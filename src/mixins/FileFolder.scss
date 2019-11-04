@@ -1,0 +1,69 @@
+/**
+ * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
+ *
+ * @author John Molakvoæ <skjnldsv@protonmail.com>
+ *
+ * @license GNU AGPL version 3 or any later version
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+.file,
+.folder {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	.cover {
+		z-index: 2;
+		// We want nice squares despite anything that is in it.
+		// The .cover is what makes the exact square size of the grid.
+		// We use padding-bottom because padding with percentage
+		// always refers to the width. And we only want to fit
+		// the css grid's width.
+		width: 100%;
+		padding-bottom: 100%;
+		transition: opacity var(--animation-quick) ease-in-out;
+		opacity: 0;
+		background-color: var(--color-main-text);
+	}
+
+	&.active,
+	&:active,
+	&:hover,
+	&:focus {
+		.cover {
+			opacity: .3;
+		}
+	}
+
+	&--clear.active,
+	&--clear:active,
+	&--clear:hover,
+	&--clear:focus {
+		.cover {
+			opacity: .1;
+		}
+	}
+}
+
+.fade-enter-active, .fade-leave-active {
+	transition: opacity var(--animation-quick) ease-in-out;
+}
+
+.fade-enter, .fade-leave-to {
+	opacity: 0;
+}

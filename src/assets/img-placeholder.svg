@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" fill="url(#img-placeholder__gradient)">
+	<defs>
+		<linearGradient id="img-placeholder__gradient">
+			<stop offset="0%" stop-color="#ededed"><animate attributeName="stop-color" values="#ededed; #ededed; #cccccc; #cccccc; #ededed" dur="2s" repeatCount="indefinite"/></stop>
+			<stop offset="100%" stop-color="#cccccc"><animate attributeName="stop-color" values="#cccccc; #ededed; #ededed; #cccccc; #cccccc" dur="2s" repeatCount="indefinite"/></stop>
+		</linearGradient>
+		<path id="img-placeholder" d="M8.36 10a1.12 1.12 0 00-.86 1.1v27.81c0 .58.53 1.09 1.1 1.09h32.81c.57 0 1.09-.53 1.09-1.09V11.53c0-.84-.66-1.53-1.29-1.53zM10 12.5h30V25l-2.5-2.5-7.5 10-7.5-7.5-10 10H10zm6.25 2.5a3.75 3.75 0 100 7.5 3.75 3.75 0 000-7.5z"/>
+	</defs>
+</svg>
