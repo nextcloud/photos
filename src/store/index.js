@@ -25,12 +25,14 @@ import Vuex, { Store } from 'vuex'
 
 import files from './files'
 import folders from './folders'
+import systemtags from './systemtags'
 
 Vue.use(Vuex)
 export default new Store({
 	modules: {
 		files,
 		folders,
+		systemtags,
 	},
 
 	strict: process.env.NODE_ENV !== 'production',

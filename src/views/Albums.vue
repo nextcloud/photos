@@ -33,16 +33,11 @@
 	</EmptyContent>
 
 	<!-- Folder content -->
-	<transition-group v-else
-		class="photos-grid"
-		role="grid"
-		name="list"
-		tag="div">
+	<Grid v-else>
 		<Navigation v-if="folder" key="navigation" v-bind="folder" />
 		<Folder v-for="dir in folderList" :key="dir.id" :folder="dir" />
 		<File v-for="file in fileList" :key="file.id" v-bind="file" />
-		<div key="footer" role="none" class="photos-grid__footer-spacer" />
-	</transition-group>
+	</Grid>
 </template>
 
 <script>
@@ -55,16 +50,18 @@ import getPictures from '../services/FileList'
 import EmptyContent from './EmptyContent'
 import Folder from '../components/Folder'
 import File from '../components/File'
+import Grid from '../components/Grid'
 import Navigation from '../components/Navigation'
 
 import cancelableRequest from '../utils/CancelableRequest'
 
 export default {
-	name: 'Grid',
+	name: 'Albums',
 	components: {
 		EmptyContent,
 		File,
 		Folder,
+		Grid,
 		Navigation,
 	},
 	props: {
@@ -205,50 +202,3 @@ export default {
 
 }
 </script>
-
-<style lang="scss">
-.photos-grid {
-	display: grid;
-	align-items: center;
-	justify-content: center;
-	gap: 8px;
-	grid-template-columns: repeat(10, 1fr);
-	position: relative;
-	// always put one more row of grid for the spacer
-	&__footer-spacer {
-		// always add one row, so placing it on the first
-		// column will always add one more
-		grid-column: 1;
-		// same height as the width
-		padding-bottom: 100%;
-	}
-}
-
-.list-move {
-	transition: transform var(--animation-quick);
-}
-
-// TODO: use mixins/GridSizes as soon as node-sass supports it
-// needs node-sass 5.0 (with libsass 3.6)
-// https://github.com/sass/node-sass/pull/2312
-$previous: 0;
-@each $size, $config in get('sizes') {
-	$count: map-get($config, 'count');
-	$marginTop: map-get($config, 'marginTop');
-	$marginW: map-get($config, 'marginW');
-
-	// if this is the last entry, only use min-width
-	$rule: '(min-width: #{$previous}px) and (max-width: #{$size}px)';
-	@if $size == 'max' {
-		$rule: '(min-width: #{$previous}px)';
-	}
-
-	@media #{$rule} {
-		.photos-grid {
-			padding: #{$marginTop}px #{$marginW}px #{$marginW}px #{$marginW}px;
-			grid-template-columns: repeat($count, 1fr);
-		}
-	}
-	$previous: $size;
-}
-</style>

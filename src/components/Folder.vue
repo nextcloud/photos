@@ -23,7 +23,7 @@
 <template>
 	<router-link :class="{'folder--clear': isEmpty}"
 		class="folder"
-		:to="folder.filename"
+		:to="to"
 		:aria-label="ariaLabel">
 		<transition name="fade">
 			<div v-show="loaded"
@@ -39,8 +39,8 @@
 		</transition>
 		<div
 			class="folder-name">
-			<span :class="{'icon-white': !isEmpty}"
-				class="folder-name__icon  icon-folder"
+			<span :class="[!isEmpty ? 'icon-white' : 'icon-dark', icon]"
+				class="folder-name__icon"
 				role="img" />
 			<p :id="ariaUuid" class="folder-name__name">
 				{{ folder.basename }}
@@ -65,6 +65,10 @@ export default {
 		folder: {
 			type: Object,
 			required: true,
+		},
+		icon: {
+			type: String,
+			default: 'icon-folder',
 		},
 	},
 
@@ -105,6 +109,20 @@ export default {
 		},
 		ariaLabel() {
 			return t('photos', 'Open the "{name}" sub-directory', { name: this.folder.basename })
+		},
+
+		/**
+		 * We do not want encoded slashes when browsing by folder
+		 * so we generate a new valid route object, get the final url back
+		 * decode it and use it as a direct string, which vue-router 
+		 * does not encode afterwards
+		 */
+		to() {
+			const route = Object.assign({}, this.$route, {
+				// always remove first slash
+				params: { path: this.folder.filename.substr(1) }
+			});
+			return decodeURIComponent(this.$router.resolve(route).resolved.path)
 		},
 	},
 
@@ -215,6 +233,9 @@ $name-height: 1.2rem;
 .folder {
 	// if no img, let's display the folder icon as default black
 	&--clear {
+		.folder-name__icon {
+			opacity: .3;
+		}
 		.folder-name__name {
 			color: var(--color-main-text);
 			text-shadow: 0 0 8px var(--color-main-background);

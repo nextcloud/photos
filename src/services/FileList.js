@@ -20,12 +20,14 @@
  *
  */
 
+import { getCurrentUser } from '@nextcloud/auth'
 import { getSingleValue, getValueForKey, parseXML, propsToStat } from 'webdav/dist/interface/dav'
 import { handleResponseCode, processResponsePayload } from 'webdav/dist/response'
 import { normaliseHREF, normalisePath } from 'webdav/dist/url'
 import client, { remotePath } from './DavClient'
 import pathPosix from 'path-posix'
 import request from './DavRequest'
+import parseFile from '../utils/ParseFile'
 
 /**
  * List files from a folder and filter out unwanted mimes
@@ -46,6 +48,8 @@ export default async function(path, options) {
 		details: true,
 	}, options)
 
+	const prefixPath = `/files/${getCurrentUser().uid}`
+
 	/**
 	 * Fetch listing
 	 *
@@ -54,7 +58,7 @@ export default async function(path, options) {
 	 * see https://github.com/perry-mitchell/webdav-client/blob/baf858a4856d44ae19ac12cb10c469b3e6c41ae4/source/interface/directoryContents.js#L11
 	 */
 	let response = null
-	const { data } = await client.customRequest(path, options)
+	const { data } = await client.customRequest(prefixPath + path, options)
 		.then(handleResponseCode)
 		.then(res => {
 			response = res
@@ -64,14 +68,7 @@ export default async function(path, options) {
 		.then(result => getDirectoryFiles(result, remotePath, options.details))
 		.then(files => processResponsePayload(response, files, options.details))
 
-	const list = data
-		.map(entry => {
-			return Object.assign({
-				id: parseInt(entry.props.fileid),
-				isFavorite: entry.props.favorite !== '0',
-				hasPreview: entry.props['has-preview'] !== 'false',
-			}, entry)
-		})
+	const list = data.map(data => parseFile(data, prefixPath))
 
 	// filter all the files and folders
 	let folder = {}
@@ -91,6 +88,15 @@ export default async function(path, options) {
 	return { folder, folders, files }
 }
 
+/**
+ * Modified function to include the root requested folder
+ * Into the returned data
+ *
+ * @param {Object} result the request result
+ * @param {string} serverBasePath server base path
+ * @param {boolean} isDetailed detailed request
+ * @returns {Array}
+ */
 function getDirectoryFiles(result, serverBasePath, isDetailed = false) {
 	const serverBase = pathPosix.join(serverBasePath, '/')
 	// Extract the response items (directory contents)

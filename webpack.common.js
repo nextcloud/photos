@@ -14,13 +14,13 @@ module.exports = {
 		path: path.resolve(__dirname, './js'),
 		publicPath: '/js/',
 		filename: `${appName}.js`,
-		chunkFilename: 'chunks/[name]-[hash].js'
+		chunkFilename: 'chunks/[name]-[hash].js',
 	},
 	module: {
 		rules: [
 			{
 				test: /\.css$/,
-				use: ['vue-style-loader', 'css-loader', 'postcss-loader']
+				use: ['vue-style-loader', 'css-loader', 'postcss-loader'],
 			},
 			{
 				test: /\.scss$/,
@@ -32,34 +32,34 @@ module.exports = {
 						loader: 'sass-loader',
 						options: {
 							functions: {
-								'get($keys)': SassGetGridConfig
-							}
-						}
-					}
-				]
+								'get($keys)': SassGetGridConfig,
+							},
+						},
+					},
+				],
 			},
 			{
 				test: /\.(js|vue)$/,
 				use: 'eslint-loader',
 				exclude: /node_modules/,
-				enforce: 'pre'
+				enforce: 'pre',
 			},
 			{
 				test: /\.vue$/,
 				loader: 'vue-loader',
-				exclude: /node_modules/
+				exclude: /node_modules/,
 			},
 			{
 				test: /\.js$/,
 				loader: 'babel-loader',
-				exclude: /node_modules(?!(\/|\\)(hot-patcher|webdav)(\/|\\))/
+				exclude: /node_modules(?!(\/|\\)(hot-patcher|webdav)(\/|\\))/,
 			},
 			{
 				test: /\.svg$/,
 				// illustrations
-				loader: 'svg-inline-loader'
-			}
-		]
+				loader: 'svg-inline-loader',
+			},
+		],
 	},
 	plugins: [
 		new VueLoaderPlugin(),
@@ -68,12 +68,12 @@ module.exports = {
 		new ModuleReplaceWebpackPlugin({
 			modules: [{
 				test: /request.js/,
-				replace: './src/patchedRequest.js'
-			}]
-		})
+				replace: './src/patchedRequest.js',
+			}],
+		}),
 	],
 	resolve: {
 		extensions: ['*', '.js', '.vue'],
-		symlinks: false
-	}
+		symlinks: false,
+	},
 }

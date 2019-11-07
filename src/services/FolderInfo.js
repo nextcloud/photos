@@ -20,8 +20,10 @@
  *
  */
 
+import { getCurrentUser } from '@nextcloud/auth'
 import client from './DavClient'
 import request from './DavRequest'
+import parseFile from '../utils/ParseFile'
 
 /**
  * List files from a folder and filter out unwanted mimes
@@ -33,17 +35,13 @@ export default async function(path) {
 	// getDirectoryContents doesn't accept / for root
 	const fixedPath = path === '/' ? '' : path
 
+	const prefixPath = `/files/${getCurrentUser().uid}`
+
 	// fetch listing
-	const response = await client.stat(fixedPath, {
+	const response = await client.stat(prefixPath + fixedPath, {
 		data: request,
 		details: true,
 	})
 
-	const entry = response.data
-	return Object.assign({
-		id: parseInt(entry.props.fileid),
-		isFavorite: entry.props.favorite !== '0',
-		hasPreview: entry.props['has-preview'] !== 'false',
-	}, entry)
-
+	return parseFile(response.data, prefixPath)
 }

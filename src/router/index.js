@@ -24,9 +24,16 @@ import { generateUrl } from '@nextcloud/router'
 import Router from 'vue-router'
 import Vue from 'vue'
 
-import Grid from '../views/Grid'
+import Albums from '../views/Albums'
+import Tags from '../views/Tags'
 
 Vue.use(Router)
+
+// shortcut to properly format the path prop
+const props = route => ({
+	// always lead current path with a slash
+	path: `/${route.params.path ? route.params.path : ''}`,
+})
 
 export default new Router({
 	mode: 'history',
@@ -37,20 +44,65 @@ export default new Router({
 	routes: [
 		{
 			path: '/',
-			component: Grid,
-			props: route => ({
-				// always lead current path with a slash
-				path: `/${route.params.path ? route.params.path : ''}`,
-			}),
+			component: Albums,
 			name: 'root',
+		},
+		{
+			path: '/albums',
+			component: Albums,
+			name: 'albums',
+			props,
 			children: [
 				{
 					path: ':path*',
 					name: 'path',
-					component: Grid,
+					component: Albums,
 				},
 			],
 		},
-		{ path: '*', redirect: { name: 'root' } },
+		{
+			path: '/shared',
+			component: Albums,
+			name: 'shared',
+			props,
+			children: [
+				{
+					path: ':path*',
+					name: 'path',
+					component: Albums,
+				},
+			],
+		},
+		{
+			path: '/favorites',
+			component: Tags,
+			name: 'favorites',
+			props,
+			children: [
+				{
+					path: ':path*',
+					name: 'path',
+					component: Tags,
+				},
+			],
+		},
+		{
+			path: '/tags',
+			component: Tags,
+			name: 'tags',
+			props,
+			children: [
+				{
+					path: ':path*',
+					name: 'path',
+					component: Tags,
+				},
+			],
+		},
+		{
+			path: '/maps',
+			name: 'maps',
+			redirect: '',
+		},
 	],
 })

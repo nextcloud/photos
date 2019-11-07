@@ -22,6 +22,17 @@
 
 <template>
 	<Content app-name="photos">
+		<AppNavigation>
+			<AppNavigationItem :to="{name: 'root'}"
+				class="app-navigation__photos"
+				:title="t('photos', 'Your photos')"
+				icon="icon-photos" />
+			<AppNavigationItem to="/favorites" :title="t('photos', 'Favorites')" icon="icon-favorite" />
+			<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Your albums')" icon="icon-files-dark" />
+			<AppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared albums')" icon="icon-share" />
+			<AppNavigationItem :to="{name: 'tags'}" :title="t('photos', 'Tags')" icon="icon-tag" />
+			<AppNavigationItem :to="{name: 'maps'}" :title="t('photos', 'Locations')" icon="icon-address" />
+		</AppNavigation>
 		<AppContent :class="{ 'icon-loading': loading }">
 			<router-view v-show="!loading" :loading.sync="loading" />
 
@@ -34,6 +45,8 @@
 <script>
 import Content from '@nextcloud/vue/dist/Components/Content'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
+import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation'
+import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import svgplaceholder from './assets/img-placeholder.svg'
 
 export default {
@@ -41,6 +54,8 @@ export default {
 	components: {
 		Content,
 		AppContent,
+		AppNavigation,
+		AppNavigationItem,
 	},
 	data: function() {
 		return {
@@ -50,3 +65,8 @@ export default {
 	},
 }
 </script>
+<style lang="scss" scoped>
+.app-navigation__photos::v-deep .app-navigation-entry-icon.icon-photos {
+	background-size: 20px;
+}
+</style>

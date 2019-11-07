@@ -20,8 +20,10 @@
  *
  */
 
-import client from './DavClient'
+import { generateRemoteUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
+import client from './DavClient'
+import parseFile from '../utils/ParseFile'
 
 /**
  * List files from a folder and filter out unwanted mimes
@@ -35,7 +37,7 @@ export default async function() {
 		headers: {
 			'content-Type': 'text/xml',
 		},
-		url: '/remote.php/dav/',
+		url: generateRemoteUrl(`dav`),
 		data: `<?xml version="1.0" encoding="UTF-8"?>
 <d:searchrequest xmlns:d="DAV:"
 	xmlns:oc="http://owncloud.org/ns"

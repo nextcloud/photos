@@ -89,11 +89,25 @@ export default {
 			}
 			return t('photos', 'Back to {folder}', { folder: this.parentName })
 		},
+
+		/**
+		 * We do not want encoded slashes when browsing by folder
+		 * so we generate a new valid route object, get the final url back
+		 * decode it and use it as a direct string, which vue-router 
+		 * does not encode afterwards
+		 */
+		to() {
+			const route = Object.assign({}, this.$route, {
+				// always remove first slash
+				params: { path: this.parentPath.substr(1) }
+			});
+			return decodeURIComponent(this.$router.resolve(route).resolved.path)
+		},
 	},
 
 	methods: {
 		folderUp() {
-			this.$router.push(this.parentPath)
+			this.$router.push(this.to)
 		},
 	},
 }

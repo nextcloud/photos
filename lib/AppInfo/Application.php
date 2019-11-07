@@ -28,9 +28,9 @@ use OCP\AppFramework\App;
 
 class Application extends App {
 
-	const appID = 'photos';
+	const APP_ID = 'photos';
 
 	public function __construct() {
-		parent::__construct(self::appID);
+		parent::__construct(self::APP_ID);
 	}
 }

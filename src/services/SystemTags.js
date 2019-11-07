@@ -1,4 +1,3 @@
-<?php
 /**
  * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
  *
@@ -20,6 +19,38 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-?>
 
-<div id="content"></div>
+import client from './DavClient'
+import { generateRemoteUrl } from '@nextcloud/router'
+
+/**
+ * List files from a folder and filter out unwanted mimes
+ *
+ * @returns {Array} the file list
+ */
+export default async function() {
+	const response = await client.getDirectoryContents('/systemtags/', {
+		data: `<?xml version="1.0"?>
+			<d:propfind  xmlns:d="DAV:"
+				xmlns:oc="http://owncloud.org/ns">
+				<d:prop>
+					<oc:id />
+					<oc:display-name />
+					<oc:user-visible />
+					<oc:user-assignable />
+					<oc:can-assign />
+				</d:prop>
+			</d:propfind>`,
+		details: true,
+	})
+
+	console.info(response)
+
+	const entry = response.data
+	return Object.assign({
+		id: parseInt(entry.props.fileid),
+		isFavorite: entry.props.favorite !== '0',
+		hasPreview: entry.props['has-preview'] !== 'false',
+	}, entry)
+
+}

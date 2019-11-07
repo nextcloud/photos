@@ -1,4 +1,3 @@
-<?php
 /**
  * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
  *
@@ -20,6 +19,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-?>
 
-<div id="content"></div>
+/**
+ * Format a file into a usable fileinfo object
+ *
+ * @param {Object} fileData file data returned by the webdav lib
+ * @param {String} prefixPath path to substract from the files
+ * @returns {Object}
+ */
+export default function(fileData, prefixPath = '') {
+	const filename = fileData.filename.replace(prefixPath, '/').replace(/^\/\//, '/')
+	return Object.assign({
+		id: parseInt(fileData.props.fileid),
+		isFavorite: fileData.props.favorite !== '0',
+		hasPreview: fileData.props['has-preview'] !== 'false',
+	}, fileData, { filename })
+}
