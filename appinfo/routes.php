@@ -22,8 +22,10 @@
  */
 
 return [
-    'routes' => [
-	   ['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
-	   ['name' => 'page#index', 'url' => '/{path}', 'verb' => 'GET', 'postfix' => 'folder', 'requirements' => ['path' => '.+']],
-    ]
+	'routes' => [
+		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
+	 	//['name' => 'page#index', 'url' => '/{path}', 'verb' => 'GET', 'postfix' => 'folder', 'requirements' => ['path' => '.+']],
+		['name' => 'albums#myAlbums', 'url' => '/albums', 'verb' => 'GET'],
+		['name' => 'albums#sharedAlbums', 'url' => '/shared', 'verb' => 'GET'],
+	]
 ];
