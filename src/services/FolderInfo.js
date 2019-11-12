@@ -23,7 +23,7 @@
 import { getCurrentUser } from '@nextcloud/auth'
 import client from './DavClient'
 import request from './DavRequest'
-import parseFile from '../utils/ParseFile'
+import { genFileInfo } from '../utils/fileUtils'
 
 /**
  * List files from a folder and filter out unwanted mimes
@@ -43,5 +43,5 @@ export default async function(path) {
 		details: true,
 	})
 
-	return parseFile(response.data, prefixPath)
+	return genFileInfo(response.data, prefixPath)
 }

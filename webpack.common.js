@@ -69,6 +69,7 @@ module.exports = {
 			modules: [{
 				test: /request.js/,
 				replace: './src/patchedRequest.js',
+				exclude: [/patchedRequest.js$/],
 			}],
 		}),
 	],

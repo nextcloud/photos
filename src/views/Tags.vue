@@ -33,12 +33,23 @@
 	</EmptyContent> -->
 
 	<!-- Folder content -->
+	<Grid v-if="isRoot">
+		<Navigation v-if="tag"
+			key="navigation"
+			:basename="tagname"
+			:filename="'/' + tagname"
+			:root-title="t('photos', 'Tags')" />
+		<Folder v-for="id in tagsNames"
+			:key="id"
+			v-bind="tags[id]"
+			:basename="tags[id].displayName"
+			icon="icon-tag" />
+	</Grid>
 	<!-- <Grid v-else>
 		<Navigation v-if="folder" key="navigation" v-bind="folder" />
 		<Folder v-for="dir in folderList" :key="dir.id" :folder="dir" />
 		<File v-for="file in fileList" :key="file.id" v-bind="file" />
 	</Grid> -->
-	<span>Test</span>
 </template>
 
 <script>
@@ -64,9 +75,9 @@ export default {
 		Navigation,
 	},
 	props: {
-		path: {
+		tagname: {
 			type: String,
-			default: '/',
+			default: '',
 		},
 		loading: {
 			type: Boolean,
@@ -86,24 +97,66 @@ export default {
 		...mapGetters([
 			'files',
 			'tags',
+			'tagsNames',
 		]),
+
+		// current tag id from current path
+		tagId() {
+			return this.$store.getters.tagId(this.tagname)
+		},
+
+		// current tag
+		tag() {
+			return this.tags[this.tagId]
+		},
+		// files list of the current tag
+		fileList() {
+			return this.tag && this.tag.files
+				.map(id => this.files[id])
+				.filter(file => !!file)
+		},
+
+		isRoot() {
+			return this.tagname === ''
+		},
 	},
 
 	watch: {
-		path(path) {
-			console.debug('changed:', path)
-			this.fetchFolderContent()
+		tagname(name) {
+			console.debug('changed:', name)
+			this.fetchRootContent()
 		},
 	},
 
 	async beforeMount() {
 		console.debug('beforemount: GRID')
-		this.fetchFolderContent()
+		this.fetchRootContent()
 	},
 
 	methods: {
-		async fetchFolderContent() {
-			await getSystemTags()
+		async fetchRootContent() {
+			console.debug('start: fetchRootContent', this.path)
+			// cancel any pending requests
+			this.cancelRequest()
+
+			// close any potential opened viewer
+			OCA.Viewer.close()
+
+			// if we don't already have some cached data let's show a loader
+			if (!this.tags[this.folderId]) {
+				this.$emit('update:loading', true)
+			}
+			this.error = null
+
+			// init cancellable request
+			const { request, cancel } = cancelableRequest(getSystemTags)
+			this.cancelRequest = cancel
+
+			const tags = await request()
+			this.$store.dispatch('updateTags', tags)
+
+			// done loading
+			this.$emit('update:loading', false)
 		},
 	},
 

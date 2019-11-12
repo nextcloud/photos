@@ -26,8 +26,7 @@ import { handleResponseCode, processResponsePayload } from 'webdav/dist/response
 import { normaliseHREF, normalisePath } from 'webdav/dist/url'
 import client, { remotePath } from './DavClient'
 import pathPosix from 'path-posix'
-import request from './DavRequest'
-import parseFile from '../utils/ParseFile'
+import { genFileInfo } from '../utils/fileUtils'
 
 /**
  * List files from a folder and filter out unwanted mimes
@@ -37,6 +36,8 @@ import parseFile from '../utils/ParseFile'
  * @returns {Array} the file list
  */
 export default async function(path, options) {
+
+	console.trace();
 	options = Object.assign({
 		method: 'PROPFIND',
 		headers: {
@@ -44,7 +45,6 @@ export default async function(path, options) {
 			Depth: options.deep ? 'infinity' : 1,
 		},
 		responseType: 'text',
-		data: request,
 		details: true,
 	}, options)
 
@@ -68,7 +68,7 @@ export default async function(path, options) {
 		.then(result => getDirectoryFiles(result, remotePath, options.details))
 		.then(files => processResponsePayload(response, files, options.details))
 
-	const list = data.map(data => parseFile(data, prefixPath))
+	const list = data.map(data => genFileInfo(data, prefixPath))
 
 	// filter all the files and folders
 	let folder = {}

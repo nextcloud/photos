@@ -21,15 +21,17 @@
  */
 
 import client from './DavClient'
-import { generateRemoteUrl } from '@nextcloud/router'
+import { genFileInfo } from '../utils/fileUtils'
 
 /**
- * List files from a folder and filter out unwanted mimes
+ * List system tags
  *
+ * @param {String} path the path relative to the user root
+ * @param {Object} [options] optional options for axios
  * @returns {Array} the file list
  */
-export default async function() {
-	const response = await client.getDirectoryContents('/systemtags/', {
+export default async function(path, options = {}) {
+	const response = await client.getDirectoryContents('/systemtags/', Object.assign({}, {
 		data: `<?xml version="1.0"?>
 			<d:propfind  xmlns:d="DAV:"
 				xmlns:oc="http://owncloud.org/ns">
@@ -42,15 +44,7 @@ export default async function() {
 				</d:prop>
 			</d:propfind>`,
 		details: true,
-	})
+	}, options))
 
-	console.info(response)
-
-	const entry = response.data
-	return Object.assign({
-		id: parseInt(entry.props.fileid),
-		isFavorite: entry.props.favorite !== '0',
-		hasPreview: entry.props['has-preview'] !== 'false',
-	}, entry)
-
+	return response.data.map(data => genFileInfo(data))
 }

@@ -43,7 +43,7 @@
 				class="folder-name__icon"
 				role="img" />
 			<p :id="ariaUuid" class="folder-name__name">
-				{{ folder.basename }}
+				{{ basename }}
 			</p>
 		</div>
 		<div class="cover" role="none" />
@@ -62,8 +62,16 @@ export default {
 	inheritAttrs: false,
 
 	props: {
-		folder: {
-			type: Object,
+		basename: {
+			type: String,
+			required: true,
+		},
+		filename: {
+			type: String,
+			required: true,
+		},
+		id: {
+			type: Number,
 			required: true,
 		},
 		icon: {
@@ -88,7 +96,7 @@ export default {
 
 		// files list of the current folder
 		folderContent() {
-			return this.folders[this.folder.id]
+			return this.folders[this.id]
 		},
 		fileList() {
 			return this.folderContent
@@ -105,23 +113,24 @@ export default {
 		},
 
 		ariaUuid() {
-			return `folder-${this.folder.id}`
+			return `folder-${this.id}`
 		},
 		ariaLabel() {
-			return t('photos', 'Open the "{name}" sub-directory', { name: this.folder.basename })
+			return t('photos', 'Open the "{name}" sub-directory', { name: this.basename })
 		},
 
 		/**
 		 * We do not want encoded slashes when browsing by folder
 		 * so we generate a new valid route object, get the final url back
-		 * decode it and use it as a direct string, which vue-router 
+		 * decode it and use it as a direct string, which vue-router
 		 * does not encode afterwards
+		 * @returns {string}
 		 */
 		to() {
 			const route = Object.assign({}, this.$route, {
 				// always remove first slash
-				params: { path: this.folder.filename.substr(1) }
-			});
+				params: { path: this.filename.substr(1) },
+			})
 			return decodeURIComponent(this.$router.resolve(route).resolved.path)
 		},
 	},
@@ -133,9 +142,9 @@ export default {
 
 		try {
 			// get data
-			const { files, folders } = await request(this.folder.filename)
+			const { files, folders } = await request(this.filename)
 			// this.cancelRequest('Stop!')
-			this.$store.dispatch('updateFolders', { id: this.folder.id, files, folders })
+			this.$store.dispatch('updateFolders', { id: this.id, files, folders })
 			this.$store.dispatch('updateFiles', { folder: this.folder, files, folders })
 		} catch (error) {
 			if (error.response && error.response.status) {

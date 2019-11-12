@@ -20,50 +20,56 @@
  *
  */
 import Vue from 'vue'
+import { sortCompare } from '../utils/fileUtils'
 
 const state = {
-	paths: {},
 	tags: {},
+	names: {},
 }
 
 const mutations = {
 	/**
-	 * Index folders paths and ids
+	 * Order and save tags
 	 *
 	 * @param {Object} state vuex state
-	 * @param {Object} data destructuring object
-	 * @param {number} data.id current folder id
-	 * @param {Array} data.files list of files
+	 * @param {Array} tags the tags list
 	 */
-	updateTags(state, { id, files }) {
-		if (files.length > 0) {
-			// sort by last modified
-			const list = files.sort((a, b) => {
-				return new Date(b.lastmod).getTime() - new Date(a.lastmod).getTime()
-			})
+	updateTags(state, tags) {
+		if (tags.length > 0) {
+			// sort by basename
+			const list = tags.sort((a, b) => sortCompare(a, b, 'displayName'))
 
-			// Set folder list
-			Vue.set(state.tags, id, list.map(file => file.id))
+			// store tag and its index
+			list.forEach(tag => {
+				Vue.set(state.tags, tag.id, tag)
+				Vue.set(state.tags[tag.id], 'files', [])
+				Vue.set(state.names, tag.displayName, tag.id)
+			})
 		}
 	},
 
 	/**
-	 * Index folders paths and ids
+	 * Update tag files list
 	 *
 	 * @param {Object} state vuex state
 	 * @param {Object} data destructuring object
-	 * @param {string} data.path path of this folder
-	 * @param {number} data.id id of this folder
+	 * @param {number} data.id current tag id
+	 * @param {Object[]} data.files list of files
 	 */
-	addPath(state, { path, id }) {
-		Vue.set(state.paths, path, id)
+	updateTag(state, { id, files }) {
+		// sort by last modified
+		const list = files.sort((a, b) => sortCompare(a, b, 'lastmod'))
+
+		// overwrite list
+		Vue.set(state.tags[id], 'files', list.map(file => file.id))
 	},
 }
 
 const getters = {
 	tags: state => state.tags,
+	tagsNames: state => state.names,
 	tag: state => id => state.tags[id],
-	tagId: state => path => state.paths[path],
+	tagId: state => name => state.names[name],
 }
 
 const actions = {
@@ -71,28 +77,22 @@ const actions = {
 	 * Update files and folders
 	 *
 	 * @param {Object} context vuex context
-	 * @param {Object} data destructuring object
-	 * @param {number} data.id current folder id
-	 * @param {Array} data.files list of files
-	 * @param {Array} data.folders list of folders
+	 * @param {Array} tags the tag list
 	 */
-	updateTags(context, { id, files, folders }) {
-		context.commit('updateTags', { id, files })
-
-		// then add each folders path indexes
-		folders.forEach(folder => context.commit('addPath', { path: folder.filename, id: folder.id }))
+	updateTags(context, tags) {
+		context.commit('updateTags', tags)
 	},
 
 	/**
-	 * Index folders paths and ids
+	 * Update tag files list
 	 *
 	 * @param {Object} context vuex context
 	 * @param {Object} data destructuring object
-	 * @param {string} data.path path of this folder
-	 * @param {number} data.id id of this folder
+	 * @param {number} data.id current tag id
+	 * @param {Object[]} data.files list of files
 	 */
-	addPath(context, { path, id }) {
-		context.commit('addPath', { path, id })
+	updateTag(context, { id, files }) {
+		context.commit('updateTag', { id, files })
 	},
 }
 

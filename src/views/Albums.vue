@@ -35,7 +35,7 @@
 	<!-- Folder content -->
 	<Grid v-else>
 		<Navigation v-if="folder" key="navigation" v-bind="folder" />
-		<Folder v-for="dir in folderList" :key="dir.id" :folder="dir" />
+		<Folder v-for="dir in folderList" :key="dir.id" v-bind="dir" />
 		<File v-for="file in fileList" :key="file.id" v-bind="file" />
 	</Grid>
 </template>

@@ -23,7 +23,7 @@
 import { generateRemoteUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import client from './DavClient'
-import parseFile from '../utils/ParseFile'
+import { genFileInfo } from '../utils/fileUtils'
 
 /**
  * List files from a folder and filter out unwanted mimes

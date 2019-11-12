@@ -55,7 +55,7 @@ export default new Router({
 			children: [
 				{
 					path: ':path*',
-					name: 'path',
+					name: 'albumspath',
 					component: Albums,
 				},
 			],
@@ -68,7 +68,7 @@ export default new Router({
 			children: [
 				{
 					path: ':path*',
-					name: 'path',
+					name: 'sharedpath',
 					component: Albums,
 				},
 			],
@@ -77,24 +77,18 @@ export default new Router({
 			path: '/favorites',
 			component: Tags,
 			name: 'favorites',
-			props,
-			children: [
-				{
-					path: ':path*',
-					name: 'path',
-					component: Tags,
-				},
-			],
 		},
 		{
 			path: '/tags',
 			component: Tags,
 			name: 'tags',
-			props,
+			props: route => ({
+				tagname: route.params.tagname,
+			}),
 			children: [
 				{
-					path: ':path*',
-					name: 'path',
+					path: ':tagname',
+					name: 'tagname',
 					component: Tags,
 				},
 			],
