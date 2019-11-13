@@ -50,7 +50,6 @@ class AlbumsController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 */
 	public function myAlbums(string $path = ''): JSONResponse {
 		return $this->generate($path, false);
@@ -58,7 +57,6 @@ class AlbumsController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 */
 	public function sharedAlbums(string $path = ''): JSONResponse {
 		return $this->generate($path, true);
