@@ -25,7 +25,27 @@ return [
 	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
 	 	//['name' => 'page#index', 'url' => '/{path}', 'verb' => 'GET', 'postfix' => 'folder', 'requirements' => ['path' => '.+']],
-		['name' => 'albums#myAlbums', 'url' => '/albums', 'verb' => 'GET'],
-		['name' => 'albums#sharedAlbums', 'url' => '/shared', 'verb' => 'GET'],
+		[
+			'name' => 'albums#myAlbums',
+			'url' => '/api/v1/albums/{path}',
+			'verb' => 'GET',
+			'requirements' => [
+				'path' => '.+',
+			],
+			'defaults' => [
+				'path' => '',
+			],
+		],
+		[
+			'name' => 'albums#sharedAlbums',
+			'url' => '/api/v1/shared/{path}',
+			'verb' => 'GET',
+			'requirements' => [
+				'path' => '.+',
+			],
+			'defaults' => [
+				'path' => '',
+			],
+		],
 	]
 ];
