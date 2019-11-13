@@ -20,6 +20,5 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-?>
-
-<div id="content"></div>
+use OCA\Photos\AppInfo\Application;
+\OC::$server->query(Application::class);

@@ -30,6 +30,7 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IRequest;
+use OCP\Util;
 
 class PageController extends Controller {
 
@@ -57,6 +58,10 @@ class PageController extends Controller {
 	public function index(): TemplateResponse {
 		$this->eventDispatcher->dispatch(LoadSidebar::class, new LoadSidebar());
 		$this->eventDispatcher->dispatch(LoadViewer::class, new LoadViewer());
+
+
+		Util::addScript('photos', 'photos');
+		Util::addStyle('photos', 'icons');
 
 		$response = new TemplateResponse($this->appName, 'main');
 		return $response;

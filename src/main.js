@@ -26,7 +26,7 @@ import { sync } from 'vuex-router-sync'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import Vue from 'vue'
 
-import Gallery from './Gallery'
+import Photos from './Photos'
 import router from './router'
 import store from './store'
 
@@ -49,8 +49,8 @@ Vue.prototype.n = translatePlural
 export default new Vue({
 	el: '#content',
 	// eslint-disable-next-line vue/match-component-file-name
-	name: 'GalleryRoot',
+	name: 'PhotosRoot',
 	router,
 	store,
-	render: h => h(Gallery),
+	render: h => h(Photos),
 })

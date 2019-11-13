@@ -1,4 +1,3 @@
-<?php
 /**
  * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
  *
@@ -20,6 +19,32 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-?>
 
-<div id="content"></div>
+import client from './DavClient'
+import { genFileInfo } from '../utils/fileUtils'
+
+/**
+ * List system tags
+ *
+ * @param {String} path the path relative to the user root
+ * @param {Object} [options] optional options for axios
+ * @returns {Array} the file list
+ */
+export default async function(path, options = {}) {
+	const response = await client.getDirectoryContents('/systemtags/', Object.assign({}, {
+		data: `<?xml version="1.0"?>
+			<d:propfind  xmlns:d="DAV:"
+				xmlns:oc="http://owncloud.org/ns">
+				<d:prop>
+					<oc:id />
+					<oc:display-name />
+					<oc:user-visible />
+					<oc:user-assignable />
+					<oc:can-assign />
+				</d:prop>
+			</d:propfind>`,
+		details: true,
+	}, options))
+
+	return response.data.map(data => genFileInfo(data))
+}

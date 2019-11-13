@@ -20,6 +20,7 @@
  *
  */
 import Vue from 'vue'
+import { sortCompare } from '../utils/fileUtils'
 
 const state = {
 	paths: {},
@@ -39,9 +40,7 @@ const mutations = {
 		if (files.length > 0) {
 			const t0 = performance.now()
 			// sort by last modified
-			const list = files.sort((a, b) => {
-				return new Date(b.lastmod).getTime() - new Date(a.lastmod).getTime()
-			})
+			const list = files.sort((a, b) => sortCompare(a, b, 'lastmod'))
 
 			// Set folder list
 			Vue.set(state.folders, id, list.map(file => file.id))

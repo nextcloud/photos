@@ -1,4 +1,3 @@
-<?php
 /**
  * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
  *
@@ -20,6 +19,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-?>
 
-<div id="content"></div>
+const isNumber = function(num) {
+	if (!num) {
+		return false
+	}
+	return Number(num).toString() === num.toString()
+}
+
+export { isNumber }
