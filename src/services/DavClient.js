@@ -24,14 +24,13 @@ import webdav from 'webdav'
 import axios from '@nextcloud/axios'
 import parseUrl from 'url-parse'
 import { generateRemoteUrl } from '@nextcloud/router'
-import { getCurrentUser } from '@nextcloud/auth'
 
 // force our axios
 const patcher = webdav.getPatcher()
 patcher.patch('request', axios)
 
 // init webdav client
-const remote = generateRemoteUrl(`dav/files/${getCurrentUser().uid}`)
+const remote = generateRemoteUrl(`dav`)
 const client = webdav.createClient(remote)
 
 export const remotePath = parseUrl(remote).pathname

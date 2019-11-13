@@ -1,4 +1,3 @@
-<?php
 /**
  * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
  *
@@ -20,6 +19,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-?>
 
-<div id="content"></div>
+.icon-folder.icon-dark {
+	@include icon-color('folder', 'filetypes', $color-black, 1, true);
+}
+
+@include icon-black-white('photos', 'photos', 2);

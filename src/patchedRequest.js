@@ -21,7 +21,6 @@
  */
 
 const request = require('webdav/dist/request')
-const merge = require('webdav/dist/merge')
 
 const oldPrepareRequestOptions = request.prepareRequestOptions
 
@@ -32,7 +31,7 @@ const oldPrepareRequestOptions = request.prepareRequestOptions
 request.prepareRequestOptions = function(requestOptions, methodOptions) {
 	// add our cancelToken support
 	if (methodOptions.cancelToken && typeof methodOptions.cancelToken === 'object') {
-		requestOptions.cancelToken = merge(requestOptions.cancelToken || {}, methodOptions.cancelToken)
+		requestOptions.cancelToken = Object.assign({}, requestOptions.cancelToken || {}, methodOptions.cancelToken)
 	}
 	// exploit old method
 	oldPrepareRequestOptions(requestOptions, methodOptions)
