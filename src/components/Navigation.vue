@@ -95,9 +95,15 @@ export default {
 		 * so we generate a new valid route object, get the final url back
 		 * decode it and use it as a direct string, which vue-router
 		 * does not encode afterwards
-		 * @returns {string}
+		 * @returns {string|object}
 		 */
 		to() {
+			if (this.parentPath === '/') {
+				return { name: this.$route.name }
+			}
+
+			// else let's build the path and make sure it's
+			// not url encoded (more importantly if filename have slashes)
 			const route = Object.assign({}, this.$route, {
 				// always remove first slash
 				params: { path: this.parentPath.substr(1) },
