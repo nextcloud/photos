@@ -20,6 +20,7 @@
  *
  */
 
+import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import { genFileInfo } from '../utils/fileUtils'
 
@@ -27,19 +28,34 @@ import { genFileInfo } from '../utils/fileUtils'
  * List files from a folder and filter out unwanted mimes
  *
  * @param {String} path the path relative to the user root
+ * @param {Object} [options] optional options for axios
+ * @param {boolean} [shared] fetch shared albums ?
  * @returns {Array} the file list
  */
-export default async function(path) {
-	// getDirectoryContents doesn't accept / for root
-	const fixedPath = path === '/' ? '' : path
-
-	const prefixPath = `/files/${getCurrentUser().uid}`
+export default async function(path = '/', options = {}) {
+	const prefixPath = generateUrl(`/apps/photos/api/v1/${options.shared ? 'shared' : 'albums'}`)
+	console.info(prefixPath);
 
 	// fetch listing
-	const response = await client.stat(prefixPath + fixedPath, {
-		data: request,
-		details: true,
-	})
+	const response = await axios.get(prefixPath + path, options)
 
-	return genFileInfo(response.data, prefixPath)
+	const list = response.data.map(data => genFileInfo(data, prefixPath))
+
+	// filter all the files and folders
+	let folder = {}
+	const folders = []
+	const files = []
+	for (const entry of list) {
+		// is this the current provided path ?
+		if (entry.filename === path) {
+			folder = entry
+		} else if (entry.type !== 'file') {
+			folders.push(entry)
+		} else if (entry.mime === 'image/jpeg') {
+			files.push(entry)
+		}
+	}
+
+	// return current folder, subfolders and files
+	return { folder, folders, files }
 }

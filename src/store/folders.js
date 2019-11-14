@@ -48,6 +48,8 @@ const mutations = {
 			Vue.set(state.folders, fileid, list.map(file => file.fileid))
 			const t1 = performance.now()
 			console.debug('perf: updateFolders', `${t1 - t0}ms`)
+		} else {
+			Vue.set(state.folders, fileid, [])
 		}
 	},
 

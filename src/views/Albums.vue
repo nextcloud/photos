@@ -35,7 +35,7 @@
 	<!-- Folder content -->
 	<Grid v-else>
 		<Navigation v-if="folder" key="navigation" v-bind="folder" />
-		<Folder v-for="dir in folderList" :key="dir.fileid" v-bind="dir" />
+		<Folder v-for="dir in folderList" :key="dir.fileid" v-bind="dir" :showShared="showShared" />
 		<File v-for="file in fileList" :key="file.fileid" v-bind="file" />
 	</Grid>
 </template>
@@ -43,9 +43,7 @@
 <script>
 import { mapGetters } from 'vuex'
 
-// import getFolder from '../services/FolderInfo'
-import getPictures from '../services/FileList'
-// import searchPhotos from '../services/PhotoSearch'
+import getAlbumContent from '../services/AlbumContent'
 
 import EmptyContent from './EmptyContent'
 import Folder from '../components/Folder'
@@ -72,6 +70,10 @@ export default {
 		loading: {
 			type: Boolean,
 			required: true,
+		},
+		showShared: {
+			type: Boolean,
+			default: false,
 		},
 	},
 
@@ -142,8 +144,10 @@ export default {
 	},
 
 	watch: {
-		path(path) {
-			console.debug('changed:', path)
+		path() {
+			this.fetchFolderContent()
+		},
+		showShared() {
 			this.fetchFolderContent()
 		},
 	},
@@ -169,13 +173,12 @@ export default {
 			this.error = null
 
 			// init cancellable request
-			const { request, cancel } = cancelableRequest(getPictures)
+			const { request, cancel } = cancelableRequest(getAlbumContent)
 			this.cancelRequest = cancel
 
 			try {
 				// get content and current folder info
-				const { folder, folders, files } = await request(this.path)
-				console.debug(folder, folders, files)
+				const { folder, folders, files } = await request(this.path, {shared: this.showShared})
 				this.$store.dispatch('addPath', { path: this.path, fileid: folder.fileid })
 				this.$store.dispatch('updateFolders', { fileid: folder.fileid, files, folders })
 				this.$store.dispatch('updateFiles', { folder, files, folders })

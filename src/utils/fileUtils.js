@@ -78,9 +78,9 @@ const sortCompare = function(fileInfo1, fileInfo2, key, asc = true) {
 	}
 
 	// else we sort by string, so let's sort directories first
-	if (fileInfo1.type === 'directory' && fileInfo2.type !== 'directory') {
+	if (fileInfo1.type !== 'file' && fileInfo2.type === 'file') {
 		return asc ? -1 : 1
-	} else if (fileInfo1.type !== 'directory' && fileInfo2.type === 'directory') {
+	} else if (fileInfo1.type === 'file' && fileInfo2.type !== 'file') {
 		return asc ? 1 : -1
 	}
 

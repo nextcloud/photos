@@ -80,7 +80,7 @@ export default async function(path, options) {
 		// is this the current provided path ?
 		if (entry.filename === path) {
 			folder = entry
-		} else if (entry.type === 'directory') {
+		} else if (entry.type !== 'file') {
 			folders.push(entry)
 		} else if (entry.mime === 'image/jpeg') {
 			files.push(entry)

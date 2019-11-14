@@ -81,17 +81,27 @@ class AlbumsController extends Controller {
 	}
 
 	private function formatData(iterable $nodes): array {
+		$userFolder = $this->rootFolder->getUserFolder($this->userId);
+
 		$result = [];
 		/** @var Node $node */
 		foreach ($nodes as $node) {
+			// properly format full path and make sure
+			// we're relative to the user home folder
+			$isRoot = $node === $userFolder;
+			$path = $isRoot ? '/' : str_replace($userFolder->getPath(), '', $node->getPath());
+
 			$result[] = [
-				'id' => $node->getName(),
-				'basename' => $node->getName(),
-				'id' => $node->getName(),
-				'id' => $node->getName(),
-				'id' => $node->getName(),
-				'id' => $node->getName(),
-			]
+				'basename' => $isRoot ? '' : $node->getName(),
+				'etag' => $node->getEtag(),
+				'fileid' => $node->getId(),
+				'filename' => $path,
+				'etag' => $node->getEtag(),
+				'lastmod' => $node->getMTime(),
+				'mime' => $node->getMimetype(),
+				'size' => $node->getSize(),
+				'type' => $node->getType()
+			];
 		}
 
 		return $result;
@@ -99,6 +109,9 @@ class AlbumsController extends Controller {
 
 	private function scanCurrentFolder(Folder $folder, bool $shared): iterable  {
 		$nodes = $folder->getDirectoryListing();
+
+		// add current folder to iterable set
+		yield $folder;
 
 		foreach ($nodes as $node) {
 			if ($node instanceof Folder) {

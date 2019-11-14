@@ -29,12 +29,6 @@ import Tags from '../views/Tags'
 
 Vue.use(Router)
 
-// shortcut to properly format the path prop
-const props = route => ({
-	// always lead current path with a slash
-	path: `/${route.params.path ? route.params.path : ''}`,
-})
-
 export default new Router({
 	mode: 'history',
 	// if index.php is in the url AND we got this far, then it's working:
@@ -51,7 +45,10 @@ export default new Router({
 			path: '/albums',
 			component: Albums,
 			name: 'albums',
-			props,
+			props: route => ({
+				// always lead current path with a slash
+				path: `/${route.params.path ? route.params.path : ''}`,
+			}),
 			children: [
 				{
 					path: ':path*',
@@ -64,7 +61,11 @@ export default new Router({
 			path: '/shared',
 			component: Albums,
 			name: 'shared',
-			props,
+			props: route => ({
+				// always lead current path with a slash
+				path: `/${route.params.path ? route.params.path : ''}`,
+				showShared: true,
+			}),
 			children: [
 				{
 					path: ':path*',

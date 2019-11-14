@@ -54,7 +54,7 @@
 import { generateUrl } from '@nextcloud/router'
 import { mapGetters } from 'vuex'
 
-import getPictures from '../services/FileList'
+import getAlbumContent from '../services/AlbumContent'
 import cancelableRequest from '../utils/CancelableRequest'
 
 export default {
@@ -77,6 +77,10 @@ export default {
 		icon: {
 			type: String,
 			default: 'icon-folder',
+		},
+		showShared: {
+			type: Boolean,
+			default: false,
 		},
 	},
 
@@ -137,12 +141,12 @@ export default {
 
 	async created() {
 		// init cancellable request
-		const { request, cancel } = cancelableRequest(getPictures)
+		const { request, cancel } = cancelableRequest(getAlbumContent)
 		this.cancelRequest = cancel
 
 		try {
 			// get data
-			const { folder, folders, files } = await request(this.filename)
+			const { folder, folders, files } = await request(this.filename, {shared: this.showShared})
 			console.info(folder, folders, files);
 			this.$store.dispatch('updateFolders', { fileid: folder.fileid, files, folders })
 			this.$store.dispatch('updateFiles', { folder, files, folders })
