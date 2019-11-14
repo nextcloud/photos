@@ -104,13 +104,10 @@ export default {
 			return this.folders[this.folderId]
 		},
 		fileList() {
-			const t0 = performance.now()
 			const list = this.folderContent
 				&& this.folderContent
 					.map(id => this.files[id])
 					.filter(file => !!file)
-			const t1 = performance.now()
-			console.debug('perf: fileList', `${t1 - t0}ms`)
 			return list
 		},
 
@@ -121,13 +118,10 @@ export default {
 				&& this.files[this.folderId].folders
 		},
 		folderList() {
-			const t0 = performance.now()
 			const list = this.subFolders
 				&& this.subFolders
 					.map(id => this.files[id])
 					.filter(file => !!file)
-			const t1 = performance.now()
-			console.debug('perf: folderList', `${t1 - t0}ms`)
 			return list
 		},
 
@@ -153,13 +147,11 @@ export default {
 	},
 
 	async beforeMount() {
-		console.debug('beforemount: GRID')
 		this.fetchFolderContent()
 	},
 
 	methods: {
 		async fetchFolderContent() {
-			console.debug('start: fetchFolderContent', this.path)
 			// cancel any pending requests
 			this.cancelRequest('Changed folder')
 
@@ -182,7 +174,6 @@ export default {
 				this.$store.dispatch('addPath', { path: this.path, fileid: folder.fileid })
 				this.$store.dispatch('updateFolders', { fileid: folder.fileid, files, folders })
 				this.$store.dispatch('updateFiles', { folder, files, folders })
-				console.debug('end: fetchFolderContent', this.path)
 			} catch (error) {
 				if (error.response && error.response.status) {
 					if (error.response.status === 404) {
@@ -195,8 +186,7 @@ export default {
 					}
 				}
 				// cancelled request, moving on...
-				console.error(error)
-				console.debug('cancelled: fetchFolderContent', this.path)
+				console.error('Error fetching album data', error)
 			} finally {
 				// done loading even with errors
 				this.$emit('update:loading', false)

@@ -52,7 +52,7 @@ export default new Router({
 			children: [
 				{
 					path: ':path*',
-					name: 'albumspath',
+					name: 'albums',
 					component: Albums,
 				},
 			],
@@ -69,7 +69,7 @@ export default new Router({
 			children: [
 				{
 					path: ':path*',
-					name: 'sharedpath',
+					name: 'shared',
 					component: Albums,
 				},
 			],

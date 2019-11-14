@@ -73,12 +73,9 @@ const actions = {
 	 * @param {Array} data.folders list of folders within current folder
 	 */
 	updateFiles(context, { folder, files, folders }) {
-		const t0 = performance.now()
 		// we want all the FileInfo! Folders included!
 		context.commit('updateFiles', [folder, ...files, ...folders])
 		context.commit('setSubFolders', { fileid: folder.fileid, folders })
-		const t1 = performance.now()
-		console.debug('perf: updateFiles', `${t1 - t0}ms`)
 	},
 }
 

@@ -147,7 +147,6 @@ export default {
 		try {
 			// get data
 			const { folder, folders, files } = await request(this.filename, {shared: this.showShared})
-			console.info(folder, folders, files);
 			this.$store.dispatch('updateFolders', { fileid: folder.fileid, files, folders })
 			this.$store.dispatch('updateFiles', { folder, files, folders })
 		} catch (error) {

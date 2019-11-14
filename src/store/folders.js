@@ -38,7 +38,6 @@ const mutations = {
 	 */
 	updateFolders(state, { fileid, files }) {
 		if (files.length > 0) {
-			const t0 = performance.now()
 			// sort by last modified
 			const list = files
 				.sort((a, b) => sortCompare(a, b, 'lastmod'))
@@ -46,8 +45,6 @@ const mutations = {
 
 			// Set folder list
 			Vue.set(state.folders, fileid, list.map(file => file.fileid))
-			const t1 = performance.now()
-			console.debug('perf: updateFolders', `${t1 - t0}ms`)
 		} else {
 			Vue.set(state.folders, fileid, [])
 		}

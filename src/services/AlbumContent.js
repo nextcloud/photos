@@ -34,7 +34,6 @@ import { genFileInfo } from '../utils/fileUtils'
  */
 export default async function(path = '/', options = {}) {
 	const prefixPath = generateUrl(`/apps/photos/api/v1/${options.shared ? 'shared' : 'albums'}`)
-	console.info(prefixPath);
 
 	// fetch listing
 	const response = await axios.get(prefixPath + path, options)
