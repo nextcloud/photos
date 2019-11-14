@@ -25,10 +25,9 @@ return [
 	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
 		['name' => 'page#index', 'url' => '/albums', 'verb' => 'GET', 'postfix' => 'albums'],
-		['name' => 'page#index', 'url' => '/albums/{tag}', 'verb' => 'GET', 'postfix' => 'albumsx'],
 		['name' => 'page#index', 'url' => '/favorites', 'verb' => 'GET', 'postfix' => 'favorites'],
 		['name' => 'page#index', 'url' => '/shared', 'verb' => 'GET', 'postfix' => 'shared'],
-		['name' => 'page#index', 'url' => '/tags/{tag}', 'verb' => 'GET', 'postfix' => 'tags', 'requirements' => ['tag' => '.*']],
+		['name' => 'page#index', 'url' => '/tags', 'verb' => 'GET', 'postfix' => 'tags'],
 		 
 		// apis
 		[
