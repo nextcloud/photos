@@ -84,7 +84,14 @@ class AlbumsController extends Controller {
 		$result = [];
 		/** @var Node $node */
 		foreach ($nodes as $node) {
-			$result[] = $node->getName();
+			$result[] = [
+				'id' => $node->getName(),
+				'basename' => $node->getName(),
+				'id' => $node->getName(),
+				'id' => $node->getName(),
+				'id' => $node->getName(),
+				'id' => $node->getName(),
+			]
 		}
 
 		return $result;

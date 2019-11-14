@@ -20,18 +20,26 @@
  *
  */
 
-import webdav from 'webdav'
-import axios from '@nextcloud/axios'
-import parseUrl from 'url-parse'
-import { generateRemoteUrl } from '@nextcloud/router'
+import { generateUrl } from '@nextcloud/router'
+import { genFileInfo } from '../utils/fileUtils'
 
-// force our axios
-const patcher = webdav.getPatcher()
-patcher.patch('request', axios)
+/**
+ * List files from a folder and filter out unwanted mimes
+ *
+ * @param {String} path the path relative to the user root
+ * @returns {Array} the file list
+ */
+export default async function(path) {
+	// getDirectoryContents doesn't accept / for root
+	const fixedPath = path === '/' ? '' : path
 
-// init webdav client on default dav endpoint
-const remote = generateRemoteUrl(`dav`)
-const client = webdav.createClient(remote)
+	const prefixPath = `/files/${getCurrentUser().uid}`
 
-export const remotePath = parseUrl(remote).pathname
-export default client
+	// fetch listing
+	const response = await client.stat(prefixPath + fixedPath, {
+		data: request,
+		details: true,
+	})
+
+	return genFileInfo(response.data, prefixPath)
+}

@@ -60,10 +60,6 @@ export default {
 			type: String,
 			default: t('photos', 'Photos'),
 		},
-		id: {
-			type: Number,
-			required: true,
-		},
 	},
 
 	computed: {

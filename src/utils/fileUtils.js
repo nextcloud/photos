@@ -85,7 +85,7 @@ const sortCompare = function(fileInfo1, fileInfo2, key, asc = true) {
 	}
 
 	// if this is a date, let's sort by date
-	if (isNumber(new Date(fileInfo1[key]).getTime()) && isNumber(new Date(fileInfo2[key])).getTime()) {
+	if (isNumber(new Date(fileInfo1[key]).getTime()) && isNumber(new Date(fileInfo2[key]).getTime())) {
 		return asc
 			? new Date(fileInfo2[key]).getTime() - new Date(fileInfo1[key]).getTime()
 			: new Date(fileInfo1[key]).getTime() - new Date(fileInfo2[key]).getTime()

@@ -35,8 +35,8 @@
 	<!-- Folder content -->
 	<Grid v-else>
 		<Navigation v-if="folder" key="navigation" v-bind="folder" />
-		<Folder v-for="dir in folderList" :key="dir.id" v-bind="dir" />
-		<File v-for="file in fileList" :key="file.id" v-bind="file" />
+		<Folder v-for="dir in folderList" :key="dir.fileid" v-bind="dir" />
+		<File v-for="file in fileList" :key="file.fileid" v-bind="file" />
 	</Grid>
 </template>
 
@@ -157,7 +157,7 @@ export default {
 		async fetchFolderContent() {
 			console.debug('start: fetchFolderContent', this.path)
 			// cancel any pending requests
-			this.cancelRequest()
+			this.cancelRequest('Changed folder')
 
 			// close any potential opened viewer
 			OCA.Viewer.close()
@@ -175,8 +175,9 @@ export default {
 			try {
 				// get content and current folder info
 				const { folder, folders, files } = await request(this.path)
-				this.$store.dispatch('addPath', { path: this.path, id: folder.id })
-				this.$store.dispatch('updateFolders', { id: folder.id, files, folders })
+				console.debug(folder, folders, files)
+				this.$store.dispatch('addPath', { path: this.path, fileid: folder.fileid })
+				this.$store.dispatch('updateFolders', { fileid: folder.fileid, files, folders })
 				this.$store.dispatch('updateFiles', { folder, files, folders })
 				console.debug('end: fetchFolderContent', this.path)
 			} catch (error) {

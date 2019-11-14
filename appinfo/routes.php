@@ -24,13 +24,19 @@
 return [
 	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
-	 	//['name' => 'page#index', 'url' => '/{path}', 'verb' => 'GET', 'postfix' => 'folder', 'requirements' => ['path' => '.+']],
+		['name' => 'page#index', 'url' => '/albums', 'verb' => 'GET', 'postfix' => 'albums'],
+		['name' => 'page#index', 'url' => '/albums/{tag}', 'verb' => 'GET', 'postfix' => 'albumsx'],
+		['name' => 'page#index', 'url' => '/favorites', 'verb' => 'GET', 'postfix' => 'favorites'],
+		['name' => 'page#index', 'url' => '/shared', 'verb' => 'GET', 'postfix' => 'shared'],
+		['name' => 'page#index', 'url' => '/tags/{tag}', 'verb' => 'GET', 'postfix' => 'tags', 'requirements' => ['tag' => '.*']],
+		 
+		// apis
 		[
 			'name' => 'albums#myAlbums',
 			'url' => '/api/v1/albums/{path}',
 			'verb' => 'GET',
 			'requirements' => [
-				'path' => '.+',
+				'path' => '.*',
 			],
 			'defaults' => [
 				'path' => '',
@@ -41,7 +47,7 @@ return [
 			'url' => '/api/v1/shared/{path}',
 			'verb' => 'GET',
 			'requirements' => [
-				'path' => '.+',
+				'path' => '.*',
 			],
 			'defaults' => [
 				'path' => '',

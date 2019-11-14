@@ -25,6 +25,7 @@ import { getSingleValue, getValueForKey, parseXML, propsToStat } from 'webdav/di
 import { handleResponseCode, processResponsePayload } from 'webdav/dist/response'
 import { normaliseHREF, normalisePath } from 'webdav/dist/url'
 import client, { remotePath } from './DavClient'
+import request from './DavRequest'
 import pathPosix from 'path-posix'
 import { genFileInfo } from '../utils/fileUtils'
 
@@ -37,17 +38,18 @@ import { genFileInfo } from '../utils/fileUtils'
  */
 export default async function(path, options) {
 
-	console.trace();
 	options = Object.assign({
 		method: 'PROPFIND',
 		headers: {
 			Accept: 'text/plain',
 			Depth: options.deep ? 'infinity' : 1,
 		},
+		data: request,
 		responseType: 'text',
 		details: true,
 	}, options)
 
+	// we also use the davclient for other endpoints than /files (like tags)
 	const prefixPath = `/files/${getCurrentUser().uid}`
 
 	/**
@@ -65,7 +67,7 @@ export default async function(path, options) {
 			return res.data
 		})
 		.then(parseXML)
-		.then(result => getDirectoryFiles(result, remotePath, options.details))
+		.then(result => getDirectoryFiles(result, remotePath + prefixPath, options.details))
 		.then(files => processResponsePayload(response, files, options.details))
 
 	const list = data.map(data => genFileInfo(data, prefixPath))
@@ -75,6 +77,7 @@ export default async function(path, options) {
 	const folders = []
 	const files = []
 	for (const entry of list) {
+		// is this the current provided path ?
 		if (entry.filename === path) {
 			folder = entry
 		} else if (entry.type === 'directory') {
@@ -89,7 +92,8 @@ export default async function(path, options) {
 }
 
 /**
- * Modified function to include the root requested folder
+ * ! Modified function to include the root requested folder
+ * ! See webdav library
  * Into the returned data
  *
  * @param {Object} result the request result
@@ -104,7 +108,7 @@ function getDirectoryFiles(result, serverBasePath, isDetailed = false) {
 	const responseItems = getValueForKey('response', multiStatus)
 	return (
 		responseItems
-		// Map all items to a consistent output structure (results)
+			// Map all items to a consistent output structure (results)
 			.map(item => {
 				// HREF is the file path (in full)
 				let href = getSingleValue(getValueForKey('href', item))

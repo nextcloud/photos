@@ -34,7 +34,9 @@ const mutations = {
 	 */
 	updateFiles(state, files) {
 		files.forEach(file => {
-			Vue.set(state.files, file.id, file)
+			if (file.fileid >= 0) {
+				Vue.set(state.files, file.fileid, file)
+			}
 		})
 	},
 
@@ -43,12 +45,15 @@ const mutations = {
 	 *
 	 * @param {Object} state the store mutations
 	 * @param {Object} data destructuring object
-	 * @param {number} data.id current folder id
+	 * @param {number} data.fileid current folder id
 	 * @param {Array} data.folders list of folders
 	 */
-	setSubFolders(state, { id, folders }) {
-		if (state.files[id]) {
-			Vue.set(state.files[id], 'folders', [...folders.map(folder => folder.id)])
+	setSubFolders(state, { fileid, folders }) {
+		if (state.files[fileid]) {
+			const subfolders = folders
+				.map(folder => folder.fileid)
+				.filter(id => id >= 0)
+			Vue.set(state.files[fileid], 'folders', subfolders)
 		}
 	},
 }
@@ -71,7 +76,7 @@ const actions = {
 		const t0 = performance.now()
 		// we want all the FileInfo! Folders included!
 		context.commit('updateFiles', [folder, ...files, ...folders])
-		context.commit('setSubFolders', { id: folder.id, folders })
+		context.commit('setSubFolders', { fileid: folder.fileid, folders })
 		const t1 = performance.now()
 		console.debug('perf: updateFiles', `${t1 - t0}ms`)
 	},
