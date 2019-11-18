@@ -33,19 +33,20 @@ const mutations = {
 	 *
 	 * @param {Object} state vuex state
 	 * @param {Object} data destructuring object
-	 * @param {number} data.id current folder id
+	 * @param {number} data.fileid current folder id
 	 * @param {Array} data.files list of files
 	 */
-	updateFolders(state, { id, files }) {
+	updateFolders(state, { fileid, files }) {
 		if (files.length > 0) {
-			const t0 = performance.now()
 			// sort by last modified
-			const list = files.sort((a, b) => sortCompare(a, b, 'lastmod'))
+			const list = files
+				.sort((a, b) => sortCompare(a, b, 'lastmod'))
+				.filter(file => file.fileid >= 0)
 
 			// Set folder list
-			Vue.set(state.folders, id, list.map(file => file.id))
-			const t1 = performance.now()
-			console.debug('perf: updateFolders', `${t1 - t0}ms`)
+			Vue.set(state.folders, fileid, list.map(file => file.fileid))
+		} else {
+			Vue.set(state.folders, fileid, [])
 		}
 	},
 
@@ -55,16 +56,18 @@ const mutations = {
 	 * @param {Object} state vuex state
 	 * @param {Object} data destructuring object
 	 * @param {string} data.path path of this folder
-	 * @param {number} data.id id of this folder
+	 * @param {number} data.fileid id of this folder
 	 */
-	addPath(state, { path, id }) {
-		Vue.set(state.paths, path, id)
+	addPath(state, { path, fileid }) {
+		if (fileid >= 0) {
+			Vue.set(state.paths, path, fileid)
+		}
 	},
 }
 
 const getters = {
 	folders: state => state.folders,
-	folder: state => id => state.folders[id],
+	folder: state => fileid => state.folders[fileid],
 	folderId: state => path => state.paths[path],
 }
 
@@ -74,15 +77,15 @@ const actions = {
 	 *
 	 * @param {Object} context vuex context
 	 * @param {Object} data destructuring object
-	 * @param {number} data.id current folder id
+	 * @param {number} data.fileid current folder id
 	 * @param {Array} data.files list of files
 	 * @param {Array} data.folders list of folders
 	 */
-	updateFolders(context, { id, files, folders }) {
-		context.commit('updateFolders', { id, files })
+	updateFolders(context, { fileid, files, folders }) {
+		context.commit('updateFolders', { fileid, files })
 
 		// then add each folders path indexes
-		folders.forEach(folder => context.commit('addPath', { path: folder.filename, id: folder.id }))
+		folders.forEach(folder => context.commit('addPath', { path: folder.filename, fileid: folder.fileid }))
 	},
 
 	/**
@@ -91,10 +94,10 @@ const actions = {
 	 * @param {Object} context vuex context
 	 * @param {Object} data destructuring object
 	 * @param {string} data.path path of this folder
-	 * @param {number} data.id id of this folder
+	 * @param {number} data.fileid id of this folder
 	 */
-	addPath(context, { path, id }) {
-		context.commit('addPath', { path, id })
+	addPath(context, { path, fileid }) {
+		context.commit('addPath', { path, fileid })
 	},
 }
 

@@ -42,6 +42,7 @@
 		<Folder v-for="id in tagsNames"
 			:key="id"
 			v-bind="tags[id]"
+			:fileid="id"
 			:basename="tags[id].displayName"
 			icon="icon-tag" />
 	</Grid>
@@ -123,19 +124,16 @@ export default {
 
 	watch: {
 		tagname(name) {
-			console.debug('changed:', name)
 			this.fetchRootContent()
 		},
 	},
 
 	async beforeMount() {
-		console.debug('beforemount: GRID')
 		this.fetchRootContent()
 	},
 
 	methods: {
 		async fetchRootContent() {
-			console.debug('start: fetchRootContent', this.path)
 			// cancel any pending requests
 			this.cancelRequest()
 

@@ -31,7 +31,7 @@
 				class="folder-content"
 				role="none">
 				<img v-for="file in fileList"
-					:key="file.id"
+					:key="file.fileid"
 					:src="generateImgSrc(file)"
 					alt=""
 					@load="loaded = true">
@@ -54,7 +54,7 @@
 import { generateUrl } from '@nextcloud/router'
 import { mapGetters } from 'vuex'
 
-import getPictures from '../services/FileList'
+import getAlbumContent from '../services/AlbumContent'
 import cancelableRequest from '../utils/CancelableRequest'
 
 export default {
@@ -70,13 +70,17 @@ export default {
 			type: String,
 			required: true,
 		},
-		id: {
+		fileid: {
 			type: Number,
 			required: true,
 		},
 		icon: {
 			type: String,
 			default: 'icon-folder',
+		},
+		showShared: {
+			type: Boolean,
+			default: false,
 		},
 	},
 
@@ -96,7 +100,7 @@ export default {
 
 		// files list of the current folder
 		folderContent() {
-			return this.folders[this.id]
+			return this.folders[this.fileid]
 		},
 		fileList() {
 			return this.folderContent
@@ -113,7 +117,7 @@ export default {
 		},
 
 		ariaUuid() {
-			return `folder-${this.id}`
+			return `folder-${this.fileid}`
 		},
 		ariaLabel() {
 			return t('photos', 'Open the "{name}" sub-directory', { name: this.basename })
@@ -137,15 +141,14 @@ export default {
 
 	async created() {
 		// init cancellable request
-		const { request, cancel } = cancelableRequest(getPictures)
+		const { request, cancel } = cancelableRequest(getAlbumContent)
 		this.cancelRequest = cancel
 
 		try {
 			// get data
-			const { files, folders } = await request(this.filename)
-			// this.cancelRequest('Stop!')
-			this.$store.dispatch('updateFolders', { id: this.id, files, folders })
-			this.$store.dispatch('updateFiles', { folder: this.folder, files, folders })
+			const { folder, folders, files } = await request(this.filename, {shared: this.showShared})
+			this.$store.dispatch('updateFolders', { fileid: folder.fileid, files, folders })
+			this.$store.dispatch('updateFiles', { folder, files, folders })
 		} catch (error) {
 			if (error.response && error.response.status) {
 				console.error('Failed to get folder content', this.folder, error.response)
@@ -155,13 +158,13 @@ export default {
 	},
 
 	beforeDestroy() {
-		this.cancelRequest()
+		this.cancelRequest('Navigated away')
 	},
 
 	methods: {
-		generateImgSrc({ id, etag }) {
+		generateImgSrc({ fileid, etag }) {
 			// use etag to force cache reload if file changed
-			return generateUrl(`/core/preview?fileId=${id}&x=${256}&y=${256}&a=true&v=${etag}`)
+			return generateUrl(`/core/preview?fileId=${fileid}&x=${256}&y=${256}&a=true&v=${etag}`)
 		},
 
 		fetch() {

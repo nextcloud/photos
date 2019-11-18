@@ -22,8 +22,35 @@
  */
 
 return [
-    'routes' => [
-	   ['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
-	   ['name' => 'page#index', 'url' => '/{path}', 'verb' => 'GET', 'postfix' => 'folder', 'requirements' => ['path' => '.+']],
-    ]
+	'routes' => [
+		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
+		['name' => 'page#index', 'url' => '/albums', 'verb' => 'GET', 'postfix' => 'albums'],
+		['name' => 'page#index', 'url' => '/favorites', 'verb' => 'GET', 'postfix' => 'favorites'],
+		['name' => 'page#index', 'url' => '/shared', 'verb' => 'GET', 'postfix' => 'shared'],
+		['name' => 'page#index', 'url' => '/tags', 'verb' => 'GET', 'postfix' => 'tags'],
+		 
+		// apis
+		[
+			'name' => 'albums#myAlbums',
+			'url' => '/api/v1/albums/{path}',
+			'verb' => 'GET',
+			'requirements' => [
+				'path' => '.*',
+			],
+			'defaults' => [
+				'path' => '',
+			],
+		],
+		[
+			'name' => 'albums#sharedAlbums',
+			'url' => '/api/v1/shared/{path}',
+			'verb' => 'GET',
+			'requirements' => [
+				'path' => '.*',
+			],
+			'defaults' => [
+				'path' => '',
+			],
+		],
+	]
 ];

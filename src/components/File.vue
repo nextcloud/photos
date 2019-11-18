@@ -68,7 +68,7 @@ export default {
 			type: String,
 			required: true,
 		},
-		id: {
+		fileid: {
 			type: Number,
 			required: true,
 		},
@@ -87,7 +87,7 @@ export default {
 			return generateRemoteUrl(`dav/files/${getCurrentUser().uid}`) + this.filename
 		},
 		ariaUuid() {
-			return `image-${this.id}`
+			return `image-${this.fileid}`
 		},
 		ariaLabel() {
 			return t('photos', 'Open the full size "{name}" image', { name: this.basename })
@@ -97,7 +97,7 @@ export default {
 	created() {
 		// Allow us to cancel the img loading on destroy
 		// use etag to force cache reload if file changed
-		this.img.src = generateUrl(`/core/preview?fileId=${this.id}&x=${1024}&y=${1024}&a=true&v=${this.etag}`)
+		this.img.src = generateUrl(`/core/preview?fileId=${this.fileid}&x=${1024}&y=${1024}&a=true&v=${this.etag}`)
 		this.img.addEventListener('load', () => {
 			this.src = this.img.src
 		})

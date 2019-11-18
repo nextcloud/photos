@@ -29,7 +29,7 @@ import { generateRemoteUrl } from '@nextcloud/router'
 const patcher = webdav.getPatcher()
 patcher.patch('request', axios)
 
-// init webdav client
+// init webdav client on default dav endpoint
 const remote = generateRemoteUrl(`dav`)
 const client = webdav.createClient(remote)
 
