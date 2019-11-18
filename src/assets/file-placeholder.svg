@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+	<defs>
+		<linearGradient id="placeholder__gradient">
+			<stop offset="0%" stop-color="#ededed"><animate attributeName="stop-color" values="#ededed; #ededed; #cccccc; #cccccc; #ededed" dur="2s" repeatCount="indefinite"/></stop>
+			<stop offset="100%" stop-color="#cccccc"><animate attributeName="stop-color" values="#cccccc; #ededed; #ededed; #cccccc; #cccccc" dur="2s" repeatCount="indefinite"/></stop>
+		</linearGradient>
+	</defs>
+</svg>

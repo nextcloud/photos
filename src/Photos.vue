@@ -38,6 +38,8 @@
 
 			<!-- svg img loading placeholder (linked to the File component) -->
 			<span class="hidden-visually" role="none" v-html="svgplaceholder" />
+			<span class="hidden-visually" role="none" v-html="imgplaceholder" />
+			<span class="hidden-visually" role="none" v-html="videoplaceholder" />
 		</AppContent>
 	</Content>
 </template>
@@ -47,7 +49,9 @@ import Content from '@nextcloud/vue/dist/Components/Content'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
-import svgplaceholder from './assets/img-placeholder.svg'
+import svgplaceholder from './assets/file-placeholder.svg'
+import imgplaceholder from './assets/image.svg'
+import videoplaceholder from './assets/video.svg'
 
 export default {
 	name: 'Photos',
@@ -61,6 +65,8 @@ export default {
 		return {
 			loading: true,
 			svgplaceholder,
+			imgplaceholder,
+			videoplaceholder,
 		}
 	},
 }

@@ -25,10 +25,12 @@ declare(strict_types=1);
 namespace OCA\Photos\Controller;
 
 use OCA\Files\Event\LoadSidebar;
+use OCA\Photos\AppInfo\Application;
 use OCA\Viewer\Event\LoadViewer;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IInitialStateService;
 use OCP\IRequest;
 use OCP\Util;
 
@@ -39,13 +41,19 @@ class PageController extends Controller {
 	/** @var IEventDispatcher */
 	private $eventDispatcher;
 
+	/** @var IInitialStateService */
+	private $initialStateService;
+
 	public function __construct($appName,
 								IRequest $request,
-								IEventDispatcher $eventDispatcher) {
+								IEventDispatcher $eventDispatcher,
+								IInitialStateService $initialStateService) {
 		parent::__construct($appName, $request);
 
 		$this->appName = $appName;
 		$this->eventDispatcher = $eventDispatcher;
+		$this->initialStateService = $initialStateService;
+
 	}
 
 	/**
@@ -59,9 +67,10 @@ class PageController extends Controller {
 		$this->eventDispatcher->dispatch(LoadSidebar::class, new LoadSidebar());
 		$this->eventDispatcher->dispatch(LoadViewer::class, new LoadViewer());
 
+		$this->initialStateService->provideInitialState($this->appName, 'mimes', Application::MIMES);
 
-		Util::addScript('photos', 'photos');
-		Util::addStyle('photos', 'icons');
+		Util::addScript($this->appName, 'photos');
+		Util::addStyle($this->appName, 'icons');
 
 		$response = new TemplateResponse($this->appName, 'main');
 		return $response;

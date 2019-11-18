@@ -36,9 +36,10 @@
 		</transition>
 		<svg v-if="!loaded"
 			xmlns="http://www.w3.org/2000/svg"
-			viewBox="0 0 50 50"
-			fill="url(#img-placeholder__gradient)">
-			<use xlink:href="#img-placeholder" />
+			viewBox="0 0 32 32"
+			fill="url(#placeholder__gradient)">
+			<use v-if="isImage" xlink:href="#placeholder--img" />
+			<use v-else xlink:href="#placeholder--video" />
 		</svg>
 
 		<!-- image name and cover -->
@@ -72,6 +73,10 @@ export default {
 			type: Number,
 			required: true,
 		},
+		mime: {
+			type: String,
+			required: true,
+		},
 	},
 
 	data() {
@@ -91,6 +96,9 @@ export default {
 		},
 		ariaLabel() {
 			return t('photos', 'Open the full size "{name}" image', { name: this.basename })
+		},
+		isImage() {
+			return this.mime.startsWith('image')
 		},
 	},
 

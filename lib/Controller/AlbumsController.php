@@ -25,6 +25,7 @@ declare(strict_types=1);
 namespace OCA\Photos\Controller;
 
 use OCA\Files_Sharing\SharedStorage;
+use OCA\Photos\AppInfo\Application;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
@@ -125,7 +126,7 @@ class AlbumsController extends Controller {
 	}
 
 	private function validFile(File $file, bool $shared): bool {
-		if ($file->getMimePart() === 'image' && $this->isShared($file) === $shared) {
+		if (in_array($file->getMimeType(), Application::MIMES) && $this->isShared($file) === $shared) {
 			return true;
 		}
 

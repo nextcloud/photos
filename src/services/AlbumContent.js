@@ -23,6 +23,7 @@
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import { genFileInfo } from '../utils/fileUtils'
+import allowedMimes from './AllowedMimes'
 
 /**
  * List files from a folder and filter out unwanted mimes
@@ -44,13 +45,14 @@ export default async function(path = '/', options = {}) {
 	let folder = {}
 	const folders = []
 	const files = []
+	console.info(allowedMimes)
 	for (const entry of list) {
 		// is this the current provided path ?
 		if (entry.filename === path) {
 			folder = entry
 		} else if (entry.type !== 'file') {
 			folders.push(entry)
-		} else if (entry.mime === 'image/jpeg') {
+		} else if (allowedMimes.indexOf(entry.mime) > -1) {
 			files.push(entry)
 		}
 	}

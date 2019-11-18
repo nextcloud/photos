@@ -30,6 +30,22 @@ class Application extends App {
 
 	const APP_ID = 'photos';
 
+	const MIMES = [
+		// 'image/png',			// too rarely used for photos
+		'image/jpeg',
+		// 'image/gif',			// too rarely used for photos
+		// 'image/x-xbitmap',	// too rarely used for photos
+		// 'image/bmp',			// too rarely used for photos
+		// 'image/svg+xml',		// too rarely used for photos
+		// 'video/mpeg',		// too rarely used for photos
+		// 'video/ogg',			// too rarely used for photos
+		// 'video/webm',		// too rarely used for photos
+		'video/mp4',
+		// 'video/x-m4v',		// too rarely used for photos
+		'video/quicktime',
+		// 'video/x-matroska'	// too rarely used for photos
+	];
+
 	public function __construct() {
 		parent::__construct(self::APP_ID);
 	}
