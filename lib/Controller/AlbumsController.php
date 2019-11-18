@@ -89,7 +89,7 @@ class AlbumsController extends Controller {
 			// properly format full path and make sure
 			// we're relative to the user home folder
 			$isRoot = $node === $userFolder;
-			$path = $isRoot ? '/' : str_replace($userFolder->getPath(), '', $node->getPath());
+			$path = $userFolder->getRelativePath($node->getPath());
 
 			$result[] = [
 				'basename' => $isRoot ? '' : $node->getName(),
