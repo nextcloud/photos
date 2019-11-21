@@ -70,7 +70,7 @@ export default async function(path, options) {
 		.then(result => getDirectoryFiles(result, remotePath + prefixPath, options.details))
 		.then(files => processResponsePayload(response, files, options.details))
 
-	const list = data.map(data => genFileInfo(data, prefixPath))
+	const list = data.map(data => genFileInfo(data))
 
 	// filter all the files and folders
 	let folder = {}

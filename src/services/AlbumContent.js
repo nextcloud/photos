@@ -38,14 +38,13 @@ export default async function(path = '/', options = {}) {
 
 	// fetch listing
 	const response = await axios.get(prefixPath + path, options)
-
 	const list = response.data.map(data => genFileInfo(data, prefixPath))
 
 	// filter all the files and folders
 	let folder = {}
 	const folders = []
 	const files = []
-	console.info(allowedMimes)
+
 	for (const entry of list) {
 		// is this the current provided path ?
 		if (entry.filename === path) {

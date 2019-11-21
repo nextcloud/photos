@@ -33,8 +33,14 @@ request.prepareRequestOptions = function(requestOptions, methodOptions) {
 	if (methodOptions.cancelToken && typeof methodOptions.cancelToken === 'object') {
 		requestOptions.cancelToken = Object.assign({}, requestOptions.cancelToken || {}, methodOptions.cancelToken)
 	}
+
 	// exploit old method
 	oldPrepareRequestOptions(requestOptions, methodOptions)
+
+	// allow us to override the request method
+	if (methodOptions.method && typeof methodOptions.method === 'string') {
+		requestOptions.method = methodOptions.method
+	}
 }
 
 module.exports = request

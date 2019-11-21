@@ -61,7 +61,8 @@ const mutations = {
 		const list = files.sort((a, b) => sortCompare(a, b, 'lastmod'))
 
 		// overwrite list
-		Vue.set(state.tags[id], 'files', list.map(file => file.id))
+		console.info(id, list)
+		Vue.set(state.tags[id], 'files', list.map(file => file.fileid))
 	},
 }
 

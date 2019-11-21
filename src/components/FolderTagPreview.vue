@@ -21,97 +21,114 @@
  -->
 
 <template>
-	<FolderTagPreview :id="fileid"
-		:name="basename"
-		:path="filename"
-		:file-list="fileList" />
+	<router-link :class="{'folder--clear': isEmpty}"
+		class="folder"
+		:to="to"
+		:aria-label="ariaLabel">
+		<!-- Images preview -->
+		<transition name="fade">
+			<div v-show="loaded"
+				:class="`folder-content--grid-${fileList.length}`"
+				class="folder-content"
+				role="none">
+				<img v-for="file in fileList"
+					:key="file.fileid"
+					:src="generateImgSrc(file)"
+					alt=""
+					@load="loaded = true">
+			</div>
+		</transition>
+
+		<div
+			class="folder-name">
+			<span :class="[!isEmpty ? 'icon-white' : 'icon-dark', icon]"
+				class="folder-name__icon"
+				role="img" />
+			<p :id="ariaUuid" class="folder-name__name">
+				{{ name }}
+			</p>
+		</div>
+
+		<div class="cover" role="none" />
+	</router-link>
 </template>
 
 <script>
 import { generateUrl } from '@nextcloud/router'
-import { mapGetters } from 'vuex'
-
-import getAlbumContent from '../services/AlbumContent'
-import cancelableRequest from '../utils/CancelableRequest'
-import FolderTagPreview from './FolderTagPreview'
 
 export default {
-	name: 'Folder',
-
-	components: {
-		FolderTagPreview,
-	},
-	inheritAttrs: false,
+	name: 'FolderTagPreview',
 
 	props: {
-		basename: {
+		icon: {
 			type: String,
-			required: true,
+			default: 'icon-folder',
 		},
-		filename: {
-			type: String,
-			required: true,
-		},
-		fileid: {
+		id: {
 			type: Number,
 			required: true,
 		},
-		showShared: {
-			type: Boolean,
-			default: false,
+		name: {
+			type: String,
+			required: true,
+		},
+		path: {
+			type: String,
+			required: true,
+		},
+		fileList: {
+			type: Array,
+			default: () => [],
 		},
 	},
 
 	data() {
 		return {
-			cancelRequest: () => {},
+			loaded: false,
 		}
 	},
 
-	beforeDestroy() {
-		this.cancelRequest('Navigated away')
-	},
 	computed: {
-		// global lists
-		...mapGetters([
-			'files',
-			'folders',
-		]),
-
-		// files list of the current folder
-		folderContent() {
-			return this.folders[this.fileid]
+		// folder is empty
+		isEmpty() {
+			return this.fileList.length === 0
 		},
-		fileList() {
-			return this.folderContent
-				? this.folderContent
-					.map(id => this.files[id])
-					.filter(file => !!file)
-					.slice(0, 4) // only get the 4 first images
-				: []
+
+		ariaUuid() {
+			return `folder-${this.id}`
+		},
+		ariaLabel() {
+			return t('photos', 'Open the "{name}" sub-directory', { name: this.name })
+		},
+
+		/**
+		 * We do not want encoded slashes when browsing by folder
+		 * so we generate a new valid route object based on the
+		 * current named route, get the final url back, decode it
+		 * and use it as a direct string.
+		 * Which vue-router does not encode afterwards!
+		 * @returns {string}
+		 */
+		to() {
+			// always remove first slash, the router
+			// manage it automatically
+			const regex = /^\/?(.+)/i
+			const path = regex.exec(this.path)[1]
+
+			// apply to current route
+			const route = Object.assign({}, this.$route, {
+				params: { path },
+			})
+			// returning a string prevent vue-router to encode it again
+			return decodeURIComponent(this.$router.resolve(route).resolved.path)
 		},
 	},
 
-	async created() {
-		// init cancellable request
-		const { request, cancel } = cancelableRequest(getAlbumContent)
-		this.cancelRequest = cancel
-
-		try {
-			// get data
-			const { folder, folders, files } = await request(this.filename, { shared: this.showShared })
-			this.$store.dispatch('updateFolders', { fileid: folder.fileid, files, folders })
-			this.$store.dispatch('updateFiles', { folder, files, folders })
-		} catch (error) {
-			if (error.response && error.response.status) {
-				console.error('Failed to get folder content', this.folder, error.response)
-			}
-			// else we just cancelled the request
-		}
-	},
-
-	beforeDestroy() {
-		this.cancelRequest('Navigated away')
+	methods: {
+		generateImgSrc({ fileid, etag }) {
+			// use etag to force cache reload if file changed
+			return generateUrl(`/core/preview?fileId=${fileid}&x=${256}&y=${256}&a=true&v=${etag}`)
+		},
 	},
 }
 </script>
@@ -206,7 +223,6 @@ $name-height: 1.2rem;
 
 		// hide everything but pictures
 		// on hover/active/focus
-		&.active,
 		&:active,
 		&:hover,
 		&:focus {

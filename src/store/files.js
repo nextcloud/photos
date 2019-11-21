@@ -52,6 +52,7 @@ const mutations = {
 		if (state.files[fileid]) {
 			const subfolders = folders
 				.map(folder => folder.fileid)
+				// some invalid folders have an id of -1 (ext storage)
 				.filter(id => id >= 0)
 			Vue.set(state.files[fileid], 'folders', subfolders)
 		}
@@ -64,7 +65,7 @@ const getters = {
 
 const actions = {
 	/**
-	 * Increment the number of contacts accepted
+	 * Update files, folders and their respective subfolders
 	 *
 	 * @param {Object} context the store mutations
 	 * @param {Object} data destructuring object
@@ -72,10 +73,20 @@ const actions = {
 	 * @param {Array} data.files list of files
 	 * @param {Array} data.folders list of folders within current folder
 	 */
-	updateFiles(context, { folder, files, folders }) {
+	updateFiles(context, { folder, files = [], folders = [] } = {}) {
 		// we want all the FileInfo! Folders included!
 		context.commit('updateFiles', [folder, ...files, ...folders])
 		context.commit('setSubFolders', { fileid: folder.fileid, folders })
+	},
+
+	/**
+	 * Append or update given files
+	 *
+	 * @param {Object} context the store mutations
+	 * @param {Array} files list of files
+	 */
+	appendFiles(context, files = []) {
+		context.commit('updateFiles', files)
 	},
 }
 

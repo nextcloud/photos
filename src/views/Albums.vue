@@ -29,12 +29,13 @@
 		{{ t('photos', 'An error occurred') }}
 	</EmptyContent>
 	<EmptyContent v-else-if="!loading && isEmpty" illustration-name="empty">
-		{{ t('photos', 'This folder does not contain pictures') }}
+		{{ t('photos', 'No photos in here') }}
 	</EmptyContent>
 
 	<!-- Folder content -->
 	<Grid v-else>
 		<Navigation v-if="folder" key="navigation" v-bind="folder" />
+
 		<Folder v-for="dir in folderList"
 			:key="dir.fileid"
 			v-bind="dir"
@@ -182,7 +183,7 @@ export default {
 					if (error.response.status === 404) {
 						this.error = 404
 						setTimeout(() => {
-							this.$router.push({ name: 'root' })
+							this.$router.push({ name: this.$route.name })
 						}, 3000)
 					} else {
 						this.error = error

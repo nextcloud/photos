@@ -25,6 +25,9 @@
 		<div v-if="haveIllustration" class="illustration" v-html="illustration" />
 		<div v-else class="icon-error" />
 		<h2><slot /></h2>
+		<p v-show="$slots.desc">
+			<slot name="desc" />
+		</p>
 	</div>
 </template>
 

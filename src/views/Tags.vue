@@ -22,35 +22,29 @@
 
 <template>
 	<!-- Errors handlers-->
-	<!-- <EmptyContent v-if="error === 404" illustration-name="folder">
-		{{ t('photos', 'This folder does not exists') }}
-	</EmptyContent>
-	<EmptyContent v-else-if="error">
+	<EmptyContent v-if="error">
 		{{ t('photos', 'An error occurred') }}
 	</EmptyContent>
 	<EmptyContent v-else-if="!loading && isEmpty" illustration-name="empty">
-		{{ t('photos', 'This folder does not contain pictures') }}
-	</EmptyContent> -->
+		{{ t('photos', 'No tags yet') }}
+		<template #desc>
+			{{ t('photos', 'Photos with tags will show up here') }}
+		</template>
+	</EmptyContent>
 
 	<!-- Folder content -->
-	<Grid v-if="isRoot">
+	<Grid v-else-if="isRoot">
 		<Navigation v-if="tag"
 			key="navigation"
 			:basename="tagname"
 			:filename="'/' + tagname"
 			:root-title="t('photos', 'Tags')" />
-		<Folder v-for="id in tagsNames"
+		<Tag v-for="id in tagsNames"
 			:key="id"
 			v-bind="tags[id]"
 			:fileid="id"
-			:basename="tags[id].displayName"
-			icon="icon-tag" />
+			:basename="tags[id].displayName" />
 	</Grid>
-	<!-- <Grid v-else>
-		<Navigation v-if="folder" key="navigation" v-bind="folder" />
-		<Folder v-for="dir in folderList" :key="dir.id" :folder="dir" />
-		<File v-for="file in fileList" :key="file.id" v-bind="file" />
-	</Grid> -->
 </template>
 
 <script>
@@ -59,7 +53,7 @@ import { mapGetters } from 'vuex'
 import getSystemTags from '../services/SystemTags'
 
 import EmptyContent from './EmptyContent'
-import Folder from '../components/Folder'
+import Tag from '../components/Tag'
 import File from '../components/File'
 import Grid from '../components/Grid'
 import Navigation from '../components/Navigation'
@@ -71,7 +65,7 @@ export default {
 	components: {
 		EmptyContent,
 		File,
-		Folder,
+		Tag,
 		Grid,
 		Navigation,
 	},
@@ -119,6 +113,10 @@ export default {
 
 		isRoot() {
 			return this.tagname === ''
+		},
+
+		isEmpty() {
+			return Object.keys(this.tagsNames).length === 0
 		},
 	},
 
