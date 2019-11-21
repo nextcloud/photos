@@ -60,9 +60,6 @@ export default {
 		}
 	},
 
-	beforeDestroy() {
-		this.cancelRequest('Navigated away')
-	},
 	computed: {
 		// global lists
 		...mapGetters([
@@ -84,6 +81,10 @@ export default {
 		},
 	},
 
+	beforeDestroy() {
+		this.cancelRequest('Navigated away')
+	},
+
 	async created() {
 		// init cancellable request
 		const { request, cancel } = cancelableRequest(getTaggedImages)
@@ -91,7 +92,7 @@ export default {
 
 		try {
 			// get data
-			const files = await request(this.id, { shared: this.showShared })
+			const files = await request(this.id)
 			this.$store.dispatch('updateTag', { id: this.id, files })
 			this.$store.dispatch('appendFiles', files)
 		} catch (error) {

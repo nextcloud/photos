@@ -42,37 +42,27 @@ export default new Router({
 			name: 'root',
 		},
 		{
-			path: '/albums',
+			path: '/albums/:path*',
 			component: Albums,
 			name: 'albums',
 			props: route => ({
 				// always lead current path with a slash
 				path: `/${route.params.path ? route.params.path : ''}`,
+				// if path is empty
+				isRoot: !route.params.path,
 			}),
-			children: [
-				{
-					path: ':path*',
-					name: 'albums',
-					component: Albums,
-				},
-			],
 		},
 		{
-			path: '/shared',
+			path: '/shared/:path*',
 			component: Albums,
 			name: 'shared',
 			props: route => ({
 				// always lead current path with a slash
 				path: `/${route.params.path ? route.params.path : ''}`,
+				// if path is empty
+				isRoot: !route.params.path,
 				showShared: true,
 			}),
-			children: [
-				{
-					path: ':path*',
-					name: 'shared',
-					component: Albums,
-				},
-			],
 		},
 		{
 			path: '/favorites',
@@ -80,19 +70,14 @@ export default new Router({
 			name: 'favorites',
 		},
 		{
-			path: '/tags',
+			path: '/tags/:path*',
 			component: Tags,
 			name: 'tags',
 			props: route => ({
-				tagname: route.params.tagname,
+				path: `${route.params.path ? route.params.path : ''}`,
+				// if path is empty
+				isRoot: !route.params.path,
 			}),
-			children: [
-				{
-					path: ':tagname',
-					name: 'tagname',
-					component: Tags,
-				},
-			],
 		},
 		{
 			path: '/maps',

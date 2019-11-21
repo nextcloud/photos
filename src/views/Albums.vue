@@ -154,6 +154,10 @@ export default {
 		this.fetchFolderContent()
 	},
 
+	beforeDestroy() {
+		this.cancelRequest()
+	},
+
 	methods: {
 		async fetchFolderContent() {
 			// cancel any pending requests

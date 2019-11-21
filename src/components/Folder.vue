@@ -28,7 +28,6 @@
 </template>
 
 <script>
-import { generateUrl } from '@nextcloud/router'
 import { mapGetters } from 'vuex'
 
 import getAlbumContent from '../services/AlbumContent'
@@ -68,9 +67,6 @@ export default {
 		}
 	},
 
-	beforeDestroy() {
-		this.cancelRequest('Navigated away')
-	},
 	computed: {
 		// global lists
 		...mapGetters([

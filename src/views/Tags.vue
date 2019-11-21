@@ -33,17 +33,22 @@
 	</EmptyContent>
 
 	<!-- Folder content -->
-	<Grid v-else-if="isRoot">
-		<Navigation v-if="tag"
+	<Grid v-else>
+		<Navigation
 			key="navigation"
-			:basename="tagname"
-			:filename="'/' + tagname"
+			:basename="path"
+			:filename="'/' + path"
 			:root-title="t('photos', 'Tags')" />
-		<Tag v-for="id in tagsNames"
-			:key="id"
-			v-bind="tags[id]"
-			:fileid="id"
-			:basename="tags[id].displayName" />
+		<template v-if="isRoot">
+			<Tag v-for="id in tagsNames"
+				:key="id"
+				v-bind="tags[id]"
+				:fileid="id"
+				:basename="tags[id].displayName" />
+		</template>
+		<template v-else>
+			<File v-for="file in fileList" :key="file.fileid" v-bind="file" />
+		</template>
 	</Grid>
 </template>
 
@@ -51,6 +56,7 @@
 import { mapGetters } from 'vuex'
 
 import getSystemTags from '../services/SystemTags'
+import getTaggedImages from '../services/TaggedImages'
 
 import EmptyContent from './EmptyContent'
 import Tag from '../components/Tag'
@@ -70,13 +76,17 @@ export default {
 		Navigation,
 	},
 	props: {
-		tagname: {
+		path: {
 			type: String,
 			default: '',
 		},
 		loading: {
 			type: Boolean,
 			required: true,
+		},
+		isRoot: {
+			type: Boolean,
+			default: true,
 		},
 	},
 
@@ -97,7 +107,7 @@ export default {
 
 		// current tag id from current path
 		tagId() {
-			return this.$store.getters.tagId(this.tagname)
+			return this.$store.getters.tagId(this.path)
 		},
 
 		// current tag
@@ -111,23 +121,41 @@ export default {
 				.filter(file => !!file)
 		},
 
-		isRoot() {
-			return this.tagname === ''
-		},
-
 		isEmpty() {
 			return Object.keys(this.tagsNames).length === 0
 		},
 	},
 
 	watch: {
-		tagname(name) {
-			this.fetchRootContent()
+		async path() {
+			// if we don't have the tag in the store yet,
+			// we need to fetch the list first
+			if (!this.tagId) {
+				await this.fetchRootContent()
+			}
+
+			// if we're not in the root, we fetch the data
+			if (!this.isRoot) {
+				this.fetchContent()
+			}
 		},
 	},
 
+	beforeDestroy() {
+		this.cancelRequest()
+	},
+
 	async beforeMount() {
-		this.fetchRootContent()
+		// if we don't have the tag in the store yet,
+		// we need to fetch the list first
+		if (!this.tagId) {
+			await this.fetchRootContent()
+		}
+
+		// if we're not in the root, we fetch the data
+		if (!this.isRoot) {
+			this.fetchContent()
+		}
 	},
 
 	methods: {
@@ -139,7 +167,7 @@ export default {
 			OCA.Viewer.close()
 
 			// if we don't already have some cached data let's show a loader
-			if (!this.tags[this.folderId]) {
+			if (!this.tags[this.tagId]) {
 				this.$emit('update:loading', true)
 			}
 			this.error = null
@@ -150,6 +178,32 @@ export default {
 
 			const tags = await request()
 			this.$store.dispatch('updateTags', tags)
+
+			// done loading
+			this.$emit('update:loading', false)
+		},
+
+		async fetchContent() {
+			// cancel any pending requests
+			this.cancelRequest()
+
+			// close any potential opened viewer
+			OCA.Viewer.close()
+
+			// if we don't already have some cached data let's show a loader
+			if (!this.tags[this.tagId]) {
+				this.$emit('update:loading', true)
+			}
+			this.error = null
+
+			// init cancellable request
+			const { request, cancel } = cancelableRequest(getTaggedImages)
+			this.cancelRequest = cancel
+
+			// get data
+			const files = await request(this.tagId)
+			this.$store.dispatch('updateTag', { id: this.tagId, files })
+			this.$store.dispatch('appendFiles', files)
 
 			// done loading
 			this.$emit('update:loading', false)

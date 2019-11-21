@@ -98,17 +98,24 @@ export default {
 		 * @returns {string|object}
 		 */
 		to() {
-			if (this.parentPath === '/') {
-				return { name: this.$route.name }
+			// always remove first slash, the router
+			// manage it automatically
+			const regex = /^\/?(.*)/i
+			const path = regex.exec(this.parentPath)[1]
+
+			// apply to current route
+			const { name, params } = Object.assign({}, this.$route, {
+				params: { path },
+			})
+
+			// return the full object as we don't care about
+			// an empty path if this is route
+			if (path === '') {
+				return { name }
 			}
 
-			// else let's build the path and make sure it's
-			// not url encoded (more importantly if filename have slashes)
-			const route = Object.assign({}, this.$route, {
-				// always remove first slash
-				params: { path: this.parentPath.substr(1) },
-			})
-			return decodeURIComponent(this.$router.resolve(route).resolved.path)
+			// returning a string prevent vue-router to encode it again
+			return decodeURIComponent(this.$router.resolve({ name, params }).resolved.path)
 		},
 	},
 
