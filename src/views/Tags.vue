@@ -142,7 +142,7 @@ export default {
 	},
 
 	beforeDestroy() {
-		this.cancelRequest()
+		this.cancelRequest('Changed view')
 	},
 
 	async beforeMount() {
@@ -161,7 +161,7 @@ export default {
 	methods: {
 		async fetchRootContent() {
 			// cancel any pending requests
-			this.cancelRequest()
+			this.cancelRequest('Changed folder')
 
 			// close any potential opened viewer
 			OCA.Viewer.close()

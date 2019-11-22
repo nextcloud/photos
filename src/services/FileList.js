@@ -36,7 +36,7 @@ import { genFileInfo } from '../utils/fileUtils'
  * @param {Object} [options] optional options for axios
  * @returns {Array} the file list
  */
-export default async function(path, options) {
+export default async function(path, options = {}) {
 
 	options = Object.assign({
 		method: 'PROPFIND',

@@ -20,22 +20,39 @@
  *
  */
 
-import Vue from 'vue'
-import Vuex, { Store } from 'vuex'
+const state = {
+	timeline: [],
+}
 
-import files from './files'
-import folders from './folders'
-import systemtags from './systemtags'
-import timeline from './timeline'
-
-Vue.use(Vuex)
-export default new Store({
-	modules: {
-		files,
-		folders,
-		systemtags,
-		timeline,
+const mutations = {
+	/**
+	 * Update timeline files list
+	 *
+	 * @param {Object} state the store mutations
+	 * @param {Array} files the store mutations
+	 */
+	updateTimeline(state, files) {
+		state.timeline = files
+			.map(file => file.fileid)
+			.filter(id => id >= 0)
 	},
+}
 
-	strict: process.env.NODE_ENV !== 'production',
-})
+const getters = {
+	timeline: state => state.timeline,
+}
+
+const actions = {
+	/**
+	 * Update timeline files list
+	 *
+	 * @param {Object} context the store mutations
+	 * @param {Number[]} files list of files ids
+	 */
+	updateTimeline(context, files = []) {
+		// we want all the FileInfo! Folders included!
+		context.commit('updateTimeline', files)
+	},
+}
+
+export default { state, mutations, getters, actions }

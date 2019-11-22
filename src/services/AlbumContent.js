@@ -38,7 +38,7 @@ export default async function(path = '/', options = {}) {
 
 	// fetch listing
 	const response = await axios.get(prefixPath + path, options)
-	const list = response.data.map(data => genFileInfo(data, prefixPath))
+	const list = response.data.map(data => genFileInfo(data))
 
 	// filter all the files and folders
 	let folder = {}

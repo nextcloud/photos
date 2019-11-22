@@ -20,7 +20,6 @@
  *
  */
 
-import { generateRemoteUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import client from './DavClient'
 import { genFileInfo } from '../utils/fileUtils'
@@ -28,53 +27,69 @@ import { genFileInfo } from '../utils/fileUtils'
 /**
  * List files from a folder and filter out unwanted mimes
  *
+ * @param {string} [path] not used
+ * @param {Object} [options] used for the cancellable requests
  * @returns {Array} the file list
  */
-export default async function() {
-	// fetch listing
-	const response = await client.customRequest('', {
+export default async function(path = '', options) {
+
+	const prefixPath = `/files/${getCurrentUser().uid}`
+
+	options = Object.assign({
 		method: 'SEARCH',
 		headers: {
 			'content-Type': 'text/xml',
 		},
-		url: generateRemoteUrl(`dav`),
 		data: `<?xml version="1.0" encoding="UTF-8"?>
-<d:searchrequest xmlns:d="DAV:"
-	xmlns:oc="http://owncloud.org/ns"
-	xmlns:nc="http://nextcloud.org/ns"
-	xmlns:ocs="http://open-collaboration-services.org/ns">
-	<d:basicsearch>
-		<d:select>
-			<d:prop>
-				<d:getlastmodified />
-				<d:getetag />
-				<d:getcontenttype />
-				<oc:fileid />
-				<d:getcontentlength />
-				<nc:has-preview />
-				<oc:favorite />
-				<d:resourcetype />
-			</d:prop>
-		</d:select>
-		<d:from>
-			<d:scope>
-				<d:href>/files/${getCurrentUser().uid}/</d:href>
-				<d:depth>infinity</d:depth>
-			</d:scope>
-		</d:from>
-		<d:where>
-			<d:like>
-				<d:prop>
-					<d:getcontenttype/>
-				</d:prop>
-				<d:literal>image/jpeg</d:literal>
-			</d:like>
-		</d:where>
-		<d:orderby/>
-	</d:basicsearch>
-</d:searchrequest>` })
+			<d:searchrequest xmlns:d="DAV:"
+				xmlns:oc="http://owncloud.org/ns"
+				xmlns:nc="http://nextcloud.org/ns"
+				xmlns:ocs="http://open-collaboration-services.org/ns">
+				<d:basicsearch>
+					<d:select>
+						<d:prop>
+							<d:getlastmodified />
+							<d:getetag />
+							<d:getcontenttype />
+							<oc:fileid />
+							<d:getcontentlength />
+							<nc:has-preview />
+							<oc:favorite />
+							<d:resourcetype />
+						</d:prop>
+					</d:select>
+					<d:from>
+						<d:scope>
+							<d:href>${prefixPath}</d:href>
+							<d:depth>infinity</d:depth>
+						</d:scope>
+					</d:from>
+					<d:where>
+						<d:like>
+							<d:prop>
+								<d:getcontenttype/>
+							</d:prop>
+							<d:literal>image/jpeg</d:literal>
+						</d:like>
+						<d:eq>
+							<d:prop>
+								<oc:owner-id/>
+							</d:prop>
+							<d:literal>admin</d:literal>
+						</d:eq>
+					</d:where>
+					<d:orderby/>
+				</d:basicsearch>
+			</d:searchrequest>`,
+		deep: true,
+		details: true,
+	}, options)
 
-	const entry = response.data
-	console.info(entry)
+	const response = await client.getDirectoryContents('', options)
+
+	return response.data
+		.map(data => genFileInfo(data))
+		// remove prefix path from full file path
+		.map(data => Object.assign({}, data, { filename: data.filename.replace(prefixPath, '') }))
 
 }

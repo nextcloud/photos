@@ -55,9 +55,7 @@ import client from './DavClient'
  */
 export default async function(id, options = {}) {
 
-	const prefixPath = `/files/${getCurrentUser().uid}`
-
-	const response = await client.getDirectoryContents(prefixPath, Object.assign({}, {
+	options = Object.assign({
 		method: 'REPORT',
 		data: `<?xml version="1.0"?>
 			<oc:filter-files
@@ -90,10 +88,13 @@ export default async function(id, options = {}) {
 				</oc:filter-rules>
 			</oc:filter-files>`,
 		details: true,
-	}, options))
+	}, options)
+
+	const prefixPath = `/files/${getCurrentUser().uid}`
+	const response = await client.getDirectoryContents(prefixPath, options)
 
 	return response.data
-		.map(data => genFileInfo(data, prefixPath))
+		.map(data => genFileInfo(data))
 		// remove prefix path from full file path
 		.map(data => Object.assign({}, data, { filename: data.filename.replace(prefixPath, '') }))
 }

@@ -27,7 +27,7 @@ const state = {
 
 const mutations = {
 	/**
-	 * Increment the number of contacts accepted
+	 * Append or update given files
 	 *
 	 * @param {Object} state the store mutations
 	 * @param {Array} files the store mutations

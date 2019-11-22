@@ -25,6 +25,7 @@ import Router from 'vue-router'
 import Vue from 'vue'
 
 import Albums from '../views/Albums'
+import Timeline from '../views/Timeline'
 import Tags from '../views/Tags'
 
 Vue.use(Router)
@@ -38,7 +39,7 @@ export default new Router({
 	routes: [
 		{
 			path: '/',
-			component: Albums,
+			component: Timeline,
 			name: 'root',
 		},
 		{

@@ -43,5 +43,5 @@ export default async function(path) {
 		details: true,
 	})
 
-	return genFileInfo(response.data, prefixPath)
+	return genFileInfo(response.data)
 }
