@@ -20,9 +20,10 @@
  *
  */
 
-import { getCurrentUser } from '@nextcloud/auth'
-import client from './DavClient'
 import { genFileInfo } from '../utils/fileUtils'
+import { getCurrentUser } from '@nextcloud/auth'
+import allowedMimes from './AllowedMimes'
+import client from './DavClient'
 
 /**
  * List files from a folder and filter out unwanted mimes
@@ -34,6 +35,17 @@ import { genFileInfo } from '../utils/fileUtils'
 export default async function(path = '', options) {
 
 	const prefixPath = `/files/${getCurrentUser().uid}`
+
+	// generating the search or condition
+	// based on the allowed mimetypes
+	const orMime = allowedMimes.reduce((str, mime) => `${str}
+		<d:eq>
+			<d:prop>
+				<d:getcontenttype/>
+			</d:prop>
+			<d:literal>${mime}</d:literal>
+		</d:eq>
+	`, '')
 
 	options = Object.assign({
 		method: 'SEARCH',
@@ -65,20 +77,22 @@ export default async function(path = '', options) {
 						</d:scope>
 					</d:from>
 					<d:where>
-						<d:like>
-							<d:prop>
-								<d:getcontenttype/>
-							</d:prop>
-							<d:literal>image/jpeg</d:literal>
-						</d:like>
+						<d:or>
+							${orMime}
+						</d:or>
 						<d:eq>
 							<d:prop>
 								<oc:owner-id/>
 							</d:prop>
-							<d:literal>admin</d:literal>
+							<d:literal>${getCurrentUser().uid}</d:literal>
 						</d:eq>
 					</d:where>
-					<d:orderby/>
+					<d:orderby>
+						<d:order>
+							<d:prop><d:getlastmodified/></d:prop>
+							<d:descending/>
+						</d:order>
+				 	</d:orderby>
 				</d:basicsearch>
 			</d:searchrequest>`,
 		deep: true,
