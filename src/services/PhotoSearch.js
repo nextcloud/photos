@@ -28,11 +28,11 @@ import client from './DavClient'
 /**
  * List files from a folder and filter out unwanted mimes
  *
- * @param {string} [path] not used
+ * @param {boolean} [onlyFavorites=false] not used
  * @param {Object} [options] used for the cancellable requests
  * @returns {Array} the file list
  */
-export default async function(path = '', options) {
+export default async function(onlyFavorites = false, options = {}) {
 
 	const prefixPath = `/files/${getCurrentUser().uid}`
 
@@ -46,6 +46,15 @@ export default async function(path = '', options) {
 			<d:literal>${mime}</d:literal>
 		</d:eq>
 	`, '')
+
+	const eqFavorites = onlyFavorites
+		? `<d:eq>
+				<d:prop>
+					<oc:favorite/>
+				</d:prop>
+				<d:literal>1</d:literal>
+			</d:eq>`
+		: ''
 
 	options = Object.assign({
 		method: 'SEARCH',
@@ -77,15 +86,18 @@ export default async function(path = '', options) {
 						</d:scope>
 					</d:from>
 					<d:where>
-						<d:or>
-							${orMime}
-						</d:or>
-						<d:eq>
-							<d:prop>
-								<oc:owner-id/>
-							</d:prop>
-							<d:literal>${getCurrentUser().uid}</d:literal>
-						</d:eq>
+						<d:and>
+							<d:or>
+								${orMime}
+							</d:or>
+							${eqFavorites}
+							<d:eq>
+								<d:prop>
+									<oc:owner-id/>
+								</d:prop>
+								<d:literal>${getCurrentUser().uid}</d:literal>
+							</d:eq>
+						</d:and>
 					</d:where>
 					<d:orderby>
 						<d:order>

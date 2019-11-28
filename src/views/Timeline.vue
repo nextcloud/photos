@@ -61,6 +61,10 @@ export default {
 			type: Boolean,
 			required: true,
 		},
+		onlyFavorites: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	data() {
@@ -89,8 +93,16 @@ export default {
 		},
 	},
 
+	watch: {
+		async onlyFavorites() {
+			// content is completely different
+			this.$emit('update:loading', true)
+			this.fetchContent()
+		},
+	},
+
 	async beforeMount() {
-		this.fetchFolderContent()
+		this.fetchContent()
 	},
 
 	beforeDestroy() {
@@ -98,7 +110,7 @@ export default {
 	},
 
 	methods: {
-		async fetchFolderContent() {
+		async fetchContent() {
 			// cancel any pending requests
 			this.cancelRequest('Changed view')
 
@@ -117,7 +129,7 @@ export default {
 
 			try {
 				// get content and current folder info
-				const files = await request()
+				const files = await request(this.onlyFavorites)
 				this.$store.dispatch('updateTimeline', files)
 				this.$store.dispatch('appendFiles', files)
 			} catch (error) {

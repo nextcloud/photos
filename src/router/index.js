@@ -67,8 +67,11 @@ export default new Router({
 		},
 		{
 			path: '/favorites',
-			component: Tags,
+			component: Timeline,
 			name: 'favorites',
+			props: {
+				onlyFavorites: true,
+			},
 		},
 		{
 			path: '/tags/:path*',

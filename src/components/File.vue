@@ -105,7 +105,7 @@ export default {
 	created() {
 		// Allow us to cancel the img loading on destroy
 		// use etag to force cache reload if file changed
-		this.img.src = generateUrl(`/core/preview?fileId=${this.fileid}&x=${1024}&y=${1024}&a=true&v=${this.etag}`)
+		this.img.src = generateUrl(`/core/preview?fileId=${this.fileid}&x=${256}&y=${256}&a=true&v=${this.etag}`)
 		this.img.addEventListener('load', () => {
 			this.src = this.img.src
 		})
