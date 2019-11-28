@@ -33,7 +33,7 @@
 	</EmptyContent>
 
 	<!-- Folder content -->
-	<Grid v-else>
+	<Grid v-else-if="!loading">
 		<File v-for="file in fileList" :key="file.fileid" v-bind="file" />
 	</Grid>
 </template>
