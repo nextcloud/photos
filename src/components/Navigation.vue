@@ -32,6 +32,13 @@
 		<h2 class="photos-navigation__title">
 			{{ name }}
 		</h2>
+		<Actions class="photos-navigation__share">
+			<ActionButton
+				icon="icon-shared"
+				@click="showSidebar">
+				{{ t('photos', 'Share this folder') }}
+			</ActionButton>
+		</Actions>
 	</div>
 </template>
 
@@ -123,6 +130,10 @@ export default {
 		folderUp() {
 			this.$router.push(this.to)
 		},
+		showSidebar() {
+			OCA.Files.Sidebar.open(this.filename)
+			
+		}
 	},
 }
 </script>
