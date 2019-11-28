@@ -68,6 +68,7 @@ class PageController extends Controller {
 		$this->eventDispatcher->dispatch(LoadViewer::class, new LoadViewer());
 
 		$this->initialStateService->provideInitialState($this->appName, 'mimes', Application::MIMES);
+		$this->initialStateService->provideInitialState($this->appName, 'maps', Application::MAPS);
 
 		Util::addScript($this->appName, 'photos');
 		Util::addStyle($this->appName, 'icons');
@@ -75,5 +76,4 @@ class PageController extends Controller {
 		$response = new TemplateResponse($this->appName, 'main');
 		return $response;
 	}
-
 }

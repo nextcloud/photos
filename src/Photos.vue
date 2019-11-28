@@ -22,6 +22,7 @@
 
 <template>
 	<Content app-name="photos">
+		{{MapsInstalled}}
 		<AppNavigation>
 			<AppNavigationItem :to="{name: 'root'}"
 				class="app-navigation__photos"
@@ -53,6 +54,7 @@ import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import svgplaceholder from './assets/file-placeholder.svg'
 import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'
+import MapsInstalled from './services/MapsInstalled'
 
 export default {
 	name: 'Photos',
