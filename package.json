@@ -36,7 +36,7 @@
 		"@nextcloud/initial-state": "^0.2.0",
 		"@nextcloud/l10n": "^0.2.1",
 		"@nextcloud/router": "^0.1.0",
-		"@nextcloud/vue": "^1.2.0",
+		"@nextcloud/vue": "^1.2.2",
 		"camelcase": "^5.3.1",
 		"cdav-library": "git+https://github.com/nextcloud/cdav-library.git",
 		"path-posix": "^1.0.0",
