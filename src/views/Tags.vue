@@ -38,7 +38,7 @@
 			key="navigation"
 			:basename="path"
 			:filename="'/' + path"
-			:root-title="t('photos', 'Tags')" />
+			:root-title="rootTitle" />
 		<template v-if="isRoot">
 			<Tag v-for="id in tagsNames"
 				:key="id"
@@ -76,6 +76,10 @@ export default {
 		Navigation,
 	},
 	props: {
+		rootTitle: {
+			type: String,
+			required: true,
+		},
 		path: {
 			type: String,
 			default: '',

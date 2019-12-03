@@ -57,6 +57,7 @@ export default new Router({
 				path: `/${route.params.path ? route.params.path : ''}`,
 				// if path is empty
 				isRoot: !route.params.path,
+				rootTitle: t('photos', 'Your albums'),
 			}),
 		},
 		{
@@ -68,6 +69,7 @@ export default new Router({
 				path: `/${route.params.path ? route.params.path : ''}`,
 				// if path is empty
 				isRoot: !route.params.path,
+				rootTitle: t('photos', 'Shared albums'),
 				showShared: true,
 			}),
 		},
@@ -87,6 +89,7 @@ export default new Router({
 				path: `${route.params.path ? route.params.path : ''}`,
 				// if path is empty
 				isRoot: !route.params.path,
+				rootTitle: t('photos', 'Tagged photos'),
 			}),
 		},
 		{

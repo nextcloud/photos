@@ -32,7 +32,7 @@
 		<h2 class="photos-navigation__title">
 			{{ name }}
 		</h2>
-		<Actions class="photos-navigation__share">
+		<Actions v-if="!isRoot && showActions" class="photos-navigation__share">
 			<ActionButton
 				icon="icon-shared"
 				@click="showSidebar">
@@ -63,6 +63,10 @@ export default {
 			type: String,
 			required: true,
 		},
+		showActions: {
+			type: Boolean,
+			default: false,
+		},
 		rootTitle: {
 			type: String,
 			default: t('photos', 'Photos'),
@@ -92,7 +96,7 @@ export default {
 		},
 		backToText() {
 			if (this.parentPath === '/') {
-				return t('photos', 'Back to home')
+				return t('photos', 'Back to {folder}', { folder: this.rootTitle })
 			}
 			return t('photos', 'Back to {folder}', { folder: this.parentName })
 		},
@@ -132,8 +136,8 @@ export default {
 		},
 		showSidebar() {
 			OCA.Files.Sidebar.open(this.filename)
-			
-		}
+
+		},
 	},
 }
 </script>
@@ -150,6 +154,9 @@ export default {
 	align-items: center;
 	&__title {
 		margin: 0;
+	}
+	&__share {
+		margin-left: 10px;
 	}
 }
 

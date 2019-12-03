@@ -34,7 +34,11 @@
 
 	<!-- Folder content -->
 	<Grid v-else>
-		<Navigation v-if="folder" key="navigation" v-bind="folder" />
+		<Navigation v-if="folder"
+			key="navigation"
+			v-bind="folder"
+			:root-title="rootTitle"
+			:show-actions="true" />
 
 		<Folder v-for="dir in folderList"
 			:key="dir.fileid"
@@ -67,6 +71,10 @@ export default {
 		Navigation,
 	},
 	props: {
+		rootTitle: {
+			type: String,
+			required: true,
+		},
 		path: {
 			type: String,
 			default: '/',
@@ -163,8 +171,9 @@ export default {
 			// cancel any pending requests
 			this.cancelRequest('Changed folder')
 
-			// close any potential opened viewer
-			OCA.Viewer.close()
+			// close any potential opened viewer & sidebar
+			OCA.Viewer && OCA.Viewer.close()
+			OCA.Files && OCA.Files.Sidebar.close()
 
 			// if we don't already have some cached data let's show a loader
 			if (!this.files[this.folderId]) {

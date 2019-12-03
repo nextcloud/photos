@@ -73,6 +73,10 @@ class PageController extends Controller {
 		$this->initialStateService->provideInitialState($this->appName, 'mimes', Application::MIMES);
 		$this->initialStateService->provideInitialState($this->appName, 'maps', $this->config->getAppValue('maps', 'enabled', 'no') === 'yes');
 
+
+		// used by the sidebar to parse files requests
+		// TODO: move to a standalone dav fileinfo parser
+		Util::addScript('files', 'files/client');
 		Util::addScript($this->appName, 'photos');
 		Util::addStyle($this->appName, 'icons');
 
