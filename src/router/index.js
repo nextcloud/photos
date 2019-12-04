@@ -84,8 +84,13 @@ export default new Router({
 			}),
 		},
 		{
-			path: '/maps',
-			name: 'maps',
+			path: generateUrl('apps/maps', ''),
+			name: 'MapsInstalled',
+			redirect: '',
+		},
+		{
+			path: generateUrl('settings/apps/integration/maps', ''),
+			name: 'MapsNotInstalled',
 			redirect: '',
 		},
 	],

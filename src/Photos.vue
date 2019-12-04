@@ -32,7 +32,7 @@
 			<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Your albums')" icon="icon-files-dark" />
 			<AppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared albums')" icon="icon-share" />
 			<AppNavigationItem :to="{name: 'tags'}" :title="t('photos', 'Tagged photos')" icon="icon-tag" />
-			<AppNavigationItem :to="mapsLink" :title="t('photos', 'Locations')" icon="icon-address" />
+			<AppNavigationItem :to="mapsLink" :title="t('photos', 'Locations')" icon="icon-address" target="_blank" />
 		</AppNavigation>
 		<AppContent :class="{ 'icon-loading': loading }">
 			<router-view v-show="!loading" :loading.sync="loading" />
@@ -68,18 +68,18 @@ export default {
 			loading: true,
 			svgplaceholder,
 			imgplaceholder,
-			videoplaceholder
+			videoplaceholder,
 		}
 	},
 	computed: {
 		mapsLink() {
 			if (isMapsInstalled) {
-				return 'apps/maps'
+				return {name: 'MapsInstalled'}
 			} else {
-				return 'https://apps.nextcloud.com/apps/maps'
+				return {name: 'MapsNotInstalled'}
 			}
-		}
-	}
+		},
+	},
 }
 </script>
 <style lang="scss" scoped>
