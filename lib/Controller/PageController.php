@@ -33,6 +33,7 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IInitialStateService;
 use OCP\IRequest;
 use OCP\Util;
+use OCP\IConfig;
 
 class PageController extends Controller {
 
@@ -47,12 +48,14 @@ class PageController extends Controller {
 	public function __construct($appName,
 								IRequest $request,
 								IEventDispatcher $eventDispatcher,
+								IConfig $config,
 								IInitialStateService $initialStateService) {
-		parent::__construct($appName, $request);
+		parent::__construct($appName, $request, $config);
 
 		$this->appName = $appName;
 		$this->eventDispatcher = $eventDispatcher;
 		$this->initialStateService = $initialStateService;
+		$this->config = $config;
 
 	}
 
@@ -68,7 +71,7 @@ class PageController extends Controller {
 		$this->eventDispatcher->dispatch(LoadViewer::class, new LoadViewer());
 
 		$this->initialStateService->provideInitialState($this->appName, 'mimes', Application::MIMES);
-		$this->initialStateService->provideInitialState($this->appName, 'maps', Application::MAPS);
+		$this->initialStateService->provideInitialState($this->appName, 'maps', $this->config->getAppValue('maps', 'enabled', 'no') === 'yes');
 
 		Util::addScript($this->appName, 'photos');
 		Util::addStyle($this->appName, 'icons');

@@ -70,6 +70,7 @@ export default {
 			svgplaceholder,
 			imgplaceholder,
 			videoplaceholder,
+			MapsInstalled
 		}
 	},
 }
