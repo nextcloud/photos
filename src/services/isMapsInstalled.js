@@ -22,5 +22,5 @@
 
 import { loadState } from '@nextcloud/initial-state'
 
-const maps = loadState('maps')
+const maps = loadState('photos', 'maps')
 export default maps

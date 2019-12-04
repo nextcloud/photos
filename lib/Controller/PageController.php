@@ -50,7 +50,7 @@ class PageController extends Controller {
 								IEventDispatcher $eventDispatcher,
 								IConfig $config,
 								IInitialStateService $initialStateService) {
-		parent::__construct($appName, $request, $config);
+		parent::__construct($appName, $request);
 
 		$this->appName = $appName;
 		$this->eventDispatcher = $eventDispatcher;
