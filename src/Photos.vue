@@ -32,7 +32,7 @@
 			<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Your albums')" icon="icon-files-dark" />
 			<AppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared albums')" icon="icon-share" />
 			<AppNavigationItem :to="{name: 'tags'}" :title="t('photos', 'Tagged photos')" icon="icon-tag" />
-			<AppNavigationItem :to="mapsLink" :title="t('photos', 'Locations')" icon="icon-address" target="_blank" />
+			<AppNavigationItem :to="{name: 'maps'}" :title="t('photos', 'Locations')" icon="icon-address" />
 		</AppNavigation>
 		<AppContent :class="{ 'icon-loading': loading }">
 			<router-view v-show="!loading" :loading.sync="loading" />
@@ -53,7 +53,6 @@ import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import svgplaceholder from './assets/file-placeholder.svg'
 import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'
-import isMapsInstalled from './services/isMapsInstalled'
 
 export default {
 	name: 'Photos',
@@ -70,15 +69,6 @@ export default {
 			imgplaceholder,
 			videoplaceholder,
 		}
-	},
-	computed: {
-		mapsLink() {
-			if (isMapsInstalled) {
-				return {name: 'MapsInstalled'}
-			} else {
-				return {name: 'MapsNotInstalled'}
-			}
-		},
 	},
 }
 </script>

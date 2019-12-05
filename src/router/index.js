@@ -27,8 +27,14 @@ import Vue from 'vue'
 import Albums from '../views/Albums'
 import Timeline from '../views/Timeline'
 import Tags from '../views/Tags'
+import isMapsInstalled from '../services/IsMapsInstalled'
 
 Vue.use(Router)
+
+let mapsPath = generateUrl('/apps/maps')
+if (!isMapsInstalled) {
+	mapsPath = generateUrl('/settings/apps/integration/maps')
+}
 
 export default new Router({
 	mode: 'history',
@@ -84,14 +90,12 @@ export default new Router({
 			}),
 		},
 		{
-			path: generateUrl('apps/maps', ''),
-			name: 'MapsInstalled',
-			redirect: '',
-		},
-		{
-			path: generateUrl('settings/apps/integration/maps', ''),
-			name: 'MapsNotInstalled',
-			redirect: '',
+			path: '/maps',
+			name: 'maps',
+			// router-link doesn't support external url, let's force the redirect
+			beforeEnter() {
+				location.href = mapsPath
+			},
 		},
 	],
 })
