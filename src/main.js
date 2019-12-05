@@ -46,6 +46,15 @@ sync(store, router)
 Vue.prototype.t = translate
 Vue.prototype.n = translatePlural
 
+// TODO: remove when we have a proper fileinfo standalone library
+window.addEventListener('DOMContentLoaded', () => {
+	// register unused client for the sidebar to have access to its parser methods
+	if (!window.OCA.Files) {
+		window.OCA.Files = {}
+	}
+	Object.assign(window.OCA.Files, { App: { fileList: { filesClient: OC.Files.getClient() } } }, window.OCA.Files)
+})
+
 export default new Vue({
 	el: '#content',
 	// eslint-disable-next-line vue/match-component-file-name
