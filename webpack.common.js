@@ -5,8 +5,7 @@ const StyleLintPlugin = require('stylelint-webpack-plugin')
 const SassGetGridConfig = require('./src/utils/SassGetGridConfig')
 const ModuleReplaceWebpackPlugin = require('module-replace-webpack-plugin');
 
-const packageJson = require('./package.json')
-const appName = packageJson.name
+const appName = process.env.npm_package_name
 
 module.exports = {
 	entry: path.join(__dirname, 'src', 'main.js'),
@@ -14,7 +13,7 @@ module.exports = {
 		path: path.resolve(__dirname, './js'),
 		publicPath: '/js/',
 		filename: `${appName}.js`,
-		chunkFilename: 'chunks/[name]-[hash].js',
+		chunkFilename: '[name].js?v=[contenthash]',
 	},
 	module: {
 		rules: [
