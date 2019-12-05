@@ -20,7 +20,13 @@
  *
  */
 
-// compatible with webpack config, no export
+/**
+ * Define the max width proportions
+ * The number (key) indicate the MAX size
+ *
+ * needs to be ompatible with webpack config
+ * so no export default {}
+ */
 module.exports = {
 	sizes: {
 		400: {
@@ -28,7 +34,7 @@ module.exports = {
 			marginW: 8, // same as grid-gap
 			count: 3,
 		},
-		600: {
+		700: {
 			marginTop: 66,
 			marginW: 8, // same as grid-gap
 			count: 4,
@@ -38,27 +44,36 @@ module.exports = {
 			marginW: 44,
 			count: 5,
 		},
-		1400: {
+		1280: {
 			marginTop: 66,
 			marginW: 44,
+			count: 4,
+		},
+		1440: {
+			marginTop: 88,
+			marginW: 66,
+			count: 5,
+		},
+		1600: {
+			marginTop: 88,
+			marginW: 66,
 			count: 6,
 		},
-		1800: {
+		2048: {
 			marginTop: 88,
 			marginW: 66,
 			count: 7,
 		},
-		2200: {
+		2560: {
 			marginTop: 88,
-			marginW: 66,
+			marginW: 88,
 			count: 8,
 		},
-		2600: {
+		3440: {
 			marginTop: 88,
 			marginW: 88,
 			count: 9,
 		},
-		// excessive value on purpose
 		max: {
 			marginTop: 88,
 			marginW: 88,
