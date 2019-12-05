@@ -164,11 +164,13 @@ export default {
 	&__title {
 		margin: 0;
 	}
+<<<<<<< HEAD
 	&__share {
 		margin-left: 10px;
-	}
+=======
 	&--mobile {
 		margin-left: 50px;
+>>>>>>> Shift navigation on mobile view
 	}
 }
 
