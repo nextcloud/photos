@@ -111,6 +111,12 @@ export default {
 </script>
 
 <style lang="scss">
+.emptycontent {
+	// span all the available columns
+	grid-column: 1/-1;
+	margin-top: 20vh;
+}
+
 .illustration {
 	min-width: 200px;
 	max-width: 15%;

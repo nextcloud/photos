@@ -25,20 +25,16 @@
 	<EmptyContent v-if="error">
 		{{ t('photos', 'An error occurred') }}
 	</EmptyContent>
-	<EmptyContent v-else-if="!loading && isEmpty" illustration-name="empty">
-		{{ t('photos', 'No tags yet') }}
-		<template #desc>
-			{{ t('photos', 'Photos with tags will show up here') }}
-		</template>
-	</EmptyContent>
 
 	<!-- Folder content -->
-	<Grid v-else>
+	<Grid v-else-if="!loading">
 		<Navigation
 			key="navigation"
 			:basename="path"
 			:filename="'/' + path"
 			:root-title="rootTitle" />
+
+		<!-- Tags list -->
 		<template v-if="isRoot">
 			<Tag v-for="id in tagsNames"
 				:key="id"
@@ -46,7 +42,16 @@
 				:fileid="id"
 				:basename="tags[id].displayName" />
 		</template>
+
+		<!-- Content list -->
 		<template v-else>
+			<EmptyContent v-if="isEmpty" key="emptycontent" illustration-name="empty">
+				{{ t('photos', 'No tags yet') }}
+				<template #desc>
+					{{ t('photos', 'Photos with tags will show up here') }}
+				</template>
+			</EmptyContent>
+
 			<File v-for="file in fileList" :key="file.fileid" v-bind="file" />
 		</template>
 	</Grid>
@@ -58,7 +63,7 @@ import { mapGetters } from 'vuex'
 import getSystemTags from '../services/SystemTags'
 import getTaggedImages from '../services/TaggedImages'
 
-import EmptyContent from './EmptyContent'
+import EmptyContent from '../components/EmptyContent'
 import Tag from '../components/Tag'
 import File from '../components/File'
 import Grid from '../components/Grid'
@@ -126,7 +131,10 @@ export default {
 		},
 
 		isEmpty() {
-			return Object.keys(this.tagsNames).length === 0
+			if (this.isRoot) {
+				return Object.keys(this.tagsNames).length === 0
+			}
+			return this.fileList.length === 0
 		},
 	},
 
@@ -180,11 +188,18 @@ export default {
 			const { request, cancel } = cancelableRequest(getSystemTags)
 			this.cancelRequest = cancel
 
-			const tags = await request()
-			this.$store.dispatch('updateTags', tags)
+			try {
+				// fetch content
+				const tags = await request()
+				this.$store.dispatch('updateTags', tags)
+			} catch (error) {
+				console.error(error)
+				this.error = true
+			} finally {
+				// done loading
+				this.$emit('update:loading', false)
+			}
 
-			// done loading
-			this.$emit('update:loading', false)
 		},
 
 		async fetchContent() {
