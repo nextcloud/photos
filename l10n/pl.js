@@ -11,6 +11,7 @@ OC.L10N.register(
     "Locations" : "Lokalizacje",
     "Open the full size \"{name}\" image" : "Otwórz obraz \"{name}\" w pełnym rozmiarze",
     "Open the \"{name}\" sub-directory" : "Otwórz podkatalog \"{name}\"",
+    "Share this folder" : "Udostępnij ten katalog",
     "Back to {folder}" : "Powrót do {folder}",
     "This folder does not exists" : "Ten katalog nie istnieje",
     "An error occurred" : "Wystąpił błąd",

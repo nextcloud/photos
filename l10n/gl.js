@@ -11,6 +11,7 @@ OC.L10N.register(
     "Locations" : "Localizacións",
     "Open the full size \"{name}\" image" : "Abrir a imaxe «{name}» a tamaño completo",
     "Open the \"{name}\" sub-directory" : "Abrir o subdirectorio «{name}»",
+    "Share this folder" : "Compartir este cartafol",
     "Back to {folder}" : "Volver a {folder}",
     "This folder does not exists" : "Este cartafol non existe",
     "An error occurred" : "Produciuse un erro",

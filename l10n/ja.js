@@ -11,6 +11,7 @@ OC.L10N.register(
     "Locations" : "場所",
     "Open the full size \"{name}\" image" : "画像 \"{name}\" をフルサイズで開く",
     "Open the \"{name}\" sub-directory" : "サブディレクトリ \"{name}\" を開く",
+    "Share this folder" : "このフォルダーを共有する",
     "Back to {folder}" : " {folder} に戻る",
     "This folder does not exists" : "このフォルダは存在しません",
     "An error occurred" : "エラーが発生しました",
