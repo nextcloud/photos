@@ -16,7 +16,7 @@ OC.L10N.register(
     "This folder does not exists" : "Dieser Ordner existiert nicht",
     "An error occurred" : "Es ist ein Fehler aufgetreten",
     "No photos in here" : "Keine Fotos vorhanden",
-    "No tags yet" : "Keine Tags ausgewählt",
+    "No tags yet" : "Noch keine Schlagworte vorhanden",
     "Photos with tags will show up here" : "Getaggte Fotos werden hier angezeigt"
 },
 "nplurals=2; plural=(n != 1);");
