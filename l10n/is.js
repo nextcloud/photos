@@ -11,6 +11,7 @@ OC.L10N.register(
     "Locations" : "Staðsetningar",
     "Open the full size \"{name}\" image" : "Opna myndina \"{name}\" í fullri stærð",
     "Open the \"{name}\" sub-directory" : "Opna \"{name}\" undirmöppuna",
+    "Share this folder" : "Deila þessari möppu",
     "Back to {folder}" : "Til baka í {folder}",
     "This folder does not exists" : "Þessi mappa er ekki til",
     "An error occurred" : "Villa kom upp",
