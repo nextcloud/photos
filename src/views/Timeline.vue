@@ -43,7 +43,7 @@ import { mapGetters } from 'vuex'
 
 import getPhotos from '../services/PhotoSearch'
 
-import EmptyContent from './EmptyContent'
+import EmptyContent from '../components/EmptyContent'
 import File from '../components/File'
 import Grid from '../components/Grid'
 

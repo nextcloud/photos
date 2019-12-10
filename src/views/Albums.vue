@@ -28,23 +28,28 @@
 	<EmptyContent v-else-if="error">
 		{{ t('photos', 'An error occurred') }}
 	</EmptyContent>
-	<EmptyContent v-else-if="!loading && isEmpty" illustration-name="empty">
-		{{ t('photos', 'No photos in here') }}
-	</EmptyContent>
 
 	<!-- Folder content -->
-	<Grid v-else>
+	<Grid v-else-if="!loading">
 		<Navigation v-if="folder"
 			key="navigation"
 			v-bind="folder"
 			:root-title="rootTitle"
 			:show-actions="true" />
 
-		<Folder v-for="dir in folderList"
-			:key="dir.fileid"
-			v-bind="dir"
-			:show-shared="showShared" />
-		<File v-for="file in fileList" :key="file.fileid" v-bind="file" />
+		<!-- Empty folder, should only happen via direct link -->
+		<EmptyContent v-if="isEmpty" key="emptycontent" illustration-name="empty">
+			{{ t('photos', 'No photos in here') }}
+		</EmptyContent>
+
+		<!-- Folders and files list -->
+		<template v-else>
+			<Folder v-for="dir in folderList"
+				:key="dir.fileid"
+				v-bind="dir"
+				:show-shared="showShared" />
+			<File v-for="file in fileList" :key="file.fileid" v-bind="file" />
+		</template>
 	</Grid>
 </template>
 
@@ -53,7 +58,7 @@ import { mapGetters } from 'vuex'
 
 import getAlbumContent from '../services/AlbumContent'
 
-import EmptyContent from './EmptyContent'
+import EmptyContent from '../components/EmptyContent'
 import Folder from '../components/Folder'
 import File from '../components/File'
 import Grid from '../components/Grid'
