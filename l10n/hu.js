@@ -11,6 +11,7 @@ OC.L10N.register(
     "Locations" : "Helyek",
     "Open the full size \"{name}\" image" : "A teljes méretű „{name}” fénykép megnyitása",
     "Open the \"{name}\" sub-directory" : "A(z) „name” alkönyvtár megnyitása",
+    "Share this folder" : "Mappa megosztása",
     "Back to {folder}" : "Vissza ide: {folder}",
     "This folder does not exists" : "Ez a mappa nem létezik",
     "An error occurred" : "Hiba történt",
