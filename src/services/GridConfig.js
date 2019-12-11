@@ -20,39 +20,32 @@
  *
  */
 
-const state = {
-	timeline: [],
-}
+import Vue from 'vue'
+import { sizes } from '../assets/grid-sizes'
 
-const mutations = {
-	/**
-	 * Update timeline files list
-	 *
-	 * @param {Object} state the store mutations
-	 * @param {Array} files the store mutations
-	 */
-	updateTimeline(state, files) {
-		state.timeline.push(...files
-			.map(file => file.fileid)
-			.filter(id => id >= 0))
+export default new Vue({
+	data() {
+		return {
+			gridConfig: sizes.max,
+		}
 	},
-}
-
-const getters = {
-	timeline: state => state.timeline,
-}
-
-const actions = {
-	/**
-	 * Update timeline files list
-	 *
-	 * @param {Object} context the store mutations
-	 * @param {Number[]} files list of files ids
-	 */
-	updateTimeline(context, files = []) {
-		// we want all the FileInfo! Folders included!
-		context.commit('updateTimeline', files)
+	watch: {
+		gridConfig(val) {
+			this.$emit('changed', val)
+		},
 	},
-}
-
-export default { state, mutations, getters, actions }
+	created() {
+		window.addEventListener('resize', this.handleWindowResize)
+		this.handleWindowResize()
+	},
+	beforeDestroy() {
+		window.removeEventListener('resize', this.handleWindowResize)
+	},
+	methods: {
+		handleWindowResize() {
+			// find the first grid size that fit the current window width
+			const currentSize = Object.keys(sizes).find(size => size > document.documentElement.clientWidth)
+			this.gridConfig = sizes[currentSize]
+		},
+	},
+})

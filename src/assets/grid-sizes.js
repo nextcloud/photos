@@ -20,6 +20,9 @@
  *
  */
 
+// for now we want to keep the same gap everywhere
+const gap = 8
+
 /**
  * Define the max width proportions
  * The number (key) indicate the MAX size
@@ -31,53 +34,63 @@ module.exports = {
 	sizes: {
 		400: {
 			marginTop: 66, // same as grid-gap
-			marginW: 8, // same as grid-gap
+			marginW: gap, // same as grid-gap
 			count: 3,
+			gap,
 		},
 		700: {
 			marginTop: 66,
 			marginW: 8, // same as grid-gap
 			count: 4,
+			gap,
 		},
 		1024: {
 			marginTop: 66,
 			marginW: 44,
 			count: 5,
+			gap,
 		},
 		1280: {
 			marginTop: 66,
 			marginW: 44,
 			count: 4,
+			gap,
 		},
 		1440: {
 			marginTop: 88,
 			marginW: 66,
 			count: 5,
+			gap,
 		},
 		1600: {
 			marginTop: 88,
 			marginW: 66,
 			count: 6,
+			gap,
 		},
 		2048: {
 			marginTop: 88,
 			marginW: 66,
 			count: 7,
+			gap,
 		},
 		2560: {
 			marginTop: 88,
 			marginW: 88,
 			count: 8,
+			gap,
 		},
 		3440: {
 			marginTop: 88,
 			marginW: 88,
 			count: 9,
+			gap,
 		},
 		max: {
 			marginTop: 88,
 			marginW: 88,
 			count: 10,
+			gap,
 		},
 	},
 }

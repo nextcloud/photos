@@ -20,39 +20,20 @@
  *
  */
 
-const state = {
-	timeline: [],
+const arrayRange = function(n) {
+	// Array.range(5) --> [0,1,2,3,4]
+	return Array.apply(null, Array(n)).map((x, i) => i)
 }
 
-const mutations = {
-	/**
-	 * Update timeline files list
-	 *
-	 * @param {Object} state the store mutations
-	 * @param {Array} files the store mutations
-	 */
-	updateTimeline(state, files) {
-		state.timeline.push(...files
-			.map(file => file.fileid)
-			.filter(id => id >= 0))
-	},
+/**
+ * Split an array into chunks
+ *
+ * @param {Array} arr an array to split
+ * @param {number} count lenght of the chunk
+ * @returns {Array}
+ */
+export default function(arr = [], count = 5) {
+	return arrayRange(Math.ceil(arr.length / count)).map((x, i) =>
+		arr.slice(i * count, i * count + count)
+	)
 }
-
-const getters = {
-	timeline: state => state.timeline,
-}
-
-const actions = {
-	/**
-	 * Update timeline files list
-	 *
-	 * @param {Object} context the store mutations
-	 * @param {Number[]} files list of files ids
-	 */
-	updateTimeline(context, files = []) {
-		// we want all the FileInfo! Folders included!
-		context.commit('updateTimeline', files)
-	},
-}
-
-export default { state, mutations, getters, actions }

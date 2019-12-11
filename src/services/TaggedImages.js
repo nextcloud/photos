@@ -46,6 +46,8 @@ import { genFileInfo } from '../utils/fileUtils'
 import { getCurrentUser } from '@nextcloud/auth'
 import client from './DavClient'
 
+import { props } from './DavRequest'
+
 /**
  * Get tagged files based on provided tag id
  *
@@ -64,24 +66,7 @@ export default async function(id, options = {}) {
 				xmlns:nc="http://nextcloud.org/ns"
 				xmlns:ocs="http://open-collaboration-services.org/ns">
 				<d:prop>
-					<d:getlastmodified />
-					<d:getetag />
-					<d:getcontenttype />
-					<d:resourcetype />
-					<oc:fileid />
-					<oc:permissions />
-					<oc:size />
-					<d:getcontentlength />
-					<nc:has-preview />
-					<nc:mount-type />
-					<nc:is-encrypted />
-					<ocs:share-permissions />
-					<oc:tags />
-					<oc:favorite />
-					<oc:comments-unread />
-					<oc:owner-id />
-					<oc:owner-display-name />
-					<oc:share-types />
+					${props}
 				</d:prop>
 				<oc:filter-rules>
 					<oc:systemtag>${id}</oc:systemtag>

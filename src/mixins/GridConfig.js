@@ -1,5 +1,5 @@
 /**
- * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
+ * @copyright Copyright (c) 2018 John Molakvoæ <skjnldsv@protonmail.com>
  *
  * @author John Molakvoæ <skjnldsv@protonmail.com>
  *
@@ -12,30 +12,35 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-const props = `
-	<oc:fileid />
-	<d:getlastmodified />
-	<d:getetag />
-	<d:getcontenttype />
-	<d:getcontentlength />
-	<nc:has-preview />
-	<oc:favorite />
-	<d:resourcetype />`
 
-export { props }
-export default `<?xml version="1.0"?>
-			<d:propfind xmlns:d="DAV:"
-				xmlns:oc="http://owncloud.org/ns"
-				xmlns:nc="http://nextcloud.org/ns"
-				xmlns:ocs="http://open-collaboration-services.org/ns">
-				<d:prop>
-					${props}
-				</d:prop>
-			</d:propfind>`
+import getGridConfig from '../services/GridConfig'
+
+/**
+ * Get the current used grid config
+ */
+export default {
+	data() {
+		return {
+			gridConfig: {},
+		}
+	},
+
+	created() {
+		getGridConfig.$on('changed', val => {
+			this.gridConfig = val
+		})
+		console.debug('Current grid config', getGridConfig.gridConfig)
+		this.gridConfig = getGridConfig.gridConfig
+	},
+
+	beforeDestroy() {
+		getGridConfig.$off('changed', this.gridConfig)
+	},
+}
