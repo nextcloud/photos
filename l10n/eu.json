@@ -1,6 +1,6 @@
 { "translations": {
     "Photos" : "Argazkiak",
-    "Your memories under your control" : "Zure memoriak zure kontrolpean",
+    "Your memories under your control" : "Zure oroitzapenak zure kontrolpean",
     "Your photos" : "Zure argazkiak",
     "Favorites" : "Gogokoak",
     "Your albums" : "Zure albumak",
@@ -12,7 +12,7 @@
     "Share this folder" : "Partekatu karpeta hau",
     "Back to {folder}" : "Itzuli {folder} -(e)ra",
     "This folder does not exists" : "Karpeta hau ez da existitzen",
-    "An error occurred" : "Akats bat gertatu de",
+    "An error occurred" : "Akats bat gertatu da",
     "No photos in here" : "Argazkirik ez hemen",
     "No tags yet" : "Etitketarik ez oraindik",
     "Photos with tags will show up here" : "Etiketadun argazkiak hemen erakutsiko dira"
