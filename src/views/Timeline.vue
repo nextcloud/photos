@@ -238,7 +238,7 @@ export default {
 			this.loadingPage = false
 			this.page = 0
 			this.page = 0
-		}
+		},
 
 	},
 
