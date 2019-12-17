@@ -97,7 +97,7 @@ export default new Router({
 			name: 'maps',
 			// router-link doesn't support external url, let's force the redirect
 			beforeEnter() {
-				window.open(mapsPath, '_blank');
+				window.open(mapsPath, '_blank')
 			},
 		},
 	],
