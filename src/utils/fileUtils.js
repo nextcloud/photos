@@ -20,7 +20,7 @@
  *
  */
 import camelcase from 'camelcase'
-import { isNumber } from './numberUtil'
+import { isNumber } from './numberUtils'
 
 /**
  * Get an url encoded path

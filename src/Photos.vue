@@ -72,3 +72,16 @@ export default {
 	},
 }
 </script>
+<style lang="scss" scoped>
+#app-content {
+	height: 100%;
+	display: flex;
+	flex-grow: 1;
+	flex-direction: column;
+	align-content: space-between;
+}
+
+.app-navigation__photos::v-deep .app-navigation-entry-icon.icon-photos {
+	background-size: 20px;
+}
+</style>

@@ -19,23 +19,33 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-const props = `
-	<oc:fileid />
-	<d:getlastmodified />
-	<d:getetag />
-	<d:getcontenttype />
-	<d:getcontentlength />
-	<nc:has-preview />
-	<oc:favorite />
-	<d:resourcetype />`
 
-export { props }
-export default `<?xml version="1.0"?>
-			<d:propfind xmlns:d="DAV:"
-				xmlns:oc="http://owncloud.org/ns"
-				xmlns:nc="http://nextcloud.org/ns"
-				xmlns:ocs="http://open-collaboration-services.org/ns">
-				<d:prop>
-					${props}
-				</d:prop>
-			</d:propfind>`
+import Vue from 'vue'
+import { sizes } from '../assets/grid-sizes'
+
+export default new Vue({
+	data() {
+		return {
+			gridConfig: sizes.max,
+		}
+	},
+	watch: {
+		gridConfig(val) {
+			this.$emit('changed', val)
+		},
+	},
+	created() {
+		window.addEventListener('resize', this.handleWindowResize)
+		this.handleWindowResize()
+	},
+	beforeDestroy() {
+		window.removeEventListener('resize', this.handleWindowResize)
+	},
+	methods: {
+		handleWindowResize() {
+			// find the first grid size that fit the current window width
+			const currentSize = Object.keys(sizes).find(size => size > document.documentElement.clientWidth)
+			this.gridConfig = sizes[currentSize]
+		},
+	},
+})

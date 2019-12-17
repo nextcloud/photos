@@ -23,41 +23,33 @@
 <template>
 	<!-- Folder content -->
 	<transition-group
-		class="photos-grid"
+		class="photos-grid-row"
 		role="grid"
 		name="list"
 		tag="div">
 		<slot />
-		<div key="footer" role="none" class="photos-grid__footer-spacer" />
 	</transition-group>
 </template>
 
 <script>
 export default {
-	name: 'Grid',
+	name: 'GridRow',
 }
 </script>
 
 <style scoped lang="scss">
-.photos-grid {
+.photos-grid-row {
 	display: grid;
 	align-items: center;
 	justify-content: center;
+	gap: 8px;
+	margin-bottom: 8px;
 	grid-template-columns: repeat(10, 1fr);
 	position: relative;
-
-	// always put one more row of grid for the spacer
-	&__footer-spacer {
-		// always add one row, so placing it on the first
-		// column will always add one more
-		grid-column: 1;
-		// same height as the width
-		padding-bottom: 100%;
-	}
 }
 
 .list-move {
-	transition: transform var(--animation-quick);
+	transition: transform 2s;
 }
 
 // TODO: use mixins/GridSizes as soon as node-sass supports it
@@ -68,7 +60,6 @@ $previous: 0;
 	$count: map-get($config, 'count');
 	$marginTop: map-get($config, 'marginTop');
 	$marginW: map-get($config, 'marginW');
-	$gap: map-get($config, 'gap');
 
 	// if this is the last entry, only use min-width
 	$rule: '(min-width: #{$previous}px) and (max-width: #{$size}px)';
@@ -77,9 +68,7 @@ $previous: 0;
 	}
 
 	@media #{$rule} {
-		.photos-grid {
-			gap: #{$gap}px;
-			padding: #{$marginTop}px #{$marginW}px #{$marginW}px #{$marginW}px;
+		.photos-grid-row {
 			grid-template-columns: repeat($count, 1fr);
 		}
 	}

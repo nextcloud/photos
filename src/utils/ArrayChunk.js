@@ -19,23 +19,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-const props = `
-	<oc:fileid />
-	<d:getlastmodified />
-	<d:getetag />
-	<d:getcontenttype />
-	<d:getcontentlength />
-	<nc:has-preview />
-	<oc:favorite />
-	<d:resourcetype />`
 
-export { props }
-export default `<?xml version="1.0"?>
-			<d:propfind xmlns:d="DAV:"
-				xmlns:oc="http://owncloud.org/ns"
-				xmlns:nc="http://nextcloud.org/ns"
-				xmlns:ocs="http://open-collaboration-services.org/ns">
-				<d:prop>
-					${props}
-				</d:prop>
-			</d:propfind>`
+const arrayRange = function(n) {
+	// Array.range(5) --> [0,1,2,3,4]
+	return Array.apply(null, Array(n)).map((x, i) => i)
+}
+
+/**
+ * Split an array into chunks
+ *
+ * @param {Array} arr an array to split
+ * @param {number} count lenght of the chunk
+ * @returns {Array}
+ */
+export default function(arr = [], count = 5) {
+	return arrayRange(Math.ceil(arr.length / count)).map((x, i) =>
+		arr.slice(i * count, i * count + count)
+	)
+}

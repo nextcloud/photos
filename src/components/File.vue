@@ -100,12 +100,15 @@ export default {
 		isImage() {
 			return this.mime.startsWith('image')
 		},
+		srcUrl() {
+			return generateUrl(`/core/preview?fileId=${this.fileid}&x=${256}&y=${256}&a=true&v=${this.etag}`)
+		},
 	},
 
 	created() {
 		// Allow us to cancel the img loading on destroy
 		// use etag to force cache reload if file changed
-		this.img.src = generateUrl(`/core/preview?fileId=${this.fileid}&x=${256}&y=${256}&a=true&v=${this.etag}`)
+		this.img.src = this.srcUrl
 		this.img.addEventListener('load', () => {
 			this.src = this.img.src
 		})

@@ -33,29 +33,35 @@
 	</EmptyContent>
 
 	<!-- Folder content -->
-	<Grid v-else-if="!loading">
-		<File v-for="file in fileList" :key="file.fileid" v-bind="file" />
-	</Grid>
+	<VirtualGrid v-else-if="!loading"
+		:component="getComponent"
+		:list="fileList"
+		:loading-page="loadingPage"
+		:props="getProps"
+		@bottomReached="onBottomReached" />
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import debounce from 'debounce'
 
 import getPhotos from '../services/PhotoSearch'
 
 import EmptyContent from '../components/EmptyContent'
 import File from '../components/File'
-import Grid from '../components/Grid'
+import VirtualGrid from '../components/VirtualGrid'
 
 import cancelableRequest from '../utils/CancelableRequest'
+import arrayToChunk from '../utils/ArrayChunk'
+import GridConfigMixin from '../mixins/GridConfig'
 
 export default {
 	name: 'Timeline',
 	components: {
 		EmptyContent,
-		File,
-		Grid,
+		VirtualGrid,
 	},
+	mixins: [GridConfigMixin],
 	props: {
 		loading: {
 			type: Boolean,
@@ -69,8 +75,11 @@ export default {
 
 	data() {
 		return {
-			error: null,
 			cancelRequest: () => {},
+			done: false,
+			error: null,
+			loadingPage: false,
+			page: 0,
 		}
 	},
 
@@ -91,10 +100,18 @@ export default {
 		isEmpty() {
 			return this.fileList.length === 0
 		},
+
+		// the list chunked in rows for the virtual list
+		chunkedList() {
+			return arrayToChunk(this.fileList, this.gridConfig.count)
+		},
 	},
 
 	watch: {
 		async onlyFavorites() {
+			// reset component
+			this.resetState()
+
 			// content is completely different
 			this.$emit('update:loading', true)
 			this.fetchContent()
@@ -111,6 +128,11 @@ export default {
 
 	methods: {
 		async fetchContent() {
+			// only one simultaneous page load
+			if (this.loadingPage) {
+				return
+			}
+
 			// cancel any pending requests
 			this.cancelRequest('Changed view')
 
@@ -122,6 +144,7 @@ export default {
 				this.$emit('update:loading', true)
 			}
 			this.error = null
+			this.loadingPage = true
 
 			// init cancellable request
 			const { request, cancel } = cancelableRequest(getPhotos)
@@ -129,9 +152,20 @@ export default {
 
 			try {
 				// get content and current folder info
-				const files = await request(this.onlyFavorites)
+				const files = await request(this.onlyFavorites, {
+					page: this.page,
+					perPage: this.gridConfig.count * 5, // we load 5 rows,
+				})
 				this.$store.dispatch('updateTimeline', files)
 				this.$store.dispatch('appendFiles', files)
+
+				// next time we load this script, we load the next page if the list returned
+				if (files.length === this.gridConfig.count * 5) {
+					this.page++
+				} else {
+					console.debug('We loaded the last page')
+					this.done = true
+				}
 			} catch (error) {
 				if (error.response && error.response.status) {
 					if (error.response.status === 404) {
@@ -148,8 +182,64 @@ export default {
 			} finally {
 				// done loading even with errors
 				this.$emit('update:loading', false)
+				this.loadingPage = false
 			}
 		},
+
+		/**
+		 * Return the props based on the element
+		 * Here we want to bind the full fileinfo
+		 * object so we stupidly return it whole!
+		 *
+		 * @param {Object} item the scoped item from the VirtualGrid
+		 * @returns {Object}
+		 */
+		getProps(item) {
+			return item
+		},
+
+		/**
+		 * Return the component based on the element
+		 * We only have files in the Timeline,
+		 * so we return Files!
+		 *
+		 * @returns {Object}
+		 */
+		getComponent() {
+			return File
+		},
+
+		debounceOnBottomReached: debounce(function() {
+			this.onBottomReached()
+		}, 1000),
+
+		/**
+		 * When virtual grid reach the bottom,
+		 * we load the next page
+		 */
+		onBottomReached() {
+			// if we're currently loading or if a previous
+			// request returned the last page, we stop
+			if (this.loadingPage || this.done) {
+				return
+			}
+
+			console.debug('Loading next page', this.page)
+			this.fetchContent()
+		},
+
+		/**
+		 * Reset this component data to a pristine state
+		 */
+		resetState() {
+			this.$store.dispatch('resetTimeline')
+			this.done = false
+			this.error = null
+			this.loadingPage = false
+			this.page = 0
+			this.page = 0
+		}
+
 	},
 
 }

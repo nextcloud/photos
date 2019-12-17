@@ -24,15 +24,25 @@ import { genFileInfo } from '../utils/fileUtils'
 import { getCurrentUser } from '@nextcloud/auth'
 import allowedMimes from './AllowedMimes'
 import client from './DavClient'
+import { props } from './DavRequest'
+import { sizes } from '../assets/grid-sizes'
 
 /**
  * List files from a folder and filter out unwanted mimes
  *
  * @param {boolean} [onlyFavorites=false] not used
  * @param {Object} [options] used for the cancellable requests
+ * @param {number} [options.page=0] which page to start (starts at 0)
+ * @param {number} [options.perPage] how many to display per page default is 5 times the max number per line from the grid-sizes config file
+ * @param {boolean} [options.full=false] get full data of the files
  * @returns {Array} the file list
  */
 export default async function(onlyFavorites = false, options = {}) {
+	// default function options
+	options = Object.assign({}, {
+		page: 0, // start at the first page
+		perPage: sizes.max.count * 10, // ten rows of the max width
+	}, options)
 
 	const prefixPath = `/files/${getCurrentUser().uid}`
 
@@ -65,18 +75,12 @@ export default async function(onlyFavorites = false, options = {}) {
 			<d:searchrequest xmlns:d="DAV:"
 				xmlns:oc="http://owncloud.org/ns"
 				xmlns:nc="http://nextcloud.org/ns"
+				xmlns:ns="https://github.com/icewind1991/SearchDAV/ns"
 				xmlns:ocs="http://open-collaboration-services.org/ns">
 				<d:basicsearch>
 					<d:select>
 						<d:prop>
-							<d:getlastmodified />
-							<d:getetag />
-							<d:getcontenttype />
-							<oc:fileid />
-							<d:getcontentlength />
-							<nc:has-preview />
-							<oc:favorite />
-							<d:resourcetype />
+							${props}
 						</d:prop>
 					</d:select>
 					<d:from>
@@ -104,7 +108,11 @@ export default async function(onlyFavorites = false, options = {}) {
 							<d:prop><d:getlastmodified/></d:prop>
 							<d:descending/>
 						</d:order>
-				 	</d:orderby>
+					</d:orderby>
+					<d:limit>
+						<d:nresults>${options.perPage}</d:nresults>
+						<ns:firstresult>${options.page * options.perPage}</ns:firstresult>
+					</d:limit>
 				</d:basicsearch>
 			</d:searchrequest>`,
 		deep: true,
