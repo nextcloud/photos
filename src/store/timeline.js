@@ -36,6 +36,10 @@ const mutations = {
 			.map(file => file.fileid)
 			.filter(id => id >= 0))
 	},
+
+	resetTimeline(state) {
+		state.timeline = []
+	},
 }
 
 const getters = {
@@ -52,6 +56,15 @@ const actions = {
 	updateTimeline(context, files = []) {
 		// we want all the FileInfo! Folders included!
 		context.commit('updateTimeline', files)
+	},
+
+	/**
+	 * Reset the timeline files list
+	 *
+	 * @param {Object} context the store mutations
+	 */
+	resetTimeline(context) {
+		context.commit('resetTimeline')
 	},
 }
 

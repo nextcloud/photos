@@ -34,8 +34,8 @@
 
 	<!-- Folder content -->
 	<VirtualGrid v-else-if="!loading"
-		:list="fileList"
 		:component="getComponent"
+		:list="fileList"
 		:loading-page="loadingPage"
 		:props="getProps"
 		@bottomReached="onBottomReached" />
@@ -78,8 +78,8 @@ export default {
 			cancelRequest: () => {},
 			done: false,
 			error: null,
-			page: 0,
 			loadingPage: false,
+			page: 0,
 		}
 	},
 
@@ -109,6 +109,9 @@ export default {
 
 	watch: {
 		async onlyFavorites() {
+			// reset component
+			this.resetState()
+
 			// content is completely different
 			this.$emit('update:loading', true)
 			this.fetchContent()
@@ -224,6 +227,18 @@ export default {
 			console.debug('Loading next page', this.page)
 			this.fetchContent()
 		},
+
+		/**
+		 * Reset this component data to a pristine state
+		 */
+		resetState() {
+			this.$store.dispatch('resetTimeline')
+			this.done = false
+			this.error = null
+			this.loadingPage = false
+			this.page = 0
+			this.page = 0
+		}
 
 	},
 
