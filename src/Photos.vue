@@ -26,7 +26,7 @@
 			<AppNavigationItem :to="{name: 'root'}"
 				class="app-navigation__photos"
 				:title="t('photos', 'Your photos')"
-				icon="icon-photos"
+				icon="icon-yourphotos"
 				exact />
 			<AppNavigationItem to="/favorites" :title="t('photos', 'Favorites')" icon="icon-favorite" />
 			<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Your albums')" icon="icon-files-dark" />
