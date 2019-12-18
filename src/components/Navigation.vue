@@ -152,8 +152,12 @@ export default {
 	position: absolute;
 	height: 44px;
 	align-items: center;
+	max-width: 100%;
 	&__title {
 		margin: 0;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 	&__share {
 		margin-left: 10px;
