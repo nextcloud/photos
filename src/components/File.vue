@@ -29,10 +29,11 @@
 		<!-- image and loading placeholder -->
 		<transition name="fade">
 			<img v-show="loaded"
+				ref="img"
 				:src="src"
 				:alt="basename"
 				:aria-describedby="ariaUuid"
-				@load="loaded = true">
+				@load="onLoad">
 		</transition>
 		<svg v-if="!loaded"
 			xmlns="http://www.w3.org/2000/svg"
@@ -82,8 +83,6 @@ export default {
 	data() {
 		return {
 			loaded: false,
-			img: new Image(),
-			src: '',
 		}
 	},
 
@@ -100,32 +99,22 @@ export default {
 		isImage() {
 			return this.mime.startsWith('image')
 		},
-		srcUrl() {
+		src() {
 			return generateUrl(`/core/preview?fileId=${this.fileid}&x=${256}&y=${256}&a=true&v=${this.etag}`)
 		},
 	},
 
-	created() {
-		// Allow us to cancel the img loading on destroy
-		// use etag to force cache reload if file changed
-		this.img.src = this.srcUrl
-		this.img.addEventListener('load', () => {
-			this.src = this.img.src
-		})
-	},
-
 	beforeDestroy() {
 		// cancel any pending load
-		this.img.src = ''
-		this.src = ''
+		this.$refs.src = ''
 	},
 
 	methods: {
 		openViewer() {
 			OCA.Viewer.open(this.filename)
 		},
-		async getImage() {
-
+		onLoad() {
+			this.loaded = true
 		},
 	},
 
