@@ -31,6 +31,7 @@
 		"stylelint:fix": "stylelint src --fix"
 	},
 	"dependencies": {
+		"@essentials/request-timeout": "^1.0.2",
 		"@nextcloud/auth": "^1.1.0",
 		"@nextcloud/axios": "^1.1.0",
 		"@nextcloud/initial-state": "^1.0.0",

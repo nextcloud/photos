@@ -1,31 +1,48 @@
 
 <template>
 	<Grid ref="grid">
+		<!-- top spacer -->
 		<span v-show="shownFirstRow > 0"
-			ref="filler-top"
 			key="filler-top"
+			ref="filler-top"
+			:style="{paddingBottom: topPadding}"
 			class="grid-filler grid-filler--top"
-			role="none"
-			:style="{paddingBottom: topPadding}" />
+			role="none" />
+
+		<!-- files list -->
 		<component :is="component(item)"
 			v-for="(item, index) in shownList"
 			:key="item.fileid"
 			:ref="`item-${index}`"
 			:class="`row-${getRowNumber(index)}`"
 			v-bind="props(item)" />
+
+		<!-- next page loading indicator -->
+		<div v-if="loadingPage"
+			key="grid-loading"
+			class="grid-loading icon-loading"
+			role="none" />
+
+		<!-- bottom spacer -->
 		<span v-show="shownLastRow < lastRow"
 			ref="filler-bottom"
 			key="filler-bottom"
+			:style="{paddingBottom: bottomPadding}"
 			class="grid-filler grid-filler--bottom"
-			role="none"
-			:style="{paddingBottom: bottomPadding}" />
+			role="none" />
 	</Grid>
 </template>
 
 <script>
-import debounce from 'debounce'
+import { requestTimeout, clearRequestTimeout } from '@essentials/request-timeout'
 import Grid from './Grid'
 import GridConfigMixin from '../mixins/GridConfig'
+
+/**
+ * Specifies the number of miliseconds during which to disable pointer events while a scroll is in progress.
+ * This improves performance and makes scrolling smoother.
+ */
+export const DEFAULT_SCROLLING_RESET_TIME_INTERVAL = 150
 
 export default {
 	name: 'VirtualGrid',
@@ -46,6 +63,10 @@ export default {
 		component: {
 			type: Function,
 			required: true,
+		},
+		loadingPage: {
+			type: Boolean,
+			default: false,
 		},
 	},
 
@@ -98,9 +119,20 @@ export default {
 	},
 
 	methods: {
-		debounceOnDocumentScroll: debounce(function() {
-			this.onDocumentScroll()
-		}, 50),
+
+		/**
+		 * Request an animation frame and debounce the onScroll method
+		 */
+		debounceOnDocumentScroll() {
+			if (this.debounceOnDocumentScrollRequest) {
+				clearRequestTimeout(this.debounceOnDocumentScrollRequest)
+			}
+
+			this.debounceOnDocumentScrollRequest = requestTimeout(
+				this.onDocumentScroll,
+				DEFAULT_SCROLLING_RESET_TIME_INTERVAL, //
+			)
+		},
 
 		/**
 		 * Handle document scroll
@@ -164,5 +196,10 @@ export default {
 .grid-filler {
 	// put the filler at the end of the row to put the next one into a new line
 	grid-column-end: -1;
+}
+
+.grid-loading {
+	grid-column: 1/-1;
+	height: 88px;
 }
 </style>
