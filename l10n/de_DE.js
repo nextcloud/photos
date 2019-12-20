@@ -5,7 +5,7 @@ OC.L10N.register(
     "Your memories under your control" : "Ihre Erinnerungen unter Ihrer Kontrolle",
     "Your photos" : "Ihre Fotos",
     "Favorites" : "Favoriten",
-    "Your albums" : "Ihre Apps",
+    "Your albums" : "Ihre Alben",
     "Shared albums" : "Geteilte Alben",
     "Tagged photos" : "Getaggte Fotos",
     "Locations" : "Orte",
