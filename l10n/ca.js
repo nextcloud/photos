@@ -11,6 +11,7 @@ OC.L10N.register(
     "Locations" : "Ubicacions",
     "Open the full size \"{name}\" image" : "Obrir la imatge \"{name}\" a mida completa",
     "Open the \"{name}\" sub-directory" : "Obrir la subcarpeta \"{name}\"",
+    "Share this folder" : "Comparteix la carpeta",
     "Back to {folder}" : "Tornar a la carpeta {folder}",
     "This folder does not exists" : "Aquesta carpeta no existeix",
     "An error occurred" : "S'ha produït un error",

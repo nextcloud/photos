@@ -1,0 +1,6 @@
+{ "translations": {
+    "Photos" : "Bilder",
+    "Favorites" : "Favoritter",
+    "An error occurred" : "En feil oppstod"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
