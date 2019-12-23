@@ -68,7 +68,7 @@
 		"babel-loader": "^8.0.6",
 		"css-loader": "^3.4.0",
 		"eslint": "^5.16.0",
-		"eslint-config-nextcloud": "^0.1.0",
+		"eslint-config-nextcloud": "^0.1.1",
 		"eslint-config-standard": "^12.0.0",
 		"eslint-loader": "^3.0.3",
 		"eslint-plugin-import": "^2.19.1",
