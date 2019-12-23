@@ -100,7 +100,7 @@ export default {
 			return this.mime.startsWith('image')
 		},
 		src() {
-			return generateUrl(`/core/preview?fileId=${this.fileid}&x=${256}&y=${256}&a=true&v=${this.etag}`)
+			return generateUrl(`/core/preview?fileId=${this.fileid}&x=${256}&y=${256}&a=false&v=${this.etag}`)
 		},
 	},
 
