@@ -52,7 +52,6 @@ import File from '../components/File'
 import VirtualGrid from '../components/VirtualGrid'
 
 import cancelableRequest from '../utils/CancelableRequest'
-import arrayToChunk from '../utils/ArrayChunk'
 import GridConfigMixin from '../mixins/GridConfig'
 
 export default {
@@ -99,11 +98,6 @@ export default {
 		// is current folder empty?
 		isEmpty() {
 			return this.fileList.length === 0
-		},
-
-		// the list chunked in rows for the virtual list
-		chunkedList() {
-			return arrayToChunk(this.fileList, this.gridConfig.count)
 		},
 	},
 
