@@ -169,7 +169,7 @@ export default {
 	}
 }
 
-$name-height: 1.2rem;
+$name-height: 1rem;
 
 .folder-name {
 	position: absolute;
