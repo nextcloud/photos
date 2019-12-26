@@ -109,12 +109,14 @@ export default {
 	},
 
 	created() {
+		window.addEventListener('resize', this.onDocumentScroll)
 		window.addEventListener('scroll', this.onDocumentScroll)
 	},
 	mounted() {
 		this.onDocumentScroll()
 	},
 	beforeDestroy() {
+		window.removeEventListener('resize', this.onDocumentScroll)
 		window.removeEventListener('scroll', this.onDocumentScroll)
 	},
 
