@@ -119,6 +119,7 @@ export default {
 	},
 
 	async beforeMount() {
+		this.resetState()
 		this.fetchContent()
 	},
 
