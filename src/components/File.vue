@@ -115,7 +115,7 @@ export default {
 
 	methods: {
 		openViewer() {
-			OCA.Viewer.open(this.filename, this.list)
+			OCA.Viewer.open(unescape(this.filename), this.list)
 		},
 		onLoad() {
 			this.loaded = true

@@ -118,6 +118,10 @@ const genFileInfo = function(obj) {
 					: data
 			}
 		}
+
+		if (key === 'filename') {
+			fileInfo[camelcase(key)] = escape(data)
+		}
 	})
 	return fileInfo
 }

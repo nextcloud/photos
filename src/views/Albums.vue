@@ -195,7 +195,7 @@ export default {
 
 			try {
 				// get content and current folder info
-				const { folder, folders, files } = await request(this.path, { shared: this.showShared })
+				const { folder, folders, files } = await request(escape(this.path), { shared: this.showShared })
 				this.$store.dispatch('addPath', { path: this.path, fileid: folder.fileid })
 				this.$store.dispatch('updateFolders', { fileid: folder.fileid, files, folders })
 				this.$store.dispatch('updateFiles', { folder, files, folders })
