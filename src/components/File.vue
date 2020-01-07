@@ -78,6 +78,10 @@ export default {
 			type: String,
 			required: true,
 		},
+		list: {
+			type: Array,
+			required: true,
+		},
 	},
 
 	data() {
@@ -111,7 +115,7 @@ export default {
 
 	methods: {
 		openViewer() {
-			OCA.Viewer.open(this.filename)
+			OCA.Viewer.open(this.filename, this.list)
 		},
 		onLoad() {
 			this.loaded = true
