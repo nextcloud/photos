@@ -15,6 +15,7 @@
 			:key="item.fileid"
 			:ref="`item-${index}`"
 			:class="`row-${getRowNumber(index)}`"
+			:list="list"
 			v-bind="props(item)" />
 
 		<!-- next page loading indicator -->

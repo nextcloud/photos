@@ -52,7 +52,10 @@
 				</template>
 			</EmptyContent>
 
-			<File v-for="file in fileList" :key="file.fileid" v-bind="file" />
+			<File v-for="file in fileList"
+				:key="file.fileid"
+				:list="fileList"
+				v-bind="file" />
 		</template>
 	</Grid>
 </template>
