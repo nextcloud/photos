@@ -82,6 +82,10 @@ export default {
 			type: Array,
 			required: true,
 		},
+		loadMore: {
+			type: Function,
+			default: () => ([]),
+		},
 	},
 
 	data() {
@@ -115,7 +119,7 @@ export default {
 
 	methods: {
 		openViewer() {
-			OCA.Viewer.open(this.filename, this.list)
+			OCA.Viewer.open({ path: this.filename, list: this.list, loadMore: this.loadMore })
 		},
 		onLoad() {
 			this.loaded = true
