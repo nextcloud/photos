@@ -131,9 +131,6 @@ export default {
 			// cancel any pending requests
 			this.cancelRequest('Changed view')
 
-			// close any potential opened viewer
-			OCA.Viewer.close()
-
 			// if we don't already have some cached data let's show a loader
 			if (this.timeline.length === 0) {
 				this.$emit('update:loading', true)
@@ -161,6 +158,9 @@ export default {
 					console.debug('We loaded the last page')
 					this.done = true
 				}
+
+				// return for the viewer loadMore method
+				return files
 			} catch (error) {
 				if (error.response && error.response.status) {
 					if (error.response.status === 404) {
@@ -190,7 +190,9 @@ export default {
 		 * @returns {Object}
 		 */
 		getProps(item) {
-			return item
+			return Object.assign({}, item, {
+				loadMore: this.fetchContent,
+			})
 		},
 
 		/**
