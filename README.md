@@ -29,3 +29,4 @@ If you'd like to join, just go through the [issue list](https://github.com/nextc
 3.  🏗 Then to build the Javascript whenever you make changes, run `make build-js`. Watch changes with: `make watch-js`
 4.  ✅ Enable the app through the app management of your Nextcloud
 5.  🎉 Partytime!
+6.  💻 Fix easily linting issues with `npm run lint:fix`
