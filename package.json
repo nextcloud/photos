@@ -81,7 +81,7 @@
 		"node-sass": "^4.12.0",
 		"node-sass-utils": "^1.1.2",
 		"postcss-loader": "^3.0.0",
-		"sass-loader": "^7.3.1",
+		"sass-loader": "^8.0.1",
 		"stylelint": "^8.4.0",
 		"stylelint-config-recommended-scss": "^3.3.0",
 		"stylelint-scss": "^3.13.0",
