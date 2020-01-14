@@ -196,7 +196,6 @@ $previous: 0;
 			}
 			&--root &__title {
 				padding-left: #{$marginW}px;
-				padding-left: #{$marginW}px;
 			}
 		}
 	}
