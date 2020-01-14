@@ -28,14 +28,15 @@
 		<!-- Images preview -->
 		<transition name="fade">
 			<div v-show="loaded"
-				:class="`folder-content--grid-${fileList.length}`"
+				:class="`folder-content--grid-${previewList.length}`"
 				class="folder-content"
 				role="none">
-				<img v-for="file in fileList"
+				<img v-for="file in previewList"
 					:key="file.fileid"
 					:src="generateImgSrc(file)"
 					alt=""
-					@load="loaded = true">
+					@load="loaded = true"
+					@error="onPreviewFail(file)">
 			</div>
 		</transition>
 
@@ -85,13 +86,14 @@ export default {
 	data() {
 		return {
 			loaded: false,
+			failed: [],
 		}
 	},
 
 	computed: {
 		// folder is empty
 		isEmpty() {
-			return this.fileList.length === 0
+			return this.previewList.length === 0
 		},
 
 		ariaUuid() {
@@ -99,6 +101,15 @@ export default {
 		},
 		ariaLabel() {
 			return t('photos', 'Open the "{name}" sub-directory', { name: this.name })
+		},
+
+		/**
+		 * Previews list without the failed ones
+		 * @returns {Object[]} the previews fileinfo
+		 */
+		previewList() {
+			return this.fileList
+				.filter(file => this.failed.indexOf(file.fileid) === -1)
 		},
 
 		/**
@@ -128,6 +139,9 @@ export default {
 		generateImgSrc({ fileid, etag }) {
 			// use etag to force cache reload if file changed
 			return generateUrl(`/core/preview?fileId=${fileid}&x=${256}&y=${256}&a=true&v=${etag}`)
+		},
+		onPreviewFail({ fileid }) {
+			this.failed.push(fileid)
 		},
 	},
 }
