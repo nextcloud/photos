@@ -162,6 +162,11 @@ export default {
 	&__share {
 		margin-left: 10px;
 	}
+	&__back,
+	&__share {
+		flex-grow: 0;
+		flex-shrink: 0;
+	}
 }
 
 // generate variants based on grid sizes
@@ -190,6 +195,7 @@ $previous: 0;
 				}
 			}
 			&--root &__title {
+				padding-left: #{$marginW}px;
 				padding-left: #{$marginW}px;
 			}
 		}
