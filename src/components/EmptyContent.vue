@@ -22,6 +22,7 @@
 
 <template>
 	<div v-if="isReady" class="emptycontent">
+		<!-- eslint-disable-next-line vue/no-v-html (because it's an SVG file) -->
 		<div v-if="haveIllustration" class="illustration" v-html="illustration" />
 		<div v-else class="icon-error" />
 		<h2><slot /></h2>

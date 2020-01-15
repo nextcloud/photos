@@ -38,8 +38,11 @@
 			<router-view v-show="!loading" :loading.sync="loading" />
 
 			<!-- svg img loading placeholder (linked to the File component) -->
+			<!-- eslint-disable-next-line vue/no-v-html (because it's an SVG file) -->
 			<span class="hidden-visually" role="none" v-html="svgplaceholder" />
+			<!-- eslint-disable-next-line vue/no-v-html (because it's an SVG file) -->
 			<span class="hidden-visually" role="none" v-html="imgplaceholder" />
+			<!-- eslint-disable-next-line vue/no-v-html (because it's an SVG file) -->
 			<span class="hidden-visually" role="none" v-html="videoplaceholder" />
 		</AppContent>
 	</Content>
