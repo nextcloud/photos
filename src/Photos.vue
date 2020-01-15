@@ -77,7 +77,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 #app-content {
-	height: 100%;
 	display: flex;
 	flex-grow: 1;
 	flex-direction: column;
