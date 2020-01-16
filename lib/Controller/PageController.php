@@ -34,6 +34,7 @@ use OCP\IInitialStateService;
 use OCP\IRequest;
 use OCP\Util;
 use OCP\IConfig;
+use OCP\App\IAppManager;
 
 class PageController extends Controller {
 
@@ -45,7 +46,11 @@ class PageController extends Controller {
 	/** @var IInitialStateService */
 	private $initialStateService;
 
+	/** @var IAppManager */
+	private $appManager;
+
 	public function __construct($appName,
+								IAppManager $appManager,
 								IRequest $request,
 								IEventDispatcher $eventDispatcher,
 								IConfig $config,
@@ -53,6 +58,7 @@ class PageController extends Controller {
 		parent::__construct($appName, $request);
 
 		$this->appName = $appName;
+		$this->appManager = $appManager;
 		$this->eventDispatcher = $eventDispatcher;
 		$this->initialStateService = $initialStateService;
 		$this->config = $config;
@@ -71,8 +77,7 @@ class PageController extends Controller {
 		$this->eventDispatcher->dispatch(LoadViewer::class, new LoadViewer());
 
 		$this->initialStateService->provideInitialState($this->appName, 'mimes', Application::MIMES);
-		$this->initialStateService->provideInitialState($this->appName, 'maps', $this->config->getAppValue('maps', 'enabled', 'no') === 'yes');
-
+		$this->initialStateService->provideInitialState($this->appName, 'maps', $this->appManager->isEnabledForUser('maps') === true);
 
 		Util::addScript($this->appName, 'photos');
 		Util::addStyle($this->appName, 'icons');
