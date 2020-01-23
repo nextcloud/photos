@@ -1,6 +1,6 @@
 {
   "name": "nextcloud/photos",
-  "description": "3rdparty components for sharelisting",
+  "description": "Lint config for nextcloud/photos",
   "license": "MIT",
   "config": {
     "optimize-autoloader": true,
