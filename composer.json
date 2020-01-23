@@ -1,0 +1,12 @@
+{
+  "name": "nextcloud/photos",
+  "description": "Lint config for nextcloud/photos",
+  "license": "MIT",
+  "config": {
+    "optimize-autoloader": true,
+    "classmap-authoritative": true
+  },
+  "scripts": {
+    "lint": "find . -name \\*.php -not -path './vendor/*' -exec php -l \"{}\" \\;"
+  }
+}
