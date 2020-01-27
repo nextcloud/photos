@@ -142,6 +142,11 @@ class AlbumsController extends Controller {
 			return [];
 		}
 
+		// Ignore folder with a .noimage or .nomedia node
+		if ($folder->nodeExists('.noimage') || $folder->nodeExists('.nomedia')) {
+			return [];
+		}
+
 		$nodes = $folder->getDirectoryListing();
 
 		foreach ($nodes as $node) {
