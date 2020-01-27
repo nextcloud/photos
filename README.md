@@ -16,7 +16,6 @@
 In your Nextcloud, simply enable the Photos app through the Apps management.
 
 Consider installing the [preview generator](https://github.com/rullzer/previewgenerator) for pre-generating thumbnails.
-Please have a look at [CHANGELOG.md](https://github.com/nextcloud/photos/blob/master/CHANGELOG.md) for details about changes.
 
 ## Mobile Photos
 
