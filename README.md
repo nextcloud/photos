@@ -14,6 +14,7 @@
 ## 🚀 Installation
 
 In your Nextcloud, simply enable the Photos app through the Apps management.
+The Nextcloud Photos app is only included in nextcloud v18 and higher.
 
 Consider installing the [preview generator](https://github.com/rullzer/previewgenerator) for pre-generating thumbnails.
 
