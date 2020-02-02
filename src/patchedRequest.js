@@ -20,7 +20,7 @@
  *
  */
 
-const request = require('webdav/dist/request')
+const request = require('webdav/dist/node/request')
 
 const oldPrepareRequestOptions = request.prepareRequestOptions
 
