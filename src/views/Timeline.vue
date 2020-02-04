@@ -33,12 +33,20 @@
 	</EmptyContent>
 
 	<!-- Folder content -->
-	<VirtualGrid v-else-if="!loading"
-		:component="getComponent"
-		:list="fileList"
-		:loading-page="loadingPage"
-		:props="getProps"
-		@bottomReached="onBottomReached" />
+	<div v-else-if="!loading">
+		<Navigation
+			key="navigation"
+			:basename="path"
+			:filename="'/'"
+			:root-title="rootTitle" />
+
+		<VirtualGrid
+			:component="getComponent"
+			:list="fileList"
+			:loading-page="loadingPage"
+			:props="getProps"
+			@bottomReached="onBottomReached" />
+	</div>
 </template>
 
 <script>
@@ -50,6 +58,7 @@ import getPhotos from '../services/PhotoSearch'
 import EmptyContent from '../components/EmptyContent'
 import File from '../components/File'
 import VirtualGrid from '../components/VirtualGrid'
+import Navigation from '../components/Navigation'
 
 import cancelableRequest from '../utils/CancelableRequest'
 import GridConfigMixin from '../mixins/GridConfig'
@@ -59,6 +68,7 @@ export default {
 	components: {
 		EmptyContent,
 		VirtualGrid,
+		Navigation,
 	},
 	mixins: [GridConfigMixin],
 	props: {
@@ -69,6 +79,14 @@ export default {
 		onlyFavorites: {
 			type: Boolean,
 			default: false,
+		},
+		rootTitle: {
+			type: String,
+			required: true,
+		},
+		path: {
+			type: String,
+			default: '',
 		},
 	},
 

@@ -47,6 +47,9 @@ export default new Router({
 			path: '/',
 			component: Timeline,
 			name: 'root',
+			props: route => ({
+				rootTitle: t('photos', 'Your photos'),
+			}),
 		},
 		{
 			path: '/albums/:path*',
@@ -77,9 +80,10 @@ export default new Router({
 			path: '/favorites',
 			component: Timeline,
 			name: 'favorites',
-			props: {
+			props: route => ({
+				rootTitle: t('photos', 'Favorites'),
 				onlyFavorites: true,
-			},
+			}),
 		},
 		{
 			path: '/tags/:path*',
