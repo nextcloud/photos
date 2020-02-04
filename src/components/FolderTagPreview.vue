@@ -127,11 +127,9 @@ export default {
 			const path = regex.exec(this.path)[1]
 
 			// apply to current route
-			const route = Object.assign({}, this.$route, {
+			return Object.assign({}, this.$route, {
 				params: { path },
 			})
-			// returning a string prevent vue-router to encode it again
-			return decodeURIComponent(this.$router.resolve(route).resolved.path)
 		},
 	},
 

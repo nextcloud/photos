@@ -180,8 +180,8 @@ export default {
 			this.cancelRequest('Changed folder')
 
 			// close any potential opened viewer & sidebar
-			OCA.Viewer && OCA.Viewer.close()
-			OCA.Files && OCA.Files.Sidebar.close()
+			OCA.Viewer && OCA.Viewer.close && OCA.Viewer.close()
+			OCA.Files && OCA.Files.Sidebar.close && OCA.Files.Sidebar.close()
 
 			// if we don't already have some cached data let's show a loader
 			if (!this.files[this.folderId]) {
