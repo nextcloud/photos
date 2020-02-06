@@ -21,9 +21,9 @@
  */
 
 import { getCurrentUser } from '@nextcloud/auth'
-import { getSingleValue, getValueForKey, parseXML, propsToStat } from 'webdav/dist/interface/dav'
-import { handleResponseCode, processResponsePayload } from 'webdav/dist/response'
-import { normaliseHREF, normalisePath } from 'webdav/dist/url'
+import { getSingleValue, getValueForKey, parseXML, propsToStat } from 'webdav/dist/node/interface/dav'
+import { handleResponseCode, processResponsePayload } from 'webdav/dist/node/response'
+import { normaliseHREF, normalisePath } from 'webdav/dist/node/url'
 import client, { remotePath } from './DavClient'
 import request from './DavRequest'
 import pathPosix from 'path-posix'
