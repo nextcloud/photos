@@ -92,7 +92,7 @@ export default {
 
 	data() {
 		return {
-			cancelRequest: () => {},
+			cancelRequest: null,
 			done: false,
 			error: null,
 			loadingPage: false,
@@ -136,7 +136,10 @@ export default {
 	},
 
 	beforeDestroy() {
-		this.cancelRequest()
+		// cancel any pending requests
+		if (this.cancelRequest) {
+			this.cancelRequest('Changed view')
+		}
 	},
 
 	methods: {
@@ -147,7 +150,9 @@ export default {
 			}
 
 			// cancel any pending requests
-			this.cancelRequest('Changed view')
+			if (this.cancelRequest) {
+				this.cancelRequest('Changed view')
+			}
 
 			// if we don't already have some cached data let's show a loader
 			if (this.timeline.length === 0) {
@@ -196,6 +201,7 @@ export default {
 				// done loading even with errors
 				this.$emit('update:loading', false)
 				this.loadingPage = false
+				this.cancelRequest = null
 			}
 		},
 
