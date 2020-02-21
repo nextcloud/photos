@@ -89,7 +89,7 @@
 		"svg-inline-loader": "^0.8.0",
 		"vue-loader": "^15.9.0",
 		"vue-template-compiler": "^2.6.11",
-		"webpack": "^4.41.5",
+		"webpack": "^4.41.6",
 		"webpack-cli": "^3.3.11",
 		"webpack-merge": "^4.2.2"
 	}
