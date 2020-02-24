@@ -63,7 +63,7 @@ export default {
 
 	data() {
 		return {
-			cancelRequest: () => {},
+			cancelRequest: null,
 		}
 	},
 
@@ -103,11 +103,16 @@ export default {
 				console.error('Failed to get folder content', this.folder, error.response)
 			}
 			// else we just cancelled the request
+		} finally {
+			this.cancelRequest = null
 		}
 	},
 
 	beforeDestroy() {
-		this.cancelRequest('Navigated away')
+		// cancel any pending requests
+		if (this.cancelRequest) {
+			this.cancelRequest('Navigated away')
+		}
 	},
 }
 </script>

@@ -105,7 +105,7 @@ export default {
 	data() {
 		return {
 			error: null,
-			cancelRequest: () => {},
+			cancelRequest: null,
 		}
 	},
 
@@ -157,7 +157,10 @@ export default {
 	},
 
 	beforeDestroy() {
-		this.cancelRequest('Changed view')
+		// cancel any pending requests
+		if (this.cancelRequest) {
+			this.cancelRequest('Navigated away')
+		}
 	},
 
 	async beforeMount() {
@@ -176,7 +179,9 @@ export default {
 	methods: {
 		async fetchRootContent() {
 			// cancel any pending requests
-			this.cancelRequest('Changed folder')
+			if (this.cancelRequest) {
+				this.cancelRequest('Changed folder')
+			}
 
 			// close any potential opened viewer
 			OCA.Viewer.close()
@@ -201,13 +206,16 @@ export default {
 			} finally {
 				// done loading
 				this.$emit('update:loading', false)
+				this.cancelRequest = null
 			}
 
 		},
 
 		async fetchContent() {
 			// cancel any pending requests
-			this.cancelRequest()
+			if (this.cancelRequest) {
+				this.cancelRequest()
+			}
 
 			// close any potential opened viewer
 			OCA.Viewer.close()
@@ -222,13 +230,19 @@ export default {
 			const { request, cancel } = cancelableRequest(getTaggedImages)
 			this.cancelRequest = cancel
 
-			// get data
-			const files = await request(this.tagId)
-			this.$store.dispatch('updateTag', { id: this.tagId, files })
-			this.$store.dispatch('appendFiles', files)
-
-			// done loading
-			this.$emit('update:loading', false)
+			try {
+				// get data
+				const files = await request(this.tagId)
+				this.$store.dispatch('updateTag', { id: this.tagId, files })
+				this.$store.dispatch('appendFiles', files)
+			} catch (error) {
+				console.error(error)
+				this.error = true
+			} finally {
+				// done loading
+				this.$emit('update:loading', false)
+				this.cancelRequest = null
+			}
 		},
 	},
 

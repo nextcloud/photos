@@ -56,7 +56,7 @@ export default {
 
 	data() {
 		return {
-			cancelRequest: () => {},
+			cancelRequest: null,
 		}
 	},
 
@@ -82,7 +82,10 @@ export default {
 	},
 
 	beforeDestroy() {
-		this.cancelRequest('Navigated away')
+		// cancel any pending requests
+		if (this.cancelRequest) {
+			this.cancelRequest('Navigated away')
+		}
 	},
 
 	async created() {
@@ -99,7 +102,8 @@ export default {
 			if (error.response && error.response.status) {
 				console.error('Failed to get folder content', this.id, error.response)
 			}
-			// else we just cancelled the request
+		} finally {
+			this.cancelRequest = null
 		}
 	},
 
