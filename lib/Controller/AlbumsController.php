@@ -34,6 +34,7 @@ use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\FIles\Node;
 use OCP\Files\NotFoundException;
+use OCP\Files\StorageNotAvailableException;
 use OCP\IRequest;
 
 class AlbumsController extends Controller {
@@ -142,12 +143,16 @@ class AlbumsController extends Controller {
 			return [];
 		}
 
-		// Ignore folder with a .noimage or .nomedia node
-		if ($folder->nodeExists('.noimage') || $folder->nodeExists('.nomedia')) {
+		try {
+			// Ignore folder with a .noimage or .nomedia node
+			if ($folder->nodeExists('.noimage') || $folder->nodeExists('.nomedia')) {
+				return [];
+			}
+
+			$nodes = $folder->getDirectoryListing();
+		} catch (StorageNotAvailableException $e) {
 			return [];
 		}
-
-		$nodes = $folder->getDirectoryListing();
 
 		foreach ($nodes as $node) {
 			if ($node instanceof File) {
