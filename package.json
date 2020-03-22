@@ -37,7 +37,7 @@
 		"@nextcloud/initial-state": "^1.1.0",
 		"@nextcloud/l10n": "^1.1.1",
 		"@nextcloud/router": "^1.0.0",
-		"@nextcloud/vue": "^1.4.0",
+		"@nextcloud/vue": "^1.4.1",
 		"camelcase": "^5.3.1",
 		"core-js": "^3.6.4",
 		"debounce": "^1.2.0",
