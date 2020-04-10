@@ -31,7 +31,7 @@ class Application extends App {
 	const APP_ID = 'photos';
 
 	const MIMES = [
-		// 'image/png',			// too rarely used for photos
+		'image/png',			// rarely used but still used #208
 		'image/jpeg',
 		// 'image/gif',			// too rarely used for photos
 		// 'image/x-xbitmap',	// too rarely used for photos
