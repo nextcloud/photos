@@ -1,5 +1,6 @@
 { "translations": {
     "Photos" : "Ảnh",
-    "Favorites" : "Ưa thích"
+    "Favorites" : "Ưa thích",
+    "An error occurred" : "Có lỗi đã xảy ra"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
