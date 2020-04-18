@@ -30,8 +30,10 @@ module.exports = {
 					{
 						loader: 'sass-loader',
 						options: {
-							functions: {
-								'get($keys)': SassGetGridConfig,
+							sassOptions: {
+								functions: {
+									'get($keys)': SassGetGridConfig,
+								},
 							},
 						},
 					},
@@ -51,7 +53,7 @@ module.exports = {
 			{
 				test: /\.js$/,
 				loader: 'babel-loader',
-				exclude: /node_modules(?!(\/|\\)(hot-patcher|webdav)(\/|\\))/,
+				exclude: /node_modules(?!(\/|\\)(hot-patcher|webdav|camelcase)(\/|\\))/,
 			},
 			{
 				test: /\.svg$/,
