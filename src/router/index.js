@@ -20,14 +20,28 @@
  *
  */
 
-import { generateUrl } from '@nextcloud/router'
+import { generateUrl, generateFilePath } from '@nextcloud/router'
 import Router from 'vue-router'
 import Vue from 'vue'
 
-import Albums from '../views/Albums'
-import Timeline from '../views/Timeline'
-import Tags from '../views/Tags'
 import isMapsInstalled from '../services/IsMapsInstalled'
+
+import { getRequestToken } from '@nextcloud/auth'
+
+// CSP config for webpack dynamic chunk loading
+// eslint-disable-next-line
+__webpack_nonce__ = btoa(getRequestToken())
+
+// Correct the root of the app for chunk loading
+// OC.linkTo matches the apps folders
+// OC.generateUrl ensure the index.php (or not)
+// We do not want the index.php since we're loading files
+// eslint-disable-next-line
+__webpack_public_path__ = generateFilePath('photos', '', 'js/')
+
+const Albums = () => import('../views/Albums')
+const Tags = () => import('../views/Tags')
+const Timeline = () => import('../views/Timeline')
 
 Vue.use(Router)
 
