@@ -78,7 +78,7 @@
 		"eslint-plugin-standard": "^4.0.1",
 		"eslint-plugin-vue": "^5.2.3",
 		"module-replace-webpack-plugin": "0.0.12",
-		"node-sass": "^4.12.0",
+		"node-sass": "^4.13.1",
 		"node-sass-utils": "^1.1.2",
 		"postcss-loader": "^3.0.0",
 		"sass-loader": "^7.3.1",
