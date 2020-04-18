@@ -51,7 +51,7 @@ module.exports = {
 			{
 				test: /\.js$/,
 				loader: 'babel-loader',
-				exclude: /node_modules(?!(\/|\\)(hot-patcher|webdav)(\/|\\))/,
+				exclude: /node_modules(?!(\/|\\)(hot-patcher|webdav|camelcase)(\/|\\))/,
 			},
 			{
 				test: /\.svg$/,
