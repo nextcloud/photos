@@ -1,7 +1,6 @@
 OC.L10N.register(
     "photos",
     {
-    "Photos" : "Նկարներ",
-    "Favorites" : "Սիրվածներ"
+    "Favorites" : "Imenyafen"
 },
 "nplurals=2; plural=(n != 1);");

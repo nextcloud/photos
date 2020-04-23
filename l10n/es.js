@@ -2,7 +2,7 @@ OC.L10N.register(
     "photos",
     {
     "Photos" : "Fotos",
-    "Your memories under your control" : "Sus memorias bajo su propio control",
+    "Your memories under your control" : "Sus recuerdos bajo su control",
     "Your photos" : "Tus fotos",
     "Favorites" : "Favoritos",
     "Your albums" : "Tus álbumes",
