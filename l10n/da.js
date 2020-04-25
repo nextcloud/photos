@@ -11,6 +11,7 @@ OC.L10N.register(
     "Locations" : "Sted",
     "Open the full size \"{name}\" image" : "Åbn billedet \"{name}\" i fuld størrelse",
     "Open the \"{name}\" sub-directory" : "Åbn \"{name}\" under direktoriet",
+    "Share this folder" : "Del denne mappe",
     "Back to {folder}" : "Tilbage til {folder}",
     "This folder does not exists" : "Denne folder eksisterer ikke",
     "An error occurred" : "Der var en fejl",
