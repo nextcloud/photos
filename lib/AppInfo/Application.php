@@ -33,6 +33,7 @@ class Application extends App {
 	const MIMES = [
 		// 'image/png',			// too rarely used for photos
 		'image/jpeg',
+		'image/heic',
 		// 'image/gif',			// too rarely used for photos
 		// 'image/x-xbitmap',	// too rarely used for photos
 		// 'image/bmp',			// too rarely used for photos
