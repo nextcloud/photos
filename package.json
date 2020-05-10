@@ -42,7 +42,7 @@
 		"core-js": "^3.6.5",
 		"debounce": "^1.2.0",
 		"path-posix": "^1.0.0",
-		"qs": "^6.9.3",
+		"qs": "^6.9.4",
 		"regenerator-runtime": "^0.13.5",
 		"url-parse": "^1.4.7",
 		"vue": "^2.6.11",
