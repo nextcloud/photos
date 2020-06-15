@@ -9,7 +9,7 @@ OC.L10N.register(
     "Shared albums" : "Geteilte Alben",
     "Tagged photos" : "Getaggte Fotos",
     "Locations" : "Orte",
-    "Open the full size \"{name}\" image" : "Bild \"{name}\" in Orginal Größe öffnen",
+    "Open the full size \"{name}\" image" : "Bild \"{name}\" in Originalgröße öffnen",
     "Open the \"{name}\" sub-directory" : "Unterverzeichnis \"{name}\" öffnen",
     "Share this folder" : "Diesen Ordner teilen",
     "Back to {folder}" : "Zurück zu {folder}",
