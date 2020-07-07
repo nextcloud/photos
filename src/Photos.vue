@@ -23,19 +23,21 @@
 <template>
 	<Content app-name="photos">
 		<AppNavigation>
-			<AppNavigationItem :to="{name: 'root'}"
-				class="app-navigation__photos"
-				:title="t('photos', 'Your photos')"
-				icon="icon-yourphotos"
-				exact />
-			<AppNavigationItem to="/favorites" :title="t('photos', 'Favorites')" icon="icon-favorite" />
-			<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Your albums')" icon="icon-files-dark" />
-			<AppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared albums')" icon="icon-share" />
-			<AppNavigationItem :to="{name: 'tags'}" :title="t('photos', 'Tagged photos')" icon="icon-tag" />
-			<AppNavigationItem v-if="showLocationMenuEntry"
-				:to="{name: 'maps'}"
-				:title="t('photos', 'Locations')"
-				icon="icon-address" />
+			<template #list>
+				<AppNavigationItem :to="{name: 'root'}"
+					class="app-navigation__photos"
+					:title="t('photos', 'Your photos')"
+					icon="icon-yourphotos"
+					exact />
+				<AppNavigationItem to="/favorites" :title="t('photos', 'Favorites')" icon="icon-favorite" />
+				<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Your albums')" icon="icon-files-dark" />
+				<AppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared albums')" icon="icon-share" />
+				<AppNavigationItem :to="{name: 'tags'}" :title="t('photos', 'Tagged photos')" icon="icon-tag" />
+				<AppNavigationItem v-if="showLocationMenuEntry"
+					:to="{name: 'maps'}"
+					:title="t('photos', 'Locations')"
+					icon="icon-address" />
+			</template>
 		</AppNavigation>
 		<AppContent :class="{ 'icon-loading': loading }">
 			<router-view v-show="!loading" :loading.sync="loading" />
@@ -84,7 +86,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-#app-content {
+.app-content {
 	display: flex;
 	flex-grow: 1;
 	flex-direction: column;
