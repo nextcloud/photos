@@ -1,10 +1,10 @@
 OC.L10N.register(
     "photos",
     {
-    "Photos" : "Photos",
+    "Photos" : "عکس ها",
     "Your memories under your control" : "خاطرات شما تحت کنترل شماست",
-    "Your photos" : "عکس های خود را",
-    "Favorites" : "Favorites",
+    "Your photos" : "عکس های شما",
+    "Favorites" : "مورد علاقه ها",
     "Your albums" : "آلبوم های شما",
     "Shared albums" : "آلبوم های مشترک",
     "Tagged photos" : "عکسهای برچسب خورده",
@@ -16,7 +16,7 @@ OC.L10N.register(
     "This folder does not exists" : "این پوشه وجود ندارد",
     "An error occurred" : "خطایی روی داد",
     "No photos in here" : "هیچ عکسی در اینجا نیست",
-    "No tags yet" : "هنوز هیچ برچسب",
-    "Photos with tags will show up here" : "عکس هایی با برچسب ها در اینجا نشان داده می شوند"
+    "No tags yet" : "هنوز برچسپی وجود ندارد",
+    "Photos with tags will show up here" : "عکس های دارای برچسب در اینجا نشان داده می شوند"
 },
 "nplurals=2; plural=(n > 1);");
