@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
@@ -37,7 +38,6 @@ use OCP\IConfig;
 use OCP\App\IAppManager;
 
 class PageController extends Controller {
-
 	protected $appName;
 
 	/** @var IEventDispatcher */
@@ -62,7 +62,6 @@ class PageController extends Controller {
 		$this->eventDispatcher = $eventDispatcher;
 		$this->initialStateService = $initialStateService;
 		$this->config = $config;
-
 	}
 
 	/**

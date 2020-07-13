@@ -21,4 +21,5 @@
  *
  */
 use OCA\Photos\AppInfo\Application;
+
 \OC::$server->query(Application::class);
