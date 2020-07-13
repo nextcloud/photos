@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2019, Roeland Jago Douma <roeland@famdouma.nl>
@@ -109,7 +110,7 @@ class AlbumsController extends Controller {
 		return $result;
 	}
 
-	private function scanCurrentFolder(Folder $folder, bool $shared): iterable  {
+	private function scanCurrentFolder(Folder $folder, bool $shared): iterable {
 		$nodes = $folder->getDirectoryListing();
 
 		// add current folder to iterable set
