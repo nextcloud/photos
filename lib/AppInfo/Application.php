@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
@@ -27,10 +28,9 @@ namespace OCA\Photos\AppInfo;
 use OCP\AppFramework\App;
 
 class Application extends App {
+	public const APP_ID = 'photos';
 
-	const APP_ID = 'photos';
-
-	const MIMES = [
+	public const MIMES = [
 		// 'image/png',			// too rarely used for photos
 		'image/jpeg',
 		// 'image/gif',			// too rarely used for photos
