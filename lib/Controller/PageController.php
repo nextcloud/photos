@@ -79,7 +79,7 @@ class PageController extends Controller {
 		$this->initialStateService->provideInitialState($this->appName, 'mimes', Application::MIMES);
 		$this->initialStateService->provideInitialState($this->appName, 'maps', $this->appManager->isEnabledForUser('maps') === true);
 
-		Util::addScript($this->appName, 'photos');
+		Util::addScript($this->appName, 'photos-main');
 		Util::addStyle($this->appName, 'icons');
 
 		$response = new TemplateResponse($this->appName, 'main');
