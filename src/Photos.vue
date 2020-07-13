@@ -72,7 +72,7 @@ export default {
 		AppNavigation,
 		AppNavigationItem,
 	},
-	data: function() {
+	data() {
 		return {
 			loading: true,
 			svgplaceholder,
