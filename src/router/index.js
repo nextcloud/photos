@@ -87,6 +87,15 @@ export default new Router({
 			}),
 		},
 		{
+			path: '/videos',
+			component: Timeline,
+			name: 'videos',
+			props: route => ({
+				rootTitle: t('photos', 'Videos'),
+				onlyVideos: true,
+			}),
+		},
+		{
 			path: '/tags/:path*',
 			component: Tags,
 			name: 'tags',

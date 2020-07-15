@@ -80,6 +80,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		onlyVideos: {
+			type: Boolean,
+			default: false,
+		},
 		rootTitle: {
 			type: String,
 			required: true,

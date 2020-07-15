@@ -1,6 +1,921 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[4],{179:function(t,e,n){function o(t){return(o="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[4],{
+
+/***/ "./node_modules/@essentials/raf/dist/module/index.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/@essentials/raf/dist/module/index.js ***!
+  \***********************************************************/
+/*! exports provided: raf, caf, now */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "raf", function() { return raf; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "caf", function() { return caf; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "now", function() { return now; });
+let u = 'undefined',
+    win = typeof window !== u ? window : {},
+    p = typeof performance !== u ? performance : Date,
+    now = () => p.now(),
+    af = 'AnimationFrame',
+    Caf = 'cancel' + af,
+    Raf = 'request' + af,
+    raf = win[Raf] && /*#__PURE__*/win[Raf].bind(win),
+    caf = win[Caf] && /*#__PURE__*/win[Caf].bind(win);
+
+function _ref(h) {
+  return clearTimeout(h);
+}
+
+if (!raf || !caf) {
+  let lastTime = 0;
+
+  raf = callback => {
+    let curr = now(),
+        next = Math.max(lastTime + 1000 / 60, curr);
+    return setTimeout(() => {
+      callback(lastTime = next);
+    }, next - curr);
+  };
+
+  caf = _ref;
+}
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@essentials/request-timeout/dist/module/index.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/@essentials/request-timeout/dist/module/index.js ***!
+  \***********************************************************************/
+/*! exports provided: clearRequestTimeout, requestTimeout, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearRequestTimeout", function() { return clearRequestTimeout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "requestTimeout", function() { return requestTimeout; });
+/* harmony import */ var _essentials_raf__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @essentials/raf */ "./node_modules/@essentials/raf/dist/module/index.js");
 /**
- * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
+ * Copyright 2011, Joe Lambert.
+ * Free to use under the MIT license.
+ * http://www.opensource.org/licenses/mit-license.php
+ **/
+
+const clearRequestTimeout = handle => {
+  Object(_essentials_raf__WEBPACK_IMPORTED_MODULE_0__["caf"])(handle.v || -1);
+};
+const requestTimeout = (fn, ms) => {
+  const start = Object(_essentials_raf__WEBPACK_IMPORTED_MODULE_0__["now"])(),
+        handle = {};
+
+  const loop = () => {
+    Object(_essentials_raf__WEBPACK_IMPORTED_MODULE_0__["now"])() - start >= ms ? fn.call(null) : handle.v = Object(_essentials_raf__WEBPACK_IMPORTED_MODULE_0__["raf"])(loop);
+  };
+
+  handle.v = Object(_essentials_raf__WEBPACK_IMPORTED_MODULE_0__["raf"])(loop);
+  return handle;
+};
+/* harmony default export */ __webpack_exports__["default"] = (requestTimeout);
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/index.js?!./src/components/VirtualGrid.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib!./node_modules/vue-loader/lib??vue-loader-options!./src/components/VirtualGrid.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************/
+/*! exports provided: DEFAULT_SCROLLING_RESET_TIME_INTERVAL, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DEFAULT_SCROLLING_RESET_TIME_INTERVAL", function() { return DEFAULT_SCROLLING_RESET_TIME_INTERVAL; });
+/* harmony import */ var _essentials_request_timeout__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @essentials/request-timeout */ "./node_modules/@essentials/request-timeout/dist/module/index.js");
+/* harmony import */ var _Grid__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Grid */ "./src/components/Grid.vue");
+/* harmony import */ var _mixins_GridConfig__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../mixins/GridConfig */ "./src/mixins/GridConfig.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/**
+ * Specifies the number of miliseconds during which to disable pointer events while a scroll is in progress.
+ * This improves performance and makes scrolling smoother.
+ */
+
+var DEFAULT_SCROLLING_RESET_TIME_INTERVAL = 150;
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'VirtualGrid',
+  components: {
+    Grid: _Grid__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  mixins: [_mixins_GridConfig__WEBPACK_IMPORTED_MODULE_2__["default"]],
+  props: {
+    list: {
+      type: Array,
+      default: function _default() {
+        return [];
+      }
+    },
+    props: {
+      type: Function,
+      default: function _default() {
+        return {};
+      }
+    },
+    component: {
+      type: Function,
+      required: true
+    },
+    loadingPage: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data: function data() {
+    return {
+      shownFirstRow: 0,
+      shownLastRow: this.getRowNumber(this.list.length - 1)
+    };
+  },
+  computed: {
+    shownList: function shownList() {
+      var _this = this;
+
+      return this.list.filter(function (item, index) {
+        return _this.isVisible(index);
+      });
+    },
+
+    /**
+     * Calculate the top filler needed padding
+     * to compensate for the hidden items
+     * @returns {string}
+     */
+    topPadding: function topPadding() {
+      return "".concat(this.shownFirstRow * 100, "%");
+    },
+
+    /**
+     * Calculate the bottom filler needed padding
+     * to compensate for the hidden items
+     * Because bottomShift indicate the index of the last visible item,
+     * we need to calcuta ehow any rows there is to compensate
+     * between bottomShift and the end of the list
+     * @returns {string}
+     */
+    bottomPadding: function bottomPadding() {
+      return "".concat((this.lastRow - this.shownLastRow) * 100, "%");
+    },
+    lastRow: function lastRow() {
+      return this.getRowNumber(this.list.length - 1);
+    }
+  },
+  created: function created() {
+    window.addEventListener('resize', this.onDocumentScroll);
+    window.addEventListener('scroll', this.onDocumentScroll);
+  },
+  mounted: function mounted() {
+    this.onDocumentScroll();
+  },
+  beforeDestroy: function beforeDestroy() {
+    window.removeEventListener('resize', this.onDocumentScroll);
+    window.removeEventListener('scroll', this.onDocumentScroll);
+  },
+  methods: {
+    /**
+     * Request an animation frame and debounce the onScroll method
+     */
+    debounceOnDocumentScroll: function debounceOnDocumentScroll() {
+      if (this.debounceOnDocumentScrollRequest) {
+        Object(_essentials_request_timeout__WEBPACK_IMPORTED_MODULE_0__["clearRequestTimeout"])(this.debounceOnDocumentScrollRequest);
+      }
+
+      this.debounceOnDocumentScrollRequest = Object(_essentials_request_timeout__WEBPACK_IMPORTED_MODULE_0__["requestTimeout"])(this.onDocumentScroll, DEFAULT_SCROLLING_RESET_TIME_INTERVAL //
+      );
+    },
+
+    /**
+     * Handle document scroll
+     * Detect first visible/hidden to implement virtual scrolling
+     */
+    onDocumentScroll: function onDocumentScroll() {
+      // get the row height
+      var gridContainer = this.$refs.grid.$el;
+      var gridStyles = getComputedStyle(gridContainer);
+      var rowHeight = parseFloat(gridStyles.gridTemplateColumns.split(' ')[0], 10); // scrolled content
+      // rounding up to tens to make sure we only detect changes by steps of 10px
+
+      var scrolled = this.roundToTen(window.pageYOffset - this.gridConfig.marginTop); // adding one above and one under to have a trigger area of one row
+
+      var shownFirstRow = Math.floor(scrolled / (rowHeight + this.gridConfig.gap)) - 1;
+      var shownLastRow = Math.ceil(window.innerHeight / rowHeight) + shownFirstRow + 1;
+      this.shownFirstRow = Math.max(shownFirstRow, 0); // the first shown row cannot be negative
+
+      this.shownLastRow = Math.min(shownLastRow, this.lastRow); // the last shown row cannot be lower than the last row
+
+      if (this.shownLastRow >= this.lastRow) {
+        this.$emit('bottomReached');
+      }
+    },
+    isVisible: function isVisible(index) {
+      var row = this.getRowNumber(index);
+      return row >= this.shownFirstRow && row < this.shownLastRow + 1;
+    },
+
+    /**
+     * Return the row number of the provided index
+     *
+     * @param {number} index the index
+     * @returns {number}
+     */
+    getRowNumber: function getRowNumber(index) {
+      // in case the grid config is not here yet, let's
+      var count = this.gridConfig ? this.gridConfig.count : this.list.length;
+      return Math.floor(index / count);
+    },
+
+    /**
+     * Round the provided number to a tens of its value
+     *
+     * @param {number} number the number to round
+     * @returns {number}
+     */
+    roundToTen: function roundToTen(number) {
+      return Math.floor(number / 10) * 10;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/index.js?!./src/views/Timeline.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib!./node_modules/vue-loader/lib??vue-loader-options!./src/views/Timeline.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var debounce__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! debounce */ "./node_modules/debounce/index.js");
+/* harmony import */ var debounce__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(debounce__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _services_PhotoSearch__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/PhotoSearch */ "./src/services/PhotoSearch.js");
+/* harmony import */ var _components_EmptyContent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/EmptyContent */ "./src/components/EmptyContent.vue");
+/* harmony import */ var _components_File__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/File */ "./src/components/File.vue");
+/* harmony import */ var _components_VirtualGrid__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/VirtualGrid */ "./src/components/VirtualGrid.vue");
+/* harmony import */ var _components_Navigation__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/Navigation */ "./src/components/Navigation.vue");
+/* harmony import */ var _utils_CancelableRequest__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utils/CancelableRequest */ "./src/utils/CancelableRequest.js");
+/* harmony import */ var _mixins_GridConfig__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../mixins/GridConfig */ "./src/mixins/GridConfig.js");
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'Timeline',
+  components: {
+    EmptyContent: _components_EmptyContent__WEBPACK_IMPORTED_MODULE_3__["default"],
+    VirtualGrid: _components_VirtualGrid__WEBPACK_IMPORTED_MODULE_5__["default"],
+    Navigation: _components_Navigation__WEBPACK_IMPORTED_MODULE_6__["default"]
+  },
+  mixins: [_mixins_GridConfig__WEBPACK_IMPORTED_MODULE_8__["default"]],
+  props: {
+    loading: {
+      type: Boolean,
+      required: true
+    },
+    onlyFavorites: {
+      type: Boolean,
+      default: false
+    },
+    onlyVideos: {
+      type: Boolean,
+      default: false
+    },
+    rootTitle: {
+      type: String,
+      required: true
+    },
+    path: {
+      type: String,
+      default: ''
+    }
+  },
+  data: function data() {
+    return {
+      cancelRequest: null,
+      done: false,
+      error: null,
+      loadingPage: false,
+      page: 0
+    };
+  },
+  computed: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['files', 'timeline'])), {}, {
+    fileList: function fileList() {
+      var _this = this;
+
+      return this.timeline.map(function (id) {
+        return _this.files[id];
+      }).filter(function (file) {
+        return !!file;
+      });
+    },
+    // is current folder empty?
+    isEmpty: function isEmpty() {
+      return this.fileList.length === 0;
+    }
+  }),
+  watch: {
+    onlyFavorites: function onlyFavorites() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                // reset component
+                _this2.resetState(); // content is completely different
+
+
+                _this2.$emit('update:loading', true);
+
+                _this2.fetchContent();
+
+              case 3:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    }
+  },
+  beforeMount: function beforeMount() {
+    var _this3 = this;
+
+    return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _this3.resetState();
+
+              _this3.fetchContent();
+
+            case 2:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    }))();
+  },
+  beforeDestroy: function beforeDestroy() {
+    // cancel any pending requests
+    if (this.cancelRequest) {
+      this.cancelRequest('Changed view');
+    }
+  },
+  methods: {
+    fetchContent: function fetchContent() {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
+        var _cancelableRequest, request, cancel, files;
+
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                if (!_this4.loadingPage) {
+                  _context3.next = 2;
+                  break;
+                }
+
+                return _context3.abrupt("return");
+
+              case 2:
+                // cancel any pending requests
+                if (_this4.cancelRequest) {
+                  _this4.cancelRequest('Changed view');
+                } // if we don't already have some cached data let's show a loader
+
+
+                if (_this4.timeline.length === 0) {
+                  _this4.$emit('update:loading', true);
+                }
+
+                _this4.error = null;
+                _this4.loadingPage = true; // init cancellable request
+
+                _cancelableRequest = Object(_utils_CancelableRequest__WEBPACK_IMPORTED_MODULE_7__["default"])(_services_PhotoSearch__WEBPACK_IMPORTED_MODULE_2__["default"]), request = _cancelableRequest.request, cancel = _cancelableRequest.cancel;
+                _this4.cancelRequest = cancel;
+                _context3.prev = 8;
+                _context3.next = 11;
+                return request(_this4.onlyFavorites, {
+                  page: _this4.page,
+                  perPage: _this4.gridConfig.count * 5 // we load 5 rows,
+
+                });
+
+              case 11:
+                files = _context3.sent;
+
+                _this4.$store.dispatch('updateTimeline', files);
+
+                _this4.$store.dispatch('appendFiles', files); // next time we load this script, we load the next page if the list returned
+
+
+                if (files.length === _this4.gridConfig.count * 5) {
+                  _this4.page++;
+                } else {
+                  console.debug('We loaded the last page');
+                  _this4.done = true;
+                } // return for the viewer loadMore method
+
+
+                return _context3.abrupt("return", files);
+
+              case 18:
+                _context3.prev = 18;
+                _context3.t0 = _context3["catch"](8);
+
+                if (_context3.t0.response && _context3.t0.response.status) {
+                  if (_context3.t0.response.status === 404) {
+                    _this4.error = 404;
+                    setTimeout(function () {
+                      _this4.$router.push({
+                        name: _this4.$route.name
+                      });
+                    }, 3000);
+                  } else {
+                    _this4.error = _context3.t0;
+                  }
+                } // cancelled request, moving on...
+
+
+                console.error('Error fetching timeline', _context3.t0);
+
+              case 22:
+                _context3.prev = 22;
+
+                // done loading even with errors
+                _this4.$emit('update:loading', false);
+
+                _this4.loadingPage = false;
+                _this4.cancelRequest = null;
+                return _context3.finish(22);
+
+              case 27:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, null, [[8, 18, 22, 27]]);
+      }))();
+    },
+
+    /**
+     * Return the props based on the element
+     * Here we want to bind the full fileinfo
+     * object so we stupidly return it whole!
+     *
+     * @param {Object} item the scoped item from the VirtualGrid
+     * @returns {Object}
+     */
+    getProps: function getProps(item) {
+      return Object.assign({}, item, {
+        loadMore: this.fetchContent
+      });
+    },
+
+    /**
+     * Return the component based on the element
+     * We only have files in the Timeline,
+     * so we return Files!
+     *
+     * @returns {Object}
+     */
+    getComponent: function getComponent() {
+      return _components_File__WEBPACK_IMPORTED_MODULE_4__["default"];
+    },
+    debounceOnBottomReached: debounce__WEBPACK_IMPORTED_MODULE_1___default()(function () {
+      this.onBottomReached();
+    }, 1000),
+
+    /**
+     * When virtual grid reach the bottom,
+     * we load the next page
+     */
+    onBottomReached: function onBottomReached() {
+      // if we're currently loading or if a previous
+      // request returned the last page, we stop
+      if (this.loadingPage || this.done) {
+        return;
+      }
+
+      console.debug('Loading next page', this.page);
+      this.fetchContent();
+    },
+
+    /**
+     * Reset this component data to a pristine state
+     */
+    resetState: function resetState() {
+      this.$store.dispatch('resetTimeline');
+      this.done = false;
+      this.error = null;
+      this.loadingPage = false;
+      this.page = 0;
+      this.page = 0;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/components/VirtualGrid.vue?vue&type=style&index=0&id=178c031e&lang=scss&scoped=true&":
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src!./node_modules/sass-loader/dist/cjs.js??ref--1-3!./node_modules/vue-loader/lib??vue-loader-options!./src/components/VirtualGrid.vue?vue&type=style&index=0&id=178c031e&lang=scss&scoped=true& ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+exports = ___CSS_LOADER_API_IMPORT___(false);
+// Module
+exports.push([module.i, ".grid-filler[data-v-178c031e] {\n  grid-column-end: -1;\n}\n.grid-loading[data-v-178c031e] {\n  grid-column: 1/-1;\n  height: 88px;\n}\n", ""]);
+// Exports
+module.exports = exports;
+
+
+/***/ }),
+
+/***/ "./node_modules/debounce/index.js":
+/*!****************************************!*\
+  !*** ./node_modules/debounce/index.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/**
+ * Returns a function, that, as long as it continues to be invoked, will not
+ * be triggered. The function will be called after it stops being called for
+ * N milliseconds. If `immediate` is passed, trigger the function on the
+ * leading edge, instead of the trailing. The function also has a property 'clear' 
+ * that is a function which will clear the timer to prevent previously scheduled executions. 
+ *
+ * @source underscore.js
+ * @see http://unscriptable.com/2009/03/20/debouncing-javascript-methods/
+ * @param {Function} function to wrap
+ * @param {Number} timeout in ms (`100`)
+ * @param {Boolean} whether to execute at the beginning (`false`)
+ * @api public
+ */
+function debounce(func, wait, immediate){
+  var timeout, args, context, timestamp, result;
+  if (null == wait) wait = 100;
+
+  function later() {
+    var last = Date.now() - timestamp;
+
+    if (last < wait && last >= 0) {
+      timeout = setTimeout(later, wait - last);
+    } else {
+      timeout = null;
+      if (!immediate) {
+        result = func.apply(context, args);
+        context = args = null;
+      }
+    }
+  };
+
+  var debounced = function(){
+    context = this;
+    args = arguments;
+    timestamp = Date.now();
+    var callNow = immediate && !timeout;
+    if (!timeout) timeout = setTimeout(later, wait);
+    if (callNow) {
+      result = func.apply(context, args);
+      context = args = null;
+    }
+
+    return result;
+  };
+
+  debounced.clear = function() {
+    if (timeout) {
+      clearTimeout(timeout);
+      timeout = null;
+    }
+  };
+  
+  debounced.flush = function() {
+    if (timeout) {
+      result = func.apply(context, args);
+      context = args = null;
+      
+      clearTimeout(timeout);
+      timeout = null;
+    }
+  };
+
+  return debounced;
+};
+
+// Adds compatibility for ES modules
+debounce.debounce = debounce;
+
+module.exports = debounce;
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./src/components/VirtualGrid.vue?vue&type=template&id=178c031e&scoped=true&":
+/*!*****************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/VirtualGrid.vue?vue&type=template&id=178c031e&scoped=true& ***!
+  \*****************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "Grid",
+    { ref: "grid" },
+    [
+      _c("span", {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.shownFirstRow > 0,
+            expression: "shownFirstRow > 0"
+          }
+        ],
+        key: "filler-top",
+        ref: "filler-top",
+        staticClass: "grid-filler grid-filler--top",
+        style: { paddingBottom: _vm.topPadding },
+        attrs: { role: "none" }
+      }),
+      _vm._v(" "),
+      _vm._l(_vm.shownList, function(item, index) {
+        return _c(
+          _vm.component(item),
+          _vm._b(
+            {
+              key: item.fileid,
+              ref: "item-" + index,
+              refInFor: true,
+              tag: "component",
+              class: "row-" + _vm.getRowNumber(index),
+              attrs: { list: _vm.list }
+            },
+            "component",
+            _vm.props(item),
+            false
+          )
+        )
+      }),
+      _vm._v(" "),
+      _vm.loadingPage
+        ? _c("div", {
+            key: "grid-loading",
+            staticClass: "grid-loading icon-loading",
+            attrs: { role: "none" }
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _c("span", {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.shownLastRow < _vm.lastRow,
+            expression: "shownLastRow < lastRow"
+          }
+        ],
+        key: "filler-bottom",
+        ref: "filler-bottom",
+        staticClass: "grid-filler grid-filler--bottom",
+        style: { paddingBottom: _vm.bottomPadding },
+        attrs: { role: "none" }
+      })
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./src/views/Timeline.vue?vue&type=template&id=e945440a&":
+/*!*********************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/views/Timeline.vue?vue&type=template&id=e945440a& ***!
+  \*********************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.error === 404
+    ? _c("EmptyContent", { attrs: { "illustration-name": "folder" } }, [
+        _vm._v(
+          "\n\t" + _vm._s(_vm.t("photos", "This folder does not exists")) + "\n"
+        )
+      ])
+    : _vm.error
+    ? _c("EmptyContent", [
+        _vm._v("\n\t" + _vm._s(_vm.t("photos", "An error occurred")) + "\n")
+      ])
+    : !_vm.loading && _vm.isEmpty
+    ? _c("EmptyContent", { attrs: { "illustration-name": "empty" } }, [
+        _vm._v("\n\t" + _vm._s(_vm.t("photos", "No photos in here")) + "\n")
+      ])
+    : !_vm.loading
+    ? _c(
+        "div",
+        [
+          _c("Navigation", {
+            key: "navigation",
+            attrs: {
+              basename: _vm.path,
+              filename: "/",
+              "root-title": _vm.rootTitle
+            }
+          }),
+          _vm._v(" "),
+          _c("VirtualGrid", {
+            attrs: {
+              component: _vm.getComponent,
+              list: _vm.fileList,
+              "loading-page": _vm.loadingPage,
+              props: _vm.getProps
+            },
+            on: { bottomReached: _vm.onBottomReached }
+          })
+        ],
+        1
+      )
+    : _vm._e()
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/components/VirtualGrid.vue?vue&type=style&index=0&id=178c031e&lang=scss&scoped=true&":
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-style-loader!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src!./node_modules/sass-loader/dist/cjs.js??ref--1-3!./node_modules/vue-loader/lib??vue-loader-options!./src/components/VirtualGrid.vue?vue&type=style&index=0&id=178c031e&lang=scss&scoped=true& ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(/*! !../../node_modules/css-loader/dist/cjs.js!../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../node_modules/postcss-loader/src!../../node_modules/sass-loader/dist/cjs.js??ref--1-3!../../node_modules/vue-loader/lib??vue-loader-options!./VirtualGrid.vue?vue&type=style&index=0&id=178c031e&lang=scss&scoped=true& */ "./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/components/VirtualGrid.vue?vue&type=style&index=0&id=178c031e&lang=scss&scoped=true&");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var add = __webpack_require__(/*! ../../node_modules/vue-style-loader/lib/addStylesClient.js */ "./node_modules/vue-style-loader/lib/addStylesClient.js").default
+var update = add("3de8de44", content, false, {});
+// Hot Module Replacement
+if(false) {}
+
+/***/ }),
+
+/***/ "./src/assets/grid-sizes.js":
+/*!**********************************!*\
+  !*** ./src/assets/grid-sizes.js ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/**
+ * @copyright Copyright (c) 2018 John Molakvoæ <skjnldsv@protonmail.com>
  *
  * @author John Molakvoæ <skjnldsv@protonmail.com>
  *
@@ -13,13 +928,251 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
- */var r=n(252),i=r.prepareRequestOptions;r.prepareRequestOptions=function(t,e){e.cancelToken&&"object"===o(e.cancelToken)&&(t.cancelToken=e.cancelToken),i(t,e),e.method&&"string"==typeof e.method&&(t.method=e.method)},t.exports=r},200:function(t,e,n){"use strict";var o=n(251),r=n.n(o),i=n(199),a=n.n(i),s=n(234),c=n.n(s),u=n(15);r.a.getPatcher().patch("request",a.a);var l=Object(u.generateRemoteUrl)("dav"),d=r.a.createClient(l);c()(l).pathname;e.a=d},236:function(t,e,n){"use strict";n.d(e,"a",(function(){return o}));
+ */
+// for now we want to keep the same gap everywhere
+var gap = 8;
+/**
+ * Define the max width proportions
+ * The number (key) indicate the MAX size
+ *
+ * needs to be ompatible with webpack config
+ * so no export default {}
+ */
+
+module.exports = {
+  sizes: {
+    400: {
+      marginTop: 66,
+      // same as grid-gap
+      marginW: gap,
+      // same as grid-gap
+      count: 3,
+      gap: gap
+    },
+    700: {
+      marginTop: 66,
+      marginW: 8,
+      // same as grid-gap
+      count: 4,
+      gap: gap
+    },
+    1024: {
+      marginTop: 66,
+      marginW: 44,
+      count: 5,
+      gap: gap
+    },
+    1280: {
+      marginTop: 66,
+      marginW: 44,
+      count: 4,
+      gap: gap
+    },
+    1440: {
+      marginTop: 88,
+      marginW: 66,
+      count: 5,
+      gap: gap
+    },
+    1600: {
+      marginTop: 88,
+      marginW: 66,
+      count: 6,
+      gap: gap
+    },
+    2048: {
+      marginTop: 88,
+      marginW: 66,
+      count: 7,
+      gap: gap
+    },
+    2560: {
+      marginTop: 88,
+      marginW: 88,
+      count: 8,
+      gap: gap
+    },
+    3440: {
+      marginTop: 88,
+      marginW: 88,
+      count: 9,
+      gap: gap
+    },
+    max: {
+      marginTop: 88,
+      marginW: 88,
+      count: 10,
+      gap: gap
+    }
+  }
+};
+
+/***/ }),
+
+/***/ "./src/components/VirtualGrid.vue":
+/*!****************************************!*\
+  !*** ./src/components/VirtualGrid.vue ***!
+  \****************************************/
+/*! exports provided: DEFAULT_SCROLLING_RESET_TIME_INTERVAL, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _VirtualGrid_vue_vue_type_template_id_178c031e_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./VirtualGrid.vue?vue&type=template&id=178c031e&scoped=true& */ "./src/components/VirtualGrid.vue?vue&type=template&id=178c031e&scoped=true&");
+/* harmony import */ var _VirtualGrid_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./VirtualGrid.vue?vue&type=script&lang=js& */ "./src/components/VirtualGrid.vue?vue&type=script&lang=js&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "DEFAULT_SCROLLING_RESET_TIME_INTERVAL", function() { return _VirtualGrid_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["DEFAULT_SCROLLING_RESET_TIME_INTERVAL"]; });
+
+/* harmony import */ var _VirtualGrid_vue_vue_type_style_index_0_id_178c031e_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./VirtualGrid.vue?vue&type=style&index=0&id=178c031e&lang=scss&scoped=true& */ "./src/components/VirtualGrid.vue?vue&type=style&index=0&id=178c031e&lang=scss&scoped=true&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _VirtualGrid_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _VirtualGrid_vue_vue_type_template_id_178c031e_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _VirtualGrid_vue_vue_type_template_id_178c031e_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "178c031e",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "src/components/VirtualGrid.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./src/components/VirtualGrid.vue?vue&type=script&lang=js&":
+/*!*****************************************************************!*\
+  !*** ./src/components/VirtualGrid.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************/
+/*! exports provided: default, DEFAULT_SCROLLING_RESET_TIME_INTERVAL */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_VirtualGrid_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/babel-loader/lib!../../node_modules/vue-loader/lib??vue-loader-options!./VirtualGrid.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/index.js?!./src/components/VirtualGrid.vue?vue&type=script&lang=js&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "DEFAULT_SCROLLING_RESET_TIME_INTERVAL", function() { return _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_VirtualGrid_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["DEFAULT_SCROLLING_RESET_TIME_INTERVAL"]; });
+
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_VirtualGrid_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./src/components/VirtualGrid.vue?vue&type=style&index=0&id=178c031e&lang=scss&scoped=true&":
+/*!**************************************************************************************************!*\
+  !*** ./src/components/VirtualGrid.vue?vue&type=style&index=0&id=178c031e&lang=scss&scoped=true& ***!
+  \**************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_node_modules_sass_loader_dist_cjs_js_ref_1_3_node_modules_vue_loader_lib_index_js_vue_loader_options_VirtualGrid_vue_vue_type_style_index_0_id_178c031e_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/vue-style-loader!../../node_modules/css-loader/dist/cjs.js!../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../node_modules/postcss-loader/src!../../node_modules/sass-loader/dist/cjs.js??ref--1-3!../../node_modules/vue-loader/lib??vue-loader-options!./VirtualGrid.vue?vue&type=style&index=0&id=178c031e&lang=scss&scoped=true& */ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/components/VirtualGrid.vue?vue&type=style&index=0&id=178c031e&lang=scss&scoped=true&");
+/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_node_modules_sass_loader_dist_cjs_js_ref_1_3_node_modules_vue_loader_lib_index_js_vue_loader_options_VirtualGrid_vue_vue_type_style_index_0_id_178c031e_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_node_modules_sass_loader_dist_cjs_js_ref_1_3_node_modules_vue_loader_lib_index_js_vue_loader_options_VirtualGrid_vue_vue_type_style_index_0_id_178c031e_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_node_modules_sass_loader_dist_cjs_js_ref_1_3_node_modules_vue_loader_lib_index_js_vue_loader_options_VirtualGrid_vue_vue_type_style_index_0_id_178c031e_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_node_modules_sass_loader_dist_cjs_js_ref_1_3_node_modules_vue_loader_lib_index_js_vue_loader_options_VirtualGrid_vue_vue_type_style_index_0_id_178c031e_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_node_modules_sass_loader_dist_cjs_js_ref_1_3_node_modules_vue_loader_lib_index_js_vue_loader_options_VirtualGrid_vue_vue_type_style_index_0_id_178c031e_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "./src/components/VirtualGrid.vue?vue&type=template&id=178c031e&scoped=true&":
+/*!***********************************************************************************!*\
+  !*** ./src/components/VirtualGrid.vue?vue&type=template&id=178c031e&scoped=true& ***!
+  \***********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_VirtualGrid_vue_vue_type_template_id_178c031e_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../node_modules/vue-loader/lib??vue-loader-options!./VirtualGrid.vue?vue&type=template&id=178c031e&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./src/components/VirtualGrid.vue?vue&type=template&id=178c031e&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_VirtualGrid_vue_vue_type_template_id_178c031e_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_VirtualGrid_vue_vue_type_template_id_178c031e_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./src/mixins/GridConfig.js":
+/*!**********************************!*\
+  !*** ./src/mixins/GridConfig.js ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _services_GridConfig__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/GridConfig */ "./src/services/GridConfig.js");
+/**
+ * @copyright Copyright (c) 2018 John Molakvoæ <skjnldsv@protonmail.com>
+ *
+ * @author John Molakvoæ <skjnldsv@protonmail.com>
+ *
+ * @license GNU AGPL version 3 or any later version
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+/**
+ * Get the current used grid config
+ */
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      gridConfig: {}
+    };
+  },
+  created: function created() {
+    var _this = this;
+
+    _services_GridConfig__WEBPACK_IMPORTED_MODULE_0__["default"].$on('changed', function (val) {
+      _this.gridConfig = val;
+    });
+    console.debug('Current grid config', _services_GridConfig__WEBPACK_IMPORTED_MODULE_0__["default"].gridConfig);
+    this.gridConfig = _services_GridConfig__WEBPACK_IMPORTED_MODULE_0__["default"].gridConfig;
+  },
+  beforeDestroy: function beforeDestroy() {
+    _services_GridConfig__WEBPACK_IMPORTED_MODULE_0__["default"].$off('changed', this.gridConfig);
+  }
+});
+
+/***/ }),
+
+/***/ "./src/patchedRequest.js":
+/*!*******************************!*\
+  !*** ./src/patchedRequest.js ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 /**
  * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
  *
@@ -41,7 +1194,48 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-var o="\n\t<oc:fileid />\n\t<d:getlastmodified />\n\t<d:getetag />\n\t<d:getcontenttype />\n\t<d:getcontentlength />\n\t<nc:has-preview />\n\t<oc:favorite />\n\t<d:resourcetype />";'<?xml version="1.0"?>\n\t\t\t<d:propfind xmlns:d="DAV:"\n\t\t\t\txmlns:oc="http://owncloud.org/ns"\n\t\t\t\txmlns:nc="http://nextcloud.org/ns"\n\t\t\t\txmlns:ocs="http://open-collaboration-services.org/ns">\n\t\t\t\t<d:prop>\n\t\t\t\t\t'.concat(o,"\n\t\t\t\t</d:prop>\n\t\t\t</d:propfind>")},237:function(t,e,n){var o=n(441);"string"==typeof o&&(o=[[t.i,o,""]]),o.locals&&(t.exports=o.locals);(0,n(117).default)("c29390dc",o,!0,{})},259:function(t,e){},260:function(t,e){},280:function(t,e){},282:function(t,e){},299:function(t,e){t.exports={sizes:{400:{marginTop:66,marginW:8,count:3,gap:8},700:{marginTop:66,marginW:8,count:4,gap:8},1024:{marginTop:66,marginW:44,count:5,gap:8},1280:{marginTop:66,marginW:44,count:4,gap:8},1440:{marginTop:88,marginW:66,count:5,gap:8},1600:{marginTop:88,marginW:66,count:6,gap:8},2048:{marginTop:88,marginW:66,count:7,gap:8},2560:{marginTop:88,marginW:88,count:8,gap:8},3440:{marginTop:88,marginW:88,count:9,gap:8},max:{marginTop:88,marginW:88,count:10,gap:8}}}},439:function(t,e){function n(t,e,n){var o,r,i,a,s;function c(){var u=Date.now()-a;u<e&&u>=0?o=setTimeout(c,e-u):(o=null,n||(s=t.apply(i,r),i=r=null))}null==e&&(e=100);var u=function(){i=this,r=arguments,a=Date.now();var u=n&&!o;return o||(o=setTimeout(c,e)),u&&(s=t.apply(i,r),i=r=null),s};return u.clear=function(){o&&(clearTimeout(o),o=null)},u.flush=function(){o&&(s=t.apply(i,r),i=r=null,clearTimeout(o),o=null)},u}n.debounce=n,t.exports=n},440:function(t,e,n){"use strict";var o=n(237);n.n(o).a},441:function(t,e,n){(e=n(116)(!1)).push([t.i,".grid-filler[data-v-4517b139]{grid-column-end:-1}.grid-loading[data-v-4517b139]{grid-column:1/-1;height:88px}\n",""]),t.exports=e},445:function(t,e,n){"use strict";n.r(e);var o=n(42),r=n(439),i=n.n(r),a=n(19),s=n(18),c=n(209),u=n(200),l=n(236),d=n(299);function p(t,e,n,o,r,i,a){try{var s=t[i](a),c=s.value}catch(t){return void n(t)}s.done?e(c):Promise.resolve(c).then(o,r)}function f(t){return function(){var e=this,n=arguments;return new Promise((function(o,r){var i=t.apply(e,n);function a(t){p(i,o,r,a,s,"next",t)}function s(t){p(i,o,r,a,s,"throw",t)}a(void 0)}))}}
+var request = __webpack_require__(/*! webdav/dist/node/request */ "./node_modules/webdav/dist/node/request.js");
+
+var oldPrepareRequestOptions = request.prepareRequestOptions; // While we wait for official cancellable webdav requests
+// https://github.com/perry-mitchell/webdav-client/issues/179
+// let's properly forward our axios options through webdav to axios
+
+request.prepareRequestOptions = function (requestOptions, methodOptions) {
+  // add our cancelToken support
+  if (methodOptions.cancelToken && _typeof(methodOptions.cancelToken) === 'object') {
+    requestOptions.cancelToken = methodOptions.cancelToken;
+  } // exploit old method
+
+
+  oldPrepareRequestOptions(requestOptions, methodOptions); // allow us to override the request method
+
+  if (methodOptions.method && typeof methodOptions.method === 'string') {
+    requestOptions.method = methodOptions.method;
+  }
+};
+
+module.exports = request;
+
+/***/ }),
+
+/***/ "./src/services/DavClient.js":
+/*!***********************************!*\
+  !*** ./src/services/DavClient.js ***!
+  \***********************************/
+/*! exports provided: remotePath, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "remotePath", function() { return remotePath; });
+/* harmony import */ var webdav__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! webdav */ "./node_modules/webdav/dist/node/index.js");
+/* harmony import */ var webdav__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(webdav__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _nextcloud_axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nextcloud/axios */ "./node_modules/@nextcloud/axios/dist/index.js");
+/* harmony import */ var _nextcloud_axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var url_parse__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! url-parse */ "./node_modules/url-parse/index.js");
+/* harmony import */ var url_parse__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(url_parse__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _nextcloud_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @nextcloud/router */ "./node_modules/@nextcloud/router/dist/index.js");
+/* harmony import */ var _nextcloud_router__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_router__WEBPACK_IMPORTED_MODULE_3__);
 /**
  * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
  *
@@ -62,5 +1256,385 @@ var o="\n\t<oc:fileid />\n\t<d:getlastmodified />\n\t<d:getetag />\n\t<d:getcont
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
- */var g=function(){return h.apply(this,arguments)};function h(){return(h=f(regeneratorRuntime.mark((function t(){var e,n,o,r,i,p,f=arguments;return regeneratorRuntime.wrap((function(t){for(;;)switch(t.prev=t.next){case 0:return e=f.length>0&&void 0!==f[0]&&f[0],n=f.length>1&&void 0!==f[1]?f[1]:{},n=Object.assign({},{page:0,perPage:10*d.sizes.max.count},n),o="/files/".concat(Object(s.getCurrentUser)().uid),r=c.a.reduce((function(t,e){return"".concat(t,"\n\t\t<d:eq>\n\t\t\t<d:prop>\n\t\t\t\t<d:getcontenttype/>\n\t\t\t</d:prop>\n\t\t\t<d:literal>").concat(e,"</d:literal>\n\t\t</d:eq>\n\t")}),""),i=e?"<d:eq>\n\t\t\t\t<d:prop>\n\t\t\t\t\t<oc:favorite/>\n\t\t\t\t</d:prop>\n\t\t\t\t<d:literal>1</d:literal>\n\t\t\t</d:eq>":"",n=Object.assign({method:"SEARCH",headers:{"content-Type":"text/xml"},data:'<?xml version="1.0" encoding="UTF-8"?>\n\t\t\t<d:searchrequest xmlns:d="DAV:"\n\t\t\t\txmlns:oc="http://owncloud.org/ns"\n\t\t\t\txmlns:nc="http://nextcloud.org/ns"\n\t\t\t\txmlns:ns="https://github.com/icewind1991/SearchDAV/ns"\n\t\t\t\txmlns:ocs="http://open-collaboration-services.org/ns">\n\t\t\t\t<d:basicsearch>\n\t\t\t\t\t<d:select>\n\t\t\t\t\t\t<d:prop>\n\t\t\t\t\t\t\t'.concat(l.a,"\n\t\t\t\t\t\t</d:prop>\n\t\t\t\t\t</d:select>\n\t\t\t\t\t<d:from>\n\t\t\t\t\t\t<d:scope>\n\t\t\t\t\t\t\t<d:href>").concat(o,"</d:href>\n\t\t\t\t\t\t\t<d:depth>infinity</d:depth>\n\t\t\t\t\t\t</d:scope>\n\t\t\t\t\t</d:from>\n\t\t\t\t\t<d:where>\n\t\t\t\t\t\t<d:and>\n\t\t\t\t\t\t\t<d:or>\n\t\t\t\t\t\t\t\t").concat(r,"\n\t\t\t\t\t\t\t</d:or>\n\t\t\t\t\t\t\t").concat(i,"\n\t\t\t\t\t\t\t<d:eq>\n\t\t\t\t\t\t\t\t<d:prop>\n\t\t\t\t\t\t\t\t\t<oc:owner-id/>\n\t\t\t\t\t\t\t\t</d:prop>\n\t\t\t\t\t\t\t\t<d:literal>").concat(Object(s.getCurrentUser)().uid,"</d:literal>\n\t\t\t\t\t\t\t</d:eq>\n\t\t\t\t\t\t</d:and>\n\t\t\t\t\t</d:where>\n\t\t\t\t\t<d:orderby>\n\t\t\t\t\t\t<d:order>\n\t\t\t\t\t\t\t<d:prop><d:getlastmodified/></d:prop>\n\t\t\t\t\t\t\t<d:descending/>\n\t\t\t\t\t\t</d:order>\n\t\t\t\t\t</d:orderby>\n\t\t\t\t\t<d:limit>\n\t\t\t\t\t\t<d:nresults>").concat(n.perPage,"</d:nresults>\n\t\t\t\t\t\t<ns:firstresult>").concat(n.page*n.perPage,"</ns:firstresult>\n\t\t\t\t\t</d:limit>\n\t\t\t\t</d:basicsearch>\n\t\t\t</d:searchrequest>"),deep:!0,details:!0},n),t.next=9,u.a.getDirectoryContents("",n);case 9:return p=t.sent,t.abrupt("return",p.data.map((function(t){return Object(a.b)(t)})).map((function(t){return Object.assign({},t,{filename:t.filename.replace(o,"")})})));case 11:case"end":return t.stop()}}),t)})))).apply(this,arguments)}var m=n(238),w=n(240);let v="undefined",b=typeof window!==v?window:{},y=typeof performance!==v?performance:Date,R=()=>y.now(),x="AnimationFrame",C="cancel"+x,O="request"+x,T=b[O]&&b[O].bind(b),P=b[C]&&b[C].bind(b);if(!T||!P){let t=0;T=e=>{let n=R(),o=Math.max(t+1e3/60,n);return setTimeout(()=>{e(t=o)},o-n)},P=function(t){return clearTimeout(t)}}const j=(t,e)=>{const n=R(),o={},r=()=>{R()-n>=e?t.call(null):o.v=T(r)};return o.v=T(r),o};var q=n(241),D=new(n(0).default)({data:function(){return{gridConfig:d.sizes.max}},watch:{gridConfig:function(t){this.$emit("changed",t)}},created:function(){window.addEventListener("resize",this.handleWindowResize),this.handleWindowResize()},beforeDestroy:function(){window.removeEventListener("resize",this.handleWindowResize)},methods:{handleWindowResize:function(){var t=Object.keys(d.sizes).find((function(t){return t>document.documentElement.clientWidth}));this.gridConfig=d.sizes[t]}}}),S={data:function(){return{gridConfig:{}}},created:function(){var t=this;D.$on("changed",(function(e){t.gridConfig=e})),console.debug("Current grid config",D.gridConfig),this.gridConfig=D.gridConfig},beforeDestroy:function(){D.$off("changed",this.gridConfig)}},E={name:"VirtualGrid",components:{Grid:q.a},mixins:[S],props:{list:{type:Array,default:function(){return[]}},props:{type:Function,default:function(){return{}}},component:{type:Function,required:!0},loadingPage:{type:Boolean,default:!1}},data:function(){return{shownFirstRow:0,shownLastRow:this.getRowNumber(this.list.length-1)}},computed:{shownList:function(){var t=this;return this.list.filter((function(e,n){return t.isVisible(n)}))},topPadding:function(){return"".concat(100*this.shownFirstRow,"%")},bottomPadding:function(){return"".concat(100*(this.lastRow-this.shownLastRow),"%")},lastRow:function(){return this.getRowNumber(this.list.length-1)}},created:function(){window.addEventListener("resize",this.onDocumentScroll),window.addEventListener("scroll",this.onDocumentScroll)},mounted:function(){this.onDocumentScroll()},beforeDestroy:function(){window.removeEventListener("resize",this.onDocumentScroll),window.removeEventListener("scroll",this.onDocumentScroll)},methods:{debounceOnDocumentScroll:function(){var t;this.debounceOnDocumentScrollRequest&&(t=this.debounceOnDocumentScrollRequest,P(t.v||-1)),this.debounceOnDocumentScrollRequest=j(this.onDocumentScroll,150)},onDocumentScroll:function(){var t=this.$refs.grid.$el,e=getComputedStyle(t),n=parseFloat(e.gridTemplateColumns.split(" ")[0],10),o=this.roundToTen(window.pageYOffset-this.gridConfig.marginTop),r=Math.floor(o/(n+this.gridConfig.gap))-1,i=Math.ceil(window.innerHeight/n)+r+1;this.shownFirstRow=Math.max(r,0),this.shownLastRow=Math.min(i,this.lastRow),this.shownLastRow>=this.lastRow&&this.$emit("bottomReached")},isVisible:function(t){var e=this.getRowNumber(t);return e>=this.shownFirstRow&&e<this.shownLastRow+1},getRowNumber:function(t){var e=this.gridConfig?this.gridConfig.count:this.list.length;return Math.floor(t/e)},roundToTen:function(t){return 10*Math.floor(t/10)}}},L=(n(440),n(64)),k=Object(L.a)(E,(function(){var t=this,e=t.$createElement,n=t._self._c||e;return n("Grid",{ref:"grid"},[n("span",{directives:[{name:"show",rawName:"v-show",value:t.shownFirstRow>0,expression:"shownFirstRow > 0"}],key:"filler-top",ref:"filler-top",staticClass:"grid-filler grid-filler--top",style:{paddingBottom:t.topPadding},attrs:{role:"none"}}),t._v(" "),t._l(t.shownList,(function(e,o){return n(t.component(e),t._b({key:e.fileid,ref:"item-"+o,refInFor:!0,tag:"component",class:"row-"+t.getRowNumber(o),attrs:{list:t.list}},"component",t.props(e),!1))})),t._v(" "),t.loadingPage?n("div",{key:"grid-loading",staticClass:"grid-loading icon-loading",attrs:{role:"none"}}):t._e(),t._v(" "),n("span",{directives:[{name:"show",rawName:"v-show",value:t.shownLastRow<t.lastRow,expression:"shownLastRow < lastRow"}],key:"filler-bottom",ref:"filler-bottom",staticClass:"grid-filler grid-filler--bottom",style:{paddingBottom:t.bottomPadding},attrs:{role:"none"}})],2)}),[],!1,null,"4517b139",null).exports,_=n(242),F=n(192);function W(t,e,n,o,r,i,a){try{var s=t[i](a),c=s.value}catch(t){return void n(t)}s.done?e(c):Promise.resolve(c).then(o,r)}function $(t){return function(){var e=this,n=arguments;return new Promise((function(o,r){var i=t.apply(e,n);function a(t){W(i,o,r,a,s,"next",t)}function s(t){W(i,o,r,a,s,"throw",t)}a(void 0)}))}}function z(t,e){var n=Object.keys(t);if(Object.getOwnPropertySymbols){var o=Object.getOwnPropertySymbols(t);e&&(o=o.filter((function(e){return Object.getOwnPropertyDescriptor(t,e).enumerable}))),n.push.apply(n,o)}return n}function N(t){for(var e=1;e<arguments.length;e++){var n=null!=arguments[e]?arguments[e]:{};e%2?z(Object(n),!0).forEach((function(e){B(t,e,n[e])})):Object.getOwnPropertyDescriptors?Object.defineProperties(t,Object.getOwnPropertyDescriptors(n)):z(Object(n)).forEach((function(e){Object.defineProperty(t,e,Object.getOwnPropertyDescriptor(n,e))}))}return t}function B(t,e,n){return e in t?Object.defineProperty(t,e,{value:n,enumerable:!0,configurable:!0,writable:!0}):t[e]=n,t}var M={name:"Timeline",components:{EmptyContent:m.a,VirtualGrid:k,Navigation:_.a},mixins:[S],props:{loading:{type:Boolean,required:!0},onlyFavorites:{type:Boolean,default:!1},rootTitle:{type:String,required:!0},path:{type:String,default:""}},data:function(){return{cancelRequest:null,done:!1,error:null,loadingPage:!1,page:0}},computed:N(N({},Object(o.c)(["files","timeline"])),{},{fileList:function(){var t=this;return this.timeline.map((function(e){return t.files[e]})).filter((function(t){return!!t}))},isEmpty:function(){return 0===this.fileList.length}}),watch:{onlyFavorites:function(){var t=this;return $(regeneratorRuntime.mark((function e(){return regeneratorRuntime.wrap((function(e){for(;;)switch(e.prev=e.next){case 0:t.resetState(),t.$emit("update:loading",!0),t.fetchContent();case 3:case"end":return e.stop()}}),e)})))()}},beforeMount:function(){var t=this;return $(regeneratorRuntime.mark((function e(){return regeneratorRuntime.wrap((function(e){for(;;)switch(e.prev=e.next){case 0:t.resetState(),t.fetchContent();case 2:case"end":return e.stop()}}),e)})))()},beforeDestroy:function(){this.cancelRequest&&this.cancelRequest("Changed view")},methods:{fetchContent:function(){var t=this;return $(regeneratorRuntime.mark((function e(){var n,o,r,i;return regeneratorRuntime.wrap((function(e){for(;;)switch(e.prev=e.next){case 0:if(!t.loadingPage){e.next=2;break}return e.abrupt("return");case 2:return t.cancelRequest&&t.cancelRequest("Changed view"),0===t.timeline.length&&t.$emit("update:loading",!0),t.error=null,t.loadingPage=!0,n=Object(F.a)(g),o=n.request,r=n.cancel,t.cancelRequest=r,e.prev=8,e.next=11,o(t.onlyFavorites,{page:t.page,perPage:5*t.gridConfig.count});case 11:return i=e.sent,t.$store.dispatch("updateTimeline",i),t.$store.dispatch("appendFiles",i),i.length===5*t.gridConfig.count?t.page++:(console.debug("We loaded the last page"),t.done=!0),e.abrupt("return",i);case 18:e.prev=18,e.t0=e.catch(8),e.t0.response&&e.t0.response.status&&(404===e.t0.response.status?(t.error=404,setTimeout((function(){t.$router.push({name:t.$route.name})}),3e3)):t.error=e.t0),console.error("Error fetching timeline",e.t0);case 22:return e.prev=22,t.$emit("update:loading",!1),t.loadingPage=!1,t.cancelRequest=null,e.finish(22);case 27:case"end":return e.stop()}}),e,null,[[8,18,22,27]])})))()},getProps:function(t){return Object.assign({},t,{loadMore:this.fetchContent})},getComponent:function(){return w.a},debounceOnBottomReached:i()((function(){this.onBottomReached()}),1e3),onBottomReached:function(){this.loadingPage||this.done||(console.debug("Loading next page",this.page),this.fetchContent())},resetState:function(){this.$store.dispatch("resetTimeline"),this.done=!1,this.error=null,this.loadingPage=!1,this.page=0,this.page=0}}},V=Object(L.a)(M,(function(){var t=this,e=t.$createElement,n=t._self._c||e;return 404===t.error?n("EmptyContent",{attrs:{"illustration-name":"folder"}},[t._v("\n\t"+t._s(t.t("photos","This folder does not exists"))+"\n")]):t.error?n("EmptyContent",[t._v("\n\t"+t._s(t.t("photos","An error occurred"))+"\n")]):!t.loading&&t.isEmpty?n("EmptyContent",{attrs:{"illustration-name":"empty"}},[t._v("\n\t"+t._s(t.t("photos","No photos in here"))+"\n")]):t.loading?t._e():n("div",[n("Navigation",{key:"navigation",attrs:{basename:t.path,filename:"/","root-title":t.rootTitle}}),t._v(" "),n("VirtualGrid",{attrs:{component:t.getComponent,list:t.fileList,"loading-page":t.loadingPage,props:t.getProps},on:{bottomReached:t.onBottomReached}})],1)}),[],!1,null,null,null);e.default=V.exports}}]);
-//# sourceMappingURL=photos-4.js.map?v=b0e768ed3739b5ae3919
+ */
+
+
+
+ // force our axios
+
+var patcher = webdav__WEBPACK_IMPORTED_MODULE_0___default.a.getPatcher();
+patcher.patch('request', _nextcloud_axios__WEBPACK_IMPORTED_MODULE_1___default.a); // init webdav client on default dav endpoint
+
+var remote = Object(_nextcloud_router__WEBPACK_IMPORTED_MODULE_3__["generateRemoteUrl"])('dav');
+var client = webdav__WEBPACK_IMPORTED_MODULE_0___default.a.createClient(remote);
+var remotePath = url_parse__WEBPACK_IMPORTED_MODULE_2___default()(remote).pathname;
+/* harmony default export */ __webpack_exports__["default"] = (client);
+
+/***/ }),
+
+/***/ "./src/services/DavRequest.js":
+/*!************************************!*\
+  !*** ./src/services/DavRequest.js ***!
+  \************************************/
+/*! exports provided: props, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "props", function() { return props; });
+/**
+ * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
+ *
+ * @author John Molakvoæ <skjnldsv@protonmail.com>
+ *
+ * @license GNU AGPL version 3 or any later version
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+var props = "\n\t<oc:fileid />\n\t<d:getlastmodified />\n\t<d:getetag />\n\t<d:getcontenttype />\n\t<d:getcontentlength />\n\t<nc:has-preview />\n\t<oc:favorite />\n\t<d:resourcetype />";
+
+/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\n\t\t\t<d:propfind xmlns:d=\"DAV:\"\n\t\t\t\txmlns:oc=\"http://owncloud.org/ns\"\n\t\t\t\txmlns:nc=\"http://nextcloud.org/ns\"\n\t\t\t\txmlns:ocs=\"http://open-collaboration-services.org/ns\">\n\t\t\t\t<d:prop>\n\t\t\t\t\t".concat(props, "\n\t\t\t\t</d:prop>\n\t\t\t</d:propfind>"));
+
+/***/ }),
+
+/***/ "./src/services/GridConfig.js":
+/*!************************************!*\
+  !*** ./src/services/GridConfig.js ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.runtime.esm.js");
+/* harmony import */ var _assets_grid_sizes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../assets/grid-sizes */ "./src/assets/grid-sizes.js");
+/* harmony import */ var _assets_grid_sizes__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_assets_grid_sizes__WEBPACK_IMPORTED_MODULE_1__);
+/**
+ * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
+ *
+ * @author John Molakvoæ <skjnldsv@protonmail.com>
+ *
+ * @license GNU AGPL version 3 or any later version
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+
+/* harmony default export */ __webpack_exports__["default"] = (new vue__WEBPACK_IMPORTED_MODULE_0__["default"]({
+  data: function data() {
+    return {
+      gridConfig: _assets_grid_sizes__WEBPACK_IMPORTED_MODULE_1__["sizes"].max
+    };
+  },
+  watch: {
+    gridConfig: function gridConfig(val) {
+      this.$emit('changed', val);
+    }
+  },
+  created: function created() {
+    window.addEventListener('resize', this.handleWindowResize);
+    this.handleWindowResize();
+  },
+  beforeDestroy: function beforeDestroy() {
+    window.removeEventListener('resize', this.handleWindowResize);
+  },
+  methods: {
+    handleWindowResize: function handleWindowResize() {
+      // find the first grid size that fit the current window width
+      var currentSize = Object.keys(_assets_grid_sizes__WEBPACK_IMPORTED_MODULE_1__["sizes"]).find(function (size) {
+        return size > document.documentElement.clientWidth;
+      });
+      this.gridConfig = _assets_grid_sizes__WEBPACK_IMPORTED_MODULE_1__["sizes"][currentSize];
+    }
+  }
+}));
+
+/***/ }),
+
+/***/ "./src/services/PhotoSearch.js":
+/*!*************************************!*\
+  !*** ./src/services/PhotoSearch.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _utils_fileUtils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/fileUtils */ "./src/utils/fileUtils.js");
+/* harmony import */ var _nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nextcloud/auth */ "./node_modules/@nextcloud/auth/dist/index.js");
+/* harmony import */ var _nextcloud_auth__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _AllowedMimes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AllowedMimes */ "./src/services/AllowedMimes.js");
+/* harmony import */ var _DavClient__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./DavClient */ "./src/services/DavClient.js");
+/* harmony import */ var _DavRequest__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./DavRequest */ "./src/services/DavRequest.js");
+/* harmony import */ var _assets_grid_sizes__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../assets/grid-sizes */ "./src/assets/grid-sizes.js");
+/* harmony import */ var _assets_grid_sizes__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_assets_grid_sizes__WEBPACK_IMPORTED_MODULE_5__);
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+/**
+ * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
+ *
+ * @author John Molakvoæ <skjnldsv@protonmail.com>
+ *
+ * @license GNU AGPL version 3 or any later version
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+
+
+
+
+
+/**
+ * List files from a folder and filter out unwanted mimes
+ *
+ * @param {boolean} [onlyFavorites=false] not used
+ * @param {Object} [options] used for the cancellable requests
+ * @param {number} [options.page=0] which page to start (starts at 0)
+ * @param {number} [options.perPage] how many to display per page default is 5 times the max number per line from the grid-sizes config file
+ * @param {boolean} [options.full=false] get full data of the files
+ * @returns {Array} the file list
+ */
+
+/* harmony default export */ __webpack_exports__["default"] = (function () {
+  return _ref.apply(this, arguments);
+});
+
+function _ref() {
+  _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+    var onlyFavorites,
+        onlyVideos,
+        options,
+        prefixPath,
+        m,
+        orMime,
+        eqFavorites,
+        response,
+        _args = arguments;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            onlyFavorites = _args.length > 0 && _args[0] !== undefined ? _args[0] : false;
+            onlyVideos = _args.length > 1 && _args[1] !== undefined ? _args[1] : false;
+            options = _args.length > 2 && _args[2] !== undefined ? _args[2] : {};
+            // default function options
+            options = Object.assign({}, {
+              page: 0,
+              // start at the first page
+              perPage: _assets_grid_sizes__WEBPACK_IMPORTED_MODULE_5__["sizes"].max.count * 10 // ten rows of the max width
+
+            }, options);
+            prefixPath = "/files/".concat(Object(_nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__["getCurrentUser"])().uid); // generating the search or condition
+            // based on the allowed mimetypes
+
+            m = _AllowedMimes__WEBPACK_IMPORTED_MODULE_2__["default"];
+            console.log(m);
+
+            if (onlyVideos) {
+              m = _AllowedMimes__WEBPACK_IMPORTED_MODULE_2__["default"].filter(function (type) {
+                return type.includes('video');
+              });
+            }
+
+            console.log(m);
+            orMime = m.reduce(function (str, mime) {
+              return "".concat(str, "\n\t\t<d:eq>\n\t\t\t<d:prop>\n\t\t\t\t<d:getcontenttype/>\n\t\t\t</d:prop>\n\t\t\t<d:literal>").concat(mime, "</d:literal>\n\t\t</d:eq>\n\t");
+            }, ''); // if (onlyVideos) {
+            // 	orMime = `<d:eq>
+            // 				<d:prop>
+            // 				<d:getcontenttype/>
+            // 				</d:prop>
+            // 				<d:literal>video/mp4</d:literal>
+            // 			</d:eq>`
+            // }
+
+            eqFavorites = onlyFavorites ? "<d:eq>\n\t\t\t\t<d:prop>\n\t\t\t\t\t<oc:favorite/>\n\t\t\t\t</d:prop>\n\t\t\t\t<d:literal>1</d:literal>\n\t\t\t</d:eq>" : '';
+            options = Object.assign({
+              method: 'SEARCH',
+              headers: {
+                'content-Type': 'text/xml'
+              },
+              data: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\t\t\t<d:searchrequest xmlns:d=\"DAV:\"\n\t\t\t\txmlns:oc=\"http://owncloud.org/ns\"\n\t\t\t\txmlns:nc=\"http://nextcloud.org/ns\"\n\t\t\t\txmlns:ns=\"https://github.com/icewind1991/SearchDAV/ns\"\n\t\t\t\txmlns:ocs=\"http://open-collaboration-services.org/ns\">\n\t\t\t\t<d:basicsearch>\n\t\t\t\t\t<d:select>\n\t\t\t\t\t\t<d:prop>\n\t\t\t\t\t\t\t".concat(_DavRequest__WEBPACK_IMPORTED_MODULE_4__["props"], "\n\t\t\t\t\t\t</d:prop>\n\t\t\t\t\t</d:select>\n\t\t\t\t\t<d:from>\n\t\t\t\t\t\t<d:scope>\n\t\t\t\t\t\t\t<d:href>").concat(prefixPath, "</d:href>\n\t\t\t\t\t\t\t<d:depth>infinity</d:depth>\n\t\t\t\t\t\t</d:scope>\n\t\t\t\t\t</d:from>\n\t\t\t\t\t<d:where>\n\t\t\t\t\t\t<d:and>\n\t\t\t\t\t\t\t<d:or>\n\t\t\t\t\t\t\t\t").concat(orMime, "\n\t\t\t\t\t\t\t</d:or>\n\t\t\t\t\t\t\t").concat(eqFavorites, "\n\t\t\t\t\t\t\t<d:eq>\n\t\t\t\t\t\t\t\t<d:prop>\n\t\t\t\t\t\t\t\t\t<oc:owner-id/>\n\t\t\t\t\t\t\t\t</d:prop>\n\t\t\t\t\t\t\t\t<d:literal>").concat(Object(_nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__["getCurrentUser"])().uid, "</d:literal>\n\t\t\t\t\t\t\t</d:eq>\n\t\t\t\t\t\t</d:and>\n\t\t\t\t\t</d:where>\n\t\t\t\t\t<d:orderby>\n\t\t\t\t\t\t<d:order>\n\t\t\t\t\t\t\t<d:prop><d:getlastmodified/></d:prop>\n\t\t\t\t\t\t\t<d:descending/>\n\t\t\t\t\t\t</d:order>\n\t\t\t\t\t</d:orderby>\n\t\t\t\t\t<d:limit>\n\t\t\t\t\t\t<d:nresults>").concat(options.perPage, "</d:nresults>\n\t\t\t\t\t\t<ns:firstresult>").concat(options.page * options.perPage, "</ns:firstresult>\n\t\t\t\t\t</d:limit>\n\t\t\t\t</d:basicsearch>\n\t\t\t</d:searchrequest>"),
+              deep: true,
+              details: true
+            }, options);
+            _context.next = 14;
+            return _DavClient__WEBPACK_IMPORTED_MODULE_3__["default"].getDirectoryContents('', options);
+
+          case 14:
+            response = _context.sent;
+            return _context.abrupt("return", response.data.map(function (data) {
+              return Object(_utils_fileUtils__WEBPACK_IMPORTED_MODULE_0__["genFileInfo"])(data);
+            }) // remove prefix path from full file path
+            .map(function (data) {
+              return Object.assign({}, data, {
+                filename: data.filename.replace(prefixPath, '')
+              });
+            }));
+
+          case 16:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _ref.apply(this, arguments);
+}
+
+/***/ }),
+
+/***/ "./src/views/Timeline.vue":
+/*!********************************!*\
+  !*** ./src/views/Timeline.vue ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Timeline_vue_vue_type_template_id_e945440a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Timeline.vue?vue&type=template&id=e945440a& */ "./src/views/Timeline.vue?vue&type=template&id=e945440a&");
+/* harmony import */ var _Timeline_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Timeline.vue?vue&type=script&lang=js& */ "./src/views/Timeline.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Timeline_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Timeline_vue_vue_type_template_id_e945440a___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Timeline_vue_vue_type_template_id_e945440a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "src/views/Timeline.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./src/views/Timeline.vue?vue&type=script&lang=js&":
+/*!*********************************************************!*\
+  !*** ./src/views/Timeline.vue?vue&type=script&lang=js& ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Timeline_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/babel-loader/lib!../../node_modules/vue-loader/lib??vue-loader-options!./Timeline.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/index.js?!./src/views/Timeline.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Timeline_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./src/views/Timeline.vue?vue&type=template&id=e945440a&":
+/*!***************************************************************!*\
+  !*** ./src/views/Timeline.vue?vue&type=template&id=e945440a& ***!
+  \***************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Timeline_vue_vue_type_template_id_e945440a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../node_modules/vue-loader/lib??vue-loader-options!./Timeline.vue?vue&type=template&id=e945440a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./src/views/Timeline.vue?vue&type=template&id=e945440a&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Timeline_vue_vue_type_template_id_e945440a___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Timeline_vue_vue_type_template_id_e945440a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ 0:
+/*!**********************!*\
+  !*** util (ignored) ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ 1:
+/*!**********************!*\
+  !*** util (ignored) ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ 2:
+/*!************************!*\
+  !*** buffer (ignored) ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ 3:
+/*!************************!*\
+  !*** crypto (ignored) ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* (ignored) */
+
+/***/ })
+
+}]);
+//# sourceMappingURL=photos-4.js.map?v=fd2373d9a7a8629702f5

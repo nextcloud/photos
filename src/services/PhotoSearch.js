@@ -37,7 +37,7 @@ import { sizes } from '../assets/grid-sizes'
  * @param {boolean} [options.full=false] get full data of the files
  * @returns {Array} the file list
  */
-export default async function(onlyFavorites = false, options = {}) {
+export default async function(onlyFavorites = false, onlyVideos = false, options = {}) {
 	// default function options
 	options = Object.assign({}, {
 		page: 0, // start at the first page
@@ -48,7 +48,13 @@ export default async function(onlyFavorites = false, options = {}) {
 
 	// generating the search or condition
 	// based on the allowed mimetypes
-	const orMime = allowedMimes.reduce((str, mime) => `${str}
+	let m = allowedMimes
+	console.log(m)
+	if (onlyVideos) {
+		m = allowedMimes.filter(type => type.includes('video'))
+	}
+	console.log(m)
+	const orMime = m.reduce((str, mime) => `${str}
 		<d:eq>
 			<d:prop>
 				<d:getcontenttype/>
@@ -56,6 +62,15 @@ export default async function(onlyFavorites = false, options = {}) {
 			<d:literal>${mime}</d:literal>
 		</d:eq>
 	`, '')
+
+	// if (onlyVideos) {
+	// 	orMime = `<d:eq>
+	// 				<d:prop>
+	// 				<d:getcontenttype/>
+	// 				</d:prop>
+	// 				<d:literal>video/mp4</d:literal>
+	// 			</d:eq>`
+	// }
 
 	const eqFavorites = onlyFavorites
 		? `<d:eq>
