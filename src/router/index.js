@@ -96,6 +96,15 @@ export default new Router({
 			}),
 		},
 		{
+			path: '/photos',
+			component: Timeline,
+			name: 'photos',
+			props: route => ({
+				rootTitle: t('photos', 'Your Photos'),
+				onlyPhotos: true,
+			}),
+		},
+		{
 			path: '/tags/:path*',
 			component: Tags,
 			name: 'tags',

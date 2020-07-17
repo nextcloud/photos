@@ -389,6 +389,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       type: Boolean,
       default: false
     },
+    onlyPhotos: {
+      type: Boolean,
+      default: false
+    },
     onlyVideos: {
       type: Boolean,
       default: false
@@ -451,7 +455,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }, _callee);
       }))();
     },
-    onlyVideos: function onlyVideos() {
+    onlyPhotos: function onlyPhotos() {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
@@ -474,26 +478,50 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           }
         }, _callee2);
       }))();
+    },
+    onlyVideos: function onlyVideos() {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                // reset component
+                _this4.resetState(); // content is completely different
+
+
+                _this4.$emit('update:loading', true);
+
+                _this4.fetchContent();
+
+              case 3:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }))();
     }
   },
   beforeMount: function beforeMount() {
-    var _this4 = this;
+    var _this5 = this;
 
-    return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
-      return regeneratorRuntime.wrap(function _callee3$(_context3) {
+    return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
+      return regeneratorRuntime.wrap(function _callee4$(_context4) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context4.prev = _context4.next) {
             case 0:
-              _this4.resetState();
+              _this5.resetState();
 
-              _this4.fetchContent();
+              _this5.fetchContent();
 
             case 2:
             case "end":
-              return _context3.stop();
+              return _context4.stop();
           }
         }
-      }, _callee3);
+      }, _callee4);
     }))();
   },
   beforeDestroy: function beforeDestroy() {
@@ -504,103 +532,104 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     fetchContent: function fetchContent() {
-      var _this5 = this;
+      var _this6 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
+      return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
         var _cancelableRequest, request, cancel, files;
 
-        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+        return regeneratorRuntime.wrap(function _callee5$(_context5) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context5.prev = _context5.next) {
               case 0:
-                if (!_this5.loadingPage) {
-                  _context4.next = 2;
+                if (!_this6.loadingPage) {
+                  _context5.next = 2;
                   break;
                 }
 
-                return _context4.abrupt("return");
+                return _context5.abrupt("return");
 
               case 2:
                 // cancel any pending requests
-                if (_this5.cancelRequest) {
-                  _this5.cancelRequest('Changed view');
+                if (_this6.cancelRequest) {
+                  _this6.cancelRequest('Changed view');
                 } // if we don't already have some cached data let's show a loader
 
 
-                if (_this5.timeline.length === 0) {
-                  _this5.$emit('update:loading', true);
+                if (_this6.timeline.length === 0) {
+                  _this6.$emit('update:loading', true);
                 }
 
-                _this5.error = null;
-                _this5.loadingPage = true; // init cancellable request
+                _this6.error = null;
+                _this6.loadingPage = true; // init cancellable request
 
                 _cancelableRequest = Object(_utils_CancelableRequest__WEBPACK_IMPORTED_MODULE_7__["default"])(_services_PhotoSearch__WEBPACK_IMPORTED_MODULE_2__["default"]), request = _cancelableRequest.request, cancel = _cancelableRequest.cancel;
-                _this5.cancelRequest = cancel;
-                _context4.prev = 8;
-                _context4.next = 11;
+                _this6.cancelRequest = cancel;
+                _context5.prev = 8;
+                _context5.next = 11;
                 return request({
-                  onlyFavorites: _this5.onlyFavorites,
-                  onlyVideos: _this5.onlyVideos
+                  onlyFavorites: _this6.onlyFavorites,
+                  onlyVideos: _this6.onlyVideos,
+                  onlyPhotos: _this6.onlyPhotos
                 }, {
-                  page: _this5.page,
-                  perPage: _this5.gridConfig.count * 5 // we load 5 rows,
+                  page: _this6.page,
+                  perPage: _this6.gridConfig.count * 5 // we load 5 rows,
 
                 });
 
               case 11:
-                files = _context4.sent;
+                files = _context5.sent;
 
-                _this5.$store.dispatch('updateTimeline', files);
+                _this6.$store.dispatch('updateTimeline', files);
 
-                _this5.$store.dispatch('appendFiles', files); // next time we load this script, we load the next page if the list returned
+                _this6.$store.dispatch('appendFiles', files); // next time we load this script, we load the next page if the list returned
 
 
-                if (files.length === _this5.gridConfig.count * 5) {
-                  _this5.page++;
+                if (files.length === _this6.gridConfig.count * 5) {
+                  _this6.page++;
                 } else {
                   console.debug('We loaded the last page');
-                  _this5.done = true;
+                  _this6.done = true;
                 } // return for the viewer loadMore method
 
 
-                return _context4.abrupt("return", files);
+                return _context5.abrupt("return", files);
 
               case 18:
-                _context4.prev = 18;
-                _context4.t0 = _context4["catch"](8);
+                _context5.prev = 18;
+                _context5.t0 = _context5["catch"](8);
 
-                if (_context4.t0.response && _context4.t0.response.status) {
-                  if (_context4.t0.response.status === 404) {
-                    _this5.error = 404;
+                if (_context5.t0.response && _context5.t0.response.status) {
+                  if (_context5.t0.response.status === 404) {
+                    _this6.error = 404;
                     setTimeout(function () {
-                      _this5.$router.push({
-                        name: _this5.$route.name
+                      _this6.$router.push({
+                        name: _this6.$route.name
                       });
                     }, 3000);
                   } else {
-                    _this5.error = _context4.t0;
+                    _this6.error = _context5.t0;
                   }
                 } // cancelled request, moving on...
 
 
-                console.error('Error fetching timeline', _context4.t0);
+                console.error('Error fetching timeline', _context5.t0);
 
               case 22:
-                _context4.prev = 22;
+                _context5.prev = 22;
 
                 // done loading even with errors
-                _this5.$emit('update:loading', false);
+                _this6.$emit('update:loading', false);
 
-                _this5.loadingPage = false;
-                _this5.cancelRequest = null;
-                return _context4.finish(22);
+                _this6.loadingPage = false;
+                _this6.cancelRequest = null;
+                return _context5.finish(22);
 
               case 27:
               case "end":
-                return _context4.stop();
+                return _context5.stop();
             }
           }
-        }, _callee4, null, [[8, 18, 22, 27]]);
+        }, _callee5, null, [[8, 18, 22, 27]]);
       }))();
     },
 
@@ -1471,6 +1500,8 @@ function _ref2() {
         onlyFavorites,
         _ref$onlyVideos,
         onlyVideos,
+        _ref$onlyPhotos,
+        onlyPhotos,
         options,
         prefixPath,
         m,
@@ -1483,7 +1514,7 @@ function _ref2() {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _ref$onlyFavorites = _ref.onlyFavorites, onlyFavorites = _ref$onlyFavorites === void 0 ? false : _ref$onlyFavorites, _ref$onlyVideos = _ref.onlyVideos, onlyVideos = _ref$onlyVideos === void 0 ? false : _ref$onlyVideos;
+            _ref$onlyFavorites = _ref.onlyFavorites, onlyFavorites = _ref$onlyFavorites === void 0 ? false : _ref$onlyFavorites, _ref$onlyVideos = _ref.onlyVideos, onlyVideos = _ref$onlyVideos === void 0 ? false : _ref$onlyVideos, _ref$onlyPhotos = _ref.onlyPhotos, onlyPhotos = _ref$onlyPhotos === void 0 ? false : _ref$onlyPhotos;
             options = _args.length > 1 && _args[1] !== undefined ? _args[1] : {};
             // default function options
             options = Object.assign({}, {
@@ -1496,7 +1527,12 @@ function _ref2() {
             // based on the allowed mimetypes
 
             m = _AllowedMimes__WEBPACK_IMPORTED_MODULE_2__["default"];
-            console.log(m);
+
+            if (onlyPhotos) {
+              m = _AllowedMimes__WEBPACK_IMPORTED_MODULE_2__["default"].filter(function (type) {
+                return type.includes('image');
+              });
+            }
 
             if (onlyVideos) {
               m = _AllowedMimes__WEBPACK_IMPORTED_MODULE_2__["default"].filter(function (type) {
@@ -1504,18 +1540,9 @@ function _ref2() {
               });
             }
 
-            console.log(m);
             orMime = m.reduce(function (str, mime) {
               return "".concat(str, "\n\t\t<d:eq>\n\t\t\t<d:prop>\n\t\t\t\t<d:getcontenttype/>\n\t\t\t</d:prop>\n\t\t\t<d:literal>").concat(mime, "</d:literal>\n\t\t</d:eq>\n\t");
-            }, ''); // if (onlyVideos) {
-            // 	orMime = `<d:eq>
-            // 				<d:prop>
-            // 				<d:getcontenttype/>
-            // 				</d:prop>
-            // 				<d:literal>video/mp4</d:literal>
-            // 			</d:eq>`
-            // }
-
+            }, '');
             eqFavorites = onlyFavorites ? "<d:eq>\n\t\t\t\t<d:prop>\n\t\t\t\t\t<oc:favorite/>\n\t\t\t\t</d:prop>\n\t\t\t\t<d:literal>1</d:literal>\n\t\t\t</d:eq>" : '';
             options = Object.assign({
               method: 'SEARCH',
@@ -1526,10 +1553,10 @@ function _ref2() {
               deep: true,
               details: true
             }, options);
-            _context.next = 13;
+            _context.next = 12;
             return _DavClient__WEBPACK_IMPORTED_MODULE_3__["default"].getDirectoryContents('', options);
 
-          case 13:
+          case 12:
             response = _context.sent;
             return _context.abrupt("return", response.data.map(function (data) {
               return Object(_utils_fileUtils__WEBPACK_IMPORTED_MODULE_0__["genFileInfo"])(data);
@@ -1540,7 +1567,7 @@ function _ref2() {
               });
             }));
 
-          case 15:
+          case 14:
           case "end":
             return _context.stop();
         }
@@ -1666,4 +1693,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-4.js.map?v=3efaa06e8ff0bde7a3da
+//# sourceMappingURL=photos-4.js.map?v=01ae95a51361e61a3629

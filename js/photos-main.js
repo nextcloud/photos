@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "photos-" + ({}[chunkId]||chunkId) + ".js?v=" + {"0":"e11206372d966835f4e1","1":"309b5e3965a8a84ccb16","2":"c0d72bfb7e7705d1705c","3":"5512847ae83b2fd4ae59","4":"3efaa06e8ff0bde7a3da","5":"a2e9aaf5c7a814e64063","6":"ae7a46c68f5a570c323d","7":"044a2978f0d10cfa7b6e","8":"2fb57ca06dc5ee66d2ca","9":"0de99c8ce8cb938f25e3"}[chunkId] + ""
+/******/ 		return __webpack_require__.p + "photos-" + ({}[chunkId]||chunkId) + ".js?v=" + {"0":"e11206372d966835f4e1","1":"309b5e3965a8a84ccb16","2":"c0d72bfb7e7705d1705c","3":"5512847ae83b2fd4ae59","4":"01ae95a51361e61a3629","5":"a2e9aaf5c7a814e64063","6":"ae7a46c68f5a570c323d","7":"044a2978f0d10cfa7b6e","8":"2fb57ca06dc5ee66d2ca","9":"0de99c8ce8cb938f25e3"}[chunkId] + ""
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -2061,6 +2061,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_IsMapsInstalled__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./services/IsMapsInstalled */ "./src/services/IsMapsInstalled.js");
 /* harmony import */ var _nextcloud_auth__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @nextcloud/auth */ "./node_modules/@nextcloud/auth/dist/index.js");
 /* harmony import */ var _nextcloud_auth__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_auth__WEBPACK_IMPORTED_MODULE_8__);
+//
 //
 //
 //
@@ -22547,6 +22548,14 @@ var render = function() {
                 _vm._v(" "),
                 _c("AppNavigationItem", {
                   attrs: {
+                    to: "/photos",
+                    title: _vm.t("photos", "Your Photos"),
+                    icon: "icon-category-multimedia"
+                  }
+                }),
+                _vm._v(" "),
+                _c("AppNavigationItem", {
+                  attrs: {
                     to: "/videos",
                     title: _vm.t("photos", "Your Videos"),
                     icon: "icon-video"
@@ -36388,6 +36397,16 @@ if (!_services_IsMapsInstalled__WEBPACK_IMPORTED_MODULE_3__["default"]) {
       };
     }
   }, {
+    path: '/photos',
+    component: Timeline,
+    name: 'photos',
+    props: function props(route) {
+      return {
+        rootTitle: t('photos', 'Your Photos'),
+        onlyPhotos: true
+      };
+    }
+  }, {
     path: '/tags/:path*',
     component: Tags,
     name: 'tags',
@@ -37213,4 +37232,4 @@ var isNumber = function isNumber(num) {
 /***/ })
 
 /******/ });
-//# sourceMappingURL=photos-main.js.map?v=b4b1becd8c99f27e7152
+//# sourceMappingURL=photos-main.js.map?v=f1df4b8a50d58fc2e73b

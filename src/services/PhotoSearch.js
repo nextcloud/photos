@@ -37,7 +37,7 @@ import { sizes } from '../assets/grid-sizes'
  * @param {boolean} [options.full=false] get full data of the files
  * @returns {Array} the file list
  */
-export default async function({ onlyFavorites = false, onlyVideos = false }, options = {}) {
+export default async function({ onlyFavorites = false, onlyVideos = false, onlyPhotos = false }, options = {}) {
 	// default function options
 	options = Object.assign({}, {
 		page: 0, // start at the first page
@@ -49,6 +49,9 @@ export default async function({ onlyFavorites = false, onlyVideos = false }, opt
 	// generating the search or condition
 	// based on the allowed mimetypes
 	let m = allowedMimes
+	if (onlyPhotos) {
+		m = allowedMimes.filter(type => type.includes('image'))
+	}
 	if (onlyVideos) {
 		m = allowedMimes.filter(type => type.includes('video'))
 	}

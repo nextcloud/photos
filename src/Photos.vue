@@ -29,6 +29,7 @@
 					:title="t('photos', 'Timeline')"
 					icon="icon-yourphotos"
 					exact />
+				<AppNavigationItem to="/photos" :title="t('photos', 'Your Photos')" icon="icon-category-multimedia" />
 				<AppNavigationItem to="/videos" :title="t('photos', 'Your Videos')" icon="icon-video" />
 				<AppNavigationItem to="/favorites" :title="t('photos', 'Favorites')" icon="icon-favorite" />
 				<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Your albums')" icon="icon-files-dark" />

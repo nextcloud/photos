@@ -80,6 +80,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		onlyPhotos: {
+			type: Boolean,
+			default: false,
+		},
 		onlyVideos: {
 			type: Boolean,
 			default: false,
@@ -125,6 +129,14 @@ export default {
 
 	watch: {
 		async onlyFavorites() {
+			// reset component
+			this.resetState()
+
+			// content is completely different
+			this.$emit('update:loading', true)
+			this.fetchContent()
+		},
+		async onlyPhotos() {
 			// reset component
 			this.resetState()
 
@@ -183,6 +195,7 @@ export default {
 					{
 						onlyFavorites: this.onlyFavorites,
 						onlyVideos: this.onlyVideos,
+						onlyPhotos: this.onlyPhotos,
 					},
 					{
 						page: this.page,
