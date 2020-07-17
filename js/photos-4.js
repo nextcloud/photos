@@ -450,26 +450,50 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           }
         }, _callee);
       }))();
+    },
+    onlyVideos: function onlyVideos() {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                // reset component
+                _this3.resetState(); // content is completely different
+
+
+                _this3.$emit('update:loading', true);
+
+                _this3.fetchContent();
+
+              case 3:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
     }
   },
   beforeMount: function beforeMount() {
-    var _this3 = this;
+    var _this4 = this;
 
-    return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+    return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
+      return regeneratorRuntime.wrap(function _callee3$(_context3) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context3.prev = _context3.next) {
             case 0:
-              _this3.resetState();
+              _this4.resetState();
 
-              _this3.fetchContent();
+              _this4.fetchContent();
 
             case 2:
             case "end":
-              return _context2.stop();
+              return _context3.stop();
           }
         }
-      }, _callee2);
+      }, _callee3);
     }))();
   },
   beforeDestroy: function beforeDestroy() {
@@ -480,100 +504,103 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     fetchContent: function fetchContent() {
-      var _this4 = this;
+      var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
+      return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
         var _cancelableRequest, request, cancel, files;
 
-        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
           while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context4.prev = _context4.next) {
               case 0:
-                if (!_this4.loadingPage) {
-                  _context3.next = 2;
+                if (!_this5.loadingPage) {
+                  _context4.next = 2;
                   break;
                 }
 
-                return _context3.abrupt("return");
+                return _context4.abrupt("return");
 
               case 2:
                 // cancel any pending requests
-                if (_this4.cancelRequest) {
-                  _this4.cancelRequest('Changed view');
+                if (_this5.cancelRequest) {
+                  _this5.cancelRequest('Changed view');
                 } // if we don't already have some cached data let's show a loader
 
 
-                if (_this4.timeline.length === 0) {
-                  _this4.$emit('update:loading', true);
+                if (_this5.timeline.length === 0) {
+                  _this5.$emit('update:loading', true);
                 }
 
-                _this4.error = null;
-                _this4.loadingPage = true; // init cancellable request
+                _this5.error = null;
+                _this5.loadingPage = true; // init cancellable request
 
                 _cancelableRequest = Object(_utils_CancelableRequest__WEBPACK_IMPORTED_MODULE_7__["default"])(_services_PhotoSearch__WEBPACK_IMPORTED_MODULE_2__["default"]), request = _cancelableRequest.request, cancel = _cancelableRequest.cancel;
-                _this4.cancelRequest = cancel;
-                _context3.prev = 8;
-                _context3.next = 11;
-                return request(_this4.onlyFavorites, {
-                  page: _this4.page,
-                  perPage: _this4.gridConfig.count * 5 // we load 5 rows,
+                _this5.cancelRequest = cancel;
+                _context4.prev = 8;
+                _context4.next = 11;
+                return request({
+                  onlyFavorites: _this5.onlyFavorites,
+                  onlyVideos: _this5.onlyVideos
+                }, {
+                  page: _this5.page,
+                  perPage: _this5.gridConfig.count * 5 // we load 5 rows,
 
                 });
 
               case 11:
-                files = _context3.sent;
+                files = _context4.sent;
 
-                _this4.$store.dispatch('updateTimeline', files);
+                _this5.$store.dispatch('updateTimeline', files);
 
-                _this4.$store.dispatch('appendFiles', files); // next time we load this script, we load the next page if the list returned
+                _this5.$store.dispatch('appendFiles', files); // next time we load this script, we load the next page if the list returned
 
 
-                if (files.length === _this4.gridConfig.count * 5) {
-                  _this4.page++;
+                if (files.length === _this5.gridConfig.count * 5) {
+                  _this5.page++;
                 } else {
                   console.debug('We loaded the last page');
-                  _this4.done = true;
+                  _this5.done = true;
                 } // return for the viewer loadMore method
 
 
-                return _context3.abrupt("return", files);
+                return _context4.abrupt("return", files);
 
               case 18:
-                _context3.prev = 18;
-                _context3.t0 = _context3["catch"](8);
+                _context4.prev = 18;
+                _context4.t0 = _context4["catch"](8);
 
-                if (_context3.t0.response && _context3.t0.response.status) {
-                  if (_context3.t0.response.status === 404) {
-                    _this4.error = 404;
+                if (_context4.t0.response && _context4.t0.response.status) {
+                  if (_context4.t0.response.status === 404) {
+                    _this5.error = 404;
                     setTimeout(function () {
-                      _this4.$router.push({
-                        name: _this4.$route.name
+                      _this5.$router.push({
+                        name: _this5.$route.name
                       });
                     }, 3000);
                   } else {
-                    _this4.error = _context3.t0;
+                    _this5.error = _context4.t0;
                   }
                 } // cancelled request, moving on...
 
 
-                console.error('Error fetching timeline', _context3.t0);
+                console.error('Error fetching timeline', _context4.t0);
 
               case 22:
-                _context3.prev = 22;
+                _context4.prev = 22;
 
                 // done loading even with errors
-                _this4.$emit('update:loading', false);
+                _this5.$emit('update:loading', false);
 
-                _this4.loadingPage = false;
-                _this4.cancelRequest = null;
-                return _context3.finish(22);
+                _this5.loadingPage = false;
+                _this5.cancelRequest = null;
+                return _context4.finish(22);
 
               case 27:
               case "end":
-                return _context3.stop();
+                return _context4.stop();
             }
           }
-        }, _callee3, null, [[8, 18, 22, 27]]);
+        }, _callee4, null, [[8, 18, 22, 27]]);
       }))();
     },
 
@@ -1434,13 +1461,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
  * @returns {Array} the file list
  */
 
-/* harmony default export */ __webpack_exports__["default"] = (function () {
-  return _ref.apply(this, arguments);
+/* harmony default export */ __webpack_exports__["default"] = (function (_x) {
+  return _ref2.apply(this, arguments);
 });
 
-function _ref() {
-  _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-    var onlyFavorites,
+function _ref2() {
+  _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(_ref) {
+    var _ref$onlyFavorites,
+        onlyFavorites,
+        _ref$onlyVideos,
         onlyVideos,
         options,
         prefixPath,
@@ -1449,13 +1478,13 @@ function _ref() {
         eqFavorites,
         response,
         _args = arguments;
+
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            onlyFavorites = _args.length > 0 && _args[0] !== undefined ? _args[0] : false;
-            onlyVideos = _args.length > 1 && _args[1] !== undefined ? _args[1] : false;
-            options = _args.length > 2 && _args[2] !== undefined ? _args[2] : {};
+            _ref$onlyFavorites = _ref.onlyFavorites, onlyFavorites = _ref$onlyFavorites === void 0 ? false : _ref$onlyFavorites, _ref$onlyVideos = _ref.onlyVideos, onlyVideos = _ref$onlyVideos === void 0 ? false : _ref$onlyVideos;
+            options = _args.length > 1 && _args[1] !== undefined ? _args[1] : {};
             // default function options
             options = Object.assign({}, {
               page: 0,
@@ -1497,10 +1526,10 @@ function _ref() {
               deep: true,
               details: true
             }, options);
-            _context.next = 14;
+            _context.next = 13;
             return _DavClient__WEBPACK_IMPORTED_MODULE_3__["default"].getDirectoryContents('', options);
 
-          case 14:
+          case 13:
             response = _context.sent;
             return _context.abrupt("return", response.data.map(function (data) {
               return Object(_utils_fileUtils__WEBPACK_IMPORTED_MODULE_0__["genFileInfo"])(data);
@@ -1511,14 +1540,14 @@ function _ref() {
               });
             }));
 
-          case 16:
+          case 15:
           case "end":
             return _context.stop();
         }
       }
     }, _callee);
   }));
-  return _ref.apply(this, arguments);
+  return _ref2.apply(this, arguments);
 }
 
 /***/ }),
@@ -1637,4 +1666,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-4.js.map?v=fd2373d9a7a8629702f5
+//# sourceMappingURL=photos-4.js.map?v=3efaa06e8ff0bde7a3da

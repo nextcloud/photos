@@ -132,6 +132,14 @@ export default {
 			this.$emit('update:loading', true)
 			this.fetchContent()
 		},
+		async onlyVideos() {
+			// reset component
+			this.resetState()
+
+			// content is completely different
+			this.$emit('update:loading', true)
+			this.fetchContent()
+		},
 	},
 
 	async beforeMount() {
@@ -171,10 +179,15 @@ export default {
 
 			try {
 				// get content and current folder info
-				const files = await request(this.onlyFavorites, {
-					page: this.page,
-					perPage: this.gridConfig.count * 5, // we load 5 rows,
-				})
+				const files = await request(
+					{
+						onlyFavorites: this.onlyFavorites,
+						onlyVideos: this.onlyVideos,
+					},
+					{
+						page: this.page,
+						perPage: this.gridConfig.count * 5, // we load 5 rows,
+					})
 				this.$store.dispatch('updateTimeline', files)
 				this.$store.dispatch('appendFiles', files)
 

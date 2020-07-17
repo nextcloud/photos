@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "photos-" + ({}[chunkId]||chunkId) + ".js?v=" + {"0":"e11206372d966835f4e1","1":"309b5e3965a8a84ccb16","2":"c0d72bfb7e7705d1705c","3":"5512847ae83b2fd4ae59","4":"fd2373d9a7a8629702f5","5":"4b416d58510b9eea49da","6":"ae7a46c68f5a570c323d","7":"044a2978f0d10cfa7b6e","8":"2fb57ca06dc5ee66d2ca","9":"0de99c8ce8cb938f25e3"}[chunkId] + ""
+/******/ 		return __webpack_require__.p + "photos-" + ({}[chunkId]||chunkId) + ".js?v=" + {"0":"e11206372d966835f4e1","1":"309b5e3965a8a84ccb16","2":"c0d72bfb7e7705d1705c","3":"5512847ae83b2fd4ae59","4":"3efaa06e8ff0bde7a3da","5":"a2e9aaf5c7a814e64063","6":"ae7a46c68f5a570c323d","7":"044a2978f0d10cfa7b6e","8":"2fb57ca06dc5ee66d2ca","9":"0de99c8ce8cb938f25e3"}[chunkId] + ""
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -22539,7 +22539,7 @@ var render = function() {
                   staticClass: "app-navigation__photos",
                   attrs: {
                     to: { name: "root" },
-                    title: _vm.t("photos", "Your photos"),
+                    title: _vm.t("photos", "Timeline"),
                     icon: "icon-yourphotos",
                     exact: ""
                   }
@@ -22548,7 +22548,7 @@ var render = function() {
                 _c("AppNavigationItem", {
                   attrs: {
                     to: "/videos",
-                    title: _vm.t("photos", "Videos"),
+                    title: _vm.t("photos", "Your Videos"),
                     icon: "icon-video"
                   }
                 }),
@@ -36337,7 +36337,7 @@ if (!_services_IsMapsInstalled__WEBPACK_IMPORTED_MODULE_3__["default"]) {
     name: 'root',
     props: function props(route) {
       return {
-        rootTitle: t('photos', 'Your photos')
+        rootTitle: t('photos', 'Timeline')
       };
     }
   }, {
@@ -36383,7 +36383,7 @@ if (!_services_IsMapsInstalled__WEBPACK_IMPORTED_MODULE_3__["default"]) {
     name: 'videos',
     props: function props(route) {
       return {
-        rootTitle: t('photos', 'Videos'),
+        rootTitle: t('photos', 'Your Videos'),
         onlyVideos: true
       };
     }
@@ -37213,4 +37213,4 @@ var isNumber = function isNumber(num) {
 /***/ })
 
 /******/ });
-//# sourceMappingURL=photos-main.js.map?v=7bb29fe6198b65e7a208
+//# sourceMappingURL=photos-main.js.map?v=b4b1becd8c99f27e7152

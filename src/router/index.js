@@ -49,7 +49,7 @@ export default new Router({
 			component: Timeline,
 			name: 'root',
 			props: route => ({
-				rootTitle: t('photos', 'Your photos'),
+				rootTitle: t('photos', 'Timeline'),
 			}),
 		},
 		{
@@ -91,7 +91,7 @@ export default new Router({
 			component: Timeline,
 			name: 'videos',
 			props: route => ({
-				rootTitle: t('photos', 'Videos'),
+				rootTitle: t('photos', 'Your Videos'),
 				onlyVideos: true,
 			}),
 		},

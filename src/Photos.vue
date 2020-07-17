@@ -26,10 +26,10 @@
 			<template #list>
 				<AppNavigationItem :to="{name: 'root'}"
 					class="app-navigation__photos"
-					:title="t('photos', 'Your photos')"
+					:title="t('photos', 'Timeline')"
 					icon="icon-yourphotos"
 					exact />
-				<AppNavigationItem to="/videos" :title="t('photos', 'Videos')" icon="icon-video" />
+				<AppNavigationItem to="/videos" :title="t('photos', 'Your Videos')" icon="icon-video" />
 				<AppNavigationItem to="/favorites" :title="t('photos', 'Favorites')" icon="icon-favorite" />
 				<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Your albums')" icon="icon-files-dark" />
 				<AppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared albums')" icon="icon-share" />
