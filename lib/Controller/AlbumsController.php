@@ -99,7 +99,6 @@ class AlbumsController extends Controller {
 				'etag' => $node->getEtag(),
 				'fileid' => $node->getId(),
 				'filename' => $path,
-				'etag' => $node->getEtag(),
 				'lastmod' => $node->getMTime(),
 				'mime' => $node->getMimetype(),
 				'size' => $node->getSize(),
@@ -136,7 +135,8 @@ class AlbumsController extends Controller {
 	}
 
 	private function isShared(Node $node): bool {
-		return $node->getStorage()->instanceOfStorage(SharedStorage::class);
+		return $node->getStorage()->instanceOfStorage(SharedStorage::class) ||
+			$node->getStorage()->instanceOfStorage(\OCA\GroupFolders\Mount\GroupFolderStorage::class);
 	}
 
 	private function scanFolder(Folder $folder, int $depth, bool $shared): bool {
