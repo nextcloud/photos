@@ -1,9 +1,10 @@
-const path = require('path')
 const { VueLoaderPlugin } = require('vue-loader')
+const babelLoaderExcludeNodeModulesExcept = require('babel-loader-exclude-node-modules-except')
+const ModuleReplaceWebpackPlugin = require('module-replace-webpack-plugin')
+const path = require('path')
 const StyleLintPlugin = require('stylelint-webpack-plugin')
 
 const SassGetGridConfig = require('./src/utils/SassGetGridConfig')
-const ModuleReplaceWebpackPlugin = require('module-replace-webpack-plugin');
 
 const appName = process.env.npm_package_name
 
@@ -12,7 +13,7 @@ module.exports = {
 	output: {
 		path: path.resolve(__dirname, './js'),
 		publicPath: '/js/',
-		filename: `${appName}.js`,
+		filename: `${appName}.js?v=[contenthash]`,
 		chunkFilename: `${appName}.[name].js?v=[contenthash]`,
 	},
 	module: {
@@ -51,7 +52,14 @@ module.exports = {
 			{
 				test: /\.js$/,
 				loader: 'babel-loader',
-				exclude: /node_modules(?!(\/|\\)(hot-patcher|webdav|camelcase)(\/|\\))/,
+				exclude: babelLoaderExcludeNodeModulesExcept([
+					'@essentials/request-timeout',
+					'@nextcloud/event-bus',
+					'camelcase',
+					'hot-patcher',
+					'semver',
+					'webdav',
+				]),
 			},
 			{
 				test: /\.svg$/,
