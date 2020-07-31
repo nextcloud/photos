@@ -3,6 +3,7 @@ const webpackConfig = require('@nextcloud/webpack-vue-config')
 
 const SassGetGridConfig = require('./src/utils/SassGetGridConfig')
 const ModuleReplaceWebpackPlugin = require('module-replace-webpack-plugin');
+const BabelLoaderExcludeNodeModulesExcept = require('babel-loader-exclude-node-modules-except')
 
 const config = {
 	module: {
@@ -33,7 +34,14 @@ const config = {
 			{
 				test: /\.js$/,
 				loader: 'babel-loader',
-				exclude: /node_modules(?!(\/|\\)(hot-patcher|webdav|camelcase)(\/|\\))/,
+				exclude: BabelLoaderExcludeNodeModulesExcept([
+					'@essentials/request-timeout',
+					'@nextcloud/event-bus',
+					'camelcase',
+					'hot-patcher',
+					'semver',
+					'webdav',
+				]),
 			},
 		],
 	},
