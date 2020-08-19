@@ -26,6 +26,7 @@
 		:href="davPath"
 		:aria-label="ariaLabel"
 		@click.prevent="openViewer">
+		<div v-if="mime.includes('video') && hasPreview" class="icon-video-white" />
 		<!-- image and loading placeholder -->
 		<transition name="fade">
 			<img v-show="loaded"
@@ -131,6 +132,13 @@ export default {
 
 <style lang="scss" scoped>
 @import '../mixins/FileFolder.scss';
+
+.icon-video-white {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	z-index: 5;
+}
 
 img {
 	position: absolute;
