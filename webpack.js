@@ -2,7 +2,7 @@ const { merge } = require('webpack-merge')
 const webpackConfig = require('@nextcloud/webpack-vue-config')
 
 const SassGetGridConfig = require('./src/utils/SassGetGridConfig')
-const ModuleReplaceWebpackPlugin = require('module-replace-webpack-plugin');
+const ModuleReplaceWebpackPlugin = require('module-replace-webpack-plugin')
 const BabelLoaderExcludeNodeModulesExcept = require('babel-loader-exclude-node-modules-except')
 
 const config = {
