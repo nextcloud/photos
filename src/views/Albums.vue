@@ -184,7 +184,7 @@ export default {
 			OCA.Files && OCA.Files.Sidebar.close && OCA.Files.Sidebar.close()
 
 			// if we don't already have some cached data let's show a loader
-			if (!this.files[this.folderId]) {
+			if (!this.files[this.folderId] || !this.folders[this.folderId]) {
 				this.$emit('update:loading', true)
 			}
 			this.error = null
