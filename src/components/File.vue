@@ -21,7 +21,10 @@
  -->
 
 <template>
-	<a :class="{'file--clear': !loaded}"
+	<a :class="{
+			'file--clear': !loaded,
+			'file--cropped': croppedLayout,
+		}"
 		class="file"
 		:href="davPath"
 		:aria-label="ariaLabel"
@@ -54,10 +57,12 @@
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 
+import UserConfig from '../mixins/UserConfig'
+
 export default {
 	name: 'File',
+	mixins: [UserConfig],
 	inheritAttrs: false,
-
 	props: {
 		item: {
 			type: Object,
@@ -85,7 +90,7 @@ export default {
 			return this.item.injected.mime.startsWith('image')
 		},
 		src() {
-			return generateUrl(`/core/preview?fileId=${this.item.injected.fileid}&x=${256}&y=${256}&a=false&v=${this.item.injected.etag}`)
+			return generateUrl(`/core/preview?fileId=${this.item.injected.fileid}&x=${256}&y=${256}&a=${!this.croppedLayout}&v=${this.item.injected.etag}`)
 		},
 	},
 
@@ -127,7 +132,11 @@ img {
 	width: 100%;
 	height: 100%;
 
-	object-fit: cover;
+	object-fit: contain;
+
+	.file--cropped & {
+		object-fit: cover;
+	}
 }
 
 svg {
