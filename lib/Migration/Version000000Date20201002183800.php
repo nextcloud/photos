@@ -26,12 +26,10 @@ class Version000000Date20201002183800 extends SimpleMigrationStep
       $table->addColumn('id', 'integer', [
 				'notnull' => true,
 				'autoincrement' => true,
-				'unsigned' => true,
       ]);
 		 
 			$table->addColumn('file_id', 'integer', [
-				'notnull' => true,
-				'unsigned' => true,
+				'notnull' => false,
         'length' => 64,
       ]);
 			$table->addColumn('date_time_original', 'string', [

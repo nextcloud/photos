@@ -10,6 +10,10 @@
 <author mail="skjnldsv@protonmail.com">John Molakvoæ</author>
 <namespace>Photos</namespace>
 <category>multimedia</category>
+<types>
+	<filesystem/>
+	<dav/>
+</types>
 
 <website>https://github.com/nextcloud/photos</website>
 <bugs>https://github.com/nextcloud/photos/issues</bugs>

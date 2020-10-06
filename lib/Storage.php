@@ -31,60 +31,62 @@ namespace OCA\Photos;
 
 use OC\Files\Filesystem;
 use OC\Files\Storage\Wrapper\Wrapper;
-use OCA\Files_Trashbin\Events\MoveToTrashEvent;
-use OCA\Files_Trashbin\Trash\ITrashManager;
-use OCP\Encryption\Exceptions\GenericEncryptionException;
 use OCP\Files\IRootFolder;
-use OCP\Files\Mount\IMountPoint;
-use OCP\Files\Node;
 use OCP\ILogger;
-use OCP\IUserManager;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
+use OCA\Photos\Service\MetadataService;
+use OCA\Photos\Db\PhotoMetadataMapper;
 
 class Storage extends Wrapper {
-	/** @var IMountPoint */
-	private $mountPoint;
-
-	/** @var  IUserManager */
-	private $userManager;
 
 	/** @var ILogger */
 	private $logger;
 
-	/** @var EventDispatcherInterface */
-	private $eventDispatcher;
-
 	/** @var IRootFolder */
 	private $rootFolder;
 
-	/** @var ITrashManager */
-	private $trashManager;
+/** @var MetadataService */
+	private $metadataService;
+
+/** @var PhotoMetadataMapper */
+	private $photoMetadataMapper;
 
 	/**
 	 * Storage constructor.
 	 *
 	 * @param array $parameters
-	 * @param ITrashManager $trashManager
-	 * @param IUserManager|null $userManager
 	 * @param ILogger|null $logger
-	 * @param EventDispatcherInterface|null $eventDispatcher
 	 * @param IRootFolder|null $rootFolder
+	 * @param MetadataService|null $metadataService
+
 	 */
 	public function __construct(
 		$parameters,
-		ITrashManager $trashManager = null,
-		IUserManager $userManager = null,
 		ILogger $logger = null,
-		EventDispatcherInterface $eventDispatcher = null,
-		IRootFolder $rootFolder = null
+		IRootFolder $rootFolder = null,
+		MetadataService $metadataService = null,
+		PhotoMetadataMapper $photoMetadataMapper = null
 	) {
-		$this->mountPoint = $parameters['mountPoint'];
-		$this->trashManager = $trashManager;
-		$this->userManager = $userManager;
 		$this->logger = $logger;
-		$this->eventDispatcher = $eventDispatcher;
 		$this->rootFolder = $rootFolder;
+		$this->metadataService = $metadataService;
+		$this->photoMetadataMapper = $photoMetadataMapper;
 		parent::__construct($parameters);
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function writeStream(string $path, $stream, int $size = null): int {
+		$mimeType = \OC::$server->getMimeTypeDetector()->detectPath($path);
+		if (in_array($mimeType, ['image/jpeg'])) {
+			$photoMetadata = $this->metadataService->extractPhotoMetadata($stream);
+			$filePath = $path;
+			$filePath = preg_replace('/\\.[^.\\s]+$/', '', trim($filePath,'.part'));
+			$photoMetadata->setPath($filePath);
+			$this->photoMetadataMapper->insert($photoMetadata);
+		}
+		return parent::writeStream($path,$stream,$size);
 	}
 
 	/**
@@ -93,17 +95,12 @@ class Storage extends Wrapper {
 	public static function setupStorage() {
 		\OC\Files\Filesystem::addStorageWrapper('oc_photos', function ($mountPoint, $storage) {
 			return new \OCA\Photos\Storage(
-				['storage' => $storage, 'mountPoint' => $mountPoint],
-				\OC::$server->query(ITrashManager::class),
-				\OC::$server->getUserManager(),
+				['storage' => $storage],
 				\OC::$server->getLogger(),
-				\OC::$server->getEventDispatcher(),
-				\OC::$server->getLazyRootFolder()
+				\OC::$server->getLazyRootFolder(),
+				\OC::$server->get("OCA\Photos\Service\MetadataService"),
+				\OC::$server->get("OCA\Photos\Db\PhotoMetadataMapper")
 			);
 		}, 1);
-	}
-
-	public function getMountPoint() {
-		return $this->mountPoint;
 	}
 }

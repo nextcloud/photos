@@ -9,11 +9,8 @@ class MetadataService {
 	public function __construct() {
 	}
 
-	public function extractPhotoMetadata(File $file): PhotoMetadata {
-    $fileStorage = $file->getStorage();
-    $tempStream = $fileStorage->fopen($file->getInternalPath(),'r');
-		$metadata = exif_read_data($tempStream);
-		fclose($tempStream);
+	public function extractPhotoMetadata($stream, int $fileId=-1): PhotoMetadata {
+		$metadata = exif_read_data($stream);
 		$metadata = [
 			'DateTimeOriginal' => $metadata['DateTimeOriginal'] ?? "",
 			'GPSLatitude' => implode('-',$metadata['GPSLatitude']) ?? "",
@@ -23,7 +20,7 @@ class MetadataService {
 		];
 		// save metadatat to database
 		$photoMetadata = new PhotoMetadata();
-		$photoMetadata->setFileId($file->getId());
+		$photoMetadata->setFileId($fileId);
 		$photoMetadata->setDateTimeOriginal($metadata['DateTimeOriginal']);
 		$photoMetadata->setGpsLatitude($metadata['GPSLatitude']);
 		$photoMetadata->setGpsLongitude($metadata['GPSLongitude']);

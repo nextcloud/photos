@@ -159,7 +159,10 @@ class ExtractMetadata extends Command {
 		}
 		$mimeType = \OC::$server->getMimeTypeDetector()->detectPath($file->getPath());
 		if (in_array($mimeType, ['image/jpeg'])) {
-			$photoMetadata = $this->metadataService->extractPhotoMetadata($file);
+			$fileStorage = $file->getStorage();
+    	$tempStream = $fileStorage->fopen($file->getInternalPath(),'r');
+			$photoMetadata = $this->metadataService->extractPhotoMetadata($tempStream,$file->getId());
+			fclose($tempStream);
 			$this->photoMetadataMapper->insert($photoMetadata);
 		}
 	}
