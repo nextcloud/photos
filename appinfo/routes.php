@@ -86,7 +86,7 @@ return [
 		],
 		[
 			'name' => 'albums#getPhotosOfMonth',
-			'url' => '/api/v1/photosofmonth/{path}',
+			'url' => '/api/v1/photosofmonth/{yearandmonth}',
 			'verb' => 'GET',
 			'requirements' => [
 				'yearandmonth' => '.*',
