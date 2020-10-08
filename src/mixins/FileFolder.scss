@@ -27,6 +27,8 @@
 	align-items: center;
 	justify-content: center;
 	user-select: none;
+	border-radius: var(--border-radius);
+	overflow: hidden;
 
 	.cover {
 		z-index: 2;
