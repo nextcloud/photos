@@ -30,30 +30,31 @@
 	</EmptyContent>
 
 	<!-- Folder content -->
-	<Grid v-else-if="!loading">
+	<div v-else-if="!loading">
 		<Navigation v-if="folder"
 			key="navigation"
 			v-bind="folder"
 			:root-title="rootTitle"
 			:show-actions="true" />
+		<Grid>
+			<!-- Empty folder, should only happen via direct link -->
+			<EmptyContent v-if="isEmpty" key="emptycontent" illustration-name="empty">
+				{{ t('photos', 'No photos in here') }}
+			</EmptyContent>
 
-		<!-- Empty folder, should only happen via direct link -->
-		<EmptyContent v-if="isEmpty" key="emptycontent" illustration-name="empty">
-			{{ t('photos', 'No photos in here') }}
-		</EmptyContent>
-
-		<!-- Folders and files list -->
-		<template v-else>
-			<Folder v-for="dir in folderList"
-				:key="dir.fileid"
-				v-bind="dir"
-				:show-shared="showShared" />
-			<File v-for="file in fileList"
-				:key="file.fileid"
-				:list="fileList"
-				v-bind="file" />
-		</template>
-	</Grid>
+			<!-- Folders and files list -->
+			<template v-else>
+				<Folder v-for="dir in folderList"
+					:key="dir.fileid"
+					v-bind="dir"
+					:show-shared="showShared" />
+				<File v-for="file in fileList"
+					:key="file.fileid"
+					:list="fileList"
+					v-bind="file" />
+			</template>
+		</Grid>
+	</div>
 </template>
 
 <script>
