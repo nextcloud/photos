@@ -25,6 +25,7 @@ import Router from 'vue-router'
 import Vue from 'vue'
 
 import isMapsInstalled from '../services/IsMapsInstalled'
+import { videoMimes } from '../services/AllowedMimes'
 
 const Albums = () => import('../views/Albums')
 const Tags = () => import('../views/Tags')
@@ -75,6 +76,15 @@ export default new Router({
 				isRoot: !route.params.path,
 				rootTitle: t('photos', 'Shared albums'),
 				showShared: true,
+			}),
+		},
+		{
+			path: '/videos',
+			component: Timeline,
+			name: 'videos',
+			props: route => ({
+				rootTitle: t('photos', 'Your videos'),
+				mimesType: videoMimes,
 			}),
 		},
 		{

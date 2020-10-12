@@ -22,7 +22,7 @@
 
 import { genFileInfo } from '../utils/fileUtils'
 import { getCurrentUser } from '@nextcloud/auth'
-import allowedMimes from './AllowedMimes'
+import { allMimes } from './AllowedMimes'
 import client from './DavClient'
 import { props } from './DavRequest'
 import { sizes } from '../assets/grid-sizes'
@@ -38,17 +38,19 @@ import { sizes } from '../assets/grid-sizes'
  * @returns {Array} the file list
  */
 export default async function(onlyFavorites = false, options = {}) {
+
 	// default function options
 	options = Object.assign({}, {
 		page: 0, // start at the first page
 		perPage: sizes.max.count * 10, // ten rows of the max width
+		mimesType: allMimes, // all mimes types
 	}, options)
 
 	const prefixPath = `/files/${getCurrentUser().uid}`
 
 	// generating the search or condition
 	// based on the allowed mimetypes
-	const orMime = allowedMimes.reduce((str, mime) => `${str}
+	const orMime = options.mimesType.reduce((str, mime) => `${str}
 		<d:eq>
 			<d:prop>
 				<d:getcontenttype/>
