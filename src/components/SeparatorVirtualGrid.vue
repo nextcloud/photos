@@ -15,22 +15,6 @@ export default {
 		item: {
 			type: Object,
 			required: true,
-			injected: {
-				type: Object,
-				required: true,
-				month: {
-					type: String,
-					required: true,
-				},
-				year: {
-					type: String,
-					required: true,
-				},
-			},
-			height: {
-				type: Number,
-				required: true,
-			},
 		},
 	},
 }

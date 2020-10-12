@@ -82,10 +82,15 @@ export default {
 			})
 		},
 
+		/** When the image is fully loaded by browser we remove the placeholder */
 		onLoad() {
 			this.loaded = true
 		},
 
+		/** Function to remove all elements in the list that are not images/videos (such as titles)
+		 * @param {Array} list List of elements
+		 * @returns {Array} List of elements that can be rendered by viewer
+		 */
 		filterOnlyViewableFiles(list) {
 			return list.filter(item => item.injected.filename).map(item => item.injected)
 		},
