@@ -261,7 +261,7 @@ $previous: 0;
 	}
 	@media #{$rule} {
 		.grid-container {
-			padding: #{$marginTop}px #{$marginW}px #{$marginW}px #{$marginW}px;
+			padding: 0px #{$marginW}px 256px #{$marginW}px;
 		}
 	}
 	$previous: $size;
