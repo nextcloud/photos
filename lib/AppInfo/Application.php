@@ -34,7 +34,7 @@ class Application extends App implements IBootstrap {
 	public const APP_ID = 'photos';
 
 	public const MIMES = [
-		// 'image/png',			// too rarely used for photos
+		'image/png',
 		'image/jpeg',
 		'image/heic',
 		// 'image/gif',			// too rarely used for photos
