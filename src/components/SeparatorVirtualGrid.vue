@@ -24,7 +24,6 @@ export default {
 .grid-title {
 	grid-column: 1/8;
 	padding: 48px 0 12px 0;
-	background:#fff;
 	margin: 0;
 	span {
 		font-weight: normal;
