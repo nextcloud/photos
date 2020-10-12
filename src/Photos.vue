@@ -23,16 +23,21 @@
 <template>
 	<Content app-name="photos">
 		<AppNavigation>
-			<AppNavigationItem :to="{name: 'root'}"
-				class="app-navigation__photos"
-				:title="t('photos', 'Your photos')"
-				icon="icon-yourphotos"
-				exact />
-			<AppNavigationItem to="/favorites" :title="t('photos', 'Favorites')" icon="icon-favorite" />
-			<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Your albums')" icon="icon-files-dark" />
-			<AppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared albums')" icon="icon-share" />
-			<AppNavigationItem :to="{name: 'tags'}" :title="t('photos', 'Tagged photos')" icon="icon-tag" />
-			<AppNavigationItem :to="{name: 'maps'}" :title="t('photos', 'Locations')" icon="icon-address" />
+			<template #list>
+				<AppNavigationItem :to="{name: 'root'}"
+					class="app-navigation__photos"
+					:title="t('photos', 'Your photos')"
+					icon="icon-yourphotos"
+					exact />
+				<AppNavigationItem to="/favorites" :title="t('photos', 'Favorites')" icon="icon-favorite" />
+				<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Your albums')" icon="icon-files-dark" />
+				<AppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared albums')" icon="icon-share" />
+				<AppNavigationItem :to="{name: 'tags'}" :title="t('photos', 'Tagged photos')" icon="icon-tag" />
+				<AppNavigationItem v-if="showLocationMenuEntry"
+					:to="{name: 'maps'}"
+					:title="t('photos', 'Locations')"
+					icon="icon-address" />
+			</template>
 		</AppNavigation>
 		<AppContent :class="{ 'icon-loading': loading }">
 			<router-view v-show="!loading" :loading.sync="loading" />
@@ -56,6 +61,8 @@ import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import svgplaceholder from './assets/file-placeholder.svg'
 import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'
+import isMapsInstalled from './services/IsMapsInstalled'
+import { getCurrentUser } from '@nextcloud/auth'
 
 export default {
 	name: 'Photos',
@@ -65,18 +72,21 @@ export default {
 		AppNavigation,
 		AppNavigationItem,
 	},
-	data: function() {
+	data() {
 		return {
 			loading: true,
 			svgplaceholder,
 			imgplaceholder,
 			videoplaceholder,
+			showLocationMenuEntry: getCurrentUser() === null
+				? false
+				: getCurrentUser().isAdmin || isMapsInstalled,
 		}
 	},
 }
 </script>
 <style lang="scss" scoped>
-#app-content {
+.app-content {
 	display: flex;
 	flex-grow: 1;
 	flex-direction: column;

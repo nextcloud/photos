@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2019, Roeland Jago Douma <roeland@famdouma.nl>
@@ -98,7 +99,6 @@ class AlbumsController extends Controller {
 				'etag' => $node->getEtag(),
 				'fileid' => $node->getId(),
 				'filename' => $path,
-				'etag' => $node->getEtag(),
 				'lastmod' => $node->getMTime(),
 				'mime' => $node->getMimetype(),
 				'size' => $node->getSize(),
@@ -109,7 +109,7 @@ class AlbumsController extends Controller {
 		return $result;
 	}
 
-	private function scanCurrentFolder(Folder $folder, bool $shared): iterable  {
+	private function scanCurrentFolder(Folder $folder, bool $shared): iterable {
 		$nodes = $folder->getDirectoryListing();
 
 		// add current folder to iterable set
@@ -135,7 +135,8 @@ class AlbumsController extends Controller {
 	}
 
 	private function isShared(Node $node): bool {
-		return $node->getStorage()->instanceOfStorage(SharedStorage::class);
+		return $node->getStorage()->instanceOfStorage(SharedStorage::class) ||
+			$node->getStorage()->instanceOfStorage(\OCA\GroupFolders\Mount\GroupFolderStorage::class);
 	}
 
 	private function scanFolder(Folder $folder, int $depth, bool $shared): bool {

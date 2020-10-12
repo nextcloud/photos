@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
@@ -37,7 +38,6 @@ use OCP\IConfig;
 use OCP\App\IAppManager;
 
 class PageController extends Controller {
-
 	protected $appName;
 
 	/** @var IEventDispatcher */
@@ -62,7 +62,6 @@ class PageController extends Controller {
 		$this->eventDispatcher = $eventDispatcher;
 		$this->initialStateService = $initialStateService;
 		$this->config = $config;
-
 	}
 
 	/**
@@ -79,7 +78,7 @@ class PageController extends Controller {
 		$this->initialStateService->provideInitialState($this->appName, 'mimes', Application::MIMES);
 		$this->initialStateService->provideInitialState($this->appName, 'maps', $this->appManager->isEnabledForUser('maps') === true);
 
-		Util::addScript($this->appName, 'photos');
+		Util::addScript($this->appName, 'photos-main');
 		Util::addStyle($this->appName, 'icons');
 
 		$response = new TemplateResponse($this->appName, 'main');

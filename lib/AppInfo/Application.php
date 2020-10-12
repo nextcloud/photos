@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
@@ -25,14 +26,17 @@ declare(strict_types=1);
 namespace OCA\Photos\AppInfo;
 
 use OCP\AppFramework\App;
+use OCP\AppFramework\Bootstrap\IBootContext;
+use OCP\AppFramework\Bootstrap\IBootstrap;
+use OCP\AppFramework\Bootstrap\IRegistrationContext;
 
-class Application extends App {
+class Application extends App implements IBootstrap {
+	public const APP_ID = 'photos';
 
-	const APP_ID = 'photos';
-
-	const MIMES = [
-		'image/png',			// rarely used but still used #208
+	public const MIMES = [
+		'image/png',
 		'image/jpeg',
+		'image/heic',
 		// 'image/gif',			// too rarely used for photos
 		// 'image/x-xbitmap',	// too rarely used for photos
 		// 'image/bmp',			// too rarely used for photos
@@ -48,5 +52,11 @@ class Application extends App {
 
 	public function __construct() {
 		parent::__construct(self::APP_ID);
+	}
+
+	public function register(IRegistrationContext $context): void {
+	}
+
+	public function boot(IBootContext $context): void {
 	}
 }

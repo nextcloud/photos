@@ -30,7 +30,7 @@ const patcher = webdav.getPatcher()
 patcher.patch('request', axios)
 
 // init webdav client on default dav endpoint
-const remote = generateRemoteUrl(`dav`)
+const remote = generateRemoteUrl('dav')
 const client = webdav.createClient(remote)
 
 export const remotePath = parseUrl(remote).pathname

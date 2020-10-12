@@ -11,6 +11,7 @@ OC.L10N.register(
     "Locations" : "Localizações",
     "Open the full size \"{name}\" image" : "Abrir a foto \"{name}\" no tamanho original",
     "Open the \"{name}\" sub-directory" : "Abrir a sub-diretoria \"{name}\"",
+    "Share this folder" : "Partilhar esta pasta",
     "Back to {folder}" : "Ir para {folder}",
     "This folder does not exists" : "Esta pasta não existe",
     "An error occurred" : "Ocorreu um erro",
