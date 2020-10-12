@@ -149,8 +149,9 @@ export default {
 
 .photos-navigation {
 	display: flex;
-	position: absolute;
+	position: block;
 	height: 44px;
+	padding: 0 40px;
 	align-items: center;
 	max-width: 100%;
 	&__title {
@@ -195,7 +196,7 @@ $previous: 0;
 				}
 			}
 			&--root &__title {
-				padding-left: #{$marginW}px;
+				padding-left: #{$marginW - 44}px;
 			}
 		}
 	}

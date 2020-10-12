@@ -27,37 +27,38 @@
 	</EmptyContent>
 
 	<!-- Folder content -->
-	<Grid v-else-if="!loading">
+	<div v-else-if="!loading">
 		<Navigation
 			key="navigation"
 			:basename="path"
 			:filename="'/' + path"
 			:root-title="rootTitle" />
+		<Grid>
+			<!-- Tags list -->
+			<template v-if="isRoot">
+				<Tag v-for="id in tagsNames"
+					:key="id"
+					v-bind="tags[id]"
+					:fileid="id"
+					:basename="tags[id].displayName" />
+			</template>
 
-		<!-- Tags list -->
-		<template v-if="isRoot">
-			<Tag v-for="id in tagsNames"
-				:key="id"
-				v-bind="tags[id]"
-				:fileid="id"
-				:basename="tags[id].displayName" />
-		</template>
+			<!-- Content list -->
+			<template v-else>
+				<EmptyContent v-if="isEmpty" key="emptycontent" illustration-name="empty">
+					{{ t('photos', 'No tags yet') }}
+					<template #desc>
+						{{ t('photos', 'Photos with tags will show up here') }}
+					</template>
+				</EmptyContent>
 
-		<!-- Content list -->
-		<template v-else>
-			<EmptyContent v-if="isEmpty" key="emptycontent" illustration-name="empty">
-				{{ t('photos', 'No tags yet') }}
-				<template #desc>
-					{{ t('photos', 'Photos with tags will show up here') }}
-				</template>
-			</EmptyContent>
-
-			<File v-for="file in fileList"
-				:key="file.fileid"
-				:list="fileList"
-				v-bind="file" />
-		</template>
-	</Grid>
+				<File v-for="file in fileList"
+					:key="file.fileid"
+					:list="fileList"
+					v-bind="file" />
+			</template>
+		</Grid>
+	</div>
 </template>
 
 <script>
