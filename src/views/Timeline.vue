@@ -46,6 +46,8 @@
 			<VirtualGrid
 				ref="virtualgrid"
 				:update-function="getContent"
+				:get-column-count="() => gridConfig.count"
+				:get-grid-gap="() => gridConfig.gap"
 				:update-trigger-margin="700" />
 		</div>
 	</div>
@@ -137,20 +139,35 @@ export default {
 			const { request, cancel } = cancelableRequest(getPhotos)
 			this.cancelRequest = cancel
 
+			const numberOfImagesPerBatch = this.gridConfig.count * 5 // loading 5 rows
+
 			try {
+				// Load next batch of images
 				const files = await request(this.onlyFavorites, {
-					page: params.offset,
-					perPage: 30,
+					page: params.offset, // offset is incremented +1 by the virtualgrid lib
+					perPage: numberOfImagesPerBatch,
 				})
 
+				// If first batch of images is empty, there is no images
 				if (files.length === params.offset === 0) {
 					this.isEmpty = true
 				}
 
-				if (files.length !== 30) {
+				// If we get less files than requested that means we got to the end
+				if (files.length !== numberOfImagesPerBatch) {
 					this.done = true
 				}
 
+				/** The goal of this flat map is to return an array of images separated by titles (months)
+				 * ie: [{month1}, {image1}, {image2}, {month2}, {image3}, {image4}, {image5}]
+				 * First we get the current month+year of the image
+				 * We compare it to the previous image month+year
+				 * If there is a difference we have to insert a title object before the current image
+				 * If it's equal we just add the current image to the array
+				 * Note: the injected param of objects are used to pass custom params to the grid lib
+				 * In our case injected could be an image/video (aka file) or a title (year/month)
+				 * Note2: titles are rendered full width and images are rendered on 1 column and 256x256 ratio
+				 */
 				return files.flatMap((file, index) => {
 					const finalArray = []
 					const currentSection = this.getFormatedDate(file.lastmod, 'YYYY MMMM')
@@ -166,11 +183,11 @@ export default {
 								month: this.getFormatedDate(file.lastmod, 'MMMM'),
 							},
 							height: 90,
-							columnSpan: 0,
+							columnSpan: 0, // means full width
 							newRow: true,
 							renderComponent: SeparatorVirtualGrid,
 						})
-						this.lastSection = currentSection
+						this.lastSection = currentSection // we keep track of the last section for the next batch
 					}
 					finalArray.push({
 						id: `img-${file.fileid}`,
@@ -196,7 +213,7 @@ export default {
 					} else {
 						this.error = error
 					}
-				} else if (params.offset === 0) {
+				} else if (params.offset === 0) { // if we get an error at first batch we assume list is empty
 					this.isEmpty = true
 				}
 
@@ -233,7 +250,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.grid-container {
-	padding: 66px;
+$previous: 0;
+@each $size, $config in get('sizes') {
+	$marginTop: map-get($config, 'marginTop');
+	$marginW: map-get($config, 'marginW');
+	// if this is the last entry, only use min-width
+	$rule: '(min-width: #{$previous}px) and (max-width: #{$size}px)';
+	@if $size == 'max' {
+		$rule: '(min-width: #{$previous}px)';
+	}
+	@media #{$rule} {
+		.grid-container {
+			padding: #{$marginTop}px #{$marginW}px #{$marginW}px #{$marginW}px;
+		}
+	}
+	$previous: $size;
 }
 </style>
