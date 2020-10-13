@@ -74,7 +74,7 @@ export default new Router({
 				path: `/${route.params.path ? route.params.path : ''}`,
 				// if path is empty
 				isRoot: !route.params.path,
-				rootTitle: t('photos', 'Shared albums'),
+				rootTitle: t('photos', 'Shared folders'),
 				showShared: true,
 			}),
 		},
