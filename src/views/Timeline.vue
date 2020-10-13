@@ -49,7 +49,8 @@
 				:update-function="getContent"
 				:get-column-count="() => gridConfig.count"
 				:get-grid-gap="() => gridConfig.gap"
-				:update-trigger-margin="700" />
+				:update-trigger-margin="700"
+				:loader="loaderComponent" />
 		</div>
 	</div>
 </template>
@@ -65,6 +66,7 @@ import FileVirtualGrid from '../components/FileVirtualGrid'
 import SeparatorVirtualGrid from '../components/SeparatorVirtualGrid'
 import VirtualGrid from 'vue-virtual-grid'
 import Navigation from '../components/Navigation'
+import Loader from '../components/Loader'
 
 import cancelableRequest from '../utils/CancelableRequest'
 import GridConfigMixin from '../mixins/GridConfig'
@@ -103,6 +105,7 @@ export default {
 			error: null,
 			page: 0,
 			lastSection: '',
+			loaderComponent: Loader,
 		}
 	},
 
