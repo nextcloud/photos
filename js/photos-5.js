@@ -150,6 +150,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Loader'
 });
@@ -2253,4 +2272,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-5.js.map?v=d43d527a6d3d35d9d3fa
+//# sourceMappingURL=photos-5.js.map?v=0775a17703c879a3649f
