@@ -62,7 +62,7 @@ export default new Router({
 				path: `/${route.params.path ? route.params.path : ''}`,
 				// if path is empty
 				isRoot: !route.params.path,
-				rootTitle: t('photos', 'Your albums'),
+				rootTitle: t('photos', 'Your folders'),
 			}),
 		},
 		{
