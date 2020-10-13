@@ -1,7 +1,9 @@
 <!--
- - @copyright Copyright (c) 2020 Nextcloud
+ - @copyright Copyright (c) 2020 Corentin Mors
  -
  - @license GNU AGPL version 3 or any later version
+ -
+ - @author Corentin Mors <medias@pixelswap.fr>
  -
  - This program is free software: you can redistribute it and/or modify
  - it under the terms of the GNU Affero General Public License as
