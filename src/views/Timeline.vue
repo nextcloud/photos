@@ -2,6 +2,7 @@
  - @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
  -
  - @author John Molakvoæ <skjnldsv@protonmail.com>
+ - @author Corentin Mors <medias@pixelswap.fr>
  -
  - @license GNU AGPL version 3 or any later version
  -
@@ -45,16 +46,19 @@
 		<div class="grid-container">
 			<VirtualGrid
 				ref="virtualgrid"
+				:items="contentList"
 				:update-function="getContent"
 				:get-column-count="() => gridConfig.count"
 				:get-grid-gap="() => gridConfig.gap"
-				:update-trigger-margin="700" />
+				:update-trigger-margin="700"
+				:loader="loaderComponent" />
 		</div>
 	</div>
 </template>
 
 <script>
 import * as moment from 'moment'
+import { mapGetters } from 'vuex'
 
 import getPhotos from '../services/PhotoSearch'
 
@@ -63,6 +67,7 @@ import FileVirtualGrid from '../components/FileVirtualGrid'
 import SeparatorVirtualGrid from '../components/SeparatorVirtualGrid'
 import VirtualGrid from 'vue-virtual-grid'
 import Navigation from '../components/Navigation'
+import Loader from '../components/Loader'
 
 import cancelableRequest from '../utils/CancelableRequest'
 import GridConfigMixin from '../mixins/GridConfig'
@@ -99,22 +104,86 @@ export default {
 			cancelRequest: null,
 			done: false,
 			error: null,
-			loadingPage: false,
-			isEmpty: false,
+			page: 0,
 			lastSection: '',
+			loaderComponent: Loader,
 		}
+	},
+
+	computed: {
+		// global lists
+		...mapGetters([
+			'files',
+			'timeline',
+		]),
+		// list of loaded medias
+		fileList() {
+			return this.timeline.map((fileId) => this.files[fileId])
+		},
+		// list of displayed content in the grid (titles + medias)
+		contentList() {
+			/** The goal of this flat map is to return an array of images separated by titles (months)
+			 * ie: [{month1}, {image1}, {image2}, {month2}, {image3}, {image4}, {image5}]
+			 * First we get the current month+year of the image
+			 * We compare it to the previous image month+year
+			 * If there is a difference we have to insert a title object before the current image
+			 * If it's equal we just add the current image to the array
+			 * Note: the injected param of objects are used to pass custom params to the grid lib
+			 * In our case injected could be an image/video (aka file) or a title (year/month)
+			 * Note2: titles are rendered full width and images are rendered on 1 column and 256x256 ratio
+			 */
+			return this.fileList.flatMap((file, index) => {
+				const finalArray = []
+				const currentSection = this.getFormatedDate(file.lastmod, 'YYYY MMMM')
+				if (
+					currentSection
+						!== this.getFormatedDate(this.timeline[index - 1]?.lastmod, 'YYYY MMMM')
+						&& (this.lastSection !== currentSection)
+				) {
+					finalArray.push({
+						id: `title-${index}`,
+						injected: {
+							year: this.getFormatedDate(file.lastmod, 'YYYY'),
+							month: this.getFormatedDate(file.lastmod, 'MMMM'),
+						},
+						height: 90,
+						columnSpan: 0, // means full width
+						newRow: true,
+						renderComponent: SeparatorVirtualGrid,
+					})
+					this.lastSection = currentSection // we keep track of the last section for the next batch
+				}
+				finalArray.push({
+					id: `img-${file.fileid}`,
+					injected: {
+						...file,
+						list: this.fileList,
+						loadMore: this.getContent,
+					},
+					width: 256,
+					height: 256,
+					columnSpan: 1,
+					renderComponent: FileVirtualGrid,
+				})
+				return finalArray
+			})
+		},
+		// is current folder empty?
+		isEmpty() {
+			return this.fileList.length === 0
+		},
 	},
 
 	watch: {
 		async onlyFavorites() {
 			// reset component
 			this.resetState()
+			this.getContent()
 		},
 	},
 
-	async beforeMount() {
-		this.$emit('update:loading', false)
-		this.loadingPage = false
+	beforeMount() {
+		this.getContent()
 	},
 
 	beforeDestroy() {
@@ -125,14 +194,23 @@ export default {
 	},
 
 	methods: {
-		async getContent(params) {
+		/** Return next batch of data depending on global offset
+		 * @param {boolean} doReturn Returns a Promise with the list instead of a boolean
+		 * @returns {Promise<boolean>} Returns a Promise with a boolean that stops infinite loading
+		 */
+		async getContent(doReturn) {
 			if (this.done) {
-				return Promise.resolve([])
+				return Promise.resolve(true)
 			}
 
 			// cancel any pending requests
 			if (this.cancelRequest) {
 				this.cancelRequest('Changed view')
+			}
+
+			// if we don't already have some cached data let's show a loader
+			if (this.timeline.length === 0) {
+				this.$emit('update:loading', true)
 			}
 
 			// done loading even with errors
@@ -144,65 +222,25 @@ export default {
 			try {
 				// Load next batch of images
 				const files = await request(this.onlyFavorites, {
-					page: params.offset, // offset is incremented +1 by the virtualgrid lib
+					page: this.page,
 					perPage: numberOfImagesPerBatch,
 				})
-
-				// If first batch of images is empty, there is no images
-				if (files.length === params.offset === 0) {
-					this.isEmpty = true
-				}
 
 				// If we get less files than requested that means we got to the end
 				if (files.length !== numberOfImagesPerBatch) {
 					this.done = true
 				}
 
-				/** The goal of this flat map is to return an array of images separated by titles (months)
-				 * ie: [{month1}, {image1}, {image2}, {month2}, {image3}, {image4}, {image5}]
-				 * First we get the current month+year of the image
-				 * We compare it to the previous image month+year
-				 * If there is a difference we have to insert a title object before the current image
-				 * If it's equal we just add the current image to the array
-				 * Note: the injected param of objects are used to pass custom params to the grid lib
-				 * In our case injected could be an image/video (aka file) or a title (year/month)
-				 * Note2: titles are rendered full width and images are rendered on 1 column and 256x256 ratio
-				 */
-				return files.flatMap((file, index) => {
-					const finalArray = []
-					const currentSection = this.getFormatedDate(file.lastmod, 'YYYY MMMM')
-					if (
-						currentSection
-						!== this.getFormatedDate(files[index - 1]?.lastmod, 'YYYY MMMM')
-						&& (this.lastSection !== currentSection)
-					) {
-						finalArray.push({
-							id: `title-${index}`,
-							injected: {
-								year: this.getFormatedDate(file.lastmod, 'YYYY'),
-								month: this.getFormatedDate(file.lastmod, 'MMMM'),
-							},
-							height: 90,
-							columnSpan: 0, // means full width
-							newRow: true,
-							renderComponent: SeparatorVirtualGrid,
-						})
-						this.lastSection = currentSection // we keep track of the last section for the next batch
-					}
-					finalArray.push({
-						id: `img-${file.fileid}`,
-						injected: {
-							...file,
-							list: this.$refs.virtualgrid.getCurrentItems,
-							loadMore: this.$refs.virtualgrid.loadMoreData,
-						},
-						width: 256,
-						height: 256,
-						columnSpan: 1,
-						renderComponent: FileVirtualGrid,
-					})
-					return finalArray
-				})
+				this.$store.dispatch('updateTimeline', files)
+				this.$store.dispatch('appendFiles', files)
+
+				this.page += 1
+
+				if (doReturn) {
+					return Promise.resolve(files)
+				}
+
+				return Promise.resolve(false)
 			} catch (error) {
 				if (error.response && error.response.status) {
 					if (error.response.status === 404) {
@@ -213,17 +251,14 @@ export default {
 					} else {
 						this.error = error
 					}
-				} else if (params.offset === 0) { // if we get an error at first batch we assume list is empty
-					this.isEmpty = true
 				}
 
 				// cancelled request, moving on...
 				console.error('Error fetching timeline', error)
-				return Promise.resolve([])
+				return Promise.resolve(true)
 			} finally {
 				// done loading even with errors
 				this.$emit('update:loading', false)
-				this.loadingPage = false
 				this.cancelRequest = null
 			}
 		},
@@ -234,9 +269,9 @@ export default {
 		resetState() {
 			this.$store.dispatch('resetTimeline')
 			this.done = false
-			this.isEmpty = false
 			this.error = null
-			this.loadingPage = false
+			this.page = 0
+			this.$emit('update:loading', true)
 			this.$refs.virtualgrid.resetGrid()
 		},
 

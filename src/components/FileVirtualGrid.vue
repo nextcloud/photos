@@ -1,3 +1,24 @@
+<!--
+ - @copyright Copyright (c) 2020 Corentin Mors
+ -
+ - @license GNU AGPL version 3 or any later version
+ -
+ - @author Corentin Mors <medias@pixelswap.fr>
+ -
+ - This program is free software: you can redistribute it and/or modify
+ - it under the terms of the GNU Affero General Public License as
+ - published by the Free Software Foundation, either version 3 of the
+ - License, or (at your option) any later version.
+ -
+ - This program is distributed in the hope that it will be useful,
+ - but WITHOUT ANY WARRANTY; without even the implied warranty of
+ - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ - GNU Affero General Public License for more details.
+ -
+ - You should have received a copy of the GNU Affero General Public License
+ - along with this program. If not, see <http://www.gnu.org/licenses/>.
+ -
+ -->
 
 <template>
 	<a :class="{'file--clear': !loaded}"
@@ -77,22 +98,14 @@ export default {
 		openViewer() {
 			OCA.Viewer.open({
 				path: this.item.injected.filename,
-				list: this.filterOnlyViewableFiles(this.item.injected.list()),
-				loadMore: async() => this.filterOnlyViewableFiles(await this.item.injected.loadMore()),
+				list: this.item.injected.list,
+				loadMore: async() => await this.item.injected.loadMore(true),
 			})
 		},
 
 		/** When the image is fully loaded by browser we remove the placeholder */
 		onLoad() {
 			this.loaded = true
-		},
-
-		/** Function to remove all elements in the list that are not images/videos (such as titles)
-		 * @param {Array} list List of elements
-		 * @returns {Array} List of elements that can be rendered by viewer
-		 */
-		filterOnlyViewableFiles(list) {
-			return list.filter(item => item.injected.filename).map(item => item.injected)
 		},
 	},
 

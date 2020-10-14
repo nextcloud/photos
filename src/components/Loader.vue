@@ -21,37 +21,22 @@
  -->
 
 <template>
-	<h2 class="grid-title" :style="{height: item.height + 'px'}">
-		{{ item.injected.month }}
-		<span>{{ item.injected.year }}</span>
-	</h2>
+	<div class="loader">
+		<slot name="icon">
+			<span class="icon-loading" />
+		</slot>
+	</div>
 </template>
 
 <script>
 export default {
-	name: 'SeparatorVirtualGrid',
-
-	inheritAttrs: false,
-
-	props: {
-		item: {
-			type: Object,
-			required: true,
-		},
-	},
+	name: 'Loader',
 }
 </script>
 
-<style lang="scss" scoped>
-.grid-title {
-	grid-column: 1/8;
-	padding: 48px 0 12px 0;
-	margin: 0;
-	span {
-		font-weight: normal;
-	}
-	&.first-title {
-		padding: 0 0 12px 0;
-	}
+<style lang="scss">
+.loader {
+	display: grid;
+	height: 60px;
 }
 </style>
