@@ -21,9 +21,9 @@
  -->
 
 <template>
-	<div class="loader" icon="loading">
+	<div class="loader">
 		<slot name="icon">
-			<span :class="['loading']" />
+			<span class="icon-loading" />
 		</slot>
 	</div>
 </template>

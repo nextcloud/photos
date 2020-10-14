@@ -222,7 +222,7 @@ export default {
 			try {
 				// Load next batch of images
 				const files = await request(this.onlyFavorites, {
-					page: this.page, // offset is incremented +1 by the virtualgrid lib
+					page: this.page,
 					perPage: numberOfImagesPerBatch,
 				})
 
