@@ -127,7 +127,8 @@ class AlbumsController extends Controller {
 	}
 
 	private function validFile(File $file, bool $shared): bool {
-		if (in_array($file->getMimeType(), Application::MIMES) && $this->isShared($file) === $shared) {
+		$allowed_mimes = array_merge(Application::IMAGE_MIMES, Application::VIDEO_MIMES);
+		if (in_array($file->getMimeType(), $allowed_mimes) && $this->isShared($file) === $shared) {
 			return true;
 		}
 

@@ -75,7 +75,8 @@ class PageController extends Controller {
 		$this->eventDispatcher->dispatch(LoadSidebar::class, new LoadSidebar());
 		$this->eventDispatcher->dispatch(LoadViewer::class, new LoadViewer());
 
-		$this->initialStateService->provideInitialState($this->appName, 'mimes', Application::MIMES);
+		$this->initialStateService->provideInitialState($this->appName, 'image-mimes', Application::IMAGE_MIMES);
+		$this->initialStateService->provideInitialState($this->appName, 'video-mimes', Application::VIDEO_MIMES);
 		$this->initialStateService->provideInitialState($this->appName, 'maps', $this->appManager->isEnabledForUser('maps') === true);
 
 		Util::addScript($this->appName, 'photos-main');

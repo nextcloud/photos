@@ -71,6 +71,7 @@ import Loader from '../components/Loader'
 
 import cancelableRequest from '../utils/CancelableRequest'
 import GridConfigMixin from '../mixins/GridConfig'
+import { allMimes } from '../services/AllowedMimes'
 
 export default {
 	name: 'Timeline',
@@ -88,6 +89,10 @@ export default {
 		onlyFavorites: {
 			type: Boolean,
 			default: false,
+		},
+		mimesType: {
+			type: Array,
+			default: () => allMimes,
 		},
 		rootTitle: {
 			type: String,
@@ -180,6 +185,11 @@ export default {
 			this.resetState()
 			this.getContent()
 		},
+		async mimesType() {
+			// reset component
+			this.resetState()
+			this.getContent()
+		},
 	},
 
 	beforeMount() {
@@ -224,6 +234,7 @@ export default {
 				const files = await request(this.onlyFavorites, {
 					page: this.page,
 					perPage: numberOfImagesPerBatch,
+					mimesType: this.mimesType,
 				})
 
 				// If we get less files than requested that means we got to the end
@@ -271,6 +282,7 @@ export default {
 			this.done = false
 			this.error = null
 			this.page = 0
+			this.lastSection = ''
 			this.$emit('update:loading', true)
 			this.$refs.virtualgrid.resetGrid()
 		},
