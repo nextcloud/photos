@@ -63,7 +63,7 @@ import { mapGetters } from 'vuex'
 import getPhotos from '../services/PhotoSearch'
 
 import EmptyContent from '../components/EmptyContent'
-import FileVirtualGrid from '../components/FileVirtualGrid'
+import File from '../components/File'
 import SeparatorVirtualGrid from '../components/SeparatorVirtualGrid'
 import VirtualGrid from 'vue-virtual-grid'
 import Navigation from '../components/Navigation'
@@ -168,7 +168,7 @@ export default {
 					width: 256,
 					height: 256,
 					columnSpan: 1,
-					renderComponent: FileVirtualGrid,
+					renderComponent: File,
 				})
 				return finalArray
 			})
@@ -201,6 +201,7 @@ export default {
 		if (this.cancelRequest) {
 			this.cancelRequest('Changed view')
 		}
+		this.resetState()
 	},
 
 	methods: {

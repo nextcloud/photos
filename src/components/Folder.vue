@@ -2,6 +2,7 @@
  - @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
  -
  - @author John Molakvoæ <skjnldsv@protonmail.com>
+ - @author Corentin Mors <medias@pixelswap.fr>
  -
  - @license GNU AGPL version 3 or any later version
  -
@@ -21,9 +22,9 @@
  -->
 
 <template>
-	<FolderTagPreview :id="fileid"
-		:name="basename"
-		:path="filename"
+	<FolderTagPreview :id="item.injected.fileid"
+		:name="item.injected.basename"
+		:path="item.injected.filename"
 		:file-list="fileList" />
 </template>
 
@@ -43,21 +44,9 @@ export default {
 	inheritAttrs: false,
 
 	props: {
-		basename: {
-			type: String,
+		item: {
+			type: Object,
 			required: true,
-		},
-		filename: {
-			type: String,
-			required: true,
-		},
-		fileid: {
-			type: Number,
-			required: true,
-		},
-		showShared: {
-			type: Boolean,
-			default: false,
 		},
 	},
 
@@ -76,7 +65,7 @@ export default {
 
 		// files list of the current folder
 		folderContent() {
-			return this.folders[this.fileid]
+			return this.folders[this.item.injected.fileid]
 		},
 		fileList() {
 			return this.folderContent
@@ -95,12 +84,12 @@ export default {
 
 		try {
 			// get data
-			const { folder, folders, files } = await request(this.filename, { shared: this.showShared })
+			const { folder, folders, files } = await request(this.item.injected.filename, { shared: this.item.injected.showShared })
 			this.$store.dispatch('updateFolders', { fileid: folder.fileid, files, folders })
 			this.$store.dispatch('updateFiles', { folder, files, folders })
 		} catch (error) {
 			if (error.response && error.response.status) {
-				console.error('Failed to get folder content', this.folder, error.response)
+				console.error('Failed to get folder content', this.item.injected.folder, error.response)
 			}
 			// else we just cancelled the request
 		} finally {

@@ -2,6 +2,7 @@
  - @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
  -
  - @author John Molakvoæ <skjnldsv@protonmail.com>
+ - @author Corentin Mors <medias@pixelswap.fr>
  -
  - @license GNU AGPL version 3 or any later version
  -
@@ -33,36 +34,26 @@
 			:basename="path"
 			:filename="'/' + path"
 			:root-title="rootTitle" />
-		<Grid>
-			<!-- Tags list -->
-			<template v-if="isRoot">
-				<Tag v-for="id in tagsNames"
-					:key="id"
-					v-bind="tags[id]"
-					:fileid="id"
-					:basename="tags[id].displayName" />
+		<EmptyContent v-if="isEmpty" key="emptycontent" illustration-name="empty">
+			{{ t('photos', 'No tags yet') }}
+			<template #desc>
+				{{ t('photos', 'Photos with tags will show up here') }}
 			</template>
+		</EmptyContent>
 
-			<!-- Content list -->
-			<template v-else>
-				<EmptyContent v-if="isEmpty" key="emptycontent" illustration-name="empty">
-					{{ t('photos', 'No tags yet') }}
-					<template #desc>
-						{{ t('photos', 'Photos with tags will show up here') }}
-					</template>
-				</EmptyContent>
-
-				<File v-for="file in fileList"
-					:key="file.fileid"
-					:list="fileList"
-					v-bind="file" />
-			</template>
-		</Grid>
+		<div v-else class="grid-container">
+			<VirtualGrid
+				ref="virtualgrid"
+				:items="contentList"
+				:get-column-count="() => gridConfig.count"
+				:get-grid-gap="() => gridConfig.gap" />
+		</div>
 	</div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import VirtualGrid from 'vue-virtual-grid'
 
 import getSystemTags from '../services/SystemTags'
 import getTaggedImages from '../services/TaggedImages'
@@ -70,20 +61,20 @@ import getTaggedImages from '../services/TaggedImages'
 import EmptyContent from '../components/EmptyContent'
 import Tag from '../components/Tag'
 import File from '../components/File'
-import Grid from '../components/Grid'
 import Navigation from '../components/Navigation'
+
+import GridConfigMixin from '../mixins/GridConfig'
 
 import cancelableRequest from '../utils/CancelableRequest'
 
 export default {
 	name: 'Tags',
 	components: {
+		VirtualGrid,
 		EmptyContent,
-		File,
-		Tag,
-		Grid,
 		Navigation,
 	},
+	mixins: [GridConfigMixin],
 	props: {
 		rootTitle: {
 			type: String,
@@ -127,11 +118,48 @@ export default {
 		tag() {
 			return this.tags[this.tagId]
 		},
+
+		tagsList() {
+			return Object.values(this.tagsNames).map((tagsId) => this.tags[tagsId])
+		},
+
 		// files list of the current tag
 		fileList() {
 			return this.tag && this.tag.files
 				.map(id => this.files[id])
 				.filter(file => !!file)
+		},
+
+		contentList() {
+			if (this.isRoot) {
+				return this.tagsList.flatMap((tag) => {
+					return tag.id === ''
+						? []
+						: [{
+							id: `tag-${tag.id}`,
+							injected: {
+								...tag,
+							},
+							width: 256,
+							height: 256,
+							columnSpan: 1,
+							renderComponent: Tag,
+						}]
+				})
+			}
+			return this.fileList.map((file) => {
+				return {
+					id: `file-${file.fileid}`,
+					injected: {
+						...file,
+						list: this.fileList,
+					},
+					width: 256,
+					height: 256,
+					columnSpan: 1,
+					renderComponent: File,
+				}
+			})
 		},
 
 		isEmpty() {
@@ -249,3 +277,22 @@ export default {
 
 }
 </script>
+
+<style lang="scss" scoped>
+$previous: 0;
+@each $size, $config in get('sizes') {
+	$marginTop: map-get($config, 'marginTop');
+	$marginW: map-get($config, 'marginW');
+	// if this is the last entry, only use min-width
+	$rule: '(min-width: #{$previous}px) and (max-width: #{$size}px)';
+	@if $size == 'max' {
+		$rule: '(min-width: #{$previous}px)';
+	}
+	@media #{$rule} {
+		.grid-container {
+			padding: #{$marginTop}px #{$marginW}px 256px #{$marginW}px;
+		}
+	}
+	$previous: $size;
+}
+</style>

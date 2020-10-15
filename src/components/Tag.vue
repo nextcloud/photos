@@ -2,6 +2,7 @@
  - @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
  -
  - @author John Molakvoæ <skjnldsv@protonmail.com>
+ - @author Corentin Mors <medias@pixelswap.fr>
  -
  - @license GNU AGPL version 3 or any later version
  -
@@ -21,10 +22,10 @@
  -->
 
 <template>
-	<FolderTagPreview :id="id"
+	<FolderTagPreview :id="item.injected.id"
 		icon="icon-tag"
-		:name="displayName"
-		:path="displayName"
+		:name="item.injected.displayName"
+		:path="item.injected.displayName"
 		:file-list="fileList" />
 </template>
 
@@ -44,12 +45,8 @@ export default {
 	inheritAttrs: false,
 
 	props: {
-		displayName: {
-			type: String,
-			required: true,
-		},
-		id: {
-			type: Number,
+		item: {
+			type: Object,
 			required: true,
 		},
 	},
@@ -69,7 +66,7 @@ export default {
 
 		// files list of the current folder
 		folderContent() {
-			return this.tags[this.id].files
+			return this.tags[this.item.injected.id].files
 		},
 		fileList() {
 			return this.folderContent
@@ -95,12 +92,12 @@ export default {
 
 		try {
 			// get data
-			const files = await request(this.id)
-			this.$store.dispatch('updateTag', { id: this.id, files })
+			const files = await request(this.item.injected.id)
+			this.$store.dispatch('updateTag', { id: this.item.injected.id, files })
 			this.$store.dispatch('appendFiles', files)
 		} catch (error) {
 			if (error.response && error.response.status) {
-				console.error('Failed to get folder content', this.id, error.response)
+				console.error('Failed to get folder content', this.item.injected.id, error.response)
 			}
 		} finally {
 			this.cancelRequest = null
