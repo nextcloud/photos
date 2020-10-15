@@ -11,7 +11,7 @@ const config = {
 			{
 				test: /\.svg$/,
 				// illustrations
-				loader: 'svg-inline-loader',
+				loader: 'raw-loader',
 			},
 			{
 				test: /\.scss$/,
@@ -57,6 +57,11 @@ const config = {
 	],
 }
 
+// Remove svg from default url-loader
+const svgRule = webpackConfig.module.rules.find(rule => rule.test && rule.test.toString().indexOf('|svg') !== -1)
+svgRule.test = new RegExp(svgRule.test.toString().replace('|svg', ''))
+
+// Merge configs
 const mergedConfigs = merge(config, webpackConfig)
 
 // Remove duplicate rules by the `test` key
