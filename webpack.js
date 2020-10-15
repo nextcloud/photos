@@ -16,7 +16,7 @@ const config = {
 			{
 				test: /\.scss$/,
 				use: [
-					'vue-style-loader',
+					'style-loader',
 					'css-loader',
 					'postcss-loader',
 					{
