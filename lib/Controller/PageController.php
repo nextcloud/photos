@@ -28,40 +28,45 @@ namespace OCA\Photos\Controller;
 use OCA\Files\Event\LoadSidebar;
 use OCA\Photos\AppInfo\Application;
 use OCA\Viewer\Event\LoadViewer;
+use OCP\App\IAppManager;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IConfig;
 use OCP\IInitialStateService;
 use OCP\IRequest;
+use OCP\IUserSession;
 use OCP\Util;
-use OCP\IConfig;
-use OCP\App\IAppManager;
 
 class PageController extends Controller {
-	protected $appName;
+	/** @var IAppManager */
+	private $appManager;
 
 	/** @var IEventDispatcher */
 	private $eventDispatcher;
 
+	/** @var IConfig */
+	private $config;
+
 	/** @var IInitialStateService */
 	private $initialStateService;
 
-	/** @var IAppManager */
-	private $appManager;
+	/** @var IUserSession */
+	private $userSession;
 
-	public function __construct($appName,
+	public function __construct(IRequest $request,
 								IAppManager $appManager,
-								IRequest $request,
 								IEventDispatcher $eventDispatcher,
 								IConfig $config,
-								IInitialStateService $initialStateService) {
-		parent::__construct($appName, $request);
+								IInitialStateService $initialStateService,
+								IUserSession $userSession) {
+		parent::__construct(Application::APP_ID, $request);
 
-		$this->appName = $appName;
 		$this->appManager = $appManager;
 		$this->eventDispatcher = $eventDispatcher;
-		$this->initialStateService = $initialStateService;
 		$this->config = $config;
+		$this->initialStateService = $initialStateService;
+		$this->userSession = $userSession;
 	}
 
 	/**
@@ -72,17 +77,20 @@ class PageController extends Controller {
 	 * @return TemplateResponse
 	 */
 	public function index(): TemplateResponse {
+		$user = $this->userSession->getUser();
+
 		$this->eventDispatcher->dispatch(LoadSidebar::class, new LoadSidebar());
 		$this->eventDispatcher->dispatch(LoadViewer::class, new LoadViewer());
 
 		$this->initialStateService->provideInitialState($this->appName, 'image-mimes', Application::IMAGE_MIMES);
 		$this->initialStateService->provideInitialState($this->appName, 'video-mimes', Application::VIDEO_MIMES);
 		$this->initialStateService->provideInitialState($this->appName, 'maps', $this->appManager->isEnabledForUser('maps') === true);
+		$this->initialStateService->provideInitialState($this->appName, 'croppedLayout', $this->config->getUserValue($user->getUid(), Application::APP_ID, 'croppedLayout', 'false'));
 
-		Util::addScript($this->appName, 'photos-main');
-		Util::addStyle($this->appName, 'icons');
+		Util::addScript(Application::APP_ID, 'photos-main');
+		Util::addStyle(Application::APP_ID, 'icons');
 
-		$response = new TemplateResponse($this->appName, 'main');
+		$response = new TemplateResponse(Application::APP_ID, 'main');
 		return $response;
 	}
 }

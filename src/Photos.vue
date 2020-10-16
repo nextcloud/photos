@@ -39,6 +39,11 @@
 					:title="t('photos', 'Locations')"
 					icon="icon-address" />
 			</template>
+			<template #footer>
+				<AppNavigationSettings :title="t('photos', 'Settings')">
+					<CroppedLayoutSettings />
+				</AppNavigationSettings>
+			</template>
 		</AppNavigation>
 		<AppContent :class="{ 'icon-loading': loading }">
 			<router-view v-show="!loading" :loading.sync="loading" />
@@ -55,23 +60,29 @@
 </template>
 
 <script>
+import { getCurrentUser } from '@nextcloud/auth'
+
 import Content from '@nextcloud/vue/dist/Components/Content'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
+import AppNavigationSettings from '@nextcloud/vue/dist/Components/AppNavigationSettings'
+
+import CroppedLayoutSettings from './components/Settings/CroppedLayoutSettings'
 import svgplaceholder from './assets/file-placeholder.svg'
 import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'
 import isMapsInstalled from './services/IsMapsInstalled'
-import { getCurrentUser } from '@nextcloud/auth'
 
 export default {
 	name: 'Photos',
 	components: {
 		Content,
+		CroppedLayoutSettings,
 		AppContent,
 		AppNavigation,
 		AppNavigationItem,
+		AppNavigationSettings,
 	},
 	data() {
 		return {

@@ -36,7 +36,7 @@ export default {
 		getGridConfig.$on('changed', val => {
 			this.gridConfig = val
 		})
-		console.debug('Current grid config', getGridConfig.gridConfig)
+		console.debug(`[${appName}]`, 'Grid config', Object.assign({}, getGridConfig.gridConfig))
 		this.gridConfig = getGridConfig.gridConfig
 	},
 
