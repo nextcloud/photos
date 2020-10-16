@@ -31,6 +31,7 @@ use OCA\Viewer\Event\LoadViewer;
 use OCP\App\IAppManager;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IInitialStateService;
@@ -91,6 +92,12 @@ class PageController extends Controller {
 		Util::addStyle(Application::APP_ID, 'icons');
 
 		$response = new TemplateResponse(Application::APP_ID, 'main');
+
+		$policy = new ContentSecurityPolicy();
+		$policy->addAllowedWorkerSrcDomain("'self'");
+		$policy->addAllowedScriptDomain("'self'");
+		$response->setContentSecurityPolicy($policy);
+		
 		return $response;
 	}
 }
