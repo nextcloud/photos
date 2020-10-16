@@ -5,8 +5,6 @@ OC.L10N.register(
     "Your memories under your control" : "Zure oroitzapenak zure kontrolpean",
     "Your photos" : "Zure argazkiak",
     "Favorites" : "Gogokoak",
-    "Your albums" : "Zure albumak",
-    "Shared albums" : "Partekaturiko albumak",
     "Tagged photos" : "Etiketaturiko argazkiak",
     "Locations" : "Kokapenak",
     "Open the full size \"{name}\" image" : "Ireki \"{name}\" neurri handian",
@@ -17,6 +15,8 @@ OC.L10N.register(
     "An error occurred" : "Akats bat gertatu da",
     "No photos in here" : "Argazkirik ez hemen",
     "No tags yet" : "Etitketarik ez oraindik",
-    "Photos with tags will show up here" : "Etiketadun argazkiak hemen erakutsiko dira"
+    "Photos with tags will show up here" : "Etiketadun argazkiak hemen erakutsiko dira",
+    "Your albums" : "Zure albumak",
+    "Shared albums" : "Partekaturiko albumak"
 },
 "nplurals=2; plural=(n != 1);");
