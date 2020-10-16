@@ -5,8 +5,6 @@ OC.L10N.register(
     "Your memories under your control" : "Jouw herinneringen onder jouw beheer",
     "Your photos" : "Jouw foto's",
     "Favorites" : "Favorieten",
-    "Your albums" : "Jouw albums",
-    "Shared albums" : "Gedeelde albums",
     "Tagged photos" : "Gelabelde foto's",
     "Locations" : "Locaties",
     "Open the full size \"{name}\" image" : "Open het \"{name}\" beeld in originele grootte",
@@ -17,6 +15,8 @@ OC.L10N.register(
     "An error occurred" : "Er heeft een fout opgetreden",
     "No photos in here" : "Geen foto's hier",
     "No tags yet" : "Nog geen labels",
-    "Photos with tags will show up here" : "Gelabelde foto's worden hier getoond"
+    "Photos with tags will show up here" : "Gelabelde foto's worden hier getoond",
+    "Your albums" : "Jouw albums",
+    "Shared albums" : "Gedeelde albums"
 },
 "nplurals=2; plural=(n != 1);");

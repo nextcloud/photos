@@ -5,8 +5,6 @@ OC.L10N.register(
     "Your memories under your control" : "Az Ön emlékei, az Ön felügyelete alatt",
     "Your photos" : "Az Ön fényképei",
     "Favorites" : "Kedvencek",
-    "Your albums" : "Az Ön albumai",
-    "Shared albums" : "Megosztott albumok",
     "Tagged photos" : "Címkézett fényképek",
     "Locations" : "Helyek",
     "Open the full size \"{name}\" image" : "A teljes méretű „{name}” fénykép megnyitása",
@@ -17,6 +15,8 @@ OC.L10N.register(
     "An error occurred" : "Hiba történt",
     "No photos in here" : "Itt nincsenek fényképe",
     "No tags yet" : "Még nincsenek címkék",
-    "Photos with tags will show up here" : "A címkével rendelkező fényképek itt fognak megjelenni"
+    "Photos with tags will show up here" : "A címkével rendelkező fényképek itt fognak megjelenni",
+    "Your albums" : "Az Ön albumai",
+    "Shared albums" : "Megosztott albumok"
 },
 "nplurals=2; plural=(n != 1);");

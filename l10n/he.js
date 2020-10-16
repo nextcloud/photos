@@ -5,8 +5,6 @@ OC.L10N.register(
     "Your memories under your control" : "הזכרונות שלך בשליטתך",
     "Your photos" : "התמונות שלך",
     "Favorites" : "מועדפים",
-    "Your albums" : "האלבומים שלך",
-    "Shared albums" : "אלבומים משותפים",
     "Tagged photos" : "תמונות מתויגות",
     "Locations" : "מיקומים",
     "Open the full size \"{name}\" image" : "לפתוח את התמונה „{name}” בגודל מלא",
@@ -17,6 +15,8 @@ OC.L10N.register(
     "An error occurred" : "אירעה שגיאה",
     "No photos in here" : "אין כאן תמונות",
     "No tags yet" : "אין תגיות עדיין",
-    "Photos with tags will show up here" : "תמונות עם תגיות תמיד תופענה כאן"
+    "Photos with tags will show up here" : "תמונות עם תגיות תמיד תופענה כאן",
+    "Your albums" : "האלבומים שלך",
+    "Shared albums" : "אלבומים משותפים"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");

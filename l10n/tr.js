@@ -4,9 +4,8 @@ OC.L10N.register(
     "Photos" : "Fotoğraflar",
     "Your memories under your control" : "Anılarınız kontrolünüz altında",
     "Your photos" : "Fotoğraflarınız",
+    "Your videos" : "Görüntüleriniz",
     "Favorites" : "Sık kullanılanlar",
-    "Your albums" : "Albümleriniz",
-    "Shared albums" : "Paylaşılmış albümler",
     "Tagged photos" : "Etiketlenmiş fotoğraflar",
     "Locations" : "Konumlar",
     "Open the full size \"{name}\" image" : "\"{name}\" fotoğrafını tam boyutunda aç",
@@ -17,6 +16,8 @@ OC.L10N.register(
     "An error occurred" : "Bir sorun çıktı",
     "No photos in here" : "Burada herhangi bir fotoğraf yok",
     "No tags yet" : "Henüz bir etiket yok",
-    "Photos with tags will show up here" : "Etiketlenmiş fotoğraflar burada görüntülenir"
+    "Photos with tags will show up here" : "Etiketlenmiş fotoğraflar burada görüntülenir",
+    "Your albums" : "Albümleriniz",
+    "Shared albums" : "Paylaşılmış albümler"
 },
 "nplurals=2; plural=(n > 1);");
