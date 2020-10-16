@@ -22,7 +22,6 @@
 
 <template>
 	<a :class="{
-			'file--clear': !loaded,
 			'file--cropped': croppedLayout,
 		}"
 		class="file"
@@ -31,21 +30,26 @@
 		@click.prevent="openViewer">
 		<div v-if="item.injected.mime.includes('video') && hasPreview" class="icon-video-white" />
 		<!-- image and loading placeholder -->
-		<transition name="fade">
-			<img v-show="loaded"
+		<transition-group name="fade" class="transition-group">
+			<img
+				v-if="!error"
 				ref="img"
+				:key="`${item.injected.basename}-img`"
 				:src="src"
 				:alt="item.injected.basename"
 				:aria-describedby="ariaUuid"
-				@load="onLoad">
-		</transition>
-		<svg v-if="!loaded"
-			xmlns="http://www.w3.org/2000/svg"
-			viewBox="0 0 32 32"
-			fill="url(#placeholder__gradient)">
-			<use v-if="isImage" xlink:href="#placeholder--img" />
-			<use v-else xlink:href="#placeholder--video" />
-		</svg>
+				@load="onLoad"
+				@error="onError">
+
+			<svg v-if="!loaded || error"
+				:key="`${item.injected.basename}-svg`"
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 32 32"
+				fill="url(#placeholder__gradient)">
+				<use v-if="isImage" xlink:href="#placeholder--img" />
+				<use v-else xlink:href="#placeholder--video" />
+			</svg>
+		</transition-group>
 
 		<!-- image name and cover -->
 		<p :id="ariaUuid" class="hidden-visually">{{ item.injected.basename }}</p>
@@ -73,6 +77,7 @@ export default {
 	data() {
 		return {
 			loaded: false,
+			error: false,
 		}
 	},
 
@@ -113,6 +118,10 @@ export default {
 		onLoad() {
 			this.loaded = true
 		},
+
+		onError() {
+			this.error = true
+		},
 	},
 
 }
@@ -120,6 +129,10 @@ export default {
 
 <style lang="scss" scoped>
 @import '../mixins/FileFolder.scss';
+
+.transition-group {
+	display: contents;
+}
 
 .icon-video-white {
 	position: absolute;
@@ -132,6 +145,9 @@ img {
 	position: absolute;
 	width: 100%;
 	height: 100%;
+	z-index: 10;
+
+	color: transparent; // should be diplayed on error
 
 	object-fit: contain;
 
@@ -144,9 +160,5 @@ svg {
 	position: absolute;
 	width: 70%;
 	height: 70%;
-}
-
-.file--clear {
-	background: var(--color-background-hover);
 }
 </style>

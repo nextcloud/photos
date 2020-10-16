@@ -5,6 +5,8 @@ const SassGetGridConfig = require('./src/utils/SassGetGridConfig')
 const ModuleReplaceWebpackPlugin = require('module-replace-webpack-plugin')
 const BabelLoaderExcludeNodeModulesExcept = require('babel-loader-exclude-node-modules-except')
 
+const WorkboxPlugin = require('workbox-webpack-plugin')
+
 const config = {
 	module: {
 		rules: [
@@ -52,6 +54,34 @@ const config = {
 				test: /request.js/,
 				replace: './src/patchedRequest.js',
 				exclude: [/patchedRequest.js$/],
+			}],
+		}),
+		new WorkboxPlugin.GenerateSW({
+			swDest: 'photos-service-worker.js',
+			clientsClaim: true,
+			skipWaiting: true,
+			exclude: [new RegExp('.*')], // don't do precaching
+			inlineWorkboxRuntime: true,
+			sourcemap: false,
+
+			// Define runtime caching rules.
+			runtimeCaching: [{
+				// Match any preview file request
+				urlPattern: /^.*\/core\/preview\?fileId=.*/,
+
+				// Apply a strategy.
+				handler: 'CacheFirst',
+
+				options: {
+					// Use a custom cache name.
+					cacheName: 'images',
+
+					// Only cache 10000 images.
+					expiration: {
+						maxAgeSeconds: 3600 * 24 * 7, // one week
+						maxEntries: 10000,
+					},
+				},
 			}],
 		}),
 	],
