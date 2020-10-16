@@ -5,8 +5,6 @@ OC.L10N.register(
     "Your memories under your control" : "Muistosi hallinnassasi",
     "Your photos" : "Valokuvasi",
     "Favorites" : "Suosikit",
-    "Your albums" : "Omat albumit",
-    "Shared albums" : "Jaetut albumit",
     "Tagged photos" : "Tunnisteilla varustetut kuvat",
     "Locations" : "Sijainnit",
     "Open the full size \"{name}\" image" : "Avaa kuva \"{name}\" todellisessa koossa",
@@ -17,6 +15,8 @@ OC.L10N.register(
     "An error occurred" : "Tapahtui virhe",
     "No photos in here" : "Ei kuvia täällä",
     "No tags yet" : "Ei vielä tunnisteita",
-    "Photos with tags will show up here" : "Tunnisteilla varustetut kuvat näkyvät täällä"
+    "Photos with tags will show up here" : "Tunnisteilla varustetut kuvat näkyvät täällä",
+    "Your albums" : "Omat albumit",
+    "Shared albums" : "Jaetut albumit"
 },
 "nplurals=2; plural=(n != 1);");

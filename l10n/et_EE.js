@@ -5,8 +5,6 @@ OC.L10N.register(
     "Your memories under your control" : "Sinu mälestused sinu kontrolli all",
     "Your photos" : "Sinu fotod",
     "Favorites" : "Lemmikud",
-    "Your albums" : "Sinu albumid",
-    "Shared albums" : "Jagatud albumid",
     "Tagged photos" : "Sildistatud fotod",
     "Locations" : "Asukohad",
     "Open the full size \"{name}\" image" : "Ava \"{name}\" täissuuruses",
@@ -17,6 +15,8 @@ OC.L10N.register(
     "An error occurred" : "Tekkis tõrge",
     "No photos in here" : "Siin ei ole fotosid",
     "No tags yet" : "Silte veel pole",
-    "Photos with tags will show up here" : "Sildistatud fotod on siin näha"
+    "Photos with tags will show up here" : "Sildistatud fotod on siin näha",
+    "Your albums" : "Sinu albumid",
+    "Shared albums" : "Jagatud albumid"
 },
 "nplurals=2; plural=(n != 1);");

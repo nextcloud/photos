@@ -5,8 +5,6 @@ OC.L10N.register(
     "Your memories under your control" : "Haltu minningunum þínum undir þinni stjórn",
     "Your photos" : "Ljósmyndirnar þínar",
     "Favorites" : "Eftirlæti",
-    "Your albums" : "Albúmin þín",
-    "Shared albums" : "Sameiginleg albúm",
     "Tagged photos" : "Merktar ljósmyndir",
     "Locations" : "Staðsetningar",
     "Open the full size \"{name}\" image" : "Opna myndina \"{name}\" í fullri stærð",
@@ -17,6 +15,8 @@ OC.L10N.register(
     "An error occurred" : "Villa kom upp",
     "No photos in here" : "Engar myndir hér",
     "No tags yet" : "Engin merki ennþá",
-    "Photos with tags will show up here" : "Ljósmyndir með merkjum munu birtast hér"
+    "Photos with tags will show up here" : "Ljósmyndir með merkjum munu birtast hér",
+    "Your albums" : "Albúmin þín",
+    "Shared albums" : "Sameiginleg albúm"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");
