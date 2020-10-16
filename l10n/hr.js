@@ -5,8 +5,6 @@ OC.L10N.register(
     "Your memories under your control" : "Upravljajte svojim sjećanjima",
     "Your photos" : "Vaše fotografije",
     "Favorites" : "Favoriti",
-    "Your albums" : "Vaši albumi",
-    "Shared albums" : "Dijeljeni albumi",
     "Tagged photos" : "Označene fotografije",
     "Locations" : "Lokacije",
     "Open the full size \"{name}\" image" : "Otvori sliku „{name}” u punoj veličini",
@@ -17,6 +15,8 @@ OC.L10N.register(
     "An error occurred" : "Došlo je do pogreške",
     "No photos in here" : "Ovdje nema fotografija",
     "No tags yet" : "Još nema oznaka",
-    "Photos with tags will show up here" : "Ovdje će se prikazivati fotografije s oznakama"
+    "Photos with tags will show up here" : "Ovdje će se prikazivati fotografije s oznakama",
+    "Your albums" : "Vaši albumi",
+    "Shared albums" : "Dijeljeni albumi"
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");

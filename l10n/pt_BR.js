@@ -4,9 +4,8 @@ OC.L10N.register(
     "Photos" : "Fotos",
     "Your memories under your control" : "Suas memórias sob seu controle",
     "Your photos" : "Suas fotos",
+    "Your videos" : "Seus vídeos",
     "Favorites" : "Favoritos",
-    "Your albums" : "Seus álbuns",
-    "Shared albums" : "Álbuns compartilhados",
     "Tagged photos" : "Fotos marcadas",
     "Locations" : "Localizações",
     "Open the full size \"{name}\" image" : "Abrir a imagem \"{name}\" no tamanho normal",
@@ -17,6 +16,8 @@ OC.L10N.register(
     "An error occurred" : "Ocorreu um erro",
     "No photos in here" : "Não há fotos aqui",
     "No tags yet" : "Não há marcações ainda",
-    "Photos with tags will show up here" : "Fotos com marcações serão mostradas aqui"
+    "Photos with tags will show up here" : "Fotos com marcações serão mostradas aqui",
+    "Your albums" : "Seus álbuns",
+    "Shared albums" : "Álbuns compartilhados"
 },
 "nplurals=2; plural=(n > 1);");

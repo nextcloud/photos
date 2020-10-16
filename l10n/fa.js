@@ -5,8 +5,6 @@ OC.L10N.register(
     "Your memories under your control" : "خاطرات شما تحت کنترل شماست",
     "Your photos" : "عکس های شما",
     "Favorites" : "مورد علاقه ها",
-    "Your albums" : "آلبوم های شما",
-    "Shared albums" : "آلبوم های مشترک",
     "Tagged photos" : "عکسهای برچسب خورده",
     "Locations" : "مکانها",
     "Open the full size \"{name}\" image" : "اندازه کامل \"{نام}\" باز کردن تصویر",
@@ -17,6 +15,8 @@ OC.L10N.register(
     "An error occurred" : "خطایی روی داد",
     "No photos in here" : "هیچ عکسی در اینجا نیست",
     "No tags yet" : "هنوز برچسپی وجود ندارد",
-    "Photos with tags will show up here" : "عکس های دارای برچسب در اینجا نشان داده می شوند"
+    "Photos with tags will show up here" : "عکس های دارای برچسب در اینجا نشان داده می شوند",
+    "Your albums" : "آلبوم های شما",
+    "Shared albums" : "آلبوم های مشترک"
 },
 "nplurals=2; plural=(n > 1);");
