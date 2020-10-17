@@ -7,6 +7,7 @@ OC.L10N.register(
     "Favorites" : "お気に入り",
     "Tagged photos" : "タグ付けされた写真",
     "Locations" : "場所",
+    "Settings" : "設定",
     "Open the full size \"{name}\" image" : "画像 \"{name}\" をフルサイズで開く",
     "Open the \"{name}\" sub-directory" : "サブディレクトリ \"{name}\" を開く",
     "Share this folder" : "このフォルダーを共有する",

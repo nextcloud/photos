@@ -7,6 +7,7 @@ OC.L10N.register(
     "Favorites" : "مورد علاقه ها",
     "Tagged photos" : "عکسهای برچسب خورده",
     "Locations" : "مکانها",
+    "Settings" : "تنظیمات",
     "Open the full size \"{name}\" image" : "اندازه کامل \"{نام}\" باز کردن تصویر",
     "Open the \"{name}\" sub-directory" : "باز کردن \"{نام}\" زیر مسیر",
     "Share this folder" : "این پوشه را به اشتراک بگذار",

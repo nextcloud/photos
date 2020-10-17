@@ -7,6 +7,7 @@ OC.L10N.register(
     "Favorites" : "Ưa thích",
     "Tagged photos" : "Ảnh gắn nhãn",
     "Locations" : "Các địa điểm",
+    "Settings" : "Cài đặt",
     "Open the full size \"{name}\" image" : "Mở kích thước đủ của ảnh \"{name}\"",
     "Open the \"{name}\" sub-directory" : "Mở thư mục phụ của \"{name}\" ",
     "Share this folder" : "Chia sẻ thư mục này",

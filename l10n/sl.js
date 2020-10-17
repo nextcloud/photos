@@ -7,6 +7,7 @@ OC.L10N.register(
     "Favorites" : "Priljubljene",
     "Tagged photos" : "Označene fotografije",
     "Locations" : "Mesta",
+    "Settings" : "Nastavitve",
     "Open the full size \"{name}\" image" : "Odpri sliko »{name}« v polni velikosti",
     "Open the \"{name}\" sub-directory" : "Odpri podmapo »{name}«",
     "Share this folder" : "Omogoči souporabo mape",

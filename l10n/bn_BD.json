@@ -1,5 +1,6 @@
 { "translations": {
     "Photos" : "Photos",
-    "Favorites" : "প্রিয়জন"
+    "Favorites" : "প্রিয়জন",
+    "Settings" : "সেটিংস"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

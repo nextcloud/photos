@@ -7,6 +7,7 @@ OC.L10N.register(
     "Favorites" : "Favoriter",
     "Tagged photos" : "Taggade bilder",
     "Locations" : "Platser",
+    "Settings" : "Inställningar",
     "Open the full size \"{name}\" image" : "Öppna bilden \"{name}\" i full storlek",
     "Open the \"{name}\" sub-directory" : "Öppna undermappen \"{name}\"",
     "Share this folder" : "Dela denna mapp",

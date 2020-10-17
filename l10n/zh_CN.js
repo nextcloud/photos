@@ -7,6 +7,7 @@ OC.L10N.register(
     "Favorites" : "收藏",
     "Tagged photos" : "标记的照片",
     "Locations" : "地点",
+    "Settings" : "设置",
     "Open the full size \"{name}\" image" : "打开图片 “{name}” 的完整尺寸",
     "Open the \"{name}\" sub-directory" : "打开 “{name}” 的子目录",
     "Share this folder" : "共享此文件夹",
