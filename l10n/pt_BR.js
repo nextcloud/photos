@@ -8,6 +8,7 @@ OC.L10N.register(
     "Favorites" : "Favoritos",
     "Tagged photos" : "Fotos marcadas",
     "Locations" : "Localizações",
+    "Settings" : "Configurações",
     "Open the full size \"{name}\" image" : "Abrir a imagem \"{name}\" no tamanho normal",
     "Open the \"{name}\" sub-directory" : "Abrir o subdiretório \"{name}\"",
     "Share this folder" : "Compartilhar esta pasta",

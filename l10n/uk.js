@@ -7,6 +7,7 @@ OC.L10N.register(
     "Favorites" : "Улюблене",
     "Tagged photos" : "Світлини з позначками",
     "Locations" : "Розташування",
+    "Settings" : "Налаштування",
     "Open the full size \"{name}\" image" : "Відкрити повнорозмірне зображення: \"{name}\"",
     "Open the \"{name}\" sub-directory" : "Відкрити підтеку \"{name}\"",
     "Share this folder" : "Надати спільний доступ до теки",

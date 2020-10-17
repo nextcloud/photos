@@ -1,6 +1,7 @@
 { "translations": {
     "Photos" : "Fotoj",
     "Favorites" : "Pliŝataĵoj",
+    "Settings" : "Agordoj",
     "An error occurred" : "Eraro okazis"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

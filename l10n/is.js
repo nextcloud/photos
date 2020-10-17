@@ -7,6 +7,7 @@ OC.L10N.register(
     "Favorites" : "Eftirlæti",
     "Tagged photos" : "Merktar ljósmyndir",
     "Locations" : "Staðsetningar",
+    "Settings" : "Stillingar",
     "Open the full size \"{name}\" image" : "Opna myndina \"{name}\" í fullri stærð",
     "Open the \"{name}\" sub-directory" : "Opna \"{name}\" undirmöppuna",
     "Share this folder" : "Deila þessari möppu",

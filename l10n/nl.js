@@ -7,6 +7,7 @@ OC.L10N.register(
     "Favorites" : "Favorieten",
     "Tagged photos" : "Gelabelde foto's",
     "Locations" : "Locaties",
+    "Settings" : "Instellingen",
     "Open the full size \"{name}\" image" : "Open het \"{name}\" beeld in originele grootte",
     "Open the \"{name}\" sub-directory" : "Open de \"{name}\" map",
     "Share this folder" : "Deze map delen",

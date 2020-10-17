@@ -7,6 +7,7 @@ OC.L10N.register(
     "Favorites" : "מועדפים",
     "Tagged photos" : "תמונות מתויגות",
     "Locations" : "מיקומים",
+    "Settings" : "הגדרות",
     "Open the full size \"{name}\" image" : "לפתוח את התמונה „{name}” בגודל מלא",
     "Open the \"{name}\" sub-directory" : "לפתוח את תת־התיקייה „{name}”",
     "Share this folder" : "שיתוף התיקייה הזו",
