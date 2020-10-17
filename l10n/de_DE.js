@@ -6,6 +6,8 @@ OC.L10N.register(
     "Your photos" : "Ihre Fotos",
     "Your videos" : "Ihre Videos",
     "Favorites" : "Favoriten",
+    "Your folders" : "Ihre Ordner",
+    "Shared folders" : "Geteilte Ordner",
     "Tagged photos" : "Getaggte Fotos",
     "Locations" : "Orte",
     "Open the full size \"{name}\" image" : "Bild \"{name}\" in Originalgröße öffnen",

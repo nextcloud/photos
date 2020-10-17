@@ -7,6 +7,7 @@ OC.L10N.register(
     "Favorites" : "Lemmikud",
     "Tagged photos" : "Sildistatud fotod",
     "Locations" : "Asukohad",
+    "Settings" : "Seaded",
     "Open the full size \"{name}\" image" : "Ava \"{name}\" täissuuruses",
     "Open the \"{name}\" sub-directory" : "Ava alamkataloog \"{name}\"",
     "Share this folder" : "Jaga seda kausta",

@@ -1,5 +1,6 @@
 { "translations": {
     "Photos" : "Photos",
-    "Favorites" : "Favorites"
+    "Favorites" : "Favorites",
+    "Settings" : "Tetapan"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
