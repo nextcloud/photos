@@ -1,5 +1,6 @@
 { "translations": {
     "Photos" : "ფოტოები",
-    "Favorites" : "რჩეულები"
+    "Favorites" : "რჩეულები",
+    "Settings" : "პარამეტრები"
 },"pluralForm" :"nplurals=2; plural=(n!=1);"
 }

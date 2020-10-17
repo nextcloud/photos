@@ -7,6 +7,7 @@ OC.L10N.register(
     "Favorites" : "Gogokoak",
     "Tagged photos" : "Etiketaturiko argazkiak",
     "Locations" : "Kokapenak",
+    "Settings" : "Ezarpenak",
     "Open the full size \"{name}\" image" : "Ireki \"{name}\" neurri handian",
     "Open the \"{name}\" sub-directory" : "Ireki \"{name}\" azpi-direktorioa",
     "Share this folder" : "Partekatu karpeta hau",

@@ -1,6 +1,7 @@
 { "translations": {
     "Photos" : "Foto",
     "Favorites" : "Disukai",
+    "Settings" : "Setelan",
     "An error occurred" : "Terjadi kesalahan"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
