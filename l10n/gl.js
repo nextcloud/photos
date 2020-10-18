@@ -15,6 +15,8 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "Abrir o subdirectorio «{name}»",
     "Share this folder" : "Compartir este cartafol",
     "Back to {folder}" : "Volver a {folder}",
+    "Layout" : "Deseño",
+    "Enable cropped layout" : "Activar o deseño recortado",
     "This folder does not exists" : "Este cartafol non existe",
     "An error occurred" : "Produciuse un erro",
     "No photos in here" : "Aquí non hai fotos",
