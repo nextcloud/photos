@@ -10,6 +10,7 @@ OC.L10N.register(
     "Shared folders" : "Διαμοιρασμένοι φάκελοι",
     "Tagged photos" : "Φωτογραφίες με ετικέτα",
     "Locations" : "Τοποθεσίες",
+    "Settings" : "Ρυθμίσεις",
     "Open the full size \"{name}\" image" : "Άνοιγμα εικόνας \"{name}\" σε πλήρη μέγεθος",
     "Open the \"{name}\" sub-directory" : "Άνοιγμα υπό-κατηγορίας του \"{name}\"",
     "Share this folder" : "Διαμοιρασμός αυτού του φακέλου",

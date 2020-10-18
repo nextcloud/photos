@@ -15,6 +15,8 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "Atverti \"{name}\" pakatalogį",
     "Share this folder" : "Bendrinti šį aplanką",
     "Back to {folder}" : "Atgal į {folder}",
+    "Layout" : "Išdėstymas",
+    "Enable cropped layout" : "Įjungti apkarpytą išdėstymą",
     "This folder does not exists" : "Šio aplanko nėra",
     "An error occurred" : "Įvyko klaida",
     "No photos in here" : "Čia nuotraukų nėra",
