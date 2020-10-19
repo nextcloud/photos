@@ -164,6 +164,7 @@ export default {
 						...file,
 						list: this.fileList,
 						loadMore: this.getContent,
+						canLoop: false,
 					},
 					width: 256,
 					height: 256,
