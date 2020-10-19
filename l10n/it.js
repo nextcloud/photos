@@ -15,6 +15,8 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "Apri la sottocartella \"{name}\"",
     "Share this folder" : "Condividi questa cartella",
     "Back to {folder}" : "Torna a {folder}",
+    "Layout" : "Disposizione",
+    "Enable cropped layout" : "Abilita disposizione ritagliata",
     "This folder does not exists" : "Questa cartella non esiste",
     "An error occurred" : "Si è verificato un errore",
     "No photos in here" : "Nessuna foto qui",
