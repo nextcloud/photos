@@ -30,7 +30,7 @@
 				type="checkbox"
 				class="checkbox"
 				@change="updateSetting('croppedLayout')">
-			<label for="enable-cropped-layout">{{ t('photos', 'Enable cropped layout') }}</label>
+			<label for="enable-cropped-layout">{{ t('photos', 'Enable squared photos view') }}</label>
 		</p>
 	</div>
 </template>
