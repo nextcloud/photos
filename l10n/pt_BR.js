@@ -16,7 +16,6 @@ OC.L10N.register(
     "Share this folder" : "Compartilhar esta pasta",
     "Back to {folder}" : "Voltar para {folder}",
     "Layout" : "Layout",
-    "Enable cropped layout" : "Habilitar layout cortado",
     "This folder does not exists" : "Esta pasta não existe",
     "An error occurred" : "Ocorreu um erro",
     "No photos in here" : "Não há fotos aqui",

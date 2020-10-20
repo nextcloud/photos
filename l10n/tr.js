@@ -16,7 +16,6 @@ OC.L10N.register(
     "Share this folder" : "Bu klasörü paylaş",
     "Back to {folder}" : "{folder} klasörüne geri dön",
     "Layout" : "Görünüm",
-    "Enable cropped layout" : "Kırpılmış görünüm kullanılsın",
     "This folder does not exists" : "Bu klasör bulunamadı",
     "An error occurred" : "Bir sorun çıktı",
     "No photos in here" : "Burada herhangi bir fotoğraf yok",
