@@ -16,7 +16,6 @@ OC.L10N.register(
     "Share this folder" : "Udostępnij ten katalog",
     "Back to {folder}" : "Powrót do {folder}",
     "Layout" : "Wygląd",
-    "Enable cropped layout" : "Włącz układ kwadratowy",
     "This folder does not exists" : "Ten katalog nie istnieje",
     "An error occurred" : "Wystąpił błąd",
     "No photos in here" : "Brak zdjęć",
