@@ -87,6 +87,7 @@ class PageController extends Controller {
 		$this->initialStateService->provideInitialState($this->appName, 'video-mimes', Application::VIDEO_MIMES);
 		$this->initialStateService->provideInitialState($this->appName, 'maps', $this->appManager->isEnabledForUser('maps') === true);
 		$this->initialStateService->provideInitialState($this->appName, 'croppedLayout', $this->config->getUserValue($user->getUid(), Application::APP_ID, 'croppedLayout', 'false'));
+		$this->initialStateService->provideInitialState($this->appName, 'systemtags', $this->appManager->isEnabledForUser('systemtags') === true);
 
 		Util::addScript(Application::APP_ID, 'photos-main');
 		Util::addStyle(Application::APP_ID, 'icons');
