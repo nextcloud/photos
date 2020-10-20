@@ -64,6 +64,7 @@ import File from '../components/File'
 import Navigation from '../components/Navigation'
 
 import GridConfigMixin from '../mixins/GridConfig'
+import FileSelectMixin from '../mixins/FileSelect'
 
 import cancelableRequest from '../utils/CancelableRequest'
 
@@ -74,7 +75,7 @@ export default {
 		EmptyContent,
 		Navigation,
 	},
-	mixins: [GridConfigMixin],
+	mixins: [GridConfigMixin, FileSelectMixin],
 	props: {
 		rootTitle: {
 			type: String,
@@ -153,6 +154,9 @@ export default {
 					injected: {
 						...file,
 						list: this.fileList,
+						selectedFiles: this.selectedFiles,
+						selectFile: this.selectFile,
+						unSelectFile: this.unSelectFile,
 					},
 					width: 256,
 					height: 256,

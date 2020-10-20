@@ -21,36 +21,39 @@
  -->
 
 <template>
-	<a :class="{
-			'file--clear': !loaded,
-			'file--cropped': croppedLayout,
-		}"
-		class="file"
-		:href="davPath"
-		:aria-label="ariaLabel"
-		@click.prevent="openViewer">
-		<div v-if="item.injected.mime.includes('video') && hasPreview" class="icon-video-white" />
-		<!-- image and loading placeholder -->
-		<transition name="fade">
-			<img v-show="loaded"
-				ref="img"
-				:src="src"
-				:alt="item.injected.basename"
-				:aria-describedby="ariaUuid"
-				@load="onLoad">
-		</transition>
-		<svg v-if="!loaded"
-			xmlns="http://www.w3.org/2000/svg"
-			viewBox="0 0 32 32"
-			fill="url(#placeholder__gradient)">
-			<use v-if="isImage" xlink:href="#placeholder--img" />
-			<use v-else xlink:href="#placeholder--video" />
-		</svg>
+	<div :class="['file-container', checked ? 'checked' : '']">
+		<span class="icon-checkmark file-check-selector" @click.prevent="onCheck" />
+		<a :class="{
+				'file--clear': !loaded,
+				'file--cropped': croppedLayout,
+			}"
+			class="file"
+			:href="davPath"
+			:aria-label="ariaLabel"
+			@click.prevent="openViewer">
+			<div v-if="item.injected.mime.includes('video') && hasPreview" class="icon-video-white" />
+			<!-- image and loading placeholder -->
+			<transition name="fade">
+				<img v-show="loaded"
+					ref="img"
+					:src="src"
+					:alt="item.injected.basename"
+					:aria-describedby="ariaUuid"
+					@load="onLoad">
+			</transition>
+			<svg v-if="!loaded"
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 32 32"
+				fill="url(#placeholder__gradient)">
+				<use v-if="isImage" xlink:href="#placeholder--img" />
+				<use v-else xlink:href="#placeholder--video" />
+			</svg>
 
-		<!-- image name and cover -->
-		<p :id="ariaUuid" class="hidden-visually">{{ item.injected.basename }}</p>
-		<div class="cover" role="none" />
-	</a>
+			<!-- image name and cover -->
+			<p :id="ariaUuid" class="hidden-visually">{{ item.injected.basename }}</p>
+			<div class="cover" role="none" />
+		</a>
+	</div>
 </template>
 
 <script>
@@ -73,6 +76,7 @@ export default {
 	data() {
 		return {
 			loaded: false,
+			checked: this.item.injected.selectedFiles?.has(this.item.injected.filename),
 		}
 	},
 
@@ -112,6 +116,15 @@ export default {
 		onLoad() {
 			this.loaded = true
 		},
+
+		onCheck() {
+			this.checked = !this.checked
+			if (this.checked) {
+				this.item.injected.selectFile(this.item.injected.filename)
+				return OCA.Files.Sidebar.open(this.item.injected.filename)
+			}
+			this.item.injected.unSelectFile(this.item.injected.filename)
+		},
 	},
 
 }
@@ -143,6 +156,48 @@ svg {
 	position: absolute;
 	width: 70%;
 	height: 70%;
+}
+
+.file-container {
+	position: relative;
+
+	&:hover {
+		.file-check-selector {
+			opacity: .7;
+		}
+
+		.cover {
+			opacity: .3;
+		}
+	}
+
+	&.checked {
+		.file-check-selector{
+			opacity: 1!important;
+		}
+
+		.cover {
+			opacity: .3;
+		}
+	}
+}
+
+.file-check-selector {
+	color: #fff;
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	z-index: 20;
+	border: 2px solid #fff;
+	border-radius: 50%;
+	background-color: #fff;
+	height: 20px;
+	width: 20px;
+	opacity: 0;
+
+	&:hover {
+		opacity: 1!important;
+	}
 }
 
 .file--clear {

@@ -53,6 +53,10 @@
 				:update-trigger-margin="700"
 				:loader="loaderComponent" />
 		</div>
+
+		<SelectBar v-if="selectedFilesCount > 0"
+			:selected-files-count="selectedFilesCount"
+			:clear-selected-files="clearSelectedFiles" />
 	</div>
 </template>
 
@@ -68,9 +72,11 @@ import SeparatorVirtualGrid from '../components/SeparatorVirtualGrid'
 import VirtualGrid from 'vue-virtual-grid'
 import Navigation from '../components/Navigation'
 import Loader from '../components/Loader'
+import SelectBar from '../components/SelectBar'
 
 import cancelableRequest from '../utils/CancelableRequest'
 import GridConfigMixin from '../mixins/GridConfig'
+import FileSelectMixin from '../mixins/FileSelect'
 import { allMimes } from '../services/AllowedMimes'
 
 export default {
@@ -79,8 +85,9 @@ export default {
 		EmptyContent,
 		VirtualGrid,
 		Navigation,
+		SelectBar,
 	},
-	mixins: [GridConfigMixin],
+	mixins: [GridConfigMixin, FileSelectMixin],
 	props: {
 		loading: {
 			type: Boolean,
@@ -164,6 +171,9 @@ export default {
 						...file,
 						list: this.fileList,
 						loadMore: this.getContent,
+						selectedFiles: this.selectedFiles,
+						selectFile: this.selectFile,
+						unSelectFile: this.unSelectFile,
 					},
 					width: 256,
 					height: 256,
