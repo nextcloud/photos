@@ -78,6 +78,7 @@ export default {
 			svgplaceholder,
 			imgplaceholder,
 			videoplaceholder,
+			areTagsInstalled,
 			showLocationMenuEntry: getCurrentUser() === null
 				? false
 				: getCurrentUser().isAdmin || isMapsInstalled,
