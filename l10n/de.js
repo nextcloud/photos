@@ -16,6 +16,7 @@ OC.L10N.register(
     "Share this folder" : "Diesen Ordner teilen",
     "Back to {folder}" : "Zurück zu {folder}",
     "Layout" : "Layout",
+    "Enable squared photos view" : "Quadratische Fotoansicht aktivieren",
     "This folder does not exists" : "Dieser Ordner existiert nicht",
     "An error occurred" : "Es ist ein Fehler aufgetreten",
     "No photos in here" : "Keine Fotos vorhanden",
