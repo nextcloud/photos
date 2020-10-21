@@ -16,6 +16,7 @@ OC.L10N.register(
     "Share this folder" : "Bendrinti šį aplanką",
     "Back to {folder}" : "Atgal į {folder}",
     "Layout" : "Išdėstymas",
+    "Enable squared photos view" : "Įjungti kvadratinį nuotraukų rodinį",
     "This folder does not exists" : "Šio aplanko nėra",
     "An error occurred" : "Įvyko klaida",
     "No photos in here" : "Čia nuotraukų nėra",
