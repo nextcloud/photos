@@ -22,7 +22,7 @@
 
 <template>
 	<div class="section">
-		<h2>{{ t('photos', 'Layout') }}</h2>
+		<h2>{{ t('photos', 'View') }}</h2>
 		<p>
 			<input
 				id="enable-cropped-layout"
