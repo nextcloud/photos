@@ -22,22 +22,35 @@
 
 <template>
 	<div class="select-bar">
-		{{ selectedFilesCount }} {{ t('photos', 'files are selected') }}
+		<div>{{ selectedFilesCount }} {{ t('photos', 'files are selected') }}</div>
+		<div>
+			<ActionButton @click="onClearFiles">
+				{{ t('photos', 'Clear selection') }}
+			</ActionButton>
+		</div>
 	</div>
 </template>
 
 <script>
+import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
+
 export default {
 	name: 'SelectBar',
+
+	components: {
+		ActionButton,
+	},
 
 	props: {
 		selectedFilesCount: {
 			type: Number,
 			required: true,
 		},
-		clearSelectedFiles: {
-			type: () => null,
-			required: true,
+	},
+
+	methods: {
+		onClearFiles() {
+			this.$emit('clear-selected-files')
 		},
 	},
 

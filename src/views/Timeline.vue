@@ -51,12 +51,14 @@
 				:get-column-count="() => gridConfig.count"
 				:get-grid-gap="() => gridConfig.gap"
 				:update-trigger-margin="700"
-				:loader="loaderComponent" />
+				:loader="loaderComponent"
+				@select-file="selectFile"
+				@un-select-file="unSelectFile" />
 		</div>
 
 		<SelectBar v-if="selectedFilesCount > 0"
 			:selected-files-count="selectedFilesCount"
-			:clear-selected-files="clearSelectedFiles" />
+			@clear-selected-files="clearSelectedFiles" />
 	</div>
 </template>
 
@@ -171,9 +173,7 @@ export default {
 						...file,
 						list: this.fileList,
 						loadMore: this.getContent,
-						selectedFiles: this.selectedFiles,
-						selectFile: this.selectFile,
-						unSelectFile: this.unSelectFile,
+						selected: this.selectedFiles[file.fileid],
 					},
 					width: 256,
 					height: 256,

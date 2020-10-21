@@ -21,8 +21,8 @@
  -->
 
 <template>
-	<div :class="['file-container', checked ? 'checked' : '']">
-		<span class="icon-checkmark file-check-selector" @click.prevent="onCheck" />
+	<div :class="['file-container', item.injected.selected ? 'selected' : '']">
+		<span class="icon-checkmark file-check-selector" @click.prevent="onCheckFile" />
 		<a :class="{
 				'file--clear': !loaded,
 				'file--cropped': croppedLayout,
@@ -76,7 +76,6 @@ export default {
 	data() {
 		return {
 			loaded: false,
-			checked: this.item.injected.selectedFiles?.has(this.item.injected.filename),
 		}
 	},
 
@@ -117,16 +116,14 @@ export default {
 			this.loaded = true
 		},
 
-		onCheck() {
-			this.checked = !this.checked
-			if (this.checked) {
-				this.item.injected.selectFile(this.item.injected.filename)
-				return OCA.Files.Sidebar.open(this.item.injected.filename)
+		async onCheckFile() {
+			if (this.item.injected.selected) {
+				return this.$emit('un-select-file', this.item.injected.fileid)
 			}
-			this.item.injected.unSelectFile(this.item.injected.filename)
+			this.$emit('select-file', this.item.injected.fileid)
+			OCA.Files.Sidebar.open(this.item.injected.filename)
 		},
 	},
-
 }
 </script>
 
@@ -171,7 +168,7 @@ svg {
 		}
 	}
 
-	&.checked {
+	&.selected {
 		.file-check-selector{
 			opacity: 1!important;
 		}

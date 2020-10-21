@@ -46,8 +46,14 @@
 				ref="virtualgrid"
 				:items="contentList"
 				:get-column-count="() => gridConfig.count"
-				:get-grid-gap="() => gridConfig.gap" />
+				:get-grid-gap="() => gridConfig.gap"
+				@select-file="selectFile"
+				@un-select-file="unSelectFile" />
 		</div>
+
+		<SelectBar v-if="selectedFilesCount > 0"
+			:selected-files-count="selectedFilesCount"
+			@clear-selected-files="clearSelectedFiles" />
 	</div>
 </template>
 
@@ -62,6 +68,7 @@ import EmptyContent from '../components/EmptyContent'
 import Tag from '../components/Tag'
 import File from '../components/File'
 import Navigation from '../components/Navigation'
+import SelectBar from '../components/SelectBar'
 
 import GridConfigMixin from '../mixins/GridConfig'
 import FileSelectMixin from '../mixins/FileSelect'
@@ -74,6 +81,7 @@ export default {
 		VirtualGrid,
 		EmptyContent,
 		Navigation,
+		SelectBar,
 	},
 	mixins: [GridConfigMixin, FileSelectMixin],
 	props: {

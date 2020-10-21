@@ -23,8 +23,7 @@
 export default {
 	data() {
 		return {
-			selectedFiles: new Set(),
-			selectedFilesCount: 0, // VueJS does not support Set() as reactive so we need a count var
+			selectedFiles: {},
 		}
 	},
 
@@ -32,20 +31,24 @@ export default {
 		this.selectedFiles.clear()
 	},
 
+	computed: {
+		selectedFilesCount() {
+			return Object.keys(this.selectedFiles).length
+		},
+	},
+
 	methods: {
-		selectFile(filename) {
-			this.selectedFiles.add(filename)
-			this.selectedFilesCount += 1
+		selectFile(fileId) {
+			this.selectedFiles = Object.assign({}, this.selectedFiles, { [fileId]: true })
 		},
 
-		unSelectFile(filename) {
-			this.selectedFiles.delete(filename)
-			this.selectedFilesCount -= 1
+		unSelectFile(fileId) {
+			delete this.selectedFiles[fileId]
+			this.selectedFiles = Object.assign({}, this.selectedFiles)
 		},
 
 		clearSelectedFiles() {
-			this.selectedFiles.clear()
-			this.selectedFilesCount = 0
+			this.selectedFiles = {}
 		},
 	},
 }
