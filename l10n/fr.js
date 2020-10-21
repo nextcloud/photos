@@ -15,6 +15,8 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "Ouvrir le sous-dossier \"{name}\"",
     "Share this folder" : "Partager ce dossier",
     "Back to {folder}" : "Revenir au dossier {folder}",
+    "Layout" : "Affichage",
+    "Enable squared photos view" : "Activer l'affichage en miniatures",
     "This folder does not exists" : "Ce dossier n'existe pas",
     "An error occurred" : "Une erreur est survenue",
     "No photos in here" : "Aucune photo",

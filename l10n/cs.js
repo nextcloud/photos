@@ -16,6 +16,7 @@ OC.L10N.register(
     "Share this folder" : "Sdílet tuto složku",
     "Back to {folder}" : "Zpět do {folder}",
     "Layout" : "Rozvržení",
+    "Enable squared photos view" : "Zapnout čtvercové zobrazení fotek",
     "This folder does not exists" : "Tato složka neexistuje",
     "An error occurred" : "Došlo k chybě",
     "No photos in here" : "Tady nejsou žádné fotky",
