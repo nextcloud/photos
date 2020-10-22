@@ -12,6 +12,7 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "打开 “{name}” 的子目录",
     "Share this folder" : "共享此文件夹",
     "Back to {folder}" : "返回 {folder}",
+    "View" : "查看",
     "This folder does not exists" : "该文件夹不存在",
     "An error occurred" : "发生错误",
     "No photos in here" : "这里没有照片",

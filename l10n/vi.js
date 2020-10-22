@@ -12,6 +12,7 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "Mở thư mục phụ của \"{name}\" ",
     "Share this folder" : "Chia sẻ thư mục này",
     "Back to {folder}" : "Trở về {folder}",
+    "View" : "Xem",
     "This folder does not exists" : "Thư mục không tồn tại",
     "An error occurred" : "Có lỗi đã xảy ra",
     "No photos in here" : "Không có ảnh nào trong này",

@@ -12,6 +12,7 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "Öppna undermappen \"{name}\"",
     "Share this folder" : "Dela denna mapp",
     "Back to {folder}" : "Tillbaka till {folder}",
+    "View" : "Visa",
     "This folder does not exists" : "Denna mapp finns inte",
     "An error occurred" : "Ett fel uppstod",
     "No photos in here" : "Det finns inga bilder här",

@@ -12,6 +12,7 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "Otvori poddirektorij „{name}”",
     "Share this folder" : "Dijeli ovu mapu",
     "Back to {folder}" : "Natrag na {folder}",
+    "View" : "Pregledaj",
     "This folder does not exists" : "Ova mapa ne postoji",
     "An error occurred" : "Došlo je do pogreške",
     "No photos in here" : "Ovdje nema fotografija",

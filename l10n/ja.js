@@ -12,6 +12,7 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "サブディレクトリ \"{name}\" を開く",
     "Share this folder" : "このフォルダーを共有する",
     "Back to {folder}" : " {folder} に戻る",
+    "View" : "表示",
     "This folder does not exists" : "このフォルダは存在しません",
     "An error occurred" : "エラーが発生しました",
     "No photos in here" : "写真がありません",
