@@ -12,6 +12,7 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "Open de \"{name}\" map",
     "Share this folder" : "Deze map delen",
     "Back to {folder}" : "Terug naar {folder}",
+    "View" : "Bekijken",
     "This folder does not exists" : "Deze map bestaat niet",
     "An error occurred" : "Er heeft een fout opgetreden",
     "No photos in here" : "Geen foto's hier",

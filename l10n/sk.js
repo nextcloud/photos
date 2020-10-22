@@ -12,6 +12,7 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "Otvoriť podpriečinok „{name}“",
     "Share this folder" : "Sprístupniť tento priečinok",
     "Back to {folder}" : "Späť do {folder}",
+    "View" : "Prezerať",
     "This folder does not exists" : "Tento priečinok neexistuje",
     "An error occurred" : "Vyskytla sa chyba",
     "No photos in here" : "Nie sú tu žiadne fotografie",

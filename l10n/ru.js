@@ -12,6 +12,7 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "Открыть вложенную папке «{name}»",
     "Share this folder" : "Опубликовать эту папку",
     "Back to {folder}" : "Вернуться в {folder}",
+    "View" : "Просмотр",
     "This folder does not exists" : "Эта папка не существует",
     "An error occurred" : "Произошла ошибка",
     "No photos in here" : "Здесь нет фотографий",

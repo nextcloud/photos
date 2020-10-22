@@ -15,6 +15,7 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "Άνοιγμα υπό-κατηγορίας του \"{name}\"",
     "Share this folder" : "Διαμοιρασμός αυτού του φακέλου",
     "Back to {folder}" : "Πίσω στο {folder}",
+    "View" : "Προβολή",
     "This folder does not exists" : "Ο φάκελος δεν υπάρχει",
     "An error occurred" : "Παρουσιάστηκε σφάλμα",
     "No photos in here" : "Δεν υπάρχουν φωτογραφίες εδώ",

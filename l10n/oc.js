@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Photos" : "Photos",
     "Favorites" : "Favorits",
-    "Settings" : "Paramètres"
+    "Settings" : "Paramètres",
+    "View" : "Vista"
 },
 "nplurals=2; plural=(n > 1);");

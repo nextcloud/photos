@@ -15,7 +15,7 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "\"{name}\" alt klasörünü aç",
     "Share this folder" : "Bu klasörü paylaş",
     "Back to {folder}" : "{folder} klasörüne geri dön",
-    "Layout" : "Görünüm",
+    "View" : "Görüntüle",
     "Enable squared photos view" : "Kare fotoğraf görünümü kullanılsın",
     "This folder does not exists" : "Bu klasör bulunamadı",
     "An error occurred" : "Bir sorun çıktı",
