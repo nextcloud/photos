@@ -12,6 +12,7 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "Åbn \"{name}\" under direktoriet",
     "Share this folder" : "Del denne mappe",
     "Back to {folder}" : "Tilbage til {folder}",
+    "View" : "Vis",
     "This folder does not exists" : "Denne folder eksisterer ikke",
     "An error occurred" : "Der var en fejl",
     "No photos in here" : "Ingen billeder her",

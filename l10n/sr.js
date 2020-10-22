@@ -12,6 +12,7 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "Отвори „{name}” поддиректоријум",
     "Share this folder" : "Дели ову фасциклу",
     "Back to {folder}" : "Назад у {folder}",
+    "View" : "Погледај",
     "This folder does not exists" : "Ова фасцикла не постоји",
     "An error occurred" : "Догодила се грешка",
     "No photos in here" : "Овде нема слика",

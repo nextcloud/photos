@@ -12,6 +12,7 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "לפתוח את תת־התיקייה „{name}”",
     "Share this folder" : "שיתוף התיקייה הזו",
     "Back to {folder}" : "חזרה אל {folder}",
+    "View" : "צפייה",
     "This folder does not exists" : "תיקייה זו אינה קיימת",
     "An error occurred" : "אירעה שגיאה",
     "No photos in here" : "אין כאן תמונות",

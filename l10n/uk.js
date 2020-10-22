@@ -12,6 +12,7 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "Відкрити підтеку \"{name}\"",
     "Share this folder" : "Надати спільний доступ до теки",
     "Back to {folder}" : "Повернутися до теки {folder}",
+    "View" : "Перегляд",
     "This folder does not exists" : "Ця тека відсутня",
     "An error occurred" : "Виникла помилка",
     "No photos in here" : "Тут немає світлин",

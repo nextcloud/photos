@@ -1,6 +1,7 @@
 { "translations": {
     "Photos" : "Foto",
     "Favorites" : "Favorites",
-    "Settings" : "Rregullimet"
+    "Settings" : "Rregullimet",
+    "View" : "Shiko"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

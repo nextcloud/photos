@@ -12,6 +12,7 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "A(z) „name” alkönyvtár megnyitása",
     "Share this folder" : "Mappa megosztása",
     "Back to {folder}" : "Vissza ide: {folder}",
+    "View" : "Megtekintés",
     "This folder does not exists" : "Ez a mappa nem létezik",
     "An error occurred" : "Hiba történt",
     "No photos in here" : "Itt nincsenek fényképe",

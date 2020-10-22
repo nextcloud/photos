@@ -15,7 +15,7 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "Öffne den \"{name}\" Unterordner",
     "Share this folder" : "Diesen Ordner teilen",
     "Back to {folder}" : "Zurück zu {folder}",
-    "Layout" : "Layout",
+    "View" : "Ansicht",
     "Enable squared photos view" : "Quadratische Fotoansicht aktivieren",
     "This folder does not exists" : "Dieser Ordner existiert nicht",
     "An error occurred" : "Es ist ein Fehler aufgetreten",
