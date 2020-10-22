@@ -29,6 +29,7 @@ use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
+use OCP\Files\Events\NodeAddedToCache;
 
 class Application extends App implements IBootstrap {
 	public const APP_ID = 'photos';
@@ -55,11 +56,18 @@ class Application extends App implements IBootstrap {
 
 	public function __construct() {
 		parent::__construct(self::APP_ID);
+		/* @var IEventDispatcher $eventDispatcher */
+		$dispatcher = $this->getContainer()->get("OCP\EventDispatcher\IEventDispatcher" );
+		$dispatcher->addListener(NodeAddedToCache::class, function(NodeAddedToCache $event) {
+			$filePath = $event->getPath();
+		});
+
 	}
 
 	public function register(IRegistrationContext $context): void {
 	}
 
 	public function boot(IBootContext $context): void {
+		\OCP\Util::connectHook('OC_Filesystem', 'preSetup', 'OCA\Photos\Storage', 'setupStorage');
 	}
 }

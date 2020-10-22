@@ -27,6 +27,7 @@ namespace OCA\Photos\Controller;
 
 use OCA\Files_Sharing\SharedStorage;
 use OCA\Photos\AppInfo\Application;
+use OCA\Photos\Db\PhotoMetadataMapper;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
@@ -44,11 +45,18 @@ class AlbumsController extends Controller {
 	private $userId;
 	/** @var IRootFolder */
 	private $rootFolder;
+	/** @var PhotoMetadataMapper */
+	private $photoMetadataMapper;
 
-	public function __construct($appName, IRequest $request, string $userId, IRootFolder $rootFolder) {
+	public function __construct($appName, 
+		IRequest $request, 
+		string $userId, 
+		IRootFolder $rootFolder,
+		PhotoMetadataMapper $photoMetadataMapper) {
 		parent::__construct($appName, $request);
 		$this->userId = $userId;
 		$this->rootFolder = $rootFolder;
+		$this->photoMetadataMapper = $photoMetadataMapper;
 	}
 
 	/**
@@ -65,18 +73,86 @@ class AlbumsController extends Controller {
 		return $this->generate($path, true);
 	}
 
-	private function generate(string $path, bool $shared): JSONResponse {
-		$userFolder = $this->rootFolder->getUserFolder($this->userId);
+	/**
+	 * @NoAdminRequired
+	 */
+	public function getNumberByMonth(string $path = ''): JSONResponse {
+		return $this->formatPhotosByMonth($path);
+	}
 
-		$folder = $userFolder;
-		if ($path !== '') {
-			try {
-				$folder = $userFolder->get($path);
-			} catch (NotFoundException $e) {
-				return new JSONResponse([], Http::STATUS_NOT_FOUND);
+	/**
+	 * @NoAdminRequired
+	 * @var yearandmonth : 2016-08
+	 */
+	public function getPhotosOfMonth(string $yearandmonth = ''): JSONResponse {
+		if ($yearandmonth == '') {
+			$targetYearMonth = '';
+		}else{
+			$targetYearMonth = $this->convertDate($yearandmonth);
+		}
+
+		$nodes = $this->getAllUserPhotos('');
+		$photosMetadata = $this->getPhotosMetadata($nodes);
+		$photosOfMonth = [];
+		foreach ($photosMetadata as $metadata) {
+			$dateTime = $metadata->getDateTimeOriginal();
+
+			if ($dateTime == '') {
+				if ($targetYearMonth == '') {
+					$photosOfMonth[]= $metadata->getFileId();
+				}
+				continue;
+			}
+
+			$yearMonth = date('Y-M',strtotime($dateTime));
+			if ($yearMonth == $targetYearMonth) {
+				$photosOfMonth[] = $metadata->getFileId();
 			}
 		}
 
+		return new JSONResponse($photosOfMonth, Http::STATUS_OK);
+	}
+
+	private function formatPhotosByMonth(string $path): JSONResponse {
+		$nodes = $this->getAllUserPhotos($path);
+		$photosMetadata = $this->getPhotosMetadata($nodes);
+		//caculate photos in each month 
+		$photosByMonth = ["unknown" => 0];
+		foreach ($photosMetadata as $metadata) {
+			$dateTime = $metadata->getDateTimeOriginal();
+			if ($dateTime == "") {
+				$photosByMonth['unknown'] = $photosByMonth['unknown'] + 1;
+				continue;
+			}
+			$yearMonth = date('Y-M',strtotime($dateTime));
+			if (array_key_exists($yearMonth,$photosByMonth)) {
+				$photosByMonth[$yearMonth] = $photosByMonth[$yearMonth] + 1;
+			} else {
+				$photosByMonth[$yearMonth] = 1;
+			}
+		}
+		return new JSONResponse($photosByMonth,Http::STATUS_OK);
+	}
+	
+	private function getAllUserPhotos(string $path) {
+		$folder = $this->getFolder($path);
+		if (is_null($folder)) {
+			return new JSONResponse([], Http::STATUS_NOT_FOUND);
+		}
+		$nodes = $this->scanCurrentFolderRecusive($folder,false);
+		return $nodes;
+	}
+	
+	private function getPhotosMetadata(iterable $nodes) {
+		$fileIds =  [];
+		foreach ($nodes as $node) {
+			$fileIds[] = $node->getId();
+		}
+		return $this->photoMetadataMapper->findAll($fileIds);
+	}
+	
+	private function generate(string $path, bool $shared): JSONResponse {
+		$folder = $this->getFolder($path);
 		$data = $this->scanCurrentFolder($folder, $shared);
 		$result = $this->formatData($data);
 
@@ -108,6 +184,25 @@ class AlbumsController extends Controller {
 
 		return $result;
 	}
+	
+	private function scanCurrentFolderRecusive(Folder $folder): iterable
+  {
+    $nodes = $folder->getDirectoryListing();
+
+    foreach ($nodes as $node) {
+      if ($node instanceof Folder) {
+        foreach ($this->scanCurrentFolderRecusive($node) as $subnode) {
+          if ($subnode instanceof File) {
+            yield $subnode;
+          }
+        }
+      } elseif ($node instanceof File) {
+				if ($this->validFile($node, false)) {
+					yield $node;
+				}
+      }
+    }
+  }
 
 	private function scanCurrentFolder(Folder $folder, bool $shared): iterable {
 		$nodes = $folder->getDirectoryListing();
@@ -125,6 +220,22 @@ class AlbumsController extends Controller {
 			}
 		}
 	}
+	
+	private function getFolder(string $path) {
+		$userFolder = $this->rootFolder->getUserFolder($this->userId);
+
+		$folder = $userFolder;
+		if ($path !== '') {
+			try {
+				$folder = $userFolder->get($path);
+			} catch (NotFoundException $e) {
+				return null;
+			}
+		}
+		return $folder;
+	}
+
+
 
 	private function validFile(File $file, bool $shared): bool {
 		$allowed_mimes = array_merge(Application::IMAGE_MIMES, Application::VIDEO_MIMES);
@@ -173,5 +284,14 @@ class AlbumsController extends Controller {
 		}
 
 		return false;
+	}
+
+	/**
+	 * convert 2016-08 to 2016-Aug
+	 */
+	private function convertDate(string $yearMonth) {
+		$temp = str_replace('-','',$yearMonth);
+		$month = date('M', strtotime($temp . '01'));
+		return explode('-',$yearMonth)[0] . '-' . $month;
 	}
 }

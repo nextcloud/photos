@@ -76,5 +76,30 @@ return [
 				'path' => '',
 			],
 		],
+		[
+			'name' => 'albums#getNumberByMonth',
+			'url' => '/api/v1/numberbymonth/{path}',
+			'verb' => 'GET',
+			'requirements' => [
+				'path' => '.*',
+			],
+			'defaults' => [
+				'path' => '',
+			],
+		],
+		[
+			'name' => 'albums#getPhotosOfMonth',
+			'url' => '/api/v1/photosofmonth/{yearandmonth}',
+			'verb' => 'GET',
+			'requirements' => [
+				'yearandmonth' => '.*',
+				'path' => '.*',
+			],
+			'defaults' => [
+				'yearandmonth' => '',
+				'path' => '',
+			],
+		],
+
 	]
 ];
