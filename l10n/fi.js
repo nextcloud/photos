@@ -12,6 +12,7 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "Avaa \"{name}\"-alikansio",
     "Share this folder" : "Jaa tämä kansio",
     "Back to {folder}" : "Takaisin kansioon {folder}",
+    "View" : "Näytä",
     "This folder does not exists" : "Tätä kansiota ei ole olemassa",
     "An error occurred" : "Tapahtui virhe",
     "No photos in here" : "Ei kuvia täällä",

@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Photos" : "Photos",
     "Favorites" : "Favoritos",
-    "Settings" : "Configurationes"
+    "Settings" : "Configurationes",
+    "View" : "Vider"
 },
 "nplurals=2; plural=(n != 1);");

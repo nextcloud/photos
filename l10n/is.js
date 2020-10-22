@@ -12,6 +12,7 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "Opna \"{name}\" undirmöppuna",
     "Share this folder" : "Deila þessari möppu",
     "Back to {folder}" : "Til baka í {folder}",
+    "View" : "Skoða",
     "This folder does not exists" : "Þessi mappa er ekki til",
     "An error occurred" : "Villa kom upp",
     "No photos in here" : "Engar myndir hér",
