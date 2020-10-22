@@ -32,7 +32,7 @@
 				<AppNavigationItem to="/videos" :title="t('photos', 'Your videos')" icon="icon-video" />
 				<AppNavigationItem to="/favorites" :title="t('photos', 'Favorites')" icon="icon-favorite" />
 				<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Your folders')" icon="icon-files-dark" />
-				<AppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared folders')" icon="icon-share" />
+				<AppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared with you')" icon="icon-share" />
 				<AppNavigationItem :to="{name: 'tags'}" :title="t('photos', 'Tagged photos')" icon="icon-tag" />
 				<AppNavigationItem v-if="showLocationMenuEntry"
 					:to="{name: 'maps'}"
