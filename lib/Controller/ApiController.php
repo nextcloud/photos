@@ -29,6 +29,8 @@ use OCA\Photos\AppInfo\Application;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http\StreamResponse;
+use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\IConfig;
 use OCP\IRequest;
 use OCP\IUserSession;
@@ -69,5 +71,23 @@ class ApiController extends Controller {
 		$userId = $user->getUid();
 		$this->config->setUserValue($userId, Application::APP_ID, $key, $value);
 		return new JSONResponse([], Http::STATUS_OK);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 */
+	public function serviceWorker() {
+		$response = new StreamResponse(__DIR__.'/../../js/photos-service-worker.js');
+		$response->setHeaders([
+			'Content-Type' => 'application/javascript',
+			'Service-Worker-Allowed' => '/'
+		]);
+		$policy = new ContentSecurityPolicy();
+		$policy->addAllowedWorkerSrcDomain("'self'");
+		$policy->addAllowedScriptDomain("'self'");
+		$policy->addAllowedConnectDomain("'self'");
+		$response->setContentSecurityPolicy($policy);
+		return $response;
 	}
 }

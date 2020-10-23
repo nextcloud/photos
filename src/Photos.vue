@@ -61,6 +61,7 @@
 
 <script>
 import { getCurrentUser } from '@nextcloud/auth'
+import { generateUrl } from '@nextcloud/router'
 
 import Content from '@nextcloud/vue/dist/Components/Content'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
@@ -94,6 +95,30 @@ export default {
 				? false
 				: getCurrentUser().isAdmin || isMapsInstalled,
 		}
+	},
+
+	beforeMount() {
+		if ('serviceWorker' in navigator) {
+			// Use the window load event to keep the page load performant
+			window.addEventListener('load', () => {
+				navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js'), {
+					scope: '/',
+				}).then(registration => {
+					console.debug('SW registered: ', registration)
+				}).catch(registrationError => {
+					console.error('SW registration failed: ', registrationError)
+				})
+
+			})
+		} else {
+			console.debug('Service Worker is not enabled on this browser.')
+		}
+	},
+
+	beforeDestroy() {
+		window.removeEventListener('load', () => {
+			navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js'))
+		})
 	},
 }
 </script>
