@@ -7,7 +7,6 @@ OC.L10N.register(
     "Your videos" : "Tus vídeos",
     "Favorites" : "Favoritos",
     "Your folders" : "Tus carpetas",
-    "Shared folders" : "Carpetas compartidas",
     "Tagged photos" : "Fotos etiquetadas",
     "Locations" : "Ubicaciones",
     "Settings" : "Ajustes",
