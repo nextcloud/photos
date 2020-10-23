@@ -128,7 +128,7 @@ export default {
 
 			// apply to current route
 			return Object.assign({}, this.$route, {
-				params: { path },
+				params: { path: path.split('/') },
 			})
 		},
 	},
