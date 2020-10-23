@@ -41,6 +41,7 @@
 			</template>
 			<template #footer>
 				<AppNavigationSettings :title="t('photos', 'Settings')">
+					<TimelineSettings />
 					<CroppedLayoutSettings />
 				</AppNavigationSettings>
 			</template>
@@ -70,6 +71,7 @@ import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import AppNavigationSettings from '@nextcloud/vue/dist/Components/AppNavigationSettings'
 
 import CroppedLayoutSettings from './components/Settings/CroppedLayoutSettings'
+import TimelineSettings from './components/Settings/TimelineSettings'
 import svgplaceholder from './assets/file-placeholder.svg'
 import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'
@@ -80,6 +82,7 @@ export default {
 	components: {
 		Content,
 		CroppedLayoutSettings,
+		TimelineSettings,
 		AppContent,
 		AppNavigation,
 		AppNavigationItem,

@@ -71,6 +71,7 @@ import Loader from '../components/Loader'
 
 import cancelableRequest from '../utils/CancelableRequest'
 import GridConfigMixin from '../mixins/GridConfig'
+import UserConfig from '../mixins/UserConfig'
 import { allMimes } from '../services/AllowedMimes'
 
 export default {
@@ -80,7 +81,7 @@ export default {
 		VirtualGrid,
 		Navigation,
 	},
-	mixins: [GridConfigMixin],
+	mixins: [GridConfigMixin, UserConfig],
 	props: {
 		loading: {
 			type: Boolean,
@@ -237,6 +238,7 @@ export default {
 					page: this.page,
 					perPage: numberOfImagesPerBatch,
 					mimesType: this.mimesType,
+					rootFolder: this.timelineRootFolder,
 				})
 
 				// If we get less files than requested that means we got to the end

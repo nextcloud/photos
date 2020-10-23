@@ -1,9 +1,9 @@
 <!--
- - @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
- -
- - @author John Molakvoæ <skjnldsv@protonmail.com>
+ - @copyright Copyright (c) 2020 Corentin Mors
  -
  - @license GNU AGPL version 3 or any later version
+ -
+ - @author Corentin Mors <medias@pixelswap.fr>
  -
  - This program is free software: you can redistribute it and/or modify
  - it under the terms of the GNU Affero General Public License as
@@ -22,28 +22,46 @@
 
 <template>
 	<div class="section">
-		<h2>{{ t('photos', 'View') }}</h2>
-		<p>
-			<input
-				id="enable-cropped-layout"
-				v-model="croppedLayout"
-				type="checkbox"
-				class="checkbox"
-				@change="updateSetting('croppedLayout')">
-			<label for="enable-cropped-layout">{{ t('photos', 'Enable squared photos view') }}</label>
-		</p>
+		<h2>{{ t('photos', 'Timeline') }}</h2>
+
+		<p>{{ t('photos', 'Folder for the timeline') }} : {{ timelineRootFolder }}/</p>
+		<button
+			@click="pickRootFolder">
+			{{ t('photos', 'Choose folder') }}
+		</button>
 	</div>
 </template>
 
 <script>
+import { getFilePickerBuilder } from '@nextcloud/dialogs'
 import UserConfig from '../../mixins/UserConfig'
 
 export default {
-	name: 'CroppedLayoutSettings',
+	name: 'TimelineSettings',
 
 	mixins: [
 		UserConfig,
 	],
+
+	methods: {
+		pickRootFolder() {
+			const picker = getFilePickerBuilder(t('photos', 'Choose a folder to display in the timeline'))
+				.setMultiSelect(false)
+				.addMimeTypeFilter('httpd/unix-directory')
+				.setModal(true)
+				.setType(1)
+				.allowDirectories(true)
+				.build()
+
+			return picker
+				.pick()
+				.then((dest) => {
+					this.timelineRootFolder = dest
+					this.updateSetting('timelineRootFolder')
+					location.reload()
+				})
+		},
+	},
 }
 </script>
 
