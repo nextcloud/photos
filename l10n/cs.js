@@ -7,7 +7,6 @@ OC.L10N.register(
     "Your videos" : "Vaše videa",
     "Favorites" : "Oblíbené",
     "Your folders" : "Vaše složky",
-    "Shared folders" : "Sdílené složky",
     "Tagged photos" : "Označené fotky",
     "Locations" : "Umístění",
     "Settings" : "Nastavení",
