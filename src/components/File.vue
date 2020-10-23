@@ -28,7 +28,7 @@
 		:href="davPath"
 		:aria-label="ariaLabel"
 		@click.prevent="openViewer">
-		<div v-if="item.injected.mime.includes('video') && hasPreview" class="icon-video-white" />
+		<div v-if="item.injected.mime.includes('video') && item.injected.hasPreview" class="icon-video-white" />
 		<!-- image and loading placeholder -->
 		<transition-group name="fade" class="transition-group">
 			<img
