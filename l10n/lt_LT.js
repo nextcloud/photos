@@ -7,7 +7,6 @@ OC.L10N.register(
     "Your videos" : "Jūsų vaizdo įrašai",
     "Favorites" : "Mėgstamos",
     "Your folders" : "Jūsų aplankai",
-    "Shared folders" : "Bendrinami aplankai",
     "Tagged photos" : "Pažymėtos nuotraukos",
     "Locations" : "Vietos",
     "Settings" : "Nustatymai",
