@@ -1,6 +1,7 @@
 { "translations": {
     "Photos" : "相片",
     "Favorites" : "最愛",
+    "Shared with you" : "Shared with you",
     "Settings" : "設定"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

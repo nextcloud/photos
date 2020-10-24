@@ -7,6 +7,7 @@ OC.L10N.register(
     "Your videos" : "Τα βίντεό σας",
     "Favorites" : "Αγαπημένα",
     "Your folders" : "Οι φάκελοί σας",
+    "Shared with you" : "Διαμοιρασμένα μαζί σας",
     "Tagged photos" : "Φωτογραφίες με ετικέτα",
     "Locations" : "Τοποθεσίες",
     "Settings" : "Ρυθμίσεις",

@@ -5,6 +5,7 @@ OC.L10N.register(
     "Your memories under your control" : "Zure oroitzapenak zure kontrolpean",
     "Your photos" : "Zure argazkiak",
     "Favorites" : "Gogokoak",
+    "Shared with you" : "Zurekin partekatua",
     "Tagged photos" : "Etiketaturiko argazkiak",
     "Locations" : "Kokapenak",
     "Settings" : "Ezarpenak",

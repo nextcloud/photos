@@ -5,6 +5,7 @@ OC.L10N.register(
     "Your memories under your control" : "Các ký ức của bạn dưới sự kiểm soát của bạn",
     "Your photos" : "Ảnh của bạn",
     "Favorites" : "Ưa thích",
+    "Shared with you" : "Đã chia sẻ với bạn",
     "Tagged photos" : "Ảnh gắn nhãn",
     "Locations" : "Các địa điểm",
     "Settings" : "Cài đặt",

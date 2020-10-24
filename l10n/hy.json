@@ -1,6 +1,7 @@
 { "translations": {
     "Photos" : "Նկարներ",
     "Favorites" : "Սիրվածներ",
+    "Shared with you" : "Shared with you",
     "Settings" : "կարգավորումներ"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

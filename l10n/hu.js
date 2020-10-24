@@ -5,6 +5,7 @@ OC.L10N.register(
     "Your memories under your control" : "Az Ön emlékei, az Ön felügyelete alatt",
     "Your photos" : "Az Ön fényképei",
     "Favorites" : "Kedvencek",
+    "Shared with you" : "Megosztva Önnel",
     "Tagged photos" : "Címkézett fényképek",
     "Locations" : "Helyek",
     "Settings" : "Beállítások",

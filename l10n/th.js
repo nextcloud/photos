@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Photos" : "Photos",
     "Favorites" : "รายการโปรด",
+    "Shared with you" : "Shared with you",
     "Settings" : "ตั้งค่า"
 },
 "nplurals=1; plural=0;");

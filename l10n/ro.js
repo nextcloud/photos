@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Photos" : "Poze",
     "Favorites" : "Favorite",
+    "Shared with you" : "Partajat cu tine",
     "Settings" : "Setări",
     "View" : "Vizualizare"
 },
