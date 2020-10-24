@@ -1,5 +1,6 @@
 { "translations": {
     "Favorites" : "په نښه شوي",
+    "Shared with you" : "تاسې سره شريک شوي",
     "Settings" : "سمونې"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

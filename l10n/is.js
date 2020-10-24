@@ -5,6 +5,7 @@ OC.L10N.register(
     "Your memories under your control" : "Haltu minningunum þínum undir þinni stjórn",
     "Your photos" : "Ljósmyndirnar þínar",
     "Favorites" : "Eftirlæti",
+    "Shared with you" : "Deilt með þér",
     "Tagged photos" : "Merktar ljósmyndir",
     "Locations" : "Staðsetningar",
     "Settings" : "Stillingar",

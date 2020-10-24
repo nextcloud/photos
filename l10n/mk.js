@@ -7,6 +7,7 @@ OC.L10N.register(
     "Your videos" : "Видеа",
     "Favorites" : "Омилени",
     "Your folders" : "Папки",
+    "Shared with you" : "Споделено со вас",
     "Tagged photos" : "Означени фотографии",
     "Locations" : "Локации",
     "Settings" : "Параметри",

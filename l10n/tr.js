@@ -7,6 +7,7 @@ OC.L10N.register(
     "Your videos" : "Görüntüleriniz",
     "Favorites" : "Sık kullanılanlar",
     "Your folders" : "Klasörleriniz",
+    "Shared with you" : "Sizinle paylaşıldı",
     "Tagged photos" : "Etiketlenmiş fotoğraflar",
     "Locations" : "Konumlar",
     "Settings" : "Ayarlar",

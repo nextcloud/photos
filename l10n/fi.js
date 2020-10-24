@@ -5,6 +5,7 @@ OC.L10N.register(
     "Your memories under your control" : "Muistosi hallinnassasi",
     "Your photos" : "Valokuvasi",
     "Favorites" : "Suosikit",
+    "Shared with you" : "Jaettu kanssasi",
     "Tagged photos" : "Tunnisteilla varustetut kuvat",
     "Locations" : "Sijainnit",
     "Settings" : "Asetukset",

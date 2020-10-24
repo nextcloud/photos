@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Photos" : "Photos",
     "Favorites" : "Favorits",
+    "Shared with you" : "Shared with you",
     "Settings" : "Paramètres",
     "View" : "Vista"
 },
