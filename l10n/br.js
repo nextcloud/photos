@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Photos" : "Fotoioù",
     "Favorites" : "Pennrolloù",
+    "Shared with you" : "Rannet ganeoc'h",
     "Settings" : "Arventennoù",
     "View" : "Gwell"
 },

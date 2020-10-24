@@ -4,6 +4,7 @@ OC.L10N.register(
     "Photos" : "الصور",
     "Your photos" : "صورك",
     "Favorites" : "المفضلات",
+    "Shared with you" : "شورك معك",
     "Settings" : "الإعدادات",
     "An error occurred" : "طرأ هناك خطأ"
 },

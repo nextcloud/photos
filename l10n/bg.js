@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Photos" : "Снимки",
     "Favorites" : "Любими",
+    "Shared with you" : "Споделени с вас",
     "Settings" : "Настройки",
     "View" : "Изглед",
     "An error occurred" : "Възникна грешка"

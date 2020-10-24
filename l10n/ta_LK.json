@@ -1,6 +1,7 @@
 { "translations": {
     "Photos" : "Photos",
     "Favorites" : "விருப்பங்கள்",
+    "Shared with you" : "Shared with you",
     "Settings" : "அமைப்புகள்"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Photos" : "Lluniau",
     "Favorites" : "Ffefrynnau",
+    "Shared with you" : "Shared with you",
     "Settings" : "Gosodiadau",
     "An error occurred" : "Digwyddodd gwall"
 },
