@@ -5,6 +5,7 @@ OC.L10N.register(
     "Your memories under your control" : "خاطرات شما تحت کنترل شماست",
     "Your photos" : "عکس های شما",
     "Favorites" : "مورد علاقه ها",
+    "Shared with you" : "با شما به اشتراک گذاشته شده است",
     "Tagged photos" : "عکسهای برچسب خورده",
     "Locations" : "مکانها",
     "Settings" : "تنظیمات",

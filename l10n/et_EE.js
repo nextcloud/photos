@@ -5,6 +5,7 @@ OC.L10N.register(
     "Your memories under your control" : "Sinu mälestused sinu kontrolli all",
     "Your photos" : "Sinu fotod",
     "Favorites" : "Lemmikud",
+    "Shared with you" : "Sinuga jagatud",
     "Tagged photos" : "Sildistatud fotod",
     "Locations" : "Asukohad",
     "Settings" : "Seaded",

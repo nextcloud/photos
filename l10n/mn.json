@@ -1,6 +1,7 @@
 { "translations": {
     "Photos" : "Зурагнууд",
     "Favorites" : "Онцолсон",
+    "Shared with you" : "тантай хуваалцсан",
     "Settings" : "Тохиргоо"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
