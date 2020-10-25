@@ -25,4 +25,8 @@
             <order>1</order>
         </navigation>
     </navigations>
+    <settings>
+        <personal>OCA\Photos\Settings\Personal</personal>
+        <personal-section>OCA\Photos\Settings\PersonalSection</personal-section>
+    </settings>
 </info>

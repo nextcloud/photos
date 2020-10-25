@@ -26,6 +26,8 @@ import { allMimes } from './AllowedMimes'
 import client from './DavClient'
 import { props } from './DavRequest'
 import { sizes } from '../assets/grid-sizes'
+import axios from '@nextcloud/axios'
+import { generateUrl } from '@nextcloud/router'
 
 /**
  * List files from a folder and filter out unwanted mimes
@@ -47,6 +49,9 @@ export default async function(onlyFavorites = false, options = {}) {
 	}, options)
 
 	const prefixPath = `/files/${getCurrentUser().uid}`
+
+	const targetPathRead = await axios.get(generateUrl('apps/photos/api/v1/config/photos_dir'))
+	const targetPath = targetPathRead.data.value + (targetPathRead.data.value.endsWith('/') ? '' : '/')
 
 	// generating the search or condition
 	// based on the allowed mimetypes
@@ -127,5 +132,6 @@ export default async function(onlyFavorites = false, options = {}) {
 		.map(data => genFileInfo(data))
 		// remove prefix path from full file path
 		.map(data => Object.assign({}, data, { filename: data.filename.replace(prefixPath, '') }))
+		.filter(data => data.filename.startsWith(targetPath))
 
 }

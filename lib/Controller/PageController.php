@@ -85,6 +85,7 @@ class PageController extends Controller {
 		$this->initialStateService->provideInitialState($this->appName, 'image-mimes', Application::IMAGE_MIMES);
 		$this->initialStateService->provideInitialState($this->appName, 'video-mimes', Application::VIDEO_MIMES);
 		$this->initialStateService->provideInitialState($this->appName, 'maps', $this->appManager->isEnabledForUser('maps') === true);
+		$this->initialStateService->provideInitialState($this->appName, 'photos_dir', $this->config->getUserValue($user->getUid(), Application::APP_ID, 'photos_dir', ''));
 		$this->initialStateService->provideInitialState($this->appName, 'croppedLayout', $this->config->getUserValue($user->getUid(), Application::APP_ID, 'croppedLayout', 'false'));
 
 		Util::addScript(Application::APP_ID, 'photos-main');

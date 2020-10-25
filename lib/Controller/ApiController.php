@@ -53,6 +53,26 @@ class ApiController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
+	 * get preferences (user setting)
+	 *
+	 * @param string key the identifier
+	 *
+	 * @return JSONResponse with result in value
+	 */
+	public function getUserConfig(string $key): JSONResponse {
+		$user = $this->userSession->getUser();
+		if (is_null($user)) {
+			return new JSONResponse([], Http::STATUS_PRECONDITION_FAILED);
+		}
+
+		$userId = $user->getUid();
+		$value = $this->config->getUserValue($userId, Application::APP_ID, $key, '');
+		return new JSONResponse(['value' => $value], Http::STATUS_OK);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
 	 * update preferences (user setting)
 	 *
 	 * @param string key the identifier to change

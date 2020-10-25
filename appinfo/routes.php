@@ -23,6 +23,7 @@
 
 return [
 	'routes' => [
+		['name' => 'api#getUserConfig', 'url' => '/api/v1/config/{key}', 'verb' => 'GET'],
 		['name' => 'api#setUserConfig', 'url' => '/api/v1/config/{key}', 'verb' => 'PUT'],
 
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],

@@ -31,7 +31,7 @@
 					exact />
 				<AppNavigationItem to="/videos" :title="t('photos', 'Your videos')" icon="icon-video" />
 				<AppNavigationItem to="/favorites" :title="t('photos', 'Favorites')" icon="icon-favorite" />
-				<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Your folders')" icon="icon-files-dark" />
+				<AppNavigationItem :to="'/albums/' + photosDirWithoutLeadingSlash" :title="t('photos', 'Your folders')" icon="icon-files-dark" />
 				<AppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared with you')" icon="icon-share" />
 				<AppNavigationItem :to="{name: 'tags'}" :title="t('photos', 'Tagged photos')" icon="icon-tag" />
 				<AppNavigationItem v-if="showLocationMenuEntry"
@@ -73,6 +73,7 @@ import svgplaceholder from './assets/file-placeholder.svg'
 import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'
 import isMapsInstalled from './services/IsMapsInstalled'
+import photosDir from './services/PhotosDir'
 
 export default {
 	name: 'Photos',
@@ -93,6 +94,7 @@ export default {
 			showLocationMenuEntry: getCurrentUser() === null
 				? false
 				: getCurrentUser().isAdmin || isMapsInstalled,
+			photosDirWithoutLeadingSlash: photosDir.startsWith('/') ? photosDir.substr(1) : photosDir,
 		}
 	},
 }
