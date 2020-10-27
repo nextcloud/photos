@@ -33,7 +33,10 @@
 				<AppNavigationItem to="/favorites" :title="t('photos', 'Favorites')" icon="icon-favorite" />
 				<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Your folders')" icon="icon-files-dark" />
 				<AppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared with you')" icon="icon-share" />
-				<AppNavigationItem :to="{name: 'tags'}" :title="t('photos', 'Tagged photos')" icon="icon-tag" />
+				<AppNavigationItem v-if="areTagsInstalled"
+					:to="{name: 'tags'}"
+					:title="t('photos', 'Tagged photos')"
+					icon="icon-tag" />
 				<AppNavigationItem v-if="showLocationMenuEntry"
 					:to="{name: 'maps'}"
 					:title="t('photos', 'Locations')"
@@ -74,6 +77,7 @@ import svgplaceholder from './assets/file-placeholder.svg'
 import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'
 import isMapsInstalled from './services/IsMapsInstalled'
+import areTagsInstalled from './services/AreTagsInstalled'
 
 export default {
 	name: 'Photos',
@@ -91,6 +95,7 @@ export default {
 			svgplaceholder,
 			imgplaceholder,
 			videoplaceholder,
+			areTagsInstalled,
 			showLocationMenuEntry: getCurrentUser() === null
 				? false
 				: getCurrentUser().isAdmin || isMapsInstalled,
