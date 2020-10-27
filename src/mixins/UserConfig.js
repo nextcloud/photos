@@ -30,7 +30,9 @@ const eventName = 'photos:user-config-changed'
 export default {
 	data() {
 		const croppedLayoutLocalStorage = localStorage.getItem('photos:croppedLayout')
+		const timelineRootFolderLocalStorage = localStorage.getItem('photos:timelineRootFolder')
 		return {
+			timelineRootFolder: timelineRootFolderLocalStorage || loadState('photos', 'timelineRootFolder'),
 			croppedLayout: croppedLayoutLocalStorage !== null
 				? croppedLayoutLocalStorage === 'true'
 				: loadState('photos', 'croppedLayout') === 'true',

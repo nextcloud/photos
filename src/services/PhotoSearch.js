@@ -44,9 +44,11 @@ export default async function(onlyFavorites = false, options = {}) {
 		page: 0, // start at the first page
 		perPage: sizes.max.count * 10, // ten rows of the max width
 		mimesType: allMimes, // all mimes types
+		rootFolder: '',
 	}, options)
 
-	const prefixPath = `/files/${getCurrentUser().uid}`
+	const davPath = `/files/${getCurrentUser().uid}`
+	const prefixPath = `${davPath}${options.rootFolder}`
 
 	// generating the search or condition
 	// based on the allowed mimetypes
@@ -65,6 +67,15 @@ export default async function(onlyFavorites = false, options = {}) {
 					<oc:favorite/>
 				</d:prop>
 				<d:literal>1</d:literal>
+			</d:eq>`
+		: ''
+
+	const eqOwner = options.rootFolder === ''
+		? `<d:eq>
+				<d:prop>
+					<oc:owner-id/>
+				</d:prop>
+				<d:literal>${getCurrentUser().uid}</d:literal>
 			</d:eq>`
 		: ''
 
@@ -97,12 +108,7 @@ export default async function(onlyFavorites = false, options = {}) {
 								${orMime}
 							</d:or>
 							${eqFavorites}
-							<d:eq>
-								<d:prop>
-									<oc:owner-id/>
-								</d:prop>
-								<d:literal>${getCurrentUser().uid}</d:literal>
-							</d:eq>
+							${eqOwner}
 						</d:and>
 					</d:where>
 					<d:orderby>
@@ -126,6 +132,6 @@ export default async function(onlyFavorites = false, options = {}) {
 	return response.data
 		.map(data => genFileInfo(data))
 		// remove prefix path from full file path
-		.map(data => Object.assign({}, data, { filename: data.filename.replace(prefixPath, '') }))
+		.map(data => Object.assign({}, data, { filename: data.filename.replace(davPath, '') }))
 
 }
