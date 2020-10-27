@@ -25,6 +25,7 @@ import Router from 'vue-router'
 import Vue from 'vue'
 
 import isMapsInstalled from '../services/IsMapsInstalled'
+import areTagsInstalled from '../services/AreTagsInstalled'
 import { videoMimes } from '../services/AllowedMimes'
 
 const Albums = () => import('../views/Albums')
@@ -58,7 +59,7 @@ export default new Router({
 		{
 			path: '/',
 			component: Timeline,
-			name: 'root',
+			name: 'timeline',
 			props: route => ({
 				rootTitle: t('photos', 'Your photos'),
 			}),
@@ -108,6 +109,7 @@ export default new Router({
 			path: '/tags/:path*',
 			component: Tags,
 			name: 'tags',
+			redirect: !areTagsInstalled ? { name: 'timeline' } : null,
 			props: route => ({
 				path: `${route.params.path ? route.params.path : ''}`,
 				// if path is empty
