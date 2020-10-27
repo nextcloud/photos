@@ -140,11 +140,7 @@ export default {
 			return this.fileList.flatMap((file, index) => {
 				const finalArray = []
 				const currentSection = this.getFormatedDate(file.lastmod, 'YYYY MMMM')
-				if (
-					currentSection
-						!== this.getFormatedDate(this.timeline[index - 1]?.lastmod, 'YYYY MMMM')
-						&& (this.lastSection !== currentSection)
-				) {
+				if (this.lastSection !== currentSection) {
 					finalArray.push({
 						id: `title-${index}`,
 						injected: {
