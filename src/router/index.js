@@ -38,6 +38,16 @@ if (!isMapsInstalled) {
 	mapsPath = generateUrl('/settings/apps/integration/maps')
 }
 
+/**
+ * Parse the path of a route : join the elements of the array and return a single string with slashes
+ * + always lead current path with a slash
+ * @param {string|array} path path arguments to parse
+ * @returns {string}
+ */
+const parsePathParams = (path) => {
+	return `/${Array.isArray(path) ? path.join('/') : path || ''}`
+}
+
 export default new Router({
 	mode: 'history',
 	// if index.php is in the url AND we got this far, then it's working:
@@ -58,8 +68,7 @@ export default new Router({
 			component: Albums,
 			name: 'albums',
 			props: route => ({
-				// always lead current path with a slash
-				path: `/${route.params.path ? route.params.path : ''}`,
+				path: parsePathParams(route.params.path),
 				// if path is empty
 				isRoot: !route.params.path,
 				rootTitle: t('photos', 'Your folders'),
@@ -70,8 +79,7 @@ export default new Router({
 			component: Albums,
 			name: 'shared',
 			props: route => ({
-				// always lead current path with a slash
-				path: `/${route.params.path ? route.params.path : ''}`,
+				path: parsePathParams(route.params.path),
 				// if path is empty
 				isRoot: !route.params.path,
 				rootTitle: t('photos', 'Shared with you'),
