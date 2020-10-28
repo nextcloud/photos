@@ -24,7 +24,7 @@
 	<Content app-name="photos">
 		<AppNavigation>
 			<template #list>
-				<AppNavigationItem :to="{name: 'root'}"
+				<AppNavigationItem :to="{name: 'timeline'}"
 					class="app-navigation__photos"
 					:title="t('photos', 'Your photos')"
 					icon="icon-yourphotos"
