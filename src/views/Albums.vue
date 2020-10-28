@@ -142,7 +142,7 @@ export default {
 			return list
 		},
 		contentList() {
-			const folders = this.folderList.map((folder) => {
+			const folders = this.folderList?.map((folder) => {
 				return {
 					id: `folder-${folder.fileid}`,
 					injected: {
@@ -156,7 +156,7 @@ export default {
 				}
 			})
 
-			const files = this.fileList.map((file) => {
+			const files = this.fileList?.map((file) => {
 				return {
 					id: `file-${file.fileid}`,
 					injected: {
@@ -170,7 +170,7 @@ export default {
 				}
 			})
 
-			return [...folders, ...files]
+			return [...(folders || []), ...(files || [])]
 		},
 
 		// is current folder empty?
