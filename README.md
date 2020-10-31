@@ -6,7 +6,7 @@
 
 ## Why is this so awesome?
 
-* **📸 Beautiful Photo und Video Timeline**
+* **📸 Beautiful Photo and Video Timeline**
 * **⭐ Favorites and Tagging:** Favorite and tag your photos!
 * **Slideshow and easy sharing:** Show slideshows and share your photos or albums easy
 * **Albums:** Create albums from your contents
