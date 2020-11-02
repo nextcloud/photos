@@ -6,11 +6,11 @@
     "Favorites" : "Favoriten",
     "Your folders" : "Ihre Ordner",
     "Shared with you" : "Mit Ihnen geteilt",
-    "Tagged photos" : "Getaggte Fotos",
+    "Tagged photos" : "Fotos mit Schlagworten",
     "Locations" : "Orte",
     "Settings" : "Einstellungen",
     "Open the full size \"{name}\" image" : "Bild \"{name}\" in Originalgröße öffnen",
-    "Open the \"{name}\" sub-directory" : "Unterverzeichnis \"{name}\" öffnen",
+    "Open the \"{name}\" sub-directory" : "Öffne den Unterordner \"{name}\" ",
     "Share this folder" : "Diesen Ordner teilen",
     "Back to {folder}" : "Zurück zu {folder}",
     "View" : "Ansicht",
@@ -19,7 +19,7 @@
     "An error occurred" : "Es ist ein Fehler aufgetreten",
     "No photos in here" : "Keine Fotos vorhanden",
     "No tags yet" : "Noch keine Schlagworte vorhanden",
-    "Photos with tags will show up here" : "Getaggte Fotos werden hier angezeigt",
+    "Photos with tags will show up here" : "Fotos mit Schlagworten werden hier angezeigt",
     "Your albums" : "Ihre Alben",
     "Shared albums" : "Geteilte Alben"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
