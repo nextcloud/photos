@@ -11,7 +11,7 @@ OC.L10N.register(
     "Tagged photos" : "Fotos mit Tags",
     "Locations" : "Orte",
     "Settings" : "Einstellungen",
-    "Open the full size \"{name}\" image" : "Öffne \"{name}\" in voller Gröẞe",
+    "Open the full size \"{name}\" image" : "Bild \"{name}\" in Originalgröße öffnen",
     "Open the \"{name}\" sub-directory" : "Öffne den \"{name}\" Unterordner",
     "Share this folder" : "Diesen Ordner teilen",
     "Back to {folder}" : "Zurück zu {folder}",
