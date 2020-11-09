@@ -3,8 +3,10 @@ OC.L10N.register(
     {
     "Photos" : "Kuvat",
     "Your memories under your control" : "Muistosi hallinnassasi",
-    "Your photos" : "Valokuvasi",
+    "Your photos" : "Valokuvat",
+    "Your videos" : "Videot",
     "Favorites" : "Suosikit",
+    "Your folders" : "Kansiot",
     "Shared with you" : "Jaettu kanssasi",
     "Tagged photos" : "Tunnisteilla varustetut kuvat",
     "Locations" : "Sijainnit",
