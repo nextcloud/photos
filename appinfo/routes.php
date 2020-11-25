@@ -23,7 +23,11 @@
 
 return [
 	'routes' => [
+		['name' => 'api#setUserConfig', 'url' => '/api/v1/config/{key}', 'verb' => 'PUT'],
+		['name' => 'api#serviceWorker', 'url' => '/service-worker.js', 'verb' => 'GET'],
+
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
+		['name' => 'page#index', 'url' => '/videos', 'verb' => 'GET', 'postfix' => 'videos'],
 		['name' => 'page#index', 'url' => '/favorites', 'verb' => 'GET', 'postfix' => 'favorites'],
 		['name' => 'page#index', 'url' => '/albums/{path}', 'verb' => 'GET', 'postfix' => 'albums',
 			'requirements' => [

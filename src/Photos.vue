@@ -24,19 +24,28 @@
 	<Content app-name="photos">
 		<AppNavigation>
 			<template #list>
-				<AppNavigationItem :to="{name: 'root'}"
+				<AppNavigationItem :to="{name: 'timeline'}"
 					class="app-navigation__photos"
 					:title="t('photos', 'Your photos')"
 					icon="icon-yourphotos"
 					exact />
+				<AppNavigationItem to="/videos" :title="t('photos', 'Your videos')" icon="icon-video" />
 				<AppNavigationItem to="/favorites" :title="t('photos', 'Favorites')" icon="icon-favorite" />
-				<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Your albums')" icon="icon-files-dark" />
-				<AppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared albums')" icon="icon-share" />
-				<AppNavigationItem :to="{name: 'tags'}" :title="t('photos', 'Tagged photos')" icon="icon-tag" />
+				<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Your folders')" icon="icon-files-dark" />
+				<AppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared with you')" icon="icon-share" />
+				<AppNavigationItem v-if="areTagsInstalled"
+					:to="{name: 'tags'}"
+					:title="t('photos', 'Tagged photos')"
+					icon="icon-tag" />
 				<AppNavigationItem v-if="showLocationMenuEntry"
 					:to="{name: 'maps'}"
 					:title="t('photos', 'Locations')"
 					icon="icon-address" />
+			</template>
+			<template #footer>
+				<AppNavigationSettings :title="t('photos', 'Settings')">
+					<CroppedLayoutSettings />
+				</AppNavigationSettings>
 			</template>
 		</AppNavigation>
 		<AppContent :class="{ 'icon-loading': loading }">
@@ -54,23 +63,31 @@
 </template>
 
 <script>
+import { getCurrentUser } from '@nextcloud/auth'
+import { generateUrl } from '@nextcloud/router'
+
 import Content from '@nextcloud/vue/dist/Components/Content'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
+import AppNavigationSettings from '@nextcloud/vue/dist/Components/AppNavigationSettings'
+
+import CroppedLayoutSettings from './components/Settings/CroppedLayoutSettings'
 import svgplaceholder from './assets/file-placeholder.svg'
 import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'
 import isMapsInstalled from './services/IsMapsInstalled'
-import { getCurrentUser } from '@nextcloud/auth'
+import areTagsInstalled from './services/AreTagsInstalled'
 
 export default {
 	name: 'Photos',
 	components: {
 		Content,
+		CroppedLayoutSettings,
 		AppContent,
 		AppNavigation,
 		AppNavigationItem,
+		AppNavigationSettings,
 	},
 	data() {
 		return {
@@ -78,10 +95,35 @@ export default {
 			svgplaceholder,
 			imgplaceholder,
 			videoplaceholder,
+			areTagsInstalled,
 			showLocationMenuEntry: getCurrentUser() === null
 				? false
 				: getCurrentUser().isAdmin || isMapsInstalled,
 		}
+	},
+
+	beforeMount() {
+		if ('serviceWorker' in navigator) {
+			// Use the window load event to keep the page load performant
+			window.addEventListener('load', () => {
+				navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js'), {
+					scope: '/',
+				}).then(registration => {
+					console.debug('SW registered: ', registration)
+				}).catch(registrationError => {
+					console.error('SW registration failed: ', registrationError)
+				})
+
+			})
+		} else {
+			console.debug('Service Worker is not enabled on this browser.')
+		}
+	},
+
+	beforeDestroy() {
+		window.removeEventListener('load', () => {
+			navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js'))
+		})
 	},
 }
 </script>

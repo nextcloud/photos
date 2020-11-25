@@ -2,6 +2,7 @@
  - @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
  -
  - @author John Molakvoæ <skjnldsv@protonmail.com>
+ - @author Corentin Mors <medias@pixelswap.fr>
  -
  - @license GNU AGPL version 3 or any later version
  -
@@ -30,30 +31,25 @@
 	</EmptyContent>
 
 	<!-- Folder content -->
-	<Grid v-else-if="!loading">
+	<div v-else-if="!loading">
 		<Navigation v-if="folder"
 			key="navigation"
 			v-bind="folder"
 			:root-title="rootTitle"
 			:show-actions="true" />
-
 		<!-- Empty folder, should only happen via direct link -->
 		<EmptyContent v-if="isEmpty" key="emptycontent" illustration-name="empty">
 			{{ t('photos', 'No photos in here') }}
 		</EmptyContent>
 
-		<!-- Folders and files list -->
-		<template v-else>
-			<Folder v-for="dir in folderList"
-				:key="dir.fileid"
-				v-bind="dir"
-				:show-shared="showShared" />
-			<File v-for="file in fileList"
-				:key="file.fileid"
-				:list="fileList"
-				v-bind="file" />
-		</template>
-	</Grid>
+		<div v-else class="grid-container">
+			<VirtualGrid
+				ref="virtualgrid"
+				:items="contentList"
+				:get-column-count="() => gridConfig.count"
+				:get-grid-gap="() => gridConfig.gap" />
+		</div>
+	</div>
 </template>
 
 <script>
@@ -61,23 +57,24 @@ import { mapGetters } from 'vuex'
 
 import getAlbumContent from '../services/AlbumContent'
 
+import VirtualGrid from 'vue-virtual-grid'
 import EmptyContent from '../components/EmptyContent'
 import Folder from '../components/Folder'
 import File from '../components/File'
-import Grid from '../components/Grid'
 import Navigation from '../components/Navigation'
+
+import GridConfigMixin from '../mixins/GridConfig'
 
 import cancelableRequest from '../utils/CancelableRequest'
 
 export default {
 	name: 'Albums',
 	components: {
+		VirtualGrid,
 		EmptyContent,
-		File,
-		Folder,
-		Grid,
 		Navigation,
 	},
+	mixins: [GridConfigMixin],
 	props: {
 		rootTitle: {
 			type: String,
@@ -143,6 +140,37 @@ export default {
 					.map(id => this.files[id])
 					.filter(file => !!file)
 			return list
+		},
+		contentList() {
+			const folders = this.folderList?.map((folder) => {
+				return {
+					id: `folder-${folder.fileid}`,
+					injected: {
+						...folder,
+						showShared: this.showShared,
+					},
+					width: 256,
+					height: 256,
+					columnSpan: 1,
+					renderComponent: Folder,
+				}
+			})
+
+			const files = this.fileList?.map((file) => {
+				return {
+					id: `file-${file.fileid}`,
+					injected: {
+						...file,
+						list: this.fileList,
+					},
+					width: 256,
+					height: 256,
+					columnSpan: 1,
+					renderComponent: File,
+				}
+			})
+
+			return [...(folders || []), ...(files || [])]
 		},
 
 		// is current folder empty?
@@ -221,3 +249,22 @@ export default {
 
 }
 </script>
+
+<style lang="scss" scoped>
+$previous: 0;
+@each $size, $config in get('sizes') {
+	$marginTop: map-get($config, 'marginTop');
+	$marginW: map-get($config, 'marginW');
+	// if this is the last entry, only use min-width
+	$rule: '(min-width: #{$previous}px) and (max-width: #{$size}px)';
+	@if $size == 'max' {
+		$rule: '(min-width: #{$previous}px)';
+	}
+	@media #{$rule} {
+		.grid-container {
+			padding: #{$marginTop}px #{$marginW}px 256px #{$marginW}px;
+		}
+	}
+	$previous: $size;
+}
+</style>

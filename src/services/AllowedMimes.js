@@ -22,5 +22,8 @@
 
 import { loadState } from '@nextcloud/initial-state'
 
-const mimes = loadState('photos', 'mimes')
-export default mimes
+const imageMimes = loadState('photos', 'image-mimes')
+const videoMimes = loadState('photos', 'video-mimes')
+const allMimes = [...imageMimes, ...videoMimes]
+
+export { allMimes as default, allMimes, imageMimes, videoMimes }

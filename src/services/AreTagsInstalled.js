@@ -1,7 +1,7 @@
 /**
- * @copyright Copyright (c) 2018 John Molakvoæ <skjnldsv@protonmail.com>
+ * @copyright Copyright (c) 2020 Jakob Röhrl <jakob.roehrl@web.de>
  *
- * @author John Molakvoæ <skjnldsv@protonmail.com>
+ * @author Jakob Röhrl <jakob.roehrl@web.de>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -20,27 +20,7 @@
  *
  */
 
-import getGridConfig from '../services/GridConfig'
+import { loadState } from '@nextcloud/initial-state'
 
-/**
- * Get the current used grid config
- */
-export default {
-	data() {
-		return {
-			gridConfig: {},
-		}
-	},
-
-	created() {
-		getGridConfig.$on('changed', val => {
-			this.gridConfig = val
-		})
-		console.debug(`[${appName}]`, 'Grid config', Object.assign({}, getGridConfig.gridConfig))
-		this.gridConfig = getGridConfig.gridConfig
-	},
-
-	beforeDestroy() {
-		getGridConfig.$off('changed', this.gridConfig)
-	},
-}
+const systemtags = loadState('photos', 'systemtags')
+export default systemtags

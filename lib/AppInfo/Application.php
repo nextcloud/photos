@@ -33,14 +33,17 @@ use OCP\AppFramework\Bootstrap\IRegistrationContext;
 class Application extends App implements IBootstrap {
 	public const APP_ID = 'photos';
 
-	public const MIMES = [
-		// 'image/png',			// too rarely used for photos
+	public const IMAGE_MIMES = [
+		'image/png',
 		'image/jpeg',
 		'image/heic',
 		// 'image/gif',			// too rarely used for photos
 		// 'image/x-xbitmap',	// too rarely used for photos
 		// 'image/bmp',			// too rarely used for photos
 		// 'image/svg+xml',		// too rarely used for photos
+	];
+
+	public const VIDEO_MIMES = [
 		// 'video/mpeg',		// too rarely used for photos
 		// 'video/ogg',			// too rarely used for photos
 		// 'video/webm',		// too rarely used for photos

@@ -2,6 +2,7 @@
  - @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
  -
  - @author John Molakvoæ <skjnldsv@protonmail.com>
+ - @author Corentin Mors <medias@pixelswap.fr>
  -
  - @license GNU AGPL version 3 or any later version
  -
@@ -21,10 +22,10 @@
  -->
 
 <template>
-	<FolderTagPreview :id="fileid"
-		:name="basename"
-		:path="filename"
-		:file-list="fileList" />
+	<FolderTagPreview :id="item.injected.fileid"
+		:name="item.injected.basename"
+		:path="item.injected.filename"
+		:file-list="previewFiles" />
 </template>
 
 <script>
@@ -43,27 +44,16 @@ export default {
 	inheritAttrs: false,
 
 	props: {
-		basename: {
-			type: String,
+		item: {
+			type: Object,
 			required: true,
-		},
-		filename: {
-			type: String,
-			required: true,
-		},
-		fileid: {
-			type: Number,
-			required: true,
-		},
-		showShared: {
-			type: Boolean,
-			default: false,
 		},
 	},
 
 	data() {
 		return {
 			cancelRequest: null,
+			previewFolder: this.item.injected.fileid,
 		}
 	},
 
@@ -76,35 +66,38 @@ export default {
 
 		// files list of the current folder
 		folderContent() {
-			return this.folders[this.fileid]
+			return this.folders[this.item.injected.fileid]
 		},
-		fileList() {
-			return this.folderContent
-				? this.folderContent
+		previewFiles() {
+			const previewFolderContent = this.folders[this.previewFolder]
+
+			const previewFiles = previewFolderContent
+				? previewFolderContent
 					.map(id => this.files[id])
-					.filter(file => !!file)
 					.slice(0, 4) // only get the 4 first images
 				: []
+
+			// If we didn't found any previews in the folder we try the next subfolder
+			// We limit to one subfolder for performance concerns
+			if (previewFiles.length === 0
+				&& this.files[this.previewFolder].folders
+				&& this.previewFolder === this.item.injected.fileid) {
+
+				const firstChildFolder = this.files[this.previewFolder].folders[0]
+				this.updatePreviewFolder(firstChildFolder)
+
+				if (!this.folders[this.previewFolder]) {
+					this.getFolderData(this.files[this.previewFolder].filename)
+				}
+			}
+
+			return previewFiles
 		},
 	},
 
 	async created() {
-		// init cancellable request
-		const { request, cancel } = cancelableRequest(getAlbumContent)
-		this.cancelRequest = cancel
-
-		try {
-			// get data
-			const { folder, folders, files } = await request(this.filename, { shared: this.showShared })
-			this.$store.dispatch('updateFolders', { fileid: folder.fileid, files, folders })
-			this.$store.dispatch('updateFiles', { folder, files, folders })
-		} catch (error) {
-			if (error.response && error.response.status) {
-				console.error('Failed to get folder content', this.folder, error.response)
-			}
-			// else we just cancelled the request
-		} finally {
-			this.cancelRequest = null
+		if (!this.folderContent) {
+			await this.getFolderData(this.item.injected.filename)
 		}
 	},
 
@@ -113,6 +106,32 @@ export default {
 		if (this.cancelRequest) {
 			this.cancelRequest('Navigated away')
 		}
+	},
+
+	methods: {
+		async getFolderData(filename) {
+			// init cancellable request
+			const { request, cancel } = cancelableRequest(getAlbumContent)
+			this.cancelRequest = cancel
+
+			try {
+				// get data
+				const { folder, folders, files } = await request(filename, { shared: this.item.injected.showShared })
+				this.$store.dispatch('updateFolders', { fileid: folder.fileid, files, folders })
+				this.$store.dispatch('updateFiles', { folder, files, folders })
+			} catch (error) {
+				if (error.response && error.response.status) {
+					console.error('Failed to get folder content', filename, error.response)
+				}
+				// else we just cancelled the request
+			} finally {
+				this.cancelRequest = null
+			}
+		},
+
+		updatePreviewFolder(path) {
+			this.previewFolder = path
+		},
 	},
 }
 </script>

@@ -2,6 +2,7 @@
  - @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
  -
  - @author John Molakvoæ <skjnldsv@protonmail.com>
+ - @author Corentin Mors <medias@pixelswap.fr>
  -
  - @license GNU AGPL version 3 or any later version
  -
@@ -28,40 +29,49 @@
 	<EmptyContent v-else-if="error">
 		{{ t('photos', 'An error occurred') }}
 	</EmptyContent>
-	<EmptyContent v-else-if="!loading && isEmpty" illustration-name="empty">
-		{{ t('photos', 'No photos in here') }}
-	</EmptyContent>
 
 	<!-- Folder content -->
 	<div v-else-if="!loading">
 		<Navigation
+			v-if="isEmpty"
 			key="navigation"
 			:basename="path"
 			:filename="'/'"
 			:root-title="rootTitle" />
 
-		<VirtualGrid
-			:component="getComponent"
-			:list="fileList"
-			:loading-page="loadingPage"
-			:props="getProps"
-			@bottomReached="onBottomReached" />
+		<EmptyContent v-if="isEmpty" illustration-name="empty">
+			{{ t('photos', 'No photos in here') }}
+		</EmptyContent>
+
+		<div class="grid-container">
+			<VirtualGrid
+				ref="virtualgrid"
+				:items="contentList"
+				:update-function="getContent"
+				:get-column-count="() => gridConfig.count"
+				:get-grid-gap="() => gridConfig.gap"
+				:update-trigger-margin="700"
+				:loader="loaderComponent" />
+		</div>
 	</div>
 </template>
 
 <script>
+import * as moment from 'moment'
 import { mapGetters } from 'vuex'
-import debounce from 'debounce'
 
 import getPhotos from '../services/PhotoSearch'
 
 import EmptyContent from '../components/EmptyContent'
 import File from '../components/File'
-import VirtualGrid from '../components/VirtualGrid'
+import SeparatorVirtualGrid from '../components/SeparatorVirtualGrid'
+import VirtualGrid from 'vue-virtual-grid'
 import Navigation from '../components/Navigation'
+import Loader from '../components/Loader'
 
 import cancelableRequest from '../utils/CancelableRequest'
 import GridConfigMixin from '../mixins/GridConfig'
+import { allMimes } from '../services/AllowedMimes'
 
 export default {
 	name: 'Timeline',
@@ -80,6 +90,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		mimesType: {
+			type: Array,
+			default: () => allMimes,
+		},
 		rootTitle: {
 			type: String,
 			required: true,
@@ -95,8 +109,9 @@ export default {
 			cancelRequest: null,
 			done: false,
 			error: null,
-			loadingPage: false,
 			page: 0,
+			lastSection: '',
+			loaderComponent: Loader,
 		}
 	},
 
@@ -106,13 +121,55 @@ export default {
 			'files',
 			'timeline',
 		]),
-
+		// list of loaded medias
 		fileList() {
-			return this.timeline
-				.map(id => this.files[id])
-				.filter(file => !!file)
+			return this.timeline.map((fileId) => this.files[fileId])
 		},
-
+		// list of displayed content in the grid (titles + medias)
+		contentList() {
+			/** The goal of this flat map is to return an array of images separated by titles (months)
+			 * ie: [{month1}, {image1}, {image2}, {month2}, {image3}, {image4}, {image5}]
+			 * First we get the current month+year of the image
+			 * We compare it to the previous image month+year
+			 * If there is a difference we have to insert a title object before the current image
+			 * If it's equal we just add the current image to the array
+			 * Note: the injected param of objects are used to pass custom params to the grid lib
+			 * In our case injected could be an image/video (aka file) or a title (year/month)
+			 * Note2: titles are rendered full width and images are rendered on 1 column and 256x256 ratio
+			 */
+			return this.fileList.flatMap((file, index) => {
+				const finalArray = []
+				const currentSection = this.getFormatedDate(file.lastmod, 'YYYY MMMM')
+				if (this.lastSection !== currentSection) {
+					finalArray.push({
+						id: `title-${index}`,
+						injected: {
+							year: this.getFormatedDate(file.lastmod, 'YYYY'),
+							month: this.getFormatedDate(file.lastmod, 'MMMM'),
+						},
+						height: 90,
+						columnSpan: 0, // means full width
+						newRow: true,
+						renderComponent: SeparatorVirtualGrid,
+					})
+					this.lastSection = currentSection // we keep track of the last section for the next batch
+				}
+				finalArray.push({
+					id: `img-${file.fileid}`,
+					injected: {
+						...file,
+						list: this.fileList,
+						loadMore: this.getContent,
+						canLoop: false,
+					},
+					width: 256,
+					height: 256,
+					columnSpan: 1,
+					renderComponent: File,
+				})
+				return finalArray
+			})
+		},
 		// is current folder empty?
 		isEmpty() {
 			return this.fileList.length === 0
@@ -123,16 +180,17 @@ export default {
 		async onlyFavorites() {
 			// reset component
 			this.resetState()
-
-			// content is completely different
-			this.$emit('update:loading', true)
-			this.fetchContent()
+			this.getContent()
+		},
+		async mimesType() {
+			// reset component
+			this.resetState()
+			this.getContent()
 		},
 	},
 
-	async beforeMount() {
-		this.resetState()
-		this.fetchContent()
+	beforeMount() {
+		this.getContent()
 	},
 
 	beforeDestroy() {
@@ -140,13 +198,17 @@ export default {
 		if (this.cancelRequest) {
 			this.cancelRequest('Changed view')
 		}
+		this.resetState()
 	},
 
 	methods: {
-		async fetchContent() {
-			// only one simultaneous page load
-			if (this.loadingPage) {
-				return
+		/** Return next batch of data depending on global offset
+		 * @param {boolean} doReturn Returns a Promise with the list instead of a boolean
+		 * @returns {Promise<boolean>} Returns a Promise with a boolean that stops infinite loading
+		 */
+		async getContent(doReturn) {
+			if (this.done) {
+				return Promise.resolve(true)
 			}
 
 			// cancel any pending requests
@@ -158,32 +220,36 @@ export default {
 			if (this.timeline.length === 0) {
 				this.$emit('update:loading', true)
 			}
-			this.error = null
-			this.loadingPage = true
 
-			// init cancellable request
+			// done loading even with errors
 			const { request, cancel } = cancelableRequest(getPhotos)
 			this.cancelRequest = cancel
 
+			const numberOfImagesPerBatch = this.gridConfig.count * 5 // loading 5 rows
+
 			try {
-				// get content and current folder info
+				// Load next batch of images
 				const files = await request(this.onlyFavorites, {
 					page: this.page,
-					perPage: this.gridConfig.count * 5, // we load 5 rows,
+					perPage: numberOfImagesPerBatch,
+					mimesType: this.mimesType,
 				})
-				this.$store.dispatch('updateTimeline', files)
-				this.$store.dispatch('appendFiles', files)
 
-				// next time we load this script, we load the next page if the list returned
-				if (files.length === this.gridConfig.count * 5) {
-					this.page++
-				} else {
-					console.debug('We loaded the last page')
+				// If we get less files than requested that means we got to the end
+				if (files.length !== numberOfImagesPerBatch) {
 					this.done = true
 				}
 
-				// return for the viewer loadMore method
-				return files
+				this.$store.dispatch('updateTimeline', files)
+				this.$store.dispatch('appendFiles', files)
+
+				this.page += 1
+
+				if (doReturn) {
+					return Promise.resolve(files)
+				}
+
+				return Promise.resolve(false)
 			} catch (error) {
 				if (error.response && error.response.status) {
 					if (error.response.status === 404) {
@@ -195,58 +261,15 @@ export default {
 						this.error = error
 					}
 				}
+
 				// cancelled request, moving on...
 				console.error('Error fetching timeline', error)
+				return Promise.resolve(true)
 			} finally {
 				// done loading even with errors
 				this.$emit('update:loading', false)
-				this.loadingPage = false
 				this.cancelRequest = null
 			}
-		},
-
-		/**
-		 * Return the props based on the element
-		 * Here we want to bind the full fileinfo
-		 * object so we stupidly return it whole!
-		 *
-		 * @param {Object} item the scoped item from the VirtualGrid
-		 * @returns {Object}
-		 */
-		getProps(item) {
-			return Object.assign({}, item, {
-				loadMore: this.fetchContent,
-			})
-		},
-
-		/**
-		 * Return the component based on the element
-		 * We only have files in the Timeline,
-		 * so we return Files!
-		 *
-		 * @returns {Object}
-		 */
-		getComponent() {
-			return File
-		},
-
-		debounceOnBottomReached: debounce(function() {
-			this.onBottomReached()
-		}, 1000),
-
-		/**
-		 * When virtual grid reach the bottom,
-		 * we load the next page
-		 */
-		onBottomReached() {
-			// if we're currently loading or if a previous
-			// request returned the last page, we stop
-			if (this.loadingPage || this.done) {
-				return
-			}
-
-			console.debug('Loading next page', this.page)
-			this.fetchContent()
 		},
 
 		/**
@@ -256,12 +279,36 @@ export default {
 			this.$store.dispatch('resetTimeline')
 			this.done = false
 			this.error = null
-			this.loadingPage = false
 			this.page = 0
-			this.page = 0
+			this.lastSection = ''
+			this.$emit('update:loading', true)
+			this.$refs.virtualgrid.resetGrid()
+		},
+
+		getFormatedDate(string, format) {
+			return moment(string).format(format)
 		},
 
 	},
 
 }
 </script>
+
+<style lang="scss" scoped>
+$previous: 0;
+@each $size, $config in get('sizes') {
+	$marginTop: map-get($config, 'marginTop');
+	$marginW: map-get($config, 'marginW');
+	// if this is the last entry, only use min-width
+	$rule: '(min-width: #{$previous}px) and (max-width: #{$size}px)';
+	@if $size == 'max' {
+		$rule: '(min-width: #{$previous}px)';
+	}
+	@media #{$rule} {
+		.grid-container {
+			padding: 0px #{$marginW}px 256px #{$marginW}px;
+		}
+	}
+	$previous: $size;
+}
+</style>
