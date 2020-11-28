@@ -50,7 +50,7 @@
 		"vue": "^2.6.12",
 		"vue-router": "^3.4.9",
 		"vue-virtual-grid": "^2.2.1",
-		"vuex": "^3.5.1",
+		"vuex": "^3.6.0",
 		"vuex-router-sync": "^5.0.0",
 		"webdav": "^3.6.1"
 	},
