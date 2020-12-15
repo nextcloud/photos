@@ -1,7 +1,7 @@
 {
 	"name": "photos",
 	"description": "Your memories under your control",
-	"version": "1.2.0",
+	"version": "1.2.2",
 	"author": "John Molakvoæ <skjnldsv@protonmail.com>",
 	"contributors": [
 		"John Molakvoæ <skjnldsv@protonmail.com>"
@@ -49,10 +49,10 @@
 		"url-parse": "^1.4.7",
 		"vue": "^2.6.12",
 		"vue-router": "^3.4.9",
-		"vue-virtual-grid": "^2.2.1",
+		"vue-virtual-grid": "^2.3.0",
 		"vuex": "^3.5.1",
 		"vuex-router-sync": "^5.0.0",
-		"webdav": "^3.6.1"
+		"webdav": "^3.6.2"
 	},
 	"browserslist": [
 		"extends @nextcloud/browserslist-config"
