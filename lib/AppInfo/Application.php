@@ -5,6 +5,7 @@ declare(strict_types=1);
  * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
  *
  * @author John Molakvoæ <skjnldsv@protonmail.com>
+ * @author cnmicha <cnmicha@bhb-networks.com>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -29,6 +30,8 @@ use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
+use OCA\Photos\Listener\FilesListLoadingListener;
+use OCA\Files\Event\LoadAdditionalScriptsEvent;
 
 class Application extends App implements IBootstrap {
 	public const APP_ID = 'photos';
@@ -58,6 +61,8 @@ class Application extends App implements IBootstrap {
 	}
 
 	public function register(IRegistrationContext $context): void {
+		// Files app integration, adds a button that allows opening the current directory in the photos app
+		$context->registerEventListener(LoadAdditionalScriptsEvent::class, FilesListLoadingListener::class);
 	}
 
 	public function boot(IBootContext $context): void {

@@ -89,26 +89,28 @@ __webpack_require__.r(__webpack_exports__);
     },
     fileList: {
       type: Array,
-      default: function _default() {
-        return [];
-      }
+      default: () => []
     }
   },
-  data: function data() {
+
+  data() {
     return {
       loaded: false,
       failed: []
     };
   },
+
   computed: {
     // folder is empty
-    isEmpty: function isEmpty() {
+    isEmpty() {
       return this.previewList.length === 0;
     },
-    ariaUuid: function ariaUuid() {
+
+    ariaUuid() {
       return "folder-".concat(this.id);
     },
-    ariaLabel: function ariaLabel() {
+
+    ariaLabel() {
       return t('photos', 'Open the "{name}" sub-directory', {
         name: this.name
       });
@@ -118,12 +120,8 @@ __webpack_require__.r(__webpack_exports__);
      * Previews list without the failed ones
      * @returns {Object[]} the previews fileinfo
      */
-    previewList: function previewList() {
-      var _this = this;
-
-      return this.fileList.filter(function (file) {
-        return _this.failed.indexOf(file.fileid) === -1;
-      });
+    previewList() {
+      return this.fileList.filter(file => this.failed.indexOf(file.fileid) === -1);
     },
 
     /**
@@ -134,11 +132,11 @@ __webpack_require__.r(__webpack_exports__);
      * Which vue-router does not encode afterwards!
      * @returns {string}
      */
-    to: function to() {
+    to() {
       // always remove first slash, the router
       // manage it automatically
-      var regex = /^\/?(.+)/i;
-      var path = regex.exec(this.path)[1]; // apply to current route
+      const regex = /^\/?(.+)/i;
+      const path = regex.exec(this.path)[1]; // apply to current route
 
       return Object.assign({}, this.$route, {
         params: {
@@ -146,18 +144,23 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     }
+
   },
   methods: {
-    generateImgSrc: function generateImgSrc(_ref) {
-      var fileid = _ref.fileid,
-          etag = _ref.etag;
+    generateImgSrc({
+      fileid,
+      etag
+    }) {
       // use etag to force cache reload if file changed
       return Object(_nextcloud_router__WEBPACK_IMPORTED_MODULE_0__["generateUrl"])("/core/preview?fileId=".concat(fileid, "&x=", 256, "&y=", 256, "&a=true&v=").concat(etag));
     },
-    onPreviewFail: function onPreviewFail(_ref2) {
-      var fileid = _ref2.fileid;
+
+    onPreviewFail({
+      fileid
+    }) {
       this.failed.push(fileid);
     }
+
   }
 });
 
@@ -178,7 +181,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(false);
 // Module
-___CSS_LOADER_EXPORT___.push([module.i, "@charset \"UTF-8\";\n/**\n * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>\n *\n * @author John Molakvoæ <skjnldsv@protonmail.com>\n *\n * @license GNU AGPL version 3 or any later version\n *\n * This program is free software: you can redistribute it and/or modify\n * it under the terms of the GNU Affero General Public License as\n * published by the Free Software Foundation, either version 3 of the\n * License, or (at your option) any later version.\n *\n * This program is distributed in the hope that it will be useful,\n * but WITHOUT ANY WARRANTY; without even the implied warranty of\n * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\n * GNU Affero General Public License for more details.\n *\n * You should have received a copy of the GNU Affero General Public License\n * along with this program. If not, see <http://www.gnu.org/licenses/>.\n *\n */\n.file[data-v-77915c0c],\n.folder[data-v-77915c0c] {\n  position: relative;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  border-radius: var(--border-radius);\n  overflow: hidden;\n}\n.file .cover[data-v-77915c0c],\n  .folder .cover[data-v-77915c0c] {\n    z-index: 2;\n    width: 100%;\n    padding-bottom: 100%;\n    transition: opacity var(--animation-quick) ease-in-out;\n    opacity: 0;\n    background-color: var(--color-main-text);\n}\n.file.active .cover[data-v-77915c0c], .file:active .cover[data-v-77915c0c], .file:hover .cover[data-v-77915c0c], .file:focus .cover[data-v-77915c0c],\n  .folder.active .cover[data-v-77915c0c],\n  .folder:active .cover[data-v-77915c0c],\n  .folder:hover .cover[data-v-77915c0c],\n  .folder:focus .cover[data-v-77915c0c] {\n    opacity: .3;\n}\n.file--clear.active .cover[data-v-77915c0c], .file--clear:active .cover[data-v-77915c0c], .file--clear:hover .cover[data-v-77915c0c], .file--clear:focus .cover[data-v-77915c0c],\n  .folder--clear.active .cover[data-v-77915c0c],\n  .folder--clear:active .cover[data-v-77915c0c],\n  .folder--clear:hover .cover[data-v-77915c0c],\n  .folder--clear:focus .cover[data-v-77915c0c] {\n    opacity: .1;\n}\n.fade-enter-active[data-v-77915c0c], .fade-leave-active[data-v-77915c0c] {\n  transition: opacity var(--animation-quick) ease-in-out;\n}\n.fade-enter[data-v-77915c0c], .fade-leave-to[data-v-77915c0c] {\n  opacity: 0;\n}\n.folder-content[data-v-77915c0c] {\n  position: absolute;\n  display: grid;\n  width: 100%;\n  height: 100%;\n}\n.folder-content--grid-1[data-v-77915c0c] {\n    grid-template-columns: 1fr;\n    grid-template-rows: 1fr;\n}\n.folder-content--grid-2[data-v-77915c0c] {\n    grid-template-columns: 1fr;\n    grid-template-rows: 1fr 1fr;\n}\n.folder-content--grid-3[data-v-77915c0c] {\n    grid-template-columns: 1fr 1fr;\n    grid-template-rows: 1fr 1fr;\n}\n.folder-content--grid-3 img[data-v-77915c0c]:first-child {\n      grid-column: span 2;\n}\n.folder-content--grid-4[data-v-77915c0c] {\n    grid-template-columns: 1fr 1fr;\n    grid-template-rows: 1fr 1fr;\n}\n.folder-content img[data-v-77915c0c] {\n    width: 100%;\n    height: 100%;\n    -o-object-fit: cover;\n       object-fit: cover;\n}\n.folder-name[data-v-77915c0c] {\n  position: absolute;\n  z-index: 3;\n  display: flex;\n  overflow: hidden;\n  flex-direction: column;\n  width: 100%;\n  height: 100%;\n  transition: opacity var(--animation-quick) ease-in-out;\n  opacity: 1;\n}\n.folder-name__icon[data-v-77915c0c] {\n    height: 40%;\n    margin-top: calc(30% - 1rem / 2);\n    background-size: 40%;\n}\n.folder-name__name[data-v-77915c0c] {\n    overflow: hidden;\n    height: 1rem;\n    padding: 0 10px;\n    text-align: center;\n    white-space: nowrap;\n    text-overflow: ellipsis;\n    color: var(--color-main-background);\n    text-shadow: 0 0 8px var(--color-main-text);\n    font-size: 1rem;\n    line-height: 1rem;\n}\n.folder--clear .folder-name__icon[data-v-77915c0c] {\n  opacity: .3;\n}\n.folder--clear .folder-name__name[data-v-77915c0c] {\n  color: var(--color-main-text);\n  text-shadow: 0 0 8px var(--color-main-background);\n}\n.folder:not(.folder--clear) .cover[data-v-77915c0c] {\n  opacity: .3;\n}\n.folder:not(.folder--clear):active .folder-name[data-v-77915c0c],\n.folder:not(.folder--clear):active .cover[data-v-77915c0c], .folder:not(.folder--clear):hover .folder-name[data-v-77915c0c],\n.folder:not(.folder--clear):hover .cover[data-v-77915c0c], .folder:not(.folder--clear):focus .folder-name[data-v-77915c0c],\n.folder:not(.folder--clear):focus .cover[data-v-77915c0c] {\n  opacity: 0;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.i, "@charset \"UTF-8\";\n/**\n * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>\n *\n * @author John Molakvoæ <skjnldsv@protonmail.com>\n *\n * @license GNU AGPL version 3 or any later version\n *\n * This program is free software: you can redistribute it and/or modify\n * it under the terms of the GNU Affero General Public License as\n * published by the Free Software Foundation, either version 3 of the\n * License, or (at your option) any later version.\n *\n * This program is distributed in the hope that it will be useful,\n * but WITHOUT ANY WARRANTY; without even the implied warranty of\n * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\n * GNU Affero General Public License for more details.\n *\n * You should have received a copy of the GNU Affero General Public License\n * along with this program. If not, see <http://www.gnu.org/licenses/>.\n *\n */\n.file[data-v-77915c0c],\n.folder[data-v-77915c0c] {\n  position: relative;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  border-radius: var(--border-radius);\n  overflow: hidden;\n}\n.file .cover[data-v-77915c0c],\n  .folder .cover[data-v-77915c0c] {\n    z-index: 2;\n    width: 100%;\n    padding-bottom: 100%;\n    transition: opacity var(--animation-quick) ease-in-out;\n    opacity: 0;\n    background-color: var(--color-main-text);\n}\n.file.active .cover[data-v-77915c0c], .file:active .cover[data-v-77915c0c], .file:hover .cover[data-v-77915c0c], .file:focus .cover[data-v-77915c0c],\n  .folder.active .cover[data-v-77915c0c],\n  .folder:active .cover[data-v-77915c0c],\n  .folder:hover .cover[data-v-77915c0c],\n  .folder:focus .cover[data-v-77915c0c] {\n    opacity: .3;\n}\n.file--clear.active .cover[data-v-77915c0c], .file--clear:active .cover[data-v-77915c0c], .file--clear:hover .cover[data-v-77915c0c], .file--clear:focus .cover[data-v-77915c0c],\n  .folder--clear.active .cover[data-v-77915c0c],\n  .folder--clear:active .cover[data-v-77915c0c],\n  .folder--clear:hover .cover[data-v-77915c0c],\n  .folder--clear:focus .cover[data-v-77915c0c] {\n    opacity: .1;\n}\n.fade-enter-active[data-v-77915c0c], .fade-leave-active[data-v-77915c0c] {\n  transition: opacity var(--animation-quick) ease-in-out;\n}\n.fade-enter[data-v-77915c0c], .fade-leave-to[data-v-77915c0c] {\n  opacity: 0;\n}\n.folder-content[data-v-77915c0c] {\n  position: absolute;\n  display: grid;\n  width: 100%;\n  height: 100%;\n}\n.folder-content--grid-1[data-v-77915c0c] {\n    grid-template-columns: 1fr;\n    grid-template-rows: 1fr;\n}\n.folder-content--grid-2[data-v-77915c0c] {\n    grid-template-columns: 1fr;\n    grid-template-rows: 1fr 1fr;\n}\n.folder-content--grid-3[data-v-77915c0c] {\n    grid-template-columns: 1fr 1fr;\n    grid-template-rows: 1fr 1fr;\n}\n.folder-content--grid-3 img[data-v-77915c0c]:first-child {\n      grid-column: span 2;\n}\n.folder-content--grid-4[data-v-77915c0c] {\n    grid-template-columns: 1fr 1fr;\n    grid-template-rows: 1fr 1fr;\n}\n.folder-content img[data-v-77915c0c] {\n    width: 100%;\n    height: 100%;\n    object-fit: cover;\n}\n.folder-name[data-v-77915c0c] {\n  position: absolute;\n  z-index: 3;\n  display: flex;\n  overflow: hidden;\n  flex-direction: column;\n  width: 100%;\n  height: 100%;\n  transition: opacity var(--animation-quick) ease-in-out;\n  opacity: 1;\n}\n.folder-name__icon[data-v-77915c0c] {\n    height: 40%;\n    margin-top: calc(30% - 1rem / 2);\n    background-size: 40%;\n}\n.folder-name__name[data-v-77915c0c] {\n    overflow: hidden;\n    height: 1rem;\n    padding: 0 10px;\n    text-align: center;\n    white-space: nowrap;\n    text-overflow: ellipsis;\n    color: var(--color-main-background);\n    text-shadow: 0 0 8px var(--color-main-text);\n    font-size: 1rem;\n    line-height: 1rem;\n}\n.folder--clear .folder-name__icon[data-v-77915c0c] {\n  opacity: .3;\n}\n.folder--clear .folder-name__name[data-v-77915c0c] {\n  color: var(--color-main-text);\n  text-shadow: 0 0 8px var(--color-main-background);\n}\n.folder:not(.folder--clear) .cover[data-v-77915c0c] {\n  opacity: .3;\n}\n.folder:not(.folder--clear):active .folder-name[data-v-77915c0c],\n.folder:not(.folder--clear):active .cover[data-v-77915c0c], .folder:not(.folder--clear):hover .folder-name[data-v-77915c0c],\n.folder:not(.folder--clear):hover .cover[data-v-77915c0c], .folder:not(.folder--clear):focus .folder-name[data-v-77915c0c],\n.folder:not(.folder--clear):focus .cover[data-v-77915c0c] {\n  opacity: 0;\n}\n", ""]);
 // Exports
 /* harmony default export */ __webpack_exports__["default"] = (___CSS_LOADER_EXPORT___);
 
@@ -382,4 +385,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-3.js.map?v=64463fe7f0cbc1b1fe5d
+//# sourceMappingURL=photos-3.js.map?v=68cd3d9d11062ab7bc2e

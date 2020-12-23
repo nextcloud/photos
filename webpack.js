@@ -4,6 +4,7 @@ const webpackConfig = require('@nextcloud/webpack-vue-config')
 const SassGetGridConfig = require('./src/utils/SassGetGridConfig')
 const ModuleReplaceWebpackPlugin = require('module-replace-webpack-plugin')
 const BabelLoaderExcludeNodeModulesExcept = require('babel-loader-exclude-node-modules-except')
+const path = require('path')
 
 const WorkboxPlugin = require('workbox-webpack-plugin')
 
@@ -91,6 +92,9 @@ const config = {
 // Remove svg from default url-loader
 const svgRule = webpackConfig.module.rules.find(rule => rule.test && rule.test.toString().indexOf('|svg') !== -1)
 svgRule.test = new RegExp(svgRule.test.toString().replace('|svg', ''))
+
+// Integration into files app
+webpackConfig.entry.filesbutton = path.resolve(path.join('src', 'filesbutton.js'))
 
 // Merge configs
 const mergedConfigs = merge(config, webpackConfig)
