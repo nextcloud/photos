@@ -33,7 +33,7 @@ use OCP\AppFramework\Http\JSONResponse;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
-use OCP\FIles\Node;
+use OCP\Files\Node;
 use OCP\Files\NotFoundException;
 use OCP\Files\StorageNotAvailableException;
 use OCP\IPreview;
@@ -43,10 +43,10 @@ class AlbumsController extends Controller {
 
 	/** @var string */
 	private $userId;
-	
+
 	/** @var IRootFolder */
 	private $rootFolder;
-	
+
 	/** @var IPreview */
 	private $previewManager;
 
