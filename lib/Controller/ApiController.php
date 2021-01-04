@@ -77,7 +77,7 @@ class ApiController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function serviceWorker() {
+	public function serviceWorker(): StreamResponse {
 		$response = new StreamResponse(__DIR__.'/../../js/photos-service-worker.js');
 		$response->setHeaders([
 			'Content-Type' => 'application/javascript',
