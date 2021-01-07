@@ -5,7 +5,7 @@
     <name>Photos</name>
     <summary>Your memories under your control</summary>
     <description>Your memories under your control</description>
-    <version>1.2.2</version>
+    <version>1.2.3</version>
     <licence>agpl</licence>
 	<author mail="skjnldsv@protonmail.com">John Molakvoæ</author>
     <namespace>Photos</namespace>
