@@ -16,6 +16,7 @@ OC.L10N.register(
     "Share this folder" : "Διαμοιρασμός αυτού του φακέλου",
     "Back to {folder}" : "Πίσω στο {folder}",
     "View" : "Προβολή",
+    "Enable squared photos view" : "Ενεργοποίηση προβολής τετραγωνικών φωτογραφιών",
     "This folder does not exists" : "Ο φάκελος δεν υπάρχει",
     "An error occurred" : "Παρουσιάστηκε σφάλμα",
     "No photos in here" : "Δεν υπάρχουν φωτογραφίες εδώ",
