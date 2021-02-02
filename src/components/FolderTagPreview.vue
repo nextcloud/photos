@@ -181,8 +181,6 @@ export default {
 	}
 }
 
-$name-height: 1rem;
-
 .folder-name {
 	position: absolute;
 	z-index: 3;
@@ -195,20 +193,20 @@ $name-height: 1rem;
 	opacity: 1;
 	&__icon {
 		height: 40%;
-		margin-top: calc(30% - #{$name-height} / 2); // center name+icon
+		margin-top: 30%; // center name+icon
 		background-size: 40%;
 	}
 	&__name {
 		overflow: hidden;
-		height: $name-height;
+		height: 30%; // 30% (icon margin-top) + 40% (icon) + 30% (name) = 100%
 		padding: 0 10px;
 		text-align: center;
-		white-space: nowrap;
+		white-space: normal;
 		text-overflow: ellipsis;
 		color: var(--color-main-background);
 		text-shadow: 0 0 8px var(--color-main-text);
-		font-size: $name-height;
-		line-height: $name-height;
+		font-size: 1rem;
+		line-height: 1rem;
 	}
 }
 
