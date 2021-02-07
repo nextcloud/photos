@@ -19,7 +19,7 @@ OC.L10N.register(
     "Enable squared photos view" : "啟用方形照片顯示",
     "This folder does not exists" : "此資料夾不存在",
     "An error occurred" : "發生錯誤",
-    "No photos in here" : "此處無照片檔案",
+    "No photos in here" : "無照片檔案",
     "No tags yet" : "尚未加入標籤",
     "Photos with tags will show up here" : "此處會顯示照片的標籤",
     "Your albums" : "您的相簿",
