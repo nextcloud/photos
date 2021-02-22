@@ -45,7 +45,7 @@ export default new Vue({
 		handleWindowResize() {
 			// find the first grid size that fit the current window width
 			const currentSize = Object.keys(sizes).find(size => size > document.documentElement.clientWidth)
-			this.gridConfig = sizes[currentSize]
+			this.gridConfig = sizes[currentSize] || sizes.max
 		},
 	},
 })
