@@ -46,7 +46,7 @@
 		"path-posix": "^1.0.0",
 		"qs": "^6.9.6",
 		"regenerator-runtime": "^0.13.7",
-		"url-parse": "^1.4.7",
+		"url-parse": "^1.5.1",
 		"vue": "^2.6.12",
 		"vue-router": "^3.5.1",
 		"vue-virtual-grid": "^2.3.0",
