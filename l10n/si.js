@@ -1,6 +1,8 @@
 OC.L10N.register(
     "photos",
     {
+    "Photos" : "ඡායාරූප",
+    "Your photos" : "ඔබේ ඡායාරූප",
     "Favorites" : "ප්‍රියතම",
     "Settings" : "සැකසුම්"
 },
