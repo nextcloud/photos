@@ -32,7 +32,7 @@ If you'd like to join, just go through the [issues list](https://github.com/next
 
 1. ☁ Clone this into your `apps` folder of your Nextcloud.
 1. 👩‍💻 In a terminal, run the command `make dev-setup` to install the dependencies.
-1. 🏗 Then to build the Javascript whenever you make changes, run `make build-js`. To create a pull request use `make build-js-production`Watch changes with: `make watch-js`.
+1. 🏗 Then to build the Javascript whenever you make changes, run `make build-js`. To create a pull request use `make build-js-production`. Watch changes with: `make watch-js`.
 1. ✅ Enable the app through the app management of your Nextcloud.
 1. 🎉 Partytime!
 1. 💻 Fix easily linting issues with `npm run lint:fix`.
