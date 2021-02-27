@@ -13,7 +13,7 @@ OC.L10N.register(
     "Settings" : "設定",
     "Open the full size \"{name}\" image" : "開啟「{name}」的原始尺寸影像",
     "Open the \"{name}\" sub-directory" : "開啟「{name}」子目錄",
-    "Share this folder" : "分享這個資料夾",
+    "Share this folder" : "分享此資料夾",
     "Back to {folder}" : "回到 {folder}",
     "View" : "檢視",
     "Enable squared photos view" : "啟用方形照片檢視",
