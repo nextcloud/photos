@@ -8,7 +8,7 @@ OC.L10N.register(
     "Favorites" : "Oblíbené",
     "Your folders" : "Vaše složky",
     "Shared with you" : "Sdíleno s vámi",
-    "Tagged photos" : "Označené fotky",
+    "Tagged photos" : "Oštítkované fotky",
     "Locations" : "Umístění",
     "Settings" : "Nastavení",
     "Open the full size \"{name}\" image" : "Otevřít obrázek „{name}“ v plné velikosti",
