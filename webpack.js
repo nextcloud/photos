@@ -42,6 +42,7 @@ const config = {
 					'camelcase',
 					'hot-patcher',
 					'semver',
+					'vue-virtual-grid',
 					'webdav',
 				]),
 			},
