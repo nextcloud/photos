@@ -24,7 +24,7 @@
 <template>
 	<!-- Errors handlers-->
 	<EmptyContent v-if="error === 404" illustration-name="folder">
-		{{ t('photos', 'This folder does not exists') }}
+		{{ t('photos', 'This folder does not exist') }}
 	</EmptyContent>
 	<EmptyContent v-else-if="error">
 		{{ t('photos', 'An error occurred') }}
