@@ -17,12 +17,12 @@ OC.L10N.register(
     "Back to {folder}" : "Назад у {folder}",
     "View" : "Погледај",
     "Enable squared photos view" : "Укључи квадратасти приказ слика",
-    "This folder does not exists" : "Ова фасцикла не постоји",
     "An error occurred" : "Догодила се грешка",
     "No photos in here" : "Овде нема слика",
     "No tags yet" : "Још нема ознака",
     "Photos with tags will show up here" : "Слике са ознакама ће се појавити овде",
     "Your albums" : "Ваши албуми",
-    "Shared albums" : "Дељени албуми"
+    "Shared albums" : "Дељени албуми",
+    "This folder does not exists" : "Ова фасцикла не постоји"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

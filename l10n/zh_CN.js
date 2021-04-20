@@ -17,12 +17,12 @@ OC.L10N.register(
     "Back to {folder}" : "返回 {folder}",
     "View" : "查看",
     "Enable squared photos view" : "启用平铺照片视图",
-    "This folder does not exists" : "该文件夹不存在",
     "An error occurred" : "发生错误",
     "No photos in here" : "这里没有照片",
     "No tags yet" : "尚无标签",
     "Photos with tags will show up here" : "带标签的照片将显示在此处",
     "Your albums" : "你的相册",
-    "Shared albums" : "共享的相册"
+    "Shared albums" : "共享的相册",
+    "This folder does not exists" : "该文件夹不存在"
 },
 "nplurals=1; plural=0;");
