@@ -15,12 +15,12 @@
     "Back to {folder}" : "{folder} klasörüne geri dön",
     "View" : "Görüntüle",
     "Enable squared photos view" : "Kare fotoğraf görünümü kullanılsın",
-    "This folder does not exists" : "Bu klasör bulunamadı",
     "An error occurred" : "Bir sorun çıktı",
     "No photos in here" : "Burada herhangi bir fotoğraf yok",
     "No tags yet" : "Henüz bir etiket yok",
     "Photos with tags will show up here" : "Etiketlenmiş fotoğraflar burada görüntülenir",
     "Your albums" : "Albümleriniz",
-    "Shared albums" : "Paylaşılmış albümler"
+    "Shared albums" : "Paylaşılmış albümler",
+    "This folder does not exists" : "Bu klasör bulunamadı"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

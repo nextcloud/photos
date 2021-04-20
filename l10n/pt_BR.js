@@ -17,12 +17,12 @@ OC.L10N.register(
     "Back to {folder}" : "Voltar para {folder}",
     "View" : "Exibição",
     "Enable squared photos view" : "Ativar exibição de fotos quadradas",
-    "This folder does not exists" : "Esta pasta não existe",
     "An error occurred" : "Ocorreu um erro",
     "No photos in here" : "Não há fotos aqui",
     "No tags yet" : "Ainda não há marcações",
     "Photos with tags will show up here" : "Fotos com marcações serão mostradas aqui",
     "Your albums" : "Seus álbuns",
-    "Shared albums" : "Álbuns compartilhados"
+    "Shared albums" : "Álbuns compartilhados",
+    "This folder does not exists" : "Esta pasta não existe"
 },
 "nplurals=2; plural=(n > 1);");
