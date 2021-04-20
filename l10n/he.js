@@ -17,12 +17,12 @@ OC.L10N.register(
     "Back to {folder}" : "חזרה אל {folder}",
     "View" : "צפייה",
     "Enable squared photos view" : "הפעלת תצוגת תמונות מרובעות",
-    "This folder does not exists" : "תיקייה זו אינה קיימת",
     "An error occurred" : "אירעה שגיאה",
     "No photos in here" : "אין כאן תמונות",
     "No tags yet" : "אין תגיות עדיין",
     "Photos with tags will show up here" : "תמונות עם תגיות תמיד תופענה כאן",
     "Your albums" : "האלבומים שלך",
-    "Shared albums" : "אלבומים משותפים"
+    "Shared albums" : "אלבומים משותפים",
+    "This folder does not exists" : "תיקייה זו אינה קיימת"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");
