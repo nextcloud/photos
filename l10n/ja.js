@@ -17,12 +17,12 @@ OC.L10N.register(
     "Back to {folder}" : " {folder} に戻る",
     "View" : "表示",
     "Enable squared photos view" : "写真を矩形での表示を有効化",
-    "This folder does not exists" : "このフォルダは存在しません",
     "An error occurred" : "エラーが発生しました",
     "No photos in here" : "写真がありません",
     "No tags yet" : "まだタグがありません",
     "Photos with tags will show up here" : "タグ付けされた写真がここに表示されます",
     "Your albums" : "あなたのアルバム",
-    "Shared albums" : "共有アルバム"
+    "Shared albums" : "共有アルバム",
+    "This folder does not exists" : "このフォルダは存在しません"
 },
 "nplurals=1; plural=0;");

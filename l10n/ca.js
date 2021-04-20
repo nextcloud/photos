@@ -17,12 +17,12 @@ OC.L10N.register(
     "Back to {folder}" : "Torna a {folder}",
     "View" : "Visualitza",
     "Enable squared photos view" : "Habilita la visualització de fotos quadrades",
-    "This folder does not exists" : "Aquesta carpeta no existeix",
     "An error occurred" : "S'ha produït un error",
     "No photos in here" : "No hi ha cap fotografia",
     "No tags yet" : "Encara no hi ha etiquetes",
     "Photos with tags will show up here" : "Aquí es mostraran les fotografies amb etiquetes",
     "Your albums" : "Els vostres àlbums",
-    "Shared albums" : "Àlbums compartits"
+    "Shared albums" : "Àlbums compartits",
+    "This folder does not exists" : "Aquesta carpeta no existeix"
 },
 "nplurals=2; plural=(n != 1);");
