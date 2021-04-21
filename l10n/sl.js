@@ -17,6 +17,7 @@ OC.L10N.register(
     "Back to {folder}" : "Nazaj v mapo {folder}",
     "View" : "Poglej",
     "Enable squared photos view" : "Omogoči kvadratne prikaze slik",
+    "This folder does not exist" : "Ta mapa ne obstaja",
     "An error occurred" : "Prišlo je do napake.",
     "No photos in here" : "Na tem mestu še ni fotografij",
     "No tags yet" : "Ni še dodane nobene oznake",
