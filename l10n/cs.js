@@ -17,6 +17,7 @@ OC.L10N.register(
     "Back to {folder}" : "Zpět do {folder}",
     "View" : "Zobrazit",
     "Enable squared photos view" : "Zapnout čtvercové zobrazení fotek",
+    "This folder does not exist" : "Tato složka neexistuje",
     "An error occurred" : "Došlo k chybě",
     "No photos in here" : "Tady nejsou žádné fotky",
     "No tags yet" : "Zatím žádné štítky",

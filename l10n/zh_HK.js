@@ -17,6 +17,7 @@ OC.L10N.register(
     "Back to {folder}" : "回到 {folder}",
     "View" : "檢視",
     "Enable squared photos view" : "啟用方形照片顯示",
+    "This folder does not exist" : "此資料夾不存在",
     "An error occurred" : "發生錯誤",
     "No photos in here" : "無照片檔案",
     "No tags yet" : "尚未加入標籤",
