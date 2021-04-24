@@ -17,6 +17,7 @@ OC.L10N.register(
     "Back to {folder}" : "Itzuli {folder} -(e)ra",
     "View" : "Ikusi",
     "Enable squared photos view" : "Gaitu lauki formako argazki ikuspegia",
+    "This folder does not exist" : "Karpeta hau ez da existitzen",
     "An error occurred" : "Akats bat gertatu da",
     "No photos in here" : "Argazkirik ez hemen",
     "No tags yet" : "Etitketarik ez oraindik",
