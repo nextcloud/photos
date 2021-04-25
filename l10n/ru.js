@@ -17,6 +17,7 @@ OC.L10N.register(
     "Back to {folder}" : "Вернуться в {folder}",
     "View" : "Просмотр",
     "Enable squared photos view" : "Включить квадратный просмотр фотографий",
+    "This folder does not exist" : "Эта папка не существует",
     "An error occurred" : "Произошла ошибка",
     "No photos in here" : "Здесь нет фотографий",
     "No tags yet" : "Меток ещё нет",
