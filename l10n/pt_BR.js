@@ -17,6 +17,7 @@ OC.L10N.register(
     "Back to {folder}" : "Voltar para {folder}",
     "View" : "Exibição",
     "Enable squared photos view" : "Ativar exibição de fotos quadradas",
+    "This folder does not exist" : "Esta pasta não existe",
     "An error occurred" : "Ocorreu um erro",
     "No photos in here" : "Não há fotos aqui",
     "No tags yet" : "Ainda não há marcações",
