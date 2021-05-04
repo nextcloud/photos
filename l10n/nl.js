@@ -17,6 +17,7 @@ OC.L10N.register(
     "Back to {folder}" : "Terug naar {folder}",
     "View" : "Bekijken",
     "Enable squared photos view" : "Inschakelen vierkante foto overzicht",
+    "This folder does not exist" : "Deze map bestaat niet",
     "An error occurred" : "Er heeft een fout opgetreden",
     "No photos in here" : "Geen foto's hier",
     "No tags yet" : "Nog geen labels",
