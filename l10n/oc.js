@@ -8,7 +8,7 @@ OC.L10N.register(
     "Favorites" : "Favorits",
     "Your folders" : "Vòstres dossièrs",
     "Shared with you" : "Shared with you",
-    "Tagged photos" : "Fòtos etiquetas",
+    "Tagged photos" : "Fòtos etiquetadas",
     "Locations" : "Emplaçaments",
     "Settings" : "Paramètres",
     "Open the full size \"{name}\" image" : "Dobrir l’imatge {name} en talha originala",
