@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import * as moment from 'moment'
+import moment from '@nextcloud/moment'
 import { mapGetters } from 'vuex'
 
 import getPhotos from '../services/PhotoSearch'
