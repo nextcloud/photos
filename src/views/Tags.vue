@@ -279,20 +279,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$previous: 0;
-@each $size, $config in get('sizes') {
-	$marginTop: map-get($config, 'marginTop');
-	$marginW: map-get($config, 'marginW');
-	// if this is the last entry, only use min-width
-	$rule: '(min-width: #{$previous}px) and (max-width: #{$size}px)';
-	@if $size == 'max' {
-		$rule: '(min-width: #{$previous}px)';
+@import '../mixins/GridSizes.scss';
+
+.grid-container {
+	@include grid-sizes using ($marginTop, $marginW) {
+		padding: 0px #{$marginW}px 256px #{$marginW}px;
 	}
-	@media #{$rule} {
-		.grid-container {
-			padding: #{$marginTop}px #{$marginW}px 256px #{$marginW}px;
-		}
-	}
-	$previous: $size;
 }
 </style>

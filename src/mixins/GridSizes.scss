@@ -19,23 +19,23 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+@use 'sass:map';
 
-// needs node-sass 5.0 (with libsass 3.6)
-// https://github.com/sass/node-sass/pull/2312
 @mixin grid-sizes() {
 	$previous: 0;
 
-	@each $size, $config in get('sizes') {
+	@each $size, $config in $sizes {
 		$count: map-get($config, 'count');
 		$marginTop: map-get($config, 'marginTop');
 		$marginW: map-get($config, 'marginW');
+
 		@if $size == 'max' {
 			@media (min-width: #{$previous}px) {
-				@content;
+				@content($marginTop, $marginW);
 			}
 		} @else {
 			@media (min-width: #{$previous}px) and (max-width: #{$size}px) {
-				@content;
+				@content($marginTop, $marginW);
 			}
 		}
 		$previous: $size;
