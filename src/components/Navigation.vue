@@ -143,6 +143,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../mixins/GridSizes.scss';
+
 .icon-confirm {
 	transform: rotate(180deg)
 }
@@ -168,38 +170,20 @@ export default {
 		flex-grow: 0;
 		flex-shrink: 0;
 	}
-}
 
-// generate variants based on grid sizes
-// TODO: use mixins/GridSizes as soon as node-sass supports it
-// needs node-sass 5.0 (with libsass 3.6)
-// https://github.com/sass/node-sass/pull/2312
-$previous: 0;
-@each $size, $config in get('sizes') {
-	$marginTop: map-get($config, 'marginTop');
-	$marginW: map-get($config, 'marginW');
+	// Specific grid spacing
+	@include grid-sizes using ($marginTop, $marginW) {
+		// we space this with 2/3 margin top, 1/3 margin bottom
+		margin-top: ($marginTop - 44px) * 2 / 3;
 
-	// if this is the last entry, only use min-width
-	$rule: '(min-width: #{$previous}px) and (max-width: #{$size}px)';
-	@if $size == 'max' {
-		$rule: '(min-width: #{$previous}px)';
-	}
-
-	@media #{$rule} {
-		.photos-navigation {
-			// we space this with 2/3 margin top, 1/3 margin bottom
-			top: ($marginTop - 44px) * 2 / 3;
-			// padding-left: $marginW;
-			@if $marginW >= 44px {
-				&__back {
-					margin: 0 (($marginW - 44px) / 2);
-				}
-			}
-			&--root &__title {
-				padding-left: #{$marginW - 44}px;
+		@if $marginW >= 44px {
+			&__back {
+				margin: 0 (($marginW - 44px) / 2);
 			}
 		}
+		&--root &__title {
+			padding-left: #{$marginW - 44}px;
+		}
 	}
-	$previous: $size;
 }
 </style>
