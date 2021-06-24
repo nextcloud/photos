@@ -138,7 +138,7 @@ export default {
 	position: absolute;
 	top: 10px;
 	right: 10px;
-	z-index: 5;
+	z-index: 20;
 }
 
 img {
