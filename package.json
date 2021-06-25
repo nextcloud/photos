@@ -1,7 +1,7 @@
 {
 	"name": "photos",
 	"description": "Your memories under your control",
-	"version": "1.4.0",
+	"version": "1.5.0",
 	"author": "John Molakvoæ <skjnldsv@protonmail.com>",
 	"contributors": [
 		"John Molakvoæ <skjnldsv@protonmail.com>"
@@ -41,7 +41,7 @@
 		"@nextcloud/router": "^1.2.0",
 		"@nextcloud/vue": "^3.10.0",
 		"camelcase": "^6.2.0",
-		"core-js": "^3.9.1",
+		"core-js": "^3.15.1",
 		"debounce": "^1.2.1",
 		"path-posix": "^1.0.0",
 		"qs": "^6.10.1",
