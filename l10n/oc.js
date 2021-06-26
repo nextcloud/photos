@@ -15,6 +15,7 @@ OC.L10N.register(
     "Share this folder" : "Partejar aqueste dossièr",
     "Back to {folder}" : "Tornar a {folder}",
     "View" : "Vista",
+    "This folder does not exist" : "Aqueste dossièr existís pas",
     "An error occurred" : "Una error s’es producha",
     "No photos in here" : "Cap de fòto aquí",
     "No tags yet" : "Cap d’etiqueta pel moment",
