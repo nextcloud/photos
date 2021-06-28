@@ -17,6 +17,7 @@ OC.L10N.register(
     "Back to {folder}" : "Vissza ide: {folder}",
     "View" : "Megtekintés",
     "Enable squared photos view" : "A négyzet alakú fotónézet engedélyezése",
+    "This folder does not exist" : "Ez a mappa nem létezik",
     "An error occurred" : "Hiba történt",
     "No photos in here" : "Itt nincsenek fényképe",
     "No tags yet" : "Még nincsenek címkék",
