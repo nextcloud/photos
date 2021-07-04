@@ -2,6 +2,7 @@ OC.L10N.register(
     "photos",
     {
     "Photos" : "Bildes",
+    "Your photos" : "Jūsu bildes",
     "Favorites" : "Favorīti",
     "Shared with you" : "Koplietots ar tevi",
     "Settings" : "Iestatījumi",
