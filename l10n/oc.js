@@ -19,8 +19,6 @@ OC.L10N.register(
     "An error occurred" : "Una error s’es producha",
     "No photos in here" : "Cap de fòto aquí",
     "No tags yet" : "Cap d’etiqueta pel moment",
-    "Your albums" : "Vòstres albums",
-    "Shared albums" : "Albums partejats",
     "This folder does not exists" : "Aqueste dossièr existís pas"
 },
 "nplurals=2; plural=(n > 1);");

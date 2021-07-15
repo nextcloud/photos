@@ -17,8 +17,6 @@ OC.L10N.register(
     "No photos in here" : "No hay fotos aquí",
     "No tags yet" : "Aún no hay etiquetas",
     "Photos with tags will show up here" : "Las fotos con etiquetas se mostrarán aquí",
-    "Your albums" : "Tus álbums",
-    "Shared albums" : "Álbums compartidos",
     "This folder does not exists" : "Este directorio no existe"
 },
 "nplurals=2; plural=(n != 1);");

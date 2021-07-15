@@ -21,8 +21,6 @@ OC.L10N.register(
     "No photos in here" : "Čia nuotraukų nėra",
     "No tags yet" : "Kol kas žymių nėra",
     "Photos with tags will show up here" : "Čia bus rodomos nuotraukos su žymėmis",
-    "Your albums" : "Jūsų albumai",
-    "Shared albums" : "Bendrinami albumai",
     "This folder does not exists" : "Šio aplanko nėra"
 },
 "nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);");
