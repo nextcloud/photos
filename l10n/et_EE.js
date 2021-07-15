@@ -17,8 +17,6 @@ OC.L10N.register(
     "No photos in here" : "Siin ei ole fotosid",
     "No tags yet" : "Silte veel pole",
     "Photos with tags will show up here" : "Sildistatud fotod on siin näha",
-    "Your albums" : "Sinu albumid",
-    "Shared albums" : "Jagatud albumid",
     "This folder does not exists" : "Seda kausta pole olemas"
 },
 "nplurals=2; plural=(n != 1);");

@@ -21,8 +21,6 @@ OC.L10N.register(
     "No photos in here" : "Δεν υπάρχουν φωτογραφίες εδώ",
     "No tags yet" : "Χωρίς ετικέτες ακόμη",
     "Photos with tags will show up here" : "Φωτογραφίες με ετικέτες εμφανίζονται εδώ πάνω",
-    "Your albums" : "Τα άλμπουμ σας",
-    "Shared albums" : "Κοινόχρηστα άλμπουμ",
     "This folder does not exists" : "Ο φάκελος δεν υπάρχει"
 },
 "nplurals=2; plural=(n != 1);");

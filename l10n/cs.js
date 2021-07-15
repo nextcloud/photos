@@ -22,8 +22,6 @@ OC.L10N.register(
     "No photos in here" : "Tady nejsou žádné fotky",
     "No tags yet" : "Zatím žádné štítky",
     "Photos with tags will show up here" : "Fotky opatřené štítky se objeví zde",
-    "Your albums" : "Vaše alba",
-    "Shared albums" : "Sdílená alba",
     "This folder does not exists" : "Tato složka neexistuje"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

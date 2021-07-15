@@ -22,8 +22,6 @@ OC.L10N.register(
     "No photos in here" : "写真がありません",
     "No tags yet" : "まだタグがありません",
     "Photos with tags will show up here" : "タグ付けされた写真がここに表示されます",
-    "Your albums" : "あなたのアルバム",
-    "Shared albums" : "共有アルバム",
     "This folder does not exists" : "このフォルダーは存在しません"
 },
 "nplurals=1; plural=0;");
