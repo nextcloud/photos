@@ -21,8 +21,6 @@ OC.L10N.register(
     "No photos in here" : "Ingen bilder her",
     "No tags yet" : "Ingen etiketter enda",
     "Photos with tags will show up here" : "Bilder med etiketter vises her",
-    "Your albums" : "Dine album",
-    "Shared albums" : "Delte album",
     "This folder does not exists" : "Denne mappen finnes ikke"
 },
 "nplurals=2; plural=(n != 1);");

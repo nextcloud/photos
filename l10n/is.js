@@ -21,8 +21,6 @@ OC.L10N.register(
     "No photos in here" : "Engar myndir hér",
     "No tags yet" : "Engin merki ennþá",
     "Photos with tags will show up here" : "Ljósmyndir með merkjum munu birtast hér",
-    "Your albums" : "Albúmin þín",
-    "Shared albums" : "Sameiginleg albúm",
     "This folder does not exists" : "Þessi mappa er ekki til"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");
