@@ -17,12 +17,11 @@ OC.L10N.register(
     "Back to {folder}" : "Vissza ide: {folder}",
     "View" : "Megtekintés",
     "Enable squared photos view" : "A négyzet alakú fotónézet engedélyezése",
+    "This folder does not exist" : "Ez a mappa nem létezik",
     "An error occurred" : "Hiba történt",
     "No photos in here" : "Itt nincsenek fényképe",
     "No tags yet" : "Még nincsenek címkék",
     "Photos with tags will show up here" : "A címkével rendelkező fényképek itt fognak megjelenni",
-    "Your albums" : "Az Ön albumai",
-    "Shared albums" : "Megosztott albumok",
     "This folder does not exists" : "Ez a mappa nem létezik"
 },
 "nplurals=2; plural=(n != 1);");

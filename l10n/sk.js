@@ -17,12 +17,11 @@ OC.L10N.register(
     "Back to {folder}" : "Späť do {folder}",
     "View" : "Prezerať",
     "Enable squared photos view" : "Zapnúť štvorcové zobrazenie fotiek",
+    "This folder does not exist" : "Tento priečinok neexistuje",
     "An error occurred" : "Vyskytla sa chyba",
     "No photos in here" : "Nie sú tu žiadne fotografie",
     "No tags yet" : "Zatiaľ žiadne štítky",
     "Photos with tags will show up here" : "Fotografie so štítkami sa zobrazia tu",
-    "Your albums" : "Vaše albumy",
-    "Shared albums" : "Zdieľané albumy",
     "This folder does not exists" : "Tento priečinok neexistuje"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

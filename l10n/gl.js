@@ -21,8 +21,6 @@ OC.L10N.register(
     "No photos in here" : "Aquí non hai fotos",
     "No tags yet" : "Non hai nada etiquetado",
     "Photos with tags will show up here" : "As fotos etiquetadas aparecerán aquí",
-    "Your albums" : "Os seus álbums",
-    "Shared albums" : "Albums compartidos",
     "This folder does not exists" : "Este cartafol non existe"
 },
 "nplurals=2; plural=(n != 1);");

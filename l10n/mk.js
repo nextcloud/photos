@@ -22,8 +22,6 @@ OC.L10N.register(
     "No photos in here" : "Овде нема фотографии",
     "No tags yet" : "Сеуште нема ознаки",
     "Photos with tags will show up here" : "Фотографиите со ознаки ќе се појават овде",
-    "Your albums" : "Ваши албуми",
-    "Shared albums" : "Споделени албуми",
     "This folder does not exists" : "Папката не постои"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

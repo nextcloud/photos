@@ -22,8 +22,6 @@ OC.L10N.register(
     "No photos in here" : "Keine Fotos vorhanden",
     "No tags yet" : "Noch keine Schlagworte vorhanden",
     "Photos with tags will show up here" : "Fotos mit Schlagworten werden hier angezeigt",
-    "Your albums" : "Ihre Alben",
-    "Shared albums" : "Geteilte Alben",
     "This folder does not exists" : "Dieser Ordner existiert nicht"
 },
 "nplurals=2; plural=(n != 1);");

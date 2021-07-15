@@ -16,12 +16,12 @@ OC.L10N.register(
     "Share this folder" : "Dela denna mapp",
     "Back to {folder}" : "Tillbaka till {folder}",
     "View" : "Visa",
+    "Enable squared photos view" : "Aktivera kvadratiska foto-vyn",
+    "This folder does not exist" : "Denna mappen finns inte",
     "An error occurred" : "Ett fel uppstod",
     "No photos in here" : "Det finns inga bilder här",
     "No tags yet" : "Inga taggar än",
     "Photos with tags will show up here" : "Bilder med taggar visas här",
-    "Your albums" : "Dina album",
-    "Shared albums" : "Delade album",
     "This folder does not exists" : "Denna mapp finns inte"
 },
 "nplurals=2; plural=(n != 1);");

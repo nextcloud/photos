@@ -22,8 +22,6 @@ OC.L10N.register(
     "No photos in here" : "Peruna fotografia inoghe",
     "No tags yet" : "Ancora peruna eticheta",
     "Photos with tags will show up here" : "Is fotografias etichetadas ant a aparèssere inoghe",
-    "Your albums" : "Is album tuos",
-    "Shared albums" : "Album cumpartzidos",
     "This folder does not exists" : "Custa cartella no esistit"
 },
 "nplurals=2; plural=(n != 1);");
