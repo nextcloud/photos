@@ -44,7 +44,7 @@
 		"debounce": "^1.2.1",
 		"path-posix": "^1.0.0",
 		"qs": "^6.10.1",
-		"url-parse": "^1.5.1",
+		"url-parse": "^1.5.3",
 		"vue": "^2.6.12",
 		"vue-router": "^3.5.2",
 		"vue-virtual-grid": "^2.3.2",
