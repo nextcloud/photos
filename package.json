@@ -39,7 +39,7 @@
 		"@nextcloud/l10n": "^1.4.1",
 		"@nextcloud/moment": "^1.1.1",
 		"@nextcloud/router": "^1.2.0",
-		"@nextcloud/vue": "^3.10.0",
+		"@nextcloud/vue": "^4.0.3",
 		"camelcase": "^6.2.0",
 		"debounce": "^1.2.1",
 		"path-posix": "^1.0.0",
@@ -61,11 +61,11 @@
 		"npm": ">=7.0.0"
 	},
 	"devDependencies": {
-		"@nextcloud/babel-config": "^1.0.0-beta.1",
+		"@nextcloud/babel-config": "^1.0.0",
 		"@nextcloud/browserslist-config": "^2.1.0",
 		"@nextcloud/eslint-config": "^5.1.0",
 		"@nextcloud/stylelint-config": "^1.0.0-beta.0",
-		"@nextcloud/webpack-vue-config": "^4.0.3",
+		"@nextcloud/webpack-vue-config": "^4.1.0",
 		"@vue/test-utils": "^1.2.2",
 		"autoprefixer": "^10.3.1",
 		"babel-loader-exclude-node-modules-except": "^1.2.1",
