@@ -144,6 +144,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use 'sass:math';
 @import '../mixins/GridSizes.scss';
 
 .icon-confirm {
@@ -175,11 +176,11 @@ export default {
 	// Specific grid spacing
 	@include grid-sizes using ($marginTop, $marginW) {
 		// we space this with 2/3 margin top, 1/3 margin bottom
-		margin-top: ($marginTop - 44px) * 2 / 3;
+		margin-top: math.div($marginTop - 44px * 2, 3);
 
 		@if $marginW >= 44px {
 			&__back {
-				margin: 0 (($marginW - 44px) / 2);
+				margin: 0 math.div($marginW - 44px, 2);
 			}
 		}
 		&--root &__title {
