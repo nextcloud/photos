@@ -29,13 +29,6 @@ webpackRules.RULE_SCSS.use = [
 	},
 ]
 
-webpackConfig.module.rules = Object.values(webpackRules)
-webpackConfig.module.rules.push({
-	test: /\.svg$/,
-	// illustrations
-	loader: 'raw-loader',
-})
-
 webpackConfig.plugins.push(
 	// patch webdav/dist/request.js
 	new webpack.NormalModuleReplacementPlugin(
