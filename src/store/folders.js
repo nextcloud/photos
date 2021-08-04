@@ -3,7 +3,7 @@
  *
  * @author John Molakvoæ <skjnldsv@protonmail.com>
  *
- * @license GNU AGPL version 3 or any later version
+ * @license AGPL-3.0-or-later
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -17,7 +17,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
  */
 import Vue from 'vue'
 import { sortCompare } from '../utils/fileUtils'
@@ -31,8 +30,8 @@ const mutations = {
 	/**
 	 * Index folders paths and ids
 	 *
-	 * @param {Object} state vuex state
-	 * @param {Object} data destructuring object
+	 * @param {object} state vuex state
+	 * @param {object} data destructuring object
 	 * @param {number} data.fileid current folder id
 	 * @param {Array} data.files list of files
 	 */
@@ -53,8 +52,8 @@ const mutations = {
 	/**
 	 * Index folders paths and ids
 	 *
-	 * @param {Object} state vuex state
-	 * @param {Object} data destructuring object
+	 * @param {object} state vuex state
+	 * @param {object} data destructuring object
 	 * @param {string} data.path path of this folder
 	 * @param {number} data.fileid id of this folder
 	 */
@@ -75,8 +74,8 @@ const actions = {
 	/**
 	 * Update files and folders
 	 *
-	 * @param {Object} context vuex context
-	 * @param {Object} data destructuring object
+	 * @param {object} context vuex context
+	 * @param {object} data destructuring object
 	 * @param {number} data.fileid current folder id
 	 * @param {Array} data.files list of files
 	 * @param {Array} data.folders list of folders
@@ -91,8 +90,8 @@ const actions = {
 	/**
 	 * Index folders paths and ids
 	 *
-	 * @param {Object} context vuex context
-	 * @param {Object} data destructuring object
+	 * @param {object} context vuex context
+	 * @param {object} data destructuring object
 	 * @param {string} data.path path of this folder
 	 * @param {number} data.fileid id of this folder
 	 */

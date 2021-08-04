@@ -3,7 +3,7 @@
  *
  * @author John Molakvoæ <skjnldsv@protonmail.com>
  *
- * @license GNU AGPL version 3 or any later version
+ * @license AGPL-3.0-or-later
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -17,7 +17,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
  */
 import Vue from 'vue'
 
@@ -29,7 +28,7 @@ const mutations = {
 	/**
 	 * Append or update given files
 	 *
-	 * @param {Object} state the store mutations
+	 * @param {object} state the store mutations
 	 * @param {Array} files the store mutations
 	 */
 	updateFiles(state, files) {
@@ -43,8 +42,8 @@ const mutations = {
 	/**
 	 * Set a folder subfolders
 	 *
-	 * @param {Object} state the store mutations
-	 * @param {Object} data destructuring object
+	 * @param {object} state the store mutations
+	 * @param {object} data destructuring object
 	 * @param {number} data.fileid current folder id
 	 * @param {Array} data.folders list of folders
 	 */
@@ -67,9 +66,9 @@ const actions = {
 	/**
 	 * Update files, folders and their respective subfolders
 	 *
-	 * @param {Object} context the store mutations
-	 * @param {Object} data destructuring object
-	 * @param {Object} data.folder current folder fileinfo
+	 * @param {object} context the store mutations
+	 * @param {object} data destructuring object
+	 * @param {object} data.folder current folder fileinfo
 	 * @param {Array} data.files list of files
 	 * @param {Array} data.folders list of folders within current folder
 	 */
@@ -82,7 +81,7 @@ const actions = {
 	/**
 	 * Append or update given files
 	 *
-	 * @param {Object} context the store mutations
+	 * @param {object} context the store mutations
 	 * @param {Array} files list of files
 	 */
 	appendFiles(context, files = []) {

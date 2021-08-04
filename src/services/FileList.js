@@ -3,7 +3,7 @@
  *
  * @author John Molakvoæ <skjnldsv@protonmail.com>
  *
- * @license GNU AGPL version 3 or any later version
+ * @license AGPL-3.0-or-later
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -17,7 +17,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 import { getCurrentUser } from '@nextcloud/auth'
@@ -32,9 +31,9 @@ import { genFileInfo } from '../utils/fileUtils'
 /**
  * List files from a folder and filter out unwanted mimes
  *
- * @param {String} path the path relative to the user root
- * @param {Object} [options] optional options for axios
- * @returns {Array} the file list
+ * @param {string} path the path relative to the user root
+ * @param {object} [options] optional options for axios
+ * @return {Array} the file list
  */
 export default async function(path, options = {}) {
 
@@ -96,10 +95,10 @@ export default async function(path, options = {}) {
  * ! See webdav library
  * Into the returned data
  *
- * @param {Object} result the request result
+ * @param {object} result the request result
  * @param {string} serverBasePath server base path
  * @param {boolean} isDetailed detailed request
- * @returns {Array}
+ * @return {Array}
  */
 function getDirectoryFiles(result, serverBasePath, isDetailed = false) {
 	const serverBase = pathPosix.join(serverBasePath, '/')

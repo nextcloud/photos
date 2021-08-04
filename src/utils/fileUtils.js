@@ -3,7 +3,7 @@
  *
  * @author John Molakvoæ <skjnldsv@protonmail.com>
  *
- * @license GNU AGPL version 3 or any later version
+ * @license AGPL-3.0-or-later
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -17,7 +17,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
  */
 import camelcase from 'camelcase'
 import { isNumber } from './numberUtils'
@@ -25,8 +24,8 @@ import { isNumber } from './numberUtils'
 /**
  * Get an url encoded path
  *
- * @param {String} path the full path
- * @returns {string} url encoded file path
+ * @param {string} path the full path
+ * @return {string} url encoded file path
  */
 const encodeFilePath = function(path) {
 	const pathSections = (path.startsWith('/') ? path : `/${path}`).split('/')
@@ -42,8 +41,8 @@ const encodeFilePath = function(path) {
 /**
  * Extract dir and name from file path
  *
- * @param {String} path the full path
- * @returns {String[]} [dirPath, fileName]
+ * @param {string} path the full path
+ * @return {string[]} [dirPath, fileName]
  */
 const extractFilePaths = function(path) {
 	const pathSections = path.split('/')
@@ -55,11 +54,11 @@ const extractFilePaths = function(path) {
 /**
  * Sorting comparison function
  *
- * @param {Object} fileInfo1 file 1 fileinfo
- * @param {Object} fileInfo2 file 2 fileinfo
+ * @param {object} fileInfo1 file 1 fileinfo
+ * @param {object} fileInfo2 file 2 fileinfo
  * @param {string} key key to sort with
  * @param {boolean} [asc=true] sort ascending?
- * @returns {number}
+ * @return {number}
  */
 const sortCompare = function(fileInfo1, fileInfo2, key, asc = true) {
 
