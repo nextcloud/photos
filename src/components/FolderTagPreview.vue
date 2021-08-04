@@ -3,7 +3,7 @@
  -
  - @author John Molakvoæ <skjnldsv@protonmail.com>
  -
- - @license GNU AGPL version 3 or any later version
+ - @license AGPL-3.0-or-later
  -
  - This program is free software: you can redistribute it and/or modify
  - it under the terms of the GNU Affero General Public License as
@@ -105,7 +105,8 @@ export default {
 
 		/**
 		 * Previews list without the failed ones
-		 * @returns {Object[]} the previews fileinfo
+		 *
+		 * @return {object[]} the previews fileinfo
 		 */
 		previewList() {
 			return this.fileList
@@ -118,7 +119,8 @@ export default {
 		 * current named route, get the final url back, decode it
 		 * and use it as a direct string.
 		 * Which vue-router does not encode afterwards!
-		 * @returns {string}
+		 *
+		 * @return {string}
 		 */
 		to() {
 			// always remove first slash, the router

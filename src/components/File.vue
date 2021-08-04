@@ -1,7 +1,7 @@
 <!--
  - @copyright Copyright (c) 2020 Corentin Mors
  -
- - @license GNU AGPL version 3 or any later version
+ - @license AGPL-3.0-or-later
  -
  - @author Corentin Mors <medias@pixelswap.fr>
  -
@@ -109,7 +109,7 @@ export default {
 			OCA.Viewer.open({
 				path: this.item.injected.filename,
 				list: this.item.injected.list,
-				loadMore: this.item.injected.loadMore ? async() => await this.item.injected.loadMore(true) : () => [],
+				loadMore: this.item.injected.loadMore ? async () => await this.item.injected.loadMore(true) : () => [],
 				canLoop: this.item.injected.canLoop,
 			})
 		},

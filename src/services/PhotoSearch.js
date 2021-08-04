@@ -3,7 +3,7 @@
  *
  * @author John Molakvoæ <skjnldsv@protonmail.com>
  *
- * @license GNU AGPL version 3 or any later version
+ * @license AGPL-3.0-or-later
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -17,7 +17,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 import { genFileInfo } from '../utils/fileUtils'
@@ -31,11 +30,11 @@ import { sizes } from '../assets/grid-sizes'
  * List files from a folder and filter out unwanted mimes
  *
  * @param {boolean} [onlyFavorites=false] not used
- * @param {Object} [options] used for the cancellable requests
+ * @param {object} [options] used for the cancellable requests
  * @param {number} [options.page=0] which page to start (starts at 0)
  * @param {number} [options.perPage] how many to display per page default is 5 times the max number per line from the grid-sizes config file
  * @param {boolean} [options.full=false] get full data of the files
- * @returns {Array} the file list
+ * @return {Array} the file list
  */
 export default async function(onlyFavorites = false, options = {}) {
 

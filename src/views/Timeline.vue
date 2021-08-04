@@ -4,7 +4,7 @@
  - @author John Molakvoæ <skjnldsv@protonmail.com>
  - @author Corentin Mors <medias@pixelswap.fr>
  -
- - @license GNU AGPL version 3 or any later version
+ - @license AGPL-3.0-or-later
  -
  - This program is free software: you can redistribute it and/or modify
  - it under the terms of the GNU Affero General Public License as
@@ -203,8 +203,9 @@ export default {
 
 	methods: {
 		/** Return next batch of data depending on global offset
+		 *
 		 * @param {boolean} doReturn Returns a Promise with the list instead of a boolean
-		 * @returns {Promise<boolean>} Returns a Promise with a boolean that stops infinite loading
+		 * @return {Promise<boolean>} Returns a Promise with a boolean that stops infinite loading
 		 */
 		async getContent(doReturn) {
 			if (this.done) {

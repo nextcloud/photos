@@ -1,7 +1,7 @@
 <!--
  - @copyright Copyright (c) 2020 Corentin Mors
  -
- - @license GNU AGPL version 3 or any later version
+ - @license AGPL-3.0-or-later
  -
  - @author Corentin Mors <medias@pixelswap.fr>
  -

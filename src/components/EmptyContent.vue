@@ -3,7 +3,7 @@
  -
  - @author John Molakvoæ <skjnldsv@protonmail.com>
  -
- - @license GNU AGPL version 3 or any later version
+ - @license AGPL-3.0-or-later
  -
  - This program is free software: you can redistribute it and/or modify
  - it under the terms of the GNU Affero General Public License as
@@ -50,7 +50,7 @@ export default {
 		/**
 		 * Does this component have an illustration
 		 *
-		 * @returns {boolean}
+		 * @return {boolean}
 		 */
 		haveIllustration() {
 			return this.illustrationName !== ''
@@ -59,7 +59,7 @@ export default {
 		/**
 		 * Is the illustration loaded
 		 *
-		 * @returns {boolean}
+		 * @return {boolean}
 		 */
 		isLoaded() {
 			if (!this.haveIllustration) {
@@ -72,7 +72,7 @@ export default {
 		 * The component is ready if the illustration
 		 * is done loading or if there is none
 		 *
-		 * @returns {boolean}
+		 * @return {boolean}
 		 */
 		isReady() {
 			return !this.haveIllustration || (this.haveIllustration && this.isLoaded)
