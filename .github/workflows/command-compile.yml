@@ -60,6 +60,11 @@ jobs:
           fetch-depth: 0
           ref: ${{ needs.init.outputs.head_ref }}
 
+      - name: Setup git
+        run: |
+          git config --local user.email "nextcloud-command@users.noreply.github.com"
+          git config --local user.name "nextcloud-command"
+
       - name: Read package.json node and npm engines version
         uses: skjnldsv/read-package-engines-version-actions@v1
         id: package-engines-versions
