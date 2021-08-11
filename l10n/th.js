@@ -1,7 +1,7 @@
 OC.L10N.register(
     "photos",
     {
-    "Photos" : "Photos",
+    "Photos" : "รูปภาพ",
     "Your photos" : "รูปภาพของคุณ",
     "Your videos" : "วิดีโอของคุณ",
     "Favorites" : "รายการโปรด",
