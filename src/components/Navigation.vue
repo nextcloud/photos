@@ -107,7 +107,7 @@ export default {
 		 * decode it and use it as a direct string, which vue-router
 		 * does not encode afterwards
 		 *
-		 * @return {string|object}
+		 * @returns {string|object}
 		 */
 		to() {
 			// always remove first slash, the router

@@ -20,7 +20,7 @@
  */
 
 /*!
-  * vue-router v3.5.1
+  * vue-router v3.5.2
   * (c) 2021 Evan You
   * @license MIT
   */
@@ -29,13 +29,6 @@
  * The buffer module from node.js, for the browser.
  *
  * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
- * @license  MIT
- */
-
-/*!
- * The buffer module from node.js, for the browser.
- *
- * @author   Feross Aboukhadijeh <https://feross.org>
  * @license  MIT
  */
 
@@ -64,20 +57,6 @@
  *
  * Copyright (c) 2016 Jorik Tangelder;
  * Licensed under the MIT license */
-
-/*! http://mths.be/base64 v0.1.0 by @mathias | MIT license */
-
-/*! https://mths.be/he v1.2.0 by @mathias | MIT license */
-
-/*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
-
-/*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
-
-/**
-      * vue-class-component v7.2.6
-      * (c) 2015-present Evan You
-      * @license MIT
-      */
 
 /**
  * @copyright 2019 Christoph Wurst <christoph@winzerhof-wurst.at>
@@ -277,14 +256,6 @@
  *
  */
 
-/**
-* @license nested-property https://github.com/cosmosio/nested-property
-*
-* The MIT License (MIT)
-*
-* Copyright (c) 2014-2020 Olivier Scherrer <pode.fr@gmail.com>
-*/
-
 /**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
  * @version 1.16.1
@@ -309,5 +280,3 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-//! moment.js
