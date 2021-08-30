@@ -99,7 +99,7 @@ export default {
 			this.illustration = ''
 			if (this.illustrationName !== '') {
 				try {
-					const illustration = await import(`../assets/Illustrations/${this.illustrationName}.svg`)
+					const illustration = await import(`!raw-loader!../assets/Illustrations/${this.illustrationName}.svg`)
 					this.illustration = illustration.default
 				} catch (error) {
 					console.error('Could not get the error illustration', error)

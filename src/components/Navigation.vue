@@ -3,7 +3,7 @@
  -
  - @author John Molakvoæ <skjnldsv@protonmail.com>
  -
- - @license GNU AGPL version 3 or any later version
+ - @license AGPL-3.0-or-later
  -
  - This program is free software: you can redistribute it and/or modify
  - it under the terms of the GNU Affero General Public License as
@@ -106,7 +106,8 @@ export default {
 		 * so we generate a new valid route object, get the final url back
 		 * decode it and use it as a direct string, which vue-router
 		 * does not encode afterwards
-		 * @returns {string|object}
+		 *
+		 * @return {string|object}
 		 */
 		to() {
 			// always remove first slash, the router
@@ -143,6 +144,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use 'sass:math';
 @import '../mixins/GridSizes.scss';
 
 .icon-confirm {
@@ -174,11 +176,11 @@ export default {
 	// Specific grid spacing
 	@include grid-sizes using ($marginTop, $marginW) {
 		// we space this with 2/3 margin top, 1/3 margin bottom
-		margin-top: ($marginTop - 44px) * 2 / 3;
+		margin-top: math.div($marginTop - 44px * 2, 3);
 
 		@if $marginW >= 44px {
 			&__back {
-				margin: 0 (($marginW - 44px) / 2);
+				margin: 0 math.div($marginW - 44px, 2);
 			}
 		}
 		&--root &__title {
