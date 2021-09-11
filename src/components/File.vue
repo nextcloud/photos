@@ -149,7 +149,8 @@ img {
 
 	color: transparent; // should be diplayed on error
 
-	object-fit: contain;
+	object-fit: cover;
+	object-position: top;
 
 	.file--cropped & {
 		object-fit: cover;
