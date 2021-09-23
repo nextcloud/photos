@@ -75,6 +75,6 @@
 		"postcss": "^8.3.6",
 		"postcss-loader": "^6.1.1",
 		"raw-loader": "^4.0.2",
-		"workbox-webpack-plugin": "^6.2.4"
+		"workbox-webpack-plugin": "^6.3.0"
 	}
 }
