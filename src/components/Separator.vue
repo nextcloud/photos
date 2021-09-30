@@ -1,9 +1,9 @@
 <!--
- - @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
- -
- - @author John Molakvoæ <skjnldsv@protonmail.com>
+ - @copyright Copyright (c) 2020 Corentin Mors
  -
  - @license AGPL-3.0-or-later
+ -
+ - @author Corentin Mors <medias@pixelswap.fr>
  -
  - This program is free software: you can redistribute it and/or modify
  - it under the terms of the GNU Affero General Public License as
@@ -21,25 +21,45 @@
  -->
 
 <template>
-	<p>
-	<input
-		id="enable-cropped-layout"
-		v-model="croppedLayout"
-		type="checkbox"
-		class="checkbox"
-		@change="updateSetting('croppedLayout')">
-	<label for="enable-cropped-layout">{{ t('photos', 'Enable squared photos view') }}</label>
-	</p>
+  <h2
+    class="grid-title"
+    :style="{ height: items.height + 'px width:100% !important;' }"
+  >
+    {{ items.injected.month }}
+    <span>{{ items.injected.year }}</span>
+  </h2>
 </template>
 
 <script>
-import UserConfig from '../../mixins/UserConfig'
-
 export default {
-	name: 'CroppedLayoutSettings',
+  name: "Separator",
 
-	mixins: [
-		UserConfig,
-	],
-}
+  inheritAttrs: false,
+
+  props: {
+    items: {
+      type: Object,
+      required: true,
+    },
+  },
+};
 </script>
+
+<style lang="scss" scoped>
+.grid-title {
+  grid-column: 1/4;
+  padding: 48px 0 12px 0;
+  margin: 0;
+  span {
+    font-weight: normal;
+    width: 100%;
+  }
+  &.first-title {
+    padding: 0 0 12px 0;
+  }
+}
+.item:focus-within {
+  width: 100% !important;
+  height: 90px;
+}
+</style>

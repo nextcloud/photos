@@ -21,25 +21,23 @@
  -->
 
 <template>
-	<p>
-	<input
-		id="enable-cropped-layout"
-		v-model="croppedLayout"
-		type="checkbox"
-		class="checkbox"
-		@change="updateSetting('croppedLayout')">
-	<label for="enable-cropped-layout">{{ t('photos', 'Enable squared photos view') }}</label>
-	</p>
+	<div class="section">
+		<h2>{{ t('photos', 'View') }}</h2>
+			<CroppedLayoutSettings />	
+			<GalleryLayoutSettings />			
+	</div>
 </template>
 
 <script>
-import UserConfig from '../../mixins/UserConfig'
+import CroppedLayoutSettings from './CroppedLayoutSettings'
+import GalleryLayoutSettings from './GalleryLayoutSettings'
 
 export default {
-	name: 'CroppedLayoutSettings',
-
-	mixins: [
-		UserConfig,
-	],
+	name: 'SettingsView',
+	components: {
+		CroppedLayoutSettings,
+		GalleryLayoutSettings,
+		
+	},
 }
 </script>

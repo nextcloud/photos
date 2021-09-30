@@ -21,121 +21,147 @@
  -->
 
 <template>
-	<Content app-name="photos">
-		<AppNavigation>
-			<template #list>
-				<AppNavigationItem :to="{name: 'timeline'}"
-					class="app-navigation__photos"
-					:title="t('photos', 'Your photos')"
-					icon="icon-yourphotos"
-					exact />
-				<AppNavigationItem to="/videos" :title="t('photos', 'Your videos')" icon="icon-video" />
-				<AppNavigationItem to="/favorites" :title="t('photos', 'Favorites')" icon="icon-favorite" />
-				<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Your folders')" icon="icon-files-dark" />
-				<AppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared with you')" icon="icon-share" />
-				<AppNavigationItem v-if="areTagsInstalled"
-					:to="{name: 'tags'}"
-					:title="t('photos', 'Tagged photos')"
-					icon="icon-tag" />
-				<AppNavigationItem v-if="showLocationMenuEntry"
-					:to="{name: 'maps'}"
-					:title="t('photos', 'Locations')"
-					icon="icon-address" />
-			</template>
-			<template #footer>
-				<AppNavigationSettings :title="t('photos', 'Settings')">
-					<CroppedLayoutSettings />
-				</AppNavigationSettings>
-			</template>
-		</AppNavigation>
-		<AppContent :class="{ 'icon-loading': loading }">
-			<router-view v-show="!loading" :loading.sync="loading" />
+  <Content app-name="photos">
+    <AppNavigation>
+      <template #list>
+        <AppNavigationItem
+          :to="{ name: 'timeline' }"
+          class="app-navigation__photos"
+          :title="t('photos', 'Your photos')"
+          icon="icon-yourphotos"
+          exact
+        />
+        <AppNavigationItem
+          to="/videos"
+          :title="t('photos', 'Your videos')"
+          icon="icon-video"
+        />
+        <AppNavigationItem
+          to="/favorites"
+          :title="t('photos', 'Favorites')"
+          icon="icon-favorite"
+        />
+        <AppNavigationItem
+          :to="{ name: 'albums' }"
+          :title="t('photos', 'Your folders')"
+          icon="icon-files-dark"
+        />
+        <AppNavigationItem
+          :to="{ name: 'shared' }"
+          :title="t('photos', 'Shared with you')"
+          icon="icon-share"
+        />
+        <AppNavigationItem
+          v-if="areTagsInstalled"
+          :to="{ name: 'tags' }"
+          :title="t('photos', 'Tagged photos')"
+          icon="icon-tag"
+        />
+        <AppNavigationItem
+          v-if="showLocationMenuEntry"
+          :to="{ name: 'maps' }"
+          :title="t('photos', 'Locations')"
+          icon="icon-address"
+        />
+      </template>
+      <template #footer>
+        <AppNavigationSettings :title="t('photos', 'Settings')">
+          <SettingsView />
+        </AppNavigationSettings>
+      </template>
+    </AppNavigation>
+    <AppContent :class="{ 'icon-loading': loading }">
+      <router-view v-show="!loading" :loading.sync="loading" />
 
-			<!-- svg img loading placeholder (linked to the File component) -->
-			<!-- eslint-disable-next-line vue/no-v-html (because it's an SVG file) -->
-			<span class="hidden-visually" role="none" v-html="svgplaceholder" />
-			<!-- eslint-disable-next-line vue/no-v-html (because it's an SVG file) -->
-			<span class="hidden-visually" role="none" v-html="imgplaceholder" />
-			<!-- eslint-disable-next-line vue/no-v-html (because it's an SVG file) -->
-			<span class="hidden-visually" role="none" v-html="videoplaceholder" />
-		</AppContent>
-	</Content>
+      <!-- svg img loading placeholder (linked to the File component) -->
+      <!-- eslint-disable-next-line vue/no-v-html (because it's an SVG file) -->
+      <span class="hidden-visually" role="none" v-html="svgplaceholder" />
+      <!-- eslint-disable-next-line vue/no-v-html (because it's an SVG file) -->
+      <span class="hidden-visually" role="none" v-html="imgplaceholder" />
+      <!-- eslint-disable-next-line vue/no-v-html (because it's an SVG file) -->
+      <span class="hidden-visually" role="none" v-html="videoplaceholder" />
+    </AppContent>
+  </Content>
 </template>
 
 <script>
-import { getCurrentUser } from '@nextcloud/auth'
-import { generateUrl } from '@nextcloud/router'
+import { getCurrentUser } from "@nextcloud/auth";
+import { generateUrl } from "@nextcloud/router";
 
-import Content from '@nextcloud/vue/dist/Components/Content'
-import AppContent from '@nextcloud/vue/dist/Components/AppContent'
-import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation'
-import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
-import AppNavigationSettings from '@nextcloud/vue/dist/Components/AppNavigationSettings'
+import Content from "@nextcloud/vue/dist/Components/Content";
+import AppContent from "@nextcloud/vue/dist/Components/AppContent";
+import AppNavigation from "@nextcloud/vue/dist/Components/AppNavigation";
+import AppNavigationItem from "@nextcloud/vue/dist/Components/AppNavigationItem";
+import AppNavigationSettings from "@nextcloud/vue/dist/Components/AppNavigationSettings";
 
-import CroppedLayoutSettings from './components/Settings/CroppedLayoutSettings'
-import svgplaceholder from './assets/file-placeholder.svg'
-import imgplaceholder from './assets/image.svg'
-import videoplaceholder from './assets/video.svg'
-import isMapsInstalled from './services/IsMapsInstalled'
-import areTagsInstalled from './services/AreTagsInstalled'
+import SettingsView from "./components/Settings/SettingsView";
+import svgplaceholder from "./assets/file-placeholder.svg";
+import imgplaceholder from "./assets/image.svg";
+import videoplaceholder from "./assets/video.svg";
+import isMapsInstalled from "./services/IsMapsInstalled";
+import areTagsInstalled from "./services/AreTagsInstalled";
 
 export default {
-	name: 'Photos',
-	components: {
-		Content,
-		CroppedLayoutSettings,
-		AppContent,
-		AppNavigation,
-		AppNavigationItem,
-		AppNavigationSettings,
-	},
-	data() {
-		return {
-			loading: true,
-			svgplaceholder,
-			imgplaceholder,
-			videoplaceholder,
-			areTagsInstalled,
-			showLocationMenuEntry: getCurrentUser() === null
-				? false
-				: getCurrentUser().isAdmin || isMapsInstalled,
-		}
-	},
+  name: "Photos",
+  components: {
+    Content,
+    SettingsView,
+    AppContent,
+    AppNavigation,
+    AppNavigationItem,
+    AppNavigationSettings,
+  },
+  data() {
+    return {
+      loading: true,
+      svgplaceholder,
+      imgplaceholder,
+      videoplaceholder,
+      areTagsInstalled,
+      showLocationMenuEntry:
+        getCurrentUser() === null
+          ? false
+          : getCurrentUser().isAdmin || isMapsInstalled,
+    };
+  },
 
-	beforeMount() {
-		if ('serviceWorker' in navigator) {
-			// Use the window load event to keep the page load performant
-			window.addEventListener('load', () => {
-				navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js'), {
-					scope: '/',
-				}).then(registration => {
-					console.debug('SW registered: ', registration)
-				}).catch(registrationError => {
-					console.error('SW registration failed: ', registrationError)
-				})
+  beforeMount() {
+    if ("serviceWorker" in navigator) {
+      // Use the window load event to keep the page load performant
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register(generateUrl("/apps/photos/service-worker.js"), {
+            scope: "/",
+          })
+          .then((registration) => {
+            console.debug("SW registered: ", registration);
+          })
+          .catch((registrationError) => {
+            console.error("SW registration failed: ", registrationError);
+          });
+      });
+    } else {
+      console.debug("Service Worker is not enabled on this browser.");
+    }
+  },
 
-			})
-		} else {
-			console.debug('Service Worker is not enabled on this browser.')
-		}
-	},
-
-	beforeDestroy() {
-		window.removeEventListener('load', () => {
-			navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js'))
-		})
-	},
-}
+  beforeDestroy() {
+    window.removeEventListener("load", () => {
+      navigator.serviceWorker.register(
+        generateUrl("/apps/photos/service-worker.js")
+      );
+    });
+  },
+};
 </script>
 <style lang="scss" scoped>
 .app-content {
-	display: flex;
-	flex-grow: 1;
-	flex-direction: column;
-	align-content: space-between;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
 }
 
 .app-navigation__photos::v-deep .app-navigation-entry-icon.icon-photos {
-	background-size: 20px;
+  background-size: 20px;
 }
 </style>

@@ -30,6 +30,7 @@ import { videoMimes } from '../services/AllowedMimes'
 const Albums = () => import('../views/Albums')
 const Tags = () => import('../views/Tags')
 const Timeline = () => import('../views/Timeline')
+const Timeline1 = () => import('../views/Timeline1')
 
 Vue.use(Router)
 
@@ -62,6 +63,17 @@ export default new Router({
 			name: 'timeline',
 			props: route => ({
 				rootTitle: t('photos', 'Your photos'),
+			}),
+		},
+		{
+			path: '/gallery/:path*',
+			component: Timeline1,
+			name: 'timeline1',
+			props: route => ({
+				path: parsePathParams(route.params.path),
+				// if path is empty
+				isRoot: !route.params.path,
+				rootTitle: t('photos', 'Your gallery'),
 			}),
 		},
 		{

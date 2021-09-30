@@ -22,21 +22,22 @@
 
 <template>
 	<p>
-	<input
-		id="enable-cropped-layout"
-		v-model="croppedLayout"
-		type="checkbox"
-		class="checkbox"
-		@change="updateSetting('croppedLayout')">
-	<label for="enable-cropped-layout">{{ t('photos', 'Enable squared photos view') }}</label>
-	</p>
+			<input
+				id="enable-gallery-layout"
+				v-model="galleryLayout"
+				type="checkbox"
+				class="checkbox"
+				@change="updateGallerySettings('galleryLayout')">
+			<label for="enable-gallery-layout">{{ t('photos', 'Enable Gallery view') }}</label>
+		</p>
+	
 </template>
 
 <script>
 import UserConfig from '../../mixins/UserConfig'
 
 export default {
-	name: 'CroppedLayoutSettings',
+	name: 'GalleryLayoutSettings',
 
 	mixins: [
 		UserConfig,
