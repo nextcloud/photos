@@ -67,7 +67,7 @@
 		"@nextcloud/stylelint-config": "^1.0.0-beta.0",
 		"@nextcloud/webpack-vue-config": "^4.1.0",
 		"@vue/test-utils": "^1.2.2",
-		"autoprefixer": "^10.3.6",
+		"autoprefixer": "^10.3.7",
 		"babel-loader-exclude-node-modules-except": "^1.2.1",
 		"module-replace-webpack-plugin": "0.0.12",
 		"node-sass": "^6.0.1",
