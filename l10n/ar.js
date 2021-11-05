@@ -17,6 +17,7 @@ OC.L10N.register(
     "Back to {folder}" : "العودة إلى {folder} ",
     "View" : "عرض",
     "Enable squared photos view" : "تفعيل عرض الصور المربعة",
+    "This folder does not exist" : "هذا المجلد غير موجود",
     "An error occurred" : "طرأ هناك خطأ",
     "No photos in here" : "لا توجد صور هنا",
     "No tags yet" : "لا توجد وسوم حتى الآن",
