@@ -14,7 +14,7 @@
 		"psalm": "psalm.phar"
 	},
 	"require-dev": {
-		"nextcloud/coding-standard": "^0.5.0",
+		"nextcloud/coding-standard": "^1.0.0",
 		"phpunit/phpunit": "^9",
 		"psalm/phar": "^4.3"
 	}
