@@ -1359,16 +1359,16 @@
         },
         {
             "name": "psalm/phar",
-            "version": "4.12.0",
+            "version": "4.13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/phar.git",
-                "reference": "0ccb66911b6ca4cd4ecb88a619476791cf624bab"
+                "reference": "3bca7086f16e2881dccc2192c47b32311c2ca3f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/phar/zipball/0ccb66911b6ca4cd4ecb88a619476791cf624bab",
-                "reference": "0ccb66911b6ca4cd4ecb88a619476791cf624bab",
+                "url": "https://api.github.com/repos/psalm/phar/zipball/3bca7086f16e2881dccc2192c47b32311c2ca3f7",
+                "reference": "3bca7086f16e2881dccc2192c47b32311c2ca3f7",
                 "shasum": ""
             },
             "require": {
@@ -1386,7 +1386,7 @@
                 "MIT"
             ],
             "description": "Composer-based Psalm Phar",
-            "time": "2021-11-06T18:59:32+00:00"
+            "time": "2021-11-23T23:59:04+00:00"
         },
         {
             "name": "psr/container",
