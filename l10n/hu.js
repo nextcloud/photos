@@ -22,8 +22,6 @@ OC.L10N.register(
     "No photos in here" : "Itt nincsenek fényképe",
     "No tags yet" : "Még nincsenek címkék",
     "Photos with tags will show up here" : "A címkével rendelkező fényképek itt fognak megjelenni",
-    "Your albums" : "Az Ön albumai",
-    "Shared albums" : "Megosztott albumok",
     "This folder does not exists" : "Ez a mappa nem létezik"
 },
 "nplurals=2; plural=(n != 1);");

@@ -12,15 +12,16 @@ OC.L10N.register(
     "Locations" : "Emplaçaments",
     "Settings" : "Paramètres",
     "Open the full size \"{name}\" image" : "Dobrir l’imatge {name} en talha originala",
+    "Open the \"{name}\" sub-directory" : "Dobrir lo jos-dossièr « {name} »",
     "Share this folder" : "Partejar aqueste dossièr",
     "Back to {folder}" : "Tornar a {folder}",
     "View" : "Vista",
+    "Enable squared photos view" : "Activar la vista amb fòtos carrat",
     "This folder does not exist" : "Aqueste dossièr existís pas",
     "An error occurred" : "Una error s’es producha",
     "No photos in here" : "Cap de fòto aquí",
     "No tags yet" : "Cap d’etiqueta pel moment",
-    "Your albums" : "Vòstres albums",
-    "Shared albums" : "Albums partejats",
+    "Photos with tags will show up here" : "Las fòtos amb etiquetas apreissaràn aquí",
     "This folder does not exists" : "Aqueste dossièr existís pas"
 },
 "nplurals=2; plural=(n > 1);");

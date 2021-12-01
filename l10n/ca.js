@@ -22,8 +22,6 @@ OC.L10N.register(
     "No photos in here" : "No hi ha cap fotografia",
     "No tags yet" : "Encara no hi ha etiquetes",
     "Photos with tags will show up here" : "Aquí es mostraran les fotografies amb etiquetes",
-    "Your albums" : "Els vostres àlbums",
-    "Shared albums" : "Àlbums compartits",
     "This folder does not exists" : "Aquesta carpeta no existeix"
 },
 "nplurals=2; plural=(n != 1);");

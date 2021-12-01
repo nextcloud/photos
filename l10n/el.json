@@ -9,18 +9,17 @@
     "Tagged photos" : "Φωτογραφίες με ετικέτα",
     "Locations" : "Τοποθεσίες",
     "Settings" : "Ρυθμίσεις",
-    "Open the full size \"{name}\" image" : "Άνοιγμα εικόνας \"{name}\" σε πλήρη μέγεθος",
-    "Open the \"{name}\" sub-directory" : "Άνοιγμα υπό-κατηγορίας του \"{name}\"",
+    "Open the full size \"{name}\" image" : "Άνοιγμα εικόνας «{name}» σε πλήρη μέγεθος",
+    "Open the \"{name}\" sub-directory" : "Άνοιγμα υπό-κατάλογος του «{name}»",
     "Share this folder" : "Διαμοιρασμός αυτού του φακέλου",
     "Back to {folder}" : "Πίσω στο {folder}",
     "View" : "Προβολή",
     "Enable squared photos view" : "Ενεργοποίηση προβολής τετραγωνικών φωτογραφιών",
+    "This folder does not exist" : "Αυτός ο φάκελος δεν υπάρχει",
     "An error occurred" : "Παρουσιάστηκε σφάλμα",
     "No photos in here" : "Δεν υπάρχουν φωτογραφίες εδώ",
     "No tags yet" : "Χωρίς ετικέτες ακόμη",
     "Photos with tags will show up here" : "Φωτογραφίες με ετικέτες εμφανίζονται εδώ πάνω",
-    "Your albums" : "Τα άλμπουμ σας",
-    "Shared albums" : "Κοινόχρηστα άλμπουμ",
     "This folder does not exists" : "Ο φάκελος δεν υπάρχει"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

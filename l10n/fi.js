@@ -16,12 +16,11 @@ OC.L10N.register(
     "Share this folder" : "Jaa tämä kansio",
     "Back to {folder}" : "Takaisin kansioon {folder}",
     "View" : "Näytä",
+    "This folder does not exist" : "Tätä kansiota ei ole olemassa",
     "An error occurred" : "Tapahtui virhe",
     "No photos in here" : "Ei kuvia täällä",
     "No tags yet" : "Ei vielä tunnisteita",
     "Photos with tags will show up here" : "Tunnisteilla varustetut kuvat näkyvät täällä",
-    "Your albums" : "Omat albumit",
-    "Shared albums" : "Jaetut albumit",
     "This folder does not exists" : "Tätä kansiota ei ole olemassa"
 },
 "nplurals=2; plural=(n != 1);");

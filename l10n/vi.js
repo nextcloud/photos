@@ -17,12 +17,11 @@ OC.L10N.register(
     "Back to {folder}" : "Trở về {folder}",
     "View" : "Xem",
     "Enable squared photos view" : "Bật chế độ xem theo ô",
+    "This folder does not exist" : "Thư mục này không tồn tại",
     "An error occurred" : "Có lỗi đã xảy ra",
     "No photos in here" : "Không có ảnh nào trong này",
     "No tags yet" : "Chưa gắn nhãn",
     "Photos with tags will show up here" : "Ảnh đã gắn nhãn sẽ được cho thấy trên này",
-    "Your albums" : "Các tập ảnh của bạn",
-    "Shared albums" : "Các tập ảnh đã chia sẽ",
     "This folder does not exists" : "Thư mục không tồn tại"
 },
 "nplurals=1; plural=0;");

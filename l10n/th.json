@@ -1,7 +1,24 @@
 { "translations": {
-    "Photos" : "Photos",
+    "Photos" : "รูปภาพ",
+    "Your photos" : "รูปภาพของคุณ",
+    "Your videos" : "วิดีโอของคุณ",
     "Favorites" : "รายการโปรด",
-    "Shared with you" : "Shared with you",
-    "Settings" : "ตั้งค่า"
+    "Your folders" : "โฟลเดอร์ของคุณ",
+    "Shared with you" : "แชร์กับคุณ",
+    "Tagged photos" : "รูปภาพที่ติดแท็ก",
+    "Locations" : "สถานที่",
+    "Settings" : "การตั้งค่า",
+    "Open the full size \"{name}\" image" : "เปิดรูปภาพขนาดเต็ม \"{name}\"",
+    "Open the \"{name}\" sub-directory" : "เปิดไดเรกทอรีรอง \"{name}\"",
+    "Share this folder" : "แชร์โฟลเดอร์นี้",
+    "Back to {folder}" : "กลับไปยัง {folder}",
+    "View" : "มุมมอง",
+    "Enable squared photos view" : "เปิดมุมมองรูปภาพสี่เหลี่ยม",
+    "This folder does not exist" : "ไม่มีโฟลเดอร์นี้",
+    "An error occurred" : "เกิดข้อผิดพลาด",
+    "No photos in here" : "ไม่มีรูปภาพที่นี่",
+    "No tags yet" : "ยังไม่มีแท็ก",
+    "Photos with tags will show up here" : "รูปภาพที่ติดแท็กจะแสดงที่นี่",
+    "This folder does not exists" : "ไม่มีโฟลเดอร์นี้"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

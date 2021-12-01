@@ -17,8 +17,6 @@ OC.L10N.register(
     "No photos in here" : "هیچ عکسی در اینجا نیست",
     "No tags yet" : "هنوز برچسپی وجود ندارد",
     "Photos with tags will show up here" : "عکس های دارای برچسب در اینجا نشان داده می شوند",
-    "Your albums" : "آلبوم های شما",
-    "Shared albums" : "آلبوم های مشترک",
     "This folder does not exists" : "این پوشه وجود ندارد"
 },
 "nplurals=2; plural=(n > 1);");

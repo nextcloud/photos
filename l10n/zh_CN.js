@@ -22,8 +22,6 @@ OC.L10N.register(
     "No photos in here" : "这里没有照片",
     "No tags yet" : "尚无标签",
     "Photos with tags will show up here" : "带标签的照片将显示在此处",
-    "Your albums" : "你的相册",
-    "Shared albums" : "共享的相册",
     "This folder does not exists" : "该文件夹不存在"
 },
 "nplurals=1; plural=0;");

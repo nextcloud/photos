@@ -22,8 +22,6 @@ OC.L10N.register(
     "No photos in here" : "Burada herhangi bir fotoğraf yok",
     "No tags yet" : "Henüz bir etiket yok",
     "Photos with tags will show up here" : "Etiketlenmiş fotoğraflar burada görüntülenir",
-    "Your albums" : "Albümleriniz",
-    "Shared albums" : "Paylaşılmış albümler",
     "This folder does not exists" : "Bu klasör bulunamadı"
 },
 "nplurals=2; plural=(n > 1);");
