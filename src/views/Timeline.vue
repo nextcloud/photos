@@ -102,6 +102,10 @@ export default {
 			type: String,
 			default: '',
 		},
+		onThisDay: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	data() {
@@ -185,6 +189,11 @@ export default {
 			}
 			this.resetState()
 		},
+		async onThisDay() {
+			// reset component
+			this.resetState()
+			this.getContent()
+		},
 	},
 
 	beforeRouteLeave(from, to, next) {
@@ -237,6 +246,7 @@ export default {
 					page: this.page,
 					perPage: numberOfImagesPerBatch,
 					mimesType: this.mimesType,
+					onThisDay: this.onThisDay,
 				})
 
 				// If we get less files than requested that means we got to the end

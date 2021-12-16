@@ -17,6 +17,7 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 import { genFileInfo } from '../utils/fileUtils'
@@ -25,16 +26,18 @@ import { allMimes } from './AllowedMimes'
 import client from './DavClient'
 import { props } from './DavRequest'
 import { sizes } from '../assets/grid-sizes'
+import moment from 'moment'
 
 /**
  * List files from a folder and filter out unwanted mimes
  *
  * @param {boolean} [onlyFavorites=false] not used
- * @param {object} [options] used for the cancellable requests
+ * @param {Object} [options] used for the cancellable requests
  * @param {number} [options.page=0] which page to start (starts at 0)
  * @param {number} [options.perPage] how many to display per page default is 5 times the max number per line from the grid-sizes config file
  * @param {boolean} [options.full=false] get full data of the files
- * @return {Array} the file list
+ * @param {boolean} [options.onThisDay=false] get only items from this day of year
+ * @returns {Array} the file list
  */
 export default async function(onlyFavorites = false, options = {}) {
 
@@ -43,6 +46,7 @@ export default async function(onlyFavorites = false, options = {}) {
 		page: 0, // start at the first page
 		perPage: sizes.max.count * 10, // ten rows of the max width
 		mimesType: allMimes, // all mimes types
+		onThisDay: false,
 	}, options)
 
 	const prefixPath = `/files/${getCurrentUser().uid}`
@@ -65,6 +69,23 @@ export default async function(onlyFavorites = false, options = {}) {
 				</d:prop>
 				<d:literal>1</d:literal>
 			</d:eq>`
+		: ''
+
+	const onThisDay = options.onThisDay
+		? `<d:or>${Array(20).fill(1).map((_, years) => `<d:and>
+				<d:gt>
+					<d:prop>
+						<d:getlastmodified />
+					</d:prop>
+					<d:literal>${moment(Date.now()).startOf('day').subtract(years, 'y').format(moment.defaultFormatUtc)}</d:literal>
+				</d:gt>
+				<d:lt>
+					<d:prop>
+						<d:getlastmodified />
+					</d:prop>
+					<d:literal>${moment(Date.now()).endOf('day').add(1, 'd').subtract(years, 'y').format(moment.defaultFormatUtc)}</d:literal>
+				</d:lt>
+			</d:and>`).join('\n')}</d:or>`
 		: ''
 
 	options = Object.assign({
@@ -96,6 +117,13 @@ export default async function(onlyFavorites = false, options = {}) {
 								${orMime}
 							</d:or>
 							${eqFavorites}
+							${onThisDay}
+							<d:eq>
+								<d:prop>
+									<oc:owner-id/>
+								</d:prop>
+								<d:literal>${getCurrentUser().uid}</d:literal>
+							</d:eq>
 						</d:and>
 					</d:where>
 					<d:orderby>

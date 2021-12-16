@@ -125,5 +125,14 @@ export default new Router({
 				window.open(mapsPath, '_blank')
 			},
 		},
+		{
+			path: '/thisday',
+			name: 'thisday',
+			component: Timeline,
+			props: route => ({
+				rootTitle: t('photos', 'On this day'),
+				onThisDay: true,
+			}),
+		},
 	],
 })
