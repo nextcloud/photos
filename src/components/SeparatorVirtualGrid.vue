@@ -22,6 +22,7 @@
 
 <template>
 	<h2 class="grid-title" :style="{height: item.height + 'px'}">
+		<span v-if="item.injected.onThisDay">{{ n('photos', '{years} year ago', '{years} years ago', item.injected.onThisDay, {years: item.injected.onThisDay}) }}</span>
 		{{ item.injected.month }}
 		<span>{{ item.injected.year }}</span>
 	</h2>

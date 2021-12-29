@@ -71,12 +71,11 @@ export default async function(onlyFavorites = false, options = {}) {
 			</d:eq>`
 		: ''
 
-	const today = moment(Date.now())
 	const onThisDay = options.onThisDay
 		? `<d:or>${Array(20).fill(1)
 			.map((_, years) => {
-				const start = today.startOf('day').subtract(3, 'd').subtract(years + 1, 'y')
-				const end = today.endOf('day').add(3, 'd').subtract(years + 1, 'y')
+				const start = moment(Date.now()).startOf('day').subtract(3, 'd').subtract(years + 1, 'y')
+				const end = moment(Date.now()).endOf('day').add(3, 'd').subtract(years + 1, 'y')
 				return `<d:and>
 				<d:gt>
 					<d:prop>

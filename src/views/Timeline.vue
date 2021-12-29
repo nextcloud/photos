@@ -151,6 +151,7 @@ export default {
 						injected: {
 							year: this.getFormatedDate(file.lastmod, 'YYYY'),
 							month: this.getFormatedDate(file.lastmod, 'MMMM'),
+							...(this.onThisDay && { onThisDay: Math.round(moment(Date.now()).diff(moment(file.lastmod), 'years', true)) }),
 						},
 						height: 90,
 						columnSpan: 0, // means full width
