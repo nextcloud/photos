@@ -17,5 +17,8 @@
 		"nextcloud/coding-standard": "^0.5.0",
 		"phpunit/phpunit": "^9",
 		"psalm/phar": "^4.3"
+	},
+	"require": {
+		"ext-pdo": "*"
 	}
 }

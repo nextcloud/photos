@@ -25,10 +25,17 @@ declare(strict_types=1);
 
 namespace OCA\Photos\AppInfo;
 
+use OCA\Photos\Listener\NoMediaModifiedListener;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
+use OCP\Files\Events\Node\NodeCopiedEvent;
+use OCP\Files\Events\Node\NodeCreatedEvent;
+use OCP\Files\Events\Node\NodeDeletedEvent;
+use OCP\Files\Events\Node\NodeRenamedEvent;
+use OCP\Files\Events\Node\NodeTouchedEvent;
+use OCP\Files\Events\Node\NodeWrittenEvent;
 
 class Application extends App implements IBootstrap {
 	public const APP_ID = 'photos';
@@ -58,6 +65,12 @@ class Application extends App implements IBootstrap {
 	}
 
 	public function register(IRegistrationContext $context): void {
+		$context->registerEventListener(NodeCreatedEvent::class, NoMediaModifiedListener::class);
+		$context->registerEventListener(NodeDeletedEvent::class, NoMediaModifiedListener::class);
+		$context->registerEventListener(NodeTouchedEvent::class, NoMediaModifiedListener::class);
+		$context->registerEventListener(NodeWrittenEvent::class, NoMediaModifiedListener::class);
+		$context->registerEventListener(NodeCopiedEvent::class, NoMediaModifiedListener::class);
+		$context->registerEventListener(NodeRenamedEvent::class, NoMediaModifiedListener::class);
 	}
 
 	public function boot(IBootContext $context): void {

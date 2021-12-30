@@ -17,9 +17,10 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
-import { genFileInfo } from '../utils/fileUtils'
+import { genFileInfo, isFileIncluded } from '../utils/fileUtils'
 import { getCurrentUser } from '@nextcloud/auth'
 import { allMimes } from './AllowedMimes'
 import client from './DavClient'
@@ -117,6 +118,7 @@ export default async function(onlyFavorites = false, options = {}) {
 	const response = await client.getDirectoryContents('', options)
 
 	return response.data
+		.filter(data => isFileIncluded(data))
 		.map(data => genFileInfo(data))
 		// remove prefix path from full file path
 		.map(data => Object.assign({}, data, { filename: data.filename.replace(prefixPath, '') }))

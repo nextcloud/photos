@@ -27,6 +27,7 @@ namespace OCA\Photos\Controller;
 
 use OCA\Files\Event\LoadSidebar;
 use OCA\Photos\AppInfo\Application;
+use OCA\Photos\Db\ExcludedPathMapper;
 use OCA\Viewer\Event\LoadViewer;
 use OCP\App\IAppManager;
 use OCP\AppFramework\Controller;
@@ -55,12 +56,15 @@ class PageController extends Controller {
 	/** @var IUserSession */
 	private $userSession;
 
+	private ExcludedPathMapper $excludedPathMapper;
+
 	public function __construct(IRequest $request,
 								IAppManager $appManager,
 								IEventDispatcher $eventDispatcher,
 								IConfig $config,
 								IInitialStateService $initialStateService,
-								IUserSession $userSession) {
+								IUserSession $userSession,
+								ExcludedPathMapper $excludedPathMapper) {
 		parent::__construct(Application::APP_ID, $request);
 
 		$this->appManager = $appManager;
@@ -68,6 +72,7 @@ class PageController extends Controller {
 		$this->config = $config;
 		$this->initialStateService = $initialStateService;
 		$this->userSession = $userSession;
+		$this->excludedPathMapper = $excludedPathMapper;
 	}
 
 	/**
@@ -83,6 +88,7 @@ class PageController extends Controller {
 		$this->eventDispatcher->dispatch(LoadSidebar::class, new LoadSidebar());
 		$this->eventDispatcher->dispatch(LoadViewer::class, new LoadViewer());
 
+		$this->initialStateService->provideInitialState($this->appName, 'excluded-paths', $this->excludedPathMapper->getAllPaths());
 		$this->initialStateService->provideInitialState($this->appName, 'image-mimes', Application::IMAGE_MIMES);
 		$this->initialStateService->provideInitialState($this->appName, 'video-mimes', Application::VIDEO_MIMES);
 		$this->initialStateService->provideInitialState($this->appName, 'maps', $this->appManager->isEnabledForUser('maps') === true);
@@ -98,7 +104,7 @@ class PageController extends Controller {
 		$policy->addAllowedWorkerSrcDomain("'self'");
 		$policy->addAllowedScriptDomain("'self'");
 		$response->setContentSecurityPolicy($policy);
-		
+
 		return $response;
 	}
 }

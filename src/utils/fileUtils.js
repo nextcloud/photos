@@ -17,9 +17,11 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 import camelcase from 'camelcase'
 import { isNumber } from './numberUtils'
+import { excludedPaths } from '../services/Paths'
 
 /**
  * Get an url encoded path
@@ -121,4 +123,26 @@ const genFileInfo = function(obj) {
 	return fileInfo
 }
 
-export { encodeFilePath, extractFilePaths, sortCompare, genFileInfo }
+const isFileIncluded = function(data) {
+	// The first two segments are the wrong way round via DAV for some reason, so we need to correct that
+	const segments = data.filename.split('/')
+
+	// ''
+	const segment0 = segments.shift()
+	// files
+	const segment1 = segments.shift()
+	// username
+	const segment2 = segments.shift()
+
+	const realFilename = [segment0, segment2, segment1, ...segments].join('/')
+
+	for (const path of excludedPaths) {
+		if (realFilename.startsWith(path)) {
+			return false
+		}
+	}
+
+	return true
+}
+
+export { encodeFilePath, extractFilePaths, isFileIncluded, sortCompare, genFileInfo }
