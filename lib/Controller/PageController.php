@@ -25,6 +25,12 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Controller;
 
+use OC\Files\Search\SearchBinaryOperator;
+use OC\Files\Search\SearchComparison;
+use OCP\Files\Search\ISearchBinaryOperator;
+use OCP\Files\Search\ISearchComparison;
+use OC\Files\Search\SearchQuery;
+use OC\User\NoUserException;
 use OCA\Files\Event\LoadSidebar;
 use OCA\Photos\AppInfo\Application;
 use OCA\Viewer\Event\LoadViewer;
@@ -33,11 +39,18 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Files\InvalidPathException;
+use OCP\Files\IRootFolder;
+use OCP\Files\Node;
+use OCP\Files\NotFoundException;
+use OCP\Files\NotPermittedException;
+use OCP\ICacheFactory;
 use OCP\IConfig;
 use OCP\IInitialStateService;
 use OCP\IRequest;
 use OCP\IUserSession;
 use OCP\Util;
+use Psr\Log\LoggerInterface;
 
 class PageController extends Controller {
 	/** @var IAppManager */
@@ -54,13 +67,32 @@ class PageController extends Controller {
 
 	/** @var IUserSession */
 	private $userSession;
+	/**
+	 * @var \OCP\Files\IRootFolder
+	 */
+	private $rootFolder;
+	/**
+	 * @var \OCP\ICacheFactory
+	 */
+	private $cacheFactory;
+	/**
+	 * @var \OCP\ICache
+	 */
+	private $nomediaPathsCache;
+	/**
+	 * @var \Psr\Log\LoggerInterface
+	 */
+	private $logger;
 
-	public function __construct(IRequest $request,
-								IAppManager $appManager,
-								IEventDispatcher $eventDispatcher,
-								IConfig $config,
+	public function __construct(IRequest             $request,
+								IAppManager          $appManager,
+								IEventDispatcher     $eventDispatcher,
+								IConfig              $config,
 								IInitialStateService $initialStateService,
-								IUserSession $userSession) {
+								IUserSession         $userSession,
+								IRootFolder          $rootFolder,
+								ICacheFactory $cacheFactory,
+								LoggerInterface $logger) {
 		parent::__construct(Application::APP_ID, $request);
 
 		$this->appManager = $appManager;
@@ -68,6 +100,10 @@ class PageController extends Controller {
 		$this->config = $config;
 		$this->initialStateService = $initialStateService;
 		$this->userSession = $userSession;
+		$this->rootFolder = $rootFolder;
+		$this->cacheFactory = $cacheFactory;
+		$this->nomediaPathsCache = $this->cacheFactory->createLocal('photos:nomedia-paths');
+		$this->logger = $logger;
 	}
 
 	/**
@@ -89,6 +125,27 @@ class PageController extends Controller {
 		$this->initialStateService->provideInitialState($this->appName, 'croppedLayout', $this->config->getUserValue($user->getUid(), Application::APP_ID, 'croppedLayout', 'false'));
 		$this->initialStateService->provideInitialState($this->appName, 'systemtags', $this->appManager->isEnabledForUser('systemtags') === true);
 
+		$paths = [];
+		try {
+			$userFolder = $this->rootFolder->getUserFolder($user->getUID());
+			$key = $user->getUID() . ':' . $userFolder->getEtag();
+			$paths = $this->nomediaPathsCache->get($key);
+			if ($paths === null) {
+				$search = $userFolder->search(new SearchQuery(new SearchBinaryOperator(ISearchBinaryOperator::OPERATOR_OR, [
+					new SearchComparison(ISearchComparison::COMPARE_EQUAL, 'name', '.nomedia'),
+					new SearchComparison(ISearchComparison::COMPARE_EQUAL, 'name', '.noimage')
+				]), 0, 0, [], $user));
+				$paths = array_map(function (Node $node) use ($userFolder) {
+					return substr(dirname($node->getPath()), strlen($userFolder->getPath()));
+				}, $search);
+				$this->nomediaPathsCache->set($key, $paths, 60 * 60 * 24 * 28);
+			}
+		} catch (InvalidPathException | NotFoundException | NotPermittedException | NoUserException $e) {
+			$this->logger->error($e->getMessage());
+		}
+
+		$this->initialStateService->provideInitialState($this->appName, 'nomedia-paths', $paths);
+
 		Util::addScript(Application::APP_ID, 'photos-main');
 		Util::addStyle(Application::APP_ID, 'icons');
 
@@ -98,7 +155,7 @@ class PageController extends Controller {
 		$policy->addAllowedWorkerSrcDomain("'self'");
 		$policy->addAllowedScriptDomain("'self'");
 		$response->setContentSecurityPolicy($policy);
-		
+
 		return $response;
 	}
 }

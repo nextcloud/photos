@@ -23,6 +23,7 @@ import Vue from 'vue'
 
 const state = {
 	files: {},
+	nomediaPaths: [],
 }
 
 const mutations = {
@@ -34,6 +35,9 @@ const mutations = {
 	 */
 	updateFiles(state, files) {
 		files.forEach(file => {
+			if (state.nomediaPaths.some(nomediaPath => file.filename.startsWith(nomediaPath))) {
+				return
+			}
 			if (file.fileid >= 0) {
 				Vue.set(state.files, file.fileid, file)
 			}
@@ -57,10 +61,21 @@ const mutations = {
 			Vue.set(state.files[fileid], 'folders', subfolders)
 		}
 	},
+
+	/**
+	 * Set list of all .nomedia/.noimage files
+	 *
+	 * @param {object} state the store mutations
+	 * @param {Array} paths list of files
+	 */
+	setNomediaPaths(state, paths) {
+		state.nomediaPaths = paths
+	},
 }
 
 const getters = {
 	files: state => state.files,
+	nomediaPaths: state => state.nomediaPaths,
 }
 
 const actions = {
@@ -87,6 +102,17 @@ const actions = {
 	 */
 	appendFiles(context, files = []) {
 		context.commit('updateFiles', files)
+	},
+
+	/**
+	 * Set list of all .nomedia/.noimage files
+	 *
+	 * @param {object} context the store mutations
+	 * @param {Array} paths list of files
+	 */
+	setNomediaPaths(context, paths) {
+		console.debug('Ignored paths', { paths })
+		context.commit('setNomediaPaths', paths)
 	},
 }
 
