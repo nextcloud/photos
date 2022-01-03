@@ -57,6 +57,13 @@ const mutations = {
 	 * @param {Object[]} data.files list of files
 	 */
 	updateTag(state, { id, files }) {
+		if (files.length === 0) {
+			// Remove this tag from the list if there's no files for it
+			Vue.delete(state.names, state.tags[id].displayName)
+			Vue.delete(state.tags, id)
+			return
+		}
+
 		// sort by last modified
 		const list = files.sort((a, b) => sortCompare(a, b, 'lastmod'))
 
@@ -93,6 +100,10 @@ const actions = {
 	 * @param {Object[]} data.files list of files
 	 */
 	updateTag(context, { id, files }) {
+		if (files.length === 0) {
+			// Remove this tag from the list if there's no files for it
+			context.commit('removeTag', { id })
+		}
 		context.commit('updateTag', { id, files })
 	},
 }
