@@ -91,7 +91,7 @@ export default {
 	},
 	data() {
 		return {
-			loading: true,
+			loading: false,
 			svgplaceholder,
 			imgplaceholder,
 			videoplaceholder,
