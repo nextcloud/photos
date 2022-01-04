@@ -26,20 +26,20 @@ const gap = 8
  * Define the max width proportions
  * The number (key) indicate the MAX size
  *
- * needs to be ompatible with webpack config
+ * needs to be compatible with webpack config
  * so no export default {}
  */
 module.exports = {
 	sizes: {
 		400: {
-			marginTop: 66, // same as grid-gap
-			marginW: gap, // same as grid-gap
+			marginTop: 66,
+			marginW: gap,
 			count: 3,
 			gap,
 		},
 		700: {
 			marginTop: 66,
-			marginW: 8, // same as grid-gap
+			marginW: gap,
 			count: 4,
 			gap,
 		},
