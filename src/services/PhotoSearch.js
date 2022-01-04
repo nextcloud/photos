@@ -32,12 +32,12 @@ import moment from '@nextcloud/moment'
  * List files from a folder and filter out unwanted mimes
  *
  * @param {boolean} [onlyFavorites=false] not used
- * @param {Object} [options] used for the cancellable requests
+ * @param {object} [options] used for the cancellable requests
  * @param {number} [options.page=0] which page to start (starts at 0)
  * @param {number} [options.perPage] how many to display per page default is 5 times the max number per line from the grid-sizes config file
  * @param {boolean} [options.full=false] get full data of the files
  * @param {boolean} [options.onThisDay=false] get only items from this day of year
- * @returns {Array} the file list
+ * @return {Array} the file list
  */
 export default async function(onlyFavorites = false, options = {}) {
 
