@@ -127,7 +127,8 @@ export default {
 		},
 		// list of displayed content in the grid (titles + medias)
 		contentList() {
-			/** The goal of this flat map is to return an array of images separated by titles (months)
+			/**
+			 * The goal of this flat map is to return an array of images separated by titles (months)
 			 * ie: [{month1}, {image1}, {image2}, {month2}, {image3}, {image4}, {image5}]
 			 * First we get the current month+year of the image
 			 * We compare it to the previous image month+year
@@ -177,20 +178,22 @@ export default {
 	},
 
 	watch: {
-		async onlyFavorites() {
-			// reset component
+		$route(from, to) {
+			// cancel any pending requests
+			if (this.cancelRequest) {
+				this.cancelRequest('Changed view')
+			}
 			this.resetState()
-			this.getContent()
-		},
-		async mimesType() {
-			// reset component
-			this.resetState()
-			this.getContent()
 		},
 	},
 
-	beforeMount() {
-		this.getContent()
+	beforeRouteLeave(from, to, next) {
+		// cancel any pending requests
+		if (this.cancelRequest) {
+			this.cancelRequest('Changed view')
+		}
+		this.resetState()
+		next()
 	},
 
 	beforeDestroy() {
@@ -198,11 +201,11 @@ export default {
 		if (this.cancelRequest) {
 			this.cancelRequest('Changed view')
 		}
-		this.resetState()
 	},
 
 	methods: {
-		/** Return next batch of data depending on global offset
+		/**
+		 * Return next batch of data depending on global offset
 		 *
 		 * @param {boolean} doReturn Returns a Promise with the list instead of a boolean
 		 * @return {Promise<boolean>} Returns a Promise with a boolean that stops infinite loading
@@ -283,7 +286,9 @@ export default {
 			this.page = 0
 			this.lastSection = ''
 			this.$emit('update:loading', true)
-			this.$refs.virtualgrid.resetGrid()
+			if (this.$refs.virtualgrid) {
+				this.$refs.virtualgrid.resetGrid()
+			}
 		},
 
 		getFormatedDate(string, format) {
