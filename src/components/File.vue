@@ -46,8 +46,8 @@
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="0 0 32 32"
 				fill="url(#placeholder__gradient)">
-				<use v-if="isImage" xlink:href="#placeholder--img" />
-				<use v-else xlink:href="#placeholder--video" />
+				<use v-if="isImage" href="#placeholder--img" />
+				<use v-else href="#placeholder--video" />
 			</svg>
 		</transition-group>
 
