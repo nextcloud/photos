@@ -29,6 +29,15 @@ webpackRules.RULE_SCSS.use = [
 	},
 ]
 
+// Load raw SVGs to be able to inject them via v-html
+webpackRules.RULE_ASSETS.test = /\.(png|jpe?g|gif|woff2?|eot|ttf)$/
+webpackRules.RULE_RAW_SVGS = {
+	test: /\.svg$/,
+	loader: 'raw-loader',
+}
+
+webpackConfig.module.rules = Object.values(webpackRules)
+
 webpackConfig.plugins.push(
 	// patch webdav/dist/request.js
 	new webpack.NormalModuleReplacementPlugin(
