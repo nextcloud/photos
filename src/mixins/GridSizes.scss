@@ -25,9 +25,9 @@
 	$previous: 0;
 
 	@each $size, $config in $sizes {
-		$count: map-get($config, 'count');
-		$marginTop: map-get($config, 'marginTop');
-		$marginW: map-get($config, 'marginW');
+		$count: map.get($config, 'count');
+		$marginTop: map.get($config, 'marginTop');
+		$marginW: map.get($config, 'marginW');
 
 		@if $size == 'max' {
 			@media (min-width: #{$previous}px) {

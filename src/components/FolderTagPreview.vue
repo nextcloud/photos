@@ -148,7 +148,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../mixins/FileFolder.scss';
+@import '../mixins/FileFolder';
 
 .folder-content {
 	position: absolute;
