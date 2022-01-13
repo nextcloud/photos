@@ -44,7 +44,7 @@
 		"debounce": "^1.2.0",
 		"moment": "^2.29.1",
 		"path-posix": "^1.0.0",
-		"qs": "^6.9.4",
+		"qs": "^6.9.7",
 		"regenerator-runtime": "^0.13.7",
 		"url-parse": "^1.4.7",
 		"vue": "^2.6.14",
