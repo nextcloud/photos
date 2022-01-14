@@ -71,7 +71,7 @@
 		"@vue/test-utils": "^1.1.1",
 		"autoprefixer": "^9.8.6",
 		"babel-eslint": "^10.1.0",
-		"babel-loader": "^8.2.1",
+		"babel-loader": "^8.2.3",
 		"babel-loader-exclude-node-modules-except": "^1.0.3",
 		"css-loader": "^4.3.0",
 		"eslint": "^7.14.0",
