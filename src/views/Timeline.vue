@@ -102,6 +102,10 @@ export default {
 			type: String,
 			default: '',
 		},
+		onThisDay: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	data() {
@@ -110,7 +114,6 @@ export default {
 			done: false,
 			error: null,
 			page: 0,
-			lastSection: '',
 			loaderComponent: Loader,
 		}
 	},
@@ -138,22 +141,24 @@ export default {
 			 * In our case injected could be an image/video (aka file) or a title (year/month)
 			 * Note2: titles are rendered full width and images are rendered on 1 column and 256x256 ratio
 			 */
+			let lastSection = ''
 			return this.fileList.flatMap((file, index) => {
 				const finalArray = []
 				const currentSection = this.getFormatedDate(file.lastmod, 'YYYY MMMM')
-				if (this.lastSection !== currentSection) {
+				if (lastSection !== currentSection) {
 					finalArray.push({
 						id: `title-${index}`,
 						injected: {
 							year: this.getFormatedDate(file.lastmod, 'YYYY'),
 							month: this.getFormatedDate(file.lastmod, 'MMMM'),
+							onThisDay: this.onThisDay ? Math.round(moment(Date.now()).diff(moment(file.lastmod), 'years', true)) : false,
 						},
 						height: 90,
 						columnSpan: 0, // means full width
 						newRow: true,
 						renderComponent: SeparatorVirtualGrid,
 					})
-					this.lastSection = currentSection // we keep track of the last section for the next batch
+					lastSection = currentSection // we keep track of the last section for the next batch
 				}
 				finalArray.push({
 					id: `img-${file.fileid}`,
@@ -184,6 +189,11 @@ export default {
 				this.cancelRequest('Changed view')
 			}
 			this.resetState()
+		},
+		async onThisDay() {
+			// reset component
+			this.resetState()
+			this.getContent()
 		},
 	},
 
@@ -237,6 +247,7 @@ export default {
 					page: this.page,
 					perPage: numberOfImagesPerBatch,
 					mimesType: this.mimesType,
+					onThisDay: this.onThisDay,
 				})
 
 				// If we get less files than requested that means we got to the end

@@ -17,6 +17,7 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 import { generateUrl } from '@nextcloud/router'
@@ -124,6 +125,15 @@ export default new Router({
 			beforeEnter() {
 				window.open(mapsPath, '_blank')
 			},
+		},
+		{
+			path: '/thisday',
+			name: 'thisday',
+			component: Timeline,
+			props: route => ({
+				rootTitle: t('photos', 'On this day'),
+				onThisDay: true,
+			}),
 		},
 	],
 })
