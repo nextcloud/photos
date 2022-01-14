@@ -54,9 +54,28 @@ const mutations = {
 	 * @param {object} state vuex state
 	 * @param {object} data destructuring object
 	 * @param {number} data.id current tag id
+	 */
+	removeTag(state, { id }) {
+		Vue.delete(state.names, state.tags[id].displayName)
+		Vue.delete(state.tags, id)
+	},
+
+	/**
+	 * Update tag files list
+	 *
+	 * @param {object} state vuex state
+	 * @param {object} data destructuring object
+	 * @param {number} data.id current tag id
 	 * @param {object[]} data.files list of files
 	 */
 	updateTag(state, { id, files }) {
+		if (files.length === 0) {
+			// Remove this tag from the list if there's no files for it
+			Vue.delete(state.names, state.tags[id].displayName)
+			Vue.delete(state.tags, id)
+			return
+		}
+
 		// sort by last modified
 		const list = files.sort((a, b) => sortCompare(a, b, 'lastmod'))
 
@@ -93,6 +112,10 @@ const actions = {
 	 * @param {object[]} data.files list of files
 	 */
 	updateTag(context, { id, files }) {
+		if (files.length === 0) {
+			// Remove this tag from the list if there's no files for it
+			context.commit('removeTag', { id })
+		}
 		context.commit('updateTag', { id, files })
 	},
 }
