@@ -45,7 +45,7 @@
 		"moment": "^2.29.1",
 		"path-posix": "^1.0.0",
 		"qs": "^6.9.6",
-		"regenerator-runtime": "^0.13.7",
+		"regenerator-runtime": "^0.13.9",
 		"url-parse": "^1.4.7",
 		"vue": "^2.6.12",
 		"vue-router": "^3.4.9",
