@@ -21,7 +21,8 @@
  -->
 
 <template>
-	<a :class="{
+	<a
+		:class="{
 			'file--cropped': croppedLayout,
 		}"
 		class="file"
@@ -41,7 +42,8 @@
 				@load="onLoad"
 				@error="onError">
 
-			<svg v-if="!loaded || error"
+			<svg
+				v-if="!loaded || error"
 				:key="`${item.injected.basename}-svg`"
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="0 0 32 32"
