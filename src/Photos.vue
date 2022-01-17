@@ -24,7 +24,8 @@
 	<Content app-name="photos">
 		<AppNavigation>
 			<template #list>
-				<AppNavigationItem :to="{name: 'timeline'}"
+				<AppNavigationItem
+					:to="{name: 'timeline'}"
 					class="app-navigation__photos"
 					:title="t('photos', 'Your photos')"
 					icon="icon-yourphotos"
@@ -34,11 +35,13 @@
 				<AppNavigationItem :to="{name: 'thisday'}" :title="t('photos', 'On this day')" icon="icon-calendar-dark" />
 				<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Your folders')" icon="icon-files-dark" />
 				<AppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared with you')" icon="icon-share" />
-				<AppNavigationItem v-if="areTagsInstalled"
+				<AppNavigationItem
+					v-if="areTagsInstalled"
 					:to="{name: 'tags'}"
 					:title="t('photos', 'Tagged photos')"
 					icon="icon-tag" />
-				<AppNavigationItem v-if="showLocationMenuEntry"
+				<AppNavigationItem
+					v-if="showLocationMenuEntry"
 					:to="{name: 'maps'}"
 					:title="t('photos', 'Locations')"
 					icon="icon-address" />

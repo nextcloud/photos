@@ -22,7 +22,8 @@
  -->
 
 <template>
-	<FolderTagPreview :id="item.injected.fileid"
+	<FolderTagPreview
+		:id="item.injected.fileid"
 		:name="item.injected.basename"
 		:path="item.injected.filename"
 		:file-list="previewFiles" />

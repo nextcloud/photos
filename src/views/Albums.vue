@@ -32,7 +32,8 @@
 
 	<!-- Folder content -->
 	<div v-else-if="!loading">
-		<Navigation v-if="folder"
+		<Navigation
+			v-if="folder"
 			key="navigation"
 			v-bind="folder"
 			:root-title="rootTitle"
