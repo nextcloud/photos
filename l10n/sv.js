@@ -6,6 +6,7 @@ OC.L10N.register(
     "Your photos" : "Dina bilder",
     "Your videos" : "Dina videor",
     "Favorites" : "Favoriter",
+    "On this day" : "På den här dagen",
     "Your folders" : "Dina mappar",
     "Shared with you" : "Delad med dig",
     "Tagged photos" : "Taggade bilder",
