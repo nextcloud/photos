@@ -32,8 +32,7 @@
 
 	<!-- Folder content -->
 	<div v-else-if="!loading">
-		<Navigation
-			v-if="folder"
+		<Navigation v-if="folder"
 			key="navigation"
 			v-bind="folder"
 			:root-title="rootTitle"
@@ -44,8 +43,7 @@
 		</EmptyContent>
 
 		<div v-else class="grid-container">
-			<VirtualGrid
-				ref="virtualgrid"
+			<VirtualGrid ref="virtualgrid"
 				:items="contentList"
 				:get-column-count="() => gridConfig.count"
 				:get-grid-gap="() => gridConfig.gap" />
