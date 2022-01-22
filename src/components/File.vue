@@ -21,8 +21,7 @@
  -->
 
 <template>
-	<a
-		:class="{
+	<a :class="{
 			'file--cropped': croppedLayout,
 		}"
 		class="file"
@@ -32,8 +31,7 @@
 		<div v-if="item.injected.mime.includes('video') && item.injected.hasPreview" class="icon-video-white" />
 		<!-- image and loading placeholder -->
 		<transition-group name="fade" class="transition-group">
-			<img
-				v-if="!error"
+			<img v-if="!error"
 				ref="img"
 				:key="`${item.injected.basename}-img`"
 				:src="src"
@@ -42,8 +40,7 @@
 				@load="onLoad"
 				@error="onError">
 
-			<svg
-				v-if="!loaded || error"
+			<svg v-if="!loaded || error"
 				:key="`${item.injected.basename}-svg`"
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="0 0 32 32"

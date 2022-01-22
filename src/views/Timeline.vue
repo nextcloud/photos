@@ -32,8 +32,7 @@
 
 	<!-- Folder content -->
 	<div v-else-if="!loading">
-		<Navigation
-			v-if="isEmpty"
+		<Navigation v-if="isEmpty"
 			key="navigation"
 			:basename="path"
 			:filename="'/'"
@@ -44,8 +43,7 @@
 		</EmptyContent>
 
 		<div class="grid-container">
-			<VirtualGrid
-				ref="virtualgrid"
+			<VirtualGrid ref="virtualgrid"
 				:items="contentList"
 				:update-function="getContent"
 				:get-column-count="() => gridConfig.count"

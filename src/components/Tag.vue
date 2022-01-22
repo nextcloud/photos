@@ -22,8 +22,7 @@
  -->
 
 <template>
-	<FolderTagPreview
-		:id="item.injected.id"
+	<FolderTagPreview :id="item.injected.id"
 		icon="icon-tag"
 		:name="item.injected.displayName"
 		:path="item.injected.displayName"

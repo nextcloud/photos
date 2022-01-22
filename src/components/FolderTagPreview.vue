@@ -21,20 +21,17 @@
  -->
 
 <template>
-	<router-link
-		:class="{'folder--clear': isEmpty}"
+	<router-link :class="{'folder--clear': isEmpty}"
 		class="folder"
 		:to="to"
 		:aria-label="ariaLabel">
 		<!-- Images preview -->
 		<transition name="fade">
-			<div
-				v-show="loaded"
+			<div v-show="loaded"
 				:class="`folder-content--grid-${previewList.length}`"
 				class="folder-content"
 				role="none">
-				<img
-					v-for="file in previewList"
+				<img v-for="file in previewList"
 					:key="file.fileid"
 					:src="generateImgSrc(file)"
 					alt=""
@@ -44,8 +41,7 @@
 		</transition>
 
 		<div class="folder-name">
-			<span
-				:class="[!isEmpty ? 'icon-white' : 'icon-dark', icon]"
+			<span :class="[!isEmpty ? 'icon-white' : 'icon-dark', icon]"
 				class="folder-name__icon"
 				role="img" />
 			<p :id="ariaUuid" class="folder-name__name">
