@@ -96,6 +96,7 @@ export default new Router({
 				mimesType: imageMimes,
 			}),
 		},
+		
 		{
 			path: '/videos',
 			component: Timeline,
