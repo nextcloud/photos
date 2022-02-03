@@ -43,11 +43,22 @@
 		</EmptyContent>
 
 		<div v-else class="grid-container">
+			<div class="folders" v-if="contentList.folders.length">
+				<div class="list-title" >Folders</div>
+				<VirtualGrid
+					ref="virtualgrid"
+					:items="contentList.folders"
+					:get-column-count="() => gridConfig.count"
+					:get-grid-gap="() => gridConfig.gap" />
+			</div>
+			<div class="spacing-between" v-if="contentList.folders.length" />
+			<div class="list-title"  >Images</div>
 			<VirtualGrid
 				ref="virtualgrid"
-				:items="contentList"
+				:items="contentList.files"
 				:get-column-count="() => gridConfig.count"
 				:get-grid-gap="() => gridConfig.gap" />
+			<div class="footer-replace">  </div>
 		</div>
 	</div>
 </template>
@@ -169,8 +180,8 @@ export default {
 					renderComponent: File,
 				}
 			})
-
-			return [...(folders || []), ...(files || [])]
+			return {"folders": folders,"files":(files)}
+			//return [...(folders || []), ...(files || [])]
 		},
 
 		// is current folder empty?
@@ -257,5 +268,18 @@ export default {
 	@include grid-sizes using ($marginTop, $marginW) {
 		padding: 0px #{$marginW}px 256px #{$marginW}px;
 	}
+}
+
+.footer-replace{
+  height: 70px;
+}
+.spacing-between{
+  height: 64px;
+}
+.list-title{
+    line-height: 50px !important;
+	font-weight: bold;
+    font-size: 24px;
+    padding: 0 6px;
 }
 </style>
