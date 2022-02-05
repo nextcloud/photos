@@ -480,12 +480,12 @@
             },
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "DeepCopy\\": "src/DeepCopy/"
-                },
                 "files": [
                     "src/DeepCopy/deep_copy.php"
-                ]
+                ],
+                "psr-4": {
+                    "DeepCopy\\": "src/DeepCopy/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1360,16 +1360,16 @@
         },
         {
             "name": "psalm/phar",
-            "version": "4.19.0",
+            "version": "4.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/phar.git",
-                "reference": "de599ce185277138c5ea6af9a06574dc3b7acef9"
+                "reference": "75a688daeb0660d14951da869a11136a7283a5b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/phar/zipball/de599ce185277138c5ea6af9a06574dc3b7acef9",
-                "reference": "de599ce185277138c5ea6af9a06574dc3b7acef9",
+                "url": "https://api.github.com/repos/psalm/phar/zipball/75a688daeb0660d14951da869a11136a7283a5b7",
+                "reference": "75a688daeb0660d14951da869a11136a7283a5b7",
                 "shasum": ""
             },
             "require": {
@@ -1387,7 +1387,7 @@
                 "MIT"
             ],
             "description": "Composer-based Psalm Phar",
-            "time": "2022-01-28T06:40:04+00:00"
+            "time": "2022-02-03T20:57:20+00:00"
         },
         {
             "name": "psr/container",
