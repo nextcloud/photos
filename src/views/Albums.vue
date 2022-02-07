@@ -262,7 +262,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../mixins/GridSizes.scss';
+@import '../mixins/GridSizes';
 
 .grid-container {
 	@include grid-sizes using ($marginTop, $marginW) {

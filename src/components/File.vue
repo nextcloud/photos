@@ -31,8 +31,7 @@
 		<div v-if="item.injected.mime.includes('video') && item.injected.hasPreview" class="icon-video-white" />
 		<!-- image and loading placeholder -->
 		<transition-group name="fade" class="transition-group">
-			<img
-				v-if="!error"
+			<img v-if="!error"
 				ref="img"
 				:key="`${item.injected.basename}-img`"
 				:src="src"
@@ -46,8 +45,8 @@
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="0 0 32 32"
 				fill="url(#placeholder__gradient)">
-				<use v-if="isImage" xlink:href="#placeholder--img" />
-				<use v-else xlink:href="#placeholder--video" />
+				<use v-if="isImage" href="#placeholder--img" />
+				<use v-else href="#placeholder--video" />
 			</svg>
 		</transition-group>
 
@@ -128,7 +127,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../mixins/FileFolder.scss';
+@import '../mixins/FileFolder';
 
 .transition-group {
 	display: contents;

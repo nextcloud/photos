@@ -32,8 +32,7 @@
 
 	<!-- Folder content -->
 	<div v-else-if="!loading">
-		<Navigation
-			v-if="isEmpty"
+		<Navigation v-if="isEmpty"
 			key="navigation"
 			:basename="path"
 			:filename="'/'"
@@ -44,8 +43,7 @@
 		</EmptyContent>
 
 		<div class="grid-container">
-			<VirtualGrid
-				ref="virtualgrid"
+			<VirtualGrid ref="virtualgrid"
 				:items="contentList"
 				:update-function="getContent"
 				:get-column-count="() => gridConfig.count"
@@ -102,6 +100,10 @@ export default {
 			type: String,
 			default: '',
 		},
+		onThisDay: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	data() {
@@ -110,7 +112,6 @@ export default {
 			done: false,
 			error: null,
 			page: 0,
-			lastSection: '',
 			loaderComponent: Loader,
 		}
 	},
@@ -127,7 +128,8 @@ export default {
 		},
 		// list of displayed content in the grid (titles + medias)
 		contentList() {
-			/** The goal of this flat map is to return an array of images separated by titles (months)
+			/**
+			 * The goal of this flat map is to return an array of images separated by titles (months)
 			 * ie: [{month1}, {image1}, {image2}, {month2}, {image3}, {image4}, {image5}]
 			 * First we get the current month+year of the image
 			 * We compare it to the previous image month+year
@@ -137,22 +139,24 @@ export default {
 			 * In our case injected could be an image/video (aka file) or a title (year/month)
 			 * Note2: titles are rendered full width and images are rendered on 1 column and 256x256 ratio
 			 */
+			let lastSection = ''
 			return this.fileList.flatMap((file, index) => {
 				const finalArray = []
 				const currentSection = this.getFormatedDate(file.lastmod, 'YYYY MMMM')
-				if (this.lastSection !== currentSection) {
+				if (lastSection !== currentSection) {
 					finalArray.push({
 						id: `title-${index}`,
 						injected: {
 							year: this.getFormatedDate(file.lastmod, 'YYYY'),
 							month: this.getFormatedDate(file.lastmod, 'MMMM'),
+							onThisDay: this.onThisDay ? Math.round(moment(Date.now()).diff(moment(file.lastmod), 'years', true)) : false,
 						},
 						height: 90,
 						columnSpan: 0, // means full width
 						newRow: true,
 						renderComponent: SeparatorVirtualGrid,
 					})
-					this.lastSection = currentSection // we keep track of the last section for the next batch
+					lastSection = currentSection // we keep track of the last section for the next batch
 				}
 				finalArray.push({
 					id: `img-${file.fileid}`,
@@ -177,20 +181,27 @@ export default {
 	},
 
 	watch: {
-		async onlyFavorites() {
-			// reset component
+		$route(from, to) {
+			// cancel any pending requests
+			if (this.cancelRequest) {
+				this.cancelRequest('Changed view')
+			}
 			this.resetState()
-			this.getContent()
 		},
-		async mimesType() {
+		async onThisDay() {
 			// reset component
 			this.resetState()
 			this.getContent()
 		},
 	},
 
-	beforeMount() {
-		this.getContent()
+	beforeRouteLeave(from, to, next) {
+		// cancel any pending requests
+		if (this.cancelRequest) {
+			this.cancelRequest('Changed view')
+		}
+		this.resetState()
+		next()
 	},
 
 	beforeDestroy() {
@@ -198,11 +209,11 @@ export default {
 		if (this.cancelRequest) {
 			this.cancelRequest('Changed view')
 		}
-		this.resetState()
 	},
 
 	methods: {
-		/** Return next batch of data depending on global offset
+		/**
+		 * Return next batch of data depending on global offset
 		 *
 		 * @param {boolean} doReturn Returns a Promise with the list instead of a boolean
 		 * @return {Promise<boolean>} Returns a Promise with a boolean that stops infinite loading
@@ -234,6 +245,7 @@ export default {
 					page: this.page,
 					perPage: numberOfImagesPerBatch,
 					mimesType: this.mimesType,
+					onThisDay: this.onThisDay,
 				})
 
 				// If we get less files than requested that means we got to the end
@@ -283,7 +295,9 @@ export default {
 			this.page = 0
 			this.lastSection = ''
 			this.$emit('update:loading', true)
-			this.$refs.virtualgrid.resetGrid()
+			if (this.$refs.virtualgrid) {
+				this.$refs.virtualgrid.resetGrid()
+			}
 		},
 
 		getFormatedDate(string, format) {
@@ -296,7 +310,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../mixins/GridSizes.scss';
+@import '../mixins/GridSizes';
 
 .grid-container {
 	@include grid-sizes using ($marginTop, $marginW) {

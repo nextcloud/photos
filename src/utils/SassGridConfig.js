@@ -20,26 +20,25 @@
  */
 
 // sass plugin to implement js configs into scss
-// eslint-disable-next-line node/no-extraneous-require
+
+/* eslint-disable node/no-extraneous-require */
 const sass = require('sass')
+const { OrderedMap } = require('immutable')
+
 const { sizes } = require('../assets/grid-sizes')
 
 const gridConfigKeys = Object.keys(sizes)
-const gridConfigMap = new sass.types.Map(gridConfigKeys.length)
+const gridConfigMap = OrderedMap().asMutable()
 
-gridConfigKeys.forEach((size, index) => {
+gridConfigKeys.forEach(size => {
 	const config = sizes[size]
-	const configMap = new sass.types.Map(3)
+	const configMap = OrderedMap().asMutable()
 
-	configMap.setKey(0, new sass.types.String('count'))
-	configMap.setValue(0, new sass.types.Number(config.count))
-	configMap.setKey(1, new sass.types.String('marginTop'))
-	configMap.setValue(1, new sass.types.Number(config.marginTop))
-	configMap.setKey(2, new sass.types.String('marginW'))
-	configMap.setValue(2, new sass.types.Number(config.marginW))
+	configMap.set(new sass.SassString('count'), new sass.SassNumber(config.count))
+	configMap.set(new sass.SassString('marginTop'), new sass.SassNumber(config.marginTop))
+	configMap.set(new sass.SassString('marginW'), new sass.SassNumber(config.marginW))
 
-	gridConfigMap.setKey(index, new sass.types.String(size))
-	gridConfigMap.setValue(index, configMap)
+	gridConfigMap.set(new sass.SassString(size), new sass.SassMap(configMap))
 })
 
-module.exports = `$sizes: ${gridConfigMap};`
+module.exports = `$sizes: ${new sass.SassMap(gridConfigMap)};`

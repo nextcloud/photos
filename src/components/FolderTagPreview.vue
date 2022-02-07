@@ -40,8 +40,7 @@
 			</div>
 		</transition>
 
-		<div
-			class="folder-name">
+		<div class="folder-name">
 			<span :class="[!isEmpty ? 'icon-white' : 'icon-dark', icon]"
 				class="folder-name__icon"
 				role="img" />
@@ -148,7 +147,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../mixins/FileFolder.scss';
+@import '../mixins/FileFolder';
 
 .folder-content {
 	position: absolute;

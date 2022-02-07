@@ -24,8 +24,7 @@
 	<div class="section">
 		<h2>{{ t('photos', 'View') }}</h2>
 		<p>
-			<input
-				id="enable-cropped-layout"
+			<input id="enable-cropped-layout"
 				v-model="croppedLayout"
 				type="checkbox"
 				class="checkbox"

@@ -1,3 +1,3 @@
-const babelConfig = require('@nextcloud/stylelint-config')
+const stylelintConfig = require('@nextcloud/stylelint-config')
 
-module.exports = babelConfig
+module.exports = stylelintConfig

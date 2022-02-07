@@ -23,8 +23,7 @@
 <template>
 	<div :class="{'photos-navigation--root': isRoot}" class="photos-navigation" role="toolbar">
 		<Actions v-if="!isRoot" class="photos-navigation__back">
-			<ActionButton
-				icon="icon-confirm"
+			<ActionButton icon="icon-confirm"
 				@click="folderUp">
 				{{ backToText }}
 			</ActionButton>
@@ -33,8 +32,7 @@
 			{{ name }}
 		</h2>
 		<Actions v-if="!isRoot && showActions" class="photos-navigation__share">
-			<ActionButton
-				icon="icon-shared"
+			<ActionButton icon="icon-shared"
 				@click="showSidebar">
 				{{ t('photos', 'Share this folder') }}
 			</ActionButton>
@@ -145,7 +143,7 @@ export default {
 
 <style lang="scss" scoped>
 @use 'sass:math';
-@import '../mixins/GridSizes.scss';
+@import '../mixins/GridSizes';
 
 .icon-confirm {
 	transform: rotate(180deg)

@@ -40,6 +40,7 @@
 					/>
 				<AppNavigationItem to="/videos" :title="t('photos', 'Your videos')" icon="icon-video" />
 				<AppNavigationItem to="/favorites" :title="t('photos', 'Favorites')" icon="icon-favorite" />
+				<AppNavigationItem :to="{name: 'thisday'}" :title="t('photos', 'On this day')" icon="icon-calendar-dark" />
 				<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Your folders')" icon="icon-files-dark" />
 				<AppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared with you')" icon="icon-share" />
 				<AppNavigationItem v-if="areTagsInstalled"
@@ -100,7 +101,7 @@ export default {
 	},
 	data() {
 		return {
-			loading: true,
+			loading: false,
 			svgplaceholder,
 			imgplaceholder,
 			videoplaceholder,
