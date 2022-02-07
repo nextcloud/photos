@@ -24,11 +24,20 @@
 	<Content app-name="photos">
 		<AppNavigation>
 			<template #list>
-				<AppNavigationItem :to="{name: 'timeline'}"
-					class="app-navigation__photos"
+				<AppNavigationItem
+					:to="{ name: 'timeline' }"
+					class="app-navigation__allmedia "
+					:title="t('photos', 'All Media')"
+					icon="icon-yourphotos allmedia"
+					exact
+					/>
+				<AppNavigationItem
+					to="/images"
+					class="app-navigation__photos "
 					:title="t('photos', 'Your photos')"
-					icon="icon-yourphotos"
-					exact />
+					icon="icon-yourphotos allphotos"
+					
+					/>
 				<AppNavigationItem to="/videos" :title="t('photos', 'Your videos')" icon="icon-video" />
 				<AppNavigationItem to="/favorites" :title="t('photos', 'Favorites')" icon="icon-favorite" />
 				<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Your folders')" icon="icon-files-dark" />

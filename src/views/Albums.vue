@@ -43,9 +43,19 @@
 		</EmptyContent>
 
 		<div v-else class="grid-container">
+			<div class="folders" v-if="contentList.folders.length">
+				<div class="list-title" >Folders</div>
+				<VirtualGrid
+					ref="virtualgrid"
+					:items="contentList.folders"
+					:get-column-count="() => gridConfig.count"
+					:get-grid-gap="() => gridConfig.gap" />
+			</div>
+			<div class="spacing-between" v-if="contentList.folders.length" />
+			<div class="list-title"  >Images</div>
 			<VirtualGrid
 				ref="virtualgrid"
-				:items="contentList"
+				:items="contentList.files"
 				:get-column-count="() => gridConfig.count"
 				:get-grid-gap="() => gridConfig.gap" />
 		</div>
@@ -170,7 +180,8 @@ export default {
 				}
 			})
 
-			return [...(folders || []), ...(files || [])]
+			//return [...(folders || []), ...(files || [])]
+			return {"folders": folders,"files":(files)}
 		},
 
 		// is current folder empty?
