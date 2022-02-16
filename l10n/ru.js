@@ -6,6 +6,7 @@ OC.L10N.register(
     "Your photos" : "Мои фотографии",
     "Your videos" : "Ваши видео",
     "Favorites" : "Избранное",
+    "On this day" : "В этот день",
     "Your folders" : "Ваши каталоги",
     "Shared with you" : "Предоставленные вам",
     "Tagged photos" : "Фотографии с метками",
