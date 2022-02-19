@@ -45,7 +45,7 @@
 		"path-posix": "^1.0.0",
 		"qs": "^6.10.3",
 		"url-parse": "^1.5.4",
-		"vue": "^2.6.14",
+		"vue": "^3.2.31",
 		"vue-router": "^3.5.3",
 		"vue-template-compiler": "^2.6.14",
 		"vue-virtual-grid": "^2.3.2",
