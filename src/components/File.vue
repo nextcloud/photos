@@ -93,8 +93,11 @@ export default {
 		isImage() {
 			return this.item.injected.mime.startsWith('image')
 		},
+		decodedEtag() {
+			return this.item.injected.etag.replace('&quot;', '').replace('&quot;', '')
+		},
 		src() {
-			return generateUrl(`/core/preview?fileId=${this.item.injected.fileid}&x=${256}&y=${256}&a=${!this.croppedLayout}&v=${this.item.injected.etag}`)
+			return generateUrl(`/core/preview?fileId=${this.item.injected.fileid}&c=${this.decodedEtag}&x=${250}&y=${250}&forceIcon=0&a=${this.croppedLayout ? '0' : '1'}`)
 		},
 	},
 

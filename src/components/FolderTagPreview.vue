@@ -137,7 +137,7 @@ export default {
 	methods: {
 		generateImgSrc({ fileid, etag }) {
 			// use etag to force cache reload if file changed
-			return generateUrl(`/core/preview?fileId=${fileid}&x=${256}&y=${256}&a=true&v=${etag}`)
+			return generateUrl(`/core/preview?fileId=${fileid}&c=${etag}&x=${250}&y=${250}&forceIcon=0&a=0`)
 		},
 		onPreviewFail({ fileid }) {
 			this.failed.push(fileid)
