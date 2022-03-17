@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.3.1@2feba22a005a18bf31d4c7b9bdb9252c73897476">
+<files psalm-version="4.x-dev@">
   <file src="lib/Controller/AlbumsController.php">
-    <MissingDependency occurrences="5">
+    <MissingDependency occurrences="4">
       <code>$this-&gt;rootFolder</code>
       <code>$this-&gt;rootFolder</code>
       <code>IRootFolder</code>
       <code>IRootFolder</code>
-      <code>StorageNotAvailableException</code>
     </MissingDependency>
     <UndefinedClass occurrences="2">
       <code>SharedStorage</code>
@@ -14,11 +13,22 @@
     </UndefinedClass>
   </file>
   <file src="lib/Controller/PageController.php">
-    <UndefinedClass occurrences="4">
+    <MissingDependency occurrences="3">
+      <code>$this-&gt;rootFolder</code>
+      <code>IRootFolder</code>
+      <code>\OCP\Files\IRootFolder</code>
+    </MissingDependency>
+    <UndefinedClass occurrences="10">
+      <code>$e</code>
       <code>LoadSidebar</code>
       <code>LoadSidebar</code>
       <code>LoadViewer</code>
       <code>LoadViewer</code>
+      <code>NoUserException</code>
+      <code>SearchBinaryOperator</code>
+      <code>SearchComparison</code>
+      <code>SearchComparison</code>
+      <code>SearchQuery</code>
     </UndefinedClass>
   </file>
 </files>

@@ -124,7 +124,9 @@ export default {
 		]),
 		// list of loaded medias
 		fileList() {
-			return this.timeline.map((fileId) => this.files[fileId])
+			return this.timeline
+				.map((fileId) => this.files[fileId])
+				.filter((file) => !!file)
 		},
 		// list of displayed content in the grid (titles + medias)
 		contentList() {

@@ -66,6 +66,7 @@
 <script>
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
+import { loadState } from '@nextcloud/initial-state'
 
 import Content from '@nextcloud/vue/dist/Components/Content'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
@@ -103,7 +104,7 @@ export default {
 		}
 	},
 
-	beforeMount() {
+	async beforeMount() {
 		if ('serviceWorker' in navigator) {
 			// Use the window load event to keep the page load performant
 			window.addEventListener('load', () => {
@@ -119,6 +120,9 @@ export default {
 		} else {
 			console.debug('Service Worker is not enabled on this browser.')
 		}
+
+		const files = loadState('photos', 'nomedia-paths', [])
+		this.$store.dispatch('setNomediaPaths', files)
 	},
 
 	beforeDestroy() {
