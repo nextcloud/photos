@@ -48,6 +48,7 @@ export default async function(path = '', options = {}) {
 		mimesType: allMimes,
 		onThisDay: false,
 		onlyFavorites: false,
+		fileIds: [],
 		...options,
 	}
 
@@ -95,6 +96,12 @@ export default async function(path = '', options = {}) {
 			}).join('\n')}</d:or>`
 		: ''
 
+	const orIds = options.fileIds.length
+		? `<d:or>${options.fileIds.map(fileId =>
+			`<d:eq><d:prop><oc:fileid/></d:prop><d:literal>${fileId}</d:literal></d:eq>`
+		)}</d:or>`
+		: ''
+
 	options = Object.assign({
 		method: 'SEARCH',
 		headers: {
@@ -125,6 +132,7 @@ export default async function(path = '', options = {}) {
 							</d:or>
 							${eqFavorites}
 							${onThisDay}
+							${orIds}
 						</d:and>
 					</d:where>
 					<d:orderby>

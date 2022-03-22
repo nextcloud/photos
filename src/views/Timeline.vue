@@ -134,6 +134,11 @@ import Download from 'vue-material-design-icons/Download'
 
 import { NcModal, NcActions, NcActionButton, NcButton, NcEmptyContent, isMobile } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
+import { mapGetters } from 'vuex'
+import flatten from 'lodash/flatten'
+import uniq from 'lodash/uniq'
+
+import getPhotos from '../services/PhotoSearch'
 
 import { allMimes } from '../services/AllowedMimes.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
@@ -146,6 +151,7 @@ import AlbumPicker from '../components/Albums/AlbumPicker.vue'
 import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import ActionDownload from '../components/Actions/ActionDownload.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import getTaggedImages from '../services/TaggedImages'
 
 export default {
 	name: 'Timeline',
@@ -213,6 +219,10 @@ export default {
 			type: String,
 			required: true,
 		},
+		search: {
+			type: String,
+			default: '',
+		},
 	},
 
 	data() {
@@ -221,14 +231,27 @@ export default {
 			showAlbumCreationForm: false,
 			showAlbumPicker: false,
 			appContent: document.getElementById('app-content-vue'),
+			searchFileList: [],
 		}
 	},
 
 	computed: {
 		...mapGetters([
 			'files',
+			'tags',
 		]),
 	},
+
+	watch: {
+		search() {
+			this.loadSearchResults()
+		},
+	},
+
+	mounted() {
+		this.loadSearchResults()
+	},
+
 
 	methods: {
 		...mapActions(['deleteFiles', 'addFilesToAlbum']),
@@ -238,6 +261,7 @@ export default {
 				mimesType: this.mimesType,
 				onThisDay: this.onThisDay,
 				onlyFavorites: this.onlyFavorites,
+				fileIds: this.searchFileList,
 			})
 		},
 
@@ -267,6 +291,72 @@ export default {
 			this.fetchedFileIds = this.fetchedFileIds.filter(fileid => !fileIds.includes(fileid))
 			await this.deleteFiles(fileIds)
 		},
+
+		loadSearchResults() {
+			if (this.search.length < 3) {
+				this.searchFileList = []
+				return
+			}
+			if (this.searchTimeout) {
+				clearTimeout(this.searchTimeout)
+			}
+			this.searchTimeout = setTimeout(async () => {
+				const searchQueries = this.search.split(' ')
+
+				const tags = Object.values(this.tags)
+				const searchMatchingTags = searchQueries.map(query =>
+					tags.filter(tag => tag.displayName.includes(query)).map(tag => tag.id))
+				const uniqueTags = uniq(flatten(searchMatchingTags))
+				await Promise.all(uniqueTags.map(tagId =>
+					this.fetchTaggedImages(tagId)
+				))
+				const fileIdToTags = {}
+				this.searchFileList = uniq(flatten(
+					uniqueTags
+						.map(tagId => this.tags[tagId])
+						.filter(tag => tag.files)
+						.map(tag => tag.files.map(id => {
+							if (fileIdToTags[id]) {
+								fileIdToTags[id].push(tag.id)
+							} else {
+								fileIdToTags[id] = [tag.id]
+							}
+							return id
+						}))
+				))
+					.filter(fileId =>
+						searchMatchingTags.every(queryTags =>
+							queryTags.some(tagId => fileIdToTags[fileId].includes(tagId))
+						)
+					)
+				// cancel any pending requests
+				if (this.cancelRequest) {
+					this.cancelRequest('Changed view')
+				}
+				this.resetState()
+			}, 250)
+		},
+
+		async fetchTaggedImages(tagId) {
+			// if we don't already have some cached data let's show a loader
+			if (!this.tags[tagId]) {
+				this.$emit('update:loading', true)
+			}
+			this.error = null
+
+			try {
+				// get data
+				const files = await getTaggedImages(tagId)
+				this.$store.dispatch('updateTag', { id: tagId, files })
+			} catch (error) {
+				console.error(error)
+				this.error = true
+			} finally {
+				// done loading
+				this.$emit('update:loading', false)
+			}
+		},
+
 	},
 }
 </script>
