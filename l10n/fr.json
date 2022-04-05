@@ -23,5 +23,5 @@
     "No tags yet" : "Aucune étiquette pour le moment",
     "Photos with tags will show up here" : "Les photos étiquetées apparaîtront ici",
     "This folder does not exists" : "Ce dossier n'existe pas"
-},"pluralForm" :"nplurals=2; plural=(n > 1);"
+},"pluralForm" :"nplurals=3; plural=(n==0 || n==1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
