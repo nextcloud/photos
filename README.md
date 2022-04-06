@@ -8,7 +8,7 @@
 
 * **📸 Beautiful Photo and Video Timeline**
 * **⭐ Favorites and Tagging:** Favorite and tag your photos!
-* **Slideshow and easy sharing:** Show slideshows and share your photos or albums easy
+* **Slideshow and easy sharing:** Show slideshows and share your photos or albums easily
 * **Albums:** Create albums from your contents
 
 ## 🚀 Installation
