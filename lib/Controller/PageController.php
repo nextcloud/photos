@@ -27,8 +27,6 @@ namespace OCA\Photos\Controller;
 
 use OC\Files\Search\SearchBinaryOperator;
 use OC\Files\Search\SearchComparison;
-use OCP\Files\Search\ISearchBinaryOperator;
-use OCP\Files\Search\ISearchComparison;
 use OC\Files\Search\SearchQuery;
 use OC\User\NoUserException;
 use OCA\Files\Event\LoadSidebar;
@@ -36,14 +34,17 @@ use OCA\Photos\AppInfo\Application;
 use OCA\Viewer\Event\LoadViewer;
 use OCP\App\IAppManager;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
+use OCP\AppFramework\Http\TemplateResponse;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
 use OCP\Files\Node;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
+use OCP\Files\Search\ISearchBinaryOperator;
+use OCP\Files\Search\ISearchComparison;
+use OCP\ICache;
 use OCP\ICacheFactory;
 use OCP\IConfig;
 use OCP\IInitialStateService;
@@ -53,46 +54,27 @@ use OCP\Util;
 use Psr\Log\LoggerInterface;
 
 class PageController extends Controller {
-	/** @var IAppManager */
-	private $appManager;
+	private IAppManager $appManager;
+	private IEventDispatcher $eventDispatcher;
+	private IConfig $config;
+	private IInitialStateService $initialStateService;
+	private IUserSession $userSession;
+	private IRootFolder $rootFolder;
+	private ICacheFactory $cacheFactory;
+	private ICache $nomediaPathsCache;
+	private LoggerInterface $logger;
 
-	/** @var IEventDispatcher */
-	private $eventDispatcher;
-
-	/** @var IConfig */
-	private $config;
-
-	/** @var IInitialStateService */
-	private $initialStateService;
-
-	/** @var IUserSession */
-	private $userSession;
-	/**
-	 * @var \OCP\Files\IRootFolder
-	 */
-	private $rootFolder;
-	/**
-	 * @var \OCP\ICacheFactory
-	 */
-	private $cacheFactory;
-	/**
-	 * @var \OCP\ICache
-	 */
-	private $nomediaPathsCache;
-	/**
-	 * @var \Psr\Log\LoggerInterface
-	 */
-	private $logger;
-
-	public function __construct(IRequest             $request,
-								IAppManager          $appManager,
-								IEventDispatcher     $eventDispatcher,
-								IConfig              $config,
-								IInitialStateService $initialStateService,
-								IUserSession         $userSession,
-								IRootFolder          $rootFolder,
-								ICacheFactory $cacheFactory,
-								LoggerInterface $logger) {
+	public function __construct(
+		IRequest $request,
+		IAppManager $appManager,
+		IEventDispatcher $eventDispatcher,
+		IConfig $config,
+		IInitialStateService $initialStateService,
+		IUserSession $userSession,
+		IRootFolder $rootFolder,
+		ICacheFactory $cacheFactory,
+		LoggerInterface $logger
+	) {
 		parent::__construct(Application::APP_ID, $request);
 
 		$this->appManager = $appManager;

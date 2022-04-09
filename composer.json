@@ -11,11 +11,12 @@
 		"cs:fix": "php-cs-fixer fix",
 		"cs:check": "php-cs-fixer fix --dry-run --diff",
 		"lint": "find . -name \\*.php -not -path './vendor/*' -print0 | xargs -0 -n1 php -l",
-		"psalm": "psalm.phar"
+		"psalm": "psalm",
+		"psalm:update-baseline": "psalm --update-baseline"
 	},
 	"require-dev": {
 		"nextcloud/coding-standard": "^0.5.0",
 		"phpunit/phpunit": "^9",
-		"psalm/phar": "^4.3"
+		"vimeo/psalm": "^4.22"
 	}
 }
