@@ -1,11 +1,11 @@
 { "translations": {
     "Photos" : "Fényképek",
     "Your memories under your control" : "Az Ön emlékei, az Ön felügyelete alatt",
-    "Your photos" : "Az Ön fényképei",
-    "Your videos" : "Videói",
+    "Your photos" : "Saját fényképek",
+    "Your videos" : "Saját videók",
     "Favorites" : "Kedvencek",
     "On this day" : "A mai napon",
-    "Your folders" : "Mappái",
+    "Your folders" : "Saját mappák",
     "Shared with you" : "Megosztva Önnel",
     "Tagged photos" : "Címkézett fényképek",
     "Locations" : "Helyek",
@@ -19,7 +19,7 @@
     "Enable squared photos view" : "A négyzet alakú fotónézet engedélyezése",
     "This folder does not exist" : "Ez a mappa nem létezik",
     "An error occurred" : "Hiba történt",
-    "No photos in here" : "Itt nincsenek fényképe",
+    "No photos in here" : "Itt nincsenek fényképek",
     "No tags yet" : "Még nincsenek címkék",
     "Photos with tags will show up here" : "A címkével rendelkező fényképek itt fognak megjelenni",
     "This folder does not exists" : "Ez a mappa nem létezik"
