@@ -21,7 +21,6 @@ OC.L10N.register(
     "An error occurred" : "エラーが発生しました",
     "No photos in here" : "写真がありません",
     "No tags yet" : "まだタグがありません",
-    "Photos with tags will show up here" : "タグ付けされた写真がここに表示されます",
-    "This folder does not exists" : "このフォルダーは存在しません"
+    "Photos with tags will show up here" : "タグ付けされた写真がここに表示されます"
 },
 "nplurals=1; plural=0;");

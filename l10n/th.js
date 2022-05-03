@@ -20,7 +20,6 @@ OC.L10N.register(
     "An error occurred" : "เกิดข้อผิดพลาด",
     "No photos in here" : "ไม่มีรูปภาพที่นี่",
     "No tags yet" : "ยังไม่มีแท็ก",
-    "Photos with tags will show up here" : "รูปภาพที่ติดแท็กจะแสดงที่นี่",
-    "This folder does not exists" : "ไม่มีโฟลเดอร์นี้"
+    "Photos with tags will show up here" : "รูปภาพที่ติดแท็กจะแสดงที่นี่"
 },
 "nplurals=1; plural=0;");

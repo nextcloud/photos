@@ -21,7 +21,6 @@ OC.L10N.register(
     "An error occurred" : "طرأ هناك خطأ",
     "No photos in here" : "لا توجد صور هنا",
     "No tags yet" : "لا توجد وسوم حتى الآن",
-    "Photos with tags will show up here" : "سوف تظهر الصور ذات الوسوم هنا",
-    "This folder does not exists" : "هذا المجلد غير موجود"
+    "Photos with tags will show up here" : "سوف تظهر الصور ذات الوسوم هنا"
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");
