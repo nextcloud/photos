@@ -21,7 +21,6 @@ OC.L10N.register(
     "An error occurred" : "Настана грешка",
     "No photos in here" : "Овде нема фотографии",
     "No tags yet" : "Сеуште нема ознаки",
-    "Photos with tags will show up here" : "Фотографиите со ознаки ќе се појават овде",
-    "This folder does not exists" : "Папката не постои"
+    "Photos with tags will show up here" : "Фотографиите со ознаки ќе се појават овде"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

@@ -20,7 +20,6 @@ OC.L10N.register(
     "An error occurred" : "Villa kom upp",
     "No photos in here" : "Engar myndir hér",
     "No tags yet" : "Engin merki ennþá",
-    "Photos with tags will show up here" : "Ljósmyndir með merkjum munu birtast hér",
-    "This folder does not exists" : "Þessi mappa er ekki til"
+    "Photos with tags will show up here" : "Ljósmyndir með merkjum munu birtast hér"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

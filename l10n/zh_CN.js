@@ -23,7 +23,6 @@ OC.L10N.register(
     "An error occurred" : "发生错误",
     "No photos in here" : "这里没有照片",
     "No tags yet" : "尚无标签",
-    "Photos with tags will show up here" : "带标签的照片将显示在此处",
-    "This folder does not exists" : "该文件夹不存在"
+    "Photos with tags will show up here" : "带标签的照片将显示在此处"
 },
 "nplurals=1; plural=0;");

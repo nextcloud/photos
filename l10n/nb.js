@@ -23,7 +23,6 @@ OC.L10N.register(
     "An error occurred" : "En feil oppstod",
     "No photos in here" : "Ingen bilder her",
     "No tags yet" : "Ingen etiketter enda",
-    "Photos with tags will show up here" : "Bilder med etiketter vises her",
-    "This folder does not exists" : "Denne mappen finnes ikke"
+    "Photos with tags will show up here" : "Bilder med etiketter vises her"
 },
 "nplurals=2; plural=(n != 1);");
