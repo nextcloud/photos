@@ -23,7 +23,6 @@ OC.L10N.register(
     "An error occurred" : "Ocorreu um erro",
     "No photos in here" : "Não há fotos aqui",
     "No tags yet" : "Ainda não há marcações",
-    "Photos with tags will show up here" : "Fotos com marcações serão mostradas aqui",
-    "This folder does not exists" : "Esta pasta não existe"
+    "Photos with tags will show up here" : "Fotos com marcações serão mostradas aqui"
 },
 "nplurals=2; plural=(n > 1);");

@@ -2,6 +2,7 @@
     "Photos" : "Foto",
     "Favorites" : "Favorit",
     "Shared with you" : "Shared with you",
-    "Settings" : "Instillingar"
+    "Settings" : "Instillingar",
+    "An error occurred" : "Det oppstod ein feil."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

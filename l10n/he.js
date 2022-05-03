@@ -20,7 +20,6 @@ OC.L10N.register(
     "An error occurred" : "אירעה שגיאה",
     "No photos in here" : "אין כאן תמונות",
     "No tags yet" : "אין תגיות עדיין",
-    "Photos with tags will show up here" : "תמונות עם תגיות תמיד תופענה כאן",
-    "This folder does not exists" : "תיקייה זו אינה קיימת"
+    "Photos with tags will show up here" : "תמונות עם תגיות תמיד תופענה כאן"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");

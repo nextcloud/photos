@@ -16,7 +16,6 @@ OC.L10N.register(
     "An error occurred" : "Tekkis tõrge",
     "No photos in here" : "Siin ei ole fotosid",
     "No tags yet" : "Silte veel pole",
-    "Photos with tags will show up here" : "Sildistatud fotod on siin näha",
-    "This folder does not exists" : "Seda kausta pole olemas"
+    "Photos with tags will show up here" : "Sildistatud fotod on siin näha"
 },
 "nplurals=2; plural=(n != 1);");

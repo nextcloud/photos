@@ -21,7 +21,6 @@ OC.L10N.register(
     "An error occurred" : "Er heeft een fout opgetreden",
     "No photos in here" : "Geen foto's hier",
     "No tags yet" : "Nog geen labels",
-    "Photos with tags will show up here" : "Gelabelde foto's worden hier getoond",
-    "This folder does not exists" : "Deze map bestaat niet"
+    "Photos with tags will show up here" : "Gelabelde foto's worden hier getoond"
 },
 "nplurals=2; plural=(n != 1);");

@@ -6,6 +6,7 @@ OC.L10N.register(
     "Your photos" : "Вашите снимки",
     "Your videos" : "Вашите видеа",
     "Favorites" : "Любими",
+    "On this day" : "На този ден",
     "Your folders" : "Вашите папки",
     "Shared with you" : "Споделени с вас",
     "Tagged photos" : "Маркирани снимки",
@@ -15,13 +16,13 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "Отваряне на \"{name}“  поддиректория ",
     "Share this folder" : "Споделяане на тази папка",
     "Back to {folder}" : "Назад към {folder}",
+    "_{years} year ago_::_{years} years ago_" : ["Преди {years} години","Преди {years} години"],
     "View" : "Изглед",
     "Enable squared photos view" : "Активирайте изгледа на снимки в квадратче",
     "This folder does not exist" : "Тази папка не съществува",
     "An error occurred" : "Възникна грешка",
     "No photos in here" : "Тук няма снимки",
     "No tags yet" : "Все още няма етикети",
-    "Photos with tags will show up here" : " Снимки с етикети ще се покажат тук",
-    "This folder does not exists" : "Тази папка не съществува"
+    "Photos with tags will show up here" : " Снимки с етикети ще се покажат тук"
 },
 "nplurals=2; plural=(n != 1);");

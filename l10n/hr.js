@@ -21,7 +21,6 @@ OC.L10N.register(
     "An error occurred" : "Došlo je do pogreške",
     "No photos in here" : "Ovdje nema fotografija",
     "No tags yet" : "Još nema oznaka",
-    "Photos with tags will show up here" : "Ovdje će se prikazivati fotografije s oznakama",
-    "This folder does not exists" : "Ova mapa ne postoji"
+    "Photos with tags will show up here" : "Ovdje će se prikazivati fotografije s oznakama"
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");

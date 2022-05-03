@@ -23,7 +23,6 @@ OC.L10N.register(
     "An error occurred" : "Hiba történt",
     "No photos in here" : "Itt nincsenek fényképek",
     "No tags yet" : "Még nincsenek címkék",
-    "Photos with tags will show up here" : "A címkével rendelkező fényképek itt fognak megjelenni",
-    "This folder does not exists" : "Ez a mappa nem létezik"
+    "Photos with tags will show up here" : "A címkével rendelkező fényképek itt fognak megjelenni"
 },
 "nplurals=2; plural=(n != 1);");
