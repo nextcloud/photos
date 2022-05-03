@@ -23,7 +23,6 @@ OC.L10N.register(
     "An error occurred" : "Akats bat gertatu da",
     "No photos in here" : "Argazkirik ez hemen",
     "No tags yet" : "Etitketarik ez oraindik",
-    "Photos with tags will show up here" : "Etiketadun argazkiak hemen erakutsiko dira",
-    "This folder does not exists" : "Karpeta hau ez da existitzen"
+    "Photos with tags will show up here" : "Etiketadun argazkiak hemen erakutsiko dira"
 },
 "nplurals=2; plural=(n != 1);");

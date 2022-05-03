@@ -23,7 +23,6 @@ OC.L10N.register(
     "An error occurred" : "Παρουσιάστηκε σφάλμα",
     "No photos in here" : "Δεν υπάρχουν φωτογραφίες εδώ",
     "No tags yet" : "Χωρίς ετικέτες ακόμη",
-    "Photos with tags will show up here" : "Φωτογραφίες με ετικέτες εμφανίζονται εδώ πάνω",
-    "This folder does not exists" : "Ο φάκελος δεν υπάρχει"
+    "Photos with tags will show up here" : "Φωτογραφίες με ετικέτες εμφανίζονται εδώ πάνω"
 },
 "nplurals=2; plural=(n != 1);");

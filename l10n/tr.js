@@ -23,7 +23,6 @@ OC.L10N.register(
     "An error occurred" : "Bir sorun çıktı",
     "No photos in here" : "Burada herhangi bir fotoğraf yok",
     "No tags yet" : "Henüz bir etiket yok",
-    "Photos with tags will show up here" : "Etiketlenmiş fotoğraflar burada görüntülenir",
-    "This folder does not exists" : "Bu klasör bulunamadı"
+    "Photos with tags will show up here" : "Etiketlenmiş fotoğraflar burada görüntülenir"
 },
 "nplurals=2; plural=(n > 1);");

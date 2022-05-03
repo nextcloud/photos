@@ -21,7 +21,6 @@ OC.L10N.register(
     "An error occurred" : "S'ha produït un error",
     "No photos in here" : "No hi ha cap fotografia",
     "No tags yet" : "Encara no hi ha etiquetes",
-    "Photos with tags will show up here" : "Aquí es mostraran les fotografies amb etiquetes",
-    "This folder does not exists" : "Aquesta carpeta no existeix"
+    "Photos with tags will show up here" : "Aquí es mostraran les fotografies amb etiquetes"
 },
 "nplurals=2; plural=(n != 1);");

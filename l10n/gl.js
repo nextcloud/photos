@@ -20,7 +20,6 @@ OC.L10N.register(
     "An error occurred" : "Produciuse un erro",
     "No photos in here" : "Aquí non hai fotos",
     "No tags yet" : "Non hai nada etiquetado",
-    "Photos with tags will show up here" : "As fotos etiquetadas aparecerán aquí",
-    "This folder does not exists" : "Este cartafol non existe"
+    "Photos with tags will show up here" : "As fotos etiquetadas aparecerán aquí"
 },
 "nplurals=2; plural=(n != 1);");

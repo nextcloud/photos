@@ -23,7 +23,6 @@ OC.L10N.register(
     "An error occurred" : "Tapahtui virhe",
     "No photos in here" : "Ei kuvia täällä",
     "No tags yet" : "Ei vielä tunnisteita",
-    "Photos with tags will show up here" : "Tunnisteilla varustetut kuvat näkyvät täällä",
-    "This folder does not exists" : "Tätä kansiota ei ole olemassa"
+    "Photos with tags will show up here" : "Tunnisteilla varustetut kuvat näkyvät täällä"
 },
 "nplurals=2; plural=(n != 1);");

@@ -16,7 +16,6 @@ OC.L10N.register(
     "An error occurred" : "خطایی روی داد",
     "No photos in here" : "هیچ عکسی در اینجا نیست",
     "No tags yet" : "هنوز برچسپی وجود ندارد",
-    "Photos with tags will show up here" : "عکس های دارای برچسب در اینجا نشان داده می شوند",
-    "This folder does not exists" : "این پوشه وجود ندارد"
+    "Photos with tags will show up here" : "عکس های دارای برچسب در اینجا نشان داده می شوند"
 },
 "nplurals=2; plural=(n > 1);");

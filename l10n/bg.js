@@ -23,7 +23,6 @@ OC.L10N.register(
     "An error occurred" : "Възникна грешка",
     "No photos in here" : "Тук няма снимки",
     "No tags yet" : "Все още няма етикети",
-    "Photos with tags will show up here" : " Снимки с етикети ще се покажат тук",
-    "This folder does not exists" : "Тази папка не съществува"
+    "Photos with tags will show up here" : " Снимки с етикети ще се покажат тук"
 },
 "nplurals=2; plural=(n != 1);");
