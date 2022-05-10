@@ -36,16 +36,14 @@ use OCP\IRequest;
 use OCP\IUserSession;
 
 class ApiController extends Controller {
+	private IConfig $config;
+	private IUserSession $userSession;
 
-	/** @var IConfig */
-	private $config;
-
-	/** @var IUserSession */
-	private $userSession;
-
-	public function __construct(IRequest $request,
-								IConfig $config,
-								IUserSession $userSession) {
+	public function __construct(
+		IRequest $request,
+		IConfig $config,
+		IUserSession $userSession
+	) {
 		parent::__construct(Application::APP_ID, $request);
 
 		$this->config = $config;

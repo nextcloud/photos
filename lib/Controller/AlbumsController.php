@@ -40,20 +40,16 @@ use OCP\IPreview;
 use OCP\IRequest;
 
 class AlbumsController extends Controller {
+	private string $userId;
+	private IRootFolder $rootFolder;
+	private IPreview $previewManager;
 
-	/** @var string */
-	private $userId;
-
-	/** @var IRootFolder */
-	private $rootFolder;
-
-	/** @var IPreview */
-	private $previewManager;
-
-	public function __construct(string $userId,
-								IRequest $request,
-								IRootFolder $rootFolder,
-								IPreview $previewManager) {
+	public function __construct(
+		string $userId,
+		IRequest $request,
+		IRootFolder $rootFolder,
+		IPreview $previewManager
+	) {
 		parent::__construct(Application::APP_ID, $request);
 
 		$this->userId = $userId;
