@@ -3,11 +3,11 @@ OC.L10N.register(
     {
     "Photos" : "Foto's",
     "Your memories under your control" : "Jouw herinneringen onder jouw beheer",
-    "Your photos" : "Jouw foto's",
+    "Your photos" : "Je foto's",
     "Your videos" : "Je video's",
     "Favorites" : "Favorieten",
     "Your folders" : "Je mappen",
-    "Shared with you" : "Deelde met jou",
+    "Shared with you" : "Met je gedeeld",
     "Tagged photos" : "Gelabelde foto's",
     "Locations" : "Locaties",
     "Settings" : "Instellingen",
