@@ -16,7 +16,7 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "Abrir el subdirectorio \"{name}\"",
     "Share this folder" : "Compartir esta carpeta",
     "Back to {folder}" : "Atrás a {folder}",
-    "_{years} year ago_::_{years} years ago_" : ["Hace {years} año","Hace {years} años"],
+    "_{years} year ago_::_{years} years ago_" : ["Hace {years} año","Hace {years} años","Hace {years} años"],
     "View" : "Ver",
     "Enable squared photos view" : "Habilitar vista de fotos cuadradas",
     "This folder does not exist" : "Esta carpeta no existe",
@@ -25,4 +25,4 @@ OC.L10N.register(
     "No tags yet" : "Todavía no hay etiquetas",
     "Photos with tags will show up here" : "Las fotos con etiquetas aparecerán aquí"
 },
-"nplurals=2; plural=(n != 1);");
+"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
