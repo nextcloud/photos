@@ -16,7 +16,7 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "Ouvrir le sous-dossier \"{name}\"",
     "Share this folder" : "Partager ce dossier",
     "Back to {folder}" : "Revenir au dossier {folder}",
-    "_{years} year ago_::_{years} years ago_" : ["Il y a {years} ans","Il y a {years} ans"],
+    "_{years} year ago_::_{years} years ago_" : ["Il y a {years} ans","Il y a {years} ans","Il y a {years} ans"],
     "View" : "Afficher",
     "Enable squared photos view" : "Activer l'affichage en miniatures",
     "This folder does not exist" : "Ce dossier n'existe pas",
@@ -25,4 +25,4 @@ OC.L10N.register(
     "No tags yet" : "Aucune étiquette pour le moment",
     "Photos with tags will show up here" : "Les photos étiquetées apparaîtront ici"
 },
-"nplurals=2; plural=(n > 1);");
+"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
