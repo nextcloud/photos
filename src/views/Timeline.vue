@@ -135,8 +135,6 @@ import Download from 'vue-material-design-icons/Download'
 import { NcModal, NcActions, NcActionButton, NcButton, NcEmptyContent, isMobile } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import { mapGetters } from 'vuex'
-import flatten from 'lodash/flatten'
-import uniq from 'lodash/uniq'
 
 import getPhotos from '../services/PhotoSearch'
 
@@ -306,12 +304,12 @@ export default {
 				const tags = Object.values(this.tags)
 				const searchMatchingTags = searchQueries.map(query =>
 					tags.filter(tag => tag.displayName.includes(query)).map(tag => tag.id))
-				const uniqueTags = uniq(flatten(searchMatchingTags))
+				const uniqueTags = [...new Set(searchMatchingTags.flat())]
 				await Promise.all(uniqueTags.map(tagId =>
 					this.fetchTaggedImages(tagId)
 				))
 				const fileIdToTags = {}
-				this.searchFileList = uniq(flatten(
+				this.searchFileList = [...new Set(
 					uniqueTags
 						.map(tagId => this.tags[tagId])
 						.filter(tag => tag.files)
@@ -323,7 +321,8 @@ export default {
 							}
 							return id
 						}))
-				))
+						.flat()
+				)]
 					.filter(fileId =>
 						searchMatchingTags.every(queryTags =>
 							queryTags.some(tagId => fileIdToTags[fileId].includes(tagId))
