@@ -20,6 +20,11 @@
  *
  */
 import Vue from 'vue'
+import moment from '@nextcloud/moment'
+
+import { deleteFile, favoriteFile, downloadFiles } from '../services/FileActions.js'
+import logger from '../services/logger.js'
+import Semaphore from '../utils/semaphoreWithPriority.js'
 
 const state = {
 	files: {},
@@ -31,17 +36,31 @@ const mutations = {
 	 * Append or update given files
 	 *
 	 * @param {object} state the store mutations
-	 * @param {Array} files the store mutations
+	 * @param {Array} newFiles the store mutations
 	 */
-	updateFiles(state, files) {
-		files.forEach(file => {
+	updateFiles(state, newFiles) {
+		newFiles.forEach(file => {
 			if (state.nomediaPaths.some(nomediaPath => file.filename.startsWith(nomediaPath))) {
 				return
 			}
 			if (file.fileid >= 0) {
-				Vue.set(state.files, file.fileid, file)
+				if (file.fileMetadataSize) {
+					file.fileMetadataSizeParsed = JSON.parse(file.fileMetadataSize.replace(/&quot;/g, '"'))
+				}
+				file.fileMetadataSizeParsed.width = file.fileMetadataSizeParsed?.width ?? 256
+				file.fileMetadataSizeParsed.height = file.fileMetadataSizeParsed?.height ?? 256
 			}
+
+			// Precalculate dates as it is expensive.
+			file.timestamp = moment(file.lastmod).unix() // For sorting
+			file.month = moment(file.lastmod).format('YYYYMM') // For grouping by month
+			file.day = moment(file.lastmod).format('MMDD') // For On this day
 		})
+
+		state.files = {
+			...state.files,
+			...newFiles.reduce((files, file) => ({ ...files, [file.fileid]: file }), {}),
+		}
 	},
 
 	/**
@@ -70,6 +89,28 @@ const mutations = {
 	 */
 	setNomediaPaths(state, paths) {
 		state.nomediaPaths = paths
+	},
+
+	/**
+	 * Delete a file
+	 *
+	 * @param {object} state the store mutations
+	 * @param {number} fileId - The id of the file
+	 */
+	deleteFile(state, fileId) {
+		Vue.delete(state.files, fileId)
+	},
+
+	/**
+	 * Favorite a list of files
+	 *
+	 * @param {object} state the store mutations
+	 * @param {object} params -
+	 * @param {number} params.fileId - The id of the file
+	 * @param {boolean} params.favoriteState - The ew state of the favorite property
+	 */
+	favoriteFile(state, { fileId, favoriteState }) {
+		Vue.set(state.files[fileId], 'favorite', favoriteState ? 1 : 0)
 	},
 }
 
@@ -111,8 +152,68 @@ const actions = {
 	 * @param {Array} paths list of files
 	 */
 	setNomediaPaths(context, paths) {
-		console.debug('Ignored paths', { paths })
+		logger.debug('Ignored paths', { paths })
 		context.commit('setNomediaPaths', paths)
+	},
+
+	/**
+	 * Delete a list of files
+	 *
+	 * @param {object} context the store mutations
+	 * @param {number[]} fileIds - The ids of the files
+	 */
+	deleteFiles(context, fileIds) {
+		const semaphore = new Semaphore(5)
+
+		const files = fileIds.map(fileId => state.files[fileId]).reduce((files, file) => ({ ...files, [file.fileid]: file }), {})
+		fileIds.forEach(fileId => context.commit('deleteFile', fileId))
+
+		const promises = fileIds
+			.map(async (fileId) => {
+				const symbol = await semaphore.acquire()
+				try {
+					await deleteFile(files[fileId].filename)
+				} catch (error) {
+					console.error(error)
+					context.dispatch('appendFiles', [files[fileId]])
+				} finally {
+					semaphore.release(symbol)
+				}
+			})
+
+		return Promise.all(promises)
+	},
+
+	/**
+	 * Favorite a list of files
+	 *
+	 * @param {object} context the store mutations
+	 * @param {object} params -
+	 * @param {number[]} params.fileIds - The ids of the files
+	 * @param {boolean} params.favoriteState - The favorite state to set
+	 */
+	toggleFavoriteForFiles(context, { fileIds, favoriteState }) {
+		const semaphore = new Semaphore(5)
+
+		const promises = fileIds
+			.map(async (fileId) => {
+				await semaphore.acquire()
+				await favoriteFile(state.files[fileId].filename, favoriteState)
+				context.commit('favoriteFile', { fileId, favoriteState })
+				return semaphore.release()
+			})
+
+		return Promise.all(promises)
+	},
+
+	/**
+	 * Download a list of files
+	 *
+	 * @param {object} context the store mutations
+	 * @param {number[]} fileIds - The ids of the files
+	 */
+	downloadFiles(context, fileIds) {
+		downloadFiles(fileIds.map(fileId => context.state.files[fileId].filename))
 	},
 }
 

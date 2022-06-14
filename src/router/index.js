@@ -24,9 +24,9 @@ import { generateUrl } from '@nextcloud/router'
 import Router from 'vue-router'
 import Vue from 'vue'
 
-import isMapsInstalled from '../services/IsMapsInstalled'
-import areTagsInstalled from '../services/AreTagsInstalled'
-import { videoMimes } from '../services/AllowedMimes'
+import isMapsInstalled from '../services/IsMapsInstalled.js'
+import areTagsInstalled from '../services/AreTagsInstalled.js'
+import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
 
 const Albums = () => import('../views/Albums')
 const Tags = () => import('../views/Tags')
@@ -60,9 +60,27 @@ export default new Router({
 		{
 			path: '/',
 			component: Timeline,
-			name: 'timeline',
+			name: 'all_media',
 			props: route => ({
-				rootTitle: t('photos', 'Your photos'),
+				rootTitle: t('photos', 'All media'),
+			}),
+		},
+		{
+			path: '/photos',
+			component: Timeline,
+			name: 'photos',
+			props: route => ({
+				rootTitle: t('photos', 'Photos'),
+				mimesType: imageMimes,
+			}),
+		},
+		{
+			path: '/videos',
+			component: Timeline,
+			name: 'videos',
+			props: route => ({
+				rootTitle: t('photos', 'Videos'),
+				mimesType: videoMimes,
 			}),
 		},
 		{
@@ -73,7 +91,18 @@ export default new Router({
 				path: parsePathParams(route.params.path),
 				// if path is empty
 				isRoot: !route.params.path,
-				rootTitle: t('photos', 'Your folders'),
+				rootTitle: t('photos', 'Albums'),
+			}),
+		},
+		{
+			path: '/folders/:path*',
+			component: Albums,
+			name: 'folders',
+			props: route => ({
+				path: parsePathParams(route.params.path),
+				// if path is empty
+				isRoot: !route.params.path,
+				rootTitle: t('photos', 'Folders'),
 			}),
 		},
 		{
@@ -86,15 +115,6 @@ export default new Router({
 				isRoot: !route.params.path,
 				rootTitle: t('photos', 'Shared with you'),
 				showShared: true,
-			}),
-		},
-		{
-			path: '/videos',
-			component: Timeline,
-			name: 'videos',
-			props: route => ({
-				rootTitle: t('photos', 'Your videos'),
-				mimesType: videoMimes,
 			}),
 		},
 		{
