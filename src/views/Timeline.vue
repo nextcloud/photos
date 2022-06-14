@@ -31,7 +31,7 @@
 	</EmptyContent>
 
 	<!-- Folder content -->
-	<div v-else-if="!loading">
+	<div v-else>
 		<Navigation v-if="isEmpty"
 			key="navigation"
 			:basename="path"
