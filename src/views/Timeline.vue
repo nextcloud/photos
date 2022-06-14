@@ -38,52 +38,110 @@
 			:filename="'/'"
 			:root-title="rootTitle" />
 
-		<EmptyContent v-if="isEmpty" illustration-name="empty">
-			{{ t('photos', 'No photos in here') }}
-		</EmptyContent>
+		<div v-else class="photos-container">
+			<PhotosHeader :selection="selection" @uncheck-items="onUncheckItems" />
 
-		<div class="grid-container">
-			<VirtualGrid ref="virtualgrid"
-				:items="contentList"
-				:update-function="getContent"
-				:get-column-count="() => gridConfig.count"
-				:get-grid-gap="() => gridConfig.gap"
-				:update-trigger-margin="700"
-				:loader="loaderComponent" />
+			<Loader v-if="nbFetchedFiles === 0 && loading" />
+
+			<TiledLayout ref="tiledLayout" :items="itemsList">
+				<VirtualScrolling slot-scope="{rows}"
+					:use-window="true"
+					:rows="rows"
+					@need-content="getContent">
+					<TiledRows slot-scope="{renderedRows}" :rows="renderedRows">
+						<template slot-scope="{row, item}">
+							<h3 v-if="item.sectionHeader" class="section-header">
+								<!-- TODO: uncomment to activate section selection -->
+								<!-- <CheckboxRadioSwitch v-if="allowSelection"
+								class="selection-checkbox"
+								:checked="selectedSections[item.id]"
+								@update:checked="(value) => onSectionToggle(item.id)"> -->
+								<b>{{ item.id | dateMonth }}</b>
+								{{ item.id | dateYear }}
+								<!-- </CheckboxRadioSwitch> -->
+							</h3>
+
+							<File v-else
+								:item="files[item.id]"
+								:allow-selection="true"
+								:selected="selectedItems[item.id] === true"
+								:visibility="row.visibility"
+								:semaphore="semaphore"
+								@click="openViewer"
+								@select-toggled="onItemSelectToggle" />
+						</template>
+					</TiledRows>
+				</VirtualScrolling>
+			</TiledLayout>
+
+			<Loader v-if="loading" />
+
+			<EmptyContent v-if="isEmpty" illustration-name="empty">
+				{{ t('photos', 'No photos in here') }}
+			</EmptyContent>
 		</div>
 	</div>
 </template>
 
 <script>
-import moment from '@nextcloud/moment'
 import { mapGetters } from 'vuex'
 
-import getPhotos from '../services/PhotoSearch'
+import moment from '@nextcloud/moment'
 
-import EmptyContent from '../components/EmptyContent'
-import File from '../components/File'
-import SeparatorVirtualGrid from '../components/SeparatorVirtualGrid'
-import VirtualGrid from 'vue-virtual-grid'
-import Navigation from '../components/Navigation'
-import Loader from '../components/Loader'
+import cancelableRequest from '../utils/CancelableRequest.js'
 
-import cancelableRequest from '../utils/CancelableRequest'
-import GridConfigMixin from '../mixins/GridConfig'
-import { allMimes } from '../services/AllowedMimes'
+import getPhotos from '../services/PhotoSearch.js'
+import { allMimes } from '../services/AllowedMimes.js'
+import logger from '../services/logger.js'
+
+import TiledLayout from '../components/TiledLayout.vue'
+import TiledRows from '../components/TiledRows.vue'
+import VirtualScrolling from '../components/VirtualScrolling.vue'
+import PhotosHeader from '../components/PhotosHeader.vue'
+import EmptyContent from '../components/EmptyContent.vue'
+import File from '../components/File.vue'
+import Navigation from '../components/Navigation.vue'
+import Loader from '../components/Loader.vue'
+import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
 
 export default {
 	name: 'Timeline',
 	components: {
 		EmptyContent,
-		VirtualGrid,
 		Navigation,
+		TiledLayout,
+		TiledRows,
+		VirtualScrolling,
+		PhotosHeader,
+		Loader,
+		File,
 	},
-	mixins: [GridConfigMixin],
-	props: {
-		loading: {
-			type: Boolean,
-			required: true,
+
+	filters: {
+		/**
+		 * @param {string} date - In the following format: YYYYMM
+		 */
+		dateMonth(date) {
+			return moment(date, 'YYYYMM').format('MMMM')
 		},
+		/**
+		 * @param {string} date - In the following format: YYYYMM
+		 */
+		dateYear(date) {
+			return moment(date, 'YYYYMM').format('YYYY')
+		},
+	},
+
+	beforeRouteLeave(from, to, next) {
+		// cancel any pending requests
+		if (this.cancelRequest) {
+			this.cancelRequest('Changed view')
+		}
+		this.resetState()
+		return next()
+	},
+
+	props: {
 		onlyFavorites: {
 			type: Boolean,
 			default: false,
@@ -108,11 +166,14 @@ export default {
 
 	data() {
 		return {
+			loading: false,
 			cancelRequest: null,
 			done: false,
 			error: null,
-			page: 0,
-			loaderComponent: Loader,
+			selectedItems: {},
+			nbFetchedFiles: 0,
+			semaphore: new SemaphoreWithPriority(30),
+			semaphoreSymbol: null,
 		}
 	},
 
@@ -120,65 +181,87 @@ export default {
 		// global lists
 		...mapGetters([
 			'files',
-			'timeline',
 		]),
-		// list of loaded medias
+
+		/**
+		 * List of loaded medias.
+		 *
+		 * @return {import('../services/TiledLayout').TiledItem[]}
+		 */
 		fileList() {
-			return this.timeline
-				.map((fileId) => this.files[fileId])
-				.filter((file) => !!file)
+			const today = moment().format('DDMM')
+			return Object.values(this.files)
+				.filter(file => !this.onlyFavorites || file.favorite === 1)
+				.filter(file => this.mimesType.includes(file.mime))
+				.filter(file => !this.onThisDay || file.day === today)
+				.map(file => ({
+					id: file.fileid,
+					width: file.fileMetadataSizeParsed.width,
+					height: file.fileMetadataSizeParsed.height,
+					ratio: file.fileMetadataSizeParsed.width / file.fileMetadataSizeParsed.height,
+				}))
 		},
-		// list of displayed content in the grid (titles + medias)
-		contentList() {
-			/**
-			 * The goal of this flat map is to return an array of images separated by titles (months)
-			 * ie: [{month1}, {image1}, {image2}, {month2}, {image3}, {image4}, {image5}]
-			 * First we get the current month+year of the image
-			 * We compare it to the previous image month+year
-			 * If there is a difference we have to insert a title object before the current image
-			 * If it's equal we just add the current image to the array
-			 * Note: the injected param of objects are used to pass custom params to the grid lib
-			 * In our case injected could be an image/video (aka file) or a title (year/month)
-			 * Note2: titles are rendered full width and images are rendered on 1 column and 256x256 ratio
-			 */
-			let lastSection = ''
-			return this.fileList.flatMap((file, index) => {
-				const finalArray = []
-				const currentSection = this.getFormatedDate(file.lastmod, 'YYYY MMMM')
-				if (lastSection !== currentSection) {
-					finalArray.push({
-						id: `title-${index}`,
-						injected: {
-							year: this.getFormatedDate(file.lastmod, 'YYYY'),
-							month: this.getFormatedDate(file.lastmod, 'MMMM'),
-							onThisDay: this.onThisDay ? Math.round(moment(Date.now()).diff(moment(file.lastmod), 'years', true)) : false,
+
+		/**
+		 * @return {Object<string, import('../services/TiledLayout').TiledItem[]>}
+		 */
+		fileListByMonth() {
+			const itemsByMonth = {}
+			for (const item of this.fileList) {
+				itemsByMonth[this.files[item.id].month] = itemsByMonth[this.files[item.id].month] ?? []
+				itemsByMonth[this.files[item.id].month].push(item)
+			}
+			return itemsByMonth
+		},
+
+		/**
+		 * @return {import('../services/TiledLayout').TiledItem[]}
+		 */
+		itemsList() {
+			const fileListByMonth = this.fileListByMonth
+			return Object
+				.keys(fileListByMonth)
+				.sort((date1, date2) => date1 > date2 ? -1 : 1)
+				.flatMap((month) => {
+					// Insert month item in the list.
+					return [
+						{
+							id: month,
+							sectionHeader: true,
+							height: 75,
 						},
-						height: 90,
-						columnSpan: 0, // means full width
-						newRow: true,
-						renderComponent: SeparatorVirtualGrid,
-					})
-					lastSection = currentSection // we keep track of the last section for the next batch
-				}
-				finalArray.push({
-					id: `img-${file.fileid}`,
-					injected: {
-						...file,
-						list: this.fileList,
-						loadMore: this.getContent,
-						canLoop: false,
-					},
-					width: 256,
-					height: 256,
-					columnSpan: 1,
-					renderComponent: File,
+						...fileListByMonth[month].sort((item1, item2) => this.files[item1.id].timestamp > this.files[item2.id].timestamp ? -1 : 1),
+					]
 				})
-				return finalArray
-			})
 		},
-		// is current folder empty?
+
+		/**
+		 * Is current folder empty?
+		 *
+		 * @return  {boolean}
+		 */
 		isEmpty() {
 			return this.fileList.length === 0
+		},
+
+		/**
+		 * Is current folder empty?
+		 *
+		 * @type {Object<string, boolean>}
+		 */
+		selectedSections() {
+			return Object.entries(this.fileListByMonth)
+				.reduce((selectedSections, [month, items]) => {
+					return {
+						...selectedSections,
+						[month]: !items.some((item) => this.selectedItems[item.id] !== true),
+					}
+				}, {})
+		},
+
+		/** @return {import('../services/TiledLayout').TiledItem[]} */
+		selection() {
+			return Object.keys(this.selectedItems).filter(fileId => this.selectedItems[fileId])
 		},
 	},
 
@@ -189,6 +272,7 @@ export default {
 				this.cancelRequest('Changed view')
 			}
 			this.resetState()
+			this.getContent()
 		},
 		async onThisDay() {
 			// reset component
@@ -197,13 +281,8 @@ export default {
 		},
 	},
 
-	beforeRouteLeave(from, to, next) {
-		// cancel any pending requests
-		if (this.cancelRequest) {
-			this.cancelRequest('Changed view')
-		}
-		this.resetState()
-		next()
+	mounted() {
+		this.getContent()
 	},
 
 	beforeDestroy() {
@@ -216,36 +295,27 @@ export default {
 	methods: {
 		/**
 		 * Return next batch of data depending on global offset
-		 *
-		 * @param {boolean} doReturn Returns a Promise with the list instead of a boolean
-		 * @return {Promise<boolean>} Returns a Promise with a boolean that stops infinite loading
 		 */
-		async getContent(doReturn) {
-			if (this.done) {
-				return Promise.resolve(true)
+		async getContent() {
+			if (this.done || this.loading) {
+				return
 			}
-
-			// cancel any pending requests
-			if (this.cancelRequest) {
-				this.cancelRequest('Changed view')
-			}
-
-			// if we don't already have some cached data let's show a loader
-			if (this.timeline.length === 0) {
-				this.$emit('update:loading', true)
-			}
-
-			// done loading even with errors
-			const { request, cancel } = cancelableRequest(getPhotos)
-			this.cancelRequest = cancel
-
-			const numberOfImagesPerBatch = this.gridConfig.count * 5 // loading 5 rows
 
 			try {
+				this.loading = true
+				this.semaphoreSymbol = await this.semaphore.acquire(() => 0, 'timeline')
+
+				const { request, cancel } = cancelableRequest(getPhotos)
+				this.cancelRequest = cancel
+
+				const numberOfImagesPerBatch = 1000
+
 				// Load next batch of images
 				const files = await request(this.onlyFavorites, {
-					page: this.page,
-					perPage: numberOfImagesPerBatch,
+					// We reuse already fetched files in the store when moving from one tab to another, but to make sure that we have all the files, we keep an internal counter (nbFetchedFiles).
+					// Some files will be fetched twice, but we have less loading time when switching between tabs.
+					firstResult: this.nbFetchedFiles,
+					nbResults: numberOfImagesPerBatch,
 					mimesType: this.mimesType,
 					onThisDay: this.onThisDay,
 				})
@@ -255,16 +325,9 @@ export default {
 					this.done = true
 				}
 
-				this.$store.dispatch('updateTimeline', files)
+				this.nbFetchedFiles += files.length
+
 				this.$store.dispatch('appendFiles', files)
-
-				this.page += 1
-
-				if (doReturn) {
-					return Promise.resolve(files)
-				}
-
-				return Promise.resolve(false)
 			} catch (error) {
 				if (error.response && error.response.status) {
 					if (error.response.status === 404) {
@@ -278,12 +341,12 @@ export default {
 				}
 
 				// cancelled request, moving on...
-				console.error('Error fetching timeline', error)
-				return Promise.resolve(true)
+				logger.error('Error fetching timeline', error)
 			} finally {
-				// done loading even with errors
-				this.$emit('update:loading', false)
+				this.loading = false
 				this.cancelRequest = null
+				await this.semaphore.release(this.semaphoreSymbol)
+				this.semaphoreSymbol = null
 			}
 		},
 
@@ -291,32 +354,41 @@ export default {
 		 * Reset this component data to a pristine state
 		 */
 		resetState() {
-			this.$store.dispatch('resetTimeline')
 			this.done = false
 			this.error = null
-			this.page = 0
 			this.lastSection = ''
-			this.$emit('update:loading', true)
-			if (this.$refs.virtualgrid) {
-				this.$refs.virtualgrid.resetGrid()
-			}
+			this.loading = false
+			this.nbFetchedFiles = 0
+			this.$refs.tiledLayout?.$el.scrollTo(0, 0)
 		},
 
-		getFormatedDate(string, format) {
-			return moment(string).format(format)
+		onItemSelectToggle({ id, value }) {
+			this.$set(this.selectedItems, id, value)
 		},
 
+		// onSectionToggle(sectionId) {
+		// const shouldCheck = !this.selectedSections[sectionId]
+		// this.fileListByMonth[sectionId].forEach(item => this.$set(this.selectedItems, item.id, shouldCheck))
+		// },
+
+		onUncheckItems(itemIds) {
+			itemIds.forEach(itemId => this.$set(this.selectedItems, itemId, false))
+		},
+
+		openViewer(itemId) {
+			const item = this.files[itemId]
+			OCA.Viewer.open({
+				path: item.filename,
+				list: this.itemsList.filter(item => !item.sectionHeader).map(item => this.files[item.id]),
+				loadMore: item.loadMore ? async () => await item.loadMore(true) : () => [],
+				canLoop: item.canLoop,
+			})
+		},
 	},
-
 }
 </script>
-
 <style lang="scss" scoped>
-@import '../mixins/GridSizes';
-
-.grid-container {
-	@include grid-sizes using ($marginTop, $marginW) {
-		padding: 0px #{$marginW}px 256px #{$marginW}px;
+	.section-header {
+		padding: 32px 0 16px 2px;
 	}
-}
 </style>

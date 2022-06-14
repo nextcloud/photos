@@ -24,24 +24,63 @@
 	<Content app-name="photos">
 		<AppNavigation>
 			<template #list>
-				<AppNavigationItem :to="{name: 'timeline'}"
-					class="app-navigation__photos"
-					:title="t('photos', 'Your photos')"
-					icon="icon-yourphotos"
-					exact />
-				<AppNavigationItem to="/videos" :title="t('photos', 'Your videos')" icon="icon-video" />
-				<AppNavigationItem to="/favorites" :title="t('photos', 'Favorites')" icon="icon-favorite" />
-				<AppNavigationItem :to="{name: 'thisday'}" :title="t('photos', 'On this day')" icon="icon-calendar-dark" />
-				<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Your folders')" icon="icon-files-dark" />
-				<AppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared with you')" icon="icon-share" />
+				<AppNavigationItem :to="{name: 'all_media'}"
+					class="app-navigation__all_media"
+					:title="t('photos', 'All media')"
+					exact>
+					<template #icon>
+						<ImageIcon />
+					</template>
+				</AppNavigationItem>
+				<AppNavigationItem to="/photos" :title="t('photos', 'Photos')">
+					<template #icon>
+						<Camera />
+					</template>
+				</AppNavigationItem>
+				<AppNavigationItem to="/videos" :title="t('photos', 'Videos')">
+					<template #icon>
+						<VideoIcon />
+					</template>
+				</AppNavigationItem>
+				<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Albums')">
+					<template #icon>
+						<FolderMultipleImage />
+					</template>
+				</AppNavigationItem>
+				<AppNavigationItem :to="{name: 'folders'}" :title="t('photos', 'Folders')">
+					<template #icon>
+						<Folder />
+					</template>
+				</AppNavigationItem>
+				<AppNavigationItem to="/favorites" :title="t('photos', 'Favorites')">
+					<template #icon>
+						<Star />
+					</template>
+				</AppNavigationItem>
+				<AppNavigationItem :to="{name: 'thisday'}" :title="t('photos', 'On this day')">
+					<template #icon>
+						<CalendarToday />
+					</template>
+				</AppNavigationItem>
+				<AppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared with you')">
+					<template #icon>
+						<ShareVariant />
+					</template>
+				</AppNavigationItem>
 				<AppNavigationItem v-if="areTagsInstalled"
 					:to="{name: 'tags'}"
-					:title="t('photos', 'Tagged photos')"
-					icon="icon-tag" />
+					:title="t('photos', 'Tagged photos')">
+					<template #icon>
+						<Tag />
+					</template>
+				</AppNavigationItem>
 				<AppNavigationItem v-if="showLocationMenuEntry"
 					:to="{name: 'maps'}"
-					:title="t('photos', 'Locations')"
-					icon="icon-address" />
+					:title="t('photos', 'Locations')">
+					<template #icon>
+						<MapMarker />
+					</template>
+				</AppNavigationItem>
 			</template>
 			<template #footer>
 				<AppNavigationSettings :title="t('photos', 'Photos settings')">
@@ -49,8 +88,8 @@
 				</AppNavigationSettings>
 			</template>
 		</AppNavigation>
-		<AppContent :class="{ 'icon-loading': loading }">
-			<router-view v-show="!loading" :loading.sync="loading" />
+		<AppContent>
+			<router-view />
 
 			<!-- svg img loading placeholder (linked to the File component) -->
 			<!-- eslint-disable-next-line vue/no-v-html (because it's an SVG file) -->
@@ -68,18 +107,29 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
 import { loadState } from '@nextcloud/initial-state'
 
+import Camera from 'vue-material-design-icons/Camera.vue'
+import ImageIcon from 'vue-material-design-icons/Image.vue'
+import VideoIcon from 'vue-material-design-icons/Video.vue'
+import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
+import Folder from 'vue-material-design-icons/Folder.vue'
+import Star from 'vue-material-design-icons/Star.vue'
+import CalendarToday from 'vue-material-design-icons/CalendarToday.vue'
+import Tag from 'vue-material-design-icons/Tag.vue'
+import MapMarker from 'vue-material-design-icons/MapMarker.vue'
+import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
+
 import Content from '@nextcloud/vue/dist/Components/Content'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import AppNavigationSettings from '@nextcloud/vue/dist/Components/AppNavigationSettings'
 
-import CroppedLayoutSettings from './components/Settings/CroppedLayoutSettings'
+import CroppedLayoutSettings from './components/Settings/CroppedLayoutSettings.vue'
 import svgplaceholder from './assets/file-placeholder.svg'
 import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'
-import isMapsInstalled from './services/IsMapsInstalled'
-import areTagsInstalled from './services/AreTagsInstalled'
+import isMapsInstalled from './services/IsMapsInstalled.js'
+import areTagsInstalled from './services/AreTagsInstalled.js'
 
 export default {
 	name: 'Photos',
@@ -90,10 +140,19 @@ export default {
 		AppNavigation,
 		AppNavigationItem,
 		AppNavigationSettings,
+		ImageIcon,
+		Camera,
+		VideoIcon,
+		FolderMultipleImage,
+		Folder,
+		Star,
+		CalendarToday,
+		Tag,
+		MapMarker,
+		ShareVariant,
 	},
 	data() {
 		return {
-			loading: false,
 			svgplaceholder,
 			imgplaceholder,
 			videoplaceholder,

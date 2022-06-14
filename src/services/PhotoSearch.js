@@ -20,12 +20,11 @@
  *
  */
 
-import { genFileInfo } from '../utils/fileUtils'
+import { genFileInfo } from '../utils/fileUtils.js'
 import { getCurrentUser } from '@nextcloud/auth'
-import { allMimes } from './AllowedMimes'
-import client from './DavClient'
-import { props } from './DavRequest'
-import { sizes } from '../assets/grid-sizes'
+import { allMimes } from './AllowedMimes.js'
+import client from './DavClient.js'
+import { props } from './DavRequest.js'
 import moment from '@nextcloud/moment'
 
 /**
@@ -33,21 +32,23 @@ import moment from '@nextcloud/moment'
  *
  * @param {boolean} [onlyFavorites=false] not used
  * @param {object} [options] used for the cancellable requests
- * @param {number} [options.page=0] which page to start (starts at 0)
- * @param {number} [options.perPage] how many to display per page default is 5 times the max number per line from the grid-sizes config file
+ * @param {number} [options.firstResult=0] Index of the first result that we want (starts at 0)
+ * @param {number} [options.nbResults=200] The number of file to fetch
+ * @param {string[]} [options.mimesType=allMimes] Mime type of the files
  * @param {boolean} [options.full=false] get full data of the files
  * @param {boolean} [options.onThisDay=false] get only items from this day of year
- * @return {Array} the file list
+ * @return {Promise<object[]>} the file list
  */
 export default async function(onlyFavorites = false, options = {}) {
 
 	// default function options
-	options = Object.assign({}, {
-		page: 0, // start at the first page
-		perPage: sizes.max.count * 10, // ten rows of the max width
-		mimesType: allMimes, // all mimes types
+	options = {
+		firstResult: 0,
+		nbResults: 200,
+		mimesType: allMimes,
 		onThisDay: false,
-	}, options)
+		...options,
+	}
 
 	const prefixPath = `/files/${getCurrentUser().uid}`
 
@@ -132,8 +133,8 @@ export default async function(onlyFavorites = false, options = {}) {
 						</d:order>
 					</d:orderby>
 					<d:limit>
-						<d:nresults>${options.perPage}</d:nresults>
-						<ns:firstresult>${options.page * options.perPage}</ns:firstresult>
+						<d:nresults>${options.nbResults}</d:nresults>
+						<ns:firstresult>${options.firstResult}</ns:firstresult>
 					</d:limit>
 				</d:basicsearch>
 			</d:searchrequest>`,
