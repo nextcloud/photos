@@ -123,12 +123,6 @@ export default async function(onlyFavorites = false, options = {}) {
 							</d:or>
 							${eqFavorites}
 							${onThisDay}
-							<d:eq>
-								<d:prop>
-									<oc:owner-id/>
-								</d:prop>
-								<d:literal>${getCurrentUser().uid}</d:literal>
-							</d:eq>
 						</d:and>
 					</d:where>
 					<d:orderby>
