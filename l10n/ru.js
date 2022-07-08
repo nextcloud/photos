@@ -16,6 +16,7 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "Открыть вложенную папке «{name}»",
     "Share this folder" : "Опубликовать эту папку",
     "Back to {folder}" : "Вернуться в {folder}",
+    "_{years} year ago_::_{years} years ago_" : ["{years} год назад","{years} лет назад","{years} лет назад","{years} лет назад"],
     "View" : "Просмотр",
     "Enable squared photos view" : "Включить квадратный просмотр фотографий",
     "This folder does not exist" : "Эта папка не существует",
