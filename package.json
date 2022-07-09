@@ -42,7 +42,7 @@
 		"camelcase": "^6.2.1",
 		"core-js": "^3.8.1",
 		"debounce": "^1.2.0",
-		"moment": "^2.29.3",
+		"moment": "^2.29.4",
 		"path-posix": "^1.0.0",
 		"qs": "^6.9.7",
 		"regenerator-runtime": "^0.13.9",
