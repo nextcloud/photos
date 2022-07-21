@@ -154,7 +154,7 @@ __webpack_require__.r(__webpack_exports__);
       var fileid = _ref.fileid,
           etag = _ref.etag;
       // use etag to force cache reload if file changed
-      return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_0__.generateUrl)("/core/preview?fileId=".concat(fileid, "&c=").concat(etag, "&x=", 250, "&y=", 250, "&forceIcon=0&a=1"));
+      return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_0__.generateUrl)("/core/preview?fileId=".concat(fileid, "&c=").concat(etag, "&x=", 250, "&y=", 250, "&forceIcon=0&a=0"));
     },
     onPreviewFail: function onPreviewFail(_ref2) {
       var fileid = _ref2.fileid;
@@ -412,4 +412,4 @@ render._withStripped = true
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_components_FolderTagPreview_vue.js.map?v=777e3d24e04f73d45f66
+//# sourceMappingURL=photos-src_components_FolderTagPreview_vue.js.map?v=64a263008881f73e7d4e
