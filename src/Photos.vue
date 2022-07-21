@@ -44,7 +44,7 @@
 					icon="icon-address" />
 			</template>
 			<template #footer>
-				<AppNavigationSettings :title="t('photos', 'Settings')">
+				<AppNavigationSettings :title="t('photos', 'Photos settings')">
 					<CroppedLayoutSettings />
 				</AppNavigationSettings>
 			</template>
