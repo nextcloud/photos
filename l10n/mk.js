@@ -10,7 +10,6 @@ OC.L10N.register(
     "Shared with you" : "Споделено со вас",
     "Tagged photos" : "Означени фотографии",
     "Locations" : "Локации",
-    "Settings" : "Параметри",
     "Open the full size \"{name}\" image" : "Отвори ја сликата \"{name}\" во целосна големина",
     "Open the \"{name}\" sub-directory" : "Отвори го поддиректориумот \"{name}\"",
     "Share this folder" : "Сподели ја оваа папка",
@@ -21,6 +20,7 @@ OC.L10N.register(
     "An error occurred" : "Настана грешка",
     "No photos in here" : "Овде нема фотографии",
     "No tags yet" : "Сеуште нема ознаки",
-    "Photos with tags will show up here" : "Фотографиите со ознаки ќе се појават овде"
+    "Photos with tags will show up here" : "Фотографиите со ознаки ќе се појават овде",
+    "Settings" : "Параметри"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

@@ -10,7 +10,6 @@ OC.L10N.register(
     "Shared with you" : "Met je gedeeld",
     "Tagged photos" : "Gelabelde foto's",
     "Locations" : "Locaties",
-    "Settings" : "Instellingen",
     "Open the full size \"{name}\" image" : "Open het \"{name}\" beeld in originele grootte",
     "Open the \"{name}\" sub-directory" : "Open de \"{name}\" map",
     "Share this folder" : "Deze map delen",
@@ -21,6 +20,7 @@ OC.L10N.register(
     "An error occurred" : "Er heeft een fout opgetreden",
     "No photos in here" : "Geen foto's hier",
     "No tags yet" : "Nog geen labels",
-    "Photos with tags will show up here" : "Gelabelde foto's worden hier getoond"
+    "Photos with tags will show up here" : "Gelabelde foto's worden hier getoond",
+    "Settings" : "Instellingen"
 },
 "nplurals=2; plural=(n != 1);");

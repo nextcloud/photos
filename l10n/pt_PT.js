@@ -10,7 +10,6 @@ OC.L10N.register(
     "Shared with you" : "Partilhado consigo",
     "Tagged photos" : "Fotos marcadas",
     "Locations" : "Localizações",
-    "Settings" : "Configurações",
     "Open the full size \"{name}\" image" : "Abrir a foto \"{name}\" no tamanho original",
     "Open the \"{name}\" sub-directory" : "Abrir a sub-diretoria \"{name}\"",
     "Share this folder" : "Partilhar esta pasta",
@@ -20,6 +19,7 @@ OC.L10N.register(
     "An error occurred" : "Ocorreu um erro",
     "No photos in here" : "Aqui não existem fotos ",
     "No tags yet" : "Ainda sem marcações",
-    "Photos with tags will show up here" : "Fotos com marcações serão mostradas aqui"
+    "Photos with tags will show up here" : "Fotos com marcações serão mostradas aqui",
+    "Settings" : "Configurações"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

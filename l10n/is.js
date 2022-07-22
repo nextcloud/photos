@@ -10,7 +10,6 @@ OC.L10N.register(
     "Shared with you" : "Deilt með þér",
     "Tagged photos" : "Merktar ljósmyndir",
     "Locations" : "Staðsetningar",
-    "Settings" : "Stillingar",
     "Open the full size \"{name}\" image" : "Opna myndina \"{name}\" í fullri stærð",
     "Open the \"{name}\" sub-directory" : "Opna \"{name}\" undirmöppuna",
     "Share this folder" : "Deila þessari möppu",
@@ -20,6 +19,7 @@ OC.L10N.register(
     "An error occurred" : "Villa kom upp",
     "No photos in here" : "Engar myndir hér",
     "No tags yet" : "Engin merki ennþá",
-    "Photos with tags will show up here" : "Ljósmyndir með merkjum munu birtast hér"
+    "Photos with tags will show up here" : "Ljósmyndir með merkjum munu birtast hér",
+    "Settings" : "Stillingar"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");
