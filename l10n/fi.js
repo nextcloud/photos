@@ -11,7 +11,6 @@ OC.L10N.register(
     "Shared with you" : "Jaettu kanssasi",
     "Tagged photos" : "Tunnisteilla varustetut kuvat",
     "Locations" : "Sijainnit",
-    "Settings" : "Asetukset",
     "Open the full size \"{name}\" image" : "Avaa kuva \"{name}\" todellisessa koossa",
     "Open the \"{name}\" sub-directory" : "Avaa \"{name}\"-alikansio",
     "Share this folder" : "Jaa tämä kansio",
@@ -23,6 +22,7 @@ OC.L10N.register(
     "An error occurred" : "Tapahtui virhe",
     "No photos in here" : "Ei kuvia täällä",
     "No tags yet" : "Ei vielä tunnisteita",
-    "Photos with tags will show up here" : "Tunnisteilla varustetut kuvat näkyvät täällä"
+    "Photos with tags will show up here" : "Tunnisteilla varustetut kuvat näkyvät täällä",
+    "Settings" : "Asetukset"
 },
 "nplurals=2; plural=(n != 1);");

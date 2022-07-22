@@ -5,8 +5,8 @@ OC.L10N.register(
     "Favorites" : "즐겨찾기",
     "Shared with you" : "나와 공유됨",
     "Locations" : "위치",
-    "Settings" : "설정",
     "View" : "보기",
-    "An error occurred" : "오류가 발생함"
+    "An error occurred" : "오류가 발생함",
+    "Settings" : "설정"
 },
 "nplurals=1; plural=0;");

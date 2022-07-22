@@ -10,7 +10,6 @@ OC.L10N.register(
     "Shared with you" : "V souporabi z vami",
     "Tagged photos" : "Označene fotografije",
     "Locations" : "Mesta",
-    "Settings" : "Nastavitve",
     "Open the full size \"{name}\" image" : "Odpri sliko »{name}« v polni velikosti",
     "Open the \"{name}\" sub-directory" : "Odpri podmapo »{name}«",
     "Share this folder" : "Omogoči souporabo mape",
@@ -21,6 +20,7 @@ OC.L10N.register(
     "An error occurred" : "Prišlo je do napake.",
     "No photos in here" : "Na tem mestu še ni fotografij",
     "No tags yet" : "Ni še dodane nobene oznake",
-    "Photos with tags will show up here" : "Na tem mestu bodo prikazane fotografije z oznakami."
+    "Photos with tags will show up here" : "Na tem mestu bodo prikazane fotografije z oznakami.",
+    "Settings" : "Nastavitve"
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");

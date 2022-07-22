@@ -8,7 +8,6 @@ OC.L10N.register(
     "Shared with you" : "با شما به اشتراک گذاشته شده است",
     "Tagged photos" : "عکسهای برچسب خورده",
     "Locations" : "مکانها",
-    "Settings" : "تنظیمات",
     "Open the full size \"{name}\" image" : "اندازه کامل \"{نام}\" باز کردن تصویر",
     "Open the \"{name}\" sub-directory" : "باز کردن \"{نام}\" زیر مسیر",
     "Share this folder" : "این پوشه را به اشتراک بگذار",
@@ -16,6 +15,7 @@ OC.L10N.register(
     "An error occurred" : "خطایی روی داد",
     "No photos in here" : "هیچ عکسی در اینجا نیست",
     "No tags yet" : "هنوز برچسپی وجود ندارد",
-    "Photos with tags will show up here" : "عکس های دارای برچسب در اینجا نشان داده می شوند"
+    "Photos with tags will show up here" : "عکس های دارای برچسب در اینجا نشان داده می شوند",
+    "Settings" : "تنظیمات"
 },
 "nplurals=2; plural=(n > 1);");

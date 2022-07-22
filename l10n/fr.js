@@ -11,7 +11,6 @@ OC.L10N.register(
     "Shared with you" : "Partagé avec vous",
     "Tagged photos" : "Photos étiquetées ",
     "Locations" : "Lieux",
-    "Settings" : "Paramètres",
     "Open the full size \"{name}\" image" : "Ouvrir l'image \"{name}\" dans sa taille originale",
     "Open the \"{name}\" sub-directory" : "Ouvrir le sous-dossier \"{name}\"",
     "Share this folder" : "Partager ce dossier",
@@ -23,6 +22,7 @@ OC.L10N.register(
     "An error occurred" : "Une erreur est survenue",
     "No photos in here" : "Aucune photo",
     "No tags yet" : "Aucune étiquette pour le moment",
-    "Photos with tags will show up here" : "Les photos étiquetées apparaîtront ici"
+    "Photos with tags will show up here" : "Les photos étiquetées apparaîtront ici",
+    "Settings" : "Paramètres"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

@@ -4,7 +4,7 @@ OC.L10N.register(
     "Photos" : "Foto",
     "Favorites" : "Disukai",
     "Shared with you" : "Shared with you",
-    "Settings" : "Setelan",
-    "An error occurred" : "Terjadi kesalahan"
+    "An error occurred" : "Terjadi kesalahan",
+    "Settings" : "Setelan"
 },
 "nplurals=1; plural=0;");

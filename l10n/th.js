@@ -9,7 +9,6 @@ OC.L10N.register(
     "Shared with you" : "แชร์กับคุณ",
     "Tagged photos" : "รูปภาพที่ติดแท็ก",
     "Locations" : "สถานที่",
-    "Settings" : "การตั้งค่า",
     "Open the full size \"{name}\" image" : "เปิดรูปภาพขนาดเต็ม \"{name}\"",
     "Open the \"{name}\" sub-directory" : "เปิดไดเรกทอรีรอง \"{name}\"",
     "Share this folder" : "แชร์โฟลเดอร์นี้",
@@ -20,6 +19,7 @@ OC.L10N.register(
     "An error occurred" : "เกิดข้อผิดพลาด",
     "No photos in here" : "ไม่มีรูปภาพที่นี่",
     "No tags yet" : "ยังไม่มีแท็ก",
-    "Photos with tags will show up here" : "รูปภาพที่ติดแท็กจะแสดงที่นี่"
+    "Photos with tags will show up here" : "รูปภาพที่ติดแท็กจะแสดงที่นี่",
+    "Settings" : "การตั้งค่า"
 },
 "nplurals=1; plural=0;");
