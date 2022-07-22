@@ -11,7 +11,6 @@ OC.L10N.register(
     "Shared with you" : "已与您共享",
     "Tagged photos" : "标记的照片",
     "Locations" : "地点",
-    "Settings" : "设置",
     "Open the full size \"{name}\" image" : "打开图片 “{name}” 的完整尺寸",
     "Open the \"{name}\" sub-directory" : "打开 “{name}” 的子目录",
     "Share this folder" : "共享此文件夹",
@@ -23,6 +22,7 @@ OC.L10N.register(
     "An error occurred" : "发生错误",
     "No photos in here" : "这里没有照片",
     "No tags yet" : "尚无标签",
-    "Photos with tags will show up here" : "带标签的照片将显示在此处"
+    "Photos with tags will show up here" : "带标签的照片将显示在此处",
+    "Settings" : "设置"
 },
 "nplurals=1; plural=0;");

@@ -11,7 +11,6 @@ OC.L10N.register(
     "Shared with you" : "與您分享",
     "Tagged photos" : "有標籤的照片",
     "Locations" : "地點",
-    "Settings" : "設定",
     "Open the full size \"{name}\" image" : "開啟「{name}」的原始尺寸影像",
     "Open the \"{name}\" sub-directory" : "開啟「{name}」子目錄",
     "Share this folder" : "分享這個資料夾",
@@ -23,6 +22,7 @@ OC.L10N.register(
     "An error occurred" : "發生錯誤",
     "No photos in here" : "無照片檔案",
     "No tags yet" : "尚未加入標籤",
-    "Photos with tags will show up here" : "此處會顯示照片的標籤"
+    "Photos with tags will show up here" : "此處會顯示照片的標籤",
+    "Settings" : "設定"
 },
 "nplurals=1; plural=0;");

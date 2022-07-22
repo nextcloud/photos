@@ -11,7 +11,6 @@ OC.L10N.register(
     "Shared with you" : "Shared with you",
     "Tagged photos" : "Markerede billeder",
     "Locations" : "Sted",
-    "Settings" : "Indstillinger",
     "Open the full size \"{name}\" image" : "Åbn billedet \"{name}\" i fuld størrelse",
     "Open the \"{name}\" sub-directory" : "Åbn \"{name}\" under direktoriet",
     "Share this folder" : "Del denne mappe",
@@ -23,6 +22,7 @@ OC.L10N.register(
     "An error occurred" : "Der var en fejl",
     "No photos in here" : "Ingen billeder her",
     "No tags yet" : "Ingen tags endnu",
-    "Photos with tags will show up here" : "Billeder med tags vil vise sig her"
+    "Photos with tags will show up here" : "Billeder med tags vil vise sig her",
+    "Settings" : "Indstillinger"
 },
 "nplurals=2; plural=(n != 1);");

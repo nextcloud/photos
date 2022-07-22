@@ -10,7 +10,6 @@ OC.L10N.register(
     "Shared with you" : "Đã chia sẻ với bạn",
     "Tagged photos" : "Ảnh gắn nhãn",
     "Locations" : "Các địa điểm",
-    "Settings" : "Cài đặt",
     "Open the full size \"{name}\" image" : "Mở kích thước đủ của ảnh \"{name}\"",
     "Open the \"{name}\" sub-directory" : "Mở thư mục phụ của \"{name}\" ",
     "Share this folder" : "Chia sẻ thư mục này",
@@ -21,6 +20,7 @@ OC.L10N.register(
     "An error occurred" : "Có lỗi đã xảy ra",
     "No photos in here" : "Không có ảnh nào trong này",
     "No tags yet" : "Chưa gắn nhãn",
-    "Photos with tags will show up here" : "Ảnh đã gắn nhãn sẽ được cho thấy trên này"
+    "Photos with tags will show up here" : "Ảnh đã gắn nhãn sẽ được cho thấy trên này",
+    "Settings" : "Cài đặt"
 },
 "nplurals=1; plural=0;");

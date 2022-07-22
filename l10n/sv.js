@@ -11,7 +11,6 @@ OC.L10N.register(
     "Shared with you" : "Delad med dig",
     "Tagged photos" : "Taggade bilder",
     "Locations" : "Platser",
-    "Settings" : "Inställningar",
     "Open the full size \"{name}\" image" : "Öppna bilden \"{name}\" i full storlek",
     "Open the \"{name}\" sub-directory" : "Öppna undermappen \"{name}\"",
     "Share this folder" : "Dela denna mapp",
@@ -22,6 +21,7 @@ OC.L10N.register(
     "An error occurred" : "Ett fel uppstod",
     "No photos in here" : "Det finns inga bilder här",
     "No tags yet" : "Inga taggar än",
-    "Photos with tags will show up here" : "Bilder med taggar visas här"
+    "Photos with tags will show up here" : "Bilder med taggar visas här",
+    "Settings" : "Inställningar"
 },
 "nplurals=2; plural=(n != 1);");

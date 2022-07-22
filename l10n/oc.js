@@ -10,7 +10,6 @@ OC.L10N.register(
     "Shared with you" : "Shared with you",
     "Tagged photos" : "Fòtos etiquetadas",
     "Locations" : "Emplaçaments",
-    "Settings" : "Paramètres",
     "Open the full size \"{name}\" image" : "Dobrir l’imatge {name} en talha originala",
     "Open the \"{name}\" sub-directory" : "Dobrir lo jos-dossièr « {name} »",
     "Share this folder" : "Partejar aqueste dossièr",
@@ -21,6 +20,7 @@ OC.L10N.register(
     "An error occurred" : "Una error s’es producha",
     "No photos in here" : "Cap de fòto aquí",
     "No tags yet" : "Cap d’etiqueta pel moment",
-    "Photos with tags will show up here" : "Las fòtos amb etiquetas apreissaràn aquí"
+    "Photos with tags will show up here" : "Las fòtos amb etiquetas apreissaràn aquí",
+    "Settings" : "Paramètres"
 },
 "nplurals=2; plural=(n > 1);");
