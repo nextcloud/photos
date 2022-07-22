@@ -10,7 +10,6 @@ OC.L10N.register(
     "Shared with you" : "Cumpartzidu cun tegus",
     "Tagged photos" : "Fotografias etichetadas",
     "Locations" : "Positziones",
-    "Settings" : "Impostatziones",
     "Open the full size \"{name}\" image" : "Aberi s'imàgine \"{name}\" a mannària prena",
     "Open the \"{name}\" sub-directory" : "Aberi sa sub-cartella \"{name}\"",
     "Share this folder" : "Cumpartzi custa cartella",
@@ -21,6 +20,7 @@ OC.L10N.register(
     "An error occurred" : "B'at àpidu un'errore",
     "No photos in here" : "Peruna fotografia inoghe",
     "No tags yet" : "Ancora peruna eticheta",
-    "Photos with tags will show up here" : "Is fotografias etichetadas ant a aparèssere inoghe"
+    "Photos with tags will show up here" : "Is fotografias etichetadas ant a aparèssere inoghe",
+    "Settings" : "Impostatziones"
 },
 "nplurals=2; plural=(n != 1);");

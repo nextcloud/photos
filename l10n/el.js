@@ -11,7 +11,6 @@ OC.L10N.register(
     "Shared with you" : "Διαμοιρασμένα μαζί σας",
     "Tagged photos" : "Φωτογραφίες με ετικέτα",
     "Locations" : "Τοποθεσίες",
-    "Settings" : "Ρυθμίσεις",
     "Open the full size \"{name}\" image" : "Άνοιγμα εικόνας «{name}» σε πλήρη μέγεθος",
     "Open the \"{name}\" sub-directory" : "Άνοιγμα υπό-κατάλογου του «{name}»",
     "Share this folder" : "Διαμοιρασμός αυτού του φακέλου",
@@ -23,6 +22,7 @@ OC.L10N.register(
     "An error occurred" : "Παρουσιάστηκε σφάλμα",
     "No photos in here" : "Δεν υπάρχουν φωτογραφίες εδώ",
     "No tags yet" : "Χωρίς ετικέτες ακόμη",
-    "Photos with tags will show up here" : "Φωτογραφίες με ετικέτες εμφανίζονται εδώ πάνω"
+    "Photos with tags will show up here" : "Φωτογραφίες με ετικέτες εμφανίζονται εδώ πάνω",
+    "Settings" : "Ρυθμίσεις"
 },
 "nplurals=2; plural=(n != 1);");

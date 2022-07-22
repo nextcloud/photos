@@ -11,7 +11,6 @@ OC.L10N.register(
     "Shared with you" : "Megosztva Önnel",
     "Tagged photos" : "Címkézett fényképek",
     "Locations" : "Helyek",
-    "Settings" : "Beállítások",
     "Open the full size \"{name}\" image" : "A teljes méretű „{name}” fénykép megnyitása",
     "Open the \"{name}\" sub-directory" : "A(z) „name” alkönyvtár megnyitása",
     "Share this folder" : "Mappa megosztása",
@@ -23,6 +22,7 @@ OC.L10N.register(
     "An error occurred" : "Hiba történt",
     "No photos in here" : "Itt nincsenek fényképek",
     "No tags yet" : "Még nincsenek címkék",
-    "Photos with tags will show up here" : "A címkével rendelkező fényképek itt fognak megjelenni"
+    "Photos with tags will show up here" : "A címkével rendelkező fényképek itt fognak megjelenni",
+    "Settings" : "Beállítások"
 },
 "nplurals=2; plural=(n != 1);");

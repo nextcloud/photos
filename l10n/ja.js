@@ -11,7 +11,6 @@ OC.L10N.register(
     "Shared with you" : "共有中",
     "Tagged photos" : "タグ付けされた写真",
     "Locations" : "場所",
-    "Settings" : "設定",
     "Open the full size \"{name}\" image" : "画像 \"{name}\" をフルサイズで開く",
     "Open the \"{name}\" sub-directory" : "サブディレクトリ \"{name}\" を開く",
     "Share this folder" : "このフォルダーを共有する",
@@ -23,6 +22,7 @@ OC.L10N.register(
     "An error occurred" : "エラーが発生しました",
     "No photos in here" : "写真がありません",
     "No tags yet" : "まだタグがありません",
-    "Photos with tags will show up here" : "タグ付けされた写真がここに表示されます"
+    "Photos with tags will show up here" : "タグ付けされた写真がここに表示されます",
+    "Settings" : "設定"
 },
 "nplurals=1; plural=0;");

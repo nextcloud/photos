@@ -11,7 +11,6 @@ OC.L10N.register(
     "Shared with you" : "Sizinle paylaşıldı",
     "Tagged photos" : "Etiketlenmiş fotoğraflar",
     "Locations" : "Konumlar",
-    "Settings" : "Ayarlar",
     "Open the full size \"{name}\" image" : "\"{name}\" fotoğrafını tam boyutunda aç",
     "Open the \"{name}\" sub-directory" : "\"{name}\" alt klasörünü aç",
     "Share this folder" : "Bu klasörü paylaş",
@@ -23,6 +22,7 @@ OC.L10N.register(
     "An error occurred" : "Bir sorun çıktı",
     "No photos in here" : "Burada herhangi bir fotoğraf yok",
     "No tags yet" : "Henüz bir etiket yok",
-    "Photos with tags will show up here" : "Etiketlenmiş fotoğraflar burada görüntülenir"
+    "Photos with tags will show up here" : "Etiketlenmiş fotoğraflar burada görüntülenir",
+    "Settings" : "Ayarlar"
 },
 "nplurals=2; plural=(n > 1);");

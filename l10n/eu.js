@@ -11,7 +11,6 @@ OC.L10N.register(
     "Shared with you" : "Zurekin partekatua",
     "Tagged photos" : "Etiketaturiko argazkiak",
     "Locations" : "Kokapenak",
-    "Settings" : "Ezarpenak",
     "Open the full size \"{name}\" image" : "Ireki \"{name}\" neurri handian",
     "Open the \"{name}\" sub-directory" : "Ireki \"{name}\" azpi-direktorioa",
     "Share this folder" : "Partekatu karpeta hau",
@@ -23,6 +22,7 @@ OC.L10N.register(
     "An error occurred" : "Akats bat gertatu da",
     "No photos in here" : "Argazkirik ez hemen",
     "No tags yet" : "Etitketarik ez oraindik",
-    "Photos with tags will show up here" : "Etiketadun argazkiak hemen erakutsiko dira"
+    "Photos with tags will show up here" : "Etiketadun argazkiak hemen erakutsiko dira",
+    "Settings" : "Ezarpenak"
 },
 "nplurals=2; plural=(n != 1);");

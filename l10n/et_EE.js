@@ -8,7 +8,6 @@ OC.L10N.register(
     "Shared with you" : "Sinuga jagatud",
     "Tagged photos" : "Sildistatud fotod",
     "Locations" : "Asukohad",
-    "Settings" : "Seaded",
     "Open the full size \"{name}\" image" : "Ava \"{name}\" täissuuruses",
     "Open the \"{name}\" sub-directory" : "Ava alamkataloog \"{name}\"",
     "Share this folder" : "Jaga seda kausta",
@@ -16,6 +15,7 @@ OC.L10N.register(
     "An error occurred" : "Tekkis tõrge",
     "No photos in here" : "Siin ei ole fotosid",
     "No tags yet" : "Silte veel pole",
-    "Photos with tags will show up here" : "Sildistatud fotod on siin näha"
+    "Photos with tags will show up here" : "Sildistatud fotod on siin näha",
+    "Settings" : "Seaded"
 },
 "nplurals=2; plural=(n != 1);");

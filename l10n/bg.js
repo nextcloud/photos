@@ -11,7 +11,6 @@ OC.L10N.register(
     "Shared with you" : "Споделени с вас",
     "Tagged photos" : "Маркирани снимки",
     "Locations" : "Местоположения",
-    "Settings" : "Настройки",
     "Open the full size \"{name}\" image" : "Отваряне на изображението\"{name}“  в пълен размер ",
     "Open the \"{name}\" sub-directory" : "Отваряне на \"{name}“  поддиректория ",
     "Share this folder" : "Споделяане на тази папка",
@@ -23,6 +22,7 @@ OC.L10N.register(
     "An error occurred" : "Възникна грешка",
     "No photos in here" : "Тук няма снимки",
     "No tags yet" : "Все още няма етикети",
-    "Photos with tags will show up here" : " Снимки с етикети ще се покажат тук"
+    "Photos with tags will show up here" : " Снимки с етикети ще се покажат тук",
+    "Settings" : "Настройки"
 },
 "nplurals=2; plural=(n != 1);");

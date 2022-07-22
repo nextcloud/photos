@@ -4,7 +4,7 @@ OC.L10N.register(
     "Photos" : "Foto",
     "Favorites" : "Favorites",
     "Shared with you" : "E ndarë me ju",
-    "Settings" : "Rregullimet",
-    "View" : "Shiko"
+    "View" : "Shiko",
+    "Settings" : "Rregullimet"
 },
 "nplurals=2; plural=(n != 1);");
