@@ -11,6 +11,7 @@ OC.L10N.register(
     "Shared with you" : "Bendrinama su jumis",
     "Tagged photos" : "Pažymėtos nuotraukos",
     "Locations" : "Vietos",
+    "Photos settings" : "Nuotraukų nustatymai",
     "Open the full size \"{name}\" image" : "Atverti viso dydžio „{name}“ paveikslą",
     "Open the \"{name}\" sub-directory" : "Atverti „{name}“ pakatalogį",
     "Share this folder" : "Bendrinti šį aplanką",

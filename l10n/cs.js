@@ -11,6 +11,7 @@ OC.L10N.register(
     "Shared with you" : "Sdíleno s vámi",
     "Tagged photos" : "Oštítkované fotky",
     "Locations" : "Umístění",
+    "Photos settings" : "Nastavení pro Fotky",
     "Open the full size \"{name}\" image" : "Otevřít obrázek „{name}“ v plné velikosti",
     "Open the \"{name}\" sub-directory" : "Otevřít podsložku „{name}“",
     "Share this folder" : "Sdílet tuto složku",
