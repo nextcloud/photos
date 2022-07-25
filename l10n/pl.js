@@ -11,6 +11,7 @@ OC.L10N.register(
     "Shared with you" : "Udostępnione Tobie",
     "Tagged photos" : "Oznaczone zdjęcia",
     "Locations" : "Lokalizacje",
+    "Photos settings" : "Ustawienia Zdjęć",
     "Open the full size \"{name}\" image" : "Otwórz obraz \"{name}\" w pełnym rozmiarze",
     "Open the \"{name}\" sub-directory" : "Otwórz podkatalog \"{name}\"",
     "Share this folder" : "Udostępnij ten katalog",
