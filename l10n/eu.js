@@ -11,6 +11,7 @@ OC.L10N.register(
     "Shared with you" : "Zurekin partekatua",
     "Tagged photos" : "Etiketaturiko argazkiak",
     "Locations" : "Kokapenak",
+    "Photos settings" : "Argazkien ezarpenak",
     "Open the full size \"{name}\" image" : "Ireki \"{name}\" neurri handian",
     "Open the \"{name}\" sub-directory" : "Ireki \"{name}\" azpi-direktorioa",
     "Share this folder" : "Partekatu karpeta hau",
