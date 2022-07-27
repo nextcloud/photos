@@ -26,7 +26,6 @@ namespace OCA\Photos\Sabre;
 use OCA\Photos\Album\AlbumMapper;
 use OCP\Files\IRootFolder;
 use OCP\IUserSession;
-use Sabre\DAV\INode;
 use Sabre\DAVACL\AbstractPrincipalCollection;
 use Sabre\DAVACL\PrincipalBackend;
 
@@ -56,7 +55,6 @@ class RootCollection extends AbstractPrincipalCollection {
 	 * supplied by the authentication backend.
 	 *
 	 * @param array $principalInfo
-	 * @return INode
 	 */
 	public function getChildForPrincipal(array $principalInfo): PhotosHome {
 		[, $name] = \Sabre\Uri\split($principalInfo['uri']);

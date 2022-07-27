@@ -28,70 +28,66 @@
 			:aria-label="ariaLabel"
 			@click.prevent="emitClick">
 
-			<div v-if="item.mime.includes('video') && item.hasPreview" class="icon-video-white" />
-
 			<!-- image and loading placeholder -->
-			<div class="images-container">
+			<div class="file__images">
+				<VideoIcon v-if="file.mime.includes('video')" class="video-icon" :size="64" />
+
 				<img v-if="visibility !== 'none' && canLoad && !error"
 					ref="imgNear"
-					:key="`${item.basename}-near`"
+					:key="`${file.basename}-near`"
 					:src="srcNear"
-					:alt="item.basename"
+					:alt="file.basename"
 					:aria-describedby="ariaDescription"
 					@load="onLoad"
 					@error="onError">
 
 				<img v-if="visibility === 'visible' && canLoad && !error"
 					ref="imgVisible"
-					:key="`${item.basename}-visible`"
+					:key="`${file.basename}-visible`"
 					:src="srcVisible"
-					:alt="item.basename"
+					:alt="file.basename"
 					:aria-describedby="ariaDescription"
 					@load="onLoad"
 					@error="onError">
-
-				<div v-if="visibility === 'none' || !loaded || error"
-					:key="`${item.basename}-placeholder`"
-					class="loading-overlay">
-					<svg xmlns="http://www.w3.org/2000/svg"
-						viewBox="0 0 32 32"
-						fill="url(#placeholder__gradient)">
-						<use v-if="isImage" href="#placeholder--img" />
-						<use v-else href="#placeholder--video" />
-					</svg>
-				</div>
 			</div>
 
-			<!-- image name -->
-			<p :id="ariaDescription" class="hidden-visually">{{ item.basename }}</p>
+			<!-- image description -->
+			<p :id="ariaDescription" class="file__hidden-description" :class="{show: error}">{{ file.basename }}</p>
 		</a>
 
 		<CheckboxRadioSwitch v-if="allowSelection"
 			class="selection-checkbox"
 			:checked="selected"
 			@update:checked="onToggle">
-			<span class="input-label">{{ t('photos', 'Select image {imageName}', {imageName: item.basename}) }}</span>
+			<span class="input-label">{{ t('photos', 'Select image {imageName}', {imageName: file.basename}) }}</span>
 		</CheckboxRadioSwitch>
+
+		<Star v-if="file.favorite === 1" class="favorite-state" :aria-label="t('photos', 'The file is in the favorites')" />
 	</div>
 </template>
 
 <script>
+import Star from 'vue-material-design-icons/Star'
+import VideoIcon from 'vue-material-design-icons/Video.vue'
+
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { CheckboxRadioSwitch } from '@nextcloud/vue'
 
 import UserConfig from '../mixins/UserConfig.js'
-import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
+import Semaphore from '../utils/semaphoreWithPriority.js'
 
 export default {
 	name: 'File',
 	components: {
 		CheckboxRadioSwitch,
+		Star,
+		VideoIcon,
 	},
 	mixins: [UserConfig],
 	inheritAttrs: false,
 	props: {
-		item: {
+		file: {
 			type: Object,
 			required: true,
 		},
@@ -108,7 +104,7 @@ export default {
 			required: true,
 		},
 		semaphore: {
-			type: SemaphoreWithPriority,
+			type: Semaphore,
 			required: true,
 		},
 	},
@@ -126,23 +122,23 @@ export default {
 	computed: {
 		/** @return {string} */
 		davPath() {
-			return generateRemoteUrl(`dav/files/${getCurrentUser().uid}`) + this.item.filename
+			return generateRemoteUrl(`dav/files/${getCurrentUser().uid}`) + this.file.filename
 		},
 		/** @return {string} */
 		ariaDescription() {
-			return `image-description-${this.item.fileid}`
+			return `image-description-${this.file.fileid}`
 		},
 		/** @return {string} */
 		ariaLabel() {
-			return t('photos', 'Open the full size "{name}" image', { name: this.item.basename })
+			return t('photos', 'Open the full size "{name}" image', { name: this.file.basename })
 		},
 		/** @return {boolean} */
 		isImage() {
-			return this.item.mime.startsWith('image')
+			return this.file.mime.startsWith('image')
 		},
 		/** @return {string} */
 		decodedEtag() {
-			return this.item.etag.replace('&quot;', '').replace('&quot;', '')
+			return this.file.etag.replace('&quot;', '').replace('&quot;', '')
 		},
 		/** @return {string} */
 		srcVisible() {
@@ -154,27 +150,25 @@ export default {
 		},
 	},
 
-	async mounted() {
+	mounted() {
 		// Don't render the component right away as it is useless if the user is only scrolling
-		await new Promise((resolve) => {
-			setTimeout(async () => { resolve() }, 250)
-		})
+		setTimeout(async () => {
+			this.semaphoreSymbol = await this.semaphore.acquire(() => {
+				switch (this.visibility) {
+				case 'visible':
+					return 1
+				case 'near':
+					return 2
+				default:
+					return 3
+				}
+			}, this.file.fileid)
 
-		this.semaphoreSymbol = await this.semaphore.acquire(() => {
-			switch (this.visibility) {
-			case 'visible':
-				return 1
-			case 'near':
-				return 2
-			default:
-				return 3
+			this.canLoad = true
+			if (this.visibility === 'none' || this.isDestroyed) {
+				this.releaseSemaphore()
 			}
-		}, this.item.fileid)
-
-		this.canLoad = true
-		if (this.visibility === 'none' || this.isDestroyed) {
-			this.releaseSemaphore()
-		}
+		}, 250)
 	},
 
 	beforeDestroy() {
@@ -192,7 +186,7 @@ export default {
 
 	methods: {
 		emitClick() {
-			this.$emit('click', this.item.fileid)
+			this.$emit('click', this.file.fileid)
 		},
 
 		/** When the image is fully loaded by browser we remove the placeholder */
@@ -207,11 +201,11 @@ export default {
 		},
 
 		onToggle(value) {
-			this.$emit('select-toggled', { id: this.item.fileid, value })
+			this.$emit('select-toggled', { id: this.file.fileid, value })
 		},
 
 		getItemURL(size) {
-			return generateUrl(`/core/preview?fileId=${this.item.fileid}&c=${this.decodedEtag}&x=${size}&y=${size}&forceIcon=0&a=1`)
+			return generateUrl(`/core/preview?fileId=${this.file.fileid}&c=${this.decodedEtag}&x=${size}&y=${size}&forceIcon=0&a=1`)
 
 		},
 
@@ -229,11 +223,12 @@ export default {
 
 <style lang="scss" scoped>
 .file-container {
-	background: lightgray;
+	background: var(--color-primary-light);
 	position: relative;
-	border: 2px solid white; // Use border so create a separation between images.
 	height: 100%;
 	width: 100%;
+	border: 2px solid var(--color-main-background); // Use border so create a separation between images.
+	box-sizing: border-box;
 
 	// Selection border.
 	&.selected, &:focus-within {
@@ -251,10 +246,77 @@ export default {
 		}
 	}
 
+	.file {
+		width: 100%;
+		height: 100%;
+		box-sizing: border-box;
+		outline: none; // Override global focus state.
+
+		&__images {
+			display: contents;
+
+			.video-icon {
+				position: absolute;
+				top: 0px;
+				right: 0px;
+				width: 100%;
+				height: 100%;
+				z-index: 1;
+				opacity: 0.8;
+
+				::v-deep .material-design-icon__svg {
+					fill: var(--color-main-background);
+				}
+			}
+
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				position: absolute;
+				color: transparent; /// Hide alt='' text when loading.
+			}
+
+			.loading-overlay {
+				position: absolute;
+				height: 100%;
+				width: 100%;
+				display: flex;
+				align-content: center;
+				align-items: center;
+				justify-content: center;
+
+				svg {
+					width: 70%;
+					height: 70%;
+				}
+			}
+		}
+
+		&__hidden-description {
+			position: absolute;
+			left: -10000px;
+			top: -10000px;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+
+			&.show {
+				position: initial;
+				width: fit-content;
+				height: fit-content;
+			}
+		}
+	}
+
 	// Reveal checkbox on hover.
 	&:hover, &.selected, &:focus-within {
 		.selection-checkbox {
 			display: flex;
+		}
+
+		.favorite-state {
+			display: none;
 		}
 	}
 
@@ -270,7 +332,9 @@ export default {
 		// Make the checkbox background round on hover.
 		::v-deep .checkbox-radio-switch__label {
 			padding: 10px;
+			box-sizing: border-box;
 
+			// Add a background to the checkbox so we do not see the image through it.
 			&::after {
 				content: '';
 				background: var(--color-primary-light);
@@ -294,41 +358,18 @@ export default {
 		}
 	}
 
-	.file {
-		width: 100%;
-		height: 100%;
-		box-sizing: border-box;
+	.favorite-state {
+		position: absolute;
+		top: 2px;
+		// Fancy calculation to render the start in the middle of narrow images.
+		right: min(2px, calc(50% - 7px));
 
-		.images-container {
-			display: contents;
+		::v-deep .material-design-icon__svg {
+			fill: #FC0;
 
-			.icon-video-white {
-				position: absolute;
-				top: 10px;
-				right: 10px;
-				z-index: 20;
-			}
-
-			img {
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
-				position: absolute;
-			}
-
-			.loading-overlay {
-				position: absolute;
-				height: 100%;
-				width: 100%;
-				display: flex;
-				align-content: center;
-				align-items: center;
-				justify-content: center;
-
-				svg {
-					width: 70%;
-					height: 70%;
-				}
+			path {
+				stroke: var(--color-primary-light);
+				stroke-width: 1px;
 			}
 		}
 	}

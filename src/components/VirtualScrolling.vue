@@ -25,6 +25,7 @@
 			class="vs-rows-container"
 			:style="rowsContainerStyle">
 			<slot :rendered-rows="visibleRows" />
+			<slot name="loader" />
 		</div>
 	</div>
 	<div v-else
@@ -32,10 +33,14 @@
 		class="vs-rows-container"
 		:style="rowsContainerStyle">
 		<slot :rendered-rows="visibleRows" />
+		<slot name="loader" />
 	</div>
 </template>
 
 <script>
+import { debounce } from 'debounce'
+
+import logger from '../services/logger.js'
 /**
  * @typedef {object} Row
  * @property {number} height - The height of the row.
@@ -68,23 +73,24 @@ export default {
 
 		renderWindowRatio: {
 			type: Number,
-			default: 6,
+			default: 4,
 		},
-
 		willBeVisibleWindowRatio: {
 			type: Number,
 			default: 4,
 		},
-
 		visibleWindowRatio: {
 			type: Number,
 			// A little bit more than the container's height to include items at its edges.
 			default: 0,
 		},
-
 		bottomBufferRatio: {
 			type: Number,
 			default: 5,
+		},
+		scrollToKey: {
+			type: String,
+			default: '',
 		},
 	},
 
@@ -103,6 +109,8 @@ export default {
 		 * @return {VisibleRow[]}
 		 */
 		visibleRows() {
+			logger.debug('[VirtualScrolling] Computing visible rows', this.rows)
+
 			// Optimisation: get those computed properties once to not go through vue's internal every time we need them.
 			const scrollPosition = this.scrollPosition
 			const containerHeight = this.containerHeight
@@ -114,14 +122,14 @@ export default {
 			const visibleWindow = containerHeight * this.visibleWindowRatio
 
 			let currentRowTopDistanceFromTop = 0
-			let currentBottomTopDistanceFromTop = 0
+			let currentRowBottomDistanceFromTop = 0
 
 			// Compute whether a row should be included in the DOM (shouldRender)
 			// And how visible the row is.
 			return this.rows
 				.reduce((visibleRows, row) => {
-					currentRowTopDistanceFromTop = currentBottomTopDistanceFromTop
-					currentBottomTopDistanceFromTop += row.height
+					currentRowTopDistanceFromTop = currentRowBottomDistanceFromTop
+					currentRowBottomDistanceFromTop += row.height
 
 					if (currentRowTopDistanceFromTop < scrollPosition - shouldRenderedWindow || scrollPosition + containerHeight + shouldRenderedWindow < currentRowTopDistanceFromTop) {
 						return visibleRows
@@ -135,8 +143,7 @@ export default {
 						if (scrollPosition - visibleWindow < currentRowTopDistanceFromTop && currentRowTopDistanceFromTop < scrollPosition + containerHeight + visibleWindow) {
 							visibility = 'visible'
 						}
-
-						if (scrollPosition - visibleWindow < currentBottomTopDistanceFromTop && currentBottomTopDistanceFromTop < scrollPosition + containerHeight + visibleWindow) {
+						if (scrollPosition - visibleWindow < currentRowBottomDistanceFromTop && currentRowBottomDistanceFromTop < scrollPosition + containerHeight + visibleWindow) {
 							visibility = 'visible'
 						}
 					}
@@ -152,14 +159,16 @@ export default {
 		},
 
 		/**
-		 * Total height of all the rows.
+		 * Total height of all the rows + some room for the loader.
 		 *
 		 * @return {number}
 		 */
 		rowsHeight() {
+			const loaderHeight = 200
+
 			return this.rows
 				.map(row => row.height)
-				.reduce((totalHeight, rowHeight) => totalHeight + rowHeight, 0)
+				.reduce((totalHeight, rowHeight) => totalHeight + rowHeight, 0) + loaderHeight
 		},
 
 		/**
@@ -205,6 +214,7 @@ export default {
 		 * @return {HTMLElement}
 		 */
 		container() {
+			logger.debug('[VirtualScrolling] Computing container')
 			if (this.containerElement !== null) {
 				return this.containerElement
 			} else if (this.useWindow) {
@@ -227,6 +237,18 @@ export default {
 			// If the height of added rows is under `bottomBufferRatio`, `isNearBottom` will still be true so we need more content.
 			if (this.isNearBottom) {
 				this.$emit('need-content')
+			}
+		},
+
+		scrollToKey(key) {
+			let currentRowTopDistanceFromTop = 0
+			for (const row of this.rows) {
+				if (row.key === key) {
+					this.$refs.container.scrollTo({ top: currentRowTopDistanceFromTop, behavior: 'smooth' })
+					return
+				}
+
+				currentRowTopDistanceFromTop += row.height
 			}
 		},
 	},
@@ -265,9 +287,14 @@ export default {
 	},
 
 	methods: {
-		updateScrollPosition() {
-			this.scrollPosition = this.container.scrollY
-		},
+		updateScrollPosition: debounce(function() {
+			if (this.useWindow) {
+				this.scrollPosition = this.container.scrollY
+			} else {
+				this.scrollPosition = this.container.scrollTop
+			}
+		}, 200),
+
 		updateContainerSize() {
 			this.containerHeight = window.innerHeight
 		},
@@ -279,5 +306,9 @@ export default {
 .vs-container {
 	overflow-y: scroll;
 	height: 100%;
+}
+
+.vs-rows-container {
+	box-sizing: border-box;
 }
 </style>

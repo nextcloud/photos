@@ -27,6 +27,7 @@ use OC\Metadata\IMetadataManager;
 use OCA\DAV\Connector\Sabre\FilesPlugin;
 use OCA\Photos\Album\AlbumMapper;
 use OCP\IConfig;
+use OCP\IPreview;
 use Sabre\DAV\INode;
 use Sabre\DAV\PropFind;
 use Sabre\DAV\PropPatch;
@@ -36,11 +37,18 @@ use Sabre\DAV\Tree;
 
 class PropFindPlugin extends ServerPlugin {
 	public const FILE_NAME_PROPERTYNAME = '{http://nextcloud.org/ns}file-name';
+	public const REALPATH_PROPERTYNAME = '{http://nextcloud.org/ns}realpath';
+	public const FAVORITE_PROPERTYNAME = '{http://owncloud.org/ns}favorite';
+	public const DATE_RANGE_PROPERTYNAME = '{http://nextcloud.org/ns}dateRange';
 	public const LOCATION_PROPERTYNAME = '{http://nextcloud.org/ns}location';
 	public const LAST_PHOTO_PROPERTYNAME = '{http://nextcloud.org/ns}last-photo';
+	public const NBITEMS_PROPERTYNAME = '{http://nextcloud.org/ns}nbItems';
+
+	public const TAG_FAVORITE = '_$!<Favorite>!$_';
 
 	private IConfig $config;
 	private IMetadataManager $metadataManager;
+	private IPreview $previewManager;
 	private bool $metadataEnabled;
 	private ?Tree $tree;
 	private AlbumMapper $albumMapper;
@@ -48,31 +56,35 @@ class PropFindPlugin extends ServerPlugin {
 	public function __construct(
 		IConfig $config,
 		IMetadataManager $metadataManager,
+		IPreview $previewManager,
 		AlbumMapper $albumMapper
 	) {
 		$this->config = $config;
 		$this->metadataManager = $metadataManager;
+		$this->previewManager = $previewManager;
 		$this->albumMapper = $albumMapper;
 		$this->metadataEnabled = $this->config->getSystemValueBool('enable_file_metadata', true);
 	}
 
-
+	/**
+	 * @return void
+	 */
 	public function initialize(Server $server) {
 		$this->tree = $server->tree;
 		$server->on('propFind', [$this, 'propFind']);
 		$server->on('propPatch', [$this, 'handleUpdateProperties']);
 	}
 
-	public function propFind(PropFind $propFind, INode $node) {
+	public function propFind(PropFind $propFind, INode $node): void {
 		if ($node instanceof AlbumPhoto) {
-			$propFind->handle(self::FILE_NAME_PROPERTYNAME, function () use ($node) {
-				return $node->getFile()->getName();
-			});
-			$propFind->handle(FilesPlugin::INTERNAL_FILEID_PROPERTYNAME, function () use ($node) {
-				return $node->getFile()->getFileId();
-			});
-			$propFind->handle(FilesPlugin::GETETAG_PROPERTYNAME, function () use ($node): string {
-				return $node->getETag();
+			$propFind->handle(FilesPlugin::INTERNAL_FILEID_PROPERTYNAME, fn () => $node->getFile()->getFileId());
+			$propFind->handle(FilesPlugin::GETETAG_PROPERTYNAME,         fn () => $node->getETag());
+			$propFind->handle(self::FILE_NAME_PROPERTYNAME,              fn () => $node->getFile()->getName());
+			$propFind->handle(self::REALPATH_PROPERTYNAME,               fn () => $node->getFileInfo()->getPath());
+			$propFind->handle(self::FAVORITE_PROPERTYNAME,               fn () => $node->isFavorite() ? 1 : 0);
+
+			$propFind->handle(FilesPlugin::HAS_PREVIEW_PROPERTYNAME, function () use ($node) {
+				return json_encode($this->previewManager->isAvailable($node->getFileInfo()));
 			});
 
 			if ($this->metadataEnabled) {
@@ -93,12 +105,10 @@ class PropFindPlugin extends ServerPlugin {
 		}
 
 		if ($node instanceof AlbumRoot) {
-			$propFind->handle(self::LOCATION_PROPERTYNAME, function () use ($node) {
-				return $node->getAlbum()->getAlbum()->getLocation();
-			});
-			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, function () use ($node) {
-				return $node->getAlbum()->getAlbum()->getLastAddedPhoto();
-			});
+			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn () => $node->getAlbum()->getAlbum()->getLastAddedPhoto());
+			$propFind->handle(self::NBITEMS_PROPERTYNAME,    fn () => count($node->getChildren()));
+			$propFind->handle(self::LOCATION_PROPERTYNAME,   fn () => $node->getAlbum()->getAlbum()->getLocation());
+			$propFind->handle(self::DATE_RANGE_PROPERTYNAME, fn () => json_encode($node->getDateRange()));
 
 			// TODO detect dynamically which metadata groups are requested and
 			// preload all of them and not just size
@@ -115,7 +125,7 @@ class PropFindPlugin extends ServerPlugin {
 		}
 	}
 
-	public function handleUpdateProperties($path, PropPatch $propPatch) {
+	public function handleUpdateProperties($path, PropPatch $propPatch): void {
 		$node = $this->tree->getNodeForPath($path);
 		if ($node instanceof AlbumRoot) {
 			$propPatch->handle(self::LOCATION_PROPERTYNAME, function ($location) use ($node) {

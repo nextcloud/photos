@@ -27,8 +27,8 @@ import { translate, translatePlural } from '@nextcloud/l10n'
 import Vue from 'vue'
 
 import Photos from './Photos'
-import router from './router'
-import store from './store'
+import router from './router/index.js'
+import store from './store/index.js'
 
 // CSP config for webpack dynamic chunk loading
 // eslint-disable-next-line

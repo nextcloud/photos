@@ -24,5 +24,4 @@ declare(strict_types=1);
 namespace OCA\Photos\Exception;
 
 class AlreadyInAlbumException extends \Exception {
-
 }

@@ -1,22 +1,21 @@
 <?xml version="1.0"?>
-<psalm
-    errorLevel="4"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="https://getpsalm.org/schema/config"
-    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
-    errorBaseline="tests/psalm-baseline.xml"
->
-    <projectFiles>
-        <directory name="lib" />
-    </projectFiles>
-    <extraFiles>
-        <directory name="vendor/christophwurst/nextcloud" />
-    </extraFiles>
-    	<issueHandlers>
+<psalm errorLevel="4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://getpsalm.org/schema/config" xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd" errorBaseline="tests/psalm-baseline.xml">
+	<projectFiles>
+		<directory name="lib" />
+	</projectFiles>
+	<extraFiles>
+		<directory name="vendor" />
+	</extraFiles>
+	<issueHandlers>
 		<UndefinedClass>
 			<errorLevel type="suppress">
 				<referencedClass name="OC" />
-				<referencedClass name="Doctrine\DBAL\Types\Type"/>
+				<referencedClass name="Doctrine\DBAL\Types\Type" />
+				<referencedClass name="OC\Metadata\IMetadataManager" />
+				<referencedClass name="OC\Metadata\FileMetadata" />
+				<referencedClass name="OCA\DAV\Connector\Sabre\Principal" />
+				<referencedClass name="OCA\DAV\Connector\Sabre\File" />
+				<referencedClass name="OCA\DAV\Connector\Sabre\FilesPlugin" />
 			</errorLevel>
 		</UndefinedClass>
 		<UndefinedDocblockClass>
@@ -26,7 +25,23 @@
 				<referencedClass name="Doctrine\DBAL\Schema\SchemaException" />
 				<referencedClass name="Doctrine\DBAL\Schema\Table" />
 				<referencedClass name="Doctrine\DBAL\Statement" />
+				<referencedClass name="OC\Metadata\IMetadataManager" />
+				<referencedClass name="OC\Metadata\FileMetadata" />
 			</errorLevel>
 		</UndefinedDocblockClass>
+		<MissingDependency>
+			<errorLevel type="suppress">
+				<!-- <file name="OC\Hooks\Emitter" /> -->
+			</errorLevel>
+		</MissingDependency>
+		<UndefinedInterfaceMethod>
+			<errorLevel type="suppress">
+				<!-- <referencedMethod name="/getId/" /> -->
+				<referencedMethod name="/INode::*/" />
+				<referencedMethod name="/Sabre\\DAV\\INode::*/" />
+				<referencedMethod name="/OCA\\DAV\\Connector\\Sabre\\File::*/" />
+				<!-- <referencedMethod name="/\(Sabre\\DAV\\INode\&OCA\\DAV\\Connector\\Sabre\\File\)::getFileInfo/" /> -->
+			</errorLevel>
+		</UndefinedInterfaceMethod>
 	</issueHandlers>
 </psalm>

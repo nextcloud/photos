@@ -52,6 +52,9 @@ class AlbumRoot implements ICollection, ICopyTarget {
 		$this->user = $user;
 	}
 
+	/**
+	 * @return void
+	 */
 	public function delete() {
 		$this->albumMapper->delete($this->album->getAlbum()->getId());
 	}
@@ -60,6 +63,9 @@ class AlbumRoot implements ICollection, ICopyTarget {
 		return basename($this->album->getAlbum()->getTitle());
 	}
 
+	/**
+	 * @return void
+	 */
 	public function setName($name) {
 		$this->albumMapper->rename($this->album->getAlbum()->getId(), $name);
 	}
@@ -68,6 +74,9 @@ class AlbumRoot implements ICollection, ICopyTarget {
 		throw new Forbidden('Not allowed to create files in this folder, copy files into this folder instead');
 	}
 
+	/**
+	 * @return never
+	 */
 	public function createDirectory($name) {
 		throw new Forbidden('Not allowed to create directories in this folder');
 	}
@@ -117,5 +126,36 @@ class AlbumRoot implements ICollection, ICopyTarget {
 
 	public function getAlbum(): AlbumWithFiles {
 		return $this->album;
+	}
+
+	public function getDateRange(): array {
+		$earliestDate = null;
+		$latestDate = null;
+
+		foreach ($this->getChildren() as $child) {
+			$childCreationDate = $child->getFileInfo()->getMtime();
+			if ($childCreationDate < $earliestDate || $earliestDate === null) {
+				$earliestDate = $childCreationDate;
+			}
+
+			if ($childCreationDate > $earliestDate || $latestDate === null) {
+				$latestDate = $childCreationDate;
+			}
+		}
+
+		return ['start' => $earliestDate, 'end' => $latestDate];
+	}
+
+	/**
+	 * @return int|null
+	 */
+	public function getCover() {
+		$children = $this->getChildren();
+
+		if (count($children) > 0) {
+			return $children[0]->getFileId();
+		} else {
+			return null;
+		}
 	}
 }

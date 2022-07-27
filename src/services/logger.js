@@ -1,5 +1,5 @@
 /**
- * @copyright 2019 Louis Chemineau <mlouis@chmn.me>
+ * @copyright 2022 Louis Chemineau <mlouis@chmn.me>
  *
  * @author Louis Chemineau <mlouis@chmn.me>
  *

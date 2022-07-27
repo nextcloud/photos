@@ -33,7 +33,7 @@ class AlbumFile {
 	private int $mtime;
 	private string $etag;
 	private int $added;
-	/** @var array<int, FileMetadata> */
+	/** @var array<string, FileMetadata> */
 	private array $metaData = [];
 
 	public function __construct(
@@ -74,7 +74,7 @@ class AlbumFile {
 		return $this->mtime;
 	}
 
-	public function getEtag() {
+	public function getEtag(): string {
 		return $this->etag;
 	}
 

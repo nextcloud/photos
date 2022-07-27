@@ -25,7 +25,6 @@ namespace OCA\Photos\Migration;
 
 use Closure;
 use Doctrine\DBAL\Types\Types;
-use OC\DB\SchemaWrapper;
 use OCP\DB\ISchemaWrapper;
 use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
@@ -35,7 +34,7 @@ use OCP\Migration\SimpleMigrationStep;
  */
 class Version20000Date20220727125801 extends SimpleMigrationStep {
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
-		/** @var SchemaWrapper $schema */
+		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
 		if (!$schema->hasTable("photos_albums")) {

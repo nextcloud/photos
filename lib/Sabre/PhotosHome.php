@@ -52,6 +52,9 @@ class PhotosHome implements ICollection {
 		$this->userFolder = $rootFolder->getUserFolder($user->getUID());
 	}
 
+	/**
+	 * @return never
+	 */
 	public function delete() {
 		throw new Forbidden();
 	}
@@ -61,6 +64,9 @@ class PhotosHome implements ICollection {
 		return $name;
 	}
 
+	/**
+	 * @return never
+	 */
 	public function setName($name) {
 		throw new Forbidden('Permission denied to rename this folder');
 	}
@@ -69,6 +75,9 @@ class PhotosHome implements ICollection {
 		throw new Forbidden('Not allowed to create files in this folder');
 	}
 
+	/**
+	 * @return never
+	 */
 	public function createDirectory($name) {
 		throw new Forbidden('Permission denied to create folders in this folder');
 	}

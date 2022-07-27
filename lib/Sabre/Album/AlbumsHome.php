@@ -39,6 +39,11 @@ class AlbumsHome implements ICollection {
 	private IRootFolder $rootFolder;
 	private Folder $userFolder;
 
+	/**
+	 * @var AlbumRoot[]
+	 */
+	private ?array $children = null;
+
 	public function __construct(
 		array $principalInfo,
 		AlbumMapper $albumMapper,
@@ -52,6 +57,9 @@ class AlbumsHome implements ICollection {
 		$this->userFolder = $rootFolder->getUserFolder($user->getUID());
 	}
 
+	/**
+	 * @return never
+	 */
 	public function delete() {
 		throw new Forbidden();
 	}
@@ -60,6 +68,9 @@ class AlbumsHome implements ICollection {
 		return 'albums';
 	}
 
+	/**
+	 * @return never
+	 */
 	public function setName($name) {
 		throw new Forbidden('Permission denied to rename this folder');
 	}
@@ -68,6 +79,9 @@ class AlbumsHome implements ICollection {
 		throw new Forbidden('Not allowed to create files in this folder');
 	}
 
+	/**
+	 * @return void
+	 */
 	public function createDirectory($name) {
 		$uid = $this->user->getUID();
 		$this->albumMapper->create($uid, $name);
@@ -87,10 +101,14 @@ class AlbumsHome implements ICollection {
 	 * @return AlbumRoot[]
 	 */
 	public function getChildren(): array {
-		$folders = $this->albumMapper->getForUserWithFiles($this->user->getUID());
-		return array_map(function (AlbumWithFiles $folder) {
-			return new AlbumRoot($this->albumMapper, $folder, $this->rootFolder, $this->userFolder, $this->user);
-		}, $folders);
+		if ($this->children === null) {
+			$folders = $this->albumMapper->getForUserWithFiles($this->user->getUID());
+			$this->children = array_map(function (AlbumWithFiles $folder) {
+				return new AlbumRoot($this->albumMapper, $folder, $this->rootFolder, $this->userFolder, $this->user);
+			}, $folders);
+		}
+
+		return $this->children;
 	}
 
 	public function childExists($name): bool {

@@ -39,6 +39,8 @@ class AlbumPhoto implements IFile {
 	private AlbumFile $file;
 	private Folder $userFolder;
 
+	public const TAG_FAVORITE = '_$!<Favorite>!$_';
+
 	public function __construct(AlbumMapper $albumMapper, AlbumInfo $album, AlbumFile $file, Folder $userFolder) {
 		$this->albumMapper = $albumMapper;
 		$this->album = $album;
@@ -46,6 +48,9 @@ class AlbumPhoto implements IFile {
 		$this->userFolder = $userFolder;
 	}
 
+	/**
+	 * @return void
+	 */
 	public function delete() {
 		$this->albumMapper->removeFile($this->album->getId(), $this->file->getFileId());
 	}
@@ -54,6 +59,9 @@ class AlbumPhoto implements IFile {
 		return $this->file->getFileId() . "-" . $this->file->getName();
 	}
 
+	/**
+	 * @return never
+	 */
 	public function setName($name) {
 		throw new Forbidden('Can\'t rename photos trough the album api');
 	}
@@ -81,6 +89,20 @@ class AlbumPhoto implements IFile {
 		}
 	}
 
+	public function getFileId(): int {
+		return $this->file->getFileId();
+	}
+
+	public function getFileInfo(): Node {
+		$nodes = $this->userFolder->getById($this->file->getFileId());
+		$node = current($nodes);
+		if ($node) {
+			return $node;
+		} else {
+			throw new NotFoundException("Photo not found for user");
+		}
+	}
+
 	public function getContentType() {
 		return $this->file->getMimeType();
 	}
@@ -95,5 +117,17 @@ class AlbumPhoto implements IFile {
 
 	public function getFile(): AlbumFile {
 		return $this->file;
+	}
+
+	public function isFavorite(): bool {
+		$tagManager = \OCP\Server::get(\OCP\ITagManager::class);
+		$tagger = $tagManager->load('files');
+		$tags = $tagger->getTagsForObjects([$this->getFileId()]);
+
+		if ($tags === false || empty($tags)) {
+			return false;
+		}
+
+		return array_search(self::TAG_FAVORITE, current($tags)) !== false;
 	}
 }
