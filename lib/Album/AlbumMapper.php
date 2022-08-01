@@ -106,7 +106,7 @@ class AlbumMapper {
 	 */
 	public function getForUserWithFiles(string $userId): array {
 		$query = $this->connection->getQueryBuilder();
-		$query->select("fileid", "mimetype", "a.album_id")
+		$query->select("fileid", "mimetype", "a.album_id", "size", "mtime", "etag")
 			->selectAlias("f.name", "file_name")
 			->selectAlias("a.name", "album_name")
 			->from("photos_albums", "a")
@@ -122,7 +122,7 @@ class AlbumMapper {
 			if ($row['fileid']) {
 				$mimeId = $row['mimetype'];
 				$mimeType = $this->mimeTypeLoader->getMimetypeById($mimeId);
-				$filesByAlbum[$albumId][] = new AlbumFile($row['fileid'], $row['file_name'], $mimeType);
+				$filesByAlbum[$albumId][] = new AlbumFile($row['fileid'], $row['file_name'], $mimeType, $row['size'], $row['mtime'], $row['etag']);
 			}
 
 			if (!isset($albumsById[$albumId])) {

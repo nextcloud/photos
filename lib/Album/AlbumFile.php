@@ -27,11 +27,24 @@ class AlbumFile {
 	private int $fileId;
 	private string $name;
 	private string $mimeType;
+	private int $size;
+	private int $mtime;
+	private string $etag;
 
-	public function __construct(int $fileId, string $name, string $mimeType) {
+	public function __construct(
+		int $fileId,
+		string $name,
+		string $mimeType,
+		int $size,
+		int $mtime,
+		string $etag
+	) {
 		$this->fileId = $fileId;
 		$this->name = $name;
 		$this->mimeType = $mimeType;
+		$this->size = $size;
+		$this->mtime = $mtime;
+		$this->etag = $etag;
 	}
 
 	public function getFileId(): int {
@@ -44,5 +57,17 @@ class AlbumFile {
 
 	public function getMimeType(): string {
 		return $this->mimeType;
+	}
+
+	public function getSize(): int {
+		return $this->size;
+	}
+
+	public function getMTime(): int {
+		return $this->mtime;
+	}
+
+	public function getEtag() {
+		return $this->etag;
 	}
 }
