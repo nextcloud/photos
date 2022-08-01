@@ -10,6 +10,9 @@
 	<author mail="skjnldsv@protonmail.com">John Molakvoæ</author>
     <namespace>Photos</namespace>
     <category>multimedia</category>
+	<types>
+		<dav/>
+	</types>
 
 	<website>https://github.com/nextcloud/photos</website>
 	<bugs>https://github.com/nextcloud/photos/issues</bugs>
@@ -25,4 +28,10 @@
             <order>1</order>
         </navigation>
     </navigations>
+
+	<sabre>
+		<collections>
+			<collection>OCA\Photos\Sabre\RootCollection</collection>
+		</collections>
+	</sabre>
 </info>
