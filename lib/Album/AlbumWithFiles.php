@@ -27,7 +27,7 @@ use OC\Files\Cache\CacheEntry;
 
 class AlbumWithFiles {
 	private AlbumInfo $info;
-	/** @var CacheEntry[] */
+	/** @var AlbumFile[] */
 	private array $files;
 
 	public function __construct(AlbumInfo $info, array $files) {
@@ -40,9 +40,18 @@ class AlbumWithFiles {
 	}
 
 	/**
-	 * @return CacheEntry[]
+	 * @return AlbumFile[]
 	 */
 	public function getFiles(): array {
 		return $this->files;
+	}
+
+	/**
+	 * @return int[]
+	 */
+	public function getFileIds(): array {
+		return array_map(function(AlbumFile $file) {
+			return $file->getFileId();
+		}, $this->files);
 	}
 }

@@ -176,8 +176,8 @@ class AlbumMapperTest extends TestCase {
 			return $a->getFileId() <=> $b->getFileId();
 		});
 		$this->assertCount(2, $files);
-		$this->assertEquals(new AlbumFile($fileId1, "file1", "text/plain"), $albumsWithFiles[0]->getFiles()[0]);
-		$this->assertEquals(new AlbumFile($fileId2, "file2", "image/png"), $albumsWithFiles[0]->getFiles()[1]);
+		$this->assertEquals(new AlbumFile($fileId1, "file1", "text/plain", 10, 10000, "dummy"), $albumsWithFiles[0]->getFiles()[0]);
+		$this->assertEquals(new AlbumFile($fileId2, "file2", "image/png", 10, 10000, "dummy"), $albumsWithFiles[0]->getFiles()[1]);
 
 		$this->assertEquals($album2, $albumsWithFiles[1]->getAlbum());
 
@@ -186,6 +186,6 @@ class AlbumMapperTest extends TestCase {
 			return $a->getFileId() <=> $b->getFileId();
 		});
 		$this->assertCount(1, $files);
-		$this->assertEquals(new AlbumFile($fileId1, "file1", "text/plain"), $albumsWithFiles[0]->getFiles()[0]);
+		$this->assertEquals(new AlbumFile($fileId1, "file1", "text/plain", 10, 10000, "dummy"), $albumsWithFiles[0]->getFiles()[0]);
 	}
 }
