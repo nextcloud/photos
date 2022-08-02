@@ -80,7 +80,7 @@ class AlbumRoot implements ICollection, ICopyTarget {
 
 	public function getChild($name): AlbumPhoto {
 		foreach ($this->album->getFiles() as $file) {
-			if ($file->getName() === $name) {
+			if ($file->getFileId() . "-" . $file->getName() === $name) {
 				return new AlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->userFolder);
 			}
 		}

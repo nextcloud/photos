@@ -21,35 +21,30 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Photos\Album;
+namespace OCA\Photos\Sabre\Album;
 
-class AlbumWithFiles {
-	private AlbumInfo $info;
-	/** @var AlbumFile[] */
-	private array $files;
+use Sabre\DAV\INode;
+use Sabre\DAV\PropFind;
+use Sabre\DAV\Server;
+use Sabre\DAV\ServerPlugin;
 
-	public function __construct(AlbumInfo $info, array $files) {
-		$this->info = $info;
-		$this->files = $files;
+class PropFindPlugin extends ServerPlugin {
+	private Server $server;
+
+	public function initialize(Server $server) {
+		$this->server = $server;
+
+		$this->server->on('propFind', [$this, 'propFind']);
 	}
 
-	public function getAlbum(): AlbumInfo {
-		return $this->info;
-	}
 
-	/**
-	 * @return AlbumFile[]
-	 */
-	public function getFiles(): array {
-		return $this->files;
-	}
+	public function propFind(PropFind $propFind, INode $node) {
+		if (!($node instanceof AlbumPhoto)) {
+			return;
+		}
 
-	/**
-	 * @return int[]
-	 */
-	public function getFileIds(): array {
-		return array_map(function(AlbumFile $file) {
-			return $file->getFileId();
-		}, $this->files);
+		$propFind->handle('{http://nextcloud.org/ns}file-name', function () use ($node) {
+			return $node->getFile()->getName();
+		});
 	}
 }

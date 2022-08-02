@@ -51,7 +51,7 @@ class AlbumPhoto implements IFile {
 	}
 
 	public function getName() {
-		return $this->file->getName();
+		return $this->file->getFileId() . "-" . $this->file->getName();
 	}
 
 	public function setName($name) {
@@ -91,5 +91,9 @@ class AlbumPhoto implements IFile {
 
 	public function getSize() {
 		return $this->file->getSize();
+	}
+
+	public function getFile(): AlbumFile {
+		return $this->file;
 	}
 }
