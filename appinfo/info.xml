@@ -33,5 +33,8 @@
 		<collections>
 			<collection>OCA\Photos\Sabre\RootCollection</collection>
 		</collections>
+		<plugins>
+			<plugin>OCA\Photos\Sabre\Album\PropFindPlugin</plugin>
+		</plugins>
 	</sabre>
 </info>
