@@ -2,7 +2,7 @@ OC.L10N.register(
     "photos",
     {
     "Photos" : "Fotoğraflar",
-    "Your memories under your control" : "Anılarınız elinizin altında",
+    "Your memories under your control" : "Anılarınızın denetimi sizde",
     "Your photos" : "Fotoğraflarınız",
     "Your videos" : "Görüntüleriniz",
     "Favorites" : "Sık kullanılanlar",
