@@ -6,7 +6,7 @@ OC.L10N.register(
     "Your photos" : "Vos photos",
     "Your videos" : "Vos vidéos",
     "Favorites" : "Favoris",
-    "On this day" : "Aujourd'hui",
+    "On this day" : "Souvenirs années précédentes",
     "Your folders" : "Vos dossiers",
     "Shared with you" : "Partagé avec vous",
     "Tagged photos" : "Photos étiquetées ",
