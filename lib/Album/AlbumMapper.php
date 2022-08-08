@@ -23,6 +23,8 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Album;
 
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use OCA\Photos\Exception\AlreadyInAlbumException;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\IMimeTypeLoader;
 use OCP\IDBConnection;
@@ -138,13 +140,17 @@ class AlbumMapper {
 	}
 
 	public function addFile(int $albumId, int $fileId): void {
-		$query = $this->connection->getQueryBuilder();
-		$query->insert("photos_albums_files")
-			->values([
-				"album_id" => $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT),
-				"file_id" => $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)
-			]);
-		$query->executeStatement();
+		try {
+			$query = $this->connection->getQueryBuilder();
+			$query->insert("photos_albums_files")
+				->values([
+					"album_id" => $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT),
+					"file_id" => $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)
+				]);
+			$query->executeStatement();
+		} catch (UniqueConstraintViolationException $e) {
+			throw new AlreadyInAlbumException("File already in album", 0, $e);
+		}
 	}
 
 	public function removeFile(int $albumId, int $fileId): void {
