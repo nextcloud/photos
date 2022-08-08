@@ -75,7 +75,7 @@ class AlbumMapper {
 			->where($query->expr()->eq('user', $query->createNamedParameter($userId)));
 		$rows = $query->executeQuery()->fetchAll();
 		return array_map(function (array $row) use ($userId) {
-			return new AlbumInfo($row['album_id'], $userId, $row['name']);
+			return new AlbumInfo((int)$row['album_id'], $userId, $row['name']);
 		}, $rows);
 	}
 
@@ -120,11 +120,11 @@ class AlbumMapper {
 		$filesByAlbum = [];
 		$albumsById = [];
 		foreach ($rows as $row) {
-			$albumId = $row['album_id'];
+			$albumId = (int)$row['album_id'];
 			if ($row['fileid']) {
 				$mimeId = $row['mimetype'];
 				$mimeType = $this->mimeTypeLoader->getMimetypeById($mimeId);
-				$filesByAlbum[$albumId][] = new AlbumFile($row['fileid'], $row['file_name'], $mimeType, $row['size'], $row['mtime'], $row['etag']);
+				$filesByAlbum[$albumId][] = new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag']);
 			}
 
 			if (!isset($albumsById[$albumId])) {
