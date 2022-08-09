@@ -77,7 +77,7 @@ export default {
 		},
 		willBeVisibleWindowRatio: {
 			type: Number,
-			default: 5,
+			default: 4,
 		},
 		visibleWindowRatio: {
 			type: Number,
