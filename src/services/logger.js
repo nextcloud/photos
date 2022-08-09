@@ -30,7 +30,6 @@ const getLogger = user => {
 	}
 	return getLoggerBuilder()
 		.setApp('photos')
-		.setLogLevel(0)
 		.setUid(user.uid)
 		.build()
 }
