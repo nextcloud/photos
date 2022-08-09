@@ -58,10 +58,10 @@ const mutations = {
 			file.day = moment(file.lastmod).format('MMDD') // For On this day
 		})
 
-		state.files = {
+		state.files = Object.freeze({
 			...state.files,
 			...newFiles.reduce((files, file) => ({ ...files, [file.fileid]: file }), {}),
-		}
+		})
 	},
 
 	/**
