@@ -97,7 +97,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
-import MapMarker from 'vue-material-design-icons/MapMarker'
+// import MapMarker from 'vue-material-design-icons/MapMarker'
 // import AccountMultiplePlus from 'vue-material-design-icons/AccountMultiplePlus'
 import Send from 'vue-material-design-icons/Send'
 
@@ -112,7 +112,7 @@ export default {
 
 	components: {
 		Button,
-		MapMarker,
+		// MapMarker,
 		// AccountMultiplePlus,
 		Send,
 		Loader,
