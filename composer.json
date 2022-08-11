@@ -20,8 +20,5 @@
 		"vimeo/psalm": "^4.22",
 		"christophwurst/nextcloud": "dev-master",
 		"sabre/dav": "^4.2.1"
-	},
-	"require": {
-		"doctrine/dbal": "^3.4"
 	}
 }
