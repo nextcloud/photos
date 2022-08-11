@@ -25,6 +25,7 @@ import Vuex, { Store } from 'vuex'
 
 import files from './files.js'
 import albums from './albums.js'
+import faces from './faces.js'
 import folders from './folders.js'
 import systemtags from './systemtags.js'
 
@@ -34,6 +35,7 @@ export default new Store({
 		files,
 		folders,
 		albums,
+		faces,
 		systemtags,
 	},
 

@@ -27,6 +27,7 @@ import Vue from 'vue'
 import isMapsInstalled from '../services/IsMapsInstalled.js'
 import areTagsInstalled from '../services/AreTagsInstalled.js'
 import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
+import Faces from '../views/Faces'
 
 const Folders = () => import('../views/Folders')
 const Albums = () => import('../views/Albums')
@@ -151,6 +152,14 @@ export default new Router({
 			props: route => ({
 				rootTitle: t('photos', 'On this day'),
 				onThisDay: true,
+			}),
+		},
+		{
+			path: '/faces',
+			name: 'faces',
+			component: Faces,
+			props: route => ({
+				rootTitle: t('photos', 'People'),
 			}),
 		},
 	],
