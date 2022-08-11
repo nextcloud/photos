@@ -521,6 +521,10 @@ export default {
 			margin-left: 32px;
 		}
 
+		&__loader {
+			margin-left: 32px;
+		}
+
 		&__actions {
 			display: flex;
 			align-items: center;
