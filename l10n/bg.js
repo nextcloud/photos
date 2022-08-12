@@ -11,6 +11,7 @@ OC.L10N.register(
     "Shared with you" : "Споделени с вас",
     "Tagged photos" : "Маркирани снимки",
     "Locations" : "Местоположения",
+    "Photos settings" : "Настройки на снимки",
     "Open the full size \"{name}\" image" : "Отваряне на изображението\"{name}“  в пълен размер ",
     "Open the \"{name}\" sub-directory" : "Отваряне на \"{name}“  поддиректория ",
     "Share this folder" : "Споделяане на тази папка",
