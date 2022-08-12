@@ -33,22 +33,6 @@
 				<h2 class="face-cover__details__name">
 					{{ baseName }}
 				</h2>
-				<div class="album-cover__details__state">
-					<Actions>
-						<ActionButton :close-after-click="true"
-							:title="t('photos', 'Rename this person')"
-							:aria-label="t('photos', 'Rename this person')"
-							@click="renameFaceCluster">
-							<Pencil slot="icon" />
-						</ActionButton>
-						<ActionButton :close-after-click="true"
-							:aria-label="t('photos', 'Remove this person')"
-							:title="t('photos', 'Remove this person')"
-							@click="deleteFaceCluster">
-							<TrashCan slot="icon" />
-						</ActionButton>
-					</Actions>
-				</div>
 			</div>
 			<div v-if="facesFiles[baseName]" class="album-cover__details__second-line">
 				{{ n('photos', '%n item', '%n items', facesFiles[baseName].length,) }}
@@ -60,22 +44,11 @@
 <script>
 import he from 'he'
 import { mapGetters } from 'vuex'
-import Pencil from 'vue-material-design-icons/Pencil'
-import TrashCan from 'vue-material-design-icons/TrashCan'
-import { Actions, ActionButton } from '@nextcloud/vue'
 import { generateUrl } from '@nextcloud/router'
-import { showError } from '@nextcloud/dialogs'
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
 
 export default {
 	name: 'FaceCover',
-
-	components: {
-		Actions,
-		ActionButton,
-		TrashCan,
-		Pencil,
-	},
 
 	mixins: [
 		FetchFacesMixin,
@@ -156,28 +129,6 @@ export default {
 	methods: {
 		async fetchFiles() {
 			await this.fetchFaceContent(this.face.basename)
-		},
-		async deleteFaceCluster(e) {
-			if (e) {
-				e.preventDefault()
-				e.stopImmediatePropagation()
-			}
-			try {
-				this.$store.dispatch('deleteFace', { faceName: this.baseName })
-			} catch (e) {
-				showError('Failed to delete album "' + this.baseName + '"')
-			}
-		},
-		async renameFaceCluster(e) {
-			if (e) {
-				e.preventDefault()
-				e.stopImmediatePropagation()
-			}
-			try {
-				this.$store.dispatch('deleteFace', { faceName: this.baseName })
-			} catch (e) {
-				showError('Failed to delete album "' + this.baseName + '"')
-			}
 		},
 	},
 }
