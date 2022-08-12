@@ -27,11 +27,24 @@ class AlbumInfo {
 	private int $id;
 	private string $userId;
 	private string $title;
+	private string $location;
+	private int $created;
+	private int $lastAdded;
 
-	public function __construct(int $id, string $userId, string $title) {
+	public function __construct(
+		int $id,
+		string $userId,
+		string $title,
+		string $location,
+		int $created,
+		int $lastAdded
+	) {
 		$this->id = $id;
 		$this->userId = $userId;
 		$this->title = $title;
+		$this->location = $location;
+		$this->created = $created;
+		$this->lastAdded = $lastAdded;
 	}
 
 	public function getId(): int {
@@ -44,5 +57,17 @@ class AlbumInfo {
 
 	public function getTitle(): string {
 		return $this->title;
+	}
+
+	public function getLocation(): string {
+		return $this->location;
+	}
+
+	public function getCreated(): int {
+		return $this->created;
+	}
+
+	public function getLastAddedPhoto(): int {
+		return $this->lastAdded;
 	}
 }
