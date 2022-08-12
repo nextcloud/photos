@@ -32,6 +32,7 @@ class AlbumFile {
 	private int $size;
 	private int $mtime;
 	private string $etag;
+	private int $added;
 	/** @var array<int, FileMetadata> */
 	private array $metaData = [];
 
@@ -41,7 +42,8 @@ class AlbumFile {
 		string $mimeType,
 		int $size,
 		int $mtime,
-		string $etag
+		string $etag,
+		int $added
 	) {
 		$this->fileId = $fileId;
 		$this->name = $name;
@@ -49,6 +51,7 @@ class AlbumFile {
 		$this->size = $size;
 		$this->mtime = $mtime;
 		$this->etag = $etag;
+		$this->added = $added;
 	}
 
 	public function getFileId(): int {
@@ -85,5 +88,9 @@ class AlbumFile {
 
 	public function getMetadata(string $key): FileMetadata {
 		return $this->metaData[$key];
+	}
+
+	public function getAdded(): int {
+		return $this->added;
 	}
 }

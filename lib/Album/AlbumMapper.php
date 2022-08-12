@@ -25,6 +25,7 @@ namespace OCA\Photos\Album;
 
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use OCA\Photos\Exception\AlreadyInAlbumException;
+use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\IMimeTypeLoader;
 use OCP\IDBConnection;
@@ -32,33 +33,39 @@ use OCP\IDBConnection;
 class AlbumMapper {
 	private IDBConnection $connection;
 	private IMimeTypeLoader $mimeTypeLoader;
+	private ITimeFactory $timeFactory;
 
-	public function __construct(IDBConnection $connection, IMimeTypeLoader $mimeTypeLoader) {
+	public function __construct(IDBConnection $connection, IMimeTypeLoader $mimeTypeLoader, ITimeFactory $timeFactory) {
 		$this->connection = $connection;
 		$this->mimeTypeLoader = $mimeTypeLoader;
+		$this->timeFactory = $timeFactory;
 	}
 
-	public function create(string $userId, string $name): AlbumInfo {
+	public function create(string $userId, string $name, string $location = ""): AlbumInfo {
+		$created = $this->timeFactory->getTime();
 		$query = $this->connection->getQueryBuilder();
 		$query->insert("photos_albums")
 			->values([
 				'user' => $query->createNamedParameter($userId),
 				'name' => $query->createNamedParameter($name),
+				'location' => $query->createNamedParameter($location),
+				'created' => $query->createNamedParameter($created, IQueryBuilder::PARAM_INT),
+				'last_added_photo' => $query->createNamedParameter(-1, IQueryBuilder::PARAM_INT),
 			]);
 		$query->executeStatement();
 		$id = $query->getLastInsertId();
 
-		return new AlbumInfo($id, $userId, $name);
+		return new AlbumInfo($id, $userId, $name, $location, $created, -1);
 	}
 
 	public function get(int $id): ?AlbumInfo {
 		$query = $this->connection->getQueryBuilder();
-		$query->select("name", "user")
+		$query->select("name", "user", "location", "created", "last_added_photo")
 			->from("photos_albums")
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$row = $query->executeQuery()->fetch();
 		if ($row) {
-			return new AlbumInfo($id, $row['user'], $row['name']);
+			return new AlbumInfo($id, $row['user'], $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
 		} else {
 			return null;
 		}
@@ -70,12 +77,12 @@ class AlbumMapper {
 	 */
 	public function getForUser(string $userId): array {
 		$query = $this->connection->getQueryBuilder();
-		$query->select("album_id", "name")
+		$query->select("album_id", "name", "location", "created", "last_added_photo")
 			->from("photos_albums")
 			->where($query->expr()->eq('user', $query->createNamedParameter($userId)));
 		$rows = $query->executeQuery()->fetchAll();
 		return array_map(function (array $row) use ($userId) {
-			return new AlbumInfo((int)$row['album_id'], $userId, $row['name']);
+			return new AlbumInfo((int)$row['album_id'], $userId, $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
 		}, $rows);
 	}
 
@@ -83,6 +90,14 @@ class AlbumMapper {
 		$query = $this->connection->getQueryBuilder();
 		$query->update("photos_albums")
 			->set("name", $query->createNamedParameter($newName))
+			->where($query->expr()->eq('album_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+		$query->executeStatement();
+	}
+
+	public function setLocation(int $id, string $newLocation): void {
+		$query = $this->connection->getQueryBuilder();
+		$query->update("photos_albums")
+			->set("location", $query->createNamedParameter($newLocation))
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$query->executeStatement();
 	}
@@ -108,7 +123,7 @@ class AlbumMapper {
 	 */
 	public function getForUserWithFiles(string $userId): array {
 		$query = $this->connection->getQueryBuilder();
-		$query->select("fileid", "mimetype", "a.album_id", "size", "mtime", "etag")
+		$query->select("fileid", "mimetype", "a.album_id", "size", "mtime", "etag", "location", "created", "last_added_photo", "added")
 			->selectAlias("f.name", "file_name")
 			->selectAlias("a.name", "album_name")
 			->from("photos_albums", "a")
@@ -124,11 +139,11 @@ class AlbumMapper {
 			if ($row['fileid']) {
 				$mimeId = $row['mimetype'];
 				$mimeType = $this->mimeTypeLoader->getMimetypeById($mimeId);
-				$filesByAlbum[$albumId][] = new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag']);
+				$filesByAlbum[$albumId][] = new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added']);
 			}
 
 			if (!isset($albumsById[$albumId])) {
-				$albumsById[$albumId] = new AlbumInfo($albumId, $userId, $row['album_name']);
+				$albumsById[$albumId] = new AlbumInfo($albumId, $userId, $row['album_name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
 			}
 		}
 
@@ -140,17 +155,25 @@ class AlbumMapper {
 	}
 
 	public function addFile(int $albumId, int $fileId): void {
+		$added = $this->timeFactory->getTime();
 		try {
 			$query = $this->connection->getQueryBuilder();
 			$query->insert("photos_albums_files")
 				->values([
 					"album_id" => $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT),
-					"file_id" => $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)
+					"file_id" => $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT),
+					"added" => $query->createNamedParameter($added, IQueryBuilder::PARAM_INT),
 				]);
 			$query->executeStatement();
 		} catch (UniqueConstraintViolationException $e) {
 			throw new AlreadyInAlbumException("File already in album", 0, $e);
 		}
+
+		$query = $this->connection->getQueryBuilder();
+		$query->update("photos_albums")
+			->set('last_added_photo', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT))
+			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)));
+		$query->executeStatement();
 	}
 
 	public function removeFile(int $albumId, int $fileId): void {
@@ -159,5 +182,26 @@ class AlbumMapper {
 			->where($query->expr()->eq("album_id", $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq("file_id", $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
 		$query->executeStatement();
+
+		$query = $this->connection->getQueryBuilder();
+		$query->update("photos_albums")
+			->set('last_added_photo', $query->createNamedParameter($this->getLastAdded($albumId), IQueryBuilder::PARAM_INT))
+			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)));
+		$query->executeStatement();
+	}
+
+	private function getLastAdded(int $albumId): int {
+		$query = $this->connection->getQueryBuilder();
+		$query->select("file_id")
+			->from("photos_albums_files")
+			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
+			->orderBy("added", "DESC")
+			->setMaxResults(1);
+		$id = $query->executeQuery()->fetchOne();
+		if ($id === false) {
+			return -1;
+		} else {
+			return (int)$id;
+		}
 	}
 }

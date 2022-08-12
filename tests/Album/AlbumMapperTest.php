@@ -27,6 +27,7 @@ use OCA\Photos\Album\AlbumFile;
 use OCA\Photos\Album\AlbumInfo;
 use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Album\AlbumWithFiles;
+use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\IMimeTypeLoader;
@@ -44,6 +45,9 @@ class AlbumMapperTest extends TestCase {
 	private $mimeLoader;
 	/** @var AlbumMapper */
 	private $mapper;
+	/** @var ITimeFactory|\PHPUnit_Framework_MockObject_MockObject */
+	private $timeFactory;
+	private int $time = 100;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -51,7 +55,12 @@ class AlbumMapperTest extends TestCase {
 		$this->createdFiles = [];
 		$this->connection = \OC::$server->get(IDBConnection::class);
 		$this->mimeLoader = \OC::$server->get(IMimeTypeLoader::class);
-		$this->mapper = new AlbumMapper($this->connection, $this->mimeLoader);
+		$this->timeFactory = $this->createMock(ITimeFactory::class);
+		$this->timeFactory->method('getTime')->willReturnCallback(function() {
+			return $this->time;
+		});
+
+		$this->mapper = new AlbumMapper($this->connection, $this->mimeLoader, $this->timeFactory);
 	}
 
 	protected function tearDown():void {
@@ -100,6 +109,9 @@ class AlbumMapperTest extends TestCase {
 
 		$retrievedAlbum = $this->mapper->get($album->getId());
 		$this->assertEquals($album, $retrievedAlbum);
+		$this->assertEquals(100, $retrievedAlbum->getCreated());
+		$this->assertEquals("", $retrievedAlbum->getLocation());
+		$this->assertEquals(-1, $retrievedAlbum->getLastAddedPhoto());
 	}
 
 	public function testCreateList() {
@@ -147,6 +159,14 @@ class AlbumMapperTest extends TestCase {
 		$this->assertEquals("renamed", $retrievedAlbum->getTitle());
 	}
 
+	public function testCreateUpdateGet() {
+		$album = $this->mapper->create("user1", "album1");
+		$this->mapper->setLocation($album->getId(),"nowhere");
+
+		$retrievedAlbum = $this->mapper->get($album->getId());
+		$this->assertEquals("nowhere", $retrievedAlbum->getLocation());
+	}
+
 	public function testEmptyFiles() {
 		$album1 = $this->mapper->create("user1", "album1");
 
@@ -170,22 +190,110 @@ class AlbumMapperTest extends TestCase {
 		});
 		$this->assertCount(2, $albumsWithFiles);
 
-		$this->assertEquals($album1, $albumsWithFiles[0]->getAlbum());
+		$this->assertEquals($album1->getId(), $albumsWithFiles[0]->getAlbum()->getId());
+		$this->assertEquals($fileId2, $albumsWithFiles[0]->getAlbum()->getLastAddedPhoto());
 		$files = $albumsWithFiles[0]->getFiles();
 		usort($files, function(AlbumFile $a, AlbumFile $b) {
 			return $a->getFileId() <=> $b->getFileId();
 		});
 		$this->assertCount(2, $files);
-		$this->assertEquals(new AlbumFile($fileId1, "file1", "text/plain", 10, 10000, "dummy"), $albumsWithFiles[0]->getFiles()[0]);
-		$this->assertEquals(new AlbumFile($fileId2, "file2", "image/png", 10, 10000, "dummy"), $albumsWithFiles[0]->getFiles()[1]);
+		$this->assertEquals(new AlbumFile($fileId1, "file1", "text/plain", 10, 10000, "dummy", 100), $albumsWithFiles[0]->getFiles()[0]);
+		$this->assertEquals(new AlbumFile($fileId2, "file2", "image/png", 10, 10000, "dummy", 100), $albumsWithFiles[0]->getFiles()[1]);
 
-		$this->assertEquals($album2, $albumsWithFiles[1]->getAlbum());
+		$this->assertEquals($album2->getId(), $albumsWithFiles[1]->getAlbum()->getId());
+		$this->assertEquals($fileId1, $albumsWithFiles[1]->getAlbum()->getLastAddedPhoto());
 
 		$files = $albumsWithFiles[1]->getFiles();
 		usort($files, function(AlbumFile $a, AlbumFile $b) {
 			return $a->getFileId() <=> $b->getFileId();
 		});
 		$this->assertCount(1, $files);
-		$this->assertEquals(new AlbumFile($fileId1, "file1", "text/plain", 10, 10000, "dummy"), $albumsWithFiles[0]->getFiles()[0]);
+		$this->assertEquals(new AlbumFile($fileId1, "file1", "text/plain", 10, 10000, "dummy", 100), $albumsWithFiles[0]->getFiles()[0]);
+	}
+
+	public function testAddRemoveFiles() {
+		$album1 = $this->mapper->create("user1", "album1");
+
+		$fileId1 = $this->createFile("file1", "text/plain");
+		$fileId2 = $this->createFile("file2", "image/png");
+		$fileId3 = $this->createFile("file3", "image/png");
+
+		$this->time = 110;
+		$this->mapper->addFile($album1->getId(), $fileId1);
+		$this->time = 120;
+		$this->mapper->addFile($album1->getId(), $fileId2);
+		$this->time = 130;
+		$this->mapper->addFile($album1->getId(), $fileId3);
+
+		$albumsWithFiles = $this->mapper->getForUserWithFiles("user1");
+		usort($albumsWithFiles, function(AlbumWithFiles $a, AlbumWithFiles $b) {
+			return $a->getAlbum()->getId() <=> $b->getAlbum()->getId();
+		});
+		$this->assertCount(1, $albumsWithFiles);
+
+		$this->assertEquals($album1->getId(), $albumsWithFiles[0]->getAlbum()->getId());
+		$this->assertEquals($fileId3, $albumsWithFiles[0]->getAlbum()->getLastAddedPhoto());
+		$files = $albumsWithFiles[0]->getFiles();
+		usort($files, function(AlbumFile $a, AlbumFile $b) {
+			return $a->getFileId() <=> $b->getFileId();
+		});
+		$this->assertCount(3, $files);
+		$this->assertEquals(new AlbumFile($fileId1, "file1", "text/plain", 10, 10000, "dummy", 110), $albumsWithFiles[0]->getFiles()[0]);
+		$this->assertEquals(new AlbumFile($fileId2, "file2", "image/png", 10, 10000, "dummy", 120), $albumsWithFiles[0]->getFiles()[1]);
+		$this->assertEquals(new AlbumFile($fileId3, "file3", "image/png", 10, 10000, "dummy", 130), $albumsWithFiles[0]->getFiles()[2]);
+
+
+
+		$this->mapper->removeFile($album1->getId(), $fileId2);
+
+		$albumsWithFiles = $this->mapper->getForUserWithFiles("user1");
+		usort($albumsWithFiles, function(AlbumWithFiles $a, AlbumWithFiles $b) {
+			return $a->getAlbum()->getId() <=> $b->getAlbum()->getId();
+		});
+		$this->assertCount(1, $albumsWithFiles);
+
+		$this->assertEquals($album1->getId(), $albumsWithFiles[0]->getAlbum()->getId());
+		$this->assertEquals($fileId3, $albumsWithFiles[0]->getAlbum()->getLastAddedPhoto());
+		$files = $albumsWithFiles[0]->getFiles();
+		usort($files, function(AlbumFile $a, AlbumFile $b) {
+			return $a->getFileId() <=> $b->getFileId();
+		});
+		$this->assertCount(2, $files);
+		$this->assertEquals(new AlbumFile($fileId1, "file1", "text/plain", 10, 10000, "dummy", 110), $albumsWithFiles[0]->getFiles()[0]);
+		$this->assertEquals(new AlbumFile($fileId3, "file3", "image/png", 10, 10000, "dummy", 130), $albumsWithFiles[0]->getFiles()[1]);
+
+
+
+		$this->mapper->removeFile($album1->getId(), $fileId3);
+
+		$albumsWithFiles = $this->mapper->getForUserWithFiles("user1");
+		usort($albumsWithFiles, function(AlbumWithFiles $a, AlbumWithFiles $b) {
+			return $a->getAlbum()->getId() <=> $b->getAlbum()->getId();
+		});
+		$this->assertCount(1, $albumsWithFiles);
+
+		$this->assertEquals($album1->getId(), $albumsWithFiles[0]->getAlbum()->getId());
+		$this->assertEquals($fileId1, $albumsWithFiles[0]->getAlbum()->getLastAddedPhoto());
+		$files = $albumsWithFiles[0]->getFiles();
+		usort($files, function(AlbumFile $a, AlbumFile $b) {
+			return $a->getFileId() <=> $b->getFileId();
+		});
+		$this->assertCount(1, $files);
+		$this->assertEquals(new AlbumFile($fileId1, "file1", "text/plain", 10, 10000, "dummy", 110), $albumsWithFiles[0]->getFiles()[0]);
+
+
+
+		$this->mapper->removeFile($album1->getId(), $fileId1);
+
+		$albumsWithFiles = $this->mapper->getForUserWithFiles("user1");
+		usort($albumsWithFiles, function(AlbumWithFiles $a, AlbumWithFiles $b) {
+			return $a->getAlbum()->getId() <=> $b->getAlbum()->getId();
+		});
+		$this->assertCount(1, $albumsWithFiles);
+
+		$this->assertEquals($album1->getId(), $albumsWithFiles[0]->getAlbum()->getId());
+		$this->assertEquals(-1, $albumsWithFiles[0]->getAlbum()->getLastAddedPhoto());
+		$files = $albumsWithFiles[0]->getFiles();
+		$this->assertCount(0, $files);
 	}
 }

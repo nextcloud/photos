@@ -53,6 +53,16 @@ class Version20000Date20220727125801 extends SimpleMigrationStep {
 				'notnull' => true,
 				'length' => 255,
 			]);
+			$table->addColumn('created', 'bigint', [
+				'notnull' => true,
+			]);
+			$table->addColumn('location', 'string', [
+				'notnull' => true,
+				'length' => 255,
+			]);
+			$table->addColumn('last_added_photo', 'bigint', [
+				'notnull' => true,
+			]);
 			$table->setPrimaryKey(['album_id']);
 			$table->addIndex(['user'], 'pa_user');
 		}
@@ -71,6 +81,9 @@ class Version20000Date20220727125801 extends SimpleMigrationStep {
 			$table->addColumn('file_id', Types::BIGINT, [
 				'notnull' => true,
 				'length' => 20,
+			]);
+			$table->addColumn('added', 'bigint', [
+				'notnull' => true,
 			]);
 			$table->setPrimaryKey(['album_file_id']);
 			$table->addIndex(['album_id'], 'paf_folder');
