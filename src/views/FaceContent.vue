@@ -41,7 +41,6 @@
 				<div class="album__header__title">
 					<b v-if="face !== undefined" class="album-name">
 						{{ face.basename }}
-
 					</b>
 				</div>
 
@@ -51,7 +50,7 @@
 				<Actions :force-menu="true">
 					<ActionButton :close-after-click="true"
 						:title="t('photos', 'Rename')"
-						@click="showEditAlbumForm = true">
+						@click="showRenameModal = true">
 						<template #icon>
 							<Pencil />
 						</template>
@@ -111,23 +110,29 @@
 				@select-toggled="onFileSelectToggle" />
 		</FilesListViewer>
 
-		<Modal v-if="showAddPhotosModal"
-			size="large"
-			:title="t('photos', 'Add photos to the album')"
-			@close="showAddPhotosModal = false">
-			<FilesPicker :blacklist-ids="albumFileIds" @files-picked="handleFilesPicked" />
-		</Modal>
-
-		<Modal v-else-if="showShareModal"
-			:title="t('photos', 'Share the album')"
-			@close="showShareModal = false">
-			<ShareAlbumForm @albumShared="showShareModal = false" />
-		</Modal>
-
-		<Modal v-if="showEditAlbumForm"
-			:title="t('photos', 'New album')"
-			@close="showEditAlbumForm = false">
-			<AlbumForm :album="album" @done="showEditAlbumForm = false" />
+		<Modal v-if="showRenameModal"
+			:title="t('photos', 'Rename person')"
+			@close="showRenameModal = false">
+			<div class="rename-form">
+				<input ref="nameInput"
+					v-focus
+					:value="faceName"
+					type="text"
+					name="name"
+					required
+					:placeholder="t('photos', 'Name of this person')"
+					@keydown.enter="handleRenameFace($refs.nameInput.value)">
+				<Button :aria-label="t('photos', 'Save.')"
+					type="primary"
+					:disabled="$refs.nameInput && $refs.nameInput.value.trim() === ''"
+					@click="handleRenameFace($refs.nameInput.value)">
+					<template #icon>
+						<Loader v-if="loadingCount" />
+						<Send v-else />
+					</template>
+					{{ t('photos', 'Save') }}
+				</Button>
+			</div>
 		</Modal>
 	</div>
 </template>
@@ -139,20 +144,19 @@ import TrashCan from 'vue-material-design-icons/TrashCan'
 import AlertCircle from 'vue-material-design-icons/AlertCircle'
 import Star from 'vue-material-design-icons/Star'
 import DownloadOutline from 'vue-material-design-icons/DownloadOutline'
+import Send from 'vue-material-design-icons/Send'
 
-import { Actions, ActionButton, Modal, EmptyContent } from '@nextcloud/vue'
+import { Actions, ActionButton, Modal, EmptyContent, Button } from '@nextcloud/vue'
 
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import File from '../components/File.vue'
 import Loader from '../components/Loader.vue'
-import FilesPicker from '../components/FilesPicker.vue'
-import ShareAlbumForm from '../components/ShareAlbumForm.vue'
-import AlbumForm from '../components/AlbumForm.vue'
 import FolderIllustration from '../assets/Illustrations/folder.svg'
 import logger from '../services/logger.js'
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
+import Vue from 'vue'
 
 export default {
 	name: 'FaceContent',
@@ -164,14 +168,19 @@ export default {
 		AlertCircle,
 		FilesListViewer,
 		File,
-		AlbumForm,
 		EmptyContent,
 		Loader,
 		Actions,
 		ActionButton,
 		Modal,
-		FilesPicker,
-		ShareAlbumForm,
+		Send,
+		Button,
+	},
+
+	directives: {
+		focus(el) {
+			Vue.nextTick(() => el.focus())
+		},
 	},
 
 	mixins: [
@@ -191,7 +200,7 @@ export default {
 		return {
 			showAddPhotosModal: false,
 			showShareModal: false,
-			showEditAlbumForm: false,
+			showRenameModal: false,
 			FolderIllustration,
 			loadingCount: 0,
 		}
@@ -226,12 +235,12 @@ export default {
 
 	watch: {
 		face() {
-			this.fetchFaceContent()
+			this.fetchFaceContent(this.faceName)
 		},
 	},
 
 	methods: {
-		...mapActions(['appendFiles', 'deleteFace']),
+		...mapActions(['appendFiles', 'deleteFace', 'renameFace']),
 
 		openViewer(fileId) {
 			const file = this.files[fileId]
@@ -257,8 +266,22 @@ export default {
 		async handleDeleteFace() {
 			try {
 				this.loadingCount++
-				await this.deleteAlbum({ albumName: this.faceName })
+				await this.deleteFace({ faceName: this.faceName })
 				this.$router.push('/faces')
+			} catch (error) {
+				logger.error(error)
+			} finally {
+				this.loadingCount--
+			}
+		},
+
+		async handleRenameFace(faceName) {
+			try {
+				this.loadingCount++
+				await this.renameFace({ oldName: this.faceName, faceName })
+				this.showRenameModal = false
+				// eslint-disable-next-line vue/no-mutating-props
+				this.$router.push({ name: 'facecontent', params: { faceName } })
 			} catch (error) {
 				logger.error(error)
 			} finally {
@@ -367,6 +390,18 @@ export default {
 	svg {
 		width: 200px;
 		height: 200px;
+	}
+}
+
+.rename-form {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	height: 70px;
+	padding: 16px;
+
+	input {
+		width: 80%;
 	}
 }
 </style>

@@ -186,24 +186,27 @@ const actions = {
 	 *
 	 * @param {object} context vuex context
 	 * @param {object} data destructuring object
-	 * @param {string} data.currentAlbumName - The current name of the album.
-	 * @param {string} data.newAlbumName - The wanted name for the album.
+	 * @param {string} data.oldName - The current name of the face.
+	 * @param {string} data.faceName - The wanted name for the face.
 	 */
-	async renameAlbum(context, { currentAlbumName, newAlbumName }) {
-		let album = state.albums[currentAlbumName]
+	async renameFace(context, { oldName, faceName }) {
+		const face = state.faces[oldName]
+		const files = state.facesFiles[oldName]
 
 		try {
-			context.commit('removeAlbums', { albumNames: [currentAlbumName] })
+			await context.commit('removeFaces', { faceNames: [oldName] })
 
-			album = await client.moveFile(
-				`/photos/${getCurrentUser()?.uid}/albums/${currentAlbumName}`,
-				`/photos/${getCurrentUser()?.uid}/albums/${newAlbumName}`,
+			await client.moveFile(
+				`/recognize/${getCurrentUser()?.uid}/faces/${oldName}`,
+				`/recognize/${getCurrentUser()?.uid}/faces/${faceName}`,
 			)
+			face.basename = faceName
 		} catch (error) {
-			logger.error(t('photos', 'Failed to rename {currentAlbumName} to {newAlbumName}.', { currentAlbumName, newAlbumName }), error)
-			showError(t('photos', 'Failed to rename {currentAlbumName} to {newAlbumName}.', { currentAlbumName, newAlbumName }))
+			logger.error(t('photos', 'Failed to rename {oldName} to {faceName}.', { oldName, faceName }), error)
+			showError(t('photos', 'Failed to rename {oldName} to {faceName}.', { oldName, faceName }))
 		} finally {
-			context.commit('addAlbums', { albums: [album] })
+			await context.commit('addFaces', { faces: [face] })
+			await context.commit('addFilesToFace', { faceName: face.basename, fileIdsToAdd: files })
 		}
 	},
 
