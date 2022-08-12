@@ -23,6 +23,8 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Album;
 
+use OC\Metadata\FileMetadata;
+
 class AlbumFile {
 	private int $fileId;
 	private string $name;
@@ -30,6 +32,8 @@ class AlbumFile {
 	private int $size;
 	private int $mtime;
 	private string $etag;
+	/** @var array<int, FileMetadata> */
+	private array $metaData = [];
 
 	public function __construct(
 		int $fileId,
@@ -69,5 +73,17 @@ class AlbumFile {
 
 	public function getEtag() {
 		return $this->etag;
+	}
+
+	public function setMetadata(string $key, FileMetadata $value): void {
+		$this->metaData[$key] = $value;
+	}
+
+	public function hasMetadata(string $key): bool {
+		return isset($this->metaData[$key]);
+	}
+
+	public function getMetadata(string $key): FileMetadata {
+		return $this->metaData[$key];
 	}
 }

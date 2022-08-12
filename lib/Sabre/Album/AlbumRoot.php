@@ -114,4 +114,8 @@ class AlbumRoot implements ICollection, ICopyTarget {
 		}
 		throw new \Exception("Can't add file to album, only files from $uid can be added");
 	}
+
+	public function getAlbum(): AlbumWithFiles {
+		return $this->album;
+	}
 }
