@@ -59,7 +59,7 @@ import { EmptyContent } from '@nextcloud/vue'
 
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
 import Loader from '../components/Loader.vue'
-import FaceCover from '../components/FaceCover'
+import FaceCover from '../components/FaceCover.vue'
 
 export default {
 	name: 'Faces',

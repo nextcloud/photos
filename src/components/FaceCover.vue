@@ -33,9 +33,24 @@
 				<h2 class="face-cover__details__name">
 					{{ baseName }}
 				</h2>
-				<div class="album-cover__details__state" />
+				<div class="album-cover__details__state">
+					<Actions>
+						<ActionButton :close-after-click="true"
+							:title="t('photos', 'Rename this person')"
+							:aria-label="t('photos', 'Rename this person')"
+							@click="renameFaceCluster">
+							<Pencil slot="icon" />
+						</ActionButton>
+						<ActionButton :close-after-click="true"
+							:aria-label="t('photos', 'Remove this person')"
+							:title="t('photos', 'Remove this person')"
+							@click="deleteFaceCluster">
+							<TrashCan slot="icon" />
+						</ActionButton>
+					</Actions>
+				</div>
 			</div>
-			<div class="album-cover__details__second-line">
+			<div v-if="facesFiles[baseName]" class="album-cover__details__second-line">
 				{{ n('photos', '%n item', '%n items', facesFiles[baseName].length,) }}
 			</div>
 		</div>
@@ -45,28 +60,32 @@
 <script>
 import he from 'he'
 import { mapGetters } from 'vuex'
-
+import Pencil from 'vue-material-design-icons/Pencil'
+import TrashCan from 'vue-material-design-icons/TrashCan'
+import { Actions, ActionButton } from '@nextcloud/vue'
 import { generateUrl } from '@nextcloud/router'
-import cancelableRequest from '../utils/CancelableRequest.js'
-import client from '../services/DavClient.js'
-import { getCurrentUser } from '@nextcloud/auth'
-import DavRequest from '../services/DavRequest.js'
+import { showError } from '@nextcloud/dialogs'
+import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
 
 export default {
 	name: 'FaceCover',
+
+	components: {
+		Actions,
+		ActionButton,
+		TrashCan,
+		Pencil,
+	},
+
+	mixins: [
+		FetchFacesMixin,
+	],
 
 	props: {
 		baseName: {
 			type: String,
 			required: true,
 		},
-	},
-
-	data() {
-		return {
-			cancelFacesRequest: () => { },
-			cover: null,
-		}
 	},
 
 	computed: {
@@ -91,12 +110,29 @@ export default {
 				return ''
 			}
 
-			return generateUrl(`/core/preview?fileId=${this.cover.props.fileid}&x=${512}&y=${512}&forceIcon=0&a=1`)
+			return generateUrl(`/core/preview?fileId=${this.cover.fileid}&x=${512}&y=${512}&forceIcon=0&a=1`)
+		},
+
+		cover() {
+			return (this.facesFiles[this.face.basename] || [])
+				.slice(0, 25)
+				.map(fileId => this.files[fileId])
+				.map(file => ({ ...file, faceDetections: JSON.parse(he.decode(file.faceDetections)) }))
+			// sort larges face first
+				.sort((a, b) =>
+					b.faceDetections.find(d => d.faceName === this.face.basename).width
+							- a.faceDetections.find(d => d.faceName === this.face.basename).width
+				)
+			// sort fewest face detections first
+				.sort((a, b) =>
+					a.faceDetections.length
+							- b.faceDetections.length
+				)[0]
 		},
 
 		coverDimensions() {
 			if (!this.cover) return {}
-			const detections = JSON.parse(he.decode(this.cover.props['face-detections']))
+			const detections = this.cover.faceDetections
 
 			const detection = detections.find(detection => detection.faceName === this.face.basename)
 			const zoom = Math.max(1, (1 / detection.width) * 0.4)
@@ -119,17 +155,29 @@ export default {
 
 	methods: {
 		async fetchFiles() {
-			const { request, cancel } = cancelableRequest(client.getDirectoryContents)
-			this.cancelFilesRequest = cancel
-			const { data: files } = await request(`/recognize/${getCurrentUser()?.uid}/faces/${this.face.basename}`, {
-				details: true,
-				data: DavRequest,
-			})
-			// eslint-disable-next-line
-			console.log(files)
-			const fileIdsToAdd = files.map(({ basename }) => basename.split('-', 2)[0])
-			this.$store.commit('addFilesToFace', { faceName: this.face.basename, fileIdsToAdd })
-			this.cover = files.find(file => JSON.parse(he.decode(file.props['face-detections'])).length === 1) || files[0]
+			await this.fetchFaceContent(this.face.basename)
+		},
+		async deleteFaceCluster(e) {
+			if (e) {
+				e.preventDefault()
+				e.stopImmediatePropagation()
+			}
+			try {
+				this.$store.dispatch('deleteFace', { faceName: this.baseName })
+			} catch (e) {
+				showError('Failed to delete album "' + this.baseName + '"')
+			}
+		},
+		async renameFaceCluster(e) {
+			if (e) {
+				e.preventDefault()
+				e.stopImmediatePropagation()
+			}
+			try {
+				this.$store.dispatch('deleteFace', { faceName: this.baseName })
+			} catch (e) {
+				showError('Failed to delete album "' + this.baseName + '"')
+			}
 		},
 	},
 }

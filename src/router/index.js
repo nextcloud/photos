@@ -28,6 +28,7 @@ import isMapsInstalled from '../services/IsMapsInstalled.js'
 import areTagsInstalled from '../services/AreTagsInstalled.js'
 import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
 import Faces from '../views/Faces'
+import FaceContent from '../views/FaceContent'
 
 const Folders = () => import('../views/Folders')
 const Albums = () => import('../views/Albums')
@@ -160,6 +161,15 @@ export default new Router({
 			component: Faces,
 			props: route => ({
 				rootTitle: t('photos', 'People'),
+			}),
+		},
+		{
+			path: '/faces/:faceName',
+			name: 'facecontent',
+			component: FaceContent,
+			props: route => ({
+				rootTitle: route.params.faceName,
+				faceName: route.params.faceName,
 			}),
 		},
 	],

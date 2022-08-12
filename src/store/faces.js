@@ -26,6 +26,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import client from '../services/DavClient.js'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
+import Vue from 'vue'
 
 /**
  * @typedef {object} Face
@@ -36,7 +37,7 @@ import Semaphore from '../utils/semaphoreWithPriority.js'
 
 const state = {
 	faces: {},
-	facesFiles: [],
+	facesFiles: {},
 }
 
 const mutations = {
@@ -48,9 +49,8 @@ const mutations = {
 	 * @param {Array} data.faces list of albums
 	 */
 	addFaces(state, { faces }) {
-		state.faces = {
-			...state.faces,
-			...faces.reduce((faces, face) => ({ ...faces, [face.basename]: face }), {}),
+		for (const face of faces) {
+			Vue.set(state.faces, face.basename, face)
 		}
 	},
 
@@ -74,14 +74,11 @@ const mutations = {
 	 * @param {string[]} data.fileIdsToAdd list of files
 	 */
 	addFilesToFace(state, { faceName, fileIdsToAdd }) {
-		const faceFiles = state.facesFiles[faceName] || []
-		state.facesFiles = {
-			...state.facesFiles,
-			[faceName]: [
-				...faceFiles,
-				...fileIdsToAdd.filter(fileId => !faceFiles.includes(fileId)), // Filter to prevent duplicate fileId.
-			],
+		if (!state.facesFiles[faceName]) {
+			Vue.set(state.facesFiles, faceName, [])
 		}
+		const faceFiles = state.facesFiles[faceName]
+		state.facesFiles[faceName].push(...fileIdsToAdd.filter(fileId => !faceFiles.includes(fileId))) // Filter to prevent duplicate fileId.
 	},
 
 	/**
@@ -93,10 +90,7 @@ const mutations = {
 	 * @param {string[]} data.fileIdsToRemove list of files
 	 */
 	removeFilesFromFace(state, { faceName, fileIdsToRemove }) {
-		state.facesFiles = {
-			...state.facesFiles,
-			[faceName]: state.facesFiles[faceName].filter(fileId => !fileIdsToRemove.includes(fileId)),
-		}
+		Vue.set(state.facesFiles, faceName, state.facesFiles[faceName].filter(fileId => !fileIdsToRemove.includes(fileId)))
 	},
 }
 
@@ -218,15 +212,15 @@ const actions = {
 	 *
 	 * @param {object} context vuex context
 	 * @param {object} data destructuring object
-	 * @param {string} data.albumName the id of the album
+	 * @param {string} data.faceName the id of the album
 	 */
-	async deleteAlbum(context, { albumName }) {
+	async deleteFace(context, { faceName }) {
 		try {
-			await client.deleteFile(`/photos/${getCurrentUser()?.uid}/albums/${albumName}`)
-			context.commit('removeAlbums', { albumNames: [albumName] })
+			await client.deleteFile(`/recognize/${getCurrentUser()?.uid}/faces/${faceName}`)
+			context.commit('removeFaces', { faceNames: [faceName] })
 		} catch (error) {
-			logger.error(t('photos', 'Failed to delete {albumName}.', { albumName }), error)
-			showError(t('photos', 'Failed to delete {albumName}.', { albumName }))
+			logger.error(t('photos', 'Failed to delete {albumName}.', { faceName }), error)
+			showError(t('photos', 'Failed to delete {albumName}.', { faceName }))
 		}
 	},
 }

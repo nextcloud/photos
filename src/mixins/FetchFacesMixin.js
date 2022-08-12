@@ -20,7 +20,7 @@
  *
  */
 
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 import { showError } from '@nextcloud/dialogs'
 import { getCurrentUser } from '@nextcloud/auth'
@@ -28,6 +28,8 @@ import { getCurrentUser } from '@nextcloud/auth'
 import client from '../services/DavClient.js'
 import logger from '../services/logger.js'
 import cancelableRequest from '../utils/CancelableRequest.js'
+import DavRequest from '../services/DavRequest'
+import { genFileInfo } from '../utils/fileUtils'
 
 export default {
 	name: 'FetchFacesMixin',
@@ -36,7 +38,10 @@ export default {
 		return {
 			errorFetchingFaces: null,
 			loadingFaces: false,
+			errorFetchingFiles: null,
+			loadingFiles: false,
 			cancelFacesRequest: () => { },
+			cancelFilesRequest: () => {},
 		}
 	},
 
@@ -46,6 +51,7 @@ export default {
 
 	beforeDestroy() {
 		this.cancelFacesRequest('Changed view')
+		this.cancelFilesRequest('Changed view')
 	},
 
 	computed: {
@@ -55,8 +61,16 @@ export default {
 	},
 
 	methods: {
+		...mapActions([
+			'appendFiles',
+		]),
+
 		async fetchFaces() {
 			if (this.loadingFaces) {
+				return
+			}
+
+			if (Object.keys(this.faces).length) {
 				return
 			}
 
@@ -83,6 +97,60 @@ export default {
 			} finally {
 				this.cancelFacesRequest = () => { }
 				this.loadingFaces = false
+			}
+		},
+
+		async fetchFaceContent(faceName) {
+			if (this.loadingFiles) {
+				return
+			}
+
+			if (this.facesFiles[faceName] && this.facesFiles[faceName].length) {
+				return
+			}
+
+			try {
+				this.errorFetchingFiles = null
+				this.loadingFiles = true
+
+				const { request, cancel } = cancelableRequest(client.getDirectoryContents)
+				this.cancelFilesRequest = cancel
+
+				let { data: fetchedFiles } = await request(
+					`/recognize/${getCurrentUser()?.uid}/faces/${faceName}`,
+					{
+						data: DavRequest,
+						details: true,
+					}
+				)
+
+				fetchedFiles = fetchedFiles
+					.map(file => genFileInfo(file))
+					.map(file => ({ ...file, filename: file.realpath.replace(`/${getCurrentUser().uid}/files`, '') }))
+
+				const fileIds = fetchedFiles.map(file => file.fileid)
+
+				this.appendFiles(fetchedFiles)
+
+				if (fetchedFiles.length > 0) {
+					await this.$store.commit('addFilesToFace', { faceName, fileIdsToAdd: fileIds })
+				}
+
+				logger.debug(`[FetchFacesMixin] Fetched ${fileIds.length} new files: `, fileIds)
+			} catch (error) {
+				if (error.response && error.response.status) {
+					if (error.response.status === 404) {
+						this.errorFetchingFiles = 404
+					} else {
+						this.errorFetchingFiles = error
+					}
+				}
+
+				// cancelled request, moving on...
+				logger.error('Error fetching face files', error)
+			} finally {
+				this.loadingFiles = false
+				this.cancelFilesRequest = () => { }
 			}
 		},
 	},
