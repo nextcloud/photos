@@ -25,31 +25,47 @@ namespace OCA\Photos\Sabre\Album;
 
 use OC\Metadata\IMetadataManager;
 use OCA\DAV\Connector\Sabre\FilesPlugin;
+use OCA\Photos\Album\AlbumMapper;
 use OCP\IConfig;
 use Sabre\DAV\INode;
 use Sabre\DAV\PropFind;
+use Sabre\DAV\PropPatch;
 use Sabre\DAV\Server;
 use Sabre\DAV\ServerPlugin;
+use Sabre\DAV\Tree;
 
 class PropFindPlugin extends ServerPlugin {
+	public const FILE_NAME_PROPERTYNAME = '{http://nextcloud.org/ns}file-name';
+	public const LOCATION_PROPERTYNAME = '{http://nextcloud.org/ns}location';
+	public const LAST_PHOTO_PROPERTYNAME = '{http://nextcloud.org/ns}last-photo';
+
 	private IConfig $config;
 	private IMetadataManager $metadataManager;
 	private bool $metadataEnabled;
+	private ?Tree $tree;
+	private AlbumMapper $albumMapper;
 
-	public function __construct(IConfig $config, IMetadataManager $metadataManager) {
+	public function __construct(
+		IConfig $config,
+		IMetadataManager $metadataManager,
+		AlbumMapper $albumMapper
+	) {
 		$this->config = $config;
 		$this->metadataManager = $metadataManager;
+		$this->albumMapper = $albumMapper;
 		$this->metadataEnabled = $this->config->getSystemValueBool('enable_file_metadata', true);
 	}
 
 
 	public function initialize(Server $server) {
+		$this->tree = $server->tree;
 		$server->on('propFind', [$this, 'propFind']);
+		$server->on('propPatch', [$this, 'handleUpdateProperties']);
 	}
 
 	public function propFind(PropFind $propFind, INode $node) {
 		if ($node instanceof AlbumPhoto) {
-			$propFind->handle('{http://nextcloud.org/ns}file-name', function () use ($node) {
+			$propFind->handle(self::FILE_NAME_PROPERTYNAME, function () use ($node) {
 				return $node->getFile()->getName();
 			});
 			$propFind->handle(FilesPlugin::INTERNAL_FILEID_PROPERTYNAME, function () use ($node) {
@@ -77,6 +93,13 @@ class PropFindPlugin extends ServerPlugin {
 		}
 
 		if ($node instanceof AlbumRoot) {
+			$propFind->handle(self::LOCATION_PROPERTYNAME, function () use ($node) {
+				return $node->getAlbum()->getAlbum()->getLocation();
+			});
+			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, function () use ($node) {
+				return $node->getAlbum()->getAlbum()->getLastAddedPhoto();
+			});
+
 			// TODO detect dynamically which metadata groups are requested and
 			// preload all of them and not just size
 			if ($this->metadataEnabled && in_array(FilesPlugin::FILE_METADATA_SIZE, $propFind->getRequestedProperties(), true)) {
@@ -89,6 +112,16 @@ class PropFindPlugin extends ServerPlugin {
 					}
 				}
 			}
+		}
+	}
+
+	public function handleUpdateProperties($path, PropPatch $propPatch) {
+		$node = $this->tree->getNodeForPath($path);
+		if ($node instanceof AlbumRoot) {
+			$propPatch->handle(self::LOCATION_PROPERTYNAME, function ($location) use ($node) {
+				$this->albumMapper->setLocation($node->getAlbum()->getAlbum()->getId(), $location);
+				return true;
+			});
 		}
 	}
 }
