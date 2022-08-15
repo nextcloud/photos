@@ -55,7 +55,7 @@
 							<Pencil />
 						</template>
 					</ActionButton>
-					<template v-if="selection.length === 0">
+					<template v-if="selectedFileIds.length">
 						<ActionButton :close-after-click="true"
 							:aria-label="t('photos', 'Download selection')"
 							:title="t('photos', 'Download')"
@@ -77,10 +77,10 @@
 							<Star slot="icon" />
 						</ActionButton>
 						<ActionButton :close-after-click="true"
-							:title="n('photos', 'Remove file from person', 'Remove files from person', selection.length)"
-							@click="removeFilesFromFace(selectedFileIds)">
+							:title="n('photos', 'Remove file from person', 'Remove files from person', selectedFileIds.length)"
+							@click="handleRemoveFilesFromFace(selectedFileIds)">
 							<template #icon>
-								<TrashCan />
+								<CloseBoxMultiple />
 							</template>
 						</ActionButton>
 					</template>
@@ -141,6 +141,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import Pencil from 'vue-material-design-icons/Pencil'
 import TrashCan from 'vue-material-design-icons/TrashCan'
+import CloseBoxMultiple from 'vue-material-design-icons/CloseBoxMultiple'
 import AlertCircle from 'vue-material-design-icons/AlertCircle'
 import Star from 'vue-material-design-icons/Star'
 import DownloadOutline from 'vue-material-design-icons/DownloadOutline'
@@ -175,6 +176,7 @@ export default {
 		Modal,
 		Send,
 		Button,
+		CloseBoxMultiple,
 	},
 
 	directives: {
@@ -240,7 +242,14 @@ export default {
 	},
 
 	methods: {
-		...mapActions(['appendFiles', 'deleteFace', 'renameFace']),
+		...mapActions([
+			'appendFiles',
+			'deleteFace',
+			'renameFace',
+			'downloadFiles',
+			'toggleFavoriteForFiles',
+			'removeFilesFromFace',
+		]),
 
 		openViewer(fileId) {
 			const file = this.files[fileId]
@@ -255,10 +264,10 @@ export default {
 			})
 		},
 
-		async removeFilesFromFace(fileIds) {
+		async handleRemoveFilesFromFace(fileIds) {
 			try {
 				this.loadingCount++
-				await this.removeFilesFromFace({ albumName: this.albumName, fileIdsToAdd: fileIds })
+				await this.removeFilesFromFace({ faceName: this.faceName, fileIdsToRemove: fileIds })
 			} catch (error) {
 				logger.error(error)
 			} finally {

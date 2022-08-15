@@ -128,7 +128,7 @@ export default {
 					.map(file => genFileInfo(file))
 					.map(file => ({ ...file, filename: file.realpath.replace(`/${getCurrentUser().uid}/files`, '') }))
 
-				const fileIds = fetchedFiles.map(file => file.fileid)
+				const fileIds = fetchedFiles.map(file => '' + file.fileid)
 
 				this.appendFiles(fetchedFiles)
 

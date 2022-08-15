@@ -115,6 +115,7 @@ export default {
 		flex-wrap: wrap;
 		overflow: scroll;
 		gap: 32px;
+		align-content: flex-start;
 	}
 
 	&__empty {

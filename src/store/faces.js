@@ -63,6 +63,7 @@ const mutations = {
 	 */
 	removeFaces(state, { faceNames }) {
 		faceNames.forEach(faceName => delete state.faces[faceName])
+		faceNames.forEach(faceName => delete state.facesFiles[faceName])
 	},
 
 	/**
@@ -153,13 +154,13 @@ const actions = {
 	 *
 	 * @param {object} context vuex context
 	 * @param {object} data destructuring object
-	 * @param {string} data.albumName the album name
+	 * @param {string} data.faceName the album name
 	 * @param {string[]} data.fileIdsToRemove list of files ids to remove
 	 */
-	async removeFilesFromAlbum(context, { albumName, fileIdsToRemove }) {
+	async removeFilesFromFace(context, { faceName, fileIdsToRemove }) {
 		const semaphore = new Semaphore(5)
 
-		context.commit('removeFilesFromAlbum', { albumName, fileIdsToRemove })
+		await context.commit('removeFilesFromFace', { faceName, fileIdsToRemove })
 
 		const promises = fileIdsToRemove
 			.map(async (fileId) => {
@@ -167,12 +168,12 @@ const actions = {
 				const symbol = await semaphore.acquire()
 
 				try {
-					await client.deleteFile(`/photos/${getCurrentUser()?.uid}/albums/${albumName}/${fileBaseName}`)
+					await client.deleteFile(`/recognize/${getCurrentUser()?.uid}/faces/${faceName}/${fileBaseName}`)
 				} catch (error) {
-					context.commit('addFilesToAlbum', { albumName, fileIdsToAdd: [fileId] })
+					context.commit('addFilesToFace', { faceName, fileIdsToAdd: [fileId] })
 
-					logger.error(t('photos', 'Failed to delete {fileBaseName}.', { fileBaseName }), error)
-					showError(t('photos', 'Failed to delete {fileBaseName}.', { fileBaseName }))
+					logger.error(t('photos', 'Failed to remove {fileBaseName}.', { fileBaseName }), error)
+					showError(t('photos', 'Failed to remove {fileBaseName}.', { fileBaseName }))
 				} finally {
 					semaphore.release(symbol)
 				}
