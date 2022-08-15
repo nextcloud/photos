@@ -101,7 +101,7 @@
 			:file-ids="faceFileIds"
 			:loading="loadingFiles || loadingFaces">
 			<File slot-scope="{file, visibility}"
-				:item="files[file.id]"
+				:file="files[file.id]"
 				:allow-selection="true"
 				:selected="selection[file.id] === true"
 				:visibility="visibility"
