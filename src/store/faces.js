@@ -191,23 +191,20 @@ const actions = {
 	 * @param {string} data.faceName - The wanted name for the face.
 	 */
 	async renameFace(context, { oldName, faceName }) {
-		const face = state.faces[oldName]
-		const files = state.facesFiles[oldName]
+		let face = state.faces[oldName]
 
 		try {
-			await context.commit('removeFaces', { faceNames: [oldName] })
-
 			await client.moveFile(
 				`/recognize/${getCurrentUser()?.uid}/faces/${oldName}`,
 				`/recognize/${getCurrentUser()?.uid}/faces/${faceName}`,
 			)
-			face.basename = faceName
+			context.commit('removeFaces', { faceNames: [oldName] })
+			face = { ...face, basename: faceName }
 		} catch (error) {
 			logger.error(t('photos', 'Failed to rename {oldName} to {faceName}.', { oldName, faceName }), error)
 			showError(t('photos', 'Failed to rename {oldName} to {faceName}.', { oldName, faceName }))
 		} finally {
-			await context.commit('addFaces', { faces: [face] })
-			await context.commit('addFilesToFace', { faceName: face.basename, fileIdsToAdd: files })
+			context.commit('addFaces', { faces: [face] })
 		}
 	},
 

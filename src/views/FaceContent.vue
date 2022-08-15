@@ -238,7 +238,9 @@ export default {
 
 	watch: {
 		face() {
-			this.fetchFaceContent(this.faceName)
+			if (this.face) {
+				this.fetchFaceContent(this.faceName)
+			}
 		},
 	},
 
@@ -293,8 +295,6 @@ export default {
 				this.loadingCount++
 				await this.renameFace({ oldName: this.faceName, faceName })
 				this.showRenameModal = false
-				await this.fetchFaceContent(faceName, true)
-				// eslint-disable-next-line vue/no-mutating-props
 				this.$router.push({ name: 'facecontent', params: { faceName } })
 			} catch (error) {
 				logger.error(error)
