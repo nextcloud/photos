@@ -246,7 +246,10 @@ export default {
 			const file = this.files[fileId]
 			OCA.Viewer.open({
 				path: file.filename,
-				list: this.albumFileIds.map(fileId => this.files[fileId]).filter(file => !file.sectionHeader),
+				list: this.faceFileIds.map(fileId => ({
+					...this.files[fileId],
+					basename: this.files[fileId].basename.split('-', 2)[1],
+				})).filter(file => !file.sectionHeader),
 				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
 				canLoop: file.canLoop,
 			})
