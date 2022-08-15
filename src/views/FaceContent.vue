@@ -49,7 +49,8 @@
 			<div v-if="face !== undefined" class="album__header__actions">
 				<Actions :force-menu="true">
 					<ActionButton :close-after-click="true"
-						:title="t('photos', 'Rename')"
+						:aria-label="t('photos', 'Rename person')"
+						:title="t('photos', 'Rename person')"
 						@click="showRenameModal = true">
 						<template #icon>
 							<Pencil />
@@ -57,8 +58,8 @@
 					</ActionButton>
 					<template v-if="selectedFileIds.length">
 						<ActionButton :close-after-click="true"
-							:aria-label="t('photos', 'Download selection')"
-							:title="t('photos', 'Download')"
+							:aria-label="t('photos', 'Download selected files')"
+							:title="t('photos', 'Download selected files')"
 							@click="downloadSelection">
 							<DownloadOutline slot="icon" />
 						</ActionButton>
@@ -359,24 +360,27 @@ export default {
 		min-height: 60px;
 		align-items: center;
 		justify-content: space-between;
-		position: fixed;
+		position: sticky;
+		top: var(--header-height);
 		z-index: 3;
 		background: var(--color-main-background);
 
 		&__left {
 			height: 100%;
 			display: flex;
-			align-items: flex-start;
+			align-items: center;
 		}
 
 		&__title {
-			min-width: 300px;
-
 			.album-location {
 				margin-left: -4px;
 				display: flex;
 				color: var(--color-text-lighter);
 			}
+		}
+
+		&__loader {
+			margin-left: 32px;
 		}
 
 		&__actions {
