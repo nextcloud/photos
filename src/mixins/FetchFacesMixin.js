@@ -100,12 +100,12 @@ export default {
 			}
 		},
 
-		async fetchFaceContent(faceName) {
+		async fetchFaceContent(faceName, force) {
 			if (this.loadingFiles) {
 				return
 			}
 
-			if (this.facesFiles[faceName] && this.facesFiles[faceName].length) {
+			if (!force && this.facesFiles[faceName] && this.facesFiles[faceName].length) {
 				return
 			}
 
