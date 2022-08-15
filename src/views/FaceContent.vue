@@ -24,7 +24,7 @@
 	<EmptyContent v-if="face === undefined && !loadingFiles && !loadingFaces" class="empty-content-with-illustration">
 		<template #icon>
 			<!-- eslint-disable-next-line vue/no-v-html -->
-			<span class="empty-content-illustration" v-html="FolderIllustration" />
+			<span class="empty-content-illustration" v-html="FaceIllustration" />
 		</template>
 		{{ t('photos', 'This person could not be found') }}
 	</EmptyContent>
@@ -155,7 +155,7 @@ import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import File from '../components/File.vue'
 import Loader from '../components/Loader.vue'
-import FolderIllustration from '../assets/Illustrations/folder.svg'
+import FaceIllustration from '../assets/Illustrations/face.svg'
 import logger from '../services/logger.js'
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
 import Vue from 'vue'
@@ -204,7 +204,7 @@ export default {
 			showAddPhotosModal: false,
 			showShareModal: false,
 			showRenameModal: false,
-			FolderIllustration,
+			FaceIllustration,
 			loadingCount: 0,
 		}
 	},
