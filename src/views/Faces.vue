@@ -33,9 +33,9 @@
 
 		<!-- No albums -->
 		<div v-if="noFaces && !loadingFaces" class="albums__empty">
-			<EmptyContent>
+			<EmptyContent class="empty-content-with-illustration">
 				<template #icon>
-					<AccountBoxMultipleOutline />
+					<span class="empty-content-illustration" v-html="FaceIllustration" />
 				</template>
 				<template #desc>
 					{{ t('photos', "No people have been discovered in your photos, yet.") }}
@@ -53,10 +53,9 @@
 </template>
 
 <script>
-import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline'
-
 import { EmptyContent } from '@nextcloud/vue'
 
+import FaceIllustration from '../assets/Illustrations/face.svg'
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
 import Loader from '../components/Loader.vue'
 import FaceCover from '../components/FaceCover.vue'
@@ -67,12 +66,17 @@ export default {
 		FaceCover,
 		EmptyContent,
 		Loader,
-		AccountBoxMultipleOutline,
 	},
 
 	mixins: [
 		FetchFacesMixin,
 	],
+
+	data() {
+		return {
+			FaceIllustration,
+		}
+	},
 
 	computed: {
 		/**
