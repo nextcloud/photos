@@ -56,6 +56,15 @@
 							<Pencil />
 						</template>
 					</ActionButton>
+					<ActionButton v-if="Object.keys(faces).length > 1"
+						:close-after-click="true"
+						:aria-label="t('photos', 'Unify with different person')"
+						:title="t('photos', 'Unify with different person')"
+						@click="showMergeModal = true">
+						<template #icon>
+							<Merge />
+						</template>
+					</ActionButton>
 					<template v-if="selectedFileIds.length">
 						<ActionButton :close-after-click="true"
 							:aria-label="t('photos', 'Download selected files')"
@@ -135,6 +144,12 @@
 				</Button>
 			</div>
 		</Modal>
+
+		<Modal v-if="showMergeModal"
+			:title="t('photos', 'Unify person')"
+			@close="showMergeModal = false">
+			<FaceMergeForm :first-face="faceName" @select="handleMerge($event)" />
+		</Modal>
 	</div>
 </template>
 
@@ -147,6 +162,7 @@ import AlertCircle from 'vue-material-design-icons/AlertCircle'
 import Star from 'vue-material-design-icons/Star'
 import DownloadOutline from 'vue-material-design-icons/DownloadOutline'
 import Send from 'vue-material-design-icons/Send'
+import Merge from 'vue-material-design-icons/Merge'
 
 import { Actions, ActionButton, Modal, EmptyContent, Button } from '@nextcloud/vue'
 
@@ -159,10 +175,12 @@ import FaceIllustration from '../assets/Illustrations/face.svg'
 import logger from '../services/logger.js'
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
 import Vue from 'vue'
+import FaceMergeForm from '../components/FaceMergeForm.vue'
 
 export default {
 	name: 'FaceContent',
 	components: {
+		FaceMergeForm,
 		Pencil,
 		Star,
 		DownloadOutline,
@@ -178,6 +196,7 @@ export default {
 		Send,
 		Button,
 		CloseBoxMultiple,
+		Merge,
 	},
 
 	directives: {
@@ -201,8 +220,7 @@ export default {
 
 	data() {
 		return {
-			showAddPhotosModal: false,
-			showShareModal: false,
+			showMergeModal: false,
 			showRenameModal: false,
 			FaceIllustration,
 			loadingCount: 0,
@@ -252,6 +270,7 @@ export default {
 			'downloadFiles',
 			'toggleFavoriteForFiles',
 			'removeFilesFromFace',
+			'moveFilesToFace',
 		]),
 
 		openViewer(fileId) {
@@ -295,6 +314,20 @@ export default {
 				this.loadingCount++
 				await this.renameFace({ oldName: this.faceName, faceName })
 				this.showRenameModal = false
+				this.$router.push({ name: 'facecontent', params: { faceName } })
+			} catch (error) {
+				logger.error(error)
+			} finally {
+				this.loadingCount--
+			}
+		},
+
+		async handleMerge(faceName) {
+			try {
+				this.loadingCount++
+				await this.moveFilesToFace({ oldFace: this.faceName, faceName, fileIdsToMove: this.facesFiles[this.faceName] })
+				await this.deleteFace({ faceName: this.faceName })
+				this.showMergeModal = false
 				this.$router.push({ name: 'facecontent', params: { faceName } })
 			} catch (error) {
 				logger.error(error)

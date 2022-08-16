@@ -42,16 +42,17 @@
 </template>
 
 <script>
-import he from 'he'
 import { mapGetters } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
+import FaceCoverMixin from '../mixins/FaceCoverMixin.js'
 
 export default {
 	name: 'FaceCover',
 
 	mixins: [
 		FetchFacesMixin,
+		FaceCoverMixin,
 	],
 
 	props: {
@@ -87,34 +88,12 @@ export default {
 		},
 
 		cover() {
-			return (this.facesFiles[this.face.basename] || [])
-				.slice(0, 25)
-				.map(fileId => this.files[fileId])
-				.map(file => ({ ...file, faceDetections: JSON.parse(he.decode(file.faceDetections)) }))
-			// sort larges face first
-				.sort((a, b) =>
-					b.faceDetections.find(d => d.faceName === this.face.basename).width
-							- a.faceDetections.find(d => d.faceName === this.face.basename).width
-				)
-			// sort fewest face detections first
-				.sort((a, b) =>
-					a.faceDetections.length
-							- b.faceDetections.length
-				)[0]
+			return this.getFaceCover(this.face.basename)
 		},
 
 		coverDimensions() {
 			if (!this.cover) return {}
-			const detections = this.cover.faceDetections
-
-			const detection = detections.find(detection => detection.faceName === this.face.basename)
-			const zoom = Math.max(1, (1 / detection.width) * 0.4)
-
-			return {
-				width: '100%',
-				transform: `translate(calc( 125px - ${(detection.x + detection.width / 2) * 100}% ), calc( 125px - ${(detection.y + detection.height / 2) * 100}% )) scale(${zoom})`,
-				transformOrigin: `${(detection.x + detection.width / 2) * 100}% ${(detection.y + detection.height / 2) * 100}%`,
-			}
+			return this.getCoverStyle(this.face.basename, 250)
 		},
 	},
 

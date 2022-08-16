@@ -106,7 +106,7 @@ const actions = {
 	 *
 	 * @param {object} context vuex context
 	 * @param {object} data destructuring object
-	 * @param {Album[]} data.faces list of faces
+	 * @param {Face[]} data.faces list of faces
 	 */
 	addFaces(context, { faces }) {
 		context.commit('addFaces', { faces })
@@ -117,32 +117,32 @@ const actions = {
 	 *
 	 * @param {object} context vuex context
 	 * @param {object} data destructuring object
-	 * @param {string} data.albumName the album name
-	 * @param {string[]} data.fileIdsToAdd list of files ids to add
+	 * @param {string} data.faceName the new face name
+	 * @param {string} data.faceName the album name
+	 * @param {string[]} data.fileIdsToMove list of files ids to move
+	 * @param data.oldFace
 	 */
-	async addFilesToAlbum(context, { albumName, fileIdsToAdd }) {
+	async moveFilesToFace(context, { oldFace, faceName, fileIdsToMove }) {
 		const semaphore = new Semaphore(5)
 
-		context.commit('addFilesToAlbum', { albumName, fileIdsToAdd })
-
-		const promises = fileIdsToAdd
+		const promises = fileIdsToMove
 			.map(async (fileId) => {
-				const fileName = context.getters.files[fileId].filename
 				const fileBaseName = context.getters.files[fileId].basename
 				const symbol = await semaphore.acquire()
 
 				try {
-					await client.copyFile(
-						`/files/${getCurrentUser()?.uid}/${fileName}`,
-						`/photos/${getCurrentUser()?.uid}/albums/${albumName}/${fileBaseName}`
+					await client.moveFile(
+						`/recognize/${getCurrentUser()?.uid}/faces/${oldFace}/${fileBaseName}`,
+						`/recognize/${getCurrentUser()?.uid}/faces/${faceName}/${fileBaseName}`
 					)
-				} catch (error) {
-					context.commit('removeFilesFromAlbum', { albumName, fileIdsToRemove: [fileId] })
-
-					logger.error(t('photos', 'Failed to add {fileBaseName} to album {albumName}.', { fileBaseName, albumName }), error)
-					showError(t('photos', 'Failed to add {fileBaseName} to album {albumName}.', { fileBaseName, albumName }))
-				} finally {
+					await context.commit('addFilesToFace', { faceName, fileIdsToAdd: [fileId] })
+					await context.commit('removeFilesFromFace', { faceName: oldFace, fileIdsToRemove: [fileId] })
 					semaphore.release(symbol)
+				} catch (error) {
+					logger.error(t('photos', 'Failed to move {fileBaseName} to person {faceName}.', { fileBaseName, faceName }), error)
+					showError(t('photos', 'Failed to move {fileBaseName} to person {faceName}.', { fileBaseName, faceName }))
+					semaphore.release(symbol)
+					throw error
 				}
 			})
 
