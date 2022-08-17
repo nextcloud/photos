@@ -11,6 +11,7 @@ OC.L10N.register(
     "Shared with you" : "Jaettu kanssasi",
     "Tagged photos" : "Tunnisteilla varustetut kuvat",
     "Locations" : "Sijainnit",
+    "Photos settings" : "Kuvien asetukset",
     "Open the full size \"{name}\" image" : "Avaa kuva \"{name}\" todellisessa koossa",
     "Open the \"{name}\" sub-directory" : "Avaa \"{name}\"-alikansio",
     "Share this folder" : "Jaa tämä kansio",
