@@ -42,8 +42,8 @@ export default {
 			  .map(file => ({ ...file, faceDetections: JSON.parse(he.decode(file.faceDetections)) }))
 			  // sort larges face first
 			  .sort((a, b) =>
-				  b.faceDetections.find(d => d.faceName === faceName).width
-				  - a.faceDetections.find(d => d.faceName === faceName).width
+				  b.faceDetections.find(d => d.title === faceName).width
+				  - a.faceDetections.find(d => d.title === faceName).width
 			  )
 			  // sort fewest face detections first
 			  .sort((a, b) =>
@@ -59,7 +59,7 @@ export default {
 			}
 			const detections = cover.faceDetections
 
-			const detection = detections.find(detection => detection.faceName === faceName)
+			const detection = detections.find(detection => detection.title === faceName)
 			const zoom = Math.max(1, (1 / detection.width) * 0.4)
 
 			return {
