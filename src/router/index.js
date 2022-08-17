@@ -29,6 +29,7 @@ import areTagsInstalled from '../services/AreTagsInstalled.js'
 import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
 import Faces from '../views/Faces'
 import FaceContent from '../views/FaceContent'
+import isRecognizeInstalled from '../services/IsRecognizeInstalled.js'
 
 const Folders = () => import('../views/Folders')
 const Albums = () => import('../views/Albums')
@@ -159,8 +160,11 @@ export default new Router({
 			path: '/faces',
 			name: 'faces',
 			component: Faces,
-			props: route => ({
-				rootTitle: t('photos', 'People'),
+			...((!isRecognizeInstalled) && {
+				beforeEnter() {
+					const recognizeInstallLink = generateUrl('/settings/apps/installed/recognize')
+					window.open(recognizeInstallLink, '_blank')
+				},
 			}),
 		},
 		{

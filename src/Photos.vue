@@ -39,7 +39,7 @@
 				<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Albums')">
 					<FolderMultipleImage slot="icon" :size="20" />
 				</AppNavigationItem>
-				<AppNavigationItem :to="{name: 'faces'}" :title="t('photos', 'People')">
+				<AppNavigationItem v-if="showPeopleMenuEntry" :to="{name: 'faces'}" :title="t('photos', 'People')">
 					<template #icon>
 						<AccountBoxMultipleOutline />
 					</template>
@@ -116,6 +116,7 @@ import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'
 import isMapsInstalled from './services/IsMapsInstalled.js'
 import areTagsInstalled from './services/AreTagsInstalled.js'
+import isRecognizeInstalled from './services/IsRecognizeInstalled'
 
 export default {
 	name: 'Photos',
@@ -147,6 +148,9 @@ export default {
 			showLocationMenuEntry: getCurrentUser() === null
 				? false
 				: getCurrentUser().isAdmin || isMapsInstalled,
+			showPeopleMenuEntry: getCurrentUser() === null
+				? false
+				: getCurrentUser().isAdmin || isRecognizeInstalled,
 		}
 	},
 
