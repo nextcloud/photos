@@ -44,7 +44,7 @@
 		</div>
 
 		<div v-else-if="!noFaces" class="albums__list">
-			<FaceCover v-for="face in faces"
+			<FaceCover v-for="face in orderedFaces"
 				:key="face.basename"
 				class="album"
 				:base-name="face.basename" />
@@ -59,6 +59,7 @@ import FaceIllustration from '../assets/Illustrations/face.svg'
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
 import Loader from '../components/Loader.vue'
 import FaceCover from '../components/FaceCover.vue'
+import { mapGetters } from 'vuex'
 
 export default {
 	name: 'Faces',
@@ -79,11 +80,24 @@ export default {
 	},
 
 	computed: {
+		...mapGetters([
+			'facesFiles',
+		]),
+
 		/**
 		 * @return {boolean} Whether the list of album is empty or not.
 		 */
 		noFaces() {
 			return Object.keys(this.faces).length === 0
+		},
+
+		orderedFaces() {
+			return Object.values(this.faces).sort((a, b) => {
+				if (!this.facesFiles[b.basename] || !this.facesFiles[a.basename]) {
+					return 0
+				}
+				return this.facesFiles[b.basename].length - this.facesFiles[a.basename].length
+			})
 		},
 	},
 }
