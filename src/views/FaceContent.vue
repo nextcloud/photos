@@ -299,6 +299,7 @@ export default {
 			try {
 				this.loadingCount++
 				await this.removeFilesFromFace({ faceName: this.faceName, fileIdsToRemove: fileIds })
+				this.resetSelection()
 			} catch (error) {
 				logger.error(error)
 			} finally {

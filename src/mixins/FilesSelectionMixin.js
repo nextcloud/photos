@@ -41,6 +41,10 @@ export default {
 		onUncheckFiles(filesIds) {
 			filesIds.forEach((/** @type {string} */ filesId) => this.$set(this.selection, filesId, false))
 		},
+
+		resetSelection() {
+			this.selection = {}
+		},
 	},
 
 	computed: {
