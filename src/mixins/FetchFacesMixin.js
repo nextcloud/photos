@@ -79,7 +79,7 @@ export default {
 				this.errorFetchingFaces = null
 
 				const { request, cancel } = cancelableRequest(client.getDirectoryContents)
-				this.cancelAlbumsRequest = cancel
+				this.cancelFacesRequest = cancel
 
 				const faces = await request(`/recognize/${getCurrentUser()?.uid}/faces/`)
 				this.$store.dispatch('addFaces', { faces })
