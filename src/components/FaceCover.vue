@@ -145,6 +145,7 @@ export default {
 		flex-direction: column;
 		width: 250px;
 		margin-top: 4px;
+		text-align: center;
 
 		@media only screen and (max-width: 1020px) {
 			width: 95px;
@@ -158,7 +159,6 @@ export default {
 		}
 
 		&__second-line {
-			display: flex;
 			color: var(--color-text-maxcontrast);
 		}
 
