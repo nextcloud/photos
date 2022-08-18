@@ -38,68 +38,77 @@
 	<div v-else class="album">
 		<div class="album__header">
 			<div class="album__header__left">
+				<Actions>
+					<ActionButton @click="$router.push('/faces/')">
+						<template #icon>
+							<ArrowLeft />
+						</template>{{ t('photos', 'Back') }}
+					</ActionButton>
+				</Actions>
 				<div class="album__header__title">
-					<b v-if="face !== undefined" class="album-name">
+					<h2 v-if="face !== undefined" :class="{'album-name': true, 'hidden-visually': face.basename.match(/^[0-9]+$/)}">
 						{{ face.basename }}
-					</b>
+					</h2>
 				</div>
 
 				<Loader v-if="loadingCount > 0 || loadingFaces" />
 			</div>
 			<div v-if="face !== undefined" class="album__header__actions">
-				<Actions :force-menu="true">
+				<Actions>
 					<ActionButton :close-after-click="true"
 						:aria-label="t('photos', 'Rename person')"
-						:title="t('photos', 'Rename person')"
 						@click="showRenameModal = true">
 						<template #icon>
 							<Pencil />
 						</template>
+						{{ t('photos', 'Rename person') }}
 					</ActionButton>
+				</Actions>
+				<Actions :force-menu="true">
 					<ActionButton v-if="Object.keys(faces).length > 1"
 						:close-after-click="true"
-						:aria-label="t('photos', 'Unify with different person')"
-						:title="t('photos', 'Unify with different person')"
+						:aria-label="t('photos', 'Merge with different person')"
 						@click="showMergeModal = true">
 						<template #icon>
 							<Merge />
 						</template>
+						{{ t('photos', 'Merge with different person') }}
 					</ActionButton>
 					<template v-if="selectedFileIds.length">
 						<ActionButton :close-after-click="true"
 							:aria-label="t('photos', 'Download selected files')"
-							:title="t('photos', 'Download selected files')"
 							@click="downloadSelection">
-							<DownloadOutline slot="icon" />
+							<Download slot="icon" />
+							{{ t('photos', 'Download selected photos') }}
 						</ActionButton>
 						<ActionButton v-if="shouldFavoriteSelection"
 							:close-after-click="true"
 							:aria-label="t('photos', 'Mark selection as favorite')"
-							:title="t('photos', 'Favorite')"
 							@click="favoriteSelection">
 							<Star slot="icon" />
+							{{ t('photos', 'Favorite') }}
 						</ActionButton>
 						<ActionButton v-else
 							:close-after-click="true"
 							:aria-label="t('photos', 'Remove selection from favorites')"
-							:title="t('photos', 'Remove from favorites')"
 							@click="unFavoriteSelection">
 							<Star slot="icon" />
+							{{ t('photos', 'Remove from favorites') }}
 						</ActionButton>
 						<ActionButton :close-after-click="true"
-							:title="n('photos', 'Remove file from person', 'Remove files from person', selectedFileIds.length)"
 							@click="handleRemoveFilesFromFace(selectedFileIds)">
 							<template #icon>
-								<CloseBoxMultiple />
+								<Close />
 							</template>
+							{{ n('photos', 'Remove photo from person', 'Remove photos from person', selectedFileIds.length) }}
 						</ActionButton>
 					</template>
 					<ActionButton :close-after-click="true"
-						:title="t('photos', 'Delete person')"
 						@click="handleDeleteFace">
 						<template #icon>
-							<TrashCan />
+							<Close />
 						</template>
+						{{ t('photos', 'Remove person') }}
 					</ActionButton>
 				</Actions>
 			</div>
@@ -146,7 +155,7 @@
 		</Modal>
 
 		<Modal v-if="showMergeModal"
-			:title="t('photos', 'Unify person')"
+			:title="t('photos', 'Merge person')"
 			@close="showMergeModal = false">
 			<FaceMergeForm :first-face="faceName" @select="handleMerge($event)" />
 		</Modal>
@@ -156,13 +165,13 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import Pencil from 'vue-material-design-icons/Pencil'
-import TrashCan from 'vue-material-design-icons/TrashCan'
-import CloseBoxMultiple from 'vue-material-design-icons/CloseBoxMultiple'
+import Close from 'vue-material-design-icons/Close'
 import AlertCircle from 'vue-material-design-icons/AlertCircle'
 import Star from 'vue-material-design-icons/Star'
-import DownloadOutline from 'vue-material-design-icons/DownloadOutline'
+import Download from 'vue-material-design-icons/Download'
 import Send from 'vue-material-design-icons/Send'
 import Merge from 'vue-material-design-icons/Merge'
+import ArrowLeft from 'vue-material-design-icons/ArrowLeft'
 
 import { Actions, ActionButton, Modal, EmptyContent, Button } from '@nextcloud/vue'
 
@@ -183,8 +192,8 @@ export default {
 		FaceMergeForm,
 		Pencil,
 		Star,
-		DownloadOutline,
-		TrashCan,
+		Download,
+		Close,
 		AlertCircle,
 		FilesListViewer,
 		File,
@@ -195,8 +204,8 @@ export default {
 		Modal,
 		Send,
 		Button,
-		CloseBoxMultiple,
 		Merge,
+		ArrowLeft,
 	},
 
 	directives: {
@@ -312,8 +321,9 @@ export default {
 		async handleRenameFace(faceName) {
 			try {
 				this.loadingCount++
-				await this.renameFace({ oldName: this.faceName, faceName })
 				this.showRenameModal = false
+				const oldName = this.faceName
+				await this.renameFace({ oldName, faceName })
 				this.$router.push({ name: 'facecontent', params: { faceName } })
 			} catch (error) {
 				logger.error(error)
@@ -375,7 +385,6 @@ export default {
 .album {
 	display: flex;
 	flex-direction: column;
-	padding: 8px 64px;
 
 	&__empty {
 		display: flex;
@@ -397,6 +406,12 @@ export default {
 		top: var(--header-height);
 		z-index: 3;
 		background: var(--color-main-background);
+		padding: 0 64px;
+
+		@media only screen and (max-width: 1020px) {
+			padding: 0;
+			padding-left: 64px;
+		}
 
 		&__left {
 			height: 100%;
@@ -405,10 +420,9 @@ export default {
 		}
 
 		&__title {
-			.album-location {
-				margin-left: -4px;
-				display: flex;
-				color: var(--color-text-lighter);
+			margin-left: 10px;
+			h2 {
+				margin-bottom: 0;
 			}
 		}
 
@@ -430,6 +444,11 @@ export default {
 		margin-top: 16px;
 		height: 100%;
 		min-height: 0; // Prevent it from overflowing in a flex context.
+		padding: 0 64px;
+
+		@media only screen and (max-width: 1020px) {
+			padding: 0;
+		}
 	}
 }
 

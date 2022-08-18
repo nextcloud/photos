@@ -30,12 +30,12 @@
 		</div>
 		<div class="face-cover__details">
 			<div class="face-cover__details__first-line">
-				<h2 class="face-cover__details__name">
+				<h2 :class="{'face-cover__details__name': true, 'hidden-visually': baseName.match(/^[0-9]+$/)}">
 					{{ baseName }}
 				</h2>
 			</div>
-			<div v-if="facesFiles[baseName]" class="album-cover__details__second-line">
-				{{ n('photos', '%n item', '%n items', facesFiles[baseName].length,) }}
+			<div v-if="facesFiles[baseName]" class="face-cover__details__second-line">
+				{{ n('photos', '%n photos', '%n photos', facesFiles[baseName].length,) }}
 			</div>
 		</div>
 	</router-link>
@@ -93,7 +93,7 @@ export default {
 
 		coverDimensions() {
 			if (!this.cover) return {}
-			return this.getCoverStyle(this.face.basename, 250)
+			return this.getCoverStyle(this.face.basename)
 		},
 	},
 
@@ -118,7 +118,7 @@ export default {
 	display: flex;
 	flex-direction: column;
 	padding: 10px;
-	border-radius: var(--border-radius);
+	border-radius: var(--border-radius-large);
 
 	&__crop-container {
 		overflow: hidden;
@@ -127,29 +127,44 @@ export default {
 		border-radius: 250px;
 		position: relative;
 		background: var(--color-background-darker);
+	  --photos-face-width: 250px;
+
+		@media only screen and (max-width: 1020px) {
+			width: 95px;
+			height: 95px;
+			--photos-face-width: 95px;
+		}
 	}
 
-	&:hover {
+	&:hover, &:focus {
 		background: var(--color-background-hover);
 	}
 
 	&__details {
 		display: flex;
 		flex-direction: column;
+		width: 250px;
+		margin-top: 4px;
+
+		@media only screen and (max-width: 1020px) {
+			width: 95px;
+		}
 
 		&__first-line {
 			display: flex;
+			height: 2em;
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
 
 		&__second-line {
 			display: flex;
-			color: var(--color-text-lighter);
+			color: var(--color-text-maxcontrast);
 		}
 
 		&__name {
 			flex-grow: 1;
 			margin: 0;
-			font-weight: normal;
 		}
 	}
 }

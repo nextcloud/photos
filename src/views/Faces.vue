@@ -27,9 +27,7 @@
 
 	<!-- Album list -->
 	<div v-else class="albums">
-		<div class="albums__header">
-			<Loader v-if="loadingFaces" />
-		</div>
+		<Loader v-if="loadingFaces" />
 
 		<!-- No albums -->
 		<div v-if="noFaces && !loadingFaces" class="albums__empty">
@@ -104,14 +102,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 .albums {
-	height: 100%;
 	display: flex;
 	flex-direction: column;
 	height: calc(100vh - var(--header-height));
-	padding: 4px 64px;
+	padding-left: 64px;
 
-	@media only screen and (max-width: 1200px) {
-		padding: 4px 32px;
+	@media only screen and (max-width: 1020px) {
+		padding: 0;
 	}
 
 	&__header {
@@ -125,7 +122,6 @@ export default {
 	}
 
 	&__list {
-		margin-top: 8px;
 		padding-top: 24px;
 		padding-bottom: 32px;
 		flex-grow: 1;

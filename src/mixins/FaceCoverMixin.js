@@ -52,7 +52,7 @@ export default {
 			  )[0]
 		},
 
-		getCoverStyle(faceName, baseWidth) {
+		getCoverStyle(faceName) {
 			const cover = this.getFaceCover(faceName)
 			if (!cover) {
 				return {}
@@ -64,7 +64,7 @@ export default {
 
 			return {
 				width: '100%',
-				transform: `translate(calc( ${baseWidth / 2}px - ${(detection.x + detection.width / 2) * 100}% ), calc( ${baseWidth / 2}px - ${(detection.y + detection.height / 2) * 100}% )) scale(${zoom})`,
+				transform: `translate(calc( var(--photos-face-width)/2 - ${(detection.x + detection.width / 2) * 100}% ), calc( var(--photos-face-width)/2 - ${(detection.y + detection.height / 2) * 100}% )) scale(${zoom})`,
 				transformOrigin: `${(detection.x + detection.width / 2) * 100}% ${(detection.y + detection.height / 2) * 100}%`,
 			}
 		},

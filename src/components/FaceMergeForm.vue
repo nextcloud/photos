@@ -11,10 +11,10 @@
 				<div class="face-list__item__crop-container">
 					<img class="face-list__item__image"
 						:src="getCoverUrl(face.basename)"
-						:style="getCoverStyle(face.basename, 50)">
+						:style="getCoverStyle(face.basename)">
 				</div>
 				<div class="face-list__item__details">
-					{{ face.basename }}
+					<span :class="{'hidden-visually': face.basename.match(/^[0-9]+$/)}">{{ face.basename }}</span>
 				</div>
 			</div>
 		</template>
@@ -54,7 +54,12 @@ export default {
 		]),
 
 		filteredFaces() {
-			return Object.values(this.faces).filter(face => face.basename !== this.firstFace)
+			return Object.values(this.faces).filter(face => face.basename !== this.firstFace).sort((a, b) => {
+				if (!this.facesFiles[b.basename] || !this.facesFiles[a.basename]) {
+					return 0
+				}
+				return this.facesFiles[b.basename].length - this.facesFiles[a.basename].length
+			})
 		},
 	},
 	methods: {
@@ -78,16 +83,19 @@ export default {
 <style scoped lang="scss">
 .face-list {
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	height: 350px;
+	flex-wrap: wrap;
+	padding: 12px;
 
 	&__item {
 		display: flex;
-		flex-direction: row;
+		flex-direction: column;
 		padding: 10px;
 		border-radius: var(--border-radius);
 		align-items: center;
 		cursor: pointer;
+		width: 120px;
 
 		* {
 			cursor: pointer;
@@ -95,19 +103,25 @@ export default {
 
 		&__crop-container {
 			overflow: hidden;
-			width: 50px;
-			height: 50px;
-			border-radius: 50px;
+			width: 60px;
+			height: 60px;
+			border-radius: 60px;
 			position: relative;
 			background: var(--color-background-darker);
+			--photos-face-width: 60px;
 		}
 
-		&:hover {
+		&:hover, &:focus {
 			background: var(--color-background-hover);
 		}
 
 		&__details {
 			padding: 10px;
+			height: 1em;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			width: 100%;
+			text-align: center;
 		}
 	}
 }
