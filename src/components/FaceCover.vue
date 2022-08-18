@@ -1,7 +1,9 @@
 <!--
  - @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
+ - @copyright Copyright (c) 2022 Marcel Klehr <mklehr@gmx.net>
  -
  - @author Louis Chemineau <louis@chmn.me>
+ - @author Marcel Klehr <mklehr@gmx.net>
  -
  - @license AGPL-3.0-or-later
  -

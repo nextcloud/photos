@@ -1,7 +1,9 @@
 <!--
  - @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
+ - @copyright Copyright (c) 2022 Marcel Klehr <mklehr@gmx.net>
  -
  - @author Louis Chemineau <louis@chmn.me>
+ - @author Marcel Klehr <mklehr@gmx.net>
  -
  - @license AGPL-3.0-or-later
  -
@@ -25,12 +27,12 @@
 		{{ t('photos', 'An error occurred') }}
 	</EmptyContent>
 
-	<!-- Album list -->
-	<div v-else class="albums">
+	<!-- Face list -->
+	<div v-else class="faces">
 		<Loader v-if="loadingFaces" />
 
-		<!-- No albums -->
-		<div v-if="noFaces && !loadingFaces" class="albums__empty">
+		<!-- No faces -->
+		<div v-if="noFaces && !loadingFaces" class="faces__empty">
 			<EmptyContent class="empty-content-with-illustration">
 				<template #icon>
 					<AccountBoxMultipleOutline />
@@ -42,10 +44,9 @@
 			</EmptyContent>
 		</div>
 
-		<div v-else-if="!noFaces" class="albums__list">
+		<div v-else-if="!noFaces" class="faces__list">
 			<FaceCover v-for="face in orderedFaces"
 				:key="face.basename"
-				class="album"
 				:base-name="face.basename" />
 		</div>
 	</div>
@@ -79,7 +80,7 @@ export default {
 		]),
 
 		/**
-		 * @return {boolean} Whether the list of album is empty or not.
+		 * @return {boolean} Whether the list of face is empty or not.
 		 */
 		noFaces() {
 			return Object.keys(this.faces).length === 0
@@ -97,7 +98,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.albums {
+.faces {
 	display: flex;
 	flex-direction: column;
 	height: calc(100vh - var(--header-height));
