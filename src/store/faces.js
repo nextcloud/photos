@@ -30,9 +30,9 @@ import Vue from 'vue'
 
 /**
  * @typedef {object} Face
- * @property {string} basename - The name of the album.
- * @property {number} lastmod - The creation date of the album.
- * @property {string} size - The number of items in the album.
+ * @property {string} basename - The name of the face.
+ * @property {number} lastmod - The creation date of the face.
+ * @property {string} size - The number of items in the face.
  */
 
 const state = {
@@ -42,11 +42,11 @@ const state = {
 
 const mutations = {
 	/**
-	 * Add albums to the album collection.
+	 * Add faces to the face collection.
 	 *
 	 * @param {object} state vuex state
 	 * @param {object} data destructuring object
-	 * @param {Array} data.faces list of albums
+	 * @param {Array} data.faces list of faces
 	 */
 	addFaces(state, { faces }) {
 		for (const face of faces) {
@@ -59,7 +59,7 @@ const mutations = {
 	 *
 	 * @param {object} state vuex state
 	 * @param {object} data destructuring object
-	 * @param {Array} data.faceNames list of albums ids
+	 * @param {Array} data.faceNames list of faces ids
 	 */
 	removeFaces(state, { faceNames }) {
 		faceNames.forEach(faceName => delete state.faces[faceName])
@@ -87,7 +87,7 @@ const mutations = {
 	 *
 	 * @param {object} state vuex state
 	 * @param {object} data destructuring object
-	 * @param {string} data.faceName the album id
+	 * @param {string} data.faceName the face id
 	 * @param {string[]} data.fileIdsToRemove list of files
 	 */
 	removeFilesFromFace(state, { faceName, fileIdsToRemove }) {
@@ -102,7 +102,7 @@ const getters = {
 
 const actions = {
 	/**
-	 * Update files and albums
+	 * Update files and faces
 	 *
 	 * @param {object} context vuex context
 	 * @param {object} data destructuring object
@@ -113,14 +113,13 @@ const actions = {
 	},
 
 	/**
-	 * Add files to an album.
+	 * Add files to a face.
 	 *
 	 * @param {object} context vuex context
 	 * @param {object} data destructuring object
 	 * @param {string} data.faceName the new face name
-	 * @param {string} data.faceName the album name
+	 * @param {string} data.oldFace the old face name
 	 * @param {string[]} data.fileIdsToMove list of files ids to move
-	 * @param data.oldFace
 	 */
 	async moveFilesToFace(context, { oldFace, faceName, fileIdsToMove }) {
 		const semaphore = new Semaphore(5)
@@ -150,11 +149,11 @@ const actions = {
 	},
 
 	/**
-	 * Remove files to an album.
+	 * Remove files to an face.
 	 *
 	 * @param {object} context vuex context
 	 * @param {object} data destructuring object
-	 * @param {string} data.faceName the album name
+	 * @param {string} data.faceName the face name
 	 * @param {string[]} data.fileIdsToRemove list of files ids to remove
 	 */
 	async removeFilesFromFace(context, { faceName, fileIdsToRemove }) {
@@ -183,7 +182,7 @@ const actions = {
 	},
 
 	/**
-	 * Rename an album.
+	 * Rename an face.
 	 *
 	 * @param {object} context vuex context
 	 * @param {object} data destructuring object
@@ -209,19 +208,19 @@ const actions = {
 	},
 
 	/**
-	 * Delete an album.
+	 * Delete an face.
 	 *
 	 * @param {object} context vuex context
 	 * @param {object} data destructuring object
-	 * @param {string} data.faceName the id of the album
+	 * @param {string} data.faceName the id of the face
 	 */
 	async deleteFace(context, { faceName }) {
 		try {
 			await client.deleteFile(`/recognize/${getCurrentUser()?.uid}/faces/${faceName}`)
 			context.commit('removeFaces', { faceNames: [faceName] })
 		} catch (error) {
-			logger.error(t('photos', 'Failed to delete {albumName}.', { faceName }), error)
-			showError(t('photos', 'Failed to delete {albumName}.', { faceName }))
+			logger.error(t('photos', 'Failed to delete {faceName}.', { faceName }), error)
+			showError(t('photos', 'Failed to delete {faceName}.', { faceName }))
 		}
 	},
 }
