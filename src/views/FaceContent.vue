@@ -23,8 +23,7 @@
 	<!-- Errors handlers-->
 	<EmptyContent v-if="face === undefined && !loadingFiles && !loadingFaces" class="empty-content-with-illustration">
 		<template #icon>
-			<!-- eslint-disable-next-line vue/no-v-html -->
-			<span class="empty-content-illustration" v-html="FaceIllustration" />
+			<AccountBoxMultipleOutline />
 		</template>
 		{{ t('photos', 'This person could not be found') }}
 	</EmptyContent>
@@ -172,6 +171,7 @@ import Download from 'vue-material-design-icons/Download'
 import Send from 'vue-material-design-icons/Send'
 import Merge from 'vue-material-design-icons/Merge'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft'
+import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline'
 
 import { Actions, ActionButton, Modal, EmptyContent, Button } from '@nextcloud/vue'
 
@@ -180,7 +180,6 @@ import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import File from '../components/File.vue'
 import Loader from '../components/Loader.vue'
-import FaceIllustration from '../assets/Illustrations/face.svg'
 import logger from '../services/logger.js'
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
 import Vue from 'vue'
@@ -206,6 +205,7 @@ export default {
 		Button,
 		Merge,
 		ArrowLeft,
+		AccountBoxMultipleOutline,
 	},
 
 	directives: {
@@ -231,7 +231,6 @@ export default {
 		return {
 			showMergeModal: false,
 			showRenameModal: false,
-			FaceIllustration,
 			loadingCount: 0,
 		}
 	},
