@@ -129,7 +129,7 @@ export default {
 		border-radius: 250px;
 		position: relative;
 		background: var(--color-background-darker);
-	  --photos-face-width: 250px;
+		--photos-face-width: 250px;
 
 		@media only screen and (max-width: 1020px) {
 			width: 95px;
