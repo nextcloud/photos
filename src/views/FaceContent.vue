@@ -36,9 +36,9 @@
 		{{ t('photos', 'An error occurred') }}
 	</EmptyContent>
 
-	<div v-else class="album">
-		<div class="album__header">
-			<div class="album__header__left">
+	<div v-else class="face">
+		<div class="face__header">
+			<div class="face__header__left">
 				<Actions>
 					<ActionButton @click="$router.push('/faces/')">
 						<template #icon>
@@ -46,15 +46,15 @@
 						</template>{{ t('photos', 'Back') }}
 					</ActionButton>
 				</Actions>
-				<div class="album__header__title">
-					<h2 v-if="face !== undefined" :class="{'album-name': true, 'hidden-visually': face.basename.match(/^[0-9]+$/)}">
+				<div class="face__header__title">
+					<h2 v-if="face !== undefined" :class="{'face-name': true, 'hidden-visually': face.basename.match(/^[0-9]+$/)}">
 						{{ face.basename }}
 					</h2>
 				</div>
 
 				<Loader v-if="loadingCount > 0 || loadingFaces" />
 			</div>
-			<div v-if="face !== undefined" class="album__header__actions">
+			<div v-if="face !== undefined" class="face__header__actions">
 				<Actions>
 					<ActionButton :close-after-click="true"
 						:aria-label="t('photos', 'Rename person')"
@@ -116,7 +116,7 @@
 		</div>
 
 		<FilesListViewer v-if="face !== undefined"
-			class="album__photos"
+			class="face__photos"
 			:use-window="true"
 			:file-ids="faceFileIds"
 			:loading="loadingFiles || loadingFaces">
@@ -384,7 +384,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.album {
+.face {
 	display: flex;
 	flex-direction: column;
 
