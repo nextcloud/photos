@@ -116,7 +116,7 @@ import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'
 import isMapsInstalled from './services/IsMapsInstalled.js'
 import areTagsInstalled from './services/AreTagsInstalled.js'
-import isRecognizeInstalled from './services/IsRecognizeInstalled'
+import isRecognizeInstalled from './services/IsRecognizeInstalled.js'
 
 export default {
 	name: 'Photos',
