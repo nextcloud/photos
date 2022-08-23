@@ -39,6 +39,11 @@
 				<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Albums')">
 					<FolderMultipleImage slot="icon" :size="20" />
 				</AppNavigationItem>
+				<AppNavigationItem v-if="showPeopleMenuEntry" :to="{name: 'faces'}" :title="t('photos', 'People')">
+					<template #icon>
+						<AccountBoxMultipleOutline :size="20" />
+					</template>
+				</AppNavigationItem>
 				<AppNavigationItem :to="{name: 'folders'}" :title="t('photos', 'Folders')">
 					<Folder slot="icon" :size="20" />
 				</AppNavigationItem>
@@ -97,6 +102,7 @@ import CalendarToday from 'vue-material-design-icons/CalendarToday.vue'
 import Tag from 'vue-material-design-icons/Tag.vue'
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
+import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline'
 
 import Content from '@nextcloud/vue/dist/Components/Content'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
@@ -110,6 +116,7 @@ import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'
 import isMapsInstalled from './services/IsMapsInstalled.js'
 import areTagsInstalled from './services/AreTagsInstalled.js'
+import isRecognizeInstalled from './services/IsRecognizeInstalled.js'
 
 export default {
 	name: 'Photos',
@@ -130,6 +137,7 @@ export default {
 		Tag,
 		MapMarker,
 		ShareVariant,
+		AccountBoxMultipleOutline,
 	},
 	data() {
 		return {
@@ -140,6 +148,9 @@ export default {
 			showLocationMenuEntry: getCurrentUser() === null
 				? false
 				: getCurrentUser().isAdmin || isMapsInstalled,
+			showPeopleMenuEntry: getCurrentUser() === null
+				? false
+				: getCurrentUser().isAdmin || isRecognizeInstalled,
 		}
 	},
 

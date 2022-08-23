@@ -28,6 +28,7 @@ const props = `
 	<nc:realpath />
 	<nc:has-preview />
 	<nc:file-metadata-size />
+	<nc:face-detections />
 	<oc:favorite />
 	<d:resourcetype />`
 

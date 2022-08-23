@@ -201,7 +201,7 @@ export default {
 					text-overflow: ellipsis;
 				}
 
-				&__second-line {
+					&__second-line{
 					color: var(--color-text-lighter);
 				}
 			}

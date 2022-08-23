@@ -28,11 +28,15 @@ import isMapsInstalled from '../services/IsMapsInstalled.js'
 import areTagsInstalled from '../services/AreTagsInstalled.js'
 import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
 
+import isRecognizeInstalled from '../services/IsRecognizeInstalled.js'
+
 const Folders = () => import('../views/Folders')
 const Albums = () => import('../views/Albums')
 const AlbumContent = () => import('../views/AlbumContent')
 const Tags = () => import('../views/Tags')
 const Timeline = () => import('../views/Timeline')
+const Faces = () => import('../views/Faces')
+const FaceContent = () => import('../views/FaceContent')
 
 Vue.use(Router)
 
@@ -151,6 +155,26 @@ export default new Router({
 			props: route => ({
 				rootTitle: t('photos', 'On this day'),
 				onThisDay: true,
+			}),
+		},
+		{
+			path: '/faces',
+			name: 'faces',
+			component: Faces,
+			...((!isRecognizeInstalled) && {
+				beforeEnter() {
+					const recognizeInstallLink = generateUrl('/settings/apps/installed/recognize')
+					window.open(recognizeInstallLink, '_blank')
+				},
+			}),
+		},
+		{
+			path: '/faces/:faceName',
+			name: 'facecontent',
+			component: FaceContent,
+			props: route => ({
+				rootTitle: route.params.faceName,
+				faceName: route.params.faceName,
 			}),
 		},
 	],

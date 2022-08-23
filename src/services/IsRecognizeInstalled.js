@@ -1,5 +1,5 @@
 /**
- * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
+ * @copyright Copyright (c) 2018 John Molakvoæ <skjnldsv@protonmail.com>
  *
  * @author John Molakvoæ <skjnldsv@protonmail.com>
  *
@@ -12,7 +12,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
@@ -20,24 +20,7 @@
  *
  */
 
-import Vue from 'vue'
-import Vuex, { Store } from 'vuex'
+import { loadState } from '@nextcloud/initial-state'
 
-import files from './files.js'
-import albums from './albums.js'
-import faces from './faces.js'
-import folders from './folders.js'
-import systemtags from './systemtags.js'
-
-Vue.use(Vuex)
-export default new Store({
-	modules: {
-		files,
-		folders,
-		albums,
-		faces,
-		systemtags,
-	},
-
-	strict: process.env.NODE_ENV !== 'production',
-})
+const recognize = loadState('photos', 'recognize')
+export default recognize

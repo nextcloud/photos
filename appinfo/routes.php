@@ -46,6 +46,22 @@ return [
 				'path' => '',
 			]
 		],
+		['name' => 'page#index', 'url' => '/folders/{path}', 'verb' => 'GET', 'postfix' => 'folders',
+			'requirements' => [
+				'path' => '.*',
+			],
+			'defaults' => [
+				'path' => '',
+			]
+		],
+		['name' => 'page#index', 'url' => '/faces/{path}', 'verb' => 'GET', 'postfix' => 'faces',
+			'requirements' => [
+				'path' => '.*',
+			],
+			'defaults' => [
+				'path' => '',
+			]
+		],
 		['name' => 'page#index', 'url' => '/shared/{path}', 'verb' => 'GET', 'postfix' => 'shared',
 			'requirements' => [
 				'path' => '.*',
