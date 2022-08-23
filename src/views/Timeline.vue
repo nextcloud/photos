@@ -371,10 +371,6 @@ export default {
 			top: calc(var(--header-height) + 60px);
 		}
 
-		::v-deep .files-list-viewer__section-header {
-			top: calc(var(--header-height) + 60px);
-		}
-
 		.section-header {
 			padding: 24px 0 16px 0;
 		}
