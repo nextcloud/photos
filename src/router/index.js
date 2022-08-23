@@ -27,8 +27,7 @@ import Vue from 'vue'
 import isMapsInstalled from '../services/IsMapsInstalled.js'
 import areTagsInstalled from '../services/AreTagsInstalled.js'
 import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
-import Faces from '../views/Faces'
-import FaceContent from '../views/FaceContent'
+
 import isRecognizeInstalled from '../services/IsRecognizeInstalled.js'
 
 const Folders = () => import('../views/Folders')
@@ -36,6 +35,8 @@ const Albums = () => import('../views/Albums')
 const AlbumContent = () => import('../views/AlbumContent')
 const Tags = () => import('../views/Tags')
 const Timeline = () => import('../views/Timeline')
+const Faces = () => import('../views/Faces')
+const FaceContent = () => import('../views/FaceContent')
 
 Vue.use(Router)
 
