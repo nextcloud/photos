@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace OCA\Photos\AppInfo;
 
+use OCA\DAV\Connector\Sabre\Principal;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -58,6 +59,8 @@ class Application extends App implements IBootstrap {
 	}
 
 	public function register(IRegistrationContext $context): void {
+		/** Register $principalBackend for the DAV collection */
+		$context->registerServiceAlias('principalBackend', Principal::class);
 	}
 
 	public function boot(IBootContext $context): void {

@@ -82,10 +82,6 @@ export default {
 			type: String,
 			default: '',
 		},
-		loading: {
-			type: Boolean,
-			required: true,
-		},
 		isRoot: {
 			type: Boolean,
 			default: true,
@@ -96,6 +92,7 @@ export default {
 		return {
 			error: null,
 			cancelRequest: null,
+			loading: false,
 		}
 	},
 
@@ -215,7 +212,7 @@ export default {
 
 			// if we don't already have some cached data let's show a loader
 			if (!this.tags[this.tagId]) {
-				this.$emit('update:loading', true)
+				this.loading = true
 			}
 			this.error = null
 
@@ -232,7 +229,7 @@ export default {
 				this.error = true
 			} finally {
 				// done loading
-				this.$emit('update:loading', false)
+				this.loading = false
 				this.cancelRequest = null
 			}
 
@@ -249,7 +246,7 @@ export default {
 
 			// if we don't already have some cached data let's show a loader
 			if (!this.tags[this.tagId]) {
-				this.$emit('update:loading', true)
+				this.loading = true
 			}
 			this.error = null
 
@@ -267,12 +264,11 @@ export default {
 				this.error = true
 			} finally {
 				// done loading
-				this.$emit('update:loading', false)
+				this.loading = false
 				this.cancelRequest = null
 			}
 		},
 	},
-
 }
 </script>
 

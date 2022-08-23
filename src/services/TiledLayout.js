@@ -36,17 +36,16 @@
  * @property {string} key -
  */
 
-const BASE_ROW_HEIGHT = 200
-
 /**
  * Split items in rows of equal width.
  * The last row will not be forced to match containerWidth.
  *
  * @param {TiledItem[]} items The list of item to split in row of equal width.
  * @param {number} containerWidth The width of a row.
+ * @param {number} baseHeight The base height of the rows.
  * @return {TiledRow[]}
  */
-export function splitItemsInRows(items, containerWidth) {
+export function splitItemsInRows(items, containerWidth, baseHeight = 200) {
 	if (containerWidth === 0) {
 		return []
 	}
@@ -66,7 +65,7 @@ export function splitItemsInRows(items, containerWidth) {
 		} while (
 			currentItem < items.length
 			&& !items[currentItem - 1].sectionHeader && !items[currentItem].sectionHeader
-			&& computeRowWidth([...rowItems, items[currentItem]]) <= containerWidth
+			&& computeRowWidth([...rowItems, items[currentItem]], baseHeight) <= containerWidth
 		)
 
 		rows[rowNumber] = {
@@ -74,7 +73,8 @@ export function splitItemsInRows(items, containerWidth) {
 			height: computeRowHeight(
 				rowItems,
 				containerWidth,
-				items.length === currentItem || items[currentItem].sectionHeader === true
+				items.length === currentItem || items[currentItem].sectionHeader === true,
+				baseHeight
 			),
 			// Key to help vue to keep track of the row in VirtualScrolling.
 			key: rowItems.map(item => item.id).join('-'),
@@ -87,14 +87,14 @@ export function splitItemsInRows(items, containerWidth) {
 }
 
 /**
- * Compute the row width based on its items with the assumption that their height is BASE_ROW_HEIGHT.
  *
  * @param {TiledItem[]} items The list of items in the row.
+ * @param {number} baseHeight The base height of the rows.
  * @return {number} The width of the row
  */
-function computeRowWidth(items) {
+function computeRowWidth(items, baseHeight) {
 	return items
-		.map(item => BASE_ROW_HEIGHT * item.ratio)
+		.map(item => baseHeight * item.ratio)
 		.reduce((sum, itemWidth) => sum + itemWidth)
 }
 
@@ -119,9 +119,10 @@ function computeRowWidth(items) {
  * @param {TiledItem[]} items The list of items in the row.
  * @param {number} containerWidth The width of the row.
  * @param {boolean} isLastRow Whether we are computing the height for the last row.
+ * @param {number} baseHeight The base height of the rows.
  * @return {number} The height of the row
  */
-function computeRowHeight(items, containerWidth, isLastRow) {
+function computeRowHeight(items, containerWidth, isLastRow, baseHeight) {
 	// Exception 1: there is only one item and its width it is a sectionHeader, meaning take the full width.
 	if (items.length === 1 && items[0].sectionHeader) {
 		return items[0].height
@@ -141,9 +142,9 @@ function computeRowHeight(items, containerWidth, isLastRow) {
 	}
 
 	// Exception 3: we reached the last row.
-	// Force the items width to match containerWidth, and limit their heigh to BASE_ROW_HEIGHT.
+	// Force the items width to match containerWidth, and limit their heigh to baseHeight + 20.
 	if (isLastRow) {
-		rowHeight = Math.min(BASE_ROW_HEIGHT + 20, rowHeight)
+		rowHeight = Math.min(baseHeight + 20, rowHeight)
 	}
 
 	return rowHeight

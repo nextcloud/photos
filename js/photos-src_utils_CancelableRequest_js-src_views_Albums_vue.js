@@ -59,7 +59,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 
@@ -72,7 +71,7 @@ __webpack_require__.r(__webpack_exports__);
     AccountMultiple: vue_material_design_icons_AccountMultiple__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   props: {
-    albumId: {
+    baseName: {
       type: String,
       required: true
     }
@@ -83,21 +82,21 @@ __webpack_require__.r(__webpack_exports__);
      * @return {Album}
      */
     album() {
-      return this.albums[this.albumId];
+      return this.albums[this.baseName];
     },
 
     /**
      * @return {string}
      */
     coverUrl() {
-      return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_3__.generateUrl)(`/core/preview?fileId=${this.album.cover}&x=${512}&y=${512}&forceIcon=0&a=1`);
+      return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_3__.generateUrl)(`/core/preview?fileId=${this.album.cover || 47515}&x=${512}&y=${512}&forceIcon=0&a=1`);
     },
 
     /**
      * @param {string}
      */
     prettyCreationDate() {
-      return _nextcloud_moment__WEBPACK_IMPORTED_MODULE_2___default().unix(this.album.creationDate).format('MMMM YYYY');
+      return _nextcloud_moment__WEBPACK_IMPORTED_MODULE_2___default().unix(this.album.lastmod).format('MMMM YYYY');
     }
 
   }
@@ -116,13 +115,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var vue_material_design_icons_Plus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-material-design-icons/Plus */ "./node_modules/vue-material-design-icons/Plus.vue");
-/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nextcloud/vue */ "./node_modules/@nextcloud/vue/dist/ncvuecomponents.js");
-/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _mixins_FetchAlbumsMixin_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../mixins/FetchAlbumsMixin.js */ "./src/mixins/FetchAlbumsMixin.js");
-/* harmony import */ var _components_AlbumCover_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/AlbumCover.vue */ "./src/components/AlbumCover.vue");
-/* harmony import */ var _components_EmptyContent_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/EmptyContent.vue */ "./src/components/EmptyContent.vue");
-/* harmony import */ var _components_AlbumCreationForm_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/AlbumCreationForm.vue */ "./src/components/AlbumCreationForm.vue");
+/* harmony import */ var vue_material_design_icons_FolderMultipleImage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-material-design-icons/FolderMultipleImage */ "./node_modules/vue-material-design-icons/FolderMultipleImage.vue");
+/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @nextcloud/vue */ "./node_modules/@nextcloud/vue/dist/ncvuecomponents.js");
+/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_vue__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _mixins_FetchAlbumsMixin_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../mixins/FetchAlbumsMixin.js */ "./src/mixins/FetchAlbumsMixin.js");
+/* harmony import */ var _components_AlbumCover_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/AlbumCover.vue */ "./src/components/AlbumCover.vue");
+/* harmony import */ var _components_AlbumForm_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/AlbumForm.vue */ "./src/components/AlbumForm.vue");
 /* harmony import */ var _components_Loader_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/Loader.vue */ "./src/components/Loader.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -193,22 +209,32 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'Albums',
   components: {
-    AlbumCover: _components_AlbumCover_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
-    EmptyContent: _components_EmptyContent_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
-    AlbumCreationForm: _components_AlbumCreationForm_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
+    AlbumCover: _components_AlbumCover_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
+    EmptyContent: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_2__.EmptyContent,
+    AlbumForm: _components_AlbumForm_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
     Loader: _components_Loader_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
-    Modal: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__.Modal,
-    Button: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__.Button,
-    Plus: vue_material_design_icons_Plus__WEBPACK_IMPORTED_MODULE_0__["default"]
+    Modal: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_2__.Modal,
+    Button: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_2__.Button,
+    Plus: vue_material_design_icons_Plus__WEBPACK_IMPORTED_MODULE_0__["default"],
+    FolderMultipleImage: vue_material_design_icons_FolderMultipleImage__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
-  mixins: [_mixins_FetchAlbumsMixin_js__WEBPACK_IMPORTED_MODULE_2__["default"]],
+  mixins: [_mixins_FetchAlbumsMixin_js__WEBPACK_IMPORTED_MODULE_3__["default"]],
 
   data() {
     return {
       showAlbumCreationForm: false
     };
-  }
+  },
 
+  computed: {
+    /**
+     * @return {boolean} Whether the list of album is empty or not.
+     */
+    noAlbums() {
+      return Object.keys(this.albums).length === 0;
+    }
+
+  }
 });
 
 /***/ }),
@@ -336,7 +362,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".photos-albums[data-v-28345ec4] {\n  height: 100%;\n  display: flex;\n  flex-direction: column;\n  height: calc(100vh - var(--header-height));\n  padding: 4px 64px;\n}\n@media only screen and (max-width: 1200px) {\n.photos-albums[data-v-28345ec4] {\n    padding: 4px 32px;\n}\n}\n.photos-albums .albums-header[data-v-28345ec4] {\n  display: flex;\n  min-height: 60px;\n  align-items: center;\n}\n.photos-albums .albums-header button[data-v-28345ec4] {\n  margin-right: 32px;\n}\n.photos-albums .albums-container[data-v-28345ec4] {\n  margin-top: 8px;\n  padding-top: 24px;\n  padding-bottom: 32px;\n  flex-grow: 1;\n  display: flex;\n  flex-wrap: wrap;\n  overflow: scroll;\n  gap: 32px;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".albums[data-v-28345ec4] {\n  height: 100%;\n  display: flex;\n  flex-direction: column;\n  height: calc(100vh - var(--header-height));\n  padding: 4px 64px;\n}\n@media only screen and (max-width: 1200px) {\n.albums[data-v-28345ec4] {\n    padding: 4px 32px;\n}\n}\n.albums__header[data-v-28345ec4] {\n  display: flex;\n  min-height: 60px;\n  align-items: center;\n}\n.albums__header button[data-v-28345ec4] {\n  margin-right: 32px;\n}\n.albums__list[data-v-28345ec4] {\n  margin-top: 8px;\n  padding-top: 24px;\n  padding-bottom: 32px;\n  flex-grow: 1;\n  display: flex;\n  flex-wrap: wrap;\n  overflow: scroll;\n  gap: 32px;\n}\n.albums__empty[data-v-28345ec4] {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.albums__empty__button[data-v-28345ec4] {\n  margin-top: 32px;\n}\n.empty-content-with-illustration[data-v-28345ec4]  .empty-content__icon {\n  width: 200px;\n  height: 200px;\n}\n.empty-content-with-illustration[data-v-28345ec4]  .empty-content__icon svg {\n  width: 200px;\n  height: 200px;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -822,7 +848,7 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c(
     "router-link",
-    { staticClass: "album-cover", attrs: { to: "/albums/" + _vm.albumId } },
+    { staticClass: "album-cover", attrs: { to: "/albums/" + _vm.baseName } },
     [
       _c("img", {
         staticClass: "album-cover__image",
@@ -832,7 +858,7 @@ var render = function () {
       _c("div", { staticClass: "album-cover__details" }, [
         _c("div", { staticClass: "album-cover__details__first-line" }, [
           _c("h2", { staticClass: "album-cover__details__name" }, [
-            _vm._v("\n\t\t\t\t" + _vm._s(_vm.album.name || "All") + "\n\t\t\t"),
+            _vm._v("\n\t\t\t\t" + _vm._s(_vm.baseName) + "\n\t\t\t"),
           ]),
           _vm._v(" "),
           _c(
@@ -852,9 +878,7 @@ var render = function () {
             "\n\t\t\t" +
               _vm._s(_vm.prettyCreationDate) +
               " ⸱ " +
-              _vm._s(
-                _vm.n("photos", "%n item", "%n items", _vm.album.itemCount)
-              ) +
+              _vm._s(_vm.n("photos", "%n item", "%n items", _vm.album.size)) +
               "\n\t\t"
           ),
         ]),
@@ -890,11 +914,11 @@ var render = function () {
       ])
     : _c(
         "div",
-        { staticClass: "photos-albums" },
+        { staticClass: "albums" },
         [
           _c(
             "div",
-            { staticClass: "albums-header" },
+            { staticClass: "albums__header" },
             [
               _c(
                 "Button",
@@ -925,61 +949,120 @@ var render = function () {
               ),
               _vm._v(" "),
               _vm.loadingAlbums ? _c("Loader") : _vm._e(),
-              _vm._v(" "),
-              _vm.showAlbumCreationForm
-                ? _c(
-                    "Modal",
-                    {
-                      attrs: { title: _vm.t("photos", "New album") },
-                      on: {
-                        close: function ($event) {
-                          _vm.showAlbumCreationForm = false
-                        },
-                      },
-                    },
-                    [
-                      _c("AlbumCreationForm", {
-                        on: {
-                          "album-created": function ($event) {
-                            _vm.showAlbumCreationForm = false
-                          },
-                        },
-                      }),
-                    ],
-                    1
-                  )
-                : _vm._e(),
             ],
             1
           ),
           _vm._v(" "),
-          _vm.albums.length !== 0
+          _vm.noAlbums && !_vm.loadingAlbums
             ? _c(
                 "div",
-                { staticClass: "albums-container" },
+                { staticClass: "albums__empty" },
+                [
+                  _c("EmptyContent", {
+                    scopedSlots: _vm._u(
+                      [
+                        {
+                          key: "icon",
+                          fn: function () {
+                            return [_c("FolderMultipleImage")]
+                          },
+                          proxy: true,
+                        },
+                        {
+                          key: "desc",
+                          fn: function () {
+                            return [
+                              _vm._v(
+                                "\n\t\t\t\t" +
+                                  _vm._s(
+                                    _vm.t("photos", "There is no album yet!")
+                                  ) +
+                                  "\n\t\t\t"
+                              ),
+                            ]
+                          },
+                          proxy: true,
+                        },
+                      ],
+                      null,
+                      false,
+                      3685789295
+                    ),
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "Button",
+                    {
+                      staticClass: "albums__empty__button",
+                      attrs: {
+                        type: "primary",
+                        "aria-label": _vm.t("photos", "Create a new album"),
+                      },
+                      on: {
+                        click: function ($event) {
+                          _vm.showAlbumCreationForm = true
+                        },
+                      },
+                      scopedSlots: _vm._u(
+                        [
+                          {
+                            key: "icon",
+                            fn: function () {
+                              return [_c("Plus")]
+                            },
+                            proxy: true,
+                          },
+                        ],
+                        null,
+                        false,
+                        1489515321
+                      ),
+                    },
+                    [
+                      _vm._v(
+                        "\n\t\t\t" + _vm._s(_vm.t("photos", "Add")) + "\n\t\t"
+                      ),
+                    ]
+                  ),
+                ],
+                1
+              )
+            : !_vm.noAlbums
+            ? _c(
+                "div",
+                { staticClass: "albums__list" },
                 _vm._l(_vm.albums, function (album) {
                   return _c("AlbumCover", {
-                    key: album.id,
+                    key: album.basename,
                     staticClass: "album",
-                    attrs: { "album-id": album.id },
+                    attrs: { "base-name": album.basename },
                   })
                 }),
                 1
               )
-            : _vm.albums.length === 0 && !_vm.loadingAlbums
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.showAlbumCreationForm
             ? _c(
-                "EmptyContent",
+                "Modal",
                 {
-                  key: "emptycontent",
-                  attrs: { "illustration-name": "empty" },
+                  attrs: { title: _vm.t("photos", "New album") },
+                  on: {
+                    close: function ($event) {
+                      _vm.showAlbumCreationForm = false
+                    },
+                  },
                 },
                 [
-                  _vm._v(
-                    "\n\t\t" +
-                      _vm._s(_vm.t("photos", "No albums yet.")) +
-                      "\n\t"
-                  ),
-                ]
+                  _c("AlbumForm", {
+                    on: {
+                      done: function ($event) {
+                        _vm.showAlbumCreationForm = false
+                      },
+                    },
+                  }),
+                ],
+                1
               )
             : _vm._e(),
         ],
@@ -994,4 +1077,4 @@ render._withStripped = true
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_utils_CancelableRequest_js-src_views_Albums_vue.js.map?v=8605bb7eb076051ced21
+//# sourceMappingURL=photos-src_utils_CancelableRequest_js-src_views_Albums_vue.js.map?v=60219cbbf0fba033967b

@@ -28,58 +28,38 @@
 					class="app-navigation__all_media"
 					:title="t('photos', 'All media')"
 					exact>
-					<template #icon>
-						<ImageIcon />
-					</template>
+					<ImageIcon slot="icon" :size="20" />
 				</AppNavigationItem>
 				<AppNavigationItem to="/photos" :title="t('photos', 'Photos')">
-					<template #icon>
-						<Camera />
-					</template>
+					<Camera slot="icon" :size="20" />
 				</AppNavigationItem>
 				<AppNavigationItem to="/videos" :title="t('photos', 'Videos')">
-					<template #icon>
-						<VideoIcon />
-					</template>
+					<VideoIcon slot="icon" :size="20" />
 				</AppNavigationItem>
 				<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Albums')">
-					<template #icon>
-						<FolderMultipleImage />
-					</template>
+					<FolderMultipleImage slot="icon" :size="20" />
 				</AppNavigationItem>
 				<AppNavigationItem :to="{name: 'folders'}" :title="t('photos', 'Folders')">
-					<template #icon>
-						<Folder />
-					</template>
+					<Folder slot="icon" :size="20" />
 				</AppNavigationItem>
 				<AppNavigationItem to="/favorites" :title="t('photos', 'Favorites')">
-					<template #icon>
-						<Star />
-					</template>
+					<Star slot="icon" :size="20" />
 				</AppNavigationItem>
 				<AppNavigationItem :to="{name: 'thisday'}" :title="t('photos', 'On this day')">
-					<template #icon>
-						<CalendarToday />
-					</template>
+					<CalendarToday slot="icon" :size="20" />
 				</AppNavigationItem>
 				<AppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared with you')">
-					<template #icon>
-						<ShareVariant />
-					</template>
+					<ShareVariant slot="icon" :size="20" />
 				</AppNavigationItem>
 				<AppNavigationItem v-if="areTagsInstalled"
 					:to="{name: 'tags'}"
 					:title="t('photos', 'Tagged photos')">
-					<template #icon>
-						<Tag />
-					</template>
+					<Tag slot="icon" :size="20" />
 				</AppNavigationItem>
 				<AppNavigationItem v-if="showLocationMenuEntry"
 					:to="{name: 'maps'}"
 					:title="t('photos', 'Locations')">
-					<template #icon>
-						<MapMarker />
-					</template>
+					<MapMarker slot="icon" :size="20" />
 				</AppNavigationItem>
 			</template>
 			<template #footer>
@@ -191,15 +171,23 @@ export default {
 	},
 }
 </script>
-<style lang="scss" scoped>
-.app-content {
-	display: flex;
-	flex-grow: 1;
-	flex-direction: column;
-	align-content: space-between;
-}
+<style lang="scss">
+body {
+	overflow-x: hidden; // Prevent horizontal scrollbar on chrome as .app-photos is 100vw, which means size of the window including the scrollbar.
 
-.app-navigation__photos::v-deep .app-navigation-entry-icon.icon-photos {
-	background-size: 20px;
+	.app-photos {
+		width: 100vw; // Prevent layout change when opening the Viewer as the scrollbar disappear (overflow: hidden on body)
+
+		.app-content {
+			display: flex;
+			flex-grow: 1;
+			flex-direction: column;
+			align-content: space-between;
+		}
+
+		.app-navigation__photos::v-deep .app-navigation-entry-icon.icon-photos {
+			background-size: 20px;
+		}
+	}
 }
 </style>

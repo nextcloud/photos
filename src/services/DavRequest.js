@@ -25,6 +25,7 @@ const props = `
 	<d:getetag />
 	<d:getcontenttype />
 	<d:getcontentlength />
+	<nc:realpath />
 	<nc:has-preview />
 	<nc:file-metadata-size />
 	<oc:favorite />

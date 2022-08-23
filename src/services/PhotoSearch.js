@@ -30,23 +30,24 @@ import moment from '@nextcloud/moment'
 /**
  * List files from a folder and filter out unwanted mimes
  *
- * @param {boolean} [onlyFavorites=false] not used
+ * @param {object} path the lookup path
  * @param {object} [options] used for the cancellable requests
  * @param {number} [options.firstResult=0] Index of the first result that we want (starts at 0)
  * @param {number} [options.nbResults=200] The number of file to fetch
  * @param {string[]} [options.mimesType=allMimes] Mime type of the files
  * @param {boolean} [options.full=false] get full data of the files
  * @param {boolean} [options.onThisDay=false] get only items from this day of year
+ * @param {boolean} [options.onlyFavorites=false] get only favorite items
  * @return {Promise<object[]>} the file list
  */
-export default async function(onlyFavorites = false, options = {}) {
-
+export default async function(path = '', options = {}) {
 	// default function options
 	options = {
 		firstResult: 0,
 		nbResults: 200,
 		mimesType: allMimes,
 		onThisDay: false,
+		onlyFavorites: false,
 		...options,
 	}
 
@@ -63,7 +64,7 @@ export default async function(onlyFavorites = false, options = {}) {
 		</d:eq>
 	`, '')
 
-	const eqFavorites = onlyFavorites
+	const eqFavorites = options.onlyFavorites
 		? `<d:eq>
 				<d:prop>
 					<oc:favorite/>
@@ -113,7 +114,7 @@ export default async function(onlyFavorites = false, options = {}) {
 					</d:select>
 					<d:from>
 						<d:scope>
-							<d:href>${prefixPath}</d:href>
+							<d:href>${prefixPath}/${path}</d:href>
 							<d:depth>infinity</d:depth>
 						</d:scope>
 					</d:from>
@@ -147,6 +148,6 @@ export default async function(onlyFavorites = false, options = {}) {
 	return response.data
 		.map(data => genFileInfo(data))
 		// remove prefix path from full file path
-		.map(data => Object.assign({}, data, { filename: data.filename.replace(prefixPath, '') }))
+		.map(data => ({ ...data, filename: data.filename.replace(prefixPath, '') }))
 
 }

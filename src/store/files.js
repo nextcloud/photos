@@ -44,12 +44,13 @@ const mutations = {
 				return
 			}
 			if (file.fileid >= 0) {
-				if (file.fileMetadataSize) {
-					file.fileMetadataSizeParsed = JSON.parse(file.fileMetadataSize.replace(/&quot;/g, '"'))
-				}
+				file.fileMetadataSizeParsed = JSON.parse(file.fileMetadataSize?.replace(/&quot;/g, '"') ?? '{}')
 				file.fileMetadataSizeParsed.width = file.fileMetadataSizeParsed?.width ?? 256
 				file.fileMetadataSizeParsed.height = file.fileMetadataSizeParsed?.height ?? 256
 			}
+
+			// Make the fileId a string once and for all.
+			file.fileid = file.fileid.toString()
 
 			// Precalculate dates as it is expensive.
 			file.timestamp = moment(file.lastmod).unix() // For sorting
@@ -165,7 +166,10 @@ const actions = {
 	deleteFiles(context, fileIds) {
 		const semaphore = new Semaphore(5)
 
-		const files = fileIds.map(fileId => state.files[fileId]).reduce((files, file) => ({ ...files, [file.fileid]: file }), {})
+		const files = fileIds
+			.map(fileId => state.files[fileId])
+			.reduce((files, file) => ({ ...files, [file.fileid]: file }), {})
+
 		fileIds.forEach(fileId => context.commit('deleteFile', fileId))
 
 		const promises = fileIds
@@ -197,10 +201,10 @@ const actions = {
 
 		const promises = fileIds
 			.map(async (fileId) => {
-				await semaphore.acquire()
+				const symbole = await semaphore.acquire()
 				await favoriteFile(state.files[fileId].filename, favoriteState)
 				context.commit('favoriteFile', { fileId, favoriteState })
-				return semaphore.release()
+				return semaphore.release(symbole)
 			})
 
 		return Promise.all(promises)
