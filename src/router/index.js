@@ -24,13 +24,19 @@ import { generateUrl } from '@nextcloud/router'
 import Router from 'vue-router'
 import Vue from 'vue'
 
-import isMapsInstalled from '../services/IsMapsInstalled'
-import areTagsInstalled from '../services/AreTagsInstalled'
-import { videoMimes } from '../services/AllowedMimes'
+import isMapsInstalled from '../services/IsMapsInstalled.js'
+import areTagsInstalled from '../services/AreTagsInstalled.js'
+import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
 
+import isRecognizeInstalled from '../services/IsRecognizeInstalled.js'
+
+const Folders = () => import('../views/Folders')
 const Albums = () => import('../views/Albums')
+const AlbumContent = () => import('../views/AlbumContent')
 const Tags = () => import('../views/Tags')
 const Timeline = () => import('../views/Timeline')
+const Faces = () => import('../views/Faces')
+const FaceContent = () => import('../views/FaceContent')
 
 Vue.use(Router)
 
@@ -54,31 +60,57 @@ export default new Router({
 	mode: 'history',
 	// if index.php is in the url AND we got this far, then it's working:
 	// let's keep using index.php in the url
-	base: generateUrl('/apps/photos', ''),
+	base: generateUrl('/apps/photos'),
 	linkActiveClass: 'active',
 	routes: [
 		{
 			path: '/',
 			component: Timeline,
-			name: 'timeline',
+			name: 'all_media',
+		},
+		{
+			path: '/photos',
+			component: Timeline,
+			name: 'photos',
 			props: route => ({
-				rootTitle: t('photos', 'Your photos'),
+				mimesType: imageMimes,
 			}),
 		},
 		{
-			path: '/albums/:path*',
+			path: '/videos',
+			component: Timeline,
+			name: 'videos',
+			props: route => ({
+				mimesType: videoMimes,
+			}),
+		},
+		{
+			path: '/albums',
 			component: Albums,
 			name: 'albums',
+		},
+		{
+			path: '/albums/:albumName*',
+			component: AlbumContent,
+			name: 'albumContent',
+			props: route => ({
+				albumName: route.params.albumName,
+			}),
+		},
+		{
+			path: '/folders/:path*',
+			component: Folders,
+			name: 'folders',
 			props: route => ({
 				path: parsePathParams(route.params.path),
 				// if path is empty
 				isRoot: !route.params.path,
-				rootTitle: t('photos', 'Your folders'),
+				rootTitle: t('photos', 'Folders'),
 			}),
 		},
 		{
 			path: '/shared/:path*',
-			component: Albums,
+			component: Folders,
 			name: 'shared',
 			props: route => ({
 				path: parsePathParams(route.params.path),
@@ -89,20 +121,10 @@ export default new Router({
 			}),
 		},
 		{
-			path: '/videos',
-			component: Timeline,
-			name: 'videos',
-			props: route => ({
-				rootTitle: t('photos', 'Your videos'),
-				mimesType: videoMimes,
-			}),
-		},
-		{
 			path: '/favorites',
 			component: Timeline,
 			name: 'favorites',
 			props: route => ({
-				rootTitle: t('photos', 'Favorites'),
 				onlyFavorites: true,
 			}),
 		},
@@ -133,6 +155,26 @@ export default new Router({
 			props: route => ({
 				rootTitle: t('photos', 'On this day'),
 				onThisDay: true,
+			}),
+		},
+		{
+			path: '/faces',
+			name: 'faces',
+			component: Faces,
+			...((!isRecognizeInstalled) && {
+				beforeEnter() {
+					const recognizeInstallLink = generateUrl('/settings/apps/installed/recognize')
+					window.open(recognizeInstallLink, '_blank')
+				},
+			}),
+		},
+		{
+			path: '/faces/:faceName',
+			name: 'facecontent',
+			component: FaceContent,
+			props: route => ({
+				rootTitle: route.params.faceName,
+				faceName: route.params.faceName,
 			}),
 		},
 	],

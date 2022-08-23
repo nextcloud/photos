@@ -6,17 +6,28 @@
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
     errorBaseline="tests/psalm-baseline.xml"
 >
-    <projectFiles>
-        <directory name="lib" />
-    </projectFiles>
-    <extraFiles>
-        <directory name="vendor/christophwurst/nextcloud" />
-    </extraFiles>
-    	<issueHandlers>
+	<stubs>
+		<file name="tests/stub.phpstub" preloadClasses="true"/>
+	</stubs>
+	<projectFiles>
+		<directory name="lib" />
+		<ignoreFiles>
+			<directory name="vendor" />
+		</ignoreFiles>
+	</projectFiles>
+	<extraFiles>
+		<directory name="vendor" />
+		<ignoreFiles>
+			<directory name="vendor/phpunit/php-code-coverage" />
+		</ignoreFiles>
+	</extraFiles>
+	<issueHandlers>
 		<UndefinedClass>
 			<errorLevel type="suppress">
-				<referencedClass name="OC" />
-				<referencedClass name="Doctrine\DBAL\Types\Type"/>
+				<referencedClass name="Doctrine\DBAL\Types\Type" />
+				<referencedClass name="OCA\DAV\Connector\Sabre\Principal" />
+				<referencedClass name="OCA\DAV\Connector\Sabre\File" />
+				<referencedClass name="OCA\DAV\Connector\Sabre\FilesPlugin" />
 			</errorLevel>
 		</UndefinedClass>
 		<UndefinedDocblockClass>
