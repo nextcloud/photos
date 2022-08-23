@@ -78,10 +78,10 @@ class PropFindPlugin extends ServerPlugin {
 	public function propFind(PropFind $propFind, INode $node): void {
 		if ($node instanceof AlbumPhoto) {
 			$propFind->handle(FilesPlugin::INTERNAL_FILEID_PROPERTYNAME, fn () => $node->getFile()->getFileId());
-			$propFind->handle(FilesPlugin::GETETAG_PROPERTYNAME,         fn () => $node->getETag());
-			$propFind->handle(self::FILE_NAME_PROPERTYNAME,              fn () => $node->getFile()->getName());
-			$propFind->handle(self::REALPATH_PROPERTYNAME,               fn () => $node->getFileInfo()->getPath());
-			$propFind->handle(self::FAVORITE_PROPERTYNAME,               fn () => $node->isFavorite() ? 1 : 0);
+			$propFind->handle(FilesPlugin::GETETAG_PROPERTYNAME, fn () => $node->getETag());
+			$propFind->handle(self::FILE_NAME_PROPERTYNAME, fn () => $node->getFile()->getName());
+			$propFind->handle(self::REALPATH_PROPERTYNAME, fn () => $node->getFileInfo()->getPath());
+			$propFind->handle(self::FAVORITE_PROPERTYNAME, fn () => $node->isFavorite() ? 1 : 0);
 
 			$propFind->handle(FilesPlugin::HAS_PREVIEW_PROPERTYNAME, function () use ($node) {
 				return json_encode($this->previewManager->isAvailable($node->getFileInfo()));
@@ -106,8 +106,8 @@ class PropFindPlugin extends ServerPlugin {
 
 		if ($node instanceof AlbumRoot) {
 			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn () => $node->getAlbum()->getAlbum()->getLastAddedPhoto());
-			$propFind->handle(self::NBITEMS_PROPERTYNAME,    fn () => count($node->getChildren()));
-			$propFind->handle(self::LOCATION_PROPERTYNAME,   fn () => $node->getAlbum()->getAlbum()->getLocation());
+			$propFind->handle(self::NBITEMS_PROPERTYNAME, fn () => count($node->getChildren()));
+			$propFind->handle(self::LOCATION_PROPERTYNAME, fn () => $node->getAlbum()->getAlbum()->getLocation());
 			$propFind->handle(self::DATE_RANGE_PROPERTYNAME, fn () => json_encode($node->getDateRange()));
 
 			// TODO detect dynamically which metadata groups are requested and

@@ -153,7 +153,7 @@ class AlbumMapperTest extends TestCase {
 
 	public function testCreateRenameGet() {
 		$album = $this->mapper->create("user1", "album1");
-		$this->mapper->rename($album->getId(),"renamed");
+		$this->mapper->rename($album->getId(), "renamed");
 
 		$retrievedAlbum = $this->mapper->get($album->getId());
 		$this->assertEquals("renamed", $retrievedAlbum->getTitle());
@@ -161,7 +161,7 @@ class AlbumMapperTest extends TestCase {
 
 	public function testCreateUpdateGet() {
 		$album = $this->mapper->create("user1", "album1");
-		$this->mapper->setLocation($album->getId(),"nowhere");
+		$this->mapper->setLocation($album->getId(), "nowhere");
 
 		$retrievedAlbum = $this->mapper->get($album->getId());
 		$this->assertEquals("nowhere", $retrievedAlbum->getLocation());
