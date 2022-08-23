@@ -41,7 +41,7 @@
 				</AppNavigationItem>
 				<AppNavigationItem v-if="showPeopleMenuEntry" :to="{name: 'faces'}" :title="t('photos', 'People')">
 					<template #icon>
-						<AccountBoxMultipleOutline />
+						<AccountBoxMultipleOutline :size="20" />
 					</template>
 				</AppNavigationItem>
 				<AppNavigationItem :to="{name: 'folders'}" :title="t('photos', 'Folders')">
