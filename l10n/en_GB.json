@@ -1,7 +1,10 @@
 { "translations": {
     "Photos" : "Photos",
+    "Videos" : "Videos",
     "Favorites" : "Favourites",
     "Shared with you" : "Shared with you",
+    "Download" : "Download",
+    "Delete" : "Delete",
     "Settings" : "Settings"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -1,11 +1,8 @@
 { "translations": {
     "Photos" : "Bilder",
     "Your memories under your control" : "Dina minnen under din kontroll",
-    "Your photos" : "Dina bilder",
-    "Your videos" : "Dina videor",
     "Favorites" : "Favoriter",
     "On this day" : "På den här dagen",
-    "Your folders" : "Dina mappar",
     "Shared with you" : "Delad med dig",
     "Tagged photos" : "Taggade bilder",
     "Locations" : "Platser",
@@ -15,11 +12,15 @@
     "Back to {folder}" : "Tillbaka till {folder}",
     "View" : "Visa",
     "Enable squared photos view" : "Aktivera kvadratiska foto-vyn",
-    "This folder does not exist" : "Denna mappen finns inte",
     "An error occurred" : "Ett fel uppstod",
+    "This folder does not exist" : "Denna mappen finns inte",
     "No photos in here" : "Det finns inga bilder här",
     "No tags yet" : "Inga taggar än",
     "Photos with tags will show up here" : "Bilder med taggar visas här",
+    "Download" : "Ladda ner",
+    "Your photos" : "Dina bilder",
+    "Your videos" : "Dina videor",
+    "Your folders" : "Dina mappar",
     "Settings" : "Inställningar"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

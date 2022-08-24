@@ -4,6 +4,13 @@ OC.L10N.register(
     "Photos" : "Photos",
     "Favorites" : "விருப்பங்கள்",
     "Shared with you" : "Shared with you",
+    "Back" : "பின்னுக்கு",
+    "Save" : "சேமிக்க ",
+    "Favorite" : "விருப்பமான",
+    "Remove from favorites" : "Remove from favorites",
+    "Add" : "சேர்க்க",
+    "Download" : "பதிவிறக்குக",
+    "Delete" : "நீக்குக",
     "Settings" : "அமைப்புகள்"
 },
 "nplurals=2; plural=(n != 1);");
