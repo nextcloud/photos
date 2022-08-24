@@ -1,11 +1,8 @@
 { "translations": {
     "Photos" : "Foto",
     "Your memories under your control" : "I tuoi ricordi sotto il tuo controllo",
-    "Your photos" : "Le tue foto",
-    "Your videos" : "I tuoi video",
     "Favorites" : "Preferiti",
     "On this day" : "In questo giorno",
-    "Your folders" : "Le tue cartelle",
     "Shared with you" : "Condivise con te",
     "Tagged photos" : "Foto con tag",
     "Locations" : "Posizioni",
@@ -16,11 +13,15 @@
     "_{years} year ago_::_{years} years ago_" : ["{years} anno fa","{years} anni fa","{years} anni fa"],
     "View" : "Visualizza",
     "Enable squared photos view" : "Abilita vista foto quadrate",
-    "This folder does not exist" : "Questa cartella non esiste",
     "An error occurred" : "Si è verificato un errore",
+    "This folder does not exist" : "Questa cartella non esiste",
     "No photos in here" : "Nessuna foto qui",
     "No tags yet" : "Ancora nessun tag",
     "Photos with tags will show up here" : "Le foto con i tag saranno mostrate qui",
+    "Download" : "Scarica",
+    "Your photos" : "Le tue foto",
+    "Your videos" : "I tuoi video",
+    "Your folders" : "Le tue cartelle",
     "Settings" : "Impostazioni"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

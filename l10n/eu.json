@@ -1,11 +1,9 @@
 { "translations": {
     "Photos" : "Argazkiak",
     "Your memories under your control" : "Zure oroitzapenak zure kontrolpean",
-    "Your photos" : "Zure argazkiak",
-    "Your videos" : "Zure bideoak",
+    "Videos" : "Bideoak",
     "Favorites" : "Gogokoak",
     "On this day" : "Egun honetan",
-    "Your folders" : "Zure karpetak",
     "Shared with you" : "Zurekin partekatua",
     "Tagged photos" : "Etiketaturiko argazkiak",
     "Locations" : "Kokapenak",
@@ -17,11 +15,16 @@
     "_{years} year ago_::_{years} years ago_" : ["orain dela urte {years}","orain dela {years} urte"],
     "View" : "Ikusi",
     "Enable squared photos view" : "Gaitu lauki formako argazki ikuspegia",
-    "This folder does not exist" : "Karpeta hau ez da existitzen",
     "An error occurred" : "Akats bat gertatu da",
+    "This folder does not exist" : "Karpeta hau ez da existitzen",
     "No photos in here" : "Argazkirik ez hemen",
     "No tags yet" : "Etitketarik ez oraindik",
     "Photos with tags will show up here" : "Etiketadun argazkiak hemen erakutsiko dira",
+    "Download" : "Deskargatu",
+    "Delete" : "Ezabatu",
+    "Your photos" : "Zure argazkiak",
+    "Your videos" : "Zure bideoak",
+    "Your folders" : "Zure karpetak",
     "Settings" : "Ezarpenak"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

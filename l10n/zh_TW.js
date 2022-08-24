@@ -3,11 +3,8 @@ OC.L10N.register(
     {
     "Photos" : "照片",
     "Your memories under your control" : "完全自主掌控您珍貴的回憶",
-    "Your photos" : "我的照片",
-    "Your videos" : "您的影片",
     "Favorites" : "我的最愛",
     "On this day" : "在這天",
-    "Your folders" : "您的資料夾",
     "Shared with you" : "與您分享",
     "Tagged photos" : "有標籤的照片",
     "Locations" : "地點",
@@ -19,11 +16,15 @@ OC.L10N.register(
     "_{years} year ago_::_{years} years ago_" : ["{years} 年前"],
     "View" : "檢視",
     "Enable squared photos view" : "啟用方形照片檢視",
-    "This folder does not exist" : "此資料夾不存在",
     "An error occurred" : "發生錯誤",
+    "This folder does not exist" : "此資料夾不存在",
     "No photos in here" : "此處無圖片檔案",
     "No tags yet" : "尚未加入標籤",
     "Photos with tags will show up here" : "此處會顯示圖片的標籤",
+    "Download" : "下載",
+    "Your photos" : "我的照片",
+    "Your videos" : "您的影片",
+    "Your folders" : "您的資料夾",
     "Settings" : "設定"
 },
 "nplurals=1; plural=0;");

@@ -1,6 +1,7 @@
 { "translations": {
     "Photos" : "Rasmlar",
     "Shared with you" : "Siz bilan baham ko'rdim",
+    "Download" : "Yuklab oling",
     "Settings" : "Sozlamalar"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
