@@ -3,7 +3,7 @@ OC.L10N.register(
     {
     "Photos" : "Fotod",
     "Your memories under your control" : "Sinu mälestused sinu kontrolli all",
-    "Your photos" : "Sinu fotod",
+    "Videos" : "Videod",
     "Favorites" : "Lemmikud",
     "Shared with you" : "Sinuga jagatud",
     "Tagged photos" : "Sildistatud fotod",
@@ -13,9 +13,14 @@ OC.L10N.register(
     "Share this folder" : "Jaga seda kausta",
     "Back to {folder}" : "Tagasi kausta {folder}",
     "An error occurred" : "Tekkis tõrge",
+    "Remove from favorites" : "Eemalda lemmikutest",
     "No photos in here" : "Siin ei ole fotosid",
     "No tags yet" : "Silte veel pole",
     "Photos with tags will show up here" : "Sildistatud fotod on siin näha",
+    "Download" : "Lae alla",
+    "Delete selection" : "Kustuta valik",
+    "Delete" : "Kustuta",
+    "Your photos" : "Sinu fotod",
     "Settings" : "Seaded"
 },
 "nplurals=2; plural=(n != 1);");

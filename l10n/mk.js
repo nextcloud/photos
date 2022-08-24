@@ -3,11 +3,8 @@ OC.L10N.register(
     {
     "Photos" : "Фотографии",
     "Your memories under your control" : "Вашите спомени под ваша контрола",
-    "Your photos" : "Твој фотографии",
-    "Your videos" : "Видеа",
     "Favorites" : "Омилени",
     "On this day" : "На денешен ден",
-    "Your folders" : "Папки",
     "Shared with you" : "Споделено со вас",
     "Tagged photos" : "Означени фотографии",
     "Locations" : "Локации",
@@ -19,11 +16,15 @@ OC.L10N.register(
     "_{years} year ago_::_{years} years ago_" : ["пред 1 година","пред {years} години"],
     "View" : "Погледни",
     "Enable squared photos view" : "Овозможи поглед на фотографиите во квадрати",
-    "This folder does not exist" : "Папката не постои",
     "An error occurred" : "Настана грешка",
+    "This folder does not exist" : "Папката не постои",
     "No photos in here" : "Овде нема фотографии",
     "No tags yet" : "Сеуште нема ознаки",
     "Photos with tags will show up here" : "Фотографиите со ознаки ќе се појават овде",
+    "Download" : "Преземи",
+    "Your photos" : "Твој фотографии",
+    "Your videos" : "Видеа",
+    "Your folders" : "Папки",
     "Settings" : "Параметри"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");
