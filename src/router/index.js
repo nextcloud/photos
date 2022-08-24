@@ -29,6 +29,7 @@ import areTagsInstalled from '../services/AreTagsInstalled.js'
 import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
 
 import isRecognizeInstalled from '../services/IsRecognizeInstalled.js'
+import { cancelAll } from '../services/RequestHandler.js'
 
 const Folders = () => import('../views/Folders')
 const Albums = () => import('../views/Albums')
@@ -56,7 +57,7 @@ const parsePathParams = (path) => {
 	return `/${Array.isArray(path) ? path.join('/') : path || ''}`
 }
 
-export default new Router({
+const router = new Router({
 	mode: 'history',
 	// if index.php is in the url AND we got this far, then it's working:
 	// let's keep using index.php in the url
@@ -179,3 +180,10 @@ export default new Router({
 		},
 	],
 })
+
+router.beforeResolve((from, to, next) => {
+	cancelAll()
+	next()
+})
+
+export default router

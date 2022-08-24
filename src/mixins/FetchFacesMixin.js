@@ -27,9 +27,9 @@ import { getCurrentUser } from '@nextcloud/auth'
 
 import client from '../services/DavClient.js'
 import logger from '../services/logger.js'
-import cancelableRequest from '../utils/CancelableRequest.js'
 import DavRequest from '../services/DavRequest'
 import { genFileInfo } from '../utils/fileUtils'
+import { abortController } from '../services/RequestHandler'
 
 export default {
 	name: 'FetchFacesMixin',
@@ -40,18 +40,11 @@ export default {
 			loadingFaces: false,
 			errorFetchingFiles: null,
 			loadingFiles: false,
-			cancelFacesRequest: () => { },
-			cancelFilesRequest: () => {},
 		}
 	},
 
 	async beforeMount() {
 		this.fetchFaces()
-	},
-
-	beforeDestroy() {
-		this.cancelFacesRequest('Changed view')
-		this.cancelFilesRequest('Changed view')
 	},
 
 	computed: {
@@ -78,10 +71,9 @@ export default {
 				this.loadingFaces = true
 				this.errorFetchingFaces = null
 
-				const { request, cancel } = cancelableRequest(client.getDirectoryContents)
-				this.cancelFacesRequest = cancel
-
-				const faces = await request(`/recognize/${getCurrentUser()?.uid}/faces/`)
+				const faces = await client.getDirectoryContents(`/recognize/${getCurrentUser()?.uid}/faces/`, {
+					signal: abortController.signal,
+				})
 				this.$store.dispatch('addFaces', { faces })
 				logger.debug(`[FetchFacesMixin] Fetched ${faces.length} new faces: `, faces)
 			} catch (error) {
@@ -95,7 +87,6 @@ export default {
 				logger.error(t('photos', 'Failed to fetch faces list.'), error)
 				showError(t('photos', 'Failed to fetch faces list.'))
 			} finally {
-				this.cancelFacesRequest = () => { }
 				this.loadingFaces = false
 			}
 		},
@@ -113,14 +104,12 @@ export default {
 				this.errorFetchingFiles = null
 				this.loadingFiles = true
 
-				const { request, cancel } = cancelableRequest(client.getDirectoryContents)
-				this.cancelFilesRequest = cancel
-
-				let { data: fetchedFiles } = await request(
+				let { data: fetchedFiles } = await client.getDirectoryContents(
 					`/recognize/${getCurrentUser()?.uid}/faces/${faceName}`,
 					{
 						data: DavRequest,
 						details: true,
+						signal: abortController.signal,
 					}
 				)
 
@@ -150,7 +139,6 @@ export default {
 				logger.error('Error fetching face files', error)
 			} finally {
 				this.loadingFiles = false
-				this.cancelFilesRequest = () => { }
 			}
 		},
 	},

@@ -63,7 +63,7 @@ import Navigation from '../components/Navigation'
 
 import GridConfigMixin from '../mixins/GridConfig'
 
-import cancelableRequest from '../utils/CancelableRequest'
+import { abortController } from '../services/RequestHandler'
 
 export default {
 	name: 'Tags',
@@ -91,7 +91,6 @@ export default {
 	data() {
 		return {
 			error: null,
-			cancelRequest: null,
 			loading: false,
 		}
 	},
@@ -180,13 +179,6 @@ export default {
 		},
 	},
 
-	beforeDestroy() {
-		// cancel any pending requests
-		if (this.cancelRequest) {
-			this.cancelRequest('Navigated away')
-		}
-	},
-
 	async beforeMount() {
 		// if we don't have the tag in the store yet,
 		// we need to fetch the list first
@@ -202,11 +194,6 @@ export default {
 
 	methods: {
 		async fetchRootContent() {
-			// cancel any pending requests
-			if (this.cancelRequest) {
-				this.cancelRequest('Changed folder')
-			}
-
 			// close any potential opened viewer
 			OCA.Viewer.close()
 
@@ -216,13 +203,11 @@ export default {
 			}
 			this.error = null
 
-			// init cancellable request
-			const { request, cancel } = cancelableRequest(getSystemTags)
-			this.cancelRequest = cancel
-
 			try {
 				// fetch content
-				const tags = await request()
+				const tags = await getSystemTags('', {
+					signal: abortController.signal,
+				})
 				this.$store.dispatch('updateTags', tags)
 			} catch (error) {
 				console.error(error)
@@ -230,17 +215,11 @@ export default {
 			} finally {
 				// done loading
 				this.loading = false
-				this.cancelRequest = null
 			}
 
 		},
 
 		async fetchContent() {
-			// cancel any pending requests
-			if (this.cancelRequest) {
-				this.cancelRequest()
-			}
-
 			// close any potential opened viewer
 			OCA.Viewer.close()
 
@@ -250,13 +229,11 @@ export default {
 			}
 			this.error = null
 
-			// init cancellable request
-			const { request, cancel } = cancelableRequest(getTaggedImages)
-			this.cancelRequest = cancel
-
 			try {
 				// get data
-				const files = await request(this.tagId)
+				const files = await getTaggedImages(this.tagId, {
+					signal: abortController.signal,
+				})
 				this.$store.dispatch('updateTag', { id: this.tagId, files })
 				this.$store.dispatch('appendFiles', files)
 			} catch (error) {
@@ -265,7 +242,6 @@ export default {
 			} finally {
 				// done loading
 				this.loading = false
-				this.cancelRequest = null
 			}
 		},
 	},

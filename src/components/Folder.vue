@@ -32,8 +32,8 @@
 import { mapGetters } from 'vuex'
 
 import getAlbumContent from '../services/AlbumContent'
-import cancelableRequest from '../utils/CancelableRequest'
 import FolderTagPreview from './FolderTagPreview'
+import { abortController } from '../services/RequestHandler'
 
 export default {
 	name: 'Folder',
@@ -52,7 +52,6 @@ export default {
 
 	data() {
 		return {
-			cancelRequest: null,
 			previewFolder: this.item.injected.fileid,
 		}
 	},
@@ -101,31 +100,20 @@ export default {
 		}
 	},
 
-	beforeDestroy() {
-		// cancel any pending requests
-		if (this.cancelRequest) {
-			this.cancelRequest('Navigated away')
-		}
-	},
-
 	methods: {
 		async getFolderData(filename) {
-			// init cancellable request
-			const { request, cancel } = cancelableRequest(getAlbumContent)
-			this.cancelRequest = cancel
-
 			try {
 				// get data
-				const { folder, folders, files } = await request(filename, { shared: this.item.injected.showShared })
+				const { folder, folders, files } = await getAlbumContent(filename, {
+					shared: this.item.injected.showShared,
+					signal: abortController.signal,
+				})
 				this.$store.dispatch('updateFolders', { fileid: folder.fileid, files, folders })
 				this.$store.dispatch('updateFiles', { folder, files, folders })
 			} catch (error) {
 				if (error.response && error.response.status) {
 					console.error('Failed to get folder content', filename, error.response)
 				}
-				// else we just cancelled the request
-			} finally {
-				this.cancelRequest = null
 			}
 		},
 

@@ -63,8 +63,7 @@ import FileLegacy from '../components/FileLegacy.vue'
 import Navigation from '../components/Navigation.vue'
 
 import GridConfigMixin from '../mixins/GridConfig.js'
-
-import cancelableRequest from '../utils/CancelableRequest.js'
+import { abortController } from '../services/RequestHandler.js'
 
 export default {
 	name: 'Folders',
@@ -92,7 +91,6 @@ export default {
 	data() {
 		return {
 			error: null,
-			cancelRequest: () => {},
 			loading: false,
 		}
 	},
@@ -194,15 +192,8 @@ export default {
 		this.fetchFolderContent()
 	},
 
-	beforeDestroy() {
-		this.cancelRequest('Changed view')
-	},
-
 	methods: {
 		async fetchFolderContent() {
-			// cancel any pending requests
-			this.cancelRequest('Changed folder')
-
 			// close any potential opened viewer & sidebar
 			OCA.Viewer && OCA.Viewer.close && OCA.Viewer.close()
 			OCA.Files && OCA.Files.Sidebar.close && OCA.Files.Sidebar.close()
@@ -213,13 +204,12 @@ export default {
 			}
 			this.error = null
 
-			// init cancellable request
-			const { request, cancel } = cancelableRequest(getAlbumContent)
-			this.cancelRequest = cancel
-
 			try {
 				// get content and current folder info
-				const { folder, folders, files } = await request(this.path, { shared: this.showShared })
+				const { folder, folders, files } = await getAlbumContent(this.path, {
+					shared: this.showShared,
+					signal: abortController.signal,
+				})
 				this.$store.dispatch('addPath', { path: this.path, fileid: folder.fileid })
 				this.$store.dispatch('updateFolders', { fileid: folder.fileid, files, folders })
 				this.$store.dispatch('updateFiles', { folder, files, folders })

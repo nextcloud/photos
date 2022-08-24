@@ -103,10 +103,6 @@ export default {
 		await this.fetchFiles()
 	},
 
-	beforeDestroy() {
-		this.cancelFilesRequest('Changed view')
-	},
-
 	methods: {
 		async fetchFiles() {
 			await this.fetchFaceContent(this.face.basename)
