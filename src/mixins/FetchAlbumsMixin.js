@@ -49,6 +49,10 @@ export default {
 		this.fetchAlbums()
 	},
 
+	beforeDestroy() {
+		this.cancelAlbumsRequest('Changed view')
+	},
+
 	computed: {
 		...mapGetters([
 			'albums',
