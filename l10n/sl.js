@@ -3,10 +3,7 @@ OC.L10N.register(
     {
     "Photos" : "Fotografije",
     "Your memories under your control" : "Spomini pod vašim nadzorom",
-    "Your photos" : "Fotografije",
-    "Your videos" : "Osebni videoposnetki",
     "Favorites" : "Priljubljene",
-    "Your folders" : "Osebne mape",
     "Shared with you" : "V souporabi z vami",
     "Tagged photos" : "Označene fotografije",
     "Locations" : "Mesta",
@@ -16,11 +13,14 @@ OC.L10N.register(
     "Back to {folder}" : "Nazaj v mapo {folder}",
     "View" : "Poglej",
     "Enable squared photos view" : "Omogoči kvadratne prikaze slik",
-    "This folder does not exist" : "Ta mapa ne obstaja",
     "An error occurred" : "Prišlo je do napake.",
+    "This folder does not exist" : "Ta mapa ne obstaja",
     "No photos in here" : "Na tem mestu še ni fotografij",
     "No tags yet" : "Ni še dodane nobene oznake",
     "Photos with tags will show up here" : "Na tem mestu bodo prikazane fotografije z oznakami.",
+    "Your photos" : "Fotografije",
+    "Your videos" : "Osebni videoposnetki",
+    "Your folders" : "Osebne mape",
     "Settings" : "Nastavitve"
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");

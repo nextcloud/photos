@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Photos" : "Fotos",
     "Your memories under your control" : "Tus recuerdos bajo tu control",
-    "Your photos" : "Tus fotos",
     "Favorites" : "Favoritos",
     "Shared with you" : "Compartido con usted",
     "Tagged photos" : "Fotos etiquetadas",
@@ -16,6 +15,7 @@ OC.L10N.register(
     "No photos in here" : "No hay fotos aquí",
     "No tags yet" : "Aún no hay etiquetas",
     "Photos with tags will show up here" : "Fotos con etiquetas serán mostradas aquí",
+    "Your photos" : "Tus fotos",
     "Settings" : "Configuraciones "
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
