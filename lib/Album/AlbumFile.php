@@ -33,6 +33,7 @@ class AlbumFile {
 	private int $mtime;
 	private string $etag;
 	private int $added;
+	private string $owner;
 	/** @var array<string, FileMetadata> */
 	private array $metaData = [];
 
@@ -43,7 +44,8 @@ class AlbumFile {
 		int $size,
 		int $mtime,
 		string $etag,
-		int $added
+		int $added,
+		string $owner
 	) {
 		$this->fileId = $fileId;
 		$this->name = $name;
@@ -52,6 +54,7 @@ class AlbumFile {
 		$this->mtime = $mtime;
 		$this->etag = $etag;
 		$this->added = $added;
+		$this->owner = $owner;
 	}
 
 	public function getFileId(): int {
@@ -92,5 +95,9 @@ class AlbumFile {
 
 	public function getAdded(): int {
 		return $this->added;
+	}
+
+	public function getOwner(): string {
+		return $this->owner;
 	}
 }

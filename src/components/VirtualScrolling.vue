@@ -257,7 +257,7 @@ export default {
 		this.resizeObserver = new ResizeObserver(entries => {
 			for (const entry of entries) {
 				const cr = entry.contentRect
-				if (entry.target.classList.contains('vs-container')) {
+				if (entry.target === this.container) {
 					this.containerHeight = cr.height
 				}
 				if (entry.target.classList.contains('vs-rows-container')) {

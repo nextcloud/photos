@@ -39,6 +39,9 @@
 				<NcAppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Albums')">
 					<FolderMultipleImage slot="icon" :size="20" />
 				</NcAppNavigationItem>
+				<NcAppNavigationItem :to="{name: 'sharedAlbums'}" :title="t('photos', 'Collaborative albums')">
+					<AccountGroup slot="icon" :size="20" />
+				</NcAppNavigationItem>
 				<NcAppNavigationItem v-if="showPeopleMenuEntry" :to="{name: 'faces'}" :title="t('photos', 'People')">
 					<template #icon>
 						<AccountBoxMultipleOutline :size="20" />
@@ -102,6 +105,7 @@ import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.v
 import Folder from 'vue-material-design-icons/Folder.vue'
 import Star from 'vue-material-design-icons/Star.vue'
 import CalendarToday from 'vue-material-design-icons/CalendarToday.vue'
+import AccountGroup from 'vue-material-design-icons/AccountGroup.vue'
 import Tag from 'vue-material-design-icons/Tag.vue'
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
@@ -126,6 +130,7 @@ export default {
 		Cog,
 		CalendarToday,
 		Camera,
+		AccountGroup,
 		Folder,
 		FolderMultipleImage,
 		ImageIcon,
@@ -197,19 +202,14 @@ export default {
 }
 </script>
 <style lang="scss">
-.app-photos {
-	width: 100vw; // Prevent layout change when opening the Viewer as the scrollbar disappear (overflow: hidden on body)
-	height: 100%;
+.app-content {
+	display: flex;
+	flex-grow: 1;
+	flex-direction: column;
+	align-content: space-between;
+}
 
-	.app-content {
-		display: flex;
-		flex-grow: 1;
-		flex-direction: column;
-		align-content: space-between;
-	}
-
-	.app-navigation__photos::v-deep .app-navigation-entry-icon.icon-photos {
-		background-size: 20px;
-	}
+.app-navigation__photos::v-deep .app-navigation-entry-icon.icon-photos {
+	background-size: 20px;
 }
 </style>

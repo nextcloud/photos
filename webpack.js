@@ -61,7 +61,7 @@ webpackConfig.plugins.push(
 		// Define runtime caching rules.
 		runtimeCaching: [{
 			// Match any preview file request
-			urlPattern: /^.*\/core\/preview\?fileId=.*/,
+			urlPattern: /^.*\/apps\/photos\/api\/v1\/preview\/.*/,
 
 			// Apply a strategy.
 			handler: 'CacheFirst',

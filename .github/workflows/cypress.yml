@@ -1,0 +1,113 @@
+name: Cypress
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - stable*
+
+env:
+  APP_NAME: photos
+  BRANCH: ${{ github.base_ref }}
+  CYPRESS_baseUrl: http://127.0.0.1:8082/index.php
+  TESTING: true
+
+jobs:
+  init:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout app
+        uses: actions/checkout@v3
+
+      - name: Read package.json node and npm engines version
+        uses: skjnldsv/read-package-engines-version-actions@v1.1
+        id: versions
+        with:
+          fallbackNode: '^12'
+          fallbackNpm: '^6'
+
+      - name: Set up node ${{ steps.versions.outputs.nodeVersion }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ steps.versions.outputs.nodeVersion }}
+
+      - name: Set up npm ${{ steps.versions.outputs.npmVersion }}
+        run: npm i -g npm@"${{ steps.versions.outputs.npmVersion }}"
+
+      - name: Install dependencies & build app
+        run: |
+          npm ci
+          TESTING=true npm run build --if-present
+
+      - name: Save context
+        uses: actions/cache@v3
+        with:
+          key: cypress-context-${{ github.run_id }}
+          path: /home/runner/work/photos
+
+  cypress:
+    runs-on: ubuntu-latest
+    needs: init
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # run multiple copies of the current job in parallel
+        containers: [1, 2, 3, 4, 5, 6, 7, 8]
+
+    name: runner ${{ matrix.containers }}
+
+    steps:
+      - name: Restore context
+        uses: actions/cache@v3
+        with:
+          key: cypress-context-${{ github.run_id }}
+          path: /home/runner/work/photos
+
+      - name: Setup server
+        run: |
+          cd cypress
+          docker-compose up -d
+
+      - name: Wait for server
+        run: npm run wait-on $CYPRESS_baseUrl
+
+      - name: Enable app & configure server
+        run: |
+          cd cypress
+          docker-compose exec --env APP_NAME=${{ env.APP_NAME }} --env BRANCH=${{ env.BRANCH }} -T nextcloud bash /initserver.sh
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v4
+        with:
+          record: true
+          parallel: true
+          # cypress env
+          ci-build-id: ${{ github.sha }}-${{ github.run_number }}
+          tag: ${{ github.event_name }}
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # https://github.com/cypress-io/github-action/issues/124
+          COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
+          TESTING: true
+
+      - name: Upload snapshots
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: snapshots
+          path: cypress/snapshots
+
+  summary:
+    runs-on: ubuntu-latest
+    needs: [init, cypress]
+
+    if: always()
+
+    name: cypress-summary
+
+    steps:
+      - name: Summary status
+        run: if ${{ needs.init.result != 'success' || ( needs.cypress.result != 'success' && needs.cypress.result != 'skipped' ) }}; then exit 1; fi

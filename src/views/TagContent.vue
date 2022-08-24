@@ -49,7 +49,7 @@
 		<NcEmptyContent v-if="isEmpty" :title="t('photos', 'No photos with this tag yet')" />
 
 		<FilesListViewer class="tag__photos"
-			:use-window="true"
+			:container-element="appContent"
 			:file-ids="fileIds"
 			:base-height="isMobile ? 120 : 200"
 			:loading="loading">
@@ -106,6 +106,7 @@ export default {
 			error: null,
 			loading: false,
 			semaphore: new SemaphoreWithPriority(30),
+			appContent: document.getElementById('app-content-vue'),
 		}
 	},
 

@@ -92,7 +92,7 @@ export default {
 				this.fetchFaceContent(faceName)
 				return ''
 			}
-			return generateUrl(`/core/preview?fileId=${cover.fileid}&x=${512}&y=${512}&forceIcon=0&a=1`)
+			return generateUrl(`/apps/photos/api/v1/preview/${cover.fileid}?x=${512}&y=${512}`)
 		},
 
 		handleSelect(faceName) {

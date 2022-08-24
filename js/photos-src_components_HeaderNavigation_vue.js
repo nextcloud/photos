@@ -66,6 +66,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -100,28 +104,32 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   computed: {
-    isRoot: function isRoot() {
-      var isRoot = this.path === '/';
+    isRoot() {
+      const isRoot = this.path === '/';
       this.toggleNavigationButton(!isRoot);
       return isRoot;
     },
-    name: function name() {
+
+    name() {
       if (this.isRoot) {
         return this.rootTitle;
       }
 
       return this.title;
     },
-    parentPath: function parentPath() {
-      var path = this.path.split('/');
+
+    parentPath() {
+      const path = this.path.split('/');
       path.pop();
-      var parent = path.join('/');
+      const parent = path.join('/');
       return this.isRoot || parent.trim() === '' ? '/' : path.join('/');
     },
-    parentName: function parentName() {
+
+    parentName() {
       return this.parentPath && this.parentPath.split('/').pop();
     },
-    backToText: function backToText() {
+
+    backToText() {
       if (this.parentPath === '/') {
         return t('photos', 'Back to {folder}', {
           folder: this.rootTitle
@@ -141,47 +149,51 @@ __webpack_require__.r(__webpack_exports__);
      *
      * @return {string|object}
      */
-    to: function to() {
+    to() {
       // always remove first slash, the router
       // manage it automatically
-      var regex = /^\/?(.*)/i;
-      var path = regex.exec(this.parentPath)[1]; // apply to current route
+      const regex = /^\/?(.*)/i;
+      const path = regex.exec(this.parentPath)[1]; // apply to current route
 
-      var _Object$assign = Object.assign({}, this.$route, {
+      const {
+        name,
+        params
+      } = Object.assign({}, this.$route, {
         params: this.params || {
-          path: path
+          path
         }
-      }),
-          name = _Object$assign.name,
-          params = _Object$assign.params; // return the full object as we don't care about
+      }); // return the full object as we don't care about
       // an empty path if this is route
-
 
       if (path === '') {
         return {
-          name: name
+          name
         };
       } // returning a string prevent vue-router to encode it again
 
 
       return decodeURIComponent(this.$router.resolve({
-        name: name,
-        params: params
+        name,
+        params
       }).resolved.path);
     }
+
   },
   methods: {
-    folderUp: function folderUp() {
+    folderUp() {
       this.$router.push(this.to);
     },
-    refresh: function refresh() {
+
+    refresh() {
       this.$emit('refresh');
     },
-    toggleNavigationButton: function toggleNavigationButton(hide) {
+
+    toggleNavigationButton(hide) {
       // Hide the navigation toggle if the back button is shown
-      var navigationToggle = document.querySelector('button.app-navigation-toggle');
+      const navigationToggle = document.querySelector('button.app-navigation-toggle');
       navigationToggle.style.display = hide ? 'none' : null;
     }
+
   }
 });
 
@@ -232,7 +244,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".photos-navigation[data-v-21ecc79e] {\n  position: -webkit-sticky;\n  position: sticky;\n  z-index: 20;\n  top: 0;\n  display: flex;\n  align-items: center;\n  width: 100%;\n  height: var(--photos-navigation-height);\n  min-height: var(--photos-navigation-height);\n  padding: 0 var(--photos-navigation-height);\n  background: var(--color-main-background);\n}\n.photos-navigation__back[data-v-21ecc79e] {\n  position: absolute;\n  left: 0;\n  margin: var(--photos-navigation-spacing) !important;\n}\n.photos-navigation__title[data-v-21ecc79e] {\n  overflow: hidden;\n  margin: 0;\n  margin-right: calc(2 * var(--photos-navigation-spacing));\n  cursor: pointer;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.photos-navigation__loader[data-v-21ecc79e] {\n  margin-left: 32px;\n}\n.photos-navigation__content-right[data-v-21ecc79e] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin-left: auto;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".photos-navigation[data-v-21ecc79e] {\n  position: sticky;\n  z-index: 20;\n  top: 0;\n  display: flex;\n  align-items: center;\n  width: 100%;\n  min-height: var(--photos-navigation-height);\n  padding: 0 var(--photos-navigation-height);\n  background: var(--color-main-background);\n}\n.photos-navigation__back[data-v-21ecc79e] {\n  position: absolute;\n  left: 0;\n  margin: var(--photos-navigation-spacing) !important;\n}\n.photos-navigation__title[data-v-21ecc79e] {\n  max-width: 50%;\n  margin-right: calc(2 * var(--photos-navigation-spacing));\n  display: flex;\n  flex-direction: column;\n}\n.photos-navigation__title__main[data-v-21ecc79e] {\n  margin: 0;\n  cursor: pointer;\n}\n.photos-navigation__title__main[data-v-21ecc79e], .photos-navigation__title__sub[data-v-21ecc79e] {\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.photos-navigation__loader[data-v-21ecc79e] {\n  margin-left: 32px;\n}\n.photos-navigation__content-right[data-v-21ecc79e] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin-left: auto;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -490,9 +502,23 @@ var render = function () {
         : _vm._e(),
       _vm._v(" "),
       _c(
-        "h2",
-        { staticClass: "photos-navigation__title", on: { click: _vm.refresh } },
-        [_vm._v("\n\t\t" + _vm._s(_vm.name) + "\n\t")]
+        "div",
+        { staticClass: "photos-navigation__title" },
+        [
+          _c(
+            "h2",
+            {
+              staticClass: "photos-navigation__title__main",
+              on: { click: _vm.refresh },
+            },
+            [_vm._v("\n\t\t\t" + _vm._s(_vm.name) + "\n\t\t")]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "photos-navigation__title__sub" }),
+          _vm._v(" "),
+          _vm._t("subtitle"),
+        ],
+        2
       ),
       _vm._v(" "),
       _vm.$slots.default
@@ -504,9 +530,17 @@ var render = function () {
           )
         : _vm._e(),
       _vm._v(" "),
-      _vm.loading
-        ? _c("NcLoadingIcon", { staticClass: "photos-navigation__loader" })
-        : _vm._e(),
+      _c("NcLoadingIcon", {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.loading,
+            expression: "loading",
+          },
+        ],
+        staticClass: "photos-navigation__loader",
+      }),
       _vm._v(" "),
       _c(
         "div",
@@ -526,4 +560,4 @@ render._withStripped = true
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_components_HeaderNavigation_vue.js.map?v=dbf75ea65c8b5b3c0c10
+//# sourceMappingURL=photos-src_components_HeaderNavigation_vue.js.map?v=7e32c42ba2f874b3582b

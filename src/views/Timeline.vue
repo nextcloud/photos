@@ -58,42 +58,28 @@
 					</template>
 					{{ t('photos', 'Add to album') }}
 				</NcButton>
-				<NcActions>
-					<NcActionButton :close-after-click="true"
-						:aria-label="t('photos', 'Download selection')"
-						@click="downloadSelection">
-						{{ t('photos', 'Download') }}
+
+				<NcActions :aria-label="t('photos', 'Open actions menu')">
+					<ActionDownload :selected-file-ids="selectedFileIds" :title="t('photos', 'Download selected files')">
 						<Download slot="icon" />
-					</NcActionButton>
-					<NcActionButton v-if="shouldFavorite"
-						:close-after-click="true"
-						:aria-label="t('photos', 'Mark selection as favorite')"
-						@click="favoriteSelection">
-						{{ t('photos', 'Favorite') }}
-						<Star slot="icon" />
-					</NcActionButton>
-					<NcActionButton v-else
-						:close-after-click="true"
-						:aria-label="t('photos', 'Remove selection from favorites')"
-						@click="unFavoriteSelection">
-						{{ t('photos', 'Remove from favorites') }}
-						<Star slot="icon" />
-					</NcActionButton>
+					</ActionDownload>
+
+					<ActionFavorite :selected-file-ids="selectedFileIds" />
+
 					<NcActionButton :close-after-click="true"
 						:aria-label="t('photos', 'Delete selection')"
 						@click="deleteSelection">
-						{{ t('photos', 'Delete') }}
+						{{ t('photos', 'Delete selection') }}
 						<Delete slot="icon" />
 					</NcActionButton>
 				</NcActions>
-				<!-- HACK: Needed to make the above Actions work, no idea why be it is like that in the documentation. -->
-				<NcActions />
 			</template>
 
 			<NcLoadingIcon v-if="loadingCount > 0" key="loader" :size="32" />
 		</div>
 
 		<FilesListViewer ref="filesListViewer"
+			:container-element="appContent"
 			class="timeline__file-list"
 			:file-ids-by-section="fileIdsByMonth"
 			:sections="monthsList"
@@ -143,21 +129,21 @@ import Plus from 'vue-material-design-icons/Plus'
 import Delete from 'vue-material-design-icons/Delete'
 import PlusBoxMultiple from 'vue-material-design-icons/PlusBoxMultiple'
 import FileUpload from 'vue-material-design-icons/FileUpload'
-import Star from 'vue-material-design-icons/Star'
 import Download from 'vue-material-design-icons/Download'
 
 import { NcModal, NcActions, NcActionButton, NcButton, NcLoadingIcon, NcEmptyContent, isMobile } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 
-import logger from '../services/logger.js'
 import { allMimes } from '../services/AllowedMimes.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import File from '../components/File.vue'
-import AlbumForm from '../components/AlbumForm.vue'
-import AlbumPicker from '../components/AlbumPicker.vue'
+import AlbumForm from '../components/Albums/AlbumForm.vue'
+import AlbumPicker from '../components/Albums/AlbumPicker.vue'
+import ActionFavorite from '../components/Actions/ActionFavorite.vue'
+import ActionDownload from '../components/Actions/ActionDownload.vue'
 
 export default {
 	name: 'Timeline',
@@ -165,19 +151,21 @@ export default {
 		Delete,
 		FileUpload,
 		PlusBoxMultiple,
-		Star,
 		Download,
+		Plus,
 		NcLoadingIcon,
 		NcEmptyContent,
 		NcModal,
 		NcActions,
 		NcActionButton,
 		NcButton,
-		Plus,
 		AlbumForm,
 		AlbumPicker,
 		FilesListViewer,
 		File,
+		ActionFavorite,
+		ActionDownload,
+
 	},
 
 	filters: {
@@ -227,6 +215,7 @@ export default {
 			loadingCount: 0,
 			showAlbumCreationForm: false,
 			showAlbumPicker: false,
+			appContent: document.getElementById('app-content-vue'),
 		}
 	},
 
@@ -234,16 +223,10 @@ export default {
 		...mapGetters([
 			'files',
 		]),
-
-		/** @type {boolean} */
-		shouldFavorite() {
-			// Favorite all selection if at least one file is not on the favorites.
-			return this.selectedFileIds.some((fileId) => this.$store.state.files.files[fileId].favorite === 0)
-		},
 	},
 
 	methods: {
-		...mapActions(['deleteFiles', 'toggleFavoriteForFiles', 'downloadFiles', 'addFilesToAlbum']),
+		...mapActions(['deleteFiles', 'addFilesToAlbum']),
 
 		getContent() {
 			this.fetchFiles('', {
@@ -256,7 +239,7 @@ export default {
 		openViewer(fileId) {
 			const file = this.files[fileId]
 			OCA.Viewer.open({
-				path: file.filename,
+				fileInfo: file,
 				list: Object.values(this.fileIdsByMonth).flat().map(fileId => this.files[fileId]),
 				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
 				canLoop: file.canLoop,
@@ -268,63 +251,16 @@ export default {
 		},
 
 		async addSelectionToAlbum(albumName) {
-			try {
-				this.showAlbumPicker = false
-				this.loadingCount++
-				await this.addFilesToAlbum({ albumName, fileIdsToAdd: this.selectedFileIds })
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		async favoriteSelection() {
-			try {
-				this.loadingCount++
-				await this.toggleFavoriteForFiles({ fileIds: this.selectedFileIds, favoriteState: true })
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		async unFavoriteSelection() {
-			try {
-				this.loadingCount++
-				await this.toggleFavoriteForFiles({ fileIds: this.selectedFileIds, favoriteState: false })
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
+			this.showAlbumPicker = false
+			await this.addFilesToAlbum({ albumName, fileIdsToAdd: this.selectedFileIds })
 		},
 
 		async deleteSelection() {
-			try {
-				this.loadingCount++
-				// Need to store the file ids so it is not changed before the deleteFiles call.
-				const fileIds = this.selectedFileIds
-				this.onUncheckFiles(fileIds)
-				this.fetchedFileIds = this.fetchedFileIds.filter(fileid => !fileIds.includes(fileid))
-				await this.deleteFiles(fileIds)
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		async downloadSelection() {
-			try {
-				this.loadingCount++
-				await this.downloadFiles(this.selectedFileIds)
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
+			// Need to store the file ids so it is not changed before the deleteFiles call.
+			const fileIds = this.selectedFileIds
+			this.onUncheckFiles(fileIds)
+			this.fetchedFileIds = this.fetchedFileIds.filter(fileid => !fileIds.includes(fileid))
+			await this.deleteFiles(fileIds)
 		},
 	},
 }
@@ -333,17 +269,18 @@ export default {
 .timeline {
 	display: flex;
 	flex-direction: column;
-	height: 100%;
 
 	&__header {
 		display: flex;
+		min-height: 60px;
+		box-sizing: content-box;
 		align-items: center;
 		position: sticky;
 		width: 100%;
 		height: 60px;
 		z-index: 3;
 		background: var(--color-main-background);
-		padding: 0 64px;
+		padding: 8px 64px 0px 64px;
 
 		@media only screen and (max-width: 1200px) {
 			padding: 0 48px;
@@ -360,7 +297,6 @@ export default {
 
 	&__file-list {
 		padding: 0 64px;
-		height: calc(100% - 60px);
 
 		@media only screen and (max-width: 1200px) {
 			padding: 0 4px;

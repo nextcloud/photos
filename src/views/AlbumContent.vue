@@ -20,132 +20,104 @@
  -
  -->
 <template>
-	<!-- Errors handlers-->
-	<NcEmptyContent v-if="album === undefined && !loadingAlbums" class="empty-content-with-illustration">
-		<template #icon>
-			<!-- eslint-disable-next-line vue/no-v-html -->
-			<span class="empty-content-illustration" v-html="FolderIllustration" />
-		</template>
-		{{ t('photos', 'This album does not exist') }}
-	</NcEmptyContent>
-
-	<NcEmptyContent v-else-if="errorFetchingFiles || errorFetchingAlbums">
-		<template #icon>
-			<AlertCircle />
-		</template>
-		{{ t('photos', 'An error occurred') }}
-	</NcEmptyContent>
-
-	<div v-else class="album">
-		<HeaderNavigation key="navigation"
-			:loading="loadingFiles"
-			:params="{ albumName }"
-			:path="'/' + albumName"
-			:title="albumName"
-			@refresh="fetchAlbumContent">
-			<!-- <UploadPicker :accept="allowedMimes"
+	<div>
+		<CollectionContent v-if="true"
+			ref="collectionContent"
+			:collection="album"
+			:collection-file-ids="albumFileIds"
+			:semaphore="semaphore"
+			:loading="loadingAlbums || loadingFiles"
+			:error="errorFetchingAlbums || errorFetchingFiles">
+			<!-- Header -->
+			<HeaderNavigation key="navigation"
+				slot="header"
+				slot-scope="{selectedFileIds}"
+				:loading="loadingFiles"
+				:params="{ albumName }"
+				:path="'/' + albumName"
+				:title="albumName"
+				@refresh="fetchAlbumContent">
+				<!-- <UploadPicker :accept="allowedMimes"
 				:destination="folder.filename"
 				:multiple="true"
 				@uploaded="onUpload" /> -->
-			<div v-if="album.location !== ''" class="album__location">
-				<MapMarker />{{ album.location }}
-			</div>
+				<div v-if="album.location !== ''" slot="subtitle" class="album__location">
+					<MapMarker />{{ album.location }}
+				</div>
+				<template v-if="album !== undefined"
+					slot="right">
+					<NcButton v-if="album.nbItems !== 0"
+						type="tertiary"
+						:aria-label="t('photos', 'Add photos to this album')"
+						@click="showAddPhotosModal = true">
+						<template #icon>
+							<Plus />
+						</template>
+					</NcButton>
 
-			<template #right>
-				<NcButton v-if="album.nbItems !== 0"
-					type="tertiary"
+					<NcButton v-if="sharingEnabled"
+						type="tertiary"
+						:aria-label="t('photos', 'Manage collaborators for this album')"
+						@click="showManageCollaboratorView = true">
+						<ShareVariant slot="icon" />
+					</NcButton>
+
+					<NcActions :aria-label="t('photos', 'Open actions menu')">
+						<NcActionButton :close-after-click="true"
+							:aria-label="t('photos', 'Edit album details')"
+							@click="showEditAlbumForm = true">
+							{{ t('photos', 'Edit album details') }}
+							<Pencil slot="icon" />
+						</NcActionButton>
+
+						<ActionDownload v-if="albumFileIds.length > 0"
+							:selected-file-ids="albumFileIds"
+							:title="t('photos', 'Download all files in album')">
+							<DownloadMultiple slot="icon" />
+						</ActionDownload>
+
+						<NcActionButton :close-after-click="true"
+							@click="handleDeleteAlbum">
+							{{ t('photos', 'Delete album') }}
+							<Delete slot="icon" />
+						</NcActionButton>
+
+						<template v-if="selectedFileIds.length > 0">
+							<NcActionSeparator />
+
+							<ActionDownload :selected-file-ids="selectedFileIds" :title="t('photos', 'Download selected files')">
+								<Download slot="icon" />
+							</ActionDownload>
+
+							<ActionFavorite :selected-file-ids="selectedFileIds" />
+
+							<NcActionButton :close-after-click="true"
+								@click="handleRemoveFilesFromAlbum(selectedFileIds)">
+								{{ t('photos', 'Remove selection from album') }}
+								<Close slot="icon" />
+							</NcActionButton>
+						</template>
+					</NcActions>
+				</template>
+			</HeaderNavigation>
+
+			<!-- No content -->
+			<NcEmptyContent v-if="album !== undefined && album.nbItems === 0 && !(loadingFiles || loadingAlbums)"
+				slot="empty-content"
+				:title="t('photos', 'This album doesn\'t have any photos or videos yet!')"
+				class="album__empty">
+				<ImagePlus slot="icon" />
+
+				<NcButton slot="action"
+					class="album__empty__button"
+					type="primary"
 					:aria-label="t('photos', 'Add photos to this album')"
 					@click="showAddPhotosModal = true">
-					<template #icon>
-						<Plus />
-					</template>
+					<Plus slot="icon" />
+					{{ t('photos', "Add") }}
 				</NcButton>
-				<NcActions :force-menu="true">
-					<NcActionButton :close-after-click="true"
-						:aria-label="t('photos', 'Edit album details')"
-						@click="showEditAlbumForm = true">
-						{{ t('photos', 'Edit album details') }}
-						<Pencil slot="icon" />
-					</NcActionButton>
-					<NcActionButton v-if="albumFileIds.length > 0"
-						:close-after-click="true"
-						:aria-label="t('photos', 'Download all files in album')"
-						@click="downloadAllFiles">
-						{{ t('photos', 'Download all files in album') }}
-						<DownloadMultiple slot="icon" />
-					</NcActionButton>
-					<template v-if="selectedFileIds.length > 0">
-						<NcActionButton :close-after-click="true"
-							:aria-label="t('photos', 'Download selection')"
-							@click="downloadSelection">
-							{{ t('photos', 'Download selected files') }}
-							<Download slot="icon" />
-						</NcActionButton>
-						<NcActionButton v-if="shouldFavoriteSelection"
-							:close-after-click="true"
-							:aria-label="t('photos', 'Mark selection as favorite')"
-							@click="favoriteSelection">
-							{{ t('photos', 'Favorite') }}
-							<Star slot="icon" />
-						</NcActionButton>
-						<NcActionButton v-else
-							:close-after-click="true"
-							:aria-label="t('photos', 'Remove selection from favorites')"
-							@click="unFavoriteSelection">
-							{{ t('photos', 'Remove from favorites') }}
-							<Star slot="icon" />
-						</NcActionButton>
-						<NcActionButton :close-after-click="true"
-							@click="handleRemoveFilesFromAlbum(selectedFileIds)">
-							{{ n('photos', 'Remove item from album', 'Remove selection from album', selection.length) }}
-							<template #icon>
-								<Close />
-							</template>
-						</NcActionButton>
-					</template>
-					<NcActionButton :close-after-click="true"
-						@click="handleDeleteAlbum">
-						{{ t('photos', 'Delete album') }}
-						<Delete slot="icon" />
-					</NcActionButton>
-				</NcActions>
-			</template>
-		</HeaderNavigation>
-
-		<div v-if="album.nbItems === 0 && !(loadingFiles || loadingAlbums)" class="album__empty">
-			<NcEmptyContent>
-				<template #icon>
-					<ImagePlus />
-				</template>
-				<template #desc>
-					{{ t('photos', "This album doesn't have any photos or videos yet!") }}
-				</template>
 			</NcEmptyContent>
-
-			<Button class="album__empty__button"
-				type="primary"
-				:aria-label="t('photos', 'Add photos to this album')"
-				@click="showAddPhotosModal = true">
-				<template #icon>
-					<Plus />
-				</template>
-				{{ t('photos', "Add") }}
-			</Button>
-		</div>
-
-		<FilesListViewer v-else
-			class="album__photos"
-			:file-ids="albumFileIds"
-			:base-height="isMobile ? 120 : 200">
-			<File slot-scope="{file, visibility}"
-				:file="files[file.id]"
-				:allow-selection="true"
-				:selected="selection[file.id] === true"
-				:visibility="visibility"
-				:semaphore="semaphore"
-				@click="openViewer"
-				@select-toggled="onFileSelectToggle" />
-		</FilesListViewer>
+		</CollectionContent>
 
 		<NcModal v-if="showAddPhotosModal"
 			size="large"
@@ -153,14 +125,27 @@
 			@close="showAddPhotosModal = false">
 			<FilesPicker :destination="album.basename"
 				:blacklist-ids="albumFileIds"
-				:loading="loadingAddFilesToAlbum"
 				@files-picked="handleFilesPicked" />
 		</NcModal>
 
-		<NcModal v-else-if="showShareModal"
-			:title="t('photos', 'Share the album')"
-			@close="showShareModal = false">
-			<ShareAlbumForm @albumShared="showShareModal = false" />
+		<NcModal v-if="showManageCollaboratorView"
+			:title="t('photos', 'Manager collaborators')"
+			@close="showManageCollaboratorView = false">
+			<CollaboratorsSelectionForm :album-name="album.basename"
+				:collaborators="album.collaborators"
+				:public-link="album.publicLink">
+				<template slot-scope="{collaborators}">
+					<NcButton :aria-label="t('photos', 'Save collaborators for this album.')"
+						type="primary"
+						:disabled="loadingAddCollaborators"
+						@click="handleSetCollaborators(collaborators)">
+						<template #icon>
+							<NcLoadingIcon v-if="loadingAddCollaborators" />
+						</template>
+						{{ t('photos', 'Save') }}
+					</NcButton>
+				</template>
+			</CollaboratorsSelectionForm>
 		</NcModal>
 
 		<NcModal v-if="showEditAlbumForm"
@@ -173,69 +158,69 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, isMobile } from '@nextcloud/vue'
-import { getCurrentUser } from '@nextcloud/auth'
 
 import MapMarker from 'vue-material-design-icons/MapMarker'
+import ShareVariant from 'vue-material-design-icons/ShareVariant'
 import Plus from 'vue-material-design-icons/Plus'
 import Pencil from 'vue-material-design-icons/Pencil'
 import Delete from 'vue-material-design-icons/Delete'
 import ImagePlus from 'vue-material-design-icons/ImagePlus'
-import AlertCircle from 'vue-material-design-icons/AlertCircle'
-import Star from 'vue-material-design-icons/Star'
 import Close from 'vue-material-design-icons/Close'
 import Download from 'vue-material-design-icons/Download'
 import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple'
 
-import { genFileInfo } from '../utils/fileUtils.js'
-import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
+import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionSeparator, NcLoadingIcon, isMobile } from '@nextcloud/vue'
+import { getCurrentUser } from '@nextcloud/auth'
+import { generateRemoteUrl } from '@nextcloud/router'
+
 import FetchAlbumsMixin from '../mixins/FetchAlbumsMixin.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
-import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
-
+import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
+import HeaderNavigation from '../components/HeaderNavigation.vue'
+import FilesPicker from '../components/FilesPicker.vue'
+import CollectionContent from '../components/Collection/CollectionContent.vue'
+import ActionFavorite from '../components/Actions/ActionFavorite.vue'
+import ActionDownload from '../components/Actions/ActionDownload.vue'
+import CollaboratorsSelectionForm from '../components/Albums/CollaboratorsSelectionForm.vue'
+import AlbumForm from '../components/Albums/AlbumForm.vue'
+import logger from '../services/logger.js'
 import client from '../services/DavClient.js'
 import DavRequest from '../services/DavRequest.js'
-import FolderIllustration from '../assets/Illustrations/folder.svg'
-import logger from '../services/logger.js'
-
-import AlbumForm from '../components/AlbumForm.vue'
-import File from '../components/File.vue'
-import FilesListViewer from '../components/FilesListViewer.vue'
-import FilesPicker from '../components/FilesPicker.vue'
-import HeaderNavigation from '../components/HeaderNavigation.vue'
-import ShareAlbumForm from '../components/ShareAlbumForm.vue'
+import { genFileInfo } from '../utils/fileUtils.js'
 
 export default {
 	name: 'AlbumContent',
 	components: {
-		AlbumForm,
-		AlertCircle,
+		MapMarker,
+		ShareVariant,
+		Plus,
+		Pencil,
 		Close,
 		Delete,
 		Download,
 		DownloadMultiple,
-		File,
-		FilesListViewer,
 		FilesPicker,
 		HeaderNavigation,
 		ImagePlus,
-		MapMarker,
-		NcActionButton,
-		NcActions,
-		NcButton,
 		NcEmptyContent,
+		NcActions,
+		NcActionButton,
+		NcButton,
 		NcModal,
-		Pencil,
-		Plus,
-		ShareAlbumForm,
-		Star,
+		NcLoadingIcon,
+		NcActionSeparator,
+		CollectionContent,
+		ActionFavorite,
+		ActionDownload,
+		AlbumForm,
+		CollaboratorsSelectionForm,
 	},
 
 	mixins: [
 		AbortControllerMixin,
 		FetchAlbumsMixin,
 		FetchFilesMixin,
-		FilesSelectionMixin,
+		AbortControllerMixin,
 		isMobile,
 	],
 
@@ -249,22 +234,19 @@ export default {
 	data() {
 		return {
 			showAddPhotosModal: false,
-			showShareModal: false,
+			showManageCollaboratorView: false,
 			showEditAlbumForm: false,
-			FolderIllustration,
-			loadingCount: 0,
-			loadingAddFilesToAlbum: false,
+			loadingAddCollaborators: false,
 		}
 	},
 
 	computed: {
 		...mapGetters([
-			'files',
 			'albumsFiles',
 		]),
 
 		/**
-		 * @return {string[]} The album information for the current albumName.
+		 * @return {object} The album information for the current albumName.
 		 */
 		album() {
 			return this.albums[this.albumName] || {}
@@ -277,10 +259,11 @@ export default {
 			return this.albumsFiles[this.albumName] || []
 		},
 
-		/** @type {boolean} */
-		shouldFavoriteSelection() {
-			// Favorite all selection if at least one file is not on the favorites.
-			return this.selectedFileIds.some((fileId) => this.$store.state.files.files[fileId].favorite === 0)
+		/**
+		 * @return {boolean} Whether sharing is enabled.
+		 */
+		sharingEnabled() {
+			return OC.Share !== undefined
 		},
 	},
 
@@ -296,8 +279,7 @@ export default {
 			'deleteAlbum',
 			'addFilesToAlbum',
 			'removeFilesFromAlbum',
-			'toggleFavoriteForFiles',
-			'downloadFiles',
+			'updateAlbum',
 		]),
 
 		async fetchAlbumContent() {
@@ -324,7 +306,8 @@ export default {
 
 				const fetchedFiles = response.data
 					.map(file => genFileInfo(file))
-					.map(file => ({ ...file, filename: file.realpath.replace(`/${getCurrentUser().uid}/files`, '') }))
+					// For the Viewer.
+					.map(file => ({ ...file, source: generateRemoteUrl(`dav${file.filename}`) }))
 
 				const fileIds = fetchedFiles
 					.map(file => file.fileid)
@@ -358,16 +341,6 @@ export default {
 			return []
 		},
 
-		openViewer(fileId) {
-			const file = this.files[fileId]
-			OCA.Viewer.open({
-				fileInfo: file,
-				list: this.albumFileIds.map(fileId => this.files[fileId]).filter(file => !file.sectionHeader),
-				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
-				canLoop: file.canLoop,
-			})
-		},
-
 		redirectToNewName({ album }) {
 			this.showEditAlbumForm = false
 
@@ -382,81 +355,31 @@ export default {
 		},
 
 		async handleFilesPicked(fileIds) {
-			try {
-				this.loadingAddFilesToAlbum = true
-				await this.addFilesToAlbum({ albumName: this.albumName, fileIdsToAdd: fileIds })
-				this.showAddPhotosModal = false
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingAddFilesToAlbum = false
-			}
+			this.showAddPhotosModal = false
+			await this.addFilesToAlbum({ albumName: this.albumName, fileIdsToAdd: fileIds })
+			// Re-fetch album content to have the proper filenames.
+			await this.fetchAlbumContent()
 		},
 
 		async handleRemoveFilesFromAlbum(fileIds) {
-			try {
-				this.loadingCount++
-				await this.removeFilesFromAlbum({ albumName: this.albumName, fileIdsToRemove: fileIds })
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
+			this.$refs.collectionContent.onUncheckFiles(fileIds)
+			await this.removeFilesFromAlbum({ albumName: this.albumName, fileIdsToRemove: fileIds })
 		},
 
 		async handleDeleteAlbum() {
-			try {
-				this.loadingCount++
-				await this.deleteAlbum({ albumName: this.albumName })
-				this.$router.push('/albums')
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
+			await this.deleteAlbum({ albumName: this.albumName })
+			this.$router.push('/albums')
 		},
 
-		async favoriteSelection() {
+		async handleSetCollaborators(collaborators) {
 			try {
-				this.loadingCount++
-				await this.toggleFavoriteForFiles({ fileIds: this.selectedFileIds, favoriteState: true })
+				this.loadingAddCollaborators = true
+				this.showManageCollaboratorView = false
+				await this.updateAlbum({ albumName: this.albumName, properties: { collaborators } })
 			} catch (error) {
 				logger.error(error)
 			} finally {
-				this.loadingCount--
-			}
-		},
-
-		async unFavoriteSelection() {
-			try {
-				this.loadingCount++
-				await this.toggleFavoriteForFiles({ fileIds: this.selectedFileIds, favoriteState: false })
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		async downloadAllFiles() {
-			try {
-				this.loadingCount++
-				await this.downloadFiles(this.albumFileIds)
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		async downloadSelection() {
-			try {
-				this.loadingCount++
-				await this.downloadFiles(this.selectedFileIds)
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
+				this.loadingAddCollaborators = false
 			}
 		},
 	},
@@ -464,25 +387,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .album {
-	display: flex;
-	flex-direction: column;
-	height: 100%;
-
-	&__empty {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-
-		&__button {
-			margin-top: 32px;
-		}
-
-	}
-
-	&__location {
-		margin-left: -4px;
-		display: flex;
-		color: var(--color-text-lighter);
+	&__title {
+		width: 100%;
 	}
 
 	&__name {
@@ -491,64 +397,10 @@ export default {
 		text-overflow: ellipsis;
 	}
 
-	&__header {
+	&__location {
+		margin-left: -4px;
 		display: flex;
-		height: 60px;
-		align-items: center;
-		justify-content: space-between;
-		position: sticky;
-		z-index: 3;
-		background: var(--color-main-background);
-		padding: 8px 64px 32px 64px;
-		box-sizing: content-box;
-
-		@media only screen and (max-width: 1200px) {
-			padding: 8px 48px 32px 48px;
-		}
-
-		&__left {
-			height: 100%;
-			display: flex;
-			align-items: center;
-			min-width: 0;
-		}
-
-		&__title {
-			min-width: 0;
-		}
-
-		&__loader {
-			margin-left: 32px;
-		}
-
-		&__actions {
-			display: flex;
-			align-items: center;
-
-			button {
-				margin-left: 16px;
-			}
-		}
-	}
-
-	&__photos {
-		height: calc(100% - 60px);
-		min-height: 0; // Prevent it from overflowing in a flex context.
-		padding: 0 64px;
-
-		@media only screen and (max-width: 1200px) {
-			padding: 0 4px;
-		}
-	}
-}
-
-.empty-content-with-illustration ::v-deep .empty-content__icon {
-	width: 200px;
-	height: 200px;
-
-	svg {
-		width: 200px;
-		height: 200px;
+		color: var(--color-text-lighter);
 	}
 }
 </style>

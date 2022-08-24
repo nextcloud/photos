@@ -26,7 +26,7 @@ namespace OCA\Photos\Sabre\Album;
 use OCA\Photos\Album\AlbumFile;
 use OCA\Photos\Album\AlbumInfo;
 use OCA\Photos\Album\AlbumMapper;
-use OCP\Files\Folder;
+use OCP\Files\IRootFolder;
 use OCP\Files\Node;
 use OCP\Files\File;
 use OCP\Files\NotFoundException;
@@ -37,15 +37,15 @@ class AlbumPhoto implements IFile {
 	private AlbumMapper $albumMapper;
 	private AlbumInfo $album;
 	private AlbumFile $file;
-	private Folder $userFolder;
+	private IRootFolder $rootFolder;
 
 	public const TAG_FAVORITE = '_$!<Favorite>!$_';
 
-	public function __construct(AlbumMapper $albumMapper, AlbumInfo $album, AlbumFile $file, Folder $userFolder) {
+	public function __construct(AlbumMapper $albumMapper, AlbumInfo $album, AlbumFile $file, IRootFolder $rootFolder) {
 		$this->albumMapper = $albumMapper;
 		$this->album = $album;
 		$this->file = $file;
-		$this->userFolder = $userFolder;
+		$this->rootFolder = $rootFolder;
 	}
 
 	/**
@@ -75,7 +75,9 @@ class AlbumPhoto implements IFile {
 	}
 
 	public function get() {
-		$nodes = $this->userFolder->getById($this->file->getFileId());
+		$nodes = $this->rootFolder
+			->getUserFolder($this->file->getOwner())
+			->getById($this->file->getFileId());
 		$node = current($nodes);
 		if ($node) {
 			/** @var Node $node */
@@ -94,7 +96,9 @@ class AlbumPhoto implements IFile {
 	}
 
 	public function getFileInfo(): Node {
-		$nodes = $this->userFolder->getById($this->file->getFileId());
+		$nodes = $this->rootFolder
+			->getUserFolder($this->file->getOwner())
+			->getById($this->file->getFileId());
 		$node = current($nodes);
 		if ($node) {
 			return $node;
@@ -129,5 +133,19 @@ class AlbumPhoto implements IFile {
 		}
 
 		return array_search(self::TAG_FAVORITE, current($tags)) !== false;
+	}
+
+	public function setFavoriteState($favoriteState): bool {
+		$tagManager = \OCP\Server::get(\OCP\ITagManager::class);
+		$tagger = $tagManager->load('files');
+
+		switch ($favoriteState) {
+			case "0":
+				return $tagger->removeFromFavorites($this->file->getFileId());
+			case "1":
+				return $tagger->addToFavorites($this->file->getFileId());
+			default:
+				new \Exception('Favorite state is invalide, should be 0 or 1.');
+		}
 	}
 }

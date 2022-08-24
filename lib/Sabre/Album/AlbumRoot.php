@@ -39,18 +39,20 @@ use Sabre\DAV\ICopyTarget;
 use Sabre\DAV\INode;
 
 class AlbumRoot implements ICollection, ICopyTarget {
-	private AlbumMapper $albumMapper;
-	private AlbumWithFiles $album;
-	private Folder $userFolder;
-	private IUser $user;
-	private UserConfigService $userConfigService;
+	protected AlbumMapper $albumMapper;
+	protected AlbumWithFiles $album;
+	protected IRootFolder $rootFolder;
+	protected Folder $userFolder;
+	protected IUser $user;
 
-	public function __construct(AlbumMapper $albumMapper,
+	public function __construct(
+		AlbumMapper $albumMapper,
 		AlbumWithFiles $album,
 		IRootFolder $rootFolder,
 		Folder $userFolder,
 		IUser $user,
-		UserConfigService $userConfigService) {
+		UserConfigService $userConfigService
+	) {
 		$this->albumMapper = $albumMapper;
 		$this->album = $album;
 		$this->rootFolder = $rootFolder;
@@ -111,14 +113,14 @@ class AlbumRoot implements ICollection, ICopyTarget {
 
 	public function getChildren(): array {
 		return array_map(function (AlbumFile $file) {
-			return new AlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->userFolder);
+			return new AlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder);
 		}, $this->album->getFiles());
 	}
 
 	public function getChild($name): AlbumPhoto {
 		foreach ($this->album->getFiles() as $file) {
 			if ($file->getFileId() . "-" . $file->getName() === $name) {
-				return new AlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->userFolder);
+				return new AlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder);
 			}
 		}
 		throw new NotFound("$name not found");
@@ -147,13 +149,13 @@ class AlbumRoot implements ICollection, ICopyTarget {
 		throw new \Exception("Can't add file to album, only files from $uid can be added");
 	}
 
-	private function addFile(int $sourceId, string $ownerUID): bool {
+	protected function addFile(int $sourceId, string $ownerUID): bool {
 		$uid = $this->user->getUID();
 		if (in_array($sourceId, $this->album->getFileIds())) {
 			throw new Conflict("File $sourceId is already in the folder");
 		}
 		if ($ownerUID === $uid) {
-			$this->albumMapper->addFile($this->album->getAlbum()->getId(), $sourceId);
+			$this->albumMapper->addFile($this->album->getAlbum()->getId(), $sourceId, $ownerUID);
 			return true;
 		}
 		return false;
@@ -192,5 +194,15 @@ class AlbumRoot implements ICollection, ICopyTarget {
 		} else {
 			return null;
 		}
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getCollaborators() {
+		return array_map(
+			fn (array $collaborator) => [ 'nc:collaborator' => $collaborator ],
+			$this->albumMapper->getCollaborators($this->album->getAlbum()->getId()),
+		);
 	}
 }

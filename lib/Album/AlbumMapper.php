@@ -29,16 +29,35 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\IMimeTypeLoader;
 use OCP\IDBConnection;
+use OCP\IGroup;
+use OCP\IUser;
+use OCP\IUserManager;
+use OCP\IGroupManager;
 
 class AlbumMapper {
 	private IDBConnection $connection;
 	private IMimeTypeLoader $mimeTypeLoader;
 	private ITimeFactory $timeFactory;
+	private IUserManager $userManager;
+	private IGroupManager $groupManager;
 
-	public function __construct(IDBConnection $connection, IMimeTypeLoader $mimeTypeLoader, ITimeFactory $timeFactory) {
+	// Same mapping as IShare.
+	public const TYPE_USER = 0;
+	public const TYPE_GROUP = 1;
+	// public const TYPE_LINK = 3;
+
+	public function __construct(
+		IDBConnection $connection,
+		IMimeTypeLoader $mimeTypeLoader,
+		ITimeFactory $timeFactory,
+		IUserManager $userManager,
+		IGroupManager $groupManager
+	) {
 		$this->connection = $connection;
 		$this->mimeTypeLoader = $mimeTypeLoader;
 		$this->timeFactory = $timeFactory;
+		$this->userManager = $userManager;
+		$this->groupManager = $groupManager;
 	}
 
 	public function create(string $userId, string $name, string $location = ""): AlbumInfo {
@@ -120,16 +139,22 @@ class AlbumMapper {
 
 	public function delete(int $id): void {
 		$this->connection->beginTransaction();
+
 		$query = $this->connection->getQueryBuilder();
 		$query->delete("photos_albums")
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$query->executeStatement();
 
-
 		$query = $this->connection->getQueryBuilder();
 		$query->delete("photos_albums_files")
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$query->executeStatement();
+
+		$query = $this->connection->getQueryBuilder();
+		$query->delete("photos_collaborators")
+			->where($query->expr()->eq('album_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+		$query->executeStatement();
+
 		$this->connection->commit();
 	}
 
@@ -139,7 +164,7 @@ class AlbumMapper {
 	 */
 	public function getForUserWithFiles(string $userId): array {
 		$query = $this->connection->getQueryBuilder();
-		$query->select("fileid", "mimetype", "a.album_id", "size", "mtime", "etag", "location", "created", "last_added_photo", "added")
+		$query->select("fileid", "mimetype", "a.album_id", "size", "mtime", "etag", "location", "created", "last_added_photo", "added", "owner")
 			->selectAlias("f.name", "file_name")
 			->selectAlias("a.name", "album_name")
 			->from("photos_albums", "a")
@@ -155,7 +180,7 @@ class AlbumMapper {
 			if ($row['fileid']) {
 				$mimeId = $row['mimetype'];
 				$mimeType = $this->mimeTypeLoader->getMimetypeById($mimeId);
-				$filesByAlbum[$albumId][] = new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added']);
+				$filesByAlbum[$albumId][] = new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
 			}
 
 			if (!isset($albumsById[$albumId])) {
@@ -170,7 +195,7 @@ class AlbumMapper {
 		return $result;
 	}
 
-	public function addFile(int $albumId, int $fileId): void {
+	public function addFile(int $albumId, int $fileId, string $owner): void {
 		$added = $this->timeFactory->getTime();
 		try {
 			$query = $this->connection->getQueryBuilder();
@@ -179,6 +204,7 @@ class AlbumMapper {
 					"album_id" => $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT),
 					"file_id" => $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT),
 					"added" => $query->createNamedParameter($added, IQueryBuilder::PARAM_INT),
+					"owner" => $query->createNamedParameter($owner),
 				]);
 			$query->executeStatement();
 		} catch (UniqueConstraintViolationException $e) {
@@ -219,5 +245,180 @@ class AlbumMapper {
 		} else {
 			return (int)$id;
 		}
+	}
+
+	/**
+	 * @param int $albumId
+	 * @return array<array{'id': string, 'label': string, 'source': int}>
+	 */
+	public function getCollaborators(int $albumId): array {
+		$query = $this->connection->getQueryBuilder();
+		$query->select("collaborator_id", "collaborator_source")
+			->from("photos_collaborators")
+			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)));
+
+		$rows = $query->executeQuery()->fetchAll();
+
+		$collaborators = array_map(function (array $row) {
+			/** @var IUser|IGroup|null */
+			$collaborator = null;
+
+			switch ($row['collaborator_source']) {
+				case self::TYPE_USER:
+					$collaborator = $this->userManager->get($row['collaborator_id']);
+					break;
+				case self::TYPE_GROUP:
+					$collaborator = $this->groupManager->get($row['collaborator_id']);
+					break;
+				default:
+					throw new \Exception('Invalid collaborator source: ' . $row['collaborator_source']);
+			}
+
+			if (is_null($collaborator)) {
+				return null;
+			}
+
+			return [
+				'id' => $row['collaborator_id'],
+				'label' => $collaborator->getDisplayName(),
+				'source' => (int)$row['collaborator_source'],
+			];
+		}, $rows);
+
+		return array_values(array_filter($collaborators, fn ($c) => $c !== null));
+	}
+
+	/**
+	 * @param int $albumId
+	 * @param array{'id': string, 'label': string, 'source': int} $newCollaborators
+	 */
+	public function setCollaborators(int $albumId, array $newCollaborators): void {
+		$existingCollaborators = $this->getCollaborators($albumId);
+
+		$collaboratorsToAdd = array_udiff($newCollaborators, $existingCollaborators, fn ($a, $b) => strcmp($a['id'].$a['source'], $b['id'].$b['source']));
+		$collaboratorsToRemove = array_udiff($existingCollaborators, $newCollaborators, fn ($a, $b) => strcmp($a['id'].$a['source'], $b['id'].$b['source']));
+
+		foreach ($collaboratorsToAdd as $collaborator) {
+			switch ($collaborator['source']) {
+				case self::TYPE_USER:
+					if (is_null($this->userManager->get($collaborator['id']))) {
+						throw new \Exception('Unknown collaborator: ' . $collaborator['id']);
+					}
+					break;
+				case self::TYPE_GROUP:
+					if (is_null($this->groupManager->get($collaborator['id']))) {
+						throw new \Exception('Unknown collaborator: ' . $collaborator['id']);
+					}
+					break;
+				default:
+					throw new \Exception('Invalid collaborator source: ' . $collaborator['source']);
+			}
+
+			$query = $this->connection->getQueryBuilder();
+			$query->insert('photos_collaborators')
+				->setValue('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT))
+				->setValue('collaborator_id', $query->createNamedParameter($collaborator['id']))
+				->setValue('collaborator_source', $query->createNamedParameter($collaborator['source'], IQueryBuilder::PARAM_INT))
+				->executeStatement();
+		}
+
+		foreach ($collaboratorsToRemove as $collaborator) {
+			$query = $this->connection->getQueryBuilder();
+			$query->delete('photos_collaborators')
+				->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
+				->andWhere($query->expr()->eq('collaborator_id', $query->createNamedParameter($collaborator['id'])))
+				->andWhere($query->expr()->eq('collaborator_source', $query->createNamedParameter($collaborator['source'], IQueryBuilder::PARAM_INT)))
+				->executeStatement();
+		}
+	}
+
+	/**
+	 * @param string $userId
+	 * @return AlbumWithFiles[]
+	 */
+	public function getSharedAlbumsForCollaboratorWithFiles(string $collaboratorId, int $collaboratorSource): array {
+		$query = $this->connection->getQueryBuilder();
+		$rows = $query
+			->select("fileid", "mimetype", "a.album_id", "size", "mtime", "etag", "location", "created", "last_added_photo", "added", 'owner')
+			->selectAlias("f.name", "file_name")
+			->selectAlias("a.name", "album_name")
+			->selectAlias("a.user", "album_user")
+			->from("photos_collaborators", "c")
+			->leftJoin("c", "photos_albums", "a", $query->expr()->eq("a.album_id", "c.album_id"))
+			->leftJoin("a", "photos_albums_files", "p", $query->expr()->eq("a.album_id", "p.album_id"))
+			->leftJoin("p", "filecache", "f", $query->expr()->eq("p.file_id", "f.fileid"))
+			->where($query->expr()->eq('collaborator_id', $query->createNamedParameter($collaboratorId)))
+			->andWhere($query->expr()->eq('collaborator_source', $query->createNamedParameter($collaboratorSource, IQueryBuilder::PARAM_INT)))
+			->executeQuery()
+			->fetchAll();
+
+		$filesByAlbum = [];
+		$albumsById = [];
+		foreach ($rows as $row) {
+			$albumId = (int)$row['album_id'];
+			if ($row['fileid']) {
+				$mimeId = $row['mimetype'];
+				$mimeType = $this->mimeTypeLoader->getMimetypeById($mimeId);
+				$filesByAlbum[$albumId][] = new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
+			}
+
+			if (!isset($albumsById[$albumId])) {
+				$albumsById[$albumId] = new AlbumInfo($albumId, $row['album_user'], $row['album_name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
+			}
+		}
+
+		$result = [];
+		foreach ($albumsById as $id => $album) {
+			$result[] = new AlbumWithFiles($album, $filesByAlbum[$id] ?? []);
+		}
+		return $result;
+	}
+
+	/**
+	 * @param string $userId
+	 * @param int $albumId
+	 * @return void
+	 */
+	public function deleteCollaboratorFromAlbum(string $userId, int $albumId): void {
+		// TODO: only delete if this was not a group share
+		$query = $this->connection->getQueryBuilder();
+		$query->delete('photos_collaborators')
+			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->eq('collaborator_id', $query->createNamedParameter($userId)))
+			->andWhere($query->expr()->eq('collaborator_source', $query->createNamedParameter(self::TYPE_USER, IQueryBuilder::PARAM_INT)))
+			->executeStatement();
+	}
+
+	/**
+	 * @param string $collaboratorId
+	 * @param int $collaboratorSource
+	 * @param int $fileId
+	 * @return AlbumInfo[]
+	 */
+	public function getAlbumForCollaboratorIdAndFileId(string $collaboratorId, int $collaboratorSource, int $fileId): array {
+		$query = $this->connection->getQueryBuilder();
+		$rows = $query
+			->select("a.album_id", "name", "user", "location", "created", "last_added_photo")
+			->from("photos_collaborators", "c")
+			->leftJoin("c", "photos_albums", "a", $query->expr()->eq("a.album_id", "c.album_id"))
+			->leftJoin("a", "photos_albums_files", "p", $query->expr()->eq("a.album_id", "p.album_id"))
+			->where($query->expr()->eq('collaborator_id', $query->createNamedParameter($collaboratorId)))
+			->andWhere($query->expr()->eq('collaborator_source', $query->createNamedParameter($collaboratorSource, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->eq('file_id', $query->createNamedParameter($fileId)))
+			->groupBy('album_id')
+			->executeQuery()
+			->fetchAll();
+
+
+		return array_map(function (array $row) {
+			return new AlbumInfo(
+				(int)$row['album_id'],
+				$row['user'],
+				$row['name'],
+				$row['location'],
+				(int)$row['created'],
+				(int)$row['last_added_photo']
+			);
+		}, $rows);
 	}
 }
