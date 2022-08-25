@@ -5,7 +5,12 @@ OC.L10N.register(
     "Videos" : "Videoioù",
     "Favorites" : "Pennrolloù",
     "Shared with you" : "Rannet ganeoc'h",
+    "Back" : "Distro",
+    "Save" : "Enrollañ",
     "View" : "Gwell",
+    "Favorite" : "Pennrollañ",
+    "Remove from favorites" : "Diverkañañ eus ar pennrolloù",
+    "Add" : "Ouzhpennañ",
     "Download" : "Pellgargañ",
     "Delete" : "Lemel",
     "Settings" : "Arventennoù"

@@ -4,6 +4,10 @@ OC.L10N.register(
     "Photos" : "Photos",
     "Favorites" : "Favoriti",
     "Shared with you" : "Shared with you",
+    "Save" : "Spremi",
+    "Favorite" : "Favorit",
+    "Remove from favorites" : "Remove from favorites",
+    "Add" : "Dodaj",
     "Download" : "Preuzmi",
     "Delete" : "Obriši",
     "Settings" : "Podešavanje"

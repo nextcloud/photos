@@ -6,6 +6,8 @@ OC.L10N.register(
     "Favorites" : "Omiljeni",
     "Shared with you" : "Shared with you",
     "Back" : "Nazad",
+    "Save" : "Sačuvaj",
+    "Favorite" : "Omiljene",
     "Remove from favorites" : "Ukloni iz omiljenih",
     "Add" : "Dodaj",
     "Download" : "Preuzmi",

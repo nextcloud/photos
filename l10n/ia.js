@@ -5,6 +5,7 @@ OC.L10N.register(
     "Favorites" : "Favoritos",
     "Shared with you" : "Compartite con te",
     "Back" : "Retro",
+    "Save" : "Salveguardar",
     "View" : "Vider",
     "Favorite" : "Favorite",
     "Remove from favorites" : "Remove from favorites",

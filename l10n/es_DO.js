@@ -3,9 +3,11 @@ OC.L10N.register(
     {
     "Photos" : "Fotos",
     "Videos" : "Videos",
+    "Folders" : "Carpetas",
     "Favorites" : "Favoritos",
     "Shared with you" : "Compartido con usted",
     "Back" : "Atrás",
+    "Save" : "Guardar",
     "Favorite" : "Hacer favorito",
     "Remove from favorites" : "Eliminar de favoritos",
     "Add" : "Agregar",
