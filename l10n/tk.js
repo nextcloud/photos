@@ -4,6 +4,9 @@ OC.L10N.register(
     "Photos" : "Suratlar",
     "Videos" : "Wideo",
     "Favorites" : "Halanýanlar",
+    "Back" : "Yzyna",
+    "Save" : "Saklamak",
+    "Favorite" : "Halaýan",
     "Download" : "Göçürip almak",
     "Delete" : "Pozmak",
     "Settings" : "Sazlamalar"

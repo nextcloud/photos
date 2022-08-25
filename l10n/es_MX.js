@@ -10,6 +10,7 @@ OC.L10N.register(
     "Tagged photos" : "Fotos con etiquetas",
     "Locations" : "Ubicaciones",
     "Back" : "Atrás",
+    "Save" : "Guardar",
     "Open the full size \"{name}\" image" : "Abrir Imagen \"{name}\" en tamaño completo",
     "Open the \"{name}\" sub-directory" : "Abrir el sub-directorio de \"{name}\"",
     "Back to {folder}" : "Regresar a {folder}",

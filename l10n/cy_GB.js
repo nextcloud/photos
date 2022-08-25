@@ -5,8 +5,12 @@ OC.L10N.register(
     "Videos" : "Fideos",
     "Favorites" : "Ffefrynnau",
     "Shared with you" : "Shared with you",
+    "Back" : "Nôl",
+    "Save" : "Cadw",
     "An error occurred" : "Digwyddodd gwall",
+    "Favorite" : "Ffefryn",
     "Remove from favorites" : "Remove from favorites",
+    "Add" : "Ychwanegu",
     "Download" : "Llwytho i lawr",
     "Delete" : "Dileu",
     "Settings" : "Gosodiadau"
