@@ -4,6 +4,7 @@ OC.L10N.register(
     "Photos" : "Photos",
     "Favorites" : "Favorites",
     "Shared with you" : "Shared with you",
+    "Save" : "Save",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "Add",
     "Delete" : "Delete",
