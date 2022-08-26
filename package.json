@@ -82,6 +82,6 @@
 		"postcss-loader": "^7.0.1",
 		"raw-loader": "^4.0.2",
 		"vue-jest": "^3.0.7",
-		"workbox-webpack-plugin": "^6.5.3"
+		"workbox-webpack-plugin": "^6.5.4"
 	}
 }
