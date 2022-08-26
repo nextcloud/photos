@@ -46,7 +46,7 @@
 		"qs": "^6.10.4",
 		"url-parse": "^1.5.10",
 		"vue": "^2.6.14",
-		"vue-router": "^3.5.3",
+		"vue-router": "^3.5.4",
 		"vue-template-compiler": "^2.6.14",
 		"vue-virtual-grid": "^2.3.2",
 		"vuex": "^3.6.2",
