@@ -68,9 +68,9 @@
 				</AppNavigationItem>
 			</template>
 			<template #footer>
-				<AppNavigationSettings :title="t('photos', 'Photos settings')">
-					<CroppedLayoutSettings />
-				</AppNavigationSettings>
+				<AppNavigationItem :title="t('photos', 'Photos settings')" @click="showSettings">
+					<Cog slot="icon" :size="20" />
+				</AppNavigationItem>
 			</template>
 		</AppNavigation>
 		<AppContent>
@@ -84,6 +84,9 @@
 			<!-- eslint-disable-next-line vue/no-v-html (because it's an SVG file) -->
 			<span class="hidden-visually" role="none" v-html="videoplaceholder" />
 		</AppContent>
+
+		<!-- Main settings Modal-->
+		<SettingsDialog :open.sync="openedSettings" />
 	</Content>
 </template>
 
@@ -102,42 +105,43 @@ import CalendarToday from 'vue-material-design-icons/CalendarToday.vue'
 import Tag from 'vue-material-design-icons/Tag.vue'
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
-import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline'
+import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
+import Cog from 'vue-material-design-icons/Cog.vue'
 
-import Content from '@nextcloud/vue/dist/Components/Content'
-import AppContent from '@nextcloud/vue/dist/Components/AppContent'
-import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation'
-import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
-import AppNavigationSettings from '@nextcloud/vue/dist/Components/AppNavigationSettings'
+import AppContent from '@nextcloud/vue/dist/Components/AppContent.js'
+import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation.js'
+import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem.js'
+import Content from '@nextcloud/vue/dist/Components/Content.js'
 
-import CroppedLayoutSettings from './components/Settings/CroppedLayoutSettings.vue'
+import SettingsDialog from './components/Settings/SettingsDialog.vue'
+
 import svgplaceholder from './assets/file-placeholder.svg'
 import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'
-import isMapsInstalled from './services/IsMapsInstalled.js'
 import areTagsInstalled from './services/AreTagsInstalled.js'
+import isMapsInstalled from './services/IsMapsInstalled.js'
 import isRecognizeInstalled from './services/IsRecognizeInstalled.js'
 
 export default {
 	name: 'Photos',
 	components: {
-		Content,
-		CroppedLayoutSettings,
+		AccountBoxMultipleOutline,
 		AppContent,
 		AppNavigation,
 		AppNavigationItem,
-		AppNavigationSettings,
-		ImageIcon,
-		Camera,
-		VideoIcon,
-		FolderMultipleImage,
-		Folder,
-		Star,
+		Cog,
 		CalendarToday,
-		Tag,
+		Camera,
+		Content,
+		Folder,
+		FolderMultipleImage,
+		ImageIcon,
 		MapMarker,
+		SettingsDialog,
 		ShareVariant,
-		AccountBoxMultipleOutline,
+		Star,
+		Tag,
+		VideoIcon,
 	},
 	data() {
 		return {
@@ -145,12 +149,15 @@ export default {
 			imgplaceholder,
 			videoplaceholder,
 			areTagsInstalled,
+
 			showLocationMenuEntry: getCurrentUser() === null
 				? false
 				: getCurrentUser().isAdmin || isMapsInstalled,
 			showPeopleMenuEntry: getCurrentUser() === null
 				? false
 				: getCurrentUser().isAdmin || isRecognizeInstalled,
+
+			openedSettings: false,
 		}
 	},
 
@@ -179,6 +186,12 @@ export default {
 		window.removeEventListener('load', () => {
 			navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js'))
 		})
+	},
+
+	methods: {
+		showSettings() {
+			this.openedSettings = true
+		},
 	},
 }
 </script>

@@ -31,6 +31,7 @@ use OC\Files\Search\SearchQuery;
 use OC\User\NoUserException;
 use OCA\Files\Event\LoadSidebar;
 use OCA\Photos\AppInfo\Application;
+use OCA\Photos\Service\UserConfigService;
 use OCA\Viewer\Event\LoadViewer;
 use OCP\App\IAppManager;
 use OCP\AppFramework\Controller;
@@ -46,8 +47,7 @@ use OCP\Files\Search\ISearchBinaryOperator;
 use OCP\Files\Search\ISearchComparison;
 use OCP\ICache;
 use OCP\ICacheFactory;
-use OCP\IConfig;
-use OCP\IInitialStateService;
+use OCP\AppFramework\Services\IInitialState;
 use OCP\IRequest;
 use OCP\IUserSession;
 use OCP\Util;
@@ -56,8 +56,8 @@ use Psr\Log\LoggerInterface;
 class PageController extends Controller {
 	private IAppManager $appManager;
 	private IEventDispatcher $eventDispatcher;
-	private IConfig $config;
-	private IInitialStateService $initialStateService;
+	private UserConfigService $userConfig;
+	private IInitialState $initialState;
 	private IUserSession $userSession;
 	private IRootFolder $rootFolder;
 	private ICacheFactory $cacheFactory;
@@ -68,8 +68,8 @@ class PageController extends Controller {
 		IRequest $request,
 		IAppManager $appManager,
 		IEventDispatcher $eventDispatcher,
-		IConfig $config,
-		IInitialStateService $initialStateService,
+		UserConfigService $userConfig,
+		IInitialState $initialState,
 		IUserSession $userSession,
 		IRootFolder $rootFolder,
 		ICacheFactory $cacheFactory,
@@ -79,8 +79,8 @@ class PageController extends Controller {
 
 		$this->appManager = $appManager;
 		$this->eventDispatcher = $eventDispatcher;
-		$this->config = $config;
-		$this->initialStateService = $initialStateService;
+		$this->userConfig = $userConfig;
+		$this->initialState = $initialState;
 		$this->userSession = $userSession;
 		$this->rootFolder = $rootFolder;
 		$this->cacheFactory = $cacheFactory;
@@ -101,12 +101,16 @@ class PageController extends Controller {
 		$this->eventDispatcher->dispatch(LoadSidebar::class, new LoadSidebar());
 		$this->eventDispatcher->dispatch(LoadViewer::class, new LoadViewer());
 
-		$this->initialStateService->provideInitialState($this->appName, 'image-mimes', Application::IMAGE_MIMES);
-		$this->initialStateService->provideInitialState($this->appName, 'video-mimes', Application::VIDEO_MIMES);
-		$this->initialStateService->provideInitialState($this->appName, 'maps', $this->appManager->isEnabledForUser('maps') === true);
-		$this->initialStateService->provideInitialState($this->appName, 'recognize', $this->appManager->isEnabledForUser('recognize') === true);
-		$this->initialStateService->provideInitialState($this->appName, 'croppedLayout', $this->config->getUserValue($user->getUid(), Application::APP_ID, 'croppedLayout', 'false'));
-		$this->initialStateService->provideInitialState($this->appName, 'systemtags', $this->appManager->isEnabledForUser('systemtags') === true);
+		$this->initialState->provideInitialState('image-mimes', Application::IMAGE_MIMES);
+		$this->initialState->provideInitialState('video-mimes', Application::VIDEO_MIMES);
+		$this->initialState->provideInitialState('maps', $this->appManager->isEnabledForUser('maps') === true);
+		$this->initialState->provideInitialState('recognize', $this->appManager->isEnabledForUser('recognize') === true);
+		$this->initialState->provideInitialState('systemtags', $this->appManager->isEnabledForUser('systemtags') === true);
+
+		// Provide user config
+		foreach (array_keys(UserConfigService::DEFAULT_CONFIGS) as $key) {
+			$this->initialState->provideInitialState($key, $this->userConfig->getUserConfig($key));
+		}
 
 		$paths = [];
 		try {
@@ -127,7 +131,7 @@ class PageController extends Controller {
 			$this->logger->error($e->getMessage());
 		}
 
-		$this->initialStateService->provideInitialState($this->appName, 'nomedia-paths', $paths);
+		$this->initialState->provideInitialState('nomedia-paths', $paths);
 
 		Util::addScript(Application::APP_ID, 'photos-main');
 		Util::addStyle(Application::APP_ID, 'icons');
