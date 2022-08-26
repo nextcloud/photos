@@ -43,7 +43,7 @@
 		"@nextcloud/moment": "^1.2.1",
 		"@nextcloud/paths": "^2.1.0",
 		"@nextcloud/router": "^2.0.0",
-		"@nextcloud/vue": "^5.3.1",
+		"@nextcloud/vue": "^5.4.0",
 		"camelcase": "^7.0.0",
 		"debounce": "^1.2.1",
 		"he": "^1.2.0",
