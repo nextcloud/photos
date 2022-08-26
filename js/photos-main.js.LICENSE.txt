@@ -5,6 +5,13 @@
   */
 
 /*!
+ * Determine if an object is a Buffer
+ *
+ * @author   Feross Aboukhadijeh <https://feross.org>
+ * @license  MIT
+ */
+
+/*!
  * The buffer module from node.js, for the browser.
  *
  * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
@@ -50,13 +57,11 @@
  * Copyright (c) 2016 Jorik Tangelder;
  * Licensed under the MIT license */
 
-/*! http://mths.be/base64 v0.1.0 by @mathias | MIT license */
+/*! https://mths.be/base64 v1.0.0 by @mathias | MIT license */
 
 /*! https://mths.be/he v1.2.0 by @mathias | MIT license */
 
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
-
-/*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
 
 /**
  * @copyright Copyright (c) 2018 John Molakvoæ <skjnldsv@protonmail.com>

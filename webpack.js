@@ -7,6 +7,7 @@ const SassGridConfig = require('./src/utils/SassGridConfig')
 const BabelLoaderExcludeNodeModulesExcept = require('babel-loader-exclude-node-modules-except')
 
 const WorkboxPlugin = require('workbox-webpack-plugin')
+const { basename } = require('path')
 
 webpackRules.RULE_JS.exclude = BabelLoaderExcludeNodeModulesExcept([
 	'@essentials/request-timeout',
@@ -41,9 +42,10 @@ webpackConfig.module.rules = Object.values(webpackRules)
 webpackConfig.plugins.push(
 	// patch webdav/dist/request.js
 	new webpack.NormalModuleReplacementPlugin(
-		/request.js/,
+		/request(\.js)?/,
 		function(resource) {
-			if (resource.context.indexOf('webdav/dist') > -1) {
+			if (resource.context.indexOf('webdav') > -1) {
+				console.debug('Patched request for webdav', basename(resource.contextInfo.issuer))
 				resource.request = path.join(__dirname, 'src/patchedRequest.js')
 			}
 		},
