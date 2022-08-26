@@ -63,10 +63,10 @@
 	"browserslist": [
 		"extends @nextcloud/browserslist-config"
 	],
-  "engines": {
-    "node": "^16.0.0",
-    "npm": "^7.0.0 || ^8.0.0"
-  },
+	"engines": {
+		"node": "^16.0.0",
+		"npm": "^7.0.0 || ^8.0.0"
+	},
 	"devDependencies": {
 		"@nextcloud/babel-config": "^1.0.0",
 		"@nextcloud/browserslist-config": "^2.2.0",
