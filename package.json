@@ -52,7 +52,7 @@
 		"qs": "^6.11.0",
 		"url-parse": "^1.5.10",
 		"vue": "^2.7.10",
-		"vue-material-design-icons": "^5.0.0",
+		"vue-material-design-icons": "^5.1.2",
 		"vue-router": "^3.6.4",
 		"vue-template-compiler": "^2.7.10",
 		"vue-virtual-grid": "^2.5.0",
