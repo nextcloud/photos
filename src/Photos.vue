@@ -24,24 +24,48 @@
 	<Content app-name="photos">
 		<AppNavigation>
 			<template #list>
-				<AppNavigationItem :to="{name: 'timeline'}"
-					class="app-navigation__photos"
-					:title="t('photos', 'Your photos')"
-					icon="icon-yourphotos"
-					exact />
-				<AppNavigationItem to="/videos" :title="t('photos', 'Your videos')" icon="icon-video" />
-				<AppNavigationItem to="/favorites" :title="t('photos', 'Favorites')" icon="icon-favorite" />
-				<AppNavigationItem :to="{name: 'thisday'}" :title="t('photos', 'On this day')" icon="icon-calendar-dark" />
-				<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Your folders')" icon="icon-files-dark" />
-				<AppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared with you')" icon="icon-share" />
+				<AppNavigationItem :to="{name: 'all_media'}"
+					class="app-navigation__all_media"
+					:title="t('photos', 'All media')"
+					exact>
+					<ImageIcon slot="icon" :size="20" />
+				</AppNavigationItem>
+				<AppNavigationItem to="/photos" :title="t('photos', 'Photos')">
+					<Camera slot="icon" :size="20" />
+				</AppNavigationItem>
+				<AppNavigationItem to="/videos" :title="t('photos', 'Videos')">
+					<VideoIcon slot="icon" :size="20" />
+				</AppNavigationItem>
+				<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Albums')">
+					<FolderMultipleImage slot="icon" :size="20" />
+				</AppNavigationItem>
+				<AppNavigationItem v-if="showPeopleMenuEntry" :to="{name: 'faces'}" :title="t('photos', 'People')">
+					<template #icon>
+						<AccountBoxMultipleOutline :size="20" />
+					</template>
+				</AppNavigationItem>
+				<AppNavigationItem :to="{name: 'folders'}" :title="t('photos', 'Folders')">
+					<Folder slot="icon" :size="20" />
+				</AppNavigationItem>
+				<AppNavigationItem to="/favorites" :title="t('photos', 'Favorites')">
+					<Star slot="icon" :size="20" />
+				</AppNavigationItem>
+				<AppNavigationItem :to="{name: 'thisday'}" :title="t('photos', 'On this day')">
+					<CalendarToday slot="icon" :size="20" />
+				</AppNavigationItem>
+				<AppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared with you')">
+					<ShareVariant slot="icon" :size="20" />
+				</AppNavigationItem>
 				<AppNavigationItem v-if="areTagsInstalled"
 					:to="{name: 'tags'}"
-					:title="t('photos', 'Tagged photos')"
-					icon="icon-tag" />
+					:title="t('photos', 'Tagged photos')">
+					<Tag slot="icon" :size="20" />
+				</AppNavigationItem>
 				<AppNavigationItem v-if="showLocationMenuEntry"
 					:to="{name: 'maps'}"
-					:title="t('photos', 'Locations')"
-					icon="icon-address" />
+					:title="t('photos', 'Locations')">
+					<MapMarker slot="icon" :size="20" />
+				</AppNavigationItem>
 			</template>
 			<template #footer>
 				<AppNavigationSettings :title="t('photos', 'Photos settings')">
@@ -49,8 +73,8 @@
 				</AppNavigationSettings>
 			</template>
 		</AppNavigation>
-		<AppContent :class="{ 'icon-loading': loading }">
-			<router-view v-show="!loading" :loading.sync="loading" />
+		<AppContent>
+			<router-view />
 
 			<!-- svg img loading placeholder (linked to the File component) -->
 			<!-- eslint-disable-next-line vue/no-v-html (because it's an SVG file) -->
@@ -68,18 +92,31 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
 import { loadState } from '@nextcloud/initial-state'
 
+import Camera from 'vue-material-design-icons/Camera.vue'
+import ImageIcon from 'vue-material-design-icons/Image.vue'
+import VideoIcon from 'vue-material-design-icons/Video.vue'
+import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
+import Folder from 'vue-material-design-icons/Folder.vue'
+import Star from 'vue-material-design-icons/Star.vue'
+import CalendarToday from 'vue-material-design-icons/CalendarToday.vue'
+import Tag from 'vue-material-design-icons/Tag.vue'
+import MapMarker from 'vue-material-design-icons/MapMarker.vue'
+import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
+import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline'
+
 import Content from '@nextcloud/vue/dist/Components/Content'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import AppNavigationSettings from '@nextcloud/vue/dist/Components/AppNavigationSettings'
 
-import CroppedLayoutSettings from './components/Settings/CroppedLayoutSettings'
+import CroppedLayoutSettings from './components/Settings/CroppedLayoutSettings.vue'
 import svgplaceholder from './assets/file-placeholder.svg'
 import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'
-import isMapsInstalled from './services/IsMapsInstalled'
-import areTagsInstalled from './services/AreTagsInstalled'
+import isMapsInstalled from './services/IsMapsInstalled.js'
+import areTagsInstalled from './services/AreTagsInstalled.js'
+import isRecognizeInstalled from './services/IsRecognizeInstalled.js'
 
 export default {
 	name: 'Photos',
@@ -90,10 +127,20 @@ export default {
 		AppNavigation,
 		AppNavigationItem,
 		AppNavigationSettings,
+		ImageIcon,
+		Camera,
+		VideoIcon,
+		FolderMultipleImage,
+		Folder,
+		Star,
+		CalendarToday,
+		Tag,
+		MapMarker,
+		ShareVariant,
+		AccountBoxMultipleOutline,
 	},
 	data() {
 		return {
-			loading: false,
 			svgplaceholder,
 			imgplaceholder,
 			videoplaceholder,
@@ -101,6 +148,9 @@ export default {
 			showLocationMenuEntry: getCurrentUser() === null
 				? false
 				: getCurrentUser().isAdmin || isMapsInstalled,
+			showPeopleMenuEntry: getCurrentUser() === null
+				? false
+				: getCurrentUser().isAdmin || isRecognizeInstalled,
 		}
 	},
 
@@ -132,15 +182,23 @@ export default {
 	},
 }
 </script>
-<style lang="scss" scoped>
-.app-content {
-	display: flex;
-	flex-grow: 1;
-	flex-direction: column;
-	align-content: space-between;
-}
+<style lang="scss">
+body {
+	overflow-x: hidden; // Prevent horizontal scrollbar on chrome as .app-photos is 100vw, which means size of the window including the scrollbar.
 
-.app-navigation__photos::v-deep .app-navigation-entry-icon.icon-photos {
-	background-size: 20px;
+	.app-photos {
+		width: 100vw; // Prevent layout change when opening the Viewer as the scrollbar disappear (overflow: hidden on body)
+
+		.app-content {
+			display: flex;
+			flex-grow: 1;
+			flex-direction: column;
+			align-content: space-between;
+		}
+
+		.app-navigation__photos::v-deep .app-navigation-entry-icon.icon-photos {
+			background-size: 20px;
+		}
+	}
 }
 </style>

@@ -21,54 +21,90 @@
  -->
 
 <template>
-	<a :class="{
-			'file--cropped': croppedLayout,
-		}"
-		class="file"
-		:href="davPath"
-		:aria-label="ariaLabel"
-		@click.prevent="openViewer">
-		<div v-if="item.injected.mime.includes('video') && item.injected.hasPreview" class="icon-video-white" />
-		<!-- image and loading placeholder -->
-		<transition-group name="fade" class="transition-group">
-			<img v-if="!error"
-				ref="img"
-				:key="`${item.injected.basename}-img`"
-				:src="src"
-				:alt="item.injected.basename"
-				:aria-describedby="ariaUuid"
-				@load="onLoad"
-				@error="onError">
+	<div class="file-container"
+		:class="{selected}">
+		<a class="file"
+			:href="davPath"
+			:aria-label="ariaLabel"
+			@click.prevent="emitClick">
 
-			<svg v-if="!loaded || error"
-				:key="`${item.injected.basename}-svg`"
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 32 32"
-				fill="url(#placeholder__gradient)">
-				<use v-if="isImage" href="#placeholder--img" />
-				<use v-else href="#placeholder--video" />
-			</svg>
-		</transition-group>
+			<!-- image and loading placeholder -->
+			<div class="file__images">
+				<VideoIcon v-if="file.mime.includes('video')" class="video-icon" :size="64" />
 
-		<!-- image name and cover -->
-		<p :id="ariaUuid" class="hidden-visually">{{ item.injected.basename }}</p>
-		<div class="cover" role="none" />
-	</a>
+				<img v-if="visibility !== 'none' && canLoad && !error"
+					ref="imgNear"
+					:key="`${file.basename}-near`"
+					:src="srcNear"
+					:alt="file.basename"
+					:aria-describedby="ariaDescription"
+					@load="onLoad"
+					@error="onError">
+
+				<img v-if="visibility === 'visible' && canLoad && !error"
+					ref="imgVisible"
+					:key="`${file.basename}-visible`"
+					:src="srcVisible"
+					:alt="file.basename"
+					:aria-describedby="ariaDescription"
+					@load="onLoad"
+					@error="onError">
+			</div>
+
+			<!-- image description -->
+			<p :id="ariaDescription" class="file__hidden-description" :class="{show: error}">{{ file.basename }}</p>
+		</a>
+
+		<CheckboxRadioSwitch v-if="allowSelection"
+			class="selection-checkbox"
+			:checked="selected"
+			@update:checked="onToggle">
+			<span class="input-label">{{ t('photos', 'Select image {imageName}', {imageName: file.basename}) }}</span>
+		</CheckboxRadioSwitch>
+
+		<Star v-if="file.favorite === 1" class="favorite-state" :aria-label="t('photos', 'The file is in the favorites')" />
+	</div>
 </template>
 
 <script>
+import Star from 'vue-material-design-icons/Star'
+import VideoIcon from 'vue-material-design-icons/Video.vue'
+
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
+import { CheckboxRadioSwitch } from '@nextcloud/vue'
 
-import UserConfig from '../mixins/UserConfig'
+import UserConfig from '../mixins/UserConfig.js'
+import Semaphore from '../utils/semaphoreWithPriority.js'
 
 export default {
 	name: 'File',
+	components: {
+		CheckboxRadioSwitch,
+		Star,
+		VideoIcon,
+	},
 	mixins: [UserConfig],
 	inheritAttrs: false,
 	props: {
-		item: {
+		file: {
 			type: Object,
+			required: true,
+		},
+		selected: {
+			type: Boolean,
+			required: true,
+		},
+		allowSelection: {
+			type: Boolean,
+			default: true,
+		},
+		visibility: {
+			type: String,
+			required: true,
+		},
+		semaphore: {
+			type: Semaphore,
 			required: true,
 		},
 	},
@@ -77,52 +113,108 @@ export default {
 		return {
 			loaded: false,
 			error: false,
+			canLoad: false,
+			semaphoreSymbol: null,
+			isDestroyed: false,
 		}
 	},
 
 	computed: {
+		/** @return {string} */
 		davPath() {
-			return generateRemoteUrl(`dav/files/${getCurrentUser().uid}`) + this.item.injected.filename
+			return generateRemoteUrl(`dav/files/${getCurrentUser().uid}`) + this.file.filename
 		},
-		ariaUuid() {
-			return `image-${this.item.injected.fileid}`
+		/** @return {string} */
+		ariaDescription() {
+			return `image-description-${this.file.fileid}`
 		},
+		/** @return {string} */
 		ariaLabel() {
-			return t('photos', 'Open the full size "{name}" image', { name: this.item.injected.basename })
+			return t('photos', 'Open the full size "{name}" image', { name: this.file.basename })
 		},
+		/** @return {boolean} */
 		isImage() {
-			return this.item.injected.mime.startsWith('image')
+			return this.file.mime.startsWith('image')
 		},
+		/** @return {string} */
 		decodedEtag() {
-			return this.item.injected.etag.replace('&quot;', '').replace('&quot;', '')
+			return this.file.etag.replace('&quot;', '').replace('&quot;', '')
 		},
-		src() {
-			return generateUrl(`/core/preview?fileId=${this.item.injected.fileid}&c=${this.decodedEtag}&x=${250}&y=${250}&forceIcon=0&a=${this.croppedLayout ? '0' : '1'}`)
+		/** @return {string} */
+		srcVisible() {
+			return this.getItemURL(512)
 		},
+		/** @return {string} */
+		srcNear() {
+			return this.getItemURL(64)
+		},
+	},
+
+	mounted() {
+		// Don't render the component right away as it is useless if the user is only scrolling
+		setTimeout(async () => {
+			this.semaphoreSymbol = await this.semaphore.acquire(() => {
+				switch (this.visibility) {
+				case 'visible':
+					return 1
+				case 'near':
+					return 2
+				default:
+					return 3
+				}
+			}, this.file.fileid)
+
+			this.canLoad = true
+			if (this.visibility === 'none' || this.isDestroyed) {
+				this.releaseSemaphore()
+			}
+		}, 250)
 	},
 
 	beforeDestroy() {
+		this.isDestroyed = true
+		this.releaseSemaphore()
+
 		// cancel any pending load
-		this.$refs.src = ''
+		if (this.$refs.imgNear !== undefined) {
+			this.$refs.imgNear.src = ''
+		}
+		if (this.$refs.srcVisible !== undefined) {
+			this.$refs.srcVisible.src = ''
+		}
 	},
 
 	methods: {
-		openViewer() {
-			OCA.Viewer.open({
-				path: this.item.injected.filename,
-				list: this.item.injected.list,
-				loadMore: this.item.injected.loadMore ? async () => await this.item.injected.loadMore(true) : () => [],
-				canLoop: this.item.injected.canLoop,
-			})
+		emitClick() {
+			this.$emit('click', this.file.fileid)
 		},
 
 		/** When the image is fully loaded by browser we remove the placeholder */
 		onLoad() {
 			this.loaded = true
+			this.releaseSemaphore()
 		},
 
 		onError() {
 			this.error = true
+			this.releaseSemaphore()
+		},
+
+		onToggle(value) {
+			this.$emit('select-toggled', { id: this.file.fileid, value })
+		},
+
+		getItemURL(size) {
+			return generateUrl(`/core/preview?fileId=${this.file.fileid}&c=${this.decodedEtag}&x=${size}&y=${size}&forceIcon=0&a=1`)
+
+		},
+
+		releaseSemaphore() {
+			if (this.semaphoreSymbol === null) {
+				return
+			}
+			this.semaphore.release(this.semaphoreSymbol)
+			this.semaphoreSymbol = null
 		},
 	},
 
@@ -130,37 +222,156 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../mixins/FileFolder';
-
-.transition-group {
-	display: contents;
-}
-
-.icon-video-white {
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	z-index: 20;
-}
-
-img {
-	position: absolute;
-	width: 100%;
+.file-container {
+	background: var(--color-primary-light);
+	position: relative;
 	height: 100%;
-	z-index: 10;
+	width: 100%;
+	border: 2px solid var(--color-main-background); // Use border so create a separation between images.
+	box-sizing: border-box;
 
-	color: transparent; // should be diplayed on error
-
-	object-fit: contain;
-
-	.file--cropped & {
-		object-fit: cover;
+	// Selection border.
+	&.selected, &:focus-within {
+		&::after {
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 2;
+			width: 100%;
+			height: 100%;
+			content: '';
+			outline: var(--color-primary) solid 4px;
+			outline-offset: -4px;
+			pointer-events: none;
+		}
 	}
-}
 
-svg {
-	position: absolute;
-	width: 70%;
-	height: 70%;
+	.file {
+		width: 100%;
+		height: 100%;
+		box-sizing: border-box;
+		outline: none; // Override global focus state.
+
+		&__images {
+			display: contents;
+
+			.video-icon {
+				position: absolute;
+				top: 0px;
+				right: 0px;
+				width: 100%;
+				height: 100%;
+				z-index: 1;
+				opacity: 0.8;
+
+				::v-deep .material-design-icon__svg {
+					fill: var(--color-main-background);
+				}
+			}
+
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				position: absolute;
+				color: transparent; /// Hide alt='' text when loading.
+			}
+
+			.loading-overlay {
+				position: absolute;
+				height: 100%;
+				width: 100%;
+				display: flex;
+				align-content: center;
+				align-items: center;
+				justify-content: center;
+
+				svg {
+					width: 70%;
+					height: 70%;
+				}
+			}
+		}
+
+		&__hidden-description {
+			position: absolute;
+			left: -10000px;
+			top: -10000px;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+
+			&.show {
+				position: initial;
+				width: fit-content;
+				height: fit-content;
+			}
+		}
+	}
+
+	// Reveal checkbox on hover.
+	&:hover, &.selected, &:focus-within {
+		.selection-checkbox {
+			display: flex;
+		}
+
+		.favorite-state {
+			display: none;
+		}
+	}
+
+	.selection-checkbox {
+		display: none;
+		position: absolute;
+		top: 8px;
+		// Fancy calculation to render the checkbox in the middle of narrow images.
+		right: min(22px, calc(50% - 7px));
+		z-index: 1;
+		width: fit-content;
+
+		// Make the checkbox background round on hover.
+		::v-deep .checkbox-radio-switch__label {
+			padding: 10px;
+			box-sizing: border-box;
+
+			// Add a background to the checkbox so we do not see the image through it.
+			&::after {
+				content: '';
+				background: var(--color-primary-light);
+				width: 16px;
+				height: 16px;
+				position: absolute;
+				left: 1px;
+				z-index: -1;
+			}
+
+			.checkbox-radio-switch__icon {
+				margin: 0;
+			}
+		}
+
+		.input-label {
+			position: fixed;
+			z-index: -1;
+			top: -5000px;
+			left: -5000px;
+		}
+	}
+
+	.favorite-state {
+		position: absolute;
+		top: 2px;
+		// Fancy calculation to render the start in the middle of narrow images.
+		right: min(2px, calc(50% - 7px));
+
+		::v-deep .material-design-icon__svg {
+			fill: #FC0;
+
+			path {
+				stroke: var(--color-primary-light);
+				stroke-width: 1px;
+			}
+		}
+	}
 }
 </style>

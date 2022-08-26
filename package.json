@@ -1,78 +1,87 @@
 {
-  "name": "photos",
-  "description": "Your memories under your control",
-  "version": "1.7.0",
-  "author": "John Molakvoæ <skjnldsv@protonmail.com>",
-  "contributors": [
-    "John Molakvoæ <skjnldsv@protonmail.com>"
-  ],
-  "keywords": [
-    "nextcloud",
-    "photos",
-    "app"
-  ],
-  "bugs": {
-    "url": "https://github.com/nextcloud/photos/issues"
-  },
-  "repository": {
-    "url": "https://github.com/nextcloud/photos",
-    "type": "git"
-  },
-  "homepage": "https://github.com/nextcloud/photos",
-  "license": "agpl",
-  "private": true,
-  "scripts": {
-    "build": "NODE_ENV=production webpack --progress --config webpack.js",
-    "dev": "NODE_ENV=development webpack --progress --config webpack.js",
-    "watch": "NODE_ENV=development webpack --progress --watch --config webpack.js",
-    "lint": "eslint --ext .js,.vue src",
-    "lint:fix": "eslint --ext .js,.vue src --fix",
-    "stylelint": "stylelint src",
-    "stylelint:fix": "stylelint src --fix"
-  },
-  "dependencies": {
-    "@essentials/request-timeout": "^1.3.0",
-    "@nextcloud/auth": "^1.3.0",
-    "@nextcloud/axios": "^1.10.0",
-    "@nextcloud/event-bus": "^2.1.1",
-    "@nextcloud/initial-state": "^1.2.1",
-    "@nextcloud/l10n": "^1.4.1",
-    "@nextcloud/moment": "^1.2.1",
-    "@nextcloud/router": "^2.0.0",
-    "@nextcloud/vue": "^5.3.1",
-    "camelcase": "^6.3.0",
-    "debounce": "^1.2.1",
-    "path-posix": "^1.0.0",
-    "qs": "^6.11.0",
-    "url-parse": "^1.5.10",
-    "vue": "^2.6.14",
-    "vue-router": "^3.5.3",
-    "vue-template-compiler": "^2.6.14",
-    "vue-virtual-grid": "^2.5.0",
-    "vuex": "^3.6.2",
-    "vuex-router-sync": "^5.0.0",
-    "webdav": "^3.6.1"
-  },
-  "browserslist": [
-    "extends @nextcloud/browserslist-config"
-  ],
+	"name": "photos",
+	"description": "Your memories under your control",
+	"version": "1.7.0",
+	"author": "John Molakvoæ <skjnldsv@protonmail.com>",
+	"contributors": [
+		"John Molakvoæ <skjnldsv@protonmail.com>"
+	],
+	"keywords": [
+		"nextcloud",
+		"photos",
+		"app"
+	],
+	"bugs": {
+		"url": "https://github.com/nextcloud/photos/issues"
+	},
+	"repository": {
+		"url": "https://github.com/nextcloud/photos",
+		"type": "git"
+	},
+	"homepage": "https://github.com/nextcloud/photos",
+	"license": "agpl",
+	"private": true,
+	"scripts": {
+		"build": "NODE_ENV=production webpack --progress --config webpack.js",
+		"dev": "NODE_ENV=development webpack --progress --config webpack.js",
+		"watch": "NODE_ENV=development webpack --progress --watch --config webpack.js",
+		"test": "jest",
+		"lint": "eslint --ext .js,.vue src",
+		"lint:fix": "eslint --ext .js,.vue src --fix",
+		"stylelint": "stylelint src",
+		"stylelint:fix": "stylelint src --fix"
+	},
+	"dependencies": {
+		"@essentials/request-timeout": "^1.3.0",
+		"@nextcloud/auth": "^1.3.0",
+		"@nextcloud/axios": "^1.10.0",
+		"@nextcloud/dialogs": "^3.1.2",
+		"@nextcloud/event-bus": "^2.1.1",
+		"@nextcloud/initial-state": "^1.2.1",
+		"@nextcloud/l10n": "^1.6.0",
+		"@nextcloud/logger": "^2.2.0",
+		"@nextcloud/moment": "^1.2.1",
+		"@nextcloud/paths": "^2.1.0",
+		"@nextcloud/router": "^2.0.0",
+		"@nextcloud/vue": "^5.3.1",
+		"camelcase": "^6.3.0",
+		"debounce": "^1.2.1",
+		"he": "^1.2.0",
+		"jest-environment-jsdom": "^28.1.1",
+		"path-posix": "^1.0.0",
+		"qs": "^6.11.0",
+		"url-parse": "^1.5.10",
+		"vue": "^2.6.14",
+		"vue-material-design-icons": "^5.0.0",
+		"vue-router": "^3.5.3",
+		"vue-template-compiler": "^2.6.14",
+		"vue-virtual-grid": "^2.5.0",
+		"vuex": "^3.6.2",
+		"vuex-router-sync": "^5.0.0",
+		"webdav": "^3.6.1"
+	},
+	"browserslist": [
+		"extends @nextcloud/browserslist-config"
+	],
   "engines": {
     "node": "^16.0.0",
     "npm": "^7.0.0 || ^8.0.0"
   },
-  "devDependencies": {
-    "@nextcloud/babel-config": "^1.0.0",
-    "@nextcloud/browserslist-config": "^2.2.0",
-    "@nextcloud/eslint-config": "^8.0.0",
-    "@nextcloud/stylelint-config": "^2.1.2",
-    "@nextcloud/webpack-vue-config": "^5.1.0",
-    "@vue/test-utils": "^1.3.0",
-    "autoprefixer": "^10.4.7",
-    "babel-loader-exclude-node-modules-except": "^1.2.1",
-    "module-replace-webpack-plugin": "0.0.12",
-    "postcss": "^8.4.14",
-    "postcss-loader": "^6.2.1",
-    "raw-loader": "^4.0.2",
-    "workbox-webpack-plugin": "^6.5.3"
-  }
+	"devDependencies": {
+		"@nextcloud/babel-config": "^1.0.0",
+		"@nextcloud/browserslist-config": "^2.2.0",
+		"@nextcloud/eslint-config": "^8.0.0",
+		"@nextcloud/stylelint-config": "^2.1.2",
+		"@nextcloud/webpack-vue-config": "^5.1.0",
+		"@vue/test-utils": "^1.3.0",
+		"autoprefixer": "^10.4.7",
+		"babel-loader-exclude-node-modules-except": "^1.2.1",
+		"jest": "^28.1.1",
+		"module-replace-webpack-plugin": "0.0.12",
+		"postcss": "^8.4.14",
+		"postcss-loader": "^6.2.1",
+		"raw-loader": "^4.0.2",
+		"vue-jest": "^3.0.7",
+		"workbox-webpack-plugin": "^6.5.3"
+	}
 }

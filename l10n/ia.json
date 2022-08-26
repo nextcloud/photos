@@ -2,7 +2,14 @@
     "Photos" : "Photos",
     "Favorites" : "Favoritos",
     "Shared with you" : "Compartite con te",
+    "Back" : "Retro",
+    "Save" : "Salveguardar",
     "View" : "Vider",
+    "Favorite" : "Favorite",
+    "Remove from favorites" : "Remove from favorites",
+    "Add" : "Adder",
+    "Download" : "Discargar",
+    "Delete" : "Deler",
     "Settings" : "Configurationes"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

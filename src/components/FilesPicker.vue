@@ -1,0 +1,249 @@
+<!--
+ - @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
+ -
+ - @author Louis Chemineau <louis@chmn.me>
+ -
+ - @license AGPL-3.0-or-later
+ -
+ - This program is free software: you can redistribute it and/or modify
+ - it under the terms of the GNU Affero General Public License as
+ - published by the Free Software Foundation, either version 3 of the
+ - License, or (at your option) any later version.
+ -
+ - This program is distributed in the hope that it will be useful,
+ - but WITHOUT ANY WARRANTY; without even the implied warranty of
+ - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ - GNU Affero General Public License for more details.
+ -
+ - You should have received a copy of the GNU Affero General Public License
+ - along with this program. If not, see <http://www.gnu.org/licenses/>.
+ -
+ -->
+<template>
+	<div class="file-picker">
+		<div class="file-picker__content">
+			<div class="file-picker__navigation"
+				:class="{'file-picker__navigation--loading': loadingFiles && monthsList.length === 0}">
+				<div v-for="month in monthsList"
+					:key="month"
+					class="file-picker__navigation__month"
+					:class="{selected: targetMonth === month}"
+					@click="targetMonth = month">
+					{{ month | dateMonthAndYear }}
+				</div>
+			</div>
+			<FilesListViewer class="file-picker__file-list"
+				:class="{'file-picker__file-list--loading': loadingFiles && monthsList.length === 0}"
+				:file-ids-by-section="fileIdsByMonth"
+				:sections="monthsList"
+				:loading="loadingFiles"
+				:base-height="100"
+				:section-header-height="50"
+				:scroll-to-section="targetMonth"
+				@need-content="getFiles">
+				<template slot-scope="{file, height, visibility}">
+					<h3 v-if="file.sectionHeader"
+						:id="`file-picker-section-header-${file.id}`"
+						:style="{ height: `${height}px`}"
+						class="section-header">
+						{{ file.id | dateMonthAndYear }}
+					</h3>
+					<File v-else
+						:file="files[file.id]"
+						:allow-selection="true"
+						:selected="selection[file.id] === true"
+						:visibility="visibility"
+						:semaphore="semaphore"
+						@select-toggled="onFileSelectToggle" />
+				</template>
+			</FilesListViewer>
+		</div>
+		<div class="file-picker__actions">
+			<!-- TODO: Implement upload -->
+			<Button type="tertiary" :disabled="loading">
+				<template #icon>
+					<Upload />
+				</template>
+				{{ t('photos', 'Upload from computer') }}
+			</Button>
+			<Button type="primary" :disabled="loading || selectedFileIds.length === 0" @click="emitPickedEvent">
+				<template #icon>
+					<ImagePlus v-if="!loading" />
+					<Loader v-if="loading" />
+				</template>
+				{{ t('photos', 'Add to {destination}', { destination }) }}
+			</Button>
+		</div>
+	</div>
+</template>
+
+<script>
+import { mapGetters } from 'vuex'
+
+import ImagePlus from 'vue-material-design-icons/ImagePlus'
+import Upload from 'vue-material-design-icons/Upload'
+import moment from '@nextcloud/moment'
+import { Button } from '@nextcloud/vue'
+
+import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
+import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
+import FilesListViewer from './FilesListViewer.vue'
+import Loader from './Loader.vue'
+import File from './File.vue'
+import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
+
+export default {
+	name: 'FilesPicker',
+
+	components: {
+		ImagePlus,
+		Upload,
+		Button,
+		FilesListViewer,
+		File,
+		Loader,
+	},
+
+	filters: {
+		/**
+		 * @param {string} date - In the following format: YYYYMM
+		 */
+		dateMonthAndYear(date) {
+			return moment(date, 'YYYYMM').format('MMMM YYYY')
+		},
+	},
+
+	mixins: [
+		FetchFilesMixin,
+		FilesByMonthMixin,
+		FilesSelectionMixin,
+	],
+
+	props: {
+		// Label to show in the submit button.
+		destination: {
+			type: String,
+			required: true,
+		},
+
+		// List of file ids to not show.
+		blacklistIds: {
+			type: Array,
+			default: () => [],
+		},
+
+		// Whether we should disable the submit button and show a spinner.
+		loading: {
+			type: Boolean,
+			default: false,
+		},
+	},
+
+	data() {
+		return {
+			targetMonth: null,
+		}
+	},
+
+	computed: {
+		...mapGetters([
+			'files',
+		]),
+	},
+
+	watch: {
+		monthsList(value) {
+			if (this.targetMonth === null) {
+				this.targetMonth = value[0]
+			}
+		},
+	},
+
+	methods: {
+		getFiles() {
+			this.fetchFiles('', {}, this.blacklistIds)
+		},
+
+		emitPickedEvent() {
+			this.$emit('files-picked', this.selectedFileIds)
+		},
+	},
+}
+</script>
+
+<style lang="scss" scoped>
+.file-picker {
+	display: flex;
+	flex-direction: column;
+	padding: 12px;
+
+	&__content {
+		display: flex;
+		align-items: flex-start;
+		flex-grow: 1;
+		height: 500px;
+	}
+
+	&__navigation {
+		flex-basis: 200px;
+		overflow: scroll;
+		margin-right: 8px;
+		padding-right: 8px;
+		height: 100%;
+
+		@media only screen and (max-width: 1200px) {
+			flex-basis: 80px;
+		}
+
+		&--loading {
+			background: var(--color-primary-light);
+			border-radius: 16px;
+		}
+
+		&__month {
+			font-weight: bold;
+			font-size: 16px;
+			border-radius: 48px;
+			padding: 8px 16px;
+			margin: 4px 0;
+			cursor: pointer;
+
+			@media only screen and (max-width: 1200px) {
+				text-align: center;
+			}
+
+			&:hover {
+				background: var(--color-background-dark);
+			}
+
+			&.selected {
+				background: var(--color-primary-element-lighter);
+			}
+		}
+	}
+
+	&__file-list {
+		flex-grow: 1;
+		min-width: 0;
+		height: 100%;
+
+		&--loading {
+			background: var(--color-primary-light);
+			border-radius: 16px;
+		}
+
+		.section-header {
+			font-weight: bold;
+			font-size: 20px;
+			padding: 8px 0 4px 0;
+		}
+	}
+
+	&__actions {
+		display: flex;
+		justify-content: space-between;
+		justify-items: center;
+		padding-top: 16px;
+	}
+}
+</style>

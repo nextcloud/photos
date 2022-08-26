@@ -33,7 +33,7 @@ webpackRules.RULE_SCSS.use = [
 webpackRules.RULE_ASSETS.test = /\.(png|jpe?g|gif|woff2?|eot|ttf)$/
 webpackRules.RULE_RAW_SVGS = {
 	test: /\.svg$/,
-	loader: 'raw-loader',
+	type: 'asset/source',
 }
 
 webpackConfig.module.rules = Object.values(webpackRules)

@@ -23,18 +23,20 @@
 import Vue from 'vue'
 import Vuex, { Store } from 'vuex'
 
-import files from './files'
-import folders from './folders'
-import systemtags from './systemtags'
-import timeline from './timeline'
+import files from './files.js'
+import albums from './albums.js'
+import faces from './faces.js'
+import folders from './folders.js'
+import systemtags from './systemtags.js'
 
 Vue.use(Vuex)
 export default new Store({
 	modules: {
 		files,
 		folders,
+		albums,
+		faces,
 		systemtags,
-		timeline,
 	},
 
 	strict: process.env.NODE_ENV !== 'production',

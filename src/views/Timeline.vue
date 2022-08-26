@@ -3,6 +3,7 @@
  -
  - @author John Molakvoæ <skjnldsv@protonmail.com>
  - @author Corentin Mors <medias@pixelswap.fr>
+ - @author Louis Chemineau <louis@chmn.me>
  -
  - @license AGPL-3.0-or-later
  -
@@ -22,68 +23,192 @@
  -->
 
 <template>
-	<!-- Errors handlers-->
-	<EmptyContent v-if="error === 404" illustration-name="folder">
-		{{ t('photos', 'This folder does not exist') }}
-	</EmptyContent>
-	<EmptyContent v-else-if="error">
+	<!-- Errors handlers -->
+	<EmptyContent v-if="errorFetchingFiles">
 		{{ t('photos', 'An error occurred') }}
 	</EmptyContent>
 
-	<!-- Folder content -->
-	<div v-else>
-		<Navigation v-if="isEmpty"
-			key="navigation"
-			:basename="path"
-			:filename="'/'"
-			:root-title="rootTitle" />
+	<div v-else class="timeline">
+		<div class="timeline__header">
+			<Actions v-if="selectedFileIds.length === 0"
+				:force-title="true"
+				:force-menu="true"
+				:menu-title="t('photos', 'Add')"
+				:primary="true">
+				<Plus slot="icon" />
+				<ActionButton :close-after-click="true" @click="openUploader">
+					{{ t('photos', 'Upload media') }}
+					<FileUpload slot="icon" />
+				</ActionButton>
+				<ActionButton :close-after-click="true"
+					:aria-label="t('photos', 'Create a new album')"
+					@click="showAlbumCreationForm = true">
+					{{ t('photos', 'Create new album') }}
+					<PlusBoxMultiple slot="icon" />
+				</ActionButton>
+			</Actions>
 
-		<EmptyContent v-if="isEmpty" illustration-name="empty">
-			{{ t('photos', 'No photos in here') }}
-		</EmptyContent>
+			<template v-else>
+				<Button :close-after-click="true"
+					type="primary"
+					:aria-label="t('photos', 'Add selection to an album')"
+					@click="showAlbumPicker = true">
+					<template #icon>
+						<Plus slot="icon" />
+					</template>
+					{{ t('photos', 'Add to album') }}
+				</Button>
+				<Actions>
+					<ActionButton :close-after-click="true"
+						:aria-label="t('photos', 'Download selection')"
+						@click="downloadSelection">
+						{{ t('photos', 'Download') }}
+						<Download slot="icon" />
+					</ActionButton>
+					<ActionButton v-if="shouldFavorite"
+						:close-after-click="true"
+						:aria-label="t('photos', 'Mark selection as favorite')"
+						@click="favoriteSelection">
+						{{ t('photos', 'Favorite') }}
+						<Star slot="icon" />
+					</ActionButton>
+					<ActionButton v-else
+						:close-after-click="true"
+						:aria-label="t('photos', 'Remove selection from favorites')"
+						@click="unFavoriteSelection">
+						{{ t('photos', 'Remove from favorites') }}
+						<Star slot="icon" />
+					</ActionButton>
+					<ActionButton :close-after-click="true"
+						:aria-label="t('photos', 'Delete selection')"
+						@click="deleteSelection">
+						{{ t('photos', 'Delete') }}
+						<Delete slot="icon" />
+					</ActionButton>
+				</Actions>
+				<!-- HACK: Needed to make the above Actions work, no idea why be it is like that in the documentation. -->
+				<Actions />
+			</template>
 
-		<div class="grid-container">
-			<VirtualGrid ref="virtualgrid"
-				:items="contentList"
-				:update-function="getContent"
-				:get-column-count="() => gridConfig.count"
-				:get-grid-gap="() => gridConfig.gap"
-				:update-trigger-margin="700"
-				:loader="loaderComponent" />
+			<Loader v-if="loadingCount > 0" key="loader" />
 		</div>
+
+		<FilesListViewer ref="filesListViewer"
+			class="timeline__file-list"
+			:use-window="true"
+			:file-ids-by-section="fileIdsByMonth"
+			:sections="monthsList"
+			:loading="loadingFiles"
+			:base-height="isMobile ? 120 : 200"
+			:empty-message="t('photos', 'No photos in here')"
+			@need-content="getContent">
+			<template slot-scope="{file, visibility}">
+				<h3 v-if="file.sectionHeader"
+					:id="`file-picker-section-header-${file.id}`"
+					class="section-header">
+					<b>{{ file.id | dateMonth }}</b>
+					{{ file.id | dateYear }}
+				</h3>
+				<File v-else
+					:file="files[file.id]"
+					:allow-selection="true"
+					:selected="selection[file.id] === true"
+					:visibility="visibility"
+					:semaphore="semaphore"
+					@click="openViewer"
+					@select-toggled="onFileSelectToggle" />
+			</template>
+		</FilesListViewer>
+
+		<Modal v-if="showAlbumCreationForm"
+			key="albumCreationForm"
+			:title="t('photos', 'New album')"
+			@close="showAlbumCreationForm = false">
+			<AlbumForm @done="showAlbumCreationForm = false" />
+		</Modal>
+
+		<Modal v-if="showAlbumPicker"
+			key="albumPicker"
+			:title="t('photos', 'Add to album')"
+			@close="showAlbumPicker = false">
+			<AlbumPicker @album-picked="addSelectionToAlbum" />
+		</Modal>
 	</div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+import Plus from 'vue-material-design-icons/Plus'
+import Delete from 'vue-material-design-icons/Delete'
+import PlusBoxMultiple from 'vue-material-design-icons/PlusBoxMultiple'
+import FileUpload from 'vue-material-design-icons/FileUpload'
+import Star from 'vue-material-design-icons/Star'
+import Download from 'vue-material-design-icons/Download'
+
+import { Modal, Actions, ActionButton, Button, isMobile } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
-import { mapGetters } from 'vuex'
 
-import getPhotos from '../services/PhotoSearch'
-
-import EmptyContent from '../components/EmptyContent'
-import File from '../components/File'
-import SeparatorVirtualGrid from '../components/SeparatorVirtualGrid'
-import VirtualGrid from 'vue-virtual-grid'
-import Navigation from '../components/Navigation'
-import Loader from '../components/Loader'
-
-import cancelableRequest from '../utils/CancelableRequest'
-import GridConfigMixin from '../mixins/GridConfig'
-import { allMimes } from '../services/AllowedMimes'
+import logger from '../services/logger.js'
+import { allMimes } from '../services/AllowedMimes.js'
+import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
+import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
+import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
+import FilesListViewer from '../components/FilesListViewer.vue'
+import EmptyContent from '../components/EmptyContent.vue'
+import File from '../components/File.vue'
+import Loader from '../components/Loader.vue'
+import AlbumForm from '../components/AlbumForm.vue'
+import AlbumPicker from '../components/AlbumPicker.vue'
 
 export default {
 	name: 'Timeline',
 	components: {
 		EmptyContent,
-		VirtualGrid,
-		Navigation,
+		AlbumForm,
+		AlbumPicker,
+		FilesListViewer,
+		Loader,
+		File,
+		Modal,
+		Actions,
+		ActionButton,
+		Button,
+		Plus,
+		Delete,
+		FileUpload,
+		PlusBoxMultiple,
+		Star,
+		Download,
 	},
-	mixins: [GridConfigMixin],
-	props: {
-		loading: {
-			type: Boolean,
-			required: true,
+
+	filters: {
+		/**
+		 * @param {string} date - In the following format: YYYYMM
+		 */
+		dateMonth(date) {
+			return moment(date, 'YYYYMM').format('MMMM')
 		},
+		/**
+		 * @param {string} date - In the following format: YYYYMM
+		 */
+		dateYear(date) {
+			return moment(date, 'YYYYMM').format('YYYY')
+		},
+	},
+
+	mixins: [
+		FetchFilesMixin,
+		FilesSelectionMixin,
+		FilesByMonthMixin,
+		isMobile,
+	],
+
+	beforeRouteLeave(to, from, next) {
+		window.scrollTo(0, 0)
+		next()
+	},
+
+	props: {
 		onlyFavorites: {
 			type: Boolean,
 			default: false,
@@ -91,14 +216,6 @@ export default {
 		mimesType: {
 			type: Array,
 			default: () => allMimes,
-		},
-		rootTitle: {
-			type: String,
-			required: true,
-		},
-		path: {
-			type: String,
-			default: '',
 		},
 		onThisDay: {
 			type: Boolean,
@@ -108,215 +225,155 @@ export default {
 
 	data() {
 		return {
-			cancelRequest: null,
-			done: false,
-			error: null,
-			page: 0,
-			loaderComponent: Loader,
+			loadingCount: 0,
+			showAlbumCreationForm: false,
+			showAlbumPicker: false,
 		}
 	},
 
 	computed: {
-		// global lists
 		...mapGetters([
 			'files',
-			'timeline',
 		]),
-		// list of loaded medias
-		fileList() {
-			return this.timeline
-				.map((fileId) => this.files[fileId])
-				.filter((file) => !!file)
-		},
-		// list of displayed content in the grid (titles + medias)
-		contentList() {
-			/**
-			 * The goal of this flat map is to return an array of images separated by titles (months)
-			 * ie: [{month1}, {image1}, {image2}, {month2}, {image3}, {image4}, {image5}]
-			 * First we get the current month+year of the image
-			 * We compare it to the previous image month+year
-			 * If there is a difference we have to insert a title object before the current image
-			 * If it's equal we just add the current image to the array
-			 * Note: the injected param of objects are used to pass custom params to the grid lib
-			 * In our case injected could be an image/video (aka file) or a title (year/month)
-			 * Note2: titles are rendered full width and images are rendered on 1 column and 256x256 ratio
-			 */
-			let lastSection = ''
-			return this.fileList.flatMap((file, index) => {
-				const finalArray = []
-				const currentSection = this.getFormatedDate(file.lastmod, 'YYYY MMMM')
-				if (lastSection !== currentSection) {
-					finalArray.push({
-						id: `title-${index}`,
-						injected: {
-							year: this.getFormatedDate(file.lastmod, 'YYYY'),
-							month: this.getFormatedDate(file.lastmod, 'MMMM'),
-							onThisDay: this.onThisDay ? Math.round(moment(Date.now()).diff(moment(file.lastmod), 'years', true)) : false,
-						},
-						height: 90,
-						columnSpan: 0, // means full width
-						newRow: true,
-						renderComponent: SeparatorVirtualGrid,
-					})
-					lastSection = currentSection // we keep track of the last section for the next batch
-				}
-				finalArray.push({
-					id: `img-${file.fileid}`,
-					injected: {
-						...file,
-						list: this.fileList,
-						loadMore: this.getContent,
-						canLoop: false,
-					},
-					width: 256,
-					height: 256,
-					columnSpan: 1,
-					renderComponent: File,
-				})
-				return finalArray
-			})
-		},
-		// is current folder empty?
-		isEmpty() {
-			return this.fileList.length === 0
-		},
-	},
 
-	watch: {
-		$route(from, to) {
-			// cancel any pending requests
-			if (this.cancelRequest) {
-				this.cancelRequest('Changed view')
-			}
-			this.resetState()
+		/** @type {boolean} */
+		shouldFavorite() {
+			// Favorite all selection if at least one file is not on the favorites.
+			return this.selectedFileIds.some((fileId) => this.$store.state.files.files[fileId].favorite === 0)
 		},
-		async onThisDay() {
-			// reset component
-			this.resetState()
-			this.getContent()
-		},
-	},
-
-	beforeRouteLeave(from, to, next) {
-		// cancel any pending requests
-		if (this.cancelRequest) {
-			this.cancelRequest('Changed view')
-		}
-		this.resetState()
-		next()
-	},
-
-	beforeDestroy() {
-		// cancel any pending requests
-		if (this.cancelRequest) {
-			this.cancelRequest('Changed view')
-		}
 	},
 
 	methods: {
-		/**
-		 * Return next batch of data depending on global offset
-		 *
-		 * @param {boolean} doReturn Returns a Promise with the list instead of a boolean
-		 * @return {Promise<boolean>} Returns a Promise with a boolean that stops infinite loading
-		 */
-		async getContent(doReturn) {
-			if (this.done) {
-				return Promise.resolve(true)
-			}
+		...mapActions(['deleteFiles', 'toggleFavoriteForFiles', 'downloadFiles', 'addFilesToAlbum']),
 
-			// cancel any pending requests
-			if (this.cancelRequest) {
-				this.cancelRequest('Changed view')
-			}
+		getContent() {
+			this.fetchFiles('', {
+				mimesType: this.mimesType,
+				onThisDay: this.onThisDay,
+				onlyFavorites: this.onlyFavorites,
+			})
+		},
 
-			// if we don't already have some cached data let's show a loader
-			if (this.timeline.length === 0) {
-				this.$emit('update:loading', true)
-			}
+		openViewer(fileId) {
+			const file = this.files[fileId]
+			OCA.Viewer.open({
+				path: file.filename,
+				list: Object.values(this.fileIdsByMonth).flat().map(fileId => this.files[fileId]),
+				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
+				canLoop: file.canLoop,
+			})
+		},
 
-			// done loading even with errors
-			const { request, cancel } = cancelableRequest(getPhotos)
-			this.cancelRequest = cancel
+		openUploader() {
+			// TODO: finish when implementing upload
+		},
 
-			const numberOfImagesPerBatch = this.gridConfig.count * 5 // loading 5 rows
-
+		async addSelectionToAlbum(albumName) {
 			try {
-				// Load next batch of images
-				const files = await request(this.onlyFavorites, {
-					page: this.page,
-					perPage: numberOfImagesPerBatch,
-					mimesType: this.mimesType,
-					onThisDay: this.onThisDay,
-				})
-
-				// If we get less files than requested that means we got to the end
-				if (files.length !== numberOfImagesPerBatch) {
-					this.done = true
-				}
-
-				this.$store.dispatch('updateTimeline', files)
-				this.$store.dispatch('appendFiles', files)
-
-				this.page += 1
-
-				if (doReturn) {
-					return Promise.resolve(files)
-				}
-
-				return Promise.resolve(false)
+				this.showAlbumPicker = false
+				this.loadingCount++
+				await this.addFilesToAlbum({ albumName, fileIdsToAdd: this.selectedFileIds })
 			} catch (error) {
-				if (error.response && error.response.status) {
-					if (error.response.status === 404) {
-						this.error = 404
-						setTimeout(() => {
-							this.$router.push({ name: this.$route.name })
-						}, 3000)
-					} else {
-						this.error = error
-					}
-				}
-
-				// cancelled request, moving on...
-				console.error('Error fetching timeline', error)
-				return Promise.resolve(true)
+				logger.error(error)
 			} finally {
-				// done loading even with errors
-				this.$emit('update:loading', false)
-				this.cancelRequest = null
+				this.loadingCount--
 			}
 		},
 
-		/**
-		 * Reset this component data to a pristine state
-		 */
-		resetState() {
-			this.$store.dispatch('resetTimeline')
-			this.done = false
-			this.error = null
-			this.page = 0
-			this.lastSection = ''
-			this.$emit('update:loading', true)
-			if (this.$refs.virtualgrid) {
-				this.$refs.virtualgrid.resetGrid()
+		async favoriteSelection() {
+			try {
+				this.loadingCount++
+				await this.toggleFavoriteForFiles({ fileIds: this.selectedFileIds, favoriteState: true })
+			} catch (error) {
+				logger.error(error)
+			} finally {
+				this.loadingCount--
 			}
 		},
 
-		getFormatedDate(string, format) {
-			return moment(string).format(format)
+		async unFavoriteSelection() {
+			try {
+				this.loadingCount++
+				await this.toggleFavoriteForFiles({ fileIds: this.selectedFileIds, favoriteState: false })
+			} catch (error) {
+				logger.error(error)
+			} finally {
+				this.loadingCount--
+			}
 		},
 
+		async deleteSelection() {
+			try {
+				this.loadingCount++
+				// Need to store the file ids so it is not changed before the deleteFiles call.
+				const fileIds = this.selectedFileIds
+				this.onUncheckFiles(fileIds)
+				this.fetchedFileIds = this.fetchedFileIds.filter(fileid => !fileIds.includes(fileid))
+				await this.deleteFiles(fileIds)
+			} catch (error) {
+				logger.error(error)
+			} finally {
+				this.loadingCount--
+			}
+		},
+
+		async downloadSelection() {
+			try {
+				this.loadingCount++
+				await this.downloadFiles(this.selectedFileIds)
+			} catch (error) {
+				logger.error(error)
+			} finally {
+				this.loadingCount--
+			}
+		},
 	},
-
 }
 </script>
-
 <style lang="scss" scoped>
-@import '../mixins/GridSizes';
+.timeline {
+	display: flex;
+	flex-direction: column;
 
-.grid-container {
-	@include grid-sizes using ($marginTop, $marginW) {
-		padding: 0px #{$marginW}px 256px #{$marginW}px;
+	&__header {
+		display: flex;
+		min-height: 60px;
+		align-items: center;
+		position: sticky;
+		top: var(--header-height);
+		width: 100%;
+		height: 60px;
+		z-index: 3;
+		background: var(--color-main-background);
+		padding: 0 64px;
+
+		@media only screen and (max-width: 1200px) {
+			padding: 0 48px;
+		}
+
+		& > * {
+			margin-right: 8px;
+		}
+
+		.loader {
+			margin-left: 16px;
+		}
+	}
+
+	&__file-list {
+		padding: 0 64px;
+
+		@media only screen and (max-width: 1200px) {
+			padding: 0 4px;
+		}
+
+		::v-deep .files-list-viewer__section-header {
+			top: calc(var(--header-height) + 60px);
+		}
+
+		.section-header {
+			padding: 24px 0 16px 0;
+		}
 	}
 }
 </style>
