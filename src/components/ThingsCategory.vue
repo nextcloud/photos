@@ -22,11 +22,11 @@
  -->
 
 <template>
-	<div class="tag">
-		<FolderTagPreview :id="tag.id"
+	<div v-show="folderContent.length" class="things-category">
+		<FolderTagPreview :id="Object.keys(CATEGORIES).indexOf(title)"
 			icon="icon-tag"
-			:name="t('recognize', tag.displayName)"
-			:to="{name: 'tagcontent', params: {path: tag.displayName }}"
+			:name="t('photos', title)"
+			:to="{name:'categorycontent', params:{category: title}}"
 			:file-list="fileList" />
 	</div>
 </template>
@@ -35,25 +35,27 @@
 import { mapGetters } from 'vuex'
 
 import FolderTagPreview from './FolderTagPreview'
-import AbortControllerMixin from '../mixins/AbortControllerMixin'
+import { CATEGORIES } from '../services/Things'
 
 export default {
-	name: 'Tag',
+	name: 'ThingsCategory',
 
 	components: {
 		FolderTagPreview,
 	},
-
-	mixins: [
-		AbortControllerMixin,
-	],
 	inheritAttrs: false,
 
 	props: {
-		tag: {
-			type: Object,
+		title: {
+			type: String,
 			required: true,
 		},
+	},
+
+	data() {
+		return {
+			CATEGORIES,
+		}
 	},
 
 	computed: {
@@ -61,12 +63,21 @@ export default {
 		...mapGetters([
 			'files',
 			'tags',
+			'tagsNames',
 		]),
 
-		// files list of the current folder
-		folderContent() {
-			return this.tags[this.tag.id].files
+		// tags list of the current category
+		categoryTags() {
+			return CATEGORIES[this.title]
+				.map(tagName => this.tags[this.tagsNames[tagName]])
+				.filter(Boolean)
 		},
+
+		// files list of the current category
+		folderContent() {
+			return this.categoryTags.flatMap(tag => tag.files)
+		},
+
 		fileList() {
 			return this.folderContent
 				? this.folderContent
@@ -78,15 +89,15 @@ export default {
 	},
 
 	async created() {
-		this.$store.dispatch('fetchTagFiles', {
-			id: this.tag.id,
-			signal: this.abortController.signal,
-		})
+		Promise.all(this.categoryTags.map(tag =>
+			this.$store.dispatch('fetchTagFiles', { id: tag.id })
+		))
 	},
+
 }
 </script>
 <style scoped lang="scss">
-.tag {
+.things-category {
 	height: 250px;
 	width: 250px;
 }

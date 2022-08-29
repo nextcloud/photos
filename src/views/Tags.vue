@@ -22,78 +22,69 @@
  -->
 
 <template>
-	<!-- Errors handlers-->
-	<EmptyContent v-if="error">
-		{{ t('photos', 'An error occurred') }}
-	</EmptyContent>
+	<div>
+		<!-- Errors handlers-->
+		<EmptyContent v-if="error">
+			{{ t('photos', 'An error occurred') }}
+		</EmptyContent>
 
-	<!-- Folder content -->
-	<div v-else-if="!loading">
-		<Navigation key="navigation"
-			:basename="path"
-			:filename="'/' + path"
-			:root-title="rootTitle" />
-		<EmptyContent v-if="isEmpty" key="emptycontent" illustration-name="empty">
+		<EmptyContent v-if="!loading && !hasTagsWithFiles" key="emptycontent" illustration-name="empty">
 			{{ t('photos', 'No tags yet') }}
 			<template #desc>
 				{{ t('photos', 'Photos with tags will show up here') }}
 			</template>
 		</EmptyContent>
 
-		<div v-else class="grid-container">
-			<VirtualGrid ref="virtualgrid"
-				:items="contentList"
-				:get-column-count="() => gridConfig.count"
-				:get-grid-gap="() => gridConfig.gap" />
+		<Loader v-if="loading" class="loader" />
+
+		<div v-else>
+			<div class="grid-container">
+				<div v-if="hasCategoriesWithFiles" class="things">
+					<ThingsCategory v-for="category in Object.keys(CATEGORIES)" :key="category" :title="category" />
+					<div v-if="!showTags" class="expand-box">
+						<Button aria-label="Show more tags" @click="expandTags()">
+							More
+						</Button>
+					</div>
+				</div>
+				<div v-if="showTags || !hasCategoriesWithFiles" class="tags">
+					<Tag v-for="tag in tagsList" :key="tag.id" :tag="tag" />
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import VirtualGrid from 'vue-virtual-grid'
-
-import getSystemTags from '../services/SystemTags'
-import getTaggedImages from '../services/TaggedImages'
+import { Button } from '@nextcloud/vue'
 
 import EmptyContent from '../components/EmptyContent'
 import Tag from '../components/Tag'
-import File from '../components/File'
-import Navigation from '../components/Navigation'
 
-import GridConfigMixin from '../mixins/GridConfig'
+import { CATEGORIES } from '../services/Things'
+import ThingsCategory from '../components/ThingsCategory'
+import Loader from '../components/Loader'
 import AbortControllerMixin from '../mixins/AbortControllerMixin'
+
 
 export default {
 	name: 'Tags',
 	components: {
-		VirtualGrid,
+		Loader,
+		ThingsCategory,
+		Tag,
 		EmptyContent,
-		Navigation,
+		Button,
 	},
-	mixins: [
-		GridConfigMixin,
-		AbortControllerMixin,
-	],
-	props: {
-		rootTitle: {
-			type: String,
-			required: true,
-		},
-		path: {
-			type: String,
-			default: '',
-		},
-		isRoot: {
-			type: Boolean,
-			default: true,
-		},
-	},
+	mixins: [AbortControllerMixin],
 
 	data() {
 		return {
 			error: null,
 			loading: false,
+			showTags: false,
+			CATEGORIES,
 		}
 	},
 
@@ -105,93 +96,24 @@ export default {
 			'tagsNames',
 		]),
 
-		// current tag id from current path
-		tagId() {
-			return this.$store.getters.tagId(this.path)
-		},
-
-		// current tag
-		tag() {
-			return this.tags[this.tagId]
-		},
-
 		tagsList() {
-			return Object.values(this.tagsNames).map((tagsId) => this.tags[tagsId])
+			return Object.values(this.tagsNames).map((tagsId) => this.tags[tagsId]).filter(tag => tag && tag.id)
 		},
 
-		// files list of the current tag
-		fileList() {
-			return this.tag && this.tag.files
-				.map(id => this.files[id])
-				.filter(file => !!file)
+		hasTagsWithFiles() {
+			return Object.values(this.tags).some(tag => !!tag.files.length)
 		},
 
-		contentList() {
-			if (this.isRoot) {
-				return this.tagsList.flatMap((tag) => {
-					return tag.id === ''
-						? []
-						: [{
-							id: `tag-${tag.id}`,
-							injected: {
-								...tag,
-							},
-							width: 256,
-							height: 256,
-							columnSpan: 1,
-							renderComponent: Tag,
-						}]
-				})
-			}
-			return this.fileList.map((file) => {
-				return {
-					id: `file-${file.fileid}`,
-					injected: {
-						...file,
-						list: this.fileList,
-					},
-					width: 256,
-					height: 256,
-					columnSpan: 1,
-					renderComponent: File,
-				}
-			})
-		},
-
-		isEmpty() {
-			if (this.isRoot) {
-				return Object.keys(this.tagsNames).length === 0
-			}
-			return this.fileList.length === 0
-		},
-	},
-
-	watch: {
-		async path() {
-			// if we don't have the tag in the store yet,
-			// we need to fetch the list first
-			if (!this.tagId) {
-				await this.fetchRootContent()
-			}
-
-			// if we're not in the root, we fetch the data
-			if (!this.isRoot) {
-				this.fetchContent()
-			}
+		hasCategoriesWithFiles() {
+			return Object.values(CATEGORIES)
+				.flatMap(tagName => this.tags[this.tagsNames[tagName]])
+				.filter(Boolean)
+				.some(tag => !tag.files.length)
 		},
 	},
 
 	async beforeMount() {
-		// if we don't have the tag in the store yet,
-		// we need to fetch the list first
-		if (!this.tagId) {
-			await this.fetchRootContent()
-		}
-
-		// if we're not in the root, we fetch the data
-		if (!this.isRoot) {
-			this.fetchContent()
-		}
+		await this.fetchRootContent()
 	},
 
 	methods: {
@@ -207,10 +129,9 @@ export default {
 
 			try {
 				// fetch content
-				const tags = await getSystemTags('', {
-					signal: this.abortController.signal,
+				await this.$store.dispatch('fetchAllTags' {
+						signal: this.abortController.signal,
 				})
-				this.$store.dispatch('updateTags', tags)
 			} catch (error) {
 				console.error(error)
 				this.error = true
@@ -218,44 +139,36 @@ export default {
 				// done loading
 				this.loading = false
 			}
-
 		},
-
-		async fetchContent() {
-			// close any potential opened viewer
-			OCA.Viewer.close()
-
-			// if we don't already have some cached data let's show a loader
-			if (!this.tags[this.tagId]) {
-				this.loading = true
-			}
-			this.error = null
-
-			try {
-				// get data
-				const files = await getTaggedImages(this.tagId, {
-					signal: this.abortController.signal,
-				})
-				this.$store.dispatch('updateTag', { id: this.tagId, files })
-				this.$store.dispatch('appendFiles', files)
-			} catch (error) {
-				console.error(error)
-				this.error = true
-			} finally {
-				// done loading
-				this.loading = false
-			}
+		expandTags() {
+			this.showTags = true
 		},
 	},
 }
 </script>
 
 <style lang="scss" scoped>
-@import '../mixins/GridSizes';
+.loader {
+	margin-top: 30vh;
+}
 
-.grid-container {
-	@include grid-sizes using ($marginTop, $marginW) {
-		padding: 0px #{$marginW}px 256px #{$marginW}px;
+.things, .tags {
+	display: flex;
+	flex-direction: row;
+	gap: 8px;
+	flex-wrap: wrap;
+	margin-top: 44px;
+}
+
+.expand-box {
+	height: 250px;
+	width: 250px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	> * {
+		margin-top: 45%;
 	}
 }
 </style>

@@ -34,6 +34,8 @@ const Folders = () => import('../views/Folders')
 const Albums = () => import('../views/Albums')
 const AlbumContent = () => import('../views/AlbumContent')
 const Tags = () => import('../views/Tags')
+const TagContent = () => import('../views/TagContent')
+const CategoryContent = () => import('../views/CategoryContent')
 const Timeline = () => import('../views/Timeline')
 const Faces = () => import('../views/Faces')
 const FaceContent = () => import('../views/FaceContent')
@@ -129,15 +131,32 @@ const router = new Router({
 			}),
 		},
 		{
-			path: '/tags/:path*',
+			path: '/tags/',
 			component: Tags,
 			name: 'tags',
 			redirect: !areTagsInstalled ? { name: 'timeline' } : null,
 			props: route => ({
-				path: `${route.params.path ? route.params.path : ''}`,
-				// if path is empty
+				path: '',
 				isRoot: !route.params.path,
 				rootTitle: t('photos', 'Tagged photos'),
+			}),
+		},
+		{
+			path: '/tags/:path',
+			component: TagContent,
+			name: 'tagcontent',
+			redirect: !areTagsInstalled ? { name: 'timeline' } : null,
+			props: route => ({
+				path: `${route.params.path ? route.params.path : ''}`,
+			}),
+		},
+		{
+			path: '/categories/:category',
+			component: CategoryContent,
+			name: 'categorycontent',
+			redirect: !areTagsInstalled ? { name: 'timeline' } : null,
+			props: route => ({
+				category: route.params.category,
 			}),
 		},
 		{

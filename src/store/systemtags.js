@@ -21,6 +21,9 @@
  */
 import Vue from 'vue'
 import { sortCompare } from '../utils/fileUtils'
+import getTaggedImages from '../services/TaggedImages'
+import { abortController } from '../services/RequestHandler'
+import getSystemTags from '../services/SystemTags'
 
 const state = {
 	tags: {},
@@ -117,6 +120,33 @@ const actions = {
 			context.commit('removeTag', { id })
 		}
 		context.commit('updateTag', { id, files })
+	},
+
+	/**
+	 *
+	 * @param context
+	 * @param id.id
+	 * @param id the tag id to fetch files for
+	 * @return {Promise<void>}
+	 */
+	async fetchTagFiles(context, { id }) {
+		try {
+			// get data
+			const files = await getTaggedImages(id, { signal: abortController.signal })
+			await context.dispatch('updateTag', { id, files })
+			await context.dispatch('appendFiles', files)
+		} catch (error) {
+			if (error.response && error.response.status) {
+				console.error('Failed to get tag content', id, error.response)
+			}
+		}
+	},
+
+	async fetchAllTags(context) {
+		const tags = await getSystemTags('', {
+			signal: abortController.signal,
+		})
+		await context.dispatch('updateTags', tags)
 	},
 }
 
