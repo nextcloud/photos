@@ -43,7 +43,7 @@
 					<ThingsCategory v-for="category in Object.keys(CATEGORIES)" :key="category" :title="category" />
 					<div v-if="!showTags" class="expand-box">
 						<Button aria-label="Show more tags" @click="expandTags()">
-							More
+							{{ t('photos', 'More') }}
 						</Button>
 					</div>
 				</div>
