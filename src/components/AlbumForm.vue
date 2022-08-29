@@ -39,7 +39,7 @@
 		<div class="form-buttons">
 			<span class="left-buttons">
 				<Button v-if="displayBackButton"
-					:aria-label="t('photos', 'Go back to the previous view')"
+					:aria-label="t('photos', 'Go back to the previous view.')"
 					type="tertiary"
 					@click="back">
 					{{ t('photos', 'Back') }}
