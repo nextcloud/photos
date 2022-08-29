@@ -44,7 +44,7 @@
 					<div class="album__details__second-line">
 						{{ n('photos', '%n item', '%n photos and videos', album.nbItems) }}
 						<!-- TODO: finish collaboration -->
-						<!--⸱ {{ n('photos', 'Share with %n user', 'Share with %n others', album.isShared) }}-->
+						<!--⸱ {{ n('photos', 'Share with %n user', 'Share with %n users', album.isShared) }}-->
 					</div>
 				</div>
 			</div>
