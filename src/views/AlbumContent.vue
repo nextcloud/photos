@@ -65,9 +65,9 @@
 				</Button> -->
 				<Actions :force-menu="true">
 					<ActionButton :close-after-click="true"
-						:aria-label="t('photos', 'Edit album\'s details')"
+						:aria-label="t('photos', 'Edit album details')"
 						@click="showEditAlbumForm = true">
-						{{ t('photos', 'Edit album\'s details') }}
+						{{ t('photos', 'Edit album details') }}
 						<Pencil slot="icon" />
 					</ActionButton>
 					<ActionButton v-if="albumFileIds.length > 0"
@@ -169,7 +169,7 @@
 		</Modal>
 
 		<Modal v-if="showEditAlbumForm"
-			:title="t('photos', 'Edit album\'s details')"
+			:title="t('photos', 'Edit album details')"
 			@close="showEditAlbumForm = false">
 			<AlbumForm :album="album" @done="redirectToNewName" />
 		</Modal>
