@@ -37,19 +37,18 @@
 
 		<Loader v-if="loading" class="loader" />
 
-		<div v-else>
-			<div class="grid-container">
-				<div v-if="hasCategoriesWithFiles" class="things">
-					<ThingsCategory v-for="category in Object.keys(CATEGORIES)" :key="category" :title="category" />
-					<div v-if="!showTags" class="expand-box">
-						<Button aria-label="Show more tags" @click="expandTags()">
-							{{ t('photos', 'More') }}
-						</Button>
-					</div>
-				</div>
-				<div v-if="showTags || !hasCategoriesWithFiles" class="tags">
-					<Tag v-for="tag in tagsList" :key="tag.id" :tag="tag" />
-				</div>
+		<div v-else class="container">
+			<h2 v-if="popularTags.length">
+				{{ t('photos', 'Popular tags') }}
+			</h2>
+			<div class="popular-tags">
+				<TagCover v-for="tag in popularTags" :key="tag.id" :tag="tag" />
+			</div>
+			<h2 v-if="tagsList.length">
+				All tags
+			</h2>
+			<div class="tags">
+				<TagCover v-for="tag in tagsList" :key="tag.id" :tag="tag" />
 			</div>
 		</div>
 	</div>
@@ -57,25 +56,19 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { Button } from '@nextcloud/vue'
 
 import EmptyContent from '../components/EmptyContent'
-import Tag from '../components/Tag'
+import TagCover from '../components/TagCover'
 
-import { CATEGORIES } from '../services/Things'
-import ThingsCategory from '../components/ThingsCategory'
 import Loader from '../components/Loader'
 import AbortControllerMixin from '../mixins/AbortControllerMixin'
-
 
 export default {
 	name: 'Tags',
 	components: {
 		Loader,
-		ThingsCategory,
-		Tag,
+		TagCover,
 		EmptyContent,
-		Button,
 	},
 	mixins: [AbortControllerMixin],
 
@@ -84,7 +77,6 @@ export default {
 			error: null,
 			loading: false,
 			showTags: false,
-			CATEGORIES,
 		}
 	},
 
@@ -97,18 +89,20 @@ export default {
 		]),
 
 		tagsList() {
-			return Object.values(this.tagsNames).map((tagsId) => this.tags[tagsId]).filter(tag => tag && tag.id)
+			return Object.keys(this.tagsNames)
+				.map(tagName => this.tags[this.tagsNames[tagName]])
+				.filter(tag => tag && tag.id)
+		},
+
+		popularTags() {
+			return Object.values(this.tags)
+				.filter(tag => tag.files && tag.files.length > 50)
+				.sort((a, b) => a.files.length - b.files.length)
+				.slice(0, 9)
 		},
 
 		hasTagsWithFiles() {
 			return Object.values(this.tags).some(tag => !!tag.files.length)
-		},
-
-		hasCategoriesWithFiles() {
-			return Object.values(CATEGORIES)
-				.flatMap(tagName => this.tags[this.tagsNames[tagName]])
-				.filter(Boolean)
-				.some(tag => !tag.files.length)
 		},
 	},
 
@@ -129,9 +123,17 @@ export default {
 
 			try {
 				// fetch content
-				await this.$store.dispatch('fetchAllTags' {
+				if (!this.tagsList.length) {
+					await this.$store.dispatch('fetchAllTags', {
 						signal: this.abortController.signal,
-				})
+					})
+				}
+				if (!this.hasTagsWithFiles) {
+					await Promise.all(this.tagsList.slice(0, 15).map(tag => this.$store.dispatch('fetchTagFiles', {
+						id: tag.id,
+						signal: this.abortController.signal,
+					})))
+				}
 			} catch (error) {
 				console.error(error)
 				this.error = true
@@ -139,9 +141,6 @@ export default {
 				// done loading
 				this.loading = false
 			}
-		},
-		expandTags() {
-			this.showTags = true
 		},
 	},
 }
@@ -152,23 +151,15 @@ export default {
 	margin-top: 30vh;
 }
 
-.things, .tags {
+.container {
+	margin-top: 44px;
+	padding-left: 44px;
+}
+
+.popular-tags, .tags {
 	display: flex;
 	flex-direction: row;
 	gap: 8px;
 	flex-wrap: wrap;
-	margin-top: 44px;
-}
-
-.expand-box {
-	height: 250px;
-	width: 250px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-
-	> * {
-		margin-top: 45%;
-	}
 }
 </style>
