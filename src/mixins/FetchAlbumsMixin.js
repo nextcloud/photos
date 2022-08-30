@@ -102,7 +102,7 @@ export default {
 						}
 
 						if (dateRangeFormated.startDate === dateRangeFormated.endDate) {
-							return { ...album, date: this.t('photos', '{startDate}', dateRangeFormated) }
+							return { ...album, date: dateRangeFormated }
 						} else {
 							return { ...album, date: this.t('photos', '{startDate} to {endDate}', dateRangeFormated) }
 						}
