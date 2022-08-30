@@ -1018,7 +1018,7 @@ var render = function () {
                         attrs: {
                           "aria-label": _vm.t(
                             "photos",
-                            "Go back to the previous view"
+                            "Go back to the previous view."
                           ),
                           type: "tertiary",
                         },
@@ -1254,7 +1254,7 @@ var render = function () {
               name: "search",
               placeholder: _vm.t(
                 "photos",
-                "Search users, email or federated cloud ID"
+                "Search users, email or Federated Cloud ID"
               ),
             },
           }),
@@ -1279,4 +1279,4 @@ render._withStripped = true
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_mixins_FetchAlbumsMixin_js-src_components_AlbumForm_vue.js.map?v=ac8a6355eb1cf02fe113
+//# sourceMappingURL=photos-src_mixins_FetchAlbumsMixin_js-src_components_AlbumForm_vue.js.map?v=35df94247fb248d71f3e

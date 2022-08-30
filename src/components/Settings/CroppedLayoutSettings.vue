@@ -21,24 +21,23 @@
  -->
 
 <template>
-	<div class="section">
-		<h2>{{ t('photos', 'View') }}</h2>
-		<p>
-			<input id="enable-cropped-layout"
-				v-model="croppedLayout"
-				type="checkbox"
-				class="checkbox"
-				@change="updateSetting('croppedLayout')">
-			<label for="enable-cropped-layout">{{ t('photos', 'Enable squared photos view') }}</label>
-		</p>
-	</div>
+	<CheckboxRadioSwitch :checked.sync="croppedLayout"
+		type="switch"
+		@update:checked="updateSetting('croppedLayout')">
+		{{ t('photos', 'Enable squared photos view') }}
+	</CheckboxRadioSwitch>
 </template>
 
 <script>
-import UserConfig from '../../mixins/UserConfig'
+import CheckboxRadioSwitch from '@nextcloud/vue/dist/Components/CheckboxRadioSwitch.js'
+import UserConfig from '../../mixins/UserConfig.js'
 
 export default {
 	name: 'CroppedLayoutSettings',
+
+	components: {
+		CheckboxRadioSwitch,
+	},
 
 	mixins: [
 		UserConfig,

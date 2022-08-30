@@ -26,7 +26,7 @@ import { sync } from 'vuex-router-sync'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import Vue from 'vue'
 
-import Photos from './Photos'
+import Photos from './Photos.vue'
 import router from './router/index.js'
 import store from './store/index.js'
 
