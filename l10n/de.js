@@ -16,7 +16,6 @@ OC.L10N.register(
     "Photos settings" : "Fotos-Einstellungen",
     "Name of the album" : "Name des Albums",
     "Location of the album" : "Ort des Albums",
-    "Go back to the previous view" : "Zur vorherigen Ansicht zurückgehen",
     "Back" : "Zurück",
     "Add collaborators" : "Mitbearbeiter hinzufügen",
     "Save." : "Speichern",
