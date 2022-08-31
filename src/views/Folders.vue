@@ -29,14 +29,24 @@
 	<EmptyContent v-else-if="error">
 		{{ t('photos', 'An error occurred') }}
 	</EmptyContent>
+	<NcEmptyContent v-else-if="initializing" icon="icon-loading">
+		{{ t('photos', 'Loading folders') }}
+	</NcEmptyContent>
 
 	<!-- Folder content -->
-	<div v-else-if="!loading">
-		<Navigation v-if="folder"
-			key="navigation"
-			v-bind="folder"
+	<div v-else-if="!initializing">
+		<HeaderNavigation key="navigation"
+			:loading="loading"
+			:path="folder.filename"
+			:title="folder.basename"
 			:root-title="rootTitle"
-			:show-actions="true" />
+			@refresh="onRefresh">
+			<UploadPicker :accept="allowedMimes"
+				:destination="folder.filename"
+				:multiple="true"
+				@uploaded="onUpload" />
+		</HeaderNavigation>
+
 		<!-- Empty folder, should only happen via direct link -->
 		<EmptyContent v-if="isEmpty" key="emptycontent" illustration-name="empty">
 			{{ t('photos', 'No photos in here') }}
@@ -53,28 +63,34 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { UploadPicker } from '@nextcloud/upload'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
+import VirtualGrid from 'vue-virtual-grid'
 
+import EmptyContent from '../components/EmptyContent.vue'
+import FileLegacy from '../components/FileLegacy.vue'
+import Folder from '../components/Folder.vue'
+import HeaderNavigation from '../components/HeaderNavigation.vue'
+
+import allowedMimes from '../services/AllowedMimes.js'
 import getAlbumContent from '../services/AlbumContent.js'
 
-import VirtualGrid from 'vue-virtual-grid'
-import EmptyContent from '../components/EmptyContent.vue'
-import Folder from '../components/Folder.vue'
-import FileLegacy from '../components/FileLegacy.vue'
-import Navigation from '../components/Navigation.vue'
-
+import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import GridConfigMixin from '../mixins/GridConfig.js'
-import AbortControllerMixin from '../mixins/AbortControllerMixin'
+import getFileInfo from '../services/FileInfo.js'
 
 export default {
 	name: 'Folders',
 	components: {
 		VirtualGrid,
 		EmptyContent,
-		Navigation,
+		HeaderNavigation,
+		NcEmptyContent,
+		UploadPicker,
 	},
 	mixins: [
-		GridConfigMixin,
 		AbortControllerMixin,
+		GridConfigMixin,
 	],
 	props: {
 		rootTitle: {
@@ -94,6 +110,9 @@ export default {
 	data() {
 		return {
 			error: null,
+			allowedMimes,
+
+			initializing: true,
 			loading: false,
 		}
 	},
@@ -191,21 +210,27 @@ export default {
 		},
 	},
 
-	async beforeMount() {
+	beforeMount() {
 		this.fetchFolderContent()
 	},
 
 	methods: {
+		onRefresh() {
+			this.fetchFolderContent()
+		},
+
 		async fetchFolderContent() {
+			this.error = null
+			this.loading = true
+
 			// close any potential opened viewer & sidebar
-			OCA.Viewer && OCA.Viewer.close && OCA.Viewer.close()
-			OCA.Files && OCA.Files.Sidebar.close && OCA.Files.Sidebar.close()
+			OCA?.Viewer?.close?.()
+			OCA?.Files?.Sidebar?.close?.()
 
 			// if we don't already have some cached data let's show a loader
 			if (!this.files[this.folderId] || !this.folders[this.folderId]) {
-				this.loading = true
+				this.initializing = true
 			}
-			this.error = null
 
 			try {
 				// get content and current folder info
@@ -232,7 +257,23 @@ export default {
 			} finally {
 				// done loading even with errors
 				this.loading = false
+				this.initializing = false
 			}
+		},
+
+		/**
+		 * Fetch file Info and add them into the store
+		 *
+		 * @param {Upload[]} uploads the newly uploaded files
+		 */
+		onUpload(uploads) {
+			const prefixPath = `/files/${getCurrentUser().uid}`
+			uploads.forEach(async upload => {
+				const relPath = upload.path.split(prefixPath).pop()
+				const file = await getFileInfo(relPath)
+				this.$store.dispatch('appendFiles', [file])
+				this.$store.dispatch('addFilesToFolder', { fileid: this.folderId, files: [file] })
+			})
 		},
 	},
 

@@ -65,7 +65,7 @@ export default {
 			default: 'icon-folder',
 		},
 		id: {
-			type: Number,
+			type: [Number, String],
 			required: true,
 		},
 		name: {
