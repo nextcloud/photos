@@ -80,6 +80,7 @@ import FilesSelectionMixin from '../mixins/FilesSelectionMixin'
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft'
+import AbortControllerMixin from '../mixins/AbortControllerMixin'
 
 export default {
 	name: 'TagContent',
@@ -94,6 +95,7 @@ export default {
 	mixins: [
 		isMobile,
 		FilesSelectionMixin,
+		AbortControllerMixin,
 	],
 	props: {
 		path: {
@@ -156,12 +158,12 @@ export default {
 			// if we don't already have some cached data let's show a loader
 			if (!this.tags[this.tagId]) {
 				this.loading = true
-				await this.$store.dispatch('fetchAllTags')
+				await this.$store.dispatch('fetchAllTags', { signal: this.abortController.signal })
 			}
 			this.error = null
 
 			try {
-				await this.$store.dispatch('fetchTagFiles', { id: this.tagId })
+				await this.$store.dispatch('fetchTagFiles', { id: this.tagId, signal: this.abortController.signal })
 			} catch (error) {
 				console.error(error)
 				this.error = true

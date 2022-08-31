@@ -45,6 +45,7 @@
 import { mapGetters } from 'vuex'
 import ImageMultipleIcon from 'vue-material-design-icons/ImageMultiple'
 import { generateUrl } from '@nextcloud/router'
+import AbortControllerMixin from '../mixins/AbortControllerMixin'
 
 export default {
 	name: 'TagCover',
@@ -52,6 +53,10 @@ export default {
 	components: {
 		ImageMultipleIcon,
 	},
+
+	mixins: [
+		AbortControllerMixin,
+	],
 
 	props: {
 		tag: {
@@ -79,7 +84,7 @@ export default {
 		if (this.tag.files.length) {
 			return
 		}
-		this.$store.dispatch('fetchTagFiles', { id: this.tag.id })
+		this.$store.dispatch('fetchTagFiles', { id: this.tag.id, signal: this.abortController.signal })
 	},
 }
 </script>

@@ -21,7 +21,7 @@
  */
 
 export default {
-	name: 'CancelRequestMixin',
+	name: 'AbortControllerMixin',
 
 	data() {
 		return {
@@ -33,8 +33,8 @@ export default {
 		this.abortController.abort()
 	},
 
-	beforeRouteLeave() {
+	beforeRouteLeave(from, to, next) {
 		this.abortController.abort()
-		this.abortController = new AbortController()
+		next()
 	},
 }
