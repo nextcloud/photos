@@ -22,7 +22,6 @@
 import Vue from 'vue'
 import { sortCompare } from '../utils/fileUtils'
 import getTaggedImages from '../services/TaggedImages'
-import { abortController } from '../services/RequestHandler'
 import getSystemTags from '../services/SystemTags'
 
 const state = {
@@ -125,14 +124,15 @@ const actions = {
 	/**
 	 *
 	 * @param context
-	 * @param id.id
-	 * @param id the tag id to fetch files for
+	 * @param obj
+	 * @param obj.id the tag id to fetch files for
+	 * @param obj.signal AbortController signal
 	 * @return {Promise<void>}
 	 */
-	async fetchTagFiles(context, { id }) {
+	async fetchTagFiles(context, { id, signal }) {
 		try {
 			// get data
-			const files = await getTaggedImages(id, { signal: abortController.signal })
+			const files = await getTaggedImages(id, { signal })
 			await context.dispatch('updateTag', { id, files })
 			await context.dispatch('appendFiles', files)
 		} catch (error) {
@@ -142,9 +142,9 @@ const actions = {
 		}
 	},
 
-	async fetchAllTags(context) {
+	async fetchAllTags(context, { signal }) {
 		const tags = await getSystemTags('', {
-			signal: abortController.signal,
+			signal,
 		})
 		await context.dispatch('updateTags', tags)
 	},
