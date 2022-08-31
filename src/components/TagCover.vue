@@ -24,7 +24,9 @@
 
 <template>
 	<router-link class="tag-cover" :to="`/tags/${tag.displayName}`">
-		<img v-if="tag.files.length !== 0" class="tag-cover__image" :src="coverUrl">
+		<img v-if="tag.files.length !== 0"
+			class="tag-cover__image"
+			:src="coverUrl">
 		<div v-else class="tag-cover__image tag-cover__image--placeholder">
 			<ImageMultipleIcon :size="128" />
 		</div>
@@ -65,6 +67,13 @@ export default {
 		},
 	},
 
+	data() {
+		return {
+			loadCover: false,
+			observer: null,
+		}
+	},
+
 	computed: {
 		// global lists
 		...mapGetters([
@@ -76,6 +85,9 @@ export default {
 		 * @return {string}
 		 */
 		coverUrl() {
+			if (!this.loadCover) {
+				return ''
+			}
 			return generateUrl(`/core/preview?fileId=${this.tag.files[this.tag.files.length - 1]}&x=${512}&y=${512}&forceIcon=0&a=1`)
 		},
 	},
@@ -85,6 +97,16 @@ export default {
 			return
 		}
 		this.$store.dispatch('fetchTagFiles', { id: this.tag.id, signal: this.abortController.signal })
+	},
+
+	mounted() {
+		this.observer = new IntersectionObserver((entries) => {
+			if (entries[0].isIntersecting) {
+				this.loadCover = true
+				this.observer.disconnect()
+			}
+		})
+		this.observer.observe(this.$el)
 	},
 }
 </script>
