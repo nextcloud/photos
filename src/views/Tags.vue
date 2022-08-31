@@ -154,6 +154,14 @@ export default {
 .container {
 	margin-top: 44px;
 	padding-left: 44px;
+
+	> h2 {
+		margin-left: 14px;
+	}
+}
+
+.popular-tags + h2 {
+	margin-top: 20px;
 }
 
 .popular-tags, .tags {
