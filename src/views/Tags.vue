@@ -97,7 +97,7 @@ export default {
 		popularTags() {
 			return Object.values(this.tags)
 				.filter(tag => tag.files && tag.files.length > 50)
-				.sort((a, b) => a.files.length - b.files.length)
+				.sort((a, b) => b.files.length - a.files.length)
 				.slice(0, 9)
 		},
 
