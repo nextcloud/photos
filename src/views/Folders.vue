@@ -63,7 +63,7 @@ import FileLegacy from '../components/FileLegacy.vue'
 import Navigation from '../components/Navigation.vue'
 
 import GridConfigMixin from '../mixins/GridConfig.js'
-import { abortController } from '../services/RequestHandler.js'
+import AbortControllerMixin from '../mixins/AbortControllerMixin'
 
 export default {
 	name: 'Folders',
@@ -72,7 +72,10 @@ export default {
 		EmptyContent,
 		Navigation,
 	},
-	mixins: [GridConfigMixin],
+	mixins: [
+		GridConfigMixin,
+		AbortControllerMixin,
+	],
 	props: {
 		rootTitle: {
 			type: String,
@@ -208,7 +211,7 @@ export default {
 				// get content and current folder info
 				const { folder, folders, files } = await getAlbumContent(this.path, {
 					shared: this.showShared,
-					signal: abortController.signal,
+					signal: this.abortController.signal,
 				})
 				this.$store.dispatch('addPath', { path: this.path, fileid: folder.fileid })
 				this.$store.dispatch('updateFolders', { fileid: folder.fileid, files, folders })

@@ -23,10 +23,14 @@
 import logger from '../services/logger.js'
 import getPhotos from '../services/PhotoSearch.js'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
-import { abortController } from '../services/RequestHandler'
+import AbortControllerMixin from './AbortControllerMixin'
 
 export default {
 	name: 'FetchFilesMixin',
+
+	mixins: [
+		AbortControllerMixin,
+	],
 
 	data() {
 		return {
@@ -73,7 +77,7 @@ export default {
 					firstResult: this.fetchedFileIds.length,
 					nbResults: numberOfImagesPerBatch,
 					...options,
-					signal: abortController.signal,
+					signal: this.abortController.signal,
 				})
 
 				// If we get less files than requested that means we got to the end

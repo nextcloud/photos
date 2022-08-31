@@ -29,7 +29,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import client from '../services/DavClient.js'
 import logger from '../services/logger.js'
 import { genFileInfo } from '../utils/fileUtils.js'
-import { abortController } from '../services/RequestHandler'
+import AbortControllerMixin from './AbortControllerMixin'
 
 export default {
 	name: 'FetchAlbumsMixin',
@@ -40,6 +40,10 @@ export default {
 			loadingAlbums: false,
 		}
 	},
+
+	mixins: [
+		AbortControllerMixin,
+	],
 
 	async beforeMount() {
 		this.fetchAlbums()
@@ -75,7 +79,7 @@ export default {
 								</d:prop>
 							</d:propfind>`,
 					details: true,
-					signal: abortController.signal,
+					signal: this.abortController.signal,
 				})
 
 				const albums = response.data

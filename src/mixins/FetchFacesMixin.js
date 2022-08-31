@@ -29,7 +29,7 @@ import client from '../services/DavClient.js'
 import logger from '../services/logger.js'
 import DavRequest from '../services/DavRequest'
 import { genFileInfo } from '../utils/fileUtils'
-import { abortController } from '../services/RequestHandler'
+import AbortControllerMixin from './AbortControllerMixin'
 
 export default {
 	name: 'FetchFacesMixin',
@@ -42,6 +42,10 @@ export default {
 			loadingFiles: false,
 		}
 	},
+
+	mixins: [
+		AbortControllerMixin,
+	],
 
 	async beforeMount() {
 		this.fetchFaces()
@@ -72,7 +76,7 @@ export default {
 				this.errorFetchingFaces = null
 
 				const faces = await client.getDirectoryContents(`/recognize/${getCurrentUser()?.uid}/faces/`, {
-					signal: abortController.signal,
+					signal: this.abortController.signal,
 				})
 				this.$store.dispatch('addFaces', { faces })
 				logger.debug(`[FetchFacesMixin] Fetched ${faces.length} new faces: `, faces)
@@ -109,7 +113,7 @@ export default {
 					{
 						data: DavRequest,
 						details: true,
-						signal: abortController.signal,
+						signal: this.abortController.signal,
 					}
 				)
 

@@ -207,7 +207,7 @@ import logger from '../services/logger.js'
 import client from '../services/DavClient.js'
 import DavRequest from '../services/DavRequest.js'
 import { genFileInfo } from '../utils/fileUtils.js'
-import { abortController } from '../services/RequestHandler'
+import AbortControllerMixin from '../mixins/AbortControllerMixin'
 
 export default {
 	name: 'AlbumContent',
@@ -240,6 +240,7 @@ export default {
 		FetchAlbumsMixin,
 		FetchFilesMixin,
 		FilesSelectionMixin,
+		AbortControllerMixin,
 		isMobile,
 	],
 
@@ -318,7 +319,7 @@ export default {
 					{
 						data: DavRequest,
 						details: true,
-						signal: abortController.signal,
+						signal: this.abortController.signal,
 					}
 				)
 

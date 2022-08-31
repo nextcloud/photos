@@ -62,8 +62,7 @@ import File from '../components/File'
 import Navigation from '../components/Navigation'
 
 import GridConfigMixin from '../mixins/GridConfig'
-
-import { abortController } from '../services/RequestHandler'
+import AbortControllerMixin from '../mixins/AbortControllerMixin'
 
 export default {
 	name: 'Tags',
@@ -72,7 +71,10 @@ export default {
 		EmptyContent,
 		Navigation,
 	},
-	mixins: [GridConfigMixin],
+	mixins: [
+		GridConfigMixin,
+		AbortControllerMixin,
+	],
 	props: {
 		rootTitle: {
 			type: String,
@@ -206,7 +208,7 @@ export default {
 			try {
 				// fetch content
 				const tags = await getSystemTags('', {
-					signal: abortController.signal,
+					signal: this.abortController.signal,
 				})
 				this.$store.dispatch('updateTags', tags)
 			} catch (error) {
@@ -232,7 +234,7 @@ export default {
 			try {
 				// get data
 				const files = await getTaggedImages(this.tagId, {
-					signal: abortController.signal,
+					signal: this.abortController.signal,
 				})
 				this.$store.dispatch('updateTag', { id: this.tagId, files })
 				this.$store.dispatch('appendFiles', files)

@@ -29,7 +29,6 @@ import areTagsInstalled from '../services/AreTagsInstalled.js'
 import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
 
 import isRecognizeInstalled from '../services/IsRecognizeInstalled.js'
-import { cancelAll } from '../services/RequestHandler.js'
 
 const Folders = () => import('../views/Folders')
 const Albums = () => import('../views/Albums')
@@ -179,11 +178,6 @@ const router = new Router({
 			}),
 		},
 	],
-})
-
-router.beforeResolve((from, to, next) => {
-	cancelAll()
-	next()
 })
 
 export default router

@@ -34,7 +34,7 @@ import { mapGetters } from 'vuex'
 
 import getTaggedImages from '../services/TaggedImages'
 import FolderTagPreview from './FolderTagPreview'
-import { abortController } from '../services/RequestHandler'
+import AbortControllerMixin from '../mixins/AbortControllerMixin'
 
 export default {
 	name: 'Tag',
@@ -42,6 +42,10 @@ export default {
 	components: {
 		FolderTagPreview,
 	},
+
+	mixins: [
+		AbortControllerMixin,
+	],
 	inheritAttrs: false,
 
 	props: {
@@ -76,7 +80,7 @@ export default {
 		try {
 			// get data
 			const files = await getTaggedImages(this.item.injected.id, {
-				signal: abortController.signal,
+				signal: this.abortController.signal,
 			})
 			this.$store.dispatch('updateTag', { id: this.item.injected.id, files })
 			this.$store.dispatch('appendFiles', files)
