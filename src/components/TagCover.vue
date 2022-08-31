@@ -32,9 +32,9 @@
 		</div>
 		<div class="tag-cover__details">
 			<div class="tag-cover__details__first-line">
-				<h2 class="tag-cover__details__name">
+				<h3 class="tag-cover__details__name">
 					{{ t('recognize', tag.displayName) }}
-				</h2>
+				</h3>
 			</div>
 			<div class="tag-cover__details__second-line">
 				{{ n('photos', '%n photo', '%n photos', tag.files.length,) }}
