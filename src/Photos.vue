@@ -58,7 +58,7 @@
 				</AppNavigationItem>
 				<AppNavigationItem v-if="areTagsInstalled"
 					:to="{name: 'tags'}"
-					:title="t('photos', 'Tagged photos')">
+					:title="t('photos', 'Tags')">
 					<Tag slot="icon" :size="20" />
 				</AppNavigationItem>
 				<AppNavigationItem v-if="showLocationMenuEntry"

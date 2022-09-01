@@ -23,7 +23,7 @@
 <template>
 	<router-link :class="{'folder--clear': isEmpty}"
 		class="folder"
-		:to="to"
+		:to="toLink"
 		:aria-label="ariaLabel">
 		<!-- Images preview -->
 		<transition name="fade">
@@ -74,11 +74,15 @@ export default {
 		},
 		path: {
 			type: String,
-			required: true,
+			default: '',
 		},
 		fileList: {
 			type: Array,
 			default: () => [],
+		},
+		to: {
+			type: Object,
+			default: null,
 		},
 	},
 
@@ -121,7 +125,10 @@ export default {
 		 *
 		 * @return {string}
 		 */
-		to() {
+		toLink() {
+			if (this.to) {
+				return this.to
+			}
 			// always remove first slash, the router
 			// manage it automatically
 			const regex = /^\/?(.+)/i
@@ -215,6 +222,7 @@ $name-height: 1rem;
 
 // Cover management empty/full
 .folder {
+	border-radius: var(--border-radius-large);
 	// if no img, let's display the folder icon as default black
 	&--clear {
 		.folder-name__icon {

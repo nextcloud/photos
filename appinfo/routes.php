@@ -78,6 +78,14 @@ return [
 				'path' => '',
 			]
 		],
+		['name' => 'page#index', 'url' => '/categories/{path}', 'verb' => 'GET', 'postfix' => 'categories',
+			'requirements' => [
+				'path' => '.*',
+			],
+			'defaults' => [
+				'path' => '',
+			]
+		],
 
 		// apis
 		[
