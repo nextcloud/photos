@@ -207,4 +207,8 @@ export default {
 	margin-top: -11px;
 	color: var(--color-text-maxcontrast);
 }
+
+.tag__photos {
+	padding: 0 64px;
+}
 </style>
