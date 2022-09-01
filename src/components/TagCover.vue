@@ -47,7 +47,7 @@
 import { mapGetters } from 'vuex'
 import ImageMultipleIcon from 'vue-material-design-icons/ImageMultiple'
 import { generateUrl } from '@nextcloud/router'
-import AbortControllerMixin from '../mixins/AbortControllerMixin'
+import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 
 export default {
 	name: 'TagCover',
