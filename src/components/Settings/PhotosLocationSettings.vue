@@ -53,7 +53,7 @@ export default {
 
 	methods: {
 		selectPhotosFolder() {
-			const picker = getFilePickerBuilder(t('photos', 'Select the default location for your Photos'))
+			const picker = getFilePickerBuilder(t('photos', 'Select the default location for your media'))
 				.setMultiSelect(false)
 				.setModal(true)
 				.setType(1)
