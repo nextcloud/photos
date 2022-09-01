@@ -206,8 +206,8 @@ import FolderIllustration from '../assets/Illustrations/folder.svg'
 import logger from '../services/logger.js'
 import client from '../services/DavClient.js'
 import DavRequest from '../services/DavRequest.js'
-import cancelableRequest from '../utils/CancelableRequest.js'
 import { genFileInfo } from '../utils/fileUtils.js'
+import AbortControllerMixin from '../mixins/AbortControllerMixin'
 
 export default {
 	name: 'AlbumContent',
@@ -240,6 +240,7 @@ export default {
 		FetchAlbumsMixin,
 		FetchFilesMixin,
 		FilesSelectionMixin,
+		AbortControllerMixin,
 		isMobile,
 	],
 
@@ -309,22 +310,16 @@ export default {
 				return []
 			}
 
-			const semaphoreSymbol = await this.semaphore.acquire(() => 0, 'fetchFiles')
-			const fetchSemaphoreSymbol = await this.fetchSemaphore.acquire()
-
 			try {
 				this.errorFetchingFiles = null
 				this.loadingFiles = true
-				this.semaphoreSymbol = semaphoreSymbol
 
-				const { request, cancel } = cancelableRequest(client.getDirectoryContents)
-				this.cancelFilesRequest = cancel
-
-				const response = await request(
+				const response = await client.getDirectoryContents(
 					`/photos/${getCurrentUser()?.uid}/albums/${this.albumName}`,
 					{
 						data: DavRequest,
 						details: true,
+						signal: this.abortController.signal,
 					}
 				)
 
@@ -356,9 +351,6 @@ export default {
 				logger.error('Error fetching album files', error)
 			} finally {
 				this.loadingFiles = false
-				this.cancelFilesRequest = () => { }
-				this.semaphore.release(semaphoreSymbol)
-				this.fetchSemaphore.release(fetchSemaphoreSymbol)
 			}
 
 			return []

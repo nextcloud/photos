@@ -33,8 +33,8 @@
 import { mapGetters } from 'vuex'
 
 import getTaggedImages from '../services/TaggedImages'
-import cancelableRequest from '../utils/CancelableRequest'
 import FolderTagPreview from './FolderTagPreview'
+import AbortControllerMixin from '../mixins/AbortControllerMixin'
 
 export default {
 	name: 'Tag',
@@ -42,6 +42,10 @@ export default {
 	components: {
 		FolderTagPreview,
 	},
+
+	mixins: [
+		AbortControllerMixin,
+	],
 	inheritAttrs: false,
 
 	props: {
@@ -49,12 +53,6 @@ export default {
 			type: Object,
 			required: true,
 		},
-	},
-
-	data() {
-		return {
-			cancelRequest: null,
-		}
 	},
 
 	computed: {
@@ -78,29 +76,18 @@ export default {
 		},
 	},
 
-	beforeDestroy() {
-		// cancel any pending requests
-		if (this.cancelRequest) {
-			this.cancelRequest('Navigated away')
-		}
-	},
-
 	async created() {
-		// init cancellable request
-		const { request, cancel } = cancelableRequest(getTaggedImages)
-		this.cancelRequest = cancel
-
 		try {
 			// get data
-			const files = await request(this.item.injected.id)
+			const files = await getTaggedImages(this.item.injected.id, {
+				signal: this.abortController.signal,
+			})
 			this.$store.dispatch('updateTag', { id: this.item.injected.id, files })
 			this.$store.dispatch('appendFiles', files)
 		} catch (error) {
 			if (error.response && error.response.status) {
 				console.error('Failed to get folder content', this.item.injected.id, error.response)
 			}
-		} finally {
-			this.cancelRequest = null
 		}
 	},
 

@@ -28,8 +28,8 @@ import { getCurrentUser } from '@nextcloud/auth'
 
 import client from '../services/DavClient.js'
 import logger from '../services/logger.js'
-import cancelableRequest from '../utils/CancelableRequest.js'
 import { genFileInfo } from '../utils/fileUtils.js'
+import AbortControllerMixin from './AbortControllerMixin'
 
 export default {
 	name: 'FetchAlbumsMixin',
@@ -38,16 +38,15 @@ export default {
 		return {
 			errorFetchingAlbums: null,
 			loadingAlbums: false,
-			cancelAlbumsRequest: () => { },
 		}
 	},
 
+	mixins: [
+		AbortControllerMixin,
+	],
+
 	async beforeMount() {
 		this.fetchAlbums()
-	},
-
-	beforeDestroy() {
-		this.cancelAlbumsRequest('Changed view')
 	},
 
 	computed: {
@@ -66,10 +65,7 @@ export default {
 				this.loadingAlbums = true
 				this.errorFetchingAlbums = null
 
-				const { request, cancel } = cancelableRequest(client.getDirectoryContents)
-				this.cancelAlbumsRequest = cancel
-
-				const response = await request(`/photos/${getCurrentUser()?.uid}/albums`, {
+				const response = await client.getDirectoryContents(`/photos/${getCurrentUser()?.uid}/albums`, {
 					data: `<?xml version="1.0"?>
 							<d:propfind xmlns:d="DAV:"
 								xmlns:oc="http://owncloud.org/ns"
@@ -83,8 +79,9 @@ export default {
 								</d:prop>
 							</d:propfind>`,
 					details: true,
-
+					signal: this.abortController.signal,
 				})
+
 				const albums = response.data
 					.filter(album => album.filename !== '/photos/admin/albums')
 					.map(album => genFileInfo(album))
@@ -121,7 +118,6 @@ export default {
 				logger.error(t('photos', 'Failed to fetch albums list.'), error)
 				showError(t('photos', 'Failed to fetch albums list.'))
 			} finally {
-				this.cancelAlbumsRequest = () => { }
 				this.loadingAlbums = false
 			}
 		},
