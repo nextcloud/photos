@@ -43,6 +43,9 @@
 				{{ path }}
 			</h2>
 		</div>
+		<div class="heading-subline">
+			{{ n('photos', '%n photo', '%n photos', tag.files.length,) }}
+		</div>
 		<EmptyContent v-if="isEmpty" key="emptycontent" illustration-name="empty">
 			{{ t('photos', 'No tags yet') }}
 			<template #desc>
@@ -197,5 +200,11 @@ export default {
 		padding: 0;
 		margin: 0;
 	}
+}
+
+.heading-subline {
+	margin-left: 85px;
+	margin-top: -11px;
+	color: var(--color-text-maxcontrast);
 }
 </style>
