@@ -161,7 +161,7 @@ export default {
 }
 
 .popular-tags + h2 {
-	margin-top: 20px;
+	margin-top: 40px;
 }
 
 .popular-tags, .tags {
