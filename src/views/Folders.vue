@@ -64,6 +64,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { UploadPicker } from '@nextcloud/upload'
+import { getCurrentUser } from '@nextcloud/auth'
 import NcEmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import VirtualGrid from 'vue-virtual-grid'
 

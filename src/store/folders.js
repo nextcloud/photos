@@ -63,6 +63,25 @@ const mutations = {
 			Vue.set(state.paths, path, fileid)
 		}
 	},
+
+	/**
+	 * Append files to a folder
+	 *
+	 * @param {object} state vuex state
+	 * @param {object} data destructuring object
+	 * @param {number} data.fileid id of this folder
+	 * @param {Array} data.files list of files to add
+	 */
+	addFilesToFolder(state, { fileid, files }) {
+		if (fileid >= 0 && files.length > 0) {
+			// and sort by last modified
+			const list = files
+				.sort((a, b) => sortCompare(a, b, 'lastmod'))
+				.filter(file => file.fileid >= 0)
+				.map(file => file.fileid)
+			Vue.set(state.folders, fileid, [...list, ...state.folders[fileid]])
+		}
+	},
 }
 
 const getters = {
@@ -98,6 +117,18 @@ const actions = {
 	 */
 	addPath(context, { path, fileid }) {
 		context.commit('addPath', { path, fileid })
+	},
+
+	/**
+	 * Append files to a folder
+	 *
+	 * @param {object} context vuex context
+	 * @param {object} data destructuring object
+	 * @param {number} data.fileid id of this folder
+	 * @param {Array} data.files list of files to add
+	 */
+	addFilesToFolder(context, { fileid, files }) {
+		context.commit('addFilesToFolder', { fileid, files })
 	},
 }
 
