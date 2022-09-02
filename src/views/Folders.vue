@@ -30,7 +30,7 @@
 		{{ t('photos', 'An error occurred') }}
 	</EmptyContent>
 	<NcEmptyContent v-else-if="initializing" icon="icon-loading">
-		{{ t('photos', 'Loading folders') }}
+		{{ t('photos', 'Loading folders …') }}
 	</NcEmptyContent>
 
 	<!-- Folder content -->
