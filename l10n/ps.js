@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Favorites" : "په نښه شوي",
     "Shared with you" : "تاسې سره شريک شوي",
+    "Tags" : "نښکې",
     "Save" : "ساتل",
     "Favorite" : "په نښه شوی",
     "Remove from favorites" : "له نښو ويستل",

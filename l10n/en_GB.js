@@ -6,6 +6,7 @@ OC.L10N.register(
     "Folders" : "Folders",
     "Favorites" : "Favourites",
     "Shared with you" : "Shared with you",
+    "Tags" : "Tags",
     "Back" : "Back",
     "Save" : "Save",
     "Favorite" : "Favourite",

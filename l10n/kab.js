@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Videos" : "Tividyutin",
     "Favorites" : "Imenyafen",
+    "Tags" : "Tibzimin",
     "Back" : "Retour",
     "Save" : "Sekles",
     "Favorite" : "Menyif",

@@ -6,6 +6,7 @@ OC.L10N.register(
     "Folders" : "Mapes",
     "Favorites" : "Favorīti",
     "Shared with you" : "Koplietots ar tevi",
+    "Tags" : "Birkas",
     "Back" : "Atpakaļ",
     "Save" : "Saglabāt",
     "View" : "Skats",

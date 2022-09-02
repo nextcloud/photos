@@ -5,6 +5,7 @@ OC.L10N.register(
     "Videos" : "ວິດີໂອ",
     "Favorites" : "ລາຍການທີ່ມັກ",
     "Shared with you" : "ແບ່ງປັບກັບທ່ານ",
+    "Tags" : "ປ້າຍກຳກັບ",
     "Back" : "ຫຼັງ",
     "Save" : "ບັນທຶກ",
     "Favorite" : "ລາຍການທີ່ມັກ",

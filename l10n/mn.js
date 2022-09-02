@@ -6,6 +6,7 @@ OC.L10N.register(
     "Folders" : "Хавтсууд",
     "Favorites" : "Онцолсон",
     "Shared with you" : "тантай хуваалцсан",
+    "Tags" : "Tag-үүд",
     "Back" : "буцах",
     "Save" : "Хадгалах",
     "Favorite" : "Дуртай",

@@ -4,6 +4,7 @@ OC.L10N.register(
     "Photos" : "Photos",
     "Favorites" : "Favoritos",
     "Shared with you" : "Compartite con te",
+    "Tags" : "Etiquettas",
     "Back" : "Retro",
     "Save" : "Salveguardar",
     "View" : "Vider",

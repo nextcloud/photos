@@ -7,7 +7,6 @@ OC.L10N.register(
     "Folders" : "Carpetas",
     "Favorites" : "Favoritos",
     "Shared with you" : "Compartido con usted",
-    "Tagged photos" : "Fotos con etiquetas",
     "Locations" : "Ubicaciones",
     "Back" : "Atrás",
     "Save" : "Guardar",
@@ -24,6 +23,7 @@ OC.L10N.register(
     "Add" : "Agregar",
     "Download" : "Descargar",
     "Delete" : "Eliminar",
+    "Tagged photos" : "Fotos con etiquetas",
     "Your photos" : "Tus Fotos",
     "Settings" : "Configuraciones "
 },
