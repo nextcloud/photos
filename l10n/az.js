@@ -4,6 +4,7 @@ OC.L10N.register(
     "Photos" : "Photos",
     "Favorites" : "Sevimlilər",
     "Shared with you" : "Shared with you",
+    "Tags" : "Işarələr",
     "Save" : "Saxla",
     "Favorite" : "İstəkli",
     "Remove from favorites" : "Remove from favorites",

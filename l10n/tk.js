@@ -4,6 +4,7 @@ OC.L10N.register(
     "Photos" : "Suratlar",
     "Videos" : "Wideo",
     "Favorites" : "Halanýanlar",
+    "Tags" : "Bellikler",
     "Back" : "Yzyna",
     "Save" : "Saklamak",
     "Favorite" : "Halaýan",

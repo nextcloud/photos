@@ -4,6 +4,7 @@ OC.L10N.register(
     "Photos" : "Photos",
     "Favorites" : "விருப்பங்கள்",
     "Shared with you" : "Shared with you",
+    "Tags" : "சீட்டுகள்",
     "Back" : "பின்னுக்கு",
     "Save" : "சேமிக்க ",
     "Favorite" : "விருப்பமான",

@@ -5,6 +5,7 @@ OC.L10N.register(
     "Videos" : "Video",
     "Favorites" : "Omiljeni",
     "Shared with you" : "Shared with you",
+    "Tags" : "Oznake",
     "Back" : "Nazad",
     "Save" : "Sačuvaj",
     "Favorite" : "Omiljene",
