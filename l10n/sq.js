@@ -6,6 +6,7 @@ OC.L10N.register(
     "Folders" : "Dosjet",
     "Favorites" : "Favorites",
     "Shared with you" : "E ndarë me ju",
+    "Tags" : "Etiketat",
     "Back" : "Prapa",
     "Save" : "Ruaj",
     "View" : "Shiko",

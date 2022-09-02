@@ -6,6 +6,7 @@ OC.L10N.register(
     "Folders" : "Director",
     "Favorites" : "Favorite",
     "Shared with you" : "Partajat cu tine",
+    "Tags" : "Etichete",
     "Back" : "Înapoi",
     "Save" : "Salvează",
     "View" : "Vizualizare",

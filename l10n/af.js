@@ -6,6 +6,7 @@ OC.L10N.register(
     "Folders" : "Vouers",
     "Favorites" : "Gunstelinge",
     "Shared with you" : "Met u gedeel",
+    "Tags" : "Etikette",
     "Back" : "Terug",
     "Save" : "Bewaar",
     "View" : "Bekyk",

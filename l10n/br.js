@@ -5,6 +5,7 @@ OC.L10N.register(
     "Videos" : "Videoioù",
     "Favorites" : "Pennrolloù",
     "Shared with you" : "Rannet ganeoc'h",
+    "Tags" : "Klavioù",
     "Back" : "Distro",
     "Save" : "Enrollañ",
     "View" : "Gwell",

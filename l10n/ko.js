@@ -6,6 +6,7 @@ OC.L10N.register(
     "Folders" : "폴더",
     "Favorites" : "즐겨찾기",
     "Shared with you" : "나와 공유됨",
+    "Tags" : "태그",
     "Locations" : "위치",
     "Back" : "뒤로",
     "Save" : "저장",

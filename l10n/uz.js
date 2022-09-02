@@ -4,6 +4,7 @@ OC.L10N.register(
     "Photos" : "Rasmlar",
     "Videos" : "Videolar",
     "Shared with you" : "Siz bilan baham ko'rdim",
+    "Tags" : "Teglar",
     "Save" : "Saqlash",
     "Add" : "Qo'shish",
     "Download" : "Yuklab oling",

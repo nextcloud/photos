@@ -6,6 +6,7 @@ OC.L10N.register(
     "Folders" : "Dosierujoj",
     "Favorites" : "Pliŝataĵoj",
     "Shared with you" : "Kunhavata kun vi",
+    "Tags" : "Etikedoj",
     "Back" : "Antaŭen",
     "Save" : "Konservi",
     "View" : "Vidi",

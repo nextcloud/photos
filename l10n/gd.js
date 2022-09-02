@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Videos" : "Videothan",
     "Favorites" : "Annsachdan",
+    "Tags" : "Tagaichean",
     "Back" : "Air ais",
     "Save" : "Sàbhail",
     "Favorite" : "Annsachd",
