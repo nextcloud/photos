@@ -5,6 +5,7 @@ OC.L10N.register(
     "Videos" : "Video",
     "Favorites" : "Favorit",
     "Shared with you" : "Shared with you",
+    "Tags" : "Emneord",
     "Back" : "Tilbake",
     "Save" : "Lagre",
     "An error occurred" : "Det oppstod ein feil.",

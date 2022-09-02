@@ -5,6 +5,7 @@ OC.L10N.register(
     "Videos" : "Fideos",
     "Favorites" : "Ffefrynnau",
     "Shared with you" : "Shared with you",
+    "Tags" : "Tagiau",
     "Back" : "Nôl",
     "Save" : "Cadw",
     "An error occurred" : "Digwyddodd gwall",

@@ -6,6 +6,7 @@ OC.L10N.register(
     "Folders" : "Folder-folder",
     "Favorites" : "Disukai",
     "Shared with you" : "Shared with you",
+    "Tags" : "Tag",
     "Back" : "Kembali",
     "Save" : "Simpan",
     "An error occurred" : "Terjadi kesalahan",
