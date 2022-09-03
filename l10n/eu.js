@@ -11,6 +11,7 @@ OC.L10N.register(
     "Favorites" : "Gogokoak",
     "On this day" : "Egun honetan",
     "Shared with you" : "Zurekin partekatua",
+    "Tags" : "Etiketak",
     "Locations" : "Kokapenak",
     "Photos settings" : "Argazkien ezarpenak",
     "_%n item_::_%n photos and videos_" : ["%n fitxategi","%n argazki eta bideo"],
