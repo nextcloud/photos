@@ -7,6 +7,7 @@ OC.L10N.register(
     "Folders" : "Carpetas",
     "Favorites" : "Favoritos",
     "Shared with you" : "Compartido con usted",
+    "Tags" : "Etiquetas",
     "Locations" : "Ubicaciones",
     "Back" : "Atrás",
     "Save" : "Guardar",
