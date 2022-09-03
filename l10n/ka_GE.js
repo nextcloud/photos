@@ -6,6 +6,7 @@ OC.L10N.register(
     "Folders" : "დირექტორიები",
     "Favorites" : "რჩეულები",
     "Shared with you" : "გაზიარებული თქვენთან",
+    "Tags" : "ტეგები",
     "Back" : "უკან",
     "Save" : "შენახვა",
     "Favorite" : "რჩეული",

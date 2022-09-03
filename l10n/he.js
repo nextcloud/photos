@@ -7,6 +7,7 @@ OC.L10N.register(
     "Folders" : "תיקייה",
     "Favorites" : "מועדפים",
     "Shared with you" : "משותף אתך",
+    "Tags" : "תגיות",
     "Locations" : "מיקומים",
     "Back" : "חזרה",
     "Save" : "שמירה",
