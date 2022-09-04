@@ -79,6 +79,7 @@ OC.L10N.register(
     "This might take some time depending on the size of your photo library." : "Dies kann je nach Größe Ihrer Fotobibliothek einige Zeit dauern.",
     "Recognized people will show up here" : "Erkannte Menschen werden hier angezeigt werden",
     "This folder does not exist" : "Dieser Ordner existiert nicht",
+    "Loading folders …" : "Ordner werden geladen...",
     "No photos in here" : "Keine Fotos vorhanden",
     "Back to tags overview" : "Zurück zur Schlagwortübersicht",
     "No tags yet" : "Noch keine Schlagworte vorhanden",
