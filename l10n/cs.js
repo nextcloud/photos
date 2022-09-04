@@ -79,6 +79,7 @@ OC.L10N.register(
     "This might take some time depending on the size of your photo library." : "Toto může zabrat nějakou dobu v závislosti na velikosti vaší knihovny fotek.",
     "Recognized people will show up here" : "Rozpoznaní lidé se zobrazí zde",
     "This folder does not exist" : "Tato složka neexistuje",
+    "Loading folders …" : "Načítání složek…",
     "No photos in here" : "Tady nejsou žádné fotky",
     "Back to tags overview" : "Zpět na přehled štítků",
     "No tags yet" : "Zatím žádné štítky",
