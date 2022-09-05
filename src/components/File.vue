@@ -55,12 +55,12 @@
 			<p :id="ariaDescription" class="file__hidden-description" :class="{show: error}">{{ file.basename }}</p>
 		</a>
 
-		<CheckboxRadioSwitch v-if="allowSelection"
+		<NcCheckboxRadioSwitch v-if="allowSelection"
 			class="selection-checkbox"
 			:checked="selected"
 			@update:checked="onToggle">
 			<span class="input-label">{{ t('photos', 'Select image {imageName}', {imageName: file.basename}) }}</span>
-		</CheckboxRadioSwitch>
+		</NcCheckboxRadioSwitch>
 
 		<Star v-if="file.favorite === 1" class="favorite-state" :aria-label="t('photos', 'The file is in the favorites')" />
 	</div>
@@ -72,7 +72,7 @@ import VideoIcon from 'vue-material-design-icons/Video.vue'
 
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
-import { CheckboxRadioSwitch } from '@nextcloud/vue'
+import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 
 import UserConfig from '../mixins/UserConfig.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
@@ -80,7 +80,7 @@ import Semaphore from '../utils/semaphoreWithPriority.js'
 export default {
 	name: 'File',
 	components: {
-		CheckboxRadioSwitch,
+		NcCheckboxRadioSwitch,
 		Star,
 		VideoIcon,
 	},
@@ -341,7 +341,7 @@ export default {
 				width: 16px;
 				height: 16px;
 				position: absolute;
-				left: 1px;
+				left: 14px;
 				z-index: -1;
 			}
 

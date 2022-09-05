@@ -60,35 +60,34 @@
 		</div>
 		<div class="file-picker__actions">
 			<!-- TODO: Implement upload -->
-			<Button type="tertiary" :disabled="loading">
+			<NcButton type="tertiary" :disabled="loading">
 				<template #icon>
 					<Upload />
 				</template>
 				{{ t('photos', 'Upload from computer') }}
-			</Button>
-			<Button type="primary" :disabled="loading || selectedFileIds.length === 0" @click="emitPickedEvent">
+			</NcButton>
+			<NcButton type="primary" :disabled="loading || selectedFileIds.length === 0" @click="emitPickedEvent">
 				<template #icon>
 					<ImagePlus v-if="!loading" />
-					<Loader v-if="loading" />
+					<NcLoadingIcon v-if="loading" />
 				</template>
 				{{ t('photos', 'Add to {destination}', { destination }) }}
-			</Button>
+			</NcButton>
 		</div>
 	</div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-
 import ImagePlus from 'vue-material-design-icons/ImagePlus'
 import Upload from 'vue-material-design-icons/Upload'
+
 import moment from '@nextcloud/moment'
-import { Button } from '@nextcloud/vue'
+import { NcButton, NcLoadingIcon } from '@nextcloud/vue'
 
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import FilesListViewer from './FilesListViewer.vue'
-import Loader from './Loader.vue'
 import File from './File.vue'
 import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
 
@@ -98,10 +97,10 @@ export default {
 	components: {
 		ImagePlus,
 		Upload,
-		Button,
+		NcButton,
+		NcLoadingIcon,
 		FilesListViewer,
 		File,
-		Loader,
 	},
 
 	filters: {

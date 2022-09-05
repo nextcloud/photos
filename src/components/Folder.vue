@@ -31,9 +31,9 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import getAlbumContent from '../services/AlbumContent'
-import FolderTagPreview from './FolderTagPreview'
-import AbortControllerMixin from '../mixins/AbortControllerMixin'
+import FolderTagPreview from './FolderTagPreview.vue'
+import getAlbumContent from '../services/AlbumContent.js'
+import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 
 export default {
 	name: 'Folder',

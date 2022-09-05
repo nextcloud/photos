@@ -23,50 +23,50 @@
  -->
 <template>
 	<!-- Errors handlers-->
-	<EmptyContent v-if="face === undefined && !loadingFiles && !loadingFaces" class="empty-content-with-illustration">
+	<NcEmptyContent v-if="face === undefined && !loadingFiles && !loadingFaces" class="empty-content-with-illustration">
 		<template #icon>
 			<AccountBoxMultipleOutline />
 		</template>
 		{{ t('photos', 'This person could not be found') }}
-	</EmptyContent>
-	<EmptyContent v-else-if="errorFetchingFiles || errorFetchingFaces">
+	</NcEmptyContent>
+	<NcEmptyContent v-else-if="errorFetchingFiles || errorFetchingFaces">
 		<template #icon>
 			<AlertCircle />
 		</template>
 		{{ t('photos', 'An error occurred') }}
-	</EmptyContent>
+	</NcEmptyContent>
 
 	<div v-else class="face">
 		<div class="face__header">
 			<div class="face__header__left">
-				<Actions>
-					<ActionButton @click="$router.push('/faces/')">
+				<NcActions>
+					<NcActionButton @click="$router.push('/faces/')">
 						<template #icon>
 							<ArrowLeft />
 						</template>{{ t('photos', 'Back') }}
-					</ActionButton>
-				</Actions>
+					</NcActionButton>
+				</NcActions>
 				<div class="face__header__title">
 					<h2 v-if="face !== undefined" :class="{'face-name': true, 'hidden-visually': face.basename.match(/^[0-9]+$/)}">
 						{{ face.basename }}
 					</h2>
 				</div>
 
-				<Loader v-if="loadingCount > 0 || loadingFaces" />
+				<NcLoadingIcon v-if="loadingCount > 0 || loadingFaces" />
 			</div>
 			<div v-if="face !== undefined" class="face__header__actions">
-				<Actions>
-					<ActionButton :close-after-click="true"
+				<NcActions>
+					<NcActionButton :close-after-click="true"
 						:aria-label="t('photos', 'Rename person')"
 						@click="showRenameModal = true">
 						<template #icon>
 							<Pencil />
 						</template>
 						{{ t('photos', 'Rename person') }}
-					</ActionButton>
-				</Actions>
-				<Actions :force-menu="true">
-					<ActionButton v-if="Object.keys(faces).length > 1"
+					</NcActionButton>
+				</NcActions>
+				<NcActions :force-menu="true">
+					<NcActionButton v-if="Object.keys(faces).length > 1"
 						:close-after-click="true"
 						:aria-label="t('photos', 'Merge with different person')"
 						@click="showMergeModal = true">
@@ -74,44 +74,44 @@
 							<Merge />
 						</template>
 						{{ t('photos', 'Merge with different person') }}
-					</ActionButton>
+					</NcActionButton>
 					<template v-if="selectedFileIds.length">
-						<ActionButton :close-after-click="true"
+						<NcActionButton :close-after-click="true"
 							:aria-label="t('photos', 'Download selected files')"
 							@click="downloadSelection">
 							<Download slot="icon" />
 							{{ t('photos', 'Download selected photos') }}
-						</ActionButton>
-						<ActionButton v-if="shouldFavoriteSelection"
+						</NcActionButton>
+						<NcActionButton v-if="shouldFavoriteSelection"
 							:close-after-click="true"
 							:aria-label="t('photos', 'Mark selection as favorite')"
 							@click="favoriteSelection">
 							<Star slot="icon" />
 							{{ t('photos', 'Favorite') }}
-						</ActionButton>
-						<ActionButton v-else
+						</NcActionButton>
+						<NcActionButton v-else
 							:close-after-click="true"
 							:aria-label="t('photos', 'Remove selection from favorites')"
 							@click="unFavoriteSelection">
 							<Star slot="icon" />
 							{{ t('photos', 'Remove from favorites') }}
-						</ActionButton>
-						<ActionButton :close-after-click="true"
+						</NcActionButton>
+						<NcActionButton :close-after-click="true"
 							@click="handleRemoveFilesFromFace(selectedFileIds)">
 							<template #icon>
 								<Close />
 							</template>
 							{{ n('photos', 'Remove photo from person', 'Remove photos from person', selectedFileIds.length) }}
-						</ActionButton>
+						</NcActionButton>
 					</template>
-					<ActionButton :close-after-click="true"
+					<NcActionButton :close-after-click="true"
 						@click="handleDeleteFace">
 						<template #icon>
 							<Close />
 						</template>
 						{{ t('photos', 'Remove person') }}
-					</ActionButton>
-				</Actions>
+					</NcActionButton>
+				</NcActions>
 			</div>
 		</div>
 
@@ -130,7 +130,7 @@
 				@select-toggled="onFileSelectToggle" />
 		</FilesListViewer>
 
-		<Modal v-if="showRenameModal"
+		<NcModal v-if="showRenameModal"
 			:title="t('photos', 'Rename person')"
 			@close="showRenameModal = false">
 			<div class="rename-form">
@@ -142,24 +142,24 @@
 					required
 					:placeholder="t('photos', 'Name of this person')"
 					@keydown.enter="handleRenameFace($refs.nameInput.value)">
-				<Button :aria-label="t('photos', 'Save.')"
+				<NcButton :aria-label="t('photos', 'Save.')"
 					type="primary"
 					:disabled="$refs.nameInput && $refs.nameInput.value.trim() === ''"
 					@click="handleRenameFace($refs.nameInput.value)">
 					<template #icon>
-						<Loader v-if="loadingCount" />
+						<NcLoadingIcon v-if="loadingCount" />
 						<Send v-else />
 					</template>
 					{{ t('photos', 'Save') }}
-				</Button>
+				</NcButton>
 			</div>
-		</Modal>
+		</NcModal>
 
-		<Modal v-if="showMergeModal"
+		<NcModal v-if="showMergeModal"
 			:title="t('photos', 'Merge person')"
 			@close="showMergeModal = false">
 			<FaceMergeForm :first-face="faceName" @select="handleMerge($event)" />
-		</Modal>
+		</NcModal>
 	</div>
 </template>
 
@@ -175,13 +175,12 @@ import Merge from 'vue-material-design-icons/Merge'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft'
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline'
 
-import { Actions, ActionButton, Modal, EmptyContent, Button } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcModal, NcEmptyContent, NcButton, NcLoadingIcon } from '@nextcloud/vue'
 
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import File from '../components/File.vue'
-import Loader from '../components/Loader.vue'
 import logger from '../services/logger.js'
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
 import Vue from 'vue'
@@ -190,24 +189,24 @@ import FaceMergeForm from '../components/FaceMergeForm.vue'
 export default {
 	name: 'FaceContent',
 	components: {
-		FaceMergeForm,
 		Pencil,
 		Star,
 		Download,
 		Close,
 		AlertCircle,
-		FilesListViewer,
-		File,
-		EmptyContent,
-		Loader,
-		Actions,
-		ActionButton,
-		Modal,
 		Send,
-		Button,
 		Merge,
 		ArrowLeft,
 		AccountBoxMultipleOutline,
+		FaceMergeForm,
+		FilesListViewer,
+		File,
+		NcLoadingIcon,
+		NcEmptyContent,
+		NcActions,
+		NcActionButton,
+		NcModal,
+		NcButton,
 	},
 
 	directives: {

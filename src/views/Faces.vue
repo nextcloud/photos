@@ -23,17 +23,17 @@
  -->
 <template>
 	<!-- Errors handlers-->
-	<EmptyContent v-if="errorFetchingFaces">
+	<NcEmptyContent v-if="errorFetchingFaces">
 		{{ t('photos', 'An error occurred') }}
-	</EmptyContent>
+	</NcEmptyContent>
 
 	<!-- Face list -->
 	<div v-else class="faces">
-		<Loader v-if="loadingFaces" />
+		<NcLoadingIcon v-if="loadingFaces" />
 
 		<!-- No faces -->
 		<div v-if="noFaces && !loadingFaces" class="faces__empty">
-			<EmptyContent class="empty-content-with-illustration">
+			<NcEmptyContent class="empty-content-with-illustration">
 				<template #icon>
 					<AccountBoxMultipleOutline />
 				</template>
@@ -41,7 +41,7 @@
 					{{ t('photos', 'This might take some time depending on the size of your photo library.') }}
 				</template>
 				{{ t('photos', 'Recognized people will show up here') }}
-			</EmptyContent>
+			</NcEmptyContent>
 		</div>
 
 		<div v-else-if="!noFaces" class="faces__list">
@@ -53,11 +53,11 @@
 </template>
 
 <script>
-import { EmptyContent } from '@nextcloud/vue'
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline'
 
+import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
-import Loader from '../components/Loader.vue'
 import FaceCover from '../components/FaceCover.vue'
 import { mapGetters } from 'vuex'
 
@@ -65,8 +65,8 @@ export default {
 	name: 'Faces',
 	components: {
 		FaceCover,
-		EmptyContent,
-		Loader,
+		NcEmptyContent,
+		NcLoadingIcon,
 		AccountBoxMultipleOutline,
 	},
 

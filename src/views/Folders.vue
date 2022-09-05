@@ -23,12 +23,12 @@
 
 <template>
 	<!-- Errors handlers-->
-	<EmptyContent v-if="error === 404" illustration-name="folder">
+	<NcEmptyContent v-if="error === 404" illustration-name="folder">
 		{{ t('photos', 'This folder does not exist') }}
-	</EmptyContent>
-	<EmptyContent v-else-if="error">
+	</NcEmptyContent>
+	<NcEmptyContent v-else-if="error">
 		{{ t('photos', 'An error occurred') }}
-	</EmptyContent>
+	</NcEmptyContent>
 	<NcEmptyContent v-else-if="initializing" icon="icon-loading">
 		{{ t('photos', 'Loading folders …') }}
 	</NcEmptyContent>
@@ -48,9 +48,9 @@
 		</HeaderNavigation>
 
 		<!-- Empty folder, should only happen via direct link -->
-		<EmptyContent v-if="isEmpty" key="emptycontent" illustration-name="empty">
+		<NcEmptyContent v-if="isEmpty" key="emptycontent" illustration-name="empty">
 			{{ t('photos', 'No photos in here') }}
-		</EmptyContent>
+		</NcEmptyContent>
 
 		<div v-else class="grid-container">
 			<VirtualGrid ref="virtualgrid"
@@ -65,10 +65,9 @@
 import { mapGetters } from 'vuex'
 import { UploadPicker } from '@nextcloud/upload'
 import { getCurrentUser } from '@nextcloud/auth'
-import NcEmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
+import { NcEmptyContent } from '@nextcloud/vue'
 import VirtualGrid from 'vue-virtual-grid'
 
-import EmptyContent from '../components/EmptyContent.vue'
 import FileLegacy from '../components/FileLegacy.vue'
 import Folder from '../components/Folder.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
@@ -84,7 +83,6 @@ export default {
 	name: 'Folders',
 	components: {
 		VirtualGrid,
-		EmptyContent,
 		HeaderNavigation,
 		NcEmptyContent,
 		UploadPicker,

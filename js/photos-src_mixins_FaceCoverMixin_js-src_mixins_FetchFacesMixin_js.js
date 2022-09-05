@@ -122,9 +122,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nextcloud/auth */ "./node_modules/@nextcloud/auth/dist/index.esm.js");
 /* harmony import */ var _services_DavClient_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/DavClient.js */ "./src/services/DavClient.js");
 /* harmony import */ var _services_logger_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../services/logger.js */ "./src/services/logger.js");
-/* harmony import */ var _utils_CancelableRequest_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/CancelableRequest.js */ "./src/utils/CancelableRequest.js");
-/* harmony import */ var _services_DavRequest__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../services/DavRequest */ "./src/services/DavRequest.js");
-/* harmony import */ var _utils_fileUtils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../utils/fileUtils */ "./src/utils/fileUtils.js");
+/* harmony import */ var _services_DavRequest__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/DavRequest */ "./src/services/DavRequest.js");
+/* harmony import */ var _utils_fileUtils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/fileUtils */ "./src/utils/fileUtils.js");
+/* harmony import */ var _AbortControllerMixin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./AbortControllerMixin */ "./src/mixins/AbortControllerMixin.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
@@ -171,11 +171,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       errorFetchingFaces: null,
       loadingFaces: false,
       errorFetchingFiles: null,
-      loadingFiles: false,
-      cancelFacesRequest: function cancelFacesRequest() {},
-      cancelFilesRequest: function cancelFilesRequest() {}
+      loadingFiles: false
     };
   },
+  mixins: [_AbortControllerMixin__WEBPACK_IMPORTED_MODULE_6__["default"]],
   beforeMount: function beforeMount() {
     var _this = this;
 
@@ -194,17 +193,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee);
     }))();
   },
-  beforeDestroy: function beforeDestroy() {
-    this.cancelFacesRequest('Changed view');
-    this.cancelFilesRequest('Changed view');
-  },
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_7__.mapGetters)(['faces'])),
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_7__.mapActions)(['appendFiles'])), {}, {
     fetchFaces: function fetchFaces() {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-        var _getCurrentUser, _cancelableRequest, request, cancel, faces;
+        var _getCurrentUser, faces;
 
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
@@ -229,12 +224,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context2.prev = 4;
                 _this2.loadingFaces = true;
                 _this2.errorFetchingFaces = null;
-                _cancelableRequest = (0,_utils_CancelableRequest_js__WEBPACK_IMPORTED_MODULE_4__["default"])(_services_DavClient_js__WEBPACK_IMPORTED_MODULE_2__["default"].getDirectoryContents), request = _cancelableRequest.request, cancel = _cancelableRequest.cancel;
-                _this2.cancelFacesRequest = cancel;
-                _context2.next = 11;
-                return request("/recognize/".concat((_getCurrentUser = (0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__.getCurrentUser)()) === null || _getCurrentUser === void 0 ? void 0 : _getCurrentUser.uid, "/faces/"));
+                _context2.next = 9;
+                return _services_DavClient_js__WEBPACK_IMPORTED_MODULE_2__["default"].getDirectoryContents("/recognize/".concat((_getCurrentUser = (0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__.getCurrentUser)()) === null || _getCurrentUser === void 0 ? void 0 : _getCurrentUser.uid, "/faces/"), {
+                  signal: _this2.abortController.signal
+                });
 
-              case 11:
+              case 9:
                 faces = _context2.sent;
 
                 _this2.$store.dispatch('addFaces', {
@@ -242,11 +237,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 });
 
                 _services_logger_js__WEBPACK_IMPORTED_MODULE_3__["default"].debug("[FetchFacesMixin] Fetched ".concat(faces.length, " new faces: "), faces);
-                _context2.next = 21;
+                _context2.next = 19;
                 break;
 
-              case 16:
-                _context2.prev = 16;
+              case 14:
+                _context2.prev = 14;
                 _context2.t0 = _context2["catch"](4);
 
                 if (_context2.t0.response && _context2.t0.response.status) {
@@ -260,27 +255,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _services_logger_js__WEBPACK_IMPORTED_MODULE_3__["default"].error(t('photos', 'Failed to fetch faces list.'), _context2.t0);
                 (0,_nextcloud_dialogs__WEBPACK_IMPORTED_MODULE_0__.showError)(t('photos', 'Failed to fetch faces list.'));
 
-              case 21:
-                _context2.prev = 21;
-
-                _this2.cancelFacesRequest = function () {};
-
+              case 19:
+                _context2.prev = 19;
                 _this2.loadingFaces = false;
-                return _context2.finish(21);
+                return _context2.finish(19);
 
-              case 25:
+              case 22:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[4, 16, 21, 25]]);
+        }, _callee2, null, [[4, 14, 19, 22]]);
       }))();
     },
     fetchFaceContent: function fetchFaceContent(faceName, force) {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
-        var _getCurrentUser2, _cancelableRequest2, request, cancel, _yield$request, fetchedFiles, fileIds;
+        var _getCurrentUser2, _yield$client$getDire, fetchedFiles, fileIds;
 
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
@@ -305,19 +297,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context3.prev = 4;
                 _this3.errorFetchingFiles = null;
                 _this3.loadingFiles = true;
-                _cancelableRequest2 = (0,_utils_CancelableRequest_js__WEBPACK_IMPORTED_MODULE_4__["default"])(_services_DavClient_js__WEBPACK_IMPORTED_MODULE_2__["default"].getDirectoryContents), request = _cancelableRequest2.request, cancel = _cancelableRequest2.cancel;
-                _this3.cancelFilesRequest = cancel;
-                _context3.next = 11;
-                return request("/recognize/".concat((_getCurrentUser2 = (0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__.getCurrentUser)()) === null || _getCurrentUser2 === void 0 ? void 0 : _getCurrentUser2.uid, "/faces/").concat(faceName), {
-                  data: _services_DavRequest__WEBPACK_IMPORTED_MODULE_5__["default"],
-                  details: true
+                _context3.next = 9;
+                return _services_DavClient_js__WEBPACK_IMPORTED_MODULE_2__["default"].getDirectoryContents("/recognize/".concat((_getCurrentUser2 = (0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__.getCurrentUser)()) === null || _getCurrentUser2 === void 0 ? void 0 : _getCurrentUser2.uid, "/faces/").concat(faceName), {
+                  data: _services_DavRequest__WEBPACK_IMPORTED_MODULE_4__["default"],
+                  details: true,
+                  signal: _this3.abortController.signal
                 });
 
-              case 11:
-                _yield$request = _context3.sent;
-                fetchedFiles = _yield$request.data;
+              case 9:
+                _yield$client$getDire = _context3.sent;
+                fetchedFiles = _yield$client$getDire.data;
                 fetchedFiles = fetchedFiles.map(function (file) {
-                  return (0,_utils_fileUtils__WEBPACK_IMPORTED_MODULE_6__.genFileInfo)(file);
+                  return (0,_utils_fileUtils__WEBPACK_IMPORTED_MODULE_5__.genFileInfo)(file);
                 }).map(function (file) {
                   return _objectSpread(_objectSpread({}, file), {}, {
                     filename: file.realpath.replace("/".concat((0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__.getCurrentUser)().uid, "/files"), '')
@@ -330,23 +321,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this3.appendFiles(fetchedFiles);
 
                 if (!(fetchedFiles.length > 0)) {
-                  _context3.next = 19;
+                  _context3.next = 17;
                   break;
                 }
 
-                _context3.next = 19;
+                _context3.next = 17;
                 return _this3.$store.commit('addFilesToFace', {
                   faceName: faceName,
                   fileIdsToAdd: fileIds
                 });
 
-              case 19:
+              case 17:
                 _services_logger_js__WEBPACK_IMPORTED_MODULE_3__["default"].debug("[FetchFacesMixin] Fetched ".concat(fileIds.length, " new files: "), fileIds);
-                _context3.next = 26;
+                _context3.next = 24;
                 break;
 
-              case 22:
-                _context3.prev = 22;
+              case 20:
+                _context3.prev = 20;
                 _context3.t0 = _context3["catch"](4);
 
                 if (_context3.t0.response && _context3.t0.response.status) {
@@ -360,20 +351,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _services_logger_js__WEBPACK_IMPORTED_MODULE_3__["default"].error('Error fetching face files', _context3.t0);
 
-              case 26:
-                _context3.prev = 26;
+              case 24:
+                _context3.prev = 24;
                 _this3.loadingFiles = false;
+                return _context3.finish(24);
 
-                _this3.cancelFilesRequest = function () {};
-
-                return _context3.finish(26);
-
-              case 30:
+              case 27:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[4, 22, 26, 30]]);
+        }, _callee3, null, [[4, 20, 24, 27]]);
       }))();
     }
   })
@@ -382,4 +370,4 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_mixins_FaceCoverMixin_js-src_mixins_FetchFacesMixin_js.js.map?v=8ea597e01435671f3dae
+//# sourceMappingURL=photos-src_mixins_FaceCoverMixin_js-src_mixins_FetchFacesMixin_js.js.map?v=985dd72c2bf1eb091603

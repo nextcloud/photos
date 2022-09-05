@@ -24,21 +24,21 @@
 
 <template>
 	<!-- Errors handlers-->
-	<EmptyContent v-if="error">
+	<NcEmptyContent v-if="error">
 		{{ t('photos', 'An error occurred') }}
-	</EmptyContent>
+	</NcEmptyContent>
 
 	<!-- Folder content -->
 	<div v-else-if="!loading">
 		<div class="photos-navigation">
-			<Actions class="photos-navigation__back">
+			<NcActions class="photos-navigation__back">
 				<ActionButton @click="$router.push({name: 'tags'})">
 					<template #icon>
 						<ArrowLeft />
 					</template>
 					{{ t('photos', 'Back to tags overview') }}
 				</ActionButton>
-			</Actions>
+			</NcActions>
 			<h2 class="photos-navigation__title">
 				{{ path }}
 			</h2>
@@ -46,12 +46,12 @@
 		<div class="heading-subline">
 			{{ n('photos', '%n photo', '%n photos', tag.files.length,) }}
 		</div>
-		<EmptyContent v-if="isEmpty" key="emptycontent" illustration-name="empty">
+		<NcEmptyContent v-if="isEmpty" key="emptycontent" illustration-name="empty">
 			{{ t('photos', 'No tags yet') }}
 			<template #desc>
 				{{ t('photos', 'Photos with tags will show up here') }}
 			</template>
-		</EmptyContent>
+		</NcEmptyContent>
 
 		<FilesListViewer class="tag__photos"
 			:use-window="true"
@@ -72,27 +72,24 @@
 
 <script>
 import { mapGetters } from 'vuex'
-
-import EmptyContent from '../components/EmptyContent'
-import File from '../components/File'
-
-import FilesListViewer from '../components/FilesListViewer'
-import { isMobile } from '@nextcloud/vue'
-import SemaphoreWithPriority from '../utils/semaphoreWithPriority'
-import FilesSelectionMixin from '../mixins/FilesSelectionMixin'
-import Actions from '@nextcloud/vue/dist/Components/Actions'
-import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft'
-import AbortControllerMixin from '../mixins/AbortControllerMixin'
+
+import { NcEmptyContent, NcActions, isMobile } from '@nextcloud/vue'
+
+import File from '../components/File.vue'
+import FilesListViewer from '../components/FilesListViewer.vue'
+
+import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
+import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
+import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 
 export default {
 	name: 'TagContent',
 	components: {
 		File,
 		FilesListViewer,
-		EmptyContent,
-		Actions,
-		ActionButton,
+		NcEmptyContent,
+		NcActions,
 		ArrowLeft,
 	},
 	mixins: [

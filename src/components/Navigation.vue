@@ -22,33 +22,32 @@
 
 <template>
 	<div :class="{'photos-navigation--root': isRoot}" class="photos-navigation" role="toolbar">
-		<Actions v-if="!isRoot" class="photos-navigation__back">
-			<ActionButton icon="icon-confirm"
+		<NcActions v-if="!isRoot" class="photos-navigation__back">
+			<NcActionButton icon="icon-confirm"
 				@click="folderUp">
 				{{ backToText }}
-			</ActionButton>
-		</Actions>
+			</NcActionButton>
+		</NcActions>
 		<h2 class="photos-navigation__title">
 			{{ name }}
 		</h2>
-		<Actions v-if="!isRoot && showActions" class="photos-navigation__share">
-			<ActionButton icon="icon-shared"
+		<NcActions v-if="!isRoot && showActions" class="photos-navigation__share">
+			<NcActionButton icon="icon-shared"
 				@click="showSidebar">
 				{{ t('photos', 'Share this folder') }}
-			</ActionButton>
-		</Actions>
+			</NcActionButton>
+		</NcActions>
 	</div>
 </template>
 
 <script>
-import Actions from '@nextcloud/vue/dist/Components/Actions'
-import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
+import { NcActions, NcActionButton } from '@nextcloud/vue'
 export default {
 	name: 'Navigation',
 
 	components: {
-		ActionButton,
-		Actions,
+		NcActions,
+		NcActionButton,
 	},
 	inheritAttrs: false,
 

@@ -23,7 +23,7 @@
 	<div v-if="!showAlbumCreationForm" class="album-picker">
 		<h2>
 			{{ t('photos', 'Add to Album') }}
-			<Loader v-if="loadingAlbums" class="loading-icon" />
+			<NcLoadingIcon v-if="loadingAlbums" class="loading-icon" />
 		</h2>
 
 		<div class="albums-container">
@@ -50,7 +50,7 @@
 			</div>
 		</div>
 
-		<Button :aria-label="t('photos', 'Create a new album.')"
+		<NcButton :aria-label="t('photos', 'Create a new album.')"
 			class="new-album-button"
 			type="tertiary"
 			@click="showAlbumCreationForm = true">
@@ -58,7 +58,7 @@
 				<Plus />
 			</template>
 			{{ t('photos', 'Create new album') }}
-		</Button>
+		</NcButton>
 	</div>
 
 	<AlbumForm v-else
@@ -72,22 +72,21 @@
 import Plus from 'vue-material-design-icons/Plus'
 import ImageMultiple from 'vue-material-design-icons/ImageMultiple'
 
-import { Button } from '@nextcloud/vue'
+import { NcButton, NcLoadingIcon } from '@nextcloud/vue'
 import { generateUrl } from '@nextcloud/router'
 
 import FetchAlbumsMixin from '../mixins/FetchAlbumsMixin.js'
 import AlbumForm from './AlbumForm.vue'
-import Loader from '../components/Loader.vue'
 
 export default {
 	name: 'AlbumPicker',
 
 	components: {
-		Button,
-		AlbumForm,
-		Loader,
 		Plus,
 		ImageMultiple,
+		NcButton,
+		NcLoadingIcon,
+		AlbumForm,
 	},
 
 	filters: {

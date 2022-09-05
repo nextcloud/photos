@@ -24,18 +24,18 @@
 <template>
 	<div>
 		<!-- Errors handlers-->
-		<EmptyContent v-if="error">
+		<NcEmptyContent v-if="error">
 			{{ t('photos', 'An error occurred') }}
-		</EmptyContent>
+		</NcEmptyContent>
 
-		<EmptyContent v-if="!loading && !hasTagsWithFiles" key="emptycontent" illustration-name="empty">
+		<NcEmptyContent v-if="!loading && !hasTagsWithFiles" key="Ncemptycontent" illustration-name="empty">
 			{{ t('photos', 'No tags yet') }}
 			<template #desc>
 				{{ t('photos', 'Photos with tags will show up here') }}
 			</template>
-		</EmptyContent>
+		</NcEmptyContent>
 
-		<Loader v-if="loading" class="loader" />
+		<NcLoadingIcon v-if="loading" class="loader" />
 
 		<div v-else class="container">
 			<h2 v-if="popularTags.length">
@@ -57,18 +57,17 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import EmptyContent from '../components/EmptyContent'
-import TagCover from '../components/TagCover'
+import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 
-import Loader from '../components/Loader'
-import AbortControllerMixin from '../mixins/AbortControllerMixin'
+import TagCover from '../components/TagCover.vue'
+import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 
 export default {
 	name: 'Tags',
 	components: {
-		Loader,
 		TagCover,
-		EmptyContent,
+		NcLoadingIcon,
+		NcEmptyContent,
 	},
 	mixins: [AbortControllerMixin],
 

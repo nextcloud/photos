@@ -21,37 +21,37 @@
  -->
 <template>
 	<!-- Errors handlers-->
-	<EmptyContent v-if="errorFetchingAlbums">
+	<NcEmptyContent v-if="errorFetchingAlbums">
 		{{ t('photos', 'An error occurred') }}
-	</EmptyContent>
+	</NcEmptyContent>
 
 	<!-- Album list -->
 	<div v-else class="albums">
 		<div class="albums__header">
-			<Button type="primary"
+			<NcButton type="primary"
 				:aria-label="t('photos', 'Create a new album.')"
 				@click="showAlbumCreationForm = true">
 				<template #icon>
 					<Plus />
 				</template>
 				{{ t('photos', 'New album') }}
-			</Button>
+			</NcButton>
 
-			<Loader v-if="loadingAlbums" />
+			<NcLoadingIcon v-if="loadingAlbums" />
 		</div>
 
 		<!-- No albums -->
 		<div v-if="noAlbums && !loadingAlbums" class="albums__empty">
-			<EmptyContent>
+			<NcEmptyContent>
 				<template #icon>
 					<FolderMultipleImage />
 				</template>
 				<template #desc>
 					{{ t('photos', "There is no album yet!") }}
 				</template>
-			</EmptyContent>
+			</NcEmptyContent>
 
-			<Button class="albums__empty__button"
+			<NcButton class="albums__empty__button"
 				type="primary"
 				:aria-label="t('photos', 'Create a new album')"
 				@click="showAlbumCreationForm = true">
@@ -59,7 +59,7 @@
 					<Plus />
 				</template>
 				{{ t('photos', "Add") }}
-			</Button>
+			</NcButton>
 		</div>
 
 		<div v-else-if="!noAlbums" class="albums__list">
@@ -69,11 +69,11 @@
 				:base-name="album.basename" />
 		</div>
 
-		<Modal v-if="showAlbumCreationForm"
+		<NcModal v-if="showAlbumCreationForm"
 			:title="t('photos', 'New album')"
 			@close="showAlbumCreationForm = false">
 			<AlbumForm @done="handleAlbumCreated" />
-		</Modal>
+		</NcModal>
 	</div>
 </template>
 
@@ -81,24 +81,23 @@
 import Plus from 'vue-material-design-icons/Plus'
 import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage'
 
-import { Button, Modal, EmptyContent } from '@nextcloud/vue'
+import { NcButton, NcModal, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 
 import FetchAlbumsMixin from '../mixins/FetchAlbumsMixin.js'
 import AlbumCover from '../components/AlbumCover.vue'
 import AlbumForm from '../components/AlbumForm.vue'
-import Loader from '../components/Loader.vue'
 
 export default {
 	name: 'Albums',
 	components: {
-		AlbumCover,
-		EmptyContent,
-		AlbumForm,
-		Loader,
-		Modal,
-		Button,
 		Plus,
 		FolderMultipleImage,
+		NcEmptyContent,
+		NcModal,
+		NcButton,
+		NcLoadingIcon,
+		AlbumCover,
+		AlbumForm,
 	},
 
 	mixins: [
@@ -140,7 +139,6 @@ export default {
 		align-items: center;
 		padding: 0 64px;
 		position: sticky;
-		top: var(--header-height);
 		width: 100%;
 		z-index: 3;
 		background: var(--color-main-background);

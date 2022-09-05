@@ -21,14 +21,14 @@
  -->
 <template>
 	<div class="files-list-viewer">
-		<EmptyContent v-if="emptyMessage !== '' && items.length === 0 && !loading"
-			key="emptycontent">
+		<NcEmptyContent v-if="emptyMessage !== '' && items.length === 0 && !loading"
+			key="Ncemptycontent">
 			<template #icon>
 				<!-- eslint-disable-next-line vue/no-v-html -->
 				<span class="empty-content-illustration" v-html="EmptyBox" />
 			</template>
 			{{ emptyMessage }}
-		</EmptyContent>
+		</NcEmptyContent>
 
 		<TiledLayout :base-height="baseHeight" :items="items">
 			<VirtualScrolling slot-scope="{rows}"
@@ -50,7 +50,7 @@
 					</div>
 				</ul>
 				<template v-if="loading" #loader>
-					<Loader class="files-list-viewer__loader" />
+					<NcLoadingIcon class="files-list-viewer__loader" />
 				</template>
 			</VirtualScrolling>
 		</TiledLayout>
@@ -59,21 +59,20 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import { EmptyContent } from '@nextcloud/vue'
+import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 
 import TiledLayout from '../components/TiledLayout.vue'
 import VirtualScrolling from '../components/VirtualScrolling.vue'
-import Loader from '../components/Loader.vue'
 import EmptyBox from '../assets/Illustrations/empty.svg'
 
 export default {
 	name: 'FilesListViewer',
 
 	components: {
-		EmptyContent,
+		NcEmptyContent,
+		NcLoadingIcon,
 		TiledLayout,
 		VirtualScrolling,
-		Loader,
 	},
 
 	props: {
