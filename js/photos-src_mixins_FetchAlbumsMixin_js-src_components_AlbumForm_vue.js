@@ -19,16 +19,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _nextcloud_moment__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_moment__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _Loader_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Loader.vue */ "./src/components/Loader.vue");
 /* harmony import */ var _CollaboratorsSelectionForm_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./CollaboratorsSelectionForm.vue */ "./src/components/CollaboratorsSelectionForm.vue");
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 //
 //
 //
@@ -154,7 +144,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       default: false
     }
   },
-  data: function data() {
+
+  data() {
     return {
       showCollaboratorView: false,
       albumName: '',
@@ -162,26 +153,29 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       loading: false
     };
   },
+
   computed: {
-    editMode: function editMode() {
+    editMode() {
       return this.album !== null;
     }
-  },
-  mounted: function mounted() {
-    var _this = this;
 
+  },
+
+  mounted() {
     if (this.editMode) {
       this.albumName = this.album.basename;
       this.albumLocation = this.album.location;
     }
 
-    this.$nextTick(function () {
-      _this.$refs.nameInput.focus();
+    this.$nextTick(() => {
+      this.$refs.nameInput.focus();
     });
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)(['createAlbum', 'renameAlbum', 'updateAlbumLocation'])), {}, {
-    submit: function submit() {
-      var collaborators = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+
+  methods: { ...(0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)(['createAlbum', 'renameAlbum', 'updateAlbumLocation']),
+
+    submit() {
+      let collaborators = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 
       if (this.albumName === '' || this.loading) {
         return;
@@ -193,117 +187,65 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         this.handleCreateAlbum(collaborators);
       }
     },
-    handleCreateAlbum: function handleCreateAlbum() {
-      var _arguments = arguments,
-          _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        var collaborators, album;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                collaborators = _arguments.length > 0 && _arguments[0] !== undefined ? _arguments[0] : [];
-                _context.prev = 1;
-                _this2.loading = true;
-                _context.next = 5;
-                return _this2.createAlbum({
-                  album: {
-                    basename: _this2.albumName,
-                    nbItems: 0,
-                    location: _this2.albumLocation,
-                    lastPhoto: '',
-                    date: _nextcloud_moment__WEBPACK_IMPORTED_MODULE_2___default()().format('MMMM YYYY'),
-                    collaborators: collaborators
-                  }
-                });
+    async handleCreateAlbum() {
+      let collaborators = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 
-              case 5:
-                album = _context.sent;
-
-                _this2.$emit('done', {
-                  album: album
-                });
-
-              case 7:
-                _context.prev = 7;
-                _this2.loading = false;
-                return _context.finish(7);
-
-              case 10:
-              case "end":
-                return _context.stop();
-            }
+      try {
+        this.loading = true;
+        const album = await this.createAlbum({
+          album: {
+            basename: this.albumName,
+            nbItems: 0,
+            location: this.albumLocation,
+            lastPhoto: '',
+            date: _nextcloud_moment__WEBPACK_IMPORTED_MODULE_2___default()().format('MMMM YYYY'),
+            collaborators
           }
-        }, _callee, null, [[1,, 7, 10]]);
-      }))();
+        });
+        this.$emit('done', {
+          album
+        });
+      } finally {
+        this.loading = false;
+      }
     },
-    handleUpdateAlbum: function handleUpdateAlbum() {
-      var _arguments2 = arguments,
-          _this3 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-        var collaborators, album;
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                collaborators = _arguments2.length > 0 && _arguments2[0] !== undefined ? _arguments2[0] : [];
-                _context2.prev = 1;
-                _this3.loading = true;
-                album = _objectSpread({}, _this3.album);
+    async handleUpdateAlbum() {
+      let collaborators = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 
-                if (!(_this3.album.basename !== _this3.albumName)) {
-                  _context2.next = 8;
-                  break;
-                }
+      try {
+        this.loading = true;
+        let album = { ...this.album
+        };
 
-                _context2.next = 7;
-                return _this3.renameAlbum({
-                  currentAlbumName: _this3.album.basename,
-                  newAlbumName: _this3.albumName
-                });
+        if (this.album.basename !== this.albumName) {
+          album = await this.renameAlbum({
+            currentAlbumName: this.album.basename,
+            newAlbumName: this.albumName
+          });
+        }
 
-              case 7:
-                album = _context2.sent;
+        if (this.album.location !== this.albumLocation) {
+          album.location = await this.updateAlbumLocation({
+            albumName: this.albumName,
+            newLocation: this.albumLocation
+          });
+        }
 
-              case 8:
-                if (!(_this3.album.location !== _this3.albumLocation)) {
-                  _context2.next = 12;
-                  break;
-                }
-
-                _context2.next = 11;
-                return _this3.updateAlbumLocation({
-                  albumName: _this3.albumName,
-                  newLocation: _this3.albumLocation
-                });
-
-              case 11:
-                album.location = _context2.sent;
-
-              case 12:
-                _this3.$emit('done', {
-                  album: album
-                });
-
-              case 13:
-                _context2.prev = 13;
-                _this3.loading = false;
-                return _context2.finish(13);
-
-              case 16:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, null, [[1,, 13, 16]]);
-      }))();
+        this.$emit('done', {
+          album
+        });
+      } finally {
+        this.loading = false;
+      }
     },
-    back: function back() {
+
+    back() {
       this.$emit('back');
     }
-  })
+
+  }
 });
 
 /***/ }),
@@ -365,11 +307,13 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     Magnify: vue_material_design_icons_Magnify__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  data: function data() {
+
+  data() {
     return {
       loading: false
     };
   }
+
 });
 
 /***/ }),
@@ -391,18 +335,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _nextcloud_auth__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @nextcloud/auth */ "./node_modules/@nextcloud/auth/dist/index.esm.js");
 /* harmony import */ var _services_DavClient_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../services/DavClient.js */ "./src/services/DavClient.js");
 /* harmony import */ var _services_logger_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/logger.js */ "./src/services/logger.js");
-/* harmony import */ var _utils_CancelableRequest_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/CancelableRequest.js */ "./src/utils/CancelableRequest.js");
-/* harmony import */ var _utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../utils/fileUtils.js */ "./src/utils/fileUtils.js");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
+/* harmony import */ var _utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/fileUtils.js */ "./src/utils/fileUtils.js");
+/* harmony import */ var _AbortControllerMixin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./AbortControllerMixin */ "./src/mixins/AbortControllerMixin.js");
 /**
  * @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
  *
@@ -434,149 +368,94 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'FetchAlbumsMixin',
-  data: function data() {
+
+  data() {
     return {
       errorFetchingAlbums: null,
-      loadingAlbums: false,
-      cancelAlbumsRequest: function cancelAlbumsRequest() {}
+      loadingAlbums: false
     };
   },
-  beforeMount: function beforeMount() {
-    var _this = this;
 
-    return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-      return regeneratorRuntime.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _this.fetchAlbums();
+  mixins: [_AbortControllerMixin__WEBPACK_IMPORTED_MODULE_6__["default"]],
 
-            case 1:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }))();
+  async beforeMount() {
+    this.fetchAlbums();
   },
-  beforeDestroy: function beforeDestroy() {
+
+  beforeDestroy() {
     this.cancelAlbumsRequest('Changed view');
   },
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_7__.mapGetters)(['albums'])),
+
+  computed: { ...(0,vuex__WEBPACK_IMPORTED_MODULE_7__.mapGetters)(['albums'])
+  },
   methods: {
-    fetchAlbums: function fetchAlbums() {
-      var _this2 = this;
+    async fetchAlbums() {
+      if (this.loadingAlbums) {
+        return;
+      }
 
-      return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-        var _getCurrentUser, _cancelableRequest, request, cancel, response, albums, _error$response;
+      try {
+        this.loadingAlbums = true;
+        this.errorFetchingAlbums = null;
+        const response = await _services_DavClient_js__WEBPACK_IMPORTED_MODULE_3__["default"].getDirectoryContents(`/photos/${(0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_2__.getCurrentUser)()?.uid}/albums`, {
+          data: `<?xml version="1.0"?>
+							<d:propfind xmlns:d="DAV:"
+								xmlns:oc="http://owncloud.org/ns"
+								xmlns:nc="http://nextcloud.org/ns"
+								xmlns:ocs="http://open-collaboration-services.org/ns">
+								<d:prop>
+									<nc:last-photo />
+									<nc:nbItems />
+									<nc:location />
+									<nc:dateRange />
+								</d:prop>
+							</d:propfind>`,
+          details: true,
+          signal: this.abortController.signal
+        });
+        const albums = response.data.filter(album => album.filename !== '/photos/admin/albums').map(album => (0,_utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_5__.genFileInfo)(album)).map(album => {
+          const dateRange = JSON.parse(album.dateRange?.replace(/&quot;/g, '"') ?? '{}');
 
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                if (!_this2.loadingAlbums) {
-                  _context2.next = 2;
-                  break;
-                }
-
-                return _context2.abrupt("return");
-
-              case 2:
-                _context2.prev = 2;
-                _this2.loadingAlbums = true;
-                _this2.errorFetchingAlbums = null;
-                _cancelableRequest = (0,_utils_CancelableRequest_js__WEBPACK_IMPORTED_MODULE_5__["default"])(_services_DavClient_js__WEBPACK_IMPORTED_MODULE_3__["default"].getDirectoryContents), request = _cancelableRequest.request, cancel = _cancelableRequest.cancel;
-                _this2.cancelAlbumsRequest = cancel;
-                _context2.next = 9;
-                return request("/photos/".concat((_getCurrentUser = (0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_2__.getCurrentUser)()) === null || _getCurrentUser === void 0 ? void 0 : _getCurrentUser.uid, "/albums"), {
-                  data: "<?xml version=\"1.0\"?>\n\t\t\t\t\t\t\t<d:propfind xmlns:d=\"DAV:\"\n\t\t\t\t\t\t\t\txmlns:oc=\"http://owncloud.org/ns\"\n\t\t\t\t\t\t\t\txmlns:nc=\"http://nextcloud.org/ns\"\n\t\t\t\t\t\t\t\txmlns:ocs=\"http://open-collaboration-services.org/ns\">\n\t\t\t\t\t\t\t\t<d:prop>\n\t\t\t\t\t\t\t\t\t<nc:last-photo />\n\t\t\t\t\t\t\t\t\t<nc:nbItems />\n\t\t\t\t\t\t\t\t\t<nc:location />\n\t\t\t\t\t\t\t\t\t<nc:dateRange />\n\t\t\t\t\t\t\t\t</d:prop>\n\t\t\t\t\t\t\t</d:propfind>",
-                  details: true
-                });
-
-              case 9:
-                response = _context2.sent;
-                albums = response.data.filter(function (album) {
-                  return album.filename !== '/photos/admin/albums';
-                }).map(function (album) {
-                  return (0,_utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_6__.genFileInfo)(album);
-                }).map(function (album) {
-                  var _album$dateRange$repl, _album$dateRange;
-
-                  var dateRange = JSON.parse((_album$dateRange$repl = (_album$dateRange = album.dateRange) === null || _album$dateRange === void 0 ? void 0 : _album$dateRange.replace(/&quot;/g, '"')) !== null && _album$dateRange$repl !== void 0 ? _album$dateRange$repl : '{}');
-
-                  if (dateRange.start === null) {
-                    dateRange.start = _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0___default()().unix();
-                    dateRange.end = _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0___default()().unix();
-                  }
-
-                  var dateRangeFormated = {
-                    startDate: _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0___default().unix(dateRange.start).format('MMMM YYYY'),
-                    endDate: _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0___default().unix(dateRange.end).format('MMMM YYYY')
-                  };
-
-                  if (dateRangeFormated.startDate === dateRangeFormated.endDate) {
-                    return _objectSpread(_objectSpread({}, album), {}, {
-                      date: _this2.t('photos', '{startDate}', dateRangeFormated)
-                    });
-                  } else {
-                    return _objectSpread(_objectSpread({}, album), {}, {
-                      date: _this2.t('photos', '{startDate} to {endDate}', dateRangeFormated)
-                    });
-                  }
-                });
-
-                _this2.$store.dispatch('addAlbums', {
-                  albums: albums
-                });
-
-                _services_logger_js__WEBPACK_IMPORTED_MODULE_4__["default"].debug("[FetchAlbumsMixin] Fetched ".concat(albums.length, " new files: "), albums);
-                _context2.next = 28;
-                break;
-
-              case 15:
-                _context2.prev = 15;
-                _context2.t0 = _context2["catch"](2);
-
-                if (!(((_error$response = _context2.t0.response) === null || _error$response === void 0 ? void 0 : _error$response.status) === 404)) {
-                  _context2.next = 21;
-                  break;
-                }
-
-                _this2.errorFetchingAlbums = 404;
-                _context2.next = 26;
-                break;
-
-              case 21:
-                if (!(_context2.t0.code === 'ERR_CANCELED')) {
-                  _context2.next = 25;
-                  break;
-                }
-
-                return _context2.abrupt("return");
-
-              case 25:
-                _this2.errorFetchingAlbums = _context2.t0;
-
-              case 26:
-                _services_logger_js__WEBPACK_IMPORTED_MODULE_4__["default"].error(t('photos', 'Failed to fetch albums list.'), _context2.t0);
-                (0,_nextcloud_dialogs__WEBPACK_IMPORTED_MODULE_1__.showError)(t('photos', 'Failed to fetch albums list.'));
-
-              case 28:
-                _context2.prev = 28;
-
-                _this2.cancelAlbumsRequest = function () {};
-
-                _this2.loadingAlbums = false;
-                return _context2.finish(28);
-
-              case 32:
-              case "end":
-                return _context2.stop();
-            }
+          if (dateRange.start === null) {
+            dateRange.start = _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0___default()().unix();
+            dateRange.end = _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0___default()().unix();
           }
-        }, _callee2, null, [[2, 15, 28, 32]]);
-      }))();
+
+          const dateRangeFormated = {
+            startDate: _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0___default().unix(dateRange.start).format('MMMM YYYY'),
+            endDate: _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0___default().unix(dateRange.end).format('MMMM YYYY')
+          };
+
+          if (dateRangeFormated.startDate === dateRangeFormated.endDate) {
+            return { ...album,
+              date: dateRangeFormated
+            };
+          } else {
+            return { ...album,
+              date: this.t('photos', '{startDate} to {endDate}', dateRangeFormated)
+            };
+          }
+        });
+        this.$store.dispatch('addAlbums', {
+          albums
+        });
+        _services_logger_js__WEBPACK_IMPORTED_MODULE_4__["default"].debug(`[FetchAlbumsMixin] Fetched ${albums.length} new files: `, albums);
+      } catch (error) {
+        if (error.response?.status === 404) {
+          this.errorFetchingAlbums = 404;
+        } else if (error.code === 'ERR_CANCELED') {
+          return;
+        } else {
+          this.errorFetchingAlbums = error;
+        }
+
+        _services_logger_js__WEBPACK_IMPORTED_MODULE_4__["default"].error(t('photos', 'Failed to fetch albums list.'), error);
+        (0,_nextcloud_dialogs__WEBPACK_IMPORTED_MODULE_1__.showError)(t('photos', 'Failed to fetch albums list.'));
+      } finally {
+        this.loadingAlbums = false;
+      }
     }
+
   }
 });
 
@@ -1279,4 +1158,4 @@ render._withStripped = true
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_mixins_FetchAlbumsMixin_js-src_components_AlbumForm_vue.js.map?v=35df94247fb248d71f3e
+//# sourceMappingURL=photos-src_mixins_FetchAlbumsMixin_js-src_components_AlbumForm_vue.js.map?v=192eb855e0bfa19da939

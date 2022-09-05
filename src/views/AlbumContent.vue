@@ -138,7 +138,6 @@
 
 		<FilesListViewer v-if="album !== undefined"
 			class="album__photos"
-			:use-window="true"
 			:file-ids="albumFileIds"
 			:base-height="isMobile ? 120 : 200"
 			:loading="loadingFiles || loadingAlbums">
@@ -465,6 +464,7 @@ export default {
 .album {
 	display: flex;
 	flex-direction: column;
+	height: 100%;
 
 	&__empty {
 		display: flex;
@@ -491,7 +491,7 @@ export default {
 
 	&__header {
 		display: flex;
-		min-height: 60px;
+		height: 60px;
 		align-items: center;
 		justify-content: space-between;
 		position: sticky;
@@ -499,6 +499,7 @@ export default {
 		z-index: 3;
 		background: var(--color-main-background);
 		padding: 8px 64px 32px 64px;
+		box-sizing: content-box;
 
 		@media only screen and (max-width: 1200px) {
 			padding: 8px 48px 32px 48px;
@@ -530,14 +531,13 @@ export default {
 	}
 
 	&__photos {
-		height: 100%;
+		height: calc(100% - 60px);
 		min-height: 0; // Prevent it from overflowing in a flex context.
 		padding: 0 64px;
 
 		@media only screen and (max-width: 1200px) {
 			padding: 0 4px;
 		}
-
 	}
 }
 

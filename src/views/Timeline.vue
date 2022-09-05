@@ -95,7 +95,6 @@
 
 		<FilesListViewer ref="filesListViewer"
 			class="timeline__file-list"
-			:use-window="true"
 			:file-ids-by-section="fileIdsByMonth"
 			:sections="monthsList"
 			:loading="loadingFiles"
@@ -334,10 +333,11 @@ export default {
 .timeline {
 	display: flex;
 	flex-direction: column;
+	height: 100%;
 
 	&__header {
 		display: flex;
-		min-height: 60px;
+		height: 60px;
 		align-items: center;
 		position: sticky;
 		top: var(--header-height);
@@ -362,13 +362,14 @@ export default {
 
 	&__file-list {
 		padding: 0 64px;
+		height: calc(100% - 60px);
 
 		@media only screen and (max-width: 1200px) {
 			padding: 0 4px;
 		}
 
 		::v-deep .files-list-viewer__section-header {
-			top: calc(var(--header-height) + 60px);
+			top: 0;
 		}
 
 		.section-header {

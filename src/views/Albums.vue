@@ -132,20 +132,22 @@ export default {
 .albums {
 	display: flex;
 	flex-direction: column;
+	height: 100%;
 
 	&__header {
 		display: flex;
-		min-height: 60px;
+		height: 60px;
 		align-items: center;
-		padding: 8px 64px 32px 64px;
+		padding: 0 64px;
 		position: sticky;
 		top: var(--header-height);
 		width: 100%;
 		z-index: 3;
 		background: var(--color-main-background);
+		box-sizing: content-box;
 
 		@media only screen and (max-width: 1200px) {
-			padding: 8px 48px 32px 48px;
+			padding: 0 48px;
 		}
 
 		button {
@@ -154,15 +156,17 @@ export default {
 	}
 
 	&__list {
-		padding: 0px 48px 32px 48px;
+		padding: 32px 48px;
 		flex-grow: 1;
 		display: flex;
 		flex-wrap: wrap;
 		gap: 16px;
 		align-items: flex-start;
+		height: calc(100% - 60px);
+		overflow-x: scroll;
 
 		@media only screen and (max-width: 1200px) {
-			padding: 0px 12px 32px 12px;
+			padding: 32px 12px;
 			justify-content: center;
 		}
 
