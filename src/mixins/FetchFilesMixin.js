@@ -70,7 +70,7 @@ export default {
 				this.loadingFiles = true
 				this.semaphoreSymbol = semaphoreSymbol
 
-				const numberOfImagesPerBatch = 1000
+				const numberOfImagesPerBatch = 200
 
 				// Load next batch of images
 				const fetchedFiles = await getPhotos(path, {
