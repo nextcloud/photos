@@ -162,7 +162,9 @@ export default {
 		if ('serviceWorker' in navigator) {
 			// Use the window load event to keep the page load performant
 			window.addEventListener('load', () => {
-				navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js'), {
+				navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js', {}, {
+					noRewrite: true,
+				}), {
 					scope: '/',
 				}).then(registration => {
 					console.debug('SW registered: ', registration)
@@ -181,7 +183,9 @@ export default {
 
 	beforeDestroy() {
 		window.removeEventListener('load', () => {
-			navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js'))
+			navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js', {}, {
+				noRewrite: true,
+			}))
 		})
 	},
 
