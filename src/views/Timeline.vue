@@ -24,32 +24,32 @@
 
 <template>
 	<!-- Errors handlers -->
-	<EmptyContent v-if="errorFetchingFiles">
+	<NcEmptyContent v-if="errorFetchingFiles">
 		{{ t('photos', 'An error occurred') }}
-	</EmptyContent>
+	</NcEmptyContent>
 
 	<div v-else class="timeline">
 		<div class="timeline__header">
-			<Actions v-if="selectedFileIds.length === 0"
+			<NcActions v-if="selectedFileIds.length === 0"
 				:force-title="true"
 				:force-menu="true"
 				:menu-title="t('photos', 'Add')"
 				:primary="true">
 				<Plus slot="icon" />
-				<ActionButton :close-after-click="true" @click="openUploader">
+				<NcActionButton :close-after-click="true" @click="openUploader">
 					{{ t('photos', 'Upload media') }}
 					<FileUpload slot="icon" />
-				</ActionButton>
-				<ActionButton :close-after-click="true"
+				</NcActionButton>
+				<NcActionButton :close-after-click="true"
 					:aria-label="t('photos', 'Create a new album')"
 					@click="showAlbumCreationForm = true">
 					{{ t('photos', 'Create new album') }}
 					<PlusBoxMultiple slot="icon" />
-				</ActionButton>
-			</Actions>
+				</NcActionButton>
+			</NcActions>
 
 			<template v-else>
-				<Button :close-after-click="true"
+				<NcButton :close-after-click="true"
 					type="primary"
 					:aria-label="t('photos', 'Add selection to an album')"
 					@click="showAlbumPicker = true">
@@ -57,45 +57,44 @@
 						<Plus slot="icon" />
 					</template>
 					{{ t('photos', 'Add to album') }}
-				</Button>
-				<Actions>
-					<ActionButton :close-after-click="true"
+				</NcButton>
+				<NcActions>
+					<NcActionButton :close-after-click="true"
 						:aria-label="t('photos', 'Download selection')"
 						@click="downloadSelection">
 						{{ t('photos', 'Download') }}
 						<Download slot="icon" />
-					</ActionButton>
-					<ActionButton v-if="shouldFavorite"
+					</NcActionButton>
+					<NcActionButton v-if="shouldFavorite"
 						:close-after-click="true"
 						:aria-label="t('photos', 'Mark selection as favorite')"
 						@click="favoriteSelection">
 						{{ t('photos', 'Favorite') }}
 						<Star slot="icon" />
-					</ActionButton>
-					<ActionButton v-else
+					</NcActionButton>
+					<NcActionButton v-else
 						:close-after-click="true"
 						:aria-label="t('photos', 'Remove selection from favorites')"
 						@click="unFavoriteSelection">
 						{{ t('photos', 'Remove from favorites') }}
 						<Star slot="icon" />
-					</ActionButton>
-					<ActionButton :close-after-click="true"
+					</NcActionButton>
+					<NcActionButton :close-after-click="true"
 						:aria-label="t('photos', 'Delete selection')"
 						@click="deleteSelection">
 						{{ t('photos', 'Delete') }}
 						<Delete slot="icon" />
-					</ActionButton>
-				</Actions>
+					</NcActionButton>
+				</NcActions>
 				<!-- HACK: Needed to make the above Actions work, no idea why be it is like that in the documentation. -->
-				<Actions />
+				<NcActions />
 			</template>
 
-			<Loader v-if="loadingCount > 0" key="loader" />
+			<NcLoadingIcon v-if="loadingCount > 0" key="loader" :size="32" />
 		</div>
 
 		<FilesListViewer ref="filesListViewer"
 			class="timeline__file-list"
-			:use-window="true"
 			:file-ids-by-section="fileIdsByMonth"
 			:sections="monthsList"
 			:loading="loadingFiles"
@@ -120,19 +119,21 @@
 			</template>
 		</FilesListViewer>
 
-		<Modal v-if="showAlbumCreationForm"
+		<NcModal v-if="showAlbumCreationForm"
 			key="albumCreationForm"
+			:close-button-contained="false"
 			:title="t('photos', 'New album')"
 			@close="showAlbumCreationForm = false">
 			<AlbumForm @done="showAlbumCreationForm = false" />
-		</Modal>
+		</NcModal>
 
-		<Modal v-if="showAlbumPicker"
+		<NcModal v-if="showAlbumPicker"
 			key="albumPicker"
+			:close-button-contained="false"
 			:title="t('photos', 'Add to album')"
 			@close="showAlbumPicker = false">
 			<AlbumPicker @album-picked="addSelectionToAlbum" />
-		</Modal>
+		</NcModal>
 	</div>
 </template>
 
@@ -145,7 +146,7 @@ import FileUpload from 'vue-material-design-icons/FileUpload'
 import Star from 'vue-material-design-icons/Star'
 import Download from 'vue-material-design-icons/Download'
 
-import { Modal, Actions, ActionButton, Button, isMobile } from '@nextcloud/vue'
+import { NcModal, NcActions, NcActionButton, NcButton, NcLoadingIcon, NcEmptyContent, isMobile } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 
 import logger from '../services/logger.js'
@@ -154,31 +155,29 @@ import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import FilesListViewer from '../components/FilesListViewer.vue'
-import EmptyContent from '../components/EmptyContent.vue'
 import File from '../components/File.vue'
-import Loader from '../components/Loader.vue'
 import AlbumForm from '../components/AlbumForm.vue'
 import AlbumPicker from '../components/AlbumPicker.vue'
 
 export default {
 	name: 'Timeline',
 	components: {
-		EmptyContent,
-		AlbumForm,
-		AlbumPicker,
-		FilesListViewer,
-		Loader,
-		File,
-		Modal,
-		Actions,
-		ActionButton,
-		Button,
-		Plus,
 		Delete,
 		FileUpload,
 		PlusBoxMultiple,
 		Star,
 		Download,
+		NcLoadingIcon,
+		NcEmptyContent,
+		NcModal,
+		NcActions,
+		NcActionButton,
+		NcButton,
+		Plus,
+		AlbumForm,
+		AlbumPicker,
+		FilesListViewer,
+		File,
 	},
 
 	filters: {
@@ -334,13 +333,12 @@ export default {
 .timeline {
 	display: flex;
 	flex-direction: column;
+	height: 100%;
 
 	&__header {
 		display: flex;
-		min-height: 60px;
 		align-items: center;
 		position: sticky;
-		top: var(--header-height);
 		width: 100%;
 		height: 60px;
 		z-index: 3;
@@ -362,13 +360,14 @@ export default {
 
 	&__file-list {
 		padding: 0 64px;
+		height: calc(100% - 60px);
 
 		@media only screen and (max-width: 1200px) {
 			padding: 0 4px;
 		}
 
 		::v-deep .files-list-viewer__section-header {
-			top: calc(var(--header-height) + 60px);
+			top: 0;
 		}
 
 		.section-header {

@@ -1,21 +1,21 @@
 <template>
-	<AppSettingsDialog :open="open"
+	<NcAppSettingsDialog :open="open"
 		:show-navigation="true"
 		:title="t('photos', 'Photos settings')"
 		@update:open="onClose">
-		<AppSettingsSection id="layout-settings" :title="t('photos', 'View')">
+		<NcAppSettingsSection id="layout-settings" :title="t('photos', 'View')">
 			<CroppedLayoutSettings />
-		</AppSettingsSection>
+		</NcAppSettingsSection>
 
-		<AppSettingsSection id="directory-settings" :title="t('photos', 'Photos directory')">
+		<NcAppSettingsSection id="directory-settings" :title="t('photos', 'Photos directory')">
 			<PhotosLocationSettings />
-		</AppSettingsSection>
-	</AppSettingsDialog>
+		</NcAppSettingsSection>
+	</NcAppSettingsDialog>
 </template>
 
 <script>
-import AppSettingsDialog from '@nextcloud/vue/dist/Components/AppSettingsDialog.js'
-import AppSettingsSection from '@nextcloud/vue/dist/Components/AppSettingsSection.js'
+import { NcAppSettingsDialog, NcAppSettingsSection } from '@nextcloud/vue'
+
 import CroppedLayoutSettings from './CroppedLayoutSettings.vue'
 import PhotosLocationSettings from './PhotosLocationSettings.vue'
 
@@ -23,8 +23,8 @@ export default {
 	name: 'SettingsDialog',
 
 	components: {
-		AppSettingsDialog,
-		AppSettingsSection,
+		NcAppSettingsDialog,
+		NcAppSettingsSection,
 		CroppedLayoutSettings,
 		PhotosLocationSettings,
 	},

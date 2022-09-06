@@ -22,31 +22,31 @@
 <template>
 	<form v-if="!showCollaboratorView" class="album-form" @submit.prevent="submit">
 		<div class="form-inputs">
-			<input ref="nameInput"
-				v-model.trim="albumName"
+			<NcTextField ref="nameInput"
+				:value.sync="albumName"
 				type="text"
 				name="name"
-				required
+				:required="true"
 				autofocus="true"
-				:placeholder="t('photos', 'Name of the album')">
+				:placeholder="t('photos', 'Name of the album')" />
 			<label>
-				<MapMarker /><input v-model.trim="albumLocation"
+				<MapMarker /><NcTextField :value.sync="albumLocation"
 					name="location"
 					type="text"
-					:placeholder="t('photos', 'Location of the album')">
+					:placeholder="t('photos', 'Location of the album')" />
 			</label>
 		</div>
 		<div class="form-buttons">
 			<span class="left-buttons">
-				<Button v-if="displayBackButton"
+				<NcButton v-if="displayBackButton"
 					:aria-label="t('photos', 'Go back to the previous view.')"
 					type="tertiary"
 					@click="back">
 					{{ t('photos', 'Back') }}
-				</Button>
+				</NcButton>
 			</span>
 			<span class="right-buttons">
-				<!-- <Button v-if="!editMode"
+				<!-- <NcButton v-if="!editMode"
 					:aria-label="t('photos', 'Go to the add collaborators view.')"
 					type="secondary"
 					:disabled="albumName.trim() === '' || loading"
@@ -55,17 +55,17 @@
 						<AccountMultiplePlus />
 					</template>
 					{{ t('photos', 'Add collaborators') }}
-				</Button> -->
-				<Button :aria-label="editMode ? t('photos', 'Save.') : t('photos', 'Create the album.')"
+				</NcButton> -->
+				<NcButton :aria-label="editMode ? t('photos', 'Save.') : t('photos', 'Create the album.')"
 					type="primary"
 					:disabled="albumName === '' || loading"
 					@click="submit()">
 					<template #icon>
-						<Loader v-if="loading" />
+						<NcLoadingIcon v-if="loading" />
 						<Send v-else />
 					</template>
 					{{ editMode ? t('photos', 'Save') : t('photos', 'Create album') }}
-				</Button>
+				</NcButton>
 			</span>
 		</div>
 	</form>
@@ -74,48 +74,48 @@
 		@cancel="showCollaboratorView = true">
 		<template slot-scope="{collaborators}">
 			<span class="left-buttons">
-				<Button :aria-label="t('photos', 'Back to the new album form.')"
+				<NcButton :aria-label="t('photos', 'Back to the new album form.')"
 					type="tertiary"
 					@click="showCollaboratorView = false">
 					{{ t('photos', 'Back') }}
-				</Button>
+				</NcButton>
 			</span>
 			<span class="right-buttons">
-				<Button :aria-label="editMode ? t('photos', 'Save.') : t('photos', 'Create the album.')"
+				<NcButton :aria-label="editMode ? t('photos', 'Save.') : t('photos', 'Create the album.')"
 					type="primary"
 					:disabled="albumName.trim() === '' || loading"
 					@click="submit(collaborators)">
 					<template #icon>
-						<Loader v-if="loading" />
+						<NcLoadingIcon v-if="loading" />
 						<Send v-else />
 					</template>
 					{{ editMode ? t('photos', 'Save') : t('photos', 'Create album') }}
-				</Button>
+				</NcButton>
 			</span>
 		</template>
 	</CollaboratorsSelectionForm>
 </template>
 <script>
 import { mapActions } from 'vuex'
-// import MapMarker from 'vue-material-design-icons/MapMarker'
+import MapMarker from 'vue-material-design-icons/MapMarker'
 // import AccountMultiplePlus from 'vue-material-design-icons/AccountMultiplePlus'
 import Send from 'vue-material-design-icons/Send'
 
-import { Button } from '@nextcloud/vue'
+import { NcButton, NcLoadingIcon, NcTextField } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 
-import Loader from './Loader.vue'
 import CollaboratorsSelectionForm from './CollaboratorsSelectionForm.vue'
 
 export default {
 	name: 'AlbumForm',
 
 	components: {
-		Button,
-		// MapMarker,
+		NcButton,
+		MapMarker,
 		// AccountMultiplePlus,
 		Send,
-		Loader,
+		NcLoadingIcon,
+		NcTextField,
 		CollaboratorsSelectionForm,
 	},
 
@@ -152,7 +152,7 @@ export default {
 		}
 
 		this.$nextTick(() => {
-			this.$refs.nameInput.focus()
+			this.$refs.nameInput.$el.getElementsByTagName('input')[0].focus()
 		})
 	},
 

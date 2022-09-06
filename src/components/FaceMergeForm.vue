@@ -22,7 +22,7 @@
 <template>
 	<div class="merge-form face-list">
 		<template v-if="loading">
-			<Loader class="loader" />
+			<NcLoadingIcon class="loader" />
 		</template>
 		<template v-else>
 			<div v-for="face in filteredFaces"
@@ -43,15 +43,17 @@
 </template>
 
 <script>
-import FaceCoverMixin from '../mixins/FaceCoverMixin.js'
-import { generateUrl } from '@nextcloud/router'
 import { mapGetters } from 'vuex'
+
+import { generateUrl } from '@nextcloud/router'
+import { NcLoadingIcon } from '@nextcloud/vue'
+
+import FaceCoverMixin from '../mixins/FaceCoverMixin.js'
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
-import Loader from './Loader'
 
 export default {
 	name: 'FaceMergeForm',
-	components: { Loader },
+	components: { NcLoadingIcon },
 	mixins: [
 		FaceCoverMixin,
 		FetchFacesMixin,

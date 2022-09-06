@@ -31,7 +31,7 @@
 			{{ t('photos', 'Share this album via link') }}
 		</div>
 		<div class="form-inputs">
-			<Magnify /><input type="text" name="search" :placeholder="t('photos', 'Search users, email or Federated Cloud ID')">
+			<Magnify /><NcTextField type="text" name="search" :placeholder="t('photos', 'Search users, email or Federated Cloud ID')" />
 		</div>
 		<div class="form-buttons">
 			<slot collaborators="collaborators" />

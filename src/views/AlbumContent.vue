@@ -21,19 +21,19 @@
  -->
 <template>
 	<!-- Errors handlers-->
-	<EmptyContent v-if="album === undefined && !loadingAlbums" class="empty-content-with-illustration">
+	<NcEmptyContent v-if="album === undefined && !loadingAlbums" class="empty-content-with-illustration">
 		<template #icon>
 			<!-- eslint-disable-next-line vue/no-v-html -->
 			<span class="empty-content-illustration" v-html="FolderIllustration" />
 		</template>
 		{{ t('photos', 'This album does not exist') }}
-	</EmptyContent>
-	<EmptyContent v-else-if="errorFetchingFiles || errorFetchingAlbums">
+	</NcEmptyContent>
+	<NcEmptyContent v-else-if="errorFetchingFiles || errorFetchingAlbums">
 		<template #icon>
 			<AlertCircle />
 		</template>
 		{{ t('photos', 'An error occurred') }}
-	</EmptyContent>
+	</NcEmptyContent>
 
 	<div v-else class="album">
 		<div class="album__header">
@@ -47,83 +47,83 @@
 					</div>
 				</div>
 
-				<Loader v-if="loadingCount > 0" class="album__header__loader" />
+				<NcLoadingIcon v-if="loadingCount > 0" class="album__header__loader" />
 			</div>
 			<div v-if="album !== undefined" class="album__header__actions">
-				<Button v-if="album.nbItems !== 0"
+				<NcButton v-if="album.nbItems !== 0"
 					type="tertiary"
 					:aria-label="t('photos', 'Add photos to this album')"
 					@click="showAddPhotosModal = true">
 					<template #icon>
 						<Plus />
 					</template>
-				</Button>
-				<!-- <Button type="tertiary" :aria-label="t('photos', 'Share this album')" @click="showShareModal = true">
+				</NcButton>
+				<!-- <NcButton type="tertiary" :aria-label="t('photos', 'Share this album')" @click="showShareModal = true">
 					<template #icon>
 						<ShareVariant />
 					</template>
-				</Button> -->
-				<Actions :force-menu="true">
-					<ActionButton :close-after-click="true"
+				</NcButton> -->
+				<NcActions :force-menu="true">
+					<NcActionButton :close-after-click="true"
 						:aria-label="t('photos', 'Edit album details')"
 						@click="showEditAlbumForm = true">
 						{{ t('photos', 'Edit album details') }}
 						<Pencil slot="icon" />
-					</ActionButton>
-					<ActionButton v-if="albumFileIds.length > 0"
+					</NcActionButton>
+					<NcActionButton v-if="albumFileIds.length > 0"
 						:close-after-click="true"
 						:aria-label="t('photos', 'Download all files in album')"
 						@click="downloadAllFiles">
 						{{ t('photos', 'Download all files in album') }}
 						<DownloadMultiple slot="icon" />
-					</ActionButton>
+					</NcActionButton>
 					<template v-if="selectedFileIds.length > 0">
-						<ActionButton :close-after-click="true"
+						<NcActionButton :close-after-click="true"
 							:aria-label="t('photos', 'Download selection')"
 							@click="downloadSelection">
 							{{ t('photos', 'Download selected files') }}
 							<Download slot="icon" />
-						</ActionButton>
-						<ActionButton v-if="shouldFavoriteSelection"
+						</NcActionButton>
+						<NcActionButton v-if="shouldFavoriteSelection"
 							:close-after-click="true"
 							:aria-label="t('photos', 'Mark selection as favorite')"
 							@click="favoriteSelection">
 							{{ t('photos', 'Favorite') }}
 							<Star slot="icon" />
-						</ActionButton>
-						<ActionButton v-else
+						</NcActionButton>
+						<NcActionButton v-else
 							:close-after-click="true"
 							:aria-label="t('photos', 'Remove selection from favorites')"
 							@click="unFavoriteSelection">
 							{{ t('photos', 'Remove from favorites') }}
 							<Star slot="icon" />
-						</ActionButton>
-						<ActionButton :close-after-click="true"
+						</NcActionButton>
+						<NcActionButton :close-after-click="true"
 							@click="handleRemoveFilesFromAlbum(selectedFileIds)">
 							{{ n('photos', 'Remove item from album', 'Remove selection from album', selection.length) }}
 							<template #icon>
 								<Close />
 							</template>
-						</ActionButton>
+						</NcActionButton>
 					</template>
-					<ActionButton :close-after-click="true"
+					<NcActionButton :close-after-click="true"
 						@click="handleDeleteAlbum">
 						{{ t('photos', 'Delete album') }}
 						<Delete slot="icon" />
-					</ActionButton>
-				</Actions>
+					</NcActionButton>
+				</NcActions>
 			</div>
 		</div>
 
 		<div v-if="album !== undefined && album.nbItems === 0 && !(loadingFiles || loadingAlbums)" class="album__empty">
-			<EmptyContent>
+			<NcEmptyContent>
 				<template #icon>
 					<ImagePlus />
 				</template>
 				<template #desc>
 					{{ t('photos', "This album doesn't have any photos or videos yet!") }}
 				</template>
-			</EmptyContent>
+			</NcEmptyContent>
 
 			<Button class="album__empty__button"
 				type="primary"
@@ -138,7 +138,6 @@
 
 		<FilesListViewer v-if="album !== undefined"
 			class="album__photos"
-			:use-window="true"
 			:file-ids="albumFileIds"
 			:base-height="isMobile ? 120 : 200"
 			:loading="loadingFiles || loadingAlbums">
@@ -152,7 +151,7 @@
 				@select-toggled="onFileSelectToggle" />
 		</FilesListViewer>
 
-		<Modal v-if="showAddPhotosModal"
+		<NcModal v-if="showAddPhotosModal"
 			size="large"
 			:title="t('photos', 'Add photos to the album')"
 			@close="showAddPhotosModal = false">
@@ -160,19 +159,19 @@
 				:blacklist-ids="albumFileIds"
 				:loading="loadingAddFilesToAlbum"
 				@files-picked="handleFilesPicked" />
-		</Modal>
+		</NcModal>
 
-		<Modal v-else-if="showShareModal"
+		<NcModal v-else-if="showShareModal"
 			:title="t('photos', 'Share the album')"
 			@close="showShareModal = false">
 			<ShareAlbumForm @albumShared="showShareModal = false" />
-		</Modal>
+		</NcModal>
 
-		<Modal v-if="showEditAlbumForm"
+		<NcModal v-if="showEditAlbumForm"
 			:title="t('photos', 'Edit album details')"
 			@close="showEditAlbumForm = false">
 			<AlbumForm :album="album" @done="redirectToNewName" />
-		</Modal>
+		</NcModal>
 	</div>
 </template>
 
@@ -190,7 +189,7 @@ import Close from 'vue-material-design-icons/Close'
 import Download from 'vue-material-design-icons/Download'
 import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple'
 
-import { Actions, ActionButton, Button, Modal, EmptyContent, isMobile } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcLoadingIcon, isMobile } from '@nextcloud/vue'
 import { getCurrentUser } from '@nextcloud/auth'
 
 import FetchAlbumsMixin from '../mixins/FetchAlbumsMixin.js'
@@ -198,7 +197,6 @@ import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import File from '../components/File.vue'
-import Loader from '../components/Loader.vue'
 import FilesPicker from '../components/FilesPicker.vue'
 import ShareAlbumForm from '../components/ShareAlbumForm.vue'
 import AlbumForm from '../components/AlbumForm.vue'
@@ -207,7 +205,7 @@ import logger from '../services/logger.js'
 import client from '../services/DavClient.js'
 import DavRequest from '../services/DavRequest.js'
 import { genFileInfo } from '../utils/fileUtils.js'
-import AbortControllerMixin from '../mixins/AbortControllerMixin'
+import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 
 export default {
 	name: 'AlbumContent',
@@ -223,15 +221,15 @@ export default {
 		Delete,
 		ImagePlus,
 		AlertCircle,
+		NcEmptyContent,
+		NcActions,
+		NcActionButton,
+		NcButton,
+		NcModal,
+		NcLoadingIcon,
 		FilesListViewer,
 		File,
 		AlbumForm,
-		EmptyContent,
-		Loader,
-		Actions,
-		ActionButton,
-		Button,
-		Modal,
 		FilesPicker,
 		ShareAlbumForm,
 	},
@@ -465,6 +463,7 @@ export default {
 .album {
 	display: flex;
 	flex-direction: column;
+	height: 100%;
 
 	&__empty {
 		display: flex;
@@ -491,14 +490,14 @@ export default {
 
 	&__header {
 		display: flex;
-		min-height: 60px;
+		height: 60px;
 		align-items: center;
 		justify-content: space-between;
 		position: sticky;
-		top: var(--header-height);
 		z-index: 3;
 		background: var(--color-main-background);
 		padding: 8px 64px 32px 64px;
+		box-sizing: content-box;
 
 		@media only screen and (max-width: 1200px) {
 			padding: 8px 48px 32px 48px;
@@ -530,14 +529,13 @@ export default {
 	}
 
 	&__photos {
-		height: 100%;
+		height: calc(100% - 60px);
 		min-height: 0; // Prevent it from overflowing in a flex context.
 		padding: 0 64px;
 
 		@media only screen and (max-width: 1200px) {
 			padding: 0 4px;
 		}
-
 	}
 }
 

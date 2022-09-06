@@ -23,14 +23,14 @@
 <template>
 	<div :class="{'photos-navigation--root': isRoot}" class="photos-navigation" role="toolbar">
 		<!-- Back navigation button -->
-		<Button v-if="!isRoot"
+		<NcButton v-if="!isRoot"
 			class="photos-navigation__back"
 			type="tertiary"
 			@click="folderUp">
 			<template #icon>
 				<ArrowLeft :size="20" />
 			</template>
-		</Button>
+		</NcButton>
 
 		<!-- Main Navigation title -->
 		<h2 class="photos-navigation__title" @click="refresh">
@@ -42,24 +42,24 @@
 			<slot />
 		</div>
 
-		<Loader v-if="loading" class="photos-navigation__loader" />
+		<NcLoadingIcon v-if="loading" class="photos-navigation__loader" />
 	</div>
 </template>
 
 <script>
-import Button from '@nextcloud/vue/dist/Components/Button'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 
-import Loader from '../components/Loader.vue'
+import { NcButton, NcLoadingIcon } from '@nextcloud/vue'
 
 export default {
 	name: 'HeaderNavigation',
 
 	components: {
 		ArrowLeft,
-		Button,
-		Loader,
+		NcButton,
+		NcLoadingIcon,
 	},
+
 	inheritAttrs: false,
 
 	props: {

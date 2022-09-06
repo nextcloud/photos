@@ -12,12 +12,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var vue_material_design_icons_Send__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-material-design-icons/Send */ "./node_modules/vue-material-design-icons/Send.vue");
-/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nextcloud/vue */ "./node_modules/@nextcloud/vue/dist/ncvuecomponents.js");
-/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _nextcloud_moment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @nextcloud/moment */ "./node_modules/@nextcloud/moment/dist/index.js");
-/* harmony import */ var _nextcloud_moment__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_moment__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _Loader_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Loader.vue */ "./src/components/Loader.vue");
+/* harmony import */ var vue_material_design_icons_MapMarker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-material-design-icons/MapMarker */ "./node_modules/vue-material-design-icons/MapMarker.vue");
+/* harmony import */ var vue_material_design_icons_Send__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-material-design-icons/Send */ "./node_modules/vue-material-design-icons/Send.vue");
+/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @nextcloud/vue */ "./node_modules/@nextcloud/vue/dist/ncvuecomponents.js");
+/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_vue__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _nextcloud_moment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @nextcloud/moment */ "./node_modules/@nextcloud/moment/dist/index.js");
+/* harmony import */ var _nextcloud_moment__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_moment__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _CollaboratorsSelectionForm_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./CollaboratorsSelectionForm.vue */ "./src/components/CollaboratorsSelectionForm.vue");
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
@@ -126,9 +126,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
- // import MapMarker from 'vue-material-design-icons/MapMarker'
-// import AccountMultiplePlus from 'vue-material-design-icons/AccountMultiplePlus'
 
+ // import AccountMultiplePlus from 'vue-material-design-icons/AccountMultiplePlus'
 
 
 
@@ -137,11 +136,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'AlbumForm',
   components: {
-    Button: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__.Button,
-    // MapMarker,
+    NcButton: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_2__.NcButton,
+    MapMarker: vue_material_design_icons_MapMarker__WEBPACK_IMPORTED_MODULE_0__["default"],
     // AccountMultiplePlus,
-    Send: vue_material_design_icons_Send__WEBPACK_IMPORTED_MODULE_0__["default"],
-    Loader: _Loader_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+    Send: vue_material_design_icons_Send__WEBPACK_IMPORTED_MODULE_1__["default"],
+    NcLoadingIcon: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_2__.NcLoadingIcon,
+    NcTextField: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_2__.NcTextField,
     CollaboratorsSelectionForm: _CollaboratorsSelectionForm_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
   props: {
@@ -176,7 +176,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
 
     this.$nextTick(function () {
-      _this.$refs.nameInput.focus();
+      _this.$refs.nameInput.$el.getElementsByTagName('input')[0].focus();
     });
   },
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)(['createAlbum', 'renameAlbum', 'updateAlbumLocation'])), {}, {
@@ -213,7 +213,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     nbItems: 0,
                     location: _this2.albumLocation,
                     lastPhoto: '',
-                    date: _nextcloud_moment__WEBPACK_IMPORTED_MODULE_2___default()().format('MMMM YYYY'),
+                    date: _nextcloud_moment__WEBPACK_IMPORTED_MODULE_3___default()().format('MMMM YYYY'),
                     collaborators: collaborators
                   }
                 });
@@ -391,8 +391,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _nextcloud_auth__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @nextcloud/auth */ "./node_modules/@nextcloud/auth/dist/index.esm.js");
 /* harmony import */ var _services_DavClient_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../services/DavClient.js */ "./src/services/DavClient.js");
 /* harmony import */ var _services_logger_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/logger.js */ "./src/services/logger.js");
-/* harmony import */ var _utils_CancelableRequest_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/CancelableRequest.js */ "./src/utils/CancelableRequest.js");
-/* harmony import */ var _utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../utils/fileUtils.js */ "./src/utils/fileUtils.js");
+/* harmony import */ var _utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/fileUtils.js */ "./src/utils/fileUtils.js");
+/* harmony import */ var _AbortControllerMixin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./AbortControllerMixin */ "./src/mixins/AbortControllerMixin.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
@@ -437,10 +437,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       errorFetchingAlbums: null,
-      loadingAlbums: false,
-      cancelAlbumsRequest: function cancelAlbumsRequest() {}
+      loadingAlbums: false
     };
   },
+  mixins: [_AbortControllerMixin__WEBPACK_IMPORTED_MODULE_6__["default"]],
   beforeMount: function beforeMount() {
     var _this = this;
 
@@ -468,7 +468,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-        var _getCurrentUser, _cancelableRequest, request, cancel, response, albums, _error$response;
+        var _getCurrentUser, response, albums, _error$response;
 
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
@@ -485,20 +485,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context2.prev = 2;
                 _this2.loadingAlbums = true;
                 _this2.errorFetchingAlbums = null;
-                _cancelableRequest = (0,_utils_CancelableRequest_js__WEBPACK_IMPORTED_MODULE_5__["default"])(_services_DavClient_js__WEBPACK_IMPORTED_MODULE_3__["default"].getDirectoryContents), request = _cancelableRequest.request, cancel = _cancelableRequest.cancel;
-                _this2.cancelAlbumsRequest = cancel;
-                _context2.next = 9;
-                return request("/photos/".concat((_getCurrentUser = (0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_2__.getCurrentUser)()) === null || _getCurrentUser === void 0 ? void 0 : _getCurrentUser.uid, "/albums"), {
+                _context2.next = 7;
+                return _services_DavClient_js__WEBPACK_IMPORTED_MODULE_3__["default"].getDirectoryContents("/photos/".concat((_getCurrentUser = (0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_2__.getCurrentUser)()) === null || _getCurrentUser === void 0 ? void 0 : _getCurrentUser.uid, "/albums"), {
                   data: "<?xml version=\"1.0\"?>\n\t\t\t\t\t\t\t<d:propfind xmlns:d=\"DAV:\"\n\t\t\t\t\t\t\t\txmlns:oc=\"http://owncloud.org/ns\"\n\t\t\t\t\t\t\t\txmlns:nc=\"http://nextcloud.org/ns\"\n\t\t\t\t\t\t\t\txmlns:ocs=\"http://open-collaboration-services.org/ns\">\n\t\t\t\t\t\t\t\t<d:prop>\n\t\t\t\t\t\t\t\t\t<nc:last-photo />\n\t\t\t\t\t\t\t\t\t<nc:nbItems />\n\t\t\t\t\t\t\t\t\t<nc:location />\n\t\t\t\t\t\t\t\t\t<nc:dateRange />\n\t\t\t\t\t\t\t\t</d:prop>\n\t\t\t\t\t\t\t</d:propfind>",
-                  details: true
+                  details: true,
+                  signal: _this2.abortController.signal
                 });
 
-              case 9:
+              case 7:
                 response = _context2.sent;
                 albums = response.data.filter(function (album) {
                   return album.filename !== '/photos/admin/albums';
                 }).map(function (album) {
-                  return (0,_utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_6__.genFileInfo)(album);
+                  return (0,_utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_5__.genFileInfo)(album);
                 }).map(function (album) {
                   var _album$dateRange$repl, _album$dateRange;
 
@@ -516,7 +515,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                   if (dateRangeFormated.startDate === dateRangeFormated.endDate) {
                     return _objectSpread(_objectSpread({}, album), {}, {
-                      date: _this2.t('photos', '{startDate}', dateRangeFormated)
+                      date: dateRangeFormated
                     });
                   } else {
                     return _objectSpread(_objectSpread({}, album), {}, {
@@ -530,51 +529,48 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 });
 
                 _services_logger_js__WEBPACK_IMPORTED_MODULE_4__["default"].debug("[FetchAlbumsMixin] Fetched ".concat(albums.length, " new files: "), albums);
-                _context2.next = 28;
+                _context2.next = 26;
                 break;
 
-              case 15:
-                _context2.prev = 15;
+              case 13:
+                _context2.prev = 13;
                 _context2.t0 = _context2["catch"](2);
 
                 if (!(((_error$response = _context2.t0.response) === null || _error$response === void 0 ? void 0 : _error$response.status) === 404)) {
-                  _context2.next = 21;
+                  _context2.next = 19;
                   break;
                 }
 
                 _this2.errorFetchingAlbums = 404;
-                _context2.next = 26;
+                _context2.next = 24;
                 break;
 
-              case 21:
+              case 19:
                 if (!(_context2.t0.code === 'ERR_CANCELED')) {
-                  _context2.next = 25;
+                  _context2.next = 23;
                   break;
                 }
 
                 return _context2.abrupt("return");
 
-              case 25:
+              case 23:
                 _this2.errorFetchingAlbums = _context2.t0;
 
-              case 26:
+              case 24:
                 _services_logger_js__WEBPACK_IMPORTED_MODULE_4__["default"].error(t('photos', 'Failed to fetch albums list.'), _context2.t0);
                 (0,_nextcloud_dialogs__WEBPACK_IMPORTED_MODULE_1__.showError)(t('photos', 'Failed to fetch albums list.'));
 
-              case 28:
-                _context2.prev = 28;
-
-                _this2.cancelAlbumsRequest = function () {};
-
+              case 26:
+                _context2.prev = 26;
                 _this2.loadingAlbums = false;
-                return _context2.finish(28);
+                return _context2.finish(26);
 
-              case 32:
+              case 29:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[2, 15, 28, 32]]);
+        }, _callee2, null, [[2, 13, 26, 29]]);
       }))();
     }
   }
@@ -936,75 +932,50 @@ var render = function () {
           },
         },
         [
-          _c("div", { staticClass: "form-inputs" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model.trim",
+          _c(
+            "div",
+            { staticClass: "form-inputs" },
+            [
+              _c("NcTextField", {
+                ref: "nameInput",
+                attrs: {
                   value: _vm.albumName,
-                  expression: "albumName",
-                  modifiers: { trim: true },
+                  type: "text",
+                  name: "name",
+                  required: true,
+                  autofocus: "true",
+                  placeholder: _vm.t("photos", "Name of the album"),
                 },
-              ],
-              ref: "nameInput",
-              attrs: {
-                type: "text",
-                name: "name",
-                required: "",
-                autofocus: "true",
-                placeholder: _vm.t("photos", "Name of the album"),
-              },
-              domProps: { value: _vm.albumName },
-              on: {
-                input: function ($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.albumName = $event.target.value.trim()
+                on: {
+                  "update:value": function ($event) {
+                    _vm.albumName = $event
+                  },
                 },
-                blur: function ($event) {
-                  return _vm.$forceUpdate()
-                },
-              },
-            }),
-            _vm._v(" "),
-            _c(
-              "label",
-              [
-                _c("MapMarker"),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model.trim",
+              }),
+              _vm._v(" "),
+              _c(
+                "label",
+                [
+                  _c("MapMarker"),
+                  _c("NcTextField", {
+                    attrs: {
                       value: _vm.albumLocation,
-                      expression: "albumLocation",
-                      modifiers: { trim: true },
+                      name: "location",
+                      type: "text",
+                      placeholder: _vm.t("photos", "Location of the album"),
                     },
-                  ],
-                  attrs: {
-                    name: "location",
-                    type: "text",
-                    placeholder: _vm.t("photos", "Location of the album"),
-                  },
-                  domProps: { value: _vm.albumLocation },
-                  on: {
-                    input: function ($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.albumLocation = $event.target.value.trim()
+                    on: {
+                      "update:value": function ($event) {
+                        _vm.albumLocation = $event
+                      },
                     },
-                    blur: function ($event) {
-                      return _vm.$forceUpdate()
-                    },
-                  },
-                }),
-              ],
-              1
-            ),
-          ]),
+                  }),
+                ],
+                1
+              ),
+            ],
+            1
+          ),
           _vm._v(" "),
           _c("div", { staticClass: "form-buttons" }, [
             _c(
@@ -1013,7 +984,7 @@ var render = function () {
               [
                 _vm.displayBackButton
                   ? _c(
-                      "Button",
+                      "NcButton",
                       {
                         attrs: {
                           "aria-label": _vm.t(
@@ -1042,7 +1013,7 @@ var render = function () {
               { staticClass: "right-buttons" },
               [
                 _c(
-                  "Button",
+                  "NcButton",
                   {
                     attrs: {
                       "aria-label": _vm.editMode
@@ -1061,14 +1032,16 @@ var render = function () {
                         {
                           key: "icon",
                           fn: function () {
-                            return [_vm.loading ? _c("Loader") : _c("Send")]
+                            return [
+                              _vm.loading ? _c("NcLoadingIcon") : _c("Send"),
+                            ]
                           },
                           proxy: true,
                         },
                       ],
                       null,
                       false,
-                      862849841
+                      3914512768
                     ),
                   },
                   [
@@ -1107,7 +1080,7 @@ var render = function () {
                   { staticClass: "left-buttons" },
                   [
                     _c(
-                      "Button",
+                      "NcButton",
                       {
                         attrs: {
                           "aria-label": _vm.t(
@@ -1139,7 +1112,7 @@ var render = function () {
                   { staticClass: "right-buttons" },
                   [
                     _c(
-                      "Button",
+                      "NcButton",
                       {
                         attrs: {
                           "aria-label": _vm.editMode
@@ -1158,7 +1131,11 @@ var render = function () {
                             {
                               key: "icon",
                               fn: function () {
-                                return [_vm.loading ? _c("Loader") : _c("Send")]
+                                return [
+                                  _vm.loading
+                                    ? _c("NcLoadingIcon")
+                                    : _c("Send"),
+                                ]
                               },
                               proxy: true,
                             },
@@ -1248,7 +1225,7 @@ var render = function () {
         { staticClass: "form-inputs" },
         [
           _c("Magnify"),
-          _c("input", {
+          _c("NcTextField", {
             attrs: {
               type: "text",
               name: "search",
@@ -1279,4 +1256,4 @@ render._withStripped = true
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_mixins_FetchAlbumsMixin_js-src_components_AlbumForm_vue.js.map?v=35df94247fb248d71f3e
+//# sourceMappingURL=photos-src_mixins_FetchAlbumsMixin_js-src_components_AlbumForm_vue.js.map?v=c891259ea2d3cfdd3c09

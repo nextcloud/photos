@@ -39,8 +39,9 @@
 </template>
 
 <script>
-import { getFilePickerBuilder, showError } from '@nextcloud/dialogs'
 import debounce from 'debounce'
+
+import { getFilePickerBuilder, showError } from '@nextcloud/dialogs'
 
 import UserConfig from '../../mixins/UserConfig.js'
 
