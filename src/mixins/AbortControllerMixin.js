@@ -35,6 +35,7 @@ export default {
 
 	beforeRouteLeave(from, to, next) {
 		this.abortController.abort()
+		this.abortController = new AbortController()
 		next()
 	},
 }
