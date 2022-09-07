@@ -44,6 +44,7 @@
     "_{years} year ago_::_{years} years ago_" : ["orain dela urte {years}","orain dela {years} urte"],
     "Enable squared photos view" : "Gaitu lauki formako argazki ikuspegia",
     "View" : "Ikusi",
+    "_%n photo_::_%n photos_" : ["argazki %n","%n argazki"],
     "This album does not exist" : "Albuma ez da existitzen",
     "An error occurred" : "Akats bat gertatu da",
     "Add photos to this album" : "Gehitu argazkiak album honetara ",
