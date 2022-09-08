@@ -24,34 +24,29 @@
 
 <template>
 	<!-- Errors handlers-->
-	<NcEmptyContent v-if="error">
-		{{ t('photos', 'An error occurred') }}
-	</NcEmptyContent>
+	<NcEmptyContent v-if="error" :title="t('photos', 'An error occurred')" />
+
+	<NcLoadingIcon v-else-if="loading" class="loader" />
 
 	<!-- Folder content -->
-	<div v-else-if="!loading">
+	<div v-else>
 		<div class="photos-navigation">
 			<NcActions class="photos-navigation__back">
-				<ActionButton @click="$router.push({name: 'tags'})">
+				<NcActionButton @click="$router.push({name: 'tags'})">
 					<template #icon>
 						<ArrowLeft />
 					</template>
 					{{ t('photos', 'Back to tags overview') }}
-				</ActionButton>
+				</NcActionButton>
 			</NcActions>
 			<h2 class="photos-navigation__title">
 				{{ path }}
 			</h2>
 		</div>
 		<div class="heading-subline">
-			{{ n('photos', '%n photo', '%n photos', tag.files.length,) }}
+			{{ n('photos', '%n photo', '%n photos', fileIds.length,) }}
 		</div>
-		<NcEmptyContent v-if="isEmpty" key="emptycontent" illustration-name="empty">
-			{{ t('photos', 'No tags yet') }}
-			<template #desc>
-				{{ t('photos', 'Photos with tags will show up here') }}
-			</template>
-		</NcEmptyContent>
+		<NcEmptyContent v-if="isEmpty" :title="t('photos', 'No photos with this tag yet')" />
 
 		<FilesListViewer class="tag__photos"
 			:use-window="true"
@@ -74,7 +69,7 @@
 import { mapGetters } from 'vuex'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft'
 
-import { NcEmptyContent, NcActions, isMobile } from '@nextcloud/vue'
+import { NcEmptyContent, NcActions, NcActionButton, NcLoadingIcon, isMobile } from '@nextcloud/vue'
 
 import File from '../components/File.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
@@ -90,6 +85,8 @@ export default {
 		FilesListViewer,
 		NcEmptyContent,
 		NcActions,
+		NcActionButton,
+		NcLoadingIcon,
 		ArrowLeft,
 	},
 	mixins: [
@@ -155,14 +152,15 @@ export default {
 			// close any potential opened viewer
 			OCA.Viewer.close()
 
-			// if we don't already have some cached data let's show a loader
-			if (!this.tags[this.tagId]) {
-				this.loading = true
-				await this.$store.dispatch('fetchAllTags', { signal: this.abortController.signal })
-			}
+			this.loading = true
 			this.error = null
 
 			try {
+				// if we don't already have some cached data let's show a loader
+				if (!this.tags[this.tagId]) {
+					await this.$store.dispatch('fetchAllTags', { signal: this.abortController.signal })
+				}
+
 				await this.$store.dispatch('fetchTagFiles', { id: this.tagId, signal: this.abortController.signal })
 			} catch (error) {
 				console.error(error)
@@ -186,6 +184,10 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+.loader {
+	margin-top: 30vh;
+}
+
 .photos-navigation {
 	display: flex;
 	height: 44px;

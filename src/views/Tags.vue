@@ -24,16 +24,9 @@
 <template>
 	<div>
 		<!-- Errors handlers-->
-		<NcEmptyContent v-if="error">
-			{{ t('photos', 'An error occurred') }}
-		</NcEmptyContent>
+		<NcEmptyContent v-if="error" :title="t('photos', 'An error occurred')" />
 
-		<NcEmptyContent v-if="!loading && !hasTagsWithFiles" key="Ncemptycontent" illustration-name="empty">
-			{{ t('photos', 'No tags yet') }}
-			<template #desc>
-				{{ t('photos', 'Photos with tags will show up here') }}
-			</template>
-		</NcEmptyContent>
+		<NcEmptyContent v-if="!loading && !hasTagsWithFiles" :title="t('photos', 'No tags yet')" :description="t('photos', 'Photos with tags will show up here')" />
 
 		<NcLoadingIcon v-if="loading" class="loader" />
 
@@ -151,16 +144,12 @@ export default {
 }
 
 .container {
-	margin-top: 44px;
 	padding-left: 44px;
 
 	> h2 {
 		margin-left: 14px;
+		margin-top: 40px;
 	}
-}
-
-.popular-tags + h2 {
-	margin-top: 40px;
 }
 
 .popular-tags, .tags {
