@@ -93,7 +93,7 @@ const router = new Router({
 		{
 			path: '/albums/:albumName*',
 			component: AlbumContent,
-			name: 'albumContent',
+			name: 'albums',
 			props: route => ({
 				albumName: route.params.albumName,
 			}),

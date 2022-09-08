@@ -43,6 +43,10 @@
 		</div>
 
 		<NcLoadingIcon v-if="loading" class="photos-navigation__loader" />
+
+		<div class="photos-navigation__content-right">
+			<slot name="right" />
+		</div>
 	</div>
 </template>
 
@@ -78,6 +82,11 @@ export default {
 		rootTitle: {
 			type: String,
 			default: t('photos', 'Photos'),
+		},
+		// The route params
+		params: {
+			type: Object,
+			default: null,
 		},
 	},
 
@@ -131,7 +140,7 @@ export default {
 
 			// apply to current route
 			const { name, params } = Object.assign({}, this.$route, {
-				params: { path },
+				params: this.params || { path },
 			})
 
 			// return the full object as we don't care about
@@ -172,16 +181,19 @@ export default {
 
 // Properly position the navigation toggle button
 button.app-navigation-toggle {
+	// App-navigation have a 4px margin top
+	top: 0 !important;
 	right: calc(var(--photos-navigation-height) * -1) !important;
 	margin: var(--photos-navigation-spacing) !important;
 }
+
 </style>
 
 <style lang="scss" scoped>
 .photos-navigation {
 	position: sticky;
 	z-index: 20;
-	top: var(--header-height);
+	top: 0;
 	display: flex;
 	align-items: center;
 	width: 100%;
@@ -208,6 +220,13 @@ button.app-navigation-toggle {
 
 	&__loader {
 		margin-left: 32px;
+	}
+
+	&__content-right {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-left: auto;
 	}
 }
 

@@ -29,7 +29,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import client from '../services/DavClient.js'
 import logger from '../services/logger.js'
 import { genFileInfo } from '../utils/fileUtils.js'
-import AbortControllerMixin from './AbortControllerMixin'
+import AbortControllerMixin from './AbortControllerMixin.js'
 
 export default {
 	name: 'FetchAlbumsMixin',
@@ -47,10 +47,6 @@ export default {
 
 	async beforeMount() {
 		this.fetchAlbums()
-	},
-
-	beforeDestroy() {
-		this.cancelAlbumsRequest('Changed view')
 	},
 
 	computed: {

@@ -27,7 +27,11 @@
 
 	<!-- Album list -->
 	<div v-else class="albums">
-		<div class="albums__header">
+		<HeaderNavigation key="navigation"
+			:loading="loadingAlbums"
+			:title="t('photos', 'Albums')"
+			:root-title="t('photos', 'Albums')"
+			@refresh="onRefresh">
 			<NcButton type="primary"
 				:aria-label="t('photos', 'Create a new album.')"
 				@click="showAlbumCreationForm = true">
@@ -36,9 +40,7 @@
 				</template>
 				{{ t('photos', 'New album') }}
 			</NcButton>
-
-			<NcLoadingIcon v-if="loadingAlbums" />
-		</div>
+		</HeaderNavigation>
 
 		<!-- No albums -->
 		<div v-if="noAlbums && !loadingAlbums" class="albums__empty">
@@ -78,26 +80,27 @@
 </template>
 
 <script>
+import { NcButton, NcModal, NcEmptyContent } from '@nextcloud/vue'
+
 import Plus from 'vue-material-design-icons/Plus'
 import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage'
-
-import { NcButton, NcModal, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 
 import FetchAlbumsMixin from '../mixins/FetchAlbumsMixin.js'
 import AlbumCover from '../components/AlbumCover.vue'
 import AlbumForm from '../components/AlbumForm.vue'
+import HeaderNavigation from '../components/HeaderNavigation.vue'
 
 export default {
 	name: 'Albums',
 	components: {
-		Plus,
-		FolderMultipleImage,
-		NcEmptyContent,
-		NcModal,
-		NcButton,
-		NcLoadingIcon,
 		AlbumCover,
 		AlbumForm,
+		FolderMultipleImage,
+		HeaderNavigation,
+		NcButton,
+		NcEmptyContent,
+		NcModal,
+		Plus,
 	},
 
 	mixins: [
@@ -122,7 +125,16 @@ export default {
 	methods: {
 		handleAlbumCreated({ album }) {
 			this.showAlbumCreationForm = false
-			this.$router.push(`/albums/${album.basename}`)
+			this.$router.push({
+				name: 'albums',
+				params: {
+					path: album.basename,
+				},
+			})
+		},
+
+		onRefresh() {
+			this.fetchAlbums()
 		},
 	},
 }
@@ -132,26 +144,6 @@ export default {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
-
-	&__header {
-		display: flex;
-		height: 60px;
-		align-items: center;
-		padding: 0 64px;
-		position: sticky;
-		width: 100%;
-		z-index: 3;
-		background: var(--color-main-background);
-		box-sizing: content-box;
-
-		@media only screen and (max-width: 1200px) {
-			padding: 0 48px;
-		}
-
-		button {
-			margin-right: 32px;
-		}
-	}
 
 	&__list {
 		padding: 32px 48px;

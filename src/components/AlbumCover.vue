@@ -22,7 +22,10 @@
 
 <template>
 	<router-link class="album-cover" :to="`/albums/${baseName}`">
-		<img v-if="album.lastPhoto !== 0" class="album-cover__image" :src="coverUrl">
+		<img v-if="album.lastPhoto !== 0"
+			class="album-cover__image"
+			:src="coverUrl"
+			:alt="altImg">
 		<div v-else class="album-cover__image album-cover__image--placeholder">
 			<ImageMultiple :size="128" />
 		</div>
@@ -86,6 +89,10 @@ export default {
 		 */
 		coverUrl() {
 			return generateUrl(`/core/preview?fileId=${this.album.lastPhoto}&x=${512}&y=${512}&forceIcon=0&a=1`)
+		},
+
+		altImg() {
+			return t('photos', 'Photo cover for the "{albumName}" album.', { albumName: this.baseName })
 		},
 	},
 }
