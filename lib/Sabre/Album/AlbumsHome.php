@@ -25,6 +25,7 @@ namespace OCA\Photos\Sabre\Album;
 
 use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Album\AlbumWithFiles;
+use OCA\Photos\Service\UserConfigService;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
@@ -38,6 +39,7 @@ class AlbumsHome implements ICollection {
 	private IUser $user;
 	private IRootFolder $rootFolder;
 	private Folder $userFolder;
+	private UserConfigService $userConfigService;
 
 	/**
 	 * @var AlbumRoot[]
@@ -48,13 +50,14 @@ class AlbumsHome implements ICollection {
 		array $principalInfo,
 		AlbumMapper $albumMapper,
 		IUser $user,
-		IRootFolder $rootFolder
-	) {
+		IRootFolder $rootFolder,
+		UserConfigService $userConfigService) {
 		$this->principalInfo = $principalInfo;
 		$this->albumMapper = $albumMapper;
 		$this->user = $user;
 		$this->rootFolder = $rootFolder;
 		$this->userFolder = $rootFolder->getUserFolder($user->getUID());
+		$this->userConfigService = $userConfigService;
 	}
 
 	/**
@@ -104,7 +107,7 @@ class AlbumsHome implements ICollection {
 		if ($this->children === null) {
 			$folders = $this->albumMapper->getForUserWithFiles($this->user->getUID());
 			$this->children = array_map(function (AlbumWithFiles $folder) {
-				return new AlbumRoot($this->albumMapper, $folder, $this->rootFolder, $this->userFolder, $this->user);
+				return new AlbumRoot($this->albumMapper, $folder, $this->rootFolder, $this->userFolder, $this->user, $this->userConfigService);
 			}, $folders);
 		}
 

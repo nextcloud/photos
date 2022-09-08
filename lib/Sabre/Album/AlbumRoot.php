@@ -27,6 +27,7 @@ use OCA\DAV\Connector\Sabre\File;
 use OCA\Photos\Album\AlbumFile;
 use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Album\AlbumWithFiles;
+use OCA\Photos\Service\UserConfigService;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
@@ -40,16 +41,22 @@ use Sabre\DAV\INode;
 class AlbumRoot implements ICollection, ICopyTarget {
 	private AlbumMapper $albumMapper;
 	private AlbumWithFiles $album;
-	private IRootFolder $rootFolder;
 	private Folder $userFolder;
 	private IUser $user;
+	private UserConfigService $userConfigService;
 
-	public function __construct(AlbumMapper $albumMapper, AlbumWithFiles $album, IRootFolder $rootFolder, Folder $userFolder, IUser $user) {
+	public function __construct(AlbumMapper $albumMapper,
+		AlbumWithFiles $album,
+		IRootFolder $rootFolder,
+		Folder $userFolder,
+		IUser $user,
+		UserConfigService $userConfigService) {
 		$this->albumMapper = $albumMapper;
 		$this->album = $album;
 		$this->rootFolder = $rootFolder;
 		$this->userFolder = $userFolder;
 		$this->user = $user;
+		$this->userConfigService = $userConfigService;
 	}
 
 	/**
@@ -70,8 +77,23 @@ class AlbumRoot implements ICollection, ICopyTarget {
 		$this->albumMapper->rename($this->album->getAlbum()->getId(), $name);
 	}
 
+	/**
+	 * We cannot create files in an Album
+	 * We add the file to the default Photos folder and then link it there.
+	 *
+	 * @param [type] $name
+	 * @param [type] $data
+	 * @return void
+	 */
 	public function createFile($name, $data = null) {
-		throw new Forbidden('Not allowed to create files in this folder, copy files into this folder instead');
+		try {
+			$photosLocation = $this->userConfigService->getUserConfig('photosLocation');
+			$photosFolder = $this->userFolder->get($photosLocation);
+			$node = $photosFolder->newFile($name, $data);
+			return $this->addFile($node->getId(), $node->getOwner()->getUID());
+		} catch (\Exception $e) {
+			throw new \Exception('The file could not be created');
+		}
 	}
 
 	/**
@@ -113,15 +135,21 @@ class AlbumRoot implements ICollection, ICopyTarget {
 		$uid = $this->user->getUID();
 		if ($sourceNode instanceof File) {
 			$sourceId = $sourceNode->getId();
-			if (in_array($sourceId, $this->album->getFileIds())) {
-				throw new Conflict("File $sourceId is already in the folder");
-			}
-			if ($sourceNode->getFileInfo()->getOwner()->getUID() === $uid) {
-				$this->albumMapper->addFile($this->album->getAlbum()->getId(), $sourceId);
-				return true;
-			}
+			$ownerUID = $sourceNode->getFileInfo()->getOwner()->getUID();
+			return $this->addFile($sourceId, $ownerUID);
 		}
 		throw new \Exception("Can't add file to album, only files from $uid can be added");
+	}
+
+	private function addFile(int $sourceId, string $ownerUID): bool {
+		$uid = $this->user->getUID();
+		if (in_array($sourceId, $this->album->getFileIds())) {
+			throw new Conflict("File $sourceId is already in the folder");
+		}
+		if ($ownerUID === $uid) {
+			$this->albumMapper->addFile($this->album->getAlbum()->getId(), $sourceId);
+			return true;
+		}
 	}
 
 	public function getAlbum(): AlbumWithFiles {

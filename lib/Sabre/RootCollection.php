@@ -24,6 +24,7 @@ declare(strict_types=1);
 namespace OCA\Photos\Sabre;
 
 use OCA\Photos\Album\AlbumMapper;
+use OCA\Photos\Service\UserConfigService;
 use OCP\Files\IRootFolder;
 use OCP\IUserSession;
 use Sabre\DAVACL\AbstractPrincipalCollection;
@@ -33,18 +34,20 @@ class RootCollection extends AbstractPrincipalCollection {
 	private AlbumMapper $folderMapper;
 	private IUserSession $userSession;
 	private IRootFolder $rootFolder;
+	private UserConfigService $userConfigService;
 
 	public function __construct(
 		AlbumMapper $folderMapper,
 		IUserSession $userSession,
 		IRootFolder $rootFolder,
-		PrincipalBackend\BackendInterface $principalBackend
-	) {
+		PrincipalBackend\BackendInterface $principalBackend,
+		UserConfigService $userConfigService) {
 		parent::__construct($principalBackend, 'principals/users');
 
 		$this->folderMapper = $folderMapper;
 		$this->userSession = $userSession;
 		$this->rootFolder = $rootFolder;
+		$this->userConfigService = $userConfigService;
 	}
 
 	/**
@@ -62,7 +65,7 @@ class RootCollection extends AbstractPrincipalCollection {
 		if (is_null($user) || $name !== $user->getUID()) {
 			throw new \Sabre\DAV\Exception\Forbidden();
 		}
-		return new PhotosHome($principalInfo, $this->folderMapper, $user, $this->rootFolder);
+		return new PhotosHome($principalInfo, $this->folderMapper, $user, $this->rootFolder, $this->userConfigService);
 	}
 
 	public function getName(): string {

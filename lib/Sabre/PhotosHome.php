@@ -25,7 +25,7 @@ namespace OCA\Photos\Sabre;
 
 use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Sabre\Album\AlbumsHome;
-use OCP\Files\Folder;
+use OCA\Photos\Service\UserConfigService;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
 use Sabre\DAV\Exception\Forbidden;
@@ -37,19 +37,20 @@ class PhotosHome implements ICollection {
 	private array $principalInfo;
 	private IUser $user;
 	private IRootFolder $rootFolder;
-	private Folder $userFolder;
+	private UserConfigService $userConfigService;
 
 	public function __construct(
 		array $principalInfo,
 		AlbumMapper $albumMapper,
 		IUser $user,
-		IRootFolder $rootFolder
+		IRootFolder $rootFolder,
+		UserConfigService $userConfigService
 	) {
 		$this->principalInfo = $principalInfo;
 		$this->albumMapper = $albumMapper;
 		$this->user = $user;
 		$this->rootFolder = $rootFolder;
-		$this->userFolder = $rootFolder->getUserFolder($user->getUID());
+		$this->userConfigService = $userConfigService;
 	}
 
 	/**
@@ -84,7 +85,7 @@ class PhotosHome implements ICollection {
 
 	public function getChild($name) {
 		if ($name === 'albums') {
-			return new AlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder);
+			return new AlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->userConfigService);
 		}
 
 		throw new NotFound();
@@ -94,7 +95,7 @@ class PhotosHome implements ICollection {
 	 * @return AlbumsHome[]
 	 */
 	public function getChildren(): array {
-		return [new AlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder)];
+		return [new AlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->userConfigService)];
 	}
 
 	public function childExists($name): bool {
