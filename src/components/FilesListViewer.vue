@@ -94,7 +94,7 @@ export default {
 		// Whether we should display a loading indicator.
 		loading: {
 			type: Boolean,
-			required: true,
+			default: false,
 		},
 		// Message to display when there is no files.
 		emptyMessage: {

@@ -28,6 +28,7 @@
 		</template>
 		{{ t('photos', 'This album does not exist') }}
 	</NcEmptyContent>
+
 	<NcEmptyContent v-else-if="errorFetchingFiles || errorFetchingAlbums">
 		<template #icon>
 			<AlertCircle />
@@ -36,20 +37,21 @@
 	</NcEmptyContent>
 
 	<div v-else class="album">
-		<div class="album__header">
-			<div class="album__header__left">
-				<div class="album__header__title">
-					<h2 v-if="album !== undefined" class="album__name">
-						{{ album.basename }}
-					</h2>
-					<div v-if="album !== undefined && album.location !== ''" class="album__location">
-						<MapMarker />{{ album.location }}
-					</div>
-				</div>
-
-				<NcLoadingIcon v-if="loadingCount > 0" class="album__header__loader" />
+		<HeaderNavigation key="navigation"
+			:loading="loadingFiles"
+			:params="{ albumName }"
+			:path="'/' + albumName"
+			:title="albumName"
+			@refresh="fetchAlbumContent">
+			<!-- <UploadPicker :accept="allowedMimes"
+				:destination="folder.filename"
+				:multiple="true"
+				@uploaded="onUpload" /> -->
+			<div v-if="album.location !== ''" class="album__location">
+				<MapMarker />{{ album.location }}
 			</div>
-			<div v-if="album !== undefined" class="album__header__actions">
+
+			<template #right>
 				<NcButton v-if="album.nbItems !== 0"
 					type="tertiary"
 					:aria-label="t('photos', 'Add photos to this album')"
@@ -58,11 +60,6 @@
 						<Plus />
 					</template>
 				</NcButton>
-				<!-- <NcButton type="tertiary" :aria-label="t('photos', 'Share this album')" @click="showShareModal = true">
-					<template #icon>
-						<ShareVariant />
-					</template>
-				</NcButton> -->
 				<NcActions :force-menu="true">
 					<NcActionButton :close-after-click="true"
 						:aria-label="t('photos', 'Edit album details')"
@@ -112,10 +109,10 @@
 						<Delete slot="icon" />
 					</NcActionButton>
 				</NcActions>
-			</div>
-		</div>
+			</template>
+		</HeaderNavigation>
 
-		<div v-if="album !== undefined && album.nbItems === 0 && !(loadingFiles || loadingAlbums)" class="album__empty">
+		<div v-if="album.nbItems === 0 && !(loadingFiles || loadingAlbums)" class="album__empty">
 			<NcEmptyContent>
 				<template #icon>
 					<ImagePlus />
@@ -136,11 +133,10 @@
 			</Button>
 		</div>
 
-		<FilesListViewer v-if="album !== undefined"
+		<FilesListViewer v-else
 			class="album__photos"
 			:file-ids="albumFileIds"
-			:base-height="isMobile ? 120 : 200"
-			:loading="loadingFiles || loadingAlbums">
+			:base-height="isMobile ? 120 : 200">
 			<File slot-scope="{file, visibility}"
 				:file="files[file.id]"
 				:allow-selection="true"
@@ -177,8 +173,10 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, isMobile } from '@nextcloud/vue'
+import { getCurrentUser } from '@nextcloud/auth'
+
 import MapMarker from 'vue-material-design-icons/MapMarker'
-// import ShareVariant from 'vue-material-design-icons/ShareVariant'
 import Plus from 'vue-material-design-icons/Plus'
 import Pencil from 'vue-material-design-icons/Pencil'
 import Delete from 'vue-material-design-icons/Delete'
@@ -189,56 +187,55 @@ import Close from 'vue-material-design-icons/Close'
 import Download from 'vue-material-design-icons/Download'
 import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple'
 
-import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcLoadingIcon, isMobile } from '@nextcloud/vue'
-import { getCurrentUser } from '@nextcloud/auth'
-
+import { genFileInfo } from '../utils/fileUtils.js'
+import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import FetchAlbumsMixin from '../mixins/FetchAlbumsMixin.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
-import FilesListViewer from '../components/FilesListViewer.vue'
-import File from '../components/File.vue'
-import FilesPicker from '../components/FilesPicker.vue'
-import ShareAlbumForm from '../components/ShareAlbumForm.vue'
-import AlbumForm from '../components/AlbumForm.vue'
-import FolderIllustration from '../assets/Illustrations/folder.svg'
-import logger from '../services/logger.js'
+
 import client from '../services/DavClient.js'
 import DavRequest from '../services/DavRequest.js'
-import { genFileInfo } from '../utils/fileUtils.js'
-import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
+import FolderIllustration from '../assets/Illustrations/folder.svg'
+import logger from '../services/logger.js'
+
+import AlbumForm from '../components/AlbumForm.vue'
+import File from '../components/File.vue'
+import FilesListViewer from '../components/FilesListViewer.vue'
+import FilesPicker from '../components/FilesPicker.vue'
+import HeaderNavigation from '../components/HeaderNavigation.vue'
+import ShareAlbumForm from '../components/ShareAlbumForm.vue'
 
 export default {
 	name: 'AlbumContent',
 	components: {
-		MapMarker,
-		// ShareVariant,
-		Plus,
-		Pencil,
-		Star,
+		AlbumForm,
+		AlertCircle,
 		Close,
+		Delete,
 		Download,
 		DownloadMultiple,
-		Delete,
-		ImagePlus,
-		AlertCircle,
-		NcEmptyContent,
-		NcActions,
-		NcActionButton,
-		NcButton,
-		NcModal,
-		NcLoadingIcon,
-		FilesListViewer,
 		File,
-		AlbumForm,
+		FilesListViewer,
 		FilesPicker,
+		HeaderNavigation,
+		ImagePlus,
+		MapMarker,
+		NcActionButton,
+		NcActions,
+		NcButton,
+		NcEmptyContent,
+		NcModal,
+		Pencil,
+		Plus,
 		ShareAlbumForm,
+		Star,
 	},
 
 	mixins: [
+		AbortControllerMixin,
 		FetchAlbumsMixin,
 		FetchFilesMixin,
 		FilesSelectionMixin,
-		AbortControllerMixin,
 		isMobile,
 	],
 
@@ -270,7 +267,7 @@ export default {
 		 * @return {string[]} The album information for the current albumName.
 		 */
 		album() {
-			return this.albums[this.albumName]
+			return this.albums[this.albumName] || {}
 		},
 
 		/**
@@ -350,7 +347,8 @@ export default {
 				}
 
 				// cancelled request, moving on...
-				logger.error('Error fetching album files', error)
+				logger.error('Error fetching album files')
+				console.error(error)
 			} finally {
 				this.loadingFiles = false
 				this.semaphore.release(semaphoreSymbol)
@@ -363,7 +361,7 @@ export default {
 		openViewer(fileId) {
 			const file = this.files[fileId]
 			OCA.Viewer.open({
-				path: file.filename,
+				fileInfo: file,
 				list: this.albumFileIds.map(fileId => this.files[fileId]).filter(file => !file.sectionHeader),
 				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
 				canLoop: file.canLoop,
@@ -374,7 +372,12 @@ export default {
 			this.showEditAlbumForm = false
 
 			if (this.album.basename !== album.basename) {
-				this.$router.push(`/albums/${album.basename}`)
+				this.$router.push({
+					name: 'albums',
+					params: {
+						path: album.basename,
+					},
+				})
 			}
 		},
 
