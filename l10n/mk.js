@@ -46,7 +46,6 @@ OC.L10N.register(
     "This album does not exist" : "Овој албум не постои",
     "An error occurred" : "Настана грешка",
     "Add photos to this album" : "Додади фотографии во овој албум",
-    "Share this album" : "Сподели го овој албум",
     "Download all files in album" : "Преземи ги сите датотеки од албумот",
     "Download selection" : "Преземи означени",
     "Download selected files" : "Преземи ги означените датотеки",

@@ -54,7 +54,6 @@ OC.L10N.register(
     "This album does not exist" : "此相簿不存在",
     "An error occurred" : "發生錯誤",
     "Add photos to this album" : "新增照片至此相簿",
-    "Share this album" : "分享此相簿",
     "Edit album details" : "編輯相簿詳細資訊",
     "Download all files in album" : "下載相簿中的所有檔案",
     "Download selection" : "下載選取的部份",
