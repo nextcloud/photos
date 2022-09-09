@@ -54,7 +54,6 @@ OC.L10N.register(
     "This album does not exist" : "Bu albüm bulunamadı",
     "An error occurred" : "Bir sorun çıktı",
     "Add photos to this album" : "Bu albüme fotoğraflar ekle",
-    "Share this album" : "Bu albümü paylaş",
     "Edit album details" : "Albüm ayrıntılarını düzenle",
     "Download all files in album" : "Albümdeki tüm dosyaları indir",
     "Download selection" : "Seçilmişleri indir",
