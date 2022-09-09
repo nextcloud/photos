@@ -50,7 +50,6 @@ OC.L10N.register(
     "This album does not exist" : "Albuma ez da existitzen",
     "An error occurred" : "Akats bat gertatu da",
     "Add photos to this album" : "Gehitu argazkiak album honetara ",
-    "Share this album" : "Partekatu album hau",
     "Edit album details" : "Editatu albumaren xehetasunak",
     "Download all files in album" : "Deskargatu albumeko fitxategi guztiak",
     "Download selection" : "Deskargatu hautatutakoak",
