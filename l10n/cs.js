@@ -54,7 +54,6 @@ OC.L10N.register(
     "This album does not exist" : "Toto album neexistuje",
     "An error occurred" : "Došlo k chybě",
     "Add photos to this album" : "Přidat fotky do tohoto alba",
-    "Share this album" : "Nasdílet toto albu",
     "Edit album details" : "Upravit podrobnosti o albu",
     "Download all files in album" : "Stáhnout veškeré soubory v albu",
     "Download selection" : "Výběr stahování",

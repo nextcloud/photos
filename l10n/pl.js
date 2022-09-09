@@ -54,7 +54,6 @@ OC.L10N.register(
     "This album does not exist" : "Ten album nie istnieje",
     "An error occurred" : "Wystąpił błąd",
     "Add photos to this album" : "Dodaj zdjęcia do tego albumu",
-    "Share this album" : "Udostępnij ten album",
     "Edit album details" : "Edytuj szczegóły albumu",
     "Download all files in album" : "Pobierz wszystkie pliki z albumu",
     "Download selection" : "Pobierz wybrane",
