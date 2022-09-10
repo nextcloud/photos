@@ -15,7 +15,7 @@ class MoveToTrashListener implements IEventListener {
 	}
 
 	public function handle(Event $event): void {
-		if (!($event instanceOf NodeDeletedEvent)) {
+		if (!($event instanceof NodeDeletedEvent)) {
 			return;
 		}
 
