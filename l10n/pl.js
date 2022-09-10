@@ -81,6 +81,7 @@ OC.L10N.register(
     "Loading folders …" : "Ładowanie katalogów …",
     "No photos in here" : "Brak zdjęć",
     "Back to tags overview" : "Powrót do przeglądania etykiet",
+    "No photos with this tag yet" : "Nie ma jeszcze zdjęć z tą etykietą",
     "No tags yet" : "Brak etykiet",
     "Photos with tags will show up here" : "Zdjęcia z etykietami pojawią się tutaj",
     "Popular tags" : "Popularne etykiety",
