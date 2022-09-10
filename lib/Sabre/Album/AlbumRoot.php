@@ -87,12 +87,18 @@ class AlbumRoot implements ICollection, ICopyTarget {
 	 */
 	public function createFile($name, $data = null) {
 		try {
+			// userConfigService->getUserConfig handle the path creation if missing
 			$photosLocation = $this->userConfigService->getUserConfig('photosLocation');
+
 			$photosFolder = $this->userFolder->get($photosLocation);
+			if (!($photosFolder instanceof Folder)) {
+				throw new Conflict('The destination exists and is not a folder');
+			}
+
 			$node = $photosFolder->newFile($name, $data);
 			return $this->addFile($node->getId(), $node->getOwner()->getUID());
 		} catch (\Exception $e) {
-			throw new \Exception('The file could not be created');
+			throw new Forbidden('Could not create file');
 		}
 	}
 
@@ -150,6 +156,7 @@ class AlbumRoot implements ICollection, ICopyTarget {
 			$this->albumMapper->addFile($this->album->getAlbum()->getId(), $sourceId);
 			return true;
 		}
+		return false;
 	}
 
 	public function getAlbum(): AlbumWithFiles {
