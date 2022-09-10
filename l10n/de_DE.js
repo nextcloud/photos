@@ -81,6 +81,7 @@ OC.L10N.register(
     "Loading folders …" : "Ordner werden geladen...",
     "No photos in here" : "Keine Fotos vorhanden",
     "Back to tags overview" : "Zurück zur Schlagwortübersicht",
+    "No photos with this tag yet" : "Noch keine Fotos mit diesem Schlagwort",
     "No tags yet" : "Noch keine Schlagworte vorhanden",
     "Photos with tags will show up here" : "Fotos mit Schlagworten werden hier angezeigt",
     "Popular tags" : "Beliebte Schlagwörter",

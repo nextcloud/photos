@@ -81,6 +81,7 @@ OC.L10N.register(
     "Loading folders …" : "載入資料夾 …",
     "No photos in here" : "無照片檔案",
     "Back to tags overview" : "返回標籤概覽",
+    "No photos with this tag yet" : "還沒有帶有此標籤的照片",
     "No tags yet" : "尚未加入標籤",
     "Photos with tags will show up here" : "此處會顯示照片的標籤",
     "Popular tags" : "熱門標籤",
