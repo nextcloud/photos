@@ -14,6 +14,7 @@ OC.L10N.register(
     "Tags" : "標籤",
     "Locations" : "地點",
     "Photos settings" : "照片設定",
+    "Cover photo for the \"{albumName}\" album." : "“{albumName}” 相簿的封面照片。",
     "_%n item_::_%n photos and videos_" : ["%n 個照片與視像"],
     "Name of the album" : "相簿名稱",
     "Location of the album" : "相簿位置",
