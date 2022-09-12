@@ -92,7 +92,7 @@ export default {
 		},
 
 		altImg() {
-			return t('photos', 'Cover photo for the album "{albumName}".', { albumName: this.baseName })
+			return t('photos', 'Cover photo for album "{albumName}".', { albumName: this.baseName })
 		},
 	},
 }
