@@ -34,6 +34,7 @@ use Sabre\DAV\PropPatch;
 use Sabre\DAV\Server;
 use Sabre\DAV\ServerPlugin;
 use Sabre\DAV\Tree;
+use OCP\Files\NotFoundException;
 
 class PropFindPlugin extends ServerPlugin {
 	public const FILE_NAME_PROPERTYNAME = '{http://nextcloud.org/ns}file-name';
@@ -77,14 +78,22 @@ class PropFindPlugin extends ServerPlugin {
 
 	public function propFind(PropFind $propFind, INode $node): void {
 		if ($node instanceof AlbumPhoto) {
+			// Checking if the node is trulely available and ignoring if not
+			// Should be pre-emptively handled by the NodeDeletedEvent
+			try {
+				$fileInfo = $node->getFileInfo();
+			} catch (NotFoundException $e) {
+				return;
+			}
+
 			$propFind->handle(FilesPlugin::INTERNAL_FILEID_PROPERTYNAME, fn () => $node->getFile()->getFileId());
 			$propFind->handle(FilesPlugin::GETETAG_PROPERTYNAME, fn () => $node->getETag());
 			$propFind->handle(self::FILE_NAME_PROPERTYNAME, fn () => $node->getFile()->getName());
-			$propFind->handle(self::REALPATH_PROPERTYNAME, fn () => $node->getFileInfo()->getPath());
+			$propFind->handle(self::REALPATH_PROPERTYNAME, fn () => $fileInfo->getPath());
 			$propFind->handle(self::FAVORITE_PROPERTYNAME, fn () => $node->isFavorite() ? 1 : 0);
 
-			$propFind->handle(FilesPlugin::HAS_PREVIEW_PROPERTYNAME, function () use ($node) {
-				return json_encode($this->previewManager->isAvailable($node->getFileInfo()));
+			$propFind->handle(FilesPlugin::HAS_PREVIEW_PROPERTYNAME, function () use ($fileInfo) {
+				return json_encode($this->previewManager->isAvailable($fileInfo));
 			});
 
 			if ($this->metadataEnabled) {
