@@ -14,7 +14,6 @@ OC.L10N.register(
     "Tags" : "Etiketler",
     "Locations" : "Konumlar",
     "Photos settings" : "Fotoğraflar ayarları",
-    "Cover photo for the \"{albumName}\" album." : "\"{albumName}\" albümünün kapak görseli.",
     "_%n item_::_%n photos and videos_" : ["%n öge","%n fotoğraf ve görüntü"],
     "Name of the album" : "Albümün adı",
     "Location of the album" : "Albümün konumu",
