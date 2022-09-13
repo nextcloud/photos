@@ -30,6 +30,8 @@ use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
+use OCP\Files\Events\Node\NodeDeletedEvent;
+use OCA\Photos\Event\MoveToTrashListener;
 
 class Application extends App implements IBootstrap {
 	public const APP_ID = 'photos';
@@ -61,6 +63,7 @@ class Application extends App implements IBootstrap {
 	public function register(IRegistrationContext $context): void {
 		/** Register $principalBackend for the DAV collection */
 		$context->registerServiceAlias('principalBackend', Principal::class);
+		$context->registerEventListener(NodeDeletedEvent::class, MoveToTrashListener::class);
 	}
 
 	public function boot(IBootContext $context): void {

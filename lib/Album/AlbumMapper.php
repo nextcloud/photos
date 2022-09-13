@@ -86,6 +86,22 @@ class AlbumMapper {
 		}, $rows);
 	}
 
+	/**
+	 * @param int $fileId
+	 * @return AlbumInfo[]
+	 */
+	public function getForFile(int $fileId): array {
+		$query = $this->connection->getQueryBuilder();
+		$query->select("a.album_id", "name", "user", "location", "created", "last_added_photo")
+			->from("photos_albums", "a")
+			->leftJoin("a", "photos_albums_files", "p", $query->expr()->eq("a.album_id", "p.album_id"))
+			->where($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
+		$rows = $query->executeQuery()->fetchAll();
+		return array_map(function (array $row) {
+			return new AlbumInfo((int)$row['album_id'], $row['user'], $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
+		}, $rows);
+	}
+
 	public function rename(int $id, string $newName): void {
 		$query = $this->connection->getQueryBuilder();
 		$query->update("photos_albums")
