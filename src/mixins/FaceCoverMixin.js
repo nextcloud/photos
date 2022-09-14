@@ -36,20 +36,33 @@ export default {
 
 	methods: {
 		getFaceCover(faceName) {
-		  return (this.facesFiles[faceName] || [])
-			  .slice(0, 25)
-			  .map(fileId => this.files[fileId])
-			  .map(file => ({ ...file, faceDetections: JSON.parse(he.decode(file.faceDetections)) }))
-			  // sort larges face first
-			  .sort((a, b) =>
-				  b.faceDetections.find(d => d.title === faceName).width
-				  - a.faceDetections.find(d => d.title === faceName).width
-			  )
-			  // sort fewest face detections first
-			  .sort((a, b) =>
-				  a.faceDetections.length
-				  - b.faceDetections.length
-			  )[0]
+			// Give high scores for faces that intersect with the edge of the picture (with a margin of half the face size)
+			const scoreFacePosition = (faceDetection) => {
+				return Math.max(0, -1 * (faceDetection.x - faceDetection.width * 0.5))
+				+ Math.max(0, -1 * (faceDetection.y - faceDetection.height * 0.5))
+				+ Math.max(0, -1 * (1 - (faceDetection.x + faceDetection.width) - faceDetection.width * 0.5))
+				+ Math.max(0, -1 * (1 - (faceDetection.y + faceDetection.height) - faceDetection.height * 0.5))
+			}
+
+			return (this.facesFiles[faceName] || [])
+				.slice(0, 25)
+				.map(fileId => this.files[fileId])
+				.map(file => ({ ...file, faceDetections: JSON.parse(he.decode(file.faceDetections)) }))
+				// sort larges face first
+				.sort((a, b) =>
+					b.faceDetections.find(d => d.title === faceName).width
+					- a.faceDetections.find(d => d.title === faceName).width
+				)
+				// sort fewest face detections first
+				.sort((a, b) =>
+					a.faceDetections.length
+					- b.faceDetections.length
+				)
+				// Sort faces that are at the edge last
+				.sort((a, b) =>
+					scoreFacePosition(a.faceDetections.find(d => d.title === faceName))
+					- scoreFacePosition(b.faceDetections.find(d => d.title === faceName))
+				)[0]
 		},
 
 		/**
