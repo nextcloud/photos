@@ -14,6 +14,7 @@ OC.L10N.register(
     "Tags" : "Štítky",
     "Locations" : "Umístění",
     "Photos settings" : "Nastavení pro Fotky",
+    "Cover photo for album \"{albumName}\"." : "Foto na obálku alba „{albumName}“.",
     "_%n item_::_%n photos and videos_" : ["%n položka","%n fotky a videa","%n fotek a videí","%n fotky a videa"],
     "Name of the album" : "Název alba",
     "Location of the album" : "Umístění alba",
