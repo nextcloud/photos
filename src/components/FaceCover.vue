@@ -31,8 +31,8 @@
 				:style="coverDimensions">
 		</div>
 		<div class="face-cover__details">
-			<div class="face-cover__details__first-line">
-				<h2 :class="{'face-cover__details__name': true, 'hidden-visually': baseName.match(/^[0-9]+$/)}">
+			<div v-if="!baseName.match(/^[0-9]+$/)" class="face-cover__details__first-line">
+				<h2 class="face-cover__details__name">
 					{{ baseName }}
 				</h2>
 			</div>
@@ -157,6 +157,7 @@ export default {
 		}
 
 		&__second-line {
+			margin-top: 6px;
 			color: var(--color-text-maxcontrast);
 		}
 
