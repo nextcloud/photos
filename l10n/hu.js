@@ -14,6 +14,7 @@ OC.L10N.register(
     "Tags" : "Címkék",
     "Locations" : "Helyek",
     "Photos settings" : "Fényképek beállításai",
+    "Cover photo for album \"{albumName}\"." : "Borítókép a(z) „{albumName}” albumhoz.",
     "_%n item_::_%n photos and videos_" : ["%n fénykép és videó","%n fénykép és videó"],
     "Name of the album" : "Az album neve",
     "Location of the album" : "Az album helye",

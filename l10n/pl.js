@@ -14,6 +14,7 @@ OC.L10N.register(
     "Tags" : "Tagi",
     "Locations" : "Lokalizacje",
     "Photos settings" : "Ustawienia Zdjęć",
+    "Cover photo for album \"{albumName}\"." : "Zdjęcie na okładkę albumu \"{albumName}\".",
     "_%n item_::_%n photos and videos_" : ["%n pozycja","%n pozycje","%n pozycji","%n zdjęć i filmów"],
     "Name of the album" : "Nazwa albumu",
     "Location of the album" : "Lokalizacja albumu",
