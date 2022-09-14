@@ -14,6 +14,7 @@ OC.L10N.register(
     "Tags" : "Schlagwörter",
     "Locations" : "Orte",
     "Photos settings" : "Fotos-Einstellungen",
+    "Cover photo for album \"{albumName}\"." : "Cover-Foto für Album \"{albumName}\".",
     "_%n item_::_%n photos and videos_" : ["%n Stück","%n Fotos und Videos"],
     "Name of the album" : "Name des Albums",
     "Location of the album" : "Ort des Albums",
