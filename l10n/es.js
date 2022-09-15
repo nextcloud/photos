@@ -12,6 +12,7 @@ OC.L10N.register(
     "Shared with you" : "Compartido contigo",
     "Tags" : "Etiquetas",
     "Locations" : "Ubicaciones",
+    "Photos settings" : "Configuración de fotos",
     "Back" : "Atrás",
     "Save" : "Guardar",
     "Open the full size \"{name}\" image" : "Abrir la imagen \"{name}\" a tamaño completo",
