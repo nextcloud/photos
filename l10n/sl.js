@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Photos" : "Fotografije",
     "Your memories under your control" : "Spomini pod vašim nadzorom",
+    "All media" : "Vsi mediji",
     "Videos" : "Video posnetki",
     "Albums" : "Albumi",
     "People" : "Ljudje",
