@@ -12,6 +12,7 @@
     "Tags" : "Étiquettes",
     "Locations" : "Lieux",
     "Photos settings" : "Paramètres des photos",
+    "Cover photo for album \"{albumName}\"." : "Photo de couverture de l'album \"{albumName}\".",
     "_%n item_::_%n photos and videos_" : ["%n élément","%n photos et vidéos","%n photos et vidéos"],
     "Name of the album" : "Nom de l'album",
     "Location of the album" : "Emplacement de l'album",
