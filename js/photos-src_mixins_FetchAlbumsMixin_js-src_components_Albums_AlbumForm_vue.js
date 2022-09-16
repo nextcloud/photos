@@ -549,19 +549,22 @@ const SHARE = {
     },
 
     // TODO: implement public sharing
-    // async createPublicLinkForAlbum() {
-    // return axios.put(generateOcsUrl(`apps/photos/createPublicLink/${this.albumName}`))
-    // },
-    // async deletePublicLink() {
-    // return axios.delete(generateOcsUrl(`apps/photos/createPublicLink/${this.albumName}`))
-    // },
-    // async copyPublicLink() {
-    // await navigator.clipboard.writeText(this.publicLink)
-    // this.publicLinkCopied = true
-    // setTimeout(() => {
-    // this.publicLinkCopied = false
-    // }, 10000)
-    // },
+    async createPublicLinkForAlbum() {
+      return _nextcloud_axios__WEBPACK_IMPORTED_MODULE_2__["default"].put((0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_5__.generateOcsUrl)(`apps/photos/createPublicLink/${this.albumName}`));
+    },
+
+    async deletePublicLink() {
+      return _nextcloud_axios__WEBPACK_IMPORTED_MODULE_2__["default"]["delete"]((0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_5__.generateOcsUrl)(`apps/photos/createPublicLink/${this.albumName}`));
+    },
+
+    async copyPublicLink() {
+      await navigator.clipboard.writeText(this.publicLink);
+      this.publicLinkCopied = true;
+      setTimeout(() => {
+        this.publicLinkCopied = false;
+      }, 10000);
+    },
+
     selectEntity(collaboratorKey) {
       if (this.selectedCollaboratorsKeys.includes(collaboratorKey)) {
         return;
@@ -668,10 +671,9 @@ __webpack_require__.r(__webpack_exports__);
 									<nc:location />
 									<nc:dateRange />
 									<nc:collaborators />
-									</d:prop>
-									</d:propfind>`,
-          // TODO: implement public sharing
-          // <nc:publicLink />
+									<nc:publicLink />
+								</d:prop>
+							</d:propfind>`,
           details: true,
           signal: this.abortController.signal
         });
@@ -1571,6 +1573,89 @@ var render = function () {
     ),
     _vm._v(" "),
     _c("div", { staticClass: "actions" }, [
+      _vm.allowPublicLink
+        ? _c(
+            "div",
+            { staticClass: "actions__public-link" },
+            [
+              _vm.publicLink
+                ? [
+                    _c(
+                      "NcButton",
+                      {
+                        staticClass: "manage-collaborators__public-link-button",
+                        attrs: { type: "tertiary-no-background" },
+                        on: { click: _vm.copyPublicLink },
+                        scopedSlots: _vm._u(
+                          [
+                            {
+                              key: "icon",
+                              fn: function () {
+                                return [
+                                  _vm.publicLinkCopied
+                                    ? _c("Check")
+                                    : _c("ContentCopy"),
+                                ]
+                              },
+                              proxy: true,
+                            },
+                          ],
+                          null,
+                          false,
+                          845538853
+                        ),
+                      },
+                      [
+                        _vm.publicLinkCopied
+                          ? [
+                              _vm._v(
+                                "\n\t\t\t\t\t\t" +
+                                  _vm._s(
+                                    _vm.t("photos", "Public link copied!")
+                                  ) +
+                                  "\n\t\t\t\t\t"
+                              ),
+                            ]
+                          : [
+                              _vm._v(
+                                "\n\t\t\t\t\t\t" +
+                                  _vm._s(_vm.t("photos", "Copy public link")) +
+                                  "\n\t\t\t\t\t"
+                              ),
+                            ],
+                      ],
+                      2
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "NcButton",
+                      { on: { click: _vm.deletePublicLink } },
+                      [_c("Close", { attrs: { slot: "icon" }, slot: "icon" })],
+                      1
+                    ),
+                  ]
+                : _c(
+                    "NcButton",
+                    {
+                      staticClass: "manage-collaborators__public-link-button",
+                      attrs: { type: "tertiary-no-background" },
+                      on: { click: _vm.createPublicLinkForAlbum },
+                    },
+                    [
+                      _c("Earth", { attrs: { slot: "icon" }, slot: "icon" }),
+                      _vm._v(
+                        "\n\t\t\t\t" +
+                          _vm._s(_vm.t("photos", "Share via public link")) +
+                          "\n\t\t\t"
+                      ),
+                    ],
+                    1
+                  ),
+            ],
+            2
+          )
+        : _vm._e(),
+      _vm._v(" "),
       _c(
         "div",
         { staticClass: "actions__slot" },
@@ -1588,4 +1673,4 @@ render._withStripped = true
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_mixins_FetchAlbumsMixin_js-src_components_Albums_AlbumForm_vue.js.map?v=2d3f52e0ace4759057cc
+//# sourceMappingURL=photos-src_mixins_FetchAlbumsMixin_js-src_components_Albums_AlbumForm_vue.js.map?v=b271159883624ebb6769

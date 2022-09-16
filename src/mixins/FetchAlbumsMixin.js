@@ -77,10 +77,9 @@ export default {
 									<nc:location />
 									<nc:dateRange />
 									<nc:collaborators />
-									</d:prop>
-									</d:propfind>`,
-					// TODO: implement public sharing
-					// <nc:publicLink />
+									<nc:publicLink />
+								</d:prop>
+							</d:propfind>`,
 					details: true,
 					signal: this.abortController.signal,
 				})
