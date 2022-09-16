@@ -34,24 +34,25 @@ use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\ICollection;
 
 class AlbumsHome implements ICollection {
-	private AlbumMapper $albumMapper;
-	private array $principalInfo;
-	private IUser $user;
-	private IRootFolder $rootFolder;
-	private Folder $userFolder;
-	private UserConfigService $userConfigService;
+	protected AlbumMapper $albumMapper;
+	protected array $principalInfo;
+	protected IUser $user;
+	protected IRootFolder $rootFolder;
+	protected Folder $userFolder;
+	protected UserConfigService $userConfigService;
 
 	/**
 	 * @var AlbumRoot[]
 	 */
-	private ?array $children = null;
+	protected ?array $children = null;
 
 	public function __construct(
 		array $principalInfo,
 		AlbumMapper $albumMapper,
 		IUser $user,
 		IRootFolder $rootFolder,
-		UserConfigService $userConfigService) {
+		UserConfigService $userConfigService
+	) {
 		$this->principalInfo = $principalInfo;
 		$this->albumMapper = $albumMapper;
 		$this->user = $user;

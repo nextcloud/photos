@@ -22,17 +22,15 @@
 <template>
 	<div class="files-list-viewer">
 		<NcEmptyContent v-if="emptyMessage !== '' && items.length === 0 && !loading"
-			key="Ncemptycontent">
-			<template #icon>
-				<!-- eslint-disable-next-line vue/no-v-html -->
-				<span class="empty-content-illustration" v-html="EmptyBox" />
-			</template>
-			{{ emptyMessage }}
+			key="emptycontent"
+			:title="emptyMessage">
+			<PackageVariant slot="icon" />
 		</NcEmptyContent>
 
 		<TiledLayout :base-height="baseHeight" :items="items">
 			<VirtualScrolling slot-scope="{rows}"
 				:use-window="useWindow"
+				:container-element="containerElement"
 				:rows="rows"
 				:scroll-to-key="scrollToSection"
 				@need-content="needContent">
@@ -45,13 +43,14 @@
 						<li v-for="item of row.items"
 							:key="item.id"
 							:style="{ width: item.ratio ? `${row.height * item.ratio}px` : '100%', height: `${row.height}px`}">
-							<slot :file="item" :visibility="row.visibility" />
+							<!-- Placeholder when initial loading -->
+							<div v-if="showPlaceholders" class="files-list-viewer__placeholder" />
+							<!-- Real file. -->
+							<slot v-else :file="item" :visibility="row.visibility" />
 						</li>
 					</div>
 				</ul>
-				<template v-if="loading" #loader>
-					<NcLoadingIcon class="files-list-viewer__loader" />
-				</template>
+				<NcLoadingIcon v-if="loading && !showPlaceholders" slot="loader" class="files-list-viewer__loader" />
 			</VirtualScrolling>
 		</TiledLayout>
 	</div>
@@ -59,9 +58,11 @@
 <script>
 import { mapGetters } from 'vuex'
 
+import PackageVariant from 'vue-material-design-icons/PackageVariant'
+
 import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 
-import TiledLayout from '../components/TiledLayout.vue'
+import TiledLayout from '../components/TiledLayout/TiledLayout.vue'
 import VirtualScrolling from '../components/VirtualScrolling.vue'
 import EmptyBox from '../assets/Illustrations/empty.svg'
 
@@ -69,6 +70,7 @@ export default {
 	name: 'FilesListViewer',
 
 	components: {
+		PackageVariant,
 		NcEmptyContent,
 		NcLoadingIcon,
 		TiledLayout,
@@ -131,6 +133,16 @@ export default {
 	data() {
 		return {
 			EmptyBox,
+			placeholderFiles: Array(20).fill(0).map((_, index) => {
+				const height = 200
+				const width = height * (1 + Math.random() * 2)
+				return {
+					id: index,
+					width,
+					height,
+					ratio: width / height,
+				}
+			}),
 		}
 	},
 
@@ -171,18 +183,38 @@ export default {
 		},
 
 		/**
+		 * @return {boolean} The list of items to pass to TiledLayout.
+		 */
+		showPlaceholders() {
+			return this.loading && (this.fileIds?.length === 0 || this.sections?.length === 0)
+		},
+
+		/**
 		 * @return {object[]} The list of items to pass to TiledLayout.
 		 */
 		items() {
+
 			if (this.fileIds !== undefined) {
+				if (this.showPlaceholders) {
+					return this.placeholderFiles
+				}
+
 				return this.fileIdsToItems
 			}
 
 			if (this.sections !== undefined) {
+				if (this.showPlaceholders) {
+					return [{ height: 75, sectionHeader: true }, ...this.placeholderFiles]
+				}
+
 				return this.sectionsToItems
 			}
 
 			return []
+		},
+
+		showLoader() {
+			return this.loading && (this.fileIds?.length !== 0 || this.sections?.length !== 0)
 		},
 	},
 
@@ -209,18 +241,19 @@ export default {
 	height: 100%;
 	position: relative;
 
-	::v-deep .empty-content__icon {
-		width: 200px;
-		height: 200px;
-
-		.empty-content-illustration svg {
-			width: 200px;
-			height: 200px;
-		}
+	&__placeholder {
+		background: var(--color-primary-light);
+		width: 100%;
+		height: 100%;
+		border: 2px solid var(--color-main-background); // Use border so create a separation between images.
 	}
 
-	.tiled-row {
-		display: flex;
+	.tiled-container {
+		flex-basis: 0;
+
+		.tiled-row {
+			display: flex;
+		}
 	}
 
 	&__section-header {

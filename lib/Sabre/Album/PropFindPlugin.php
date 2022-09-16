@@ -38,12 +38,12 @@ use OCP\Files\NotFoundException;
 
 class PropFindPlugin extends ServerPlugin {
 	public const FILE_NAME_PROPERTYNAME = '{http://nextcloud.org/ns}file-name';
-	public const REALPATH_PROPERTYNAME = '{http://nextcloud.org/ns}realpath';
 	public const FAVORITE_PROPERTYNAME = '{http://owncloud.org/ns}favorite';
 	public const DATE_RANGE_PROPERTYNAME = '{http://nextcloud.org/ns}dateRange';
 	public const LOCATION_PROPERTYNAME = '{http://nextcloud.org/ns}location';
 	public const LAST_PHOTO_PROPERTYNAME = '{http://nextcloud.org/ns}last-photo';
 	public const NBITEMS_PROPERTYNAME = '{http://nextcloud.org/ns}nbItems';
+	public const COLLABORATORS_PROPERTYNAME = '{http://nextcloud.org/ns}collaborators';
 
 	public const TAG_FAVORITE = '_$!<Favorite>!$_';
 
@@ -89,9 +89,7 @@ class PropFindPlugin extends ServerPlugin {
 			$propFind->handle(FilesPlugin::INTERNAL_FILEID_PROPERTYNAME, fn () => $node->getFile()->getFileId());
 			$propFind->handle(FilesPlugin::GETETAG_PROPERTYNAME, fn () => $node->getETag());
 			$propFind->handle(self::FILE_NAME_PROPERTYNAME, fn () => $node->getFile()->getName());
-			$propFind->handle(self::REALPATH_PROPERTYNAME, fn () => $fileInfo->getPath());
 			$propFind->handle(self::FAVORITE_PROPERTYNAME, fn () => $node->isFavorite() ? 1 : 0);
-
 			$propFind->handle(FilesPlugin::HAS_PREVIEW_PROPERTYNAME, function () use ($fileInfo) {
 				return json_encode($this->previewManager->isAvailable($fileInfo));
 			});
@@ -113,11 +111,12 @@ class PropFindPlugin extends ServerPlugin {
 			}
 		}
 
-		if ($node instanceof AlbumRoot) {
+		if ($node instanceof AlbumRoot || $node instanceof SharedAlbumRoot) {
 			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn () => $node->getAlbum()->getAlbum()->getLastAddedPhoto());
 			$propFind->handle(self::NBITEMS_PROPERTYNAME, fn () => count($node->getChildren()));
 			$propFind->handle(self::LOCATION_PROPERTYNAME, fn () => $node->getAlbum()->getAlbum()->getLocation());
 			$propFind->handle(self::DATE_RANGE_PROPERTYNAME, fn () => json_encode($node->getDateRange()));
+			$propFind->handle(self::COLLABORATORS_PROPERTYNAME, fn () => $node->getCollaborators());
 
 			// TODO detect dynamically which metadata groups are requested and
 			// preload all of them and not just size
@@ -139,6 +138,17 @@ class PropFindPlugin extends ServerPlugin {
 		if ($node instanceof AlbumRoot) {
 			$propPatch->handle(self::LOCATION_PROPERTYNAME, function ($location) use ($node) {
 				$this->albumMapper->setLocation($node->getAlbum()->getAlbum()->getId(), $location);
+				return true;
+			});
+			$propPatch->handle(self::COLLABORATORS_PROPERTYNAME, function ($collaborators) use ($node) {
+				$this->albumMapper->setCollaborators($node->getAlbum()->getAlbum()->getId(), json_decode($collaborators, true));
+				return true;
+			});
+		}
+
+		if ($node instanceof AlbumPhoto) {
+			$propPatch->handle(self::FAVORITE_PROPERTYNAME, function ($favoriteState) use ($node) {
+				$node->setFavoriteState($favoriteState);
 				return true;
 			});
 		}

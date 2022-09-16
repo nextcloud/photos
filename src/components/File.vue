@@ -22,11 +22,12 @@
 
 <template>
 	<div class="file-container"
+		data-test="media"
 		:class="{selected}">
 		<a class="file"
 			:href="davPath"
 			:aria-label="ariaLabel"
-			@click.prevent="emitClick">
+			@click.stop.prevent="emitClick">
 
 			<!-- image and loading placeholder -->
 			<div class="file__images">
@@ -205,7 +206,7 @@ export default {
 		},
 
 		getItemURL(size) {
-			return generateUrl(`/core/preview?fileId=${this.file.fileid}&c=${this.decodedEtag}&x=${size}&y=${size}&forceIcon=0&a=1`)
+			return generateUrl(`/apps/photos/api/v1/preview/${this.file.fileid}?x=${size}&y=${size}`)
 
 		},
 

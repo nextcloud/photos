@@ -38,6 +38,14 @@ return [
 				'path' => '',
 			]
 		],
+		['name' => 'page#index', 'url' => '/sharedalbums/{path}', 'verb' => 'GET', 'postfix' => 'sharedalbums',
+			'requirements' => [
+				'path' => '.*',
+			],
+			'defaults' => [
+				'path' => '',
+			]
+		],
 		['name' => 'page#index', 'url' => '/folders/{path}', 'verb' => 'GET', 'postfix' => 'folders',
 			'requirements' => [
 				'path' => '.*',
@@ -109,6 +117,15 @@ return [
 			'defaults' => [
 				'path' => '',
 			],
+		],
+
+		[
+			'name' => 'preview#index',
+			'url' => '/api/v1/preview/{fileId}',
+			'verb' => 'GET',
+			'requirements' => [
+				'fileId' => '.*',
+			]
 		],
 	]
 ];

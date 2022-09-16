@@ -20,56 +20,46 @@
  -
  -->
 <template>
-	<!-- Errors handlers-->
-	<NcEmptyContent v-if="errorFetchingAlbums">
-		{{ t('photos', 'An error occurred') }}
-	</NcEmptyContent>
-
-	<!-- Album list -->
-	<div v-else class="albums">
-		<HeaderNavigation key="navigation"
+	<div>
+		<CollectionsList :collections="albums"
 			:loading="loadingAlbums"
-			:title="t('photos', 'Albums')"
-			:root-title="t('photos', 'Albums')"
-			@refresh="onRefresh">
-			<NcButton type="primary"
-				:aria-label="t('photos', 'Create a new album.')"
-				@click="showAlbumCreationForm = true">
-				<template #icon>
-					<Plus />
-				</template>
-				{{ t('photos', 'New album') }}
-			</NcButton>
-		</HeaderNavigation>
+			:error="errorFetchingAlbums"
+			class="albums-list">
+			<HeaderNavigation key="navigation"
+				slot="header"
+				:loading="loadingAlbums"
+				:title="t('photos', 'Albums')"
+				:root-title="t('photos', 'Albums')"
+				@refresh="onRefresh">
+				<slot name="header" />
+				<NcButton type="primary"
+					:aria-label="t('photos', 'Create a new album.')"
+					@click="showAlbumCreationForm = true">
+					<template #icon>
+						<Plus />
+					</template>
+					{{ t('photos', 'New album') }}
+				</NcButton>
+			</HeaderNavigation>
 
-		<!-- No albums -->
-		<div v-if="noAlbums && !loadingAlbums" class="albums__empty">
-			<NcEmptyContent>
-				<template #icon>
-					<FolderMultipleImage />
-				</template>
-				<template #desc>
-					{{ t('photos', "There is no album yet!") }}
-				</template>
+			<CollectionCover :key="collection.basename"
+				slot-scope="{collection}"
+				:link="`/albums/${collection.basename}`"
+				:alt-img="t('photos', 'Cover photo for album {albumName}', { albumName: collection.basename })"
+				:cover-url="collection.lastPhoto | coverUrl">
+				<h2 class="album__name">
+					{{ collection.basename }}
+				</h2>
+
+				<div slot="subtitle" class="album__details">
+					{{ collection.date }} ⸱ {{ n('photos', '%n item', '%n photos and videos', collection.nbItems,) }}
+				</div>
+			</CollectionCover>
+
+			<NcEmptyContent slot="empty-collections-list" :title="t('photos', 'There is no album yet!')">
+				<FolderMultipleImage slot="icon" />
 			</NcEmptyContent>
-
-			<NcButton class="albums__empty__button"
-				type="primary"
-				:aria-label="t('photos', 'Create a new album')"
-				@click="showAlbumCreationForm = true">
-				<template #icon>
-					<Plus />
-				</template>
-				{{ t('photos', "Add") }}
-			</NcButton>
-		</div>
-
-		<div v-else-if="!noAlbums" class="albums__list">
-			<AlbumCover v-for="album in albums"
-				:key="album.basename"
-				class="album"
-				:base-name="album.basename" />
-		</div>
+		</CollectionsList>
 
 		<NcModal v-if="showAlbumCreationForm"
 			:title="t('photos', 'New album')"
@@ -80,27 +70,43 @@
 </template>
 
 <script>
-import { NcButton, NcModal, NcEmptyContent } from '@nextcloud/vue'
-
 import Plus from 'vue-material-design-icons/Plus'
 import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage'
 
+import { generateUrl } from '@nextcloud/router'
+import { NcModal, NcButton, NcEmptyContent } from '@nextcloud/vue'
+
 import FetchAlbumsMixin from '../mixins/FetchAlbumsMixin.js'
-import AlbumCover from '../components/AlbumCover.vue'
-import AlbumForm from '../components/AlbumForm.vue'
+import CollectionsList from '../components/Collection/CollectionsList.vue'
+import CollectionCover from '../components/Collection/CollectionCover.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import AlbumForm from '../components/Albums/AlbumForm.vue'
 
 export default {
 	name: 'Albums',
 	components: {
-		AlbumCover,
-		AlbumForm,
+		Plus,
 		FolderMultipleImage,
-		HeaderNavigation,
+		NcModal,
 		NcButton,
 		NcEmptyContent,
-		NcModal,
-		Plus,
+		CollectionsList,
+		CollectionCover,
+		HeaderNavigation,
+		AlbumForm,
+	},
+
+	filters: {
+		/**
+		 * @param {string} lastPhoto The album's last photos.
+		 */
+		coverUrl(lastPhoto) {
+			if (lastPhoto === -1) {
+				return ''
+			}
+
+			return generateUrl(`/apps/photos/api/v1/preview/${lastPhoto}?x=${512}&y=${512}`)
+		},
 	},
 
 	mixins: [
@@ -113,24 +119,10 @@ export default {
 		}
 	},
 
-	computed: {
-		/**
-		 * @return {boolean} Whether the list of album is empty or not.
-		 */
-		noAlbums() {
-			return Object.keys(this.albums).length === 0
-		},
-	},
-
 	methods: {
 		handleAlbumCreated({ album }) {
 			this.showAlbumCreationForm = false
-			this.$router.push({
-				name: 'albums',
-				params: {
-					path: album.basename,
-				},
-			})
+			this.$router.push(`albums/${album.basename}`)
 		},
 
 		onRefresh() {
@@ -140,46 +132,15 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.albums {
+.albums-list {
 	display: flex;
 	flex-direction: column;
-	height: 100%;
 
-	&__list {
-		padding: 32px 48px;
-		flex-grow: 1;
-		display: flex;
-		flex-wrap: wrap;
-		gap: 16px;
-		align-items: flex-start;
-		height: calc(100% - 60px);
-		overflow-x: scroll;
-
-		@media only screen and (max-width: 1200px) {
-			padding: 32px 12px;
-			justify-content: center;
-		}
-
-	}
-
-	&__empty {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-
-		&__button {
-			margin-top: 32px;
-		}
-	}
-}
-
-.empty-content-with-illustration ::v-deep .empty-content__icon {
-	width: 200px;
-	height: 200px;
-
-	svg {
-		width: 200px;
-		height: 200px;
+	.album__name {
+		font-weight: normal;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
 }
 </style>

@@ -76,14 +76,31 @@ export default {
 									<nc:nbItems />
 									<nc:location />
 									<nc:dateRange />
-								</d:prop>
-							</d:propfind>`,
+									<nc:collaborators />
+									</d:prop>
+									</d:propfind>`,
+					// TODO: implement public sharing
+					// <nc:publicLink />
 					details: true,
 					signal: this.abortController.signal,
 				})
 
 				const albums = response.data
-					.filter(album => album.filename !== '/photos/admin/albums')
+					.filter(album => album.filename !== `/photos/${getCurrentUser()?.uid}/albums`)
+					// Ensure that we have a proper collaborators array.
+					.map(album => {
+						if (album.props.collaborators === '') {
+							album.props.collaborators = []
+						} else if (typeof album.props.collaborators.collaborator === 'object') {
+							if (Array.isArray(album.props.collaborators.collaborator)) {
+								album.props.collaborators = album.props.collaborators.collaborator
+							} else {
+								album.props.collaborators = [album.props.collaborators.collaborator]
+							}
+						}
+
+						return album
+					})
 					.map(album => genFileInfo(album))
 					.map(album => {
 						const dateRange = JSON.parse(album.dateRange?.replace(/&quot;/g, '"') ?? '{}')

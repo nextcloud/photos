@@ -146,21 +146,21 @@ const actions = {
 
 		const promises = fileIdsToAdd
 			.map(async (fileId) => {
-				const fileName = context.getters.files[fileId].filename
-				const fileBaseName = context.getters.files[fileId].basename
+				const file = context.getters.files[fileId]
+				const album = context.getters.albums[albumName]
 				const symbol = await semaphore.acquire()
 
 				try {
 					await client.copyFile(
-						`/files/${getCurrentUser()?.uid}/${fileName}`,
-						`/photos/${getCurrentUser()?.uid}/albums/${albumName}/${fileBaseName}`
+						file.filename,
+						`${album.filename}/${file.basename}`,
 					)
 				} catch (error) {
 					if (error.response.status !== 409) { // Already in the album.
 						context.commit('removeFilesFromAlbum', { albumName, fileIdsToRemove: [fileId] })
 
-						logger.error(t('photos', 'Failed to add {fileBaseName} to album {albumName}.', { fileBaseName, albumName }), error)
-						showError(t('photos', 'Failed to add {fileBaseName} to album {albumName}.', { fileBaseName, albumName }))
+						logger.error(t('photos', 'Failed to add {fileBaseName} to album {albumName}.', { fileBaseName: file.basename, albumName }), error)
+						showError(t('photos', 'Failed to add {fileBaseName} to album {albumName}.', { fileBaseName: file.basename, albumName }))
 					}
 				} finally {
 					semaphore.release(symbol)
@@ -185,16 +185,16 @@ const actions = {
 
 		const promises = fileIdsToRemove
 			.map(async (fileId) => {
-				const fileBaseName = context.getters.files[fileId].basename
+				const file = context.getters.files[fileId]
 				const symbol = await semaphore.acquire()
 
 				try {
-					await client.deleteFile(`/photos/${getCurrentUser()?.uid}/albums/${albumName}/${fileBaseName}`)
+					await client.deleteFile(file.filename)
 				} catch (error) {
 					context.commit('addFilesToAlbum', { albumName, fileIdsToAdd: [fileId] })
 
-					logger.error(t('photos', 'Failed to delete {fileBaseName}.', { fileBaseName }), error)
-					showError(t('photos', 'Failed to delete {fileBaseName}.', { fileBaseName }))
+					logger.error(t('photos', 'Failed to delete {fileBaseName}.', { fileBaseName: file.basename }), error)
+					showError(t('photos', 'Failed to delete {fileBaseName}.', { fileBaseName: file.basename }))
 				} finally {
 					semaphore.release(symbol)
 				}
@@ -231,20 +231,19 @@ const actions = {
 	 */
 	async renameAlbum(context, { currentAlbumName, newAlbumName }) {
 		const album = state.albums[currentAlbumName]
-		const newAlbum = { ...album, basename: newAlbumName }
+		const newAlbum = {
+			...album,
+			basename: newAlbumName,
+			filename: `/photos/${getCurrentUser()?.uid}/albums/${newAlbumName}`,
+		}
+
 		try {
 			context.commit('addAlbums', { albums: [newAlbum] })
-
-			await client.moveFile(
-				`/photos/${getCurrentUser()?.uid}/albums/${currentAlbumName}`,
-				`/photos/${getCurrentUser()?.uid}/albums/${newAlbumName}`,
-			)
-
+			await client.moveFile(album.filename, newAlbum.filename)
 			context.commit('removeAlbums', { albumNames: [currentAlbumName] })
 			return newAlbum
 		} catch (error) {
 			context.commit('removeAlbums', { albumNames: [newAlbumName] })
-
 			logger.error(t('photos', 'Failed to rename {currentAlbumName} to {newAlbumName}.', { currentAlbumName, newAlbumName }), error)
 			showError(t('photos', 'Failed to rename {currentAlbumName} to {newAlbumName}.', { currentAlbumName, newAlbumName }))
 			return album
@@ -252,22 +251,38 @@ const actions = {
 	},
 
 	/**
-	 * Update an album's location.
+	 * Update an album's properties.
 	 *
 	 * @param {object} context vuex context
 	 * @param {object} data destructuring object
 	 * @param {string} data.albumName - The name of the album.
-	 * @param {string} data.newLocation - The new location of the album.
+	 * @param {object} data.properties - The properties to update.
 	 */
-	async updateAlbumLocation(context, { albumName, newLocation }) {
-		const album = state.albums[albumName]
-		const updatedAlbum = { ...album, location: newLocation }
+	async updateAlbum(context, { albumName, properties }) {
+		const album = context.state.albums[albumName]
+
+		const updatedAlbum = { ...album, ...properties }
+
+		const stringifiedProperties = Object
+			.entries(properties)
+			.map(([name, value]) => {
+				switch (typeof value) {
+				case 'string':
+					return `<nc:${name}>${value}</nc:${name}>`
+				case 'object':
+					return `<nc:${name}>${JSON.stringify(value)}</nc:${name}>`
+				default:
+					return ''
+				}
+			})
+			.join()
 
 		try {
 			context.commit('updateAlbum', { album: updatedAlbum })
 
 			await client.customRequest(
-				`/photos/${getCurrentUser()?.uid}/albums/${albumName}`,
+				// TODO: use album.filename
+				album.filename,
 				{
 					method: 'PROPPATCH',
 					data: `<?xml version="1.0"?>
@@ -276,9 +291,9 @@ const actions = {
 								xmlns:nc="http://nextcloud.org/ns"
 								xmlns:ocs="http://open-collaboration-services.org/ns">
 							<d:set>
-									<d:prop>
-									<nc:location>${newLocation}</nc:location>
-									</d:prop>
+								<d:prop>
+									${stringifiedProperties}
+								</d:prop>
 							</d:set>
 							</d:propertyupdate>`,
 				}
@@ -287,9 +302,8 @@ const actions = {
 			return updatedAlbum
 		} catch (error) {
 			context.commit('updateAlbum', { album })
-
-			logger.error(t('photos', 'Failed to update location of {albumName} to {newLocation}.', { albumName, newLocation }), error)
-			showError(t('photos', 'Failed to update location of {albumName} to {newLocation}.', { albumName, newLocation }))
+			logger.error(t('photos', 'Failed to update properties of {albumName} with {properties}.', { albumName, properties: JSON.stringify(properties) }), error)
+			showError(t('photos', 'Failed to update properties of {albumName} with {properties}.', { albumName, properties: JSON.stringify(properties) }))
 			return album
 		}
 	},
@@ -303,7 +317,8 @@ const actions = {
 	 */
 	async deleteAlbum(context, { albumName }) {
 		try {
-			await client.deleteFile(`/photos/${getCurrentUser()?.uid}/albums/${albumName}`)
+			const album = context.getters.albums[albumName]
+			await client.deleteFile(album.filename)
 			context.commit('removeAlbums', { albumNames: [albumName] })
 		} catch (error) {
 			logger.error(t('photos', 'Failed to delete {albumName}.', { albumName }), error)

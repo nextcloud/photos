@@ -33,6 +33,8 @@ import isRecognizeInstalled from '../services/IsRecognizeInstalled.js'
 const Folders = () => import('../views/Folders')
 const Albums = () => import('../views/Albums')
 const AlbumContent = () => import('../views/AlbumContent')
+const SharedAlbums = () => import('../views/SharedAlbums')
+const SharedAlbumContent = () => import('../views/SharedAlbumContent')
 const Tags = () => import('../views/Tags')
 const TagContent = () => import('../views/TagContent')
 const Timeline = () => import('../views/Timeline')
@@ -94,6 +96,19 @@ const router = new Router({
 			path: '/albums/:albumName*',
 			component: AlbumContent,
 			name: 'albums',
+			props: route => ({
+				albumName: route.params.albumName,
+			}),
+		},
+		{
+			path: '/sharedalbums',
+			component: SharedAlbums,
+			name: 'sharedAlbums',
+		},
+		{
+			path: '/sharedalbums/:albumName*',
+			component: SharedAlbumContent,
+			name: 'sharedAlbums',
 			props: route => ({
 				albumName: route.params.albumName,
 			}),

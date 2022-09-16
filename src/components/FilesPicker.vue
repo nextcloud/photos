@@ -23,7 +23,7 @@
 	<div class="file-picker">
 		<div class="file-picker__content">
 			<div class="file-picker__navigation"
-				:class="{'file-picker__navigation--loading': loadingFiles && monthsList.length === 0}">
+				:class="{'file-picker__navigation--placeholder': monthsList.length === 0}">
 				<div v-for="month in monthsList"
 					:key="month"
 					class="file-picker__navigation__month"
@@ -33,8 +33,9 @@
 				</div>
 			</div>
 			<FilesListViewer class="file-picker__file-list"
-				:class="{'file-picker__file-list--loading': loadingFiles && monthsList.length === 0}"
+				:class="{'file-picker__file-list--placeholder': monthsList.length === 0}"
 				:file-ids-by-section="fileIdsByMonth"
+				:empty-message="t('photos', 'There is no photos or videos yet!')"
 				:sections="monthsList"
 				:loading="loadingFiles"
 				:base-height="100"
@@ -191,18 +192,18 @@ export default {
 		height: 100%;
 
 		@media only screen and (max-width: 1200px) {
-			flex-basis: 80px;
+			flex-basis: 100px;
 		}
 
-		&--loading {
+		&--placeholder {
 			background: var(--color-primary-light);
-			border-radius: 16px;
+			border-radius: var(--border-radius-large);
 		}
 
 		&__month {
 			font-weight: bold;
 			font-size: 16px;
-			border-radius: 48px;
+			border-radius: var(--border-radius-pill);
 			padding: 8px 16px;
 			margin: 4px 0;
 			cursor: pointer;
@@ -226,15 +227,25 @@ export default {
 		min-width: 0;
 		height: 100%;
 
-		&--loading {
+		&--placeholder {
 			background: var(--color-primary-light);
-			border-radius: 16px;
+			border-radius: var(--border-radius-large);
 		}
 
 		.section-header {
 			font-weight: bold;
 			font-size: 20px;
 			padding: 8px 0 4px 0;
+		}
+
+		::v-deep .empty-content {
+			position: absolute;
+			width: 100%;
+			margin-top: 0;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
 		}
 	}
 

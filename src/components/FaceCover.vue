@@ -86,7 +86,7 @@ export default {
 				return ''
 			}
 
-			return generateUrl(`/core/preview?fileId=${this.cover.fileid}&x=${512}&y=${512}&forceIcon=0&a=1`)
+			return generateUrl(`/apps/photos/api/v1/preview/${this.cover.fileid}?x=${512}&y=${512}`)
 		},
 
 		cover() {

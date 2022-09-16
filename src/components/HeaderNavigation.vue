@@ -33,16 +33,20 @@
 		</NcButton>
 
 		<!-- Main Navigation title -->
-		<h2 class="photos-navigation__title" @click="refresh">
-			{{ name }}
-		</h2>
+		<div class="photos-navigation__title">
+			<h2 class="photos-navigation__title__main" @click="refresh">
+				{{ name }}
+			</h2>
+			<div class="photos-navigation__title__sub" />
+			<slot name="subtitle" />
+		</div>
 
 		<!-- Main slot -->
 		<div v-if="$slots.default" class="photos-navigation__content">
 			<slot />
 		</div>
 
-		<NcLoadingIcon v-if="loading" class="photos-navigation__loader" />
+		<NcLoadingIcon v-show="loading" class="photos-navigation__loader" />
 
 		<div class="photos-navigation__content-right">
 			<slot name="right" />
@@ -197,7 +201,6 @@ button.app-navigation-toggle {
 	display: flex;
 	align-items: center;
 	width: 100%;
-	height: var(--photos-navigation-height);
 	min-height: var(--photos-navigation-height);
 	padding: 0 var(--photos-navigation-height);
 	background: var(--color-main-background);
@@ -210,12 +213,21 @@ button.app-navigation-toggle {
 	}
 
 	&__title {
-		overflow: hidden;
-		margin: 0;
+		max-width: 50%;
 		margin-right: calc(2 * var(--photos-navigation-spacing));
-		cursor: pointer;
-		white-space: nowrap;
-		text-overflow: ellipsis;
+		display: flex;
+		flex-direction: column;
+
+		&__main {
+			margin: 0;
+			cursor: pointer;
+		}
+
+		&__main, &__sub {
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
 	}
 
 	&__loader {

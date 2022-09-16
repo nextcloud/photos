@@ -117,7 +117,7 @@
 
 		<FilesListViewer v-if="face !== undefined"
 			class="face__photos"
-			:use-window="true"
+			:container-element="appContent"
 			:file-ids="faceFileIds"
 			:loading="loadingFiles || loadingFaces">
 			<File slot-scope="{file, visibility}"
@@ -233,6 +233,7 @@ export default {
 			showMergeModal: false,
 			showRenameModal: false,
 			loadingCount: 0,
+			appContent: document.getElementById('app-content-vue'),
 		}
 	},
 
