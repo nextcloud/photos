@@ -161,4 +161,29 @@ describe('Manage shared albums', () => {
       cy.get('ul.collections__list li').should('have.length', 3)
     })
   })
+
+  context('Two shared albums with the same name', () => {
+    before(() => {
+      cy.logout()
+      cy.login(randUser, 'password')
+      cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
+      cy.createAnAlbumFromAlbums('shared_album_test5')
+      cy.addCollaborators([randUser2])
+      cy.logout()
+
+      cy.login(randUser3, 'password')
+      cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
+      cy.createAnAlbumFromAlbums('shared_album_test5')
+      cy.addCollaborators([randUser2])
+      cy.logout()
+    })
+
+
+    it('It should display two shared albums', () => {
+      cy.get('ul.collections__list li')
+        .contains(`shared_album_test5 (${randUser})`)
+      cy.get('ul.collections__list li')
+        .contains(`shared_album_test5 (${randUser3})`)
+    })
+  })
 })
