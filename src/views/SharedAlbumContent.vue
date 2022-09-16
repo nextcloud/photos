@@ -54,7 +54,7 @@
 						</template>
 					</NcButton>
 
-					<NcActions :aria-label="t('photos', 'Open actions menu')">
+					<NcActions :force-menu="true" :aria-label="t('photos', 'Open actions menu')">
 						<ActionDownload v-if="albumFileIds.length > 0"
 							:selected-file-ids="albumFileIds"
 							:title="t('photos', 'Download all files in album')">
