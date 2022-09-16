@@ -249,7 +249,7 @@ class AlbumMapper {
 
 	/**
 	 * @param int $albumId
-	 * @return array<array{'id': string, 'label': string, 'source': int}>
+	 * @return array<array{'id': string, 'label': string, 'source': string}>
 	 */
 	public function getCollaborators(int $albumId): array {
 		$query = $this->connection->getQueryBuilder();
@@ -281,7 +281,7 @@ class AlbumMapper {
 			return [
 				'id' => $row['collaborator_id'],
 				'label' => $collaborator->getDisplayName(),
-				'source' => (int)$row['collaborator_source'],
+				'source' => $row['collaborator_source'] === self::TYPE_USER ? "users" : "groups",
 			];
 		}, $rows);
 
@@ -301,13 +301,16 @@ class AlbumMapper {
 		$this->connection->beginTransaction();
 
 		foreach ($collaboratorsToAdd as $collaborator) {
+			$source = null;
 			switch ($collaborator['source']) {
 				case self::TYPE_USER:
+					$source = self::TYPE_USER;
 					if (is_null($this->userManager->get($collaborator['id']))) {
 						throw new \Exception('Unknown collaborator: ' . $collaborator['id']);
 					}
 					break;
 				case self::TYPE_GROUP:
+					$source = self::TYPE_GROUP;
 					if (is_null($this->groupManager->get($collaborator['id']))) {
 						throw new \Exception('Unknown collaborator: ' . $collaborator['id']);
 					}
@@ -320,7 +323,7 @@ class AlbumMapper {
 			$query->insert('photos_collaborators')
 				->setValue('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT))
 				->setValue('collaborator_id', $query->createNamedParameter($collaborator['id']))
-				->setValue('collaborator_source', $query->createNamedParameter($collaborator['source'], IQueryBuilder::PARAM_INT))
+				->setValue('collaborator_source', $query->createNamedParameter($source, IQueryBuilder::PARAM_INT))
 				->executeStatement();
 		}
 

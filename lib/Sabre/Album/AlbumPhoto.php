@@ -76,7 +76,7 @@ class AlbumPhoto implements IFile {
 
 	public function get() {
 		$nodes = $this->rootFolder
-			->getUserFolder($this->albumFile->getOwner())
+			->getUserFolder($this->albumFile->getOwner() || $this->album->getUserId())
 			->getById($this->albumFile->getFileId());
 		$node = current($nodes);
 		if ($node) {
@@ -97,7 +97,7 @@ class AlbumPhoto implements IFile {
 
 	public function getFileInfo(): Node {
 		$nodes = $this->rootFolder
-			->getUserFolder($this->albumFile->getOwner())
+			->getUserFolder($this->albumFile->getOwner() ?? $this->album->getUserId())
 			->getById($this->albumFile->getFileId());
 		$node = current($nodes);
 		if ($node) {
