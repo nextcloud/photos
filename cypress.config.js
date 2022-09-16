@@ -2,6 +2,8 @@ const { defineConfig } = require("cypress");
 const browserify = require('@cypress/browserify-preprocessor')
 
 module.exports = defineConfig({
+	projectId: 'nc_photos_cy',
+
 	viewportWidth: 1280,
 	viewportHeight: 720,
 	defaultCommandTimeout: 6000,
