@@ -290,6 +290,7 @@ export default {
 
 		async handleDeleteAlbum() {
 			await this.deleteSharedAlbum({ albumName: this.albumName })
+			this.$router.push('/sharedalbums')
 		},
 	},
 }
