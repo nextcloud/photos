@@ -45,7 +45,7 @@
 					<NcLoadingIcon v-if="loadingCollaborators" />
 				</label>
 
-				<ul :id="`manage-collaborators__form__list-${randomId}`" class="manage-collaborators__form__list">
+				<ul v-if="searchResults.length !== 0" :id="`manage-collaborators__form__list-${randomId}`" class="manage-collaborators__form__list">
 					<li v-for="result of searchResults" :key="result.key">
 						<a>
 							<NcListItemIcon :id="availableCollaborators[result.key].id"
@@ -58,6 +58,12 @@
 						</a>
 					</li>
 				</ul>
+				<NcEmptyContent v-else
+					key="emptycontent"
+					class="manage-collaborators__form__list--empty"
+					:title="t('photos', 'No collaborators available')">
+					<AccountGroup slot="icon" />
+				</NcEmptyContent>
 			</NcPopover>
 		</form>
 
@@ -116,13 +122,14 @@
 <script>
 import Magnify from 'vue-material-design-icons/Magnify'
 import Close from 'vue-material-design-icons/Close'
+import AccountGroup from 'vue-material-design-icons/AccountGroup'
 import Earth from 'vue-material-design-icons/Earth'
 
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateOcsUrl } from '@nextcloud/router'
-import { NcButton, NcListItemIcon, NcLoadingIcon, NcPopover, NcTextField } from '@nextcloud/vue'
+import { NcButton, NcListItemIcon, NcLoadingIcon, NcPopover, NcTextField, NcEmptyContent } from '@nextcloud/vue'
 
 import logger from '../../services/logger.js'
 
@@ -140,12 +147,14 @@ export default {
 	components: {
 		Magnify,
 		Close,
+		AccountGroup,
 		Earth,
 		NcLoadingIcon,
 		NcButton,
 		NcListItemIcon,
 		NcTextField,
 		NcPopover,
+		NcEmptyContent,
 	},
 
 	props: {
@@ -354,6 +363,10 @@ export default {
 				&:hover {
 					background: var(--color-background-dark);
 				}
+			}
+
+			&--empty {
+				margin: 100px 0;
 			}
 		}
 	}
