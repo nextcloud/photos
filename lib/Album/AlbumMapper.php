@@ -290,13 +290,15 @@ class AlbumMapper {
 
 	/**
 	 * @param int $albumId
-	 * @param array{'id': string, 'label': string, 'source': int} $newCollaborators
+	 * @param array{'id': string, 'label': string, 'source': int} $collaborators
 	 */
-	public function setCollaborators(int $albumId, array $newCollaborators): void {
+	public function setCollaborators(int $albumId, array $collaborators): void {
 		$existingCollaborators = $this->getCollaborators($albumId);
 
-		$collaboratorsToAdd = array_udiff($newCollaborators, $existingCollaborators, fn ($a, $b) => strcmp($a['id'].$a['source'], $b['id'].$b['source']));
-		$collaboratorsToRemove = array_udiff($existingCollaborators, $newCollaborators, fn ($a, $b) => strcmp($a['id'].$a['source'], $b['id'].$b['source']));
+		$collaboratorsToAdd = array_udiff($collaborators, $existingCollaborators, fn ($a, $b) => strcmp($a['id'].$a['source'], $b['id'].$b['source']));
+		$collaboratorsToRemove = array_udiff($existingCollaborators, $collaborators, fn ($a, $b) => strcmp($a['id'].$a['source'], $b['id'].$b['source']));
+
+		$this->connection->beginTransaction();
 
 		foreach ($collaboratorsToAdd as $collaborator) {
 			switch ($collaborator['source']) {
@@ -330,10 +332,13 @@ class AlbumMapper {
 				->andWhere($query->expr()->eq('collaborator_source', $query->createNamedParameter($collaborator['source'], IQueryBuilder::PARAM_INT)))
 				->executeStatement();
 		}
+
+		$this->connection->commit();
 	}
 
 	/**
-	 * @param string $userId
+	 * @param string $collaboratorId
+	 * @param string $collaboratorsSource - The source of the collaborator, either a user or a group.
 	 * @return AlbumWithFiles[]
 	 */
 	public function getSharedAlbumsForCollaboratorWithFiles(string $collaboratorId, int $collaboratorSource): array {
