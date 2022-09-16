@@ -79,7 +79,7 @@
 		</ul>
 
 		<div class="actions">
-			<!-- <div v-if="allowPublicLink" class="actions__public-link">
+			<div v-if="allowPublicLink" class="actions__public-link">
 				<template v-if="publicLink">
 					<NcButton class="manage-collaborators__public-link-button"
 						type="tertiary-no-background"
@@ -106,7 +106,7 @@
 					<Earth slot="icon" />
 					{{ t('photos', 'Share via public link') }}
 				</NcButton>
-			</div> -->
+			</div>
 
 			<div class="actions__slot">
 				<slot :collaborators="selectedCollaborators" />
@@ -266,21 +266,21 @@ export default {
 		},
 
 		// TODO: implement public sharing
-		// async createPublicLinkForAlbum() {
-		// return axios.put(generateOcsUrl(`apps/photos/createPublicLink/${this.albumName}`))
-		// },
+		async createPublicLinkForAlbum() {
+			return axios.put(generateOcsUrl(`apps/photos/createPublicLink/${this.albumName}`))
+		},
 
-		// async deletePublicLink() {
-		// return axios.delete(generateOcsUrl(`apps/photos/createPublicLink/${this.albumName}`))
-		// },
+		async deletePublicLink() {
+			return axios.delete(generateOcsUrl(`apps/photos/createPublicLink/${this.albumName}`))
+		},
 
-		// async copyPublicLink() {
-		// await navigator.clipboard.writeText(this.publicLink)
-		// this.publicLinkCopied = true
-		// setTimeout(() => {
-		// this.publicLinkCopied = false
-		// }, 10000)
-		// },
+		async copyPublicLink() {
+			await navigator.clipboard.writeText(this.publicLink)
+			this.publicLinkCopied = true
+			setTimeout(() => {
+				this.publicLinkCopied = false
+			}, 10000)
+		},
 
 		selectEntity(collaboratorKey) {
 			if (this.selectedCollaboratorsKeys.includes(collaboratorKey)) {

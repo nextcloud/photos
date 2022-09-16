@@ -281,7 +281,6 @@ const actions = {
 			context.commit('updateAlbum', { album: updatedAlbum })
 
 			await client.customRequest(
-				// TODO: use album.filename
 				album.filename,
 				{
 					method: 'PROPPATCH',

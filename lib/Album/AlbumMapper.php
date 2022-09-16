@@ -44,7 +44,7 @@ class AlbumMapper {
 	// Same mapping as IShare.
 	public const TYPE_USER = 0;
 	public const TYPE_GROUP = 1;
-	// public const TYPE_LINK = 3;
+	public const TYPE_LINK = 3;
 
 	public function __construct(
 		IDBConnection $connection,
