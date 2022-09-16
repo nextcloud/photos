@@ -58,11 +58,11 @@ class Version20001Date20220830131446 extends SimpleMigrationStep {
 				'notnull' => true,
 				'length' => 64,
 			]);
-			$table->addColumn('collaborator_source', Types::INTEGER, [
+			$table->addColumn('collaborator_type', Types::INTEGER, [
 				'notnull' => true,
 			]);
 
-			$table->addUniqueConstraint(['album_id', 'collaborator_id', 'collaborator_source'], 'collaborators_unique_idx');
+			$table->addUniqueConstraint(['album_id', 'collaborator_id', 'collaborator_type'], 'collaborators_unique_idx');
 		}
 
 		if (!$schema->getTable("photos_albums_files")->hasColumn("owner")) {

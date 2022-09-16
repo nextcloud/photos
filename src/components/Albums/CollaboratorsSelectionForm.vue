@@ -192,7 +192,7 @@ export default {
 		searchResults() {
 			return this.currentSearchResults
 				.filter(({ id }) => id !== getCurrentUser().uid)
-				.map(({ source, id }) => `${source}:${id}`)
+				.map(({ type, id }) => `${type}:${id}`)
 				.filter(key => !this.selectedCollaboratorsKeys.includes(key))
 				.map((key) => ({ key, height: 48 }))
 		},
@@ -207,11 +207,11 @@ export default {
 
 	mounted() {
 		this.searchCollaborators()
-		this.selectedCollaboratorsKeys = this.collaborators.map(({ source, id }) => `${source}:${id}`)
+		this.selectedCollaboratorsKeys = this.collaborators.map(({ type, id }) => `${type}:${id}`)
 		this.availableCollaborators = {
 			...this.availableCollaborators,
 			...this.collaborators
-				.reduce((collaborators, collaborator) => ({ ...collaborators, [`${collaborator.source}:${collaborator.id}`]: collaborator }), {}),
+				.reduce((collaborators, collaborator) => ({ ...collaborators, [`${collaborator.type}:${collaborator.id}`]: collaborator }), {}),
 		}
 	},
 
@@ -238,10 +238,23 @@ export default {
 				})
 
 				this.currentSearchResults = response.data.ocs.data
+					.map(collaborator => {
+						let type = -1
+						switch (collaborator.source) {
+						case 'users':
+							type = OC.Share.SHARE_TYPE_USER
+							break
+						case 'groups':
+							type = OC.Share.SHARE_TYPE_GROUP
+							break
+						}
+
+						return { ...collaborator, type }
+					})
 				this.availableCollaborators = {
 					...this.availableCollaborators,
-					...response.data.ocs.data
-						.reduce((collaborators, collaborator) => ({ ...collaborators, [`${collaborator.source}:${collaborator.id}`]: collaborator }), {}),
+					...this.currentSearchResults
+						.reduce((collaborators, collaborator) => ({ ...collaborators, [`${collaborator.type}:${collaborator.id}`]: collaborator }), {}),
 				}
 			} catch (error) {
 				this.errorFetchingCollaborators = error
