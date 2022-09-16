@@ -123,7 +123,7 @@ describe('Manage shared albums', () => {
     cy.get('[data-test="media"]').should('have.length', 0)
   })
 
-  xit('Remove shared album', () => {
+  it('Remove shared album', () => {
     cy.goToSharedAlbum('shared_album_test3')
     cy.removeSharedAlbums()
   })

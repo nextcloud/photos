@@ -243,7 +243,7 @@ Cypress.Commands.add('removeCollaborators', collaborators => {
 	cy.contains('Save').click()
 })
 
-Cypress.Commands.add('removeSharedAlbums', collaborators => {
+Cypress.Commands.add('removeSharedAlbums', () => {
 	cy.get('[aria-label="Open actions menu"]').click()
-	cy.contains("Remove selection from album").click()
+	cy.contains("Delete album").click()
 })
