@@ -26,6 +26,13 @@
 		:collection-root="t('photos', 'Shared albums')"
 		:error="errorFetchingAlbums"
 		class="albums-list">
+		<HeaderNavigation key="navigation"
+			slot="header"
+			:loading="loadingAlbums"
+			:title="t('photos', 'Shared albums')"
+			:root-title="t('photos', 'Shared albums')"
+			@refresh="onRefresh" />
+
 		<CollectionCover :key="collection.basename"
 			slot-scope="{collection}"
 			:link="`/sharedalbums/${collection.basename}`"
@@ -55,6 +62,7 @@ import { NcEmptyContent } from '@nextcloud/vue'
 import FetchSharedAlbumsMixin from '../mixins/FetchSharedAlbumsMixin.js'
 import CollectionsList from '../components/Collection/CollectionsList.vue'
 import CollectionCover from '../components/Collection/CollectionCover.vue'
+import HeaderNavigation from '../components/HeaderNavigation.vue'
 
 export default {
 	name: 'SharedAlbums',
@@ -63,6 +71,7 @@ export default {
 		NcEmptyContent,
 		CollectionsList,
 		CollectionCover,
+		HeaderNavigation,
 	},
 
 	filters: {
@@ -81,6 +90,12 @@ export default {
 	mixins: [
 		FetchSharedAlbumsMixin,
 	],
+
+	methods: {
+		onRefresh() {
+			this.fetchAlbums()
+		},
+	},
 }
 </script>
 <style lang="scss" scoped>

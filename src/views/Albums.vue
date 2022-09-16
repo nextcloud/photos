@@ -31,7 +31,6 @@
 				:title="t('photos', 'Albums')"
 				:root-title="t('photos', 'Albums')"
 				@refresh="onRefresh">
-				<slot name="header" />
 				<NcButton :aria-label="t('photos', 'Create a new album.')"
 					@click="showAlbumCreationForm = true">
 					<template #icon>
