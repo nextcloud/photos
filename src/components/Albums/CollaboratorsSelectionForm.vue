@@ -73,8 +73,7 @@
 				class="manage-collaborators__selection__item">
 				<NcListItemIcon :id="availableCollaborators[collaboratorKey].id"
 					:title="availableCollaborators[collaboratorKey].id"
-					:display-name="availableCollaborators[collaboratorKey].label"
-					:aria-label="t('photos', 'Remove {collaboratorLabel} from the collaborators list', {collaboratorLabel: availableCollaborators[collaboratorKey].label})">
+					:display-name="availableCollaborators[collaboratorKey].label">
 					<NcButton type="tertiary"
 						:aria-label="t('photos', 'Remove {collaboratorLabel} from the collaborators list', {collaboratorLabel: availableCollaborators[collaboratorKey].label})"
 						@click="unselectEntity(collaboratorKey)">

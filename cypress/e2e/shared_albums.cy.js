@@ -128,11 +128,12 @@ describe('Manage shared albums', () => {
     cy.removeSharedAlbums()
   })
 
-  xit('Remove collaborator from an album', () => {
-    cy.get('[data-test="media"]').should('have.length', 4)
+  it('Remove collaborator from an album', () => {
+    cy.get('ul.collections__list li').should('have.length', 4)
 
     cy.logout()
     cy.login(randUser, 'password')
+    cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos`)
     cy.goToAlbum('shared_album_test4')
     cy.removeCollaborators([randUser2])
     cy.logout()

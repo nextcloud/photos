@@ -232,8 +232,13 @@ Cypress.Commands.add('addCollaborators', collaborators => {
 Cypress.Commands.add('removeCollaborators', collaborators => {
 	cy.get('[aria-label="Manage collaborators for this album"]').click()
 	collaborators.forEach((collaborator) => {
-		cy.get('[aria-label="Search for collaborators"').type(collaborator)
-		cy.contains(collaborator).click()
+		cy.get('.manage-collaborators')
+			.within(() => {
+				cy.contains(collaborator)
+					.parentsUntil('ul')
+					.get(`[aria-label="Remove ${collaborator} from the collaborators list"]`)
+					.click()
+			})
 	})
 	cy.contains('Save').click()
 })
