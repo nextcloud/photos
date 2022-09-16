@@ -379,12 +379,7 @@ export default {
 			this.showEditAlbumForm = false
 
 			if (this.album.basename !== album.basename) {
-				this.$router.push({
-					name: 'albums',
-					params: {
-						path: album.basename,
-					},
-				})
+				this.$router.push(`/albums/${album.basename}`)
 			}
 		},
 

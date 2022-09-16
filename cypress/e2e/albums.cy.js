@@ -99,4 +99,36 @@ describe('Manage albums', () => {
     cy.downloadSelection()
     cy.unselectMedia([1, 2])
   })
+
+  it('Edit an album\'s name', () => {
+    cy.get('[aria-label="Open actions menu"]').click()
+    cy.contains('Edit album details').click()
+    cy.get('form [name="name"]').clear().type("New name")
+    cy.contains('Save').click()
+
+    cy.reload()
+
+    cy.contains('New name')
+
+    cy.get('[aria-label="Open actions menu"]').click()
+    cy.contains('Edit album details').click()
+    cy.get('form [name="name"]').clear().type("albums_test")
+    cy.contains('Save').click()
+  })
+
+  it('Edit an album\'s location', () => {
+    cy.get('[aria-label="Open actions menu"]').click()
+    cy.contains('Edit album details').click()
+    cy.get('form [name="location"]').clear().type("New location")
+    cy.contains('Save').click()
+
+    cy.reload()
+
+    cy.contains('New location')
+
+    cy.get('[aria-label="Open actions menu"]').click()
+    cy.contains('Edit album details').click()
+    cy.get('form [name="location"]').clear()
+    cy.contains('Save').click()
+  })
 })
