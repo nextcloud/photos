@@ -45,8 +45,10 @@ class Version20001Date20220830131446 extends SimpleMigrationStep {
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
+		$modified = false;
 
 		if (!$schema->hasTable("photos_collaborators")) {
+			$modified = true;
 			$table = $schema->createTable("photos_collaborators");
 			$table->addColumn('album_id', Types::BIGINT, [
 				'notnull' => true,
@@ -56,14 +58,15 @@ class Version20001Date20220830131446 extends SimpleMigrationStep {
 				'notnull' => true,
 				'length' => 64,
 			]);
-			$table->addColumn('collaborator_source', Types::INTEGER, [
+			$table->addColumn('collaborator_type', Types::INTEGER, [
 				'notnull' => true,
 			]);
 
-			$table->addUniqueConstraint(['album_id', 'collaborator_id', 'collaborator_source'], 'collaborators_unique_idx');
+			$table->addUniqueConstraint(['album_id', 'collaborator_id', 'collaborator_type'], 'collaborators_unique_idx');
 		}
 
 		if (!$schema->getTable("photos_albums_files")->hasColumn("owner")) {
+			$modified = true;
 			$table = $schema->getTable("photos_albums_files");
 			$table->addColumn('owner', Types::STRING, [
 				'notnull' => true,
@@ -71,6 +74,10 @@ class Version20001Date20220830131446 extends SimpleMigrationStep {
 			]);
 		}
 
-		return $schema;
+		if ($modified) {
+			return $schema;
+		} else {
+			return null;
+		}
 	}
 }

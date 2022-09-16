@@ -32,7 +32,7 @@ class SharedAlbumRoot extends AlbumRoot {
 	 * @return void
 	 */
 	public function delete() {
-		$this->albumMapper->deleteCollaboratorFromAlbum($this->user->getUID(), $this->album->getAlbum()->getId());
+		$this->albumMapper->deleteUserFromAlbumCollaboratorsList($this->user->getUID(), $this->album->getAlbum()->getId());
 	}
 
 	/**
@@ -48,7 +48,7 @@ class SharedAlbumRoot extends AlbumRoot {
 		}
 
 		$collaboratorIds = array_map(
-			fn ($collaborator) => $collaborator['source'].':'.$collaborator['id'],
+			fn ($collaborator) => $collaborator['type'].':'.$collaborator['id'],
 			$this->albumMapper->getCollaborators($this->album->getAlbum()->getId()),
 		);
 		$uid = $this->user->getUID();

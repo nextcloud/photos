@@ -249,11 +249,11 @@ class AlbumMapper {
 
 	/**
 	 * @param int $albumId
-	 * @return array<array{'id': string, 'label': string, 'source': int}>
+	 * @return array<array{'id': string, 'label': string, 'type': int}>
 	 */
 	public function getCollaborators(int $albumId): array {
 		$query = $this->connection->getQueryBuilder();
-		$query->select("collaborator_id", "collaborator_source")
+		$query->select("collaborator_id", "collaborator_type")
 			->from("photos_collaborators")
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)));
 
@@ -263,7 +263,7 @@ class AlbumMapper {
 			/** @var IUser|IGroup|null */
 			$collaborator = null;
 
-			switch ($row['collaborator_source']) {
+			switch ($row['collaborator_type']) {
 				case self::TYPE_USER:
 					$collaborator = $this->userManager->get($row['collaborator_id']);
 					break;
@@ -271,7 +271,7 @@ class AlbumMapper {
 					$collaborator = $this->groupManager->get($row['collaborator_id']);
 					break;
 				default:
-					throw new \Exception('Invalid collaborator source: ' . $row['collaborator_source']);
+					throw new \Exception('Invalid collaborator type: ' . $row['collaborator_type']);
 			}
 
 			if (is_null($collaborator)) {
@@ -281,7 +281,7 @@ class AlbumMapper {
 			return [
 				'id' => $row['collaborator_id'],
 				'label' => $collaborator->getDisplayName(),
-				'source' => (int)$row['collaborator_source'],
+				'type' => $row['collaborator_type'],
 			];
 		}, $rows);
 
@@ -290,16 +290,18 @@ class AlbumMapper {
 
 	/**
 	 * @param int $albumId
-	 * @param array{'id': string, 'label': string, 'source': int} $newCollaborators
+	 * @param array{'id': string, 'label': string, 'type': int} $collaborators
 	 */
-	public function setCollaborators(int $albumId, array $newCollaborators): void {
+	public function setCollaborators(int $albumId, array $collaborators): void {
 		$existingCollaborators = $this->getCollaborators($albumId);
 
-		$collaboratorsToAdd = array_udiff($newCollaborators, $existingCollaborators, fn ($a, $b) => strcmp($a['id'].$a['source'], $b['id'].$b['source']));
-		$collaboratorsToRemove = array_udiff($existingCollaborators, $newCollaborators, fn ($a, $b) => strcmp($a['id'].$a['source'], $b['id'].$b['source']));
+		$collaboratorsToAdd = array_udiff($collaborators, $existingCollaborators, fn ($a, $b) => strcmp($a['id'].$a['type'], $b['id'].$b['type']));
+		$collaboratorsToRemove = array_udiff($existingCollaborators, $collaborators, fn ($a, $b) => strcmp($a['id'].$a['type'], $b['id'].$b['type']));
+
+		$this->connection->beginTransaction();
 
 		foreach ($collaboratorsToAdd as $collaborator) {
-			switch ($collaborator['source']) {
+			switch ($collaborator['type']) {
 				case self::TYPE_USER:
 					if (is_null($this->userManager->get($collaborator['id']))) {
 						throw new \Exception('Unknown collaborator: ' . $collaborator['id']);
@@ -311,14 +313,14 @@ class AlbumMapper {
 					}
 					break;
 				default:
-					throw new \Exception('Invalid collaborator source: ' . $collaborator['source']);
+					throw new \Exception('Invalid collaborator type: ' . $collaborator['type']);
 			}
 
 			$query = $this->connection->getQueryBuilder();
 			$query->insert('photos_collaborators')
 				->setValue('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT))
 				->setValue('collaborator_id', $query->createNamedParameter($collaborator['id']))
-				->setValue('collaborator_source', $query->createNamedParameter($collaborator['source'], IQueryBuilder::PARAM_INT))
+				->setValue('collaborator_type', $query->createNamedParameter($collaborator['type'], IQueryBuilder::PARAM_INT))
 				->executeStatement();
 		}
 
@@ -327,16 +329,19 @@ class AlbumMapper {
 			$query->delete('photos_collaborators')
 				->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
 				->andWhere($query->expr()->eq('collaborator_id', $query->createNamedParameter($collaborator['id'])))
-				->andWhere($query->expr()->eq('collaborator_source', $query->createNamedParameter($collaborator['source'], IQueryBuilder::PARAM_INT)))
+				->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter($collaborator['type'], IQueryBuilder::PARAM_INT)))
 				->executeStatement();
 		}
+
+		$this->connection->commit();
 	}
 
 	/**
-	 * @param string $userId
+	 * @param string $collaboratorId
+	 * @param string $collaboratorsType - The type of the collaborator, either a user or a group.
 	 * @return AlbumWithFiles[]
 	 */
-	public function getSharedAlbumsForCollaboratorWithFiles(string $collaboratorId, int $collaboratorSource): array {
+	public function getSharedAlbumsForCollaboratorWithFiles(string $collaboratorId, int $collaboratorType): array {
 		$query = $this->connection->getQueryBuilder();
 		$rows = $query
 			->select("fileid", "mimetype", "a.album_id", "size", "mtime", "etag", "location", "created", "last_added_photo", "added", 'owner')
@@ -348,7 +353,7 @@ class AlbumMapper {
 			->leftJoin("a", "photos_albums_files", "p", $query->expr()->eq("a.album_id", "p.album_id"))
 			->leftJoin("p", "filecache", "f", $query->expr()->eq("p.file_id", "f.fileid"))
 			->where($query->expr()->eq('collaborator_id', $query->createNamedParameter($collaboratorId)))
-			->andWhere($query->expr()->eq('collaborator_source', $query->createNamedParameter($collaboratorSource, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter($collaboratorType, IQueryBuilder::PARAM_INT)))
 			->executeQuery()
 			->fetchAll();
 
@@ -379,23 +384,23 @@ class AlbumMapper {
 	 * @param int $albumId
 	 * @return void
 	 */
-	public function deleteCollaboratorFromAlbum(string $userId, int $albumId): void {
+	public function deleteUserFromAlbumCollaboratorsList(string $userId, int $albumId): void {
 		// TODO: only delete if this was not a group share
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('photos_collaborators')
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('collaborator_id', $query->createNamedParameter($userId)))
-			->andWhere($query->expr()->eq('collaborator_source', $query->createNamedParameter(self::TYPE_USER, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter(self::TYPE_USER, IQueryBuilder::PARAM_INT)))
 			->executeStatement();
 	}
 
 	/**
 	 * @param string $collaboratorId
-	 * @param int $collaboratorSource
+	 * @param int $collaboratorType
 	 * @param int $fileId
 	 * @return AlbumInfo[]
 	 */
-	public function getAlbumForCollaboratorIdAndFileId(string $collaboratorId, int $collaboratorSource, int $fileId): array {
+	public function getAlbumForCollaboratorIdAndFileId(string $collaboratorId, int $collaboratorType, int $fileId): array {
 		$query = $this->connection->getQueryBuilder();
 		$rows = $query
 			->select("a.album_id", "name", "user", "location", "created", "last_added_photo")
@@ -403,7 +408,7 @@ class AlbumMapper {
 			->leftJoin("c", "photos_albums", "a", $query->expr()->eq("a.album_id", "c.album_id"))
 			->leftJoin("a", "photos_albums_files", "p", $query->expr()->eq("a.album_id", "p.album_id"))
 			->where($query->expr()->eq('collaborator_id', $query->createNamedParameter($collaboratorId)))
-			->andWhere($query->expr()->eq('collaborator_source', $query->createNamedParameter($collaboratorSource, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter($collaboratorType, IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('file_id', $query->createNamedParameter($fileId)))
 			->groupBy('album_id')
 			->executeQuery()

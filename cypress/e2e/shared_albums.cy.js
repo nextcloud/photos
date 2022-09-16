@@ -47,6 +47,9 @@ describe('Manage shared albums', () => {
     cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
     cy.createAnAlbumFromAlbums('shared_album_test3')
     cy.addCollaborators([randUser2])
+    cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
+    cy.createAnAlbumFromAlbums('shared_album_test4')
+    cy.addCollaborators([randUser2])
     cy.logout()
 
     cy.login(randUser2, 'password')
@@ -120,8 +123,23 @@ describe('Manage shared albums', () => {
     cy.get('[data-test="media"]').should('have.length', 0)
   })
 
-  xit('Remove collaborator from an album', () => {
+  xit('Remove shared album', () => {
     cy.goToSharedAlbum('shared_album_test3')
     cy.removeSharedAlbums()
+  })
+
+  xit('Remove collaborator from an album', () => {
+    cy.get('[data-test="media"]').should('have.length', 4)
+
+    cy.logout()
+    cy.login(randUser, 'password')
+    cy.goToAlbum('shared_album_test4')
+    cy.removeCollaborators([randUser2])
+    cy.logout()
+
+    cy.login(randUser2, 'password')
+    cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/sharedalbums`)
+
+    cy.get('ul.collections__list li').should('have.length', 3)
   })
 })

@@ -36,15 +36,15 @@ use Sabre\DAV\IFile;
 class AlbumPhoto implements IFile {
 	private AlbumMapper $albumMapper;
 	private AlbumInfo $album;
-	private AlbumFile $file;
+	private AlbumFile $albumFile;
 	private IRootFolder $rootFolder;
 
 	public const TAG_FAVORITE = '_$!<Favorite>!$_';
 
-	public function __construct(AlbumMapper $albumMapper, AlbumInfo $album, AlbumFile $file, IRootFolder $rootFolder) {
+	public function __construct(AlbumMapper $albumMapper, AlbumInfo $album, AlbumFile $albumFile, IRootFolder $rootFolder) {
 		$this->albumMapper = $albumMapper;
 		$this->album = $album;
-		$this->file = $file;
+		$this->albumFile = $albumFile;
 		$this->rootFolder = $rootFolder;
 	}
 
@@ -52,11 +52,11 @@ class AlbumPhoto implements IFile {
 	 * @return void
 	 */
 	public function delete() {
-		$this->albumMapper->removeFile($this->album->getId(), $this->file->getFileId());
+		$this->albumMapper->removeFile($this->album->getId(), $this->albumFile->getFileId());
 	}
 
 	public function getName() {
-		return $this->file->getFileId() . "-" . $this->file->getName();
+		return $this->albumFile->getFileId() . "-" . $this->albumFile->getName();
 	}
 
 	/**
@@ -67,7 +67,7 @@ class AlbumPhoto implements IFile {
 	}
 
 	public function getLastModified() {
-		return $this->file->getMTime();
+		return $this->albumFile->getMTime();
 	}
 
 	public function put($data) {
@@ -76,8 +76,8 @@ class AlbumPhoto implements IFile {
 
 	public function get() {
 		$nodes = $this->rootFolder
-			->getUserFolder($this->file->getOwner())
-			->getById($this->file->getFileId());
+			->getUserFolder($this->albumFile->getOwner() || $this->album->getUserId())
+			->getById($this->albumFile->getFileId());
 		$node = current($nodes);
 		if ($node) {
 			/** @var Node $node */
@@ -92,13 +92,13 @@ class AlbumPhoto implements IFile {
 	}
 
 	public function getFileId(): int {
-		return $this->file->getFileId();
+		return $this->albumFile->getFileId();
 	}
 
 	public function getFileInfo(): Node {
 		$nodes = $this->rootFolder
-			->getUserFolder($this->file->getOwner())
-			->getById($this->file->getFileId());
+			->getUserFolder($this->albumFile->getOwner() ?? $this->album->getUserId())
+			->getById($this->albumFile->getFileId());
 		$node = current($nodes);
 		if ($node) {
 			return $node;
@@ -108,19 +108,19 @@ class AlbumPhoto implements IFile {
 	}
 
 	public function getContentType() {
-		return $this->file->getMimeType();
+		return $this->albumFile->getMimeType();
 	}
 
 	public function getETag() {
-		return $this->file->getEtag();
+		return $this->albumFile->getEtag();
 	}
 
 	public function getSize() {
-		return $this->file->getSize();
+		return $this->albumFile->getSize();
 	}
 
 	public function getFile(): AlbumFile {
-		return $this->file;
+		return $this->albumFile;
 	}
 
 	public function isFavorite(): bool {
@@ -141,9 +141,9 @@ class AlbumPhoto implements IFile {
 
 		switch ($favoriteState) {
 			case "0":
-				return $tagger->removeFromFavorites($this->file->getFileId());
+				return $tagger->removeFromFavorites($this->albumFile->getFileId());
 			case "1":
-				return $tagger->addToFavorites($this->file->getFileId());
+				return $tagger->addToFavorites($this->albumFile->getFileId());
 			default:
 				new \Exception('Favorite state is invalide, should be 0 or 1.');
 		}
