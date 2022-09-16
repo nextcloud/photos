@@ -71,7 +71,18 @@ class AlbumPhoto implements IFile {
 	}
 
 	public function put($data) {
-		throw new Forbidden('Can\'t write to photos trough the album api');
+		$nodes = $this->userFolder->getById($this->file->getFileId());
+		$node = current($nodes);
+		if ($node) {
+			/** @var Node $node */
+			if ($node instanceof File) {
+				return $node->putContent($data);
+			} else {
+				throw new NotFoundException("Photo is a folder");
+			}
+		} else {
+			throw new NotFoundException("Photo not found for user");
+		}
 	}
 
 	public function get() {

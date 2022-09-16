@@ -30,6 +30,7 @@ use OCA\Photos\Album\AlbumWithFiles;
 use OCA\Photos\Service\UserConfigService;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
+use OCP\Files\NotFoundException;
 use OCP\IUser;
 use Sabre\DAV\Exception\Conflict;
 use Sabre\DAV\Exception\Forbidden;
@@ -97,8 +98,15 @@ class AlbumRoot implements ICollection, ICopyTarget {
 				throw new Conflict('The destination exists and is not a folder');
 			}
 
-			$node = $photosFolder->newFile($name, $data);
-			return $this->addFile($node->getId(), $node->getOwner()->getUID());
+			// Check for conflict and rename the file accordingly
+			$newName = \basename(\OC_Helper::buildNotExistingFileName($photosLocation, $name));
+
+			$node = $photosFolder->newFile($newName, $data);
+			$this->addFile($node->getId(), $node->getOwner()->getUID());
+			// Cheating with header because we are using fileID-fileName
+			// https://github.com/nextcloud/server/blob/af29b978078ffd9169a9bd9146feccbb7974c900/apps/dav/lib/Connector/Sabre/FilesPlugin.php#L564-L585
+			\header('OC-FileId: ' . $node->getId());
+			return '"' . $node->getEtag() . '"';
 		} catch (\Exception $e) {
 			throw new Forbidden('Could not create file');
 		}
@@ -156,6 +164,8 @@ class AlbumRoot implements ICollection, ICopyTarget {
 		}
 		if ($ownerUID === $uid) {
 			$this->albumMapper->addFile($this->album->getAlbum()->getId(), $sourceId, $ownerUID);
+			$node = current($this->userFolder->getById($sourceId));
+			$this->album->addFile(new AlbumFile($sourceId, $node->getName(), $node->getMimetype(), $node->getSize(), $node->getMTime(), $node->getEtag(), $node->getCreationTime(), $ownerUID));
 			return true;
 		}
 		return false;
@@ -170,7 +180,12 @@ class AlbumRoot implements ICollection, ICopyTarget {
 		$latestDate = null;
 
 		foreach ($this->getChildren() as $child) {
-			$childCreationDate = $child->getFileInfo()->getMtime();
+			try {
+				$childCreationDate = $child->getFileInfo()->getMtime();
+			} catch (NotFoundException $e) {
+				continue;
+			}
+
 			if ($childCreationDate < $earliestDate || $earliestDate === null) {
 				$earliestDate = $childCreationDate;
 			}

@@ -37,23 +37,18 @@
 				:path="'/' + albumName"
 				:title="albumName"
 				@refresh="fetchAlbumContent">
-				<!-- <UploadPicker :accept="allowedMimes"
-				:destination="folder.filename"
-				:multiple="true"
-				@uploaded="onUpload" /> -->
 				<div v-if="album.location !== ''" slot="subtitle" class="album__location">
 					<MapMarker />{{ album.location }}
 				</div>
 				<template v-if="album !== undefined"
 					slot="right">
-					<NcButton v-if="album.nbItems !== 0"
-						type="tertiary"
-						:aria-label="t('photos', 'Add photos to this album')"
-						@click="showAddPhotosModal = true">
-						<template #icon>
-							<Plus />
-						</template>
-					</NcButton>
+					<UploadPicker v-if="album.nbItems !== 0"
+						:accept="allowedMimes"
+						:context="uploadContext"
+						:destination="album.basename"
+						:root="uploadContext.root"
+						:multiple="true"
+						@uploaded="onUpload" />
 
 					<NcButton v-if="sharingEnabled"
 						type="tertiary"
@@ -157,71 +152,80 @@
 </template>
 
 <script>
+// eslint-disable-next-line node/no-extraneous-import
+import { addNewFileMenuEntry } from '@nextcloud/files'
+import { generateRemoteUrl } from '@nextcloud/router'
+import { getCurrentUser } from '@nextcloud/auth'
 import { mapActions, mapGetters } from 'vuex'
+import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionSeparator, NcLoadingIcon, isMobile } from '@nextcloud/vue'
+import { Upload, UploadPicker } from '@nextcloud/upload'
+import debounce from 'debounce'
 
-import MapMarker from 'vue-material-design-icons/MapMarker'
-import ShareVariant from 'vue-material-design-icons/ShareVariant'
-import Plus from 'vue-material-design-icons/Plus'
-import Pencil from 'vue-material-design-icons/Pencil'
-import Delete from 'vue-material-design-icons/Delete'
-import ImagePlus from 'vue-material-design-icons/ImagePlus'
 import Close from 'vue-material-design-icons/Close'
+import Delete from 'vue-material-design-icons/Delete'
 import Download from 'vue-material-design-icons/Download'
 import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple'
+import ImagePlus from 'vue-material-design-icons/ImagePlus'
+import MapMarker from 'vue-material-design-icons/MapMarker'
+import Pencil from 'vue-material-design-icons/Pencil'
+import Plus from 'vue-material-design-icons/Plus'
+import PlusSvg from '@mdi/svg/svg/plus.svg'
+import ShareVariant from 'vue-material-design-icons/ShareVariant'
 
-import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionSeparator, NcLoadingIcon, isMobile } from '@nextcloud/vue'
-import { getCurrentUser } from '@nextcloud/auth'
-import { generateRemoteUrl } from '@nextcloud/router'
-
+import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import FetchAlbumsMixin from '../mixins/FetchAlbumsMixin.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
-import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
-import HeaderNavigation from '../components/HeaderNavigation.vue'
-import FilesPicker from '../components/FilesPicker.vue'
-import CollectionContent from '../components/Collection/CollectionContent.vue'
-import ActionFavorite from '../components/Actions/ActionFavorite.vue'
+import UserConfig from '../mixins/UserConfig.js'
+
 import ActionDownload from '../components/Actions/ActionDownload.vue'
-import CollaboratorsSelectionForm from '../components/Albums/CollaboratorsSelectionForm.vue'
+import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
-import logger from '../services/logger.js'
+import CollaboratorsSelectionForm from '../components/Albums/CollaboratorsSelectionForm.vue'
+import CollectionContent from '../components/Collection/CollectionContent.vue'
+import FilesPicker from '../components/FilesPicker.vue'
+import HeaderNavigation from '../components/HeaderNavigation.vue'
+
+import { genFileInfo } from '../utils/fileUtils.js'
+import allowedMimes from '../services/AllowedMimes.js'
 import client from '../services/DavClient.js'
 import DavRequest from '../services/DavRequest.js'
-import { genFileInfo } from '../utils/fileUtils.js'
+import logger from '../services/logger.js'
 
 export default {
 	name: 'AlbumContent',
 	components: {
-		MapMarker,
-		ShareVariant,
-		Plus,
-		Pencil,
+		ActionDownload,
+		ActionFavorite,
+		AlbumForm,
 		Close,
+		CollaboratorsSelectionForm,
+		CollectionContent,
 		Delete,
 		Download,
 		DownloadMultiple,
 		FilesPicker,
 		HeaderNavigation,
 		ImagePlus,
-		NcEmptyContent,
-		NcActions,
+		MapMarker,
 		NcActionButton,
-		NcButton,
-		NcModal,
-		NcLoadingIcon,
+		NcActions,
 		NcActionSeparator,
-		CollectionContent,
-		ActionFavorite,
-		ActionDownload,
-		AlbumForm,
-		CollaboratorsSelectionForm,
+		NcButton,
+		NcEmptyContent,
+		NcLoadingIcon,
+		NcModal,
+		Pencil,
+		Plus,
+		ShareVariant,
+		UploadPicker,
 	},
 
 	mixins: [
 		AbortControllerMixin,
 		FetchAlbumsMixin,
 		FetchFilesMixin,
-		AbortControllerMixin,
 		isMobile,
+		UserConfig,
 	],
 
 	props: {
@@ -233,9 +237,12 @@ export default {
 
 	data() {
 		return {
+			allowedMimes,
+
 			showAddPhotosModal: false,
 			showManageCollaboratorView: false,
 			showEditAlbumForm: false,
+
 			loadingAddCollaborators: false,
 		}
 	},
@@ -265,12 +272,39 @@ export default {
 		sharingEnabled() {
 			return OC.Share !== undefined
 		},
+
+		/**
+		 * The upload picker context
+		 * We're uploading to the album folder, and the backend handle
+		 * the writing to the default location as well as the album update.
+		 * The context is also used for the NewFileMenu.
+		 */
+		uploadContext() {
+			return {
+				...this.album,
+				route: this.$route.name,
+				root: `dav/photos/${getCurrentUser()?.uid}/albums`,
+			}
+		},
 	},
 
 	watch: {
 		album() {
 			this.fetchAlbumContent()
 		},
+	},
+
+	mounted() {
+		addNewFileMenuEntry({
+			id: 'album-add',
+			displayName: t('photos', 'Add photos to this album'),
+			templateName: '',
+			if: (context) => context.route === this.$route.name,
+			/** Existing icon css class */
+			iconSvgInline: PlusSvg,
+			/** Function to be run after creation */
+			handler: () => { this.showAddPhotosModal = true },
+		})
 	},
 
 	methods: {
@@ -382,6 +416,15 @@ export default {
 				this.loadingAddCollaborators = false
 			}
 		},
+
+		/**
+		 * A new File has been uploaded, let's add it
+		 *
+		 * @param {Upload[]} uploads
+		 */
+		onUpload: debounce(function() {
+			this.fetchAlbumContent()
+		}, 500),
 	},
 }
 </script>

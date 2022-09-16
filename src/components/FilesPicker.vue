@@ -32,6 +32,7 @@
 					{{ month | dateMonthAndYear }}
 				</div>
 			</div>
+
 			<FilesListViewer class="file-picker__file-list"
 				:class="{'file-picker__file-list--placeholder': monthsList.length === 0}"
 				:file-ids-by-section="fileIdsByMonth"
@@ -49,6 +50,7 @@
 						class="section-header">
 						{{ file.id | dateMonthAndYear }}
 					</h3>
+
 					<File v-else
 						:file="files[file.id]"
 						:allow-selection="true"
@@ -59,14 +61,13 @@
 				</template>
 			</FilesListViewer>
 		</div>
+
 		<div class="file-picker__actions">
-			<!-- TODO: Implement upload -->
-			<NcButton type="tertiary" :disabled="loading">
-				<template #icon>
-					<Upload />
-				</template>
-				{{ t('photos', 'Upload from computer') }}
-			</NcButton>
+			<UploadPicker :accept="allowedMimes"
+				:context="uploadContext"
+				:destination="photosLocation"
+				:multiple="true"
+				@uploaded="getFiles" />
 			<NcButton type="primary" :disabled="loading || selectedFileIds.length === 0" @click="emitPickedEvent">
 				<template #icon>
 					<ImagePlus v-if="!loading" />
@@ -80,28 +81,31 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import ImagePlus from 'vue-material-design-icons/ImagePlus'
-import Upload from 'vue-material-design-icons/Upload'
-
-import moment from '@nextcloud/moment'
 import { NcButton, NcLoadingIcon } from '@nextcloud/vue'
+import { UploadPicker } from '@nextcloud/upload'
+import moment from '@nextcloud/moment'
+
+import ImagePlus from 'vue-material-design-icons/ImagePlus'
+
+import FilesListViewer from './FilesListViewer.vue'
+import File from './File.vue'
 
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
-import FilesListViewer from './FilesListViewer.vue'
-import File from './File.vue'
 import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
+import UserConfig from '../mixins/UserConfig.js'
+import allowedMimes from '../services/AllowedMimes.js'
 
 export default {
 	name: 'FilesPicker',
 
 	components: {
+		File,
+		FilesListViewer,
 		ImagePlus,
-		Upload,
 		NcButton,
 		NcLoadingIcon,
-		FilesListViewer,
-		File,
+		UploadPicker,
 	},
 
 	filters: {
@@ -112,11 +116,11 @@ export default {
 			return moment(date, 'YYYYMM').format('MMMM YYYY')
 		},
 	},
-
 	mixins: [
 		FetchFilesMixin,
 		FilesByMonthMixin,
 		FilesSelectionMixin,
+		UserConfig,
 	],
 
 	props: {
@@ -141,7 +145,11 @@ export default {
 
 	data() {
 		return {
+			allowedMimes,
 			targetMonth: null,
+			uploadContext: {
+				route: 'albumpicker',
+			},
 		}
 	},
 
