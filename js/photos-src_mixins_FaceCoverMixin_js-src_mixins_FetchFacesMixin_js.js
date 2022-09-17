@@ -50,6 +50,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getFaceCover: function getFaceCover(faceName) {
       var _this = this;
 
+      // Give high scores for faces that intersect with the edge of the picture (with a margin of half the face size)
+      var scoreFacePosition = function scoreFacePosition(faceDetection) {
+        return Math.max(0, -1 * (faceDetection.x - faceDetection.width * 0.5)) + Math.max(0, -1 * (faceDetection.y - faceDetection.height * 0.5)) + Math.max(0, -1 * (1 - (faceDetection.x + faceDetection.width) - faceDetection.width * 0.5)) + Math.max(0, -1 * (1 - (faceDetection.y + faceDetection.height) - faceDetection.height * 0.5));
+      };
+
       return (this.facesFiles[faceName] || []).slice(0, 25).map(function (fileId) {
         return _this.files[fileId];
       }).map(function (file) {
@@ -66,6 +71,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }) // sort fewest face detections first
       .sort(function (a, b) {
         return a.faceDetections.length - b.faceDetections.length;
+      }) // Sort faces that are at the edge last
+      .sort(function (a, b) {
+        return scoreFacePosition(a.faceDetections.find(function (d) {
+          return d.title === faceName;
+        })) - scoreFacePosition(b.faceDetections.find(function (d) {
+          return d.title === faceName;
+        }));
       })[0];
     },
 
@@ -370,4 +382,4 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_mixins_FaceCoverMixin_js-src_mixins_FetchFacesMixin_js.js.map?v=985dd72c2bf1eb091603
+//# sourceMappingURL=photos-src_mixins_FaceCoverMixin_js-src_mixins_FetchFacesMixin_js.js.map?v=32ecf436be4947895a5d

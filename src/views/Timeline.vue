@@ -30,16 +30,12 @@
 
 	<div v-else class="timeline">
 		<div class="timeline__header">
+			<!-- TODO: UploadPicker -->
 			<NcActions v-if="selectedFileIds.length === 0"
 				:force-title="true"
 				:force-menu="true"
-				:menu-title="t('photos', 'Add')"
-				:primary="true">
+				:menu-title="t('photos', 'Add')">
 				<Plus slot="icon" />
-				<NcActionButton :close-after-click="true" @click="openUploader">
-					{{ t('photos', 'Upload media') }}
-					<FileUpload slot="icon" />
-				</NcActionButton>
 				<NcActionButton :close-after-click="true"
 					:aria-label="t('photos', 'Create a new album')"
 					@click="showAlbumCreationForm = true">
@@ -128,7 +124,6 @@ import { mapActions, mapGetters } from 'vuex'
 import Plus from 'vue-material-design-icons/Plus'
 import Delete from 'vue-material-design-icons/Delete'
 import PlusBoxMultiple from 'vue-material-design-icons/PlusBoxMultiple'
-import FileUpload from 'vue-material-design-icons/FileUpload'
 import Download from 'vue-material-design-icons/Download'
 
 import { NcModal, NcActions, NcActionButton, NcButton, NcLoadingIcon, NcEmptyContent, isMobile } from '@nextcloud/vue'
@@ -149,7 +144,6 @@ export default {
 	name: 'Timeline',
 	components: {
 		Delete,
-		FileUpload,
 		PlusBoxMultiple,
 		Download,
 		Plus,
