@@ -9,8 +9,6 @@ OC.L10N.register(
     "Save" : "Save",
     "Favorite" : "Favorite",
     "Add" : "Add",
-    "Download" : "Download",
-    "Delete" : "Delete",
     "Settings" : "Settings"
 },
 "nplurals=1; plural=0;");

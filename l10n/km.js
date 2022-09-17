@@ -9,8 +9,6 @@ OC.L10N.register(
     "Save" : "រក្សាទុក",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "បញ្ចូល",
-    "Download" : "ទាញយក",
-    "Delete" : "លុប",
     "Settings" : "ការកំណត់"
 },
 "nplurals=1; plural=0;");

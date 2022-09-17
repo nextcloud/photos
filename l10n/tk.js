@@ -8,8 +8,6 @@ OC.L10N.register(
     "Back" : "Yzyna",
     "Save" : "Saklamak",
     "Favorite" : "Halaýan",
-    "Download" : "Göçürip almak",
-    "Delete" : "Pozmak",
     "Settings" : "Sazlamalar"
 },
 "nplurals=2; plural=(n != 1);");
