@@ -9,13 +9,12 @@ OC.L10N.register(
     "Tags" : "Tag",
     "Back" : "Kembali",
     "Save" : "Simpan",
+    "Copy public link" : "Salin tautan publik",
     "An error occurred" : "Terjadi kesalahan",
     "Favorite" : "Favorit",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "Masukkan",
-    "Download" : "Unduh",
     "Delete selection" : "Hapus pilihan",
-    "Delete" : "Hapus",
     "Settings" : "Setelan"
 },
 "nplurals=1; plural=0;");

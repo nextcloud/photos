@@ -7,8 +7,6 @@ OC.L10N.register(
     "Save" : "ساتل",
     "Favorite" : "په نښه شوی",
     "Remove from favorites" : "له نښو ويستل",
-    "Download" : "ښکته کول",
-    "Delete" : "ړنګول",
     "Settings" : "سمونې"
 },
 "nplurals=2; plural=(n != 1);");

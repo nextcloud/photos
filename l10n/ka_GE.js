@@ -12,8 +12,6 @@ OC.L10N.register(
     "Favorite" : "რჩეული",
     "Remove from favorites" : "რჩეულებიდან ამოშლა",
     "Add" : "დამატება",
-    "Download" : "ჩამოტვირთვა",
-    "Delete" : "წაშლა",
     "Settings" : "პარამეტრები"
 },
 "nplurals=2; plural=(n!=1);");

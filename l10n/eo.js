@@ -9,14 +9,12 @@ OC.L10N.register(
     "Tags" : "Etikedoj",
     "Back" : "Antaŭen",
     "Save" : "Konservi",
-    "View" : "Vidi",
     "An error occurred" : "Eraro okazis",
+    "View" : "Vidi",
     "Favorite" : "Pliŝatati",
     "Remove from favorites" : "Forigi el pliŝataĵoj",
     "Add" : "Aldoni",
-    "Download" : "Elŝuti",
     "Delete selection" : "Forigi elekton",
-    "Delete" : "Forigi",
     "Settings" : "Agordoj"
 },
 "nplurals=2; plural=(n != 1);");

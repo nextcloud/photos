@@ -12,8 +12,6 @@ OC.L10N.register(
     "Favorite" : "Favoritt",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "Legg til",
-    "Download" : "Last ned",
-    "Delete" : "Slett",
     "Settings" : "Instillingar"
 },
 "nplurals=2; plural=(n != 1);");
