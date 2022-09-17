@@ -99,7 +99,7 @@
 			<!-- No content -->
 			<NcEmptyContent v-if="album !== undefined && album.nbItems === 0 && !(loadingFiles || loadingAlbums)"
 				slot="empty-content"
-				:title="t('photos', 'This album doesn\'t have any photos or videos yet!')"
+				:title="t('photos', 'This album does not have any photos or videos yet!')"
 				class="album__empty">
 				<ImagePlus slot="icon" />
 
