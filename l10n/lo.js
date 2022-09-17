@@ -11,8 +11,6 @@ OC.L10N.register(
     "Favorite" : "ລາຍການທີ່ມັກ",
     "Remove from favorites" : "ຍ້າຍຈາກລາຍການທີ່ມັກ",
     "Add" : "ເພີ່ມ",
-    "Download" : "ດາວໂຫລດ",
-    "Delete" : "ລຶບ",
     "Settings" : "ການຕັ້ງຄ່າ"
 },
 "nplurals=1; plural=0;");

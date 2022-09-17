@@ -10,8 +10,6 @@ OC.L10N.register(
     "Favorite" : "Favorit",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "Derbäimaachen",
-    "Download" : "Eroflueden",
-    "Delete" : "Läschen",
     "Settings" : "Astellungen"
 },
 "nplurals=2; plural=(n != 1);");

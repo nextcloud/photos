@@ -10,13 +10,12 @@ OC.L10N.register(
     "Locations" : "위치",
     "Back" : "뒤로",
     "Save" : "저장",
-    "View" : "보기",
+    "Copy public link" : "공용 링크 복사",
     "An error occurred" : "오류가 발생함",
+    "View" : "보기",
     "Favorite" : "즐겨찾기",
     "Remove from favorites" : "즐겨찾기에서 제거",
     "Add" : "추가",
-    "Download" : "다운로드",
-    "Delete" : "삭제",
     "Settings" : "설정"
 },
 "nplurals=1; plural=0;");

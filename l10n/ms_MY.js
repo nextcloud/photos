@@ -8,8 +8,6 @@ OC.L10N.register(
     "Save" : "Simpan",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "Tambah",
-    "Download" : "Muat turun",
-    "Delete" : "Padam",
     "Settings" : "Tetapan"
 },
 "nplurals=1; plural=0;");
