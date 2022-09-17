@@ -7,7 +7,6 @@ OC.L10N.register(
     "Save" : "සුරකින්න",
     "Favorite" : "ප්‍රියතම",
     "Add" : "එකතු කරන්න",
-    "Download" : "බාගන්න",
     "Your photos" : "ඔබේ ඡායාරූප",
     "Settings" : "සැකසුම්"
 },

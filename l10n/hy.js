@@ -7,8 +7,6 @@ OC.L10N.register(
     "Save" : "Պահպանել",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "Ավելացնել",
-    "Download" : "Ներբեռնել",
-    "Delete" : "հեռացնել",
     "Settings" : "կարգավորումներ"
 },
 "nplurals=2; plural=(n != 1);");

@@ -12,8 +12,6 @@ OC.L10N.register(
     "Favorite" : "Дуртай",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "нэмэх",
-    "Download" : "Татах",
-    "Delete" : "Устгах",
     "Your photos" : "Таны зурагнууд ",
     "Settings" : "Тохиргоо"
 },

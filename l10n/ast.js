@@ -12,8 +12,6 @@ OC.L10N.register(
     "Favorite" : "Marcar como favoritu",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "Amestar",
-    "Download" : "Baxar",
-    "Delete" : "Desaniciar",
     "Settings" : "Settings"
 },
 "nplurals=2; plural=(n != 1);");

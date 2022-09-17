@@ -5,8 +5,6 @@ OC.L10N.register(
     "Tags" : "Etiquetas",
     "Back" : "Dezaga",
     "Favorite" : "Favorito",
-    "Download" : "Escargar",
-    "Delete" : "Borrar",
     "Settings" : "Configurazión"
 },
 "nplurals=2; plural=(n != 1);");
