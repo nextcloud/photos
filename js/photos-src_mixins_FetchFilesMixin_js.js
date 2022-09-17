@@ -14,7 +14,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_logger_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/logger.js */ "./src/services/logger.js");
 /* harmony import */ var _services_PhotoSearch_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/PhotoSearch.js */ "./src/services/PhotoSearch.js");
 /* harmony import */ var _utils_semaphoreWithPriority_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/semaphoreWithPriority.js */ "./src/utils/semaphoreWithPriority.js");
-/* harmony import */ var _AbortControllerMixin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./AbortControllerMixin */ "./src/mixins/AbortControllerMixin.js");
+/* harmony import */ var _AbortControllerMixin_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./AbortControllerMixin.js */ "./src/mixins/AbortControllerMixin.js");
 /* provided dependency */ var console = __webpack_require__(/*! ./node_modules/console-browserify/index.js */ "./node_modules/console-browserify/index.js");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
@@ -65,7 +65,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'FetchFilesMixin',
-  mixins: [_AbortControllerMixin__WEBPACK_IMPORTED_MODULE_3__["default"]],
+  mixins: [_AbortControllerMixin_js__WEBPACK_IMPORTED_MODULE_3__["default"]],
   data: function data() {
     return {
       errorFetchingFiles: null,
@@ -128,7 +128,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.errorFetchingFiles = null;
                 _this.loadingFiles = true;
                 _this.semaphoreSymbol = semaphoreSymbol;
-                numberOfImagesPerBatch = 1000; // Load next batch of images
+                numberOfImagesPerBatch = 200; // Load next batch of images
 
                 _context.next = 18;
                 return (0,_services_PhotoSearch_js__WEBPACK_IMPORTED_MODULE_1__["default"])(path, _objectSpread(_objectSpread({
@@ -241,6 +241,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DavRequest_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./DavRequest.js */ "./src/services/DavRequest.js");
 /* harmony import */ var _nextcloud_moment__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @nextcloud/moment */ "./node_modules/@nextcloud/moment/dist/index.js");
 /* harmony import */ var _nextcloud_moment__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_moment__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _nextcloud_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @nextcloud/router */ "./node_modules/@nextcloud/router/dist/index.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
@@ -272,6 +273,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 
 
 
@@ -348,10 +350,9 @@ function _ref() {
             response = _context.sent;
             return _context.abrupt("return", response.data.map(function (data) {
               return (0,_utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_0__.genFileInfo)(data);
-            }) // remove prefix path from full file path
-            .map(function (data) {
-              return _objectSpread(_objectSpread({}, data), {}, {
-                filename: data.filename.replace(prefixPath, '')
+            }).map(function (file) {
+              return _objectSpread(_objectSpread({}, file), {}, {
+                source: (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_6__.generateRemoteUrl)("dav".concat(file.filename))
               });
             }));
 
@@ -368,4 +369,4 @@ function _ref() {
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_mixins_FetchFilesMixin_js.js.map?v=94f6b9782f717ad84184
+//# sourceMappingURL=photos-src_mixins_FetchFilesMixin_js.js.map?v=4c8d0b922aa83262f119

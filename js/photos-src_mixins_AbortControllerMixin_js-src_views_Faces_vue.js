@@ -99,7 +99,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return '';
       }
 
-      return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_0__.generateUrl)("/core/preview?fileId=".concat(this.cover.fileid, "&x=", 512, "&y=", 512, "&forceIcon=0&a=1"));
+      return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_0__.generateUrl)("/apps/photos/api/v1/preview/".concat(this.cover.fileid, "?x=", 512, "&y=", 512));
     },
     cover: function cover() {
       return this.getFaceCover(this.face.basename);
@@ -309,6 +309,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   beforeRouteLeave: function beforeRouteLeave(from, to, next) {
     this.abortController.abort();
+    this.abortController = new AbortController();
     next();
   }
 });
@@ -334,7 +335,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".face-cover[data-v-acc68b4c] {\n  display: flex;\n  flex-direction: column;\n  padding: 10px;\n  border-radius: var(--border-radius-large);\n}\n.face-cover__crop-container[data-v-acc68b4c] {\n  overflow: hidden;\n  width: 250px;\n  height: 250px;\n  border-radius: 250px;\n  position: relative;\n  background: var(--color-background-darker);\n  --photos-face-width: 250px;\n}\n@media only screen and (max-width: 1020px) {\n.face-cover__crop-container[data-v-acc68b4c] {\n    width: 95px;\n    height: 95px;\n    --photos-face-width: 95px;\n}\n}\n.face-cover[data-v-acc68b4c]:hover, .face-cover[data-v-acc68b4c]:focus {\n  background: var(--color-background-hover);\n}\n.face-cover__details[data-v-acc68b4c] {\n  display: flex;\n  flex-direction: column;\n  width: 250px;\n  margin-top: 4px;\n  text-align: center;\n}\n@media only screen and (max-width: 1020px) {\n.face-cover__details[data-v-acc68b4c] {\n    width: 95px;\n}\n}\n.face-cover__details__first-line[data-v-acc68b4c] {\n  display: flex;\n  height: 2em;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.face-cover__details__second-line[data-v-acc68b4c] {\n  color: var(--color-text-maxcontrast);\n}\n.face-cover__details__name[data-v-acc68b4c] {\n  flex-grow: 1;\n  margin: 0;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".face-cover[data-v-acc68b4c] {\n  display: flex;\n  flex-direction: column;\n  padding: 10px;\n  border-radius: var(--border-radius-large);\n}\n.face-cover__crop-container[data-v-acc68b4c] {\n  overflow: hidden;\n  width: 250px;\n  height: 250px;\n  border-radius: 250px;\n  position: relative;\n  background: var(--color-background-darker);\n  --photos-face-width: 250px;\n}\n@media only screen and (max-width: 1020px) {\n.face-cover__crop-container[data-v-acc68b4c] {\n    width: 95px;\n    height: 95px;\n    --photos-face-width: 95px;\n}\n}\n.face-cover[data-v-acc68b4c]:hover, .face-cover[data-v-acc68b4c]:focus {\n  background: var(--color-background-hover);\n}\n.face-cover__details[data-v-acc68b4c] {\n  display: flex;\n  flex-direction: column;\n  width: 250px;\n  margin-top: 4px;\n  text-align: center;\n}\n@media only screen and (max-width: 1020px) {\n.face-cover__details[data-v-acc68b4c] {\n    width: 95px;\n}\n}\n.face-cover__details__first-line[data-v-acc68b4c] {\n  display: flex;\n  height: 2em;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.face-cover__details__second-line[data-v-acc68b4c] {\n  margin-top: 6px;\n  color: var(--color-text-maxcontrast);\n}\n.face-cover__details__name[data-v-acc68b4c] {\n  flex-grow: 1;\n  margin: 0;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -670,18 +671,13 @@ var render = function () {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "face-cover__details" }, [
-        _c("div", { staticClass: "face-cover__details__first-line" }, [
-          _c(
-            "h2",
-            {
-              class: {
-                "face-cover__details__name": true,
-                "hidden-visually": _vm.baseName.match(/^[0-9]+$/),
-              },
-            },
-            [_vm._v("\n\t\t\t\t" + _vm._s(_vm.baseName) + "\n\t\t\t")]
-          ),
-        ]),
+        !_vm.baseName.match(/^[0-9]+$/)
+          ? _c("div", { staticClass: "face-cover__details__first-line" }, [
+              _c("h2", { staticClass: "face-cover__details__name" }, [
+                _vm._v("\n\t\t\t\t" + _vm._s(_vm.baseName) + "\n\t\t\t"),
+              ]),
+            ])
+          : _vm._e(),
         _vm._v(" "),
         _vm.facesFiles[_vm.baseName]
           ? _c("div", { staticClass: "face-cover__details__second-line" }, [
@@ -819,4 +815,4 @@ render._withStripped = true
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_mixins_AbortControllerMixin_js-src_views_Faces_vue.js.map?v=15779bac8aab235ba549
+//# sourceMappingURL=photos-src_mixins_AbortControllerMixin_js-src_views_Faces_vue.js.map?v=5606ac61448cbb034cd7
