@@ -90,7 +90,7 @@
 		"vue-jest": "^3.0.7",
 		"workbox-webpack-plugin": "^6.5.4",
 		"@cypress/browserify-preprocessor": "^3.0.2",
-		"cypress": "^10.7.0",
+		"cypress": "^10.8.0",
 		"wait-on": "^6.0.1"
 	}
 }
