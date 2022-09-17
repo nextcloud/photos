@@ -45,6 +45,14 @@ class AlbumWithFiles {
 	}
 
 	/**
+	 * @return AlbumFile[]
+	 */
+	public function addFile(AlbumFile $file): array {
+		array_push($this->files, $file);
+		return $this->files;
+	}
+
+	/**
 	 * @return int[]
 	 */
 	public function getFileIds(): array {

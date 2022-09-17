@@ -159,7 +159,9 @@ export default {
 				return []
 			}
 
-			return this.fileIds.map(this.mapFileToItem)
+			return this.fileIds
+				.filter(fileId => this.files[fileId])
+				.map(this.mapFileToItem)
 		},
 
 		/**
@@ -177,7 +179,9 @@ export default {
 						sectionHeader: true,
 						height: this.sectionHeaderHeight,
 					},
-					...this.fileIdsBySection[sectionId].map(this.mapFileToItem),
+					...this.fileIdsBySection[sectionId]
+						.filter(fileId => this.files[fileId])
+						.map(this.mapFileToItem),
 				]
 			})
 		},
