@@ -8,6 +8,7 @@ OC.L10N.register(
     "Tags" : "Klavioù",
     "Back" : "Distro",
     "Save" : "Enrollañ",
+    "Copy public link" : "Eilañ al liamm foran",
     "View" : "Gwell",
     "Favorite" : "Pennrollañ",
     "Remove from favorites" : "Diverkañañ eus ar pennrolloù",

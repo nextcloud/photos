@@ -16,7 +16,6 @@ OC.L10N.register(
     "Copy public link" : "公開リンクをコピー",
     "An error occurred" : "エラーが発生しました",
     "Open the full size \"{name}\" image" : "画像 \"{name}\" をフルサイズで開く",
-    "Upload from computer" : "コンピュータからアップロード",
     "Open the \"{name}\" sub-directory" : "サブディレクトリ \"{name}\" を開く",
     "Back to {folder}" : " {folder} に戻る",
     "Share this folder" : "このフォルダーを共有する",

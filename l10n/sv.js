@@ -16,7 +16,6 @@ OC.L10N.register(
     "Copy public link" : "Kopiera publik länk",
     "An error occurred" : "Ett fel uppstod",
     "Open the full size \"{name}\" image" : "Öppna bilden \"{name}\" i full storlek",
-    "Upload from computer" : "Ladda upp från dator",
     "Open the \"{name}\" sub-directory" : "Öppna undermappen \"{name}\"",
     "Back to {folder}" : "Tillbaka till {folder}",
     "Share this folder" : "Dela denna mapp",
