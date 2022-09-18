@@ -37,7 +37,6 @@ OC.L10N.register(
     "Select image {imageName}" : "Vælg billede {imageName}",
     "The file is in the favorites" : "Filen er i favoritterne",
     "Open the full size \"{name}\" image" : "Åbn billedet \"{name}\" i fuld størrelse",
-    "Upload from computer" : "Upload fra computer",
     "Add to {destination}" : "Føj til {destination}",
     "Open the \"{name}\" sub-directory" : "Åbn \"{name}\" under direktoriet",
     "Back to {folder}" : "Tilbage til {folder}",

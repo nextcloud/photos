@@ -17,7 +17,6 @@ OC.L10N.register(
     "Copy public link" : "复制公开链接",
     "An error occurred" : "发生错误",
     "Open the full size \"{name}\" image" : "打开图片 “{name}” 的完整尺寸",
-    "Upload from computer" : "从电脑上传",
     "Open the \"{name}\" sub-directory" : "打开 “{name}” 的子目录",
     "Back to {folder}" : "返回 {folder}",
     "Share this folder" : "共享此文件夹",

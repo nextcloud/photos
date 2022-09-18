@@ -17,7 +17,6 @@ OC.L10N.register(
     "Copy public link" : "Kopieer openbare link",
     "An error occurred" : "Er heeft een fout opgetreden",
     "Open the full size \"{name}\" image" : "Open het \"{name}\" beeld in originele grootte",
-    "Upload from computer" : "Uploaden vanaf computer",
     "Open the \"{name}\" sub-directory" : "Open de \"{name}\" map",
     "Back to {folder}" : "Terug naar {folder}",
     "Share this folder" : "Deze map delen",

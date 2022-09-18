@@ -23,6 +23,7 @@ OC.L10N.register(
     "Remove from favorites" : "إزالتها مِن المفضلة",
     "This folder does not exist" : "هذا المجلد غير موجود",
     "No photos in here" : "لا توجد صور هنا",
+    "Shared albums" : "الألبومات المشتركة",
     "No tags yet" : "لا توجد وسوم حتى الآن",
     "Photos with tags will show up here" : "سوف تظهر الصور ذات الوسوم هنا",
     "Add" : "إضافة",

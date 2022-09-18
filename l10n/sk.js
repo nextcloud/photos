@@ -17,7 +17,6 @@ OC.L10N.register(
     "Copy public link" : "Kopírovať verejný odkaz",
     "An error occurred" : "Vyskytla sa chyba",
     "Open the full size \"{name}\" image" : "Otvoriť fotografiu „{name}“ v pôvodnej veľkosti",
-    "Upload from computer" : "Nahrať z počítača",
     "Open the \"{name}\" sub-directory" : "Otvoriť podpriečinok „{name}“",
     "Back to {folder}" : "Späť do {folder}",
     "Share this folder" : "Sprístupniť tento priečinok",
