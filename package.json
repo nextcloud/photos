@@ -60,7 +60,7 @@
 		"url-parse": "^1.5.10",
 		"vue": "^2.7.10",
 		"vue-material-design-icons": "^5.1.2",
-		"vue-router": "^3.6.4",
+		"vue-router": "^3.6.5",
 		"vue-template-compiler": "^2.7.10",
 		"vue-virtual-grid": "^2.5.0",
 		"vuex": "^3.6.2",
