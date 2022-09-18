@@ -36,7 +36,7 @@
 			<FilesListViewer class="file-picker__file-list"
 				:class="{'file-picker__file-list--placeholder': monthsList.length === 0}"
 				:file-ids-by-section="fileIdsByMonth"
-				:empty-message="t('photos', 'There is no photos or videos yet!')"
+				:empty-message="t('photos', 'There are no photos or videos yet!')"
 				:sections="monthsList"
 				:loading="loadingFiles"
 				:base-height="100"
