@@ -17,7 +17,6 @@ OC.L10N.register(
     "Copy public link" : "Αντιγραφή δημόσιου συνδέσμου",
     "An error occurred" : "Παρουσιάστηκε σφάλμα",
     "Open the full size \"{name}\" image" : "Άνοιγμα εικόνας «{name}» σε πλήρη μέγεθος",
-    "Upload from computer" : "Μεταφόρτωση από υπολογιστή",
     "Open the \"{name}\" sub-directory" : "Άνοιγμα υπό-κατάλογου του «{name}»",
     "Back to {folder}" : "Πίσω στο {folder}",
     "Share this folder" : "Διαμοιρασμός αυτού του φακέλου",

@@ -18,7 +18,6 @@ OC.L10N.register(
     "Copy public link" : "Copiar enlace público",
     "An error occurred" : "Ocurrió un error",
     "Open the full size \"{name}\" image" : "Abrir la imagen \"{name}\" a tamaño completo",
-    "Upload from computer" : "Cargar desde el ordenador",
     "Open the \"{name}\" sub-directory" : "Abrir el subdirectorio \"{name}\"",
     "Back to {folder}" : "Atrás a {folder}",
     "Share this folder" : "Compartir esta carpeta",
