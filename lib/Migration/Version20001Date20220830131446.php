@@ -70,6 +70,7 @@ class Version20001Date20220830131446 extends SimpleMigrationStep {
 			$table = $schema->getTable("photos_albums_files");
 			$table->addColumn('owner', Types::STRING, [
 				'notnull' => true,
+				'default' => '',
 				'length' => 64,
 			]);
 		}
