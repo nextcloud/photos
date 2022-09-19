@@ -124,7 +124,7 @@
 		</NcModal>
 
 		<NcModal v-if="showManageCollaboratorView"
-			:title="t('photos', 'Manager collaborators')"
+			:title="t('photos', 'Manage collaborators')"
 			@close="showManageCollaboratorView = false">
 			<CollaboratorsSelectionForm :album-name="album.basename"
 				:collaborators="album.collaborators"
