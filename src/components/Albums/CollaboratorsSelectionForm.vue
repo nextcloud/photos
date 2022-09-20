@@ -82,7 +82,6 @@
 			<div v-if="allowPublicLink" class="actions__public-link">
 				<template v-if="publicLink">
 					<NcButton class="manage-collaborators__public-link-button"
-						type="tertiary-no-background"
 						@click="copyPublicLink">
 						<template v-if="publicLinkCopied">
 							{{ t('photos', 'Public link copied!') }}
@@ -101,7 +100,6 @@
 				</template>
 				<NcButton v-else
 					class="manage-collaborators__public-link-button"
-					type="tertiary-no-background"
 					@click="createPublicLinkForAlbum">
 					<Earth slot="icon" />
 					{{ t('photos', 'Share via public link') }}
@@ -118,6 +116,7 @@
 <script>
 import Magnify from 'vue-material-design-icons/Magnify'
 import Close from 'vue-material-design-icons/Close'
+import Earth from 'vue-material-design-icons/Earth'
 
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
@@ -141,6 +140,7 @@ export default {
 	components: {
 		Magnify,
 		Close,
+		Earth,
 		NcLoadingIcon,
 		NcButton,
 		NcListItemIcon,
