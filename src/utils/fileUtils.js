@@ -19,8 +19,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+import { generateRemoteUrl } from '@nextcloud/router'
 import camelcase from 'camelcase'
-import { isNumber } from './numberUtils'
+import { rootPath } from '../services/DavClient.js'
+import { isNumber } from './numberUtils.js'
 
 /**
  * Get an url encoded path
@@ -101,7 +103,7 @@ const sortCompare = function(fileInfo1, fileInfo2, key, asc = true) {
  * @param {object} obj - object to flatten and format.
  */
 function genFileInfo(obj) {
-	return Object.entries(obj).reduce((fileInfo, [key, data]) => {
+	const fileInfo = Object.entries(obj).reduce((fileInfo, [key, data]) => {
 		// flatten object if any
 		if (!!data && typeof data === 'object' && !Array.isArray(data)) {
 			return { ...fileInfo, ...genFileInfo(data) }
@@ -117,6 +119,13 @@ function genFileInfo(obj) {
 			return { ...fileInfo, [camelcase(key)]: isNumber(data) ? Number(data) : data }
 		}
 	}, {})
+
+	if (fileInfo.filename) {
+		// Adding context
+		fileInfo.source = generateRemoteUrl(rootPath) + '/' + fileInfo.filename
+	}
+
+	return fileInfo
 }
 
 export { encodeFilePath, extractFilePaths, sortCompare, genFileInfo }

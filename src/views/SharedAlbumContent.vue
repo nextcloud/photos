@@ -125,7 +125,6 @@ import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple'
 
 import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionSeparator, isMobile } from '@nextcloud/vue'
 import { getCurrentUser } from '@nextcloud/auth'
-import { generateRemoteUrl } from '@nextcloud/router'
 
 import FetchSharedAlbumsMixin from '../mixins/FetchSharedAlbumsMixin.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
@@ -242,8 +241,6 @@ export default {
 
 				const fetchedFiles = response.data
 					.map(file => genFileInfo(file))
-					// For the Viewer.
-					.map(file => ({ ...file, source: generateRemoteUrl(`dav${file.filename}`) }))
 
 				const fileIds = fetchedFiles
 					.map(file => file.fileid)

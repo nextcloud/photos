@@ -26,7 +26,6 @@ import { allMimes } from './AllowedMimes.js'
 import client from './DavClient.js'
 import { props } from './DavRequest.js'
 import moment from '@nextcloud/moment'
-import { generateRemoteUrl } from '@nextcloud/router'
 
 /**
  * List files from a folder and filter out unwanted mimes
@@ -147,6 +146,4 @@ export default async function(path = '', options = {}) {
 	const response = await client.getDirectoryContents('', options)
 
 	return response.data.map(data => genFileInfo(data))
-		.map(file => ({ ...file, source: generateRemoteUrl(`dav${file.filename}`) }))
-
 }

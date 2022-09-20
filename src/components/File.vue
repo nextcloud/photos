@@ -25,7 +25,7 @@
 		data-test="media"
 		:class="{selected}">
 		<a class="file"
-			:href="davPath"
+			:href="file.source"
 			:aria-label="ariaLabel"
 			@click.stop.prevent="emitClick">
 
@@ -71,8 +71,7 @@
 import Star from 'vue-material-design-icons/Star'
 import VideoIcon from 'vue-material-design-icons/Video.vue'
 
-import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
-import { getCurrentUser } from '@nextcloud/auth'
+import { generateUrl } from '@nextcloud/router'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 
 import UserConfig from '../mixins/UserConfig.js'
@@ -121,10 +120,6 @@ export default {
 	},
 
 	computed: {
-		/** @return {string} */
-		davPath() {
-			return generateRemoteUrl(`dav/files/${getCurrentUser().uid}`) + this.file.filename
-		},
 		/** @return {string} */
 		ariaDescription() {
 			return `image-description-${this.file.fileid}`
