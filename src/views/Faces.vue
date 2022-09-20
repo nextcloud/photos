@@ -124,7 +124,6 @@ export default {
 		flex-grow: 1;
 		display: flex;
 		flex-wrap: wrap;
-		overflow: scroll;
 		gap: 32px;
 		align-content: flex-start;
 	}
