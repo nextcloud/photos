@@ -29,50 +29,56 @@
 	</NcEmptyContent>
 
 	<div v-else class="timeline">
-		<div class="timeline__header">
-			<!-- TODO: UploadPicker -->
-			<NcActions v-if="selectedFileIds.length === 0"
-				:force-title="true"
-				:force-menu="true"
-				:menu-title="t('photos', 'Add')">
-				<Plus slot="icon" />
-				<NcActionButton :close-after-click="true"
-					:aria-label="t('photos', 'Create a new album')"
-					@click="showAlbumCreationForm = true">
-					{{ t('photos', 'Create new album') }}
-					<PlusBoxMultiple slot="icon" />
-				</NcActionButton>
-			</NcActions>
-
-			<template v-else>
-				<NcButton :close-after-click="true"
-					type="primary"
-					:aria-label="t('photos', 'Add selection to an album')"
-					@click="showAlbumPicker = true">
-					<template #icon>
-						<Plus slot="icon" />
-					</template>
-					{{ t('photos', 'Add to album') }}
-				</NcButton>
-
-				<NcActions :aria-label="t('photos', 'Open actions menu')">
-					<ActionDownload :selected-file-ids="selectedFileIds" :title="t('photos', 'Download selected files')">
-						<Download slot="icon" />
-					</ActionDownload>
-
-					<ActionFavorite :selected-file-ids="selectedFileIds" />
-
+		<!-- Header -->
+		<HeaderNavigation key="navigation"
+			:loading="loadingCount > 0"
+			:path="'/'"
+			:title="rootTitle"
+			:root-title="rootTitle"
+			@refresh="resetFetchFilesState">
+			<div class="timeline__header__left">
+				<!-- TODO: UploadPicker -->
+				<NcActions v-if="selectedFileIds.length === 0"
+					:force-title="true"
+					:force-menu="true"
+					:menu-title="t('photos', 'Add')">
+					<Plus slot="icon" />
 					<NcActionButton :close-after-click="true"
-						:aria-label="t('photos', 'Delete selection')"
-						@click="deleteSelection">
-						{{ t('photos', 'Delete selection') }}
-						<Delete slot="icon" />
+						:aria-label="t('photos', 'Create a new album')"
+						@click="showAlbumCreationForm = true">
+						{{ t('photos', 'Create new album') }}
+						<PlusBoxMultiple slot="icon" />
 					</NcActionButton>
 				</NcActions>
-			</template>
 
-			<NcLoadingIcon v-if="loadingCount > 0" key="loader" :size="32" />
-		</div>
+				<template v-else>
+					<NcButton :close-after-click="true"
+						type="primary"
+						:aria-label="t('photos', 'Add selection to an album')"
+						@click="showAlbumPicker = true">
+						<template #icon>
+							<Plus slot="icon" />
+						</template>
+						{{ t('photos', 'Add to album') }}
+					</NcButton>
+
+					<NcActions :aria-label="t('photos', 'Open actions menu')">
+						<ActionDownload :selected-file-ids="selectedFileIds" :title="t('photos', 'Download selected files')">
+							<Download slot="icon" />
+						</ActionDownload>
+
+						<ActionFavorite :selected-file-ids="selectedFileIds" />
+
+						<NcActionButton :close-after-click="true"
+							:aria-label="t('photos', 'Delete selection')"
+							@click="deleteSelection">
+							{{ t('photos', 'Delete selection') }}
+							<Delete slot="icon" />
+						</NcActionButton>
+					</NcActions>
+				</template>
+			</div>
+		</HeaderNavigation>
 
 		<FilesListViewer ref="filesListViewer"
 			:container-element="appContent"
@@ -126,7 +132,7 @@ import Delete from 'vue-material-design-icons/Delete'
 import PlusBoxMultiple from 'vue-material-design-icons/PlusBoxMultiple'
 import Download from 'vue-material-design-icons/Download'
 
-import { NcModal, NcActions, NcActionButton, NcButton, NcLoadingIcon, NcEmptyContent, isMobile } from '@nextcloud/vue'
+import { NcModal, NcActions, NcActionButton, NcButton, NcEmptyContent, isMobile } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 
 import { allMimes } from '../services/AllowedMimes.js'
@@ -139,6 +145,7 @@ import AlbumForm from '../components/Albums/AlbumForm.vue'
 import AlbumPicker from '../components/Albums/AlbumPicker.vue'
 import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import ActionDownload from '../components/Actions/ActionDownload.vue'
+import HeaderNavigation from '../components/HeaderNavigation.vue'
 
 export default {
 	name: 'Timeline',
@@ -147,7 +154,6 @@ export default {
 		PlusBoxMultiple,
 		Download,
 		Plus,
-		NcLoadingIcon,
 		NcEmptyContent,
 		NcModal,
 		NcActions,
@@ -159,6 +165,7 @@ export default {
 		File,
 		ActionFavorite,
 		ActionDownload,
+		HeaderNavigation,
 
 	},
 
@@ -201,6 +208,10 @@ export default {
 		onThisDay: {
 			type: Boolean,
 			default: false,
+		},
+		rootTitle: {
+			type: String,
+			required: true,
 		},
 	},
 
@@ -265,27 +276,8 @@ export default {
 	flex-direction: column;
 
 	&__header {
-		display: flex;
-		min-height: 60px;
-		box-sizing: content-box;
-		align-items: center;
-		position: sticky;
-		width: 100%;
-		height: 60px;
-		z-index: 3;
-		background: var(--color-main-background);
-		padding: 8px 64px 0px 64px;
-
-		@media only screen and (max-width: 1200px) {
-			padding: 0 48px;
-		}
-
-		& > * {
-			margin-right: 8px;
-		}
-
-		.loader {
-			margin-left: 16px;
+		&__left {
+			display: flex;
 		}
 	}
 
@@ -297,11 +289,7 @@ export default {
 		}
 
 		::v-deep .files-list-viewer__section-header {
-			top: 0;
-		}
-
-		.section-header {
-			padding: 24px 0 16px 0;
+			top: var(--photos-navigation-height);
 		}
 	}
 }

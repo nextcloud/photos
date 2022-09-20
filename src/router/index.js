@@ -70,12 +70,16 @@ const router = new Router({
 			path: '/',
 			component: Timeline,
 			name: 'all_media',
+			props: route => ({
+				rootTitle: t('photos', 'All your media'),
+			}),
 		},
 		{
 			path: '/photos',
 			component: Timeline,
 			name: 'photos',
 			props: route => ({
+				rootTitle: t('photos', 'Photos'),
 				mimesType: imageMimes,
 			}),
 		},
@@ -84,6 +88,7 @@ const router = new Router({
 			component: Timeline,
 			name: 'videos',
 			props: route => ({
+				rootTitle: t('photos', 'Videos'),
 				mimesType: videoMimes,
 			}),
 		},
@@ -141,6 +146,7 @@ const router = new Router({
 			component: Timeline,
 			name: 'favorites',
 			props: route => ({
+				rootTitle: t('photos', 'Favorites'),
 				onlyFavorites: true,
 			}),
 		},
