@@ -289,7 +289,7 @@ export default {
 				path: file.filename,
 				list: this.faceFileIds.map(fileId => ({
 					...this.files[fileId],
-					basename: this.files[fileId].basename.split('-', 2)[1],
+					basename: this.files[fileId].basename.split('-').slice(1).join('-'),
 				})).filter(file => !file.sectionHeader),
 				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
 				canLoop: file.canLoop,
@@ -405,7 +405,6 @@ export default {
 		align-items: center;
 		justify-content: space-between;
 		position: sticky;
-		top: var(--header-height);
 		z-index: 3;
 		background: var(--color-main-background);
 		padding: 0 64px;
