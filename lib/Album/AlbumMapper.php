@@ -121,6 +121,24 @@ class AlbumMapper {
 		}, $rows);
 	}
 
+	/**
+	 * @param string $userId
+	 * @param int $fileId
+	 * @return AlbumInfo[]
+	 */
+	public function getForUserAndFile(string $userId, int $fileId): array {
+		$query = $this->connection->getQueryBuilder();
+		$query->select("a.album_id", "name", "user", "location", "created", "last_added_photo")
+			->from("photos_albums", "a")
+			->leftJoin("a", "photos_albums_files", "p", $query->expr()->eq("a.album_id", "p.album_id"))
+			->where($query->expr()->eq('user', $query->createNamedParameter($userId)))
+			->andWhere($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
+		$rows = $query->executeQuery()->fetchAll();
+		return array_map(function (array $row) {
+			return new AlbumInfo((int)$row['album_id'], $row['user'], $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
+		}, $rows);
+	}
+
 	public function rename(int $id, string $newName): void {
 		$query = $this->connection->getQueryBuilder();
 		$query->update("photos_albums")
@@ -193,6 +211,28 @@ class AlbumMapper {
 			$result[] = new AlbumWithFiles($album, $filesByAlbum[$id] ?? []);
 		}
 		return $result;
+	}
+
+	/**
+	 * @param int $albumId
+	 * @param int $fileId
+	 * @return AlbumFile
+	 */
+	public function getForAlbumIdAndFileId(int $albumId, int $fileId): AlbumFile {
+		$query = $this->connection->getQueryBuilder();
+		$query->select("fileid", "mimetype", "a.album_id", "user", "size", "mtime", "etag", "location", "created", "last_added_photo", "added", "owner")
+			->selectAlias("f.name", "file_name")
+			->selectAlias("a.name", "album_name")
+			->from("photos_albums", "a")
+			->leftJoin("a", "photos_albums_files", "p", $query->expr()->eq("a.album_id", "p.album_id"))
+			->leftJoin("p", "filecache", "f", $query->expr()->eq("p.file_id", "f.fileid"))
+			->where($query->expr()->eq('a.album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
+		$row = $query->executeQuery()->fetchAll()[0];
+
+		$mimeId = $row['mimetype'];
+		$mimeType = $this->mimeTypeLoader->getMimetypeById($mimeId);
+		return new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
 	}
 
 	public function addFile(int $albumId, int $fileId, string $owner): void {

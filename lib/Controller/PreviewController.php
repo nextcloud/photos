@@ -88,7 +88,9 @@ class PreviewController extends Controller {
 		$nodes = $this->userFolder->getById($fileId);
 
 		if (\count($nodes) === 0) {
-			$albums = $this->albumMapper->getAlbumForCollaboratorIdAndFileId($user->getUID(), AlbumMapper::TYPE_USER, $fileId);
+			$albums = $this->albumMapper->getForUserAndFile($user->getUID(), $fileId);
+			$receivedAlbums = $this->albumMapper->getAlbumForCollaboratorIdAndFileId($user->getUID(), AlbumMapper::TYPE_USER, $fileId);
+			$albums = array_merge($albums, $receivedAlbums);
 
 			$userGroups = $this->groupManager->getUserGroupIds($user);
 			foreach ($userGroups as $groupId) {
@@ -98,8 +100,9 @@ class PreviewController extends Controller {
 			}
 
 			foreach ($albums as $album) {
+				$albumFile = $this->albumMapper->getForAlbumIdAndFileId($album->getId(), $fileId);
 				$nodes = $this->rootFolder
-					->getUserFolder($album->getUserId())
+					->getUserFolder($albumFile->getOwner())
 					->getById($fileId);
 				if (\count($nodes) !== 0) {
 					break;
