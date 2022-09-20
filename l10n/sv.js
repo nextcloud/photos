@@ -31,6 +31,7 @@ OC.L10N.register(
     "Add" : "Lägg till",
     "Delete selection" : "Ta bort urval",
     "Tagged photos" : "Taggade bilder",
+    "Failed to delete {fileName}." : "Misslyckades att radera {fileName}.",
     "Your photos" : "Dina bilder",
     "Your videos" : "Dina videor",
     "Your folders" : "Dina mappar",

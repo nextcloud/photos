@@ -31,6 +31,7 @@ OC.L10N.register(
     "Popular tags" : "Популярні теги",
     "Add" : "Додати",
     "Tagged photos" : "Світлини з позначками",
+    "Failed to delete {fileName}." : "Не вдалося видалити {fileName}.",
     "Your photos" : "Ваші світлини",
     "Settings" : "Налаштування"
 },
