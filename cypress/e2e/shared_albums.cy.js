@@ -20,8 +20,10 @@
  *
  */
 import { randHash } from '../utils'
+
 const randUser = randHash()
 const randUser2 = randHash()
+const randUser3 = randHash()
 
 const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/
 Cypress.on('uncaught:exception', (err) => {
@@ -34,112 +36,154 @@ Cypress.on('uncaught:exception', (err) => {
 describe('Manage shared albums', () => {
   before(() => {
     cy.logout()
+
     cy.nextcloudCreateUser(randUser, 'password')
     cy.nextcloudCreateUser(randUser2, 'password')
-
-    cy.login(randUser, 'password')
-    cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
-    cy.createAnAlbumFromAlbums('shared_album_test1')
-    cy.addCollaborators([randUser2])
-    cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
-    cy.createAnAlbumFromAlbums('shared_album_test2')
-    cy.addCollaborators([randUser2])
-    cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
-    cy.createAnAlbumFromAlbums('shared_album_test3')
-    cy.addCollaborators([randUser2])
-    cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
-    cy.createAnAlbumFromAlbums('shared_album_test4')
-    cy.addCollaborators([randUser2])
-    cy.logout()
+    cy.nextcloudCreateUser(randUser3, 'password')
 
     cy.login(randUser2, 'password')
     cy.uploadTestMedia()
-    cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/sharedalbums`)
-    cy.goToSharedAlbum('shared_album_test2')
-    cy.addFilesToAlbumFromAlbum('shared_album_test2', [0, 1, 2])
-
-    // wait a bit for things to be settled
-    cy.wait(1000)
+    cy.logout()
   })
 
   beforeEach(() => {
-    cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/sharedalbums`)
-  })
-
-  it('Add and remove a file to a shared album from a shared album', () => {
-    cy.goToSharedAlbum('shared_album_test1')
-    cy.get('[data-test="media"]').should('have.length', 0)
-    cy.addFilesToAlbumFromAlbum('shared_album_test1', [0])
-    cy.get('[data-test="media"]').should('have.length', 1)
-    cy.selectMedia([0])
-    cy.removeSelectionFromAlbum()
-    cy.get('[data-test="media"]').should('have.length', 0)
-  })
-
-  it('Add and remove multiple files to a shared album from a shared album', () => {
-    cy.goToSharedAlbum('shared_album_test1')
-    cy.get('[data-test="media"]').should('have.length', 0)
-    cy.addFilesToAlbumFromAlbum('shared_album_test1', [1, 2])
-    cy.get('[data-test="media"]').should('have.length', 2)
-    cy.selectMedia([0, 1])
-    cy.removeSelectionFromAlbum()
-    cy.get('[data-test="media"]').should('have.length', 0)
-  })
-
-  it('Download a file from a shared album', () => {
-    cy.goToSharedAlbum('shared_album_test2')
-    cy.selectMedia([0])
-    cy.downloadSelection()
-    cy.unselectMedia([0])
-  })
-
-  it('Download multiple files from a shared album', () => {
-    cy.goToSharedAlbum('shared_album_test2')
-    cy.selectMedia([1, 2])
-    cy.downloadSelection()
-    cy.unselectMedia([1, 2])
-  })
-
-  it('Download all files from a shared album', () => {
-    cy.goToSharedAlbum('shared_album_test2')
-    cy.downloadAllFiles()
-  })
-
-  it('Remove a file from a shared album', () => {
-    cy.goToSharedAlbum('shared_album_test2')
-    cy.get('[data-test="media"]').should('have.length', 3)
-    cy.goToSharedAlbum('shared_album_test2')
-    cy.selectMedia([0])
-    cy.removeSelectionFromAlbum()
-    cy.get('[data-test="media"]').should('have.length', 2)
-  })
-
-  it('Remove multiple files from a shared album', () => {
-    cy.goToSharedAlbum('shared_album_test2')
-    cy.get('[data-test="media"]').should('have.length', 2)
-    cy.goToSharedAlbum('shared_album_test2')
-    cy.selectMedia([0, 1])
-    cy.removeSelectionFromAlbum()
-    cy.get('[data-test="media"]').should('have.length', 0)
-  })
-
-  xit('Remove shared album', () => {
-    cy.goToSharedAlbum('shared_album_test3')
-    cy.removeSharedAlbums()
-  })
-
-  xit('Remove collaborator from an album', () => {
-    cy.get('[data-test="media"]').should('have.length', 4)
-
     cy.logout()
-    cy.login(randUser, 'password')
-    cy.goToAlbum('shared_album_test4')
-    cy.removeCollaborators([randUser2])
-    cy.logout()
-
     cy.login(randUser2, 'password')
     cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/sharedalbums`)
+  })
 
-    cy.get('ul.collections__list li').should('have.length', 3)
+  context('Adding and removing files in a shared album', () => {
+    before(() => {
+      cy.logout()
+      cy.login(randUser, 'password')
+      cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
+      cy.createAnAlbumFromAlbums('shared_album_test1')
+      cy.addCollaborators([randUser2])
+      cy.logout()
+    })
+
+    it('Add and remove a file to a shared album from a shared album', () => {
+      cy.goToSharedAlbum('shared_album_test1')
+      cy.get('[data-test="media"]').should('have.length', 0)
+      cy.addFilesToAlbumFromAlbum('shared_album_test1', [0])
+      cy.get('[data-test="media"]').should('have.length', 1)
+      cy.selectMedia([0])
+      cy.removeSelectionFromAlbum()
+      cy.get('[data-test="media"]').should('have.length', 0)
+    })
+
+    it('Add and remove multiple files to a shared album from a shared album', () => {
+      cy.goToSharedAlbum('shared_album_test1')
+      cy.get('[data-test="media"]').should('have.length', 0)
+      cy.addFilesToAlbumFromAlbum('shared_album_test1', [1, 2])
+      cy.get('[data-test="media"]').should('have.length', 2)
+      cy.selectMedia([0, 1])
+      cy.removeSelectionFromAlbum()
+      cy.get('[data-test="media"]').should('have.length', 0)
+    })
+  })
+
+  context('Download files from a shared album', () => {
+    before(() => {
+      cy.logout()
+      cy.login(randUser, 'password')
+      cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
+      cy.createAnAlbumFromAlbums('shared_album_test2')
+      cy.addCollaborators([randUser2])
+      cy.logout()
+
+      cy.login(randUser2, 'password')
+      cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/sharedalbums`)
+      cy.goToSharedAlbum('shared_album_test2')
+      cy.addFilesToAlbumFromAlbum('shared_album_test2', [0, 1, 2])
+      cy.logout()
+    })
+
+    it('Download a file from a shared album', () => {
+      cy.goToSharedAlbum('shared_album_test2')
+      cy.selectMedia([0])
+      cy.downloadSelection()
+      cy.unselectMedia([0])
+    })
+
+    it('Download multiple files from a shared album', () => {
+      cy.goToSharedAlbum('shared_album_test2')
+      cy.selectMedia([1, 2])
+      cy.downloadSelection()
+      cy.unselectMedia([1, 2])
+    })
+
+    it('Download all files from a shared album', () => {
+      cy.goToSharedAlbum('shared_album_test2')
+      cy.downloadAllFiles()
+    })
+  })
+
+  context('Delete a received shared album', () => {
+    before(() => {
+      cy.logout()
+      cy.login(randUser, 'password')
+      cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
+      cy.createAnAlbumFromAlbums('shared_album_test3')
+      cy.addCollaborators([randUser2])
+      cy.logout()
+    })
+
+    it('Remove shared album', () => {
+      cy.goToSharedAlbum('shared_album_test3')
+      cy.removeSharedAlbums()
+    })
+  })
+
+  context('Remove a collaborator from an album', () => {
+    before(() => {
+      cy.logout()
+      cy.login(randUser, 'password')
+      cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
+      cy.createAnAlbumFromAlbums('shared_album_test4')
+      cy.addCollaborators([randUser2])
+      cy.logout()
+    })
+
+    it('Remove collaborator from an album', () => {
+      cy.get('ul.collections__list li').should('have.length', 4)
+
+      cy.logout()
+      cy.login(randUser, 'password')
+      cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos`)
+      cy.goToAlbum('shared_album_test4')
+      cy.removeCollaborators([randUser2])
+      cy.logout()
+
+      cy.login(randUser2, 'password')
+      cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/sharedalbums`)
+
+      cy.get('ul.collections__list li').should('have.length', 3)
+    })
+  })
+
+  context('Two shared albums with the same name', () => {
+    before(() => {
+      cy.logout()
+      cy.login(randUser, 'password')
+      cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
+      cy.createAnAlbumFromAlbums('shared_album_test5')
+      cy.addCollaborators([randUser2])
+      cy.logout()
+
+      cy.login(randUser3, 'password')
+      cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
+      cy.createAnAlbumFromAlbums('shared_album_test5')
+      cy.addCollaborators([randUser2])
+      cy.logout()
+    })
+
+
+    it('It should display two shared albums', () => {
+      cy.get('ul.collections__list li')
+        .contains(`shared_album_test5 (${randUser})`)
+      cy.get('ul.collections__list li')
+        .contains(`shared_album_test5 (${randUser3})`)
+    })
   })
 })

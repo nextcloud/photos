@@ -364,11 +364,11 @@ class AlbumMapper {
 			if ($row['fileid']) {
 				$mimeId = $row['mimetype'];
 				$mimeType = $this->mimeTypeLoader->getMimetypeById($mimeId);
-				$filesByAlbum[$albumId][] = new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
+				$filesByAlbum[$albumId][] = new AlbumFile((int)$row['fileid'], $row['album_name'].' ('.$row['album_user'].')', $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
 			}
 
 			if (!isset($albumsById[$albumId])) {
-				$albumsById[$albumId] = new AlbumInfo($albumId, $row['album_user'], $row['album_name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
+				$albumsById[$albumId] = new AlbumInfo($albumId, $row['album_user'], $row['album_name'].' ('.$row['album_user'].')', $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
 			}
 		}
 
@@ -419,7 +419,7 @@ class AlbumMapper {
 			return new AlbumInfo(
 				(int)$row['album_id'],
 				$row['user'],
-				$row['name'],
+				$row['name'].' ('.$row['user'].')',
 				$row['location'],
 				(int)$row['created'],
 				(int)$row['last_added_photo']
