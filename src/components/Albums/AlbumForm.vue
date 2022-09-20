@@ -101,6 +101,7 @@ import MapMarker from 'vue-material-design-icons/MapMarker'
 import AccountMultiplePlus from 'vue-material-design-icons/AccountMultiplePlus'
 import Send from 'vue-material-design-icons/Send'
 
+import { getCurrentUser } from '@nextcloud/auth'
 import { NcButton, NcLoadingIcon, NcTextField } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 
@@ -187,6 +188,7 @@ export default {
 				let album = await this.createAlbum({
 					album: {
 						basename: this.albumName,
+						filename: `/photos/${getCurrentUser().uid}/albums/${this.albumName}`,
 						nbItems: 0,
 						location: this.albumLocation,
 						lastPhoto: -1,
