@@ -52,6 +52,7 @@
 								class="manage-collaborators__form__list__result"
 								:title="availableCollaborators[result.key].id"
 								:search="searchText"
+								:user="availableCollaborators[result.key].id"
 								:display-name="availableCollaborators[result.key].label"
 								:aria-label="t('photos', 'Add {collaboratorLabel} to the collaborators list', {collaboratorLabel: availableCollaborators[result.key].label})"
 								@click="selectEntity(result.key)" />
@@ -72,8 +73,9 @@
 				:key="collaboratorKey"
 				class="manage-collaborators__selection__item">
 				<NcListItemIcon :id="availableCollaborators[collaboratorKey].id"
+					:display-name="availableCollaborators[collaboratorKey].label"
 					:title="availableCollaborators[collaboratorKey].id"
-					:display-name="availableCollaborators[collaboratorKey].label">
+					:user="availableCollaborators[collaboratorKey].id">
 					<NcButton type="tertiary"
 						:aria-label="t('photos', 'Remove {collaboratorLabel} from the collaborators list', {collaboratorLabel: availableCollaborators[collaboratorKey].label})"
 						@click="unselectEntity(collaboratorKey)">
