@@ -154,7 +154,6 @@
 <script>
 // eslint-disable-next-line node/no-extraneous-import
 import { addNewFileMenuEntry } from '@nextcloud/files'
-import { generateRemoteUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { mapActions, mapGetters } from 'vuex'
 import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionSeparator, NcLoadingIcon, isMobile } from '@nextcloud/vue'
@@ -340,8 +339,6 @@ export default {
 
 				const fetchedFiles = response.data
 					.map(file => genFileInfo(file))
-					// For the Viewer.
-					.map(file => ({ ...file, source: generateRemoteUrl(`dav${file.filename}`) }))
 
 				const fileIds = fetchedFiles
 					.map(file => file.fileid)

@@ -25,7 +25,7 @@
 			'file--cropped': croppedLayout,
 		}"
 		class="file"
-		:href="davPath"
+		:href="item.injected.source"
 		:aria-label="ariaLabel"
 		@click.prevent="openViewer">
 		<div v-if="item.injected.mime.includes('video') && item.injected.hasPreview" class="icon-video-white" />
@@ -57,8 +57,7 @@
 </template>
 
 <script>
-import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
-import { getCurrentUser } from '@nextcloud/auth'
+import { generateUrl } from '@nextcloud/router'
 
 import UserConfig from '../mixins/UserConfig.js'
 
@@ -81,9 +80,6 @@ export default {
 	},
 
 	computed: {
-		davPath() {
-			return generateRemoteUrl(`dav/files/${getCurrentUser().uid}`) + this.item.injected.filename
-		},
 		ariaUuid() {
 			return `image-${this.item.injected.fileid}`
 		},
