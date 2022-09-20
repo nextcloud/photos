@@ -289,7 +289,7 @@ export default {
 				path: file.filename,
 				list: this.faceFileIds.map(fileId => ({
 					...this.files[fileId],
-					basename: this.files[fileId].basename.substring(this.files[fileId].basename.indexOf('-') + 1),
+					basename: this.files[fileId].basename.split('-').slice(1).join('-'),
 				})).filter(file => !file.sectionHeader),
 				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
 				canLoop: file.canLoop,
