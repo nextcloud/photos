@@ -247,6 +247,7 @@ export default {
 		height: 100%;
 		box-sizing: border-box;
 		outline: none; // Override global focus state.
+		display: flex; // Fill parent size
 
 		&__images {
 			display: contents;
