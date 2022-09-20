@@ -410,7 +410,7 @@ class AlbumMapper {
 			->where($query->expr()->eq('collaborator_id', $query->createNamedParameter($collaboratorId)))
 			->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter($collaboratorType, IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('file_id', $query->createNamedParameter($fileId)))
-			->groupBy('album_id')
+			->groupBy('a.album_id')
 			->executeQuery()
 			->fetchAll();
 
