@@ -207,7 +207,7 @@ button.app-navigation-toggle {
 
 	&__back {
 		// Above the navigation menu
-		position: absolute;
+		position: absolute !important;
 		left: 0;
 		margin: var(--photos-navigation-spacing) !important;
 	}
