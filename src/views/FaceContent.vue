@@ -405,7 +405,6 @@ export default {
 		align-items: center;
 		justify-content: space-between;
 		position: sticky;
-		top: var(--header-height);
 		z-index: 3;
 		background: var(--color-main-background);
 		padding: 0 64px;
