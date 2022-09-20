@@ -99,21 +99,21 @@ describe('Manage shared albums', () => {
       cy.logout()
     })
 
-    it('Download a file from a shared album', () => {
+    xit('Download a file from a shared album', () => {
       cy.goToSharedAlbum('shared_album_test2')
       cy.selectMedia([0])
       cy.downloadSelection()
       cy.unselectMedia([0])
     })
 
-    it('Download multiple files from a shared album', () => {
+    xit('Download multiple files from a shared album', () => {
       cy.goToSharedAlbum('shared_album_test2')
       cy.selectMedia([1, 2])
       cy.downloadSelection()
       cy.unselectMedia([1, 2])
     })
 
-    it('Download all files from a shared album', () => {
+    xit('Download all files from a shared album', () => {
       cy.goToSharedAlbum('shared_album_test2')
       cy.downloadAllFiles()
     })
