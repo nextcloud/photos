@@ -61,7 +61,8 @@ export default {
 
 		downloadUrl() {
 			const params = new URLSearchParams()
-			params.append('files', JSON.stringify(this.fileNames))
+			const filePaths = this.fileNames.map(fileName => '/' + fileName.split('/').splice(3).join('/'))
+			params.append('files', JSON.stringify(filePaths))
 
 			return generateUrl(`/apps/files/ajax/download.php?${params}`)
 		},
