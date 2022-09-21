@@ -56,6 +56,7 @@ OC.L10N.register(
     "Add" : "Tilføj",
     "Delete selection" : "Slet valgte",
     "Tagged photos" : "Markerede billeder",
+    "Failed to delete {fileName}." : "Kunne ikke slette {fileName}.",
     "Your photos" : "Dine billeder",
     "Your videos" : "Dine videoer",
     "Your folders" : "Dine mapper",

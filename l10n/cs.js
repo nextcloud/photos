@@ -74,7 +74,6 @@ OC.L10N.register(
     "This album does not have any photos or videos yet!" : "Toto album zatím neobsahuje žádné fotky či videa!",
     "Add photos to this album" : "Přidat fotky do tohoto alba",
     "Add photos to the album" : "Přidat fotky do alba",
-    "Manager collaborators" : "Spravovat spolupracující",
     "Save collaborators for this album." : "Uložit spolupracující pro toto album.",
     "Cover photo for album {albumName}" : "Foto na obálku alba {albumName}",
     "There is no album yet!" : "Zatím zde nejsou žádná alba",

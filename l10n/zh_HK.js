@@ -74,7 +74,6 @@ OC.L10N.register(
     "This album does not have any photos or videos yet!" : "此相簿還沒有任何照片或視像！",
     "Add photos to this album" : "添加照片至此相簿",
     "Add photos to the album" : "添加照片至相簿",
-    "Manager collaborators" : "經理協作者",
     "Save collaborators for this album." : "保存此相簿的協作者。",
     "Cover photo for album {albumName}" : "{albumName} 相簿的封面照片。",
     "There is no album yet!" : "還沒有相簿！",
