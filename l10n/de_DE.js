@@ -74,7 +74,6 @@ OC.L10N.register(
     "This album does not have any photos or videos yet!" : "Dieses Album enthält noch keine Fotos oder Videos!",
     "Add photos to this album" : "Fotos zu diesem Album hinzufügen",
     "Add photos to the album" : "Fotos zum Album hinzufügen",
-    "Manager collaborators" : "Verwalter der Mitarbeiter",
     "Save collaborators for this album." : "Mitbearbeiter für dieses Album speichern.",
     "Cover photo for album {albumName}" : "Titelbild für Album {albumName}",
     "There is no album yet!" : "Es gibt noch kein Album!",

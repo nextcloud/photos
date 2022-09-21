@@ -72,7 +72,6 @@ OC.L10N.register(
     "Remove selection from album" : "Retirer la sélection de l'album",
     "Add photos to this album" : "Ajouter des photos à cet album",
     "Add photos to the album" : "Ajouter des photos à l'album",
-    "Manager collaborators" : "Collaborateurs gestionnaires",
     "Save collaborators for this album." : "Enregistrer les collaborateurs pour cet album.",
     "Cover photo for album {albumName}" : "Photo de couverture de l'album {albumName}",
     "There is no album yet!" : "Il n'y a pas encore d'album !",
