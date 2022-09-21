@@ -46,16 +46,16 @@
 				</label>
 
 				<ul v-if="searchResults.length !== 0" :id="`manage-collaborators__form__list-${randomId}`" class="manage-collaborators__form__list">
-					<li v-for="result of searchResults" :key="result.key">
+					<li v-for="collaboratorKey of searchResults" :key="collaboratorKey">
 						<a>
-							<NcListItemIcon :id="availableCollaborators[result.key].id"
+							<NcListItemIcon :id="availableCollaborators[collaboratorKey].id"
 								class="manage-collaborators__form__list__result"
-								:title="availableCollaborators[result.key].id"
+								:title="availableCollaborators[collaboratorKey].id"
 								:search="searchText"
-								:user="availableCollaborators[result.key].id"
-								:display-name="availableCollaborators[result.key].label"
-								:aria-label="t('photos', 'Add {collaboratorLabel} to the collaborators list', {collaboratorLabel: availableCollaborators[result.key].label})"
-								@click="selectEntity(result.key)" />
+								:user="availableCollaborators[collaboratorKey].id"
+								:display-name="availableCollaborators[collaboratorKey].label"
+								:aria-label="t('photos', 'Add {collaboratorLabel} to the collaborators list', {collaboratorLabel: availableCollaborators[collaboratorKey].label})"
+								@click="selectEntity(collaboratorKey)" />
 						</a>
 					</li>
 				</ul>
@@ -69,7 +69,7 @@
 		</form>
 
 		<ul class="manage-collaborators__selection">
-			<li v-for="collaboratorKey of selectedCollaboratorsKeys"
+			<li v-for="collaboratorKey of listableSelectedCollaboratorsKeys"
 				:key="collaboratorKey"
 				class="manage-collaborators__selection__item">
 				<NcListItemIcon :id="availableCollaborators[collaboratorKey].id"
@@ -87,8 +87,9 @@
 
 		<div class="actions">
 			<div v-if="allowPublicLink" class="actions__public-link">
-				<template v-if="publicLink">
+				<template v-if="isPublicLinkSelected">
 					<NcButton class="manage-collaborators__public-link-button"
+						:aria-label="t('photos', 'Copy the public link')"
 						@click="copyPublicLink">
 						<template v-if="publicLinkCopied">
 							{{ t('photos', 'Public link copied!') }}
@@ -101,7 +102,7 @@
 							<ContentCopy v-else />
 						</template>
 					</NcButton>
-					<NcButton @click="deletePublicLink">
+					<NcButton type="tertiary" :aria-label="t('photos', 'Delete the public link')" @click="deletePublicLink">
 						<Close slot="icon" />
 					</NcButton>
 				</template>
@@ -119,28 +120,30 @@
 		</div>
 	</div>
 </template>
-
 <script>
+import { mapActions } from 'vuex'
+
 import Magnify from 'vue-material-design-icons/Magnify'
 import Close from 'vue-material-design-icons/Close'
+import Check from 'vue-material-design-icons/Check'
+import ContentCopy from 'vue-material-design-icons/ContentCopy'
 import AccountGroup from 'vue-material-design-icons/AccountGroup'
 import Earth from 'vue-material-design-icons/Earth'
 
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
 import { getCurrentUser } from '@nextcloud/auth'
-import { generateOcsUrl } from '@nextcloud/router'
+import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { NcButton, NcListItemIcon, NcLoadingIcon, NcPopover, NcTextField, NcEmptyContent } from '@nextcloud/vue'
 
 import logger from '../../services/logger.js'
 
-const SHARE = {
-	TYPE: {
-		USER: 0,
-		GROUP: 1,
-		// LINK: 3,
-	},
-}
+/**
+ * @typedef {object} Collaborator
+ * @property {string} id - The id of the collaborator.
+ * @property {string} label - The label of the collaborator for display.
+ * @property {0|1|3} type - The type of the collaborator.
+ */
 
 export default {
 	name: 'CollaboratorsSelectionForm',
@@ -149,6 +152,8 @@ export default {
 		Magnify,
 		Close,
 		AccountGroup,
+		ContentCopy,
+		Check,
 		Earth,
 		NcLoadingIcon,
 		NcButton,
@@ -164,14 +169,10 @@ export default {
 			required: true,
 		},
 
+		/** @type {import('vue').PropType<Collaborator[]>} */
 		collaborators: {
 			type: Array,
 			default: () => [],
-		},
-
-		publicLink: {
-			type: String,
-			default: '',
 		},
 
 		allowPublicLink: {
@@ -183,14 +184,23 @@ export default {
 	data() {
 		return {
 			searchText: '',
+			/** @type {Object<string, Collaborator>} */
 			availableCollaborators: {},
+			/** @type {string[]} */
 			selectedCollaboratorsKeys: [],
+			/** @type {Collaborator[]} */
 			currentSearchResults: [],
 			loadingCollaborators: false,
 			randomId: Math.random().toString().substring(2, 10),
 			publicLinkCopied: false,
 			config: {
 				minSearchStringLength: parseInt(OC.config['sharing.minSearchStringLength'], 10) || 0,
+			},
+			/** @type {Collaborator} */
+			publicLink: {
+				id: (Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2)).substring(0, 15),
+				label: t('photos', 'Public link'),
+				type: OC.Share.SHARE_TYPE_LINK,
 			},
 		}
 	},
@@ -203,29 +213,56 @@ export default {
 			return this.currentSearchResults
 				.filter(({ id }) => id !== getCurrentUser().uid)
 				.map(({ type, id }) => `${type}:${id}`)
-				.filter(key => !this.selectedCollaboratorsKeys.includes(key))
-				.map((key) => ({ key, height: 48 }))
+				.filter(collaboratorKey => !this.selectedCollaboratorsKeys.includes(collaboratorKey))
 		},
 
 		/**
-		 * @return {object[]}
+		 * @return {string[]}
+		 */
+		listableSelectedCollaboratorsKeys() {
+			return this.selectedCollaboratorsKeys
+				.filter(collaboratorKey => this.availableCollaborators[collaboratorKey].type !== OC.Share.SHARE_TYPE_LINK)
+		},
+
+		/**
+		 * @return {Collaborator[]}
 		 */
 		selectedCollaborators() {
-			return this.selectedCollaboratorsKeys.map((collaboratorKey) => this.availableCollaborators[collaboratorKey])
+			return this.selectedCollaboratorsKeys
+				.map((collaboratorKey) => this.availableCollaborators[collaboratorKey])
+		},
+
+		/**
+		 * @return {boolean}
+		 */
+		isPublicLinkSelected() {
+			return this.selectedCollaborators
+				.some(collaborator => collaborator.type === OC.Share.SHARE_TYPE_LINK)
+
 		},
 	},
 
 	mounted() {
 		this.searchCollaborators()
-		this.selectedCollaboratorsKeys = this.collaborators.map(({ type, id }) => `${type}:${id}`)
+
+		const initialCollaborators = this.collaborators.reduce(this.indexCollaborators, {})
+		const publicLink = this.collaborators.find(collaborator => collaborator.type === OC.Share.SHARE_TYPE_LINK)
+
+		if (publicLink !== undefined) {
+			this.publicLink = publicLink
+		}
+
+		this.selectedCollaboratorsKeys = Object.keys(initialCollaborators)
 		this.availableCollaborators = {
+			[`${this.publicLink.type}:${this.publicLink.id}`]: this.publicLink,
 			...this.availableCollaborators,
-			...this.collaborators
-				.reduce((collaborators, collaborator) => ({ ...collaborators, [`${collaborator.type}:${collaborator.id}`]: collaborator }), {}),
+			...initialCollaborators,
 		}
 	},
 
 	methods: {
+		...mapActions(['updateAlbum']),
+
 		/**
 		 * Fetch possible collaborators.
 		 */
@@ -241,30 +278,27 @@ export default {
 						search: this.searchText,
 						itemType: 'share-recipients',
 						shareTypes: [
-							SHARE.TYPE.USER,
-							SHARE.TYPE.GROUP,
+							OC.Share.SHARE_TYPE_USER,
+							OC.Share.SHARE_TYPE_GROUP,
 						],
 					},
 				})
 
 				this.currentSearchResults = response.data.ocs.data
 					.map(collaborator => {
-						let type = -1
 						switch (collaborator.source) {
 						case 'users':
-							type = OC.Share.SHARE_TYPE_USER
-							break
+							return { id: collaborator.id, label: collaborator.label, type: OC.Share.SHARE_TYPE_USER }
 						case 'groups':
-							type = OC.Share.SHARE_TYPE_GROUP
-							break
+							return { id: collaborator.id, label: collaborator.label, type: OC.Share.SHARE_TYPE_GROUP }
+						default:
+							throw new Error(`Invalid collaborator source ${collaborator.source}`)
 						}
-
-						return { ...collaborator, type }
 					})
+
 				this.availableCollaborators = {
 					...this.availableCollaborators,
-					...this.currentSearchResults
-						.reduce((collaborators, collaborator) => ({ ...collaborators, [`${collaborator.type}:${collaborator.id}`]: collaborator }), {}),
+					...this.currentSearchResults.reduce(this.indexCollaborators, {}),
 				}
 			} catch (error) {
 				this.errorFetchingCollaborators = error
@@ -275,17 +309,46 @@ export default {
 			}
 		},
 
-		// TODO: implement public sharing
+		/**
+		 * @param {Object<string, Collaborator>} collaborators - Index of collaborators
+		 * @param {Collaborator} collaborator - A collaborator
+		 */
+		indexCollaborators(collaborators, collaborator) {
+			return { ...collaborators, [`${collaborator.type}:${collaborator.id}`]: collaborator }
+		},
+
 		async createPublicLinkForAlbum() {
-			return axios.put(generateOcsUrl(`apps/photos/createPublicLink/${this.albumName}`))
+			this.selectEntity(`${this.publicLink.type}:${this.publicLink.id}`)
+			await this.updateAlbumCollaborators()
 		},
 
 		async deletePublicLink() {
-			return axios.delete(generateOcsUrl(`apps/photos/createPublicLink/${this.albumName}`))
+			this.unselectEntity(`${this.publicLink.type}:${this.publicLink.id}`)
+
+			this.publicLinkCopied = false
+
+			delete this.availableCollaborators[`${this.publicLink.type}:${this.publicLink.id}`]
+			this.publicLink = {
+				id: (Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2)).substring(0, 15),
+				label: t('photos', 'Public link'),
+				type: OC.Share.SHARE_TYPE_LINK,
+			}
+			this.availableCollaborators[`${this.publicLink.type}:${this.publicLink.id}`] = this.publicLink
+
+			await this.updateAlbumCollaborators()
+		},
+
+		async updateAlbumCollaborators() {
+			await this.updateAlbum({
+				albumName: this.albumName,
+				properties: {
+					collaborators: this.selectedCollaborators,
+				},
+			})
 		},
 
 		async copyPublicLink() {
-			await navigator.clipboard.writeText(this.publicLink)
+			await navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}${generateUrl(`apps/photos/public/${getCurrentUser().uid}/${this.publicLink.id}`)}`)
 			this.publicLinkCopied = true
 			setTimeout(() => {
 				this.publicLinkCopied = false
@@ -308,7 +371,6 @@ export default {
 	},
 }
 </script>
-
 <style lang="scss" scoped>
 .manage-collaborators {
 	display: flex;
@@ -396,6 +458,10 @@ export default {
 		&__public-link {
 			display: flex;
 			align-items: center;
+
+			button {
+				margin-left: 8px;
+			}
 		}
 
 		&__slot {

@@ -29,6 +29,7 @@ import sharedAlbums from './sharedAlbums.js'
 import faces from './faces.js'
 import folders from './folders.js'
 import systemtags from './systemtags.js'
+import collectionStoreFactory from './collectionStoreFactory.js'
 
 Vue.use(Vuex)
 export default new Store({
@@ -39,6 +40,7 @@ export default new Store({
 		sharedAlbums,
 		faces,
 		systemtags,
+		publicAlbums: collectionStoreFactory('publicAlbum'),
 	},
 
 	strict: process.env.NODE_ENV !== 'production',

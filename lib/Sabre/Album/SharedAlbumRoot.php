@@ -59,4 +59,9 @@ class SharedAlbumRoot extends AlbumRoot {
 		$this->albumMapper->addFile($this->album->getAlbum()->getId(), $sourceId, $ownerUID);
 		return true;
 	}
+
+	// Do not reveal collaborators for shared albums.
+	public function getCollaborators() {
+		return [];
+	}
 }

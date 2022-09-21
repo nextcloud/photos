@@ -20,8 +20,14 @@
  *
  */
 
-import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
+import moment from '@nextcloud/moment'
+import { showError } from '@nextcloud/dialogs'
+import { translate } from '@nextcloud/l10n'
+
+import client from '../services/DavClient.js'
+import logger from '../services/logger.js'
+import DavRequest from '../services/DavRequest.js'
+import { genFileInfo } from '../utils/fileUtils.js'
 
 /**
  * @typedef {object} Album
@@ -35,19 +41,151 @@ import { generateUrl } from '@nextcloud/router'
  */
 
 /**
- * List albums.
  *
- * @return {Promise<Album[]>} the album list
+ * @param {string} path - Albums' root path.
+ * @param {AbortSignal} signal - Abort signal to cancel the request.
+ * @return {Promise<Album|null>}
  */
-export default async function() {
-	const response = await axios.get(generateUrl('/apps/photos/api/v1/albums'))
-	return response.data.map(album => ({
-		id: `${album.fileid}`,
-		name: album.basename,
-		location: 'Paris',
-		creationDate: album.lastmod,
-		state: 0,
-		itemCount: 100,
-		cover: '13397',
-	}))
+export async function fetchAlbum(path, signal) {
+	try {
+		const response = await client.stat(path, {
+			data: `<?xml version="1.0"?>
+							<d:propfind xmlns:d="DAV:"
+								xmlns:oc="http://owncloud.org/ns"
+								xmlns:nc="http://nextcloud.org/ns"
+								xmlns:ocs="http://open-collaboration-services.org/ns">
+								<d:prop>
+									<nc:last-photo />
+									<nc:nbItems />
+									<nc:location />
+									<nc:dateRange />
+									<nc:collaborators />
+								</d:prop>
+							</d:propfind>`,
+			signal,
+			details: true,
+		})
+
+		logger.debug('[Albums] Fetched an album: ', response.data)
+
+		return formatAlbum(response.data)
+	} catch (error) {
+		if (error.code === 'ERR_CANCELED') {
+			return null
+		}
+
+		throw error
+	}
+}
+
+/**
+ *
+ * @param {string} path - Albums' root path.
+ * @param {AbortSignal} signal - Abort signal to cancel the request.
+ * @return {Promise<Album[]>}
+ */
+export async function fetchAlbums(path, signal) {
+	try {
+		const response = await client.getDirectoryContents(path, {
+			data: `<?xml version="1.0"?>
+							<d:propfind xmlns:d="DAV:"
+								xmlns:oc="http://owncloud.org/ns"
+								xmlns:nc="http://nextcloud.org/ns"
+								xmlns:ocs="http://open-collaboration-services.org/ns">
+								<d:prop>
+									<nc:last-photo />
+									<nc:nbItems />
+									<nc:location />
+									<nc:dateRange />
+									<nc:collaborators />
+								</d:prop>
+							</d:propfind>`,
+			details: true,
+			signal,
+		})
+
+		logger.debug(`[Albums] Fetched ${response.data.length} albums: `, response.data)
+
+		return response.data
+			.filter(album => album.filename !== path)
+			.map(formatAlbum)
+	} catch (error) {
+		if (error.code === 'ERR_CANCELED') {
+			return []
+		}
+
+		throw error
+	}
+}
+
+/**
+ *
+ * @param {object} album - An album received from a webdav request.
+ * @return {Album}
+ */
+function formatAlbum(album) {
+	// Ensure that we have a proper collaborators array.
+	if (album.props.collaborators === '') {
+		album.props.collaborators = []
+	} else if (typeof album.props.collaborators.collaborator === 'object') {
+		if (Array.isArray(album.props.collaborators.collaborator)) {
+			album.props.collaborators = album.props.collaborators.collaborator
+		} else {
+			album.props.collaborators = [album.props.collaborators.collaborator]
+		}
+	}
+
+	// Extract custom props.
+	album = genFileInfo(album)
+
+	// Compute date range label.
+	const dateRange = JSON.parse(album.dateRange?.replace(/&quot;/g, '"') ?? '{}')
+	if (dateRange.start === null) {
+		dateRange.start = moment().unix()
+		dateRange.end = moment().unix()
+	}
+	const dateRangeFormated = {
+		startDate: moment.unix(dateRange.start).format('MMMM YYYY'),
+		endDate: moment.unix(dateRange.end).format('MMMM YYYY'),
+	}
+	if (dateRangeFormated.startDate === dateRangeFormated.endDate) {
+		album.date = dateRangeFormated.startDate
+	} else {
+		album.date = translate('photos', '{startDate} to {endDate}', dateRangeFormated)
+	}
+
+	return album
+}
+
+/**
+ *
+ * @param {string} path - Albums' root path.
+ * @param {AbortSignal} signal - Abort signal to cancel the request.
+ * @return {Promise<[]>}
+ */
+export async function fetchAlbumContent(path, signal) {
+	try {
+		const response = await client.getDirectoryContents(path, {
+			data: DavRequest,
+			details: true,
+			signal,
+		})
+
+		const fetchedFiles = response.data
+			.map(file => genFileInfo(file))
+			.filter(file => file.fileid)
+
+		logger.debug(`[Albums] Fetched ${fetchedFiles.length} new files: `, fetchedFiles)
+
+		return fetchedFiles
+	} catch (error) {
+		if (error.code === 'ERR_CANCELED') {
+			return []
+		}
+
+		logger.error('Error fetching album files', error)
+		console.error(error)
+
+		throw error
+	}
 }

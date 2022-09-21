@@ -152,9 +152,11 @@ class AlbumPhoto implements IFile {
 
 		switch ($favoriteState) {
 			case "0":
-				return $tagger->removeFromFavorites($this->albumFile->getFileId());
+				$tagger->removeFromFavorites($this->albumFile->getFileId());
+				return "0";
 			case "1":
-				return $tagger->addToFavorites($this->albumFile->getFileId());
+				$tagger->addToFavorites($this->albumFile->getFileId());
+				return "1";
 			default:
 				new \Exception('Favorite state is invalide, should be 0 or 1.');
 		}

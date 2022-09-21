@@ -33,6 +33,7 @@ use OCP\IGroup;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IGroupManager;
+use OCP\IL10N;
 
 class AlbumMapper {
 	private IDBConnection $connection;
@@ -40,6 +41,7 @@ class AlbumMapper {
 	private ITimeFactory $timeFactory;
 	private IUserManager $userManager;
 	private IGroupManager $groupManager;
+	protected IL10N $l;
 
 	// Same mapping as IShare.
 	public const TYPE_USER = 0;
@@ -51,13 +53,15 @@ class AlbumMapper {
 		IMimeTypeLoader $mimeTypeLoader,
 		ITimeFactory $timeFactory,
 		IUserManager $userManager,
-		IGroupManager $groupManager
+		IGroupManager $groupManager,
+		IL10N $l
 	) {
 		$this->connection = $connection;
 		$this->mimeTypeLoader = $mimeTypeLoader;
 		$this->timeFactory = $timeFactory;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
+		$this->l = $l;
 	}
 
 	public function create(string $userId, string $name, string $location = ""): AlbumInfo {
@@ -147,12 +151,13 @@ class AlbumMapper {
 		$query->executeStatement();
 	}
 
-	public function setLocation(int $id, string $newLocation): void {
+	public function setLocation(int $id, string $newLocation): string {
 		$query = $this->connection->getQueryBuilder();
 		$query->update("photos_albums")
 			->set("location", $query->createNamedParameter($newLocation))
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$query->executeStatement();
+		return $newLocation;
 	}
 
 	public function delete(int $id): void {
@@ -294,26 +299,29 @@ class AlbumMapper {
 
 		$collaborators = array_map(function (array $row) {
 			/** @var IUser|IGroup|null */
-			$collaborator = null;
+			$displayName = null;
 
 			switch ($row['collaborator_type']) {
 				case self::TYPE_USER:
-					$collaborator = $this->userManager->get($row['collaborator_id']);
+					$displayName = $this->userManager->get($row['collaborator_id'])->getDisplayName();
 					break;
 				case self::TYPE_GROUP:
-					$collaborator = $this->groupManager->get($row['collaborator_id']);
+					$displayName = $this->groupManager->get($row['collaborator_id'])->getDisplayName();
+					break;
+				case self::TYPE_LINK:
+					$displayName = $this->l->t('Public link');;
 					break;
 				default:
 					throw new \Exception('Invalid collaborator type: ' . $row['collaborator_type']);
 			}
 
-			if (is_null($collaborator)) {
+			if (is_null($displayName)) {
 				return null;
 			}
 
 			return [
 				'id' => $row['collaborator_id'],
-				'label' => $collaborator->getDisplayName(),
+				'label' => $displayName,
 				'type' => $row['collaborator_type'],
 			];
 		}, $rows);
@@ -344,6 +352,8 @@ class AlbumMapper {
 					if (is_null($this->groupManager->get($collaborator['id']))) {
 						throw new \Exception('Unknown collaborator: ' . $collaborator['id']);
 					}
+					break;
+				case self::TYPE_LINK:
 					break;
 				default:
 					throw new \Exception('Invalid collaborator type: ' . $collaborator['type']);
@@ -397,7 +407,7 @@ class AlbumMapper {
 			if ($row['fileid']) {
 				$mimeId = $row['mimetype'];
 				$mimeType = $this->mimeTypeLoader->getMimetypeById($mimeId);
-				$filesByAlbum[$albumId][] = new AlbumFile((int)$row['fileid'], $row['album_name'].' ('.$row['album_user'].')', $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
+				$filesByAlbum[$albumId][] = new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
 			}
 
 			if (!isset($albumsById[$albumId])) {
