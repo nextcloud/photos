@@ -134,9 +134,6 @@ import Download from 'vue-material-design-icons/Download'
 
 import { NcModal, NcActions, NcActionButton, NcButton, NcEmptyContent, isMobile } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
-import { mapGetters } from 'vuex'
-
-import getPhotos from '../services/PhotoSearch'
 
 import { allMimes } from '../services/AllowedMimes.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
@@ -149,7 +146,7 @@ import AlbumPicker from '../components/Albums/AlbumPicker.vue'
 import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import ActionDownload from '../components/Actions/ActionDownload.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-import getTaggedImages from '../services/TaggedImages'
+import getTaggedImages from '../services/TaggedImages.js'
 
 export default {
 	name: 'Timeline',
@@ -244,12 +241,14 @@ export default {
 		search() {
 			this.loadSearchResults()
 		},
+		searchFileList() {
+			this.getContent()
+		},
 	},
 
 	mounted() {
 		this.loadSearchResults()
 	},
-
 
 	methods: {
 		...mapActions(['deleteFiles', 'addFilesToAlbum']),
@@ -328,11 +327,6 @@ export default {
 							queryTags.some(tagId => fileIdToTags[fileId].includes(tagId))
 						)
 					)
-				// cancel any pending requests
-				if (this.cancelRequest) {
-					this.cancelRequest('Changed view')
-				}
-				this.resetState()
 			}, 250)
 		},
 
