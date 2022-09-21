@@ -46,6 +46,14 @@ return [
 				'path' => '',
 			]
 		],
+		[ 'name' => 'publicAlbum#get', 'url' => '/public/{ownerId}/{token}', 'verb' => 'GET',
+			'requirements' => [
+				'ownerId' => '.*',
+			],
+			'requirements' => [
+				'token' => '.*',
+			],
+		],
 		['name' => 'page#index', 'url' => '/folders/{path}', 'verb' => 'GET', 'postfix' => 'folders',
 			'requirements' => [
 				'path' => '.*',
@@ -74,10 +82,8 @@ return [
 			'requirements' => [
 				'path' => '.*',
 			],
-			'defaults' => [
-				'path' => '',
-			]
 		],
+		[ 'name' => 'public#get', 'url' => '/display/{token}', 'verb' => 'GET' ],
 		['name' => 'page#index', 'url' => '/tags/{path}', 'verb' => 'GET', 'postfix' => 'tags',
 			'requirements' => [
 				'path' => '.*',

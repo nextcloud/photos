@@ -26,6 +26,7 @@ namespace OCA\Photos\Sabre;
 use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Sabre\Album\AlbumsHome;
 use OCA\Photos\Sabre\Album\SharedAlbumsHome;
+use OCA\Photos\Sabre\Album\PublicAlbumsHome;
 use OCA\Photos\Service\UserConfigService;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
@@ -93,13 +94,15 @@ class PhotosHome implements ICollection {
 			return new AlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->userConfigService);
 		} elseif ($name === 'sharedalbums') {
 			return new SharedAlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->groupManager, $this->userConfigService);
+		} elseif ($name === 'public') {
+			return new PublicAlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->userConfigService);
 		}
 
 		throw new NotFound();
 	}
 
 	/**
-	 * @return (AlbumsHome|SharedAlbumsHome)[]
+	 * @return (AlbumsHome|SharedAlbumsHome|PublicAlbumHome)[]
 	 */
 	public function getChildren(): array {
 		return [new AlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->userConfigService)];

@@ -20,16 +20,12 @@
  *
  */
 
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
-import moment from '@nextcloud/moment'
-import { showError } from '@nextcloud/dialogs'
 import { getCurrentUser } from '@nextcloud/auth'
 
-import client from '../services/DavClient.js'
-import logger from '../services/logger.js'
-import { genFileInfo } from '../utils/fileUtils.js'
 import AbortControllerMixin from './AbortControllerMixin.js'
+import { fetchAlbums } from '../services/Albums.js'
 
 export default {
 	name: 'FetchSharedAlbumsMixin',
@@ -56,6 +52,10 @@ export default {
 	},
 
 	methods: {
+		...mapActions([
+			'addSharedAlbums',
+		]),
+
 		async fetchAlbums() {
 			if (this.loadingAlbums) {
 				return
@@ -65,62 +65,15 @@ export default {
 				this.loadingAlbums = true
 				this.errorFetchingAlbums = null
 
-				const response = await client.getDirectoryContents(`/photos/${getCurrentUser()?.uid}/sharedalbums`, {
-					data: `<?xml version="1.0"?>
-							<d:propfind xmlns:d="DAV:"
-								xmlns:oc="http://owncloud.org/ns"
-								xmlns:nc="http://nextcloud.org/ns"
-								xmlns:ocs="http://open-collaboration-services.org/ns">
-								<d:prop>
-									<nc:last-photo />
-									<nc:nbItems />
-									<nc:location />
-									<nc:dateRange />
-									<nc:collaborators />
-									<nc:publicLink />
-								</d:prop>
-							</d:propfind>`,
-					details: true,
-					signal: this.abortController.signal,
-				})
+				const albums = await fetchAlbums(`/photos/${getCurrentUser()?.uid}/sharedalbums`, this.abortController.signal)
 
-				const albums = response.data
-					.filter(album => album.filename !== `/photos/${getCurrentUser()?.uid}/sharedalbums`)
-					.map(album => genFileInfo(album))
-					.map(album => {
-						album.collaborators = album.collaborators === '' ? [] : album.collaborators
-
-						const dateRange = JSON.parse(album.dateRange?.replace(/&quot;/g, '"') ?? '{}')
-
-						if (dateRange.start === null) {
-							dateRange.start = moment().unix()
-							dateRange.end = moment().unix()
-						}
-
-						const dateRangeFormated = {
-							startDate: moment.unix(dateRange.start).format('MMMM YYYY'),
-							endDate: moment.unix(dateRange.end).format('MMMM YYYY'),
-						}
-
-						if (dateRangeFormated.startDate === dateRangeFormated.endDate) {
-							return { ...album, date: dateRangeFormated.startDate }
-						} else {
-							return { ...album, date: this.t('photos', '{startDate} to {endDate}', dateRangeFormated) }
-						}
-					})
-
-				this.$store.dispatch('addSharedAlbums', { albums })
-				logger.debug(`[FetchSharedAlbumsMixin] Fetched ${albums.length} new files: `, albums)
+				this.addSharedAlbums({ albums })
 			} catch (error) {
 				if (error.response?.status === 404) {
 					this.errorFetchingAlbums = 404
-				} else if (error.code === 'ERR_CANCELED') {
-					return
 				} else {
 					this.errorFetchingAlbums = error
 				}
-				logger.error(t('photos', 'Failed to fetch albums list.'), error)
-				showError(t('photos', 'Failed to fetch albums list.'))
 			} finally {
 				this.loadingAlbums = false
 			}

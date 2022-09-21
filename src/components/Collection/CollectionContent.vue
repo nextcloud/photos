@@ -24,7 +24,7 @@
 	<NcEmptyContent v-if="collection === undefined && !loading"
 		class="empty-content-with-illustration"
 		:title="t('photos', 'This collection does not exist')">
-		<FolderMultipleImage />
+		<FolderMultipleImage slot="icon" />
 	</NcEmptyContent>
 	<NcEmptyContent v-else-if="error" :title="t('photos', 'An error occurred')">
 		<AlertCircle slot="icon" />
@@ -102,8 +102,8 @@ export default {
 		},
 
 		error: {
-			type: [Error],
-			default: '',
+			type: [Error, Number],
+			default: null,
 		},
 
 		semaphore: {

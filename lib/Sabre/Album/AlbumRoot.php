@@ -212,12 +212,21 @@ class AlbumRoot implements ICollection, ICopyTarget {
 	}
 
 	/**
-	 * @return array
+	 * @return array{'id': string, 'label': string, 'type': int}
 	 */
 	public function getCollaborators() {
 		return array_map(
 			fn (array $collaborator) => [ 'nc:collaborator' => $collaborator ],
 			$this->albumMapper->getCollaborators($this->album->getAlbum()->getId()),
 		);
+	}
+
+	/**
+	 * @param array{'id': string, 'type': int} $collaborators
+	 * @return array{'id': string, 'label': string, 'type': int}
+	 */
+	public function setCollaborators($collaborators) {
+		$this->albumMapper->setCollaborators($this->getAlbum()->getAlbum()->getId(), $collaborators);
+		return $this->getCollaborators();
 	}
 }

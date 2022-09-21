@@ -78,7 +78,7 @@ class PropFindPlugin extends ServerPlugin {
 
 	public function propFind(PropFind $propFind, INode $node): void {
 		if ($node instanceof AlbumPhoto) {
-			// Checking if the node is trulely available and ignoring if not
+			// Checking if the node is truly available and ignoring if not
 			// Should be pre-emptively handled by the NodeDeletedEvent
 			try {
 				$fileInfo = $node->getFileInfo();
@@ -87,12 +87,10 @@ class PropFindPlugin extends ServerPlugin {
 			}
 
 			$propFind->handle(FilesPlugin::INTERNAL_FILEID_PROPERTYNAME, fn () => $node->getFile()->getFileId());
-			$propFind->handle(FilesPlugin::GETETAG_PROPERTYNAME, fn () => $node->getETag());
-			$propFind->handle(self::FILE_NAME_PROPERTYNAME, fn () => $node->getFile()->getName());
-			$propFind->handle(self::FAVORITE_PROPERTYNAME, fn () => $node->isFavorite() ? 1 : 0);
-			$propFind->handle(FilesPlugin::HAS_PREVIEW_PROPERTYNAME, function () use ($fileInfo) {
-				return json_encode($this->previewManager->isAvailable($fileInfo));
-			});
+			$propFind->handle(FilesPlugin::GETETAG_PROPERTYNAME,         fn () => $node->getETag());
+			$propFind->handle(self::FILE_NAME_PROPERTYNAME,              fn () => $node->getFile()->getName());
+			$propFind->handle(self::FAVORITE_PROPERTYNAME,               fn () => $node->isFavorite() ? 1 : 0);
+			$propFind->handle(FilesPlugin::HAS_PREVIEW_PROPERTYNAME,     fn () => json_encode($this->previewManager->isAvailable($fileInfo)));
 
 			if ($this->metadataEnabled) {
 				$propFind->handle(FilesPlugin::FILE_METADATA_SIZE, function () use ($node) {
@@ -111,11 +109,11 @@ class PropFindPlugin extends ServerPlugin {
 			}
 		}
 
-		if ($node instanceof AlbumRoot || $node instanceof SharedAlbumRoot) {
-			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn () => $node->getAlbum()->getAlbum()->getLastAddedPhoto());
-			$propFind->handle(self::NBITEMS_PROPERTYNAME, fn () => count($node->getChildren()));
-			$propFind->handle(self::LOCATION_PROPERTYNAME, fn () => $node->getAlbum()->getAlbum()->getLocation());
-			$propFind->handle(self::DATE_RANGE_PROPERTYNAME, fn () => json_encode($node->getDateRange()));
+		if ($node instanceof AlbumRoot) {
+			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME,    fn () => $node->getAlbum()->getAlbum()->getLastAddedPhoto());
+			$propFind->handle(self::NBITEMS_PROPERTYNAME,       fn () => count($node->getChildren()));
+			$propFind->handle(self::LOCATION_PROPERTYNAME,      fn () => $node->getAlbum()->getAlbum()->getLocation());
+			$propFind->handle(self::DATE_RANGE_PROPERTYNAME,    fn () => json_encode($node->getDateRange()));
 			$propFind->handle(self::COLLABORATORS_PROPERTYNAME, fn () => $node->getCollaborators());
 
 			// TODO detect dynamically which metadata groups are requested and
@@ -141,7 +139,7 @@ class PropFindPlugin extends ServerPlugin {
 				return true;
 			});
 			$propPatch->handle(self::COLLABORATORS_PROPERTYNAME, function ($collaborators) use ($node) {
-				$this->albumMapper->setCollaborators($node->getAlbum()->getAlbum()->getId(), json_decode($collaborators, true));
+				$collaborators = $node->setCollaborators(json_decode($collaborators, true));
 				return true;
 			});
 		}
