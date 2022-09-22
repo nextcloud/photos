@@ -177,40 +177,33 @@ class AlbumMapper {
 	}
 
 	/**
+	 * @param int $albumId
 	 * @param string $userId
-	 * @return AlbumWithFiles[]
+	 * @return AlbumFile[]
 	 */
-	public function getForUserWithFiles(string $userId): array {
+	public function getForAlbumIdAndUserWithFiles(int $albumId, string $userId): array {
 		$query = $this->connection->getQueryBuilder();
-		$query->select("fileid", "mimetype", "a.album_id", "size", "mtime", "etag", "location", "created", "last_added_photo", "added", "owner")
+		$query->select("fileid", "mimetype", "a.album_id", "size", "mtime", "etag", "added", "owner")
 			->selectAlias("f.name", "file_name")
 			->selectAlias("a.name", "album_name")
 			->from("photos_albums", "a")
 			->leftJoin("a", "photos_albums_files", "p", $query->expr()->eq("a.album_id", "p.album_id"))
 			->leftJoin("p", "filecache", "f", $query->expr()->eq("p.file_id", "f.fileid"))
-			->where($query->expr()->eq('user', $query->createNamedParameter($userId)));
+			->where($query->expr()->eq('a.album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->eq('user', $query->createNamedParameter($userId)));
 		$rows = $query->executeQuery()->fetchAll();
 
-		$filesByAlbum = [];
-		$albumsById = [];
+		$files = [];
 		foreach ($rows as $row) {
 			$albumId = (int)$row['album_id'];
 			if ($row['fileid']) {
 				$mimeId = $row['mimetype'];
 				$mimeType = $this->mimeTypeLoader->getMimetypeById($mimeId);
-				$filesByAlbum[$albumId][] = new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
-			}
-
-			if (!isset($albumsById[$albumId])) {
-				$albumsById[$albumId] = new AlbumInfo($albumId, $userId, $row['album_name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
+				$files[] = new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
 			}
 		}
 
-		$result = [];
-		foreach ($albumsById as $id => $album) {
-			$result[] = new AlbumWithFiles($album, $filesByAlbum[$id] ?? []);
-		}
-		return $result;
+		return $files ?? [];
 	}
 
 	/**
@@ -414,7 +407,7 @@ class AlbumMapper {
 
 		$result = [];
 		foreach ($albumsById as $id => $album) {
-			$result[] = new AlbumWithFiles($album, $filesByAlbum[$id] ?? []);
+			$result[] = new AlbumWithFiles($album, $this, $filesByAlbum[$id] ?? []);
 		}
 		return $result;
 	}
