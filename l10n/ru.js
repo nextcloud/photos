@@ -33,6 +33,7 @@ OC.L10N.register(
     "Add" : "Добавить",
     "Delete selection" : "Удалить выбранное",
     "Tagged photos" : "Фотографии с метками",
+    "Failed to delete {fileName}." : "Ошибка удаления файла «{fileName}».",
     "Your photos" : "Мои фотографии",
     "Your videos" : "Ваши видео",
     "Your folders" : "Ваши каталоги",
