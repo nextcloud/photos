@@ -62,10 +62,10 @@
 						</ActionDownload> -->
 
 						<template v-if="selectedFileIds.length > 0">
-							<NcActionSeparator />
-
 							<!-- TODO: enable download on public albums -->
-							<!-- <ActionDownload :selected-file-ids="selectedFileIds" :title="t('photos', 'Download selected files')">
+							<!-- <NcActionSeparator />
+
+							<ActionDownload :selected-file-ids="selectedFileIds" :title="t('photos', 'Download selected files')">
 								<Download slot="icon" />
 							</ActionDownload> -->
 
@@ -117,7 +117,7 @@ import Close from 'vue-material-design-icons/Close'
 // import Download from 'vue-material-design-icons/Download'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple'
 
-import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionSeparator, isMobile } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, /** NcActionSeparator, */ isMobile } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
 
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
@@ -141,7 +141,7 @@ export default {
 		NcEmptyContent,
 		NcActions,
 		NcActionButton,
-		NcActionSeparator,
+		// NcActionSeparator,
 		NcButton,
 		NcModal,
 		CollectionContent,
