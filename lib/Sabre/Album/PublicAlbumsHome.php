@@ -25,19 +25,22 @@ namespace OCA\Photos\Sabre\Album;
 
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;
+use Sabre\DAV\Server;
 use OCP\Files\IRootFolder;
 use OCP\IUser;
-use OCA\Photos\Sabre\Album\PublicAlbumRoot;
 use OCA\Photos\Service\UserConfigService;
 use OCA\Photos\Album\AlbumMapper;
 
 class PublicAlbumsHome extends AlbumsHome {
+	private Server $server;
+
 	public function __construct(
 		array $principalInfo,
 		AlbumMapper $albumMapper,
 		IUser $user,
 		IRootFolder $rootFolder,
 		UserConfigService $userConfigService,
+		Server $server
 	) {
 		parent::__construct(
 			$principalInfo,
@@ -46,6 +49,8 @@ class PublicAlbumsHome extends AlbumsHome {
 			$rootFolder,
 			$userConfigService,
 		);
+
+		$this->server = $server;
 	}
 
 	public function getName(): string {
@@ -60,7 +65,10 @@ class PublicAlbumsHome extends AlbumsHome {
 	}
 
 	public function getChild($name) {
-		$albums = $this->albumMapper->getSharedAlbumsForCollaboratorWithFiles($name, AlbumMapper::TYPE_LINK);
+		$basicAuth = $this->server->httpRequest->getHeader('Authorization');
+		[, $base64Token] = explode('Basic ', $basicAuth);
+		$token = \base64_decode($base64Token);
+		$albums = $this->albumMapper->getSharedAlbumsForCollaboratorWithFiles($token, AlbumMapper::TYPE_LINK);
 
 		array_filter($albums, fn ($album) => $album->getAlbum()->getUserId() === $this->user->getUid());
 

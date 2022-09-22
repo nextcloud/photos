@@ -24,7 +24,7 @@
 
 namespace OCA\Photos\Controller;
 
-use OCP\AppFramework\PublicShareController;
+use OCP\AppFramework\Controller;
 use OCA\Files\Event\LoadSidebar;
 use OCA\Photos\AppInfo\Application;
 use OCA\Photos\Service\UserConfigService;
@@ -38,8 +38,7 @@ use OCP\IRequest;
 use OCP\ISession;
 use OCP\Util;
 
-
-class PublicAlbumController extends PublicShareController {
+class PublicAlbumController extends Controller {
 	private IAppManager $appManager;
 	private IEventDispatcher $eventDispatcher;
 	private UserConfigService $userConfig;
@@ -59,28 +58,6 @@ class PublicAlbumController extends PublicShareController {
 		$this->eventDispatcher = $eventDispatcher;
 		$this->userConfig = $userConfig;
 		$this->initialState = $initialState;
-	}
-
-	/**
-	* Validate the token of this share. If the token is invalid this controller
-	* will return a 404.
-	*/
-	public function isValidToken(): bool {
-		// TODO: uncomment
-		// $album = $this->albumMapper->getAlbumForToken($this->getToken);
-		// return $album !== null;
-		return true;
-	}
-
-	public function getPasswordHash(): string {
-		return '';
-	}
-
-	/**
-	 * Allows you to specify if this share is password protected
-	 */
-	protected function isPasswordProtected(): bool {
-		return false;
 	}
 
 	/**

@@ -46,12 +46,12 @@ return [
 				'path' => '',
 			]
 		],
-		[ 'name' => 'publicAlbum#get', 'url' => '/public/{ownerId}/{token}', 'verb' => 'GET',
+		[ 'name' => 'publicAlbum#get', 'url' => '/public/{ownerId}/{path}', 'verb' => 'GET',
 			'requirements' => [
 				'ownerId' => '.*',
 			],
 			'requirements' => [
-				'token' => '.*',
+				'path' => '.*',
 			],
 		],
 		['name' => 'page#index', 'url' => '/folders/{path}', 'verb' => 'GET', 'postfix' => 'folders',

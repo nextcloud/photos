@@ -103,6 +103,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+
 import MapMarker from 'vue-material-design-icons/MapMarker'
 import Plus from 'vue-material-design-icons/Plus'
 import ImagePlus from 'vue-material-design-icons/ImagePlus'
@@ -154,6 +155,10 @@ export default {
 			type: String,
 			required: true,
 		},
+		albumName: {
+			type: String,
+			required: true,
+		},
 		token: {
 			type: String,
 			required: true,
@@ -167,7 +172,7 @@ export default {
 			errorFetchingAlbum: null,
 			loadingCount: 0,
 			loadingAddFilesToAlbum: false,
-			albumName: '',
+			publicClient: null,
 		}
 	},
 
@@ -215,9 +220,13 @@ export default {
 				this.loadingAlbum = true
 				this.errorFetchingAlbum = null
 
-				const album = await fetchAlbum(`/photos/${this.userId}/public/${this.token}`, this.abortController.signal)
+				const album = await fetchAlbum(`/photos/${this.userId}/public/${this.albumName}`, {
+					signal: this.abortController.signal,
+					headers: {
+						Authorization: `Basic ${btoa(this.token)}`,
+					},
+				})
 				this.addPublicAlbums({ collections: [album] })
-				this.albumName = album.basename
 			} catch (error) {
 				if (error.response?.status === 404) {
 					this.errorFetchingAlbum = 404
@@ -245,10 +254,12 @@ export default {
 				this.loadingFiles = true
 				this.semaphoreSymbol = semaphoreSymbol
 
-				const fetchedFiles = await fetchAlbumContent(
-					`/photos/${this.userId}/public/${this.token}`,
-					this.abortController.signal,
-				)
+				const fetchedFiles = await fetchAlbumContent(`/photos/${this.userId}/public/${this.albumName}`, {
+					signal: this.abortController.signal,
+					headers: {
+						Authorization: `Basic ${btoa(this.token)}`,
+					},
+				})
 
 				const fileIds = fetchedFiles
 					.map(file => file.fileid.toString())
@@ -281,14 +292,14 @@ export default {
 
 		async handleFilesPicked(fileIds) {
 			this.showAddPhotosModal = false
-			await this.addFilesToPublicAlbum({ collectionName: this.albumName, fileIdsToAdd: fileIds })
+			await this.addFilesToPublicAlbum({ collectionId: this.albumName, fileIdsToAdd: fileIds })
 			// Re-fetch album content to have the proper filenames.
 			await this.fetchAlbumContent()
 		},
 
 		async handleRemoveFilesFromAlbum(fileIds) {
 			this.$refs.collectionContent.onUncheckFiles(fileIds)
-			await this.removeFilesFromPublicAlbum({ collectionName: this.albumName, fileIdsToRemove: fileIds })
+			await this.removeFilesFromPublicAlbum({ collectionId: this.albumName, fileIdsToRemove: fileIds })
 		},
 	},
 }

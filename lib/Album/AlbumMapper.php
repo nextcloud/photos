@@ -309,7 +309,7 @@ class AlbumMapper {
 					$displayName = $this->groupManager->get($row['collaborator_id'])->getDisplayName();
 					break;
 				case self::TYPE_LINK:
-					$displayName = $this->l->t('Public link');;
+					$displayName = $this->l->t('Public link');
 					break;
 				default:
 					throw new \Exception('Invalid collaborator type: ' . $row['collaborator_type']);

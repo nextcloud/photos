@@ -34,6 +34,7 @@ use OCP\IGroupManager;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\ICollection;
+use Sabre\DAV\Server;
 
 class PhotosHome implements ICollection {
 	private AlbumMapper $albumMapper;
@@ -42,6 +43,7 @@ class PhotosHome implements ICollection {
 	private IRootFolder $rootFolder;
 	private IGroupManager $groupManager;
 	private UserConfigService $userConfigService;
+	private Server $server;
 
 	public function __construct(
 		array $principalInfo,
@@ -49,7 +51,8 @@ class PhotosHome implements ICollection {
 		IUser $user,
 		IRootFolder $rootFolder,
 		IGroupManager $groupManager,
-		UserConfigService $userConfigService
+		UserConfigService $userConfigService,
+		Server $server
 	) {
 		$this->principalInfo = $principalInfo;
 		$this->albumMapper = $albumMapper;
@@ -57,6 +60,7 @@ class PhotosHome implements ICollection {
 		$this->rootFolder = $rootFolder;
 		$this->groupManager = $groupManager;
 		$this->userConfigService = $userConfigService;
+		$this->server = $server;
 	}
 
 	/**
@@ -95,7 +99,7 @@ class PhotosHome implements ICollection {
 		} elseif ($name === 'sharedalbums') {
 			return new SharedAlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->groupManager, $this->userConfigService);
 		} elseif ($name === 'public') {
-			return new PublicAlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->userConfigService);
+			return new PublicAlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->userConfigService, $this->server);
 		}
 
 		throw new NotFound();
