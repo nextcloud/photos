@@ -1,13 +1,13 @@
 <?php
 
-namespace OCA\Photos\Event;
+namespace OCA\Photos\Listener;
 
+use OCA\Photos\Album\AlbumMapper;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
-use OCP\Files\Events\Node\NodeDeletedEvent;
-use OCA\Photos\Album\AlbumMapper;
+use OCP\Files\Cache\CacheEntryRemovedEvent;
 
-class MoveToTrashListener implements IEventListener {
+class CacheEntryRemovedListener implements IEventListener {
 	private AlbumMapper $albumMapper;
 
 	public function __construct(AlbumMapper $albumMapper) {
@@ -15,14 +15,14 @@ class MoveToTrashListener implements IEventListener {
 	}
 
 	public function handle(Event $event): void {
-		if (!($event instanceof NodeDeletedEvent)) {
+		if (!($event instanceof CacheEntryRemovedEvent)) {
 			return;
 		}
 
 		// Remove node from all albums containing it.
-		$albums = $this->albumMapper->getForFile($event->getNode()->getId());
+		$albums = $this->albumMapper->getForFile($event->getFileId());
 		foreach ($albums as $album) {
-			$this->albumMapper->removeFile($album->getId(), $event->getNode()->getId());
+			$this->albumMapper->removeFile($album->getId(), $event->getFileId());
 		}
 	}
 }
