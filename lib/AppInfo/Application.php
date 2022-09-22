@@ -26,12 +26,12 @@ declare(strict_types=1);
 namespace OCA\Photos\AppInfo;
 
 use OCA\DAV\Connector\Sabre\Principal;
+use OCA\Photos\Listener\CacheEntryRemovedListener;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
-use OCP\Files\Events\Node\NodeDeletedEvent;
-use OCA\Photos\Event\MoveToTrashListener;
+use OCP\Files\Cache\CacheEntryRemovedEvent;
 
 class Application extends App implements IBootstrap {
 	public const APP_ID = 'photos';
@@ -63,7 +63,7 @@ class Application extends App implements IBootstrap {
 	public function register(IRegistrationContext $context): void {
 		/** Register $principalBackend for the DAV collection */
 		$context->registerServiceAlias('principalBackend', Principal::class);
-		$context->registerEventListener(NodeDeletedEvent::class, MoveToTrashListener::class);
+		$context->registerEventListener(CacheEntryRemovedEvent::class, CacheEntryRemovedListener::class);
 	}
 
 	public function boot(IBootContext $context): void {
