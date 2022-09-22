@@ -46,13 +46,6 @@
 					<MapMarker />{{ album.location }}
 				</div>
 				<template v-if="album !== undefined" slot="right">
-					<NcButton v-if="album.nbItems !== 0"
-						type="tertiary"
-						:aria-label="t('photos', 'Add photos to this album')"
-						@click="showAddPhotosModal = true">
-						<Plus slot="icon" />
-					</NcButton>
-
 					<NcActions :force-menu="true" :aria-label="t('photos', 'Open actions menu')">
 						<!-- TODO: enable download on public albums -->
 						<!-- <ActionDownload v-if="albumFileIds.length > 0"
