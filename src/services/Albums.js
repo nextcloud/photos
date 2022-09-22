@@ -21,7 +21,6 @@
  */
 
 import moment from '@nextcloud/moment'
-import { showError } from '@nextcloud/dialogs'
 import { translate } from '@nextcloud/l10n'
 
 import client from '../services/DavClient.js'
@@ -43,12 +42,13 @@ import { genFileInfo } from '../utils/fileUtils.js'
 /**
  *
  * @param {string} path - Albums' root path.
- * @param {AbortSignal} signal - Abort signal to cancel the request.
+ * @param {import('webdav').StatOptions} options - Options to forward to the webdav client.
+ * @param {import('webdav').WebDAVClient} customClient
  * @return {Promise<Album|null>}
  */
-export async function fetchAlbum(path, signal) {
+export async function fetchAlbum(path, options, customClient) {
 	try {
-		const response = await client.stat(path, {
+		const response = await (customClient || client).stat(path, {
 			data: `<?xml version="1.0"?>
 							<d:propfind xmlns:d="DAV:"
 								xmlns:oc="http://owncloud.org/ns"
@@ -62,8 +62,8 @@ export async function fetchAlbum(path, signal) {
 									<nc:collaborators />
 								</d:prop>
 							</d:propfind>`,
-			signal,
 			details: true,
+			...options,
 		})
 
 		logger.debug('[Albums] Fetched an album: ', response.data)
@@ -81,12 +81,13 @@ export async function fetchAlbum(path, signal) {
 /**
  *
  * @param {string} path - Albums' root path.
- * @param {AbortSignal} signal - Abort signal to cancel the request.
+ * @param {import('webdav').StatOptions} options - Options to forward to the webdav client.
+ * @param {import('webdav').WebDAVClient} customClient
  * @return {Promise<Album[]>}
  */
-export async function fetchAlbums(path, signal) {
+export async function fetchAlbums(path, options, customClient) {
 	try {
-		const response = await client.getDirectoryContents(path, {
+		const response = await (customClient || client).getDirectoryContents(path, {
 			data: `<?xml version="1.0"?>
 							<d:propfind xmlns:d="DAV:"
 								xmlns:oc="http://owncloud.org/ns"
@@ -101,7 +102,7 @@ export async function fetchAlbums(path, signal) {
 								</d:prop>
 							</d:propfind>`,
 			details: true,
-			signal,
+			...options,
 		})
 
 		logger.debug(`[Albums] Fetched ${response.data.length} albums: `, response.data)
@@ -144,14 +145,14 @@ function formatAlbum(album) {
 		dateRange.start = moment().unix()
 		dateRange.end = moment().unix()
 	}
-	const dateRangeFormated = {
+	const dateRangeFormatted = {
 		startDate: moment.unix(dateRange.start).format('MMMM YYYY'),
 		endDate: moment.unix(dateRange.end).format('MMMM YYYY'),
 	}
-	if (dateRangeFormated.startDate === dateRangeFormated.endDate) {
-		album.date = dateRangeFormated.startDate
+	if (dateRangeFormatted.startDate === dateRangeFormatted.endDate) {
+		album.date = dateRangeFormatted.startDate
 	} else {
-		album.date = translate('photos', '{startDate} to {endDate}', dateRangeFormated)
+		album.date = translate('photos', '{startDate} to {endDate}', dateRangeFormatted)
 	}
 
 	return album
@@ -160,15 +161,16 @@ function formatAlbum(album) {
 /**
  *
  * @param {string} path - Albums' root path.
- * @param {AbortSignal} signal - Abort signal to cancel the request.
- * @return {Promise<[]>}
+ * @param {import('webdav').StatOptions} options - Options to forward to the webdav client.
+ * @param {import('webdav').WebDAVClient} customClient
+ * @return {Promise<Array>}
  */
-export async function fetchAlbumContent(path, signal) {
+export async function fetchAlbumContent(path, options, customClient) {
 	try {
-		const response = await client.getDirectoryContents(path, {
+		const response = await (customClient || client).getDirectoryContents(path, {
 			data: DavRequest,
 			details: true,
-			signal,
+			...options,
 		})
 
 		const fetchedFiles = response.data
