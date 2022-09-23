@@ -44,7 +44,7 @@ OC.L10N.register(
     "Remove {collaboratorLabel} from the collaborators list" : "{collaboratorLabel} aus der Liste der Mitarbeiter löschen",
     "Public link copied!" : "Öffentlicher Link kopiert!",
     "Copy public link" : "Öffentlichen Link kopieren",
-    "Share via public link" : "Durch einen öffentlichen Link teilen",
+    "Share via public link" : "Als öffentlichen Link teilen",
     "Failed to fetch collaborators list." : "Liste der Mitbearbeiter konnte nicht abgerufen werden.",
     "This collection does not exist" : "Diese Sammlung existiert nicht",
     "An error occurred" : "Es ist ein Fehler aufgetreten",
