@@ -337,12 +337,13 @@ export default {
 					}
 				)
 
+				// Gen files info and filtering invalid files
 				const fetchedFiles = response.data
 					.map(file => genFileInfo(file))
+					.filter(file => file.fileid)
 
 				const fileIds = fetchedFiles
-					.map(file => file.fileid)
-					.map((fileId) => fileId.toString())
+					.map(file => file.fileid.toString())
 
 				this.appendFiles(fetchedFiles)
 
