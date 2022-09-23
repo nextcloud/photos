@@ -18,7 +18,7 @@
 		"nextcloud/coding-standard": "1.0",
 		"phpunit/phpunit": "^9",
 		"vimeo/psalm": "^4.22",
-		"christophwurst/nextcloud": "dev-master",
-		"sabre/dav": "^4.2.1"
+		"sabre/dav": "^4.2.1",
+		"nextcloud/ocp": "dev-stable25"
 	}
 }
