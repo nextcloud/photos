@@ -87,6 +87,7 @@ OC.L10N.register(
     "Loading folders …" : "Karpetak kargatzen ...",
     "No photos in here" : "Argazkirik ez hemen",
     "Shared albums" : "Partekaturiko albumak",
+    "Back to tags overview" : "Itzuli etiketen ikuspegira",
     "No photos with this tag yet" : "Ez dago etiketa hau duen argazkirik oraindik",
     "No tags yet" : "Etitketarik ez oraindik",
     "Photos with tags will show up here" : "Etiketadun argazkiak hemen erakutsiko dira",
