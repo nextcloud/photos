@@ -90,6 +90,7 @@
 				<template v-if="isPublicLinkSelected">
 					<NcButton class="manage-collaborators__public-link-button"
 						:aria-label="t('photos', 'Copy the public link')"
+						:disabled="publicLink.id === ''"
 						@click="copyPublicLink">
 						<template v-if="publicLinkCopied">
 							{{ t('photos', 'Public link copied!') }}
@@ -102,8 +103,12 @@
 							<ContentCopy v-else />
 						</template>
 					</NcButton>
-					<NcButton type="tertiary" :aria-label="t('photos', 'Delete the public link')" @click="deletePublicLink">
-						<Close slot="icon" />
+					<NcButton type="tertiary"
+						:aria-label="t('photos', 'Delete the public link')"
+						:disabled="publicLink.id === ''"
+						@click="deletePublicLink">
+						<NcLoadingIcon v-if="publicLink.id === ''" slot="icon" />
+						<Close v-else slot="icon" />
 					</NcButton>
 				</template>
 				<NcButton v-else
@@ -137,6 +142,8 @@ import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { NcButton, NcListItemIcon, NcLoadingIcon, NcPopover, NcTextField, NcEmptyContent } from '@nextcloud/vue'
 
 import logger from '../../services/logger.js'
+import AbortControllerMixin from '../../mixins/AbortControllerMixin.js'
+import { fetchAlbum } from '../../services/Albums.js'
 
 /**
  * @typedef {object} Collaborator
@@ -162,6 +169,8 @@ export default {
 		NcPopover,
 		NcEmptyContent,
 	},
+
+	mixins: [AbortControllerMixin],
 
 	props: {
 		albumName: {
@@ -190,17 +199,13 @@ export default {
 			selectedCollaboratorsKeys: [],
 			/** @type {Collaborator[]} */
 			currentSearchResults: [],
+			loadingAlbum: false,
+			errorFetchingAlbum: null,
 			loadingCollaborators: false,
 			randomId: Math.random().toString().substring(2, 10),
 			publicLinkCopied: false,
 			config: {
 				minSearchStringLength: parseInt(OC.config['sharing.minSearchStringLength'], 10) || 0,
-			},
-			/** @type {Collaborator} */
-			publicLink: {
-				id: (Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2)).substring(0, 15),
-				label: t('photos', 'Public link'),
-				type: OC.Share.SHARE_TYPE_LINK,
 			},
 		}
 	},
@@ -236,32 +241,28 @@ export default {
 		 * @return {boolean}
 		 */
 		isPublicLinkSelected() {
-			return this.selectedCollaborators
-				.some(collaborator => collaborator.type === OC.Share.SHARE_TYPE_LINK)
+			return this.selectedCollaboratorsKeys.includes(OC.Share.SHARE_TYPE_LINK.toString())
+		},
 
+		/** @return {Collaborator} */
+		publicLink() {
+			return this.availableCollaborators[OC.Share.SHARE_TYPE_LINK]
+		},
+	},
+
+	watch: {
+		collaborators(collaborators) {
+			this.populateCollaborators(collaborators)
 		},
 	},
 
 	mounted() {
 		this.searchCollaborators()
-
-		const initialCollaborators = this.collaborators.reduce(this.indexCollaborators, {})
-		const publicLink = this.collaborators.find(collaborator => collaborator.type === OC.Share.SHARE_TYPE_LINK)
-
-		if (publicLink !== undefined) {
-			this.publicLink = publicLink
-		}
-
-		this.selectedCollaboratorsKeys = Object.keys(initialCollaborators)
-		this.availableCollaborators = {
-			[`${this.publicLink.type}:${this.publicLink.id}`]: this.publicLink,
-			...this.availableCollaborators,
-			...initialCollaborators,
-		}
+		this.populateCollaborators(this.collaborators)
 	},
 
 	methods: {
-		...mapActions(['updateAlbum']),
+		...mapActions(['updateAlbum', 'addAlbums']),
 
 		/**
 		 * Fetch possible collaborators.
@@ -310,41 +311,84 @@ export default {
 		},
 
 		/**
+		 * Populate selectedCollaboratorsKeys and availableCollaborators.
+		 *
+		 * @param {Collaborator[]} collaborators
+		 */
+		populateCollaborators(collaborators) {
+			const initialCollaborators = collaborators.reduce(this.indexCollaborators, {})
+			this.selectedCollaboratorsKeys = Object.keys(initialCollaborators)
+			this.availableCollaborators = {
+				3: {
+					id: '',
+					label: t('photos', 'Public link'),
+					type: OC.Share.SHARE_TYPE_LINK,
+				},
+				...this.availableCollaborators,
+				...initialCollaborators,
+			}
+		},
+
+		/**
 		 * @param {Object<string, Collaborator>} collaborators - Index of collaborators
 		 * @param {Collaborator} collaborator - A collaborator
 		 */
 		indexCollaborators(collaborators, collaborator) {
-			return { ...collaborators, [`${collaborator.type}:${collaborator.id}`]: collaborator }
+			return { ...collaborators, [`${collaborator.type}${collaborator.type === OC.Share.SHARE_TYPE_LINK ? '' : ':'}${collaborator.type === OC.Share.SHARE_TYPE_LINK ? '' : collaborator.id}`]: collaborator }
 		},
 
 		async createPublicLinkForAlbum() {
-			this.selectEntity(`${this.publicLink.type}:${this.publicLink.id}`)
+			this.selectEntity(OC.Share.SHARE_TYPE_LINK.toString())
 			await this.updateAlbumCollaborators()
+			try {
+				this.loadingAlbum = true
+				this.errorFetchingAlbum = null
+
+				const album = await fetchAlbum(
+					`/photos/${getCurrentUser().uid}/albums/${this.albumName}`,
+					{ signal: this.abortController.signal }
+				)
+
+				this.addAlbums({ albums: [album] })
+			} catch (error) {
+				if (error.response?.status === 404) {
+					this.errorFetchingAlbum = 404
+				} else {
+					this.errorFetchingAlbum = error
+				}
+
+				logger.error('[PublicAlbumContent] Error fetching album', error)
+				showError(this.t('photos', 'Failed to fetch album.'))
+			} finally {
+				this.loadingAlbum = false
+			}
 		},
 
 		async deletePublicLink() {
-			this.unselectEntity(`${this.publicLink.type}:${this.publicLink.id}`)
-
-			this.publicLinkCopied = false
-
-			delete this.availableCollaborators[`${this.publicLink.type}:${this.publicLink.id}`]
-			this.publicLink = {
-				id: (Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2)).substring(0, 15),
+			this.unselectEntity(OC.Share.SHARE_TYPE_LINK.toString())
+			this.availableCollaborators[3] = {
+				id: '',
 				label: t('photos', 'Public link'),
 				type: OC.Share.SHARE_TYPE_LINK,
 			}
-			this.availableCollaborators[`${this.publicLink.type}:${this.publicLink.id}`] = this.publicLink
-
+			this.publicLinkCopied = false
 			await this.updateAlbumCollaborators()
 		},
 
 		async updateAlbumCollaborators() {
-			await this.updateAlbum({
-				albumName: this.albumName,
-				properties: {
-					collaborators: this.selectedCollaborators,
-				},
-			})
+			try {
+				await this.updateAlbum({
+					albumName: this.albumName,
+					properties: {
+						collaborators: this.selectedCollaborators,
+					},
+				})
+			} catch (error) {
+				logger.error('[PublicAlbumContent] Error updating album', error)
+				showError(this.t('photos', 'Failed to update album.'))
+			} finally {
+				this.loadingAlbum = false
+			}
 		},
 
 		async copyPublicLink() {
@@ -366,6 +410,11 @@ export default {
 
 		unselectEntity(collaboratorKey) {
 			const index = this.selectedCollaboratorsKeys.indexOf(collaboratorKey)
+
+			if (index === -1) {
+				return
+			}
+
 			this.selectedCollaboratorsKeys.splice(index, 1)
 		},
 	},

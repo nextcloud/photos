@@ -67,4 +67,8 @@ class SharedAlbumRoot extends AlbumRoot {
 		/** @var array{array{'nc:collaborator': array{'id': string, 'label': string, 'type': int}}} */
 		return [];
 	}
+
+	public function setCollaborators($collaborators): array {
+		throw new Forbidden('Not allowed to collaborators a public album');
+	}
 }
