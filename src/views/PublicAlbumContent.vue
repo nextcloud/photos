@@ -34,7 +34,8 @@
 				slot-scope="{selectedFileIds}"
 				:loading="loadingAlbum || loadingFiles"
 				:params="{ albumName }"
-				:path="'/' + albumName"
+				path="/"
+				:root-title="albumName"
 				:title="albumName"
 				@refresh="fetchAlbumContent">
 				<!-- TODO: enable upload on public albums -->
@@ -198,9 +199,9 @@ export default {
 		},
 	},
 
-	beforeMount() {
-		this.fetchAlbumInfo()
-		this.fetchAlbumContent()
+	async beforeMount() {
+		await this.fetchAlbumInfo()
+		await this.fetchAlbumContent()
 	},
 
 	methods: {
@@ -230,12 +231,12 @@ export default {
 			} catch (error) {
 				if (error.response?.status === 404) {
 					this.errorFetchingAlbum = 404
-				} else {
-					this.errorFetchingAlbum = error
+					return
 				}
 
+				this.errorFetchingAlbum = error
 				logger.error('[PublicAlbumContent] Error fetching album', error)
-				showError(this.t('photos', 'Failed to fetch albums list.'))
+				showError(this.t('photos', 'Failed to fetch album.'))
 			} finally {
 				this.loadingAlbum = false
 			}

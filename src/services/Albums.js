@@ -43,12 +43,11 @@ import { genFileInfo } from '../utils/fileUtils.js'
  *
  * @param {string} path - Albums' root path.
  * @param {import('webdav').StatOptions} options - Options to forward to the webdav client.
- * @param {import('webdav').WebDAVClient} customClient
  * @return {Promise<Album|null>}
  */
-export async function fetchAlbum(path, options, customClient) {
+export async function fetchAlbum(path, options) {
 	try {
-		const response = await (customClient || client).stat(path, {
+		const response = await client.stat(path, {
 			data: `<?xml version="1.0"?>
 							<d:propfind xmlns:d="DAV:"
 								xmlns:oc="http://owncloud.org/ns"
@@ -82,12 +81,11 @@ export async function fetchAlbum(path, options, customClient) {
  *
  * @param {string} path - Albums' root path.
  * @param {import('webdav').StatOptions} options - Options to forward to the webdav client.
- * @param {import('webdav').WebDAVClient} customClient
  * @return {Promise<Album[]>}
  */
-export async function fetchAlbums(path, options, customClient) {
+export async function fetchAlbums(path, options) {
 	try {
-		const response = await (customClient || client).getDirectoryContents(path, {
+		const response = await client.getDirectoryContents(path, {
 			data: `<?xml version="1.0"?>
 							<d:propfind xmlns:d="DAV:"
 								xmlns:oc="http://owncloud.org/ns"
@@ -162,12 +160,11 @@ function formatAlbum(album) {
  *
  * @param {string} path - Albums' root path.
  * @param {import('webdav').StatOptions} options - Options to forward to the webdav client.
- * @param {import('webdav').WebDAVClient} customClient
  * @return {Promise<Array>}
  */
-export async function fetchAlbumContent(path, options, customClient) {
+export async function fetchAlbumContent(path, options) {
 	try {
-		const response = await (customClient || client).getDirectoryContents(path, {
+		const response = await client.getDirectoryContents(path, {
 			data: DavRequest,
 			details: true,
 			...options,

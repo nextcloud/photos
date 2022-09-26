@@ -288,8 +288,10 @@ export default {
 	},
 
 	watch: {
-		album() {
-			this.fetchAlbumContent()
+		album(newAlbum, oldAlbum) {
+			if (newAlbum.filename !== oldAlbum.filename) {
+				this.fetchAlbumContent()
+			}
 		},
 	},
 

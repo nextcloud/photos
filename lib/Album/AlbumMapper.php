@@ -28,6 +28,7 @@ use OCA\Photos\Exception\AlreadyInAlbumException;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\IMimeTypeLoader;
+use OCP\Security\ISecureRandom;
 use OCP\IDBConnection;
 use OCP\IGroup;
 use OCP\IUser;
@@ -42,6 +43,7 @@ class AlbumMapper {
 	private IUserManager $userManager;
 	private IGroupManager $groupManager;
 	protected IL10N $l;
+	protected ISecureRandom $random;
 
 	// Same mapping as IShare.
 	public const TYPE_USER = 0;
@@ -54,7 +56,8 @@ class AlbumMapper {
 		ITimeFactory $timeFactory,
 		IUserManager $userManager,
 		IGroupManager $groupManager,
-		IL10N $l
+		IL10N $l,
+		ISecureRandom $random
 	) {
 		$this->connection = $connection;
 		$this->mimeTypeLoader = $mimeTypeLoader;
@@ -62,6 +65,7 @@ class AlbumMapper {
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
 		$this->l = $l;
+		$this->random = $random;
 	}
 
 	public function create(string $userId, string $name, string $location = ""): AlbumInfo {
@@ -321,7 +325,7 @@ class AlbumMapper {
 			return [
 				'id' => $row['collaborator_id'],
 				'label' => $displayName,
-				'type' => $row['collaborator_type'],
+				'type' => (int)$row['collaborator_type'],
 			];
 		}, $rows);
 
@@ -335,8 +339,13 @@ class AlbumMapper {
 	public function setCollaborators(int $albumId, array $collaborators): void {
 		$existingCollaborators = $this->getCollaborators($albumId);
 
-		$collaboratorsToAdd = array_udiff($collaborators, $existingCollaborators, fn ($a, $b) => strcmp($a['id'].$a['type'], $b['id'].$b['type']));
-		$collaboratorsToRemove = array_udiff($existingCollaborators, $collaborators, fn ($a, $b) => strcmp($a['id'].$a['type'], $b['id'].$b['type']));
+		// Different behavior if type is link to prevent creating multiple link.
+		function computeKey($c) {
+			return ($c['type'] === AlbumMapper::TYPE_LINK ? '' : $c['id']).$c['type'];
+		}
+
+		$collaboratorsToAdd = array_udiff($collaborators, $existingCollaborators, fn ($a, $b) => strcmp(computeKey($a), computeKey($b)));
+		$collaboratorsToRemove = array_udiff($existingCollaborators, $collaborators, fn ($a, $b) => strcmp(computeKey($a), computeKey($b)));
 
 		$this->connection->beginTransaction();
 
@@ -353,6 +362,7 @@ class AlbumMapper {
 					}
 					break;
 				case self::TYPE_LINK:
+					$collaborator['id'] = $this->random->generate(15, ISecureRandom::CHAR_UPPER . ISecureRandom::CHAR_LOWER . ISecureRandom::CHAR_DIGITS);
 					break;
 				default:
 					throw new \Exception('Invalid collaborator type: ' . $collaborator['type']);
