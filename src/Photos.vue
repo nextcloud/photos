@@ -178,14 +178,14 @@ export default {
 				}), {
 					scope: generateUrl('/apps/photos'),
 				}).then(registration => {
-					console.debug('SW registered: ', registration)
+					logger.debug('SW registered: ', registration)
 				}).catch(registrationError => {
-					console.error('SW registration failed: ', registrationError)
+					logger.error('SW registration failed: ', registrationError)
 				})
 
 			})
 		} else {
-			console.debug('Service Worker is not enabled on this browser.')
+			logger.debug('Service Worker is not enabled on this browser.')
 		}
 	},
 

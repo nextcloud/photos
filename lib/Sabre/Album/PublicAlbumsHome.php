@@ -65,12 +65,12 @@ class PublicAlbumsHome extends AlbumsHome {
 	}
 
 	public function getChild($name) {
-		$basicAuth = $this->server->httpRequest->getHeader('Authorization');
+		$basicAuth = $this->server->httpRequest->getHeader('Authorization') ?? 'Basic ';
 		[, $base64Token] = explode('Basic ', $basicAuth);
 		$token = \base64_decode($base64Token);
 		$albums = $this->albumMapper->getSharedAlbumsForCollaboratorWithFiles($token, AlbumMapper::TYPE_LINK);
 
-		array_filter($albums, fn ($album) => $album->getAlbum()->getUserId() === $this->user->getUid());
+		$albums = array_filter($albums, fn ($album) => $album->getAlbum()->getUserId() === $this->user->getUid());
 
 		if (count($albums) !== 1) {
 			throw new NotFound();

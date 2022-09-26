@@ -151,13 +151,12 @@ class AlbumMapper {
 		$query->executeStatement();
 	}
 
-	public function setLocation(int $id, string $newLocation): string {
+	public function setLocation(int $id, string $newLocation): void {
 		$query = $this->connection->getQueryBuilder();
 		$query->update("photos_albums")
 			->set("location", $query->createNamedParameter($newLocation))
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$query->executeStatement();
-		return $newLocation;
 	}
 
 	public function delete(int $id): void {
@@ -331,7 +330,7 @@ class AlbumMapper {
 
 	/**
 	 * @param int $albumId
-	 * @param array{'id': string, 'label': string, 'type': int} $collaborators
+	 * @param array{'id': string, 'type': int} $collaborators
 	 */
 	public function setCollaborators(int $albumId, array $collaborators): void {
 		$existingCollaborators = $this->getCollaborators($albumId);

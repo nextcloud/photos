@@ -47,12 +47,12 @@ class UserConfigService {
 		$this->userSession = $userSession;
 	}
 
-	public function getUserConfig(string $key) {
+	public function getUserConfig(string $key): string {
 		$user = $this->userSession->getUser();
 		return $this->getConfigForUser($user->getUid(), $key);
 	}
 
-	public function getConfigForUser(string $userId, string $key) {
+	public function getConfigForUser(string $userId, string $key): string {
 		if (!in_array($key, array_keys(self::DEFAULT_CONFIGS))) {
 			throw new Exception('Unknown user config key');
 		}

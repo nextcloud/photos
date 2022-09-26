@@ -60,8 +60,11 @@ class SharedAlbumRoot extends AlbumRoot {
 		return true;
 	}
 
-	// Do not reveal collaborators for shared albums.
-	public function getCollaborators() {
+	/**
+	 * Do not reveal collaborators for shared albums.
+	 */
+	public function getCollaborators(): array {
+		/** @var array{array{'nc:collaborator': array{'id': string, 'label': string, 'type': int}}} */
 		return [];
 	}
 }
