@@ -203,7 +203,7 @@ class AlbumMapper {
 			}
 		}
 
-		return $files ?? [];
+		return $files;
 	}
 
 	/**
