@@ -37,6 +37,7 @@ use Sabre\DAV\Tree;
 use OCP\Files\NotFoundException;
 
 class PropFindPlugin extends ServerPlugin {
+	public const ORIGINAL_NAME_PROPERTYNAME = '{http://nextcloud.org/ns}original-name';
 	public const FILE_NAME_PROPERTYNAME = '{http://nextcloud.org/ns}file-name';
 	public const FAVORITE_PROPERTYNAME = '{http://owncloud.org/ns}favorite';
 	public const DATE_RANGE_PROPERTYNAME = '{http://nextcloud.org/ns}dateRange';
@@ -110,6 +111,7 @@ class PropFindPlugin extends ServerPlugin {
 		}
 
 		if ($node instanceof AlbumRoot) {
+			$propFind->handle(self::ORIGINAL_NAME_PROPERTYNAME, fn () => $node->getAlbum()->getAlbum()->getTitle());
 			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn () => $node->getAlbum()->getAlbum()->getLastAddedPhoto());
 			$propFind->handle(self::NBITEMS_PROPERTYNAME, fn () => count($node->getChildren()));
 			$propFind->handle(self::LOCATION_PROPERTYNAME, fn () => $node->getAlbum()->getAlbum()->getLocation());

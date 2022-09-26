@@ -45,7 +45,7 @@ import { genFileInfo } from '../utils/fileUtils.js'
  * @param {import('webdav').StatOptions} options - Options to forward to the webdav client.
  * @return {Promise<Album|null>}
  */
-export async function fetchAlbum(path, options) {
+export async function fetchAlbum(path, options, extraProps = '') {
 	try {
 		const response = await client.stat(path, {
 			data: `<?xml version="1.0"?>
@@ -59,6 +59,7 @@ export async function fetchAlbum(path, options) {
 									<nc:location />
 									<nc:dateRange />
 									<nc:collaborators />
+									${extraProps}
 								</d:prop>
 							</d:propfind>`,
 			details: true,

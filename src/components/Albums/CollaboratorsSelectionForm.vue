@@ -392,7 +392,7 @@ export default {
 		},
 
 		async copyPublicLink() {
-			await navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}${generateUrl(`apps/photos/public/${getCurrentUser().uid}/${this.albumName}?token=${this.publicLink.id}`)}`)
+			await navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}${generateUrl(`apps/photos/public/${getCurrentUser().uid}/${this.publicLink.id}`)}`)
 			this.publicLinkCopied = true
 			setTimeout(() => {
 				this.publicLinkCopied = false

@@ -21,22 +21,22 @@
  -->
 <template>
 	<div>
-		<CollectionContent v-if="true"
-			ref="collectionContent"
+		<CollectionContent ref="collectionContent"
 			:collection="album"
 			:collection-file-ids="albumFileIds"
 			:semaphore="semaphore"
 			:loading="loadingAlbum || loadingFiles"
 			:error="errorFetchingAlbum || errorFetchingFiles">
 			<!-- Header -->
-			<HeaderNavigation key="navigation"
+			<HeaderNavigation v-if="albumOriginalName !== ''"
+				key="navigation"
 				slot="header"
 				slot-scope="{selectedFileIds}"
 				:loading="loadingAlbum || loadingFiles"
-				:params="{ albumName }"
+				:params="{ userId, token }"
 				path="/"
-				:root-title="albumName"
-				:title="albumName"
+				:root-title="albumOriginalName"
+				:title="albumOriginalName"
 				@refresh="fetchAlbumContent">
 				<!-- TODO: enable upload on public albums -->
 				<!-- <UploadPicker :accept="allowedMimes"
@@ -104,7 +104,6 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-
 import MapMarker from 'vue-material-design-icons/MapMarker'
 import Plus from 'vue-material-design-icons/Plus'
 import ImagePlus from 'vue-material-design-icons/ImagePlus'
@@ -156,10 +155,6 @@ export default {
 			type: String,
 			required: true,
 		},
-		albumName: {
-			type: String,
-			required: true,
-		},
 		token: {
 			type: String,
 			required: true,
@@ -173,7 +168,7 @@ export default {
 			errorFetchingAlbum: null,
 			loadingCount: 0,
 			loadingAddFilesToAlbum: false,
-			publicClient: null,
+			albumOriginalName: '',
 		}
 	},
 
@@ -189,6 +184,13 @@ export default {
 		 */
 		album() {
 			return this.publicAlbums[this.albumName] || {}
+		},
+
+		/**
+		 * @return {string} The album's name is the token.
+		 */
+		albumName() {
+			return this.token
 		},
 
 		/**
@@ -221,13 +223,13 @@ export default {
 				this.loadingAlbum = true
 				this.errorFetchingAlbum = null
 
-				const album = await fetchAlbum(`/photos/${this.userId}/public/${this.albumName}`, {
-					signal: this.abortController.signal,
-					headers: {
-						Authorization: `Basic ${btoa(this.token)}`,
-					},
-				})
+				const album = await fetchAlbum(
+					`/photos/${this.userId}/public/${this.token}`,
+					this.abortController.signal,
+					'<nc:original-name />',
+				)
 				this.addPublicAlbums({ collections: [album] })
+				this.albumOriginalName = album.originalName
 			} catch (error) {
 				if (error.response?.status === 404) {
 					this.errorFetchingAlbum = 404
@@ -255,12 +257,10 @@ export default {
 				this.loadingFiles = true
 				this.semaphoreSymbol = semaphoreSymbol
 
-				const fetchedFiles = await fetchAlbumContent(`/photos/${this.userId}/public/${this.albumName}`, {
-					signal: this.abortController.signal,
-					headers: {
-						Authorization: `Basic ${btoa(this.token)}`,
-					},
-				})
+				const fetchedFiles = await fetchAlbumContent(
+					`/photos/${this.userId}/public/${this.token}`,
+					this.abortController.signal,
+				)
 
 				const fileIds = fetchedFiles
 					.map(file => file.fileid.toString())
