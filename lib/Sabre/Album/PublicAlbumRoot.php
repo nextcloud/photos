@@ -44,7 +44,7 @@ class PublicAlbumRoot extends AlbumRoot {
 	}
 
 	public function copyInto($targetName, $sourcePath, INode $sourceNode): bool {
-	 throw new Forbidden('Not allowed to copy into a public album');
+		throw new Forbidden('Not allowed to copy into a public album');
 	}
 
 	/**

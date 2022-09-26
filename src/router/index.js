@@ -120,13 +120,12 @@ const router = new Router({
 			}),
 		},
 		{
-			path: '/public/:userId/:path*',
+			path: '/public/:userId/:token',
 			component: PublicAlbumContent,
 			name: 'publicAlbums',
 			props: route => ({
 				userId: route.params.userId,
-				albumName: route.params.path,
-				token: route.query.token,
+				token: route.params.token,
 			}),
 		},
 		{
