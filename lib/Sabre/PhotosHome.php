@@ -90,26 +90,31 @@ class PhotosHome implements ICollection {
 	}
 
 	public function getChild($name) {
-		if ($name === 'albums') {
-			return new AlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->userConfigService);
-		} elseif ($name === 'sharedalbums') {
-			return new SharedAlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->groupManager, $this->userConfigService);
-		} elseif ($name === 'public') {
-			return new PublicAlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->userConfigService);
+		switch ($name) {
+			case 'albums':
+				return new AlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->userConfigService);
+			case 'sharedalbums':
+				return new SharedAlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->groupManager, $this->userConfigService);
+			case 'public':
+				return new PublicAlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->userConfigService);
 		}
 
 		throw new NotFound();
 	}
 
 	/**
-	 * @return (AlbumsHome|SharedAlbumsHome|PublicAlbumHome)[]
+	 * @return (AlbumsHome)[]
 	 */
 	public function getChildren(): array {
-		return [new AlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->userConfigService)];
+		return [
+			new AlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->userConfigService),
+			new SharedAlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->groupManager, $this->userConfigService),
+			new PublicAlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->userConfigService),
+		];
 	}
 
 	public function childExists($name): bool {
-		return $name === 'albums' || $name === 'sharedalbums';
+		return $name === 'albums' || $name === 'sharedalbums' || $name === 'public';
 	}
 
 	public function getLastModified(): int {

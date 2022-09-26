@@ -83,7 +83,6 @@ return [
 				'path' => '.*',
 			],
 		],
-		[ 'name' => 'public#get', 'url' => '/display/{token}', 'verb' => 'GET' ],
 		['name' => 'page#index', 'url' => '/tags/{path}', 'verb' => 'GET', 'postfix' => 'tags',
 			'requirements' => [
 				'path' => '.*',

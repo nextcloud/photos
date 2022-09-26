@@ -313,7 +313,6 @@ class AlbumMapper {
 					break;
 				case self::TYPE_LINK:
 					$displayName = $this->l->t('Public link');
-					;
 					break;
 				default:
 					throw new \Exception('Invalid collaborator type: ' . $row['collaborator_type']);
