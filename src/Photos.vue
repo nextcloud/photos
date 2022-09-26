@@ -122,6 +122,7 @@ import videoplaceholder from './assets/video.svg'
 import areTagsInstalled from './services/AreTagsInstalled.js'
 import isMapsInstalled from './services/IsMapsInstalled.js'
 import isRecognizeInstalled from './services/IsRecognizeInstalled.js'
+import logger from './services/logger.js'
 
 export default {
 	name: 'Photos',
@@ -172,14 +173,14 @@ export default {
 				}), {
 					scope: generateUrl('/apps/photos'),
 				}).then(registration => {
-					console.debug('SW registered: ', registration)
+					logger.debug('SW registered: ', registration)
 				}).catch(registrationError => {
-					console.error('SW registration failed: ', registrationError)
+					logger.error('SW registration failed: ', registrationError)
 				})
 
 			})
 		} else {
-			console.debug('Service Worker is not enabled on this browser.')
+			logger.debug('Service Worker is not enabled on this browser.')
 		}
 
 		const files = loadState('photos', 'nomedia-paths', [])

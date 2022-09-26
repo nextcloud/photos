@@ -84,8 +84,8 @@ class AlbumRoot implements ICollection, ICopyTarget {
 	 * We cannot create files in an Album
 	 * We add the file to the default Photos folder and then link it there.
 	 *
-	 * @param [type] $name
-	 * @param [type] $data
+	 * @param string $name
+	 * @param null|resource|string $data
 	 * @return void
 	 */
 	public function createFile($name, $data = null) {
@@ -212,9 +212,9 @@ class AlbumRoot implements ICollection, ICopyTarget {
 	}
 
 	/**
-	 * @return array{'id': string, 'label': string, 'type': int}
+	 * @return array{array{'nc:collaborator': array{'id': string, 'label': string, 'type': int}}}
 	 */
-	public function getCollaborators() {
+	public function getCollaborators(): array {
 		return array_map(
 			fn (array $collaborator) => [ 'nc:collaborator' => $collaborator ],
 			$this->albumMapper->getCollaborators($this->album->getAlbum()->getId()),
@@ -223,9 +223,9 @@ class AlbumRoot implements ICollection, ICopyTarget {
 
 	/**
 	 * @param array{'id': string, 'type': int} $collaborators
-	 * @return array{'id': string, 'label': string, 'type': int}
+	 * @return array{array{'nc:collaborator': array{'id': string, 'label': string, 'type': int}}}
 	 */
-	public function setCollaborators($collaborators) {
+	public function setCollaborators($collaborators): array {
 		$this->albumMapper->setCollaborators($this->getAlbum()->getAlbum()->getId(), $collaborators);
 		return $this->getCollaborators();
 	}

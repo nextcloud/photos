@@ -1,7 +1,7 @@
 <!--
- - @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
+ - @copyright Copyright (c) 2022 Louis Chmn <louis@chmn.me>
  -
- - @author John Molakvoæ <skjnldsv@protonmail.com>
+ - @author Louis Chmn <louis@chmn.me>
  -
  - @license AGPL-3.0-or-later
  -
@@ -41,6 +41,7 @@ import { generateUrl } from '@nextcloud/router'
 
 import { NcContent, NcAppContent } from '@nextcloud/vue'
 
+import logger from './services/logger.js'
 import svgplaceholder from './assets/file-placeholder.svg'
 import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'
@@ -62,20 +63,17 @@ export default {
 	async beforeMount() {
 		if ('serviceWorker' in navigator) {
 			// Use the window load event to keep the page load performant
-			window.addEventListener('load', () => {
-				navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js', {}, {
-					noRewrite: true,
-				}), {
-					scope: '/',
-				}).then(registration => {
-					console.debug('SW registered: ', registration)
-				}).catch(registrationError => {
-					console.error('SW registration failed: ', registrationError)
-				})
-
+			window.addEventListener('load', async () => {
+				try {
+					const url = generateUrl('/apps/photos/service-worker.js', {}, { noRewrite: true })
+					const registration = await navigator.serviceWorker.register(url, { scope: '/' })
+					logger.debug('SW registered: ', registration)
+				} catch (error) {
+					logger.error('SW registration failed: ', error)
+				}
 			})
 		} else {
-			console.debug('Service Worker is not enabled on this browser.')
+			logger.debug('Service Worker is not enabled on this browser.')
 		}
 	},
 

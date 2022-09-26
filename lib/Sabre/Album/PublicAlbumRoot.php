@@ -26,6 +26,7 @@ namespace OCA\Photos\Sabre\Album;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\Conflict;
 use OCP\Files\Folder;
+use Sabre\DAV\INode;
 
 class PublicAlbumRoot extends AlbumRoot {
 	/**
@@ -42,20 +43,22 @@ class PublicAlbumRoot extends AlbumRoot {
 		throw new Forbidden('Not allowed to rename a public album');
 	}
 
-	// TODO: uncomment else it is a security hole.
-	// public function copyInto($targetName, $sourcePath, INode $sourceNode): bool {
-	//  throw new Forbidden('Not allowed to copy into a public album');
-	// }
+	public function copyInto($targetName, $sourcePath, INode $sourceNode): bool {
+	 throw new Forbidden('Not allowed to copy into a public album');
+	}
 
 	/**
 	 * We cannot create files in an Album
 	 * We add the file to the default Photos folder and then link it there.
 	 *
-	 * @param [type] $name
-	 * @param [type] $data
-	 * @return void
+	 * @param string $name
+	 * @param null|resource|string $data
+	 * @return null
 	 */
 	public function createFile($name, $data = null) {
+		// TODO: implement public album upload
+		throw new Forbidden('Not allowed to create a file in a public album');
+
 		try {
 			$albumOwner = $this->album->getAlbum()->getUserId();
 			$photosLocation = $this->userConfigService->getConfigForUser($albumOwner, 'photosLocation');
@@ -78,8 +81,10 @@ class PublicAlbumRoot extends AlbumRoot {
 		}
 	}
 
-
 	protected function addFile(int $sourceId, string $ownerUID): bool {
+		// TODO: implement public album upload
+		throw new Forbidden('Not allowed to create a file in a public album');
+
 		if (in_array($sourceId, $this->album->getFileIds())) {
 			throw new Conflict("File $sourceId is already in the folder");
 		}
@@ -89,7 +94,8 @@ class PublicAlbumRoot extends AlbumRoot {
 	}
 
 	// Do not reveal collaborators for public albums.
-	public function getCollaborators() {
+	public function getCollaborators(): array {
+		/** @var array{array{'nc:collaborator': array{'id': string, 'label': string, 'type': int}}} */
 		return [];
 	}
 }

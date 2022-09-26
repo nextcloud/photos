@@ -35,7 +35,6 @@ use OCP\AppFramework\Http\TemplateResponse;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\IRequest;
-use OCP\ISession;
 use OCP\Util;
 
 class PublicAlbumController extends Controller {
@@ -46,13 +45,12 @@ class PublicAlbumController extends Controller {
 
 	public function __construct(
 		IRequest $request,
-		ISession $session,
 		IAppManager $appManager,
 		IEventDispatcher $eventDispatcher,
 		UserConfigService $userConfig,
 		IInitialState $initialState,
 	) {
-		parent::__construct(Application::APP_ID, $request, $session);
+		parent::__construct(Application::APP_ID, $request);
 
 		$this->appManager = $appManager;
 		$this->eventDispatcher = $eventDispatcher;
@@ -61,14 +59,8 @@ class PublicAlbumController extends Controller {
 	}
 
 	/**
-	 * Your normal controller function. The following annotation will allow guests
-	 * to open the page as well
-	 *
 	 * @PublicPage
-	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 *
-	 * @return TemplateResponse
 	 */
 	public function get(): TemplateResponse {
 		$this->eventDispatcher->dispatch(LoadSidebar::class, new LoadSidebar());
