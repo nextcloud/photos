@@ -140,6 +140,7 @@ import { showError } from '@nextcloud/dialogs'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { NcButton, NcListItemIcon, NcLoadingIcon, NcPopover, NcTextField, NcEmptyContent } from '@nextcloud/vue'
+import { Type } from '@nextcloud/sharing'
 
 import logger from '../../services/logger.js'
 import AbortControllerMixin from '../../mixins/AbortControllerMixin.js'
@@ -149,7 +150,7 @@ import { fetchAlbum } from '../../services/Albums.js'
  * @typedef {object} Collaborator
  * @property {string} id - The id of the collaborator.
  * @property {string} label - The label of the collaborator for display.
- * @property {0|1|3} type - The type of the collaborator.
+ * @property {Type.SHARE_TYPE_USER|Type.SHARE_TYPE_GROUP|Type.SHARE_TYPE_LINK} type - The type of the collaborator.
  */
 
 export default {
@@ -226,7 +227,7 @@ export default {
 		 */
 		listableSelectedCollaboratorsKeys() {
 			return this.selectedCollaboratorsKeys
-				.filter(collaboratorKey => this.availableCollaborators[collaboratorKey].type !== OC.Share.SHARE_TYPE_LINK)
+				.filter(collaboratorKey => this.availableCollaborators[collaboratorKey].type !== Type.SHARE_TYPE_LINK)
 		},
 
 		/**
@@ -241,12 +242,12 @@ export default {
 		 * @return {boolean}
 		 */
 		isPublicLinkSelected() {
-			return this.selectedCollaboratorsKeys.includes(OC.Share.SHARE_TYPE_LINK.toString())
+			return this.selectedCollaboratorsKeys.includes(`${Type.SHARE_TYPE_LINK}`)
 		},
 
 		/** @return {Collaborator} */
 		publicLink() {
-			return this.availableCollaborators[OC.Share.SHARE_TYPE_LINK]
+			return this.availableCollaborators[Type.SHARE_TYPE_LINK]
 		},
 	},
 
@@ -279,8 +280,8 @@ export default {
 						search: this.searchText,
 						itemType: 'share-recipients',
 						shareTypes: [
-							OC.Share.SHARE_TYPE_USER,
-							OC.Share.SHARE_TYPE_GROUP,
+							Type.SHARE_TYPE_USER,
+							Type.SHARE_TYPE_GROUP,
 						],
 					},
 				})
@@ -289,9 +290,9 @@ export default {
 					.map(collaborator => {
 						switch (collaborator.source) {
 						case 'users':
-							return { id: collaborator.id, label: collaborator.label, type: OC.Share.SHARE_TYPE_USER }
+							return { id: collaborator.id, label: collaborator.label, type: Type.SHARE_TYPE_USER }
 						case 'groups':
-							return { id: collaborator.id, label: collaborator.label, type: OC.Share.SHARE_TYPE_GROUP }
+							return { id: collaborator.id, label: collaborator.label, type: Type.SHARE_TYPE_GROUP }
 						default:
 							throw new Error(`Invalid collaborator source ${collaborator.source}`)
 						}
@@ -322,7 +323,7 @@ export default {
 				3: {
 					id: '',
 					label: t('photos', 'Public link'),
-					type: OC.Share.SHARE_TYPE_LINK,
+					type: Type.SHARE_TYPE_LINK,
 				},
 				...this.availableCollaborators,
 				...initialCollaborators,
@@ -334,11 +335,11 @@ export default {
 		 * @param {Collaborator} collaborator - A collaborator
 		 */
 		indexCollaborators(collaborators, collaborator) {
-			return { ...collaborators, [`${collaborator.type}${collaborator.type === OC.Share.SHARE_TYPE_LINK ? '' : ':'}${collaborator.type === OC.Share.SHARE_TYPE_LINK ? '' : collaborator.id}`]: collaborator }
+			return { ...collaborators, [`${collaborator.type}${collaborator.type === Type.SHARE_TYPE_LINK ? '' : ':'}${collaborator.type === Type.SHARE_TYPE_LINK ? '' : collaborator.id}`]: collaborator }
 		},
 
 		async createPublicLinkForAlbum() {
-			this.selectEntity(OC.Share.SHARE_TYPE_LINK.toString())
+			this.selectEntity(`${Type.SHARE_TYPE_LINK}`)
 			await this.updateAlbumCollaborators()
 			try {
 				this.loadingAlbum = true
@@ -365,11 +366,11 @@ export default {
 		},
 
 		async deletePublicLink() {
-			this.unselectEntity(OC.Share.SHARE_TYPE_LINK.toString())
+			this.unselectEntity(`${Type.SHARE_TYPE_LINK}`)
 			this.availableCollaborators[3] = {
 				id: '',
 				label: t('photos', 'Public link'),
-				type: OC.Share.SHARE_TYPE_LINK,
+				type: Type.SHARE_TYPE_LINK,
 			}
 			this.publicLinkCopied = false
 			await this.updateAlbumCollaborators()

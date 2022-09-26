@@ -88,17 +88,6 @@
 				</NcButton>
 			</NcEmptyContent>
 		</CollectionContent>
-
-		<!-- Modals -->
-		<NcModal v-if="showAddPhotosModal"
-			size="large"
-			:title="t('photos', 'Add photos to the album')"
-			@close="showAddPhotosModal = false">
-			<FilesPicker :destination="album.basename"
-				:blacklist-ids="albumFileIds"
-				:loading="loadingAddFilesToAlbum"
-				@files-picked="handleFilesPicked" />
-		</NcModal>
 	</div>
 </template>
 
@@ -119,7 +108,6 @@ import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
-import FilesPicker from '../components/FilesPicker.vue'
 import { fetchAlbum, fetchAlbumContent } from '../services/Albums.js'
 import logger from '../services/logger.js'
 
@@ -137,10 +125,8 @@ export default {
 		NcActionButton,
 		// NcActionSeparator,
 		NcButton,
-		NcModal,
 		CollectionContent,
 		// ActionDownload,
-		FilesPicker,
 		HeaderNavigation,
 	},
 
