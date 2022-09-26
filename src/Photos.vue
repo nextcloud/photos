@@ -170,7 +170,7 @@ export default {
 				navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js', {}, {
 					noRewrite: true,
 				}), {
-					scope: '/',
+					scope: generateUrl('/apps/photos'),
 				}).then(registration => {
 					console.debug('SW registered: ', registration)
 				}).catch(registrationError => {
