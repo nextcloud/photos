@@ -33,8 +33,9 @@
 			type="text"
 			@input="debounceUpdatePhotosFolder(photosLocation)"
 			@change="debounceUpdatePhotosFolder(photosLocation)"
-			@focus="selectPhotosFolder"
-			@click="selectPhotosFolder">
+			@click="selectPhotosFolder"
+			@focus.once="selectPhotosFolder"
+			@keyboard.enter="selectPhotosFolder">
 	</div>
 </template>
 
