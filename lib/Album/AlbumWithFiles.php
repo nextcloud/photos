@@ -78,6 +78,6 @@ class AlbumWithFiles {
 	 * @return AlbumFile[]
 	 */
 	private function fetchFiles(): array {
-		return $this->albumMapper->getForAlbumIdAndUserWithFiles($this->info->getId(), $this->info->getUserId()) ?? [];
+		return $this->albumMapper->getForAlbumIdAndUserWithFiles($this->info->getId(), $this->info->getUserId());
 	}
 }
