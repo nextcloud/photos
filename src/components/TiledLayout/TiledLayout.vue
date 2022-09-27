@@ -65,7 +65,7 @@ export default {
 	computed: {
 		/** @return {import('../services/TiledLayout.js').TiledRow[]} */
 		rows() {
-			logger.debug('[TiledLayout] Computing rows', this.items)
+			logger.debug('[TiledLayout] Computing rows', { items: this.items })
 
 			return splitItemsInRows(this.items, this.containerWidth, this.baseHeight)
 		},

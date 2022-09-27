@@ -358,7 +358,7 @@ export default {
 					this.errorFetchingAlbum = error
 				}
 
-				logger.error('[PublicAlbumContent] Error fetching album', error)
+				logger.error('[PublicAlbumContent] Error fetching album', {error})
 				showError(this.t('photos', 'Failed to fetch album.'))
 			} finally {
 				this.loadingAlbum = false
@@ -385,7 +385,7 @@ export default {
 					},
 				})
 			} catch (error) {
-				logger.error('[PublicAlbumContent] Error updating album', error)
+				logger.error('[PublicAlbumContent] Error updating album', {error})
 				showError(this.t('photos', 'Failed to update album.'))
 			} finally {
 				this.loadingAlbum = false

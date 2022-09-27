@@ -77,10 +77,7 @@ export default function collectionStoreFactory(collectionName) {
 			const collectionFiles = state[`${collectionName}sFiles`][collectionId] || []
 			state[`${collectionName}sFiles`] = {
 				...state[`${collectionName}sFiles`],
-				[collectionId]: [
-					...collectionFiles,
-					...fileIdsToAdd.filter(fileId => !collectionFiles.includes(fileId)), // Filter to prevent duplicate fileId.
-				],
+				[collectionId]: [...new Set([...collectionFiles, ...fileIdsToAdd])],
 			}
 			state[`${collectionName}s`][collectionId].nbItems += fileIdsToAdd.length
 		},
@@ -147,7 +144,7 @@ export default function collectionStoreFactory(collectionName) {
 						if (error.response.status !== 409) { // Already in the collection.
 							context.commit(`removeFilesFrom${capitalizedCollectionName}`, { collectionId, fileIdsToRemove: [fileId] })
 
-							logger.error(translate('photos', 'Failed to add {fileBaseName} to {collectionId}.', { fileBaseName: file.basename, collectionId }), error)
+							logger.error(translate('photos', 'Failed to add {fileBaseName} to {collectionId}.', { fileBaseName: file.basename, collectionId }), { error })
 							showError(translate('photos', 'Failed to add {fileBaseName} to {collectionId}.', { fileBaseName: file.basename, collectionId }))
 						}
 					} finally {
@@ -181,7 +178,7 @@ export default function collectionStoreFactory(collectionName) {
 					} catch (error) {
 						context.commit(`addFilesTo${capitalizedCollectionName}`, { collectionId, fileIdsToAdd: [fileId] })
 
-						logger.error(translate('photos', 'Failed to delete {fileBaseName}.', { fileBaseName: file.basename }), error)
+						logger.error(translate('photos', 'Failed to delete {fileBaseName}.', { fileBaseName: file.basename }), { error })
 						showError(translate('photos', 'Failed to delete {fileBaseName}.', { fileBaseName: file.basename }))
 					} finally {
 						semaphore.release(symbol)
@@ -204,7 +201,7 @@ export default function collectionStoreFactory(collectionName) {
 				await client.deleteFile(collection.filename)
 				context.commit(`remove${capitalizedCollectionName}s`, { collectionIds: [collectionId] })
 			} catch (error) {
-				logger.error(translate('photos', 'Failed to delete {collectionId}.', { collectionId }), error)
+				logger.error(translate('photos', 'Failed to delete {collectionId}.', { collectionId }), { error })
 				showError(translate('photos', 'Failed to delete {collectionId}.', { collectionId }))
 			}
 		},

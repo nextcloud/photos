@@ -28,9 +28,7 @@ use Sabre\DAV\Exception\NotFound;
 use OCA\Photos\Album\AlbumMapper;
 
 class PublicAlbumsHome extends AlbumsHome {
-	public function getName(): string {
-		return 'public';
-	}
+	public const NAME = 'public';
 
 	/**
 	 * @return never

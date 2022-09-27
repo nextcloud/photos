@@ -263,7 +263,7 @@ export default {
 				}
 
 				// cancelled request, moving on...
-				logger.error('[SharedAlbumContent] Error fetching album files', error)
+				logger.error('[SharedAlbumContent] Error fetching album files', { error })
 			} finally {
 				this.loadingFiles = false
 				this.semaphore.release(semaphoreSymbol)

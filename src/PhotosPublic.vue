@@ -67,9 +67,9 @@ export default {
 				try {
 					const url = generateUrl('/apps/photos/service-worker.js', {}, { noRewrite: true })
 					const registration = await navigator.serviceWorker.register(url, { scope: generateUrl('/apps/photos') })
-					logger.debug('SW registered: ', registration)
+					logger.debug('SW registered: ', { registration })
 				} catch (error) {
-					logger.error('SW registration failed: ', error)
+					logger.error('SW registration failed: ', { error })
 				}
 			})
 		} else {

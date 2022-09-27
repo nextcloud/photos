@@ -173,9 +173,9 @@ export default {
 				}), {
 					scope: generateUrl('/apps/photos'),
 				}).then(registration => {
-					logger.debug('SW registered: ', registration)
+					logger.debug('SW registered: ', { registration })
 				}).catch(registrationError => {
-					logger.error('SW registration failed: ', registrationError)
+					logger.error('SW registration failed: ', { registrationError })
 				})
 
 			})

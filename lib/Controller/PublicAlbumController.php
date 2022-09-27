@@ -63,14 +63,13 @@ class PublicAlbumController extends Controller {
 	 * @NoCSRFRequired
 	 */
 	public function get(): TemplateResponse {
-		$this->eventDispatcher->dispatch(LoadSidebar::class, new LoadSidebar());
 		$this->eventDispatcher->dispatch(LoadViewer::class, new LoadViewer());
 
 		$this->initialState->provideInitialState('image-mimes', Application::IMAGE_MIMES);
 		$this->initialState->provideInitialState('video-mimes', Application::VIDEO_MIMES);
-		$this->initialState->provideInitialState('maps', $this->appManager->isEnabledForUser('maps') === true);
-		$this->initialState->provideInitialState('recognize', $this->appManager->isEnabledForUser('recognize') === true);
-		$this->initialState->provideInitialState('systemtags', $this->appManager->isEnabledForUser('systemtags') === true);
+		$this->initialState->provideInitialState('maps', false);
+		$this->initialState->provideInitialState('recognize', false);
+		$this->initialState->provideInitialState('systemtags', false);
 
 		// Provide user config
 		foreach (array_keys(UserConfigService::DEFAULT_CONFIGS) as $key) {

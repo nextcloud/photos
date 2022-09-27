@@ -110,7 +110,7 @@ export default {
 				}
 
 				// cancelled request, moving on...
-				logger.error('Error fetching files', error)
+				logger.error('Error fetching files', { error })
 				console.error(error)
 			} finally {
 				this.loadingFiles = false

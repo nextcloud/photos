@@ -42,6 +42,8 @@ class AlbumsHome implements ICollection {
 	protected Folder $userFolder;
 	protected UserConfigService $userConfigService;
 
+	public const NAME = 'albums';
+
 	/**
 	 * @var AlbumRoot[]
 	 */
@@ -70,7 +72,7 @@ class AlbumsHome implements ICollection {
 	}
 
 	public function getName(): string {
-		return 'albums';
+		return self::NAME;
 	}
 
 	/**
