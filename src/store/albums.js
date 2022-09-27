@@ -159,7 +159,7 @@ const actions = {
 					if (error.response.status !== 409) { // Already in the album.
 						context.commit('removeFilesFromAlbum', { albumName, fileIdsToRemove: [fileId] })
 
-						logger.error(t('photos', 'Failed to add {fileBaseName} to album {albumName}.', { fileBaseName: file.basename, albumName }), error)
+						logger.error(t('photos', 'Failed to add {fileBaseName} to album {albumName}.', { fileBaseName: file.basename, albumName }), { error })
 						showError(t('photos', 'Failed to add {fileBaseName} to album {albumName}.', { fileBaseName: file.basename, albumName }))
 					}
 				} finally {
@@ -193,7 +193,7 @@ const actions = {
 				} catch (error) {
 					context.commit('addFilesToAlbum', { albumName, fileIdsToAdd: [fileId] })
 
-					logger.error(t('photos', 'Failed to delete {fileBaseName}.', { fileBaseName: file.basename }), error)
+					logger.error(t('photos', 'Failed to delete {fileBaseName}.', { fileBaseName: file.basename }), { error })
 					showError(t('photos', 'Failed to delete {fileBaseName}.', { fileBaseName: file.basename }))
 				} finally {
 					semaphore.release(symbol)
@@ -216,7 +216,7 @@ const actions = {
 			context.commit('addAlbums', { albums: [album] })
 			return album
 		} catch (error) {
-			logger.error(t('photos', 'Failed to create {albumName}.', { albumName: album.basename }), error)
+			logger.error(t('photos', 'Failed to create {albumName}.', { albumName: album.basename }), { error })
 			showError(t('photos', 'Failed to create {albumName}.', { albumName: album.basename }))
 		}
 	},
@@ -244,7 +244,7 @@ const actions = {
 			return newAlbum
 		} catch (error) {
 			context.commit('removeAlbums', { albumNames: [newAlbumName] })
-			logger.error(t('photos', 'Failed to rename {currentAlbumName} to {newAlbumName}.', { currentAlbumName, newAlbumName }), error)
+			logger.error(t('photos', 'Failed to rename {currentAlbumName} to {newAlbumName}.', { currentAlbumName, newAlbumName }), { error })
 			showError(t('photos', 'Failed to rename {currentAlbumName} to {newAlbumName}.', { currentAlbumName, newAlbumName }))
 			return album
 		}
@@ -301,7 +301,7 @@ const actions = {
 			return updatedAlbum
 		} catch (error) {
 			context.commit('updateAlbum', { album })
-			logger.error(t('photos', 'Failed to update properties of {albumName} with {properties}.', { albumName, properties: JSON.stringify(properties) }), error)
+			logger.error(t('photos', 'Failed to update properties of {albumName} with {properties}.', { albumName, properties: JSON.stringify(properties) }), { error })
 			showError(t('photos', 'Failed to update properties of {albumName} with {properties}.', { albumName, properties: JSON.stringify(properties) }))
 			return album
 		}
@@ -320,7 +320,7 @@ const actions = {
 			await client.deleteFile(album.filename)
 			context.commit('removeAlbums', { albumNames: [albumName] })
 		} catch (error) {
-			logger.error(t('photos', 'Failed to delete {albumName}.', { albumName }), error)
+			logger.error(t('photos', 'Failed to delete {albumName}.', { albumName }), { error })
 			showError(t('photos', 'Failed to delete {albumName}.', { albumName }))
 		}
 	},

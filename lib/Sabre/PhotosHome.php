@@ -91,11 +91,11 @@ class PhotosHome implements ICollection {
 
 	public function getChild($name) {
 		switch ($name) {
-			case 'albums':
+			case AlbumsHome::NAME:
 				return new AlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->userConfigService);
-			case 'sharedalbums':
+			case SharedAlbumsHome::NAME:
 				return new SharedAlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->groupManager, $this->userConfigService);
-			case 'public':
+			case PublicAlbumsHome::NAME:
 				return new PublicAlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->userConfigService);
 		}
 
@@ -114,7 +114,7 @@ class PhotosHome implements ICollection {
 	}
 
 	public function childExists($name): bool {
-		return $name === 'albums' || $name === 'sharedalbums' || $name === 'public';
+		return $name === AlbumsHome::NAME || $name === SharedAlbumsHome::NAME || $name === PublicAlbumsHome::NAME;
 	}
 
 	public function getLastModified(): int {

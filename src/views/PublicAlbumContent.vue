@@ -223,7 +223,7 @@ export default {
 				}
 
 				this.errorFetchingAlbum = error
-				logger.error('[PublicAlbumContent] Error fetching album', error)
+				logger.error('[PublicAlbumContent] Error fetching album', { error })
 				showError(this.t('photos', 'Failed to fetch album.'))
 			} finally {
 				this.loadingAlbum = false
@@ -267,7 +267,7 @@ export default {
 				this.errorFetchingFiles = error
 
 				showError(this.t('photos', 'Failed to fetch albums list.'))
-				logger.error('[PublicAlbumContent] Error fetching album files', error)
+				logger.error('[PublicAlbumContent] Error fetching album files', { error })
 			} finally {
 				this.loadingFiles = false
 				this.semaphore.release(semaphoreSymbol)

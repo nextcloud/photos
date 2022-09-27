@@ -363,7 +363,7 @@ export default {
 					this.errorFetchingFiles = error
 				}
 
-				logger.error('[AlbumContent] Error fetching album files', error)
+				logger.error('[AlbumContent] Error fetching album files', { error })
 			} finally {
 				this.loadingFiles = false
 				this.semaphore.release(semaphoreSymbol)

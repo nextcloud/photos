@@ -34,6 +34,8 @@ use OCP\IUser;
 class SharedAlbumsHome extends AlbumsHome {
 	private IGroupManager $groupManager;
 
+	public const NAME = 'sharedalbums';
+
 	public function __construct(
 		array $principalInfo,
 		AlbumMapper $albumMapper,
@@ -51,10 +53,6 @@ class SharedAlbumsHome extends AlbumsHome {
 		);
 
 		$this->groupManager = $groupManager;
-	}
-
-	public function getName(): string {
-		return 'sharedalbums';
 	}
 
 	/**

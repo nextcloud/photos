@@ -40,33 +40,42 @@ import { genFileInfo } from '../utils/fileUtils.js'
  */
 
 /**
+ * @param {string} extraProps - Extra properties to add to the DAV request.
+ * @return {string}
+ */
+function getDavRequest(extraProps = '') {
+	return `<?xml version="1.0"?>
+			<d:propfind xmlns:d="DAV:"
+				xmlns:oc="http://owncloud.org/ns"
+				xmlns:nc="http://nextcloud.org/ns"
+				xmlns:ocs="http://open-collaboration-services.org/ns">
+				<d:prop>
+					<nc:last-photo />
+					<nc:nbItems />
+					<nc:location />
+					<nc:dateRange />
+					<nc:collaborators />
+					${extraProps}
+				</d:prop>
+			</d:propfind>`
+}
+
+/**
  *
  * @param {string} path - Albums' root path.
  * @param {import('webdav').StatOptions} options - Options to forward to the webdav client.
+ * @param {string} extraProps - Extra properties to add to the DAV request.
  * @return {Promise<Album|null>}
  */
 export async function fetchAlbum(path, options, extraProps = '') {
 	try {
 		const response = await client.stat(path, {
-			data: `<?xml version="1.0"?>
-							<d:propfind xmlns:d="DAV:"
-								xmlns:oc="http://owncloud.org/ns"
-								xmlns:nc="http://nextcloud.org/ns"
-								xmlns:ocs="http://open-collaboration-services.org/ns">
-								<d:prop>
-									<nc:last-photo />
-									<nc:nbItems />
-									<nc:location />
-									<nc:dateRange />
-									<nc:collaborators />
-									${extraProps}
-								</d:prop>
-							</d:propfind>`,
+			data: getDavRequest(extraProps),
 			details: true,
 			...options,
 		})
 
-		logger.debug('[Albums] Fetched an album: ', response.data)
+		logger.debug('[Albums] Fetched an album: ', { data: response.data })
 
 		return formatAlbum(response.data)
 	} catch (error) {
@@ -87,24 +96,12 @@ export async function fetchAlbum(path, options, extraProps = '') {
 export async function fetchAlbums(path, options) {
 	try {
 		const response = await client.getDirectoryContents(path, {
-			data: `<?xml version="1.0"?>
-							<d:propfind xmlns:d="DAV:"
-								xmlns:oc="http://owncloud.org/ns"
-								xmlns:nc="http://nextcloud.org/ns"
-								xmlns:ocs="http://open-collaboration-services.org/ns">
-								<d:prop>
-									<nc:last-photo />
-									<nc:nbItems />
-									<nc:location />
-									<nc:dateRange />
-									<nc:collaborators />
-								</d:prop>
-							</d:propfind>`,
+			data: getDavRequest(),
 			details: true,
 			...options,
 		})
 
-		logger.debug(`[Albums] Fetched ${response.data.length} albums: `, response.data)
+		logger.debug(`[Albums] Fetched ${response.data.length} albums: `, { data: response.data })
 
 		return response.data
 			.filter(album => album.filename !== path)
@@ -183,7 +180,7 @@ export async function fetchAlbumContent(path, options) {
 			return []
 		}
 
-		logger.error('Error fetching album files', error)
+		logger.error('Error fetching album files', { error })
 		console.error(error)
 
 		throw error
