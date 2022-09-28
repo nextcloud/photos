@@ -60,17 +60,9 @@ class UserConfigService {
 		if (!in_array($key, array_keys(self::DEFAULT_CONFIGS))) {
 			throw new Exception('Unknown user config key');
 		}
+
 		$default = self::DEFAULT_CONFIGS[$key];
 		$value = $this->config->getUserValue($userId, Application::APP_ID, $key, $default);
-
-		// If the config is a path, make sure it exists
-		if (str_starts_with($default, '/')) {
-			$userFolder = $this->rootFolder->getUserFolder($userId);
-			// If the folder does not exists, create it
-			if (!$userFolder->nodeExists($value)) {
-				$userFolder->newFolder($value);
-			}
-		}
 
 		return $value;
 	}
