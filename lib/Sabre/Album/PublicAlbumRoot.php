@@ -47,38 +47,11 @@ class PublicAlbumRoot extends AlbumRoot {
 		throw new Forbidden('Not allowed to copy into a public album');
 	}
 
-	/**
-	 * We cannot create files in an Album
-	 * We add the file to the default Photos folder and then link it there.
-	 *
-	 * @param string $name
-	 * @param null|resource|string $data
-	 * @return null
-	 */
-	public function createFile($name, $data = null) {
-		// TODO: implement public album upload
-		throw new Forbidden('Not allowed to create a file in a public album');
-
-		try {
-			$albumOwner = $this->album->getAlbum()->getUserId();
-			$photosLocation = $this->userConfigService->getConfigForUser($albumOwner, 'photosLocation');
-			$photosFolder = $this->rootFolder->getUserFolder($albumOwner)->get($photosLocation);
-			if (!($photosFolder instanceof Folder)) {
-				throw new Conflict('The destination exists and is not a folder');
-			}
-
-			// Check for conflict and rename the file accordingly
-			$newName = \basename(\OC_Helper::buildNotExistingFileName($photosLocation, $name));
-
-			$node = $photosFolder->newFile($newName, $data);
-			$this->addFile($node->getId(), $node->getOwner()->getUID());
-			// Cheating with header because we are using fileID-fileName
-			// https://github.com/nextcloud/server/blob/af29b978078ffd9169a9bd9146feccbb7974c900/apps/dav/lib/Connector/Sabre/FilesPlugin.php#L564-L585
-			\header('OC-FileId: ' . $node->getId());
-			return '"' . $node->getEtag() . '"';
-		} catch (\Exception $e) {
-			throw new Forbidden('Could not create file');
-		}
+	protected function getPhotosLocationInfo() {
+		$albumOwner = $this->album->getAlbum()->getUserId();
+		$photosLocation = $this->userConfigService->getConfigForUser($albumOwner, 'photosLocation');
+		$userFolder = $this->rootFolder->getUserFolder($albumOwner);
+		return [$photosLocation, $userFolder];
 	}
 
 	protected function addFile(int $sourceId, string $ownerUID): bool {

@@ -80,6 +80,12 @@ class AlbumRoot implements ICollection, ICopyTarget {
 		$this->albumMapper->rename($this->album->getAlbum()->getId(), $name);
 	}
 
+	protected function getPhotosLocationInfo() {
+		$photosLocation = $this->userConfigService->getUserConfig('photosLocation');
+		$userFolder = $this->rootFolder->getUserFolder($this->user->getUID());
+		return [$photosLocation, $userFolder];
+	}
+
 	/**
 	 * We cannot create files in an Album
 	 * We add the file to the default Photos folder and then link it there.
@@ -90,13 +96,13 @@ class AlbumRoot implements ICollection, ICopyTarget {
 	 */
 	public function createFile($name, $data = null) {
 		try {
-			$photosLocation = $this->userConfigService->getUserConfig('photosLocation');
+			[$photosLocation, $userFolder] = $this->getPhotosLocationInfo();
 
 			try {
-				$photosFolder = $this->userFolder->get($photosLocation);
+				$photosFolder = $userFolder->get($photosLocation);
 			} catch (NotFoundException $e) {
 				// If the folder does not exists, create it
-				$photosFolder = $this->userFolder->newFolder($photosLocation);
+				$photosFolder = $userFolder->newFolder($photosLocation);
 			}
 
 			// If the node is not a folder, we throw

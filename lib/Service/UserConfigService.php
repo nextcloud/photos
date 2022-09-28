@@ -56,6 +56,7 @@ class UserConfigService {
 		if (!in_array($key, array_keys(self::DEFAULT_CONFIGS))) {
 			throw new Exception('Unknown user config key');
 		}
+
 		$default = self::DEFAULT_CONFIGS[$key];
 		$value = $this->config->getUserValue($userId, Application::APP_ID, $key, $default);
 
