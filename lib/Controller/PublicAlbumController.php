@@ -71,11 +71,6 @@ class PublicAlbumController extends Controller {
 		$this->initialState->provideInitialState('recognize', false);
 		$this->initialState->provideInitialState('systemtags', false);
 
-		// Provide user config
-		foreach (array_keys(UserConfigService::DEFAULT_CONFIGS) as $key) {
-			$this->initialState->provideInitialState($key, $this->userConfig->getUserConfig($key));
-		}
-
 		Util::addScript(Application::APP_ID, 'photos-public');
 		Util::addStyle(Application::APP_ID, 'icons');
 
