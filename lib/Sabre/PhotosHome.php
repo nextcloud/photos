@@ -26,10 +26,9 @@ namespace OCA\Photos\Sabre;
 use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Sabre\Album\AlbumsHome;
 use OCA\Photos\Sabre\Album\SharedAlbumsHome;
-use OCA\Photos\Sabre\Album\PublicAlbumsHome;
 use OCA\Photos\Service\UserConfigService;
 use OCP\Files\IRootFolder;
-use OCP\IUser;
+use OCP\IUserManager;
 use OCP\IGroupManager;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;
@@ -38,23 +37,26 @@ use Sabre\DAV\ICollection;
 class PhotosHome implements ICollection {
 	private AlbumMapper $albumMapper;
 	private array $principalInfo;
-	private IUser $user;
+	private string $userId;
 	private IRootFolder $rootFolder;
+	private IUserManager $userManager;
 	private IGroupManager $groupManager;
 	private UserConfigService $userConfigService;
 
 	public function __construct(
 		array $principalInfo,
 		AlbumMapper $albumMapper,
-		IUser $user,
+		string $userId,
 		IRootFolder $rootFolder,
+		IUserManager $userManager,
 		IGroupManager $groupManager,
 		UserConfigService $userConfigService
 	) {
 		$this->principalInfo = $principalInfo;
 		$this->albumMapper = $albumMapper;
-		$this->user = $user;
+		$this->userId = $userId;
 		$this->rootFolder = $rootFolder;
+		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
 		$this->userConfigService = $userConfigService;
 	}
@@ -92,11 +94,9 @@ class PhotosHome implements ICollection {
 	public function getChild($name) {
 		switch ($name) {
 			case AlbumsHome::NAME:
-				return new AlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->userConfigService);
+				return new AlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userConfigService);
 			case SharedAlbumsHome::NAME:
-				return new SharedAlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->groupManager, $this->userConfigService);
-			case PublicAlbumsHome::NAME:
-				return new PublicAlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->userConfigService);
+				return new SharedAlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userManager, $this->groupManager, $this->userConfigService);
 		}
 
 		throw new NotFound();
@@ -107,14 +107,13 @@ class PhotosHome implements ICollection {
 	 */
 	public function getChildren(): array {
 		return [
-			new AlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->userConfigService),
-			new SharedAlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->groupManager, $this->userConfigService),
-			new PublicAlbumsHome($this->principalInfo, $this->albumMapper, $this->user, $this->rootFolder, $this->userConfigService),
+			new AlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userConfigService),
+			new SharedAlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userManager, $this->groupManager, $this->userConfigService),
 		];
 	}
 
 	public function childExists($name): bool {
-		return $name === AlbumsHome::NAME || $name === SharedAlbumsHome::NAME || $name === PublicAlbumsHome::NAME;
+		return $name === AlbumsHome::NAME || $name === SharedAlbumsHome::NAME;
 	}
 
 	public function getLastModified(): int {

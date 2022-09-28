@@ -20,4 +20,10 @@
       <code>SearchQuery</code>
     </UndefinedClass>
   </file>
+  <file src="lib/Controller/PublicAlbumController.php">
+    <UndefinedClass occurrences="10">
+      <code>LoadViewer</code>
+      <code>LoadViewer</code>
+    </UndefinedClass>
+  </file>
 </files>

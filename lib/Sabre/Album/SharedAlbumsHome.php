@@ -26,12 +26,13 @@ namespace OCA\Photos\Sabre\Album;
 use OCA\Photos\Album\AlbumWithFiles;
 use OCA\Photos\Service\UserConfigService;
 use Sabre\DAV\Exception\Forbidden;
+use OCP\IUserManager;
 use OCP\IGroupManager;
 use OCA\Photos\Album\AlbumMapper;
 use OCP\Files\IRootFolder;
-use OCP\IUser;
 
 class SharedAlbumsHome extends AlbumsHome {
+	private IUserManager $userManager;
 	private IGroupManager $groupManager;
 
 	public const NAME = 'sharedalbums';
@@ -39,19 +40,21 @@ class SharedAlbumsHome extends AlbumsHome {
 	public function __construct(
 		array $principalInfo,
 		AlbumMapper $albumMapper,
-		IUser $user,
+		string $userId,
 		IRootFolder $rootFolder,
+		IUserManager $userManager,
 		IGroupManager $groupManager,
 		UserConfigService $userConfigService
 	) {
 		parent::__construct(
 			$principalInfo,
 			$albumMapper,
-			$user,
+			$userId,
 			$rootFolder,
 			$userConfigService
 		);
 
+		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
 	}
 
@@ -67,17 +70,18 @@ class SharedAlbumsHome extends AlbumsHome {
 	 */
 	public function getChildren(): array {
 		if ($this->children === null) {
-			$albums = $this->albumMapper->getSharedAlbumsForCollaboratorWithFiles($this->user->getUID(), AlbumMapper::TYPE_USER);
+			$albums = $this->albumMapper->getSharedAlbumsForCollaboratorWithFiles($this->userId, AlbumMapper::TYPE_USER);
 
-			$userGroups = $this->groupManager->getUserGroupIds($this->user);
+			$user = $this->userManager->get($this->userId);
+			$userGroups = $this->groupManager->getUserGroupIds($user);
 			foreach ($userGroups as $groupId) {
 				$albumsForGroup = $this->albumMapper->getSharedAlbumsForCollaboratorWithFiles($groupId, AlbumMapper::TYPE_GROUP);
 				$albumsForGroup = array_udiff($albumsForGroup, $albums, fn ($a, $b) => $a->getAlbum()->getId() - $b->getAlbum()->getId());
 				$albums = array_merge($albums, $albumsForGroup);
 			}
 
-			$this->children = array_map(function (AlbumWithFiles $folder) {
-				return new SharedAlbumRoot($this->albumMapper, $folder, $this->rootFolder, $this->userFolder, $this->user, $this->userConfigService);
+			$this->children = array_map(function (AlbumWithFiles $album) {
+				return new SharedAlbumRoot($this->albumMapper, $album, $this->rootFolder, $this->userId, $this->userConfigService);
 			}, $albums);
 		}
 

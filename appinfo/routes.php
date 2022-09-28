@@ -46,10 +46,7 @@ return [
 				'path' => '',
 			]
 		],
-		[ 'name' => 'publicAlbum#get', 'url' => '/public/{ownerId}/{token}', 'verb' => 'GET',
-			'requirements' => [
-				'ownerId' => '.*',
-			],
+		[ 'name' => 'publicAlbum#get', 'url' => '/public/{token}', 'verb' => 'GET',
 			'requirements' => [
 				'token' => '.*',
 			],
@@ -127,6 +124,15 @@ return [
 		[
 			'name' => 'preview#index',
 			'url' => '/api/v1/preview/{fileId}',
+			'verb' => 'GET',
+			'requirements' => [
+				'fileId' => '.*',
+			]
+		],
+
+		[
+			'name' => 'publicPreview#index',
+			'url' => '/api/v1/publicPreview/{fileId}',
 			'verb' => 'GET',
 			'requirements' => [
 				'fileId' => '.*',

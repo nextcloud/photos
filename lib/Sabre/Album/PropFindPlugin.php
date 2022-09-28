@@ -28,13 +28,13 @@ use OCA\DAV\Connector\Sabre\FilesPlugin;
 use OCA\Photos\Album\AlbumMapper;
 use OCP\IConfig;
 use OCP\IPreview;
+use OCP\Files\NotFoundException;
 use Sabre\DAV\INode;
 use Sabre\DAV\PropFind;
 use Sabre\DAV\PropPatch;
 use Sabre\DAV\Server;
 use Sabre\DAV\ServerPlugin;
 use Sabre\DAV\Tree;
-use OCP\Files\NotFoundException;
 
 class PropFindPlugin extends ServerPlugin {
 	public const ORIGINAL_NAME_PROPERTYNAME = '{http://nextcloud.org/ns}original-name';
@@ -67,6 +67,19 @@ class PropFindPlugin extends ServerPlugin {
 		$this->albumMapper = $albumMapper;
 		$this->metadataEnabled = $this->config->getSystemValueBool('enable_file_metadata', true);
 	}
+
+	/**
+	 * Returns a plugin name.
+	 *
+	 * Using this name other plugins will be able to access other plugins
+	 * using DAV\Server::getPlugin
+	 *
+	 * @return string
+	 */
+	public function getPluginName() {
+		return 'photosDavPlugin';
+	}
+
 
 	/**
 	 * @return void
