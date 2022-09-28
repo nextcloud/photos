@@ -24,60 +24,64 @@ declare(strict_types=1);
 namespace OCA\Photos\Sabre;
 
 use OCA\Photos\Album\AlbumMapper;
+use OCA\Photos\Sabre\Album\PublicAlbumRoot;
 use OCA\Photos\Service\UserConfigService;
 use OCP\Files\IRootFolder;
-use OCP\IUserSession;
 use Sabre\DAVACL\AbstractPrincipalCollection;
 use Sabre\DAVACL\PrincipalBackend;
-use OCP\IUserManager;
-use OCP\IGroupManager;
+use Sabre\DAV\Exception\NotFound;
 
-class RootCollection extends AbstractPrincipalCollection {
-	private AlbumMapper $folderMapper;
-	private IUserSession $userSession;
+class PublicRootCollection extends AbstractPrincipalCollection {
+	private AlbumMapper $albumMapper;
 	private IRootFolder $rootFolder;
-	private IUserManager $userManager;
-	private IGroupManager $groupManager;
 	private UserConfigService $userConfigService;
 
 	public function __construct(
-		AlbumMapper $folderMapper,
-		IUserSession $userSession,
+		AlbumMapper $albumMapper,
 		IRootFolder $rootFolder,
 		PrincipalBackend\BackendInterface $principalBackend,
-		IUserManager $userManager,
-		IGroupManager $groupManager,
 		UserConfigService $userConfigService
 	) {
-		parent::__construct($principalBackend, 'principals/users');
+		parent::__construct($principalBackend, 'principals/token');
 
-		$this->folderMapper = $folderMapper;
-		$this->userSession = $userSession;
+		$this->albumMapper = $albumMapper;
 		$this->rootFolder = $rootFolder;
-		$this->userManager = $userManager;
-		$this->groupManager = $groupManager;
 		$this->userConfigService = $userConfigService;
 	}
 
-	/**
-	 * This method returns a node for a principal.
-	 *
-	 * The passed array contains principal information, and is guaranteed to
-	 * at least contain a uri item. Other properties may or may not be
-	 * supplied by the authentication backend.
-	 *
-	 * @param array $principalInfo
-	 */
-	public function getChildForPrincipal(array $principalInfo): PhotosHome {
-		[, $name] = \Sabre\Uri\split($principalInfo['uri']);
-		$user = $this->userSession->getUser();
-		if (is_null($user) || $name !== $user->getUID()) {
-			throw new \Sabre\DAV\Exception\Forbidden();
-		}
-		return new PhotosHome($principalInfo, $this->folderMapper, $name, $this->rootFolder, $this->userManager, $this->groupManager, $this->userConfigService);
+	public function getName(): string {
+		return 'photospublic';
 	}
 
-	public function getName(): string {
-		return 'photos';
+	/**
+	 * Child are retrieved directly by getChild.
+	 * This should never be called.
+	 * @param array $principalInfo
+	 */
+	public function getChildForPrincipal(array $principalInfo): PublicAlbumRoot {
+		throw new \Sabre\DAV\Exception\Forbidden();
+	}
+
+	/**
+	 * Returns a child object, by its token.
+	 *
+	 * @param string $token
+	 *
+	 * @throws NotFound
+	 *
+	 * @return DAV\INode
+	 */
+	public function getChild($token) {
+		if (is_null($token)) {
+			throw new \Sabre\DAV\Exception\Forbidden();
+		}
+
+		$albums = $this->albumMapper->getSharedAlbumsForCollaboratorWithFiles($token, AlbumMapper::TYPE_LINK);
+
+		if (count($albums) !== 1) {
+			throw new NotFound("Unable to find public album");
+		}
+
+		return new PublicAlbumRoot($this->albumMapper, $albums[0], $this->rootFolder, $albums[0]->getAlbum()->getUserId(), $this->userConfigService);
 	}
 }

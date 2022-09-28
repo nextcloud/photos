@@ -25,36 +25,27 @@
 namespace OCA\Photos\Controller;
 
 use OCP\AppFramework\Controller;
-use OCA\Files\Event\LoadSidebar;
 use OCA\Photos\AppInfo\Application;
-use OCA\Photos\Service\UserConfigService;
 use OCA\Viewer\Event\LoadViewer;
-use OCP\App\IAppManager;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
-use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Http\Template\PublicTemplateResponse;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\IRequest;
 use OCP\Util;
 
 class PublicAlbumController extends Controller {
-	private IAppManager $appManager;
 	private IEventDispatcher $eventDispatcher;
-	private UserConfigService $userConfig;
 	private IInitialState $initialState;
 
 	public function __construct(
 		IRequest $request,
-		IAppManager $appManager,
 		IEventDispatcher $eventDispatcher,
-		UserConfigService $userConfig,
-		IInitialState $initialState,
+		IInitialState $initialState
 	) {
 		parent::__construct(Application::APP_ID, $request);
 
-		$this->appManager = $appManager;
 		$this->eventDispatcher = $eventDispatcher;
-		$this->userConfig = $userConfig;
 		$this->initialState = $initialState;
 	}
 
@@ -62,7 +53,7 @@ class PublicAlbumController extends Controller {
 	 * @PublicPage
 	 * @NoCSRFRequired
 	 */
-	public function get(): TemplateResponse {
+	public function get(): PublicTemplateResponse {
 		$this->eventDispatcher->dispatch(LoadViewer::class, new LoadViewer());
 
 		$this->initialState->provideInitialState('image-mimes', Application::IMAGE_MIMES);
@@ -74,7 +65,7 @@ class PublicAlbumController extends Controller {
 		Util::addScript(Application::APP_ID, 'photos-public');
 		Util::addStyle(Application::APP_ID, 'icons');
 
-		$response = new TemplateResponse(Application::APP_ID, 'main');
+		$response = new PublicTemplateResponse(Application::APP_ID, 'public');
 
 		$policy = new ContentSecurityPolicy();
 		$policy->addAllowedWorkerSrcDomain("'self'");

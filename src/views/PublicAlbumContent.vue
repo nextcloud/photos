@@ -33,7 +33,7 @@
 				slot="header"
 				slot-scope="{selectedFileIds}"
 				:loading="loadingAlbum || loadingFiles"
-				:params="{ userId, token }"
+				:params="{ token }"
 				path="/"
 				:root-title="albumOriginalName"
 				:title="albumOriginalName"
@@ -93,6 +93,8 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { createClient, getPatcher } from 'webdav'
+
 import MapMarker from 'vue-material-design-icons/MapMarker'
 import Plus from 'vue-material-design-icons/Plus'
 import ImagePlus from 'vue-material-design-icons/ImagePlus'
@@ -100,8 +102,10 @@ import Close from 'vue-material-design-icons/Close'
 // import Download from 'vue-material-design-icons/Download'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple'
 
-import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, /** NcActionSeparator, */ isMobile } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcButton, NcEmptyContent, /** NcActionSeparator, */ isMobile } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
+import axios from '@nextcloud/axios'
+import { generateRemoteUrl } from '@nextcloud/router'
 
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
@@ -110,6 +114,16 @@ import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
 import { fetchAlbum, fetchAlbumContent } from '../services/Albums.js'
 import logger from '../services/logger.js'
+
+const publicRootPath = 'dav'
+
+// force our axios
+const patcher = getPatcher()
+patcher.patch('request', axios)
+
+// init webdav client on default dav endpoint
+const remote = generateRemoteUrl(publicRootPath)
+const publicRemote = remote
 
 export default {
 	name: 'PublicAlbumContent',
@@ -137,10 +151,6 @@ export default {
 	],
 
 	props: {
-		userId: {
-			type: String,
-			required: true,
-		},
 		token: {
 			type: String,
 			required: true,
@@ -155,6 +165,10 @@ export default {
 			loadingCount: 0,
 			loadingAddFilesToAlbum: false,
 			albumOriginalName: '',
+			publicClient: createClient(publicRemote, {
+				username: this.token,
+				password: null,
+			}),
 		}
 	},
 
@@ -210,9 +224,10 @@ export default {
 				this.errorFetchingAlbum = null
 
 				const album = await fetchAlbum(
-					`/photos/${this.userId}/public/${this.token}`,
+					`/photospublic/${this.token}`,
 					this.abortController.signal,
 					'<nc:original-name />',
+					this.publicClient,
 				)
 				this.addPublicAlbums({ collections: [album] })
 				this.albumOriginalName = album.originalName
@@ -244,8 +259,9 @@ export default {
 				this.semaphoreSymbol = semaphoreSymbol
 
 				const fetchedFiles = await fetchAlbumContent(
-					`/photos/${this.userId}/public/${this.token}`,
+					`/photospublic/${this.token}`,
 					this.abortController.signal,
+					this.publicClient,
 				)
 
 				const fileIds = fetchedFiles

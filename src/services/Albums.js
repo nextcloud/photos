@@ -23,7 +23,7 @@
 import moment from '@nextcloud/moment'
 import { translate } from '@nextcloud/l10n'
 
-import client from '../services/DavClient.js'
+import defaultClient from '../services/DavClient.js'
 import logger from '../services/logger.js'
 import DavRequest from '../services/DavRequest.js'
 import { genFileInfo } from '../utils/fileUtils.js'
@@ -65,9 +65,10 @@ function getDavRequest(extraProps = '') {
  * @param {string} path - Albums' root path.
  * @param {import('webdav').StatOptions} options - Options to forward to the webdav client.
  * @param {string} extraProps - Extra properties to add to the DAV request.
+ * @param {import('webdav').WebDAVClient} client - The DAV client to use.
  * @return {Promise<Album|null>}
  */
-export async function fetchAlbum(path, options, extraProps = '') {
+export async function fetchAlbum(path, options, extraProps = '', client = defaultClient) {
 	try {
 		const response = await client.stat(path, {
 			data: getDavRequest(extraProps),
@@ -91,12 +92,14 @@ export async function fetchAlbum(path, options, extraProps = '') {
  *
  * @param {string} path - Albums' root path.
  * @param {import('webdav').StatOptions} options - Options to forward to the webdav client.
+ * @param {string} extraProps - Extra properties to add to the DAV request.
+ * @param {import('webdav').WebDAVClient} client - The DAV client to use.
  * @return {Promise<Album[]>}
  */
-export async function fetchAlbums(path, options) {
+export async function fetchAlbums(path, options, extraProps = '', client = defaultClient) {
 	try {
 		const response = await client.getDirectoryContents(path, {
-			data: getDavRequest(),
+			data: getDavRequest(extraProps),
 			details: true,
 			...options,
 		})
@@ -158,9 +161,10 @@ function formatAlbum(album) {
  *
  * @param {string} path - Albums' root path.
  * @param {import('webdav').StatOptions} options - Options to forward to the webdav client.
+ * @param {import('webdav').WebDAVClient} client - The DAV client to use.
  * @return {Promise<Array>}
  */
-export async function fetchAlbumContent(path, options) {
+export async function fetchAlbumContent(path, options, client = defaultClient) {
 	try {
 		const response = await client.getDirectoryContents(path, {
 			data: DavRequest,

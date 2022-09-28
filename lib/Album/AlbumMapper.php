@@ -362,7 +362,7 @@ class AlbumMapper {
 					}
 					break;
 				case self::TYPE_LINK:
-					$collaborator['id'] = $this->random->generate(15, ISecureRandom::CHAR_UPPER . ISecureRandom::CHAR_LOWER . ISecureRandom::CHAR_DIGITS);
+					$collaborator['id'] = $this->random->generate(32, ISecureRandom::CHAR_UPPER . ISecureRandom::CHAR_LOWER . ISecureRandom::CHAR_DIGITS);
 					break;
 				default:
 					throw new \Exception('Invalid collaborator type: ' . $collaborator['type']);
@@ -420,7 +420,13 @@ class AlbumMapper {
 			}
 
 			if (!isset($albumsById[$albumId])) {
-				$albumsById[$albumId] = new AlbumInfo($albumId, $row['album_user'], $row['album_name'].' ('.$row['album_user'].')', $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
+				$albumName = $row['album_name'];
+				// Suffix album name with the album owner to prevent duplicates.
+				// Not done for public link as it would like owner's uid.
+				if ($collaboratorType !== self::TYPE_LINK) {
+					$row['album_name'].' ('.$row['album_user'].')';
+				}
+				$albumsById[$albumId] = new AlbumInfo($albumId, $row['album_user'], $albumName, $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
 			}
 		}
 
@@ -452,7 +458,7 @@ class AlbumMapper {
 	 * @param int $fileId
 	 * @return AlbumInfo[]
 	 */
-	public function getAlbumForCollaboratorIdAndFileId(string $collaboratorId, int $collaboratorType, int $fileId): array {
+	public function getAlbumsForCollaboratorIdAndFileId(string $collaboratorId, int $collaboratorType, int $fileId): array {
 		$query = $this->connection->getQueryBuilder();
 		$rows = $query
 			->select("a.album_id", "name", "user", "location", "created", "last_added_photo")

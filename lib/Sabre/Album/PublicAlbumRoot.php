@@ -24,8 +24,6 @@ declare(strict_types=1);
 namespace OCA\Photos\Sabre\Album;
 
 use Sabre\DAV\Exception\Forbidden;
-use Sabre\DAV\Exception\Conflict;
-use OCP\Files\Folder;
 use Sabre\DAV\INode;
 
 class PublicAlbumRoot extends AlbumRoot {
