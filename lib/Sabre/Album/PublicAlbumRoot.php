@@ -53,15 +53,7 @@ class PublicAlbumRoot extends AlbumRoot {
 	}
 
 	protected function addFile(int $sourceId, string $ownerUID): bool {
-		// TODO: implement public album upload
 		throw new Forbidden('Not allowed to create a file in a public album');
-
-		if (in_array($sourceId, $this->album->getFileIds())) {
-			throw new Conflict("File $sourceId is already in the folder");
-		}
-
-		$this->albumMapper->addFile($this->album->getAlbum()->getId(), $sourceId, $ownerUID);
-		return true;
 	}
 
 	// Do not reveal collaborators for public albums.
