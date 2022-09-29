@@ -38,11 +38,6 @@
 				:root-title="albumOriginalName"
 				:title="albumOriginalName"
 				@refresh="fetchAlbumContent">
-				<!-- TODO: enable upload on public albums -->
-				<!-- <UploadPicker :accept="allowedMimes"
-				:destination="folder.filename"
-				:multiple="true"
-				@uploaded="onUpload" /> -->
 				<div v-if="album.location !== ''" slot="subtitle" class="album__location">
 					<MapMarker />{{ album.location }}
 				</div>
