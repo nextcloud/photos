@@ -115,6 +115,8 @@ OC.L10N.register(
     "Failed to delete {faceName}." : "Ezin izan da  {faceName} ezabatu.",
     "Failed to delete {fileId}." : "{fileId} ezabatzeak huts egin du.",
     "Failed to delete {fileName}." : "{fileName} ezabatzeak huts egin du.",
+    "Failed to set favorite state for {fileId}." : "Ezin izan da ezarri gogoko egoera {fileId}rako.",
+    "Failed to set favorite state for {fileName}." : "Ezin izan da ezarri gogoko egoera {fileName}rako.",
     "Your photos" : "Zure argazkiak",
     "Your videos" : "Zure bideoak",
     "Your folders" : "Zure karpetak",
