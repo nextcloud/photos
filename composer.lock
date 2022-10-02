@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "22b98c2b6a7958eeb5d98c1135aa761d",
+    "content-hash": "39b83fe892d4db36f7482fe28df1f30a",
     "packages": [],
     "packages-dev": [
         {
@@ -172,50 +172,6 @@
                 }
             ],
             "time": "2021-03-30T17:13:30+00:00"
-        },
-        {
-            "name": "christophwurst/nextcloud",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ChristophWurst/nextcloud_composer.git",
-                "reference": "ddec3f878b3b71d4f763865dacc95a1d058e5d66"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ChristophWurst/nextcloud_composer/zipball/ddec3f878b3b71d4f763865dacc95a1d058e5d66",
-                "reference": "ddec3f878b3b71d4f763865dacc95a1d058e5d66",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.4 || ~8.0 || ~8.1",
-                "psr/container": "^1.1.1",
-                "psr/event-dispatcher": "^1.0",
-                "psr/log": "^1.1"
-            },
-            "default-branch": true,
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "25.0.0-dev"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "AGPL-3.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Christoph Wurst",
-                    "email": "christoph@winzerhof-wurst.at"
-                }
-            ],
-            "description": "Composer package containing Nextcloud's public API (classes, interfaces)",
-            "support": {
-                "issues": "https://github.com/ChristophWurst/nextcloud_composer/issues",
-                "source": "https://github.com/ChristophWurst/nextcloud_composer/tree/master"
-            },
-            "time": "2022-08-22T09:23:37+00:00"
         },
         {
             "name": "composer/package-versions-deprecated",
@@ -1111,12 +1067,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextcloud-deps/ocp.git",
-                "reference": "f79ac43d0422211b35542856338d808bc94a116b"
+                "reference": "20476bc52a77f41fbebdb95ecdc6dbe290263305"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/f79ac43d0422211b35542856338d808bc94a116b",
-                "reference": "f79ac43d0422211b35542856338d808bc94a116b",
+                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/20476bc52a77f41fbebdb95ecdc6dbe290263305",
+                "reference": "20476bc52a77f41fbebdb95ecdc6dbe290263305",
                 "shasum": ""
             },
             "require": {
@@ -1145,7 +1101,7 @@
             "support": {
                 "source": "https://github.com/nextcloud-deps/ocp/tree/stable25"
             },
-            "time": "2022-09-22T12:39:39+00:00"
+            "time": "2022-10-01T01:06:18+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -5209,7 +5165,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "christophwurst/nextcloud": 20,
         "nextcloud/ocp": 20
     },
     "prefer-stable": false,
