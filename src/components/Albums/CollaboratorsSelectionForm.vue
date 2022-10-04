@@ -353,7 +353,6 @@ export default {
 			padding: 8px;
 			height: 500px;
 			overflow: scroll;
-			
 			&__result {
 				padding: 8px;
 				border-radius: 100px;
