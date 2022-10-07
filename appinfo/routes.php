@@ -38,6 +38,14 @@ return [
 				'path' => '',
 			]
 		],
+		['name' => 'page#index', 'url' => '/search/{query}', 'verb' => 'GET', 'postfix' => 'search',
+			'requirements' => [
+				'path' => '.*',
+			],
+			'defaults' => [
+				'path' => '',
+			]
+		],
 		['name' => 'page#index', 'url' => '/sharedalbums/{path}', 'verb' => 'GET', 'postfix' => 'sharedalbums',
 			'requirements' => [
 				'path' => '.*',

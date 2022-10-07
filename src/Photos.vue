@@ -97,6 +97,7 @@
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
 import { loadState } from '@nextcloud/initial-state'
+import { subscribe } from '@nextcloud/event-bus'
 
 import Camera from 'vue-material-design-icons/Camera.vue'
 import ImageIcon from 'vue-material-design-icons/Image.vue'
@@ -122,6 +123,7 @@ import videoplaceholder from './assets/video.svg'
 import areTagsInstalled from './services/AreTagsInstalled.js'
 import isMapsInstalled from './services/IsMapsInstalled.js'
 import isRecognizeInstalled from './services/IsRecognizeInstalled.js'
+import getSystemTags from './services/SystemTags'
 
 export default {
 	name: 'Photos',
@@ -184,6 +186,21 @@ export default {
 
 		const files = loadState('photos', 'nomedia-paths', [])
 		this.$store.dispatch('setNomediaPaths', files)
+
+		subscribe('nextcloud:unified-search.search', ({ query }) => {
+			this.$router.push({ name: 'search', params: { query } })
+		})
+		subscribe('nextcloud:unified-search.reset', () => {
+			this.$router.push({ name: 'timeline' })
+		})
+
+		try {
+			// fetch tags so they are available for searching
+			const tags = await getSystemTags()
+			this.$store.dispatch('updateTags', tags)
+		} catch (error) {
+			console.error(error)
+		}
 	},
 
 	beforeDestroy() {

@@ -207,6 +207,15 @@ const router = new Router({
 				faceName: route.params.faceName,
 			}),
 		},
+		{
+			path: '/search/:query',
+			name: 'search',
+			component: Timeline,
+			props: route => ({
+				rootTitle: t('photos', 'Search'),
+				search: route.params.query,
+			}),
+		},
 	],
 })
 
