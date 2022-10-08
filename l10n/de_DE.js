@@ -81,7 +81,7 @@ OC.L10N.register(
     "There is no album yet!" : "Es gibt noch kein Album!",
     "This person could not be found" : "Diese Person konnte nicht gefunden werden",
     "Rename person" : "Person umbenennen",
-    "Merge with different person" : "Mit einer anderen Person verbinden",
+    "Merge with different person" : "Mit einer anderen Person zusammenführen",
     "Download selected photos" : "Ausgwählte Fotos herunterladen",
     "Favorite" : "Favorisieren",
     "Remove from favorites" : "Von Favoriten entfernen",

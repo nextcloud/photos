@@ -63,7 +63,7 @@ OC.L10N.register(
     "Select the default location for your media" : "Sélectionnez l'emplacement par défaut de vos médias",
     "Invalid location selected" : "Emplacement sélectionné non valide",
     "View" : "Affichage",
-    "Photos directory" : "Répertoire des photos",
+    "Photos directory" : "Dossier des photos",
     "_%n photo_::_%n photos_" : ["%n photo","%n photos","%n photos"],
     "Manage collaborators for this album" : "Gérer les collaborateurs pour cet album",
     "Open actions menu" : "Ouvrir le menu des actions",
