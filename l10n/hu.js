@@ -90,7 +90,7 @@ OC.L10N.register(
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "A(z) {currentAlbumName} átnevezése a következőre sikertelen: {newAlbumName}.",
     "Failed to rename {oldName} to {faceName}." : "A(z) {oldName} átnevezése a következőre sikertelen: {faceName}.",
     "Failed to delete {faceName}." : "A(z) {faceName} törlése sikertelen.",
-    "Failed to delete {fileName}." : "{fileName} törlése sikertelen.",
+    "Failed to delete {fileName}." : "A(z) {fileName} törlése sikertelen.",
     "Your photos" : "Saját fényképek",
     "Your videos" : "Saját videók",
     "Your folders" : "Saját mappák",

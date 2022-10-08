@@ -98,6 +98,7 @@ OC.L10N.register(
     "Add to album" : "Zum Album hinzufügen",
     "Delete selection" : "Auswahl löschen",
     "Failed to fetch faces list." : "Liste mit Gesichter konnte nicht geladen werden.",
+    "All your media" : "Alle deine Medien",
     "Tagged photos" : "Fotos mit Tags",
     "Failed to create {albumName}." : "{albumName} konnte nicht erstellt werden.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "{currentAlbumName} konnte nicht in {newAlbumName} umbenannt werden.",
