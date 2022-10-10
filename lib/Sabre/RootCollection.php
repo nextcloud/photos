@@ -29,12 +29,14 @@ use OCP\Files\IRootFolder;
 use OCP\IUserSession;
 use Sabre\DAVACL\AbstractPrincipalCollection;
 use Sabre\DAVACL\PrincipalBackend;
+use OCP\IUserManager;
 use OCP\IGroupManager;
 
 class RootCollection extends AbstractPrincipalCollection {
 	private AlbumMapper $folderMapper;
 	private IUserSession $userSession;
 	private IRootFolder $rootFolder;
+	private IUserManager $userManager;
 	private IGroupManager $groupManager;
 	private UserConfigService $userConfigService;
 
@@ -43,6 +45,7 @@ class RootCollection extends AbstractPrincipalCollection {
 		IUserSession $userSession,
 		IRootFolder $rootFolder,
 		PrincipalBackend\BackendInterface $principalBackend,
+		IUserManager $userManager,
 		IGroupManager $groupManager,
 		UserConfigService $userConfigService
 	) {
@@ -51,6 +54,7 @@ class RootCollection extends AbstractPrincipalCollection {
 		$this->folderMapper = $folderMapper;
 		$this->userSession = $userSession;
 		$this->rootFolder = $rootFolder;
+		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
 		$this->userConfigService = $userConfigService;
 	}
@@ -70,7 +74,7 @@ class RootCollection extends AbstractPrincipalCollection {
 		if (is_null($user) || $name !== $user->getUID()) {
 			throw new \Sabre\DAV\Exception\Forbidden();
 		}
-		return new PhotosHome($principalInfo, $this->folderMapper, $user, $this->rootFolder, $this->groupManager, $this->userConfigService);
+		return new PhotosHome($principalInfo, $this->folderMapper, $name, $this->rootFolder, $this->userManager, $this->groupManager, $this->userConfigService);
 	}
 
 	public function getName(): string {

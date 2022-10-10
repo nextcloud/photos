@@ -88,7 +88,7 @@ export default {
 						this.errorFetchingFaces = error
 					}
 				}
-				logger.error(t('photos', 'Failed to fetch faces list.'), error)
+				logger.error(t('photos', 'Failed to fetch faces list.'), { error })
 				showError(t('photos', 'Failed to fetch faces list.'))
 			} finally {
 				this.loadingFaces = false
@@ -140,7 +140,7 @@ export default {
 				}
 
 				// cancelled request, moving on...
-				logger.error('Error fetching face files', error)
+				logger.error('Error fetching face files', { error })
 			} finally {
 				this.loadingFiles = false
 			}

@@ -32,7 +32,7 @@ class SharedAlbumRoot extends AlbumRoot {
 	 * @return void
 	 */
 	public function delete() {
-		$this->albumMapper->deleteUserFromAlbumCollaboratorsList($this->user->getUID(), $this->album->getAlbum()->getId());
+		$this->albumMapper->deleteUserFromAlbumCollaboratorsList($this->userId, $this->album->getAlbum()->getId());
 	}
 
 	/**
@@ -51,12 +51,23 @@ class SharedAlbumRoot extends AlbumRoot {
 			fn ($collaborator) => $collaborator['type'].':'.$collaborator['id'],
 			$this->albumMapper->getCollaborators($this->album->getAlbum()->getId()),
 		);
-		$uid = $this->user->getUID();
-		if (!in_array(AlbumMapper::TYPE_USER.':'.$uid, $collaboratorIds)) {
+		if (!in_array(AlbumMapper::TYPE_USER.':'.$this->userId, $collaboratorIds)) {
 			return false;
 		}
 
 		$this->albumMapper->addFile($this->album->getAlbum()->getId(), $sourceId, $ownerUID);
 		return true;
+	}
+
+	/**
+	 * Do not reveal collaborators for shared albums.
+	 */
+	public function getCollaborators(): array {
+		/** @var array{array{'nc:collaborator': array{'id': string, 'label': string, 'type': int}}} */
+		return [];
+	}
+
+	public function setCollaborators($collaborators): array {
+		throw new Forbidden('Not allowed to collaborators a public album');
 	}
 }

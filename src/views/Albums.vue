@@ -30,7 +30,7 @@
 				:loading="loadingAlbums"
 				:title="t('photos', 'Albums')"
 				:root-title="t('photos', 'Albums')"
-				@refresh="onRefresh">
+				@refresh="fetchAlbums">
 				<NcButton :aria-label="t('photos', 'Create a new album.')"
 					@click="showAlbumCreationForm = true">
 					<template #icon>
@@ -121,10 +121,6 @@ export default {
 		handleAlbumCreated({ album }) {
 			this.showAlbumCreationForm = false
 			this.$router.push(`albums/${album.basename}`)
-		},
-
-		onRefresh() {
-			this.fetchAlbums()
 		},
 	},
 }

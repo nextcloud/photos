@@ -9,6 +9,11 @@ const BabelLoaderExcludeNodeModulesExcept = require('babel-loader-exclude-node-m
 const WorkboxPlugin = require('workbox-webpack-plugin')
 const { basename } = require('path')
 
+webpackConfig.entry = {
+	main: path.join(__dirname, 'src', 'main.js'),
+	public: path.join(__dirname, 'src', 'public.js'),
+}
+
 webpackRules.RULE_JS.exclude = BabelLoaderExcludeNodeModulesExcept([
 	'@essentials/request-timeout',
 	'@nextcloud/event-bus',
@@ -43,7 +48,7 @@ webpackConfig.plugins.push(
 	// patch webdav/dist/request.js
 	new webpack.NormalModuleReplacementPlugin(
 		/request(\.js)?/,
-		function(resource) {
+		function (resource) {
 			if (resource.context.indexOf('webdav') > -1) {
 				console.debug('Patched request for webdav', basename(resource.contextInfo.issuer))
 				resource.request = path.join(__dirname, 'src/patchedRequest.js')

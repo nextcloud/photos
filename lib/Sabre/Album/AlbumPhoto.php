@@ -137,6 +137,9 @@ class AlbumPhoto implements IFile {
 	public function isFavorite(): bool {
 		$tagManager = \OCP\Server::get(\OCP\ITagManager::class);
 		$tagger = $tagManager->load('files');
+		if ($tagger === null) {
+			return false;
+		}
 		$tags = $tagger->getTagsForObjects([$this->getFileId()]);
 
 		if ($tags === false || empty($tags)) {

@@ -25,6 +25,8 @@ declare(strict_types=1);
 
 namespace OCA\Photos\AppInfo;
 
+use OCA\DAV\Events\SabrePluginAuthInitEvent;
+use OCA\Photos\Listener\SabrePluginAuthInitListener;
 use OCA\DAV\Connector\Sabre\Principal;
 use OCA\Photos\Listener\CacheEntryRemovedListener;
 use OCP\AppFramework\App;
@@ -64,6 +66,7 @@ class Application extends App implements IBootstrap {
 		/** Register $principalBackend for the DAV collection */
 		$context->registerServiceAlias('principalBackend', Principal::class);
 		$context->registerEventListener(CacheEntryRemovedEvent::class, CacheEntryRemovedListener::class);
+		$context->registerEventListener(SabrePluginAuthInitEvent::class, SabrePluginAuthInitListener::class);
 	}
 
 	public function boot(IBootContext $context): void {

@@ -201,7 +201,12 @@ export default {
 		},
 
 		getItemURL(size) {
-			return generateUrl(`/apps/photos/api/v1/preview/${this.file.fileid}?x=${size}&y=${size}`)
+			const token = this.$route.params.token
+			if (token) {
+				return generateUrl(`/apps/photos/api/v1/publicPreview/${this.file.fileid}?x=${size}&y=${size}&token=${token}`)
+			} else {
+				return generateUrl(`/apps/photos/api/v1/preview/${this.file.fileid}?x=${size}&y=${size}`)
+			}
 
 		},
 

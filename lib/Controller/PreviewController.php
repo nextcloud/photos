@@ -43,16 +43,16 @@ use OCP\IUserSession;
 
 class PreviewController extends Controller {
 	private IUserSession $userSession;
-	private Folder $userFolder;
+	private ?Folder $userFolder;
 	private IRootFolder $rootFolder;
-	private AlbumMapper $albumMapper;
+	protected AlbumMapper $albumMapper;
 	private IPreview $preview;
 	private IGroupManager $groupManager;
 
 	public function __construct(
 		IRequest $request,
 		IUserSession $userSession,
-		Folder $userFolder,
+		?Folder $userFolder,
 		IRootFolder $rootFolder,
 		AlbumMapper $albumMapper,
 		IPreview $preview,
@@ -67,7 +67,6 @@ class PreviewController extends Controller {
 		$this->preview = $preview;
 		$this->groupManager = $groupManager;
 	}
-
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
@@ -85,25 +84,35 @@ class PreviewController extends Controller {
 		}
 
 		$user = $this->userSession->getUser();
+
+		if ($user === null || $this->userFolder === null) {
+			return new DataResponse([], Http::STATUS_FORBIDDEN);
+		}
+
 		$nodes = $this->userFolder->getById($fileId);
 
+		/** @var \OCA\Photos\Album\AlbumInfo[] */
+		$checkedAlbums = [];
 		if (\count($nodes) === 0) {
-			$albums = $this->albumMapper->getForUserAndFile($user->getUID(), $fileId);
-			$receivedAlbums = $this->albumMapper->getAlbumForCollaboratorIdAndFileId($user->getUID(), AlbumMapper::TYPE_USER, $fileId);
-			$albums = array_merge($albums, $receivedAlbums);
+			$albumsOfCurrentUser = $this->albumMapper->getForUserAndFile($user->getUID(), $fileId);
+			$nodes = $this->getFileIdForAlbums($fileId, $albumsOfCurrentUser);
+			$checkedAlbums = $albumsOfCurrentUser;
+		}
 
+		if (\count($nodes) === 0) {
+			$receivedAlbums = $this->albumMapper->getAlbumsForCollaboratorIdAndFileId($user->getUID(), AlbumMapper::TYPE_USER, $fileId);
+			$receivedAlbums = array_udiff($checkedAlbums, $receivedAlbums, fn ($a, $b) => strcmp($a->getId(), $b->getId()));
+			$nodes = $this->getFileIdForAlbums($fileId, $receivedAlbums);
+			$checkedAlbums = array_merge($checkedAlbums, $receivedAlbums);
+		}
+
+		if (\count($nodes) === 0) {
 			$userGroups = $this->groupManager->getUserGroupIds($user);
 			foreach ($userGroups as $groupId) {
-				$albumsForGroup = $this->albumMapper->getAlbumForCollaboratorIdAndFileId($groupId, AlbumMapper::TYPE_GROUP, $fileId);
-				$albumsForGroup = array_udiff($albumsForGroup, $albums, fn ($a, $b) => $a->getId() - $b->getId());
-				$albums = array_merge($albums, $albumsForGroup);
-			}
-
-			foreach ($albums as $album) {
-				$albumFile = $this->albumMapper->getForAlbumIdAndFileId($album->getId(), $fileId);
-				$nodes = $this->rootFolder
-					->getUserFolder($albumFile->getOwner())
-					->getById($fileId);
+				$albumsForGroup = $this->albumMapper->getAlbumsForCollaboratorIdAndFileId($groupId, AlbumMapper::TYPE_GROUP, $fileId);
+				$albumsForGroup = array_udiff($checkedAlbums, $albumsForGroup, fn ($a, $b) => strcmp($a->getId(), $b->getId()));
+				$nodes = $this->getFileIdForAlbums($fileId, $albumsForGroup);
+				$checkedAlbums = array_merge($checkedAlbums, $receivedAlbums);
 				if (\count($nodes) !== 0) {
 					break;
 				}
@@ -119,10 +128,25 @@ class PreviewController extends Controller {
 		return $this->fetchPreview($node, $x, $y);
 	}
 
+
+	protected function getFileIdForAlbums($fileId, $albums) {
+		foreach ($albums as $album) {
+			$albumFile = $this->albumMapper->getForAlbumIdAndFileId($album->getId(), $fileId);
+			$nodes = $this->rootFolder
+				->getUserFolder($albumFile->getOwner())
+				->getById($fileId);
+			if (\count($nodes) !== 0) {
+				return $nodes;
+			}
+		}
+
+		return [];
+	}
+
 	/**
 	 * @return DataResponse|FileDisplayResponse
 	 */
-	private function fetchPreview(
+	protected function fetchPreview(
 		Node $node,
 		int $x,
 		int $y
