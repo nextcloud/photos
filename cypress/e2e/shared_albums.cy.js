@@ -21,9 +21,9 @@
  */
 import { randHash } from '../utils'
 
-const randUser = randHash()
-const randUser2 = randHash()
-const randUser3 = randHash()
+const alice = `alice_${randHash()}`
+const bob = `bob_${randHash()}`
+const charlie = `charlie_${randHash()}`
 
 const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/
 Cypress.on('uncaught:exception', (err) => {
@@ -35,30 +35,30 @@ Cypress.on('uncaught:exception', (err) => {
 
 describe('Manage shared albums', () => {
   before(() => {
+    cy.visit('')
     cy.logout()
 
-    cy.nextcloudCreateUser(randUser, 'password')
-    cy.nextcloudCreateUser(randUser2, 'password')
-    cy.nextcloudCreateUser(randUser3, 'password')
+    cy.nextcloudCreateUser(alice, 'password')
+    cy.nextcloudCreateUser(bob, 'password')
+    cy.nextcloudCreateUser(charlie, 'password')
 
-    cy.login(randUser2, 'password')
+    cy.login(bob, 'password')
     cy.uploadTestMedia()
     cy.logout()
   })
 
   beforeEach(() => {
     cy.logout()
-    cy.login(randUser2, 'password')
-    cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/sharedalbums`)
+    cy.login(bob, 'password', '/apps/photos/sharedalbums')
   })
 
   context('Adding and removing files in a shared album', () => {
     before(() => {
       cy.logout()
-      cy.login(randUser, 'password')
+      cy.login(alice, 'password')
       cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
       cy.createAnAlbumFromAlbums('shared_album_test1')
-      cy.addCollaborators([randUser2])
+      cy.addCollaborators([bob])
       cy.logout()
     })
 
@@ -86,13 +86,13 @@ describe('Manage shared albums', () => {
   context('Download files from a shared album', () => {
     before(() => {
       cy.logout()
-      cy.login(randUser, 'password')
+      cy.login(alice, 'password')
       cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
       cy.createAnAlbumFromAlbums('shared_album_test2')
-      cy.addCollaborators([randUser2])
+      cy.addCollaborators([bob])
       cy.logout()
 
-      cy.login(randUser2, 'password')
+      cy.login(bob, 'password')
       cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/sharedalbums`)
       cy.goToSharedAlbum('shared_album_test2')
       cy.addFilesToAlbumFromAlbum('shared_album_test2', [0, 1, 2])
@@ -122,10 +122,10 @@ describe('Manage shared albums', () => {
   context('Delete a received shared album', () => {
     before(() => {
       cy.logout()
-      cy.login(randUser, 'password')
+      cy.login(alice, 'password')
       cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
       cy.createAnAlbumFromAlbums('shared_album_test3')
-      cy.addCollaborators([randUser2])
+      cy.addCollaborators([bob])
       cy.logout()
     })
 
@@ -138,52 +138,50 @@ describe('Manage shared albums', () => {
   context('Remove a collaborator from an album', () => {
     before(() => {
       cy.logout()
-      cy.login(randUser, 'password')
-      cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
+      cy.login(alice, 'password', '/apps/photos/albums')
       cy.createAnAlbumFromAlbums('shared_album_test4')
-      cy.addCollaborators([randUser2])
+      cy.addCollaborators([bob])
       cy.logout()
     })
 
     it('Remove collaborator from an album', () => {
-      cy.get('ul.collections__list li').should('have.length', 4)
+      cy.get('ul.collections__list li')
+        .should('contain', `shared_album_test4 (${alice})`)
 
       cy.logout()
-      cy.login(randUser, 'password')
-      cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos`)
+      cy.login(alice, 'password', '/apps/photos')
       cy.goToAlbum('shared_album_test4')
-      cy.removeCollaborators([randUser2])
+      cy.removeCollaborators([bob])
       cy.logout()
 
-      cy.login(randUser2, 'password')
-      cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/sharedalbums`)
-
-      cy.get('ul.collections__list li').should('have.length', 3)
+      cy.login(bob, 'password', '/apps/photos/sharedalbums')
+      cy.get('body')
+        .should('not.contain', `shared_album_test4 (${alice})`)
     })
   })
 
   context('Two shared albums with the same name', () => {
     before(() => {
       cy.logout()
-      cy.login(randUser, 'password')
+      cy.login(alice, 'password')
       cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
       cy.createAnAlbumFromAlbums('shared_album_test5')
-      cy.addCollaborators([randUser2])
+      cy.addCollaborators([bob])
       cy.logout()
 
-      cy.login(randUser3, 'password')
+      cy.login(charlie, 'password')
       cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
       cy.createAnAlbumFromAlbums('shared_album_test5')
-      cy.addCollaborators([randUser2])
+      cy.addCollaborators([bob])
       cy.logout()
     })
 
 
     it('It should display two shared albums', () => {
       cy.get('ul.collections__list li')
-        .contains(`shared_album_test5 (${randUser})`)
+        .contains(`shared_album_test5 (${alice})`)
       cy.get('ul.collections__list li')
-        .contains(`shared_album_test5 (${randUser3})`)
+        .contains(`shared_album_test5 (${charlie})`)
     })
   })
 })
