@@ -74,7 +74,9 @@ export default {
 
 	filters: {
 		/**
-		 * @param {string} lastPhoto The album's last photos.
+		 *		 @param {string} lastPhoto The album's last photos.
+		 *
+		 * @param lastPhoto
 		 */
 		coverUrl(lastPhoto) {
 			if (lastPhoto === -1) {

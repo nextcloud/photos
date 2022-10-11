@@ -261,9 +261,9 @@ export default {
 		},
 
 		/**
-		 * Fetch file Info and add them into the store
+		 *		 Fetch file Info and add them into the store		 *		 * @param {Upload[]} uploads the newly uploaded files
 		 *
-		 * @param {Upload[]} uploads the newly uploaded files
+		 * @param uploads
 		 */
 		onUpload(uploads) {
 			const prefixPath = `/files/${getCurrentUser().uid}`

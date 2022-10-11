@@ -317,9 +317,9 @@ export default {
 		},
 
 		/**
-		 * Populate selectedCollaboratorsKeys and availableCollaborators.
+		 *		 Populate selectedCollaboratorsKeys and availableCollaborators.		 *		 * @param {Collaborator[]} collaborators
 		 *
-		 * @param {Collaborator[]} collaborators
+		 * @param collaborators
 		 */
 		populateCollaborators(collaborators) {
 			const initialCollaborators = collaborators.reduce(this.indexCollaborators, {})
@@ -336,8 +336,10 @@ export default {
 		},
 
 		/**
-		 * @param {Object<string, Collaborator>} collaborators - Index of collaborators
-		 * @param {Collaborator} collaborator - A collaborator
+		 *		 @param {Object<string, Collaborator>} collaborators - Index of collaborators		 * @param {Collaborator} collaborator - A collaborator
+		 *
+		 * @param collaborators
+		 * @param collaborator
 		 */
 		indexCollaborators(collaborators, collaborator) {
 			return { ...collaborators, [`${collaborator.type}${collaborator.type === Type.SHARE_TYPE_LINK ? '' : ':'}${collaborator.type === Type.SHARE_TYPE_LINK ? '' : collaborator.id}`]: collaborator }

@@ -110,7 +110,9 @@ export default {
 
 	filters: {
 		/**
-		 * @param {string} date - In the following format: YYYYMM
+		 *		 @param {string} date - In the following format: YYYYMM
+		 *
+		 * @param date
 		 */
 		dateMonthAndYear(date) {
 			return moment(date, 'YYYYMM').format('MMMM YYYY')

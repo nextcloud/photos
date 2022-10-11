@@ -171,13 +171,17 @@ export default {
 
 	filters: {
 		/**
-		 * @param {string} date - In the following format: YYYYMM
+		 *		 @param {string} date - In the following format: YYYYMM
+		 *
+		 * @param date
 		 */
 		dateMonth(date) {
 			return moment(date, 'YYYYMM').format('MMMM')
 		},
 		/**
-		 * @param {string} date - In the following format: YYYYMM
+		 *		 @param {string} date - In the following format: YYYYMM
+		 *
+		 * @param date
 		 */
 		dateYear(date) {
 			return moment(date, 'YYYYMM').format('YYYY')

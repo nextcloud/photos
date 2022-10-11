@@ -90,8 +90,9 @@ export default {
 
 	filters: {
 		/**
-		 * @param {string} fileId - The id of the file.
-		 * @return {string}
+		 *		 @param {string} fileId - The id of the file.		 * @return {string}
+		 *
+		 * @param fileId
 		 */
 		toCoverUrl(fileId) {
 			return generateUrl(`/apps/photos/api/v1/preview/${fileId}?x=${64}&y=${64}`)
