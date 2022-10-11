@@ -424,7 +424,7 @@ class AlbumMapper {
 				// Suffix album name with the album owner to prevent duplicates.
 				// Not done for public link as it would like owner's uid.
 				if ($collaboratorType !== self::TYPE_LINK) {
-					$row['album_name'].' ('.$row['album_user'].')';
+					$albumName = $row['album_name'].' ('.$row['album_user'].')';
 				}
 				$albumsById[$albumId] = new AlbumInfo($albumId, $row['album_user'], $albumName, $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
 			}
