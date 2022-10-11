@@ -1,6 +1,7 @@
 OC.L10N.register(
     "photos",
     {
+    "Public link" : "Julkinen linkki",
     "Photos" : "Kuvat",
     "Your memories under your control" : "Muistosi hallinnassasi",
     "All media" : "Kaikki media",
@@ -78,6 +79,7 @@ OC.L10N.register(
     "This folder does not exist" : "Tätä kansiota ei ole olemassa",
     "Loading folders …" : "Ladataan kansioita…",
     "No photos in here" : "Ei kuvia täällä",
+    "Failed to fetch albums list." : "Albumien listan noutaminen epäonnistui.",
     "Shared albums" : "Jaetut albumit",
     "Back to tags overview" : "Takaisin tunnistenäkymään",
     "No photos with this tag yet" : "Ei vielä kuvia tällä tunnisteella",

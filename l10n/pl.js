@@ -1,6 +1,7 @@
 OC.L10N.register(
     "photos",
     {
+    "Public link" : "Link publiczny",
     "Photos" : "Zdjęcia",
     "Your memories under your control" : "Twoje wspomnienia pod kontrolą",
     "All media" : "Wszystkie media",
@@ -94,6 +95,7 @@ OC.L10N.register(
     "This folder does not exist" : "Ten katalog nie istnieje",
     "Loading folders …" : "Ładowanie katalogów …",
     "No photos in here" : "Brak zdjęć",
+    "Failed to fetch albums list." : "Nie udało się pobrać listy albumów.",
     "Shared albums" : "Udostępnione albumy",
     "Cover photo for shared album {albumName}." : "Zdjęcie na okładkę albumu udostępnionego {albumName}.",
     "Back to tags overview" : "Powrót do przeglądania etykiet",

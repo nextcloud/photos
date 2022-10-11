@@ -1,6 +1,7 @@
 OC.L10N.register(
     "photos",
     {
+    "Public link" : "Esteka publikoa",
     "Photos" : "Argazkiak",
     "Your memories under your control" : "Zure oroitzapenak zure kontrolpean",
     "All media" : "Fitxategi guztiak",
@@ -94,6 +95,7 @@ OC.L10N.register(
     "This folder does not exist" : "Karpeta hau ez da existitzen",
     "Loading folders …" : "Karpetak kargatzen ...",
     "No photos in here" : "Argazkirik ez hemen",
+    "Failed to fetch albums list." : "Ezin izan da album zerrenda eskuratu.",
     "Shared albums" : "Partekaturiko albumak",
     "Cover photo for shared album {albumName}." : "{albumName} album partekatuko azaleko argazkia",
     "Back to tags overview" : "Itzuli etiketen ikuspegira",

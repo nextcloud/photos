@@ -1,6 +1,7 @@
 OC.L10N.register(
     "photos",
     {
+    "Public link" : "Herkese açık bağlantı",
     "Photos" : "Fotoğraflar",
     "Your memories under your control" : "Anılarınızın denetimi sizde",
     "All media" : "Tüm ortamlar",
@@ -94,6 +95,7 @@ OC.L10N.register(
     "This folder does not exist" : "Bu klasör bulunamadı",
     "Loading folders …" : "Klasörler yükleniyor…",
     "No photos in here" : "Burada herhangi bir fotoğraf yok",
+    "Failed to fetch albums list." : "Albümlerin listesi alınamadı.",
     "Shared albums" : "Paylaşılmış albümler",
     "Cover photo for shared album {albumName}." : "{albumName} paylaşılmış albümünün kapak görseli.",
     "Back to tags overview" : "Etiket özetine geri dön",

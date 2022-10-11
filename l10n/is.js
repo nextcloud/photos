@@ -1,6 +1,7 @@
 OC.L10N.register(
     "photos",
     {
+    "Public link" : "Opinber tengill",
     "Photos" : "Ljósmyndir",
     "Your memories under your control" : "Haltu minningunum þínum undir þinni stjórn",
     "Videos" : "Myndskeið",
