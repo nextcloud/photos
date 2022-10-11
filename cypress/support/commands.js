@@ -27,7 +27,6 @@ const url = Cypress.config('baseUrl').replace(/\/index.php\/?$/g, '')
 Cypress.env('baseUrl', url)
 
 Cypress.Commands.add('login', (user, password, route = '/apps/files') => {
-	cy.clearCookies()
 	Cypress.Cookies.defaults({
 		preserve: /^(oc|nc)/,
 	})
@@ -39,7 +38,6 @@ Cypress.Commands.add('login', (user, password, route = '/apps/files') => {
 })
 
 Cypress.Commands.add('logout', () => {
-	cy.visit('')
 	cy.getCookies()
 		.then(cookies => {
 			if (cookies.length === 0) {
@@ -49,20 +47,19 @@ Cypress.Commands.add('logout', () => {
 
 			return cy.get("body")
 				.then($body => {
-					const logout = $body.find('#expanddiv li[data-id="logout"] a')
-					if (logout.length > 0) {
-						cy.log('Loging out...')
-						cy.visit(logout[0].href)
-					} else {
-						cy.log('Nothing')
+					const $settingsButton = $body.find('#settings #expand')
+					if ($settingsButton.length === 0) {
+						cy.log("Not logged in.")
+						return
 					}
+
+					$settingsButton.click()
+					cy.contains('Log out').click()
 				})
 		})
 })
 
 Cypress.Commands.add('nextcloudCreateUser', (user, password) => {
-	cy.clearCookies()
-	cy.visit('/')
 	cy.request({
 		method: 'POST',
 		url: `${Cypress.env('baseUrl')}/ocs/v1.php/cloud/users?format=json`,
@@ -78,6 +75,7 @@ Cypress.Commands.add('nextcloudCreateUser', (user, password) => {
 			Authorization: `Basic ${Buffer.from('admin:admin').toString('base64')}`,
 		},
 	})
+	cy.clearCookies()
 })
 
 Cypress.Commands.add('uploadTestMedia', () => {
