@@ -27,7 +27,6 @@ namespace OCA\Photos\Service;
 
 use Exception;
 use OCA\Photos\AppInfo\Application;
-use OCP\Files\IRootFolder;
 use OCP\IConfig;
 use OCP\IUserSession;
 
@@ -39,34 +38,23 @@ class UserConfigService {
 
 	private IConfig $config;
 	private IUserSession $userSession;
-	private IRootFolder $rootFolder;
 
 	public function __construct(
 		IConfig $config,
-		IUserSession $userSession,
-		IRootFolder $rootFolder
+		IUserSession $userSession
 	) {
 		$this->config = $config;
 		$this->userSession = $userSession;
-		$this->rootFolder = $rootFolder;
 	}
 
 	public function getUserConfig(string $key) {
 		if (!in_array($key, array_keys(self::DEFAULT_CONFIGS))) {
 			throw new Exception('Unknown user config key');
 		}
+
 		$user = $this->userSession->getUser();
 		$default = self::DEFAULT_CONFIGS[$key];
 		$value = $this->config->getUserValue($user->getUid(), Application::APP_ID, $key, $default);
-
-		// If the config is a path, make sure it exists
-		if (str_starts_with($default, '/')) {
-			$userFolder = $this->rootFolder->getUserFolder($user->getUID());
-			// If the folder does not exists, create it
-			if (!$userFolder->nodeExists($value)) {
-				$userFolder->newFolder($value);
-			}
-		}
 
 		return $value;
 	}
