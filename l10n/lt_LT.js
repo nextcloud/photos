@@ -1,6 +1,7 @@
 OC.L10N.register(
     "photos",
     {
+    "Public link" : "Viešoji nuoroda",
     "Photos" : "Nuotraukos",
     "Your memories under your control" : "Jūsų prisiminimai jūsų rankose",
     "All media" : "Visa medija",
@@ -49,6 +50,7 @@ OC.L10N.register(
     "This folder does not exist" : "Šio aplanko nėra",
     "Loading folders …" : "Įkeliami aplankai…",
     "No photos in here" : "Čia nuotraukų nėra",
+    "Failed to fetch albums list." : "Nepavyko gauti albumų sąrašo.",
     "Shared albums" : "Bendrinami albumai",
     "No tags yet" : "Kol kas žymių nėra",
     "Photos with tags will show up here" : "Čia bus rodomos nuotraukos su žymėmis",

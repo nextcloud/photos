@@ -1,6 +1,7 @@
 OC.L10N.register(
     "photos",
     {
+    "Public link" : "Veřejný odkaz",
     "Photos" : "Fotky",
     "Your memories under your control" : "Vaše vzpomínky pod vaší kontrolou",
     "All media" : "Veškerá média",
@@ -94,6 +95,7 @@ OC.L10N.register(
     "This folder does not exist" : "Tato složka neexistuje",
     "Loading folders …" : "Načítání složek…",
     "No photos in here" : "Tady nejsou žádné fotky",
+    "Failed to fetch albums list." : "Nepodařilo se získat seznam alb.",
     "Shared albums" : "Sdílená alba",
     "Cover photo for shared album {albumName}." : "Foto na obálku sdíleného alba {albumName}.",
     "Back to tags overview" : "Zpět na přehled štítků",

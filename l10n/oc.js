@@ -1,6 +1,7 @@
 OC.L10N.register(
     "photos",
     {
+    "Public link" : "Ligam public",
     "Photos" : "Photos",
     "Your memories under your control" : "Vòstres sovenirs jos vòstre contraròtle",
     "Albums" : "Albums",

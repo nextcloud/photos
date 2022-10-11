@@ -1,6 +1,7 @@
 OC.L10N.register(
     "photos",
     {
+    "Public link" : "Nyilvános hivatkozás",
     "Photos" : "Fényképek",
     "Your memories under your control" : "Az Ön emlékei, az Ön felügyelete alatt",
     "All media" : "Összes média",
@@ -73,6 +74,7 @@ OC.L10N.register(
     "This folder does not exist" : "Ez a mappa nem létezik",
     "Loading folders …" : "Mappák betöltése…",
     "No photos in here" : "Itt nincsenek fényképek",
+    "Failed to fetch albums list." : "Az albumok lekérése sikertelen.",
     "Shared albums" : "Megosztott albumok",
     "Back to tags overview" : "Vissza a címkeáttekintőhöz",
     "No photos with this tag yet" : "Még nincsenek fényképek ezzel a címkével",
