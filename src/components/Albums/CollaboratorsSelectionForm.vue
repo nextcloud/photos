@@ -29,7 +29,9 @@
 		</div>
 
 		<form class="manage-collaborators__form" @submit.prevent>
-			<NcPopover ref="popover" :auto-size="true" :distance="0">
+			<NcPopover ref="popover"
+				:auto-size="true"
+				:distance="0">
 				<label slot="trigger" class="manage-collaborators__form__input">
 					<NcTextField :value.sync="searchText"
 						autocomplete="off"
@@ -47,16 +49,15 @@
 
 				<ul v-if="searchResults.length !== 0" :id="`manage-collaborators__form__list-${randomId}`" class="manage-collaborators__form__list">
 					<li v-for="collaboratorKey of searchResults" :key="collaboratorKey">
-						<a>
-							<NcListItemIcon :id="availableCollaborators[collaboratorKey].id"
-								class="manage-collaborators__form__list__result"
-								:title="availableCollaborators[collaboratorKey].id"
-								:search="searchText"
-								:user="availableCollaborators[collaboratorKey].id"
-								:display-name="availableCollaborators[collaboratorKey].label"
-								:aria-label="t('photos', 'Add {collaboratorLabel} to the collaborators list', {collaboratorLabel: availableCollaborators[collaboratorKey].label})"
-								@click="selectEntity(collaboratorKey)" />
-						</a>
+						<NcListItemIcon :id="availableCollaborators[collaboratorKey].id"
+							class="manage-collaborators__form__list__result"
+							:title="availableCollaborators[collaboratorKey].id"
+							:search="searchText"
+							:user="availableCollaborators[collaboratorKey].id"
+							:display-name="availableCollaborators[collaboratorKey].label"
+							:aria-label="t('photos', 'Add {collaboratorLabel} to the collaborators list', {collaboratorLabel: availableCollaborators[collaboratorKey].label})"
+							tabindex="0"
+							@click="selectEntity(collaboratorKey)" />
 					</li>
 				</ul>
 				<NcEmptyContent v-else
@@ -269,6 +270,10 @@ export default {
 		 * Fetch possible collaborators.
 		 */
 		async searchCollaborators() {
+			if (this.searchText.length >= 1) {
+				this.$refs.popover.$refs.popover.show()
+			}
+
 			try {
 				if (this.searchText.length < this.config.minSearchStringLength) {
 					return
@@ -463,8 +468,9 @@ export default {
 
 		&__list {
 			padding: 8px;
-			height: 500px;
+			height: 350px;
 			overflow: scroll;
+
 			&__result {
 				padding: 8px;
 				border-radius: 100px;
