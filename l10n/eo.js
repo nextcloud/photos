@@ -1,6 +1,7 @@
 OC.L10N.register(
     "photos",
     {
+    "Public link" : "Publika ligilo",
     "Photos" : "Fotoj",
     "Videos" : "Videaĵoj",
     "Folders" : "Dosierujoj",

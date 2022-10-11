@@ -1,6 +1,7 @@
 OC.L10N.register(
     "photos",
     {
+    "Public link" : "Δημόσιος σύνδεσμος",
     "Photos" : "Φωτογραφίες",
     "Your memories under your control" : "Οι αναμνήσεις υπό τον έλεγχό σας",
     "Videos" : "Βίντεο",

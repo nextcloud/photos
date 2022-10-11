@@ -1,6 +1,7 @@
 OC.L10N.register(
     "photos",
     {
+    "Public link" : "公開連結",
     "Photos" : "照片",
     "Your memories under your control" : "完全自主掌控您珍貴的回憶",
     "All media" : "所有媒體",
@@ -94,6 +95,7 @@ OC.L10N.register(
     "This folder does not exist" : "此資料夾不存在",
     "Loading folders …" : "載入資料夾 …",
     "No photos in here" : "無照片檔案",
+    "Failed to fetch albums list." : "擷取相簿清單失敗。",
     "Shared albums" : "已分享了的相簿",
     "Cover photo for shared album {albumName}." : "共享相簿 {albumName} 的封面照片。",
     "Back to tags overview" : "返回標籤概覽",

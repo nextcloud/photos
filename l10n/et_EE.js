@@ -1,6 +1,7 @@
 OC.L10N.register(
     "photos",
     {
+    "Public link" : "Avalik link",
     "Photos" : "Fotod",
     "Your memories under your control" : "Sinu mälestused sinu kontrolli all",
     "Videos" : "Videod",

@@ -1,6 +1,7 @@
 OC.L10N.register(
     "photos",
     {
+    "Public link" : "Liga pública",
     "Photos" : "Fotos",
     "Videos" : "Videos",
     "Folders" : "Carpetas",
