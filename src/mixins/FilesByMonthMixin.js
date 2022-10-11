@@ -51,4 +51,15 @@ export default {
 				.sort((month1, month2) => month1 > month2 ? -1 : 1)
 		},
 	},
+
+	methods: {
+		/**
+		 * @param {string} fileId1 The first file ID
+		 * @param {string} fileId2 The second file ID
+		 * @return {-1 | 1}
+		 */
+		sortFilesByTimestamp(fileId1, fileId2) {
+			return this.files[fileId1].timestamp > this.files[fileId2].timestamp ? -1 : 1
+		},
+	},
 }
