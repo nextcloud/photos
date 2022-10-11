@@ -94,13 +94,14 @@ class AlbumRoot implements ICollection, ICopyTarget {
 		try {
 			[$photosLocation, $userFolder] = $this->getPhotosLocationInfo();
 
-			// If the folder does not exists, create it.
-			if (!$userFolder->nodeExists($photosLocation)) {
-				return $userFolder->newFolder($photosLocation);
+			try {
+				$photosFolder = $this->userFolder->get($photosLocation);
+			} catch (NotFoundException $e) {
+				// If the folder does not exists, create it
+				$photosFolder = $this->userFolder->newFolder($photosLocation);
 			}
 
-			$photosFolder = $userFolder->get($photosLocation);
-
+			// If the node is not a folder, we throw
 			if (!($photosFolder instanceof Folder)) {
 				throw new Conflict('The destination exists and is not a folder');
 			}
