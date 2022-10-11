@@ -1,6 +1,7 @@
 OC.L10N.register(
     "photos",
     {
+    "Public link" : "Public link",
     "Photos" : "Photos",
     "Videos" : "Videos",
     "Folders" : "Folders",

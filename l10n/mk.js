@@ -1,6 +1,7 @@
 OC.L10N.register(
     "photos",
     {
+    "Public link" : "Јавен линк",
     "Photos" : "Фотографии",
     "Your memories under your control" : "Вашите спомени под ваша контрола",
     "All media" : "Сите медиуми",
@@ -64,6 +65,7 @@ OC.L10N.register(
     "Recognized people will show up here" : "Препознатите луѓе ќе се појават овде",
     "This folder does not exist" : "Папката не постои",
     "No photos in here" : "Овде нема фотографии",
+    "Failed to fetch albums list." : "Неуспешно добивање на листа со албуми.",
     "Shared albums" : "Споделени албуми",
     "No tags yet" : "Сеуште нема ознаки",
     "Photos with tags will show up here" : "Фотографиите со ознаки ќе се појават овде",
