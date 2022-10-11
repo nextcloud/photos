@@ -90,10 +90,16 @@ class AlbumRoot implements ICollection, ICopyTarget {
 	 */
 	public function createFile($name, $data = null) {
 		try {
-			// userConfigService->getUserConfig handle the path creation if missing
 			$photosLocation = $this->userConfigService->getUserConfig('photosLocation');
 
-			$photosFolder = $this->userFolder->get($photosLocation);
+			try {
+				$photosFolder = $this->userFolder->get($photosLocation);
+			} catch (NotFoundException $e) {
+				// If the folder does not exists, create it
+				$photosFolder = $this->userFolder->newFolder($photosLocation);
+			}
+
+			// If the node is not a folder, we throw
 			if (!($photosFolder instanceof Folder)) {
 				throw new Conflict('The destination exists and is not a folder');
 			}
