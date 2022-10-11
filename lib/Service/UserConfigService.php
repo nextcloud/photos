@@ -27,7 +27,6 @@ namespace OCA\Photos\Service;
 
 use Exception;
 use OCA\Photos\AppInfo\Application;
-use OCP\Files\IRootFolder;
 use OCP\IConfig;
 use OCP\IUserSession;
 
@@ -39,16 +38,13 @@ class UserConfigService {
 
 	private IConfig $config;
 	private IUserSession $userSession;
-	private IRootFolder $rootFolder;
 
 	public function __construct(
 		IConfig $config,
-		IUserSession $userSession,
-		IRootFolder $rootFolder
+		IUserSession $userSession
 	) {
 		$this->config = $config;
 		$this->userSession = $userSession;
-		$this->rootFolder = $rootFolder;
 	}
 
 	public function getUserConfig(string $key): string {
