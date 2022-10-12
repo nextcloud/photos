@@ -1,6 +1,7 @@
 OC.L10N.register(
     "photos",
     {
+    "Public link" : "Openbare skakel",
     "Photos" : "Foto’s",
     "Videos" : "Video's ",
     "Folders" : "Vouers",
