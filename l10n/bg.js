@@ -1,6 +1,7 @@
 OC.L10N.register(
     "photos",
     {
+    "Public link" : "Публична връзка",
     "Photos" : "Снимки",
     "Your memories under your control" : "Вашите спомени под ваш контрол",
     "All media" : "Всички медии",
@@ -94,6 +95,7 @@ OC.L10N.register(
     "This folder does not exist" : "Тази папка не съществува",
     "Loading folders …" : "Зареждане на папките …",
     "No photos in here" : "Тук няма снимки",
+    "Failed to fetch albums list." : "Неуспешно извличане на списък с албуми.",
     "Shared albums" : "Споделени албуми",
     "Cover photo for shared album {albumName}." : "Снимка на корицата на споделен албум {albumName}",
     "Back to tags overview" : "Обратно към преглед на етикети",
