@@ -110,6 +110,7 @@ export default {
 	height: 350px;
 	flex-wrap: wrap;
 	padding: 12px;
+	align-content: center;
 
 	&__item {
 		display: flex;
@@ -150,6 +151,6 @@ export default {
 }
 
 .loader {
-	margin-top: 25%;
+	margin: 25% auto;
 }
 </style>
