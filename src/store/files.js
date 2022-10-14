@@ -25,7 +25,7 @@ import moment from '@nextcloud/moment'
 import { showError } from '@nextcloud/dialogs'
 
 import logger from '../services/logger.js'
-import client from '../services/DavClient.js'
+import client, { prefixPath } from '../services/DavClient.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
 
 const state = {
@@ -41,10 +41,14 @@ const mutations = {
 	 * @param {Array} newFiles the store mutations
 	 */
 	updateFiles(state, newFiles) {
+		const files = {}
 		newFiles.forEach(file => {
-			if (state.nomediaPaths.some(nomediaPath => file.filename.startsWith(nomediaPath))) {
+			// Ignore the file if the path is excluded
+			if (state.nomediaPaths.some(nomediaPath => file.filename.startsWith(nomediaPath)
+				|| file.filename.startsWith(prefixPath + nomediaPath))) {
 				return
 			}
+
 			if (file.fileid >= 0) {
 				file.fileMetadataSizeParsed = JSON.parse(file.fileMetadataSize?.replace(/&quot;/g, '"') ?? '{}')
 				file.fileMetadataSizeParsed.width = file.fileMetadataSizeParsed?.width ?? 256
@@ -58,11 +62,14 @@ const mutations = {
 			file.timestamp = moment(file.lastmod).unix() // For sorting
 			file.month = moment(file.lastmod).format('YYYYMM') // For grouping by month
 			file.day = moment(file.lastmod).format('MMDD') // For On this day
+
+			// Schedule the file to add
+			files[file.fileid] = file
 		})
 
 		state.files = {
 			...state.files,
-			...newFiles.reduce((files, file) => ({ ...files, [file.fileid]: file }), {}),
+			...files,
 		}
 	},
 
