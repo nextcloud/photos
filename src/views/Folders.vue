@@ -64,7 +64,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import { UploadPicker } from '@nextcloud/upload'
-import { getCurrentUser } from '@nextcloud/auth'
 import { NcEmptyContent } from '@nextcloud/vue'
 import VirtualGrid from 'vue-virtual-grid'
 
@@ -72,6 +71,7 @@ import FileLegacy from '../components/FileLegacy.vue'
 import Folder from '../components/Folder.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 
+import { prefixPath } from '../services/DavClient.js'
 import allowedMimes from '../services/AllowedMimes.js'
 import getAlbumContent from '../services/AlbumContent.js'
 
@@ -266,7 +266,6 @@ export default {
 		 * @param {Upload[]} uploads the newly uploaded files
 		 */
 		onUpload(uploads) {
-			const prefixPath = `/files/${getCurrentUser().uid}`
 			uploads.forEach(async upload => {
 				const relPath = upload.path.split(prefixPath).pop()
 				const file = await getFileInfo(relPath)

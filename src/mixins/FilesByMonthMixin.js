@@ -31,8 +31,10 @@ export default {
 			const filesByMonth = {}
 			for (const fileId of this.fetchedFileIds) {
 				const file = this.files[fileId]
-				filesByMonth[file.month] = filesByMonth[file.month] ?? []
-				filesByMonth[file.month].push(file.fileid)
+				if (file) {
+					filesByMonth[file.month] = filesByMonth[file.month] ?? []
+					filesByMonth[file.month].push(file.fileid)
+				}
 			}
 
 			// Sort files in sections.

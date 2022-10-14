@@ -164,6 +164,11 @@ export default {
 	},
 
 	async beforeMount() {
+		// Register excluded paths
+		const files = loadState('photos', 'nomedia-paths', [])
+		this.$store.dispatch('setNomediaPaths', files)
+		logger.debug('Known .nomedia and .noimage  paths', { files })
+
 		if ('serviceWorker' in navigator) {
 			// Use the window load event to keep the page load performant
 			window.addEventListener('load', () => {
@@ -181,9 +186,6 @@ export default {
 		} else {
 			console.debug('Service Worker is not enabled on this browser.')
 		}
-
-		const files = loadState('photos', 'nomedia-paths', [])
-		this.$store.dispatch('setNomediaPaths', files)
 	},
 
 	beforeDestroy() {
