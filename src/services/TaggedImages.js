@@ -20,11 +20,10 @@
  *
  */
 
-import { genFileInfo } from '../utils/fileUtils'
-import { getCurrentUser } from '@nextcloud/auth'
-import { props } from './DavRequest'
-import allowedMimes from './AllowedMimes'
-import client from './DavClient'
+import { genFileInfo } from '../utils/fileUtils.js'
+import { props } from './DavRequest.js'
+import allowedMimes from './AllowedMimes.js'
+import client, { prefixPath } from './DavClient.js'
 
 /**
  * Get tagged files based on provided tag id
@@ -53,7 +52,6 @@ export default async function(id, options = {}) {
 		details: true,
 	}, options)
 
-	const prefixPath = `/files/${getCurrentUser().uid}`
 	const response = await client.getDirectoryContents(prefixPath, options)
 
 	return response.data
