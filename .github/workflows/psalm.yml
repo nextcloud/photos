@@ -1,3 +1,8 @@
+# This workflow is provided via the organization template repository
+#
+# https://github.com/nextcloud/.github
+# https://docs.github.com/en/actions/learn-github-actions/sharing-workflows-with-your-organization
+
 name: Static analysis
 
 on:
@@ -5,13 +10,18 @@ on:
   push:
     branches:
       - master
+      - main
       - stable*
 
+concurrency: 
+  group: psalm-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
-  static-psalm-analysis:
+  static-analysis:
     runs-on: ubuntu-latest
 
-    name: Nextcloud ${{ matrix.ocp-version }}
+    name: Nextcloud
     steps:
       - name: Checkout
         uses: actions/checkout@v3
