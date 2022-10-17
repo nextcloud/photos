@@ -9,7 +9,7 @@ OC.L10N.register(
     "People" : "Mensen",
     "Folders" : "Mappen",
     "Favorites" : "Favorieten",
-    "On this day" : "Vandaag",
+    "On this day" : "Op deze dag",
     "Shared with you" : "Met je gedeeld",
     "Tags" : "Tags",
     "Locations" : "Locaties",
