@@ -23,13 +23,11 @@ namespace OCA\Photos\Sabre;
 
 use OC\Security\Bruteforce\Throttler;
 use OCA\Photos\Album\AlbumMapper;
-use OCA\Photos\Album\AlbumWithFiles;
 use OCP\IRequest;
 use Sabre\DAV\Auth\Backend\AbstractBasic;
 
 class PublicAlbumAuthBackend extends AbstractBasic {
-	private const BRUTEFORCE_ACTION = 'public_webdav_auth';
-	private ?AlbumWithFiles $album = null;
+	private const BRUTEFORCE_ACTION = 'publicphotos_webdav_auth';
 	private IRequest $request;
 	private AlbumMapper $albumMapper;
 	private Throttler $throttler;
@@ -42,10 +40,6 @@ class PublicAlbumAuthBackend extends AbstractBasic {
 		$this->request = $request;
 		$this->albumMapper = $albumMapper;
 		$this->throttler = $throttler;
-
-		// setup realm
-		$defaults = new \OCP\Defaults();
-		$this->realm = $defaults->getName();
 	}
 
 	/**
@@ -60,21 +54,13 @@ class PublicAlbumAuthBackend extends AbstractBasic {
 
 		$albums = $this->albumMapper->getSharedAlbumsForCollaboratorWithFiles($username, AlbumMapper::TYPE_LINK);
 
-
 		if (count($albums) !== 1) {
 			$this->throttler->registerAttempt(self::BRUTEFORCE_ACTION, $this->request->getRemoteAddress());
 			return false;
 		}
 
-		$this->album = $albums[0];
-
 		\OC_User::setIncognitoMode(true);
 
 		return true;
-	}
-
-	public function getShare(): AlbumWithFiles {
-		assert($this->album !== null);
-		return $this->album;
 	}
 }
