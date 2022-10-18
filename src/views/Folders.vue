@@ -71,7 +71,7 @@ import FileLegacy from '../components/FileLegacy.vue'
 import Folder from '../components/Folder.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 
-import { prefixPath } from '../services/DavClient.js'
+import { getPrefixPath } from '../services/DavClient.js'
 import allowedMimes from '../services/AllowedMimes.js'
 import getAlbumContent from '../services/AlbumContent.js'
 
@@ -267,7 +267,7 @@ export default {
 		 */
 		onUpload(uploads) {
 			uploads.forEach(async upload => {
-				const relPath = upload.path.split(prefixPath).pop()
+				const relPath = upload.path.split(getPrefixPath()).pop()
 				const file = await getFileInfo(relPath)
 				this.$store.dispatch('appendFiles', [file])
 				this.$store.dispatch('addFilesToFolder', { fileid: this.folderId, files: [file] })

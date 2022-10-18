@@ -23,7 +23,7 @@
 import { genFileInfo } from '../utils/fileUtils.js'
 import { props } from './DavRequest.js'
 import allowedMimes from './AllowedMimes.js'
-import client, { prefixPath } from './DavClient.js'
+import client, { getPrefixPath } from './DavClient.js'
 
 /**
  * Get tagged files based on provided tag id
@@ -32,7 +32,7 @@ import client, { prefixPath } from './DavClient.js'
  * @param {object} [options] optional options for axios
  * @return {Array} the file list
  */
-export default async function(id, options = {}) {
+export default async function (id, options = {}) {
 
 	options = Object.assign({
 		method: 'REPORT',
@@ -52,7 +52,7 @@ export default async function(id, options = {}) {
 		details: true,
 	}, options)
 
-	const response = await client.getDirectoryContents(prefixPath, options)
+	const response = await client.getDirectoryContents(getPrefixPath(), options)
 
 	return response.data
 		.map(data => genFileInfo(data))
@@ -61,5 +61,5 @@ export default async function(id, options = {}) {
 		// https://github.com/nextcloud/server/blob/5bf3d1bb384da56adbf205752be8f840aac3b0c5/apps/dav/lib/Connector/Sabre/FilesReportPlugin.php#L274
 		.filter(file => file.mime && allowedMimes.indexOf(file.mime) !== -1)
 		// remove prefix path from full file path
-		.map(data => Object.assign({}, data, { filename: data.filename.replace(prefixPath, '') }))
+		.map(data => Object.assign({}, data, { filename: data.filename.replace(getPrefixPath(), '') }))
 }
