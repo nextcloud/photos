@@ -232,8 +232,11 @@ __webpack_require__.r(__webpack_exports__);
 
       for (const fileId of this.fetchedFileIds) {
         const file = this.files[fileId];
-        filesByMonth[file.month] = filesByMonth[file.month] ?? [];
-        filesByMonth[file.month].push(file.fileid);
+
+        if (file) {
+          filesByMonth[file.month] = filesByMonth[file.month] ?? [];
+          filesByMonth[file.month].push(file.fileid);
+        }
       } // Sort files in sections.
 
 
@@ -246,6 +249,17 @@ __webpack_require__.r(__webpack_exports__);
      */
     monthsList() {
       return Object.keys(this.fileIdsByMonth).sort((month1, month2) => month1 > month2 ? -1 : 1);
+    }
+
+  },
+  methods: {
+    /**
+     * @param {string} fileId1 The first file ID
+     * @param {string} fileId2 The second file ID
+     * @return {-1 | 1}
+     */
+    sortFilesByTimestamp(fileId1, fileId2) {
+      return this.files[fileId1].timestamp > this.files[fileId2].timestamp ? -1 : 1;
     }
 
   }
@@ -721,4 +735,4 @@ render._withStripped = true
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_components_FilesPicker_vue.js.map?v=43024ef169ccf568519e
+//# sourceMappingURL=photos-src_components_FilesPicker_vue.js.map?v=d733cdb9099939e146e8
