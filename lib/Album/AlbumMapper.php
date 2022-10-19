@@ -442,7 +442,7 @@ class AlbumMapper {
 			->leftJoin("a", "photos_albums_files", "p", $query->expr()->eq("a.album_id", "p.album_id"))
 			->where($query->expr()->eq('collaborator_id', $query->createNamedParameter($collaboratorId)))
 			->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter($collaboratorType, IQueryBuilder::PARAM_INT)))
-			->andWhere($query->expr()->eq('file_id', $query->createNamedParameter($fileId)))
+			->andWhere($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)))
 			->groupBy('a.album_id')
 			->executeQuery()
 			->fetchAll();
