@@ -153,11 +153,11 @@
 
 <script>
 // eslint-disable-next-line node/no-extraneous-import
-import { addNewFileMenuEntry } from '@nextcloud/files'
+import { addNewFileMenuEntry, removeNewFileMenuEntry } from '@nextcloud/files'
 import { getCurrentUser } from '@nextcloud/auth'
 import { mapActions, mapGetters } from 'vuex'
 import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionSeparator, NcLoadingIcon, isMobile } from '@nextcloud/vue'
-import { Upload, UploadPicker } from '@nextcloud/upload'
+import { UploadPicker } from '@nextcloud/upload'
 import debounce from 'debounce'
 
 import Close from 'vue-material-design-icons/Close'
@@ -243,6 +243,16 @@ export default {
 			showEditAlbumForm: false,
 
 			loadingAddCollaborators: false,
+			newFileMenuEntry: {
+				id: 'album-add',
+				displayName: t('photos', 'Add photos to this album'),
+				templateName: '',
+				if: (context) => context.route === this.$route.name,
+				/** Existing icon css class */
+				iconSvgInline: PlusSvg,
+				/** Function to be run after creation */
+				handler: () => { this.showAddPhotosModal = true },
+			},
 		}
 	},
 
@@ -296,16 +306,12 @@ export default {
 	},
 
 	mounted() {
-		addNewFileMenuEntry({
-			id: 'album-add',
-			displayName: t('photos', 'Add photos to this album'),
-			templateName: '',
-			if: (context) => context.route === this.$route.name,
-			/** Existing icon css class */
-			iconSvgInline: PlusSvg,
-			/** Function to be run after creation */
-			handler: () => { this.showAddPhotosModal = true },
-		})
+		this.fetchAlbumContent()
+		addNewFileMenuEntry(this.newFileMenuEntry)
+	},
+
+	destroyed() {
+		removeNewFileMenuEntry(this.newFileMenuEntry)
 	},
 
 	methods: {
@@ -350,7 +356,7 @@ export default {
 				this.appendFiles(fetchedFiles)
 
 				if (fetchedFiles.length > 0) {
-					await this.$store.commit('addFilesToAlbum', { albumName: this.albumName, fileIdsToAdd: fileIds })
+					await this.$store.commit('setAlbumFiles', { albumName: this.albumName, fileIds })
 				}
 
 				logger.debug(`[AlbumContent] Fetched ${fileIds.length} new files: `, fileIds)

@@ -83,6 +83,29 @@ const mutations = {
 	 * @param {object} state vuex state
 	 * @param {object} data destructuring object
 	 * @param {string} data.albumName the album id
+	 * @param {string[]} data.fileIds list of files
+	 */
+	setAlbumFiles(state, { albumName, fileIds }) {
+		const albumFiles = state.albumsFiles[albumName] || []
+		state.albumsFiles = {
+			...state.albumsFiles,
+			[albumName]: [
+				...albumFiles,
+				...fileIds.filter(fileId => !albumFiles.includes(fileId)), // Filter to prevent duplicate fileId.
+			],
+		}
+
+		if (state.albums[albumName] !== undefined) {
+			state.albums[albumName].nbItems = fileIds.length
+		}
+	},
+
+	/**
+	 * Add files to an album.
+	 *
+	 * @param {object} state vuex state
+	 * @param {object} data destructuring object
+	 * @param {string} data.albumName the album id
 	 * @param {string[]} data.fileIdsToAdd list of files
 	 */
 	addFilesToAlbum(state, { albumName, fileIdsToAdd }) {
