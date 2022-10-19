@@ -707,4 +707,4 @@ module.exports = "<svg id=\"3ecf9745-447a-4766-8a86-6837975429df\" data-name=\"L
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_mixins_FetchFilesMixin_js-src_components_Collection_CollectionContent_vue.js.map?v=57dd9ecd6354a562e033
+//# sourceMappingURL=photos-src_mixins_FetchFilesMixin_js-src_components_Collection_CollectionContent_vue.js.map?v=ddcf361d018d95c1d589

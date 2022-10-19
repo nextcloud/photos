@@ -1166,7 +1166,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".face-list[data-v-1591b7bf] {\n  display: flex;\n  flex-direction: row;\n  height: 350px;\n  flex-wrap: wrap;\n  padding: 12px;\n}\n.face-list__item[data-v-1591b7bf] {\n  display: flex;\n  flex-direction: column;\n  padding: 10px;\n  border-radius: var(--border-radius);\n  align-items: center;\n  cursor: pointer;\n  width: 120px;\n}\n.face-list__item *[data-v-1591b7bf] {\n  cursor: pointer;\n}\n.face-list__item__crop-container[data-v-1591b7bf] {\n  overflow: hidden;\n  width: 60px;\n  height: 60px;\n  border-radius: 60px;\n  position: relative;\n  background: var(--color-background-darker);\n  --photos-face-width: 60px;\n}\n.face-list__item[data-v-1591b7bf]:hover, .face-list__item[data-v-1591b7bf]:focus {\n  background: var(--color-background-hover);\n}\n.face-list__item__details[data-v-1591b7bf] {\n  padding: 10px;\n  height: 1em;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  width: 100%;\n  text-align: center;\n}\n.loader[data-v-1591b7bf] {\n  margin-top: 25%;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".face-list[data-v-1591b7bf] {\n  display: flex;\n  flex-direction: row;\n  height: 350px;\n  flex-wrap: wrap;\n  padding: 12px;\n  align-content: center;\n}\n.face-list__item[data-v-1591b7bf] {\n  display: flex;\n  flex-direction: column;\n  padding: 10px;\n  border-radius: var(--border-radius);\n  align-items: center;\n  cursor: pointer;\n  width: 120px;\n}\n.face-list__item *[data-v-1591b7bf] {\n  cursor: pointer;\n}\n.face-list__item__crop-container[data-v-1591b7bf] {\n  overflow: hidden;\n  width: 60px;\n  height: 60px;\n  border-radius: 60px;\n  position: relative;\n  background: var(--color-background-darker);\n  --photos-face-width: 60px;\n}\n.face-list__item[data-v-1591b7bf]:hover, .face-list__item[data-v-1591b7bf]:focus {\n  background: var(--color-background-hover);\n}\n.face-list__item__details[data-v-1591b7bf] {\n  padding: 10px;\n  height: 1em;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  width: 100%;\n  text-align: center;\n}\n.loader[data-v-1591b7bf] {\n  margin: 25% auto;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -2104,4 +2104,4 @@ render._withStripped = true
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_views_FaceContent_vue.js.map?v=51a0d9e91da359ec2f24
+//# sourceMappingURL=photos-src_views_FaceContent_vue.js.map?v=6b5c3b6147f6bcb72fe9
