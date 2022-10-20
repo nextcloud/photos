@@ -122,6 +122,7 @@ import videoplaceholder from './assets/video.svg'
 import areTagsInstalled from './services/AreTagsInstalled.js'
 import isMapsInstalled from './services/IsMapsInstalled.js'
 import isRecognizeInstalled from './services/IsRecognizeInstalled.js'
+import logger from './services/logger.js'
 
 export default {
 	name: 'Photos',
@@ -164,6 +165,11 @@ export default {
 	},
 
 	async beforeMount() {
+		// Register excluded paths
+		const files = loadState('photos', 'nomedia-paths', [])
+		this.$store.dispatch('setNomediaPaths', files)
+		logger.debug('Known .nomedia and .noimage  paths', { files })
+
 		if ('serviceWorker' in navigator) {
 			// Use the window load event to keep the page load performant
 			window.addEventListener('load', () => {
@@ -181,9 +187,6 @@ export default {
 		} else {
 			console.debug('Service Worker is not enabled on this browser.')
 		}
-
-		const files = loadState('photos', 'nomedia-paths', [])
-		this.$store.dispatch('setNomediaPaths', files)
 	},
 
 	beforeDestroy() {
