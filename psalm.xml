@@ -10,7 +10,7 @@
         <directory name="lib" />
     </projectFiles>
     <extraFiles>
-        <directory name="vendor/christophwurst/nextcloud" />
+        <directory name="vendor/nextcloud/ocp" />
     </extraFiles>
     	<issueHandlers>
 		<UndefinedClass>
