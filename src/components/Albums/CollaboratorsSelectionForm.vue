@@ -46,16 +46,16 @@
 				</label>
 
 				<ul v-if="searchResults.length !== 0" :id="`manage-collaborators__form__list-${randomId}`" class="manage-collaborators__form__list">
-					<li v-for="result of searchResults" :key="result.key">
+					<li v-for="collaboratorKey of searchResults" :key="collaboratorKey">
 						<a>
-							<NcListItemIcon :id="availableCollaborators[result.key].id"
+							<NcListItemIcon :id="availableCollaborators[collaboratorKey].id"
 								class="manage-collaborators__form__list__result"
-								:title="availableCollaborators[result.key].id"
+								:title="availableCollaborators[collaboratorKey].id"
 								:search="searchText"
-								:user="availableCollaborators[result.key].id"
-								:display-name="availableCollaborators[result.key].label"
-								:aria-label="t('photos', 'Add {collaboratorLabel} to the collaborators list', {collaboratorLabel: availableCollaborators[result.key].label})"
-								@click="selectEntity(result.key)" />
+								:user="availableCollaborators[collaboratorKey].id"
+								:display-name="availableCollaborators[collaboratorKey].label"
+								:aria-label="t('photos', 'Add {collaboratorLabel} to the collaborators list', {collaboratorLabel: availableCollaborators[collaboratorKey].label})"
+								@click="selectEntity(collaboratorKey)" />
 						</a>
 					</li>
 				</ul>
@@ -69,7 +69,7 @@
 		</form>
 
 		<ul class="manage-collaborators__selection">
-			<li v-for="collaboratorKey of selectedCollaboratorsKeys"
+			<li v-for="collaboratorKey of listableSelectedCollaboratorsKeys"
 				:key="collaboratorKey"
 				class="manage-collaborators__selection__item">
 				<NcListItemIcon :id="availableCollaborators[collaboratorKey].id"
@@ -87,8 +87,10 @@
 
 		<div class="actions">
 			<div v-if="allowPublicLink" class="actions__public-link">
-				<template v-if="publicLink">
+				<template v-if="isPublicLinkSelected">
 					<NcButton class="manage-collaborators__public-link-button"
+						:aria-label="t('photos', 'Copy the public link')"
+						:disabled="publicLink.id === ''"
 						@click="copyPublicLink">
 						<template v-if="publicLinkCopied">
 							{{ t('photos', 'Public link copied!') }}
@@ -101,8 +103,12 @@
 							<ContentCopy v-else />
 						</template>
 					</NcButton>
-					<NcButton @click="deletePublicLink">
-						<Close slot="icon" />
+					<NcButton type="tertiary"
+						:aria-label="t('photos', 'Delete the public link')"
+						:disabled="publicLink.id === ''"
+						@click="deletePublicLink">
+						<NcLoadingIcon v-if="publicLink.id === ''" slot="icon" />
+						<Close v-else slot="icon" />
 					</NcButton>
 				</template>
 				<NcButton v-else
@@ -119,28 +125,33 @@
 		</div>
 	</div>
 </template>
-
 <script>
+import { mapActions } from 'vuex'
+
 import Magnify from 'vue-material-design-icons/Magnify'
 import Close from 'vue-material-design-icons/Close'
+import Check from 'vue-material-design-icons/Check'
+import ContentCopy from 'vue-material-design-icons/ContentCopy'
 import AccountGroup from 'vue-material-design-icons/AccountGroup'
 import Earth from 'vue-material-design-icons/Earth'
 
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
 import { getCurrentUser } from '@nextcloud/auth'
-import { generateOcsUrl } from '@nextcloud/router'
+import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { NcButton, NcListItemIcon, NcLoadingIcon, NcPopover, NcTextField, NcEmptyContent } from '@nextcloud/vue'
+import { Type } from '@nextcloud/sharing'
 
 import logger from '../../services/logger.js'
+import AbortControllerMixin from '../../mixins/AbortControllerMixin.js'
+import { fetchAlbum } from '../../services/Albums.js'
 
-const SHARE = {
-	TYPE: {
-		USER: 0,
-		GROUP: 1,
-		// LINK: 3,
-	},
-}
+/**
+ * @typedef {object} Collaborator
+ * @property {string} id - The id of the collaborator.
+ * @property {string} label - The label of the collaborator for display.
+ * @property {Type.SHARE_TYPE_USER|Type.SHARE_TYPE_GROUP|Type.SHARE_TYPE_LINK} type - The type of the collaborator.
+ */
 
 export default {
 	name: 'CollaboratorsSelectionForm',
@@ -149,6 +160,8 @@ export default {
 		Magnify,
 		Close,
 		AccountGroup,
+		ContentCopy,
+		Check,
 		Earth,
 		NcLoadingIcon,
 		NcButton,
@@ -158,20 +171,18 @@ export default {
 		NcEmptyContent,
 	},
 
+	mixins: [AbortControllerMixin],
+
 	props: {
 		albumName: {
 			type: String,
 			required: true,
 		},
 
+		/** @type {import('vue').PropType<Collaborator[]>} */
 		collaborators: {
 			type: Array,
 			default: () => [],
-		},
-
-		publicLink: {
-			type: String,
-			default: '',
 		},
 
 		allowPublicLink: {
@@ -183,9 +194,14 @@ export default {
 	data() {
 		return {
 			searchText: '',
+			/** @type {Object<string, Collaborator>} */
 			availableCollaborators: {},
+			/** @type {string[]} */
 			selectedCollaboratorsKeys: [],
+			/** @type {Collaborator[]} */
 			currentSearchResults: [],
+			loadingAlbum: false,
+			errorFetchingAlbum: null,
 			loadingCollaborators: false,
 			randomId: Math.random().toString().substring(2, 10),
 			publicLinkCopied: false,
@@ -203,29 +219,52 @@ export default {
 			return this.currentSearchResults
 				.filter(({ id }) => id !== getCurrentUser().uid)
 				.map(({ type, id }) => `${type}:${id}`)
-				.filter(key => !this.selectedCollaboratorsKeys.includes(key))
-				.map((key) => ({ key, height: 48 }))
+				.filter(collaboratorKey => !this.selectedCollaboratorsKeys.includes(collaboratorKey))
 		},
 
 		/**
-		 * @return {object[]}
+		 * @return {string[]}
+		 */
+		listableSelectedCollaboratorsKeys() {
+			return this.selectedCollaboratorsKeys
+				.filter(collaboratorKey => this.availableCollaborators[collaboratorKey].type !== Type.SHARE_TYPE_LINK)
+		},
+
+		/**
+		 * @return {Collaborator[]}
 		 */
 		selectedCollaborators() {
-			return this.selectedCollaboratorsKeys.map((collaboratorKey) => this.availableCollaborators[collaboratorKey])
+			return this.selectedCollaboratorsKeys
+				.map((collaboratorKey) => this.availableCollaborators[collaboratorKey])
+		},
+
+		/**
+		 * @return {boolean}
+		 */
+		isPublicLinkSelected() {
+			return this.selectedCollaboratorsKeys.includes(`${Type.SHARE_TYPE_LINK}`)
+		},
+
+		/** @return {Collaborator} */
+		publicLink() {
+			return this.availableCollaborators[Type.SHARE_TYPE_LINK]
+		},
+	},
+
+	watch: {
+		collaborators(collaborators) {
+			this.populateCollaborators(collaborators)
 		},
 	},
 
 	mounted() {
 		this.searchCollaborators()
-		this.selectedCollaboratorsKeys = this.collaborators.map(({ type, id }) => `${type}:${id}`)
-		this.availableCollaborators = {
-			...this.availableCollaborators,
-			...this.collaborators
-				.reduce((collaborators, collaborator) => ({ ...collaborators, [`${collaborator.type}:${collaborator.id}`]: collaborator }), {}),
-		}
+		this.populateCollaborators(this.collaborators)
 	},
 
 	methods: {
+		...mapActions(['updateAlbum', 'addAlbums']),
+
 		/**
 		 * Fetch possible collaborators.
 		 */
@@ -241,30 +280,27 @@ export default {
 						search: this.searchText,
 						itemType: 'share-recipients',
 						shareTypes: [
-							SHARE.TYPE.USER,
-							SHARE.TYPE.GROUP,
+							Type.SHARE_TYPE_USER,
+							Type.SHARE_TYPE_GROUP,
 						],
 					},
 				})
 
 				this.currentSearchResults = response.data.ocs.data
 					.map(collaborator => {
-						let type = -1
 						switch (collaborator.source) {
 						case 'users':
-							type = OC.Share.SHARE_TYPE_USER
-							break
+							return { id: collaborator.id, label: collaborator.label, type: Type.SHARE_TYPE_USER }
 						case 'groups':
-							type = OC.Share.SHARE_TYPE_GROUP
-							break
+							return { id: collaborator.id, label: collaborator.label, type: Type.SHARE_TYPE_GROUP }
+						default:
+							throw new Error(`Invalid collaborator source ${collaborator.source}`)
 						}
-
-						return { ...collaborator, type }
 					})
+
 				this.availableCollaborators = {
 					...this.availableCollaborators,
-					...this.currentSearchResults
-						.reduce((collaborators, collaborator) => ({ ...collaborators, [`${collaborator.type}:${collaborator.id}`]: collaborator }), {}),
+					...this.currentSearchResults.reduce(this.indexCollaborators, {}),
 				}
 			} catch (error) {
 				this.errorFetchingCollaborators = error
@@ -275,17 +311,89 @@ export default {
 			}
 		},
 
-		// TODO: implement public sharing
+		/**
+		 * Populate selectedCollaboratorsKeys and availableCollaborators.
+		 *
+		 * @param {Collaborator[]} collaborators
+		 */
+		populateCollaborators(collaborators) {
+			const initialCollaborators = collaborators.reduce(this.indexCollaborators, {})
+			this.selectedCollaboratorsKeys = Object.keys(initialCollaborators)
+			this.availableCollaborators = {
+				3: {
+					id: '',
+					label: t('photos', 'Public link'),
+					type: Type.SHARE_TYPE_LINK,
+				},
+				...this.availableCollaborators,
+				...initialCollaborators,
+			}
+		},
+
+		/**
+		 * @param {Object<string, Collaborator>} collaborators - Index of collaborators
+		 * @param {Collaborator} collaborator - A collaborator
+		 */
+		indexCollaborators(collaborators, collaborator) {
+			return { ...collaborators, [`${collaborator.type}${collaborator.type === Type.SHARE_TYPE_LINK ? '' : ':'}${collaborator.type === Type.SHARE_TYPE_LINK ? '' : collaborator.id}`]: collaborator }
+		},
+
 		async createPublicLinkForAlbum() {
-			return axios.put(generateOcsUrl(`apps/photos/createPublicLink/${this.albumName}`))
+			this.selectEntity(`${Type.SHARE_TYPE_LINK}`)
+			await this.updateAlbumCollaborators()
+			try {
+				this.loadingAlbum = true
+				this.errorFetchingAlbum = null
+
+				const album = await fetchAlbum(
+					`/photos/${getCurrentUser().uid}/albums/${this.albumName}`,
+					{ signal: this.abortController.signal }
+				)
+
+				this.addAlbums({ albums: [album] })
+			} catch (error) {
+				if (error.response?.status === 404) {
+					this.errorFetchingAlbum = 404
+				} else {
+					this.errorFetchingAlbum = error
+				}
+
+				logger.error('[PublicAlbumContent] Error fetching album', { error })
+				showError(this.t('photos', 'Failed to fetch album.'))
+			} finally {
+				this.loadingAlbum = false
+			}
 		},
 
 		async deletePublicLink() {
-			return axios.delete(generateOcsUrl(`apps/photos/createPublicLink/${this.albumName}`))
+			this.unselectEntity(`${Type.SHARE_TYPE_LINK}`)
+			this.availableCollaborators[3] = {
+				id: '',
+				label: t('photos', 'Public link'),
+				type: Type.SHARE_TYPE_LINK,
+			}
+			this.publicLinkCopied = false
+			await this.updateAlbumCollaborators()
+		},
+
+		async updateAlbumCollaborators() {
+			try {
+				await this.updateAlbum({
+					albumName: this.albumName,
+					properties: {
+						collaborators: this.selectedCollaborators,
+					},
+				})
+			} catch (error) {
+				logger.error('[PublicAlbumContent] Error updating album', { error })
+				showError(this.t('photos', 'Failed to update album.'))
+			} finally {
+				this.loadingAlbum = false
+			}
 		},
 
 		async copyPublicLink() {
-			await navigator.clipboard.writeText(this.publicLink)
+			await navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}${generateUrl(`apps/photos/public/${this.publicLink.id}`)}`)
 			this.publicLinkCopied = true
 			setTimeout(() => {
 				this.publicLinkCopied = false
@@ -303,12 +411,16 @@ export default {
 
 		unselectEntity(collaboratorKey) {
 			const index = this.selectedCollaboratorsKeys.indexOf(collaboratorKey)
+
+			if (index === -1) {
+				return
+			}
+
 			this.selectedCollaboratorsKeys.splice(index, 1)
 		},
 	},
 }
 </script>
-
 <style lang="scss" scoped>
 .manage-collaborators {
 	display: flex;
@@ -396,6 +508,10 @@ export default {
 		&__public-link {
 			display: flex;
 			align-items: center;
+
+			button {
+				margin-left: 8px;
+			}
 		}
 
 		&__slot {

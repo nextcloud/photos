@@ -28,15 +28,16 @@ use OCA\DAV\Connector\Sabre\FilesPlugin;
 use OCA\Photos\Album\AlbumMapper;
 use OCP\IConfig;
 use OCP\IPreview;
+use OCP\Files\NotFoundException;
 use Sabre\DAV\INode;
 use Sabre\DAV\PropFind;
 use Sabre\DAV\PropPatch;
 use Sabre\DAV\Server;
 use Sabre\DAV\ServerPlugin;
 use Sabre\DAV\Tree;
-use OCP\Files\NotFoundException;
 
 class PropFindPlugin extends ServerPlugin {
+	public const ORIGINAL_NAME_PROPERTYNAME = '{http://nextcloud.org/ns}original-name';
 	public const FILE_NAME_PROPERTYNAME = '{http://nextcloud.org/ns}file-name';
 	public const FAVORITE_PROPERTYNAME = '{http://owncloud.org/ns}favorite';
 	public const DATE_RANGE_PROPERTYNAME = '{http://nextcloud.org/ns}dateRange';
@@ -68,6 +69,19 @@ class PropFindPlugin extends ServerPlugin {
 	}
 
 	/**
+	 * Returns a plugin name.
+	 *
+	 * Using this name other plugins will be able to access other plugins
+	 * using DAV\Server::getPlugin
+	 *
+	 * @return string
+	 */
+	public function getPluginName() {
+		return 'photosDavPlugin';
+	}
+
+
+	/**
 	 * @return void
 	 */
 	public function initialize(Server $server) {
@@ -78,7 +92,7 @@ class PropFindPlugin extends ServerPlugin {
 
 	public function propFind(PropFind $propFind, INode $node): void {
 		if ($node instanceof AlbumPhoto) {
-			// Checking if the node is trulely available and ignoring if not
+			// Checking if the node is truly available and ignoring if not
 			// Should be pre-emptively handled by the NodeDeletedEvent
 			try {
 				$fileInfo = $node->getFileInfo();
@@ -90,9 +104,7 @@ class PropFindPlugin extends ServerPlugin {
 			$propFind->handle(FilesPlugin::GETETAG_PROPERTYNAME, fn () => $node->getETag());
 			$propFind->handle(self::FILE_NAME_PROPERTYNAME, fn () => $node->getFile()->getName());
 			$propFind->handle(self::FAVORITE_PROPERTYNAME, fn () => $node->isFavorite() ? 1 : 0);
-			$propFind->handle(FilesPlugin::HAS_PREVIEW_PROPERTYNAME, function () use ($fileInfo) {
-				return json_encode($this->previewManager->isAvailable($fileInfo));
-			});
+			$propFind->handle(FilesPlugin::HAS_PREVIEW_PROPERTYNAME, fn () => json_encode($this->previewManager->isAvailable($fileInfo)));
 
 			if ($this->metadataEnabled) {
 				$propFind->handle(FilesPlugin::FILE_METADATA_SIZE, function () use ($node) {
@@ -111,7 +123,8 @@ class PropFindPlugin extends ServerPlugin {
 			}
 		}
 
-		if ($node instanceof AlbumRoot || $node instanceof SharedAlbumRoot) {
+		if ($node instanceof AlbumRoot) {
+			$propFind->handle(self::ORIGINAL_NAME_PROPERTYNAME, fn () => $node->getAlbum()->getAlbum()->getTitle());
 			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn () => $node->getAlbum()->getAlbum()->getLastAddedPhoto());
 			$propFind->handle(self::NBITEMS_PROPERTYNAME, fn () => count($node->getChildren()));
 			$propFind->handle(self::LOCATION_PROPERTYNAME, fn () => $node->getAlbum()->getAlbum()->getLocation());
@@ -141,7 +154,7 @@ class PropFindPlugin extends ServerPlugin {
 				return true;
 			});
 			$propPatch->handle(self::COLLABORATORS_PROPERTYNAME, function ($collaborators) use ($node) {
-				$this->albumMapper->setCollaborators($node->getAlbum()->getAlbum()->getId(), json_decode($collaborators, true));
+				$collaborators = $node->setCollaborators(json_decode($collaborators, true));
 				return true;
 			});
 		}

@@ -49,12 +49,11 @@
 						type="tertiary"
 						:aria-label="t('photos', 'Add photos to this album')"
 						@click="showAddPhotosModal = true">
-						<template #icon>
-							<Plus />
-						</template>
+						<Plus slot="icon" />
 					</NcButton>
 
 					<NcActions :force-menu="true" :aria-label="t('photos', 'Open actions menu')">
+						<!-- TODO: enable download on shared albums -->
 						<!-- <ActionDownload v-if="albumFileIds.length > 0"
 							:selected-file-ids="albumFileIds"
 							:title="t('photos', 'Download all files in album')">
@@ -70,6 +69,7 @@
 						<template v-if="selectedFileIds.length > 0">
 							<NcActionSeparator />
 
+							<!-- TODO: enable download on shared albums -->
 							<!-- <ActionDownload :selected-file-ids="selectedFileIds" :title="t('photos', 'Download selected files')">
 								<Download slot="icon" />
 							</ActionDownload> -->
@@ -263,7 +263,7 @@ export default {
 				}
 
 				// cancelled request, moving on...
-				logger.error('Error fetching shared album files', error)
+				logger.error('[SharedAlbumContent] Error fetching album files', { error })
 			} finally {
 				this.loadingFiles = false
 				this.semaphore.release(semaphoreSymbol)

@@ -28,11 +28,13 @@ use OCA\Photos\Exception\AlreadyInAlbumException;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\IMimeTypeLoader;
+use OCP\Security\ISecureRandom;
 use OCP\IDBConnection;
 use OCP\IGroup;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IGroupManager;
+use OCP\IL10N;
 
 class AlbumMapper {
 	private IDBConnection $connection;
@@ -40,6 +42,8 @@ class AlbumMapper {
 	private ITimeFactory $timeFactory;
 	private IUserManager $userManager;
 	private IGroupManager $groupManager;
+	protected IL10N $l;
+	protected ISecureRandom $random;
 
 	// Same mapping as IShare.
 	public const TYPE_USER = 0;
@@ -51,13 +55,17 @@ class AlbumMapper {
 		IMimeTypeLoader $mimeTypeLoader,
 		ITimeFactory $timeFactory,
 		IUserManager $userManager,
-		IGroupManager $groupManager
+		IGroupManager $groupManager,
+		IL10N $l,
+		ISecureRandom $random
 	) {
 		$this->connection = $connection;
 		$this->mimeTypeLoader = $mimeTypeLoader;
 		$this->timeFactory = $timeFactory;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
+		$this->l = $l;
+		$this->random = $random;
 	}
 
 	public function create(string $userId, string $name, string $location = ""): AlbumInfo {
@@ -294,27 +302,30 @@ class AlbumMapper {
 
 		$collaborators = array_map(function (array $row) {
 			/** @var IUser|IGroup|null */
-			$collaborator = null;
+			$displayName = null;
 
 			switch ($row['collaborator_type']) {
 				case self::TYPE_USER:
-					$collaborator = $this->userManager->get($row['collaborator_id']);
+					$displayName = $this->userManager->get($row['collaborator_id'])->getDisplayName();
 					break;
 				case self::TYPE_GROUP:
-					$collaborator = $this->groupManager->get($row['collaborator_id']);
+					$displayName = $this->groupManager->get($row['collaborator_id'])->getDisplayName();
+					break;
+				case self::TYPE_LINK:
+					$displayName = $this->l->t('Public link');
 					break;
 				default:
 					throw new \Exception('Invalid collaborator type: ' . $row['collaborator_type']);
 			}
 
-			if (is_null($collaborator)) {
+			if (is_null($displayName)) {
 				return null;
 			}
 
 			return [
 				'id' => $row['collaborator_id'],
-				'label' => $collaborator->getDisplayName(),
-				'type' => $row['collaborator_type'],
+				'label' => $displayName,
+				'type' => (int)$row['collaborator_type'],
 			];
 		}, $rows);
 
@@ -323,13 +334,18 @@ class AlbumMapper {
 
 	/**
 	 * @param int $albumId
-	 * @param array{'id': string, 'label': string, 'type': int} $collaborators
+	 * @param array{'id': string, 'type': int} $collaborators
 	 */
 	public function setCollaborators(int $albumId, array $collaborators): void {
 		$existingCollaborators = $this->getCollaborators($albumId);
 
-		$collaboratorsToAdd = array_udiff($collaborators, $existingCollaborators, fn ($a, $b) => strcmp($a['id'].$a['type'], $b['id'].$b['type']));
-		$collaboratorsToRemove = array_udiff($existingCollaborators, $collaborators, fn ($a, $b) => strcmp($a['id'].$a['type'], $b['id'].$b['type']));
+		// Different behavior if type is link to prevent creating multiple link.
+		function computeKey($c) {
+			return ($c['type'] === AlbumMapper::TYPE_LINK ? '' : $c['id']).$c['type'];
+		}
+
+		$collaboratorsToAdd = array_udiff($collaborators, $existingCollaborators, fn ($a, $b) => strcmp(computeKey($a), computeKey($b)));
+		$collaboratorsToRemove = array_udiff($existingCollaborators, $collaborators, fn ($a, $b) => strcmp(computeKey($a), computeKey($b)));
 
 		$this->connection->beginTransaction();
 
@@ -344,6 +360,9 @@ class AlbumMapper {
 					if (is_null($this->groupManager->get($collaborator['id']))) {
 						throw new \Exception('Unknown collaborator: ' . $collaborator['id']);
 					}
+					break;
+				case self::TYPE_LINK:
+					$collaborator['id'] = $this->random->generate(32, ISecureRandom::CHAR_UPPER . ISecureRandom::CHAR_LOWER . ISecureRandom::CHAR_DIGITS);
 					break;
 				default:
 					throw new \Exception('Invalid collaborator type: ' . $collaborator['type']);
@@ -397,11 +416,17 @@ class AlbumMapper {
 			if ($row['fileid']) {
 				$mimeId = $row['mimetype'];
 				$mimeType = $this->mimeTypeLoader->getMimetypeById($mimeId);
-				$filesByAlbum[$albumId][] = new AlbumFile((int)$row['fileid'], $row['album_name'].' ('.$row['album_user'].')', $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
+				$filesByAlbum[$albumId][] = new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
 			}
 
 			if (!isset($albumsById[$albumId])) {
-				$albumsById[$albumId] = new AlbumInfo($albumId, $row['album_user'], $row['album_name'].' ('.$row['album_user'].')', $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
+				$albumName = $row['album_name'];
+				// Suffix album name with the album owner to prevent duplicates.
+				// Not done for public link as it would like owner's uid.
+				if ($collaboratorType !== self::TYPE_LINK) {
+					$albumName = $row['album_name'].' ('.$row['album_user'].')';
+				}
+				$albumsById[$albumId] = new AlbumInfo($albumId, $row['album_user'], $albumName, $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
 			}
 		}
 
@@ -433,7 +458,7 @@ class AlbumMapper {
 	 * @param int $fileId
 	 * @return AlbumInfo[]
 	 */
-	public function getAlbumForCollaboratorIdAndFileId(string $collaboratorId, int $collaboratorType, int $fileId): array {
+	public function getAlbumsForCollaboratorIdAndFileId(string $collaboratorId, int $collaboratorType, int $fileId): array {
 		$query = $this->connection->getQueryBuilder();
 		$rows = $query
 			->select("a.album_id", "name", "user", "location", "created", "last_added_photo")

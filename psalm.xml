@@ -1,13 +1,7 @@
 <?xml version="1.0"?>
-<psalm
-    errorLevel="4"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="https://getpsalm.org/schema/config"
-    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
-    errorBaseline="tests/psalm-baseline.xml"
->
+<psalm errorLevel="4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://getpsalm.org/schema/config" xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd" errorBaseline="tests/psalm-baseline.xml">
 	<stubs>
-		<file name="tests/stub.phpstub" preloadClasses="true"/>
+		<file name="tests/stub.phpstub" preloadClasses="true" />
 	</stubs>
 	<projectFiles>
 		<directory name="lib" />
@@ -28,6 +22,9 @@
 				<referencedClass name="OCA\DAV\Connector\Sabre\Principal" />
 				<referencedClass name="OCA\DAV\Connector\Sabre\File" />
 				<referencedClass name="OCA\DAV\Connector\Sabre\FilesPlugin" />
+				<referencedClass name="OCA\DAV\Events\SabrePluginAuthInitEvent" />
+				<referencedClass name="OC\Security\Bruteforce\Throttler" />
+				<referencedClass name="OC_User" />
 			</errorLevel>
 		</UndefinedClass>
 		<UndefinedDocblockClass>

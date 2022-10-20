@@ -31,7 +31,6 @@ use OCA\Photos\Service\UserConfigService;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
-use OCP\IUser;
 use Sabre\DAV\Exception\Conflict;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;
@@ -43,22 +42,19 @@ class AlbumRoot implements ICollection, ICopyTarget {
 	protected AlbumMapper $albumMapper;
 	protected AlbumWithFiles $album;
 	protected IRootFolder $rootFolder;
-	protected Folder $userFolder;
-	protected IUser $user;
+	protected string $userId;
 
 	public function __construct(
 		AlbumMapper $albumMapper,
 		AlbumWithFiles $album,
 		IRootFolder $rootFolder,
-		Folder $userFolder,
-		IUser $user,
+		string $userId,
 		UserConfigService $userConfigService
 	) {
 		$this->albumMapper = $albumMapper;
 		$this->album = $album;
 		$this->rootFolder = $rootFolder;
-		$this->userFolder = $userFolder;
-		$this->user = $user;
+		$this->userId = $userId;
 		$this->userConfigService = $userConfigService;
 	}
 
@@ -80,23 +76,29 @@ class AlbumRoot implements ICollection, ICopyTarget {
 		$this->albumMapper->rename($this->album->getAlbum()->getId(), $name);
 	}
 
+	protected function getPhotosLocationInfo() {
+		$photosLocation = $this->userConfigService->getUserConfig('photosLocation');
+		$userFolder = $this->rootFolder->getUserFolder($this->userId);
+		return [$photosLocation, $userFolder];
+	}
+
 	/**
 	 * We cannot create files in an Album
 	 * We add the file to the default Photos folder and then link it there.
 	 *
-	 * @param [type] $name
-	 * @param [type] $data
+	 * @param string $name
+	 * @param null|resource|string $data
 	 * @return void
 	 */
 	public function createFile($name, $data = null) {
 		try {
-			$photosLocation = $this->userConfigService->getUserConfig('photosLocation');
+			[$photosLocation, $userFolder] = $this->getPhotosLocationInfo();
 
 			try {
-				$photosFolder = $this->userFolder->get($photosLocation);
+				$photosFolder = $userFolder->get($photosLocation);
 			} catch (NotFoundException $e) {
 				// If the folder does not exists, create it
-				$photosFolder = $this->userFolder->newFolder($photosLocation);
+				$photosFolder = $userFolder->newFolder($photosLocation);
 			}
 
 			// If the node is not a folder, we throw
@@ -154,23 +156,22 @@ class AlbumRoot implements ICollection, ICopyTarget {
 	}
 
 	public function copyInto($targetName, $sourcePath, INode $sourceNode): bool {
-		$uid = $this->user->getUID();
 		if ($sourceNode instanceof File) {
 			$sourceId = $sourceNode->getId();
 			$ownerUID = $sourceNode->getFileInfo()->getOwner()->getUID();
 			return $this->addFile($sourceId, $ownerUID);
 		}
+		$uid = $this->userId;
 		throw new \Exception("Can't add file to album, only files from $uid can be added");
 	}
 
 	protected function addFile(int $sourceId, string $ownerUID): bool {
-		$uid = $this->user->getUID();
 		if (in_array($sourceId, $this->album->getFileIds())) {
 			throw new Conflict("File $sourceId is already in the folder");
 		}
-		if ($ownerUID === $uid) {
+		if ($ownerUID === $this->userId) {
 			$this->albumMapper->addFile($this->album->getAlbum()->getId(), $sourceId, $ownerUID);
-			$node = current($this->userFolder->getById($sourceId));
+			$node = current($this->rootFolder->getUserFolder($ownerUID)->getById($sourceId));
 			$this->album->addFile(new AlbumFile($sourceId, $node->getName(), $node->getMimetype(), $node->getSize(), $node->getMTime(), $node->getEtag(), $node->getCreationTime(), $ownerUID));
 			return true;
 		}
@@ -218,12 +219,21 @@ class AlbumRoot implements ICollection, ICopyTarget {
 	}
 
 	/**
-	 * @return array
+	 * @return array{array{'nc:collaborator': array{'id': string, 'label': string, 'type': int}}}
 	 */
-	public function getCollaborators() {
+	public function getCollaborators(): array {
 		return array_map(
 			fn (array $collaborator) => [ 'nc:collaborator' => $collaborator ],
 			$this->albumMapper->getCollaborators($this->album->getAlbum()->getId()),
 		);
+	}
+
+	/**
+	 * @param array{'id': string, 'type': int} $collaborators
+	 * @return array{array{'nc:collaborator': array{'id': string, 'label': string, 'type': int}}}
+	 */
+	public function setCollaborators($collaborators): array {
+		$this->albumMapper->setCollaborators($this->getAlbum()->getAlbum()->getId(), $collaborators);
+		return $this->getCollaborators();
 	}
 }

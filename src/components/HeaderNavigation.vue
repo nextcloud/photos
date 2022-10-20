@@ -170,7 +170,9 @@ export default {
 		toggleNavigationButton(hide) {
 			// Hide the navigation toggle if the back button is shown
 			const navigationToggle = document.querySelector('button.app-navigation-toggle')
-			navigationToggle.style.display = hide ? 'none' : null
+			if (navigationToggle !== null) {
+				navigationToggle.style.display = hide ? 'none' : null
+			}
 		},
 	},
 }

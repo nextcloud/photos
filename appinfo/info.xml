@@ -10,9 +10,10 @@
 	<author mail="skjnldsv@protonmail.com">John Molakvoæ</author>
     <namespace>Photos</namespace>
     <category>multimedia</category>
-	<types>
-		<dav/>
-	</types>
+    <types>
+        <dav />
+        <authentication />
+    </types>
 
 	<website>https://github.com/nextcloud/photos</website>
 	<bugs>https://github.com/nextcloud/photos/issues</bugs>
@@ -29,12 +30,13 @@
         </navigation>
     </navigations>
 
-	<sabre>
-		<collections>
-			<collection>OCA\Photos\Sabre\RootCollection</collection>
-		</collections>
-		<plugins>
-			<plugin>OCA\Photos\Sabre\Album\PropFindPlugin</plugin>
-		</plugins>
-	</sabre>
+    <sabre>
+        <collections>
+            <collection>OCA\Photos\Sabre\RootCollection</collection>
+            <collection>OCA\Photos\Sabre\PublicRootCollection</collection>
+        </collections>
+        <plugins>
+            <plugin>OCA\Photos\Sabre\Album\PropFindPlugin</plugin>
+        </plugins>
+    </sabre>
 </info>

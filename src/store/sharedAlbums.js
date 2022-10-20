@@ -147,7 +147,7 @@ const actions = {
 					if (error.response.status !== 409) { // Already in the album.
 						context.commit('removeFilesFromSharedAlbum', { albumName, fileIdsToRemove: [fileId] })
 
-						logger.error(t('photos', 'Failed to add {fileBaseName} to shared album {albumName}.', { fileBaseName: file.basename, albumName }), error)
+						logger.error(t('photos', 'Failed to add {fileBaseName} to shared album {albumName}.', { fileBaseName: file.basename, albumName }), { error })
 						showError(t('photos', 'Failed to add {fileBaseName} to shared album {albumName}.', { fileBaseName: file.basename, albumName }))
 					}
 				} finally {
@@ -181,7 +181,7 @@ const actions = {
 				} catch (error) {
 					context.commit('addFilesToSharedAlbum', { albumName, fileIdsToAdd: [fileId] })
 
-					logger.error(t('photos', 'Failed to delete {fileBaseName}.', { fileBaseName: file.basename }), error)
+					logger.error(t('photos', 'Failed to delete {fileBaseName}.', { fileBaseName: file.basename }), { error })
 					showError(t('photos', 'Failed to delete {fileBaseName}.', { fileBaseName: file.basename }))
 				} finally {
 					semaphore.release(symbol)
@@ -204,7 +204,7 @@ const actions = {
 			await client.deleteFile(album.filename)
 			context.commit('removeSharedAlbums', { albumNames: [albumName] })
 		} catch (error) {
-			logger.error(t('photos', 'Failed to delete {albumName}.', { albumName }), error)
+			logger.error(t('photos', 'Failed to delete {albumName}.', { albumName }), { error })
 			showError(t('photos', 'Failed to delete {albumName}.', { albumName }))
 		}
 	},

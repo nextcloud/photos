@@ -288,8 +288,10 @@ export default {
 	},
 
 	watch: {
-		album() {
-			this.fetchAlbumContent()
+		album(newAlbum, oldAlbum) {
+			if (newAlbum.filename !== oldAlbum.filename) {
+				this.fetchAlbumContent()
+			}
 		},
 	},
 
@@ -361,9 +363,7 @@ export default {
 					this.errorFetchingFiles = error
 				}
 
-				// cancelled request, moving on...
-				logger.error('Error fetching album files')
-				console.error(error)
+				logger.error('[AlbumContent] Error fetching album files', { error })
 			} finally {
 				this.loadingFiles = false
 				this.semaphore.release(semaphoreSymbol)

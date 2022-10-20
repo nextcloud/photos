@@ -22,8 +22,6 @@
 <template>
 	<CollectionsList :collections="sharedAlbums"
 		:loading="loadingAlbums"
-		:collection-title="t('photos', 'Shared albums')"
-		:collection-root="t('photos', 'Shared albums')"
 		:error="errorFetchingAlbums"
 		class="albums-list">
 		<HeaderNavigation key="navigation"
@@ -31,7 +29,7 @@
 			:loading="loadingAlbums"
 			:title="t('photos', 'Shared albums')"
 			:root-title="t('photos', 'Shared albums')"
-			@refresh="onRefresh" />
+			@refresh="fetchAlbums" />
 
 		<CollectionCover :key="collection.basename"
 			slot-scope="{collection}"
@@ -90,12 +88,6 @@ export default {
 	mixins: [
 		FetchSharedAlbumsMixin,
 	],
-
-	methods: {
-		onRefresh() {
-			this.fetchAlbums()
-		},
-	},
 }
 </script>
 <style lang="scss" scoped>
