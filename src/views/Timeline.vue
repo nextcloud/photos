@@ -288,7 +288,7 @@ export default {
 			padding: 0 4px;
 		}
 
-		::v-deep .files-list-viewer__section-header {
+		:deep .files-list-viewer__section-header {
 			top: var(--photos-navigation-height);
 		}
 	}

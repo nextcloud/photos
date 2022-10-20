@@ -266,7 +266,7 @@ export default {
 				z-index: 1;
 				opacity: 0.8;
 
-				::v-deep .material-design-icon__svg {
+				:deep .material-design-icon__svg {
 					fill: var(--color-main-background);
 				}
 			}
@@ -332,7 +332,7 @@ export default {
 		width: fit-content;
 
 		// Make the checkbox background round on hover.
-		::v-deep .checkbox-radio-switch__label {
+		:deep .checkbox-radio-switch__label {
 			padding: 10px;
 			box-sizing: border-box;
 
@@ -366,7 +366,7 @@ export default {
 		// Fancy calculation to render the start in the middle of narrow images.
 		right: min(2px, calc(50% - 7px));
 
-		::v-deep .material-design-icon__svg {
+		:deep .material-design-icon__svg {
 			fill: #FC0;
 
 			path {
