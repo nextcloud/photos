@@ -136,6 +136,11 @@ class PageController extends Controller {
 		Util::addScript(Application::APP_ID, 'photos-main');
 		Util::addStyle(Application::APP_ID, 'icons');
 
+		if ($this->appManager->isEnabledForUser('recognize') === true) {
+			// Allow auto-translation of tags
+			Util::addTranslations('recognize');
+		}
+
 		$response = new TemplateResponse(Application::APP_ID, 'main');
 
 		$policy = new ContentSecurityPolicy();
