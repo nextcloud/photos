@@ -122,6 +122,7 @@ import videoplaceholder from './assets/video.svg'
 import areTagsInstalled from './services/AreTagsInstalled.js'
 import isMapsInstalled from './services/IsMapsInstalled.js'
 import isRecognizeInstalled from './services/IsRecognizeInstalled.js'
+import logger from './services/logger.js'
 
 export default {
 	name: 'Photos',
