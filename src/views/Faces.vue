@@ -139,7 +139,7 @@ export default {
 	}
 }
 
-.empty-content-with-illustration ::v-deep .empty-content__icon {
+.empty-content-with-illustration :deep .empty-content__icon {
 	width: 200px;
 	height: 200px;
 
