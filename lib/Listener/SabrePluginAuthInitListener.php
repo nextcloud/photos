@@ -43,6 +43,11 @@ class SabrePluginAuthInitListener implements IEventListener {
 		}
 
 		$server = $event->getServer();
+
+		if (!str_starts_with($server->getRequestUri(), 'photospublic/')) {
+			return;
+		}
+
 		$authPlugin = $server->getPlugin('auth');
 		$authPlugin->addBackend($this->publicAlbumAuthBackend);
 	}
