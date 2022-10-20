@@ -27,7 +27,7 @@ import { generateRemoteUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 
 export const rootPath = 'dav'
-export const prefixPath = `/files/${getCurrentUser().uid}`
+export const prefixPath = `/files/${getCurrentUser()?.uid}`
 
 // force our axios
 const patcher = getPatcher()
