@@ -1,6 +1,7 @@
 OC.L10N.register(
     "photos",
     {
+    "Public link" : "Liamm publik",
     "Photos" : "Fotoioù",
     "Videos" : "Videoioù",
     "Favorites" : "Pennrolloù",
