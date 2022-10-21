@@ -1,6 +1,7 @@
 OC.L10N.register(
     "photos",
     {
+    "Public link" : "Enllaç públic",
     "Photos" : "Fotografies",
     "Your memories under your control" : "Els vostres records sota control",
     "Videos" : "Vídeos",
