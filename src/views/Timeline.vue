@@ -133,6 +133,7 @@ import PlusBoxMultiple from 'vue-material-design-icons/PlusBoxMultiple'
 import Download from 'vue-material-design-icons/Download'
 
 import { NcModal, NcActions, NcActionButton, NcButton, NcEmptyContent, isMobile } from '@nextcloud/vue'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import moment from '@nextcloud/moment'
 
 import { allMimes } from '../services/AllowedMimes.js'
@@ -230,6 +231,14 @@ export default {
 		]),
 	},
 
+	created() {
+		subscribe('files:file:deleted', this.onDeleteFile) // listen for delete in Viewer.vue
+	},
+
+	beforeDestroy() {
+		unsubscribe('files:file:deleted', this.onDeleteFile)
+	},
+
 	methods: {
 		...mapActions(['deleteFiles', 'addFilesToAlbum']),
 
@@ -261,11 +270,22 @@ export default {
 		},
 
 		async deleteSelection() {
-			// Need to store the file ids so it is not changed before the deleteFiles call.
-			const fileIds = this.selectedFileIds
-			this.onUncheckFiles(fileIds)
-			this.fetchedFileIds = this.fetchedFileIds.filter(fileid => !fileIds.includes(fileid))
+			const fileIds = [...this.selectedFileIds]
+			this.removeFromFetchedFiles(fileIds)
 			await this.deleteFiles(fileIds)
+		},
+
+		onDeleteFile(file) {
+			const fileId = (file && file.fileid && file.fileid.toString())
+			if (fileId) {
+				this.removeFromFetchedFiles([fileId])
+				this.$store.commit('deleteFile', fileId)
+			}
+		},
+
+		removeFromFetchedFiles(fileIds) {
+			this.onUncheckFiles(fileIds)
+			this.fetchedFileIds = this.fetchedFileIds.filter(fileId => !fileIds.includes(fileId))
 		},
 	},
 }

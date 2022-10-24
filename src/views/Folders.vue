@@ -65,6 +65,7 @@
 import { mapGetters } from 'vuex'
 import { UploadPicker } from '@nextcloud/upload'
 import { NcEmptyContent } from '@nextcloud/vue'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import VirtualGrid from 'vue-virtual-grid'
 
 import FileLegacy from '../components/FileLegacy.vue'
@@ -213,6 +214,14 @@ export default {
 		this.fetchFolderContent()
 	},
 
+	created() {
+		subscribe('files:file:deleted', this.onDelete) // listen for delete in Viewer.vue
+	},
+
+	beforeDestroy() {
+		unsubscribe('files:file:deleted', this.onDelete)
+	},
+
 	methods: {
 		onRefresh() {
 			this.fetchFolderContent()
@@ -257,6 +266,12 @@ export default {
 				// done loading even with errors
 				this.loading = false
 				this.initializing = false
+			}
+		},
+
+		onDelete(file) {
+			if (file && file.fileid) {
+				this.$store.dispatch('removeFilesFromFolder', { fileid: this.folderId, files: [file] })
 			}
 		},
 

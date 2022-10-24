@@ -82,6 +82,25 @@ const mutations = {
 			Vue.set(state.folders, fileid, [...list, ...state.folders[fileid]])
 		}
 	},
+
+	/**
+	 * Remove files from a folder
+	 *
+	 * @param {object} state vuex state
+	 * @param {object} data destructuring object
+	 * @param {number} data.fileid id of this folder
+	 * @param {Array} data.files list of files to remove
+	 */
+	removeFilesFromFolder(state, { fileid, files }) {
+		const removedIds = files
+			.filter(file => file && file.fileid)
+			.map(file => `${file.fileid}`)
+
+		const folderFileIds = state.folders[fileid]
+		if (folderFileIds) {
+			Vue.set(state.folders, fileid, folderFileIds.filter(id => !removedIds.includes(`${id}`)))
+		}
+	},
 }
 
 const getters = {
@@ -129,6 +148,18 @@ const actions = {
 	 */
 	addFilesToFolder(context, { fileid, files }) {
 		context.commit('addFilesToFolder', { fileid, files })
+	},
+
+	/**
+	 * Remove files from a folder
+	 *
+	 * @param {object} context vuex context
+	 * @param {object} data destructuring object
+	 * @param {number} data.fileid id of this folder
+	 * @param {Array} data.files list of files to remove
+	 */
+	removeFilesFromFolder(context, { fileid, files }) {
+		context.commit('removeFilesFromFolder', { fileid, files })
 	},
 }
 
