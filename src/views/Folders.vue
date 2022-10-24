@@ -42,7 +42,7 @@
 			:root-title="rootTitle"
 			@refresh="onRefresh">
 			<UploadPicker :accept="allowedMimes"
-				:destination="folder.filename"
+				:destination="toRelative(folder.filename)"
 				:multiple="true"
 				@uploaded="onUpload" />
 		</HeaderNavigation>
@@ -78,6 +78,7 @@ import getAlbumContent from '../services/AlbumContent.js'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import GridConfigMixin from '../mixins/GridConfig.js'
 import getFileInfo from '../services/FileInfo.js'
+import { toRelativeFilePath } from '../utils/fileUtils.js'
 
 export default {
 	name: 'Folders',
@@ -216,6 +217,10 @@ export default {
 	methods: {
 		onRefresh() {
 			this.fetchFolderContent()
+		},
+
+		toRelative(path) {
+			return toRelativeFilePath(path)
 		},
 
 		async fetchFolderContent() {

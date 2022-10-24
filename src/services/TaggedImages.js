@@ -60,6 +60,4 @@ export default async function(id, options = {}) {
 		// hardcoded props and mime is not one of them
 		// https://github.com/nextcloud/server/blob/5bf3d1bb384da56adbf205752be8f840aac3b0c5/apps/dav/lib/Connector/Sabre/FilesReportPlugin.php#L274
 		.filter(file => file.mime && allowedMimes.indexOf(file.mime) !== -1)
-		// remove prefix path from full file path
-		.map(data => Object.assign({}, data, { filename: data.filename.replace(prefixPath, '') }))
 }

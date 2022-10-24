@@ -20,8 +20,9 @@
  *
  */
 import { generateRemoteUrl } from '@nextcloud/router'
+import { getCurrentUser } from '@nextcloud/auth'
 import camelcase from 'camelcase'
-import { rootPath } from '../services/DavClient.js'
+import { rootPath, prefixPath } from '../services/DavClient.js'
 import { isNumber } from './numberUtils.js'
 
 /**
@@ -99,6 +100,84 @@ const sortCompare = function(fileInfo1, fileInfo2, key, asc = true) {
 		: -fileInfo1[key]?.toString()?.localeCompare(fileInfo2[key].toString(), OC.getLanguage()) || -1
 }
 
+const knownApps = ['files', 'photos', 'recognize']
+
+/**
+ * Checks if the specified path starts with app and user
+ *
+ * @param {string} path the path to check
+ * @return {object} the check result
+ */
+function analyzePath(path) {
+	const parts = typeof path === 'string'
+		? path.split('/').filter(p => p.length > 0)
+		: []
+
+	const [app, user] = parts
+	const hasCurrentUser = user && user === `${getCurrentUser()?.uid}`
+	const hasKnownApp = app && knownApps.includes(app)
+
+	return { hasCurrentUser, hasKnownApp, parts }
+}
+
+/**
+ * Strips '/app/user/' from path or fileInfo.filename
+ *
+ * @param {string|object.filename} path the path or fileInfo to convert
+ * @return {string|object.filename} the converted input or the original if no conversion was required
+ */
+function toRelativeFilePath(path) {
+	if (typeof path === 'object' && 'filename' in path) {
+		return { ...path, filename: toRelativeFilePath(path.filename) }
+	}
+
+	const { hasKnownApp, hasCurrentUser, parts } = analyzePath(path)
+	return hasKnownApp || hasCurrentUser
+		? '/' + parts.slice(2).join('/')
+		: path
+}
+
+/**
+ * Changes path (or fileInfo.filename) so that it starts with '/app/user/...'
+ *
+ * @param {string|object.filename} path the path or fileInfo to convert
+ * @param {string} contextPath the prefix to add to relative paths
+ * @return {string|object.filename} the converted input or the original if no conversion was required
+ */
+function toAbsoluteFilePath(path, contextPath = prefixPath) {
+	if (typeof path === 'object' && 'filename' in path) {
+		return { ...path, filename: toAbsoluteFilePath(path.filename) }
+	}
+
+	const { hasKnownApp, hasCurrentUser } = analyzePath(path)
+	return !hasKnownApp && !hasCurrentUser
+		? contextPath + path
+		: path
+}
+
+/**
+ * Converts the given fileInfo to an obj suitable for OCA.Viewer
+ *
+ * @param {object} obj the fileInfo to prepare for sending it to OCA.Viewer
+ * @returns a clone of obj with properties adjusted when needed
+ */
+function toViewerFileInfo(obj) {
+	if (typeof obj !== 'object' || typeof obj.filename !== 'string') {
+		throw new Error('fileInfo obj must be given, found: ' + obj)
+	}
+
+	// according to Viewer docs, filename must be URL when route is not /files/user/
+	obj = obj.filename.startsWith('/files/')
+		? { ...obj, filename: toRelativeFilePath(obj.filename) }
+		: { ...obj, filename: obj.source }
+
+	// ensure basename is correct
+	const [, basename] = extractFilePaths(obj.filename)
+	obj.basename = basename
+
+	return obj
+}
+
 /**
  * @param {object} obj - object to flatten and format.
  */
@@ -120,12 +199,15 @@ function genFileInfo(obj) {
 		}
 	}, {})
 
+	// format source and filename (ensure app & user is always included)
 	if (fileInfo.filename) {
-		// Adding context
-		fileInfo.source = generateRemoteUrl(rootPath) + '/' + fileInfo.filename
+		fileInfo.filename = toAbsoluteFilePath(fileInfo.filename)
+
+		const path = encodeFilePath(fileInfo.filename)
+		fileInfo.source = generateRemoteUrl(rootPath) + (path.startsWith('/') ? '' : '/') + path
 	}
 
 	return fileInfo
 }
 
-export { encodeFilePath, extractFilePaths, sortCompare, genFileInfo }
+export { encodeFilePath, extractFilePaths, sortCompare, genFileInfo, toRelativeFilePath, toAbsoluteFilePath, toViewerFileInfo }

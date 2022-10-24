@@ -136,6 +136,7 @@ import { NcModal, NcActions, NcActionButton, NcButton, NcEmptyContent, isMobile 
 import moment from '@nextcloud/moment'
 
 import { allMimes } from '../services/AllowedMimes.js'
+import { toViewerFileInfo } from '../utils/fileUtils.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
@@ -244,8 +245,8 @@ export default {
 		openViewer(fileId) {
 			const file = this.files[fileId]
 			OCA.Viewer.open({
-				fileInfo: file,
-				list: Object.values(this.fileIdsByMonth).flat().map(fileId => this.files[fileId]),
+				fileInfo: toViewerFileInfo(file),
+				list: Object.values(this.fileIdsByMonth).flat().map(fileId => toViewerFileInfo(this.files[fileId])),
 				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
 				canLoop: file.canLoop,
 			})

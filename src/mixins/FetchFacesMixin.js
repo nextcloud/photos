@@ -28,7 +28,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import client from '../services/DavClient.js'
 import logger from '../services/logger.js'
 import DavRequest from '../services/DavRequest'
-import { genFileInfo } from '../utils/fileUtils'
+import { genFileInfo, toAbsoluteFilePath } from '../utils/fileUtils'
 import AbortControllerMixin from './AbortControllerMixin'
 
 export default {
@@ -117,9 +117,12 @@ export default {
 					}
 				)
 
+				const fixRealpath = file => file.realpath.replace(`/${getCurrentUser().uid}/files`, '')
+
 				fetchedFiles = fetchedFiles
 					.map(file => genFileInfo(file))
-					.map(file => ({ ...file, filename: file.realpath.replace(`/${getCurrentUser().uid}/files`, '') }))
+					.map(file => ({ ...file, filename: toAbsoluteFilePath(fixRealpath(file)) }))
+					.map(file => genFileInfo(file)) // ensure we have a correct source URL
 
 				const fileIds = fetchedFiles.map(file => '' + file.fileid)
 

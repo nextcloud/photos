@@ -22,7 +22,7 @@
 
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
-import { genFileInfo, encodeFilePath } from '../utils/fileUtils.js'
+import { genFileInfo, encodeFilePath, toRelativeFilePath } from '../utils/fileUtils.js'
 import allowedMimes from './AllowedMimes.js'
 
 /**
@@ -37,6 +37,7 @@ export default async function(path = '/', options = {}) {
 	const prefixPath = generateUrl(`/apps/photos/api/v1/${options.shared ? 'shared' : 'albums'}`)
 
 	// fetch listing
+	path = toRelativeFilePath(path)
 	const response = await axios.get(prefixPath + encodeFilePath(path), options)
 	const list = response.data.map(data => genFileInfo(data))
 
@@ -47,7 +48,7 @@ export default async function(path = '/', options = {}) {
 
 	for (const entry of list) {
 		// is this the current provided path ?
-		if (entry.filename === path) {
+		if (toRelativeFilePath(entry.filename) === path) {
 			folder = entry
 		} else if (entry.type !== 'file') {
 			folders.push(entry)

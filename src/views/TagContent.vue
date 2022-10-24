@@ -75,6 +75,7 @@ import File from '../components/File.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
+import { toViewerFileInfo } from '../utils/fileUtils.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 
@@ -175,8 +176,8 @@ export default {
 		openViewer(fileId) {
 			const file = this.files[fileId]
 			OCA.Viewer.open({
-				path: file.filename,
-				list: this.fileIds.map(fileId => this.files[fileId]),
+				fileInfo: toViewerFileInfo(file),
+				list: this.fileIds.map(fileId => toViewerFileInfo(this.files[fileId])),
 				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
 				canLoop: file.canLoop,
 			})

@@ -20,7 +20,7 @@
  *
  */
 
-import { genFileInfo } from '../utils/fileUtils.js'
+import { genFileInfo, toRelativeFilePath } from '../utils/fileUtils.js'
 import { getCurrentUser } from '@nextcloud/auth'
 import { allMimes } from './AllowedMimes.js'
 import client from './DavClient.js'
@@ -52,6 +52,7 @@ export default async function(path = '', options = {}) {
 	}
 
 	const prefixPath = `/files/${getCurrentUser().uid}`
+	path = toRelativeFilePath(path)
 
 	// generating the search or condition
 	// based on the allowed mimetypes

@@ -183,6 +183,7 @@ import FilesListViewer from '../components/FilesListViewer.vue'
 import File from '../components/File.vue'
 import logger from '../services/logger.js'
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
+import { toViewerFileInfo } from '../utils/fileUtils.js'
 import Vue from 'vue'
 import FaceMergeForm from '../components/FaceMergeForm.vue'
 
@@ -286,11 +287,8 @@ export default {
 		openViewer(fileId) {
 			const file = this.files[fileId]
 			OCA.Viewer.open({
-				path: file.filename,
-				list: this.faceFileIds.map(fileId => ({
-					...this.files[fileId],
-					basename: this.files[fileId].basename.split('-').slice(1).join('-'),
-				})).filter(file => !file.sectionHeader),
+				path: toViewerFileInfo(file).filename,
+				list: this.faceFileIds.map(fileId => toViewerFileInfo(this.files[fileId])).filter(file => !file.sectionHeader),
 				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
 				canLoop: file.canLoop,
 			})

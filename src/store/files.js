@@ -25,7 +25,8 @@ import moment from '@nextcloud/moment'
 import { showError } from '@nextcloud/dialogs'
 
 import logger from '../services/logger.js'
-import client, { prefixPath } from '../services/DavClient.js'
+import client from '../services/DavClient.js'
+import { toRelativeFilePath } from '../utils/fileUtils.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
 
 const state = {
@@ -44,8 +45,8 @@ const mutations = {
 		const files = {}
 		newFiles.forEach(file => {
 			// Ignore the file if the path is excluded
-			if (state.nomediaPaths.some(nomediaPath => file.filename.startsWith(nomediaPath)
-				|| file.filename.startsWith(prefixPath + nomediaPath))) {
+			if (state.nomediaPaths.some(nomediaPath => toRelativeFilePath(file.filename).startsWith(nomediaPath))) {
+				logger.debug('Excluded file: ', file.filename)
 				return
 			}
 
