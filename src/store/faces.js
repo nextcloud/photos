@@ -62,8 +62,8 @@ const mutations = {
 	 * @param {Array} data.faceNames list of faces ids
 	 */
 	removeFaces(state, { faceNames }) {
-		faceNames.forEach(faceName => delete state.faces[faceName])
-		faceNames.forEach(faceName => delete state.facesFiles[faceName])
+		faceNames.forEach(faceName => Vue.delete(state.faces, faceName))
+		faceNames.forEach(faceName => Vue.delete(state.facesFiles, faceName))
 	},
 
 	/**

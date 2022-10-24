@@ -121,15 +121,17 @@ export default {
 					.map(file => genFileInfo(file))
 					.map(file => ({ ...file, filename: file.realpath.replace(`/${getCurrentUser().uid}/files`, '') }))
 
-				const fileIds = fetchedFiles.map(file => '' + file.fileid)
+				const appendedFiles = await this.$store.dispatch('appendFiles', fetchedFiles)
+				const fileIds = appendedFiles
+					.map(file => file.fileid.toString())
 
-				this.appendFiles(fetchedFiles)
-
-				if (fetchedFiles.length > 0) {
+				if (fileIds.length > 0) {
 					await this.$store.commit('addFilesToFace', { faceName, fileIdsToAdd: fileIds })
+				} else {
+					await this.$store.commit('removeFaces', { faceNames: [faceName] })
 				}
 
-				logger.debug(`[FetchFacesMixin] Fetched ${fileIds.length} new files: `, fileIds)
+				logger.debug(`[FetchFacesMixin] Fetched ${fileIds.length} new files (from available ${fetchedFiles.length}): `, fileIds)
 			} catch (error) {
 				if (error.response && error.response.status) {
 					if (error.response.status === 404) {

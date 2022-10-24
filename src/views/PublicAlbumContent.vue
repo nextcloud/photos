@@ -259,16 +259,15 @@ export default {
 					this.publicClient,
 				)
 
-				const fileIds = fetchedFiles
+				const appendedFiles = await this.$store.dispatch('appendFiles', fetchedFiles)
+				const fileIds = appendedFiles
 					.map(file => file.fileid.toString())
 
-				this.appendFiles(fetchedFiles)
-
-				if (fetchedFiles.length > 0) {
+				if (appendedFiles.length > 0) {
 					await this.$store.commit('addFilesToPublicAlbum', { collectionId: this.albumName, fileIdsToAdd: fileIds })
 				}
 
-				return fetchedFiles
+				return appendedFiles
 			} catch (error) {
 				if (error.response?.status === 404) {
 					this.errorFetchingFiles = 404

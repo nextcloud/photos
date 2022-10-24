@@ -150,9 +150,11 @@ const actions = {
 	 *
 	 * @param {object} context the store mutations
 	 * @param {Array} files list of files
+	 * @return {Array} the appended files
 	 */
 	appendFiles(context, files = []) {
 		context.commit('updateFiles', files)
+		return files.filter(file => !!state.files[file.fileid])
 	},
 
 	/**

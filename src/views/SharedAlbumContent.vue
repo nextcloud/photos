@@ -242,17 +242,15 @@ export default {
 				const fetchedFiles = response.data
 					.map(file => genFileInfo(file))
 
-				const fileIds = fetchedFiles
-					.map(file => file.fileid)
-					.map((fileId) => fileId.toString())
+				const appendedFiles = await this.$store.dispatch('appendFiles', fetchedFiles)
+				const fileIds = appendedFiles
+					.map(file => file.fileid.toString())
 
-				this.appendFiles(fetchedFiles)
-
-				if (fetchedFiles.length > 0) {
+				if (appendedFiles.length > 0) {
 					await this.$store.commit('addFilesToSharedAlbum', { albumName: this.albumName, fileIdsToAdd: fileIds })
 				}
 
-				logger.debug(`[SharedAlbumContent] Fetched ${fileIds.length} new files: `, fileIds)
+				logger.debug(`[SharedAlbumContent] Fetched ${fileIds.length} new files (from available ${fetchedFiles.length}): `, fileIds)
 			} catch (error) {
 				if (error.response?.status === 404) {
 					this.errorFetchingFiles = 404

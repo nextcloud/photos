@@ -350,12 +350,11 @@ export default {
 					.map(file => genFileInfo(file))
 					.filter(file => file.fileid)
 
-				const fileIds = fetchedFiles
+				const appendedFiles = await this.$store.dispatch('appendFiles', fetchedFiles)
+				const fileIds = appendedFiles
 					.map(file => file.fileid.toString())
 
-				this.appendFiles(fetchedFiles)
-
-				if (fetchedFiles.length > 0) {
+				if (appendedFiles.length > 0) {
 					await this.$store.commit('setAlbumFiles', { albumName: this.albumName, fileIds })
 				}
 

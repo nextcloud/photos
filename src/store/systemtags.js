@@ -132,9 +132,9 @@ const actions = {
 	async fetchTagFiles(context, { id, signal }) {
 		try {
 			// get data
-			const files = await getTaggedImages(id, { signal })
+			let files = await getTaggedImages(id, { signal })
+			files = await context.dispatch('appendFiles', files)
 			await context.dispatch('updateTag', { id, files })
-			await context.dispatch('appendFiles', files)
 		} catch (error) {
 			if (error.response && error.response.status) {
 				console.error('Failed to get tag content', id, error.response)

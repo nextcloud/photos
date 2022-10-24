@@ -85,19 +85,21 @@ export default {
 					this.doneFetchingFiles = true
 				}
 
-				const fileIds = fetchedFiles
-					.map(file => file.fileid)
+				let fileIds = fetchedFiles
+					.map(file => file.fileid.toString())
 					.filter(fileId => !this.fetchedFileIds.includes(fileId)) // Filter to prevent duplicate fileIds.
 
 				this.fetchedFileIds.push(
 					...fileIds
-						.map((fileId) => fileId.toString())
 						.filter((fileId) => !blacklist.includes(fileId))
 				)
 
-				this.$store.dispatch('appendFiles', fetchedFiles)
+				const appendedFiles = await this.$store.dispatch('appendFiles', fetchedFiles)
+				fileIds = appendedFiles
+					.map(file => file.fileid.toString())
+					.filter(fileId => fileIds.includes(fileId)) // Ensure fileIds had been selected before
 
-				logger.debug(`[FetchFilesMixin] Fetched ${fileIds.length} new files: `, fileIds)
+				logger.debug(`[FetchFilesMixin] Fetched ${fileIds.length} new files (from available ${fetchedFiles.length}): `, fileIds)
 
 				return fileIds
 			} catch (error) {

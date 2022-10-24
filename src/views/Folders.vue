@@ -269,8 +269,8 @@ export default {
 			uploads.forEach(async upload => {
 				const relPath = upload.path.split(prefixPath).pop()
 				const file = await getFileInfo(relPath)
-				this.$store.dispatch('appendFiles', [file])
-				this.$store.dispatch('addFilesToFolder', { fileid: this.folderId, files: [file] })
+				const files = await this.$store.dispatch('appendFiles', [file])
+				this.$store.dispatch('addFilesToFolder', { fileid: this.folderId, files })
 			})
 		},
 	},

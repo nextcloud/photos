@@ -77,6 +77,7 @@ export default {
 			const previewFiles = previewFolderContent
 				? previewFolderContent
 					.map(id => this.files[id])
+					.filter(file => !!file) // id might not exist in files
 					.slice(0, 4) // only get the 4 first images
 				: []
 
