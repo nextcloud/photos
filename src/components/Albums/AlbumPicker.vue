@@ -31,7 +31,7 @@
 				:key="album.basename"
 				class="album"
 				:title="album.basename"
-				:aria-label="t('photos', 'Add selection to album {ablumName}', {albumName: album.basename})"
+				:aria-label="t('photos', 'Add selection to album {albumName}', {albumName: album.basename})"
 				@click="pickAlbum(album.basename)">
 				<template slot="icon">
 					<img v-if="album.lastPhoto !== -1" class="album__image" :src="album.lastPhoto | toCoverUrl">
