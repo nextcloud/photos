@@ -31,7 +31,6 @@ OC.L10N.register(
     "Create album" : "Vytvoriť album",
     "Back to the new album form." : "Späť na formulár pre pridanie nového albumu.",
     "Add to Album" : "Pridať do Albumu",
-    "Add selection to album {ablumName}" : "Pridať vybrané to albumu {ablumName}",
     "Create a new album." : "Vytvoriť nový album.",
     "Create new album" : "Vytvoriť nový album",
     "New album" : "Nový album",
