@@ -31,7 +31,6 @@ OC.L10N.register(
     "Create album" : "Sortu albuma",
     "Back to the new album form." : "Itzuli album berrien formulariora",
     "Add to Album" : "Gehitu album batera",
-    "Add selection to album {ablumName}" : "Gehitu hautapena {albumName} albumera",
     "Create a new album." : "Sortu album berria.",
     "Create new album" : "Sortu album berria",
     "New album" : "Album berria",

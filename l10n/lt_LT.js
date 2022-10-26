@@ -25,7 +25,6 @@ OC.L10N.register(
     "Create album" : "Sukurti albumą",
     "Back to the new album form." : "Atgal į naujo albumo formą.",
     "Add to Album" : "Pridėti į albumą",
-    "Add selection to album {ablumName}" : "Pridėti žymėjimą į albumą {ablumName}",
     "Create a new album." : "Sukurti naują albumą.",
     "Create new album" : "Sukurti naują albumą",
     "New album" : "Naujas albumas",
