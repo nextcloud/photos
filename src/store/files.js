@@ -148,12 +148,13 @@ const actions = {
 	/**
 	 * Append or update given files
 	 *
-	 * @param {object} context the store mutations
+	 * @param {object.commit} commit the store mutation commit function
+	 * @param {object.state} state the store state
 	 * @param {Array} files list of files
 	 * @return {Array} the appended files
 	 */
-	appendFiles(context, files = []) {
-		context.commit('updateFiles', files)
+	appendFiles({ commit, state }, files = []) {
+		commit('updateFiles', files)
 		return files.filter(file => !!state.files[file.fileid])
 	},
 
@@ -178,7 +179,7 @@ const actions = {
 		const semaphore = new Semaphore(5)
 
 		const files = fileIds
-			.map(fileId => state.files[fileId])
+			.map(fileId => context.state.files[fileId])
 			.reduce((files, file) => ({ ...files, [file.fileid]: file }), {})
 
 		fileIds.forEach(fileId => context.commit('deleteFile', fileId))
