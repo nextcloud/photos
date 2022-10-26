@@ -25,6 +25,7 @@
 		"build": "NODE_ENV=production webpack --progress --config webpack.js",
 		"dev": "NODE_ENV=development webpack --progress --config webpack.js",
 		"watch": "NODE_ENV=development webpack --progress --watch --config webpack.js",
+		"serve": "NODE_ENV=development webpack serve --progress --config webpack.js",
 		"test": "jest",
 		"lint": "eslint --ext .js,.vue src",
 		"lint:fix": "eslint --ext .js,.vue src --fix",

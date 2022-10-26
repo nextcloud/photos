@@ -113,7 +113,3 @@ Cypress.Commands.add('uploadContent', (user, blob, mimeType, target) => {
 		}
 	})
 })
-
-Cypress.Commands.add('runOccCommand', (command: string) => {
-	cy.exec(`docker exec --user www-data nextcloud-cypress-tests-server php ./occ ${command}`)
-})

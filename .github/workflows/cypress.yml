@@ -90,8 +90,19 @@ jobs:
         uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: snapshots
+          name: snapshots_${{ matrix.containers }}
           path: cypress/snapshots
+
+      - name: Extract NC logs
+        if: always()
+        run: docker-compose --project-directory cypress logs > nextcloud.log
+
+      - name: Upload NC logs
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: nc_logs_${{ matrix.containers }}
+          path: nextcloud.log
 
   summary:
     runs-on: ubuntu-latest
