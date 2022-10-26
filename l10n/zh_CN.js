@@ -31,7 +31,6 @@ OC.L10N.register(
     "Create album" : "创建相册",
     "Back to the new album form." : "回到创建新相册表单。",
     "Add to Album" : "添加至相册",
-    "Add selection to album {ablumName}" : "将所选项加入相册 {ablumName}",
     "Create a new album." : "创建新相册。",
     "Create new album" : "创建新相册",
     "New album" : "新相册",
