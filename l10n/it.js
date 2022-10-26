@@ -30,7 +30,6 @@ OC.L10N.register(
     "Save" : "Salva",
     "Create album" : "Crea l'album",
     "Add to Album" : "Aggiungi all'album",
-    "Add selection to album {ablumName}" : "Aggiungi selezione all'album {ablumName}",
     "Create a new album." : "Crea un nuovo album",
     "Create new album" : "Crea nuovo album",
     "New album" : "Nuovo album",
