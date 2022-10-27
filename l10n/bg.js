@@ -31,6 +31,7 @@ OC.L10N.register(
     "Create album" : "Създаване на албум",
     "Back to the new album form." : "Обратно към формата на новия албум.",
     "Add to Album" : "Добавяне към Албум",
+    "Add selection to album {albumName}" : "Добавяне на селекция към албум {ablumName}",
     "Create a new album." : "Създаване на нов албум.",
     "Create new album" : "Създаване на нов албум",
     "New album" : "Нов албум",
