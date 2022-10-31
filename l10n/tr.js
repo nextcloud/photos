@@ -31,6 +31,7 @@ OC.L10N.register(
     "Create album" : "Albüm ekle",
     "Back to the new album form." : "Albüm ekleme formuna geri döner.",
     "Add to Album" : "Albüme ekle",
+    "Add selection to album {albumName}" : "Seçilmişleri {albumName} albümüne ekle",
     "Create a new album." : "Yeni bir albüm ekler.",
     "Create new album" : "Yeni albüm ekle",
     "New album" : "Yeni albüm",
