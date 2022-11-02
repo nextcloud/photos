@@ -29,6 +29,7 @@ OC.L10N.register(
     "Create album" : "Luo albumi",
     "Back to the new album form." : "Takaisin uuden albumin lomakkeeseen.",
     "Add to Album" : "Lisää albumiin",
+    "Add selection to album {albumName}" : "Lisää valinta albumiin {albumName}",
     "Create a new album." : "Luo uusi albumi.",
     "Create new album" : "Luo uusi albumi",
     "New album" : "Uusi albumi",
