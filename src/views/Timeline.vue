@@ -87,7 +87,7 @@
 			:sections="monthsList"
 			:loading="loadingFiles"
 			:base-height="isMobile ? 120 : 200"
-			:empty-message="t('photos', 'No photos in here')"
+			:empty-message="t('photos', 'No photos or videos in here')"
 			@need-content="getContent">
 			<template slot-scope="{file, visibility}">
 				<h3 v-if="file.sectionHeader"
