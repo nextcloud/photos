@@ -177,7 +177,7 @@ class AlbumMapper {
 		$query->executeStatement();
 
 		$query = $this->connection->getQueryBuilder();
-		$query->delete("photos_collaborators")
+		$query->delete("photos_albums_collabs")
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$query->executeStatement();
 
@@ -295,7 +295,7 @@ class AlbumMapper {
 	public function getCollaborators(int $albumId): array {
 		$query = $this->connection->getQueryBuilder();
 		$query->select("collaborator_id", "collaborator_type")
-			->from("photos_collaborators")
+			->from("photos_albums_collabs")
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)));
 
 		$rows = $query->executeQuery()->fetchAll();
@@ -369,7 +369,7 @@ class AlbumMapper {
 			}
 
 			$query = $this->connection->getQueryBuilder();
-			$query->insert('photos_collaborators')
+			$query->insert('photos_albums_collabs')
 				->setValue('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT))
 				->setValue('collaborator_id', $query->createNamedParameter($collaborator['id']))
 				->setValue('collaborator_type', $query->createNamedParameter($collaborator['type'], IQueryBuilder::PARAM_INT))
@@ -378,7 +378,7 @@ class AlbumMapper {
 
 		foreach ($collaboratorsToRemove as $collaborator) {
 			$query = $this->connection->getQueryBuilder();
-			$query->delete('photos_collaborators')
+			$query->delete('photos_albums_collabs')
 				->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
 				->andWhere($query->expr()->eq('collaborator_id', $query->createNamedParameter($collaborator['id'])))
 				->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter($collaborator['type'], IQueryBuilder::PARAM_INT)))
@@ -400,7 +400,7 @@ class AlbumMapper {
 			->selectAlias("f.name", "file_name")
 			->selectAlias("a.name", "album_name")
 			->selectAlias("a.user", "album_user")
-			->from("photos_collaborators", "c")
+			->from("photos_albums_collabs", "c")
 			->leftJoin("c", "photos_albums", "a", $query->expr()->eq("a.album_id", "c.album_id"))
 			->leftJoin("a", "photos_albums_files", "p", $query->expr()->eq("a.album_id", "p.album_id"))
 			->leftJoin("p", "filecache", "f", $query->expr()->eq("p.file_id", "f.fileid"))
@@ -445,7 +445,7 @@ class AlbumMapper {
 	public function deleteUserFromAlbumCollaboratorsList(string $userId, int $albumId): void {
 		// TODO: only delete if this was not a group share
 		$query = $this->connection->getQueryBuilder();
-		$query->delete('photos_collaborators')
+		$query->delete('photos_albums_collabs')
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('collaborator_id', $query->createNamedParameter($userId)))
 			->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter(self::TYPE_USER, IQueryBuilder::PARAM_INT)))
@@ -462,7 +462,7 @@ class AlbumMapper {
 		$query = $this->connection->getQueryBuilder();
 		$rows = $query
 			->select("a.album_id", "name", "user", "location", "created", "last_added_photo")
-			->from("photos_collaborators", "c")
+			->from("photos_albums_collabs", "c")
 			->leftJoin("c", "photos_albums", "a", $query->expr()->eq("a.album_id", "c.album_id"))
 			->leftJoin("a", "photos_albums_files", "p", $query->expr()->eq("a.album_id", "p.album_id"))
 			->where($query->expr()->eq('collaborator_id', $query->createNamedParameter($collaboratorId)))
