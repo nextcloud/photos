@@ -29,6 +29,8 @@ use OCA\DAV\Events\SabrePluginAuthInitEvent;
 use OCA\Photos\Listener\SabrePluginAuthInitListener;
 use OCA\DAV\Connector\Sabre\Principal;
 use OCA\Photos\Listener\CacheEntryRemovedListener;
+use OCA\Photos\Provider\AlbumsFileDownloadProvider;
+use OCA\Photos\Provider\PublicAlbumsFileDownloadProvider;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -65,6 +67,9 @@ class Application extends App implements IBootstrap {
 	public function register(IRegistrationContext $context): void {
 		/** Register $principalBackend for the DAV collection */
 		$context->registerServiceAlias('principalBackend', Principal::class);
+		$context->registerFileDownloadProvider(AlbumsFileDownloadProvider::class);
+		$context->registerFileDownloadProvider(PublicAlbumsFileDownloadProvider::class);
+
 		$context->registerEventListener(CacheEntryRemovedEvent::class, CacheEntryRemovedListener::class);
 		$context->registerEventListener(SabrePluginAuthInitEvent::class, SabrePluginAuthInitListener::class);
 	}

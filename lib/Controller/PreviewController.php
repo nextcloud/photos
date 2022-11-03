@@ -27,45 +27,34 @@ namespace OCA\Photos\Controller;
 
 use OCA\Photos\AppInfo\Application;
 use OCA\Photos\Album\AlbumMapper;
+use OCA\Photos\Service\FileAccessManager;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\FileDisplayResponse;
 use OCP\Files\File;
-use OCP\Files\Folder;
-use OCP\Files\IRootFolder;
 use OCP\Files\Node;
 use OCP\Files\NotFoundException;
 use OCP\IPreview;
 use OCP\IRequest;
-use OCP\IGroupManager;
 use OCP\IUserSession;
 
 class PreviewController extends Controller {
-	private IUserSession $userSession;
-	private ?Folder $userFolder;
-	private IRootFolder $rootFolder;
+	private FileAccessManager $fileAccessManager;
 	protected AlbumMapper $albumMapper;
 	private IPreview $preview;
-	private IGroupManager $groupManager;
 
 	public function __construct(
+		FileAccessManager $fileAccessManager,
 		IRequest $request,
 		IUserSession $userSession,
-		?Folder $userFolder,
-		IRootFolder $rootFolder,
-		AlbumMapper $albumMapper,
-		IPreview $preview,
-		IGroupManager $groupManager
+		IPreview $preview
 	) {
 		parent::__construct(Application::APP_ID, $request);
 
+		$this->fileAccessManager = $fileAccessManager;
 		$this->userSession = $userSession;
-		$this->userFolder = $userFolder;
-		$this->rootFolder = $rootFolder;
-		$this->albumMapper = $albumMapper;
 		$this->preview = $preview;
-		$this->groupManager = $groupManager;
 	}
 	/**
 	 * @NoAdminRequired
@@ -83,64 +72,17 @@ class PreviewController extends Controller {
 			return new DataResponse([], Http::STATUS_BAD_REQUEST);
 		}
 
-		$user = $this->userSession->getUser();
-
-		if ($user === null || $this->userFolder === null) {
+		if (!$this->userSession->isLoggedIn()) {
 			return new DataResponse([], Http::STATUS_FORBIDDEN);
 		}
 
-		$nodes = $this->userFolder->getById($fileId);
+		$node = $this->fileAccessManager->getAccessibleNodeForUser($fileId, $this->userSession->getUser());
 
-		/** @var \OCA\Photos\Album\AlbumInfo[] */
-		$checkedAlbums = [];
-		if (\count($nodes) === 0) {
-			$albumsOfCurrentUser = $this->albumMapper->getForUserAndFile($user->getUID(), $fileId);
-			$nodes = $this->getFileIdForAlbums($fileId, $albumsOfCurrentUser);
-			$checkedAlbums = $albumsOfCurrentUser;
-		}
-
-		if (\count($nodes) === 0) {
-			$receivedAlbums = $this->albumMapper->getAlbumsForCollaboratorIdAndFileId($user->getUID(), AlbumMapper::TYPE_USER, $fileId);
-			$receivedAlbums = array_udiff($receivedAlbums, $checkedAlbums, fn ($a, $b) => strcmp($a->getId(), $b->getId()));
-			$nodes = $this->getFileIdForAlbums($fileId, $receivedAlbums);
-			$checkedAlbums = array_merge($checkedAlbums, $receivedAlbums);
-		}
-
-		if (\count($nodes) === 0) {
-			$userGroups = $this->groupManager->getUserGroupIds($user);
-			foreach ($userGroups as $groupId) {
-				$albumsForGroup = $this->albumMapper->getAlbumsForCollaboratorIdAndFileId($groupId, AlbumMapper::TYPE_GROUP, $fileId);
-				$albumsForGroup = array_udiff($albumsForGroup, $checkedAlbums, fn ($a, $b) => strcmp($a->getId(), $b->getId()));
-				$nodes = $this->getFileIdForAlbums($fileId, $albumsForGroup);
-				$checkedAlbums = array_merge($checkedAlbums, $receivedAlbums);
-				if (\count($nodes) !== 0) {
-					break;
-				}
-			}
-		}
-
-		if (\count($nodes) === 0) {
+		if ($node === null) {
 			return new DataResponse([], Http::STATUS_NOT_FOUND);
 		}
 
-		$node = array_pop($nodes);
-
 		return $this->fetchPreview($node, $x, $y);
-	}
-
-
-	protected function getFileIdForAlbums($fileId, $albums) {
-		foreach ($albums as $album) {
-			$albumFile = $this->albumMapper->getForAlbumIdAndFileId($album->getId(), $fileId);
-			$nodes = $this->rootFolder
-				->getUserFolder($albumFile->getOwner())
-				->getById($fileId);
-			if (\count($nodes) !== 0) {
-				return $nodes;
-			}
-		}
-
-		return [];
 	}
 
 	/**
