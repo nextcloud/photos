@@ -27,7 +27,6 @@ declare(strict_types=1);
 namespace OCA\Photos\Migration;
 
 use Closure;
-use OCP\DB\Types;
 use OCP\DB\ISchemaWrapper;
 use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
@@ -35,7 +34,7 @@ use OCP\Migration\SimpleMigrationStep;
 /**
  * Auto-generated migration step: Please modify to your needs!
  */
-class Version20001Date20220830131446 extends SimpleMigrationStep {
+class Version20003Date20221103094628 extends SimpleMigrationStep {
 	/**
 	 * @param IOutput $output
 	 * @param Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
@@ -45,43 +44,12 @@ class Version20001Date20220830131446 extends SimpleMigrationStep {
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
-		$modified = false;
 
-		/**
-		 * Replaced by Version20003Date20221102170153
-		 *
-		 * if (!$schema->hasTable("photos_collaborators")) {
-		 * 	$modified = true;
-		 * 	$table = $schema->createTable("photos_collaborators");
-		 * 	$table->addColumn('album_id', Types::BIGINT, [
-		 * 		'notnull' => true,
-		 * 		'length' => 20,
-		 * 	]);
-		 * 	$table->addColumn('collaborator_id', Types::STRING, [
-		 * 		'notnull' => true,
-		 * 		'length' => 64,
-		 * 	]);
-		 * 	$table->addColumn('collaborator_type', Types::INTEGER, [
-		 * 		'notnull' => true,
-		 * 	]);
-		 *
-		 * 	$table->addUniqueConstraint(['album_id', 'collaborator_id', 'collaborator_type'], 'collaborators_unique_idx');
-		 * }
-		 */
-
-		if (!$schema->getTable("photos_albums_files")->hasColumn("owner")) {
-			$modified = true;
-			$table = $schema->getTable("photos_albums_files");
-			$table->addColumn('owner', Types::STRING, [
-				'notnull' => false,
-				'length' => 64,
-			]);
-		}
-
-		if ($modified) {
+		if ($schema->hasTable('photos_collaborators')) {
+			$schema->dropTable('photos_collaborators');
 			return $schema;
-		} else {
-			return null;
 		}
+
+		return null;
 	}
 }
