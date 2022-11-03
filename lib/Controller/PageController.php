@@ -134,7 +134,6 @@ class PageController extends Controller {
 		$this->initialState->provideInitialState('nomedia-paths', $paths);
 
 		Util::addScript(Application::APP_ID, 'photos-main');
-		Util::addStyle(Application::APP_ID, 'icons');
 
 		if ($this->appManager->isEnabledForUser('recognize') === true) {
 			// Allow auto-translation of tags
