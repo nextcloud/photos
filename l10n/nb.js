@@ -5,6 +5,7 @@ OC.L10N.register(
     "Photos" : "Bilder",
     "Your memories under your control" : "Dine minner under din kontroll",
     "Videos" : "Filmer",
+    "Albums" : "Album",
     "Folders" : "Mapper",
     "Favorites" : "Favoritter",
     "On this day" : "På denne dagen",
