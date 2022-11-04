@@ -112,6 +112,7 @@ OC.L10N.register(
     "Add selection to an album" : "Přidat do alba výběr",
     "Add to album" : "Přidat do alba",
     "Delete selection" : "Smazat výběr",
+    "No photos or videos in here" : "Nenacházejí se zde žádné fotky nebo videa",
     "Failed to fetch faces list." : "Nepodařilo se získat seznam obličejů.",
     "All your media" : "Veškerá vaše média",
     "Tagged photos" : "Oštítkované fotky",
