@@ -75,7 +75,9 @@ export default {
 				this.loadingFaces = true
 				this.errorFetchingFaces = null
 
-				const faces = await client.getDirectoryContents(`/recognize/${getCurrentUser()?.uid}/faces/`, {
+				const { data: faces } = await client.getDirectoryContents(`/recognize/${getCurrentUser()?.uid}/faces/`, {
+					data: DavRequest,
+					details: true,
 					signal: this.abortController.signal,
 				})
 				this.$store.dispatch('addFaces', { faces })

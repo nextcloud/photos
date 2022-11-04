@@ -64,6 +64,12 @@ export default {
 		},
 	},
 
+	data() {
+		return {
+			observer: null,
+		}
+	},
+
 	computed: {
 		...mapGetters([
 			'files',
@@ -99,13 +105,29 @@ export default {
 		},
 	},
 
-	async beforeMount() {
-		await this.fetchFiles()
+	async mounted() {
+		this.waitForVisible(this.$el, (isVisible) => {
+			if (!this.facesFiles[this.face.basename]) {
+				this.fetchFiles()
+			}
+		})
 	},
 
 	methods: {
 		async fetchFiles() {
 			await this.fetchFaceContent(this.face.basename)
+		},
+		waitForVisible(el, listener) {
+			const observer = new IntersectionObserver((entries, observer) => {
+				entries.forEach(entry => {
+					if (entry.intersectionRatio > 0) {
+						listener()
+						observer.disconnect()
+					}
+				})
+			})
+
+			observer.observe(el)
 		},
 	},
 }

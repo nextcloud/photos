@@ -32,6 +32,7 @@ const props = `
 	<oc:favorite />
 	<oc:fileid />
 	<oc:permissions />
+	<nc:nbItems />
 `
 
 export { props }

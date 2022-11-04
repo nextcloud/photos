@@ -88,6 +88,9 @@ export default {
 
 		orderedFaces() {
 			return Object.values(this.faces).sort((a, b) => {
+				if (a.props.nbItems && b.props.nbItems) {
+					return b.props.nbItems - a.props.nbItems
+				}
 				if (!this.facesFiles[b.basename] || !this.facesFiles[a.basename]) {
 					return 0
 				}
