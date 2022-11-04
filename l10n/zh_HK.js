@@ -111,6 +111,7 @@ OC.L10N.register(
     "Add selection to an album" : "將選擇範圍添加至相簿",
     "Add to album" : "添加至相簿",
     "Delete selection" : "刪除選擇",
+    "No photos or videos in here" : "此處沒有照片或視像",
     "Failed to fetch faces list." : "擷取臉部清單失敗。",
     "All your media" : "所有媒體",
     "Tagged photos" : "有標籤的照片",
