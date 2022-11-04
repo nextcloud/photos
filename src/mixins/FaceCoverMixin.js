@@ -21,7 +21,6 @@
  */
 
 import { mapGetters } from 'vuex'
-import he from 'he'
 
 export default {
 	name: 'FaceCoverMixin',
@@ -47,7 +46,6 @@ export default {
 			return (this.facesFiles[faceName] || [])
 				.slice(0, 25)
 				.map(fileId => this.files[fileId])
-				.map(file => ({ ...file, faceDetections: JSON.parse(he.decode(file.faceDetections)) }))
 				// sort larges face first
 				.sort((a, b) =>
 					b.faceDetections.find(d => d.title === faceName).width

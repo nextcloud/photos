@@ -30,6 +30,7 @@ import logger from '../services/logger.js'
 import DavRequest from '../services/DavRequest'
 import { genFileInfo } from '../utils/fileUtils'
 import AbortControllerMixin from './AbortControllerMixin'
+import he from 'he'
 
 export default {
 	name: 'FetchFacesMixin',
@@ -122,6 +123,7 @@ export default {
 				fetchedFiles = fetchedFiles
 					.map(file => genFileInfo(file))
 					.map(file => ({ ...file, filename: file.realpath.replace(`/${getCurrentUser().uid}/files`, '') }))
+					.map(file => ({ ...file, faceDetections: JSON.parse(he.decode(file.faceDetections)) }))
 
 				const fileIds = fetchedFiles.map(file => '' + file.fileid)
 
