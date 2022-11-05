@@ -112,6 +112,7 @@ OC.L10N.register(
     "Add selection to an album" : "Ajouter la sélection à un album",
     "Add to album" : "Ajouter à l'album",
     "Delete selection" : "Supprimer la sélection",
+    "No photos or videos in here" : "Aucune photo ou vidéo ici",
     "Failed to fetch faces list." : "Échec de la récupération de la liste des visages.",
     "All your media" : "Tous vos médias",
     "Tagged photos" : "Photos étiquetées ",
