@@ -1,6 +1,7 @@
 OC.L10N.register(
     "photos",
     {
+    "Public link" : "Openbare Link",
     "Photos" : "Foto's",
     "Your memories under your control" : "Jouw herinneringen onder jouw beheer",
     "Videos" : "Videos",
@@ -8,7 +9,7 @@ OC.L10N.register(
     "People" : "Mensen",
     "Folders" : "Mappen",
     "Favorites" : "Favorieten",
-    "On this day" : "Vandaag",
+    "On this day" : "Op deze dag",
     "Shared with you" : "Met je gedeeld",
     "Tags" : "Tags",
     "Locations" : "Locaties",

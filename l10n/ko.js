@@ -1,6 +1,7 @@
 OC.L10N.register(
     "photos",
     {
+    "Public link" : "공개 링크",
     "Photos" : "사진",
     "Videos" : "동영상",
     "Folders" : "폴더",
