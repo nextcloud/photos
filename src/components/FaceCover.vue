@@ -164,14 +164,6 @@ export default {
 		}
 	}
 
-	&.face-cover--small {
-		.face-cover__crop-container {
-			width: 60px !important;
-			height: 60px !important;
-			--photos-face-width: 60px !important;
-		}
-	}
-
 	&:hover, &:focus {
 		background: var(--color-background-hover);
 	}
@@ -204,14 +196,19 @@ export default {
 			margin: 0;
 		}
 	}
+}
 
-	&.face-cover--small {
-		* {
-			font-size: 15px !important;
-		}
-		.face-cover__details {
-			width: 60px !important;
-		}
+.face-cover--small {
+	* {
+		font-size: 15px !important;
+	}
+	.face-cover__details {
+		width: 60px !important;
+	}
+	.face-cover__crop-container {
+		width: 60px !important;
+		height: 60px !important;
+		--photos-face-width: 60px !important;
 	}
 }
 </style>
