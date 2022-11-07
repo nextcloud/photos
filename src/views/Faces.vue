@@ -45,9 +45,11 @@
 		</div>
 
 		<div v-else-if="!noFaces" class="faces__list">
-			<FaceCover v-for="face in orderedFaces"
+			<router-link v-for="face in orderedFaces"
 				:key="face.basename"
-				:base-name="face.basename" />
+				:to="`/faces/${face.basename}`">
+				<FaceCover :base-name="face.basename" />
+			</router-link>
 		</div>
 	</div>
 </template>

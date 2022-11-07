@@ -21,9 +21,10 @@
  -->
 <template>
 	<div class="merge-form face-list">
-		<FaceCoverSmall v-for="face in filteredFaces"
+		<FaceCover v-for="face in filteredFaces"
 			:key="face.basename"
 			:base-name="face.basename"
+			small
 			@click="handleSelect(face.basename)" />
 	</div>
 </template>
@@ -33,11 +34,11 @@ import { mapGetters } from 'vuex'
 
 import FaceCoverMixin from '../mixins/FaceCoverMixin.js'
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
-import FaceCoverSmall from './FaceCoverSmall.vue'
+import FaceCover from './FaceCover.vue'
 
 export default {
 	name: 'FaceMergeForm',
-	components: { FaceCoverSmall },
+	components: { FaceCover },
 	mixins: [
 		FaceCoverMixin,
 		FetchFacesMixin,
