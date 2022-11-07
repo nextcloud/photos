@@ -23,7 +23,7 @@
  -->
 
 <template>
-	<router-link class="face-cover" :to="`/faces/${baseName}`">
+	<div :class="['face-cover', small && 'face-cover--small']" @click="$emit('click')">
 		<div class="face-cover__crop-container">
 			<img ref="image"
 				class="face-cover__image"
@@ -36,11 +36,11 @@
 					{{ baseName }}
 				</h2>
 			</div>
-			<div v-if="facesFiles[baseName]" class="face-cover__details__second-line">
+			<div v-if="facesFiles[baseName] && !small" class="face-cover__details__second-line">
 				{{ n('photos', '%n photos', '%n photos', facesFiles[baseName].length,) }}
 			</div>
 		</div>
-	</router-link>
+	</div>
 </template>
 
 <script>
@@ -61,6 +61,10 @@ export default {
 		baseName: {
 			type: String,
 			required: true,
+		},
+		small: {
+			type: Boolean,
+			default: false,
 		},
 	},
 
@@ -113,12 +117,16 @@ export default {
 		})
 	},
 
+	beforeDestroy() {
+		this.observer.disconnect()
+	},
+
 	methods: {
 		async fetchFiles() {
 			await this.fetchFaceContent(this.face.basename)
 		},
 		waitForVisible(el, listener) {
-			const observer = new IntersectionObserver((entries, observer) => {
+			this.observer = new IntersectionObserver((entries, observer) => {
 				entries.forEach(entry => {
 					if (entry.intersectionRatio > 0) {
 						listener()
@@ -127,7 +135,7 @@ export default {
 				})
 			})
 
-			observer.observe(el)
+			this.observer.observe(el)
 		},
 	},
 }
@@ -153,6 +161,14 @@ export default {
 			width: 95px;
 			height: 95px;
 			--photos-face-width: 95px;
+		}
+	}
+
+	&.face-cover--small {
+		.face-cover__crop-container {
+			width: 60px !important;
+			height: 60px !important;
+			--photos-face-width: 60px !important;
 		}
 	}
 
@@ -186,6 +202,15 @@ export default {
 		&__name {
 			flex-grow: 1;
 			margin: 0;
+		}
+	}
+
+	&.face-cover--small {
+		* {
+			font-size: 15px !important;
+		}
+		.face-cover__details {
+			width: 60px !important;
 		}
 	}
 }
