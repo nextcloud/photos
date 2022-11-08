@@ -9,6 +9,7 @@ OC.L10N.register(
     "Tags" : "Birkas",
     "Back" : "Atpakaļ",
     "Save" : "Saglabāt",
+    "Create album" : "Izveidot albumu",
     "An error occurred" : "Gadījās kļūda",
     "View" : "Skats",
     "Favorite" : "Favorīts",
