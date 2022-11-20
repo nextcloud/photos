@@ -38,6 +38,7 @@ OC.L10N.register(
     "View" : "Просмотр",
     "Favorite" : "В избранное",
     "Remove from favorites" : "Убрать из избранного",
+    "Recognized people will show up here" : "Тут будут показаны лица людей, которые удалось распознать",
     "This folder does not exist" : "Эта папка не существует",
     "No photos in here" : "Здесь нет фотографий",
     "Shared albums" : "Полученные альбомы",
