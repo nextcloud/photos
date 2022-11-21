@@ -72,7 +72,7 @@ OC.L10N.register(
     "Manage collaborators for this album" : "Керуйте співавторами для цього альбому",
     "Open actions menu" : "Відкрити меню дій",
     "Edit album details" : "Редагувати деталі альбому",
-    "Download all files in album" : "Завантажити всі файли в альбомі",
+    "Download all files in album" : "Звантажити всі файли в альбомі",
     "Delete album" : "Видалити альбом",
     "Download selected files" : "Завантажте вибрані файли",
     "Remove selection from album" : "Видалити виділення з альбому",
