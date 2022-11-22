@@ -64,7 +64,7 @@
     "Enable squared photos view" : "Quadratische Fotoansicht aktivieren",
     "Default Photos upload and Albums location" : "Standardspeicherort für das Hochladen von Fotos und Alben",
     "Select the default location for your media" : "Standardspeicherort für Ihre Medien auswählen",
-    "Invalid location selected" : "Ungültiger Speicherort ausgewählt",
+    "Invalid location selected" : "Ungültigen Speicherort ausgewählt",
     "View" : "Ansicht",
     "Photos directory" : "Fotoverzeichnis",
     "_%n photo_::_%n photos_" : ["%n Foto","%n Fotos"],
