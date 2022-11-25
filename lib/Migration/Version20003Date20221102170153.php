@@ -119,12 +119,13 @@ class Version20003Date20221102170153 extends SimpleMigrationStep {
 	protected function chunkedCopying(IQueryBuilder $insert, IQueryBuilder $select, int $offset): int {
 		$this->connection->beginTransaction();
 
+		$rowCount = 0;
 		$result = $select
 			->setFirstResult($offset)
 			->executeQuery();
 
 		while ($row = $result->fetch()) {
-			$insert
+			$rowCount += $insert
 				->setParameter('album_id', (int)$row['album_id'], IQueryBuilder::PARAM_INT)
 				->setParameter('collaborator_id', $row['collaborator_id'])
 				->setParameter('collaborator_type', (int) $row['collaborator_type'], IQueryBuilder::PARAM_INT)
@@ -134,6 +135,8 @@ class Version20003Date20221102170153 extends SimpleMigrationStep {
 		$result->closeCursor();
 		$this->connection->commit();
 
-		return $result->rowCount();
+		// $result->rowCount() cannot be relied on.
+		// some database drivers may return the number of rows returned by that query
+		return $rowCount;
 	}
 }
