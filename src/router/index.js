@@ -42,6 +42,8 @@ const Timeline = () => import('../views/Timeline')
 const Faces = () => import('../views/Faces')
 const FaceContent = () => import('../views/FaceContent')
 
+const baseTitle = document.title
+
 Vue.use(Router)
 
 let mapsPath = generateUrl('/apps/maps')
@@ -74,6 +76,11 @@ const router = new Router({
 			props: route => ({
 				rootTitle: t('photos', 'All your media'),
 			}),
+			meta: {
+				rootTitle: () => {
+					return t('photos', 'All your media')
+				},
+			},
 		},
 		{
 			path: '/photos',
@@ -83,6 +90,11 @@ const router = new Router({
 				rootTitle: t('photos', 'Photos'),
 				mimesType: imageMimes,
 			}),
+			meta: {
+				rootTitle: () => {
+					return t('photos', 'Photos')
+				},
+			},
 		},
 		{
 			path: '/videos',
@@ -92,11 +104,21 @@ const router = new Router({
 				rootTitle: t('photos', 'Videos'),
 				mimesType: videoMimes,
 			}),
+			meta: {
+				rootTitle: () => {
+					return t('photos', 'Videos')
+				},
+			},
 		},
 		{
 			path: '/albums',
 			component: Albums,
 			name: 'albums',
+			meta: {
+				rootTitle: () => {
+					return t('photos', 'Albums')
+				},
+			},
 		},
 		{
 			path: '/albums/:albumName*',
@@ -105,11 +127,21 @@ const router = new Router({
 			props: route => ({
 				albumName: route.params.albumName,
 			}),
+			meta: {
+				rootTitle: (to) => {
+					return t('photos', 'Album {title}', { title: to.params.albumName })
+				},
+			},
 		},
 		{
 			path: '/sharedalbums',
 			component: SharedAlbums,
 			name: 'sharedAlbums',
+			meta: {
+				rootTitle: () => {
+					return t('photos', 'Shared Albums')
+				},
+			},
 		},
 		{
 			path: '/sharedalbums/:albumName*',
@@ -118,6 +150,11 @@ const router = new Router({
 			props: route => ({
 				albumName: route.params.albumName,
 			}),
+			meta: {
+				rootTitle: (to) => {
+					return t('photos', 'Shared album {title}', { title: to.params.albumName })
+				},
+			},
 		},
 		{
 			path: '/public/:token',
@@ -126,6 +163,11 @@ const router = new Router({
 			props: route => ({
 				token: route.params.token,
 			}),
+			meta: {
+				rootTitle: (to) => {
+					return t('photos', 'Public album {title}', { title: to.params.token })
+				},
+			},
 		},
 		{
 			path: '/folders/:path*',
@@ -137,6 +179,11 @@ const router = new Router({
 				isRoot: !route.params.path,
 				rootTitle: t('photos', 'Folders'),
 			}),
+			meta: {
+				rootTitle: () => {
+					return t('photos', 'Folders')
+				},
+			},
 		},
 		{
 			path: '/shared/:path*',
@@ -149,6 +196,11 @@ const router = new Router({
 				rootTitle: t('photos', 'Shared with you'),
 				showShared: true,
 			}),
+			meta: {
+				rootTitle: () => {
+					return t('photos', 'Shared with you')
+				},
+			},
 		},
 		{
 			path: '/favorites',
@@ -158,6 +210,11 @@ const router = new Router({
 				rootTitle: t('photos', 'Favorites'),
 				onlyFavorites: true,
 			}),
+			meta: {
+				rootTitle: () => {
+					return t('photos', 'Favorites')
+				},
+			},
 		},
 		{
 			path: '/tags/',
@@ -169,6 +226,11 @@ const router = new Router({
 				isRoot: !route.params.path,
 				rootTitle: t('photos', 'Tagged photos'),
 			}),
+			meta: {
+				rootTitle: () => {
+					return t('photos', 'Tagged photos')
+				},
+			},
 		},
 		{
 			path: '/tags/:path',
@@ -178,6 +240,11 @@ const router = new Router({
 			props: route => ({
 				path: `${route.params.path ? route.params.path : ''}`,
 			}),
+			meta: {
+				rootTitle: (to) => {
+					return t('photos', 'Tagged photo {title}', { title: to.params.path })
+				},
+			},
 		},
 		{
 			path: '/maps',
@@ -195,6 +262,11 @@ const router = new Router({
 				rootTitle: t('photos', 'On this day'),
 				onThisDay: true,
 			}),
+			meta: {
+				rootTitle: () => {
+					return t('photos', 'On this day')
+				},
+			},
 		},
 		{
 			path: '/faces',
@@ -215,8 +287,23 @@ const router = new Router({
 				rootTitle: route.params.faceName,
 				faceName: route.params.faceName,
 			}),
+			meta: {
+				rootTitle: (to) => {
+					return t('photos', "{title}'s face", { title: to.params.rootTitle })
+				},
+			},
 		},
 	],
+})
+
+router.afterEach((to) => {
+	const rootTitle = to.meta.rootTitle?.(to)
+
+	if (rootTitle) {
+		document.title = `${rootTitle} - ${baseTitle}`
+	} else {
+		document.title = baseTitle
+	}
 })
 
 export default router
