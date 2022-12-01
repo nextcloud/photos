@@ -30,6 +30,7 @@
     "New album" : "Nyt album",
     "_%n item_::_%n photos and videos_" : ["%n enheder","%n fotos og videoer"],
     "_Share with %n user_::_Share with %n users_" : ["Del med %n bruger","Del med %n brugere"],
+    "Public link copied!" : "Offentlig link kopieret!",
     "Copy public link" : "Kopier offentligt link",
     "An error occurred" : "Der var en fejl",
     "_%n photos_::_%n photos_" : ["%n foto","%n fotos"],
