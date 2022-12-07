@@ -7,6 +7,7 @@ OC.L10N.register(
     "All media" : "Όλα τα media",
     "Videos" : "Βίντεο",
     "Albums" : "Άλμπουμ",
+    "Collaborative albums" : "Συνεργατικά άλμπουμ",
     "People" : "Άτομα",
     "Folders" : "Φάκελοι",
     "Favorites" : "Αγαπημένα",
