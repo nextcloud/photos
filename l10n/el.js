@@ -28,6 +28,7 @@ OC.L10N.register(
     "Create a new album." : "Δημιουργήστε ένα νέο άλμπουμ.",
     "Create new album" : "Δημιουργία νέου άλμπουμ. ",
     "New album" : "Νέο άλμπουμ",
+    "No collaborators available" : "Δεν υπάρχουν διαθέσιμοι συνεργάτες",
     "Copy public link" : "Αντιγραφή δημόσιου συνδέσμου",
     "An error occurred" : "Παρουσιάστηκε σφάλμα",
     "Select image {imageName}" : "Επιλογή εικόνας {imageName}",
