@@ -95,7 +95,7 @@ OC.L10N.register(
     "Merge person" : "Merge person",
     "_Remove photo from person_::_Remove photos from person_" : ["Remove photo from person","Remove photos from person"],
     "This might take some time depending on the size of your photo library." : "This might take some time depending on the size of your photo library.",
-    "Recognized people will show up here" : "Recognized people will show up here",
+    "Recognized people will show up here" : "Recognised people will show up here",
     "This folder does not exist" : "This folder does not exist",
     "Loading folders …" : "Loading folders …",
     "No photos in here" : "No photos in here",
