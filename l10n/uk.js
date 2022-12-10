@@ -63,7 +63,7 @@ OC.L10N.register(
     "Share this folder" : "Надати спільний доступ до каталогу",
     "_{years} year ago_::_{years} years ago_" : ["{years} рік тому","{years} років тому","{years} років тому","{years} років тому"],
     "Enable squared photos view" : "Увімкнути перегляд фотографій у квадраті",
-    "Default Photos upload and Albums location" : "Розташування завантаження фотографій і альбомів за умовчанням",
+    "Default Photos upload and Albums location" : "Типове місце завантажених світлин та альбомів",
     "Select the default location for your media" : "Виберіть типове розташування для ваших зображень та відео",
     "Invalid location selected" : "Вибрано недійсне місце розташування",
     "View" : "Перегляд",
