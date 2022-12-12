@@ -45,9 +45,11 @@
 		</div>
 
 		<div v-else-if="!noFaces" class="faces__list">
-			<FaceCover v-for="face in orderedFaces"
+			<router-link v-for="face in orderedFaces"
 				:key="face.basename"
-				:base-name="face.basename" />
+				:to="`/faces/${face.basename}`">
+				<FaceCover :base-name="face.basename" />
+			</router-link>
 		</div>
 	</div>
 </template>
@@ -88,6 +90,9 @@ export default {
 
 		orderedFaces() {
 			return Object.values(this.faces).sort((a, b) => {
+				if (a.props.nbItems && b.props.nbItems) {
+					return b.props.nbItems - a.props.nbItems
+				}
 				if (!this.facesFiles[b.basename] || !this.facesFiles[a.basename]) {
 					return 0
 				}

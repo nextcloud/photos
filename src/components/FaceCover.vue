@@ -23,7 +23,7 @@
  -->
 
 <template>
-	<router-link class="face-cover" :to="`/faces/${baseName}`">
+	<div :class="['face-cover', small && 'face-cover--small']" @click="$emit('click')">
 		<div class="face-cover__crop-container">
 			<img ref="image"
 				class="face-cover__image"
@@ -36,11 +36,11 @@
 					{{ baseName }}
 				</h2>
 			</div>
-			<div v-if="facesFiles[baseName]" class="face-cover__details__second-line">
+			<div v-if="facesFiles[baseName] && !small" class="face-cover__details__second-line">
 				{{ n('photos', '%n photos', '%n photos', facesFiles[baseName].length,) }}
 			</div>
 		</div>
-	</router-link>
+	</div>
 </template>
 
 <script>
@@ -62,6 +62,16 @@ export default {
 			type: String,
 			required: true,
 		},
+		small: {
+			type: Boolean,
+			default: false,
+		},
+	},
+
+	data() {
+		return {
+			observer: null,
+		}
 	},
 
 	computed: {
@@ -99,13 +109,33 @@ export default {
 		},
 	},
 
-	async beforeMount() {
-		await this.fetchFiles()
+	async mounted() {
+		this.waitForVisible(this.$el, (isVisible) => {
+			if (!this.facesFiles[this.face.basename]) {
+				this.fetchFiles()
+			}
+		})
+	},
+
+	beforeDestroy() {
+		this.observer.disconnect()
 	},
 
 	methods: {
 		async fetchFiles() {
 			await this.fetchFaceContent(this.face.basename)
+		},
+		waitForVisible(el, listener) {
+			this.observer = new IntersectionObserver((entries, observer) => {
+				entries.forEach(entry => {
+					if (entry.intersectionRatio > 0) {
+						listener()
+						observer.disconnect()
+					}
+				})
+			})
+
+			this.observer.observe(el)
 		},
 	},
 }
@@ -165,6 +195,20 @@ export default {
 			flex-grow: 1;
 			margin: 0;
 		}
+	}
+}
+
+.face-cover--small {
+	* {
+		font-size: 15px !important;
+	}
+	.face-cover__details {
+		width: 60px !important;
+	}
+	.face-cover__crop-container {
+		width: 60px !important;
+		height: 60px !important;
+		--photos-face-width: 60px !important;
 	}
 }
 </style>

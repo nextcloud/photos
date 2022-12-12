@@ -62,8 +62,8 @@ const mutations = {
 	 * @param {Array} data.faceNames list of faces ids
 	 */
 	removeFaces(state, { faceNames }) {
-		faceNames.forEach(faceName => delete state.faces[faceName])
-		faceNames.forEach(faceName => delete state.facesFiles[faceName])
+		faceNames.forEach(faceName => Vue.delete(state.faces, faceName))
+		faceNames.forEach(faceName => Vue.delete(state.facesFiles, faceName))
 	},
 
 	/**
@@ -79,7 +79,7 @@ const mutations = {
 			Vue.set(state.facesFiles, faceName, [])
 		}
 		const faceFiles = state.facesFiles[faceName]
-		state.facesFiles[faceName].push(...fileIdsToAdd.filter(fileId => !faceFiles.includes(fileId))) // Filter to prevent duplicate fileId.
+		faceFiles.push(...fileIdsToAdd.filter(fileId => !faceFiles.includes(fileId))) // Filter to prevent duplicate fileId.
 	},
 
 	/**
@@ -126,7 +126,8 @@ const actions = {
 
 		const promises = fileIdsToMove
 			.map(async (fileId) => {
-				const fileBaseName = context.getters.files[fileId].basename
+				const file = context.getters.files[fileId]
+				const fileBaseName = file.basename
 				const symbol = await semaphore.acquire()
 
 				try {
@@ -134,6 +135,7 @@ const actions = {
 						`/recognize/${getCurrentUser()?.uid}/faces/${oldFace}/${fileBaseName}`,
 						`/recognize/${getCurrentUser()?.uid}/faces/${faceName}/${fileBaseName}`
 					)
+					file.faceDetections.find(detection => detection.title === oldFace).title = faceName
 					await context.commit('addFilesToFace', { faceName, fileIdsToAdd: [fileId] })
 					await context.commit('removeFilesFromFace', { faceName: oldFace, fileIdsToRemove: [fileId] })
 					semaphore.release(symbol)
