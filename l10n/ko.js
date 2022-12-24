@@ -17,6 +17,7 @@ OC.L10N.register(
     "Favorite" : "즐겨찾기",
     "Remove from favorites" : "즐겨찾기에서 제거",
     "Add" : "추가",
+    "Your photos" : "당신의 사진",
     "Settings" : "설정"
 },
 "nplurals=1; plural=0;");
