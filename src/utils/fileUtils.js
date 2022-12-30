@@ -122,7 +122,7 @@ function genFileInfo(obj) {
 
 	if (fileInfo.filename) {
 		// Adding context
-		fileInfo.source = generateRemoteUrl(rootPath) + '/' + fileInfo.filename
+		fileInfo.source = generateRemoteUrl(rootPath) + '/' + encodeFilePath(fileInfo.filename)
 	}
 
 	return fileInfo
