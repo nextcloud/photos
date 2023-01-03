@@ -46,16 +46,16 @@
  */
 
 /*!
-* focus-trap 7.0.0
+* focus-trap 7.2.0
 * @license MIT, https://github.com/focus-trap/focus-trap/blob/master/LICENSE
 */
 
 /*!
-* tabbable 6.0.0
+* tabbable 6.0.1
 * @license MIT, https://github.com/focus-trap/tabbable/blob/master/LICENSE
 */
 
-/*! For license information please see ncvuecomponents.js.LICENSE.txt */
+/*! For license information please see index.module.js.LICENSE.txt */
 
 /*! Hammer.JS - v2.0.7 - 2016-04-22
  * http://hammerjs.github.io/
