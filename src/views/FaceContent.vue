@@ -97,6 +97,13 @@
 							{{ t('photos', 'Remove from favorites') }}
 						</NcActionButton>
 						<NcActionButton :close-after-click="true"
+							@click="showMoveModal = true">
+							<template #icon>
+								<AccountSwitch />
+							</template>
+							{{ n('photos', 'Move photo to a different person', 'Move photos to a different person', selectedFileIds.length) }}
+						</NcActionButton>
+						<NcActionButton :close-after-click="true"
 							@click="handleRemoveFilesFromFace(selectedFileIds)">
 							<template #icon>
 								<Close />
@@ -160,6 +167,11 @@
 			@close="showMergeModal = false">
 			<FaceMergeForm :first-face="faceName" @select="handleMerge($event)" />
 		</NcModal>
+		<NcModal v-if="showMoveModal"
+			:title="t('photos', 'Merge person')"
+			@close="showMoveModal = false">
+			<FaceMergeForm :first-face="faceName" @select="handleMove($event, selectedFileIds)" />
+		</NcModal>
 	</div>
 </template>
 
@@ -173,6 +185,7 @@ import Download from 'vue-material-design-icons/Download'
 import Send from 'vue-material-design-icons/Send'
 import Merge from 'vue-material-design-icons/Merge'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft'
+import AccountSwitch from 'vue-material-design-icons/AccountSwitch'
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline'
 
 import { NcActions, NcActionButton, NcModal, NcEmptyContent, NcButton, NcLoadingIcon } from '@nextcloud/vue'
@@ -207,6 +220,7 @@ export default {
 		NcActionButton,
 		NcModal,
 		NcButton,
+		AccountSwitch,
 	},
 
 	directives: {
@@ -230,6 +244,7 @@ export default {
 
 	data() {
 		return {
+			showMoveModal: false,
 			showMergeModal: false,
 			showRenameModal: false,
 			loadingCount: 0,
@@ -341,6 +356,18 @@ export default {
 				await this.deleteFace({ faceName: this.faceName })
 				this.showMergeModal = false
 				this.$router.push({ name: 'facecontent', params: { faceName } })
+			} catch (error) {
+				logger.error(error)
+			} finally {
+				this.loadingCount--
+			}
+		},
+
+		async handleMove(faceName, fileIds) {
+			try {
+				this.loadingCount++
+				await this.moveFilesToFace({ oldFace: this.faceName, faceName, fileIdsToMove: fileIds })
+				this.showMoveModal = false
 			} catch (error) {
 				logger.error(error)
 			} finally {
