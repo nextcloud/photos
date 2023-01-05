@@ -122,7 +122,7 @@ export default {
 
 				fetchedFiles = fetchedFiles
 					.map(file => genFileInfo(file))
-					.map(file => ({ ...file, filename: file.realpath.replace(`/${getCurrentUser().uid}/files`, '') }))
+					.map(file => ({ ...file, filename: file.realpath.replace(`/${getCurrentUser().uid}/files`, `/files/${getCurrentUser().uid}`) }))
 					.map(file => ({ ...file, faceDetections: JSON.parse(he.decode(file.faceDetections)) }))
 
 				const fileIds = fetchedFiles.map(file => '' + file.fileid)
