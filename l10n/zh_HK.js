@@ -93,6 +93,7 @@ OC.L10N.register(
     "Remove person" : "移除人",
     "Name of this person" : "此人的名字",
     "Merge person" : "合併人",
+    "_Move photo to a different person_::_Move photos to a different person_" : ["將照片移給其他人"],
     "_Remove photo from person_::_Remove photos from person_" : ["從人移除照片"],
     "This might take some time depending on the size of your photo library." : "這可能需要花一點時間，取決於您照片庫的大小。",
     "Recognized people will show up here" : "被識別的人將會出現在此處",

@@ -93,6 +93,7 @@ OC.L10N.register(
     "Remove person" : "Remove person",
     "Name of this person" : "Name of this person",
     "Merge person" : "Merge person",
+    "_Move photo to a different person_::_Move photos to a different person_" : ["Move photo to a different person","Move photos to a different person"],
     "_Remove photo from person_::_Remove photos from person_" : ["Remove photo from person","Remove photos from person"],
     "This might take some time depending on the size of your photo library." : "This might take some time depending on the size of your photo library.",
     "Recognized people will show up here" : "Recognised people will show up here",
