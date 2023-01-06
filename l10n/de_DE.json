@@ -91,6 +91,7 @@
     "Remove person" : "Person entfernen",
     "Name of this person" : "Name dieser Person",
     "Merge person" : "Person zusammenführen",
+    "_Move photo to a different person_::_Move photos to a different person_" : ["Foto an eine andere Person verschieben","Fotos an eine andere Person verschieben"],
     "_Remove photo from person_::_Remove photos from person_" : ["Foto von Person entfernen","Fotos von Person entfernen"],
     "This might take some time depending on the size of your photo library." : "Dies kann je nach Größe Ihrer Fotobibliothek einige Zeit dauern.",
     "Recognized people will show up here" : "Erkannte Menschen werden hier angezeigt werden",
