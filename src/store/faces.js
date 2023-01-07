@@ -195,17 +195,20 @@ const actions = {
 		let face = state.faces[oldName]
 
 		try {
+			if (state.faces[faceName]) {
+				throw new Error('Name already exists')
+			}
 			await client.moveFile(
 				`/recognize/${getCurrentUser()?.uid}/faces/${oldName}`,
 				`/recognize/${getCurrentUser()?.uid}/faces/${faceName}`,
 			)
 			context.commit('removeFaces', { faceNames: [oldName] })
 			face = { ...face, basename: faceName }
+			context.commit('addFaces', { faces: [face] })
 		} catch (error) {
 			logger.error(t('photos', 'Failed to rename {oldName} to {faceName}.', { oldName, faceName }), { error })
 			showError(t('photos', 'Failed to rename {oldName} to {faceName}.', { oldName, faceName }))
-		} finally {
-			context.commit('addFaces', { faces: [face] })
+			throw error
 		}
 	},
 
