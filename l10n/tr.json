@@ -91,6 +91,7 @@
     "Remove person" : "Kişiyi sil",
     "Name of this person" : "Bu kişinin adı",
     "Merge person" : "Kişiyi birleştir",
+    "_Move photo to a different person_::_Move photos to a different person_" : ["Fotoğrafı başka bir kişiye aktar","Fotoğrafları başka bir kişiye aktar"],
     "_Remove photo from person_::_Remove photos from person_" : ["Fotoğrafı kişiden kaldır","Fotoğrafları kişiden kaldır"],
     "This might take some time depending on the size of your photo library." : "Bu işlemin tamamlanması fotoğraf arşivinizin boyutuna bağlı olarak biraz zaman alabilir.",
     "Recognized people will show up here" : "Tanınan kişiler burada görüntülenir",
