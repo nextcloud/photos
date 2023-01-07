@@ -91,6 +91,7 @@
     "Remove person" : "Премахване на лице",
     "Name of this person" : "Име лицето",
     "Merge person" : "Обединяване на лице",
+    "_Move photo to a different person_::_Move photos to a different person_" : ["Преместване на снимки към друго лице","Преместване на снимки към друго лице"],
     "_Remove photo from person_::_Remove photos from person_" : ["Премахване на снимки от лице","Премахване на снимки от лице"],
     "This might take some time depending on the size of your photo library." : "Това може да отнеме известно време в зависимост от размера на вашата библиотека със снимки.",
     "Recognized people will show up here" : "Разпознатите хора ще се показват тук",
