@@ -32,7 +32,7 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import { generateUrl } from '@nextcloud/router'
+import { generateOcsUrl } from '@nextcloud/router'
 import { NcActionLink } from '@nextcloud/vue'
 
 export default {
@@ -61,10 +61,9 @@ export default {
 
 		downloadUrl() {
 			const params = new URLSearchParams()
-			const filePaths = this.fileNames.map(fileName => '/' + fileName.split('/').splice(3).join('/'))
-			params.append('files', JSON.stringify(filePaths))
+			params.append('files', JSON.stringify(this.fileNames))
 
-			return generateUrl(`/apps/files/ajax/download.php?${params}`)
+			return generateOcsUrl(`apps/files/api/v1/download?${params}`)
 		},
 
 		fileNames() {

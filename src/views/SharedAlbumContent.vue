@@ -53,12 +53,11 @@
 					</NcButton>
 
 					<NcActions :force-menu="true" :aria-label="t('photos', 'Open actions menu')">
-						<!-- TODO: enable download on shared albums -->
-						<!-- <ActionDownload v-if="albumFileIds.length > 0"
+						<ActionDownload v-if="albumFileIds.length > 0"
 							:selected-file-ids="albumFileIds"
 							:title="t('photos', 'Download all files in album')">
 							<DownloadMultiple slot="icon" />
-						</ActionDownload> -->
+						</ActionDownload>
 
 						<NcActionButton :close-after-click="true"
 							@click="handleDeleteAlbum">
@@ -69,10 +68,9 @@
 						<template v-if="selectedFileIds.length > 0">
 							<NcActionSeparator />
 
-							<!-- TODO: enable download on shared albums -->
-							<!-- <ActionDownload :selected-file-ids="selectedFileIds" :title="t('photos', 'Download selected files')">
+							<ActionDownload :selected-file-ids="selectedFileIds" :title="t('photos', 'Download selected files')">
 								<Download slot="icon" />
-							</ActionDownload> -->
+							</ActionDownload>
 
 							<NcActionButton :close-after-click="true"
 								@click="handleRemoveFilesFromAlbum(selectedFileIds)">
@@ -120,8 +118,8 @@ import Plus from 'vue-material-design-icons/Plus'
 import Delete from 'vue-material-design-icons/Delete'
 import ImagePlus from 'vue-material-design-icons/ImagePlus'
 import Close from 'vue-material-design-icons/Close'
-// import Download from 'vue-material-design-icons/Download'
-// import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple'
+import Download from 'vue-material-design-icons/Download'
+import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple'
 
 import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionSeparator, isMobile } from '@nextcloud/vue'
 import { getCurrentUser } from '@nextcloud/auth'
@@ -131,7 +129,7 @@ import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-// import ActionDownload from '../components/Actions/ActionDownload.vue'
+import ActionDownload from '../components/Actions/ActionDownload.vue'
 import FilesPicker from '../components/FilesPicker.vue'
 import logger from '../services/logger.js'
 import client from '../services/DavClient.js'
@@ -144,8 +142,8 @@ export default {
 		MapMarker,
 		Plus,
 		Close,
-		// Download,
-		// DownloadMultiple,
+		Download,
+		DownloadMultiple,
 		Delete,
 		ImagePlus,
 		NcEmptyContent,
@@ -155,7 +153,7 @@ export default {
 		NcButton,
 		NcModal,
 		CollectionContent,
-		// ActionDownload,
+		ActionDownload,
 		FilesPicker,
 		HeaderNavigation,
 	},

@@ -25,12 +25,33 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Controller;
 
-use OCA\Photos\Album\AlbumMapper;
+use OCA\Photos\Service\FileAccessManager;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\FileDisplayResponse;
+use OCP\IPreview;
+use OCP\IRequest;
+use OCP\IUserSession;
 
 class PublicPreviewController extends PreviewController {
+	private FileAccessManager $fileAccessManager;
+
+	public function __construct(
+		FileAccessManager $fileAccessManager,
+		IRequest $request,
+		IUserSession $userSession,
+		IPreview $preview
+	) {
+		parent::__construct(
+			$fileAccessManager,
+			$request,
+			$userSession,
+			$preview
+		);
+
+		$this->fileAccessManager = $fileAccessManager;
+	}
+
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
@@ -53,14 +74,11 @@ class PublicPreviewController extends PreviewController {
 			return new DataResponse([], Http::STATUS_FORBIDDEN);
 		}
 
-		$publicAlbums = $this->albumMapper->getAlbumsForCollaboratorIdAndFileId($token, AlbumMapper::TYPE_LINK, $fileId);
-		$nodes = $this->getFileIdForAlbums($fileId, $publicAlbums);
+		$node = $this->fileAccessManager->getAccessibleNodeForPublicAlbum($fileId, $token);
 
-		if (\count($nodes) === 0) {
+		if ($node === null) {
 			return new DataResponse([], Http::STATUS_NOT_FOUND);
 		}
-
-		$node = array_pop($nodes);
 
 		return $this->fetchPreview($node, $x, $y);
 	}
