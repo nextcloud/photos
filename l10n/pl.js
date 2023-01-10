@@ -93,6 +93,7 @@ OC.L10N.register(
     "Remove person" : "Usuń osobę",
     "Name of this person" : "Nazwa tej osoby",
     "Merge person" : "Połącz osobę",
+    "_Move photo to a different person_::_Move photos to a different person_" : ["Przenieś zdjęcie do innej osoby","Przenieś zdjęcia do innej osoby","Przenieś zdjęcia do innej osoby","Przenieś zdjęcia do innej osoby"],
     "_Remove photo from person_::_Remove photos from person_" : ["Usuń zdjęcie od osoby","Usuń zdjęcia od osoby","Usuń zdjęcia od osoby","Usuń zdjęcia od osoby"],
     "This might take some time depending on the size of your photo library." : "Może to zająć trochę czasu, w zależności od rozmiaru biblioteki zdjęć.",
     "Recognized people will show up here" : "Rozpoznane osoby pojawią się tutaj",
