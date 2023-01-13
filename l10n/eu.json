@@ -91,6 +91,7 @@
     "Remove person" : "Kendu pertsona",
     "Name of this person" : "Pertsona honen izena",
     "Merge person" : "Bateratu pertsona",
+    "_Move photo to a different person_::_Move photos to a different person_" : ["Mugitu argazkia beste pertsona batera","Mugitu argazkiak beste pertsona batera"],
     "_Remove photo from person_::_Remove photos from person_" : ["Kendu argazkia pertsonatik","Kendu argazkiak pertsonatik"],
     "This might take some time depending on the size of your photo library." : "Honek luze jo dezake, zure argazki liburutegiaren tamainaren arabera.",
     "Recognized people will show up here" : "Ezagutu diren pertsonak hemen agertuko dira",
