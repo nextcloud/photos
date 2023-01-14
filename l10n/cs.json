@@ -91,6 +91,7 @@
     "Remove person" : "Odebrat osobu",
     "Name of this person" : "Pojmenovat tuto osobu",
     "Merge person" : "Sloučit osobu",
+    "_Move photo to a different person_::_Move photos to a different person_" : ["Přesunout fotku k jiné osobě","Přesunout fotky k jiné osobě","Přesunout fotky k jiné osobě","Přesunout fotky k jiné osobě"],
     "_Remove photo from person_::_Remove photos from person_" : ["Odebrat fotku z osoby","Odebrat fotky z osoby","Odebrat fotky z osoby","Odebrat fotky z osoby"],
     "This might take some time depending on the size of your photo library." : "Toto může zabrat nějakou dobu v závislosti na velikosti vaší knihovny fotek.",
     "Recognized people will show up here" : "Rozpoznaní lidé se zobrazí zde",
