@@ -4,7 +4,7 @@
 		"optimize-autoloader": true,
 		"classmap-authoritative": true,
 		"platform": {
-			"php": "7.4"
+			"php": "8.0"
 		}
 	},
 	"scripts": {
@@ -12,7 +12,8 @@
 		"cs:check": "php-cs-fixer fix --dry-run --diff",
 		"lint": "find . -name \\*.php -not -path './vendor/*' -print0 | xargs -0 -n1 php -l",
 		"psalm": "psalm",
-		"psalm:update-baseline": "psalm --update-baseline"
+		"psalm:update-baseline": "psalm --update-baseline",
+		"test:unit": "echo 'Only testing installation of the app'"
 	},
 	"require-dev": {
 		"nextcloud/coding-standard": "1.0",
