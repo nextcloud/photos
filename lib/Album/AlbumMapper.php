@@ -377,26 +377,18 @@ class AlbumMapper {
 		}
 
 		foreach ($collaboratorsToRemove as $collaborator) {
-			$query = $this->connection->getQueryBuilder();
-			$query->delete('photos_albums_collabs')
-				->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
-				->andWhere($query->expr()->eq('collaborator_id', $query->createNamedParameter($collaborator['id'])))
-				->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter($collaborator['type'], IQueryBuilder::PARAM_INT)))
-				->executeStatement();
-			
-			// Remove photos added by removed collaborators
-			$query = $this->connection->getQueryBuilder();
-			$query->delete('photos_albums_files')
-				->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
-				->andWhere($query->expr()->eq('owner', $query->createNamedParameter($collaborator['id'])))
-				->executeStatement();
-
-			// Update the last added photo after removal:
-			$query = $this->connection->getQueryBuilder();
-			$query->update("photos_albums")
-				->set('last_added_photo', $query->createNamedParameter($this->getLastAdded($albumId), IQueryBuilder::PARAM_INT))
-				->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)));
-			$query->executeStatement();
+			switch ($collaborator['type']) {
+				case self::TYPE_USER:
+					$this->deleteUserFromAlbumCollaboratorsList($collaborator['id'], $albumId);
+					break;
+				default:
+					$query = $this->connection->getQueryBuilder();
+					$query->delete('photos_albums_collabs')
+						->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
+						->andWhere($query->expr()->eq('collaborator_id', $query->createNamedParameter($collaborator['id'])))
+						->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter($collaborator['type'], IQueryBuilder::PARAM_INT)))
+						->executeStatement();
+			}
 		}
 
 		$this->connection->commit();
