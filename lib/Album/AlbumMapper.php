@@ -493,12 +493,25 @@ class AlbumMapper {
 	 * @return void
 	 */
 	public function deleteUserFromAlbumCollaboratorsList(string $userId, int $albumId): void {
-		// TODO: only delete if this was not a group share
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('photos_albums_collabs')
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('collaborator_id', $query->createNamedParameter($userId)))
 			->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter(self::TYPE_USER, IQueryBuilder::PARAM_INT)))
+			->executeStatement();
+	}
+
+	/**
+	 * @param string $groupId
+	 * @param int $albumId
+	 * @return void
+	 */
+	public function deleteGroupFromAlbumCollaboratorsList(string $groupId, int $albumId): void {
+		$query = $this->connection->getQueryBuilder();
+		$query->delete('photos_albums_collabs')
+			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->eq('collaborator_id', $query->createNamedParameter($groupId)))
+			->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter(self::TYPE_GROUP, IQueryBuilder::PARAM_INT)))
 			->executeStatement();
 	}
 
