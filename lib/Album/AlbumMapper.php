@@ -273,6 +273,22 @@ class AlbumMapper {
 		$query->executeStatement();
 	}
 
+	public function removeFilesForUser(int $albumId, string $userId) {
+		// Remove all photos by this user from the album:
+		$query = $this->connection->getQueryBuilder();
+		$query->delete('photos_albums_files')
+			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->eq('owner', $query->createNamedParameter($userId)))
+			->executeStatement();
+
+		// Update the last added photo:
+		$query = $this->connection->getQueryBuilder();
+		$query->update("photos_albums")
+			->set('last_added_photo', $query->createNamedParameter($this->getLastAdded($albumId), IQueryBuilder::PARAM_INT))
+			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
+			->executeStatement();
+	}
+
 	private function getLastAdded(int $albumId): int {
 		$query = $this->connection->getQueryBuilder();
 		$query->select("file_id")
@@ -492,18 +508,7 @@ class AlbumMapper {
 			->executeStatement();
 
 		// Remove all photos by this user from the album:
-		$query = $this->connection->getQueryBuilder();
-		$query->delete('photos_albums_files')
-			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
-			->andWhere($query->expr()->eq('owner', $query->createNamedParameter($userId)))
-			->executeStatement();
-
-		// Update the last added photo:
-		$query = $this->connection->getQueryBuilder();
-		$query->update("photos_albums")
-			->set('last_added_photo', $query->createNamedParameter($this->getLastAdded($albumId), IQueryBuilder::PARAM_INT))
-			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
-			->executeStatement();
+		$this->removeFilesForUser($albumId, $userId);
 	}
 
 	/**
