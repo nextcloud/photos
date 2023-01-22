@@ -349,12 +349,12 @@ class AlbumMapper {
 		foreach ($rows as $row) {
 			switch ($row['collaborator_type']) {
 				case self::TYPE_USER:
-					if ($row['collaborator_id'] === $userId) {
+					if (strcmp($row['collaborator_id'], $userId)) {
 						return true;
 					}
 					break;
 				case self::TYPE_GROUP:
-					if ($$this->groupManager->isInGroup($userId, $row['collaborator_id'])) {
+					if ($this->groupManager->isInGroup($userId, $row['collaborator_id'])) {
 						return true;
 					}
 					break;
