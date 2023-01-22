@@ -29,12 +29,15 @@ use OCA\DAV\Events\SabrePluginAuthInitEvent;
 use OCA\Photos\Listener\SabrePluginAuthInitListener;
 use OCA\DAV\Connector\Sabre\Principal;
 use OCA\Photos\Listener\NodeDeletedListener;
+use OCA\Photos\Listener\GroupUserRemovedListener;
+use OCA\Photos\Listener\GroupDeletedListener;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Files\Events\Node\NodeDeletedEvent;
 use OCP\Group\Events\UserRemovedEvent;
+use OCP\Group\Events\GroupDeletedEvent;
 
 class Application extends App implements IBootstrap {
 	public const APP_ID = 'photos';
@@ -70,6 +73,8 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(NodeDeletedEvent::class, NodeDeletedListener::class);
 
 		$context->registerEventListener(UserRemovedEvent::class, GroupUserRemovedListener::class);
+
+		$context->registerEventListener(GroupDeletedEvent::class, GroupDeletedListener::class);
 
 		$context->registerEventListener(SabrePluginAuthInitEvent::class, SabrePluginAuthInitListener::class);
 	}
