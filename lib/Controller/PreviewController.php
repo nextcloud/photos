@@ -101,7 +101,7 @@ class PreviewController extends Controller {
 
 		if (\count($nodes) === 0) {
 			$receivedAlbums = $this->albumMapper->getAlbumsForCollaboratorIdAndFileId($user->getUID(), AlbumMapper::TYPE_USER, $fileId);
-			$receivedAlbums = array_udiff($receivedAlbums, $checkedAlbums, fn ($a, $b) => strcmp($a->getId(), $b->getId()));
+			$receivedAlbums = array_udiff($receivedAlbums, $checkedAlbums, fn ($a, $b) => ($a->getId() - $b->getId()));
 			$nodes = $this->getFileIdForAlbums($fileId, $receivedAlbums);
 			$checkedAlbums = array_merge($checkedAlbums, $receivedAlbums);
 		}
@@ -110,7 +110,7 @@ class PreviewController extends Controller {
 			$userGroups = $this->groupManager->getUserGroupIds($user);
 			foreach ($userGroups as $groupId) {
 				$albumsForGroup = $this->albumMapper->getAlbumsForCollaboratorIdAndFileId($groupId, AlbumMapper::TYPE_GROUP, $fileId);
-				$albumsForGroup = array_udiff($albumsForGroup, $checkedAlbums, fn ($a, $b) => strcmp($a->getId(), $b->getId()));
+				$albumsForGroup = array_udiff($albumsForGroup, $checkedAlbums, fn ($a, $b) => ($a->getId() - $b->getId()));
 				$nodes = $this->getFileIdForAlbums($fileId, $albumsForGroup);
 				$checkedAlbums = array_merge($checkedAlbums, $receivedAlbums);
 				if (\count($nodes) !== 0) {
