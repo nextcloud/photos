@@ -25,7 +25,6 @@ namespace OCA\Photos\Sabre\Album;
 
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\Conflict;
-use OCA\Photos\Album\AlbumMapper;
 
 class SharedAlbumRoot extends AlbumRoot {
 	/**
@@ -47,7 +46,7 @@ class SharedAlbumRoot extends AlbumRoot {
 			throw new Conflict("File $sourceId is already in the folder");
 		}
 
-		if(!$this->albumMapper->isCollaborator($this->album->getAlbum()->getId(), $this->userId)) {
+		if (!$this->albumMapper->isCollaborator($this->album->getAlbum()->getId(), $this->userId)) {
 			return false;
 		}
 
