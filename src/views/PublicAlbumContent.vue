@@ -100,7 +100,7 @@ import Close from 'vue-material-design-icons/Close'
 import { NcActions, NcActionButton, NcButton, NcEmptyContent, /** NcActionSeparator, */ isMobile } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
 import axios from '@nextcloud/axios'
-import { generateRemoteUrl } from '@nextcloud/router'
+import { generateUrl, generateRemoteUrl } from '@nextcloud/router'
 
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
@@ -261,6 +261,13 @@ export default {
 
 				const fileIds = fetchedFiles
 					.map(file => file.fileid.toString())
+
+				fetchedFiles.forEach(file => {
+					// Custom preview URL
+					file.appPreviewPath = generateUrl(`/apps/photos/api/v1/publicPreview/${file.fileid}?x=2048&y=2048&token=${this.token}`)
+					// Disable use of generic file previews for public albums - until support for custom preview URL is available in the Viewer app.
+					file.hasPreview = false
+				})
 
 				this.appendFiles(fetchedFiles)
 
