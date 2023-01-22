@@ -13,7 +13,7 @@ OC.L10N.register(
     "Favorites" : "Favoriten",
     "On this day" : "An diesem Tag",
     "Shared with you" : "Mit Ihnen geteilt",
-    "Tags" : "Schlagwörter",
+    "Tags" : "Schlagworte",
     "Locations" : "Orte",
     "Photos settings" : "Fotos-Einstellungen",
     "Mark selection as favorite" : "Auswahl als Favoriten markieren",
