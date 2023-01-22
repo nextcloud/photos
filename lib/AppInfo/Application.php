@@ -34,6 +34,7 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Files\Events\Node\NodeDeletedEvent;
+use OCP\Group\Events\UserRemovedEvent;
 
 class Application extends App implements IBootstrap {
 	public const APP_ID = 'photos';
@@ -65,7 +66,11 @@ class Application extends App implements IBootstrap {
 	public function register(IRegistrationContext $context): void {
 		/** Register $principalBackend for the DAV collection */
 		$context->registerServiceAlias('principalBackend', Principal::class);
+		
 		$context->registerEventListener(NodeDeletedEvent::class, NodeDeletedListener::class);
+
+		$context->registerEventListener(UserRemovedEvent::class, GroupUserRemovedListener::class);
+
 		$context->registerEventListener(SabrePluginAuthInitEvent::class, SabrePluginAuthInitListener::class);
 	}
 
