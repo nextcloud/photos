@@ -21,15 +21,11 @@
  */
 namespace OCA\Photos\Sabre;
 
-use OC\Security\Bruteforce\Throttler;
-use OCA\Photos\Album\AlbumMapper;
-use OCP\IRequest;
 use Sabre\DAV\Auth\Backend\BackendInterface;
 use Sabre\HTTP\RequestInterface;
 use Sabre\HTTP\ResponseInterface;
 
 class PublicAlbumAuthBackend implements BackendInterface {
-
 	public function __construct() {
 	}
 
