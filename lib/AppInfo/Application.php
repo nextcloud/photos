@@ -34,6 +34,7 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Files\Cache\CacheEntryRemovedEvent;
+use OCP\Files\Events\Node\NodeDeletedEvent;
 
 class Application extends App implements IBootstrap {
 	public const APP_ID = 'photos';
@@ -66,6 +67,7 @@ class Application extends App implements IBootstrap {
 		/** Register $principalBackend for the DAV collection */
 		$context->registerServiceAlias('principalBackend', Principal::class);
 		$context->registerEventListener(CacheEntryRemovedEvent::class, CacheEntryRemovedListener::class);
+		$context->registerEventListener(NodeDeletedEvent::class, CacheEntryRemovedListener::class);
 		$context->registerEventListener(SabrePluginAuthInitEvent::class, SabrePluginAuthInitListener::class);
 	}
 
