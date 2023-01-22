@@ -7,6 +7,7 @@ OC.L10N.register(
     "Back" : "Retour",
     "Save" : "Sekles",
     "Favorite" : "Menyif",
+    "Remove from favorites" : "Kkes-it seg ismal",
     "Add" : "Rnu",
     "Settings" : "Iɣewwaṛen"
 },
