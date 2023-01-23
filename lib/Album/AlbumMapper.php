@@ -349,7 +349,7 @@ class AlbumMapper {
 		foreach ($rows as $row) {
 			switch ($row['collaborator_type']) {
 				case self::TYPE_USER:
-					if (!strcmp($row['collaborator_id'], $userId)) {
+					if ($row['collaborator_id'] === $userId) {
 						return true;
 					}
 					break;
