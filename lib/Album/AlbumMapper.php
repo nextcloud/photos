@@ -332,6 +332,40 @@ class AlbumMapper {
 		return array_values(array_filter($collaborators, fn ($c) => $c !== null));
 	}
 
+
+	/**
+	 * @param int $albumId
+	 * @param string $userId
+	 * @return bool
+	 */
+	public function isCollaborator(int $albumId, string $userId): bool {
+		$query = $this->connection->getQueryBuilder();
+		$query->select("collaborator_id", "collaborator_type")
+			->from("photos_albums_collabs")
+			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)));
+
+		$rows = $query->executeQuery()->fetchAll();
+
+		foreach ($rows as $row) {
+			switch ($row['collaborator_type']) {
+				case self::TYPE_USER:
+					if ($row['collaborator_id'] === $userId) {
+						return true;
+					}
+					break;
+				case self::TYPE_GROUP:
+					if ($this->groupManager->isInGroup($userId, $row['collaborator_id'])) {
+						return true;
+					}
+					break;
+				default:
+					break;
+			}
+		}
+
+		return false;
+	}
+
 	/**
 	 * @param int $albumId
 	 * @param array{'id': string, 'type': int} $collaborators
