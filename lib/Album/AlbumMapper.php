@@ -440,6 +440,34 @@ class AlbumMapper {
 
 	/**
 	 * @param string $collaboratorId
+	 * @param int $collaboratorType
+	 * @return AlbumInfo[]
+	 */
+	public function getSharedAlbumsForCollaborator(string $collaboratorId, int $collaboratorType): array {
+		$query = $this->connection->getQueryBuilder();
+		$rows = $query
+			->select("a.album_id", "name", "user", "location", "created", "last_added_photo")
+			->from("photos_albums_collabs", "c")
+			->leftJoin("c", "photos_albums", "a", $query->expr()->eq("a.album_id", "c.album_id"))
+			->where($query->expr()->eq('collaborator_id', $query->createNamedParameter($collaboratorId)))
+			->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter($collaboratorType, IQueryBuilder::PARAM_INT)))
+			->executeQuery()
+			->fetchAll();
+
+		return array_map(function (array $row) {
+			return new AlbumInfo(
+				(int)$row['album_id'],
+				$row['user'],
+				$row['name'].' ('.$row['user'].')',
+				$row['location'],
+				(int)$row['created'],
+				(int)$row['last_added_photo']
+			);
+		}, $rows);
+	}
+
+	/**
+	 * @param string $collaboratorId
 	 * @param string $collaboratorsType - The type of the collaborator, either a user or a group.
 	 * @return AlbumWithFiles[]
 	 */
