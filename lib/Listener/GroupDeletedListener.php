@@ -20,7 +20,7 @@ class GroupDeletedListener implements IEventListener {
 		}
 
 		// Get all shared albums for this group:
-		$albums_group = $this->albumMapper->getSharedAlbumsForCollaboratorWithFiles($event->getGroup()->getGID(), AlbumMapper::TYPE_GROUP);
+		$albums_group = $this->albumMapper->getSharedAlbumsForCollaborator($event->getGroup()->getGID(), AlbumMapper::TYPE_GROUP);
 
 		// Get all users of this group:
 		$users = $event->getGroup()->getUsers();
@@ -29,20 +29,19 @@ class GroupDeletedListener implements IEventListener {
 			$uid = $user->getUID();
 
 			// Get all albums shared with this specific user:
-			$albums_user = $this->albumMapper->getSharedAlbumsForCollaboratorWithFiles($user->getUID(), AlbumMapper::TYPE_USER);
+			$albums_user = $this->albumMapper->getSharedAlbumsForCollaborator($user->getUID(), AlbumMapper::TYPE_USER);
 
 			// Get all group-shared albums that are not directly shared with the removed user in addition
-			$albums = array_udiff($albums_group, $albums_user, fn ($a, $b) => ($a->getAlbum()->getId() - $b->getAlbum()->getId()));
-
+			$albums = array_udiff($albums_group, $albums_user, fn ($a, $b) => ($a->getId() - $b->getId()));
 
 			// Remove their photos from theses albums:
 			foreach ($albums as $album) {
-				$this->albumMapper->removeFilesForUser($album->getAlbum()->getId(), $user->getUID());
+				$this->albumMapper->removeFilesForUser($album->getId(), $user->getUID());
 			}
 		}
 
 		foreach ($albums_group as $album) {
-			$this->albumMapper->deleteGroupFromAlbumCollaboratorsList($event->getGroup()->getGID(), $album->getAlbum()->getId());
+			$this->albumMapper->deleteGroupFromAlbumCollaboratorsList($event->getGroup()->getGID(), $album->getId());
 		}
 	}
 }
