@@ -527,6 +527,9 @@ class AlbumMapper {
 			->andWhere($query->expr()->eq('collaborator_id', $query->createNamedParameter($userId)))
 			->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter(self::TYPE_USER, IQueryBuilder::PARAM_INT)))
 			->executeStatement();
+			
+		// Remove all photos by this user from the album:
+		$this->removeFilesForUser($albumId, $userId);
 	}
 
 	/**
