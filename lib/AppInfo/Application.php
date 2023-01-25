@@ -29,6 +29,7 @@ use OCA\DAV\Events\SabrePluginAuthInitEvent;
 use OCA\Photos\Listener\SabrePluginAuthInitListener;
 use OCA\DAV\Connector\Sabre\Principal;
 use OCA\Photos\Listener\NodeDeletedListener;
+use OCA\Photos\Listener\TagListener;
 use OCA\Photos\Listener\GroupUserRemovedListener;
 use OCA\Photos\Listener\GroupDeletedListener;
 use OCP\AppFramework\App;
@@ -36,6 +37,7 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Files\Events\Node\NodeDeletedEvent;
+use OCP\SystemTag\MapperEvent;
 use OCP\Group\Events\UserRemovedEvent;
 use OCP\Group\Events\GroupDeletedEvent;
 
@@ -69,7 +71,7 @@ class Application extends App implements IBootstrap {
 	public function register(IRegistrationContext $context): void {
 		/** Register $principalBackend for the DAV collection */
 		$context->registerServiceAlias('principalBackend', Principal::class);
-		
+
 		$context->registerEventListener(NodeDeletedEvent::class, NodeDeletedListener::class);
 
 		$context->registerEventListener(UserRemovedEvent::class, GroupUserRemovedListener::class);
@@ -77,6 +79,9 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(GroupDeletedEvent::class, GroupDeletedListener::class);
 
 		$context->registerEventListener(SabrePluginAuthInitEvent::class, SabrePluginAuthInitListener::class);
+
+		$context->registerEventListener(MapperEvent::EVENT_ASSIGN, TagListener::class);
+		$context->registerEventListener(MapperEvent::EVENT_UNASSIGN, TagListener::class);
 	}
 
 	public function boot(IBootContext $context): void {
