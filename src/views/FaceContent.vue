@@ -286,7 +286,8 @@ export default {
 		openViewer(fileId) {
 			const file = this.files[fileId]
 			OCA.Viewer.open({
-				path: file.filename,
+				// remove /username/files/ from the start
+				path: '/' + file.filename.split('/').slice(3).join('/'),
 				list: this.faceFileIds.map(fileId => ({
 					...this.files[fileId],
 					basename: this.files[fileId].basename.split('-').slice(1).join('-'),
