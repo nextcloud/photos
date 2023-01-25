@@ -146,7 +146,7 @@ class PageController extends Controller {
 		$this->initialState->provideInitialState('nomedia-paths', $paths);
 
 
-		$key = $user->getUID() . ':' . $userFolder->getEtag();
+		$key = $user->getUID();
 		$tagCounts = $this->tagCountsCache->get($key);
 		if ($tagCounts === null) {
 			$tags = $this->tagManager->getAllTags(true);
