@@ -56,16 +56,15 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
 import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
 
 import { NcEmptyContent, isMobile } from '@nextcloud/vue'
+import { translate } from '@nextcloud/l10n'
 
 import FilesSelectionMixin from '../../mixins/FilesSelectionMixin.js'
 import FilesListViewer from '.././FilesListViewer.vue'
 import File from '.././File.vue'
-import FolderIllustration from '../../assets/Illustrations/folder.svg'
 
 export default {
 	name: 'CollectionContent',
@@ -84,11 +83,13 @@ export default {
 	],
 
 	props: {
+		/** @type {import('vue').PropType<import('../../services/collectionFetcher').Collection>} */
 		collection: {
 			type: Object,
 			default: () => undefined,
 		},
 
+		/** @type {import('vue').PropType<string[]>} */
 		collectionFileIds: {
 			type: Array,
 			required: true,
@@ -107,15 +108,15 @@ export default {
 
 	data() {
 		return {
-			FolderIllustration,
 			appContent: document.getElementById('app-content-vue'),
 		}
 	},
 
 	computed: {
-		...mapGetters([
-			'files',
-		]),
+		/** @return {import('../../services/collectionFetcher').IndexedCollectionFiles} */
+		files() {
+			return this.$store.getters.files
+		},
 	},
 
 	methods: {
@@ -128,6 +129,8 @@ export default {
 				canLoop: file.canLoop,
 			})
 		},
+
+		t: translate,
 	},
 }
 </script>

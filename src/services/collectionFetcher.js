@@ -47,6 +47,9 @@ import { genFileInfo } from '../utils/fileUtils.js'
  * @property {number} fileMetadataSizeParsed.height - The height of the file.
  */
 
+/** @typedef {Object<string, Collection>} IndexedCollections */
+/** @typedef {Object<string, CollectionFile>} IndexedCollectionFiles */
+
 /**
  * @param {string} extraProps - Extra properties to add to the DAV request.
  * @return {string}
