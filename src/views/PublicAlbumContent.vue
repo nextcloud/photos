@@ -263,10 +263,8 @@ export default {
 					.map(file => file.fileid.toString())
 
 				fetchedFiles.forEach(file => {
-					// Custom preview URL
-					file.appPreviewPath = generateUrl(`/apps/photos/api/v1/publicPreview/${file.fileid}?x=2048&y=2048&token=${this.token}`)
-					// Disable use of generic file previews for public albums - until support for custom preview URL is available in the Viewer app.
-					file.hasPreview = false
+					// Use custom preview URL to avoid authentication prompt
+					file.previewUrl = generateUrl(`/apps/photos/api/v1/publicPreview/${file.fileid}?x=2048&y=2048&token=${this.token}`)
 				})
 
 				this.appendFiles(fetchedFiles)
