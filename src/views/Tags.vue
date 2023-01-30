@@ -26,7 +26,7 @@
 		<!-- Errors handlers-->
 		<NcEmptyContent v-if="error" :title="t('photos', 'An error occurred')" />
 
-		<NcEmptyContent v-if="!loading && !hasTagsWithFiles" :title="t('photos', 'No tags yet')" :description="t('photos', 'Photos with tags will show up here')" />
+		<NcEmptyContent v-if="!loading && tagsList.length === 0" :title="t('photos', 'No tags yet')" :description="t('photos', 'Photos with tags will show up here')" />
 
 		<NcLoadingIcon v-if="loading" class="loader" />
 
@@ -51,6 +51,7 @@
 import { mapGetters } from 'vuex'
 
 import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import { loadState } from '@nextcloud/initial-state'
 
 import TagCover from '../components/TagCover.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
@@ -69,6 +70,7 @@ export default {
 			error: null,
 			loading: false,
 			showTags: false,
+			tagCounts: loadState('photos', 'tag-counts'),
 		}
 	},
 
@@ -87,14 +89,11 @@ export default {
 		},
 
 		popularTags() {
-			return Object.values(this.tags)
-				.filter(tag => tag.files && tag.files.length > 50)
-				.sort((a, b) => b.files.length - a.files.length)
+			return Object.keys(this.tagsNames)
+				.filter(tagName => (this.tags[this.tagsNames[tagName]].files.length || this.tagCounts[tagName]) > 50)
+				.sort((a, b) => (this.tags[this.tagsNames[b]].files.length || this.tagCounts[b]) - (this.tags[this.tagsNames[a]].files.length || this.tagCounts[a]))
 				.slice(0, 9)
-		},
-
-		hasTagsWithFiles() {
-			return Object.values(this.tags).some(tag => !!tag.files.length)
+				.map(tagName => this.tags[this.tagsNames[tagName]])
 		},
 	},
 
@@ -107,24 +106,15 @@ export default {
 			// close any potential opened viewer
 			OCA.Viewer.close()
 
-			// if we don't already have some cached data let's show a loader
-			if (!this.tags[this.tagId]) {
-				this.loading = true
-			}
 			this.error = null
 
 			try {
 				// fetch content
 				if (!this.tagsList.length) {
+					this.loading = true
 					await this.$store.dispatch('fetchAllTags', {
 						signal: this.abortController.signal,
 					})
-				}
-				if (!this.hasTagsWithFiles) {
-					await Promise.all(this.tagsList.slice(0, 15).map(tag => this.$store.dispatch('fetchTagFiles', {
-						id: tag.id,
-						signal: this.abortController.signal,
-					})))
 				}
 			} catch (error) {
 				console.error(error)
@@ -135,6 +125,7 @@ export default {
 			}
 		},
 	},
+
 }
 </script>
 
