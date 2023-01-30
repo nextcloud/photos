@@ -37,7 +37,7 @@
 				</h3>
 			</div>
 			<div class="tag-cover__details__second-line">
-				{{ n('photos', '%n photo', '%n photos', tag.files.length,) }}
+				{{ n('photos', '%n photo', '%n photos', count) }}
 			</div>
 		</div>
 	</router-link>
@@ -50,6 +50,7 @@ import ImageMultipleIcon from 'vue-material-design-icons/ImageMultiple'
 import { generateUrl } from '@nextcloud/router'
 
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
+import { loadState } from '@nextcloud/initial-state'
 
 export default {
 	name: 'TagCover',
@@ -73,6 +74,7 @@ export default {
 		return {
 			loadCover: false,
 			observer: null,
+			tagCounts: loadState('photos', 'tag-counts'),
 		}
 	},
 
@@ -92,13 +94,19 @@ export default {
 			}
 			return generateUrl(`/core/preview?fileId=${this.tag.files[this.tag.files.length - 1]}&x=${512}&y=${512}&forceIcon=0&a=1`)
 		},
+
+		count() {
+			return this.tag.files.length || this.tagCounts[this.tag.displayName]
+		},
 	},
 
-	async created() {
-		if (this.tag.files.length) {
-			return
-		}
-		this.$store.dispatch('fetchTagFiles', { id: this.tag.id, signal: this.abortController.signal })
+	watch: {
+		loadCover() {
+			if (this.tag.files.length) {
+				return
+			}
+			this.$store.dispatch('fetchTagFiles', { id: this.tag.id, signal: this.abortController.signal })
+		},
 	},
 
 	mounted() {

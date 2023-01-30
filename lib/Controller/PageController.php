@@ -50,6 +50,8 @@ use OCP\ICacheFactory;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\IRequest;
 use OCP\IUserSession;
+use OCP\SystemTag\ISystemTagManager;
+use OCP\SystemTag\ISystemTagObjectMapper;
 use OCP\Util;
 use Psr\Log\LoggerInterface;
 
@@ -62,18 +64,25 @@ class PageController extends Controller {
 	private IRootFolder $rootFolder;
 	private ICacheFactory $cacheFactory;
 	private ICache $nomediaPathsCache;
+	private ICache $tagCountsCache;
 	private LoggerInterface $logger;
 
+	private ISystemTagObjectMapper $tagObjectMapper;
+
+	private ISystemTagManager $tagManager;
+
 	public function __construct(
-		IRequest $request,
-		IAppManager $appManager,
-		IEventDispatcher $eventDispatcher,
+		IRequest          $request,
+		IAppManager       $appManager,
+		IEventDispatcher  $eventDispatcher,
 		UserConfigService $userConfig,
-		IInitialState $initialState,
-		IUserSession $userSession,
-		IRootFolder $rootFolder,
-		ICacheFactory $cacheFactory,
-		LoggerInterface $logger
+		IInitialState     $initialState,
+		IUserSession      $userSession,
+		IRootFolder       $rootFolder,
+		ICacheFactory     $cacheFactory,
+		LoggerInterface   $logger,
+		ISystemTagObjectMapper $tagObjectMapper,
+		ISystemTagManager $tagManager
 	) {
 		parent::__construct(Application::APP_ID, $request);
 
@@ -85,7 +94,10 @@ class PageController extends Controller {
 		$this->rootFolder = $rootFolder;
 		$this->cacheFactory = $cacheFactory;
 		$this->nomediaPathsCache = $this->cacheFactory->createLocal('photos:nomedia-paths');
+		$this->tagCountsCache = $this->cacheFactory->createLocal('photos:tag-counts');
 		$this->logger = $logger;
+		$this->tagObjectMapper = $tagObjectMapper;
+		$this->tagManager = $tagManager;
 	}
 
 	/**
@@ -125,13 +137,27 @@ class PageController extends Controller {
 				$paths = array_map(function (Node $node) use ($userFolder) {
 					return substr(dirname($node->getPath()), strlen($userFolder->getPath()));
 				}, $search);
-				$this->nomediaPathsCache->set($key, $paths, 60 * 60 * 24 * 28);
+				$this->nomediaPathsCache->set($key, $paths, 60 * 60 * 24 * 28); // 28 days
 			}
 		} catch (InvalidPathException | NotFoundException | NotPermittedException | NoUserException $e) {
 			$this->logger->error($e->getMessage());
 		}
 
 		$this->initialState->provideInitialState('nomedia-paths', $paths);
+
+
+		$key = $user->getUID();
+		$tagCounts = $this->tagCountsCache->get($key);
+		if ($tagCounts === null) {
+			$tags = $this->tagManager->getAllTags(true);
+			$tagCounts = [];
+			foreach ($tags as $tag) {
+				$search = $userFolder->search(new SearchQuery(new SearchComparison(ISearchComparison::COMPARE_EQUAL, 'systemtag', $tag->getName()), 0, 0, [], $user));
+				$tagCounts[$tag->getName()] = count($search);
+			}
+			$this->tagCountsCache->set($key, $tagCounts, 60 * 60 * 24 * 7); // 7 days
+		}
+		$this->initialState->provideInitialState('tag-counts', $tagCounts);
 
 		Util::addScript(Application::APP_ID, 'photos-main');
 
