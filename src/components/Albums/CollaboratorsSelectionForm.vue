@@ -120,11 +120,10 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { NcButton, NcListItemIcon, NcSelect } from '@nextcloud/vue'
 import { Type } from '@nextcloud/sharing'
+import { translate } from '@nextcloud/l10n'
 
 import logger from '../../services/logger.js'
-import AbortControllerMixin from '../../mixins/AbortControllerMixin.js'
-import { fetchAlbum } from '../../services/Albums.js'
-import { translate } from '@nextcloud/l10n'
+import FetchCollectionContentMixin from '../../mixins/FetchCollectionContentMixin.js'
 
 /**
  * @typedef {object} Collaborator
@@ -154,7 +153,7 @@ export default {
 		NcSelect,
 	},
 
-	mixins: [AbortControllerMixin],
+	mixins: [FetchCollectionContentMixin],
 
 	props: {
 		albumName: {
@@ -162,7 +161,7 @@ export default {
 			required: true,
 		},
 
-		/** @type {import('vue').PropType<Collaborator[]>} */
+		/** @type {import('vue').PropType<import('../../store/albums.js').Collaborator[]>} */
 		collaborators: {
 			type: Array,
 			default: () => [],
@@ -177,14 +176,12 @@ export default {
 	data() {
 		return {
 			searchText: null,
-			/** @type {Object<string, Collaborator>} */
+			/** @type {import('../../store/albums.js').IndexedCollaborators} */
 			availableCollaborators: {},
 			/** @type {string[]} */
 			selectedCollaboratorsKeys: [],
-			/** @type {Collaborator[]} */
+			/** @type {import('../../store/albums.js').Collaborator[]} */
 			currentSearchResults: [],
-			loadingAlbum: false,
-			errorFetchingAlbum: null,
 			loadingCollaborators: false,
 			randomId: Math.random().toString().substring(2, 10),
 			publicLinkCopied: false,
@@ -221,7 +218,7 @@ export default {
 		},
 
 		/**
-		 * @return {Collaborator[]}
+		 * @return {import('../../store/albums.js').Collaborator[]}
 		 */
 		selectedCollaborators() {
 			return this.selectedCollaboratorsKeys
@@ -235,7 +232,7 @@ export default {
 			return this.selectedCollaboratorsKeys.includes(`${Type.SHARE_TYPE_LINK}`)
 		},
 
-		/** @return {Collaborator} */
+		/** @return {import('../../store/albums.js').Collaborator} */
 		publicLink() {
 			return this.availableCollaborators[Type.SHARE_TYPE_LINK]
 		},
@@ -243,6 +240,13 @@ export default {
 		/** @return {string} */
 		publicLinkURL() {
 			return `${window.location.protocol}//${window.location.host}${generateUrl(`apps/photos/public/${this.publicLink.id}`)}`
+		},
+
+		/**
+		 * @return {string} The album's filename based on its name. Useful to fetch the location information and content.
+		 */
+		albumFileName() {
+			return this.$store.getters.getAlbumName(this.albumName)
 		},
 	},
 
@@ -257,7 +261,7 @@ export default {
 	},
 
 	methods: {
-		...mapActions(['updateAlbum', 'addAlbums']),
+		...mapActions(['updateCollection']),
 
 		/**
 		 * Fetch possible collaborators.
@@ -316,7 +320,7 @@ export default {
 		/**
 		 * Populate selectedCollaboratorsKeys and availableCollaborators.
 		 *
-		 * @param {Collaborator[]} collaborators - The list of collaborators
+		 * @param {import('../../store/albums.js').Collaborator[]} collaborators - The list of collaborators
 		 */
 		populateCollaborators(collaborators) {
 			const initialCollaborators = collaborators.reduce(this.indexCollaborators, {})
@@ -333,8 +337,8 @@ export default {
 		},
 
 		/**
-		 * @param {Object<string, Collaborator>} collaborators - Index of collaborators
-		 * @param {Collaborator} collaborator - A collaborator
+		 * @param {import('../../store/albums.js').IndexedCollaborators} collaborators - Index of collaborators
+		 * @param {import('../../store/albums.js').Collaborator} collaborator - A collaborator
 		 */
 		indexCollaborators(collaborators, collaborator) {
 			return { ...collaborators, [`${collaborator.type}${collaborator.type === Type.SHARE_TYPE_LINK ? '' : ':'}${collaborator.type === Type.SHARE_TYPE_LINK ? '' : collaborator.id}`]: collaborator }
@@ -343,28 +347,10 @@ export default {
 		async createPublicLinkForAlbum() {
 			this.selectEntity(`${Type.SHARE_TYPE_LINK}`)
 			await this.updateAlbumCollaborators()
-			try {
-				this.loadingAlbum = true
-				this.errorFetchingAlbum = null
-
-				const album = await fetchAlbum(
-					`/photos/${getCurrentUser().uid}/albums/${this.albumName}`,
-					{ signal: this.abortController.signal }
-				)
-
-				this.addAlbums({ albums: [album] })
-			} catch (error) {
-				if (error.response?.status === 404) {
-					this.errorFetchingAlbum = 404
-				} else {
-					this.errorFetchingAlbum = error
-				}
-
-				logger.error('[PublicAlbumContent] Error fetching album', { error })
-				showError(this.t('photos', 'Failed to fetch album.'))
-			} finally {
-				this.loadingAlbum = false
-			}
+			await this.fetchCollection(
+				this.albumFileName,
+				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />']
+			)
 		},
 
 		async deletePublicLink() {
@@ -380,8 +366,8 @@ export default {
 
 		async updateAlbumCollaborators() {
 			try {
-				await this.updateAlbum({
-					albumName: this.albumName,
+				await this.updateCollection({
+					collectionFileName: this.albumFileName,
 					properties: {
 						collaborators: this.selectedCollaborators,
 					},
@@ -389,8 +375,6 @@ export default {
 			} catch (error) {
 				logger.error('[PublicAlbumContent] Error updating album', { error })
 				showError(this.t('photos', 'Failed to update album.'))
-			} finally {
-				this.loadingAlbum = false
 			}
 		},
 

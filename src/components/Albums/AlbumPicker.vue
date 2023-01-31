@@ -74,9 +74,9 @@ import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
 import { NcButton, NcListItem, NcLoadingIcon, NcUserBubble } from '@nextcloud/vue'
 import { generateUrl } from '@nextcloud/router'
 import { translate, translatePlural } from '@nextcloud/l10n'
+import { getCurrentUser } from '@nextcloud/auth'
 
-import FetchAlbumsMixin from '../../mixins/FetchAlbumsMixin.js'
-import FetchSharedAlbumsMixin from '../../mixins/FetchSharedAlbumsMixin.js'
+import FetchCollectionsMixin from '../../mixins/FetchCollectionsMixin.js'
 import AlbumForm from './AlbumForm.vue'
 
 export default {
@@ -103,8 +103,7 @@ export default {
 	},
 
 	mixins: [
-		FetchAlbumsMixin,
-		FetchSharedAlbumsMixin,
+		FetchCollectionsMixin,
 	],
 
 	data() {
@@ -114,7 +113,9 @@ export default {
 	},
 
 	computed: {
-		/** @return {object[]} */
+		/**
+		 * @return {import('../../store/albums.js').Album[]}
+		 */
 		allAlbums() {
 			return [...Object.values(this.albums), ...Object.values(this.sharedAlbums)]
 		},
@@ -123,6 +124,8 @@ export default {
 	methods: {
 		albumCreatedHandler() {
 			this.showAlbumCreationForm = false
+			this.fetchCollections(`/photos/${getCurrentUser()?.uid}/albums`)
+			this.fetchCollections(`/photos/${getCurrentUser()?.uid}/sharedalbums`)
 		},
 
 		pickAlbum(album) {

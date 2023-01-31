@@ -93,9 +93,10 @@ export default {
 	mixins: [
 		FetchCollectionsMixin,
 	],
+
 	computed: {
 		/**
-		 * @return {{place: Object<string, import('../services/collectionFetcher').Collection>}}
+		 * @return {import('../services/collectionFetcher.js').IndexedCollections}
 		 */
 		places() {
 			return this.$store.getters.places

@@ -30,7 +30,7 @@ import logger from '../services/logger.js'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
 
 export default {
-	name: 'FetchCollectionsContentMixin',
+	name: 'FetchCollectionContentMixin',
 
 	data() {
 		return {
@@ -52,23 +52,27 @@ export default {
 			'addCollections',
 			'setCollectionFiles',
 		]),
-
-		async fetchCollection(collectionFileName) {
+		/**
+		 * @param {string} collectionFileName
+		 * @param {string[]} extraProps - Extra properties to add to the DAV request.
+		 * @return {Promise<import('../services/collectionFetcher.js').Collection|null>}
+		 */
+		async fetchCollection(collectionFileName, extraProps) {
 			if (this.loadingCollection) {
-				return
+				return null
 			}
 
 			try {
 				this.loadingCollection = true
 				this.errorFetchingCollection = null
 
-				const collection = await fetchCollection(collectionFileName, { signal: this.abortController.signal })
+				const collection = await fetchCollection(collectionFileName, { signal: this.abortController.signal }, extraProps)
 				this.addCollections({ collections: [collection] })
 				return collection
 			} catch (error) {
 				if (error.response?.status === 404) {
 					this.errorFetchingCollection = 404
-					return
+					return null
 				}
 
 				this.errorFetchingCollection = error
@@ -77,9 +81,16 @@ export default {
 			} finally {
 				this.loadingCollection = false
 			}
+
+			return null
 		},
 
-		async fetchCollectionFiles(collectionFileName) {
+		/**
+		 * @param {string} collectionFileName
+		 * @param {string[]} extraProps - Extra properties to add to the DAV request.
+		 * @return {Promise<import('../services/collectionFetcher.js').CollectionFile[]>}
+		 */
+		async fetchCollectionFiles(collectionFileName, extraProps = []) {
 			if (this.loadingCollectionFiles) {
 				return []
 			}
@@ -90,7 +101,7 @@ export default {
 				this.errorFetchingCollectionFiles = null
 				this.loadingCollectionFiles = true
 
-				const fetchedFiles = await fetchCollectionFiles(collectionFileName, { signal: this.abortController.signal })
+				const fetchedFiles = await fetchCollectionFiles(collectionFileName, { signal: this.abortController.signal }, extraProps)
 				const fileIds = fetchedFiles.map(file => file.fileid.toString())
 
 				this.appendFiles(fetchedFiles)
