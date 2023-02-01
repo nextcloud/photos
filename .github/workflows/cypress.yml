@@ -49,6 +49,7 @@ jobs:
       - name: Set up node ${{ steps.versions.outputs.nodeVersion }}
         uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3.8.1
         with:
+          cache: "npm"
           node-version: ${{ steps.versions.outputs.nodeVersion }}
 
       - name: Set up npm ${{ steps.versions.outputs.npmVersion }}
@@ -58,7 +59,6 @@ jobs:
         run: |
           npm ci
           TESTING=true npm run build --if-present
-
       - name: Save context
         uses: buildjet/cache/save@e376f15c6ec6dc595375c78633174c7e5f92dc0e # v3
         with:
@@ -94,10 +94,7 @@ jobs:
       - name: Set up npm ${{ needs.init.outputs.npmVersion }}
         run: npm i -g npm@"${{ needs.init.outputs.npmVersion }}"
 
-      - name: Setup server
-        run: |
-          cd cypress
-          docker-compose up -d
+      - name: Run ${{ matrix.containers == 'component' && 'component' || 'E2E' }} cypress tests
 
       - name: Wait for server
         run: npm run wait-on $CYPRESS_baseUrl

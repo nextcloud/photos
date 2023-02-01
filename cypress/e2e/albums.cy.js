@@ -19,116 +19,126 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-import { randHash } from '../utils'
-const randUser = randHash()
+import {
+	addFilesToAlbumFromAlbum,
+	createAnAlbumFromAlbums,
+	deleteAnAlbumFromAlbumContent,
+	removeSelectionFromAlbum,
+} from './albumsUtils'
+import {
+	downloadSelection,
+	favoriteSelection,
+	selectMedia,
+	unfavoriteSelection,
+	unselectMedia,
+	uploadTestMedia,
+} from './photosUtils'
 
 const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/
 Cypress.on('uncaught:exception', (err) => {
-  /* returning false here prevents Cypress from failing the test */
-  if (resizeObserverLoopErrRe.test(err.message)) {
-    return false
-  }
+	/* returning false here prevents Cypress from failing the test */
+	if (resizeObserverLoopErrRe.test(err.message)) {
+		return false
+	}
 })
 
 describe('Manage albums', () => {
-  before(function () {
-    cy.logout()
-    cy.nextcloudCreateUser(randUser, 'password')
+	before(function() {
+		cy.createRandomUser()
+			.then((user) => {
+				uploadTestMedia(user)
+				cy.login(user)
+				cy.visit('/apps/photos')
+			})
+	})
 
-    cy.login(randUser, 'password')
-    cy.uploadTestMedia()
+	beforeEach(() => {
+		cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
+		createAnAlbumFromAlbums('albums_test')
+		addFilesToAlbumFromAlbum('albums_test', [0, 1, 2])
+	})
 
-    // wait a bit for things to be settled
-    cy.wait(1000)
-  })
+	afterEach(() => {
+		deleteAnAlbumFromAlbumContent()
+		cy.contains('There is no album yet!').click()
+	})
 
-  beforeEach(() => {
-    cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
-    cy.createAnAlbumFromAlbums('albums_test')
-    cy.addFilesToAlbumFromAlbum('albums_test', [0, 1, 2])
-  })
+	it('Add and remove a file to an album from an album', () => {
+		selectMedia([0])
+		removeSelectionFromAlbum()
+	})
 
-  afterEach(() => {
-    cy.deleteAnAlbumFromAlbumContent()
-    cy.contains("There is no album yet!").click()
-  })
+	it('Add and remove multiple files to an album from an album', () => {
+		selectMedia([0, 1])
+		removeSelectionFromAlbum()
+	})
 
-  it('Add and remove a file to an album from an album', () => {
-    cy.selectMedia([0])
-    cy.removeSelectionFromAlbum()
-  })
+	it('Favorite a file from an album', () => {
+		selectMedia([0])
+		favoriteSelection()
+		cy.get('[data-test="media"]').eq(0).find('[aria-label="The file is in the favorites"]')
+		unfavoriteSelection()
+		unselectMedia([0])
+		cy.get('[aria-label="The file is in the favorites"]').should('not.exist')
+	})
 
-  it('Add and remove multiple files to an album from an album', () => {
-    cy.selectMedia([0, 1])
-    cy.removeSelectionFromAlbum()
-  })
+	it('Favorite multiple files from an album', () => {
+		selectMedia([1, 2])
+		favoriteSelection()
+		cy.get('[data-test="media"]').eq(1).find('[aria-label="The file is in the favorites"]')
+		cy.get('[data-test="media"]').eq(2).find('[aria-label="The file is in the favorites"]')
+		unfavoriteSelection()
+		unselectMedia([1, 2])
+		cy.get('[aria-label="The file is in the favorites"]').should('not.exist')
+	})
 
-  it('Favorite a file from an album', () => {
-    cy.selectMedia([0])
-    cy.favoriteSelection()
-    cy.get('[data-test="media"]').eq(0).find('[aria-label="The file is in the favorites"]')
-    cy.unfavoriteSelection()
-    cy.unselectMedia([0])
-    cy.get('[aria-label="The file is in the favorites"]').should('not.exist')
-  })
+	it('Download a file from an album', () => {
+		selectMedia([0])
+		downloadSelection()
+		unselectMedia([0])
+	})
 
-  it('Favorite multiple files from an album', () => {
-    cy.selectMedia([1, 2])
-    cy.favoriteSelection()
-    cy.get('[data-test="media"]').eq(1).find('[aria-label="The file is in the favorites"]')
-    cy.get('[data-test="media"]').eq(2).find('[aria-label="The file is in the favorites"]')
-    cy.unfavoriteSelection()
-    cy.unselectMedia([1, 2])
-    cy.get('[aria-label="The file is in the favorites"]').should('not.exist')
-  })
+	it('Download multiple files from an album', () => {
+		selectMedia([1, 2])
+		downloadSelection()
+		unselectMedia([1, 2])
+	})
 
-  it('Download a file from an album', () => {
-    cy.selectMedia([0])
-    cy.downloadSelection()
-    cy.unselectMedia([0])
-  })
+	it('Download all files from an album', () => {
+		selectMedia([1, 2])
+		downloadSelection()
+		unselectMedia([1, 2])
+	})
 
-  it('Download multiple files from an album', () => {
-    cy.selectMedia([1, 2])
-    cy.downloadSelection()
-    cy.unselectMedia([1, 2])
-  })
+	it('Edit an album\'s name', () => {
+		cy.get('[aria-label="Open actions menu"]').click()
+		cy.contains('Edit album details').click()
+		cy.get('form [name="name"]').clear().type('New name')
+		cy.contains('Save').click()
 
-  it('Download all files from an album', () => {
-    cy.selectMedia([1, 2])
-    cy.downloadSelection()
-    cy.unselectMedia([1, 2])
-  })
+		cy.reload()
 
-  it('Edit an album\'s name', () => {
-    cy.get('[aria-label="Open actions menu"]').click()
-    cy.contains('Edit album details').click()
-    cy.get('form [name="name"]').clear().type("New name")
-    cy.contains('Save').click()
+		cy.contains('New name')
 
-    cy.reload()
+		cy.get('[aria-label="Open actions menu"]').click()
+		cy.contains('Edit album details').click()
+		cy.get('form [name="name"]').clear().type('albums_test')
+		cy.contains('Save').click()
+	})
 
-    cy.contains('New name')
+	it('Edit an album\'s location', () => {
+		cy.get('[aria-label="Open actions menu"]').click()
+		cy.contains('Edit album details').click()
+		cy.get('form [name="location"]').clear().type('New location')
+		cy.contains('Save').click()
 
-    cy.get('[aria-label="Open actions menu"]').click()
-    cy.contains('Edit album details').click()
-    cy.get('form [name="name"]').clear().type("albums_test")
-    cy.contains('Save').click()
-  })
+		cy.reload()
 
-  it('Edit an album\'s location', () => {
-    cy.get('[aria-label="Open actions menu"]').click()
-    cy.contains('Edit album details').click()
-    cy.get('form [name="location"]').clear().type("New location")
-    cy.contains('Save').click()
+		cy.contains('New location')
 
-    cy.reload()
-
-    cy.contains('New location')
-
-    cy.get('[aria-label="Open actions menu"]').click()
-    cy.contains('Edit album details').click()
-    cy.get('form [name="location"]').clear()
-    cy.contains('Save').click()
-  })
+		cy.get('[aria-label="Open actions menu"]').click()
+		cy.contains('Edit album details').click()
+		cy.get('form [name="location"]').clear()
+		cy.contains('Save').click()
+	})
 })
