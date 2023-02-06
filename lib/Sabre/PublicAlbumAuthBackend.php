@@ -56,7 +56,7 @@ class PublicAlbumAuthBackend implements BackendInterface {
 	 * @return array
 	 */
 	public function check(RequestInterface $request, ResponseInterface $response) {
-		\OC_User::setIncognitoMode(true); // ???
+		\OC_User::setIncognitoMode(true);
 		return [true, "principals/token"];
 	}
 
