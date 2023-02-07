@@ -150,12 +150,12 @@ export default {
 
 	&__crop-container {
 		overflow: hidden;
-		width: 250px;
-		height: 250px;
-		border-radius: 250px;
+		width: 128px;
+		height: 128px;
+		border-radius: 128px;
 		position: relative;
 		background: var(--color-background-darker);
-		--photos-face-width: 250px;
+		--photos-face-width: 128px;
 
 		@media only screen and (max-width: 1020px) {
 			width: 95px;
@@ -171,7 +171,7 @@ export default {
 	&__details {
 		display: flex;
 		flex-direction: column;
-		width: 250px;
+		width: 128px;
 		margin-top: 4px;
 		text-align: center;
 
