@@ -19,93 +19,105 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-import { randHash } from '../utils'
-const randUser = randHash()
+import {
+	addFilesToAlbumFromTimeline,
+	createAnAlbumFromTimeline,
+	deleteAnAlbumFromAlbumContent,
+	goToAlbum,
+} from './albumsUtils'
+
+import {
+	deleteSelection,
+	downloadSelection,
+	favoriteSelection,
+	selectMedia,
+	unfavoriteSelection,
+	unselectMedia,
+	uploadTestMedia,
+} from './photosUtils'
 
 const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/
 Cypress.on('uncaught:exception', (err) => {
-  /* returning false here prevents Cypress from failing the test */
-  if (resizeObserverLoopErrRe.test(err.message)) {
-    return false
-  }
+	/* returning false here prevents Cypress from failing the test */
+	if (resizeObserverLoopErrRe.test(err.message)) {
+		return false
+	}
 })
 
 describe('View list of photos in the main timeline', () => {
-  before(() => {
-    cy.logout()
-    cy.nextcloudCreateUser(randUser, 'password')
+	before(() => {
+		cy.createRandomUser()
+			.then((user) => {
+				uploadTestMedia(user)
+				cy.login(user)
+				cy.visit('/apps/photos')
+			})
+	})
 
-    cy.login(randUser, 'password')
-    cy.uploadTestMedia()
+	beforeEach(() => {
+		cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos`)
+	})
 
-    // wait a bit for things to be settled
-    cy.wait(1000)
-  })
+	it('Favorite a file from a timeline', () => {
+		selectMedia([0])
+		favoriteSelection()
+		cy.get('[data-test="media"]').eq(0).find('[aria-label="The file is in the favorites"]')
+		unfavoriteSelection()
+		unselectMedia([0])
+		cy.get('[aria-label="The file is in the favorites"]').should('not.exist')
+	})
 
-  beforeEach(() => {
-    cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos`)
-  })
+	it('Favorite multiple files from a timeline', () => {
+		selectMedia([1, 2])
+		favoriteSelection()
+		cy.get('[data-test="media"]').eq(1).find('[aria-label="The file is in the favorites"]')
+		cy.get('[data-test="media"]').eq(2).find('[aria-label="The file is in the favorites"]')
+		unfavoriteSelection()
+		unselectMedia([1, 2])
+		cy.get('[aria-label="The file is in the favorites"]').should('not.exist')
+	})
 
-  it('Favorite a file from a timeline', () => {
-    cy.selectMedia([0])
-    cy.favoriteSelection()
-    cy.get('[data-test="media"]').eq(0).find('[aria-label="The file is in the favorites"]')
-    cy.unfavoriteSelection()
-    cy.unselectMedia([0])
-    cy.get('[aria-label="The file is in the favorites"]').should('not.exist')
-  })
+	it('Download a file from a timeline', () => {
+		selectMedia([0])
+		downloadSelection()
+		unselectMedia([0])
+	})
 
-  it('Favorite multiple files from a timeline', () => {
-    cy.selectMedia([1, 2])
-    cy.favoriteSelection()
-    cy.get('[data-test="media"]').eq(1).find('[aria-label="The file is in the favorites"]')
-    cy.get('[data-test="media"]').eq(2).find('[aria-label="The file is in the favorites"]')
-    cy.unfavoriteSelection()
-    cy.unselectMedia([1, 2])
-    cy.get('[aria-label="The file is in the favorites"]').should('not.exist')
-  })
+	it('Download multiple files from a timeline', () => {
+		selectMedia([1, 2])
+		downloadSelection()
+		unselectMedia([1, 2])
+	})
 
-  it('Download a file from a timeline', () => {
-    cy.selectMedia([0])
-    cy.downloadSelection()
-    cy.unselectMedia([0])
-  })
+	it('Add file to an album from a timeline', () => {
+		createAnAlbumFromTimeline('timeline_test_single')
+		selectMedia([0])
+		addFilesToAlbumFromTimeline('timeline_test_single')
+		goToAlbum('timeline_test_single')
+		cy.get('[data-test="media"]').should('have.length', 1)
+		deleteAnAlbumFromAlbumContent()
+	})
 
-  it('Download multiple files from a timeline', () => {
-    cy.selectMedia([1, 2])
-    cy.downloadSelection()
-    cy.unselectMedia([1, 2])
-  })
+	it('Add multiple files to an album from a timeline', () => {
+		createAnAlbumFromTimeline('timeline_test_multiple')
+		selectMedia([1, 2])
+		addFilesToAlbumFromTimeline('timeline_test_multiple')
+		goToAlbum('timeline_test_multiple')
+		cy.get('[data-test="media"]').should('have.length', 2)
+		deleteAnAlbumFromAlbumContent()
+	})
 
-  it('Add file to an album from a timeline', () => {
-    cy.createAnAlbumFromTimeline('timeline_test_single')
-    cy.selectMedia([0])
-    cy.addFilesToAlbumFromTimeline('timeline_test_single')
-    cy.goToAlbum('timeline_test_single')
-    cy.get('[data-test="media"]').should('have.length', 1)
-    cy.deleteAnAlbumFromAlbumContent()
-  })
+	it('Delete a file from photos', () => {
+		cy.get('[data-test="media"]').should('have.length', 5)
+		selectMedia([0])
+		deleteSelection()
+		cy.get('[data-test="media"]').should('have.length', 4)
+	})
 
-  it('Add multiple files to an album from a timeline', () => {
-    cy.createAnAlbumFromTimeline('timeline_test_multiple')
-    cy.selectMedia([1, 2])
-    cy.addFilesToAlbumFromTimeline('timeline_test_multiple')
-    cy.goToAlbum('timeline_test_multiple')
-    cy.get('[data-test="media"]').should('have.length', 2)
-    cy.deleteAnAlbumFromAlbumContent()
-  })
-
-  it('Delete a file from photos', () => {
-    cy.get('[data-test="media"]').should('have.length', 5)
-    cy.selectMedia([0])
-    cy.deleteSelection()
-    cy.get('[data-test="media"]').should('have.length', 4)
-  })
-
-  it('Delete multiple files from photos', () => {
-    cy.get('[data-test="media"]').should('have.length', 4)
-    cy.selectMedia([1, 2])
-    cy.deleteSelection()
-    cy.get('[data-test="media"]').should('have.length', 2)
-  })
+	it('Delete multiple files from photos', () => {
+		cy.get('[data-test="media"]').should('have.length', 4)
+		selectMedia([1, 2])
+		deleteSelection()
+		cy.get('[data-test="media"]').should('have.length', 2)
+	})
 })
