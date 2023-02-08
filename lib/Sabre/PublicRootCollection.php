@@ -23,30 +23,39 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Sabre;
 
+use OC\Security\Bruteforce\Throttler;
 use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Sabre\Album\PublicAlbumRoot;
 use OCA\Photos\Service\UserConfigService;
+use OCP\IRequest;
 use OCP\Files\IRootFolder;
 use Sabre\DAVACL\AbstractPrincipalCollection;
 use Sabre\DAVACL\PrincipalBackend;
 use Sabre\DAV\Exception\NotFound;
 
 class PublicRootCollection extends AbstractPrincipalCollection {
+	private const BRUTEFORCE_ACTION = 'publicphotos_webdav_auth';
 	private AlbumMapper $albumMapper;
 	private IRootFolder $rootFolder;
 	private UserConfigService $userConfigService;
+	private IRequest $request;
+	private Throttler $throttler;
 
 	public function __construct(
 		AlbumMapper $albumMapper,
 		IRootFolder $rootFolder,
 		PrincipalBackend\BackendInterface $principalBackend,
-		UserConfigService $userConfigService
+		UserConfigService $userConfigService,
+		IRequest $request,
+		Throttler $throttler
 	) {
 		parent::__construct($principalBackend, 'principals/token');
 
 		$this->albumMapper = $albumMapper;
 		$this->rootFolder = $rootFolder;
 		$this->userConfigService = $userConfigService;
+		$this->request = $request;
+		$this->throttler = $throttler;
 	}
 
 	public function getName(): string {
@@ -72,6 +81,8 @@ class PublicRootCollection extends AbstractPrincipalCollection {
 	 * @return DAV\INode
 	 */
 	public function getChild($token) {
+		$this->throttler->sleepDelayOrThrowOnMax($this->request->getRemoteAddress(), self::BRUTEFORCE_ACTION);
+
 		if (is_null($token)) {
 			throw new \Sabre\DAV\Exception\Forbidden();
 		}
@@ -79,6 +90,7 @@ class PublicRootCollection extends AbstractPrincipalCollection {
 		$albums = $this->albumMapper->getSharedAlbumsForCollaboratorWithFiles($token, AlbumMapper::TYPE_LINK);
 
 		if (count($albums) !== 1) {
+			$this->throttler->registerAttempt(self::BRUTEFORCE_ACTION, $this->request->getRemoteAddress());
 			throw new NotFound("Unable to find public album");
 		}
 
