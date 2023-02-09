@@ -28,7 +28,6 @@ namespace OCA\Photos\AppInfo;
 use OCA\DAV\Events\SabrePluginAuthInitEvent;
 use OCA\Photos\Listener\SabrePluginAuthInitListener;
 use OCA\DAV\Connector\Sabre\Principal;
-use OCA\Photos\Listener\NodeDeletedListener;
 use OCA\Photos\Listener\TagListener;
 use OCA\Photos\Listener\GroupUserRemovedListener;
 use OCA\Photos\Listener\GroupDeletedListener;
