@@ -36,6 +36,7 @@ use OCA\Viewer\Event\LoadViewer;
 use OCP\App\IAppManager;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
+use OCP\IL10N;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\InvalidPathException;
@@ -63,6 +64,7 @@ class PageController extends Controller {
 	private IUserSession $userSession;
 	private IRootFolder $rootFolder;
 	private ICacheFactory $cacheFactory;
+	private IL10N $l10n;
 	private ICache $nomediaPathsCache;
 	private ICache $tagCountsCache;
 	private LoggerInterface $logger;
@@ -82,7 +84,8 @@ class PageController extends Controller {
 		ICacheFactory     $cacheFactory,
 		LoggerInterface   $logger,
 		ISystemTagObjectMapper $tagObjectMapper,
-		ISystemTagManager $tagManager
+		ISystemTagManager $tagManager,
+		IL10N $l10n
 	) {
 		parent::__construct(Application::APP_ID, $request);
 
@@ -98,6 +101,7 @@ class PageController extends Controller {
 		$this->logger = $logger;
 		$this->tagObjectMapper = $tagObjectMapper;
 		$this->tagManager = $tagManager;
+		$this->l10n = $l10n;
 	}
 
 	/**
@@ -166,7 +170,9 @@ class PageController extends Controller {
 			Util::addTranslations('recognize');
 		}
 
-		$response = new TemplateResponse(Application::APP_ID, 'main');
+		$response = new TemplateResponse(Application::APP_ID, 'main', [
+			'pageTitle' => $this->l10n->t('Photos')
+		]);
 
 		$policy = new ContentSecurityPolicy();
 		$policy->addAllowedWorkerSrcDomain("'self'");
