@@ -298,9 +298,9 @@ const router = new Router({
 
 router.afterEach((to) => {
 	const rootTitle = to.meta.rootTitle?.(to)
-
 	if (rootTitle) {
 		document.title = `${rootTitle} - ${baseTitle}`
+		OCP.Accessibility.setPageHeading(rootTitle)
 	} else {
 		document.title = baseTitle
 	}
