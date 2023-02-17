@@ -13,6 +13,7 @@ OC.L10N.register(
     "Locations" : "Localizacións",
     "Back" : "Atrás",
     "Save" : "Gardar",
+    "Public link copied!" : "Enlace público copiado!",
     "Copy public link" : "Copiar a ligazón pública",
     "An error occurred" : "Produciuse un erro",
     "Open the full size \"{name}\" image" : "Abrir a imaxe «{name}» a tamaño completo",
