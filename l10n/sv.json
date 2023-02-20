@@ -39,6 +39,7 @@
     "Share this folder" : "Dela denna mapp",
     "_{years} year ago_::_{years} years ago_" : ["{years} år sedan","{years} år sedan"],
     "Enable squared photos view" : "Aktivera kvadratiska foto-vyn",
+    "Invalid location selected" : "Ogiltig plats vald",
     "View" : "Visa",
     "Download selected photos" : "Ladda ner markerade bilder",
     "Favorite" : "Favorit",
