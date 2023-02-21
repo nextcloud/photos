@@ -92,23 +92,23 @@ describe('Manage albums', () => {
 		cy.get('[aria-label="The file is in the favorites"]').should('not.exist')
 	})
 
-	it('Download a file from an album', () => {
-		selectMedia([0])
-		downloadSelection()
-		unselectMedia([0])
-	})
+	// it('Download a file from an album', () => {
+	// 	selectMedia([0])
+	// 	downloadSelection()
+	// 	unselectMedia([0])
+	// })
 
-	it('Download multiple files from an album', () => {
-		selectMedia([1, 2])
-		downloadSelection()
-		unselectMedia([1, 2])
-	})
+	// it('Download multiple files from an album', () => {
+	// 	selectMedia([1, 2])
+	// 	downloadSelection()
+	// 	unselectMedia([1, 2])
+	// })
 
-	it('Download all files from an album', () => {
-		selectMedia([1, 2])
-		downloadSelection()
-		unselectMedia([1, 2])
-	})
+	// it('Download all files from an album', () => {
+	// 	selectMedia([1, 2])
+	// 	downloadSelection()
+	// 	unselectMedia([1, 2])
+	// })
 
 	it('Edit an album\'s name', () => {
 		cy.get('[aria-label="Open actions menu"]').click()

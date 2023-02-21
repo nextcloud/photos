@@ -65,11 +65,12 @@
 							<Pencil slot="icon" />
 						</NcActionButton>
 
+						<!-- Support download from arbitrary origin
 						<ActionDownload v-if="albumFileIds.length > 0"
 							:selected-file-ids="albumFileIds"
 							:title="t('photos', 'Download all files in album')">
 							<DownloadMultiple slot="icon" />
-						</ActionDownload>
+						</ActionDownload>-->
 
 						<NcActionButton :close-after-click="true"
 							@click="handleDeleteAlbum">
@@ -80,9 +81,10 @@
 						<template v-if="selectedFileIds.length > 0">
 							<NcActionSeparator />
 
+							<!-- Support download from arbitrary origin
 							<ActionDownload :selected-file-ids="selectedFileIds" :title="t('photos', 'Download selected files')">
 								<Download slot="icon" />
-							</ActionDownload>
+							</ActionDownload>-->
 
 							<ActionFavorite :selected-file-ids="selectedFileIds" />
 
@@ -162,8 +164,8 @@ import debounce from 'debounce'
 
 import Close from 'vue-material-design-icons/Close'
 import Delete from 'vue-material-design-icons/Delete'
-import Download from 'vue-material-design-icons/Download'
-import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple'
+// import Download from 'vue-material-design-icons/Download'
+// import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple'
 import ImagePlus from 'vue-material-design-icons/ImagePlus'
 import MapMarker from 'vue-material-design-icons/MapMarker'
 import Pencil from 'vue-material-design-icons/Pencil'
@@ -176,7 +178,7 @@ import FetchAlbumsMixin from '../mixins/FetchAlbumsMixin.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import UserConfig from '../mixins/UserConfig.js'
 
-import ActionDownload from '../components/Actions/ActionDownload.vue'
+// import ActionDownload from '../components/Actions/ActionDownload.vue'
 import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import CollaboratorsSelectionForm from '../components/Albums/CollaboratorsSelectionForm.vue'
@@ -193,15 +195,15 @@ import logger from '../services/logger.js'
 export default {
 	name: 'AlbumContent',
 	components: {
-		ActionDownload,
+		// ActionDownload,
 		ActionFavorite,
 		AlbumForm,
 		Close,
 		CollaboratorsSelectionForm,
 		CollectionContent,
 		Delete,
-		Download,
-		DownloadMultiple,
+		// Download,
+		// DownloadMultiple,
 		FilesPicker,
 		HeaderNavigation,
 		ImagePlus,
