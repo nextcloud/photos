@@ -65,7 +65,7 @@ OC.L10N.register(
     "_{years} year ago_::_{years} years ago_" : ["Преди {years} години","Преди {years} години"],
     "Enable squared photos view" : "Активирайте изгледа на снимки в квадратче",
     "Default Photos upload and Albums location" : "Качване на снимки и местоположение на албуми по подразбиране",
-    "Select the default location for your media" : "Избор местоположение по подразбиране за вашата медия",
+    "Select the default location for your media" : "Избор на местоположение по подразбиране за вашата медия",
     "Invalid location selected" : "Избрано е невалидно местоположение",
     "View" : "Изглед",
     "Photos directory" : "Директория със снимки",
