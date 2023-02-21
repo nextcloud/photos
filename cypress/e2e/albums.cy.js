@@ -116,6 +116,8 @@ describe('Manage albums', () => {
 		cy.get('form [name="name"]').clear().type('New name')
 		cy.contains('Save').click()
 
+		cy.contains('New name')
+
 		cy.reload()
 
 		cy.contains('New name')
@@ -131,6 +133,8 @@ describe('Manage albums', () => {
 		cy.contains('Edit album details').click()
 		cy.get('form [name="location"]').clear().type('New location')
 		cy.contains('Save').click()
+
+		cy.contains('New location')
 
 		cy.reload()
 
