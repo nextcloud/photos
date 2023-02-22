@@ -118,6 +118,7 @@ namespace Symfony\Component\Console\Question {
 namespace Symfony\Component\Console\Output {
 	class OutputInterface {
 		public const VERBOSITY_VERBOSE = 1;
+		public function write($messages, $newline = false, $options = 0);
 		public function writeln(string $text, int $flat = 0) {}
 	}
 }
@@ -269,10 +270,10 @@ namespace OC\Files\Mount {
 		protected $class;
 		protected $storageId;
 		protected $rootId = null;
-	
+
 		/** @var int|null */
 		protected $mountId;
-	
+
 		/**
 		 * @param string|\OCP\Files\Storage\IStorage $storage
 		 * @param string $mountpoint
@@ -285,7 +286,7 @@ namespace OC\Files\Mount {
 		public function __construct($storage, $mountpoint, $arguments = null, $loader = null, $mountOptions = null, $mountId = null) {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * get complete path to the mount point, relative to data/
 		 *
@@ -294,7 +295,7 @@ namespace OC\Files\Mount {
 		public function getMountPoint() {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * Sets the mount point path, relative to data/
 		 *
@@ -303,28 +304,28 @@ namespace OC\Files\Mount {
 		public function setMountPoint($mountPoint) {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * @return \OCP\Files\Storage\IStorage
 		 */
 		public function getStorage() {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * @return string
 		 */
 		public function getStorageId() {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * @return int
 		 */
 		public function getNumericStorageId() {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * @param string $path
 		 * @return string
@@ -332,14 +333,14 @@ namespace OC\Files\Mount {
 		public function getInternalPath($path) {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * @param callable $wrapper
 		 */
 		public function wrapStorage($wrapper) {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * Get a mount option
 		 *
@@ -350,7 +351,7 @@ namespace OC\Files\Mount {
 		public function getOption($name, $default) {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * Get all options for the mount
 		 *
@@ -359,18 +360,18 @@ namespace OC\Files\Mount {
 		public function getOptions() {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * @return int
 		 */
 		public function getStorageRootId() {
 			throw new \Exception('stub');
 		}
-	
+
 		public function getMountId() {
 			throw new \Exception('stub');
 		}
-	
+
 		public function getMountType() {
 			throw new \Exception('stub');
 		}
@@ -656,7 +657,7 @@ use OCP\DB\Types;
 /**
  * @method string getGroupName()
  * @method void setGroupName(string $groupName)
- * @method string getMetadata()
+ * @method array getMetadata()
  * @method void setMetadata(array $metadata)
  * @see \OC\Core\Migrations\Version240000Date20220404230027
  */
@@ -685,4 +686,26 @@ namespace OCA\DAV\Upload {
 
 namespace Doctrine\DBAL\Exception {
     class UniqueConstraintViolationException extends \Exception {}
+}
+
+namespace OC\Files\Mount;
+
+/**
+ * Defines the mount point to be (re)moved by the user
+ */
+interface MoveableMount {
+	/**
+	 * Move the mount point to $target
+	 *
+	 * @param string $target the target mount point
+	 * @return bool
+	 */
+	public function moveMount($target);
+
+	/**
+	 * Remove the mount points
+	 *
+	 * @return bool
+	 */
+	public function removeMount();
 }

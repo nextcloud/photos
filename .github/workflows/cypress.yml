@@ -19,6 +19,9 @@ jobs:
       - name: Checkout app
         uses: actions/checkout@v3
 
+      - name: Install server dependencies
+        run: composer install
+
       - name: Read package.json node and npm engines version
         uses: skjnldsv/read-package-engines-version-actions@v2.0
         id: versions
@@ -35,7 +38,7 @@ jobs:
       - name: Set up npm ${{ steps.versions.outputs.npmVersion }}
         run: npm i -g npm@"${{ steps.versions.outputs.npmVersion }}"
 
-      - name: Install dependencies & build app
+      - name: Install node dependencies & build app
         run: |
           npm ci
           TESTING=true npm run build --if-present

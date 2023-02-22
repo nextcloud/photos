@@ -32,6 +32,7 @@ use OCA\Photos\Listener\NodeDeletedListener;
 use OCA\Photos\Listener\TagListener;
 use OCA\Photos\Listener\GroupUserRemovedListener;
 use OCA\Photos\Listener\GroupDeletedListener;
+use OCA\Photos\Listener\LocationManagerEventListener;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -40,6 +41,9 @@ use OCP\Files\Events\Node\NodeDeletedEvent;
 use OCP\SystemTag\MapperEvent;
 use OCP\Group\Events\UserRemovedEvent;
 use OCP\Group\Events\GroupDeletedEvent;
+use OCP\Files\Events\Node\NodeWrittenEvent;
+
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 class Application extends App implements IBootstrap {
 	public const APP_ID = 'photos';
@@ -77,6 +81,9 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(UserRemovedEvent::class, GroupUserRemovedListener::class);
 
 		$context->registerEventListener(GroupDeletedEvent::class, GroupDeletedListener::class);
+
+		// Priority of -1 to be triggered after event listeners populating metadata.
+		$context->registerEventListener(NodeWrittenEvent::class, LocationManagerEventListener::class, -1);
 
 		$context->registerEventListener(SabrePluginAuthInitEvent::class, SabrePluginAuthInitListener::class);
 

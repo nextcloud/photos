@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
-<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+<info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
     <id>photos</id>
     <name>Photos</name>
     <summary>Your memories under your control</summary>
     <description>Your memories under your control</description>
     <version>2.2.0</version>
     <licence>agpl</licence>
-	<author mail="skjnldsv@protonmail.com">John Molakvoæ</author>
+    <author mail="skjnldsv@protonmail.com">John Molakvoæ</author>
     <namespace>Photos</namespace>
     <category>multimedia</category>
     <types>
@@ -15,8 +15,8 @@
         <authentication />
     </types>
 
-	<website>https://github.com/nextcloud/photos</website>
-	<bugs>https://github.com/nextcloud/photos/issues</bugs>
+    <website>https://github.com/nextcloud/photos</website>
+    <bugs>https://github.com/nextcloud/photos/issues</bugs>
     <repository>https://github.com/nextcloud/photos.git</repository>
     <default_enable />
     <dependencies>
@@ -30,6 +30,11 @@
         </navigation>
     </navigations>
 
+    <commands>
+        <command>OCA\Photos\Command\UpdateReverseGeocodingFilesCommand</command>
+        <command>OCA\Photos\Command\MapMediaToLocationCommand</command>
+    </commands>
+
     <sabre>
         <collections>
             <collection>OCA\Photos\Sabre\RootCollection</collection>
@@ -39,4 +44,8 @@
             <plugin>OCA\Photos\Sabre\Album\PropFindPlugin</plugin>
         </plugins>
     </sabre>
+
+    <background-jobs>
+        <job>OCA\Photos\Jobs\AutomaticLocationMapperJob</job>
+    </background-jobs>
 </info>

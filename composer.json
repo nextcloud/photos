@@ -21,5 +21,8 @@
 		"vimeo/psalm": "^4.22",
 		"sabre/dav": "^4.2.1",
 		"nextcloud/ocp": "dev-master"
+	},
+	"require": {
+		"hexogen/kdtree": "^0.2.5"
 	}
 }
