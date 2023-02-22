@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 /**
- * @copyright Copyright (c) 2022 Robin Appelman <robin@icewind.nl>
+ * @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
  *
- * @license GNU AGPL version 3 or any later version
+ * @author Louis Chemineau <louis@chmn.me>
+ *
+ * @license AGPL-3.0-or-later
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -21,42 +23,26 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Photos\Album;
+namespace OCA\Photos\Jobs;
 
-use OCA\Photos\DB\PhotosFile;
+use OCA\Photos\Service\MediaLocationManager;
+use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\BackgroundJob\QueuedJob;
 
-class AlbumFile extends PhotosFile {
-	private int $added;
-	private string $owner;
+class MapMediaToLocationJob extends QueuedJob {
+	private MediaLocationManager $mediaLocationManager;
 
 	public function __construct(
-		int $fileId,
-		string $name,
-		string $mimeType,
-		int $size,
-		int $mtime,
-		string $etag,
-		int $added,
-		string $owner
+		ITimeFactory $time,
+		MediaLocationManager $mediaLocationManager
 	) {
-		parent::__construct(
-			$fileId,
-			$name,
-			$mimeType,
-			$size,
-			$mtime,
-			$etag
-		);
-
-		$this->added = $added;
-		$this->owner = $owner;
+		parent::__construct($time);
+		$this->mediaLocationManager = $mediaLocationManager;
 	}
 
-	public function getAdded(): int {
-		return $this->added;
-	}
+	protected function run($argument) {
+		[$fileId] = $argument;
 
-	public function getOwner(): string {
-		return $this->owner;
+		$this->mediaLocationManager->setLocationForFile($fileId);
 	}
 }
