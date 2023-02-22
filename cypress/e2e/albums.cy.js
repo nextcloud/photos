@@ -26,13 +26,14 @@ import {
 	removeSelectionFromAlbum,
 } from './albumsUtils'
 import {
-	downloadSelection,
 	favoriteSelection,
 	selectMedia,
 	unfavoriteSelection,
 	unselectMedia,
 	uploadTestMedia,
 } from './photosUtils'
+
+import { randHash } from '../utils'
 
 const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/
 Cypress.on('uncaught:exception', (err) => {
@@ -43,6 +44,8 @@ Cypress.on('uncaught:exception', (err) => {
 })
 
 describe('Manage albums', () => {
+	let albumName = ''
+
 	before(function() {
 		cy.createRandomUser()
 			.then((user) => {
@@ -54,8 +57,9 @@ describe('Manage albums', () => {
 
 	beforeEach(() => {
 		cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
-		createAnAlbumFromAlbums('albums_test')
-		addFilesToAlbumFromAlbum('albums_test', [0, 1, 2])
+		albumName = `albums_test_${randHash()}`
+		createAnAlbumFromAlbums(albumName)
+		addFilesToAlbumFromAlbum(albumName, [0, 1, 2])
 	})
 
 	afterEach(() => {
@@ -124,7 +128,7 @@ describe('Manage albums', () => {
 
 		cy.get('[aria-label="Open actions menu"]').click()
 		cy.contains('Edit album details').click()
-		cy.get('form [name="name"]').clear().type('albums_test')
+		cy.get('form [name="name"]').clear().type(albumName)
 		cy.contains('Save').click()
 	})
 

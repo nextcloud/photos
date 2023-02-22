@@ -64,19 +64,22 @@ describe('Manage shared albums', () => {
 	})
 
 	context('Adding and removing files in a shared album', () => {
+		let albumName = ''
+
 		before(() => {
+			albumName = `shared_album_test_1_${randHash()}`
 			cy.login(alice)
 			cy.visit('apps/photos/albums')
-			createAnAlbumFromAlbums('shared_album_test1')
+			createAnAlbumFromAlbums(albumName)
 			addCollaborators([bob.userId])
 		})
 
 		it('Add and remove a file to a shared album from a shared album', () => {
 			cy.login(bob)
 			cy.visit('apps/photos/albums')
-			goToSharedAlbum('shared_album_test1')
+			goToSharedAlbum(albumName)
 			cy.get('[data-test="media"]').should('have.length', 0)
-			addFilesToAlbumFromAlbum('shared_album_test1', [0])
+			addFilesToAlbumFromAlbum(albumName, [0])
 			cy.get('[data-test="media"]').should('have.length', 1)
 			selectMedia([0])
 			removeSelectionFromAlbum()
@@ -84,9 +87,9 @@ describe('Manage shared albums', () => {
 		})
 
 		it('Add and remove multiple files to a shared album from a shared album', () => {
-			goToSharedAlbum('shared_album_test1')
+			goToSharedAlbum(albumName)
 			cy.get('[data-test="media"]').should('have.length', 0)
-			addFilesToAlbumFromAlbum('shared_album_test1', [1, 2])
+			addFilesToAlbumFromAlbum(albumName, [1, 2])
 			cy.get('[data-test="media"]').should('have.length', 2)
 			selectMedia([0, 1])
 			removeSelectionFromAlbum()
@@ -95,59 +98,68 @@ describe('Manage shared albums', () => {
 	})
 
 	context('Download files from a shared album', () => {
+		let albumName = ''
+
 		before(() => {
+			albumName = `shared_album_test_2_${randHash()}`
 			cy.login(alice)
 			cy.visit('apps/photos/albums')
-			createAnAlbumFromAlbums('shared_album_test2')
+			createAnAlbumFromAlbums(albumName)
 			addCollaborators([bob.userId])
 
 			cy.login(bob)
 			cy.visit('apps/photos/sharedalbums')
-			goToSharedAlbum('shared_album_test2')
-			addFilesToAlbumFromAlbum('shared_album_test2', [0, 1, 2])
+			goToSharedAlbum(albumName)
+			addFilesToAlbumFromAlbum(albumName, [0, 1, 2])
 		})
 
 		xit('Download a file from a shared album', () => {
-			goToSharedAlbum('shared_album_test2')
+			goToSharedAlbum(albumName)
 			selectMedia([0])
 			downloadSelection()
 			selectMedia([0])
 		})
 
 		xit('Download multiple files from a shared album', () => {
-			goToSharedAlbum('shared_album_test2')
+			goToSharedAlbum(albumName)
 			selectMedia([1, 2])
 			downloadSelection()
 			selectMedia([1, 2])
 		})
 
 		xit('Download all files from a shared album', () => {
-			goToSharedAlbum('shared_album_test2')
+			goToSharedAlbum(albumName)
 			downloadAllFiles()
 		})
 	})
 
 	context('Delete a received shared album', () => {
+		let albumName = ''
+
 		before(() => {
+			albumName = `shared_album_test_3_${randHash()}`
 			cy.login(alice)
 			cy.visit('apps/photos/albums')
-			createAnAlbumFromAlbums('shared_album_test3')
+			createAnAlbumFromAlbums(albumName)
 			addCollaborators([bob.userId])
 		})
 
 		it('Remove shared album', () => {
 			cy.login(bob)
 			cy.visit('apps/photos/albums')
-			goToSharedAlbum('shared_album_test3')
+			goToSharedAlbum(albumName)
 			removeSharedAlbums()
 		})
 	})
 
 	context('Remove a collaborator from an album', () => {
+		let albumName = ''
+
 		before(() => {
+			albumName = `shared_album_test_4_${randHash()}`
 			cy.login(alice)
 			cy.visit('/apps/photos/albums')
-			createAnAlbumFromAlbums('shared_album_test4')
+			createAnAlbumFromAlbums(albumName)
 			addCollaborators([bob.userId])
 		})
 
@@ -155,30 +167,33 @@ describe('Manage shared albums', () => {
 			cy.login(bob)
 			cy.visit('apps/photos/sharedalbums')
 			cy.get('ul.collections__list li')
-				.should('contain', `shared_album_test4 (${alice.userId})`)
+				.should('contain', `${albumName} (${alice.userId})`)
 
 			cy.login(alice)
 			cy.visit('/apps/photos')
-			goToAlbum('shared_album_test4')
+			goToAlbum(albumName)
 			removeCollaborators([bob.userId])
 
 			cy.login(bob)
 			cy.visit('/apps/photos/sharedalbums')
 			cy.get('body')
-				.should('not.contain', `shared_album_test4 (${alice.userId})`)
+				.should('not.contain', `${albumName} (${alice.userId})`)
 		})
 	})
 
 	context('Two shared albums with the same name', () => {
+		let albumName = ''
+
 		before(() => {
+			albumName = `shared_album_test_5_${randHash()}`
 			cy.login(alice)
 			cy.visit('apps/photos/albums')
-			createAnAlbumFromAlbums('shared_album_test5')
+			createAnAlbumFromAlbums(albumName)
 			addCollaborators([bob.userId])
 
 			cy.login(charlie)
 			cy.visit('apps/photos/albums')
-			createAnAlbumFromAlbums('shared_album_test5')
+			createAnAlbumFromAlbums(albumName)
 			addCollaborators([bob.userId])
 		})
 
@@ -186,9 +201,9 @@ describe('Manage shared albums', () => {
 			cy.login(bob)
 			cy.visit('/apps/photos/sharedalbums')
 			cy.get('ul.collections__list li')
-				.contains(`shared_album_test5 (${alice.userId})`)
+				.contains(`${albumName} (${alice.userId})`)
 			cy.get('ul.collections__list li')
-				.contains(`shared_album_test5 (${charlie.userId})`)
+				.contains(`${albumName} (${charlie.userId})`)
 		})
 	})
 })
