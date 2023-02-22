@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 /**
- * @copyright Copyright (c) 2022 Robin Appelman <robin@icewind.nl>
+ * @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
  *
- * @license GNU AGPL version 3 or any later version
+ * @author Louis Chemineau <louis@chmn.me>
+ *
+ * @license AGPL-3.0-or-later
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -21,14 +23,11 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Photos\Album;
+namespace OCA\Photos\DB\Location;
 
 use OCA\Photos\DB\PhotosFile;
 
-class AlbumFile extends PhotosFile {
-	private int $added;
-	private string $owner;
-
+class LocationFile extends PhotosFile {
 	public function __construct(
 		int $fileId,
 		string $name,
@@ -36,8 +35,7 @@ class AlbumFile extends PhotosFile {
 		int $size,
 		int $mtime,
 		string $etag,
-		int $added,
-		string $owner
+		private string $location,
 	) {
 		parent::__construct(
 			$fileId,
@@ -45,18 +43,11 @@ class AlbumFile extends PhotosFile {
 			$mimeType,
 			$size,
 			$mtime,
-			$etag
+			$etag,
 		);
-
-		$this->added = $added;
-		$this->owner = $owner;
 	}
 
-	public function getAdded(): int {
-		return $this->added;
-	}
-
-	public function getOwner(): string {
-		return $this->owner;
+	public function getLocation(): string {
+		return $this->location;
 	}
 }
