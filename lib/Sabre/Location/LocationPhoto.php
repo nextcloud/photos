@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 /**
- * @copyright Copyright (c) 2022 Robin Appelman <robin@icewind.nl>
+ * @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
+ *
+ * @author Louis Chemineau <louis@chmn.me>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -21,42 +23,43 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Photos\Sabre\Album;
+namespace OCA\Photos\Sabre\Location;
 
-use OCA\Photos\Album\AlbumFile;
-use OCA\Photos\Album\AlbumInfo;
-use OCA\Photos\Album\AlbumMapper;
+use OCA\Photos\DB\Location\LocationFile;
+use OCA\Photos\DB\Location\LocationInfo;
 use OCA\Photos\Sabre\CollectionPhoto;
 use OCP\Files\IRootFolder;
 use OCP\Files\Node;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\NotFoundException;
+use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\IFile;
 
-class AlbumPhoto extends CollectionPhoto implements IFile {
+class LocationPhoto extends CollectionPhoto implements IFile {
 	public function __construct(
-		private AlbumMapper $albumMapper,
-		private AlbumInfo $album,
-		private AlbumFile $albumFile,
+		private LocationInfo $locationInfo,
+		LocationFile $file,
 		private IRootFolder $rootFolder,
-		Folder $userFolder,
+		Folder $userFolder
 	) {
-		parent::__construct($albumFile, $userFolder);
+		parent::__construct($file, $userFolder);
 	}
 
 	/**
 	 * @return void
 	 */
 	public function delete() {
-		$this->albumMapper->removeFile($this->album->getId(), $this->file->getFileId());
+		throw new Forbidden('Cannot remove from a location');
 	}
 
 	private function getNode(): Node {
 		$nodes = $this->rootFolder
-			->getUserFolder($this->albumFile->getOwner() ?: $this->album->getUserId())
+			->getUserFolder($this->locationInfo->getUserId())
 			->getById($this->file->getFileId());
+
 		$node = current($nodes);
+
 		if ($node) {
 			return $node;
 		} else {
@@ -66,6 +69,7 @@ class AlbumPhoto extends CollectionPhoto implements IFile {
 
 	public function get() {
 		$node = $this->getNode();
+
 		if ($node instanceof File) {
 			return $node->fopen('r');
 		} else {

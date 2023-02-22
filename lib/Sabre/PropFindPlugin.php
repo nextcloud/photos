@@ -21,11 +21,15 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Photos\Sabre\Album;
+namespace OCA\Photos\Sabre;
 
 use OC\Metadata\IMetadataManager;
 use OCA\DAV\Connector\Sabre\FilesPlugin;
 use OCA\Photos\Album\AlbumMapper;
+use OCA\Photos\Sabre\Album\AlbumPhoto;
+use OCA\Photos\Sabre\Album\AlbumRoot;
+use OCA\Photos\Sabre\Location\LocationPhoto;
+use OCA\Photos\Sabre\Location\LocationRoot;
 use OCP\IConfig;
 use OCP\IPreview;
 use OCP\Files\NotFoundException;
@@ -45,8 +49,6 @@ class PropFindPlugin extends ServerPlugin {
 	public const LAST_PHOTO_PROPERTYNAME = '{http://nextcloud.org/ns}last-photo';
 	public const NBITEMS_PROPERTYNAME = '{http://nextcloud.org/ns}nbItems';
 	public const COLLABORATORS_PROPERTYNAME = '{http://nextcloud.org/ns}collaborators';
-
-	public const TAG_FAVORITE = '_$!<Favorite>!$_';
 
 	private IConfig $config;
 	private IMetadataManager $metadataManager;
@@ -91,7 +93,7 @@ class PropFindPlugin extends ServerPlugin {
 	}
 
 	public function propFind(PropFind $propFind, INode $node): void {
-		if ($node instanceof AlbumPhoto) {
+		if ($node instanceof AlbumPhoto || $node instanceof LocationPhoto) {
 			// Checking if the node is truly available and ignoring if not
 			// Should be pre-emptively handled by the NodeDeletedEvent
 			try {
@@ -141,6 +143,22 @@ class PropFindPlugin extends ServerPlugin {
 					if (str_starts_with($file->getMimeType(), 'image')) {
 						$file->setMetadata('size', $preloadedMetadata[$file->getFileId()]);
 					}
+				}
+			}
+		}
+
+		if ($node instanceof LocationRoot) {
+			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn () => $node->getFirstPhoto());
+			$propFind->handle(self::NBITEMS_PROPERTYNAME, fn () => count($node->getChildren()));
+
+			// TODO detect dynamically which metadata groups are requested and
+			// preload all of them and not just size
+			if ($this->metadataEnabled && in_array(FilesPlugin::FILE_METADATA_SIZE, $propFind->getRequestedProperties(), true)) {
+				$fileIds = $node->getFileIds();
+				$preloadedMetadata = $this->metadataManager->fetchMetadataFor('size', $fileIds);
+
+				foreach ($node->getChildren() as $file) {
+					$file->getFile()->setMetadata('size', $preloadedMetadata[$file->getFileId()]);
 				}
 			}
 		}
