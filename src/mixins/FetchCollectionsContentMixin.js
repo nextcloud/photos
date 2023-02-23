@@ -74,8 +74,8 @@ export default {
 				}
 
 				this.errorFetchingCollection = error
-				logger.error('[PublicLocationContent] Error fetching location', { error })
-				showError(this.t('photos', 'Failed to fetch location.'))
+				logger.error('[PublicCollectionContent] Error fetching collection', { error })
+				showError(this.t('photos', 'Failed to fetch collection.'))
 			} finally {
 				this.loadingCollection = false
 			}
@@ -112,8 +112,8 @@ export default {
 
 				this.errorFetchingCollectionFiles = error
 
-				showError(this.t('photos', 'Failed to fetch locations list.'))
-				logger.error('[PublicLocationContent] Error fetching location files', { error })
+				showError(this.t('photos', 'Failed to fetch collections list.'))
+				logger.error('[PublicCollectionContent] Error fetching collection files', { error })
 			} finally {
 				this.loadingCollectionFiles = false
 				this.semaphore.release(semaphoreSymbol)

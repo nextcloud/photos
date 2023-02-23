@@ -46,7 +46,7 @@ return [
 				'path' => '',
 			]
 		],
-		['name' => 'page#index', 'url' => '/locations/{path}', 'verb' => 'GET', 'postfix' => 'locations',
+		['name' => 'page#index', 'url' => '/places/{path}', 'verb' => 'GET', 'postfix' => 'places',
 			'requirements' => [
 				'path' => '.*',
 			],

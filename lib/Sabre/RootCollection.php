@@ -24,7 +24,7 @@ declare(strict_types=1);
 namespace OCA\Photos\Sabre;
 
 use OCA\Photos\Album\AlbumMapper;
-use OCA\Photos\DB\Location\LocationMapper;
+use OCA\Photos\DB\Place\PlaceMapper;
 use OCA\Photos\Service\ReverseGeoCoderService;
 use OCA\Photos\Service\UserConfigService;
 use OCP\Files\IRootFolder;
@@ -37,7 +37,7 @@ use OCP\IGroupManager;
 class RootCollection extends AbstractPrincipalCollection {
 	public function __construct(
 		private AlbumMapper $albumMapper,
-		private LocationMapper $locationMapper,
+		private PlaceMapper $placeMapper,
 		private ReverseGeoCoderService $reverseGeoCoderService,
 		private IUserSession $userSession,
 		private IRootFolder $rootFolder,
@@ -64,7 +64,7 @@ class RootCollection extends AbstractPrincipalCollection {
 		if (is_null($user) || $name !== $user->getUID()) {
 			throw new \Sabre\DAV\Exception\Forbidden();
 		}
-		return new PhotosHome($principalInfo, $this->albumMapper, $this->locationMapper, $this->reverseGeoCoderService, $name, $this->rootFolder, $this->userManager, $this->groupManager, $this->userConfigService);
+		return new PhotosHome($principalInfo, $this->albumMapper, $this->placeMapper, $this->reverseGeoCoderService, $name, $this->rootFolder, $this->userManager, $this->groupManager, $this->userConfigService);
 	}
 
 	public function getName(): string {

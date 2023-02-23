@@ -27,7 +27,7 @@ import files from './files.js'
 import albums from './albums.js'
 import sharedAlbums from './sharedAlbums.js'
 import collections from './collections.js'
-import locations from './locations.js'
+import places from './places.js'
 import faces from './faces.js'
 import folders from './folders.js'
 import systemtags from './systemtags.js'
@@ -44,7 +44,7 @@ export default new Store({
 		systemtags,
 		publicAlbums: collectionStoreFactory('publicAlbum'),
 		collections,
-		locations,
+		places,
 	},
 
 	strict: process.env.NODE_ENV !== 'production',

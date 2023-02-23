@@ -54,13 +54,13 @@ class ReverseGeoCoderService {
 		}
 	}
 
-	public function getLocationForCoordinates(float $latitude, float $longitude): string {
+	public function getPlaceForCoordinates(float $latitude, float $longitude): string {
 		$this->loadKdTree();
 		$result = $this->fsSearcher->search(new Point([$latitude, $longitude]), 1);
-		return $this->getLocationNameForLocationId($result[0]->getId());
+		return $this->getPlaceNameForPlaceId($result[0]->getId());
 	}
 
-	private function getLocationNameForLocationId(int $locationId): string {
+	private function getPlaceNameForPlaceId(int $placeId): string {
 		if ($this->citiesMapping === null) {
 			$this->downloadCities1000();
 			$cities1000 = $this->loadCities1000();
@@ -70,7 +70,7 @@ class ReverseGeoCoderService {
 			}
 		}
 
-		return $this->citiesMapping[$locationId];
+		return $this->citiesMapping[$placeId];
 	}
 
 	private function downloadCities1000(bool $force = false): void {
@@ -89,7 +89,7 @@ class ReverseGeoCoderService {
 		$zip = new \ZipArchive;
 		$res = $zip->open($cities1000ZipTmpFileName);
 		if ($res !== true) {
-			throw new \Exception("Fail to unzip location file: $res", $res);
+			throw new \Exception("Fail to unzip place file: $res", $res);
 		}
 		$cities1000TxtSteam = $zip->getStream('cities1000.txt');
 

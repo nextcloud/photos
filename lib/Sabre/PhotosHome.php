@@ -24,10 +24,10 @@ declare(strict_types=1);
 namespace OCA\Photos\Sabre;
 
 use OCA\Photos\Album\AlbumMapper;
-use OCA\Photos\DB\Location\LocationMapper;
+use OCA\Photos\DB\Place\PlaceMapper;
 use OCA\Photos\Sabre\Album\AlbumsHome;
 use OCA\Photos\Sabre\Album\SharedAlbumsHome;
-use OCA\Photos\Sabre\Location\LocationsHome;
+use OCA\Photos\Sabre\Place\PlacesHome;
 use OCA\Photos\Service\ReverseGeoCoderService;
 use OCA\Photos\Service\UserConfigService;
 use OCP\Files\IRootFolder;
@@ -41,7 +41,7 @@ class PhotosHome implements ICollection {
 	public function __construct(
 		private array $principalInfo,
 		private AlbumMapper $albumMapper,
-		private LocationMapper $locationMapper,
+		private PlaceMapper $placeMapper,
 		private ReverseGeoCoderService $reverseGeoCoderService,
 		private string $userId,
 		private IRootFolder $rootFolder,
@@ -87,8 +87,8 @@ class PhotosHome implements ICollection {
 				return new AlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userConfigService);
 			case SharedAlbumsHome::NAME:
 				return new SharedAlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userManager, $this->groupManager, $this->userConfigService);
-			case LocationsHome::NAME:
-				return new LocationsHome($this->userId, $this->rootFolder, $this->reverseGeoCoderService, $this->locationMapper);
+			case PlacesHome::NAME:
+				return new PlacesHome($this->userId, $this->rootFolder, $this->reverseGeoCoderService, $this->placeMapper);
 		}
 
 		throw new NotFound();
@@ -101,12 +101,12 @@ class PhotosHome implements ICollection {
 		return [
 			new AlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userConfigService),
 			new SharedAlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userManager, $this->groupManager, $this->userConfigService),
-			new LocationsHome($this->userId, $this->rootFolder, $this->reverseGeoCoderService, $this->locationMapper),
+			new PlacesHome($this->userId, $this->rootFolder, $this->reverseGeoCoderService, $this->placeMapper),
 		];
 	}
 
 	public function childExists($name): bool {
-		return $name === AlbumsHome::NAME || $name === SharedAlbumsHome::NAME || $name === LocationsHome::NAME;
+		return $name === AlbumsHome::NAME || $name === SharedAlbumsHome::NAME || $name === PlacesHome::NAME;
 	}
 
 	public function getLastModified(): int {

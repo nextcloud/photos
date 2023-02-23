@@ -128,21 +128,21 @@ describe('Manage albums', () => {
 		cy.contains('Save').click()
 	})
 
-	it('Edit an album\'s location', () => {
+	it('Edit an album\'s place', () => {
 		cy.get('[aria-label="Open actions menu"]').click()
 		cy.contains('Edit album details').click()
-		cy.get('form [name="location"]').clear().type('New location')
+		cy.get('form [name="place"]').clear().type('New place')
 		cy.contains('Save').click()
 
-		cy.contains('New location')
+		cy.contains('New place')
 
 		cy.reload()
 
-		cy.contains('New location')
+		cy.contains('New place')
 
 		cy.get('[aria-label="Open actions menu"]').click()
 		cy.contains('Edit album details').click()
-		cy.get('form [name="location"]').clear()
+		cy.get('form [name="place"]').clear()
 		cy.contains('Save').click()
 	})
 })

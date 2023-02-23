@@ -64,7 +64,7 @@
 					:title="t('photos', 'Tags')">
 					<Tag slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem :to="{name: 'locations'}" :title="t('photos', 'Places')">
+				<NcAppNavigationItem :to="{name: 'places'}" :title="t('photos', 'Places')">
 					<MapMarker slot="icon" :size="20" />
 				</NcAppNavigationItem>
 				<NcAppNavigationItem v-if="showLocationMenuEntry"

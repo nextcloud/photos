@@ -30,8 +30,8 @@ import { genFileInfo } from '../utils/fileUtils.js'
 /**
  * @typedef {object} Collection
  * @property {string} basename - The name of the collection (ex: "Athens").
- * @property {string} filename - The filename of the collection (ex: "/photos/admin/locations/Athens").
- * @property {string} source - The full source of the collection (ex: "https://nextcloud_server1.test/remote.php/dav//photos/admin/locations/Athens").
+ * @property {string} filename - The filename of the collection (ex: "/photos/admin/places/Athens").
+ * @property {string} source - The full source of the collection (ex: "https://nextcloud_server1.test/remote.php/dav//photos/admin/places/Athens").
  * @property {number} nbItems - The number of item in the collection.
  * @property {number} lastPhoto - The file id for the cover of the collection.
  */
@@ -40,8 +40,8 @@ import { genFileInfo } from '../utils/fileUtils.js'
  * @typedef {object} CollectionFile
  * @property {string} fileid - The id of the file.
  * @property {string} basename - The name of the file (ex: "790-IMG_20180906_085724.jpg").
- * @property {string} filename - The file name of the file (ex: "/photos/admin/locations/Athens/790-IMG_20180906_085724.jpg").
- * @property {string} source - The full source of the collection (ex: "https://nextcloud_server1.test/remote.php/dav//photos/admin/locations/Athens/790-IMG_20180906_085724.jpg").
+ * @property {string} filename - The file name of the file (ex: "/photos/admin/places/Athens/790-IMG_20180906_085724.jpg").
+ * @property {string} source - The full source of the collection (ex: "https://nextcloud_server1.test/remote.php/dav//photos/admin/places/Athens/790-IMG_20180906_085724.jpg").
  * @property {object} fileMetadataSizeParsed - The metadata of the file.
  * @property {number} fileMetadataSizeParsed.width - The width of the file.
  * @property {number} fileMetadataSizeParsed.height - The height of the file.
