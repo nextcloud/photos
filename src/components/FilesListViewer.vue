@@ -56,13 +56,15 @@
 	</div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 import PackageVariant from 'vue-material-design-icons/PackageVariant'
 
 import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
 import TiledLayout from '../components/TiledLayout/TiledLayout.vue'
+import { fetchFile } from '../services/fileFetcher.js'
 import VirtualScrolling from '../components/VirtualScrolling.vue'
 import EmptyBox from '../assets/Illustrations/empty.svg'
 
@@ -222,7 +224,19 @@ export default {
 		},
 	},
 
+	mounted() {
+		subscribe('files:file:updated', this.handleFileUpdated)
+	},
+
+	destroyed() {
+		unsubscribe('files:file:updated', this.handleFileUpdated)
+	},
+
 	methods: {
+		...mapActions([
+			'appendFiles',
+		]),
+
 		// Ask the parent for more content.
 		needContent() {
 			this.$emit('need-content')
@@ -236,6 +250,15 @@ export default {
 				height: file.fileMetadataSizeParsed.height,
 				ratio: file.fileMetadataSizeParsed.width / file.fileMetadataSizeParsed.height,
 			}
+		},
+
+		/**
+		 * @param {object} data
+		 * @param {string} data.fileid - The file id of the updated file.
+		 */
+		async handleFileUpdated({ fileid }) {
+			const fetchedFile = await fetchFile(this.files[fileid].filename)
+			this.appendFiles([fetchedFile])
 		},
 	},
 }
