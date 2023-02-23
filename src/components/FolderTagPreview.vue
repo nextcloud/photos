@@ -55,6 +55,7 @@
 
 <script>
 import { generateUrl } from '@nextcloud/router'
+import { getCurrentUser } from '@nextcloud/auth'
 
 export default {
 	name: 'FolderTagPreview',
@@ -129,10 +130,15 @@ export default {
 			if (this.to) {
 				return this.to
 			}
+
+			// Remove leading /file/{userId}
+			const prefix = `/files/${getCurrentUser()?.uid}`
+			let path = this.path.replace(new RegExp(`^${prefix}`), '')
+
 			// always remove first slash, the router
 			// manage it automatically
 			const regex = /^\/?(.+)/i
-			const path = regex.exec(this.path)[1]
+			path = regex.exec(path)[1]
 
 			// apply to current route
 			return Object.assign({}, this.$route, {
