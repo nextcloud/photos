@@ -129,14 +129,14 @@ class AlbumRoot implements ICollection, ICopyTarget {
 
 	public function getChildren(): array {
 		return array_map(function (AlbumFile $file) {
-			return new AlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder);
+			return new AlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId));
 		}, $this->album->getFiles());
 	}
 
 	public function getChild($name): AlbumPhoto {
 		foreach ($this->album->getFiles() as $file) {
 			if ($file->getFileId() . "-" . $file->getName() === $name) {
-				return new AlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder);
+				return new AlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId));
 			}
 		}
 		throw new NotFound("$name not found");

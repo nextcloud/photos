@@ -29,6 +29,7 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
+use OCP\Files\NotFoundException;
 use OCP\IDBConnection;
 
 class LocationMapper {
@@ -43,19 +44,19 @@ class LocationMapper {
 
 	/** @return LocationInfo[] */
 	public function findLocationsForUser(string $userId): array {
-		$mountId = $this->rootFolder
+		$storageId = $this->rootFolder
 			->getUserFolder($userId)
 			->getMountPoint()
-			->getMountId();
+			->getNumericStorageId();
+
 		$mimepart = $this->mimeTypeLoader->getId('image');
 
 		$qb = $this->connection->getQueryBuilder();
 
 		$rows = $qb->selectDistinct('meta.metadata')
-			->from('mounts', 'mount')
-			->join('mount', 'filecache', 'file', $qb->expr()->eq('file.storage', 'mount.storage_id', IQueryBuilder::PARAM_INT))
-			->join('file', 'file_metadata', 'meta', $qb->expr()->eq('file.fileid', 'meta.id', IQueryBuilder::PARAM_INT))
-			->where($qb->expr()->eq('mount.id', $qb->createNamedParameter($mountId), IQueryBuilder::PARAM_INT))
+			->from('file_metadata', 'meta')
+			->join('meta', 'filecache', 'file', $qb->expr()->eq('file.fileid', 'meta.id', IQueryBuilder::PARAM_INT))
+			->where($qb->expr()->eq('file.storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('file.mimepart', $qb->createNamedParameter($mimepart, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('meta.group_name', $qb->createNamedParameter(self::METADATA_TYPE)))
 			->executeQuery()
@@ -64,21 +65,49 @@ class LocationMapper {
 		return array_map(fn ($row) => new LocationInfo($userId, $row['metadata']), $rows);
 	}
 
-	/** @return LocationFile[] */
-	public function findFilesForUserAndLocation(string $userId, string $location) {
-		$mountId = $this->rootFolder
+	/** @return LocationInfo */
+	public function findLocationForUser(string $userId, string $location): LocationInfo {
+		$storageId = $this->rootFolder
 			->getUserFolder($userId)
 			->getMountPoint()
-			->getMountId();
+			->getNumericStorageId();
+
+		$mimepart = $this->mimeTypeLoader->getId('image');
+
+		$qb = $this->connection->getQueryBuilder();
+
+		$rows = $qb->selectDistinct('meta.metadata')
+			->from('file_metadata', 'meta')
+			->join('meta', 'filecache', 'file', $qb->expr()->eq('file.fileid', 'meta.id', IQueryBuilder::PARAM_INT))
+			->where($qb->expr()->eq('file.storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('file.mimepart', $qb->createNamedParameter($mimepart, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('meta.group_name', $qb->createNamedParameter(self::METADATA_TYPE)))
+			->andWhere($qb->expr()->eq('meta.metadata', $qb->createNamedParameter($location)))
+			->executeQuery()
+			->fetchAll();
+
+		if (count($rows) !== 1) {
+			throw new NotFoundException();
+		}
+
+		return new LocationInfo($userId, $rows[0]['metadata']);
+	}
+
+	/** @return LocationFile[] */
+	public function findFilesForUserAndLocation(string $userId, string $location) {
+		$storageId = $this->rootFolder
+			->getUserFolder($userId)
+			->getMountPoint()
+			->getNumericStorageId();
+
 		$mimepart = $this->mimeTypeLoader->getId('image');
 
 		$qb = $this->connection->getQueryBuilder();
 
 		$rows = $qb->select('file.fileid', 'file.name', 'file.mimetype', 'file.size', 'file.mtime', 'file.etag', 'meta.metadata')
-			->from('mounts', 'mount')
-			->join('mount', 'filecache', 'file', $qb->expr()->eq('file.storage', 'mount.storage_id', IQueryBuilder::PARAM_INT))
-			->join('file', 'file_metadata', 'meta', $qb->expr()->eq('file.fileid', 'meta.id', IQueryBuilder::PARAM_INT))
-			->where($qb->expr()->eq('mount.id', $qb->createNamedParameter($mountId), IQueryBuilder::PARAM_INT))
+			->from('file_metadata', 'meta')
+			->join('meta', 'filecache', 'file', $qb->expr()->eq('file.fileid', 'meta.id', IQueryBuilder::PARAM_INT))
+			->where($qb->expr()->eq('file.storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('file.mimepart', $qb->createNamedParameter($mimepart, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('meta.group_name', $qb->createNamedParameter(self::METADATA_TYPE)))
 			->andWhere($qb->expr()->eq('meta.metadata', $qb->createNamedParameter($location)))
@@ -96,6 +125,43 @@ class LocationMapper {
 				$row['metadata']
 			),
 			$rows,
+		);
+	}
+
+	public function findFileForUserAndLocation(string $userId, string $location, string $fileId, string $fileName): LocationFile {
+		$storageId = $this->rootFolder
+			->getUserFolder($userId)
+			->getMountPoint()
+			->getNumericStorageId();
+
+		$mimepart = $this->mimeTypeLoader->getId('image');
+
+		$qb = $this->connection->getQueryBuilder();
+
+		$rows = $qb->select('file.fileid', 'file.name', 'file.mimetype', 'file.size', 'file.mtime', 'file.etag', 'meta.metadata')
+			->from('file_metadata', 'meta')
+			->join('meta', 'filecache', 'file', $qb->expr()->eq('file.fileid', 'meta.id', IQueryBuilder::PARAM_INT))
+			->where($qb->expr()->eq('file.storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('file.mimepart', $qb->createNamedParameter($mimepart, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('file.fileid', $qb->createNamedParameter($fileId)))
+			->andWhere($qb->expr()->eq('file.name', $qb->createNamedParameter($fileName)))
+			->andWhere($qb->expr()->eq('meta.group_name', $qb->createNamedParameter(self::METADATA_TYPE)))
+			->andWhere($qb->expr()->eq('meta.metadata', $qb->createNamedParameter($location)))
+			->executeQuery()
+			->fetchAll();
+
+		if (count($rows) !== 1) {
+			throw new NotFoundException();
+		}
+
+		return new LocationFile(
+			(int)$rows[0]['fileid'],
+			$rows[0]['name'],
+			$this->mimeTypeLoader->getMimetypeById($rows[0]['mimetype']),
+			(int)$rows[0]['size'],
+			(int)$rows[0]['mtime'],
+			$rows[0]['etag'],
+			$rows[0]['metadata']
 		);
 	}
 
