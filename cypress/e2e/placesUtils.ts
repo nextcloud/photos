@@ -25,7 +25,7 @@ export function navigateToCollection(collectionType: string, collectionName: str
 	cy.get('ul.collections__list').contains(collectionName).click()
 }
 
-export function navigateToLocation(locationName: string) {
+export function navigateToPlace(locationName: string) {
 	navigateToCollection('Places', locationName)
 }
 

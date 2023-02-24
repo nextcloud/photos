@@ -31,7 +31,7 @@
 				:placeholder="t('photos', 'Name of the album')" />
 			<label>
 				<MapMarker /><NcTextField :value.sync="albumLocation"
-					name="location"
+					name="place"
 					type="text"
 					:placeholder="t('photos', 'Location of the album')" />
 			</label>
@@ -159,7 +159,7 @@ export default {
 	mounted() {
 		if (this.editMode) {
 			this.albumName = this.album.basename
-			this.albumLocation = this.album.location
+			this.albumLocation = this.album.location || ''
 		}
 
 		this.$nextTick(() => {
