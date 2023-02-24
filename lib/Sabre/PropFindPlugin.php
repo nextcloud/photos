@@ -28,8 +28,8 @@ use OCA\DAV\Connector\Sabre\FilesPlugin;
 use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Sabre\Album\AlbumPhoto;
 use OCA\Photos\Sabre\Album\AlbumRoot;
-use OCA\Photos\Sabre\Location\LocationPhoto;
-use OCA\Photos\Sabre\Location\LocationRoot;
+use OCA\Photos\Sabre\Place\PlacePhoto;
+use OCA\Photos\Sabre\Place\PlaceRoot;
 use OCP\IConfig;
 use OCP\IPreview;
 use OCP\Files\NotFoundException;
@@ -45,7 +45,7 @@ class PropFindPlugin extends ServerPlugin {
 	public const FILE_NAME_PROPERTYNAME = '{http://nextcloud.org/ns}file-name';
 	public const FAVORITE_PROPERTYNAME = '{http://owncloud.org/ns}favorite';
 	public const DATE_RANGE_PROPERTYNAME = '{http://nextcloud.org/ns}dateRange';
-	public const LOCATION_PROPERTYNAME = '{http://nextcloud.org/ns}location';
+	public const LOCATION_PROPERTYNAME = '{http://nextcloud.org/ns}place';
 	public const LAST_PHOTO_PROPERTYNAME = '{http://nextcloud.org/ns}last-photo';
 	public const NBITEMS_PROPERTYNAME = '{http://nextcloud.org/ns}nbItems';
 	public const COLLABORATORS_PROPERTYNAME = '{http://nextcloud.org/ns}collaborators';
@@ -93,7 +93,7 @@ class PropFindPlugin extends ServerPlugin {
 	}
 
 	public function propFind(PropFind $propFind, INode $node): void {
-		if ($node instanceof AlbumPhoto || $node instanceof LocationPhoto) {
+		if ($node instanceof AlbumPhoto || $node instanceof PlacePhoto) {
 			// Checking if the node is truly available and ignoring if not
 			// Should be pre-emptively handled by the NodeDeletedEvent
 			try {
@@ -147,7 +147,7 @@ class PropFindPlugin extends ServerPlugin {
 			}
 		}
 
-		if ($node instanceof LocationRoot) {
+		if ($node instanceof PlaceRoot) {
 			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn () => $node->getFirstPhoto());
 			$propFind->handle(self::NBITEMS_PROPERTYNAME, fn () => count($node->getChildren()));
 
@@ -167,8 +167,8 @@ class PropFindPlugin extends ServerPlugin {
 	public function handleUpdateProperties($path, PropPatch $propPatch): void {
 		$node = $this->tree->getNodeForPath($path);
 		if ($node instanceof AlbumRoot) {
-			$propPatch->handle(self::LOCATION_PROPERTYNAME, function ($location) use ($node) {
-				$this->albumMapper->setLocation($node->getAlbum()->getAlbum()->getId(), $location);
+			$propPatch->handle(self::LOCATION_PROPERTYNAME, function ($place) use ($node) {
+				$this->albumMapper->setLocation($node->getAlbum()->getAlbum()->getId(), $place);
 				return true;
 			});
 			$propPatch->handle(self::COLLABORATORS_PROPERTYNAME, function ($collaborators) use ($node) {

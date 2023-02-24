@@ -95,7 +95,7 @@ export default {
 	&__image {
 		width: 350px;
 		height: 350px;
-		object-fit: none;
+		object-fit: cover;
 		border-radius: var(--border-radius-large);
 
 		@media only screen and (max-width: 1200px) {

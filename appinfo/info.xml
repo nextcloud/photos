@@ -32,7 +32,7 @@
 
     <commands>
         <command>OCA\Photos\Command\UpdateReverseGeocodingFilesCommand</command>
-        <command>OCA\Photos\Command\MapMediaToLocationCommand</command>
+        <command>OCA\Photos\Command\MapMediaToPlaceCommand</command>
     </commands>
 
     <sabre>
@@ -46,6 +46,6 @@
     </sabre>
 
     <background-jobs>
-        <job>OCA\Photos\Jobs\AutomaticLocationMapperJob</job>
+        <job>OCA\Photos\Jobs\AutomaticPlaceMapperJob</job>
     </background-jobs>
 </info>

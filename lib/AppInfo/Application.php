@@ -32,7 +32,7 @@ use OCA\Photos\Listener\NodeDeletedListener;
 use OCA\Photos\Listener\TagListener;
 use OCA\Photos\Listener\GroupUserRemovedListener;
 use OCA\Photos\Listener\GroupDeletedListener;
-use OCA\Photos\Listener\LocationManagerEventListener;
+use OCA\Photos\Listener\PlaceManagerEventListener;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -83,7 +83,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(GroupDeletedEvent::class, GroupDeletedListener::class);
 
 		// Priority of -1 to be triggered after event listeners populating metadata.
-		$context->registerEventListener(NodeWrittenEvent::class, LocationManagerEventListener::class, -1);
+		$context->registerEventListener(NodeWrittenEvent::class, PlaceManagerEventListener::class, -1);
 
 		$context->registerEventListener(SabrePluginAuthInitEvent::class, SabrePluginAuthInitListener::class);
 

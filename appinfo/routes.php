@@ -46,6 +46,14 @@ return [
 				'path' => '',
 			]
 		],
+		['name' => 'page#index', 'url' => '/places/{path}', 'verb' => 'GET', 'postfix' => 'places',
+			'requirements' => [
+				'path' => '.*',
+			],
+			'defaults' => [
+				'path' => '',
+			]
+		],
 		[ 'name' => 'publicAlbum#get', 'url' => '/public/{token}', 'verb' => 'GET',
 			'requirements' => [
 				'token' => '.*',

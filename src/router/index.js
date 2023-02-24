@@ -36,6 +36,8 @@ const AlbumContent = () => import('../views/AlbumContent')
 const SharedAlbums = () => import('../views/SharedAlbums')
 const SharedAlbumContent = () => import('../views/SharedAlbumContent')
 const PublicAlbumContent = () => import('../views/PublicAlbumContent')
+const Places = () => import('../views/Places')
+const PlaceContent = () => import('../views/PlaceContent')
 const Tags = () => import('../views/Tags')
 const TagContent = () => import('../views/TagContent')
 const Timeline = () => import('../views/Timeline')
@@ -168,6 +170,19 @@ const router = new Router({
 					return t('photos', 'Public album {title}', { title: to.params.token })
 				},
 			},
+		},
+		{
+			path: '/places',
+			component: Places,
+			name: 'places',
+		},
+		{
+			path: '/places/:placeName*',
+			component: PlaceContent,
+			name: 'places',
+			props: route => ({
+				placeName: route.params.placeName,
+			}),
 		},
 		{
 			path: '/folders/:path*',
