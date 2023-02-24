@@ -95,7 +95,9 @@ class PhotosHome implements ICollection {
 	}
 
 	/**
-	 * @return (AlbumsHome)[]
+	 * @return (AlbumsHome|PlacesHome|SharedAlbumsHome)[]
+	 *
+	 * @psalm-return array{0: AlbumsHome, 1: SharedAlbumsHome, 2: PlacesHome}
 	 */
 	public function getChildren(): array {
 		return [

@@ -88,9 +88,8 @@ class AlbumRoot implements ICollection, ICopyTarget {
 	 *
 	 * @param string $name
 	 * @param null|resource|string $data
-	 * @return void
 	 */
-	public function createFile($name, $data = null) {
+	public function createFile($name, $data = null): string {
 		try {
 			[$photosLocation, $userFolder] = $this->getPhotosLocationInfo();
 

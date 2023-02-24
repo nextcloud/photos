@@ -131,7 +131,7 @@ class ReverseGeoCoderService {
 		return $cities;
 	}
 
-	public function buildKDTree($force = false): void {
+	public function buildKDTree(bool $force = false): void {
 		if ($this->geoNameFolder->fileExists('cities1000.bin') && !$force) {
 			return;
 		}

@@ -77,10 +77,8 @@ class PublicRootCollection extends AbstractPrincipalCollection {
 	 * @param string $token
 	 *
 	 * @throws NotFound
-	 *
-	 * @return DAV\INode
 	 */
-	public function getChild($token) {
+	public function getChild($token): PublicAlbumRoot {
 		$this->throttler->sleepDelayOrThrowOnMax($this->request->getRemoteAddress(), self::BRUTEFORCE_ACTION);
 
 		if (is_null($token)) {

@@ -83,7 +83,9 @@ class PlaceRoot implements ICollection {
 	}
 
 	/**
-	 * @return PlacePhoto[]
+	 * @return (PlaceFile|PlacePhoto)[]
+	 *
+	 * @psalm-return array<PlaceFile|PlacePhoto>
 	 */
 	public function getChildren(): array {
 		if ($this->children === null) {
