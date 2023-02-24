@@ -43,8 +43,6 @@ use OCP\Group\Events\UserRemovedEvent;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\Files\Events\Node\NodeWrittenEvent;
 
-require_once __DIR__ . '/../../vendor/autoload.php';
-
 class Application extends App implements IBootstrap {
 	public const APP_ID = 'photos';
 

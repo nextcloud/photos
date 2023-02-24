@@ -1,26 +1,39 @@
 {
 	"name": "nextcloud/photos",
 	"config": {
-		"optimize-autoloader": true,
+		"autoloader-suffix": "Photos",
 		"classmap-authoritative": true,
+		"optimize-autoloader": true,
+		"sort-packages": true,
+		"allow-plugins": {
+			"bamarni/composer-bin-plugin": true
+		},
 		"platform": {
 			"php": "8.0"
+		}
+	},
+	"autoload": {
+		"psr-4": {
+			"OCA\\Photos\\": "./lib/"
 		}
 	},
 	"scripts": {
 		"cs:fix": "php-cs-fixer fix",
 		"cs:check": "php-cs-fixer fix --dry-run --diff",
 		"lint": "find . -name \\*.php -not -path './vendor/*' -print0 | xargs -0 -n1 php -l",
-		"psalm": "psalm",
-		"psalm:update-baseline": "psalm --update-baseline",
+		"psalm": "psalm --threads=1",
+		"psalm:update-baseline": "psalm --threads=1 --update-baseline",
+		"psalm:clear": "psalm --clear-cache && psalm --clear-global-cache",
+		"psalm:fix": "psalm --alter --issues=InvalidReturnType,InvalidNullableReturnType,MissingParamType,InvalidFalsableReturnType",
 		"test:unit": "echo 'Only testing installation of the app'"
 	},
 	"require-dev": {
+		"bamarni/composer-bin-plugin": "^1.8",
 		"nextcloud/coding-standard": "1.0",
+		"nextcloud/ocp": "dev-master",
 		"phpunit/phpunit": "^9",
-		"vimeo/psalm": "^4.22",
 		"sabre/dav": "^4.2.1",
-		"nextcloud/ocp": "dev-master"
+		"vimeo/psalm": "^4.22"
 	},
 	"require": {
 		"hexogen/kdtree": "^0.2.5"
