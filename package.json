@@ -54,7 +54,7 @@
 		"@nextcloud/upload": "^1.0.0-beta.8",
 		"@nextcloud/vue": "^7.3.0",
 		"camelcase": "^7.0.0",
-		"cypress": "^12.5.0",
+		"cypress": "^12.7.0",
 		"debounce": "^1.2.1",
 		"he": "^1.2.0",
 		"jest-environment-jsdom": "^29.4.1",
