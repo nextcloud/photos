@@ -13,7 +13,6 @@ OC.L10N.register(
     "On this day" : "この日",
     "Shared with you" : "共有中",
     "Tags" : "タグ",
-    "Locations" : "場所",
     "Mark selection as favorite" : "選択したものをお気に入りとしてマーク",
     "Add selection to favorites" : "選択したものをお気に入りに追加",
     "Remove selection from favorites" : "選択したものをお気に入りから削除",
@@ -51,6 +50,7 @@ OC.L10N.register(
     "Your photos" : "写真",
     "Your videos" : "動画",
     "Your folders" : "フォルダー",
+    "Locations" : "場所",
     "Settings" : "設定"
 },
 "nplurals=1; plural=0;");

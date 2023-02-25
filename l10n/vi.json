@@ -6,7 +6,6 @@
     "Favorites" : "Ưa thích",
     "Shared with you" : "Đã chia sẻ với bạn",
     "Tags" : "Nhãn",
-    "Locations" : "Các địa điểm",
     "Back" : "Quay lại",
     "Save" : "Lưu",
     "Copy public link" : "Sao chép liên kết công khai",
@@ -29,6 +28,7 @@
     "Your photos" : "Ảnh của bạn",
     "Your videos" : "Video của bạn",
     "Your folders" : "Thư mục của bạn",
+    "Locations" : "Các địa điểm",
     "Settings" : "Cài đặt"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

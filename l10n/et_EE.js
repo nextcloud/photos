@@ -9,7 +9,6 @@ OC.L10N.register(
     "Favorites" : "Lemmikud",
     "Shared with you" : "Sinuga jagatud",
     "Tags" : "Sildid",
-    "Locations" : "Asukohad",
     "Back" : "Tagasi",
     "Save" : "Salvesta",
     "Copy public link" : "Kopeeri avalik link",
@@ -28,6 +27,7 @@ OC.L10N.register(
     "Delete selection" : "Kustuta valik",
     "Tagged photos" : "Sildistatud fotod",
     "Your photos" : "Sinu fotod",
+    "Locations" : "Asukohad",
     "Settings" : "Seaded"
 },
 "nplurals=2; plural=(n != 1);");

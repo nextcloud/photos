@@ -13,7 +13,8 @@ OC.L10N.register(
     "On this day" : "Tänä päivänä",
     "Shared with you" : "Jaettu kanssasi",
     "Tags" : "Tunnisteet",
-    "Locations" : "Sijainnit",
+    "Places" : "Paikat",
+    "Map" : "Kartta",
     "Photos settings" : "Kuvien asetukset",
     "Mark selection as favorite" : "Merkitse valinta suosikeiksi",
     "Add selection to favorites" : "Lisää valinta suosikkeihin",
@@ -115,6 +116,7 @@ OC.L10N.register(
     "Your photos" : "Valokuvat",
     "Your videos" : "Videot",
     "Your folders" : "Kansiot",
+    "Locations" : "Sijainnit",
     "Settings" : "Asetukset"
 },
 "nplurals=2; plural=(n != 1);");

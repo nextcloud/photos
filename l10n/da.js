@@ -13,7 +13,6 @@ OC.L10N.register(
     "On this day" : "På denne dag",
     "Shared with you" : "Shared with you",
     "Tags" : "Mærker",
-    "Locations" : "Sted",
     "Photos settings" : "Indstillinger for fotos",
     "Name of the album" : "Albummets navn",
     "Location of the album" : "Placering af albummet",
@@ -62,6 +61,7 @@ OC.L10N.register(
     "Your photos" : "Dine billeder",
     "Your videos" : "Dine videoer",
     "Your folders" : "Dine mapper",
+    "Locations" : "Sted",
     "Settings" : "Indstillinger"
 },
 "nplurals=2; plural=(n != 1);");

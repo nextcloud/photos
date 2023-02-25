@@ -10,7 +10,6 @@ OC.L10N.register(
     "Favorites" : "Омиљене",
     "Shared with you" : "Дељено са Вама",
     "Tags" : "Ознаке",
-    "Locations" : "Локације",
     "Back" : "Назад",
     "Save" : "Сачувај",
     "An error occurred" : "Догодила се грешка",
@@ -32,6 +31,7 @@ OC.L10N.register(
     "Your photos" : "Ваше слике",
     "Your videos" : "Ваши видео снимци",
     "Your folders" : "Ваше фасцикле",
+    "Locations" : "Локације",
     "Settings" : "Поставке"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

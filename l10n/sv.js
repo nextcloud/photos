@@ -14,7 +14,6 @@ OC.L10N.register(
     "On this day" : "På den här dagen",
     "Shared with you" : "Delad med dig",
     "Tags" : "Taggar",
-    "Locations" : "Platser",
     "Back" : "Tillbaka",
     "Save." : "Spara.",
     "Create the album." : "Skapa albumet.",
@@ -67,6 +66,7 @@ OC.L10N.register(
     "Your photos" : "Dina bilder",
     "Your videos" : "Dina videor",
     "Your folders" : "Dina mappar",
+    "Locations" : "Platser",
     "Settings" : "Inställningar"
 },
 "nplurals=2; plural=(n != 1);");

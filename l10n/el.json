@@ -12,7 +12,6 @@
     "On this day" : "Αυτή τη μέρα",
     "Shared with you" : "Διαμοιρασμένα μαζί σας",
     "Tags" : "Ετικέτες",
-    "Locations" : "Τοποθεσίες",
     "Photos settings" : "Ρυθμίσεις φωτογραφιών",
     "Mark selection as favorite" : "Επισήμανση ως αγαπημένο",
     "Add selection to favorites" : "Προσθήκη στα αγαπημένα",
@@ -77,6 +76,7 @@
     "Your photos" : "Οι φωτογραφίες σας",
     "Your videos" : "Τα βίντεό σας",
     "Your folders" : "Οι φάκελοί σας",
+    "Locations" : "Τοποθεσίες",
     "Settings" : "Ρυθμίσεις"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

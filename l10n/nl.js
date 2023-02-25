@@ -14,7 +14,6 @@ OC.L10N.register(
     "On this day" : "Op deze dag",
     "Shared with you" : "Met je gedeeld",
     "Tags" : "Tags",
-    "Locations" : "Locaties",
     "Photos settings" : "Instellingen voor foto's",
     "Mark selection as favorite" : "Markeer selectie als favoriet",
     "Add selection to favorites" : "Selectie toevoegen aan favorieten",
@@ -130,6 +129,7 @@ OC.L10N.register(
     "Your photos" : "Je foto's",
     "Your videos" : "Je video's",
     "Your folders" : "Je mappen",
+    "Locations" : "Locaties",
     "Settings" : "Instellingen"
 },
 "nplurals=2; plural=(n != 1);");

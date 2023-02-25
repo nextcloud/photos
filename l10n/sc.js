@@ -11,7 +11,6 @@ OC.L10N.register(
     "Favorites" : "Preferidos",
     "Shared with you" : "Cumpartzidu cun tegus",
     "Tags" : "Etichetas",
-    "Locations" : "Positziones",
     "Back" : "In segus",
     "Save" : "Sarva",
     "Copy public link" : "Còpia ligòngiu pùblicu",
@@ -35,6 +34,7 @@ OC.L10N.register(
     "Your photos" : "Is fotografias tuas",
     "Your videos" : "Is vìdeos tuos",
     "Your folders" : "Is cartellas tuas",
+    "Locations" : "Positziones",
     "Settings" : "Impostatziones"
 },
 "nplurals=2; plural=(n != 1);");

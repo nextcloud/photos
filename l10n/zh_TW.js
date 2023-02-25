@@ -14,7 +14,8 @@ OC.L10N.register(
     "On this day" : "在這天",
     "Shared with you" : "與您分享",
     "Tags" : "標籤",
-    "Locations" : "地點",
+    "Places" : "地點",
+    "Map" : "地圖",
     "Photos settings" : "照片設定",
     "Mark selection as favorite" : "將選取範圍標記為最愛",
     "Add selection to favorites" : "新增選取範圍至最愛",
@@ -134,6 +135,7 @@ OC.L10N.register(
     "Your photos" : "我的照片",
     "Your videos" : "您的影片",
     "Your folders" : "您的資料夾",
+    "Locations" : "地點",
     "Settings" : "設定"
 },
 "nplurals=1; plural=0;");

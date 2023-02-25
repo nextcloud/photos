@@ -8,7 +8,6 @@ OC.L10N.register(
     "Favorites" : "Ưa thích",
     "Shared with you" : "Đã chia sẻ với bạn",
     "Tags" : "Nhãn",
-    "Locations" : "Các địa điểm",
     "Back" : "Quay lại",
     "Save" : "Lưu",
     "Copy public link" : "Sao chép liên kết công khai",
@@ -31,6 +30,7 @@ OC.L10N.register(
     "Your photos" : "Ảnh của bạn",
     "Your videos" : "Video của bạn",
     "Your folders" : "Thư mục của bạn",
+    "Locations" : "Các địa điểm",
     "Settings" : "Cài đặt"
 },
 "nplurals=1; plural=0;");

@@ -12,7 +12,8 @@
     "On this day" : "En este día",
     "Shared with you" : "Compartido contigo",
     "Tags" : "Etiquetas",
-    "Locations" : "Ubicaciones",
+    "Places" : "Ubicaciones",
+    "Map" : "Mapas",
     "Photos settings" : "Configuración de fotos",
     "Mark selection as favorite" : "Marcar selección como favorita",
     "Add selection to favorites" : "Añadir selección a favoritos",
@@ -132,6 +133,7 @@
     "Your photos" : "Tus fotos",
     "Your videos" : "Tus vídeos",
     "Your folders" : "Tus carpetas",
+    "Locations" : "Ubicaciones",
     "Settings" : "Ajustes"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
