@@ -13,7 +13,6 @@ OC.L10N.register(
     "On this day" : "Aquest mateix dia",
     "Shared with you" : "Compartit amb vós",
     "Tags" : "Etiquetes",
-    "Locations" : "Ubicacions",
     "Name of the album" : "Nom de l'àlbum",
     "Back" : "Torna",
     "Save" : "Desa",
@@ -65,6 +64,7 @@ OC.L10N.register(
     "Your photos" : "Les vostres fotografies",
     "Your videos" : "Els vostres vídeos",
     "Your folders" : "Les vostres carpetes",
+    "Locations" : "Ubicacions",
     "Settings" : "Paràmetres"
 },
 "nplurals=2; plural=(n != 1);");

@@ -13,7 +13,6 @@ OC.L10N.register(
     "On this day" : "วันนี้ในอดีต",
     "Shared with you" : "แชร์กับคุณ",
     "Tags" : "แท็ก",
-    "Locations" : "สถานที่",
     "Photos settings" : "การตั้งค่ารูปภาพ",
     "Mark selection as favorite" : "ระบุที่เลือกเป็นรายการโปรด",
     "Add selection to favorites" : "เพิ่มที่เลือกไปยังรายการโปรด",
@@ -49,6 +48,7 @@ OC.L10N.register(
     "Your photos" : "รูปภาพของคุณ",
     "Your videos" : "วิดีโอของคุณ",
     "Your folders" : "โฟลเดอร์ของคุณ",
+    "Locations" : "สถานที่",
     "Settings" : "การตั้งค่า"
 },
 "nplurals=1; plural=0;");

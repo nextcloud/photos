@@ -14,7 +14,8 @@ OC.L10N.register(
     "On this day" : "På denne dagen",
     "Shared with you" : "Delt med deg",
     "Tags" : "Merkelapper",
-    "Locations" : "Steder",
+    "Places" : "Steder",
+    "Map" : "Kart",
     "Photos settings" : "Innstillinger for bilder",
     "Mark selection as favorite" : "Merk utvalget som favoritt",
     "Add selection to favorites" : "Legg til utvalg i favoritter",
@@ -134,6 +135,7 @@ OC.L10N.register(
     "Your photos" : "Dine bilder",
     "Your videos" : "Dine videoer",
     "Your folders" : "Dine mapper",
+    "Locations" : "Steder",
     "Settings" : "Innstillinger"
 },
 "nplurals=2; plural=(n != 1);");

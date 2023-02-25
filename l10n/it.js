@@ -14,7 +14,6 @@ OC.L10N.register(
     "On this day" : "In questo giorno",
     "Shared with you" : "Condivise con te",
     "Tags" : "Etichette",
-    "Locations" : "Posizioni",
     "Photos settings" : "Impostazioni foto",
     "Mark selection as favorite" : "Imposta selezione come preferiti",
     "Add selection to favorites" : "Aggiungi selezione ai preferiti",
@@ -90,6 +89,7 @@ OC.L10N.register(
     "Your photos" : "Le tue foto",
     "Your videos" : "I tuoi video",
     "Your folders" : "Le tue cartelle",
+    "Locations" : "Posizioni",
     "Settings" : "Impostazioni"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

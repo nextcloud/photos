@@ -14,7 +14,8 @@ OC.L10N.register(
     "On this day" : "Bugün",
     "Shared with you" : "Sizinle paylaşılanlar",
     "Tags" : "Etiketler",
-    "Locations" : "Konumlar",
+    "Places" : "Yerler",
+    "Map" : "Harita",
     "Photos settings" : "Fotoğraflar ayarları",
     "Mark selection as favorite" : "Seçilmişleri sık kullanılanlara ekle",
     "Add selection to favorites" : "Seçilmişleri sık kullanılanlara ekle",
@@ -134,6 +135,7 @@ OC.L10N.register(
     "Your photos" : "Fotoğraflarınız",
     "Your videos" : "Görüntüleriniz",
     "Your folders" : "Klasörleriniz",
+    "Locations" : "Konumlar",
     "Settings" : "Ayarlar"
 },
 "nplurals=2; plural=(n > 1);");

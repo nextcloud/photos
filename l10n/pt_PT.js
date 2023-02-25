@@ -9,7 +9,6 @@ OC.L10N.register(
     "Favorites" : "Favoritos",
     "Shared with you" : "Partilhado consigo",
     "Tags" : "Etiquetas",
-    "Locations" : "Localizações",
     "Back" : "Anterior",
     "Save" : "Guardar",
     "Copy public link" : "Copiar ligação publica",
@@ -32,6 +31,7 @@ OC.L10N.register(
     "Your photos" : "As suas fotos",
     "Your videos" : "Os seus vídeos",
     "Your folders" : "As suas pastas",
+    "Locations" : "Localizações",
     "Settings" : "Configurações"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

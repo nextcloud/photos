@@ -14,7 +14,7 @@ OC.L10N.register(
     "On this day" : "V tento den",
     "Shared with you" : "Sdíleno s vámi",
     "Tags" : "Štítky",
-    "Locations" : "Umístění",
+    "Places" : "Místa",
     "Photos settings" : "Nastavení pro Fotky",
     "Mark selection as favorite" : "Označit vybrané jako oblíbené",
     "Add selection to favorites" : "Přidat vybrané do oblíbených",
@@ -134,6 +134,7 @@ OC.L10N.register(
     "Your photos" : "Vaše fotky",
     "Your videos" : "Vaše videa",
     "Your folders" : "Vaše složky",
+    "Locations" : "Umístění",
     "Settings" : "Nastavení"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

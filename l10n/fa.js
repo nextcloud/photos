@@ -10,7 +10,6 @@ OC.L10N.register(
     "Favorites" : "مورد علاقه ها",
     "Shared with you" : "با شما به اشتراک گذاشته شده است",
     "Tags" : "برچسب ها",
-    "Locations" : "مکانها",
     "Back" : "بازگشت",
     "Save" : "ذخیره",
     "Copy public link" : "پیوند عمومی را کپی کنید",
@@ -29,6 +28,7 @@ OC.L10N.register(
     "Delete selection" : "انتخاب را حذف کنید",
     "Tagged photos" : "عکسهای برچسب خورده",
     "Your photos" : "عکس های شما",
+    "Locations" : "مکانها",
     "Settings" : "تنظیمات"
 },
 "nplurals=2; plural=(n > 1);");

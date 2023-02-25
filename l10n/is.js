@@ -11,7 +11,6 @@ OC.L10N.register(
     "On this day" : "Á þessum degi",
     "Shared with you" : "Deilt með þér",
     "Tags" : "Merki",
-    "Locations" : "Staðsetningar",
     "Photos settings" : "Stillingar ljósmynda",
     "Back" : "Til baka",
     "Save" : "Vista",
@@ -37,6 +36,7 @@ OC.L10N.register(
     "Your photos" : "Ljósmyndirnar þínar",
     "Your videos" : "Myndskeiðin þín",
     "Your folders" : "Möppurnar þínar",
+    "Locations" : "Staðsetningar",
     "Settings" : "Stillingar"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

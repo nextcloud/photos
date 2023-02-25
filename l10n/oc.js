@@ -10,7 +10,6 @@ OC.L10N.register(
     "Favorites" : "Favorits",
     "Shared with you" : "Shared with you",
     "Tags" : "Etiquetas",
-    "Locations" : "Emplaçaments",
     "Back" : "Retorn",
     "Save" : "Enregistrar",
     "Copy public link" : "Copiar lo ligam public",
@@ -33,6 +32,7 @@ OC.L10N.register(
     "Your photos" : "Vòstras fòtos",
     "Your videos" : "Vòstras vidèos",
     "Your folders" : "Vòstres dossièrs",
+    "Locations" : "Emplaçaments",
     "Settings" : "Paramètres"
 },
 "nplurals=2; plural=(n > 1);");

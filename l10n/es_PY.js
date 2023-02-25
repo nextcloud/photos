@@ -8,7 +8,6 @@ OC.L10N.register(
     "Favorites" : "Favoritos",
     "Shared with you" : "Compartido con usted",
     "Tags" : "Etiquetas",
-    "Locations" : "Ubicaciones",
     "Back" : "Atrás",
     "Save" : "Guardar",
     "An error occurred" : "Se presentó un error",
@@ -25,6 +24,7 @@ OC.L10N.register(
     "Add" : "Agregar",
     "Tagged photos" : "Fotos etiquetadas",
     "Your photos" : "Tus fotos",
+    "Locations" : "Ubicaciones",
     "Settings" : "Configuraciones "
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

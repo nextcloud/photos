@@ -13,7 +13,6 @@ OC.L10N.register(
     "On this day" : "На денешен ден",
     "Shared with you" : "Споделено со вас",
     "Tags" : "Ознаки",
-    "Locations" : "Локации",
     "Photos settings" : "Параметри за фотографиите",
     "Mark selection as favorite" : "Означи ги селектираните како омилени",
     "Remove selection from favorites" : "Отстрани ги селектираните од омилени",
@@ -86,6 +85,7 @@ OC.L10N.register(
     "Your photos" : "Твој фотографии",
     "Your videos" : "Видеа",
     "Your folders" : "Папки",
+    "Locations" : "Локации",
     "Settings" : "Параметри"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

@@ -13,7 +13,6 @@ OC.L10N.register(
     "On this day" : "Šią dieną",
     "Shared with you" : "Bendrinama su jumis",
     "Tags" : "Žymės",
-    "Locations" : "Vietos",
     "Photos settings" : "Nuotraukų nustatymai",
     "Name of the album" : "Albumo pavadinimas",
     "Location of the album" : "Albumo vieta",
@@ -101,6 +100,7 @@ OC.L10N.register(
     "Your photos" : "Jūsų nuotraukos",
     "Your videos" : "Jūsų vaizdo įrašai",
     "Your folders" : "Jūsų aplankai",
+    "Locations" : "Vietos",
     "Settings" : "Nustatymai"
 },
 "nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);");
