@@ -14,7 +14,6 @@ OC.L10N.register(
     "On this day" : "Αυτή τη μέρα",
     "Shared with you" : "Διαμοιρασμένα μαζί σας",
     "Tags" : "Ετικέτες",
-    "Locations" : "Τοποθεσίες",
     "Photos settings" : "Ρυθμίσεις φωτογραφιών",
     "Mark selection as favorite" : "Επισήμανση ως αγαπημένο",
     "Add selection to favorites" : "Προσθήκη στα αγαπημένα",
@@ -79,6 +78,7 @@ OC.L10N.register(
     "Your photos" : "Οι φωτογραφίες σας",
     "Your videos" : "Τα βίντεό σας",
     "Your folders" : "Οι φάκελοί σας",
+    "Locations" : "Τοποθεσίες",
     "Settings" : "Ρυθμίσεις"
 },
 "nplurals=2; plural=(n != 1);");

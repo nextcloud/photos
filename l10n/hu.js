@@ -14,7 +14,6 @@ OC.L10N.register(
     "On this day" : "A mai napon",
     "Shared with you" : "Megosztva Önnel",
     "Tags" : "Címkék",
-    "Locations" : "Helyek",
     "Photos settings" : "Fényképek beállításai",
     "Mark selection as favorite" : "Kiválasztás megjelölése kedvencként",
     "Add selection to favorites" : "Kiválasztás hozzáadása a kedvencekhez",
@@ -134,6 +133,7 @@ OC.L10N.register(
     "Your photos" : "Saját fényképek",
     "Your videos" : "Saját videók",
     "Your folders" : "Saját mappák",
+    "Locations" : "Helyek",
     "Settings" : "Beállítások"
 },
 "nplurals=2; plural=(n != 1);");

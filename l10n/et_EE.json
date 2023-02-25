@@ -7,7 +7,6 @@
     "Favorites" : "Lemmikud",
     "Shared with you" : "Sinuga jagatud",
     "Tags" : "Sildid",
-    "Locations" : "Asukohad",
     "Back" : "Tagasi",
     "Save" : "Salvesta",
     "Copy public link" : "Kopeeri avalik link",
@@ -26,6 +25,7 @@
     "Delete selection" : "Kustuta valik",
     "Tagged photos" : "Sildistatud fotod",
     "Your photos" : "Sinu fotod",
+    "Locations" : "Asukohad",
     "Settings" : "Seaded"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -14,7 +14,6 @@ OC.L10N.register(
     "On this day" : "Цього дня",
     "Shared with you" : "Вам надано доступ",
     "Tags" : "Позначки",
-    "Locations" : "Розташування",
     "Photos settings" : "Налаштування фотографій",
     "Mark selection as favorite" : "Позначити вибране як вибране",
     "Add selection to favorites" : "Додайте вибір до вибраного",
@@ -125,6 +124,7 @@ OC.L10N.register(
     "Your photos" : "Ваші світлини",
     "Your videos" : "Ваші відео",
     "Your folders" : "Ваші каталоги",
+    "Locations" : "Розташування",
     "Settings" : "Налаштування"
 },
 "nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);");

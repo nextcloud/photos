@@ -8,7 +8,6 @@
     "Favorites" : "مورد علاقه ها",
     "Shared with you" : "با شما به اشتراک گذاشته شده است",
     "Tags" : "برچسب ها",
-    "Locations" : "مکانها",
     "Back" : "بازگشت",
     "Save" : "ذخیره",
     "Copy public link" : "پیوند عمومی را کپی کنید",
@@ -27,6 +26,7 @@
     "Delete selection" : "انتخاب را حذف کنید",
     "Tagged photos" : "عکسهای برچسب خورده",
     "Your photos" : "عکس های شما",
+    "Locations" : "مکانها",
     "Settings" : "تنظیمات"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

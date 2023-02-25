@@ -14,7 +14,7 @@ OC.L10N.register(
     "On this day" : "На този ден",
     "Shared with you" : "Споделени с вас",
     "Tags" : "Етикети",
-    "Locations" : "Местоположения",
+    "Places" : "Места",
     "Photos settings" : "Настройки на снимки",
     "Mark selection as favorite" : "Маркиране на селекцията като любима",
     "Add selection to favorites" : "Добавяне на селекция към любими",
@@ -134,6 +134,7 @@ OC.L10N.register(
     "Your photos" : "Вашите снимки",
     "Your videos" : "Вашите видеа",
     "Your folders" : "Вашите папки",
+    "Locations" : "Местоположения",
     "Settings" : "Настройки"
 },
 "nplurals=2; plural=(n != 1);");

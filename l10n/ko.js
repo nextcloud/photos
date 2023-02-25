@@ -8,7 +8,6 @@ OC.L10N.register(
     "Favorites" : "즐겨찾기",
     "Shared with you" : "나와 공유됨",
     "Tags" : "태그",
-    "Locations" : "위치",
     "Back" : "뒤로",
     "Save" : "저장",
     "Copy public link" : "공용 링크 복사",
@@ -18,6 +17,7 @@ OC.L10N.register(
     "Remove from favorites" : "즐겨찾기에서 제거",
     "Add" : "추가",
     "Your photos" : "당신의 사진",
+    "Locations" : "위치",
     "Settings" : "설정"
 },
 "nplurals=1; plural=0;");

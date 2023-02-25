@@ -10,7 +10,6 @@ OC.L10N.register(
     "Favorites" : "Favoritos",
     "Shared with you" : "Compartido con usted",
     "Tags" : "Etiquetas",
-    "Locations" : "Ubicaciones",
     "Back" : "Atrás",
     "Save" : "Guardar",
     "Copy public link" : "Copiar enlace público",
@@ -28,6 +27,7 @@ OC.L10N.register(
     "Add" : "Agregar",
     "Tagged photos" : "Fotos con etiquetas",
     "Your photos" : "Tus Fotos",
+    "Locations" : "Ubicaciones",
     "Settings" : "Configuraciones "
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

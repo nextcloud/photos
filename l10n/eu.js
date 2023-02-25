@@ -14,7 +14,7 @@ OC.L10N.register(
     "On this day" : "Egun honetan",
     "Shared with you" : "Zurekin partekatua",
     "Tags" : "Etiketak",
-    "Locations" : "Kokapenak",
+    "Places" : "Lekuak",
     "Photos settings" : "Argazkien ezarpenak",
     "Mark selection as favorite" : "Markatu hautatutakoak gogoko gisa",
     "Add selection to favorites" : "Gehitu hautatutakoak gogokoetara",
@@ -134,6 +134,7 @@ OC.L10N.register(
     "Your photos" : "Zure argazkiak",
     "Your videos" : "Zure bideoak",
     "Your folders" : "Zure karpetak",
+    "Locations" : "Kokapenak",
     "Settings" : "Ezarpenak"
 },
 "nplurals=2; plural=(n != 1);");
