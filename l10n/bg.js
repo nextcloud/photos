@@ -15,6 +15,7 @@ OC.L10N.register(
     "Shared with you" : "Споделени с вас",
     "Tags" : "Етикети",
     "Places" : "Места",
+    "Map" : "Карта",
     "Photos settings" : "Настройки на снимки",
     "Mark selection as favorite" : "Маркиране на селекцията като любима",
     "Add selection to favorites" : "Добавяне на селекция към любими",
