@@ -113,6 +113,8 @@
     "Add to album" : "Ajouter à l'album",
     "Delete selection" : "Supprimer la sélection",
     "No photos or videos in here" : "Aucune photo ou vidéo ici",
+    "Failed to fetch collection." : "Échec de récupération de l'album.",
+    "Failed to fetch collections list." : "La récupération de la liste des albums a échoué.",
     "Failed to fetch faces list." : "Échec de la récupération de la liste des visages.",
     "All your media" : "Tous vos médias",
     "Album {title}" : "Album {title}",
