@@ -44,11 +44,11 @@
 			:file-ids="collectionFileIds"
 			:base-height="isMobile ? 120 : 200"
 			:loading="loading">
-			<File slot-scope="{file, visibility}"
+			<File slot-scope="{file, distance}"
 				:file="files[file.id]"
 				:allow-selection="true"
 				:selected="selection[file.id] === true"
-				:visibility="visibility"
+				:distance="distance"
 				:semaphore="semaphore"
 				@click="openViewer"
 				@select-toggled="onFileSelectToggle" />

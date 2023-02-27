@@ -43,7 +43,7 @@
 				:section-header-height="50"
 				:scroll-to-section="targetMonth"
 				@need-content="getFiles">
-				<template slot-scope="{file, height, visibility}">
+				<template slot-scope="{file, height, distance}">
 					<h3 v-if="file.sectionHeader"
 						:id="`file-picker-section-header-${file.id}`"
 						:style="{ height: `${height}px`}"
@@ -55,7 +55,7 @@
 						:file="files[file.id]"
 						:allow-selection="true"
 						:selected="selection[file.id] === true"
-						:visibility="visibility"
+						:distance="distance"
 						:semaphore="semaphore"
 						@select-toggled="onFileSelectToggle" />
 				</template>
