@@ -105,7 +105,7 @@ export default {
 	methods: {
 		openViewer() {
 			OCA.Viewer.open({
-				path: this.item.injected.filename,
+				fileInfo: this.item.injected,
 				list: this.item.injected.list,
 				loadMore: this.item.injected.loadMore ? async () => await this.item.injected.loadMore(true) : () => [],
 				canLoop: this.item.injected.canLoop,
