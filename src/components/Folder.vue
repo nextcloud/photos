@@ -31,6 +31,8 @@
 <script>
 import { mapGetters } from 'vuex'
 
+import { getCurrentUser } from '@nextcloud/auth'
+
 import FolderTagPreview from './FolderTagPreview.vue'
 import getAlbumContent from '../services/AlbumContent.js'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
@@ -107,8 +109,12 @@ export default {
 	methods: {
 		async getFolderData(filename) {
 			try {
+				// Remove leading /file/{userId}
+				const prefix = `/files/${getCurrentUser()?.uid}`
+				const unPrefixedFileName = filename.replace(new RegExp(`^${prefix}`), '')
+
 				// get data
-				const { folder, folders, files } = await getAlbumContent(filename, {
+				const { folder, folders, files } = await getAlbumContent(unPrefixedFileName, {
 					shared: this.item.injected.showShared,
 					signal: this.abortController.signal,
 				})

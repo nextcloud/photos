@@ -37,12 +37,12 @@
 	<div v-else-if="!initializing">
 		<HeaderNavigation key="navigation"
 			:loading="loading"
-			:path="folder.filename"
+			:path="path"
 			:title="folder.basename"
 			:root-title="rootTitle"
 			@refresh="onRefresh">
 			<UploadPicker :accept="allowedMimes"
-				:destination="folder.filename"
+				:destination="path"
 				:multiple="true"
 				@uploaded="onUpload" />
 		</HeaderNavigation>
