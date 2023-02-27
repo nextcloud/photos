@@ -1,7 +1,7 @@
 OC.L10N.register(
     "photos",
     {
-    "Public link" : "Publik länk",
+    "Public link" : "Offentlig länk",
     "Photos" : "Bilder",
     "Your memories under your control" : "Dina minnen under din kontroll",
     "All media" : "All media",
@@ -14,6 +14,8 @@ OC.L10N.register(
     "On this day" : "På den här dagen",
     "Shared with you" : "Delad med dig",
     "Tags" : "Taggar",
+    "Places" : "Platser",
+    "Map" : "Karta",
     "Back" : "Tillbaka",
     "Save." : "Spara.",
     "Create the album." : "Skapa albumet.",
@@ -59,7 +61,10 @@ OC.L10N.register(
     "Add to album" : "Lägg till i album",
     "Delete selection" : "Ta bort urval",
     "All your media" : "All din media",
+    "Album {title}" : "Album {title}",
+    "Public album {title}" : "Offentligt album {title}",
     "Tagged photos" : "Taggade bilder",
+    "Tagged photo {title}" : "Taggad bild {title}",
     "Failed to delete {faceName}." : "Misslyckades att radera {faceName}.",
     "Failed to delete {fileId}." : "Misslyckades att radera {fileId}.",
     "Failed to delete {fileName}." : "Misslyckades att radera {fileName}.",
