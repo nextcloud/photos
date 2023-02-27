@@ -36,7 +36,7 @@ use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\ICollection;
 
 class PlaceRoot implements ICollection {
-	/** @var PlaceFile[]|null */
+	/** @var PlacePhoto[]|null */
 	protected ?array $children = null;
 
 	public function __construct(
@@ -83,9 +83,9 @@ class PlaceRoot implements ICollection {
 	}
 
 	/**
-	 * @return (PlaceFile|PlacePhoto)[]
+	 * @return (PlacePhoto)[]
 	 *
-	 * @psalm-return array<PlaceFile|PlacePhoto>
+	 * @psalm-return array<PlacePhoto>
 	 */
 	public function getChildren(): array {
 		if ($this->children === null) {
