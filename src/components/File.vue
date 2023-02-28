@@ -33,27 +33,27 @@
 			<div class="file__images">
 				<VideoIcon v-if="file.mime.includes('video')" class="video-icon" :size="64" />
 
-				<img v-if="visibility !== 'none' && canLoad && !error"
+				<img v-if="visibility !== 'none' && canLoad && !errorNear && !loadedVisible"
 					ref="imgNear"
 					:key="`${file.basename}-near`"
 					:src="srcNear"
 					:alt="file.basename"
 					:aria-describedby="ariaDescription"
-					@load="onLoad"
-					@error="onError">
+					@load="onLoadNear"
+					@error="onErrorNear">
 
-				<img v-if="visibility === 'visible' && canLoad && !error"
+				<img v-if="(visibility === 'visible' || (loadedVisible && visibility === 'near')) && canLoad && !errorVisible"
 					ref="imgVisible"
 					:key="`${file.basename}-visible`"
 					:src="srcVisible"
 					:alt="file.basename"
 					:aria-describedby="ariaDescription"
-					@load="onLoad"
-					@error="onError">
+					@load="onLoadVisible"
+					@error="onErrorVisible">
 			</div>
 
 			<!-- image description -->
-			<p :id="ariaDescription" class="file__hidden-description" :class="{show: error}">{{ file.basename }}</p>
+			<p :id="ariaDescription" class="file__hidden-description" :class="{show: errorNear && errorVisible}">{{ file.basename }}</p>
 		</a>
 
 		<NcCheckboxRadioSwitch v-if="allowSelection"
@@ -111,8 +111,10 @@ export default {
 
 	data() {
 		return {
-			loaded: false,
-			error: false,
+			loadedNear: false,
+			loadedVisible: false,
+			errorNear: false,
+			errorVisible: false,
 			canLoad: false,
 			semaphoreSymbol: null,
 			isDestroyed: false,
@@ -146,25 +148,24 @@ export default {
 		},
 	},
 
-	mounted() {
-		// Don't render the component right away as it is useless if the user is only scrolling
-		setTimeout(async () => {
-			this.semaphoreSymbol = await this.semaphore.acquire(() => {
-				switch (this.visibility) {
-				case 'visible':
-					return 1
-				case 'near':
-					return 2
-				default:
-					return 3
-				}
-			}, this.file.fileid)
-
-			this.canLoad = true
-			if (this.visibility === 'none' || this.isDestroyed) {
-				this.releaseSemaphore()
+	async mounted() {
+		this.semaphoreSymbol = await this.semaphore.acquire(() => {
+			switch (this.visibility) {
+			case 'visible':
+				return 1
+			case 'near':
+				return 2
+			default:
+				return 3
 			}
-		}, 250)
+		}, this.file.fileid)
+
+		if (this.visibility === 'none' || this.isDestroyed) {
+			this.releaseSemaphore()
+			return
+		}
+
+		this.canLoad = true
 	},
 
 	beforeDestroy() {
@@ -185,14 +186,25 @@ export default {
 			this.$emit('click', this.file.fileid)
 		},
 
-		/** When the image is fully loaded by browser we remove the placeholder */
-		onLoad() {
-			this.loaded = true
+		/** When the 'near' image is fully loaded by browser we release semaphore */
+		onLoadNear() {
+			this.loadedNear = true
 			this.releaseSemaphore()
 		},
 
-		onError() {
-			this.error = true
+		/** When the 'visible' image is fully loaded by browser we release semaphore */
+		onLoadVisible() {
+			this.loadedVisible = true
+			this.releaseSemaphore()
+		},
+
+		onErrorNear() {
+			this.errorNear = true
+			this.releaseSemaphore()
+		},
+
+		onErrorVisible() {
+			this.errorVisible = true
 			this.releaseSemaphore()
 		},
 
@@ -203,11 +215,10 @@ export default {
 		getItemURL(size) {
 			const token = this.$route.params.token
 			if (token) {
-				return generateUrl(`/apps/photos/api/v1/publicPreview/${this.file.fileid}?x=${size}&y=${size}&token=${token}`)
+				return generateUrl(`/apps/photos/api/v1/publicPreview/${this.file.fileid}?etag=${this.decodedEtag}&x=${size}&y=${size}&token=${token}`)
 			} else {
-				return generateUrl(`/apps/photos/api/v1/preview/${this.file.fileid}?x=${size}&y=${size}`)
+				return generateUrl(`/apps/photos/api/v1/preview/${this.file.fileid}?etag=${this.decodedEtag}&x=${size}&y=${size}`)
 			}
-
 		},
 
 		releaseSemaphore() {
