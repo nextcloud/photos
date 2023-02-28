@@ -54,10 +54,11 @@ export default {
 		]),
 		/**
 		 * @param {string} collectionFileName
-		 * @param {string[]} extraProps - Extra properties to add to the DAV request.
+		 * @param {string[]} [extraProps] - Extra properties to add to the DAV request.
+		 * @param {import('webdav').WebDAVClient} [client] - The DAV client to use.
 		 * @return {Promise<import('../services/collectionFetcher.js').Collection|null>}
 		 */
-		async fetchCollection(collectionFileName, extraProps) {
+		async fetchCollection(collectionFileName, extraProps, client) {
 			if (this.loadingCollection) {
 				return null
 			}
@@ -66,7 +67,7 @@ export default {
 				this.loadingCollection = true
 				this.errorFetchingCollection = null
 
-				const collection = await fetchCollection(collectionFileName, { signal: this.abortController.signal }, extraProps)
+				const collection = await fetchCollection(collectionFileName, { signal: this.abortController.signal }, extraProps, client)
 				this.addCollections({ collections: [collection] })
 				return collection
 			} catch (error) {
@@ -87,10 +88,12 @@ export default {
 
 		/**
 		 * @param {string} collectionFileName
-		 * @param {string[]} extraProps - Extra properties to add to the DAV request.
+		 * @param {string[]} [extraProps] - Extra properties to add to the DAV request.
+		 * @param {import('webdav').WebDAVClient} [client] - The DAV client to use.
+		 * @param {((value: import('../services/collectionFetcher.js').CollectionFile, index: number, array: import('../services/collectionFetcher.js').CollectionFile[]) => any)[]} [mappers] - Callback that can transform files before they are appended.
 		 * @return {Promise<import('../services/collectionFetcher.js').CollectionFile[]>}
 		 */
-		async fetchCollectionFiles(collectionFileName, extraProps = []) {
+		async fetchCollectionFiles(collectionFileName, extraProps, client, mappers = []) {
 			if (this.loadingCollectionFiles) {
 				return []
 			}
@@ -101,8 +104,10 @@ export default {
 				this.errorFetchingCollectionFiles = null
 				this.loadingCollectionFiles = true
 
-				const fetchedFiles = await fetchCollectionFiles(collectionFileName, { signal: this.abortController.signal }, extraProps)
+				let fetchedFiles = await fetchCollectionFiles(collectionFileName, { signal: this.abortController.signal }, extraProps, client)
 				const fileIds = fetchedFiles.map(file => file.fileid.toString())
+
+				mappers.forEach(mapper => (fetchedFiles = fetchedFiles.map(mapper)))
 
 				this.appendFiles(fetchedFiles)
 

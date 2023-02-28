@@ -46,10 +46,11 @@ export default {
 
 		/**
 		 * @param {string} collectionHome
-		 * @param {string[]} extraProps - Extra properties to add to the DAV request.
+		 * @param {string[]} [extraProps] - Extra properties to add to the DAV request.
+		 * @param {import('webdav').WebDAVClient} [client] - The DAV client to use.
 		 * @return {Promise<import('../services/collectionFetcher.js').Collection[]>}
 		 */
-		async fetchCollections(collectionHome, extraProps = []) {
+		async fetchCollections(collectionHome, extraProps, client) {
 			if (this.loadingCollections) {
 				return []
 			}
@@ -58,7 +59,7 @@ export default {
 				this.loadingCollections = true
 				this.errorFetchingCollections = null
 
-				const collections = await fetchCollections(collectionHome, { signal: this.abortController.signal }, extraProps)
+				const collections = await fetchCollections(collectionHome, { signal: this.abortController.signal }, extraProps, client)
 
 				this.addCollections({ collections })
 
