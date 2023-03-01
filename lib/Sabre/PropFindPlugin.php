@@ -45,7 +45,7 @@ class PropFindPlugin extends ServerPlugin {
 	public const FILE_NAME_PROPERTYNAME = '{http://nextcloud.org/ns}file-name';
 	public const FAVORITE_PROPERTYNAME = '{http://owncloud.org/ns}favorite';
 	public const DATE_RANGE_PROPERTYNAME = '{http://nextcloud.org/ns}dateRange';
-	public const LOCATION_PROPERTYNAME = '{http://nextcloud.org/ns}place';
+	public const LOCATION_PROPERTYNAME = '{http://nextcloud.org/ns}location';
 	public const LAST_PHOTO_PROPERTYNAME = '{http://nextcloud.org/ns}last-photo';
 	public const NBITEMS_PROPERTYNAME = '{http://nextcloud.org/ns}nbItems';
 	public const COLLABORATORS_PROPERTYNAME = '{http://nextcloud.org/ns}collaborators';
@@ -167,8 +167,8 @@ class PropFindPlugin extends ServerPlugin {
 	public function handleUpdateProperties($path, PropPatch $propPatch): void {
 		$node = $this->tree->getNodeForPath($path);
 		if ($node instanceof AlbumRoot) {
-			$propPatch->handle(self::LOCATION_PROPERTYNAME, function ($place) use ($node) {
-				$this->albumMapper->setLocation($node->getAlbum()->getAlbum()->getId(), $place);
+			$propPatch->handle(self::LOCATION_PROPERTYNAME, function ($location) use ($node) {
+				$this->albumMapper->setLocation($node->getAlbum()->getAlbum()->getId(), $location);
 				return true;
 			});
 			$propPatch->handle(self::COLLABORATORS_PROPERTYNAME, function ($collaborators) use ($node) {
