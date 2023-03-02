@@ -9,7 +9,7 @@ services:
 
         environment:
             CYPRESS_baseUrl: "http://127.0.0.1:8082/index.php"
-            BRANCH: "${BRANCH:-master}"
+            BRANCH: "${BRANCH:-stable25}"
 
         volumes:
             # Using fallback to make sure this script doesn't mess

@@ -47,13 +47,13 @@ Cypress.Commands.add('logout', () => {
 
 			return cy.get("body")
 				.then($body => {
-					const $settingsButton = $body.find('#settings #expand')
+					const $settingsButton = $body.find('.user-menu .header-menu__trigger')
 					if ($settingsButton.length === 0) {
 						cy.log("Not logged in.")
 						return
 					}
 
-					$settingsButton.click()
+					cy.get('.user-menu .header-menu__trigger').click()
 					cy.contains('Log out').click()
 				})
 		})
