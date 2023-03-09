@@ -120,7 +120,7 @@ class PropFindPlugin extends ServerPlugin {
 						$sizeMetadata = $this->metadataManager->fetchMetadataFor('size', [$node->getFile()->getFileId()])[$node->getFile()->getFileId()];
 					}
 
-					return json_encode((object)$sizeMetadata->getMetadata());
+					return $sizeMetadata->getValue();
 				});
 			}
 		}
