@@ -178,6 +178,8 @@ class PlaceMapper {
 		} catch (\Exception $ex) {
 			if ($ex->getPrevious() instanceof UniqueConstraintViolationException) {
 				$this->updatePlaceForFile($place, $fileId);
+			} else {
+				throw $ex;
 			}
 		}
 	}
