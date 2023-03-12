@@ -26,6 +26,7 @@
     "_%n item_::_%n photos and videos_" : ["Ett objekt","%n bilder och videor"],
     "_Share with %n user_::_Share with %n users_" : ["Dela med en användare","Dela med %n användare"],
     "Add people or groups who can edit your album" : "Lägg till personer eller grupper som kan redigera ditt album",
+    "Search for collaborators" : "Sök efter medarbetare",
     "Search people or groups" : "Sök personer eller grupper",
     "Copy the public link" : "Kopiera den offentliga länken",
     "Public link copied!" : "Offentlig länk kopierad!",
