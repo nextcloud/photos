@@ -55,6 +55,7 @@
 		<div v-else class="grid-container">
 			<VirtualGrid ref="virtualgrid"
 				:items="contentList"
+				:scrollElement="appContent"
 				:get-column-count="() => gridConfig.count"
 				:get-grid-gap="() => gridConfig.gap" />
 		</div>
@@ -113,6 +114,8 @@ export default {
 
 			initializing: true,
 			loading: false,
+
+			appContent: document.getElementById('app-content-vue'),
 		}
 	},
 
