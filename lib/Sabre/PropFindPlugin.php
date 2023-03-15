@@ -30,6 +30,7 @@ use OCA\Photos\Sabre\Album\AlbumPhoto;
 use OCA\Photos\Sabre\Album\AlbumRoot;
 use OCA\Photos\Sabre\Place\PlacePhoto;
 use OCA\Photos\Sabre\Place\PlaceRoot;
+use OCP\Files\DavUtil;
 use OCP\IConfig;
 use OCP\IPreview;
 use OCP\Files\NotFoundException;
@@ -49,6 +50,7 @@ class PropFindPlugin extends ServerPlugin {
 	public const LAST_PHOTO_PROPERTYNAME = '{http://nextcloud.org/ns}last-photo';
 	public const NBITEMS_PROPERTYNAME = '{http://nextcloud.org/ns}nbItems';
 	public const COLLABORATORS_PROPERTYNAME = '{http://nextcloud.org/ns}collaborators';
+	public const PERMISSIONS_PROPERTYNAME = '{http://owncloud.org/ns}permissions';
 
 	private IConfig $config;
 	private IMetadataManager $metadataManager;
@@ -107,6 +109,8 @@ class PropFindPlugin extends ServerPlugin {
 			$propFind->handle(self::FILE_NAME_PROPERTYNAME, fn () => $node->getFile()->getName());
 			$propFind->handle(self::FAVORITE_PROPERTYNAME, fn () => $node->isFavorite() ? 1 : 0);
 			$propFind->handle(FilesPlugin::HAS_PREVIEW_PROPERTYNAME, fn () => json_encode($this->previewManager->isAvailable($fileInfo)));
+			// Remove G permission as it does not make sense in the context of photos.
+			$propFind->handle(FilesPlugin::PERMISSIONS_PROPERTYNAME, fn () => str_replace('G', '', DavUtil::getDavPermissions($node->getFileInfo())));
 
 			if ($this->metadataEnabled) {
 				$propFind->handle(FilesPlugin::FILE_METADATA_SIZE, function () use ($node) {
