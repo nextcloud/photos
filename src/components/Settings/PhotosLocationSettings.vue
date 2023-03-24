@@ -33,9 +33,9 @@
 			type="text"
 			@input="debounceUpdatePhotosFolder(photosLocation)"
 			@change="debounceUpdatePhotosFolder(photosLocation)"
-			@click="selectPhotosFolder"
-			@focus.once="selectPhotosFolder"
-			@keyboard.enter="selectPhotosFolder">
+			@click="debounceSelectPhotosFolder"
+			@focus.once="debounceSelectPhotosFolder"
+			@keyboard.enter="debounceSelectPhotosFolder">
 	</div>
 </template>
 
@@ -54,6 +54,10 @@ export default {
 	],
 
 	methods: {
+		debounceSelectPhotosFolder: debounce(function() {
+			this.selectPhotosFolder()
+		}),
+
 		selectPhotosFolder() {
 			const picker = getFilePickerBuilder(t('photos', 'Select the default location for your media'))
 				.setMultiSelect(false)
