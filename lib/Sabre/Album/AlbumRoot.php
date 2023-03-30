@@ -156,13 +156,18 @@ class AlbumRoot implements ICollection, ICopyTarget {
 	}
 
 	public function copyInto($targetName, $sourcePath, INode $sourceNode): bool {
-		if ($sourceNode instanceof File) {
-			$sourceId = $sourceNode->getId();
-			$ownerUID = $sourceNode->getFileInfo()->getOwner()->getUID();
-			return $this->addFile($sourceId, $ownerUID);
+		if (!$sourceNode instanceof File) {
+			throw new Forbidden("The source is not a file");
 		}
+
+		$sourceId = $sourceNode->getId();
+		$ownerUID = $sourceNode->getFileInfo()->getOwner()->getUID();
 		$uid = $this->userId;
-		throw new \Exception("Can't add file to album, only files from $uid can be added");
+		if ($ownerUID !== $uid) {
+			throw new Forbidden("Can't add file to album, only files from $uid can be added");
+		}
+
+		return $this->addFile($sourceId, $ownerUID);
 	}
 
 	protected function addFile(int $sourceId, string $ownerUID): bool {
