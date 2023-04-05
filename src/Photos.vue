@@ -79,7 +79,7 @@
 				</NcAppNavigationItem>
 			</template>
 		</NcAppNavigation>
-		<NcAppContent>
+		<NcAppContent :page-heading="pageHeading">
 			<router-view />
 
 			<!-- svg img loading placeholder (linked to the File component) -->
@@ -167,6 +167,12 @@ export default {
 
 			openedSettings: false,
 		}
+	},
+
+	computed: {
+		pageHeading() {
+			return this.$route.meta.rootTitle?.(this.$route)
+		},
 	},
 
 	async beforeMount() {
