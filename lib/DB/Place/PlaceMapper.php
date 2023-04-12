@@ -33,7 +33,7 @@ use OCP\Files\NotFoundException;
 use OCP\IDBConnection;
 
 class PlaceMapper {
-	public const METADATA_TYPE = 'photos_place';
+	public const METADATA_GROUP = 'photos_place';
 
 	public function __construct(
 		private IDBConnection $connection,
@@ -53,16 +53,16 @@ class PlaceMapper {
 
 		$qb = $this->connection->getQueryBuilder();
 
-		$rows = $qb->selectDistinct('meta.metadata')
+		$rows = $qb->selectDistinct('meta.value')
 			->from('file_metadata', 'meta')
 			->join('meta', 'filecache', 'file', $qb->expr()->eq('file.fileid', 'meta.id', IQueryBuilder::PARAM_INT))
 			->where($qb->expr()->eq('file.storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('file.mimepart', $qb->createNamedParameter($mimepart, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq('meta.group_name', $qb->createNamedParameter(self::METADATA_TYPE)))
+			->andWhere($qb->expr()->eq('meta.group_name', $qb->createNamedParameter(self::METADATA_GROUP)))
 			->executeQuery()
 			->fetchAll();
 
-		return array_map(fn ($row) => new PlaceInfo($userId, $row['metadata']), $rows);
+		return array_map(fn ($row) => new PlaceInfo($userId, $row['value']), $rows);
 	}
 
 	/** @return PlaceInfo */
@@ -76,13 +76,13 @@ class PlaceMapper {
 
 		$qb = $this->connection->getQueryBuilder();
 
-		$rows = $qb->selectDistinct('meta.metadata')
+		$rows = $qb->selectDistinct('meta.value')
 			->from('file_metadata', 'meta')
 			->join('meta', 'filecache', 'file', $qb->expr()->eq('file.fileid', 'meta.id', IQueryBuilder::PARAM_INT))
 			->where($qb->expr()->eq('file.storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('file.mimepart', $qb->createNamedParameter($mimepart, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq('meta.group_name', $qb->createNamedParameter(self::METADATA_TYPE)))
-			->andWhere($qb->expr()->eq('meta.metadata', $qb->createNamedParameter($place)))
+			->andWhere($qb->expr()->eq('meta.group_name', $qb->createNamedParameter(self::METADATA_GROUP)))
+			->andWhere($qb->expr()->eq('meta.value', $qb->createNamedParameter($place)))
 			->executeQuery()
 			->fetchAll();
 
@@ -90,7 +90,7 @@ class PlaceMapper {
 			throw new NotFoundException();
 		}
 
-		return new PlaceInfo($userId, $rows[0]['metadata']);
+		return new PlaceInfo($userId, $rows[0]['value']);
 	}
 
 	/** @return PlaceFile[] */
@@ -104,13 +104,13 @@ class PlaceMapper {
 
 		$qb = $this->connection->getQueryBuilder();
 
-		$rows = $qb->select('file.fileid', 'file.name', 'file.mimetype', 'file.size', 'file.mtime', 'file.etag', 'meta.metadata')
+		$rows = $qb->select('file.fileid', 'file.name', 'file.mimetype', 'file.size', 'file.mtime', 'file.etag', 'meta.value')
 			->from('file_metadata', 'meta')
 			->join('meta', 'filecache', 'file', $qb->expr()->eq('file.fileid', 'meta.id', IQueryBuilder::PARAM_INT))
 			->where($qb->expr()->eq('file.storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('file.mimepart', $qb->createNamedParameter($mimepart, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq('meta.group_name', $qb->createNamedParameter(self::METADATA_TYPE)))
-			->andWhere($qb->expr()->eq('meta.metadata', $qb->createNamedParameter($place)))
+			->andWhere($qb->expr()->eq('meta.group_name', $qb->createNamedParameter(self::METADATA_GROUP)))
+			->andWhere($qb->expr()->eq('meta.value', $qb->createNamedParameter($place)))
 			->executeQuery()
 			->fetchAll();
 
@@ -122,7 +122,7 @@ class PlaceMapper {
 				(int)$row['size'],
 				(int)$row['mtime'],
 				$row['etag'],
-				$row['metadata']
+				$row['value']
 			),
 			$rows,
 		);
@@ -138,15 +138,15 @@ class PlaceMapper {
 
 		$qb = $this->connection->getQueryBuilder();
 
-		$rows = $qb->select('file.fileid', 'file.name', 'file.mimetype', 'file.size', 'file.mtime', 'file.etag', 'meta.metadata')
+		$rows = $qb->select('file.fileid', 'file.name', 'file.mimetype', 'file.size', 'file.mtime', 'file.etag', 'meta.value')
 			->from('file_metadata', 'meta')
 			->join('meta', 'filecache', 'file', $qb->expr()->eq('file.fileid', 'meta.id', IQueryBuilder::PARAM_INT))
 			->where($qb->expr()->eq('file.storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('file.mimepart', $qb->createNamedParameter($mimepart, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('file.fileid', $qb->createNamedParameter($fileId)))
 			->andWhere($qb->expr()->eq('file.name', $qb->createNamedParameter($fileName)))
-			->andWhere($qb->expr()->eq('meta.group_name', $qb->createNamedParameter(self::METADATA_TYPE)))
-			->andWhere($qb->expr()->eq('meta.metadata', $qb->createNamedParameter($place)))
+			->andWhere($qb->expr()->eq('meta.group_name', $qb->createNamedParameter(self::METADATA_GROUP)))
+			->andWhere($qb->expr()->eq('meta.value', $qb->createNamedParameter($place)))
 			->executeQuery()
 			->fetchAll();
 
@@ -161,7 +161,7 @@ class PlaceMapper {
 			(int)$rows[0]['size'],
 			(int)$rows[0]['mtime'],
 			$rows[0]['etag'],
-			$rows[0]['metadata']
+			$rows[0]['value']
 		);
 	}
 
@@ -171,8 +171,8 @@ class PlaceMapper {
 			$query->insert('file_metadata')
 				->values([
 					"id" => $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT),
-					"group_name" => $query->createNamedParameter(self::METADATA_TYPE),
-					"metadata" => $query->createNamedParameter($place),
+					"group_name" => $query->createNamedParameter(self::METADATA_GROUP),
+					"value" => $query->createNamedParameter($place),
 				])
 				->executeStatement();
 		} catch (\Exception $ex) {
@@ -185,9 +185,9 @@ class PlaceMapper {
 	public function updatePlaceForFile(string $place, int $fileId): void {
 		$query = $this->connection->getQueryBuilder();
 		$query->update('file_metadata')
-			->set("metadata", $query->createNamedParameter($place))
+			->set("value", $query->createNamedParameter($place))
 			->where($query->expr()->eq('id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)))
-			->andWhere($query->expr()->eq('group_name', $query->createNamedParameter(self::METADATA_TYPE)))
+			->andWhere($query->expr()->eq('group_name', $query->createNamedParameter(self::METADATA_GROUP)))
 			->executeStatement();
 	}
 }
