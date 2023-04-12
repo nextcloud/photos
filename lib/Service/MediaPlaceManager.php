@@ -58,7 +58,7 @@ class MediaPlaceManager {
 
 	private function getPlaceForFile(int $fileId): ?string {
 		$gpsMetadata = $this->metadataManager->fetchMetadataFor('gps', [$fileId])[$fileId];
-		$metadata = $gpsMetadata->getMetadata();
+		$metadata = $gpsMetadata->getDecodedValue();
 
 		if (count($metadata) === 0) {
 			return null;
