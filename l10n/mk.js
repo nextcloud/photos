@@ -7,7 +7,7 @@ OC.L10N.register(
     "All media" : "Сите медиуми",
     "Videos" : "Видеа",
     "Albums" : "Албуми",
-    "Collaborative albums" : "Колаборативна албуми",
+    "Collaborative albums" : "Колаборативни албуми",
     "People" : "Луѓе",
     "Folders" : "Папки",
     "Favorites" : "Омилени",
