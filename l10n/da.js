@@ -46,6 +46,7 @@ OC.L10N.register(
     "Enable squared photos view" : "Aktiver kvadratisk fotovisning",
     "Default Photos upload and Albums location" : "Standard upload af fotos og albumplacering",
     "Select the default location for your media" : "Vælg standardplaceringen for dine medier",
+    "Invalid location selected" : "Ugyldig placering er valgt",
     "View" : "Vis",
     "Favorite" : "Favorit",
     "Remove from favorites" : "Fjern fra favoritter",
