@@ -58,11 +58,11 @@
 								<Download slot="icon" />
 							</ActionDownload> -->
 
-							<NcActionButton :close-after-click="true"
+							<!-- <NcActionButton :close-after-click="true"
 								@click="handleRemoveFilesFromAlbum(selectedFileIds)">
 								{{ t('photos', 'Remove selection from album') }}
 								<Close slot="icon" />
-							</NcActionButton>
+							</NcActionButton> -->
 						</template>
 					</NcActions>
 				</template>
@@ -93,11 +93,10 @@ import { createClient, getPatcher } from 'webdav'
 import MapMarker from 'vue-material-design-icons/MapMarker'
 import Plus from 'vue-material-design-icons/Plus'
 import ImagePlus from 'vue-material-design-icons/ImagePlus'
-import Close from 'vue-material-design-icons/Close'
 // import Download from 'vue-material-design-icons/Download'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple'
 
-import { NcActions, NcActionButton, NcButton, NcEmptyContent, /** NcActionSeparator, */ isMobile } from '@nextcloud/vue'
+import { NcActions, NcButton, NcEmptyContent, /** NcActionSeparator, */ isMobile } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
 import axios from '@nextcloud/axios'
 import { generateUrl, generateRemoteUrl } from '@nextcloud/router'
@@ -125,13 +124,11 @@ export default {
 	components: {
 		MapMarker,
 		Plus,
-		Close,
 		// Download,
 		// DownloadMultiple,
 		ImagePlus,
 		NcEmptyContent,
 		NcActions,
-		NcActionButton,
 		// NcActionSeparator,
 		NcButton,
 		CollectionContent,
