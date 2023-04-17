@@ -55,7 +55,7 @@
 		<div v-else class="grid-container">
 			<VirtualGrid ref="virtualgrid"
 				:items="contentList"
-				:scrollElement="appContent"
+				:scroll-element="appContent"
 				:get-column-count="() => gridConfig.count"
 				:get-grid-gap="() => gridConfig.gap" />
 		</div>
