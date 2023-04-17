@@ -227,11 +227,11 @@ export default {
 	},
 
 	mounted() {
-		subscribe('files:file:updated', this.handleFileUpdated)
+		subscribe('files:node:updated', this.handleFileUpdated)
 	},
 
 	destroyed() {
-		unsubscribe('files:file:updated', this.handleFileUpdated)
+		unsubscribe('files:node:updated', this.handleFileUpdated)
 	},
 
 	methods: {
