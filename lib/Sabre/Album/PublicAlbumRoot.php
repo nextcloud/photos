@@ -23,7 +23,9 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Sabre\Album;
 
+use OCA\Photos\Album\AlbumFile;
 use Sabre\DAV\Exception\Forbidden;
+use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\INode;
 
 class PublicAlbumRoot extends AlbumRoot {
@@ -52,8 +54,12 @@ class PublicAlbumRoot extends AlbumRoot {
 		return [$photosLocation, $userFolder];
 	}
 
-	protected function addFile(int $sourceId, string $ownerUID): bool {
+	public function createFile($name, $data = null) {
 		throw new Forbidden('Not allowed to create a file in a public album');
+	}
+
+	protected function addFile(int $sourceId, string $ownerUID): bool {
+		throw new Forbidden('Not allowed to add a file to a public album');
 	}
 
 	// Do not reveal collaborators for public albums.
@@ -64,5 +70,22 @@ class PublicAlbumRoot extends AlbumRoot {
 
 	public function setCollaborators($collaborators): array {
 		throw new Forbidden('Not allowed to collaborators a public album');
+	}
+
+	/** @return never */
+	public function getChildren(): array {
+		return array_map(function (AlbumFile $file) {
+			return new PublicAlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId));
+		}, $this->album->getFiles());
+	}
+
+	public function getChild($name): PublicAlbumPhoto {
+		foreach ($this->album->getFiles() as $file) {
+			if ($file->getFileId() . "-" . $file->getName() === $name) {
+				return new PublicAlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId));
+			}
+		}
+
+		throw new NotFound("$name not found");
 	}
 }
