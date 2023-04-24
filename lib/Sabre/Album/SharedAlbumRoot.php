@@ -63,6 +63,6 @@ class SharedAlbumRoot extends AlbumRoot {
 	}
 
 	public function setCollaborators($collaborators): array {
-		throw new Forbidden('Not allowed to collaborators a public album');
+		throw new Forbidden('Not allowed to collaborators to a public album');
 	}
 }
