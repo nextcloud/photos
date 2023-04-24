@@ -2,6 +2,7 @@
  - @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
  -
  - @author Louis Chemineau <louis@chmn.me>
+ - @author Richard Steinmetz <richard@steinmetz.cloud>
  -
  - @license AGPL-3.0-or-later
  -
@@ -72,8 +73,9 @@
 			<NcEmptyContent slot="empty-content"
 				:title="t('photos', 'This album does not have any photos or videos yet!')"
 				class="album__empty">
-				<ImagePlus slot="icon" />
+				<ImageOff slot="icon" />
 
+				<!-- Public upload is not implemented yet
 				<NcButton slot="action"
 					type="primary"
 					:aria-label="t('photos', 'Add photos to this album')"
@@ -81,6 +83,7 @@
 					<Plus slot="icon" />
 					{{ t('photos', "Add") }}
 				</NcButton>
+				-->
 			</NcEmptyContent>
 		</CollectionContent>
 	</div>
@@ -91,12 +94,13 @@ import { mapActions, mapGetters } from 'vuex'
 import { createClient, getPatcher } from 'webdav'
 
 import MapMarker from 'vue-material-design-icons/MapMarker'
-import Plus from 'vue-material-design-icons/Plus'
-import ImagePlus from 'vue-material-design-icons/ImagePlus'
+// import Plus from 'vue-material-design-icons/Plus'
+// import ImagePlus from 'vue-material-design-icons/ImagePlus'
+import ImageOff from 'vue-material-design-icons/ImageOff'
 // import Download from 'vue-material-design-icons/Download'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple'
 
-import { NcActions, NcButton, NcEmptyContent, /** NcActionSeparator, */ isMobile } from '@nextcloud/vue'
+import { NcActions, /** NcButton, */ NcEmptyContent, /** NcActionSeparator, */ isMobile } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
 import axios from '@nextcloud/axios'
 import { generateUrl, generateRemoteUrl } from '@nextcloud/router'
@@ -123,14 +127,15 @@ export default {
 	name: 'PublicAlbumContent',
 	components: {
 		MapMarker,
-		Plus,
+		// Plus,
 		// Download,
 		// DownloadMultiple,
-		ImagePlus,
+		// ImagePlus,
+		ImageOff,
 		NcEmptyContent,
 		NcActions,
 		// NcActionSeparator,
-		NcButton,
+		// NcButton,
 		CollectionContent,
 		// ActionDownload,
 		HeaderNavigation,
