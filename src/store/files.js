@@ -50,9 +50,13 @@ const mutations = {
 			}
 
 			if (file.fileid >= 0) {
-				file.fileMetadataSizeParsed = JSON.parse(file.fileMetadataSize?.replace(/&quot;/g, '"') ?? '{}')
-				file.fileMetadataSizeParsed.width = file.fileMetadataSizeParsed?.width ?? 256
-				file.fileMetadataSizeParsed.height = file.fileMetadataSizeParsed?.height ?? 256
+				if (file.fileMetadataSize.length > 1) {
+					file.fileMetadataSizeParsed = JSON.parse(file.fileMetadataSize?.replace(/&quot;/g, '"') ?? '{}')
+					file.fileMetadataSizeParsed.width = file.fileMetadataSizeParsed?.width ?? 256
+					file.fileMetadataSizeParsed.height = file.fileMetadataSizeParsed?.height ?? 256
+				} else {
+					file.fileMetadataSizeParsed = { width: 256, height: 256 }
+				}
 			}
 
 			// Make the fileId a string once and for all.
