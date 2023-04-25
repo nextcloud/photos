@@ -34,21 +34,32 @@
 				:rows="rows"
 				:scroll-to-key="scrollToSection"
 				@need-content="needContent">
-				<ul slot-scope="{renderedRows}">
-					<div v-for="row of renderedRows"
-						:key="row.key"
-						class="tiled-row"
-						:class="{'files-list-viewer__section-header': row.items[0].sectionHeader}"
-						:style="{height: `${row.height}px`}">
-						<li v-for="item of row.items"
-							:key="item.id"
-							:style="{ width: item.ratio ? `${row.height * item.ratio}px` : '100%', height: `${row.height}px`}">
-							<!-- Placeholder when initial loading -->
-							<div v-if="showPlaceholders" class="files-list-viewer__placeholder" />
-							<!-- Real file. -->
-							<slot v-else :file="item" :visibility="row.visibility" />
+				<ul slot-scope="{renderedRows}" class="tiled-row">
+					<template v-for="row of renderedRows">
+						<li v-if="row.items[0].sectionHeader"
+							:key="row.key"
+							:style="{ width: row.items[0].ratio ? `${row.height * row.items[0].ratio}px` : '100%', height: `${row.height}px`}"
+							:class="{'files-list-viewer__section-header': row.items[0].sectionHeader}">
+							<template v-for="item of row.items">
+								<div :key="item.id">
+									<!-- Placeholder when initial loading -->
+									<div v-if="showPlaceholders" class="files-list-viewer__placeholder" />
+									<!-- Real file. -->
+									<slot v-else :file="item" :visibility="row.visibility" />
+								</div>
+							</template>
 						</li>
-					</div>
+						<template v-else>
+							<li v-for="item in row.items"
+								:key="item.id"
+								:style="{ width: item.ratio ? `${row.height * item.ratio}px` : '100%', height: `${row.height}px`}">
+								<!-- Placeholder when initial loading -->
+								<div v-if="showPlaceholders" class="files-list-viewer__placeholder" />
+								<!-- Real file. -->
+								<slot v-else :file="item" :visibility="row.visibility" />
+							</li>
+						</template>
+					</template>
 				</ul>
 				<NcLoadingIcon v-if="loading && !showPlaceholders" slot="loader" class="files-list-viewer__loader" />
 			</VirtualScrolling>
@@ -282,6 +293,7 @@ export default {
 
 		.tiled-row {
 			display: flex;
+			flex-wrap: wrap;
 		}
 	}
 
