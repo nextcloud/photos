@@ -2,7 +2,6 @@
 	<NcAppSettingsDialog :open="open"
 		:show-navigation="true"
 		:title="t('photos', 'Photos settings')"
-		:additional-trap-elements="[filePicker]"
 		@update:open="onClose">
 		<NcAppSettingsSection id="layout-settings" :title="t('photos', 'View')">
 			<CroppedLayoutSettings />
@@ -35,34 +34,6 @@ export default {
 			type: Boolean,
 			default: false,
 		},
-	},
-
-	data() {
-		return {
-			filePicker: null,
-			observer: null,
-		}
-	},
-
-	mounted() {
-		// get reference to the file picker dialog if it is opened
-		 this.observer = new MutationObserver((mutationList, observer) => {
-			mutationList.forEach(mutation => {
-				mutation.addedNodes.forEach(node => {
-					if (node?.classList?.contains('oc-dialog')) {
-						this.filePicker = node
-					}
-				})
-			})
-		})
-		this.observer.observe(document.body, {
-			subtree: true,
-			childList: true,
-		})
-	},
-
-	unmounted() {
-		this.observer.disconnect()
 	},
 
 	methods: {
