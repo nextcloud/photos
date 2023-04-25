@@ -7,7 +7,7 @@ OC.L10N.register(
     "All media" : "Tüm ortamlar",
     "Videos" : "Görüntüler",
     "Albums" : "Albümler",
-    "Collaborative albums" : "İşbirliği albümleri",
+    "Collaborative albums" : "İş birlikli albümler",
     "People" : "Kişiler",
     "Folders" : "Klasörler",
     "Favorites" : "Sık kullanılanlar",
