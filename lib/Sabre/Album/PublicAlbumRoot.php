@@ -23,6 +23,7 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Sabre\Album;
 
+include_once("PublicAlbumPhoto.php");
 use OCA\Photos\Album\AlbumFile;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;
