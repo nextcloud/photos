@@ -162,7 +162,9 @@ export default {
 					await this.$store.dispatch('fetchAllTags', { signal: this.abortController.signal })
 				}
 
-				await this.$store.dispatch('fetchTagFiles', { id: this.tagId, signal: this.abortController.signal })
+				if (this.tag && !this.tag.files) {
+					await this.$store.dispatch('fetchTagFiles', { id: this.tagId, signal: this.abortController.signal })
+				}
 			} catch (error) {
 				console.error(error)
 				this.error = true

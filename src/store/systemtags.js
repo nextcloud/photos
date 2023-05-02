@@ -44,7 +44,6 @@ const mutations = {
 			// store tag and its index
 			list.forEach(tag => {
 				Vue.set(state.tags, tag.id, tag)
-				Vue.set(state.tags[tag.id], 'files', [])
 				Vue.set(state.names, tag.displayName, tag.id)
 			})
 		}
@@ -79,7 +78,7 @@ const mutations = {
 		}
 
 		// sort by last modified
-		const list = files.sort((a, b) => sortCompare(a, b, 'lastmod'))
+		const list = files.sort((a, b) => sortCompare(a, b, 'filesAssigned'))
 
 		// overwrite list
 		console.info(id, list)
