@@ -90,8 +90,8 @@ export default {
 
 		popularTags() {
 			return Object.keys(this.tagsNames)
-				.filter(tagName => (this.tags[this.tagsNames[tagName]].files.length || this.tagCounts[tagName]) > 50)
-				.sort((a, b) => (this.tags[this.tagsNames[b]].files.length || this.tagCounts[b]) - (this.tags[this.tagsNames[a]].files.length || this.tagCounts[a]))
+				.filter(tagName => (this.tags[this.tagsNames[tagName]].filesAssigned) > 50)
+				.sort((a, b) => (this.tags[this.tagsNames[b]].filesAssigned || this.tagCounts[b]) - (this.tags[this.tagsNames[a]].filesAssigned || this.tagCounts[a]))
 				.slice(0, 9)
 				.map(tagName => this.tags[this.tagsNames[tagName]])
 		},
