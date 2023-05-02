@@ -128,4 +128,28 @@ function genFileInfo(obj) {
 	return fileInfo
 }
 
-export { encodeFilePath, extractFilePaths, sortCompare, genFileInfo }
+/**
+ * @param {object} obj - object to flatten and format.
+ */
+function extractTagInfo(obj) {
+	const tagInfo = Object.entries(obj).reduce((tagInfo, [key, data]) => {
+		// flatten object if any
+		if (!!data && typeof data === 'object' && !Array.isArray(data)) {
+			return { ...tagInfo, ...extractTagInfo(data) }
+		}
+
+		// format key and add it to the tagInfo
+		switch (data) {
+			case 'false':
+				return { ...tagInfo, [camelcase(key)]: false }
+			case 'true':
+				return { ...tagInfo, [camelcase(key)]: true }
+			default:
+				return { ...tagInfo, [camelcase(key)]: isNumber(data) ? Number(data) : data }
+		}
+	}, {})
+
+	return tagInfo
+}
+
+export { encodeFilePath, extractFilePaths, sortCompare, genFileInfo, extractTagInfo }
