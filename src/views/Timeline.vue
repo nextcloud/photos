@@ -146,6 +146,7 @@ import AlbumPicker from '../components/Albums/AlbumPicker.vue'
 import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import ActionDownload from '../components/Actions/ActionDownload.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import { translate } from '@nextcloud/l10n'
 
 export default {
 	name: 'Timeline',
@@ -267,6 +268,8 @@ export default {
 			this.fetchedFileIds = this.fetchedFileIds.filter(fileid => !fileIds.includes(fileid))
 			await this.deleteFiles(fileIds)
 		},
+
+		t: translate,
 	},
 }
 </script>

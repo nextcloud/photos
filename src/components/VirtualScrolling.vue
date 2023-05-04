@@ -72,7 +72,7 @@ export default {
 
 		renderDistance: {
 			type: Number,
-			default: 5,
+			default: 10,
 		},
 		bottomBufferRatio: {
 			type: Number,
