@@ -34,22 +34,22 @@
 				:rows="rows"
 				:scroll-to-key="scrollToSection"
 				@need-content="needContent">
-				<ul slot-scope="{renderedRows}">
+				<div slot-scope="{renderedRows}">
 					<div v-for="row of renderedRows"
 						:key="row.key"
 						class="tiled-row"
 						:class="{'files-list-viewer__section-header': row.items[0].sectionHeader}"
 						:style="{height: `${row.height}px`}">
-						<li v-for="item of row.items"
+						<div v-for="item of row.items"
 							:key="item.id"
 							:style="{ width: item.ratio ? `${row.height * item.ratio}px` : '100%', height: `${row.height}px`}">
 							<!-- Placeholder when initial loading -->
 							<div v-if="showPlaceholders" class="files-list-viewer__placeholder" />
 							<!-- Real file. -->
 							<slot v-else :file="item" :visibility="row.visibility" />
-						</li>
+						</div>
 					</div>
-				</ul>
+				</div>
 				<NcLoadingIcon v-if="loading && !showPlaceholders" slot="loader" class="files-list-viewer__loader" />
 			</VirtualScrolling>
 		</TiledLayout>
