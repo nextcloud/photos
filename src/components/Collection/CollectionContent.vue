@@ -49,7 +49,6 @@
 				:allow-selection="true"
 				:selected="selection[file.id] === true"
 				:distance="distance"
-				:semaphore="semaphore"
 				@click="openViewer"
 				@select-toggled="onFileSelectToggle" />
 		</FilesListViewer>
@@ -67,7 +66,6 @@ import FilesSelectionMixin from '../../mixins/FilesSelectionMixin.js'
 import FilesListViewer from '.././FilesListViewer.vue'
 import File from '.././File.vue'
 import FolderIllustration from '../../assets/Illustrations/folder.svg'
-import SemaphoreWithPriority from '../../utils/semaphoreWithPriority.js'
 
 export default {
 	name: 'CollectionContent',
@@ -104,11 +102,6 @@ export default {
 		error: {
 			type: [Error, Number],
 			default: null,
-		},
-
-		semaphore: {
-			type: SemaphoreWithPriority,
-			required: true,
 		},
 	},
 

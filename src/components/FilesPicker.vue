@@ -56,7 +56,6 @@
 						:allow-selection="true"
 						:selected="selection[file.id] === true"
 						:distance="distance"
-						:semaphore="semaphore"
 						@select-toggled="onFileSelectToggle" />
 				</template>
 			</FilesListViewer>

@@ -25,7 +25,6 @@
 			ref="collectionContent"
 			:collection="album"
 			:collection-file-ids="albumFileIds"
-			:semaphore="semaphore"
 			:loading="loadingAlbums || loadingFiles"
 			:error="errorFetchingAlbums || errorFetchingFiles">
 			<!-- Header -->
@@ -330,13 +329,11 @@ export default {
 				return []
 			}
 
-			const semaphoreSymbol = await this.semaphore.acquire(() => 0, 'fetchFiles')
 			const fetchSemaphoreSymbol = await this.fetchSemaphore.acquire()
 
 			try {
 				this.errorFetchingFiles = null
 				this.loadingFiles = true
-				this.semaphoreSymbol = semaphoreSymbol
 
 				const response = await client.getDirectoryContents(
 					`/photos/${getCurrentUser()?.uid}/albums/${this.albumName}`,
@@ -374,7 +371,6 @@ export default {
 				logger.error('[AlbumContent] Error fetching album files', { error })
 			} finally {
 				this.loadingFiles = false
-				this.semaphore.release(semaphoreSymbol)
 				this.fetchSemaphore.release(fetchSemaphoreSymbol)
 			}
 

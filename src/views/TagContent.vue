@@ -58,7 +58,6 @@
 				:allow-selection="true"
 				:selected="selection[file.id] === true"
 				:distance="distance"
-				:semaphore="semaphore"
 				@click="openViewer"
 				@select-toggled="onFileSelectToggle" />
 		</FilesListViewer>
@@ -74,7 +73,6 @@ import { NcEmptyContent, NcActions, NcActionButton, NcLoadingIcon, isMobile } fr
 import File from '../components/File.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 
-import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 
@@ -105,7 +103,6 @@ export default {
 		return {
 			error: null,
 			loading: false,
-			semaphore: new SemaphoreWithPriority(30),
 			appContent: document.getElementById('app-content-vue'),
 		}
 	},

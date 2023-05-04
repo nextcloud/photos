@@ -37,9 +37,7 @@ export default {
 			errorFetchingFiles: null,
 			loadingFiles: false,
 			doneFetchingFiles: false,
-			semaphore: new SemaphoreWithPriority(30),
 			fetchSemaphore: new SemaphoreWithPriority(1),
-			semaphoreSymbol: null,
 			fetchedFileIds: [],
 		}
 	},
@@ -62,13 +60,11 @@ export default {
 				return []
 			}
 
-			const semaphoreSymbol = await this.semaphore.acquire(() => 0, 'fetchFiles')
 			const fetchSemaphoreSymbol = await this.fetchSemaphore.acquire()
 
 			try {
 				this.errorFetchingFiles = null
 				this.loadingFiles = true
-				this.semaphoreSymbol = semaphoreSymbol
 
 				const numberOfImagesPerBatch = 200
 
@@ -114,7 +110,6 @@ export default {
 				console.error(error)
 			} finally {
 				this.loadingFiles = false
-				this.semaphore.release(semaphoreSymbol)
 				this.fetchSemaphore.release(fetchSemaphoreSymbol)
 			}
 
