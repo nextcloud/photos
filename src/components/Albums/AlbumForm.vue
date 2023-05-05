@@ -28,12 +28,15 @@
 				name="name"
 				:required="true"
 				autofocus="true"
-				:placeholder="t('photos', 'Name of the album')" />
+				:label="t('photos', 'Name of the album')"
+				:label-visible="true" />
 			<label>
-				<MapMarker /><NcTextField :value.sync="albumLocation"
+				<MapMarker />
+				<NcTextField :value.sync="albumLocation"
 					name="location"
 					type="text"
-					:placeholder="t('photos', 'Location of the album')" />
+					:label="t('photos', 'Location of the album')"
+					:label-visible="true" />
 			</label>
 		</div>
 		<div class="form-buttons">
@@ -267,8 +270,12 @@ export default {
 			display: flex;
 			margin-top: 16px;
 
-			:deep svg {
-				margin-right: 12px;
+			:deep {
+				.material-design-icon {
+					align-self: flex-end;
+					margin-right: 12px;
+					margin-bottom: 6px;
+				}
 			}
 		}
 	}
