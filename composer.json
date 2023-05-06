@@ -33,7 +33,7 @@
 		"nextcloud/ocp": "dev-master",
 		"phpunit/phpunit": "^9",
 		"sabre/dav": "^4.2.1",
-		"vimeo/psalm": "^4.22"
+		"vimeo/psalm": "^5.11"
 	},
 	"require": {
 		"hexogen/kdtree": "^0.2.5"
