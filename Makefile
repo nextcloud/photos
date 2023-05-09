@@ -1,7 +1,7 @@
 all: dev-setup lint build-js-production test
 
 # Dev env management
-dev-setup: clean clean-dev npm-init
+dev-setup: clean clean-dev npm-init composer-install
 
 npm-init:
 	npm ci
@@ -50,3 +50,6 @@ clean:
 clean-dev:
 	rm -rf node_modules
 
+# Install php deps
+composer-install:
+	composer install
