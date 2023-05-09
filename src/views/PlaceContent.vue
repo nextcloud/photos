@@ -24,7 +24,6 @@
 		<CollectionContent ref="collectionContent"
 			:collection="place"
 			:collection-file-ids="placeFileIds"
-			:semaphore="semaphore"
 			:loading="loadingCollection || loadingCollectionFiles"
 			:error="errorFetchingCollection || errorFetchingCollectionFiles">
 			<!-- Header -->

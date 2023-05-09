@@ -127,12 +127,11 @@
 			:container-element="appContent"
 			:file-ids="faceFileIds"
 			:loading="loadingFiles || loadingFaces">
-			<File slot-scope="{file, visibility}"
+			<File slot-scope="{file, distance}"
 				:file="files[file.id]"
 				:allow-selection="true"
 				:selected="selection[file.id] === true"
-				:visibility="visibility"
-				:semaphore="semaphore"
+				:distance="distance"
 				@click="openViewer"
 				@select-toggled="onFileSelectToggle" />
 		</FilesListViewer>

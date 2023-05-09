@@ -53,12 +53,11 @@
 			:file-ids="fileIds"
 			:base-height="isMobile ? 120 : 200"
 			:loading="loading">
-			<File slot-scope="{file, visibility}"
+			<File slot-scope="{file, distance}"
 				:file="files[file.id]"
 				:allow-selection="true"
 				:selected="selection[file.id] === true"
-				:visibility="visibility"
-				:semaphore="semaphore"
+				:distance="distance"
 				@click="openViewer"
 				@select-toggled="onFileSelectToggle" />
 		</FilesListViewer>
@@ -74,7 +73,6 @@ import { NcEmptyContent, NcActions, NcActionButton, NcLoadingIcon, isMobile } fr
 import File from '../components/File.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 
-import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 
@@ -105,7 +103,6 @@ export default {
 		return {
 			error: null,
 			loading: false,
-			semaphore: new SemaphoreWithPriority(30),
 			appContent: document.getElementById('app-content-vue'),
 		}
 	},

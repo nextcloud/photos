@@ -38,7 +38,7 @@
 		<HeaderNavigation key="navigation"
 			:loading="loading"
 			:path="path"
-			:title="folder.basename"
+			:title="folder.basename.toString()"
 			:root-title="rootTitle"
 			@refresh="onRefresh">
 			<UploadPicker :accept="allowedMimes"

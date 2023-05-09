@@ -46,7 +46,7 @@
 							<!-- Placeholder when initial loading -->
 							<div v-if="showPlaceholders" class="files-list-viewer__placeholder" />
 							<!-- Real file. -->
-							<slot v-else :file="item" :visibility="row.visibility" />
+							<slot v-else :file="item" :distance="row.distance" />
 						</li>
 					</div>
 				</ul>

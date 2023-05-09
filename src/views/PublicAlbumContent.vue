@@ -25,7 +25,6 @@
 		<CollectionContent ref="collectionContent"
 			:collection="album"
 			:collection-file-ids="albumFileIds"
-			:semaphore="semaphore"
 			:loading="loadingAlbum || loadingFiles"
 			:error="errorFetchingAlbum || errorFetchingFiles">
 			<!-- Header -->
@@ -247,13 +246,11 @@ export default {
 				return []
 			}
 
-			const semaphoreSymbol = await this.semaphore.acquire(() => 0, 'fetchFiles')
 			const fetchSemaphoreSymbol = await this.fetchSemaphore.acquire()
 
 			try {
 				this.errorFetchingFiles = null
 				this.loadingFiles = true
-				this.semaphoreSymbol = semaphoreSymbol
 
 				const fetchedFiles = await fetchAlbumContent(
 					`/photospublic/${this.token}`,
@@ -290,7 +287,6 @@ export default {
 				logger.error('[PublicAlbumContent] Error fetching album files', { error })
 			} finally {
 				this.loadingFiles = false
-				this.semaphore.release(semaphoreSymbol)
 				this.fetchSemaphore.release(fetchSemaphoreSymbol)
 			}
 

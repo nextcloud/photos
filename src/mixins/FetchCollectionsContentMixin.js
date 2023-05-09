@@ -34,9 +34,7 @@ export default {
 
 	data() {
 		return {
-			semaphore: new SemaphoreWithPriority(30),
 			fetchSemaphore: new SemaphoreWithPriority(1),
-			semaphoreSymbol: null,
 			loadingCollection: false,
 			loadingCollectionFiles: false,
 			errorFetchingCollection: null,
@@ -86,13 +84,11 @@ export default {
 				return []
 			}
 
-			const semaphoreSymbol = await this.semaphore.acquire(() => 0, 'fetchFiles')
 			const fetchSemaphoreSymbol = await this.fetchSemaphore.acquire()
 
 			try {
 				this.errorFetchingCollectionFiles = null
 				this.loadingCollectionFiles = true
-				this.semaphoreSymbol = semaphoreSymbol
 
 				const fetchedFiles = await fetchCollectionFiles(collectionFileName, { signal: this.abortController.signal })
 				const fileIds = fetchedFiles.map(file => file.fileid.toString())
@@ -116,7 +112,6 @@ export default {
 				logger.error('[PublicCollectionContent] Error fetching collection files', { error })
 			} finally {
 				this.loadingCollectionFiles = false
-				this.semaphore.release(semaphoreSymbol)
 				this.fetchSemaphore.release(fetchSemaphoreSymbol)
 			}
 

@@ -44,12 +44,11 @@
 			:file-ids="collectionFileIds"
 			:base-height="isMobile ? 120 : 200"
 			:loading="loading">
-			<File slot-scope="{file, visibility}"
+			<File slot-scope="{file, distance}"
 				:file="files[file.id]"
 				:allow-selection="true"
 				:selected="selection[file.id] === true"
-				:visibility="visibility"
-				:semaphore="semaphore"
+				:distance="distance"
 				@click="openViewer"
 				@select-toggled="onFileSelectToggle" />
 		</FilesListViewer>
@@ -67,7 +66,6 @@ import FilesSelectionMixin from '../../mixins/FilesSelectionMixin.js'
 import FilesListViewer from '.././FilesListViewer.vue'
 import File from '.././File.vue'
 import FolderIllustration from '../../assets/Illustrations/folder.svg'
-import SemaphoreWithPriority from '../../utils/semaphoreWithPriority.js'
 
 export default {
 	name: 'CollectionContent',
@@ -104,11 +102,6 @@ export default {
 		error: {
 			type: [Error, Number],
 			default: null,
-		},
-
-		semaphore: {
-			type: SemaphoreWithPriority,
-			required: true,
 		},
 	},
 

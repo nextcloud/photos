@@ -89,7 +89,7 @@
 			:base-height="isMobile ? 120 : 200"
 			:empty-message="t('photos', 'No photos or videos in here')"
 			@need-content="getContent">
-			<template slot-scope="{file, visibility}">
+			<template slot-scope="{file, distance}">
 				<h3 v-if="file.sectionHeader"
 					:id="`file-picker-section-header-${file.id}`"
 					class="section-header">
@@ -100,8 +100,7 @@
 					:file="files[file.id]"
 					:allow-selection="true"
 					:selected="selection[file.id] === true"
-					:visibility="visibility"
-					:semaphore="semaphore"
+					:distance="distance"
 					@click="openViewer"
 					@select-toggled="onFileSelectToggle" />
 			</template>
@@ -146,6 +145,7 @@ import AlbumPicker from '../components/Albums/AlbumPicker.vue'
 import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import ActionDownload from '../components/Actions/ActionDownload.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import { translate } from '@nextcloud/l10n'
 
 export default {
 	name: 'Timeline',
@@ -166,7 +166,6 @@ export default {
 		ActionFavorite,
 		ActionDownload,
 		HeaderNavigation,
-
 	},
 
 	filters: {
@@ -267,6 +266,8 @@ export default {
 			this.fetchedFileIds = this.fetchedFileIds.filter(fileid => !fileIds.includes(fileid))
 			await this.deleteFiles(fileIds)
 		},
+
+		t: translate,
 	},
 }
 </script>
