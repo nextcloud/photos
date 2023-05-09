@@ -40,6 +40,7 @@ OC.L10N.register(
     "_{years} year ago_::_{years} years ago_" : ["{years} χρόνο πριν","{years} χρόνια πριν"],
     "Enable squared photos view" : "Ενεργοποίηση προβολής τετραγωνικών φωτογραφιών",
     "Select the default location for your media" : "Επιλέξτε την προεπιλεγμένη τοποθεσία για τα πολυμέσα σας",
+    "Invalid location selected" : "Επιλέχθηκε μη έγκυρη τοποθεσία",
     "View" : "Προβολή",
     "Delete album" : "Διαγραφή άλμπουμ",
     "Download selected files" : "Λήψη επιλεγμένων αρχείων",
