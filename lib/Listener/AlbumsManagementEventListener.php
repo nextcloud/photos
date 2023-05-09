@@ -13,12 +13,18 @@ use OCP\Group\Events\GroupDeletedEvent;
 use OCP\Group\Events\UserRemovedEvent;
 use OCP\Share\Events\ShareDeletedEvent;
 use OCP\User\Events\UserDeletedEvent;
+use Psr\Log\LoggerInterface;
 
 class AlbumsManagementEventListener implements IEventListener {
 	private AlbumMapper $albumMapper;
+	private LoggerInterface $logger;
 
-	public function __construct(AlbumMapper $albumMapper) {
+	public function __construct(
+		AlbumMapper $albumMapper,
+		LoggerInterface $logger,
+	) {
 		$this->albumMapper = $albumMapper;
+		$this->logger = $logger;
 	}
 
 	public function handle(Event $event): void {
@@ -33,27 +39,22 @@ class AlbumsManagementEventListener implements IEventListener {
 			} catch(\Throwable $ex) {
 				// If an error occur, return silently as we don't want to block the rest of the deletion process.
 				// It happened already during migrations when the albums table is not yet created, but a folder is deleted by the theming app.
+				$this->logger->error($ex->getMessage(), ['exception' => $ex]);
 			}
-		}
-
-		if ($event instanceof UserDeletedEvent) {
+		} elseif ($event instanceof UserDeletedEvent) {
 			// Delete all user's albums.
 			$albums = $this->albumMapper->getForUser($event->getUser()->getUID());
 			foreach ($albums as $album) {
 				$this->albumMapper->delete($album->getId());
 			}
-		}
-
-		if ($event instanceof ShareDeletedEvent) {
+		} elseif ($event instanceof ShareDeletedEvent) {
 			$receiverId = $event->getShare()->getSharedWith();
 			$this->forEachSubNode(
 				$event->getShare()->getNode(),
 				// Remove node from any album when the owner is $receiverId.
 				fn ($node) => $this->albumMapper->removeFileWithOwner($node->getId(), $receiverId),
 			);
-		}
-
-		if ($event instanceof UserRemovedEvent) {
+		} elseif ($event instanceof UserRemovedEvent) {
 			// Get all shared albums for this group:
 			$albums_group = $this->albumMapper->getSharedAlbumsForCollaborator($event->getGroup()->getGID(), AlbumMapper::TYPE_GROUP);
 			// Get all albums shared with this specific user:
@@ -65,9 +66,7 @@ class AlbumsManagementEventListener implements IEventListener {
 			foreach ($albums as $album) {
 				$this->albumMapper->removeFilesForUser($album->getId(), $event->getUser()->getUID());
 			}
-		}
-
-		if ($event instanceof GroupDeletedEvent) {
+		} elseif ($event instanceof GroupDeletedEvent) {
 			// Get all shared albums for this group:
 			$albums_group = $this->albumMapper->getSharedAlbumsForCollaborator($event->getGroup()->getGID(), AlbumMapper::TYPE_GROUP);
 
@@ -98,9 +97,7 @@ class AlbumsManagementEventListener implements IEventListener {
 			foreach ($node->getDirectoryListing() as $subNode) {
 				$this->forEachSubNode($subNode, $callback);
 			}
-		}
-
-		if ($node instanceof File) {
+		} elseif ($node instanceof File) {
 			if (!str_starts_with($node->getMimeType(), 'image')) {
 				return;
 			}
