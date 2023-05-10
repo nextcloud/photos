@@ -19,8 +19,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+import { generateRemoteUrl } from '@nextcloud/router'
 import camelcase from 'camelcase'
-import { isNumber } from './numberUtils'
+import { rootPath } from '../services/DavClient.js'
+import { isNumber } from './numberUtils.js'
 
 /**
  * Get an url encoded path
@@ -97,28 +99,32 @@ const sortCompare = function(fileInfo1, fileInfo2, key, asc = true) {
 		: -fileInfo1[key]?.toString()?.localeCompare(fileInfo2[key].toString(), OC.getLanguage()) || -1
 }
 
-const genFileInfo = function(obj) {
-	const fileInfo = {}
-
-	Object.keys(obj).forEach(key => {
-		const data = obj[key]
-
+/**
+ * @param {object} obj - object to flatten and format.
+ */
+function genFileInfo(obj) {
+	const fileInfo = Object.entries(obj).reduce((fileInfo, [key, data]) => {
 		// flatten object if any
-		if (!!data && typeof data === 'object') {
-			Object.assign(fileInfo, genFileInfo(data))
-		} else {
-			// format key and add it to the fileInfo
-			if (data === 'false') {
-				fileInfo[camelcase(key)] = false
-			} else if (data === 'true') {
-				fileInfo[camelcase(key)] = true
-			} else {
-				fileInfo[camelcase(key)] = isNumber(data)
-					? Number(data)
-					: data
-			}
+		if (!!data && typeof data === 'object' && !Array.isArray(data)) {
+			return { ...fileInfo, ...genFileInfo(data) }
 		}
-	})
+
+		// format key and add it to the fileInfo
+		switch (data) {
+		case 'false':
+			return { ...fileInfo, [camelcase(key)]: false }
+		case 'true':
+			return { ...fileInfo, [camelcase(key)]: true }
+		default:
+			return { ...fileInfo, [camelcase(key)]: isNumber(data) ? Number(data) : data }
+		}
+	}, {})
+
+	if (fileInfo.filename) {
+		// Adding context
+		fileInfo.source = generateRemoteUrl(rootPath) + encodeFilePath(fileInfo.filename)
+	}
+
 	return fileInfo
 }
 

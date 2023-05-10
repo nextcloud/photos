@@ -23,7 +23,7 @@
 <template>
 	<router-link :class="{'folder--clear': isEmpty}"
 		class="folder"
-		:to="to"
+		:to="toLink"
 		:aria-label="ariaLabel">
 		<!-- Images preview -->
 		<transition name="fade">
@@ -55,6 +55,7 @@
 
 <script>
 import { generateUrl } from '@nextcloud/router'
+import { getCurrentUser } from '@nextcloud/auth'
 
 export default {
 	name: 'FolderTagPreview',
@@ -65,7 +66,7 @@ export default {
 			default: 'icon-folder',
 		},
 		id: {
-			type: Number,
+			type: [Number, String],
 			required: true,
 		},
 		name: {
@@ -74,11 +75,15 @@ export default {
 		},
 		path: {
 			type: String,
-			required: true,
+			default: '',
 		},
 		fileList: {
 			type: Array,
 			default: () => [],
+		},
+		to: {
+			type: Object,
+			default: null,
 		},
 	},
 
@@ -121,11 +126,19 @@ export default {
 		 *
 		 * @return {string}
 		 */
-		to() {
+		toLink() {
+			if (this.to) {
+				return this.to
+			}
+
+			// Remove leading /file/{userId}
+			const prefix = `/files/${getCurrentUser()?.uid}`
+			let path = this.path.replace(new RegExp(`^${prefix}`), '')
+
 			// always remove first slash, the router
 			// manage it automatically
 			const regex = /^\/?(.+)/i
-			const path = regex.exec(this.path)[1]
+			path = regex.exec(path)[1]
 
 			// apply to current route
 			return Object.assign({}, this.$route, {
@@ -215,6 +228,7 @@ $name-height: 1rem;
 
 // Cover management empty/full
 .folder {
+	border-radius: var(--border-radius-large);
 	// if no img, let's display the folder icon as default black
 	&--clear {
 		.folder-name__icon {

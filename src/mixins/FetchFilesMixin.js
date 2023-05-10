@@ -22,36 +22,24 @@
 
 import logger from '../services/logger.js'
 import getPhotos from '../services/PhotoSearch.js'
-import cancelableRequest from '../utils/CancelableRequest.js'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
+import AbortControllerMixin from './AbortControllerMixin.js'
 
 export default {
 	name: 'FetchFilesMixin',
+
+	mixins: [
+		AbortControllerMixin,
+	],
 
 	data() {
 		return {
 			errorFetchingFiles: null,
 			loadingFiles: false,
 			doneFetchingFiles: false,
-			cancelFilesRequest: () => { },
-			semaphore: new SemaphoreWithPriority(30),
 			fetchSemaphore: new SemaphoreWithPriority(1),
-			semaphoreSymbol: null,
 			fetchedFileIds: [],
 		}
-	},
-
-	beforeDestroy() {
-		if (this.cancelFilesRequest) {
-			this.cancelFilesRequest('Changed view')
-		}
-	},
-
-	beforeRouteLeave(from, to, next) {
-		if (this.cancelFilesRequest) {
-			this.cancelFilesRequest('Changed view')
-		}
-		return next()
 	},
 
 	watch: {
@@ -72,24 +60,20 @@ export default {
 				return []
 			}
 
-			const semaphoreSymbol = await this.semaphore.acquire(() => 0, 'fetchFiles')
 			const fetchSemaphoreSymbol = await this.fetchSemaphore.acquire()
 
 			try {
 				this.errorFetchingFiles = null
 				this.loadingFiles = true
-				this.semaphoreSymbol = semaphoreSymbol
 
-				const { request, cancel } = cancelableRequest(getPhotos)
-				this.cancelFilesRequest = cancel
-
-				const numberOfImagesPerBatch = 1000
+				const numberOfImagesPerBatch = 200
 
 				// Load next batch of images
-				const fetchedFiles = await request(path, {
+				const fetchedFiles = await getPhotos(path, {
 					firstResult: this.fetchedFileIds.length,
 					nbResults: numberOfImagesPerBatch,
 					...options,
+					signal: this.abortController.signal,
 				})
 
 				// If we get less files than requested that means we got to the end
@@ -122,12 +106,10 @@ export default {
 				}
 
 				// cancelled request, moving on...
-				logger.error('Error fetching files', error)
+				logger.error('Error fetching files', { error })
 				console.error(error)
 			} finally {
 				this.loadingFiles = false
-				this.cancelFilesRequest = () => { }
-				this.semaphore.release(semaphoreSymbol)
 				this.fetchSemaphore.release(fetchSemaphoreSymbol)
 			}
 
@@ -139,7 +121,6 @@ export default {
 			this.errorFetchingFiles = null
 			this.loadingFiles = false
 			this.fetchedFileIds = []
-			this.cancelFilesRequest = () => { }
 		},
 	},
 }

@@ -23,7 +23,7 @@
 	<div class="file-picker">
 		<div class="file-picker__content">
 			<div class="file-picker__navigation"
-				:class="{'file-picker__navigation--loading': loadingFiles && monthsList.length === 0}">
+				:class="{'file-picker__navigation--placeholder': monthsList.length === 0}">
 				<div v-for="month in monthsList"
 					:key="month"
 					class="file-picker__navigation__month"
@@ -32,76 +32,79 @@
 					{{ month | dateMonthAndYear }}
 				</div>
 			</div>
+
 			<FilesListViewer class="file-picker__file-list"
-				:class="{'file-picker__file-list--loading': loadingFiles && monthsList.length === 0}"
+				:class="{'file-picker__file-list--placeholder': monthsList.length === 0}"
 				:file-ids-by-section="fileIdsByMonth"
+				:empty-message="t('photos', 'There are no photos or videos yet!')"
 				:sections="monthsList"
 				:loading="loadingFiles"
 				:base-height="100"
 				:section-header-height="50"
 				:scroll-to-section="targetMonth"
 				@need-content="getFiles">
-				<template slot-scope="{file, height, visibility}">
+				<template slot-scope="{file, height, distance}">
 					<h3 v-if="file.sectionHeader"
 						:id="`file-picker-section-header-${file.id}`"
 						:style="{ height: `${height}px`}"
 						class="section-header">
 						{{ file.id | dateMonthAndYear }}
 					</h3>
+
 					<File v-else
 						:file="files[file.id]"
 						:allow-selection="true"
 						:selected="selection[file.id] === true"
-						:visibility="visibility"
-						:semaphore="semaphore"
+						:distance="distance"
 						@select-toggled="onFileSelectToggle" />
 				</template>
 			</FilesListViewer>
 		</div>
+
 		<div class="file-picker__actions">
-			<!-- TODO: Implement upload -->
-			<Button type="tertiary" :disabled="loading">
-				<template #icon>
-					<Upload />
-				</template>
-				{{ t('photos', 'Upload from computer') }}
-			</Button>
-			<Button type="primary" :disabled="loading || selectedFileIds.length === 0" @click="emitPickedEvent">
+			<UploadPicker :accept="allowedMimes"
+				:context="uploadContext"
+				:destination="photosLocation"
+				:multiple="true"
+				@uploaded="getFiles" />
+			<NcButton type="primary" :disabled="loading || selectedFileIds.length === 0" @click="emitPickedEvent">
 				<template #icon>
 					<ImagePlus v-if="!loading" />
-					<Loader v-if="loading" />
+					<NcLoadingIcon v-if="loading" />
 				</template>
 				{{ t('photos', 'Add to {destination}', { destination }) }}
-			</Button>
+			</NcButton>
 		</div>
 	</div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import { NcButton, NcLoadingIcon } from '@nextcloud/vue'
+import { UploadPicker } from '@nextcloud/upload'
+import moment from '@nextcloud/moment'
 
 import ImagePlus from 'vue-material-design-icons/ImagePlus'
-import Upload from 'vue-material-design-icons/Upload'
-import moment from '@nextcloud/moment'
-import { Button } from '@nextcloud/vue'
+
+import FilesListViewer from './FilesListViewer.vue'
+import File from './File.vue'
 
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
-import FilesListViewer from './FilesListViewer.vue'
-import Loader from './Loader.vue'
-import File from './File.vue'
 import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
+import UserConfig from '../mixins/UserConfig.js'
+import allowedMimes from '../services/AllowedMimes.js'
 
 export default {
 	name: 'FilesPicker',
 
 	components: {
-		ImagePlus,
-		Upload,
-		Button,
-		FilesListViewer,
 		File,
-		Loader,
+		FilesListViewer,
+		ImagePlus,
+		NcButton,
+		NcLoadingIcon,
+		UploadPicker,
 	},
 
 	filters: {
@@ -112,11 +115,11 @@ export default {
 			return moment(date, 'YYYYMM').format('MMMM YYYY')
 		},
 	},
-
 	mixins: [
 		FetchFilesMixin,
 		FilesByMonthMixin,
 		FilesSelectionMixin,
+		UserConfig,
 	],
 
 	props: {
@@ -141,7 +144,11 @@ export default {
 
 	data() {
 		return {
+			allowedMimes,
 			targetMonth: null,
+			uploadContext: {
+				route: 'albumpicker',
+			},
 		}
 	},
 
@@ -192,18 +199,18 @@ export default {
 		height: 100%;
 
 		@media only screen and (max-width: 1200px) {
-			flex-basis: 80px;
+			flex-basis: 100px;
 		}
 
-		&--loading {
+		&--placeholder {
 			background: var(--color-primary-light);
-			border-radius: 16px;
+			border-radius: var(--border-radius-large);
 		}
 
 		&__month {
 			font-weight: bold;
 			font-size: 16px;
-			border-radius: 48px;
+			border-radius: var(--border-radius-pill);
 			padding: 8px 16px;
 			margin: 4px 0;
 			cursor: pointer;
@@ -227,15 +234,25 @@ export default {
 		min-width: 0;
 		height: 100%;
 
-		&--loading {
+		&--placeholder {
 			background: var(--color-primary-light);
-			border-radius: 16px;
+			border-radius: var(--border-radius-large);
 		}
 
 		.section-header {
 			font-weight: bold;
 			font-size: 20px;
 			padding: 8px 0 4px 0;
+		}
+
+		:deep .empty-content {
+			position: absolute;
+			width: 100%;
+			margin-top: 0;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
 		}
 	}
 

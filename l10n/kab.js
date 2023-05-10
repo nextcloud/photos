@@ -3,12 +3,12 @@ OC.L10N.register(
     {
     "Videos" : "Tividyutin",
     "Favorites" : "Imenyafen",
+    "Tags" : "Tibzimin",
     "Back" : "Retour",
     "Save" : "Sekles",
     "Favorite" : "Menyif",
+    "Remove from favorites" : "Kkes-it seg ismal",
     "Add" : "Rnu",
-    "Download" : "Sider",
-    "Delete" : "Kkes",
     "Settings" : "Iɣewwaṛen"
 },
 "nplurals=2; plural=(n != 1);");

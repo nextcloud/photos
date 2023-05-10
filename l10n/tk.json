@@ -2,11 +2,10 @@
     "Photos" : "Suratlar",
     "Videos" : "Wideo",
     "Favorites" : "Halanýanlar",
+    "Tags" : "Bellikler",
     "Back" : "Yzyna",
     "Save" : "Saklamak",
     "Favorite" : "Halaýan",
-    "Download" : "Göçürip almak",
-    "Delete" : "Pozmak",
     "Settings" : "Sazlamalar"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

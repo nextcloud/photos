@@ -33,14 +33,16 @@
 			type="text"
 			@input="debounceUpdatePhotosFolder(photosLocation)"
 			@change="debounceUpdatePhotosFolder(photosLocation)"
-			@focus="selectPhotosFolder"
-			@click="selectPhotosFolder">
+			@click="debounceSelectPhotosFolder"
+			@focus.once="debounceSelectPhotosFolder"
+			@keyboard.enter="debounceSelectPhotosFolder">
 	</div>
 </template>
 
 <script>
-import { getFilePickerBuilder, showError } from '@nextcloud/dialogs'
 import debounce from 'debounce'
+
+import { getFilePickerBuilder, showError } from '@nextcloud/dialogs'
 
 import UserConfig from '../../mixins/UserConfig.js'
 
@@ -52,6 +54,10 @@ export default {
 	],
 
 	methods: {
+		debounceSelectPhotosFolder: debounce(function() {
+			this.selectPhotosFolder()
+		}),
+
 		selectPhotosFolder() {
 			const picker = getFilePickerBuilder(t('photos', 'Select the default location for your media'))
 				.setMultiSelect(false)

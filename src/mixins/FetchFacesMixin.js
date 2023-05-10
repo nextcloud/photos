@@ -27,9 +27,10 @@ import { getCurrentUser } from '@nextcloud/auth'
 
 import client from '../services/DavClient.js'
 import logger from '../services/logger.js'
-import cancelableRequest from '../utils/CancelableRequest.js'
 import DavRequest from '../services/DavRequest'
 import { genFileInfo } from '../utils/fileUtils'
+import AbortControllerMixin from './AbortControllerMixin'
+import he from 'he'
 
 export default {
 	name: 'FetchFacesMixin',
@@ -40,18 +41,15 @@ export default {
 			loadingFaces: false,
 			errorFetchingFiles: null,
 			loadingFiles: false,
-			cancelFacesRequest: () => { },
-			cancelFilesRequest: () => {},
 		}
 	},
 
+	mixins: [
+		AbortControllerMixin,
+	],
+
 	async beforeMount() {
 		this.fetchFaces()
-	},
-
-	beforeDestroy() {
-		this.cancelFacesRequest('Changed view')
-		this.cancelFilesRequest('Changed view')
 	},
 
 	computed: {
@@ -78,10 +76,11 @@ export default {
 				this.loadingFaces = true
 				this.errorFetchingFaces = null
 
-				const { request, cancel } = cancelableRequest(client.getDirectoryContents)
-				this.cancelFacesRequest = cancel
-
-				const faces = await request(`/recognize/${getCurrentUser()?.uid}/faces/`)
+				const { data: faces } = await client.getDirectoryContents(`/recognize/${getCurrentUser()?.uid}/faces/`, {
+					data: DavRequest,
+					details: true,
+					signal: this.abortController.signal,
+				})
 				this.$store.dispatch('addFaces', { faces })
 				logger.debug(`[FetchFacesMixin] Fetched ${faces.length} new faces: `, faces)
 			} catch (error) {
@@ -92,10 +91,9 @@ export default {
 						this.errorFetchingFaces = error
 					}
 				}
-				logger.error(t('photos', 'Failed to fetch faces list.'), error)
+				logger.error(t('photos', 'Failed to fetch faces list.'), { error })
 				showError(t('photos', 'Failed to fetch faces list.'))
 			} finally {
-				this.cancelFacesRequest = () => { }
 				this.loadingFaces = false
 			}
 		},
@@ -113,20 +111,19 @@ export default {
 				this.errorFetchingFiles = null
 				this.loadingFiles = true
 
-				const { request, cancel } = cancelableRequest(client.getDirectoryContents)
-				this.cancelFilesRequest = cancel
-
-				let { data: fetchedFiles } = await request(
+				let { data: fetchedFiles } = await client.getDirectoryContents(
 					`/recognize/${getCurrentUser()?.uid}/faces/${faceName}`,
 					{
 						data: DavRequest,
 						details: true,
+						signal: this.abortController.signal,
 					}
 				)
 
 				fetchedFiles = fetchedFiles
 					.map(file => genFileInfo(file))
-					.map(file => ({ ...file, filename: file.realpath.replace(`/${getCurrentUser().uid}/files`, '') }))
+					.map(file => ({ ...file, filename: he.decode(file.realpath).replace(`/${getCurrentUser().uid}/files`, `/files/${getCurrentUser().uid}`) }))
+					.map(file => ({ ...file, faceDetections: JSON.parse(he.decode(file.faceDetections)) }))
 
 				const fileIds = fetchedFiles.map(file => '' + file.fileid)
 
@@ -147,10 +144,9 @@ export default {
 				}
 
 				// cancelled request, moving on...
-				logger.error('Error fetching face files', error)
+				logger.error('Error fetching face files', { error })
 			} finally {
 				this.loadingFiles = false
-				this.cancelFilesRequest = () => { }
 			}
 		},
 	},

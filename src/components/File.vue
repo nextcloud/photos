@@ -22,45 +22,60 @@
 
 <template>
 	<div class="file-container"
+		data-test="media"
 		:class="{selected}">
 		<a class="file"
-			:href="davPath"
+			:href="file.source"
 			:aria-label="ariaLabel"
-			@click.prevent="emitClick">
+			@click.stop.prevent="emitClick">
 
 			<!-- image and loading placeholder -->
 			<div class="file__images">
 				<VideoIcon v-if="file.mime.includes('video')" class="video-icon" :size="64" />
 
-				<img v-if="visibility !== 'none' && canLoad && !error"
-					ref="imgNear"
-					:key="`${file.basename}-near`"
-					:src="srcNear"
-					:alt="file.basename"
-					:aria-describedby="ariaDescription"
-					@load="onLoad"
-					@error="onError">
+				<!-- We have two img elements to load the small and large preview -->
+				<!-- Do not show the small preview if the larger one is loaded -->
+				<!-- Prioritize visible files -->
+				<!-- Load small preview first, then the larger one -->
+				<!-- Preload large preview for near visible files -->
+				<!-- Preload small preview for further away files -->
+				<template v-if="initialized">
+					<img v-if="!loadedLarge && (loadedSmall || (distance < 5 && !errorSmall))"
+						ref="imgSmall"
+						:key="`${file.basename}-small`"
+						:src="srcSmall"
+						:alt="file.basename"
+						:aria-describedby="ariaDescription"
+						:decoding="loadedSmall || isVisible ? 'sync' : 'async'"
+						:fetchpriority="loadedSmall || isVisible ? 'high' : 'low'"
+						:loading="loadedSmall || isVisible ? 'eager' : distance < 2 ? 'auto' : 'lazy'"
+						@load="onLoadSmall"
+						@error="onErrorSmall">
 
-				<img v-if="visibility === 'visible' && canLoad && !error"
-					ref="imgVisible"
-					:key="`${file.basename}-visible`"
-					:src="srcVisible"
-					:alt="file.basename"
-					:aria-describedby="ariaDescription"
-					@load="onLoad"
-					@error="onError">
+					<img v-if="loadedLarge || ((isVisible || (distance < 2 && (loadedSmall || errorSmall))) && !errorLarge)"
+						ref="imgLarge"
+						:key="`${file.basename}-large`"
+						:src="srcLarge"
+						:alt="file.basename"
+						:decoding="loadedLarge || isVisible ? 'sync' : 'async'"
+						:fetchpriority="loadedLarge || isVisible ? 'high' : 'low'"
+						:loading="loadedLarge || isVisible ? 'auto' : 'lazy'"
+						:aria-describedby="ariaDescription"
+						@load="onLoadLarge"
+						@error="onErrorLarge">
+				</template>
 			</div>
 
 			<!-- image description -->
-			<p :id="ariaDescription" class="file__hidden-description" :class="{show: error}">{{ file.basename }}</p>
+			<p :id="ariaDescription" class="file__hidden-description" :class="{show: errorSmall && errorLarge}">{{ file.basename }}</p>
 		</a>
 
-		<CheckboxRadioSwitch v-if="allowSelection"
+		<NcCheckboxRadioSwitch v-if="allowSelection"
 			class="selection-checkbox"
 			:checked="selected"
 			@update:checked="onToggle">
 			<span class="input-label">{{ t('photos', 'Select image {imageName}', {imageName: file.basename}) }}</span>
-		</CheckboxRadioSwitch>
+		</NcCheckboxRadioSwitch>
 
 		<Star v-if="file.favorite === 1" class="favorite-state" :aria-label="t('photos', 'The file is in the favorites')" />
 	</div>
@@ -70,17 +85,16 @@
 import Star from 'vue-material-design-icons/Star'
 import VideoIcon from 'vue-material-design-icons/Video.vue'
 
-import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
-import { getCurrentUser } from '@nextcloud/auth'
-import { CheckboxRadioSwitch } from '@nextcloud/vue'
+import { generateUrl } from '@nextcloud/router'
+import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 
 import UserConfig from '../mixins/UserConfig.js'
-import Semaphore from '../utils/semaphoreWithPriority.js'
+import { isCachedPreview } from '../services/PreviewService.js'
 
 export default {
 	name: 'File',
 	components: {
-		CheckboxRadioSwitch,
+		NcCheckboxRadioSwitch,
 		Star,
 		VideoIcon,
 	},
@@ -99,31 +113,24 @@ export default {
 			type: Boolean,
 			default: true,
 		},
-		visibility: {
-			type: String,
-			required: true,
-		},
-		semaphore: {
-			type: Semaphore,
+		distance: {
+			type: Number,
 			required: true,
 		},
 	},
 
 	data() {
 		return {
-			loaded: false,
-			error: false,
-			canLoad: false,
-			semaphoreSymbol: null,
+			initialized: false,
 			isDestroyed: false,
+			loadedSmall: false,
+			errorSmall: false,
+			loadedLarge: false,
+			errorLarge: false,
 		}
 	},
 
 	computed: {
-		/** @return {string} */
-		davPath() {
-			return generateRemoteUrl(`dav/files/${getCurrentUser().uid}`) + this.file.filename
-		},
 		/** @return {string} */
 		ariaDescription() {
 			return `image-description-${this.file.fileid}`
@@ -141,46 +148,37 @@ export default {
 			return this.file.etag.replace('&quot;', '').replace('&quot;', '')
 		},
 		/** @return {string} */
-		srcVisible() {
+		srcLarge() {
 			return this.getItemURL(512)
 		},
 		/** @return {string} */
-		srcNear() {
+		srcSmall() {
 			return this.getItemURL(64)
+		},
+		/** @return {boolean} */
+		isVisible() {
+			return this.distance === 0
 		},
 	},
 
-	mounted() {
-		// Don't render the component right away as it is useless if the user is only scrolling
-		setTimeout(async () => {
-			this.semaphoreSymbol = await this.semaphore.acquire(() => {
-				switch (this.visibility) {
-				case 'visible':
-					return 1
-				case 'near':
-					return 2
-				default:
-					return 3
-				}
-			}, this.file.fileid)
+	async mounted() {
+		[this.loadedSmall, this.loadedLarge] = await Promise.all([
+			await isCachedPreview(this.srcSmall),
+			await isCachedPreview(this.srcLarge),
+		])
 
-			this.canLoad = true
-			if (this.visibility === 'none' || this.isDestroyed) {
-				this.releaseSemaphore()
-			}
-		}, 250)
+		this.initialized = true
 	},
 
 	beforeDestroy() {
 		this.isDestroyed = true
-		this.releaseSemaphore()
 
 		// cancel any pending load
-		if (this.$refs.imgNear !== undefined) {
-			this.$refs.imgNear.src = ''
+		if (this.$refs.imgSmall !== undefined) {
+			this.$refs.imgSmall.src = ''
 		}
-		if (this.$refs.srcVisible !== undefined) {
-			this.$refs.srcVisible.src = ''
+		if (this.$refs.srcLarge !== undefined) {
+			this.$refs.srcLarge.src = ''
 		}
 	},
 
@@ -189,15 +187,20 @@ export default {
 			this.$emit('click', this.file.fileid)
 		},
 
-		/** When the image is fully loaded by browser we remove the placeholder */
-		onLoad() {
-			this.loaded = true
-			this.releaseSemaphore()
+		onLoadSmall() {
+			this.loadedSmall = true
 		},
 
-		onError() {
-			this.error = true
-			this.releaseSemaphore()
+		onLoadLarge() {
+			this.loadedLarge = true
+		},
+
+		onErrorSmall() {
+			this.errorSmall = true
+		},
+
+		onErrorLarge() {
+			this.errorLarge = true
 		},
 
 		onToggle(value) {
@@ -205,16 +208,12 @@ export default {
 		},
 
 		getItemURL(size) {
-			return generateUrl(`/core/preview?fileId=${this.file.fileid}&c=${this.decodedEtag}&x=${size}&y=${size}&forceIcon=0&a=1`)
-
-		},
-
-		releaseSemaphore() {
-			if (this.semaphoreSymbol === null) {
-				return
+			const token = this.$route.params.token
+			if (token) {
+				return generateUrl(`/apps/photos/api/v1/publicPreview/${this.file.fileid}?etag=${this.decodedEtag}&x=${size}&y=${size}&token=${token}`)
+			} else {
+				return generateUrl(`/apps/photos/api/v1/preview/${this.file.fileid}?etag=${this.decodedEtag}&x=${size}&y=${size}`)
 			}
-			this.semaphore.release(this.semaphoreSymbol)
-			this.semaphoreSymbol = null
 		},
 	},
 
@@ -251,6 +250,7 @@ export default {
 		height: 100%;
 		box-sizing: border-box;
 		outline: none; // Override global focus state.
+		display: flex; // Fill parent size
 
 		&__images {
 			display: contents;
@@ -264,7 +264,7 @@ export default {
 				z-index: 1;
 				opacity: 0.8;
 
-				::v-deep .material-design-icon__svg {
+				:deep .material-design-icon__svg {
 					fill: var(--color-main-background);
 				}
 			}
@@ -330,7 +330,7 @@ export default {
 		width: fit-content;
 
 		// Make the checkbox background round on hover.
-		::v-deep .checkbox-radio-switch__label {
+		:deep .checkbox-radio-switch__label {
 			padding: 10px;
 			box-sizing: border-box;
 
@@ -341,7 +341,7 @@ export default {
 				width: 16px;
 				height: 16px;
 				position: absolute;
-				left: 1px;
+				left: 14px;
 				z-index: -1;
 			}
 
@@ -364,7 +364,7 @@ export default {
 		// Fancy calculation to render the start in the middle of narrow images.
 		right: min(2px, calc(50% - 7px));
 
-		::v-deep .material-design-icon__svg {
+		:deep .material-design-icon__svg {
 			fill: #FC0;
 
 			path {

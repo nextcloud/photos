@@ -24,6 +24,7 @@ import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import { genFileInfo, encodeFilePath } from '../utils/fileUtils.js'
 import allowedMimes from './AllowedMimes.js'
+import { getCurrentUser } from '@nextcloud/auth'
 
 /**
  * List files from a folder and filter out unwanted mimes
@@ -34,11 +35,14 @@ import allowedMimes from './AllowedMimes.js'
  * @return {Promise<object[]>} the file list
  */
 export default async function(path = '/', options = {}) {
-	const prefixPath = generateUrl(`/apps/photos/api/v1/${options.shared ? 'shared' : 'albums'}`)
+	const endpoint = generateUrl(`/apps/photos/api/v1/${options.shared ? 'shared' : 'albums'}`)
+	const prefix = `/files/${getCurrentUser()?.uid}`
 
 	// fetch listing
-	const response = await axios.get(prefixPath + encodeFilePath(path), options)
-	const list = response.data.map(data => genFileInfo(data))
+	const response = await axios.get(endpoint + encodeFilePath(path), options)
+	const list = response.data
+		.map(data => ({ ...data, filename: `${prefix}${data.filename}` }))
+		.map(data => genFileInfo(data))
 
 	// filter all the files and folders
 	let folder = {}
@@ -47,7 +51,7 @@ export default async function(path = '/', options = {}) {
 
 	for (const entry of list) {
 		// is this the current provided path ?
-		if (entry.filename === path) {
+		if (entry.filename === `${prefix}${path}`) {
 			folder = entry
 		} else if (entry.type !== 'file') {
 			folders.push(entry)

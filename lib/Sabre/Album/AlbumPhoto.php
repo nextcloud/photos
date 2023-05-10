@@ -26,26 +26,23 @@ namespace OCA\Photos\Sabre\Album;
 use OCA\Photos\Album\AlbumFile;
 use OCA\Photos\Album\AlbumInfo;
 use OCA\Photos\Album\AlbumMapper;
-use OCP\Files\Folder;
+use OCA\Photos\Sabre\CollectionPhoto;
+use OCP\Files\IRootFolder;
 use OCP\Files\Node;
 use OCP\Files\File;
+use OCP\Files\Folder;
 use OCP\Files\NotFoundException;
-use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\IFile;
 
-class AlbumPhoto implements IFile {
-	private AlbumMapper $albumMapper;
-	private AlbumInfo $album;
-	private AlbumFile $file;
-	private Folder $userFolder;
-
-	public const TAG_FAVORITE = '_$!<Favorite>!$_';
-
-	public function __construct(AlbumMapper $albumMapper, AlbumInfo $album, AlbumFile $file, Folder $userFolder) {
-		$this->albumMapper = $albumMapper;
-		$this->album = $album;
-		$this->file = $file;
-		$this->userFolder = $userFolder;
+class AlbumPhoto extends CollectionPhoto implements IFile {
+	public function __construct(
+		private AlbumMapper $albumMapper,
+		private AlbumInfo $album,
+		private AlbumFile $albumFile,
+		private IRootFolder $rootFolder,
+		Folder $userFolder,
+	) {
+		parent::__construct($albumFile, $userFolder);
 	}
 
 	/**
@@ -55,46 +52,10 @@ class AlbumPhoto implements IFile {
 		$this->albumMapper->removeFile($this->album->getId(), $this->file->getFileId());
 	}
 
-	public function getName() {
-		return $this->file->getFileId() . "-" . $this->file->getName();
-	}
-
-	/**
-	 * @return never
-	 */
-	public function setName($name) {
-		throw new Forbidden('Can\'t rename photos trough the album api');
-	}
-
-	public function getLastModified() {
-		return $this->file->getMTime();
-	}
-
-	public function put($data) {
-		throw new Forbidden('Can\'t write to photos trough the album api');
-	}
-
-	public function get() {
-		$nodes = $this->userFolder->getById($this->file->getFileId());
-		$node = current($nodes);
-		if ($node) {
-			/** @var Node $node */
-			if ($node instanceof File) {
-				return $node->fopen('r');
-			} else {
-				throw new NotFoundException("Photo is a folder");
-			}
-		} else {
-			throw new NotFoundException("Photo not found for user");
-		}
-	}
-
-	public function getFileId(): int {
-		return $this->file->getFileId();
-	}
-
-	public function getFileInfo(): Node {
-		$nodes = $this->userFolder->getById($this->file->getFileId());
+	private function getNode(): Node {
+		$nodes = $this->rootFolder
+			->getUserFolder($this->albumFile->getOwner() ?: $this->album->getUserId())
+			->getById($this->file->getFileId());
 		$node = current($nodes);
 		if ($node) {
 			return $node;
@@ -103,31 +64,16 @@ class AlbumPhoto implements IFile {
 		}
 	}
 
-	public function getContentType() {
-		return $this->file->getMimeType();
-	}
-
-	public function getETag() {
-		return $this->file->getEtag();
-	}
-
-	public function getSize() {
-		return $this->file->getSize();
-	}
-
-	public function getFile(): AlbumFile {
-		return $this->file;
-	}
-
-	public function isFavorite(): bool {
-		$tagManager = \OCP\Server::get(\OCP\ITagManager::class);
-		$tagger = $tagManager->load('files');
-		$tags = $tagger->getTagsForObjects([$this->getFileId()]);
-
-		if ($tags === false || empty($tags)) {
-			return false;
+	public function get() {
+		$node = $this->getNode();
+		if ($node instanceof File) {
+			return $node->fopen('r');
+		} else {
+			throw new NotFoundException("Photo is a folder");
 		}
+	}
 
-		return array_search(self::TAG_FAVORITE, current($tags)) !== false;
+	public function getFileInfo(): Node {
+		return $this->getNode();
 	}
 }

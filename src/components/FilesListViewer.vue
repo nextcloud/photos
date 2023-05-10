@@ -21,18 +21,16 @@
  -->
 <template>
 	<div class="files-list-viewer">
-		<EmptyContent v-if="emptyMessage !== '' && items.length === 0 && !loading"
-			key="emptycontent">
-			<template #icon>
-				<!-- eslint-disable-next-line vue/no-v-html -->
-				<span class="empty-content-illustration" v-html="EmptyBox" />
-			</template>
-			{{ emptyMessage }}
-		</EmptyContent>
+		<NcEmptyContent v-if="emptyMessage !== '' && items.length === 0 && !loading"
+			key="emptycontent"
+			:title="emptyMessage">
+			<PackageVariant slot="icon" />
+		</NcEmptyContent>
 
 		<TiledLayout :base-height="baseHeight" :items="items">
 			<VirtualScrolling slot-scope="{rows}"
 				:use-window="useWindow"
+				:container-element="containerElement"
 				:rows="rows"
 				:scroll-to-key="scrollToSection"
 				@need-content="needContent">
@@ -45,35 +43,41 @@
 						<li v-for="item of row.items"
 							:key="item.id"
 							:style="{ width: item.ratio ? `${row.height * item.ratio}px` : '100%', height: `${row.height}px`}">
-							<slot :file="item" :visibility="row.visibility" />
+							<!-- Placeholder when initial loading -->
+							<div v-if="showPlaceholders" class="files-list-viewer__placeholder" />
+							<!-- Real file. -->
+							<slot v-else :file="item" :distance="row.distance" />
 						</li>
 					</div>
 				</ul>
-				<template v-if="loading" #loader>
-					<Loader class="files-list-viewer__loader" />
-				</template>
+				<NcLoadingIcon v-if="loading && !showPlaceholders" slot="loader" class="files-list-viewer__loader" />
 			</VirtualScrolling>
 		</TiledLayout>
 	</div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
-import { EmptyContent } from '@nextcloud/vue'
+import PackageVariant from 'vue-material-design-icons/PackageVariant'
 
-import TiledLayout from '../components/TiledLayout.vue'
+import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+
+import TiledLayout from '../components/TiledLayout/TiledLayout.vue'
+import { fetchFile } from '../services/fileFetcher.js'
 import VirtualScrolling from '../components/VirtualScrolling.vue'
-import Loader from '../components/Loader.vue'
 import EmptyBox from '../assets/Illustrations/empty.svg'
+import { loadState } from '@nextcloud/initial-state'
 
 export default {
 	name: 'FilesListViewer',
 
 	components: {
-		EmptyContent,
+		PackageVariant,
+		NcEmptyContent,
+		NcLoadingIcon,
 		TiledLayout,
 		VirtualScrolling,
-		Loader,
 	},
 
 	props: {
@@ -95,7 +99,7 @@ export default {
 		// Whether we should display a loading indicator.
 		loading: {
 			type: Boolean,
-			required: true,
+			default: false,
 		},
 		// Message to display when there is no files.
 		emptyMessage: {
@@ -132,6 +136,17 @@ export default {
 	data() {
 		return {
 			EmptyBox,
+			croppedLayout: loadState('photos', 'croppedLayout', 'false') === 'true',
+			placeholderFiles: Array(20).fill(0).map((_, index) => {
+				const height = 200
+				const width = this.croppedLayout ? height : height * (1 + Math.random() * 2)
+				return {
+					id: index,
+					width,
+					height,
+					ratio: width / height,
+				}
+			}),
 		}
 	},
 
@@ -148,7 +163,9 @@ export default {
 				return []
 			}
 
-			return this.fileIds.map(this.mapFileToItem)
+			return this.fileIds
+				.filter(fileId => this.files[fileId])
+				.map(this.mapFileToItem)
 		},
 
 		/**
@@ -166,28 +183,62 @@ export default {
 						sectionHeader: true,
 						height: this.sectionHeaderHeight,
 					},
-					...this.fileIdsBySection[sectionId].map(this.mapFileToItem),
+					...this.fileIdsBySection[sectionId]
+						.filter(fileId => this.files[fileId])
+						.map(this.mapFileToItem),
 				]
 			})
+		},
+
+		/**
+		 * @return {boolean} The list of items to pass to TiledLayout.
+		 */
+		showPlaceholders() {
+			return this.loading && (this.fileIds?.length === 0 || this.sections?.length === 0)
 		},
 
 		/**
 		 * @return {object[]} The list of items to pass to TiledLayout.
 		 */
 		items() {
+
 			if (this.fileIds !== undefined) {
+				if (this.showPlaceholders) {
+					return this.placeholderFiles
+				}
+
 				return this.fileIdsToItems
 			}
 
 			if (this.sections !== undefined) {
+				if (this.showPlaceholders) {
+					return [{ height: 75, sectionHeader: true }, ...this.placeholderFiles]
+				}
+
 				return this.sectionsToItems
 			}
 
 			return []
 		},
+
+		showLoader() {
+			return this.loading && (this.fileIds?.length !== 0 || this.sections?.length !== 0)
+		},
+	},
+
+	mounted() {
+		subscribe('files:node:updated', this.handleFileUpdated)
+	},
+
+	destroyed() {
+		unsubscribe('files:node:updated', this.handleFileUpdated)
 	},
 
 	methods: {
+		...mapActions([
+			'appendFiles',
+		]),
+
 		// Ask the parent for more content.
 		needContent() {
 			this.$emit('need-content')
@@ -199,8 +250,17 @@ export default {
 				id: file.fileid,
 				width: file.fileMetadataSizeParsed.width,
 				height: file.fileMetadataSizeParsed.height,
-				ratio: file.fileMetadataSizeParsed.width / file.fileMetadataSizeParsed.height,
+				ratio: this.croppedLayout ? 1 : file.fileMetadataSizeParsed.width / file.fileMetadataSizeParsed.height,
 			}
+		},
+
+		/**
+		 * @param {object} data
+		 * @param {string} data.fileid - The file id of the updated file.
+		 */
+		async handleFileUpdated({ fileid }) {
+			const fetchedFile = await fetchFile(this.files[fileid].filename)
+			this.appendFiles([fetchedFile])
 		},
 	},
 }
@@ -210,18 +270,19 @@ export default {
 	height: 100%;
 	position: relative;
 
-	::v-deep .empty-content__icon {
-		width: 200px;
-		height: 200px;
-
-		.empty-content-illustration svg {
-			width: 200px;
-			height: 200px;
-		}
+	&__placeholder {
+		background: var(--color-primary-light);
+		width: 100%;
+		height: 100%;
+		border: 2px solid var(--color-main-background); // Use border so create a separation between images.
 	}
 
-	.tiled-row {
-		display: flex;
+	.tiled-container {
+		flex-basis: 0;
+
+		.tiled-row {
+			display: flex;
+		}
 	}
 
 	&__section-header {

@@ -24,27 +24,29 @@ declare(strict_types=1);
 namespace OCA\Photos\Sabre;
 
 use OCA\Photos\Album\AlbumMapper;
+use OCA\Photos\DB\Place\PlaceMapper;
+use OCA\Photos\Service\ReverseGeoCoderService;
+use OCA\Photos\Service\UserConfigService;
 use OCP\Files\IRootFolder;
 use OCP\IUserSession;
 use Sabre\DAVACL\AbstractPrincipalCollection;
 use Sabre\DAVACL\PrincipalBackend;
+use OCP\IUserManager;
+use OCP\IGroupManager;
 
 class RootCollection extends AbstractPrincipalCollection {
-	private AlbumMapper $folderMapper;
-	private IUserSession $userSession;
-	private IRootFolder $rootFolder;
-
 	public function __construct(
-		AlbumMapper $folderMapper,
-		IUserSession $userSession,
-		IRootFolder $rootFolder,
-		PrincipalBackend\BackendInterface $principalBackend
+		private AlbumMapper $albumMapper,
+		private PlaceMapper $placeMapper,
+		private ReverseGeoCoderService $reverseGeoCoderService,
+		private IUserSession $userSession,
+		private IRootFolder $rootFolder,
+		PrincipalBackend\BackendInterface $principalBackend,
+		private IUserManager $userManager,
+		private IGroupManager $groupManager,
+		private UserConfigService $userConfigService,
 	) {
 		parent::__construct($principalBackend, 'principals/users');
-
-		$this->folderMapper = $folderMapper;
-		$this->userSession = $userSession;
-		$this->rootFolder = $rootFolder;
 	}
 
 	/**
@@ -62,7 +64,7 @@ class RootCollection extends AbstractPrincipalCollection {
 		if (is_null($user) || $name !== $user->getUID()) {
 			throw new \Sabre\DAV\Exception\Forbidden();
 		}
-		return new PhotosHome($principalInfo, $this->folderMapper, $user, $this->rootFolder);
+		return new PhotosHome($principalInfo, $this->albumMapper, $this->placeMapper, $this->reverseGeoCoderService, $name, $this->rootFolder, $this->userManager, $this->groupManager, $this->userConfigService);
 	}
 
 	public function getName(): string {

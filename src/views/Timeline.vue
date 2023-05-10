@@ -24,85 +24,72 @@
 
 <template>
 	<!-- Errors handlers -->
-	<EmptyContent v-if="errorFetchingFiles">
+	<NcEmptyContent v-if="errorFetchingFiles">
 		{{ t('photos', 'An error occurred') }}
-	</EmptyContent>
+	</NcEmptyContent>
 
 	<div v-else class="timeline">
-		<div class="timeline__header">
-			<Actions v-if="selectedFileIds.length === 0"
-				:force-title="true"
-				:force-menu="true"
-				:menu-title="t('photos', 'Add')"
-				:primary="true">
-				<Plus slot="icon" />
-				<ActionButton :close-after-click="true" @click="openUploader">
-					{{ t('photos', 'Upload media') }}
-					<FileUpload slot="icon" />
-				</ActionButton>
-				<ActionButton :close-after-click="true"
-					:aria-label="t('photos', 'Create a new album')"
-					@click="showAlbumCreationForm = true">
-					{{ t('photos', 'Create new album') }}
-					<PlusBoxMultiple slot="icon" />
-				</ActionButton>
-			</Actions>
+		<!-- Header -->
+		<HeaderNavigation key="navigation"
+			:loading="loadingCount > 0"
+			:path="'/'"
+			:title="rootTitle"
+			:root-title="rootTitle"
+			@refresh="resetFetchFilesState">
+			<div class="timeline__header__left">
+				<!-- TODO: UploadPicker -->
+				<NcActions v-if="selectedFileIds.length === 0"
+					:force-title="true"
+					:force-menu="true"
+					:menu-title="t('photos', 'Add')">
+					<Plus slot="icon" />
+					<NcActionButton :close-after-click="true"
+						:aria-label="t('photos', 'Create a new album')"
+						@click="showAlbumCreationForm = true">
+						{{ t('photos', 'Create new album') }}
+						<PlusBoxMultiple slot="icon" />
+					</NcActionButton>
+				</NcActions>
 
-			<template v-else>
-				<Button :close-after-click="true"
-					type="primary"
-					:aria-label="t('photos', 'Add selection to an album')"
-					@click="showAlbumPicker = true">
-					<template #icon>
-						<Plus slot="icon" />
-					</template>
-					{{ t('photos', 'Add to album') }}
-				</Button>
-				<Actions>
-					<ActionButton :close-after-click="true"
-						:aria-label="t('photos', 'Download selection')"
-						@click="downloadSelection">
-						{{ t('photos', 'Download') }}
-						<Download slot="icon" />
-					</ActionButton>
-					<ActionButton v-if="shouldFavorite"
-						:close-after-click="true"
-						:aria-label="t('photos', 'Mark selection as favorite')"
-						@click="favoriteSelection">
-						{{ t('photos', 'Favorite') }}
-						<Star slot="icon" />
-					</ActionButton>
-					<ActionButton v-else
-						:close-after-click="true"
-						:aria-label="t('photos', 'Remove selection from favorites')"
-						@click="unFavoriteSelection">
-						{{ t('photos', 'Remove from favorites') }}
-						<Star slot="icon" />
-					</ActionButton>
-					<ActionButton :close-after-click="true"
-						:aria-label="t('photos', 'Delete selection')"
-						@click="deleteSelection">
-						{{ t('photos', 'Delete') }}
-						<Delete slot="icon" />
-					</ActionButton>
-				</Actions>
-				<!-- HACK: Needed to make the above Actions work, no idea why be it is like that in the documentation. -->
-				<Actions />
-			</template>
+				<template v-else>
+					<NcButton :close-after-click="true"
+						type="primary"
+						:aria-label="t('photos', 'Add selection to an album')"
+						@click="showAlbumPicker = true">
+						<template #icon>
+							<Plus slot="icon" />
+						</template>
+						{{ t('photos', 'Add to album') }}
+					</NcButton>
 
-			<Loader v-if="loadingCount > 0" key="loader" />
-		</div>
+					<NcActions :aria-label="t('photos', 'Open actions menu')">
+						<ActionDownload :selected-file-ids="selectedFileIds" :title="t('photos', 'Download selected files')">
+							<Download slot="icon" />
+						</ActionDownload>
+
+						<ActionFavorite :selected-file-ids="selectedFileIds" />
+
+						<NcActionButton :close-after-click="true"
+							:aria-label="t('photos', 'Delete selection')"
+							@click="deleteSelection">
+							{{ t('photos', 'Delete selection') }}
+							<Delete slot="icon" />
+						</NcActionButton>
+					</NcActions>
+				</template>
+			</div>
+		</HeaderNavigation>
 
 		<FilesListViewer ref="filesListViewer"
+			:container-element="appContent"
 			class="timeline__file-list"
-			:use-window="true"
 			:file-ids-by-section="fileIdsByMonth"
 			:sections="monthsList"
 			:loading="loadingFiles"
 			:base-height="isMobile ? 120 : 200"
-			:empty-message="t('photos', 'No photos in here')"
+			:empty-message="t('photos', 'No photos or videos in here')"
 			@need-content="getContent">
-			<template slot-scope="{file, visibility}">
+			<template slot-scope="{file, distance}">
 				<h3 v-if="file.sectionHeader"
 					:id="`file-picker-section-header-${file.id}`"
 					class="section-header">
@@ -113,26 +100,27 @@
 					:file="files[file.id]"
 					:allow-selection="true"
 					:selected="selection[file.id] === true"
-					:visibility="visibility"
-					:semaphore="semaphore"
+					:distance="distance"
 					@click="openViewer"
 					@select-toggled="onFileSelectToggle" />
 			</template>
 		</FilesListViewer>
 
-		<Modal v-if="showAlbumCreationForm"
+		<NcModal v-if="showAlbumCreationForm"
 			key="albumCreationForm"
+			:close-button-contained="false"
 			:title="t('photos', 'New album')"
 			@close="showAlbumCreationForm = false">
 			<AlbumForm @done="showAlbumCreationForm = false" />
-		</Modal>
+		</NcModal>
 
-		<Modal v-if="showAlbumPicker"
+		<NcModal v-if="showAlbumPicker"
 			key="albumPicker"
+			:close-button-contained="false"
 			:title="t('photos', 'Add to album')"
 			@close="showAlbumPicker = false">
 			<AlbumPicker @album-picked="addSelectionToAlbum" />
-		</Modal>
+		</NcModal>
 	</div>
 </template>
 
@@ -141,44 +129,43 @@ import { mapActions, mapGetters } from 'vuex'
 import Plus from 'vue-material-design-icons/Plus'
 import Delete from 'vue-material-design-icons/Delete'
 import PlusBoxMultiple from 'vue-material-design-icons/PlusBoxMultiple'
-import FileUpload from 'vue-material-design-icons/FileUpload'
-import Star from 'vue-material-design-icons/Star'
 import Download from 'vue-material-design-icons/Download'
 
-import { Modal, Actions, ActionButton, Button, isMobile } from '@nextcloud/vue'
+import { NcModal, NcActions, NcActionButton, NcButton, NcEmptyContent, isMobile } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 
-import logger from '../services/logger.js'
 import { allMimes } from '../services/AllowedMimes.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import FilesListViewer from '../components/FilesListViewer.vue'
-import EmptyContent from '../components/EmptyContent.vue'
 import File from '../components/File.vue'
-import Loader from '../components/Loader.vue'
-import AlbumForm from '../components/AlbumForm.vue'
-import AlbumPicker from '../components/AlbumPicker.vue'
+import AlbumForm from '../components/Albums/AlbumForm.vue'
+import AlbumPicker from '../components/Albums/AlbumPicker.vue'
+import ActionFavorite from '../components/Actions/ActionFavorite.vue'
+import ActionDownload from '../components/Actions/ActionDownload.vue'
+import HeaderNavigation from '../components/HeaderNavigation.vue'
+import { translate } from '@nextcloud/l10n'
 
 export default {
 	name: 'Timeline',
 	components: {
-		EmptyContent,
+		Delete,
+		PlusBoxMultiple,
+		Download,
+		Plus,
+		NcEmptyContent,
+		NcModal,
+		NcActions,
+		NcActionButton,
+		NcButton,
 		AlbumForm,
 		AlbumPicker,
 		FilesListViewer,
-		Loader,
 		File,
-		Modal,
-		Actions,
-		ActionButton,
-		Button,
-		Plus,
-		Delete,
-		FileUpload,
-		PlusBoxMultiple,
-		Star,
-		Download,
+		ActionFavorite,
+		ActionDownload,
+		HeaderNavigation,
 	},
 
 	filters: {
@@ -221,6 +208,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		rootTitle: {
+			type: String,
+			required: true,
+		},
 	},
 
 	data() {
@@ -228,6 +219,7 @@ export default {
 			loadingCount: 0,
 			showAlbumCreationForm: false,
 			showAlbumPicker: false,
+			appContent: document.getElementById('app-content-vue'),
 		}
 	},
 
@@ -235,16 +227,10 @@ export default {
 		...mapGetters([
 			'files',
 		]),
-
-		/** @type {boolean} */
-		shouldFavorite() {
-			// Favorite all selection if at least one file is not on the favorites.
-			return this.selectedFileIds.some((fileId) => this.$store.state.files.files[fileId].favorite === 0)
-		},
 	},
 
 	methods: {
-		...mapActions(['deleteFiles', 'toggleFavoriteForFiles', 'downloadFiles', 'addFilesToAlbum']),
+		...mapActions(['deleteFiles', 'addFilesToAlbum']),
 
 		getContent() {
 			this.fetchFiles('', {
@@ -257,7 +243,7 @@ export default {
 		openViewer(fileId) {
 			const file = this.files[fileId]
 			OCA.Viewer.open({
-				path: file.filename,
+				fileInfo: file,
 				list: Object.values(this.fileIdsByMonth).flat().map(fileId => this.files[fileId]),
 				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
 				canLoop: file.canLoop,
@@ -269,64 +255,19 @@ export default {
 		},
 
 		async addSelectionToAlbum(albumName) {
-			try {
-				this.showAlbumPicker = false
-				this.loadingCount++
-				await this.addFilesToAlbum({ albumName, fileIdsToAdd: this.selectedFileIds })
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		async favoriteSelection() {
-			try {
-				this.loadingCount++
-				await this.toggleFavoriteForFiles({ fileIds: this.selectedFileIds, favoriteState: true })
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		async unFavoriteSelection() {
-			try {
-				this.loadingCount++
-				await this.toggleFavoriteForFiles({ fileIds: this.selectedFileIds, favoriteState: false })
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
+			this.showAlbumPicker = false
+			await this.addFilesToAlbum({ albumName, fileIdsToAdd: this.selectedFileIds })
 		},
 
 		async deleteSelection() {
-			try {
-				this.loadingCount++
-				// Need to store the file ids so it is not changed before the deleteFiles call.
-				const fileIds = this.selectedFileIds
-				this.onUncheckFiles(fileIds)
-				this.fetchedFileIds = this.fetchedFileIds.filter(fileid => !fileIds.includes(fileid))
-				await this.deleteFiles(fileIds)
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
+			// Need to store the file ids so it is not changed before the deleteFiles call.
+			const fileIds = this.selectedFileIds
+			this.onUncheckFiles(fileIds)
+			this.fetchedFileIds = this.fetchedFileIds.filter(fileid => !fileIds.includes(fileid))
+			await this.deleteFiles(fileIds)
 		},
 
-		async downloadSelection() {
-			try {
-				this.loadingCount++
-				await this.downloadFiles(this.selectedFileIds)
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
-		},
+		t: translate,
 	},
 }
 </script>
@@ -336,27 +277,8 @@ export default {
 	flex-direction: column;
 
 	&__header {
-		display: flex;
-		min-height: 60px;
-		align-items: center;
-		position: sticky;
-		top: var(--header-height);
-		width: 100%;
-		height: 60px;
-		z-index: 3;
-		background: var(--color-main-background);
-		padding: 0 64px;
-
-		@media only screen and (max-width: 1200px) {
-			padding: 0 48px;
-		}
-
-		& > * {
-			margin-right: 8px;
-		}
-
-		.loader {
-			margin-left: 16px;
+		&__left {
+			display: flex;
 		}
 	}
 
@@ -367,12 +289,8 @@ export default {
 			padding: 0 4px;
 		}
 
-		::v-deep .files-list-viewer__section-header {
-			top: calc(var(--header-height) + 60px);
-		}
-
-		.section-header {
-			padding: 24px 0 16px 0;
+		:deep .files-list-viewer__section-header {
+			top: var(--photos-navigation-height);
 		}
 	}
 }

@@ -20,10 +20,12 @@
  *
  */
 import Vue from 'vue'
-import moment from '@nextcloud/moment'
 
-import { deleteFile, favoriteFile, downloadFiles } from '../services/FileActions.js'
+import moment from '@nextcloud/moment'
+import { showError } from '@nextcloud/dialogs'
+
 import logger from '../services/logger.js'
+import client, { prefixPath } from '../services/DavClient.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
 
 const state = {
@@ -39,14 +41,22 @@ const mutations = {
 	 * @param {Array} newFiles the store mutations
 	 */
 	updateFiles(state, newFiles) {
+		const files = {}
 		newFiles.forEach(file => {
-			if (state.nomediaPaths.some(nomediaPath => file.filename.startsWith(nomediaPath))) {
+			// Ignore the file if the path is excluded
+			if (state.nomediaPaths.some(nomediaPath => file.filename.startsWith(nomediaPath)
+				|| file.filename.startsWith(prefixPath + nomediaPath))) {
 				return
 			}
+
 			if (file.fileid >= 0) {
-				file.fileMetadataSizeParsed = JSON.parse(file.fileMetadataSize?.replace(/&quot;/g, '"') ?? '{}')
-				file.fileMetadataSizeParsed.width = file.fileMetadataSizeParsed?.width ?? 256
-				file.fileMetadataSizeParsed.height = file.fileMetadataSizeParsed?.height ?? 256
+				if (file.fileMetadataSize?.length > 1) {
+					file.fileMetadataSizeParsed = JSON.parse(file.fileMetadataSize?.replace(/&quot;/g, '"') ?? '{}')
+					file.fileMetadataSizeParsed.width = file.fileMetadataSizeParsed?.width ?? 256
+					file.fileMetadataSizeParsed.height = file.fileMetadataSizeParsed?.height ?? 256
+				} else {
+					file.fileMetadataSizeParsed = { width: 256, height: 256 }
+				}
 			}
 
 			// Make the fileId a string once and for all.
@@ -56,11 +66,14 @@ const mutations = {
 			file.timestamp = moment(file.lastmod).unix() // For sorting
 			file.month = moment(file.lastmod).format('YYYYMM') // For grouping by month
 			file.day = moment(file.lastmod).format('MMDD') // For On this day
+
+			// Schedule the file to add
+			files[file.fileid] = file
 		})
 
 		state.files = {
 			...state.files,
-			...newFiles.reduce((files, file) => ({ ...files, [file.fileid]: file }), {}),
+			...files,
 		}
 	},
 
@@ -108,10 +121,10 @@ const mutations = {
 	 * @param {object} state the store mutations
 	 * @param {object} params -
 	 * @param {number} params.fileId - The id of the file
-	 * @param {boolean} params.favoriteState - The ew state of the favorite property
+	 * @param {0|1} params.favoriteState - The ew state of the favorite property
 	 */
 	favoriteFile(state, { fileId, favoriteState }) {
-		Vue.set(state.files[fileId], 'favorite', favoriteState ? 1 : 0)
+		Vue.set(state.files[fileId], 'favorite', favoriteState)
 	},
 }
 
@@ -174,12 +187,16 @@ const actions = {
 
 		const promises = fileIds
 			.map(async (fileId) => {
+				const file = files[fileId]
 				const symbol = await semaphore.acquire()
+
 				try {
-					await deleteFile(files[fileId].filename)
+					await client.deleteFile(file.filename)
 				} catch (error) {
+					logger.error(t('photos', 'Failed to delete {fileId}.', { fileId }), { error })
+					showError(t('photos', 'Failed to delete {fileName}.', { fileName: file.basename }))
 					console.error(error)
-					context.dispatch('appendFiles', [files[fileId]])
+					context.dispatch('appendFiles', [file])
 				} finally {
 					semaphore.release(symbol)
 				}
@@ -194,30 +211,45 @@ const actions = {
 	 * @param {object} context the store mutations
 	 * @param {object} params -
 	 * @param {number[]} params.fileIds - The ids of the files
-	 * @param {boolean} params.favoriteState - The favorite state to set
+	 * @param {0|1} params.favoriteState - The favorite state to set
 	 */
 	toggleFavoriteForFiles(context, { fileIds, favoriteState }) {
 		const semaphore = new Semaphore(5)
 
 		const promises = fileIds
 			.map(async (fileId) => {
+				const file = context.state.files[fileId]
 				const symbole = await semaphore.acquire()
-				await favoriteFile(state.files[fileId].filename, favoriteState)
-				context.commit('favoriteFile', { fileId, favoriteState })
+
+				try {
+					context.commit('favoriteFile', { fileId, favoriteState })
+					await client.customRequest(
+						file.filename,
+						{
+							method: 'PROPPATCH',
+							data: `<?xml version="1.0"?>
+							<d:propertyupdate xmlns:d="DAV:"
+								xmlns:oc="http://owncloud.org/ns"
+								xmlns:nc="http://nextcloud.org/ns"
+								xmlns:ocs="http://open-collaboration-services.org/ns">
+							<d:set>
+								<d:prop>
+									<oc:favorite>${favoriteState}</oc:favorite>
+								</d:prop>
+							</d:set>
+							</d:propertyupdate>`,
+						}
+					)
+				} catch (error) {
+					context.commit('favoriteFile', { fileId, favoriteState: favoriteState === 0 ? 1 : 0 })
+					logger.error(t('photos', 'Failed to set favorite state for {fileId}.', { fileId: file.fileid }), { error })
+					showError(t('photos', 'Failed to set favorite state for {fileName}.', { fileName: file.basename }))
+				}
+
 				return semaphore.release(symbole)
 			})
 
 		return Promise.all(promises)
-	},
-
-	/**
-	 * Download a list of files
-	 *
-	 * @param {object} context the store mutations
-	 * @param {number[]} fileIds - The ids of the files
-	 */
-	downloadFiles(context, fileIds) {
-		downloadFiles(fileIds.map(fileId => context.state.files[fileId].filename))
 	},
 }
 

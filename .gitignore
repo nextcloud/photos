@@ -19,3 +19,7 @@ coverage/
 vendor
 .php_cs.cache
 .php-cs-fixer.cache
+
+cypress/videos
+cypress/snapshots
+cypress/downloads

@@ -23,7 +23,7 @@
  -->
 
 <template>
-	<router-link class="face-cover" :to="`/faces/${baseName}`">
+	<div :class="['face-cover', small && 'face-cover--small']" @click="$emit('click')">
 		<div class="face-cover__crop-container">
 			<img ref="image"
 				class="face-cover__image"
@@ -31,16 +31,16 @@
 				:style="coverDimensions">
 		</div>
 		<div class="face-cover__details">
-			<div class="face-cover__details__first-line">
-				<h2 :class="{'face-cover__details__name': true, 'hidden-visually': baseName.match(/^[0-9]+$/)}">
+			<div v-if="!baseName.match(/^[0-9]+$/)" class="face-cover__details__first-line">
+				<h2 class="face-cover__details__name">
 					{{ baseName }}
 				</h2>
 			</div>
-			<div v-if="facesFiles[baseName]" class="face-cover__details__second-line">
+			<div v-if="facesFiles[baseName] && !small" class="face-cover__details__second-line">
 				{{ n('photos', '%n photos', '%n photos', facesFiles[baseName].length,) }}
 			</div>
 		</div>
-	</router-link>
+	</div>
 </template>
 
 <script>
@@ -62,6 +62,16 @@ export default {
 			type: String,
 			required: true,
 		},
+		small: {
+			type: Boolean,
+			default: false,
+		},
+	},
+
+	data() {
+		return {
+			observer: null,
+		}
 	},
 
 	computed: {
@@ -86,7 +96,7 @@ export default {
 				return ''
 			}
 
-			return generateUrl(`/core/preview?fileId=${this.cover.fileid}&x=${512}&y=${512}&forceIcon=0&a=1`)
+			return generateUrl(`/apps/photos/api/v1/preview/${this.cover.fileid}?x=${512}&y=${512}`)
 		},
 
 		cover() {
@@ -99,17 +109,33 @@ export default {
 		},
 	},
 
-	async beforeMount() {
-		await this.fetchFiles()
+	async mounted() {
+		this.waitForVisible(this.$el, (isVisible) => {
+			if (!this.facesFiles[this.face.basename]) {
+				this.fetchFiles()
+			}
+		})
 	},
 
 	beforeDestroy() {
-		this.cancelFilesRequest('Changed view')
+		this.observer.disconnect()
 	},
 
 	methods: {
 		async fetchFiles() {
 			await this.fetchFaceContent(this.face.basename)
+		},
+		waitForVisible(el, listener) {
+			this.observer = new IntersectionObserver((entries, observer) => {
+				entries.forEach(entry => {
+					if (entry.intersectionRatio > 0) {
+						listener()
+						observer.disconnect()
+					}
+				})
+			})
+
+			this.observer.observe(el)
 		},
 	},
 }
@@ -124,12 +150,12 @@ export default {
 
 	&__crop-container {
 		overflow: hidden;
-		width: 250px;
-		height: 250px;
-		border-radius: 250px;
+		width: 128px;
+		height: 128px;
+		border-radius: 128px;
 		position: relative;
 		background: var(--color-background-darker);
-		--photos-face-width: 250px;
+		--photos-face-width: 128px;
 
 		@media only screen and (max-width: 1020px) {
 			width: 95px;
@@ -145,7 +171,7 @@ export default {
 	&__details {
 		display: flex;
 		flex-direction: column;
-		width: 250px;
+		width: 128px;
 		margin-top: 4px;
 		text-align: center;
 
@@ -161,6 +187,7 @@ export default {
 		}
 
 		&__second-line {
+			margin-top: 6px;
 			color: var(--color-text-maxcontrast);
 		}
 
@@ -168,6 +195,20 @@ export default {
 			flex-grow: 1;
 			margin: 0;
 		}
+	}
+}
+
+.face-cover--small {
+	* {
+		font-size: 15px !important;
+	}
+	.face-cover__details {
+		width: 60px !important;
+	}
+	.face-cover__crop-container {
+		width: 60px !important;
+		height: 60px !important;
+		--photos-face-width: 60px !important;
 	}
 }
 </style>

@@ -23,28 +23,39 @@
 
 <template>
 	<!-- Errors handlers-->
-	<EmptyContent v-if="error === 404" illustration-name="folder">
+	<NcEmptyContent v-if="error === 404" illustration-name="folder">
 		{{ t('photos', 'This folder does not exist') }}
-	</EmptyContent>
-	<EmptyContent v-else-if="error">
+	</NcEmptyContent>
+	<NcEmptyContent v-else-if="error">
 		{{ t('photos', 'An error occurred') }}
-	</EmptyContent>
+	</NcEmptyContent>
+	<NcEmptyContent v-else-if="initializing" icon="icon-loading">
+		{{ t('photos', 'Loading folders …') }}
+	</NcEmptyContent>
 
 	<!-- Folder content -->
-	<div v-else-if="!loading">
-		<Navigation v-if="folder"
-			key="navigation"
-			v-bind="folder"
+	<div v-else-if="!initializing">
+		<HeaderNavigation key="navigation"
+			:loading="loading"
+			:path="path"
+			:title="folder.basename.toString()"
 			:root-title="rootTitle"
-			:show-actions="true" />
+			@refresh="onRefresh">
+			<UploadPicker :accept="allowedMimes"
+				:destination="path"
+				:multiple="true"
+				@uploaded="onUpload" />
+		</HeaderNavigation>
+
 		<!-- Empty folder, should only happen via direct link -->
-		<EmptyContent v-if="isEmpty" key="emptycontent" illustration-name="empty">
+		<NcEmptyContent v-if="isEmpty" key="emptycontent" illustration-name="empty">
 			{{ t('photos', 'No photos in here') }}
-		</EmptyContent>
+		</NcEmptyContent>
 
 		<div v-else class="grid-container">
 			<VirtualGrid ref="virtualgrid"
 				:items="contentList"
+				:scroll-element="appContent"
 				:get-column-count="() => gridConfig.count"
 				:get-grid-gap="() => gridConfig.gap" />
 		</div>
@@ -53,27 +64,34 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { UploadPicker } from '@nextcloud/upload'
+import { NcEmptyContent } from '@nextcloud/vue'
+import VirtualGrid from 'vue-virtual-grid'
 
+import FileLegacy from '../components/FileLegacy.vue'
+import Folder from '../components/Folder.vue'
+import HeaderNavigation from '../components/HeaderNavigation.vue'
+
+import { prefixPath } from '../services/DavClient.js'
+import allowedMimes from '../services/AllowedMimes.js'
 import getAlbumContent from '../services/AlbumContent.js'
 
-import VirtualGrid from 'vue-virtual-grid'
-import EmptyContent from '../components/EmptyContent.vue'
-import Folder from '../components/Folder.vue'
-import FileLegacy from '../components/FileLegacy.vue'
-import Navigation from '../components/Navigation.vue'
-
+import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import GridConfigMixin from '../mixins/GridConfig.js'
-
-import cancelableRequest from '../utils/CancelableRequest.js'
+import getFileInfo from '../services/FileInfo.js'
 
 export default {
 	name: 'Folders',
 	components: {
 		VirtualGrid,
-		EmptyContent,
-		Navigation,
+		HeaderNavigation,
+		NcEmptyContent,
+		UploadPicker,
 	},
-	mixins: [GridConfigMixin],
+	mixins: [
+		AbortControllerMixin,
+		GridConfigMixin,
+	],
 	props: {
 		rootTitle: {
 			type: String,
@@ -92,8 +110,12 @@ export default {
 	data() {
 		return {
 			error: null,
-			cancelRequest: () => {},
+			allowedMimes,
+
+			initializing: true,
 			loading: false,
+
+			appContent: document.getElementById('app-content-vue'),
 		}
 	},
 
@@ -190,36 +212,34 @@ export default {
 		},
 	},
 
-	async beforeMount() {
+	beforeMount() {
 		this.fetchFolderContent()
 	},
 
-	beforeDestroy() {
-		this.cancelRequest('Changed view')
-	},
-
 	methods: {
+		onRefresh() {
+			this.fetchFolderContent()
+		},
+
 		async fetchFolderContent() {
-			// cancel any pending requests
-			this.cancelRequest('Changed folder')
+			this.error = null
+			this.loading = true
 
 			// close any potential opened viewer & sidebar
-			OCA.Viewer && OCA.Viewer.close && OCA.Viewer.close()
-			OCA.Files && OCA.Files.Sidebar.close && OCA.Files.Sidebar.close()
+			OCA?.Viewer?.close?.()
+			OCA?.Files?.Sidebar?.close?.()
 
 			// if we don't already have some cached data let's show a loader
 			if (!this.files[this.folderId] || !this.folders[this.folderId]) {
-				this.loading = true
+				this.initializing = true
 			}
-			this.error = null
-
-			// init cancellable request
-			const { request, cancel } = cancelableRequest(getAlbumContent)
-			this.cancelRequest = cancel
 
 			try {
 				// get content and current folder info
-				const { folder, folders, files } = await request(this.path, { shared: this.showShared })
+				const { folder, folders, files } = await getAlbumContent(this.path, {
+					shared: this.showShared,
+					signal: this.abortController.signal,
+				})
 				this.$store.dispatch('addPath', { path: this.path, fileid: folder.fileid })
 				this.$store.dispatch('updateFolders', { fileid: folder.fileid, files, folders })
 				this.$store.dispatch('updateFiles', { folder, files, folders })
@@ -239,7 +259,22 @@ export default {
 			} finally {
 				// done loading even with errors
 				this.loading = false
+				this.initializing = false
 			}
+		},
+
+		/**
+		 * Fetch file Info and add them into the store
+		 *
+		 * @param {Upload[]} uploads the newly uploaded files
+		 */
+		onUpload(uploads) {
+			uploads.forEach(async upload => {
+				const relPath = upload.path.split(prefixPath).pop()
+				const file = await getFileInfo(relPath)
+				this.$store.dispatch('appendFiles', [file])
+				this.$store.dispatch('addFilesToFolder', { fileid: this.folderId, files: [file] })
+			})
 		},
 	},
 

@@ -23,18 +23,11 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Album;
 
-use OC\Metadata\FileMetadata;
+use OCA\Photos\DB\PhotosFile;
 
-class AlbumFile {
-	private int $fileId;
-	private string $name;
-	private string $mimeType;
-	private int $size;
-	private int $mtime;
-	private string $etag;
+class AlbumFile extends PhotosFile {
 	private int $added;
-	/** @var array<string, FileMetadata> */
-	private array $metaData = [];
+	private string $owner;
 
 	public function __construct(
 		int $fileId,
@@ -43,54 +36,27 @@ class AlbumFile {
 		int $size,
 		int $mtime,
 		string $etag,
-		int $added
+		int $added,
+		string $owner
 	) {
-		$this->fileId = $fileId;
-		$this->name = $name;
-		$this->mimeType = $mimeType;
-		$this->size = $size;
-		$this->mtime = $mtime;
-		$this->etag = $etag;
+		parent::__construct(
+			$fileId,
+			$name,
+			$mimeType,
+			$size,
+			$mtime,
+			$etag
+		);
+
 		$this->added = $added;
-	}
-
-	public function getFileId(): int {
-		return $this->fileId;
-	}
-
-	public function getName(): string {
-		return $this->name;
-	}
-
-	public function getMimeType(): string {
-		return $this->mimeType;
-	}
-
-	public function getSize(): int {
-		return $this->size;
-	}
-
-	public function getMTime(): int {
-		return $this->mtime;
-	}
-
-	public function getEtag(): string {
-		return $this->etag;
-	}
-
-	public function setMetadata(string $key, FileMetadata $value): void {
-		$this->metaData[$key] = $value;
-	}
-
-	public function hasMetadata(string $key): bool {
-		return isset($this->metaData[$key]);
-	}
-
-	public function getMetadata(string $key): FileMetadata {
-		return $this->metaData[$key];
+		$this->owner = $owner;
 	}
 
 	public function getAdded(): int {
 		return $this->added;
+	}
+
+	public function getOwner(): string {
+		return $this->owner;
 	}
 }

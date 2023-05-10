@@ -23,7 +23,7 @@
 
 <template>
 	<FolderTagPreview :id="item.injected.fileid"
-		:name="item.injected.basename"
+		:name="item.injected.basename.toString()"
 		:path="item.injected.filename"
 		:file-list="previewFiles" />
 </template>
@@ -31,9 +31,11 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import getAlbumContent from '../services/AlbumContent'
-import cancelableRequest from '../utils/CancelableRequest'
-import FolderTagPreview from './FolderTagPreview'
+import { getCurrentUser } from '@nextcloud/auth'
+
+import FolderTagPreview from './FolderTagPreview.vue'
+import getAlbumContent from '../services/AlbumContent.js'
+import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 
 export default {
 	name: 'Folder',
@@ -41,6 +43,10 @@ export default {
 	components: {
 		FolderTagPreview,
 	},
+
+	mixins: [
+		AbortControllerMixin,
+	],
 	inheritAttrs: false,
 
 	props: {
@@ -52,7 +58,6 @@ export default {
 
 	data() {
 		return {
-			cancelRequest: null,
 			previewFolder: this.item.injected.fileid,
 		}
 	},
@@ -101,31 +106,24 @@ export default {
 		}
 	},
 
-	beforeDestroy() {
-		// cancel any pending requests
-		if (this.cancelRequest) {
-			this.cancelRequest('Navigated away')
-		}
-	},
-
 	methods: {
 		async getFolderData(filename) {
-			// init cancellable request
-			const { request, cancel } = cancelableRequest(getAlbumContent)
-			this.cancelRequest = cancel
-
 			try {
+				// Remove leading /file/{userId}
+				const prefix = `/files/${getCurrentUser()?.uid}`
+				const unPrefixedFileName = filename.replace(new RegExp(`^${prefix}`), '')
+
 				// get data
-				const { folder, folders, files } = await request(filename, { shared: this.item.injected.showShared })
+				const { folder, folders, files } = await getAlbumContent(unPrefixedFileName, {
+					shared: this.item.injected.showShared,
+					signal: this.abortController.signal,
+				})
 				this.$store.dispatch('updateFolders', { fileid: folder.fileid, files, folders })
 				this.$store.dispatch('updateFiles', { folder, files, folders })
 			} catch (error) {
 				if (error.response && error.response.status) {
 					console.error('Failed to get folder content', filename, error.response)
 				}
-				// else we just cancelled the request
-			} finally {
-				this.cancelRequest = null
 			}
 		},
 

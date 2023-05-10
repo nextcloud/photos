@@ -21,59 +21,65 @@
  -->
 
 <template>
-	<Content app-name="photos">
-		<AppNavigation>
+	<NcContent app-name="photos">
+		<NcAppNavigation>
 			<template #list>
-				<AppNavigationItem :to="{name: 'all_media'}"
+				<NcAppNavigationItem :to="{name: 'all_media'}"
 					class="app-navigation__all_media"
 					:title="t('photos', 'All media')"
 					exact>
 					<ImageIcon slot="icon" :size="20" />
-				</AppNavigationItem>
-				<AppNavigationItem to="/photos" :title="t('photos', 'Photos')">
+				</NcAppNavigationItem>
+				<NcAppNavigationItem to="/photos" :title="t('photos', 'Photos')">
 					<Camera slot="icon" :size="20" />
-				</AppNavigationItem>
-				<AppNavigationItem to="/videos" :title="t('photos', 'Videos')">
+				</NcAppNavigationItem>
+				<NcAppNavigationItem to="/videos" :title="t('photos', 'Videos')">
 					<VideoIcon slot="icon" :size="20" />
-				</AppNavigationItem>
-				<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Albums')">
+				</NcAppNavigationItem>
+				<NcAppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Albums')">
 					<FolderMultipleImage slot="icon" :size="20" />
-				</AppNavigationItem>
-				<AppNavigationItem v-if="showPeopleMenuEntry" :to="{name: 'faces'}" :title="t('photos', 'People')">
+				</NcAppNavigationItem>
+				<NcAppNavigationItem :to="{name: 'sharedAlbums'}" :title="t('photos', 'Collaborative albums')">
+					<AccountGroup slot="icon" :size="20" />
+				</NcAppNavigationItem>
+				<NcAppNavigationItem v-if="showPeopleMenuEntry" :to="{name: 'faces'}" :title="t('photos', 'People')">
 					<template #icon>
 						<AccountBoxMultipleOutline :size="20" />
 					</template>
-				</AppNavigationItem>
-				<AppNavigationItem :to="{name: 'folders'}" :title="t('photos', 'Folders')">
+				</NcAppNavigationItem>
+				<NcAppNavigationItem :to="{name: 'folders'}" :title="t('photos', 'Folders')">
 					<Folder slot="icon" :size="20" />
-				</AppNavigationItem>
-				<AppNavigationItem to="/favorites" :title="t('photos', 'Favorites')">
+				</NcAppNavigationItem>
+				<NcAppNavigationItem to="/favorites" :title="t('photos', 'Favorites')">
 					<Star slot="icon" :size="20" />
-				</AppNavigationItem>
-				<AppNavigationItem :to="{name: 'thisday'}" :title="t('photos', 'On this day')">
+				</NcAppNavigationItem>
+				<NcAppNavigationItem :to="{name: 'thisday'}" :title="t('photos', 'On this day')">
 					<CalendarToday slot="icon" :size="20" />
-				</AppNavigationItem>
-				<AppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared with you')">
+				</NcAppNavigationItem>
+				<NcAppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared with you')">
 					<ShareVariant slot="icon" :size="20" />
-				</AppNavigationItem>
-				<AppNavigationItem v-if="areTagsInstalled"
+				</NcAppNavigationItem>
+				<NcAppNavigationItem v-if="areTagsInstalled"
 					:to="{name: 'tags'}"
-					:title="t('photos', 'Tagged photos')">
+					:title="t('photos', 'Tags')">
 					<Tag slot="icon" :size="20" />
-				</AppNavigationItem>
-				<AppNavigationItem v-if="showLocationMenuEntry"
-					:to="{name: 'maps'}"
-					:title="t('photos', 'Locations')">
+				</NcAppNavigationItem>
+				<NcAppNavigationItem :to="{name: 'places'}" :title="t('photos', 'Places')">
 					<MapMarker slot="icon" :size="20" />
-				</AppNavigationItem>
+				</NcAppNavigationItem>
+				<NcAppNavigationItem v-if="showLocationMenuEntry"
+					:to="{name: 'maps'}"
+					:title="t('photos', 'Map')">
+					<Map slot="icon" :size="20" />
+				</NcAppNavigationItem>
 			</template>
 			<template #footer>
-				<AppNavigationItem :title="t('photos', 'Photos settings')" @click="showSettings">
+				<NcAppNavigationItem :title="t('photos', 'Photos settings')" @click="showSettings">
 					<Cog slot="icon" :size="20" />
-				</AppNavigationItem>
+				</NcAppNavigationItem>
 			</template>
-		</AppNavigation>
-		<AppContent>
+		</NcAppNavigation>
+		<NcAppContent :page-heading="pageHeading">
 			<router-view />
 
 			<!-- svg img loading placeholder (linked to the File component) -->
@@ -83,11 +89,11 @@
 			<span class="hidden-visually" role="none" v-html="imgplaceholder" />
 			<!-- eslint-disable-next-line vue/no-v-html (because it's an SVG file) -->
 			<span class="hidden-visually" role="none" v-html="videoplaceholder" />
-		</AppContent>
+		</NcAppContent>
 
 		<!-- Main settings Modal-->
 		<SettingsDialog :open.sync="openedSettings" />
-	</Content>
+	</NcContent>
 </template>
 
 <script>
@@ -102,16 +108,15 @@ import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.v
 import Folder from 'vue-material-design-icons/Folder.vue'
 import Star from 'vue-material-design-icons/Star.vue'
 import CalendarToday from 'vue-material-design-icons/CalendarToday.vue'
+import AccountGroup from 'vue-material-design-icons/AccountGroup.vue'
 import Tag from 'vue-material-design-icons/Tag.vue'
+import Map from 'vue-material-design-icons/Map.vue'
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
 import Cog from 'vue-material-design-icons/Cog.vue'
 
-import AppContent from '@nextcloud/vue/dist/Components/AppContent.js'
-import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation.js'
-import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem.js'
-import Content from '@nextcloud/vue/dist/Components/Content.js'
+import { NcContent, NcAppContent, NcAppNavigation, NcAppNavigationItem } from '@nextcloud/vue'
 
 import SettingsDialog from './components/Settings/SettingsDialog.vue'
 
@@ -121,27 +126,30 @@ import videoplaceholder from './assets/video.svg'
 import areTagsInstalled from './services/AreTagsInstalled.js'
 import isMapsInstalled from './services/IsMapsInstalled.js'
 import isRecognizeInstalled from './services/IsRecognizeInstalled.js'
+import logger from './services/logger.js'
 
 export default {
 	name: 'Photos',
 	components: {
 		AccountBoxMultipleOutline,
-		AppContent,
-		AppNavigation,
-		AppNavigationItem,
 		Cog,
 		CalendarToday,
 		Camera,
-		Content,
+		AccountGroup,
 		Folder,
 		FolderMultipleImage,
 		ImageIcon,
-		MapMarker,
-		SettingsDialog,
 		ShareVariant,
 		Star,
 		Tag,
 		VideoIcon,
+		Map,
+		MapMarker,
+		NcAppContent,
+		NcAppNavigation,
+		NcAppNavigationItem,
+		NcContent,
+		SettingsDialog,
 	},
 	data() {
 		return {
@@ -161,30 +169,42 @@ export default {
 		}
 	},
 
+	computed: {
+		pageHeading() {
+			return this.$route.meta.rootTitle?.(this.$route)
+		},
+	},
+
 	async beforeMount() {
+		// Register excluded paths
+		const files = loadState('photos', 'nomedia-paths', [])
+		this.$store.dispatch('setNomediaPaths', files)
+		logger.debug('Known .nomedia and .noimage  paths', { files })
+
 		if ('serviceWorker' in navigator) {
 			// Use the window load event to keep the page load performant
 			window.addEventListener('load', () => {
-				navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js'), {
-					scope: '/',
+				navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js', {}, {
+					noRewrite: true,
+				}), {
+					scope: generateUrl('/apps/photos'),
 				}).then(registration => {
-					console.debug('SW registered: ', registration)
+					logger.debug('SW registered: ', { registration })
 				}).catch(registrationError => {
-					console.error('SW registration failed: ', registrationError)
+					logger.error('SW registration failed: ', { registrationError })
 				})
 
 			})
 		} else {
-			console.debug('Service Worker is not enabled on this browser.')
+			logger.debug('Service Worker is not enabled on this browser.')
 		}
-
-		const files = loadState('photos', 'nomedia-paths', [])
-		this.$store.dispatch('setNomediaPaths', files)
 	},
 
 	beforeDestroy() {
 		window.removeEventListener('load', () => {
-			navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js'))
+			navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js', {}, {
+				noRewrite: true,
+			}))
 		})
 	},
 
@@ -196,22 +216,14 @@ export default {
 }
 </script>
 <style lang="scss">
-body {
-	overflow-x: hidden; // Prevent horizontal scrollbar on chrome as .app-photos is 100vw, which means size of the window including the scrollbar.
+.app-content {
+	display: flex;
+	flex-grow: 1;
+	flex-direction: column;
+	align-content: space-between;
+}
 
-	.app-photos {
-		width: 100vw; // Prevent layout change when opening the Viewer as the scrollbar disappear (overflow: hidden on body)
-
-		.app-content {
-			display: flex;
-			flex-grow: 1;
-			flex-direction: column;
-			align-content: space-between;
-		}
-
-		.app-navigation__photos::v-deep .app-navigation-entry-icon.icon-photos {
-			background-size: 20px;
-		}
-	}
+.app-navigation__photos:deep .app-navigation-entry-icon.icon-photos {
+	background-size: 20px;
 }
 </style>

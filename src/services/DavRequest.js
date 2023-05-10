@@ -20,17 +20,20 @@
  *
  */
 const props = `
-	<oc:fileid />
-	<d:getlastmodified />
-	<d:getetag />
-	<d:getcontenttype />
 	<d:getcontentlength />
-	<nc:realpath />
-	<nc:has-preview />
-	<nc:file-metadata-size />
+	<d:getcontenttype />
+	<d:getetag />
+	<d:getlastmodified />
+	<d:resourcetype />
 	<nc:face-detections />
+	<nc:file-metadata-size />
+	<nc:has-preview />
+	<nc:realpath />
 	<oc:favorite />
-	<d:resourcetype />`
+	<oc:fileid />
+	<oc:permissions />
+	<nc:nbItems />
+`
 
 export { props }
 export default `<?xml version="1.0"?>

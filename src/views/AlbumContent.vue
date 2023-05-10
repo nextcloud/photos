@@ -20,227 +20,212 @@
  -
  -->
 <template>
-	<!-- Errors handlers-->
-	<EmptyContent v-if="album === undefined && !loadingAlbums" class="empty-content-with-illustration">
-		<template #icon>
-			<!-- eslint-disable-next-line vue/no-v-html -->
-			<span class="empty-content-illustration" v-html="FolderIllustration" />
-		</template>
-		{{ t('photos', 'This album does not exist') }}
-	</EmptyContent>
-	<EmptyContent v-else-if="errorFetchingFiles || errorFetchingAlbums">
-		<template #icon>
-			<AlertCircle />
-		</template>
-		{{ t('photos', 'An error occurred') }}
-	</EmptyContent>
-
-	<div v-else class="album">
-		<div class="album__header">
-			<div class="album__header__left">
-				<div class="album__header__title">
-					<h2 v-if="album !== undefined" class="album__name">
-						{{ album.basename }}
-					</h2>
-					<div v-if="album !== undefined && album.location !== ''" class="album__location">
-						<MapMarker />{{ album.location }}
-					</div>
+	<div>
+		<CollectionContent v-if="true"
+			ref="collectionContent"
+			:collection="album"
+			:collection-file-ids="albumFileIds"
+			:loading="loadingAlbums || loadingFiles"
+			:error="errorFetchingAlbums || errorFetchingFiles">
+			<!-- Header -->
+			<HeaderNavigation key="navigation"
+				slot="header"
+				slot-scope="{selectedFileIds}"
+				:loading="loadingFiles"
+				:params="{ albumName }"
+				:path="'/' + albumName"
+				:title="albumName"
+				@refresh="fetchAlbumContent">
+				<div v-if="album.location !== ''" slot="subtitle" class="album__location">
+					<MapMarker />{{ album.location }}
 				</div>
+				<template v-if="album !== undefined"
+					slot="right">
+					<UploadPicker v-if="album.nbItems !== 0"
+						:accept="allowedMimes"
+						:context="uploadContext"
+						:destination="album.basename"
+						:root="uploadContext.root"
+						:multiple="true"
+						@uploaded="onUpload" />
 
-				<Loader v-if="loadingCount > 0" class="album__header__loader" />
-			</div>
-			<div v-if="album !== undefined" class="album__header__actions">
-				<Button v-if="album.nbItems !== 0"
-					type="tertiary"
+					<NcButton v-if="sharingEnabled"
+						type="tertiary"
+						:aria-label="t('photos', 'Manage collaborators for this album')"
+						@click="showManageCollaboratorView = true">
+						<ShareVariant slot="icon" />
+					</NcButton>
+
+					<NcActions :aria-label="t('photos', 'Open actions menu')">
+						<NcActionButton :close-after-click="true"
+							:aria-label="t('photos', 'Edit album details')"
+							@click="showEditAlbumForm = true">
+							{{ t('photos', 'Edit album details') }}
+							<Pencil slot="icon" />
+						</NcActionButton>
+
+						<!-- Support download from arbitrary origin
+						<ActionDownload v-if="albumFileIds.length > 0"
+							:selected-file-ids="albumFileIds"
+							:title="t('photos', 'Download all files in album')">
+							<DownloadMultiple slot="icon" />
+						</ActionDownload>-->
+
+						<NcActionButton :close-after-click="true"
+							@click="handleDeleteAlbum">
+							{{ t('photos', 'Delete album') }}
+							<Delete slot="icon" />
+						</NcActionButton>
+
+						<template v-if="selectedFileIds.length > 0">
+							<NcActionSeparator />
+
+							<!-- Support download from arbitrary origin
+							<ActionDownload :selected-file-ids="selectedFileIds" :title="t('photos', 'Download selected files')">
+								<Download slot="icon" />
+							</ActionDownload>-->
+
+							<ActionFavorite :selected-file-ids="selectedFileIds" />
+
+							<NcActionButton :close-after-click="true"
+								@click="handleRemoveFilesFromAlbum(selectedFileIds)">
+								{{ t('photos', 'Remove selection from album') }}
+								<Close slot="icon" />
+							</NcActionButton>
+						</template>
+					</NcActions>
+				</template>
+			</HeaderNavigation>
+
+			<!-- No content -->
+			<NcEmptyContent v-if="album !== undefined && album.nbItems === 0 && !(loadingFiles || loadingAlbums)"
+				slot="empty-content"
+				:title="t('photos', 'This album does not have any photos or videos yet!')"
+				class="album__empty">
+				<ImagePlus slot="icon" />
+
+				<NcButton slot="action"
+					class="album__empty__button"
+					type="primary"
 					:aria-label="t('photos', 'Add photos to this album')"
 					@click="showAddPhotosModal = true">
-					<template #icon>
-						<Plus />
-					</template>
-				</Button>
-				<!-- <Button type="tertiary" :aria-label="t('photos', 'Share this album')" @click="showShareModal = true">
-					<template #icon>
-						<ShareVariant />
-					</template>
-				</Button> -->
-				<Actions :force-menu="true">
-					<ActionButton :close-after-click="true"
-						:aria-label="t('photos', 'Edit album details')"
-						@click="showEditAlbumForm = true">
-						{{ t('photos', 'Edit album details') }}
-						<Pencil slot="icon" />
-					</ActionButton>
-					<ActionButton v-if="albumFileIds.length > 0"
-						:close-after-click="true"
-						:aria-label="t('photos', 'Download all files in album')"
-						@click="downloadAllFiles">
-						{{ t('photos', 'Download all files in album') }}
-						<DownloadMultiple slot="icon" />
-					</ActionButton>
-					<template v-if="selectedFileIds.length > 0">
-						<ActionButton :close-after-click="true"
-							:aria-label="t('photos', 'Download selection')"
-							@click="downloadSelection">
-							{{ t('photos', 'Download selected files') }}
-							<Download slot="icon" />
-						</ActionButton>
-						<ActionButton v-if="shouldFavoriteSelection"
-							:close-after-click="true"
-							:aria-label="t('photos', 'Mark selection as favorite')"
-							@click="favoriteSelection">
-							{{ t('photos', 'Favorite') }}
-							<Star slot="icon" />
-						</ActionButton>
-						<ActionButton v-else
-							:close-after-click="true"
-							:aria-label="t('photos', 'Remove selection from favorites')"
-							@click="unFavoriteSelection">
-							{{ t('photos', 'Remove from favorites') }}
-							<Star slot="icon" />
-						</ActionButton>
-						<ActionButton :close-after-click="true"
-							@click="handleRemoveFilesFromAlbum(selectedFileIds)">
-							{{ n('photos', 'Remove item from album', 'Remove selection from album', selection.length) }}
-							<template #icon>
-								<Close />
-							</template>
-						</ActionButton>
-					</template>
-					<ActionButton :close-after-click="true"
-						@click="handleDeleteAlbum">
-						{{ t('photos', 'Delete album') }}
-						<Delete slot="icon" />
-					</ActionButton>
-				</Actions>
-			</div>
-		</div>
+					<Plus slot="icon" />
+					{{ t('photos', "Add") }}
+				</NcButton>
+			</NcEmptyContent>
+		</CollectionContent>
 
-		<div v-if="album !== undefined && album.nbItems === 0 && !(loadingFiles || loadingAlbums)" class="album__empty">
-			<EmptyContent>
-				<template #icon>
-					<ImagePlus />
-				</template>
-				<template #desc>
-					{{ t('photos', "This album doesn't have any photos or videos yet!") }}
-				</template>
-			</EmptyContent>
-
-			<Button class="album__empty__button"
-				type="primary"
-				:aria-label="t('photos', 'Add photos to this album')"
-				@click="showAddPhotosModal = true">
-				<template #icon>
-					<Plus />
-				</template>
-				{{ t('photos', "Add") }}
-			</Button>
-		</div>
-
-		<FilesListViewer v-if="album !== undefined"
-			class="album__photos"
-			:use-window="true"
-			:file-ids="albumFileIds"
-			:base-height="isMobile ? 120 : 200"
-			:loading="loadingFiles || loadingAlbums">
-			<File slot-scope="{file, visibility}"
-				:file="files[file.id]"
-				:allow-selection="true"
-				:selected="selection[file.id] === true"
-				:visibility="visibility"
-				:semaphore="semaphore"
-				@click="openViewer"
-				@select-toggled="onFileSelectToggle" />
-		</FilesListViewer>
-
-		<Modal v-if="showAddPhotosModal"
+		<NcModal v-if="showAddPhotosModal"
 			size="large"
 			:title="t('photos', 'Add photos to the album')"
 			@close="showAddPhotosModal = false">
 			<FilesPicker :destination="album.basename"
 				:blacklist-ids="albumFileIds"
-				:loading="loadingAddFilesToAlbum"
 				@files-picked="handleFilesPicked" />
-		</Modal>
+		</NcModal>
 
-		<Modal v-else-if="showShareModal"
-			:title="t('photos', 'Share the album')"
-			@close="showShareModal = false">
-			<ShareAlbumForm @albumShared="showShareModal = false" />
-		</Modal>
+		<NcModal v-if="showManageCollaboratorView"
+			:title="t('photos', 'Manage collaborators')"
+			@close="showManageCollaboratorView = false">
+			<CollaboratorsSelectionForm :album-name="album.basename"
+				:collaborators="album.collaborators"
+				:public-link="album.publicLink">
+				<template slot-scope="{collaborators}">
+					<NcButton :aria-label="t('photos', 'Save collaborators for this album.')"
+						type="primary"
+						:disabled="loadingAddCollaborators"
+						@click="handleSetCollaborators(collaborators)">
+						<template #icon>
+							<NcLoadingIcon v-if="loadingAddCollaborators" />
+						</template>
+						{{ t('photos', 'Save') }}
+					</NcButton>
+				</template>
+			</CollaboratorsSelectionForm>
+		</NcModal>
 
-		<Modal v-if="showEditAlbumForm"
+		<NcModal v-if="showEditAlbumForm"
 			:title="t('photos', 'Edit album details')"
 			@close="showEditAlbumForm = false">
 			<AlbumForm :album="album" @done="redirectToNewName" />
-		</Modal>
+		</NcModal>
 	</div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
-import MapMarker from 'vue-material-design-icons/MapMarker'
-// import ShareVariant from 'vue-material-design-icons/ShareVariant'
-import Plus from 'vue-material-design-icons/Plus'
-import Pencil from 'vue-material-design-icons/Pencil'
-import Delete from 'vue-material-design-icons/Delete'
-import ImagePlus from 'vue-material-design-icons/ImagePlus'
-import AlertCircle from 'vue-material-design-icons/AlertCircle'
-import Star from 'vue-material-design-icons/Star'
-import Close from 'vue-material-design-icons/Close'
-import Download from 'vue-material-design-icons/Download'
-import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple'
-
-import { Actions, ActionButton, Button, Modal, EmptyContent, isMobile } from '@nextcloud/vue'
+// eslint-disable-next-line node/no-extraneous-import
+import { addNewFileMenuEntry, removeNewFileMenuEntry } from '@nextcloud/files'
 import { getCurrentUser } from '@nextcloud/auth'
+import { mapActions, mapGetters } from 'vuex'
+import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionSeparator, NcLoadingIcon, isMobile } from '@nextcloud/vue'
+import { UploadPicker } from '@nextcloud/upload'
+import debounce from 'debounce'
 
+import Close from 'vue-material-design-icons/Close'
+import Delete from 'vue-material-design-icons/Delete'
+// import Download from 'vue-material-design-icons/Download'
+// import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple'
+import ImagePlus from 'vue-material-design-icons/ImagePlus'
+import MapMarker from 'vue-material-design-icons/MapMarker'
+import Pencil from 'vue-material-design-icons/Pencil'
+import Plus from 'vue-material-design-icons/Plus'
+import PlusSvg from '@mdi/svg/svg/plus.svg'
+import ShareVariant from 'vue-material-design-icons/ShareVariant'
+
+import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import FetchAlbumsMixin from '../mixins/FetchAlbumsMixin.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
-import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
-import FilesListViewer from '../components/FilesListViewer.vue'
-import File from '../components/File.vue'
-import Loader from '../components/Loader.vue'
+import UserConfig from '../mixins/UserConfig.js'
+
+// import ActionDownload from '../components/Actions/ActionDownload.vue'
+import ActionFavorite from '../components/Actions/ActionFavorite.vue'
+import AlbumForm from '../components/Albums/AlbumForm.vue'
+import CollaboratorsSelectionForm from '../components/Albums/CollaboratorsSelectionForm.vue'
+import CollectionContent from '../components/Collection/CollectionContent.vue'
 import FilesPicker from '../components/FilesPicker.vue'
-import ShareAlbumForm from '../components/ShareAlbumForm.vue'
-import AlbumForm from '../components/AlbumForm.vue'
-import FolderIllustration from '../assets/Illustrations/folder.svg'
-import logger from '../services/logger.js'
+import HeaderNavigation from '../components/HeaderNavigation.vue'
+
+import { genFileInfo } from '../utils/fileUtils.js'
+import allowedMimes from '../services/AllowedMimes.js'
 import client from '../services/DavClient.js'
 import DavRequest from '../services/DavRequest.js'
-import cancelableRequest from '../utils/CancelableRequest.js'
-import { genFileInfo } from '../utils/fileUtils.js'
+import logger from '../services/logger.js'
 
 export default {
 	name: 'AlbumContent',
 	components: {
-		MapMarker,
-		// ShareVariant,
-		Plus,
-		Pencil,
-		Star,
-		Close,
-		Download,
-		DownloadMultiple,
-		Delete,
-		ImagePlus,
-		AlertCircle,
-		FilesListViewer,
-		File,
+		// ActionDownload,
+		ActionFavorite,
 		AlbumForm,
-		EmptyContent,
-		Loader,
-		Actions,
-		ActionButton,
-		Button,
-		Modal,
+		Close,
+		CollaboratorsSelectionForm,
+		CollectionContent,
+		Delete,
+		// Download,
+		// DownloadMultiple,
 		FilesPicker,
-		ShareAlbumForm,
+		HeaderNavigation,
+		ImagePlus,
+		MapMarker,
+		NcActionButton,
+		NcActions,
+		NcActionSeparator,
+		NcButton,
+		NcEmptyContent,
+		NcLoadingIcon,
+		NcModal,
+		Pencil,
+		Plus,
+		ShareVariant,
+		UploadPicker,
 	},
 
 	mixins: [
+		AbortControllerMixin,
 		FetchAlbumsMixin,
 		FetchFilesMixin,
-		FilesSelectionMixin,
 		isMobile,
+		UserConfig,
 	],
 
 	props: {
@@ -252,26 +237,36 @@ export default {
 
 	data() {
 		return {
+			allowedMimes,
+
 			showAddPhotosModal: false,
-			showShareModal: false,
+			showManageCollaboratorView: false,
 			showEditAlbumForm: false,
-			FolderIllustration,
-			loadingCount: 0,
-			loadingAddFilesToAlbum: false,
+
+			loadingAddCollaborators: false,
+			newFileMenuEntry: {
+				id: 'album-add',
+				displayName: t('photos', 'Add photos to this album'),
+				templateName: '',
+				if: (context) => context.route === this.$route.name,
+				/** Existing icon css class */
+				iconSvgInline: PlusSvg,
+				/** Function to be run after creation */
+				handler: () => { this.showAddPhotosModal = true },
+			},
 		}
 	},
 
 	computed: {
 		...mapGetters([
-			'files',
 			'albumsFiles',
 		]),
 
 		/**
-		 * @return {string[]} The album information for the current albumName.
+		 * @return {object} The album information for the current albumName.
 		 */
 		album() {
-			return this.albums[this.albumName]
+			return this.albums[this.albumName] || {}
 		},
 
 		/**
@@ -281,17 +276,43 @@ export default {
 			return this.albumsFiles[this.albumName] || []
 		},
 
-		/** @type {boolean} */
-		shouldFavoriteSelection() {
-			// Favorite all selection if at least one file is not on the favorites.
-			return this.selectedFileIds.some((fileId) => this.$store.state.files.files[fileId].favorite === 0)
+		/**
+		 * @return {boolean} Whether sharing is enabled.
+		 */
+		sharingEnabled() {
+			return OC.Share !== undefined
+		},
+
+		/**
+		 * The upload picker context
+		 * We're uploading to the album folder, and the backend handle
+		 * the writing to the default location as well as the album update.
+		 * The context is also used for the NewFileMenu.
+		 */
+		uploadContext() {
+			return {
+				...this.album,
+				route: this.$route.name,
+				root: `dav/photos/${getCurrentUser()?.uid}/albums`,
+			}
 		},
 	},
 
 	watch: {
-		album() {
-			this.fetchAlbumContent()
+		album(newAlbum, oldAlbum) {
+			if (newAlbum.filename !== oldAlbum.filename) {
+				this.fetchAlbumContent()
+			}
 		},
+	},
+
+	mounted() {
+		this.fetchAlbumContent()
+		addNewFileMenuEntry(this.newFileMenuEntry)
+	},
+
+	destroyed() {
+		removeNewFileMenuEntry(this.newFileMenuEntry)
 	},
 
 	methods: {
@@ -300,8 +321,7 @@ export default {
 			'deleteAlbum',
 			'addFilesToAlbum',
 			'removeFilesFromAlbum',
-			'toggleFavoriteForFiles',
-			'downloadFiles',
+			'updateAlbum',
 		]),
 
 		async fetchAlbumContent() {
@@ -309,37 +329,33 @@ export default {
 				return []
 			}
 
-			const semaphoreSymbol = await this.semaphore.acquire(() => 0, 'fetchFiles')
 			const fetchSemaphoreSymbol = await this.fetchSemaphore.acquire()
 
 			try {
 				this.errorFetchingFiles = null
 				this.loadingFiles = true
-				this.semaphoreSymbol = semaphoreSymbol
 
-				const { request, cancel } = cancelableRequest(client.getDirectoryContents)
-				this.cancelFilesRequest = cancel
-
-				const response = await request(
+				const response = await client.getDirectoryContents(
 					`/photos/${getCurrentUser()?.uid}/albums/${this.albumName}`,
 					{
 						data: DavRequest,
 						details: true,
+						signal: this.abortController.signal,
 					}
 				)
 
+				// Gen files info and filtering invalid files
 				const fetchedFiles = response.data
 					.map(file => genFileInfo(file))
-					.map(file => ({ ...file, filename: file.realpath.replace(`/${getCurrentUser().uid}/files`, '') }))
+					.filter(file => file.fileid)
 
 				const fileIds = fetchedFiles
-					.map(file => file.fileid)
-					.map((fileId) => fileId.toString())
+					.map(file => file.fileid.toString())
 
 				this.appendFiles(fetchedFiles)
 
 				if (fetchedFiles.length > 0) {
-					await this.$store.commit('addFilesToAlbum', { albumName: this.albumName, fileIdsToAdd: fileIds })
+					await this.$store.commit('setAlbumFiles', { albumName: this.albumName, fileIds })
 				}
 
 				logger.debug(`[AlbumContent] Fetched ${fileIds.length} new files: `, fileIds)
@@ -352,26 +368,13 @@ export default {
 					this.errorFetchingFiles = error
 				}
 
-				// cancelled request, moving on...
-				logger.error('Error fetching album files', error)
+				logger.error('[AlbumContent] Error fetching album files', { error })
 			} finally {
 				this.loadingFiles = false
-				this.cancelFilesRequest = () => { }
-				this.semaphore.release(semaphoreSymbol)
 				this.fetchSemaphore.release(fetchSemaphoreSymbol)
 			}
 
 			return []
-		},
-
-		openViewer(fileId) {
-			const file = this.files[fileId]
-			OCA.Viewer.open({
-				path: file.filename,
-				list: this.albumFileIds.map(fileId => this.files[fileId]).filter(file => !file.sectionHeader),
-				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
-				canLoop: file.canLoop,
-			})
 		},
 
 		redirectToNewName({ album }) {
@@ -383,106 +386,49 @@ export default {
 		},
 
 		async handleFilesPicked(fileIds) {
-			try {
-				this.loadingAddFilesToAlbum = true
-				await this.addFilesToAlbum({ albumName: this.albumName, fileIdsToAdd: fileIds })
-				this.showAddPhotosModal = false
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingAddFilesToAlbum = false
-			}
+			this.showAddPhotosModal = false
+			await this.addFilesToAlbum({ albumName: this.albumName, fileIdsToAdd: fileIds })
+			// Re-fetch album content to have the proper filenames.
+			await this.fetchAlbumContent()
 		},
 
 		async handleRemoveFilesFromAlbum(fileIds) {
-			try {
-				this.loadingCount++
-				await this.removeFilesFromAlbum({ albumName: this.albumName, fileIdsToRemove: fileIds })
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
+			this.$refs.collectionContent.onUncheckFiles(fileIds)
+			await this.removeFilesFromAlbum({ albumName: this.albumName, fileIdsToRemove: fileIds })
 		},
 
 		async handleDeleteAlbum() {
+			await this.deleteAlbum({ albumName: this.albumName })
+			this.$router.push('/albums')
+		},
+
+		async handleSetCollaborators(collaborators) {
 			try {
-				this.loadingCount++
-				await this.deleteAlbum({ albumName: this.albumName })
-				this.$router.push('/albums')
+				this.loadingAddCollaborators = true
+				this.showManageCollaboratorView = false
+				await this.updateAlbum({ albumName: this.albumName, properties: { collaborators } })
 			} catch (error) {
 				logger.error(error)
 			} finally {
-				this.loadingCount--
+				this.loadingAddCollaborators = false
 			}
 		},
 
-		async favoriteSelection() {
-			try {
-				this.loadingCount++
-				await this.toggleFavoriteForFiles({ fileIds: this.selectedFileIds, favoriteState: true })
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		async unFavoriteSelection() {
-			try {
-				this.loadingCount++
-				await this.toggleFavoriteForFiles({ fileIds: this.selectedFileIds, favoriteState: false })
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		async downloadAllFiles() {
-			try {
-				this.loadingCount++
-				await this.downloadFiles(this.albumFileIds)
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		async downloadSelection() {
-			try {
-				this.loadingCount++
-				await this.downloadFiles(this.selectedFileIds)
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
-		},
+		/**
+		 * A new File has been uploaded, let's add it
+		 *
+		 * @param {Upload[]} uploads
+		 */
+		onUpload: debounce(function() {
+			this.fetchAlbumContent()
+		}, 500),
 	},
 }
 </script>
 <style lang="scss" scoped>
 .album {
-	display: flex;
-	flex-direction: column;
-
-	&__empty {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-
-		&__button {
-			margin-top: 32px;
-		}
-
-	}
-
-	&__location {
-		margin-left: -4px;
-		display: flex;
-		color: var(--color-text-lighter);
+	&__title {
+		width: 100%;
 	}
 
 	&__name {
@@ -491,65 +437,10 @@ export default {
 		text-overflow: ellipsis;
 	}
 
-	&__header {
+	&__location {
+		margin-left: -4px;
 		display: flex;
-		min-height: 60px;
-		align-items: center;
-		justify-content: space-between;
-		position: sticky;
-		top: var(--header-height);
-		z-index: 3;
-		background: var(--color-main-background);
-		padding: 8px 64px 32px 64px;
-
-		@media only screen and (max-width: 1200px) {
-			padding: 8px 48px 32px 48px;
-		}
-
-		&__left {
-			height: 100%;
-			display: flex;
-			align-items: center;
-			min-width: 0;
-		}
-
-		&__title {
-			min-width: 0;
-		}
-
-		&__loader {
-			margin-left: 32px;
-		}
-
-		&__actions {
-			display: flex;
-			align-items: center;
-
-			button {
-				margin-left: 16px;
-			}
-		}
-	}
-
-	&__photos {
-		height: 100%;
-		min-height: 0; // Prevent it from overflowing in a flex context.
-		padding: 0 64px;
-
-		@media only screen and (max-width: 1200px) {
-			padding: 0 4px;
-		}
-
-	}
-}
-
-.empty-content-with-illustration ::v-deep .empty-content__icon {
-	width: 200px;
-	height: 200px;
-
-	svg {
-		width: 200px;
-		height: 200px;
+		color: var(--color-text-lighter);
 	}
 }
 </style>

@@ -23,17 +23,17 @@
  -->
 <template>
 	<!-- Errors handlers-->
-	<EmptyContent v-if="errorFetchingFaces">
+	<NcEmptyContent v-if="errorFetchingFaces">
 		{{ t('photos', 'An error occurred') }}
-	</EmptyContent>
+	</NcEmptyContent>
 
 	<!-- Face list -->
 	<div v-else class="faces">
-		<Loader v-if="loadingFaces" />
+		<NcLoadingIcon v-if="loadingFaces" />
 
 		<!-- No faces -->
 		<div v-if="noFaces && !loadingFaces" class="faces__empty">
-			<EmptyContent class="empty-content-with-illustration">
+			<NcEmptyContent class="empty-content-with-illustration">
 				<template #icon>
 					<AccountBoxMultipleOutline />
 				</template>
@@ -41,23 +41,25 @@
 					{{ t('photos', 'This might take some time depending on the size of your photo library.') }}
 				</template>
 				{{ t('photos', 'Recognized people will show up here') }}
-			</EmptyContent>
+			</NcEmptyContent>
 		</div>
 
 		<div v-else-if="!noFaces" class="faces__list">
-			<FaceCover v-for="face in orderedFaces"
+			<router-link v-for="face in orderedFaces"
 				:key="face.basename"
-				:base-name="face.basename" />
+				:to="`/faces/${face.basename}`">
+				<FaceCover :base-name="face.basename" />
+			</router-link>
 		</div>
 	</div>
 </template>
 
 <script>
-import { EmptyContent } from '@nextcloud/vue'
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline'
 
+import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
-import Loader from '../components/Loader.vue'
 import FaceCover from '../components/FaceCover.vue'
 import { mapGetters } from 'vuex'
 
@@ -65,8 +67,8 @@ export default {
 	name: 'Faces',
 	components: {
 		FaceCover,
-		EmptyContent,
-		Loader,
+		NcEmptyContent,
+		NcLoadingIcon,
 		AccountBoxMultipleOutline,
 	},
 
@@ -88,6 +90,9 @@ export default {
 
 		orderedFaces() {
 			return Object.values(this.faces).sort((a, b) => {
+				if (a.props.nbItems && b.props.nbItems) {
+					return b.props.nbItems - a.props.nbItems
+				}
 				if (!this.facesFiles[b.basename] || !this.facesFiles[a.basename]) {
 					return 0
 				}
@@ -124,7 +129,6 @@ export default {
 		flex-grow: 1;
 		display: flex;
 		flex-wrap: wrap;
-		overflow: scroll;
 		gap: 32px;
 		align-content: flex-start;
 	}
@@ -140,7 +144,7 @@ export default {
 	}
 }
 
-.empty-content-with-illustration ::v-deep .empty-content__icon {
+.empty-content-with-illustration :deep .empty-content__icon {
 	width: 200px;
 	height: 200px;
 

@@ -22,77 +22,55 @@
  -->
 
 <template>
-	<!-- Errors handlers-->
-	<EmptyContent v-if="error">
-		{{ t('photos', 'An error occurred') }}
-	</EmptyContent>
+	<div>
+		<!-- Errors handlers-->
+		<NcEmptyContent v-if="error" :title="t('photos', 'An error occurred')" />
 
-	<!-- Folder content -->
-	<div v-else-if="!loading">
-		<Navigation key="navigation"
-			:basename="path"
-			:filename="'/' + path"
-			:root-title="rootTitle" />
-		<EmptyContent v-if="isEmpty" key="emptycontent" illustration-name="empty">
-			{{ t('photos', 'No tags yet') }}
-			<template #desc>
-				{{ t('photos', 'Photos with tags will show up here') }}
-			</template>
-		</EmptyContent>
+		<NcEmptyContent v-if="!loading && tagsList.length === 0" :title="t('photos', 'No tags yet')" :description="t('photos', 'Photos with tags will show up here')" />
 
-		<div v-else class="grid-container">
-			<VirtualGrid ref="virtualgrid"
-				:items="contentList"
-				:get-column-count="() => gridConfig.count"
-				:get-grid-gap="() => gridConfig.gap" />
+		<NcLoadingIcon v-if="loading" class="loader" />
+
+		<div v-else class="container">
+			<h2 v-if="popularTags.length">
+				{{ t('photos', 'Popular tags') }}
+			</h2>
+			<div class="popular-tags">
+				<TagCover v-for="tag in popularTags" :key="tag.id" :tag="tag" />
+			</div>
+			<h2 v-if="tagsList.length">
+				All tags
+			</h2>
+			<div class="tags">
+				<TagCover v-for="tag in tagsList" :key="tag.id" :tag="tag" />
+			</div>
 		</div>
 	</div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import VirtualGrid from 'vue-virtual-grid'
 
-import getSystemTags from '../services/SystemTags'
-import getTaggedImages from '../services/TaggedImages'
+import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import { loadState } from '@nextcloud/initial-state'
 
-import EmptyContent from '../components/EmptyContent'
-import Tag from '../components/Tag'
-import File from '../components/File'
-import Navigation from '../components/Navigation'
-
-import GridConfigMixin from '../mixins/GridConfig'
-
-import cancelableRequest from '../utils/CancelableRequest'
+import TagCover from '../components/TagCover.vue'
+import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 
 export default {
 	name: 'Tags',
 	components: {
-		VirtualGrid,
-		EmptyContent,
-		Navigation,
+		TagCover,
+		NcLoadingIcon,
+		NcEmptyContent,
 	},
-	mixins: [GridConfigMixin],
-	props: {
-		rootTitle: {
-			type: String,
-			required: true,
-		},
-		path: {
-			type: String,
-			default: '',
-		},
-		isRoot: {
-			type: Boolean,
-			default: true,
-		},
-	},
+	mixins: [AbortControllerMixin],
 
 	data() {
 		return {
 			error: null,
-			cancelRequest: null,
 			loading: false,
+			showTags: false,
+			tagCounts: loadState('photos', 'tag-counts'),
 		}
 	},
 
@@ -104,180 +82,71 @@ export default {
 			'tagsNames',
 		]),
 
-		// current tag id from current path
-		tagId() {
-			return this.$store.getters.tagId(this.path)
-		},
-
-		// current tag
-		tag() {
-			return this.tags[this.tagId]
-		},
-
 		tagsList() {
-			return Object.values(this.tagsNames).map((tagsId) => this.tags[tagsId])
+			return Object.keys(this.tagsNames)
+				.map(tagName => this.tags[this.tagsNames[tagName]])
+				.filter(tag => tag && tag.id)
 		},
 
-		// files list of the current tag
-		fileList() {
-			return this.tag && this.tag.files
-				.map(id => this.files[id])
-				.filter(file => !!file)
+		popularTags() {
+			return Object.keys(this.tagsNames)
+				.filter(tagName => (this.tags[this.tagsNames[tagName]].files.length || this.tagCounts[tagName]) > 50)
+				.sort((a, b) => (this.tags[this.tagsNames[b]].files.length || this.tagCounts[b]) - (this.tags[this.tagsNames[a]].files.length || this.tagCounts[a]))
+				.slice(0, 9)
+				.map(tagName => this.tags[this.tagsNames[tagName]])
 		},
-
-		contentList() {
-			if (this.isRoot) {
-				return this.tagsList.flatMap((tag) => {
-					return tag.id === ''
-						? []
-						: [{
-							id: `tag-${tag.id}`,
-							injected: {
-								...tag,
-							},
-							width: 256,
-							height: 256,
-							columnSpan: 1,
-							renderComponent: Tag,
-						}]
-				})
-			}
-			return this.fileList.map((file) => {
-				return {
-					id: `file-${file.fileid}`,
-					injected: {
-						...file,
-						list: this.fileList,
-					},
-					width: 256,
-					height: 256,
-					columnSpan: 1,
-					renderComponent: File,
-				}
-			})
-		},
-
-		isEmpty() {
-			if (this.isRoot) {
-				return Object.keys(this.tagsNames).length === 0
-			}
-			return this.fileList.length === 0
-		},
-	},
-
-	watch: {
-		async path() {
-			// if we don't have the tag in the store yet,
-			// we need to fetch the list first
-			if (!this.tagId) {
-				await this.fetchRootContent()
-			}
-
-			// if we're not in the root, we fetch the data
-			if (!this.isRoot) {
-				this.fetchContent()
-			}
-		},
-	},
-
-	beforeDestroy() {
-		// cancel any pending requests
-		if (this.cancelRequest) {
-			this.cancelRequest('Navigated away')
-		}
 	},
 
 	async beforeMount() {
-		// if we don't have the tag in the store yet,
-		// we need to fetch the list first
-		if (!this.tagId) {
-			await this.fetchRootContent()
-		}
-
-		// if we're not in the root, we fetch the data
-		if (!this.isRoot) {
-			this.fetchContent()
-		}
+		await this.fetchRootContent()
 	},
 
 	methods: {
 		async fetchRootContent() {
-			// cancel any pending requests
-			if (this.cancelRequest) {
-				this.cancelRequest('Changed folder')
-			}
-
 			// close any potential opened viewer
 			OCA.Viewer.close()
 
-			// if we don't already have some cached data let's show a loader
-			if (!this.tags[this.tagId]) {
-				this.loading = true
-			}
 			this.error = null
-
-			// init cancellable request
-			const { request, cancel } = cancelableRequest(getSystemTags)
-			this.cancelRequest = cancel
 
 			try {
 				// fetch content
-				const tags = await request()
-				this.$store.dispatch('updateTags', tags)
+				if (!this.tagsList.length) {
+					this.loading = true
+					await this.$store.dispatch('fetchAllTags', {
+						signal: this.abortController.signal,
+					})
+				}
 			} catch (error) {
 				console.error(error)
 				this.error = true
 			} finally {
 				// done loading
 				this.loading = false
-				this.cancelRequest = null
-			}
-
-		},
-
-		async fetchContent() {
-			// cancel any pending requests
-			if (this.cancelRequest) {
-				this.cancelRequest()
-			}
-
-			// close any potential opened viewer
-			OCA.Viewer.close()
-
-			// if we don't already have some cached data let's show a loader
-			if (!this.tags[this.tagId]) {
-				this.loading = true
-			}
-			this.error = null
-
-			// init cancellable request
-			const { request, cancel } = cancelableRequest(getTaggedImages)
-			this.cancelRequest = cancel
-
-			try {
-				// get data
-				const files = await request(this.tagId)
-				this.$store.dispatch('updateTag', { id: this.tagId, files })
-				this.$store.dispatch('appendFiles', files)
-			} catch (error) {
-				console.error(error)
-				this.error = true
-			} finally {
-				// done loading
-				this.loading = false
-				this.cancelRequest = null
 			}
 		},
 	},
+
 }
 </script>
 
 <style lang="scss" scoped>
-@import '../mixins/GridSizes';
+.loader {
+	margin-top: 30vh;
+}
 
-.grid-container {
-	@include grid-sizes using ($marginTop, $marginW) {
-		padding: 0px #{$marginW}px 256px #{$marginW}px;
+.container {
+	padding-left: 44px;
+
+	> h2 {
+		margin-left: 14px;
+		margin-top: 40px;
 	}
+}
+
+.popular-tags, .tags {
+	display: flex;
+	flex-direction: row;
+	gap: 8px;
+	flex-wrap: wrap;
 }
 </style>

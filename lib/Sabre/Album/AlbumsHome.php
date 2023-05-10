@@ -23,38 +23,41 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Sabre\Album;
 
+use OCA\Photos\Album\AlbumInfo;
 use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Album\AlbumWithFiles;
-use OCP\Files\Folder;
+use OCA\Photos\Service\UserConfigService;
 use OCP\Files\IRootFolder;
-use OCP\IUser;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\ICollection;
 
 class AlbumsHome implements ICollection {
-	private AlbumMapper $albumMapper;
-	private array $principalInfo;
-	private IUser $user;
-	private IRootFolder $rootFolder;
-	private Folder $userFolder;
+	protected AlbumMapper $albumMapper;
+	protected array $principalInfo;
+	protected string $userId;
+	protected IRootFolder $rootFolder;
+	protected UserConfigService $userConfigService;
+
+	public const NAME = 'albums';
 
 	/**
 	 * @var AlbumRoot[]
 	 */
-	private ?array $children = null;
+	protected ?array $children = null;
 
 	public function __construct(
 		array $principalInfo,
 		AlbumMapper $albumMapper,
-		IUser $user,
-		IRootFolder $rootFolder
+		string $userId,
+		IRootFolder $rootFolder,
+		UserConfigService $userConfigService
 	) {
 		$this->principalInfo = $principalInfo;
 		$this->albumMapper = $albumMapper;
-		$this->user = $user;
+		$this->userId = $userId;
 		$this->rootFolder = $rootFolder;
-		$this->userFolder = $rootFolder->getUserFolder($user->getUID());
+		$this->userConfigService = $userConfigService;
 	}
 
 	/**
@@ -65,7 +68,7 @@ class AlbumsHome implements ICollection {
 	}
 
 	public function getName(): string {
-		return 'albums';
+		return self::NAME;
 	}
 
 	/**
@@ -83,8 +86,7 @@ class AlbumsHome implements ICollection {
 	 * @return void
 	 */
 	public function createDirectory($name) {
-		$uid = $this->user->getUID();
-		$this->albumMapper->create($uid, $name);
+		$this->albumMapper->create($this->userId, $name);
 	}
 
 	public function getChild($name) {
@@ -102,10 +104,10 @@ class AlbumsHome implements ICollection {
 	 */
 	public function getChildren(): array {
 		if ($this->children === null) {
-			$folders = $this->albumMapper->getForUserWithFiles($this->user->getUID());
-			$this->children = array_map(function (AlbumWithFiles $folder) {
-				return new AlbumRoot($this->albumMapper, $folder, $this->rootFolder, $this->userFolder, $this->user);
-			}, $folders);
+			$albumInfos = $this->albumMapper->getForUser($this->userId);
+			$this->children = array_map(function (AlbumInfo $albumInfo) {
+				return new AlbumRoot($this->albumMapper, new AlbumWithFiles($albumInfo, $this->albumMapper), $this->rootFolder, $this->userId, $this->userConfigService);
+			}, $albumInfos);
 		}
 
 		return $this->children;

@@ -27,9 +27,10 @@ use OCA\DAV\Connector\Sabre\File;
 use OCA\Photos\Album\AlbumFile;
 use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Album\AlbumWithFiles;
+use OCA\Photos\Service\UserConfigService;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
-use OCP\IUser;
+use OCP\Files\NotFoundException;
 use Sabre\DAV\Exception\Conflict;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;
@@ -38,18 +39,23 @@ use Sabre\DAV\ICopyTarget;
 use Sabre\DAV\INode;
 
 class AlbumRoot implements ICollection, ICopyTarget {
-	private AlbumMapper $albumMapper;
-	private AlbumWithFiles $album;
-	private IRootFolder $rootFolder;
-	private Folder $userFolder;
-	private IUser $user;
+	protected AlbumMapper $albumMapper;
+	protected AlbumWithFiles $album;
+	protected IRootFolder $rootFolder;
+	protected string $userId;
 
-	public function __construct(AlbumMapper $albumMapper, AlbumWithFiles $album, IRootFolder $rootFolder, Folder $userFolder, IUser $user) {
+	public function __construct(
+		AlbumMapper $albumMapper,
+		AlbumWithFiles $album,
+		IRootFolder $rootFolder,
+		string $userId,
+		UserConfigService $userConfigService
+	) {
 		$this->albumMapper = $albumMapper;
 		$this->album = $album;
 		$this->rootFolder = $rootFolder;
-		$this->userFolder = $userFolder;
-		$this->user = $user;
+		$this->userId = $userId;
+		$this->userConfigService = $userConfigService;
 	}
 
 	/**
@@ -70,8 +76,48 @@ class AlbumRoot implements ICollection, ICopyTarget {
 		$this->albumMapper->rename($this->album->getAlbum()->getId(), $name);
 	}
 
+	protected function getPhotosLocationInfo() {
+		$photosLocation = $this->userConfigService->getUserConfig('photosLocation');
+		$userFolder = $this->rootFolder->getUserFolder($this->userId);
+		return [$photosLocation, $userFolder];
+	}
+
+	/**
+	 * We cannot create files in an Album
+	 * We add the file to the default Photos folder and then link it there.
+	 *
+	 * @param string $name
+	 * @param null|resource|string $data
+	 * @return void
+	 */
 	public function createFile($name, $data = null) {
-		throw new Forbidden('Not allowed to create files in this folder, copy files into this folder instead');
+		try {
+			[$photosLocation, $userFolder] = $this->getPhotosLocationInfo();
+
+			try {
+				$photosFolder = $userFolder->get($photosLocation);
+			} catch (NotFoundException $e) {
+				// If the folder does not exists, create it
+				$photosFolder = $userFolder->newFolder($photosLocation);
+			}
+
+			// If the node is not a folder, we throw
+			if (!($photosFolder instanceof Folder)) {
+				throw new Conflict('The destination exists and is not a folder');
+			}
+
+			// Check for conflict and rename the file accordingly
+			$newName = \basename(\OC_Helper::buildNotExistingFileName($photosLocation, $name));
+
+			$node = $photosFolder->newFile($newName, $data);
+			$this->addFile($node->getId(), $node->getOwner()->getUID());
+			// Cheating with header because we are using fileID-fileName
+			// https://github.com/nextcloud/server/blob/af29b978078ffd9169a9bd9146feccbb7974c900/apps/dav/lib/Connector/Sabre/FilesPlugin.php#L564-L585
+			\header('OC-FileId: ' . $node->getId());
+			return '"' . $node->getEtag() . '"';
+		} catch (\Exception $e) {
+			throw new Forbidden('Could not create file');
+		}
 	}
 
 	/**
@@ -83,14 +129,14 @@ class AlbumRoot implements ICollection, ICopyTarget {
 
 	public function getChildren(): array {
 		return array_map(function (AlbumFile $file) {
-			return new AlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->userFolder);
+			return new AlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId));
 		}, $this->album->getFiles());
 	}
 
 	public function getChild($name): AlbumPhoto {
 		foreach ($this->album->getFiles() as $file) {
 			if ($file->getFileId() . "-" . $file->getName() === $name) {
-				return new AlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->userFolder);
+				return new AlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId));
 			}
 		}
 		throw new NotFound("$name not found");
@@ -110,18 +156,31 @@ class AlbumRoot implements ICollection, ICopyTarget {
 	}
 
 	public function copyInto($targetName, $sourcePath, INode $sourceNode): bool {
-		$uid = $this->user->getUID();
-		if ($sourceNode instanceof File) {
-			$sourceId = $sourceNode->getId();
-			if (in_array($sourceId, $this->album->getFileIds())) {
-				throw new Conflict("File $sourceId is already in the folder");
-			}
-			if ($sourceNode->getFileInfo()->getOwner()->getUID() === $uid) {
-				$this->albumMapper->addFile($this->album->getAlbum()->getId(), $sourceId);
-				return true;
-			}
+		if (!$sourceNode instanceof File) {
+			throw new Forbidden("The source is not a file");
 		}
-		throw new \Exception("Can't add file to album, only files from $uid can be added");
+
+		$sourceId = $sourceNode->getId();
+		$ownerUID = $sourceNode->getFileInfo()->getOwner()->getUID();
+		$uid = $this->userId;
+		if ($ownerUID !== $uid) {
+			throw new Forbidden("Can't add file to album, only files from $uid can be added");
+		}
+
+		return $this->addFile($sourceId, $ownerUID);
+	}
+
+	protected function addFile(int $sourceId, string $ownerUID): bool {
+		if (in_array($sourceId, $this->album->getFileIds())) {
+			throw new Conflict("File $sourceId is already in the folder");
+		}
+		if ($ownerUID === $this->userId) {
+			$this->albumMapper->addFile($this->album->getAlbum()->getId(), $sourceId, $ownerUID);
+			$node = current($this->rootFolder->getUserFolder($ownerUID)->getById($sourceId));
+			$this->album->addFile(new AlbumFile($sourceId, $node->getName(), $node->getMimetype(), $node->getSize(), $node->getMTime(), $node->getEtag(), $node->getCreationTime(), $ownerUID));
+			return true;
+		}
+		return false;
 	}
 
 	public function getAlbum(): AlbumWithFiles {
@@ -133,7 +192,12 @@ class AlbumRoot implements ICollection, ICopyTarget {
 		$latestDate = null;
 
 		foreach ($this->getChildren() as $child) {
-			$childCreationDate = $child->getFileInfo()->getMtime();
+			try {
+				$childCreationDate = $child->getFileInfo()->getMtime();
+			} catch (NotFoundException $e) {
+				continue;
+			}
+
 			if ($childCreationDate < $earliestDate || $earliestDate === null) {
 				$earliestDate = $childCreationDate;
 			}
@@ -157,5 +221,24 @@ class AlbumRoot implements ICollection, ICopyTarget {
 		} else {
 			return null;
 		}
+	}
+
+	/**
+	 * @return array{array{'nc:collaborator': array{'id': string, 'label': string, 'type': int}}}
+	 */
+	public function getCollaborators(): array {
+		return array_map(
+			fn (array $collaborator) => [ 'nc:collaborator' => $collaborator ],
+			$this->albumMapper->getCollaborators($this->album->getAlbum()->getId()),
+		);
+	}
+
+	/**
+	 * @param array{'id': string, 'type': int} $collaborators
+	 * @return array{array{'nc:collaborator': array{'id': string, 'label': string, 'type': int}}}
+	 */
+	public function setCollaborators($collaborators): array {
+		$this->albumMapper->setCollaborators($this->getAlbum()->getAlbum()->getId(), $collaborators);
+		return $this->getCollaborators();
 	}
 }

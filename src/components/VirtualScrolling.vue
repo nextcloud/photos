@@ -48,8 +48,7 @@ import logger from '../services/logger.js'
 
 /**
  * @typedef {Row} VisibleRow
- * @property {'none'|'near'|'visible'} visibility - The visibility state of the row
- * @property {boolean} shouldRender - Whether the row should be renderer in the DOM
+ * @property {number} distance - The distance from the visible viewport
  */
 
 export default {
@@ -71,22 +70,13 @@ export default {
 			default: false,
 		},
 
-		renderWindowRatio: {
+		renderDistance: {
 			type: Number,
-			default: 4,
-		},
-		willBeVisibleWindowRatio: {
-			type: Number,
-			default: 4,
-		},
-		visibleWindowRatio: {
-			type: Number,
-			// A little bit more than the container's height to include items at its edges.
-			default: 0,
+			default: 10,
 		},
 		bottomBufferRatio: {
 			type: Number,
-			default: 5,
+			default: 2,
 		},
 		scrollToKey: {
 			type: String,
@@ -112,47 +102,37 @@ export default {
 			logger.debug('[VirtualScrolling] Computing visible rows', this.rows)
 
 			// Optimisation: get those computed properties once to not go through vue's internal every time we need them.
-			const scrollPosition = this.scrollPosition
 			const containerHeight = this.containerHeight
+			const containerTop = this.scrollPosition
+			const containerBottom = containerTop + containerHeight
 
-			// Optimisation: different windows to hint the items how they should render themselves.
-			// This will be forwarded with the visibility props.
-			const shouldRenderedWindow = containerHeight * this.renderWindowRatio
-			const willBeVisibleWindow = containerHeight * this.willBeVisibleWindowRatio
-			const visibleWindow = containerHeight * this.visibleWindowRatio
-
-			let currentRowTopDistanceFromTop = 0
-			let currentRowBottomDistanceFromTop = 0
+			let currentRowTop = 0
+			let currentRowBottom = 0
 
 			// Compute whether a row should be included in the DOM (shouldRender)
 			// And how visible the row is.
 			return this.rows
 				.reduce((visibleRows, row) => {
-					currentRowTopDistanceFromTop = currentRowBottomDistanceFromTop
-					currentRowBottomDistanceFromTop += row.height
+					currentRowTop = currentRowBottom
+					currentRowBottom += row.height
 
-					if (currentRowTopDistanceFromTop < scrollPosition - shouldRenderedWindow || scrollPosition + containerHeight + shouldRenderedWindow < currentRowTopDistanceFromTop) {
-						return visibleRows
+					let distance = 0
+
+					if (currentRowBottom < containerTop) {
+						distance = (containerTop - currentRowBottom) / containerHeight
+					} else if (currentRowTop > containerBottom) {
+						distance = (currentRowTop - containerBottom) / containerHeight
 					}
 
-					let visibility = 'none'
-
-					if (scrollPosition - willBeVisibleWindow < currentRowTopDistanceFromTop && currentRowTopDistanceFromTop < scrollPosition + containerHeight + willBeVisibleWindow) {
-						visibility = 'near'
-
-						if (scrollPosition - visibleWindow < currentRowTopDistanceFromTop && currentRowTopDistanceFromTop < scrollPosition + containerHeight + visibleWindow) {
-							visibility = 'visible'
-						}
-						if (scrollPosition - visibleWindow < currentRowBottomDistanceFromTop && currentRowBottomDistanceFromTop < scrollPosition + containerHeight + visibleWindow) {
-							visibility = 'visible'
-						}
+					if (distance > this.renderDistance) {
+						return visibleRows
 					}
 
 					return [
 						...visibleRows,
 						{
 							...row,
-							visibility,
+							distance,
 						},
 					]
 				}, [])
@@ -190,7 +170,7 @@ export default {
 		/**
 		 * padding-top is used to replace not included item in the container.
 		 *
-		 * @return {object}
+		 * @return {{heigh: string, paddingTop: string}}
 		 */
 		rowsContainerStyle() {
 			return {
@@ -257,7 +237,7 @@ export default {
 		this.resizeObserver = new ResizeObserver(entries => {
 			for (const entry of entries) {
 				const cr = entry.contentRect
-				if (entry.target.classList.contains('vs-container')) {
+				if (entry.target === this.container) {
 					this.containerHeight = cr.height
 				}
 				if (entry.target.classList.contains('vs-rows-container')) {

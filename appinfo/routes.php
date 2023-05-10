@@ -38,6 +38,27 @@ return [
 				'path' => '',
 			]
 		],
+		['name' => 'page#index', 'url' => '/sharedalbums/{path}', 'verb' => 'GET', 'postfix' => 'sharedalbums',
+			'requirements' => [
+				'path' => '.*',
+			],
+			'defaults' => [
+				'path' => '',
+			]
+		],
+		['name' => 'page#index', 'url' => '/places/{path}', 'verb' => 'GET', 'postfix' => 'places',
+			'requirements' => [
+				'path' => '.*',
+			],
+			'defaults' => [
+				'path' => '',
+			]
+		],
+		[ 'name' => 'publicAlbum#get', 'url' => '/public/{token}', 'verb' => 'GET',
+			'requirements' => [
+				'token' => '.*',
+			],
+		],
 		['name' => 'page#index', 'url' => '/folders/{path}', 'verb' => 'GET', 'postfix' => 'folders',
 			'requirements' => [
 				'path' => '.*',
@@ -66,11 +87,16 @@ return [
 			'requirements' => [
 				'path' => '.*',
 			],
+		],
+		['name' => 'page#index', 'url' => '/tags/{path}', 'verb' => 'GET', 'postfix' => 'tags',
+			'requirements' => [
+				'path' => '.*',
+			],
 			'defaults' => [
 				'path' => '',
 			]
 		],
-		['name' => 'page#index', 'url' => '/tags/{path}', 'verb' => 'GET', 'postfix' => 'tags',
+		['name' => 'page#index', 'url' => '/categories/{path}', 'verb' => 'GET', 'postfix' => 'categories',
 			'requirements' => [
 				'path' => '.*',
 			],
@@ -101,6 +127,24 @@ return [
 			'defaults' => [
 				'path' => '',
 			],
+		],
+
+		[
+			'name' => 'preview#index',
+			'url' => '/api/v1/preview/{fileId}',
+			'verb' => 'GET',
+			'requirements' => [
+				'fileId' => '.*',
+			]
+		],
+
+		[
+			'name' => 'publicPreview#index',
+			'url' => '/api/v1/publicPreview/{fileId}',
+			'verb' => 'GET',
+			'requirements' => [
+				'fileId' => '.*',
+			]
 		],
 	]
 ];

@@ -6,13 +6,12 @@ OC.L10N.register(
     "Folders" : "Carpetes",
     "Favorites" : "Favorites",
     "Shared with you" : "Shared with you",
+    "Tags" : "Etiquetes",
     "Back" : "Atrás",
     "Save" : "Guardar",
     "Favorite" : "Marcar como favoritu",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "Amestar",
-    "Download" : "Baxar",
-    "Delete" : "Desaniciar",
     "Settings" : "Settings"
 },
 "nplurals=2; plural=(n != 1);");

@@ -145,9 +145,5 @@ export default async function(path = '', options = {}) {
 
 	const response = await client.getDirectoryContents('', options)
 
-	return response.data
-		.map(data => genFileInfo(data))
-		// remove prefix path from full file path
-		.map(data => ({ ...data, filename: data.filename.replace(prefixPath, '') }))
-
+	return response.data.map(data => genFileInfo(data))
 }
