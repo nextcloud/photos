@@ -21,7 +21,7 @@ class AlbumsManagementEventListener implements IEventListener {
 
 	public function __construct(
 		AlbumMapper $albumMapper,
-		LoggerInterface $logger,
+		LoggerInterface $logger
 	) {
 		$this->albumMapper = $albumMapper;
 		$this->logger = $logger;
