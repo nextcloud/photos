@@ -66,7 +66,7 @@
 				:context="uploadContext"
 				:destination="photosLocation"
 				:multiple="true"
-				@uploaded="getFiles" />
+				@uploaded="refreshFiles" />
 			<NcButton type="primary" :disabled="loading || selectedFileIds.length === 0" @click="emitPickedEvent">
 				<template #icon>
 					<ImagePlus v-if="!loading" />
@@ -169,6 +169,10 @@ export default {
 	methods: {
 		getFiles() {
 			this.fetchFiles('', {}, this.blacklistIds)
+		},
+
+		refreshFiles() {
+			this.fetchFiles('', { firstResult: 0 }, [...this.blacklistIds, ...this.fetchedFileIds], true)
 		},
 
 		emitPickedEvent() {
