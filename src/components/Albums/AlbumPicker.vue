@@ -160,14 +160,14 @@ export default {
 				border-radius: var(--border-radius);
 
 				&--placeholder {
-					background: var(--color-primary-light);
+					background: var(--color-primary-element-light);
 
 					:deep .material-design-icon {
 						width: 100%;
 						height: 100%;
 
 						.material-design-icon__svg {
-							fill: var(--color-primary);
+							fill: var(--color-primary-element);
 						}
 					}
 				}
