@@ -70,7 +70,6 @@ export default {
 			error: null,
 			loading: false,
 			showTags: false,
-			tagCounts: loadState('photos', 'tag-counts'),
 		}
 	},
 
