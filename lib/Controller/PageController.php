@@ -149,20 +149,6 @@ class PageController extends Controller {
 
 		$this->initialState->provideInitialState('nomedia-paths', $paths);
 
-
-		$key = $user->getUID();
-		$tagCounts = $this->tagCountsCache->get($key);
-		if ($tagCounts === null) {
-			$tags = $this->tagManager->getAllTags(true);
-			$tagCounts = [];
-			foreach ($tags as $tag) {
-				$search = $userFolder->search(new SearchQuery(new SearchComparison(ISearchComparison::COMPARE_EQUAL, 'systemtag', $tag->getName()), 0, 0, [], $user));
-				$tagCounts[$tag->getName()] = count($search);
-			}
-			$this->tagCountsCache->set($key, $tagCounts, 60 * 60 * 24 * 7); // 7 days
-		}
-		$this->initialState->provideInitialState('tag-counts', $tagCounts);
-
 		Util::addScript(Application::APP_ID, 'photos-main');
 
 		if ($this->appManager->isEnabledForUser('recognize') === true) {
