@@ -74,7 +74,6 @@ export default {
 		return {
 			loadCover: false,
 			observer: null,
-			tagCounts: loadState('photos', 'tag-counts'),
 		}
 	},
 
