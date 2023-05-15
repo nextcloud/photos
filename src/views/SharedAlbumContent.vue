@@ -35,14 +35,15 @@
 				:loading="loadingFiles"
 				:params="{ albumName }"
 				:path="'/' + albumName"
-				:title="albumName"
+				:title="albumOriginalName"
 				@refresh="fetchAlbumContent">
 				<!-- <UploadPicker :accept="allowedMimes"
 				:destination="folder.filename"
 				:multiple="true"
 				@uploaded="onUpload" /> -->
+
 				<div v-if="album.location !== ''" slot="subtitle" class="album__location">
-					<MapMarker />{{ album.location }}
+					<MapMarker />{{ album.location }} ⸱ {{ t('photos', 'Shared by') }}&nbsp;<NcUserBubble :display-name="album.collaborators[0].label" :user="album.collaborators[0].id" />
 				</div>
 				<template v-if="album !== undefined" slot="right">
 					<NcButton v-if="album.nbItems !== 0"
@@ -123,7 +124,7 @@ import Close from 'vue-material-design-icons/Close'
 // import Download from 'vue-material-design-icons/Download'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple'
 
-import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionSeparator, isMobile } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionSeparator, NcUserBubble, isMobile } from '@nextcloud/vue'
 import { getCurrentUser } from '@nextcloud/auth'
 
 import FetchSharedAlbumsMixin from '../mixins/FetchSharedAlbumsMixin.js'
@@ -137,6 +138,7 @@ import logger from '../services/logger.js'
 import client from '../services/DavClient.js'
 import DavRequest from '../services/DavRequest.js'
 import { genFileInfo } from '../utils/fileUtils.js'
+import { translate } from '@nextcloud/l10n'
 
 export default {
 	name: 'SharedAlbumContent',
@@ -154,6 +156,7 @@ export default {
 		NcActionSeparator,
 		NcButton,
 		NcModal,
+		NcUserBubble,
 		CollectionContent,
 		// ActionDownload,
 		FilesPicker,
@@ -200,6 +203,13 @@ export default {
 		 */
 		albumFileIds() {
 			return this.sharedAlbumsFiles[this.albumName] || []
+		},
+
+		/**
+		 * @return {string} The album name without the userId between parentheses.
+		 */
+		albumOriginalName() {
+			return this.albumName.replace(new RegExp(`\\(${this.album.collaborators[0].id}\\)$`), '')
 		},
 	},
 
@@ -289,6 +299,8 @@ export default {
 			await this.deleteSharedAlbum({ albumName: this.albumName })
 			this.$router.push('/sharedalbums')
 		},
+
+		t: translate,
 	},
 }
 </script>

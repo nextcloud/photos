@@ -35,13 +35,16 @@
 			slot-scope="{collection}"
 			:link="`/sharedalbums/${collection.basename}`"
 			:alt-img="t('photos', 'Cover photo for shared album {albumName}.', { albumName: collection.basename })"
+			:data-test="collection.basename"
 			:cover-url="collection.lastPhoto | coverUrl">
 			<h2 class="album__name">
-				{{ collection.basename }}
+				{{ collection | albumOriginalName }}
 			</h2>
 
 			<div slot="subtitle" class="album__details">
 				{{ collection.date }} ⸱ {{ n('photos', '%n item', '%n photos and videos', collection.nbItems,) }}
+				<br>
+				{{ t('photos', 'Shared by') }}&nbsp;<NcUserBubble :display-name="collection.collaborators[0].label" :user="collection.collaborators[0].id" />
 			</div>
 		</CollectionCover>
 
@@ -55,12 +58,13 @@
 import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage'
 
 import { generateUrl } from '@nextcloud/router'
-import { NcEmptyContent } from '@nextcloud/vue'
+import { NcEmptyContent, NcUserBubble } from '@nextcloud/vue'
 
 import FetchSharedAlbumsMixin from '../mixins/FetchSharedAlbumsMixin.js'
 import CollectionsList from '../components/Collection/CollectionsList.vue'
 import CollectionCover from '../components/Collection/CollectionCover.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import { translate, translatePlural } from '@nextcloud/l10n'
 
 export default {
 	name: 'SharedAlbums',
@@ -70,11 +74,13 @@ export default {
 		CollectionsList,
 		CollectionCover,
 		HeaderNavigation,
+		NcUserBubble,
 	},
 
 	filters: {
 		/**
 		 * @param {string} lastPhoto The album's last photos.
+		 * @return {string}
 		 */
 		coverUrl(lastPhoto) {
 			if (lastPhoto === -1) {
@@ -83,11 +89,24 @@ export default {
 
 			return generateUrl(`/apps/photos/api/v1/preview/${lastPhoto}?x=${512}&y=${512}`)
 		},
+
+		/**
+		 * @param {import('../services/Albums.js').Album} album The album's full name, including the userid.
+		 * @return {string} The album name without the userId between parentheses.
+		 */
+		albumOriginalName(album) {
+			return album.basename.replace(new RegExp(`\\(${album.collaborators[0].id}\\)$`), '')
+		},
 	},
 
 	mixins: [
 		FetchSharedAlbumsMixin,
 	],
+
+	methods: {
+		t: translate,
+		n: translatePlural,
+	},
 }
 </script>
 <style lang="scss" scoped>
