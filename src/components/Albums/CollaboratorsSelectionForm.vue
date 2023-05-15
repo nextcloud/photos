@@ -51,7 +51,7 @@
 					<li v-for="collaboratorKey of searchResults" :key="collaboratorKey">
 						<NcListItemIcon :id="availableCollaborators[collaboratorKey].id"
 							class="manage-collaborators__form__list__result"
-							:title="availableCollaborators[collaboratorKey].id"
+							:title="availableCollaborators[collaboratorKey].label"
 							:search="searchText"
 							:user="availableCollaborators[collaboratorKey].id"
 							:display-name="availableCollaborators[collaboratorKey].label"
@@ -75,7 +75,7 @@
 				class="manage-collaborators__selection__item">
 				<NcListItemIcon :id="availableCollaborators[collaboratorKey].id"
 					:display-name="availableCollaborators[collaboratorKey].label"
-					:title="availableCollaborators[collaboratorKey].id"
+					:title="availableCollaborators[collaboratorKey].label"
 					:user="availableCollaborators[collaboratorKey].id">
 					<NcButton type="tertiary"
 						:aria-label="t('photos', 'Remove {collaboratorLabel} from the collaborators list', {collaboratorLabel: availableCollaborators[collaboratorKey].label})"
