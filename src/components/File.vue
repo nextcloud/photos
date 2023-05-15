@@ -222,7 +222,7 @@ export default {
 
 <style lang="scss" scoped>
 .file-container {
-	background: var(--color-primary-light);
+	background: var(--color-primary-element-light);
 	position: relative;
 	height: 100%;
 	width: 100%;
@@ -239,7 +239,7 @@ export default {
 			width: 100%;
 			height: 100%;
 			content: '';
-			outline: var(--color-primary) solid 4px;
+			outline: var(--color-primary-element) solid 4px;
 			outline-offset: -4px;
 			pointer-events: none;
 		}
@@ -337,7 +337,7 @@ export default {
 			// Add a background to the checkbox so we do not see the image through it.
 			&::after {
 				content: '';
-				background: var(--color-primary-light);
+				background: var(--color-primary-element-light);
 				width: 16px;
 				height: 16px;
 				position: absolute;
@@ -368,7 +368,7 @@ export default {
 			fill: #FC0;
 
 			path {
-				stroke: var(--color-primary-light);
+				stroke: var(--color-primary-element-light);
 				stroke-width: 1px;
 			}
 		}

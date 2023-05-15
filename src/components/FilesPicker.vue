@@ -207,7 +207,7 @@ export default {
 		}
 
 		&--placeholder {
-			background: var(--color-primary-light);
+			background: var(--color-primary-element-light);
 			border-radius: var(--border-radius-large);
 		}
 
@@ -239,7 +239,7 @@ export default {
 		height: 100%;
 
 		&--placeholder {
-			background: var(--color-primary-light);
+			background: var(--color-primary-element-light);
 			border-radius: var(--border-radius-large);
 		}
 

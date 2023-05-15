@@ -271,7 +271,7 @@ export default {
 	position: relative;
 
 	&__placeholder {
-		background: var(--color-primary-light);
+		background: var(--color-primary-element-light);
 		width: 100%;
 		height: 100%;
 		border: 2px solid var(--color-main-background); // Use border so create a separation between images.
