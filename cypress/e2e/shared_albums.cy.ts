@@ -154,8 +154,7 @@ describe('Manage shared albums', () => {
 		it('Remove collaborator from an album', () => {
 			cy.login(bob)
 			cy.visit('apps/photos/sharedalbums')
-			cy.get('ul.collections__list li')
-				.should('contain', `shared_album_test4 (${alice.userId})`)
+			cy.get(`[data-test="shared_album_test4 (${alice.userId})"]`).should('have.length', 1)
 
 			cy.login(alice)
 			cy.visit('/apps/photos')
@@ -185,10 +184,8 @@ describe('Manage shared albums', () => {
 		it('It should display two shared albums', () => {
 			cy.login(bob)
 			cy.visit('/apps/photos/sharedalbums')
-			cy.get('ul.collections__list li')
-				.contains(`shared_album_test5 (${alice.userId})`)
-			cy.get('ul.collections__list li')
-				.contains(`shared_album_test5 (${charlie.userId})`)
+			cy.get(`[data-test="shared_album_test5 (${alice.userId})"]`).should('have.length', 1)
+			cy.get(`[data-test="shared_album_test5 (${charlie.userId})"]`).should('have.length', 1)
 		})
 	})
 })
