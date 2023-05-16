@@ -50,7 +50,6 @@ import ImageMultipleIcon from 'vue-material-design-icons/ImageMultiple.vue'
 import { generateUrl } from '@nextcloud/router'
 
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
-import { loadState } from '@nextcloud/initial-state'
 
 export default {
 	name: 'TagCover',
