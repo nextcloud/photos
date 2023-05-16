@@ -81,7 +81,7 @@ class SharedAlbumsHome extends AlbumsHome {
 			}
 
 			$this->children = array_map(function (AlbumWithFiles $album) {
-				return new SharedAlbumRoot($this->albumMapper, $album, $this->rootFolder, $this->userId, $this->userConfigService);
+				return new SharedAlbumRoot($this->albumMapper, $album, $this->rootFolder, $this->userId, $this->userConfigService, $this->userManager);
 			}, $albums);
 		}
 
