@@ -140,12 +140,12 @@ function extractTagInfo(obj) {
 
 		// format key and add it to the tagInfo
 		switch (data) {
-			case 'false':
-				return { ...tagInfo, [camelcase(key)]: false }
-			case 'true':
-				return { ...tagInfo, [camelcase(key)]: true }
-			default:
-				return { ...tagInfo, [camelcase(key)]: isNumber(data) ? Number(data) : data }
+		case 'false':
+			return { ...tagInfo, [camelcase(key)]: false }
+		case 'true':
+			return { ...tagInfo, [camelcase(key)]: true }
+		default:
+			return { ...tagInfo, [camelcase(key)]: isNumber(data) ? Number(data) : data }
 		}
 	}, {})
 
