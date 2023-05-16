@@ -51,7 +51,6 @@
 import { mapGetters } from 'vuex'
 
 import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
-import { loadState } from '@nextcloud/initial-state'
 
 import TagCover from '../components/TagCover.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
