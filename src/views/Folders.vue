@@ -36,6 +36,7 @@
 	<!-- Folder content -->
 	<div v-else-if="!initializing">
 		<HeaderNavigation key="navigation"
+			:class="{'photos-navigation--uploading': uploader.queue?.length > 0}"
 			:loading="loading"
 			:path="path"
 			:title="folder.basename"
@@ -64,7 +65,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { UploadPicker } from '@nextcloud/upload'
+import { UploadPicker, getUploader } from '@nextcloud/upload'
 import { NcEmptyContent } from '@nextcloud/vue'
 import VirtualGrid from 'vue-virtual-grid'
 
@@ -116,6 +117,8 @@ export default {
 			loading: false,
 
 			appContent: document.getElementById('app-content-vue'),
+
+			uploader: getUploader(),
 		}
 	},
 
@@ -289,4 +292,29 @@ export default {
 		padding: 0px #{$marginW}px 256px #{$marginW}px;
 	}
 }
+
+.photos-navigation {
+	position: relative;
+
+	// Add space at the bottom for the progress bar.
+	&--uploading {
+		margin-bottom: 30px;
+	}
+}
+
+:deep(.upload-picker) {
+	.upload-picker__progress {
+		position: absolute;
+		bottom: -30px;
+		left: 64px;
+		margin: 0;
+	}
+
+	.upload-picker__cancel {
+		position: absolute;
+		bottom: -24px;
+		right: 50px;
+	}
+}
+
 </style>
