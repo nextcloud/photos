@@ -23,3 +23,5 @@ vendor
 cypress/videos
 cypress/snapshots
 cypress/downloads
+
+js/*hot-update.*

@@ -25,8 +25,35 @@ namespace OCA\Photos\Sabre\Album;
 
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\Conflict;
+use OCA\Photos\Album\AlbumMapper;
+use OCA\Photos\Album\AlbumWithFiles;
+use OCA\Photos\Service\UserConfigService;
+use OCP\Files\IRootFolder;
+use OCP\IUserManager;
 
 class SharedAlbumRoot extends AlbumRoot {
+	private IUserManager $userManager;
+
+	public function __construct(
+		AlbumMapper $albumMapper,
+		AlbumWithFiles $album,
+		IRootFolder $rootFolder,
+		string $userId,
+		UserConfigService $userConfigService,
+		IUserManager $userManager
+	) {
+		parent::__construct(
+			$albumMapper,
+			$album,
+			$rootFolder,
+			$userId,
+			$userConfigService,
+			$userManager
+		);
+
+		$this->userManager = $userManager;
+	}
+
 	/**
 	 * @return void
 	 */
@@ -55,11 +82,16 @@ class SharedAlbumRoot extends AlbumRoot {
 	}
 
 	/**
-	 * Do not reveal collaborators for shared albums.
+	 * Return only the owner, and do not reveal other collaborators.
 	 */
 	public function getCollaborators(): array {
-		/** @var array{array{'nc:collaborator': array{'id': string, 'label': string, 'type': int}}} */
-		return [];
+		return [[
+			'nc:collaborator' => [
+				'id' => $this->album->getAlbum()->getUserId(),
+				'label' => $this->userManager->get($this->album->getAlbum()->getUserId())->getDisplayName(),
+				'type' => 1,
+			],
+		]];
 	}
 
 	public function setCollaborators($collaborators): array {
