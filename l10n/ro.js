@@ -14,6 +14,7 @@ OC.L10N.register(
     "View" : "Vizualizare",
     "Favorite" : "Favorite",
     "Remove from favorites" : "Șterge din favorite",
+    "Shared by" : "Partajat de",
     "Add" : "Adaugă",
     "Settings" : "Setări"
 },

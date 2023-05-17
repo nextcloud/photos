@@ -9,6 +9,7 @@ OC.L10N.register(
     "Save" : "Späicheren",
     "Favorite" : "Favorit",
     "Remove from favorites" : "Remove from favorites",
+    "Shared by" : "Gedeelt vun",
     "Add" : "Derbäimaachen",
     "Settings" : "Astellungen"
 },

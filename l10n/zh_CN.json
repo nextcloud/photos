@@ -97,6 +97,7 @@
     "Loading folders …" : "正在加载文件夹……",
     "No photos in here" : "这里没有照片",
     "Failed to fetch albums list." : "无法获取相册列表。",
+    "Shared by" : "共享人",
     "Shared albums" : "共享的相册",
     "Cover photo for shared album {albumName}." : "共享相册 {albumName} 的封面照片",
     "Back to tags overview" : "回到标签一览",

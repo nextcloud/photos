@@ -94,6 +94,7 @@ OC.L10N.register(
     "This folder does not exist" : "Ta mapa ne obstaja",
     "Loading folders …" : "Poteka nalaganje map …",
     "No photos in here" : "Na tem mestu še ni fotografij",
+    "Shared by" : "Souporabo omogoča",
     "Shared albums" : "Albumi v souporabi",
     "No photos with this tag yet" : "Ni še fotografij, označenih s to oznako.",
     "No tags yet" : "Ni še dodane nobene oznake",

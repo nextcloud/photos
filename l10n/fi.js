@@ -89,6 +89,7 @@ OC.L10N.register(
     "Loading folders …" : "Ladataan kansioita…",
     "No photos in here" : "Ei kuvia täällä",
     "Failed to fetch albums list." : "Albumien listan noutaminen epäonnistui.",
+    "Shared by" : "Jaettu",
     "Shared albums" : "Jaetut albumit",
     "Back to tags overview" : "Takaisin tunnistenäkymään",
     "No photos with this tag yet" : "Ei vielä kuvia tällä tunnisteella",

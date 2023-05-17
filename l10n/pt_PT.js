@@ -22,6 +22,7 @@ OC.L10N.register(
     "Favorite" : "Favorito",
     "Remove from favorites" : "Remover dos favoritos",
     "No photos in here" : "Aqui não existem fotos ",
+    "Shared by" : "Partilhado por",
     "Shared albums" : "Álbuns partilhados",
     "No tags yet" : "Ainda sem marcações",
     "Photos with tags will show up here" : "Fotos com marcações serão mostradas aqui",
