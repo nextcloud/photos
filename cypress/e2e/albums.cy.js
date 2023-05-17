@@ -21,12 +21,14 @@
  */
 import {
 	addFilesToAlbumFromAlbum,
+	addFilesToAlbumFromAlbumFromHeader,
 	createAnAlbumFromAlbums,
 	deleteAnAlbumFromAlbumContent,
+	goToAlbum,
 	removeSelectionFromAlbum,
 } from './albumsUtils'
 import {
-	downloadSelection,
+	deleteSelection,
 	favoriteSelection,
 	selectMedia,
 	unfavoriteSelection,
@@ -43,9 +45,12 @@ Cypress.on('uncaught:exception', (err) => {
 })
 
 describe('Manage albums', () => {
+	let user = null
+
 	before(function() {
 		cy.createRandomUser()
-			.then((user) => {
+			.then(_user => {
+				user = _user
 				uploadTestMedia(user)
 				cy.login(user)
 				cy.visit('/apps/photos')
@@ -63,17 +68,21 @@ describe('Manage albums', () => {
 		cy.contains('There is no album yet!').click()
 	})
 
-	it('Add and remove a file to an album from an album', () => {
+	it('Create an album, populate it and delete it', () => {
+		cy.get('[data-test="media"]').should('have.length', 3)
+	})
+
+	it('Remove a file to an album from an album content view', () => {
 		selectMedia([0])
 		removeSelectionFromAlbum()
 	})
 
-	it('Add and remove multiple files to an album from an album', () => {
+	it('Remove multiple files to an album from an album content view', () => {
 		selectMedia([0, 1])
 		removeSelectionFromAlbum()
 	})
 
-	it('Favorite a file from an album', () => {
+	it('Favorite a file from an album content view', () => {
 		selectMedia([0])
 		favoriteSelection()
 		cy.get('[data-test="media"]').eq(0).find('[aria-label="The file is in the favorites"]')
@@ -82,7 +91,7 @@ describe('Manage albums', () => {
 		cy.get('[aria-label="The file is in the favorites"]').should('not.exist')
 	})
 
-	it('Favorite multiple files from an album', () => {
+	it('Favorite multiple files from an album content view', () => {
 		selectMedia([1, 2])
 		favoriteSelection()
 		cy.get('[data-test="media"]').eq(1).find('[aria-label="The file is in the favorites"]')
@@ -92,19 +101,19 @@ describe('Manage albums', () => {
 		cy.get('[aria-label="The file is in the favorites"]').should('not.exist')
 	})
 
-	// it('Download a file from an album', () => {
+	// it('Download a file from an album content view', () => {
 	// 	selectMedia([0])
 	// 	downloadSelection()
 	// 	unselectMedia([0])
 	// })
 
-	// it('Download multiple files from an album', () => {
+	// it('Download multiple files from an album content view', () => {
 	// 	selectMedia([1, 2])
 	// 	downloadSelection()
 	// 	unselectMedia([1, 2])
 	// })
 
-	// it('Download all files from an album', () => {
+	// it('Download all files from an album content view', () => {
 	// 	selectMedia([1, 2])
 	// 	downloadSelection()
 	// 	unselectMedia([1, 2])
@@ -144,5 +153,15 @@ describe('Manage albums', () => {
 		cy.contains('Edit album details').click()
 		cy.get('form [name="location"]').clear()
 		cy.contains('Save').click()
+	})
+
+	it('Delete a file that was added to an album', () => {
+		addFilesToAlbumFromAlbumFromHeader('albums_test', [0])
+		cy.get('[data-test="media"]').should('have.length', 4)
+		cy.visit('/apps/photos')
+		selectMedia([3])
+		deleteSelection()
+		goToAlbum('albums_test')
+		cy.get('[data-test="media"]').should('have.length', 3)
 	})
 })

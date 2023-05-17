@@ -53,6 +53,16 @@ export function addFilesToAlbumFromAlbum(albumName: string, itemsIndex: number[]
 	cy.contains(`Add to ${albumName}`).click()
 }
 
+export function addFilesToAlbumFromAlbumFromHeader(albumName: string, itemsIndex: number[]) {
+	cy.contains('Add').click()
+	cy.contains('Add photos to this album').click()
+	cy.get('.file-picker__file-list').within(() => {
+		selectMedia(itemsIndex)
+	})
+	cy.contains(`Add to ${albumName}`).click()
+
+}
+
 export function removeSelectionFromAlbum() {
 	cy.get('[aria-label="Open actions menu"]').click()
 	cy.contains('Remove selection from album').click()
