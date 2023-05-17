@@ -11,6 +11,7 @@ OC.L10N.register(
     "An error occurred" : "Det oppstod ein feil.",
     "Favorite" : "Favoritt",
     "Remove from favorites" : "Remove from favorites",
+    "Shared by" : "Delt av",
     "Add" : "Legg til",
     "Settings" : "Instillingar"
 },

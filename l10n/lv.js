@@ -21,6 +21,7 @@ OC.L10N.register(
     "View" : "Skats",
     "Favorite" : "Favorīts",
     "Remove from favorites" : "Noņemt no izlases",
+    "Shared by" : "Koplietoja",
     "Add" : "Pievienot",
     "Your photos" : "Jūsu bildes",
     "Settings" : "Iestatījumi"

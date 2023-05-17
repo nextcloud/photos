@@ -20,6 +20,7 @@ OC.L10N.register(
     "Favorite" : "Lemmik",
     "Remove from favorites" : "Eemalda lemmikutest",
     "No photos in here" : "Siin ei ole fotosid",
+    "Shared by" : "Jagas",
     "Shared albums" : "Jagatud albumid",
     "No tags yet" : "Silte veel pole",
     "Photos with tags will show up here" : "Sildistatud fotod on siin näha",

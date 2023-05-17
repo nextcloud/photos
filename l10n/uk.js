@@ -106,6 +106,7 @@ OC.L10N.register(
     "Cover photo for place {placeName}" : "Обкладинка для місця {placeName}",
     "There is no place yet!" : "Місця ще немає!",
     "Failed to fetch albums list." : "Не вдалося отримати список альбомів.",
+    "Shared by" : "Поділилися",
     "Shared albums" : "Альбоми із спільним доступом",
     "Cover photo for shared album {albumName}." : "Обкладинка для спільного альбому {albumName}.",
     "Back to tags overview" : "Назад до огляду тегів",

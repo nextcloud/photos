@@ -11,6 +11,7 @@ OC.L10N.register(
     "Save" : "Хадгалах",
     "Favorite" : "Дуртай",
     "Remove from favorites" : "Remove from favorites",
+    "Shared by" : "Хуваалцсан",
     "Add" : "нэмэх",
     "Your photos" : "Таны зурагнууд ",
     "Settings" : "Тохиргоо"

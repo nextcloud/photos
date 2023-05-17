@@ -12,6 +12,7 @@ OC.L10N.register(
     "Save" : "Guardar",
     "Favorite" : "Favorito",
     "Remove from favorites" : "Eliminar de favoritos",
+    "Shared by" : "Compartido por",
     "Add" : "Agregar",
     "Settings" : "Configuraciones "
 },

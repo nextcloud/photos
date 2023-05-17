@@ -104,6 +104,7 @@
     "Cover photo for place {placeName}" : "{placeName} yerinin kapak görseli",
     "There is no place yet!" : "Henüz bir yer yok!",
     "Failed to fetch albums list." : "Albümlerin listesi alınamadı.",
+    "Shared by" : "Paylaşan",
     "Shared albums" : "Paylaşılmış albümler",
     "Cover photo for shared album {albumName}." : "{albumName} paylaşılmış albümünün kapak görseli.",
     "Back to tags overview" : "Etiket özetine geri dön",
