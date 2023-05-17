@@ -36,7 +36,7 @@
 	<!-- Folder content -->
 	<div v-else-if="!initializing">
 		<HeaderNavigation key="navigation"
-			:class="{'photos-navigation--uploading': uploader.queue?.length > 0}"
+			:class="{ 'photos-navigation--uploading': isUploading }"
 			:loading="loading"
 			:path="path"
 			:title="folder.basename"
@@ -203,6 +203,10 @@ export default {
 		},
 		haveFolders() {
 			return !!this.folderList && this.folderList.length !== 0
+		},
+
+		isUploading() {
+			return this.uploader.queue?.length > 0
 		},
 	},
 
