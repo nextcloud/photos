@@ -80,6 +80,7 @@ OC.L10N.register(
     "Merge person" : "Unisci persona",
     "This folder does not exist" : "Questa cartella non esiste",
     "No photos in here" : "Nessuna foto qui",
+    "Shared by" : "Condiviso da",
     "Shared albums" : "Album condivisi",
     "No tags yet" : "Ancora nessun tag",
     "Photos with tags will show up here" : "Le foto con i tag saranno mostrate qui",

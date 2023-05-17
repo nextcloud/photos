@@ -30,8 +30,6 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Security\ISecureRandom;
 use OCP\IDBConnection;
-use OCP\IGroup;
-use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IGroupManager;
 use OCP\IL10N;
@@ -350,7 +348,7 @@ class AlbumMapper {
 		$rows = $query->executeQuery()->fetchAll();
 
 		$collaborators = array_map(function (array $row) {
-			/** @var IUser|IGroup|null */
+			/** @var string|null */
 			$displayName = null;
 
 			switch ($row['collaborator_type']) {

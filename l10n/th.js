@@ -41,6 +41,7 @@ OC.L10N.register(
     "Remove from favorites" : "เอาออกจากรายการโปรด",
     "This folder does not exist" : "ไม่มีโฟลเดอร์นี้",
     "No photos in here" : "ไม่มีรูปภาพที่นี่",
+    "Shared by" : "แชร์โดย",
     "No tags yet" : "ยังไม่มีแท็ก",
     "Photos with tags will show up here" : "รูปภาพที่ติดแท็กจะแสดงที่นี่",
     "Add" : "เพิ่ม",

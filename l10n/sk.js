@@ -99,6 +99,7 @@ OC.L10N.register(
     "Loading folders …" : "Nahrať priečinky ...",
     "No photos in here" : "Nie sú tu žiadne fotografie",
     "Failed to fetch albums list." : "Nepodarilo sa načítať zoznam albumov.",
+    "Shared by" : "Zdieľané od",
     "Shared albums" : "Zdieľané albumy",
     "Cover photo for shared album {albumName}." : "Fotka obalu pre zdieľaný album {albumName}.",
     "Back to tags overview" : "Späť k prehladu štítkov",

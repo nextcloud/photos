@@ -102,6 +102,7 @@ OC.L10N.register(
     "Loading folders …" : "Laster inn mapper…",
     "No photos in here" : "Ingen bilder her",
     "Failed to fetch albums list." : "Kunne ikke hente albumlisten.",
+    "Shared by" : "Delt av",
     "Shared albums" : "Delte album",
     "Cover photo for shared album {albumName}." : "Forsidebilde for delt album {albumName}.",
     "Back to tags overview" : "Tilbake til merkelappoversikt",

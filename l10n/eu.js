@@ -106,6 +106,7 @@ OC.L10N.register(
     "Cover photo for place {placeName}" : "{placeName} tokiaren azaleko argazkia",
     "There is no place yet!" : "Oraindik ez dago lekurik!",
     "Failed to fetch albums list." : "Ezin izan da album zerrenda eskuratu.",
+    "Shared by" : "Honek partekatua",
     "Shared albums" : "Partekaturiko albumak",
     "Cover photo for shared album {albumName}." : "{albumName} album partekatuko azaleko argazkia",
     "Back to tags overview" : "Itzuli etiketen ikuspegira",

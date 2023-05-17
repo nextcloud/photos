@@ -106,6 +106,7 @@ OC.L10N.register(
     "Cover photo for place {placeName}" : "地點 {placeName} 的封面照片",
     "There is no place yet!" : "還沒有地點！",
     "Failed to fetch albums list." : "擷取相簿清單失敗。",
+    "Shared by" : "分享自",
     "Shared albums" : "已分享了的相簿",
     "Cover photo for shared album {albumName}." : "共享相簿 {albumName} 的封面照片。",
     "Back to tags overview" : "返回標籤概覽",

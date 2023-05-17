@@ -106,6 +106,7 @@ OC.L10N.register(
     "Cover photo for place {placeName}" : "Насловна фотографија за местото {placeName}",
     "There is no place yet!" : "Сè уште нема места!",
     "Failed to fetch albums list." : "Неуспешно добивање на листа со албуми.",
+    "Shared by" : "Споделено од",
     "Shared albums" : "Споделени албуми",
     "Cover photo for shared album {albumName}." : "Насловна фотографија за споделениот албум {albumName}",
     "Back to tags overview" : "Назад до преглед на ознаки",

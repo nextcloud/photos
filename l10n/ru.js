@@ -106,6 +106,7 @@ OC.L10N.register(
     "Cover photo for place {placeName}" : "Заглавное изображение для места «{placeName}»",
     "There is no place yet!" : "Пока нет ни одного места.",
     "Failed to fetch albums list." : "Не удалось получить список альбомов.",
+    "Shared by" : "Доступ предоставлен",
     "Shared albums" : "Полученные альбомы",
     "Cover photo for shared album {albumName}." : "Заглавное изображение опубликованного альбома «{albumName}».",
     "Back to tags overview" : "Вернуться к просмотру меток",

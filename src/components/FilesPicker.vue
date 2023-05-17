@@ -66,7 +66,7 @@
 				:context="uploadContext"
 				:destination="photosLocation"
 				:multiple="true"
-				@uploaded="getFiles" />
+				@uploaded="refreshFiles" />
 			<NcButton type="primary" :disabled="loading || selectedFileIds.length === 0" @click="emitPickedEvent">
 				<template #icon>
 					<ImagePlus v-if="!loading" />
@@ -171,6 +171,10 @@ export default {
 			this.fetchFiles('', {}, this.blacklistIds)
 		},
 
+		refreshFiles() {
+			this.fetchFiles('', { firstResult: 0 }, [...this.blacklistIds, ...this.fetchedFileIds], true)
+		},
+
 		emitPickedEvent() {
 			this.$emit('files-picked', this.selectedFileIds)
 		},
@@ -203,7 +207,7 @@ export default {
 		}
 
 		&--placeholder {
-			background: var(--color-primary-light);
+			background: var(--color-primary-element-light);
 			border-radius: var(--border-radius-large);
 		}
 
@@ -235,7 +239,7 @@ export default {
 		height: 100%;
 
 		&--placeholder {
-			background: var(--color-primary-light);
+			background: var(--color-primary-element-light);
 			border-radius: var(--border-radius-large);
 		}
 

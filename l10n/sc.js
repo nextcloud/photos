@@ -25,6 +25,7 @@ OC.L10N.register(
     "Remove from favorites" : "Boga·nche dae preferidos",
     "This folder does not exist" : "Custa cartella no esistit",
     "No photos in here" : "Peruna fotografia inoghe",
+    "Shared by" : "Cumpartzidu dae",
     "Shared albums" : "Album cumpartzidos",
     "No tags yet" : "Ancora peruna eticheta",
     "Photos with tags will show up here" : "Is fotografias etichetadas ant a aparèssere inoghe",

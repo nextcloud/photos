@@ -31,6 +31,7 @@ OC.L10N.register(
     "Favorite" : "סימון כמועדף",
     "Remove from favorites" : "הסרה מהמועדפים",
     "No photos in here" : "אין כאן תמונות",
+    "Shared by" : "שותף על ידי",
     "Shared albums" : "אלבומים משותפים",
     "No tags yet" : "אין תגיות עדיין",
     "Photos with tags will show up here" : "תמונות עם תגיות תמיד תופענה כאן",

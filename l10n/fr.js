@@ -106,6 +106,7 @@ OC.L10N.register(
     "Cover photo for place {placeName}" : "Photo de couverture pour le lieu {nom du lieu}",
     "There is no place yet!" : "Il n'y a pas encore de lieu !",
     "Failed to fetch albums list." : "Impossible de récupérer la liste des albums.",
+    "Shared by" : "Partagé par",
     "Shared albums" : "Albums partagés",
     "Cover photo for shared album {albumName}." : "Photo de couverture pour l'album partagé {albumName}.",
     "Back to tags overview" : "Retour à l'aperçu des étiquettes",
