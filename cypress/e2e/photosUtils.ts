@@ -18,7 +18,7 @@
  *
  */
 
-import type { User } from "@nextcloud/cypress"
+import type { User } from '@nextcloud/cypress'
 
 export function uploadTestMedia(user: User) {
 	cy.exec('ls cypress/fixtures/media')
