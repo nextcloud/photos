@@ -57,7 +57,7 @@
 		"cypress": "^12.5.0",
 		"debounce": "^1.2.1",
 		"he": "^1.2.0",
-		"jest-environment-jsdom": "^29.4.1",
+		"jest-environment-jsdom": "^29.4.3",
 		"path-posix": "^1.0.0",
 		"qs": "^6.11.0",
 		"url-parse": "^1.5.10",
