@@ -46,10 +46,11 @@
 				</div>
 				<template v-if="album !== undefined" slot="right">
 					<NcButton v-if="album.nbItems !== 0"
-						type="tertiary"
+						type="secondary"
 						:aria-label="t('photos', 'Add photos to this album')"
 						@click="showAddPhotosModal = true">
 						<Plus slot="icon" />
+						{{ t('photos', "Add") }}
 					</NcButton>
 
 					<NcActions :force-menu="true" :aria-label="t('photos', 'Open actions menu')">

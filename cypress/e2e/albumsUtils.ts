@@ -30,9 +30,11 @@ export function createAnAlbumFromTimeline(albumName: string) {
 }
 
 export function createAnAlbumFromAlbums(albumName: string) {
+	cy.intercept({ method: 'PROPFIND', url: `**/dav/photos/**/albums/${albumName}` }).as('propFind')
 	cy.contains('New album').click()
 	cy.get('form [name="name"]').type(albumName)
 	cy.contains('Create album').click()
+	cy.wait('@propFind')
 }
 
 export function deleteAnAlbumFromAlbumContent() {
@@ -60,7 +62,6 @@ export function addFilesToAlbumFromAlbumFromHeader(albumName: string, itemsIndex
 		selectMedia(itemsIndex)
 	})
 	cy.contains(`Add to ${albumName}`).click()
-
 }
 
 export function removeSelectionFromAlbum() {
@@ -69,8 +70,10 @@ export function removeSelectionFromAlbum() {
 }
 
 export function goToAlbum(albumName: string) {
+	cy.intercept({ method: 'PROPFIND', url: `**/dav/photos/**/albums/${albumName}` }).as('propFind')
 	cy.get('.app-navigation__list').contains('Albums').click()
 	cy.get('ul.collections__list').contains(albumName).click()
+	cy.wait('@propFind')
 }
 
 export function addCollaborators(collaborators: string[]) {

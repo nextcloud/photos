@@ -20,12 +20,24 @@
  *
  */
 
+import { selectMedia } from "./photosUtils"
+
 export function goToSharedAlbum(albumName: string) {
+	cy.intercept({ method: 'PROPFIND', url: `**/dav/photos/**/sharedalbums/${albumName}**` }).as('propFind')
 	cy.get('.app-navigation__list').contains('Collaborative albums').click()
 	cy.get('ul.collections__list').contains(albumName).click()
+	cy.wait('@propFind')
 }
 
 export function removeSharedAlbums() {
 	cy.get('[aria-label="Open actions menu"]').click()
 	cy.contains('Delete album').click()
+}
+
+export function addFilesToSharedAlbumFromSharedAlbumFromHeader(albumName: string, itemsIndex: number[]) {
+	cy.contains('Add').click()
+	cy.get('.file-picker__file-list').within(() => {
+		selectMedia(itemsIndex)
+	})
+	cy.contains(`Add to ${albumName}`).click()
 }
