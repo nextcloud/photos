@@ -10,6 +10,7 @@ OC.L10N.register(
     "View" : "Vider",
     "Favorite" : "Favorite",
     "Remove from favorites" : "Remove from favorites",
+    "Shared by" : "Compartite per",
     "Add" : "Adder",
     "Settings" : "Configurationes"
 },

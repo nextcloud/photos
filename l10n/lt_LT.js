@@ -76,6 +76,7 @@ OC.L10N.register(
     "Loading folders …" : "Įkeliami aplankai…",
     "No photos in here" : "Čia nuotraukų nėra",
     "Failed to fetch albums list." : "Nepavyko gauti albumų sąrašo.",
+    "Shared by" : "Bendrina",
     "Shared albums" : "Bendrinami albumai",
     "Cover photo for shared album {albumName}." : "Viršelio nuotrauka, skirta bendrinamam albumui {albumName}.",
     "Back to tags overview" : "Atgal į žymių apžvalgą",

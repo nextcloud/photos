@@ -21,6 +21,7 @@ OC.L10N.register(
     "Favorite" : "مورد‌ ‌علاقه‌",
     "Remove from favorites" : "حذف کردن از مورد علاقه‌ها",
     "No photos in here" : "هیچ عکسی در اینجا نیست",
+    "Shared by" : "اشتراک گذاشته شده به وسیله",
     "Shared albums" : "آلبوم های مشترک",
     "No tags yet" : "هنوز برچسپی وجود ندارد",
     "Photos with tags will show up here" : "عکس های دارای برچسب در اینجا نشان داده می شوند",

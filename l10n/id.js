@@ -106,6 +106,7 @@ OC.L10N.register(
     "Cover photo for place {placeName}" : "Foto cover untuk tempat {placeName}",
     "There is no place yet!" : "Belum ada tempat!",
     "Failed to fetch albums list." : "Gagal mendapatkan daftar album.",
+    "Shared by" : "Dibagikan oleh",
     "Shared albums" : "Album terbagi",
     "Cover photo for shared album {albumName}." : "Foto cover untuk album terbagi {albumName}.",
     "Back to tags overview" : "Kembali ke ikhtisar tag",

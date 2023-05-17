@@ -24,6 +24,7 @@ OC.L10N.register(
     "Remove from favorites" : "Ukloni iz favorita",
     "This folder does not exist" : "Ova mapa ne postoji",
     "No photos in here" : "Ovdje nema fotografija",
+    "Shared by" : "Podijeljeno od",
     "Shared albums" : "Dijeljeni albumi",
     "No tags yet" : "Još nema oznaka",
     "Photos with tags will show up here" : "Ovdje će se prikazivati fotografije s oznakama",

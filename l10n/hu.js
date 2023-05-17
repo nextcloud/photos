@@ -106,6 +106,7 @@ OC.L10N.register(
     "Cover photo for place {placeName}" : "A következő hely borítóképe: {placeName}",
     "There is no place yet!" : "Még nincsenek helyek.",
     "Failed to fetch albums list." : "Az albumok lekérése sikertelen.",
+    "Shared by" : "Megosztotta:",
     "Shared albums" : "Megosztott albumok",
     "Cover photo for shared album {albumName}." : "Borítókép a(z) „{albumName}” megosztott albumhoz.",
     "Back to tags overview" : "Vissza a címkeáttekintőhöz",

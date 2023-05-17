@@ -106,6 +106,7 @@ OC.L10N.register(
     "Cover photo for place {placeName}" : "Titelbild für Ort {placeName}",
     "There is no place yet!" : "Es gibt noch keinen Ort",
     "Failed to fetch albums list." : "Albumliste konnte nicht geladen werden.",
+    "Shared by" : "Geteilt von",
     "Shared albums" : "Geteilte Alben",
     "Cover photo for shared album {albumName}." : "Titelbild für das geteilte Album {albumName}.",
     "Back to tags overview" : "Zurück zur Schlagwortübersicht",

@@ -100,6 +100,7 @@ OC.L10N.register(
     "Loading folders …" : "Mappen laden ...",
     "No photos in here" : "Geen foto's hier",
     "Failed to fetch albums list." : "Ophalen van albumlijst mislukt.",
+    "Shared by" : "Gedeeld door",
     "Shared albums" : "Gedeelde albums",
     "Cover photo for shared album {albumName}." : "Omslagfoto voor gedeeld album {albumName}.",
     "No tags yet" : "Nog geen labels",

@@ -11,6 +11,7 @@ OC.L10N.register(
     "Save" : "შენახვა",
     "Favorite" : "რჩეული",
     "Remove from favorites" : "რჩეულებიდან ამოშლა",
+    "Shared by" : "გამზიარებელი",
     "Add" : "დამატება",
     "Settings" : "პარამეტრები"
 },
