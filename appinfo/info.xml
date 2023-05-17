@@ -5,7 +5,7 @@
     <name>Photos</name>
     <summary>Your memories under your control</summary>
     <description>Your memories under your control</description>
-    <version>2.3.0</version>
+    <version>2.4.0</version>
     <licence>agpl</licence>
     <author mail="skjnldsv@protonmail.com">John Molakvoæ</author>
     <namespace>Photos</namespace>
@@ -20,7 +20,7 @@
     <repository>https://github.com/nextcloud/photos.git</repository>
     <default_enable />
     <dependencies>
-        <nextcloud min-version="27" max-version="27" />
+        <nextcloud min-version="28" max-version="28" />
     </dependencies>
     <navigations>
         <navigation>
