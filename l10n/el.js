@@ -57,6 +57,7 @@ OC.L10N.register(
     "This folder does not exist" : "Αυτός ο φάκελος δεν υπάρχει",
     "Loading folders …" : "Φόρτωση φακέλων...",
     "No photos in here" : "Δεν υπάρχουν φωτογραφίες εδώ",
+    "Shared by" : "Διαμοιράστηκε από",
     "Shared albums" : "Κοινόχρηστα άλμπουμ",
     "No photos with this tag yet" : "Δεν υπάρχουν φωτογραφίες με αυτή την ετικέτα ακόμη",
     "No tags yet" : "Χωρίς ετικέτες ακόμη",

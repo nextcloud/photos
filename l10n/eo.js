@@ -14,6 +14,7 @@ OC.L10N.register(
     "View" : "Vidi",
     "Favorite" : "Pliŝatati",
     "Remove from favorites" : "Forigi el pliŝataĵoj",
+    "Shared by" : "Kunhavigita de",
     "Add" : "Aldoni",
     "Delete selection" : "Forigi elekton",
     "Settings" : "Agordoj"

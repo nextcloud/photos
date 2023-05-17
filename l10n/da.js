@@ -52,6 +52,7 @@ OC.L10N.register(
     "Remove from favorites" : "Fjern fra favoritter",
     "This folder does not exist" : "Denne mappe findes ikke",
     "No photos in here" : "Ingen billeder her",
+    "Shared by" : "Delt af",
     "Shared albums" : "Delte album",
     "No tags yet" : "Ingen tags endnu",
     "Photos with tags will show up here" : "Billeder med tags vil vise sig her",

@@ -8,6 +8,7 @@ OC.L10N.register(
     "Back" : "ត្រឡប់ក្រោយ",
     "Save" : "រក្សាទុក",
     "Remove from favorites" : "Remove from favorites",
+    "Shared by" : "បាន​ចែក​រំលែក​ដោយ",
     "Add" : "បញ្ចូល",
     "Settings" : "ការកំណត់"
 },

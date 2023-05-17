@@ -106,6 +106,7 @@ OC.L10N.register(
     "Cover photo for place {placeName}" : "Foto da capa do lespaço {placeName}",
     "There is no place yet!" : "Ainda não há espaço!",
     "Failed to fetch albums list." : "Falha ao buscar lista de álbuns.",
+    "Shared by" : "Compartilhado por",
     "Shared albums" : "Álbuns compartilhados",
     "Cover photo for shared album {albumName}." : "Foto da capa do álbum compartilhado {albumName}.",
     "Back to tags overview" : "Voltar para a visão geral das etiquetas",

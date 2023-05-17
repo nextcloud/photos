@@ -12,6 +12,7 @@ OC.L10N.register(
     "View" : "Shiko",
     "Favorite" : "I/E Preferuar",
     "Remove from favorites" : "Remove from favorites",
+    "Shared by" : "Shpërndarë nga",
     "Add" : "Shto",
     "Settings" : "Rregullimet"
 },

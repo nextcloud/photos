@@ -106,6 +106,7 @@ OC.L10N.register(
     "Cover photo for place {placeName}" : "Cover photo for place {placeName}",
     "There is no place yet!" : "There is no place yet!",
     "Failed to fetch albums list." : "Failed to fetch albums list.",
+    "Shared by" : "Shared by",
     "Shared albums" : "Shared albums",
     "Cover photo for shared album {albumName}." : "Cover photo for shared album {albumName}.",
     "Back to tags overview" : "Back to tags overview",

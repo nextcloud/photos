@@ -95,6 +95,7 @@ OC.L10N.register(
     "Cover photo for place {placeName}" : "Omslagsfoto för plats {placeName}",
     "There is no place yet!" : "Det finns ingen plats ännu!",
     "Failed to fetch albums list." : "Misslyckades att hämta albumlistan.",
+    "Shared by" : "Delad av",
     "Shared albums" : "Delade album",
     "Cover photo for shared album {albumName}." : "Omslagsfoto för delat album {albumName}.",
     "Back to tags overview" : "Tillbaka till tagg-översikten",
