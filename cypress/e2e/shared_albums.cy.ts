@@ -1,5 +1,5 @@
 
-import { randHash } from '../utils'
+import { randHash, randHash } from '../utils'
 /**
  * @copyright Copyright (c) 2022 Louis Chmn <louis@chmn.me>
  *
@@ -33,13 +33,10 @@ import {
 import {
 	downloadAllFiles,
 	downloadSelection,
-	goToSharedAlbum,
-	removeSharedAlbums,
 	selectMedia,
 	uploadTestMedia,
 } from './photosUtils'
-
-import { randHash } from '../utils'
+import { addFilesToSharedAlbumFromSharedAlbumFromHeader, goToSharedAlbum } from './sharedAlbumUtils'
 
 const alice = new User(`alice_${randHash()}`)
 const bob = new User(`bob_${randHash()}`)
@@ -186,6 +183,47 @@ describe('Manage shared albums', () => {
 			cy.visit('/apps/photos/sharedalbums')
 			cy.get(`[data-test="shared_album_test5 (${alice.userId})"]`).should('have.length', 1)
 			cy.get(`[data-test="shared_album_test5 (${charlie.userId})"]`).should('have.length', 1)
+		})
+	})
+
+	context('Multiple collaborators', () => {
+		before(() => {
+			uploadTestMedia(alice)
+			uploadTestMedia(charlie)
+
+			cy.login(alice)
+			cy.visit('apps/photos/albums')
+			createAnAlbumFromAlbums('shared_album_test6')
+			addCollaborators([bob.userId, charlie.userId])
+		})
+
+		it('It should display picture from all collaborators', () => {
+			cy.login(alice)
+			cy.visit('apps/photos/albums')
+			goToAlbum('shared_album_test6')
+			cy.get('[data-test="media"]').should('have.length', 0)
+			addFilesToAlbumFromAlbum('shared_album_test6', [0])
+			cy.get('[data-test="media"]').should('have.length', 1)
+
+			cy.login(bob)
+			cy.visit('apps/photos/sharedalbums')
+			goToSharedAlbum('shared_album_test6')
+			cy.get('[data-test="media"]').should('have.length', 1)
+			addFilesToSharedAlbumFromSharedAlbumFromHeader('shared_album_test6', [1])
+			cy.get('[data-test="media"]').should('have.length', 2)
+
+			cy.login(charlie)
+			cy.visit('apps/photos/sharedalbums')
+			goToSharedAlbum('shared_album_test6')
+			cy.get('[data-test="media"]').should('have.length', 2)
+			addFilesToSharedAlbumFromSharedAlbumFromHeader('shared_album_test6', [2])
+			cy.get('[data-test="media"]').should('have.length', 3)
+		})
+
+		it('Collaborator should be able to delete all picture from the shared album', () => {
+			selectMedia([0, 1, 2])
+			removeSelectionFromAlbum()
+			cy.get('[data-test="media"]').should('have.length', 0)
 		})
 	})
 })

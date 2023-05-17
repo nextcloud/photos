@@ -72,13 +72,3 @@ export function deleteSelection() {
 		.click()
 		.wait('@deleteRequests')
 }
-
-export function goToSharedAlbum(albumName: string) {
-	cy.get('.app-navigation__list').contains('Collaborative albums').click()
-	cy.get('ul.collections__list').contains(albumName).click()
-}
-
-export function removeSharedAlbums() {
-	cy.get('[aria-label="Open actions menu"]').click()
-	cy.contains('Delete album').click()
-}
