@@ -52,13 +52,25 @@
 		<NcEmptyContent v-if="isEmpty" key="emptycontent" illustration-name="empty">
 			{{ t('photos', 'No photos in here') }}
 		</NcEmptyContent>
-
 		<div v-else class="grid-container">
+			<div v-if="contentList.folders.length" class="folders">
+				<div class="list-title">
+					Folders
+				</div>
+				<VirtualGrid ref="virtualgrid"
+					:items="contentList.folders"
+					:get-column-count="() => gridConfig.count"
+					:get-grid-gap="() => gridConfig.gap" />
+			</div>
+			<div v-if="contentList.folders.length" class="spacing-between" />
+			<div class="list-title">
+				{{ t('photos', 'Files') }}
+			</div>
 			<VirtualGrid ref="virtualgrid"
-				:items="contentList"
-				:scroll-element="appContent"
+				:items="contentList.files"
 				:get-column-count="() => gridConfig.count"
 				:get-grid-gap="() => gridConfig.gap" />
+			<div class="footer-replace" />
 		</div>
 	</div>
 </template>
@@ -68,15 +80,12 @@ import { mapGetters } from 'vuex'
 import { UploadPicker, getUploader } from '@nextcloud/upload'
 import { NcEmptyContent } from '@nextcloud/vue'
 import VirtualGrid from 'vue-virtual-grid'
-
 import FileLegacy from '../components/FileLegacy.vue'
 import Folder from '../components/Folder.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-
 import { prefixPath } from '../services/DavClient.js'
 import allowedMimes from '../services/AllowedMimes.js'
 import getAlbumContent from '../services/AlbumContent.js'
-
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import GridConfigMixin from '../mixins/GridConfig.js'
 import getFileInfo from '../services/FileInfo.js'
@@ -190,8 +199,7 @@ export default {
 					renderComponent: FileLegacy,
 				}
 			})
-
-			return [...(folders || []), ...(files || [])]
+			return { 'folders': folders, 'files': files }
 		},
 
 		// is current folder empty?
@@ -317,4 +325,44 @@ export default {
 	}
 }
 
+.spacing-between{
+	height: 64px;
+}
+
+.main-container {
+	display: flex;
+	justify-content: start;
+	flex-direction: row;
+	flex-wrap: wrap;
+	width: 100%;
+	margin: 0 4px;
+}
+
+.item {
+	width: auto;
+	margin: 2px;
+	position: relative;
+}
+
+.title-item {
+	height: 90px;
+	width: 100%;
+	margin: 4px;
+}
+
+.fullWidth {
+	width: 100%;
+	height: auto;
+}
+
+.footer-replace{
+	height: 70px;
+}
+
+.list-title{
+	line-height: 50px !important;
+	font-weight: bold;
+	font-size: 24px;
+	padding: 0 6px;
+}
 </style>
