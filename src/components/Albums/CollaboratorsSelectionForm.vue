@@ -24,49 +24,25 @@
 		<h2 class="manage-collaborators__title">
 			{{ t('photos', 'Add collaborators') }}
 		</h2>
-		<div class="manage-collaborators__subtitle">
+
+		<label class="manage-collaborators__subtitle" for="sharing-search-input">
 			{{ t('photos', 'Add people or groups who can edit your album') }}
-		</div>
-
+		</label>
 		<form class="manage-collaborators__form" @submit.prevent>
-			<NcPopover ref="popover"
-				:auto-size="true"
-				:distance="0">
-				<label slot="trigger" class="manage-collaborators__form__input">
-					<NcTextField :value.sync="searchText"
-						autocomplete="off"
-						type="search"
-						name="search"
-						:aria-label="t('photos', 'Search for collaborators')"
-						aria-autocomplete="list"
-						:aria-controls="`manage-collaborators__form__selection-${randomId} manage-collaborators__form__list-${randomId}`"
-						:placeholder="t('photos', 'Search people or groups')"
-						@input="searchCollaborators">
-						<Magnify :size="16" />
-					</NcTextField>
-					<NcLoadingIcon v-if="loadingCollaborators" />
-				</label>
-
-				<ul v-if="searchResults.length !== 0" :id="`manage-collaborators__form__list-${randomId}`" class="manage-collaborators__form__list">
-					<li v-for="collaboratorKey of searchResults" :key="collaboratorKey">
-						<NcListItemIcon :id="availableCollaborators[collaboratorKey].id"
-							class="manage-collaborators__form__list__result"
-							:title="availableCollaborators[collaboratorKey].label"
-							:search="searchText"
-							:user="availableCollaborators[collaboratorKey].id"
-							:display-name="availableCollaborators[collaboratorKey].label"
-							:aria-label="t('photos', 'Add {collaboratorLabel} to the collaborators list', {collaboratorLabel: availableCollaborators[collaboratorKey].label})"
-							tabindex="0"
-							@click="selectEntity(collaboratorKey)" />
-					</li>
-				</ul>
-				<NcEmptyContent v-else
-					key="emptycontent"
-					class="manage-collaborators__form__list--empty"
-					:title="t('photos', 'No collaborators available')">
-					<AccountGroup slot="icon" />
-				</NcEmptyContent>
-			</NcPopover>
+			<NcSelect v-model="searchText"
+				input-id="sharing-search-input"
+				:loading="loadingCollaborators"
+				label="label"
+				:filterable="false"
+				:placeholder="t('photos', 'Search people or groups')"
+				:clear-search-on-blur="() => false"
+				:user-select="true"
+				:append-to-body="false"
+				:options="searchResults"
+				@search="searchCollaborators"
+				@option:selected="({key}) => selectEntity(key)">
+				{{ t('photos', 'No recommendations. Start typing.') }}
+			</NcSelect>
 		</form>
 
 		<ul class="manage-collaborators__selection">
@@ -76,7 +52,9 @@
 				<NcListItemIcon :id="availableCollaborators[collaboratorKey].id"
 					:display-name="availableCollaborators[collaboratorKey].label"
 					:title="availableCollaborators[collaboratorKey].label"
-					:user="availableCollaborators[collaboratorKey].id">
+					:user="availableCollaborators[collaboratorKey].id"
+					:is-no-user="availableCollaborators[collaboratorKey].type !== collaboratorTypes.SHARE_TYPE_USER">
+					<AccountGroup v-if="availableCollaborators[collaboratorKey].type === collaboratorTypes.SHARE_TYPE_GROUP" :title="t('photos', 'Group')" />
 					<NcButton type="tertiary"
 						:aria-label="t('photos', 'Remove {collaboratorLabel} from the collaborators list', {collaboratorLabel: availableCollaborators[collaboratorKey].label})"
 						@click="unselectEntity(collaboratorKey)">
@@ -134,23 +112,32 @@ import Check from 'vue-material-design-icons/Check.vue'
 import ContentCopy from 'vue-material-design-icons/ContentCopy.vue'
 import AccountGroup from 'vue-material-design-icons/AccountGroup.vue'
 import Earth from 'vue-material-design-icons/Earth.vue'
+import AccountGroupSvg from '@mdi/svg/svg/account-group.svg'
 
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
-import { NcButton, NcListItemIcon, NcLoadingIcon, NcPopover, NcTextField, NcEmptyContent } from '@nextcloud/vue'
+import { NcButton, NcListItemIcon, NcLoadingIcon, NcSelect } from '@nextcloud/vue'
 import { Type } from '@nextcloud/sharing'
 
 import logger from '../../services/logger.js'
 import AbortControllerMixin from '../../mixins/AbortControllerMixin.js'
 import { fetchAlbum } from '../../services/Albums.js'
+import { translate } from '@nextcloud/l10n'
 
 /**
  * @typedef {object} Collaborator
  * @property {string} id - The id of the collaborator.
  * @property {string} label - The label of the collaborator for display.
  * @property {Type.SHARE_TYPE_USER|Type.SHARE_TYPE_GROUP|Type.SHARE_TYPE_LINK} type - The type of the collaborator.
+ */
+
+/**
+ * @typedef {Collaborator} SearchResult
+ * @property {string} key
+ * @property {string} displayName - The label of the collaborator for display.
+ * @property {Element} [iconSvg] - An icon to differentiate the collaborator type.
  */
 
 export default {
@@ -165,9 +152,7 @@ export default {
 		NcLoadingIcon,
 		NcButton,
 		NcListItemIcon,
-		NcTextField,
-		NcPopover,
-		NcEmptyContent,
+		NcSelect,
 	},
 
 	mixins: [AbortControllerMixin],
@@ -192,7 +177,7 @@ export default {
 
 	data() {
 		return {
-			searchText: '',
+			searchText: null,
 			/** @type {Object<string, Collaborator>} */
 			availableCollaborators: {},
 			/** @type {string[]} */
@@ -204,6 +189,7 @@ export default {
 			loadingCollaborators: false,
 			randomId: Math.random().toString().substring(2, 10),
 			publicLinkCopied: false,
+			collaboratorTypes: Type,
 			config: {
 				minSearchStringLength: parseInt(OC.config['sharing.minSearchStringLength'], 10) || 0,
 			},
@@ -212,13 +198,19 @@ export default {
 
 	computed: {
 		/**
-		 * @return {string[]}
+		 * @return {SearchResult[]}
 		 */
 		searchResults() {
 			return this.currentSearchResults
 				.filter(({ id }) => id !== getCurrentUser().uid)
-				.map(({ type, id }) => `${type}:${id}`)
-				.filter(collaboratorKey => !this.selectedCollaboratorsKeys.includes(collaboratorKey))
+				.map((collaborator) => {
+					return {
+						...collaborator,
+						key: `${collaborator.type}:${collaborator.id}`,
+						iconSvg: collaborator.type === Type.SHARE_TYPE_GROUP ? AccountGroupSvg : undefined,
+					}
+				})
+				.filter(({ key }) => !this.selectedCollaboratorsKeys.includes(key))
 		},
 
 		/**
@@ -257,7 +249,6 @@ export default {
 	},
 
 	mounted() {
-		this.searchCollaborators()
 		this.populateCollaborators(this.collaborators)
 	},
 
@@ -266,21 +257,25 @@ export default {
 
 		/**
 		 * Fetch possible collaborators.
+		 *
+		 * @param {string} query
 		 */
-		async searchCollaborators() {
-			if (this.searchText.length >= 1) {
-				this.$refs.popover.$refs.popover.show()
+		async searchCollaborators(query) {
+			if (query === undefined) {
+				return
+			}
+
+			query = query.trim()
+
+			if (query.length < this.config.minSearchStringLength) {
+				return
 			}
 
 			try {
-				if (this.searchText.length < this.config.minSearchStringLength) {
-					return
-				}
-
 				this.loadingCollaborators = true
 				const response = await axios.get(generateOcsUrl('core/autocomplete/get'), {
 					params: {
-						search: this.searchText,
+						search: query,
 						itemType: 'share-recipients',
 						shareTypes: [
 							Type.SHARE_TYPE_USER,
@@ -404,11 +399,12 @@ export default {
 		},
 
 		selectEntity(collaboratorKey) {
+			this.searchText = null
+
 			if (this.selectedCollaboratorsKeys.includes(collaboratorKey)) {
 				return
 			}
 
-			this.$refs.popover.$refs.popover.hide()
 			this.selectedCollaboratorsKeys.push(collaboratorKey)
 		},
 
@@ -421,6 +417,8 @@ export default {
 
 			this.selectedCollaboratorsKeys.splice(index, 1)
 		},
+
+		t: translate,
 	},
 }
 </script>
@@ -492,7 +490,7 @@ export default {
 	&__selection {
 		display: flex;
 		flex-direction: column;
-		margin-top: 8px;
+		margin-top: 32px;
 		flex-grow: 1;
 
 		&__item {
@@ -501,6 +499,10 @@ export default {
 
 			&:hover {
 				background: var(--color-background-dark);
+			}
+
+			:deep(.option) {
+				gap: 4px;
 			}
 		}
 	}
