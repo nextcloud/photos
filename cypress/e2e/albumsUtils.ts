@@ -20,7 +20,7 @@
  *
  */
 
-import { selectMedia } from "./photosUtils"
+import { selectMedia } from './photosUtils'
 
 export function createAnAlbumFromTimeline(albumName: string) {
 	cy.contains('Add').click()
@@ -79,7 +79,7 @@ export function goToAlbum(albumName: string) {
 export function addCollaborators(collaborators: string[]) {
 	cy.get('[aria-label="Manage collaborators for this album"]').click()
 	collaborators.forEach((collaborator: string) => {
-		cy.get('[aria-label="Search for collaborators"').type(collaborator)
+		cy.get('#sharing-search-input').type(collaborator)
 		cy.contains(collaborator).click()
 	})
 	cy.contains('Save').click()

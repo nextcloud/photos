@@ -1,5 +1,3 @@
-
-import { randHash, randHash } from '../utils'
 /**
  * @copyright Copyright (c) 2022 Louis Chmn <louis@chmn.me>
  *
@@ -31,12 +29,20 @@ import {
 	removeSelectionFromAlbum,
 } from './albumsUtils'
 import {
+	deleteSelection,
 	downloadAllFiles,
 	downloadSelection,
 	selectMedia,
 	uploadTestMedia,
 } from './photosUtils'
-import { addFilesToSharedAlbumFromSharedAlbumFromHeader, goToSharedAlbum } from './sharedAlbumUtils'
+import {
+	addFilesToSharedAlbumFromSharedAlbumFromHeader,
+	goToSharedAlbum,
+	removeSharedAlbums,
+} from './sharedAlbumUtils'
+import {
+	randHash,
+} from '../utils/index.js'
 
 const alice = new User(`alice_${randHash()}`)
 const bob = new User(`bob_${randHash()}`)
@@ -186,7 +192,7 @@ describe('Manage shared albums', () => {
 		})
 	})
 
-	context('Multiple collaborators', () => {
+	context('Multiple collaborators should see each other\'s pictures', () => {
 		before(() => {
 			uploadTestMedia(alice)
 			uploadTestMedia(charlie)
@@ -220,10 +226,84 @@ describe('Manage shared albums', () => {
 			cy.get('[data-test="media"]').should('have.length', 3)
 		})
 
-		it('Collaborator should be able to delete all picture from the shared album', () => {
-			selectMedia([0, 1, 2])
+		it('Removing a collaborator should remove its pictures', () => {
+			cy.login(alice)
+			cy.visit('apps/photos/albums')
+			goToAlbum('shared_album_test6')
+			removeCollaborators([bob.userId])
+			cy.reload()
+			cy.get('[data-test="media"]').should('have.length', 2)
+		})
+
+		it('Collaborator should be able to remove all pictures from the shared album', () => {
+			cy.login(charlie)
+			cy.visit('apps/photos/sharedalbums')
+			goToSharedAlbum('shared_album_test6')
+			selectMedia([0, 1])
 			removeSelectionFromAlbum()
 			cy.get('[data-test="media"]').should('have.length', 0)
+
+			cy.login(alice)
+			cy.visit('apps/photos/sharedalbums')
+			goToAlbum('shared_album_test6')
+			cy.get('[data-test="media"]').should('have.length', 0)
+		})
+	})
+
+	context('Users and files events should impact albums', () => {
+		before(() => {
+			uploadTestMedia(alice)
+			uploadTestMedia(charlie)
+
+			cy.login(alice)
+			cy.visit('apps/photos/albums')
+			createAnAlbumFromAlbums('shared_album_test7')
+			addCollaborators([bob.userId, charlie.userId])
+			addFilesToAlbumFromAlbum('shared_album_test7', [0])
+
+			cy.login(bob)
+			cy.visit('apps/photos/sharedalbums')
+			goToSharedAlbum('shared_album_test7')
+			addFilesToSharedAlbumFromSharedAlbumFromHeader('shared_album_test7', [1])
+
+			cy.login(charlie)
+			cy.visit('apps/photos/sharedalbums')
+			goToSharedAlbum('shared_album_test7')
+			addFilesToSharedAlbumFromSharedAlbumFromHeader('shared_album_test7', [2])
+			cy.get('[data-test="media"]').should('have.length', 3)
+		})
+
+		it('Deleting a file should remove it from the albums', () => {
+			cy.login(bob)
+			cy.visit('/apps/photos')
+			selectMedia([1])
+			deleteSelection()
+			goToSharedAlbum('shared_album_test7')
+			cy.get('[data-test="media"]').should('have.length', 2)
+
+			cy.login(alice)
+			cy.visit('apps/photos/albums')
+			goToAlbum('shared_album_test7')
+			cy.get('[data-test="media"]').should('have.length', 2)
+		})
+
+		it('Deleting a user should remove it from the collaborator list of albums and remove its pictures', () => {
+			cy.deleteUser(charlie)
+			cy.login(alice)
+			cy.visit('apps/photos/albums')
+			goToAlbum('shared_album_test7')
+			cy.get('[data-test="media"]').should('have.length', 1)
+			cy.get('[aria-label="Manage collaborators for this album"]').click()
+			cy.get('.manage-collaborators__selection__item').should('have.length', 1)
+		})
+
+		it('Deleting a user should remove its albums for collaborators', () => {
+			cy.deleteUser(alice)
+			cy.login(bob)
+			cy.visit('apps/photos/sharedalbums')
+			cy.get('body').should('not.contain', `shared_album_test7 (${alice.userId})`)
+			cy.createUser(alice)
+			uploadTestMedia(alice)
 		})
 	})
 })
