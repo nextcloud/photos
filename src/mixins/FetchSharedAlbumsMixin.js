@@ -32,8 +32,8 @@ export default {
 
 	data() {
 		return {
-			errorFetchingAlbums: null,
-			loadingAlbums: false,
+			errorFetchingSharedAlbums: null,
+			loadingSharedAlbums: false,
 		}
 	},
 
@@ -42,7 +42,7 @@ export default {
 	],
 
 	async beforeMount() {
-		this.fetchAlbums()
+		this.fetchSharedAlbums()
 	},
 
 	computed: {
@@ -56,26 +56,26 @@ export default {
 			'addSharedAlbums',
 		]),
 
-		async fetchAlbums() {
-			if (this.loadingAlbums) {
+		async fetchSharedAlbums() {
+			if (this.loadingSharedAlbums) {
 				return
 			}
 
 			try {
-				this.loadingAlbums = true
-				this.errorFetchingAlbums = null
+				this.loadingSharedAlbums = true
+				this.errorFetchingSharedAlbums = null
 
 				const albums = await fetchAlbums(`/photos/${getCurrentUser()?.uid}/sharedalbums`, this.abortController.signal)
 
 				this.addSharedAlbums({ albums })
 			} catch (error) {
 				if (error.response?.status === 404) {
-					this.errorFetchingAlbums = 404
+					this.errorFetchingSharedAlbums = 404
 				} else {
-					this.errorFetchingAlbums = error
+					this.errorFetchingSharedAlbums = error
 				}
 			} finally {
-				this.loadingAlbums = false
+				this.loadingSharedAlbums = false
 			}
 		},
 	},
