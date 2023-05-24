@@ -24,6 +24,8 @@ import {
 	addCollaborators,
 	addFilesToAlbumFromAlbum,
 	createAnAlbumFromAlbums,
+	createPublicShare,
+	deletePublicShare,
 	goToAlbum,
 	removeCollaborators,
 	removeSelectionFromAlbum,
@@ -59,11 +61,11 @@ Cypress.on('uncaught:exception', (err) => {
 describe('Manage shared albums', () => {
 	before(() => {
 		cy.createUser(alice)
-		cy.createUser(bob).then(() => {
-			uploadTestMedia(bob)
-		})
+		cy.createUser(bob)
 		cy.createUser(charlie)
-
+		uploadTestMedia(alice)
+		uploadTestMedia(bob)
+		uploadTestMedia(charlie)
 	})
 
 	context('Adding and removing files in a shared album', () => {
@@ -97,7 +99,7 @@ describe('Manage shared albums', () => {
 		})
 	})
 
-	context('Download files from a shared album', () => {
+	xcontext('Download files from a shared album', () => {
 		before(() => {
 			cy.login(alice)
 			cy.visit('apps/photos/albums')
@@ -110,21 +112,21 @@ describe('Manage shared albums', () => {
 			addFilesToAlbumFromAlbum('shared_album_test2', [0, 1, 2])
 		})
 
-		xit('Download a file from a shared album', () => {
+		it('Download a file from a shared album', () => {
 			goToSharedAlbum('shared_album_test2')
 			selectMedia([0])
 			downloadSelection()
 			selectMedia([0])
 		})
 
-		xit('Download multiple files from a shared album', () => {
+		it('Download multiple files from a shared album', () => {
 			goToSharedAlbum('shared_album_test2')
 			selectMedia([1, 2])
 			downloadSelection()
 			selectMedia([1, 2])
 		})
 
-		xit('Download all files from a shared album', () => {
+		it('Download all files from a shared album', () => {
 			goToSharedAlbum('shared_album_test2')
 			downloadAllFiles()
 		})
@@ -194,9 +196,6 @@ describe('Manage shared albums', () => {
 
 	context('Multiple collaborators should see each other\'s pictures', () => {
 		before(() => {
-			uploadTestMedia(alice)
-			uploadTestMedia(charlie)
-
 			cy.login(alice)
 			cy.visit('apps/photos/albums')
 			createAnAlbumFromAlbums('shared_album_test6')
@@ -252,9 +251,6 @@ describe('Manage shared albums', () => {
 
 	context('Users and files events should impact albums', () => {
 		before(() => {
-			uploadTestMedia(alice)
-			uploadTestMedia(charlie)
-
 			cy.login(alice)
 			cy.visit('apps/photos/albums')
 			createAnAlbumFromAlbums('shared_album_test7')
@@ -304,6 +300,32 @@ describe('Manage shared albums', () => {
 			cy.get('body').should('not.contain', `shared_album_test7 (${alice.userId})`)
 			cy.createUser(alice)
 			uploadTestMedia(alice)
+		})
+	})
+
+	context('Public share should work', () => {
+		before(() => {
+			cy.login(alice)
+			cy.visit('apps/photos/albums')
+			createAnAlbumFromAlbums('shared_album_test8')
+			addFilesToAlbumFromAlbum('shared_album_test8', [0, 1, 2])
+		})
+
+		it('Create a public link', () => {
+			createPublicShare()
+				.then(publicLink => {
+					cy.logout()
+					cy.visit(publicLink)
+					cy.contains('shared_album_test8')
+					cy.get('[data-test="media"]').should('have.length', 3)
+
+					cy.login(alice)
+					cy.visit('apps/photos/albums')
+					goToAlbum('shared_album_test8')
+					deletePublicShare()
+					cy.visit(publicLink)
+					cy.contains('This collection does not exist')
+				})
 		})
 	})
 })

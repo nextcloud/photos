@@ -98,3 +98,18 @@ export function removeCollaborators(collaborators: string[]) {
 	})
 	cy.contains('Save').click()
 }
+
+export function createPublicShare() {
+	cy.get('[aria-label="Manage collaborators for this album"]').click()
+	cy.intercept({ method: 'PROPPATCH', url: '**/dav/photos/*/albums/*' }).as('patchCall')
+	cy.get('[aria-label="Create public link share"]').click()
+	cy.wait('@patchCall')
+
+	return cy.get('[aria-label="Copy the public link"]')
+		.invoke('attr', 'title') as Cypress.Chainable<string>
+}
+
+export function deletePublicShare() {
+	cy.get('[aria-label="Manage collaborators for this album"]').click()
+	cy.get('[aria-label="Delete the public link"]').click()
+}
