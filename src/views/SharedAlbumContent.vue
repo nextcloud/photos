@@ -61,7 +61,8 @@
 							<DownloadMultiple slot="icon" />
 						</ActionDownload> -->
 
-						<NcActionButton :close-after-click="true"
+						<NcActionButton v-if="album.collaborators[0].type === collaboratorTypes.SHARE_TYPE_USER"
+							:close-after-click="true"
 							@click="handleDeleteAlbum">
 							{{ t('photos', 'Delete album') }}
 							<Delete slot="icon" />
@@ -126,6 +127,7 @@ import Close from 'vue-material-design-icons/Close.vue'
 
 import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionSeparator, NcUserBubble, isMobile } from '@nextcloud/vue'
 import { getCurrentUser } from '@nextcloud/auth'
+import { Type } from '@nextcloud/sharing'
 
 import FetchSharedAlbumsMixin from '../mixins/FetchSharedAlbumsMixin.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
@@ -182,6 +184,7 @@ export default {
 			showAddPhotosModal: false,
 			loadingCount: 0,
 			loadingAddFilesToAlbum: false,
+			collaboratorTypes: Type,
 		}
 	},
 
