@@ -89,7 +89,7 @@ class SharedAlbumRoot extends AlbumRoot {
 			'nc:collaborator' => [
 				'id' => $this->album->getAlbum()->getUserId(),
 				'label' => $this->userManager->get($this->album->getAlbum()->getUserId())->getDisplayName(),
-				'type' => 1,
+				'type' => $this->album->getAlbum()->getReceivedFrom(),
 			],
 		]];
 	}
