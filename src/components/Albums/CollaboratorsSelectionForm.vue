@@ -66,10 +66,10 @@
 
 		<div class="actions">
 			<div v-if="allowPublicLink" class="actions__public-link">
-				<template v-if="isPublicLinkSelected">
+				<template v-if="isPublicLinkSelected && publicLink.id !== ''">
 					<NcButton class="manage-collaborators__public-link-button"
 						:aria-label="t('photos', 'Copy the public link')"
-						:disabled="publicLink.id === ''"
+						:title="publicLinkURL"
 						@click="copyPublicLink">
 						<template v-if="publicLinkCopied">
 							{{ t('photos', 'Public link copied!') }}
@@ -84,13 +84,13 @@
 					</NcButton>
 					<NcButton type="tertiary"
 						:aria-label="t('photos', 'Delete the public link')"
-						:disabled="publicLink.id === ''"
 						@click="deletePublicLink">
-						<NcLoadingIcon v-if="publicLink.id === ''" slot="icon" />
-						<Close v-else slot="icon" />
+						<Close slot="icon" />
 					</NcButton>
 				</template>
 				<NcButton v-else
+					:disabled="isPublicLinkSelected && publicLink.id === ''"
+					:aria-label="t('photos', 'Create public link share')"
 					class="manage-collaborators__public-link-button"
 					@click="createPublicLinkForAlbum">
 					<Earth slot="icon" />
@@ -118,7 +118,7 @@ import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
-import { NcButton, NcListItemIcon, NcLoadingIcon, NcSelect } from '@nextcloud/vue'
+import { NcButton, NcListItemIcon, NcSelect } from '@nextcloud/vue'
 import { Type } from '@nextcloud/sharing'
 
 import logger from '../../services/logger.js'
@@ -149,7 +149,6 @@ export default {
 		ContentCopy,
 		Check,
 		Earth,
-		NcLoadingIcon,
 		NcButton,
 		NcListItemIcon,
 		NcSelect,
@@ -239,6 +238,11 @@ export default {
 		/** @return {Collaborator} */
 		publicLink() {
 			return this.availableCollaborators[Type.SHARE_TYPE_LINK]
+		},
+
+		/** @return {string} */
+		publicLinkURL() {
+			return `${window.location.protocol}//${window.location.host}${generateUrl(`apps/photos/public/${this.publicLink.id}`)}`
 		},
 	},
 
@@ -391,7 +395,7 @@ export default {
 		},
 
 		async copyPublicLink() {
-			await navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}${generateUrl(`apps/photos/public/${this.publicLink.id}`)}`)
+			await navigator.clipboard.writeText(this.publicLinkURL)
 			this.publicLinkCopied = true
 			setTimeout(() => {
 				this.publicLinkCopied = false
