@@ -230,7 +230,7 @@ export default {
 	},
 
 	methods: {
-		...mapActions(['deleteFiles', 'addFilesToAlbum']),
+		...mapActions(['deleteFiles', 'addFilesToAlbum', 'addFilesToSharedAlbum']),
 
 		getContent() {
 			this.fetchFiles('', {
@@ -254,9 +254,13 @@ export default {
 			// TODO: finish when implementing upload
 		},
 
-		async addSelectionToAlbum(albumName) {
+		async addSelectionToAlbum(album) {
 			this.showAlbumPicker = false
-			await this.addFilesToAlbum({ albumName, fileIdsToAdd: this.selectedFileIds })
+			if (album.filename.match(/^\/photos\/.+\/sharedalbums\//) !== null) {
+				await this.addFilesToSharedAlbum({ albumName: album.basename, fileIdsToAdd: this.selectedFileIds })
+			} else {
+				await this.addFilesToAlbum({ albumName: album.basename, fileIdsToAdd: this.selectedFileIds })
+			}
 		},
 
 		async deleteSelection() {

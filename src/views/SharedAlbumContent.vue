@@ -25,8 +25,8 @@
 			ref="collectionContent"
 			:collection="album"
 			:collection-file-ids="albumFileIds"
-			:loading="loadingAlbums || loadingFiles"
-			:error="errorFetchingAlbums || errorFetchingFiles">
+			:loading="loadingSharedAlbums || loadingFiles"
+			:error="errorFetchingSharedAlbums || errorFetchingFiles">
 			<!-- Header -->
 			<HeaderNavigation key="navigation"
 				slot="header"
