@@ -66,7 +66,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import ArrowLeft from 'vue-material-design-icons/ArrowLeft'
+import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 
 import { NcEmptyContent, NcActions, NcActionButton, NcLoadingIcon, isMobile } from '@nextcloud/vue'
 

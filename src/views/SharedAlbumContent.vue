@@ -115,13 +115,13 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import MapMarker from 'vue-material-design-icons/MapMarker'
-import Plus from 'vue-material-design-icons/Plus'
-import Delete from 'vue-material-design-icons/Delete'
-import ImagePlus from 'vue-material-design-icons/ImagePlus'
-import Close from 'vue-material-design-icons/Close'
-// import Download from 'vue-material-design-icons/Download'
-// import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple'
+import MapMarker from 'vue-material-design-icons/MapMarker.vue'
+import Plus from 'vue-material-design-icons/Plus.vue'
+import Delete from 'vue-material-design-icons/Delete.vue'
+import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
+import Close from 'vue-material-design-icons/Close.vue'
+// import Download from 'vue-material-design-icons/Download.vue'
+// import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
 
 import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionSeparator, NcUserBubble, isMobile } from '@nextcloud/vue'
 import { getCurrentUser } from '@nextcloud/auth'

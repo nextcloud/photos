@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import AlertCircle from 'vue-material-design-icons/AlertCircle'
+import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
 
 import { NcEmptyContent } from '@nextcloud/vue'
 

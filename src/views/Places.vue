@@ -55,7 +55,7 @@
 
 <script>
 
-import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage'
+import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
 
 import { generateUrl } from '@nextcloud/router'
 import { NcEmptyContent } from '@nextcloud/vue'
