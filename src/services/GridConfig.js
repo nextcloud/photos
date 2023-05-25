@@ -21,7 +21,7 @@
  */
 
 import Vue from 'vue'
-import { sizes } from '../assets/grid-sizes'
+import { sizes } from '../assets/grid-sizes.js'
 
 export default new Vue({
 	data() {

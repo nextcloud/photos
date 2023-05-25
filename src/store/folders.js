@@ -20,7 +20,7 @@
  *
  */
 import Vue from 'vue'
-import { sortCompare } from '../utils/fileUtils'
+import { sortCompare } from '../utils/fileUtils.js'
 
 const state = {
 	paths: {},

@@ -20,15 +20,15 @@
  *
  */
 
-import client from './DavClient'
-import { genFileInfo } from '../utils/fileUtils'
+import client from './DavClient.js'
+import { genFileInfo } from '../utils/fileUtils.js'
 
 /**
  * List system tags
  *
  * @param {string} path the path relative to the user root
  * @param {object} [options] optional options for axios
- * @return {Array} the file list
+ * @return {Promise<object[]>} the file list
  */
 export default async function(path, options = {}) {
 	const response = await client.getDirectoryContents('/systemtags/', Object.assign({}, {

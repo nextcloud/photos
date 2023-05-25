@@ -58,7 +58,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 
-import PackageVariant from 'vue-material-design-icons/PackageVariant'
+import PackageVariant from 'vue-material-design-icons/PackageVariant.vue'
 
 import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'

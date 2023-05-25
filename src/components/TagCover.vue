@@ -45,7 +45,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import ImageMultipleIcon from 'vue-material-design-icons/ImageMultiple'
+import ImageMultipleIcon from 'vue-material-design-icons/ImageMultiple.vue'
 
 import { generateUrl } from '@nextcloud/router'
 

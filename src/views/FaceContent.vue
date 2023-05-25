@@ -176,16 +176,16 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import Pencil from 'vue-material-design-icons/Pencil'
-import Close from 'vue-material-design-icons/Close'
-import AlertCircle from 'vue-material-design-icons/AlertCircle'
-import Star from 'vue-material-design-icons/Star'
-import Download from 'vue-material-design-icons/Download'
-import Send from 'vue-material-design-icons/Send'
-import Merge from 'vue-material-design-icons/Merge'
-import ArrowLeft from 'vue-material-design-icons/ArrowLeft'
-import AccountSwitch from 'vue-material-design-icons/AccountSwitch'
-import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline'
+import Pencil from 'vue-material-design-icons/Pencil.vue'
+import Close from 'vue-material-design-icons/Close.vue'
+import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
+import Star from 'vue-material-design-icons/Star.vue'
+import Download from 'vue-material-design-icons/Download.vue'
+import Send from 'vue-material-design-icons/Send.vue'
+import Merge from 'vue-material-design-icons/Merge.vue'
+import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
+import AccountSwitch from 'vue-material-design-icons/AccountSwitch.vue'
+import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
 
 import { NcActions, NcActionButton, NcModal, NcEmptyContent, NcButton, NcLoadingIcon } from '@nextcloud/vue'
 
