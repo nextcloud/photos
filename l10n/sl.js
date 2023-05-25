@@ -14,6 +14,8 @@ OC.L10N.register(
     "On this day" : "Na današnji dan",
     "Shared with you" : "V souporabi z vami",
     "Tags" : "Oznake",
+    "Places" : "Mesta",
+    "Map" : "Zemljevid",
     "Photos settings" : "Nastavitve fotografij",
     "Mark selection as favorite" : "Označi izbor kot priljubljene",
     "Add selection to favorites" : "Dodaj izbor med priljubljene",
