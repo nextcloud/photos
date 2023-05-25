@@ -76,6 +76,7 @@ jobs:
           # cypress env
           ci-build-id: ${{ github.sha }}-${{ github.run_number }}
           tag: ${{ github.event_name }}
+          component: matrix.containers == 'component'
         env:
           # Needs to be prefixed with CYPRESS_
           CYPRESS_BRANCH: ${{ env.BRANCH }}
