@@ -21,26 +21,27 @@
  -->
 
 <template>
-	<div>
-		<!-- Description -->
-		<p class="app-settings-section__desc">
-			{{ t('photos', 'Default Photos upload and Albums location') }}
-		</p>
-
-		<!-- Picker -->
-		<input v-model="photosLocation"
-			class="app-settings-section__input"
-			type="text"
-			@input="debounceUpdatePhotosFolder(photosLocation)"
-			@change="debounceUpdatePhotosFolder(photosLocation)"
-			@click="debounceSelectPhotosFolder"
-			@focus.once="debounceSelectPhotosFolder"
-			@keyboard.enter="debounceSelectPhotosFolder">
+	<div class="photos-location">
+		<NcTextField class="photos-location__text-field"
+			:label="t('photos', 'Default Photos upload and Albums location')"
+			:label-visible="true"
+			:value.sync="photosLocation"
+			@update:value="debounceUpdatePhotosFolder(photosLocation)" />
+		<NcButton :aria-label="t('photos', 'Choose default Photos upload and Albums location')"
+			@click="debounceSelectPhotosFolder">
+			<template #icon>
+				<Folder :size="20" />
+			</template>
+		</NcButton>
 	</div>
 </template>
 
 <script>
 import debounce from 'debounce'
+
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import NcTextField from '@nextcloud/vue/dist/Components/NcTextField.js'
+import Folder from 'vue-material-design-icons/Folder.vue'
 
 import { getFilePickerBuilder, showError } from '@nextcloud/dialogs'
 
@@ -52,6 +53,12 @@ export default {
 	mixins: [
 		UserConfig,
 	],
+
+	components: {
+		NcButton,
+		NcTextField,
+		Folder,
+	},
 
 	methods: {
 		debounceSelectPhotosFolder: debounce(function() {
@@ -93,3 +100,22 @@ export default {
 	},
 }
 </script>
+
+<style lang="scss" scoped>
+.photos-location {
+	display: flex;
+	align-items: flex-end;
+	gap: 0 8px;
+
+	&__text-field {
+		max-width: 300px;
+
+		:deep {
+			.input-field__main-wrapper,
+			input {
+				height: var(--default-clickable-area) !important;
+			}
+		}
+	}
+}
+</style>
