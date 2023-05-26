@@ -8,6 +8,7 @@ OC.L10N.register(
     "Save" : "Saxla",
     "Favorite" : "İstəkli",
     "Remove from favorites" : "Remove from favorites",
+    "Shared by" : "Tərəfindən yayımlanıb",
     "Add" : "Əlavə etmək",
     "Settings" : "Quraşdırmalar"
 },
