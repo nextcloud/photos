@@ -9,6 +9,7 @@ OC.L10N.register(
     "Save" : "সংরক্ষণ",
     "Favorite" : "প্রিয়জন",
     "Remove from favorites" : "Remove from favorites",
+    "Shared by" : "যাদের মাঝে ভাগাভাগি করা হয়েছে",
     "Add" : "যোগ করুন",
     "Settings" : "সেটিংস"
 },

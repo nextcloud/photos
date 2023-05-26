@@ -106,6 +106,7 @@ OC.L10N.register(
     "Cover photo for place {placeName}" : "Foto na obálku pro umístění {placeName}",
     "There is no place yet!" : "Zatím zde není žádné umístění!",
     "Failed to fetch albums list." : "Nepodařilo se získat seznam alb.",
+    "Shared by" : "Nasdílel(a)",
     "Shared albums" : "Sdílená alba",
     "Cover photo for shared album {albumName}." : "Foto na obálku sdíleného alba {albumName}.",
     "Back to tags overview" : "Zpět na přehled štítků",

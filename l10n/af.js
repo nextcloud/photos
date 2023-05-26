@@ -14,6 +14,7 @@ OC.L10N.register(
     "View" : "Bekyk",
     "Favorite" : "Gunsteling",
     "Remove from favorites" : "Verwyder uit gunstelinge",
+    "Shared by" : "Gedeel deur",
     "Add" : "Voeg by",
     "Settings" : "Instellings"
 },

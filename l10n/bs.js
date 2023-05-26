@@ -7,6 +7,7 @@ OC.L10N.register(
     "Save" : "Spremi",
     "Favorite" : "Favorit",
     "Remove from favorites" : "Remove from favorites",
+    "Shared by" : "Dijeli",
     "Add" : "Dodaj",
     "Settings" : "Podešavanje"
 },
