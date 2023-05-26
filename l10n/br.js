@@ -13,6 +13,7 @@ OC.L10N.register(
     "View" : "Gwell",
     "Favorite" : "Pennrollañ",
     "Remove from favorites" : "Diverkañañ eus ar pennrolloù",
+    "Shared by" : "Rannet gant",
     "Add" : "Ouzhpennañ",
     "Settings" : "Arventennoù"
 },
