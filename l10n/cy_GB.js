@@ -12,6 +12,7 @@ OC.L10N.register(
     "An error occurred" : "Digwyddodd gwall",
     "Favorite" : "Ffefryn",
     "Remove from favorites" : "Remove from favorites",
+    "Shared by" : "Rhannwyd gan",
     "Add" : "Ychwanegu",
     "Settings" : "Gosodiadau"
 },
