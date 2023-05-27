@@ -16,7 +16,6 @@ OC.L10N.register(
     "Remove from favorites" : "Forigi el pliŝataĵoj",
     "Shared by" : "Kunhavigita de",
     "Add" : "Aldoni",
-    "Delete selection" : "Forigi elekton",
-    "Settings" : "Agordoj"
+    "Delete selection" : "Forigi elekton"
 },
 "nplurals=2; plural=(n != 1);");

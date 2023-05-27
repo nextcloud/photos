@@ -34,10 +34,6 @@ OC.L10N.register(
     "Add" : "Bæta við",
     "Delete selection" : "Eyða vali",
     "Tagged photos" : "Merktar ljósmyndir",
-    "Your photos" : "Ljósmyndirnar þínar",
-    "Your videos" : "Myndskeiðin þín",
-    "Your folders" : "Möppurnar þínar",
-    "Locations" : "Staðsetningar",
-    "Settings" : "Stillingar"
+    "Locations" : "Staðsetningar"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

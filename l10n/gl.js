@@ -139,10 +139,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "Produciuse un erro ao eliminar {fileName}.",
     "Failed to set favorite state for {fileId}." : "Non se puido establecer o estado favorito para {fileId}.",
     "Failed to set favorite state for {fileName}." : "Non se puido establecer o estado favorito para {fileName}.",
-    "Your photos" : "As súas fotos",
-    "Your videos" : "Os seus vídeos",
-    "Your folders" : "Os seus cartafoles",
-    "Locations" : "Localizacións",
-    "Settings" : "Axustes"
+    "Locations" : "Localizacións"
 },
 "nplurals=2; plural=(n != 1);");

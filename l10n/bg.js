@@ -139,10 +139,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "Неуспешно изтриване на {fileName}.",
     "Failed to set favorite state for {fileId}." : "Неуспешно задаване на предпочитано/любимо/ състояние за {fileId}.",
     "Failed to set favorite state for {fileName}." : "Неуспешно задаване на предпочитано/любимо/ състояние за {fileName}.",
-    "Your photos" : "Вашите снимки",
-    "Your videos" : "Вашите видеа",
-    "Your folders" : "Вашите папки",
-    "Locations" : "Местоположения",
-    "Settings" : "Настройки"
+    "Locations" : "Местоположения"
 },
 "nplurals=2; plural=(n != 1);");

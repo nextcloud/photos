@@ -87,10 +87,6 @@ OC.L10N.register(
     "Add" : "Aggiungi",
     "Delete selection" : "Elimina selezione",
     "Tagged photos" : "Foto con tag",
-    "Your photos" : "Le tue foto",
-    "Your videos" : "I tuoi video",
-    "Your folders" : "Le tue cartelle",
-    "Locations" : "Posizioni",
-    "Settings" : "Impostazioni"
+    "Locations" : "Posizioni"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

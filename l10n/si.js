@@ -6,8 +6,6 @@ OC.L10N.register(
     "Back" : "ආපසු",
     "Save" : "සුරකින්න",
     "Favorite" : "ප්‍රියතම",
-    "Add" : "එකතු කරන්න",
-    "Your photos" : "ඔබේ ඡායාරූප",
-    "Settings" : "සැකසුම්"
+    "Add" : "එකතු කරන්න"
 },
 "nplurals=2; plural=(n != 1);");

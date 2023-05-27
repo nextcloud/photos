@@ -77,10 +77,6 @@ OC.L10N.register(
     "Failed to delete {faceName}." : "Απέτυχε η διαγραφή {faceName}.",
     "Failed to delete {fileId}." : "Απέτυχε η διαγραφή {fileId}.",
     "Failed to delete {fileName}." : "Απέτυχε η διαγραφή {fileName}.",
-    "Your photos" : "Οι φωτογραφίες σας",
-    "Your videos" : "Τα βίντεό σας",
-    "Your folders" : "Οι φάκελοί σας",
-    "Locations" : "Τοποθεσίες",
-    "Settings" : "Ρυθμίσεις"
+    "Locations" : "Τοποθεσίες"
 },
 "nplurals=2; plural=(n != 1);");

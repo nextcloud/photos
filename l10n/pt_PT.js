@@ -29,10 +29,6 @@ OC.L10N.register(
     "Add" : "Adicionar",
     "Tagged photos" : "Fotos marcadas",
     "Failed to delete {fileName}." : "Falha ao remover {fileName}.",
-    "Your photos" : "As suas fotos",
-    "Your videos" : "Os seus vídeos",
-    "Your folders" : "As suas pastas",
-    "Locations" : "Localizações",
-    "Settings" : "Configurações"
+    "Locations" : "Localizações"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

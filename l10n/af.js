@@ -15,7 +15,6 @@ OC.L10N.register(
     "Favorite" : "Gunsteling",
     "Remove from favorites" : "Verwyder uit gunstelinge",
     "Shared by" : "Gedeel deur",
-    "Add" : "Voeg by",
-    "Settings" : "Instellings"
+    "Add" : "Voeg by"
 },
 "nplurals=2; plural=(n != 1);");

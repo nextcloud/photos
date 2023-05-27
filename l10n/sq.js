@@ -13,7 +13,6 @@ OC.L10N.register(
     "Favorite" : "I/E Preferuar",
     "Remove from favorites" : "Remove from favorites",
     "Shared by" : "Shpërndarë nga",
-    "Add" : "Shto",
-    "Settings" : "Rregullimet"
+    "Add" : "Shto"
 },
 "nplurals=2; plural=(n != 1);");

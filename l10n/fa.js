@@ -28,8 +28,6 @@ OC.L10N.register(
     "Add" : "افزودن",
     "Delete selection" : "انتخاب را حذف کنید",
     "Tagged photos" : "عکسهای برچسب خورده",
-    "Your photos" : "عکس های شما",
-    "Locations" : "مکانها",
-    "Settings" : "تنظیمات"
+    "Locations" : "مکانها"
 },
 "nplurals=2; plural=(n > 1);");
