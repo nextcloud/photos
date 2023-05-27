@@ -7,7 +7,6 @@ OC.L10N.register(
     "Save" : "ساتل",
     "Favorite" : "په نښه شوی",
     "Remove from favorites" : "له نښو ويستل",
-    "Shared by" : "شریکوننکی",
-    "Settings" : "سمونې"
+    "Shared by" : "شریکوننکی"
 },
 "nplurals=2; plural=(n != 1);");

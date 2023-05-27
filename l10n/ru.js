@@ -139,10 +139,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "Не удалось удалить файл «{fileName}».",
     "Failed to set favorite state for {fileId}." : "Не удалось отметить или снять отметку избранного с «{fileId}».",
     "Failed to set favorite state for {fileName}." : "Не удалось отметить или снять отметку избранного с «{fileId}».",
-    "Your photos" : "Мои фотографии",
-    "Your videos" : "Ваши видео",
-    "Your folders" : "Ваши каталоги",
-    "Locations" : "Места",
-    "Settings" : "Параметры"
+    "Locations" : "Места"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

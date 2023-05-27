@@ -133,10 +133,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "Kunne ikke slette {fileName}.",
     "Failed to set favorite state for {fileId}." : "Kunne ikke angi favorittstatus for {fileId}.",
     "Failed to set favorite state for {fileName}." : "Kunne ikke angi favorittstatus for {fileName}.",
-    "Your photos" : "Dine bilder",
-    "Your videos" : "Dine videoer",
-    "Your folders" : "Dine mapper",
-    "Locations" : "Steder",
-    "Settings" : "Innstillinger"
+    "Locations" : "Steder"
 },
 "nplurals=2; plural=(n != 1);");

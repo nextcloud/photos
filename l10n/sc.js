@@ -32,10 +32,6 @@ OC.L10N.register(
     "Add" : "Agiunghe",
     "Delete selection" : "Cantzella seletzione",
     "Tagged photos" : "Fotografias etichetadas",
-    "Your photos" : "Is fotografias tuas",
-    "Your videos" : "Is vìdeos tuos",
-    "Your folders" : "Is cartellas tuas",
-    "Locations" : "Positziones",
-    "Settings" : "Impostatziones"
+    "Locations" : "Positziones"
 },
 "nplurals=2; plural=(n != 1);");

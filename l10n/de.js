@@ -139,10 +139,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "{fileName} konnte nicht gelöscht werden.",
     "Failed to set favorite state for {fileId}." : "Fehler beim Festlegen des Favoritenstatus für {fileId}.",
     "Failed to set favorite state for {fileName}." : "Fehler beim Festlegen des Favoritenstatus für {fileName}.",
-    "Your photos" : "Deine Fotos",
-    "Your videos" : "Deine Videos",
-    "Your folders" : "Deine Ordner",
-    "Locations" : "Orte",
-    "Settings" : "Einstellungen"
+    "Locations" : "Orte"
 },
 "nplurals=2; plural=(n != 1);");

@@ -7,7 +7,6 @@ OC.L10N.register(
     "Save" : "حفظ",
     "Remove from favorites" : "Remove from favorites",
     "Shared by" : "سے اشتراک شدہ",
-    "Add" : "شامل کریں",
-    "Settings" : "سیٹینگز"
+    "Add" : "شامل کریں"
 },
 "nplurals=2; plural=(n != 1);");

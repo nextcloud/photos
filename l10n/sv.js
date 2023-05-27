@@ -65,6 +65,7 @@ OC.L10N.register(
     "_{years} year ago_::_{years} years ago_" : ["{years} år sedan","{years} år sedan"],
     "Enable squared photos view" : "Aktivera kvadratiska bild-vyn",
     "Default Photos upload and Albums location" : "Standardplats för album och bilder",
+    "Choose default Photos upload and Albums location" : "Välj standardplats uppladdning av bilder och plats för album",
     "Select the default location for your media" : "Välj standardplats för din media",
     "Invalid location selected" : "Ogiltig plats vald",
     "View" : "Visa",
@@ -138,10 +139,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "Misslyckades att radera {fileName}.",
     "Failed to set favorite state for {fileId}." : "Det gick inte att ange favoritstatus för {fileId}.",
     "Failed to set favorite state for {fileName}." : "Det gick inte att ange favoritstatus för {fileName}.",
-    "Your photos" : "Dina bilder",
-    "Your videos" : "Dina videor",
-    "Your folders" : "Dina mappar",
-    "Locations" : "Platser",
-    "Settings" : "Inställningar"
+    "Locations" : "Platser"
 },
 "nplurals=2; plural=(n != 1);");

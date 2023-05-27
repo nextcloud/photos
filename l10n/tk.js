@@ -7,7 +7,6 @@ OC.L10N.register(
     "Tags" : "Bellikler",
     "Back" : "Yzyna",
     "Save" : "Saklamak",
-    "Favorite" : "Halaýan",
-    "Settings" : "Sazlamalar"
+    "Favorite" : "Halaýan"
 },
 "nplurals=2; plural=(n != 1);");

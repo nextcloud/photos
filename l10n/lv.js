@@ -22,8 +22,6 @@ OC.L10N.register(
     "Favorite" : "Favorīts",
     "Remove from favorites" : "Noņemt no izlases",
     "Shared by" : "Koplietoja",
-    "Add" : "Pievienot",
-    "Your photos" : "Jūsu bildes",
-    "Settings" : "Iestatījumi"
+    "Add" : "Pievienot"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

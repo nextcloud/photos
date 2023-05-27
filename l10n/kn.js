@@ -7,7 +7,6 @@ OC.L10N.register(
     "Save" : "﻿ಉಳಿಸಿ",
     "Favorite" : "ಅಚ್ಚುಮೆಚ್ಚಿನ",
     "Remove from favorites" : "Remove from favorites",
-    "Add" : "﻿ಸೇರಿಸಿ",
-    "Settings" : "ಆಯ್ಕೆ"
+    "Add" : "﻿ಸೇರಿಸಿ"
 },
 "nplurals=2; plural=(n > 1);");

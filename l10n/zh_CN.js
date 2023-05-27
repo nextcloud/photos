@@ -130,10 +130,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "删除{fileName}失败",
     "Failed to set favorite state for {fileId}." : "为{field}设定收藏状态失败",
     "Failed to set favorite state for {fileName}." : "为{fileName}设定收藏状态失败",
-    "Your photos" : "你的照片",
-    "Your videos" : "您的视频",
-    "Your folders" : "您的文件夹",
-    "Locations" : "地点",
-    "Settings" : "设置"
+    "Locations" : "地点"
 },
 "nplurals=1; plural=0;");

@@ -60,10 +60,6 @@ OC.L10N.register(
     "Delete selection" : "Slet valgte",
     "Tagged photos" : "Markerede billeder",
     "Failed to delete {fileName}." : "Kunne ikke slette {fileName}.",
-    "Your photos" : "Dine billeder",
-    "Your videos" : "Dine videoer",
-    "Your folders" : "Dine mapper",
-    "Locations" : "Sted",
-    "Settings" : "Indstillinger"
+    "Locations" : "Sted"
 },
 "nplurals=2; plural=(n != 1);");

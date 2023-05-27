@@ -139,10 +139,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "Gagal menghapus {fileName}.",
     "Failed to set favorite state for {fileId}." : "Gagal menetapkan keadaan favorit untuk {field}.",
     "Failed to set favorite state for {fileName}." : "Gagal menetapkan keadaan favorit untuk {fileName}.",
-    "Your photos" : "Foto Anda",
-    "Your videos" : "Video Anda",
-    "Your folders" : "Folder Anda",
-    "Locations" : "Lokasi",
-    "Settings" : "Setelan"
+    "Locations" : "Lokasi"
 },
 "nplurals=1; plural=0;");

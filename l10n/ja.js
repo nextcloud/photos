@@ -48,10 +48,6 @@ OC.L10N.register(
     "Add" : "追加",
     "Delete selection" : "選択した項目を削除",
     "Tagged photos" : "タグ付けされた写真",
-    "Your photos" : "写真",
-    "Your videos" : "動画",
-    "Your folders" : "フォルダー",
-    "Locations" : "場所",
-    "Settings" : "設定"
+    "Locations" : "場所"
 },
 "nplurals=1; plural=0;");

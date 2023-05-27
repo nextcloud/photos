@@ -13,7 +13,6 @@ OC.L10N.register(
     "Favorite" : "Hacer favorito",
     "Remove from favorites" : "Eliminar de favoritos",
     "Shared by" : "Compartido por",
-    "Add" : "Agregar",
-    "Settings" : "Configuraciones "
+    "Add" : "Agregar"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

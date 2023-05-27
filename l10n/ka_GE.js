@@ -12,7 +12,6 @@ OC.L10N.register(
     "Favorite" : "რჩეული",
     "Remove from favorites" : "რჩეულებიდან ამოშლა",
     "Shared by" : "გამზიარებელი",
-    "Add" : "დამატება",
-    "Settings" : "პარამეტრები"
+    "Add" : "დამატება"
 },
 "nplurals=2; plural=(n!=1);");

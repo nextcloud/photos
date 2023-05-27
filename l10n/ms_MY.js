@@ -8,7 +8,6 @@ OC.L10N.register(
     "Save" : "Simpan",
     "Remove from favorites" : "Remove from favorites",
     "Shared by" : "Dikongsi dengan",
-    "Add" : "Tambah",
-    "Settings" : "Tetapan"
+    "Add" : "Tambah"
 },
 "nplurals=1; plural=0;");
