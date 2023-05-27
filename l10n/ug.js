@@ -9,7 +9,6 @@ OC.L10N.register(
     "Favorite" : "يىغقۇچ",
     "Remove from favorites" : "Remove from favorites",
     "Shared by" : "ھەمبەھىرلىگۈچى",
-    "Add" : "قوش",
-    "Settings" : "تەڭشەكلەر"
+    "Add" : "قوش"
 },
 "nplurals=2; plural=(n != 1);");

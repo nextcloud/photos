@@ -10,7 +10,6 @@ OC.L10N.register(
     "Save" : "ບັນທຶກ",
     "Favorite" : "ລາຍການທີ່ມັກ",
     "Remove from favorites" : "ຍ້າຍຈາກລາຍການທີ່ມັກ",
-    "Add" : "ເພີ່ມ",
-    "Settings" : "ການຕັ້ງຄ່າ"
+    "Add" : "ເພີ່ມ"
 },
 "nplurals=1; plural=0;");

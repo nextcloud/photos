@@ -139,10 +139,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "{fileName} silinemedi.",
     "Failed to set favorite state for {fileId}." : "{fileId} için sık kullanılan durumu ayarlanamadı.",
     "Failed to set favorite state for {fileName}." : "{fileName} için sık kullanılan durumu ayarlanamadı.",
-    "Your photos" : "Fotoğraflarınız",
-    "Your videos" : "Görüntüleriniz",
-    "Your folders" : "Klasörleriniz",
-    "Locations" : "Konumlar",
-    "Settings" : "Ayarlar"
+    "Locations" : "Konumlar"
 },
 "nplurals=2; plural=(n > 1);");

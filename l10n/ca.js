@@ -66,6 +66,7 @@ OC.L10N.register(
     "_{years} year ago_::_{years} years ago_" : ["Fa {years} any","Fa {years} anys"],
     "Enable squared photos view" : "Habilita la visualització de fotografies quadrada",
     "Default Photos upload and Albums location" : "Ubicació per defecte de les pujades de fotografies i els àlbums",
+    "Choose default Photos upload and Albums location" : "Tria la ubicació per defecte de les pujades de fotografies i dels àlbums",
     "Select the default location for your media" : "Seleccioneu la ubicació per defecte per al contingut multimèdia",
     "Invalid location selected" : "La ubicació seleccionada no és vàlida",
     "View" : "Visualització",
@@ -139,10 +140,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "No s'ha pogut suprimir {fileName}.",
     "Failed to set favorite state for {fileId}." : "No s'ha pogut establir l'estat de preferit per a {fileId}.",
     "Failed to set favorite state for {fileName}." : "No s'ha pogut establir l'estat de preferit per a {fileName}.",
-    "Your photos" : "Les vostres fotografies",
-    "Your videos" : "Els vostres vídeos",
-    "Your folders" : "Les vostres carpetes",
-    "Locations" : "Llocs",
-    "Settings" : "Paràmetres"
+    "Locations" : "Llocs"
 },
 "nplurals=2; plural=(n != 1);");

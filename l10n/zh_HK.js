@@ -66,6 +66,7 @@ OC.L10N.register(
     "_{years} year ago_::_{years} years ago_" : ["{years} 年前"],
     "Enable squared photos view" : "啟用方形照片顯示",
     "Default Photos upload and Albums location" : "默認照片上傳及相簿位置",
+    "Choose default Photos upload and Albums location" : "選擇默認照片上傳及相簿位置",
     "Select the default location for your media" : "選擇媒體的默認位置",
     "Invalid location selected" : "所選的位置無效",
     "View" : "檢視",
@@ -139,10 +140,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "刪除 {fileName} 失敗。",
     "Failed to set favorite state for {fileId}." : "未能為 {fileId} 設置收藏狀態。",
     "Failed to set favorite state for {fileName}." : "未能為 {fileName} 設置收藏狀態。",
-    "Your photos" : "您的照片",
-    "Your videos" : "您的影片",
-    "Your folders" : "您的資料夾",
-    "Locations" : "地點",
-    "Settings" : "設定"
+    "Locations" : "地點"
 },
 "nplurals=1; plural=0;");

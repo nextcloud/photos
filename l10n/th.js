@@ -46,10 +46,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "รูปภาพที่ติดแท็กจะแสดงที่นี่",
     "Add" : "เพิ่ม",
     "Tagged photos" : "รูปภาพที่ติดแท็ก",
-    "Your photos" : "รูปภาพของคุณ",
-    "Your videos" : "วิดีโอของคุณ",
-    "Your folders" : "โฟลเดอร์ของคุณ",
-    "Locations" : "สถานที่",
-    "Settings" : "การตั้งค่า"
+    "Locations" : "สถานที่"
 },
 "nplurals=1; plural=0;");

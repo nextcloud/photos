@@ -116,10 +116,6 @@ OC.L10N.register(
     "Failed to create {albumName}." : "Ustvarjanje albuma {albumName} je spodletelo.",
     "Failed to delete {fileId}." : "Brisanje polja {fileId} je spodletelo.",
     "Failed to delete {fileName}." : "Brisanje datoteke {fileName} je spodletelo.",
-    "Your photos" : "Fotografije",
-    "Your videos" : "Osebni videoposnetki",
-    "Your folders" : "Osebne mape",
-    "Locations" : "Mesta",
-    "Settings" : "Nastavitve"
+    "Locations" : "Mesta"
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");

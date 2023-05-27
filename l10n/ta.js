@@ -9,7 +9,6 @@ OC.L10N.register(
     "Save" : "சேமிக்க ",
     "Favorite" : "விருப்பமான",
     "Remove from favorites" : "Remove from favorites",
-    "Add" : "சேர்க்க",
-    "Settings" : "அமைப்புகள்"
+    "Add" : "சேர்க்க"
 },
 "nplurals=2; plural=(n != 1);");

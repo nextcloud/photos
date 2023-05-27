@@ -112,10 +112,6 @@
     "Failed to rename {oldName} to {faceName}." : "Henkilön {oldName} nimeäminen muotoon {faceName} epäonnistui.",
     "Failed to delete {faceName}." : "Henkilön {faceName} poistaminen epäonnistui.",
     "Failed to delete {fileName}." : "Tiedoston {fileName} poisto epäonnistui.",
-    "Your photos" : "Valokuvat",
-    "Your videos" : "Videot",
-    "Your folders" : "Kansiot",
-    "Locations" : "Sijainnit",
-    "Settings" : "Asetukset"
+    "Locations" : "Sijainnit"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

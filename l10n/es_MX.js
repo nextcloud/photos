@@ -27,8 +27,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Las fotos con etiquetas se mostrarán aquí",
     "Add" : "Agregar",
     "Tagged photos" : "Fotos con etiquetas",
-    "Your photos" : "Tus Fotos",
-    "Locations" : "Ubicaciones",
-    "Settings" : "Configuraciones "
+    "Locations" : "Ubicaciones"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
