@@ -139,10 +139,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "A(z) {fileName} törlése sikertelen.",
     "Failed to set favorite state for {fileId}." : "A(z) {fileId} kedvenc állapotának beállítása sikertelen.",
     "Failed to set favorite state for {fileName}." : "A(z) {fileName} kedvenc állapotának beállítása sikertelen.",
-    "Your photos" : "Saját fényképek",
-    "Your videos" : "Saját videók",
-    "Your folders" : "Saját mappák",
-    "Locations" : "Helyek",
-    "Settings" : "Beállítások"
+    "Locations" : "Helyek"
 },
 "nplurals=2; plural=(n != 1);");

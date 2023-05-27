@@ -27,8 +27,6 @@ OC.L10N.register(
     "Add" : "Lisa",
     "Delete selection" : "Kustuta valik",
     "Tagged photos" : "Sildistatud fotod",
-    "Your photos" : "Sinu fotod",
-    "Locations" : "Asukohad",
-    "Settings" : "Seaded"
+    "Locations" : "Asukohad"
 },
 "nplurals=2; plural=(n != 1);");

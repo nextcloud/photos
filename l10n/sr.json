@@ -137,10 +137,6 @@
     "Failed to delete {fileName}." : "Није успело брисање {fileName}.",
     "Failed to set favorite state for {fileId}." : "Није успело постављање стања омиљено за {fileId}.",
     "Failed to set favorite state for {fileName}." : "Није успело постављање стања омиљено за {fileName}.",
-    "Your photos" : "Ваше слике",
-    "Your videos" : "Ваши видео снимци",
-    "Your folders" : "Ваше фасцикле",
-    "Locations" : "Локације",
-    "Settings" : "Поставке"
+    "Locations" : "Локације"
 },"pluralForm" :"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
 }

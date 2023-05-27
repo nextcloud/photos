@@ -8,7 +8,7 @@ OC.L10N.register(
     "Save" : "Saxla",
     "Favorite" : "İstəkli",
     "Remove from favorites" : "Remove from favorites",
-    "Add" : "Əlavə etmək",
-    "Settings" : "Quraşdırmalar"
+    "Shared by" : "Tərəfindən yayımlanıb",
+    "Add" : "Əlavə etmək"
 },
 "nplurals=2; plural=(n != 1);");

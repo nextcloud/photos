@@ -124,10 +124,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "Nepodarilo sa zmazať {fileName}.",
     "Failed to set favorite state for {fileId}." : "Nepodarilo sa nastaviť obľúbený stav pre {fileId}.",
     "Failed to set favorite state for {fileName}." : "Nepodarilo sa nastaviť obľúbený stav pre {fileName}.",
-    "Your photos" : "Vaše fotografie",
-    "Your videos" : "Vaše videá",
-    "Your folders" : "Vaše priečinky",
-    "Locations" : "Umiestnenie",
-    "Settings" : "Nastavenia"
+    "Locations" : "Umiestnenie"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

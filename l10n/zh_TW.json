@@ -137,10 +137,6 @@
     "Failed to delete {fileName}." : "刪除 {fileName} 失敗。",
     "Failed to set favorite state for {fileId}." : "未能為 {fileId} 設定最愛狀態。",
     "Failed to set favorite state for {fileName}." : "未能為 {fileName} 設定最愛狀態。",
-    "Your photos" : "我的照片",
-    "Your videos" : "您的影片",
-    "Your folders" : "您的資料夾",
-    "Locations" : "地點",
-    "Settings" : "設定"
+    "Locations" : "地點"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

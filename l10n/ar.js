@@ -22,15 +22,12 @@ OC.L10N.register(
     "Remove from favorites" : "إزالتها مِن المفضلة",
     "This folder does not exist" : "هذا المجلد غير موجود",
     "No photos in here" : "لا توجد صور هنا",
+    "Shared by" : "شاركه",
     "Shared albums" : "الألبومات المشتركة",
     "No tags yet" : "لا توجد وسوم حتى الآن",
     "Photos with tags will show up here" : "سوف تظهر الصور ذات الوسوم هنا",
     "Add" : "إضافة",
     "Tagged photos" : "الصور الموسومة",
-    "Your photos" : "صورك",
-    "Your videos" : "فيديوهاتك",
-    "Your folders" : "مجلداتك",
-    "Locations" : "المواقع",
-    "Settings" : "الإعدادات"
+    "Locations" : "المواقع"
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");

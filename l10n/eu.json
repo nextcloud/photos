@@ -137,10 +137,6 @@
     "Failed to delete {fileName}." : "{fileName} ezabatzeak huts egin du.",
     "Failed to set favorite state for {fileId}." : "Ezin izan da ezarri gogoko egoera {fileId}(r)entzat.",
     "Failed to set favorite state for {fileName}." : "Ezin izan da ezarri gogoko egoera {fileName}(r)entzat.",
-    "Your photos" : "Zure argazkiak",
-    "Your videos" : "Zure bideoak",
-    "Your folders" : "Zure karpetak",
-    "Locations" : "Kokapenak",
-    "Settings" : "Ezarpenak"
+    "Locations" : "Kokapenak"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

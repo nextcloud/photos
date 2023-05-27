@@ -106,6 +106,7 @@ OC.L10N.register(
     "Cover photo for place {placeName}" : "Foto na obálku pro umístění {placeName}",
     "There is no place yet!" : "Zatím zde není žádné umístění!",
     "Failed to fetch albums list." : "Nepodařilo se získat seznam alb.",
+    "Shared by" : "Nasdílel(a)",
     "Shared albums" : "Sdílená alba",
     "Cover photo for shared album {albumName}." : "Foto na obálku sdíleného alba {albumName}.",
     "Back to tags overview" : "Zpět na přehled štítků",
@@ -138,10 +139,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "Nepodařilo se smazat {fileName}.",
     "Failed to set favorite state for {fileId}." : "Nepodařilo se nastavit stav zařazení mezi oblíbené pro {fileId}.",
     "Failed to set favorite state for {fileName}." : "Nepodařil se nastavit stav zařazení mezi oblíbené pro {fileName}.",
-    "Your photos" : "Vaše fotky",
-    "Your videos" : "Vaše videa",
-    "Your folders" : "Vaše složky",
-    "Locations" : "Umístění",
-    "Settings" : "Nastavení"
+    "Locations" : "Umístění"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

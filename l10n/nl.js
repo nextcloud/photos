@@ -127,10 +127,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "Verwijderen van {fileName} mislukt.",
     "Failed to set favorite state for {fileId}." : "Favorietenstatus instellen voor {fileId} mislukt.",
     "Failed to set favorite state for {fileName}." : "Favorietenstatus instellen voor {fileName} mislukt.",
-    "Your photos" : "Je foto's",
-    "Your videos" : "Je video's",
-    "Your folders" : "Je mappen",
-    "Locations" : "Locaties",
-    "Settings" : "Instellingen"
+    "Locations" : "Locaties"
 },
 "nplurals=2; plural=(n != 1);");

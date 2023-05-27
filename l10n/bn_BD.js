@@ -9,7 +9,7 @@ OC.L10N.register(
     "Save" : "সংরক্ষণ",
     "Favorite" : "প্রিয়জন",
     "Remove from favorites" : "Remove from favorites",
-    "Add" : "যোগ করুন",
-    "Settings" : "সেটিংস"
+    "Shared by" : "যাদের মাঝে ভাগাভাগি করা হয়েছে",
+    "Add" : "যোগ করুন"
 },
 "nplurals=2; plural=(n != 1);");

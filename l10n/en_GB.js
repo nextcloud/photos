@@ -66,6 +66,7 @@ OC.L10N.register(
     "_{years} year ago_::_{years} years ago_" : ["{years} year ago","{years} years ago"],
     "Enable squared photos view" : "Enable squared photos view",
     "Default Photos upload and Albums location" : "Default Photos upload and Albums location",
+    "Choose default Photos upload and Albums location" : "Choose default Photos upload and Albums location",
     "Select the default location for your media" : "Select the default location for your media",
     "Invalid location selected" : "Invalid location selected",
     "View" : "View",
@@ -139,10 +140,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "Failed to delete {fileName}.",
     "Failed to set favorite state for {fileId}." : "Failed to set favorite state for {fileId}.",
     "Failed to set favorite state for {fileName}." : "Failed to set favorite state for {fileName}.",
-    "Your photos" : "Your photos",
-    "Your videos" : "Your videos",
-    "Your folders" : "Your folders",
-    "Locations" : "Locations",
-    "Settings" : "Settings"
+    "Locations" : "Locations"
 },
 "nplurals=2; plural=(n != 1);");

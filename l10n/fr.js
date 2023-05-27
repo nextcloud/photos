@@ -66,6 +66,7 @@ OC.L10N.register(
     "_{years} year ago_::_{years} years ago_" : ["Il y a {years} ans","Il y a {years} ans","Il y a {years} an(s)"],
     "Enable squared photos view" : "Activer l'affichage en miniatures carrées",
     "Default Photos upload and Albums location" : "Emplacement par défaut du téléversement des photos et des albums",
+    "Choose default Photos upload and Albums location" : "Choisir l'emplacement par défaut pour le téléversement des photos et des albums",
     "Select the default location for your media" : "Sélectionnez l'emplacement par défaut de vos médias",
     "Invalid location selected" : "Emplacement sélectionné non valide",
     "View" : "Affichage",
@@ -139,10 +140,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "Échec de la suppression de {fileName}.",
     "Failed to set favorite state for {fileId}." : "Impossible de définir l'état des favoris pour {fileId}.",
     "Failed to set favorite state for {fileName}." : "Échec de la définition de l'état des favoris pour {fileName}.",
-    "Your photos" : "Vos photos",
-    "Your videos" : "Vos vidéos",
-    "Your folders" : "Vos dossiers",
-    "Locations" : "Lieux",
-    "Settings" : "Paramètres"
+    "Locations" : "Lieux"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

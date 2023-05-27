@@ -14,7 +14,7 @@ OC.L10N.register(
     "View" : "Bekyk",
     "Favorite" : "Gunsteling",
     "Remove from favorites" : "Verwyder uit gunstelinge",
-    "Add" : "Voeg by",
-    "Settings" : "Instellings"
+    "Shared by" : "Gedeel deur",
+    "Add" : "Voeg by"
 },
 "nplurals=2; plural=(n != 1);");

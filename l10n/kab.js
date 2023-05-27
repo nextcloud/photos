@@ -8,7 +8,6 @@ OC.L10N.register(
     "Save" : "Sekles",
     "Favorite" : "Menyif",
     "Remove from favorites" : "Kkes-it seg ismal",
-    "Add" : "Rnu",
-    "Settings" : "Iɣewwaṛen"
+    "Add" : "Rnu"
 },
 "nplurals=2; plural=(n != 1);");

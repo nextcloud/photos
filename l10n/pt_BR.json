@@ -64,6 +64,7 @@
     "_{years} year ago_::_{years} years ago_" : ["{anos} ano atrás","{anos} anos atrás","{anos} anos atrás"],
     "Enable squared photos view" : "Ativar exibição de fotos quadradas",
     "Default Photos upload and Albums location" : "Localização padrão de upload para fotos e álbuns",
+    "Choose default Photos upload and Albums location" : "Escolha o upload padrão de fotos e o local dos álbuns",
     "Select the default location for your media" : "Selecione o local padrão para sua mídia",
     "Invalid location selected" : "Invalidar localização selecionada",
     "View" : "Exibição",
@@ -137,10 +138,6 @@
     "Failed to delete {fileName}." : "Falha ao excluir {fileName}.",
     "Failed to set favorite state for {fileId}." : "Falha ao definir o estado de favorito para {fileId}.",
     "Failed to set favorite state for {fileName}." : "Falha ao definir o estado de favorito para {fileName}.",
-    "Your photos" : "Suas fotos",
-    "Your videos" : "Seus vídeos",
-    "Your folders" : "Suas pastas",
-    "Locations" : "Localizações",
-    "Settings" : "Configurações"
+    "Locations" : "Localizações"
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

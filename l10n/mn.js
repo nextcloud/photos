@@ -12,8 +12,6 @@ OC.L10N.register(
     "Favorite" : "Дуртай",
     "Remove from favorites" : "Remove from favorites",
     "Shared by" : "Хуваалцсан",
-    "Add" : "нэмэх",
-    "Your photos" : "Таны зурагнууд ",
-    "Settings" : "Тохиргоо"
+    "Add" : "нэмэх"
 },
 "nplurals=2; plural=(n != 1);");

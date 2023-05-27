@@ -17,8 +17,6 @@ OC.L10N.register(
     "Remove from favorites" : "즐겨찾기에서 제거",
     "Shared by" : "다음 사용자가 공유함",
     "Add" : "추가",
-    "Your photos" : "당신의 사진",
-    "Locations" : "위치",
-    "Settings" : "설정"
+    "Locations" : "위치"
 },
 "nplurals=1; plural=0;");
