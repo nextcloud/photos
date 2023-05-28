@@ -44,6 +44,8 @@ const Timeline = () => import('../views/Timeline.vue')
 const Faces = () => import('../views/Faces.vue')
 const FaceContent = () => import('../views/FaceContent.vue')
 
+const UnassignedFaces = () => import('../views/UnassignedFaces.vue')
+
 const baseTitle = document.title
 
 Vue.use(Router)
@@ -295,6 +297,16 @@ const router = new Router({
 			}),
 		},
 		{
+			path: '/faces/unassigned',
+			name: 'unassignedfaces',
+			component: UnassignedFaces,
+			meta: {
+				rootTitle: (to) => {
+					return t('photos', 'Unassigned faces')
+				},
+			},
+		},
+		{
 			path: '/faces/:faceName',
 			name: 'facecontent',
 			component: FaceContent,
@@ -304,7 +316,7 @@ const router = new Router({
 			}),
 			meta: {
 				rootTitle: (to) => {
-					return t('photos', "{title}'s face", { title: to.params.rootTitle })
+					return t('photos', "{title}'s face", { title: to.params.faceName })
 				},
 			},
 		},
