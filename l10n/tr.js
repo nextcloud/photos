@@ -66,6 +66,7 @@ OC.L10N.register(
     "_{years} year ago_::_{years} years ago_" : ["{years} yıl önce","{years} yıl önce"],
     "Enable squared photos view" : "Kare fotoğraf görünümü kullanılsın",
     "Default Photos upload and Albums location" : "Varsayılan Fotoğraflar yükleme ve Albümler konumu",
+    "Choose default Photos upload and Albums location" : "Varsayılan Fotoğraflar yüklemesini ve Albümlerin konumu seçin",
     "Select the default location for your media" : "Ortamlarınızın varsayılan konumunu seçin",
     "Invalid location selected" : "Seçilen konum geçersiz",
     "View" : "Görüntüle",

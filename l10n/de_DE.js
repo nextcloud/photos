@@ -66,6 +66,7 @@ OC.L10N.register(
     "_{years} year ago_::_{years} years ago_" : ["Vor {years} Jahr","Vor {years} Jahren"],
     "Enable squared photos view" : "Quadratische Fotoansicht aktivieren",
     "Default Photos upload and Albums location" : "Standardspeicherort für das Hochladen von Fotos und Alben",
+    "Choose default Photos upload and Albums location" : "Den Standardspeicherort für das Hochladen von Fotos und Alben wählen",
     "Select the default location for your media" : "Standardspeicherort für Ihre Medien auswählen",
     "Invalid location selected" : "Ungültigen Speicherort ausgewählt",
     "View" : "Ansicht",
