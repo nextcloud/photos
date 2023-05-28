@@ -1,0 +1,90 @@
+/**
+ * @copyright Copyright (c) 2023 Marcel Klehr <mklehr@gmx.net>
+ *
+ * @author Marcel Klehr <mklehr@gmx.net>
+ *
+ * @license AGPL-3.0-or-later
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+.face-cover {
+	display: flex;
+	flex-direction: column;
+	padding: 10px;
+	border-radius: var(--border-radius-large);
+
+	&__crop-container {
+		overflow: hidden;
+		width: 128px;
+		height: 128px;
+		border-radius: 128px;
+		position: relative;
+		background: var(--color-background-darker);
+		--photos-face-width: 128px;
+
+		@media only screen and (max-width: 1020px) {
+			width: 95px;
+			height: 95px;
+			--photos-face-width: 95px;
+		}
+	}
+
+	&:hover, &:focus {
+		background: var(--color-background-hover);
+	}
+
+	&__details {
+		display: flex;
+		flex-direction: column;
+		width: 128px;
+		margin-top: 4px;
+		text-align: center;
+
+		@media only screen and (max-width: 1020px) {
+			width: 95px;
+		}
+
+		&__first-line {
+			display: flex;
+			height: 2em;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		&__second-line {
+			margin-top: 6px;
+			color: var(--color-text-maxcontrast);
+		}
+
+		&__name {
+			flex-grow: 1;
+			margin: 0;
+		}
+	}
+}
+
+.face-cover--small {
+	* {
+		font-size: 15px !important;
+	}
+	.face-cover__details {
+		width: 60px !important;
+	}
+	.face-cover__crop-container {
+		width: 60px !important;
+		height: 60px !important;
+		--photos-face-width: 60px !important;
+	}
+}

@@ -46,8 +46,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
-import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
-import FaceCoverMixin from '../mixins/FaceCoverMixin.js'
+import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
+import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
 
 export default {
 	name: 'FaceCover',
@@ -142,73 +142,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.face-cover {
-	display: flex;
-	flex-direction: column;
-	padding: 10px;
-	border-radius: var(--border-radius-large);
-
-	&__crop-container {
-		overflow: hidden;
-		width: 128px;
-		height: 128px;
-		border-radius: 128px;
-		position: relative;
-		background: var(--color-background-darker);
-		--photos-face-width: 128px;
-
-		@media only screen and (max-width: 1020px) {
-			width: 95px;
-			height: 95px;
-			--photos-face-width: 95px;
-		}
-	}
-
-	&:hover, &:focus {
-		background: var(--color-background-hover);
-	}
-
-	&__details {
-		display: flex;
-		flex-direction: column;
-		width: 128px;
-		margin-top: 4px;
-		text-align: center;
-
-		@media only screen and (max-width: 1020px) {
-			width: 95px;
-		}
-
-		&__first-line {
-			display: flex;
-			height: 2em;
-			overflow: hidden;
-			text-overflow: ellipsis;
-		}
-
-		&__second-line {
-			margin-top: 6px;
-			color: var(--color-text-maxcontrast);
-		}
-
-		&__name {
-			flex-grow: 1;
-			margin: 0;
-		}
-	}
-}
-
-.face-cover--small {
-	* {
-		font-size: 15px !important;
-	}
-	.face-cover__details {
-		width: 60px !important;
-	}
-	.face-cover__crop-container {
-		width: 60px !important;
-		height: 60px !important;
-		--photos-face-width: 60px !important;
-	}
-}
+@import '../../mixins/FaceCover';
 </style>
