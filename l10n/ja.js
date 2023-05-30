@@ -36,6 +36,7 @@ OC.L10N.register(
     "Share this folder" : "このフォルダーを共有する",
     "_{years} year ago_::_{years} years ago_" : ["{years} 年前"],
     "Enable squared photos view" : "写真を矩形での表示を有効化",
+    "Invalid location selected" : "選択した場所が無効",
     "View" : "表示",
     "Favorite" : "お気に入り",
     "Remove from favorites" : "お気に入りから削除",
