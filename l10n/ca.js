@@ -100,7 +100,7 @@ OC.L10N.register(
     "This might take some time depending on the size of your photo library." : "Això pot tardar una mica, en funció de la mida de la biblioteca de fotografies.",
     "Recognized people will show up here" : "Aquí apareixeran les persones reconegudes",
     "This folder does not exist" : "Aquesta carpeta no existeix",
-    "Loading folders …" : "S'estan carregant les carpetes...",
+    "Loading folders …" : "S'estan carregant les carpetes…",
     "No photos in here" : "No hi ha cap fotografia aquí",
     "This place does not have any photos or videos yet!" : "Aquest lloc encara no té cap fotografia ni vídeo!",
     "Add photos to this place" : "Afegeix fotografies a aquest lloc",

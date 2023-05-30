@@ -66,6 +66,7 @@ OC.L10N.register(
     "_{years} year ago_::_{years} years ago_" : ["{years} год назад","{years} лет назад","{years} лет назад","{years} лет назад"],
     "Enable squared photos view" : "Включить квадратный просмотр фотографий",
     "Default Photos upload and Albums location" : "Расположение загружаемых на сервер фотографий и альбомов по умолчанию",
+    "Choose default Photos upload and Albums location" : "Выберите местоположение загрузки фотографий и альбомов по умолчанию",
     "Select the default location for your media" : "Выбор расположения медиафайлов по умолчанию",
     "Invalid location selected" : "Указано недействительное расположение",
     "View" : "Просмотр",
