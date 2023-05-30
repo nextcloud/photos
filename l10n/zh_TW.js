@@ -66,6 +66,7 @@ OC.L10N.register(
     "_{years} year ago_::_{years} years ago_" : ["{years} 年前"],
     "Enable squared photos view" : "啟用方形照片檢視",
     "Default Photos upload and Albums location" : "預設照片上傳與相簿位置",
+    "Choose default Photos upload and Albums location" : "選擇預設照片上傳與相簿位置",
     "Select the default location for your media" : "選取您媒體的預設位置",
     "Invalid location selected" : "選取無效的位置",
     "View" : "檢視",
