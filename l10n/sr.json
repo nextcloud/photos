@@ -64,6 +64,7 @@
     "_{years} year ago_::_{years} years ago_" : ["пре {years} године","пре {years} године","пре {years} година"],
     "Enable squared photos view" : "Укључи квадратасти приказ слика",
     "Default Photos upload and Albums location" : "Подразумевано место за отпремање фотографија и албума",
+    "Choose default Photos upload and Albums location" : "Изаберите подразумевано место за отпремање Фотографија и албума",
     "Select the default location for your media" : "Изаберите подразумевано место за своје медије",
     "Invalid location selected" : "Изабрана је неисправна локација",
     "View" : "Погледај",
