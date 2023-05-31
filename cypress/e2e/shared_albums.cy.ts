@@ -38,6 +38,7 @@ import {
 	uploadTestMedia,
 } from './photosUtils'
 import {
+	addFilesToSharedAlbumFromAlbum,
 	addFilesToSharedAlbumFromSharedAlbumFromHeader,
 	goToSharedAlbum,
 	removeSharedAlbums,
@@ -81,7 +82,7 @@ describe('Manage shared albums', () => {
 			cy.visit('apps/photos/albums')
 			goToSharedAlbum('shared_album_test1')
 			cy.get('[data-test="media"]').should('have.length', 0)
-			addFilesToAlbumFromAlbum('shared_album_test1', [0])
+			addFilesToSharedAlbumFromAlbum('shared_album_test1', [0])
 			cy.get('[data-test="media"]').should('have.length', 1)
 			selectMedia([0])
 			removeSelectionFromAlbum()
@@ -91,7 +92,7 @@ describe('Manage shared albums', () => {
 		it('Add and remove multiple files to a shared album from a shared album', () => {
 			goToSharedAlbum('shared_album_test1')
 			cy.get('[data-test="media"]').should('have.length', 0)
-			addFilesToAlbumFromAlbum('shared_album_test1', [1, 2])
+			addFilesToSharedAlbumFromAlbum('shared_album_test1', [1, 2])
 			cy.get('[data-test="media"]').should('have.length', 2)
 			selectMedia([0, 1])
 			removeSelectionFromAlbum()
@@ -109,7 +110,7 @@ describe('Manage shared albums', () => {
 			cy.login(bob)
 			cy.visit('apps/photos/sharedalbums')
 			goToSharedAlbum('shared_album_test2')
-			addFilesToAlbumFromAlbum('shared_album_test2', [0, 1, 2])
+			addFilesToSharedAlbumFromAlbum('shared_album_test2', [0, 1, 2])
 		})
 
 		it('Download a file from a shared album', () => {
@@ -204,7 +205,7 @@ describe('Manage shared albums', () => {
 
 		it('It should display picture from all collaborators', () => {
 			cy.login(alice)
-			cy.visit('apps/photos/albums')
+			cy.visit('/apps/photos')
 			goToAlbum('shared_album_test6')
 			cy.get('[data-test="media"]').should('have.length', 0)
 			addFilesToAlbumFromAlbum('shared_album_test6', [0])
@@ -227,10 +228,12 @@ describe('Manage shared albums', () => {
 
 		it('Removing a collaborator should remove its pictures', () => {
 			cy.login(alice)
-			cy.visit('apps/photos/albums')
+			cy.visit('/apps/photos')
 			goToAlbum('shared_album_test6')
 			removeCollaborators([bob.userId])
+			cy.intercept({ times: 1, method: 'PROPFIND', url: '**/dav/photos/**/albums/shared_album_test6' }).as('propFind')
 			cy.reload()
+			cy.wait('@propFind')
 			cy.get('[data-test="media"]').should('have.length', 2)
 		})
 
@@ -243,7 +246,7 @@ describe('Manage shared albums', () => {
 			cy.get('[data-test="media"]').should('have.length', 0)
 
 			cy.login(alice)
-			cy.visit('apps/photos/sharedalbums')
+			cy.visit('/apps/photos')
 			goToAlbum('shared_album_test6')
 			cy.get('[data-test="media"]').should('have.length', 0)
 		})
@@ -278,7 +281,7 @@ describe('Manage shared albums', () => {
 			cy.get('[data-test="media"]').should('have.length', 2)
 
 			cy.login(alice)
-			cy.visit('apps/photos/albums')
+			cy.visit('/apps/photos')
 			goToAlbum('shared_album_test7')
 			cy.get('[data-test="media"]').should('have.length', 2)
 		})
@@ -286,7 +289,7 @@ describe('Manage shared albums', () => {
 		it('Deleting a user should remove it from the collaborator list of albums and remove its pictures', () => {
 			cy.deleteUser(charlie)
 			cy.login(alice)
-			cy.visit('apps/photos/albums')
+			cy.visit('/apps/photos')
 			goToAlbum('shared_album_test7')
 			cy.get('[data-test="media"]').should('have.length', 1)
 			cy.get('[aria-label="Manage collaborators for this album"]').click()
@@ -315,15 +318,21 @@ describe('Manage shared albums', () => {
 			createPublicShare()
 				.then(publicLink => {
 					cy.logout()
+					cy.intercept({ times: 1, method: 'PROPFIND', url: '**/dav/photospublic/*' }).as('propFindAlbum')
+					cy.intercept({ times: 1, method: 'PROPFIND', url: '**/dav/photospublic/*/' }).as('propFindContent')
 					cy.visit(publicLink)
+					cy.wait('@propFindAlbum')
+					cy.wait('@propFindContent')
 					cy.contains('shared_album_test8')
 					cy.get('[data-test="media"]').should('have.length', 3)
 
 					cy.login(alice)
-					cy.visit('apps/photos/albums')
+					cy.visit('/apps/photos')
 					goToAlbum('shared_album_test8')
 					deletePublicShare()
+					cy.intercept({ times: 1, method: 'PROPFIND', url: '**/dav/photospublic/*' }).as('propFindAlbum')
 					cy.visit(publicLink)
+					cy.wait('@propFindAlbum')
 					cy.contains('This collection does not exist')
 				})
 		})
