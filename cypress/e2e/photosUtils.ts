@@ -66,7 +66,7 @@ export function downloadAllFiles() {
 }
 
 export function deleteSelection() {
-	cy.intercept({ method: 'DELETE' }).as('deleteRequests')
+	cy.intercept({ times: 1, method: 'DELETE' }).as('deleteRequests')
 	cy.get('[aria-label="Open actions menu"]').click()
 	cy.contains('Delete selection')
 		.click()
