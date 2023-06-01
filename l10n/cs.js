@@ -66,6 +66,7 @@ OC.L10N.register(
     "_{years} year ago_::_{years} years ago_" : ["Před {years} rokem","Před {years} roky","Před {years} lety","Před {years} roky"],
     "Enable squared photos view" : "Zapnout čtvercové zobrazení fotek",
     "Default Photos upload and Albums location" : "Výchozí umístění nahrávání fotek a alb",
+    "Choose default Photos upload and Albums location" : "Zvolte ýchozí umístění nahrávání fotek a alb",
     "Select the default location for your media" : "Vyberte výchozí umístění pro vaše média",
     "Invalid location selected" : "Vybráno neplatné umístění",
     "View" : "Zobrazit",
