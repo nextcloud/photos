@@ -79,7 +79,7 @@ describe('Manage shared albums', () => {
 
 		it('Add and remove a file to a shared album from a shared album', () => {
 			cy.login(bob)
-			cy.visit('apps/photos/albums')
+			cy.visit('apps/photos')
 			goToSharedAlbum('shared_album_test1')
 			cy.get('[data-test="media"]').should('have.length', 0)
 			addFilesToSharedAlbumFromAlbum('shared_album_test1', [0])
@@ -103,12 +103,12 @@ describe('Manage shared albums', () => {
 	xcontext('Download files from a shared album', () => {
 		before(() => {
 			cy.login(alice)
-			cy.visit('apps/photos/albums')
+			cy.visit('apps/photos')
 			createAnAlbumFromAlbums('shared_album_test2')
 			addCollaborators([bob.userId])
 
 			cy.login(bob)
-			cy.visit('apps/photos/sharedalbums')
+			cy.visit('apps/photos')
 			goToSharedAlbum('shared_album_test2')
 			addFilesToSharedAlbumFromAlbum('shared_album_test2', [0, 1, 2])
 		})
@@ -143,7 +143,7 @@ describe('Manage shared albums', () => {
 
 		it('Remove shared album', () => {
 			cy.login(bob)
-			cy.visit('apps/photos/albums')
+			cy.visit('apps/photos')
 			goToSharedAlbum('shared_album_test3')
 			removeSharedAlbums()
 		})
@@ -212,14 +212,14 @@ describe('Manage shared albums', () => {
 			cy.get('[data-test="media"]').should('have.length', 1)
 
 			cy.login(bob)
-			cy.visit('apps/photos/sharedalbums')
+			cy.visit('apps/photos')
 			goToSharedAlbum('shared_album_test6')
 			cy.get('[data-test="media"]').should('have.length', 1)
 			addFilesToSharedAlbumFromSharedAlbumFromHeader('shared_album_test6', [1])
 			cy.get('[data-test="media"]').should('have.length', 2)
 
 			cy.login(charlie)
-			cy.visit('apps/photos/sharedalbums')
+			cy.visit('apps/photos')
 			goToSharedAlbum('shared_album_test6')
 			cy.get('[data-test="media"]').should('have.length', 2)
 			addFilesToSharedAlbumFromSharedAlbumFromHeader('shared_album_test6', [2])
@@ -239,7 +239,7 @@ describe('Manage shared albums', () => {
 
 		it('Collaborator should be able to remove all pictures from the shared album', () => {
 			cy.login(charlie)
-			cy.visit('apps/photos/sharedalbums')
+			cy.visit('apps/photos')
 			goToSharedAlbum('shared_album_test6')
 			selectMedia([0, 1])
 			removeSelectionFromAlbum()
@@ -261,12 +261,12 @@ describe('Manage shared albums', () => {
 			addFilesToAlbumFromAlbum('shared_album_test7', [0])
 
 			cy.login(bob)
-			cy.visit('apps/photos/sharedalbums')
+			cy.visit('apps/photos')
 			goToSharedAlbum('shared_album_test7')
 			addFilesToSharedAlbumFromSharedAlbumFromHeader('shared_album_test7', [1])
 
 			cy.login(charlie)
-			cy.visit('apps/photos/sharedalbums')
+			cy.visit('apps/photos')
 			goToSharedAlbum('shared_album_test7')
 			addFilesToSharedAlbumFromSharedAlbumFromHeader('shared_album_test7', [2])
 			cy.get('[data-test="media"]').should('have.length', 3)
