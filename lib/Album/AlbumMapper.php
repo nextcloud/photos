@@ -298,7 +298,7 @@ class AlbumMapper {
 		$query = $this->connection->getQueryBuilder();
 		$albumsRows = $query->select('album_id')
 			->from("photos_albums_files")
-			->where($query->expr()->eq("owner_id", $query->createNamedParameter($ownerId)))
+			->where($query->expr()->eq("owner", $query->createNamedParameter($ownerId)))
 			->andWhere($query->expr()->eq("file_id", $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)))
 			->executeQuery()
 			->fetchAll();
@@ -306,7 +306,7 @@ class AlbumMapper {
 		// Remove any occurrence of fileId when owner is ownerId.
 		$query = $this->connection->getQueryBuilder();
 		$query->delete("photos_albums_files")
-			->where($query->expr()->eq("owner_id", $query->createNamedParameter($ownerId)))
+			->where($query->expr()->eq("owner", $query->createNamedParameter($ownerId)))
 			->andWhere($query->expr()->eq("file_id", $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)))
 			->executeStatement();
 
