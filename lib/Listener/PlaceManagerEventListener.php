@@ -28,10 +28,10 @@ namespace OCA\Photos\Listener;
 use OCA\Photos\Jobs\MapMediaToPlaceJob;
 use OCA\Photos\Service\MediaPlaceManager;
 use OCP\BackgroundJob\IJobList;
-use OCP\IConfig;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Files\Events\Node\NodeWrittenEvent;
+use OCP\IConfig;
 
 /**
  * Listener to add place info from the database.

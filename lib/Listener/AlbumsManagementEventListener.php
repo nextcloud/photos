@@ -3,12 +3,12 @@
 namespace OCA\Photos\Listener;
 
 use OCA\Photos\Album\AlbumMapper;
-use OCP\Files\File;
-use OCP\Files\Folder;
-use OCP\Files\Node;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Files\Events\Node\NodeDeletedEvent;
+use OCP\Files\File;
+use OCP\Files\Folder;
+use OCP\Files\Node;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\Group\Events\UserRemovedEvent;
 use OCP\Share\Events\ShareDeletedEvent;

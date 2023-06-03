@@ -28,11 +28,11 @@ use OCA\Photos\DB\Place\PlaceMapper;
 use OCA\Photos\Service\ReverseGeoCoderService;
 use OCA\Photos\Service\UserConfigService;
 use OCP\Files\IRootFolder;
+use OCP\IGroupManager;
+use OCP\IUserManager;
 use OCP\IUserSession;
 use Sabre\DAVACL\AbstractPrincipalCollection;
 use Sabre\DAVACL\PrincipalBackend;
-use OCP\IUserManager;
-use OCP\IGroupManager;
 
 class RootCollection extends AbstractPrincipalCollection {
 	public function __construct(
