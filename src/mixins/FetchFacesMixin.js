@@ -68,6 +68,9 @@ export default {
 				return
 			}
 
+			if (Object.keys(this.faces).length) {
+				return
+			}
 
 			try {
 				this.loadingFaces = true
