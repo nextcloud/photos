@@ -71,7 +71,9 @@ class AlbumPhoto implements IFile {
 	}
 
 	public function put($data) {
-		$nodes = $this->userFolder->getById($this->file->getFileId());
+		$nodes = $this->rootFolder
+			->getUserFolder($this->albumFile->getOwner() ?: $this->album->getUserId())
+			->getById($this->albumFile->getFileId());
 		$node = current($nodes);
 		if ($node) {
 			/** @var Node $node */
