@@ -271,6 +271,9 @@ class AlbumMapper {
 		$query->executeStatement();
 	}
 
+	/**
+	 * Remove all files added by a user from an album.
+	 */
 	public function removeFilesForUser(int $albumId, string $userId) {
 		// Remove all photos by this user from the album:
 		$query = $this->connection->getQueryBuilder();
@@ -285,6 +288,36 @@ class AlbumMapper {
 			->set('last_added_photo', $query->createNamedParameter($this->getLastAdded($albumId), IQueryBuilder::PARAM_INT))
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
 			->executeStatement();
+	}
+
+	/**
+	 * Remove a given file from any albums in which it was added by a given user.
+	 */
+	public function removeFileWithOwner(int $fileId, string $ownerId): void {
+		// Get concerned albums before deleting them.
+		$query = $this->connection->getQueryBuilder();
+		$albumsRows = $query->select('album_id')
+			->from("photos_albums_files")
+			->where($query->expr()->eq("owner_id", $query->createNamedParameter($ownerId)))
+			->andWhere($query->expr()->eq("file_id", $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)))
+			->executeQuery()
+			->fetchAll();
+
+		// Remove any occurrence of fileId when owner is ownerId.
+		$query = $this->connection->getQueryBuilder();
+		$query->delete("photos_albums_files")
+			->where($query->expr()->eq("owner_id", $query->createNamedParameter($ownerId)))
+			->andWhere($query->expr()->eq("file_id", $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)))
+			->executeStatement();
+
+		// Update last_added_photo for concerned albums.
+		foreach ($albumsRows as $row) {
+			$query = $this->connection->getQueryBuilder();
+			$query->update("photos_albums")
+				->set('last_added_photo', $query->createNamedParameter($this->getLastAdded($row['album_id']), IQueryBuilder::PARAM_INT))
+				->where($query->expr()->eq('album_id', $query->createNamedParameter($row['album_id'], IQueryBuilder::PARAM_INT)));
+			$query->executeStatement();
+		}
 	}
 
 	private function getLastAdded(int $albumId): int {

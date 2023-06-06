@@ -28,11 +28,9 @@ namespace OCA\Photos\AppInfo;
 use OCA\DAV\Events\SabrePluginAuthInitEvent;
 use OCA\Photos\Listener\SabrePluginAuthInitListener;
 use OCA\DAV\Connector\Sabre\Principal;
-use OCA\Photos\Listener\NodeDeletedListener;
 use OCA\Photos\Listener\TagListener;
-use OCA\Photos\Listener\GroupUserRemovedListener;
-use OCA\Photos\Listener\GroupDeletedListener;
 use OCA\Photos\Listener\PlaceManagerEventListener;
+use OCA\Photos\Listener\AlbumsManagementEventListener;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -42,6 +40,8 @@ use OCP\SystemTag\MapperEvent;
 use OCP\Group\Events\UserRemovedEvent;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\Files\Events\Node\NodeWrittenEvent;
+use OCP\Share\Events\ShareDeletedEvent;
+use OCP\User\Events\UserDeletedEvent;
 
 class Application extends App implements IBootstrap {
 	public const APP_ID = 'photos';
@@ -74,14 +74,14 @@ class Application extends App implements IBootstrap {
 		/** Register $principalBackend for the DAV collection */
 		$context->registerServiceAlias('principalBackend', Principal::class);
 
-		$context->registerEventListener(NodeDeletedEvent::class, NodeDeletedListener::class);
-
-		$context->registerEventListener(UserRemovedEvent::class, GroupUserRemovedListener::class);
-
-		$context->registerEventListener(GroupDeletedEvent::class, GroupDeletedListener::class);
-
 		// Priority of -1 to be triggered after event listeners populating metadata.
 		$context->registerEventListener(NodeWrittenEvent::class, PlaceManagerEventListener::class, -1);
+
+		$context->registerEventListener(NodeDeletedEvent::class, AlbumsManagementEventListener::class);
+		$context->registerEventListener(UserRemovedEvent::class, AlbumsManagementEventListener::class);
+		$context->registerEventListener(GroupDeletedEvent::class, AlbumsManagementEventListener::class);
+		$context->registerEventListener(UserDeletedEvent::class, AlbumsManagementEventListener::class);
+		$context->registerEventListener(ShareDeletedEvent::class, AlbumsManagementEventListener::class);
 
 		$context->registerEventListener(SabrePluginAuthInitEvent::class, SabrePluginAuthInitListener::class);
 
