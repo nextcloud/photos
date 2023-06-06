@@ -120,20 +120,20 @@ export default {
 					}
 				)
 
-				const processedFiles = [];
-				const fileIds = [];
-			
-				for (const file of fetchedFiles) {
-				  const processedFile = genFileInfo(file);
-				  processedFile.filename = he.decode(processedFile.realpath).replace(`/${getCurrentUser().uid}/files`, `/files/${getCurrentUser().uid}`);
-				  processedFile.faceDetections = JSON.parse(he.decode(processedFile.faceDetections));
-			
-				  processedFiles.push(processedFile);
-				  fileIds.push(String(processedFile.fileid));
-				}
-			
-				this.appendFiles(processedFiles);
+				const processedFiles = []
+				const fileIds = []
 
+				for (const file of fetchedFiles) {
+				  const processedFile = genFileInfo(file)
+				  processedFile.filename = he.decode(processedFile.realpath).replace(`/${getCurrentUser().uid}/files`, `/files/${getCurrentUser().uid}`)
+				  processedFile.faceDetections = JSON.parse(he.decode(processedFile.faceDetections))
+
+				  processedFiles.push(processedFile)
+				  fileIds.push(String(processedFile.fileid))
+				}
+
+				this.appendFiles(processedFiles)
+				
 				if (fetchedFiles.length > 0) {
 					await this.$store.commit('addFilesToFace', { faceName, fileIdsToAdd: fileIds })
 				}
