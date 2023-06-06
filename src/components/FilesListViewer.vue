@@ -67,7 +67,7 @@ import TiledLayout from '../components/TiledLayout/TiledLayout.vue'
 import { fetchFile } from '../services/fileFetcher.js'
 import VirtualScrolling from '../components/VirtualScrolling.vue'
 import EmptyBox from '../assets/Illustrations/empty.svg'
-import { loadState } from '@nextcloud/initial-state'
+import UserConfig from '../mixins/UserConfig.js'
 
 export default {
 	name: 'FilesListViewer',
@@ -79,6 +79,8 @@ export default {
 		TiledLayout,
 		VirtualScrolling,
 	},
+
+	mixins: [UserConfig],
 
 	props: {
 		// Array of file ids that should be rendered.
@@ -136,7 +138,6 @@ export default {
 	data() {
 		return {
 			EmptyBox,
-			croppedLayout: loadState('photos', 'croppedLayout', 'false') === 'true',
 			placeholderFiles: Array(20).fill(0).map((_, index) => {
 				const height = 200
 				const width = this.croppedLayout ? height : height * (1 + Math.random() * 2)
