@@ -537,11 +537,11 @@ class AlbumMapper {
 			if (!isset($albumsById[$albumId])) {
 				$albumName = $row['album_name'];
 				// Suffix album name with the album owner to prevent duplicates.
-				// Not done for public link as it would like owner's uid.
+				// Not done for public link as it would leak the owner's uid.
 				if ($collaboratorType !== self::TYPE_LINK) {
 					$albumName = $row['album_name'].' ('.$row['album_user'].')';
 				}
-				$albumsById[$albumId] = new AlbumInfo($albumId, $row['album_user'], $albumName, $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
+				$albumsById[$albumId] = new AlbumInfo($albumId, $row['album_user'], $albumName, $row['location'], (int)$row['created'], (int)$row['last_added_photo'], $collaboratorType);
 			}
 		}
 

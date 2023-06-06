@@ -29,7 +29,7 @@ const SWCacheName = 'images'
  * @param {string} previewUrl - The URL of the preview to check
  */
 export const isCachedPreview = async function(previewUrl) {
-	const cache = await caches.open(SWCacheName)
-	const response = await cache.match(previewUrl)
+	const cache = await window.caches?.open(SWCacheName)
+	const response = await cache?.match(previewUrl)
 	return response !== undefined
 }

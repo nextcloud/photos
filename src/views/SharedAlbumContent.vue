@@ -25,8 +25,8 @@
 			ref="collectionContent"
 			:collection="album"
 			:collection-file-ids="albumFileIds"
-			:loading="loadingAlbums || loadingFiles"
-			:error="errorFetchingAlbums || errorFetchingFiles">
+			:loading="loadingSharedAlbums || loadingFiles"
+			:error="errorFetchingSharedAlbums || errorFetchingFiles">
 			<!-- Header -->
 			<HeaderNavigation key="navigation"
 				slot="header"
@@ -46,10 +46,11 @@
 				</div>
 				<template v-if="album !== undefined" slot="right">
 					<NcButton v-if="album.nbItems !== 0"
-						type="tertiary"
+						type="secondary"
 						:aria-label="t('photos', 'Add photos to this album')"
 						@click="showAddPhotosModal = true">
 						<Plus slot="icon" />
+						{{ t('photos', "Add") }}
 					</NcButton>
 
 					<NcActions :force-menu="true" :aria-label="t('photos', 'Open actions menu')">
@@ -60,7 +61,8 @@
 							<DownloadMultiple slot="icon" />
 						</ActionDownload> -->
 
-						<NcActionButton :close-after-click="true"
+						<NcActionButton v-if="album.collaborators[0].type === collaboratorTypes.SHARE_TYPE_USER"
+							:close-after-click="true"
 							@click="handleDeleteAlbum">
 							{{ t('photos', 'Delete album') }}
 							<Delete slot="icon" />
@@ -125,6 +127,7 @@ import Close from 'vue-material-design-icons/Close.vue'
 
 import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionSeparator, NcUserBubble, isMobile } from '@nextcloud/vue'
 import { getCurrentUser } from '@nextcloud/auth'
+import { Type } from '@nextcloud/sharing'
 
 import FetchSharedAlbumsMixin from '../mixins/FetchSharedAlbumsMixin.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
@@ -181,6 +184,7 @@ export default {
 			showAddPhotosModal: false,
 			loadingCount: 0,
 			loadingAddFilesToAlbum: false,
+			collaboratorTypes: Type,
 		}
 	},
 

@@ -30,6 +30,7 @@ class AlbumInfo {
 	private string $location;
 	private int $created;
 	private int $lastAdded;
+	private ?int $receivedFrom;
 
 	public function __construct(
 		int $id,
@@ -37,7 +38,8 @@ class AlbumInfo {
 		string $title,
 		string $location,
 		int $created,
-		int $lastAdded
+		int $lastAdded,
+		?int $receivedFrom = null,
 	) {
 		$this->id = $id;
 		$this->userId = $userId;
@@ -45,6 +47,7 @@ class AlbumInfo {
 		$this->location = $location;
 		$this->created = $created;
 		$this->lastAdded = $lastAdded;
+		$this->receivedFrom = $receivedFrom;
 	}
 
 	public function getId(): int {
@@ -69,5 +72,9 @@ class AlbumInfo {
 
 	public function getLastAddedPhoto(): int {
 		return $this->lastAdded;
+	}
+
+	public function getReceivedFrom(): ?int {
+		return $this->receivedFrom;
 	}
 }
