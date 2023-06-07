@@ -7,9 +7,10 @@ OC.L10N.register(
     "Tags" : "Tags",
     "Back" : "Zeréck",
     "Save" : "Späicheren",
+    "Shared by" : "Gedeelt vun",
+    "Group" : "Grupp",
     "Favorite" : "Favorit",
     "Remove from favorites" : "Remove from favorites",
-    "Shared by" : "Gedeelt vun",
     "Add" : "Derbäimaachen"
 },
 "nplurals=2; plural=(n != 1);");

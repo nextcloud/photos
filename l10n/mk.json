@@ -31,16 +31,14 @@
     "Back to the new album form." : "Врати се на формата за нов албум.",
     "Add to Album" : "Додади во албум",
     "Add selection to album {albumName}" : "Додади ги избраните во албумот {albumName}",
+    "Shared by" : "Споделено од",
     "Create a new album." : "Креирај нов албум.",
     "Create new album" : "Креирај нов албум",
     "New album" : "Нов албум",
     "_%n item_::_%n photos and videos_" : ["1 објект","%n фотографии и видеа"],
-    "_Share with %n user_::_Share with %n users_" : ["Споделено со 1 корисник","Споделено со %n корисници"],
     "Add people or groups who can edit your album" : "Додади корисник кој ќе може да го ажурира твојот албум",
-    "Search for collaborators" : "Барај соработници",
     "Search people or groups" : "Пребарувај луѓе и групи",
-    "Add {collaboratorLabel} to the collaborators list" : "Додади {collaboratorLabel} на листата на соработници",
-    "No collaborators available" : "Нема достапни соработници",
+    "No recommendations. Start typing." : "Нема препораки. Започнете со пишување.",
     "Remove {collaboratorLabel} from the collaborators list" : "Избриши {collaboratorLabel} од листата на соработници",
     "Copy the public link" : "Копирај јавен линк",
     "Public link copied!" : "Јавниот линк е копиран!",
@@ -104,7 +102,6 @@
     "Cover photo for place {placeName}" : "Насловна фотографија за местото {placeName}",
     "There is no place yet!" : "Сè уште нема места!",
     "Failed to fetch albums list." : "Неуспешно добивање на листа со албуми.",
-    "Shared by" : "Споделено од",
     "Shared albums" : "Споделени албуми",
     "Cover photo for shared album {albumName}." : "Насловна фотографија за споделениот албум {albumName}",
     "Back to tags overview" : "Назад до преглед на ознаки",
@@ -137,6 +134,10 @@
     "Failed to delete {fileName}." : "Неуспешно бришење на {fileName}.",
     "Failed to set favorite state for {fileId}." : "Неуспешно поставување на омилен статус за {fileId}.",
     "Failed to set favorite state for {fileName}." : "Неуспешно поставување на омилен статус за {fileName}.",
-    "Locations" : "Локации"
+    "Locations" : "Локации",
+    "_Share with %n user_::_Share with %n users_" : ["Споделено со 1 корисник","Споделено со %n корисници"],
+    "Search for collaborators" : "Барај соработници",
+    "Add {collaboratorLabel} to the collaborators list" : "Додади {collaboratorLabel} на листата на соработници",
+    "No collaborators available" : "Нема достапни соработници"
 },"pluralForm" :"nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;"
 }

@@ -9,9 +9,9 @@ OC.L10N.register(
     "Tags" : "Tag-үүд",
     "Back" : "буцах",
     "Save" : "Хадгалах",
+    "Shared by" : "Хуваалцсан",
     "Favorite" : "Дуртай",
     "Remove from favorites" : "Remove from favorites",
-    "Shared by" : "Хуваалцсан",
     "Add" : "нэмэх"
 },
 "nplurals=2; plural=(n != 1);");
