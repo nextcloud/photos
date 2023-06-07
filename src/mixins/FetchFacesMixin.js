@@ -111,7 +111,7 @@ export default {
 				this.errorFetchingFiles = null
 				this.loadingFiles = true
 
-				let { data: fetchedFiles } = await client.getDirectoryContents(
+				const { data: fetchedFiles } = await client.getDirectoryContents(
 					`/recognize/${getCurrentUser()?.uid}/faces/${faceName}`,
 					{
 						data: DavRequest,
@@ -133,7 +133,7 @@ export default {
 				}
 
 				this.appendFiles(processedFiles)
-				
+
 				if (fetchedFiles.length > 0) {
 					await this.$store.commit('addFilesToFace', { faceName, fileIdsToAdd: fileIds })
 				}
