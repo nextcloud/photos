@@ -9,9 +9,9 @@ OC.L10N.register(
     "Tags" : "ტეგები",
     "Back" : "უკან",
     "Save" : "შენახვა",
+    "Shared by" : "გამზიარებელი",
     "Favorite" : "რჩეული",
     "Remove from favorites" : "რჩეულებიდან ამოშლა",
-    "Shared by" : "გამზიარებელი",
     "Add" : "დამატება"
 },
 "nplurals=2; plural=(n!=1);");

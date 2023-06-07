@@ -8,10 +8,11 @@ OC.L10N.register(
     "Tags" : "Emneord",
     "Back" : "Tilbake",
     "Save" : "Lagre",
+    "Shared by" : "Delt av",
+    "Group" : "Gruppe",
     "An error occurred" : "Det oppstod ein feil.",
     "Favorite" : "Favoritt",
     "Remove from favorites" : "Remove from favorites",
-    "Shared by" : "Delt av",
     "Add" : "Legg til"
 },
 "nplurals=2; plural=(n != 1);");

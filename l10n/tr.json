@@ -31,16 +31,14 @@
     "Back to the new album form." : "Albüm ekleme formuna geri döner.",
     "Add to Album" : "Albüme ekle",
     "Add selection to album {albumName}" : "Seçilmişleri {albumName} albümüne ekle",
+    "Shared by" : "Paylaşan",
     "Create a new album." : "Yeni bir albüm ekler.",
     "Create new album" : "Yeni albüm ekle",
     "New album" : "Yeni albüm",
     "_%n item_::_%n photos and videos_" : ["%n öge","%n fotoğraf ve görüntü"],
-    "_Share with %n user_::_Share with %n users_" : ["%n kullanıcı ile paylaş","%n kullanıcı ile paylaş"],
     "Add people or groups who can edit your album" : "Albümünüzü düzenleyebilecek kişi ya da grupları ekleyin",
-    "Search for collaborators" : "Katılımcı ara",
     "Search people or groups" : "Kişi ya da grup arama",
-    "Add {collaboratorLabel} to the collaborators list" : "{collaboratorLabel} kullanıcısını katılımcı listesine ekle",
-    "No collaborators available" : "Seçilebilecek bir katılımcı yok",
+    "No recommendations. Start typing." : "Herhangi bir öneri yok. Yazmaya başlayın.",
     "Remove {collaboratorLabel} from the collaborators list" : "{collaboratorLabel} kullanıcısını katılımcı listesinden çıkar",
     "Copy the public link" : "Herkese açık bağlantıyı kopyala",
     "Public link copied!" : "Herkese açık bağlantı kopyalandı!",
@@ -105,7 +103,6 @@
     "Cover photo for place {placeName}" : "{placeName} yerinin kapak görseli",
     "There is no place yet!" : "Henüz bir yer yok!",
     "Failed to fetch albums list." : "Albümlerin listesi alınamadı.",
-    "Shared by" : "Paylaşan",
     "Shared albums" : "Paylaşılmış albümler",
     "Cover photo for shared album {albumName}." : "{albumName} paylaşılmış albümünün kapak görseli.",
     "Back to tags overview" : "Etiket özetine geri dön",
@@ -138,6 +135,10 @@
     "Failed to delete {fileName}." : "{fileName} silinemedi.",
     "Failed to set favorite state for {fileId}." : "{fileId} için sık kullanılan durumu ayarlanamadı.",
     "Failed to set favorite state for {fileName}." : "{fileName} için sık kullanılan durumu ayarlanamadı.",
-    "Locations" : "Konumlar"
+    "Locations" : "Konumlar",
+    "_Share with %n user_::_Share with %n users_" : ["%n kullanıcı ile paylaş","%n kullanıcı ile paylaş"],
+    "Search for collaborators" : "Katılımcı ara",
+    "Add {collaboratorLabel} to the collaborators list" : "{collaboratorLabel} kullanıcısını katılımcı listesine ekle",
+    "No collaborators available" : "Seçilebilecek bir katılımcı yok"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }
