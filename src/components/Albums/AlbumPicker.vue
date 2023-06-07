@@ -23,7 +23,7 @@
 	<div v-if="!showAlbumCreationForm" class="album-picker">
 		<h2>
 			{{ t('photos', 'Add to Album') }}
-			<NcLoadingIcon v-if="loadingAlbums || loadingSharedAlbums" class="loading-icon" />
+			<NcLoadingIcon v-if="loadingCollections" class="loading-icon" />
 		</h2>
 
 		<ul class="albums-container">
@@ -68,6 +68,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
 
@@ -113,6 +114,11 @@ export default {
 	},
 
 	computed: {
+		...mapGetters([
+			'albums',
+			'sharedAlbums',
+		]),
+
 		/**
 		 * @return {import('../../store/albums.js').Album[]}
 		 */
@@ -121,11 +127,19 @@ export default {
 		},
 	},
 
+	mounted() {
+		this.fetchAlbumList()
+	},
+
 	methods: {
+		async fetchAlbumList() {
+			await this.fetchCollections(`/photos/${getCurrentUser()?.uid}/albums`, ['<nc:location />', '<nc:dateRange />', '<nc:collaborators />'])
+			await this.fetchCollections(`/photos/${getCurrentUser()?.uid}/sharedalbums`, ['<nc:location />', '<nc:dateRange />', '<nc:collaborators />'])
+		},
+
 		albumCreatedHandler() {
 			this.showAlbumCreationForm = false
-			this.fetchCollections(`/photos/${getCurrentUser()?.uid}/albums`)
-			this.fetchCollections(`/photos/${getCurrentUser()?.uid}/sharedalbums`)
+			this.fetchAlbumList()
 		},
 
 		pickAlbum(album) {
