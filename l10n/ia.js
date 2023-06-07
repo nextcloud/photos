@@ -7,10 +7,11 @@ OC.L10N.register(
     "Tags" : "Etiquettas",
     "Back" : "Retro",
     "Save" : "Salveguardar",
+    "Shared by" : "Compartite per",
+    "Group" : "Gruppo",
     "View" : "Vider",
     "Favorite" : "Favorite",
     "Remove from favorites" : "Remove from favorites",
-    "Shared by" : "Compartite per",
     "Add" : "Adder"
 },
 "nplurals=2; plural=(n != 1);");
