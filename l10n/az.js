@@ -6,9 +6,9 @@ OC.L10N.register(
     "Shared with you" : "Shared with you",
     "Tags" : "Işarələr",
     "Save" : "Saxla",
+    "Shared by" : "Tərəfindən yayımlanıb",
     "Favorite" : "İstəkli",
     "Remove from favorites" : "Remove from favorites",
-    "Shared by" : "Tərəfindən yayımlanıb",
     "Add" : "Əlavə etmək"
 },
 "nplurals=2; plural=(n != 1);");

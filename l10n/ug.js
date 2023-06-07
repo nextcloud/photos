@@ -6,9 +6,9 @@ OC.L10N.register(
     "Shared with you" : "Shared with you",
     "Tags" : "بەلگەلەر",
     "Save" : "ساقلا",
+    "Shared by" : "ھەمبەھىرلىگۈچى",
     "Favorite" : "يىغقۇچ",
     "Remove from favorites" : "Remove from favorites",
-    "Shared by" : "ھەمبەھىرلىگۈچى",
     "Add" : "قوش"
 },
 "nplurals=2; plural=(n != 1);");
