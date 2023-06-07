@@ -55,8 +55,8 @@
 </template>
 
 <script>
-import Plus from 'vue-material-design-icons/Plus'
-import ImagePlus from 'vue-material-design-icons/ImagePlus'
+import Plus from 'vue-material-design-icons/Plus.vue'
+import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
 
 import { NcButton, NcEmptyContent, isMobile } from '@nextcloud/vue'
 import { translate } from '@nextcloud/l10n'

@@ -298,7 +298,7 @@ class AlbumMapper {
 		$query = $this->connection->getQueryBuilder();
 		$albumsRows = $query->select('album_id')
 			->from("photos_albums_files")
-			->where($query->expr()->eq("owner_id", $query->createNamedParameter($ownerId)))
+			->where($query->expr()->eq("owner", $query->createNamedParameter($ownerId)))
 			->andWhere($query->expr()->eq("file_id", $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)))
 			->executeQuery()
 			->fetchAll();
@@ -306,7 +306,7 @@ class AlbumMapper {
 		// Remove any occurrence of fileId when owner is ownerId.
 		$query = $this->connection->getQueryBuilder();
 		$query->delete("photos_albums_files")
-			->where($query->expr()->eq("owner_id", $query->createNamedParameter($ownerId)))
+			->where($query->expr()->eq("owner", $query->createNamedParameter($ownerId)))
 			->andWhere($query->expr()->eq("file_id", $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)))
 			->executeStatement();
 
@@ -537,11 +537,11 @@ class AlbumMapper {
 			if (!isset($albumsById[$albumId])) {
 				$albumName = $row['album_name'];
 				// Suffix album name with the album owner to prevent duplicates.
-				// Not done for public link as it would like owner's uid.
+				// Not done for public link as it would leak the owner's uid.
 				if ($collaboratorType !== self::TYPE_LINK) {
 					$albumName = $row['album_name'].' ('.$row['album_user'].')';
 				}
-				$albumsById[$albumId] = new AlbumInfo($albumId, $row['album_user'], $albumName, $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
+				$albumsById[$albumId] = new AlbumInfo($albumId, $row['album_user'], $albumName, $row['location'], (int)$row['created'], (int)$row['last_added_photo'], $collaboratorType);
 			}
 		}
 

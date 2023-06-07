@@ -38,6 +38,8 @@ import Vue from 'vue'
 const state = {
 	faces: {},
 	facesFiles: {},
+	unassignedFiles: [],
+	unassignedFilesCount: 0,
 }
 
 const mutations = {
@@ -83,6 +85,32 @@ const mutations = {
 	},
 
 	/**
+	 * Add files to a face.
+	 *
+	 * @param {object} state vuex state
+	 * @param {object} data destructuring object
+	 * @param {string[]} data.fileIdsToAdd list of files
+	 */
+	addUnassignedFiles(state, { fileIdsToAdd }) {
+		if (!state.unassignedFiles) {
+			state.unassignedFiles = []
+		}
+		const files = state.unassignedFiles
+		files.push(...fileIdsToAdd.filter(fileId => !files.includes(fileId))) // Filter to prevent duplicate fileId.
+	},
+
+	/**
+	 * Remove files from the unassigned Files collection
+	 *
+	 * @param state
+	 * @param fileIdsToRemove.fileIdsToRemove
+	 * @param fileIdsToRemove
+	 */
+	removeUnassignedFile(state, { fileIdsToRemove }) {
+		state.unassignedFiles = state.unassignedFiles.filter(fileId => !fileIdsToRemove.includes(fileId))
+	},
+
+	/**
 	 * Remove files from a face.
 	 *
 	 * @param {object} state vuex state
@@ -93,11 +121,22 @@ const mutations = {
 	removeFilesFromFace(state, { faceName, fileIdsToRemove }) {
 		Vue.set(state.facesFiles, faceName, state.facesFiles[faceName].filter(fileId => !fileIdsToRemove.includes(fileId)))
 	},
+
+	/**
+	 *
+	 * @param state
+	 * @param count
+	 */
+	setUnassignedFilesCount(state, count) {
+		state.unassignedFilesCount = count
+	},
 }
 
 const getters = {
 	faces: state => state.faces,
 	facesFiles: state => state.facesFiles,
+	unassignedFiles: state => state.unassignedFiles,
+	unassignedFilesCount: state => state.unassignedFilesCount,
 }
 
 const actions = {
@@ -118,7 +157,7 @@ const actions = {
 	 * @param {object} context vuex context
 	 * @param {object} data destructuring object
 	 * @param {string} data.faceName the new face name
-	 * @param {string} data.oldFace the old face name
+	 * @param {?string} data.oldFace the old face name
 	 * @param {string[]} data.fileIdsToMove list of files ids to move
 	 */
 	async moveFilesToFace(context, { oldFace, faceName, fileIdsToMove }) {
@@ -132,12 +171,16 @@ const actions = {
 
 				try {
 					await client.moveFile(
-						`/recognize/${getCurrentUser()?.uid}/faces/${oldFace}/${fileBaseName}`,
+						oldFace ? `/recognize/${getCurrentUser()?.uid}/faces/${oldFace}/${fileBaseName}` : `/recognize/${getCurrentUser()?.uid}/unassigned-faces/${fileBaseName}`,
 						`/recognize/${getCurrentUser()?.uid}/faces/${faceName}/${fileBaseName}`
 					)
 					file.faceDetections.find(detection => detection.title === oldFace).title = faceName
 					await context.commit('addFilesToFace', { faceName, fileIdsToAdd: [fileId] })
-					await context.commit('removeFilesFromFace', { faceName: oldFace, fileIdsToRemove: [fileId] })
+					if (oldFace) {
+						await context.commit('removeFilesFromFace', { faceName: oldFace, fileIdsToRemove: [fileId] })
+					} else {
+						await context.commit('removeUnassignedFile', { fileIdsToRemove: [fileId] })
+					}
 					semaphore.release(symbol)
 				} catch (error) {
 					logger.error(t('photos', 'Failed to move {fileBaseName} to person {faceName}.', { fileBaseName, faceName }), { error })

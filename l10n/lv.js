@@ -12,6 +12,8 @@ OC.L10N.register(
     "Back" : "Atpakaļ",
     "Save" : "Saglabāt",
     "Create album" : "Izveidot albumu",
+    "Shared by" : "Koplietoja",
+    "Group" : "Grupa",
     "Copy the public link" : "Kopējiet publisko saiti",
     "Public link copied!" : "Publiskā saite nokopēta!",
     "Copy public link" : "Kopējiet publisko saiti",
@@ -21,9 +23,6 @@ OC.L10N.register(
     "View" : "Skats",
     "Favorite" : "Favorīts",
     "Remove from favorites" : "Noņemt no izlases",
-    "Shared by" : "Koplietoja",
-    "Add" : "Pievienot",
-    "Your photos" : "Jūsu bildes",
-    "Settings" : "Iestatījumi"
+    "Add" : "Pievienot"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

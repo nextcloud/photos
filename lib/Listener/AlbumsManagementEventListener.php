@@ -47,13 +47,20 @@ class AlbumsManagementEventListener implements IEventListener {
 			foreach ($albums as $album) {
 				$this->albumMapper->delete($album->getId());
 			}
+
+			$sharedAlbums = $this->albumMapper->getSharedAlbumsForCollaborator($event->getUser()->getUID(), AlbumMapper::TYPE_USER);
+			foreach ($sharedAlbums as $album) {
+				$this->albumMapper->deleteUserFromAlbumCollaboratorsList($event->getUser()->getUID(), $album->getId());
+			}
 		} elseif ($event instanceof ShareDeletedEvent) {
 			$receiverId = $event->getShare()->getSharedWith();
-			$this->forEachSubNode(
-				$event->getShare()->getNode(),
-				// Remove node from any album when the owner is $receiverId.
-				fn ($node) => $this->albumMapper->removeFileWithOwner($node->getId(), $receiverId),
-			);
+			if ($receiverId !== null) { // null for public link shares
+				$this->forEachSubNode(
+					$event->getShare()->getNode(),
+					// Remove node from any album when the owner is $receiverId.
+					fn ($node) => $this->albumMapper->removeFileWithOwner($node->getId(), $receiverId),
+				);
+			}
 		} elseif ($event instanceof UserRemovedEvent) {
 			// Get all shared albums for this group:
 			$albums_group = $this->albumMapper->getSharedAlbumsForCollaborator($event->getGroup()->getGID(), AlbumMapper::TYPE_GROUP);

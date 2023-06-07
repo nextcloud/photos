@@ -13,6 +13,9 @@ OC.L10N.register(
     "Tags" : "Etichetas",
     "Back" : "In segus",
     "Save" : "Sarva",
+    "Shared by" : "Cumpartzidu dae",
+    "No recommendations. Start typing." : "Peruna racumandatzione. Cumintza a iscrìere.",
+    "Group" : "Grupu",
     "Copy public link" : "Còpia ligòngiu pùblicu",
     "An error occurred" : "B'at àpidu un'errore",
     "Open the full size \"{name}\" image" : "Aberi s'imàgine \"{name}\" a mannària prena",
@@ -25,17 +28,12 @@ OC.L10N.register(
     "Remove from favorites" : "Boga·nche dae preferidos",
     "This folder does not exist" : "Custa cartella no esistit",
     "No photos in here" : "Peruna fotografia inoghe",
-    "Shared by" : "Cumpartzidu dae",
     "Shared albums" : "Album cumpartzidos",
     "No tags yet" : "Ancora peruna eticheta",
     "Photos with tags will show up here" : "Is fotografias etichetadas ant a aparèssere inoghe",
     "Add" : "Agiunghe",
     "Delete selection" : "Cantzella seletzione",
     "Tagged photos" : "Fotografias etichetadas",
-    "Your photos" : "Is fotografias tuas",
-    "Your videos" : "Is vìdeos tuos",
-    "Your folders" : "Is cartellas tuas",
-    "Locations" : "Positziones",
-    "Settings" : "Impostatziones"
+    "Locations" : "Positziones"
 },
 "nplurals=2; plural=(n != 1);");

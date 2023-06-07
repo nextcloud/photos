@@ -167,7 +167,7 @@
 			<FaceMergeForm :first-face="faceName" @select="handleMerge($event)" />
 		</NcModal>
 		<NcModal v-if="showMoveModal"
-			:title="t('photos', 'Merge person')"
+			:title="t('photos', 'Move to different person')"
 			@close="showMoveModal = false">
 			<FaceMergeForm :first-face="faceName" @select="handleMove($event, selectedFileIds)" />
 		</NcModal>
@@ -176,16 +176,16 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import Pencil from 'vue-material-design-icons/Pencil'
-import Close from 'vue-material-design-icons/Close'
-import AlertCircle from 'vue-material-design-icons/AlertCircle'
-import Star from 'vue-material-design-icons/Star'
-import Download from 'vue-material-design-icons/Download'
-import Send from 'vue-material-design-icons/Send'
-import Merge from 'vue-material-design-icons/Merge'
-import ArrowLeft from 'vue-material-design-icons/ArrowLeft'
-import AccountSwitch from 'vue-material-design-icons/AccountSwitch'
-import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline'
+import Pencil from 'vue-material-design-icons/Pencil.vue'
+import Close from 'vue-material-design-icons/Close.vue'
+import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
+import Star from 'vue-material-design-icons/Star.vue'
+import Download from 'vue-material-design-icons/Download.vue'
+import Send from 'vue-material-design-icons/Send.vue'
+import Merge from 'vue-material-design-icons/Merge.vue'
+import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
+import AccountSwitch from 'vue-material-design-icons/AccountSwitch.vue'
+import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
 
 import { NcActions, NcActionButton, NcModal, NcEmptyContent, NcButton, NcLoadingIcon } from '@nextcloud/vue'
 
@@ -196,7 +196,7 @@ import File from '../components/File.vue'
 import logger from '../services/logger.js'
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
 import Vue from 'vue'
-import FaceMergeForm from '../components/FaceMergeForm.vue'
+import FaceMergeForm from '../components/Faces/FaceMergeForm.vue'
 
 export default {
 	name: 'FaceContent',
@@ -411,94 +411,5 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.face {
-	display: flex;
-	flex-direction: column;
-
-	&__empty {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-
-		&__button {
-			margin-top: 32px;
-		}
-
-	}
-
-	&__header {
-		display: flex;
-		min-height: 60px;
-		align-items: center;
-		justify-content: space-between;
-		position: sticky;
-		z-index: 3;
-		background: var(--color-main-background);
-		padding: 0 64px;
-
-		@media only screen and (max-width: 1020px) {
-			padding: 0;
-			padding-left: 64px;
-		}
-
-		&__left {
-			height: 100%;
-			display: flex;
-			align-items: center;
-		}
-
-		&__title {
-			margin-left: 10px;
-			h2 {
-				margin-bottom: 0;
-			}
-		}
-
-		&__loader {
-			margin-left: 32px;
-		}
-
-		&__actions {
-			display: flex;
-			align-items: center;
-
-			button {
-				margin-left: 16px;
-			}
-		}
-	}
-
-	&__photos {
-		margin-top: 16px;
-		height: 100%;
-		min-height: 0; // Prevent it from overflowing in a flex context.
-		padding: 0 64px;
-
-		@media only screen and (max-width: 1020px) {
-			padding: 0;
-		}
-	}
-}
-
-.empty-content-with-illustration :deep .empty-content__icon {
-	width: 200px;
-	height: 200px;
-
-	svg {
-		width: 200px;
-		height: 200px;
-	}
-}
-
-.rename-form {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	height: 70px;
-	padding: 16px;
-
-	input {
-		width: 80%;
-	}
-}
+@import '../mixins/FaceContent';
 </style>

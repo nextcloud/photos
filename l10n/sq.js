@@ -9,11 +9,11 @@ OC.L10N.register(
     "Tags" : "Etiketat",
     "Back" : "Prapa",
     "Save" : "Ruaj",
+    "Shared by" : "Shpërndarë nga",
+    "Group" : "Grup",
     "View" : "Shiko",
     "Favorite" : "I/E Preferuar",
     "Remove from favorites" : "Remove from favorites",
-    "Shared by" : "Shpërndarë nga",
-    "Add" : "Shto",
-    "Settings" : "Rregullimet"
+    "Add" : "Shto"
 },
 "nplurals=2; plural=(n != 1);");

@@ -11,6 +11,8 @@ OC.L10N.register(
     "Tags" : "Sildid",
     "Back" : "Tagasi",
     "Save" : "Salvesta",
+    "Shared by" : "Jagas",
+    "Group" : "Grupp",
     "Copy public link" : "Kopeeri avalik link",
     "An error occurred" : "Tekkis tõrge",
     "Open the full size \"{name}\" image" : "Ava \"{name}\" täissuuruses",
@@ -20,15 +22,12 @@ OC.L10N.register(
     "Favorite" : "Lemmik",
     "Remove from favorites" : "Eemalda lemmikutest",
     "No photos in here" : "Siin ei ole fotosid",
-    "Shared by" : "Jagas",
     "Shared albums" : "Jagatud albumid",
     "No tags yet" : "Silte veel pole",
     "Photos with tags will show up here" : "Sildistatud fotod on siin näha",
     "Add" : "Lisa",
     "Delete selection" : "Kustuta valik",
     "Tagged photos" : "Sildistatud fotod",
-    "Your photos" : "Sinu fotod",
-    "Locations" : "Asukohad",
-    "Settings" : "Seaded"
+    "Locations" : "Asukohad"
 },
 "nplurals=2; plural=(n != 1);");

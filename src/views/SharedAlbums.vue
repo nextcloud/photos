@@ -21,15 +21,15 @@
  -->
 <template>
 	<CollectionsList :collections="sharedAlbums"
-		:loading="loadingAlbums"
-		:error="errorFetchingAlbums"
+		:loading="loadingSharedAlbums"
+		:error="errorFetchingSharedAlbums"
 		class="albums-list">
 		<HeaderNavigation key="navigation"
 			slot="header"
-			:loading="loadingAlbums"
+			:loading="loadingSharedAlbums"
 			:title="t('photos', 'Shared albums')"
 			:root-title="t('photos', 'Shared albums')"
-			@refresh="fetchAlbums" />
+			@refresh="fetchSharedAlbums" />
 
 		<CollectionCover :key="collection.basename"
 			slot-scope="{collection}"
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage'
+import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
 
 import { generateUrl } from '@nextcloud/router'
 import { NcEmptyContent, NcUserBubble } from '@nextcloud/vue'

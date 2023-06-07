@@ -28,8 +28,10 @@ OC.L10N.register(
     "Back to the new album form." : "กลับไปยังแบบฟอร์มอัลบั้มใหม่",
     "Add to Album" : "เพิ่มไปยังอัลบั้ม",
     "Add selection to album {albumName}" : "เพิ่มรายการที่เลือกไปยังอัลบั้ม {albumName}",
+    "Shared by" : "แชร์โดย",
     "_%n item_::_%n photos and videos_" : ["รูปภาพและวิดีโอ %n รายการ"],
-    "_Share with %n user_::_Share with %n users_" : ["แชร์กับผู้ใช้ %n คน"],
+    "No recommendations. Start typing." : "ไม่มีคำแนะนำ เริ่มพิมพ์เลย",
+    "Group" : "กลุ่ม",
     "An error occurred" : "เกิดข้อผิดพลาด",
     "Open the full size \"{name}\" image" : "เปิดรูปภาพขนาดเต็ม \"{name}\"",
     "Open the \"{name}\" sub-directory" : "เปิดไดเรกทอรีรอง \"{name}\"",
@@ -41,15 +43,11 @@ OC.L10N.register(
     "Remove from favorites" : "เอาออกจากรายการโปรด",
     "This folder does not exist" : "ไม่มีโฟลเดอร์นี้",
     "No photos in here" : "ไม่มีรูปภาพที่นี่",
-    "Shared by" : "แชร์โดย",
     "No tags yet" : "ยังไม่มีแท็ก",
     "Photos with tags will show up here" : "รูปภาพที่ติดแท็กจะแสดงที่นี่",
     "Add" : "เพิ่ม",
     "Tagged photos" : "รูปภาพที่ติดแท็ก",
-    "Your photos" : "รูปภาพของคุณ",
-    "Your videos" : "วิดีโอของคุณ",
-    "Your folders" : "โฟลเดอร์ของคุณ",
     "Locations" : "สถานที่",
-    "Settings" : "การตั้งค่า"
+    "_Share with %n user_::_Share with %n users_" : ["แชร์กับผู้ใช้ %n คน"]
 },
 "nplurals=1; plural=0;");

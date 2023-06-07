@@ -17,9 +17,10 @@ export default defineConfig({
 	viewportWidth: 1280,
 	viewportHeight: 720,
 
-	// Tries again 2 more times on failure
+	requestTimeout: 20000,
+
 	retries: {
-		runMode: 2,
+		runMode: 0,
 		// do not retry in `cypress open`
 		openMode: 0,
 	},

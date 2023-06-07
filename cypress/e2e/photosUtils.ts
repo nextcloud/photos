@@ -18,7 +18,7 @@
  *
  */
 
-import type { User } from "@nextcloud/cypress"
+import type { User } from '@nextcloud/cypress'
 
 export function uploadTestMedia(user: User) {
 	cy.exec('ls cypress/fixtures/media')
@@ -66,19 +66,9 @@ export function downloadAllFiles() {
 }
 
 export function deleteSelection() {
-	cy.intercept({ method: 'DELETE' }).as('deleteRequests')
+	cy.intercept({ times: 1, method: 'DELETE' }).as('deleteRequests')
 	cy.get('[aria-label="Open actions menu"]').click()
 	cy.contains('Delete selection')
 		.click()
 		.wait('@deleteRequests')
-}
-
-export function goToSharedAlbum(albumName: string) {
-	cy.get('.app-navigation__list').contains('Collaborative albums').click()
-	cy.get('ul.collections__list').contains(albumName).click()
-}
-
-export function removeSharedAlbums() {
-	cy.get('[aria-label="Open actions menu"]').click()
-	cy.contains('Delete album').click()
 }

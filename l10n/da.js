@@ -26,11 +26,12 @@ OC.L10N.register(
     "Create album" : "Opret album",
     "Back to the new album form." : "Tilbage til den nye albumform.",
     "Add to Album" : "Føj til album",
+    "Shared by" : "Delt af",
     "Create a new album." : "Opret et nyt album.",
     "Create new album" : "Opret nyt album",
     "New album" : "Nyt album",
     "_%n item_::_%n photos and videos_" : ["%n enheder","%n fotos og videoer"],
-    "_Share with %n user_::_Share with %n users_" : ["Del med %n bruger","Del med %n brugere"],
+    "No recommendations. Start typing." : "Ingen anbefalinger. Begynd at skrive.",
     "Public link copied!" : "Offentlig link kopieret!",
     "Copy public link" : "Kopier offentligt link",
     "An error occurred" : "Der var en fejl",
@@ -52,7 +53,6 @@ OC.L10N.register(
     "Remove from favorites" : "Fjern fra favoritter",
     "This folder does not exist" : "Denne mappe findes ikke",
     "No photos in here" : "Ingen billeder her",
-    "Shared by" : "Delt af",
     "Shared albums" : "Delte album",
     "No tags yet" : "Ingen tags endnu",
     "Photos with tags will show up here" : "Billeder med tags vil vise sig her",
@@ -60,10 +60,7 @@ OC.L10N.register(
     "Delete selection" : "Slet valgte",
     "Tagged photos" : "Markerede billeder",
     "Failed to delete {fileName}." : "Kunne ikke slette {fileName}.",
-    "Your photos" : "Dine billeder",
-    "Your videos" : "Dine videoer",
-    "Your folders" : "Dine mapper",
     "Locations" : "Sted",
-    "Settings" : "Indstillinger"
+    "_Share with %n user_::_Share with %n users_" : ["Del med %n bruger","Del med %n brugere"]
 },
 "nplurals=2; plural=(n != 1);");

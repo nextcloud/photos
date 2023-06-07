@@ -23,16 +23,16 @@
 	<div v-if="!showAlbumCreationForm" class="album-picker">
 		<h2>
 			{{ t('photos', 'Add to Album') }}
-			<NcLoadingIcon v-if="loadingAlbums" class="loading-icon" />
+			<NcLoadingIcon v-if="loadingAlbums || loadingSharedAlbums" class="loading-icon" />
 		</h2>
 
 		<ul class="albums-container">
-			<NcListItem v-for="album in albums"
-				:key="album.basename"
+			<NcListItem v-for="album in allAlbums"
+				:key="album.filename"
 				class="album"
-				:title="album.basename"
+				:title="originalName(album)"
 				:aria-label="t('photos', 'Add selection to album {albumName}', {albumName: album.basename})"
-				@click="pickAlbum(album.basename)">
+				@click="pickAlbum(album)">
 				<template slot="icon">
 					<img v-if="album.lastPhoto !== -1" class="album__image" :src="album.lastPhoto | toCoverUrl">
 					<div v-else class="album__image album__image--placeholder">
@@ -42,8 +42,9 @@
 
 				<template slot="subtitle">
 					{{ n('photos', '%n item', '%n photos and videos', album.nbItems) }}
-					<!-- TODO: finish collaboration -->
-					<!--⸱ {{ n('photos', 'Share with %n user', 'Share with %n users', album.isShared) }}-->
+					<template v-if="isSharedAlbum(album)">
+						⸱ {{ t('photos', 'Shared by') }}&nbsp;<NcUserBubble :display-name="album.collaborators[0].label" :user="album.collaborators[0].id" />
+					</template>
 				</template>
 			</NcListItem>
 		</ul>
@@ -67,13 +68,15 @@
 </template>
 
 <script>
-import Plus from 'vue-material-design-icons/Plus'
-import ImageMultiple from 'vue-material-design-icons/ImageMultiple'
+import Plus from 'vue-material-design-icons/Plus.vue'
+import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
 
-import { NcButton, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
+import { NcButton, NcListItem, NcLoadingIcon, NcUserBubble } from '@nextcloud/vue'
 import { generateUrl } from '@nextcloud/router'
+import { translate, translatePlural } from '@nextcloud/l10n'
 
 import FetchAlbumsMixin from '../../mixins/FetchAlbumsMixin.js'
+import FetchSharedAlbumsMixin from '../../mixins/FetchSharedAlbumsMixin.js'
 import AlbumForm from './AlbumForm.vue'
 
 export default {
@@ -85,6 +88,7 @@ export default {
 		NcButton,
 		NcListItem,
 		NcLoadingIcon,
+		NcUserBubble,
 		AlbumForm,
 	},
 
@@ -100,6 +104,7 @@ export default {
 
 	mixins: [
 		FetchAlbumsMixin,
+		FetchSharedAlbumsMixin,
 	],
 
 	data() {
@@ -108,15 +113,44 @@ export default {
 		}
 	},
 
+	computed: {
+		/** @return {object[]} */
+		allAlbums() {
+			return [...Object.values(this.albums), ...Object.values(this.sharedAlbums)]
+		},
+	},
+
 	methods: {
 		albumCreatedHandler() {
 			this.showAlbumCreationForm = false
-			this.fetchAlbums()
 		},
 
-		pickAlbum(albumBaseName) {
-			this.$emit('album-picked', albumBaseName)
+		pickAlbum(album) {
+			this.$emit('album-picked', album)
 		},
+
+		/**
+		 * @param {object} album
+		 * @return {boolean}
+		 */
+		isSharedAlbum(album) {
+			return album.filename.match(/^\/photos\/.+\/sharedalbums\//) !== null
+		},
+
+		/**
+		 * @param {object} album The album's full name, including the userid.
+		 * @return {string} The album name without the userId between parentheses.
+		 */
+		originalName(album) {
+			if (this.isSharedAlbum(album)) {
+				return album.basename.replace(new RegExp(`\\(${album.collaborators[0].id}\\)$`), '')
+			} else {
+				return album.basename
+			}
+		},
+
+		t: translate,
+		n: translatePlural,
 	},
 }
 </script>

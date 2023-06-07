@@ -12,6 +12,7 @@ OC.L10N.register(
     "Tags" : "Etiquetas",
     "Back" : "Retorn",
     "Save" : "Enregistrar",
+    "Group" : "Grop",
     "Copy public link" : "Copiar lo ligam public",
     "An error occurred" : "Una error s’es producha",
     "Open the full size \"{name}\" image" : "Dobrir l’imatge {name} en talha originala",
@@ -29,10 +30,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Las fòtos amb etiquetas apreissaràn aquí",
     "Add" : "Apondre",
     "Tagged photos" : "Fòtos etiquetadas",
-    "Your photos" : "Vòstras fòtos",
-    "Your videos" : "Vòstras vidèos",
-    "Your folders" : "Vòstres dossièrs",
-    "Locations" : "Emplaçaments",
-    "Settings" : "Paramètres"
+    "Locations" : "Emplaçaments"
 },
 "nplurals=2; plural=(n > 1);");

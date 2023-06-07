@@ -10,6 +10,8 @@ OC.L10N.register(
     "Tags" : "Etiquetas",
     "Back" : "Atrás",
     "Save" : "Guardar",
+    "Shared by" : "Compartido por",
+    "Group" : "Grupo",
     "An error occurred" : "Se presentó un error",
     "Open the full size \"{name}\" image" : "Abrir la imagen \"{name}\" en tamaño completo",
     "Open the \"{name}\" sub-directory" : "Abrir el subdirectorio \"{name}\"",
@@ -18,14 +20,11 @@ OC.L10N.register(
     "Favorite" : "Hacer favorito",
     "Remove from favorites" : "Eliminar de favoritos",
     "No photos in here" : "No hay fotos aquí",
-    "Shared by" : "Compartido por",
     "Shared albums" : "Álbums compartidos",
     "No tags yet" : "Aún no hay etiquetas",
     "Photos with tags will show up here" : "Fotos con etiquetas serán mostradas aquí",
     "Add" : "Agregar",
     "Tagged photos" : "Fotos etiquetadas",
-    "Your photos" : "Tus fotos",
-    "Locations" : "Ubicaciones",
-    "Settings" : "Configuraciones "
+    "Locations" : "Ubicaciones"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

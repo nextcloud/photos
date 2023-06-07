@@ -19,8 +19,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+import { User } from '@nextcloud/cypress'
 import {
+	addCollaborators,
 	addFilesToAlbumFromTimeline,
+	createAnAlbumFromAlbums,
 	createAnAlbumFromTimeline,
 	deleteAnAlbumFromAlbumContent,
 	goToAlbum,
@@ -35,6 +38,12 @@ import {
 	unselectMedia,
 	uploadTestMedia,
 } from './photosUtils'
+import {
+	goToSharedAlbum,
+} from './sharedAlbumUtils'
+import {
+	randHash,
+} from '../utils/index.js'
 
 const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/
 Cypress.on('uncaught:exception', (err) => {
@@ -44,18 +53,22 @@ Cypress.on('uncaught:exception', (err) => {
 	}
 })
 
+const alice = new User(`alice_${randHash()}`)
+const bob = new User(`bob_${randHash()}`)
+
 describe('View list of photos in the main timeline', () => {
 	before(() => {
-		cy.createRandomUser()
-			.then((user) => {
-				uploadTestMedia(user)
-				cy.login(user)
-				cy.visit('/apps/photos')
-			})
+		cy.createUser(alice).then(() => {
+			uploadTestMedia(alice)
+		})
+		cy.createUser(bob).then(() => {
+			uploadTestMedia(bob)
+		})
+		cy.login(alice)
 	})
 
 	beforeEach(() => {
-		cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos`)
+		cy.visit('/apps/photos')
 	})
 
 	it('Favorite a file from a timeline', () => {
@@ -105,6 +118,27 @@ describe('View list of photos in the main timeline', () => {
 		goToAlbum('timeline_test_multiple')
 		cy.get('[data-test="media"]').should('have.length', 2)
 		deleteAnAlbumFromAlbumContent()
+	})
+
+	it('Add file to a shared album from a timeline', () => {
+		cy.visit('apps/photos/albums')
+		createAnAlbumFromAlbums('timeline_test_shared_album')
+		addCollaborators([bob.userId])
+		cy.login(bob)
+		cy.visit('apps/photos')
+		selectMedia([0])
+		addFilesToAlbumFromTimeline('timeline_test_shared_album')
+		goToSharedAlbum('timeline_test_shared_album')
+		cy.get('[data-test="media"]').should('have.length', 1)
+	})
+
+	it('Add multiple files to a shared album from a timeline', () => {
+		cy.login(bob)
+		cy.visit('apps/photos')
+		selectMedia([1, 2])
+		addFilesToAlbumFromTimeline('timeline_test_shared_album')
+		goToSharedAlbum('timeline_test_shared_album')
+		cy.get('[data-test="media"]').should('have.length', 3)
 	})
 
 	it('Delete a file from photos', () => {

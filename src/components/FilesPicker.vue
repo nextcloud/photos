@@ -84,7 +84,7 @@ import { NcButton, NcLoadingIcon } from '@nextcloud/vue'
 import { UploadPicker } from '@nextcloud/upload'
 import moment from '@nextcloud/moment'
 
-import ImagePlus from 'vue-material-design-icons/ImagePlus'
+import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
 
 import FilesListViewer from './FilesListViewer.vue'
 import File from './File.vue'

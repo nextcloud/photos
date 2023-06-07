@@ -12,6 +12,8 @@ OC.L10N.register(
     "Tags" : "Oznake",
     "Back" : "Natrag",
     "Save" : "Spremi",
+    "Shared by" : "Podijeljeno od",
+    "No recommendations. Start typing." : "Nema preporuka. Započnite unos.",
     "Copy public link" : "Kopiraj javnu poveznicu",
     "An error occurred" : "Došlo je do pogreške",
     "Open the full size \"{name}\" image" : "Otvori sliku „{name}” u punoj veličini",
@@ -24,17 +26,12 @@ OC.L10N.register(
     "Remove from favorites" : "Ukloni iz favorita",
     "This folder does not exist" : "Ova mapa ne postoji",
     "No photos in here" : "Ovdje nema fotografija",
-    "Shared by" : "Podijeljeno od",
     "Shared albums" : "Dijeljeni albumi",
     "No tags yet" : "Još nema oznaka",
     "Photos with tags will show up here" : "Ovdje će se prikazivati fotografije s oznakama",
     "Add" : "Dodaj",
     "Delete selection" : "Izbriši odabir",
     "Tagged photos" : "Označene fotografije",
-    "Your photos" : "Vaše fotografije",
-    "Your videos" : "Vaši videozapisi",
-    "Your folders" : "Vaše mape",
-    "Locations" : "Lokacije",
-    "Settings" : "Postavke"
+    "Locations" : "Lokacije"
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");

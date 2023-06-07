@@ -8,7 +8,6 @@ OC.L10N.register(
     "Tags" : "Tags",
     "Save" : "Save",
     "Favorite" : "Favorite",
-    "Add" : "Add",
-    "Settings" : "Settings"
+    "Add" : "Add"
 },
 "nplurals=1; plural=0;");

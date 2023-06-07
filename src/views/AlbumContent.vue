@@ -153,7 +153,6 @@
 </template>
 
 <script>
-// eslint-disable-next-line node/no-extraneous-import
 import { addNewFileMenuEntry, removeNewFileMenuEntry } from '@nextcloud/files'
 import { getCurrentUser } from '@nextcloud/auth'
 import { mapActions, mapGetters } from 'vuex'
@@ -161,16 +160,16 @@ import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionS
 import { UploadPicker } from '@nextcloud/upload'
 import debounce from 'debounce'
 
-import Close from 'vue-material-design-icons/Close'
-import Delete from 'vue-material-design-icons/Delete'
-// import Download from 'vue-material-design-icons/Download'
-// import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple'
-import ImagePlus from 'vue-material-design-icons/ImagePlus'
-import MapMarker from 'vue-material-design-icons/MapMarker'
-import Pencil from 'vue-material-design-icons/Pencil'
-import Plus from 'vue-material-design-icons/Plus'
+import Close from 'vue-material-design-icons/Close.vue'
+import Delete from 'vue-material-design-icons/Delete.vue'
+// import Download from 'vue-material-design-icons/Download.vue'
+// import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
+import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
+import MapMarker from 'vue-material-design-icons/MapMarker.vue'
+import Pencil from 'vue-material-design-icons/Pencil.vue'
+import Plus from 'vue-material-design-icons/Plus.vue'
 import PlusSvg from '@mdi/svg/svg/plus.svg'
-import ShareVariant from 'vue-material-design-icons/ShareVariant'
+import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
 
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import FetchAlbumsMixin from '../mixins/FetchAlbumsMixin.js'

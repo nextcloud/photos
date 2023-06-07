@@ -10,6 +10,7 @@ OC.L10N.register(
     "Tags" : "الوسوم",
     "Back" : "العودة",
     "Save" : "Save",
+    "Shared by" : "شاركه",
     "Copy public link" : "نسخ الرابط العام",
     "An error occurred" : "طرأ هناك خطأ",
     "Open the full size \"{name}\" image" : "افتح الصورة بالحجم الكامل \"{name}\" ",
@@ -27,10 +28,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "سوف تظهر الصور ذات الوسوم هنا",
     "Add" : "إضافة",
     "Tagged photos" : "الصور الموسومة",
-    "Your photos" : "صورك",
-    "Your videos" : "فيديوهاتك",
-    "Your folders" : "مجلداتك",
-    "Locations" : "المواقع",
-    "Settings" : "الإعدادات"
+    "Locations" : "المواقع"
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");

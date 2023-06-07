@@ -32,8 +32,8 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import FaceCoverMixin from '../mixins/FaceCoverMixin.js'
-import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
+import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
+import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
 import FaceCover from './FaceCover.vue'
 
 export default {

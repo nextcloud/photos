@@ -8,6 +8,8 @@
     "Tags" : "Nhãn",
     "Back" : "Quay lại",
     "Save" : "Lưu",
+    "Shared by" : "Đã chia sẽ bởi",
+    "Group" : "Nhóm",
     "Copy public link" : "Sao chép liên kết công khai",
     "An error occurred" : "Có lỗi đã xảy ra",
     "Open the full size \"{name}\" image" : "Mở kích thước đủ của ảnh \"{name}\"",
@@ -20,16 +22,11 @@
     "Remove from favorites" : "Xóa khỏi ưa thích",
     "This folder does not exist" : "Thư mục này không tồn tại",
     "No photos in here" : "Không có ảnh nào trong này",
-    "Shared by" : "Đã chia sẽ bởi",
     "Shared albums" : "Các tập ảnh đã chia sẽ",
     "No tags yet" : "Chưa gắn nhãn",
     "Photos with tags will show up here" : "Ảnh đã gắn nhãn sẽ được cho thấy trên này",
     "Add" : "Thêm",
     "Tagged photos" : "Ảnh gắn nhãn",
-    "Your photos" : "Ảnh của bạn",
-    "Your videos" : "Video của bạn",
-    "Your folders" : "Thư mục của bạn",
-    "Locations" : "Các địa điểm",
-    "Settings" : "Cài đặt"
+    "Locations" : "Các địa điểm"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

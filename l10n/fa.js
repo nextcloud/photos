@@ -12,6 +12,9 @@ OC.L10N.register(
     "Tags" : "برچسب ها",
     "Back" : "بازگشت",
     "Save" : "ذخیره",
+    "Shared by" : "اشتراک گذاشته شده به وسیله",
+    "No recommendations. Start typing." : "هیچ پیشنهادی نیست شروع به تایپ کنید.",
+    "Group" : "گروه",
     "Copy public link" : "پیوند عمومی را کپی کنید",
     "An error occurred" : "خطایی روی داد",
     "Open the full size \"{name}\" image" : "اندازه کامل \"{نام}\" باز کردن تصویر",
@@ -21,15 +24,12 @@ OC.L10N.register(
     "Favorite" : "مورد‌ ‌علاقه‌",
     "Remove from favorites" : "حذف کردن از مورد علاقه‌ها",
     "No photos in here" : "هیچ عکسی در اینجا نیست",
-    "Shared by" : "اشتراک گذاشته شده به وسیله",
     "Shared albums" : "آلبوم های مشترک",
     "No tags yet" : "هنوز برچسپی وجود ندارد",
     "Photos with tags will show up here" : "عکس های دارای برچسب در اینجا نشان داده می شوند",
     "Add" : "افزودن",
     "Delete selection" : "انتخاب را حذف کنید",
     "Tagged photos" : "عکسهای برچسب خورده",
-    "Your photos" : "عکس های شما",
-    "Locations" : "مکانها",
-    "Settings" : "تنظیمات"
+    "Locations" : "مکانها"
 },
 "nplurals=2; plural=(n > 1);");

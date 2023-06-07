@@ -126,10 +126,10 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import Plus from 'vue-material-design-icons/Plus'
-import Delete from 'vue-material-design-icons/Delete'
-import PlusBoxMultiple from 'vue-material-design-icons/PlusBoxMultiple'
-import Download from 'vue-material-design-icons/Download'
+import Plus from 'vue-material-design-icons/Plus.vue'
+import Delete from 'vue-material-design-icons/Delete.vue'
+import PlusBoxMultiple from 'vue-material-design-icons/PlusBoxMultiple.vue'
+import Download from 'vue-material-design-icons/Download.vue'
 
 import { NcModal, NcActions, NcActionButton, NcButton, NcEmptyContent, isMobile } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
@@ -230,7 +230,7 @@ export default {
 	},
 
 	methods: {
-		...mapActions(['deleteFiles', 'addFilesToAlbum']),
+		...mapActions(['deleteFiles', 'addFilesToAlbum', 'addFilesToSharedAlbum']),
 
 		getContent() {
 			this.fetchFiles('', {
@@ -254,9 +254,13 @@ export default {
 			// TODO: finish when implementing upload
 		},
 
-		async addSelectionToAlbum(albumName) {
+		async addSelectionToAlbum(album) {
 			this.showAlbumPicker = false
-			await this.addFilesToAlbum({ albumName, fileIdsToAdd: this.selectedFileIds })
+			if (album.filename.match(/^\/photos\/.+\/sharedalbums\//) !== null) {
+				await this.addFilesToSharedAlbum({ albumName: album.basename, fileIdsToAdd: this.selectedFileIds })
+			} else {
+				await this.addFilesToAlbum({ albumName: album.basename, fileIdsToAdd: this.selectedFileIds })
+			}
 		},
 
 		async deleteSelection() {

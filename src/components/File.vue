@@ -82,13 +82,12 @@
 </template>
 
 <script>
-import Star from 'vue-material-design-icons/Star'
+import Star from 'vue-material-design-icons/Star.vue'
 import VideoIcon from 'vue-material-design-icons/Video.vue'
 
 import { generateUrl } from '@nextcloud/router'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 
-import UserConfig from '../mixins/UserConfig.js'
 import { isCachedPreview } from '../services/PreviewService.js'
 
 export default {
@@ -98,7 +97,6 @@ export default {
 		Star,
 		VideoIcon,
 	},
-	mixins: [UserConfig],
 	inheritAttrs: false,
 	props: {
 		file: {

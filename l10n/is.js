@@ -14,6 +14,8 @@ OC.L10N.register(
     "Photos settings" : "Stillingar ljósmynda",
     "Back" : "Til baka",
     "Save" : "Vista",
+    "Shared by" : "Deilt af",
+    "Group" : "Hópur",
     "Copy public link" : "Afrita opinberan tengil",
     "An error occurred" : "Villa kom upp",
     "Open the full size \"{name}\" image" : "Opna myndina \"{name}\" í fullri stærð",
@@ -27,17 +29,12 @@ OC.L10N.register(
     "Remove from favorites" : "Fjarlægja úr eftirlætum",
     "This folder does not exist" : "Þessi mappa er ekki til",
     "No photos in here" : "Engar myndir hér",
-    "Shared by" : "Deilt af",
     "Shared albums" : "Sameiginleg albúm",
     "No tags yet" : "Engin merki ennþá",
     "Photos with tags will show up here" : "Ljósmyndir með merkjum munu birtast hér",
     "Add" : "Bæta við",
     "Delete selection" : "Eyða vali",
     "Tagged photos" : "Merktar ljósmyndir",
-    "Your photos" : "Ljósmyndirnar þínar",
-    "Your videos" : "Myndskeiðin þín",
-    "Your folders" : "Möppurnar þínar",
-    "Locations" : "Staðsetningar",
-    "Settings" : "Stillingar"
+    "Locations" : "Staðsetningar"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

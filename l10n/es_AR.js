@@ -12,6 +12,9 @@ OC.L10N.register(
     "Photos settings" : "Configuración de fotos",
     "Back" : "Atrás",
     "Save" : "Guardar",
+    "Shared by" : "Compartido por",
+    "No recommendations. Start typing." : "No hay sugerencias. Comenzar a escribir",
+    "Group" : "Grupo",
     "Copy public link" : "Copiar link publico",
     "An error occurred" : "Ocurrió un error",
     "Open the full size \"{name}\" image" : "Abrir imagen a tamaño completo \"{nombre}\"",
@@ -25,16 +28,11 @@ OC.L10N.register(
     "Remove from favorites" : "Eliminado de favoritos",
     "This folder does not exist" : "Esta carpeta no existe",
     "No photos in here" : "No hay fotos aquí",
-    "Shared by" : "Compartido por",
     "Shared albums" : "Álbumes compartidos",
     "No tags yet" : "Todavía no hay etiquetas",
     "Photos with tags will show up here" : "Las fotos con etiquetas aparecerán aquí",
     "Add" : "Añadir",
     "Tagged photos" : "Fotos etiquetadas",
-    "Your photos" : "Tus fotos",
-    "Your videos" : "Tus vídeos",
-    "Your folders" : "Tus carpetas",
-    "Locations" : "Ubicaciones",
-    "Settings" : "Ajustes"
+    "Locations" : "Ubicaciones"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

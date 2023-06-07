@@ -50,22 +50,28 @@
 				:to="`/faces/${face.basename}`">
 				<FaceCover :base-name="face.basename" />
 			</router-link>
+			<router-link key="unassigned"
+				:to="`/faces/unassigned`">
+				<UnassignedFacesCover />
+			</router-link>
 		</div>
 	</div>
 </template>
 
 <script>
-import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline'
+import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
 
 import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
-import FaceCover from '../components/FaceCover.vue'
+import FaceCover from '../components/Faces/FaceCover.vue'
 import { mapGetters } from 'vuex'
+import UnassignedFacesCover from '../components/Faces/UnassignedFacesCover.vue'
 
 export default {
 	name: 'Faces',
 	components: {
+		UnassignedFacesCover,
 		FaceCover,
 		NcEmptyContent,
 		NcLoadingIcon,
@@ -79,6 +85,7 @@ export default {
 	computed: {
 		...mapGetters([
 			'facesFiles',
+			'unassignedFilesCount',
 		]),
 
 		/**

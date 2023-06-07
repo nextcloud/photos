@@ -10,11 +10,11 @@ OC.L10N.register(
     "Tags" : "Etikette",
     "Back" : "Terug",
     "Save" : "Bewaar",
+    "Shared by" : "Gedeel deur",
     "An error occurred" : "'n Fout het voorgekom",
     "View" : "Bekyk",
     "Favorite" : "Gunsteling",
     "Remove from favorites" : "Verwyder uit gunstelinge",
-    "Add" : "Voeg by",
-    "Settings" : "Instellings"
+    "Add" : "Voeg by"
 },
 "nplurals=2; plural=(n != 1);");

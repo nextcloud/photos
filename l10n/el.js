@@ -24,10 +24,12 @@ OC.L10N.register(
     "Save." : "Αποθηκεύστε.",
     "Save" : "Αποθήκευση",
     "Create album" : "Δημιουργία άλμπουμ",
+    "Shared by" : "Διαμοιράστηκε από",
     "Create a new album." : "Δημιουργήστε ένα νέο άλμπουμ.",
     "Create new album" : "Δημιουργία νέου άλμπουμ. ",
     "New album" : "Νέο άλμπουμ",
-    "No collaborators available" : "Δεν υπάρχουν διαθέσιμοι συνεργάτες",
+    "No recommendations. Start typing." : "Δεν υπάρχουν συστάσεις. Αρχίστε να πληκτρολογείτε.",
+    "Group" : "Ομάδα",
     "Copy public link" : "Αντιγραφή δημόσιου συνδέσμου",
     "An error occurred" : "Παρουσιάστηκε σφάλμα",
     "Select image {imageName}" : "Επιλογή εικόνας {imageName}",
@@ -57,7 +59,6 @@ OC.L10N.register(
     "This folder does not exist" : "Αυτός ο φάκελος δεν υπάρχει",
     "Loading folders …" : "Φόρτωση φακέλων...",
     "No photos in here" : "Δεν υπάρχουν φωτογραφίες εδώ",
-    "Shared by" : "Διαμοιράστηκε από",
     "Shared albums" : "Κοινόχρηστα άλμπουμ",
     "No photos with this tag yet" : "Δεν υπάρχουν φωτογραφίες με αυτή την ετικέτα ακόμη",
     "No tags yet" : "Χωρίς ετικέτες ακόμη",
@@ -77,10 +78,7 @@ OC.L10N.register(
     "Failed to delete {faceName}." : "Απέτυχε η διαγραφή {faceName}.",
     "Failed to delete {fileId}." : "Απέτυχε η διαγραφή {fileId}.",
     "Failed to delete {fileName}." : "Απέτυχε η διαγραφή {fileName}.",
-    "Your photos" : "Οι φωτογραφίες σας",
-    "Your videos" : "Τα βίντεό σας",
-    "Your folders" : "Οι φάκελοί σας",
     "Locations" : "Τοποθεσίες",
-    "Settings" : "Ρυθμίσεις"
+    "No collaborators available" : "Δεν υπάρχουν διαθέσιμοι συνεργάτες"
 },
 "nplurals=2; plural=(n != 1);");

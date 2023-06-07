@@ -6,9 +6,8 @@ OC.L10N.register(
     "Shared with you" : "Shared with you",
     "Back" : "Kembali",
     "Save" : "Simpan",
-    "Remove from favorites" : "Remove from favorites",
     "Shared by" : "Dikongsi dengan",
-    "Add" : "Tambah",
-    "Settings" : "Tetapan"
+    "Remove from favorites" : "Remove from favorites",
+    "Add" : "Tambah"
 },
 "nplurals=1; plural=0;");
