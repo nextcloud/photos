@@ -22,12 +22,13 @@
     "Create album" : "Sukurti albumą",
     "Back to the new album form." : "Atgal į naujo albumo formą.",
     "Add to Album" : "Pridėti į albumą",
+    "Shared by" : "Bendrina",
     "Create a new album." : "Sukurti naują albumą.",
     "Create new album" : "Sukurti naują albumą",
     "New album" : "Naujas albumas",
-    "_Share with %n user_::_Share with %n users_" : ["Bendrinti su %n naudotoju","Bendrinti su %n naudotojais","Bendrinti su %n naudotojų","Bendrinti su %n naudotoju"],
     "Add people or groups who can edit your album" : "Pridėti žmonių ar grupių, kurie galėtų taisyti jūsų albumą",
     "Search people or groups" : "Ieškoti žmonių ar grupių",
+    "No recommendations. Start typing." : "Rekomendacijų nėra. Pradėkite rašyti.",
     "Copy the public link" : "Kopijuoti viešąją nuorodą",
     "Public link copied!" : "Viešoji nuoroda nukopijuota!",
     "Copy public link" : "Kopijuoti viešąją nuorodą",
@@ -74,7 +75,6 @@
     "Loading folders …" : "Įkeliami aplankai…",
     "No photos in here" : "Čia nuotraukų nėra",
     "Failed to fetch albums list." : "Nepavyko gauti albumų sąrašo.",
-    "Shared by" : "Bendrina",
     "Shared albums" : "Bendrinami albumai",
     "Cover photo for shared album {albumName}." : "Viršelio nuotrauka, skirta bendrinamam albumui {albumName}.",
     "Back to tags overview" : "Atgal į žymių apžvalgą",
@@ -96,6 +96,7 @@
     "Failed to delete {faceName}." : "Nepavyko ištrinti {faceName}.",
     "Failed to delete {fileId}." : "Nepavyko ištrinti {fileId}.",
     "Failed to delete {fileName}." : "Nepavyko ištrinti {fileName}.",
-    "Locations" : "Vietos"
+    "Locations" : "Vietos",
+    "_Share with %n user_::_Share with %n users_" : ["Bendrinti su %n naudotoju","Bendrinti su %n naudotojais","Bendrinti su %n naudotojų","Bendrinti su %n naudotoju"]
 },"pluralForm" :"nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);"
 }

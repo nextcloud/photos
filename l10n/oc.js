@@ -12,6 +12,7 @@ OC.L10N.register(
     "Tags" : "Etiquetas",
     "Back" : "Retorn",
     "Save" : "Enregistrar",
+    "Group" : "Grop",
     "Copy public link" : "Copiar lo ligam public",
     "An error occurred" : "Una error s’es producha",
     "Open the full size \"{name}\" image" : "Dobrir l’imatge {name} en talha originala",
