@@ -25,23 +25,18 @@
 			ref="collectionContent"
 			:collection="album"
 			:collection-file-ids="albumFileIds"
-			:loading="loadingSharedAlbums || loadingFiles"
-			:error="errorFetchingSharedAlbums || errorFetchingFiles">
+			:loading="loadingCollection || loadingCollectionFiles"
+			:error="errorFetchingCollection || errorFetchingCollectionFiles">
 			<!-- Header -->
 			<HeaderNavigation key="navigation"
 				slot="header"
 				slot-scope="{selectedFileIds}"
-				:loading="loadingFiles"
+				:loading="loadingCollectionFiles"
 				:params="{ albumName }"
 				:path="'/' + albumName"
 				:title="albumOriginalName"
 				@refresh="fetchAlbumContent">
-				<!-- <UploadPicker :accept="allowedMimes"
-				:destination="folder.filename"
-				:multiple="true"
-				@uploaded="onUpload" /> -->
-
-				<div v-if="album.location !== ''" slot="subtitle" class="album__location">
+				<div v-if="album !== undefined && album.location !== ''" slot="subtitle" class="album__location">
 					<MapMarker />{{ album.location }} ⸱ {{ t('photos', 'Shared by') }}&nbsp;<NcUserBubble :display-name="album.collaborators[0].label" :user="album.collaborators[0].id" />
 				</div>
 				<template v-if="album !== undefined" slot="right">
@@ -87,12 +82,14 @@
 			</HeaderNavigation>
 
 			<!-- No content -->
-			<NcEmptyContent slot="empty-content"
+			<NcEmptyContent v-if="album !== undefined && album.nbItems === 0 && !(loadingCollectionFiles || loadingCollection)"
+				slot="empty-content"
 				:title="t('photos', 'This album does not have any photos or videos yet!')"
 				class="album__empty">
 				<ImagePlus slot="icon" />
 
 				<NcButton slot="action"
+					class="album__empty__button"
 					type="primary"
 					:aria-label="t('photos', 'Add photos to this album')"
 					@click="showAddPhotosModal = true">
@@ -102,12 +99,12 @@
 			</NcEmptyContent>
 		</CollectionContent>
 
-		<!-- Modals -->
 		<NcModal v-if="showAddPhotosModal"
 			size="large"
 			:title="t('photos', 'Add photos to the album')"
 			@close="showAddPhotosModal = false">
-			<FilesPicker :destination="album.basename"
+			<FilesPicker v-if="album !== undefined"
+				:destination="album.basename"
 				:blacklist-ids="albumFileIds"
 				:loading="loadingAddFilesToAlbum"
 				@files-picked="handleFilesPicked" />
@@ -117,6 +114,11 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+
+import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionSeparator, NcUserBubble, isMobile } from '@nextcloud/vue'
+import { Type } from '@nextcloud/sharing'
+import { translate } from '@nextcloud/l10n'
+
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import Delete from 'vue-material-design-icons/Delete.vue'
@@ -125,22 +127,13 @@ import Close from 'vue-material-design-icons/Close.vue'
 // import Download from 'vue-material-design-icons/Download.vue'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
 
-import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionSeparator, NcUserBubble, isMobile } from '@nextcloud/vue'
-import { getCurrentUser } from '@nextcloud/auth'
-import { Type } from '@nextcloud/sharing'
-
-import FetchSharedAlbumsMixin from '../mixins/FetchSharedAlbumsMixin.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
-import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
+import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
+
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
 import FilesPicker from '../components/FilesPicker.vue'
-import logger from '../services/logger.js'
-import client from '../services/DavClient.js'
-import DavRequest from '../services/DavRequest.js'
-import { genFileInfo } from '../utils/fileUtils.js'
-import { translate } from '@nextcloud/l10n'
 
 export default {
 	name: 'SharedAlbumContent',
@@ -166,9 +159,8 @@ export default {
 	},
 
 	mixins: [
-		FetchSharedAlbumsMixin,
+		FetchCollectionContentMixin,
 		FetchFilesMixin,
-		AbortControllerMixin,
 		isMobile,
 	],
 
@@ -195,17 +187,17 @@ export default {
 		]),
 
 		/**
-		 * @return {object} The album information for the current albumName.
+		 * @return {import('../store/sharedAlbums.js').SharedAlbum|undefined} The album information for the current albumName.
 		 */
 		album() {
-			return this.sharedAlbums[this.albumName] || {}
+			return this.$store.getters.getSharedAlbum(this.albumName)
 		},
 
 		/**
 		 * @return {string[]} The list of files for the current albumName.
 		 */
 		albumFileIds() {
-			return this.sharedAlbumsFiles[this.albumName] || []
+			return this.$store.getters.getSharedAlbumFiles(this.albumName)
 		},
 
 		/**
@@ -214,89 +206,52 @@ export default {
 		albumOriginalName() {
 			return this.albumName.replace(new RegExp(`\\(${this.album.collaborators[0].id}\\)$`), '')
 		},
+
+		/**
+		 * @return {string} The album's filename based on its name. Useful to fetch the location information and content.
+		 */
+		albumFileName() {
+			return this.$store.getters.getSharedAlbumName(this.albumName)
+		},
 	},
 
-	watch: {
-		album() {
-			this.fetchAlbumContent()
-		},
+	async mounted() {
+		this.fetchAlbum()
+		this.fetchAlbumContent()
 	},
 
 	methods: {
 		...mapActions([
-			'appendFiles',
-			'deleteSharedAlbum',
-			'addFilesToSharedAlbum',
-			'removeFilesFromSharedAlbum',
+			'addFilesToCollection',
+			'removeFilesFromCollection',
+			'deleteCollection',
 		]),
 
+		async fetchAlbum() {
+			await this.fetchCollection(
+				this.albumFileName,
+				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />']
+			)
+		},
+
 		async fetchAlbumContent() {
-			if (this.loadingFiles || this.showEditAlbumForm) {
-				return []
-			}
-
-			const fetchSemaphoreSymbol = await this.fetchSemaphore.acquire()
-
-			try {
-				this.errorFetchingFiles = null
-				this.loadingFiles = true
-
-				const response = await client.getDirectoryContents(
-					`/photos/${getCurrentUser()?.uid}/sharedalbums/${this.albumName}`,
-					{
-						data: DavRequest,
-						details: true,
-						signal: this.abortController.signal,
-					}
-				)
-
-				const fetchedFiles = response.data
-					.map(file => genFileInfo(file))
-
-				const fileIds = fetchedFiles
-					.map(file => file.fileid)
-					.map((fileId) => fileId.toString())
-
-				this.appendFiles(fetchedFiles)
-
-				if (fetchedFiles.length > 0) {
-					await this.$store.commit('addFilesToSharedAlbum', { albumName: this.albumName, fileIdsToAdd: fileIds })
-				}
-
-				logger.debug(`[SharedAlbumContent] Fetched ${fileIds.length} new files: `, fileIds)
-			} catch (error) {
-				if (error.response?.status === 404) {
-					this.errorFetchingFiles = 404
-				} else if (error.code === 'ERR_CANCELED') {
-					return
-				} else {
-					this.errorFetchingFiles = error
-				}
-
-				// cancelled request, moving on...
-				logger.error('[SharedAlbumContent] Error fetching album files', { error })
-			} finally {
-				this.loadingFiles = false
-				this.fetchSemaphore.release(fetchSemaphoreSymbol)
-			}
-
-			return []
+			await this.fetchCollectionFiles(this.albumFileName)
 		},
 
 		async handleFilesPicked(fileIds) {
 			this.showAddPhotosModal = false
-			await this.addFilesToSharedAlbum({ albumName: this.albumName, fileIdsToAdd: fileIds })
+			await this.addFilesToCollection({ collectionFileName: this.album.filename, fileIdsToAdd: fileIds })
 			// Re-fetch album content to have the proper filenames.
 			await this.fetchAlbumContent()
 		},
 
 		async handleRemoveFilesFromAlbum(fileIds) {
 			this.$refs.collectionContent.onUncheckFiles(fileIds)
-			await this.removeFilesFromSharedAlbum({ albumName: this.albumName, fileIdsToRemove: fileIds })
+			await this.removeFilesFromCollection({ collectionFileName: this.album.filename, fileIdsToRemove: fileIds })
 		},
 
 		async handleDeleteAlbum() {
-			await this.deleteSharedAlbum({ albumName: this.albumName })
+			await this.deleteCollection({ collectionFileName: this.album.filename })
 			this.$router.push('/sharedalbums')
 		},
 

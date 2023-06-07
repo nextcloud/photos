@@ -21,12 +21,12 @@
  -->
 <template>
 	<CollectionsList :collections="sharedAlbums"
-		:loading="loadingSharedAlbums"
-		:error="errorFetchingSharedAlbums"
+		:loading="loadingCollections"
+		:error="errorFetchingCollections"
 		class="albums-list">
 		<HeaderNavigation key="navigation"
 			slot="header"
-			:loading="loadingSharedAlbums"
+			:loading="loadingCollections"
 			:title="t('photos', 'Shared albums')"
 			:root-title="t('photos', 'Shared albums')"
 			@refresh="fetchSharedAlbums" />
@@ -59,12 +59,13 @@ import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.v
 
 import { generateUrl } from '@nextcloud/router'
 import { NcEmptyContent, NcUserBubble } from '@nextcloud/vue'
+import { translate, translatePlural } from '@nextcloud/l10n'
+import { getCurrentUser } from '@nextcloud/auth'
 
-import FetchSharedAlbumsMixin from '../mixins/FetchSharedAlbumsMixin.js'
 import CollectionsList from '../components/Collection/CollectionsList.vue'
 import CollectionCover from '../components/Collection/CollectionCover.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-import { translate, translatePlural } from '@nextcloud/l10n'
+import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
 
 export default {
 	name: 'SharedAlbums',
@@ -100,10 +101,30 @@ export default {
 	},
 
 	mixins: [
-		FetchSharedAlbumsMixin,
+		FetchCollectionsMixin,
 	],
 
+	computed: {
+		/**
+		 * @return {import('../services/Albums').IndexedAlbums}
+		 */
+		sharedAlbums() {
+			return this.$store.getters.sharedAlbums
+		},
+	},
+
+	async beforeMount() {
+		this.fetchSharedAlbums()
+	},
+
 	methods: {
+		fetchSharedAlbums() {
+			this.fetchCollections(
+				`/photos/${getCurrentUser()?.uid}/sharedalbums`,
+				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />']
+			)
+		},
+
 		t: translate,
 		n: translatePlural,
 	},

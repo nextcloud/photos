@@ -37,11 +37,10 @@
 				:path="'/' + albumName"
 				:title="albumName"
 				@refresh="fetchAlbumContent">
-				<div v-if="album !== null && album.location !== ''" slot="subtitle" class="album__location">
+				<div v-if="album !== undefined && album.location !== ''" slot="subtitle" class="album__location">
 					<MapMarker />{{ album.location }}
 				</div>
-				<template v-if="album !== null"
-					slot="right">
+				<template v-if="album !== undefined" slot="right">
 					<UploadPicker v-if="album.nbItems !== 0"
 						:accept="allowedMimes"
 						:context="uploadContext"
@@ -99,7 +98,7 @@
 			</HeaderNavigation>
 
 			<!-- No content -->
-			<NcEmptyContent v-if="album !== null && album.nbItems === 0 && !(loadingCollectionFiles || loadingCollection)"
+			<NcEmptyContent v-if="album !== undefined && album.nbItems === 0 && !(loadingCollectionFiles || loadingCollection)"
 				slot="empty-content"
 				:title="t('photos', 'This album does not have any photos or videos yet!')"
 				class="album__empty">
@@ -120,17 +119,18 @@
 			size="large"
 			:title="t('photos', 'Add photos to the album')"
 			@close="showAddPhotosModal = false">
-			<FilesPicker :destination="album.basename"
+			<FilesPicker v-if="album !== undefined"
+				:destination="album.basename"
 				:blacklist-ids="albumFileIds"
+				:loading="loadingAddFilesToAlbum"
 				@files-picked="handleFilesPicked" />
 		</NcModal>
 
-		<NcModal v-if="showManageCollaboratorView"
+		<NcModal v-if="showManageCollaboratorView && album !== undefined"
 			:title="t('photos', 'Manage collaborators')"
 			@close="showManageCollaboratorView = false">
 			<CollaboratorsSelectionForm :album-name="album.basename"
-				:collaborators="album.collaborators"
-				:public-link="album.publicLink">
+				:collaborators="album.collaborators">
 				<template slot-scope="{collaborators}">
 					<NcButton :aria-label="t('photos', 'Save collaborators for this album.')"
 						type="primary"
@@ -259,7 +259,7 @@ export default {
 
 	computed: {
 		/**
-		 * @return {import('../store/albums.js').Album|null} The album information for the current albumName.
+		 * @return {import('../store/albums.js').Album|undefined} The album information for the current albumName.
 		 */
 		album() {
 			return this.$store.getters.getAlbum(this.albumName)

@@ -42,7 +42,7 @@ const albumsPrefix = `/photos/${getCurrentUser()?.uid}/albums/`
 
 const getters = {
 	albums: (_, __, ___, rootGetters) => rootGetters.collectionsWithPrefix(albumsPrefix),
-	getAlbum: (_, __, rootState) => albumName => rootState.collections.collections[`${albumsPrefix}${albumName}`] || null,
+	getAlbum: (_, __, rootState) => albumName => rootState.collections.collections[`${albumsPrefix}${albumName}`],
 	getAlbumFiles: (_, __, rootState) => albumName => rootState.collections.collectionsFiles[`${albumsPrefix}${albumName}`] || [],
 	getAlbumName: (_, __, ___) => albumName => `${albumsPrefix}${albumName}`,
 }
