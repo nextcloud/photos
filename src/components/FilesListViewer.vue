@@ -35,20 +35,21 @@
 				:scroll-to-key="scrollToSection"
 				@need-content="needContent">
 				<ul slot-scope="{renderedRows}">
-					<div v-for="row of renderedRows"
-						:key="row.key"
-						class="tiled-row"
-						:class="{'files-list-viewer__section-header': row.items[0].sectionHeader}"
-						:style="{height: `${row.height}px`}">
+					<template v-for="row of renderedRows">
+						<!--
+							We are subtracting 1 from flex-basis to compensate for rounding issues.
+							The flex algo will then compensate with flex-grow.
+						-->
 						<li v-for="item of row.items"
 							:key="item.id"
-							:style="{ width: item.ratio ? `${row.height * item.ratio}px` : '100%', height: `${row.height}px`}">
+							:class="{'files-list-viewer__section-header': item.sectionHeader}"
+							:style="{ 'flex-basis': item.ratio ? `${row.height * item.ratio - 1}px` : '100%', height: `${row.height}px`}">
 							<!-- Placeholder when initial loading -->
 							<div v-if="showPlaceholders" class="files-list-viewer__placeholder" />
 							<!-- Real file. -->
 							<slot v-else :file="item" :distance="row.distance" />
 						</li>
-					</div>
+					</template>
 				</ul>
 				<NcLoadingIcon v-if="loading && !showPlaceholders" slot="loader" class="files-list-viewer__loader" />
 			</VirtualScrolling>
@@ -280,9 +281,14 @@ export default {
 
 	.tiled-container {
 		flex-basis: 0;
+	}
 
-		.tiled-row {
-			display: flex;
+	ul {
+		display: flex;
+		flex-wrap: wrap;
+
+		li {
+			flex-grow: 1;
 		}
 	}
 
