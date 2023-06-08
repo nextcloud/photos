@@ -15,12 +15,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_FaceCoverMixin_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../mixins/FaceCoverMixin.js */ "./src/mixins/FaceCoverMixin.js");
 /* harmony import */ var _mixins_FetchFacesMixin_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../mixins/FetchFacesMixin.js */ "./src/mixins/FetchFacesMixin.js");
 /* harmony import */ var _FaceCover_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FaceCover.vue */ "./src/components/FaceCover.vue");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 //
 //
 //
@@ -68,35 +62,36 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       required: true
     }
   },
-  data: function data() {
+
+  data() {
     return {
       loading: false
     };
   },
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)(['files', 'faces', 'facesFiles'])), {}, {
-    filteredFaces: function filteredFaces() {
-      var _this = this;
 
-      return Object.values(this.faces).filter(function (face) {
-        return face.basename !== _this.firstFace;
-      }).sort(function (a, b) {
+  computed: { ...(0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)(['files', 'faces', 'facesFiles']),
+
+    filteredFaces() {
+      return Object.values(this.faces).filter(face => face.basename !== this.firstFace).sort((a, b) => {
         if (a.props.nbItems && b.props.nbItems) {
           return b.props.nbItems - a.props.nbItems;
         }
 
-        if (!_this.facesFiles[b.basename] || !_this.facesFiles[a.basename]) {
+        if (!this.facesFiles[b.basename] || !this.facesFiles[a.basename]) {
           return 0;
         }
 
-        return _this.facesFiles[b.basename].length - _this.facesFiles[a.basename].length;
+        return this.facesFiles[b.basename].length - this.facesFiles[a.basename].length;
       });
     }
-  }),
+
+  },
   methods: {
-    handleSelect: function handleSelect(faceName) {
+    handleSelect(faceName) {
       this.$emit('select', faceName);
       this.loading = true;
     }
+
   }
 });
 
@@ -132,16 +127,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_FetchFacesMixin_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../mixins/FetchFacesMixin.js */ "./src/mixins/FetchFacesMixin.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.runtime.esm.js");
 /* harmony import */ var _components_FaceMergeForm_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../components/FaceMergeForm.vue */ "./src/components/FaceMergeForm.vue");
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 //
 //
 //
@@ -349,11 +334,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     NcButton: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_9__.NcButton
   },
   directives: {
-    focus: function focus(el) {
-      vue__WEBPACK_IMPORTED_MODULE_17__["default"].nextTick(function () {
-        return el.focus();
-      });
+    focus(el) {
+      vue__WEBPACK_IMPORTED_MODULE_17__["default"].nextTick(() => el.focus());
     }
+
   },
   mixins: [_mixins_FetchFacesMixin_js__WEBPACK_IMPORTED_MODULE_15__["default"], _mixins_FetchFilesMixin_js__WEBPACK_IMPORTED_MODULE_10__["default"], _mixins_FilesSelectionMixin_js__WEBPACK_IMPORTED_MODULE_11__["default"]],
   props: {
@@ -362,7 +346,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       default: '/'
     }
   },
-  data: function data() {
+
+  data() {
     return {
       showMergeModal: false,
       showRenameModal: false,
@@ -370,370 +355,469 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       appContent: document.getElementById('app-content-vue')
     };
   },
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_18__.mapGetters)(['files', 'facesFiles'])), {}, {
+
+  computed: { ...(0,vuex__WEBPACK_IMPORTED_MODULE_18__.mapGetters)(['files', 'facesFiles']),
+
     /**
      * @return {string[]} The face information for the current faceName.
      */
-    face: function face() {
+    face() {
       return this.faces[this.faceName];
     },
 
     /**
      * @return {string[]} The list of files for the current faceName.
      */
-    faceFileIds: function faceFileIds() {
+    faceFileIds() {
       return this.facesFiles[this.faceName] || [];
     },
 
     /** @type {boolean} */
-    shouldFavoriteSelection: function shouldFavoriteSelection() {
-      var _this = this;
-
+    shouldFavoriteSelection() {
       // Favorite all selection if at least one file is not on the favorites.
-      return this.selectedFileIds.some(function (fileId) {
-        return _this.$store.state.files.files[fileId].favorite === 0;
-      });
+      return this.selectedFileIds.some(fileId => this.$store.state.files.files[fileId].favorite === 0);
     }
-  }),
+
+  },
   watch: {
-    face: function face() {
+    face() {
       if (this.face) {
         this.fetchFaceContent(this.faceName);
       }
     }
-  },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_18__.mapActions)(['appendFiles', 'deleteFace', 'renameFace', 'downloadFiles', 'toggleFavoriteForFiles', 'removeFilesFromFace', 'moveFilesToFace'])), {}, {
-    openViewer: function openViewer(fileId) {
-      var _this2 = this;
 
-      var file = this.files[fileId];
+  },
+  methods: { ...(0,vuex__WEBPACK_IMPORTED_MODULE_18__.mapActions)(['appendFiles', 'deleteFace', 'renameFace', 'downloadFiles', 'toggleFavoriteForFiles', 'removeFilesFromFace', 'moveFilesToFace']),
+
+    openViewer(fileId) {
+      const file = this.files[fileId];
       OCA.Viewer.open({
         // remove /username/files/ from the start
         path: '/' + file.filename.split('/').slice(3).join('/'),
-        list: this.faceFileIds.map(function (fileId) {
-          return _objectSpread(_objectSpread({}, _this2.files[fileId]), {}, {
-            basename: _this2.files[fileId].basename.split('-').slice(1).join('-')
-          });
-        }).filter(function (file) {
-          return !file.sectionHeader;
-        }),
-        loadMore: file.loadMore ? /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-          return regeneratorRuntime.wrap(function _callee$(_context) {
-            while (1) {
-              switch (_context.prev = _context.next) {
-                case 0:
-                  _context.next = 2;
-                  return file.loadMore(true);
-
-                case 2:
-                  return _context.abrupt("return", _context.sent);
-
-                case 3:
-                case "end":
-                  return _context.stop();
-              }
-            }
-          }, _callee);
-        })) : function () {
-          return [];
-        },
+        list: this.faceFileIds.map(fileId => ({ ...this.files[fileId],
+          basename: this.files[fileId].basename.split('-').slice(1).join('-')
+        })).filter(file => !file.sectionHeader),
+        loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
         canLoop: file.canLoop
       });
     },
-    handleRemoveFilesFromFace: function handleRemoveFilesFromFace(fileIds) {
-      var _this3 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.prev = 0;
-                _this3.loadingCount++;
-                _context2.next = 4;
-                return _this3.removeFilesFromFace({
-                  faceName: _this3.faceName,
-                  fileIdsToRemove: fileIds
-                });
-
-              case 4:
-                _this3.resetSelection();
-
-                _context2.next = 10;
-                break;
-
-              case 7:
-                _context2.prev = 7;
-                _context2.t0 = _context2["catch"](0);
-                _services_logger_js__WEBPACK_IMPORTED_MODULE_14__["default"].error(_context2.t0);
-
-              case 10:
-                _context2.prev = 10;
-                _this3.loadingCount--;
-                return _context2.finish(10);
-
-              case 13:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, null, [[0, 7, 10, 13]]);
-      }))();
+    async handleRemoveFilesFromFace(fileIds) {
+      try {
+        this.loadingCount++;
+        await this.removeFilesFromFace({
+          faceName: this.faceName,
+          fileIdsToRemove: fileIds
+        });
+        this.resetSelection();
+      } catch (error) {
+        _services_logger_js__WEBPACK_IMPORTED_MODULE_14__["default"].error(error);
+      } finally {
+        this.loadingCount--;
+      }
     },
-    handleDeleteFace: function handleDeleteFace() {
-      var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
-        return regeneratorRuntime.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.prev = 0;
-                _this4.loadingCount++;
-                _context3.next = 4;
-                return _this4.deleteFace({
-                  faceName: _this4.faceName
-                });
-
-              case 4:
-                _this4.$router.push('/faces');
-
-                _context3.next = 10;
-                break;
-
-              case 7:
-                _context3.prev = 7;
-                _context3.t0 = _context3["catch"](0);
-                _services_logger_js__WEBPACK_IMPORTED_MODULE_14__["default"].error(_context3.t0);
-
-              case 10:
-                _context3.prev = 10;
-                _this4.loadingCount--;
-                return _context3.finish(10);
-
-              case 13:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3, null, [[0, 7, 10, 13]]);
-      }))();
+    async handleDeleteFace() {
+      try {
+        this.loadingCount++;
+        await this.deleteFace({
+          faceName: this.faceName
+        });
+        this.$router.push('/faces');
+      } catch (error) {
+        _services_logger_js__WEBPACK_IMPORTED_MODULE_14__["default"].error(error);
+      } finally {
+        this.loadingCount--;
+      }
     },
-    handleRenameFace: function handleRenameFace(faceName) {
-      var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
-        var oldName;
-        return regeneratorRuntime.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.prev = 0;
-                _this5.loadingCount++;
-                _this5.showRenameModal = false;
-                oldName = _this5.faceName;
-                _context4.next = 6;
-                return _this5.renameFace({
-                  oldName: oldName,
-                  faceName: faceName
-                });
-
-              case 6:
-                _this5.$router.push({
-                  name: 'facecontent',
-                  params: {
-                    faceName: faceName
-                  }
-                });
-
-                _context4.next = 12;
-                break;
-
-              case 9:
-                _context4.prev = 9;
-                _context4.t0 = _context4["catch"](0);
-                _services_logger_js__WEBPACK_IMPORTED_MODULE_14__["default"].error(_context4.t0);
-
-              case 12:
-                _context4.prev = 12;
-                _this5.loadingCount--;
-                return _context4.finish(12);
-
-              case 15:
-              case "end":
-                return _context4.stop();
-            }
+    async handleRenameFace(faceName) {
+      try {
+        this.loadingCount++;
+        this.showRenameModal = false;
+        const oldName = this.faceName;
+        await this.renameFace({
+          oldName,
+          faceName
+        });
+        this.$router.push({
+          name: 'facecontent',
+          params: {
+            faceName
           }
-        }, _callee4, null, [[0, 9, 12, 15]]);
-      }))();
+        });
+      } catch (error) {
+        _services_logger_js__WEBPACK_IMPORTED_MODULE_14__["default"].error(error);
+      } finally {
+        this.loadingCount--;
+      }
     },
-    handleMerge: function handleMerge(faceName) {
-      var _this6 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
-        return regeneratorRuntime.wrap(function _callee5$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                _context5.prev = 0;
-                _this6.loadingCount++;
-                _context5.next = 4;
-                return _this6.moveFilesToFace({
-                  oldFace: _this6.faceName,
-                  faceName: faceName,
-                  fileIdsToMove: _this6.facesFiles[_this6.faceName]
-                });
-
-              case 4:
-                _context5.next = 6;
-                return _this6.deleteFace({
-                  faceName: _this6.faceName
-                });
-
-              case 6:
-                _this6.showMergeModal = false;
-
-                _this6.$router.push({
-                  name: 'facecontent',
-                  params: {
-                    faceName: faceName
-                  }
-                });
-
-                _context5.next = 13;
-                break;
-
-              case 10:
-                _context5.prev = 10;
-                _context5.t0 = _context5["catch"](0);
-                _services_logger_js__WEBPACK_IMPORTED_MODULE_14__["default"].error(_context5.t0);
-
-              case 13:
-                _context5.prev = 13;
-                _this6.loadingCount--;
-                return _context5.finish(13);
-
-              case 16:
-              case "end":
-                return _context5.stop();
-            }
+    async handleMerge(faceName) {
+      try {
+        this.loadingCount++;
+        await this.moveFilesToFace({
+          oldFace: this.faceName,
+          faceName,
+          fileIdsToMove: this.facesFiles[this.faceName]
+        });
+        await this.deleteFace({
+          faceName: this.faceName
+        });
+        this.showMergeModal = false;
+        this.$router.push({
+          name: 'facecontent',
+          params: {
+            faceName
           }
-        }, _callee5, null, [[0, 10, 13, 16]]);
-      }))();
+        });
+      } catch (error) {
+        _services_logger_js__WEBPACK_IMPORTED_MODULE_14__["default"].error(error);
+      } finally {
+        this.loadingCount--;
+      }
     },
-    favoriteSelection: function favoriteSelection() {
-      var _this7 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6() {
-        return regeneratorRuntime.wrap(function _callee6$(_context6) {
-          while (1) {
-            switch (_context6.prev = _context6.next) {
-              case 0:
-                _context6.prev = 0;
-                _this7.loadingCount++;
-                _context6.next = 4;
-                return _this7.toggleFavoriteForFiles({
-                  fileIds: _this7.selectedFileIds,
-                  favoriteState: true
-                });
-
-              case 4:
-                _context6.next = 9;
-                break;
-
-              case 6:
-                _context6.prev = 6;
-                _context6.t0 = _context6["catch"](0);
-                _services_logger_js__WEBPACK_IMPORTED_MODULE_14__["default"].error(_context6.t0);
-
-              case 9:
-                _context6.prev = 9;
-                _this7.loadingCount--;
-                return _context6.finish(9);
-
-              case 12:
-              case "end":
-                return _context6.stop();
-            }
-          }
-        }, _callee6, null, [[0, 6, 9, 12]]);
-      }))();
+    async favoriteSelection() {
+      try {
+        this.loadingCount++;
+        await this.toggleFavoriteForFiles({
+          fileIds: this.selectedFileIds,
+          favoriteState: true
+        });
+      } catch (error) {
+        _services_logger_js__WEBPACK_IMPORTED_MODULE_14__["default"].error(error);
+      } finally {
+        this.loadingCount--;
+      }
     },
-    unFavoriteSelection: function unFavoriteSelection() {
-      var _this8 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7() {
-        return regeneratorRuntime.wrap(function _callee7$(_context7) {
-          while (1) {
-            switch (_context7.prev = _context7.next) {
-              case 0:
-                _context7.prev = 0;
-                _this8.loadingCount++;
-                _context7.next = 4;
-                return _this8.toggleFavoriteForFiles({
-                  fileIds: _this8.selectedFileIds,
-                  favoriteState: false
-                });
-
-              case 4:
-                _context7.next = 9;
-                break;
-
-              case 6:
-                _context7.prev = 6;
-                _context7.t0 = _context7["catch"](0);
-                _services_logger_js__WEBPACK_IMPORTED_MODULE_14__["default"].error(_context7.t0);
-
-              case 9:
-                _context7.prev = 9;
-                _this8.loadingCount--;
-                return _context7.finish(9);
-
-              case 12:
-              case "end":
-                return _context7.stop();
-            }
-          }
-        }, _callee7, null, [[0, 6, 9, 12]]);
-      }))();
+    async unFavoriteSelection() {
+      try {
+        this.loadingCount++;
+        await this.toggleFavoriteForFiles({
+          fileIds: this.selectedFileIds,
+          favoriteState: false
+        });
+      } catch (error) {
+        _services_logger_js__WEBPACK_IMPORTED_MODULE_14__["default"].error(error);
+      } finally {
+        this.loadingCount--;
+      }
     },
-    downloadSelection: function downloadSelection() {
-      var _this9 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
-        return regeneratorRuntime.wrap(function _callee8$(_context8) {
-          while (1) {
-            switch (_context8.prev = _context8.next) {
-              case 0:
-                _context8.prev = 0;
-                _this9.loadingCount++;
-                _context8.next = 4;
-                return _this9.downloadFiles(_this9.selectedFileIds);
-
-              case 4:
-                _context8.next = 9;
-                break;
-
-              case 6:
-                _context8.prev = 6;
-                _context8.t0 = _context8["catch"](0);
-                _services_logger_js__WEBPACK_IMPORTED_MODULE_14__["default"].error(_context8.t0);
-
-              case 9:
-                _context8.prev = 9;
-                _this9.loadingCount--;
-                return _context8.finish(9);
-
-              case 12:
-              case "end":
-                return _context8.stop();
-            }
-          }
-        }, _callee8, null, [[0, 6, 9, 12]]);
-      }))();
+    async downloadSelection() {
+      try {
+        this.loadingCount++;
+        await this.downloadFiles(this.selectedFileIds);
+      } catch (error) {
+        _services_logger_js__WEBPACK_IMPORTED_MODULE_14__["default"].error(error);
+      } finally {
+        this.loadingCount--;
+      }
     }
-  })
+
+  }
 });
+
+/***/ }),
+
+/***/ "./src/mixins/FetchFilesMixin.js":
+/*!***************************************!*\
+  !*** ./src/mixins/FetchFilesMixin.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _services_logger_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/logger.js */ "./src/services/logger.js");
+/* harmony import */ var _services_PhotoSearch_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/PhotoSearch.js */ "./src/services/PhotoSearch.js");
+/* harmony import */ var _utils_semaphoreWithPriority_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/semaphoreWithPriority.js */ "./src/utils/semaphoreWithPriority.js");
+/* harmony import */ var _AbortControllerMixin_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./AbortControllerMixin.js */ "./src/mixins/AbortControllerMixin.js");
+/* provided dependency */ var console = __webpack_require__(/*! ./node_modules/console-browserify/index.js */ "./node_modules/console-browserify/index.js");
+/**
+ * @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
+ *
+ * @author Louis Chemineau <louis@chmn.me>
+ *
+ * @license AGPL-3.0-or-later
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: 'FetchFilesMixin',
+  mixins: [_AbortControllerMixin_js__WEBPACK_IMPORTED_MODULE_3__["default"]],
+
+  data() {
+    return {
+      errorFetchingFiles: null,
+      loadingFiles: false,
+      doneFetchingFiles: false,
+      semaphore: new _utils_semaphoreWithPriority_js__WEBPACK_IMPORTED_MODULE_2__["default"](30),
+      fetchSemaphore: new _utils_semaphoreWithPriority_js__WEBPACK_IMPORTED_MODULE_2__["default"](1),
+      semaphoreSymbol: null,
+      fetchedFileIds: []
+    };
+  },
+
+  watch: {
+    $route() {
+      this.resetFetchFilesState();
+    }
+
+  },
+  methods: {
+    /**
+     * @param {string} path - Path to pass to getPhotos.
+     * @param {object} options - Options to pass to getPhotos.
+     * @param {string[]} [blacklist=[]] - Array of ids to filter out.
+     * @param {boolean} [force=false] - Force fetching even if doneFetchingFiles is true
+     * @return {Promise<string[]>} - The next batch of data depending on global offset.
+     */
+    async fetchFiles() {
+      let path = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+      let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      let blacklist = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
+      let force = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+
+      if (this.doneFetchingFiles && !force || this.loadingFiles) {
+        return [];
+      }
+
+      const semaphoreSymbol = await this.semaphore.acquire(() => 0, 'fetchFiles');
+      const fetchSemaphoreSymbol = await this.fetchSemaphore.acquire();
+
+      try {
+        this.errorFetchingFiles = null;
+        this.loadingFiles = true;
+        this.semaphoreSymbol = semaphoreSymbol;
+        const numberOfImagesPerBatch = 200; // Load next batch of images
+
+        const fetchedFiles = await (0,_services_PhotoSearch_js__WEBPACK_IMPORTED_MODULE_1__["default"])(path, {
+          firstResult: this.fetchedFileIds.length,
+          nbResults: numberOfImagesPerBatch,
+          ...options,
+          signal: this.abortController.signal
+        }); // If we get less files than requested that means we got to the end
+
+        if (fetchedFiles.length !== numberOfImagesPerBatch) {
+          this.doneFetchingFiles = true;
+        }
+
+        const fileIds = fetchedFiles.map(file => file.fileid).filter(fileId => !this.fetchedFileIds.includes(fileId)); // Filter to prevent duplicate fileIds.
+
+        this.fetchedFileIds.push(...fileIds.map(fileId => fileId.toString()).filter(fileId => !blacklist.includes(fileId)));
+        this.$store.dispatch('appendFiles', fetchedFiles);
+        _services_logger_js__WEBPACK_IMPORTED_MODULE_0__["default"].debug(`[FetchFilesMixin] Fetched ${fileIds.length} new files: `, fileIds);
+        return fileIds;
+      } catch (error) {
+        if (error.response?.status === 404) {
+          this.errorFetchingFiles = 404;
+        } else if (error.code === 'ERR_CANCELED') {
+          return [];
+        } else {
+          this.errorFetchingFiles = error;
+        } // cancelled request, moving on...
+
+
+        _services_logger_js__WEBPACK_IMPORTED_MODULE_0__["default"].error('Error fetching files', {
+          error
+        });
+        console.error(error);
+      } finally {
+        this.loadingFiles = false;
+        this.semaphore.release(semaphoreSymbol);
+        this.fetchSemaphore.release(fetchSemaphoreSymbol);
+      }
+
+      return [];
+    },
+
+    resetFetchFilesState() {
+      this.doneFetchingFiles = false;
+      this.errorFetchingFiles = null;
+      this.loadingFiles = false;
+      this.fetchedFileIds = [];
+    }
+
+  }
+});
+
+/***/ }),
+
+/***/ "./src/services/PhotoSearch.js":
+/*!*************************************!*\
+  !*** ./src/services/PhotoSearch.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* export default binding */ __WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/fileUtils.js */ "./src/utils/fileUtils.js");
+/* harmony import */ var _nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nextcloud/auth */ "./node_modules/@nextcloud/auth/dist/index.esm.js");
+/* harmony import */ var _AllowedMimes_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AllowedMimes.js */ "./src/services/AllowedMimes.js");
+/* harmony import */ var _DavClient_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./DavClient.js */ "./src/services/DavClient.js");
+/* harmony import */ var _DavRequest_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./DavRequest.js */ "./src/services/DavRequest.js");
+/* harmony import */ var _nextcloud_moment__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @nextcloud/moment */ "./node_modules/@nextcloud/moment/dist/index.js");
+/* harmony import */ var _nextcloud_moment__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_moment__WEBPACK_IMPORTED_MODULE_5__);
+/**
+ * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
+ *
+ * @author John Molakvoæ <skjnldsv@protonmail.com>
+ *
+ * @license AGPL-3.0-or-later
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+
+
+
+
+
+/**
+ * List files from a folder and filter out unwanted mimes
+ *
+ * @param {object} path the lookup path
+ * @param {object} [options] used for the cancellable requests
+ * @param {number} [options.firstResult=0] Index of the first result that we want (starts at 0)
+ * @param {number} [options.nbResults=200] The number of file to fetch
+ * @param {string[]} [options.mimesType=allMimes] Mime type of the files
+ * @param {boolean} [options.full=false] get full data of the files
+ * @param {boolean} [options.onThisDay=false] get only items from this day of year
+ * @param {boolean} [options.onlyFavorites=false] get only favorite items
+ * @return {Promise<object[]>} the file list
+ */
+
+/* harmony default export */ async function __WEBPACK_DEFAULT_EXPORT__() {
+  let path = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  // default function options
+  options = {
+    firstResult: 0,
+    nbResults: 200,
+    mimesType: _AllowedMimes_js__WEBPACK_IMPORTED_MODULE_2__.allMimes,
+    onThisDay: false,
+    onlyFavorites: false,
+    ...options
+  };
+  const prefixPath = `/files/${(0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__.getCurrentUser)().uid}`; // generating the search or condition
+  // based on the allowed mimetypes
+
+  const orMime = options.mimesType.reduce((str, mime) => `${str}
+		<d:eq>
+			<d:prop>
+				<d:getcontenttype/>
+			</d:prop>
+			<d:literal>${mime}</d:literal>
+		</d:eq>
+	`, '');
+  const eqFavorites = options.onlyFavorites ? `<d:eq>
+				<d:prop>
+					<oc:favorite/>
+				</d:prop>
+				<d:literal>1</d:literal>
+			</d:eq>` : '';
+  const onThisDay = options.onThisDay ? `<d:or>${Array(20).fill(1).map((_, years) => {
+    const start = _nextcloud_moment__WEBPACK_IMPORTED_MODULE_5___default()(Date.now()).startOf('day').subtract(3, 'd').subtract(years + 1, 'y');
+    const end = _nextcloud_moment__WEBPACK_IMPORTED_MODULE_5___default()(Date.now()).endOf('day').add(3, 'd').subtract(years + 1, 'y');
+    return `<d:and>
+				<d:gt>
+					<d:prop>
+						<d:getlastmodified />
+					</d:prop>
+					<d:literal>${start.format((_nextcloud_moment__WEBPACK_IMPORTED_MODULE_5___default().defaultFormatUtc))}</d:literal>
+				</d:gt>
+				<d:lt>
+					<d:prop>
+						<d:getlastmodified />
+					</d:prop>
+					<d:literal>${end.format((_nextcloud_moment__WEBPACK_IMPORTED_MODULE_5___default().defaultFormatUtc))}</d:literal>
+				</d:lt>
+			</d:and>`;
+  }).join('\n')}</d:or>` : '';
+  options = Object.assign({
+    method: 'SEARCH',
+    headers: {
+      'content-Type': 'text/xml'
+    },
+    data: `<?xml version="1.0" encoding="UTF-8"?>
+			<d:searchrequest xmlns:d="DAV:"
+				xmlns:oc="http://owncloud.org/ns"
+				xmlns:nc="http://nextcloud.org/ns"
+				xmlns:ns="https://github.com/icewind1991/SearchDAV/ns"
+				xmlns:ocs="http://open-collaboration-services.org/ns">
+				<d:basicsearch>
+					<d:select>
+						<d:prop>
+							${_DavRequest_js__WEBPACK_IMPORTED_MODULE_4__.props}
+						</d:prop>
+					</d:select>
+					<d:from>
+						<d:scope>
+							<d:href>${prefixPath}/${path}</d:href>
+							<d:depth>infinity</d:depth>
+						</d:scope>
+					</d:from>
+					<d:where>
+						<d:and>
+							<d:or>
+								${orMime}
+							</d:or>
+							${eqFavorites}
+							${onThisDay}
+						</d:and>
+					</d:where>
+					<d:orderby>
+						<d:order>
+							<d:prop><d:getlastmodified/></d:prop>
+							<d:descending/>
+						</d:order>
+					</d:orderby>
+					<d:limit>
+						<d:nresults>${options.nbResults}</d:nresults>
+						<ns:firstresult>${options.firstResult}</ns:firstresult>
+					</d:limit>
+				</d:basicsearch>
+			</d:searchrequest>`,
+    deep: true,
+    details: true
+  }, options);
+  const response = await _DavClient_js__WEBPACK_IMPORTED_MODULE_3__["default"].getDirectoryContents('', options);
+  return response.data.map(data => (0,_utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_0__.genFileInfo)(data));
+}
 
 /***/ }),
 
@@ -782,7 +866,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".face[data-v-03238d12] {\n  display: flex;\n  flex-direction: column;\n}\n.face__empty[data-v-03238d12] {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.face__empty__button[data-v-03238d12] {\n  margin-top: 32px;\n}\n.face__header[data-v-03238d12] {\n  display: flex;\n  min-height: 60px;\n  align-items: center;\n  justify-content: space-between;\n  position: -webkit-sticky;\n  position: sticky;\n  z-index: 3;\n  background: var(--color-main-background);\n  padding: 0 64px;\n}\n@media only screen and (max-width: 1020px) {\n.face__header[data-v-03238d12] {\n    padding: 0;\n    padding-left: 64px;\n}\n}\n.face__header__left[data-v-03238d12] {\n  height: 100%;\n  display: flex;\n  align-items: center;\n}\n.face__header__title[data-v-03238d12] {\n  margin-left: 10px;\n}\n.face__header__title h2[data-v-03238d12] {\n  margin-bottom: 0;\n}\n.face__header__loader[data-v-03238d12] {\n  margin-left: 32px;\n}\n.face__header__actions[data-v-03238d12] {\n  display: flex;\n  align-items: center;\n}\n.face__header__actions button[data-v-03238d12] {\n  margin-left: 16px;\n}\n.face__photos[data-v-03238d12] {\n  margin-top: 16px;\n  height: 100%;\n  min-height: 0;\n  padding: 0 64px;\n}\n@media only screen and (max-width: 1020px) {\n.face__photos[data-v-03238d12] {\n    padding: 0;\n}\n}\n.empty-content-with-illustration[data-v-03238d12]  .empty-content__icon {\n  width: 200px;\n  height: 200px;\n}\n.empty-content-with-illustration[data-v-03238d12]  .empty-content__icon svg {\n  width: 200px;\n  height: 200px;\n}\n.rename-form[data-v-03238d12] {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  height: 70px;\n  padding: 16px;\n}\n.rename-form input[data-v-03238d12] {\n  width: 80%;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".face[data-v-03238d12] {\n  display: flex;\n  flex-direction: column;\n}\n.face__empty[data-v-03238d12] {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.face__empty__button[data-v-03238d12] {\n  margin-top: 32px;\n}\n.face__header[data-v-03238d12] {\n  display: flex;\n  min-height: 60px;\n  align-items: center;\n  justify-content: space-between;\n  position: sticky;\n  z-index: 3;\n  background: var(--color-main-background);\n  padding: 0 64px;\n}\n@media only screen and (max-width: 1020px) {\n.face__header[data-v-03238d12] {\n    padding: 0;\n    padding-left: 64px;\n}\n}\n.face__header__left[data-v-03238d12] {\n  height: 100%;\n  display: flex;\n  align-items: center;\n}\n.face__header__title[data-v-03238d12] {\n  margin-left: 10px;\n}\n.face__header__title h2[data-v-03238d12] {\n  margin-bottom: 0;\n}\n.face__header__loader[data-v-03238d12] {\n  margin-left: 32px;\n}\n.face__header__actions[data-v-03238d12] {\n  display: flex;\n  align-items: center;\n}\n.face__header__actions button[data-v-03238d12] {\n  margin-left: 16px;\n}\n.face__photos[data-v-03238d12] {\n  margin-top: 16px;\n  height: 100%;\n  min-height: 0;\n  padding: 0 64px;\n}\n@media only screen and (max-width: 1020px) {\n.face__photos[data-v-03238d12] {\n    padding: 0;\n}\n}\n.empty-content-with-illustration[data-v-03238d12]  .empty-content__icon {\n  width: 200px;\n  height: 200px;\n}\n.empty-content-with-illustration[data-v-03238d12]  .empty-content__icon svg {\n  width: 200px;\n  height: 200px;\n}\n.rename-form[data-v-03238d12] {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  height: 70px;\n  padding: 16px;\n}\n.rename-form input[data-v-03238d12] {\n  width: 80%;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1666,4 +1750,4 @@ render._withStripped = true
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_views_FaceContent_vue.js.map?v=7f4869cc789f9f95d6a1
+//# sourceMappingURL=photos-src_views_FaceContent_vue.js.map?v=27b000556139a42fa242

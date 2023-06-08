@@ -17,12 +17,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_FetchFacesMixin_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../mixins/FetchFacesMixin.js */ "./src/mixins/FetchFacesMixin.js");
 /* harmony import */ var _components_FaceCover_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/FaceCover.vue */ "./src/components/FaceCover.vue");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 //
 //
 //
@@ -93,29 +87,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     AccountBoxMultipleOutline: vue_material_design_icons_AccountBoxMultipleOutline__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   mixins: [_mixins_FetchFacesMixin_js__WEBPACK_IMPORTED_MODULE_2__["default"]],
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)(['facesFiles'])), {}, {
+  computed: { ...(0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)(['facesFiles']),
+
     /**
      * @return {boolean} Whether the list of face is empty or not.
      */
-    noFaces: function noFaces() {
+    noFaces() {
       return Object.keys(this.faces).length === 0;
     },
-    orderedFaces: function orderedFaces() {
-      var _this = this;
 
-      return Object.values(this.faces).sort(function (a, b) {
+    orderedFaces() {
+      return Object.values(this.faces).sort((a, b) => {
         if (a.props.nbItems && b.props.nbItems) {
           return b.props.nbItems - a.props.nbItems;
         }
 
-        if (!_this.facesFiles[b.basename] || !_this.facesFiles[a.basename]) {
+        if (!this.facesFiles[b.basename] || !this.facesFiles[a.basename]) {
           return 0;
         }
 
-        return _this.facesFiles[b.basename].length - _this.facesFiles[a.basename].length;
+        return this.facesFiles[b.basename].length - this.facesFiles[a.basename].length;
       });
     }
-  })
+
+  }
 });
 
 /***/ }),
@@ -590,4 +585,4 @@ render._withStripped = true
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_views_Faces_vue.js.map?v=e2dbc6d37041e8700162
+//# sourceMappingURL=photos-src_views_Faces_vue.js.map?v=73ae9b7be63b564ba1f5

@@ -16,12 +16,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _nextcloud_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @nextcloud/router */ "./node_modules/@nextcloud/router/dist/index.js");
 /* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @nextcloud/vue */ "./node_modules/@nextcloud/vue/dist/ncvuecomponents.js");
 /* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_vue__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _mixins_UserConfig_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../mixins/UserConfig.js */ "./src/mixins/UserConfig.js");
-/* harmony import */ var _utils_semaphoreWithPriority_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/semaphoreWithPriority.js */ "./src/utils/semaphoreWithPriority.js");
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
+/* harmony import */ var _utils_semaphoreWithPriority_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/semaphoreWithPriority.js */ "./src/utils/semaphoreWithPriority.js");
 //
 //
 //
@@ -91,7 +86,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-
 
 
 
@@ -104,7 +98,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     Star: vue_material_design_icons_Star__WEBPACK_IMPORTED_MODULE_0__["default"],
     VideoIcon: vue_material_design_icons_Video_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
-  mixins: [_mixins_UserConfig_js__WEBPACK_IMPORTED_MODULE_4__["default"]],
   inheritAttrs: false,
   props: {
     file: {
@@ -124,11 +117,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       required: true
     },
     semaphore: {
-      type: _utils_semaphoreWithPriority_js__WEBPACK_IMPORTED_MODULE_5__["default"],
+      type: _utils_semaphoreWithPriority_js__WEBPACK_IMPORTED_MODULE_4__["default"],
       required: true
     }
   },
-  data: function data() {
+
+  data() {
     return {
       loadedNear: false,
       loadedVisible: false,
@@ -139,85 +133,65 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       isDestroyed: false
     };
   },
+
   computed: {
     /** @return {string} */
-    ariaDescription: function ariaDescription() {
-      return "image-description-".concat(this.file.fileid);
+    ariaDescription() {
+      return `image-description-${this.file.fileid}`;
     },
 
     /** @return {string} */
-    ariaLabel: function ariaLabel() {
+    ariaLabel() {
       return t('photos', 'Open the full size "{name}" image', {
         name: this.file.basename
       });
     },
 
     /** @return {boolean} */
-    isImage: function isImage() {
+    isImage() {
       return this.file.mime.startsWith('image');
     },
 
     /** @return {string} */
-    decodedEtag: function decodedEtag() {
+    decodedEtag() {
       return this.file.etag.replace('&quot;', '').replace('&quot;', '');
     },
 
     /** @return {string} */
-    srcVisible: function srcVisible() {
+    srcVisible() {
       return this.getItemURL(512);
     },
 
     /** @return {string} */
-    srcNear: function srcNear() {
+    srcNear() {
       return this.getItemURL(64);
     }
+
   },
-  mounted: function mounted() {
-    var _this = this;
 
-    return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-      return regeneratorRuntime.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _context.next = 2;
-              return _this.semaphore.acquire(function () {
-                switch (_this.visibility) {
-                  case 'visible':
-                    return 1;
+  async mounted() {
+    this.semaphoreSymbol = await this.semaphore.acquire(() => {
+      switch (this.visibility) {
+        case 'visible':
+          return 1;
 
-                  case 'near':
-                    return 2;
+        case 'near':
+          return 2;
 
-                  default:
-                    return 3;
-                }
-              }, _this.file.fileid);
+        default:
+          return 3;
+      }
+    }, this.file.fileid);
 
-            case 2:
-              _this.semaphoreSymbol = _context.sent;
+    if (this.visibility === 'none' || this.isDestroyed) {
+      this.releaseSemaphore();
+      return;
+    }
 
-              if (!(_this.visibility === 'none' || _this.isDestroyed)) {
-                _context.next = 6;
-                break;
-              }
-
-              _this.releaseSemaphore();
-
-              return _context.abrupt("return");
-
-            case 6:
-              _this.canLoad = true;
-
-            case 7:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }))();
+    this.canLoad = true;
   },
-  beforeDestroy: function beforeDestroy() {
+
+  beforeDestroy() {
     this.isDestroyed = true;
     this.releaseSemaphore(); // cancel any pending load
 
@@ -229,46 +203,52 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.$refs.srcVisible.src = '';
     }
   },
+
   methods: {
-    emitClick: function emitClick() {
+    emitClick() {
       this.$emit('click', this.file.fileid);
     },
 
     /** When the 'near' image is fully loaded by browser we release semaphore */
-    onLoadNear: function onLoadNear() {
+    onLoadNear() {
       this.loadedNear = true;
       this.releaseSemaphore();
     },
 
     /** When the 'visible' image is fully loaded by browser we release semaphore */
-    onLoadVisible: function onLoadVisible() {
+    onLoadVisible() {
       this.loadedVisible = true;
       this.releaseSemaphore();
     },
-    onErrorNear: function onErrorNear() {
+
+    onErrorNear() {
       this.errorNear = true;
       this.releaseSemaphore();
     },
-    onErrorVisible: function onErrorVisible() {
+
+    onErrorVisible() {
       this.errorVisible = true;
       this.releaseSemaphore();
     },
-    onToggle: function onToggle(value) {
+
+    onToggle(value) {
       this.$emit('select-toggled', {
         id: this.file.fileid,
-        value: value
+        value
       });
     },
-    getItemURL: function getItemURL(size) {
-      var token = this.$route.params.token;
+
+    getItemURL(size) {
+      const token = this.$route.params.token;
 
       if (token) {
-        return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_2__.generateUrl)("/apps/photos/api/v1/publicPreview/".concat(this.file.fileid, "?etag=").concat(this.decodedEtag, "&x=").concat(size, "&y=").concat(size, "&token=").concat(token));
+        return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_2__.generateUrl)(`/apps/photos/api/v1/publicPreview/${this.file.fileid}?etag=${this.decodedEtag}&x=${size}&y=${size}&token=${token}`);
       } else {
-        return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_2__.generateUrl)("/apps/photos/api/v1/preview/".concat(this.file.fileid, "?etag=").concat(this.decodedEtag, "&x=").concat(size, "&y=").concat(size));
+        return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_2__.generateUrl)(`/apps/photos/api/v1/preview/${this.file.fileid}?etag=${this.decodedEtag}&x=${size}&y=${size}`);
       }
     },
-    releaseSemaphore: function releaseSemaphore() {
+
+    releaseSemaphore() {
       if (this.semaphoreSymbol === null) {
         return;
       }
@@ -276,6 +256,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.semaphore.release(this.semaphoreSymbol);
       this.semaphoreSymbol = null;
     }
+
   }
 });
 
@@ -300,29 +281,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_fileFetcher_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/fileFetcher.js */ "./src/services/fileFetcher.js");
 /* harmony import */ var _components_VirtualScrolling_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/VirtualScrolling.vue */ "./src/components/VirtualScrolling.vue");
 /* harmony import */ var _assets_Illustrations_empty_svg__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../assets/Illustrations/empty.svg */ "./src/assets/Illustrations/empty.svg");
-/* harmony import */ var _nextcloud_initial_state__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @nextcloud/initial-state */ "./node_modules/@nextcloud/initial-state/dist/index.esm.js");
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
+/* harmony import */ var _mixins_UserConfig_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../mixins/UserConfig.js */ "./src/mixins/UserConfig.js");
 //
 //
 //
@@ -398,6 +357,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     TiledLayout: _components_TiledLayout_TiledLayout_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
     VirtualScrolling: _components_VirtualScrolling_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
   },
+  mixins: [_mixins_UserConfig_js__WEBPACK_IMPORTED_MODULE_7__["default"]],
   props: {
     // Array of file ids that should be rendered.
     fileIds: {
@@ -450,74 +410,64 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       default: false
     }
   },
-  data: function data() {
-    var _this = this;
 
+  data() {
     return {
       EmptyBox: _assets_Illustrations_empty_svg__WEBPACK_IMPORTED_MODULE_6__,
-      croppedLayout: (0,_nextcloud_initial_state__WEBPACK_IMPORTED_MODULE_7__.loadState)('photos', 'croppedLayout', 'false') === 'true',
-      placeholderFiles: Array(20).fill(0).map(function (_, index) {
-        var height = 200;
-        var width = _this.croppedLayout ? height : height * (1 + Math.random() * 2);
+      placeholderFiles: Array(20).fill(0).map((_, index) => {
+        const height = 200;
+        const width = this.croppedLayout ? height : height * (1 + Math.random() * 2);
         return {
           id: index,
-          width: width,
-          height: height,
+          width,
+          height,
           ratio: width / height
         };
       })
     };
   },
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapGetters)(['files'])), {}, {
+
+  computed: { ...(0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapGetters)(['files']),
+
     /**
      * @return {object[]} The list of items to pass to TiledLayout.
      */
-    fileIdsToItems: function fileIdsToItems() {
-      var _this2 = this;
-
+    fileIdsToItems() {
       if (this.fileIds === undefined) {
         return [];
       }
 
-      return this.fileIds.filter(function (fileId) {
-        return _this2.files[fileId];
-      }).map(this.mapFileToItem);
+      return this.fileIds.filter(fileId => this.files[fileId]).map(this.mapFileToItem);
     },
 
     /**
      * @return {object[]} The list of items separated by sections to pass to TiledLayout.
      */
-    sectionsToItems: function sectionsToItems() {
-      var _this3 = this;
-
+    sectionsToItems() {
       if (this.sections === undefined) {
         return [];
       }
 
-      return this.sections.flatMap(function (sectionId) {
+      return this.sections.flatMap(sectionId => {
         return [{
           id: sectionId,
           sectionHeader: true,
-          height: _this3.sectionHeaderHeight
-        }].concat(_toConsumableArray(_this3.fileIdsBySection[sectionId].filter(function (fileId) {
-          return _this3.files[fileId];
-        }).map(_this3.mapFileToItem)));
+          height: this.sectionHeaderHeight
+        }, ...this.fileIdsBySection[sectionId].filter(fileId => this.files[fileId]).map(this.mapFileToItem)];
       });
     },
 
     /**
      * @return {boolean} The list of items to pass to TiledLayout.
      */
-    showPlaceholders: function showPlaceholders() {
-      var _this$fileIds, _this$sections;
-
-      return this.loading && (((_this$fileIds = this.fileIds) === null || _this$fileIds === void 0 ? void 0 : _this$fileIds.length) === 0 || ((_this$sections = this.sections) === null || _this$sections === void 0 ? void 0 : _this$sections.length) === 0);
+    showPlaceholders() {
+      return this.loading && (this.fileIds?.length === 0 || this.sections?.length === 0);
     },
 
     /**
      * @return {object[]} The list of items to pass to TiledLayout.
      */
-    items: function items() {
+    items() {
       if (this.fileIds !== undefined) {
         if (this.showPlaceholders) {
           return this.placeholderFiles;
@@ -531,7 +481,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           return [{
             height: 75,
             sectionHeader: true
-          }].concat(_toConsumableArray(this.placeholderFiles));
+          }, ...this.placeholderFiles];
         }
 
         return this.sectionsToItems;
@@ -539,25 +489,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return [];
     },
-    showLoader: function showLoader() {
-      var _this$fileIds2, _this$sections2;
 
-      return this.loading && (((_this$fileIds2 = this.fileIds) === null || _this$fileIds2 === void 0 ? void 0 : _this$fileIds2.length) !== 0 || ((_this$sections2 = this.sections) === null || _this$sections2 === void 0 ? void 0 : _this$sections2.length) !== 0);
+    showLoader() {
+      return this.loading && (this.fileIds?.length !== 0 || this.sections?.length !== 0);
     }
-  }),
-  mounted: function mounted() {
+
+  },
+
+  mounted() {
     (0,_nextcloud_event_bus__WEBPACK_IMPORTED_MODULE_2__.subscribe)('files:file:updated', this.handleFileUpdated);
   },
-  destroyed: function destroyed() {
+
+  destroyed() {
     (0,_nextcloud_event_bus__WEBPACK_IMPORTED_MODULE_2__.unsubscribe)('files:file:updated', this.handleFileUpdated);
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapActions)(['appendFiles'])), {}, {
+
+  methods: { ...(0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapActions)(['appendFiles']),
+
     // Ask the parent for more content.
-    needContent: function needContent() {
+    needContent() {
       this.$emit('need-content');
     },
-    mapFileToItem: function mapFileToItem(fileId) {
-      var file = this.files[fileId];
+
+    mapFileToItem(fileId) {
+      const file = this.files[fileId];
       return {
         id: file.fileid,
         width: file.fileMetadataSizeParsed.width,
@@ -570,33 +525,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
      * @param {object} data
      * @param {string} data.fileid - The file id of the updated file.
      */
-    handleFileUpdated: function handleFileUpdated(_ref) {
-      var _this4 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        var fileid, fetchedFile;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                fileid = _ref.fileid;
-                _context.next = 3;
-                return (0,_services_fileFetcher_js__WEBPACK_IMPORTED_MODULE_4__.fetchFile)(_this4.files[fileid].filename);
-
-              case 3:
-                fetchedFile = _context.sent;
-
-                _this4.appendFiles([fetchedFile]);
-
-              case 5:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+    async handleFileUpdated(_ref) {
+      let {
+        fileid
+      } = _ref;
+      const fetchedFile = await (0,_services_fileFetcher_js__WEBPACK_IMPORTED_MODULE_4__.fetchFile)(this.files[fileid].filename);
+      this.appendFiles([fetchedFile]);
     }
-  })
+
+  }
 });
 
 /***/ }),
@@ -614,12 +551,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_logger_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../services/logger.js */ "./src/services/logger.js");
 /* harmony import */ var _services_TiledLayout_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services/TiledLayout.js */ "./src/services/TiledLayout.js");
 /* harmony import */ var _TiledRows_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TiledRows.vue */ "./src/components/TiledLayout/TiledRows.vue");
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 //
 //
 //
@@ -671,7 +602,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       default: 200
     }
   },
-  data: function data() {
+
+  data() {
     return {
       containerWidth: 0,
 
@@ -679,42 +611,35 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       resizeObserver: null
     };
   },
+
   computed: {
     /** @return {import('../services/TiledLayout.js').TiledRow[]} */
-    rows: function rows() {
+    rows() {
       _services_logger_js__WEBPACK_IMPORTED_MODULE_0__["default"].debug('[TiledLayout] Computing rows', {
         items: this.items
       });
       return (0,_services_TiledLayout_js__WEBPACK_IMPORTED_MODULE_1__.splitItemsInRows)(this.items, this.containerWidth, this.baseHeight);
     }
+
   },
-  mounted: function mounted() {
-    var _this = this;
 
-    this.resizeObserver = new ResizeObserver(function (entries) {
-      var _iterator = _createForOfIteratorHelper(entries),
-          _step;
+  mounted() {
+    this.resizeObserver = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        const cr = entry.contentRect;
 
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var entry = _step.value;
-          var cr = entry.contentRect;
-
-          if (entry.target.classList.contains('tiled-container')) {
-            _this.containerWidth = cr.width;
-          }
+        if (entry.target.classList.contains('tiled-container')) {
+          this.containerWidth = cr.width;
         }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
       }
     });
     this.resizeObserver.observe(this.$refs.tiledLayoutContainer);
   },
-  beforeDestroy: function beforeDestroy() {
+
+  beforeDestroy() {
     this.resizeObserver.disconnect();
   }
+
 });
 
 /***/ }),
@@ -732,26 +657,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var debounce__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! debounce */ "./node_modules/debounce/index.js");
 /* harmony import */ var debounce__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(debounce__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _services_logger_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/logger.js */ "./src/services/logger.js");
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 //
 //
 //
@@ -841,7 +746,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       default: ''
     }
   },
-  data: function data() {
+
+  data() {
     return {
       scrollPosition: 0,
       containerHeight: 0,
@@ -851,25 +757,26 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       resizeObserver: null
     };
   },
+
   computed: {
     /**
      * @return {VisibleRow[]}
      */
-    visibleRows: function visibleRows() {
+    visibleRows() {
       _services_logger_js__WEBPACK_IMPORTED_MODULE_1__["default"].debug('[VirtualScrolling] Computing visible rows', this.rows); // Optimisation: get those computed properties once to not go through vue's internal every time we need them.
 
-      var scrollPosition = this.scrollPosition;
-      var containerHeight = this.containerHeight; // Optimisation: different windows to hint the items how they should render themselves.
+      const scrollPosition = this.scrollPosition;
+      const containerHeight = this.containerHeight; // Optimisation: different windows to hint the items how they should render themselves.
       // This will be forwarded with the visibility props.
 
-      var shouldRenderedWindow = containerHeight * this.renderWindowRatio;
-      var willBeVisibleWindow = containerHeight * this.willBeVisibleWindowRatio;
-      var visibleWindow = containerHeight * this.visibleWindowRatio;
-      var currentRowTopDistanceFromTop = 0;
-      var currentRowBottomDistanceFromTop = 0; // Compute whether a row should be included in the DOM (shouldRender)
+      const shouldRenderedWindow = containerHeight * this.renderWindowRatio;
+      const willBeVisibleWindow = containerHeight * this.willBeVisibleWindowRatio;
+      const visibleWindow = containerHeight * this.visibleWindowRatio;
+      let currentRowTopDistanceFromTop = 0;
+      let currentRowBottomDistanceFromTop = 0; // Compute whether a row should be included in the DOM (shouldRender)
       // And how visible the row is.
 
-      return this.rows.reduce(function (visibleRows, row) {
+      return this.rows.reduce((visibleRows, row) => {
         currentRowTopDistanceFromTop = currentRowBottomDistanceFromTop;
         currentRowBottomDistanceFromTop += row.height;
 
@@ -877,7 +784,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           return visibleRows;
         }
 
-        var visibility = 'none';
+        let visibility = 'none';
 
         if (scrollPosition - willBeVisibleWindow < currentRowTopDistanceFromTop && currentRowTopDistanceFromTop < scrollPosition + containerHeight + willBeVisibleWindow) {
           visibility = 'near';
@@ -891,9 +798,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           }
         }
 
-        return [].concat(_toConsumableArray(visibleRows), [_objectSpread(_objectSpread({}, row), {}, {
-          visibility: visibility
-        })]);
+        return [...visibleRows, { ...row,
+          visibility
+        }];
       }, []);
     },
 
@@ -902,33 +809,21 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
      *
      * @return {number}
      */
-    rowsHeight: function rowsHeight() {
-      var loaderHeight = 200;
-      return this.rows.map(function (row) {
-        return row.height;
-      }).reduce(function (totalHeight, rowHeight) {
-        return totalHeight + rowHeight;
-      }, 0) + loaderHeight;
+    rowsHeight() {
+      const loaderHeight = 200;
+      return this.rows.map(row => row.height).reduce((totalHeight, rowHeight) => totalHeight + rowHeight, 0) + loaderHeight;
     },
 
     /**
      * @return {number}
      */
-    paddingTop: function paddingTop() {
-      var _this = this;
-
+    paddingTop() {
       if (this.visibleRows.length === 0) {
         return 0;
       }
 
-      var firstVisibleRowIndex = this.rows.findIndex(function (row) {
-        return row.items === _this.visibleRows[0].items;
-      });
-      return this.rows.map(function (row) {
-        return row.height;
-      }).slice(0, firstVisibleRowIndex).reduce(function (totalHeight, rowHeight) {
-        return totalHeight + rowHeight;
-      }, 0);
+      const firstVisibleRowIndex = this.rows.findIndex(row => row.items === this.visibleRows[0].items);
+      return this.rows.map(row => row.height).slice(0, firstVisibleRowIndex).reduce((totalHeight, rowHeight) => totalHeight + rowHeight, 0);
     },
 
     /**
@@ -936,10 +831,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
      *
      * @return {object}
      */
-    rowsContainerStyle: function rowsContainerStyle() {
+    rowsContainerStyle() {
       return {
-        height: "".concat(this.rowsHeight, "px"),
-        paddingTop: "".concat(this.paddingTop, "px")
+        height: `${this.rowsHeight}px`,
+        paddingTop: `${this.paddingTop}px`
       };
     },
 
@@ -949,15 +844,15 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
      *
      * @return {boolean}
      */
-    isNearBottom: function isNearBottom() {
-      var buffer = this.containerHeight * this.bottomBufferRatio;
+    isNearBottom() {
+      const buffer = this.containerHeight * this.bottomBufferRatio;
       return this.scrollPosition + this.containerHeight >= this.rowsHeight - buffer;
     },
 
     /**
      * @return {HTMLElement}
      */
-    container: function container() {
+    container() {
       _services_logger_js__WEBPACK_IMPORTED_MODULE_1__["default"].debug('[VirtualScrolling] Computing container');
 
       if (this.containerElement !== null) {
@@ -968,71 +863,53 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         return this.$refs.container;
       }
     }
+
   },
   watch: {
-    isNearBottom: function isNearBottom(value) {
+    isNearBottom(value) {
       if (value) {
         this.$emit('need-content');
       }
     },
-    rows: function rows() {
+
+    rows() {
       // Re-emit need-content when rows is updated and isNearBottom is still true.
       // If the height of added rows is under `bottomBufferRatio`, `isNearBottom` will still be true so we need more content.
       if (this.isNearBottom) {
         this.$emit('need-content');
       }
     },
-    scrollToKey: function scrollToKey(key) {
-      var currentRowTopDistanceFromTop = 0;
 
-      var _iterator = _createForOfIteratorHelper(this.rows),
-          _step;
+    scrollToKey(key) {
+      let currentRowTopDistanceFromTop = 0;
 
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var row = _step.value;
-
-          if (row.key === key) {
-            this.$refs.container.scrollTo({
-              top: currentRowTopDistanceFromTop,
-              behavior: 'smooth'
-            });
-            return;
-          }
-
-          currentRowTopDistanceFromTop += row.height;
+      for (const row of this.rows) {
+        if (row.key === key) {
+          this.$refs.container.scrollTo({
+            top: currentRowTopDistanceFromTop,
+            behavior: 'smooth'
+          });
+          return;
         }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
+
+        currentRowTopDistanceFromTop += row.height;
       }
     }
+
   },
-  mounted: function mounted() {
-    var _this2 = this;
 
-    this.resizeObserver = new ResizeObserver(function (entries) {
-      var _iterator2 = _createForOfIteratorHelper(entries),
-          _step2;
+  mounted() {
+    this.resizeObserver = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        const cr = entry.contentRect;
 
-      try {
-        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-          var entry = _step2.value;
-          var cr = entry.contentRect;
-
-          if (entry.target === _this2.container) {
-            _this2.containerHeight = cr.height;
-          }
-
-          if (entry.target.classList.contains('vs-rows-container')) {
-            _this2.rowsContainerHeight = cr.height;
-          }
+        if (entry.target === this.container) {
+          this.containerHeight = cr.height;
         }
-      } catch (err) {
-        _iterator2.e(err);
-      } finally {
-        _iterator2.f();
+
+        if (entry.target.classList.contains('vs-rows-container')) {
+          this.rowsContainerHeight = cr.height;
+        }
       }
     });
 
@@ -1046,7 +923,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     this.resizeObserver.observe(this.$refs.rowsContainer);
     this.container.addEventListener('scroll', this.updateScrollPosition);
   },
-  beforeDestroy: function beforeDestroy() {
+
+  beforeDestroy() {
     if (this.useWindow) {
       window.removeEventListener('resize', this.updateContainerSize);
     }
@@ -1054,6 +932,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     this.resizeObserver.disconnect();
     this.container.removeEventListener('scroll', this.updateScrollPosition);
   },
+
   methods: {
     updateScrollPosition: (0,debounce__WEBPACK_IMPORTED_MODULE_0__.debounce)(function () {
       if (this.useWindow) {
@@ -1062,9 +941,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         this.scrollPosition = this.container.scrollTop;
       }
     }, 200),
-    updateContainerSize: function updateContainerSize() {
+
+    updateContainerSize() {
       this.containerHeight = window.innerHeight;
     }
+
   }
 });
 
@@ -1103,46 +984,45 @@ __webpack_require__.r(__webpack_exports__);
  */
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'FilesSelectionMixin',
-  data: function data() {
+
+  data() {
     return {
       /** @type {Object<string, boolean>} */
       selection: {}
     };
   },
+
   methods: {
-    onFileSelectToggle: function onFileSelectToggle(_ref) {
-      var id = _ref.id,
-          value = _ref.value;
+    onFileSelectToggle(_ref) {
+      let {
+        id,
+        value
+      } = _ref;
       this.$set(this.selection, id, value);
     },
 
     /**
      * @param {string[]} filesIds - The ids of the files to uncheck.
      */
-    onUncheckFiles: function onUncheckFiles(filesIds) {
-      var _this = this;
-
-      filesIds.forEach(function (
+    onUncheckFiles(filesIds) {
+      filesIds.forEach((
       /** @type {string} */
-      filesId) {
-        return _this.$set(_this.selection, filesId, false);
-      });
+      filesId) => this.$set(this.selection, filesId, false));
     },
-    resetSelection: function resetSelection() {
+
+    resetSelection() {
       this.selection = {};
     }
+
   },
   computed: {
     /**
      * @return {string[]}
      */
-    selectedFileIds: function selectedFileIds() {
-      var _this2 = this;
-
-      return Object.keys(this.selection).filter(function (fileId) {
-        return _this2.selection[fileId];
-      });
+    selectedFileIds() {
+      return Object.keys(this.selection).filter(fileId => this.selection[fileId]);
     }
+
   }
 });
 
@@ -1187,29 +1067,35 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var eventName = 'photos:user-config-changed';
+const eventName = 'photos:user-config-changed';
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  data: function data() {
-    var croppedLayoutLocalStorage = localStorage.getItem('photos:croppedLayout');
+  data() {
+    const croppedLayoutLocalStorage = localStorage.getItem('photos:croppedLayout');
     return {
       croppedLayout: croppedLayoutLocalStorage !== null ? croppedLayoutLocalStorage === 'true' : (0,_nextcloud_initial_state__WEBPACK_IMPORTED_MODULE_2__.loadState)('photos', 'croppedLayout', 'false') === 'true',
       photosLocation: (0,_nextcloud_initial_state__WEBPACK_IMPORTED_MODULE_2__.loadState)('photos', 'photosLocation', '')
     };
   },
-  created: function created() {
+
+  created() {
     (0,_nextcloud_event_bus__WEBPACK_IMPORTED_MODULE_0__.subscribe)(eventName, this.updateLocalSetting);
   },
-  beforeDestroy: function beforeDestroy() {
+
+  beforeDestroy() {
     (0,_nextcloud_event_bus__WEBPACK_IMPORTED_MODULE_0__.unsubscribe)(eventName, this.updateLocalSetting);
   },
+
   methods: {
-    updateLocalSetting: function updateLocalSetting(_ref) {
-      var setting = _ref.setting,
-          value = _ref.value;
+    updateLocalSetting(_ref) {
+      let {
+        setting,
+        value
+      } = _ref;
       this[setting] = value;
     },
-    updateSetting: function updateSetting(setting) {
-      var value = this[setting]; // Long time save setting
+
+    updateSetting(setting) {
+      const value = this[setting]; // Long time save setting
 
       _nextcloud_axios__WEBPACK_IMPORTED_MODULE_3__["default"].put((0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_1__.generateUrl)('apps/photos/api/v1/config/' + setting), {
         value: value.toString()
@@ -1218,10 +1104,11 @@ var eventName = 'photos:user-config-changed';
       localStorage.setItem('photos:' + setting, value); // Visible elements update setting
 
       (0,_nextcloud_event_bus__WEBPACK_IMPORTED_MODULE_0__.emit)(eventName, {
-        setting: setting,
-        value: value
+        setting,
+        value
       });
     }
+
   }
 });
 
@@ -1285,32 +1172,30 @@ __webpack_require__.r(__webpack_exports__);
  * @return {TiledRow[]}
  */
 function splitItemsInRows(items, containerWidth) {
-  var baseHeight = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 200;
+  let baseHeight = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 200;
 
   if (containerWidth === 0) {
     return [];
   }
 
-  var rows = [];
-  var rowNumber = 0;
-  var currentItem = 0;
+  const rows = [];
+  let rowNumber = 0;
+  let currentItem = 0;
 
   while (currentItem < items.length) {
     /** @type { TiledItem[] } */
-    var rowItems = []; // Fill the row with new items as long as the width is less than containerWidth.
+    const rowItems = []; // Fill the row with new items as long as the width is less than containerWidth.
 
     do {
       // @ts-ignore - We know that items.shift() is not undefined as we always check that items.length > 0.
       rowItems.push(items[currentItem++]);
-    } while (currentItem < items.length && !items[currentItem - 1].sectionHeader && !items[currentItem].sectionHeader && computeRowWidth([].concat(rowItems, [items[currentItem]]), baseHeight) <= containerWidth);
+    } while (currentItem < items.length && !items[currentItem - 1].sectionHeader && !items[currentItem].sectionHeader && computeRowWidth([...rowItems, items[currentItem]], baseHeight) <= containerWidth);
 
     rows[rowNumber] = {
       items: rowItems,
       height: computeRowHeight(rowItems, containerWidth, items.length === currentItem || items[currentItem].sectionHeader === true, baseHeight),
       // Key to help vue to keep track of the row in VirtualScrolling.
-      key: rowItems.map(function (item) {
-        return item.id;
-      }).join('-')
+      key: rowItems.map(item => item.id).join('-')
     };
     rowNumber += 1;
   }
@@ -1325,11 +1210,7 @@ function splitItemsInRows(items, containerWidth) {
  */
 
 function computeRowWidth(items, baseHeight) {
-  return items.map(function (item) {
-    return baseHeight * item.ratio;
-  }).reduce(function (sum, itemWidth) {
-    return sum + itemWidth;
-  });
+  return items.map(item => baseHeight * item.ratio).reduce((sum, itemWidth) => sum + itemWidth);
 }
 /**
  * Compute the row height based on its items and on the container's width.
@@ -1363,12 +1244,8 @@ function computeRowHeight(items, containerWidth, isLastRow, baseHeight) {
     return items[0].height;
   }
 
-  var sumOfItemsRatio = items.map(function (item) {
-    return item.ratio;
-  }).reduce(function (sum, itemRatio) {
-    return sum + itemRatio;
-  });
-  var rowHeight = containerWidth / sumOfItemsRatio; // Exception 2: there is only one item which is larger than containerWidth.
+  const sumOfItemsRatio = items.map(item => item.ratio).reduce((sum, itemRatio) => sum + itemRatio);
+  let rowHeight = containerWidth / sumOfItemsRatio; // Exception 2: there is only one item which is larger than containerWidth.
   // Limit its height so that itemWidth === containerWidth
 
   if (items.length === 1 && items[0].width > containerWidth) {
@@ -1398,16 +1275,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/fileUtils.js */ "./src/utils/fileUtils.js");
 /* harmony import */ var _DavClient_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DavClient.js */ "./src/services/DavClient.js");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 /**
  * @copyright Copyright (c) 2023 Louis Chemineau <louis@chmn.me>
  *
@@ -1437,8 +1304,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
  */
 
 function getCollectionFilesDavRequest() {
-  var extraProps = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  return "<?xml version=\"1.0\"?>\n\t\t\t<d:propfind xmlns:d=\"DAV:\"\n\t\t\t\txmlns:oc=\"http://owncloud.org/ns\"\n\t\t\t\txmlns:nc=\"http://nextcloud.org/ns\"\n\t\t\t\txmlns:ocs=\"http://open-collaboration-services.org/ns\">\n\t\t\t\t<d:prop>\n\t\t\t\t\t<d:getcontentlength />\n\t\t\t\t\t<d:getcontenttype />\n\t\t\t\t\t<d:getetag />\n\t\t\t\t\t<d:getlastmodified />\n\t\t\t\t\t<d:resourcetype />\n\t\t\t\t\t<nc:file-metadata-size />\n\t\t\t\t\t<nc:has-preview />\n\t\t\t\t\t<oc:favorite />\n\t\t\t\t\t<oc:fileid />\n\t\t\t\t\t<oc:permissions />\n\t\t\t\t\t".concat(extraProps.join(''), "\n\t\t\t\t</d:prop>\n\t\t\t</d:propfind>");
+  let extraProps = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  return `<?xml version="1.0"?>
+			<d:propfind xmlns:d="DAV:"
+				xmlns:oc="http://owncloud.org/ns"
+				xmlns:nc="http://nextcloud.org/ns"
+				xmlns:ocs="http://open-collaboration-services.org/ns">
+				<d:prop>
+					<d:getcontentlength />
+					<d:getcontenttype />
+					<d:getetag />
+					<d:getlastmodified />
+					<d:resourcetype />
+					<nc:file-metadata-size />
+					<nc:has-preview />
+					<oc:favorite />
+					<oc:fileid />
+					<oc:permissions />
+					${extraProps.join('')}
+				</d:prop>
+			</d:propfind>`;
 }
 /**
  * @param {string} fileName - The full file's name
@@ -1447,53 +1332,23 @@ function getCollectionFilesDavRequest() {
  */
 
 
-function fetchFile(_x) {
-  return _fetchFile.apply(this, arguments);
-}
+async function fetchFile(fileName) {
+  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-function _fetchFile() {
-  _fetchFile = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(fileName) {
-    var options,
-        response,
-        _args = arguments;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            options = _args.length > 1 && _args[1] !== undefined ? _args[1] : {};
-            _context.prev = 1;
-            _context.next = 4;
-            return _DavClient_js__WEBPACK_IMPORTED_MODULE_1__["default"].stat(fileName, _objectSpread({
-              data: getCollectionFilesDavRequest(),
-              details: true
-            }, options));
+  try {
+    const response = await _DavClient_js__WEBPACK_IMPORTED_MODULE_1__["default"].stat(fileName, {
+      data: getCollectionFilesDavRequest(),
+      details: true,
+      ...options
+    });
+    return (0,_utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_0__.genFileInfo)(response.data);
+  } catch (error) {
+    if (error.code === 'ERR_CANCELED') {
+      return null;
+    }
 
-          case 4:
-            response = _context.sent;
-            return _context.abrupt("return", (0,_utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_0__.genFileInfo)(response.data));
-
-          case 8:
-            _context.prev = 8;
-            _context.t0 = _context["catch"](1);
-
-            if (!(_context.t0.code === 'ERR_CANCELED')) {
-              _context.next = 12;
-              break;
-            }
-
-            return _context.abrupt("return", null);
-
-          case 12:
-            throw _context.t0;
-
-          case 13:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee, null, [[1, 8]]);
-  }));
-  return _fetchFile.apply(this, arguments);
+    throw error;
+  }
 }
 
 /***/ }),
@@ -1517,7 +1372,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".file-container[data-v-ab80f8a8] {\n  background: var(--color-primary-light);\n  position: relative;\n  height: 100%;\n  width: 100%;\n  border: 2px solid var(--color-main-background);\n  box-sizing: border-box;\n}\n.file-container.selected[data-v-ab80f8a8]::after, .file-container[data-v-ab80f8a8]:focus-within::after {\n  position: absolute;\n  top: 0;\n  left: 0;\n  z-index: 2;\n  width: 100%;\n  height: 100%;\n  content: \"\";\n  outline: var(--color-primary) solid 4px;\n  outline-offset: -4px;\n  pointer-events: none;\n}\n.file-container .file[data-v-ab80f8a8] {\n  width: 100%;\n  height: 100%;\n  box-sizing: border-box;\n  outline: none;\n  display: flex;\n}\n.file-container .file__images[data-v-ab80f8a8] {\n  display: contents;\n}\n.file-container .file__images .video-icon[data-v-ab80f8a8] {\n  position: absolute;\n  top: 0px;\n  right: 0px;\n  width: 100%;\n  height: 100%;\n  z-index: 1;\n  opacity: 0.8;\n}\n.file-container .file__images .video-icon[data-v-ab80f8a8]  .material-design-icon__svg {\n  fill: var(--color-main-background);\n}\n.file-container .file__images img[data-v-ab80f8a8] {\n  width: 100%;\n  height: 100%;\n  object-fit: cover;\n  position: absolute;\n  color: transparent;\n}\n.file-container .file__images .loading-overlay[data-v-ab80f8a8] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  display: flex;\n  align-content: center;\n  align-items: center;\n  justify-content: center;\n}\n.file-container .file__images .loading-overlay svg[data-v-ab80f8a8] {\n  width: 70%;\n  height: 70%;\n}\n.file-container .file__hidden-description[data-v-ab80f8a8] {\n  position: absolute;\n  left: -10000px;\n  top: -10000px;\n  width: 1px;\n  height: 1px;\n  overflow: hidden;\n}\n.file-container .file__hidden-description.show[data-v-ab80f8a8] {\n  position: initial;\n  width: -webkit-fit-content;\n  width: -moz-fit-content;\n  width: fit-content;\n  height: -webkit-fit-content;\n  height: -moz-fit-content;\n  height: fit-content;\n}\n.file-container:hover .selection-checkbox[data-v-ab80f8a8], .file-container.selected .selection-checkbox[data-v-ab80f8a8], .file-container:focus-within .selection-checkbox[data-v-ab80f8a8] {\n  display: flex;\n}\n.file-container:hover .favorite-state[data-v-ab80f8a8], .file-container.selected .favorite-state[data-v-ab80f8a8], .file-container:focus-within .favorite-state[data-v-ab80f8a8] {\n  display: none;\n}\n.file-container .selection-checkbox[data-v-ab80f8a8] {\n  display: none;\n  position: absolute;\n  top: 8px;\n  right: min(22px, 50% - 7px);\n  z-index: 1;\n  width: -webkit-fit-content;\n  width: -moz-fit-content;\n  width: fit-content;\n}\n.file-container .selection-checkbox[data-v-ab80f8a8]  .checkbox-radio-switch__label {\n  padding: 10px;\n  box-sizing: border-box;\n}\n.file-container .selection-checkbox[data-v-ab80f8a8]  .checkbox-radio-switch__label::after {\n  content: \"\";\n  background: var(--color-primary-light);\n  width: 16px;\n  height: 16px;\n  position: absolute;\n  left: 14px;\n  z-index: -1;\n}\n.file-container .selection-checkbox[data-v-ab80f8a8]  .checkbox-radio-switch__label .checkbox-radio-switch__icon {\n  margin: 0;\n}\n.file-container .selection-checkbox .input-label[data-v-ab80f8a8] {\n  position: fixed;\n  z-index: -1;\n  top: -5000px;\n  left: -5000px;\n}\n.file-container .favorite-state[data-v-ab80f8a8] {\n  position: absolute;\n  top: 2px;\n  right: min(2px, 50% - 7px);\n}\n.file-container .favorite-state[data-v-ab80f8a8]  .material-design-icon__svg {\n  fill: #FC0;\n}\n.file-container .favorite-state[data-v-ab80f8a8]  .material-design-icon__svg path {\n  stroke: var(--color-primary-light);\n  stroke-width: 1px;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".file-container[data-v-ab80f8a8] {\n  background: var(--color-primary-light);\n  position: relative;\n  height: 100%;\n  width: 100%;\n  border: 2px solid var(--color-main-background);\n  box-sizing: border-box;\n}\n.file-container.selected[data-v-ab80f8a8]::after, .file-container[data-v-ab80f8a8]:focus-within::after {\n  position: absolute;\n  top: 0;\n  left: 0;\n  z-index: 2;\n  width: 100%;\n  height: 100%;\n  content: \"\";\n  outline: var(--color-primary) solid 4px;\n  outline-offset: -4px;\n  pointer-events: none;\n}\n.file-container .file[data-v-ab80f8a8] {\n  width: 100%;\n  height: 100%;\n  box-sizing: border-box;\n  outline: none;\n  display: flex;\n}\n.file-container .file__images[data-v-ab80f8a8] {\n  display: contents;\n}\n.file-container .file__images .video-icon[data-v-ab80f8a8] {\n  position: absolute;\n  top: 0px;\n  right: 0px;\n  width: 100%;\n  height: 100%;\n  z-index: 1;\n  opacity: 0.8;\n}\n.file-container .file__images .video-icon[data-v-ab80f8a8]  .material-design-icon__svg {\n  fill: var(--color-main-background);\n}\n.file-container .file__images img[data-v-ab80f8a8] {\n  width: 100%;\n  height: 100%;\n  object-fit: cover;\n  position: absolute;\n  color: transparent;\n}\n.file-container .file__images .loading-overlay[data-v-ab80f8a8] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  display: flex;\n  align-content: center;\n  align-items: center;\n  justify-content: center;\n}\n.file-container .file__images .loading-overlay svg[data-v-ab80f8a8] {\n  width: 70%;\n  height: 70%;\n}\n.file-container .file__hidden-description[data-v-ab80f8a8] {\n  position: absolute;\n  left: -10000px;\n  top: -10000px;\n  width: 1px;\n  height: 1px;\n  overflow: hidden;\n}\n.file-container .file__hidden-description.show[data-v-ab80f8a8] {\n  position: initial;\n  width: fit-content;\n  height: fit-content;\n}\n.file-container:hover .selection-checkbox[data-v-ab80f8a8], .file-container.selected .selection-checkbox[data-v-ab80f8a8], .file-container:focus-within .selection-checkbox[data-v-ab80f8a8] {\n  display: flex;\n}\n.file-container:hover .favorite-state[data-v-ab80f8a8], .file-container.selected .favorite-state[data-v-ab80f8a8], .file-container:focus-within .favorite-state[data-v-ab80f8a8] {\n  display: none;\n}\n.file-container .selection-checkbox[data-v-ab80f8a8] {\n  display: none;\n  position: absolute;\n  top: 8px;\n  right: min(22px, 50% - 7px);\n  z-index: 1;\n  width: fit-content;\n}\n.file-container .selection-checkbox[data-v-ab80f8a8]  .checkbox-radio-switch__label {\n  padding: 10px;\n  box-sizing: border-box;\n}\n.file-container .selection-checkbox[data-v-ab80f8a8]  .checkbox-radio-switch__label::after {\n  content: \"\";\n  background: var(--color-primary-light);\n  width: 16px;\n  height: 16px;\n  position: absolute;\n  left: 14px;\n  z-index: -1;\n}\n.file-container .selection-checkbox[data-v-ab80f8a8]  .checkbox-radio-switch__label .checkbox-radio-switch__icon {\n  margin: 0;\n}\n.file-container .selection-checkbox .input-label[data-v-ab80f8a8] {\n  position: fixed;\n  z-index: -1;\n  top: -5000px;\n  left: -5000px;\n}\n.file-container .favorite-state[data-v-ab80f8a8] {\n  position: absolute;\n  top: 2px;\n  right: min(2px, 50% - 7px);\n}\n.file-container .favorite-state[data-v-ab80f8a8]  .material-design-icon__svg {\n  fill: #FC0;\n}\n.file-container .favorite-state[data-v-ab80f8a8]  .material-design-icon__svg path {\n  stroke: var(--color-primary-light);\n  stroke-width: 1px;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1543,7 +1398,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".files-list-viewer[data-v-3ebf26b2] {\n  height: 100%;\n  position: relative;\n}\n.files-list-viewer__placeholder[data-v-3ebf26b2] {\n  background: var(--color-primary-light);\n  width: 100%;\n  height: 100%;\n  border: 2px solid var(--color-main-background);\n}\n.files-list-viewer .tiled-container[data-v-3ebf26b2] {\n  flex-basis: 0;\n}\n.files-list-viewer .tiled-container .tiled-row[data-v-3ebf26b2] {\n  display: flex;\n}\n.files-list-viewer__section-header[data-v-3ebf26b2] {\n  position: -webkit-sticky;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background: var(--color-main-background);\n}\n.files-list-viewer__loader[data-v-3ebf26b2] {\n  margin: 50px 0;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".files-list-viewer[data-v-3ebf26b2] {\n  height: 100%;\n  position: relative;\n}\n.files-list-viewer__placeholder[data-v-3ebf26b2] {\n  background: var(--color-primary-light);\n  width: 100%;\n  height: 100%;\n  border: 2px solid var(--color-main-background);\n}\n.files-list-viewer .tiled-container[data-v-3ebf26b2] {\n  flex-basis: 0;\n}\n.files-list-viewer .tiled-container .tiled-row[data-v-3ebf26b2] {\n  display: flex;\n}\n.files-list-viewer__section-header[data-v-3ebf26b2] {\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background: var(--color-main-background);\n}\n.files-list-viewer__loader[data-v-3ebf26b2] {\n  margin: 50px 0;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -2711,4 +2566,4 @@ module.exports = "<svg id=\"9af98f83-10c5-4067-bc84-20554b2827d8\" data-name=\"L
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_mixins_FilesSelectionMixin_js-src_components_File_vue-src_components_FilesListViewer_vue.js.map?v=048890acd0149fe94dc1
+//# sourceMappingURL=photos-src_mixins_FilesSelectionMixin_js-src_components_File_vue-src_components_FilesListViewer_vue.js.map?v=5ed1d89490bbfdc7f25f

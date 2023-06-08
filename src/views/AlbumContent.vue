@@ -32,6 +32,7 @@
 			<HeaderNavigation key="navigation"
 				slot="header"
 				slot-scope="{selectedFileIds}"
+				:class="{'photos-navigation--uploading': isUploading}"
 				:loading="loadingFiles"
 				:params="{ albumName }"
 				:path="'/' + albumName"
@@ -157,7 +158,7 @@ import { addNewFileMenuEntry, removeNewFileMenuEntry } from '@nextcloud/files'
 import { getCurrentUser } from '@nextcloud/auth'
 import { mapActions, mapGetters } from 'vuex'
 import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionSeparator, NcLoadingIcon, isMobile } from '@nextcloud/vue'
-import { UploadPicker } from '@nextcloud/upload'
+import { UploadPicker, getUploader } from '@nextcloud/upload'
 import debounce from 'debounce'
 
 import Close from 'vue-material-design-icons/Close'
@@ -243,6 +244,9 @@ export default {
 			showEditAlbumForm: false,
 
 			loadingAddCollaborators: false,
+
+			uploader: getUploader(),
+
 			newFileMenuEntry: {
 				id: 'album-add',
 				displayName: t('photos', 'Add photos to this album'),
@@ -294,6 +298,11 @@ export default {
 				route: this.$route.name,
 				root: `dav/photos/${getCurrentUser()?.uid}/albums`,
 			}
+		},
+
+		/** @return {boolean} */
+		isUploading() {
+			return this.uploader.queue?.length > 0
 		},
 	},
 
@@ -443,6 +452,28 @@ export default {
 		margin-left: -4px;
 		display: flex;
 		color: var(--color-text-lighter);
+	}
+}
+
+.photos-navigation {
+	position: relative;
+	// Add space at the bottom for the progress bar.
+	&--uploading {
+		margin-bottom: 30px;
+	}
+}
+
+::v-deep .upload-picker {
+	.upload-picker__progress {
+		position: absolute;
+		bottom: -30px;
+		left: 64px;
+		margin: 0;
+	}
+	.upload-picker__cancel {
+		position: absolute;
+		bottom: -24px;
+		right: 50px;
 	}
 }
 </style>

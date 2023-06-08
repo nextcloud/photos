@@ -31,16 +31,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_DavRequest_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../services/DavRequest.js */ "./src/services/DavRequest.js");
 /* harmony import */ var _utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../utils/fileUtils.js */ "./src/utils/fileUtils.js");
 /* harmony import */ var _nextcloud_l10n__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @nextcloud/l10n */ "./node_modules/@nextcloud/l10n/dist/index.js");
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 //
 //
 //
@@ -208,239 +198,125 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       default: '/'
     }
   },
-  data: function data() {
+
+  data() {
     return {
       showAddPhotosModal: false,
       loadingCount: 0,
       loadingAddFilesToAlbum: false
     };
   },
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_18__.mapGetters)(['files', 'sharedAlbumsFiles'])), {}, {
+
+  computed: { ...(0,vuex__WEBPACK_IMPORTED_MODULE_18__.mapGetters)(['files', 'sharedAlbumsFiles']),
+
     /**
      * @return {object} The album information for the current albumName.
      */
-    album: function album() {
+    album() {
       return this.sharedAlbums[this.albumName] || {};
     },
 
     /**
      * @return {string[]} The list of files for the current albumName.
      */
-    albumFileIds: function albumFileIds() {
+    albumFileIds() {
       return this.sharedAlbumsFiles[this.albumName] || [];
     },
 
     /**
      * @return {string} The album name without the userId between parentheses.
      */
-    albumOriginalName: function albumOriginalName() {
-      return this.albumName.replace(new RegExp("\\(".concat(this.album.collaborators[0].id, "\\)$")), '');
+    albumOriginalName() {
+      return this.albumName.replace(new RegExp(`\\(${this.album.collaborators[0].id}\\)$`), '');
     }
-  }),
+
+  },
   watch: {
-    album: function album() {
+    album() {
       this.fetchAlbumContent();
     }
+
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_18__.mapActions)(['appendFiles', 'deleteSharedAlbum', 'addFilesToSharedAlbum', 'removeFilesFromSharedAlbum'])), {}, {
-    fetchAlbumContent: function fetchAlbumContent() {
-      var _this = this;
+  methods: { ...(0,vuex__WEBPACK_IMPORTED_MODULE_18__.mapActions)(['appendFiles', 'deleteSharedAlbum', 'addFilesToSharedAlbum', 'removeFilesFromSharedAlbum']),
 
-      return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        var semaphoreSymbol, fetchSemaphoreSymbol, _getCurrentUser, response, fetchedFiles, fileIds, _error$response;
+    async fetchAlbumContent() {
+      if (this.loadingFiles || this.showEditAlbumForm) {
+        return [];
+      }
 
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (!(_this.loadingFiles || _this.showEditAlbumForm)) {
-                  _context.next = 2;
-                  break;
-                }
+      const semaphoreSymbol = await this.semaphore.acquire(() => 0, 'fetchFiles');
+      const fetchSemaphoreSymbol = await this.fetchSemaphore.acquire();
 
-                return _context.abrupt("return", []);
+      try {
+        this.errorFetchingFiles = null;
+        this.loadingFiles = true;
+        this.semaphoreSymbol = semaphoreSymbol;
+        const response = await _services_DavClient_js__WEBPACK_IMPORTED_MODULE_14__["default"].getDirectoryContents(`/photos/${(0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_6__.getCurrentUser)()?.uid}/sharedalbums/${this.albumName}`, {
+          data: _services_DavRequest_js__WEBPACK_IMPORTED_MODULE_15__["default"],
+          details: true,
+          signal: this.abortController.signal
+        });
+        const fetchedFiles = response.data.map(file => (0,_utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_16__.genFileInfo)(file));
+        const fileIds = fetchedFiles.map(file => file.fileid).map(fileId => fileId.toString());
+        this.appendFiles(fetchedFiles);
 
-              case 2:
-                _context.next = 4;
-                return _this.semaphore.acquire(function () {
-                  return 0;
-                }, 'fetchFiles');
+        if (fetchedFiles.length > 0) {
+          await this.$store.commit('addFilesToSharedAlbum', {
+            albumName: this.albumName,
+            fileIdsToAdd: fileIds
+          });
+        }
 
-              case 4:
-                semaphoreSymbol = _context.sent;
-                _context.next = 7;
-                return _this.fetchSemaphore.acquire();
+        _services_logger_js__WEBPACK_IMPORTED_MODULE_13__["default"].debug(`[SharedAlbumContent] Fetched ${fileIds.length} new files: `, fileIds);
+      } catch (error) {
+        if (error.response?.status === 404) {
+          this.errorFetchingFiles = 404;
+        } else if (error.code === 'ERR_CANCELED') {
+          return;
+        } else {
+          this.errorFetchingFiles = error;
+        } // cancelled request, moving on...
 
-              case 7:
-                fetchSemaphoreSymbol = _context.sent;
-                _context.prev = 8;
-                _this.errorFetchingFiles = null;
-                _this.loadingFiles = true;
-                _this.semaphoreSymbol = semaphoreSymbol;
-                _context.next = 14;
-                return _services_DavClient_js__WEBPACK_IMPORTED_MODULE_14__["default"].getDirectoryContents("/photos/".concat((_getCurrentUser = (0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_6__.getCurrentUser)()) === null || _getCurrentUser === void 0 ? void 0 : _getCurrentUser.uid, "/sharedalbums/").concat(_this.albumName), {
-                  data: _services_DavRequest_js__WEBPACK_IMPORTED_MODULE_15__["default"],
-                  details: true,
-                  signal: _this.abortController.signal
-                });
 
-              case 14:
-                response = _context.sent;
-                fetchedFiles = response.data.map(function (file) {
-                  return (0,_utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_16__.genFileInfo)(file);
-                });
-                fileIds = fetchedFiles.map(function (file) {
-                  return file.fileid;
-                }).map(function (fileId) {
-                  return fileId.toString();
-                });
+        _services_logger_js__WEBPACK_IMPORTED_MODULE_13__["default"].error('[SharedAlbumContent] Error fetching album files', {
+          error
+        });
+      } finally {
+        this.loadingFiles = false;
+        this.semaphore.release(semaphoreSymbol);
+        this.fetchSemaphore.release(fetchSemaphoreSymbol);
+      }
 
-                _this.appendFiles(fetchedFiles);
-
-                if (!(fetchedFiles.length > 0)) {
-                  _context.next = 21;
-                  break;
-                }
-
-                _context.next = 21;
-                return _this.$store.commit('addFilesToSharedAlbum', {
-                  albumName: _this.albumName,
-                  fileIdsToAdd: fileIds
-                });
-
-              case 21:
-                _services_logger_js__WEBPACK_IMPORTED_MODULE_13__["default"].debug("[SharedAlbumContent] Fetched ".concat(fileIds.length, " new files: "), fileIds);
-                _context.next = 36;
-                break;
-
-              case 24:
-                _context.prev = 24;
-                _context.t0 = _context["catch"](8);
-
-                if (!(((_error$response = _context.t0.response) === null || _error$response === void 0 ? void 0 : _error$response.status) === 404)) {
-                  _context.next = 30;
-                  break;
-                }
-
-                _this.errorFetchingFiles = 404;
-                _context.next = 35;
-                break;
-
-              case 30:
-                if (!(_context.t0.code === 'ERR_CANCELED')) {
-                  _context.next = 34;
-                  break;
-                }
-
-                return _context.abrupt("return");
-
-              case 34:
-                _this.errorFetchingFiles = _context.t0;
-
-              case 35:
-                // cancelled request, moving on...
-                _services_logger_js__WEBPACK_IMPORTED_MODULE_13__["default"].error('[SharedAlbumContent] Error fetching album files', {
-                  error: _context.t0
-                });
-
-              case 36:
-                _context.prev = 36;
-                _this.loadingFiles = false;
-
-                _this.semaphore.release(semaphoreSymbol);
-
-                _this.fetchSemaphore.release(fetchSemaphoreSymbol);
-
-                return _context.finish(36);
-
-              case 41:
-                return _context.abrupt("return", []);
-
-              case 42:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, null, [[8, 24, 36, 41]]);
-      }))();
+      return [];
     },
-    handleFilesPicked: function handleFilesPicked(fileIds) {
-      var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _this2.showAddPhotosModal = false;
-                _context2.next = 3;
-                return _this2.addFilesToSharedAlbum({
-                  albumName: _this2.albumName,
-                  fileIdsToAdd: fileIds
-                });
+    async handleFilesPicked(fileIds) {
+      this.showAddPhotosModal = false;
+      await this.addFilesToSharedAlbum({
+        albumName: this.albumName,
+        fileIdsToAdd: fileIds
+      }); // Re-fetch album content to have the proper filenames.
 
-              case 3:
-                _context2.next = 5;
-                return _this2.fetchAlbumContent();
-
-              case 5:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
+      await this.fetchAlbumContent();
     },
-    handleRemoveFilesFromAlbum: function handleRemoveFilesFromAlbum(fileIds) {
-      var _this3 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
-        return regeneratorRuntime.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _this3.$refs.collectionContent.onUncheckFiles(fileIds);
-
-                _context3.next = 3;
-                return _this3.removeFilesFromSharedAlbum({
-                  albumName: _this3.albumName,
-                  fileIdsToRemove: fileIds
-                });
-
-              case 3:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }))();
+    async handleRemoveFilesFromAlbum(fileIds) {
+      this.$refs.collectionContent.onUncheckFiles(fileIds);
+      await this.removeFilesFromSharedAlbum({
+        albumName: this.albumName,
+        fileIdsToRemove: fileIds
+      });
     },
-    handleDeleteAlbum: function handleDeleteAlbum() {
-      var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
-        return regeneratorRuntime.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return _this4.deleteSharedAlbum({
-                  albumName: _this4.albumName
-                });
-
-              case 2:
-                _this4.$router.push('/sharedalbums');
-
-              case 3:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4);
-      }))();
+    async handleDeleteAlbum() {
+      await this.deleteSharedAlbum({
+        albumName: this.albumName
+      });
+      this.$router.push('/sharedalbums');
     },
+
     t: _nextcloud_l10n__WEBPACK_IMPORTED_MODULE_17__.translate
-  })
+  }
 });
 
 /***/ }),
@@ -459,16 +335,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _nextcloud_auth__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @nextcloud/auth */ "./node_modules/@nextcloud/auth/dist/index.esm.js");
 /* harmony import */ var _AbortControllerMixin_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AbortControllerMixin.js */ "./src/mixins/AbortControllerMixin.js");
 /* harmony import */ var _services_Albums_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/Albums.js */ "./src/services/Albums.js");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 /**
  * @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
  *
@@ -496,92 +362,269 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'FetchSharedAlbumsMixin',
-  data: function data() {
+
+  data() {
     return {
       errorFetchingAlbums: null,
       loadingAlbums: false
     };
   },
+
   mixins: [_AbortControllerMixin_js__WEBPACK_IMPORTED_MODULE_1__["default"]],
-  beforeMount: function beforeMount() {
-    var _this = this;
 
-    return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-      return regeneratorRuntime.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _this.fetchAlbums();
-
-            case 1:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }))();
+  async beforeMount() {
+    this.fetchAlbums();
   },
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)(['sharedAlbums'])),
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)(['addSharedAlbums'])), {}, {
-    fetchAlbums: function fetchAlbums() {
-      var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-        var _getCurrentUser, albums, _error$response;
+  computed: { ...(0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)(['sharedAlbums'])
+  },
+  methods: { ...(0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)(['addSharedAlbums']),
 
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                if (!_this2.loadingAlbums) {
-                  _context2.next = 2;
-                  break;
-                }
+    async fetchAlbums() {
+      if (this.loadingAlbums) {
+        return;
+      }
 
-                return _context2.abrupt("return");
-
-              case 2:
-                _context2.prev = 2;
-                _this2.loadingAlbums = true;
-                _this2.errorFetchingAlbums = null;
-                _context2.next = 7;
-                return (0,_services_Albums_js__WEBPACK_IMPORTED_MODULE_2__.fetchAlbums)("/photos/".concat((_getCurrentUser = (0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_0__.getCurrentUser)()) === null || _getCurrentUser === void 0 ? void 0 : _getCurrentUser.uid, "/sharedalbums"), _this2.abortController.signal);
-
-              case 7:
-                albums = _context2.sent;
-
-                _this2.addSharedAlbums({
-                  albums: albums
-                });
-
-                _context2.next = 14;
-                break;
-
-              case 11:
-                _context2.prev = 11;
-                _context2.t0 = _context2["catch"](2);
-
-                if (((_error$response = _context2.t0.response) === null || _error$response === void 0 ? void 0 : _error$response.status) === 404) {
-                  _this2.errorFetchingAlbums = 404;
-                } else {
-                  _this2.errorFetchingAlbums = _context2.t0;
-                }
-
-              case 14:
-                _context2.prev = 14;
-                _this2.loadingAlbums = false;
-                return _context2.finish(14);
-
-              case 17:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, null, [[2, 11, 14, 17]]);
-      }))();
+      try {
+        this.loadingAlbums = true;
+        this.errorFetchingAlbums = null;
+        const albums = await (0,_services_Albums_js__WEBPACK_IMPORTED_MODULE_2__.fetchAlbums)(`/photos/${(0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_0__.getCurrentUser)()?.uid}/sharedalbums`, this.abortController.signal);
+        this.addSharedAlbums({
+          albums
+        });
+      } catch (error) {
+        if (error.response?.status === 404) {
+          this.errorFetchingAlbums = 404;
+        } else {
+          this.errorFetchingAlbums = error;
+        }
+      } finally {
+        this.loadingAlbums = false;
+      }
     }
-  })
+
+  }
 });
+
+/***/ }),
+
+/***/ "./src/services/Albums.js":
+/*!********************************!*\
+  !*** ./src/services/Albums.js ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "fetchAlbum": () => (/* binding */ fetchAlbum),
+/* harmony export */   "fetchAlbumContent": () => (/* binding */ fetchAlbumContent),
+/* harmony export */   "fetchAlbums": () => (/* binding */ fetchAlbums)
+/* harmony export */ });
+/* harmony import */ var _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @nextcloud/moment */ "./node_modules/@nextcloud/moment/dist/index.js");
+/* harmony import */ var _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _nextcloud_l10n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nextcloud/l10n */ "./node_modules/@nextcloud/l10n/dist/index.js");
+/* harmony import */ var _services_DavClient_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/DavClient.js */ "./src/services/DavClient.js");
+/* harmony import */ var _services_logger_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../services/logger.js */ "./src/services/logger.js");
+/* harmony import */ var _services_DavRequest_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/DavRequest.js */ "./src/services/DavRequest.js");
+/* harmony import */ var _utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/fileUtils.js */ "./src/utils/fileUtils.js");
+/* provided dependency */ var console = __webpack_require__(/*! ./node_modules/console-browserify/index.js */ "./node_modules/console-browserify/index.js");
+/**
+ * @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
+ *
+ * @author Louis Chemineau <louis@chmn.me>
+ *
+ * @license AGPL-3.0-or-later
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+
+
+
+
+
+/**
+ * @typedef {object} Album
+ * @property {string} id - The id of the album.
+ * @property {string} name - The name of the album.
+ * @property {number} creationDate - The creation date of the album.
+ * @property {string} isShared - Whether the current user as shared the album.
+ * @property {string} isCollaborative - Whether the album can be edited by other users.
+ * @property {number} itemCount - The number of item in the album.
+ * @property {number} cover - The cover of the album.
+ */
+
+/**
+ * @param {string} extraProps - Extra properties to add to the DAV request.
+ * @return {string}
+ */
+
+function getDavRequest() {
+  let extraProps = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+  return `<?xml version="1.0"?>
+			<d:propfind xmlns:d="DAV:"
+				xmlns:oc="http://owncloud.org/ns"
+				xmlns:nc="http://nextcloud.org/ns"
+				xmlns:ocs="http://open-collaboration-services.org/ns">
+				<d:prop>
+					<nc:last-photo />
+					<nc:nbItems />
+					<nc:location />
+					<nc:dateRange />
+					<nc:collaborators />
+					${extraProps}
+				</d:prop>
+			</d:propfind>`;
+}
+/**
+ *
+ * @param {string} path - Albums' root path.
+ * @param {import('webdav').StatOptions} options - Options to forward to the webdav client.
+ * @param {string} extraProps - Extra properties to add to the DAV request.
+ * @param {import('webdav').WebDAVClient} client - The DAV client to use.
+ * @return {Promise<Album|null>}
+ */
+
+
+async function fetchAlbum(path, options) {
+  let extraProps = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+  let client = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : _services_DavClient_js__WEBPACK_IMPORTED_MODULE_2__["default"];
+
+  try {
+    const response = await client.stat(path, {
+      data: getDavRequest(extraProps),
+      details: true,
+      ...options
+    });
+    _services_logger_js__WEBPACK_IMPORTED_MODULE_3__["default"].debug('[Albums] Fetched an album: ', {
+      data: response.data
+    });
+    return formatAlbum(response.data);
+  } catch (error) {
+    if (error.code === 'ERR_CANCELED') {
+      return null;
+    }
+
+    throw error;
+  }
+}
+/**
+ *
+ * @param {string} path - Albums' root path.
+ * @param {import('webdav').StatOptions} options - Options to forward to the webdav client.
+ * @param {string} extraProps - Extra properties to add to the DAV request.
+ * @param {import('webdav').WebDAVClient} client - The DAV client to use.
+ * @return {Promise<Album[]>}
+ */
+
+async function fetchAlbums(path, options) {
+  let extraProps = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+  let client = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : _services_DavClient_js__WEBPACK_IMPORTED_MODULE_2__["default"];
+
+  try {
+    const response = await client.getDirectoryContents(path, {
+      data: getDavRequest(extraProps),
+      details: true,
+      ...options
+    });
+    _services_logger_js__WEBPACK_IMPORTED_MODULE_3__["default"].debug(`[Albums] Fetched ${response.data.length} albums: `, {
+      data: response.data
+    });
+    return response.data.filter(album => album.filename !== path).map(formatAlbum);
+  } catch (error) {
+    if (error.code === 'ERR_CANCELED') {
+      return [];
+    }
+
+    throw error;
+  }
+}
+/**
+ *
+ * @param {object} album - An album received from a webdav request.
+ * @return {Album}
+ */
+
+function formatAlbum(album) {
+  // Ensure that we have a proper collaborators array.
+  if (album.props.collaborators === '') {
+    album.props.collaborators = [];
+  } else if (typeof album.props.collaborators.collaborator === 'object') {
+    if (Array.isArray(album.props.collaborators.collaborator)) {
+      album.props.collaborators = album.props.collaborators.collaborator;
+    } else {
+      album.props.collaborators = [album.props.collaborators.collaborator];
+    }
+  } // Extract custom props.
+
+
+  album = (0,_utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_5__.genFileInfo)(album); // Compute date range label.
+
+  const dateRange = JSON.parse(album.dateRange?.replace(/&quot;/g, '"') ?? '{}');
+
+  if (dateRange.start === null) {
+    dateRange.start = _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0___default()().unix();
+    dateRange.end = _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0___default()().unix();
+  }
+
+  const dateRangeFormatted = {
+    startDate: _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0___default().unix(dateRange.start).format('MMMM YYYY'),
+    endDate: _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0___default().unix(dateRange.end).format('MMMM YYYY')
+  };
+
+  if (dateRangeFormatted.startDate === dateRangeFormatted.endDate) {
+    album.date = dateRangeFormatted.startDate;
+  } else {
+    album.date = (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_1__.translate)('photos', '{startDate} to {endDate}', dateRangeFormatted);
+  }
+
+  return album;
+}
+/**
+ *
+ * @param {string} path - Albums' root path.
+ * @param {import('webdav').StatOptions} options - Options to forward to the webdav client.
+ * @param {import('webdav').WebDAVClient} client - The DAV client to use.
+ * @return {Promise<Array>}
+ */
+
+
+async function fetchAlbumContent(path, options) {
+  let client = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : _services_DavClient_js__WEBPACK_IMPORTED_MODULE_2__["default"];
+
+  try {
+    const response = await client.getDirectoryContents(path, {
+      data: _services_DavRequest_js__WEBPACK_IMPORTED_MODULE_4__["default"],
+      details: true,
+      ...options
+    });
+    const fetchedFiles = response.data.map(file => (0,_utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_5__.genFileInfo)(file)).filter(file => file.fileid);
+    _services_logger_js__WEBPACK_IMPORTED_MODULE_3__["default"].debug(`[Albums] Fetched ${fetchedFiles.length} new files: `, fetchedFiles);
+    return fetchedFiles;
+  } catch (error) {
+    if (error.code === 'ERR_CANCELED') {
+      return [];
+    }
+
+    _services_logger_js__WEBPACK_IMPORTED_MODULE_3__["default"].error('Error fetching album files', {
+      error
+    });
+    console.error(error);
+    throw error;
+  }
+}
 
 /***/ }),
 
@@ -1040,4 +1083,4 @@ render._withStripped = true
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_views_SharedAlbumContent_vue.js.map?v=953a955b71fe7f4ffed2
+//# sourceMappingURL=photos-src_views_SharedAlbumContent_vue.js.map?v=91bfedf6a5d68e376255
