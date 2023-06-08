@@ -47,6 +47,7 @@ OC.L10N.register(
     "Public link copied!" : "Öffentlicher Link kopiert!",
     "Copy public link" : "Öffentlichen Link kopieren",
     "Delete the public link" : "Den öffentlichen Link löschen",
+    "Create public link share" : "Öffentlichen Link zum Teilen erstellen",
     "Share via public link" : "Als öffentlichen Link teilen",
     "Failed to fetch collaborators list." : "Liste der Mitbearbeitenden konnte nicht abgerufen werden.",
     "Failed to fetch album." : "Album konnte nicht abgerufen werden.",
