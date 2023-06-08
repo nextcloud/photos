@@ -116,26 +116,32 @@ __webpack_require__.r(__webpack_exports__);
     /**
      * @param {string} lastPhoto The album's last photos.
      */
-    coverUrl: function coverUrl(lastPhoto) {
+    coverUrl(lastPhoto) {
       if (lastPhoto === -1) {
         return '';
       }
 
-      return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_2__.generateUrl)("/apps/photos/api/v1/preview/".concat(lastPhoto, "?x=", 512, "&y=", 512));
+      return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_2__.generateUrl)(`/apps/photos/api/v1/preview/${lastPhoto}?x=${512}&y=${512}`);
     }
+
   },
   mixins: [_mixins_FetchAlbumsMixin_js__WEBPACK_IMPORTED_MODULE_4__["default"]],
-  data: function data() {
+
+  data() {
     return {
       showAlbumCreationForm: false
     };
   },
+
   methods: {
-    handleAlbumCreated: function handleAlbumCreated(_ref) {
-      var album = _ref.album;
+    handleAlbumCreated(_ref) {
+      let {
+        album
+      } = _ref;
       this.showAlbumCreationForm = false;
-      this.$router.push("albums/".concat(album.basename));
+      this.$router.push(`albums/${album.basename}`);
     }
+
   }
 });
 
@@ -484,4 +490,4 @@ render._withStripped = true
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_views_Albums_vue.js.map?v=ebb6cbecd85bd7075b5a
+//# sourceMappingURL=photos-src_views_Albums_vue.js.map?v=d52f2f19ed4796b9a9ed

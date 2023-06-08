@@ -306,7 +306,7 @@ export default {
 	}
 }
 
-:deep(.upload-picker) {
+::v-deep .upload-picker {
 	.upload-picker__progress {
 		position: absolute;
 		bottom: -30px;
