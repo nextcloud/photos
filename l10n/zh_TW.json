@@ -45,6 +45,7 @@
     "Public link copied!" : "已複製公開連結！",
     "Copy public link" : "複製公開連結",
     "Delete the public link" : "刪除公開連結",
+    "Create public link share" : "建立公開連結分享",
     "Share via public link" : "透過公開連結分享",
     "Failed to fetch collaborators list." : "擷取協作者清單失敗。",
     "Failed to fetch album." : "擷取相簿失敗。",
