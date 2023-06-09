@@ -52,9 +52,9 @@ const mutations = {
 	/**
 	 * Add new collections.
 	 *
-	 * @param {object} state vuex state
+	 * @param state vuex state
 	 * @param {object} data destructuring object
-	 * @param {Array} data.collections list of collections
+	 * @param {import('../services/collectionFetcher').Collection[]} data.collections list of collections
 	 */
 	addCollections(state, { collections }) {
 		state.collections = {
@@ -66,7 +66,7 @@ const mutations = {
 	/**
 	 * Add collections to the collection collection.
 	 *
-	 * @param {object} state vuex state
+	 * @param state vuex state
 	 * @param {object} data destructuring object
 	 * @param {import('../services/collectionFetcher').Collection} data.collection the collection to update
 	 */
@@ -77,9 +77,9 @@ const mutations = {
 	/**
 	 * Remove collections from the collection collection.
 	 *
-	 * @param {object} state vuex state
+	 * @param state vuex state
 	 * @param {object} data destructuring object
-	 * @param {Array} data.collectionFileNames list of collections ids
+	 * @param {string[]} data.collectionFileNames list of collections ids
 	 */
 	removeCollections(state, { collectionFileNames }) {
 		collectionFileNames.forEach(collectionFileName => delete state.collections[collectionFileName])
@@ -89,12 +89,12 @@ const mutations = {
 	/**
 	 * Add files to an collection.
 	 *
-	 * @param {object} state vuex state
+	 * @param state vuex state
 	 * @param {object} data destructuring object
 	 * @param {string} data.collectionFileName the collection id
 	 * @param {string[]} data.fileIds list of files
 	 */
-	setCollectionFiles(state, { collectionFileName, fileIds }) {
+	setCollectionFiles(state, { collectionFileName, fileIds = [] }) {
 		const collectionFiles = state.collectionsFiles[collectionFileName] || []
 		state.collectionsFiles = {
 			...state.collectionsFiles,
@@ -103,13 +103,14 @@ const mutations = {
 
 		if (state.collections[collectionFileName] !== undefined) {
 			state.collections[collectionFileName].nbItems = fileIds.length
+			state.collections[collectionFileName].lastPhoto = Number.parseInt(fileIds[fileIds.length - 1])
 		}
 	},
 
 	/**
 	 * Add files to an collection.
 	 *
-	 * @param {object} state vuex state
+	 * @param state vuex state
 	 * @param {object} data destructuring object
 	 * @param {string} data.collectionFileName the collection id
 	 * @param {string[]} data.fileIdsToAdd list of files
@@ -120,6 +121,9 @@ const mutations = {
 			...state.collectionsFiles,
 			[collectionFileName]: [...new Set([...collectionFiles, ...fileIdsToAdd])],
 		}
+
+		state.collections[collectionFileName].nbItems += fileIdsToAdd.length
+		state.collections[collectionFileName].lastPhoto = Number.parseInt(fileIdsToAdd[fileIdsToAdd.length - 1])
 	},
 
 	/**
@@ -135,7 +139,11 @@ const mutations = {
 			...state.collectionsFiles,
 			[collectionFileName]: state.collectionsFiles[collectionFileName].filter(fileId => !fileIdsToRemove.includes(fileId)),
 		}
+
 		state.collections[collectionFileName].nbItems -= fileIdsToRemove.length
+		if (fileIdsToRemove.includes(state.collections[collectionFileName].lastPhoto.toString())) {
+			state.collections[collectionFileName].lastPhoto = Number.parseInt(state.collectionsFiles[collectionFileName][state.collectionsFiles[collectionFileName].length])
+		}
 	},
 }
 
@@ -248,8 +256,8 @@ const actions = {
 			context.commit('addCollections', { collections: [collection] })
 			return collection
 		} catch (error) {
-			logger.error(translate('photos', 'Failed to create {collectionName}.', { collectionName: collection.filename }), { error })
-			showError(translate('photos', 'Failed to create {collectionName}.', { collectionName: collection.filename }))
+			logger.error(translate('photos', 'Failed to create {collectionFileName}.', { collectionFileName: collection.filename }), { error })
+			showError(translate('photos', 'Failed to create {collectionFileName}.', { collectionFileName: collection.filename }))
 		}
 	},
 
@@ -266,11 +274,12 @@ const actions = {
 		const newCollection = {
 			...collection,
 			basename: newBaseName,
-			filename: collection.filename.replace(new RegExp(`$^${collection.basename}$`), newBaseName),
+			filename: collection.filename.replace(new RegExp(`${collection.basename}$`), newBaseName),
 		}
 
 		try {
 			context.commit('addCollections', { collections: [newCollection] })
+			context.commit('setCollectionFiles', { collectionFileName: newCollection.filename, fileIds: context.state.collectionsFiles[collectionFileName] })
 			await client.moveFile(collection.filename, newCollection.filename)
 			context.commit('removeCollections', { collectionFileNames: [collectionFileName] })
 			return newCollection

@@ -61,7 +61,7 @@ import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
 import { NcButton, NcEmptyContent, isMobile } from '@nextcloud/vue'
 import { translate } from '@nextcloud/l10n'
 
-import FetchCollectionsContentMixin from '../mixins/FetchCollectionsContentMixin.js'
+import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import { getCurrentUser } from '@nextcloud/auth'
@@ -78,7 +78,7 @@ export default {
 	},
 
 	mixins: [
-		FetchCollectionsContentMixin,
+		FetchCollectionContentMixin,
 		isMobile,
 	],
 

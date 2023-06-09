@@ -25,13 +25,13 @@ import Vuex, { Store } from 'vuex'
 
 import files from './files.js'
 import albums from './albums.js'
+import publicAlbums from './publicAlbums.js'
 import sharedAlbums from './sharedAlbums.js'
 import collections from './collections.js'
 import places from './places.js'
 import faces from './faces.js'
 import folders from './folders.js'
 import systemtags from './systemtags.js'
-import collectionStoreFactory from './collectionStoreFactory.js'
 
 Vue.use(Vuex)
 export default new Store({
@@ -40,9 +40,9 @@ export default new Store({
 		folders,
 		albums,
 		sharedAlbums,
+		publicAlbums,
 		faces,
 		systemtags,
-		publicAlbums: collectionStoreFactory('publicAlbum'),
 		collections,
 		places,
 	},
