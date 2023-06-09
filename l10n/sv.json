@@ -44,6 +44,7 @@
     "Public link copied!" : "Offentlig länk kopierad!",
     "Copy public link" : "Kopiera offentlig länk",
     "Delete the public link" : "Ta bort den offentliga länken",
+    "Create public link share" : "Skapa publik delningslänk",
     "Share via public link" : "Dela via offentlig länk",
     "Failed to fetch collaborators list." : "Det gick inte att hämta medlemslistan.",
     "Failed to fetch album." : "Misslyckades att hämta album.",
