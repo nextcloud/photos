@@ -111,7 +111,7 @@ export default {
 				this.errorFetchingFiles = null
 				this.loadingFiles = true
 
-				let { data: fetchedFiles } = await client.getDirectoryContents(
+				const { data: fetchedFiles } = await client.getDirectoryContents(
 					`/recognize/${getCurrentUser()?.uid}/faces/${faceName}`,
 					{
 						data: DavRequest,
@@ -120,14 +120,19 @@ export default {
 					}
 				)
 
-				fetchedFiles = fetchedFiles
-					.map(file => genFileInfo(file))
-					.map(file => ({ ...file, filename: he.decode(file.realpath).replace(`/${getCurrentUser().uid}/files`, `/files/${getCurrentUser().uid}`) }))
-					.map(file => ({ ...file, faceDetections: JSON.parse(he.decode(file.faceDetections)) }))
+				const processedFiles = []
+				const fileIds = []
 
-				const fileIds = fetchedFiles.map(file => '' + file.fileid)
+				for (const file of fetchedFiles) {
+				  const processedFile = genFileInfo(file)
+				  processedFile.filename = he.decode(processedFile.realpath).replace(`/${getCurrentUser().uid}/files`, `/files/${getCurrentUser().uid}`)
+				  processedFile.faceDetections = JSON.parse(he.decode(processedFile.faceDetections))
 
-				this.appendFiles(fetchedFiles)
+				  processedFiles.push(processedFile)
+				  fileIds.push(String(processedFile.fileid))
+				}
+
+				this.appendFiles(processedFiles)
 
 				if (fetchedFiles.length > 0) {
 					await this.$store.commit('addFilesToFace', { faceName, fileIdsToAdd: fileIds })
