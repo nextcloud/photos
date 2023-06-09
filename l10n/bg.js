@@ -40,6 +40,7 @@ OC.L10N.register(
     "_%n item_::_%n photos and videos_" : ["%n снимки и видеоклипове","%n снимки и видеоклипове"],
     "Add people or groups who can edit your album" : "Добавяне на хора или групи, които могат да редактират вашият албум",
     "Search people or groups" : "Търсене на хора или групи",
+    "No recommendations. Start typing." : "Няма препоръки. Започнете да пишете.",
     "Remove {collaboratorLabel} from the collaborators list" : "Премахване на {collaboratorLabel} от списъка със сътрудници",
     "Copy the public link" : "Копиране на публичната връзка",
     "Public link copied!" : "Копирана е публична връзка!",
