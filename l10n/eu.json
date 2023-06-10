@@ -47,7 +47,6 @@
     "Delete the public link" : "Ezabatu esteka publikoa",
     "Share via public link" : "Partekatu esteka publiko bidez",
     "Failed to fetch collaborators list." : "Ezin izan da kolaboratzaile zerrenda lortu.",
-    "Failed to fetch album." : "Ezin izan da albuma lortu.",
     "Failed to update album." : "Ezin izan da albuma eguneratu.",
     "This collection does not exist" : "Bilduma hau ez da existitzen",
     "An error occurred" : "Errore bat gertatu da",
@@ -102,7 +101,6 @@
     "Add photos to this place" : "Gehitu argazkiak leku honetara",
     "Cover photo for place {placeName}" : "{placeName} tokiaren azaleko argazkia",
     "There is no place yet!" : "Oraindik ez dago lekurik!",
-    "Failed to fetch albums list." : "Ezin izan da album zerrenda eskuratu.",
     "Shared albums" : "Partekaturiko albumak",
     "Cover photo for shared album {albumName}." : "{albumName} album partekatuko azaleko argazkia",
     "Back to tags overview" : "Itzuli etiketen ikuspegira",
@@ -127,8 +125,6 @@
     "Tagged photos" : "Etiketaturiko argazkiak",
     "Tagged photo {title}" : "{title} etiketaturiko argazkia",
     "{title}'s face" : "{title}(r)en aurpegia",
-    "Failed to create {albumName}." : "Ezin izan da {albumName} sortu.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Ezin izan da {currentAlbumName} berrizendatu {newAlbumName} gisa.",
     "Failed to rename {oldName} to {faceName}." : "Ezin izan da {oldName} berrizendatu {faceName} gisa.",
     "Failed to delete {faceName}." : "Ezin izan da  {faceName} ezabatu.",
     "Failed to delete {fileId}." : "{fileId} ezabatzeak huts egin du.",
@@ -139,6 +135,10 @@
     "_Share with %n user_::_Share with %n users_" : ["Partekatu %n erabiltzailearekin","Partekatu %n erabiltzaileekin"],
     "Search for collaborators" : "Bilatu kolaboratzaileak",
     "Add {collaboratorLabel} to the collaborators list" : "Gehitu {collaboratorLabel} kolaboratzaile zerrendara",
-    "No collaborators available" : "Ez dago kolaboratzailerik eskuragarri"
+    "No collaborators available" : "Ez dago kolaboratzailerik eskuragarri",
+    "Failed to fetch album." : "Ezin izan da albuma lortu.",
+    "Failed to fetch albums list." : "Ezin izan da album zerrenda eskuratu.",
+    "Failed to create {albumName}." : "Ezin izan da {albumName} sortu.",
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Ezin izan da {currentAlbumName} berrizendatu {newAlbumName} gisa."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

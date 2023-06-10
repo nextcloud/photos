@@ -49,7 +49,6 @@ OC.L10N.register(
     "Delete the public link" : "Slett den offentlige lenken",
     "Share via public link" : "Del via offentlig lenke",
     "Failed to fetch collaborators list." : "Kunne ikke hente listen over samarbeidspartnere.",
-    "Failed to fetch album." : "Kunne ikke hente albumet.",
     "Failed to update album." : "Kunne ikke oppdatere albumet.",
     "This collection does not exist" : "Denne samlingen eksisterer ikke",
     "An error occurred" : "En feil oppsto",
@@ -100,7 +99,6 @@ OC.L10N.register(
     "This folder does not exist" : "Denne mappen finnes ikke",
     "Loading folders …" : "Laster inn mapper…",
     "No photos in here" : "Ingen bilder her",
-    "Failed to fetch albums list." : "Kunne ikke hente albumlisten.",
     "Shared albums" : "Delte album",
     "Cover photo for shared album {albumName}." : "Forsidebilde for delt album {albumName}.",
     "Back to tags overview" : "Tilbake til merkelappoversikt",
@@ -123,8 +121,6 @@ OC.L10N.register(
     "Tagged photos" : "Bilder med merkelapper",
     "Tagged photo {title}" : "Merket bilde {title}",
     "{title}'s face" : "{title} sitt ansikt",
-    "Failed to create {albumName}." : "Kunne ikke opprette {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Kunne ikke endre navn på {currentAlbumName} til {newAlbumName}.",
     "Failed to rename {oldName} to {faceName}." : "Kunne ikke endre navn på {oldName} til {faceName}.",
     "Failed to delete {faceName}." : "Kunne ikke slette {faceName}.",
     "Failed to delete {fileId}." : "Kunne ikke slette {fileId}.",
@@ -135,6 +131,10 @@ OC.L10N.register(
     "_Share with %n user_::_Share with %n users_" : ["Del med %n bruker","Del med %n brukere"],
     "Search for collaborators" : "Søk etter samarbeidspartnere",
     "Add {collaboratorLabel} to the collaborators list" : "Legg til {collaboratorLabel} i samarbeidspartnerlisten",
-    "No collaborators available" : "Ingen samarbeidspartnere tilgjengelig"
+    "No collaborators available" : "Ingen samarbeidspartnere tilgjengelig",
+    "Failed to fetch album." : "Kunne ikke hente albumet.",
+    "Failed to fetch albums list." : "Kunne ikke hente albumlisten.",
+    "Failed to create {albumName}." : "Kunne ikke opprette {albumName}.",
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Kunne ikke endre navn på {currentAlbumName} til {newAlbumName}."
 },
 "nplurals=2; plural=(n != 1);");

@@ -49,7 +49,6 @@ OC.L10N.register(
     "Delete the public link" : "Usuń link publiczny",
     "Share via public link" : "Udostępnij przez link publiczny",
     "Failed to fetch collaborators list." : "Nie udało się pobrać listy współpracowników.",
-    "Failed to fetch album." : "Nie udało się pobrać albumu.",
     "Failed to update album." : "Nie udało się zaktualizować albumu.",
     "This collection does not exist" : "Ta kolekcja nie istnieje",
     "An error occurred" : "Wystąpił błąd",
@@ -104,7 +103,6 @@ OC.L10N.register(
     "Add photos to this place" : "Dodaj zdjęcia do tego miejsca",
     "Cover photo for place {placeName}" : "Zdjęcie na okładkę {placeName}",
     "There is no place yet!" : "Nie ma jeszcze miejsca!",
-    "Failed to fetch albums list." : "Nie udało się pobrać listy albumów.",
     "Shared albums" : "Udostępnione albumy",
     "Cover photo for shared album {albumName}." : "Zdjęcie na okładkę albumu udostępnionego {albumName}.",
     "Back to tags overview" : "Powrót do przeglądania etykiet",
@@ -129,8 +127,6 @@ OC.L10N.register(
     "Tagged photos" : "Oznaczone zdjęcia",
     "Tagged photo {title}" : "Zdjęcie oznaczone etykietą {title}",
     "{title}'s face" : "Twarz {title}",
-    "Failed to create {albumName}." : "Nie udało się utworzyć {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Nie udało się zmienić nazwy {currentAlbumName} na {newAlbumName}.",
     "Failed to rename {oldName} to {faceName}." : "Nie udało się zmienić nazwy {oldName} na {faceName}.",
     "Failed to delete {faceName}." : "Nie udało się usunąć {faceName}.",
     "Failed to delete {fileId}." : "Nie udało się usunąć {fileId}.",
@@ -141,6 +137,10 @@ OC.L10N.register(
     "_Share with %n user_::_Share with %n users_" : ["Udostępnij %n użytkownikowi","Udostępnij %n użytkownikom","Udostępnij %n użytkownikom","Udostępnij %n użytkownikom"],
     "Search for collaborators" : "Szukaj współpracowników",
     "Add {collaboratorLabel} to the collaborators list" : "Dodaj {collaboratorLabel} do listy współpracowników",
-    "No collaborators available" : "Brak dostępnych współpracowników"
+    "No collaborators available" : "Brak dostępnych współpracowników",
+    "Failed to fetch album." : "Nie udało się pobrać albumu.",
+    "Failed to fetch albums list." : "Nie udało się pobrać listy albumów.",
+    "Failed to create {albumName}." : "Nie udało się utworzyć {albumName}.",
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Nie udało się zmienić nazwy {currentAlbumName} na {newAlbumName}."
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");

@@ -46,7 +46,6 @@
     "Delete the public link" : "Hapus tautan publik",
     "Share via public link" : "Bagikan melalui tautan publik",
     "Failed to fetch collaborators list." : "Gagal mendapatkan daftar kolaborator.",
-    "Failed to fetch album." : "Gagal mendapatkan album.",
     "Failed to update album." : "Gagal memperbarui album.",
     "This collection does not exist" : "Koleksi ini tidak ada",
     "An error occurred" : "Terjadi kesalahan",
@@ -101,7 +100,6 @@
     "Add photos to this place" : "Tambahkan foto ke tempat ini",
     "Cover photo for place {placeName}" : "Foto cover untuk tempat {placeName}",
     "There is no place yet!" : "Belum ada tempat!",
-    "Failed to fetch albums list." : "Gagal mendapatkan daftar album.",
     "Shared albums" : "Album terbagi",
     "Cover photo for shared album {albumName}." : "Foto cover untuk album terbagi {albumName}.",
     "Back to tags overview" : "Kembali ke ikhtisar tag",
@@ -126,8 +124,6 @@
     "Tagged photos" : "Foto yang memiliki tag",
     "Tagged photo {title}" : "Foto memiliki tag {title} ",
     "{title}'s face" : "Wajah {title}",
-    "Failed to create {albumName}." : "Gagal membuat {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Gagal mengubah nama {currentAlbumName} to {newAlbumName}.",
     "Failed to rename {oldName} to {faceName}." : "Gagal mengubah nama {oldName} to {faceName}.",
     "Failed to delete {faceName}." : "Gagal menghapus {faceName}.",
     "Failed to delete {fileId}." : "Gagal menghapus {field}.",
@@ -138,6 +134,10 @@
     "_Share with %n user_::_Share with %n users_" : ["Bagikan dengan %n pengguna"],
     "Search for collaborators" : "Cari kolaborator",
     "Add {collaboratorLabel} to the collaborators list" : "Tambahkan {collaboratorLabel} ke daftar kolaborator",
-    "No collaborators available" : "Tidak ada kolaborator yang tersedia"
+    "No collaborators available" : "Tidak ada kolaborator yang tersedia",
+    "Failed to fetch album." : "Gagal mendapatkan album.",
+    "Failed to fetch albums list." : "Gagal mendapatkan daftar album.",
+    "Failed to create {albumName}." : "Gagal membuat {albumName}.",
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Gagal mengubah nama {currentAlbumName} to {newAlbumName}."
 },"pluralForm" :"nplurals=1; plural=0;"
 }

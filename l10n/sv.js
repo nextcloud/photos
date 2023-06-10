@@ -49,7 +49,6 @@ OC.L10N.register(
     "Create public link share" : "Skapa publik delningslänk",
     "Share via public link" : "Dela via offentlig länk",
     "Failed to fetch collaborators list." : "Det gick inte att hämta medlemslistan.",
-    "Failed to fetch album." : "Misslyckades att hämta album.",
     "Failed to update album." : "Misslyckades att uppdatera album.",
     "This collection does not exist" : "Den här samlingen existerar ej",
     "An error occurred" : "Ett fel uppstod",
@@ -107,7 +106,6 @@ OC.L10N.register(
     "Add photos to this place" : "Lägg till bilder till denna plats",
     "Cover photo for place {placeName}" : "Omslagsbild för plats {placeName}",
     "There is no place yet!" : "Det finns ingen plats ännu!",
-    "Failed to fetch albums list." : "Misslyckades att hämta albumlistan.",
     "Shared albums" : "Delade album",
     "Cover photo for shared album {albumName}." : "Omslagsbild för delat album {albumName}.",
     "Back to tags overview" : "Tillbaka till tagg-översikten",
@@ -133,8 +131,6 @@ OC.L10N.register(
     "Tagged photos" : "Taggade bilder",
     "Tagged photo {title}" : "Taggad bild {title}",
     "{title}'s face" : "{title}s ansikte",
-    "Failed to create {albumName}." : "Lyckades inte skapa {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Lyckades inte döpa om {currentAlbumName} till {newAlbumName}.",
     "Failed to rename {oldName} to {faceName}." : "Lyckades inte döpa om {oldName} till {faceName}.",
     "Failed to delete {faceName}." : "Misslyckades att radera {faceName}.",
     "Failed to delete {fileId}." : "Misslyckades att radera {fileId}.",
@@ -145,6 +141,10 @@ OC.L10N.register(
     "_Share with %n user_::_Share with %n users_" : ["Dela med en användare","Dela med %n användare"],
     "Search for collaborators" : "Sök efter medlemmar",
     "Add {collaboratorLabel} to the collaborators list" : "Lägg till {collaboratorLabel} i listan med medlemmar",
-    "No collaborators available" : "Inga medlemmar är tillgängliga"
+    "No collaborators available" : "Inga medlemmar är tillgängliga",
+    "Failed to fetch album." : "Misslyckades att hämta album.",
+    "Failed to fetch albums list." : "Misslyckades att hämta albumlistan.",
+    "Failed to create {albumName}." : "Lyckades inte skapa {albumName}.",
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Lyckades inte döpa om {currentAlbumName} till {newAlbumName}."
 },
 "nplurals=2; plural=(n != 1);");
