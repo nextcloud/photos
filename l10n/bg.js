@@ -48,7 +48,6 @@ OC.L10N.register(
     "Delete the public link" : "Изтриване на публичната връзка",
     "Share via public link" : "Споделяне чрез публична връзка",
     "Failed to fetch collaborators list." : "Неуспешно извличане на списък със сътрудници.",
-    "Failed to fetch album." : "Неуспешно извличане на албум.",
     "Failed to update album." : "Неуспешно обновяване на албум.",
     "This collection does not exist" : "Тази колекция не съществува",
     "An error occurred" : "Възникна грешка",
@@ -103,7 +102,6 @@ OC.L10N.register(
     "Add photos to this place" : "Добавяне на снимки към това място",
     "Cover photo for place {placeName}" : "Снимка на корицата за място {placeName}",
     "There is no place yet!" : "Все още няма място!",
-    "Failed to fetch albums list." : "Неуспешно извличане на списък с албуми.",
     "Shared albums" : "Споделени албуми",
     "Cover photo for shared album {albumName}." : "Снимка на корицата на споделен албум {albumName}",
     "Back to tags overview" : "Обратно към преглед на етикети",
@@ -128,8 +126,6 @@ OC.L10N.register(
     "Tagged photos" : "Маркирани снимки",
     "Tagged photo {title}" : "Маркирана снимка {title}",
     "{title}'s face" : "Лицето на {title}",
-    "Failed to create {albumName}." : "Неуспешно създаване на {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Неуспешно преименуване от {currentAlbumName} на {newAlbumName}.",
     "Failed to rename {oldName} to {faceName}." : "Неуспешно преименуване от {oldName} на {faceName}.",
     "Failed to delete {faceName}." : "Неуспешно изтриване на {faceName}.",
     "Failed to delete {fileId}." : "Неуспешно изтриване на {fileId}.",
@@ -140,6 +136,10 @@ OC.L10N.register(
     "_Share with %n user_::_Share with %n users_" : ["Споделяне с %n потребители","Споделяне с %n потребители"],
     "Search for collaborators" : "Търсене на сътрудници",
     "Add {collaboratorLabel} to the collaborators list" : "Добавяне на {collaboratorLabel} към списъка със сътрудници",
-    "No collaborators available" : "Няма налични сътрудници"
+    "No collaborators available" : "Няма налични сътрудници",
+    "Failed to fetch album." : "Неуспешно извличане на албум.",
+    "Failed to fetch albums list." : "Неуспешно извличане на списък с албуми.",
+    "Failed to create {albumName}." : "Неуспешно създаване на {albumName}.",
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Неуспешно преименуване от {currentAlbumName} на {newAlbumName}."
 },
 "nplurals=2; plural=(n != 1);");

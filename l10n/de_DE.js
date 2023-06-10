@@ -50,7 +50,6 @@ OC.L10N.register(
     "Create public link share" : "Öffentlichen Link zum Teilen erstellen",
     "Share via public link" : "Als öffentlichen Link teilen",
     "Failed to fetch collaborators list." : "Liste der Mitbearbeitenden konnte nicht abgerufen werden.",
-    "Failed to fetch album." : "Album konnte nicht abgerufen werden.",
     "Failed to update album." : "Album konnte nicht aktualisiert werden.",
     "This collection does not exist" : "Diese Sammlung existiert nicht",
     "An error occurred" : "Es ist ein Fehler aufgetreten",
@@ -108,7 +107,6 @@ OC.L10N.register(
     "Add photos to this place" : "Fotos zu diesem Ort hinzufügen",
     "Cover photo for place {placeName}" : "Titelbild für Ort {placeName}",
     "There is no place yet!" : "Es gibt noch keinen Ort",
-    "Failed to fetch albums list." : "Albumliste konnte nicht geladen werden.",
     "Shared albums" : "Geteilte Alben",
     "Cover photo for shared album {albumName}." : "Titelbild für das geteilte Album {albumName}.",
     "Back to tags overview" : "Zurück zur Schlagwortübersicht",
@@ -134,8 +132,6 @@ OC.L10N.register(
     "Tagged photos" : "Fotos mit Schlagworten",
     "Tagged photo {title}" : "Fotos mit Schlagworten",
     "{title}'s face" : "{title}s Gesicht",
-    "Failed to create {albumName}." : "{albumName} konnte nicht erstellt werden.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "{currentAlbumName} konnte nicht in {newAlbumName} umbenannt werden.",
     "Failed to rename {oldName} to {faceName}." : "{oldName} konnte nicht in {faceName} umbenannt werden.",
     "Failed to delete {faceName}." : "{faceName} konnte nicht gelöscht werden.",
     "Failed to delete {fileId}." : "{fileId} konnte nicht gelöscht werden.",
@@ -146,6 +142,10 @@ OC.L10N.register(
     "_Share with %n user_::_Share with %n users_" : ["Mit %n Nutzer teilen","Mit %n Nutzern teilen"],
     "Search for collaborators" : "Suche nach Mitbearbeitenden",
     "Add {collaboratorLabel} to the collaborators list" : "{collaboratorLabel} zur Liste der Mitarbeitenden hinzufügen",
-    "No collaborators available" : "Keine Mitarbeitenden verfügbar"
+    "No collaborators available" : "Keine Mitarbeitenden verfügbar",
+    "Failed to fetch album." : "Album konnte nicht abgerufen werden.",
+    "Failed to fetch albums list." : "Albumliste konnte nicht geladen werden.",
+    "Failed to create {albumName}." : "{albumName} konnte nicht erstellt werden.",
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "{currentAlbumName} konnte nicht in {newAlbumName} umbenannt werden."
 },
 "nplurals=2; plural=(n != 1);");

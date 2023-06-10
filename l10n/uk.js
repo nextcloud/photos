@@ -49,7 +49,6 @@ OC.L10N.register(
     "Delete the public link" : "Вилучити публічне посилання",
     "Share via public link" : "Поділіться через публічне посилання",
     "Failed to fetch collaborators list." : "Не вдалося отримати список співавторів.",
-    "Failed to fetch album." : "Не вдалося отримати альбом.",
     "Failed to update album." : "Не вдалося оновити альбом.",
     "This collection does not exist" : "Ця колекція не існує",
     "An error occurred" : "Виникла помилка",
@@ -104,7 +103,6 @@ OC.L10N.register(
     "Add photos to this place" : "Додайте фотографії до цього місця",
     "Cover photo for place {placeName}" : "Обкладинка для місця {placeName}",
     "There is no place yet!" : "Місця ще немає!",
-    "Failed to fetch albums list." : "Не вдалося отримати список альбомів.",
     "Shared albums" : "Альбоми із спільним доступом",
     "Cover photo for shared album {albumName}." : "Обкладинка для спільного альбому {albumName}.",
     "Back to tags overview" : "Назад до огляду тегів",
@@ -129,8 +127,6 @@ OC.L10N.register(
     "Tagged photos" : "Світлини з позначками",
     "Tagged photo {title}" : "Фото з тегом {title}",
     "{title}'s face" : "обличчя {title}",
-    "Failed to create {albumName}." : "Не вдалося створити {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Не вдалося перейменувати {currentAlbumName} на {newAlbumName}.",
     "Failed to rename {oldName} to {faceName}." : "Не вдалося перейменувати {oldName} на {faceName}.",
     "Failed to delete {faceName}." : "Не вдалося вилучити {faceName}.",
     "Failed to delete {fileId}." : "Не вдалося вилучити {fileId}.",
@@ -141,6 +137,10 @@ OC.L10N.register(
     "_Share with %n user_::_Share with %n users_" : ["Поділіться з %n користувачем","Поділіться з %n користувачами","Поділіться з %n користувачами","Поділіться з %n користувачами"],
     "Search for collaborators" : "Пошук співавторів",
     "Add {collaboratorLabel} to the collaborators list" : "Додайте {collaboratorLabel} до списку співавторів",
-    "No collaborators available" : "Співавторів немає"
+    "No collaborators available" : "Співавторів немає",
+    "Failed to fetch album." : "Не вдалося отримати альбом.",
+    "Failed to fetch albums list." : "Не вдалося отримати список альбомів.",
+    "Failed to create {albumName}." : "Не вдалося створити {albumName}.",
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Не вдалося перейменувати {currentAlbumName} на {newAlbumName}."
 },
 "nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);");

@@ -50,7 +50,6 @@ OC.L10N.register(
     "Create public link share" : "Crea un element compartit per enllaç públic",
     "Share via public link" : "Comparteix mitjançant un enllaç públic",
     "Failed to fetch collaborators list." : "No s'ha pogut obtenir la llista de col·laboradors.",
-    "Failed to fetch album." : "No s'ha pogut obtenir l'àlbum.",
     "Failed to update album." : "No s'ha pogut actualitzar l'àlbum.",
     "This collection does not exist" : "Aquesta col·lecció no existeix",
     "An error occurred" : "S'ha produït un error",
@@ -108,7 +107,6 @@ OC.L10N.register(
     "Add photos to this place" : "Afegeix fotografies a aquest lloc",
     "Cover photo for place {placeName}" : "Fotografia de portada del lloc {placeName}",
     "There is no place yet!" : "Encara no hi ha cap lloc!",
-    "Failed to fetch albums list." : "No s'ha pogut obtenir la llista d'àlbums.",
     "Shared albums" : "Àlbums compartits",
     "Cover photo for shared album {albumName}." : "Fotografia de portada de l'àlbum compartit {albumName}.",
     "Back to tags overview" : "Torna a la visualització general d'etiquetes",
@@ -134,8 +132,6 @@ OC.L10N.register(
     "Tagged photos" : "Fotografies etiquetades",
     "Tagged photo {title}" : "Fotografia etiquetada {title}",
     "{title}'s face" : "Cara de {title}",
-    "Failed to create {albumName}." : "No s'ha pogut crear {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "No s'ha pogut canviar el nom de l'àlbum {currentAlbumName} a {newAlbumName}.",
     "Failed to rename {oldName} to {faceName}." : "No s'ha pogut canviar el nom de la persona {oldName} a {faceName}.",
     "Failed to delete {faceName}." : "No s'ha pogut suprimir {faceName}.",
     "Failed to delete {fileId}." : "No s'ha pogut suprimir {fileId}.",
@@ -146,6 +142,10 @@ OC.L10N.register(
     "_Share with %n user_::_Share with %n users_" : ["Comparteix amb %n usuari","Comparteix amb %n usuaris"],
     "Search for collaborators" : "Cerqueu col·laboradors",
     "Add {collaboratorLabel} to the collaborators list" : "Afegeix {collaboratorLabel} a la llista de col·laboradors",
-    "No collaborators available" : "No hi ha cap col·laborador disponible"
+    "No collaborators available" : "No hi ha cap col·laborador disponible",
+    "Failed to fetch album." : "No s'ha pogut obtenir l'àlbum.",
+    "Failed to fetch albums list." : "No s'ha pogut obtenir la llista d'àlbums.",
+    "Failed to create {albumName}." : "No s'ha pogut crear {albumName}.",
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "No s'ha pogut canviar el nom de l'àlbum {currentAlbumName} a {newAlbumName}."
 },
 "nplurals=2; plural=(n != 1);");

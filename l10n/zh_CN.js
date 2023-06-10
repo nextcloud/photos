@@ -47,7 +47,6 @@ OC.L10N.register(
     "Delete the public link" : "删除公开链接",
     "Share via public link" : "通过公开链接分享",
     "Failed to fetch collaborators list." : "获取协作者列表失败。",
-    "Failed to fetch album." : "获取相册失败。",
     "Failed to update album." : "更新相册失败。",
     "This collection does not exist" : "此收藏不存在",
     "An error occurred" : "发生错误",
@@ -97,7 +96,6 @@ OC.L10N.register(
     "This folder does not exist" : "此文件夹不存在",
     "Loading folders …" : "正在加载文件夹……",
     "No photos in here" : "这里没有照片",
-    "Failed to fetch albums list." : "获取相册列表失败。",
     "Shared albums" : "共享的相册",
     "Cover photo for shared album {albumName}." : "共享相册 {albumName} 的封面照片",
     "Back to tags overview" : "回到标签一览",
@@ -120,8 +118,6 @@ OC.L10N.register(
     "Tagged photos" : "标记的照片",
     "Tagged photo {title}" : "标记的相册{title}",
     "{title}'s face" : "{title}的脸",
-    "Failed to create {albumName}." : "创建 {albumName} 失败",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "重命名 {currentAlbumName} 为 {newAlbumName} 的操作失败",
     "Failed to rename {oldName} to {faceName}." : "重命名 {oldName} 为 {faceName} 的操作失败",
     "Failed to delete {faceName}." : "删除 {faceName} 失败",
     "Failed to delete {fileId}." : "删除{field}失败",
@@ -132,6 +128,10 @@ OC.L10N.register(
     "_Share with %n user_::_Share with %n users_" : ["与 %n 位用户分享"],
     "Search for collaborators" : "搜索协作者",
     "Add {collaboratorLabel} to the collaborators list" : "将 {collaboratorLabel} 加入协作者列表",
-    "No collaborators available" : "没有可用的协作者"
+    "No collaborators available" : "没有可用的协作者",
+    "Failed to fetch album." : "获取相册失败。",
+    "Failed to fetch albums list." : "获取相册列表失败。",
+    "Failed to create {albumName}." : "创建 {albumName} 失败",
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "重命名 {currentAlbumName} 为 {newAlbumName} 的操作失败"
 },
 "nplurals=1; plural=0;");

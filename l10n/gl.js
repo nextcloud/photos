@@ -49,7 +49,6 @@ OC.L10N.register(
     "Delete the public link" : "Eliminar a ligazón pública",
     "Share via public link" : "Compartir mediante ligazón pública",
     "Failed to fetch collaborators list." : "Produciuse un erro ao obter a lista de colaboradores.",
-    "Failed to fetch album." : "Produciuse un erro ao recuperar o álbum.",
     "Failed to update album." : "Produciuse un erro ao actualizar o álbum.",
     "This collection does not exist" : "Esta colección non existe",
     "An error occurred" : "Produciuse un erro",
@@ -104,7 +103,6 @@ OC.L10N.register(
     "Add photos to this place" : "Engade fotos a este lugar",
     "Cover photo for place {placeName}" : "Foto de portada do lugar {placeName}",
     "There is no place yet!" : "Aínda non hai lugar!",
-    "Failed to fetch albums list." : "Produciuse un erro ao recuperar a lista de álbums.",
     "Shared albums" : "Albums compartidos",
     "Cover photo for shared album {albumName}." : "Foto de portada do álbum compartido {albumName}.",
     "Back to tags overview" : "Volver á vista xeral das etiquetas",
@@ -129,8 +127,6 @@ OC.L10N.register(
     "Tagged photos" : "Fotos etiquetadas",
     "Tagged photo {title}" : "Foto etiquetada {title}",
     "{title}'s face" : "A cara de {title}",
-    "Failed to create {albumName}." : "Produciuse un erro ao crear {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Non se puido cambiar o nome de {currentAlbumName} a {newAlbumName}.",
     "Failed to rename {oldName} to {faceName}." : "Non se puido cambiar o nome de {oldName} a {faceName}.",
     "Failed to delete {faceName}." : "Produciuse un erro ao eliminar {faceName}.",
     "Failed to delete {fileId}." : "Produciuse un erro ao eliminar {fileId}.",
@@ -141,6 +137,10 @@ OC.L10N.register(
     "_Share with %n user_::_Share with %n users_" : ["Compartir con %n usuario","Compartir con %n usuarios"],
     "Search for collaborators" : "Buscar colaboradores",
     "Add {collaboratorLabel} to the collaborators list" : "Engade a {collaboratorLabel} á lista de colaboradores",
-    "No collaborators available" : "Non hai colaboradores dispoñibles"
+    "No collaborators available" : "Non hai colaboradores dispoñibles",
+    "Failed to fetch album." : "Produciuse un erro ao recuperar o álbum.",
+    "Failed to fetch albums list." : "Produciuse un erro ao recuperar a lista de álbums.",
+    "Failed to create {albumName}." : "Produciuse un erro ao crear {albumName}.",
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Non se puido cambiar o nome de {currentAlbumName} a {newAlbumName}."
 },
 "nplurals=2; plural=(n != 1);");

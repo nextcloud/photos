@@ -49,7 +49,6 @@ OC.L10N.register(
     "Delete the public link" : "Удалить общедоступную ссылку",
     "Share via public link" : "Поделиться общедоступной ссылкой",
     "Failed to fetch collaborators list." : "Не удалось получить список соавторов.",
-    "Failed to fetch album." : "Не удалось получить альбом.",
     "Failed to update album." : "Не удалось изменить альбом.",
     "This collection does not exist" : "Эта коллекция не существует",
     "An error occurred" : "Произошла ошибка",
@@ -105,7 +104,6 @@ OC.L10N.register(
     "Add photos to this place" : "Связать фотографии с этим местом",
     "Cover photo for place {placeName}" : "Заглавное изображение для места «{placeName}»",
     "There is no place yet!" : "Пока нет ни одного места.",
-    "Failed to fetch albums list." : "Не удалось получить список альбомов.",
     "Shared albums" : "Полученные альбомы",
     "Cover photo for shared album {albumName}." : "Заглавное изображение опубликованного альбома «{albumName}».",
     "Back to tags overview" : "Вернуться к просмотру меток",
@@ -130,8 +128,6 @@ OC.L10N.register(
     "Tagged photos" : "Фотографии с метками",
     "Tagged photo {title}" : "Фотография с метками «{title}»",
     "{title}'s face" : "Лицо {title}",
-    "Failed to create {albumName}." : "Не удалось создать альбом «{albumName}».",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Не удалось переименовать альбом «{currentAlbumName}» в «{newAlbumName}».",
     "Failed to rename {oldName} to {faceName}." : "Не удалось переименовать метку лица «{oldName}» в «{faceName}».",
     "Failed to delete {faceName}." : "Не удалось удалить метку лица «{faceName}».",
     "Failed to delete {fileId}." : "Не удалось удалить «{fileId}».",
@@ -142,6 +138,10 @@ OC.L10N.register(
     "_Share with %n user_::_Share with %n users_" : ["Доступно для %n пользователя","Доступно для %n пользователей","Доступно для %n пользователей","Доступно для %n пользователей"],
     "Search for collaborators" : "Поиск людей и групп для добавления в соавторы",
     "Add {collaboratorLabel} to the collaborators list" : "Добавить {collaboratorLabel} в соавторы",
-    "No collaborators available" : "Нет ни одного возможного соавтора"
+    "No collaborators available" : "Нет ни одного возможного соавтора",
+    "Failed to fetch album." : "Не удалось получить альбом.",
+    "Failed to fetch albums list." : "Не удалось получить список альбомов.",
+    "Failed to create {albumName}." : "Не удалось создать альбом «{albumName}».",
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Не удалось переименовать альбом «{currentAlbumName}» в «{newAlbumName}»."
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");
