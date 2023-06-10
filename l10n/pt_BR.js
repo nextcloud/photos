@@ -50,7 +50,6 @@ OC.L10N.register(
     "Create public link share" : "Criar compartilhamento de link público",
     "Share via public link" : "Compartilhar via link público",
     "Failed to fetch collaborators list." : "Falha ao buscar a lista de colaboradores.",
-    "Failed to fetch album." : "Falha ao buscar álbum.",
     "Failed to update album." : "Falha ao atualizar álbum.",
     "This collection does not exist" : "Esta coleção não existe",
     "An error occurred" : "Ocorreu um erro",
@@ -108,7 +107,6 @@ OC.L10N.register(
     "Add photos to this place" : "Adicionar fotos a este espaço",
     "Cover photo for place {placeName}" : "Foto da capa do lespaço {placeName}",
     "There is no place yet!" : "Ainda não há espaço!",
-    "Failed to fetch albums list." : "Falha ao buscar lista de álbuns.",
     "Shared albums" : "Álbuns compartilhados",
     "Cover photo for shared album {albumName}." : "Foto da capa do álbum compartilhado {albumName}.",
     "Back to tags overview" : "Voltar para a visão geral das etiquetas",
@@ -134,8 +132,6 @@ OC.L10N.register(
     "Tagged photos" : "Fotos marcadas",
     "Tagged photo {title}" : "Foto marcada {title}",
     "{title}'s face" : "rosto de {title}",
-    "Failed to create {albumName}." : "Falha ao criar {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Falha ao renomear {currentAlbumName} para {newAlbumName}.",
     "Failed to rename {oldName} to {faceName}." : "Falha ao renomear {oldName} para {faceName}.",
     "Failed to delete {faceName}." : "Falha ao remover {faceName}.",
     "Failed to delete {fileId}." : "Falha ao excluir {fileId}.",
@@ -146,6 +142,10 @@ OC.L10N.register(
     "_Share with %n user_::_Share with %n users_" : ["Compartilhar com %nusuário","Compartilhar com %nusuários","Compartilhar com %nusuários"],
     "Search for collaborators" : "Pesquisar colaboradores",
     "Add {collaboratorLabel} to the collaborators list" : "Adicionar {collaboratorsLabel} à lista de colaboradores",
-    "No collaborators available" : "Nenhum colaborador disponível"
+    "No collaborators available" : "Nenhum colaborador disponível",
+    "Failed to fetch album." : "Falha ao buscar álbum.",
+    "Failed to fetch albums list." : "Falha ao buscar lista de álbuns.",
+    "Failed to create {albumName}." : "Falha ao criar {albumName}.",
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Falha ao renomear {currentAlbumName} para {newAlbumName}."
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

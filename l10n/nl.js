@@ -47,7 +47,6 @@ OC.L10N.register(
     "Delete the public link" : "Verwijder de openbare link",
     "Share via public link" : "Deel via openbare link",
     "Failed to fetch collaborators list." : "Ophalen van bijdragerslijst is mislukt.",
-    "Failed to fetch album." : "Ophalen van album mislukt.",
     "Failed to update album." : "Bijwerken van album mislukt.",
     "This collection does not exist" : "Deze verzameling bestaat niet",
     "An error occurred" : "Er heeft een fout opgetreden",
@@ -98,7 +97,6 @@ OC.L10N.register(
     "This folder does not exist" : "Deze map bestaat niet",
     "Loading folders …" : "Mappen laden ...",
     "No photos in here" : "Geen foto's hier",
-    "Failed to fetch albums list." : "Ophalen van albumlijst mislukt.",
     "Shared albums" : "Gedeelde albums",
     "Cover photo for shared album {albumName}." : "Omslagfoto voor gedeeld album {albumName}.",
     "No tags yet" : "Nog geen labels",
@@ -117,8 +115,6 @@ OC.L10N.register(
     "Public album {title}" : "Openbaar album {title}",
     "Tagged photos" : "Gelabelde foto's",
     "{title}'s face" : "gezicht van {title}",
-    "Failed to create {albumName}." : "Het maken van {albumName} is mislukt.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Hernoemen van {currentAlbumName} naar {newAlbumName} mislukt.",
     "Failed to rename {oldName} to {faceName}." : "Hernoemen van {oldName} naar {faceName} mislukt.",
     "Failed to delete {faceName}." : "Verwijderen van {faceName} mislukt.",
     "Failed to delete {fileId}." : "Verwijderen van {fileId} mislukt.",
@@ -129,6 +125,10 @@ OC.L10N.register(
     "_Share with %n user_::_Share with %n users_" : ["Delen met %n gebruiker","Delen met %n gebruikers"],
     "Search for collaborators" : "Zoeken naar bijdragers",
     "Add {collaboratorLabel} to the collaborators list" : "Voeg {collaboratorLabel} toe aan de bijdragerslijst",
-    "No collaborators available" : "Geen bijdragers beschikbaar"
+    "No collaborators available" : "Geen bijdragers beschikbaar",
+    "Failed to fetch album." : "Ophalen van album mislukt.",
+    "Failed to fetch albums list." : "Ophalen van albumlijst mislukt.",
+    "Failed to create {albumName}." : "Het maken van {albumName} is mislukt.",
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Hernoemen van {currentAlbumName} naar {newAlbumName} mislukt."
 },
 "nplurals=2; plural=(n != 1);");

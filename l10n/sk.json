@@ -45,7 +45,6 @@
     "Delete the public link" : "Zmazať verejný odkaz",
     "Share via public link" : "Zdieľať ako verejný odkaz",
     "Failed to fetch collaborators list." : "Nepodarilo sa získať zoznam spolupracovníkov.",
-    "Failed to fetch album." : "Nepodarilo sa načítať album.",
     "Failed to update album." : "Nepodarilo sa aktualizovať album.",
     "This collection does not exist" : "Kolekcia neexistuje",
     "An error occurred" : "Vyskytla sa chyba",
@@ -95,7 +94,6 @@
     "This folder does not exist" : "Tento priečinok neexistuje",
     "Loading folders …" : "Nahrať priečinky ...",
     "No photos in here" : "Nie sú tu žiadne fotografie",
-    "Failed to fetch albums list." : "Nepodarilo sa načítať zoznam albumov.",
     "Shared albums" : "Zdieľané albumy",
     "Cover photo for shared album {albumName}." : "Fotka obalu pre zdieľaný album {albumName}.",
     "Back to tags overview" : "Späť k prehladu štítkov",
@@ -112,8 +110,6 @@
     "Failed to fetch faces list." : "Nepodarilo sa načítať zoznam tvárí.",
     "All your media" : "Všetky vaše médiá",
     "Tagged photos" : "Označené fotografie",
-    "Failed to create {albumName}." : "Zlyhalo vytváranie {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Chyba pri premenovávaní {currentAlbumName} na {newAlbumName}.",
     "Failed to rename {oldName} to {faceName}." : "Chyba pri premenovávaní {oldName} na {faceName}.",
     "Failed to delete {faceName}." : "Nepodarilo sa zmazať {faceName}.",
     "Failed to delete {fileId}." : "Nepodarilo sa zmazať {fileId}.",
@@ -124,6 +120,10 @@
     "_Share with %n user_::_Share with %n users_" : ["Zdieľať s %n užívateľom","Zdieľať s %n užívateľmi","Zdieľať s %n užívateľmi","Zdieľať s %n užívateľmi"],
     "Search for collaborators" : "Vyhľadať spolupracovníkov",
     "Add {collaboratorLabel} to the collaborators list" : "Pridať {collaboratorLabel} na zoznam spolupracovníkov",
-    "No collaborators available" : "Nie sú dostupný žiadny spolupracovníci"
+    "No collaborators available" : "Nie sú dostupný žiadny spolupracovníci",
+    "Failed to fetch album." : "Nepodarilo sa načítať album.",
+    "Failed to fetch albums list." : "Nepodarilo sa načítať zoznam albumov.",
+    "Failed to create {albumName}." : "Zlyhalo vytváranie {albumName}.",
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Chyba pri premenovávaní {currentAlbumName} na {newAlbumName}."
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);"
 }

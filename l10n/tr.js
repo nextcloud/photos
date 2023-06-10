@@ -50,7 +50,6 @@ OC.L10N.register(
     "Create public link share" : "Herkese açık paylaşılan bağlantı oluştur",
     "Share via public link" : "Herkese açık bağlantı ile paylaş",
     "Failed to fetch collaborators list." : "Katılımcıların listesi alınamadı.",
-    "Failed to fetch album." : "Albüm alınamadı",
     "Failed to update album." : "Albüm güncellenemedi",
     "This collection does not exist" : "Derleme bulunamadı",
     "An error occurred" : "Bir sorun çıktı",
@@ -108,7 +107,6 @@ OC.L10N.register(
     "Add photos to this place" : "Bu yere fotoğraflar ekle",
     "Cover photo for place {placeName}" : "{placeName} yerinin kapak görseli",
     "There is no place yet!" : "Henüz bir yer yok!",
-    "Failed to fetch albums list." : "Albümlerin listesi alınamadı.",
     "Shared albums" : "Paylaşılmış albümler",
     "Cover photo for shared album {albumName}." : "{albumName} paylaşılmış albümünün kapak görseli.",
     "Back to tags overview" : "Etiket özetine geri dön",
@@ -134,8 +132,6 @@ OC.L10N.register(
     "Tagged photos" : "Etiketlenmiş fotoğraflar",
     "Tagged photo {title}" : "{title} etiketlenmiş fotoğraf",
     "{title}'s face" : "{title} yüzü",
-    "Failed to create {albumName}." : "{albumName} albümü oluşturulamadı.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "{currentAlbumName} albümünün adı {newAlbumName} olarak değiştirilemedi.",
     "Failed to rename {oldName} to {faceName}." : "{oldName} adı {faceName} olarak değiştirilemedi.",
     "Failed to delete {faceName}." : "{faceName} silinemedi.",
     "Failed to delete {fileId}." : "{fileId} silinemedi.",
@@ -146,6 +142,10 @@ OC.L10N.register(
     "_Share with %n user_::_Share with %n users_" : ["%n kullanıcı ile paylaş","%n kullanıcı ile paylaş"],
     "Search for collaborators" : "Katılımcı ara",
     "Add {collaboratorLabel} to the collaborators list" : "{collaboratorLabel} kullanıcısını katılımcı listesine ekle",
-    "No collaborators available" : "Seçilebilecek bir katılımcı yok"
+    "No collaborators available" : "Seçilebilecek bir katılımcı yok",
+    "Failed to fetch album." : "Albüm alınamadı",
+    "Failed to fetch albums list." : "Albümlerin listesi alınamadı.",
+    "Failed to create {albumName}." : "{albumName} albümü oluşturulamadı.",
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "{currentAlbumName} albümünün adı {newAlbumName} olarak değiştirilemedi."
 },
 "nplurals=2; plural=(n > 1);");
