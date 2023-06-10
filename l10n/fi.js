@@ -50,7 +50,6 @@ OC.L10N.register(
     "Create public link share" : "Luo julkinen linkkijako",
     "Share via public link" : "Jaa julkisen linkin kautta",
     "Failed to fetch collaborators list." : "Osanottajien haku epäonnistui",
-    "Failed to fetch album." : "Albumin noutaminen epäonnistui.",
     "Failed to update album." : "Albumin päivittäminen epäonnistui.",
     "This collection does not exist" : "Tätä kokoelmaa ei ole olemassa",
     "An error occurred" : "Tapahtui virhe",
@@ -108,7 +107,6 @@ OC.L10N.register(
     "Add photos to this place" : "Lisää kuvia tälle sijainnille",
     "Cover photo for place {placeName}" : "Sijainnin {placeName} kansikuva",
     "There is no place yet!" : "Ei sijainteja!",
-    "Failed to fetch albums list." : "Albumien listan noutaminen epäonnistui.",
     "Shared albums" : "Jaetut albumit",
     "Cover photo for shared album {albumName}." : "Kansikuva jaetulle albumille {albumName}.",
     "Back to tags overview" : "Takaisin tunnistenäkymään",
@@ -134,8 +132,6 @@ OC.L10N.register(
     "Tagged photos" : "Tunnisteilla varustetut kuvat",
     "Tagged photo {title}" : "Kuvaan {title} asetettu tunniste",
     "{title}'s face" : "Henkilön {title} kasvot",
-    "Failed to create {albumName}." : "Albumin {albumName} luominen epäonnistui.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Albumin {currentAlbumName} nimen muuttaminen muotoon {newAlbumName} epäonnistui.",
     "Failed to rename {oldName} to {faceName}." : "Henkilön {oldName} nimeäminen muotoon {faceName} epäonnistui.",
     "Failed to delete {faceName}." : "Henkilön {faceName} poistaminen epäonnistui.",
     "Failed to delete {fileId}." : "Kohteen {fileId} poistaminen epäonnistui.",
@@ -146,6 +142,10 @@ OC.L10N.register(
     "_Share with %n user_::_Share with %n users_" : ["Jaa %n käyttäjän kanssa","Jaa %n käyttäjän kanssa"],
     "Search for collaborators" : "Etsi osanottajia",
     "Add {collaboratorLabel} to the collaborators list" : "Lisää {collaboratorLabel} osanottajiin",
-    "No collaborators available" : "Osanottajia ei löytynyt"
+    "No collaborators available" : "Osanottajia ei löytynyt",
+    "Failed to fetch album." : "Albumin noutaminen epäonnistui.",
+    "Failed to fetch albums list." : "Albumien listan noutaminen epäonnistui.",
+    "Failed to create {albumName}." : "Albumin {albumName} luominen epäonnistui.",
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Albumin {currentAlbumName} nimen muuttaminen muotoon {newAlbumName} epäonnistui."
 },
 "nplurals=2; plural=(n != 1);");

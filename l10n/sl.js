@@ -49,7 +49,6 @@ OC.L10N.register(
     "Delete the public link" : "Izbriši javno povezavo",
     "Share via public link" : "V souporabi z javno povezavo",
     "Failed to fetch collaborators list." : "Pridobivanje seznama sodelovanja je spodletelo.",
-    "Failed to fetch album." : "Pridobivanje albuma je spodletelo.",
     "Failed to update album." : "Posodabljanje albuma je spodletelo.",
     "This collection does not exist" : "Zbirka ne obstaja.",
     "An error occurred" : "Prišlo je do napake.",
@@ -117,12 +116,13 @@ OC.L10N.register(
     "Tagged photos" : "Označene fotografije",
     "Tagged photo {title}" : "Označena fotografij {title}",
     "{title}'s face" : "{title}: obraz",
-    "Failed to create {albumName}." : "Ustvarjanje albuma {albumName} je spodletelo.",
     "Failed to delete {fileId}." : "Brisanje polja {fileId} je spodletelo.",
     "Failed to delete {fileName}." : "Brisanje datoteke {fileName} je spodletelo.",
     "Locations" : "Mesta",
     "Search for collaborators" : "Iskanje sodelujočih",
     "Add {collaboratorLabel} to the collaborators list" : "Dodaj {collaboratorLabel} na seznam sodelujočih",
-    "No collaborators available" : "Ni navedenih sodelujočih urejevalcev"
+    "No collaborators available" : "Ni navedenih sodelujočih urejevalcev",
+    "Failed to fetch album." : "Pridobivanje albuma je spodletelo.",
+    "Failed to create {albumName}." : "Ustvarjanje albuma {albumName} je spodletelo."
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");

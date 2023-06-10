@@ -50,7 +50,6 @@ OC.L10N.register(
     "Create public link share" : "Направи дељење јавном везом",
     "Share via public link" : "Подели путем јавног линка",
     "Failed to fetch collaborators list." : "Није успело добављање листе сарадника.",
-    "Failed to fetch album." : "Није успело добављање албума.",
     "Failed to update album." : "Није успело ажурирање албума.",
     "This collection does not exist" : "Ова колекција не постоји",
     "An error occurred" : "Догодила се грешка",
@@ -108,7 +107,6 @@ OC.L10N.register(
     "Add photos to this place" : "Додај фотографије на ово место",
     "Cover photo for place {placeName}" : "Фотографија омота за место {placeName}",
     "There is no place yet!" : "Још увек нема места!",
-    "Failed to fetch albums list." : "Није успело добављање листе албума.",
     "Shared albums" : "Дељени албуми",
     "Cover photo for shared album {albumName}." : "Фотографија омота за дељени албум {albumName}.",
     "Back to tags overview" : "Назад на преглед ознака",
@@ -134,8 +132,6 @@ OC.L10N.register(
     "Tagged photos" : "Слике са ознаком",
     "Tagged photo {title}" : "Означена фотографија {title}",
     "{title}'s face" : "лице {title}",
-    "Failed to create {albumName}." : "{albumName} није могао да се креира.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Није успела промена имена {currentAlbumName} у {newAlbumName}.",
     "Failed to rename {oldName} to {faceName}." : "Није успела промена имена {oldName} у {faceName}.",
     "Failed to delete {faceName}." : "Није успело брисање {faceName}.",
     "Failed to delete {fileId}." : "Није успело брисање {fileId}.",
@@ -146,6 +142,10 @@ OC.L10N.register(
     "_Share with %n user_::_Share with %n users_" : ["Подели са %n корисником","Подели са %n корисника","Подели са %n корисника"],
     "Search for collaborators" : "Претрага сарадника",
     "Add {collaboratorLabel} to the collaborators list" : "Додај {collaboratorLabel} на листу сарадника",
-    "No collaborators available" : "Нема достуоних сарадника"
+    "No collaborators available" : "Нема достуоних сарадника",
+    "Failed to fetch album." : "Није успело добављање албума.",
+    "Failed to fetch albums list." : "Није успело добављање листе албума.",
+    "Failed to create {albumName}." : "{albumName} није могао да се креира.",
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Није успела промена имена {currentAlbumName} у {newAlbumName}."
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

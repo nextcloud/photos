@@ -50,7 +50,6 @@ OC.L10N.register(
     "Create public link share" : "Vytvořit sdílení veřejným odkazem",
     "Share via public link" : "Nasdílet prostřednictvím veřejného odkazu",
     "Failed to fetch collaborators list." : "Nepodařilo se získat seznam spolupracujících.",
-    "Failed to fetch album." : "Album se nepodařilo stáhnout.",
     "Failed to update album." : "Album se nepodařilo aktualizovat.",
     "This collection does not exist" : "Tato sbírka neexistuje",
     "An error occurred" : "Došlo k chybě",
@@ -108,7 +107,6 @@ OC.L10N.register(
     "Add photos to this place" : "Přidat tomuto umístění nějaké fotky",
     "Cover photo for place {placeName}" : "Foto na obálku pro umístění {placeName}",
     "There is no place yet!" : "Zatím zde není žádné umístění!",
-    "Failed to fetch albums list." : "Nepodařilo se získat seznam alb.",
     "Shared albums" : "Sdílená alba",
     "Cover photo for shared album {albumName}." : "Foto na obálku sdíleného alba {albumName}.",
     "Back to tags overview" : "Zpět na přehled štítků",
@@ -134,8 +132,6 @@ OC.L10N.register(
     "Tagged photos" : "Oštítkované fotky",
     "Tagged photo {title}" : "Fotka {title} opatřena štítkem",
     "{title}'s face" : "Obličej {title}",
-    "Failed to create {albumName}." : "Nepodařilo se vytvořit {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Nepodařilo přejmenovat {currentAlbumName} to {newAlbumName}.",
     "Failed to rename {oldName} to {faceName}." : "Nepodařilo se přejmenovat {oldName} na {faceName}.",
     "Failed to delete {faceName}." : "Nepodařilo se smazat {faceName}.",
     "Failed to delete {fileId}." : "Nepodařilo se smazat {fileId}.",
@@ -146,6 +142,10 @@ OC.L10N.register(
     "_Share with %n user_::_Share with %n users_" : ["Nasdílet %n uživateli","Nasdílet %n uživatelům","Nasdílet %n uživatelům","Nasdílet %n uživatelům"],
     "Search for collaborators" : "Vyhledat spolupracující",
     "Add {collaboratorLabel} to the collaborators list" : "Přidat {collaboratorLabel} na seznam spolupracujících",
-    "No collaborators available" : "Nejsou k dispozici žádní spolupracující"
+    "No collaborators available" : "Nejsou k dispozici žádní spolupracující",
+    "Failed to fetch album." : "Album se nepodařilo stáhnout.",
+    "Failed to fetch albums list." : "Nepodařilo se získat seznam alb.",
+    "Failed to create {albumName}." : "Nepodařilo se vytvořit {albumName}.",
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Nepodařilo přejmenovat {currentAlbumName} to {newAlbumName}."
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");
