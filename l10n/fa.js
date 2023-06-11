@@ -21,6 +21,7 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "باز کردن \"{نام}\" زیر مسیر",
     "Back to {folder}" : "برگشت به {} پوشه",
     "Share this folder" : "این پوشه را به اشتراک بگذار",
+    "View" : "نمایش",
     "Favorite" : "مورد‌ ‌علاقه‌",
     "Remove from favorites" : "حذف کردن از مورد علاقه‌ها",
     "No photos in here" : "هیچ عکسی در اینجا نیست",
