@@ -107,7 +107,7 @@ export default {
 			if (!this.cover) return {}
 			return this.getCoverStyle(this.face.basename)
 		},
-	}
+	},
 }
 </script>
 

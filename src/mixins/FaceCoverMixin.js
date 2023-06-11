@@ -21,7 +21,7 @@
  */
 
 import { mapGetters } from 'vuex'
-import he from "he";
+import he from 'he'
 
 export default {
 	name: 'FaceCoverMixin',
