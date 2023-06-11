@@ -278,6 +278,10 @@ export default {
 		},
 	},
 
+  mounted() {
+    this.fetchFaceContent(this.faceName)
+  },
+
 	watch: {
 		face() {
 			if (this.face) {

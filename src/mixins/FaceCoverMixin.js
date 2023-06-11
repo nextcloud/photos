@@ -21,6 +21,7 @@
  */
 
 import { mapGetters } from 'vuex'
+import he from "he";
 
 export default {
 	name: 'FaceCoverMixin',
@@ -35,32 +36,7 @@ export default {
 
 	methods: {
 		getFaceCover(faceName) {
-			// Give high scores for faces that intersect with the edge of the picture (with a margin of half the face size)
-			const scoreFacePosition = (faceDetection) => {
-				return Math.max(0, -1 * (faceDetection.x - faceDetection.width * 0.5))
-				+ Math.max(0, -1 * (faceDetection.y - faceDetection.height * 0.5))
-				+ Math.max(0, -1 * (1 - (faceDetection.x + faceDetection.width) - faceDetection.width * 0.5))
-				+ Math.max(0, -1 * (1 - (faceDetection.y + faceDetection.height) - faceDetection.height * 0.5))
-			}
-
-			return (this.facesFiles[faceName] || [])
-				.slice(0, 25)
-				.map(fileId => this.files[fileId])
-				// sort larges face first
-				.sort((a, b) =>
-					b.faceDetections.find(d => d.title === faceName).width
-					- a.faceDetections.find(d => d.title === faceName).width
-				)
-				// sort fewest face detections first
-				.sort((a, b) =>
-					a.faceDetections.length
-					- b.faceDetections.length
-				)
-				// Sort faces that are at the edge last
-				.sort((a, b) =>
-					scoreFacePosition(a.faceDetections.find(d => d.title === faceName))
-					- scoreFacePosition(b.faceDetections.find(d => d.title === faceName))
-				)[0]
+			return JSON.parse(he.decode(this.faces[faceName].props['face-preview-image'] || '{}'))
 		},
 
 		/**
@@ -72,12 +48,10 @@ export default {
 		 */
 		getCoverStyle(faceName) {
 			const cover = this.getFaceCover(faceName)
-			if (!cover) {
+			if (!cover || !cover.detection) {
 				return {}
 			}
-			const detections = cover.faceDetections
-
-			const detection = detections.find(detection => detection.title === faceName)
+			const detection = cover.detection
 
 			// Zoom into the picture so that the face fills the --photos-face-width box nicely
 			// if the face is larger than the image, we don't zoom out (reason for the Math.max)
