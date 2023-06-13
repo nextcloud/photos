@@ -137,7 +137,7 @@ OC.L10N.register(
     "_Share with %n user_::_Share with %n users_" : ["Compartir con %n usuario","Compartir con %n usuarios"],
     "Search for collaborators" : "Buscar colaboradores",
     "Add {collaboratorLabel} to the collaborators list" : "Engade a {collaboratorLabel} á lista de colaboradores",
-    "No collaborators available" : "Non hai colaboradores dispoñibles",
+    "No collaborators available" : "Non hai colaboradores dispoñíbeis",
     "Failed to fetch album." : "Produciuse un erro ao recuperar o álbum.",
     "Failed to fetch albums list." : "Produciuse un erro ao recuperar a lista de álbums.",
     "Failed to create {albumName}." : "Produciuse un erro ao crear {albumName}.",
