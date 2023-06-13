@@ -122,7 +122,6 @@
 			<FilesPicker v-if="album !== undefined"
 				:destination="album.basename"
 				:blacklist-ids="albumFileIds"
-				:loading="loadingAddFilesToAlbum"
 				@files-picked="handleFilesPicked" />
 		</NcModal>
 

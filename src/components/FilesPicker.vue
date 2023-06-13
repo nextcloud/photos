@@ -43,8 +43,8 @@
 				:section-header-height="50"
 				:scroll-to-section="targetMonth"
 				@need-content="getFiles">
-				<template slot-scope="{file, height, distance}">
-					<h3 v-if="file.sectionHeader"
+				<template slot-scope="{file, height, isHeader, distance}">
+					<h3 v-if="isHeader"
 						:id="`file-picker-section-header-${file.id}`"
 						:style="{ height: `${height}px`}"
 						class="section-header">

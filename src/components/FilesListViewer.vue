@@ -21,36 +21,55 @@
  -->
 <template>
 	<div class="files-list-viewer">
-		<NcEmptyContent v-if="emptyMessage !== '' && items.length === 0 && !loading"
+		<NcEmptyContent v-if="emptyMessage !== '' && itemsBySections.length === 1 && itemsBySections[0].items.length === 0 && !loading"
 			key="emptycontent"
 			:title="emptyMessage">
 			<PackageVariant slot="icon" />
 		</NcEmptyContent>
 
-		<TiledLayout :base-height="baseHeight" :items="items">
-			<VirtualScrolling slot-scope="{rows}"
+		<TiledLayout :base-height="baseHeight" :sections="itemsBySections">
+			<VirtualScrolling slot-scope="{tiledSections}"
 				:use-window="useWindow"
 				:container-element="containerElement"
-				:rows="rows"
+				:sections="tiledSections"
 				:scroll-to-key="scrollToSection"
+				:header-height="sectionHeaderHeight"
 				@need-content="needContent">
-				<ul slot-scope="{renderedRows}">
-					<template v-for="row of renderedRows">
-						<!--
-							We are subtracting 1 from flex-basis to compensate for rounding issues.
-							The flex algo will then compensate with flex-grow.
-						-->
-						<li v-for="item of row.items"
-							:key="item.id"
-							:class="{'files-list-viewer__section-header': item.sectionHeader}"
-							:style="{ 'flex-basis': item.ratio ? `${row.height * item.ratio - 1}px` : '100%', height: `${row.height}px`}">
+				<template slot-scope="{visibleSections}">
+					<div v-for="section of visibleSections" :key="section.id">
+						<template v-if="section.id !== ''">
 							<!-- Placeholder when initial loading -->
-							<div v-if="showPlaceholders" class="files-list-viewer__placeholder" />
+							<div v-if="showPlaceholders"
+								class="files-list-viewer__placeholder"
+								:style="{ 'flex-basis': '100%', height: `${sectionHeaderHeight}px`}" />
 							<!-- Real file. -->
-							<slot v-else :file="item" :distance="row.distance" />
-						</li>
-					</template>
-				</ul>
+							<slot v-else
+								:file="{id: section.id}"
+								:is-header="true"
+								class="files-list-viewer__section-header"
+								:style="{ 'flex-basis': '100%', height: `${sectionHeaderHeight}px`}" />
+						</template>
+
+						<ul>
+							<template v-for="(row, rowIndex) of section.rows">
+								<!--
+									We are subtracting 1 from flex-basis to compensate for rounding issues.
+									The flex algo will then compensate with flex-grow.
+									'last-tiled-row' prevents the last row's items from growing.
+								-->
+								<li v-for="item of row.items"
+									:key="item.id"
+									:class="{ 'last-tiled-rows': rowIndex === section.rows.length - 1 }"
+									:style="{ 'flex-basis': `${item.width - 1}px`, height: `${item.height}px`}">
+									<!-- Placeholder when initial loading -->
+									<div v-if="showPlaceholders" class="files-list-viewer__placeholder" />
+									<!-- Real file. -->
+									<slot v-else :file="item" :distance="row.distance" />
+								</li>
+							</template>
+						</ul>
+					</div>
+				</template>
 				<NcLoadingIcon v-if="loading && !showPlaceholders" slot="loader" class="files-list-viewer__loader" />
 			</VirtualScrolling>
 		</TiledLayout>
@@ -158,37 +177,36 @@ export default {
 		]),
 
 		/**
-		 * @return {object[]} The list of items to pass to TiledLayout.
+		 * @return {{id: string, items: import('../services/TiledLayout.js').TiledItem[][]}[]} The list of items to pass to TiledLayout.
 		 */
 		fileIdsToItems() {
 			if (this.fileIds === undefined) {
 				return []
 			}
 
-			return this.fileIds
-				.filter(fileId => this.files[fileId])
-				.map(this.mapFileToItem)
+			return [{
+				id: '',
+				items: this.fileIds
+					.filter(fileId => this.files[fileId])
+					.map(this.mapFileToItem),
+			}]
 		},
 
 		/**
-		 * @return {object[]} The list of items separated by sections to pass to TiledLayout.
+		 * @return {{id: string, items: import('../services/TiledLayout.js').TiledItem[][]}[]} The list of items separated by sections to pass to TiledLayout.
 		 */
 		sectionsToItems() {
 			if (this.sections === undefined) {
 				return []
 			}
 
-			return this.sections.flatMap((sectionId) => {
-				return [
-					{
-						id: sectionId,
-						sectionHeader: true,
-						height: this.sectionHeaderHeight,
-					},
-					...this.fileIdsBySection[sectionId]
+			return this.sections.map((sectionId) => {
+				return {
+					id: sectionId,
+					items: this.fileIdsBySection[sectionId]
 						.filter(fileId => this.files[fileId])
 						.map(this.mapFileToItem),
-				]
+				}
 			})
 		},
 
@@ -200,13 +218,12 @@ export default {
 		},
 
 		/**
-		 * @return {object[]} The list of items to pass to TiledLayout.
+		 * @return {{id: string, items: import('../services/TiledLayout.js').TiledItem[][]}[]} The list of items to pass to TiledLayout.
 		 */
-		items() {
-
+		itemsBySections() {
 			if (this.fileIds !== undefined) {
 				if (this.showPlaceholders) {
-					return this.placeholderFiles
+					return [{ id: '', items: this.placeholderFiles }]
 				}
 
 				return this.fileIdsToItems
@@ -214,7 +231,7 @@ export default {
 
 			if (this.sections !== undefined) {
 				if (this.showPlaceholders) {
-					return [{ height: 75, sectionHeader: true }, ...this.placeholderFiles]
+					return [{ id: 'placeholder', items: this.placeholderFiles }]
 				}
 
 				return this.sectionsToItems
@@ -223,6 +240,7 @@ export default {
 			return []
 		},
 
+		/** @return {boolean} The list of items to pass to TiledLayout. */
 		showLoader() {
 			return this.loading && (this.fileIds?.length !== 0 || this.sections?.length !== 0)
 		},
@@ -246,6 +264,10 @@ export default {
 			this.$emit('need-content')
 		},
 
+		/**
+		 * @param {string} fileId
+		 * @return {import('../services/TiledLayout.js').TiledItem[]}
+		 */
 		mapFileToItem(fileId) {
 			const file = this.files[fileId]
 			return {
@@ -287,7 +309,7 @@ export default {
 		display: flex;
 		flex-wrap: wrap;
 
-		li {
+		li:not(.last-tiled-rows) {
 			flex-grow: 1;
 		}
 	}

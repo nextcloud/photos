@@ -89,13 +89,13 @@
 			:base-height="isMobile ? 120 : 200"
 			:empty-message="t('photos', 'No photos or videos in here')"
 			@need-content="getContent">
-			<template slot-scope="{file, distance}">
-				<h3 v-if="file.sectionHeader"
+			<template slot-scope="{file, isHeader, distance}">
+				<h2 v-if="isHeader"
 					:id="`file-picker-section-header-${file.id}`"
 					class="section-header">
 					<b>{{ file.id | dateMonth }}</b>
 					{{ file.id | dateYear }}
-				</h3>
+				</h2>
 				<File v-else
 					:file="files[file.id]"
 					:allow-selection="true"
