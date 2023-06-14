@@ -13,6 +13,7 @@ OC.L10N.register(
     "Shared by" : "شاركه",
     "No recommendations. Start typing." : "لا توجد توصيات. ابدأ بالكتابة.",
     "Group" : "المجموعة",
+    "Public link copied!" : "تم نسخ الرابط العام",
     "Copy public link" : "نسخ الرابط العام",
     "An error occurred" : "طرأ هناك خطأ",
     "Open the full size \"{name}\" image" : "افتح الصورة بالحجم الكامل \"{name}\" ",
