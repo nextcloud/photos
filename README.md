@@ -16,7 +16,11 @@
 In your Nextcloud, simply enable the Photos app through the Apps management.
 The Nextcloud Photos app is only included in nextcloud v18 and higher.
 
-Consider installing the [preview generator](https://github.com/rullzer/previewgenerator) for pre-generating thumbnails.
+Optional add-ons that make the Photos app even better:
+
+* Install [Recognize for Nextcloud](https://github.com/nextcloud/recognize) for AI-powered automatic face and object recognition. Includes automated tagging/categorizing.
+* Install the [preview generator](https://github.com/rullzer/previewgenerator) if pre-generating thumbnails is desired.
+* Install [Imaginary](https://docs.nextcloud.com/server/latest/admin_manual/installation/server_tuning.html#previews) to speed up preview generation.
 
 ## Mobile Photos
 
