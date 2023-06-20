@@ -144,6 +144,6 @@
     "Failed to fetch album." : "Produciuse un fallo ao recuperar o álbum.",
     "Failed to fetch albums list." : "Produciuse un fallo ao recuperar a lista de álbums.",
     "Failed to create {albumName}." : "Produciuse un fallo ao crear {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Non se puido cambiar o nome de {currentAlbumName} a {newAlbumName}."
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Non foi posíbel cambiar o nome de {currentAlbumName} a {newAlbumName}."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
