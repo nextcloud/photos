@@ -22,16 +22,17 @@
 <template>
 	<div class="file-picker">
 		<div class="file-picker__content">
-			<div class="file-picker__navigation"
-				:class="{'file-picker__navigation--placeholder': monthsList.length === 0}">
-				<div v-for="month in monthsList"
-					:key="month"
-					class="file-picker__navigation__month"
-					:class="{selected: targetMonth === month}"
-					@click="targetMonth = month">
-					{{ month | dateMonthAndYear }}
-				</div>
-			</div>
+			<nav class="file-picker__navigation" :class="{'file-picker__navigation--placeholder': monthsList.length === 0}">
+				<ul>
+					<li v-for="month in monthsList"
+						:key="month"
+						class="file-picker__navigation__month"
+						:class="{selected: targetMonth === month}"
+						@click="targetMonth = month">
+						{{ month | dateMonthAndYear }}
+					</li>
+				</ul>
+			</nav>
 
 			<FilesListViewer class="file-picker__file-list"
 				:class="{'file-picker__file-list--placeholder': monthsList.length === 0}"
