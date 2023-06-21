@@ -117,12 +117,11 @@
 
 		<NcModal v-if="showAddPhotosModal"
 			size="large"
-			:title="t('photos', 'Add photos to the album')"
+			:title="t('photos', 'Add photos to {albumName}', {albumName: albumName})"
 			@close="showAddPhotosModal = false">
 			<FilesPicker v-if="album !== undefined"
 				:destination="album.basename"
 				:blacklist-ids="albumFileIds"
-				:loading="loadingAddFilesToAlbum"
 				@files-picked="handleFilesPicked" />
 		</NcModal>
 

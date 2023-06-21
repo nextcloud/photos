@@ -24,9 +24,9 @@
 		class="tiled-container">
 		<!-- Slot to allow changing the rows before passing them to TiledRows -->
 		<!-- Useful for partially rendering rows like with VirtualScrolling -->
-		<slot :rows="rows">
+		<slot :tiled-sections="tiledSections">
 			<!-- Default rendering -->
-			<TiledRows :rows="rows" />
+			<TiledRows :rows="tiledSections" />
 		</slot>
 	</div>
 </template>
@@ -44,7 +44,8 @@ export default {
 	},
 
 	props: {
-		items: {
+		/** @type {import('vue').PropType<import('../VirtualScrolling.vue').Section[]>} */
+		sections: {
 			type: Array,
 			required: true,
 		},
@@ -63,11 +64,19 @@ export default {
 	},
 
 	computed: {
-		/** @return {import('../services/TiledLayout.js').TiledRow[]} */
-		rows() {
-			logger.debug('[TiledLayout] Computing rows', { items: this.items })
+		/** @return {import('../../services/TiledLayout.js').TiledSection[]} */
+		tiledSections() {
+			logger.debug('[TiledLayout] Computing rows', { items: this.sections })
 
-			return splitItemsInRows(this.items, this.containerWidth, this.baseHeight)
+			return this.sections.map(section => {
+				const rows = splitItemsInRows(section.items, this.containerWidth, this.baseHeight)
+				return {
+					...section,
+					key: section.id,
+					rows: rows.map(row => ({ ...row, sectionKey: section.id })),
+					height: rows.reduce((totalHeight, row) => totalHeight + row.height, 0),
+				}
+			})
 		},
 	},
 
