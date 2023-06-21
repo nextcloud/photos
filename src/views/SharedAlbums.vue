@@ -27,8 +27,8 @@
 		<HeaderNavigation key="navigation"
 			slot="header"
 			:loading="loadingCollections"
-			:title="t('photos', 'Shared albums')"
-			:root-title="t('photos', 'Shared albums')"
+			:title="t('photos', 'Collaborative albums')"
+			:root-title="t('photos', 'Collaborative albums')"
 			@refresh="fetchSharedAlbums" />
 
 		<CollectionCover :key="collection.basename"
