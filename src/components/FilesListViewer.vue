@@ -177,40 +177,6 @@ export default {
 		]),
 
 		/**
-		 * @return {{id: string, items: import('../services/TiledLayout.js').TiledItem[][]}[]} The list of items to pass to TiledLayout.
-		 */
-		fileIdsToItems() {
-			if (this.fileIds === undefined) {
-				return []
-			}
-
-			return [{
-				id: '',
-				items: this.fileIds
-					.filter(fileId => this.files[fileId])
-					.map(this.mapFileToItem),
-			}]
-		},
-
-		/**
-		 * @return {{id: string, items: import('../services/TiledLayout.js').TiledItem[][]}[]} The list of items separated by sections to pass to TiledLayout.
-		 */
-		sectionsToItems() {
-			if (this.sections === undefined) {
-				return []
-			}
-
-			return this.sections.map((sectionId) => {
-				return {
-					id: sectionId,
-					items: this.fileIdsBySection[sectionId]
-						.filter(fileId => this.files[fileId])
-						.map(this.mapFileToItem),
-				}
-			})
-		},
-
-		/**
 		 * @return {boolean} The list of items to pass to TiledLayout.
 		 */
 		showPlaceholders() {
@@ -226,7 +192,12 @@ export default {
 					return [{ id: '', items: this.placeholderFiles }]
 				}
 
-				return this.fileIdsToItems
+				return [{
+					id: '',
+					items: this.fileIds
+						.filter(fileId => this.files[fileId])
+						.map(this.mapFileToItem),
+				}]
 			}
 
 			if (this.sections !== undefined) {
@@ -234,7 +205,14 @@ export default {
 					return [{ id: 'placeholder', items: this.placeholderFiles }]
 				}
 
-				return this.sectionsToItems
+				return this.sections.map((sectionId) => {
+					return {
+						id: sectionId,
+						items: this.fileIdsBySection[sectionId]
+							.filter(fileId => this.files[fileId])
+							.map(this.mapFileToItem),
+					}
+				})
 			}
 
 			return []
