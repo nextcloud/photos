@@ -30,6 +30,12 @@ export default {
 		}
 	},
 
+	watch: {
+		$route() {
+			this.resetSelection()
+		},
+	},
+
 	methods: {
 		onFileSelectToggle({ id, value }) {
 			this.$set(this.selection, id, value)
