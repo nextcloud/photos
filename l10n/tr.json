@@ -79,7 +79,6 @@
     "Remove selection from album" : "Seçilmişleri albümden kaldır",
     "This album does not have any photos or videos yet!" : "Bu albümde henüz bir fotoğraf ya da görüntü yok!",
     "Add photos to this album" : "Bu albüme fotoğraflar ekle",
-    "Add photos to the album" : "Albüme fotoğraflar ekle",
     "Manage collaborators" : "Katılımcı yönetimi",
     "Save collaborators for this album." : "Bu albümün katılımcılarını kaydet.",
     "Cover photo for album {albumName}" : "{albumName} albümünün kapak görseli",
@@ -105,7 +104,6 @@
     "Add photos to this place" : "Bu yere fotoğraflar ekle",
     "Cover photo for place {placeName}" : "{placeName} yerinin kapak görseli",
     "There is no place yet!" : "Henüz bir yer yok!",
-    "Shared albums" : "Paylaşılmış albümler",
     "Cover photo for shared album {albumName}." : "{albumName} paylaşılmış albümünün kapak görseli.",
     "Back to tags overview" : "Etiket özetine geri dön",
     "No photos with this tag yet" : "Henüz bu şekilde etiketlenmiş bir fotoğraf yok",
@@ -142,7 +140,9 @@
     "Add {collaboratorLabel} to the collaborators list" : "{collaboratorLabel} kullanıcısını katılımcı listesine ekle",
     "No collaborators available" : "Seçilebilecek bir katılımcı yok",
     "Failed to fetch album." : "Albüm alınamadı",
+    "Add photos to the album" : "Albüme fotoğraflar ekle",
     "Failed to fetch albums list." : "Albümlerin listesi alınamadı.",
+    "Shared albums" : "Paylaşılmış albümler",
     "Failed to create {albumName}." : "{albumName} albümü oluşturulamadı.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "{currentAlbumName} albümünün adı {newAlbumName} olarak değiştirilemedi."
 },"pluralForm" :"nplurals=2; plural=(n > 1);"

@@ -79,7 +79,6 @@
     "Remove selection from album" : "Odebrat vybrané z alba",
     "This album does not have any photos or videos yet!" : "Toto album zatím neobsahuje žádné fotky či videa!",
     "Add photos to this album" : "Přidat fotky do tohoto alba",
-    "Add photos to the album" : "Přidat fotky do alba",
     "Manage collaborators" : "Spravovat spolupracující",
     "Save collaborators for this album." : "Uložit spolupracující pro toto album.",
     "Cover photo for album {albumName}" : "Foto na obálku alba {albumName}",
@@ -105,7 +104,6 @@
     "Add photos to this place" : "Přidat tomuto umístění nějaké fotky",
     "Cover photo for place {placeName}" : "Foto na obálku pro umístění {placeName}",
     "There is no place yet!" : "Zatím zde není žádné umístění!",
-    "Shared albums" : "Sdílená alba",
     "Cover photo for shared album {albumName}." : "Foto na obálku sdíleného alba {albumName}.",
     "Back to tags overview" : "Zpět na přehled štítků",
     "No photos with this tag yet" : "Zatím žádné fotky s tímto štítkem",
@@ -142,7 +140,9 @@
     "Add {collaboratorLabel} to the collaborators list" : "Přidat {collaboratorLabel} na seznam spolupracujících",
     "No collaborators available" : "Nejsou k dispozici žádní spolupracující",
     "Failed to fetch album." : "Album se nepodařilo stáhnout.",
+    "Add photos to the album" : "Přidat fotky do alba",
     "Failed to fetch albums list." : "Nepodařilo se získat seznam alb.",
+    "Shared albums" : "Sdílená alba",
     "Failed to create {albumName}." : "Nepodařilo se vytvořit {albumName}.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Nepodařilo přejmenovat {currentAlbumName} to {newAlbumName}."
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;"

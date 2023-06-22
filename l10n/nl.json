@@ -74,7 +74,6 @@
     "Remove selection from album" : "Verwijder selectie uit album",
     "This album does not have any photos or videos yet!" : "Dit album heeft nog geen foto's of video's!",
     "Add photos to this album" : "Foto's toevoegen aan dit album",
-    "Add photos to the album" : "Foto's toevoegen aan het album",
     "Manage collaborators" : "Beheer bijdragers",
     "Save collaborators for this album." : "Bewaar bijdragers voor dit album.",
     "Cover photo for album {albumName}" : "Omslagfoto voor album {albumName}",
@@ -95,7 +94,6 @@
     "This folder does not exist" : "Deze map bestaat niet",
     "Loading folders …" : "Mappen laden ...",
     "No photos in here" : "Geen foto's hier",
-    "Shared albums" : "Gedeelde albums",
     "Cover photo for shared album {albumName}." : "Omslagfoto voor gedeeld album {albumName}.",
     "No tags yet" : "Nog geen labels",
     "Photos with tags will show up here" : "Gelabelde foto's worden hier getoond",
@@ -125,7 +123,9 @@
     "Add {collaboratorLabel} to the collaborators list" : "Voeg {collaboratorLabel} toe aan de bijdragerslijst",
     "No collaborators available" : "Geen bijdragers beschikbaar",
     "Failed to fetch album." : "Ophalen van album mislukt.",
+    "Add photos to the album" : "Foto's toevoegen aan het album",
     "Failed to fetch albums list." : "Ophalen van albumlijst mislukt.",
+    "Shared albums" : "Gedeelde albums",
     "Failed to create {albumName}." : "Het maken van {albumName} is mislukt.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Hernoemen van {currentAlbumName} naar {newAlbumName} mislukt."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
