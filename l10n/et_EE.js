@@ -77,7 +77,6 @@ OC.L10N.register(
     "Remove selection from album" : "Eemalda valitud failid albumist",
     "This album does not have any photos or videos yet!" : "Selles albumis pole veel ühtegi fotot ega videot!",
     "Add photos to this album" : "Lisa sellesse albumisse fotosid",
-    "Add photos to the album" : "Lisa albumisse fotosid",
     "Manage collaborators" : "Halda kaastöölisi",
     "Save collaborators for this album." : "Salvesta selle albumi kaastöölised.",
     "Cover photo for album {albumName}" : "Albumi {albumName} kaanepilt",
@@ -103,7 +102,6 @@ OC.L10N.register(
     "Add photos to this place" : "Lisa siia kohta fotosid",
     "Cover photo for place {placeName}" : "Koha {placeName} kaanepilt",
     "There is no place yet!" : "Ühtegi kohta pole veel!",
-    "Shared albums" : "Jagatud albumid",
     "Cover photo for shared album {albumName}." : "Jagatud albumi {albumName} kaanepilt.",
     "Back to tags overview" : "Tagasi siltide ülevaatesse",
     "No photos with this tag yet" : "Selle sildiga pole veel fotosid",
@@ -137,7 +135,9 @@ OC.L10N.register(
     "Add {collaboratorLabel} to the collaborators list" : "Lisa {collaboratorLabel} kaastööliste hulka",
     "No collaborators available" : "Kaastöölisi pole",
     "Failed to fetch album." : "Albumi laadimine ebaõnnestus.",
+    "Add photos to the album" : "Lisa albumisse fotosid",
     "Failed to fetch albums list." : "Albumite loendi laadimine ebaõnnestus.",
+    "Shared albums" : "Jagatud albumid",
     "Failed to create {albumName}." : "Albumi {albumName} loomine ebaõnnestus."
 },
 "nplurals=2; plural=(n != 1);");

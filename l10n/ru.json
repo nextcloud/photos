@@ -79,7 +79,6 @@
     "Remove selection from album" : "Удалить выбранное из альбома",
     "This album does not have any photos or videos yet!" : "Альбом пока не содержит ни одной фотографии или видео.",
     "Add photos to this album" : "Добавить фотографии в альбом",
-    "Add photos to the album" : "Добавить фотографии в альбом",
     "Manage collaborators" : "Управление списком соавторов",
     "Save collaborators for this album." : "Сохранить список соавторов альбома.",
     "Cover photo for album {albumName}" : "Заглавное изображение альбома «{albumName}»",
@@ -105,7 +104,6 @@
     "Add photos to this place" : "Связать фотографии с этим местом",
     "Cover photo for place {placeName}" : "Заглавное изображение для места «{placeName}»",
     "There is no place yet!" : "Пока нет ни одного места.",
-    "Shared albums" : "Полученные альбомы",
     "Cover photo for shared album {albumName}." : "Заглавное изображение опубликованного альбома «{albumName}».",
     "Back to tags overview" : "Вернуться к просмотру меток",
     "No photos with this tag yet" : "Нет ни одной фотографии с этой меткой",
@@ -142,7 +140,9 @@
     "Add {collaboratorLabel} to the collaborators list" : "Добавить {collaboratorLabel} в соавторы",
     "No collaborators available" : "Нет ни одного возможного соавтора",
     "Failed to fetch album." : "Не удалось получить альбом.",
+    "Add photos to the album" : "Добавить фотографии в альбом",
     "Failed to fetch albums list." : "Не удалось получить список альбомов.",
+    "Shared albums" : "Полученные альбомы",
     "Failed to create {albumName}." : "Не удалось создать альбом «{albumName}».",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Не удалось переименовать альбом «{currentAlbumName}» в «{newAlbumName}»."
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"

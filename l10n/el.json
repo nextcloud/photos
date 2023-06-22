@@ -47,7 +47,6 @@
     "Remove selection from album" : "Αφαίρεση από το άλμπουμ",
     "This album does not have any photos or videos yet!" : "Αυτό το άλμπουμ δεν έχει φωτογραφίες ή βίντεο ακόμη!",
     "Add photos to this album" : "Προσθήκη φωτογραφιών σε αυτό το άλμπουμ",
-    "Add photos to the album" : "Προσθήκη φωτογραφιών στο άλμπουμ",
     "There is no album yet!" : "Δεν υπάρχει άλμπουμ ακόμη!",
     "This person could not be found" : "Δεν ήταν δυνατή η εύρεση του ατόμου",
     "Rename person" : "Μετονομασία ατόμου",
@@ -57,7 +56,6 @@
     "This folder does not exist" : "Αυτός ο φάκελος δεν υπάρχει",
     "Loading folders …" : "Φόρτωση φακέλων...",
     "No photos in here" : "Δεν υπάρχουν φωτογραφίες εδώ",
-    "Shared albums" : "Κοινόχρηστα άλμπουμ",
     "No photos with this tag yet" : "Δεν υπάρχουν φωτογραφίες με αυτή την ετικέτα ακόμη",
     "No tags yet" : "Χωρίς ετικέτες ακόμη",
     "Photos with tags will show up here" : "Φωτογραφίες με ετικέτες εμφανίζονται εδώ πάνω",
@@ -76,6 +74,8 @@
     "Failed to delete {fileName}." : "Απέτυχε η διαγραφή {fileName}.",
     "Locations" : "Τοποθεσίες",
     "No collaborators available" : "Δεν υπάρχουν διαθέσιμοι συνεργάτες",
+    "Add photos to the album" : "Προσθήκη φωτογραφιών στο άλμπουμ",
+    "Shared albums" : "Κοινόχρηστα άλμπουμ",
     "Failed to create {albumName}." : "Απέτυχε η δημιουργία {albumName}",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Απέτυχε η μετονομασία του {currentAlbumName} σε {newAlbumName}."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

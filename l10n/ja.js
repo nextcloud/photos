@@ -44,12 +44,12 @@ OC.L10N.register(
     "Remove from favorites" : "お気に入りから削除",
     "This folder does not exist" : "このフォルダーは存在しません",
     "No photos in here" : "写真がありません",
-    "Shared albums" : "共有アルバム",
     "No tags yet" : "まだタグがありません",
     "Photos with tags will show up here" : "タグ付けされた写真がここに表示されます",
     "Add" : "追加",
     "Delete selection" : "選択した項目を削除",
     "Tagged photos" : "タグ付けされた写真",
-    "Locations" : "場所"
+    "Locations" : "場所",
+    "Shared albums" : "共有アルバム"
 },
 "nplurals=1; plural=0;");

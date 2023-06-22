@@ -75,7 +75,6 @@
     "Remove selection from album" : "Hapus pilihan dari album",
     "This album does not have any photos or videos yet!" : "Album ini belum memiliki foto atau video apa pun!",
     "Add photos to this album" : "Tambahkan foto ke album ini",
-    "Add photos to the album" : "Tambahkan foto ke album",
     "Manage collaborators" : "Kelola kolaborator",
     "Save collaborators for this album." : "Simpan kolaborator untuk album ini",
     "Cover photo for album {albumName}" : "Foto cover untuk album {albumName}",
@@ -100,7 +99,6 @@
     "Add photos to this place" : "Tambahkan foto ke tempat ini",
     "Cover photo for place {placeName}" : "Foto cover untuk tempat {placeName}",
     "There is no place yet!" : "Belum ada tempat!",
-    "Shared albums" : "Album terbagi",
     "Cover photo for shared album {albumName}." : "Foto cover untuk album terbagi {albumName}.",
     "Back to tags overview" : "Kembali ke ikhtisar tag",
     "No photos with this tag yet" : "Belum ada foto dengan tag ini",
@@ -136,7 +134,9 @@
     "Add {collaboratorLabel} to the collaborators list" : "Tambahkan {collaboratorLabel} ke daftar kolaborator",
     "No collaborators available" : "Tidak ada kolaborator yang tersedia",
     "Failed to fetch album." : "Gagal mendapatkan album.",
+    "Add photos to the album" : "Tambahkan foto ke album",
     "Failed to fetch albums list." : "Gagal mendapatkan daftar album.",
+    "Shared albums" : "Album terbagi",
     "Failed to create {albumName}." : "Gagal membuat {albumName}.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Gagal mengubah nama {currentAlbumName} to {newAlbumName}."
 },"pluralForm" :"nplurals=1; plural=0;"

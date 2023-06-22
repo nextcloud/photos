@@ -76,7 +76,6 @@
     "Remove selection from album" : "Fjern utvalg fra album",
     "This album does not have any photos or videos yet!" : "Dette albumet har ingen bilder eller videoer ennå!",
     "Add photos to this album" : "Legg til bilder i dette albumet",
-    "Add photos to the album" : "Legg til bilder i albumet",
     "Manage collaborators" : "Administrer samarbeidspartnere",
     "Save collaborators for this album." : "Lagre samarbeidspartnere for dette albumet.",
     "Cover photo for album {albumName}" : "Forsidebilde for albumet {albumName}",
@@ -97,7 +96,6 @@
     "This folder does not exist" : "Denne mappen finnes ikke",
     "Loading folders …" : "Laster inn mapper…",
     "No photos in here" : "Ingen bilder her",
-    "Shared albums" : "Delte album",
     "Cover photo for shared album {albumName}." : "Forsidebilde for delt album {albumName}.",
     "Back to tags overview" : "Tilbake til merkelappoversikt",
     "No photos with this tag yet" : "Ingen bilder med denne merkelappen ennå",
@@ -131,7 +129,9 @@
     "Add {collaboratorLabel} to the collaborators list" : "Legg til {collaboratorLabel} i samarbeidspartnerlisten",
     "No collaborators available" : "Ingen samarbeidspartnere tilgjengelig",
     "Failed to fetch album." : "Kunne ikke hente albumet.",
+    "Add photos to the album" : "Legg til bilder i albumet",
     "Failed to fetch albums list." : "Kunne ikke hente albumlisten.",
+    "Shared albums" : "Delte album",
     "Failed to create {albumName}." : "Kunne ikke opprette {albumName}.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Kunne ikke endre navn på {currentAlbumName} til {newAlbumName}."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
