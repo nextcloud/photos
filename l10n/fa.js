@@ -25,12 +25,12 @@ OC.L10N.register(
     "Favorite" : "مورد‌ ‌علاقه‌",
     "Remove from favorites" : "حذف کردن از مورد علاقه‌ها",
     "No photos in here" : "هیچ عکسی در اینجا نیست",
-    "Shared albums" : "آلبوم های مشترک",
     "No tags yet" : "هنوز برچسپی وجود ندارد",
     "Photos with tags will show up here" : "عکس های دارای برچسب در اینجا نشان داده می شوند",
     "Add" : "افزودن",
     "Delete selection" : "انتخاب را حذف کنید",
     "Tagged photos" : "عکسهای برچسب خورده",
-    "Locations" : "مکانها"
+    "Locations" : "مکانها",
+    "Shared albums" : "آلبوم های مشترک"
 },
 "nplurals=2; plural=(n > 1);");

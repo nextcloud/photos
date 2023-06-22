@@ -33,7 +33,6 @@ OC.L10N.register(
     "Favorite" : "סימון כמועדף",
     "Remove from favorites" : "הסרה מהמועדפים",
     "No photos in here" : "אין כאן תמונות",
-    "Shared albums" : "אלבומים משותפים",
     "No tags yet" : "אין תגיות עדיין",
     "Photos with tags will show up here" : "תמונות עם תגיות תמיד תופענה כאן",
     "Add" : "הוספה",
@@ -42,6 +41,7 @@ OC.L10N.register(
     "Shared Albums" : "אלבומים משותפים",
     "Tagged photos" : "תמונות מתויגות",
     "Locations" : "מיקומים",
-    "Add {collaboratorLabel} to the collaborators list" : "הוסף {collaboratorLabel} לרשימת השותפים"
+    "Add {collaboratorLabel} to the collaborators list" : "הוסף {collaboratorLabel} לרשימת השותפים",
+    "Shared albums" : "אלבומים משותפים"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");

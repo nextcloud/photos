@@ -29,12 +29,12 @@ OC.L10N.register(
     "Remove from favorites" : "Fjarlægja úr eftirlætum",
     "This folder does not exist" : "Þessi mappa er ekki til",
     "No photos in here" : "Engar myndir hér",
-    "Shared albums" : "Sameiginleg albúm",
     "No tags yet" : "Engin merki ennþá",
     "Photos with tags will show up here" : "Ljósmyndir með merkjum munu birtast hér",
     "Add" : "Bæta við",
     "Delete selection" : "Eyða vali",
     "Tagged photos" : "Merktar ljósmyndir",
-    "Locations" : "Staðsetningar"
+    "Locations" : "Staðsetningar",
+    "Shared albums" : "Sameiginleg albúm"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

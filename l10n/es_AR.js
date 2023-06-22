@@ -28,11 +28,11 @@ OC.L10N.register(
     "Remove from favorites" : "Eliminado de favoritos",
     "This folder does not exist" : "Esta carpeta no existe",
     "No photos in here" : "No hay fotos aquí",
-    "Shared albums" : "Álbumes compartidos",
     "No tags yet" : "Todavía no hay etiquetas",
     "Photos with tags will show up here" : "Las fotos con etiquetas aparecerán aquí",
     "Add" : "Añadir",
     "Tagged photos" : "Fotos etiquetadas",
-    "Locations" : "Ubicaciones"
+    "Locations" : "Ubicaciones",
+    "Shared albums" : "Álbumes compartidos"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

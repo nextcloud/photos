@@ -58,7 +58,6 @@
     "Remove selection from album" : "Šalinti žymėjimą iš albumo",
     "This album does not have any photos or videos yet!" : "Šiame albume kol kas nėra jokių nuotraukų ar vaizdo įrašų!",
     "Add photos to this album" : "Pridėti į šį albumą nuotraukų",
-    "Add photos to the album" : "Pridėti nuotraukų į albumą",
     "There is no album yet!" : "Kol kas nėra jokių albumų!",
     "This person could not be found" : "Nepavyko rasti šio žmogaus",
     "Rename person" : "Pervadinti žmogų",
@@ -73,7 +72,6 @@
     "This folder does not exist" : "Šio aplanko nėra",
     "Loading folders …" : "Įkeliami aplankai…",
     "No photos in here" : "Čia nuotraukų nėra",
-    "Shared albums" : "Bendrinami albumai",
     "Cover photo for shared album {albumName}." : "Viršelio nuotrauka, skirta bendrinamam albumui {albumName}.",
     "Back to tags overview" : "Atgal į žymių apžvalgą",
     "No photos with this tag yet" : "Kol kas nėra nuotraukų su šia žyme",
@@ -95,7 +93,9 @@
     "Locations" : "Vietos",
     "_Share with %n user_::_Share with %n users_" : ["Bendrinti su %n naudotoju","Bendrinti su %n naudotojais","Bendrinti su %n naudotojų","Bendrinti su %n naudotoju"],
     "Failed to fetch album." : "Nepavyko gauti albumo.",
+    "Add photos to the album" : "Pridėti nuotraukų į albumą",
     "Failed to fetch albums list." : "Nepavyko gauti albumų sąrašo.",
+    "Shared albums" : "Bendrinami albumai",
     "Failed to create {albumName}." : "Nepavyko sukurti {albumName}.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Nepavyko pervadinti {currentAlbumName} į {newAlbumName}."
 },"pluralForm" :"nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);"

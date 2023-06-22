@@ -74,7 +74,6 @@
     "Remove selection from album" : "Odstrániť vybrané z albumu",
     "This album does not have any photos or videos yet!" : "Tento album zatiaľ neobsahuje žiadne fotky alebo videá!",
     "Add photos to this album" : "Pridať fotky do tohto albumu",
-    "Add photos to the album" : "Pridať fotky do albumu",
     "Manage collaborators" : "Spravovať spolupracovníkov",
     "Save collaborators for this album." : "Uložiť spolupracovníkov pre tento album.",
     "Cover photo for album {albumName}" : "Fotka obalu pre album {albumName}",
@@ -94,7 +93,6 @@
     "This folder does not exist" : "Tento priečinok neexistuje",
     "Loading folders …" : "Nahrať priečinky ...",
     "No photos in here" : "Nie sú tu žiadne fotografie",
-    "Shared albums" : "Zdieľané albumy",
     "Cover photo for shared album {albumName}." : "Fotka obalu pre zdieľaný album {albumName}.",
     "Back to tags overview" : "Späť k prehladu štítkov",
     "No photos with this tag yet" : "Zatiaľ nie sú žiadne fotky s týmto štítkom",
@@ -122,7 +120,9 @@
     "Add {collaboratorLabel} to the collaborators list" : "Pridať {collaboratorLabel} na zoznam spolupracovníkov",
     "No collaborators available" : "Nie sú dostupný žiadny spolupracovníci",
     "Failed to fetch album." : "Nepodarilo sa načítať album.",
+    "Add photos to the album" : "Pridať fotky do albumu",
     "Failed to fetch albums list." : "Nepodarilo sa načítať zoznam albumov.",
+    "Shared albums" : "Zdieľané albumy",
     "Failed to create {albumName}." : "Zlyhalo vytváranie {albumName}.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Chyba pri premenovávaní {currentAlbumName} na {newAlbumName}."
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);"

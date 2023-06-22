@@ -76,7 +76,6 @@
     "Remove selection from album" : "Kendu hautatutakoak albumetik",
     "This album does not have any photos or videos yet!" : "Album honek ez du argazki edo bideorik oraindik!",
     "Add photos to this album" : "Gehitu argazkiak album honetara ",
-    "Add photos to the album" : "Gehitu argazkiak albumera",
     "Manage collaborators" : "Kudeatu kolaboratzaileak",
     "Save collaborators for this album." : "Gorde album honen kolaboratzaileak.",
     "Cover photo for album {albumName}" : "{albumName} albumaren azaleko argazkia",
@@ -101,7 +100,6 @@
     "Add photos to this place" : "Gehitu argazkiak leku honetara",
     "Cover photo for place {placeName}" : "{placeName} tokiaren azaleko argazkia",
     "There is no place yet!" : "Oraindik ez dago lekurik!",
-    "Shared albums" : "Partekaturiko albumak",
     "Cover photo for shared album {albumName}." : "{albumName} album partekatuko azaleko argazkia",
     "Back to tags overview" : "Itzuli etiketen ikuspegira",
     "No photos with this tag yet" : "Ez dago etiketa hau duen argazkirik oraindik",
@@ -137,7 +135,9 @@
     "Add {collaboratorLabel} to the collaborators list" : "Gehitu {collaboratorLabel} kolaboratzaile zerrendara",
     "No collaborators available" : "Ez dago kolaboratzailerik eskuragarri",
     "Failed to fetch album." : "Ezin izan da albuma lortu.",
+    "Add photos to the album" : "Gehitu argazkiak albumera",
     "Failed to fetch albums list." : "Ezin izan da album zerrenda eskuratu.",
+    "Shared albums" : "Partekaturiko albumak",
     "Failed to create {albumName}." : "Ezin izan da {albumName} sortu.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Ezin izan da {currentAlbumName} berrizendatu {newAlbumName} gisa."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

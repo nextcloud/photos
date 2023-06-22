@@ -53,7 +53,6 @@ OC.L10N.register(
     "Remove from favorites" : "Fjern fra favoritter",
     "This folder does not exist" : "Denne mappe findes ikke",
     "No photos in here" : "Ingen billeder her",
-    "Shared albums" : "Delte album",
     "No tags yet" : "Ingen tags endnu",
     "Photos with tags will show up here" : "Billeder med tags vil vise sig her",
     "Add" : "Tilføj",
@@ -61,6 +60,7 @@ OC.L10N.register(
     "Tagged photos" : "Markerede billeder",
     "Failed to delete {fileName}." : "Kunne ikke slette {fileName}.",
     "Locations" : "Sted",
-    "_Share with %n user_::_Share with %n users_" : ["Del med %n bruger","Del med %n brugere"]
+    "_Share with %n user_::_Share with %n users_" : ["Del med %n bruger","Del med %n brugere"],
+    "Shared albums" : "Delte album"
 },
 "nplurals=2; plural=(n != 1);");

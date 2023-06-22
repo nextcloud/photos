@@ -23,12 +23,12 @@
     "Favorite" : "Favorito",
     "Remove from favorites" : "Remover dos favoritos",
     "No photos in here" : "Aqui não existem fotos ",
-    "Shared albums" : "Álbuns partilhados",
     "No tags yet" : "Ainda sem marcações",
     "Photos with tags will show up here" : "Fotos com marcações serão mostradas aqui",
     "Add" : "Adicionar",
     "Tagged photos" : "Fotos marcadas",
     "Failed to delete {fileName}." : "Falha ao remover {fileName}.",
-    "Locations" : "Localizações"
+    "Locations" : "Localizações",
+    "Shared albums" : "Álbuns partilhados"
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
