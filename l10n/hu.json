@@ -79,7 +79,6 @@
     "Remove selection from album" : "Kiválasztás eltávolítása az albumból",
     "This album does not have any photos or videos yet!" : "Még nincs fénykép vagy videó ebben az albumban.",
     "Add photos to this album" : "Fényképek hozzáadása az albumhoz",
-    "Add photos to the album" : "Fényképek hozzáadása az albumhoz",
     "Manage collaborators" : "Közreműködők kezelése",
     "Save collaborators for this album." : "Közreműködők mentése ehhez az albumhoz.",
     "Cover photo for album {albumName}" : "Borítókép a(z) „{albumName}” albumhoz",
@@ -105,7 +104,6 @@
     "Add photos to this place" : "Fényképek hozzáadása ehhez a helyhez",
     "Cover photo for place {placeName}" : "A következő hely borítóképe: {placeName}",
     "There is no place yet!" : "Még nincsenek helyek.",
-    "Shared albums" : "Megosztott albumok",
     "Cover photo for shared album {albumName}." : "Borítókép a(z) „{albumName}” megosztott albumhoz.",
     "Back to tags overview" : "Vissza a címkeáttekintőhöz",
     "No photos with this tag yet" : "Még nincsenek fényképek ezzel a címkével",
@@ -142,7 +140,9 @@
     "Add {collaboratorLabel} to the collaborators list" : "{collaboratorLabel} hozzáadása a közreműködőkhöz",
     "No collaborators available" : "Nem érhető el közreműködő",
     "Failed to fetch album." : "Az album lekérése sikertelen.",
+    "Add photos to the album" : "Fényképek hozzáadása az albumhoz",
     "Failed to fetch albums list." : "Az albumok lekérése sikertelen.",
+    "Shared albums" : "Megosztott albumok",
     "Failed to create {albumName}." : "A(z) {albumName} létrehozása sikertelen.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "A(z) {currentAlbumName} átnevezése a következőre sikertelen: {newAlbumName}."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

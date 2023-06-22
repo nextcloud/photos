@@ -79,7 +79,6 @@
     "Remove selection from album" : "Remove selection from album",
     "This album does not have any photos or videos yet!" : "This album does not have any photos or videos yet!",
     "Add photos to this album" : "Add photos to this album",
-    "Add photos to the album" : "Add photos to the album",
     "Manage collaborators" : "Manage collaborators",
     "Save collaborators for this album." : "Save collaborators for this album.",
     "Cover photo for album {albumName}" : "Cover photo for album {albumName}",
@@ -105,7 +104,6 @@
     "Add photos to this place" : "Add photos to this place",
     "Cover photo for place {placeName}" : "Cover photo for place {placeName}",
     "There is no place yet!" : "There is no place yet!",
-    "Shared albums" : "Shared albums",
     "Cover photo for shared album {albumName}." : "Cover photo for shared album {albumName}.",
     "Back to tags overview" : "Back to tags overview",
     "No photos with this tag yet" : "No photos with this tag yet",
@@ -142,7 +140,9 @@
     "Add {collaboratorLabel} to the collaborators list" : "Add {collaboratorLabel} to the collaborators list",
     "No collaborators available" : "No collaborators available",
     "Failed to fetch album." : "Failed to fetch album.",
+    "Add photos to the album" : "Add photos to the album",
     "Failed to fetch albums list." : "Failed to fetch albums list.",
+    "Shared albums" : "Shared albums",
     "Failed to create {albumName}." : "Failed to create {albumName}.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Failed to rename {currentAlbumName} to {newAlbumName}."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

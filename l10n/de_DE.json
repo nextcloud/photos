@@ -79,7 +79,6 @@
     "Remove selection from album" : "Auswahl aus Album entfernen",
     "This album does not have any photos or videos yet!" : "Dieses Album enthält noch keine Fotos oder Videos!",
     "Add photos to this album" : "Fotos zu diesem Album hinzufügen",
-    "Add photos to the album" : "Fotos zum Album hinzufügen",
     "Manage collaborators" : "Mitarbeitende verwalten",
     "Save collaborators for this album." : "Mitbearbeitende für dieses Album speichern.",
     "Cover photo for album {albumName}" : "Titelbild für Album {albumName}",
@@ -105,7 +104,6 @@
     "Add photos to this place" : "Fotos zu diesem Ort hinzufügen",
     "Cover photo for place {placeName}" : "Titelbild für Ort {placeName}",
     "There is no place yet!" : "Es gibt noch keinen Ort",
-    "Shared albums" : "Geteilte Alben",
     "Cover photo for shared album {albumName}." : "Titelbild für das geteilte Album {albumName}.",
     "Back to tags overview" : "Zurück zur Schlagwortübersicht",
     "No photos with this tag yet" : "Noch keine Fotos mit diesem Schlagwort",
@@ -142,7 +140,9 @@
     "Add {collaboratorLabel} to the collaborators list" : "{collaboratorLabel} zur Liste der Mitarbeitenden hinzufügen",
     "No collaborators available" : "Keine Mitarbeitenden verfügbar",
     "Failed to fetch album." : "Album konnte nicht abgerufen werden.",
+    "Add photos to the album" : "Fotos zum Album hinzufügen",
     "Failed to fetch albums list." : "Albumliste konnte nicht geladen werden.",
+    "Shared albums" : "Geteilte Alben",
     "Failed to create {albumName}." : "{albumName} konnte nicht erstellt werden.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "{currentAlbumName} konnte nicht in {newAlbumName} umbenannt werden."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

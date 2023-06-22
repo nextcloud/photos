@@ -28,12 +28,12 @@ OC.L10N.register(
     "Remove from favorites" : "Boga·nche dae preferidos",
     "This folder does not exist" : "Custa cartella no esistit",
     "No photos in here" : "Peruna fotografia inoghe",
-    "Shared albums" : "Album cumpartzidos",
     "No tags yet" : "Ancora peruna eticheta",
     "Photos with tags will show up here" : "Is fotografias etichetadas ant a aparèssere inoghe",
     "Add" : "Agiunghe",
     "Delete selection" : "Cantzella seletzione",
     "Tagged photos" : "Fotografias etichetadas",
-    "Locations" : "Positziones"
+    "Locations" : "Positziones",
+    "Shared albums" : "Album cumpartzidos"
 },
 "nplurals=2; plural=(n != 1);");

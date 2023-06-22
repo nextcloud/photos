@@ -75,7 +75,6 @@
     "Remove selection from album" : "Отстрани ги селектираните од албумот",
     "This album does not have any photos or videos yet!" : "Овој албум сеуште нема фотографии и видеа!",
     "Add photos to this album" : "Додади фотографии во овој албум",
-    "Add photos to the album" : "Додади фотографии во албумот",
     "Manage collaborators" : "Уреди соработници",
     "Save collaborators for this album." : "Зачувај соработници за овој албум.",
     "Cover photo for album {albumName}" : "Насловна фотографија за албумот {albumName}",
@@ -100,7 +99,6 @@
     "Add photos to this place" : "Додади фотографии во ова место",
     "Cover photo for place {placeName}" : "Насловна фотографија за местото {placeName}",
     "There is no place yet!" : "Сè уште нема места!",
-    "Shared albums" : "Споделени албуми",
     "Cover photo for shared album {albumName}." : "Насловна фотографија за споделениот албум {albumName}",
     "Back to tags overview" : "Назад до преглед на ознаки",
     "No photos with this tag yet" : "Сеуште нема фотографии со оваа ознака",
@@ -136,7 +134,9 @@
     "Add {collaboratorLabel} to the collaborators list" : "Додади {collaboratorLabel} на листата на соработници",
     "No collaborators available" : "Нема достапни соработници",
     "Failed to fetch album." : "Неуспешно добивање на албум",
+    "Add photos to the album" : "Додади фотографии во албумот",
     "Failed to fetch albums list." : "Неуспешно добивање на листа со албуми.",
+    "Shared albums" : "Споделени албуми",
     "Failed to create {albumName}." : "Неуспешно креирање {albumName}.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Неуспешно преименување на {currentAlbumName} во {newAlbumName}."
 },"pluralForm" :"nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;"

@@ -76,7 +76,6 @@
     "Remove selection from album" : "Вилучити виділення з альбому",
     "This album does not have any photos or videos yet!" : "У цьому альбомі ще немає фото чи відео!",
     "Add photos to this album" : "Додайте фотографії до цього альбому",
-    "Add photos to the album" : "Додайте фотографії в альбом",
     "Manage collaborators" : "Керуйте співавторами",
     "Save collaborators for this album." : "Зберегти співавторів для цього альбому.",
     "Cover photo for album {albumName}" : "Обкладинка для альбому {albumName}",
@@ -101,7 +100,6 @@
     "Add photos to this place" : "Додайте фотографії до цього місця",
     "Cover photo for place {placeName}" : "Обкладинка для місця {placeName}",
     "There is no place yet!" : "Місця ще немає!",
-    "Shared albums" : "Альбоми із спільним доступом",
     "Cover photo for shared album {albumName}." : "Обкладинка для спільного альбому {albumName}.",
     "Back to tags overview" : "Назад до огляду тегів",
     "No photos with this tag yet" : "Фотографій із цим тегом ще немає",
@@ -137,7 +135,9 @@
     "Add {collaboratorLabel} to the collaborators list" : "Додайте {collaboratorLabel} до списку співавторів",
     "No collaborators available" : "Співавторів немає",
     "Failed to fetch album." : "Не вдалося отримати альбом.",
+    "Add photos to the album" : "Додайте фотографії в альбом",
     "Failed to fetch albums list." : "Не вдалося отримати список альбомів.",
+    "Shared albums" : "Альбоми із спільним доступом",
     "Failed to create {albumName}." : "Не вдалося створити {albumName}.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Не вдалося перейменувати {currentAlbumName} на {newAlbumName}."
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);"
