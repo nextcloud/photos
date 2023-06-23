@@ -80,6 +80,7 @@ OC.L10N.register(
     "Remove selection from album" : "Ta bort urval från album",
     "This album does not have any photos or videos yet!" : "Det här albumet har inga bilder eller videor än!",
     "Add photos to this album" : "Lägg till bilder i detta album",
+    "Add photos to {albumName}" : "Lägg till bilder i {albumName}",
     "Manage collaborators" : "Hantera medlemmar",
     "Save collaborators for this album." : "Spara medlemmar för det här albumet.",
     "Cover photo for album {albumName}" : "Omslagsbild för albumet {albumName}",
