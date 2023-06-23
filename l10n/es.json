@@ -79,6 +79,7 @@
     "Remove selection from album" : "Eliminar selección del álbum",
     "This album does not have any photos or videos yet!" : "¡Este álbum no tiene fotos ni videos todavía!",
     "Add photos to this album" : "Añadir fotos a este álbum",
+    "Add photos to {albumName}" : "Añadir fotos a {albumName}",
     "Manage collaborators" : "Administrar colaboradores",
     "Save collaborators for this album." : "Guardar colaboradores para este álbum",
     "Cover photo for album {albumName}" : "Foto de cubierta para el álbum {albumName}",
