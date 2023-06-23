@@ -81,6 +81,7 @@ OC.L10N.register(
     "Remove selection from album" : "Seçilmişleri albümden kaldır",
     "This album does not have any photos or videos yet!" : "Bu albümde henüz bir fotoğraf ya da görüntü yok!",
     "Add photos to this album" : "Bu albüme fotoğraflar ekle",
+    "Add photos to {albumName}" : "{albumName} albümüne fotoğraflar ekle",
     "Manage collaborators" : "Katılımcı yönetimi",
     "Save collaborators for this album." : "Bu albümün katılımcılarını kaydet.",
     "Cover photo for album {albumName}" : "{albumName} albümünün kapak görseli",

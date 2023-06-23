@@ -81,6 +81,7 @@ OC.L10N.register(
     "Remove selection from album" : "Suprimeix la selecció de l'àlbum",
     "This album does not have any photos or videos yet!" : "Aquest àlbum encara no té cap fotografia ni vídeo!",
     "Add photos to this album" : "Afegeix fotografies a aquest àlbum",
+    "Add photos to {albumName}" : "Afegeix fotografies a {albumName}",
     "Manage collaborators" : "Administra els col·laboradors",
     "Save collaborators for this album." : "Deseu els col·laboradors per a aquest àlbum.",
     "Cover photo for album {albumName}" : "Foto de portada de l'àlbum {albumName}",
