@@ -1,6 +1,7 @@
 OC.L10N.register(
     "photos",
     {
+    "Public link" : "رابط عمومي",
     "Photos" : "الصور",
     "Your memories under your control" : "الذكريات الخاصه بك تحت سيطرتك",
     "Videos" : "فيديوهات",
