@@ -81,6 +81,7 @@ OC.L10N.register(
     "Remove selection from album" : "從相簿移除已選擇的範圍",
     "This album does not have any photos or videos yet!" : "此相簿還沒有任何照片或視像！",
     "Add photos to this album" : "添加照片至此相簿",
+    "Add photos to {albumName}" : "添加照片至 {albumName}",
     "Manage collaborators" : "管理協作者",
     "Save collaborators for this album." : "保存此相簿的協作者。",
     "Cover photo for album {albumName}" : "{albumName} 相簿的封面照片。",
