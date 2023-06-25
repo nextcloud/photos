@@ -44,7 +44,7 @@
 					:menu-title="t('photos', 'Add')">
 					<Plus slot="icon" />
 					<NcActionButton :close-after-click="true"
-						:aria-label="t('photos', 'Create a new album')"
+						:aria-label="t('photos', 'Create new album')"
 						@click="showAlbumCreationForm = true">
 						{{ t('photos', 'Create new album') }}
 						<PlusBoxMultiple slot="icon" />
@@ -54,7 +54,7 @@
 				<template v-else>
 					<NcButton :close-after-click="true"
 						type="primary"
-						:aria-label="t('photos', 'Add selection to an album')"
+						:aria-label="t('photos', 'Add to album')"
 						@click="showAlbumPicker = true">
 						<template #icon>
 							<Plus slot="icon" />
