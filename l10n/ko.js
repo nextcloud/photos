@@ -33,7 +33,7 @@ OC.L10N.register(
     "Remove {collaboratorLabel} from the collaborators list" : "공동 작업자 목록에서 {collaboratorLabel} 제거",
     "Copy the public link" : "공개 링크 복사",
     "Public link copied!" : "공개 링크 복사!",
-    "Copy public link" : "공용 링크 복사",
+    "Copy public link" : "공개 링크 복사",
     "Delete the public link" : "공개 링크 삭제",
     "Share via public link" : "공개 링크로 공유",
     "Failed to fetch collaborators list." : "공동 작업자 목록을 가져오기에 실패했습니다.",
