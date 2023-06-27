@@ -66,7 +66,7 @@ OC.L10N.register(
     "_{years} year ago_::_{years} years ago_" : ["hai {years} ano","hai {years} anos"],
     "Enable squared photos view" : "Activar a vista de fotos cadradas",
     "Default Photos upload and Albums location" : "Localización predeterminada para enviar fotos e álbums",
-    "Choose default Photos upload and Albums location" : "Escolla a localización predeterminada para enviar fotos e álbumes",
+    "Choose default Photos upload and Albums location" : "Escolla a localización predeterminada para enviar fotos e álbums",
     "Select the default location for your media" : "Seleccione a localización predeterminada para os seus ficheiros multimedia",
     "Invalid location selected" : "Foi seleccionada unha localización non válida",
     "View" : "Ver",
