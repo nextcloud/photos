@@ -51,8 +51,6 @@ use OCP\ICacheFactory;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\IRequest;
 use OCP\IUserSession;
-use OCP\SystemTag\ISystemTagManager;
-use OCP\SystemTag\ISystemTagObjectMapper;
 use OCP\Util;
 use Psr\Log\LoggerInterface;
 
@@ -66,12 +64,7 @@ class PageController extends Controller {
 	private ICacheFactory $cacheFactory;
 	private IL10N $l10n;
 	private ICache $nomediaPathsCache;
-	private ICache $tagCountsCache;
 	private LoggerInterface $logger;
-
-	private ISystemTagObjectMapper $tagObjectMapper;
-
-	private ISystemTagManager $tagManager;
 
 	public function __construct(
 		IRequest          $request,
@@ -83,8 +76,6 @@ class PageController extends Controller {
 		IRootFolder       $rootFolder,
 		ICacheFactory     $cacheFactory,
 		LoggerInterface   $logger,
-		ISystemTagObjectMapper $tagObjectMapper,
-		ISystemTagManager $tagManager,
 		IL10N $l10n
 	) {
 		parent::__construct(Application::APP_ID, $request);
@@ -97,10 +88,7 @@ class PageController extends Controller {
 		$this->rootFolder = $rootFolder;
 		$this->cacheFactory = $cacheFactory;
 		$this->nomediaPathsCache = $this->cacheFactory->createLocal('photos:nomedia-paths');
-		$this->tagCountsCache = $this->cacheFactory->createLocal('photos:tag-counts');
 		$this->logger = $logger;
-		$this->tagObjectMapper = $tagObjectMapper;
-		$this->tagManager = $tagManager;
 		$this->l10n = $l10n;
 	}
 

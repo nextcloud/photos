@@ -103,22 +103,7 @@ const sortCompare = function(fileInfo1, fileInfo2, key, asc = true) {
  * @param {object} obj - object to flatten and format.
  */
 function genFileInfo(obj) {
-	const fileInfo = Object.entries(obj).reduce((fileInfo, [key, data]) => {
-		// flatten object if any
-		if (!!data && typeof data === 'object' && !Array.isArray(data)) {
-			return { ...fileInfo, ...genFileInfo(data) }
-		}
-
-		// format key and add it to the fileInfo
-		switch (data) {
-		case 'false':
-			return { ...fileInfo, [camelcase(key)]: false }
-		case 'true':
-			return { ...fileInfo, [camelcase(key)]: true }
-		default:
-			return { ...fileInfo, [camelcase(key)]: isNumber(data) ? Number(data) : data }
-		}
-	}, {})
+	const fileInfo = flattenAndFormatObject(obj, genFileInfo)
 
 	if (fileInfo.filename) {
 		// Adding context
@@ -132,24 +117,31 @@ function genFileInfo(obj) {
  * @param {object} obj - object to flatten and format.
  */
 function extractTagInfo(obj) {
-	const tagInfo = Object.entries(obj).reduce((tagInfo, [key, data]) => {
+	return flattenAndFormatObject(obj, extractTagInfo)
+}
+
+/**
+ *
+ * @param obj
+ * @param callback
+ */
+function flattenAndFormatObject(obj, callback) {
+	return Object.entries(obj).reduce((resultObj, [key, data]) => {
 		// flatten object if any
 		if (!!data && typeof data === 'object' && !Array.isArray(data)) {
-			return { ...tagInfo, ...extractTagInfo(data) }
+			return { ...resultObj, ...callback(data) }
 		}
 
 		// format key and add it to the tagInfo
 		switch (data) {
 		case 'false':
-			return { ...tagInfo, [camelcase(key)]: false }
+			return { ...resultObj, [camelcase(key)]: false }
 		case 'true':
-			return { ...tagInfo, [camelcase(key)]: true }
+			return { ...resultObj, [camelcase(key)]: true }
 		default:
-			return { ...tagInfo, [camelcase(key)]: isNumber(data) ? Number(data) : data }
+			return { ...resultObj, [camelcase(key)]: isNumber(data) ? Number(data) : data }
 		}
 	}, {})
-
-	return tagInfo
 }
 
 export { encodeFilePath, extractFilePaths, sortCompare, genFileInfo, extractTagInfo }

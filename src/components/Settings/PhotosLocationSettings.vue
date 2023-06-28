@@ -50,15 +50,15 @@ import UserConfig from '../../mixins/UserConfig.js'
 export default {
 	name: 'PhotosLocationSettings',
 
-	mixins: [
-		UserConfig,
-	],
-
 	components: {
 		NcButton,
 		NcTextField,
 		Folder,
 	},
+
+	mixins: [
+		UserConfig,
+	],
 
 	methods: {
 		debounceSelectPhotosFolder: debounce(function() {
