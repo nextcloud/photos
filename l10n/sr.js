@@ -113,8 +113,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Слике са ознакама ће се појавити овде",
     "Popular tags" : "Популарне ознаке",
     "Add" : "Додај",
-    "Create a new album" : "Креирај нови албум",
-    "Add selection to an album" : "Додај изабрано у албум",
     "Add to album" : "Додај у албум",
     "Delete selection" : "Обриши одабир",
     "No photos or videos in here" : "Овде нема фотографија или видео снимака",
@@ -145,6 +143,8 @@ OC.L10N.register(
     "Add photos to the album" : "Додај фотографије у албум",
     "Failed to fetch albums list." : "Није успело добављање листе албума.",
     "Shared albums" : "Дељени албуми",
+    "Create a new album" : "Креирај нови албум",
+    "Add selection to an album" : "Додај изабрано у албум",
     "Failed to create {albumName}." : "{albumName} није могао да се креира.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Није успела промена имена {currentAlbumName} у {newAlbumName}."
 },

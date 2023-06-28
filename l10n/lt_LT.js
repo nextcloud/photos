@@ -81,8 +81,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Čia bus rodomos nuotraukos su žymėmis",
     "Popular tags" : "Populiarios žymės",
     "Add" : "Pridėti",
-    "Create a new album" : "Sukurti naują albumą",
-    "Add selection to an album" : "Pridėti žymėjimą į albumą",
     "Add to album" : "Pridėti į albumą",
     "Delete selection" : "Ištrinti žymėjimą",
     "Failed to fetch faces list." : "Nepavyko gauti veidų sąrašo.",
@@ -98,6 +96,8 @@ OC.L10N.register(
     "Add photos to the album" : "Pridėti nuotraukų į albumą",
     "Failed to fetch albums list." : "Nepavyko gauti albumų sąrašo.",
     "Shared albums" : "Bendrinami albumai",
+    "Create a new album" : "Sukurti naują albumą",
+    "Add selection to an album" : "Pridėti žymėjimą į albumą",
     "Failed to create {albumName}." : "Nepavyko sukurti {albumName}.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Nepavyko pervadinti {currentAlbumName} į {newAlbumName}."
 },

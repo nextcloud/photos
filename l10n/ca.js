@@ -114,8 +114,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Aquí apareixeran les fotografies amb etiquetes",
     "Popular tags" : "Etiquetes populars",
     "Add" : "Afegeix",
-    "Create a new album" : "Crea un àlbum nou",
-    "Add selection to an album" : "Afegeix la selecció a un àlbum",
     "Add to album" : "Afegeix a un àlbum",
     "Delete selection" : "Suprimeix la selecció",
     "No photos or videos in here" : "No hi ha cap fotografia ni vídeo aquí",
@@ -146,6 +144,8 @@ OC.L10N.register(
     "Add photos to the album" : "Afegeix fotografies a l'àlbum",
     "Failed to fetch albums list." : "No s'ha pogut obtenir la llista d'àlbums.",
     "Shared albums" : "Àlbums compartits",
+    "Create a new album" : "Crea un àlbum nou",
+    "Add selection to an album" : "Afegeix la selecció a un àlbum",
     "Failed to create {albumName}." : "No s'ha pogut crear {albumName}.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "No s'ha pogut canviar el nom de l'àlbum {currentAlbumName} a {newAlbumName}."
 },

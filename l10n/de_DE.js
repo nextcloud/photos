@@ -114,8 +114,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Fotos mit Schlagworten werden hier angezeigt",
     "Popular tags" : "Beliebte Schlagworte",
     "Add" : "Hinzufügen",
-    "Create a new album" : "Neues Album erstellen",
-    "Add selection to an album" : "Auswahl einem Album hinzufügen",
     "Add to album" : "Zum Album hinzufügen",
     "Delete selection" : "Auswahl löschen",
     "No photos or videos in here" : "Hier gibt es keine Fotos oder Videos",
@@ -146,6 +144,8 @@ OC.L10N.register(
     "Add photos to the album" : "Fotos zum Album hinzufügen",
     "Failed to fetch albums list." : "Albumliste konnte nicht geladen werden.",
     "Shared albums" : "Geteilte Alben",
+    "Create a new album" : "Neues Album erstellen",
+    "Add selection to an album" : "Auswahl einem Album hinzufügen",
     "Failed to create {albumName}." : "{albumName} konnte nicht erstellt werden.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "{currentAlbumName} konnte nicht in {newAlbumName} umbenannt werden."
 },

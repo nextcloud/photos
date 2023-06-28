@@ -100,8 +100,6 @@ OC.L10N.register(
     "No tags yet" : "Nog geen labels",
     "Photos with tags will show up here" : "Gelabelde foto's worden hier getoond",
     "Add" : "Toevoegen",
-    "Create a new album" : "Maak een nieuw album",
-    "Add selection to an album" : "Selectie toevoegen aan een album",
     "Add to album" : "Toevoegen aan album",
     "Delete selection" : "Verwijder selectie",
     "No photos or videos in here" : "Geen foto's of video's hier",
@@ -128,6 +126,8 @@ OC.L10N.register(
     "Add photos to the album" : "Foto's toevoegen aan het album",
     "Failed to fetch albums list." : "Ophalen van albumlijst mislukt.",
     "Shared albums" : "Gedeelde albums",
+    "Create a new album" : "Maak een nieuw album",
+    "Add selection to an album" : "Selectie toevoegen aan een album",
     "Failed to create {albumName}." : "Het maken van {albumName} is mislukt.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Hernoemen van {currentAlbumName} naar {newAlbumName} mislukt."
 },
