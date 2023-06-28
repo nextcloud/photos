@@ -49,10 +49,10 @@ import UserConfig from '../../mixins/UserConfig.js'
 export default {
 	name: 'PhotosLocationSettings',
 
+
 	mixins: [
 		UserConfig,
 	],
-
 	methods: {
 		debounceSelectPhotosFolder: debounce(function() {
 			this.selectPhotosFolder()
