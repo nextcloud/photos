@@ -25,7 +25,7 @@ export default {
 
 	computed: {
 		/**
-		 * @return {object<String, []>}
+		 * @return {Object<string, []>}
 		 */
 		fileIdsByMonth() {
 			const filesByMonth = {}

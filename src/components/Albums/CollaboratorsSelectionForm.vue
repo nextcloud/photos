@@ -129,12 +129,12 @@
 <script>
 import { mapActions } from 'vuex'
 
-import Magnify from 'vue-material-design-icons/Magnify'
-import Close from 'vue-material-design-icons/Close'
-import Check from 'vue-material-design-icons/Check'
-import ContentCopy from 'vue-material-design-icons/ContentCopy'
-import AccountGroup from 'vue-material-design-icons/AccountGroup'
-import Earth from 'vue-material-design-icons/Earth'
+import Magnify from 'vue-material-design-icons/Magnify.vue'
+import Close from 'vue-material-design-icons/Close.vue'
+import Check from 'vue-material-design-icons/Check.vue'
+import ContentCopy from 'vue-material-design-icons/ContentCopy.vue'
+import AccountGroup from 'vue-material-design-icons/AccountGroup.vue'
+import Earth from 'vue-material-design-icons/Earth.vue'
 
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'

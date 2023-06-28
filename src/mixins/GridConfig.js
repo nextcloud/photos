@@ -20,7 +20,7 @@
  *
  */
 
-import getGridConfig from '../services/GridConfig'
+import getGridConfig from '../services/GridConfig.js'
 
 /**
  * Get the current used grid config

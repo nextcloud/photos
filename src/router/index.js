@@ -30,19 +30,19 @@ import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
 
 import isRecognizeInstalled from '../services/IsRecognizeInstalled.js'
 
-const Folders = () => import('../views/Folders')
-const Albums = () => import('../views/Albums')
-const AlbumContent = () => import('../views/AlbumContent')
-const SharedAlbums = () => import('../views/SharedAlbums')
-const SharedAlbumContent = () => import('../views/SharedAlbumContent')
-const PublicAlbumContent = () => import('../views/PublicAlbumContent')
-const Places = () => import('../views/Places')
-const PlaceContent = () => import('../views/PlaceContent')
-const Tags = () => import('../views/Tags')
-const TagContent = () => import('../views/TagContent')
-const Timeline = () => import('../views/Timeline')
-const Faces = () => import('../views/Faces')
-const FaceContent = () => import('../views/FaceContent')
+const Folders = () => import('../views/Folders.vue')
+const Albums = () => import('../views/Albums.vue')
+const AlbumContent = () => import('../views/AlbumContent.vue')
+const SharedAlbums = () => import('../views/SharedAlbums.vue')
+const SharedAlbumContent = () => import('../views/SharedAlbumContent.vue')
+const PublicAlbumContent = () => import('../views/PublicAlbumContent.vue')
+const Places = () => import('../views/Places.vue')
+const PlaceContent = () => import('../views/PlaceContent.vue')
+const Tags = () => import('../views/Tags.vue')
+const TagContent = () => import('../views/TagContent.vue')
+const Timeline = () => import('../views/Timeline.vue')
+const Faces = () => import('../views/Faces.vue')
+const FaceContent = () => import('../views/FaceContent.vue')
 
 const baseTitle = document.title
 

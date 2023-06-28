@@ -27,9 +27,9 @@ import { getCurrentUser } from '@nextcloud/auth'
 
 import client from '../services/DavClient.js'
 import logger from '../services/logger.js'
-import DavRequest from '../services/DavRequest'
-import { genFileInfo } from '../utils/fileUtils'
-import AbortControllerMixin from './AbortControllerMixin'
+import DavRequest from '../services/DavRequest.js'
+import { genFileInfo } from '../utils/fileUtils.js'
+import AbortControllerMixin from './AbortControllerMixin.js'
 import he from 'he'
 
 export default {
