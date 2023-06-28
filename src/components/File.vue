@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import Star from 'vue-material-design-icons/Star'
+import Star from 'vue-material-design-icons/Star.vue'
 import VideoIcon from 'vue-material-design-icons/Video.vue'
 
 import { generateUrl } from '@nextcloud/router'

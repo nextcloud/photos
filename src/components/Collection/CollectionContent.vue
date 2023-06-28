@@ -57,8 +57,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import AlertCircle from 'vue-material-design-icons/AlertCircle'
-import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage'
+import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
+import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
 
 import { NcEmptyContent, isMobile } from '@nextcloud/vue'
 

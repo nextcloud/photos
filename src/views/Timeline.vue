@@ -126,10 +126,10 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import Plus from 'vue-material-design-icons/Plus'
-import Delete from 'vue-material-design-icons/Delete'
-import PlusBoxMultiple from 'vue-material-design-icons/PlusBoxMultiple'
-import Download from 'vue-material-design-icons/Download'
+import Plus from 'vue-material-design-icons/Plus.vue'
+import Delete from 'vue-material-design-icons/Delete.vue'
+import PlusBoxMultiple from 'vue-material-design-icons/PlusBoxMultiple.vue'
+import Download from 'vue-material-design-icons/Download.vue'
 
 import { NcModal, NcActions, NcActionButton, NcButton, NcEmptyContent, isMobile } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'

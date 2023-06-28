@@ -20,9 +20,9 @@
  *
  */
 import Vue from 'vue'
-import { sortCompare } from '../utils/fileUtils'
-import getTaggedImages from '../services/TaggedImages'
-import getSystemTags from '../services/SystemTags'
+import { sortCompare } from '../utils/fileUtils.js'
+import getTaggedImages from '../services/TaggedImages.js'
+import getSystemTags from '../services/SystemTags.js'
 
 const state = {
 	tags: {},
