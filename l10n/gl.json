@@ -112,8 +112,6 @@
     "Photos with tags will show up here" : "As fotos etiquetadas aparecerán aquí",
     "Popular tags" : "Etiquetas populares",
     "Add" : "Engadir",
-    "Create a new album" : "Crear un novo álbum",
-    "Add selection to an album" : "Engadir selección a un álbum",
     "Add to album" : "Engadir ao álbum",
     "Delete selection" : "Eliminar a selección",
     "No photos or videos in here" : "Aquí non hai fotos nin vídeos",
@@ -144,6 +142,8 @@
     "Add photos to the album" : "Engadir fotos ao álbum",
     "Failed to fetch albums list." : "Produciuse un fallo ao recuperar a lista de álbums.",
     "Shared albums" : "Álbums compartidos",
+    "Create a new album" : "Crear un novo álbum",
+    "Add selection to an album" : "Engadir selección a un álbum",
     "Failed to create {albumName}." : "Produciuse un fallo ao crear {albumName}.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Non foi posíbel cambiar o nome de {currentAlbumName} a {newAlbumName}."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

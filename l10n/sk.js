@@ -102,8 +102,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Fotografie so štítkami sa zobrazia tu",
     "Popular tags" : "Populárne štítky",
     "Add" : "Pridať",
-    "Create a new album" : "Vytvoriť nový album",
-    "Add selection to an album" : "Pridať vybrané do albumu",
     "Add to album" : "Pridať do albumu",
     "Delete selection" : "Zmazanie výberu",
     "No photos or videos in here" : "Nie sú tu žiadne obrázky ani videá",
@@ -125,6 +123,8 @@ OC.L10N.register(
     "Add photos to the album" : "Pridať fotky do albumu",
     "Failed to fetch albums list." : "Nepodarilo sa načítať zoznam albumov.",
     "Shared albums" : "Zdieľané albumy",
+    "Create a new album" : "Vytvoriť nový album",
+    "Add selection to an album" : "Pridať vybrané do albumu",
     "Failed to create {albumName}." : "Zlyhalo vytváranie {albumName}.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Chyba pri premenovávaní {currentAlbumName} na {newAlbumName}."
 },

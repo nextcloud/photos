@@ -109,8 +109,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Etiketadun argazkiak hemen erakutsiko dira",
     "Popular tags" : "Etiketa ohikoak",
     "Add" : "Gehitu",
-    "Create a new album" : "Sortu album berri bat",
-    "Add selection to an album" : "Gehitu hautatutakoak album batera",
     "Add to album" : "Gehitu albumera",
     "Delete selection" : "Ezabatu hautatutakoak",
     "No photos or videos in here" : "Ez dago argazki edo bideorik hemen",
@@ -140,6 +138,8 @@ OC.L10N.register(
     "Add photos to the album" : "Gehitu argazkiak albumera",
     "Failed to fetch albums list." : "Ezin izan da album zerrenda eskuratu.",
     "Shared albums" : "Partekaturiko albumak",
+    "Create a new album" : "Sortu album berri bat",
+    "Add selection to an album" : "Gehitu hautatutakoak album batera",
     "Failed to create {albumName}." : "Ezin izan da {albumName} sortu.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Ezin izan da {currentAlbumName} berrizendatu {newAlbumName} gisa."
 },

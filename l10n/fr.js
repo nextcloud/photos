@@ -114,8 +114,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Les photos étiquetées apparaîtront ici",
     "Popular tags" : "Étiquettes populaires",
     "Add" : "Ajouter",
-    "Create a new album" : "Créer un nouvel album",
-    "Add selection to an album" : "Ajouter la sélection à un album",
     "Add to album" : "Ajouter à l'album",
     "Delete selection" : "Supprimer la sélection",
     "No photos or videos in here" : "Aucune photo ou vidéo ici",
@@ -146,6 +144,8 @@ OC.L10N.register(
     "Add photos to the album" : "Ajouter des photos à l'album",
     "Failed to fetch albums list." : "Impossible de récupérer la liste des albums.",
     "Shared albums" : "Albums partagés",
+    "Create a new album" : "Créer un nouvel album",
+    "Add selection to an album" : "Ajouter la sélection à un album",
     "Failed to create {albumName}." : "Échec de la création de {albumName}.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Échec du renommage de {currentAlbumName} en {newAlbumName}."
 },

@@ -105,8 +105,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Bilder med etiketter vises her",
     "Popular tags" : "Populære merkelapper",
     "Add" : "Legg til",
-    "Create a new album" : "Opprett et nytt album",
-    "Add selection to an album" : "Legg til utvalg i et album",
     "Add to album" : "Legg til i album",
     "Delete selection" : "Slett utvalg",
     "No photos or videos in here" : "Ingen bilder eller videoer her",
@@ -134,6 +132,8 @@ OC.L10N.register(
     "Add photos to the album" : "Legg til bilder i albumet",
     "Failed to fetch albums list." : "Kunne ikke hente albumlisten.",
     "Shared albums" : "Delte album",
+    "Create a new album" : "Opprett et nytt album",
+    "Add selection to an album" : "Legg til utvalg i et album",
     "Failed to create {albumName}." : "Kunne ikke opprette {albumName}.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Kunne ikke endre navn på {currentAlbumName} til {newAlbumName}."
 },

@@ -114,8 +114,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Fotky opatřené štítky se objeví zde",
     "Popular tags" : "Oblíbené štítky",
     "Add" : "Přidat",
-    "Create a new album" : "Vytvořit nové album",
-    "Add selection to an album" : "Přidat do alba výběr",
     "Add to album" : "Přidat do alba",
     "Delete selection" : "Smazat výběr",
     "No photos or videos in here" : "Nenacházejí se zde žádné fotky nebo videa",
@@ -146,6 +144,8 @@ OC.L10N.register(
     "Add photos to the album" : "Přidat fotky do alba",
     "Failed to fetch albums list." : "Nepodařilo se získat seznam alb.",
     "Shared albums" : "Sdílená alba",
+    "Create a new album" : "Vytvořit nové album",
+    "Add selection to an album" : "Přidat do alba výběr",
     "Failed to create {albumName}." : "Nepodařilo se vytvořit {albumName}.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Nepodařilo přejmenovat {currentAlbumName} to {newAlbumName}."
 },

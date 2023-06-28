@@ -113,8 +113,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Здесь будут показаны фотографии, которым присвоены метки",
     "Popular tags" : "Популярные метки",
     "Add" : "Добавить",
-    "Create a new album" : "Создать альбом",
-    "Add selection to an album" : "Добавить выбранное в альбом",
     "Add to album" : "Добавить в альбом",
     "Delete selection" : "Удалить выбранное",
     "No photos or videos in here" : "Нет ни одной фотографии или видео",
@@ -145,6 +143,8 @@ OC.L10N.register(
     "Add photos to the album" : "Добавить фотографии в альбом",
     "Failed to fetch albums list." : "Не удалось получить список альбомов.",
     "Shared albums" : "Полученные альбомы",
+    "Create a new album" : "Создать альбом",
+    "Add selection to an album" : "Добавить выбранное в альбом",
     "Failed to create {albumName}." : "Не удалось создать альбом «{albumName}».",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Не удалось переименовать альбом «{currentAlbumName}» в «{newAlbumName}»."
 },

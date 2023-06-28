@@ -108,8 +108,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : " Снимки с етикети ще се покажат тук",
     "Popular tags" : "Популярни етикети",
     "Add" : "Добавяне",
-    "Create a new album" : "Създаване на нов албум",
-    "Add selection to an album" : "Добавяне на селекция към албум",
     "Add to album" : "Добавяне към албум",
     "Delete selection" : "Изтриите селекцията",
     "No photos or videos in here" : "Тук няма снимки или видеоклипове",
@@ -139,6 +137,8 @@ OC.L10N.register(
     "Add photos to the album" : "Добавяне на снимки към албума",
     "Failed to fetch albums list." : "Неуспешно извличане на списък с албуми.",
     "Shared albums" : "Споделени албуми",
+    "Create a new album" : "Създаване на нов албум",
+    "Add selection to an album" : "Добавяне на селекция към албум",
     "Failed to create {albumName}." : "Неуспешно създаване на {albumName}.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Неуспешно преименуване от {currentAlbumName} на {newAlbumName}."
 },
