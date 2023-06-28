@@ -85,7 +85,7 @@ import { NcButton, NcLoadingIcon } from '@nextcloud/vue'
 import { UploadPicker } from '@nextcloud/upload'
 import moment from '@nextcloud/moment'
 
-import ImagePlus from 'vue-material-design-icons/ImagePlus'
+import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
 
 import FilesListViewer from './FilesListViewer.vue'
 import File from './File.vue'
@@ -250,7 +250,7 @@ export default {
 			padding: 8px 0 4px 0;
 		}
 
-		::v-deep .empty-content {
+		:deep(.empty-content) {
 			position: absolute;
 			width: 100%;
 			margin-top: 0;

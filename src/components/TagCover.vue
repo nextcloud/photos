@@ -45,7 +45,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import ImageMultipleIcon from 'vue-material-design-icons/ImageMultiple'
+import ImageMultipleIcon from 'vue-material-design-icons/ImageMultiple.vue'
 
 import { generateUrl } from '@nextcloud/router'
 
@@ -145,7 +145,7 @@ export default {
 		&--placeholder {
 			background: var(--color-primary-light);
 
-			::v-deep .material-design-icon {
+			:deep(.material-design-icon) {
 				width: 100%;
 				height: 100%;
 

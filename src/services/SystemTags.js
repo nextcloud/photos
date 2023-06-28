@@ -20,8 +20,8 @@
  *
  */
 
-import client from './DavClient'
-import { genFileInfo } from '../utils/fileUtils'
+import client from './DavClient.js'
+import { genFileInfo } from '../utils/fileUtils.js'
 
 /**
  * List system tags

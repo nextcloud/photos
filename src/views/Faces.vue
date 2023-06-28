@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline'
+import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
 
 import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 
@@ -144,7 +144,7 @@ export default {
 	}
 }
 
-.empty-content-with-illustration ::v-deep .empty-content__icon {
+.empty-content-with-illustration :deep(.empty-content__icon) {
 	width: 200px;
 	height: 200px;
 

@@ -97,9 +97,9 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
-import MapMarker from 'vue-material-design-icons/MapMarker'
-import AccountMultiplePlus from 'vue-material-design-icons/AccountMultiplePlus'
-import Send from 'vue-material-design-icons/Send'
+import MapMarker from 'vue-material-design-icons/MapMarker.vue'
+import AccountMultiplePlus from 'vue-material-design-icons/AccountMultiplePlus.vue'
+import Send from 'vue-material-design-icons/Send.vue'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import { NcButton, NcLoadingIcon, NcTextField } from '@nextcloud/vue'
@@ -267,7 +267,7 @@ export default {
 			display: flex;
 			margin-top: 16px;
 
-			::v-deep svg {
+			:deep(svg) {
 				margin-right: 12px;
 			}
 		}

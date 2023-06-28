@@ -67,8 +67,8 @@
 </template>
 
 <script>
-import Plus from 'vue-material-design-icons/Plus'
-import ImageMultiple from 'vue-material-design-icons/ImageMultiple'
+import Plus from 'vue-material-design-icons/Plus.vue'
+import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
 
 import { NcButton, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
 import { generateUrl } from '@nextcloud/router'
@@ -144,7 +144,7 @@ export default {
 
 		.album {
 
-			::v-deep .list-item {
+			:deep(.list-item) {
 				padding: 8px 16px;
 				box-sizing: border-box;
 			}
@@ -162,7 +162,7 @@ export default {
 				&--placeholder {
 					background: var(--color-primary-light);
 
-					::v-deep .material-design-icon {
+					:deep(.material-design-icon) {
 						width: 100%;
 						height: 100%;
 
