@@ -46,9 +46,9 @@
 <script>
 
 import { mapGetters } from 'vuex'
-// import ShareVariant from 'vue-material-design-icons/ShareVariant'
-// import AccountMultiple from 'vue-material-design-icons/AccountMultiple'
-import ImageMultiple from 'vue-material-design-icons/ImageMultiple'
+// import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
+// import AccountMultiple from 'vue-material-design-icons/AccountMultiple.vue'
+import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
 
 export default {
 	name: 'CollectionCover',

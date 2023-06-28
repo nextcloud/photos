@@ -67,8 +67,8 @@
 </template>
 
 <script>
-import Plus from 'vue-material-design-icons/Plus'
-import ImageMultiple from 'vue-material-design-icons/ImageMultiple'
+import Plus from 'vue-material-design-icons/Plus.vue'
+import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
 
 import { NcButton, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
 import { generateUrl } from '@nextcloud/router'
