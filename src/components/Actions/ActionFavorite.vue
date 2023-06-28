@@ -38,7 +38,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import Star from 'vue-material-design-icons/Star'
+import Star from 'vue-material-design-icons/Star.vue'
 
 import { NcActionButton } from '@nextcloud/vue'
 

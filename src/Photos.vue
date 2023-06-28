@@ -70,7 +70,7 @@
 				<NcAppNavigationItem v-if="showLocationMenuEntry"
 					:to="{name: 'maps'}"
 					:title="t('photos', 'Map')">
-					<Map slot="icon" :size="20" />
+					<MapIcon slot="icon" :size="20" />
 				</NcAppNavigationItem>
 			</template>
 			<template #footer>
@@ -110,7 +110,7 @@ import Star from 'vue-material-design-icons/Star.vue'
 import CalendarToday from 'vue-material-design-icons/CalendarToday.vue'
 import AccountGroup from 'vue-material-design-icons/AccountGroup.vue'
 import Tag from 'vue-material-design-icons/Tag.vue'
-import Map from 'vue-material-design-icons/Map.vue'
+import MapIcon from 'vue-material-design-icons/Map.vue'
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
@@ -143,7 +143,7 @@ export default {
 		Star,
 		Tag,
 		VideoIcon,
-		Map,
+		MapIcon,
 		MapMarker,
 		NcAppContent,
 		NcAppNavigation,

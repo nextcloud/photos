@@ -22,11 +22,10 @@
 
 // sass plugin to implement js configs into scss
 
-/* eslint-disable node/no-extraneous-require */
 const sass = require('sass')
 const { OrderedMap } = require('immutable')
 
-const { sizes } = require('../assets/grid-sizes')
+const { sizes } = require('../assets/grid-sizes.js')
 
 const gridConfigKeys = Object.keys(sizes)
 const gridConfigMap = OrderedMap().asMutable()

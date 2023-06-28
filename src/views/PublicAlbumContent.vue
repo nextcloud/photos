@@ -92,12 +92,12 @@
 import { mapActions, mapGetters } from 'vuex'
 import { createClient, getPatcher } from 'webdav'
 
-import MapMarker from 'vue-material-design-icons/MapMarker'
-// import Plus from 'vue-material-design-icons/Plus'
-// import ImagePlus from 'vue-material-design-icons/ImagePlus'
-import ImageOff from 'vue-material-design-icons/ImageOff'
-// import Download from 'vue-material-design-icons/Download'
-// import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple'
+import MapMarker from 'vue-material-design-icons/MapMarker.vue'
+// import Plus from 'vue-material-design-icons/Plus.vue'
+// import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
+import ImageOff from 'vue-material-design-icons/ImageOff.vue'
+// import Download from 'vue-material-design-icons/Download.vue'
+// import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
 
 import { NcActions, /** NcButton, */ NcEmptyContent, /** NcActionSeparator, */ isMobile } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
