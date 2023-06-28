@@ -107,8 +107,6 @@
     "Photos with tags will show up here" : "Siin näidatakse sildistatud fotosid",
     "Popular tags" : "Populaarsed sildid",
     "Add" : "Lisa",
-    "Create a new album" : "Loo uus album",
-    "Add selection to an album" : "Lisa valik albumisse",
     "Add to album" : "Lisa albumisse",
     "Delete selection" : "Kustuta valik",
     "No photos or videos in here" : "Siin pole fotosid ega videosid",
@@ -136,6 +134,8 @@
     "Add photos to the album" : "Lisa albumisse fotosid",
     "Failed to fetch albums list." : "Albumite loendi laadimine ebaõnnestus.",
     "Shared albums" : "Jagatud albumid",
+    "Create a new album" : "Loo uus album",
+    "Add selection to an album" : "Lisa valik albumisse",
     "Failed to create {albumName}." : "Albumi {albumName} loomine ebaõnnestus."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

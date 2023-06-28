@@ -111,8 +111,6 @@
     "Photos with tags will show up here" : "Слике са ознакама ће се појавити овде",
     "Popular tags" : "Популарне ознаке",
     "Add" : "Додај",
-    "Create a new album" : "Креирај нови албум",
-    "Add selection to an album" : "Додај изабрано у албум",
     "Add to album" : "Додај у албум",
     "Delete selection" : "Обриши одабир",
     "No photos or videos in here" : "Овде нема фотографија или видео снимака",
@@ -143,6 +141,8 @@
     "Add photos to the album" : "Додај фотографије у албум",
     "Failed to fetch albums list." : "Није успело добављање листе албума.",
     "Shared albums" : "Дељени албуми",
+    "Create a new album" : "Креирај нови албум",
+    "Add selection to an album" : "Додај изабрано у албум",
     "Failed to create {albumName}." : "{albumName} није могао да се креира.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Није успела промена имена {currentAlbumName} у {newAlbumName}."
 },"pluralForm" :"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"

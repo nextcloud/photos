@@ -113,8 +113,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "带标签的照片将显示在此处",
     "Popular tags" : "常用标签",
     "Add" : "添加",
-    "Create a new album" : "创建新相册",
-    "Add selection to an album" : "将所选项添加至相册",
     "Add to album" : "添加至相册",
     "Delete selection" : "删除选择项",
     "No photos or videos in here" : "此处没有图片或视频",
@@ -145,6 +143,8 @@ OC.L10N.register(
     "Add photos to the album" : "添加照片至此相册",
     "Failed to fetch albums list." : "获取相册列表失败。",
     "Shared albums" : "共享的相册",
+    "Create a new album" : "创建新相册",
+    "Add selection to an album" : "将所选项添加至相册",
     "Failed to create {albumName}." : "创建 {albumName} 失败",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "重命名 {currentAlbumName} 为 {newAlbumName} 的操作失败"
 },

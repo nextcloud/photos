@@ -113,8 +113,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Tunnisteilla varustetut kuvat näkyvät täällä",
     "Popular tags" : "Suositut tunnisteet",
     "Add" : "Lisää",
-    "Create a new album" : "Luo uusi albumi",
-    "Add selection to an album" : "Lisää valinta albumiin",
     "Add to album" : "Lisää albumiin",
     "Delete selection" : "Poista valinta",
     "No photos or videos in here" : "Ei kuvia tai videoita",
@@ -145,6 +143,8 @@ OC.L10N.register(
     "Add photos to the album" : "Lisää kuvia albumiin",
     "Failed to fetch albums list." : "Albumien listan noutaminen epäonnistui.",
     "Shared albums" : "Jaetut albumit",
+    "Create a new album" : "Luo uusi albumi",
+    "Add selection to an album" : "Lisää valinta albumiin",
     "Failed to create {albumName}." : "Albumin {albumName} luominen epäonnistui.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Albumin {currentAlbumName} nimen muuttaminen muotoon {newAlbumName} epäonnistui."
 },

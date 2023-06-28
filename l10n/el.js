@@ -63,8 +63,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Φωτογραφίες με ετικέτες εμφανίζονται εδώ πάνω",
     "Popular tags" : "Δημοφιλείς ετικέτες",
     "Add" : "Προσθήκη",
-    "Create a new album" : "Δημιουργία ενός νέου άλμπουμ",
-    "Add selection to an album" : "Προσθήκη σε ένα άλμπουμ",
     "Add to album" : "Προσθήκη στο άλμπουμ",
     "Delete selection" : "Διαγραφή επιλογής",
     "No photos or videos in here" : "Δεν υπάρχουν φωτογραφίες ή βίντεο εδώ",
@@ -78,6 +76,8 @@ OC.L10N.register(
     "No collaborators available" : "Δεν υπάρχουν διαθέσιμοι συνεργάτες",
     "Add photos to the album" : "Προσθήκη φωτογραφιών στο άλμπουμ",
     "Shared albums" : "Κοινόχρηστα άλμπουμ",
+    "Create a new album" : "Δημιουργία ενός νέου άλμπουμ",
+    "Add selection to an album" : "Προσθήκη σε ένα άλμπουμ",
     "Failed to create {albumName}." : "Απέτυχε η δημιουργία {albumName}",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Απέτυχε η μετονομασία του {currentAlbumName} σε {newAlbumName}."
 },
