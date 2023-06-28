@@ -144,7 +144,7 @@ export default {
 
 		.album {
 
-			::v-deep .list-item {
+			:deep(.list-item) {
 				padding: 8px 16px;
 				box-sizing: border-box;
 			}
@@ -162,7 +162,7 @@ export default {
 				&--placeholder {
 					background: var(--color-primary-light);
 
-					::v-deep .material-design-icon {
+					:deep(.material-design-icon) {
 						width: 100%;
 						height: 100%;
 

@@ -212,7 +212,7 @@ export default {
 	align-content: space-between;
 }
 
-.app-navigation__photos::v-deep .app-navigation-entry-icon.icon-photos {
+.app-navigation__photos:deep(.app-navigation-entry-icon.icon-photos) {
 	background-size: 20px;
 }
 </style>

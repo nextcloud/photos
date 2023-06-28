@@ -250,7 +250,7 @@ export default {
 			padding: 8px 0 4px 0;
 		}
 
-		::v-deep .empty-content {
+		:deep(.empty-content) {
 			position: absolute;
 			width: 100%;
 			margin-top: 0;

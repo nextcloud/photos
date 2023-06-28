@@ -267,7 +267,7 @@ export default {
 			display: flex;
 			margin-top: 16px;
 
-			::v-deep svg {
+			:deep(svg) {
 				margin-right: 12px;
 			}
 		}
