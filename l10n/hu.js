@@ -113,8 +113,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "A címkével rendelkező fényképek itt fognak megjelenni",
     "Popular tags" : "Népszerű címkék",
     "Add" : "Hozzáadás",
-    "Create a new album" : "Új album létrehozása",
-    "Add selection to an album" : "Kiválasztás hozzáadása egy albumhoz",
     "Add to album" : "Hozzáadás az albumhoz",
     "Delete selection" : "Kiválasztás törlése",
     "No photos or videos in here" : "Itt nincs fénykép vagy videó",
@@ -145,6 +143,8 @@ OC.L10N.register(
     "Add photos to the album" : "Fényképek hozzáadása az albumhoz",
     "Failed to fetch albums list." : "Az albumok lekérése sikertelen.",
     "Shared albums" : "Megosztott albumok",
+    "Create a new album" : "Új album létrehozása",
+    "Add selection to an album" : "Kiválasztás hozzáadása egy albumhoz",
     "Failed to create {albumName}." : "A(z) {albumName} létrehozása sikertelen.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "A(z) {currentAlbumName} átnevezése a következőre sikertelen: {newAlbumName}."
 },

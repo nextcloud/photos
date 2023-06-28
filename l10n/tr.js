@@ -114,8 +114,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Etiketlenmiş fotoğraflar burada görüntülenir",
     "Popular tags" : "Sık kullanılan etiketler",
     "Add" : "Ekle",
-    "Create a new album" : "Yeni bir albüm ekle",
-    "Add selection to an album" : "Seçilmişleri bir albüme ekle",
     "Add to album" : "Albüme ekle",
     "Delete selection" : "Seçilmişleri sil",
     "No photos or videos in here" : "Henüz bir fotoğraf ya da görüntü yok",
@@ -146,6 +144,8 @@ OC.L10N.register(
     "Add photos to the album" : "Albüme fotoğraflar ekle",
     "Failed to fetch albums list." : "Albümlerin listesi alınamadı.",
     "Shared albums" : "Paylaşılmış albümler",
+    "Create a new album" : "Yeni bir albüm ekle",
+    "Add selection to an album" : "Seçilmişleri bir albüme ekle",
     "Failed to create {albumName}." : "{albumName} albümü oluşturulamadı.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "{currentAlbumName} albümünün adı {newAlbumName} olarak değiştirilemedi."
 },

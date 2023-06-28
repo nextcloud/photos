@@ -108,8 +108,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Foto dengan tag akan muncul di sini",
     "Popular tags" : "Tag populer",
     "Add" : "Masukkan",
-    "Create a new album" : "Buat album baru",
-    "Add selection to an album" : "Tambahkan pilihan ke sebuah album",
     "Add to album" : "Tambahkan album",
     "Delete selection" : "Hapus pilihan",
     "No photos or videos in here" : "Tidak ada foto atau video di sini",
@@ -139,6 +137,8 @@ OC.L10N.register(
     "Add photos to the album" : "Tambahkan foto ke album",
     "Failed to fetch albums list." : "Gagal mendapatkan daftar album.",
     "Shared albums" : "Album terbagi",
+    "Create a new album" : "Buat album baru",
+    "Add selection to an album" : "Tambahkan pilihan ke sebuah album",
     "Failed to create {albumName}." : "Gagal membuat {albumName}.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Gagal mengubah nama {currentAlbumName} to {newAlbumName}."
 },

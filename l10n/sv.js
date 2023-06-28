@@ -114,8 +114,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Bilder med taggar visas här",
     "Popular tags" : "Populära taggar",
     "Add" : "Lägg till",
-    "Create a new album" : "Skapa ett nytt album",
-    "Add selection to an album" : "Lägg till urval till ett album",
     "Add to album" : "Lägg till i album",
     "Delete selection" : "Ta bort urval",
     "No photos or videos in here" : "Inga bilder eller videos här",
@@ -146,6 +144,8 @@ OC.L10N.register(
     "Add photos to the album" : "Lägg till bilder i albumet",
     "Failed to fetch albums list." : "Misslyckades att hämta albumlistan.",
     "Shared albums" : "Delade album",
+    "Create a new album" : "Skapa ett nytt album",
+    "Add selection to an album" : "Lägg till urval till ett album",
     "Failed to create {albumName}." : "Lyckades inte skapa {albumName}.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Lyckades inte döpa om {currentAlbumName} till {newAlbumName}."
 },

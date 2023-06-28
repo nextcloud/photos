@@ -109,8 +109,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Світлини з позначками буде показано тут",
     "Popular tags" : "Популярні теги",
     "Add" : "Додати",
-    "Create a new album" : "Створіть новий альбом",
-    "Add selection to an album" : "Додайте виділене в альбом",
     "Add to album" : "Додати в альбом",
     "Delete selection" : "Вилучити виділення",
     "No photos or videos in here" : "Тут немає фотографій та відео",
@@ -140,6 +138,8 @@ OC.L10N.register(
     "Add photos to the album" : "Додайте фотографії в альбом",
     "Failed to fetch albums list." : "Не вдалося отримати список альбомів.",
     "Shared albums" : "Альбоми із спільним доступом",
+    "Create a new album" : "Створіть новий альбом",
+    "Add selection to an album" : "Додайте виділене в альбом",
     "Failed to create {albumName}." : "Не вдалося створити {albumName}.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "Не вдалося перейменувати {currentAlbumName} на {newAlbumName}."
 },
