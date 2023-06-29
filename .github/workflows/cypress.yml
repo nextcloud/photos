@@ -74,7 +74,7 @@ jobs:
       matrix:
         # Run multiple copies of the current job in parallel
         # Please increase the number or runners as your tests suite grows
-        containers: ["component", 1, 2, 3]
+        containers: [1, 2, 3]
 
     name: runner ${{ matrix.containers }}
 
