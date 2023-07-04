@@ -36,6 +36,7 @@ OC.L10N.register(
     "No tags yet" : "لا توجد وسوم حتى الآن",
     "Photos with tags will show up here" : "سوف تظهر الصور ذات الوسوم هنا",
     "Add" : "إضافة",
+    "Delete selection" : "حذف ما تمّ تحديده",
     "Unassigned faces" : "أوجه غير معينة",
     "Tagged photos" : "الصور الموسومة",
     "Locations" : "المواقع",
