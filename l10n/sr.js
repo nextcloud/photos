@@ -81,6 +81,7 @@ OC.L10N.register(
     "Remove selection from album" : "Уклони избор са албума",
     "This album does not have any photos or videos yet!" : "Овај албум још увек нема ниједну фотографију или видео снимак!",
     "Add photos to this album" : "Додај фотографије у овај албум",
+    "Add photos to {albumName}" : "Додај фотографије у {albumName}",
     "Manage collaborators" : "Управљај сарадницима",
     "Save collaborators for this album." : "Сачувај сараднике на овом албуму",
     "Cover photo for album {albumName}" : "Фотографија омота за албум {albumName}",
