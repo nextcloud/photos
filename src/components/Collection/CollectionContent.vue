@@ -32,7 +32,10 @@
 
 	<div v-else class="collection">
 		<!-- Header -->
-		<slot class="collection__header" name="header" :selected-file-ids="selectedFileIds" />
+		<slot class="collection__header"
+			name="header"
+			:selected-file-ids="selectedFileIds"
+			:reset-selection="resetSelection" />
 
 		<!-- No content -->
 		<slot v-if="collectionFileIds.length === 0 && !loading" name="empty-content" />
@@ -46,7 +49,7 @@
 			:loading="loading">
 			<File slot-scope="{file, distance}"
 				:file="files[file.id]"
-				:allow-selection="true"
+				:allow-selection="allowSelection"
 				:selected="selection[file.id] === true"
 				:distance="distance"
 				@click="openViewer"
@@ -98,6 +101,11 @@ export default {
 		loading: {
 			type: Boolean,
 			default: false,
+		},
+
+		allowSelection: {
+			type: Boolean,
+			default: true,
 		},
 
 		error: {
