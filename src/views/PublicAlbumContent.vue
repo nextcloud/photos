@@ -25,6 +25,7 @@
 		<CollectionContent ref="collectionContent"
 			:collection="album"
 			:collection-file-ids="albumFileIds"
+			:allow-selection="false"
 			:loading="loadingAlbum || loadingFiles"
 			:error="errorFetchingAlbum || errorFetchingFiles">
 			<!-- Header -->

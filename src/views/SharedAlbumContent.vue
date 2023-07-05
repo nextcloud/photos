@@ -30,7 +30,7 @@
 			<!-- Header -->
 			<HeaderNavigation key="navigation"
 				slot="header"
-				slot-scope="{selectedFileIds}"
+				slot-scope="{selectedFileIds, resetSelection}"
 				:loading="loadingFiles"
 				:params="{ albumName }"
 				:path="'/' + albumName"
@@ -44,6 +44,18 @@
 				<div v-if="album.location !== ''" slot="subtitle" class="album__location">
 					<MapMarker />{{ album.location }} ⸱ {{ t('photos', 'Shared by') }}&nbsp;<NcUserBubble :display-name="album.collaborators[0].label" :user="album.collaborators[0].id" />
 				</div>
+
+				<template slot="default">
+					<NcButton v-if="selectedFileIds.length > 0"
+						:aria-label="t('photos', 'Unselect all')"
+						@click="resetSelection">
+						<template #icon>
+							<Close />
+						</template>
+						{{ t('photos', 'Unselect all') }}
+					</NcButton>
+				</template>
+
 				<template v-if="album !== undefined" slot="right">
 					<NcButton v-if="album.nbItems !== 0"
 						type="tertiary"
