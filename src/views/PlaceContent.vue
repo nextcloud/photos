@@ -24,6 +24,7 @@
 		<CollectionContent ref="collectionContent"
 			:collection="place"
 			:collection-file-ids="placeFileIds"
+			:allow-selection="false"
 			:loading="loadingCollection || loadingCollectionFiles"
 			:error="errorFetchingCollection || errorFetchingCollectionFiles">
 			<!-- Header -->
