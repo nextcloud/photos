@@ -25,6 +25,7 @@
 			:collection="place"
 			:collection-file-ids="placeFileIds"
 			:semaphore="semaphore"
+			:allow-selection="false"
 			:loading="loadingCollection || loadingCollectionFiles"
 			:error="errorFetchingCollection || errorFetchingCollectionFiles">
 			<!-- Header -->

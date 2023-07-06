@@ -31,7 +31,7 @@
 			<!-- Header -->
 			<HeaderNavigation key="navigation"
 				slot="header"
-				slot-scope="{selectedFileIds}"
+				slot-scope="{selectedFileIds, resetSelection}"
 				:class="{'photos-navigation--uploading': uploader.queue?.length > 0}"
 				:loading="loadingFiles"
 				:params="{ albumName }"
@@ -41,8 +41,19 @@
 				<div v-if="album.location !== ''" slot="subtitle" class="album__location">
 					<MapMarker />{{ album.location }}
 				</div>
-				<template v-if="album !== undefined"
-					slot="right">
+
+				<template slot="default">
+					<NcButton v-if="selectedFileIds.length > 0"
+						:aria-label="t('photos', 'Unselect all')"
+						@click="resetSelection">
+						<template #icon>
+							<Close />
+						</template>
+						{{ t('photos', 'Unselect all') }}
+					</NcButton>
+				</template>
+
+				<template v-if="album !== undefined" slot="right">
 					<UploadPicker v-if="album.nbItems !== 0"
 						:accept="allowedMimes"
 						:context="uploadContext"
