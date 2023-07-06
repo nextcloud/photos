@@ -72,6 +72,7 @@ OC.L10N.register(
     "View" : "Zobrazit",
     "Photos directory" : "Složka pro fotky",
     "_%n photo_::_%n photos_" : ["%n fotka","%n fotky","%n fotek","%n fotky"],
+    "Unselect all" : "Zrušit výběr všeho",
     "Manage collaborators for this album" : "Spravovat spolupracující pro toto album",
     "Open actions menu" : "Otevřít nabídku akcí",
     "Edit album details" : "Upravit podrobnosti o albu",

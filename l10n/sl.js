@@ -69,6 +69,7 @@ OC.L10N.register(
     "View" : "Poglej",
     "Photos directory" : "Slikovna mapa",
     "_%n photo_::_%n photos_" : ["%n fotografija","%n fotografiji","%n fotografije","%n fotografij"],
+    "Unselect all" : "Odstrani izbor",
     "Manage collaborators for this album" : "Upravljanje sodelujočih za izbran album",
     "Open actions menu" : "Odpri meni dejanj",
     "Edit album details" : "Uredi podrobnosti albuma",

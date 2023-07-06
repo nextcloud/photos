@@ -69,6 +69,7 @@ OC.L10N.register(
     "View" : "Ikusi",
     "Photos directory" : "Argazkien direktorioa",
     "_%n photo_::_%n photos_" : ["argazki %n","%n argazki"],
+    "Unselect all" : "Desautatu dena",
     "Manage collaborators for this album" : "Kudeatu album honen kolaboratzaileak",
     "Open actions menu" : "Ireki ekintzen menua",
     "Edit album details" : "Editatu albumaren xehetasunak",

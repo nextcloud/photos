@@ -72,6 +72,7 @@ OC.L10N.register(
     "View" : "查看",
     "Photos directory" : "照片目录",
     "_%n photo_::_%n photos_" : ["%n张照片"],
+    "Unselect all" : "取消全选",
     "Manage collaborators for this album" : "管理此相册的协作者。",
     "Open actions menu" : "打开操作菜单",
     "Edit album details" : "编辑相册详情",

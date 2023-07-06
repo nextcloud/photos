@@ -72,6 +72,7 @@ OC.L10N.register(
     "View" : "Görüntüle",
     "Photos directory" : "Fotoğraflar klasörü",
     "_%n photo_::_%n photos_" : ["%n fotoğraf","%n fotoğraf"],
+    "Unselect all" : "Tümünü bırak",
     "Manage collaborators for this album" : "Bu albümün katılımcılarını yönet",
     "Open actions menu" : "İşlemler menüsünü aç",
     "Edit album details" : "Albüm ayrıntılarını düzenle",
