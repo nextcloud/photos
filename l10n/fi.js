@@ -72,6 +72,7 @@ OC.L10N.register(
     "View" : "Näytä",
     "Photos directory" : "Kuvat-kansio",
     "_%n photo_::_%n photos_" : ["%n kuva","%n kuvaa"],
+    "Unselect all" : "Poista valinnat",
     "Manage collaborators for this album" : "Hallitse albumin osanottajia",
     "Open actions menu" : "Avaa toimintovalikko",
     "Edit album details" : "Muokkaa albumin tietoja",

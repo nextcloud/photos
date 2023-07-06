@@ -72,6 +72,7 @@ OC.L10N.register(
     "View" : "Просмотр",
     "Photos directory" : "Каталог с фотографиями",
     "_%n photo_::_%n photos_" : ["%n фотография","%n фотографии","%n фотографий","%n фотографии"],
+    "Unselect all" : "Отменить выделение для всех",
     "Manage collaborators for this album" : "Управление списком соавторов альбома",
     "Open actions menu" : "Открыть меню действий",
     "Edit album details" : "Изменить альбом",

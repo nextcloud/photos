@@ -54,6 +54,7 @@ OC.L10N.register(
     "Enable squared photos view" : "Abilita vista foto quadrate",
     "View" : "Visualizza",
     "Photos directory" : "Cartella delle foto",
+    "Unselect all" : "Deseleziona tutto",
     "Manage collaborators for this album" : "Gestisci i collaboratori di questo album",
     "Open actions menu" : "Apri il menu azioni",
     "Edit album details" : "Modifica i dettagli dell'album",
