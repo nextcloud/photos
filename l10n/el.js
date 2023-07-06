@@ -44,6 +44,7 @@ OC.L10N.register(
     "Select the default location for your media" : "Επιλέξτε την προεπιλεγμένη τοποθεσία για τα πολυμέσα σας",
     "Invalid location selected" : "Επιλέχθηκε μη έγκυρη τοποθεσία",
     "View" : "Προβολή",
+    "Unselect all" : "Αποεπιλογή όλων",
     "Delete album" : "Διαγραφή άλμπουμ",
     "Download selected files" : "Λήψη επιλεγμένων αρχείων",
     "Remove selection from album" : "Αφαίρεση από το άλμπουμ",

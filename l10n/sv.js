@@ -72,6 +72,7 @@ OC.L10N.register(
     "View" : "Visa",
     "Photos directory" : "Bildmapp",
     "_%n photo_::_%n photos_" : ["%n bild","%n bilder"],
+    "Unselect all" : "Avmarkera alla",
     "Manage collaborators for this album" : "Hantera medlemmar för det här albumet",
     "Open actions menu" : "Öppna åtgärdsmenyn",
     "Edit album details" : "Ändra albumdetaljer",
