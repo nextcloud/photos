@@ -70,6 +70,7 @@
     "View" : "Ver",
     "Photos directory" : "Directorio de fotos",
     "_%n photo_::_%n photos_" : ["%n foto","%n fotos"],
+    "Unselect all" : "Desmarcar todo",
     "Manage collaborators for this album" : "Xestionar os colaboradores deste álbum",
     "Open actions menu" : "Abrir o menú de accións",
     "Edit album details" : "Editar os detalles do álbum",

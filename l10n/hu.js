@@ -72,6 +72,7 @@ OC.L10N.register(
     "View" : "Megtekintés",
     "Photos directory" : "Fényképek könyvtár",
     "_%n photo_::_%n photos_" : ["%n fénykép","%n fénykép"],
+    "Unselect all" : "Kijelölés megszüntetése",
     "Manage collaborators for this album" : "Az album közreműködőinek kezelése",
     "Open actions menu" : "Műveletek menü megnyitása",
     "Edit album details" : "Album részleteinek szerkesztése",

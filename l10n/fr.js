@@ -72,6 +72,7 @@ OC.L10N.register(
     "View" : "Affichage",
     "Photos directory" : "Dossier des photos",
     "_%n photo_::_%n photos_" : ["%n photo","%n photos","%n photos"],
+    "Unselect all" : "Tout désélectionner",
     "Manage collaborators for this album" : "Gérer les collaborateurs pour cet album",
     "Open actions menu" : "Ouvrir le menu des actions",
     "Edit album details" : "Modifier les détails de l'album",
