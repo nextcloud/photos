@@ -80,6 +80,7 @@
     "Remove selection from album" : "Poista valinta albumista",
     "This album does not have any photos or videos yet!" : "Tässä albumissa ei ole kuvia tai videoita!",
     "Add photos to this album" : "Lisää kuvia tähän albumiin",
+    "Add photos to {albumName}" : "Lisää kuvia albumiin {albumName}",
     "Manage collaborators" : "Hallitse osanottajia",
     "Save collaborators for this album." : "Tallenna albumin osanottajat.",
     "Cover photo for album {albumName}" : "Kansikuva albumille {albumName}",
