@@ -23,10 +23,12 @@
 import moment from '@nextcloud/moment'
 import { translate } from '@nextcloud/l10n'
 
-import defaultClient from '../services/DavClient.js'
-import logger from '../services/logger.js'
-import DavRequest from '../services/DavRequest.js'
 import { genFileInfo } from '../utils/fileUtils.js'
+import { getClient } from '../services/DavClient.js'
+import DavRequest from '../services/DavRequest.js'
+import logger from '../services/logger.js'
+
+const defaultClient = getClient()
 
 /**
  * @typedef {object} Album

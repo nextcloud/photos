@@ -23,9 +23,11 @@
 import { showError } from '@nextcloud/dialogs'
 import { translate } from '@nextcloud/l10n'
 
-import client from '../services/DavClient.js'
+import { getClient } from '../services/DavClient.js'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
+
+const client = getClient()
 
 /**
  * Collections are indexed by their `filename`.
@@ -324,7 +326,9 @@ const actions = {
 			await client.customRequest(
 				collection.filename,
 				{
-					method: 'PROPPATCH',
+					headers: {
+						method: 'PROPPATCH',
+					},
 					data: `<?xml version="1.0"?>
 							<d:propertyupdate xmlns:d="DAV:"
 								xmlns:oc="http://owncloud.org/ns"

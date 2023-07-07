@@ -20,13 +20,15 @@
  *
  */
 
+import Vue from 'vue'
 import { showError } from '@nextcloud/dialogs'
 import { getCurrentUser } from '@nextcloud/auth'
 
-import client from '../services/DavClient.js'
+import { getClient } from '../services/DavClient.js'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
-import Vue from 'vue'
+
+const client = getClient()
 
 /**
  * @typedef {object} Face

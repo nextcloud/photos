@@ -21,9 +21,9 @@
  */
 
 import { genFileInfo } from '../utils/fileUtils.js'
+import { getClient, prefixPath } from './DavClient.js'
 import { props } from './DavRequest.js'
 import allowedMimes from './AllowedMimes.js'
-import client, { prefixPath } from './DavClient.js'
 
 /**
  * Get tagged files based on provided tag id
@@ -35,7 +35,9 @@ import client, { prefixPath } from './DavClient.js'
 export default async function(id, options = {}) {
 
 	options = Object.assign({
-		method: 'REPORT',
+		headers: {
+			method: 'REPORT',
+		},
 		data: `<?xml version="1.0"?>
 			<oc:filter-files
 				xmlns:d="DAV:"
@@ -52,7 +54,7 @@ export default async function(id, options = {}) {
 		details: true,
 	}, options)
 
-	const response = await client.getDirectoryContents(prefixPath, options)
+	const response = await getClient().getDirectoryContents(prefixPath, options)
 
 	return response.data
 		.map(data => genFileInfo(data))

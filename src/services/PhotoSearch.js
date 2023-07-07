@@ -23,7 +23,7 @@
 import { genFileInfo } from '../utils/fileUtils.js'
 import { getCurrentUser } from '@nextcloud/auth'
 import { allMimes } from './AllowedMimes.js'
-import client from './DavClient.js'
+import { getClient } from './DavClient.js'
 import { props } from './DavRequest.js'
 import moment from '@nextcloud/moment'
 
@@ -96,9 +96,9 @@ export default async function(path = '', options = {}) {
 		: ''
 
 	options = Object.assign({
-		method: 'SEARCH',
 		headers: {
 			'content-Type': 'text/xml',
+			method: 'SEARCH',
 		},
 		data: `<?xml version="1.0" encoding="UTF-8"?>
 			<d:searchrequest xmlns:d="DAV:"
@@ -143,7 +143,7 @@ export default async function(path = '', options = {}) {
 		details: true,
 	}, options)
 
-	const response = await client.getDirectoryContents('', options)
+	const response = await getClient().getDirectoryContents('', options)
 
 	return response.data.map(data => genFileInfo(data))
 }

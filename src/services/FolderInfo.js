@@ -20,7 +20,7 @@
  *
  */
 
-import client, { prefixPath } from './DavClient.js'
+import { getClient, prefixPath } from './DavClient.js'
 import request from './DavRequest.js'
 import { genFileInfo } from '../utils/fileUtils.js'
 
@@ -35,7 +35,7 @@ export default async function(path) {
 	const fixedPath = path === '/' ? '' : path
 
 	// fetch listing
-	const response = await client.stat(prefixPath + fixedPath, {
+	const response = await getClient().stat(prefixPath + fixedPath, {
 		data: request,
 		details: true,
 	})

@@ -25,8 +25,10 @@ import moment from '@nextcloud/moment'
 import { showError } from '@nextcloud/dialogs'
 
 import logger from '../services/logger.js'
-import client, { prefixPath } from '../services/DavClient.js'
+import { getClient, prefixPath } from '../services/DavClient.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
+
+const client = getClient()
 
 const state = {
 	files: {},
@@ -226,7 +228,9 @@ const actions = {
 					await client.customRequest(
 						file.filename,
 						{
-							method: 'PROPPATCH',
+							headers: {
+								method: 'PROPPATCH',
+							},
 							data: `<?xml version="1.0"?>
 							<d:propertyupdate xmlns:d="DAV:"
 								xmlns:oc="http://owncloud.org/ns"

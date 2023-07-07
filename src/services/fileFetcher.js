@@ -21,7 +21,7 @@
  */
 
 import { genFileInfo } from '../utils/fileUtils.js'
-import defaultClient from './DavClient.js'
+import { getClient } from './DavClient.js'
 
 /**
  * @param {string[]} extraProps - Extra properties to add to the DAV request.
@@ -56,7 +56,7 @@ function getCollectionFilesDavRequest(extraProps = []) {
  */
 export async function fetchFile(fileName, options = {}) {
 	try {
-		const response = await defaultClient.stat(fileName, {
+		const response = await getClient().stat(fileName, {
 			data: getCollectionFilesDavRequest(),
 			details: true,
 			...options,

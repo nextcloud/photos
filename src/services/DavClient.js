@@ -19,23 +19,38 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 import { createClient, getPatcher } from 'webdav'
-import axios from '@nextcloud/axios'
-import parseUrl from 'url-parse'
 import { generateRemoteUrl } from '@nextcloud/router'
-import { getCurrentUser } from '@nextcloud/auth'
+import { getCurrentUser, getRequestToken } from '@nextcloud/auth'
+import { request } from 'webdav/dist/node/request.js'
 
 export const rootPath = 'dav'
 export const prefixPath = `/files/${getCurrentUser()?.uid}`
 
-// force our axios
-const patcher = getPatcher()
-patcher.patch('request', axios)
-
 // init webdav client on default dav endpoint
-const remote = generateRemoteUrl(rootPath)
-const client = createClient(remote)
+const defaultRootUrl = generateRemoteUrl(rootPath)
 
-export const remotePath = parseUrl(remote).pathname
-export default client
+export const getClient = (rootUrl = defaultRootUrl) => {
+	const client = createClient(rootUrl, {
+		headers: {
+			requesttoken: getRequestToken() || '',
+		},
+	})
+
+	/**
+	 * Allow to override the METHOD to support dav REPORT
+	 *
+	 * @see https://github.com/perry-mitchell/webdav-client/blob/8d9694613c978ce7404e26a401c39a41f125f87f/source/request.ts
+	 */
+	const patcher = getPatcher()
+
+	// https://github.com/perry-mitchell/hot-patcher/issues/6
+	patcher.patch('request', (options) => {
+		if (options.headers?.method) {
+			options.method = options.headers.method
+			delete options.headers.method
+		}
+		return request(options)
+	})
+	return client
+}

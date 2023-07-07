@@ -45,16 +45,6 @@ webpackRules.RULE_RAW_SVGS = {
 webpackConfig.module.rules = Object.values(webpackRules)
 
 webpackConfig.plugins.push(
-	// patch webdav/dist/request.js
-	new webpack.NormalModuleReplacementPlugin(
-		/request(\.js)?/,
-		function (resource) {
-			if (resource.context.indexOf('webdav') > -1) {
-				console.debug('Patched request for webdav', basename(resource.contextInfo.issuer))
-				resource.request = path.join(__dirname, 'src/patchedRequest.js')
-			}
-		},
-	),
 	new WorkboxPlugin.GenerateSW({
 		swDest: 'photos-service-worker.js',
 		clientsClaim: true,

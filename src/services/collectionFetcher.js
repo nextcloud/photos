@@ -19,13 +19,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
-import moment from '@nextcloud/moment'
 import { translate } from '@nextcloud/l10n'
+import moment from '@nextcloud/moment'
 
-import defaultClient from './DavClient.js'
-import logger from './logger.js'
 import { genFileInfo } from '../utils/fileUtils.js'
+import { getClient } from './DavClient.js'
+import logger from './logger.js'
+
+const defaultClient = getClient()
 
 /**
  * @typedef {object} Collection
