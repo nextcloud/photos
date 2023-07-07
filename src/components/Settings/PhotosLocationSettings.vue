@@ -52,7 +52,6 @@ export default {
 	mixins: [
 		UserConfig,
 	],
-
 	methods: {
 		debounceSelectPhotosFolder: debounce(function() {
 			this.selectPhotosFolder()
