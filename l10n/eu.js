@@ -113,6 +113,7 @@ OC.L10N.register(
     "Add to album" : "Gehitu albumera",
     "Delete selection" : "Ezabatu hautatutakoak",
     "No photos or videos in here" : "Ez dago argazki edo bideorik hemen",
+    "Unassigned faces" : "Esleitu gabeko aurpegiak",
     "Failed to fetch collection." : "Ezin izan da bilduma eskuratu.",
     "Failed to fetch collections list." : "Ezin izan da bildumen zerrenda eskuratu.",
     "Failed to fetch faces list." : "Ezin izan da aurpegien zerrenda eskuratu.",

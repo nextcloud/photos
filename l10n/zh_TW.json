@@ -80,6 +80,7 @@
     "Remove selection from album" : "從相簿移除選取範圍",
     "This album does not have any photos or videos yet!" : "此相簿還沒有任何照片或影片！",
     "Add photos to this album" : "新增照片至此相簿",
+    "Add photos to {albumName}" : "新增照片至 {albumName}",
     "Manage collaborators" : "管理協作者",
     "Save collaborators for this album." : "儲存此相簿的協作者。",
     "Cover photo for album {albumName}" : "相簿 {albumName} 的封面照片",
