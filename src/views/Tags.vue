@@ -51,7 +51,6 @@
 import { mapGetters } from 'vuex'
 
 import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
-import { loadState } from '@nextcloud/initial-state'
 
 import TagCover from '../components/TagCover.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
@@ -70,7 +69,6 @@ export default {
 			error: null,
 			loading: false,
 			showTags: false,
-			tagCounts: loadState('photos', 'tag-counts'),
 		}
 	},
 
@@ -90,8 +88,8 @@ export default {
 
 		popularTags() {
 			return Object.keys(this.tagsNames)
-				.filter(tagName => (this.tags[this.tagsNames[tagName]].files.length || this.tagCounts[tagName]) > 50)
-				.sort((a, b) => (this.tags[this.tagsNames[b]].files.length || this.tagCounts[b]) - (this.tags[this.tagsNames[a]].files.length || this.tagCounts[a]))
+				.filter(tagName => (this.tags[this.tagsNames[tagName]].filesAssigned) > 50)
+				.sort((a, b) => (this.tags[this.tagsNames[b]].filesAssigned || this.tagCounts[b]) - (this.tags[this.tagsNames[a]].filesAssigned || this.tagCounts[a]))
 				.slice(0, 9)
 				.map(tagName => this.tags[this.tagsNames[tagName]])
 		},
