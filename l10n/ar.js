@@ -67,6 +67,7 @@ OC.L10N.register(
     "Invalid location selected" : "الموقع المُختار غير صحيح",
     "View" : "عرض",
     "Photos directory" : "دليل الصور",
+    "Unselect all" : "إلغاء الاختيار للكل",
     "Manage collaborators for this album" : "إدارة المتعاونين لهذا الألبوم",
     "Open actions menu" : "إفتح قائمة الإجراءات",
     "Edit album details" : "تعديل تفاصيل الألبوم",
