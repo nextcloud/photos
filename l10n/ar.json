@@ -50,6 +50,7 @@
     "Failed to update album." : "تعذّر تحديث الألبوم.",
     "This collection does not exist" : "هذه المجموعة من العناصر collection غير موجودة",
     "An error occurred" : "طرأ هناك خطأ",
+    "_%n unassigned photo_::_%n unassigned photos_" : ["%n صور غير معينة","%n صورة غير معينة","%n صور غير معينة","%n صور غير معينة","%n صور غير معينة","%n صور غير معينة"],
     "Select image {imageName}" : "إختر صورة {imageName}",
     "The file is in the favorites" : "الملف في المفضلة",
     "Open the full size \"{name}\" image" : "افتح الصورة بالحجم الكامل \"{name}\" ",
