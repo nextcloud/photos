@@ -61,6 +61,7 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "افتح الدليل الفرعي \"{name}\" ",
     "Back to {folder}" : "العودة إلى {folder} ",
     "Share this folder" : "مشاركة هذا المجلد",
+    "_{years} year ago_::_{years} years ago_" : ["سنوات {years} مضت","سنة {years} مضت","سنوات {years} مضت","سنوات {years} مضت","سنوات {years} مضت","سنوات {years} مضت"],
     "Enable squared photos view" : "تفعيل عرض الصور المربعة",
     "Default Photos upload and Albums location" : "الموقع الافتراضي لرفع الصور و الألبومات",
     "Choose default Photos upload and Albums location" : "اختر افتراضي رفع الصور وموقع الألبومات",
