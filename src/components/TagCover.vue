@@ -24,7 +24,7 @@
 
 <template>
 	<router-link class="tag-cover" :to="`/tags/${tag.displayName}`">
-		<img v-if="tag.files.length !== 0"
+		<img v-if="tag.filesAssigned !== 0"
 			class="tag-cover__image"
 			:src="coverUrl">
 		<div v-else class="tag-cover__image tag-cover__image--placeholder">
@@ -50,7 +50,6 @@ import ImageMultipleIcon from 'vue-material-design-icons/ImageMultiple.vue'
 import { generateUrl } from '@nextcloud/router'
 
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
-import { loadState } from '@nextcloud/initial-state'
 
 export default {
 	name: 'TagCover',
@@ -74,7 +73,6 @@ export default {
 		return {
 			loadCover: false,
 			observer: null,
-			tagCounts: loadState('photos', 'tag-counts'),
 		}
 	},
 
@@ -92,17 +90,17 @@ export default {
 			if (!this.loadCover) {
 				return ''
 			}
-			return generateUrl(`/core/preview?fileId=${this.tag.files[this.tag.files.length - 1]}&x=${512}&y=${512}&forceIcon=0&a=1`)
+			return generateUrl(`/core/preview?fileId=${this.tag.referenceFileid}&x=${512}&y=${512}&forceIcon=0&a=1`)
 		},
 
 		count() {
-			return this.tag.files.length || this.tagCounts[this.tag.displayName]
+			return this.tag.filesAssigned
 		},
 	},
 
 	watch: {
 		loadCover() {
-			if (this.tag.files.length) {
+			if (this.tag.filesAssigned) {
 				return
 			}
 			this.$store.dispatch('fetchTagFiles', { id: this.tag.id, signal: this.abortController.signal })

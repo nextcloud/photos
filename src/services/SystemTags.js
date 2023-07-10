@@ -31,16 +31,18 @@ import { genFileInfo } from '../utils/fileUtils.js'
  * @return {Array} the file list
  */
 export default async function(path, options = {}) {
-	const response = await client.getDirectoryContents('/systemtags/', Object.assign({}, {
+	const response = await client.getDirectoryContents('/systemtags-assigned/image', Object.assign({}, {
 		data: `<?xml version="1.0"?>
 			<d:propfind  xmlns:d="DAV:"
-				xmlns:oc="http://owncloud.org/ns">
+				xmlns:oc="http://owncloud.org/ns" xmlns:nc="http://nextcloud.org/ns">
 				<d:prop>
 					<oc:id />
 					<oc:display-name />
 					<oc:user-visible />
 					<oc:user-assignable />
 					<oc:can-assign />
+					<nc:files-assigned/>
+					<nc:reference-fileid/>
 				</d:prop>
 			</d:propfind>`,
 		details: true,
