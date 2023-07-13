@@ -97,6 +97,7 @@ OC.L10N.register(
     "Name of this person" : "أكتب اسم هذا الشخص",
     "Merge person" : "دمج شخص",
     "Move to different person" : "الانتقال إلي شخص مختلف",
+    "_Move photo to a different person_::_Move photos to a different person_" : ["انقل الصور إلى شخص مختلف","انقل الصورة إلى شخص مختلف","انقل الصور إلى شخص مختلف","انقل الصور إلى شخص مختلف","انقل الصور إلى شخص مختلف","انقل الصور إلى شخص مختلف"],
     "_Remove photo from person_::_Remove photos from person_" : ["إزالة الصور من شخص","إزالة الصورة من شخص","إزالة الصور من شخص","إزالة الصور من شخص","إزالة الصور من شخص","إزالة الصور من شخص"],
     "This might take some time depending on the size of your photo library." : "يمكن أن يستغرق هذا بعض الوقت و ذلك بحسب حجم مكتبة الصور",
     "Recognized people will show up here" : "الأشخاص الذين تمّ التعرُّف عليهم سيظهرون هنا",
