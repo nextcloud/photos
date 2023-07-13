@@ -12,7 +12,7 @@ OC.L10N.register(
     "Folders" : "Cartafoles",
     "Favorites" : "Favoritos",
     "On this day" : "Neste día",
-    "Shared with you" : "Compartido con vostede",
+    "Shared with you" : "Compartido con Vde.",
     "Tags" : "Etiquetas",
     "Places" : "Lugares",
     "Map" : "Mapa",
