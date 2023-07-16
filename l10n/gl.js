@@ -3,7 +3,7 @@ OC.L10N.register(
     {
     "Public link" : "Ligazón pública",
     "Photos" : "Fotos",
-    "Your memories under your control" : "O seus recordos baixo o seu control",
+    "Your memories under your control" : "As súas lembranzas baixo o seu control",
     "All media" : "Todos os medios",
     "Videos" : "Vídeos",
     "Albums" : "Álbums",
