@@ -55,7 +55,7 @@
     "_%n unassigned photo_::_%n unassigned photos_" : ["%n foto sen asignar","%n fotos sen asignar"],
     "Select image {imageName}" : "Seleccionar a imaxe {imageName}",
     "The file is in the favorites" : "O ficheiro está nos favoritos",
-    "Open the full size \"{name}\" image" : "Abrir a imaxe «{name}» a tamaño completo",
+    "Open the full size \"{name}\" image" : "Abrir a imaxe «{name}» a tamaño real",
     "There are no photos or videos yet!" : "Aínda non hai fotos nin vídeos!",
     "Add to {destination}" : "Engadir a {destination}",
     "Open the \"{name}\" sub-directory" : "Abrir o subdirectorio «{name}»",
