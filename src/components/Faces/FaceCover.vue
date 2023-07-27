@@ -36,8 +36,8 @@
 					{{ baseName }}
 				</h2>
 			</div>
-			<div v-if="facesFiles[baseName] && !small" class="face-cover__details__second-line">
-				{{ n('photos', '%n photos', '%n photos', facesFiles[baseName].length,) }}
+			<div v-if="!small" class="face-cover__details__second-line">
+				{{ n('photos', '%n photos', '%n photos', face.props['nbItems']) }}
 			</div>
 		</div>
 	</div>
@@ -106,36 +106,6 @@ export default {
 		coverDimensions() {
 			if (!this.cover) return {}
 			return this.getCoverStyle(this.face.basename)
-		},
-	},
-
-	async mounted() {
-		this.waitForVisible(this.$el, (isVisible) => {
-			if (!this.facesFiles[this.face.basename]) {
-				this.fetchFiles()
-			}
-		})
-	},
-
-	beforeDestroy() {
-		this.observer.disconnect()
-	},
-
-	methods: {
-		async fetchFiles() {
-			await this.fetchFaceContent(this.face.basename)
-		},
-		waitForVisible(el, listener) {
-			this.observer = new IntersectionObserver((entries, observer) => {
-				entries.forEach(entry => {
-					if (entry.intersectionRatio > 0) {
-						listener()
-						observer.disconnect()
-					}
-				})
-			})
-
-			this.observer.observe(el)
 		},
 	},
 }

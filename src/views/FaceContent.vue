@@ -286,6 +286,10 @@ export default {
 		},
 	},
 
+	mounted() {
+		this.fetchFaceContent(this.faceName)
+	},
+
 	methods: {
 		...mapActions([
 			'appendFiles',
