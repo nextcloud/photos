@@ -5,6 +5,7 @@ OC.L10N.register(
     "Photos" : "عکس ها",
     "Your memories under your control" : "خاطرات شما تحت کنترل شماست",
     "Videos" : "فیلم ها ",
+    "Albums" : "آلبوم ها",
     "People" : "مردم",
     "Folders" : "پوشه ها",
     "Favorites" : "مورد علاقه ها",
