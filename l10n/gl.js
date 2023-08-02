@@ -16,7 +16,7 @@ OC.L10N.register(
     "Tags" : "Etiquetas",
     "Places" : "Lugares",
     "Map" : "Mapa",
-    "Photos settings" : "Axustes das fotos",
+    "Photos settings" : "Axustes de Fotos",
     "Mark selection as favorite" : "Marcar a selección como favorita",
     "Add selection to favorites" : "Engadir a selección a favoritos",
     "Remove selection from favorites" : "Retirar a selección dos favoritos",
