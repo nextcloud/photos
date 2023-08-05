@@ -100,7 +100,7 @@
     "jest-environment-jsdom": "^29.4.1",
     "module-replace-webpack-plugin": "0.0.12",
     "postcss": "^8.4.19",
-    "postcss-loader": "^7.0.2",
+    "postcss-loader": "^7.3.3",
     "raw-loader": "^4.0.2",
     "ts-node": "^10.9.1",
     "tslib": "^2.5.0",
