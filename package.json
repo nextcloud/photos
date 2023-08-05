@@ -56,7 +56,7 @@
 		"camelcase": "^7.0.1",
 		"debounce": "^1.2.1",
 		"he": "^1.2.0",
-		"immutable": "^4.3.0",
+		"immutable": "^4.3.2",
 		"jest-environment-jsdom": "^29.0.3",
 		"path-posix": "^1.0.0",
 		"qs": "^6.11.2",
