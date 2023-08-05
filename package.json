@@ -60,7 +60,7 @@
     "path-posix": "^1.0.0",
     "qs": "^6.11.0",
     "url-parse": "^1.5.10",
-    "vue": "^2.7.14",
+    "vue": "^3.3.4",
     "vue-material-design-icons": "^5.1.2",
     "vue-router": "^3.6.5",
     "vue-template-compiler": "^2.7.14",
