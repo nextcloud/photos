@@ -8,6 +8,6 @@ OC.L10N.register(
     "Tags" : "Etiquetes",
     "Group" : "Grupu",
     "An error occurred" : "Prodúxose un error",
-    "This place does not have any photos or videos yet!" : "¡Esti llugar entá nun tien nenguna semeya nin nengún videu!"
+    "This place does not have any photos or videos yet!" : "¡Esti llugar nun tien nenguna semeya nin nengún videu!"
 },
 "nplurals=2; plural=(n != 1);");
