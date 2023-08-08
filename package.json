@@ -58,7 +58,7 @@
     "debounce": "^1.2.1",
     "he": "^1.2.0",
     "path-posix": "^1.0.0",
-    "qs": "^6.11.0",
+    "qs": "^6.11.2",
     "url-parse": "^1.5.10",
     "vue": "^2.7.14",
     "vue-material-design-icons": "^5.1.2",
