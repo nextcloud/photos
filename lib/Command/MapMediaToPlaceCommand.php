@@ -24,11 +24,11 @@ declare(strict_types=1);
  */
 namespace OCA\Photos\Command;
 
+use OCA\Photos\Service\MediaPlaceManager;
+use OCP\Files\Folder;
+use OCP\Files\IRootFolder;
 use OCP\IConfig;
 use OCP\IUserManager;
-use OCP\Files\IRootFolder;
-use OCP\Files\Folder;
-use OCA\Photos\Service\MediaPlaceManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;

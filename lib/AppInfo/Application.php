@@ -25,22 +25,22 @@ declare(strict_types=1);
 
 namespace OCA\Photos\AppInfo;
 
-use OCA\DAV\Events\SabrePluginAuthInitEvent;
-use OCA\Photos\Listener\SabrePluginAuthInitListener;
 use OCA\DAV\Connector\Sabre\Principal;
-use OCA\Photos\Listener\TagListener;
-use OCA\Photos\Listener\PlaceManagerEventListener;
+use OCA\DAV\Events\SabrePluginAuthInitEvent;
 use OCA\Photos\Listener\AlbumsManagementEventListener;
+use OCA\Photos\Listener\PlaceManagerEventListener;
+use OCA\Photos\Listener\SabrePluginAuthInitListener;
+use OCA\Photos\Listener\TagListener;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Files\Events\Node\NodeDeletedEvent;
-use OCP\SystemTag\MapperEvent;
-use OCP\Group\Events\UserRemovedEvent;
-use OCP\Group\Events\GroupDeletedEvent;
 use OCP\Files\Events\Node\NodeWrittenEvent;
+use OCP\Group\Events\GroupDeletedEvent;
+use OCP\Group\Events\UserRemovedEvent;
 use OCP\Share\Events\ShareDeletedEvent;
+use OCP\SystemTag\MapperEvent;
 use OCP\User\Events\UserDeletedEvent;
 
 class Application extends App implements IBootstrap {

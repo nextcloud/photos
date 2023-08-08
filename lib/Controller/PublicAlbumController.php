@@ -24,13 +24,13 @@
 
 namespace OCA\Photos\Controller;
 
-use OCP\AppFramework\Controller;
 use OCA\Photos\AppInfo\Application;
 use OCA\Viewer\Event\LoadViewer;
+use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\Template\PublicTemplateResponse;
-use OCP\EventDispatcher\IEventDispatcher;
 use OCP\AppFramework\Services\IInitialState;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IRequest;
 use OCP\Util;
 

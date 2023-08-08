@@ -24,18 +24,18 @@ declare(strict_types=1);
  */
 namespace OCA\Photos\Service;
 
-use OCP\Files\IAppData;
-use OCP\Files\SimpleFS\ISimpleFolder;
-use OCP\Files\NotFoundException;
-use OCP\Http\Client\IClientService;
-use Hexogen\KDTree\FSTreePersister;
 use Hexogen\KDTree\FSKDTree;
-use Hexogen\KDTree\KDTree;
+use Hexogen\KDTree\FSTreePersister;
 use Hexogen\KDTree\Item;
-use Hexogen\KDTree\ItemList;
 use Hexogen\KDTree\ItemFactory;
+use Hexogen\KDTree\ItemList;
+use Hexogen\KDTree\KDTree;
 use Hexogen\KDTree\NearestSearch;
 use Hexogen\KDTree\Point;
+use OCP\Files\IAppData;
+use OCP\Files\NotFoundException;
+use OCP\Files\SimpleFS\ISimpleFolder;
+use OCP\Http\Client\IClientService;
 
 class ReverseGeoCoderService {
 	private ISimpleFolder $geoNameFolder;
