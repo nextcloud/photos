@@ -8,6 +8,7 @@ OC.L10N.register(
     "Favorites" : "Ưa thích",
     "Shared with you" : "Đã chia sẻ với bạn",
     "Tags" : "Nhãn",
+    "Photos settings" : "Cài đặt Ảnh",
     "Back" : "Quay lại",
     "Save" : "Lưu",
     "Shared by" : "Đã chia sẽ bởi",
