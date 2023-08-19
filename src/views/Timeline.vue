@@ -40,7 +40,8 @@
 				<!-- TODO: UploadPicker -->
 				<NcActions v-if="selectedFileIds.length === 0"
 					:force-menu="true"
-					:menu-title="t('photos', 'Add')">
+					:menu-title="t('photos', 'Add')"
+					:aria-label="null">
 					<template #icon>
 						<Plus />
 					</template>
