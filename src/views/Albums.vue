@@ -54,13 +54,13 @@
 				</div>
 			</CollectionCover>
 
-			<NcEmptyContent slot="empty-collections-list" :title="t('photos', 'There is no album yet!')">
+			<NcEmptyContent slot="empty-collections-list" :name="t('photos', 'There is no album yet!')">
 				<FolderMultipleImage slot="icon" />
 			</NcEmptyContent>
 		</CollectionsList>
 
 		<NcModal v-if="showAlbumCreationForm"
-			:title="t('photos', 'New album')"
+			:name="t('photos', 'New album')"
 			@close="showAlbumCreationForm = false">
 			<AlbumForm @done="handleAlbumCreated" />
 		</NcModal>

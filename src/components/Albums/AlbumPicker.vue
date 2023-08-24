@@ -30,7 +30,7 @@
 			<NcListItem v-for="album in allAlbums"
 				:key="album.filename"
 				class="album"
-				:title="originalName(album)"
+				:name="originalName(album)"
 				:aria-label="t('photos', 'Add selection to album {albumName}', {albumName: album.basename})"
 				@click="pickAlbum(album)">
 				<template slot="icon">
@@ -40,7 +40,7 @@
 					</div>
 				</template>
 
-				<template slot="subtitle">
+				<template #subname>
 					{{ n('photos', '%n item', '%n photos and videos', album.nbItems) }}
 					<template v-if="isSharedAlbum(album)">
 						⸱ {{ t('photos', 'Shared by') }}&nbsp;<NcUserBubble :display-name="album.collaborators[0].label" :user="album.collaborators[0].id" />

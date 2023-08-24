@@ -1,13 +1,13 @@
 <template>
 	<NcAppSettingsDialog :open="open"
 		:show-navigation="true"
-		:title="t('photos', 'Photos settings')"
+		:name="t('photos', 'Photos settings')"
 		@update:open="onClose">
-		<NcAppSettingsSection id="layout-settings" :title="t('photos', 'View')">
+		<NcAppSettingsSection id="layout-settings" :name="t('photos', 'View')">
 			<CroppedLayoutSettings />
 		</NcAppSettingsSection>
 
-		<NcAppSettingsSection id="directory-settings" :title="t('photos', 'Photos directory')">
+		<NcAppSettingsSection id="directory-settings" :name="t('photos', 'Photos directory')">
 			<PhotosLocationSettings />
 		</NcAppSettingsSection>
 	</NcAppSettingsDialog>

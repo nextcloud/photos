@@ -39,7 +39,7 @@
 
 			<!-- No content -->
 			<NcEmptyContent slot="empty-content"
-				:title="t('photos', 'This place does not have any photos or videos yet!')"
+				:name="t('photos', 'This place does not have any photos or videos yet!')"
 				class="place__empty">
 				<ImagePlus slot="icon" />
 

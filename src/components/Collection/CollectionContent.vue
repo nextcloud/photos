@@ -23,10 +23,10 @@
 	<!-- Errors handlers-->
 	<NcEmptyContent v-if="(collection === undefined && !loading) || error === 404"
 		class="empty-content-with-illustration"
-		:title="t('photos', 'This collection does not exist')">
+		:name="t('photos', 'This collection does not exist')">
 		<FolderMultipleImage slot="icon" />
 	</NcEmptyContent>
-	<NcEmptyContent v-else-if="error" :title="t('photos', 'An error occurred')">
+	<NcEmptyContent v-else-if="error" :name="t('photos', 'An error occurred')">
 		<AlertCircle slot="icon" />
 	</NcEmptyContent>
 

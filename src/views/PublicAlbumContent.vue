@@ -71,7 +71,7 @@
 
 			<!-- No content -->
 			<NcEmptyContent slot="empty-content"
-				:title="t('photos', 'This album does not have any photos or videos yet!')"
+				:name="t('photos', 'This album does not have any photos or videos yet!')"
 				class="album__empty">
 				<ImageOff slot="icon" />
 

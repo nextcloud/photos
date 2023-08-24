@@ -40,7 +40,7 @@
 				<!-- TODO: UploadPicker -->
 				<NcActions v-if="selectedFileIds.length === 0"
 					:force-menu="true"
-					:menu-title="t('photos', 'Add')">
+					:menu-name="t('photos', 'Add')">
 					<template #icon>
 						<Plus />
 					</template>
@@ -123,7 +123,7 @@
 		<NcModal v-if="showAlbumCreationForm"
 			key="albumCreationForm"
 			:close-button-contained="false"
-			:title="t('photos', 'New album')"
+			:name="t('photos', 'New album')"
 			@close="showAlbumCreationForm = false">
 			<AlbumForm @done="showAlbumCreationForm = false" />
 		</NcModal>
@@ -131,7 +131,7 @@
 		<NcModal v-if="showAlbumPicker"
 			key="albumPicker"
 			:close-button-contained="false"
-			:title="t('photos', 'Add to album')"
+			:name="t('photos', 'Add to album')"
 			@close="showAlbumPicker = false">
 			<AlbumPicker @album-picked="addSelectionToAlbum" />
 		</NcModal>
