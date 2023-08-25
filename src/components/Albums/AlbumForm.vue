@@ -28,15 +28,13 @@
 				name="name"
 				:required="true"
 				autofocus="true"
-				:label="t('photos', 'Name of the album')"
-				:label-visible="true" />
+				:label="t('photos', 'Name of the album')" />
 			<label>
 				<MapMarker />
 				<NcTextField :value.sync="albumLocation"
 					name="location"
 					type="text"
-					:label="t('photos', 'Location of the album')"
-					:label-visible="true" />
+					:label="t('photos', 'Location of the album')" />
 			</label>
 		</div>
 		<div class="form-buttons">
