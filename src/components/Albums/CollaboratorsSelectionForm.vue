@@ -51,7 +51,7 @@
 				class="manage-collaborators__selection__item">
 				<NcListItemIcon :id="availableCollaborators[collaboratorKey].id"
 					:display-name="availableCollaborators[collaboratorKey].label"
-					:title="availableCollaborators[collaboratorKey].label"
+					:name="availableCollaborators[collaboratorKey].label"
 					:user="availableCollaborators[collaboratorKey].id"
 					:is-no-user="availableCollaborators[collaboratorKey].type !== collaboratorTypes.SHARE_TYPE_USER">
 					<AccountGroup v-if="availableCollaborators[collaboratorKey].type === collaboratorTypes.SHARE_TYPE_GROUP" :title="t('photos', 'Group')" />

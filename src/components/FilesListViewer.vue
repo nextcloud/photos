@@ -23,7 +23,7 @@
 	<div class="files-list-viewer">
 		<NcEmptyContent v-if="emptyMessage !== '' && itemsBySections.length === 1 && itemsBySections[0].items.length === 0 && !loading"
 			key="emptycontent"
-			:title="emptyMessage">
+			:name="emptyMessage">
 			<PackageVariant slot="icon" />
 		</NcEmptyContent>
 

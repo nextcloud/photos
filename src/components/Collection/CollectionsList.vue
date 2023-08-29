@@ -21,7 +21,7 @@
  -->
 <template>
 	<!-- Errors handlers-->
-	<NcEmptyContent v-if="error" :title="t('photos', 'An error occurred') ">
+	<NcEmptyContent v-if="error" :name="t('photos', 'An error occurred') ">
 		<AlertCircle slot="icon" />
 	</NcEmptyContent>
 

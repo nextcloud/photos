@@ -97,7 +97,7 @@
 		</FilesListViewer>
 
 		<NcModal v-if="showMoveModal"
-			:title="t('photos', 'Move to different person')"
+			:name="t('photos', 'Move to different person')"
 			@close="showMoveModal = false">
 			<FaceMergeForm :first-face="'-1'" @select="handleMove($event, selectedFileIds)" />
 		</NcModal>

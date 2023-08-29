@@ -96,7 +96,7 @@
 			<!-- No content -->
 			<NcEmptyContent v-if="album !== undefined && album.nbItems === 0 && !(loadingCollectionFiles || loadingCollection)"
 				slot="empty-content"
-				:title="t('photos', 'This album does not have any photos or videos yet!')"
+				:name="t('photos', 'This album does not have any photos or videos yet!')"
 				class="album__empty">
 				<ImagePlus slot="icon" />
 
@@ -113,7 +113,7 @@
 
 		<NcModal v-if="showAddPhotosModal"
 			size="large"
-			:title="t('photos', 'Add photos to {albumName}', {albumName: albumOriginalName})"
+			:name="t('photos', 'Add photos to {albumName}', {albumName: albumOriginalName})"
 			@close="showAddPhotosModal = false">
 			<FilesPicker v-if="album !== undefined"
 				:destination="album.basename"

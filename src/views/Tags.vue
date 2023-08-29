@@ -24,9 +24,9 @@
 <template>
 	<div>
 		<!-- Errors handlers-->
-		<NcEmptyContent v-if="error" :title="t('photos', 'An error occurred')" />
+		<NcEmptyContent v-if="error" :name="t('photos', 'An error occurred')" />
 
-		<NcEmptyContent v-if="!loading && tagsList.length === 0" :title="t('photos', 'No tags yet')" :description="t('photos', 'Photos with tags will show up here')" />
+		<NcEmptyContent v-if="!loading && tagsList.length === 0" :name="t('photos', 'No tags yet')" :description="t('photos', 'Photos with tags will show up here')" />
 
 		<NcLoadingIcon v-if="loading" class="loader" />
 

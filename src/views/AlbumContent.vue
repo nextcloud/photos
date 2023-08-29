@@ -112,7 +112,7 @@
 			<!-- No content -->
 			<NcEmptyContent v-if="album !== undefined && album.nbItems === 0 && !(loadingCollectionFiles || loadingCollection)"
 				slot="empty-content"
-				:title="t('photos', 'This album does not have any photos or videos yet!')"
+				:name="t('photos', 'This album does not have any photos or videos yet!')"
 				class="album__empty">
 				<ImagePlus slot="icon" />
 
@@ -129,7 +129,7 @@
 
 		<NcModal v-if="showAddPhotosModal"
 			size="large"
-			:title="t('photos', 'Add photos to {albumName}', {albumName: albumName})"
+			:name="t('photos', 'Add photos to {albumName}', {albumName: albumName})"
 			@close="showAddPhotosModal = false">
 			<FilesPicker v-if="album !== undefined"
 				:destination="album.basename"
@@ -138,7 +138,7 @@
 		</NcModal>
 
 		<NcModal v-if="showManageCollaboratorView && album !== undefined"
-			:title="t('photos', 'Manage collaborators')"
+			:name="t('photos', 'Manage collaborators')"
 			@close="showManageCollaboratorView = false">
 			<CollaboratorsSelectionForm :album-name="album.basename"
 				:collaborators="album.collaborators">
@@ -157,7 +157,7 @@
 		</NcModal>
 
 		<NcModal v-if="showEditAlbumForm"
-			:title="t('photos', 'Edit album details')"
+			:name="t('photos', 'Edit album details')"
 			@close="showEditAlbumForm = false">
 			<AlbumForm :album="album" @done="redirectToNewName" />
 		</NcModal>

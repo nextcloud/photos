@@ -24,7 +24,6 @@
 	<div class="photos-location">
 		<NcTextField class="photos-location__text-field"
 			:label="t('photos', 'Default Photos upload and Albums location')"
-			:label-visible="true"
 			:value.sync="photosLocation"
 			@update:value="debounceUpdatePhotosFolder(photosLocation)" />
 		<NcButton :aria-label="t('photos', 'Choose default Photos upload and Albums location')"
