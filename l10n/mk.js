@@ -67,6 +67,7 @@ OC.L10N.register(
     "View" : "Погледни",
     "Photos directory" : "Директориум за фотографии",
     "_%n photo_::_%n photos_" : ["%n фотографија","%n фотографии"],
+    "Unselect all" : "Од-означи се",
     "Manage collaborators for this album" : "Уреди соработници за овој албум",
     "Open actions menu" : "Отвори Мени со акции",
     "Edit album details" : "Уреди ги деталите на албумот",
