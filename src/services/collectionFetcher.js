@@ -21,7 +21,7 @@
  */
 
 import moment from '@nextcloud/moment'
-import { translate } from '@nextcloud/l10n'
+import { translate as t } from '@nextcloud/l10n'
 
 import defaultClient from './DavClient.js'
 import logger from './logger.js'
@@ -184,7 +184,7 @@ function formatCollection(rawCollection) {
 	if (dateRangeFormatted.startDate === dateRangeFormatted.endDate) {
 		rawCollection.date = dateRangeFormatted.startDate
 	} else {
-		rawCollection.date = translate('photos', '{startDate} to {endDate}', dateRangeFormatted)
+		rawCollection.date = t('photos', '{startDate} to {endDate}', dateRangeFormatted)
 	}
 
 	return rawCollection

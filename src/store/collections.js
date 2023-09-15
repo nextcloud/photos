@@ -21,7 +21,7 @@
  */
 
 import { showError } from '@nextcloud/dialogs'
-import { translate } from '@nextcloud/l10n'
+import { translate as t } from '@nextcloud/l10n'
 
 import client from '../services/DavClient.js'
 import logger from '../services/logger.js'
@@ -199,8 +199,8 @@ const actions = {
 					if (error.response.status !== 409) { // Already in the collection.
 						context.commit('removeFilesFromCollection', { collectionFileName, fileIdsToRemove: [fileId] })
 
-						logger.error(translate('photos', 'Failed to add {fileBaseName} to collection {collectionFileName}.', { fileBaseName: file.basename, collectionFileName }), { error })
-						showError(translate('photos', 'Failed to add {fileBaseName} to collection {collectionFileName}.', { fileBaseName: file.basename, collectionFileName }))
+						logger.error(t('photos', 'Failed to add {fileBaseName} to collection {collectionFileName}.', { fileBaseName: file.basename, collectionFileName }), { error })
+						showError(t('photos', 'Failed to add {fileBaseName} to collection {collectionFileName}.', { fileBaseName: file.basename, collectionFileName }))
 					}
 				} finally {
 					semaphore.release(symbol)
@@ -233,8 +233,8 @@ const actions = {
 				} catch (error) {
 					context.commit('addFilesToCollection', { collectionFileName, fileIdsToAdd: [fileId] })
 
-					logger.error(translate('photos', 'Failed to delete {fileBaseName}.', { fileBaseName: file.basename }), { error })
-					showError(translate('photos', 'Failed to delete {fileBaseName}.', { fileBaseName: file.basename }))
+					logger.error(t('photos', 'Failed to delete {fileBaseName}.', { fileBaseName: file.basename }), { error })
+					showError(t('photos', 'Failed to delete {fileBaseName}.', { fileBaseName: file.basename }))
 				} finally {
 					semaphore.release(symbol)
 				}
@@ -256,8 +256,8 @@ const actions = {
 			context.commit('addCollections', { collections: [collection] })
 			return collection
 		} catch (error) {
-			logger.error(translate('photos', 'Failed to create {collectionFileName}.', { collectionFileName: collection.filename }), { error })
-			showError(translate('photos', 'Failed to create {collectionFileName}.', { collectionFileName: collection.filename }))
+			logger.error(t('photos', 'Failed to create {collectionFileName}.', { collectionFileName: collection.filename }), { error })
+			showError(t('photos', 'Failed to create {collectionFileName}.', { collectionFileName: collection.filename }))
 		}
 	},
 
@@ -285,8 +285,8 @@ const actions = {
 			return newCollection
 		} catch (error) {
 			context.commit('removeCollections', { collectionFileNames: [newCollection.filename] })
-			logger.error(translate('photos', 'Failed to rename {currentCollectionFileName} to {newCollectionFileName}.', { currentCollectionFileName: collectionFileName, newCollectionFileName: newCollection.filename }), { error })
-			showError(translate('photos', 'Failed to rename {currentCollectionFileName} to {newCollectionFileName}.', { currentCollectionFileName: collectionFileName, newCollectionFileName: newCollection.filename }))
+			logger.error(t('photos', 'Failed to rename {currentCollectionFileName} to {newCollectionFileName}.', { currentCollectionFileName: collectionFileName, newCollectionFileName: newCollection.filename }), { error })
+			showError(t('photos', 'Failed to rename {currentCollectionFileName} to {newCollectionFileName}.', { currentCollectionFileName: collectionFileName, newCollectionFileName: newCollection.filename }))
 			return collection
 		}
 	},
@@ -342,8 +342,8 @@ const actions = {
 			return updatedCollection
 		} catch (error) {
 			context.commit('updateCollection', { collection })
-			logger.error(translate('photos', 'Failed to update properties of {collectionFileName} with {properties}.', { collectionFileName, properties: JSON.stringify(properties) }), { error })
-			showError(translate('photos', 'Failed to update properties of {collectionFileName} with {properties}.', { collectionFileName, properties: JSON.stringify(properties) }))
+			logger.error(t('photos', 'Failed to update properties of {collectionFileName} with {properties}.', { collectionFileName, properties: JSON.stringify(properties) }), { error })
+			showError(t('photos', 'Failed to update properties of {collectionFileName} with {properties}.', { collectionFileName, properties: JSON.stringify(properties) }))
 			return collection
 		}
 	},
@@ -361,8 +361,8 @@ const actions = {
 			await client.deleteFile(collection.filename)
 			context.commit('removeCollections', { collectionFileNames: [collectionFileName] })
 		} catch (error) {
-			logger.error(translate('photos', 'Failed to delete {collectionFileName}.', { collectionFileName }), { error })
-			showError(translate('photos', 'Failed to delete {collectionFileName}.', { collectionFileName }))
+			logger.error(t('photos', 'Failed to delete {collectionFileName}.', { collectionFileName }), { error })
+			showError(t('photos', 'Failed to delete {collectionFileName}.', { collectionFileName }))
 		}
 	},
 }
