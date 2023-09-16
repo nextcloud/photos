@@ -127,6 +127,7 @@
     "Tagged photos" : "Címkézett fényképek",
     "Tagged photo {title}" : "Címkézett fénykép: {title}",
     "{title}'s face" : "{title} arca",
+    "{startDate} to {endDate}" : "{startDate} – {endDate}",
     "Failed to rename {oldName} to {faceName}." : "A(z) {oldName} átnevezése a következőre sikertelen: {faceName}.",
     "Failed to delete {faceName}." : "A(z) {faceName} törlése sikertelen.",
     "Failed to delete {fileId}." : "A(z) {fileId} törlése sikertelen.",
