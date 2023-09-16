@@ -130,6 +130,7 @@ OC.L10N.register(
     "Tagged photos" : "Etiketlenmiş fotoğraflar",
     "Tagged photo {title}" : "{title} etiketlenmiş fotoğraf",
     "{title}'s face" : "{title} yüzü",
+    "{startDate} to {endDate}" : "{startDate} - {endDate}",
     "Failed to rename {oldName} to {faceName}." : "{oldName} adı {faceName} olarak değiştirilemedi.",
     "Failed to delete {faceName}." : "{faceName} silinemedi.",
     "Failed to delete {fileId}." : "{fileId} silinemedi.",
