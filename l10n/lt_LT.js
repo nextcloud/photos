@@ -86,6 +86,7 @@ OC.L10N.register(
     "Failed to fetch faces list." : "Nepavyko gauti veidų sąrašo.",
     "All your media" : "Visa jūsų medija",
     "Tagged photos" : "Pažymėtos nuotraukos",
+    "{startDate} to {endDate}" : "Nuo {startDate} iki {endDate}",
     "Failed to rename {oldName} to {faceName}." : "Nepavyko pervadinti {oldName} į {faceName}.",
     "Failed to delete {faceName}." : "Nepavyko ištrinti {faceName}.",
     "Failed to delete {fileId}." : "Nepavyko ištrinti {fileId}.",

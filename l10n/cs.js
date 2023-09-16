@@ -130,6 +130,7 @@ OC.L10N.register(
     "Tagged photos" : "Oštítkované fotky",
     "Tagged photo {title}" : "Fotka {title} opatřena štítkem",
     "{title}'s face" : "Obličej {title}",
+    "{startDate} to {endDate}" : "{startDate} až {endDate}",
     "Failed to rename {oldName} to {faceName}." : "Nepodařilo se přejmenovat {oldName} na {faceName}.",
     "Failed to delete {faceName}." : "Nepodařilo se smazat {faceName}.",
     "Failed to delete {fileId}." : "Nepodařilo se smazat {fileId}.",
