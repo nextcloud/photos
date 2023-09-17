@@ -130,6 +130,7 @@ OC.L10N.register(
     "Tagged photos" : "Fotografies etiquetades",
     "Tagged photo {title}" : "Fotografia etiquetada {title}",
     "{title}'s face" : "Cara de {title}",
+    "{startDate} to {endDate}" : "{startDate} a {endDate}",
     "Failed to rename {oldName} to {faceName}." : "No s'ha pogut canviar el nom de la persona {oldName} a {faceName}.",
     "Failed to delete {faceName}." : "No s'ha pogut suprimir {faceName}.",
     "Failed to delete {fileId}." : "No s'ha pogut suprimir {fileId}.",
