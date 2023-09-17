@@ -130,6 +130,7 @@ OC.L10N.register(
     "Tagged photos" : "الصور الموسومة",
     "Tagged photo {title}" : "صور موسومة {title}",
     "{title}'s face" : "وجه {title}",
+    "{startDate} to {endDate}" : "{startDate} إلى {endDate}",
     "Failed to rename {oldName} to {faceName}." : "تعذّر تغيير تسمية {oldName} إلى {faceName}.",
     "Failed to delete {faceName}." : "تعذّر حذف {faceName}.",
     "Failed to delete {fileId}." : "تعذّر حذف {fileId}.",
