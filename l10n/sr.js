@@ -130,6 +130,7 @@ OC.L10N.register(
     "Tagged photos" : "Слике са ознаком",
     "Tagged photo {title}" : "Означена фотографија {title}",
     "{title}'s face" : "лице {title}",
+    "{startDate} to {endDate}" : "{startDate} до {endDate}",
     "Failed to rename {oldName} to {faceName}." : "Није успела промена имена {oldName} у {faceName}.",
     "Failed to delete {faceName}." : "Није успело брисање {faceName}.",
     "Failed to delete {fileId}." : "Није успело брисање {fileId}.",
