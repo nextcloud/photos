@@ -92,7 +92,7 @@ export default {
 		},
 		renderDistance: {
 			type: Number,
-			default: 10,
+			default: 0.5,
 		},
 		bottomBufferRatio: {
 			type: Number,
@@ -129,7 +129,7 @@ export default {
 
 			// Compute whether a row should be included in the DOM (shouldRender)
 			// And how visible the row is.
-			return this.sections
+			const visibleSections = this.sections
 				.map(section => {
 					currentRowBottom += this.headerHeight
 
@@ -162,6 +162,32 @@ export default {
 					}
 				})
 				.filter(section => section.rows.length > 0)
+
+			// To allow vue to recycle the DOM elements instead of adding and deleting new ones,
+			// we assign a random key to each items. When a item removed, we recycle its key for new items,
+			// so vue can replace the content of removed DOM elements with the content of new items, but keep the other DOM elements untouched.
+			const visibleItems = visibleSections
+				.flatMap(({ rows }) => rows)
+				.flatMap(({ items }) => items)
+
+			visibleItems.forEach(item => (item.key = this.rowIdToKeyMap[item.id]))
+
+			const usedTokens = visibleItems
+				.map(({ key }) => key)
+				.filter(key => key !== undefined)
+
+			const unusedTokens = Object.values(this.rowIdToKeyMap).filter(key => !usedTokens.includes(key))
+
+			visibleItems
+				.filter(({ key }) => key === undefined)
+				.forEach(item => (item.key = unusedTokens.pop() ?? Math.random().toString(36).substr(2)))
+
+			// this.rowIdToKeyMap is created in the beforeCreate hook, so value changes are not tracked.
+			// Therefore, we wont trigger the computation of visibleSections again if we alter the value of this.rowIdToKeyMap.
+			// eslint-disable-next-line vue/no-side-effects-in-computed-properties
+			this.rowIdToKeyMap = visibleItems.reduce((finalMapping, { id, key }) => ({ ...finalMapping, [`${id}`]: key }), {})
+
+			return visibleSections
 		},
 
 		/**
@@ -278,6 +304,10 @@ export default {
 		},
 	},
 
+	beforeCreate() {
+		this.rowIdToKeyMap = {}
+	},
+
 	mounted() {
 		this.resizeObserver = new ResizeObserver(entries => {
 			for (const entry of entries) {
@@ -312,13 +342,16 @@ export default {
 	},
 
 	methods: {
+		// Debouncing by a tiny amount helps a bit to reduce computation cycles.
+		// From a quick tests, 6 cycle are triggered on a big scroll without debounce.
+		// This is reduce to 4 with this tiny debounce.
 		updateScrollPosition: debounce(function() {
 			if (this.useWindow) {
 				this.scrollPosition = this.container.scrollY
 			} else {
 				this.scrollPosition = this.container.scrollTop
 			}
-		}, 200),
+		}, 5),
 
 		updateContainerSize() {
 			this.containerHeight = window.innerHeight
