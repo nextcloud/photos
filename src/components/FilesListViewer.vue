@@ -58,7 +58,7 @@
 									'last-tiled-row' prevents the last row's items from growing.
 								-->
 								<li v-for="item of row.items"
-									:key="item.id"
+									:key="item.key"
 									:class="{ 'last-tiled-rows': rowIndex === section.rows.length - 1 }"
 									:style="{ 'flex-basis': `${item.width - 1}px`, height: `${item.height}px`}">
 									<!-- Placeholder when initial loading -->
