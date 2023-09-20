@@ -27,9 +27,14 @@ const SWCacheName = 'images'
  * Check if the preview is already cached by the service worker
  *
  * @param {string} previewUrl - The URL of the preview to check
+ * @return {Promise<boolean>}
  */
 export const isCachedPreview = async function(previewUrl) {
-	const cache = await window.caches?.open(SWCacheName)
-	const response = await cache?.match(previewUrl)
-	return response !== undefined
+	try {
+		const cache = await window.caches?.open(SWCacheName)
+		const response = await cache?.match(previewUrl)
+		return response !== undefined
+	} catch {
+		return false
+	}
 }
