@@ -11,9 +11,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue_material_design_icons_AccountBoxMultipleOutline__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-material-design-icons/AccountBoxMultipleOutline */ "./node_modules/vue-material-design-icons/AccountBoxMultipleOutline.vue");
-/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nextcloud/vue */ "./node_modules/@nextcloud/vue/dist/ncvuecomponents.js");
-/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var vue_material_design_icons_AccountBoxMultipleOutline_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-material-design-icons/AccountBoxMultipleOutline.vue */ "./node_modules/vue-material-design-icons/AccountBoxMultipleOutline.vue");
+/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nextcloud/vue */ "./node_modules/@nextcloud/vue/dist/index.module.js");
 /* harmony import */ var _mixins_FetchFacesMixin_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../mixins/FetchFacesMixin.js */ "./src/mixins/FetchFacesMixin.js");
 /* harmony import */ var _components_FaceCover_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/FaceCover.vue */ "./src/components/FaceCover.vue");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
@@ -78,38 +77,35 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'Faces',
   components: {
     FaceCover: _components_FaceCover_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
     NcEmptyContent: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__.NcEmptyContent,
     NcLoadingIcon: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__.NcLoadingIcon,
-    AccountBoxMultipleOutline: vue_material_design_icons_AccountBoxMultipleOutline__WEBPACK_IMPORTED_MODULE_0__["default"]
+    AccountBoxMultipleOutline: vue_material_design_icons_AccountBoxMultipleOutline_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   mixins: [_mixins_FetchFacesMixin_js__WEBPACK_IMPORTED_MODULE_2__["default"]],
-  computed: { ...(0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)(['facesFiles']),
-
+  computed: {
+    ...(0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)(['facesFiles']),
     /**
      * @return {boolean} Whether the list of face is empty or not.
      */
     noFaces() {
       return Object.keys(this.faces).length === 0;
     },
-
     orderedFaces() {
       return Object.values(this.faces).sort((a, b) => {
         if (a.props.nbItems && b.props.nbItems) {
           return b.props.nbItems - a.props.nbItems;
         }
-
         if (!this.facesFiles[b.basename] || !this.facesFiles[a.basename]) {
           return 0;
         }
-
         return this.facesFiles[b.basename].length - this.facesFiles[a.basename].length;
       });
     }
-
   }
 });
 
@@ -134,7 +130,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".faces[data-v-2a2a1e28] {\n  display: flex;\n  flex-direction: column;\n  height: calc(100vh - var(--header-height));\n  padding-left: 64px;\n}\n@media only screen and (max-width: 1020px) {\n.faces[data-v-2a2a1e28] {\n    padding: 0;\n}\n}\n.faces__header[data-v-2a2a1e28] {\n  display: flex;\n  min-height: 60px;\n  align-items: center;\n}\n.faces__header button[data-v-2a2a1e28] {\n  margin-right: 32px;\n}\n.faces__list[data-v-2a2a1e28] {\n  padding-top: 24px;\n  padding-bottom: 32px;\n  flex-grow: 1;\n  display: flex;\n  flex-wrap: wrap;\n  gap: 32px;\n  align-content: flex-start;\n}\n.faces__empty[data-v-2a2a1e28] {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.faces__empty__button[data-v-2a2a1e28] {\n  margin-top: 32px;\n}\n.empty-content-with-illustration[data-v-2a2a1e28]  .empty-content__icon {\n  width: 200px;\n  height: 200px;\n}\n.empty-content-with-illustration[data-v-2a2a1e28]  .empty-content__icon svg {\n  width: 200px;\n  height: 200px;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".faces[data-v-2a2a1e28] {\n  display: flex;\n  flex-direction: column;\n  height: calc(100vh - var(--header-height));\n  padding-left: 64px;\n}\n@media only screen and (max-width: 1020px) {\n.faces[data-v-2a2a1e28] {\n    padding: 0;\n}\n}\n.faces__header[data-v-2a2a1e28] {\n  display: flex;\n  min-height: 60px;\n  align-items: center;\n}\n.faces__header button[data-v-2a2a1e28] {\n  margin-right: 32px;\n}\n.faces__list[data-v-2a2a1e28] {\n  padding-top: 24px;\n  padding-bottom: 32px;\n  flex-grow: 1;\n  display: flex;\n  flex-wrap: wrap;\n  gap: 32px;\n  align-content: flex-start;\n}\n.faces__empty[data-v-2a2a1e28] {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.faces__empty__button[data-v-2a2a1e28] {\n  margin-top: 32px;\n}\n.empty-content-with-illustration[data-v-2a2a1e28] :deep(.empty-content__icon) {\n  width: 200px;\n  height: 200px;\n}\n.empty-content-with-illustration :deep(.empty-content__icon) svg[data-v-2a2a1e28] {\n  width: 200px;\n  height: 200px;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -585,4 +581,4 @@ render._withStripped = true
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_views_Faces_vue.js.map?v=73ae9b7be63b564ba1f5
+//# sourceMappingURL=photos-src_views_Faces_vue.js.map?v=5b3e86c2d7bd1a8b792c

@@ -50,6 +50,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'FaceMergeForm',
   components: {
@@ -62,36 +63,30 @@ __webpack_require__.r(__webpack_exports__);
       required: true
     }
   },
-
   data() {
     return {
       loading: false
     };
   },
-
-  computed: { ...(0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)(['files', 'faces', 'facesFiles']),
-
+  computed: {
+    ...(0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)(['files', 'faces', 'facesFiles']),
     filteredFaces() {
       return Object.values(this.faces).filter(face => face.basename !== this.firstFace).sort((a, b) => {
         if (a.props.nbItems && b.props.nbItems) {
           return b.props.nbItems - a.props.nbItems;
         }
-
         if (!this.facesFiles[b.basename] || !this.facesFiles[a.basename]) {
           return 0;
         }
-
         return this.facesFiles[b.basename].length - this.facesFiles[a.basename].length;
       });
     }
-
   },
   methods: {
     handleSelect(faceName) {
       this.$emit('select', faceName);
       this.loading = true;
     }
-
   }
 });
 
@@ -108,17 +103,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var vue_material_design_icons_Pencil__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-material-design-icons/Pencil */ "./node_modules/vue-material-design-icons/Pencil.vue");
-/* harmony import */ var vue_material_design_icons_Close__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-material-design-icons/Close */ "./node_modules/vue-material-design-icons/Close.vue");
-/* harmony import */ var vue_material_design_icons_AlertCircle__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-material-design-icons/AlertCircle */ "./node_modules/vue-material-design-icons/AlertCircle.vue");
-/* harmony import */ var vue_material_design_icons_Star__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-material-design-icons/Star */ "./node_modules/vue-material-design-icons/Star.vue");
-/* harmony import */ var vue_material_design_icons_Download__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-material-design-icons/Download */ "./node_modules/vue-material-design-icons/Download.vue");
-/* harmony import */ var vue_material_design_icons_Send__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-material-design-icons/Send */ "./node_modules/vue-material-design-icons/Send.vue");
-/* harmony import */ var vue_material_design_icons_Merge__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-material-design-icons/Merge */ "./node_modules/vue-material-design-icons/Merge.vue");
-/* harmony import */ var vue_material_design_icons_ArrowLeft__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue-material-design-icons/ArrowLeft */ "./node_modules/vue-material-design-icons/ArrowLeft.vue");
-/* harmony import */ var vue_material_design_icons_AccountBoxMultipleOutline__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vue-material-design-icons/AccountBoxMultipleOutline */ "./node_modules/vue-material-design-icons/AccountBoxMultipleOutline.vue");
-/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @nextcloud/vue */ "./node_modules/@nextcloud/vue/dist/ncvuecomponents.js");
-/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_vue__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var vue_material_design_icons_Pencil_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-material-design-icons/Pencil.vue */ "./node_modules/vue-material-design-icons/Pencil.vue");
+/* harmony import */ var vue_material_design_icons_Close_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-material-design-icons/Close.vue */ "./node_modules/vue-material-design-icons/Close.vue");
+/* harmony import */ var vue_material_design_icons_AlertCircle_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-material-design-icons/AlertCircle.vue */ "./node_modules/vue-material-design-icons/AlertCircle.vue");
+/* harmony import */ var vue_material_design_icons_Star_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-material-design-icons/Star.vue */ "./node_modules/vue-material-design-icons/Star.vue");
+/* harmony import */ var vue_material_design_icons_Download_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-material-design-icons/Download.vue */ "./node_modules/vue-material-design-icons/Download.vue");
+/* harmony import */ var vue_material_design_icons_Send_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-material-design-icons/Send.vue */ "./node_modules/vue-material-design-icons/Send.vue");
+/* harmony import */ var vue_material_design_icons_Merge_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-material-design-icons/Merge.vue */ "./node_modules/vue-material-design-icons/Merge.vue");
+/* harmony import */ var vue_material_design_icons_ArrowLeft_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue-material-design-icons/ArrowLeft.vue */ "./node_modules/vue-material-design-icons/ArrowLeft.vue");
+/* harmony import */ var vue_material_design_icons_AccountBoxMultipleOutline_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vue-material-design-icons/AccountBoxMultipleOutline.vue */ "./node_modules/vue-material-design-icons/AccountBoxMultipleOutline.vue");
+/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @nextcloud/vue */ "./node_modules/@nextcloud/vue/dist/index.module.js");
 /* harmony import */ var _mixins_FetchFilesMixin_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../mixins/FetchFilesMixin.js */ "./src/mixins/FetchFilesMixin.js");
 /* harmony import */ var _mixins_FilesSelectionMixin_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../mixins/FilesSelectionMixin.js */ "./src/mixins/FilesSelectionMixin.js");
 /* harmony import */ var _components_FilesListViewer_vue__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../components/FilesListViewer.vue */ "./src/components/FilesListViewer.vue");
@@ -311,18 +305,19 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'FaceContent',
   components: {
-    Pencil: vue_material_design_icons_Pencil__WEBPACK_IMPORTED_MODULE_0__["default"],
-    Star: vue_material_design_icons_Star__WEBPACK_IMPORTED_MODULE_3__["default"],
-    Download: vue_material_design_icons_Download__WEBPACK_IMPORTED_MODULE_4__["default"],
-    Close: vue_material_design_icons_Close__WEBPACK_IMPORTED_MODULE_1__["default"],
-    AlertCircle: vue_material_design_icons_AlertCircle__WEBPACK_IMPORTED_MODULE_2__["default"],
-    Send: vue_material_design_icons_Send__WEBPACK_IMPORTED_MODULE_5__["default"],
-    Merge: vue_material_design_icons_Merge__WEBPACK_IMPORTED_MODULE_6__["default"],
-    ArrowLeft: vue_material_design_icons_ArrowLeft__WEBPACK_IMPORTED_MODULE_7__["default"],
-    AccountBoxMultipleOutline: vue_material_design_icons_AccountBoxMultipleOutline__WEBPACK_IMPORTED_MODULE_8__["default"],
+    Pencil: vue_material_design_icons_Pencil_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
+    Star: vue_material_design_icons_Star_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+    Download: vue_material_design_icons_Download_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
+    Close: vue_material_design_icons_Close_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+    AlertCircle: vue_material_design_icons_AlertCircle_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    Send: vue_material_design_icons_Send_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
+    Merge: vue_material_design_icons_Merge_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
+    ArrowLeft: vue_material_design_icons_ArrowLeft_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
+    AccountBoxMultipleOutline: vue_material_design_icons_AccountBoxMultipleOutline_vue__WEBPACK_IMPORTED_MODULE_8__["default"],
     FaceMergeForm: _components_FaceMergeForm_vue__WEBPACK_IMPORTED_MODULE_16__["default"],
     FilesListViewer: _components_FilesListViewer_vue__WEBPACK_IMPORTED_MODULE_12__["default"],
     File: _components_File_vue__WEBPACK_IMPORTED_MODULE_13__["default"],
@@ -337,7 +332,6 @@ __webpack_require__.r(__webpack_exports__);
     focus(el) {
       vue__WEBPACK_IMPORTED_MODULE_17__["default"].nextTick(() => el.focus());
     }
-
   },
   mixins: [_mixins_FetchFacesMixin_js__WEBPACK_IMPORTED_MODULE_15__["default"], _mixins_FetchFilesMixin_js__WEBPACK_IMPORTED_MODULE_10__["default"], _mixins_FilesSelectionMixin_js__WEBPACK_IMPORTED_MODULE_11__["default"]],
   props: {
@@ -346,7 +340,6 @@ __webpack_require__.r(__webpack_exports__);
       default: '/'
     }
   },
-
   data() {
     return {
       showMergeModal: false,
@@ -355,29 +348,25 @@ __webpack_require__.r(__webpack_exports__);
       appContent: document.getElementById('app-content-vue')
     };
   },
-
-  computed: { ...(0,vuex__WEBPACK_IMPORTED_MODULE_18__.mapGetters)(['files', 'facesFiles']),
-
+  computed: {
+    ...(0,vuex__WEBPACK_IMPORTED_MODULE_18__.mapGetters)(['files', 'facesFiles']),
     /**
      * @return {string[]} The face information for the current faceName.
      */
     face() {
       return this.faces[this.faceName];
     },
-
     /**
      * @return {string[]} The list of files for the current faceName.
      */
     faceFileIds() {
       return this.facesFiles[this.faceName] || [];
     },
-
     /** @type {boolean} */
     shouldFavoriteSelection() {
       // Favorite all selection if at least one file is not on the favorites.
       return this.selectedFileIds.some(fileId => this.$store.state.files.files[fileId].favorite === 0);
     }
-
   },
   watch: {
     face() {
@@ -385,23 +374,22 @@ __webpack_require__.r(__webpack_exports__);
         this.fetchFaceContent(this.faceName);
       }
     }
-
   },
-  methods: { ...(0,vuex__WEBPACK_IMPORTED_MODULE_18__.mapActions)(['appendFiles', 'deleteFace', 'renameFace', 'downloadFiles', 'toggleFavoriteForFiles', 'removeFilesFromFace', 'moveFilesToFace']),
-
+  methods: {
+    ...(0,vuex__WEBPACK_IMPORTED_MODULE_18__.mapActions)(['appendFiles', 'deleteFace', 'renameFace', 'downloadFiles', 'toggleFavoriteForFiles', 'removeFilesFromFace', 'moveFilesToFace']),
     openViewer(fileId) {
       const file = this.files[fileId];
       OCA.Viewer.open({
         // remove /username/files/ from the start
         path: '/' + file.filename.split('/').slice(3).join('/'),
-        list: this.faceFileIds.map(fileId => ({ ...this.files[fileId],
+        list: this.faceFileIds.map(fileId => ({
+          ...this.files[fileId],
           basename: this.files[fileId].basename.split('-').slice(1).join('-')
         })).filter(file => !file.sectionHeader),
         loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
         canLoop: file.canLoop
       });
     },
-
     async handleRemoveFilesFromFace(fileIds) {
       try {
         this.loadingCount++;
@@ -416,7 +404,6 @@ __webpack_require__.r(__webpack_exports__);
         this.loadingCount--;
       }
     },
-
     async handleDeleteFace() {
       try {
         this.loadingCount++;
@@ -430,7 +417,6 @@ __webpack_require__.r(__webpack_exports__);
         this.loadingCount--;
       }
     },
-
     async handleRenameFace(faceName) {
       try {
         this.loadingCount++;
@@ -452,7 +438,6 @@ __webpack_require__.r(__webpack_exports__);
         this.loadingCount--;
       }
     },
-
     async handleMerge(faceName) {
       try {
         this.loadingCount++;
@@ -477,7 +462,6 @@ __webpack_require__.r(__webpack_exports__);
         this.loadingCount--;
       }
     },
-
     async favoriteSelection() {
       try {
         this.loadingCount++;
@@ -491,7 +475,6 @@ __webpack_require__.r(__webpack_exports__);
         this.loadingCount--;
       }
     },
-
     async unFavoriteSelection() {
       try {
         this.loadingCount++;
@@ -505,7 +488,6 @@ __webpack_require__.r(__webpack_exports__);
         this.loadingCount--;
       }
     },
-
     async downloadSelection() {
       try {
         this.loadingCount++;
@@ -516,7 +498,6 @@ __webpack_require__.r(__webpack_exports__);
         this.loadingCount--;
       }
     }
-
   }
 });
 
@@ -562,10 +543,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'FetchFilesMixin',
   mixins: [_AbortControllerMixin_js__WEBPACK_IMPORTED_MODULE_3__["default"]],
-
   data() {
     return {
       errorFetchingFiles: null,
@@ -577,12 +558,10 @@ __webpack_require__.r(__webpack_exports__);
       fetchedFileIds: []
     };
   },
-
   watch: {
     $route() {
       this.resetFetchFilesState();
     }
-
   },
   methods: {
     /**
@@ -597,47 +576,46 @@ __webpack_require__.r(__webpack_exports__);
       let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       let blacklist = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
       let force = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
-
       if (this.doneFetchingFiles && !force || this.loadingFiles) {
         return [];
       }
-
       const semaphoreSymbol = await this.semaphore.acquire(() => 0, 'fetchFiles');
       const fetchSemaphoreSymbol = await this.fetchSemaphore.acquire();
-
       try {
         this.errorFetchingFiles = null;
         this.loadingFiles = true;
         this.semaphoreSymbol = semaphoreSymbol;
-        const numberOfImagesPerBatch = 200; // Load next batch of images
+        const numberOfImagesPerBatch = 200;
 
+        // Load next batch of images
         const fetchedFiles = await (0,_services_PhotoSearch_js__WEBPACK_IMPORTED_MODULE_1__["default"])(path, {
           firstResult: this.fetchedFileIds.length,
           nbResults: numberOfImagesPerBatch,
           ...options,
           signal: this.abortController.signal
-        }); // If we get less files than requested that means we got to the end
+        });
 
+        // If we get less files than requested that means we got to the end
         if (fetchedFiles.length !== numberOfImagesPerBatch) {
           this.doneFetchingFiles = true;
         }
-
         const fileIds = fetchedFiles.map(file => file.fileid).filter(fileId => !this.fetchedFileIds.includes(fileId)); // Filter to prevent duplicate fileIds.
 
         this.fetchedFileIds.push(...fileIds.map(fileId => fileId.toString()).filter(fileId => !blacklist.includes(fileId)));
         this.$store.dispatch('appendFiles', fetchedFiles);
-        _services_logger_js__WEBPACK_IMPORTED_MODULE_0__["default"].debug(`[FetchFilesMixin] Fetched ${fileIds.length} new files: `, fileIds);
+        _services_logger_js__WEBPACK_IMPORTED_MODULE_0__["default"].debug("[FetchFilesMixin] Fetched ".concat(fileIds.length, " new files: "), fileIds);
         return fileIds;
       } catch (error) {
-        if (error.response?.status === 404) {
+        var _error$response;
+        if (((_error$response = error.response) === null || _error$response === void 0 ? void 0 : _error$response.status) === 404) {
           this.errorFetchingFiles = 404;
         } else if (error.code === 'ERR_CANCELED') {
           return [];
         } else {
           this.errorFetchingFiles = error;
-        } // cancelled request, moving on...
+        }
 
-
+        // cancelled request, moving on...
         _services_logger_js__WEBPACK_IMPORTED_MODULE_0__["default"].error('Error fetching files', {
           error
         });
@@ -647,17 +625,14 @@ __webpack_require__.r(__webpack_exports__);
         this.semaphore.release(semaphoreSymbol);
         this.fetchSemaphore.release(fetchSemaphoreSymbol);
       }
-
       return [];
     },
-
     resetFetchFilesState() {
       this.doneFetchingFiles = false;
       this.errorFetchingFiles = null;
       this.loadingFiles = false;
       this.fetchedFileIds = [];
     }
-
   }
 });
 
@@ -674,7 +649,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* export default binding */ __WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/fileUtils.js */ "./src/utils/fileUtils.js");
-/* harmony import */ var _nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nextcloud/auth */ "./node_modules/@nextcloud/auth/dist/index.esm.js");
+/* harmony import */ var _nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nextcloud/auth */ "./node_modules/@nextcloud/auth/dist/index.es.mjs");
 /* harmony import */ var _AllowedMimes_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AllowedMimes.js */ "./src/services/AllowedMimes.js");
 /* harmony import */ var _DavClient_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./DavClient.js */ "./src/services/DavClient.js");
 /* harmony import */ var _DavRequest_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./DavRequest.js */ "./src/services/DavRequest.js");
@@ -707,6 +682,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
 /**
  * List files from a folder and filter out unwanted mimes
  *
@@ -720,7 +697,6 @@ __webpack_require__.r(__webpack_exports__);
  * @param {boolean} [options.onlyFavorites=false] get only favorite items
  * @return {Promise<object[]>} the file list
  */
-
 /* harmony default export */ async function __WEBPACK_DEFAULT_EXPORT__() {
   let path = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
   let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -733,85 +709,23 @@ __webpack_require__.r(__webpack_exports__);
     onlyFavorites: false,
     ...options
   };
-  const prefixPath = `/files/${(0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__.getCurrentUser)().uid}`; // generating the search or condition
-  // based on the allowed mimetypes
+  const prefixPath = "/files/".concat((0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__.getCurrentUser)().uid);
 
-  const orMime = options.mimesType.reduce((str, mime) => `${str}
-		<d:eq>
-			<d:prop>
-				<d:getcontenttype/>
-			</d:prop>
-			<d:literal>${mime}</d:literal>
-		</d:eq>
-	`, '');
-  const eqFavorites = options.onlyFavorites ? `<d:eq>
-				<d:prop>
-					<oc:favorite/>
-				</d:prop>
-				<d:literal>1</d:literal>
-			</d:eq>` : '';
-  const onThisDay = options.onThisDay ? `<d:or>${Array(20).fill(1).map((_, years) => {
+  // generating the search or condition
+  // based on the allowed mimetypes
+  const orMime = options.mimesType.reduce((str, mime) => "".concat(str, "\n\t\t<d:eq>\n\t\t\t<d:prop>\n\t\t\t\t<d:getcontenttype/>\n\t\t\t</d:prop>\n\t\t\t<d:literal>").concat(mime, "</d:literal>\n\t\t</d:eq>\n\t"), '');
+  const eqFavorites = options.onlyFavorites ? "<d:eq>\n\t\t\t\t<d:prop>\n\t\t\t\t\t<oc:favorite/>\n\t\t\t\t</d:prop>\n\t\t\t\t<d:literal>1</d:literal>\n\t\t\t</d:eq>" : '';
+  const onThisDay = options.onThisDay ? "<d:or>".concat(Array(20).fill(1).map((_, years) => {
     const start = _nextcloud_moment__WEBPACK_IMPORTED_MODULE_5___default()(Date.now()).startOf('day').subtract(3, 'd').subtract(years + 1, 'y');
     const end = _nextcloud_moment__WEBPACK_IMPORTED_MODULE_5___default()(Date.now()).endOf('day').add(3, 'd').subtract(years + 1, 'y');
-    return `<d:and>
-				<d:gt>
-					<d:prop>
-						<d:getlastmodified />
-					</d:prop>
-					<d:literal>${start.format((_nextcloud_moment__WEBPACK_IMPORTED_MODULE_5___default().defaultFormatUtc))}</d:literal>
-				</d:gt>
-				<d:lt>
-					<d:prop>
-						<d:getlastmodified />
-					</d:prop>
-					<d:literal>${end.format((_nextcloud_moment__WEBPACK_IMPORTED_MODULE_5___default().defaultFormatUtc))}</d:literal>
-				</d:lt>
-			</d:and>`;
-  }).join('\n')}</d:or>` : '';
+    return "<d:and>\n\t\t\t\t<d:gt>\n\t\t\t\t\t<d:prop>\n\t\t\t\t\t\t<d:getlastmodified />\n\t\t\t\t\t</d:prop>\n\t\t\t\t\t<d:literal>".concat(start.format((_nextcloud_moment__WEBPACK_IMPORTED_MODULE_5___default().defaultFormatUtc)), "</d:literal>\n\t\t\t\t</d:gt>\n\t\t\t\t<d:lt>\n\t\t\t\t\t<d:prop>\n\t\t\t\t\t\t<d:getlastmodified />\n\t\t\t\t\t</d:prop>\n\t\t\t\t\t<d:literal>").concat(end.format((_nextcloud_moment__WEBPACK_IMPORTED_MODULE_5___default().defaultFormatUtc)), "</d:literal>\n\t\t\t\t</d:lt>\n\t\t\t</d:and>");
+  }).join('\n'), "</d:or>") : '';
   options = Object.assign({
     method: 'SEARCH',
     headers: {
       'content-Type': 'text/xml'
     },
-    data: `<?xml version="1.0" encoding="UTF-8"?>
-			<d:searchrequest xmlns:d="DAV:"
-				xmlns:oc="http://owncloud.org/ns"
-				xmlns:nc="http://nextcloud.org/ns"
-				xmlns:ns="https://github.com/icewind1991/SearchDAV/ns"
-				xmlns:ocs="http://open-collaboration-services.org/ns">
-				<d:basicsearch>
-					<d:select>
-						<d:prop>
-							${_DavRequest_js__WEBPACK_IMPORTED_MODULE_4__.props}
-						</d:prop>
-					</d:select>
-					<d:from>
-						<d:scope>
-							<d:href>${prefixPath}/${path}</d:href>
-							<d:depth>infinity</d:depth>
-						</d:scope>
-					</d:from>
-					<d:where>
-						<d:and>
-							<d:or>
-								${orMime}
-							</d:or>
-							${eqFavorites}
-							${onThisDay}
-						</d:and>
-					</d:where>
-					<d:orderby>
-						<d:order>
-							<d:prop><d:getlastmodified/></d:prop>
-							<d:descending/>
-						</d:order>
-					</d:orderby>
-					<d:limit>
-						<d:nresults>${options.nbResults}</d:nresults>
-						<ns:firstresult>${options.firstResult}</ns:firstresult>
-					</d:limit>
-				</d:basicsearch>
-			</d:searchrequest>`,
+    data: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\t\t\t<d:searchrequest xmlns:d=\"DAV:\"\n\t\t\t\txmlns:oc=\"http://owncloud.org/ns\"\n\t\t\t\txmlns:nc=\"http://nextcloud.org/ns\"\n\t\t\t\txmlns:ns=\"https://github.com/icewind1991/SearchDAV/ns\"\n\t\t\t\txmlns:ocs=\"http://open-collaboration-services.org/ns\">\n\t\t\t\t<d:basicsearch>\n\t\t\t\t\t<d:select>\n\t\t\t\t\t\t<d:prop>\n\t\t\t\t\t\t\t".concat(_DavRequest_js__WEBPACK_IMPORTED_MODULE_4__.props, "\n\t\t\t\t\t\t</d:prop>\n\t\t\t\t\t</d:select>\n\t\t\t\t\t<d:from>\n\t\t\t\t\t\t<d:scope>\n\t\t\t\t\t\t\t<d:href>").concat(prefixPath, "/").concat(path, "</d:href>\n\t\t\t\t\t\t\t<d:depth>infinity</d:depth>\n\t\t\t\t\t\t</d:scope>\n\t\t\t\t\t</d:from>\n\t\t\t\t\t<d:where>\n\t\t\t\t\t\t<d:and>\n\t\t\t\t\t\t\t<d:or>\n\t\t\t\t\t\t\t\t").concat(orMime, "\n\t\t\t\t\t\t\t</d:or>\n\t\t\t\t\t\t\t").concat(eqFavorites, "\n\t\t\t\t\t\t\t").concat(onThisDay, "\n\t\t\t\t\t\t</d:and>\n\t\t\t\t\t</d:where>\n\t\t\t\t\t<d:orderby>\n\t\t\t\t\t\t<d:order>\n\t\t\t\t\t\t\t<d:prop><d:getlastmodified/></d:prop>\n\t\t\t\t\t\t\t<d:descending/>\n\t\t\t\t\t\t</d:order>\n\t\t\t\t\t</d:orderby>\n\t\t\t\t\t<d:limit>\n\t\t\t\t\t\t<d:nresults>").concat(options.nbResults, "</d:nresults>\n\t\t\t\t\t\t<ns:firstresult>").concat(options.firstResult, "</ns:firstresult>\n\t\t\t\t\t</d:limit>\n\t\t\t\t</d:basicsearch>\n\t\t\t</d:searchrequest>"),
     deep: true,
     details: true
   }, options);
@@ -866,7 +780,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".face[data-v-03238d12] {\n  display: flex;\n  flex-direction: column;\n}\n.face__empty[data-v-03238d12] {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.face__empty__button[data-v-03238d12] {\n  margin-top: 32px;\n}\n.face__header[data-v-03238d12] {\n  display: flex;\n  min-height: 60px;\n  align-items: center;\n  justify-content: space-between;\n  position: sticky;\n  z-index: 3;\n  background: var(--color-main-background);\n  padding: 0 64px;\n}\n@media only screen and (max-width: 1020px) {\n.face__header[data-v-03238d12] {\n    padding: 0;\n    padding-left: 64px;\n}\n}\n.face__header__left[data-v-03238d12] {\n  height: 100%;\n  display: flex;\n  align-items: center;\n}\n.face__header__title[data-v-03238d12] {\n  margin-left: 10px;\n}\n.face__header__title h2[data-v-03238d12] {\n  margin-bottom: 0;\n}\n.face__header__loader[data-v-03238d12] {\n  margin-left: 32px;\n}\n.face__header__actions[data-v-03238d12] {\n  display: flex;\n  align-items: center;\n}\n.face__header__actions button[data-v-03238d12] {\n  margin-left: 16px;\n}\n.face__photos[data-v-03238d12] {\n  margin-top: 16px;\n  height: 100%;\n  min-height: 0;\n  padding: 0 64px;\n}\n@media only screen and (max-width: 1020px) {\n.face__photos[data-v-03238d12] {\n    padding: 0;\n}\n}\n.empty-content-with-illustration[data-v-03238d12]  .empty-content__icon {\n  width: 200px;\n  height: 200px;\n}\n.empty-content-with-illustration[data-v-03238d12]  .empty-content__icon svg {\n  width: 200px;\n  height: 200px;\n}\n.rename-form[data-v-03238d12] {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  height: 70px;\n  padding: 16px;\n}\n.rename-form input[data-v-03238d12] {\n  width: 80%;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".face[data-v-03238d12] {\n  display: flex;\n  flex-direction: column;\n}\n.face__empty[data-v-03238d12] {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.face__empty__button[data-v-03238d12] {\n  margin-top: 32px;\n}\n.face__header[data-v-03238d12] {\n  display: flex;\n  min-height: 60px;\n  align-items: center;\n  justify-content: space-between;\n  position: -webkit-sticky;\n  position: sticky;\n  z-index: 3;\n  background: var(--color-main-background);\n  padding: 0 64px;\n}\n@media only screen and (max-width: 1020px) {\n.face__header[data-v-03238d12] {\n    padding: 0;\n    padding-left: 64px;\n}\n}\n.face__header__left[data-v-03238d12] {\n  height: 100%;\n  display: flex;\n  align-items: center;\n}\n.face__header__title[data-v-03238d12] {\n  margin-left: 10px;\n}\n.face__header__title h2[data-v-03238d12] {\n  margin-bottom: 0;\n}\n.face__header__loader[data-v-03238d12] {\n  margin-left: 32px;\n}\n.face__header__actions[data-v-03238d12] {\n  display: flex;\n  align-items: center;\n}\n.face__header__actions button[data-v-03238d12] {\n  margin-left: 16px;\n}\n.face__photos[data-v-03238d12] {\n  margin-top: 16px;\n  height: 100%;\n  min-height: 0;\n  padding: 0 64px;\n}\n@media only screen and (max-width: 1020px) {\n.face__photos[data-v-03238d12] {\n    padding: 0;\n}\n}\n.empty-content-with-illustration[data-v-03238d12] :deep(.empty-content__icon) {\n  width: 200px;\n  height: 200px;\n}\n.empty-content-with-illustration :deep(.empty-content__icon) svg[data-v-03238d12] {\n  width: 200px;\n  height: 200px;\n}\n.rename-form[data-v-03238d12] {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  height: 70px;\n  padding: 16px;\n}\n.rename-form input[data-v-03238d12] {\n  width: 80%;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1750,4 +1664,4 @@ render._withStripped = true
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_views_FaceContent_vue.js.map?v=27b000556139a42fa242
+//# sourceMappingURL=photos-src_views_FaceContent_vue.js.map?v=97726b146d50febdcee9

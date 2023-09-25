@@ -11,11 +11,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue_material_design_icons_Star__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-material-design-icons/Star */ "./node_modules/vue-material-design-icons/Star.vue");
+/* harmony import */ var vue_material_design_icons_Star_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-material-design-icons/Star.vue */ "./node_modules/vue-material-design-icons/Star.vue");
 /* harmony import */ var vue_material_design_icons_Video_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-material-design-icons/Video.vue */ "./node_modules/vue-material-design-icons/Video.vue");
 /* harmony import */ var _nextcloud_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @nextcloud/router */ "./node_modules/@nextcloud/router/dist/index.js");
-/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @nextcloud/vue */ "./node_modules/@nextcloud/vue/dist/ncvuecomponents.js");
-/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_vue__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @nextcloud/vue */ "./node_modules/@nextcloud/vue/dist/index.module.js");
 /* harmony import */ var _utils_semaphoreWithPriority_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/semaphoreWithPriority.js */ "./src/utils/semaphoreWithPriority.js");
 //
 //
@@ -91,11 +90,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'File',
   components: {
     NcCheckboxRadioSwitch: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_3__.NcCheckboxRadioSwitch,
-    Star: vue_material_design_icons_Star__WEBPACK_IMPORTED_MODULE_0__["default"],
+    Star: vue_material_design_icons_Star_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
     VideoIcon: vue_material_design_icons_Video_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   inheritAttrs: false,
@@ -121,7 +121,6 @@ __webpack_require__.r(__webpack_exports__);
       required: true
     }
   },
-
   data() {
     return {
       loadedNear: false,
@@ -133,130 +132,106 @@ __webpack_require__.r(__webpack_exports__);
       isDestroyed: false
     };
   },
-
   computed: {
     /** @return {string} */
     ariaDescription() {
-      return `image-description-${this.file.fileid}`;
+      return "image-description-".concat(this.file.fileid);
     },
-
     /** @return {string} */
     ariaLabel() {
       return t('photos', 'Open the full size "{name}" image', {
         name: this.file.basename
       });
     },
-
     /** @return {boolean} */
     isImage() {
       return this.file.mime.startsWith('image');
     },
-
     /** @return {string} */
     decodedEtag() {
       return this.file.etag.replace('&quot;', '').replace('&quot;', '');
     },
-
     /** @return {string} */
     srcVisible() {
       return this.getItemURL(512);
     },
-
     /** @return {string} */
     srcNear() {
       return this.getItemURL(64);
     }
-
   },
-
   async mounted() {
     this.semaphoreSymbol = await this.semaphore.acquire(() => {
       switch (this.visibility) {
         case 'visible':
           return 1;
-
         case 'near':
           return 2;
-
         default:
           return 3;
       }
     }, this.file.fileid);
-
     if (this.visibility === 'none' || this.isDestroyed) {
       this.releaseSemaphore();
       return;
     }
-
     this.canLoad = true;
   },
-
   beforeDestroy() {
     this.isDestroyed = true;
-    this.releaseSemaphore(); // cancel any pending load
+    this.releaseSemaphore();
 
+    // cancel any pending load
     if (this.$refs.imgNear !== undefined) {
       this.$refs.imgNear.src = '';
     }
-
     if (this.$refs.srcVisible !== undefined) {
       this.$refs.srcVisible.src = '';
     }
   },
-
   methods: {
     emitClick() {
       this.$emit('click', this.file.fileid);
     },
-
     /** When the 'near' image is fully loaded by browser we release semaphore */
     onLoadNear() {
       this.loadedNear = true;
       this.releaseSemaphore();
     },
-
     /** When the 'visible' image is fully loaded by browser we release semaphore */
     onLoadVisible() {
       this.loadedVisible = true;
       this.releaseSemaphore();
     },
-
     onErrorNear() {
       this.errorNear = true;
       this.releaseSemaphore();
     },
-
     onErrorVisible() {
       this.errorVisible = true;
       this.releaseSemaphore();
     },
-
     onToggle(value) {
       this.$emit('select-toggled', {
         id: this.file.fileid,
         value
       });
     },
-
     getItemURL(size) {
       const token = this.$route.params.token;
-
       if (token) {
-        return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_2__.generateUrl)(`/apps/photos/api/v1/publicPreview/${this.file.fileid}?etag=${this.decodedEtag}&x=${size}&y=${size}&token=${token}`);
+        return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_2__.generateUrl)("/apps/photos/api/v1/publicPreview/".concat(this.file.fileid, "?etag=").concat(this.decodedEtag, "&x=").concat(size, "&y=").concat(size, "&token=").concat(token));
       } else {
-        return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_2__.generateUrl)(`/apps/photos/api/v1/preview/${this.file.fileid}?etag=${this.decodedEtag}&x=${size}&y=${size}`);
+        return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_2__.generateUrl)("/apps/photos/api/v1/preview/".concat(this.file.fileid, "?etag=").concat(this.decodedEtag, "&x=").concat(size, "&y=").concat(size));
       }
     },
-
     releaseSemaphore() {
       if (this.semaphoreSymbol === null) {
         return;
       }
-
       this.semaphore.release(this.semaphoreSymbol);
       this.semaphoreSymbol = null;
     }
-
   }
 });
 
@@ -273,10 +248,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var vue_material_design_icons_PackageVariant__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-material-design-icons/PackageVariant */ "./node_modules/vue-material-design-icons/PackageVariant.vue");
-/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nextcloud/vue */ "./node_modules/@nextcloud/vue/dist/ncvuecomponents.js");
-/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _nextcloud_event_bus__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @nextcloud/event-bus */ "./node_modules/@nextcloud/event-bus/dist/index.esm.js");
+/* harmony import */ var vue_material_design_icons_PackageVariant_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-material-design-icons/PackageVariant.vue */ "./node_modules/vue-material-design-icons/PackageVariant.vue");
+/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nextcloud/vue */ "./node_modules/@nextcloud/vue/dist/index.module.js");
+/* harmony import */ var _nextcloud_event_bus__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @nextcloud/event-bus */ "./node_modules/@nextcloud/event-bus/dist/index.mjs");
 /* harmony import */ var _components_TiledLayout_TiledLayout_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/TiledLayout/TiledLayout.vue */ "./src/components/TiledLayout/TiledLayout.vue");
 /* harmony import */ var _services_fileFetcher_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/fileFetcher.js */ "./src/services/fileFetcher.js");
 /* harmony import */ var _components_VirtualScrolling_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/VirtualScrolling.vue */ "./src/components/VirtualScrolling.vue");
@@ -339,6 +313,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+
 
 
 
@@ -351,7 +327,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'FilesListViewer',
   components: {
-    PackageVariant: vue_material_design_icons_PackageVariant__WEBPACK_IMPORTED_MODULE_0__["default"],
+    PackageVariant: vue_material_design_icons_PackageVariant_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
     NcEmptyContent: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__.NcEmptyContent,
     NcLoadingIcon: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__.NcLoadingIcon,
     TiledLayout: _components_TiledLayout_TiledLayout_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
@@ -410,7 +386,6 @@ __webpack_require__.r(__webpack_exports__);
       default: false
     }
   },
-
   data() {
     return {
       EmptyBox: _assets_Illustrations_empty_svg__WEBPACK_IMPORTED_MODULE_6__,
@@ -426,9 +401,8 @@ __webpack_require__.r(__webpack_exports__);
       })
     };
   },
-
-  computed: { ...(0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapGetters)(['files']),
-
+  computed: {
+    ...(0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapGetters)(['files']),
     /**
      * @return {object[]} The list of items to pass to TiledLayout.
      */
@@ -436,10 +410,8 @@ __webpack_require__.r(__webpack_exports__);
       if (this.fileIds === undefined) {
         return [];
       }
-
       return this.fileIds.filter(fileId => this.files[fileId]).map(this.mapFileToItem);
     },
-
     /**
      * @return {object[]} The list of items separated by sections to pass to TiledLayout.
      */
@@ -447,7 +419,6 @@ __webpack_require__.r(__webpack_exports__);
       if (this.sections === undefined) {
         return [];
       }
-
       return this.sections.flatMap(sectionId => {
         return [{
           id: sectionId,
@@ -456,14 +427,13 @@ __webpack_require__.r(__webpack_exports__);
         }, ...this.fileIdsBySection[sectionId].filter(fileId => this.files[fileId]).map(this.mapFileToItem)];
       });
     },
-
     /**
      * @return {boolean} The list of items to pass to TiledLayout.
      */
     showPlaceholders() {
-      return this.loading && (this.fileIds?.length === 0 || this.sections?.length === 0);
+      var _this$fileIds, _this$sections;
+      return this.loading && (((_this$fileIds = this.fileIds) === null || _this$fileIds === void 0 ? void 0 : _this$fileIds.length) === 0 || ((_this$sections = this.sections) === null || _this$sections === void 0 ? void 0 : _this$sections.length) === 0);
     },
-
     /**
      * @return {object[]} The list of items to pass to TiledLayout.
      */
@@ -472,10 +442,8 @@ __webpack_require__.r(__webpack_exports__);
         if (this.showPlaceholders) {
           return this.placeholderFiles;
         }
-
         return this.fileIdsToItems;
       }
-
       if (this.sections !== undefined) {
         if (this.showPlaceholders) {
           return [{
@@ -483,34 +451,27 @@ __webpack_require__.r(__webpack_exports__);
             sectionHeader: true
           }, ...this.placeholderFiles];
         }
-
         return this.sectionsToItems;
       }
-
       return [];
     },
-
     showLoader() {
-      return this.loading && (this.fileIds?.length !== 0 || this.sections?.length !== 0);
+      var _this$fileIds2, _this$sections2;
+      return this.loading && (((_this$fileIds2 = this.fileIds) === null || _this$fileIds2 === void 0 ? void 0 : _this$fileIds2.length) !== 0 || ((_this$sections2 = this.sections) === null || _this$sections2 === void 0 ? void 0 : _this$sections2.length) !== 0);
     }
-
   },
-
   mounted() {
     (0,_nextcloud_event_bus__WEBPACK_IMPORTED_MODULE_2__.subscribe)('files:file:updated', this.handleFileUpdated);
   },
-
   destroyed() {
     (0,_nextcloud_event_bus__WEBPACK_IMPORTED_MODULE_2__.unsubscribe)('files:file:updated', this.handleFileUpdated);
   },
-
-  methods: { ...(0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapActions)(['appendFiles']),
-
+  methods: {
+    ...(0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapActions)(['appendFiles']),
     // Ask the parent for more content.
     needContent() {
       this.$emit('need-content');
     },
-
     mapFileToItem(fileId) {
       const file = this.files[fileId];
       return {
@@ -520,7 +481,6 @@ __webpack_require__.r(__webpack_exports__);
         ratio: this.croppedLayout ? 1 : file.fileMetadataSizeParsed.width / file.fileMetadataSizeParsed.height
       };
     },
-
     /**
      * @param {object} data
      * @param {string} data.fileid - The file id of the updated file.
@@ -532,7 +492,6 @@ __webpack_require__.r(__webpack_exports__);
       const fetchedFile = await (0,_services_fileFetcher_js__WEBPACK_IMPORTED_MODULE_4__.fetchFile)(this.files[fileid].filename);
       this.appendFiles([fetchedFile]);
     }
-
   }
 });
 
@@ -587,6 +546,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'TiledLayout',
   components: {
@@ -602,16 +562,13 @@ __webpack_require__.r(__webpack_exports__);
       default: 200
     }
   },
-
   data() {
     return {
       containerWidth: 0,
-
       /** @type {ResizeObserver} */
       resizeObserver: null
     };
   },
-
   computed: {
     /** @return {import('../services/TiledLayout.js').TiledRow[]} */
     rows() {
@@ -620,14 +577,11 @@ __webpack_require__.r(__webpack_exports__);
       });
       return (0,_services_TiledLayout_js__WEBPACK_IMPORTED_MODULE_1__.splitItemsInRows)(this.items, this.containerWidth, this.baseHeight);
     }
-
   },
-
   mounted() {
     this.resizeObserver = new ResizeObserver(entries => {
       for (const entry of entries) {
         const cr = entry.contentRect;
-
         if (entry.target.classList.contains('tiled-container')) {
           this.containerWidth = cr.width;
         }
@@ -635,11 +589,9 @@ __webpack_require__.r(__webpack_exports__);
     });
     this.resizeObserver.observe(this.$refs.tiledLayoutContainer);
   },
-
   beforeDestroy() {
     this.resizeObserver.disconnect();
   }
-
 });
 
 /***/ }),
@@ -698,6 +650,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 
+
 /**
  * @typedef {object} Row
  * @property {number} height - The height of the row.
@@ -746,64 +699,58 @@ __webpack_require__.r(__webpack_exports__);
       default: ''
     }
   },
-
   data() {
     return {
       scrollPosition: 0,
       containerHeight: 0,
       rowsContainerHeight: 0,
-
       /** @type {ResizeObserver} */
       resizeObserver: null
     };
   },
-
   computed: {
     /**
      * @return {VisibleRow[]}
      */
     visibleRows() {
-      _services_logger_js__WEBPACK_IMPORTED_MODULE_1__["default"].debug('[VirtualScrolling] Computing visible rows', this.rows); // Optimisation: get those computed properties once to not go through vue's internal every time we need them.
+      _services_logger_js__WEBPACK_IMPORTED_MODULE_1__["default"].debug('[VirtualScrolling] Computing visible rows', this.rows);
 
+      // Optimisation: get those computed properties once to not go through vue's internal every time we need them.
       const scrollPosition = this.scrollPosition;
-      const containerHeight = this.containerHeight; // Optimisation: different windows to hint the items how they should render themselves.
-      // This will be forwarded with the visibility props.
+      const containerHeight = this.containerHeight;
 
+      // Optimisation: different windows to hint the items how they should render themselves.
+      // This will be forwarded with the visibility props.
       const shouldRenderedWindow = containerHeight * this.renderWindowRatio;
       const willBeVisibleWindow = containerHeight * this.willBeVisibleWindowRatio;
       const visibleWindow = containerHeight * this.visibleWindowRatio;
       let currentRowTopDistanceFromTop = 0;
-      let currentRowBottomDistanceFromTop = 0; // Compute whether a row should be included in the DOM (shouldRender)
-      // And how visible the row is.
+      let currentRowBottomDistanceFromTop = 0;
 
+      // Compute whether a row should be included in the DOM (shouldRender)
+      // And how visible the row is.
       return this.rows.reduce((visibleRows, row) => {
         currentRowTopDistanceFromTop = currentRowBottomDistanceFromTop;
         currentRowBottomDistanceFromTop += row.height;
-
         if (currentRowTopDistanceFromTop < scrollPosition - shouldRenderedWindow || scrollPosition + containerHeight + shouldRenderedWindow < currentRowTopDistanceFromTop) {
           return visibleRows;
         }
-
         let visibility = 'none';
-
         if (scrollPosition - willBeVisibleWindow < currentRowTopDistanceFromTop && currentRowTopDistanceFromTop < scrollPosition + containerHeight + willBeVisibleWindow) {
           visibility = 'near';
-
           if (scrollPosition - visibleWindow < currentRowTopDistanceFromTop && currentRowTopDistanceFromTop < scrollPosition + containerHeight + visibleWindow) {
             visibility = 'visible';
           }
-
           if (scrollPosition - visibleWindow < currentRowBottomDistanceFromTop && currentRowBottomDistanceFromTop < scrollPosition + containerHeight + visibleWindow) {
             visibility = 'visible';
           }
         }
-
-        return [...visibleRows, { ...row,
+        return [...visibleRows, {
+          ...row,
           visibility
         }];
       }, []);
     },
-
     /**
      * Total height of all the rows + some room for the loader.
      *
@@ -813,7 +760,6 @@ __webpack_require__.r(__webpack_exports__);
       const loaderHeight = 200;
       return this.rows.map(row => row.height).reduce((totalHeight, rowHeight) => totalHeight + rowHeight, 0) + loaderHeight;
     },
-
     /**
      * @return {number}
      */
@@ -821,11 +767,9 @@ __webpack_require__.r(__webpack_exports__);
       if (this.visibleRows.length === 0) {
         return 0;
       }
-
       const firstVisibleRowIndex = this.rows.findIndex(row => row.items === this.visibleRows[0].items);
       return this.rows.map(row => row.height).slice(0, firstVisibleRowIndex).reduce((totalHeight, rowHeight) => totalHeight + rowHeight, 0);
     },
-
     /**
      * padding-top is used to replace not included item in the container.
      *
@@ -833,11 +777,10 @@ __webpack_require__.r(__webpack_exports__);
      */
     rowsContainerStyle() {
       return {
-        height: `${this.rowsHeight}px`,
-        paddingTop: `${this.paddingTop}px`
+        height: "".concat(this.rowsHeight, "px"),
+        paddingTop: "".concat(this.paddingTop, "px")
       };
     },
-
     /**
      * Whether the user is near the bottom.
      * If true, then the need-content event will be emitted.
@@ -848,13 +791,11 @@ __webpack_require__.r(__webpack_exports__);
       const buffer = this.containerHeight * this.bottomBufferRatio;
       return this.scrollPosition + this.containerHeight >= this.rowsHeight - buffer;
     },
-
     /**
      * @return {HTMLElement}
      */
     container() {
       _services_logger_js__WEBPACK_IMPORTED_MODULE_1__["default"].debug('[VirtualScrolling] Computing container');
-
       if (this.containerElement !== null) {
         return this.containerElement;
       } else if (this.useWindow) {
@@ -863,7 +804,6 @@ __webpack_require__.r(__webpack_exports__);
         return this.$refs.container;
       }
     }
-
   },
   watch: {
     isNearBottom(value) {
@@ -871,7 +811,6 @@ __webpack_require__.r(__webpack_exports__);
         this.$emit('need-content');
       }
     },
-
     rows() {
       // Re-emit need-content when rows is updated and isNearBottom is still true.
       // If the height of added rows is under `bottomBufferRatio`, `isNearBottom` will still be true so we need more content.
@@ -879,10 +818,8 @@ __webpack_require__.r(__webpack_exports__);
         this.$emit('need-content');
       }
     },
-
     scrollToKey(key) {
       let currentRowTopDistanceFromTop = 0;
-
       for (const row of this.rows) {
         if (row.key === key) {
           this.$refs.container.scrollTo({
@@ -891,48 +828,38 @@ __webpack_require__.r(__webpack_exports__);
           });
           return;
         }
-
         currentRowTopDistanceFromTop += row.height;
       }
     }
-
   },
-
   mounted() {
     this.resizeObserver = new ResizeObserver(entries => {
       for (const entry of entries) {
         const cr = entry.contentRect;
-
         if (entry.target === this.container) {
           this.containerHeight = cr.height;
         }
-
         if (entry.target.classList.contains('vs-rows-container')) {
           this.rowsContainerHeight = cr.height;
         }
       }
     });
-
     if (this.useWindow) {
       window.addEventListener('resize', this.updateContainerSize);
       this.containerHeight = window.innerHeight;
     } else {
       this.resizeObserver.observe(this.container);
     }
-
     this.resizeObserver.observe(this.$refs.rowsContainer);
     this.container.addEventListener('scroll', this.updateScrollPosition);
   },
-
   beforeDestroy() {
     if (this.useWindow) {
       window.removeEventListener('resize', this.updateContainerSize);
     }
-
     this.resizeObserver.disconnect();
     this.container.removeEventListener('scroll', this.updateScrollPosition);
   },
-
   methods: {
     updateScrollPosition: (0,debounce__WEBPACK_IMPORTED_MODULE_0__.debounce)(function () {
       if (this.useWindow) {
@@ -941,11 +868,9 @@ __webpack_require__.r(__webpack_exports__);
         this.scrollPosition = this.container.scrollTop;
       }
     }, 200),
-
     updateContainerSize() {
       this.containerHeight = window.innerHeight;
     }
-
   }
 });
 
@@ -982,16 +907,20 @@ __webpack_require__.r(__webpack_exports__);
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'FilesSelectionMixin',
-
   data() {
     return {
       /** @type {Object<string, boolean>} */
       selection: {}
     };
   },
-
+  watch: {
+    $route() {
+      this.resetSelection();
+    }
+  },
   methods: {
     onFileSelectToggle(_ref) {
       let {
@@ -1000,20 +929,15 @@ __webpack_require__.r(__webpack_exports__);
       } = _ref;
       this.$set(this.selection, id, value);
     },
-
     /**
      * @param {string[]} filesIds - The ids of the files to uncheck.
      */
     onUncheckFiles(filesIds) {
-      filesIds.forEach((
-      /** @type {string} */
-      filesId) => this.$set(this.selection, filesId, false));
+      filesIds.forEach(( /** @type {string} */filesId) => this.$set(this.selection, filesId, false));
     },
-
     resetSelection() {
       this.selection = {};
     }
-
   },
   computed: {
     /**
@@ -1022,7 +946,6 @@ __webpack_require__.r(__webpack_exports__);
     selectedFileIds() {
       return Object.keys(this.selection).filter(fileId => this.selection[fileId]);
     }
-
   }
 });
 
@@ -1038,7 +961,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _nextcloud_event_bus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @nextcloud/event-bus */ "./node_modules/@nextcloud/event-bus/dist/index.esm.js");
+/* harmony import */ var _nextcloud_event_bus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @nextcloud/event-bus */ "./node_modules/@nextcloud/event-bus/dist/index.mjs");
 /* harmony import */ var _nextcloud_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nextcloud/router */ "./node_modules/@nextcloud/router/dist/index.js");
 /* harmony import */ var _nextcloud_initial_state__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @nextcloud/initial-state */ "./node_modules/@nextcloud/initial-state/dist/index.esm.js");
 /* harmony import */ var _nextcloud_axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @nextcloud/axios */ "./node_modules/@nextcloud/axios/dist/index.esm.js");
@@ -1067,6 +990,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 const eventName = 'photos:user-config-changed';
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data() {
@@ -1076,15 +1000,12 @@ const eventName = 'photos:user-config-changed';
       photosLocation: (0,_nextcloud_initial_state__WEBPACK_IMPORTED_MODULE_2__.loadState)('photos', 'photosLocation', '')
     };
   },
-
   created() {
     (0,_nextcloud_event_bus__WEBPACK_IMPORTED_MODULE_0__.subscribe)(eventName, this.updateLocalSetting);
   },
-
   beforeDestroy() {
     (0,_nextcloud_event_bus__WEBPACK_IMPORTED_MODULE_0__.unsubscribe)(eventName, this.updateLocalSetting);
   },
-
   methods: {
     updateLocalSetting(_ref) {
       let {
@@ -1093,22 +1014,20 @@ const eventName = 'photos:user-config-changed';
       } = _ref;
       this[setting] = value;
     },
-
     updateSetting(setting) {
-      const value = this[setting]; // Long time save setting
-
+      const value = this[setting];
+      // Long time save setting
       _nextcloud_axios__WEBPACK_IMPORTED_MODULE_3__["default"].put((0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_1__.generateUrl)('apps/photos/api/v1/config/' + setting), {
         value: value.toString()
-      }); // Current session save setting
-
-      localStorage.setItem('photos:' + setting, value); // Visible elements update setting
-
+      });
+      // Current session save setting
+      localStorage.setItem('photos:' + setting, value);
+      // Visible elements update setting
       (0,_nextcloud_event_bus__WEBPACK_IMPORTED_MODULE_0__.emit)(eventName, {
         setting,
         value
       });
     }
-
   }
 });
 
@@ -1173,24 +1092,21 @@ __webpack_require__.r(__webpack_exports__);
  */
 function splitItemsInRows(items, containerWidth) {
   let baseHeight = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 200;
-
   if (containerWidth === 0) {
     return [];
   }
-
   const rows = [];
   let rowNumber = 0;
   let currentItem = 0;
-
   while (currentItem < items.length) {
     /** @type { TiledItem[] } */
-    const rowItems = []; // Fill the row with new items as long as the width is less than containerWidth.
+    const rowItems = [];
 
+    // Fill the row with new items as long as the width is less than containerWidth.
     do {
       // @ts-ignore - We know that items.shift() is not undefined as we always check that items.length > 0.
       rowItems.push(items[currentItem++]);
     } while (currentItem < items.length && !items[currentItem - 1].sectionHeader && !items[currentItem].sectionHeader && computeRowWidth([...rowItems, items[currentItem]], baseHeight) <= containerWidth);
-
     rows[rowNumber] = {
       items: rowItems,
       height: computeRowHeight(rowItems, containerWidth, items.length === currentItem || items[currentItem].sectionHeader === true, baseHeight),
@@ -1199,19 +1115,19 @@ function splitItemsInRows(items, containerWidth) {
     };
     rowNumber += 1;
   }
-
   return rows;
 }
+
 /**
  *
  * @param {TiledItem[]} items The list of items in the row.
  * @param {number} baseHeight The base height of the rows.
  * @return {number} The width of the row
  */
-
 function computeRowWidth(items, baseHeight) {
   return items.map(item => baseHeight * item.ratio).reduce((sum, itemWidth) => sum + itemWidth);
 }
+
 /**
  * Compute the row height based on its items and on the container's width.
  *
@@ -1236,28 +1152,25 @@ function computeRowWidth(items, baseHeight) {
  * @param {number} baseHeight The base height of the rows.
  * @return {number} The height of the row
  */
-
-
 function computeRowHeight(items, containerWidth, isLastRow, baseHeight) {
   // Exception 1: there is only one item and its width it is a sectionHeader, meaning take the full width.
   if (items.length === 1 && items[0].sectionHeader) {
     return items[0].height;
   }
-
   const sumOfItemsRatio = items.map(item => item.ratio).reduce((sum, itemRatio) => sum + itemRatio);
-  let rowHeight = containerWidth / sumOfItemsRatio; // Exception 2: there is only one item which is larger than containerWidth.
-  // Limit its height so that itemWidth === containerWidth
+  let rowHeight = containerWidth / sumOfItemsRatio;
 
+  // Exception 2: there is only one item which is larger than containerWidth.
+  // Limit its height so that itemWidth === containerWidth
   if (items.length === 1 && items[0].width > containerWidth) {
     rowHeight = containerWidth / items[0].ratio;
-  } // Exception 3: we reached the last row.
+  }
+
+  // Exception 3: we reached the last row.
   // Force the items width to match containerWidth, and limit their heigh to baseHeight + 20.
-
-
   if (isLastRow) {
     rowHeight = Math.min(baseHeight + 20, rowHeight);
   }
-
   return rowHeight;
 }
 
@@ -1298,43 +1211,24 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 
+
+
 /**
  * @param {string[]} extraProps - Extra properties to add to the DAV request.
  * @return {string}
  */
-
 function getCollectionFilesDavRequest() {
   let extraProps = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  return `<?xml version="1.0"?>
-			<d:propfind xmlns:d="DAV:"
-				xmlns:oc="http://owncloud.org/ns"
-				xmlns:nc="http://nextcloud.org/ns"
-				xmlns:ocs="http://open-collaboration-services.org/ns">
-				<d:prop>
-					<d:getcontentlength />
-					<d:getcontenttype />
-					<d:getetag />
-					<d:getlastmodified />
-					<d:resourcetype />
-					<nc:file-metadata-size />
-					<nc:has-preview />
-					<oc:favorite />
-					<oc:fileid />
-					<oc:permissions />
-					${extraProps.join('')}
-				</d:prop>
-			</d:propfind>`;
+  return "<?xml version=\"1.0\"?>\n\t\t\t<d:propfind xmlns:d=\"DAV:\"\n\t\t\t\txmlns:oc=\"http://owncloud.org/ns\"\n\t\t\t\txmlns:nc=\"http://nextcloud.org/ns\"\n\t\t\t\txmlns:ocs=\"http://open-collaboration-services.org/ns\">\n\t\t\t\t<d:prop>\n\t\t\t\t\t<d:getcontentlength />\n\t\t\t\t\t<d:getcontenttype />\n\t\t\t\t\t<d:getetag />\n\t\t\t\t\t<d:getlastmodified />\n\t\t\t\t\t<d:resourcetype />\n\t\t\t\t\t<nc:file-metadata-size />\n\t\t\t\t\t<nc:has-preview />\n\t\t\t\t\t<oc:favorite />\n\t\t\t\t\t<oc:fileid />\n\t\t\t\t\t<oc:permissions />\n\t\t\t\t\t".concat(extraProps.join(''), "\n\t\t\t\t</d:prop>\n\t\t\t</d:propfind>");
 }
+
 /**
  * @param {string} fileName - The full file's name
  * @param {import('webdav').StatOptions} options - Options to forward to the webdav client.
  * @return {Promise<object>}
  */
-
-
 async function fetchFile(fileName) {
   let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
   try {
     const response = await _DavClient_js__WEBPACK_IMPORTED_MODULE_1__["default"].stat(fileName, {
       data: getCollectionFilesDavRequest(),
@@ -1346,7 +1240,6 @@ async function fetchFile(fileName) {
     if (error.code === 'ERR_CANCELED') {
       return null;
     }
-
     throw error;
   }
 }
@@ -1372,7 +1265,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".file-container[data-v-ab80f8a8] {\n  background: var(--color-primary-light);\n  position: relative;\n  height: 100%;\n  width: 100%;\n  border: 2px solid var(--color-main-background);\n  box-sizing: border-box;\n}\n.file-container.selected[data-v-ab80f8a8]::after, .file-container[data-v-ab80f8a8]:focus-within::after {\n  position: absolute;\n  top: 0;\n  left: 0;\n  z-index: 2;\n  width: 100%;\n  height: 100%;\n  content: \"\";\n  outline: var(--color-primary) solid 4px;\n  outline-offset: -4px;\n  pointer-events: none;\n}\n.file-container .file[data-v-ab80f8a8] {\n  width: 100%;\n  height: 100%;\n  box-sizing: border-box;\n  outline: none;\n  display: flex;\n}\n.file-container .file__images[data-v-ab80f8a8] {\n  display: contents;\n}\n.file-container .file__images .video-icon[data-v-ab80f8a8] {\n  position: absolute;\n  top: 0px;\n  right: 0px;\n  width: 100%;\n  height: 100%;\n  z-index: 1;\n  opacity: 0.8;\n}\n.file-container .file__images .video-icon[data-v-ab80f8a8]  .material-design-icon__svg {\n  fill: var(--color-main-background);\n}\n.file-container .file__images img[data-v-ab80f8a8] {\n  width: 100%;\n  height: 100%;\n  object-fit: cover;\n  position: absolute;\n  color: transparent;\n}\n.file-container .file__images .loading-overlay[data-v-ab80f8a8] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  display: flex;\n  align-content: center;\n  align-items: center;\n  justify-content: center;\n}\n.file-container .file__images .loading-overlay svg[data-v-ab80f8a8] {\n  width: 70%;\n  height: 70%;\n}\n.file-container .file__hidden-description[data-v-ab80f8a8] {\n  position: absolute;\n  left: -10000px;\n  top: -10000px;\n  width: 1px;\n  height: 1px;\n  overflow: hidden;\n}\n.file-container .file__hidden-description.show[data-v-ab80f8a8] {\n  position: initial;\n  width: fit-content;\n  height: fit-content;\n}\n.file-container:hover .selection-checkbox[data-v-ab80f8a8], .file-container.selected .selection-checkbox[data-v-ab80f8a8], .file-container:focus-within .selection-checkbox[data-v-ab80f8a8] {\n  display: flex;\n}\n.file-container:hover .favorite-state[data-v-ab80f8a8], .file-container.selected .favorite-state[data-v-ab80f8a8], .file-container:focus-within .favorite-state[data-v-ab80f8a8] {\n  display: none;\n}\n.file-container .selection-checkbox[data-v-ab80f8a8] {\n  display: none;\n  position: absolute;\n  top: 8px;\n  right: min(22px, 50% - 7px);\n  z-index: 1;\n  width: fit-content;\n}\n.file-container .selection-checkbox[data-v-ab80f8a8]  .checkbox-radio-switch__label {\n  padding: 10px;\n  box-sizing: border-box;\n}\n.file-container .selection-checkbox[data-v-ab80f8a8]  .checkbox-radio-switch__label::after {\n  content: \"\";\n  background: var(--color-primary-light);\n  width: 16px;\n  height: 16px;\n  position: absolute;\n  left: 14px;\n  z-index: -1;\n}\n.file-container .selection-checkbox[data-v-ab80f8a8]  .checkbox-radio-switch__label .checkbox-radio-switch__icon {\n  margin: 0;\n}\n.file-container .selection-checkbox .input-label[data-v-ab80f8a8] {\n  position: fixed;\n  z-index: -1;\n  top: -5000px;\n  left: -5000px;\n}\n.file-container .favorite-state[data-v-ab80f8a8] {\n  position: absolute;\n  top: 2px;\n  right: min(2px, 50% - 7px);\n}\n.file-container .favorite-state[data-v-ab80f8a8]  .material-design-icon__svg {\n  fill: #FC0;\n}\n.file-container .favorite-state[data-v-ab80f8a8]  .material-design-icon__svg path {\n  stroke: var(--color-primary-light);\n  stroke-width: 1px;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".file-container[data-v-ab80f8a8] {\n  background: var(--color-primary-light);\n  position: relative;\n  height: 100%;\n  width: 100%;\n  border: 2px solid var(--color-main-background);\n  box-sizing: border-box;\n}\n.file-container.selected[data-v-ab80f8a8]::after, .file-container[data-v-ab80f8a8]:focus-within::after {\n  position: absolute;\n  top: 0;\n  left: 0;\n  z-index: 2;\n  width: 100%;\n  height: 100%;\n  content: \"\";\n  outline: var(--color-primary) solid 4px;\n  outline-offset: -4px;\n  pointer-events: none;\n}\n.file-container .file[data-v-ab80f8a8] {\n  width: 100%;\n  height: 100%;\n  box-sizing: border-box;\n  outline: none;\n  display: flex;\n}\n.file-container .file__images[data-v-ab80f8a8] {\n  display: contents;\n}\n.file-container .file__images .video-icon[data-v-ab80f8a8] {\n  position: absolute;\n  top: 0px;\n  right: 0px;\n  width: 100%;\n  height: 100%;\n  z-index: 1;\n  opacity: 0.8;\n}\n.file-container .file__images .video-icon[data-v-ab80f8a8] :deep(.material-design-icon__svg) {\n  fill: var(--color-main-background);\n}\n.file-container .file__images img[data-v-ab80f8a8] {\n  width: 100%;\n  height: 100%;\n  object-fit: cover;\n  position: absolute;\n  color: transparent;\n}\n.file-container .file__images .loading-overlay[data-v-ab80f8a8] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  display: flex;\n  align-content: center;\n  align-items: center;\n  justify-content: center;\n}\n.file-container .file__images .loading-overlay svg[data-v-ab80f8a8] {\n  width: 70%;\n  height: 70%;\n}\n.file-container .file__hidden-description[data-v-ab80f8a8] {\n  position: absolute;\n  left: -10000px;\n  top: -10000px;\n  width: 1px;\n  height: 1px;\n  overflow: hidden;\n}\n.file-container .file__hidden-description.show[data-v-ab80f8a8] {\n  position: initial;\n  width: -webkit-fit-content;\n  width: -moz-fit-content;\n  width: fit-content;\n  height: -webkit-fit-content;\n  height: -moz-fit-content;\n  height: fit-content;\n}\n.file-container:hover .selection-checkbox[data-v-ab80f8a8], .file-container.selected .selection-checkbox[data-v-ab80f8a8], .file-container:focus-within .selection-checkbox[data-v-ab80f8a8] {\n  display: flex;\n}\n.file-container:hover .favorite-state[data-v-ab80f8a8], .file-container.selected .favorite-state[data-v-ab80f8a8], .file-container:focus-within .favorite-state[data-v-ab80f8a8] {\n  display: none;\n}\n.file-container .selection-checkbox[data-v-ab80f8a8] {\n  display: none;\n  position: absolute;\n  top: 8px;\n  right: min(22px, 50% - 7px);\n  z-index: 1;\n  width: -webkit-fit-content;\n  width: -moz-fit-content;\n  width: fit-content;\n}\n.file-container .selection-checkbox[data-v-ab80f8a8] :deep(.checkbox-radio-switch__label) {\n  padding: 10px;\n  box-sizing: border-box;\n}\n.file-container .selection-checkbox[data-v-ab80f8a8] :deep(.checkbox-radio-switch__label)::after {\n  content: \"\";\n  background: var(--color-primary-light);\n  width: 16px;\n  height: 16px;\n  position: absolute;\n  left: 14px;\n  z-index: -1;\n}\n.file-container .selection-checkbox :deep(.checkbox-radio-switch__label) .checkbox-radio-switch__icon[data-v-ab80f8a8] {\n  margin: 0;\n}\n.file-container .selection-checkbox .input-label[data-v-ab80f8a8] {\n  position: fixed;\n  z-index: -1;\n  top: -5000px;\n  left: -5000px;\n}\n.file-container .favorite-state[data-v-ab80f8a8] {\n  position: absolute;\n  top: 2px;\n  right: min(2px, 50% - 7px);\n}\n.file-container .favorite-state[data-v-ab80f8a8] :deep(.material-design-icon__svg) {\n  fill: #FC0;\n}\n.file-container .favorite-state :deep(.material-design-icon__svg) path[data-v-ab80f8a8] {\n  stroke: var(--color-primary-light);\n  stroke-width: 1px;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1398,7 +1291,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".files-list-viewer[data-v-3ebf26b2] {\n  height: 100%;\n  position: relative;\n}\n.files-list-viewer__placeholder[data-v-3ebf26b2] {\n  background: var(--color-primary-light);\n  width: 100%;\n  height: 100%;\n  border: 2px solid var(--color-main-background);\n}\n.files-list-viewer .tiled-container[data-v-3ebf26b2] {\n  flex-basis: 0;\n}\n.files-list-viewer .tiled-container .tiled-row[data-v-3ebf26b2] {\n  display: flex;\n}\n.files-list-viewer__section-header[data-v-3ebf26b2] {\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background: var(--color-main-background);\n}\n.files-list-viewer__loader[data-v-3ebf26b2] {\n  margin: 50px 0;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".files-list-viewer[data-v-3ebf26b2] {\n  height: 100%;\n  position: relative;\n}\n.files-list-viewer__placeholder[data-v-3ebf26b2] {\n  background: var(--color-primary-light);\n  width: 100%;\n  height: 100%;\n  border: 2px solid var(--color-main-background);\n}\n.files-list-viewer .tiled-container[data-v-3ebf26b2] {\n  flex-basis: 0;\n}\n.files-list-viewer ul[data-v-3ebf26b2] {\n  display: flex;\n  flex-wrap: wrap;\n}\n.files-list-viewer ul li[data-v-3ebf26b2] {\n  flex-grow: 1;\n}\n.files-list-viewer__section-header[data-v-3ebf26b2] {\n  position: -webkit-sticky;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background: var(--color-main-background);\n}\n.files-list-viewer__loader[data-v-3ebf26b2] {\n  margin: 50px 0;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -2340,26 +2233,20 @@ var render = function () {
                         return _c(
                           "ul",
                           {},
-                          _vm._l(renderedRows, function (row) {
-                            return _c(
-                              "div",
-                              {
-                                key: row.key,
-                                staticClass: "tiled-row",
-                                class: {
-                                  "files-list-viewer__section-header":
-                                    row.items[0].sectionHeader,
-                                },
-                                style: { height: row.height + "px" },
-                              },
-                              _vm._l(row.items, function (item) {
+                          [
+                            _vm._l(renderedRows, function (row) {
+                              return _vm._l(row.items, function (item) {
                                 return _c(
                                   "li",
                                   {
                                     key: item.id,
+                                    class: {
+                                      "files-list-viewer__section-header":
+                                        item.sectionHeader,
+                                    },
                                     style: {
-                                      width: item.ratio
-                                        ? row.height * item.ratio + "px"
+                                      "flex-basis": item.ratio
+                                        ? row.height * item.ratio - 1 + "px"
                                         : "100%",
                                       height: row.height + "px",
                                     },
@@ -2377,11 +2264,10 @@ var render = function () {
                                   ],
                                   2
                                 )
-                              }),
-                              0
-                            )
-                          }),
-                          0
+                              })
+                            }),
+                          ],
+                          2
                         )
                       },
                     },
@@ -2566,4 +2452,4 @@ module.exports = "<svg id=\"9af98f83-10c5-4067-bc84-20554b2827d8\" data-name=\"L
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_mixins_FilesSelectionMixin_js-src_components_File_vue-src_components_FilesListViewer_vue.js.map?v=5ed1d89490bbfdc7f25f
+//# sourceMappingURL=photos-src_mixins_FilesSelectionMixin_js-src_components_File_vue-src_components_FilesListViewer_vue.js.map?v=0ee10150869bfa5a26ab

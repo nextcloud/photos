@@ -64,7 +64,6 @@ export default {
 				.setType(1)
 				.addMimeTypeFilter('httpd/unix-directory')
 				.allowDirectories()
-				.startAt(this.photosLocation)
 				.build()
 
 			picker.pick()

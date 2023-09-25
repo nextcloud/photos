@@ -14,11 +14,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var webdav__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! webdav */ "./node_modules/webdav/dist/node/index.js");
 /* harmony import */ var webdav__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(webdav__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vue_material_design_icons_MapMarker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-material-design-icons/MapMarker */ "./node_modules/vue-material-design-icons/MapMarker.vue");
-/* harmony import */ var vue_material_design_icons_ImageOff__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-material-design-icons/ImageOff */ "./node_modules/vue-material-design-icons/ImageOff.vue");
-/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @nextcloud/vue */ "./node_modules/@nextcloud/vue/dist/ncvuecomponents.js");
-/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_vue__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _nextcloud_dialogs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @nextcloud/dialogs */ "./node_modules/@nextcloud/dialogs/dist/index.es.js");
+/* harmony import */ var vue_material_design_icons_MapMarker_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-material-design-icons/MapMarker.vue */ "./node_modules/vue-material-design-icons/MapMarker.vue");
+/* harmony import */ var vue_material_design_icons_ImageOff_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-material-design-icons/ImageOff.vue */ "./node_modules/vue-material-design-icons/ImageOff.vue");
+/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @nextcloud/vue */ "./node_modules/@nextcloud/vue/dist/index.module.js");
+/* harmony import */ var _nextcloud_dialogs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @nextcloud/dialogs */ "./node_modules/@nextcloud/dialogs/dist/index.mjs");
 /* harmony import */ var _nextcloud_axios__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @nextcloud/axios */ "./node_modules/@nextcloud/axios/dist/index.esm.js");
 /* harmony import */ var _nextcloud_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @nextcloud/router */ "./node_modules/@nextcloud/router/dist/index.js");
 /* harmony import */ var _mixins_FetchFilesMixin_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../mixins/FetchFilesMixin.js */ "./src/mixins/FetchFilesMixin.js");
@@ -118,41 +117,46 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
-
- // import Plus from 'vue-material-design-icons/Plus'
-// import ImagePlus from 'vue-material-design-icons/ImagePlus'
-
- // import Download from 'vue-material-design-icons/Download'
-// import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple'
+//
 
 
 
 
+// import Plus from 'vue-material-design-icons/Plus.vue'
+// import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
+
+// import Download from 'vue-material-design-icons/Download.vue'
+// import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
 
 
 
 
- // import ActionDownload from '../components/Actions/ActionDownload.vue'
 
 
 
-const publicRootPath = 'dav'; // force our axios
 
+
+// import ActionDownload from '../components/Actions/ActionDownload.vue'
+
+
+const publicRootPath = 'dav';
+
+// force our axios
 const patcher = (0,webdav__WEBPACK_IMPORTED_MODULE_0__.getPatcher)();
-patcher.patch('request', _nextcloud_axios__WEBPACK_IMPORTED_MODULE_5__["default"]); // init webdav client on default dav endpoint
+patcher.patch('request', _nextcloud_axios__WEBPACK_IMPORTED_MODULE_5__["default"]);
 
+// init webdav client on default dav endpoint
 const remote = (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_6__.generateRemoteUrl)(publicRootPath);
 const publicRemote = remote;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'PublicAlbumContent',
   components: {
-    MapMarker: vue_material_design_icons_MapMarker__WEBPACK_IMPORTED_MODULE_1__["default"],
+    MapMarker: vue_material_design_icons_MapMarker_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
     // Plus,
     // Download,
     // DownloadMultiple,
     // ImagePlus,
-    ImageOff: vue_material_design_icons_ImageOff__WEBPACK_IMPORTED_MODULE_2__["default"],
+    ImageOff: vue_material_design_icons_ImageOff_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     NcEmptyContent: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_3__.NcEmptyContent,
     NcActions: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_3__.NcActions,
     // NcActionSeparator,
@@ -168,7 +172,6 @@ const publicRemote = remote;
       required: true
     }
   },
-
   data() {
     return {
       showAddPhotosModal: false,
@@ -183,58 +186,51 @@ const publicRemote = remote;
       })
     };
   },
-
-  computed: { ...(0,vuex__WEBPACK_IMPORTED_MODULE_13__.mapGetters)(['files', 'publicAlbums', 'publicAlbumsFiles']),
-
+  computed: {
+    ...(0,vuex__WEBPACK_IMPORTED_MODULE_13__.mapGetters)(['files', 'publicAlbums', 'publicAlbumsFiles']),
     /**
      * @return {object} The album information for the current albumName.
      */
     album() {
       return this.publicAlbums[this.albumName] || {};
     },
-
     /**
      * @return {string} The album's name is the token.
      */
     albumName() {
       return this.token;
     },
-
     /**
      * @return {string[]} The list of files for the current albumName.
      */
     albumFileIds() {
       return this.publicAlbumsFiles[this.albumName] || [];
     }
-
   },
-
   async beforeMount() {
     await this.fetchAlbumInfo();
     await this.fetchAlbumContent();
   },
-
-  methods: { ...(0,vuex__WEBPACK_IMPORTED_MODULE_13__.mapActions)(['appendFiles', 'addPublicAlbums', 'addFilesToPublicAlbum', 'removeFilesFromPublicAlbum']),
-
+  methods: {
+    ...(0,vuex__WEBPACK_IMPORTED_MODULE_13__.mapActions)(['appendFiles', 'addPublicAlbums', 'addFilesToPublicAlbum', 'removeFilesFromPublicAlbum']),
     async fetchAlbumInfo() {
       if (this.loadingAlbum) {
         return;
       }
-
       try {
         this.loadingAlbum = true;
         this.errorFetchingAlbum = null;
-        const album = await (0,_services_Albums_js__WEBPACK_IMPORTED_MODULE_11__.fetchAlbum)(`/photospublic/${this.token}`, this.abortController.signal, '<nc:original-name />', this.publicClient);
+        const album = await (0,_services_Albums_js__WEBPACK_IMPORTED_MODULE_11__.fetchAlbum)("/photospublic/".concat(this.token), this.abortController.signal, '<nc:original-name />', this.publicClient);
         this.addPublicAlbums({
           collections: [album]
         });
         this.albumOriginalName = album.originalName;
       } catch (error) {
-        if (error.response?.status === 404) {
+        var _error$response;
+        if (((_error$response = error.response) === null || _error$response === void 0 ? void 0 : _error$response.status) === 404) {
           this.errorFetchingAlbum = 404;
           return;
         }
-
         this.errorFetchingAlbum = error;
         _services_logger_js__WEBPACK_IMPORTED_MODULE_12__["default"].error('[PublicAlbumContent] Error fetching album', {
           error
@@ -244,43 +240,38 @@ const publicRemote = remote;
         this.loadingAlbum = false;
       }
     },
-
     async fetchAlbumContent() {
       if (this.loadingFiles || this.showEditAlbumForm) {
         return [];
       }
-
       const semaphoreSymbol = await this.semaphore.acquire(() => 0, 'fetchFiles');
       const fetchSemaphoreSymbol = await this.fetchSemaphore.acquire();
-
       try {
         this.errorFetchingFiles = null;
         this.loadingFiles = true;
         this.semaphoreSymbol = semaphoreSymbol;
-        const fetchedFiles = await (0,_services_Albums_js__WEBPACK_IMPORTED_MODULE_11__.fetchAlbumContent)(`/photospublic/${this.token}`, this.abortController.signal, this.publicClient);
+        const fetchedFiles = await (0,_services_Albums_js__WEBPACK_IMPORTED_MODULE_11__.fetchAlbumContent)("/photospublic/".concat(this.token), this.abortController.signal, this.publicClient);
         const fileIds = fetchedFiles.map(file => file.fileid.toString());
         fetchedFiles.forEach(file => {
           // Use custom preview URL to avoid authentication prompt
-          file.previewUrl = (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_6__.generateUrl)(`/apps/photos/api/v1/publicPreview/${file.fileid}?x=2048&y=2048&token=${this.token}`); // Disable use of generic file previews for public albums - for older versions of the Viewer app
-
+          file.previewUrl = (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_6__.generateUrl)("/apps/photos/api/v1/publicPreview/".concat(file.fileid, "?x=2048&y=2048&token=").concat(this.token));
+          // Disable use of generic file previews for public albums - for older versions of the Viewer app
           file.hasPreview = false;
         });
         this.appendFiles(fetchedFiles);
-
         if (fetchedFiles.length > 0) {
           await this.$store.commit('addFilesToPublicAlbum', {
             collectionId: this.albumName,
             fileIdsToAdd: fileIds
           });
         }
-
         return fetchedFiles;
       } catch (error) {
-        if (error.response?.status === 404) {
+        var _error$response2;
+        if (((_error$response2 = error.response) === null || _error$response2 === void 0 ? void 0 : _error$response2.status) === 404) {
           this.errorFetchingFiles = 404;
           return [];
         }
-
         this.errorFetchingFiles = error;
         (0,_nextcloud_dialogs__WEBPACK_IMPORTED_MODULE_4__.showError)(this.t('photos', 'Failed to fetch albums list.'));
         _services_logger_js__WEBPACK_IMPORTED_MODULE_12__["default"].error('[PublicAlbumContent] Error fetching album files', {
@@ -291,20 +282,17 @@ const publicRemote = remote;
         this.semaphore.release(semaphoreSymbol);
         this.fetchSemaphore.release(fetchSemaphoreSymbol);
       }
-
       return [];
     },
-
     async handleFilesPicked(fileIds) {
       this.showAddPhotosModal = false;
       await this.addFilesToPublicAlbum({
         collectionId: this.albumName,
         fileIdsToAdd: fileIds
-      }); // Re-fetch album content to have the proper filenames.
-
+      });
+      // Re-fetch album content to have the proper filenames.
       await this.fetchAlbumContent();
     },
-
     async handleRemoveFilesFromAlbum(fileIds) {
       this.$refs.collectionContent.onUncheckFiles(fileIds);
       await this.removeFilesFromPublicAlbum({
@@ -312,7 +300,6 @@ const publicRemote = remote;
         fileIdsToRemove: fileIds
       });
     }
-
   }
 });
 
@@ -365,6 +352,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
 /**
  * @typedef {object} Album
  * @property {string} id - The id of the album.
@@ -380,24 +369,11 @@ __webpack_require__.r(__webpack_exports__);
  * @param {string} extraProps - Extra properties to add to the DAV request.
  * @return {string}
  */
-
 function getDavRequest() {
   let extraProps = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-  return `<?xml version="1.0"?>
-			<d:propfind xmlns:d="DAV:"
-				xmlns:oc="http://owncloud.org/ns"
-				xmlns:nc="http://nextcloud.org/ns"
-				xmlns:ocs="http://open-collaboration-services.org/ns">
-				<d:prop>
-					<nc:last-photo />
-					<nc:nbItems />
-					<nc:location />
-					<nc:dateRange />
-					<nc:collaborators />
-					${extraProps}
-				</d:prop>
-			</d:propfind>`;
+  return "<?xml version=\"1.0\"?>\n\t\t\t<d:propfind xmlns:d=\"DAV:\"\n\t\t\t\txmlns:oc=\"http://owncloud.org/ns\"\n\t\t\t\txmlns:nc=\"http://nextcloud.org/ns\"\n\t\t\t\txmlns:ocs=\"http://open-collaboration-services.org/ns\">\n\t\t\t\t<d:prop>\n\t\t\t\t\t<nc:last-photo />\n\t\t\t\t\t<nc:nbItems />\n\t\t\t\t\t<nc:location />\n\t\t\t\t\t<nc:dateRange />\n\t\t\t\t\t<nc:collaborators />\n\t\t\t\t\t".concat(extraProps, "\n\t\t\t\t</d:prop>\n\t\t\t</d:propfind>");
 }
+
 /**
  *
  * @param {string} path - Albums' root path.
@@ -406,12 +382,9 @@ function getDavRequest() {
  * @param {import('webdav').WebDAVClient} client - The DAV client to use.
  * @return {Promise<Album|null>}
  */
-
-
 async function fetchAlbum(path, options) {
   let extraProps = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
   let client = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : _services_DavClient_js__WEBPACK_IMPORTED_MODULE_2__["default"];
-
   try {
     const response = await client.stat(path, {
       data: getDavRequest(extraProps),
@@ -426,10 +399,10 @@ async function fetchAlbum(path, options) {
     if (error.code === 'ERR_CANCELED') {
       return null;
     }
-
     throw error;
   }
 }
+
 /**
  *
  * @param {string} path - Albums' root path.
@@ -438,18 +411,16 @@ async function fetchAlbum(path, options) {
  * @param {import('webdav').WebDAVClient} client - The DAV client to use.
  * @return {Promise<Album[]>}
  */
-
 async function fetchAlbums(path, options) {
   let extraProps = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
   let client = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : _services_DavClient_js__WEBPACK_IMPORTED_MODULE_2__["default"];
-
   try {
     const response = await client.getDirectoryContents(path, {
       data: getDavRequest(extraProps),
       details: true,
       ...options
     });
-    _services_logger_js__WEBPACK_IMPORTED_MODULE_3__["default"].debug(`[Albums] Fetched ${response.data.length} albums: `, {
+    _services_logger_js__WEBPACK_IMPORTED_MODULE_3__["default"].debug("[Albums] Fetched ".concat(response.data.length, " albums: "), {
       data: response.data
     });
     return response.data.filter(album => album.filename !== path).map(formatAlbum);
@@ -457,17 +428,17 @@ async function fetchAlbums(path, options) {
     if (error.code === 'ERR_CANCELED') {
       return [];
     }
-
     throw error;
   }
 }
+
 /**
  *
  * @param {object} album - An album received from a webdav request.
  * @return {Album}
  */
-
 function formatAlbum(album) {
+  var _album$dateRange$repl, _album$dateRange;
   // Ensure that we have a proper collaborators array.
   if (album.props.collaborators === '') {
     album.props.collaborators = [];
@@ -477,31 +448,29 @@ function formatAlbum(album) {
     } else {
       album.props.collaborators = [album.props.collaborators.collaborator];
     }
-  } // Extract custom props.
+  }
 
+  // Extract custom props.
+  album = (0,_utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_5__.genFileInfo)(album);
 
-  album = (0,_utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_5__.genFileInfo)(album); // Compute date range label.
-
-  const dateRange = JSON.parse(album.dateRange?.replace(/&quot;/g, '"') ?? '{}');
-
+  // Compute date range label.
+  const dateRange = JSON.parse((_album$dateRange$repl = (_album$dateRange = album.dateRange) === null || _album$dateRange === void 0 ? void 0 : _album$dateRange.replace(/&quot;/g, '"')) !== null && _album$dateRange$repl !== void 0 ? _album$dateRange$repl : '{}');
   if (dateRange.start === null) {
     dateRange.start = _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0___default()().unix();
     dateRange.end = _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0___default()().unix();
   }
-
   const dateRangeFormatted = {
     startDate: _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0___default().unix(dateRange.start).format('MMMM YYYY'),
     endDate: _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0___default().unix(dateRange.end).format('MMMM YYYY')
   };
-
   if (dateRangeFormatted.startDate === dateRangeFormatted.endDate) {
     album.date = dateRangeFormatted.startDate;
   } else {
     album.date = (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_1__.translate)('photos', '{startDate} to {endDate}', dateRangeFormatted);
   }
-
   return album;
 }
+
 /**
  *
  * @param {string} path - Albums' root path.
@@ -509,11 +478,8 @@ function formatAlbum(album) {
  * @param {import('webdav').WebDAVClient} client - The DAV client to use.
  * @return {Promise<Array>}
  */
-
-
 async function fetchAlbumContent(path, options) {
   let client = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : _services_DavClient_js__WEBPACK_IMPORTED_MODULE_2__["default"];
-
   try {
     const response = await client.getDirectoryContents(path, {
       data: _services_DavRequest_js__WEBPACK_IMPORTED_MODULE_4__["default"],
@@ -521,13 +487,12 @@ async function fetchAlbumContent(path, options) {
       ...options
     });
     const fetchedFiles = response.data.map(file => (0,_utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_5__.genFileInfo)(file)).filter(file => file.fileid);
-    _services_logger_js__WEBPACK_IMPORTED_MODULE_3__["default"].debug(`[Albums] Fetched ${fetchedFiles.length} new files: `, fetchedFiles);
+    _services_logger_js__WEBPACK_IMPORTED_MODULE_3__["default"].debug("[Albums] Fetched ".concat(fetchedFiles.length, " new files: "), fetchedFiles);
     return fetchedFiles;
   } catch (error) {
     if (error.code === 'ERR_CANCELED') {
       return [];
     }
-
     _services_logger_js__WEBPACK_IMPORTED_MODULE_3__["default"].error('Error fetching album files', {
       error
     });
@@ -1104,6 +1069,7 @@ var render = function () {
           attrs: {
             collection: _vm.album,
             "collection-file-ids": _vm.albumFileIds,
+            "allow-selection": false,
             semaphore: _vm.semaphore,
             loading: _vm.loadingAlbum || _vm.loadingFiles,
             error: _vm.errorFetchingAlbum || _vm.errorFetchingFiles,
@@ -1218,4 +1184,4 @@ render._withStripped = true
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_views_PublicAlbumContent_vue.js.map?v=410ac1afd2bbe7280771
+//# sourceMappingURL=photos-src_views_PublicAlbumContent_vue.js.map?v=58c24be4ce79e632dc2e

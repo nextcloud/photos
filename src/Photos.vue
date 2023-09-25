@@ -94,6 +94,8 @@
 </template>
 
 <script>
+import '@nextcloud/dialogs/dist/index.css'
+
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
 import { loadState } from '@nextcloud/initial-state'

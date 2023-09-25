@@ -11,11 +11,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue_material_design_icons_Plus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-material-design-icons/Plus */ "./node_modules/vue-material-design-icons/Plus.vue");
-/* harmony import */ var vue_material_design_icons_FolderMultipleImage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-material-design-icons/FolderMultipleImage */ "./node_modules/vue-material-design-icons/FolderMultipleImage.vue");
+/* harmony import */ var vue_material_design_icons_Plus_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-material-design-icons/Plus.vue */ "./node_modules/vue-material-design-icons/Plus.vue");
+/* harmony import */ var vue_material_design_icons_FolderMultipleImage_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-material-design-icons/FolderMultipleImage.vue */ "./node_modules/vue-material-design-icons/FolderMultipleImage.vue");
 /* harmony import */ var _nextcloud_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @nextcloud/router */ "./node_modules/@nextcloud/router/dist/index.js");
-/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @nextcloud/vue */ "./node_modules/@nextcloud/vue/dist/ncvuecomponents.js");
-/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_vue__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @nextcloud/vue */ "./node_modules/@nextcloud/vue/dist/index.module.js");
 /* harmony import */ var _mixins_FetchAlbumsMixin_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../mixins/FetchAlbumsMixin.js */ "./src/mixins/FetchAlbumsMixin.js");
 /* harmony import */ var _components_Collection_CollectionsList_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/Collection/CollectionsList.vue */ "./src/components/Collection/CollectionsList.vue");
 /* harmony import */ var _components_Collection_CollectionCover_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/Collection/CollectionCover.vue */ "./src/components/Collection/CollectionCover.vue");
@@ -99,11 +98,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'Albums',
   components: {
-    Plus: vue_material_design_icons_Plus__WEBPACK_IMPORTED_MODULE_0__["default"],
-    FolderMultipleImage: vue_material_design_icons_FolderMultipleImage__WEBPACK_IMPORTED_MODULE_1__["default"],
+    Plus: vue_material_design_icons_Plus_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
+    FolderMultipleImage: vue_material_design_icons_FolderMultipleImage_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
     NcModal: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_3__.NcModal,
     NcButton: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_3__.NcButton,
     NcEmptyContent: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_3__.NcEmptyContent,
@@ -120,28 +120,23 @@ __webpack_require__.r(__webpack_exports__);
       if (lastPhoto === -1) {
         return '';
       }
-
-      return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_2__.generateUrl)(`/apps/photos/api/v1/preview/${lastPhoto}?x=${512}&y=${512}`);
+      return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_2__.generateUrl)("/apps/photos/api/v1/preview/".concat(lastPhoto, "?x=", 512, "&y=", 512));
     }
-
   },
   mixins: [_mixins_FetchAlbumsMixin_js__WEBPACK_IMPORTED_MODULE_4__["default"]],
-
   data() {
     return {
       showAlbumCreationForm: false
     };
   },
-
   methods: {
     handleAlbumCreated(_ref) {
       let {
         album
       } = _ref;
       this.showAlbumCreationForm = false;
-      this.$router.push(`albums/${album.basename}`);
+      this.$router.push("albums/".concat(album.basename));
     }
-
   }
 });
 
@@ -490,4 +485,4 @@ render._withStripped = true
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_views_Albums_vue.js.map?v=d52f2f19ed4796b9a9ed
+//# sourceMappingURL=photos-src_views_Albums_vue.js.map?v=1b9194103eb696182e04
