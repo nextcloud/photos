@@ -47,10 +47,10 @@ export function addFilesToAlbumFromTimeline(albumName: string) {
 	cy.intercept({ times: 1, method: 'PROPFIND', url: '**/dav/photos/**/albums/' }).as('propFindAlbums')
 	cy.intercept({ times: 1, method: 'PROPFIND', url: '**/dav/photos/**/sharedalbums/' }).as('propFindSharedAlbums')
 	cy.contains('Add to album').click()
-	cy.get('.album-picker ul').contains(albumName).click()
-	cy.wait('@copy')
 	cy.wait('@propFindAlbums')
 	cy.wait('@propFindSharedAlbums')
+	cy.get('.album-picker ul').contains(albumName).click()
+	cy.wait('@copy')
 }
 
 export function addFilesToAlbumFromAlbum(albumName: string, itemsIndex: number[]) {
