@@ -309,6 +309,10 @@ export default {
 			} finally {
 				this.loadingCollaborators = false
 			}
+
+			if (this.searchText.length > 0) {
+				this.$refs.popover.$refs.popover.show()
+			}
 		},
 
 		/**

@@ -64,6 +64,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'FaceCover',
   mixins: [_mixins_FetchFacesMixin_js__WEBPACK_IMPORTED_MODULE_1__["default"], _mixins_FaceCoverMixin_js__WEBPACK_IMPORTED_MODULE_2__["default"]],
@@ -77,22 +78,19 @@ __webpack_require__.r(__webpack_exports__);
       default: false
     }
   },
-
   data() {
     return {
       observer: null
     };
   },
-
-  computed: { ...(0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)(['files', 'faces', 'facesFiles']),
-
+  computed: {
+    ...(0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)(['files', 'faces', 'facesFiles']),
     /**
      * @return {Face}
      */
     face() {
       return this.faces[this.baseName];
     },
-
     /**
      * @return {string}
      */
@@ -100,21 +98,16 @@ __webpack_require__.r(__webpack_exports__);
       if (!this.cover) {
         return '';
       }
-
       return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_0__.generateUrl)(`/apps/photos/api/v1/preview/${this.cover.fileid}?x=${512}&y=${512}`);
     },
-
     cover() {
       return this.getFaceCover(this.face.basename);
     },
-
     coverDimensions() {
       if (!this.cover) return {};
       return this.getCoverStyle(this.face.basename);
     }
-
   },
-
   async mounted() {
     this.waitForVisible(this.$el, isVisible => {
       if (!this.facesFiles[this.face.basename]) {
@@ -122,16 +115,13 @@ __webpack_require__.r(__webpack_exports__);
       }
     });
   },
-
   beforeDestroy() {
     this.observer.disconnect();
   },
-
   methods: {
     async fetchFiles() {
       await this.fetchFaceContent(this.face.basename);
     },
-
     waitForVisible(el, listener) {
       this.observer = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
@@ -143,7 +133,6 @@ __webpack_require__.r(__webpack_exports__);
       });
       this.observer.observe(el);
     }
-
   }
 });
 
@@ -180,25 +169,22 @@ __webpack_require__.r(__webpack_exports__);
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'AbortControllerMixin',
-
   data() {
     return {
       abortController: new AbortController()
     };
   },
-
   beforeDestroy() {
     this.abortController.abort();
   },
-
   beforeRouteLeave(from, to, next) {
     this.abortController.abort();
     this.abortController = new AbortController();
     next();
   }
-
 });
 
 /***/ }),
@@ -236,9 +222,11 @@ __webpack_require__.r(__webpack_exports__);
  *
  */
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'FaceCoverMixin',
-  computed: { ...(0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['faces', 'facesFiles', 'files'])
+  computed: {
+    ...(0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['faces', 'facesFiles', 'files'])
   },
   methods: {
     getFaceCover(faceName) {
@@ -246,13 +234,14 @@ __webpack_require__.r(__webpack_exports__);
       const scoreFacePosition = faceDetection => {
         return Math.max(0, -1 * (faceDetection.x - faceDetection.width * 0.5)) + Math.max(0, -1 * (faceDetection.y - faceDetection.height * 0.5)) + Math.max(0, -1 * (1 - (faceDetection.x + faceDetection.width) - faceDetection.width * 0.5)) + Math.max(0, -1 * (1 - (faceDetection.y + faceDetection.height) - faceDetection.height * 0.5));
       };
-
-      return (this.facesFiles[faceName] || []).slice(0, 25).map(fileId => this.files[fileId]) // sort larges face first
-      .sort((a, b) => b.faceDetections.find(d => d.title === faceName).width - a.faceDetections.find(d => d.title === faceName).width) // sort fewest face detections first
-      .sort((a, b) => a.faceDetections.length - b.faceDetections.length) // Sort faces that are at the edge last
+      return (this.facesFiles[faceName] || []).slice(0, 25).map(fileId => this.files[fileId])
+      // sort larges face first
+      .sort((a, b) => b.faceDetections.find(d => d.title === faceName).width - a.faceDetections.find(d => d.title === faceName).width)
+      // sort fewest face detections first
+      .sort((a, b) => a.faceDetections.length - b.faceDetections.length)
+      // Sort faces that are at the edge last
       .sort((a, b) => scoreFacePosition(a.faceDetections.find(d => d.title === faceName)) - scoreFacePosition(b.faceDetections.find(d => d.title === faceName)))[0];
     },
-
     /**
      * This will produce an inline style to apply to images
      * to zoom toward the detected face
@@ -262,15 +251,14 @@ __webpack_require__.r(__webpack_exports__);
      */
     getCoverStyle(faceName) {
       const cover = this.getFaceCover(faceName);
-
       if (!cover) {
         return {};
       }
-
       const detections = cover.faceDetections;
-      const detection = detections.find(detection => detection.title === faceName); // Zoom into the picture so that the face fills the --photos-face-width box nicely
-      // if the face is larger than the image, we don't zoom out (reason for the Math.max)
+      const detection = detections.find(detection => detection.title === faceName);
 
+      // Zoom into the picture so that the face fills the --photos-face-width box nicely
+      // if the face is larger than the image, we don't zoom out (reason for the Math.max)
       const zoom = Math.max(1, 1 / detection.width * 0.4);
       const horizontalCenterOfFace = (detection.x + detection.width / 2) * 100;
       const verticalCenterOfFace = (detection.y + detection.height / 2) * 100;
@@ -284,7 +272,6 @@ __webpack_require__.r(__webpack_exports__);
         transformOrigin: `${horizontalCenterOfFace}% ${verticalCenterOfFace}%`
       };
     }
-
   }
 });
 
@@ -301,13 +288,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _nextcloud_dialogs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @nextcloud/dialogs */ "./node_modules/@nextcloud/dialogs/dist/index.es.js");
-/* harmony import */ var _nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nextcloud/auth */ "./node_modules/@nextcloud/auth/dist/index.esm.js");
+/* harmony import */ var _nextcloud_dialogs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @nextcloud/dialogs */ "./node_modules/@nextcloud/dialogs/dist/index.mjs");
+/* harmony import */ var _nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nextcloud/auth */ "./node_modules/@nextcloud/auth/dist/index.es.mjs");
 /* harmony import */ var _services_DavClient_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/DavClient.js */ "./src/services/DavClient.js");
 /* harmony import */ var _services_logger_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../services/logger.js */ "./src/services/logger.js");
-/* harmony import */ var _services_DavRequest__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/DavRequest */ "./src/services/DavRequest.js");
-/* harmony import */ var _utils_fileUtils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/fileUtils */ "./src/utils/fileUtils.js");
-/* harmony import */ var _AbortControllerMixin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./AbortControllerMixin */ "./src/mixins/AbortControllerMixin.js");
+/* harmony import */ var _services_DavRequest_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/DavRequest.js */ "./src/services/DavRequest.js");
+/* harmony import */ var _utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/fileUtils.js */ "./src/utils/fileUtils.js");
+/* harmony import */ var _AbortControllerMixin_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./AbortControllerMixin.js */ "./src/mixins/AbortControllerMixin.js");
 /* harmony import */ var he__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! he */ "./node_modules/he/he.js");
 /* harmony import */ var he__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(he__WEBPACK_IMPORTED_MODULE_7__);
 /**
@@ -340,9 +327,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'FetchFacesMixin',
-
   data() {
     return {
       errorFetchingFaces: null,
@@ -351,33 +338,29 @@ __webpack_require__.r(__webpack_exports__);
       loadingFiles: false
     };
   },
-
-  mixins: [_AbortControllerMixin__WEBPACK_IMPORTED_MODULE_6__["default"]],
-
+  mixins: [_AbortControllerMixin_js__WEBPACK_IMPORTED_MODULE_6__["default"]],
   async beforeMount() {
     this.fetchFaces();
   },
-
-  computed: { ...(0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapGetters)(['faces'])
+  computed: {
+    ...(0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapGetters)(['faces'])
   },
-  methods: { ...(0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapActions)(['appendFiles']),
-
+  methods: {
+    ...(0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapActions)(['appendFiles']),
     async fetchFaces() {
       if (this.loadingFaces) {
         return;
       }
-
       if (Object.keys(this.faces).length) {
         return;
       }
-
       try {
         this.loadingFaces = true;
         this.errorFetchingFaces = null;
         const {
           data: faces
         } = await _services_DavClient_js__WEBPACK_IMPORTED_MODULE_2__["default"].getDirectoryContents(`/recognize/${(0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__.getCurrentUser)()?.uid}/faces/`, {
-          data: _services_DavRequest__WEBPACK_IMPORTED_MODULE_4__["default"],
+          data: _services_DavRequest_js__WEBPACK_IMPORTED_MODULE_4__["default"],
           details: true,
           signal: this.abortController.signal
         });
@@ -393,7 +376,6 @@ __webpack_require__.r(__webpack_exports__);
             this.errorFetchingFaces = error;
           }
         }
-
         _services_logger_js__WEBPACK_IMPORTED_MODULE_3__["default"].error(t('photos', 'Failed to fetch faces list.'), {
           error
         });
@@ -402,41 +384,38 @@ __webpack_require__.r(__webpack_exports__);
         this.loadingFaces = false;
       }
     },
-
     async fetchFaceContent(faceName, force) {
       if (this.loadingFiles) {
         return;
       }
-
       if (!force && this.facesFiles[faceName] && this.facesFiles[faceName].length) {
         return;
       }
-
       try {
         this.errorFetchingFiles = null;
         this.loadingFiles = true;
         let {
           data: fetchedFiles
         } = await _services_DavClient_js__WEBPACK_IMPORTED_MODULE_2__["default"].getDirectoryContents(`/recognize/${(0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__.getCurrentUser)()?.uid}/faces/${faceName}`, {
-          data: _services_DavRequest__WEBPACK_IMPORTED_MODULE_4__["default"],
+          data: _services_DavRequest_js__WEBPACK_IMPORTED_MODULE_4__["default"],
           details: true,
           signal: this.abortController.signal
         });
-        fetchedFiles = fetchedFiles.map(file => (0,_utils_fileUtils__WEBPACK_IMPORTED_MODULE_5__.genFileInfo)(file)).map(file => ({ ...file,
+        fetchedFiles = fetchedFiles.map(file => (0,_utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_5__.genFileInfo)(file)).map(file => ({
+          ...file,
           filename: he__WEBPACK_IMPORTED_MODULE_7___default().decode(file.realpath).replace(`/${(0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__.getCurrentUser)().uid}/files`, `/files/${(0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__.getCurrentUser)().uid}`)
-        })).map(file => ({ ...file,
+        })).map(file => ({
+          ...file,
           faceDetections: JSON.parse(he__WEBPACK_IMPORTED_MODULE_7___default().decode(file.faceDetections))
         }));
         const fileIds = fetchedFiles.map(file => '' + file.fileid);
         this.appendFiles(fetchedFiles);
-
         if (fetchedFiles.length > 0) {
           await this.$store.commit('addFilesToFace', {
             faceName,
             fileIdsToAdd: fileIds
           });
         }
-
         _services_logger_js__WEBPACK_IMPORTED_MODULE_3__["default"].debug(`[FetchFacesMixin] Fetched ${fileIds.length} new files: `, fileIds);
       } catch (error) {
         if (error.response && error.response.status) {
@@ -445,9 +424,9 @@ __webpack_require__.r(__webpack_exports__);
           } else {
             this.errorFetchingFiles = error;
           }
-        } // cancelled request, moving on...
+        }
 
-
+        // cancelled request, moving on...
         _services_logger_js__WEBPACK_IMPORTED_MODULE_3__["default"].error('Error fetching face files', {
           error
         });
@@ -455,7 +434,6 @@ __webpack_require__.r(__webpack_exports__);
         this.loadingFiles = false;
       }
     }
-
   }
 });
 
@@ -696,4 +674,4 @@ render._withStripped = true
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_components_FaceCover_vue.js.map?v=6970a926bae38aa1c5db
+//# sourceMappingURL=photos-src_components_FaceCover_vue.js.map?v=cfe0970159bffacc2d50

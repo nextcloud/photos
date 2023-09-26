@@ -12,8 +12,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var vue_material_design_icons_ArrowLeft_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-material-design-icons/ArrowLeft.vue */ "./node_modules/vue-material-design-icons/ArrowLeft.vue");
-/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nextcloud/vue */ "./node_modules/@nextcloud/vue/dist/ncvuecomponents.js");
-/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nextcloud/vue */ "./node_modules/@nextcloud/vue/dist/index.module.js");
 //
 //
 //
@@ -70,6 +69,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -109,38 +109,31 @@ __webpack_require__.r(__webpack_exports__);
       this.toggleNavigationButton(!isRoot);
       return isRoot;
     },
-
     name() {
       if (this.isRoot) {
         return this.rootTitle;
       }
-
       return this.title;
     },
-
     parentPath() {
       const path = this.path.split('/');
       path.pop();
       const parent = path.join('/');
       return this.isRoot || parent.trim() === '' ? '/' : path.join('/');
     },
-
     parentName() {
       return this.parentPath && this.parentPath.split('/').pop();
     },
-
     backToText() {
       if (this.parentPath === '/') {
         return t('photos', 'Back to {folder}', {
           folder: this.rootTitle
         });
       }
-
       return t('photos', 'Back to {folder}', {
         folder: this.parentName
       });
     },
-
     /**
      * We do not want encoded slashes when browsing by folder
      * so we generate a new valid route object, get the final url back
@@ -153,8 +146,9 @@ __webpack_require__.r(__webpack_exports__);
       // always remove first slash, the router
       // manage it automatically
       const regex = /^\/?(.*)/i;
-      const path = regex.exec(this.parentPath)[1]; // apply to current route
+      const path = regex.exec(this.parentPath)[1];
 
+      // apply to current route
       const {
         name,
         params
@@ -162,41 +156,37 @@ __webpack_require__.r(__webpack_exports__);
         params: this.params || {
           path
         }
-      }); // return the full object as we don't care about
-      // an empty path if this is route
+      });
 
+      // return the full object as we don't care about
+      // an empty path if this is route
       if (path === '') {
         return {
           name
         };
-      } // returning a string prevent vue-router to encode it again
+      }
 
-
+      // returning a string prevent vue-router to encode it again
       return decodeURIComponent(this.$router.resolve({
         name,
         params
       }).resolved.path);
     }
-
   },
   methods: {
     folderUp() {
       this.$router.push(this.to);
     },
-
     refresh() {
       this.$emit('refresh');
     },
-
     toggleNavigationButton(hide) {
       // Hide the navigation toggle if the back button is shown
       const navigationToggle = document.querySelector('button.app-navigation-toggle');
-
       if (navigationToggle !== null) {
         navigationToggle.style.display = hide ? 'none' : null;
       }
     }
-
   }
 });
 
@@ -233,25 +223,22 @@ __webpack_require__.r(__webpack_exports__);
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'AbortControllerMixin',
-
   data() {
     return {
       abortController: new AbortController()
     };
   },
-
   beforeDestroy() {
     this.abortController.abort();
   },
-
   beforeRouteLeave(from, to, next) {
     this.abortController.abort();
     this.abortController = new AbortController();
     next();
   }
-
 });
 
 /***/ }),
@@ -617,4 +604,4 @@ render._withStripped = true
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_mixins_AbortControllerMixin_js-src_components_HeaderNavigation_vue.js.map?v=bcc16e6e6df4dd338a9e
+//# sourceMappingURL=photos-src_mixins_AbortControllerMixin_js-src_components_HeaderNavigation_vue.js.map?v=10481ff1c255fe0a929e
