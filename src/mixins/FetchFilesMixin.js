@@ -84,7 +84,7 @@ export default {
 
 				const fileIds = fetchedFiles
 					.map(file => file.fileid)
-					.filter(fileId => !this.fetchedFileIds.includes(fileId)) // Filter to prevent duplicate fileIds.
+					.filter(fileId => !this.fetchedFileIds.includes(fileId.toString())) // Filter to prevent duplicate fileIds.
 
 				this.fetchedFileIds.push(
 					...fileIds

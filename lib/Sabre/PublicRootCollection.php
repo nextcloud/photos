@@ -23,15 +23,15 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Sabre;
 
-use OC\Security\Bruteforce\Throttler;
 use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Sabre\Album\PublicAlbumRoot;
 use OCA\Photos\Service\UserConfigService;
-use OCP\IRequest;
 use OCP\Files\IRootFolder;
+use OCP\IRequest;
+use OCP\Security\Bruteforce\IThrottler;
+use Sabre\DAV\Exception\NotFound;
 use Sabre\DAVACL\AbstractPrincipalCollection;
 use Sabre\DAVACL\PrincipalBackend;
-use Sabre\DAV\Exception\NotFound;
 
 class PublicRootCollection extends AbstractPrincipalCollection {
 	private const BRUTEFORCE_ACTION = 'publicphotos_webdav_auth';
@@ -39,7 +39,7 @@ class PublicRootCollection extends AbstractPrincipalCollection {
 	private IRootFolder $rootFolder;
 	private UserConfigService $userConfigService;
 	private IRequest $request;
-	private Throttler $throttler;
+	private IThrottler $throttler;
 
 	public function __construct(
 		AlbumMapper $albumMapper,
@@ -47,7 +47,7 @@ class PublicRootCollection extends AbstractPrincipalCollection {
 		PrincipalBackend\BackendInterface $principalBackend,
 		UserConfigService $userConfigService,
 		IRequest $request,
-		Throttler $throttler
+		IThrottler $throttler
 	) {
 		parent::__construct($principalBackend, 'principals/token');
 

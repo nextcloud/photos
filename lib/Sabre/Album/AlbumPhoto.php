@@ -27,10 +27,10 @@ use OCA\Photos\Album\AlbumFile;
 use OCA\Photos\Album\AlbumInfo;
 use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Sabre\CollectionPhoto;
-use OCP\Files\IRootFolder;
-use OCP\Files\Node;
 use OCP\Files\File;
 use OCP\Files\Folder;
+use OCP\Files\IRootFolder;
+use OCP\Files\Node;
 use OCP\Files\NotFoundException;
 use Sabre\DAV\IFile;
 

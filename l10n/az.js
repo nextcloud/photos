@@ -7,6 +7,7 @@ OC.L10N.register(
     "Tags" : "Işarələr",
     "Save" : "Saxla",
     "Shared by" : "Tərəfindən yayımlanıb",
+    "Group" : "Qrup",
     "Favorite" : "İstəkli",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "Əlavə etmək"

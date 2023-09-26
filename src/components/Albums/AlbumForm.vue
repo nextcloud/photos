@@ -28,15 +28,13 @@
 				name="name"
 				:required="true"
 				autofocus="true"
-				:label="t('photos', 'Name of the album')"
-				:label-visible="true" />
+				:label="t('photos', 'Name of the album')" />
 			<label>
 				<MapMarker />
 				<NcTextField :value.sync="albumLocation"
 					name="location"
 					type="text"
-					:label="t('photos', 'Location of the album')"
-					:label-visible="true" />
+					:label="t('photos', 'Location of the album')" />
 			</label>
 		</div>
 		<div class="form-buttons">
@@ -100,13 +98,14 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
+
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import AccountMultiplePlus from 'vue-material-design-icons/AccountMultiplePlus.vue'
 import Send from 'vue-material-design-icons/Send.vue'
 
-import { getCurrentUser } from '@nextcloud/auth'
 import { NcButton, NcLoadingIcon, NcTextField } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
+import { translate } from '@nextcloud/l10n'
 
 import CollaboratorsSelectionForm from './CollaboratorsSelectionForm.vue'
 
@@ -124,6 +123,7 @@ export default {
 	},
 
 	props: {
+		/** @type {import('vue').PropType<import('../../store/albums.js').Album|null>} */
 		album: {
 			type: Object,
 			default: null,
@@ -157,12 +157,19 @@ export default {
 		sharingEnabled() {
 			return OC.Share !== undefined
 		},
+
+		/**
+		 * @return {string} The album's filename based on its name. Useful to fetch the location information and content.
+		 */
+		albumFileName() {
+			return this.$store.getters.getAlbumName(this.albumName)
+		},
 	},
 
 	mounted() {
 		if (this.editMode) {
 			this.albumName = this.album.basename
-			this.albumLocation = this.album.location
+			this.albumLocation = this.album.location ?? ''
 		}
 
 		this.$nextTick(() => {
@@ -171,8 +178,9 @@ export default {
 	},
 
 	methods: {
-		...mapActions(['createAlbum', 'renameAlbum', 'updateAlbum']),
+		...mapActions(['createCollection', 'renameCollection', 'updateCollection']),
 
+		/** @param {import('../../store/albums.js').Collaborator[]} collaborators */
 		submit(collaborators = []) {
 			if (this.albumName === '' || this.loading) {
 				return
@@ -185,13 +193,14 @@ export default {
 			}
 		},
 
+		/** @param {import('../../store/albums.js').Collaborator[]} collaborators */
 		async handleCreateAlbum(collaborators = []) {
 			try {
 				this.loading = true
-				let album = await this.createAlbum({
-					album: {
+				let album = await this.createCollection({
+					collection: {
 						basename: this.albumName,
-						filename: `/photos/${getCurrentUser().uid}/albums/${this.albumName}`,
+						filename: this.albumFileName,
 						nbItems: 0,
 						location: this.albumLocation,
 						lastPhoto: -1,
@@ -201,9 +210,9 @@ export default {
 				})
 
 				if (this.albumLocation !== '' || collaborators.length !== 0) {
-					album = await this.updateAlbum(
+					album = await this.updateCollection(
 						{
-							albumName: this.albumName,
+							collectionFileName: this.albumFileName,
 							properties: {
 								location: this.albumLocation,
 								collaborators,
@@ -224,11 +233,11 @@ export default {
 				let album = { ...this.album }
 
 				if (this.album.basename !== this.albumName) {
-					album = await this.renameAlbum({ currentAlbumName: this.album.basename, newAlbumName: this.albumName })
+					album = await this.renameCollection({ collectionFileName: this.album.filename, newBaseName: this.albumName })
 				}
 
 				if (this.album.location !== this.albumLocation) {
-					album.location = await this.updateAlbum({ albumName: this.albumName, properties: { location: this.albumLocation } })
+					album = await this.updateCollection({ collectionFileName: album.filename, properties: { location: this.albumLocation } })
 				}
 
 				this.$emit('done', { album })
@@ -240,6 +249,8 @@ export default {
 		back() {
 			this.$emit('back')
 		},
+
+		t: translate,
 	},
 }
 </script>

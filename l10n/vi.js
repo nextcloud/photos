@@ -8,6 +8,7 @@ OC.L10N.register(
     "Favorites" : "Ưa thích",
     "Shared with you" : "Đã chia sẻ với bạn",
     "Tags" : "Nhãn",
+    "Photos settings" : "Cài đặt Ảnh",
     "Back" : "Quay lại",
     "Save" : "Lưu",
     "Shared by" : "Đã chia sẽ bởi",
@@ -24,11 +25,11 @@ OC.L10N.register(
     "Remove from favorites" : "Xóa khỏi ưa thích",
     "This folder does not exist" : "Thư mục này không tồn tại",
     "No photos in here" : "Không có ảnh nào trong này",
-    "Shared albums" : "Các tập ảnh đã chia sẽ",
     "No tags yet" : "Chưa gắn nhãn",
     "Photos with tags will show up here" : "Ảnh đã gắn nhãn sẽ được cho thấy trên này",
     "Add" : "Thêm",
     "Tagged photos" : "Ảnh gắn nhãn",
-    "Locations" : "Các địa điểm"
+    "Locations" : "Các địa điểm",
+    "Shared albums" : "Các tập ảnh đã chia sẽ"
 },
 "nplurals=1; plural=0;");

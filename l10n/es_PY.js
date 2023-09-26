@@ -20,11 +20,11 @@ OC.L10N.register(
     "Favorite" : "Hacer favorito",
     "Remove from favorites" : "Eliminar de favoritos",
     "No photos in here" : "No hay fotos aquí",
-    "Shared albums" : "Álbums compartidos",
     "No tags yet" : "Aún no hay etiquetas",
     "Photos with tags will show up here" : "Fotos con etiquetas serán mostradas aquí",
     "Add" : "Agregar",
     "Tagged photos" : "Fotos etiquetadas",
-    "Locations" : "Ubicaciones"
+    "Locations" : "Ubicaciones",
+    "Shared albums" : "Álbums compartidos"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

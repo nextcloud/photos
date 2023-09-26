@@ -24,7 +24,7 @@
 		<div ref="rowsContainer"
 			class="vs-rows-container"
 			:style="rowsContainerStyle">
-			<slot :rendered-rows="visibleRows" />
+			<slot :visible-sections="visibleSections" />
 			<slot name="loader" />
 		</div>
 	</div>
@@ -32,7 +32,7 @@
 		ref="rowsContainer"
 		class="vs-rows-container"
 		:style="rowsContainerStyle">
-		<slot :rendered-rows="visibleRows" />
+		<slot :visible-sections="visibleSections" />
 		<slot name="loader" />
 	</div>
 </template>
@@ -41,9 +41,24 @@
 import { debounce } from 'debounce'
 
 import logger from '../services/logger.js'
+
+/**
+ * @typedef {object} Section
+ * @property {string} key - Unique key for the section.
+ * @property {Row[]} rows - The height of the row.
+ * @property {number} height - Height of the section, excluding the header.
+ */
+
+/**
+ * @typedef {Section} VisibleSection
+ * @property {VisibleRow[]} rows - The height of the row.
+ */
+
 /**
  * @typedef {object} Row
+ * @property {string} key - Unique key for the row.
  * @property {number} height - The height of the row.
+ * @property {string} sectionKey - Unique key for the row.
  */
 
 /**
@@ -55,7 +70,8 @@ export default {
 	name: 'VirtualScrolling',
 
 	props: {
-		rows: {
+		/** @type {import('vue').PropType<Section[]}>} */
+		sections: {
 			type: Array,
 			required: true,
 		},
@@ -70,9 +86,13 @@ export default {
 			default: false,
 		},
 
+		headerHeight: {
+			type: Number,
+			default: 75,
+		},
 		renderDistance: {
 			type: Number,
-			default: 10,
+			default: 0.5,
 		},
 		bottomBufferRatio: {
 			type: Number,
@@ -95,11 +115,9 @@ export default {
 	},
 
 	computed: {
-		/**
-		 * @return {VisibleRow[]}
-		 */
-		visibleRows() {
-			logger.debug('[VirtualScrolling] Computing visible rows', this.rows)
+		/** @return {VisibleSection[]} */
+		visibleSections() {
+			logger.debug('[VirtualScrolling] Computing visible section', { sections: this.sections })
 
 			// Optimisation: get those computed properties once to not go through vue's internal every time we need them.
 			const containerHeight = this.containerHeight
@@ -111,31 +129,65 @@ export default {
 
 			// Compute whether a row should be included in the DOM (shouldRender)
 			// And how visible the row is.
-			return this.rows
-				.reduce((visibleRows, row) => {
-					currentRowTop = currentRowBottom
-					currentRowBottom += row.height
+			const visibleSections = this.sections
+				.map(section => {
+					currentRowBottom += this.headerHeight
 
-					let distance = 0
+					return {
+						...section,
+						rows: section.rows.reduce((visibleRows, row) => {
+							currentRowTop = currentRowBottom
+							currentRowBottom += row.height
 
-					if (currentRowBottom < containerTop) {
-						distance = (containerTop - currentRowBottom) / containerHeight
-					} else if (currentRowTop > containerBottom) {
-						distance = (currentRowTop - containerBottom) / containerHeight
+							let distance = 0
+
+							if (currentRowBottom < containerTop) {
+								distance = (containerTop - currentRowBottom) / containerHeight
+							} else if (currentRowTop > containerBottom) {
+								distance = (currentRowTop - containerBottom) / containerHeight
+							}
+
+							if (distance > this.renderDistance) {
+								return visibleRows
+							}
+
+							return [
+								...visibleRows,
+								{
+									...row,
+									distance,
+								},
+							]
+						}, []),
 					}
+				})
+				.filter(section => section.rows.length > 0)
 
-					if (distance > this.renderDistance) {
-						return visibleRows
-					}
+			// To allow vue to recycle the DOM elements instead of adding and deleting new ones,
+			// we assign a random key to each items. When a item removed, we recycle its key for new items,
+			// so vue can replace the content of removed DOM elements with the content of new items, but keep the other DOM elements untouched.
+			const visibleItems = visibleSections
+				.flatMap(({ rows }) => rows)
+				.flatMap(({ items }) => items)
 
-					return [
-						...visibleRows,
-						{
-							...row,
-							distance,
-						},
-					]
-				}, [])
+			visibleItems.forEach(item => (item.key = this.rowIdToKeyMap[item.id]))
+
+			const usedTokens = visibleItems
+				.map(({ key }) => key)
+				.filter(key => key !== undefined)
+
+			const unusedTokens = Object.values(this.rowIdToKeyMap).filter(key => !usedTokens.includes(key))
+
+			visibleItems
+				.filter(({ key }) => key === undefined)
+				.forEach(item => (item.key = unusedTokens.pop() ?? Math.random().toString(36).substr(2)))
+
+			// this.rowIdToKeyMap is created in the beforeCreate hook, so value changes are not tracked.
+			// Therefore, we wont trigger the computation of visibleSections again if we alter the value of this.rowIdToKeyMap.
+			// eslint-disable-next-line vue/no-side-effects-in-computed-properties
+			this.rowIdToKeyMap = visibleItems.reduce((finalMapping, { id, key }) => ({ ...finalMapping, [`${id}`]: key }), {})
+
+			return visibleSections
 		},
 
 		/**
@@ -143,28 +195,42 @@ export default {
 		 *
 		 * @return {number}
 		 */
-		rowsHeight() {
+		totalHeight() {
 			const loaderHeight = 200
 
-			return this.rows
-				.map(row => row.height)
-				.reduce((totalHeight, rowHeight) => totalHeight + rowHeight, 0) + loaderHeight
+			return this.sections
+				.map(section => this.headerHeight + section.height)
+				.reduce((totalHeight, sectionHeight) => totalHeight + sectionHeight, 0) + loaderHeight
 		},
 
 		/**
 		 * @return {number}
 		 */
 		paddingTop() {
-			if (this.visibleRows.length === 0) {
+			if (this.visibleSections.length === 0) {
 				return 0
 			}
 
-			const firstVisibleRowIndex = this.rows.findIndex(row => row.items === this.visibleRows[0].items)
+			let paddingTop = 0
 
-			return this.rows
-				.map(row => row.height)
-				.slice(0, firstVisibleRowIndex)
-				.reduce((totalHeight, rowHeight) => totalHeight + rowHeight, 0)
+			for (const section of this.sections) {
+				if (section.key !== this.visibleSections[0].rows[0].sectionKey) {
+					paddingTop += this.headerHeight + section.height
+					continue
+				}
+
+				for (const row of section.rows) {
+					if (row.key === this.visibleSections[0].rows[0].key) {
+						return paddingTop
+					}
+
+					paddingTop += row.height
+				}
+
+				paddingTop += this.headerHeight
+			}
+
+			return paddingTop
 		},
 
 		/**
@@ -174,7 +240,7 @@ export default {
 		 */
 		rowsContainerStyle() {
 			return {
-				height: `${this.rowsHeight}px`,
+				height: `${this.totalHeight}px`,
 				paddingTop: `${this.paddingTop}px`,
 			}
 		},
@@ -187,7 +253,7 @@ export default {
 		 */
 		isNearBottom() {
 			const buffer = this.containerHeight * this.bottomBufferRatio
-			return this.scrollPosition + this.containerHeight >= this.rowsHeight - buffer
+			return this.scrollPosition + this.containerHeight >= this.totalHeight - buffer
 		},
 
 		/**
@@ -207,12 +273,13 @@ export default {
 
 	watch: {
 		isNearBottom(value) {
+			logger.debug('[VirtualScrolling] isNearBottom changed', { value })
 			if (value) {
 				this.$emit('need-content')
 			}
 		},
 
-		rows() {
+		visibleSections() {
 			// Re-emit need-content when rows is updated and isNearBottom is still true.
 			// If the height of added rows is under `bottomBufferRatio`, `isNearBottom` will still be true so we need more content.
 			if (this.isNearBottom) {
@@ -222,15 +289,23 @@ export default {
 
 		scrollToKey(key) {
 			let currentRowTopDistanceFromTop = 0
-			for (const row of this.rows) {
-				if (row.key === key) {
-					this.$refs.container.scrollTo({ top: currentRowTopDistanceFromTop, behavior: 'smooth' })
-					return
+
+			for (const section of this.sections) {
+				if (section.key !== key) {
+					currentRowTopDistanceFromTop += this.headerHeight + section.height
+					continue
 				}
 
-				currentRowTopDistanceFromTop += row.height
+				break
 			}
+
+			logger.debug('[VirtualScrolling] Scrolling to', { currentRowTopDistanceFromTop })
+			this.$refs.container.scrollTo({ top: currentRowTopDistanceFromTop, behavior: 'smooth' })
 		},
+	},
+
+	beforeCreate() {
+		this.rowIdToKeyMap = {}
 	},
 
 	mounted() {
@@ -267,13 +342,16 @@ export default {
 	},
 
 	methods: {
+		// Debouncing by a tiny amount helps a bit to reduce computation cycles.
+		// From a quick tests, 6 cycle are triggered on a big scroll without debounce.
+		// This is reduce to 4 with this tiny debounce.
 		updateScrollPosition: debounce(function() {
 			if (this.useWindow) {
 				this.scrollPosition = this.container.scrollY
 			} else {
 				this.scrollPosition = this.container.scrollTop
 			}
-		}, 200),
+		}, 5),
 
 		updateContainerSize() {
 			this.containerHeight = window.innerHeight

@@ -46,7 +46,7 @@
 				</div>
 			</CollectionCover>
 
-			<NcEmptyContent slot="empty-collections-list" :title="t('photos', 'There is no place yet!')">
+			<NcEmptyContent slot="empty-collections-list" :name="t('photos', 'There is no place yet!')">
 				<FolderMultipleImage slot="icon" />
 			</NcEmptyContent>
 		</CollectionsList>
@@ -93,9 +93,10 @@ export default {
 	mixins: [
 		FetchCollectionsMixin,
 	],
+
 	computed: {
 		/**
-		 * @return {{place: Object<string, import('../services/collectionFetcher').Collection>}}
+		 * @return {import('../services/collectionFetcher.js').IndexedCollections}
 		 */
 		places() {
 			return this.$store.getters.places

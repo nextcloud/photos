@@ -21,7 +21,7 @@
  */
 
 import moment from '@nextcloud/moment'
-import { translate } from '@nextcloud/l10n'
+import { translate as t } from '@nextcloud/l10n'
 
 import defaultClient from './DavClient.js'
 import logger from './logger.js'
@@ -47,11 +47,14 @@ import { genFileInfo } from '../utils/fileUtils.js'
  * @property {number} fileMetadataSizeParsed.height - The height of the file.
  */
 
+/** @typedef {Object<string, Collection>} IndexedCollections */
+/** @typedef {Object<string, CollectionFile>} IndexedCollectionFiles */
+
 /**
- * @param {string} extraProps - Extra properties to add to the DAV request.
+ * @param {string[]} extraProps - Extra properties to add to the DAV request.
  * @return {string}
  */
-function getCollectionDavRequest(extraProps = '') {
+function getCollectionDavRequest(extraProps = []) {
 	return `<?xml version="1.0"?>
 			<d:propfind xmlns:d="DAV:"
 				xmlns:oc="http://owncloud.org/ns"
@@ -60,16 +63,16 @@ function getCollectionDavRequest(extraProps = '') {
 				<d:prop>
 					<nc:last-photo />
 					<nc:nbItems />
-					${extraProps}
+					${extraProps.join('')}
 				</d:prop>
 			</d:propfind>`
 }
 
 /**
- * @param {string} extraProps - Extra properties to add to the DAV request.
+ * @param {string[]} extraProps - Extra properties to add to the DAV request.
  * @return {string}
  */
-function getCollectionFilesDavRequest(extraProps = '') {
+function getCollectionFilesDavRequest(extraProps = []) {
 	return `<?xml version="1.0"?>
 			<d:propfind xmlns:d="DAV:"
 				xmlns:oc="http://owncloud.org/ns"
@@ -86,7 +89,7 @@ function getCollectionFilesDavRequest(extraProps = '') {
 					<oc:favorite />
 					<oc:fileid />
 					<oc:permissions />
-					${extraProps}
+					${extraProps.join('')}
 				</d:prop>
 			</d:propfind>`
 }
@@ -94,11 +97,11 @@ function getCollectionFilesDavRequest(extraProps = '') {
 /**
  * @param {string} path - Collections' root path.
  * @param {import('webdav').StatOptions} options - Options to forward to the webdav client.
- * @param {string} extraProps - Extra properties to add to the DAV request.
+ * @param {string[]} extraProps - Extra properties to add to the DAV request.
  * @param {import('webdav').WebDAVClient} client - The DAV client to use.
  * @return {Promise<Collection|null>}
  */
-export async function fetchCollection(path, options, extraProps = '', client = defaultClient) {
+export async function fetchCollection(path, options, extraProps = [], client = defaultClient) {
 	try {
 		const response = await client.stat(path, {
 			data: getCollectionDavRequest(extraProps),
@@ -122,11 +125,11 @@ export async function fetchCollection(path, options, extraProps = '', client = d
  *
  * @param {string} path - Collections' root path.
  * @param {import('webdav').StatOptions} options - Options to forward to the webdav client.
- * @param {string} extraProps - Extra properties to add to the DAV request.
+ * @param {string[]} extraProps - Extra properties to add to the DAV request.
  * @param {import('webdav').WebDAVClient} client - The DAV client to use.
  * @return {Promise<Collection[]>}
  */
-export async function fetchCollections(path, options, extraProps = '', client = defaultClient) {
+export async function fetchCollections(path, options, extraProps = [], client = defaultClient) {
 	try {
 		const response = await client.getDirectoryContents(path, {
 			data: getCollectionDavRequest(extraProps),
@@ -181,7 +184,7 @@ function formatCollection(rawCollection) {
 	if (dateRangeFormatted.startDate === dateRangeFormatted.endDate) {
 		rawCollection.date = dateRangeFormatted.startDate
 	} else {
-		rawCollection.date = translate('photos', '{startDate} to {endDate}', dateRangeFormatted)
+		rawCollection.date = t('photos', '{startDate} to {endDate}', dateRangeFormatted)
 	}
 
 	return rawCollection
@@ -191,11 +194,11 @@ function formatCollection(rawCollection) {
  *
  * @param {string} path - Collections' root path.
  * @param {import('webdav').StatOptions} options - Options to forward to the webdav client.
- * @param {string} extraProps - Extra properties to add to the DAV request.
+ * @param {string[]} extraProps - Extra properties to add to the DAV request.
  * @param {import('webdav').WebDAVClient} client - The DAV client to use.
  * @return {Promise<CollectionFile[]>}
  */
-export async function fetchCollectionFiles(path, options, extraProps = '', client = defaultClient) {
+export async function fetchCollectionFiles(path, options, extraProps = [], client = defaultClient) {
 	try {
 		const response = await client.getDirectoryContents(path, {
 			data: getCollectionFilesDavRequest(extraProps),

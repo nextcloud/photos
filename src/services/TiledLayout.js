@@ -22,18 +22,30 @@
 
 /**
  * @typedef {object} TiledItem
- * @property {string} id
- * @property {number} [width] Real width of the item.
+ * @property {string} id - Unique id for the item.
+ * @property {number} width Real width of the item.
  * @property {number} height Real height of the item.
- * @property {number} [ratio] The aspect ratio of the item.
- * @property {boolean} [sectionHeader] Whether this row is a section header.
+ * @property {number} ratio The aspect ratio of the item.
+ */
+
+/**
+ * @typedef {object} Section
+ * @property {string} id - Unique id for the section.
+ * @property {TiledItem[]} items Real width of the item.
  */
 
 /**
  * @typedef {object} TiledRow
- * @property {TiledItem[]} items -
- * @property {number} height -
- * @property {string} key -
+ * @property {TiledItem[]} items - List of item in the row.
+ * @property {number} height - Height of the row.
+ * @property {string} key - Unique key for the row.
+ */
+
+/**
+ * @typedef {Section} TiledSection
+ * @property {string} key - Unique key for the section.
+ * @property {TiledRow[]} rows Real width of the item.
+ * @property {number} height - Height of the section.
  */
 
 /**
@@ -64,19 +76,20 @@ export function splitItemsInRows(items, containerWidth, baseHeight = 200) {
 			rowItems.push(items[currentItem++])
 		} while (
 			currentItem < items.length
-			&& !items[currentItem - 1].sectionHeader && !items[currentItem].sectionHeader
 			&& computeRowWidth([...rowItems, items[currentItem]], baseHeight) <= containerWidth
 		)
 
+		const rowHeight = computeRowHeight(
+			rowItems,
+			containerWidth,
+			items.length === currentItem,
+			baseHeight
+		)
+
 		rows[rowNumber] = {
-			items: rowItems,
-			height: computeRowHeight(
-				rowItems,
-				containerWidth,
-				items.length === currentItem || items[currentItem].sectionHeader === true,
-				baseHeight
-			),
+			items: rowItems.map(item => ({ ...item, width: rowHeight * item.ratio, height: rowHeight })),
 			// Key to help vue to keep track of the row in VirtualScrolling.
+			height: rowHeight,
 			key: rowItems.map(item => item.id).join('-'),
 		}
 
@@ -123,11 +136,6 @@ function computeRowWidth(items, baseHeight) {
  * @return {number} The height of the row
  */
 function computeRowHeight(items, containerWidth, isLastRow, baseHeight) {
-	// Exception 1: there is only one item and its width it is a sectionHeader, meaning take the full width.
-	if (items.length === 1 && items[0].sectionHeader) {
-		return items[0].height
-	}
-
 	const sumOfItemsRatio = items
 		.map(item => item.ratio)
 		.reduce((sum, itemRatio) => sum + itemRatio
@@ -135,14 +143,14 @@ function computeRowHeight(items, containerWidth, isLastRow, baseHeight) {
 
 	let rowHeight = containerWidth / sumOfItemsRatio
 
-	// Exception 2: there is only one item which is larger than containerWidth.
+	// Exception 1: there is only one item which is larger than containerWidth.
 	// Limit its height so that itemWidth === containerWidth
 	if (items.length === 1 && items[0].width > containerWidth) {
 		rowHeight = containerWidth / items[0].ratio
 	}
 
-	// Exception 3: we reached the last row.
-	// Force the items width to match containerWidth, and limit their heigh to baseHeight + 20.
+	// Exception 2: we reached the last row.
+	// Force the items width to match containerWidth, and limit their height to baseHeight + 20.
 	if (isLastRow) {
 		rowHeight = Math.min(baseHeight + 20, rowHeight)
 	}

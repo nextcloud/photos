@@ -23,16 +23,19 @@
 	<!-- Errors handlers-->
 	<NcEmptyContent v-if="(collection === undefined && !loading) || error === 404"
 		class="empty-content-with-illustration"
-		:title="t('photos', 'This collection does not exist')">
+		:name="t('photos', 'This collection does not exist')">
 		<FolderMultipleImage slot="icon" />
 	</NcEmptyContent>
-	<NcEmptyContent v-else-if="error" :title="t('photos', 'An error occurred')">
+	<NcEmptyContent v-else-if="error" :name="t('photos', 'An error occurred')">
 		<AlertCircle slot="icon" />
 	</NcEmptyContent>
 
 	<div v-else class="collection">
 		<!-- Header -->
-		<slot class="collection__header" name="header" :selected-file-ids="selectedFileIds" />
+		<slot class="collection__header"
+			name="header"
+			:selected-file-ids="selectedFileIds"
+			:reset-selection="resetSelection" />
 
 		<!-- No content -->
 		<slot v-if="collectionFileIds.length === 0 && !loading" name="empty-content" />
@@ -46,7 +49,7 @@
 			:loading="loading">
 			<File slot-scope="{file, distance}"
 				:file="files[file.id]"
-				:allow-selection="true"
+				:allow-selection="allowSelection"
 				:selected="selection[file.id] === true"
 				:distance="distance"
 				@click="openViewer"
@@ -56,16 +59,15 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
 import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
 
 import { NcEmptyContent, isMobile } from '@nextcloud/vue'
+import { translate } from '@nextcloud/l10n'
 
 import FilesSelectionMixin from '../../mixins/FilesSelectionMixin.js'
 import FilesListViewer from '.././FilesListViewer.vue'
 import File from '.././File.vue'
-import FolderIllustration from '../../assets/Illustrations/folder.svg'
 
 export default {
 	name: 'CollectionContent',
@@ -84,11 +86,13 @@ export default {
 	],
 
 	props: {
+		/** @type {import('vue').PropType<import('../../services/collectionFetcher').Collection>} */
 		collection: {
 			type: Object,
 			default: () => undefined,
 		},
 
+		/** @type {import('vue').PropType<string[]>} */
 		collectionFileIds: {
 			type: Array,
 			required: true,
@@ -99,6 +103,11 @@ export default {
 			default: false,
 		},
 
+		allowSelection: {
+			type: Boolean,
+			default: true,
+		},
+
 		error: {
 			type: [Error, Number],
 			default: null,
@@ -107,15 +116,15 @@ export default {
 
 	data() {
 		return {
-			FolderIllustration,
 			appContent: document.getElementById('app-content-vue'),
 		}
 	},
 
 	computed: {
-		...mapGetters([
-			'files',
-		]),
+		/** @return {import('../../services/collectionFetcher').IndexedCollectionFiles} */
+		files() {
+			return this.$store.getters.files
+		},
 	},
 
 	methods: {
@@ -128,6 +137,8 @@ export default {
 				canLoop: file.canLoop,
 			})
 		},
+
+		t: translate,
 	},
 }
 </script>

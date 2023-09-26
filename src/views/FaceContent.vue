@@ -137,7 +137,7 @@
 		</FilesListViewer>
 
 		<NcModal v-if="showRenameModal"
-			:title="t('photos', 'Rename person')"
+			:name="t('photos', 'Rename person')"
 			@close="showRenameModal = false">
 			<div class="rename-form">
 				<input ref="nameInput"
@@ -162,12 +162,12 @@
 		</NcModal>
 
 		<NcModal v-if="showMergeModal"
-			:title="t('photos', 'Merge person')"
+			:name="t('photos', 'Merge person')"
 			@close="showMergeModal = false">
 			<FaceMergeForm :first-face="faceName" @select="handleMerge($event)" />
 		</NcModal>
 		<NcModal v-if="showMoveModal"
-			:title="t('photos', 'Move to different person')"
+			:name="t('photos', 'Move to different person')"
 			@close="showMoveModal = false">
 			<FaceMergeForm :first-face="faceName" @select="handleMove($event, selectedFileIds)" />
 		</NcModal>
@@ -284,6 +284,10 @@ export default {
 				this.fetchFaceContent(this.faceName)
 			}
 		},
+	},
+
+	mounted() {
+		this.fetchFaceContent(this.faceName)
 	},
 
 	methods: {

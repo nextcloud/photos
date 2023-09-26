@@ -23,7 +23,6 @@
 				<referencedClass name="OCA\DAV\Connector\Sabre\File" />
 				<referencedClass name="OCA\DAV\Connector\Sabre\FilesPlugin" />
 				<referencedClass name="OCA\DAV\Events\SabrePluginAuthInitEvent" />
-				<referencedClass name="OC\Security\Bruteforce\Throttler" />
 				<referencedClass name="OC_User" />
 			</errorLevel>
 		</UndefinedClass>

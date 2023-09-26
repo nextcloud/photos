@@ -24,6 +24,7 @@
 		<CollectionContent ref="collectionContent"
 			:collection="place"
 			:collection-file-ids="placeFileIds"
+			:allow-selection="false"
 			:loading="loadingCollection || loadingCollectionFiles"
 			:error="errorFetchingCollection || errorFetchingCollectionFiles">
 			<!-- Header -->
@@ -38,7 +39,7 @@
 
 			<!-- No content -->
 			<NcEmptyContent slot="empty-content"
-				:title="t('photos', 'This place does not have any photos or videos yet!')"
+				:name="t('photos', 'This place does not have any photos or videos yet!')"
 				class="place__empty">
 				<ImagePlus slot="icon" />
 
@@ -61,7 +62,7 @@ import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
 import { NcButton, NcEmptyContent, isMobile } from '@nextcloud/vue'
 import { translate } from '@nextcloud/l10n'
 
-import FetchCollectionsContentMixin from '../mixins/FetchCollectionsContentMixin.js'
+import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import { getCurrentUser } from '@nextcloud/auth'
@@ -78,7 +79,7 @@ export default {
 	},
 
 	mixins: [
-		FetchCollectionsContentMixin,
+		FetchCollectionContentMixin,
 		isMobile,
 	],
 

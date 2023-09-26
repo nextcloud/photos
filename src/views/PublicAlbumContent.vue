@@ -25,14 +25,15 @@
 		<CollectionContent ref="collectionContent"
 			:collection="album"
 			:collection-file-ids="albumFileIds"
-			:loading="loadingAlbum || loadingFiles"
-			:error="errorFetchingAlbum || errorFetchingFiles">
+			:allow-selection="false"
+			:loading="loadingCollection || loadingCollectionFiles"
+			:error="errorFetchingCollection || errorFetchingCollectionFiles">
 			<!-- Header -->
 			<HeaderNavigation v-if="albumOriginalName !== ''"
 				key="navigation"
 				slot="header"
 				slot-scope="{selectedFileIds}"
-				:loading="loadingAlbum || loadingFiles"
+				:loading="loadingCollection || loadingCollectionFiles"
 				:params="{ token }"
 				path="/"
 				:root-title="albumOriginalName"
@@ -58,11 +59,11 @@
 								<Download slot="icon" />
 							</ActionDownload> -->
 
-							<!-- <NcActionButton :close-after-click="true"
+							<!-- </**  :close */-after-click="true"
 								@click="handleRemoveFilesFromAlbum(selectedFileIds)">
 								{{ t('photos', 'Remove selection from album') }}
 								<Close slot="icon" />
-							</NcActionButton> -->
+							<//** > */ -->
 						</template>
 					</NcActions>
 				</template>
@@ -70,7 +71,7 @@
 
 			<!-- No content -->
 			<NcEmptyContent slot="empty-content"
-				:title="t('photos', 'This album does not have any photos or videos yet!')"
+				:name="t('photos', 'This album does not have any photos or videos yet!')"
 				class="album__empty">
 				<ImageOff slot="icon" />
 
@@ -89,7 +90,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import { createClient, getPatcher } from 'webdav'
 
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
@@ -100,17 +101,14 @@ import ImageOff from 'vue-material-design-icons/ImageOff.vue'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
 
 import { NcActions, /** NcButton, */ NcEmptyContent, /** NcActionSeparator, */ isMobile } from '@nextcloud/vue'
-import { showError } from '@nextcloud/dialogs'
 import axios from '@nextcloud/axios'
 import { generateUrl, generateRemoteUrl } from '@nextcloud/router'
+import { translate } from '@nextcloud/l10n'
 
-import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
-import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
-import { fetchAlbum, fetchAlbumContent } from '../services/Albums.js'
-import logger from '../services/logger.js'
+import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
 
 const publicRootPath = 'dav'
 
@@ -141,8 +139,7 @@ export default {
 	},
 
 	mixins: [
-		FetchFilesMixin,
-		AbortControllerMixin,
+		FetchCollectionContentMixin,
 		isMobile,
 	],
 
@@ -156,8 +153,6 @@ export default {
 	data() {
 		return {
 			showAddPhotosModal: false,
-			loadingAlbum: false,
-			errorFetchingAlbum: null,
 			loadingCount: 0,
 			loadingAddFilesToAlbum: false,
 			albumOriginalName: '',
@@ -169,17 +164,11 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'files',
-			'publicAlbums',
-			'publicAlbumsFiles',
-		]),
-
 		/**
-		 * @return {object} The album information for the current albumName.
+		 * @return {import('../store/publicAlbums.js').PublicAlbum} The album information for the current albumName.
 		 */
 		album() {
-			return this.publicAlbums[this.albumName] || {}
+			return this.$store.getters.getPublicAlbum(this.albumName)
 		},
 
 		/**
@@ -193,7 +182,14 @@ export default {
 		 * @return {string[]} The list of files for the current albumName.
 		 */
 		albumFileIds() {
-			return this.publicAlbumsFiles[this.albumName] || []
+			return this.$store.getters.getPublicAlbumFiles(this.albumName)
+		},
+
+		/**
+		 * @return {string} The album's filename based on its name. Useful to fetch the location information and content.
+		 */
+		publicAlbumFileName() {
+			return this.$store.getters.getPublicAlbumName(this.albumName)
 		},
 	},
 
@@ -205,105 +201,51 @@ export default {
 	methods: {
 		...mapActions([
 			'appendFiles',
-			'addPublicAlbums',
-			'addFilesToPublicAlbum',
-			'removeFilesFromPublicAlbum',
+			'addCollection',
+			'addFilesToCollection',
+			'removeFilesFromCollection',
 		]),
 
 		async fetchAlbumInfo() {
-			if (this.loadingAlbum) {
-				return
-			}
+			const album = await this.fetchCollection(
+				`/photospublic/${this.token}`,
+				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />', '<nc:original-name />'],
+				this.publicClient,
+			)
 
-			try {
-				this.loadingAlbum = true
-				this.errorFetchingAlbum = null
-
-				const album = await fetchAlbum(
-					`/photospublic/${this.token}`,
-					this.abortController.signal,
-					'<nc:original-name />',
-					this.publicClient,
-				)
-				this.addPublicAlbums({ collections: [album] })
-				this.albumOriginalName = album.originalName
-			} catch (error) {
-				if (error.response?.status === 404) {
-					this.errorFetchingAlbum = 404
-					return
-				}
-
-				this.errorFetchingAlbum = error
-				logger.error('[PublicAlbumContent] Error fetching album', { error })
-				showError(this.t('photos', 'Failed to fetch album.'))
-			} finally {
-				this.loadingAlbum = false
-			}
+			this.albumOriginalName = album.originalName
 		},
 
 		async fetchAlbumContent() {
-			if (this.loadingFiles || this.showEditAlbumForm) {
-				return []
-			}
-
-			const fetchSemaphoreSymbol = await this.fetchSemaphore.acquire()
-
-			try {
-				this.errorFetchingFiles = null
-				this.loadingFiles = true
-
-				const fetchedFiles = await fetchAlbumContent(
-					`/photospublic/${this.token}`,
-					this.abortController.signal,
-					this.publicClient,
-				)
-
-				const fileIds = fetchedFiles
-					.map(file => file.fileid.toString())
-
-				fetchedFiles.forEach(file => {
-					// Use custom preview URL to avoid authentication prompt
-					file.previewUrl = generateUrl(`/apps/photos/api/v1/publicPreview/${file.fileid}?x=2048&y=2048&token=${this.token}`)
-					// Disable use of generic file previews for public albums - for older versions of the Viewer app
-					file.hasPreview = false
-				})
-
-				this.appendFiles(fetchedFiles)
-
-				if (fetchedFiles.length > 0) {
-					await this.$store.commit('addFilesToPublicAlbum', { collectionId: this.albumName, fileIdsToAdd: fileIds })
-				}
-
-				return fetchedFiles
-			} catch (error) {
-				if (error.response?.status === 404) {
-					this.errorFetchingFiles = 404
-					return []
-				}
-
-				this.errorFetchingFiles = error
-
-				showError(this.t('photos', 'Failed to fetch albums list.'))
-				logger.error('[PublicAlbumContent] Error fetching album files', { error })
-			} finally {
-				this.loadingFiles = false
-				this.fetchSemaphore.release(fetchSemaphoreSymbol)
-			}
-
-			return []
+			await this.fetchCollectionFiles(
+				`/photospublic/${this.token}`,
+				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />', '<nc:original-name />'],
+				this.publicClient,
+				[
+					file => ({
+						...file,
+						// Use custom preview URL to avoid authentication prompt
+						previewUrl: generateUrl(`/apps/photos/api/v1/publicPreview/${file.fileid}?x=2048&y=2048&token=${this.token}`),
+						// Disable use of generic file previews for public albums - for older versions of the Viewer app
+						hasPreview: false,
+					}),
+				]
+			)
 		},
 
 		async handleFilesPicked(fileIds) {
 			this.showAddPhotosModal = false
-			await this.addFilesToPublicAlbum({ collectionId: this.albumName, fileIdsToAdd: fileIds })
+			await this.addFilesToCollection({ collectionFileName: this.albumName, fileIdsToAdd: fileIds })
 			// Re-fetch album content to have the proper filenames.
 			await this.fetchAlbumContent()
 		},
 
 		async handleRemoveFilesFromAlbum(fileIds) {
 			this.$refs.collectionContent.onUncheckFiles(fileIds)
-			await this.removeFilesFromPublicAlbum({ collectionId: this.albumName, fileIdsToRemove: fileIds })
+			await this.removeFilesFromCollection({ collectionFileName: this.albumName, fileIdsToRemove: fileIds })
 		},
+
+		t: translate,
 	},
 }
 </script>

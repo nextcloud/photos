@@ -23,14 +23,14 @@
 	<div v-if="!showAlbumCreationForm" class="album-picker">
 		<h2>
 			{{ t('photos', 'Add to Album') }}
-			<NcLoadingIcon v-if="loadingAlbums || loadingSharedAlbums" class="loading-icon" />
+			<NcLoadingIcon v-if="loadingCollections" class="loading-icon" />
 		</h2>
 
 		<ul class="albums-container">
 			<NcListItem v-for="album in allAlbums"
 				:key="album.filename"
 				class="album"
-				:title="originalName(album)"
+				:name="originalName(album)"
 				:aria-label="t('photos', 'Add selection to album {albumName}', {albumName: album.basename})"
 				@click="pickAlbum(album)">
 				<template slot="icon">
@@ -40,7 +40,7 @@
 					</div>
 				</template>
 
-				<template slot="subtitle">
+				<template #subname>
 					{{ n('photos', '%n item', '%n photos and videos', album.nbItems) }}
 					<template v-if="isSharedAlbum(album)">
 						⸱ {{ t('photos', 'Shared by') }}&nbsp;<NcUserBubble :display-name="album.collaborators[0].label" :user="album.collaborators[0].id" />
@@ -68,15 +68,16 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
 
 import { NcButton, NcListItem, NcLoadingIcon, NcUserBubble } from '@nextcloud/vue'
 import { generateUrl } from '@nextcloud/router'
 import { translate, translatePlural } from '@nextcloud/l10n'
+import { getCurrentUser } from '@nextcloud/auth'
 
-import FetchAlbumsMixin from '../../mixins/FetchAlbumsMixin.js'
-import FetchSharedAlbumsMixin from '../../mixins/FetchSharedAlbumsMixin.js'
+import FetchCollectionsMixin from '../../mixins/FetchCollectionsMixin.js'
 import AlbumForm from './AlbumForm.vue'
 
 export default {
@@ -103,8 +104,7 @@ export default {
 	},
 
 	mixins: [
-		FetchAlbumsMixin,
-		FetchSharedAlbumsMixin,
+		FetchCollectionsMixin,
 	],
 
 	data() {
@@ -114,15 +114,32 @@ export default {
 	},
 
 	computed: {
-		/** @return {object[]} */
+		...mapGetters([
+			'albums',
+			'sharedAlbums',
+		]),
+
+		/**
+		 * @return {import('../../store/albums.js').Album[]}
+		 */
 		allAlbums() {
 			return [...Object.values(this.albums), ...Object.values(this.sharedAlbums)]
 		},
 	},
 
+	mounted() {
+		this.fetchAlbumList()
+	},
+
 	methods: {
+		async fetchAlbumList() {
+			await this.fetchCollections(`/photos/${getCurrentUser()?.uid}/albums`, ['<nc:location />', '<nc:dateRange />', '<nc:collaborators />'])
+			await this.fetchCollections(`/photos/${getCurrentUser()?.uid}/sharedalbums`, ['<nc:location />', '<nc:dateRange />', '<nc:collaborators />'])
+		},
+
 		albumCreatedHandler() {
 			this.showAlbumCreationForm = false
+			this.fetchAlbumList()
 		},
 
 		pickAlbum(album) {

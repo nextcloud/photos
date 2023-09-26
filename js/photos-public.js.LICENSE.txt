@@ -1,10 +1,4 @@
 /*!
-  * vue-router v3.6.5
-  * (c) 2022 Evan You
-  * @license MIT
-  */
-
-/*!
  * Determine if an object is a Buffer
  *
  * @author   Feross Aboukhadijeh <https://feross.org>
@@ -14,15 +8,16 @@
 /*!
  * The buffer module from node.js, for the browser.
  *
- * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+ * @author   Feross Aboukhadijeh <https://feross.org>
  * @license  MIT
  */
 
 /*!
- * The buffer module from node.js, for the browser.
+ * Toastify js 1.12.0
+ * https://github.com/apvarun/toastify-js
+ * @license MIT licensed
  *
- * @author   Feross Aboukhadijeh <https://feross.org>
- * @license  MIT
+ * Copyright (C) 2018 Varun A P
  */
 
 /*!
@@ -46,24 +41,16 @@
  */
 
 /*!
-* focus-trap 7.2.0
+* focus-trap 7.5.2
 * @license MIT, https://github.com/focus-trap/focus-trap/blob/master/LICENSE
 */
 
 /*!
-* tabbable 6.0.1
+* tabbable 6.2.0
 * @license MIT, https://github.com/focus-trap/tabbable/blob/master/LICENSE
 */
 
-/*! @license DOMPurify 2.4.5 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/2.4.5/LICENSE */
-
-/*! For license information please see index.module.js.LICENSE.txt */
-
-/*! Hammer.JS - v2.0.7 - 2016-04-22
- * http://hammerjs.github.io/
- *
- * Copyright (c) 2016 Jorik Tangelder;
- * Licensed under the MIT license */
+/*! @license DOMPurify 3.0.5 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/3.0.5/LICENSE */
 
 /*! https://mths.be/base64 v1.0.0 by @mathias | MIT license */
 
@@ -71,7 +58,26 @@
 
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 
-/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
+/**
+ * @copyright 2022 Louis Chemineau <mlouis@chmn.me>
+ *
+ * @author Louis Chemineau <mlouis@chmn.me>
+ *
+ * @license AGPL-3.0-or-later
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /**
  * @copyright Copyright (c) 2018 John Molakvoæ <skjnldsv@protonmail.com>
@@ -215,14 +221,6 @@
 * Copyright (c) 2014-2020 Olivier Scherrer <pode.fr@gmail.com>
 */
 
-//! authors : Tim Wood, Iskren Chernev, Moment.js contributors
-
-//! license : MIT
-
 //! moment.js
 
 //! moment.js locale configuration
-
-//! momentjs.com
-
-//! version : 2.29.4

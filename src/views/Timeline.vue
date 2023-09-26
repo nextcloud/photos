@@ -39,27 +39,39 @@
 			<div class="timeline__header__left">
 				<!-- TODO: UploadPicker -->
 				<NcActions v-if="selectedFileIds.length === 0"
-					:force-title="true"
 					:force-menu="true"
-					:menu-title="t('photos', 'Add')">
-					<Plus slot="icon" />
+					:menu-name="t('photos', 'Add')">
+					<template #icon>
+						<Plus />
+					</template>
 					<NcActionButton :close-after-click="true"
-						:aria-label="t('photos', 'Create a new album')"
+						:aria-label="t('photos', 'Create new album')"
 						@click="showAlbumCreationForm = true">
 						{{ t('photos', 'Create new album') }}
-						<PlusBoxMultiple slot="icon" />
+						<template #icon>
+							<PlusBoxMultiple />
+						</template>
 					</NcActionButton>
 				</NcActions>
 
 				<template v-else>
 					<NcButton :close-after-click="true"
 						type="primary"
-						:aria-label="t('photos', 'Add selection to an album')"
+						:aria-label="t('photos', 'Add to album')"
 						@click="showAlbumPicker = true">
 						<template #icon>
-							<Plus slot="icon" />
+							<Plus />
 						</template>
 						{{ t('photos', 'Add to album') }}
+					</NcButton>
+
+					<NcButton v-if="selectedFileIds.length > 0"
+						:aria-label="t('photos', 'Unselect all')"
+						@click="resetSelection">
+						<template #icon>
+							<Close />
+						</template>
+						{{ t('photos', 'Unselect all') }}
 					</NcButton>
 
 					<NcActions :aria-label="t('photos', 'Open actions menu')">
@@ -73,7 +85,9 @@
 							:aria-label="t('photos', 'Delete selection')"
 							@click="deleteSelection">
 							{{ t('photos', 'Delete selection') }}
-							<Delete slot="icon" />
+							<template #icon>
+								<Delete />
+							</template>
 						</NcActionButton>
 					</NcActions>
 				</template>
@@ -89,13 +103,13 @@
 			:base-height="isMobile ? 120 : 200"
 			:empty-message="t('photos', 'No photos or videos in here')"
 			@need-content="getContent">
-			<template slot-scope="{file, distance}">
-				<h3 v-if="file.sectionHeader"
+			<template slot-scope="{file, isHeader, distance}">
+				<h2 v-if="isHeader"
 					:id="`file-picker-section-header-${file.id}`"
 					class="section-header">
 					<b>{{ file.id | dateMonth }}</b>
 					{{ file.id | dateYear }}
-				</h3>
+				</h2>
 				<File v-else
 					:file="files[file.id]"
 					:allow-selection="true"
@@ -109,7 +123,7 @@
 		<NcModal v-if="showAlbumCreationForm"
 			key="albumCreationForm"
 			:close-button-contained="false"
-			:title="t('photos', 'New album')"
+			:name="t('photos', 'New album')"
 			@close="showAlbumCreationForm = false">
 			<AlbumForm @done="showAlbumCreationForm = false" />
 		</NcModal>
@@ -117,7 +131,7 @@
 		<NcModal v-if="showAlbumPicker"
 			key="albumPicker"
 			:close-button-contained="false"
-			:title="t('photos', 'Add to album')"
+			:name="t('photos', 'Add to album')"
 			@close="showAlbumPicker = false">
 			<AlbumPicker @album-picked="addSelectionToAlbum" />
 		</NcModal>
@@ -130,6 +144,7 @@ import Plus from 'vue-material-design-icons/Plus.vue'
 import Delete from 'vue-material-design-icons/Delete.vue'
 import PlusBoxMultiple from 'vue-material-design-icons/PlusBoxMultiple.vue'
 import Download from 'vue-material-design-icons/Download.vue'
+import Close from 'vue-material-design-icons/Close.vue'
 
 import { NcModal, NcActions, NcActionButton, NcButton, NcEmptyContent, isMobile } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
@@ -153,6 +168,7 @@ export default {
 		Delete,
 		PlusBoxMultiple,
 		Download,
+		Close,
 		Plus,
 		NcEmptyContent,
 		NcModal,
@@ -230,7 +246,10 @@ export default {
 	},
 
 	methods: {
-		...mapActions(['deleteFiles', 'addFilesToAlbum', 'addFilesToSharedAlbum']),
+		...mapActions([
+			'deleteFiles',
+			'addFilesToCollection',
+		]),
 
 		getContent() {
 			this.fetchFiles('', {
@@ -256,11 +275,7 @@ export default {
 
 		async addSelectionToAlbum(album) {
 			this.showAlbumPicker = false
-			if (album.filename.match(/^\/photos\/.+\/sharedalbums\//) !== null) {
-				await this.addFilesToSharedAlbum({ albumName: album.basename, fileIdsToAdd: this.selectedFileIds })
-			} else {
-				await this.addFilesToAlbum({ albumName: album.basename, fileIdsToAdd: this.selectedFileIds })
-			}
+			await this.addFilesToCollection({ collectionFileName: album.filename, fileIdsToAdd: this.selectedFileIds })
 		},
 
 		async deleteSelection() {
@@ -283,6 +298,7 @@ export default {
 	&__header {
 		&__left {
 			display: flex;
+			gap: 4px;
 		}
 	}
 

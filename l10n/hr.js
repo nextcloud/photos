@@ -26,12 +26,12 @@ OC.L10N.register(
     "Remove from favorites" : "Ukloni iz favorita",
     "This folder does not exist" : "Ova mapa ne postoji",
     "No photos in here" : "Ovdje nema fotografija",
-    "Shared albums" : "Dijeljeni albumi",
     "No tags yet" : "Još nema oznaka",
     "Photos with tags will show up here" : "Ovdje će se prikazivati fotografije s oznakama",
     "Add" : "Dodaj",
     "Delete selection" : "Izbriši odabir",
     "Tagged photos" : "Označene fotografije",
-    "Locations" : "Lokacije"
+    "Locations" : "Lokacije",
+    "Shared albums" : "Dijeljeni albumi"
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");

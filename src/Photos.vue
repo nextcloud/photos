@@ -26,55 +26,55 @@
 			<template #list>
 				<NcAppNavigationItem :to="{name: 'all_media'}"
 					class="app-navigation__all_media"
-					:title="t('photos', 'All media')"
+					:name="t('photos', 'All media')"
 					exact>
 					<ImageIcon slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem to="/photos" :title="t('photos', 'Photos')">
+				<NcAppNavigationItem to="/photos" :name="t('photos', 'Photos')">
 					<Camera slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem to="/videos" :title="t('photos', 'Videos')">
+				<NcAppNavigationItem to="/videos" :name="t('photos', 'Videos')">
 					<VideoIcon slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Albums')">
+				<NcAppNavigationItem :to="{name: 'albums'}" :name="t('photos', 'Albums')">
 					<FolderMultipleImage slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem :to="{name: 'sharedAlbums'}" :title="t('photos', 'Collaborative albums')">
+				<NcAppNavigationItem :to="{name: 'sharedAlbums'}" :name="t('photos', 'Collaborative albums')">
 					<AccountGroup slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem v-if="showPeopleMenuEntry" :to="{name: 'faces'}" :title="t('photos', 'People')">
+				<NcAppNavigationItem v-if="showPeopleMenuEntry" :to="{name: 'faces'}" :name="t('photos', 'People')">
 					<template #icon>
 						<AccountBoxMultipleOutline :size="20" />
 					</template>
 				</NcAppNavigationItem>
-				<NcAppNavigationItem :to="{name: 'folders'}" :title="t('photos', 'Folders')">
+				<NcAppNavigationItem :to="{name: 'folders'}" :name="t('photos', 'Folders')">
 					<Folder slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem to="/favorites" :title="t('photos', 'Favorites')">
+				<NcAppNavigationItem to="/favorites" :name="t('photos', 'Favorites')">
 					<Star slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem :to="{name: 'thisday'}" :title="t('photos', 'On this day')">
+				<NcAppNavigationItem :to="{name: 'thisday'}" :name="t('photos', 'On this day')">
 					<CalendarToday slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared with you')">
+				<NcAppNavigationItem :to="{name: 'shared'}" :name="t('photos', 'Shared with you')">
 					<ShareVariant slot="icon" :size="20" />
 				</NcAppNavigationItem>
 				<NcAppNavigationItem v-if="areTagsInstalled"
 					:to="{name: 'tags'}"
-					:title="t('photos', 'Tags')">
+					:name="t('photos', 'Tags')">
 					<Tag slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem :to="{name: 'places'}" :title="t('photos', 'Places')">
+				<NcAppNavigationItem :to="{name: 'places'}" :name="t('photos', 'Places')">
 					<MapMarker slot="icon" :size="20" />
 				</NcAppNavigationItem>
 				<NcAppNavigationItem v-if="showLocationMenuEntry"
 					:to="{name: 'maps'}"
-					:title="t('photos', 'Map')">
+					:name="t('photos', 'Map')">
 					<MapIcon slot="icon" :size="20" />
 				</NcAppNavigationItem>
 			</template>
 			<template #footer>
-				<NcAppNavigationItem :title="t('photos', 'Photos settings')" @click="showSettings">
+				<NcAppNavigationItem :name="t('photos', 'Photos settings')" @click="showSettings">
 					<Cog slot="icon" :size="20" />
 				</NcAppNavigationItem>
 			</template>

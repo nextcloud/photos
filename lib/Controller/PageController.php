@@ -36,8 +36,8 @@ use OCA\Viewer\Event\LoadViewer;
 use OCP\App\IAppManager;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
-use OCP\IL10N;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Services\IInitialState;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
@@ -48,11 +48,9 @@ use OCP\Files\Search\ISearchBinaryOperator;
 use OCP\Files\Search\ISearchComparison;
 use OCP\ICache;
 use OCP\ICacheFactory;
-use OCP\AppFramework\Services\IInitialState;
+use OCP\IL10N;
 use OCP\IRequest;
 use OCP\IUserSession;
-use OCP\SystemTag\ISystemTagManager;
-use OCP\SystemTag\ISystemTagObjectMapper;
 use OCP\Util;
 use Psr\Log\LoggerInterface;
 
@@ -66,12 +64,7 @@ class PageController extends Controller {
 	private ICacheFactory $cacheFactory;
 	private IL10N $l10n;
 	private ICache $nomediaPathsCache;
-	private ICache $tagCountsCache;
 	private LoggerInterface $logger;
-
-	private ISystemTagObjectMapper $tagObjectMapper;
-
-	private ISystemTagManager $tagManager;
 
 	public function __construct(
 		IRequest          $request,
@@ -83,8 +76,6 @@ class PageController extends Controller {
 		IRootFolder       $rootFolder,
 		ICacheFactory     $cacheFactory,
 		LoggerInterface   $logger,
-		ISystemTagObjectMapper $tagObjectMapper,
-		ISystemTagManager $tagManager,
 		IL10N $l10n
 	) {
 		parent::__construct(Application::APP_ID, $request);
@@ -97,10 +88,7 @@ class PageController extends Controller {
 		$this->rootFolder = $rootFolder;
 		$this->cacheFactory = $cacheFactory;
 		$this->nomediaPathsCache = $this->cacheFactory->createLocal('photos:nomedia-paths');
-		$this->tagCountsCache = $this->cacheFactory->createLocal('photos:tag-counts');
 		$this->logger = $logger;
-		$this->tagObjectMapper = $tagObjectMapper;
-		$this->tagManager = $tagManager;
 		$this->l10n = $l10n;
 	}
 
@@ -148,20 +136,6 @@ class PageController extends Controller {
 		}
 
 		$this->initialState->provideInitialState('nomedia-paths', $paths);
-
-
-		$key = $user->getUID();
-		$tagCounts = $this->tagCountsCache->get($key);
-		if ($tagCounts === null) {
-			$tags = $this->tagManager->getAllTags(true);
-			$tagCounts = [];
-			foreach ($tags as $tag) {
-				$search = $userFolder->search(new SearchQuery(new SearchComparison(ISearchComparison::COMPARE_EQUAL, 'systemtag', $tag->getName()), 0, 0, [], $user));
-				$tagCounts[$tag->getName()] = count($search);
-			}
-			$this->tagCountsCache->set($key, $tagCounts, 60 * 60 * 24 * 7); // 7 days
-		}
-		$this->initialState->provideInitialState('tag-counts', $tagCounts);
 
 		Util::addScript(Application::APP_ID, 'photos-main');
 

@@ -24,7 +24,7 @@
 
 <template>
 	<!-- Errors handlers-->
-	<NcEmptyContent v-if="error" :title="t('photos', 'An error occurred')" />
+	<NcEmptyContent v-if="error" :name="t('photos', 'An error occurred')" />
 
 	<NcLoadingIcon v-else-if="loading" class="loader" />
 
@@ -46,7 +46,7 @@
 		<div class="heading-subline">
 			{{ n('photos', '%n photo', '%n photos', fileIds.length,) }}
 		</div>
-		<NcEmptyContent v-if="isEmpty" :title="t('photos', 'No photos with this tag yet')" />
+		<NcEmptyContent v-if="isEmpty" :name="t('photos', 'No photos with this tag yet')" />
 
 		<FilesListViewer class="tag__photos"
 			:container-element="appContent"
@@ -159,7 +159,9 @@ export default {
 					await this.$store.dispatch('fetchAllTags', { signal: this.abortController.signal })
 				}
 
-				await this.$store.dispatch('fetchTagFiles', { id: this.tagId, signal: this.abortController.signal })
+				if (this.tag && !this.tag.files) {
+					await this.$store.dispatch('fetchTagFiles', { id: this.tagId, signal: this.abortController.signal })
+				}
 			} catch (error) {
 				console.error(error)
 				this.error = true

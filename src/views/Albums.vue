@@ -22,12 +22,12 @@
 <template>
 	<div>
 		<CollectionsList :collections="albums"
-			:loading="loadingAlbums"
-			:error="errorFetchingAlbums"
+			:loading="loadingCollections"
+			:error="errorFetchingCollections"
 			class="albums-list">
 			<HeaderNavigation key="navigation"
 				slot="header"
-				:loading="loadingAlbums"
+				:loading="loadingCollections"
 				:title="t('photos', 'Albums')"
 				:root-title="t('photos', 'Albums')"
 				@refresh="fetchAlbums">
@@ -54,13 +54,13 @@
 				</div>
 			</CollectionCover>
 
-			<NcEmptyContent slot="empty-collections-list" :title="t('photos', 'There is no album yet!')">
+			<NcEmptyContent slot="empty-collections-list" :name="t('photos', 'There is no album yet!')">
 				<FolderMultipleImage slot="icon" />
 			</NcEmptyContent>
 		</CollectionsList>
 
 		<NcModal v-if="showAlbumCreationForm"
-			:title="t('photos', 'New album')"
+			:name="t('photos', 'New album')"
 			@close="showAlbumCreationForm = false">
 			<AlbumForm @done="handleAlbumCreated" />
 		</NcModal>
@@ -73,12 +73,14 @@ import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.v
 
 import { generateUrl } from '@nextcloud/router'
 import { NcModal, NcButton, NcEmptyContent } from '@nextcloud/vue'
+import { translate, translatePlural } from '@nextcloud/l10n'
+import { getCurrentUser } from '@nextcloud/auth'
 
-import FetchAlbumsMixin from '../mixins/FetchAlbumsMixin.js'
 import CollectionsList from '../components/Collection/CollectionsList.vue'
 import CollectionCover from '../components/Collection/CollectionCover.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
+import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
 
 export default {
 	name: 'Albums',
@@ -108,7 +110,7 @@ export default {
 	},
 
 	mixins: [
-		FetchAlbumsMixin,
+		FetchCollectionsMixin,
 	],
 
 	data() {
@@ -117,11 +119,34 @@ export default {
 		}
 	},
 
+	computed: {
+		/**
+		 * @return {import('../services/Albums').IndexedAlbums}
+		 */
+		albums() {
+			return this.$store.getters.albums
+		},
+	},
+
+	async beforeMount() {
+		this.fetchAlbums()
+	},
+
 	methods: {
+		fetchAlbums() {
+			this.fetchCollections(
+				`/photos/${getCurrentUser()?.uid}/albums`,
+				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />']
+			)
+		},
+
 		handleAlbumCreated({ album }) {
 			this.showAlbumCreationForm = false
 			this.$router.push(`albums/${album.basename}`)
 		},
+
+		t: translate,
+		n: translatePlural,
 	},
 }
 </script>

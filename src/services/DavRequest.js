@@ -26,6 +26,7 @@ const props = `
 	<d:getlastmodified />
 	<d:resourcetype />
 	<nc:face-detections />
+	<nc:face-preview-image />
 	<nc:file-metadata-size />
 	<nc:has-preview />
 	<nc:realpath />

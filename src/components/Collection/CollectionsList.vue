@@ -21,7 +21,7 @@
  -->
 <template>
 	<!-- Errors handlers-->
-	<NcEmptyContent v-if="error" :title="t('photos', 'An error occurred') ">
+	<NcEmptyContent v-if="error" :name="t('photos', 'An error occurred') ">
 		<AlertCircle slot="icon" />
 	</NcEmptyContent>
 
@@ -45,6 +45,7 @@
 import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
 
 import { NcEmptyContent } from '@nextcloud/vue'
+import { translate } from '@nextcloud/l10n'
 
 export default {
 	name: 'CollectionsList',
@@ -55,6 +56,7 @@ export default {
 	},
 
 	props: {
+		/** @type {import('vue').PropType<import('../../services/collectionFetcher').IndexedCollections>} */
 		collections: {
 			type: Object,
 			required: true,
@@ -76,6 +78,10 @@ export default {
 		noCollection() {
 			return Object.keys(this.collections).length === 0
 		},
+	},
+
+	methods: {
+		t: translate,
 	},
 }
 </script>

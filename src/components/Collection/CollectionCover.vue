@@ -19,7 +19,6 @@
  - along with this program. If not, see <http://www.gnu.org/licenses/>.
  -
  -->
-
 <template>
 	<li>
 		<router-link class="collection-cover" :to="link">
@@ -42,12 +41,7 @@
 		</router-link>
 	</li>
 </template>
-
 <script>
-
-import { mapGetters } from 'vuex'
-// import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
-// import AccountMultiple from 'vue-material-design-icons/AccountMultiple.vue'
 import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
 
 export default {
@@ -71,16 +65,8 @@ export default {
 			required: true,
 		},
 	},
-
-	computed: {
-		...mapGetters([
-			'files',
-			'albums',
-		]),
-	},
 }
 </script>
-
 <style lang="scss" scoped>
 .collection-cover {
 	display: flex;

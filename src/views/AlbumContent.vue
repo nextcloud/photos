@@ -25,22 +25,34 @@
 			ref="collectionContent"
 			:collection="album"
 			:collection-file-ids="albumFileIds"
-			:loading="loadingAlbums || loadingFiles"
-			:error="errorFetchingAlbums || errorFetchingFiles">
+			:loading="loadingCollection || loadingCollectionFiles"
+			:error="errorFetchingCollection || errorFetchingCollectionFiles">
 			<!-- Header -->
 			<HeaderNavigation key="navigation"
 				slot="header"
-				slot-scope="{selectedFileIds}"
-				:loading="loadingFiles"
+				slot-scope="{selectedFileIds, resetSelection}"
+				:class="{'photos-navigation--uploading': uploader.queue?.length > 0}"
+				:loading="loadingCollectionFiles"
 				:params="{ albumName }"
 				:path="'/' + albumName"
 				:title="albumName"
 				@refresh="fetchAlbumContent">
-				<div v-if="album.location !== ''" slot="subtitle" class="album__location">
+				<div v-if="album !== undefined && album.location !== ''" slot="subtitle" class="album__location">
 					<MapMarker />{{ album.location }}
 				</div>
-				<template v-if="album !== undefined"
-					slot="right">
+
+				<template slot="default">
+					<NcButton v-if="selectedFileIds.length > 0"
+						:aria-label="t('photos', 'Unselect all')"
+						@click="resetSelection">
+						<template #icon>
+							<Close />
+						</template>
+						{{ t('photos', 'Unselect all') }}
+					</NcButton>
+				</template>
+
+				<template v-if="album !== undefined" slot="right">
 					<UploadPicker v-if="album.nbItems !== 0"
 						:accept="allowedMimes"
 						:context="uploadContext"
@@ -98,9 +110,9 @@
 			</HeaderNavigation>
 
 			<!-- No content -->
-			<NcEmptyContent v-if="album !== undefined && album.nbItems === 0 && !(loadingFiles || loadingAlbums)"
+			<NcEmptyContent v-if="album !== undefined && album.nbItems === 0 && !(loadingCollectionFiles || loadingCollection)"
 				slot="empty-content"
-				:title="t('photos', 'This album does not have any photos or videos yet!')"
+				:name="t('photos', 'This album does not have any photos or videos yet!')"
 				class="album__empty">
 				<ImagePlus slot="icon" />
 
@@ -117,19 +129,19 @@
 
 		<NcModal v-if="showAddPhotosModal"
 			size="large"
-			:title="t('photos', 'Add photos to the album')"
+			:name="t('photos', 'Add photos to {albumName}', {albumName: albumName})"
 			@close="showAddPhotosModal = false">
-			<FilesPicker :destination="album.basename"
+			<FilesPicker v-if="album !== undefined"
+				:destination="album.basename"
 				:blacklist-ids="albumFileIds"
 				@files-picked="handleFilesPicked" />
 		</NcModal>
 
-		<NcModal v-if="showManageCollaboratorView"
-			:title="t('photos', 'Manage collaborators')"
+		<NcModal v-if="showManageCollaboratorView && album !== undefined"
+			:name="t('photos', 'Manage collaborators')"
 			@close="showManageCollaboratorView = false">
 			<CollaboratorsSelectionForm :album-name="album.basename"
-				:collaborators="album.collaborators"
-				:public-link="album.publicLink">
+				:collaborators="album.collaborators">
 				<template slot-scope="{collaborators}">
 					<NcButton :aria-label="t('photos', 'Save collaborators for this album.')"
 						type="primary"
@@ -145,7 +157,7 @@
 		</NcModal>
 
 		<NcModal v-if="showEditAlbumForm"
-			:title="t('photos', 'Edit album details')"
+			:name="t('photos', 'Edit album details')"
 			@close="showEditAlbumForm = false">
 			<AlbumForm :album="album" @done="redirectToNewName" />
 		</NcModal>
@@ -153,11 +165,13 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 import { addNewFileMenuEntry, removeNewFileMenuEntry } from '@nextcloud/files'
 import { getCurrentUser } from '@nextcloud/auth'
-import { mapActions, mapGetters } from 'vuex'
 import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionSeparator, NcLoadingIcon, isMobile } from '@nextcloud/vue'
-import { UploadPicker } from '@nextcloud/upload'
+import { UploadPicker, getUploader } from '@nextcloud/upload'
+import { translate } from '@nextcloud/l10n'
 import debounce from 'debounce'
 
 import Close from 'vue-material-design-icons/Close.vue'
@@ -171,9 +185,8 @@ import Plus from 'vue-material-design-icons/Plus.vue'
 import PlusSvg from '@mdi/svg/svg/plus.svg'
 import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
 
-import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
-import FetchAlbumsMixin from '../mixins/FetchAlbumsMixin.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
+import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
 import UserConfig from '../mixins/UserConfig.js'
 
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
@@ -184,10 +197,7 @@ import CollectionContent from '../components/Collection/CollectionContent.vue'
 import FilesPicker from '../components/FilesPicker.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 
-import { genFileInfo } from '../utils/fileUtils.js'
 import allowedMimes from '../services/AllowedMimes.js'
-import client from '../services/DavClient.js'
-import DavRequest from '../services/DavRequest.js'
 import logger from '../services/logger.js'
 
 export default {
@@ -220,8 +230,7 @@ export default {
 	},
 
 	mixins: [
-		AbortControllerMixin,
-		FetchAlbumsMixin,
+		FetchCollectionContentMixin,
 		FetchFilesMixin,
 		isMobile,
 		UserConfig,
@@ -243,6 +252,9 @@ export default {
 			showEditAlbumForm: false,
 
 			loadingAddCollaborators: false,
+
+			uploader: getUploader(),
+
 			newFileMenuEntry: {
 				id: 'album-add',
 				displayName: t('photos', 'Add photos to this album'),
@@ -257,22 +269,18 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'albumsFiles',
-		]),
-
 		/**
-		 * @return {object} The album information for the current albumName.
+		 * @return {import('../store/albums.js').Album|undefined} The album information for the current albumName.
 		 */
 		album() {
-			return this.albums[this.albumName] || {}
+			return this.$store.getters.getAlbum(this.albumName)
 		},
 
 		/**
 		 * @return {string[]} The list of files for the current albumName.
 		 */
 		albumFileIds() {
-			return this.albumsFiles[this.albumName] || []
+			return this.$store.getters.getAlbumFiles(this.albumName)
 		},
 
 		/**
@@ -287,6 +295,8 @@ export default {
 		 * We're uploading to the album folder, and the backend handle
 		 * the writing to the default location as well as the album update.
 		 * The context is also used for the NewFileMenu.
+		 *
+		 * @return {Album&{route: string, root: string}}
 		 */
 		uploadContext() {
 			return {
@@ -295,17 +305,17 @@ export default {
 				root: `dav/photos/${getCurrentUser()?.uid}/albums`,
 			}
 		},
-	},
 
-	watch: {
-		album(newAlbum, oldAlbum) {
-			if (newAlbum.filename !== oldAlbum.filename) {
-				this.fetchAlbumContent()
-			}
+		/**
+		 * @return {string} The album's filename based on its name. Useful to fetch the location information and content.
+		 */
+		albumFileName() {
+			return this.$store.getters.getAlbumName(this.albumName)
 		},
 	},
 
-	mounted() {
+	async mounted() {
+		this.fetchAlbum()
 		this.fetchAlbumContent()
 		addNewFileMenuEntry(this.newFileMenuEntry)
 	},
@@ -316,64 +326,21 @@ export default {
 
 	methods: {
 		...mapActions([
-			'appendFiles',
-			'deleteAlbum',
-			'addFilesToAlbum',
-			'removeFilesFromAlbum',
-			'updateAlbum',
+			'addFilesToCollection',
+			'removeFilesFromCollection',
+			'deleteCollection',
+			'updateCollection',
 		]),
 
+		async fetchAlbum() {
+			await this.fetchCollection(
+				this.albumFileName,
+				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />']
+			)
+		},
+
 		async fetchAlbumContent() {
-			if (this.loadingFiles || this.showEditAlbumForm) {
-				return []
-			}
-
-			const fetchSemaphoreSymbol = await this.fetchSemaphore.acquire()
-
-			try {
-				this.errorFetchingFiles = null
-				this.loadingFiles = true
-
-				const response = await client.getDirectoryContents(
-					`/photos/${getCurrentUser()?.uid}/albums/${this.albumName}`,
-					{
-						data: DavRequest,
-						details: true,
-						signal: this.abortController.signal,
-					}
-				)
-
-				// Gen files info and filtering invalid files
-				const fetchedFiles = response.data
-					.map(file => genFileInfo(file))
-					.filter(file => file.fileid)
-
-				const fileIds = fetchedFiles
-					.map(file => file.fileid.toString())
-
-				this.appendFiles(fetchedFiles)
-
-				if (fetchedFiles.length > 0) {
-					await this.$store.commit('setAlbumFiles', { albumName: this.albumName, fileIds })
-				}
-
-				logger.debug(`[AlbumContent] Fetched ${fileIds.length} new files: `, fileIds)
-			} catch (error) {
-				if (error.response?.status === 404) {
-					this.errorFetchingFiles = 404
-				} else if (error.code === 'ERR_CANCELED') {
-					return
-				} else {
-					this.errorFetchingFiles = error
-				}
-
-				logger.error('[AlbumContent] Error fetching album files', { error })
-			} finally {
-				this.loadingFiles = false
-				this.fetchSemaphore.release(fetchSemaphoreSymbol)
-			}
-
-			return []
+			await this.fetchCollectionFiles(this.albumFileName)
 		},
 
 		redirectToNewName({ album }) {
@@ -386,18 +353,18 @@ export default {
 
 		async handleFilesPicked(fileIds) {
 			this.showAddPhotosModal = false
-			await this.addFilesToAlbum({ albumName: this.albumName, fileIdsToAdd: fileIds })
+			await this.addFilesToCollection({ collectionFileName: this.album.filename, fileIdsToAdd: fileIds })
 			// Re-fetch album content to have the proper filenames.
 			await this.fetchAlbumContent()
 		},
 
 		async handleRemoveFilesFromAlbum(fileIds) {
 			this.$refs.collectionContent.onUncheckFiles(fileIds)
-			await this.removeFilesFromAlbum({ albumName: this.albumName, fileIdsToRemove: fileIds })
+			await this.removeFilesFromCollection({ collectionFileName: this.album.filename, fileIdsToRemove: fileIds })
 		},
 
 		async handleDeleteAlbum() {
-			await this.deleteAlbum({ albumName: this.albumName })
+			await this.deleteCollection({ collectionFileName: this.album.filename })
 			this.$router.push('/albums')
 		},
 
@@ -405,9 +372,9 @@ export default {
 			try {
 				this.loadingAddCollaborators = true
 				this.showManageCollaboratorView = false
-				await this.updateAlbum({ albumName: this.albumName, properties: { collaborators } })
+				await this.updateCollection({ collectionFileName: this.album.filename, properties: { collaborators } })
 			} catch (error) {
-				logger.error(error)
+				logger.error('Error while setting album collaborators', { error })
 			} finally {
 				this.loadingAddCollaborators = false
 			}
@@ -421,6 +388,8 @@ export default {
 		onUpload: debounce(function() {
 			this.fetchAlbumContent()
 		}, 500),
+
+		t: translate,
 	},
 }
 </script>
@@ -440,6 +409,28 @@ export default {
 		margin-left: -4px;
 		display: flex;
 		color: var(--color-text-lighter);
+	}
+}
+
+.photos-navigation {
+	position: relative;
+	// Add space at the bottom for the progress bar.
+	&--uploading {
+		margin-bottom: 30px;
+	}
+}
+
+:deep(.upload-picker) {
+	.upload-picker__progress {
+		position: absolute;
+		bottom: -30px;
+		left: 64px;
+		margin: 0;
+	}
+	.upload-picker__cancel {
+		position: absolute;
+		bottom: -24px;
+		right: 50px;
 	}
 }
 </style>

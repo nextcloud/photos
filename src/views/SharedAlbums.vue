@@ -21,14 +21,14 @@
  -->
 <template>
 	<CollectionsList :collections="sharedAlbums"
-		:loading="loadingSharedAlbums"
-		:error="errorFetchingSharedAlbums"
+		:loading="loadingCollections"
+		:error="errorFetchingCollections"
 		class="albums-list">
 		<HeaderNavigation key="navigation"
 			slot="header"
-			:loading="loadingSharedAlbums"
-			:title="t('photos', 'Shared albums')"
-			:root-title="t('photos', 'Shared albums')"
+			:loading="loadingCollections"
+			:title="t('photos', 'Collaborative albums')"
+			:root-title="t('photos', 'Collaborative albums')"
 			@refresh="fetchSharedAlbums" />
 
 		<CollectionCover :key="collection.basename"
@@ -48,7 +48,7 @@
 			</div>
 		</CollectionCover>
 
-		<NcEmptyContent slot="empty-collections-list" :title="t('photos', 'There is no album yet!')">
+		<NcEmptyContent slot="empty-collections-list" :name="t('photos', 'There is no album yet!')">
 			<FolderMultipleImage slot="icon" />
 		</NcEmptyContent>
 	</CollectionsList>
@@ -59,12 +59,13 @@ import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.v
 
 import { generateUrl } from '@nextcloud/router'
 import { NcEmptyContent, NcUserBubble } from '@nextcloud/vue'
+import { translate, translatePlural } from '@nextcloud/l10n'
+import { getCurrentUser } from '@nextcloud/auth'
 
-import FetchSharedAlbumsMixin from '../mixins/FetchSharedAlbumsMixin.js'
 import CollectionsList from '../components/Collection/CollectionsList.vue'
 import CollectionCover from '../components/Collection/CollectionCover.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-import { translate, translatePlural } from '@nextcloud/l10n'
+import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
 
 export default {
 	name: 'SharedAlbums',
@@ -100,10 +101,30 @@ export default {
 	},
 
 	mixins: [
-		FetchSharedAlbumsMixin,
+		FetchCollectionsMixin,
 	],
 
+	computed: {
+		/**
+		 * @return {import('../services/Albums').IndexedAlbums}
+		 */
+		sharedAlbums() {
+			return this.$store.getters.sharedAlbums
+		},
+	},
+
+	async beforeMount() {
+		this.fetchSharedAlbums()
+	},
+
 	methods: {
+		fetchSharedAlbums() {
+			this.fetchCollections(
+				`/photos/${getCurrentUser()?.uid}/sharedalbums`,
+				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />']
+			)
+		},
+
 		t: translate,
 		n: translatePlural,
 	},
