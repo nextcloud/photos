@@ -92,7 +92,7 @@ describe('Manage shared albums', () => {
 		})
 	})
 
-	context('Download files from a shared album', () => {
+	xcontext('Download files from a shared album', () => {
 		before(() => {
 			cy.login(alice)
 			cy.visit('apps/photos/albums')
@@ -105,21 +105,21 @@ describe('Manage shared albums', () => {
 			addFilesToAlbumFromAlbum('shared_album_test2', [0, 1, 2])
 		})
 
-		xit('Download a file from a shared album', () => {
+		it('Download a file from a shared album', () => {
 			goToSharedAlbum('shared_album_test2')
 			selectMedia([0])
 			downloadSelection()
 			selectMedia([0])
 		})
 
-		xit('Download multiple files from a shared album', () => {
+		it('Download multiple files from a shared album', () => {
 			goToSharedAlbum('shared_album_test2')
 			selectMedia([1, 2])
 			downloadSelection()
 			selectMedia([1, 2])
 		})
 
-		xit('Download all files from a shared album', () => {
+		it('Download all files from a shared album', () => {
 			goToSharedAlbum('shared_album_test2')
 			downloadAllFiles()
 		})
