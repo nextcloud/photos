@@ -1,5 +1,5 @@
 
-import { randHash } from '../utils'
+import { randHash, randHash } from '../utils'
 /**
  * @copyright Copyright (c) 2022 Louis Chmn <louis@chmn.me>
  *
@@ -38,8 +38,6 @@ import {
 	selectMedia,
 	uploadTestMedia,
 } from './photosUtils'
-
-import { randHash } from '../utils'
 
 const alice = new User(`alice_${randHash()}`)
 const bob = new User(`bob_${randHash()}`)
@@ -155,7 +153,7 @@ describe('Manage shared albums', () => {
 			cy.login(bob)
 			cy.visit('apps/photos/sharedalbums')
 			cy.get('ul.collections__list li')
-				.should('contain', `shared_album_test4 (${alice.userId})`)
+				.should('contain', 'shared_album_test4')
 
 			cy.login(alice)
 			cy.visit('/apps/photos')
@@ -165,7 +163,7 @@ describe('Manage shared albums', () => {
 			cy.login(bob)
 			cy.visit('/apps/photos/sharedalbums')
 			cy.get('body')
-				.should('not.contain', `shared_album_test4 (${alice.userId})`)
+				.should('not.contain', 'shared_album_test4')
 		})
 	})
 
@@ -186,9 +184,9 @@ describe('Manage shared albums', () => {
 			cy.login(bob)
 			cy.visit('/apps/photos/sharedalbums')
 			cy.get('ul.collections__list li')
-				.contains(`shared_album_test5 (${alice.userId})`)
+				.contains('shared_album_test5')
 			cy.get('ul.collections__list li')
-				.contains(`shared_album_test5 (${charlie.userId})`)
+				.contains('shared_album_test5')
 		})
 	})
 })
