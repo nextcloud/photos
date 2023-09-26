@@ -120,7 +120,7 @@ __webpack_require__.r(__webpack_exports__);
       if (lastPhoto === -1) {
         return '';
       }
-      return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_2__.generateUrl)("/apps/photos/api/v1/preview/".concat(lastPhoto, "?x=", 512, "&y=", 512));
+      return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_2__.generateUrl)(`/apps/photos/api/v1/preview/${lastPhoto}?x=${512}&y=${512}`);
     }
   },
   mixins: [_mixins_FetchAlbumsMixin_js__WEBPACK_IMPORTED_MODULE_4__["default"]],
@@ -135,7 +135,7 @@ __webpack_require__.r(__webpack_exports__);
         album
       } = _ref;
       this.showAlbumCreationForm = false;
-      this.$router.push("albums/".concat(album.basename));
+      this.$router.push(`albums/${album.basename}`);
     }
   }
 });
@@ -485,4 +485,4 @@ render._withStripped = true
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_views_Albums_vue.js.map?v=1b9194103eb696182e04
+//# sourceMappingURL=photos-src_views_Albums_vue.js.map?v=13c384dd9e43008e32e1

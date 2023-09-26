@@ -98,7 +98,7 @@ __webpack_require__.r(__webpack_exports__);
       if (!this.cover) {
         return '';
       }
-      return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_0__.generateUrl)("/apps/photos/api/v1/preview/".concat(this.cover.fileid, "?x=", 512, "&y=", 512));
+      return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_0__.generateUrl)(`/apps/photos/api/v1/preview/${this.cover.fileid}?x=${512}&y=${512}`);
     },
     cover() {
       return this.getFaceCover(this.face.basename);
@@ -267,9 +267,9 @@ __webpack_require__.r(__webpack_exports__);
         width: '100%',
         // we translate the image so that the center of the detected face is in the center of the --photos-face-width box
         // and add the zoom
-        transform: "translate(calc( var(--photos-face-width)/2 - ".concat(horizontalCenterOfFace, "% ), calc( var(--photos-face-width)/2 - ").concat(verticalCenterOfFace, "% )) scale(").concat(zoom, ")"),
+        transform: `translate(calc( var(--photos-face-width)/2 - ${horizontalCenterOfFace}% ), calc( var(--photos-face-width)/2 - ${verticalCenterOfFace}% )) scale(${zoom})`,
         // this is necessary for the zoom to zoom toward the center of the face
-        transformOrigin: "".concat(horizontalCenterOfFace, "% ").concat(verticalCenterOfFace, "%")
+        transformOrigin: `${horizontalCenterOfFace}% ${verticalCenterOfFace}%`
       };
     }
   }
@@ -355,12 +355,11 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
       try {
-        var _getCurrentUser;
         this.loadingFaces = true;
         this.errorFetchingFaces = null;
         const {
           data: faces
-        } = await _services_DavClient_js__WEBPACK_IMPORTED_MODULE_2__["default"].getDirectoryContents("/recognize/".concat((_getCurrentUser = (0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__.getCurrentUser)()) === null || _getCurrentUser === void 0 ? void 0 : _getCurrentUser.uid, "/faces/"), {
+        } = await _services_DavClient_js__WEBPACK_IMPORTED_MODULE_2__["default"].getDirectoryContents(`/recognize/${(0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__.getCurrentUser)()?.uid}/faces/`, {
           data: _services_DavRequest_js__WEBPACK_IMPORTED_MODULE_4__["default"],
           details: true,
           signal: this.abortController.signal
@@ -368,7 +367,7 @@ __webpack_require__.r(__webpack_exports__);
         this.$store.dispatch('addFaces', {
           faces
         });
-        _services_logger_js__WEBPACK_IMPORTED_MODULE_3__["default"].debug("[FetchFacesMixin] Fetched ".concat(faces.length, " new faces: "), faces);
+        _services_logger_js__WEBPACK_IMPORTED_MODULE_3__["default"].debug(`[FetchFacesMixin] Fetched ${faces.length} new faces: `, faces);
       } catch (error) {
         if (error.response && error.response.status) {
           if (error.response.status === 404) {
@@ -393,19 +392,18 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
       try {
-        var _getCurrentUser2;
         this.errorFetchingFiles = null;
         this.loadingFiles = true;
         let {
           data: fetchedFiles
-        } = await _services_DavClient_js__WEBPACK_IMPORTED_MODULE_2__["default"].getDirectoryContents("/recognize/".concat((_getCurrentUser2 = (0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__.getCurrentUser)()) === null || _getCurrentUser2 === void 0 ? void 0 : _getCurrentUser2.uid, "/faces/").concat(faceName), {
+        } = await _services_DavClient_js__WEBPACK_IMPORTED_MODULE_2__["default"].getDirectoryContents(`/recognize/${(0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__.getCurrentUser)()?.uid}/faces/${faceName}`, {
           data: _services_DavRequest_js__WEBPACK_IMPORTED_MODULE_4__["default"],
           details: true,
           signal: this.abortController.signal
         });
         fetchedFiles = fetchedFiles.map(file => (0,_utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_5__.genFileInfo)(file)).map(file => ({
           ...file,
-          filename: he__WEBPACK_IMPORTED_MODULE_7___default().decode(file.realpath).replace("/".concat((0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__.getCurrentUser)().uid, "/files"), "/files/".concat((0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__.getCurrentUser)().uid))
+          filename: he__WEBPACK_IMPORTED_MODULE_7___default().decode(file.realpath).replace(`/${(0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__.getCurrentUser)().uid}/files`, `/files/${(0,_nextcloud_auth__WEBPACK_IMPORTED_MODULE_1__.getCurrentUser)().uid}`)
         })).map(file => ({
           ...file,
           faceDetections: JSON.parse(he__WEBPACK_IMPORTED_MODULE_7___default().decode(file.faceDetections))
@@ -418,7 +416,7 @@ __webpack_require__.r(__webpack_exports__);
             fileIdsToAdd: fileIds
           });
         }
-        _services_logger_js__WEBPACK_IMPORTED_MODULE_3__["default"].debug("[FetchFacesMixin] Fetched ".concat(fileIds.length, " new files: "), fileIds);
+        _services_logger_js__WEBPACK_IMPORTED_MODULE_3__["default"].debug(`[FetchFacesMixin] Fetched ${fileIds.length} new files: `, fileIds);
       } catch (error) {
         if (error.response && error.response.status) {
           if (error.response.status === 404) {
@@ -676,4 +674,4 @@ render._withStripped = true
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_components_FaceCover_vue.js.map?v=a2d5fdefc2f69eb50ae4
+//# sourceMappingURL=photos-src_components_FaceCover_vue.js.map?v=cfe0970159bffacc2d50

@@ -234,8 +234,7 @@ __webpack_require__.r(__webpack_exports__);
       for (const fileId of this.fetchedFileIds) {
         const file = this.files[fileId];
         if (file) {
-          var _filesByMonth$file$mo;
-          filesByMonth[file.month] = (_filesByMonth$file$mo = filesByMonth[file.month]) !== null && _filesByMonth$file$mo !== void 0 ? _filesByMonth$file$mo : [];
+          filesByMonth[file.month] = filesByMonth[file.month] ?? [];
           filesByMonth[file.month].push(file.fileid);
         }
       }
@@ -753,4 +752,4 @@ render._withStripped = true
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_components_FilesPicker_vue.js.map?v=9047f295c55434c4a0b4
+//# sourceMappingURL=photos-src_components_FilesPicker_vue.js.map?v=3dd7a7a942b88419482d

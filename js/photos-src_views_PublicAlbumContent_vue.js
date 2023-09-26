@@ -220,14 +220,13 @@ const publicRemote = remote;
       try {
         this.loadingAlbum = true;
         this.errorFetchingAlbum = null;
-        const album = await (0,_services_Albums_js__WEBPACK_IMPORTED_MODULE_11__.fetchAlbum)("/photospublic/".concat(this.token), this.abortController.signal, '<nc:original-name />', this.publicClient);
+        const album = await (0,_services_Albums_js__WEBPACK_IMPORTED_MODULE_11__.fetchAlbum)(`/photospublic/${this.token}`, this.abortController.signal, '<nc:original-name />', this.publicClient);
         this.addPublicAlbums({
           collections: [album]
         });
         this.albumOriginalName = album.originalName;
       } catch (error) {
-        var _error$response;
-        if (((_error$response = error.response) === null || _error$response === void 0 ? void 0 : _error$response.status) === 404) {
+        if (error.response?.status === 404) {
           this.errorFetchingAlbum = 404;
           return;
         }
@@ -250,11 +249,11 @@ const publicRemote = remote;
         this.errorFetchingFiles = null;
         this.loadingFiles = true;
         this.semaphoreSymbol = semaphoreSymbol;
-        const fetchedFiles = await (0,_services_Albums_js__WEBPACK_IMPORTED_MODULE_11__.fetchAlbumContent)("/photospublic/".concat(this.token), this.abortController.signal, this.publicClient);
+        const fetchedFiles = await (0,_services_Albums_js__WEBPACK_IMPORTED_MODULE_11__.fetchAlbumContent)(`/photospublic/${this.token}`, this.abortController.signal, this.publicClient);
         const fileIds = fetchedFiles.map(file => file.fileid.toString());
         fetchedFiles.forEach(file => {
           // Use custom preview URL to avoid authentication prompt
-          file.previewUrl = (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_6__.generateUrl)("/apps/photos/api/v1/publicPreview/".concat(file.fileid, "?x=2048&y=2048&token=").concat(this.token));
+          file.previewUrl = (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_6__.generateUrl)(`/apps/photos/api/v1/publicPreview/${file.fileid}?x=2048&y=2048&token=${this.token}`);
           // Disable use of generic file previews for public albums - for older versions of the Viewer app
           file.hasPreview = false;
         });
@@ -267,8 +266,7 @@ const publicRemote = remote;
         }
         return fetchedFiles;
       } catch (error) {
-        var _error$response2;
-        if (((_error$response2 = error.response) === null || _error$response2 === void 0 ? void 0 : _error$response2.status) === 404) {
+        if (error.response?.status === 404) {
           this.errorFetchingFiles = 404;
           return [];
         }
@@ -371,7 +369,20 @@ __webpack_require__.r(__webpack_exports__);
  */
 function getDavRequest() {
   let extraProps = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-  return "<?xml version=\"1.0\"?>\n\t\t\t<d:propfind xmlns:d=\"DAV:\"\n\t\t\t\txmlns:oc=\"http://owncloud.org/ns\"\n\t\t\t\txmlns:nc=\"http://nextcloud.org/ns\"\n\t\t\t\txmlns:ocs=\"http://open-collaboration-services.org/ns\">\n\t\t\t\t<d:prop>\n\t\t\t\t\t<nc:last-photo />\n\t\t\t\t\t<nc:nbItems />\n\t\t\t\t\t<nc:location />\n\t\t\t\t\t<nc:dateRange />\n\t\t\t\t\t<nc:collaborators />\n\t\t\t\t\t".concat(extraProps, "\n\t\t\t\t</d:prop>\n\t\t\t</d:propfind>");
+  return `<?xml version="1.0"?>
+			<d:propfind xmlns:d="DAV:"
+				xmlns:oc="http://owncloud.org/ns"
+				xmlns:nc="http://nextcloud.org/ns"
+				xmlns:ocs="http://open-collaboration-services.org/ns">
+				<d:prop>
+					<nc:last-photo />
+					<nc:nbItems />
+					<nc:location />
+					<nc:dateRange />
+					<nc:collaborators />
+					${extraProps}
+				</d:prop>
+			</d:propfind>`;
 }
 
 /**
@@ -420,7 +431,7 @@ async function fetchAlbums(path, options) {
       details: true,
       ...options
     });
-    _services_logger_js__WEBPACK_IMPORTED_MODULE_3__["default"].debug("[Albums] Fetched ".concat(response.data.length, " albums: "), {
+    _services_logger_js__WEBPACK_IMPORTED_MODULE_3__["default"].debug(`[Albums] Fetched ${response.data.length} albums: `, {
       data: response.data
     });
     return response.data.filter(album => album.filename !== path).map(formatAlbum);
@@ -438,7 +449,6 @@ async function fetchAlbums(path, options) {
  * @return {Album}
  */
 function formatAlbum(album) {
-  var _album$dateRange$repl, _album$dateRange;
   // Ensure that we have a proper collaborators array.
   if (album.props.collaborators === '') {
     album.props.collaborators = [];
@@ -454,7 +464,7 @@ function formatAlbum(album) {
   album = (0,_utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_5__.genFileInfo)(album);
 
   // Compute date range label.
-  const dateRange = JSON.parse((_album$dateRange$repl = (_album$dateRange = album.dateRange) === null || _album$dateRange === void 0 ? void 0 : _album$dateRange.replace(/&quot;/g, '"')) !== null && _album$dateRange$repl !== void 0 ? _album$dateRange$repl : '{}');
+  const dateRange = JSON.parse(album.dateRange?.replace(/&quot;/g, '"') ?? '{}');
   if (dateRange.start === null) {
     dateRange.start = _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0___default()().unix();
     dateRange.end = _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0___default()().unix();
@@ -487,7 +497,7 @@ async function fetchAlbumContent(path, options) {
       ...options
     });
     const fetchedFiles = response.data.map(file => (0,_utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_5__.genFileInfo)(file)).filter(file => file.fileid);
-    _services_logger_js__WEBPACK_IMPORTED_MODULE_3__["default"].debug("[Albums] Fetched ".concat(fetchedFiles.length, " new files: "), fetchedFiles);
+    _services_logger_js__WEBPACK_IMPORTED_MODULE_3__["default"].debug(`[Albums] Fetched ${fetchedFiles.length} new files: `, fetchedFiles);
     return fetchedFiles;
   } catch (error) {
     if (error.code === 'ERR_CANCELED') {
@@ -1184,4 +1194,4 @@ render._withStripped = true
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_views_PublicAlbumContent_vue.js.map?v=58c24be4ce79e632dc2e
+//# sourceMappingURL=photos-src_views_PublicAlbumContent_vue.js.map?v=b598a944a405d93cbd9e

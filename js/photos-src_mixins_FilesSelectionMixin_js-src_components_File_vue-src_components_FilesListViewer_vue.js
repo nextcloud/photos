@@ -135,7 +135,7 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     /** @return {string} */
     ariaDescription() {
-      return "image-description-".concat(this.file.fileid);
+      return `image-description-${this.file.fileid}`;
     },
     /** @return {string} */
     ariaLabel() {
@@ -220,9 +220,9 @@ __webpack_require__.r(__webpack_exports__);
     getItemURL(size) {
       const token = this.$route.params.token;
       if (token) {
-        return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_2__.generateUrl)("/apps/photos/api/v1/publicPreview/".concat(this.file.fileid, "?etag=").concat(this.decodedEtag, "&x=").concat(size, "&y=").concat(size, "&token=").concat(token));
+        return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_2__.generateUrl)(`/apps/photos/api/v1/publicPreview/${this.file.fileid}?etag=${this.decodedEtag}&x=${size}&y=${size}&token=${token}`);
       } else {
-        return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_2__.generateUrl)("/apps/photos/api/v1/preview/".concat(this.file.fileid, "?etag=").concat(this.decodedEtag, "&x=").concat(size, "&y=").concat(size));
+        return (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_2__.generateUrl)(`/apps/photos/api/v1/preview/${this.file.fileid}?etag=${this.decodedEtag}&x=${size}&y=${size}`);
       }
     },
     releaseSemaphore() {
@@ -431,8 +431,7 @@ __webpack_require__.r(__webpack_exports__);
      * @return {boolean} The list of items to pass to TiledLayout.
      */
     showPlaceholders() {
-      var _this$fileIds, _this$sections;
-      return this.loading && (((_this$fileIds = this.fileIds) === null || _this$fileIds === void 0 ? void 0 : _this$fileIds.length) === 0 || ((_this$sections = this.sections) === null || _this$sections === void 0 ? void 0 : _this$sections.length) === 0);
+      return this.loading && (this.fileIds?.length === 0 || this.sections?.length === 0);
     },
     /**
      * @return {object[]} The list of items to pass to TiledLayout.
@@ -456,8 +455,7 @@ __webpack_require__.r(__webpack_exports__);
       return [];
     },
     showLoader() {
-      var _this$fileIds2, _this$sections2;
-      return this.loading && (((_this$fileIds2 = this.fileIds) === null || _this$fileIds2 === void 0 ? void 0 : _this$fileIds2.length) !== 0 || ((_this$sections2 = this.sections) === null || _this$sections2 === void 0 ? void 0 : _this$sections2.length) !== 0);
+      return this.loading && (this.fileIds?.length !== 0 || this.sections?.length !== 0);
     }
   },
   mounted() {
@@ -777,8 +775,8 @@ __webpack_require__.r(__webpack_exports__);
      */
     rowsContainerStyle() {
       return {
-        height: "".concat(this.rowsHeight, "px"),
-        paddingTop: "".concat(this.paddingTop, "px")
+        height: `${this.rowsHeight}px`,
+        paddingTop: `${this.paddingTop}px`
       };
     },
     /**
@@ -1219,7 +1217,25 @@ __webpack_require__.r(__webpack_exports__);
  */
 function getCollectionFilesDavRequest() {
   let extraProps = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  return "<?xml version=\"1.0\"?>\n\t\t\t<d:propfind xmlns:d=\"DAV:\"\n\t\t\t\txmlns:oc=\"http://owncloud.org/ns\"\n\t\t\t\txmlns:nc=\"http://nextcloud.org/ns\"\n\t\t\t\txmlns:ocs=\"http://open-collaboration-services.org/ns\">\n\t\t\t\t<d:prop>\n\t\t\t\t\t<d:getcontentlength />\n\t\t\t\t\t<d:getcontenttype />\n\t\t\t\t\t<d:getetag />\n\t\t\t\t\t<d:getlastmodified />\n\t\t\t\t\t<d:resourcetype />\n\t\t\t\t\t<nc:file-metadata-size />\n\t\t\t\t\t<nc:has-preview />\n\t\t\t\t\t<oc:favorite />\n\t\t\t\t\t<oc:fileid />\n\t\t\t\t\t<oc:permissions />\n\t\t\t\t\t".concat(extraProps.join(''), "\n\t\t\t\t</d:prop>\n\t\t\t</d:propfind>");
+  return `<?xml version="1.0"?>
+			<d:propfind xmlns:d="DAV:"
+				xmlns:oc="http://owncloud.org/ns"
+				xmlns:nc="http://nextcloud.org/ns"
+				xmlns:ocs="http://open-collaboration-services.org/ns">
+				<d:prop>
+					<d:getcontentlength />
+					<d:getcontenttype />
+					<d:getetag />
+					<d:getlastmodified />
+					<d:resourcetype />
+					<nc:file-metadata-size />
+					<nc:has-preview />
+					<oc:favorite />
+					<oc:fileid />
+					<oc:permissions />
+					${extraProps.join('')}
+				</d:prop>
+			</d:propfind>`;
 }
 
 /**
@@ -1265,7 +1281,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".file-container[data-v-ab80f8a8] {\n  background: var(--color-primary-light);\n  position: relative;\n  height: 100%;\n  width: 100%;\n  border: 2px solid var(--color-main-background);\n  box-sizing: border-box;\n}\n.file-container.selected[data-v-ab80f8a8]::after, .file-container[data-v-ab80f8a8]:focus-within::after {\n  position: absolute;\n  top: 0;\n  left: 0;\n  z-index: 2;\n  width: 100%;\n  height: 100%;\n  content: \"\";\n  outline: var(--color-primary) solid 4px;\n  outline-offset: -4px;\n  pointer-events: none;\n}\n.file-container .file[data-v-ab80f8a8] {\n  width: 100%;\n  height: 100%;\n  box-sizing: border-box;\n  outline: none;\n  display: flex;\n}\n.file-container .file__images[data-v-ab80f8a8] {\n  display: contents;\n}\n.file-container .file__images .video-icon[data-v-ab80f8a8] {\n  position: absolute;\n  top: 0px;\n  right: 0px;\n  width: 100%;\n  height: 100%;\n  z-index: 1;\n  opacity: 0.8;\n}\n.file-container .file__images .video-icon[data-v-ab80f8a8] :deep(.material-design-icon__svg) {\n  fill: var(--color-main-background);\n}\n.file-container .file__images img[data-v-ab80f8a8] {\n  width: 100%;\n  height: 100%;\n  object-fit: cover;\n  position: absolute;\n  color: transparent;\n}\n.file-container .file__images .loading-overlay[data-v-ab80f8a8] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  display: flex;\n  align-content: center;\n  align-items: center;\n  justify-content: center;\n}\n.file-container .file__images .loading-overlay svg[data-v-ab80f8a8] {\n  width: 70%;\n  height: 70%;\n}\n.file-container .file__hidden-description[data-v-ab80f8a8] {\n  position: absolute;\n  left: -10000px;\n  top: -10000px;\n  width: 1px;\n  height: 1px;\n  overflow: hidden;\n}\n.file-container .file__hidden-description.show[data-v-ab80f8a8] {\n  position: initial;\n  width: -webkit-fit-content;\n  width: -moz-fit-content;\n  width: fit-content;\n  height: -webkit-fit-content;\n  height: -moz-fit-content;\n  height: fit-content;\n}\n.file-container:hover .selection-checkbox[data-v-ab80f8a8], .file-container.selected .selection-checkbox[data-v-ab80f8a8], .file-container:focus-within .selection-checkbox[data-v-ab80f8a8] {\n  display: flex;\n}\n.file-container:hover .favorite-state[data-v-ab80f8a8], .file-container.selected .favorite-state[data-v-ab80f8a8], .file-container:focus-within .favorite-state[data-v-ab80f8a8] {\n  display: none;\n}\n.file-container .selection-checkbox[data-v-ab80f8a8] {\n  display: none;\n  position: absolute;\n  top: 8px;\n  right: min(22px, 50% - 7px);\n  z-index: 1;\n  width: -webkit-fit-content;\n  width: -moz-fit-content;\n  width: fit-content;\n}\n.file-container .selection-checkbox[data-v-ab80f8a8] :deep(.checkbox-radio-switch__label) {\n  padding: 10px;\n  box-sizing: border-box;\n}\n.file-container .selection-checkbox[data-v-ab80f8a8] :deep(.checkbox-radio-switch__label)::after {\n  content: \"\";\n  background: var(--color-primary-light);\n  width: 16px;\n  height: 16px;\n  position: absolute;\n  left: 14px;\n  z-index: -1;\n}\n.file-container .selection-checkbox :deep(.checkbox-radio-switch__label) .checkbox-radio-switch__icon[data-v-ab80f8a8] {\n  margin: 0;\n}\n.file-container .selection-checkbox .input-label[data-v-ab80f8a8] {\n  position: fixed;\n  z-index: -1;\n  top: -5000px;\n  left: -5000px;\n}\n.file-container .favorite-state[data-v-ab80f8a8] {\n  position: absolute;\n  top: 2px;\n  right: min(2px, 50% - 7px);\n}\n.file-container .favorite-state[data-v-ab80f8a8] :deep(.material-design-icon__svg) {\n  fill: #FC0;\n}\n.file-container .favorite-state :deep(.material-design-icon__svg) path[data-v-ab80f8a8] {\n  stroke: var(--color-primary-light);\n  stroke-width: 1px;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".file-container[data-v-ab80f8a8] {\n  background: var(--color-primary-light);\n  position: relative;\n  height: 100%;\n  width: 100%;\n  border: 2px solid var(--color-main-background);\n  box-sizing: border-box;\n}\n.file-container.selected[data-v-ab80f8a8]::after, .file-container[data-v-ab80f8a8]:focus-within::after {\n  position: absolute;\n  top: 0;\n  left: 0;\n  z-index: 2;\n  width: 100%;\n  height: 100%;\n  content: \"\";\n  outline: var(--color-primary) solid 4px;\n  outline-offset: -4px;\n  pointer-events: none;\n}\n.file-container .file[data-v-ab80f8a8] {\n  width: 100%;\n  height: 100%;\n  box-sizing: border-box;\n  outline: none;\n  display: flex;\n}\n.file-container .file__images[data-v-ab80f8a8] {\n  display: contents;\n}\n.file-container .file__images .video-icon[data-v-ab80f8a8] {\n  position: absolute;\n  top: 0px;\n  right: 0px;\n  width: 100%;\n  height: 100%;\n  z-index: 1;\n  opacity: 0.8;\n}\n.file-container .file__images .video-icon[data-v-ab80f8a8] :deep(.material-design-icon__svg) {\n  fill: var(--color-main-background);\n}\n.file-container .file__images img[data-v-ab80f8a8] {\n  width: 100%;\n  height: 100%;\n  object-fit: cover;\n  position: absolute;\n  color: transparent;\n}\n.file-container .file__images .loading-overlay[data-v-ab80f8a8] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  display: flex;\n  align-content: center;\n  align-items: center;\n  justify-content: center;\n}\n.file-container .file__images .loading-overlay svg[data-v-ab80f8a8] {\n  width: 70%;\n  height: 70%;\n}\n.file-container .file__hidden-description[data-v-ab80f8a8] {\n  position: absolute;\n  left: -10000px;\n  top: -10000px;\n  width: 1px;\n  height: 1px;\n  overflow: hidden;\n}\n.file-container .file__hidden-description.show[data-v-ab80f8a8] {\n  position: initial;\n  width: fit-content;\n  height: fit-content;\n}\n.file-container:hover .selection-checkbox[data-v-ab80f8a8], .file-container.selected .selection-checkbox[data-v-ab80f8a8], .file-container:focus-within .selection-checkbox[data-v-ab80f8a8] {\n  display: flex;\n}\n.file-container:hover .favorite-state[data-v-ab80f8a8], .file-container.selected .favorite-state[data-v-ab80f8a8], .file-container:focus-within .favorite-state[data-v-ab80f8a8] {\n  display: none;\n}\n.file-container .selection-checkbox[data-v-ab80f8a8] {\n  display: none;\n  position: absolute;\n  top: 8px;\n  right: min(22px, 50% - 7px);\n  z-index: 1;\n  width: fit-content;\n}\n.file-container .selection-checkbox[data-v-ab80f8a8] :deep(.checkbox-radio-switch__label) {\n  padding: 10px;\n  box-sizing: border-box;\n}\n.file-container .selection-checkbox[data-v-ab80f8a8] :deep(.checkbox-radio-switch__label)::after {\n  content: \"\";\n  background: var(--color-primary-light);\n  width: 16px;\n  height: 16px;\n  position: absolute;\n  left: 14px;\n  z-index: -1;\n}\n.file-container .selection-checkbox :deep(.checkbox-radio-switch__label) .checkbox-radio-switch__icon[data-v-ab80f8a8] {\n  margin: 0;\n}\n.file-container .selection-checkbox .input-label[data-v-ab80f8a8] {\n  position: fixed;\n  z-index: -1;\n  top: -5000px;\n  left: -5000px;\n}\n.file-container .favorite-state[data-v-ab80f8a8] {\n  position: absolute;\n  top: 2px;\n  right: min(2px, 50% - 7px);\n}\n.file-container .favorite-state[data-v-ab80f8a8] :deep(.material-design-icon__svg) {\n  fill: #FC0;\n}\n.file-container .favorite-state :deep(.material-design-icon__svg) path[data-v-ab80f8a8] {\n  stroke: var(--color-primary-light);\n  stroke-width: 1px;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1291,7 +1307,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".files-list-viewer[data-v-3ebf26b2] {\n  height: 100%;\n  position: relative;\n}\n.files-list-viewer__placeholder[data-v-3ebf26b2] {\n  background: var(--color-primary-light);\n  width: 100%;\n  height: 100%;\n  border: 2px solid var(--color-main-background);\n}\n.files-list-viewer .tiled-container[data-v-3ebf26b2] {\n  flex-basis: 0;\n}\n.files-list-viewer ul[data-v-3ebf26b2] {\n  display: flex;\n  flex-wrap: wrap;\n}\n.files-list-viewer ul li[data-v-3ebf26b2] {\n  flex-grow: 1;\n}\n.files-list-viewer__section-header[data-v-3ebf26b2] {\n  position: -webkit-sticky;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background: var(--color-main-background);\n}\n.files-list-viewer__loader[data-v-3ebf26b2] {\n  margin: 50px 0;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".files-list-viewer[data-v-3ebf26b2] {\n  height: 100%;\n  position: relative;\n}\n.files-list-viewer__placeholder[data-v-3ebf26b2] {\n  background: var(--color-primary-light);\n  width: 100%;\n  height: 100%;\n  border: 2px solid var(--color-main-background);\n}\n.files-list-viewer .tiled-container[data-v-3ebf26b2] {\n  flex-basis: 0;\n}\n.files-list-viewer ul[data-v-3ebf26b2] {\n  display: flex;\n  flex-wrap: wrap;\n}\n.files-list-viewer ul li[data-v-3ebf26b2] {\n  flex-grow: 1;\n}\n.files-list-viewer__section-header[data-v-3ebf26b2] {\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background: var(--color-main-background);\n}\n.files-list-viewer__loader[data-v-3ebf26b2] {\n  margin: 50px 0;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -2452,4 +2468,4 @@ module.exports = "<svg id=\"9af98f83-10c5-4067-bc84-20554b2827d8\" data-name=\"L
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_mixins_FilesSelectionMixin_js-src_components_File_vue-src_components_FilesListViewer_vue.js.map?v=0ee10150869bfa5a26ab
+//# sourceMappingURL=photos-src_mixins_FilesSelectionMixin_js-src_components_File_vue-src_components_FilesListViewer_vue.js.map?v=bfe86fb77cd815deb857
