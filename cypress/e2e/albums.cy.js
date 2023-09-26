@@ -114,8 +114,9 @@ describe('Manage albums', () => {
 		cy.get('[aria-label="Open actions menu"]').click()
 		cy.contains('Edit album details').click()
 		cy.get('form [name="name"]').clear().type('New name')
+	  cy.intercept({ times: 1, method: 'MOVE', url: '**/remote.php/dav/photos/*/albums/albums_test' }).as('renameRequest')
 		cy.contains('Save').click()
-
+		cy.wait('@renameRequest')
 		cy.reload()
 
 		cy.contains('New name')
