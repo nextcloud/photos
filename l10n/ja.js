@@ -40,6 +40,7 @@ OC.L10N.register(
     "Enable squared photos view" : "写真を矩形での表示を有効化",
     "Invalid location selected" : "選択した場所が無効",
     "View" : "表示",
+    "Unselect all" : "すべて選択解除",
     "Favorite" : "お気に入り",
     "Remove from favorites" : "お気に入りから削除",
     "This folder does not exist" : "このフォルダーは存在しません",
