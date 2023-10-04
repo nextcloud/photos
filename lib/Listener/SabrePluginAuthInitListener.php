@@ -30,6 +30,9 @@ use OCA\Photos\Sabre\PublicAlbumAuthBackend;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 
+/**
+ * @template-implements IEventListener<Event|SabrePluginAuthInitEvent>
+ */
 class SabrePluginAuthInitListener implements IEventListener {
 	private PublicAlbumAuthBackend $publicAlbumAuthBackend;
 
