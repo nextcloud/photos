@@ -76,6 +76,11 @@ class AlbumRoot implements ICollection, ICopyTarget {
 		$this->albumMapper->rename($this->album->getAlbum()->getId(), $name);
 	}
 
+	/**
+	 * @return (Folder|string)[]
+	 *
+	 * @psalm-return list{string, Folder}
+	 */
 	protected function getPhotosLocationInfo() {
 		$photosLocation = $this->userConfigService->getUserConfig('photosLocation');
 		$userFolder = $this->rootFolder->getUserFolder($this->userId);

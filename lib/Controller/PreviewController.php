@@ -129,7 +129,16 @@ class PreviewController extends Controller {
 	}
 
 
-	protected function getFileIdForAlbums($fileId, $albums) {
+	/**
+	 * @param (\OCA\Photos\Album\AlbumInfo)[] $albums
+	 *
+	 * @psalm-param array<\OCA\Photos\Album\AlbumInfo|mixed> $albums
+	 *
+	 * @return Node[]
+	 *
+	 * @psalm-return array<Node>
+	 */
+	protected function getFileIdForAlbums(int $fileId, array $albums): array {
 		foreach ($albums as $album) {
 			$albumFile = $this->albumMapper->getForAlbumIdAndFileId($album->getId(), $fileId);
 			$nodes = $this->rootFolder

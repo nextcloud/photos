@@ -40,6 +40,9 @@ class MapMediaToPlaceJob extends QueuedJob {
 		$this->mediaPlaceManager = $mediaPlaceManager;
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function run($argument) {
 		[$fileId] = $argument;
 

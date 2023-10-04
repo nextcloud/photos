@@ -47,6 +47,11 @@ class PublicAlbumRoot extends AlbumRoot {
 		throw new Forbidden('Not allowed to copy into a public album');
 	}
 
+	/**
+	 * @return (\OCP\Files\Folder|string)[]
+	 *
+	 * @psalm-return list{string, \OCP\Files\Folder}
+	 */
 	protected function getPhotosLocationInfo() {
 		$albumOwner = $this->album->getAlbum()->getUserId();
 		$photosLocation = $this->userConfigService->getConfigForUser($albumOwner, 'photosLocation');

@@ -71,6 +71,8 @@ class PublicAlbumAuthBackend implements BackendInterface {
 	 * WWW-Authenticate headers may already have been set, and you'll want to
 	 * append your own WWW-Authenticate header instead of overwriting the
 	 * existing one.
+	 *
+	 * @return void
 	 */
 	public function challenge(RequestInterface $request, ResponseInterface $response) {
 		// This is intended to be public - there is no need to set WWW-Authenticate header

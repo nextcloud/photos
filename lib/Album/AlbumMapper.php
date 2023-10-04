@@ -274,7 +274,7 @@ class AlbumMapper {
 	/**
 	 * Remove all files added by a user from an album.
 	 */
-	public function removeFilesForUser(int $albumId, string $userId) {
+	public function removeFilesForUser(int $albumId, string $userId): void {
 		// Remove all photos by this user from the album:
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('photos_albums_files')
@@ -421,7 +421,7 @@ class AlbumMapper {
 		$existingCollaborators = $this->getCollaborators($albumId);
 
 		// Different behavior if type is link to prevent creating multiple link.
-		function computeKey($c) {
+		function computeKey($c): string {
 			return ($c['type'] === AlbumMapper::TYPE_LINK ? '' : $c['id']).$c['type'];
 		}
 

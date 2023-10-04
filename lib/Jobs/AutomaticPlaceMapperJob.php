@@ -49,6 +49,9 @@ class AutomaticPlaceMapperJob extends TimedJob {
 		$this->setInterval(24 * 3600);
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function run($argument) {
 		$placeMappingDone = $this->config->getAppValue(Application::APP_ID, 'lastPlaceMappingDone', 'false');
 

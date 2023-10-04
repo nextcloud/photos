@@ -72,6 +72,9 @@ class PlacesHome implements ICollection {
 		throw new Forbidden('Not allowed to create files in this folder');
 	}
 
+	/**
+	 * @return never
+	 */
 	public function createDirectory($name) {
 		throw new Forbidden('Not allowed to create folder in this folder');
 	}

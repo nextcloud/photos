@@ -38,7 +38,7 @@ class CollectionPhoto {
 	) {
 	}
 
-	public function getName() {
+	public function getName(): string {
 		return $this->file->getFileId() . "-" . $this->file->getName();
 	}
 
@@ -49,7 +49,7 @@ class CollectionPhoto {
 		throw new Forbidden('Can\'t rename photos trough this api');
 	}
 
-	public function getLastModified() {
+	public function getLastModified(): int {
 		return $this->file->getMTime();
 	}
 
@@ -72,15 +72,15 @@ class CollectionPhoto {
 		return $this->file->getFileId();
 	}
 
-	public function getContentType() {
+	public function getContentType(): string {
 		return $this->file->getMimeType();
 	}
 
-	public function getETag() {
+	public function getETag(): string {
 		return $this->file->getEtag();
 	}
 
-	public function getSize() {
+	public function getSize(): int {
 		return $this->file->getSize();
 	}
 
