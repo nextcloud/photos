@@ -54,7 +54,7 @@
 		"@nextcloud/sharing": "^0.1.0",
 		"@nextcloud/upload": "^1.0.0-beta.8",
 		"@nextcloud/vue": "^7.3.0",
-		"camelcase": "^7.0.0",
+		"camelcase": "^7.0.1",
 		"debounce": "^1.2.1",
 		"he": "^1.2.0",
 		"immutable": "^4.3.0",
