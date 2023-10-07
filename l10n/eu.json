@@ -63,7 +63,7 @@
     "_{years} year ago_::_{years} years ago_" : ["orain dela urte {years}","orain dela {years} urte"],
     "Enable squared photos view" : "Gaitu lauki formako argazki ikuspegia",
     "Default Photos upload and Albums location" : "Argazkien karga eta albumen kokaleku lehenetsia",
-    "Choose default Photos upload and Albums location" : "Aukeratu argazkien karga eta albumen kokaleku lehenetsia",
+    "Choose default Photos upload and Albums location" : "Aukeratu argazkien igoera eta albumen kokaleku lehenetsia",
     "Select the default location for your media" : "Hautatu zure multimediaren kokaleku lehenetsia",
     "Invalid location selected" : "Kokaleku baliogabea hautatu da",
     "View" : "Ikusi",
