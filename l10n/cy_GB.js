@@ -12,6 +12,7 @@ OC.L10N.register(
     "Group" : "Grŵp",
     "Copy public link" : "Copïo dolen gyhoeddus",
     "An error occurred" : "Digwyddodd gwall",
+    "View" : "Golwg",
     "Favorite" : "Ffefryn",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "Ychwanegu"
