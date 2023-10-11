@@ -13,6 +13,7 @@ OC.L10N.register(
     "On this day" : "Šią dieną",
     "Shared with you" : "Bendrinama su jumis",
     "Tags" : "Žymės",
+    "Map" : "Žemėlapis",
     "Photos settings" : "Nuotraukų nustatymai",
     "Name of the album" : "Albumo pavadinimas",
     "Location of the album" : "Albumo vieta",
