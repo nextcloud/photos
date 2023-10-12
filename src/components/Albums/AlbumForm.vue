@@ -294,6 +294,7 @@ export default {
 	.form-buttons {
 		display: flex;
 		justify-content: space-between;
+		flex-direction: column;
 
 		.left-buttons, .right-buttons {
 			display: flex;
@@ -311,5 +312,13 @@ export default {
 
 .left-buttons {
 	flex-grow: 1;
+}
+
+@media only screen and (max-width: 1020px) {
+	.right-buttons {
+		justify-content: flex-end;
+		flex-direction: column;
+		gap: calc(var(--default-grid-baseline) * 4);
+	}
 }
 </style>
