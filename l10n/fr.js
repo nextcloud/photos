@@ -12,7 +12,7 @@ OC.L10N.register(
     "Folders" : "Dossiers",
     "Favorites" : "Favoris",
     "On this day" : "Ce même jour",
-    "Shared with you" : "Partagé avec vous",
+    "Shared with you" : "Partagés avec vous",
     "Tags" : "Étiquettes",
     "Places" : "Lieux",
     "Map" : "Carte",
