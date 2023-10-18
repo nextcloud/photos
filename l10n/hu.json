@@ -79,6 +79,7 @@
     "Remove selection from album" : "Kiválasztás eltávolítása az albumból",
     "This album does not have any photos or videos yet!" : "Még nincs fénykép vagy videó ebben az albumban.",
     "Add photos to this album" : "Fényképek hozzáadása az albumhoz",
+    "Add photos to {albumName}" : "Fényképek hozzáadása a(z) {albumName} albumhoz",
     "Manage collaborators" : "Közreműködők kezelése",
     "Save collaborators for this album." : "Közreműködők mentése ehhez az albumhoz.",
     "Cover photo for album {albumName}" : "Borítókép a(z) „{albumName}” albumhoz",

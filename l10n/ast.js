@@ -17,6 +17,7 @@ OC.L10N.register(
     "An error occurred" : "Prodúxose un error",
     "_%n photo_::_%n photos_" : ["%n semeya","%n semeyes"],
     "This place does not have any photos or videos yet!" : "¡Esti llugar nun tien nenguna semeya nin nengún videu!",
+    "Add" : "Amestar",
     "_%n photos_::_%n photos_" : ["%n semeya","%n semeyes"]
 },
 "nplurals=2; plural=(n != 1);");
