@@ -29,18 +29,18 @@
 				:required="true"
 				autofocus="true"
 				:label="t('photos', 'Name of the album')" />
-			<label>
-				<MapMarker />
-				<NcTextField :value.sync="albumLocation"
-					name="location"
-					type="text"
-					:label="t('photos', 'Location of the album')" />
-			</label>
+			<NcTextField :value.sync="albumLocation"
+				name="location"
+				type="text"
+				:label="t('photos', 'Location of the album')">
+				<template #default>
+					<MapMarker :size="20" />
+				</template>
+			</NcTextField>
 		</div>
 		<div class="form-buttons">
 			<span class="left-buttons">
 				<NcButton v-if="displayBackButton"
-					:aria-label="t('photos', 'Go back to the previous view.')"
 					type="tertiary"
 					@click="back">
 					{{ t('photos', 'Back') }}
@@ -48,22 +48,20 @@
 			</span>
 			<span class="right-buttons">
 				<NcButton v-if="sharingEnabled && !editMode"
-					:aria-label="t('photos', 'Go to the add collaborators view.')"
 					type="secondary"
 					:disabled="albumName.trim() === '' || loading"
 					@click="showCollaboratorView = true">
 					<template #icon>
-						<AccountMultiplePlus />
+						<AccountMultiplePlus :size="20" />
 					</template>
 					{{ t('photos', 'Add collaborators') }}
 				</NcButton>
-				<NcButton :aria-label="editMode ? t('photos', 'Save.') : t('photos', 'Create the album.')"
-					type="primary"
+				<NcButton type="primary"
 					:disabled="albumName === '' || loading"
 					@click="submit()">
 					<template #icon>
-						<NcLoadingIcon v-if="loading" />
-						<Send v-else />
+						<NcLoadingIcon v-if="loading" :size="20" />
+						<Send v-else :size="20" />
 					</template>
 					{{ editMode ? t('photos', 'Save') : t('photos', 'Create album') }}
 				</NcButton>
@@ -73,22 +71,20 @@
 	<CollaboratorsSelectionForm v-else
 		:album-name="albumName"
 		:allow-public-link="false">
-		<template slot-scope="{collaborators}">
+		<template #default="{ collaborators }">
 			<span class="left-buttons">
-				<NcButton :aria-label="t('photos', 'Back to the new album form.')"
-					type="tertiary"
+				<NcButton type="tertiary"
 					@click="showCollaboratorView = false">
 					{{ t('photos', 'Back') }}
 				</NcButton>
 			</span>
 			<span class="right-buttons">
-				<NcButton :aria-label="editMode ? t('photos', 'Save.') : t('photos', 'Create the album.')"
-					type="primary"
+				<NcButton type="primary"
 					:disabled="albumName.trim() === '' || loading"
 					@click="submit(collaborators)">
 					<template #icon>
-						<NcLoadingIcon v-if="loading" />
-						<Send v-else />
+						<NcLoadingIcon v-if="loading" :size="20" />
+						<Send v-else :size="20" />
 					</template>
 					{{ editMode ? t('photos', 'Save') : t('photos', 'Create album') }}
 				</NcButton>
@@ -259,7 +255,7 @@ export default {
 	display: flex;
 	flex-direction: column;
 	height: 350px;
-	padding: 16px;
+	padding: calc(var(--default-grid-baseline) * 4);
 
 	.form-title {
 		font-weight: bold;
@@ -270,25 +266,10 @@ export default {
 	}
 
 	.form-inputs {
-		flex-grow: 1;
-		justify-items: flex-end;
-
-		input {
-			width: 100%;
-		}
-
-		label {
-			display: flex;
-			margin-top: 16px;
-
-			:deep {
-				.material-design-icon {
-					align-self: flex-end;
-					margin-right: 12px;
-					margin-bottom: 6px;
-				}
-			}
-		}
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		gap: calc(var(--default-grid-baseline) * 4);
 	}
 
 	.form-buttons {
@@ -298,14 +279,11 @@ export default {
 
 		.left-buttons, .right-buttons {
 			display: flex;
+			gap: calc(var(--default-grid-baseline) * 4);
 		}
 
 		.right-buttons {
 			justify-content: flex-end;
-		}
-
-		button {
-			margin-right: 16px;
 		}
 	}
 }
@@ -318,7 +296,6 @@ export default {
 	.right-buttons {
 		justify-content: flex-end;
 		flex-direction: column;
-		gap: calc(var(--default-grid-baseline) * 4);
 	}
 }
 </style>
