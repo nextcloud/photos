@@ -74,13 +74,21 @@
 				</NcAppNavigationItem>
 			</template>
 			<template #footer>
-				<NcAppNavigationItem :name="t('photos', 'Photos settings')" @click="showSettings">
-					<Cog slot="icon" :size="20" />
-				</NcAppNavigationItem>
+				<div class="app-navigation__footer">
+					<NcButton type="tertiary"
+						alignment="start"
+						wide
+						@click="showSettings">
+						<template #icon>
+							<Cog slot="icon" :size="20" />
+						</template>
+						{{ t('photos', 'Photos settings') }}
+					</NcButton>
+				</div>
 			</template>
 		</NcAppNavigation>
 		<NcAppContent :page-heading="pageHeading">
-			<router-view />
+			<RouterView />
 
 			<!-- svg img loading placeholder (linked to the File component) -->
 			<!-- eslint-disable-next-line vue/no-v-html (because it's an SVG file) -->
@@ -116,7 +124,7 @@ import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
 import Cog from 'vue-material-design-icons/Cog.vue'
 
-import { NcContent, NcAppContent, NcAppNavigation, NcAppNavigationItem } from '@nextcloud/vue'
+import { NcContent, NcAppContent, NcAppNavigation, NcAppNavigationItem, NcButton } from '@nextcloud/vue'
 
 import SettingsDialog from './components/Settings/SettingsDialog.vue'
 
@@ -148,6 +156,7 @@ export default {
 		NcAppContent,
 		NcAppNavigation,
 		NcAppNavigationItem,
+		NcButton,
 		NcContent,
 		SettingsDialog,
 	},
@@ -223,7 +232,11 @@ export default {
 	align-content: space-between;
 }
 
-.app-navigation__photos:deep .app-navigation-entry-icon.icon-photos {
+.app-navigation__photos :deep(.app-navigation-entry-icon.icon-photos) {
 	background-size: 20px;
+}
+
+.app-navigation__footer {
+	padding: calc(var(--default-grid-baseline) * 2);
 }
 </style>
