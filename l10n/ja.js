@@ -18,11 +18,8 @@ OC.L10N.register(
     "Remove selection from favorites" : "選択したものをお気に入りから削除",
     "Name of the album" : "アルバム名",
     "Location of the album" : "アルバムの場所",
-    "Go back to the previous view." : "前を表示",
     "Back" : "戻る",
     "Add collaborators" : "共有者に追加",
-    "Save." : "保存",
-    "Create the album." : "アルバムを作成",
     "Save" : "保存",
     "Create album" : "アルバムを作成",
     "Add to Album" : "アルバムに追加",
@@ -43,6 +40,7 @@ OC.L10N.register(
     "Unselect all" : "すべて選択解除",
     "Favorite" : "お気に入り",
     "Remove from favorites" : "お気に入りから削除",
+    "Save." : "保存",
     "This folder does not exist" : "このフォルダーは存在しません",
     "No photos in here" : "写真がありません",
     "No tags yet" : "まだタグがありません",
@@ -51,6 +49,8 @@ OC.L10N.register(
     "Delete selection" : "選択した項目を削除",
     "Tagged photos" : "タグ付けされた写真",
     "Locations" : "場所",
+    "Go back to the previous view." : "前を表示",
+    "Create the album." : "アルバムを作成",
     "Shared albums" : "共有アルバム"
 },
 "nplurals=1; plural=0;");
