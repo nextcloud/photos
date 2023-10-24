@@ -17,13 +17,9 @@
     "Remove selection from favorites" : "เอาที่เลือกออกจากรายการโปรด",
     "Name of the album" : "ชื่อของอัลบั้ม",
     "Location of the album" : "ตำแหน่งของอัลบั้ม",
-    "Go back to the previous view." : "กลับไปยังมุมมองก่อนหน้า",
     "Back" : "ย้อนกลับ",
-    "Save." : "บันทึก",
-    "Create the album." : "สร้างอัลบั้ม",
     "Save" : "บันทึก",
     "Create album" : "สร้างอัลบั้ม",
-    "Back to the new album form." : "กลับไปยังแบบฟอร์มอัลบั้มใหม่",
     "Add to Album" : "เพิ่มไปยังอัลบั้ม",
     "Add selection to album {albumName}" : "เพิ่มรายการที่เลือกไปยังอัลบั้ม {albumName}",
     "Shared by" : "แชร์โดย",
@@ -39,6 +35,7 @@
     "View" : "มุมมอง",
     "Favorite" : "รายการโปรด",
     "Remove from favorites" : "เอาออกจากรายการโปรด",
+    "Save." : "บันทึก",
     "This folder does not exist" : "ไม่มีโฟลเดอร์นี้",
     "No photos in here" : "ไม่มีรูปภาพที่นี่",
     "No tags yet" : "ยังไม่มีแท็ก",
@@ -46,6 +43,9 @@
     "Add" : "เพิ่ม",
     "Tagged photos" : "รูปภาพที่ติดแท็ก",
     "Locations" : "สถานที่",
+    "Go back to the previous view." : "กลับไปยังมุมมองก่อนหน้า",
+    "Create the album." : "สร้างอัลบั้ม",
+    "Back to the new album form." : "กลับไปยังแบบฟอร์มอัลบั้มใหม่",
     "_Share with %n user_::_Share with %n users_" : ["แชร์กับผู้ใช้ %n คน"]
 },"pluralForm" :"nplurals=1; plural=0;"
 }
