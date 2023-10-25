@@ -27,7 +27,8 @@ const props = `
 	<d:resourcetype />
 	<nc:face-detections />
 	<nc:face-preview-image />
-	<nc:file-metadata-size />
+	<nc:metadata-photos-size />
+	<nc:metadata-photos-original_date_time />
 	<nc:has-preview />
 	<nc:realpath />
 	<oc:favorite />

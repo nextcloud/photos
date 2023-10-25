@@ -28,15 +28,19 @@ namespace OCA\Photos\AppInfo;
 use OCA\DAV\Connector\Sabre\Principal;
 use OCA\DAV\Events\SabrePluginAuthInitEvent;
 use OCA\Photos\Listener\AlbumsManagementEventListener;
-use OCA\Photos\Listener\PlaceManagerEventListener;
 use OCA\Photos\Listener\SabrePluginAuthInitListener;
 use OCA\Photos\Listener\TagListener;
+use OCA\Photos\MetadataProvider\ExifMetadataProvider;
+use OCA\Photos\MetadataProvider\OriginalDateTimeMetadataProvider;
+use OCA\Photos\MetadataProvider\PlaceMetadataProvider;
+use OCA\Photos\MetadataProvider\SizeMetadataProvider;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Files\Events\Node\NodeDeletedEvent;
-use OCP\Files\Events\Node\NodeWrittenEvent;
+use OCP\FilesMetadata\Event\MetadataBackgroundEvent;
+use OCP\FilesMetadata\Event\MetadataLiveEvent;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\Group\Events\UserRemovedEvent;
 use OCP\Share\Events\ShareDeletedEvent;
@@ -75,8 +79,12 @@ class Application extends App implements IBootstrap {
 		/** Register $principalBackend for the DAV collection */
 		$context->registerServiceAlias('principalBackend', Principal::class);
 
-		// Priority of -1 to be triggered after event listeners populating metadata.
-		$context->registerEventListener(NodeWrittenEvent::class, PlaceManagerEventListener::class, -1);
+		// Metadata
+		$context->registerEventListener(MetadataLiveEvent::class, ExifMetadataProvider::class);
+		$context->registerEventListener(MetadataLiveEvent::class, SizeMetadataProvider::class);
+		$context->registerEventListener(MetadataLiveEvent::class, OriginalDateTimeMetadataProvider::class);
+		$context->registerEventListener(MetadataLiveEvent::class, PlaceMetadataProvider::class);
+		$context->registerEventListener(MetadataBackgroundEvent::class, PlaceMetadataProvider::class);
 
 		$context->registerEventListener(NodeDeletedEvent::class, AlbumsManagementEventListener::class);
 		$context->registerEventListener(UserRemovedEvent::class, AlbumsManagementEventListener::class);
