@@ -28,6 +28,7 @@ use OCA\DAV\Connector\Sabre\FilesPlugin;
 use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Sabre\Album\AlbumPhoto;
 use OCA\Photos\Sabre\Album\AlbumRoot;
+use OCA\Photos\Sabre\Album\PublicAlbumPhoto;
 use OCA\Photos\Sabre\Place\PlacePhoto;
 use OCA\Photos\Sabre\Place\PlaceRoot;
 use OCP\Files\DavUtil;
@@ -109,8 +110,17 @@ class PropFindPlugin extends ServerPlugin {
 			$propFind->handle(self::FILE_NAME_PROPERTYNAME, fn () => $node->getFile()->getName());
 			$propFind->handle(self::FAVORITE_PROPERTYNAME, fn () => $node->isFavorite() ? 1 : 0);
 			$propFind->handle(FilesPlugin::HAS_PREVIEW_PROPERTYNAME, fn () => json_encode($this->previewManager->isAvailable($fileInfo)));
-			// Remove G permission as it does not make sense in the context of photos.
-			$propFind->handle(FilesPlugin::PERMISSIONS_PROPERTYNAME, fn () => str_replace('G', '', DavUtil::getDavPermissions($node->getFileInfo())));
+			$propFind->handle(FilesPlugin::PERMISSIONS_PROPERTYNAME, function () use ($node): string {
+				$permissions = DavUtil::getDavPermissions($node->getFileInfo());
+				$filteredPermissions = str_replace('R', '', $permissions);
+
+				if ($node instanceof PublicAlbumPhoto) {
+					$filteredPermissions = str_replace('D', '', $filteredPermissions);
+					$filteredPermissions = str_replace('NV', '', $filteredPermissions);
+					$filteredPermissions = str_replace('W', '', $filteredPermissions);
+				}
+				return $filteredPermissions;
+			});
 
 			if ($this->metadataEnabled) {
 				$propFind->handle(FilesPlugin::FILE_METADATA_SIZE, function () use ($node) {
