@@ -80,7 +80,7 @@ OC.L10N.register(
     "Rename person" : "Преименувај личност",
     "Merge with different person" : "Спој со друга личност",
     "Download selected photos" : "Преземи ги означените фотографии",
-    "Favorite" : "Омилен",
+    "Favorite" : "Омилени",
     "Remove from favorites" : "Отстрани од фаворити",
     "Remove person" : "Отстрани личност",
     "Name of this person" : "Име на личноста",
