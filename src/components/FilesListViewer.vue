@@ -250,9 +250,9 @@ export default {
 			const file = this.files[fileId]
 			return {
 				id: file.fileid,
-				width: file.fileMetadataSizeParsed.width,
-				height: file.fileMetadataSizeParsed.height,
-				ratio: this.croppedLayout ? 1 : file.fileMetadataSizeParsed.width / file.fileMetadataSizeParsed.height,
+				width: file.metadataPhotosSize.width,
+				height: file.metadataPhotosSize.height,
+				ratio: this.croppedLayout ? 1 : file.metadataPhotosSize.width / file.metadataPhotosSize.height,
 			}
 		},
 

@@ -25,12 +25,7 @@ declare(strict_types=1);
 
 namespace OCA\Photos\DB;
 
-use OC\Metadata\FileMetadata;
-
 class PhotosFile {
-	/** @var array<string, FileMetadata> */
-	private array $metaData = [];
-
 	public function __construct(
 		private int $fileId,
 		private string $name,
@@ -63,17 +58,5 @@ class PhotosFile {
 
 	public function getEtag(): string {
 		return $this->etag;
-	}
-
-	public function setMetadata(string $key, FileMetadata $value): void {
-		$this->metaData[$key] = $value;
-	}
-
-	public function hasMetadata(string $key): bool {
-		return isset($this->metaData[$key]);
-	}
-
-	public function getMetadata(string $key): FileMetadata {
-		return $this->metaData[$key];
 	}
 }

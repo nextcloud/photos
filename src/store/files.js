@@ -50,12 +50,12 @@ const mutations = {
 			}
 
 			if (file.fileid >= 0) {
-				if (file.fileMetadataSize?.length > 1) {
-					file.fileMetadataSizeParsed = JSON.parse(file.fileMetadataSize?.replace(/&quot;/g, '"') ?? '{}')
-					file.fileMetadataSizeParsed.width = file.fileMetadataSizeParsed?.width ?? 256
-					file.fileMetadataSizeParsed.height = file.fileMetadataSizeParsed?.height ?? 256
+				file.metadataPhotosSize = {}
+				if (file.width && file.height) {
+					file.metadataPhotosSize.width = file.width
+					file.metadataPhotosSize.height = file.height
 				} else {
-					file.fileMetadataSizeParsed = { width: 256, height: 256 }
+					file.metadataPhotosSize = { width: 256, height: 256 }
 				}
 			}
 
@@ -63,9 +63,10 @@ const mutations = {
 			file.fileid = file.fileid.toString()
 
 			// Precalculate dates as it is expensive.
-			file.timestamp = moment(file.lastmod).unix() // For sorting
-			file.month = moment(file.lastmod).format('YYYYMM') // For grouping by month
-			file.day = moment(file.lastmod).format('MMDD') // For On this day
+			const date = moment(file.lastmod)
+			file.timestamp = date.unix() // For sorting
+			file.month = date.format('YYYYMM') // For grouping by month
+			file.day = date.format('MMDD') // For On this day
 
 			// Schedule the file to add
 			files[file.fileid] = file

@@ -32,7 +32,6 @@
 
     <commands>
         <command>OCA\Photos\Command\UpdateReverseGeocodingFilesCommand</command>
-        <command>OCA\Photos\Command\MapMediaToPlaceCommand</command>
     </commands>
 
     <sabre>

@@ -25,20 +25,22 @@ declare(strict_types=1);
 
 namespace OCA\Photos\DB\Place;
 
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use OCA\Photos\AppInfo\Application;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
+use OCP\FilesMetadata\IFilesMetadataManager;
 use OCP\IDBConnection;
 
 class PlaceMapper {
-	public const METADATA_GROUP = 'photos_place';
+	public const METADATA_KEY = 'photos-place';
 
 	public function __construct(
 		private IDBConnection $connection,
 		private IMimeTypeLoader $mimeTypeLoader,
 		private IRootFolder $rootFolder,
+		private IFilesMetadataManager $filesMetadataManager,
 	) {
 	}
 
@@ -49,20 +51,22 @@ class PlaceMapper {
 			->getMountPoint()
 			->getNumericStorageId();
 
-		$mimepart = $this->mimeTypeLoader->getId('image');
+
+		$mimetypes = array_map(fn ($mimetype) => $this->mimeTypeLoader->getId($mimetype), Application::IMAGE_MIMES);
 
 		$qb = $this->connection->getQueryBuilder();
 
-		$rows = $qb->selectDistinct('meta.value')
-			->from('file_metadata', 'meta')
-			->join('meta', 'filecache', 'file', $qb->expr()->eq('file.fileid', 'meta.id', IQueryBuilder::PARAM_INT))
-			->where($qb->expr()->eq('file.storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq('file.mimepart', $qb->createNamedParameter($mimepart, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq('meta.group_name', $qb->createNamedParameter(self::METADATA_GROUP)))
+		$qb->selectDistinct('meta_value_string')
+			->from('filecache', 'file');
+		$metadataQuery = $this->filesMetadataManager->getMetadataQuery($qb, 'file', 'fileid');
+		$metadataQuery->joinIndex(self::METADATA_KEY);
+		$rows = $qb->where($qb->expr()->eq('file.storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->in('file.mimetype', $qb->createNamedParameter($mimetypes, IQueryBuilder::PARAM_INT_ARRAY)))
+			->andWhere('meta_value_string IS NOT NULL')
 			->executeQuery()
 			->fetchAll();
 
-		return array_map(fn ($row) => new PlaceInfo($userId, $row['value']), $rows);
+		return array_map(fn ($row) => new PlaceInfo($userId, $row['meta_value_string']), $rows);
 	}
 
 	/** @return PlaceInfo */
@@ -72,17 +76,18 @@ class PlaceMapper {
 			->getMountPoint()
 			->getNumericStorageId();
 
-		$mimepart = $this->mimeTypeLoader->getId('image');
+		$mimetypes = array_map(fn ($mimetype) => $this->mimeTypeLoader->getId($mimetype), Application::IMAGE_MIMES);
 
 		$qb = $this->connection->getQueryBuilder();
 
-		$rows = $qb->selectDistinct('meta.value')
-			->from('file_metadata', 'meta')
-			->join('meta', 'filecache', 'file', $qb->expr()->eq('file.fileid', 'meta.id', IQueryBuilder::PARAM_INT))
-			->where($qb->expr()->eq('file.storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq('file.mimepart', $qb->createNamedParameter($mimepart, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq('meta.group_name', $qb->createNamedParameter(self::METADATA_GROUP)))
-			->andWhere($qb->expr()->eq('meta.value', $qb->createNamedParameter($place)))
+		$qb->selectDistinct('meta_value_string')
+			->from('filecache', 'file');
+		$metadataQuery = $this->filesMetadataManager->getMetadataQuery($qb, 'file', 'fileid');
+		$metadataQuery->joinIndex(self::METADATA_KEY);
+		$rows = $qb->where($qb->expr()->eq('file.storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->in('file.mimetype', $qb->createNamedParameter($mimetypes, IQueryBuilder::PARAM_INT_ARRAY)))
+			->andWhere($qb->expr()->eq('meta_value_string', $qb->createNamedParameter($place)))
+			->andWhere('meta_value_string IS NOT NULL')
 			->executeQuery()
 			->fetchAll();
 
@@ -90,7 +95,7 @@ class PlaceMapper {
 			throw new NotFoundException();
 		}
 
-		return new PlaceInfo($userId, $rows[0]['value']);
+		return new PlaceInfo($userId, $rows[0]['meta_value_string']);
 	}
 
 	/** @return PlaceFile[] */
@@ -100,17 +105,18 @@ class PlaceMapper {
 			->getMountPoint()
 			->getNumericStorageId();
 
-		$mimepart = $this->mimeTypeLoader->getId('image');
+		$mimetypes = array_map(fn ($mimetype) => $this->mimeTypeLoader->getId($mimetype), Application::IMAGE_MIMES);
 
 		$qb = $this->connection->getQueryBuilder();
 
-		$rows = $qb->select('file.fileid', 'file.name', 'file.mimetype', 'file.size', 'file.mtime', 'file.etag', 'meta.value')
-			->from('file_metadata', 'meta')
-			->join('meta', 'filecache', 'file', $qb->expr()->eq('file.fileid', 'meta.id', IQueryBuilder::PARAM_INT))
-			->where($qb->expr()->eq('file.storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq('file.mimepart', $qb->createNamedParameter($mimepart, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq('meta.group_name', $qb->createNamedParameter(self::METADATA_GROUP)))
-			->andWhere($qb->expr()->eq('meta.value', $qb->createNamedParameter($place)))
+		$rows = $qb->select('file.fileid', 'file.name', 'file.mimetype', 'file.size', 'file.mtime', 'file.etag', 'meta_value_string')
+			->from('filecache', 'file');
+		$metadataQuery = $this->filesMetadataManager->getMetadataQuery($qb, 'file', 'fileid');
+		$metadataQuery->joinIndex(self::METADATA_KEY);
+		$rows = $qb->where($qb->expr()->eq('file.storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->in('file.mimetype', $qb->createNamedParameter($mimetypes, IQueryBuilder::PARAM_INT_ARRAY)))
+			->andWhere($qb->expr()->eq('meta_value_string', $qb->createNamedParameter($place)))
+			->andWhere('meta_value_string IS NOT NULL')
 			->executeQuery()
 			->fetchAll();
 
@@ -122,7 +128,7 @@ class PlaceMapper {
 				(int)$row['size'],
 				(int)$row['mtime'],
 				$row['etag'],
-				$row['value']
+				$row['meta_value_string']
 			),
 			$rows,
 		);
@@ -134,19 +140,20 @@ class PlaceMapper {
 			->getMountPoint()
 			->getNumericStorageId();
 
-		$mimepart = $this->mimeTypeLoader->getId('image');
+		$mimetypes = array_map(fn ($mimetype) => $this->mimeTypeLoader->getId($mimetype), Application::IMAGE_MIMES);
 
 		$qb = $this->connection->getQueryBuilder();
 
-		$rows = $qb->select('file.fileid', 'file.name', 'file.mimetype', 'file.size', 'file.mtime', 'file.etag', 'meta.value')
-			->from('file_metadata', 'meta')
-			->join('meta', 'filecache', 'file', $qb->expr()->eq('file.fileid', 'meta.id', IQueryBuilder::PARAM_INT))
-			->where($qb->expr()->eq('file.storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq('file.mimepart', $qb->createNamedParameter($mimepart, IQueryBuilder::PARAM_INT)))
+		$rows = $qb->select('file.fileid', 'file.name', 'file.mimetype', 'file.size', 'file.mtime', 'file.etag', 'meta_value_string')
+			->from('filecache', 'file');
+		$metadataQuery = $this->filesMetadataManager->getMetadataQuery($qb, 'file', 'fileid');
+		$metadataQuery->joinIndex(self::METADATA_KEY);
+		$rows = $qb->where($qb->expr()->eq('file.storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('file.fileid', $qb->createNamedParameter($fileId)))
 			->andWhere($qb->expr()->eq('file.name', $qb->createNamedParameter($fileName)))
-			->andWhere($qb->expr()->eq('meta.group_name', $qb->createNamedParameter(self::METADATA_GROUP)))
-			->andWhere($qb->expr()->eq('meta.value', $qb->createNamedParameter($place)))
+			->andWhere($qb->expr()->in('file.mimetype', $qb->createNamedParameter($mimetypes, IQueryBuilder::PARAM_INT_ARRAY)))
+			->andWhere($qb->expr()->eq('meta_value_string', $qb->createNamedParameter($place)))
+			->andWhere('meta_value_string IS NOT NULL')
 			->executeQuery()
 			->fetchAll();
 
@@ -161,35 +168,12 @@ class PlaceMapper {
 			(int)$rows[0]['size'],
 			(int)$rows[0]['mtime'],
 			$rows[0]['etag'],
-			$rows[0]['value']
+			$rows[0]['meta_value_string']
 		);
 	}
 
 	public function setPlaceForFile(string $place, int $fileId): void {
-		try {
-			$query = $this->connection->getQueryBuilder();
-			$query->insert('file_metadata')
-				->values([
-					"id" => $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT),
-					"group_name" => $query->createNamedParameter(self::METADATA_GROUP),
-					"value" => $query->createNamedParameter($place),
-				])
-				->executeStatement();
-		} catch (\Exception $ex) {
-			if ($ex->getPrevious() instanceof UniqueConstraintViolationException) {
-				$this->updatePlaceForFile($place, $fileId);
-			} else {
-				throw $ex;
-			}
-		}
-	}
-
-	public function updatePlaceForFile(string $place, int $fileId): void {
-		$query = $this->connection->getQueryBuilder();
-		$query->update('file_metadata')
-			->set("value", $query->createNamedParameter($place))
-			->where($query->expr()->eq('id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)))
-			->andWhere($query->expr()->eq('group_name', $query->createNamedParameter(self::METADATA_GROUP)))
-			->executeStatement();
+		$metadata = $this->filesMetadataManager->getMetadata($fileId, true);
+		$metadata->setString('gps', $place, true);
 	}
 }
