@@ -12,6 +12,7 @@ OC.L10N.register(
     "Back" : "Quay lại",
     "Save" : "Lưu",
     "Shared by" : "Đã chia sẽ bởi",
+    "No recommendations. Start typing." : "Không có khuyến nghị. Bắt đầu gõ.",
     "Group" : "Nhóm",
     "Copy public link" : "Sao chép liên kết công khai",
     "An error occurred" : "Có lỗi đã xảy ra",
