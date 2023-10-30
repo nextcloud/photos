@@ -43,6 +43,7 @@ OC.L10N.register(
     "Select the default location for your media" : "Vælg standardplaceringen for dine medier",
     "Invalid location selected" : "Ugyldig placering er valgt",
     "View" : "Vis",
+    "Unselect all" : "Fravælg alle",
     "Favorite" : "Favorit",
     "Remove from favorites" : "Fjern fra favoritter",
     "Save." : "Gem.",
