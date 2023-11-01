@@ -38,8 +38,7 @@
 <script>
 import debounce from 'debounce'
 
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
-import NcTextField from '@nextcloud/vue/dist/Components/NcTextField.js'
+import { NcButton, NcTextField } from '@nextcloud/vue'
 import Folder from 'vue-material-design-icons/Folder.vue'
 
 import { getFilePickerBuilder, showError } from '@nextcloud/dialogs'
