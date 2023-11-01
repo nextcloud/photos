@@ -108,6 +108,7 @@ OC.L10N.register(
     "Add to album" : "Zum Album hinzufügen",
     "Delete selection" : "Auswahl löschen",
     "No photos or videos in here" : "Hier gibt es keine Fotos oder Videos.",
+    "Unassigned faces" : "Nicht zugewiesene Gesichter",
     "_%n photos_::_%n photos_" : ["%n Foto","%n Fotos"],
     "Failed to fetch collection." : "Sammlung konnte nicht abgerufen werden.",
     "Failed to fetch collections list." : "Sammlungsliste konnte nicht geladen werden.",
