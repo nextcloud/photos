@@ -51,6 +51,7 @@ const mutations = {
 
 			if (file.fileid >= 0) {
 				if (file.fileMetadataSize?.length > 1) {
+					file.fileMetadataSize = file.fileMetadataSize === '' ? '{}' : file.fileMetadataSize
 					file.fileMetadataSizeParsed = JSON.parse(file.fileMetadataSize?.replace(/&quot;/g, '"') ?? '{}')
 					file.fileMetadataSizeParsed.width = file.fileMetadataSizeParsed?.width ?? 256
 					file.fileMetadataSizeParsed.height = file.fileMetadataSizeParsed?.height ?? 256
