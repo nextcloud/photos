@@ -103,7 +103,7 @@ const sortCompare = function(fileInfo1, fileInfo2, key, asc = true) {
  * @param {object} obj - object to flatten and format.
  */
 function genFileInfo(obj) {
-	const fileInfo = flattenAndFormatObject(obj, genFileInfo)
+	const fileInfo = flattenAndFormatObject(obj, flattenAndFormatObject)
 
 	if (fileInfo.filename) {
 		// Adding context
@@ -117,19 +117,19 @@ function genFileInfo(obj) {
  * @param {object} obj - object to flatten and format.
  */
 function extractTagInfo(obj) {
-	return flattenAndFormatObject(obj, extractTagInfo)
+	return flattenAndFormatObject(obj, flattenAndFormatObject)
 }
 
 /**
  *
- * @param obj
- * @param callback
+ * @param {object} obj
+ * @param {Function|null} callback
  */
 function flattenAndFormatObject(obj, callback) {
 	return Object.entries(obj).reduce((resultObj, [key, data]) => {
 		// flatten object if any
 		if (!!data && typeof data === 'object' && !Array.isArray(data)) {
-			return { ...resultObj, ...callback(data) }
+			return { ...resultObj, ...(callback ? callback(data) : { [camelcase(key)]: data }) }
 		}
 
 		// format key and add it to the tagInfo
