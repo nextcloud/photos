@@ -31,7 +31,7 @@ use OCP\FilesMetadata\Event\MetadataBackgroundEvent;
 use OCP\FilesMetadata\Event\MetadataLiveEvent;
 
 /**
- * @template-implements IEventListener<Event>
+ * @template-implements IEventListener<Event|MetadataLiveEvent|MetadataBackgroundEvent>
  */
 class PlaceMetadataProvider implements IEventListener {
 	public function __construct(
