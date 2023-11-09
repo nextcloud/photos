@@ -30,7 +30,9 @@ import { registerDavProperty } from '@nextcloud/files'
 Vue.prototype.t = t
 Vue.prototype.n = n
 
+// eslint-disable-next-line no-undef, camelcase
 __webpack_nonce__ = btoa(getRequestToken() ?? '')
+// eslint-disable-next-line no-undef, camelcase
 __webpack_public_path__ = generateFilePath('photos', '', 'js/')
 
 registerDavProperty('nc:metadata-photos-original_date_time', { nc: 'http://nextcloud.org/ns' })
