@@ -20,7 +20,7 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Photos\MetadataProvider;
+namespace OCA\Photos\Listener;
 
 use OCA\Photos\AppInfo\Application;
 use OCP\EventDispatcher\Event;
@@ -30,7 +30,7 @@ use OCP\FilesMetadata\Event\MetadataLiveEvent;
 use Psr\Log\LoggerInterface;
 
 /**
- * @template-implements IEventListener
+ * @template-implements IEventListener<Event>
  */
 class SizeMetadataProvider implements IEventListener {
 	public function __construct(

@@ -20,7 +20,7 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Photos\MetadataProvider;
+namespace OCA\Photos\Listener;
 
 use DateTime;
 use OCA\Photos\AppInfo\Application;
@@ -30,7 +30,7 @@ use OCP\Files\File;
 use OCP\FilesMetadata\Event\MetadataLiveEvent;
 
 /**
- * @template-implements IEventListener
+ * @template-implements IEventListener<Event>
  */
 class OriginalDateTimeMetadataProvider implements IEventListener {
 	public function __construct() {
