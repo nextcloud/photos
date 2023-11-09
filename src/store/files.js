@@ -50,13 +50,7 @@ const mutations = {
 			}
 
 			if (file.fileid >= 0) {
-				file.metadataPhotosSize = {}
-				if (file.width && file.height) {
-					file.metadataPhotosSize.width = file.width
-					file.metadataPhotosSize.height = file.height
-				} else {
-					file.metadataPhotosSize = { width: 256, height: 256 }
-				}
+				file.metadataPhotosSize ??= { width: 256, height: 256 }
 			}
 
 			// Make the fileId a string once and for all.

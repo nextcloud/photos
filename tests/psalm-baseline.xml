@@ -8,7 +8,8 @@
   </file>
   <file src="lib/Controller/PageController.php">
     <InvalidArgument occurrences="1">
-      <code>new SearchQuery(new SearchComparison(ISearchComparison::COMPARE_EQUAL, 'systemtag', $tag-&gt;getName()), 0, 0, [], $user)</code>
+      <code>new SearchQuery(new SearchComparison(ISearchComparison::COMPARE_EQUAL, 'systemtag',
+        $tag-&gt;getName()), 0, 0, [], $user)</code>
     </InvalidArgument>
     <UndefinedClass occurrences="12">
       <code>$e</code>
@@ -30,5 +31,15 @@
       <code>LoadViewer</code>
       <code>LoadViewer</code>
     </UndefinedClass>
+  </file>
+  <file src="lib/AppInfo/Application.php">
+    <InvalidArgument occurrences="9">
+      <code>registerEventListener</code>
+    </InvalidArgument>
+  </file>
+  <file src="lib/Listener/SabrePluginAuthInitListener.php">
+    <UndefinedMethod occurrences="1">
+      <code>addBackend</code>
+    </UndefinedMethod>
   </file>
 </files>

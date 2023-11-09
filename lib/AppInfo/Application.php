@@ -27,8 +27,11 @@ namespace OCA\Photos\AppInfo;
 
 use OCA\DAV\Connector\Sabre\Principal;
 use OCA\DAV\Events\SabrePluginAuthInitEvent;
+use OCA\Files\Event\LoadSidebar;
 use OCA\Photos\Listener\AlbumsManagementEventListener;
+use OCA\Photos\Listener\CSPListener;
 use OCA\Photos\Listener\ExifMetadataProvider;
+use OCA\Photos\Listener\LoadSidebarScripts;
 use OCA\Photos\Listener\OriginalDateTimeMetadataProvider;
 use OCA\Photos\Listener\PlaceMetadataProvider;
 use OCA\Photos\Listener\SabrePluginAuthInitListener;
@@ -43,6 +46,7 @@ use OCP\FilesMetadata\Event\MetadataBackgroundEvent;
 use OCP\FilesMetadata\Event\MetadataLiveEvent;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\Group\Events\UserRemovedEvent;
+use OCP\Security\CSP\AddContentSecurityPolicyEvent;
 use OCP\Share\Events\ShareDeletedEvent;
 use OCP\SystemTag\MapperEvent;
 use OCP\User\Events\UserDeletedEvent;
@@ -78,6 +82,10 @@ class Application extends App implements IBootstrap {
 	public function register(IRegistrationContext $context): void {
 		/** Register $principalBackend for the DAV collection */
 		$context->registerServiceAlias('principalBackend', Principal::class);
+
+		$context->registerEventListener(LoadSidebar::class, LoadSidebarScripts::class);
+
+		$context->registerEventListener(AddContentSecurityPolicyEvent::class, CSPListener::class);
 
 		// Metadata
 		$context->registerEventListener(MetadataLiveEvent::class, ExifMetadataProvider::class);

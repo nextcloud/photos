@@ -80,11 +80,11 @@ class ExifMetadataProvider implements IEventListener {
 		}
 
 		if ($rawExifData && array_key_exists('EXIF', $rawExifData)) {
-			$event->getMetadata()->setArray('photos-exif', $this->base64Encode($rawExifData['EXIF']));
+			$event->getMetadata()->setArray('photos-exif', $this->sanitizeEntries($rawExifData['EXIF']));
 		}
 
 		if ($rawExifData && array_key_exists('IFD0', $rawExifData)) {
-			$event->getMetadata()->setArray('photos-ifd0', $this->base64Encode($rawExifData['IFD0']));
+			$event->getMetadata()->setArray('photos-ifd0', $this->sanitizeEntries($rawExifData['IFD0']));
 		}
 
 		if (
@@ -142,14 +142,26 @@ class ExifMetadataProvider implements IEventListener {
 	/**
 	 * Exif data can contain anything.
 	 * This method will base 64 encode any non UTF-8 string in an array.
+	 * This will also remove control characters from UTF-8 strings.
 	 */
-	private function base64Encode(array $data): array {
+	private function sanitizeEntries(array $data): array {
+		$cleanData = [];
+
 		foreach ($data as $key => $value) {
 			if (is_string($value) && !mb_check_encoding($value, 'UTF-8')) {
-				$data[$key] = 'base64:'.base64_encode($value);
+				$value = 'base64:'.base64_encode($value);
+			} elseif (is_string($value)) {
+				// TODO: Can be remove when the Sidebar use the @nextcloud/files to fetch and parse the DAV response.
+				$value = preg_replace('/[[:cntrl:]]/u', '', $value);
 			}
+
+			if (preg_match('/[^a-zA-Z]/', $key) !== 0) {
+				$key = preg_replace('/[^a-zA-Z]/', '_', $key);
+			}
+
+			$cleanData[$key] = $value;
 		}
 
-		return $data;
+		return $cleanData;
 	}
 }
