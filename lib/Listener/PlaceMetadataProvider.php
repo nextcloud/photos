@@ -20,7 +20,7 @@ declare(strict_types=1);
  */
 
 
-namespace OCA\Photos\MetadataProvider;
+namespace OCA\Photos\Listener;
 
 use OCA\Photos\AppInfo\Application;
 use OCA\Photos\Service\MediaPlaceManager;
@@ -31,7 +31,7 @@ use OCP\FilesMetadata\Event\MetadataBackgroundEvent;
 use OCP\FilesMetadata\Event\MetadataLiveEvent;
 
 /**
- * @template-implements IEventListener
+ * @template-implements IEventListener<MetadataLiveEvent>
  */
 class PlaceMetadataProvider implements IEventListener {
 	public function __construct(

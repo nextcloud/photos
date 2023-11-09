@@ -3,13 +3,17 @@
 namespace OCA\Photos\Listener;
 
 use OCP\EventDispatcher\Event;
+use OCP\EventDispatcher\IEventListener;
 use OCP\Files\Config\ICachedMountInfo;
 use OCP\Files\Config\IUserMountCache;
 use OCP\Files\IRootFolder;
 use OCP\ICacheFactory;
 use OCP\SystemTag\MapperEvent;
 
-class TagListener implements \OCP\EventDispatcher\IEventListener {
+/**
+ * @template-implements IEventListener<MapperEvent>
+ */
+class TagListener implements IEventListener {
 	private \OCP\ICache $tagCountsCache;
 	private IRootFolder $rootFolder;
 	private IUserMountCache $userMountCache;

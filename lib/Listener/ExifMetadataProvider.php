@@ -20,7 +20,7 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Photos\MetadataProvider;
+namespace OCA\Photos\Listener;
 
 use OCA\Photos\AppInfo\Application;
 use OCP\EventDispatcher\Event;
@@ -33,7 +33,7 @@ use Psr\Log\LoggerInterface;
  * Extract EXIF, IFD0, and GPS data from a picture file.
  * EXIF data reference: https://web.archive.org/web/20220428165430/exif.org/Exif2-2.PDF
  *
- * @template-implements IEventListener
+ * @template-implements IEventListener<MetadataLiveEvent>
  */
 class ExifMetadataProvider implements IEventListener {
 	public function __construct(
