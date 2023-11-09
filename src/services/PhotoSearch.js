@@ -129,7 +129,7 @@ export default async function(path = '', options = {}) {
 					</d:where>
 					<d:orderby>
 						<d:order>
-							<d:prop><d:getlastmodified/></d:prop>
+							<d:prop><nc:metadata-photos-original_date_time/></d:prop>
 							<d:descending/>
 						</d:order>
 					</d:orderby>

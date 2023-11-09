@@ -25,12 +25,13 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Service;
 
-use OC\Metadata\IMetadataManager;
 use OCA\Photos\DB\Place\PlaceMapper;
+use OCP\FilesMetadata\Exceptions\FilesMetadataNotFoundException;
+use OCP\FilesMetadata\IFilesMetadataManager;
 
 class MediaPlaceManager {
 	public function __construct(
-		private IMetadataManager $metadataManager,
+		private IFilesMetadataManager $filesMetadataManager,
 		private ReverseGeoCoderService $rgcService,
 		private PlaceMapper $placeMapper,
 	) {
@@ -46,30 +47,22 @@ class MediaPlaceManager {
 		$this->placeMapper->setPlaceForFile($place, $fileId);
 	}
 
-	public function updatePlaceForFile(int $fileId): void {
-		$place = $this->getPlaceForFile($fileId);
-
-		if ($place === null) {
-			return;
-		}
-
-		$this->placeMapper->updatePlaceForFile($place, $fileId);
-	}
-
-	private function getPlaceForFile(int $fileId): ?string {
-		$gpsMetadata = $this->metadataManager->fetchMetadataFor('gps', [$fileId])[$fileId];
-		$metadata = $gpsMetadata->getDecodedValue();
-
-		if (count($metadata) === 0) {
+	public function getPlaceForFile(int $fileId): ?string {
+		try {
+			$metadata = $this->filesMetadataManager->getMetadata($fileId, true);
+		} catch (FilesMetadataNotFoundException) {
 			return null;
 		}
 
-		$latitude = $metadata['latitude'];
-		$longitude = $metadata['longitude'];
 
-		if ($latitude === null || $longitude === null) {
+		if (!$metadata->hasKey('photos-gps')) {
 			return null;
 		}
+
+		$coordinate = $metadata->getArray('photos-gps');
+
+		$latitude = $coordinate['latitude'];
+		$longitude = $coordinate['longitude'];
 
 		return $this->rgcService->getPlaceForCoordinates($latitude, $longitude);
 	}

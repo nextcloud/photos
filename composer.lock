@@ -948,12 +948,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextcloud-deps/ocp.git",
-                "reference": "a6a5f771184eed47d245bfdf30a15db2962a1a32"
+                "reference": "1b905c4b2d9d6a41b12edfb8b52306efa1e3155e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/a6a5f771184eed47d245bfdf30a15db2962a1a32",
-                "reference": "a6a5f771184eed47d245bfdf30a15db2962a1a32",
+                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/1b905c4b2d9d6a41b12edfb8b52306efa1e3155e",
+                "reference": "1b905c4b2d9d6a41b12edfb8b52306efa1e3155e",
                 "shasum": ""
             },
             "require": {

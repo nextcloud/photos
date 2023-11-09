@@ -39,7 +39,8 @@ function getCollectionFilesDavRequest(extraProps = []) {
 					<d:getetag />
 					<d:getlastmodified />
 					<d:resourcetype />
-					<nc:file-metadata-size />
+					<nc:metadata-photos-size />
+					<nc:metadata-photos-original_date_time />
 					<nc:has-preview />
 					<oc:favorite />
 					<oc:fileid />

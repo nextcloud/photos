@@ -35,7 +35,7 @@ describe('Manage places', () => {
 		cy.createRandomUser()
 			.then((user) => {
 				uploadTestMedia(user)
-				runOccCommand(`photos:map-media-to-place --user ${user.userId}`)
+				runOccCommand('files:scan --all --generate-metadata')
 				cy.login(user)
 				cy.visit('/apps/photos')
 			})
