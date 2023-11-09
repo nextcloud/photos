@@ -33,7 +33,7 @@ use OCP\IRequest;
 use OCP\Util;
 
 /**
- * @template-implements IEventListener<Event>
+ * @template-implements IEventListener<LoadSidebar>
  */
 class LoadSidebarScripts implements IEventListener {
 

@@ -15,9 +15,6 @@ use OCP\Share\Events\ShareDeletedEvent;
 use OCP\User\Events\UserDeletedEvent;
 use Psr\Log\LoggerInterface;
 
-/**
- * @template-implements IEventListener<NodeDeletedEvent|NodeDeletedEvent|UserRemovedEvent|GroupDeletedEvent|UserDeletedEvent|ShareDeletedEvent>
- */
 class AlbumsManagementEventListener implements IEventListener {
 	private AlbumMapper $albumMapper;
 	private LoggerInterface $logger;

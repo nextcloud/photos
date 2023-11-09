@@ -20,7 +20,7 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Photos\MetadataProvider;
+namespace OCA\Photos\Listener;
 
 use OCA\Photos\AppInfo\Application;
 use OCP\EventDispatcher\Event;

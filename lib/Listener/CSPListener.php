@@ -31,7 +31,7 @@ use OCP\EventDispatcher\IEventListener;
 use OCP\Security\CSP\AddContentSecurityPolicyEvent;
 
 /**
- * @template-implements IEventListener<Event>
+ * @template-implements IEventListener<AddContentSecurityPolicyEvent>
  */
 class CSPListener implements IEventListener {
 
