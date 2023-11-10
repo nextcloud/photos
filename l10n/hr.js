@@ -31,6 +31,7 @@ OC.L10N.register(
     "Add" : "Dodaj",
     "Delete selection" : "Izbriši odabir",
     "Tagged photos" : "Označene fotografije",
+    "Details" : "Pojedinosti",
     "Locations" : "Lokacije",
     "Shared albums" : "Dijeljeni albumi"
 },

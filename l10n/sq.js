@@ -14,6 +14,7 @@ OC.L10N.register(
     "View" : "Shiko",
     "Favorite" : "I/E Preferuar",
     "Remove from favorites" : "Remove from favorites",
-    "Add" : "Shto"
+    "Add" : "Shto",
+    "Details" : "Detajet"
 },
 "nplurals=2; plural=(n != 1);");

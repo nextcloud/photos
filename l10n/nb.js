@@ -113,6 +113,7 @@ OC.L10N.register(
     "Tagged photos" : "Bilder med merkelapper",
     "Tagged photo {title}" : "Merket bilde {title}",
     "{title}'s face" : "{title} sitt ansikt",
+    "Details" : "Detaljer",
     "Failed to rename {oldName} to {faceName}." : "Kunne ikke endre navn på {oldName} til {faceName}.",
     "Failed to delete {faceName}." : "Kunne ikke slette {faceName}.",
     "Failed to delete {fileId}." : "Kunne ikke slette {fileId}.",

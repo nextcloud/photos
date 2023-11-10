@@ -44,6 +44,7 @@ OC.L10N.register(
     "Photos with tags will show up here" : "รูปภาพที่ติดแท็กจะแสดงที่นี่",
     "Add" : "เพิ่ม",
     "Tagged photos" : "รูปภาพที่ติดแท็ก",
+    "Details" : "รายละเอียด",
     "Locations" : "สถานที่",
     "Go back to the previous view." : "กลับไปยังมุมมองก่อนหน้า",
     "Create the album." : "สร้างอัลบั้ม",
