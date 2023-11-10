@@ -107,6 +107,7 @@ OC.L10N.register(
     "Public album {title}" : "Openbaar album {title}",
     "Tagged photos" : "Gelabelde foto's",
     "{title}'s face" : "gezicht van {title}",
+    "Details" : "Details",
     "Failed to rename {oldName} to {faceName}." : "Hernoemen van {oldName} naar {faceName} mislukt.",
     "Failed to delete {faceName}." : "Verwijderen van {faceName} mislukt.",
     "Failed to delete {fileId}." : "Verwijderen van {fileId} mislukt.",

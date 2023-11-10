@@ -109,6 +109,7 @@ OC.L10N.register(
     "Tagged photos" : "Označene fotografije",
     "Tagged photo {title}" : "Označena fotografija {title}",
     "{title}'s face" : "{title}: obraz",
+    "Details" : "Podrobnosti",
     "Failed to delete {fileId}." : "Brisanje polja {fileId} je spodletelo.",
     "Failed to delete {fileName}." : "Brisanje datoteke {fileName} je spodletelo.",
     "Locations" : "Mesta",

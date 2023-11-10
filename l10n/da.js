@@ -55,6 +55,7 @@ OC.L10N.register(
     "Delete selection" : "Slet valgte",
     "_%n photos_::_%n photos_" : ["%n foto","%n fotos"],
     "Tagged photos" : "Markerede billeder",
+    "Details" : "Detaljer",
     "Failed to delete {fileName}." : "Kunne ikke slette {fileName}.",
     "Locations" : "Sted",
     "Go back to the previous view." : "Gå tilbage til den forrige visning.",

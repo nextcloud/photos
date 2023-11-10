@@ -11,6 +11,7 @@ OC.L10N.register(
     "Group" : "Grupp",
     "Favorite" : "Favorit",
     "Remove from favorites" : "Remove from favorites",
-    "Add" : "Derbäimaachen"
+    "Add" : "Derbäimaachen",
+    "Details" : "Detailer"
 },
 "nplurals=2; plural=(n != 1);");

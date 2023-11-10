@@ -31,6 +31,7 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Ảnh đã gắn nhãn sẽ được cho thấy trên này",
     "Add" : "Thêm",
     "Tagged photos" : "Ảnh gắn nhãn",
+    "Details" : "Chi tiết",
     "Locations" : "Các địa điểm",
     "Shared albums" : "Các tập ảnh đã chia sẽ"
 },

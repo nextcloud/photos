@@ -127,6 +127,7 @@ OC.L10N.register(
     "Tagged photo {title}" : "标记的相册{title}",
     "{title}'s face" : "{title}的脸",
     "{startDate} to {endDate}" : "{startDate} 到 {endDate}",
+    "Details" : "详情",
     "Failed to rename {oldName} to {faceName}." : "重命名 {oldName} 为 {faceName} 的操作失败",
     "Failed to delete {faceName}." : "删除 {faceName} 失败",
     "Failed to delete {fileId}." : "删除{field}失败",

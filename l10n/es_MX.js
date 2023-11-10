@@ -28,6 +28,7 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Las fotos con etiquetas se mostrarán aquí",
     "Add" : "Agregar",
     "Tagged photos" : "Fotos con etiquetas",
+    "Details" : "Detalles",
     "Locations" : "Ubicaciones",
     "Shared albums" : "Álbums compartidos"
 },

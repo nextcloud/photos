@@ -126,6 +126,8 @@ OC.L10N.register(
     "Tagged photos" : "Світлини з мітками",
     "Tagged photo {title}" : "Світлина з міткою {title}",
     "{title}'s face" : "обличчя {title}",
+    "{startDate} to {endDate}" : "{startDate} до {endDate}",
+    "Details" : "Деталі",
     "Failed to rename {oldName} to {faceName}." : "Не вдалося перейменувати {oldName} на {faceName}.",
     "Failed to delete {faceName}." : "Не вдалося вилучити {faceName}.",
     "Failed to delete {fileId}." : "Не вдалося вилучити {fileId}.",

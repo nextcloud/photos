@@ -126,6 +126,7 @@ OC.L10N.register(
     "Tagged photos" : "Fotos etiquetadas",
     "Tagged photo {title}" : "Foto etiquetada {título}",
     "{title}'s face" : "Rostro de {título}",
+    "Details" : "Detalles",
     "Failed to rename {oldName} to {faceName}." : "Error al cambiar el nombre de {antiguoNombre} a {nuevoNombre}.",
     "Failed to delete {faceName}." : "Error al eliminar {nombreRostro}.",
     "Failed to delete {fileId}." : "Error al eliminar {idArchivo}.",

@@ -125,6 +125,7 @@
     "Tagged photo {title}" : "Фотография с метками «{title}»",
     "{title}'s face" : "Лицо {title}",
     "{startDate} to {endDate}" : "С {startDate} по {endDate}",
+    "Details" : "Свойства",
     "Failed to rename {oldName} to {faceName}." : "Не удалось переименовать метку лица «{oldName}» в «{faceName}».",
     "Failed to delete {faceName}." : "Не удалось удалить метку лица «{faceName}».",
     "Failed to delete {fileId}." : "Не удалось удалить «{fileId}».",
