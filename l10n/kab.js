@@ -9,6 +9,7 @@ OC.L10N.register(
     "Group" : "Agraw",
     "Favorite" : "Menyif",
     "Remove from favorites" : "Kkes-it seg ismal",
-    "Add" : "Rnu"
+    "Add" : "Rnu",
+    "Details" : "Talqayt"
 },
 "nplurals=2; plural=(n != 1);");

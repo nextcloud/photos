@@ -127,6 +127,7 @@ OC.L10N.register(
     "Tagged photo {title}" : "{title} etiketaturiko argazkia",
     "{title}'s face" : "{title}(r)en aurpegia",
     "{startDate} to {endDate}" : "{startDate} - {endDate}",
+    "Details" : "Xehetasunak",
     "Failed to rename {oldName} to {faceName}." : "Ezin izan da {oldName} berrizendatu {faceName} gisa.",
     "Failed to delete {faceName}." : "Ezin izan da  {faceName} ezabatu.",
     "Failed to delete {fileId}." : "{fileId} ezabatzeak huts egin du.",

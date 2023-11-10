@@ -127,6 +127,7 @@ OC.L10N.register(
     "Tagged photo {title}" : "Kuvaan {title} asetettu tunniste",
     "{title}'s face" : "Henkilön {title} kasvot",
     "{startDate} to {endDate}" : "{startDate} - {endDate}",
+    "Details" : "Tiedot",
     "Failed to rename {oldName} to {faceName}." : "Henkilön {oldName} nimeäminen muotoon {faceName} epäonnistui.",
     "Failed to delete {faceName}." : "Henkilön {faceName} poistaminen epäonnistui.",
     "Failed to delete {fileId}." : "Kohteen {fileId} poistaminen epäonnistui.",

@@ -118,6 +118,7 @@ OC.L10N.register(
     "Tagged photos" : "Foto yang memiliki tag",
     "Tagged photo {title}" : "Foto memiliki tag {title} ",
     "{title}'s face" : "Wajah {title}",
+    "Details" : "Detail",
     "Failed to rename {oldName} to {faceName}." : "Gagal mengubah nama {oldName} to {faceName}.",
     "Failed to delete {faceName}." : "Gagal menghapus {faceName}.",
     "Failed to delete {fileId}." : "Gagal menghapus {field}.",

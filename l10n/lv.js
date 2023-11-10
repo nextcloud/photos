@@ -23,6 +23,7 @@ OC.L10N.register(
     "View" : "Skats",
     "Favorite" : "Favorīts",
     "Remove from favorites" : "Noņemt no izlases",
-    "Add" : "Pievienot"
+    "Add" : "Pievienot",
+    "Details" : "Detaļas"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

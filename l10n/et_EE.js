@@ -120,6 +120,7 @@ OC.L10N.register(
     "Tagged photos" : "Sildistatud fotod",
     "Tagged photo {title}" : "Sildistatud foto {title}",
     "{title}'s face" : "{title} nägu",
+    "Details" : "Üksikasjad",
     "Failed to delete {faceName}." : "{faceName} kustutamine ebaõnnestus.",
     "Failed to delete {fileId}." : "{fileId} kustutamine ebaõnnestus.",
     "Failed to delete {fileName}." : "{fileName} kustutamine ebaõnnestus.",
