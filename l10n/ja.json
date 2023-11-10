@@ -125,6 +125,7 @@
     "Tagged photo {title}" : "タグ付けされた写真 {title}",
     "{title}'s face" : "{title} の顔",
     "{startDate} to {endDate}" : "{startDate} から {endDate}",
+    "Details" : "詳細",
     "Failed to rename {oldName} to {faceName}." : "{oldName} から {faceName} への名前の変更に失敗しました。",
     "Failed to delete {faceName}." : "{faceName} の削除に失敗しました。",
     "Failed to delete {fileId}." : "{fileId} の削除に失敗しました。",

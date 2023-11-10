@@ -127,6 +127,7 @@ OC.L10N.register(
     "Tagged photo {title}" : "Foto etichettata {title}",
     "{title}'s face" : "Volto di {title}",
     "{startDate} to {endDate}" : "{startDate} a {endDate}",
+    "Details" : "Dettagli",
     "Failed to rename {oldName} to {faceName}." : "Rinominazione di {oldName} in {faceName} non riuscita.",
     "Failed to delete {faceName}." : "Eliminazione di {faceName} non riuscita.",
     "Failed to delete {fileId}." : "Eliminazione di {fileId} non riuscita.",

@@ -127,6 +127,7 @@ OC.L10N.register(
     "Tagged photo {title}" : "Taggad bild {title}",
     "{title}'s face" : "{title}s ansikte",
     "{startDate} to {endDate}" : "{startDate} till {endDate}",
+    "Details" : "Detaljer",
     "Failed to rename {oldName} to {faceName}." : "Lyckades inte döpa om {oldName} till {faceName}.",
     "Failed to delete {faceName}." : "Misslyckades att radera {faceName}.",
     "Failed to delete {fileId}." : "Misslyckades att radera {fileId}.",

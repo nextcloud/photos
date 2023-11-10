@@ -111,6 +111,7 @@ OC.L10N.register(
     "Failed to fetch faces list." : "Nepodarilo sa načítať zoznam tvárí.",
     "All your media" : "Všetky vaše médiá",
     "Tagged photos" : "Označené fotografie",
+    "Details" : "Podrobnosti",
     "Failed to rename {oldName} to {faceName}." : "Chyba pri premenovávaní {oldName} na {faceName}.",
     "Failed to delete {faceName}." : "Nepodarilo sa zmazať {faceName}.",
     "Failed to delete {fileId}." : "Nepodarilo sa zmazať {fileId}.",

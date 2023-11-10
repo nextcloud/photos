@@ -33,6 +33,7 @@ OC.L10N.register(
     "Add" : "Agiunghe",
     "Delete selection" : "Cantzella seletzione",
     "Tagged photos" : "Fotografias etichetadas",
+    "Details" : "Detàllios",
     "Locations" : "Positziones",
     "Shared albums" : "Album cumpartzidos"
 },

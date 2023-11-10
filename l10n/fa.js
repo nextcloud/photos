@@ -126,6 +126,7 @@ OC.L10N.register(
     "Tagged photos" : "عکسهای برچسب خورده",
     "Tagged photo {title}" : "عکس برچسب شده {title}",
     "{title}'s face" : "چهره {title}",
+    "Details" : "جزییات",
     "Failed to rename {oldName} to {faceName}." : "تغییر نام {oldName} به {faceName} انجام نشد.",
     "Failed to delete {faceName}." : "{faceName} حذف نشد.",
     "Failed to delete {fileId}." : "{fileId} حذف نشد.",
