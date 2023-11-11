@@ -15,6 +15,7 @@ OC.L10N.register(
     "View" : "Bekyk",
     "Favorite" : "Gunsteling",
     "Remove from favorites" : "Verwyder uit gunstelinge",
-    "Add" : "Voeg by"
+    "Add" : "Voeg by",
+    "Details" : "Besonderhede"
 },
 "nplurals=2; plural=(n != 1);");

@@ -121,7 +121,7 @@ OC.L10N.register(
     "Tagged photos" : "Fotos mit Tags",
     "Tagged photo {title}" : "Fotos mit Schlagworten",
     "{title}'s face" : "{title}´s Gesicht",
-    "Details" : "Benötigt keine Übersetzung. Hier wird nur die formelle Übersetzung verwendet (de_DE).",
+    "Details" : "Details",
     "Failed to rename {oldName} to {faceName}." : "{oldName} konnte nicht in {faceName} umbenannt werden.",
     "Failed to delete {faceName}." : "{faceName} konnte nicht gelöscht werden.",
     "Failed to delete {fileId}." : "{fileId} konnte nicht gelöscht werden.",
