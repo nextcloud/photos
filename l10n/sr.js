@@ -99,6 +99,7 @@ OC.L10N.register(
     "This folder does not exist" : "Овај фолдер не постоји",
     "Loading folders …" : "Учитавање фолдера ...",
     "No photos in here" : "Овде нема слика",
+    "Taken on {date} at {time}" : "Сликано дана {date} у {time}",
     "This place does not have any photos or videos yet!" : "Ово место још увек нема ниједну фотографију или видео снимак!",
     "Add photos to this place" : "Додај фотографије на ово место",
     "Cover photo for place {placeName}" : "Фотографија омота за место {placeName}",

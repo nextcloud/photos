@@ -99,6 +99,7 @@ OC.L10N.register(
     "This folder does not exist" : "Este cartafol non existe",
     "Loading folders …" : "Cargando cartafoles…",
     "No photos in here" : "Aquí non hai fotos",
+    "Taken on {date} at {time}" : "Tirada o {date} ás {time}",
     "This place does not have any photos or videos yet!" : "Este lugar aínda non ten fotos nin vídeos!",
     "Add photos to this place" : "Engadir fotos a este lugar",
     "Cover photo for place {placeName}" : "Foto de portada do lugar {placeName}",

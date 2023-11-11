@@ -99,6 +99,7 @@ OC.L10N.register(
     "This folder does not exist" : "Ce dossier n'existe pas",
     "Loading folders …" : "Chargement des dossiers ...",
     "No photos in here" : "Aucune photo",
+    "Taken on {date} at {time}" : "Prise le {date} à {time}",
     "This place does not have any photos or videos yet!" : "Ce lieu n'a pas encore de photos ou de vidéos !",
     "Add photos to this place" : "Ajouter des photos à ce lieu",
     "Cover photo for place {placeName}" : "Photo de couverture pour le lieu {nom du lieu}",

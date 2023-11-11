@@ -1,0 +1,11 @@
+{ "translations": {
+    "Photos" : "Suratlar",
+    "Videos" : "Wideo",
+    "Favorites" : "Halanýanlar",
+    "Tags" : "Bellikler",
+    "Back" : "Yzyna",
+    "Save" : "Saklamak",
+    "Favorite" : "Halaýan",
+    "Details" : "Jikme-jiklikler"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
