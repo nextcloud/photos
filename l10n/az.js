@@ -10,6 +10,7 @@ OC.L10N.register(
     "Group" : "Qrup",
     "Favorite" : "İstəkli",
     "Remove from favorites" : "Remove from favorites",
-    "Add" : "Əlavə etmək"
+    "Add" : "Əlavə etmək",
+    "Details" : "Detallar"
 },
 "nplurals=2; plural=(n != 1);");

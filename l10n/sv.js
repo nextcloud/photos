@@ -99,6 +99,7 @@ OC.L10N.register(
     "This folder does not exist" : "Denna mappen finns inte",
     "Loading folders …" : "Laddar mappar...",
     "No photos in here" : "Det finns inga bilder här",
+    "Taken on {date} at {time}" : "Tagen den {date} kl. {time}",
     "This place does not have any photos or videos yet!" : "Den här platsen har inga bilder eller videor än!",
     "Add photos to this place" : "Lägg till bilder till denna plats",
     "Cover photo for place {placeName}" : "Omslagsbild för plats {placeName}",
