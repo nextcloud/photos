@@ -1,0 +1,11 @@
+{ "translations": {
+    "Photos" : "Նկարներ",
+    "Favorites" : "Սիրվածներ",
+    "Shared with you" : "Shared with you",
+    "Save" : "Պահպանել",
+    "Group" : "Խումբ",
+    "Remove from favorites" : "Remove from favorites",
+    "Add" : "Ավելացնել",
+    "Details" : "Մանրամասներ"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
