@@ -99,6 +99,7 @@ OC.L10N.register(
     "This folder does not exist" : "Bu klasör bulunamadı",
     "Loading folders …" : "Klasörler yükleniyor…",
     "No photos in here" : "Burada herhangi bir fotoğraf yok",
+    "Taken on {date} at {time}" : "{date} tarihinde {time} saatinde çekilmiş",
     "This place does not have any photos or videos yet!" : "Bu yerde henüz bir fotoğraf ya da görüntü yok!",
     "Add photos to this place" : "Bu yere fotoğraflar ekle",
     "Cover photo for place {placeName}" : "{placeName} yerinin kapak görseli",
