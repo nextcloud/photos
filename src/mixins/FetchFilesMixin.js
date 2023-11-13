@@ -20,6 +20,8 @@
  *
  */
 
+import moment from '@nextcloud/moment'
+
 import logger from '../services/logger.js'
 import getPhotos from '../services/PhotoSearch.js'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
@@ -33,12 +35,19 @@ export default {
 	],
 
 	data() {
+		const dateTimeUpperBound = moment()
+		const dateTimeLowerBound = moment(dateTimeUpperBound).subtract(4, 'months')
+
 		return {
 			errorFetchingFiles: null,
 			loadingFiles: false,
 			doneFetchingFiles: false,
 			fetchSemaphore: new SemaphoreWithPriority(1),
 			fetchedFileIds: [],
+			dateTimeUpperBound,
+			dateTimeLowerBound,
+			timeWindowSteps: 4,
+			firstResultOffset: 0,
 		}
 	},
 
@@ -69,17 +78,51 @@ export default {
 
 				const numberOfImagesPerBatch = 200
 
+				logger.debug(`[FetchFilesMixin] Fetching file between ${this.dateTimeUpperBound?.format('L')} 'and' ${this.dateTimeLowerBound?.format('L')}`)
+
 				// Load next batch of images
 				const fetchedFiles = await getPhotos(path, {
-					firstResult: this.fetchedFileIds.length,
+					firstResult: this.firstResultOffset,
 					nbResults: numberOfImagesPerBatch,
+					dateTimeUpperBound: this.dateTimeUpperBound?.unix(),
+					dateTimeLowerBound: this.dateTimeLowerBound?.unix(),
 					...options,
 					signal: this.abortController.signal,
 				})
 
-				// If we get less files than requested that means we got to the end
-				if (fetchedFiles.length !== numberOfImagesPerBatch) {
-					this.doneFetchingFiles = true
+				if (fetchedFiles.length === numberOfImagesPerBatch) {
+					// If we have the same number of files than as requested
+					// then the time window probably contains more, so we simply bump the first result offset.
+					this.firstResultOffset += fetchedFiles.length
+				} else if (fetchedFiles.length === 0 && this.firstResultOffset === 0) {
+					// If we tried a new window and it is empty
+					if (this.dateTimeUpperBound === undefined) {
+						// if upper bound has been cleared, then we are done fetching files.
+						this.doneFetchingFiles = true
+					} else if (this.dateTimeLowerBound === undefined) {
+						// else if lower bound has been cleared, then we clear upper bound
+						// this will allow the server to return all files with either empty or above than now original date time
+						this.dateTimeUpperBound = undefined
+					} else if (this.timeWindowSteps === 64) {
+						// else if we reach 64 months, we clear the lower bound.
+						this.dateTimeUpperBound = this.dateTimeLowerBound
+						this.dateTimeLowerBound = undefined
+					} else {
+						// else we progressively increase the time window until we reach 64 months (3 requests)
+						this.timeWindowSteps *= 4
+						this.dateTimeUpperBound = this.dateTimeLowerBound
+						this.dateTimeLowerBound = moment(this.dateTimeLowerBound).subtract(this.timeWindowSteps, 'months')
+					}
+				} else if (fetchedFiles.length !== numberOfImagesPerBatch) {
+					// If we get less files than requested,
+					// we are at the end for the current time window, so we move to the next one.
+					this.timeWindowSteps = 4
+					this.dateTimeUpperBound = this.dateTimeLowerBound
+					if (this.dateTimeUpperBound !== undefined) {
+						this.dateTimeLowerBound = moment(this.dateTimeUpperBound).subtract(this.timeWindowSteps, 'months')
+					} else {
+						this.doneFetchingFiles = true
+					}
 				}
 
 				const fileIds = fetchedFiles
@@ -121,6 +164,9 @@ export default {
 			this.doneFetchingFiles = false
 			this.errorFetchingFiles = null
 			this.loadingFiles = false
+			this.timeWindowSteps = 4
+			this.dateTimeUpperBound = moment()
+			this.dateTimeLowerBound = moment(this.dateTimeUpperBound).subtract(this.timeWindowSteps, 'months')
 			this.fetchedFileIds = []
 		},
 	},

@@ -38,6 +38,8 @@ import moment from '@nextcloud/moment'
  * @param {boolean} [options.full=false] get full data of the files
  * @param {boolean} [options.onThisDay=false] get only items from this day of year
  * @param {boolean} [options.onlyFavorites=false] get only favorite items
+ * @param {number} [options.dateTimeUpperBound] limit the search to photos taken before this lower bound
+ * @param {number} [options.dateTimeLowerBound] limit the search to photos taken after this lower bound
  * @return {Promise<object[]>} the file list
  */
 export default async function(path = '', options = {}) {
@@ -51,7 +53,7 @@ export default async function(path = '', options = {}) {
 		...options,
 	}
 
-	const prefixPath = `/files/${getCurrentUser().uid}`
+	const prefixPath = `/files/${getCurrentUser()?.uid}`
 
 	// generating the search or condition
 	// based on the allowed mimetypes
@@ -95,6 +97,26 @@ export default async function(path = '', options = {}) {
 			}).join('\n')}</d:or>`
 		: ''
 
+	let timeWindow = ''
+	if (options.dateTimeUpperBound !== undefined) {
+		timeWindow = `
+			<d:lt>
+				<d:prop>
+					<nc:metadata-photos-original_date_time/>
+				</d:prop>
+				<d:literal>${options.dateTimeUpperBound}</d:literal>
+			</d:lt>`
+	}
+	if (options.dateTimeLowerBound !== undefined) {
+		timeWindow += `
+		<d:gt>
+			<d:prop>
+				<nc:metadata-photos-original_date_time/>
+			</d:prop>
+			<d:literal>${options.dateTimeLowerBound}</d:literal>
+		</d:gt>`
+	}
+
 	options = Object.assign({
 		method: 'SEARCH',
 		headers: {
@@ -125,6 +147,7 @@ export default async function(path = '', options = {}) {
 							</d:or>
 							${eqFavorites}
 							${onThisDay}
+							${timeWindow}
 						</d:and>
 					</d:where>
 					<d:orderby>
