@@ -54,7 +54,7 @@ class OriginalDateTimeMetadataProvider implements IEventListener {
 			return;
 		}
 
-		if (!in_array($node->getMimeType(), Application::IMAGE_MIMES)) {
+		if (!in_array($node->getMimeType(), Application::IMAGE_MIMES) && !in_array($node->getMimeType(), Application::VIDEO_MIMES)) {
 			return;
 		}
 
