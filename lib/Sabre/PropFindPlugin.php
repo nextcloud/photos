@@ -32,7 +32,7 @@ use OCA\Photos\Sabre\Place\PlacePhoto;
 use OCA\Photos\Sabre\Place\PlaceRoot;
 use OCP\Files\DavUtil;
 use OCP\Files\NotFoundException;
-use OCP\IConfig;
+use OCP\FilesMetadata\IFilesMetadataManager;
 use OCP\IPreview;
 use Sabre\DAV\INode;
 use Sabre\DAV\PropFind;
@@ -52,17 +52,15 @@ class PropFindPlugin extends ServerPlugin {
 	public const COLLABORATORS_PROPERTYNAME = '{http://nextcloud.org/ns}collaborators';
 	public const PERMISSIONS_PROPERTYNAME = '{http://owncloud.org/ns}permissions';
 
-	private IConfig $config;
 	private IPreview $previewManager;
 	private ?Tree $tree;
 	private AlbumMapper $albumMapper;
 
 	public function __construct(
-		IConfig $config,
 		IPreview $previewManager,
-		AlbumMapper $albumMapper
+		AlbumMapper $albumMapper,
+		private IFilesMetadataManager $filesMetadataManager,
 	) {
-		$this->config = $config;
 		$this->previewManager = $previewManager;
 		$this->albumMapper = $albumMapper;
 	}
@@ -119,6 +117,13 @@ class PropFindPlugin extends ServerPlugin {
 			foreach ($node->getFileInfo()->getMetadata() as $metadataKey => $metadataValue) {
 				$propFind->handle(FilesPlugin::FILE_METADATA_PREFIX.$metadataKey, $metadataValue);
 			}
+
+
+			$propFind->handle(FilesPlugin::HIDDEN_PROPERTYNAME, function () use ($node) {
+				$metadata = $this->filesMetadataManager->getMetadata((int)$node->getFileInfo()->getId(), true);
+				return $metadata->hasKey('files-live-photo') && $node->getFileInfo()->getMimetype() === 'video/quicktime' ? 'true' : 'false';
+			});
+
 		}
 
 		if ($node instanceof AlbumRoot) {

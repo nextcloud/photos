@@ -42,29 +42,31 @@ const mutations = {
 	 */
 	updateFiles(state, newFiles) {
 		const files = {}
-		newFiles.forEach(file => {
-			// Ignore the file if the path is excluded
-			if (state.nomediaPaths.some(nomediaPath => file.filename.startsWith(nomediaPath)
-				|| file.filename.startsWith(prefixPath + nomediaPath))) {
-				return
-			}
+		newFiles
+			.filter(file => !file.hidden)
+			.forEach(file => {
+				// Ignore the file if the path is excluded
+				if (state.nomediaPaths.some(nomediaPath => file.filename.startsWith(nomediaPath)
+					|| file.filename.startsWith(prefixPath + nomediaPath))) {
+					return
+				}
 
-			if (file.fileid >= 0) {
-				file.metadataPhotosSize ??= { width: 256, height: 256 }
-			}
+				if (file.fileid >= 0) {
+					file.metadataPhotosSize ??= { width: 256, height: 256 }
+				}
 
-			// Make the fileId a string once and for all.
-			file.fileid = file.fileid.toString()
+				// Make the fileId a string once and for all.
+				file.fileid = file.fileid.toString()
 
-			// Precalculate dates as it is expensive.
-			const date = moment((file.metadataPhotosOriginalDateTime * 1000) || file.lastmod)
-			file.timestamp = date.unix() // For sorting
-			file.month = date.format('YYYYMM') // For grouping by month
-			file.day = date.format('MMDD') // For On this day
+				// Precalculate dates as it is expensive.
+				const date = moment((file.metadataPhotosOriginalDateTime * 1000) || file.lastmod)
+				file.timestamp = date.unix() // For sorting
+				file.month = date.format('YYYYMM') // For grouping by month
+				file.day = date.format('MMDD') // For On this day
 
-			// Schedule the file to add
-			files[file.fileid] = file
-		})
+				// Schedule the file to add
+				files[file.fileid] = file
+			})
 
 		state.files = {
 			...state.files,
