@@ -31,7 +31,8 @@
 
 			<!-- image and loading placeholder -->
 			<div class="file__images">
-				<VideoIcon v-if="file.mime.includes('video')" class="video-icon" :size="64" />
+				<VideoIcon v-if="file.mime.includes('video')" class="icon-overlay" :size="64" />
+				<PlayCircleIcon v-else-if="file.metadataFilesLivePhoto !== undefined" class="icon-overlay" :size="64" />
 
 				<!-- We have two img elements to load the small and large preview -->
 				<!-- Do not show the small preview if the larger one is loaded -->
@@ -84,6 +85,7 @@
 <script>
 import Star from 'vue-material-design-icons/Star.vue'
 import VideoIcon from 'vue-material-design-icons/Video.vue'
+import PlayCircleIcon from 'vue-material-design-icons/PlayCircle.vue'
 
 import { generateUrl } from '@nextcloud/router'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
@@ -96,6 +98,7 @@ export default {
 		NcCheckboxRadioSwitch,
 		Star,
 		VideoIcon,
+		PlayCircleIcon,
 	},
 	inheritAttrs: false,
 	props: {
@@ -253,7 +256,7 @@ export default {
 		&__images {
 			display: contents;
 
-			.video-icon {
+			.icon-overlay {
 				position: absolute;
 				top: 0px;
 				right: 0px;

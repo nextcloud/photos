@@ -41,7 +41,9 @@ function getCollectionFilesDavRequest(extraProps = []) {
 					<d:resourcetype />
 					<nc:metadata-photos-size />
 					<nc:metadata-photos-original_date_time />
+					<nc:metadata-files-live-photo />
 					<nc:has-preview />
+					<nc:hidden />
 					<oc:favorite />
 					<oc:fileid />
 					<oc:permissions />
