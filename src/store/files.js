@@ -57,7 +57,7 @@ const mutations = {
 			file.fileid = file.fileid.toString()
 
 			// Precalculate dates as it is expensive.
-			const date = moment(file.lastmod)
+			const date = moment((file.metadataPhotosOriginalDateTime * 1000) || file.lastmod)
 			file.timestamp = date.unix() // For sorting
 			file.month = date.format('YYYYMM') // For grouping by month
 			file.day = date.format('MMDD') // For On this day
