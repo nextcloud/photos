@@ -100,21 +100,43 @@ export default async function(path = '', options = {}) {
 	let timeWindow = ''
 	if (options.dateTimeUpperBound !== undefined) {
 		timeWindow = `
-			<d:lt>
-				<d:prop>
-					<nc:metadata-photos-original_date_time/>
-				</d:prop>
-				<d:literal>${options.dateTimeUpperBound}</d:literal>
-			</d:lt>`
+			<d:or>
+				<d:lte>
+					<d:prop><nc:metadata-photos-original_date_time/></d:prop>
+					<d:literal>${options.dateTimeUpperBound}</d:literal>
+				</d:lte>
+				<d:and>
+					<d:not>
+						<d:is-defined>
+							<d:prop><nc:metadata-photos-original_date_time/></d:prop>
+						</d:is-defined>
+					</d:not>
+					<d:lte>
+						<d:prop><d:getlastmodified/></d:prop>
+						<d:literal>${options.dateTimeUpperBound}</d:literal>
+					</d:lte>
+				</d:and>
+			</d:or>`
 	}
 	if (options.dateTimeLowerBound !== undefined) {
 		timeWindow += `
-		<d:gt>
-			<d:prop>
-				<nc:metadata-photos-original_date_time/>
-			</d:prop>
-			<d:literal>${options.dateTimeLowerBound}</d:literal>
-		</d:gt>`
+			<d:or>
+				<d:gt>
+					<d:prop><nc:metadata-photos-original_date_time/></d:prop>
+					<d:literal>${options.dateTimeLowerBound}</d:literal>
+				</d:gt>
+				<d:and>
+					<d:not>
+						<d:is-defined>
+							<d:prop><nc:metadata-photos-original_date_time/></d:prop>
+						</d:is-defined>
+					</d:not>
+					<d:gt>
+						<d:prop><d:getlastmodified/></d:prop>
+						<d:literal>${options.dateTimeLowerBound}</d:literal>
+					</d:gt>
+				</d:and>
+			</d:or>`
 	}
 
 	options = Object.assign({
