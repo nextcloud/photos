@@ -64,8 +64,10 @@ class OriginalDateTimeMetadataProvider implements IEventListener {
 		if ($metadata->hasKey('photos-exif') && array_key_exists('DateTimeOriginal', $metadata->getArray('photos-exif'))) {
 			$rawDateTimeOriginal = $metadata->getArray('photos-exif')['DateTimeOriginal'];
 			$dateTimeOriginal = DateTime::createFromFormat("Y:m:d G:i:s", $rawDateTimeOriginal);
-			$metadata->setInt('photos-original_date_time', $dateTimeOriginal->getTimestamp(), true);
-			return;
+			if ($dateTimeOriginal !== false) {
+				$metadata->setInt('photos-original_date_time', $dateTimeOriginal->getTimestamp(), true);
+				return;
+			}
 		}
 
 		// Try to parse the date out of the name.
@@ -79,8 +81,10 @@ class OriginalDateTimeMetadataProvider implements IEventListener {
 			}
 
 			$dateTimeOriginal = DateTime::createFromFormat($format, $matches[1]);
-			$metadata->setInt('photos-original_date_time', $dateTimeOriginal->getTimestamp(), true);
-			return;
+			if ($dateTimeOriginal !== false) {
+				$metadata->setInt('photos-original_date_time', $dateTimeOriginal->getTimestamp(), true);
+				return;
+			}
 		}
 
 		// Fallback to the mtime.
