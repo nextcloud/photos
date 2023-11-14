@@ -99,6 +99,7 @@ OC.L10N.register(
     "This folder does not exist" : "このフォルダーは存在しません",
     "Loading folders …" : "フォルダを読み込んでいる ...",
     "No photos in here" : "写真がありません",
+    "Taken on {date} at {time}" : "{date} の {time} に撮影",
     "This place does not have any photos or videos yet!" : "この場所にはまだ写真も動画もありません！",
     "Add photos to this place" : "この場所に写真を追加",
     "Cover photo for place {placeName}" : "{placeName} の表紙写真",
