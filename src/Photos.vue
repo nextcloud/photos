@@ -27,20 +27,38 @@
 				<AppNavigationItem :to="{name: 'timeline'}"
 					class="app-navigation__photos"
 					:title="t('photos', 'Your photos')"
+					data-id-app-nav-item="timeline"
 					icon="icon-yourphotos"
 					exact />
-				<AppNavigationItem to="/videos" :title="t('photos', 'Your videos')" icon="icon-video" />
-				<AppNavigationItem to="/favorites" :title="t('photos', 'Favorites')" icon="icon-favorite" />
-				<AppNavigationItem :to="{name: 'thisday'}" :title="t('photos', 'On this day')" icon="icon-calendar-dark" />
-				<AppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Your folders')" icon="icon-files-dark" />
-				<AppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared with you')" icon="icon-share" />
+				<AppNavigationItem to="/videos"
+					:title="t('photos', 'Your videos')"
+					data-id-app-nav-item="videos"
+					icon="icon-video" />
+				<AppNavigationItem to="/favorites"
+					:title="t('photos', 'Favorites')"
+					data-id-app-nav-item="favorites"
+					icon="icon-favorite" />
+				<AppNavigationItem :to="{name: 'thisday'}"
+					:title="t('photos', 'On this day')"
+					data-id-app-nav-item="this-day"
+					icon="icon-calendar-dark" />
+				<AppNavigationItem :to="{name: 'albums'}"
+					:title="t('photos', 'Your folders')"
+					data-id-app-nav-item="albums"
+					icon="icon-files-dark" />
+				<AppNavigationItem :to="{name: 'shared'}"
+					:title="t('photos', 'Shared with you')"
+					data-id-app-nav-item="shared"
+					icon="icon-share" />
 				<AppNavigationItem v-if="areTagsInstalled"
 					:to="{name: 'tags'}"
 					:title="t('photos', 'Tagged photos')"
+					data-id-app-nav-item="tags"
 					icon="icon-tag" />
-				<AppNavigationItem v-if="showLocationMenuEntry"
+				<NcAppNavigationItem v-if="showLocationMenuEntry"
 					:to="{name: 'maps'}"
 					:title="t('photos', 'Locations')"
+					data-id-app-nav-item="maps"
 					icon="icon-address" />
 			</template>
 			<template #footer>
