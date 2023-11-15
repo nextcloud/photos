@@ -42,7 +42,7 @@ import moment from '@nextcloud/moment'
  * @param {number} [options.dateTimeLowerBound] limit the search to photos taken after this lower bound
  * @return {Promise<object[]>} the file list
  */
-export default async function(path = '', options = {}) {
+export default async function (path = '', options = {}) {
 	// default function options
 	options = {
 		firstResult: 0,
@@ -175,6 +175,10 @@ export default async function(path = '', options = {}) {
 					<d:orderby>
 						<d:order>
 							<d:prop><nc:metadata-photos-original_date_time/></d:prop>
+							<d:descending/>
+						</d:order>
+						<d:order>
+							<d:prop><d:getlastmodified/></d:prop>
 							<d:descending/>
 						</d:order>
 					</d:orderby>

@@ -35,8 +35,8 @@ export default {
 	],
 
 	data() {
-		const dateTimeUpperBound = moment()
-		const dateTimeLowerBound = moment(dateTimeUpperBound).subtract(4, 'months')
+		const dateTimeUpperBound = undefined
+		const dateTimeLowerBound = moment().subtract(4, 'months')
 
 		return {
 			errorFetchingFiles: null,
@@ -96,13 +96,15 @@ export default {
 					this.firstResultOffset += fetchedFiles.length
 				} else if (fetchedFiles.length === 0 && this.firstResultOffset === 0) {
 					// If we tried a new window and it is empty
-					if (this.dateTimeUpperBound === undefined) {
+					if (this.dateTimeUpperBound === undefined && this.dateTimeLowerBound === undefined) {
 						// if upper bound has been cleared, then we are done fetching files.
 						this.doneFetchingFiles = true
 					} else if (this.dateTimeLowerBound === undefined) {
 						// else if lower bound has been cleared, then we clear upper bound
 						// this will allow the server to return all files with either empty or above than now original date time
 						this.dateTimeUpperBound = undefined
+					} else if (this.dateTimeUpperBound === undefined) {
+						this.dateTimeUpperBound = this.dateTimeLowerBound
 					} else if (this.timeWindowSteps === 64) {
 						// else if we reach 64 months, we clear the lower bound.
 						this.dateTimeUpperBound = this.dateTimeLowerBound
@@ -165,7 +167,7 @@ export default {
 			this.errorFetchingFiles = null
 			this.loadingFiles = false
 			this.timeWindowSteps = 4
-			this.dateTimeUpperBound = moment()
+			this.dateTimeUpperBound = undefined
 			this.dateTimeLowerBound = moment(this.dateTimeUpperBound).subtract(this.timeWindowSteps, 'months')
 			this.fetchedFileIds = []
 		},
