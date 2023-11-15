@@ -27,46 +27,68 @@
 				<NcAppNavigationItem :to="{name: 'all_media'}"
 					class="app-navigation__all_media"
 					:title="t('photos', 'All media')"
+					data-id-app-nav-item="all-media"
 					exact>
 					<ImageIcon slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem to="/photos" :title="t('photos', 'Photos')">
+				<NcAppNavigationItem to="/photos"
+					:title="t('photos', 'Photos')"
+					data-id-app-nav-item="photos">
 					<Camera slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem to="/videos" :title="t('photos', 'Videos')">
+				<NcAppNavigationItem to="/videos"
+					:title="t('photos', 'Videos')"
+					data-id-app-nav-item="videos">
 					<VideoIcon slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem :to="{name: 'albums'}" :title="t('photos', 'Albums')">
+				<NcAppNavigationItem :to="{name: 'albums'}"
+					:title="t('photos', 'Albums')"
+					data-id-app-nav-item="albums">
 					<FolderMultipleImage slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem :to="{name: 'sharedAlbums'}" :title="t('photos', 'Collaborative albums')">
+				<NcAppNavigationItem :to="{name: 'sharedAlbums'}"
+					:title="t('photos', 'Collaborative albums')"
+					data-id-app-nav-item="shared-albums">
 					<AccountGroup slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem v-if="showPeopleMenuEntry" :to="{name: 'faces'}" :title="t('photos', 'People')">
+				<NcAppNavigationItem v-if="showPeopleMenuEntry"
+					:to="{name: 'faces'}"
+					:title="t('photos', 'People')"
+					data-id-app-nav-item="faces">
 					<template #icon>
 						<AccountBoxMultipleOutline :size="20" />
 					</template>
 				</NcAppNavigationItem>
-				<NcAppNavigationItem :to="{name: 'folders'}" :title="t('photos', 'Folders')">
+				<NcAppNavigationItem :to="{name: 'folders'}"
+					:title="t('photos', 'Folders')"
+					data-id-app-nav-item="folders">
 					<Folder slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem to="/favorites" :title="t('photos', 'Favorites')">
+				<NcAppNavigationItem to="/favorites"
+					:title="t('photos', 'Favorites')"
+					data-id-app-nav-item="favorites">
 					<Star slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem :to="{name: 'thisday'}" :title="t('photos', 'On this day')">
+				<NcAppNavigationItem :to="{name: 'thisday'}"
+					:title="t('photos', 'On this day')"
+					data-id-app-nav-item="this-day">
 					<CalendarToday slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem :to="{name: 'shared'}" :title="t('photos', 'Shared with you')">
+				<NcAppNavigationItem :to="{name: 'shared'}"
+					:title="t('photos', 'Shared with you')"
+					data-id-app-nav-item="shared">
 					<ShareVariant slot="icon" :size="20" />
 				</NcAppNavigationItem>
 				<NcAppNavigationItem v-if="areTagsInstalled"
 					:to="{name: 'tags'}"
-					:title="t('photos', 'Tags')">
+					:title="t('photos', 'Tags')"
+					data-id-app-nav-item="tags">
 					<Tag slot="icon" :size="20" />
 				</NcAppNavigationItem>
 				<NcAppNavigationItem v-if="showLocationMenuEntry"
 					:to="{name: 'maps'}"
-					:title="t('photos', 'Locations')">
+					:title="t('photos', 'Locations')"
+					data-id-app-nav-item="maps">
 					<MapMarker slot="icon" :size="20" />
 				</NcAppNavigationItem>
 			</template>
