@@ -313,7 +313,7 @@ export default {
 	// Reveal checkbox on hover.
 	&:hover, &.selected, &:focus-within {
 		.selection-checkbox {
-			display: flex;
+			opacity: 1;
 		}
 
 		.favorite-state {
@@ -322,7 +322,7 @@ export default {
 	}
 
 	.selection-checkbox {
-		display: none;
+		opacity: 0;
 		position: absolute;
 		top: 8px;
 		// Fancy calculation to render the checkbox in the middle of narrow images.
