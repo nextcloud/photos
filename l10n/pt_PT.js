@@ -29,6 +29,7 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Fotos com marcações serão mostradas aqui",
     "Add" : "Adicionar",
     "Tagged photos" : "Fotos marcadas",
+    "Details" : "Detalhes",
     "Failed to delete {fileName}." : "Falha ao remover {fileName}.",
     "Locations" : "Localizações",
     "Shared albums" : "Álbuns partilhados"

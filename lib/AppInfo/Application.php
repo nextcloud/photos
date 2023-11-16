@@ -27,18 +27,28 @@ namespace OCA\Photos\AppInfo;
 
 use OCA\DAV\Connector\Sabre\Principal;
 use OCA\DAV\Events\SabrePluginAuthInitEvent;
+use OCA\Files\Event\LoadSidebar;
 use OCA\Photos\Listener\AlbumsManagementEventListener;
-use OCA\Photos\Listener\PlaceManagerEventListener;
+use OCA\Photos\Listener\CSPListener;
+use OCA\Photos\Listener\ExifMetadataProvider;
+use OCA\Photos\Listener\LoadSidebarScripts;
+use OCA\Photos\Listener\OriginalDateTimeMetadataProvider;
+use OCA\Photos\Listener\PlaceMetadataProvider;
 use OCA\Photos\Listener\SabrePluginAuthInitListener;
+use OCA\Photos\Listener\SizeMetadataProvider;
 use OCA\Photos\Listener\TagListener;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Files\Events\Node\NodeDeletedEvent;
-use OCP\Files\Events\Node\NodeWrittenEvent;
+use OCP\FilesMetadata\Event\MetadataBackgroundEvent;
+use OCP\FilesMetadata\Event\MetadataLiveEvent;
+use OCP\FilesMetadata\IFilesMetadataManager;
+use OCP\FilesMetadata\Model\IMetadataValueWrapper;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\Group\Events\UserRemovedEvent;
+use OCP\Security\CSP\AddContentSecurityPolicyEvent;
 use OCP\Share\Events\ShareDeletedEvent;
 use OCP\SystemTag\MapperEvent;
 use OCP\User\Events\UserDeletedEvent;
@@ -75,8 +85,16 @@ class Application extends App implements IBootstrap {
 		/** Register $principalBackend for the DAV collection */
 		$context->registerServiceAlias('principalBackend', Principal::class);
 
-		// Priority of -1 to be triggered after event listeners populating metadata.
-		$context->registerEventListener(NodeWrittenEvent::class, PlaceManagerEventListener::class, -1);
+		$context->registerEventListener(LoadSidebar::class, LoadSidebarScripts::class);
+
+		$context->registerEventListener(AddContentSecurityPolicyEvent::class, CSPListener::class);
+
+		// Metadata
+		$context->registerEventListener(MetadataLiveEvent::class, ExifMetadataProvider::class);
+		$context->registerEventListener(MetadataLiveEvent::class, SizeMetadataProvider::class);
+		$context->registerEventListener(MetadataLiveEvent::class, OriginalDateTimeMetadataProvider::class);
+		$context->registerEventListener(MetadataLiveEvent::class, PlaceMetadataProvider::class);
+		$context->registerEventListener(MetadataBackgroundEvent::class, PlaceMetadataProvider::class);
 
 		$context->registerEventListener(NodeDeletedEvent::class, AlbumsManagementEventListener::class);
 		$context->registerEventListener(UserRemovedEvent::class, AlbumsManagementEventListener::class);
@@ -91,5 +109,8 @@ class Application extends App implements IBootstrap {
 	}
 
 	public function boot(IBootContext $context): void {
+		/** @var IFilesMetadataManager $metadataManager */
+		$metadataManager = $context->getServerContainer()->get(IFilesMetadataManager::class);
+		$metadataManager->initMetadata('photos-original_date_time', IMetadataValueWrapper::TYPE_INT, true);
 	}
 }

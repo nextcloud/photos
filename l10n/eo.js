@@ -18,6 +18,7 @@ OC.L10N.register(
     "Favorite" : "Pliŝatati",
     "Remove from favorites" : "Forigi el pliŝataĵoj",
     "Add" : "Aldoni",
-    "Delete selection" : "Forigi elekton"
+    "Delete selection" : "Forigi elekton",
+    "Details" : "Detaloj"
 },
 "nplurals=2; plural=(n != 1);");

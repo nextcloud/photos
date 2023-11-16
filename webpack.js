@@ -12,6 +12,7 @@ const { basename } = require('path')
 webpackConfig.entry = {
 	main: path.join(__dirname, 'src', 'main.js'),
 	public: path.join(__dirname, 'src', 'public.js'),
+	sidebar: path.join(__dirname, 'src', 'sidebar.js'),
 }
 
 webpackRules.RULE_JS.exclude = BabelLoaderExcludeNodeModulesExcept([

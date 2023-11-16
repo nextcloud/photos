@@ -215,7 +215,7 @@ button.app-navigation-toggle {
 	}
 
 	&__title {
-		max-width: 50%;
+		max-width: 45%;
 		margin-right: calc(2 * var(--photos-navigation-spacing));
 		display: flex;
 		flex-direction: column;
@@ -230,6 +230,10 @@ button.app-navigation-toggle {
 			white-space: nowrap;
 			text-overflow: ellipsis;
 		}
+	}
+
+	&__content {
+		max-width: 50%;
 	}
 
 	&__loader {

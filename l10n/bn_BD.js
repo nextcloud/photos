@@ -11,6 +11,7 @@ OC.L10N.register(
     "Group" : "গোষ্ঠীসমূহ",
     "Favorite" : "প্রিয়জন",
     "Remove from favorites" : "Remove from favorites",
-    "Add" : "যোগ করুন"
+    "Add" : "যোগ করুন",
+    "Details" : "বিসতারিত"
 },
 "nplurals=2; plural=(n != 1);");

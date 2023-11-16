@@ -10,6 +10,7 @@ OC.L10N.register(
     "Group" : "Group",
     "Favorite" : "விருப்பமான",
     "Remove from favorites" : "Remove from favorites",
-    "Add" : "சேர்க்க"
+    "Add" : "சேர்க்க",
+    "Details" : "விவரங்கள்"
 },
 "nplurals=2; plural=(n != 1);");

@@ -42,34 +42,31 @@ const mutations = {
 	 */
 	updateFiles(state, newFiles) {
 		const files = {}
-		newFiles.forEach(file => {
-			// Ignore the file if the path is excluded
-			if (state.nomediaPaths.some(nomediaPath => file.filename.startsWith(nomediaPath)
-				|| file.filename.startsWith(prefixPath + nomediaPath))) {
-				return
-			}
-
-			if (file.fileid >= 0) {
-				if (file.fileMetadataSize?.length > 1) {
-					file.fileMetadataSizeParsed = JSON.parse(file.fileMetadataSize?.replace(/&quot;/g, '"') ?? '{}')
-					file.fileMetadataSizeParsed.width = file.fileMetadataSizeParsed?.width ?? 256
-					file.fileMetadataSizeParsed.height = file.fileMetadataSizeParsed?.height ?? 256
-				} else {
-					file.fileMetadataSizeParsed = { width: 256, height: 256 }
+		newFiles
+			.filter(file => !file.hidden)
+			.forEach(file => {
+				// Ignore the file if the path is excluded
+				if (state.nomediaPaths.some(nomediaPath => file.filename.startsWith(nomediaPath)
+					|| file.filename.startsWith(prefixPath + nomediaPath))) {
+					return
 				}
-			}
 
-			// Make the fileId a string once and for all.
-			file.fileid = file.fileid.toString()
+				if (file.fileid >= 0) {
+					file.metadataPhotosSize ??= { width: 256, height: 256 }
+				}
 
-			// Precalculate dates as it is expensive.
-			file.timestamp = moment(file.lastmod).unix() // For sorting
-			file.month = moment(file.lastmod).format('YYYYMM') // For grouping by month
-			file.day = moment(file.lastmod).format('MMDD') // For On this day
+				// Make the fileId a string once and for all.
+				file.fileid = file.fileid.toString()
 
-			// Schedule the file to add
-			files[file.fileid] = file
-		})
+				// Precalculate dates as it is expensive.
+				const date = moment((file.metadataPhotosOriginalDateTime * 1000) || file.lastmod)
+				file.timestamp = date.unix() // For sorting
+				file.month = date.format('YYYYMM') // For grouping by month
+				file.day = date.format('MMDD') // For On this day
+
+				// Schedule the file to add
+				files[file.fileid] = file
+			})
 
 		state.files = {
 			...state.files,

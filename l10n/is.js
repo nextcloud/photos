@@ -34,6 +34,7 @@ OC.L10N.register(
     "Add" : "Bæta við",
     "Delete selection" : "Eyða vali",
     "Tagged photos" : "Merktar ljósmyndir",
+    "Details" : "Nánar",
     "Locations" : "Staðsetningar",
     "Shared albums" : "Sameiginleg albúm"
 },

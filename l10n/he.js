@@ -15,7 +15,6 @@ OC.L10N.register(
     "Name of the album" : "שם האלבום",
     "Location of the album" : "מיקום גיאוגראפי של האלבום",
     "Back" : "חזרה",
-    "Go to the add collaborators view." : "מעבר לתצוגה של הוספת שותפים",
     "Add collaborators" : "הוספת שותפים",
     "Save" : "שמירה",
     "Create album" : "יצירת אלבום",
@@ -40,7 +39,9 @@ OC.L10N.register(
     "All your media" : "כל המדיה שלך",
     "Shared Albums" : "אלבומים משותפים",
     "Tagged photos" : "תמונות מתויגות",
+    "Details" : "פרטים",
     "Locations" : "מיקומים",
+    "Go to the add collaborators view." : "מעבר לתצוגה של הוספת שותפים",
     "Add {collaboratorLabel} to the collaborators list" : "הוסף {collaboratorLabel} לרשימת השותפים",
     "Shared albums" : "אלבומים משותפים"
 },

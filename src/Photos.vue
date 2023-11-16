@@ -25,62 +25,94 @@
 		<NcAppNavigation>
 			<template #list>
 				<NcAppNavigationItem :to="{name: 'all_media'}"
-					class="app-navigation__all_media"
 					:name="t('photos', 'All media')"
+					class="app-navigation__all_media"
+					data-id-app-nav-item="all-media"
 					exact>
 					<ImageIcon slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem to="/photos" :name="t('photos', 'Photos')">
+				<NcAppNavigationItem to="/photos"
+					:name="t('photos', 'Photos')"
+					data-id-app-nav-item="photos">
 					<Camera slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem to="/videos" :name="t('photos', 'Videos')">
+				<NcAppNavigationItem to="/videos"
+					:name="t('photos', 'Videos')"
+					data-id-app-nav-item="videos">
 					<VideoIcon slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem :to="{name: 'albums'}" :name="t('photos', 'Albums')">
+				<NcAppNavigationItem :to="{name: 'albums'}"
+					:name="t('photos', 'Albums')"
+					data-id-app-nav-item="albums">
 					<FolderMultipleImage slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem :to="{name: 'sharedAlbums'}" :name="t('photos', 'Collaborative albums')">
+				<NcAppNavigationItem :to="{name: 'sharedAlbums'}"
+					:name="t('photos', 'Collaborative albums')"
+					data-id-app-nav-item="shared-albums">
 					<AccountGroup slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem v-if="showPeopleMenuEntry" :to="{name: 'faces'}" :name="t('photos', 'People')">
+				<NcAppNavigationItem v-if="showPeopleMenuEntry"
+					:to="{name: 'faces'}"
+					:name="t('photos', 'People')"
+					data-id-app-nav-item="faces">
 					<template #icon>
 						<AccountBoxMultipleOutline :size="20" />
 					</template>
 				</NcAppNavigationItem>
-				<NcAppNavigationItem :to="{name: 'folders'}" :name="t('photos', 'Folders')">
+				<NcAppNavigationItem :to="{name: 'folders'}"
+					:name="t('photos', 'Folders')"
+					data-id-app-nav-item="folders">
 					<Folder slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem to="/favorites" :name="t('photos', 'Favorites')">
+				<NcAppNavigationItem to="/favorites"
+					:name="t('photos', 'Favorites')"
+					data-id-app-nav-item="favorites">
 					<Star slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem :to="{name: 'thisday'}" :name="t('photos', 'On this day')">
+				<NcAppNavigationItem :to="{name: 'thisday'}"
+					:name="t('photos', 'On this day')"
+					data-id-app-nav-item="this-day">
 					<CalendarToday slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem :to="{name: 'shared'}" :name="t('photos', 'Shared with you')">
+				<NcAppNavigationItem :to="{name: 'shared'}"
+					:name="t('photos', 'Shared with you')"
+					data-id-app-nav-item="shared">
 					<ShareVariant slot="icon" :size="20" />
 				</NcAppNavigationItem>
 				<NcAppNavigationItem v-if="areTagsInstalled"
 					:to="{name: 'tags'}"
-					:name="t('photos', 'Tags')">
+					:name="t('photos', 'Tags')"
+					data-id-app-nav-item="tags">
 					<Tag slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem :to="{name: 'places'}" :name="t('photos', 'Places')">
+				<NcAppNavigationItem :to="{name: 'places'}"
+					:name="t('photos', 'Places')"
+					data-id-app-nav-item="places">
 					<MapMarker slot="icon" :size="20" />
 				</NcAppNavigationItem>
 				<NcAppNavigationItem v-if="showLocationMenuEntry"
 					:to="{name: 'maps'}"
-					:name="t('photos', 'Map')">
+					:name="t('photos', 'Map')"
+					data-id-app-nav-item="maps">
 					<MapIcon slot="icon" :size="20" />
 				</NcAppNavigationItem>
 			</template>
 			<template #footer>
-				<NcAppNavigationItem :name="t('photos', 'Photos settings')" @click="showSettings">
-					<Cog slot="icon" :size="20" />
-				</NcAppNavigationItem>
+				<div class="app-navigation__footer">
+					<NcButton type="tertiary"
+						alignment="start"
+						wide
+						@click="showSettings">
+						<template #icon>
+							<Cog slot="icon" :size="20" />
+						</template>
+						{{ t('photos', 'Photos settings') }}
+					</NcButton>
+				</div>
 			</template>
 		</NcAppNavigation>
 		<NcAppContent :page-heading="pageHeading">
-			<router-view />
+			<RouterView />
 
 			<!-- svg img loading placeholder (linked to the File component) -->
 			<!-- eslint-disable-next-line vue/no-v-html (because it's an SVG file) -->
@@ -116,7 +148,7 @@ import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
 import Cog from 'vue-material-design-icons/Cog.vue'
 
-import { NcContent, NcAppContent, NcAppNavigation, NcAppNavigationItem } from '@nextcloud/vue'
+import { NcContent, NcAppContent, NcAppNavigation, NcAppNavigationItem, NcButton } from '@nextcloud/vue'
 
 import SettingsDialog from './components/Settings/SettingsDialog.vue'
 
@@ -148,6 +180,7 @@ export default {
 		NcAppContent,
 		NcAppNavigation,
 		NcAppNavigationItem,
+		NcButton,
 		NcContent,
 		SettingsDialog,
 	},
@@ -223,7 +256,11 @@ export default {
 	align-content: space-between;
 }
 
-.app-navigation__photos:deep .app-navigation-entry-icon.icon-photos {
+.app-navigation__photos :deep(.app-navigation-entry-icon.icon-photos) {
 	background-size: 20px;
+}
+
+.app-navigation__footer {
+	padding: calc(var(--default-grid-baseline) * 2);
 }
 </style>

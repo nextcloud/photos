@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 /**
- * @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
+ * @copyright Copyright (c) 2023, Louis Chmn <louis@chmn.me>
  *
- * @author Louis Chemineau <louis@chmn.me>
+ * @author Louis Chmn <louis@chmn.me>
  *
- * @license AGPL-3.0-or-later
+ * @license GNU AGPL version 3 or any later version
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -23,26 +23,29 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Photos\Jobs;
+namespace OCA\Photos\Listener;
 
-use OCA\Photos\Service\MediaPlaceManager;
-use OCP\AppFramework\Utility\ITimeFactory;
-use OCP\BackgroundJob\QueuedJob;
+use OCP\AppFramework\Http\ContentSecurityPolicy;
+use OCP\EventDispatcher\Event;
+use OCP\EventDispatcher\IEventListener;
+use OCP\Security\CSP\AddContentSecurityPolicyEvent;
 
-class MapMediaToPlaceJob extends QueuedJob {
-	private MediaPlaceManager $mediaPlaceManager;
+/**
+ * @template-implements IEventListener<AddContentSecurityPolicyEvent>
+ */
+class CSPListener implements IEventListener {
 
 	public function __construct(
-		ITimeFactory $time,
-		MediaPlaceManager $mediaPlaceManager
 	) {
-		parent::__construct($time);
-		$this->mediaPlaceManager = $mediaPlaceManager;
 	}
 
-	protected function run($argument) {
-		[$fileId] = $argument;
+	public function handle(Event $event): void {
+		if (!($event instanceof AddContentSecurityPolicyEvent)) {
+			return;
+		}
 
-		$this->mediaPlaceManager->setPlaceForFile($fileId);
+		$csp = new ContentSecurityPolicy();
+		$csp->addAllowedImageDomain('https://*.tile.openstreetmap.org');
+		$event->addPolicy($csp);
 	}
 }

@@ -62,7 +62,9 @@
 						<template #icon>
 							<Plus />
 						</template>
-						{{ t('photos', 'Add to album') }}
+						<template v-if="!isMobile">
+							{{ t('photos', 'Add to album') }}
+						</template>
 					</NcButton>
 
 					<NcButton v-if="selectedFileIds.length > 0"
@@ -71,7 +73,9 @@
 						<template #icon>
 							<Close />
 						</template>
-						{{ t('photos', 'Unselect all') }}
+						<template v-if="!isMobile">
+							{{ t('photos', 'Unselect all') }}
+						</template>
 					</NcButton>
 
 					<NcActions :aria-label="t('photos', 'Open actions menu')">

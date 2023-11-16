@@ -13,6 +13,7 @@ OC.L10N.register(
     "An error occurred" : "Det oppstod ein feil.",
     "Favorite" : "Favoritt",
     "Remove from favorites" : "Remove from favorites",
-    "Add" : "Legg til"
+    "Add" : "Legg til",
+    "Details" : "Detaljar"
 },
 "nplurals=2; plural=(n != 1);");

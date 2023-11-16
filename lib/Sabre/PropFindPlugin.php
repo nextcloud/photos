@@ -23,16 +23,16 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Sabre;
 
-use OC\Metadata\IMetadataManager;
 use OCA\DAV\Connector\Sabre\FilesPlugin;
 use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Sabre\Album\AlbumPhoto;
 use OCA\Photos\Sabre\Album\AlbumRoot;
+use OCA\Photos\Sabre\Album\PublicAlbumPhoto;
 use OCA\Photos\Sabre\Place\PlacePhoto;
 use OCA\Photos\Sabre\Place\PlaceRoot;
 use OCP\Files\DavUtil;
 use OCP\Files\NotFoundException;
-use OCP\IConfig;
+use OCP\FilesMetadata\IFilesMetadataManager;
 use OCP\IPreview;
 use Sabre\DAV\INode;
 use Sabre\DAV\PropFind;
@@ -52,24 +52,17 @@ class PropFindPlugin extends ServerPlugin {
 	public const COLLABORATORS_PROPERTYNAME = '{http://nextcloud.org/ns}collaborators';
 	public const PERMISSIONS_PROPERTYNAME = '{http://owncloud.org/ns}permissions';
 
-	private IConfig $config;
-	private IMetadataManager $metadataManager;
 	private IPreview $previewManager;
-	private bool $metadataEnabled;
 	private ?Tree $tree;
 	private AlbumMapper $albumMapper;
 
 	public function __construct(
-		IConfig $config,
-		IMetadataManager $metadataManager,
 		IPreview $previewManager,
-		AlbumMapper $albumMapper
+		AlbumMapper $albumMapper,
+		private IFilesMetadataManager $filesMetadataManager,
 	) {
-		$this->config = $config;
-		$this->metadataManager = $metadataManager;
 		$this->previewManager = $previewManager;
 		$this->albumMapper = $albumMapper;
-		$this->metadataEnabled = $this->config->getSystemValueBool('enable_file_metadata', true);
 	}
 
 	/**
@@ -109,24 +102,28 @@ class PropFindPlugin extends ServerPlugin {
 			$propFind->handle(self::FILE_NAME_PROPERTYNAME, fn () => $node->getFile()->getName());
 			$propFind->handle(self::FAVORITE_PROPERTYNAME, fn () => $node->isFavorite() ? 1 : 0);
 			$propFind->handle(FilesPlugin::HAS_PREVIEW_PROPERTYNAME, fn () => json_encode($this->previewManager->isAvailable($fileInfo)));
-			// Remove G permission as it does not make sense in the context of photos.
-			$propFind->handle(FilesPlugin::PERMISSIONS_PROPERTYNAME, fn () => str_replace('G', '', DavUtil::getDavPermissions($node->getFileInfo())));
+			$propFind->handle(FilesPlugin::PERMISSIONS_PROPERTYNAME, function () use ($node): string {
+				$permissions = DavUtil::getDavPermissions($node->getFileInfo());
+				$filteredPermissions = str_replace('R', '', $permissions);
 
-			if ($this->metadataEnabled) {
-				$propFind->handle(FilesPlugin::FILE_METADATA_SIZE, function () use ($node) {
-					if (!str_starts_with($node->getFile()->getMimetype(), 'image')) {
-						return json_encode((object)[]);
-					}
+				if ($node instanceof PublicAlbumPhoto) {
+					$filteredPermissions = str_replace('D', '', $filteredPermissions);
+					$filteredPermissions = str_replace('NV', '', $filteredPermissions);
+					$filteredPermissions = str_replace('W', '', $filteredPermissions);
+				}
+				return $filteredPermissions;
+			});
 
-					if ($node->getFile()->hasMetadata('size')) {
-						$sizeMetadata = $node->getFile()->getMetadata('size');
-					} else {
-						$sizeMetadata = $this->metadataManager->fetchMetadataFor('size', [$node->getFile()->getFileId()])[$node->getFile()->getFileId()];
-					}
-
-					return $sizeMetadata->getValue();
-				});
+			foreach ($node->getFileInfo()->getMetadata() as $metadataKey => $metadataValue) {
+				$propFind->handle(FilesPlugin::FILE_METADATA_PREFIX.$metadataKey, $metadataValue);
 			}
+
+
+			$propFind->handle(FilesPlugin::HIDDEN_PROPERTYNAME, function () use ($node) {
+				$metadata = $this->filesMetadataManager->getMetadata((int)$node->getFileInfo()->getId(), true);
+				return $metadata->hasKey('files-live-photo') && $node->getFileInfo()->getMimetype() === 'video/quicktime' ? 'true' : 'false';
+			});
+
 		}
 
 		if ($node instanceof AlbumRoot) {
@@ -136,35 +133,11 @@ class PropFindPlugin extends ServerPlugin {
 			$propFind->handle(self::LOCATION_PROPERTYNAME, fn () => $node->getAlbum()->getAlbum()->getLocation());
 			$propFind->handle(self::DATE_RANGE_PROPERTYNAME, fn () => json_encode($node->getDateRange()));
 			$propFind->handle(self::COLLABORATORS_PROPERTYNAME, fn () => $node->getCollaborators());
-
-			// TODO detect dynamically which metadata groups are requested and
-			// preload all of them and not just size
-			if ($this->metadataEnabled && in_array(FilesPlugin::FILE_METADATA_SIZE, $propFind->getRequestedProperties(), true)) {
-				$fileIds = $node->getAlbum()->getFileIds();
-
-				$preloadedMetadata = $this->metadataManager->fetchMetadataFor('size', $fileIds);
-				foreach ($node->getAlbum()->getFiles() as $file) {
-					if (str_starts_with($file->getMimeType(), 'image')) {
-						$file->setMetadata('size', $preloadedMetadata[$file->getFileId()]);
-					}
-				}
-			}
 		}
 
 		if ($node instanceof PlaceRoot) {
 			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn () => $node->getFirstPhoto());
 			$propFind->handle(self::NBITEMS_PROPERTYNAME, fn () => count($node->getChildren()));
-
-			// TODO detect dynamically which metadata groups are requested and
-			// preload all of them and not just size
-			if ($this->metadataEnabled && in_array(FilesPlugin::FILE_METADATA_SIZE, $propFind->getRequestedProperties(), true)) {
-				$fileIds = $node->getFileIds();
-				$preloadedMetadata = $this->metadataManager->fetchMetadataFor('size', $fileIds);
-
-				foreach ($node->getChildren() as $file) {
-					$file->getFile()->setMetadata('size', $preloadedMetadata[$file->getFileId()]);
-				}
-			}
 		}
 	}
 

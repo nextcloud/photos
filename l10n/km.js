@@ -9,6 +9,7 @@ OC.L10N.register(
     "Save" : "រក្សាទុក",
     "Shared by" : "បាន​ចែក​រំលែក​ដោយ",
     "Remove from favorites" : "Remove from favorites",
-    "Add" : "បញ្ចូល"
+    "Add" : "បញ្ចូល",
+    "Details" : "ព័ត៌មាន​លម្អិត"
 },
 "nplurals=1; plural=0;");
