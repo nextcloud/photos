@@ -78,7 +78,6 @@ export default {
 			// The zoom level of the map in the new openstreetmap tab upon
 			// Opening the link
 			linkZoom: 18,
-
 			attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
 		}
 	},
@@ -138,7 +137,7 @@ export default {
 		 * @return {number}
 		 */
 		focal() {
-			if (!this.exif) {
+			if (!this.exif?.FNumber) {
 				return 0
 			}
 
@@ -149,7 +148,7 @@ export default {
 		 * @return {number}
 		 */
 		focalLength() {
-			if (!this.exif) {
+			if (!this.exif?.FocalLength) {
 				return 0
 			}
 
@@ -166,7 +165,7 @@ export default {
 		 * @return {string}
 		 */
 		normalizedExposureTime() {
-			if (!this.exif) {
+			if (!this.exif?.ExposureTime) {
 				return 0
 			}
 
