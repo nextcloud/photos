@@ -6,13 +6,6 @@
  */
 
 /*!
- * The buffer module from node.js, for the browser.
- *
- * @author   Feross Aboukhadijeh <https://feross.org>
- * @license  MIT
- */
-
-/*!
  * Toastify js 1.12.0
  * https://github.com/apvarun/toastify-js
  * @license MIT licensed
@@ -52,11 +45,7 @@
 
 /*! @license DOMPurify 3.0.5 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/3.0.5/LICENSE */
 
-/*! https://mths.be/base64 v1.0.0 by @mathias | MIT license */
-
-/*! https://mths.be/he v1.2.0 by @mathias | MIT license */
-
-/*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
+/*! For license information please see index.js.LICENSE.txt */
 
 /**
  * @copyright 2021 Christoph Wurst <christoph@winzerhof-wurst.at>
@@ -455,14 +444,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
-/**
-* @license nested-property https://github.com/cosmosio/nested-property
-*
-* The MIT License (MIT)
-*
-* Copyright (c) 2014-2020 Olivier Scherrer <pode.fr@gmail.com>
-*/
 
 //! moment.js
 
