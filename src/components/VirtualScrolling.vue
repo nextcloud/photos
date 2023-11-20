@@ -38,8 +38,6 @@
 </template>
 
 <script>
-import { debounce } from 'debounce'
-
 import logger from '../services/logger.js'
 
 /**
@@ -322,14 +320,14 @@ export default {
 		})
 
 		if (this.useWindow) {
-			window.addEventListener('resize', this.updateContainerSize)
+			window.addEventListener('resize', this.updateContainerSize, { passive: true })
 			this.containerHeight = window.innerHeight
 		} else {
 			this.resizeObserver.observe(this.container)
 		}
 
 		this.resizeObserver.observe(this.$refs.rowsContainer)
-		this.container.addEventListener('scroll', this.updateScrollPosition)
+		this.container.addEventListener('scroll', this.updateScrollPosition, { passive: true })
 	},
 
 	beforeDestroy() {
@@ -342,16 +340,16 @@ export default {
 	},
 
 	methods: {
-		// Debouncing by a tiny amount helps a bit to reduce computation cycles.
-		// From a quick tests, 6 cycle are triggered on a big scroll without debounce.
-		// This is reduce to 4 with this tiny debounce.
-		updateScrollPosition: debounce(function() {
-			if (this.useWindow) {
-				this.scrollPosition = this.container.scrollY
-			} else {
-				this.scrollPosition = this.container.scrollTop
-			}
-		}, 5),
+		updateScrollPosition() {
+			this._onScrollHandle ??= requestAnimationFrame(() => {
+				this._onScrollHandle = null
+				if (this.useWindow) {
+					this.scrollPosition = this.container.scrollY
+				} else {
+					this.scrollPosition = this.container.scrollTop
+				}
+			})
+		},
 
 		updateContainerSize() {
 			this.containerHeight = window.innerHeight
@@ -368,5 +366,7 @@ export default {
 
 .vs-rows-container {
 	box-sizing: border-box;
+	will-change: scroll-position, padding;
+	contain: layout paint style;
 }
 </style>

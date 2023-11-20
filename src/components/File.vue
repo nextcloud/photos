@@ -78,7 +78,10 @@
 			<span class="input-label">{{ t('photos', 'Select image {imageName}', {imageName: file.basename}) }}</span>
 		</NcCheckboxRadioSwitch>
 
-		<Star v-if="file.favorite === 1" class="favorite-state" :aria-label="t('photos', 'The file is in the favorites')" />
+		<Star v-if="file.favorite === 1"
+			v-once
+			class="favorite-state"
+			:aria-label="t('photos', 'The file is in the favorites')" />
 	</div>
 </template>
 
@@ -223,6 +226,7 @@ export default {
 
 <style lang="scss" scoped>
 .file-container {
+	contain: strict;
 	background: var(--color-primary-element-light);
 	position: relative;
 	height: 100%;
