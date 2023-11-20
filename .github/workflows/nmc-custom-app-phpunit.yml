@@ -1,0 +1,113 @@
+name: MCLOUD phpunit (app)
+
+on:
+  workflow_call:
+    inputs:
+      assembly:
+        description: name of the customisation assembly branch, not needed for non-fork apps
+        required: true
+        type: string
+      appname:
+        description: name of the app to test
+        required: true
+        type: string
+      server-repo:
+        description: uncustomized nextcloud stable version branch
+        required: false
+        type: string
+        default: 'nextcloud/server'
+      server-branch:
+        description: nextcloud stable version branch
+        required: true
+        type: string
+      phpversion:
+        description: php version to use
+        required: false
+        type: string
+        default: '8.0'
+      database:
+        description: database to use
+        required: false
+        type: string
+        default: 'mysql'
+            
+jobs:
+  unitrun:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      #matrix:
+      #  php-versions: ['8.0', '8.1']
+      #  databases: ['mysql']
+
+    name: ${{ inputs.assembly }}-php${{ inputs.phpversion }}-${{ inputs.database }}
+
+    services:
+      #postgres:
+      #  image: postgres:14
+      #  ports:
+      #    - 4445:5432/tcp
+      #  env:
+      #    POSTGRES_USER: root
+      #    POSTGRES_PASSWORD: rootpassword
+      #    POSTGRES_DB: nextcloud
+      #  options: --health-cmd pg_isready --health-interval 5s --health-timeout 2s --health-retries 5
+      mysql:
+        image: mariadb:10.5
+        ports:
+          - 4444:3306/tcp
+        env:
+          MYSQL_ROOT_PASSWORD: rootpassword
+        options: --health-cmd="mysqladmin ping" --health-interval 5s --health-timeout 2s --health-retries 5
+
+    steps:
+        # we test apps with plain Nextcloud server to keep things independent
+        # full integration test is separately done
+      - name: Checkout server
+        uses: actions/checkout@v2
+        with:
+          repository: nextcloud/server
+          ref: ${{ inputs.serverbranch }}
+
+      - name: Checkout submodules
+        shell: bash
+        run: |
+          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+          git submodule sync --recursive
+          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
+
+      - name: Checkout app
+        uses: actions/checkout@v2
+        with:
+          repository: nextmcloud/${{ inputs.appname }}
+          ref: ${{ inputs.assembly }}
+          path: apps/${{ inputs.appname }}
+
+      - name: Set up php ${{ inputs.phpversion }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ inputs.phpversion }}
+          tools: phpunit
+          extensions: zip, gd, mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite, mysql, pdo_mysql, pgsql, pdo_pgsql
+          coverage: none
+
+      - name: Set up PHPUnit
+        working-directory: apps/${{ inputs.appname }}
+        run: composer i
+
+      - name: Set up Nextcloud DB
+        run: |
+          if [ "${{ inputs.database }}" = "mysql" ]; then
+            export DB_PORT=4444
+          #elif [ "${{ inputs.database  }}" = "pgsql" ]; then
+          #  export DB_PORT=4445
+          fi
+          mkdir data
+          ./occ maintenance:install --verbose --database=${{ inputs.database }} --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass admin
+          ./occ app:enable --force ${{ inputs.appname }}
+          php -S localhost:8080 &
+
+      - name: PHPUnit
+        working-directory: apps/${{ inputs.appname }}
+        run: composer run test:unit

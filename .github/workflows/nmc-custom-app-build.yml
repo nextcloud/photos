@@ -1,0 +1,220 @@
+###
+# SPDX-License-Identifier: AGPL-3.0
+#
+# Author: Bernd Rederlechner <bernd.rederlechner@t-systems.com
+#
+# Assemble a customisation for recent trunk or a stable branch
+# If trunk, no backports are considered. For stable, only the
+# backports targetted for this baseline are considered.
+#
+# Assembly fails if a PR does not merge automatically.
+#
+
+name: MCLOUD build (custom app)
+
+on:
+  workflow_call:
+    inputs:
+      assembly:
+        description: name of the customisation assembly branch, not needed for non-fork apps
+        required: false
+        type: string
+      appname:
+        description: name of the app to pack
+        required: false
+        type: string
+      tag:
+        description: tag to use for the release
+        required: true
+        type: string
+      prerelease:
+        description: mark the package as pre-release
+        required: false
+        type: string        
+
+env:
+  CUSTOM_SERVER_EXCLUDES: |
+    /.git/
+    /build/
+    /node_modules/
+    /contribute/
+    /config/
+    /src/**/*.js
+    /.devcontainer/
+    /.github/
+    /.idea/
+    /.tx/
+    /.*
+    !/.gitignore
+    !/.nextcloudignore
+    /composer.*
+    package.json
+    package-lock.json
+    stylelint.*
+    babel.*
+    webpack.*
+    krankerl.toml
+    
+  CUSTOM_TEST_EXCLUDES: |
+    **/tests/
+    **/cypress/
+    /cypress*.ts
+    /jest.config.ts
+
+jobs:
+  build-custom:
+    runs-on: ubuntu-latest
+    env:
+      BUILD_USER:    ${{ github.actor }}
+      BUILD_EMAIL:   ${{ github.actor }}@users.noreply.github.com
+      BUILD_TOKEN:   ${{ secrets.BUILD_TOKEN || secrets.GITHUB_TOKEN }}
+      PHP_VERSION:   ${{ vars.PHP_VERSION || '8.1' }}
+    steps:
+      - name: Fetch custom assembly
+        id:   checkout_custom
+        uses: actions/checkout@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ inputs.assembly }}
+          fetch-depth: 0
+          token: ${{ env.BUILD_TOKEN }}
+
+      - name: Prepare GIT modifications
+        id:   prepare_git        
+        run: |
+          # set user in case commits are needed
+          git config user.name $BUILD_USER
+          git config user.email $BUILD_EMAIL
+          git remote set-url origin http://no.such.host
+  
+      ###
+      # To keep src as close as possible to Nextcloud checked in
+      # artefacts (and reduce size of patch diffs), the default
+      # release pack is created early
+      - name: Create app release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ inputs.tag }}
+          release_name: ${{ inputs.tag }}
+          body: |
+              Update for *Magenta*Cloud *customized fork app ${{ inputs.appname }}*
+          draft: false
+          prerelease: ${{ inputs.prerelease || false }}
+
+      # install php dependencies
+      - name: Set up php ${{ env.PHP_VERSION }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          coverage: none
+  
+      - name: Check composer.json
+        id: check_composer
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "./composer.json"
+  
+      - name: Install composer dependencies
+        if: steps.check_composer.outputs.files_exists == 'true'
+        run: |
+          composer install --no-dev
+
+      # the node.js, npm install procedure is taken over from upstream Nextcloud
+      # command-compile.yml
+      - name: Detect NC compatible node.js,npm
+        uses: skjnldsv/read-package-engines-version-actions@v2.2
+        id: package-engines-versions
+        with:
+          fallbackNode: '^16'
+          fallbackNpm: '^7'
+          
+      - name: Set up node ${{ steps.package-engines-versions.outputs.nodeVersion }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ steps.package-engines-versions.outputs.nodeVersion }}
+          cache: npm
+
+      - name: Set up npm ${{ steps.package-engines-versions.outputs.npmVersion }}
+        run: npm i -g npm@"${{ steps.package-engines-versions.outputs.npmVersion }}"
+
+      - name: Build composer dependencies, sass, webpacks
+        if: ${{ hashFiles('package.json') != '' }}
+        run: |
+          npm ci
+          npm run build --if-present
+
+      # either default ignores or listed in .nextcloudignore
+      - name: Clean files
+        env:
+          CUSTOM_EXCLUDES: |
+            ${{ env.CUSTOM_SERVER_EXCLUDES }}
+            ${{ env.CUSTOM_TEST_EXCLUDES }}
+        run: |
+          echo -e "$CUSTOM_EXCLUDES" > ${RUNNER_TEMP}/.distignore
+          if [ -f "./.nextcloudignore" ]; then
+            cat ./.nextcloudignore >> ${RUNNER_TEMP}/.distignore
+          fi
+          set -x
+          git ls-files -z --ignored --exclude-per-directory=${RUNNER_TEMP}/.distignore --cached | xargs -0 git rm -f --ignore-unmatch
+          set +x
+
+      # for apps, this last step will also remove the .git directory, so no git operations after this points anymore
+
+
+      - name: Pack app version
+        run: |
+          tar -C ${GITHUB_WORKSPACE}/.. -czf ${RUNNER_TEMP}/${{ inputs.appname }}.tar.gz ${{ inputs.appname }}
+
+      - name: Upload custom app package
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ env.BUILD_TOKEN }}            
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ runner.temp }}/${{ inputs.appname }}.tar.gz
+          asset_name: ${{ inputs.appname }}.tar.gz
+          asset_content_type: application/tar+gzip
+
+      - name: Post-failure cleanup
+        id: release_cleanup
+        if: ${{ !success() && steps.create_release.outcome == 'success' }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ env.BUILD_TOKEN }}
+          script: |
+            const releaseTag = "${{ inputs.tag }}";
+
+            // Get the release by tag
+            const { data: release } = await github.rest.repos.getReleaseByTag({
+              owner: context.repo.owner,
+              repo:  context.repo.repo,
+              tag:   releaseTag
+            });
+
+            // Delete the release
+            try {
+              await github.rest.repos.deleteRelease({
+                owner: context.repo.owner,
+                repo:  context.repo.repo,
+                release_id: release.id
+              });
+            } catch (error) {
+              // ignore on cleanup
+            }
+
+            // Delete the associated tag
+            try {
+              await github.rest.git.deleteRef({
+                owner: context.repo.owner,
+                repo:  context.repo.repo,
+                ref: `tags/${releaseTag}`
+              });
+            } catch (error) {
+              // ignore on cleanup
+            }
+  
