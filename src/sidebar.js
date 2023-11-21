@@ -21,7 +21,7 @@
  */
 import Vue from 'vue'
 // eslint-disable-next-line n/no-missing-import, import/no-unresolved
-import InformationSlabSymbol from '@mdi/svg/svg/information-slab-symbol.svg?raw'
+import InformationOutline from '@mdi/svg/svg/information-outline.svg?raw'
 import { translate as t, translatePlural as n } from '@nextcloud/l10n'
 import { getRequestToken } from '@nextcloud/auth'
 import { generateFilePath } from '@nextcloud/router'
@@ -47,7 +47,7 @@ let PhotosTabInstance = null
 const photosTab = new OCA.Files.Sidebar.Tab({
 	id: 'photos',
 	name: t('photos', 'Details'),
-	iconSvg: InformationSlabSymbol,
+	iconSvg: InformationOutline,
 
 	async mount(el, fileInfo, context) {
 		// only load if needed
