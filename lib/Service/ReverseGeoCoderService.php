@@ -86,7 +86,7 @@ class ReverseGeoCoderService {
 		}
 
 		// Download zip file to a tmp file.
-		$response = $this->clientService->newClient()->get("https://download.geonames.org/export/dump/cities1000.zip");
+		$response = $this->clientService->newClient()->get("https://download.nextcloud.com/server/apps/photos/cities1000.zip");
 		$tmpFile = tmpfile();
 		$cities1000ZipTmpFileName = stream_get_meta_data($tmpFile)['uri'];
 		fclose($tmpFile);
