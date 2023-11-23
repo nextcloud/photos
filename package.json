@@ -42,7 +42,7 @@
 		"@nextcloud/auth": "^2.0.0",
 		"@nextcloud/axios": "^2.0.0",
 		"@nextcloud/cypress": "^1.0.0-beta.6",
-		"@nextcloud/dialogs": "^4.2.1",
+		"@nextcloud/dialogs": "^4.2.2",
 		"@nextcloud/event-bus": "^3.0.2",
 		"@nextcloud/files": "^3.0.0-beta.10",
 		"@nextcloud/initial-state": "^2.0.0",
