@@ -131,7 +131,6 @@
     "Failed to delete {fileName}." : "{fileName} حذف نشد.",
     "Failed to set favorite state for {fileId}." : "حالت دلخواه برای {fileId} تنظیم نشد.",
     "Failed to set favorite state for {fileName}." : "تنظیم حالت دلخواه برای {fileName} انجام نشد.",
-    "Locations" : "مکانها",
     "Go back to the previous view." : "به نمای قبلی برگردید",
     "Go to the add collaborators view." : "به نمای افزودن همکاران بروید.",
     "Create the album." : "آلبوم را ایجاد کنید.",

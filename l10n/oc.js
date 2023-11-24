@@ -30,7 +30,6 @@ OC.L10N.register(
     "Add" : "Apondre",
     "Tagged photos" : "Fòtos etiquetadas",
     "Details" : "Detalhs",
-    "Locations" : "Emplaçaments",
     "Shared albums" : "Albums partejats"
 },
 "nplurals=2; plural=(n > 1);");

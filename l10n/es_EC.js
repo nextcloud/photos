@@ -133,7 +133,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "Error al eliminar {nombreArchivo}.",
     "Failed to set favorite state for {fileId}." : "Error al establecer el estado de favorito para {idArchivo}.",
     "Failed to set favorite state for {fileName}." : "Error al establecer el estado de favorito para {nombreArchivo}.",
-    "Locations" : "Ubicaciones",
     "Go back to the previous view." : "Volver a la vista anterior.",
     "Go to the add collaborators view." : "Ir a la vista de agregar colaboradores.",
     "Create the album." : "Crear el álbum.",

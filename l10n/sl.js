@@ -112,7 +112,6 @@ OC.L10N.register(
     "Details" : "Podrobnosti",
     "Failed to delete {fileId}." : "Brisanje polja {fileId} je spodletelo.",
     "Failed to delete {fileName}." : "Brisanje datoteke {fileName} je spodletelo.",
-    "Locations" : "Mesta",
     "Go back to the previous view." : "Vrni na predhodni pogled.",
     "Go to the add collaborators view." : "Skoči na pogled dodajanja sodelujočih.",
     "Create the album." : "Ustvari album",

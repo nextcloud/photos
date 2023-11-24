@@ -35,7 +35,6 @@ OC.L10N.register(
     "Delete selection" : "Eyða vali",
     "Tagged photos" : "Merktar ljósmyndir",
     "Details" : "Nánar",
-    "Locations" : "Staðsetningar",
     "Shared albums" : "Sameiginleg albúm"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

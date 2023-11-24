@@ -134,7 +134,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "Не вдалося вилучити {fileName}.",
     "Failed to set favorite state for {fileId}." : "Не вдалося встановити улюблений стан для {fileId}.",
     "Failed to set favorite state for {fileName}." : "Не вдалося встановити улюблений стан для {fileName}.",
-    "Locations" : "Розташування",
     "Go back to the previous view." : "Повернутися до попереднього перегляду.",
     "Go to the add collaborators view." : "Перейдіть до перегляду додавання співавторів.",
     "Create the album." : "Створіть альбом.",

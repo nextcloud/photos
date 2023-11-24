@@ -132,7 +132,6 @@
     "Failed to delete {fileName}." : "Eliminazione di {fileName} non riuscita.",
     "Failed to set favorite state for {fileId}." : "Impostazione dello stato di preferito a {fileId} non riuscita.",
     "Failed to set favorite state for {fileName}." : "Impostazione dello stato di preferito a {fileName} non riuscita.",
-    "Locations" : "Posizioni",
     "Go back to the previous view." : "Vai alla vista precedente.",
     "Go to the add collaborators view." : "Vai alla vista per aggiungere collaboratori.",
     "Create the album." : "Crea l'album.",

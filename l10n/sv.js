@@ -135,7 +135,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "Misslyckades att radera {fileName}.",
     "Failed to set favorite state for {fileId}." : "Det gick inte att ange favoritstatus för {fileId}.",
     "Failed to set favorite state for {fileName}." : "Det gick inte att ange favoritstatus för {fileName}.",
-    "Locations" : "Platser",
     "Go back to the previous view." : "Gå tillbaka till föregående vy",
     "Go to the add collaborators view." : "Gå till vyn lägg till medlemmar.",
     "Create the album." : "Skapa albumet.",

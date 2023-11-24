@@ -134,7 +134,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "{fileName} ezabatzeak huts egin du.",
     "Failed to set favorite state for {fileId}." : "Ezin izan da ezarri gogoko egoera {fileId}(r)entzat.",
     "Failed to set favorite state for {fileName}." : "Ezin izan da ezarri gogoko egoera {fileName}(r)entzat.",
-    "Locations" : "Kokapenak",
     "Go back to the previous view." : "Itzuli aurreko ikuspegira.",
     "Go to the add collaborators view." : "Joan kolaboratzaileak gehitzeko ikuspegira.",
     "Create the album." : "Sortu albuma.",

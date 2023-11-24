@@ -133,7 +133,6 @@
     "Failed to delete {fileName}." : "{fileName} の削除に失敗しました。",
     "Failed to set favorite state for {fileId}." : "{fileId} のお気に入り状態の設定に失敗しました。",
     "Failed to set favorite state for {fileName}." : "{fileName} のお気に入り状態の設定に失敗しました。",
-    "Locations" : "場所",
     "Go back to the previous view." : "前を表示",
     "Go to the add collaborators view." : "共同作業者の追加画面に移動します。",
     "Create the album." : "アルバムを作成",
