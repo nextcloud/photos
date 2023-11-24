@@ -135,7 +135,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "Nepodařilo se smazat {fileName}.",
     "Failed to set favorite state for {fileId}." : "Nepodařilo se nastavit stav zařazení mezi oblíbené pro {fileId}.",
     "Failed to set favorite state for {fileName}." : "Nepodařil se nastavit stav zařazení mezi oblíbené pro {fileName}.",
-    "Locations" : "Umístění",
     "Go back to the previous view." : "Jít zpět na předchozí pohled.",
     "Go to the add collaborators view." : "Jít na pohled přidání spolupracujících.",
     "Create the album." : "Vytvořit album.",

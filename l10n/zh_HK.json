@@ -132,7 +132,6 @@
     "Failed to delete {fileName}." : "刪除 {fileName} 失敗。",
     "Failed to set favorite state for {fileId}." : "未能為 {fileId} 設置收藏狀態。",
     "Failed to set favorite state for {fileName}." : "未能為 {fileName} 設置收藏狀態。",
-    "Locations" : "地點",
     "Go back to the previous view." : "回到前一個檢視。",
     "Go to the add collaborators view." : "到添加協作者檢視。",
     "Create the album." : "創建相簿。",

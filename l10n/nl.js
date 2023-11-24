@@ -114,7 +114,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "Verwijderen van {fileName} mislukt.",
     "Failed to set favorite state for {fileId}." : "Favorietenstatus instellen voor {fileId} mislukt.",
     "Failed to set favorite state for {fileName}." : "Favorietenstatus instellen voor {fileName} mislukt.",
-    "Locations" : "Locaties",
     "Go back to the previous view." : "Ga terug naar de vorige weergave.",
     "Go to the add collaborators view." : "Ga naar de bijdragers toevoegen weergave.",
     "Create the album." : "Maak het album.",

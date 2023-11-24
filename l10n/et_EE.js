@@ -124,7 +124,6 @@ OC.L10N.register(
     "Failed to delete {faceName}." : "{faceName} kustutamine ebaõnnestus.",
     "Failed to delete {fileId}." : "{fileId} kustutamine ebaõnnestus.",
     "Failed to delete {fileName}." : "{fileName} kustutamine ebaõnnestus.",
-    "Locations" : "Asukohad",
     "Go back to the previous view." : "Mine tagasi eelmisesse vaatesse.",
     "Go to the add collaborators view." : "Mine kaastööliste lisamise vaatesse.",
     "Create the album." : "Loo album.",

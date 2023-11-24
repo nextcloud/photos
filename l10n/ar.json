@@ -133,7 +133,6 @@
     "Failed to delete {fileName}." : "تعذّر حذف {fileName}.",
     "Failed to set favorite state for {fileId}." : "تعذّر تعيين حالة \"مُفضّل\" لـ {fileId}.",
     "Failed to set favorite state for {fileName}." : "تعذّر تعيين حالة \"مُفضّل\" لـ {fileName}.",
-    "Locations" : "المواقع",
     "Go back to the previous view." : "عودة إلى العرض السابق.",
     "Go to the add collaborators view." : "إنتقِل إلى عرض إضافة المتعاونين",
     "Create the album." : "أنشِيء الألبوم.",

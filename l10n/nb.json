@@ -118,7 +118,6 @@
     "Failed to delete {fileName}." : "Kunne ikke slette {fileName}.",
     "Failed to set favorite state for {fileId}." : "Kunne ikke angi favorittstatus for {fileId}.",
     "Failed to set favorite state for {fileName}." : "Kunne ikke angi favorittstatus for {fileName}.",
-    "Locations" : "Steder",
     "Go back to the previous view." : "Gå tilbake til forrige visning.",
     "Go to the add collaborators view." : "Gå til visningen Legg til samarbeidspartnere.",
     "Create the album." : "Lag albumet.",

@@ -125,7 +125,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "Gagal menghapus {fileName}.",
     "Failed to set favorite state for {fileId}." : "Gagal menetapkan keadaan favorit untuk {field}.",
     "Failed to set favorite state for {fileName}." : "Gagal menetapkan keadaan favorit untuk {fileName}.",
-    "Locations" : "Lokasi",
     "Go back to the previous view." : "Kembali ke tampilan sebelumnya.",
     "Go to the add collaborators view." : "Pergi ke tampilan kolaborator.",
     "Create the album." : "Buat album.",

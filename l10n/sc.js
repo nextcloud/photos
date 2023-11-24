@@ -34,7 +34,6 @@ OC.L10N.register(
     "Delete selection" : "Cantzella seletzione",
     "Tagged photos" : "Fotografias etichetadas",
     "Details" : "Detàllios",
-    "Locations" : "Positziones",
     "Shared albums" : "Album cumpartzidos"
 },
 "nplurals=2; plural=(n != 1);");

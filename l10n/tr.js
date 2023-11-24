@@ -135,7 +135,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "{fileName} silinemedi.",
     "Failed to set favorite state for {fileId}." : "{fileId} için sık kullanılan durumu ayarlanamadı.",
     "Failed to set favorite state for {fileName}." : "{fileName} için sık kullanılan durumu ayarlanamadı.",
-    "Locations" : "Konumlar",
     "Go back to the previous view." : "Önceki görünüme geri dön.",
     "Go to the add collaborators view." : "Katılımcı ekleme görünümüne gider.",
     "Create the album." : "Albüm ekler.",
