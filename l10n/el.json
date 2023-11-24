@@ -75,7 +75,6 @@
     "Failed to delete {faceName}." : "Απέτυχε η διαγραφή {faceName}.",
     "Failed to delete {fileId}." : "Απέτυχε η διαγραφή {fileId}.",
     "Failed to delete {fileName}." : "Απέτυχε η διαγραφή {fileName}.",
-    "Locations" : "Τοποθεσίες",
     "No collaborators available" : "Δεν υπάρχουν διαθέσιμοι συνεργάτες",
     "Add photos to the album" : "Προσθήκη φωτογραφιών στο άλμπουμ",
     "Shared albums" : "Κοινόχρηστα άλμπουμ",

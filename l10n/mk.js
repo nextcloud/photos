@@ -127,7 +127,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "Неуспешно бришење на {fileName}.",
     "Failed to set favorite state for {fileId}." : "Неуспешно поставување на омилен статус за {fileId}.",
     "Failed to set favorite state for {fileName}." : "Неуспешно поставување на омилен статус за {fileName}.",
-    "Locations" : "Локации",
     "Go back to the previous view." : "Врати се на предходниот поглед",
     "Go to the add collaborators view." : "Оди за да додадеш соработници",
     "Create the album." : "Креирај го албумот.",

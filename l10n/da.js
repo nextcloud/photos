@@ -57,7 +57,6 @@ OC.L10N.register(
     "Tagged photos" : "Markerede billeder",
     "Details" : "Detaljer",
     "Failed to delete {fileName}." : "Kunne ikke slette {fileName}.",
-    "Locations" : "Sted",
     "Go back to the previous view." : "Gå tilbage til den forrige visning.",
     "Go to the add collaborators view." : "Gå til visningen Tilføj samarbejdspartnere.",
     "Create the album." : "Opret albummet.",

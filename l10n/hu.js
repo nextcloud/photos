@@ -134,7 +134,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "A(z) {fileName} törlése sikertelen.",
     "Failed to set favorite state for {fileId}." : "A(z) {fileId} kedvenc állapotának beállítása sikertelen.",
     "Failed to set favorite state for {fileName}." : "A(z) {fileName} kedvenc állapotának beállítása sikertelen.",
-    "Locations" : "Helyek",
     "Go back to the previous view." : "Ugrás vissza az előző nézethez.",
     "Go to the add collaborators view." : "Ugrás a közreműködők hozzáadása nézethez",
     "Create the album." : "Album létrehozása.",
