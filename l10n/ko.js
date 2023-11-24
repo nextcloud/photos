@@ -50,7 +50,6 @@ OC.L10N.register(
     "Add to album" : "앨범에 추가",
     "Details" : "세부사항",
     "Failed to delete {fileName}." : "{fileName}(을)를 삭제하지 못했습니다.",
-    "Locations" : "위치",
     "Go back to the previous view." : "이전 보기로 이동하세요.",
     "Go to the add collaborators view." : "공동 작업자 추가 화면으로 이동하세요.",
     "Back to the new album form." : "새 앨범 양식으로 돌아가기",

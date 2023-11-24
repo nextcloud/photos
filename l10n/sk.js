@@ -118,7 +118,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "Nepodarilo sa zmazať {fileName}.",
     "Failed to set favorite state for {fileId}." : "Nepodarilo sa nastaviť obľúbený stav pre {fileId}.",
     "Failed to set favorite state for {fileName}." : "Nepodarilo sa nastaviť obľúbený stav pre {fileName}.",
-    "Locations" : "Umiestnenie",
     "Go back to the previous view." : "Vrátiť sa na predchádzajúce zobrazenie.",
     "Go to the add collaborators view." : "Ísť na zobrazenie pre pridanie spolupracujúcich.",
     "Create the album." : "Vytvoriť album.",

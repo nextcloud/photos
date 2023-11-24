@@ -40,7 +40,6 @@ OC.L10N.register(
     "Shared Albums" : "אלבומים משותפים",
     "Tagged photos" : "תמונות מתויגות",
     "Details" : "פרטים",
-    "Locations" : "מיקומים",
     "Go to the add collaborators view." : "מעבר לתצוגה של הוספת שותפים",
     "Add {collaboratorLabel} to the collaborators list" : "הוסף {collaboratorLabel} לרשימת השותפים",
     "Shared albums" : "אלבומים משותפים"

@@ -32,7 +32,6 @@ OC.L10N.register(
     "Add" : "Thêm",
     "Tagged photos" : "Ảnh gắn nhãn",
     "Details" : "Chi tiết",
-    "Locations" : "Các địa điểm",
     "Shared albums" : "Các tập ảnh đã chia sẽ"
 },
 "nplurals=1; plural=0;");

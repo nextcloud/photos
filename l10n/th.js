@@ -45,7 +45,6 @@ OC.L10N.register(
     "Add" : "เพิ่ม",
     "Tagged photos" : "รูปภาพที่ติดแท็ก",
     "Details" : "รายละเอียด",
-    "Locations" : "สถานที่",
     "Go back to the previous view." : "กลับไปยังมุมมองก่อนหน้า",
     "Create the album." : "สร้างอัลบั้ม",
     "Back to the new album form." : "กลับไปยังแบบฟอร์มอัลบั้มใหม่",

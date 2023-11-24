@@ -134,7 +134,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "Не удалось удалить файл «{fileName}».",
     "Failed to set favorite state for {fileId}." : "Не удалось отметить или снять отметку избранного с «{fileId}».",
     "Failed to set favorite state for {fileName}." : "Не удалось отметить или снять отметку избранного с «{fileId}».",
-    "Locations" : "Места",
     "Go back to the previous view." : "Вернуться к предыдущему режиму просмотра.",
     "Go to the add collaborators view." : "Перейти к просмотру соавторов.",
     "Create the album." : "Создать альбом",

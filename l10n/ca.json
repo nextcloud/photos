@@ -133,7 +133,6 @@
     "Failed to delete {fileName}." : "No s'ha pogut suprimir {fileName}.",
     "Failed to set favorite state for {fileId}." : "No s'ha pogut establir l'estat de preferit per a {fileId}.",
     "Failed to set favorite state for {fileName}." : "No s'ha pogut establir l'estat de preferit per a {fileName}.",
-    "Locations" : "Llocs",
     "Go back to the previous view." : "Torneu a la visualització anterior.",
     "Go to the add collaborators view." : "Aneu a la visualització Afegeix col·laboradors.",
     "Create the album." : "Crea l'àlbum.",

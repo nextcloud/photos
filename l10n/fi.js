@@ -134,7 +134,6 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "Tiedoston {fileName} poisto epäonnistui.",
     "Failed to set favorite state for {fileId}." : "Suosikkimääritelmän asettaminen kohteelle {fileId} epäonnistui.",
     "Failed to set favorite state for {fileName}." : "Suosikkimääritelmän asettaminen kohteelle {fileName} epäonnistui.",
-    "Locations" : "Sijainnit",
     "Go back to the previous view." : "Siirry takaisin edelliseen näkymään.",
     "Go to the add collaborators view." : "Avaa osanottajien lisäysnäkymä.",
     "Create the album." : "Luo albumi.",
