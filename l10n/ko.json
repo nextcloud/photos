@@ -1,8 +1,10 @@
 { "translations": {
     "Public link" : "공개 링크",
     "Photos" : "사진",
+    "All media" : "모든 미디어",
     "Videos" : "동영상",
     "Albums" : "앨범",
+    "Collaborative albums" : "협업 앨범",
     "People" : "사람들",
     "Folders" : "폴더",
     "Favorites" : "즐겨찾기",
