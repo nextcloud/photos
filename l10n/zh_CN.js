@@ -99,6 +99,7 @@ OC.L10N.register(
     "This folder does not exist" : "此文件夹不存在",
     "Loading folders …" : "正在加载文件夹……",
     "No photos in here" : "这里没有照片",
+    "Taken on {date} at {time}" : "拍摄于 {date} {time}",
     "This place does not have any photos or videos yet!" : "这个地点还没有任何照片和视频！",
     "Add photos to this place" : "添加照片至此地点",
     "Cover photo for place {placeName}" : "地点{placeName}的封面照片",
