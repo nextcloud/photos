@@ -47,7 +47,7 @@
 		<div v-else-if="!noFaces" class="faces__list">
 			<router-link v-for="face in orderedFaces"
 				:key="face.basename"
-				:to="`/faces/${face.basename}`">
+				:to="`/faces/${encodeURIComponent(face.basename)}`">
 				<FaceCover :base-name="face.basename" />
 			</router-link>
 			<router-link key="unassigned"
