@@ -48,7 +48,7 @@ class ExifMetadataProvider implements IEventListener {
 
 		$node = $event->getNode();
 
-		if (!$node instanceof File) {
+		if (!$node instanceof File || $node->getSize() === 0) {
 			return;
 		}
 
