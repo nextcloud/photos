@@ -353,10 +353,10 @@ class AlbumMapper {
 
 			switch ($row['collaborator_type']) {
 				case self::TYPE_USER:
-					$displayName = $this->userManager->get($row['collaborator_id'])->getDisplayName();
+					$displayName = $this->userManager->get($row['collaborator_id'])?->getDisplayName();
 					break;
 				case self::TYPE_GROUP:
-					$displayName = $this->groupManager->get($row['collaborator_id'])->getDisplayName();
+					$displayName = $this->groupManager->get($row['collaborator_id'])?->getDisplayName();
 					break;
 				case self::TYPE_LINK:
 					$displayName = $this->l->t('Public link');
