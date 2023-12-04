@@ -57,7 +57,7 @@ OC.L10N.register(
     "Open the \"{name}\" sub-directory" : "Abrir o subdirectorio «{name}»",
     "Back to {folder}" : "Volver a {folder}",
     "Share this folder" : "Compartir este cartafol",
-    "_{years} year ago_::_{years} years ago_" : ["hai {years} ano","hai {years} anos"],
+    "_{years} year ago_::_{years} years ago_" : ["Hai {years} ano","Hai {years} anos"],
     "Enable squared photos view" : "Activar a vista de fotos cadradas",
     "Default Photos upload and Albums location" : "Localización predeterminada para enviar fotos e álbums",
     "Choose default Photos upload and Albums location" : "Escolla o envío predeterminado en Fotos e a localización en Álbums",
