@@ -62,7 +62,7 @@ class PlaceMapper {
 		$metadataQuery->joinIndex(self::METADATA_KEY);
 		$rows = $qb->where($qb->expr()->eq('file.storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->in('file.mimetype', $qb->createNamedParameter($mimetypes, IQueryBuilder::PARAM_INT_ARRAY)))
-			->andWhere('meta_value_string IS NOT NULL')
+			->andWhere($qb->expr()->isNotNull('meta_value_string'))
 			->executeQuery()
 			->fetchAll();
 
@@ -87,7 +87,7 @@ class PlaceMapper {
 		$rows = $qb->where($qb->expr()->eq('file.storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->in('file.mimetype', $qb->createNamedParameter($mimetypes, IQueryBuilder::PARAM_INT_ARRAY)))
 			->andWhere($qb->expr()->eq('meta_value_string', $qb->createNamedParameter($place)))
-			->andWhere('meta_value_string IS NOT NULL')
+			->andWhere($qb->expr()->isNotNull('meta_value_string'))
 			->executeQuery()
 			->fetchAll();
 
@@ -116,7 +116,7 @@ class PlaceMapper {
 		$rows = $qb->where($qb->expr()->eq('file.storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->in('file.mimetype', $qb->createNamedParameter($mimetypes, IQueryBuilder::PARAM_INT_ARRAY)))
 			->andWhere($qb->expr()->eq('meta_value_string', $qb->createNamedParameter($place)))
-			->andWhere('meta_value_string IS NOT NULL')
+			->andWhere($qb->expr()->isNotNull('meta_value_string'))
 			->executeQuery()
 			->fetchAll();
 
@@ -153,7 +153,7 @@ class PlaceMapper {
 			->andWhere($qb->expr()->eq('file.name', $qb->createNamedParameter($fileName)))
 			->andWhere($qb->expr()->in('file.mimetype', $qb->createNamedParameter($mimetypes, IQueryBuilder::PARAM_INT_ARRAY)))
 			->andWhere($qb->expr()->eq('meta_value_string', $qb->createNamedParameter($place)))
-			->andWhere('meta_value_string IS NOT NULL')
+			->andWhere($qb->expr()->isNotNull('meta_value_string'))
 			->executeQuery()
 			->fetchAll();
 
