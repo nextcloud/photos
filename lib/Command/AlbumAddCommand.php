@@ -55,7 +55,7 @@ class AlbumAddCommand extends Command {
          * Configure the command
          */
         protected function configure(): void {
-                $this->setName('photos:add-photo-to-album')
+                $this->setName('photos:albums:add')
                         ->setDescription('Add specified photo to album')
                         ->addArgument('user', InputArgument::REQUIRED, 'User owning album')
                         ->addArgument('album', InputArgument::REQUIRED, 'Album name')

@@ -51,8 +51,8 @@ class AlbumCreateCommand extends Command {
          * Configure the command
          */
         protected function configure(): void {
-                $this->setName('photos:create-album')
-                        ->setDescription('Add file to album')
+                $this->setName('photos:albums:create')
+                        ->setDescription('Create a new album for a user')
                         ->addArgument('user', InputArgument::REQUIRED, 'User to own album')
                         ->addArgument('album', InputArgument::REQUIRED, 'Album name')
                         ->addOption('location', 'l', InputOption::VALUE_REQUIRED, 'Set album location (optional)', "");
