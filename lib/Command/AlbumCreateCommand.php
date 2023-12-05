@@ -72,16 +72,7 @@ class AlbumCreateCommand extends Command {
                 }
                 $userID = $user->getUID();
 
-                $retrievedAlbums = $this->albumMapper->getForUser($userString);
-
-                $album = null;
-                foreach ($retrievedAlbums as $singleAlbum) {
-                        if ($singleAlbum->getTitle() == $albumString) {
-                                $album = $singleAlbum;
-                                break;
-                        }
-                }
-
+                $album = $this->albumMapper->getByName($albumString);
                 if ($album) {
                         throw new \Exception("Album $albumString already exists and cannot be created.");
                 }

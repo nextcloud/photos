@@ -85,16 +85,7 @@ class AlbumAddCommand extends Command {
                         return 1;
                 }
 
-                $retrievedAlbums = $this->albumMapper->getForUser($userString);
-
-                $album = null;
-                foreach ($retrievedAlbums as $singleAlbum) {
-                        if ($singleAlbum->getTitle() == $albumString) {
-                                $album = $singleAlbum;
-                                break;
-                        }
-                }
-
+                $album = $this->albumMapper->getByName($albumString);
                 if (!$album) {
                         throw new \Exception("Album $albumString was not found");
                 }
