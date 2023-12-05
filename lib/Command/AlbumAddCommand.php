@@ -57,10 +57,10 @@ class AlbumAddCommand extends Command {
         protected function configure(): void {
                 $this->setName('photos:albums:add')
                         ->setDescription('Add specified photo to album')
-                        ->addArgument('user', InputArgument::REQUIRED, 'User owning album')
+                        ->addArgument('user', InputArgument::REQUIRED, 'User owning the album')
                         ->addArgument('album', InputArgument::REQUIRED, 'Album name')
                         ->addArgument('file', InputArgument::REQUIRED, 
-                                'Path to the file to add to the album. It must already be scanned and available in NextCloud. Example: Photos/picture1.jpg');
+                                'Path of file to add to the album. It must already be scanned and available in NextCloud. Example: Photos/picture1.jpg');
         }
 
         /**
