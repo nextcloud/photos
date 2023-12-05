@@ -101,7 +101,6 @@ class AlbumAddCommand extends Command {
 
                 try {
                         $this->albumMapper->addFile($album->getId(), $pictureFileID, $userID);
-
                 } catch (\Exception $ex) {
                         $output->writeln("<error>Problem adding $filePath to $albumString</error>");
                         $output->writeln($ex->getMessage());
