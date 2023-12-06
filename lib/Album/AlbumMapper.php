@@ -122,9 +122,9 @@ class AlbumMapper {
 				->where($query->expr()->eq('name', $query->createNamedParameter($albumName)));
 		$row = $query->executeQuery()->fetch();
 		if ($row) {
-				return new AlbumInfo((int)$row['album_id'], $row['user'], $albumName, $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
+			return new AlbumInfo((int)$row['album_id'], $row['user'], $albumName, $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
 		} else {
-				return null;
+			return null;
 		}
 	}
 
