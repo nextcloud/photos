@@ -126,16 +126,13 @@
 
 		<NcModal v-if="showAlbumCreationForm"
 			key="albumCreationForm"
-			:close-button-contained="false"
-			:name="t('photos', 'New album')"
 			@close="showAlbumCreationForm = false">
+			<h2 class="timeline__heading">{{ t('photos', 'New album') }}</h2>
 			<AlbumForm @done="showAlbumCreationForm = false" />
 		</NcModal>
 
 		<NcModal v-if="showAlbumPicker"
 			key="albumPicker"
-			:close-button-contained="false"
-			:name="t('photos', 'Add to album')"
 			@close="showAlbumPicker = false">
 			<AlbumPicker @album-picked="addSelectionToAlbum" />
 		</NcModal>
@@ -304,6 +301,12 @@ export default {
 			display: flex;
 			gap: 4px;
 		}
+	}
+
+	&__heading {
+		padding: calc(var(--default-grid-baseline) * 4);
+		margin-bottom: 0px;
+		padding-bottom: 0px;
 	}
 
 	&__file-list {
