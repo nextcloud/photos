@@ -34,6 +34,9 @@ If you'd like to join, just go through the [issues list](https://github.com/next
 
 ## 🏗 Development setup
 
+This app requires the main branch of the [Viewer app](https://github.com/nextcloud/viewer) to be installed and enabled.
+Follow its development setup and then continue here.
+
 1. ☁ Clone this into your `apps` folder of your Nextcloud.
 1. 👩‍💻 In a terminal, run the command `make dev-setup` to install the dependencies.
 1. 🏗 Then to build the Javascript whenever you make changes, run `make build-js`. To create a pull request use `make build-js-production`. Watch changes with: `make watch-js`.
