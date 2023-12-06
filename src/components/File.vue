@@ -73,10 +73,9 @@
 
 		<NcCheckboxRadioSwitch v-if="allowSelection"
 			class="selection-checkbox"
+			:aria-label="t('photos', 'Select image {imageName}', {imageName: file.basename})"
 			:checked="selected"
-			@update:checked="onToggle">
-			<span class="input-label">{{ t('photos', 'Select image {imageName}', {imageName: file.basename}) }}</span>
-		</NcCheckboxRadioSwitch>
+			@update:checked="onToggle" />
 
 		<Star v-if="file.favorite === 1"
 			v-once
@@ -335,14 +334,14 @@ export default {
 		width: fit-content;
 
 		// Make the checkbox background round on hover.
-		:deep .checkbox-radio-switch__label {
+		:deep .checkbox-radio-switch__content {
 			padding: 10px;
 			box-sizing: border-box;
+			background: var(--color-primary-element-light);
 
 			// Add a background to the checkbox so we do not see the image through it.
 			&::after {
 				content: '';
-				background: var(--color-primary-element-light);
 				width: 16px;
 				height: 16px;
 				position: absolute;
