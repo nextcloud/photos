@@ -83,7 +83,7 @@ class AlbumAddCommand extends Command {
 			return 1;
 		}
 
-		$album = $this->albumMapper->getByName($albumString);
+		$album = $this->albumMapper->getByName($albumString, $userString);
 		if (!$album) {
 			throw new \Exception("Album $albumString was not found");
 		}
