@@ -22,7 +22,7 @@
 
 <template>
 	<NcContent app-name="photos">
-		<NcAppNavigation>
+		<NcAppNavigation :aria-label="t('photos', 'Photos')">
 			<template #list>
 				<NcAppNavigationItem :to="{name: 'all_media'}"
 					:name="t('photos', 'All media')"
