@@ -97,6 +97,7 @@
     "This folder does not exist" : "Цей каталог не існує",
     "Loading folders …" : "Завантаження папок…",
     "No photos in here" : "Тут немає світлин",
+    "Taken on {date} at {time}" : "Зроблено {date} о {time}",
     "This place does not have any photos or videos yet!" : "У цього місця ще немає жодної фотографії чи відео!",
     "Add photos to this place" : "Додайте фотографії до цього місця",
     "Cover photo for place {placeName}" : "Обкладинка для місця {placeName}",
