@@ -111,6 +111,6 @@ class Application extends App implements IBootstrap {
 	public function boot(IBootContext $context): void {
 		/** @var IFilesMetadataManager $metadataManager */
 		$metadataManager = $context->getServerContainer()->get(IFilesMetadataManager::class);
-		$metadataManager->initMetadata('photos-original_date_time', IMetadataValueWrapper::TYPE_INT, true);
+		$metadataManager->initMetadata('photos-original_date_time', IMetadataValueWrapper::TYPE_INT, true, IMetadataValueWrapper::EDIT_FORBIDDEN);
 	}
 }
