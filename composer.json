@@ -33,7 +33,8 @@
 		"nextcloud/ocp": "dev-stable28",
 		"phpunit/phpunit": "^9",
 		"sabre/dav": "^4.2.1",
-		"psalm/phar": "^5.17"
+		"psalm/phar": "^5.17",
+		"symfony/console": "5.4.24"
 	},
 	"require": {
 		"hexogen/kdtree": "^0.2.5"
