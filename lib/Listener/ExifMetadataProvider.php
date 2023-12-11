@@ -143,6 +143,8 @@ class ExifMetadataProvider implements IEventListener {
 	 * Exif data can contain anything.
 	 * This method will base 64 encode any non UTF-8 string in an array.
 	 * This will also remove control characters from UTF-8 strings.
+	 *
+	 * @param array<string, string> $data
 	 */
 	private function sanitizeEntries(array $data): array {
 		$cleanData = [];
