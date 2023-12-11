@@ -28,12 +28,15 @@ use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Files\File;
 use OCP\FilesMetadata\Event\MetadataLiveEvent;
+use Psr\Log\LoggerInterface;
 
 /**
  * @template-implements IEventListener<MetadataLiveEvent>
  */
 class OriginalDateTimeMetadataProvider implements IEventListener {
-	public function __construct() {
+	public function __construct(
+		private LoggerInterface $logger,
+	) {
 	}
 
 	public array $regexpToDateFormatMap = [
@@ -42,6 +45,27 @@ class OriginalDateTimeMetadataProvider implements IEventListener {
 		"/^PXL_([0-9]{8}_[0-9]{6})/" => "Ymd_Gis",
 		"/^([0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{4})/" => "Y-m-d-G-i-s",
 	];
+
+	private function dateToTimestamp(string $format, string $date, File $node): int|false {
+		try {
+			$dateTime = DateTime::createFromFormat($format, $date);
+			if ($dateTime !== false) {
+				return $dateTime->getTimestamp();
+			}
+			return false;
+		} catch (\Throwable $t) {
+			/* Date comes from user data and may trigger ValueError or DateRangeError */
+			$this->logger->warning(
+				'Failed to parse date {date} for file {path}',
+				[
+					'date' => $date,
+					'path' => $node->getPath(),
+					'exception' => $t,
+				]
+			);
+			return false;
+		}
+	}
 
 	public function handle(Event $event): void {
 		if (!($event instanceof MetadataLiveEvent)) {
@@ -63,9 +87,9 @@ class OriginalDateTimeMetadataProvider implements IEventListener {
 		// Try to use EXIF data.
 		if ($metadata->hasKey('photos-exif') && array_key_exists('DateTimeOriginal', $metadata->getArray('photos-exif'))) {
 			$rawDateTimeOriginal = $metadata->getArray('photos-exif')['DateTimeOriginal'];
-			$dateTimeOriginal = DateTime::createFromFormat("Y:m:d G:i:s", $rawDateTimeOriginal);
-			if ($dateTimeOriginal !== false) {
-				$metadata->setInt('photos-original_date_time', $dateTimeOriginal->getTimestamp(), true);
+			$timestampOriginal = $this->dateToTimestamp("Y:m:d G:i:s", $rawDateTimeOriginal, $node);
+			if ($timestampOriginal !== false) {
+				$metadata->setInt('photos-original_date_time', $timestampOriginal, true);
 				return;
 			}
 		}
@@ -80,9 +104,9 @@ class OriginalDateTimeMetadataProvider implements IEventListener {
 				continue;
 			}
 
-			$dateTimeOriginal = DateTime::createFromFormat($format, $matches[1]);
-			if ($dateTimeOriginal !== false) {
-				$metadata->setInt('photos-original_date_time', $dateTimeOriginal->getTimestamp(), true);
+			$timestampOriginal = $this->dateToTimestamp($format, $matches[1], $node);
+			if ($timestampOriginal !== false) {
+				$metadata->setInt('photos-original_date_time', $timestampOriginal, true);
 				return;
 			}
 		}
