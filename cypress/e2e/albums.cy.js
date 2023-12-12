@@ -85,20 +85,20 @@ describe('Manage albums', () => {
 	it('Favorite a file from an album content view', () => {
 		selectMedia([0])
 		favoriteSelection()
-		cy.get('[data-test="media"]').eq(0).find('[aria-label="The file is in the favorites"]')
+		cy.get('[data-test="media"]').eq(0).find('[aria-label="Favorite"]')
 		unfavoriteSelection()
 		unselectMedia([0])
-		cy.get('[aria-label="The file is in the favorites"]').should('not.exist')
+		cy.get('[aria-label="Favorite"]').should('not.exist')
 	})
 
 	it('Favorite multiple files from an album content view', () => {
 		selectMedia([1, 2])
 		favoriteSelection()
-		cy.get('[data-test="media"]').eq(1).find('[aria-label="The file is in the favorites"]')
-		cy.get('[data-test="media"]').eq(2).find('[aria-label="The file is in the favorites"]')
+		cy.get('[data-test="media"]').eq(1).find('[aria-label="Favorite"]')
+		cy.get('[data-test="media"]').eq(2).find('[aria-label="Favorite"]')
 		unfavoriteSelection()
 		unselectMedia([1, 2])
-		cy.get('[aria-label="The file is in the favorites"]').should('not.exist')
+		cy.get('[aria-label="Favorite"]').should('not.exist')
 	})
 
 	// it('Download a file from an album content view', () => {
