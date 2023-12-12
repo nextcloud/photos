@@ -132,8 +132,10 @@
 			:name="t('photos', 'Add photos to {albumName}', {albumName: albumName})"
 			@close="showAddPhotosModal = false">
 			<FilesPicker v-if="album !== undefined"
+				:album="album"
 				:destination="album.basename"
 				:blacklist-ids="albumFileIds"
+				@files-uploaded="handleFilesUploaded"
 				@files-picked="handleFilesPicked" />
 		</NcModal>
 
@@ -349,6 +351,11 @@ export default {
 			if (this.album.basename !== album.basename) {
 				this.$router.push(`/albums/${album.basename}`)
 			}
+		},
+
+		handleFilesUploaded() {
+			this.showAddPhotosModal = false
+			this.onUpload()
 		},
 
 		async handleFilesPicked(fileIds) {

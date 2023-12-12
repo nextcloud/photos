@@ -65,9 +65,10 @@
 		<div class="file-picker__actions">
 			<UploadPicker :accept="allowedMimes"
 				:context="uploadContext"
-				:destination="photosLocation"
+				:destination="album.basename"
+				:root="uploadContext.root"
 				:multiple="true"
-				@uploaded="refreshFiles" />
+				@uploaded="emitUploadedEvent" />
 			<NcButton type="primary" :disabled="loading || selectedFileIds.length === 0" @click="emitPickedEvent">
 				<template #icon>
 					<ImagePlus v-if="!loading" />
@@ -95,6 +96,7 @@ import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
 import UserConfig from '../mixins/UserConfig.js'
 import allowedMimes from '../services/AllowedMimes.js'
+import { getCurrentUser } from '@nextcloud/auth'
 
 export default {
 	name: 'FilesPicker',
@@ -124,6 +126,10 @@ export default {
 	],
 
 	props: {
+		album: {
+			type: Object,
+			required: true,
+		},
 		// Label to show in the submit button.
 		destination: {
 			type: String,
@@ -143,13 +149,15 @@ export default {
 		},
 	},
 
+	emits: [
+		'files-uploaded',
+		'files-picked',
+	],
+
 	data() {
 		return {
 			allowedMimes,
 			targetMonth: null,
-			uploadContext: {
-				route: 'albumpicker',
-			},
 		}
 	},
 
@@ -157,6 +165,22 @@ export default {
 		...mapGetters([
 			'files',
 		]),
+
+		/**
+		 * The upload picker context
+		 * We're uploading to the album folder, and the backend handle
+		 * the writing to the default location as well as the album update.
+		 * The context is also used for the NewFileMenu.
+		 *
+		 * @return {Album&{route: string, root: string}}
+		 */
+		 uploadContext() {
+			return {
+				...this.album,
+				route: 'albumpicker',
+				root: `dav/photos/${getCurrentUser()?.uid}/albums`,
+			}
+		},
 	},
 
 	watch: {
@@ -172,8 +196,8 @@ export default {
 			this.fetchFiles('', {}, this.blacklistIds)
 		},
 
-		refreshFiles() {
-			this.fetchFiles('', { firstResult: 0 }, [...this.blacklistIds, ...this.fetchedFileIds], true)
+		emitUploadedEvent() {
+			this.$emit('files-uploaded')
 		},
 
 		emitPickedEvent() {

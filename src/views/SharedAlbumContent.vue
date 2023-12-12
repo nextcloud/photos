@@ -116,6 +116,7 @@
 			:name="t('photos', 'Add photos to {albumName}', {albumName: albumOriginalName})"
 			@close="showAddPhotosModal = false">
 			<FilesPicker v-if="album !== undefined"
+				:album="album"
 				:destination="album.basename"
 				:blacklist-ids="albumFileIds"
 				:loading="loadingAddFilesToAlbum"
