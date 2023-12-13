@@ -34,7 +34,7 @@ If you'd like to join, just go through the [issues list](https://github.com/next
 
 ## 🏗 Development setup
 
-This app requires the main branch of the [Viewer app](https://github.com/nextcloud/viewer) to be installed and enabled.
+This app requires the [Viewer app](https://github.com/nextcloud/viewer) to be installed and enabled.
 Follow its development setup and then continue here.
 
 1. ☁ Clone this into your `apps` folder of your Nextcloud.
