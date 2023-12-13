@@ -77,17 +77,16 @@
 			:checked="selected"
 			@update:checked="onToggle" />
 
-		<Star v-if="file.favorite === 1"
+		<FavoriteIcon v-if="file.favorite === 1"
 			v-once
-			class="favorite-state"
-			:aria-label="t('photos', 'The file is in the favorites')" />
+			class="favorite-state" />
 	</div>
 </template>
 
 <script>
-import Star from 'vue-material-design-icons/Star.vue'
 import VideoIcon from 'vue-material-design-icons/Video.vue'
 import PlayCircleIcon from 'vue-material-design-icons/PlayCircle.vue'
+import FavoriteIcon from './FavoriteIcon.vue'
 
 import { generateUrl } from '@nextcloud/router'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
@@ -97,8 +96,8 @@ import { isCachedPreview } from '../services/PreviewService.js'
 export default {
 	name: 'File',
 	components: {
+		FavoriteIcon,
 		NcCheckboxRadioSwitch,
-		Star,
 		VideoIcon,
 		PlayCircleIcon,
 	},
@@ -367,15 +366,6 @@ export default {
 		top: 2px;
 		// Fancy calculation to render the start in the middle of narrow images.
 		right: min(2px, calc(50% - 7px));
-
-		:deep .material-design-icon__svg {
-			fill: #FC0;
-
-			path {
-				stroke: var(--color-primary-element-light);
-				stroke-width: 1px;
-			}
-		}
 	}
 }
 </style>
