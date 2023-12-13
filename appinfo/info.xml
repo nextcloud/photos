@@ -32,6 +32,8 @@
 
     <commands>
         <command>OCA\Photos\Command\UpdateReverseGeocodingFilesCommand</command>
+        <command>OCA\Photos\Command\AlbumAddCommand</command>
+        <command>OCA\Photos\Command\AlbumCreateCommand</command>
     </commands>
 
     <sabre>

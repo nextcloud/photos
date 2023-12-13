@@ -110,6 +110,25 @@ class AlbumMapper {
 			return new AlbumInfo((int)$row['album_id'], $userId, $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
 		}, $rows);
 	}
+	
+	/**
+	 * @param string $albumName
+	 * @param string $userName
+	 * @return AlbumInfo
+	 */
+	public function getByName(string $albumName, string $userName): ?AlbumInfo {
+		$query = $this->connection->getQueryBuilder();
+		$query->select("album_id", "location", "created", "last_added_photo")
+				->from("photos_albums")
+				->where($query->expr()->eq('name', $query->createNamedParameter($albumName)))
+				->andWhere($query->expr()->eq('user', $query->createNamedParameter($userName)));
+		$row = $query->executeQuery()->fetch();
+		if ($row) {
+			return new AlbumInfo((int)$row['album_id'], $userName, $albumName, $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
+		} else {
+			return null;
+		}
+	}
 
 	/**
 	 * @param int $fileId
