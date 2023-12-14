@@ -11,8 +11,8 @@ OC.L10N.register(
     "Save" : "Enrollañ",
     "Shared by" : "Rannet gant",
     "Copy public link" : "Eilañ al liamm foran",
-    "View" : "Gwell",
     "Favorite" : "Pennrollañ",
+    "View" : "Gwell",
     "Remove from favorites" : "Diverkañañ eus ar pennrolloù",
     "Add" : "Ouzhpennañ",
     "Details" : "Munudoù"
