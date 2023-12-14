@@ -15,10 +15,10 @@ OC.L10N.register(
     "Group" : "Grup",
     "Copy public link" : "Copiză link-ul public",
     "An error occurred" : "A apărut o eraore",
+    "Favorite" : "Favorite",
     "Invalid location selected" : "Locație invalidă",
     "View" : "Vizualizare",
     "Unselect all" : "Deselectează tot",
-    "Favorite" : "Favorite",
     "Remove from favorites" : "Șterge din favorite",
     "Add" : "Adaugă",
     "Details" : "Detalii"
