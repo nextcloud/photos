@@ -20,8 +20,8 @@ OC.L10N.register(
     "Delete the public link" : "Dzēst publisko saiti",
     "Share via public link" : "Kopīgojiet, izmantojot publisko saiti",
     "An error occurred" : "Gadījās kļūda",
-    "View" : "Skats",
     "Favorite" : "Favorīts",
+    "View" : "Skats",
     "Remove from favorites" : "Noņemt no izlases",
     "Add" : "Pievienot",
     "Details" : "Detaļas"

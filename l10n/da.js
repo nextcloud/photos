@@ -30,8 +30,8 @@ OC.L10N.register(
     "Public link copied!" : "Offentlig link kopieret!",
     "Copy public link" : "Kopier offentligt link",
     "An error occurred" : "Der var en fejl",
+    "Favorite" : "Favorit",
     "Select image {imageName}" : "Vælg billede {imageName}",
-    "The file is in the favorites" : "Filen er i favoritterne",
     "Open the full size \"{name}\" image" : "Åbn billedet \"{name}\" i fuld størrelse",
     "Add to {destination}" : "Føj til {destination}",
     "Open the \"{name}\" sub-directory" : "Åbn \"{name}\" under direktoriet",
@@ -44,7 +44,6 @@ OC.L10N.register(
     "Invalid location selected" : "Ugyldig placering er valgt",
     "View" : "Vis",
     "Unselect all" : "Fravælg alle",
-    "Favorite" : "Favorit",
     "Remove from favorites" : "Fjern fra favoritter",
     "Save." : "Gem.",
     "This folder does not exist" : "Denne mappe findes ikke",
@@ -62,6 +61,7 @@ OC.L10N.register(
     "Create the album." : "Opret albummet.",
     "Back to the new album form." : "Tilbage til den nye albumform.",
     "_Share with %n user_::_Share with %n users_" : ["Del med %n bruger","Del med %n brugere"],
+    "The file is in the favorites" : "Filen er i favoritterne",
     "Shared albums" : "Delte album"
 },
 "nplurals=2; plural=(n != 1);");
