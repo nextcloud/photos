@@ -332,11 +332,17 @@ export default {
 		z-index: 1;
 		width: fit-content;
 
-		// Make the checkbox background round on hover.
+		:deep .checkbox-radio-switch__input:focus-visible + .checkbox-radio-switch__content,
+		.checkbox-radio-switch__input:focus-visible {
+			outline: 2px solid var(--color-main-text);
+			box-shadow: 0 0 0 3px var(--color-main-background);
+			outline-offset: 0px;
+		}
+
 		:deep .checkbox-radio-switch__content {
 			padding: 10px;
 			box-sizing: border-box;
-			background: var(--color-primary-element-light);
+			background: var(--color-main-background);
 
 			// Add a background to the checkbox so we do not see the image through it.
 			&::after {
