@@ -440,12 +440,12 @@ class AlbumMapper {
 		$existingCollaborators = $this->getCollaborators($albumId);
 
 		// Different behavior if type is link to prevent creating multiple link.
-		function computeKey($c) {
-			return ($c['type'] === AlbumMapper::TYPE_LINK ? '' : $c['id']).$c['type'];
-		}
+		$computeKey = function ($c) {
+			return ($c['type'] === AlbumMapper::TYPE_LINK ? '' : $c['id']) . $c['type'];
+		};
 
-		$collaboratorsToAdd = array_udiff($collaborators, $existingCollaborators, fn ($a, $b) => strcmp(computeKey($a), computeKey($b)));
-		$collaboratorsToRemove = array_udiff($existingCollaborators, $collaborators, fn ($a, $b) => strcmp(computeKey($a), computeKey($b)));
+		$collaboratorsToAdd = array_udiff($collaborators, $existingCollaborators, fn ($a, $b) => strcmp($computeKey($a), $computeKey($b)));
+		$collaboratorsToRemove = array_udiff($existingCollaborators, $collaborators, fn ($a, $b) => strcmp($computeKey($a), $computeKey($b)));
 
 		$this->connection->beginTransaction();
 
