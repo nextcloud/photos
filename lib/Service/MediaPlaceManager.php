@@ -61,9 +61,12 @@ class MediaPlaceManager {
 
 		$coordinate = $metadata->getArray('photos-gps');
 
-		$latitude = $coordinate['latitude'];
-		$longitude = $coordinate['longitude'];
+		$latitude = $coordinate['latitude'] ?? null;
+		$longitude = $coordinate['longitude'] ?? null;
+		if ($latitude === null || $longitude === null) {
+			return null;
+		}
 
-		return $this->rgcService->getPlaceForCoordinates($latitude, $longitude);
+		return $this->rgcService->getPlaceForCoordinates((float) $latitude, (float) $longitude);
 	}
 }
