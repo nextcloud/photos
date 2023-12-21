@@ -1,3 +1,457 @@
-/*! For license information please see photos-src_mixins_FetchFilesMixin_js-src_components_Faces_FaceMergeForm_vue.js.LICENSE.txt */
-"use strict";(self.webpackChunkphotos=self.webpackChunkphotos||[]).push([["src_mixins_FetchFilesMixin_js-src_components_Faces_FaceMergeForm_vue"],{46116:(t,e,n)=>{n.d(e,{Z:()=>r});var a=n(20629),s=n(86492),i=n.n(s);const r={name:"FaceCoverMixin",computed:{...(0,a.Se)(["faces","facesFiles","files"])},methods:{getFaceCover(t){return JSON.parse(i().decode(this.faces[t].props["face-preview-image"]||"{}"))},getCoverStyle(t){const e=this.getFaceCover(t);if(!e||!e.detection)return{};const n=e.detection,a=Math.max(1,1/n.width*.4),s=100*(n.x+n.width/2),i=100*(n.y+n.height/2);return{width:"100%",transform:"translate(calc( var(--photos-face-width)/2 - ".concat(s,"% ), calc( var(--photos-face-width)/2 - ").concat(i,"% )) scale(").concat(a,")"),transformOrigin:"".concat(s,"% ").concat(i,"%")}}}}},99751:(e,n,a)=>{a.d(n,{Z:()=>f});var s=a(20629),i=a(64024),r=a(77958),o=a(81067),c=a(59537),l=a(2161),d=a(94236),h=a(69363),p=a(86492),A=a.n(p);const f={name:"FetchFacesMixin",data:()=>({errorFetchingFaces:null,loadingFaces:!1,errorFetchingFiles:null,loadingFiles:!1}),mixins:[h.Z],async beforeMount(){this.fetchFaces()},computed:{...(0,s.Se)(["faces"])},methods:{...(0,s.nv)(["appendFiles"]),async fetchFaces(){if(!this.loadingFaces&&!Object.keys(this.faces).length)try{var e;this.loadingFaces=!0,this.errorFetchingFaces=null;const{data:t}=await o.ZP.getDirectoryContents("/recognize/".concat(null===(e=(0,r.ts)())||void 0===e?void 0:e.uid,"/faces/"),{data:l.Z,details:!0,signal:this.abortController.signal});this.$store.dispatch("addFaces",{faces:t}),c.Z.debug("[FetchFacesMixin] Fetched ".concat(t.length," new faces: "),t)}catch(e){e.response&&e.response.status&&(404===e.response.status?this.errorFetchingFaces=404:this.errorFetchingFaces=e),c.Z.error(t("photos","Failed to fetch faces list."),{error:e}),(0,i.x2)(t("photos","Failed to fetch faces list."))}finally{this.loadingFaces=!1}},async fetchFaceContent(t,e){if(!this.loadingFiles&&(e||!this.facesFiles[t]||!this.facesFiles[t].length))try{var n;this.errorFetchingFiles=null,this.loadingFiles=!0;let{data:e}=await o.ZP.getDirectoryContents("/recognize/".concat(null===(n=(0,r.ts)())||void 0===n?void 0:n.uid,"/faces/").concat(t),{data:l.Z,details:!0,signal:this.abortController.signal});e=e.map((t=>(0,d.AX)(t))).map((t=>({...t,filename:A().decode(t.realpath).replace("/".concat((0,r.ts)().uid,"/files"),"/files/".concat((0,r.ts)().uid))}))).map((t=>({...t,faceDetections:JSON.parse(A().decode(t.faceDetections))})));const a=e.map((t=>""+t.fileid));this.appendFiles(e),e.length>0&&await this.$store.commit("addFilesToFace",{faceName:t,fileIdsToAdd:a}),c.Z.debug("[FetchFacesMixin] Fetched ".concat(a.length," new files: "),a)}catch(t){t.response&&t.response.status&&(404===t.response.status?this.errorFetchingFiles=404:this.errorFetchingFiles=t),c.Z.error("Error fetching face files",{error:t})}finally{this.loadingFiles=!1}},async fetchUnassignedFaces(t){if(!this.loadingFiles&&(t||!this.unassignedFiles||!this.unassignedFiles.length))try{var e;this.errorFetchingFiles=null,this.loadingFiles=!0;let{data:t}=await o.ZP.getDirectoryContents("/recognize/".concat(null===(e=(0,r.ts)())||void 0===e?void 0:e.uid,"/unassigned-faces"),{data:l.Z,details:!0,signal:this.abortController.signal});t=t.map((t=>(0,d.AX)(t))).map((t=>({...t,filename:A().decode(t.realpath).replace("/".concat((0,r.ts)().uid,"/files"),"/files/".concat((0,r.ts)().uid))}))).map((t=>({...t,faceDetections:JSON.parse(A().decode(t.faceDetections))})));const n=t.map((t=>""+t.fileid));this.appendFiles(t),t.length>0&&await this.$store.commit("addUnassignedFiles",{fileIdsToAdd:n}),c.Z.debug("[FetchFacesMixin] Fetched ".concat(n.length," new unassigned files: "),n)}catch(t){t.response&&t.response.status&&(404===t.response.status?this.errorFetchingFiles=404:this.errorFetchingFiles=t),c.Z.error("Error fetching unassigned files",{error:t})}finally{this.loadingFiles=!1}},async fetchUnassignedFacesCount(){try{var t;const{data:e}=await o.ZP.stat("/recognize/".concat(null===(t=(0,r.ts)())||void 0===t?void 0:t.uid,"/unassigned-faces"),{data:l.Z,details:!0,signal:this.abortController.signal}),n=Number(e.props.nbItems);await this.$store.commit("setUnassignedFilesCount",n),c.Z.debug("[FetchFacesMixin] Fetched unassigned files count: ",n)}catch(t){c.Z.error("Error fetching unassigned files count",{error:t})}}}}},66951:(t,e,n)=>{n.d(e,{Z:()=>p});var a=n(59537),s=n(94236),i=n(77958),r=n(3301),o=n(81067),c=n(2161),l=n(80351),d=n.n(l);var h=n(32114);const p={name:"FetchFilesMixin",mixins:[n(69363).Z],data:()=>({errorFetchingFiles:null,loadingFiles:!1,doneFetchingFiles:!1,fetchSemaphore:new h.Z(1),fetchedFileIds:[]}),watch:{"$route.path"(){this.resetFetchFilesState()}},methods:{async fetchFiles(){let t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"",e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:[],l=arguments.length>3&&void 0!==arguments[3]&&arguments[3];if(this.doneFetchingFiles&&!l||this.loadingFiles)return[];const h=await this.fetchSemaphore.acquire();try{this.errorFetchingFiles=null,this.loadingFiles=!0;const l=200,h=await async function(){let t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"",e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{};e={firstResult:0,nbResults:200,mimesType:r.Oj,onThisDay:!1,onlyFavorites:!1,...e};const n="/files/".concat((0,i.ts)().uid),a=e.mimesType.reduce(((t,e)=>"".concat(t,"\n\t\t<d:eq>\n\t\t\t<d:prop>\n\t\t\t\t<d:getcontenttype/>\n\t\t\t</d:prop>\n\t\t\t<d:literal>").concat(e,"</d:literal>\n\t\t</d:eq>\n\t")),""),l=e.onlyFavorites?"<d:eq>\n\t\t\t\t<d:prop>\n\t\t\t\t\t<oc:favorite/>\n\t\t\t\t</d:prop>\n\t\t\t\t<d:literal>1</d:literal>\n\t\t\t</d:eq>":"",h=e.onThisDay?"<d:or>".concat(Array(20).fill(1).map(((t,e)=>{const n=d()(Date.now()).startOf("day").subtract(3,"d").subtract(e+1,"y"),a=d()(Date.now()).endOf("day").add(3,"d").subtract(e+1,"y");return"<d:and>\n\t\t\t\t<d:gt>\n\t\t\t\t\t<d:prop>\n\t\t\t\t\t\t<d:getlastmodified />\n\t\t\t\t\t</d:prop>\n\t\t\t\t\t<d:literal>".concat(n.format(d().defaultFormatUtc),"</d:literal>\n\t\t\t\t</d:gt>\n\t\t\t\t<d:lt>\n\t\t\t\t\t<d:prop>\n\t\t\t\t\t\t<d:getlastmodified />\n\t\t\t\t\t</d:prop>\n\t\t\t\t\t<d:literal>").concat(a.format(d().defaultFormatUtc),"</d:literal>\n\t\t\t\t</d:lt>\n\t\t\t</d:and>")})).join("\n"),"</d:or>"):"";return e=Object.assign({method:"SEARCH",headers:{"content-Type":"text/xml"},data:'<?xml version="1.0" encoding="UTF-8"?>\n\t\t\t<d:searchrequest xmlns:d="DAV:"\n\t\t\t\txmlns:oc="http://owncloud.org/ns"\n\t\t\t\txmlns:nc="http://nextcloud.org/ns"\n\t\t\t\txmlns:ns="https://github.com/icewind1991/SearchDAV/ns"\n\t\t\t\txmlns:ocs="http://open-collaboration-services.org/ns">\n\t\t\t\t<d:basicsearch>\n\t\t\t\t\t<d:select>\n\t\t\t\t\t\t<d:prop>\n\t\t\t\t\t\t\t'.concat(c.N,"\n\t\t\t\t\t\t</d:prop>\n\t\t\t\t\t</d:select>\n\t\t\t\t\t<d:from>\n\t\t\t\t\t\t<d:scope>\n\t\t\t\t\t\t\t<d:href>").concat(n,"/").concat(t,"</d:href>\n\t\t\t\t\t\t\t<d:depth>infinity</d:depth>\n\t\t\t\t\t\t</d:scope>\n\t\t\t\t\t</d:from>\n\t\t\t\t\t<d:where>\n\t\t\t\t\t\t<d:and>\n\t\t\t\t\t\t\t<d:or>\n\t\t\t\t\t\t\t\t").concat(a,"\n\t\t\t\t\t\t\t</d:or>\n\t\t\t\t\t\t\t").concat(l,"\n\t\t\t\t\t\t\t").concat(h,"\n\t\t\t\t\t\t</d:and>\n\t\t\t\t\t</d:where>\n\t\t\t\t\t<d:orderby>\n\t\t\t\t\t\t<d:order>\n\t\t\t\t\t\t\t<d:prop><nc:metadata-photos-original_date_time/></d:prop>\n\t\t\t\t\t\t\t<d:descending/>\n\t\t\t\t\t\t</d:order>\n\t\t\t\t\t</d:orderby>\n\t\t\t\t\t<d:limit>\n\t\t\t\t\t\t<d:nresults>").concat(e.nbResults,"</d:nresults>\n\t\t\t\t\t\t<ns:firstresult>").concat(e.firstResult,"</ns:firstresult>\n\t\t\t\t\t</d:limit>\n\t\t\t\t</d:basicsearch>\n\t\t\t</d:searchrequest>"),deep:!0,details:!0},e),(await o.ZP.getDirectoryContents("",e)).data.map((t=>(0,s.AX)(t)))}(t,{firstResult:this.fetchedFileIds.length,nbResults:l,...e,signal:this.abortController.signal});h.length!==l&&(this.doneFetchingFiles=!0);const p=h.map((t=>t.fileid)).filter((t=>!this.fetchedFileIds.includes(t.toString())));return this.fetchedFileIds.push(...p.map((t=>t.toString())).filter((t=>!n.includes(t)))),this.$store.dispatch("appendFiles",h),a.Z.debug("[FetchFilesMixin] Fetched ".concat(p.length," new files: "),p),p}catch(t){var p;if(404===(null===(p=t.response)||void 0===p?void 0:p.status))this.errorFetchingFiles=404;else{if("ERR_CANCELED"===t.code)return[];this.errorFetchingFiles=t}a.Z.error("Error fetching files",{error:t}),console.error(t)}finally{this.loadingFiles=!1,this.fetchSemaphore.release(h)}return[]},resetFetchFilesState(){this.doneFetchingFiles=!1,this.errorFetchingFiles=null,this.loadingFiles=!1,this.fetchedFileIds=[]}}}},90851:(t,e,n)=>{n.d(e,{Z:()=>o});var a=n(87537),s=n.n(a),i=n(23645),r=n.n(i)()(s());r.push([t.id,".face-cover[data-v-5cb97458]{display:flex;flex-direction:column;padding:10px;border-radius:var(--border-radius-large)}.face-cover__crop-container[data-v-5cb97458]{overflow:hidden;width:128px;height:128px;border-radius:128px;position:relative;background:var(--color-background-darker);--photos-face-width: 128px}@media only screen and (max-width: 1020px){.face-cover__crop-container[data-v-5cb97458]{width:95px;height:95px;--photos-face-width: 95px}}.face-cover[data-v-5cb97458]:hover,.face-cover[data-v-5cb97458]:focus{background:var(--color-background-hover)}.face-cover__details[data-v-5cb97458]{display:flex;flex-direction:column;width:128px;margin-top:4px;text-align:center}@media only screen and (max-width: 1020px){.face-cover__details[data-v-5cb97458]{width:95px}}.face-cover__details__first-line[data-v-5cb97458]{display:flex;height:2em;overflow:hidden;text-overflow:ellipsis}.face-cover__details__second-line[data-v-5cb97458]{margin-top:6px;color:var(--color-text-maxcontrast)}.face-cover__details__name[data-v-5cb97458]{flex-grow:1;margin:0}.face-cover--small *[data-v-5cb97458]{font-size:15px !important}.face-cover--small .face-cover__details[data-v-5cb97458]{width:60px !important}.face-cover--small .face-cover__crop-container[data-v-5cb97458]{width:60px !important;height:60px !important;--photos-face-width: 60px !important}","",{version:3,sources:["webpack://./src/mixins/FaceCover.scss"],names:[],mappings:"AAqBA,6BACC,YAAA,CACA,qBAAA,CACA,YAAA,CACA,wCAAA,CAEA,6CACC,eAAA,CACA,WAAA,CACA,YAAA,CACA,mBAAA,CACA,iBAAA,CACA,yCAAA,CACA,0BAAA,CAEA,2CATD,6CAUE,UAAA,CACA,WAAA,CACA,yBAAA,CAAA,CAIF,sEACC,wCAAA,CAGD,sCACC,YAAA,CACA,qBAAA,CACA,WAAA,CACA,cAAA,CACA,iBAAA,CAEA,2CAPD,sCAQE,UAAA,CAAA,CAGD,kDACC,YAAA,CACA,UAAA,CACA,eAAA,CACA,sBAAA,CAGD,mDACC,cAAA,CACA,mCAAA,CAGD,4CACC,WAAA,CACA,QAAA,CAMF,sCACC,yBAAA,CAED,yDACC,qBAAA,CAED,gEACC,qBAAA,CACA,sBAAA,CACA,oCAAA",sourcesContent:["/**\n * @copyright Copyright (c) 2023 Marcel Klehr <mklehr@gmx.net>\n *\n * @author Marcel Klehr <mklehr@gmx.net>\n *\n * @license AGPL-3.0-or-later\n *\n * This program is free software: you can redistribute it and/or modify\n * it under the terms of the GNU Affero General Public License as\n * published by the Free Software Foundation, either version 3 of the\n * License, or (at your option) any later version.\n *\n * This program is distributed in the hope that it will be useful,\n * but WITHOUT ANY WARRANTY; without even the implied warranty of\n * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\n * GNU Affero General Public License for more details.\n *\n * You should have received a copy of the GNU Affero General Public License\n * along with this program. If not, see <http://www.gnu.org/licenses/>.\n *\n */\n.face-cover {\n\tdisplay: flex;\n\tflex-direction: column;\n\tpadding: 10px;\n\tborder-radius: var(--border-radius-large);\n\n\t&__crop-container {\n\t\toverflow: hidden;\n\t\twidth: 128px;\n\t\theight: 128px;\n\t\tborder-radius: 128px;\n\t\tposition: relative;\n\t\tbackground: var(--color-background-darker);\n\t\t--photos-face-width: 128px;\n\n\t\t@media only screen and (max-width: 1020px) {\n\t\t\twidth: 95px;\n\t\t\theight: 95px;\n\t\t\t--photos-face-width: 95px;\n\t\t}\n\t}\n\n\t&:hover, &:focus {\n\t\tbackground: var(--color-background-hover);\n\t}\n\n\t&__details {\n\t\tdisplay: flex;\n\t\tflex-direction: column;\n\t\twidth: 128px;\n\t\tmargin-top: 4px;\n\t\ttext-align: center;\n\n\t\t@media only screen and (max-width: 1020px) {\n\t\t\twidth: 95px;\n\t\t}\n\n\t\t&__first-line {\n\t\t\tdisplay: flex;\n\t\t\theight: 2em;\n\t\t\toverflow: hidden;\n\t\t\ttext-overflow: ellipsis;\n\t\t}\n\n\t\t&__second-line {\n\t\t\tmargin-top: 6px;\n\t\t\tcolor: var(--color-text-maxcontrast);\n\t\t}\n\n\t\t&__name {\n\t\t\tflex-grow: 1;\n\t\t\tmargin: 0;\n\t\t}\n\t}\n}\n\n.face-cover--small {\n\t* {\n\t\tfont-size: 15px !important;\n\t}\n\t.face-cover__details {\n\t\twidth: 60px !important;\n\t}\n\t.face-cover__crop-container {\n\t\twidth: 60px !important;\n\t\theight: 60px !important;\n\t\t--photos-face-width: 60px !important;\n\t}\n}"],sourceRoot:""}]);const o=r},19500:(t,e,n)=>{n.d(e,{Z:()=>o});var a=n(87537),s=n.n(a),i=n(23645),r=n.n(i)()(s());r.push([t.id,".face-list[data-v-33326436]{display:flex;flex-direction:row;height:350px;flex-wrap:wrap;padding:12px}.loader[data-v-33326436]{margin:25% auto}","",{version:3,sources:["webpack://./src/components/Faces/FaceMergeForm.vue"],names:[],mappings:"AAEA,4BACC,YAAA,CACA,kBAAA,CACA,YAAA,CACA,cAAA,CACA,YAAA,CAGD,yBACC,eAAA",sourcesContent:['$sizes: ("400": ("count": 3, "marginTop": 66, "marginW": 8), "700": ("count": 4, "marginTop": 66, "marginW": 8), "1024": ("count": 5, "marginTop": 66, "marginW": 44), "1280": ("count": 4, "marginTop": 66, "marginW": 44), "1440": ("count": 5, "marginTop": 88, "marginW": 66), "1600": ("count": 6, "marginTop": 88, "marginW": 66), "2048": ("count": 7, "marginTop": 88, "marginW": 66), "2560": ("count": 8, "marginTop": 88, "marginW": 88), "3440": ("count": 9, "marginTop": 88, "marginW": 88), "max": ("count": 10, "marginTop": 88, "marginW": 88));\n\n.face-list {\n\tdisplay: flex;\n\tflex-direction: row;\n\theight: 350px;\n\tflex-wrap: wrap;\n\tpadding: 12px;\n}\n\n.loader {\n\tmargin: 25% auto;\n}\n'],sourceRoot:""}]);const o=r},97087:(t,e,n)=>{n.d(e,{Z:()=>b});var a=n(20629),s=n(79753),i=n(99751),r=n(46116);const o={name:"FaceCover",mixins:[i.Z,r.Z],props:{baseName:{type:String,required:!0},small:{type:Boolean,default:!1}},data:()=>({observer:null}),computed:{...(0,a.Se)(["files","faces","facesFiles"]),face(){return this.faces[this.baseName]},coverUrl(){return this.cover?(0,s.nu)("/apps/photos/api/v1/preview/".concat(this.cover.fileid,"?x=",512,"&y=",512)):""},cover(){return this.getFaceCover(this.face.basename)},coverDimensions(){return this.cover?this.getCoverStyle(this.face.basename):{}}}};var c=n(93379),l=n.n(c),d=n(7795),h=n.n(d),p=n(90569),A=n.n(p),f=n(3565),m=n.n(f),g=n(19216),u=n.n(g),v=n(44589),F=n.n(v),C=n(90851),x={};x.styleTagTransform=F(),x.setAttributes=m(),x.insert=A().bind(null,"head"),x.domAPI=h(),x.insertStyleElement=u();l()(C.Z,x);C.Z&&C.Z.locals&&C.Z.locals;const b=(0,n(51900).Z)(o,(function(){var t=this,e=t._self._c;return e("div",{class:["face-cover",t.small&&"face-cover--small"],on:{click:function(e){return t.$emit("click")}}},[e("div",{staticClass:"face-cover__crop-container"},[e("img",{ref:"image",staticClass:"face-cover__image",style:t.coverDimensions,attrs:{src:t.coverUrl}})]),t._v(" "),e("div",{staticClass:"face-cover__details"},[t.baseName.match(/^[0-9]+$/)?t._e():e("div",{staticClass:"face-cover__details__first-line"},[e("h2",{staticClass:"face-cover__details__name"},[t._v("\n\t\t\t\t"+t._s(t.baseName)+"\n\t\t\t")])]),t._v(" "),t.small?t._e():e("div",{staticClass:"face-cover__details__second-line"},[t._v("\n\t\t\t"+t._s(t.n("photos","%n photos","%n photos",t.face.props.nbItems))+"\n\t\t")])])])}),[],!1,null,"5cb97458",null).exports},23559:(t,e,n)=>{n.d(e,{Z:()=>x});var a=n(20629),s=n(46116),i=n(99751);const r={name:"FaceMergeForm",components:{FaceCover:n(97087).Z},mixins:[s.Z,i.Z],props:{firstFace:{type:String,required:!0}},data:()=>({loading:!1}),computed:{...(0,a.Se)(["files","faces","facesFiles"]),filteredFaces(){return Object.values(this.faces).filter((t=>t.basename!==this.firstFace)).sort(((t,e)=>t.props.nbItems&&e.props.nbItems?e.props.nbItems-t.props.nbItems:this.facesFiles[e.basename]&&this.facesFiles[t.basename]?this.facesFiles[e.basename].length-this.facesFiles[t.basename].length:0))}},methods:{handleSelect(t){this.$emit("select",t),this.loading=!0}}};var o=n(93379),c=n.n(o),l=n(7795),d=n.n(l),h=n(90569),p=n.n(h),A=n(3565),f=n.n(A),m=n(19216),g=n.n(m),u=n(44589),v=n.n(u),F=n(19500),C={};C.styleTagTransform=v(),C.setAttributes=f(),C.insert=p().bind(null,"head"),C.domAPI=d(),C.insertStyleElement=g();c()(F.Z,C);F.Z&&F.Z.locals&&F.Z.locals;const x=(0,n(51900).Z)(r,(function(){var t=this,e=t._self._c;return e("div",{staticClass:"merge-form face-list"},t._l(t.filteredFaces,(function(n){return e("FaceCover",{key:n.basename,attrs:{"base-name":n.basename,small:""},on:{click:function(e){return t.handleSelect(n.basename)}}})})),1)}),[],!1,null,"33326436",null).exports}}]);
-//# sourceMappingURL=photos-src_mixins_FetchFilesMixin_js-src_components_Faces_FaceMergeForm_vue.js.map?v=83bc9fb5e2294ce75642
+(self["webpackChunkphotos"] = self["webpackChunkphotos"] || []).push([["src_mixins_FetchFilesMixin_js-src_components_Faces_FaceMergeForm_vue"],{
+
+/***/ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/components/Faces/FaceMergeForm.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/components/Faces/FaceMergeForm.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _mixins_FaceCoverMixin_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../mixins/FaceCoverMixin.js */ "./src/mixins/FaceCoverMixin.js");
+/* harmony import */ var _mixins_FetchFacesMixin_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/FetchFacesMixin.js */ "./src/mixins/FetchFacesMixin.js");
+/* harmony import */ var _FaceCover_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FaceCover.vue */ "./src/components/Faces/FaceCover.vue");
+
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: 'FaceMergeForm',
+  components: {
+    FaceCover: _FaceCover_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
+  },
+  mixins: [_mixins_FaceCoverMixin_js__WEBPACK_IMPORTED_MODULE_0__["default"], _mixins_FetchFacesMixin_js__WEBPACK_IMPORTED_MODULE_1__["default"]],
+  props: {
+    firstFace: {
+      type: String,
+      required: true
+    }
+  },
+  data() {
+    return {
+      loading: false
+    };
+  },
+  computed: {
+    ...(0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)(['files', 'faces', 'facesFiles']),
+    filteredFaces() {
+      return Object.values(this.faces).filter(face => face.basename !== this.firstFace).sort((a, b) => {
+        if (a.props.nbItems && b.props.nbItems) {
+          return b.props.nbItems - a.props.nbItems;
+        }
+        if (!this.facesFiles[b.basename] || !this.facesFiles[a.basename]) {
+          return 0;
+        }
+        return this.facesFiles[b.basename].length - this.facesFiles[a.basename].length;
+      });
+    }
+  },
+  methods: {
+    handleSelect(faceName) {
+      this.$emit('select', faceName);
+      this.loading = true;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/components/Faces/FaceMergeForm.vue?vue&type=template&id=a9c1fcf4&scoped=true&":
+/*!****************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/components/Faces/FaceMergeForm.vue?vue&type=template&id=a9c1fcf4&scoped=true& ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function render() {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    staticClass: "merge-form face-list"
+  }, _vm._l(_vm.filteredFaces, function (face) {
+    return _c("FaceCover", {
+      key: face.basename,
+      attrs: {
+        "base-name": face.basename,
+        small: ""
+      },
+      on: {
+        click: function ($event) {
+          return _vm.handleSelect(face.basename);
+        }
+      }
+    });
+  }), 1);
+};
+var staticRenderFns = [];
+render._withStripped = true;
+
+
+/***/ }),
+
+/***/ "./src/mixins/FetchFilesMixin.js":
+/*!***************************************!*\
+  !*** ./src/mixins/FetchFilesMixin.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @nextcloud/moment */ "./node_modules/@nextcloud/moment/dist/index.js");
+/* harmony import */ var _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _services_logger_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/logger.js */ "./src/services/logger.js");
+/* harmony import */ var _services_PhotoSearch_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/PhotoSearch.js */ "./src/services/PhotoSearch.js");
+/* harmony import */ var _services_PhotoSearch_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_services_PhotoSearch_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _utils_semaphoreWithPriority_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/semaphoreWithPriority.js */ "./src/utils/semaphoreWithPriority.js");
+/* harmony import */ var _AbortControllerMixin_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./AbortControllerMixin.js */ "./src/mixins/AbortControllerMixin.js");
+/**
+ * @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
+ *
+ * @author Louis Chemineau <louis@chmn.me>
+ *
+ * @license AGPL-3.0-or-later
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+
+
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: 'FetchFilesMixin',
+  mixins: [_AbortControllerMixin_js__WEBPACK_IMPORTED_MODULE_4__["default"]],
+  data() {
+    const dateTimeUpperBound = undefined;
+    const dateTimeLowerBound = _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(4, 'months');
+    return {
+      errorFetchingFiles: null,
+      loadingFiles: false,
+      doneFetchingFiles: false,
+      fetchSemaphore: new _utils_semaphoreWithPriority_js__WEBPACK_IMPORTED_MODULE_3__["default"](1),
+      fetchedFileIds: [],
+      dateTimeUpperBound,
+      dateTimeLowerBound,
+      timeWindowSteps: 4,
+      firstResultOffset: 0
+    };
+  },
+  watch: {
+    '$route.path'() {
+      this.resetFetchFilesState();
+    }
+  },
+  methods: {
+    /**
+     * @param {string} path - Path to pass to getPhotos.
+     * @param {object} options - Options to pass to getPhotos.
+     * @param {string[]} [blacklist=[]] - Array of ids to filter out.
+     * @param {boolean} [force=false] - Force fetching even if doneFetchingFiles is true
+     * @return {Promise<string[]>} - The next batch of data depending on global offset.
+     */
+    async fetchFiles() {
+      let path = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+      let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      let blacklist = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
+      let force = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+      if (this.doneFetchingFiles && !force || this.loadingFiles) {
+        return [];
+      }
+      const fetchSemaphoreSymbol = await this.fetchSemaphore.acquire();
+      try {
+        this.errorFetchingFiles = null;
+        this.loadingFiles = true;
+        const numberOfImagesPerBatch = 200;
+        _services_logger_js__WEBPACK_IMPORTED_MODULE_1__["default"].debug(`[FetchFilesMixin] Fetching file between ${this.dateTimeUpperBound?.format('L')} 'and' ${this.dateTimeLowerBound?.format('L')}`);
+
+        // Load next batch of images
+        const fetchedFiles = await _services_PhotoSearch_js__WEBPACK_IMPORTED_MODULE_2___default()(path, {
+          firstResult: this.firstResultOffset,
+          nbResults: numberOfImagesPerBatch,
+          dateTimeUpperBound: this.dateTimeUpperBound?.unix(),
+          dateTimeLowerBound: this.dateTimeLowerBound?.unix(),
+          ...options,
+          signal: this.abortController.signal
+        });
+        if (fetchedFiles.length === numberOfImagesPerBatch) {
+          // If we have the same number of files than as requested
+          // then the time window probably contains more, so we simply bump the first result offset.
+          this.firstResultOffset += fetchedFiles.length;
+        } else if (fetchedFiles.length === 0 && this.firstResultOffset === 0) {
+          // If we tried a new window and it is empty
+          if (this.dateTimeUpperBound === undefined && this.dateTimeLowerBound === undefined) {
+            // if upper bound has been cleared, then we are done fetching files.
+            this.doneFetchingFiles = true;
+          } else if (this.dateTimeLowerBound === undefined) {
+            // else if lower bound has been cleared, then we clear upper bound
+            // this will allow the server to return all files with either empty or above than now original date time
+            this.dateTimeUpperBound = undefined;
+          } else if (this.dateTimeUpperBound === undefined) {
+            this.dateTimeUpperBound = this.dateTimeLowerBound;
+          } else if (this.timeWindowSteps === 64) {
+            // else if we reach 64 months, we clear the lower bound.
+            this.dateTimeUpperBound = this.dateTimeLowerBound;
+            this.dateTimeLowerBound = undefined;
+          } else {
+            // else we progressively increase the time window until we reach 64 months (3 requests)
+            this.timeWindowSteps *= 4;
+            this.dateTimeUpperBound = this.dateTimeLowerBound;
+            this.dateTimeLowerBound = _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0___default()(this.dateTimeLowerBound).subtract(this.timeWindowSteps, 'months');
+          }
+        } else if (fetchedFiles.length !== numberOfImagesPerBatch) {
+          // If we get less files than requested,
+          // we are at the end for the current time window, so we move to the next one.
+          this.timeWindowSteps = 4;
+          this.dateTimeUpperBound = this.dateTimeLowerBound;
+          if (this.dateTimeUpperBound !== undefined) {
+            this.dateTimeLowerBound = _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0___default()(this.dateTimeUpperBound).subtract(this.timeWindowSteps, 'months');
+          } else {
+            this.doneFetchingFiles = true;
+          }
+        }
+        const fileIds = fetchedFiles.map(file => file.fileid).filter(fileId => !this.fetchedFileIds.includes(fileId.toString())); // Filter to prevent duplicate fileIds.
+
+        this.fetchedFileIds.push(...fileIds.map(fileId => fileId.toString()).filter(fileId => !blacklist.includes(fileId)));
+        this.$store.dispatch('appendFiles', fetchedFiles);
+        _services_logger_js__WEBPACK_IMPORTED_MODULE_1__["default"].debug(`[FetchFilesMixin] Fetched ${fileIds.length} new files: `, fileIds);
+        return fileIds;
+      } catch (error) {
+        if (error.response?.status === 404) {
+          this.errorFetchingFiles = 404;
+        } else if (error.code === 'ERR_CANCELED') {
+          return [];
+        } else {
+          this.errorFetchingFiles = error;
+        }
+
+        // cancelled request, moving on...
+        _services_logger_js__WEBPACK_IMPORTED_MODULE_1__["default"].error('Error fetching files', {
+          error
+        });
+        console.error(error);
+      } finally {
+        this.loadingFiles = false;
+        this.fetchSemaphore.release(fetchSemaphoreSymbol);
+      }
+      return [];
+    },
+    resetFetchFilesState() {
+      this.doneFetchingFiles = false;
+      this.errorFetchingFiles = null;
+      this.loadingFiles = false;
+      this.timeWindowSteps = 4;
+      this.dateTimeUpperBound = undefined;
+      this.dateTimeLowerBound = _nextcloud_moment__WEBPACK_IMPORTED_MODULE_0___default()(this.dateTimeUpperBound).subtract(this.timeWindowSteps, 'months');
+      this.fetchedFileIds = [];
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./src/services/PhotoSearch.js":
+/*!*************************************!*\
+  !*** ./src/services/PhotoSearch.js ***!
+  \*************************************/
+/***/ (() => {
+
+throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: /home/louis/workspace/nextcloud/apps/photos/src/services/PhotoSearch.js: Unexpected reserved word 'interface'. (30:0)\n\n\u001b[0m \u001b[90m 28 |\u001b[39m \u001b[36mimport\u001b[39m moment \u001b[36mfrom\u001b[39m \u001b[32m'@nextcloud/moment'\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 29 |\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 30 |\u001b[39m \u001b[36minterface\u001b[39m \u001b[33mSearchOptions\u001b[39m {\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 31 |\u001b[39m \tfirstResult\u001b[33m:\u001b[39m number\u001b[33m;\u001b[39m \u001b[90m// Index of the first result that we want (starts at 0)\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 32 |\u001b[39m \tnbResults\u001b[33m:\u001b[39m number\u001b[33m;\u001b[39m \u001b[90m// The number of file to fetch\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 33 |\u001b[39m \tmimesType\u001b[33m:\u001b[39m string[]\u001b[33m;\u001b[39m \u001b[90m// Mime type of the files\u001b[39m\u001b[0m\n    at constructor (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:356:19)\n    at Parser.raise (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:3223:19)\n    at Parser.checkReservedWord (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:12077:12)\n    at Parser.parseIdentifierName (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:12056:12)\n    at Parser.parseIdentifier (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:12031:23)\n    at Parser.parseExprAtom (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:11236:27)\n    at Parser.parseExprSubscripts (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:10862:23)\n    at Parser.parseUpdate (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:10845:21)\n    at Parser.parseMaybeUnary (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:10821:23)\n    at Parser.parseMaybeUnaryOrPrivate (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:10659:61)\n    at Parser.parseExprOps (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:10664:23)\n    at Parser.parseMaybeConditional (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:10641:23)\n    at Parser.parseMaybeAssign (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:10602:21)\n    at Parser.parseExpressionBase (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:10556:23)\n    at /home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:10552:39\n    at Parser.allowInAnd (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:12284:16)\n    at Parser.parseExpression (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:10552:17)\n    at Parser.parseStatementContent (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:12742:23)\n    at Parser.parseStatementLike (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:12593:17)\n    at Parser.parseModuleItem (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:12570:17)\n    at Parser.parseBlockOrModuleBlockBody (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:13194:36)\n    at Parser.parseBlockBody (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:13187:10)\n    at Parser.parseProgram (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:12469:10)\n    at Parser.parseTopLevel (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:12459:25)\n    at Parser.parse (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:14381:10)\n    at parse (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/parser/lib/index.js:14422:38)\n    at parser (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/core/lib/parser/index.js:41:34)\n    at parser.next (<anonymous>)\n    at normalizeFile (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/core/lib/transformation/normalize-file.js:64:38)\n    at normalizeFile.next (<anonymous>)\n    at run (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/core/lib/transformation/index.js:21:50)\n    at run.next (<anonymous>)\n    at transform (/home/louis/workspace/nextcloud/apps/photos/node_modules/@babel/core/lib/transform.js:22:41)\n    at transform.next (<anonymous>)\n    at step (/home/louis/workspace/nextcloud/apps/photos/node_modules/gensync/index.js:261:32)\n    at /home/louis/workspace/nextcloud/apps/photos/node_modules/gensync/index.js:273:13\n    at async.call.result.err.err (/home/louis/workspace/nextcloud/apps/photos/node_modules/gensync/index.js:223:11)");
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-2.use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/components/Faces/FaceMergeForm.vue?vue&type=style&index=0&id=a9c1fcf4&scoped=true&lang=scss&":
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-2.use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/components/Faces/FaceMergeForm.vue?vue&type=style&index=0&id=a9c1fcf4&scoped=true&lang=scss& ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/noSourceMaps.js */ "./node_modules/css-loader/dist/runtime/noSourceMaps.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, ".face-list[data-v-a9c1fcf4] {\n  display: flex;\n  flex-direction: row;\n  height: 350px;\n  flex-wrap: wrap;\n  padding: 12px;\n}\n.loader[data-v-a9c1fcf4] {\n  margin: 25% auto;\n}", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-2.use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/components/Faces/FaceMergeForm.vue?vue&type=style&index=0&id=a9c1fcf4&scoped=true&lang=scss&":
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-2.use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/components/Faces/FaceMergeForm.vue?vue&type=style&index=0&id=a9c1fcf4&scoped=true&lang=scss& ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/styleDomAPI.js */ "./node_modules/style-loader/dist/runtime/styleDomAPI.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/insertBySelector.js */ "./node_modules/style-loader/dist/runtime/insertBySelector.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js */ "./node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/insertStyleElement.js */ "./node_modules/style-loader/dist/runtime/insertStyleElement.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/styleTagTransform.js */ "./node_modules/style-loader/dist/runtime/styleTagTransform.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_2_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_FaceMergeForm_vue_vue_type_style_index_0_id_a9c1fcf4_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! !!../../../node_modules/css-loader/dist/cjs.js!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/dist/cjs.js!../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-2.use[3]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./FaceMergeForm.vue?vue&type=style&index=0&id=a9c1fcf4&scoped=true&lang=scss& */ "./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-2.use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/components/Faces/FaceMergeForm.vue?vue&type=style&index=0&id=a9c1fcf4&scoped=true&lang=scss&");
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+var options = {};
+
+options.styleTagTransform = (_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default());
+options.setAttributes = (_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default());
+
+      options.insert = _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default().bind(null, "head");
+    
+options.domAPI = (_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default());
+options.insertStyleElement = (_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default());
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_2_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_FaceMergeForm_vue_vue_type_style_index_0_id_a9c1fcf4_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_6__["default"], options);
+
+
+
+
+       /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_2_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_FaceMergeForm_vue_vue_type_style_index_0_id_a9c1fcf4_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_6__["default"] && _node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_2_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_FaceMergeForm_vue_vue_type_style_index_0_id_a9c1fcf4_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_6__["default"].locals ? _node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_2_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_FaceMergeForm_vue_vue_type_style_index_0_id_a9c1fcf4_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_6__["default"].locals : undefined);
+
+
+/***/ }),
+
+/***/ "./src/components/Faces/FaceMergeForm.vue":
+/*!************************************************!*\
+  !*** ./src/components/Faces/FaceMergeForm.vue ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _FaceMergeForm_vue_vue_type_template_id_a9c1fcf4_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./FaceMergeForm.vue?vue&type=template&id=a9c1fcf4&scoped=true& */ "./src/components/Faces/FaceMergeForm.vue?vue&type=template&id=a9c1fcf4&scoped=true&");
+/* harmony import */ var _FaceMergeForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FaceMergeForm.vue?vue&type=script&lang=js& */ "./src/components/Faces/FaceMergeForm.vue?vue&type=script&lang=js&");
+/* harmony import */ var _FaceMergeForm_vue_vue_type_style_index_0_id_a9c1fcf4_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FaceMergeForm.vue?vue&type=style&index=0&id=a9c1fcf4&scoped=true&lang=scss& */ "./src/components/Faces/FaceMergeForm.vue?vue&type=style&index=0&id=a9c1fcf4&scoped=true&lang=scss&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+;
+
+
+/* normalize component */
+
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _FaceMergeForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _FaceMergeForm_vue_vue_type_template_id_a9c1fcf4_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
+  _FaceMergeForm_vue_vue_type_template_id_a9c1fcf4_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  "a9c1fcf4",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "src/components/Faces/FaceMergeForm.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./src/components/Faces/FaceMergeForm.vue?vue&type=script&lang=js&":
+/*!*************************************************************************!*\
+  !*** ./src/components/Faces/FaceMergeForm.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_FaceMergeForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./FaceMergeForm.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/components/Faces/FaceMergeForm.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_FaceMergeForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./src/components/Faces/FaceMergeForm.vue?vue&type=template&id=a9c1fcf4&scoped=true&":
+/*!*******************************************************************************************!*\
+  !*** ./src/components/Faces/FaceMergeForm.vue?vue&type=template&id=a9c1fcf4&scoped=true& ***!
+  \*******************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_lib_index_js_vue_loader_options_FaceMergeForm_vue_vue_type_template_id_a9c1fcf4_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_lib_index_js_vue_loader_options_FaceMergeForm_vue_vue_type_template_id_a9c1fcf4_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_lib_index_js_vue_loader_options_FaceMergeForm_vue_vue_type_template_id_a9c1fcf4_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[3]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./FaceMergeForm.vue?vue&type=template&id=a9c1fcf4&scoped=true& */ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/components/Faces/FaceMergeForm.vue?vue&type=template&id=a9c1fcf4&scoped=true&");
+
+
+/***/ }),
+
+/***/ "./src/components/Faces/FaceMergeForm.vue?vue&type=style&index=0&id=a9c1fcf4&scoped=true&lang=scss&":
+/*!**********************************************************************************************************!*\
+  !*** ./src/components/Faces/FaceMergeForm.vue?vue&type=style&index=0&id=a9c1fcf4&scoped=true&lang=scss& ***!
+  \**********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_2_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_FaceMergeForm_vue_vue_type_style_index_0_id_a9c1fcf4_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader/dist/cjs.js!../../../node_modules/css-loader/dist/cjs.js!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/dist/cjs.js!../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-2.use[3]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./FaceMergeForm.vue?vue&type=style&index=0&id=a9c1fcf4&scoped=true&lang=scss& */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-2.use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/components/Faces/FaceMergeForm.vue?vue&type=style&index=0&id=a9c1fcf4&scoped=true&lang=scss&");
+
+
+/***/ })
+
+}]);
+//# sourceMappingURL=photos-src_mixins_FetchFilesMixin_js-src_components_Faces_FaceMergeForm_vue.js.map?v=6c94f3b51ad2bfd1d3d4
