@@ -43,7 +43,7 @@ export default {
 	},
 
 	watch: {
-		$route() {
+		'$route.path'() {
 			this.resetFetchFilesState()
 		},
 	},
