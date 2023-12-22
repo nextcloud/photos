@@ -62,7 +62,7 @@
 						<template #icon>
 							<Plus />
 						</template>
-						<template v-if="!isMobile">
+						<template v-if="!isMobile" #default>
 							{{ t('photos', 'Add to album') }}
 						</template>
 					</NcButton>
@@ -73,7 +73,7 @@
 						<template #icon>
 							<Close />
 						</template>
-						<template v-if="!isMobile">
+						<template v-if="!isMobile" #default>
 							{{ t('photos', 'Unselect all') }}
 						</template>
 					</NcButton>
@@ -127,7 +127,9 @@
 		<NcModal v-if="showAlbumCreationForm"
 			key="albumCreationForm"
 			@close="showAlbumCreationForm = false">
-			<h2 class="timeline__heading">{{ t('photos', 'New album') }}</h2>
+			<h2 class="timeline__heading">
+				{{ t('photos', 'New album') }}
+			</h2>
 			<AlbumForm @done="showAlbumCreationForm = false" />
 		</NcModal>
 
