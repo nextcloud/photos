@@ -25,6 +25,7 @@ OC.L10N.register(
     "Share this folder" : "Cumpartzi custa cartella",
     "Enable squared photos view" : "Ativa sa visualizatzione a fotos cuadradas",
     "View" : "Visualiza",
+    "Unselect all" : "Deseletziona totu",
     "Remove from favorites" : "Boga·nche dae preferidos",
     "This folder does not exist" : "Custa cartella no esistit",
     "No photos in here" : "Peruna fotografia inoghe",
