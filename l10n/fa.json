@@ -58,7 +58,7 @@
     "_{years} year ago_::_{years} years ago_" : ["{سال} سال پیش","{سال} سال پیش"],
     "Enable squared photos view" : "نمایش عکس های مربعی را فعال کنید",
     "Default Photos upload and Albums location" : "پیش‌فرض آپلود عکس‌ها و مکان آلبوم‌ها",
-    "Choose default Photos upload and Albums location" : "پیش‌فرض آپلود عکس‌ها و مکان آلبوم‌ها را انتخاب کنید",
+    "Choose default Photos upload and Albums location" : "مکان پیش‌فرض آلبوم‌ها و بارگذاری عکس‌ها را انتخاب کنید",
     "Select the default location for your media" : "مکان پیش فرض را برای رسانه خود انتخاب کنید",
     "Invalid location selected" : "مکان نامعتبر انتخاب شده است",
     "View" : "نمایش",
