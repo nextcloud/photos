@@ -132,6 +132,10 @@ export default async function(path = '', options = {}) {
 							<d:prop><nc:metadata-photos-original_date_time/></d:prop>
 							<d:descending/>
 						</d:order>
+						<d:order>
+							<d:prop><d:getlastmodified/></d:prop>
+							<d:descending/>
+						</d:order>
 					</d:orderby>
 					<d:limit>
 						<d:nresults>${options.nbResults}</d:nresults>
