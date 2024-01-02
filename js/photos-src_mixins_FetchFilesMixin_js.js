@@ -348,14 +348,11 @@ function getSearchRequestData(prefixPath, path, constraints, orderBy, options) {
  * @param {string[]} mimesType
  */
 function getMtimeConstraint(mimesType) {
-  const mtimeConstraints = mimesType.map((str, mime) => `${str}
+  const mtimeConstraints = mimesType.map(mime => `
 				<d:eq>
-					<d:prop>
-						<d:getcontenttype/>
-					</d:prop>
+					<d:prop><d:getcontenttype/></d:prop>
 					<d:literal>${mime}</d:literal>
-				</d:eq>
-			`).join('');
+				</d:eq>`).join('');
   return `<d:or>${mtimeConstraints}</d:or>`;
 }
 function getOnThisDayConstraint() {
@@ -420,4 +417,4 @@ function getTimeBoundariesConstraint(upperBound, lowerBound) {
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_mixins_FetchFilesMixin_js.js.map?v=feae3942ddd503c2a936
+//# sourceMappingURL=photos-src_mixins_FetchFilesMixin_js.js.map?v=fe680790d6fc69075821

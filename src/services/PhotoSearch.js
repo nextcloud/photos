@@ -47,10 +47,10 @@ const orderByMetadata = `
 		<d:descending/>
 	</d:order>`
 const orderByLastModified = `
-	<d:>
+	<d:order>
 		<d:prop><d:getlastmodified/></d:prop>
 		<d:descending/>
-	</d: order >`
+	</d:order >`
 
 /**
  * List files from a folder and filter out unwanted mimes
@@ -165,14 +165,11 @@ function getSearchRequestData(prefixPath, path, constraints, orderBy, options) {
 function getMtimeConstraint(mimesType) {
 	const mtimeConstraints = mimesType
 		.map(
-			(str, mime) => `${str}
+			(mime) => `
 				<d:eq>
-					<d:prop>
-						<d:getcontenttype/>
-					</d:prop>
+					<d:prop><d:getcontenttype/></d:prop>
 					<d:literal>${mime}</d:literal>
-				</d:eq>
-			`
+				</d:eq>`
 		)
 		.join('')
 
