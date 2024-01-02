@@ -38,13 +38,13 @@
 			:reset-selection="resetSelection" />
 
 		<!-- No content -->
-		<slot v-if="collectionFileIds.length === 0 && !loading" name="empty-content" />
+		<slot v-if="sortedCollectionFileIds.length === 0 && !loading" name="empty-content" />
 
 		<!-- Media list -->
 		<FilesListViewer v-if="collection !== undefined"
 			:container-element="appContent"
 			class="collection__media"
-			:file-ids="collectionFileIds"
+			:file-ids="sortedCollectionFileIds"
 			:base-height="isMobile ? 120 : 200"
 			:loading="loading">
 			<File slot-scope="{file, distance}"
@@ -125,6 +125,10 @@ export default {
 		files() {
 			return this.$store.getters.files
 		},
+
+		sortedCollectionFileIds() {
+			return this.collectionFileIds.toSorted((fileId1, fileId2) => this.files[fileId1].timestamp < this.files[fileId2].timestamp ? -1 : 1)
+		},
 	},
 
 	methods: {
@@ -132,7 +136,7 @@ export default {
 			const file = this.files[fileId]
 			OCA.Viewer.open({
 				fileInfo: file,
-				list: this.collectionFileIds.map(fileId => this.files[fileId]).filter(file => !file.sectionHeader),
+				list: this.sortedCollectionFileIds.map(fileId => this.files[fileId]).filter(file => !file.sectionHeader),
 				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
 				canLoop: file.canLoop,
 			})
