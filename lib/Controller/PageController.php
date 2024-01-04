@@ -36,8 +36,8 @@ use OCA\Viewer\Event\LoadViewer;
 use OCP\App\IAppManager;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
-use OCP\IL10N;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Services\IInitialState;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
@@ -48,7 +48,8 @@ use OCP\Files\Search\ISearchBinaryOperator;
 use OCP\Files\Search\ISearchComparison;
 use OCP\ICache;
 use OCP\ICacheFactory;
-use OCP\AppFramework\Services\IInitialState;
+use OCP\IConfig;
+use OCP\IL10N;
 use OCP\IRequest;
 use OCP\IUserSession;
 use OCP\Util;
@@ -76,6 +77,7 @@ class PageController extends Controller {
 		IRootFolder       $rootFolder,
 		ICacheFactory     $cacheFactory,
 		LoggerInterface   $logger,
+		private IConfig   $config,
 		IL10N $l10n
 	) {
 		parent::__construct(Application::APP_ID, $request);
@@ -110,6 +112,7 @@ class PageController extends Controller {
 		$this->initialState->provideInitialState('maps', $this->appManager->isEnabledForUser('maps') === true);
 		$this->initialState->provideInitialState('recognize', $this->appManager->isEnabledForUser('recognize') === true);
 		$this->initialState->provideInitialState('systemtags', $this->appManager->isEnabledForUser('systemtags') === true);
+		$this->initialState->provideInitialState('showPeopleMenuEntry', $this->config->getAppValue('photos', 'showPeopleMenuEntry', 'true') === 'true');
 
 		// Provide user config
 		foreach (array_keys(UserConfigService::DEFAULT_CONFIGS) as $key) {
