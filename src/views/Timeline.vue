@@ -39,6 +39,7 @@
 			<div class="timeline__header__left">
 				<!-- TODO: UploadPicker -->
 				<NcActions v-if="selectedFileIds.length === 0"
+					ref="addActions"
 					:force-menu="true"
 					:menu-name="t('photos', 'Add')">
 					<template #icon>
@@ -126,6 +127,7 @@
 
 		<NcModal v-if="showAlbumCreationForm"
 			key="albumCreationForm"
+			:set-return-focus="$refs.addActions?.$refs.menuButton?.$el"
 			@close="showAlbumCreationForm = false">
 			<h2 class="timeline__heading">
 				{{ t('photos', 'New album') }}
