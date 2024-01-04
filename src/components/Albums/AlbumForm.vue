@@ -27,7 +27,6 @@
 				type="text"
 				name="name"
 				:required="true"
-				autofocus="true"
 				:label="t('photos', 'Name of the album')" />
 			<NcTextField :value.sync="albumLocation"
 				name="location"
