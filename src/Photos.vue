@@ -187,7 +187,7 @@ export default {
 				: getCurrentUser().isAdmin || isMapsInstalled,
 			showPeopleMenuEntry: getCurrentUser() === null
 				? false
-				: getCurrentUser().isAdmin || isRecognizeInstalled,
+				: (getCurrentUser().isAdmin && loadState('photos', 'showPeopleMenuEntry', true)) || isRecognizeInstalled,
 
 			openedSettings: false,
 		}
