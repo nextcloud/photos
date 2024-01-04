@@ -1,0 +1,25 @@
+OC.L10N.register(
+    "photos",
+    {
+    "Public link" : "Public link",
+    "Videos" : "Videos",
+    "People" : "People",
+    "Favorites" : "Favorites",
+    "Shared with you" : "Shared with you",
+    "Tags" : "Tags",
+    "Back" : "Back",
+    "Save" : "Save",
+    "Shared by" : "Shared by",
+    "No recommendations. Start typing." : "No recommendations. Start typing.",
+    "Group" : "Group",
+    "Copy public link" : "Copy public link",
+    "An error occurred" : "An error occurred",
+    "Favorite" : "Favorite",
+    "Invalid location selected" : "Invalid location selected",
+    "View" : "View",
+    "Unselect all" : "Unselect all",
+    "Remove from favorites" : "Remove from favorites",
+    "Add" : "Add",
+    "Details" : "Details"
+},
+"nplurals=2; plural=(n!=1);");
