@@ -10,7 +10,7 @@ OC.L10N.register(
     "Collaborative albums" : "Спільні альбоми",
     "People" : "Люди",
     "Folders" : "Каталоги",
-    "Favorites" : "Вподобане",
+    "Favorites" : "Із зірочкою",
     "On this day" : "Цього дня",
     "Shared with you" : "Вам надано доступ",
     "Tags" : "Мітки",
