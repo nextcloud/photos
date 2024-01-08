@@ -88,7 +88,7 @@
     "Name of this person" : "Имя",
     "Save." : "Сохранить",
     "Merge person" : "Объединить метки",
-    "Move to different person" : "Перейти к другому человеку",
+    "Move to different person" : "Назначить другую метку лица",
     "_Move photo to a different person_::_Move photos to a different person_" : ["Переместить к другой метке лица","Переместить к другой метке лица","Переместить к другой метке лица","Переместить к другой метке лица"],
     "_Remove photo from person_::_Remove photos from person_" : ["Снять отметку лица с фотографии","Снять отметку лица с фотографий","Снять отметку лица с фотографий","Снять отметку лица с фотографий"],
     "This might take some time depending on the size of your photo library." : "Выполнение этого действия может занять некоторое время, зависящее от размера библиотеки фотографий.",
