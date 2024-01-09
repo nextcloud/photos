@@ -26,6 +26,7 @@ use OCA\Photos\AppInfo\Application;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Files\File;
+use OCP\FilesMetadata\Event\MetadataBackgroundEvent;
 use OCP\FilesMetadata\Event\MetadataLiveEvent;
 use Psr\Log\LoggerInterface;
 
@@ -39,13 +40,20 @@ class SizeMetadataProvider implements IEventListener {
 	}
 
 	public function handle(Event $event): void {
-		if (!($event instanceof MetadataLiveEvent)) {
+		if (!($event instanceof MetadataLiveEvent) && !($event instanceof MetadataBackgroundEvent)) {
 			return;
 		}
 
 		$node = $event->getNode();
 
 		if (!$node instanceof File || $node->getSize() === 0) {
+			return;
+		}
+
+		// We need the file content to extract the size.
+		// This can be slow for remote storage, so we do it in a background job.
+		if (!$node->getStorage()->isLocal() && $event instanceof MetadataLiveEvent) {
+			$event->requestBackgroundJob();
 			return;
 		}
 
