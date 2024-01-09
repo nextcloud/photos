@@ -91,8 +91,11 @@ class Application extends App implements IBootstrap {
 
 		// Metadata
 		$context->registerEventListener(MetadataLiveEvent::class, ExifMetadataProvider::class);
+		$context->registerEventListener(MetadataBackgroundEvent::class, ExifMetadataProvider::class);
 		$context->registerEventListener(MetadataLiveEvent::class, SizeMetadataProvider::class);
+		$context->registerEventListener(MetadataBackgroundEvent::class, SizeMetadataProvider::class);
 		$context->registerEventListener(MetadataLiveEvent::class, OriginalDateTimeMetadataProvider::class);
+		$context->registerEventListener(MetadataBackgroundEvent::class, OriginalDateTimeMetadataProvider::class);
 		$context->registerEventListener(MetadataLiveEvent::class, PlaceMetadataProvider::class);
 		$context->registerEventListener(MetadataBackgroundEvent::class, PlaceMetadataProvider::class);
 
