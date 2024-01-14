@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "66f532f48e170fd3fef9b3af1c36ef41",
+    "content-hash": "27c397b0650e3172eeeefcf78f8646f7",
     "packages": [
         {
             "name": "hexogen/kdtree",
@@ -302,12 +302,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextcloud-deps/ocp.git",
-                "reference": "24c85e19a9d8f576dacffd07910ec9d4cc070050"
+                "reference": "ef30cb8584a788bf01916ab00c39303e5f58f260"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/24c85e19a9d8f576dacffd07910ec9d4cc070050",
-                "reference": "24c85e19a9d8f576dacffd07910ec9d4cc070050",
+                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/ef30cb8584a788bf01916ab00c39303e5f58f260",
+                "reference": "ef30cb8584a788bf01916ab00c39303e5f58f260",
                 "shasum": ""
             },
             "require": {
@@ -339,7 +339,7 @@
                 "issues": "https://github.com/nextcloud-deps/ocp/issues",
                 "source": "https://github.com/nextcloud-deps/ocp/tree/master"
             },
-            "time": "2023-12-09T00:33:05+00:00"
+            "time": "2024-01-12T00:34:25+00:00"
         },
         {
             "name": "nikic/php-parser",
