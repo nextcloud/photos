@@ -111,7 +111,7 @@
 				</div>
 			</template>
 		</NcAppNavigation>
-		<NcAppContent :page-heading="pageHeading">
+		<NcAppContent>
 			<RouterView />
 
 			<!-- svg img loading placeholder (linked to the File component) -->
@@ -201,13 +201,6 @@ export default {
 			openedSettings: false,
 		}
 	},
-
-	computed: {
-		pageHeading() {
-			return this.$route.meta.rootTitle?.(this.$route)
-		},
-	},
-
 	async beforeMount() {
 		// Register excluded paths
 		const files = loadState('photos', 'nomedia-paths', [])
