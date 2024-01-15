@@ -34,9 +34,9 @@
 
 		<!-- Main Navigation title -->
 		<div class="photos-navigation__title">
-			<h2 class="photos-navigation__title__main" @click="refresh">
+			<h1 class="photos-navigation__title__main" @click="refresh">
 				{{ name }}
-			</h2>
+			</h1>
 			<div class="photos-navigation__title__sub" />
 			<slot name="subtitle" />
 		</div>
@@ -204,7 +204,7 @@ button.app-navigation-toggle {
 	align-items: center;
 	width: 100%;
 	min-height: var(--photos-navigation-height);
-	padding: 0 var(--photos-navigation-height);
+	padding: 15px var(--photos-navigation-height) 0 var(--photos-navigation-height);
 	background: var(--color-main-background);
 
 	&__back {
@@ -221,8 +221,11 @@ button.app-navigation-toggle {
 		flex-direction: column;
 
 		&__main {
-			margin: 0;
 			cursor: pointer;
+			font-weight: 700;
+			font-size: 20px;
+			line-height: 44px;
+			margin: 0 0 0 calc(2 * var(--app-navigation-padding, 8px) + 44px);
 		}
 
 		&__main, &__sub {
