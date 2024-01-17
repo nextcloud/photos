@@ -258,8 +258,7 @@ export default {
 			newFileMenuEntry: {
 				id: 'album-add',
 				displayName: t('photos', 'Add photos to this album'),
-				templateName: '',
-				if: (context) => context.route === this.$route.name,
+				enabled: (destination) => destination === this.$route.params.albumName,
 				/** Existing icon css class */
 				iconSvgInline: PlusSvg,
 				/** Function to be run after creation */

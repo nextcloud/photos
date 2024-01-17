@@ -68,7 +68,7 @@ export function addFilesToAlbumFromAlbum(albumName: string, itemsIndex: number[]
 }
 
 export function addFilesToAlbumFromAlbumFromHeader(albumName: string, itemsIndex: number[]) {
-	cy.contains('Add').click()
+	cy.contains('New').click()
 	cy.intercept({ times: 1, method: 'SEARCH', url: '**/dav/' }).as('search')
 	cy.contains('Add photos to this album').click()
 	cy.wait('@search')
