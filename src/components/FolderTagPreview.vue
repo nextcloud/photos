@@ -21,35 +21,25 @@
  -->
 
 <template>
-	<router-link :class="{'folder--clear': isEmpty}"
-		class="folder"
+	<router-link class="folder"
 		:to="toLink"
 		:aria-label="ariaLabel">
-		<!-- Images preview -->
-		<transition name="fade">
-			<div v-show="loaded"
-				:class="`folder-content--grid-${previewList.length}`"
-				class="folder-content"
-				role="none">
-				<img v-for="file in previewList"
-					:key="file.fileid"
-					:src="generateImgSrc(file)"
-					alt=""
-					@load="loaded = true"
-					@error="onPreviewFail(file)">
-			</div>
-		</transition>
+		<img v-if="previewUrl"
+			class="folder__image"
+			:src="previewUrl"
+			alt=""
+			@error="onPreviewFail(file)">
 
-		<div class="folder-name">
-			<span :class="[!isEmpty ? 'icon-white' : 'icon-dark', icon]"
-				class="folder-name__icon"
-				role="img" />
-			<p :id="ariaUuid" class="folder-name__name">
-				{{ name }}
-			</p>
-		</div>
+		<span v-else class="folder__image folder__image--placeholder">
+			<Folder class="folder__icon"
+				:size="96"
+				fill-color="var(--color-primary-element)" />
+		</span>
 
-		<div class="cover" role="none" />
+		<span class="folder__details">
+			<Folder />
+			<span class="folder__title">{{ name }}</span>
+		</span>
 	</router-link>
 </template>
 
@@ -57,8 +47,14 @@
 import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 
+import Folder from 'vue-material-design-icons/Folder.vue'
+
 export default {
 	name: 'FolderTagPreview',
+
+	components: {
+		Folder,
+	},
 
 	props: {
 		icon: {
@@ -89,7 +85,6 @@ export default {
 
 	data() {
 		return {
-			loaded: false,
 			failed: [],
 		}
 	},
@@ -100,11 +95,8 @@ export default {
 			return this.previewList.length === 0
 		},
 
-		ariaUuid() {
-			return `folder-${this.id}`
-		},
 		ariaLabel() {
-			return t('photos', 'Open the "{name}" sub-directory', { name: this.name })
+			return t('photos', 'Open the "{name}" folder', { name: this.name })
 		},
 
 		/**
@@ -115,6 +107,15 @@ export default {
 		previewList() {
 			return this.fileList
 				.filter(file => this.failed.indexOf(file.fileid) === -1)
+		},
+
+		previewUrl() {
+			if (this.previewList.length === 0) {
+				return null
+			}
+			const { fileid, etag } = this.previewList.at(-1)
+			// use etag to force cache reload if file changed
+			return generateUrl(`/core/preview?fileId=${fileid}&c=${etag}&x=${250}&y=${250}&forceIcon=0&a=0`)
 		},
 
 		/**
@@ -148,10 +149,6 @@ export default {
 	},
 
 	methods: {
-		generateImgSrc({ fileid, etag }) {
-			// use etag to force cache reload if file changed
-			return generateUrl(`/core/preview?fileId=${fileid}&c=${etag}&x=${250}&y=${250}&forceIcon=0&a=0`)
-		},
 		onPreviewFail({ fileid }) {
 			this.failed.push(fileid)
 		},
@@ -160,105 +157,49 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../mixins/FileFolder';
+.folder {
+	display: flex;
+	flex-direction: column;
+	padding: 16px;
+	border-radius: var(--border-radius-large);
 
-.folder-content {
-	position: absolute;
-	display: grid;
-	width: 100%;
-	height: 100%;
-	// folder layout if less than 4 pictures
-	&--grid-1 {
-		grid-template-columns: 1fr;
-		grid-template-rows: 1fr;
+	&:hover,
+	&:focus {
+		background-color: var(--color-background-dark);
 	}
-	&--grid-2 {
-		grid-template-columns: 1fr;
-		grid-template-rows: 1fr 1fr;
-	}
-	&--grid-3 {
-		grid-template-columns: 1fr 1fr;
-		grid-template-rows: 1fr 1fr;
-		img:first-child {
-			grid-column: span 2;
+
+	&__image {
+		width: 200px;
+		height: 200px;
+		object-fit: cover;
+		border-radius: var(--border-radius-large);
+
+		&--placeholder {
+			background-color: var(--color-primary-element-light);
 		}
 	}
-	&--grid-4 {
-		grid-template-columns: 1fr 1fr;
-		grid-template-rows: 1fr 1fr;
-	}
-	img {
+
+	&__icon {
 		width: 100%;
 		height: 100%;
-
-		object-fit: cover;
 	}
-}
 
-$name-height: 1rem;
-
-.folder-name {
-	position: absolute;
-	z-index: 3;
-	display: flex;
-	overflow: hidden;
-	flex-direction: column;
-	width: 100%;
-	height: 100%;
-	transition: opacity var(--animation-quick) ease-in-out;
-	opacity: 1;
-	&__icon {
-		height: 40%;
-		margin-top: calc(30% - #{$name-height} / 2); // center name+icon
-		background-size: 40%;
+	&__details {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		margin-top: 16px;
+		width: 200px;
 	}
-	&__name {
+
+	&__title {
 		overflow: hidden;
-		height: $name-height;
-		padding: 0 10px;
-		text-align: center;
 		white-space: nowrap;
 		text-overflow: ellipsis;
-		color: var(--color-main-background);
-		text-shadow: 0 0 8px var(--color-main-text);
-		font-size: $name-height;
-		line-height: $name-height;
+		font-size: 20px;
+		margin-bottom: 2px;
+		line-height: 30px;
+		color: var(--color-main-text);
 	}
 }
-
-// Cover management empty/full
-.folder {
-	border-radius: var(--border-radius-large);
-	// if no img, let's display the folder icon as default black
-	&--clear {
-		.folder-name__icon {
-			opacity: .3;
-		}
-		.folder-name__name {
-			color: var(--color-main-text);
-			text-shadow: 0 0 8px var(--color-main-background);
-		}
-	}
-
-	// show the cover as background
-	// if  there are pictures in it
-	// so we can sho the folder+name above it
-	&:not(.folder--clear) {
-		.cover {
-			opacity: .3;
-		}
-
-		// hide everything but pictures
-		// on hover/active/focus
-		&:active,
-		&:hover,
-		&:focus {
-			.folder-name,
-			.cover {
-				opacity: 0;
-			}
-		}
-	}
-}
-
 </style>
