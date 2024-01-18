@@ -49,6 +49,10 @@ class UpdateReverseGeocodingFilesCommand extends Command {
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		try {
+			if (!$this->rgcService->arePlacesEnabled()) {
+				throw new \Exception('Place is disabled');
+			}
+
 			$this->rgcService->buildKDTree(true);
 		} catch (\Exception $ex) {
 			$output->writeln('<error>Failed to update reverse geocoding files</error>');
