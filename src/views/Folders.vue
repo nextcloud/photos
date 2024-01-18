@@ -53,12 +53,16 @@
 			{{ t('photos', 'No photos in here') }}
 		</NcEmptyContent>
 
-		<div v-else class="grid-container">
+		<div v-else
+			class="grid-container"
+			:class="{
+				'grid-container--folders': haveFolders,
+			}">
 			<VirtualGrid ref="virtualgrid"
 				:items="contentList"
 				:scroll-element="appContent"
-				:get-column-count="() => gridConfig.count"
-				:get-grid-gap="() => gridConfig.gap" />
+				:get-column-count="() => haveFolders ? gridConfig.folderCount : gridConfig.count"
+				:get-grid-gap="() => haveFolders ? 16 : 8" />
 		</div>
 	</div>
 </template>
@@ -170,8 +174,8 @@ export default {
 						...folder,
 						showShared: this.showShared,
 					},
-					width: 256,
-					height: 256,
+					width: 232,
+					height: 280,
 					columnSpan: 1,
 					renderComponent: Folder,
 				}
@@ -290,6 +294,17 @@ export default {
 .grid-container {
 	@include grid-sizes using ($marginTop, $marginW) {
 		padding: 0px #{$marginW}px 256px #{$marginW}px;
+	}
+	&--folders {
+		padding: 32px 48px;
+		@media only screen and (max-width: 400px) {
+			display: flex;
+			justify-content: center;
+			width: 100%;
+		}
+		@media only screen and (min-width: 400px) {
+			width: fit-content;
+		}
 	}
 }
 
