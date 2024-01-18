@@ -32,12 +32,15 @@ use Hexogen\KDTree\ItemList;
 use Hexogen\KDTree\KDTree;
 use Hexogen\KDTree\NearestSearch;
 use Hexogen\KDTree\Point;
+use OCA\Photos\AppInfo\Application;
 use OCP\Files\IAppData;
 use OCP\Files\NotFoundException;
 use OCP\Files\SimpleFS\ISimpleFolder;
 use OCP\Http\Client\IClientService;
+use OCP\IConfig;
 
 class ReverseGeoCoderService {
+	public const CONFIG_DISABLE_PLACES = 'disable_places';
 	private ?ISimpleFolder $geoNameFolderCache = null;
 	private ?NearestSearch $fsSearcher = null;
 	/** @var array<int, string> */
@@ -46,6 +49,7 @@ class ReverseGeoCoderService {
 	public function __construct(
 		private IAppData $appData,
 		private IClientService $clientService,
+		private IConfig $config,
 	) {
 	}
 
@@ -80,8 +84,12 @@ class ReverseGeoCoderService {
 		return $this->citiesMapping[$placeId];
 	}
 
+	public function arePlacesEnabled(): bool {
+		return ($this->config->getAppValue(Application::APP_ID, self::CONFIG_DISABLE_PLACES, '0') !== '1');
+	}
+
 	private function downloadCities1000(bool $force = false): void {
-		if ($this->geoNameFolder()->fileExists('cities1000.csv') && !$force) {
+		if (!$this->arePlacesEnabled() || ($this->geoNameFolder()->fileExists('cities1000.csv') && !$force)) {
 			return;
 		}
 

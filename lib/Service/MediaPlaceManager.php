@@ -54,8 +54,7 @@ class MediaPlaceManager {
 			return null;
 		}
 
-
-		if (!$metadata->hasKey('photos-gps')) {
+		if (!$this->rgcService->arePlacesEnabled() || !$metadata->hasKey('photos-gps')) {
 			return null;
 		}
 
