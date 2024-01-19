@@ -71,6 +71,10 @@
 		&__name {
 			flex-grow: 1;
 			margin: 0;
+			font-weight: bold;
+			font-size: 20px;
+			line-height: 30px;
+			color: var(--color-main-text);
 		}
 	}
 }
