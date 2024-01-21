@@ -91,7 +91,7 @@
     "Move to different person" : "Sposta ad un'altra persona",
     "_Move photo to a different person_::_Move photos to a different person_" : ["Sposta foto ad un'altra persona","Sposta foto ad un'altra persona","Sposta foto ad un'altra persona"],
     "_Remove photo from person_::_Remove photos from person_" : ["Rimuovi foto da persona","Rimuovi foto da persona","Rimuovi foto da persona"],
-    "This might take some time depending on the size of your photo library." : "Potrebbe volerci un po' a seconda della dimensione della libreria di foto.",
+    "This might take some time depending on the size of your photo library." : "Potrebbe richiedere del tempo a seconda della dimensione della raccolta di foto.",
     "Recognized people will show up here" : "Le persone riconosciute appariranno qui",
     "This folder does not exist" : "Questa cartella non esiste",
     "Loading folders …" : "Caricamento cartelle …",
