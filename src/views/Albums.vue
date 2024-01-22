@@ -60,8 +60,8 @@
 		</CollectionsList>
 
 		<NcModal v-if="showAlbumCreationForm"
-			:name="t('photos', 'New album')"
 			@close="showAlbumCreationForm = false">
+			<h2 class="album-creation__heading">{{ t('photos', 'New album') }}</h2>
 			<AlbumForm @done="handleAlbumCreated" />
 		</NcModal>
 	</div>
@@ -161,5 +161,11 @@ export default {
 		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
+}
+
+.album-creation__heading {
+	padding: calc(var(--default-grid-baseline) * 4);
+	margin-bottom: 0px;
+	padding-bottom: 0px;
 }
 </style>
