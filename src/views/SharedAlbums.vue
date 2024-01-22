@@ -37,9 +37,9 @@
 			:alt-img="t('photos', 'Cover photo for shared album {albumName}.', { albumName: collection.basename })"
 			:data-test="collection.basename"
 			:cover-url="collection.lastPhoto | coverUrl">
-			<h2 class="album__name">
+			<span class="album__name">
 				{{ collection | albumOriginalName }}
-			</h2>
+			</span>
 
 			<div slot="subtitle" class="album__details">
 				{{ collection.date }} ⸱ {{ n('photos', '%n item', '%n photos and videos', collection.nbItems,) }}
@@ -140,6 +140,10 @@ export default {
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
+		font-size: 20px;
+		margin-bottom: 12px;
+		line-height: 30px;
+		color: var(--color-main-text);
 	}
 }
 </style>

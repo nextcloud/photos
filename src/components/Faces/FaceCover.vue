@@ -32,9 +32,9 @@
 		</div>
 		<div class="face-cover__details">
 			<div v-if="!baseName.match(/^[0-9]+$/)" class="face-cover__details__first-line">
-				<h2 class="face-cover__details__name">
+				<span class="face-cover__details__name">
 					{{ baseName }}
-				</h2>
+				</span>
 			</div>
 			<div v-if="!small" class="face-cover__details__second-line">
 				{{ n('photos', '%n photos', '%n photos', face.props['nbItems']) }}
