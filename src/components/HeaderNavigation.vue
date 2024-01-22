@@ -25,6 +25,7 @@
 		<!-- Back navigation button -->
 		<NcButton v-if="!isRoot"
 			class="photos-navigation__back"
+			:aria-label="t('photos', 'Go back')"
 			type="tertiary"
 			@click="folderUp">
 			<template #icon>
