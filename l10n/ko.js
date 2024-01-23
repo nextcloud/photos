@@ -39,6 +39,7 @@ OC.L10N.register(
     "Failed to update album." : "앨범 업데이트에 실패했습니다.",
     "An error occurred" : "오류가 발생함",
     "Favorite" : "즐겨찾기",
+    "Go back" : "뒤로 가기",
     "View" : "보기",
     "Unselect all" : "모두 선택 해제",
     "Edit album details" : "앨범 세부 정보 수정",

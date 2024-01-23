@@ -10,6 +10,7 @@ OC.L10N.register(
     "Shared by" : "যাদের মাঝে ভাগাভাগি করা হয়েছে",
     "Group" : "গোষ্ঠীসমূহ",
     "Favorite" : "প্রিয়জন",
+    "Go back" : "ফিরে যাও",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "যোগ করুন",
     "Details" : "বিসতারিত"

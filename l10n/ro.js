@@ -16,6 +16,7 @@ OC.L10N.register(
     "Copy public link" : "Copiză link-ul public",
     "An error occurred" : "A apărut o eraore",
     "Favorite" : "Favorite",
+    "Go back" : "Înapoi",
     "Invalid location selected" : "Locație invalidă",
     "View" : "Vizualizare",
     "Unselect all" : "Deselectează tot",

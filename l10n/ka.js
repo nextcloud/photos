@@ -15,6 +15,7 @@ OC.L10N.register(
     "Copy public link" : "Copy public link",
     "An error occurred" : "An error occurred",
     "Favorite" : "Favorite",
+    "Go back" : "Go back",
     "Invalid location selected" : "Invalid location selected",
     "View" : "View",
     "Unselect all" : "Unselect all",

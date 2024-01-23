@@ -15,6 +15,7 @@ OC.L10N.register(
     "Group" : "Grupo",
     "An error occurred" : "Eraro okazis",
     "Favorite" : "Pliŝatati",
+    "Go back" : "Reveni",
     "View" : "Vidi",
     "Remove from favorites" : "Forigi el pliŝataĵoj",
     "Add" : "Aldoni",

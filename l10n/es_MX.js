@@ -19,7 +19,7 @@ OC.L10N.register(
     "An error occurred" : "Ha ocurrido un error",
     "Favorite" : "Marcar como favorito",
     "Open the full size \"{name}\" image" : "Abrir Imagen \"{name}\" en tamaño completo",
-    "Open the \"{name}\" sub-directory" : "Abrir el sub-directorio de \"{name}\"",
+    "Go back" : "Regresar",
     "Back to {folder}" : "Regresar a {folder}",
     "View" : "Ver",
     "Remove from favorites" : "Eliminar de favoritos",
@@ -29,6 +29,7 @@ OC.L10N.register(
     "Add" : "Agregar",
     "Tagged photos" : "Fotos con etiquetas",
     "Details" : "Detalles",
+    "Open the \"{name}\" sub-directory" : "Abrir el sub-directorio de \"{name}\"",
     "Shared albums" : "Álbums compartidos"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
