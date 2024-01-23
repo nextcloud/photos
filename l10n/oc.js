@@ -17,7 +17,7 @@ OC.L10N.register(
     "An error occurred" : "Una error s’es producha",
     "Favorite" : "Favorit",
     "Open the full size \"{name}\" image" : "Dobrir l’imatge {name} en talha originala",
-    "Open the \"{name}\" sub-directory" : "Dobrir lo jos-dossièr « {name} »",
+    "Go back" : "Revenir en arrière",
     "Back to {folder}" : "Tornar a {folder}",
     "Share this folder" : "Partejar aqueste dossièr",
     "Enable squared photos view" : "Activar la vista amb fòtos carrat",
@@ -31,6 +31,7 @@ OC.L10N.register(
     "Add" : "Apondre",
     "Tagged photos" : "Fòtos etiquetadas",
     "Details" : "Detalhs",
+    "Open the \"{name}\" sub-directory" : "Dobrir lo jos-dossièr « {name} »",
     "Shared albums" : "Albums partejats"
 },
 "nplurals=2; plural=(n > 1);");

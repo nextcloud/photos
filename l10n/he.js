@@ -25,7 +25,7 @@ OC.L10N.register(
     "An error occurred" : "אירעה שגיאה",
     "Favorite" : "סימון כמועדף",
     "Open the full size \"{name}\" image" : "לפתוח את התמונה „{name}” בגודל מלא",
-    "Open the \"{name}\" sub-directory" : "לפתוח את תת־התיקייה „{name}”",
+    "Go back" : "חזרה",
     "Back to {folder}" : "חזרה אל {folder}",
     "Share this folder" : "שיתוף התיקייה הזו",
     "Enable squared photos view" : "הפעלת תצוגת תמונות מרובעות",
@@ -42,6 +42,7 @@ OC.L10N.register(
     "Details" : "פרטים",
     "Go to the add collaborators view." : "מעבר לתצוגה של הוספת שותפים",
     "Add {collaboratorLabel} to the collaborators list" : "הוסף {collaboratorLabel} לרשימת השותפים",
+    "Open the \"{name}\" sub-directory" : "לפתוח את תת־התיקייה „{name}”",
     "Shared albums" : "אלבומים משותפים"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");

@@ -32,7 +32,7 @@
     "Select image {imageName}" : "Vælg billede {imageName}",
     "Open the full size \"{name}\" image" : "Åbn billedet \"{name}\" i fuld størrelse",
     "Add to {destination}" : "Føj til {destination}",
-    "Open the \"{name}\" sub-directory" : "Åbn \"{name}\" under direktoriet",
+    "Go back" : "Gå tilbage",
     "Back to {folder}" : "Tilbage til {folder}",
     "Share this folder" : "Del denne mappe",
     "_{years} year ago_::_{years} years ago_" : ["{years} år siden","{years} år siden"],
@@ -60,6 +60,7 @@
     "Back to the new album form." : "Tilbage til den nye albumform.",
     "_Share with %n user_::_Share with %n users_" : ["Del med %n bruger","Del med %n brugere"],
     "The file is in the favorites" : "Filen er i favoritterne",
+    "Open the \"{name}\" sub-directory" : "Åbn \"{name}\" under direktoriet",
     "Shared albums" : "Delte album"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

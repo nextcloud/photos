@@ -19,7 +19,7 @@ OC.L10N.register(
     "An error occurred" : "Ocurrió un error",
     "Favorite" : "Favorito",
     "Open the full size \"{name}\" image" : "Abrir imagen a tamaño completo \"{nombre}\"",
-    "Open the \"{name}\" sub-directory" : "Abra el subdirectorio \"{nombre}\"",
+    "Go back" : "Regresar",
     "Back to {folder}" : "Volver a {carpeta}",
     "Share this folder" : "Compartir esta carpeta",
     "_{years} year ago_::_{years} years ago_" : ["Hace {years} año","Hace {years} años","Hace {years} años"],
@@ -33,6 +33,7 @@ OC.L10N.register(
     "Add" : "Añadir",
     "Tagged photos" : "Fotos etiquetadas",
     "Details" : "Detalles",
+    "Open the \"{name}\" sub-directory" : "Abra el subdirectorio \"{nombre}\"",
     "Shared albums" : "Álbumes compartidos"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
