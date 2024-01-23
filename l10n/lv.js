@@ -21,6 +21,7 @@ OC.L10N.register(
     "Share via public link" : "Kopīgojiet, izmantojot publisko saiti",
     "An error occurred" : "Gadījās kļūda",
     "Favorite" : "Favorīts",
+    "Go back" : "Atpakaļ",
     "Invalid location selected" : "Ir izvēlēta nederīga atrašanās vieta ",
     "View" : "Skats",
     "Remove from favorites" : "Noņemt no izlases",

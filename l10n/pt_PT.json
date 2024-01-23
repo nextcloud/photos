@@ -16,7 +16,7 @@
     "An error occurred" : "Ocorreu um erro",
     "Favorite" : "Favorito",
     "Open the full size \"{name}\" image" : "Abrir a foto \"{name}\" no tamanho original",
-    "Open the \"{name}\" sub-directory" : "Abrir a sub-diretoria \"{name}\"",
+    "Go back" : "Voltar",
     "Back to {folder}" : "Ir para {folder}",
     "Share this folder" : "Partilhar esta pasta",
     "Enable squared photos view" : "Ativar vista de fotos quadradas",
@@ -29,6 +29,7 @@
     "Tagged photos" : "Fotos marcadas",
     "Details" : "Detalhes",
     "Failed to delete {fileName}." : "Falha ao remover {fileName}.",
+    "Open the \"{name}\" sub-directory" : "Abrir a sub-diretoria \"{name}\"",
     "Shared albums" : "Álbuns partilhados"
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

@@ -13,6 +13,7 @@ OC.L10N.register(
     "Copy public link" : "Copïo dolen gyhoeddus",
     "An error occurred" : "Digwyddodd gwall",
     "Favorite" : "Ffefryn",
+    "Go back" : "Nôl",
     "View" : "Golwg",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "Ychwanegu",

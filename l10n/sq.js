@@ -12,6 +12,7 @@ OC.L10N.register(
     "Shared by" : "Shpërndarë nga",
     "Group" : "Grup",
     "Favorite" : "I/E Preferuar",
+    "Go back" : "Shko prapa",
     "View" : "Shiko",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "Shto",

@@ -31,7 +31,7 @@ OC.L10N.register(
     "An error occurred" : "เกิดข้อผิดพลาด",
     "Favorite" : "รายการโปรด",
     "Open the full size \"{name}\" image" : "เปิดรูปภาพขนาดเต็ม \"{name}\"",
-    "Open the \"{name}\" sub-directory" : "เปิดไดเรกทอรีรอง \"{name}\"",
+    "Go back" : "กลับไป",
     "Back to {folder}" : "กลับไปยัง {folder}",
     "Share this folder" : "แชร์โฟลเดอร์นี้",
     "Enable squared photos view" : "เปิดมุมมองรูปภาพสี่เหลี่ยม",
@@ -48,6 +48,7 @@ OC.L10N.register(
     "Go back to the previous view." : "กลับไปยังมุมมองก่อนหน้า",
     "Create the album." : "สร้างอัลบั้ม",
     "Back to the new album form." : "กลับไปยังแบบฟอร์มอัลบั้มใหม่",
-    "_Share with %n user_::_Share with %n users_" : ["แชร์กับผู้ใช้ %n คน"]
+    "_Share with %n user_::_Share with %n users_" : ["แชร์กับผู้ใช้ %n คน"],
+    "Open the \"{name}\" sub-directory" : "เปิดไดเรกทอรีรอง \"{name}\""
 },
 "nplurals=1; plural=0;");
