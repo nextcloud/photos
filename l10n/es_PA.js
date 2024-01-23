@@ -12,6 +12,7 @@ OC.L10N.register(
     "Shared by" : "Compartido por",
     "Group" : "Grupo",
     "Favorite" : "Hacer favorito",
+    "Go back" : "Regresar",
     "Remove from favorites" : "Eliminar de favoritos",
     "Add" : "Agregar",
     "Details" : "Detalles"

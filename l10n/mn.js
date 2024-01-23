@@ -11,6 +11,7 @@ OC.L10N.register(
     "Save" : "Хадгалах",
     "Shared by" : "Хуваалцсан",
     "Favorite" : "Дуртай",
+    "Go back" : "Буцах",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "нэмэх",
     "Details" : "Дэлгэрэнгүй"
