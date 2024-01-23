@@ -46,7 +46,6 @@
 						:key="`${file.basename}-small`"
 						:src="srcSmall"
 						:alt="file.basename"
-						:aria-describedby="ariaDescription"
 						:decoding="loadedSmall || isVisible ? 'sync' : 'async'"
 						:fetchpriority="loadedSmall || isVisible ? 'high' : 'low'"
 						:loading="loadedSmall || isVisible ? 'eager' : distance < 2 ? 'auto' : 'lazy'"
@@ -61,14 +60,10 @@
 						:decoding="loadedLarge || isVisible ? 'sync' : 'async'"
 						:fetchpriority="loadedLarge || isVisible ? 'high' : 'low'"
 						:loading="loadedLarge || isVisible ? 'auto' : 'lazy'"
-						:aria-describedby="ariaDescription"
 						@load="onLoadLarge"
 						@error="onErrorLarge">
 				</template>
 			</div>
-
-			<!-- image description -->
-			<p :id="ariaDescription" class="file__hidden-description" :class="{show: errorSmall && errorLarge}">{{ file.basename }}</p>
 		</a>
 
 		<NcCheckboxRadioSwitch v-if="allowSelection"
@@ -134,11 +129,10 @@ export default {
 
 	computed: {
 		/** @return {string} */
-		ariaDescription() {
-			return `image-description-${this.file.fileid}`
-		},
-		/** @return {string} */
 		ariaLabel() {
+			if (this.file.favorite) {
+				return t('photos', 'Favorite image, open the full size "{name}" image', { name: this.file.basename })
+			}
 			return t('photos', 'Open the full size "{name}" image', { name: this.file.basename })
 		},
 		/** @return {boolean} */
