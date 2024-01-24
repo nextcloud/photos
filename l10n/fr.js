@@ -54,6 +54,7 @@ OC.L10N.register(
     "Open the full size \"{name}\" image" : "Ouvrir l'image \"{name}\" dans sa taille originale",
     "There are no photos or videos yet!" : "Il n'y a pas encore de photos ou de vidéos !",
     "Add to {destination}" : "Ajouter à {destination}",
+    "Open the \"{name}\" folder" : "Ouvrir le dossier « {name} »",
     "Go back" : "Revenir en arrière",
     "Back to {folder}" : "Revenir au dossier {folder}",
     "Share this folder" : "Partager ce dossier",

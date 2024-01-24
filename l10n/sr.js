@@ -54,6 +54,7 @@ OC.L10N.register(
     "Open the full size \"{name}\" image" : "Отвори слику „{name}” у пуној величини",
     "There are no photos or videos yet!" : "Још увек нема фотографија или видео снимака!",
     "Add to {destination}" : "Додај у {destination}",
+    "Open the \"{name}\" folder" : "Отвори „{name}” директоријум",
     "Go back" : "Иди назад",
     "Back to {folder}" : "Назад у {folder}",
     "Share this folder" : "Дели ову фасциклу",
