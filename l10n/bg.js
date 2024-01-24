@@ -51,6 +51,7 @@ OC.L10N.register(
     "Open the full size \"{name}\" image" : "Отваряне на изображението\"{name}“  в пълен размер ",
     "There are no photos or videos yet!" : "Все още няма снимки или видеоклипове!",
     "Add to {destination}" : "Добавяне към  {destination}",
+    "Go back" : "Назад",
     "Back to {folder}" : "Назад към {folder}",
     "Share this folder" : "Споделяне на тази папка",
     "_{years} year ago_::_{years} years ago_" : ["Преди {years} години","Преди {years} години"],

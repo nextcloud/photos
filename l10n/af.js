@@ -13,6 +13,7 @@ OC.L10N.register(
     "Shared by" : "Gedeel deur",
     "An error occurred" : "'n Fout het voorgekom",
     "Favorite" : "Gunsteling",
+    "Go back" : "Gaan terug",
     "View" : "Bekyk",
     "Remove from favorites" : "Verwyder uit gunstelinge",
     "Add" : "Voeg by",

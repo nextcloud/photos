@@ -52,6 +52,7 @@
     "Open the full size \"{name}\" image" : "\"{name}\" fotoğrafını tam boyutunda aç",
     "There are no photos or videos yet!" : "Henüz bir fotoğraf ya da görüntü yok!",
     "Add to {destination}" : "{destination} üzerine ekle",
+    "Open the \"{name}\" folder" : "\"{name}\" klasörünü aç",
     "Go back" : "Geri dön",
     "Back to {folder}" : "{folder} klasörüne geri dön",
     "Share this folder" : "Bu klasörü paylaş",
