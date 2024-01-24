@@ -93,7 +93,7 @@ class OriginalDateTimeMetadataProvider implements IEventListener {
 		$metadata = $event->getMetadata();
 
 		// Try to use EXIF data.
-		if ($metadata->hasKey('photos-exif') && array_key_exists('DateTimeOriginal', $metadata->getArray('photos-exif'))) {
+		if ($metadata->hasKey('photos-exif') && !empty($metadata->getArray('photos-exif')['DateTimeOriginal'])) {
 			$rawDateTimeOriginal = $metadata->getArray('photos-exif')['DateTimeOriginal'];
 			$timestampOriginal = $this->dateToTimestamp("Y:m:d G:i:s", $rawDateTimeOriginal, $node);
 			if ($timestampOriginal !== false) {
