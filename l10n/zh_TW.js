@@ -54,6 +54,7 @@ OC.L10N.register(
     "Open the full size \"{name}\" image" : "開啟「{name}」的原始尺寸影像",
     "There are no photos or videos yet!" : "還沒有照片或影片！",
     "Add to {destination}" : "新增至 {destination}",
+    "Open the \"{name}\" folder" : "開啟「{name}」資料夾",
     "Go back" : "返回",
     "Back to {folder}" : "回到 {folder}",
     "Share this folder" : "分享此資料夾",

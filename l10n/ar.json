@@ -52,6 +52,8 @@
     "Open the full size \"{name}\" image" : "افتح الصورة بالحجم الكامل \"{name}\" ",
     "There are no photos or videos yet!" : "لا توجد أي صور أو فيديوهات بعدُ!",
     "Add to {destination}" : "أضِف إلى {destination}",
+    "Open the \"{name}\" folder" : "إفتح المُجلّد \"{name}\"  ",
+    "Go back" : "عودة",
     "Back to {folder}" : "العودة إلى {folder} ",
     "Share this folder" : "مشاركة هذا المجلد",
     "_{years} year ago_::_{years} years ago_" : ["سنوات {years} مضت","سنة {years} مضت","سنوات {years} مضت","سنوات {years} مضت","سنوات {years} مضت","سنوات {years} مضت"],
