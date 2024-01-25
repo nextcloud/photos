@@ -194,6 +194,12 @@ button.app-navigation-toggle {
 	margin: var(--photos-navigation-spacing) !important;
 }
 
+@media (max-width: 420px) {
+	// Position the navifation toggle button to on the screen on smaller screens
+	button.app-navigation-toggle {
+		right: calc(var(--photos-navigation-height) * -0.2) !important;
+	}
+}
 </style>
 
 <style lang="scss" scoped>
