@@ -51,6 +51,7 @@ OC.L10N.register(
     "_%n unassigned photo_::_%n unassigned photos_" : ["%n unassigned photo","%n unassigned photos"],
     "Favorite" : "Favourite",
     "Select image {imageName}" : "Select image {imageName}",
+    "Favorite image, open the full size \"{name}\" image" : "Favourite image, open the full size \"{name}\" image",
     "Open the full size \"{name}\" image" : "Open the full size \"{name}\" image",
     "There are no photos or videos yet!" : "There are no photos or videos yet!",
     "Add to {destination}" : "Add to {destination}",

@@ -51,6 +51,7 @@ OC.L10N.register(
     "_%n unassigned photo_::_%n unassigned photos_" : ["%n 個未指派的照片"],
     "Favorite" : "收藏",
     "Select image {imageName}" : "選取圖片 {imageName}",
+    "Favorite image, open the full size \"{name}\" image" : "收藏影像，開啟「{name}」的原始尺寸影像",
     "Open the full size \"{name}\" image" : "開啟「{name}」的原始尺寸影像",
     "There are no photos or videos yet!" : "還沒有照片或影片！",
     "Add to {destination}" : "新增至 {destination}",
