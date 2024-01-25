@@ -20,13 +20,13 @@
  -
  -->
 <template>
-	<div class="file-picker">
-		<div class="file-picker__content">
-			<nav class="file-picker__navigation" :class="{'file-picker__navigation--placeholder': monthsList.length === 0}">
+	<div class="photos-picker">
+		<div class="photos-picker__content">
+			<nav class="photos-picker__navigation" :class="{'photos-picker__navigation--placeholder': monthsList.length === 0}">
 				<ul>
 					<li v-for="month in monthsList"
 						:key="month"
-						class="file-picker__navigation__month"
+						class="photos-picker__navigation__month"
 						:class="{selected: targetMonth === month}">
 						<NcButton type="tertiary" :aria-label="t('photos', 'Jump to {date}', {date: dateMonthAndYear(month)})" @click="targetMonth = month">
 							{{ month | dateMonthAndYear }}
@@ -35,8 +35,8 @@
 				</ul>
 			</nav>
 
-			<FilesListViewer class="file-picker__file-list"
-				:class="{'file-picker__file-list--placeholder': monthsList.length === 0}"
+			<FilesListViewer class="photos-picker__file-list"
+				:class="{'photos-picker__file-list--placeholder': monthsList.length === 0}"
 				:file-ids-by-section="fileIdsByMonth"
 				:empty-message="t('photos', 'There are no photos or videos yet!')"
 				:sections="monthsList"
@@ -47,7 +47,7 @@
 				@need-content="getFiles">
 				<template slot-scope="{file, height, isHeader, distance}">
 					<h3 v-if="isHeader"
-						:id="`file-picker-section-header-${file.id}`"
+						:id="`photos-picker-section-header-${file.id}`"
 						:style="{ height: `${height}px`}"
 						class="section-header">
 						{{ file.id | dateMonthAndYear }}
@@ -63,7 +63,7 @@
 			</FilesListViewer>
 		</div>
 
-		<div class="file-picker__actions">
+		<div class="photos-picker__actions">
 			<UploadPicker :accept="allowedMimes"
 				:context="uploadContext"
 				:destination="photosLocation"
@@ -82,7 +82,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { NcButton, NcLoadingIcon } from '@nextcloud/vue'
+import { NcButton, NcLoadingIcon, useIsMobile } from '@nextcloud/vue'
 import { UploadPicker } from '@nextcloud/upload'
 import moment from '@nextcloud/moment'
 
@@ -97,11 +97,17 @@ import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
 import UserConfig from '../mixins/UserConfig.js'
 import allowedMimes from '../services/AllowedMimes.js'
 
+const isMobile = useIsMobile()
+
 /**
  * @param {string} date - In the following format: YYYYMM
  */
 function dateMonthAndYear(date) {
-	return moment(date, 'YYYYMM').format('MMMM YYYY')
+	if (isMobile.value) {
+		return moment(date, 'YYYYMM').format('MMM YYYY')
+	} else {
+		return moment(date, 'YYYYMM').format('MMMM YYYY')
+	}
 }
 
 export default {
@@ -199,7 +205,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.file-picker {
+.photos-picker {
 	display: flex;
 	flex-direction: column;
 	padding: 12px;
@@ -209,12 +215,14 @@ export default {
 		align-items: flex-start;
 		flex-grow: 1;
 		height: 500px;
+		padding: 0 2px;
 	}
 
 	&__navigation {
 		flex-basis: 200px;
 		overflow: scroll;
 		height: 100%;
+		padding: 0 2px;
 
 		@media only screen and (max-width: 1200px) {
 			flex-basis: 100px;
@@ -234,6 +242,7 @@ export default {
 		flex-grow: 1;
 		min-width: 0;
 		height: 100%;
+		padding: 0 4px;
 
 		&--placeholder {
 			background: var(--color-primary-element-light);
