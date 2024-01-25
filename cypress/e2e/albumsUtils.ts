@@ -57,7 +57,7 @@ export function addFilesToAlbumFromAlbum(albumName: string, itemsIndex: number[]
 	cy.intercept({ times: 1, method: 'SEARCH', url: '**/dav/' }).as('search')
 	cy.get('[aria-label="Add photos to this album"]').click()
 	cy.wait('@search')
-	cy.get('.file-picker__file-list').within(() => {
+	cy.get('.photos-picker__file-list').within(() => {
 		selectMedia(itemsIndex)
 	})
 	cy.intercept({ times: itemsIndex.length, method: 'COPY', url: '**/dav/files/**' }).as('copy')
@@ -72,7 +72,7 @@ export function addFilesToAlbumFromAlbumFromHeader(albumName: string, itemsIndex
 	cy.intercept({ times: 1, method: 'SEARCH', url: '**/dav/' }).as('search')
 	cy.contains('Add photos to this album').click()
 	cy.wait('@search')
-	cy.get('.file-picker__file-list').within(() => {
+	cy.get('.photos-picker__file-list').within(() => {
 		selectMedia(itemsIndex)
 	})
 	cy.intercept({ times: 1, method: 'PROPFIND', url: `**/dav/photos/**/albums/${albumName}` }).as('propFind')
