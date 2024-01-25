@@ -27,9 +27,10 @@
 					<li v-for="month in monthsList"
 						:key="month"
 						class="file-picker__navigation__month"
-						:class="{selected: targetMonth === month}"
-						@click="targetMonth = month">
-						{{ month | dateMonthAndYear }}
+						:class="{selected: targetMonth === month}">
+						<NcButton type="tertiary" :aria-label="t('photos', 'Jump to {date}', {date: dateMonthAndYear(month)})" @click="targetMonth = month">
+							{{ month | dateMonthAndYear }}
+						</NcButton>
 					</li>
 				</ul>
 			</nav>
@@ -96,6 +97,13 @@ import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
 import UserConfig from '../mixins/UserConfig.js'
 import allowedMimes from '../services/AllowedMimes.js'
 
+/**
+ * @param {string} date - In the following format: YYYYMM
+ */
+function dateMonthAndYear(date) {
+	return moment(date, 'YYYYMM').format('MMMM YYYY')
+}
+
 export default {
 	name: 'FilesPicker',
 
@@ -113,7 +121,8 @@ export default {
 		 * @param {string} date - In the following format: YYYYMM
 		 */
 		dateMonthAndYear(date) {
-			return moment(date, 'YYYYMM').format('MMMM YYYY')
+
+			return dateMonthAndYear(date)
 		},
 	},
 	mixins: [
@@ -179,6 +188,12 @@ export default {
 		emitPickedEvent() {
 			this.$emit('files-picked', this.selectedFileIds)
 		},
+		/**
+		 * @param {string} date - In the following format: YYYYMM
+		 */
+		dateMonthAndYear(date) {
+			return dateMonthAndYear(date)
+		},
 	},
 }
 </script>
@@ -199,8 +214,6 @@ export default {
 	&__navigation {
 		flex-basis: 200px;
 		overflow: scroll;
-		margin-right: 8px;
-		padding-right: 8px;
 		height: 100%;
 
 		@media only screen and (max-width: 1200px) {
@@ -213,24 +226,7 @@ export default {
 		}
 
 		&__month {
-			font-weight: bold;
-			font-size: 16px;
-			border-radius: var(--border-radius-pill);
-			padding: 8px 16px;
 			margin: 4px 0;
-			cursor: pointer;
-
-			@media only screen and (max-width: 1200px) {
-				text-align: center;
-			}
-
-			&:hover {
-				background: var(--color-background-dark);
-			}
-
-			&.selected {
-				background: var(--color-primary-element-lighter);
-			}
 		}
 	}
 
