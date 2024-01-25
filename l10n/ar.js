@@ -51,6 +51,7 @@ OC.L10N.register(
     "_%n unassigned photo_::_%n unassigned photos_" : ["%n صور غير معينة","%n صورة غير معينة","%n صور غير معينة","%n صور غير معينة","%n صور غير معينة","%n صور غير معينة"],
     "Favorite" : "المفضلة",
     "Select image {imageName}" : "إختر صورة {imageName}",
+    "Favorite image, open the full size \"{name}\" image" : "صورة مُفضّلة, إفتَح الحجم الكامل للصورة \"{name}\"  ",
     "Open the full size \"{name}\" image" : "افتح الصورة بالحجم الكامل \"{name}\" ",
     "There are no photos or videos yet!" : "لا توجد أي صور أو فيديوهات بعدُ!",
     "Add to {destination}" : "أضِف إلى {destination}",
