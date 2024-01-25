@@ -56,7 +56,7 @@
 					<UploadPicker v-if="album.nbItems !== 0"
 						:accept="allowedMimes"
 						:context="uploadContext"
-						:destination="album.basename"
+						:destination="albumAsFolder"
 						:root="uploadContext.root"
 						:multiple="true"
 						@uploaded="onUpload" />
@@ -167,7 +167,7 @@
 <script>
 import { mapActions } from 'vuex'
 
-import { addNewFileMenuEntry, removeNewFileMenuEntry } from '@nextcloud/files'
+import { Folder, addNewFileMenuEntry, removeNewFileMenuEntry } from '@nextcloud/files'
 import { getCurrentUser } from '@nextcloud/auth'
 import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionSeparator, NcLoadingIcon, isMobile } from '@nextcloud/vue'
 import { UploadPicker, getUploader } from '@nextcloud/upload'
@@ -255,10 +255,11 @@ export default {
 
 			uploader: getUploader(),
 
+			/** @type {import('@nextcloud/files').Entry} */
 			newFileMenuEntry: {
 				id: 'album-add',
 				displayName: t('photos', 'Add photos to this album'),
-				enabled: (destination) => destination === this.$route.params.albumName,
+				enabled: (destination) => destination.basename === this.$route.params.albumName,
 				/** Existing icon css class */
 				iconSvgInline: PlusSvg,
 				/** Function to be run after creation */
@@ -310,6 +311,14 @@ export default {
 		 */
 		albumFileName() {
 			return this.$store.getters.getAlbumName(this.albumName)
+		},
+
+		albumAsFolder() {
+			return new Folder({
+				...this.album,
+				owner: getCurrentUser()?.uid ?? '',
+				source: this.album?.source ?? '',
+			})
 		},
 	},
 
