@@ -49,6 +49,7 @@
     "_%n unassigned photo_::_%n unassigned photos_" : ["%n 個未指派的照片"],
     "Favorite" : "我的最愛",
     "Select image {imageName}" : "選擇圖像 {imageName}",
+    "Favorite image, open the full size \"{name}\" image" : "收藏影像，開啟「{name}」的原始尺寸影像",
     "Open the full size \"{name}\" image" : "開啟「{name}」的原始尺寸影像",
     "There are no photos or videos yet!" : "還沒有照片或視像！",
     "Add to {destination}" : "添加到 {destination}",

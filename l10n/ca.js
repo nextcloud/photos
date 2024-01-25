@@ -51,6 +51,7 @@ OC.L10N.register(
     "_%n unassigned photo_::_%n unassigned photos_" : ["%n fotografia sense assignar","%n fotografies sense assignar"],
     "Favorite" : "Afegeix als preferits",
     "Select image {imageName}" : "Selecciona la imatge {imageName}",
+    "Favorite image, open the full size \"{name}\" image" : "Imatge preferida, obre la imatge «{name}» a mida completa",
     "Open the full size \"{name}\" image" : "Obre la imatge «{name}» a mida completa",
     "There are no photos or videos yet!" : "Encara no hi ha cap fotografia ni vídeo!",
     "Add to {destination}" : "Afegeix a {destination}",
