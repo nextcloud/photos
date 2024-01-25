@@ -49,6 +49,7 @@
     "_%n unassigned photo_::_%n unassigned photos_" : ["%n foto sin asignar","%n fotos sin asignar","%n fotos sin asignar"],
     "Favorite" : "Marcar como favorito",
     "Select image {imageName}" : "Seleccionar imagen {imageName}",
+    "Favorite image, open the full size \"{name}\" image" : "Imagen favorita, abrir la imagen \"{name}\" a tamaño completo",
     "Open the full size \"{name}\" image" : "Abrir la imagen \"{name}\" a tamaño completo",
     "There are no photos or videos yet!" : "¡No hay fotos ni videos todavía!",
     "Add to {destination}" : "Añadir a {destination}",

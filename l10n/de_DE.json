@@ -49,6 +49,7 @@
     "_%n unassigned photo_::_%n unassigned photos_" : ["%n nicht zugewiesenes Foto","%n nicht zugewiesene Fotos"],
     "Favorite" : "Favorisieren",
     "Select image {imageName}" : "Bild {imageName} auswählen",
+    "Favorite image, open the full size \"{name}\" image" : "Favorisiertes Bild, öffne das Bild \"{name}\" in Originalgröße",
     "Open the full size \"{name}\" image" : "Bild \"{name}\" in Originalgröße öffnen",
     "There are no photos or videos yet!" : "Es gibt noch keine Fotos oder Videos!",
     "Add to {destination}" : "Hinzufügen zu {destination}",
