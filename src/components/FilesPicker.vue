@@ -66,7 +66,7 @@
 		<div class="photos-picker__actions">
 			<UploadPicker :accept="allowedMimes"
 				:context="uploadContext"
-				:destination="photosLocation"
+				:destination="photosLocationFolder"
 				:multiple="true"
 				@uploaded="refreshFiles" />
 			<NcButton type="primary" :disabled="loading || selectedFileIds.length === 0" @click="emitPickedEvent">
