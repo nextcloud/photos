@@ -22,8 +22,10 @@
 
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { generateUrl } from '@nextcloud/router'
+import { davGetClient, davGetDefaultPropfind, davResultToNode, davRootPath } from '@nextcloud/files'
 import { loadState } from '@nextcloud/initial-state'
 import axios from '@nextcloud/axios'
+import { joinPaths } from '@nextcloud/paths'
 
 const eventName = 'photos:user-config-changed'
 
@@ -36,11 +38,15 @@ export default {
 				? croppedLayoutLocalStorage === 'true'
 				: loadState('photos', 'croppedLayout', 'false') === 'true',
 			photosLocation: loadState('photos', 'photosLocation', ''),
+			photosLocationFolder: null,
 		}
 	},
 
-	created() {
+	async created() {
 		subscribe(eventName, this.updateLocalSetting)
+		const davClient = davGetClient()
+		const stat = await davClient.stat(joinPaths(davRootPath, this.photosLocation), { details: true, data: davGetDefaultPropfind() })
+		this.photosLocationFolder = davResultToNode(stat.data)
 	},
 
 	beforeDestroy() {
