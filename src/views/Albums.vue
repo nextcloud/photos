@@ -31,12 +31,14 @@
 				:title="t('photos', 'Albums')"
 				:root-title="t('photos', 'Albums')"
 				@refresh="fetchAlbums">
-				<NcButton :aria-label="t('photos', 'Create a new album.')"
+				<NcButton :aria-label="isMobile ? t('photos', 'New album') : undefined"
 					@click="showAlbumCreationForm = true">
 					<template #icon>
-						<Plus />
+						<Plus :size="20" />
 					</template>
-					{{ t('photos', 'New album') }}
+					<template v-if="!isMobile" #default>
+						{{ t('photos', 'New album') }}
+					</template>
 				</NcButton>
 			</HeaderNavigation>
 
@@ -61,7 +63,9 @@
 
 		<NcModal v-if="showAlbumCreationForm"
 			@close="showAlbumCreationForm = false">
-			<h2 class="album-creation__heading">{{ t('photos', 'New album') }}</h2>
+			<h2 class="album-creation__heading">
+				{{ t('photos', 'New album') }}
+			</h2>
 			<AlbumForm @done="handleAlbumCreated" />
 		</NcModal>
 	</div>
@@ -72,7 +76,7 @@ import Plus from 'vue-material-design-icons/Plus.vue'
 import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
 
 import { generateUrl } from '@nextcloud/router'
-import { NcModal, NcButton, NcEmptyContent } from '@nextcloud/vue'
+import { NcModal, NcButton, NcEmptyContent, useIsSmallMobile } from '@nextcloud/vue'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { getCurrentUser } from '@nextcloud/auth'
 
@@ -112,6 +116,13 @@ export default {
 	mixins: [
 		FetchCollectionsMixin,
 	],
+
+	setup() {
+		const isMobile = useIsSmallMobile()
+		return {
+			isMobile,
+		}
+	},
 
 	data() {
 		return {
