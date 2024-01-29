@@ -227,7 +227,9 @@ export default {
 	box-sizing: border-box;
 
 	// Selection border.
-	&.selected, &:focus-within {
+	&.selected,
+	&:focus-within,
+	&:has(:focus) {
 		&::after {
 			position: absolute;
 			top: 0;
@@ -239,6 +241,9 @@ export default {
 			outline: var(--color-primary-element) solid 4px;
 			outline-offset: -4px;
 			pointer-events: none;
+		}
+		.selection-checkbox {
+			opacity: 1;
 		}
 	}
 
