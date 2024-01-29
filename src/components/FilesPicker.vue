@@ -44,7 +44,8 @@
 				:base-height="100"
 				:section-header-height="50"
 				:scroll-to-section="targetMonth"
-				@need-content="getFiles">
+				@need-content="getFiles"
+				@focusout.native="onFocusOut">
 				<template slot-scope="{file, height, isHeader, distance}">
 					<h3 v-if="isHeader"
 						:id="`photos-picker-section-header-${file.id}`"
@@ -183,6 +184,15 @@ export default {
 	},
 
 	methods: {
+		/**
+		 * @param {FocusEvent} event The focus event
+		 */
+		onFocusOut(event) {
+			if (event.relatedTarget === null) { // Focus escaping to body
+				event.target.focus({ preventScroll: true })
+			}
+		},
+
 		getFiles() {
 			this.fetchFiles('', {}, this.blacklistIds)
 		},
