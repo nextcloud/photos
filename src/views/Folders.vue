@@ -43,7 +43,7 @@
 			:root-title="rootTitle"
 			@refresh="onRefresh">
 			<UploadPicker :accept="allowedMimes"
-				:destination="path"
+				:destination="folderAsFolder"
 				:multiple="true"
 				@uploaded="onUpload" />
 		</HeaderNavigation>
@@ -69,7 +69,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { UploadPicker, getUploader } from '@nextcloud/upload'
+import { Upload, UploadPicker, getUploader } from '@nextcloud/upload'
+import { Folder as NcFolder } from '@nextcloud/files'
 import { NcEmptyContent } from '@nextcloud/vue'
 import VirtualGrid from 'vue-virtual-grid'
 
@@ -141,6 +142,12 @@ export default {
 		// files list of the current folder
 		folder() {
 			return this.files[this.folderId]
+		},
+		folderAsFolder() {
+			return new NcFolder({
+				...this.folder,
+				source: decodeURI(this.folder.source),
+			})
 		},
 		folderContent() {
 			return this.folders[this.folderId]
@@ -273,15 +280,13 @@ export default {
 		/**
 		 * Fetch file Info and add them into the store
 		 *
-		 * @param {Upload[]} uploads the newly uploaded files
+		 * @param {Upload} upload the newly uploaded files
 		 */
-		onUpload(uploads) {
-			uploads.forEach(async upload => {
-				const relPath = upload.path.split(prefixPath).pop()
-				const file = await getFileInfo(relPath)
-				this.$store.dispatch('appendFiles', [file])
-				this.$store.dispatch('addFilesToFolder', { fileid: this.folderId, files: [file] })
-			})
+		async onUpload(upload) {
+			const relPath = upload.source.split(prefixPath).pop()
+			const file = await getFileInfo(relPath)
+			this.$store.dispatch('appendFiles', [file])
+			this.$store.dispatch('addFilesToFolder', { fileid: this.folderId, files: [file] })
 		},
 	},
 
