@@ -97,7 +97,7 @@
 		"cypress-wait-until": "^1.7.2",
 		"dockerode": "^3.3.4",
 		"eslint-plugin-cypress": "^2.12.1",
-		"jest": "^29.6.2",
+		"jest": "^29.6.4",
 		"module-replace-webpack-plugin": "0.0.12",
 		"postcss": "^8.4.27",
 		"postcss-loader": "^7.0.2",
