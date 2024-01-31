@@ -19,76 +19,84 @@
  - along with this program. If not, see <http://www.gnu.org/licenses/>.
  -
  -->
+
 <template>
-	<div class="photos-picker">
-		<div class="photos-picker__content">
-			<nav class="photos-picker__navigation" :class="{'photos-picker__navigation--placeholder': monthsList.length === 0}">
-				<ul>
-					<li v-for="month in monthsList"
-						:key="month"
-						class="photos-picker__navigation__month"
-						:class="{selected: targetMonth === month}">
-						<NcButton type="tertiary" :aria-label="t('photos', 'Jump to {date}', {date: dateMonthAndYear(month)})" @click="targetMonth = month">
-							{{ month | dateMonthAndYear }}
-						</NcButton>
-					</li>
-				</ul>
-			</nav>
+	<!-- TODO Adjust tests -->
 
-			<FilesListViewer class="photos-picker__file-list"
-				:class="{'photos-picker__file-list--placeholder': monthsList.length === 0}"
-				:file-ids-by-section="fileIdsByMonth"
-				:empty-message="t('photos', 'There are no photos or videos yet!')"
-				:sections="monthsList"
-				:loading="loadingFiles"
-				:base-height="100"
-				:section-header-height="50"
-				:scroll-to-section="targetMonth"
-				@need-content="getFiles"
-				@focusout.native="onFocusOut">
-				<template slot-scope="{file, height, isHeader, distance}">
-					<h3 v-if="isHeader"
-						:id="`photos-picker-section-header-${file.id}`"
-						:style="{ height: `${height}px`}"
-						class="section-header">
-						{{ file.id | dateMonthAndYear }}
-					</h3>
+	<NcDialog size="large"
+		:name="t('photos', 'Add photos to {albumName}', { albumName })"
+		close-on-click-outside
+		:navigation-aria-label="t('photos', 'Months')"
+		@closing="$emit('close')">
+		<template #navigation="{ isCollapsed }">
+			<FilesPickerNavigation :is-collapsed="isCollapsed"
+				:months-list="monthsList"
+				:date-month-and-year="dateMonthAndYear"
+				:target-month.sync="targetMonth" />
+		</template>
 
-					<File v-else
-						:file="files[file.id]"
-						:allow-selection="true"
-						:selected="selection[file.id] === true"
-						:distance="distance"
-						@select-toggled="onFileSelectToggle" />
-				</template>
-			</FilesListViewer>
-		</div>
-
-		<div class="photos-picker__actions">
+		<template #actions>
 			<UploadPicker :accept="allowedMimes"
 				:context="uploadContext"
 				:destination="photosLocationFolder"
 				:multiple="true"
 				@uploaded="refreshFiles" />
-			<NcButton type="primary" :disabled="loading || selectedFileIds.length === 0" @click="emitPickedEvent">
+
+			<NcButton type="primary"
+				:disabled="loading || selectedFileIds.length === 0"
+				@click="emitPickedEvent">
 				<template #icon>
 					<ImagePlus v-if="!loading" />
 					<NcLoadingIcon v-if="loading" />
 				</template>
 				{{ t('photos', 'Add to {destination}', { destination }) }}
 			</NcButton>
+		</template>
+
+		<div class="photos-picker">
+			<div class="photos-picker__content">
+				<FilesListViewer class="photos-picker__file-list"
+					:class="{'photos-picker__file-list--placeholder': monthsList.length === 0}"
+					:file-ids-by-section="fileIdsByMonth"
+					:empty-message="t('photos', 'There are no photos or videos yet!')"
+					:sections="monthsList"
+					:loading="loadingFiles"
+					:base-height="100"
+					:section-header-height="50"
+					:scroll-to-section="targetMonth"
+					@need-content="getFiles"
+					@focusout.native="onFocusOut">
+					<template slot-scope="{file, height, isHeader, distance}">
+						<h3 v-if="isHeader"
+							:id="`photos-picker-section-header-${file.id}`"
+							:style="{ height: `${height}px`}"
+							class="section-header">
+							{{ file.id | dateMonthAndYear }}
+						</h3>
+
+						<File v-else
+							:file="files[file.id]"
+							:allow-selection="true"
+							:selected="selection[file.id] === true"
+							:distance="distance"
+							@select-toggled="onFileSelectToggle" />
+					</template>
+				</FilesListViewer>
+			</div>
 		</div>
-	</div>
+	</NcDialog>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { NcButton, NcLoadingIcon, useIsMobile } from '@nextcloud/vue'
+import { NcButton, NcDialog, NcLoadingIcon } from '@nextcloud/vue'
 import { UploadPicker } from '@nextcloud/upload'
 import moment from '@nextcloud/moment'
+import { useIsMobile } from '@nextcloud/vue'
 
 import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
 
+import FilesPickerNavigation from './FilesPickerNavigation.vue'
 import FilesListViewer from './FilesListViewer.vue'
 import File from './File.vue'
 
@@ -112,13 +120,15 @@ function dateMonthAndYear(date) {
 }
 
 export default {
-	name: 'FilesPicker',
+	name: 'FilesPickerDialog',
 
 	components: {
 		File,
+		FilesPickerNavigation,
 		FilesListViewer,
 		ImagePlus,
 		NcButton,
+		NcDialog,
 		NcLoadingIcon,
 		UploadPicker,
 	},
@@ -128,10 +138,10 @@ export default {
 		 * @param {string} date - In the following format: YYYYMM
 		 */
 		dateMonthAndYear(date) {
-
 			return dateMonthAndYear(date)
 		},
 	},
+
 	mixins: [
 		FetchFilesMixin,
 		FilesByMonthMixin,
@@ -142,6 +152,12 @@ export default {
 	props: {
 		// Label to show in the submit button.
 		destination: {
+			type: String,
+			required: true,
+		},
+
+		// Label to show in the dialog title.
+		albumName: {
 			type: String,
 			required: true,
 		},
@@ -158,6 +174,11 @@ export default {
 			default: false,
 		},
 	},
+
+	emits: [
+		'close',
+		'files-picked',
+	],
 
 	data() {
 		return {
@@ -204,6 +225,7 @@ export default {
 		emitPickedEvent() {
 			this.$emit('files-picked', this.selectedFileIds)
 		},
+
 		/**
 		 * @param {string} date - In the following format: YYYYMM
 		 */
@@ -218,7 +240,6 @@ export default {
 .photos-picker {
 	display: flex;
 	flex-direction: column;
-	padding: 12px;
 
 	&__content {
 		display: flex;
@@ -226,26 +247,6 @@ export default {
 		flex-grow: 1;
 		height: 500px;
 		padding: 0 2px;
-	}
-
-	&__navigation {
-		flex-basis: 200px;
-		overflow: scroll;
-		height: 100%;
-		padding: 0 2px;
-
-		@media only screen and (max-width: 1200px) {
-			flex-basis: 100px;
-		}
-
-		&--placeholder {
-			background: var(--color-primary-element-light);
-			border-radius: var(--border-radius-large);
-		}
-
-		&__month {
-			margin: 4px 0;
-		}
 	}
 
 	&__file-list {
@@ -275,12 +276,11 @@ export default {
 			justify-content: center;
 		}
 	}
+}
 
-	&__actions {
-		display: flex;
-		justify-content: space-between;
-		justify-items: center;
-		padding-top: 16px;
+:deep {
+	.dialog__navigation {
+		padding-bottom: 12px;
 	}
 }
 </style>

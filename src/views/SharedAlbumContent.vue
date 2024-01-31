@@ -111,23 +111,20 @@
 			</NcEmptyContent>
 		</CollectionContent>
 
-		<NcModal v-if="showAddPhotosModal"
-			size="large"
-			:name="t('photos', 'Add photos to {albumName}', {albumName: albumOriginalName})"
-			@close="showAddPhotosModal = false">
-			<FilesPicker v-if="album !== undefined"
-				:destination="album.basename"
-				:blacklist-ids="albumFileIds"
-				:loading="loadingAddFilesToAlbum"
-				@files-picked="handleFilesPicked" />
-		</NcModal>
+		<FilesPickerDialog v-if="showAddPhotosModal && album !== undefined"
+			:destination="album.basename"
+			:album-name="albumOriginalName"
+			:blacklist-ids="albumFileIds"
+			:loading="loadingAddFilesToAlbum"
+			@files-picked="handleFilesPicked"
+			@close="showAddPhotosModal = false" />
 	</div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
 
-import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionSeparator, NcUserBubble, isMobile } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcButton, NcEmptyContent, NcActionSeparator, NcUserBubble, isMobile } from '@nextcloud/vue'
 import { Type } from '@nextcloud/sharing'
 import { translate } from '@nextcloud/l10n'
 
@@ -145,7 +142,7 @@ import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.j
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
-import FilesPicker from '../components/FilesPicker.vue'
+import FilesPickerDialog from '../components/FilesPickerDialog.vue'
 
 export default {
 	name: 'SharedAlbumContent',
@@ -162,11 +159,10 @@ export default {
 		NcActionButton,
 		NcActionSeparator,
 		NcButton,
-		NcModal,
 		NcUserBubble,
 		CollectionContent,
 		// ActionDownload,
-		FilesPicker,
+		FilesPickerDialog,
 		HeaderNavigation,
 	},
 

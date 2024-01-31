@@ -127,15 +127,14 @@
 			</NcEmptyContent>
 		</CollectionContent>
 
-		<NcModal v-if="showAddPhotosModal"
-			size="large"
-			:name="t('photos', 'Add photos to {albumName}', {albumName: albumName})"
-			@close="showAddPhotosModal = false">
-			<FilesPicker v-if="album !== undefined"
-				:destination="album.basename"
-				:blacklist-ids="albumFileIds"
-				@files-picked="handleFilesPicked" />
-		</NcModal>
+		<FilesPickerDialog v-if="showAddPhotosModal && album !== undefined"
+			:destination="album.basename"
+			:album-name="albumName"
+			:blacklist-ids="albumFileIds"
+			@files-picked="handleFilesPicked"
+			@close="showAddPhotosModal = false" />
+
+		<!-- TODO Migrate other modals -->
 
 		<NcModal v-if="showManageCollaboratorView && album !== undefined"
 			:name="t('photos', 'Manage collaborators')"
@@ -194,7 +193,7 @@ import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import CollaboratorsSelectionForm from '../components/Albums/CollaboratorsSelectionForm.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
-import FilesPicker from '../components/FilesPicker.vue'
+import FilesPickerDialog from '../components/FilesPickerDialog.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 
 import allowedMimes from '../services/AllowedMimes.js'
@@ -212,7 +211,7 @@ export default {
 		Delete,
 		// Download,
 		// DownloadMultiple,
-		FilesPicker,
+		FilesPickerDialog,
 		HeaderNavigation,
 		ImagePlus,
 		MapMarker,
