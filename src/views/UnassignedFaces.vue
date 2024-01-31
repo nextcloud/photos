@@ -96,11 +96,13 @@
 				@select-toggled="onFileSelectToggle" />
 		</FilesListViewer>
 
-		<NcModal v-if="showMoveModal"
+		<NcDialog v-if="showMoveModal"
 			:name="t('photos', 'Move to different person')"
-			@close="showMoveModal = false">
+			close-on-click-outside
+			size="normal"
+			@closing="showMoveModal = false">
 			<FaceMergeForm :first-face="'-1'" @select="handleMove($event, selectedFileIds)" />
-		</NcModal>
+		</NcDialog>
 	</div>
 </template>
 
@@ -112,7 +114,7 @@ import Download from 'vue-material-design-icons/Download.vue'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 import AccountSwitch from 'vue-material-design-icons/AccountSwitch.vue'
 
-import { NcActions, NcActionButton, NcModal, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcDialog, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
@@ -137,7 +139,7 @@ export default {
 		NcEmptyContent,
 		NcActions,
 		NcActionButton,
-		NcModal,
+		NcDialog,
 		AccountSwitch,
 	},
 
