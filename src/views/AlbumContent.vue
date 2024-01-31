@@ -156,11 +156,13 @@
 			</CollaboratorsSelectionForm>
 		</NcModal>
 
-		<NcModal v-if="showEditAlbumForm"
+		<NcDialog v-if="showEditAlbumForm"
 			:name="t('photos', 'Edit album details')"
-			@close="showEditAlbumForm = false">
+			close-on-click-outside
+			size="normal"
+			@closing="showEditAlbumForm = false">
 			<AlbumForm :album="album" @done="redirectToNewName" />
-		</NcModal>
+		</NcDialog>
 	</div>
 </template>
 
@@ -169,7 +171,7 @@ import { mapActions } from 'vuex'
 
 import { Folder, addNewFileMenuEntry, removeNewFileMenuEntry } from '@nextcloud/files'
 import { getCurrentUser } from '@nextcloud/auth'
-import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionSeparator, NcLoadingIcon, isMobile } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcButton, NcDialog, NcModal, NcEmptyContent, NcActionSeparator, NcLoadingIcon, isMobile } from '@nextcloud/vue'
 import { UploadPicker, getUploader } from '@nextcloud/upload'
 import { translate } from '@nextcloud/l10n'
 import debounce from 'debounce'
@@ -220,6 +222,7 @@ export default {
 		NcActions,
 		NcActionSeparator,
 		NcButton,
+		NcDialog,
 		NcEmptyContent,
 		NcLoadingIcon,
 		NcModal,
