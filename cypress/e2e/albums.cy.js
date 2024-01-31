@@ -44,28 +44,19 @@ Cypress.on('uncaught:exception', (err) => {
 	}
 })
 
-describe('Manage albums', () => {
+describe('Manage albums', { testIsolation: true }, () => {
 	let user = null
 
-	before(function() {
+	beforeEach(function() {
 		cy.createRandomUser()
 			.then(_user => {
 				user = _user
 				uploadTestMedia(user)
 				cy.login(user)
-				cy.visit('/apps/photos')
 			})
-	})
-
-	beforeEach(() => {
 		cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
 		createAnAlbumFromAlbums('albums_test')
 		addFilesToAlbumFromAlbum('albums_test', [0, 1, 2])
-	})
-
-	afterEach(() => {
-		deleteAnAlbumFromAlbumContent()
-		cy.contains('There is no album yet!').click()
 	})
 
 	it('Create an album, populate it and delete it', () => {
@@ -156,7 +147,7 @@ describe('Manage albums', () => {
 	})
 
 	it('Delete a file that was added to an album', () => {
-		addFilesToAlbumFromAlbumFromHeader('albums_test', [0])
+		addFilesToAlbumFromAlbumFromHeader('albums_test', [3])
 		cy.get('[data-test="media"]').should('have.length', 4)
 		cy.visit('/apps/photos')
 		selectMedia([3])
