@@ -2,6 +2,7 @@
  - @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
  -
  - @author Louis Chemineau <louis@chmn.me>
+ - @author Ferdinand Thiessen <opensource@fthiessen.de>
  -
  - @license AGPL-3.0-or-later
  -
@@ -20,51 +21,45 @@
  -
  -->
 <template>
-	<div class="photos-picker">
-		<div class="photos-picker__content">
-			<nav class="photos-picker__navigation" :class="{'photos-picker__navigation--placeholder': monthsList.length === 0}">
-				<ul>
-					<li v-for="month in monthsList"
-						:key="month"
-						class="photos-picker__navigation__month"
-						:class="{selected: targetMonth === month}">
-						<NcButton type="tertiary" :aria-label="t('photos', 'Jump to {date}', {date: dateMonthAndYear(month)})" @click="targetMonth = month">
-							{{ month | dateMonthAndYear }}
-						</NcButton>
-					</li>
-				</ul>
-			</nav>
-
-			<FilesListViewer class="photos-picker__file-list"
-				:class="{'photos-picker__file-list--placeholder': monthsList.length === 0}"
-				:file-ids-by-section="fileIdsByMonth"
-				:empty-message="t('photos', 'There are no photos or videos yet!')"
-				:sections="monthsList"
-				:loading="loadingFiles"
-				:base-height="100"
-				:section-header-height="50"
-				:scroll-to-section="targetMonth"
-				@need-content="getFiles"
-				@focusout.native="onFocusOut">
-				<template slot-scope="{file, height, isHeader, distance}">
-					<h3 v-if="isHeader"
-						:id="`photos-picker-section-header-${file.id}`"
-						:style="{ height: `${height}px`}"
-						class="section-header">
-						{{ file.id | dateMonthAndYear }}
-					</h3>
-
-					<File v-else
-						:file="files[file.id]"
-						:allow-selection="true"
-						:selected="selection[file.id] === true"
-						:distance="distance"
-						@select-toggled="onFileSelectToggle" />
+	<NcDialog content-classes="photos-picker"
+		:name="name"
+		:open="open"
+		out-transition
+		size="large"
+		@update:open="(open) => $emit('update:open', open)">
+		<!-- Navigation containing the months available -->
+		<template #navigation="{ isCollapsed }">
+			<!-- Mobile view -->
+			<NcSelect v-if="isCollapsed"
+				v-model="targetMonth"
+				:aria-label-combobox="t('photos', 'Jump to specific date in list')"
+				class="photos-picker__navigation__month-select"
+				:clearable="false"
+				:options="monthsList">
+				<template #selected-option="{ label }">
+					{{ dateMonthAndYear(label) }}
 				</template>
-			</FilesListViewer>
-		</div>
+				<template #option="{ label }">
+					{{ dateMonthAndYear(label) }}
+				</template>
+			</NcSelect>
 
-		<div class="photos-picker__actions">
+			<!-- Default view -->
+			<ul v-else>
+				<li v-for="month in monthsList"
+					:key="month"
+					class="photos-picker__navigation__month">
+					<NcButton :type="targetMonth === month ? 'secondary' : 'tertiary'"
+						:aria-label="t('photos', 'Jump to {date}', { date: dateMonthAndYear(month) })"
+						@click="targetMonth = month">
+						{{ dateMonthAndYear(month) }}
+					</NcButton>
+				</li>
+			</ul>
+		</template>
+
+		<!-- The actions on the bottom -->
+		<template #actions>
 			<UploadPicker :accept="allowedMimes"
 				:context="uploadContext"
 				:destination="photosLocationFolder"
@@ -77,14 +72,44 @@
 				</template>
 				{{ t('photos', 'Add to {destination}', { destination }) }}
 			</NcButton>
-		</div>
-	</div>
+		</template>
+
+		<FilesListViewer class="photos-picker__file-list"
+			:class="{'photos-picker__file-list--placeholder': monthsList.length === 0}"
+			:file-ids-by-section="fileIdsByMonth"
+			:empty-message="t('photos', 'There are no photos or videos yet!')"
+			:sections="monthsList"
+			:loading="loadingFiles"
+			:base-height="100"
+			:section-header-height="50"
+			:scroll-to-section="targetMonth"
+			@need-content="getFiles"
+			@focusout.native="onFocusOut">
+			<template slot-scope="{file, height, isHeader, distance}">
+				<h3 v-if="isHeader"
+					:id="`photos-picker-section-header-${file.id}`"
+					:style="{ height: `${height}px`}"
+					class="section-header">
+					{{ dateMonthAndYear(file.id) }}
+				</h3>
+
+				<File v-else
+					:file="files[file.id]"
+					:allow-selection="true"
+					:selected="selection[file.id] === true"
+					:distance="distance"
+					@select-toggled="onFileSelectToggle" />
+			</template>
+		</FilesListViewer>
+	</NcDialog>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { NcButton, NcLoadingIcon, useIsMobile } from '@nextcloud/vue'
 import { UploadPicker } from '@nextcloud/upload'
+import { NcButton, NcDialog, NcLoadingIcon, NcSelect, useIsMobile } from '@nextcloud/vue'
+import { defineComponent } from 'vue'
+import { mapGetters } from 'vuex'
+
 import moment from '@nextcloud/moment'
 
 import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
@@ -98,40 +123,20 @@ import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
 import UserConfig from '../mixins/UserConfig.js'
 import allowedMimes from '../services/AllowedMimes.js'
 
-const isMobile = useIsMobile()
-
-/**
- * @param {string} date - In the following format: YYYYMM
- */
-function dateMonthAndYear(date) {
-	if (isMobile.value) {
-		return moment(date, 'YYYYMM').format('MMM YYYY')
-	} else {
-		return moment(date, 'YYYYMM').format('MMMM YYYY')
-	}
-}
-
-export default {
-	name: 'FilesPicker',
+export default defineComponent({
+	name: 'PhotosPicker',
 
 	components: {
 		File,
 		FilesListViewer,
 		ImagePlus,
 		NcButton,
+		NcDialog,
 		NcLoadingIcon,
+		NcSelect,
 		UploadPicker,
 	},
 
-	filters: {
-		/**
-		 * @param {string} date - In the following format: YYYYMM
-		 */
-		dateMonthAndYear(date) {
-
-			return dateMonthAndYear(date)
-		},
-	},
 	mixins: [
 		FetchFilesMixin,
 		FilesByMonthMixin,
@@ -140,6 +145,22 @@ export default {
 	],
 
 	props: {
+		/**
+		 * If the photos picker should be opened
+		 */
+		open: {
+			type: Boolean,
+			default: true,
+		},
+
+		/**
+		 * Name to be used as heading
+		 */
+		name: {
+			type: String,
+			required: true,
+		},
+
 		// Label to show in the submit button.
 		destination: {
 			type: String,
@@ -157,6 +178,14 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+	},
+
+	emits: ['files-picked', 'update:open'],
+
+	setup() {
+		return {
+			isMobile: useIsMobile(),
+		}
 	},
 
 	data() {
@@ -208,43 +237,34 @@ export default {
 		 * @param {string} date - In the following format: YYYYMM
 		 */
 		dateMonthAndYear(date) {
-			return dateMonthAndYear(date)
+			if (this.isMobile) {
+				return moment(date, 'YYYYMM').format('MMM YYYY')
+			}
+			return moment(date, 'YYYYMM').format('MMMM YYYY')
 		},
 	},
-}
+})
 </script>
 
 <style lang="scss" scoped>
-.photos-picker {
-	display: flex;
-	flex-direction: column;
-	padding: 12px;
+:deep(.photos-picker) {
+	// remove padding to move scrollbar to the very end
+	padding-inline-end: 0 !important;
+}
 
-	&__content {
-		display: flex;
-		align-items: flex-start;
-		flex-grow: 1;
-		height: 500px;
-		padding: 0 2px;
-	}
+.photos-picker {
 
 	&__navigation {
-		flex-basis: 200px;
-		overflow: scroll;
-		height: 100%;
-		padding: 0 2px;
-
-		@media only screen and (max-width: 1200px) {
-			flex-basis: 100px;
-		}
-
-		&--placeholder {
-			background: var(--color-primary-element-light);
-			border-radius: var(--border-radius-large);
-		}
-
 		&__month {
-			margin: 4px 0;
+			// For focus-visible outline
+			margin: 4px;
+		}
+
+		&__month-select {
+			flex: 1;
+			// align with other content
+			padding-inline-end: 12px;
+			padding-block-end: 6px;
 		}
 	}
 
@@ -274,13 +294,6 @@ export default {
 			flex-direction: column;
 			justify-content: center;
 		}
-	}
-
-	&__actions {
-		display: flex;
-		justify-content: space-between;
-		justify-items: center;
-		padding-top: 16px;
 	}
 }
 </style>
