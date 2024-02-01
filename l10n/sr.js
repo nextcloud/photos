@@ -53,6 +53,7 @@ OC.L10N.register(
     "Select image {imageName}" : "Изабери слику {imageName}",
     "Favorite image, open the full size \"{name}\" image" : "Омиљена слика, отвори слику „{name}” у пуној величини",
     "Open the full size \"{name}\" image" : "Отвори слику „{name}” у пуној величини",
+    "Jump to {date}" : "Скочи на {date}",
     "There are no photos or videos yet!" : "Још увек нема фотографија или видео снимака!",
     "Add to {destination}" : "Додај у {destination}",
     "Open the \"{name}\" folder" : "Отвори „{name}” директоријум",

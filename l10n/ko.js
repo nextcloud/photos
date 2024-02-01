@@ -52,6 +52,7 @@ OC.L10N.register(
     "Remove person" : "사람 제거",
     "Add" : "추가",
     "Add to album" : "앨범에 추가",
+    "Unassigned faces" : "지정되지 않은 얼굴",
     "Details" : "세부사항",
     "Failed to delete {fileName}." : "{fileName}(을)를 삭제하지 못했습니다.",
     "Go back to the previous view." : "이전 보기로 이동하세요.",
