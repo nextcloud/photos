@@ -53,6 +53,7 @@ OC.L10N.register(
     "Select image {imageName}" : "選取圖片 {imageName}",
     "Favorite image, open the full size \"{name}\" image" : "收藏影像，開啟「{name}」的原始尺寸影像",
     "Open the full size \"{name}\" image" : "開啟「{name}」的原始尺寸影像",
+    "Jump to {date}" : "跳到 {date}",
     "There are no photos or videos yet!" : "還沒有照片或影片！",
     "Add to {destination}" : "新增至 {destination}",
     "Open the \"{name}\" folder" : "開啟「{name}」資料夾",
