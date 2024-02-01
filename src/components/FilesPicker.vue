@@ -20,22 +20,23 @@
  -
  -->
 <template>
-	<div class="file-picker">
-		<div class="file-picker__content">
-			<nav class="file-picker__navigation" :class="{'file-picker__navigation--placeholder': monthsList.length === 0}">
+	<div class="photos-picker">
+		<div class="photos-picker__content">
+			<nav class="photos-picker__navigation" :class="{'photos-picker__navigation--placeholder': monthsList.length === 0}">
 				<ul>
 					<li v-for="month in monthsList"
 						:key="month"
-						class="file-picker__navigation__month"
-						:class="{selected: targetMonth === month}"
-						@click="targetMonth = month">
-						{{ month | dateMonthAndYear }}
+						class="photos-picker__navigation__month"
+						:class="{selected: targetMonth === month}">
+						<NcButton type="tertiary" :aria-label="t('photos', 'Jump to {date}', {date: dateMonthAndYear(month)})" @click="targetMonth = month">
+							{{ month | dateMonthAndYear }}
+						</NcButton>
 					</li>
 				</ul>
 			</nav>
 
-			<FilesListViewer class="file-picker__file-list"
-				:class="{'file-picker__file-list--placeholder': monthsList.length === 0}"
+			<FilesListViewer class="photos-picker__file-list"
+				:class="{'photos-picker__file-list--placeholder': monthsList.length === 0}"
 				:file-ids-by-section="fileIdsByMonth"
 				:empty-message="t('photos', 'There are no photos or videos yet!')"
 				:sections="monthsList"
@@ -43,10 +44,11 @@
 				:base-height="100"
 				:section-header-height="50"
 				:scroll-to-section="targetMonth"
-				@need-content="getFiles">
+				@need-content="getFiles"
+				@focusout.native="onFocusOut">
 				<template slot-scope="{file, height, isHeader, distance}">
 					<h3 v-if="isHeader"
-						:id="`file-picker-section-header-${file.id}`"
+						:id="`photos-picker-section-header-${file.id}`"
 						:style="{ height: `${height}px`}"
 						class="section-header">
 						{{ file.id | dateMonthAndYear }}
@@ -62,10 +64,10 @@
 			</FilesListViewer>
 		</div>
 
-		<div class="file-picker__actions">
+		<div class="photos-picker__actions">
 			<UploadPicker :accept="allowedMimes"
 				:context="uploadContext"
-				:destination="photosLocation"
+				:destination="photosLocationFolder"
 				:multiple="true"
 				@uploaded="refreshFiles" />
 			<NcButton type="primary" :disabled="loading || selectedFileIds.length === 0" @click="emitPickedEvent">
@@ -81,7 +83,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { NcButton, NcLoadingIcon } from '@nextcloud/vue'
+import { NcButton, NcLoadingIcon, useIsMobile } from '@nextcloud/vue'
 import { UploadPicker } from '@nextcloud/upload'
 import moment from '@nextcloud/moment'
 
@@ -95,6 +97,19 @@ import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
 import UserConfig from '../mixins/UserConfig.js'
 import allowedMimes from '../services/AllowedMimes.js'
+
+const isMobile = useIsMobile()
+
+/**
+ * @param {string} date - In the following format: YYYYMM
+ */
+function dateMonthAndYear(date) {
+	if (isMobile.value) {
+		return moment(date, 'YYYYMM').format('MMM YYYY')
+	} else {
+		return moment(date, 'YYYYMM').format('MMMM YYYY')
+	}
+}
 
 export default {
 	name: 'FilesPicker',
@@ -113,7 +128,8 @@ export default {
 		 * @param {string} date - In the following format: YYYYMM
 		 */
 		dateMonthAndYear(date) {
-			return moment(date, 'YYYYMM').format('MMMM YYYY')
+
+			return dateMonthAndYear(date)
 		},
 	},
 	mixins: [
@@ -168,6 +184,15 @@ export default {
 	},
 
 	methods: {
+		/**
+		 * @param {FocusEvent} event The focus event
+		 */
+		onFocusOut(event) {
+			if (event.relatedTarget === null) { // Focus escaping to body
+				event.target.focus({ preventScroll: true })
+			}
+		},
+
 		getFiles() {
 			this.fetchFiles('', {}, this.blacklistIds)
 		},
@@ -179,12 +204,18 @@ export default {
 		emitPickedEvent() {
 			this.$emit('files-picked', this.selectedFileIds)
 		},
+		/**
+		 * @param {string} date - In the following format: YYYYMM
+		 */
+		dateMonthAndYear(date) {
+			return dateMonthAndYear(date)
+		},
 	},
 }
 </script>
 
 <style lang="scss" scoped>
-.file-picker {
+.photos-picker {
 	display: flex;
 	flex-direction: column;
 	padding: 12px;
@@ -194,14 +225,14 @@ export default {
 		align-items: flex-start;
 		flex-grow: 1;
 		height: 500px;
+		padding: 0 2px;
 	}
 
 	&__navigation {
 		flex-basis: 200px;
 		overflow: scroll;
-		margin-right: 8px;
-		padding-right: 8px;
 		height: 100%;
+		padding: 0 2px;
 
 		@media only screen and (max-width: 1200px) {
 			flex-basis: 100px;
@@ -213,24 +244,7 @@ export default {
 		}
 
 		&__month {
-			font-weight: bold;
-			font-size: 16px;
-			border-radius: var(--border-radius-pill);
-			padding: 8px 16px;
 			margin: 4px 0;
-			cursor: pointer;
-
-			@media only screen and (max-width: 1200px) {
-				text-align: center;
-			}
-
-			&:hover {
-				background: var(--color-background-dark);
-			}
-
-			&.selected {
-				background: var(--color-primary-element-lighter);
-			}
 		}
 	}
 
@@ -238,6 +252,7 @@ export default {
 		flex-grow: 1;
 		min-width: 0;
 		height: 100%;
+		padding: 0 4px;
 
 		&--placeholder {
 			background: var(--color-primary-element-light);
