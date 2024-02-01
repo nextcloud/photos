@@ -88,11 +88,11 @@ class ExifMetadataProvider implements IEventListener {
 		}
 
 		if ($rawExifData && array_key_exists('EXIF', $rawExifData)) {
-			$event->getMetadata()->setArray('photos-exif', $this->sanitizeEntries($rawExifData['EXIF']));
+			$event->getMetadata()->setArray('photos-exif', $this->sanitizeEntries($rawExifData['EXIF'], $node));
 		}
 
 		if ($rawExifData && array_key_exists('IFD0', $rawExifData)) {
-			$event->getMetadata()->setArray('photos-ifd0', $this->sanitizeEntries($rawExifData['IFD0']));
+			$event->getMetadata()->setArray('photos-ifd0', $this->sanitizeEntries($rawExifData['IFD0'], $node));
 		}
 
 		if (
@@ -154,7 +154,7 @@ class ExifMetadataProvider implements IEventListener {
 	 *
 	 * @param array<string, string> $data
 	 */
-	private function sanitizeEntries(array $data): array {
+	private function sanitizeEntries(array $data, File $node): array {
 		$cleanData = [];
 
 		foreach ($data as $key => $value) {
@@ -169,7 +169,19 @@ class ExifMetadataProvider implements IEventListener {
 				$key = preg_replace('/[^a-zA-Z]/', '_', $key);
 			}
 
-			$cleanData[$key] = $value;
+			// Arbitrary limit to filter out large EXIF entries.
+			if (is_string($value) && strlen($value) > 1000) {
+				$this->logger->info(
+					"EXIF entry ignored as it is too large",
+					[
+						'key' => $key,
+						'value' => $value,
+						'fileId' => $node->getId(),
+					]
+				);
+			} else {
+				$cleanData[$key] = $value;
+			}
 		}
 
 		return $cleanData;
