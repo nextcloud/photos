@@ -51,6 +51,7 @@
     "Select image {imageName}" : "Välj bild {imageName}",
     "Favorite image, open the full size \"{name}\" image" : "Favoritbild, öppna bilden \"{name}\" i full storlek",
     "Open the full size \"{name}\" image" : "Öppna bilden \"{name}\" i full storlek",
+    "Jump to {date}" : "Gå till {date}",
     "There are no photos or videos yet!" : "Det finns inga bilder eller videor än!",
     "Add to {destination}" : "Lägg till i {destination}",
     "Open the \"{name}\" folder" : "Öppna mappen \"{name}\"",
