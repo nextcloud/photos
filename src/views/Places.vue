@@ -37,9 +37,9 @@
 				:link="`/places/${collection.basename}`"
 				:alt-img="t('photos', 'Cover photo for place {placeName}', { placeName: collection.basename })"
 				:cover-url="collection.lastPhoto | coverUrl">
-				<h2 class="place__name">
+				<span class="place__name">
 					{{ collection.basename }}
-				</h2>
+				</span>
 
 				<div slot="subtitle" class="place__details">
 					{{ n('photos', '%n item', '%n photos and videos', collection.nbItems,) }}
@@ -127,6 +127,10 @@ export default {
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
+		font-size: 20px;
+		margin-bottom: 12px;
+		line-height: 30px;
+		color: var(--color-main-text);
 	}
 }
 </style>
