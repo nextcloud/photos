@@ -32,9 +32,10 @@
 			<!-- Mobile view -->
 			<NcSelect v-if="isCollapsed"
 				v-model="targetMonth"
-				:aria-label-combobox="t('photos', 'Jump to specific date in list')"
+				:aria-label-listbox="t('photos', 'Dates')"
 				class="photos-picker__navigation__month-select"
 				:clearable="false"
+				:input-label="t('photos', 'Jump to specific date in list')"
 				:options="monthsList">
 				<template #selected-option="{ label }">
 					{{ dateMonthAndYear(label) }}
@@ -45,7 +46,7 @@
 			</NcSelect>
 
 			<!-- Default view -->
-			<ul v-else>
+			<ul v-else :aria-label="t('photos', 'Dates')">
 				<li v-for="month in monthsList"
 					:key="month"
 					class="photos-picker__navigation__month">
