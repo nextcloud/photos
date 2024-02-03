@@ -179,45 +179,32 @@ export default {
 }
 </script>
 
-<style lang="scss">
-:root {
-	--photos-navigation-height: 64px;
-	// header height - button size
-	--photos-navigation-spacing: calc((var(--photos-navigation-height) - 44px) / 2);
-}
-
-// Properly position the navigation toggle button
-button.app-navigation-toggle {
-	// App-navigation have a 4px margin top
-	top: 0 !important;
-	right: calc(var(--photos-navigation-height) * -1) !important;
-	margin: var(--photos-navigation-spacing) !important;
-}
-
-</style>
-
 <style lang="scss" scoped>
 .photos-navigation {
 	position: sticky;
 	z-index: 20;
 	top: 0;
 	display: flex;
+	// We need to wrap on small devices for accessibility
+	flex-wrap: wrap;
+	gap: calc(2 * var(--app-navigation-padding));
 	align-items: center;
+	justify-content: start;
 	width: 100%;
-	min-height: var(--photos-navigation-height);
-	padding: 15px var(--photos-navigation-height) 0 var(--photos-navigation-height);
+	// Ensure to not overlap with app navigation toggle
+	padding-inline: calc(var(--default-clickable-area) + 2 * var(--app-navigation-padding)) var(--app-navigation-padding);
+	// Align with app navigation toggle
+	padding-block: var(--app-navigation-padding);
 	background: var(--color-main-background);
 
 	&__back {
-		// Above the navigation menu
-		position: absolute !important;
-		left: 0;
-		margin: var(--photos-navigation-spacing) !important;
+		// Replaces the app navigation button
+		position: fixed !important;
+		left: var(--app-navigation-padding);
 	}
 
 	&__title {
 		max-width: 45%;
-		margin-right: calc(2 * var(--photos-navigation-spacing));
 		display: flex;
 		flex-direction: column;
 
@@ -226,7 +213,6 @@ button.app-navigation-toggle {
 			font-weight: 700;
 			font-size: 20px;
 			line-height: 44px;
-			margin: 0 0 0 calc(2 * var(--app-navigation-padding, 8px) + 44px);
 		}
 
 		&__main, &__sub {
@@ -236,19 +222,15 @@ button.app-navigation-toggle {
 		}
 	}
 
-	&__content {
-		max-width: 50%;
-	}
-
 	&__loader {
-		margin-left: 32px;
+		margin-inline-start: 32px;
 	}
 
 	&__content-right {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		margin-left: auto;
+		margin-inline-start: auto;
 	}
 }
 
