@@ -52,6 +52,7 @@ OC.L10N.register(
     "Favorite" : "Favoris",
     "Select image {imageName}" : "Sélectionner l'image {imageName}",
     "Open the full size \"{name}\" image" : "Ouvrir l'image \"{name}\" dans sa taille originale",
+    "Jump to {date}" : "Aller au {date}",
     "There are no photos or videos yet!" : "Il n'y a pas encore de photos ou de vidéos !",
     "Add to {destination}" : "Ajouter à {destination}",
     "Open the \"{name}\" folder" : "Ouvrir le dossier « {name} »",
