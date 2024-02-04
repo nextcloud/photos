@@ -8,7 +8,7 @@ import {
 import { defineConfig } from 'cypress'
 
 import browserify from '@cypress/browserify-preprocessor'
-import getCompareSnapshotsPlugin from 'cypress-visual-regression/dist/plugin'
+import { configureVisualRegression } from 'cypress-visual-regression/dist/plugin'
 
 export default defineConfig({
 	projectId: 'okzqgr',
@@ -47,7 +47,7 @@ export default defineConfig({
 		async setupNodeEvents(on, config) {
 			// Fix browserslist extend https://github.com/cypress-io/cypress/issues/2983#issuecomment-570616682
 			on('file:preprocessor', browserify({ typescript: require.resolve('typescript') }))
-			getCompareSnapshotsPlugin(on, config)
+			configureVisualRegression(on)
 
 			// Disable spell checking to prevent rendering differences
 			on('before:browser:launch', (browser, launchOptions) => {

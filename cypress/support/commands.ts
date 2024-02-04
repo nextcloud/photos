@@ -22,11 +22,13 @@
 /* eslint-disable n/no-unpublished-import */
 import axios from 'axios'
 import { addCommands, User } from '@nextcloud/cypress'
+import { addCompareSnapshotCommand } from 'cypress-visual-regression/dist/command'
 import { basename } from 'path'
 
 // Add custom commands
 import 'cypress-wait-until'
 addCommands()
+addCompareSnapshotCommand()
 
 // Register this file's custom commands types
 declare global {
