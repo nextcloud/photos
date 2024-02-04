@@ -102,6 +102,7 @@ OC.L10N.register(
     "Add to album" : "Legg til i album",
     "Delete selection" : "Slett utvalg",
     "No photos or videos in here" : "Ingen bilder eller videoer her",
+    "Unassigned faces" : "Ikke-tilordnede ansikter",
     "_%n photos_::_%n photos_" : ["%n bilder","%n bilder"],
     "Failed to fetch faces list." : "Kunne ikke hente ansiktslisten.",
     "All your media" : "Alle mediefilene dine",
