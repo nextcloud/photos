@@ -8,6 +8,7 @@
 		],
 		"rootDir": "src",
 		"noImplicitAny": false,
+		"noEmit": false,
 	},
 	"vueCompilerOptions": {
 		"target": 2.7
