@@ -49,7 +49,7 @@
 import { mapGetters } from 'vuex'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 
-import { NcEmptyContent, NcActions, NcActionButton, NcLoadingIcon, isMobile } from '@nextcloud/vue'
+import { NcEmptyContent, NcActions, NcActionButton, NcLoadingIcon, useIsMobile } from '@nextcloud/vue'
 
 import File from '../components/File.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
@@ -69,7 +69,6 @@ export default {
 		ArrowLeft,
 	},
 	mixins: [
-		isMobile,
 		FilesSelectionMixin,
 		AbortControllerMixin,
 	],
@@ -78,6 +77,12 @@ export default {
 			type: String,
 			default: '',
 		},
+	},
+
+	setup() {
+		return {
+			isMobile: useIsMobile(),
+		}
 	},
 
 	data() {
@@ -108,7 +113,7 @@ export default {
 
 		// files list of the current tag
 		fileIds() {
-			return this.tag ? this.tag.files : []
+			return this.tag?.files ?? []
 		},
 
 		isEmpty() {

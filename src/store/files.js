@@ -6,10 +6,11 @@ import Vue from 'vue'
 
 import moment from '@nextcloud/moment'
 import { showError } from '@nextcloud/dialogs'
+import { davRootPath } from '@nextcloud/files'
 
 import logger from '../services/logger.js'
-import client, { prefixPath } from '../services/DavClient.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
+import { davClient } from '../services/DavClient.ts'
 
 const state = {
 	files: {},
@@ -30,7 +31,7 @@ const mutations = {
 			.forEach(file => {
 				// Ignore the file if the path is excluded
 				if (state.nomediaPaths.some(nomediaPath => file.filename.startsWith(nomediaPath)
-					|| file.filename.startsWith(prefixPath + nomediaPath))) {
+					|| file.filename.startsWith(`${davRootPath}${nomediaPath}`))) {
 					return
 				}
 
@@ -171,7 +172,7 @@ const actions = {
 				const symbol = await semaphore.acquire()
 
 				try {
-					await client.deleteFile(file.filename)
+					await davClient.deleteFile(file.filename)
 				} catch (error) {
 					logger.error(t('photos', 'Failed to delete {fileId}', { fileId }), { error })
 					showError(t('photos', 'Failed to delete {fileName}', { fileName: file.basename }))
@@ -203,7 +204,7 @@ const actions = {
 
 				try {
 					context.commit('favoriteFile', { fileId, favoriteState })
-					await client.customRequest(
+					await davClient.customRequest(
 						file.filename,
 						{
 							method: 'PROPPATCH',
@@ -218,7 +219,7 @@ const actions = {
 								</d:prop>
 							</d:set>
 							</d:propertyupdate>`,
-						}
+						},
 					)
 				} catch (error) {
 					context.commit('favoriteFile', { fileId, favoriteState: favoriteState === 0 ? 1 : 0 })

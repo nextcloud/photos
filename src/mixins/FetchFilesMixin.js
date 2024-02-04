@@ -3,8 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { davGetClient, davRootPath } from '@nextcloud/files'
+import { showError } from '@nextcloud/dialogs'
+import { davRootPath } from '@nextcloud/files'
 import { joinPaths } from '@nextcloud/paths'
+
+import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import getPhotos from '../services/PhotoSearch.js'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
@@ -74,7 +77,7 @@ export default {
 				this.fetchedFileIds.push(
 					...fileIds
 						.map((fileId) => fileId.toString())
-						.filter((fileId) => !blacklist.includes(fileId))
+						.filter((fileId) => !blacklist.includes(fileId)),
 				)
 
 				this.$store.dispatch('appendFiles', fetchedFiles)
@@ -91,7 +94,7 @@ export default {
 						}
 						logger.debug(`The ${source} folder does not exist, creating it.`)
 						try {
-							await davGetClient().createDirectory(joinPaths(davRootPath, source))
+							await davClient.createDirectory(joinPaths(davRootPath, source))
 							this.resetFetchFilesState()
 							return []
 						} catch (error) {
@@ -106,7 +109,8 @@ export default {
 				}
 
 				// cancelled request, moving on...
-				logger.error('Error fetching files', { error })
+				showError(t('photos', 'Error fetching files'))
+				logger.error(error)
 			} finally {
 				this.loadingFiles = false
 				this.fetchSemaphore.release(fetchSemaphoreSymbol)

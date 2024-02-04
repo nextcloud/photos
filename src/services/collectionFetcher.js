@@ -6,9 +6,9 @@
 import moment from '@nextcloud/moment'
 import { translate as t } from '@nextcloud/l10n'
 
-import defaultClient from './DavClient.js'
 import logger from './logger.js'
 import { genFileInfo } from '../utils/fileUtils.js'
+import { davClient } from './DavClient.ts'
 
 /**
  * @typedef {object} Collection
@@ -87,7 +87,7 @@ function getCollectionFilesDavRequest(extraProps = []) {
  * @param {import('webdav').WebDAVClient} client - The DAV client to use.
  * @return {Promise<Collection|null>}
  */
-export async function fetchCollection(path, options, extraProps = [], client = defaultClient) {
+export async function fetchCollection(path, options, extraProps = [], client = davClient) {
 	try {
 		const response = await client.stat(path, {
 			data: getCollectionDavRequest(extraProps),
@@ -115,7 +115,7 @@ export async function fetchCollection(path, options, extraProps = [], client = d
  * @param {import('webdav').WebDAVClient} client - The DAV client to use.
  * @return {Promise<Collection[]>}
  */
-export async function fetchCollections(path, options, extraProps = [], client = defaultClient) {
+export async function fetchCollections(path, options, extraProps = [], client = davClient) {
 	try {
 		const response = await client.getDirectoryContents(path, {
 			data: getCollectionDavRequest(extraProps),
@@ -184,7 +184,7 @@ function formatCollection(rawCollection) {
  * @param {import('webdav').WebDAVClient} client - The DAV client to use.
  * @return {Promise<CollectionFile[]>}
  */
-export async function fetchCollectionFiles(path, options, extraProps = [], client = defaultClient) {
+export async function fetchCollectionFiles(path, options, extraProps = [], client = davClient) {
 	try {
 		const response = await client.getDirectoryContents(path, {
 			data: getCollectionFilesDavRequest(extraProps),

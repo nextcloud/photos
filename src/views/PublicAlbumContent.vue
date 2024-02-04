@@ -73,7 +73,6 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { createClient, getPatcher } from 'webdav'
 
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 // import Plus from 'vue-material-design-icons/Plus.vue'
@@ -83,24 +82,14 @@ import ImageOff from 'vue-material-design-icons/ImageOff.vue'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
 
 import { NcActions, /** NcButton, */ NcEmptyContent, /** NcActionSeparator, */ isMobile } from '@nextcloud/vue'
-import axios from '@nextcloud/axios'
-import { generateUrl, generateRemoteUrl } from '@nextcloud/router'
+import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
 import { translate } from '@nextcloud/l10n'
 
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
 import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
-
-const publicRootPath = 'dav'
-
-// force our axios
-const patcher = getPatcher()
-patcher.patch('request', axios)
-
-// init webdav client on default dav endpoint
-const remote = generateRemoteUrl(publicRootPath)
-const publicRemote = remote
+import { getClient } from '@nextcloud/files/dav'
 
 export default {
 	name: 'PublicAlbumContent',
@@ -138,9 +127,8 @@ export default {
 			loadingCount: 0,
 			loadingAddFilesToAlbum: false,
 			albumOriginalName: '',
-			publicClient: createClient(publicRemote, {
-				username: this.token,
-				password: null,
+			publicClient: getClient(generateRemoteUrl('dav'), {
+				Authorization: `Basic ${btoa(`${this.token}:`)}`,
 			}),
 		}
 	},
@@ -211,7 +199,7 @@ export default {
 						// Disable use of generic file previews for public albums - for older versions of the Viewer app
 						hasPreview: false,
 					}),
-				]
+				],
 			)
 		},
 

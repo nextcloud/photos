@@ -8,7 +8,7 @@ import InformationOutline from '@mdi/svg/svg/information-outline.svg?raw'
 import { translate as t, translatePlural as n } from '@nextcloud/l10n'
 import { getRequestToken } from '@nextcloud/auth'
 import { generateFilePath } from '@nextcloud/router'
-import { registerDavProperty } from '@nextcloud/files'
+import { registerDavProperty } from '@nextcloud/files/dav'
 
 Vue.prototype.t = t
 Vue.prototype.n = n
@@ -18,11 +18,10 @@ __webpack_nonce__ = btoa(getRequestToken() ?? '')
 // eslint-disable-next-line no-undef, camelcase
 __webpack_public_path__ = generateFilePath('photos', '', 'js/')
 
-registerDavProperty('nc:metadata-photos-original_date_time', { nc: 'http://nextcloud.org/ns' })
-registerDavProperty('nc:metadata-photos-exif', { nc: 'http://nextcloud.org/ns' })
-registerDavProperty('nc:metadata-photos-ifd0', { nc: 'http://nextcloud.org/ns' })
-registerDavProperty('nc:metadata-photos-gps', { nc: 'http://nextcloud.org/ns' })
-registerDavProperty('nc:metadata-photos-place', { nc: 'http://nextcloud.org/ns' })
+registerDavProperty('nc:metadata-photos-exif')
+registerDavProperty('nc:metadata-photos-ifd0')
+registerDavProperty('nc:metadata-photos-gps')
+registerDavProperty('nc:metadata-photos-place')
 
 // Init Photos tab component
 let PhotosTabView = null

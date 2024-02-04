@@ -3,17 +3,22 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { mapActions, mapGetters } from 'vuex'
-
 import { showError } from '@nextcloud/dialogs'
 import { getCurrentUser } from '@nextcloud/auth'
-
-import client from '../services/DavClient.js'
-import logger from '../services/logger.js'
-import DavRequest from '../services/DavRequest.js'
-import { genFileInfo } from '../utils/fileUtils.js'
-import AbortControllerMixin from './AbortControllerMixin.js'
+import { mapActions, mapGetters } from 'vuex'
 import he from 'he'
+
+import { genFileInfo } from '../utils/fileUtils.js'
+import logger from '../services/logger.js'
+import AbortControllerMixin from './AbortControllerMixin.js'
+import { davClient } from '../services/DavClient.ts'
+import { getPropFind } from '../services/DavRequest.ts'
+
+const recognizeDAVProps = [
+	'nc:face-detections',
+	'nc:face-preview-image',
+	'nc:realpath',
+]
 
 export default {
 	name: 'FetchFacesMixin',
@@ -59,8 +64,8 @@ export default {
 				this.loadingFaces = true
 				this.errorFetchingFaces = null
 
-				const { data: faces } = await client.getDirectoryContents(`/recognize/${getCurrentUser()?.uid}/faces/`, {
-					data: DavRequest,
+				const { data: faces } = await davClient.getDirectoryContents(`/recognize/${getCurrentUser()?.uid}/faces/`, {
+					data: getPropFind(recognizeDAVProps),
 					details: true,
 					signal: this.abortController.signal,
 				})
@@ -94,13 +99,13 @@ export default {
 				this.errorFetchingFiles = null
 				this.loadingFiles = true
 
-				let { data: fetchedFiles } = await client.getDirectoryContents(
+				let { data: fetchedFiles } = await davClient.getDirectoryContents(
 					`/recognize/${getCurrentUser()?.uid}/faces/${faceName}`,
 					{
-						data: DavRequest,
+						data: getPropFind(recognizeDAVProps),
 						details: true,
 						signal: this.abortController.signal,
-					}
+					},
 				)
 
 				fetchedFiles = fetchedFiles
@@ -146,13 +151,13 @@ export default {
 				this.errorFetchingFiles = null
 				this.loadingFiles = true
 
-				let { data: fetchedFiles } = await client.getDirectoryContents(
+				let { data: fetchedFiles } = await davClient.getDirectoryContents(
 					`/recognize/${getCurrentUser()?.uid}/unassigned-faces`,
 					{
-						data: DavRequest,
+						data: getPropFind(recognizeDAVProps),
 						details: true,
 						signal: this.abortController.signal,
-					}
+					},
 				)
 
 				fetchedFiles = fetchedFiles
@@ -187,13 +192,13 @@ export default {
 
 		async fetchUnassignedFacesCount() {
 			try {
-				const { data: unassignedFacesRoot } = await client.stat(
+				const { data: unassignedFacesRoot } = await davClient.stat(
 					`/recognize/${getCurrentUser()?.uid}/unassigned-faces`,
 					{
-						data: DavRequest,
+						data: getPropFind(recognizeDAVProps),
 						details: true,
 						signal: this.abortController.signal,
-					}
+					},
 				)
 
 				const count = Number(unassignedFacesRoot.props.nbItems)

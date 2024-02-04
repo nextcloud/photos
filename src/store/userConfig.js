@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { davGetClient, davGetDefaultPropfind, davResultToNode, davRootPath } from '@nextcloud/files'
+import { getDefaultPropfind, resultToNode, defaultRootPath } from '@nextcloud/files/dav'
 import { loadState } from '@nextcloud/initial-state'
 import { joinPaths } from '@nextcloud/paths'
 import { showError } from '@nextcloud/dialogs'
@@ -13,22 +13,23 @@ import { translate as t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
 
+import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 
 export const configChangedEvent = 'photos:user-config-changed'
 
 export async function getFolder(path) {
-	const davClient = davGetClient()
-	const location = joinPaths(davRootPath, path) + '/'
+	const location = joinPaths(defaultRootPath, path) + '/'
+
 	try {
-		const stat = await davClient.stat(location, { details: true, data: davGetDefaultPropfind() })
-		return davResultToNode(stat.data)
+		const stat = await davClient.stat(location, { details: true, data: getDefaultPropfind() })
+		return resultToNode(stat.data)
 	} catch (error) {
 		if (error.response?.status === 404) {
 			logger.debug('Photo location does not exist, creating it.')
 			await davClient.createDirectory(location)
-			const stat = await davClient.stat(location, { details: true, data: davGetDefaultPropfind() })
-			return davResultToNode(stat.data)
+			const stat = await davClient.stat(location, { details: true, data: getDefaultPropfind() })
+			return resultToNode(stat.data)
 		} else {
 			logger.fatal(error)
 			showError(t('photos', 'Could not load photos folder'))

@@ -7,6 +7,7 @@ import { mapActions } from 'vuex'
 
 import AbortControllerMixin from './AbortControllerMixin.js'
 import { fetchCollections } from '../services/collectionFetcher.js'
+import logger from '../services/logger.js'
 
 export default {
 	name: 'FetchCollectionsMixin',
@@ -53,6 +54,7 @@ export default {
 				} else {
 					this.errorFetchingCollections = error
 				}
+				logger.error('Error fetching collections:', { error })
 			} finally {
 				this.loadingCollections = false
 			}

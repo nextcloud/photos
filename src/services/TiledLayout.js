@@ -66,7 +66,7 @@ export function splitItemsInRows(items, containerWidth, baseHeight = 200) {
 			rowItems,
 			containerWidth,
 			items.length === currentItem,
-			baseHeight
+			baseHeight,
 		)
 
 		rows[rowNumber] = {
@@ -121,7 +121,7 @@ function computeRowWidth(items, baseHeight) {
 function computeRowHeight(items, containerWidth, isLastRow, baseHeight) {
 	const sumOfItemsRatio = items
 		.map(item => item.ratio)
-		.reduce((sum, itemRatio) => sum + itemRatio
+		.reduce((sum, itemRatio) => sum + itemRatio,
 		)
 
 	let rowHeight = containerWidth / sumOfItemsRatio
