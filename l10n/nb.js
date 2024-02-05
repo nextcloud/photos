@@ -63,6 +63,7 @@ OC.L10N.register(
     "View" : "Vis",
     "Photos directory" : "Bildemappe",
     "_%n photo_::_%n photos_" : ["%n bilde","%n bilder"],
+    "Unselect all" : "Fravelg alle",
     "Manage collaborators for this album" : "Administrer samarbeidspartnere for dette albumet",
     "Open actions menu" : "Åpne handlingsmenyen",
     "Edit album details" : "Rediger albumdetaljer",
