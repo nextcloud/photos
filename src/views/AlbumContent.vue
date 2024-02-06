@@ -185,7 +185,6 @@ import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
 
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
-import UserConfig from '../mixins/UserConfig.js'
 
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
 import ActionFavorite from '../components/Actions/ActionFavorite.vue'
@@ -232,7 +231,6 @@ export default {
 		FetchCollectionContentMixin,
 		FetchFilesMixin,
 		isMobile,
-		UserConfig,
 	],
 
 	props: {
