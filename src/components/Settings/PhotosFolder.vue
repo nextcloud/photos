@@ -48,6 +48,10 @@ export default defineComponent({
 			type: Boolean,
 			default: false,
 		},
+		rootFolderLabel: {
+			type: String,
+			required: true,
+		},
 	},
 
 	emits: ['remove-folder'],
@@ -55,7 +59,7 @@ export default defineComponent({
 	computed: {
 		folderName() {
 			if (this.path === '/') {
-				return t('photos', 'All folders')
+				return this.rootFolderLabel
 			} else {
 				return this.path.split('/').pop()
 			}

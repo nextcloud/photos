@@ -22,7 +22,7 @@
 
 <template>
 	<div class="photos-location">
-		<PhotosFolder :path="photosLocation" />
+		<PhotosFolder :path="photosLocation" :root-folder-label="t('photos', 'Root folder')" />
 
 		<NcButton :aria-label="t('photos', 'Choose default Photos upload and Albums location')"
 			@click="debounceSelectPhotosFolder">
@@ -39,7 +39,6 @@ import { NcButton } from '@nextcloud/vue'
 import { getFilePickerBuilder } from '@nextcloud/dialogs'
 import { translate as t } from '@nextcloud/l10n'
 
-import UserConfig from '../../mixins/UserConfig.js'
 import PhotosFolder from './PhotosFolder.vue'
 
 export default defineComponent({
@@ -50,9 +49,12 @@ export default defineComponent({
 		PhotosFolder,
 	},
 
-	mixins: [
-		UserConfig,
-	],
+	computed: {
+		/** @return {string} */
+		photosLocation() {
+			return this.$store.state.userConfig.photosLocation
+		},
+	},
 
 	methods: {
 		debounceSelectPhotosFolder: debounce(function() {
@@ -78,8 +80,7 @@ export default defineComponent({
 		},
 
 		updatePhotosFolder(path) {
-			this.photosLocation = path
-			this.updateSetting('photosLocation')
+			this.$store.dispatch('updateUserConfig', { key: 'photosLocation', value: path })
 		},
 
 		t,

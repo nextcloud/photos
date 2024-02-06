@@ -25,7 +25,7 @@
 		<ul>
 			<li v-for="(source, index) in photosSourceFolders"
 				:key="index">
-				<PhotosFolder :path="source" :can-delete="photosSourceFolders.length !== 1" @remove-folder="removeSourceFolder(index)" />
+				<PhotosFolder :path="source" :can-delete="photosSourceFolders.length !== 1" @remove-folder="removeSourceFolder(index)" :root-folder-label="t('photos', 'All folders')"/>
 			</li>
 		</ul>
 
@@ -49,7 +49,6 @@ import { NcButton } from '@nextcloud/vue'
 import { getFilePickerBuilder } from '@nextcloud/dialogs'
 import { translate as t } from '@nextcloud/l10n'
 
-import UserConfig from '../../mixins/UserConfig.js'
 import PhotosFolder from './PhotosFolder.vue'
 
 export default defineComponent({
@@ -61,9 +60,12 @@ export default defineComponent({
 		PhotosFolder,
 	},
 
-	mixins: [
-		UserConfig,
-	],
+	computed: {
+		/** @return {string[]} */
+		photosSourceFolders() {
+			return this.$store.state.userConfig.photosSourceFolders
+		},
+	},
 
 	methods: {
 		debounceAddSourceFolder: debounce(function(...args) {
@@ -87,13 +89,13 @@ export default defineComponent({
 			if (this.photosSourceFolders.includes(pickedFolder)) {
 				return
 			}
-			this.photosSourceFolders.push(pickedFolder)
-			this.updateSetting('photosSourceFolders')
+			this.$store.dispatch('updateUserConfig', { key: 'photosSourceFolders', value: [...this.photosSourceFolders, pickedFolder] })
 		},
 
 		removeSourceFolder(index) {
-			this.photosSourceFolders.splice(index, 1)
-			this.updateSetting('photosSourceFolders')
+			const folders = [...this.photosSourceFolders]
+			folders.splice(index, 1)
+			this.$store.dispatch('updateUserConfig', { key: 'photosSourceFolders', value: folders })
 		},
 
 		t,

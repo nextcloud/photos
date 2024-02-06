@@ -65,3 +65,5 @@ export default new Vue({
 	store,
 	render: h => h(Photos),
 })
+
+store.dispatch('initUserConfig')

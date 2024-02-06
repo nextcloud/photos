@@ -32,6 +32,7 @@ import places from './places.js'
 import faces from './faces.js'
 import folders from './folders.js'
 import systemtags from './systemtags.js'
+import userConfig from './userConfig.js'
 
 Vue.use(Vuex)
 export default new Store({
@@ -45,6 +46,7 @@ export default new Store({
 		systemtags,
 		collections,
 		places,
+		userConfig,
 	},
 
 	strict: process.env.NODE_ENV !== 'production',
