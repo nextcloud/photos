@@ -22,36 +22,32 @@
 
 <template>
 	<div class="photos-location">
-		<NcTextField class="photos-location__text-field"
-			:label="t('photos', 'Default Photos upload and Albums location')"
-			:value.sync="photosLocation"
-			@update:value="debounceUpdatePhotosFolder(photosLocation)" />
+		<PhotosFolder :path="photosLocation" />
+
 		<NcButton :aria-label="t('photos', 'Choose default Photos upload and Albums location')"
 			@click="debounceSelectPhotosFolder">
-			<template #icon>
-				<Folder :size="20" />
-			</template>
+			{{ t('photos', 'Choose a different folder') }}
 		</NcButton>
 	</div>
 </template>
 
 <script>
 import debounce from 'debounce'
+import { defineComponent } from 'vue'
 
-import { NcButton, NcTextField } from '@nextcloud/vue'
-import Folder from 'vue-material-design-icons/Folder.vue'
-
-import { getFilePickerBuilder, showError } from '@nextcloud/dialogs'
+import { NcButton } from '@nextcloud/vue'
+import { getFilePickerBuilder } from '@nextcloud/dialogs'
+import { translate as t } from '@nextcloud/l10n'
 
 import UserConfig from '../../mixins/UserConfig.js'
+import PhotosFolder from './PhotosFolder.vue'
 
-export default {
-	name: 'PhotosLocationSettings',
+export default defineComponent({
+	name: 'PhotosUploadLocationSettings',
 
 	components: {
 		NcButton,
-		NcTextField,
-		Folder,
+		PhotosFolder,
 	},
 
 	mixins: [
@@ -63,8 +59,13 @@ export default {
 			this.selectPhotosFolder()
 		}),
 
-		selectPhotosFolder() {
-			const picker = getFilePickerBuilder(t('photos', 'Select the default location for your media'))
+		async selectPhotosFolder() {
+			const pickedFolder = await this.openFilePicker(t('photos', 'Select the default upload location for your media'))
+			this.updatePhotosFolder(pickedFolder)
+		},
+
+		async openFilePicker(title) {
+			const picker = getFilePickerBuilder(title)
 				.setMultiSelect(false)
 				.setModal(true)
 				.setType(1)
@@ -73,47 +74,27 @@ export default {
 				.startAt(this.photosLocation)
 				.build()
 
-			picker.pick()
-				.then(this.updatePhotosFolder)
+			return picker.pick()
 		},
 
-		debounceUpdatePhotosFolder: debounce(function(...args) {
-			this.updatePhotosFolder(...args)
-		}, 300),
-
 		updatePhotosFolder(path) {
-			console.debug(`Path '${path}' selected for photos location`)
-			if (typeof path !== 'string' || path.trim() === '' || !path.startsWith('/')) {
-				showError(t('photos', 'Invalid location selected'))
-				return
-			}
-
-			if (path.includes('//')) {
-				path = path.replace(/\/\//gi, '/')
-			}
-
 			this.photosLocation = path
 			this.updateSetting('photosLocation')
 		},
+
+		t,
 	},
-}
+})
 </script>
 
 <style lang="scss" scoped>
 .photos-location {
 	display: flex;
-	align-items: flex-end;
-	gap: 0 8px;
+	flex-direction: column;
+	width: fit-content;
 
-	&__text-field {
-		max-width: 300px;
-
-		:deep {
-			.input-field__main-wrapper,
-			input {
-				height: var(--default-clickable-area) !important;
-			}
-		}
+	.folder {
+		margin-bottom: 16px;
 	}
 }
 </style>

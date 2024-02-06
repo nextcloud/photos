@@ -37,6 +37,7 @@ export default {
 			croppedLayout: croppedLayoutLocalStorage !== null
 				? croppedLayoutLocalStorage === 'true'
 				: loadState('photos', 'croppedLayout', 'false') === 'true',
+			photosSourceFolders: JSON.parse(loadState('photos', 'photosSourceFolders', '[]')),
 			photosLocation: loadState('photos', 'photosLocation', ''),
 			photosLocationFolder: null,
 		}
@@ -61,7 +62,7 @@ export default {
 			const value = this[setting]
 			// Long time save setting
 			axios.put(generateUrl('apps/photos/api/v1/config/' + setting), {
-				value: value.toString(),
+				value: JSON.stringify(value),
 			})
 			// Current session save setting
 			localStorage.setItem('photos:' + setting, value)
