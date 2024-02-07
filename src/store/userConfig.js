@@ -78,16 +78,9 @@ const module = {
 		},
 	},
 	actions: {
-		async initUserConfig({ commit }) {
-			const photosLocationFolder = await getFolder(loadState('photos', 'photosLocation', ''))
-			commit('updateUserConfig', { key: 'photosLocationFolder', value: photosLocationFolder })
-		},
 		async updateUserConfig({ commit }, { key, value }) {
 			commit('updateUserConfig', { key, value })
-
-			// Long time save setting
 			await axios.put(generateUrl('apps/photos/api/v1/config/' + key), {
-				// Stringify non string values.
 				value: (typeof value === 'string') ? value : JSON.stringify(value),
 			})
 		},

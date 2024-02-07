@@ -32,7 +32,7 @@ import places from './places.js'
 import faces from './faces.js'
 import folders from './folders.js'
 import systemtags from './systemtags.js'
-import userConfig from './userConfig.js'
+import userConfig, { getFolder } from './userConfig.js'
 
 Vue.use(Vuex)
 export default new Store({
@@ -48,6 +48,17 @@ export default new Store({
 		places,
 		userConfig,
 	},
+
+	plugins: [
+		(store) => {
+			store.subscribe(async (mutation, state) => {
+				if (mutation.type === 'updateUserConfig' && mutation.payload.key === 'photosLocation') {
+					const photosLocationFolder = await getFolder(state.userConfig.photosLocation)
+					store.commit('updateUserConfig', { key: 'photosLocationFolder', value: photosLocationFolder })
+				}
+			})
+		},
+	],
 
 	strict: process.env.NODE_ENV !== 'production',
 })
