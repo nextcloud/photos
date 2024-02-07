@@ -222,11 +222,11 @@ export default defineComponent({
 		},
 
 		getFiles() {
-			this.fetchFiles('', {}, this.blacklistIds)
+			this.fetchFiles({}, this.blacklistIds)
 		},
 
 		refreshFiles() {
-			this.fetchFiles('', { firstResult: 0 }, [...this.blacklistIds, ...this.fetchedFileIds], true)
+			this.fetchFiles({ firstResult: 0 }, [...this.blacklistIds, ...this.fetchedFileIds], true)
 		},
 
 		emitPickedEvent() {

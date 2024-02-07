@@ -166,6 +166,8 @@ import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import ActionDownload from '../components/Actions/ActionDownload.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import { translate } from '@nextcloud/l10n'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { configChangedEvent } from '../store/userConfig.js'
 
 export default {
 	name: 'Timeline',
@@ -244,6 +246,14 @@ export default {
 		}
 	},
 
+	mounted() {
+		subscribe(configChangedEvent, this.handleUserConfigChange)
+	},
+
+	destroyed() {
+		unsubscribe(configChangedEvent, this.handleUserConfigChange)
+	},
+
 	computed: {
 		...mapGetters([
 			'files',
@@ -257,7 +267,7 @@ export default {
 		]),
 
 		getContent() {
-			this.fetchFiles('', {
+			this.fetchFiles({
 				mimesType: this.mimesType,
 				onThisDay: this.onThisDay,
 				onlyFavorites: this.onlyFavorites,
@@ -289,6 +299,12 @@ export default {
 			this.onUncheckFiles(fileIds)
 			this.fetchedFileIds = this.fetchedFileIds.filter(fileid => !fileIds.includes(fileid))
 			await this.deleteFiles(fileIds)
+		},
+
+		handleUserConfigChange({ key }) {
+			if (key === 'photosSourceFolder') {
+				this.resetFetchFilesState()
+			}
 		},
 
 		t: translate,

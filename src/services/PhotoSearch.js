@@ -40,7 +40,7 @@ import moment from '@nextcloud/moment'
  * @param {boolean} [options.onlyFavorites=false] get only favorite items
  * @return {Promise<object[]>} the file list
  */
-export default async function(path = '', options = {}) {
+export default async function (options = {}) {
 	// default function options
 	options = {
 		firstResult: 0,
@@ -95,6 +95,16 @@ export default async function(path = '', options = {}) {
 			}).join('\n')}</d:or>`
 		: ''
 
+	// TODO: uncomment when SEARCH on multiple folders is implemented.
+	// const sourceFolders = store.state.userConfig.photosSourceFolder
+	// 	.map(folder => `
+	// 		<d:scope>
+	// 			<d:href>${davRootPath}/${folder}</d:href>
+	// 			<d:depth>infinity</d:depth>
+	// 		</d:scope>
+	// 	`)
+	// 	.join('\n')
+
 	options = Object.assign({
 		method: 'SEARCH',
 		headers: {
@@ -114,7 +124,7 @@ export default async function(path = '', options = {}) {
 					</d:select>
 					<d:from>
 						<d:scope>
-							<d:href>${prefixPath}/${path}</d:href>
+							<d:href>${prefixPath}/${store.state.userConfig.photosSourceFolder ?? '/Photos'}</d:href>
 							<d:depth>infinity</d:depth>
 						</d:scope>
 					</d:from>

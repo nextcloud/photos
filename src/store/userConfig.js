@@ -25,6 +25,7 @@ import { Folder, davGetClient, davGetDefaultPropfind, davResultToNode, davRootPa
 import { loadState } from '@nextcloud/initial-state'
 import { joinPaths } from '@nextcloud/paths'
 import { showError } from '@nextcloud/dialogs'
+import { emit } from '@nextcloud/event-bus'
 import { translate as t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
@@ -83,6 +84,7 @@ const module = {
 			await axios.put(generateUrl('apps/photos/api/v1/config/' + key), {
 				value: (typeof value === 'string') ? value : JSON.stringify(value),
 			})
+			emit(configChangedEvent, { key, value })
 		},
 	},
 }

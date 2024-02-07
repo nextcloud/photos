@@ -50,13 +50,12 @@ export default {
 
 	methods: {
 		/**
-		 * @param {string} path - Path to pass to getPhotos.
 		 * @param {object} options - Options to pass to getPhotos.
 		 * @param {string[]} [blacklist=[]] - Array of ids to filter out.
 		 * @param {boolean} [force=false] - Force fetching even if doneFetchingFiles is true
 		 * @return {Promise<string[]>} - The next batch of data depending on global offset.
 		 */
-		async fetchFiles(path = '', options = {}, blacklist = [], force = false) {
+		async fetchFiles(options = {}, blacklist = [], force = false) {
 			if ((this.doneFetchingFiles && !force) || this.loadingFiles) {
 				return []
 			}
@@ -70,7 +69,7 @@ export default {
 				const numberOfImagesPerBatch = 200
 
 				// Load next batch of images
-				const fetchedFiles = await getPhotos(path, {
+				const fetchedFiles = await getPhotos({
 					firstResult: this.fetchedFileIds.length,
 					nbResults: numberOfImagesPerBatch,
 					...options,
