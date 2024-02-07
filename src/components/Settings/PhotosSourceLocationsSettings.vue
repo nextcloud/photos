@@ -91,7 +91,7 @@ export default defineComponent({
 			const pickedFolder = await this.openFilePicker(t('photos', 'Select a source folder for your media'))
 			// TODO: uncomment when SEARCH on multiple folders is implemented.
 			// if (this.photosSourceFolder.includes(pickedFolder)) {
-			// 	return
+			//   return
 			// }
 			this.$store.dispatch('updateUserConfig', { key: 'photosSourceFolder', value: pickedFolder })
 		},

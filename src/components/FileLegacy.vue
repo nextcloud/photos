@@ -59,7 +59,6 @@
 <script>
 import { generateUrl } from '@nextcloud/router'
 
-
 export default {
 	name: 'FileLegacy',
 	inheritAttrs: false,

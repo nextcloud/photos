@@ -97,13 +97,13 @@ export default async function (options = {}) {
 
 	// TODO: uncomment when SEARCH on multiple folders is implemented.
 	// const sourceFolders = store.state.userConfig.photosSourceFolder
-	// 	.map(folder => `
-	// 		<d:scope>
-	// 			<d:href>${davRootPath}/${folder}</d:href>
-	// 			<d:depth>infinity</d:depth>
-	// 		</d:scope>
-	// 	`)
-	// 	.join('\n')
+	// .map(folder => `
+	//   <d:scope>
+	//     <d:href>${davRootPath}/${folder}</d:href>
+	//     <d:depth>infinity</d:depth>
+	//   </d:scope>
+	// `)
+	// .join('\n')
 
 	options = Object.assign({
 		method: 'SEARCH',
