@@ -34,7 +34,7 @@ class UserConfigService {
 	public const DEFAULT_CONFIGS = [
 		'croppedLayout' => 'false',
 		'photosLocation' => '/Photos',
-		'photosSourceFolders' => '["/Photos"]',
+		'photosSourceFolder' => '/Photos',
 	];
 
 	private IConfig $config;
