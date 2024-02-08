@@ -22,6 +22,7 @@ OC.L10N.register(
     "An error occurred" : "Gadījās kļūda",
     "Favorite" : "Favorīts",
     "Go back" : "Atpakaļ",
+    "Dates" : "Datumi",
     "Invalid location selected" : "Ir izvēlēta nederīga atrašanās vieta ",
     "View" : "Skats",
     "Remove from favorites" : "Noņemt no izlases",
