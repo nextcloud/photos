@@ -199,7 +199,7 @@ export default {
 
 	&__back {
 		// Replaces the app navigation button
-		position: fixed !important;
+		position: absolute !important;
 		left: var(--app-navigation-padding);
 	}
 
