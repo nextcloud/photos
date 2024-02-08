@@ -22,7 +22,7 @@
 
 <template>
 	<div class="photos-location">
-		<PhotosFolder :path="photosLocation" :root-folder-label="t('photos', 'Root folder')" />
+		<PhotosFolder :path="photosLocation" :root-folder-label="t('photos', 'Home')" :root-folder-icon="Home" />
 
 		<NcButton :aria-label="t('photos', 'Choose default Photos upload and Albums location')"
 			@click="debounceSelectPhotosFolder">
@@ -34,6 +34,8 @@
 <script>
 import debounce from 'debounce'
 import { defineComponent } from 'vue'
+
+import Home from 'vue-material-design-icons/Home.vue'
 
 import { NcButton } from '@nextcloud/vue'
 import { getFilePickerBuilder } from '@nextcloud/dialogs'
@@ -47,6 +49,12 @@ export default defineComponent({
 	components: {
 		NcButton,
 		PhotosFolder,
+	},
+
+	data() {
+		return {
+			Home,
+		}
 	},
 
 	computed: {

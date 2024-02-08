@@ -23,7 +23,7 @@
 <template>
 	<div class="photos-locations">
 		<ul>
-			<PhotosFolder :path="photosSourceFolder" :root-folder-label="t('photos', 'All folders')" />
+			<PhotosFolder :path="photosSourceFolder" :root-folder-label="t('photos', 'All folders')" :root-folder-icon="FolderMultiple" />
 			<!-- TODO: uncomment when SEARCH on multiple folders is implemented. -->
 			<!-- <li v-for="(source, index) in photosSourceFolder"
 				:key="index">
@@ -49,6 +49,8 @@
 import debounce from 'debounce'
 import { defineComponent } from 'vue'
 
+import FolderMultiple from 'vue-material-design-icons/FolderMultiple.vue'
+
 import { NcButton } from '@nextcloud/vue'
 import { getFilePickerBuilder } from '@nextcloud/dialogs'
 import { translate as t } from '@nextcloud/l10n'
@@ -61,6 +63,12 @@ export default defineComponent({
 	components: {
 		NcButton,
 		PhotosFolder,
+	},
+
+	data() {
+		return {
+			FolderMultiple,
+		}
 	},
 
 	computed: {

@@ -1,6 +1,6 @@
 <template>
 	<div class="folder">
-		<FolderMultiple v-if="path === '/'" />
+		<component :is="rootFolderIcon" v-if="path === '/'" />
 		<Folder v-else />
 		<span class="folder__info">
 			<div class="folder__path">{{ folderName }}</div>
@@ -23,7 +23,6 @@
 import { defineComponent } from 'vue'
 
 import Folder from 'vue-material-design-icons/Folder.vue'
-import FolderMultiple from 'vue-material-design-icons/FolderMultiple.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 
 import { NcButton } from '@nextcloud/vue'
@@ -35,7 +34,6 @@ export default defineComponent({
 	components: {
 		NcButton,
 		Folder,
-		FolderMultiple,
 		Close,
 	},
 
@@ -50,6 +48,10 @@ export default defineComponent({
 		},
 		rootFolderLabel: {
 			type: String,
+			required: true,
+		},
+		rootFolderIcon: {
+			type: Object,
 			required: true,
 		},
 	},
