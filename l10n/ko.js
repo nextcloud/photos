@@ -40,6 +40,7 @@ OC.L10N.register(
     "An error occurred" : "오류가 발생함",
     "Favorite" : "즐겨찾기",
     "Go back" : "뒤로 가기",
+    "Dates" : "날짜",
     "Invalid location selected" : "잘못된 위치가 선택됨",
     "View" : "보기",
     "Unselect all" : "모두 선택 해제",

@@ -28,6 +28,7 @@ OC.L10N.register(
     "Go back" : "חזרה",
     "Back to {folder}" : "חזרה אל {folder}",
     "Share this folder" : "שיתוף התיקייה הזו",
+    "Dates" : "תאריכים",
     "Enable squared photos view" : "הפעלת תצוגת תמונות מרובעות",
     "View" : "צפייה",
     "Remove from favorites" : "הסרה מהמועדפים",

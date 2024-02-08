@@ -21,6 +21,7 @@ OC.L10N.register(
     "Open the full size \"{name}\" image" : "Abrir Imagen \"{name}\" en tamaño completo",
     "Go back" : "Regresar",
     "Back to {folder}" : "Regresar a {folder}",
+    "Dates" : "Fechas",
     "View" : "Ver",
     "Remove from favorites" : "Eliminar de favoritos",
     "No photos in here" : "No hay fotos aquí",
