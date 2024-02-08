@@ -18,6 +18,7 @@ OC.L10N.register(
     "Go back" : "Regresar",
     "Back to {folder}" : "Volver a {folder}",
     "Share this folder" : "Compartir esta carpeta",
+    "Dates" : "Fechas",
     "Remove from favorites" : "Eliminar de favoritos",
     "No photos in here" : "No hay fotos aquí",
     "No tags yet" : "Aún no hay etiquetas",

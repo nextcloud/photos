@@ -14,6 +14,7 @@ OC.L10N.register(
     "Group" : "Grupo",
     "Favorite" : "Hacer favorito",
     "Go back" : "Regresar",
+    "Dates" : "Fechas",
     "Remove from favorites" : "Eliminar de favoritos",
     "Add" : "Agregar"
 },
