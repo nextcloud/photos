@@ -58,6 +58,7 @@ OC.L10N.register(
     "Back to {folder}" : "Back to {folder}",
     "Share this folder" : "Share this folder",
     "Dates" : "Dates",
+    "Jump to specific date in list" : "Jump to specific date in list",
     "Jump to {date}" : "Jump to {date}",
     "Add to {destination}" : "Add to {destination}",
     "There are no photos or videos yet!" : "There are no photos or videos yet!",
