@@ -55,6 +55,8 @@
     "Go back" : "عودة",
     "Back to {folder}" : "العودة إلى {folder} ",
     "Share this folder" : "مشاركة هذا المجلد",
+    "Dates" : "التواريخ",
+    "Jump to specific date in list" : "إقفِز للتاريخ المحدد في القائمة",
     "Jump to {date}" : "إنتقِل إلى {date}",
     "Add to {destination}" : "أضِف إلى {destination}",
     "There are no photos or videos yet!" : "لا توجد أي صور أو فيديوهات بعدُ!",
