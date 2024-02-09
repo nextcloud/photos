@@ -55,6 +55,8 @@
     "Go back" : "返回",
     "Back to {folder}" : "回到 {folder}",
     "Share this folder" : "分享這個資料夾",
+    "Dates" : "日期",
+    "Jump to specific date in list" : "跳至清單中的特定日期",
     "Jump to {date}" : "跳到 {date}",
     "Add to {destination}" : "添加到 {destination}",
     "There are no photos or videos yet!" : "還沒有照片或視像！",

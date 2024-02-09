@@ -58,6 +58,7 @@ OC.L10N.register(
     "Back to {folder}" : "Torna a {folder}",
     "Share this folder" : "Comparteix la carpeta",
     "Dates" : "Dates",
+    "Jump to specific date in list" : "Salta a una data específica de la llista",
     "Jump to {date}" : "Salta a {date}",
     "Add to {destination}" : "Afegeix a {destination}",
     "There are no photos or videos yet!" : "Encara no hi ha cap fotografia ni vídeo!",

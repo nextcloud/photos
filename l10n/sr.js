@@ -58,6 +58,7 @@ OC.L10N.register(
     "Back to {folder}" : "Назад у {folder}",
     "Share this folder" : "Дели ову фасциклу",
     "Dates" : "Датуми",
+    "Jump to specific date in list" : "Скок на одређени датум у листи",
     "Jump to {date}" : "Скочи на {date}",
     "Add to {destination}" : "Додај у {destination}",
     "There are no photos or videos yet!" : "Још увек нема фотографија или видео снимака!",
