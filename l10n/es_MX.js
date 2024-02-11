@@ -6,6 +6,7 @@ OC.L10N.register(
     "Your memories under your control" : "Tus recuerdos bajo tu control",
     "Videos" : "Videos",
     "Albums" : "Álbumes",
+    "People" : "Personas",
     "Folders" : "Carpetas",
     "Favorites" : "Favoritos",
     "Shared with you" : "Compartido con usted",
