@@ -58,6 +58,7 @@ OC.L10N.register(
     "Back to {folder}" : "Tillbaka till {folder}",
     "Share this folder" : "Dela denna mapp",
     "Dates" : "Datum",
+    "Jump to specific date in list" : "Hoppa till specifikt datum i listan",
     "Jump to {date}" : "Gå till {date}",
     "Add to {destination}" : "Lägg till i {destination}",
     "There are no photos or videos yet!" : "Det finns inga bilder eller videor än!",
