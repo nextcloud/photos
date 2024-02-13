@@ -26,6 +26,7 @@ import { allMimes } from './AllowedMimes.js'
 import client from './DavClient.js'
 import { props } from './DavRequest.js'
 import moment from '@nextcloud/moment'
+import store from '../store/index.js'
 
 /**
  * List files from a folder and filter out unwanted mimes
@@ -40,7 +41,7 @@ import moment from '@nextcloud/moment'
  * @param {boolean} [options.onlyFavorites=false] get only favorite items
  * @return {Promise<object[]>} the file list
  */
-export default async function (options = {}) {
+export default async function(options = {}) {
 	// default function options
 	options = {
 		firstResult: 0,

@@ -21,7 +21,7 @@
  *
  */
 
-import { Folder, davGetClient, davGetDefaultPropfind, davResultToNode, davRootPath } from '@nextcloud/files'
+import { davGetClient, davGetDefaultPropfind, davResultToNode, davRootPath } from '@nextcloud/files'
 import { loadState } from '@nextcloud/initial-state'
 import { joinPaths } from '@nextcloud/paths'
 import { showError } from '@nextcloud/dialogs'
@@ -60,7 +60,7 @@ export async function getFolder(path) {
  * @property {boolean} croppedLayout
  * @property {string} photosSourceFolder
  * @property {string} photosLocation
- * @property {Folder} [photosLocationFolder]
+ * @property {import('@nextcloud/files').Folder} [photosLocationFolder]
  */
 
 /** @type {import('vuex').Module<UserConfigState, object>} */
