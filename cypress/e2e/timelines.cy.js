@@ -33,6 +33,7 @@ import {
 	deleteSelection,
 	downloadSelection,
 	favoriteSelection,
+	mkdir,
 	selectMedia,
 	unfavoriteSelection,
 	unselectMedia,
@@ -59,9 +60,11 @@ const bob = new User(`bob_${randHash()}`)
 describe('View list of photos in the main timeline', () => {
 	before(() => {
 		cy.createUser(alice).then(() => {
+			mkdir(alice, '/Photos')
 			uploadTestMedia(alice)
 		})
 		cy.createUser(bob).then(() => {
+			mkdir(bob, '/Photos')
 			uploadTestMedia(bob)
 		})
 		cy.login(alice)

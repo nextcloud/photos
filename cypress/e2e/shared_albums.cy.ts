@@ -34,6 +34,7 @@ import {
 	deleteSelection,
 	downloadAllFiles,
 	downloadSelection,
+	mkdir,
 	selectMedia,
 	uploadTestMedia,
 } from './photosUtils'
@@ -64,6 +65,9 @@ describe('Manage shared albums', () => {
 		cy.createUser(alice)
 		cy.createUser(bob)
 		cy.createUser(charlie)
+		mkdir(alice, '/Photos')
+		mkdir(bob, '/Photos')
+		mkdir(charlie, '/Photos')
 		uploadTestMedia(alice)
 		uploadTestMedia(bob)
 		uploadTestMedia(charlie)
@@ -302,6 +306,7 @@ describe('Manage shared albums', () => {
 			cy.visit('apps/photos/sharedalbums')
 			cy.get('body').should('not.contain', `shared_album_test7 (${alice.userId})`)
 			cy.createUser(alice)
+			mkdir(alice, '/Photos')
 			uploadTestMedia(alice)
 		})
 	})
