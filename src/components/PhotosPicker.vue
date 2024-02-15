@@ -121,7 +121,6 @@ import File from './File.vue'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
-import UserConfig from '../mixins/UserConfig.js'
 import allowedMimes from '../services/AllowedMimes.js'
 
 export default defineComponent({
@@ -142,7 +141,6 @@ export default defineComponent({
 		FetchFilesMixin,
 		FilesByMonthMixin,
 		FilesSelectionMixin,
-		UserConfig,
 	],
 
 	props: {
@@ -224,11 +222,11 @@ export default defineComponent({
 		},
 
 		getFiles() {
-			this.fetchFiles('', {}, this.blacklistIds)
+			this.fetchFiles({}, this.blacklistIds)
 		},
 
 		refreshFiles() {
-			this.fetchFiles('', { firstResult: 0 }, [...this.blacklistIds, ...this.fetchedFileIds], true)
+			this.fetchFiles({ firstResult: 0 }, [...this.blacklistIds, ...this.fetchedFileIds], true)
 		},
 
 		emitPickedEvent() {
@@ -242,6 +240,9 @@ export default defineComponent({
 				return moment(date, 'YYYYMM').format('MMM YYYY')
 			}
 			return moment(date, 'YYYYMM').format('MMMM YYYY')
+		},
+		photosLocationFolder() {
+			return this.$store.state.userConfig.photosLocationFolder
 		},
 	},
 })

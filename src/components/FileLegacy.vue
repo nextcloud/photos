@@ -59,11 +59,8 @@
 <script>
 import { generateUrl } from '@nextcloud/router'
 
-import UserConfig from '../mixins/UserConfig.js'
-
 export default {
 	name: 'FileLegacy',
-	mixins: [UserConfig],
 	inheritAttrs: false,
 	props: {
 		item: {
@@ -94,6 +91,9 @@ export default {
 		},
 		src() {
 			return generateUrl(`/core/preview?fileId=${this.item.injected.fileid}&c=${this.decodedEtag}&x=${250}&y=${250}&forceIcon=0&a=${this.croppedLayout ? '0' : '1'}`)
+		},
+		croppedLayout() {
+			return this.$store.state.userConfig.croppedLayout
 		},
 	},
 

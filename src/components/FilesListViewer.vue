@@ -21,7 +21,7 @@
  -->
 <template>
 	<div class="files-list-viewer">
-		<NcEmptyContent v-if="emptyMessage !== '' && itemsBySections.length === 1 && itemsBySections[0].items.length === 0 && !loading"
+		<NcEmptyContent v-if="emptyMessage !== '' && photosCount === 0 && !loading"
 			key="emptycontent"
 			:name="emptyMessage">
 			<PackageVariant slot="icon" />
@@ -87,7 +87,6 @@ import TiledLayout from '../components/TiledLayout/TiledLayout.vue'
 import { fetchFile } from '../services/fileFetcher.js'
 import VirtualScrolling from '../components/VirtualScrolling.vue'
 import EmptyBox from '../assets/Illustrations/empty.svg'
-import UserConfig from '../mixins/UserConfig.js'
 
 export default {
 	name: 'FilesListViewer',
@@ -99,8 +98,6 @@ export default {
 		TiledLayout,
 		VirtualScrolling,
 	},
-
-	mixins: [UserConfig],
 
 	props: {
 		// Array of file ids that should be rendered.
@@ -218,9 +215,16 @@ export default {
 			return []
 		},
 
+		photosCount() {
+			return this.itemsBySections.map(({ items }) => items.length).reduce((total, length) => total + length, 0)
+		},
+
 		/** @return {boolean} The list of items to pass to TiledLayout. */
 		showLoader() {
 			return this.loading && (this.fileIds?.length !== 0 || this.sections?.length !== 0)
+		},
+		croppedLayout() {
+			return this.$store.state.userConfig.croppedLayout
 		},
 	},
 

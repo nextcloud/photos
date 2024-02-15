@@ -19,7 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-import { uploadTestMedia } from './photosUtils'
+import { mkdir, uploadTestMedia } from './photosUtils'
 import { navigateToPlace, runOccCommand } from './placesUtils'
 
 const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/
@@ -31,9 +31,10 @@ Cypress.on('uncaught:exception', (err) => {
 })
 
 describe('Manage places', () => {
-	before(function() {
+	before(function () {
 		cy.createRandomUser()
 			.then((user) => {
+				mkdir(user, '/Photos')
 				uploadTestMedia(user)
 				runOccCommand('files:scan --all --generate-metadata')
 				cy.login(user)

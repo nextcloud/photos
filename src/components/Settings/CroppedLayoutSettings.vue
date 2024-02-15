@@ -21,16 +21,15 @@
  -->
 
 <template>
-	<NcCheckboxRadioSwitch :checked.sync="croppedLayout"
+	<NcCheckboxRadioSwitch :checked="croppedLayout"
 		type="switch"
-		@update:checked="updateSetting('croppedLayout')">
+		@update:checked="updateSetting">
 		{{ t('photos', 'Enable squared photos view') }}
 	</NcCheckboxRadioSwitch>
 </template>
 
 <script>
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import UserConfig from '../../mixins/UserConfig.js'
 
 export default {
 	name: 'CroppedLayoutSettings',
@@ -39,8 +38,16 @@ export default {
 		NcCheckboxRadioSwitch,
 	},
 
-	mixins: [
-		UserConfig,
-	],
+	computed: {
+		croppedLayout() {
+			return this.$store.state.userConfig.croppedLayout
+		},
+	},
+
+	methods: {
+		updateSetting(value) {
+			this.$store.dispatch('updateUserConfig', { key: 'croppedLayout', value })
+		},
+	},
 }
 </script>

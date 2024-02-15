@@ -30,6 +30,7 @@ import {
 import {
 	deleteSelection,
 	favoriteSelection,
+	mkdir,
 	selectMedia,
 	unfavoriteSelection,
 	unselectMedia,
@@ -47,10 +48,11 @@ Cypress.on('uncaught:exception', (err) => {
 describe('Manage albums', { testIsolation: true }, () => {
 	let user = null
 
-	beforeEach(function() {
+	beforeEach(function () {
 		cy.createRandomUser()
 			.then(_user => {
 				user = _user
+				mkdir(user, '/Photos')
 				uploadTestMedia(user)
 				cy.login(user)
 			})
