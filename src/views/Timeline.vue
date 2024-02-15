@@ -24,8 +24,9 @@
 
 <template>
 	<!-- Errors handlers -->
-	<NcEmptyContent v-if="errorFetchingFiles">
-		{{ t('photos', 'An error occurred') }}
+	<NcEmptyContent v-if="errorFetchingFiles" :name="t('photos', 'An error occurred')">
+		<AlertCircle slot="icon" />
+		<span v-if="errorFetchingFiles === 404" slot="description">{{ t('photos', 'The source folder does not exists') }}</span>
 	</NcEmptyContent>
 
 	<div v-else class="timeline">
@@ -150,6 +151,7 @@ import Delete from 'vue-material-design-icons/Delete.vue'
 import PlusBoxMultiple from 'vue-material-design-icons/PlusBoxMultiple.vue'
 import Download from 'vue-material-design-icons/Download.vue'
 import Close from 'vue-material-design-icons/Close.vue'
+import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
 
 import { NcModal, NcActions, NcActionButton, NcButton, NcEmptyContent, isMobile } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
@@ -189,6 +191,7 @@ export default {
 		ActionFavorite,
 		ActionDownload,
 		HeaderNavigation,
+		AlertCircle,
 	},
 
 	filters: {

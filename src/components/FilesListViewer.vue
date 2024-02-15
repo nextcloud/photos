@@ -21,7 +21,7 @@
  -->
 <template>
 	<div class="files-list-viewer">
-		<NcEmptyContent v-if="emptyMessage !== '' && itemsBySections.length === 1 && itemsBySections[0].items.length === 0 && !loading"
+		<NcEmptyContent v-if="emptyMessage !== '' && photosCount === 0 && !loading"
 			key="emptycontent"
 			:name="emptyMessage">
 			<PackageVariant slot="icon" />
@@ -213,6 +213,10 @@ export default {
 			}
 
 			return []
+		},
+
+		photosCount() {
+			return this.itemsBySections.map(({ items }) => items.length).reduce((total, length) => total + length, 0)
 		},
 
 		/** @return {boolean} The list of items to pass to TiledLayout. */
