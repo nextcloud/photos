@@ -189,7 +189,7 @@ export default {
 	flex-wrap: wrap;
 	gap: calc(2 * var(--app-navigation-padding));
 	align-items: center;
-	justify-content: start;
+	justify-content: flex-start;
 	width: 100%;
 	// Ensure to not overlap with app navigation toggle
 	padding-inline: calc(var(--default-clickable-area) + 2 * var(--app-navigation-padding)) var(--app-navigation-padding);
