@@ -24,6 +24,7 @@ OC.L10N.register(
     "Back to {folder}" : "Torra a {folder}",
     "Share this folder" : "Cumpartzi custa cartella",
     "Enable squared photos view" : "Ativa sa visualizatzione a fotos cuadradas",
+    "Home" : "Pàgina printzipale",
     "View" : "Visualiza",
     "Unselect all" : "Deseletziona totu",
     "Remove from favorites" : "Boga·nche dae preferidos",

@@ -7,6 +7,7 @@ OC.L10N.register(
     "Back" : "Kembali",
     "Save" : "Simpan",
     "Shared by" : "Dikongsi dengan",
+    "Home" : "Rumah",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "Tambah"
 },

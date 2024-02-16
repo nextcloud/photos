@@ -13,6 +13,7 @@ OC.L10N.register(
     "Group" : "Grup",
     "Favorite" : "I/E Preferuar",
     "Go back" : "Shko prapa",
+    "Home" : "Kryefaqja",
     "View" : "Shiko",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "Shto",
