@@ -16,11 +16,12 @@ OC.L10N.register(
     "An error occurred" : "An error occurred",
     "Favorite" : "Favorite",
     "Go back" : "Go back",
-    "Invalid location selected" : "Invalid location selected",
+    "Home" : "მთავარი",
     "View" : "View",
     "Unselect all" : "Unselect all",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "Add",
-    "Details" : "Details"
+    "Details" : "Details",
+    "Invalid location selected" : "Invalid location selected"
 },
 "nplurals=2; plural=(n!=1);");

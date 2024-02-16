@@ -8,6 +8,7 @@ OC.L10N.register(
     "Tags" : "Tags",
     "Save" : "Save",
     "Favorite" : "Favorite",
+    "Home" : "Home",
     "Add" : "Add",
     "Details" : "Details"
 },

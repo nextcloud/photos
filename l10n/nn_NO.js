@@ -12,6 +12,7 @@ OC.L10N.register(
     "Group" : "Gruppe",
     "An error occurred" : "Det oppstod ein feil.",
     "Favorite" : "Favoritt",
+    "Home" : "Heim",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "Legg til",
     "Details" : "Detaljar"

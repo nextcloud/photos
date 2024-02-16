@@ -22,6 +22,7 @@ OC.L10N.register(
     "Back to {folder}" : "Natrag na {folder}",
     "Share this folder" : "Dijeli ovu mapu",
     "Enable squared photos view" : "Omogući kvadratni prikaz fotografija",
+    "Home" : "Doma",
     "View" : "Pregledaj",
     "Remove from favorites" : "Ukloni iz favorita",
     "This folder does not exist" : "Ova mapa ne postoji",

@@ -8,6 +8,7 @@ OC.L10N.register(
     "Save" : "Sekles",
     "Group" : "Agraw",
     "Favorite" : "Menyif",
+    "Home" : "Asnubeg",
     "Remove from favorites" : "Kkes-it seg ismal",
     "Add" : "Rnu",
     "Details" : "Talqayt"
