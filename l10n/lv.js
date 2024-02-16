@@ -23,10 +23,11 @@ OC.L10N.register(
     "Favorite" : "Favorīts",
     "Go back" : "Atpakaļ",
     "Dates" : "Datumi",
-    "Invalid location selected" : "Ir izvēlēta nederīga atrašanās vieta ",
+    "Home" : "Sākums",
     "View" : "Skats",
     "Remove from favorites" : "Noņemt no izlases",
     "Add" : "Pievienot",
-    "Details" : "Detaļas"
+    "Details" : "Detaļas",
+    "Invalid location selected" : "Ir izvēlēta nederīga atrašanās vieta "
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

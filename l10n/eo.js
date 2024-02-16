@@ -16,6 +16,7 @@ OC.L10N.register(
     "An error occurred" : "Eraro okazis",
     "Favorite" : "Pliŝatati",
     "Go back" : "Reveni",
+    "Home" : "Hejmo",
     "View" : "Vidi",
     "Remove from favorites" : "Forigi el pliŝataĵoj",
     "Add" : "Aldoni",

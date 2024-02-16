@@ -9,6 +9,7 @@ OC.L10N.register(
     "Back" : "ຫຼັງ",
     "Save" : "ບັນທຶກ",
     "Favorite" : "ລາຍການທີ່ມັກ",
+    "Home" : "ໜ້າຫຼັກ",
     "Remove from favorites" : "ຍ້າຍຈາກລາຍການທີ່ມັກ",
     "Add" : "ເພີ່ມ",
     "Details" : "ລາຍລະອຽດ"

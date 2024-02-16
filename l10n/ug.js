@@ -8,6 +8,7 @@ OC.L10N.register(
     "Save" : "ساقلا",
     "Shared by" : "ھەمبەھىرلىگۈچى",
     "Favorite" : "يىغقۇچ",
+    "Home" : "ئۆي",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "قوش"
 },
