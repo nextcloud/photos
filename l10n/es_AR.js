@@ -24,6 +24,7 @@ OC.L10N.register(
     "Share this folder" : "Compartir esta carpeta",
     "_{years} year ago_::_{years} years ago_" : ["Hace {years} año","Hace {years} años","Hace {years} años"],
     "Enable squared photos view" : "Habilitar vista de fotos cuadradas",
+    "Home" : "Casa",
     "View" : "Ver",
     "Remove from favorites" : "Eliminado de favoritos",
     "This folder does not exist" : "Esta carpeta no existe",

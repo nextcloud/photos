@@ -9,6 +9,7 @@ OC.L10N.register(
     "Save" : "சேமிக்க ",
     "Group" : "Group",
     "Favorite" : "விருப்பமான",
+    "Home" : "அகம்",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "சேர்க்க",
     "Details" : "விவரங்கள்"

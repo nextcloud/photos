@@ -22,6 +22,7 @@ OC.L10N.register(
     "Back to {folder}" : "Trở về {folder}",
     "Share this folder" : "Chia sẻ thư mục này",
     "Enable squared photos view" : "Bật chế độ xem theo ô",
+    "Home" : "Trang chủ",
     "View" : "Xem",
     "Unselect all" : "Bỏ chọn tất cả",
     "Remove from favorites" : "Xóa khỏi ưa thích",

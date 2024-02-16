@@ -39,7 +39,7 @@
     "Favorite" : "즐겨찾기",
     "Go back" : "뒤로 가기",
     "Dates" : "날짜",
-    "Invalid location selected" : "잘못된 위치가 선택됨",
+    "Home" : "집",
     "View" : "보기",
     "Unselect all" : "모두 선택 해제",
     "Edit album details" : "앨범 세부 정보 수정",
@@ -62,6 +62,7 @@
     "Add {collaboratorLabel} to the collaborators list" : "공동 작업자 목록에 {collaboratorLabel} 추가",
     "No collaborators available" : "가능한 공동 작업자 없음",
     "Failed to fetch album." : "앨범을 가져오기에 실패했습니다.",
+    "Invalid location selected" : "잘못된 위치가 선택됨",
     "Failed to create {albumName}." : "{albumName} 앨범을 만들지 못했습니다.",
     "Failed to rename {currentAlbumName} to {newAlbumName}." : "{currentAlbumName}에서 {newAlbumName}(으)로 이름을 바꾸지 못했습니다."
 },"pluralForm" :"nplurals=1; plural=0;"

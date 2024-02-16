@@ -40,9 +40,6 @@ OC.L10N.register(
     "Add to {destination}" : "Føj til {destination}",
     "_{years} year ago_::_{years} years ago_" : ["{years} år siden","{years} år siden"],
     "Enable squared photos view" : "Aktiver kvadratisk fotovisning",
-    "Default Photos upload and Albums location" : "Standard upload af fotos og albumplacering",
-    "Select the default location for your media" : "Vælg standardplaceringen for dine medier",
-    "Invalid location selected" : "Ugyldig placering er valgt",
     "View" : "Vis",
     "Unselect all" : "Fravælg alle",
     "Remove from favorites" : "Fjern fra favoritter",
@@ -64,6 +61,9 @@ OC.L10N.register(
     "_Share with %n user_::_Share with %n users_" : ["Del med %n bruger","Del med %n brugere"],
     "The file is in the favorites" : "Filen er i favoritterne",
     "Open the \"{name}\" sub-directory" : "Åbn \"{name}\" under direktoriet",
+    "Default Photos upload and Albums location" : "Standard upload af fotos og albumplacering",
+    "Select the default location for your media" : "Vælg standardplaceringen for dine medier",
+    "Invalid location selected" : "Ugyldig placering er valgt",
     "Shared albums" : "Delte album"
 },
 "nplurals=2; plural=(n != 1);");
