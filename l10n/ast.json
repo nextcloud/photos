@@ -43,6 +43,7 @@
     "This collection does not exist" : "Esta coleición nun esiste",
     "An error occurred" : "Prodúxose un error",
     "_{years} year ago_::_{years} years ago_" : ["hai {years} añu","hai {years} años"],
+    "Home" : "Aniciu",
     "View" : "Ver",
     "_%n photo_::_%n photos_" : ["%n semeya","%n semeyes"],
     "This album does not have any photos or videos yet!" : "¡Esti álbum nun tien nenguna semeya nin nengún videu!",

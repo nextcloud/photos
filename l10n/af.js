@@ -14,6 +14,7 @@ OC.L10N.register(
     "An error occurred" : "'n Fout het voorgekom",
     "Favorite" : "Gunsteling",
     "Go back" : "Gaan terug",
+    "Home" : "Tuis",
     "View" : "Bekyk",
     "Remove from favorites" : "Verwyder uit gunstelinge",
     "Add" : "Voeg by",

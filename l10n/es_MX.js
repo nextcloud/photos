@@ -25,6 +25,7 @@ OC.L10N.register(
     "Dates" : "Fechas",
     "Home" : "Inicio",
     "View" : "Ver",
+    "Unselect all" : "Desmarcar todo",
     "Remove from favorites" : "Eliminar de favoritos",
     "No photos in here" : "No hay fotos aquí",
     "No tags yet" : "Aún no hay etiquetas",
