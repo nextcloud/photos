@@ -10,6 +10,7 @@ OC.L10N.register(
     "Shared by" : "Tərəfindən yayımlanıb",
     "Group" : "Qrup",
     "Favorite" : "İstəkli",
+    "Home" : "Ev",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "Əlavə etmək",
     "Details" : "Detallar"
