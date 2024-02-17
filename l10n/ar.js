@@ -64,6 +64,7 @@ OC.L10N.register(
     "There are no photos or videos yet!" : "لا توجد أي صور أو فيديوهات بعدُ!",
     "_{years} year ago_::_{years} years ago_" : ["سنوات {years} مضت","سنة {years} مضت","سنوات {years} مضت","سنوات {years} مضت","سنوات {years} مضت","سنوات {years} مضت"],
     "Enable squared photos view" : "تفعيل عرض الصور المربعة",
+    "Home" : "الرئيسية",
     "Choose default Photos upload and Albums location" : "اختر افتراضي رفع الصور وموقع الألبومات",
     "View" : "عرض",
     "_%n photo_::_%n photos_" : ["%n صور","%n صورة","%n صور","%n صور","%n صور","%n صور"],
