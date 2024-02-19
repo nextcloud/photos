@@ -49,4 +49,14 @@
     <background-jobs>
         <job>OCA\Photos\Jobs\AutomaticPlaceMapperJob</job>
     </background-jobs>
+
+    <repair-steps>
+        <install>
+            <step>OCA\Photos\RepairStep\InitMetadata</step>
+        </install>
+        <post-migration>
+            <step>OCA\Photos\RepairStep\InitMetadata</step>
+        </post-migration>
+    </repair-steps>
+
 </info>
