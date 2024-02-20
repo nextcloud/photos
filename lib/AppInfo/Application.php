@@ -44,8 +44,6 @@ use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Files\Events\Node\NodeDeletedEvent;
 use OCP\FilesMetadata\Event\MetadataBackgroundEvent;
 use OCP\FilesMetadata\Event\MetadataLiveEvent;
-use OCP\FilesMetadata\IFilesMetadataManager;
-use OCP\FilesMetadata\Model\IMetadataValueWrapper;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\Group\Events\UserRemovedEvent;
 use OCP\Security\CSP\AddContentSecurityPolicyEvent;
@@ -112,8 +110,5 @@ class Application extends App implements IBootstrap {
 	}
 
 	public function boot(IBootContext $context): void {
-		/** @var IFilesMetadataManager $metadataManager */
-		$metadataManager = $context->getServerContainer()->get(IFilesMetadataManager::class);
-		$metadataManager->initMetadata('photos-original_date_time', IMetadataValueWrapper::TYPE_INT, true, IMetadataValueWrapper::EDIT_FORBIDDEN);
 	}
 }
