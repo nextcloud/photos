@@ -71,6 +71,7 @@
     "Select the default upload location for your media" : "Välj standarduppladdningsplats för ditt media",
     "View" : "Visa",
     "Media folder" : "Mediamapp",
+    "Upload folder" : "Ladda upp mapp",
     "Choose the folder where photos and albums are uploaded to." : "Välj mapp dit foton och album laddas upp.",
     "_%n photo_::_%n photos_" : ["%n bild","%n bilder"],
     "Unselect all" : "Avmarkera alla",
