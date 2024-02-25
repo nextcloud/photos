@@ -19,7 +19,7 @@ OC.L10N.register(
     "Copy public link" : "Còpia ligòngiu pùblicu",
     "An error occurred" : "B'at àpidu un'errore",
     "Favorite" : "Preferidu",
-    "Open the full size \"{name}\" image" : "Aberi s'imàgine \"{name}\" a mannària prena",
+    "Open the full size \"{name}\" image" : "Aberi s'immàgine \"{name}\" a mannària prena",
     "Go back" : "In segus",
     "Back to {folder}" : "Torra a {folder}",
     "Share this folder" : "Cumpartzi custa cartella",
