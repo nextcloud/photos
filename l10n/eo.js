@@ -4,6 +4,7 @@ OC.L10N.register(
     "Public link" : "Publika ligilo",
     "Photos" : "Fotoj",
     "Videos" : "Videaĵoj",
+    "People" : "Homoj",
     "Folders" : "Dosierujoj",
     "Favorites" : "Pliŝataĵoj",
     "Shared with you" : "Kunhavata kun vi",
