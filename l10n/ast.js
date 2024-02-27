@@ -44,6 +44,7 @@ OC.L10N.register(
     "Share via public link" : "Compartir per un enllaz públicu",
     "This collection does not exist" : "Esta coleición nun esiste",
     "An error occurred" : "Prodúxose un error",
+    "Favorite" : "Meter en Favoritos",
     "_{years} year ago_::_{years} years ago_" : ["hai {years} añu","hai {years} años"],
     "Home" : "Aniciu",
     "View" : "Ver",
