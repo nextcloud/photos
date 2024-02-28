@@ -14,7 +14,7 @@
 ## 🚀 Installation
 
 In your Nextcloud, simply enable the Photos app through the Apps management.
-The Nextcloud Photos app is only included in nextcloud v18 and higher.
+The Nextcloud Photos app is included in Nextcloud 18 and higher.
 
 Optional add-ons that make the Photos app even better:
 
