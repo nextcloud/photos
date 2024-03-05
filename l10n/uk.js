@@ -130,7 +130,7 @@ OC.L10N.register(
     "_%n photos_::_%n photos_" : ["%n фото","%n фотографії","%n фотографії","%n фотографії"],
     "Failed to fetch collection." : "Не вдалося отримати колекцію.",
     "Failed to fetch collections list." : "Не вдалося отримати список колекцій.",
-    "Failed to fetch faces list." : "Не вдалося отримати список облич.",
+    "Failed to fetch faces list." : "Не вдалося отримати список зображень облич.",
     "All your media" : "Усі ваші зображення та відео",
     "Album {title}" : "Альбом {title}",
     "Shared Albums" : "Спільні альбоми",
