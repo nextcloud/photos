@@ -24,10 +24,15 @@
 
 <template>
 	<!-- Errors handlers -->
-	<NcEmptyContent v-if="errorFetchingFiles" :name="t('photos', 'An error occurred')">
-		<AlertCircle slot="icon" />
-		<span v-if="errorFetchingFiles === 404" slot="description">{{ t('photos', 'The source folder does not exists') }}</span>
-	</NcEmptyContent>
+	<div v-if="errorFetchingFiles" class="timeline__empty-content">
+		<NcEmptyContent v-if="errorFetchingFiles === 404" :name="t('photos', 'The source folder does not exists')">
+			<FolderAlertOutline slot="icon" />
+			<PhotosSourceLocationsSettings slot="action" class="timeline__update_source_directory" />
+		</NcEmptyContent>
+		<NcEmptyContent v-else :name="t('photos', 'An error occurred')">
+			<AlertCircle slot="icon" />
+		</NcEmptyContent>
+	</div>
 
 	<div v-else class="timeline">
 		<!-- Header -->
@@ -146,6 +151,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import Delete from 'vue-material-design-icons/Delete.vue'
 import PlusBoxMultiple from 'vue-material-design-icons/PlusBoxMultiple.vue'
@@ -155,6 +161,8 @@ import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
 
 import { NcModal, NcActions, NcActionButton, NcButton, NcEmptyContent, isMobile } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
+import { translate } from '@nextcloud/l10n'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
 import { allMimes } from '../services/AllowedMimes.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
@@ -167,8 +175,7 @@ import AlbumPicker from '../components/Albums/AlbumPicker.vue'
 import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import ActionDownload from '../components/Actions/ActionDownload.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-import { translate } from '@nextcloud/l10n'
-import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
 import { configChangedEvent } from '../store/userConfig.js'
 
 export default {
@@ -179,6 +186,7 @@ export default {
 		Download,
 		Close,
 		Plus,
+		FolderAlertOutline,
 		NcEmptyContent,
 		NcModal,
 		NcActions,
@@ -191,6 +199,7 @@ export default {
 		ActionFavorite,
 		ActionDownload,
 		HeaderNavigation,
+		PhotosSourceLocationsSettings,
 		AlertCircle,
 	},
 
@@ -318,6 +327,22 @@ export default {
 .timeline {
 	display: flex;
 	flex-direction: column;
+
+	&__empty-content {
+		height: 100%;
+
+		.empty-content {
+			height: 100%;
+		}
+
+		.timeline__update_source_directory {
+			align-items: center;
+
+			:deep(.folder) {
+				min-width: unset;
+			}
+		}
+	}
 
 	&__header {
 		&__left {
