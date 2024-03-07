@@ -41,6 +41,8 @@
 				<!-- Preload large preview for near visible files -->
 				<!-- Preload small preview for further away files -->
 				<template v-if="initialized">
+					<canvas v-if="hasBlurhash && !loadedSmall && !loadedLarge" ref="canvas" class="file__blurhash" />
+
 					<img v-if="!loadedLarge && (loadedSmall || (distance < 5 && !errorSmall))"
 						ref="imgSmall"
 						:key="`${file.basename}-small`"
@@ -81,11 +83,12 @@
 <script>
 import VideoIcon from 'vue-material-design-icons/Video.vue'
 import PlayCircleIcon from 'vue-material-design-icons/PlayCircle.vue'
-import FavoriteIcon from './FavoriteIcon.vue'
+import { decode } from 'blurhash'
 
 import { generateUrl } from '@nextcloud/router'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 
+import FavoriteIcon from './FavoriteIcon.vue'
 import { isCachedPreview } from '../services/PreviewService.js'
 
 export default {
@@ -155,6 +158,9 @@ export default {
 		isVisible() {
 			return this.distance === 0
 		},
+		hasBlurhash() {
+			return this.file.metadataBlurhash !== undefined
+		},
 	},
 
 	async mounted() {
@@ -164,6 +170,10 @@ export default {
 		])
 
 		this.initialized = true
+
+		await this.$nextTick() // Wait for next tick to have the canvas in the DOM
+
+		this.drawBlurhash()
 	},
 
 	beforeDestroy() {
@@ -211,6 +221,21 @@ export default {
 				return generateUrl(`/apps/photos/api/v1/preview/${this.file.fileid}?etag=${this.decodedEtag}&x=${size}&y=${size}`)
 			}
 		},
+		drawBlurhash() {
+			if (!this.hasBlurhash || !this.$refs.canvas) {
+				return
+			}
+
+			const width = this.$refs.canvas.width
+			const height = this.$refs.canvas.height
+
+			const pixels = decode(this.file.metadataBlurhash, width, height)
+
+			const ctx = this.$refs.canvas.getContext('2d')
+			const imageData = ctx.createImageData(width, height)
+			imageData.data.set(pixels)
+			ctx.putImageData(imageData, 0, 0)
+		},
 	},
 
 }
@@ -242,6 +267,7 @@ export default {
 			outline-offset: -4px;
 			pointer-events: none;
 		}
+
 		.selection-checkbox {
 			opacity: 1;
 		}
@@ -254,8 +280,17 @@ export default {
 		outline: none; // Override global focus state.
 		display: flex; // Fill parent size
 
+		&__blurhash {
+			position: absolute;
+			top: 0;
+			height: 100%;
+			width: 100%;
+			object-fit: cover;
+		}
+
 		&__images {
-			display: contents;
+			width: 100%;
+			height: 100%;
 
 			.icon-overlay {
 				position: absolute;
@@ -277,36 +312,6 @@ export default {
 				object-fit: cover;
 				position: absolute;
 				color: transparent; /// Hide alt='' text when loading.
-			}
-
-			.loading-overlay {
-				position: absolute;
-				height: 100%;
-				width: 100%;
-				display: flex;
-				align-content: center;
-				align-items: center;
-				justify-content: center;
-
-				svg {
-					width: 70%;
-					height: 70%;
-				}
-			}
-		}
-
-		&__hidden-description {
-			position: absolute;
-			left: -10000px;
-			top: -10000px;
-			width: 1px;
-			height: 1px;
-			overflow: hidden;
-
-			&.show {
-				position: initial;
-				width: fit-content;
-				height: fit-content;
 			}
 		}
 	}
