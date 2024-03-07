@@ -58,6 +58,7 @@
     "There are no photos or videos yet!" : "Es gibt noch keine Fotos oder Videos!",
     "_{years} year ago_::_{years} years ago_" : ["Vor {years} Jahr","Vor {years} Jahren"],
     "Enable squared photos view" : "Quadratische Fotoansicht aktivieren",
+    "Home" : "Startseite",
     "Choose default Photos upload and Albums location" : "Den Standardspeicherort für das Hochladen von Fotos und Alben wählen",
     "View" : "Ansicht",
     "_%n photo_::_%n photos_" : ["%n Foto","%n Fotos"],

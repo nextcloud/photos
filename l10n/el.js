@@ -43,6 +43,7 @@ OC.L10N.register(
     "There are no photos or videos yet!" : "Δεν υπάρχουν φωτογραφίες ή βίντεο ακόμη!",
     "_{years} year ago_::_{years} years ago_" : ["{years} χρόνο πριν","{years} χρόνια πριν"],
     "Enable squared photos view" : "Ενεργοποίηση προβολής τετραγωνικών φωτογραφιών",
+    "Home" : "Σπίτι",
     "View" : "Προβολή",
     "Unselect all" : "Αποεπιλογή όλων",
     "Delete album" : "Διαγραφή άλμπουμ",

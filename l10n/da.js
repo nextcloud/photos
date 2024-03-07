@@ -40,6 +40,7 @@ OC.L10N.register(
     "Add to {destination}" : "Føj til {destination}",
     "_{years} year ago_::_{years} years ago_" : ["{years} år siden","{years} år siden"],
     "Enable squared photos view" : "Aktiver kvadratisk fotovisning",
+    "Home" : "Hjemme",
     "View" : "Vis",
     "Unselect all" : "Fravælg alle",
     "Remove from favorites" : "Fjern fra favoritter",

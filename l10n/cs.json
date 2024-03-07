@@ -58,6 +58,7 @@
     "There are no photos or videos yet!" : "Zatím zde nejsou žádné fotky či videa!",
     "_{years} year ago_::_{years} years ago_" : ["Před {years} rokem","Před {years} roky","Před {years} lety","Před {years} roky"],
     "Enable squared photos view" : "Zapnout čtvercové zobrazení fotek",
+    "Home" : "Domů",
     "Choose default Photos upload and Albums location" : "Zvolte ýchozí umístění nahrávání fotek a alb",
     "View" : "Zobrazit",
     "_%n photo_::_%n photos_" : ["%n fotka","%n fotky","%n fotek","%n fotky"],

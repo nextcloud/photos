@@ -12,6 +12,7 @@ OC.L10N.register(
     "Shared by" : "Rannet gant",
     "Copy public link" : "Eilañ al liamm foran",
     "Favorite" : "Pennrollañ",
+    "Home" : "Degemer",
     "View" : "Gwell",
     "Remove from favorites" : "Diverkañañ eus ar pennrolloù",
     "Add" : "Ouzhpennañ",
