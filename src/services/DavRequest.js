@@ -30,6 +30,7 @@ const props = `
 	<nc:metadata-photos-size />
 	<nc:metadata-photos-original_date_time />
 	<nc:metadata-files-live-photo />
+	<nc:metadata-blurhash/>
 	<nc:has-preview />
 	<nc:realpath />
 	<nc:hidden />
