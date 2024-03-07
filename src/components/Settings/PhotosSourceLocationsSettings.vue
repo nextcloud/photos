@@ -21,8 +21,8 @@
  -->
 
 <template>
-	<div class="photos-locations">
-		<ul>
+	<div class="photos-locations-container">
+		<div class="photos-locations">
 			<PhotosFolder :path="photosSourceFolder" :root-folder-label="t('photos', 'All folders')" :root-folder-icon="FolderMultiple" />
 			<!-- TODO: uncomment when SEARCH on multiple folders is implemented. -->
 			<!-- <li v-for="(source, index) in photosSourceFolder"
@@ -32,7 +32,7 @@
 					:root-folder-label="t('photos', 'All folders')"
 					@remove-folder="removeSourceFolder(index)" />
 			</li> -->
-		</ul>
+		</div>
 
 		<NcButton :aria-label="t('photos', 'Choose a source Photos for the timelines')"
 			@click="debounceAddSourceFolder">
@@ -116,12 +116,12 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.photos-locations {
+.photos-locations-container {
 	display: flex;
 	flex-direction: column;
 	width: fit-content;
 
-	ul {
+	.photos-locations {
 		margin-bottom: 16px;
 	}
 }
