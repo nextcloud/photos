@@ -122,7 +122,6 @@ export default {
 	data() {
 		return {
 			initialized: false,
-			isDestroyed: false,
 			loadedSmall: false,
 			errorSmall: false,
 			loadedLarge: false,
@@ -163,6 +162,16 @@ export default {
 		},
 	},
 
+	watch: {
+		file() {
+			this.initialized = false
+			this.loadedSmall = false
+			this.errorSmall = false
+			this.loadedLarge = false
+			this.errorLarge = false
+		},
+	},
+
 	async mounted() {
 		[this.loadedSmall, this.loadedLarge] = await Promise.all([
 			await isCachedPreview(this.srcSmall),
@@ -177,8 +186,6 @@ export default {
 	},
 
 	beforeDestroy() {
-		this.isDestroyed = true
-
 		// cancel any pending load
 		if (this.$refs.imgSmall !== undefined) {
 			this.$refs.imgSmall.src = ''
