@@ -8,6 +8,7 @@ OC.L10N.register(
     "Shared by" : "Dijeli",
     "Group" : "Grupa",
     "Favorite" : "Favorit",
+    "Home" : "Početna stranica",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "Dodaj"
 },
