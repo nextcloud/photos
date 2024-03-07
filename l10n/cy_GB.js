@@ -14,6 +14,7 @@ OC.L10N.register(
     "An error occurred" : "Digwyddodd gwall",
     "Favorite" : "Ffefryn",
     "Go back" : "Nôl",
+    "Home" : "Cartref",
     "View" : "Golwg",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "Ychwanegu",
