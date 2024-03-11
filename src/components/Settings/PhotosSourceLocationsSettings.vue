@@ -34,7 +34,7 @@
 			</li> -->
 		</div>
 
-		<NcButton :aria-label="t('photos', 'Choose a source Photos for the timelines')"
+		<NcButton :aria-label="t('photos', 'Choose a Photos source for the timelines')"
 			@click="debounceAddSourceFolder">
 			<!-- TODO: uncomment when SEARCH on multiple folders is implemented. -->
 			<!-- <template #icon>
