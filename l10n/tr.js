@@ -66,7 +66,6 @@ OC.L10N.register(
     "Enable squared photos view" : "Kare fotoğraf görünümü kullanılsın",
     "Delete source directory" : "Kaynak klasörü sil",
     "All folders" : "Tüm klasörler",
-    "Choose a source Photos for the timelines" : "Zaman akışları için bir fotoğraf kaynağı seçin",
     "Choose a different folder" : "Farklı bir klasör seçin",
     "Select a source folder for your media" : "Ortamlarınız için bir kaynak klasör seçin",
     "Home" : "Giriş",
