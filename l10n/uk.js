@@ -66,7 +66,6 @@ OC.L10N.register(
     "Enable squared photos view" : "Увімкнути перегляд фотографій у квадраті",
     "Delete source directory" : "Вилучити каталог джерела",
     "All folders" : "Усі каталоги",
-    "Choose a source Photos for the timelines" : "Виберіть світлини для хронології",
     "Choose a different folder" : "Виберіть інший каталог",
     "Select a source folder for your media" : "Виберіть каталог джерела для ваших світлин чи відеозаписів",
     "Home" : "Домівка",
