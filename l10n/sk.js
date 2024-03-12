@@ -66,7 +66,6 @@ OC.L10N.register(
     "Enable squared photos view" : "Zapnúť štvorcové zobrazenie fotiek",
     "Delete source directory" : "Vymazať zdrojový adresár",
     "All folders" : "Všetky adresáre",
-    "Choose a source Photos for the timelines" : "Vybrať zdrojové fotografie pre časové osi",
     "Choose a different folder" : "Vyberať iný adresár",
     "Select a source folder for your media" : "Vyberte zdrojový adresár pre vaše médiá.",
     "Home" : "Domov",

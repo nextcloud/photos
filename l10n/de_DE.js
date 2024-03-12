@@ -66,7 +66,6 @@ OC.L10N.register(
     "Enable squared photos view" : "Quadratische Fotoansicht aktivieren",
     "Delete source directory" : "Quellverzeichnis löschen",
     "All folders" : "Alle Ordner",
-    "Choose a source Photos for the timelines" : "Quelle in Photos für die Zeitleisten auswählen",
     "Choose a different folder" : "Anderen Ordner wählen",
     "Select a source folder for your media" : "Quellordner für Ihre Medien wählen",
     "Home" : "Startseite",
