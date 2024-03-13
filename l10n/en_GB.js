@@ -66,6 +66,7 @@ OC.L10N.register(
     "Enable squared photos view" : "Enable squared photos view",
     "Delete source directory" : "Delete source directory",
     "All folders" : "All folders",
+    "Choose a Photos source for the timelines" : "Choose a Photos source for the timelines",
     "Choose a different folder" : "Choose a different folder",
     "Select a source folder for your media" : "Select a source folder for your media",
     "Home" : "Home",
