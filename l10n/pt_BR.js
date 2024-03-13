@@ -66,6 +66,7 @@ OC.L10N.register(
     "Enable squared photos view" : "Ativar exibição de fotos quadradas",
     "Delete source directory" : "Excluir diretório de origem",
     "All folders" : "Todas as pastas",
+    "Choose a Photos source for the timelines" : "Escolha uma fonte de fotos para os cronogramas",
     "Choose a different folder" : "Escolha uma pasta diferente",
     "Select a source folder for your media" : "Selecione uma pasta de origem para sua mídia",
     "Home" : "Início",
