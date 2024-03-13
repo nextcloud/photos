@@ -66,6 +66,7 @@ OC.L10N.register(
     "Enable squared photos view" : "Aktiver visning med kvadratiske bilder",
     "Delete source directory" : "Slett kildekatalog",
     "All folders" : "Alle mapper",
+    "Choose a Photos source for the timelines" : "Velg en fotokilde for tidslinjer",
     "Choose a different folder" : "Velg en annen mappe",
     "Select a source folder for your media" : "Velg en kildemappe for mediene dine",
     "Home" : "Hjem",

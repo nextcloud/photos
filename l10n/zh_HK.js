@@ -66,6 +66,7 @@ OC.L10N.register(
     "Enable squared photos view" : "啟用方形照片顯示",
     "Delete source directory" : "刪除來源目錄",
     "All folders" : "所有資料夾",
+    "Choose a Photos source for the timelines" : "選擇時間軸的照片來源",
     "Choose a different folder" : "選擇其他資料夾",
     "Select a source folder for your media" : "選擇您媒體的來源資料夾",
     "Home" : "主頁",

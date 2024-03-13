@@ -66,6 +66,7 @@ OC.L10N.register(
     "Enable squared photos view" : "Укључи квадратасти приказ слика",
     "Delete source directory" : "Обриши изворни директоријум",
     "All folders" : "Сви фолдери",
+    "Choose a Photos source for the timelines" : "Изаберите извор који ће Фотографије употребити за временске линије",
     "Choose a different folder" : "Изаберите неки други фолдер",
     "Select a source folder for your media" : "Изаберите извирни фолдер за своје медије",
     "Home" : "Почетна",
