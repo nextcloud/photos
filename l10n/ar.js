@@ -66,6 +66,7 @@ OC.L10N.register(
     "Enable squared photos view" : "تفعيل عرض الصور المربعة",
     "Delete source directory" : "إحذف الدليل المصدر",
     "All folders" : "كل المجلدات",
+    "Choose a Photos source for the timelines" : "حدِّد مصدر الصور للخط الزمني",
     "Choose a different folder" : "إختَر مجلداً مختلفاً",
     "Select a source folder for your media" : "إختَر المجلد المصدر لوسائطك ",
     "Home" : "الرئيسية",
