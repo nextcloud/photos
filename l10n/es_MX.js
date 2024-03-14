@@ -11,6 +11,7 @@ OC.L10N.register(
     "Favorites" : "Favoritos",
     "Shared with you" : "Compartido con usted",
     "Tags" : "Etiquetas",
+    "Places" : "Lugares",
     "Back" : "Atrás",
     "Save" : "Guardar",
     "Shared by" : "Compartido por",
