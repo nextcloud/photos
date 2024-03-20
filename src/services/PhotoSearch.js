@@ -31,7 +31,6 @@ import store from '../store/index.js'
 /**
  * List files from a folder and filter out unwanted mimes
  *
- * @param {object} path the lookup path
  * @param {object} [options] used for the cancellable requests
  * @param {number} [options.firstResult=0] Index of the first result that we want (starts at 0)
  * @param {number} [options.nbResults=200] The number of file to fetch

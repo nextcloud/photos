@@ -13,6 +13,7 @@ webpackConfig.entry = {
 	main: path.join(__dirname, 'src', 'main.js'),
 	public: path.join(__dirname, 'src', 'public.js'),
 	sidebar: path.join(__dirname, 'src', 'sidebar.js'),
+	dashboard: path.join(__dirname, 'src', 'dashboard.js'),
 }
 
 webpackRules.RULE_JS.exclude = BabelLoaderExcludeNodeModulesExcept([
