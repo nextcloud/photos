@@ -107,7 +107,7 @@ export default {
 		},
 		selected: {
 			type: Boolean,
-			required: true,
+			default: false,
 		},
 		allowSelection: {
 			type: Boolean,
@@ -115,7 +115,7 @@ export default {
 		},
 		distance: {
 			type: Number,
-			required: true,
+			default: 0,
 		},
 	},
 
@@ -221,7 +221,7 @@ export default {
 		},
 
 		getItemURL(size) {
-			const token = this.$route.params.token
+			const token = this.$route?.params.token
 			if (token) {
 				return generateUrl(`/apps/photos/api/v1/publicPreview/${this.file.fileid}?etag=${this.decodedEtag}&x=${size}&y=${size}&token=${token}`)
 			} else {

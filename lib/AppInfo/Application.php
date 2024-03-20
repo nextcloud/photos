@@ -28,6 +28,7 @@ namespace OCA\Photos\AppInfo;
 use OCA\DAV\Connector\Sabre\Principal;
 use OCA\DAV\Events\SabrePluginAuthInitEvent;
 use OCA\Files\Event\LoadSidebar;
+use OCA\Photos\Dashboard\OnThisDay;
 use OCA\Photos\Listener\AlbumsManagementEventListener;
 use OCA\Photos\Listener\CSPListener;
 use OCA\Photos\Listener\ExifMetadataProvider;
@@ -80,6 +81,7 @@ class Application extends App implements IBootstrap {
 	}
 
 	public function register(IRegistrationContext $context): void {
+		$context->registerDashboardWidget(OnThisDay::class);
 		/** Register $principalBackend for the DAV collection */
 		$context->registerServiceAlias('principalBackend', Principal::class);
 
