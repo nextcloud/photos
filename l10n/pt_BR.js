@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Public link" : "Link público",
     "Photos" : "Fotos",
+    "On This Day" : "Neste dia",
     "Your memories under your control" : "Suas memórias sob seu controle",
     "All media" : "Toda mídia",
     "Videos" : "Vídeos",
@@ -48,6 +49,9 @@ OC.L10N.register(
     "Failed to update album." : "Falha ao atualizar álbum.",
     "This collection does not exist" : "Esta coleção não existe",
     "An error occurred" : "Ocorreu um erro",
+    "No picture for this day" : "Nenhuma foto para este dia",
+    "Picture taken on this day will show up here." : "A foto tirada neste dia aparecerá aqui.",
+    "More photos from this day" : "Mais fotos deste dia",
     "_%n unassigned photo_::_%n unassigned photos_" : ["%nfoto não identificada","%nfotos não identificadas","%nfotos não identificadas"],
     "Favorite" : "Favorito",
     "Select image {imageName}" : "Selecionar imagem {imageName}",
