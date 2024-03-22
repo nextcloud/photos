@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Public link" : "رابط عمومي",
     "Photos" : "الصور",
+    "On This Day" : "في هذا اليوم",
     "Your memories under your control" : "ذكرياتك تحت يديك",
     "All media" : "كل الوسائط",
     "Videos" : "فيديوهات",
@@ -48,6 +49,9 @@ OC.L10N.register(
     "Failed to update album." : "تعذّر تحديث الألبوم.",
     "This collection does not exist" : "هذه المجموعة من العناصر collection غير موجودة",
     "An error occurred" : "طرأ هناك خطأ",
+    "No picture for this day" : "لا صور في هذا اليوم",
+    "Picture taken on this day will show up here." : "الصور الملتقطة في هذا اليوم ستظهر هنا.",
+    "More photos from this day" : "صور أخرى من هذا اليوم",
     "_%n unassigned photo_::_%n unassigned photos_" : ["%n صور غير معينة","%n صورة غير معينة","%n صور غير معينة","%n صور غير معينة","%n صور غير معينة","%n صور غير معينة"],
     "Favorite" : "المفضلة",
     "Select image {imageName}" : "إختر صورة {imageName}",

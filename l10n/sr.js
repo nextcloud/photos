@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Public link" : "Јавна веза",
     "Photos" : "Слике",
+    "On This Day" : "На данашњи дан",
     "Your memories under your control" : "Ваше успомене под Вашом контролом",
     "All media" : "Сви медији",
     "Videos" : "Видео снимци",
@@ -48,6 +49,9 @@ OC.L10N.register(
     "Failed to update album." : "Није успело ажурирање албума.",
     "This collection does not exist" : "Ова колекција не постоји",
     "An error occurred" : "Догодила се грешка",
+    "No picture for this day" : "Нема слика за данашњи дан",
+    "Picture taken on this day will show up here." : "Овде ће се појавити слика направљена на данашњи дан.",
+    "More photos from this day" : "Још слика за данас",
     "_%n unassigned photo_::_%n unassigned photos_" : ["%n недодељена фотографија","%n недодељене фотографије","%n недодељених фотографија"],
     "Favorite" : "Омиљени",
     "Select image {imageName}" : "Изабери слику {imageName}",
