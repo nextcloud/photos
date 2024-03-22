@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Public link" : "Offentlig länk",
     "Photos" : "Bilder",
+    "On This Day" : "På denna dag",
     "Your memories under your control" : "Dina minnen under din kontroll",
     "All media" : "All media",
     "Videos" : "Videor",
@@ -48,6 +49,9 @@ OC.L10N.register(
     "Failed to update album." : "Misslyckades att uppdatera album.",
     "This collection does not exist" : "Den här samlingen existerar ej",
     "An error occurred" : "Ett fel uppstod",
+    "No picture for this day" : "Ingen bild för denna dag",
+    "Picture taken on this day will show up here." : "Bild tagen den här dagen kommer att dyka upp här.",
+    "More photos from this day" : "Fler bilder från denna dag",
     "_%n unassigned photo_::_%n unassigned photos_" : ["%n ej tilldelat foto","%n ej tilldelade foton"],
     "Favorite" : "Favorit",
     "Select image {imageName}" : "Välj bild {imageName}",
