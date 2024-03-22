@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Public link" : "Öffentlicher Link",
     "Photos" : "Fotos",
+    "On This Day" : "An diesem Tag",
     "Your memories under your control" : "Ihre Erinnerungen unter Ihrer Kontrolle",
     "All media" : "Alle Medien",
     "Videos" : "Videos",
@@ -48,6 +49,9 @@ OC.L10N.register(
     "Failed to update album." : "Album konnte nicht aktualisiert werden.",
     "This collection does not exist" : "Diese Sammlung existiert nicht",
     "An error occurred" : "Es ist ein Fehler aufgetreten",
+    "No picture for this day" : "Kein bild für diesen Tag",
+    "Picture taken on this day will show up here." : "Ein Bild, das an diesem Tag aufgenommen wurde, wird hier angezeigt.",
+    "More photos from this day" : "Weitere Bilder von diesem Tag",
     "_%n unassigned photo_::_%n unassigned photos_" : ["%n nicht zugewiesenes Foto","%n nicht zugewiesene Fotos"],
     "Favorite" : "Favorisieren",
     "Select image {imageName}" : "Bild {imageName} auswählen",
