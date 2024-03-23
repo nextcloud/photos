@@ -10,7 +10,7 @@
 		size="large"
 		@update:open="(open) => $emit('update:open', open)">
 		<!-- Navigation containing the months available -->
-		<template #navigation="{ isCollapsed }">
+		<template v-if="monthsList.length > 0" #navigation="{ isCollapsed }">
 			<!-- Mobile view -->
 			<NcSelect v-if="isCollapsed"
 				v-model="targetMonth"
@@ -48,7 +48,7 @@
 					<UploadPicker :accept="allowedMimes"
 						:context="uploadContext"
 						:destination="photosLocationFolder"
-						:multiple="true"
+						multiple
 						@uploaded="refreshFiles" />
 					<NcButton type="primary" :disabled="loading || selectedFileIds.length === 0" @click="emitPickedEvent">
 						<template #icon>
@@ -243,6 +243,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 :deep(.photos-picker) {
+	display: flex;
 	// remove padding to move scrollbar to the very end
 	padding-inline-end: 0 !important;
 }
@@ -280,14 +281,11 @@ export default defineComponent({
 			padding: 8px 0 4px 0;
 		}
 
-		:deep .empty-content {
-			position: absolute;
-			width: 100%;
-			margin-top: 0;
-			height: 100%;
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
+		:deep(.empty-content) {
+			height: fit-content;
+			margin-block: 1em;
+			margin-inline-end: 12px;
+			width: calc(100% - 12px);
 		}
 	}
 
