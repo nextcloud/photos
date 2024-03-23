@@ -149,7 +149,7 @@ export default {
 					await this.$store.dispatch('fetchTagFiles', { id: this.tagId, signal: this.abortController.signal })
 				}
 			} catch (error) {
-				console.error(error)
+				logger.error(error)
 				this.error = true
 			} finally {
 				// done loading

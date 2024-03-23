@@ -205,8 +205,6 @@ export async function fetchCollectionFiles(path, options, extraProps = [], clien
 		}
 
 		logger.error('Error fetching collection files', { error })
-		console.error(error)
-
 		throw error
 	}
 }

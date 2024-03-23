@@ -4,6 +4,7 @@
  */
 
 import getGridConfig from '../services/GridConfig.js'
+import logger from '../services/logger.js'
 
 /**
  * Get the current used grid config
@@ -19,7 +20,7 @@ export default {
 		getGridConfig.$on('changed', val => {
 			this.gridConfig = val
 		})
-		console.debug(`[${appName}]`, 'Grid config', Object.assign({}, getGridConfig.gridConfig))
+		logger.debug('Grid config', { gridConfig: getGridConfig.gridConfig })
 		this.gridConfig = getGridConfig.gridConfig
 	},
 

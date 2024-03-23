@@ -176,7 +176,6 @@ const actions = {
 				} catch (error) {
 					logger.error(t('photos', 'Failed to delete {fileId}', { fileId }), { error })
 					showError(t('photos', 'Failed to delete {fileName}', { fileName: file.basename }))
-					console.error(error)
 					context.dispatch('appendFiles', [file])
 				} finally {
 					semaphore.release(symbol)

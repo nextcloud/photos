@@ -6,6 +6,7 @@ import Vue from 'vue'
 import { sortCompare } from '../utils/fileUtils.js'
 import getTaggedImages from '../services/TaggedImages.js'
 import getSystemTags from '../services/SystemTags.js'
+import logger from '../services/logger.js'
 
 const state = {
 	tags: {},
@@ -64,7 +65,7 @@ const mutations = {
 		const list = files.sort((a, b) => sortCompare(a, b, 'filesAssigned'))
 
 		// overwrite list
-		console.info(id, list)
+		logger.debug(`Overwrite list, id: ${id}`, { list })
 		Vue.set(state.tags[id], 'files', list.map(file => file.fileid))
 	},
 }
@@ -119,7 +120,9 @@ const actions = {
 			await context.dispatch('appendFiles', files)
 		} catch (error) {
 			if (error.response && error.response.status) {
-				console.error('Failed to get tag content', id, error.response)
+				logger.error(`Failed to get tag content, id: ${id}`, { error })
+			} else {
+				logger.error(error)
 			}
 		}
 	},

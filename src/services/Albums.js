@@ -168,8 +168,6 @@ export async function fetchAlbumContent(path, options, client = davClient) {
 		}
 
 		logger.error('Error fetching album files', { error })
-		console.error(error)
-
 		throw error
 	}
 }
