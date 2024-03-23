@@ -95,7 +95,7 @@
     "@vue/vue2-jest": "^29.2.6",
     "autoprefixer": "^10.4.14",
     "babel-loader-exclude-node-modules-except": "^1.2.1",
-    "cypress-visual-regression": "^4.0.0",
+    "cypress-visual-regression": "^5.0.0",
     "cypress-wait-until": "^2.0.1",
     "dockerode": "^3.3.4",
     "eslint-plugin-cypress": "^2.12.1",
