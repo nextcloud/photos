@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Public link" : "Public link",
     "Photos" : "Photos",
+    "On This Day" : "On This Day",
     "Your memories under your control" : "Your memories under your control",
     "All media" : "All media",
     "Videos" : "Videos",
@@ -48,6 +49,9 @@ OC.L10N.register(
     "Failed to update album." : "Failed to update album.",
     "This collection does not exist" : "This collection does not exist",
     "An error occurred" : "An error occurred",
+    "No picture for this day" : "No picture for this day",
+    "Picture taken on this day will show up here." : "Picture taken on this day will show up here.",
+    "More photos from this day" : "More photos from this day",
     "_%n unassigned photo_::_%n unassigned photos_" : ["%n unassigned photo","%n unassigned photos"],
     "Favorite" : "Favourite",
     "Select image {imageName}" : "Select image {imageName}",
