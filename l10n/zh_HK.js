@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Public link" : "公開連結",
     "Photos" : "照片",
+    "On This Day" : "當年今日",
     "Your memories under your control" : "完全自主掌控您珍貴的回憶",
     "All media" : "所有媒體",
     "Videos" : "影片",
@@ -48,6 +49,9 @@ OC.L10N.register(
     "Failed to update album." : "更新相簿失敗。",
     "This collection does not exist" : "此收藏品不存在",
     "An error occurred" : "發生錯誤",
+    "No picture for this day" : "這天沒有照片",
+    "Picture taken on this day will show up here." : "這天拍攝的照片將會顯示在此處。",
+    "More photos from this day" : "更多這天的照片",
     "_%n unassigned photo_::_%n unassigned photos_" : ["%n 個未指派的照片"],
     "Favorite" : "我的最愛",
     "Select image {imageName}" : "選擇圖像 {imageName}",
