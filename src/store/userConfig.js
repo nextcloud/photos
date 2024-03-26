@@ -21,7 +21,7 @@
  *
  */
 
-import { davGetClient, davGetDefaultPropfind, davResultToNode, davRootPath } from '@nextcloud/files'
+import { davGetDefaultPropfind, davResultToNode, davRootPath } from '@nextcloud/files'
 import { loadState } from '@nextcloud/initial-state'
 import { joinPaths } from '@nextcloud/paths'
 import { showError } from '@nextcloud/dialogs'
@@ -30,13 +30,14 @@ import { translate as t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
 
+import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 
 export const configChangedEvent = 'photos:user-config-changed'
 
 export async function getFolder(path) {
-	const davClient = davGetClient()
 	const location = joinPaths(davRootPath, path) + '/'
+
 	try {
 		const stat = await davClient.stat(location, { details: true, data: davGetDefaultPropfind() })
 		return davResultToNode(stat.data)

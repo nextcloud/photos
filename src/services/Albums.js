@@ -23,10 +23,10 @@
 import moment from '@nextcloud/moment'
 import { translate as t } from '@nextcloud/l10n'
 
-import defaultClient from '../services/DavClient.js'
 import logger from '../services/logger.js'
-import DavRequest from '../services/DavRequest.js'
 import { genFileInfo } from '../utils/fileUtils.js'
+import { davClient } from './DavClient.ts'
+import { getPropFind } from './DavRequest.ts'
 
 /**
  * @typedef {object} Album
@@ -68,7 +68,7 @@ function getDavRequest(extraProps = '') {
  * @param {import('webdav').WebDAVClient} client - The DAV client to use.
  * @return {Promise<Album|null>}
  */
-export async function fetchAlbum(path, options, extraProps = '', client = defaultClient) {
+export async function fetchAlbum(path, options, extraProps = '', client = davClient) {
 	try {
 		const response = await client.stat(path, {
 			data: getDavRequest(extraProps),
@@ -96,7 +96,7 @@ export async function fetchAlbum(path, options, extraProps = '', client = defaul
  * @param {import('webdav').WebDAVClient} client - The DAV client to use.
  * @return {Promise<Album[]>}
  */
-export async function fetchAlbums(path, options, extraProps = '', client = defaultClient) {
+export async function fetchAlbums(path, options, extraProps = '', client = davClient) {
 	try {
 		const response = await client.getDirectoryContents(path, {
 			data: getDavRequest(extraProps),
@@ -164,10 +164,10 @@ function formatAlbum(album) {
  * @param {import('webdav').WebDAVClient} client - The DAV client to use.
  * @return {Promise<Array>}
  */
-export async function fetchAlbumContent(path, options, client = defaultClient) {
+export async function fetchAlbumContent(path, options, client = davClient) {
 	try {
 		const response = await client.getDirectoryContents(path, {
-			data: DavRequest,
+			data: getPropFind(),
 			details: true,
 			...options,
 		})
@@ -185,8 +185,6 @@ export async function fetchAlbumContent(path, options, client = defaultClient) {
 		}
 
 		logger.error('Error fetching album files', { error })
-		console.error(error)
-
 		throw error
 	}
 }

@@ -54,6 +54,7 @@ import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 
 import TagCover from '../components/TagCover.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
+import logger from '../services/logger'
 
 export default {
 	name: 'Tags',
@@ -115,7 +116,7 @@ export default {
 					})
 				}
 			} catch (error) {
-				console.error(error)
+				logger.error(error)
 				this.error = true
 			} finally {
 				// done loading

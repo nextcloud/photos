@@ -23,9 +23,10 @@
 import { showError } from '@nextcloud/dialogs'
 import { translate as t } from '@nextcloud/l10n'
 
-import client from '../services/DavClient.js'
+import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
+import { davRemoteURL } from '@nextcloud/files'
 
 /**
  * Collections are indexed by their `filename`.
@@ -191,8 +192,8 @@ const actions = {
 				const symbol = await semaphore.acquire()
 
 				try {
-					await client.copyFile(
-						file.filename,
+					await davClient.copyFile(
+						file.source.replace(davRemoteURL, ''),
 						`${collection.filename}/${file.basename}`,
 					)
 				} catch (error) {
@@ -229,7 +230,7 @@ const actions = {
 				const symbol = await semaphore.acquire()
 
 				try {
-					await client.deleteFile(file.filename)
+					await davClient.deleteFile(file.filename)
 				} catch (error) {
 					context.commit('addFilesToCollection', { collectionFileName, fileIdsToAdd: [fileId] })
 
@@ -252,7 +253,7 @@ const actions = {
 	 */
 	async createCollection(context, { collection }) {
 		try {
-			await client.createDirectory(collection.filename)
+			await davClient.createDirectory(collection.filename)
 			context.commit('addCollections', { collections: [collection] })
 			return collection
 		} catch (error) {
@@ -280,7 +281,7 @@ const actions = {
 		try {
 			context.commit('addCollections', { collections: [newCollection] })
 			context.commit('setCollectionFiles', { collectionFileName: newCollection.filename, fileIds: context.state.collectionsFiles[collectionFileName] })
-			await client.moveFile(collection.filename, newCollection.filename)
+			await davClient.moveFile(collection.filename, newCollection.filename)
 			context.commit('removeCollections', { collectionFileNames: [collectionFileName] })
 			return newCollection
 		} catch (error) {
@@ -321,7 +322,7 @@ const actions = {
 		try {
 			context.commit('updateCollection', { collection: updatedCollection })
 
-			await client.customRequest(
+			await davClient.customRequest(
 				collection.filename,
 				{
 					method: 'PROPPATCH',
@@ -336,7 +337,7 @@ const actions = {
 								</d:prop>
 							</d:set>
 							</d:propertyupdate>`,
-				}
+				},
 			)
 
 			return updatedCollection
@@ -358,7 +359,7 @@ const actions = {
 	async deleteCollection(context, { collectionFileName }) {
 		try {
 			const collection = context.getters.collections[collectionFileName]
-			await client.deleteFile(collection.filename)
+			await davClient.deleteFile(collection.filename)
 			context.commit('removeCollections', { collectionFileNames: [collectionFileName] })
 		} catch (error) {
 			logger.error(t('photos', 'Failed to delete {collectionFileName}.', { collectionFileName }), { error })

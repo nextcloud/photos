@@ -1,13 +1,10 @@
 const path = require('path')
-const webpack = require('webpack')
 const webpackConfig = require('@nextcloud/webpack-vue-config')
 const webpackRules = require('@nextcloud/webpack-vue-config/rules')
-
-const SassGridConfig = require('./src/utils/SassGridConfig')
+const SassGridConfig = require('./src/utils/SassGridConfig.js')
 const BabelLoaderExcludeNodeModulesExcept = require('babel-loader-exclude-node-modules-except')
 
 const WorkboxPlugin = require('workbox-webpack-plugin')
-const { basename } = require('path')
 
 webpackConfig.entry = {
 	main: path.join(__dirname, 'src', 'main.js'),
@@ -47,21 +44,11 @@ webpackRules.RULE_RAW_SVGS = {
 webpackConfig.module.rules = Object.values(webpackRules)
 
 webpackConfig.plugins.push(
-	// patch webdav/dist/request.js
-	new webpack.NormalModuleReplacementPlugin(
-		/request(\.js)?/,
-		function (resource) {
-			if (resource.context.indexOf('webdav') > -1) {
-				console.debug('Patched request for webdav', basename(resource.contextInfo.issuer))
-				resource.request = path.join(__dirname, 'src/patchedRequest.js')
-			}
-		},
-	),
 	new WorkboxPlugin.GenerateSW({
 		swDest: 'photos-service-worker.js',
 		clientsClaim: true,
 		skipWaiting: true,
-		exclude: [new RegExp('.*')], // don't do precaching
+		exclude: [/.*/], // don't do precaching
 		inlineWorkboxRuntime: true,
 		sourcemap: false,
 
@@ -84,7 +71,7 @@ webpackConfig.plugins.push(
 				},
 			},
 		}],
-	})
+	}),
 )
 
 module.exports = webpackConfig

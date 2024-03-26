@@ -20,8 +20,8 @@
  *
  */
 
-import client from './DavClient.js'
 import { genFileInfo } from '../utils/fileUtils.js'
+import { davClient } from './DavClient.ts'
 
 /**
  * List system tags
@@ -31,7 +31,7 @@ import { genFileInfo } from '../utils/fileUtils.js'
  * @return {Promise<object[]>} the file list
  */
 export default async function(path, options = {}) {
-	const response = await client.getDirectoryContents('/systemtags-assigned/image', Object.assign({}, {
+	const response = await davClient.getDirectoryContents('/systemtags-assigned/image', Object.assign({}, {
 		data: `<?xml version="1.0"?>
 			<d:propfind  xmlns:d="DAV:"
 				xmlns:oc="http://owncloud.org/ns" xmlns:nc="http://nextcloud.org/ns">

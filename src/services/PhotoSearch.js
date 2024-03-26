@@ -20,13 +20,14 @@
  *
  */
 
-import { genFileInfo } from '../utils/fileUtils.js'
-import { getCurrentUser } from '@nextcloud/auth'
-import { allMimes } from './AllowedMimes.js'
-import client from './DavClient.js'
-import { props } from './DavRequest.js'
 import moment from '@nextcloud/moment'
 import store from '../store/index.js'
+
+import { allMimes } from './AllowedMimes.js'
+import { genFileInfo } from '../utils/fileUtils.js'
+import { getDefaultDavProps } from './DavRequest.ts'
+import { davClient } from './DavClient.ts'
+import { davRootPath } from '@nextcloud/files'
 
 /**
  * List files from a folder and filter out unwanted mimes
@@ -50,8 +51,6 @@ export default async function(options = {}) {
 		onlyFavorites: false,
 		...options,
 	}
-
-	const prefixPath = `/files/${getCurrentUser().uid}`
 
 	// generating the search or condition
 	// based on the allowed mimetypes
@@ -106,10 +105,6 @@ export default async function(options = {}) {
 	// .join('\n')
 
 	options = Object.assign({
-		method: 'SEARCH',
-		headers: {
-			'content-Type': 'text/xml',
-		},
 		data: `<?xml version="1.0" encoding="UTF-8"?>
 			<d:searchrequest xmlns:d="DAV:"
 				xmlns:oc="http://owncloud.org/ns"
@@ -119,12 +114,12 @@ export default async function(options = {}) {
 				<d:basicsearch>
 					<d:select>
 						<d:prop>
-							${props}
+							${getDefaultDavProps()}
 						</d:prop>
 					</d:select>
 					<d:from>
 						<d:scope>
-							<d:href>${prefixPath}/${store.state.userConfig.photosSourceFolder ?? '/Photos'}</d:href>
+							<d:href>${davRootPath}/${store.state.userConfig.photosSourceFolder ?? '/Photos'}</d:href>
 							<d:depth>infinity</d:depth>
 						</d:scope>
 					</d:from>
@@ -138,10 +133,6 @@ export default async function(options = {}) {
 						</d:and>
 					</d:where>
 					<d:orderby>
-						<d:order>
-							<d:prop><nc:metadata-photos-original_date_time/></d:prop>
-							<d:descending/>
-						</d:order>
 						<d:order>
 							<d:prop><d:getlastmodified/></d:prop>
 							<d:descending/>
@@ -157,7 +148,7 @@ export default async function(options = {}) {
 		details: true,
 	}, options)
 
-	const response = await client.getDirectoryContents('', options)
+	const response = await davClient.search('/', options)
 
-	return response.data.map(data => genFileInfo(data))
+	return response.data.results.map((data) => genFileInfo(data))
 }

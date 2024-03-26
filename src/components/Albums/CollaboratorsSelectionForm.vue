@@ -349,7 +349,7 @@ export default {
 			await this.updateAlbumCollaborators()
 			await this.fetchCollection(
 				this.albumFileName,
-				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />']
+				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />'],
 			)
 		},
 

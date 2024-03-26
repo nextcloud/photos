@@ -147,7 +147,7 @@ export default {
 		fetchAlbums() {
 			this.fetchCollections(
 				`/photos/${getCurrentUser()?.uid}/albums`,
-				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />']
+				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />'],
 			)
 		},
 

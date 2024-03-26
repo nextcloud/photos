@@ -229,7 +229,7 @@ export default {
 						// Disable use of generic file previews for public albums - for older versions of the Viewer app
 						hasPreview: false,
 					}),
-				]
+				],
 			)
 		},
 

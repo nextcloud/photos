@@ -35,11 +35,16 @@ __webpack_nonce__ = btoa(getRequestToken() ?? '')
 // eslint-disable-next-line no-undef, camelcase
 __webpack_public_path__ = generateFilePath('photos', '', 'js/')
 
-registerDavProperty('nc:metadata-photos-original_date_time', { nc: 'http://nextcloud.org/ns' })
-registerDavProperty('nc:metadata-photos-exif', { nc: 'http://nextcloud.org/ns' })
-registerDavProperty('nc:metadata-photos-ifd0', { nc: 'http://nextcloud.org/ns' })
-registerDavProperty('nc:metadata-photos-gps', { nc: 'http://nextcloud.org/ns' })
-registerDavProperty('nc:metadata-photos-place', { nc: 'http://nextcloud.org/ns' })
+;[
+	'nc:metadata-photos-size',
+	'nc:metadata-files-live-photo',
+	'nc:metadata-blurhash',
+	'nc:metadata-photos-original_date_time',
+	'nc:metadata-photos-exif',
+	'nc:metadata-photos-ifd0',
+	'nc:metadata-photos-gps',
+	'nc:metadata-photos-place',
+].forEach((prop) => registerDavProperty(prop, { nc: 'http://nextcloud.org/ns' }))
 
 // Init Photos tab component
 let PhotosTabView = null

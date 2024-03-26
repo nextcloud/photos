@@ -33,6 +33,7 @@ import faces from './faces.js'
 import folders from './folders.js'
 import systemtags from './systemtags.js'
 import userConfig, { getFolder } from './userConfig.js'
+import logger from '../services/logger.js'
 
 Vue.use(Vuex)
 export default new Store({
@@ -51,6 +52,12 @@ export default new Store({
 
 	plugins: [
 		(store) => {
+			// Initialize the `photosLocationFolder` state
+			getFolder(store.state.userConfig.photosLocation)
+				.then((value) => store.commit('updateUserConfig', { key: 'photosLocationFolder', value }))
+				.catch((error) => logger.error('Could not load photos location', { error }))
+
+			// Subscribe the store to load photos location folder when the location was changed
 			store.subscribe(async (mutation, state) => {
 				if (mutation.type === 'updateUserConfig' && mutation.payload.key === 'photosLocation') {
 					const photosLocationFolder = await getFolder(state.userConfig.photosLocation)

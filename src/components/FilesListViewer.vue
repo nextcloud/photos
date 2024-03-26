@@ -84,7 +84,7 @@ import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
 import TiledLayout from '../components/TiledLayout/TiledLayout.vue'
-import { fetchFile } from '../services/fileFetcher.js'
+import { fetchFile } from '../services/fileFetcher.ts'
 import VirtualScrolling from '../components/VirtualScrolling.vue'
 import EmptyBox from '../assets/Illustrations/empty.svg'
 
