@@ -61,6 +61,7 @@ OC.L10N.register(
     "Enable squared photos view" : "写真を矩形での表示を有効化",
     "Choose default Photos upload and Albums location" : "デフォルトの写真のアップロードとアルバムの場所を選択する",
     "View" : "表示",
+    "Upload folder" : "アップロードフォルダー",
     "_%n photo_::_%n photos_" : ["%n 写真"],
     "Unselect all" : "すべて選択解除",
     "Manage collaborators for this album" : "このアルバムのコラボレーターを管理する",
