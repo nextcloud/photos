@@ -13,6 +13,7 @@ OC.L10N.register(
     "On this day" : "På denne dag",
     "Shared with you" : "Shared with you",
     "Tags" : "Mærker",
+    "Places" : "Steder",
     "Photos settings" : "Indstillinger for fotos",
     "Name of the album" : "Albummets navn",
     "Location of the album" : "Placering af albummet",
