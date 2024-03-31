@@ -12,7 +12,7 @@ OC.L10N.register(
     "Favorites" : "Favoritter",
     "On this day" : "På denne dag",
     "Shared with you" : "Shared with you",
-    "Tags" : "Mærker",
+    "Tags" : "Tags",
     "Places" : "Steder",
     "Photos settings" : "Indstillinger for fotos",
     "Name of the album" : "Albummets navn",
