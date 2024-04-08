@@ -106,7 +106,7 @@
     "Merge person" : "Об’єднати особу",
     "Move to different person" : "Перемістити до іншої особи",
     "_Move photo to a different person_::_Move photos to a different person_" : ["Передати фотографії іншому користувачу","Передати фотографії іншим користувачам","Передати фотографії іншим користувачам","Передати фотографії іншим користувачам"],
-    "_Remove photo from person_::_Remove photos from person_" : ["Видалити фото з особи","Видалити фотографії з особи","Видалити фотографії з особи","Вилучити світлини особи"],
+    "_Remove photo from person_::_Remove photos from person_" : ["Вилучити світлину особи","Вилучити світлини особи","Вилучити світлини особи","Вилучити світлини особи"],
     "This might take some time depending on the size of your photo library." : "Це може зайняти деякий час залежно від розміру вашої бібліотеки фотографій.",
     "Recognized people will show up here" : "Тут відображатимуться розпізнані люди",
     "This folder does not exist" : "Цей каталог не існує",
