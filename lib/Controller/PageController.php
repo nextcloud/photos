@@ -5,6 +5,7 @@ declare(strict_types=1);
  * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
  *
  * @author John Molakvoæ <skjnldsv@protonmail.com>
+ * @author Thomas Citharel <nextcloud@tcit.fr>
  *
  * @license AGPL-3.0-or-later
  *
@@ -113,6 +114,7 @@ class PageController extends Controller {
 		$this->initialState->provideInitialState('recognize', $this->appManager->isEnabledForUser('recognize') === true);
 		$this->initialState->provideInitialState('systemtags', $this->appManager->isEnabledForUser('systemtags') === true);
 		$this->initialState->provideInitialState('showPeopleMenuEntry', $this->config->getAppValue('photos', 'showPeopleMenuEntry', 'true') === 'true');
+		$this->initialState->provideInitialState('appStoreEnabled', $this->config->getSystemValueBool('appstoreenabled', true));
 
 		// Provide user config
 		foreach (array_keys(UserConfigService::DEFAULT_CONFIGS) as $key) {
