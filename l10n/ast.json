@@ -1,6 +1,7 @@
 { "translations": {
     "Public link" : "Enllaz públicu",
     "Photos" : "Semeyes",
+    "On This Day" : "Tal día como güei",
     "Your memories under your control" : "Los tos recuerdos baxo control",
     "All media" : "Tolos medios",
     "Videos" : "Vídeos",
@@ -117,12 +118,20 @@
     "Could not load photos folder" : "Nun se puen cargar la carpeta de semeyes",
     "Go back to the previous view." : "Volver a la vista anterior.",
     "Create the album." : "Crea l'álbum.",
+    "_Share with %n user_::_Share with %n users_" : ["Compartir con %n usuariu","Compartir con %n usuarios"],
+    "Search for collaborators" : "Buscar collaboradores",
     "No collaborators available" : "Nun hai nengún collaborador disponible",
     "Failed to fetch album." : "Nun se pue dir en cata del álbum.",
     "The file is in the favorites" : "Esti ficheru ta en Favoritos",
     "Open the \"{name}\" sub-directory" : "Abrir el sodireutoriu «{name}»",
     "Invalid location selected" : "Seleicionóse una llocalización inválida",
+    "Photos directory" : "Direutoriu de datos",
+    "Add photos to the album" : "Amiesta semeyes al álbum",
     "Failed to fetch albums list." : "Nun se pue dir en cata de la llista d'álbumes.",
-    "Shared albums" : "Álbumes compartíos"
+    "Shared albums" : "Álbumes compartíos",
+    "Create a new album" : "Crear un álbum",
+    "Add selection to an album" : "Amiesta la seleición a un álbum",
+    "Failed to create {albumName}." : "Nun se pue crear «{albumName}».",
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Nun se pue renomar «{albumName}» a «{newAlbumName}»."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
