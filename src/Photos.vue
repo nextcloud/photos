@@ -2,6 +2,7 @@
  - @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
  -
  - @author John Molakvoæ <skjnldsv@protonmail.com>
+ - @author Thomas Citharel <nextcloud@tcit.fr>
  -
  - @license AGPL-3.0-or-later
  -
@@ -158,6 +159,7 @@ import videoplaceholder from './assets/video.svg'
 import areTagsInstalled from './services/AreTagsInstalled.js'
 import isMapsInstalled from './services/IsMapsInstalled.js'
 import isRecognizeInstalled from './services/IsRecognizeInstalled.js'
+import isAppStoreEnabled from './services/IsAppStoreEnabled.js'
 import logger from './services/logger.js'
 
 export default {
@@ -193,10 +195,10 @@ export default {
 
 			showLocationMenuEntry: getCurrentUser() === null
 				? false
-				: getCurrentUser().isAdmin || isMapsInstalled,
+				: (getCurrentUser().isAdmin && isAppStoreEnabled) || isMapsInstalled,
 			showPeopleMenuEntry: getCurrentUser() === null
 				? false
-				: (getCurrentUser().isAdmin && loadState('photos', 'showPeopleMenuEntry', true)) || isRecognizeInstalled,
+				: (getCurrentUser().isAdmin && loadState('photos', 'showPeopleMenuEntry', true) && isAppStoreEnabled) || isRecognizeInstalled,
 
 			openedSettings: false,
 		}
