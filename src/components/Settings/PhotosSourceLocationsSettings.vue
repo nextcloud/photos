@@ -23,24 +23,22 @@
 <template>
 	<div class="photos-locations-container">
 		<div class="photos-locations">
-			<PhotosFolder :path="photosSourceFolder" :root-folder-label="t('photos', 'All folders')" :root-folder-icon="FolderMultiple" />
-			<!-- TODO: uncomment when SEARCH on multiple folders is implemented. -->
-			<!-- <li v-for="(source, index) in photosSourceFolder"
+			<li v-for="(source, index) in photosSourceFolders"
 				:key="index">
 				<PhotosFolder :path="source"
-					:can-delete="photosSourceFolder.length !== 1"
+					:can-delete="photosSourceFolders.length !== 1"
 					:root-folder-label="t('photos', 'All folders')"
+					:root-folder-icon="FolderMultiple"
 					@remove-folder="removeSourceFolder(index)" />
-			</li> -->
+			</li>
 		</div>
 
-		<NcButton :aria-label="t('photos', 'Choose a Photos source for the timelines')"
+		<NcButton :aria-label="t('photos', 'Add a Photos source for the timelines')"
 			@click="debounceAddSourceFolder">
-			<!-- TODO: uncomment when SEARCH on multiple folders is implemented. -->
-			<!-- <template #icon>
+			<template #icon>
 				<Plus :size="20" />
-			</template> -->
-			{{ t('photos', 'Choose a different folder') }}
+			</template>
+			{{ t('photos', 'Add folder') }}
 		</NcButton>
 	</div>
 </template>
@@ -50,6 +48,7 @@ import debounce from 'debounce'
 import { defineComponent } from 'vue'
 
 import FolderMultiple from 'vue-material-design-icons/FolderMultiple.vue'
+import Plus from 'vue-material-design-icons/Plus.vue'
 
 import { NcButton } from '@nextcloud/vue'
 import { getFilePickerBuilder } from '@nextcloud/dialogs'
@@ -63,6 +62,7 @@ export default defineComponent({
 	components: {
 		NcButton,
 		PhotosFolder,
+		Plus,
 	},
 
 	data() {
@@ -72,9 +72,9 @@ export default defineComponent({
 	},
 
 	computed: {
-		/** @return {string} */
-		photosSourceFolder() {
-			return this.$store.state.userConfig.photosSourceFolder
+		/** @return {string[]} */
+		photosSourceFolders() {
+			return this.$store.state.userConfig.photosSourceFolders
 		},
 	},
 
@@ -97,17 +97,16 @@ export default defineComponent({
 
 		async addSourceFolder() {
 			const pickedFolder = await this.openFilePicker(t('photos', 'Select a source folder for your media'))
-			// TODO: uncomment when SEARCH on multiple folders is implemented.
-			// if (this.photosSourceFolder.includes(pickedFolder)) {
-			//   return
-			// }
-			this.$store.dispatch('updateUserConfig', { key: 'photosSourceFolder', value: pickedFolder })
+			if (this.photosSourceFolders.includes(pickedFolder)) {
+				return
+			}
+			this.$store.dispatch('updateUserConfig', { key: 'photosSourceFolders', value: [...this.photosSourceFolders, pickedFolder] })
 		},
 
 		removeSourceFolder(index) {
-			const folders = [...this.photosSourceFolder]
+			const folders = [...this.photosSourceFolders]
 			folders.splice(index, 1)
-			this.$store.dispatch('updateUserConfig', { key: 'photosSourceFolder', value: folders })
+			this.$store.dispatch('updateUserConfig', { key: 'photosSourceFolders', value: folders })
 		},
 
 		t,
@@ -123,6 +122,10 @@ export default defineComponent({
 
 	.photos-locations {
 		margin-bottom: 16px;
+
+		li {
+			list-style: none;
+		}
 	}
 }
 </style>
