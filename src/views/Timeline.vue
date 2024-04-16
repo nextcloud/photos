@@ -25,7 +25,7 @@
 <template>
 	<!-- Errors handlers -->
 	<div v-if="errorFetchingFiles" class="timeline__empty-content">
-		<NcEmptyContent v-if="errorFetchingFiles === 404" :name="t('photos', 'The source folder does not exists')">
+		<NcEmptyContent v-if="errorFetchingFiles === 404" :name="t('photos', 'One of the source folders does not exists')">
 			<FolderAlertOutline slot="icon" />
 			<PhotosSourceLocationsSettings slot="action" class="timeline__update_source_directory" />
 		</NcEmptyContent>
@@ -314,7 +314,7 @@ export default {
 		},
 
 		handleUserConfigChange({ key }) {
-			if (key === 'photosSourceFolder') {
+			if (key === 'photosSourceFolders') {
 				this.resetFetchFilesState()
 			}
 		},

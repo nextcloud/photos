@@ -21,12 +21,13 @@
  */
 
 import { genFileInfo } from '../utils/fileUtils.js'
-import { getCurrentUser } from '@nextcloud/auth'
 import { allMimes } from './AllowedMimes.js'
 import client from './DavClient.js'
 import { props } from './DavRequest.js'
 import moment from '@nextcloud/moment'
 import store from '../store/index.js'
+import { davRootPath } from '@nextcloud/files'
+import { joinPaths } from '@nextcloud/paths'
 
 /**
  * List files from a folder and filter out unwanted mimes
@@ -50,8 +51,6 @@ export default async function(options = {}) {
 		onlyFavorites: false,
 		...options,
 	}
-
-	const prefixPath = `/files/${getCurrentUser().uid}`
 
 	// generating the search or condition
 	// based on the allowed mimetypes
@@ -95,15 +94,14 @@ export default async function(options = {}) {
 			}).join('\n')}</d:or>`
 		: ''
 
-	// TODO: uncomment when SEARCH on multiple folders is implemented.
-	// const sourceFolders = store.state.userConfig.photosSourceFolder
-	// .map(folder => `
-	//   <d:scope>
-	//     <d:href>${davRootPath}/${folder}</d:href>
-	//     <d:depth>infinity</d:depth>
-	//   </d:scope>
-	// `)
-	// .join('\n')
+	const sourceFolders = store.state.userConfig.photosSourceFolders
+		.map(folder => `
+			<d:scope>
+				<d:href>${joinPaths(davRootPath, folder)}</d:href>
+				<d:depth>infinity</d:depth>
+			</d:scope>`
+		)
+		.join('\n')
 
 	options = Object.assign({
 		method: 'SEARCH',
@@ -123,10 +121,7 @@ export default async function(options = {}) {
 						</d:prop>
 					</d:select>
 					<d:from>
-						<d:scope>
-							<d:href>${prefixPath}/${store.state.userConfig.photosSourceFolder ?? '/Photos'}</d:href>
-							<d:depth>infinity</d:depth>
-						</d:scope>
+						${sourceFolders}
 					</d:from>
 					<d:where>
 						<d:and>
