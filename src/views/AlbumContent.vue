@@ -165,7 +165,7 @@
 <script>
 import { mapActions } from 'vuex'
 
-import { Folder, addNewFileMenuEntry, removeNewFileMenuEntry } from '@nextcloud/files'
+import { Folder, addNewFileMenuEntry, removeNewFileMenuEntry, davParsePermissions } from '@nextcloud/files'
 import { getCurrentUser } from '@nextcloud/auth'
 import { NcActions, NcActionButton, NcButton, NcDialog, NcModal, NcEmptyContent, NcActionSeparator, NcLoadingIcon, isMobile } from '@nextcloud/vue'
 import { UploadPicker, getUploader } from '@nextcloud/upload'
@@ -317,6 +317,7 @@ export default {
 				...this.album,
 				owner: getCurrentUser()?.uid ?? '',
 				source: this.album?.source ?? '',
+				permissions: davParsePermissions(this.album.permissions),
 			})
 		},
 	},
