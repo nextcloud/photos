@@ -70,7 +70,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { Upload, UploadPicker, getUploader } from '@nextcloud/upload'
-import { Folder as NcFolder } from '@nextcloud/files'
+import { Folder as NcFolder, davParsePermissions } from '@nextcloud/files'
 import { NcEmptyContent } from '@nextcloud/vue'
 import VirtualGrid from 'vue-virtual-grid'
 
@@ -147,6 +147,7 @@ export default {
 			return new NcFolder({
 				...this.folder,
 				source: decodeURI(this.folder.source),
+				permissions: davParsePermissions(this.folder.permissions),
 			})
 		},
 		folderContent() {
