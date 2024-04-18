@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Controller;
 
+use OCA\Files_Sharing\SharedStorage;
 use OCA\Photos\AppInfo\Application;
 use OCA\Photos\Album\AlbumMapper;
 use OCP\AppFramework\Controller;
@@ -90,6 +91,21 @@ class PreviewController extends Controller {
 		}
 
 		$nodes = $this->userFolder->getById($fileId);
+		$nodes = array_filter(
+			$nodes,
+			function ($node) {
+				$storage = $node->getStorage();
+				if (!$storage->instanceOfStorage(SharedStorage::class)) {
+					return true;
+				}
+
+				/** @var SharedStorage $storage */
+				$share = $storage->getShare();
+				$attributes = $share->getAttributes();
+
+				return $attributes === null || $attributes->getAttribute('permissions', 'download') !== false;
+			},
+		);
 
 		/** @var \OCA\Photos\Album\AlbumInfo[] */
 		$checkedAlbums = [];
