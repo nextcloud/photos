@@ -6,10 +6,19 @@
       <code>\OCA\GroupFolders\Mount\GroupFolderStorage</code>
     </UndefinedClass>
   </file>
+  <file src="lib/Controller/PreviewController.php">
+    <UndefinedDocblockClass occurrences="4">
+      <code>OCA\Files_Sharing\SharedStorage</code>
+    </UndefinedDocblockClass>
+    <UndefinedClass occurrences="1">
+      <code>SharedStorage</code>
+    </UndefinedClass>
+  </file>
   <file src="lib/Controller/PageController.php">
     <InvalidArgument occurrences="1">
       <code>new SearchQuery(new SearchComparison(ISearchComparison::COMPARE_EQUAL, 'systemtag', $tag-&gt;getName()), 0, 0, [], $user)</code>
     </InvalidArgument>
+
     <UndefinedClass occurrences="12">
       <code>$e</code>
       <code>LoadSidebar</code>
