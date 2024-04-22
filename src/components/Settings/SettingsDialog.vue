@@ -7,7 +7,7 @@
 			<CroppedLayoutSettings />
 		</NcAppSettingsSection>
 
-		<NcAppSettingsSection id="source-directories-settings" :name="t('photos', 'Media folder')">
+		<NcAppSettingsSection id="source-directories-settings" :name="t('photos', 'Media folders')">
 			<div class="setting-section-subline">
 				{{ t('photos', 'Choose the folders from where photos and videos are shown.') }}
 			</div>

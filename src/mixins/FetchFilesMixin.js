@@ -101,13 +101,20 @@ export default {
 				return fileIds
 			} catch (error) {
 				if (error.response?.status === 404) {
-					this.errorFetchingFiles = 404
-					const source = joinPaths(davRootPath, store.state.userConfig.photosSourceFolder ?? '/Photos') + '/'
-					logger.debug('Photo source does not exist, creating it.')
-					try {
-						await davGetClient().createDirectory(source)
-					} catch (error) {
-						logger.error('Fail to create source directory', { error })
+					const sources = store.state.userConfig.photosSourceFolders
+					for (const source of sources) {
+						if (error.response?.data?.match(`File with name /${source} could not be located`) === null) {
+							continue
+						}
+						logger.debug(`The ${source} folder does not exist, creating it.`)
+						try {
+							await davGetClient().createDirectory(joinPaths(davRootPath, source))
+							this.resetFetchFilesState()
+							return []
+						} catch (error) {
+							this.errorFetchingFiles = 404
+							logger.error('Fail to create source directory', { error })
+						}
 					}
 				} else if (error.code === 'ERR_CANCELED') {
 					return []
@@ -117,7 +124,6 @@ export default {
 
 				// cancelled request, moving on...
 				logger.error('Error fetching files', { error })
-				console.error(error)
 			} finally {
 				this.loadingFiles = false
 				this.fetchSemaphore.release(fetchSemaphoreSymbol)
