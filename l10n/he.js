@@ -30,6 +30,7 @@ OC.L10N.register(
     "Share this folder" : "שיתוף התיקייה הזו",
     "Dates" : "תאריכים",
     "Enable squared photos view" : "הפעלת תצוגת תמונות מרובעות",
+    "Add folder" : "הוספת תיקייה",
     "View" : "צפייה",
     "Remove from favorites" : "הסרה מהמועדפים",
     "No photos in here" : "אין כאן תמונות",

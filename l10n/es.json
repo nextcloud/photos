@@ -68,14 +68,12 @@
     "Enable squared photos view" : "Habilitar vista de fotos cuadradas",
     "Delete source directory" : "Eliminar directorio de origen",
     "All folders" : "Todas las carpetas",
-    "Choose a Photos source for the timelines" : "Elegir una fuente de fotos para las líneas de tiempo",
-    "Choose a different folder" : "Elija una carpeta diferente",
     "Select a source folder for your media" : "Elegir una carpeta fuente para sus medios",
     "Home" : "Inicio",
     "Choose default Photos upload and Albums location" : "Ubicación por defecto de subida para Fotos y Álbumes",
+    "Choose a different folder" : "Elija una carpeta diferente",
     "Select the default upload location for your media" : "Ubicación de subida predeterminada para sus medios",
     "View" : "Ver",
-    "Media folder" : "Carpeta de medios",
     "Upload folder" : "Subir carpeta",
     "Choose the folder where photos and albums are uploaded to." : "Elija la carpeta donde se cargan las fotos y los álbumes.",
     "_%n photo_::_%n photos_" : ["%n foto","%n fotos","%n fotos"],
@@ -122,7 +120,6 @@
     "No tags yet" : "Todavía no hay etiquetas",
     "Photos with tags will show up here" : "Las fotos con etiquetas aparecerán aquí",
     "Popular tags" : "Etiquetas populares",
-    "The source folder does not exists" : "La carpeta de origen no existe",
     "Add" : "Añadir",
     "Add to album" : "Añadir al álbum",
     "Delete selection" : "Borrar la selección",
@@ -170,6 +167,9 @@
     "Create a new album" : "Crear un álbum nuevo",
     "Add selection to an album" : "Añadir selección a un álbum",
     "Failed to create {albumName}." : "Fallo al crear {albumName}",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Fallo al renombrar {currentAlbumName} a {newAlbumName}."
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Fallo al renombrar {currentAlbumName} a {newAlbumName}.",
+    "Choose a Photos source for the timelines" : "Elegir una fuente de fotos para las líneas de tiempo",
+    "Media folder" : "Carpeta de medios",
+    "The source folder does not exists" : "La carpeta de origen no existe"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

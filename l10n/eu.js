@@ -66,13 +66,13 @@ OC.L10N.register(
     "Enable squared photos view" : "Gaitu lauki formako argazki ikuspegia",
     "Delete source directory" : "Ezabatu iturburuko direktorioa",
     "All folders" : "Karpeta guztiak",
-    "Choose a different folder" : "Aukeratu beste karpeta bat",
+    "Add folder" : "Gehitu karpeta",
     "Select a source folder for your media" : "Hautatu iturburu karpeta bat zure multimedia fitxategientzat",
     "Home" : "Etxea",
     "Choose default Photos upload and Albums location" : "Aukeratu argazkien igoera eta albumen kokaleku lehenetsia",
+    "Choose a different folder" : "Aukeratu beste karpeta bat",
     "Select the default upload location for your media" : "Hautatu lehenetsitako kokalekua zure multimedia fitxategiak igotzeko",
     "View" : "Ikusi",
-    "Media folder" : "Multimedia karpeta",
     "Choose the folders from where photos and videos are shown." : "Aukeratu zein karpetatatik erakutsiko diren argazki eta bideoak.",
     "Upload folder" : "Igo karpeta",
     "Choose the folder where photos and albums are uploaded to." : "Aukeratu zein karpetatara igoko diren argazki eta albumak.",
@@ -120,7 +120,6 @@ OC.L10N.register(
     "No tags yet" : "Etitketarik ez oraindik",
     "Photos with tags will show up here" : "Etiketadun argazkiak hemen erakutsiko dira",
     "Popular tags" : "Etiketa ohikoak",
-    "The source folder does not exists" : "Iturburuko karpeta ez da existitzen",
     "Add" : "Gehitu",
     "Add to album" : "Gehitu albumera",
     "Delete selection" : "Ezabatu hautatutakoak",
@@ -168,6 +167,8 @@ OC.L10N.register(
     "Create a new album" : "Sortu album berri bat",
     "Add selection to an album" : "Gehitu hautatutakoak album batera",
     "Failed to create {albumName}." : "Ezin izan da {albumName} sortu.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Ezin izan da {currentAlbumName} berrizendatu {newAlbumName} gisa."
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Ezin izan da {currentAlbumName} berrizendatu {newAlbumName} gisa.",
+    "Media folder" : "Multimedia karpeta",
+    "The source folder does not exists" : "Iturburuko karpeta ez da existitzen"
 },
 "nplurals=2; plural=(n != 1);");

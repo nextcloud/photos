@@ -41,6 +41,7 @@ OC.L10N.register(
     "Favorite" : "즐겨찾기",
     "Go back" : "뒤로 가기",
     "Dates" : "날짜",
+    "Add folder" : "폴더 추가",
     "Home" : "집",
     "View" : "보기",
     "Unselect all" : "모두 선택 해제",
