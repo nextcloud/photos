@@ -68,14 +68,13 @@
     "Enable squared photos view" : "Увімкнути перегляд фотографій у квадраті",
     "Delete source directory" : "Вилучити каталог джерела",
     "All folders" : "Усі каталоги",
-    "Choose a Photos source for the timelines" : "Виберіть джерело світлин для хронології",
-    "Choose a different folder" : "Виберіть інший каталог",
+    "Add folder" : "Додати теку",
     "Select a source folder for your media" : "Виберіть каталог джерела для ваших світлин чи відеозаписів",
     "Home" : "Домівка",
     "Choose default Photos upload and Albums location" : "Виберіть типове розташування для завантаження світлин та альбомів",
+    "Choose a different folder" : "Виберіть інший каталог",
     "Select the default upload location for your media" : "Виберіть типове розташування для завантаження ваших світлин чи відеозаписів",
     "View" : "Перегляд",
-    "Media folder" : "Каталог для світлин чи відеозаписів",
     "Choose the folders from where photos and videos are shown." : "Виберіть каталоги, з яких показувати світлини та відеозаписи.",
     "Upload folder" : "Завантажити каталог",
     "Choose the folder where photos and albums are uploaded to." : "Виберіть каталог, до якого завантажувати світлини та альбоми.",
@@ -123,7 +122,6 @@
     "No tags yet" : "Ще немає міток",
     "Photos with tags will show up here" : "Світлини з мітками буде показано тут",
     "Popular tags" : "Популярні мітки",
-    "The source folder does not exists" : "Каталог джерела відсутній",
     "Add" : "Додати",
     "Add to album" : "Додати в альбом",
     "Delete selection" : "Вилучити виділення",
@@ -171,6 +169,9 @@
     "Create a new album" : "Створіть новий альбом",
     "Add selection to an album" : "Додайте виділене в альбом",
     "Failed to create {albumName}." : "Не вдалося створити {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Не вдалося перейменувати {currentAlbumName} на {newAlbumName}."
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Не вдалося перейменувати {currentAlbumName} на {newAlbumName}.",
+    "Choose a Photos source for the timelines" : "Виберіть джерело світлин для хронології",
+    "Media folder" : "Каталог для світлин чи відеозаписів",
+    "The source folder does not exists" : "Каталог джерела відсутній"
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);"
 }
