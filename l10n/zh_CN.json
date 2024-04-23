@@ -64,14 +64,13 @@
     "Enable squared photos view" : "启用平铺照片视图",
     "Delete source directory" : "删除源目录",
     "All folders" : "所有文件夹",
-    "Choose a Photos source for the timelines" : "为时间线选择照片源",
-    "Choose a different folder" : "选择一个不同的文件夹",
+    "Add folder" : "添加文件夹",
     "Select a source folder for your media" : "为你的媒体文件选择一个源文件夹",
     "Home" : "家",
     "Choose default Photos upload and Albums location" : "选择预设照片上传与相册位置",
+    "Choose a different folder" : "选择一个不同的文件夹",
     "Select the default upload location for your media" : "选择你的媒体文件默认上传位置",
     "View" : "查看",
-    "Media folder" : "媒体文件夹",
     "Choose the folders from where photos and videos are shown." : "选择显示照片和视频的文件夹。",
     "Upload folder" : "上传文件夹",
     "Choose the folder where photos and albums are uploaded to." : "选择照片和相册上传的文件夹。",
@@ -119,7 +118,6 @@
     "No tags yet" : "尚无标签",
     "Photos with tags will show up here" : "带标签的照片将显示在此处",
     "Popular tags" : "常用标签",
-    "The source folder does not exists" : "源文件夹不存在",
     "Add" : "添加",
     "Add to album" : "添加至相册",
     "Delete selection" : "删除选择项",
@@ -167,6 +165,9 @@
     "Create a new album" : "创建新相册",
     "Add selection to an album" : "将所选项添加至相册",
     "Failed to create {albumName}." : "创建 {albumName} 失败",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "重命名 {currentAlbumName} 为 {newAlbumName} 的操作失败"
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "重命名 {currentAlbumName} 为 {newAlbumName} 的操作失败",
+    "Choose a Photos source for the timelines" : "为时间线选择照片源",
+    "Media folder" : "媒体文件夹",
+    "The source folder does not exists" : "源文件夹不存在"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
