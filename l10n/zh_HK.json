@@ -68,14 +68,12 @@
     "Enable squared photos view" : "啟用方形照片顯示",
     "Delete source directory" : "刪除來源目錄",
     "All folders" : "所有資料夾",
-    "Choose a Photos source for the timelines" : "選擇時間軸的照片來源",
-    "Choose a different folder" : "選擇其他資料夾",
     "Select a source folder for your media" : "選擇您媒體的來源資料夾",
     "Home" : "主頁",
     "Choose default Photos upload and Albums location" : "選擇默認照片上傳及相簿位置",
+    "Choose a different folder" : "選擇其他資料夾",
     "Select the default upload location for your media" : "選擇媒體的默認上傳位置",
     "View" : "檢視",
-    "Media folder" : "媒體資料夾",
     "Choose the folders from where photos and videos are shown." : "選擇顯示照片與影片的資料夾。",
     "Upload folder" : "上傳資料夾",
     "Choose the folder where photos and albums are uploaded to." : "選擇照片與相簿上傳到的資料夾。",
@@ -123,7 +121,6 @@
     "No tags yet" : "尚未加入標籤",
     "Photos with tags will show up here" : "此處會顯示照片的標籤",
     "Popular tags" : "熱門標籤",
-    "The source folder does not exists" : "來源資料夾不存在",
     "Add" : "添加",
     "Add to album" : "添加至相簿",
     "Delete selection" : "刪除所選",
@@ -171,6 +168,9 @@
     "Create a new album" : "創建新相簿",
     "Add selection to an album" : "將選擇範圍添加至相簿",
     "Failed to create {albumName}." : "創建 {albumName} 失敗。",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "重新命名 {currentAlbumName} 為 {newAlbumName} 失敗。"
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "重新命名 {currentAlbumName} 為 {newAlbumName} 失敗。",
+    "Choose a Photos source for the timelines" : "選擇時間軸的照片來源",
+    "Media folder" : "媒體資料夾",
+    "The source folder does not exists" : "來源資料夾不存在"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

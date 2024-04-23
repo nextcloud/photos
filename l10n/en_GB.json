@@ -68,14 +68,12 @@
     "Enable squared photos view" : "Enable squared photos view",
     "Delete source directory" : "Delete source directory",
     "All folders" : "All folders",
-    "Choose a Photos source for the timelines" : "Choose a Photos source for the timelines",
-    "Choose a different folder" : "Choose a different folder",
     "Select a source folder for your media" : "Select a source folder for your media",
     "Home" : "Home",
     "Choose default Photos upload and Albums location" : "Choose default Photos upload and Albums location",
+    "Choose a different folder" : "Choose a different folder",
     "Select the default upload location for your media" : "Select the default upload location for your media",
     "View" : "View",
-    "Media folder" : "Media folder",
     "Choose the folders from where photos and videos are shown." : "Choose the folders from where photos and videos are shown.",
     "Upload folder" : "Upload folder",
     "Choose the folder where photos and albums are uploaded to." : "Choose the folder where photos and albums are uploaded to.",
@@ -123,7 +121,6 @@
     "No tags yet" : "No tags yet",
     "Photos with tags will show up here" : "Photos with tags will show up here",
     "Popular tags" : "Popular tags",
-    "The source folder does not exists" : "The source folder does not exists",
     "Add" : "Add",
     "Add to album" : "Add to album",
     "Delete selection" : "Delete selection",
@@ -171,6 +168,9 @@
     "Create a new album" : "Create a new album",
     "Add selection to an album" : "Add selection to an album",
     "Failed to create {albumName}." : "Failed to create {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Failed to rename {currentAlbumName} to {newAlbumName}."
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Failed to rename {currentAlbumName} to {newAlbumName}.",
+    "Choose a Photos source for the timelines" : "Choose a Photos source for the timelines",
+    "Media folder" : "Media folder",
+    "The source folder does not exists" : "The source folder does not exists"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

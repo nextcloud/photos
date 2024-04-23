@@ -59,6 +59,7 @@ OC.L10N.register(
     "There are no photos or videos yet!" : "写真やビデオはまだありません！",
     "_{years} year ago_::_{years} years ago_" : ["{years} 年前"],
     "Enable squared photos view" : "写真を矩形での表示を有効化",
+    "Add folder" : "フォルダーを追加",
     "Choose default Photos upload and Albums location" : "デフォルトの写真のアップロードとアルバムの場所を選択する",
     "View" : "表示",
     "Upload folder" : "アップロードフォルダー",

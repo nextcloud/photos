@@ -23,6 +23,7 @@ OC.L10N.register(
     "Favorite" : "Favorīts",
     "Go back" : "Atpakaļ",
     "Dates" : "Datumi",
+    "Add folder" : "Pievienot mapi",
     "Home" : "Sākums",
     "View" : "Skats",
     "Remove from favorites" : "Noņemt no izlases",

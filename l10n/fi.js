@@ -68,11 +68,10 @@ OC.L10N.register(
     "Enable squared photos view" : "Ota käyttöön neliömäinen kuvanäkymä",
     "Delete source directory" : "Poista lähdekansio",
     "All folders" : "Kaikki kansiot",
-    "Choose a different folder" : "Valitse eri kansio",
     "Home" : "Koti",
     "Choose default Photos upload and Albums location" : "Valitse kuvien ja albumien oletussijainti",
+    "Choose a different folder" : "Valitse eri kansio",
     "View" : "Näytä",
-    "Media folder" : "Mediakansio",
     "_%n photo_::_%n photos_" : ["%n kuva","%n kuvaa"],
     "Unselect all" : "Poista valinnat",
     "Manage collaborators for this album" : "Hallitse albumin osanottajia",
@@ -117,7 +116,6 @@ OC.L10N.register(
     "No tags yet" : "Ei vielä tunnisteita",
     "Photos with tags will show up here" : "Tunnisteilla varustetut kuvat näkyvät täällä",
     "Popular tags" : "Suositut tunnisteet",
-    "The source folder does not exists" : "Lähdekansiota ei ole olemassa",
     "Add" : "Lisää",
     "Add to album" : "Lisää albumiin",
     "Delete selection" : "Poista valinta",
@@ -164,6 +162,8 @@ OC.L10N.register(
     "Create a new album" : "Luo uusi albumi",
     "Add selection to an album" : "Lisää valinta albumiin",
     "Failed to create {albumName}." : "Albumin {albumName} luominen epäonnistui.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Albumin {currentAlbumName} nimen muuttaminen muotoon {newAlbumName} epäonnistui."
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Albumin {currentAlbumName} nimen muuttaminen muotoon {newAlbumName} epäonnistui.",
+    "Media folder" : "Mediakansio",
+    "The source folder does not exists" : "Lähdekansiota ei ole olemassa"
 },
 "nplurals=2; plural=(n != 1);");

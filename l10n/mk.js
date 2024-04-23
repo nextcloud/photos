@@ -56,6 +56,7 @@ OC.L10N.register(
     "There are no photos or videos yet!" : "Овде сеуште нема фотографии и видеа!",
     "_{years} year ago_::_{years} years ago_" : ["пред 1 година","пред {years} години"],
     "Enable squared photos view" : "Овозможи поглед на фотографиите во квадрати",
+    "Add folder" : "Додади папка",
     "Home" : "Дома",
     "View" : "Погледни",
     "_%n photo_::_%n photos_" : ["%n фотографија","%n фотографии"],

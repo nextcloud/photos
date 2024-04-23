@@ -68,14 +68,12 @@
     "Enable squared photos view" : "Zapnúť štvorcové zobrazenie fotiek",
     "Delete source directory" : "Vymazať zdrojový adresár",
     "All folders" : "Všetky adresáre",
-    "Choose a Photos source for the timelines" : "Vyberte zdroj fotografií pre časové osi",
-    "Choose a different folder" : "Vyberať iný adresár",
     "Select a source folder for your media" : "Vyberte zdrojový adresár pre vaše médiá.",
     "Home" : "Domov",
     "Choose default Photos upload and Albums location" : "Vyberte predvolené umiestnenie pre nahrávané Fotky a Albumy",
+    "Choose a different folder" : "Vyberať iný adresár",
     "Select the default upload location for your media" : "Vyberte východzie umiestnenie pre vaše médiá.",
     "View" : "Prezerať",
-    "Media folder" : "Adresár medií",
     "Choose the folders from where photos and videos are shown." : "Vyberte adresáre, z ktorých sa zobrazujú fotografie a videá.",
     "Upload folder" : "Nahrať adresár",
     "Choose the folder where photos and albums are uploaded to." : "Vyberať adresár, do ktorého sa nahrávajú fotografie a albumy.",
@@ -123,7 +121,6 @@
     "No tags yet" : "Zatiaľ žiadne štítky",
     "Photos with tags will show up here" : "Fotografie so štítkami sa zobrazia tu",
     "Popular tags" : "Populárne štítky",
-    "The source folder does not exists" : "Zdrojový adresár neexistuje",
     "Add" : "Pridať",
     "Add to album" : "Pridať do albumu",
     "Delete selection" : "Zmazanie výberu",
@@ -171,6 +168,9 @@
     "Create a new album" : "Vytvoriť nový album",
     "Add selection to an album" : "Pridať vybrané do albumu",
     "Failed to create {albumName}." : "Zlyhalo vytváranie {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Chyba pri premenovávaní {currentAlbumName} na {newAlbumName}."
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Chyba pri premenovávaní {currentAlbumName} na {newAlbumName}.",
+    "Choose a Photos source for the timelines" : "Vyberte zdroj fotografií pre časové osi",
+    "Media folder" : "Adresár medií",
+    "The source folder does not exists" : "Zdrojový adresár neexistuje"
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);"
 }
