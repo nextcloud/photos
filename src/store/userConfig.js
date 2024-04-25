@@ -58,7 +58,7 @@ export async function getFolder(path) {
 /**
  * @typedef {object} UserConfigState
  * @property {boolean} croppedLayout
- * @property {string} photosSourceFolder
+ * @property {string[]} photosSourceFolders
  * @property {string} photosLocation
  * @property {import('@nextcloud/files').Folder} [photosLocationFolder]
  */
@@ -68,7 +68,7 @@ const module = {
 	state() {
 		return {
 			croppedLayout: loadState('photos', 'croppedLayout', 'false') === 'true',
-			photosSourceFolder: loadState('photos', 'photosSourceFolder', ''),
+			photosSourceFolders: JSON.parse(loadState('photos', 'photosSourceFolders', '["/Photos"]')),
 			photosLocation: loadState('photos', 'photosLocation', ''),
 			photosLocationFolder: undefined,
 		}
