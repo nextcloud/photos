@@ -68,6 +68,7 @@
     "Enable squared photos view" : "Aktivera kvadratiska bild-vyn",
     "Delete source directory" : "Ta bort källkatalog",
     "All folders" : "Alla mappar",
+    "Add a Photos source for the timelines" : "Lägg till en fotokälla för tidslinjerna",
     "Add folder" : "Lägg till mapp",
     "Select a source folder for your media" : "Välj en källmapp för ditt media",
     "Home" : "Hem",
@@ -75,6 +76,7 @@
     "Choose a different folder" : "Välj annan mapp",
     "Select the default upload location for your media" : "Välj standarduppladdningsplats för ditt media",
     "View" : "Visa",
+    "Media folders" : "Mediamappar",
     "Choose the folders from where photos and videos are shown." : "Välj mappar där foton och videor ska visas från.",
     "Upload folder" : "Ladda upp mapp",
     "Choose the folder where photos and albums are uploaded to." : "Välj mapp dit foton och album laddas upp.",
@@ -122,6 +124,7 @@
     "No tags yet" : "Inga taggar än",
     "Photos with tags will show up here" : "Bilder med taggar visas här",
     "Popular tags" : "Populära taggar",
+    "One of the source folders does not exists" : "En av källmapparna finns inte",
     "Add" : "Lägg till",
     "Add to album" : "Lägg till i album",
     "Delete selection" : "Ta bort urval",
@@ -169,9 +172,6 @@
     "Create a new album" : "Skapa ett nytt album",
     "Add selection to an album" : "Lägg till urval till ett album",
     "Failed to create {albumName}." : "Lyckades inte skapa {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Lyckades inte döpa om {currentAlbumName} till {newAlbumName}.",
-    "Choose a Photos source for the timelines" : "Välj en fotokälla för tidslinjerna",
-    "Media folder" : "Mediamapp",
-    "The source folder does not exists" : "Källmappen finns inte"
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Lyckades inte döpa om {currentAlbumName} till {newAlbumName}."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

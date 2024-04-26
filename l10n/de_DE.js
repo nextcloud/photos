@@ -174,9 +174,6 @@ OC.L10N.register(
     "Create a new album" : "Neues Album erstellen",
     "Add selection to an album" : "Auswahl einem Album hinzufügen",
     "Failed to create {albumName}." : "{albumName} konnte nicht erstellt werden.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "{currentAlbumName} konnte nicht in {newAlbumName} umbenannt werden.",
-    "Choose a Photos source for the timelines" : "In Photos eine Quelle für die Zeitleisten auswählen",
-    "Media folder" : "Medienordner",
-    "The source folder does not exists" : "Quellordner existiert nicht"
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "{currentAlbumName} konnte nicht in {newAlbumName} umbenannt werden."
 },
 "nplurals=2; plural=(n != 1);");

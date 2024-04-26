@@ -174,9 +174,6 @@ OC.L10N.register(
     "Create a new album" : "Crear un álbum",
     "Add selection to an album" : "Amiesta la seleición a un álbum",
     "Failed to create {albumName}." : "Nun se pue crear «{albumName}».",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Nun se pue renomar «{albumName}» a «{newAlbumName}».",
-    "Choose a Photos source for the timelines" : "Escueyi una fonte de semeyes pa les llines de tiempu",
-    "Media folder" : "Carpeta multimedia",
-    "The source folder does not exists" : "La carpeta d'orixe nun esiste"
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Nun se pue renomar «{albumName}» a «{newAlbumName}»."
 },
 "nplurals=2; plural=(n != 1);");
