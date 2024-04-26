@@ -174,9 +174,6 @@ OC.L10N.register(
     "Create a new album" : "Креирај нови албум",
     "Add selection to an album" : "Додај изабрано у албум",
     "Failed to create {albumName}." : "{albumName} није могао да се креира.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Није успела промена имена {currentAlbumName} у {newAlbumName}.",
-    "Choose a Photos source for the timelines" : "Изаберите извор који ће Фотографије употребити за временске линије",
-    "Media folder" : "Фолдер медија",
-    "The source folder does not exists" : "Изворни фолдер не постоји"
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Није успела промена имена {currentAlbumName} у {newAlbumName}."
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

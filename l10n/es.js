@@ -169,9 +169,6 @@ OC.L10N.register(
     "Create a new album" : "Crear un álbum nuevo",
     "Add selection to an album" : "Añadir selección a un álbum",
     "Failed to create {albumName}." : "Fallo al crear {albumName}",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Fallo al renombrar {currentAlbumName} a {newAlbumName}.",
-    "Choose a Photos source for the timelines" : "Elegir una fuente de fotos para las líneas de tiempo",
-    "Media folder" : "Carpeta de medios",
-    "The source folder does not exists" : "La carpeta de origen no existe"
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Fallo al renombrar {currentAlbumName} a {newAlbumName}."
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

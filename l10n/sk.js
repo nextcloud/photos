@@ -170,9 +170,6 @@ OC.L10N.register(
     "Create a new album" : "Vytvoriť nový album",
     "Add selection to an album" : "Pridať vybrané do albumu",
     "Failed to create {albumName}." : "Zlyhalo vytváranie {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Chyba pri premenovávaní {currentAlbumName} na {newAlbumName}.",
-    "Choose a Photos source for the timelines" : "Vyberte zdroj fotografií pre časové osi",
-    "Media folder" : "Adresár medií",
-    "The source folder does not exists" : "Zdrojový adresár neexistuje"
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Chyba pri premenovávaní {currentAlbumName} na {newAlbumName}."
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");
