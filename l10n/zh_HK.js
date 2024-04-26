@@ -174,9 +174,6 @@ OC.L10N.register(
     "Create a new album" : "創建新相簿",
     "Add selection to an album" : "將選擇範圍添加至相簿",
     "Failed to create {albumName}." : "創建 {albumName} 失敗。",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "重新命名 {currentAlbumName} 為 {newAlbumName} 失敗。",
-    "Choose a Photos source for the timelines" : "選擇時間軸的照片來源",
-    "Media folder" : "媒體資料夾",
-    "The source folder does not exists" : "來源資料夾不存在"
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "重新命名 {currentAlbumName} 為 {newAlbumName} 失敗。"
 },
 "nplurals=1; plural=0;");
