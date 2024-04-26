@@ -162,8 +162,6 @@ OC.L10N.register(
     "Create a new album" : "Luo uusi albumi",
     "Add selection to an album" : "Lisää valinta albumiin",
     "Failed to create {albumName}." : "Albumin {albumName} luominen epäonnistui.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Albumin {currentAlbumName} nimen muuttaminen muotoon {newAlbumName} epäonnistui.",
-    "Media folder" : "Mediakansio",
-    "The source folder does not exists" : "Lähdekansiota ei ole olemassa"
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Albumin {currentAlbumName} nimen muuttaminen muotoon {newAlbumName} epäonnistui."
 },
 "nplurals=2; plural=(n != 1);");

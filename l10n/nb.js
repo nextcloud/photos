@@ -170,9 +170,6 @@ OC.L10N.register(
     "Create a new album" : "Opprett et nytt album",
     "Add selection to an album" : "Legg til utvalg i et album",
     "Failed to create {albumName}." : "Kunne ikke opprette {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Kunne ikke endre navn på {currentAlbumName} til {newAlbumName}.",
-    "Choose a Photos source for the timelines" : "Velg en fotokilde for tidslinjer",
-    "Media folder" : "Mediemappe",
-    "The source folder does not exists" : "Kildemappen finnes ikke"
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Kunne ikke endre navn på {currentAlbumName} til {newAlbumName}."
 },
 "nplurals=2; plural=(n != 1);");

@@ -167,8 +167,6 @@ OC.L10N.register(
     "Create a new album" : "Sortu album berri bat",
     "Add selection to an album" : "Gehitu hautatutakoak album batera",
     "Failed to create {albumName}." : "Ezin izan da {albumName} sortu.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Ezin izan da {currentAlbumName} berrizendatu {newAlbumName} gisa.",
-    "Media folder" : "Multimedia karpeta",
-    "The source folder does not exists" : "Iturburuko karpeta ez da existitzen"
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Ezin izan da {currentAlbumName} berrizendatu {newAlbumName} gisa."
 },
 "nplurals=2; plural=(n != 1);");

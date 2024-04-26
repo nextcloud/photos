@@ -172,9 +172,6 @@
     "Create a new album" : "Créer un nouvel album",
     "Add selection to an album" : "Ajouter la sélection à un album",
     "Failed to create {albumName}." : "Échec de la création de {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Échec du renommage de {currentAlbumName} en {newAlbumName}.",
-    "Choose a Photos source for the timelines" : "Choisir une source de Photos pour les chronologies",
-    "Media folder" : "Dossier médias",
-    "The source folder does not exists" : "Le dossier source n’existe pas"
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Échec du renommage de {currentAlbumName} en {newAlbumName}."
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

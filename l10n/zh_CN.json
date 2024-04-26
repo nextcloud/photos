@@ -165,9 +165,6 @@
     "Create a new album" : "创建新相册",
     "Add selection to an album" : "将所选项添加至相册",
     "Failed to create {albumName}." : "创建 {albumName} 失败",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "重命名 {currentAlbumName} 为 {newAlbumName} 的操作失败",
-    "Choose a Photos source for the timelines" : "为时间线选择照片源",
-    "Media folder" : "媒体文件夹",
-    "The source folder does not exists" : "源文件夹不存在"
+    "Failed to rename {currentAlbumName} to {newAlbumName}." : "重命名 {currentAlbumName} 为 {newAlbumName} 的操作失败"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
