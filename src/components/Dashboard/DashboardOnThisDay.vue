@@ -1,9 +1,7 @@
 <!--
-  - Copyright (c) 2020. The Nextcloud Bookmarks contributors.
-  -
-  - This file is licensed under the Affero General Public License version 3 or later. See the COPYING file.
-  -->
-
+ - SPDX-FileCopyrightText: 2020 The Nextcloud Bookmarks contributors.
+ - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 <template>
 	<div class="on-this-day-dashboard">
 		<NcLoadingIcon v-if="loading" :size="48" />

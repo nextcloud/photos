@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
 all: dev-setup lint build-js-production test
 
 # Dev env management
