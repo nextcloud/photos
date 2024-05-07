@@ -59,20 +59,20 @@ class PublicRootCollection extends AbstractPrincipalCollection {
 	/**
 	 * Returns a child object, by its token.
 	 *
-	 * @param string $token
+	 * @param string $name
 	 *
 	 * @throws NotFound
 	 *
 	 * @return DAV\INode
 	 */
-	public function getChild($token) {
+	public function getChild($name) {
 		$this->throttler->sleepDelayOrThrowOnMax($this->request->getRemoteAddress(), self::BRUTEFORCE_ACTION);
 
-		if (is_null($token)) {
+		if (is_null($name)) {
 			throw new \Sabre\DAV\Exception\Forbidden();
 		}
 
-		$albums = $this->albumMapper->getSharedAlbumsForCollaboratorWithFiles($token, AlbumMapper::TYPE_LINK);
+		$albums = $this->albumMapper->getSharedAlbumsForCollaboratorWithFiles($name, AlbumMapper::TYPE_LINK);
 
 		if (count($albums) !== 1) {
 			$this->throttler->registerAttempt(self::BRUTEFORCE_ACTION, $this->request->getRemoteAddress());
