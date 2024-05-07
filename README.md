@@ -1,4 +1,10 @@
+<!--
+  - SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: CC0-1.0
+-->
 # Nextcloud Photos
+
+[![REUSE status](https://api.reuse.software/badge/github.com/nextcloud/photos)](https://api.reuse.software/info/github.com/nextcloud/photos)
 
 **📸 Your memories under your control**
 
