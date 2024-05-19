@@ -8,7 +8,7 @@ OC.L10N.register(
     "Videos" : "Vídeos",
     "Albums" : "Álbums",
     "Collaborative albums" : "Álbums colaborativos",
-    "People" : "Xente",
+    "People" : "Persoas",
     "Folders" : "Cartafoles",
     "Favorites" : "Favoritos",
     "On this day" : "Neste día",
