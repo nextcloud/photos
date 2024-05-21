@@ -2,7 +2,7 @@ OC.L10N.register(
     "photos",
     {
     "Public link" : "Publiskā saite",
-    "Photos" : "Bildes",
+    "Photos" : "Fotoattēli",
     "Videos" : "Video",
     "Albums" : "Albumi",
     "Folders" : "Mapes",
