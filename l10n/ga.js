@@ -10,6 +10,7 @@ OC.L10N.register(
     "Group" : "Grúpa",
     "Home" : "Baile",
     "Remove from favorites" : "Bain ó cheanáin",
-    "Add" : "Cuir"
+    "Add" : "Cuir",
+    "Details" : "Sonraí"
 },
 "nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);");
