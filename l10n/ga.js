@@ -4,6 +4,7 @@ OC.L10N.register(
     "Public link" : "Nasc poiblí",
     "Videos" : "Físeáin",
     "People" : "Daoine",
+    "Tags" : "Clibeanna",
     "Places" : "Áiteanna",
     "Back" : "Ar ais",
     "Save" : "Sábháil",
