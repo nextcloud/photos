@@ -95,7 +95,7 @@ class AlbumMapper {
 			return new AlbumInfo((int)$row['album_id'], $userId, $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
 		}, $rows);
 	}
-	
+
 	/**
 	 * @param string $albumName
 	 * @param string $userName
@@ -205,10 +205,8 @@ class AlbumMapper {
 
 		$files = [];
 		foreach ($rows as $row) {
-			$albumId = (int)$row['album_id'];
 			if ($row['fileid']) {
-				$mimeId = $row['mimetype'];
-				$mimeType = $this->mimeTypeLoader->getMimetypeById($mimeId);
+				$mimeType = $this->mimeTypeLoader->getMimetypeById((int)$row['mimetype']);
 				$files[] = new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
 			}
 		}
@@ -233,8 +231,7 @@ class AlbumMapper {
 			->andWhere($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
 		$row = $query->executeQuery()->fetchAll()[0];
 
-		$mimeId = $row['mimetype'];
-		$mimeType = $this->mimeTypeLoader->getMimetypeById($mimeId);
+		$mimeType = $this->mimeTypeLoader->getMimetypeById((int)$row['mimetype']);
 		return new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
 	}
 
@@ -533,8 +530,7 @@ class AlbumMapper {
 		foreach ($rows as $row) {
 			$albumId = (int)$row['album_id'];
 			if ($row['fileid']) {
-				$mimeId = $row['mimetype'];
-				$mimeType = $this->mimeTypeLoader->getMimetypeById($mimeId);
+				$mimeType = $this->mimeTypeLoader->getMimetypeById((int)$row['mimetype']);
 				$filesByAlbum[$albumId][] = new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
 			}
 
