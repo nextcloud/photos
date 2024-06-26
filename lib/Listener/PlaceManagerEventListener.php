@@ -35,6 +35,8 @@ use OCP\IConfig;
 
 /**
  * Listener to add place info from the database.
+ *
+ * @template-implements IEventListener<Event|NodeWrittenEvent>
  */
 class PlaceManagerEventListener implements IEventListener {
 	public function __construct(

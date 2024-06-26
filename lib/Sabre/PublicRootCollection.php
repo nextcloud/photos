@@ -80,7 +80,7 @@ class PublicRootCollection extends AbstractPrincipalCollection {
 	 *
 	 * @return DAV\INode
 	 */
-	public function getChild($token) {
+	public function getChild($name) {
 		$this->throttler->sleepDelayOrThrowOnMax($this->request->getRemoteAddress(), self::BRUTEFORCE_ACTION);
 
 		if (is_null($token)) {
