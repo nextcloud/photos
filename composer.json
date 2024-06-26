@@ -36,6 +36,7 @@
 		"psalm/phar": "^5.25"
 	},
 	"require": {
-		"hexogen/kdtree": "^0.2.5"
+		"hexogen/kdtree": "^0.2.5",
+		"symfony/console": "^3.4"
 	}
 }
