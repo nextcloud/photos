@@ -24,9 +24,9 @@ declare(strict_types=1);
 namespace OCA\Photos\Sabre;
 
 use OCA\Photos\DB\PhotosFile;
-use OCP\Files\Node;
 use OCP\Files\File;
 use OCP\Files\Folder;
+use OCP\Files\Node;
 use OCP\Files\NotFoundException;
 use OCP\ITags;
 use Sabre\DAV\Exception\Forbidden;

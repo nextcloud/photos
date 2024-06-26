@@ -27,11 +27,11 @@ use OC\Security\Bruteforce\Throttler;
 use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Sabre\Album\PublicAlbumRoot;
 use OCA\Photos\Service\UserConfigService;
-use OCP\IRequest;
 use OCP\Files\IRootFolder;
+use OCP\IRequest;
+use Sabre\DAV\Exception\NotFound;
 use Sabre\DAVACL\AbstractPrincipalCollection;
 use Sabre\DAVACL\PrincipalBackend;
-use Sabre\DAV\Exception\NotFound;
 
 class PublicRootCollection extends AbstractPrincipalCollection {
 	private const BRUTEFORCE_ACTION = 'publicphotos_webdav_auth';
