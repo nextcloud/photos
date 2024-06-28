@@ -1,29 +1,15 @@
 /**
- * @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
- *
- * @author Louis Chemineau <louis@chmn.me>
- *
- * @license AGPL-3.0-or-later
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
+ * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { davGetClient, davRootPath } from '@nextcloud/files'
+import { joinPaths } from '@nextcloud/paths'
 import logger from '../services/logger.js'
 import getPhotos from '../services/PhotoSearch.js'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
 import AbortControllerMixin from './AbortControllerMixin.js'
+import store from '../store/index.js'
 
 export default {
 	name: 'FetchFilesMixin',
@@ -43,20 +29,19 @@ export default {
 	},
 
 	watch: {
-		$route() {
+		'$route.path'() {
 			this.resetFetchFilesState()
 		},
 	},
 
 	methods: {
 		/**
-		 * @param {string} path - Path to pass to getPhotos.
 		 * @param {object} options - Options to pass to getPhotos.
 		 * @param {string[]} [blacklist=[]] - Array of ids to filter out.
 		 * @param {boolean} [force=false] - Force fetching even if doneFetchingFiles is true
 		 * @return {Promise<string[]>} - The next batch of data depending on global offset.
 		 */
-		async fetchFiles(path = '', options = {}, blacklist = [], force = false) {
+		async fetchFiles(options = {}, blacklist = [], force = false) {
 			if ((this.doneFetchingFiles && !force) || this.loadingFiles) {
 				return []
 			}
@@ -70,7 +55,7 @@ export default {
 				const numberOfImagesPerBatch = 200
 
 				// Load next batch of images
-				const fetchedFiles = await getPhotos(path, {
+				const fetchedFiles = await getPhotos({
 					firstResult: this.fetchedFileIds.length,
 					nbResults: numberOfImagesPerBatch,
 					...options,
@@ -99,7 +84,21 @@ export default {
 				return fileIds
 			} catch (error) {
 				if (error.response?.status === 404) {
-					this.errorFetchingFiles = 404
+					const sources = store.state.userConfig.photosSourceFolders
+					for (const source of sources) {
+						if (error.response?.data?.match(`File with name /${source} could not be located`) === null) {
+							continue
+						}
+						logger.debug(`The ${source} folder does not exist, creating it.`)
+						try {
+							await davGetClient().createDirectory(joinPaths(davRootPath, source))
+							this.resetFetchFilesState()
+							return []
+						} catch (error) {
+							this.errorFetchingFiles = 404
+							logger.error('Fail to create source directory', { error })
+						}
+					}
 				} else if (error.code === 'ERR_CANCELED') {
 					return []
 				} else {
@@ -108,7 +107,6 @@ export default {
 
 				// cancelled request, moving on...
 				logger.error('Error fetching files', { error })
-				console.error(error)
 			} finally {
 				this.loadingFiles = false
 				this.fetchSemaphore.release(fetchSemaphoreSymbol)

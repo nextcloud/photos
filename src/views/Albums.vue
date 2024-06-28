@@ -1,24 +1,7 @@
 <!--
- - @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
- -
- - @author Louis Chemineau <louis@chmn.me>
- -
- - @license AGPL-3.0-or-later
- -
- - This program is free software: you can redistribute it and/or modify
- - it under the terms of the GNU Affero General Public License as
- - published by the Free Software Foundation, either version 3 of the
- - License, or (at your option) any later version.
- -
- - This program is distributed in the hope that it will be useful,
- - but WITHOUT ANY WARRANTY; without even the implied warranty of
- - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- - GNU Affero General Public License for more details.
- -
- - You should have received a copy of the GNU Affero General Public License
- - along with this program. If not, see <http://www.gnu.org/licenses/>.
- -
- -->
+  - SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 <template>
 	<div>
 		<CollectionsList :collections="albums"
@@ -31,12 +14,14 @@
 				:title="t('photos', 'Albums')"
 				:root-title="t('photos', 'Albums')"
 				@refresh="fetchAlbums">
-				<NcButton :aria-label="t('photos', 'Create a new album.')"
+				<NcButton :aria-label="isMobile ? t('photos', 'New album') : undefined"
 					@click="showAlbumCreationForm = true">
 					<template #icon>
-						<Plus />
+						<Plus :size="20" />
 					</template>
-					{{ t('photos', 'New album') }}
+					<template v-if="!isMobile" #default>
+						{{ t('photos', 'New album') }}
+					</template>
 				</NcButton>
 			</HeaderNavigation>
 
@@ -45,9 +30,9 @@
 				:link="`/albums/${collection.basename}`"
 				:alt-img="t('photos', 'Cover photo for album {albumName}', { albumName: collection.basename })"
 				:cover-url="collection.lastPhoto | coverUrl">
-				<h2 class="album__name">
+				<span class="album__name">
 					{{ collection.basename }}
-				</h2>
+				</span>
 
 				<div slot="subtitle" class="album__details">
 					{{ collection.date }} ⸱ {{ n('photos', '%n item', '%n photos and videos', collection.nbItems,) }}
@@ -60,8 +45,10 @@
 		</CollectionsList>
 
 		<NcModal v-if="showAlbumCreationForm"
-			:name="t('photos', 'New album')"
 			@close="showAlbumCreationForm = false">
+			<h2 class="album-creation__heading">
+				{{ t('photos', 'New album') }}
+			</h2>
 			<AlbumForm @done="handleAlbumCreated" />
 		</NcModal>
 	</div>
@@ -72,7 +59,7 @@ import Plus from 'vue-material-design-icons/Plus.vue'
 import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
 
 import { generateUrl } from '@nextcloud/router'
-import { NcModal, NcButton, NcEmptyContent } from '@nextcloud/vue'
+import { NcModal, NcButton, NcEmptyContent, useIsSmallMobile } from '@nextcloud/vue'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { getCurrentUser } from '@nextcloud/auth'
 
@@ -112,6 +99,13 @@ export default {
 	mixins: [
 		FetchCollectionsMixin,
 	],
+
+	setup() {
+		const isMobile = useIsSmallMobile()
+		return {
+			isMobile,
+		}
+	},
 
 	data() {
 		return {
@@ -160,6 +154,16 @@ export default {
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
+		font-size: 20px;
+		margin-bottom: 12px;
+		line-height: 30px;
+		color: var(--color-main-text);
 	}
+}
+
+.album-creation__heading {
+	padding: calc(var(--default-grid-baseline) * 4);
+	margin-bottom: 0px;
+	padding-bottom: 0px;
 }
 </style>

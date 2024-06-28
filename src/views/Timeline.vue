@@ -1,32 +1,19 @@
 <!--
- - @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
- -
- - @author John Molakvoæ <skjnldsv@protonmail.com>
- - @author Corentin Mors <medias@pixelswap.fr>
- - @author Louis Chemineau <louis@chmn.me>
- -
- - @license AGPL-3.0-or-later
- -
- - This program is free software: you can redistribute it and/or modify
- - it under the terms of the GNU Affero General Public License as
- - published by the Free Software Foundation, either version 3 of the
- - License, or (at your option) any later version.
- -
- - This program is distributed in the hope that it will be useful,
- - but WITHOUT ANY WARRANTY; without even the implied warranty of
- - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- - GNU Affero General Public License for more details.
- -
- - You should have received a copy of the GNU Affero General Public License
- - along with this program. If not, see <http://www.gnu.org/licenses/>.
- -
- -->
+  - SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 
 <template>
 	<!-- Errors handlers -->
-	<NcEmptyContent v-if="errorFetchingFiles">
-		{{ t('photos', 'An error occurred') }}
-	</NcEmptyContent>
+	<div v-if="errorFetchingFiles" class="timeline__empty-content">
+		<NcEmptyContent v-if="errorFetchingFiles === 404" :name="t('photos', 'One of the source folders does not exists')">
+			<FolderAlertOutline slot="icon" />
+			<PhotosSourceLocationsSettings slot="action" class="timeline__update_source_directory" />
+		</NcEmptyContent>
+		<NcEmptyContent v-else :name="t('photos', 'An error occurred')">
+			<AlertCircle slot="icon" />
+		</NcEmptyContent>
+	</div>
 
 	<div v-else class="timeline">
 		<!-- Header -->
@@ -39,6 +26,7 @@
 			<div class="timeline__header__left">
 				<!-- TODO: UploadPicker -->
 				<NcActions v-if="selectedFileIds.length === 0"
+					ref="addActions"
 					:force-menu="true"
 					:menu-name="t('photos', 'Add')">
 					<template #icon>
@@ -62,7 +50,7 @@
 						<template #icon>
 							<Plus />
 						</template>
-						<template v-if="!isMobile">
+						<template v-if="!isMobile" #default>
 							{{ t('photos', 'Add to album') }}
 						</template>
 					</NcButton>
@@ -73,7 +61,7 @@
 						<template #icon>
 							<Close />
 						</template>
-						<template v-if="!isMobile">
+						<template v-if="!isMobile" #default>
 							{{ t('photos', 'Unselect all') }}
 						</template>
 					</NcButton>
@@ -126,16 +114,16 @@
 
 		<NcModal v-if="showAlbumCreationForm"
 			key="albumCreationForm"
-			:close-button-contained="false"
-			:name="t('photos', 'New album')"
+			:set-return-focus="$refs.addActions?.$refs.menuButton?.$el"
 			@close="showAlbumCreationForm = false">
+			<h2 class="timeline__heading">
+				{{ t('photos', 'New album') }}
+			</h2>
 			<AlbumForm @done="showAlbumCreationForm = false" />
 		</NcModal>
 
 		<NcModal v-if="showAlbumPicker"
 			key="albumPicker"
-			:close-button-contained="false"
-			:name="t('photos', 'Add to album')"
 			@close="showAlbumPicker = false">
 			<AlbumPicker @album-picked="addSelectionToAlbum" />
 		</NcModal>
@@ -144,14 +132,18 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import Delete from 'vue-material-design-icons/Delete.vue'
 import PlusBoxMultiple from 'vue-material-design-icons/PlusBoxMultiple.vue'
 import Download from 'vue-material-design-icons/Download.vue'
 import Close from 'vue-material-design-icons/Close.vue'
+import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
 
 import { NcModal, NcActions, NcActionButton, NcButton, NcEmptyContent, isMobile } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
+import { translate } from '@nextcloud/l10n'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
 import { allMimes } from '../services/AllowedMimes.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
@@ -164,7 +156,8 @@ import AlbumPicker from '../components/Albums/AlbumPicker.vue'
 import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import ActionDownload from '../components/Actions/ActionDownload.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-import { translate } from '@nextcloud/l10n'
+import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
+import { configChangedEvent } from '../store/userConfig.js'
 
 export default {
 	name: 'Timeline',
@@ -174,6 +167,7 @@ export default {
 		Download,
 		Close,
 		Plus,
+		FolderAlertOutline,
 		NcEmptyContent,
 		NcModal,
 		NcActions,
@@ -186,6 +180,8 @@ export default {
 		ActionFavorite,
 		ActionDownload,
 		HeaderNavigation,
+		PhotosSourceLocationsSettings,
+		AlertCircle,
 	},
 
 	filters: {
@@ -243,6 +239,14 @@ export default {
 		}
 	},
 
+	mounted() {
+		subscribe(configChangedEvent, this.handleUserConfigChange)
+	},
+
+	destroyed() {
+		unsubscribe(configChangedEvent, this.handleUserConfigChange)
+	},
+
 	computed: {
 		...mapGetters([
 			'files',
@@ -256,7 +260,7 @@ export default {
 		]),
 
 		getContent() {
-			this.fetchFiles('', {
+			this.fetchFiles({
 				mimesType: this.mimesType,
 				onThisDay: this.onThisDay,
 				onlyFavorites: this.onlyFavorites,
@@ -290,6 +294,12 @@ export default {
 			await this.deleteFiles(fileIds)
 		},
 
+		handleUserConfigChange({ key }) {
+			if (key === 'photosSourceFolders') {
+				this.resetFetchFilesState()
+			}
+		},
+
 		t: translate,
 	},
 }
@@ -299,11 +309,33 @@ export default {
 	display: flex;
 	flex-direction: column;
 
+	&__empty-content {
+		height: 100%;
+
+		.empty-content {
+			height: 100%;
+		}
+
+		.timeline__update_source_directory {
+			align-items: center;
+
+			:deep(.folder) {
+				min-width: unset;
+			}
+		}
+	}
+
 	&__header {
 		&__left {
 			display: flex;
 			gap: 4px;
 		}
+	}
+
+	&__heading {
+		padding: calc(var(--default-grid-baseline) * 4);
+		margin-bottom: 0px;
+		padding-bottom: 0px;
 	}
 
 	&__file-list {

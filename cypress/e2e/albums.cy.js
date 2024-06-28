@@ -1,23 +1,6 @@
 /**
- * @copyright Copyright (c) 2022 Louis Chmn <louis@chmn.me>
- *
- * @author Louis Chmn <louis@chmn.me>
- *
- * @license AGPL-3.0-or-later
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
+ * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import {
 	addFilesToAlbumFromAlbum,
@@ -30,6 +13,7 @@ import {
 import {
 	deleteSelection,
 	favoriteSelection,
+	mkdir,
 	selectMedia,
 	unfavoriteSelection,
 	unselectMedia,
@@ -44,28 +28,20 @@ Cypress.on('uncaught:exception', (err) => {
 	}
 })
 
-describe('Manage albums', () => {
+describe('Manage albums', { testIsolation: true }, () => {
 	let user = null
 
-	before(function() {
+	beforeEach(function () {
 		cy.createRandomUser()
 			.then(_user => {
 				user = _user
+				mkdir(user, '/Photos')
 				uploadTestMedia(user)
 				cy.login(user)
-				cy.visit('/apps/photos')
 			})
-	})
-
-	beforeEach(() => {
 		cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
 		createAnAlbumFromAlbums('albums_test')
 		addFilesToAlbumFromAlbum('albums_test', [0, 1, 2])
-	})
-
-	afterEach(() => {
-		deleteAnAlbumFromAlbumContent()
-		cy.contains('There is no album yet!').click()
 	})
 
 	it('Create an album, populate it and delete it', () => {
@@ -85,20 +61,20 @@ describe('Manage albums', () => {
 	it('Favorite a file from an album content view', () => {
 		selectMedia([0])
 		favoriteSelection()
-		cy.get('[data-test="media"]').eq(0).find('[aria-label="The file is in the favorites"]')
+		cy.get('[data-test="media"]').eq(0).find('[aria-label="Favorite"]')
 		unfavoriteSelection()
 		unselectMedia([0])
-		cy.get('[aria-label="The file is in the favorites"]').should('not.exist')
+		cy.get('[aria-label="Favorite"]').should('not.exist')
 	})
 
 	it('Favorite multiple files from an album content view', () => {
 		selectMedia([1, 2])
 		favoriteSelection()
-		cy.get('[data-test="media"]').eq(1).find('[aria-label="The file is in the favorites"]')
-		cy.get('[data-test="media"]').eq(2).find('[aria-label="The file is in the favorites"]')
+		cy.get('[data-test="media"]').eq(1).find('[aria-label="Favorite"]')
+		cy.get('[data-test="media"]').eq(2).find('[aria-label="Favorite"]')
 		unfavoriteSelection()
 		unselectMedia([1, 2])
-		cy.get('[aria-label="The file is in the favorites"]').should('not.exist')
+		cy.get('[aria-label="Favorite"]').should('not.exist')
 	})
 
 	// it('Download a file from an album content view', () => {
@@ -156,7 +132,7 @@ describe('Manage albums', () => {
 	})
 
 	it('Delete a file that was added to an album', () => {
-		addFilesToAlbumFromAlbumFromHeader('albums_test', [0])
+		addFilesToAlbumFromAlbumFromHeader('albums_test', [3])
 		cy.get('[data-test="media"]').should('have.length', 4)
 		cy.visit('/apps/photos')
 		selectMedia([3])

@@ -1,24 +1,7 @@
 <!--
- - @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
- -
- - @author Louis Chemineau <louis@chmn.me>
- -
- - @license AGPL-3.0-or-later
- -
- - This program is free software: you can redistribute it and/or modify
- - it under the terms of the GNU Affero General Public License as
- - published by the Free Software Foundation, either version 3 of the
- - License, or (at your option) any later version.
- -
- - This program is distributed in the hope that it will be useful,
- - but WITHOUT ANY WARRANTY; without even the implied warranty of
- - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- - GNU Affero General Public License for more details.
- -
- - You should have received a copy of the GNU Affero General Public License
- - along with this program. If not, see <http://www.gnu.org/licenses/>.
- -
- -->
+  - SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 <template>
 	<div>
 		<CollectionContent v-if="true"
@@ -56,7 +39,7 @@
 					<UploadPicker v-if="album.nbItems !== 0"
 						:accept="allowedMimes"
 						:context="uploadContext"
-						:destination="album.basename"
+						:destination="albumAsFolder"
 						:root="uploadContext.root"
 						:multiple="true"
 						@uploaded="onUpload" />
@@ -127,15 +110,11 @@
 			</NcEmptyContent>
 		</CollectionContent>
 
-		<NcModal v-if="showAddPhotosModal"
-			size="large"
+		<PhotosPicker :open.sync="showAddPhotosModal"
+			:blacklist-ids="albumFileIds"
+			:destination="album.basename"
 			:name="t('photos', 'Add photos to {albumName}', {albumName: albumName})"
-			@close="showAddPhotosModal = false">
-			<FilesPicker v-if="album !== undefined"
-				:destination="album.basename"
-				:blacklist-ids="albumFileIds"
-				@files-picked="handleFilesPicked" />
-		</NcModal>
+			@files-picked="handleFilesPicked" />
 
 		<NcModal v-if="showManageCollaboratorView && album !== undefined"
 			:name="t('photos', 'Manage collaborators')"
@@ -156,20 +135,22 @@
 			</CollaboratorsSelectionForm>
 		</NcModal>
 
-		<NcModal v-if="showEditAlbumForm"
+		<NcDialog v-if="showEditAlbumForm"
 			:name="t('photos', 'Edit album details')"
-			@close="showEditAlbumForm = false">
+			close-on-click-outside
+			size="normal"
+			@closing="showEditAlbumForm = false">
 			<AlbumForm :album="album" @done="redirectToNewName" />
-		</NcModal>
+		</NcDialog>
 	</div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 
-import { addNewFileMenuEntry, removeNewFileMenuEntry } from '@nextcloud/files'
+import { Folder, addNewFileMenuEntry, removeNewFileMenuEntry, davParsePermissions } from '@nextcloud/files'
 import { getCurrentUser } from '@nextcloud/auth'
-import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionSeparator, NcLoadingIcon, isMobile } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcButton, NcDialog, NcModal, NcEmptyContent, NcActionSeparator, NcLoadingIcon, isMobile } from '@nextcloud/vue'
 import { UploadPicker, getUploader } from '@nextcloud/upload'
 import { translate } from '@nextcloud/l10n'
 import debounce from 'debounce'
@@ -187,14 +168,13 @@ import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
 
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
-import UserConfig from '../mixins/UserConfig.js'
 
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
 import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import CollaboratorsSelectionForm from '../components/Albums/CollaboratorsSelectionForm.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
-import FilesPicker from '../components/FilesPicker.vue'
+import PhotosPicker from '../components/PhotosPicker.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 
 import allowedMimes from '../services/AllowedMimes.js'
@@ -212,7 +192,7 @@ export default {
 		Delete,
 		// Download,
 		// DownloadMultiple,
-		FilesPicker,
+		PhotosPicker,
 		HeaderNavigation,
 		ImagePlus,
 		MapMarker,
@@ -220,6 +200,7 @@ export default {
 		NcActions,
 		NcActionSeparator,
 		NcButton,
+		NcDialog,
 		NcEmptyContent,
 		NcLoadingIcon,
 		NcModal,
@@ -233,7 +214,6 @@ export default {
 		FetchCollectionContentMixin,
 		FetchFilesMixin,
 		isMobile,
-		UserConfig,
 	],
 
 	props: {
@@ -255,11 +235,11 @@ export default {
 
 			uploader: getUploader(),
 
+			/** @type {import('@nextcloud/files').Entry} */
 			newFileMenuEntry: {
 				id: 'album-add',
 				displayName: t('photos', 'Add photos to this album'),
-				templateName: '',
-				if: (context) => context.route === this.$route.name,
+				enabled: (destination) => destination.basename === this.$route.params.albumName,
 				/** Existing icon css class */
 				iconSvgInline: PlusSvg,
 				/** Function to be run after creation */
@@ -311,6 +291,15 @@ export default {
 		 */
 		albumFileName() {
 			return this.$store.getters.getAlbumName(this.albumName)
+		},
+
+		albumAsFolder() {
+			return new Folder({
+				...this.album,
+				owner: getCurrentUser()?.uid ?? '',
+				source: this.album?.source ?? '',
+				permissions: davParsePermissions(this.album.permissions),
+			})
 		},
 	},
 

@@ -11,8 +11,10 @@ OC.L10N.register(
     "Save" : "Ruaj",
     "Shared by" : "Shpërndarë nga",
     "Group" : "Grup",
-    "View" : "Shiko",
     "Favorite" : "I/E Preferuar",
+    "Go back" : "Shko prapa",
+    "Home" : "Kryefaqja",
+    "View" : "Shiko",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "Shto",
     "Details" : "Detajet"

@@ -1,24 +1,7 @@
 <!--
- - @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
- -
- - @author Louis Chemineau <louis@chmn.me>
- -
- - @license AGPL-3.0-or-later
- -
- - This program is free software: you can redistribute it and/or modify
- - it under the terms of the GNU Affero General Public License as
- - published by the Free Software Foundation, either version 3 of the
- - License, or (at your option) any later version.
- -
- - This program is distributed in the hope that it will be useful,
- - but WITHOUT ANY WARRANTY; without even the implied warranty of
- - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- - GNU Affero General Public License for more details.
- -
- - You should have received a copy of the GNU Affero General Public License
- - along with this program. If not, see <http://www.gnu.org/licenses/>.
- -
- -->
+ - SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+ - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 <template>
 	<div v-if="!useWindow && containerElement === null" ref="container" class="vs-container">
 		<div ref="rowsContainer"
@@ -38,8 +21,6 @@
 </template>
 
 <script>
-import { debounce } from 'debounce'
-
 import logger from '../services/logger.js'
 
 /**
@@ -322,14 +303,14 @@ export default {
 		})
 
 		if (this.useWindow) {
-			window.addEventListener('resize', this.updateContainerSize)
+			window.addEventListener('resize', this.updateContainerSize, { passive: true })
 			this.containerHeight = window.innerHeight
 		} else {
 			this.resizeObserver.observe(this.container)
 		}
 
 		this.resizeObserver.observe(this.$refs.rowsContainer)
-		this.container.addEventListener('scroll', this.updateScrollPosition)
+		this.container.addEventListener('scroll', this.updateScrollPosition, { passive: true })
 	},
 
 	beforeDestroy() {
@@ -342,16 +323,16 @@ export default {
 	},
 
 	methods: {
-		// Debouncing by a tiny amount helps a bit to reduce computation cycles.
-		// From a quick tests, 6 cycle are triggered on a big scroll without debounce.
-		// This is reduce to 4 with this tiny debounce.
-		updateScrollPosition: debounce(function() {
-			if (this.useWindow) {
-				this.scrollPosition = this.container.scrollY
-			} else {
-				this.scrollPosition = this.container.scrollTop
-			}
-		}, 5),
+		updateScrollPosition() {
+			this._onScrollHandle ??= requestAnimationFrame(() => {
+				this._onScrollHandle = null
+				if (this.useWindow) {
+					this.scrollPosition = this.container.scrollY
+				} else {
+					this.scrollPosition = this.container.scrollTop
+				}
+			})
+		},
 
 		updateContainerSize() {
 			this.containerHeight = window.innerHeight
@@ -368,5 +349,7 @@ export default {
 
 .vs-rows-container {
 	box-sizing: border-box;
+	will-change: scroll-position, padding;
+	contain: layout paint style;
 }
 </style>

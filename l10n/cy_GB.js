@@ -12,8 +12,11 @@ OC.L10N.register(
     "Group" : "Grŵp",
     "Copy public link" : "Copïo dolen gyhoeddus",
     "An error occurred" : "Digwyddodd gwall",
-    "View" : "Golwg",
     "Favorite" : "Ffefryn",
+    "Go back" : "Nôl",
+    "Add folder" : "Ychwanegu ffolder",
+    "Home" : "Cartref",
+    "View" : "Golwg",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "Ychwanegu",
     "Details" : "Manylion"

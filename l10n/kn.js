@@ -7,6 +7,7 @@ OC.L10N.register(
     "Save" : "﻿ಉಳಿಸಿ",
     "Group" : "﻿ಗುಂಪು",
     "Favorite" : "ಅಚ್ಚುಮೆಚ್ಚಿನ",
+    "Home" : "﻿ಮುಖಪುಟ",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "﻿ಸೇರಿಸಿ"
 },

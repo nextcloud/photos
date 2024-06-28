@@ -1,24 +1,7 @@
 <!--
- - @copyright Copyright (c) 2020 Corentin Mors
- -
- - @license AGPL-3.0-or-later
- -
- - @author Corentin Mors <medias@pixelswap.fr>
- -
- - This program is free software: you can redistribute it and/or modify
- - it under the terms of the GNU Affero General Public License as
- - published by the Free Software Foundation, either version 3 of the
- - License, or (at your option) any later version.
- -
- - This program is distributed in the hope that it will be useful,
- - but WITHOUT ANY WARRANTY; without even the implied warranty of
- - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- - GNU Affero General Public License for more details.
- -
- - You should have received a copy of the GNU Affero General Public License
- - along with this program. If not, see <http://www.gnu.org/licenses/>.
- -
- -->
+ - SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
+ - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 
 <template>
 	<div class="file-container"
@@ -41,12 +24,13 @@
 				<!-- Preload large preview for near visible files -->
 				<!-- Preload small preview for further away files -->
 				<template v-if="initialized">
+					<canvas v-if="hasBlurhash && !loadedSmall && !loadedLarge" ref="canvas" class="file__blurhash" />
+
 					<img v-if="!loadedLarge && (loadedSmall || (distance < 5 && !errorSmall))"
 						ref="imgSmall"
 						:key="`${file.basename}-small`"
 						:src="srcSmall"
 						:alt="file.basename"
-						:aria-describedby="ariaDescription"
 						:decoding="loadedSmall || isVisible ? 'sync' : 'async'"
 						:fetchpriority="loadedSmall || isVisible ? 'high' : 'low'"
 						:loading="loadedSmall || isVisible ? 'eager' : distance < 2 ? 'auto' : 'lazy'"
@@ -61,42 +45,40 @@
 						:decoding="loadedLarge || isVisible ? 'sync' : 'async'"
 						:fetchpriority="loadedLarge || isVisible ? 'high' : 'low'"
 						:loading="loadedLarge || isVisible ? 'auto' : 'lazy'"
-						:aria-describedby="ariaDescription"
 						@load="onLoadLarge"
 						@error="onErrorLarge">
 				</template>
 			</div>
-
-			<!-- image description -->
-			<p :id="ariaDescription" class="file__hidden-description" :class="{show: errorSmall && errorLarge}">{{ file.basename }}</p>
 		</a>
 
 		<NcCheckboxRadioSwitch v-if="allowSelection"
 			class="selection-checkbox"
+			:aria-label="t('photos', 'Select image {imageName}', {imageName: file.basename})"
 			:checked="selected"
-			@update:checked="onToggle">
-			<span class="input-label">{{ t('photos', 'Select image {imageName}', {imageName: file.basename}) }}</span>
-		</NcCheckboxRadioSwitch>
+			@update:checked="onToggle" />
 
-		<Star v-if="file.favorite === 1" class="favorite-state" :aria-label="t('photos', 'The file is in the favorites')" />
+		<FavoriteIcon v-if="file.favorite === 1"
+			v-once
+			class="favorite-state" />
 	</div>
 </template>
 
 <script>
-import Star from 'vue-material-design-icons/Star.vue'
 import VideoIcon from 'vue-material-design-icons/Video.vue'
 import PlayCircleIcon from 'vue-material-design-icons/PlayCircle.vue'
+import { decode } from 'blurhash'
 
 import { generateUrl } from '@nextcloud/router'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 
+import FavoriteIcon from './FavoriteIcon.vue'
 import { isCachedPreview } from '../services/PreviewService.js'
 
 export default {
 	name: 'File',
 	components: {
+		FavoriteIcon,
 		NcCheckboxRadioSwitch,
-		Star,
 		VideoIcon,
 		PlayCircleIcon,
 	},
@@ -108,7 +90,7 @@ export default {
 		},
 		selected: {
 			type: Boolean,
-			required: true,
+			default: false,
 		},
 		allowSelection: {
 			type: Boolean,
@@ -116,14 +98,13 @@ export default {
 		},
 		distance: {
 			type: Number,
-			required: true,
+			default: 0,
 		},
 	},
 
 	data() {
 		return {
 			initialized: false,
-			isDestroyed: false,
 			loadedSmall: false,
 			errorSmall: false,
 			loadedLarge: false,
@@ -133,11 +114,10 @@ export default {
 
 	computed: {
 		/** @return {string} */
-		ariaDescription() {
-			return `image-description-${this.file.fileid}`
-		},
-		/** @return {string} */
 		ariaLabel() {
+			if (this.file.favorite) {
+				return t('photos', 'Favorite image, open the full size "{name}" image', { name: this.file.basename })
+			}
 			return t('photos', 'Open the full size "{name}" image', { name: this.file.basename })
 		},
 		/** @return {boolean} */
@@ -160,6 +140,19 @@ export default {
 		isVisible() {
 			return this.distance === 0
 		},
+		hasBlurhash() {
+			return this.file.metadataBlurhash !== undefined
+		},
+	},
+
+	watch: {
+		file() {
+			this.initialized = false
+			this.loadedSmall = false
+			this.errorSmall = false
+			this.loadedLarge = false
+			this.errorLarge = false
+		},
 	},
 
 	async mounted() {
@@ -169,11 +162,13 @@ export default {
 		])
 
 		this.initialized = true
+
+		await this.$nextTick() // Wait for next tick to have the canvas in the DOM
+
+		this.drawBlurhash()
 	},
 
 	beforeDestroy() {
-		this.isDestroyed = true
-
 		// cancel any pending load
 		if (this.$refs.imgSmall !== undefined) {
 			this.$refs.imgSmall.src = ''
@@ -209,12 +204,27 @@ export default {
 		},
 
 		getItemURL(size) {
-			const token = this.$route.params.token
+			const token = this.$route?.params.token
 			if (token) {
 				return generateUrl(`/apps/photos/api/v1/publicPreview/${this.file.fileid}?etag=${this.decodedEtag}&x=${size}&y=${size}&token=${token}`)
 			} else {
 				return generateUrl(`/apps/photos/api/v1/preview/${this.file.fileid}?etag=${this.decodedEtag}&x=${size}&y=${size}`)
 			}
+		},
+		drawBlurhash() {
+			if (!this.hasBlurhash || !this.$refs.canvas) {
+				return
+			}
+
+			const width = this.$refs.canvas.width
+			const height = this.$refs.canvas.height
+
+			const pixels = decode(this.file.metadataBlurhash, width, height)
+
+			const ctx = this.$refs.canvas.getContext('2d')
+			const imageData = ctx.createImageData(width, height)
+			imageData.data.set(pixels)
+			ctx.putImageData(imageData, 0, 0)
 		},
 	},
 
@@ -223,6 +233,7 @@ export default {
 
 <style lang="scss" scoped>
 .file-container {
+	contain: strict;
 	background: var(--color-primary-element-light);
 	position: relative;
 	height: 100%;
@@ -231,7 +242,9 @@ export default {
 	box-sizing: border-box;
 
 	// Selection border.
-	&.selected, &:focus-within {
+	&.selected,
+	&:focus-within,
+	&:has(:focus) {
 		&::after {
 			position: absolute;
 			top: 0;
@@ -244,6 +257,10 @@ export default {
 			outline-offset: -4px;
 			pointer-events: none;
 		}
+
+		.selection-checkbox {
+			opacity: 1;
+		}
 	}
 
 	.file {
@@ -253,8 +270,17 @@ export default {
 		outline: none; // Override global focus state.
 		display: flex; // Fill parent size
 
+		&__blurhash {
+			position: absolute;
+			top: 0;
+			height: 100%;
+			width: 100%;
+			object-fit: cover;
+		}
+
 		&__images {
-			display: contents;
+			width: 100%;
+			height: 100%;
 
 			.icon-overlay {
 				position: absolute;
@@ -276,36 +302,6 @@ export default {
 				object-fit: cover;
 				position: absolute;
 				color: transparent; /// Hide alt='' text when loading.
-			}
-
-			.loading-overlay {
-				position: absolute;
-				height: 100%;
-				width: 100%;
-				display: flex;
-				align-content: center;
-				align-items: center;
-				justify-content: center;
-
-				svg {
-					width: 70%;
-					height: 70%;
-				}
-			}
-		}
-
-		&__hidden-description {
-			position: absolute;
-			left: -10000px;
-			top: -10000px;
-			width: 1px;
-			height: 1px;
-			overflow: hidden;
-
-			&.show {
-				position: initial;
-				width: fit-content;
-				height: fit-content;
 			}
 		}
 	}
@@ -330,15 +326,21 @@ export default {
 		z-index: 1;
 		width: fit-content;
 
-		// Make the checkbox background round on hover.
-		:deep .checkbox-radio-switch__label {
+		:deep .checkbox-radio-switch__input:focus-visible + .checkbox-radio-switch__content,
+		.checkbox-radio-switch__input:focus-visible {
+			outline: 2px solid var(--color-main-text);
+			box-shadow: 0 0 0 3px var(--color-main-background);
+			outline-offset: 0px;
+		}
+
+		:deep .checkbox-radio-switch__content {
 			padding: 10px;
 			box-sizing: border-box;
+			background: var(--color-main-background);
 
 			// Add a background to the checkbox so we do not see the image through it.
 			&::after {
 				content: '';
-				background: var(--color-primary-element-light);
 				width: 16px;
 				height: 16px;
 				position: absolute;
@@ -364,15 +366,6 @@ export default {
 		top: 2px;
 		// Fancy calculation to render the start in the middle of narrow images.
 		right: min(2px, calc(50% - 7px));
-
-		:deep .material-design-icon__svg {
-			fill: #FC0;
-
-			path {
-				stroke: var(--color-primary-element-light);
-				stroke-width: 1px;
-			}
-		}
 	}
 }
 </style>

@@ -13,6 +13,9 @@ OC.L10N.register(
     "Shared by" : "Compartido por",
     "Group" : "Grupo",
     "Favorite" : "Favorito",
+    "Go back" : "Regresar",
+    "Dates" : "Fechas",
+    "Home" : "Inicio",
     "Remove from favorites" : "Eliminar de favoritos",
     "Add" : "Agregar",
     "Details" : "Detalles"

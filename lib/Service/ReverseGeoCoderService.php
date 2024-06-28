@@ -2,25 +2,8 @@
 
 declare(strict_types=1);
 /**
- * @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
- *
- * @author Louis Chemineau <louis@chmn.me>
- *
- * @license AGPL-3.0-or-later
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 namespace OCA\Photos\Service;
 
@@ -32,12 +15,15 @@ use Hexogen\KDTree\ItemList;
 use Hexogen\KDTree\KDTree;
 use Hexogen\KDTree\NearestSearch;
 use Hexogen\KDTree\Point;
+use OCA\Photos\AppInfo\Application;
 use OCP\Files\IAppData;
 use OCP\Files\NotFoundException;
 use OCP\Files\SimpleFS\ISimpleFolder;
 use OCP\Http\Client\IClientService;
+use OCP\IConfig;
 
 class ReverseGeoCoderService {
+	public const CONFIG_DISABLE_PLACES = 'disable_places';
 	private ?ISimpleFolder $geoNameFolderCache = null;
 	private ?NearestSearch $fsSearcher = null;
 	/** @var array<int, string> */
@@ -46,6 +32,7 @@ class ReverseGeoCoderService {
 	public function __construct(
 		private IAppData $appData,
 		private IClientService $clientService,
+		private IConfig $config,
 	) {
 	}
 
@@ -80,13 +67,17 @@ class ReverseGeoCoderService {
 		return $this->citiesMapping[$placeId];
 	}
 
+	public function arePlacesEnabled(): bool {
+		return ($this->config->getAppValue(Application::APP_ID, self::CONFIG_DISABLE_PLACES, '0') !== '1');
+	}
+
 	private function downloadCities1000(bool $force = false): void {
-		if ($this->geoNameFolder()->fileExists('cities1000.csv') && !$force) {
+		if (!$this->arePlacesEnabled() || ($this->geoNameFolder()->fileExists('cities1000.csv') && !$force)) {
 			return;
 		}
 
 		// Download zip file to a tmp file.
-		$response = $this->clientService->newClient()->get("https://download.geonames.org/export/dump/cities1000.zip");
+		$response = $this->clientService->newClient()->get("https://download.nextcloud.com/server/apps/photos/cities1000.zip");
 		$tmpFile = tmpfile();
 		$cities1000ZipTmpFileName = stream_get_meta_data($tmpFile)['uri'];
 		fclose($tmpFile);

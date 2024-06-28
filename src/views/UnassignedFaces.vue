@@ -1,26 +1,7 @@
 <!--
- - @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
- - @copyright Copyright (c) 2022 Marcel Klehr <mklehr@gmx.net>
- -
- - @author Louis Chemineau <louis@chmn.me>
- - @author Marcel Klehr <mklehr@gmx.net>
- -
- - @license AGPL-3.0-or-later
- -
- - This program is free software: you can redistribute it and/or modify
- - it under the terms of the GNU Affero General Public License as
- - published by the Free Software Foundation, either version 3 of the
- - License, or (at your option) any later version.
- -
- - This program is distributed in the hope that it will be useful,
- - but WITHOUT ANY WARRANTY; without even the implied warranty of
- - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- - GNU Affero General Public License for more details.
- -
- - You should have received a copy of the GNU Affero General Public License
- - along with this program. If not, see <http://www.gnu.org/licenses/>.
- -
- -->
+  - SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 <template>
 	<!-- Errors handlers-->
 	<NcEmptyContent v-if="errorFetchingFiles">
@@ -96,11 +77,13 @@
 				@select-toggled="onFileSelectToggle" />
 		</FilesListViewer>
 
-		<NcModal v-if="showMoveModal"
+		<NcDialog v-if="showMoveModal"
 			:name="t('photos', 'Move to different person')"
-			@close="showMoveModal = false">
+			close-on-click-outside
+			size="normal"
+			@closing="showMoveModal = false">
 			<FaceMergeForm :first-face="'-1'" @select="handleMove($event, selectedFileIds)" />
-		</NcModal>
+		</NcDialog>
 	</div>
 </template>
 
@@ -112,7 +95,7 @@ import Download from 'vue-material-design-icons/Download.vue'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 import AccountSwitch from 'vue-material-design-icons/AccountSwitch.vue'
 
-import { NcActions, NcActionButton, NcModal, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcDialog, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
@@ -137,7 +120,7 @@ export default {
 		NcEmptyContent,
 		NcActions,
 		NcActionButton,
-		NcModal,
+		NcDialog,
 		AccountSwitch,
 	},
 
@@ -199,12 +182,8 @@ export default {
 		openViewer(fileId) {
 			const file = this.files[fileId]
 			OCA.Viewer.open({
-				// remove /username/files/ from the start
 				path: '/' + file.filename.split('/').slice(3).join('/'),
-				list: this.faceFileIds.map(fileId => ({
-					...this.files[fileId],
-					basename: this.files[fileId].basename.split('-').slice(1).join('-'),
-				})).filter(file => !file.sectionHeader),
+				list: this.faceFileIds.map(fileId => ({ ...this.files[fileId], filename: '/' + this.files[fileId].filename.split('/').slice(3).join('/') })),
 				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
 				canLoop: file.canLoop,
 			})

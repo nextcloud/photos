@@ -1,3 +1,8 @@
+<!--
+ - SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+ - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <template>
 	<NcAppSettingsDialog :open="open"
 		:show-navigation="true"
@@ -7,17 +12,31 @@
 			<CroppedLayoutSettings />
 		</NcAppSettingsSection>
 
-		<NcAppSettingsSection id="directory-settings" :name="t('photos', 'Photos directory')">
-			<PhotosLocationSettings />
+		<NcAppSettingsSection id="source-directories-settings" :name="t('photos', 'Media folders')">
+			<div class="setting-section-subline">
+				{{ t('photos', 'Choose the folders from where photos and videos are shown.') }}
+			</div>
+
+			<PhotosSourceLocationsSettings />
+		</NcAppSettingsSection>
+
+		<NcAppSettingsSection id="upload-directory-settings" :name="t('photos', 'Upload folder')">
+			<div class="setting-section-subline">
+				{{ t('photos', 'Choose the folder where photos and albums are uploaded to.') }}
+			</div>
+
+			<PhotosUploadLocationSettings />
 		</NcAppSettingsSection>
 	</NcAppSettingsDialog>
 </template>
 
 <script>
 import { NcAppSettingsDialog, NcAppSettingsSection } from '@nextcloud/vue'
+import { translate as t } from '@nextcloud/l10n'
 
 import CroppedLayoutSettings from './CroppedLayoutSettings.vue'
-import PhotosLocationSettings from './PhotosLocationSettings.vue'
+import PhotosSourceLocationsSettings from './PhotosSourceLocationsSettings.vue'
+import PhotosUploadLocationSettings from './PhotosUploadLocationSettings.vue'
 
 export default {
 	name: 'SettingsDialog',
@@ -26,7 +45,8 @@ export default {
 		NcAppSettingsDialog,
 		NcAppSettingsSection,
 		CroppedLayoutSettings,
-		PhotosLocationSettings,
+		PhotosSourceLocationsSettings,
+		PhotosUploadLocationSettings,
 	},
 
 	props: {
@@ -42,20 +62,17 @@ export default {
 		onClose() {
 			this.$emit('update:open', false)
 		},
+
+		t,
 	},
 }
 </script>
 
 <style lang="scss">
 .app-settings {
-	.app-settings-section__desc {
-		margin-top: -0.2em;
-		margin-bottom: 1em;
-		opacity: .7;
-	}
-	.app-settings-section__input {
-		width: 100%;
-		max-width: 300px;
+	.setting-section-subline {
+		color: var(--color-text-lighter);
+		margin-bottom: 8px;
 	}
 }
 </style>

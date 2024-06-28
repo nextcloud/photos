@@ -1,4 +1,10 @@
+<!--
+  - SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: CC0-1.0
+-->
 # Nextcloud Photos
+
+[![REUSE status](https://api.reuse.software/badge/github.com/nextcloud/photos)](https://api.reuse.software/info/github.com/nextcloud/photos)
 
 **📸 Your memories under your control**
 
@@ -14,9 +20,13 @@
 ## 🚀 Installation
 
 In your Nextcloud, simply enable the Photos app through the Apps management.
-The Nextcloud Photos app is only included in nextcloud v18 and higher.
+The Nextcloud Photos app is included in Nextcloud 18 and higher.
 
-Consider installing the [preview generator](https://github.com/rullzer/previewgenerator) for pre-generating thumbnails.
+Optional add-ons that make the Photos app even better:
+
+* Install [Recognize for Nextcloud](https://github.com/nextcloud/recognize) for AI-powered automatic face and object recognition. Includes automated tagging/categorizing.
+* Install the [preview generator](https://github.com/rullzer/previewgenerator) if pre-generating thumbnails is desired.
+* Install [Imaginary](https://docs.nextcloud.com/server/latest/admin_manual/installation/server_tuning.html#previews) to speed up preview generation.
 
 ## Mobile Photos
 
@@ -29,6 +39,9 @@ Use the Android/iOS App to view your photos. It's possible to auto-upload them.
 If you'd like to join, just go through the [issues list](https://github.com/nextcloud/photos/issues) and fix some!
 
 ## 🏗 Development setup
+
+This app requires the [Viewer app](https://github.com/nextcloud/viewer) to be installed and enabled.
+Follow its development setup and then continue here.
 
 1. ☁ Clone this into your `apps` folder of your Nextcloud.
 1. 👩‍💻 In a terminal, run the command `make dev-setup` to install the dependencies.

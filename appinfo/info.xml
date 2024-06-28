@@ -1,11 +1,15 @@
 <?xml version="1.0"?>
+<!--
+  - SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 <info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
     <id>photos</id>
     <name>Photos</name>
     <summary>Your memories under your control</summary>
     <description>Your memories under your control</description>
-    <version>2.4.0</version>
+    <version>3.0.0</version>
     <licence>agpl</licence>
     <author mail="skjnldsv@protonmail.com">John Molakvoæ</author>
     <namespace>Photos</namespace>
@@ -20,7 +24,7 @@
     <repository>https://github.com/nextcloud/photos.git</repository>
     <default_enable />
     <dependencies>
-        <nextcloud min-version="28" max-version="28" />
+        <nextcloud min-version="30" max-version="30" />
     </dependencies>
     <navigations>
         <navigation>
@@ -32,6 +36,8 @@
 
     <commands>
         <command>OCA\Photos\Command\UpdateReverseGeocodingFilesCommand</command>
+        <command>OCA\Photos\Command\AlbumAddCommand</command>
+        <command>OCA\Photos\Command\AlbumCreateCommand</command>
     </commands>
 
     <sabre>
@@ -47,4 +53,14 @@
     <background-jobs>
         <job>OCA\Photos\Jobs\AutomaticPlaceMapperJob</job>
     </background-jobs>
+
+    <repair-steps>
+        <install>
+            <step>OCA\Photos\RepairStep\InitMetadata</step>
+        </install>
+        <post-migration>
+            <step>OCA\Photos\RepairStep\InitMetadata</step>
+        </post-migration>
+    </repair-steps>
+
 </info>

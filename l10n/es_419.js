@@ -11,6 +11,9 @@ OC.L10N.register(
     "Save" : "Guardar",
     "Shared by" : "Compartido por",
     "Favorite" : "Hacer favorito",
+    "Go back" : "Regresar",
+    "Dates" : "Fechas",
+    "Home" : "Inicio",
     "Remove from favorites" : "Eliminar de favoritos",
     "Add" : "Agregar",
     "Details" : "Detalles"

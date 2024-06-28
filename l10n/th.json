@@ -27,13 +27,14 @@
     "No recommendations. Start typing." : "ไม่มีคำแนะนำ เริ่มพิมพ์เลย",
     "Group" : "กลุ่ม",
     "An error occurred" : "เกิดข้อผิดพลาด",
+    "Favorite" : "รายการโปรด",
     "Open the full size \"{name}\" image" : "เปิดรูปภาพขนาดเต็ม \"{name}\"",
-    "Open the \"{name}\" sub-directory" : "เปิดไดเรกทอรีรอง \"{name}\"",
+    "Go back" : "กลับไป",
     "Back to {folder}" : "กลับไปยัง {folder}",
     "Share this folder" : "แชร์โฟลเดอร์นี้",
     "Enable squared photos view" : "เปิดมุมมองรูปภาพสี่เหลี่ยม",
+    "Home" : "หน้าหลัก",
     "View" : "มุมมอง",
-    "Favorite" : "รายการโปรด",
     "Remove from favorites" : "เอาออกจากรายการโปรด",
     "Save." : "บันทึก",
     "This folder does not exist" : "ไม่มีโฟลเดอร์นี้",
@@ -43,10 +44,10 @@
     "Add" : "เพิ่ม",
     "Tagged photos" : "รูปภาพที่ติดแท็ก",
     "Details" : "รายละเอียด",
-    "Locations" : "สถานที่",
     "Go back to the previous view." : "กลับไปยังมุมมองก่อนหน้า",
     "Create the album." : "สร้างอัลบั้ม",
     "Back to the new album form." : "กลับไปยังแบบฟอร์มอัลบั้มใหม่",
-    "_Share with %n user_::_Share with %n users_" : ["แชร์กับผู้ใช้ %n คน"]
+    "_Share with %n user_::_Share with %n users_" : ["แชร์กับผู้ใช้ %n คน"],
+    "Open the \"{name}\" sub-directory" : "เปิดไดเรกทอรีรอง \"{name}\""
 },"pluralForm" :"nplurals=1; plural=0;"
 }

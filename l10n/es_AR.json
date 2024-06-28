@@ -15,14 +15,15 @@
     "Group" : "Grupo",
     "Copy public link" : "Copiar link publico",
     "An error occurred" : "Ocurrió un error",
+    "Favorite" : "Favorito",
     "Open the full size \"{name}\" image" : "Abrir imagen a tamaño completo \"{nombre}\"",
-    "Open the \"{name}\" sub-directory" : "Abra el subdirectorio \"{nombre}\"",
+    "Go back" : "Regresar",
     "Back to {folder}" : "Volver a {carpeta}",
     "Share this folder" : "Compartir esta carpeta",
     "_{years} year ago_::_{years} years ago_" : ["Hace {years} año","Hace {years} años","Hace {years} años"],
     "Enable squared photos view" : "Habilitar vista de fotos cuadradas",
+    "Home" : "Casa",
     "View" : "Ver",
-    "Favorite" : "Favorito",
     "Remove from favorites" : "Eliminado de favoritos",
     "This folder does not exist" : "Esta carpeta no existe",
     "No photos in here" : "No hay fotos aquí",
@@ -31,7 +32,7 @@
     "Add" : "Añadir",
     "Tagged photos" : "Fotos etiquetadas",
     "Details" : "Detalles",
-    "Locations" : "Ubicaciones",
+    "Open the \"{name}\" sub-directory" : "Abra el subdirectorio \"{nombre}\"",
     "Shared albums" : "Álbumes compartidos"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

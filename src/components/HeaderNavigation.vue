@@ -1,30 +1,14 @@
 <!--
- - @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
- -
- - @author John Molakvoæ <skjnldsv@protonmail.com>
- -
- - @license AGPL-3.0-or-later
- -
- - This program is free software: you can redistribute it and/or modify
- - it under the terms of the GNU Affero General Public License as
- - published by the Free Software Foundation, either version 3 of the
- - License, or (at your option) any later version.
- -
- - This program is distributed in the hope that it will be useful,
- - but WITHOUT ANY WARRANTY; without even the implied warranty of
- - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- - GNU Affero General Public License for more details.
- -
- - You should have received a copy of the GNU Affero General Public License
- - along with this program. If not, see <http://www.gnu.org/licenses/>.
- -
- -->
+ - SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
+ - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 
 <template>
 	<div :class="{'photos-navigation--root': isRoot}" class="photos-navigation" role="toolbar">
 		<!-- Back navigation button -->
 		<NcButton v-if="!isRoot"
 			class="photos-navigation__back"
+			:aria-label="t('photos', 'Go back')"
 			type="tertiary"
 			@click="folderUp">
 			<template #icon>
@@ -34,9 +18,9 @@
 
 		<!-- Main Navigation title -->
 		<div class="photos-navigation__title">
-			<h2 class="photos-navigation__title__main" @click="refresh">
+			<h1 class="photos-navigation__title__main" @click="refresh">
 				{{ name }}
-			</h2>
+			</h1>
 			<div class="photos-navigation__title__sub" />
 			<slot name="subtitle" />
 		</div>
@@ -178,51 +162,40 @@ export default {
 }
 </script>
 
-<style lang="scss">
-:root {
-	--photos-navigation-height: 64px;
-	// header height - button size
-	--photos-navigation-spacing: calc((var(--photos-navigation-height) - 44px) / 2);
-}
-
-// Properly position the navigation toggle button
-button.app-navigation-toggle {
-	// App-navigation have a 4px margin top
-	top: 0 !important;
-	right: calc(var(--photos-navigation-height) * -1) !important;
-	margin: var(--photos-navigation-spacing) !important;
-}
-
-</style>
-
 <style lang="scss" scoped>
 .photos-navigation {
 	position: sticky;
 	z-index: 20;
 	top: 0;
 	display: flex;
+	// We need to wrap on small devices for accessibility
+	flex-wrap: wrap;
+	gap: calc(2 * var(--app-navigation-padding));
 	align-items: center;
+	justify-content: flex-start;
 	width: 100%;
-	min-height: var(--photos-navigation-height);
-	padding: 0 var(--photos-navigation-height);
+	// Ensure to not overlap with app navigation toggle
+	padding-inline: calc(var(--default-clickable-area) + 2 * var(--app-navigation-padding)) var(--app-navigation-padding);
+	// Align with app navigation toggle
+	padding-block: var(--app-navigation-padding);
 	background: var(--color-main-background);
 
 	&__back {
-		// Above the navigation menu
+		// Replaces the app navigation button
 		position: absolute !important;
-		left: 0;
-		margin: var(--photos-navigation-spacing) !important;
+		left: var(--app-navigation-padding);
 	}
 
 	&__title {
 		max-width: 45%;
-		margin-right: calc(2 * var(--photos-navigation-spacing));
 		display: flex;
 		flex-direction: column;
 
 		&__main {
-			margin: 0;
 			cursor: pointer;
+			font-weight: 700;
+			font-size: 20px;
+			line-height: 44px;
 		}
 
 		&__main, &__sub {
@@ -232,19 +205,15 @@ button.app-navigation-toggle {
 		}
 	}
 
-	&__content {
-		max-width: 50%;
-	}
-
 	&__loader {
-		margin-left: 32px;
+		margin-inline-start: 32px;
 	}
 
 	&__content-right {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		margin-left: auto;
+		margin-inline-start: auto;
 	}
 }
 

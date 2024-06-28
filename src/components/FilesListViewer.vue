@@ -1,27 +1,10 @@
 <!--
- - @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
- -
- - @author Louis Chemineau <louis@chmn.me>
- -
- - @license AGPL-3.0-or-later
- -
- - This program is free software: you can redistribute it and/or modify
- - it under the terms of the GNU Affero General Public License as
- - published by the Free Software Foundation, either version 3 of the
- - License, or (at your option) any later version.
- -
- - This program is distributed in the hope that it will be useful,
- - but WITHOUT ANY WARRANTY; without even the implied warranty of
- - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- - GNU Affero General Public License for more details.
- -
- - You should have received a copy of the GNU Affero General Public License
- - along with this program. If not, see <http://www.gnu.org/licenses/>.
- -
- -->
+ - SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+ - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 <template>
 	<div class="files-list-viewer">
-		<NcEmptyContent v-if="emptyMessage !== '' && itemsBySections.length === 1 && itemsBySections[0].items.length === 0 && !loading"
+		<NcEmptyContent v-if="emptyMessage !== '' && photosCount === 0 && !loading"
 			key="emptycontent"
 			:name="emptyMessage">
 			<PackageVariant slot="icon" />
@@ -87,7 +70,6 @@ import TiledLayout from '../components/TiledLayout/TiledLayout.vue'
 import { fetchFile } from '../services/fileFetcher.js'
 import VirtualScrolling from '../components/VirtualScrolling.vue'
 import EmptyBox from '../assets/Illustrations/empty.svg'
-import UserConfig from '../mixins/UserConfig.js'
 
 export default {
 	name: 'FilesListViewer',
@@ -99,8 +81,6 @@ export default {
 		TiledLayout,
 		VirtualScrolling,
 	},
-
-	mixins: [UserConfig],
 
 	props: {
 		// Array of file ids that should be rendered.
@@ -218,9 +198,16 @@ export default {
 			return []
 		},
 
+		photosCount() {
+			return this.itemsBySections.map(({ items }) => items.length).reduce((total, length) => total + length, 0)
+		},
+
 		/** @return {boolean} The list of items to pass to TiledLayout. */
 		showLoader() {
 			return this.loading && (this.fileIds?.length !== 0 || this.sections?.length !== 0)
+		},
+		croppedLayout() {
+			return this.$store.state.userConfig.croppedLayout
 		},
 	},
 

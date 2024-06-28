@@ -2,22 +2,8 @@
 
 declare(strict_types=1);
 /**
- * @copyright Copyright 2022 Carl Schwan <carl@carlschwan.eu>
- * @copyright Copyright 2022 Louis Chmn <louis@chmn.me>
- * @license AGPL-3.0-or-later
- *
- * This code is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License, version 3,
- * as published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License, version 3,
- * along with this program. If not, see <http://www.gnu.org/licenses/>
- *
+ * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
 namespace OCA\Photos\Listener;
@@ -26,6 +12,7 @@ use OCA\Photos\AppInfo\Application;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Files\File;
+use OCP\FilesMetadata\Event\MetadataBackgroundEvent;
 use OCP\FilesMetadata\Event\MetadataLiveEvent;
 use Psr\Log\LoggerInterface;
 
@@ -42,13 +29,20 @@ class ExifMetadataProvider implements IEventListener {
 	}
 
 	public function handle(Event $event): void {
-		if (!($event instanceof MetadataLiveEvent)) {
+		if (!($event instanceof MetadataLiveEvent) && !($event instanceof MetadataBackgroundEvent)) {
 			return;
 		}
 
 		$node = $event->getNode();
 
-		if (!$node instanceof File) {
+		if (!$node instanceof File || $node->getSize() === 0) {
+			return;
+		}
+
+		// We need the file content to extract the EXIF data.
+		// This can be slow for remote storage, so we do it in a background job.
+		if (!$node->getStorage()->isLocal() && $event instanceof MetadataLiveEvent) {
+			$event->requestBackgroundJob();
 			return;
 		}
 
@@ -80,11 +74,11 @@ class ExifMetadataProvider implements IEventListener {
 		}
 
 		if ($rawExifData && array_key_exists('EXIF', $rawExifData)) {
-			$event->getMetadata()->setArray('photos-exif', $this->sanitizeEntries($rawExifData['EXIF']));
+			$event->getMetadata()->setArray('photos-exif', $this->sanitizeEntries($rawExifData['EXIF'], $node));
 		}
 
 		if ($rawExifData && array_key_exists('IFD0', $rawExifData)) {
-			$event->getMetadata()->setArray('photos-ifd0', $this->sanitizeEntries($rawExifData['IFD0']));
+			$event->getMetadata()->setArray('photos-ifd0', $this->sanitizeEntries($rawExifData['IFD0'], $node));
 		}
 
 		if (
@@ -143,8 +137,10 @@ class ExifMetadataProvider implements IEventListener {
 	 * Exif data can contain anything.
 	 * This method will base 64 encode any non UTF-8 string in an array.
 	 * This will also remove control characters from UTF-8 strings.
+	 *
+	 * @param array<string, string> $data
 	 */
-	private function sanitizeEntries(array $data): array {
+	private function sanitizeEntries(array $data, File $node): array {
 		$cleanData = [];
 
 		foreach ($data as $key => $value) {
@@ -159,7 +155,19 @@ class ExifMetadataProvider implements IEventListener {
 				$key = preg_replace('/[^a-zA-Z]/', '_', $key);
 			}
 
-			$cleanData[$key] = $value;
+			// Arbitrary limit to filter out large EXIF entries.
+			if (is_string($value) && strlen($value) > 1000) {
+				$this->logger->info(
+					"EXIF entry ignored as it is too large",
+					[
+						'key' => $key,
+						'value' => $value,
+						'fileId' => $node->getId(),
+					]
+				);
+			} else {
+				$cleanData[$key] = $value;
+			}
 		}
 
 		return $cleanData;

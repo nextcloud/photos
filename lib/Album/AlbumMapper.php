@@ -2,23 +2,8 @@
 
 declare(strict_types=1);
 /**
- * @copyright Copyright (c) 2022 Robin Appelman <robin@icewind.nl>
- *
- * @license GNU AGPL version 3 or any later version
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
 namespace OCA\Photos\Album;
@@ -112,6 +97,25 @@ class AlbumMapper {
 	}
 
 	/**
+	 * @param string $albumName
+	 * @param string $userName
+	 * @return AlbumInfo
+	 */
+	public function getByName(string $albumName, string $userName): ?AlbumInfo {
+		$query = $this->connection->getQueryBuilder();
+		$query->select("album_id", "location", "created", "last_added_photo")
+				->from("photos_albums")
+				->where($query->expr()->eq('name', $query->createNamedParameter($albumName)))
+				->andWhere($query->expr()->eq('user', $query->createNamedParameter($userName)));
+		$row = $query->executeQuery()->fetch();
+		if ($row) {
+			return new AlbumInfo((int)$row['album_id'], $userName, $albumName, $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
+		} else {
+			return null;
+		}
+	}
+
+	/**
 	 * @param int $fileId
 	 * @return AlbumInfo[]
 	 */
@@ -201,10 +205,8 @@ class AlbumMapper {
 
 		$files = [];
 		foreach ($rows as $row) {
-			$albumId = (int)$row['album_id'];
 			if ($row['fileid']) {
-				$mimeId = $row['mimetype'];
-				$mimeType = $this->mimeTypeLoader->getMimetypeById($mimeId);
+				$mimeType = $this->mimeTypeLoader->getMimetypeById((int)$row['mimetype']);
 				$files[] = new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
 			}
 		}
@@ -229,8 +231,7 @@ class AlbumMapper {
 			->andWhere($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
 		$row = $query->executeQuery()->fetchAll()[0];
 
-		$mimeId = $row['mimetype'];
-		$mimeType = $this->mimeTypeLoader->getMimetypeById($mimeId);
+		$mimeType = $this->mimeTypeLoader->getMimetypeById((int)$row['mimetype']);
 		return new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
 	}
 
@@ -353,10 +354,10 @@ class AlbumMapper {
 
 			switch ($row['collaborator_type']) {
 				case self::TYPE_USER:
-					$displayName = $this->userManager->get($row['collaborator_id'])->getDisplayName();
+					$displayName = $this->userManager->get($row['collaborator_id'])?->getDisplayName();
 					break;
 				case self::TYPE_GROUP:
-					$displayName = $this->groupManager->get($row['collaborator_id'])->getDisplayName();
+					$displayName = $this->groupManager->get($row['collaborator_id'])?->getDisplayName();
 					break;
 				case self::TYPE_LINK:
 					$displayName = $this->l->t('Public link');
@@ -421,12 +422,12 @@ class AlbumMapper {
 		$existingCollaborators = $this->getCollaborators($albumId);
 
 		// Different behavior if type is link to prevent creating multiple link.
-		function computeKey($c) {
-			return ($c['type'] === AlbumMapper::TYPE_LINK ? '' : $c['id']).$c['type'];
-		}
+		$computeKey = function ($c) {
+			return ($c['type'] === AlbumMapper::TYPE_LINK ? '' : $c['id']) . $c['type'];
+		};
 
-		$collaboratorsToAdd = array_udiff($collaborators, $existingCollaborators, fn ($a, $b) => strcmp(computeKey($a), computeKey($b)));
-		$collaboratorsToRemove = array_udiff($existingCollaborators, $collaborators, fn ($a, $b) => strcmp(computeKey($a), computeKey($b)));
+		$collaboratorsToAdd = array_udiff($collaborators, $existingCollaborators, fn ($a, $b) => strcmp($computeKey($a), $computeKey($b)));
+		$collaboratorsToRemove = array_udiff($existingCollaborators, $collaborators, fn ($a, $b) => strcmp($computeKey($a), $computeKey($b)));
 
 		$this->connection->beginTransaction();
 
@@ -529,8 +530,7 @@ class AlbumMapper {
 		foreach ($rows as $row) {
 			$albumId = (int)$row['album_id'];
 			if ($row['fileid']) {
-				$mimeId = $row['mimetype'];
-				$mimeType = $this->mimeTypeLoader->getMimetypeById($mimeId);
+				$mimeType = $this->mimeTypeLoader->getMimetypeById((int)$row['mimetype']);
 				$filesByAlbum[$albumId][] = new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
 			}
 

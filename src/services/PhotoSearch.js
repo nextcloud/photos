@@ -1,36 +1,20 @@
 /**
- * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
- *
- * @author John Molakvoæ <skjnldsv@protonmail.com>
- *
- * @license AGPL-3.0-or-later
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
+ * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
 import { genFileInfo } from '../utils/fileUtils.js'
-import { getCurrentUser } from '@nextcloud/auth'
 import { allMimes } from './AllowedMimes.js'
 import client from './DavClient.js'
 import { props } from './DavRequest.js'
 import moment from '@nextcloud/moment'
+import store from '../store/index.js'
+import { davRootPath } from '@nextcloud/files'
+import { joinPaths } from '@nextcloud/paths'
 
 /**
  * List files from a folder and filter out unwanted mimes
  *
- * @param {object} path the lookup path
  * @param {object} [options] used for the cancellable requests
  * @param {number} [options.firstResult=0] Index of the first result that we want (starts at 0)
  * @param {number} [options.nbResults=200] The number of file to fetch
@@ -40,7 +24,7 @@ import moment from '@nextcloud/moment'
  * @param {boolean} [options.onlyFavorites=false] get only favorite items
  * @return {Promise<object[]>} the file list
  */
-export default async function(path = '', options = {}) {
+export default async function(options = {}) {
 	// default function options
 	options = {
 		firstResult: 0,
@@ -50,8 +34,6 @@ export default async function(path = '', options = {}) {
 		onlyFavorites: false,
 		...options,
 	}
-
-	const prefixPath = `/files/${getCurrentUser().uid}`
 
 	// generating the search or condition
 	// based on the allowed mimetypes
@@ -95,6 +77,15 @@ export default async function(path = '', options = {}) {
 			}).join('\n')}</d:or>`
 		: ''
 
+	const sourceFolders = store.state.userConfig.photosSourceFolders
+		.map(folder => `
+			<d:scope>
+				<d:href>${joinPaths(davRootPath, folder)}</d:href>
+				<d:depth>infinity</d:depth>
+			</d:scope>`
+		)
+		.join('\n')
+
 	options = Object.assign({
 		method: 'SEARCH',
 		headers: {
@@ -113,10 +104,7 @@ export default async function(path = '', options = {}) {
 						</d:prop>
 					</d:select>
 					<d:from>
-						<d:scope>
-							<d:href>${prefixPath}/${path}</d:href>
-							<d:depth>infinity</d:depth>
-						</d:scope>
+						${sourceFolders}
 					</d:from>
 					<d:where>
 						<d:and>
@@ -130,6 +118,10 @@ export default async function(path = '', options = {}) {
 					<d:orderby>
 						<d:order>
 							<d:prop><nc:metadata-photos-original_date_time/></d:prop>
+							<d:descending/>
+						</d:order>
+						<d:order>
+							<d:prop><d:getlastmodified/></d:prop>
 							<d:descending/>
 						</d:order>
 					</d:orderby>

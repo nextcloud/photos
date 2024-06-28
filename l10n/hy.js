@@ -6,6 +6,7 @@ OC.L10N.register(
     "Shared with you" : "Shared with you",
     "Save" : "Պահպանել",
     "Group" : "Խումբ",
+    "Home" : "Սկիզբ",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "Ավելացնել",
     "Details" : "Մանրամասներ"

@@ -1,32 +1,17 @@
 /**
- * @copyright Copyright (c) 2022 John Molakvoæ <skjnldsv@protonmail.com>
- *
- * @author John Molakvoæ <skjnldsv@protonmail.com>
- *
- * @license AGPL-3.0-or-later
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
+ * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 /* eslint-disable n/no-unpublished-import */
-import axios from '@nextcloud/axios'
+import axios from 'axios'
 import { addCommands, User } from '@nextcloud/cypress'
+import { addCompareSnapshotCommand } from 'cypress-visual-regression/dist/command'
 import { basename } from 'path'
 
 // Add custom commands
 import 'cypress-wait-until'
 addCommands()
+addCompareSnapshotCommand()
 
 // Register this file's custom commands types
 declare global {
@@ -85,31 +70,31 @@ Cypress.Commands.add('uploadFile', (user, fixture = 'image.jpg', mimeType = 'ima
  */
 Cypress.Commands.add('uploadContent', (user, blob, mimeType, target) => {
 	cy.clearCookies()
-	.then(async () => {
-		const fileName = basename(target)
+		.then(async () => {
+			const fileName = basename(target)
 
-		// Process paths
-		const rootPath = `${Cypress.env('baseUrl')}/remote.php/dav/files/${encodeURIComponent(user.userId)}`
-		const filePath = target.split('/').map(encodeURIComponent).join('/')
-		try {
-			const file = new File([blob], fileName, { type: mimeType })
-			await axios({
-				url: `${rootPath}${filePath}`,
-				method: 'PUT',
-				data: file,
-				headers: {
-					'Content-Type': mimeType,
-				},
-				auth: {
-					username: user.userId,
-					password: user.password,
-				},
-			}).then(response => {
-				cy.log(`Uploaded content as ${fileName}`, response)
-			})
-		} catch (error) {
-			cy.log('error', error)
-			throw new Error(`Unable to process fixture`)
-		}
-	})
+			// Process paths
+			const rootPath = `${Cypress.env('baseUrl')}/remote.php/dav/files/${encodeURIComponent(user.userId)}`
+			const filePath = target.split('/').map(encodeURIComponent).join('/')
+			try {
+				const file = new File([blob], fileName, { type: mimeType })
+				await axios({
+					url: `${rootPath}${filePath}`,
+					method: 'PUT',
+					data: file,
+					headers: {
+						'Content-Type': mimeType,
+					},
+					auth: {
+						username: user.userId,
+						password: user.password,
+					},
+				}).then(response => {
+					cy.log(`Uploaded content as ${fileName}`, response)
+				})
+			} catch (error) {
+				cy.log('error', error)
+				throw new Error('Unable to process fixture')
+			}
+		})
 })

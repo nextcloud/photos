@@ -7,6 +7,7 @@ OC.L10N.register(
     "Save" : "ساتل",
     "Shared by" : "شریکوننکی",
     "Favorite" : "په نښه شوی",
+    "Home" : "کور",
     "Remove from favorites" : "له نښو ويستل",
     "Details" : "معلومات"
 },

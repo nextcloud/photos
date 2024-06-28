@@ -21,8 +21,8 @@
  */
 
 /*!
- * Vue.js v2.7.14
- * (c) 2014-2022 Evan You
+ * Vue.js v2.7.16
+ * (c) 2014-2023 Evan You
  * Released under the MIT License.
  */
 
@@ -52,11 +52,58 @@
 
 /*! @license DOMPurify 3.0.5 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/3.0.5/LICENSE */
 
+/*! For license information please see index.js.LICENSE.txt */
+
 /*! https://mths.be/base64 v1.0.0 by @mathias | MIT license */
 
 /*! https://mths.be/he v1.2.0 by @mathias | MIT license */
 
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
+
+/**
+ * @copyright 2019 Christoph Wurst <christoph@winzerhof-wurst.at>
+ *
+ * @author Christoph Wurst <christoph@winzerhof-wurst.at>
+ *
+ * @license AGPL-3.0-or-later
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+/**
+ * @copyright 2019 Christoph Wurst <christoph@winzerhof-wurst.at>
+ *
+ * @author Christoph Wurst <christoph@winzerhof-wurst.at>
+ * @author John Molakvoæ <skjnldsv@protonmail.com>
+ *
+ * @license AGPL-3.0-or-later
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 
 /**
  * @copyright 2021 Christoph Wurst <christoph@winzerhof-wurst.at>
@@ -80,9 +127,9 @@
  */
 
 /**
- * @copyright 2022 Louis Chemineau <mlouis@chmn.me>
+ * @copyright 2022 Christopher Ng <chrng8@gmail.com>
  *
- * @author Louis Chemineau <mlouis@chmn.me>
+ * @author Christopher Ng <chrng8@gmail.com>
  *
  * @license AGPL-3.0-or-later
  *
@@ -93,11 +140,34 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+/**
+ * @copyright 2023 Christopher Ng <chrng8@gmail.com>
+ *
+ * @author Christopher Ng <chrng8@gmail.com>
+ *
+ * @license AGPL-3.0-or-later
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 /**
@@ -305,6 +375,28 @@
  * @copyright Copyright (c) 2019 Julius Härtl <jus@bitgrid.net>
  *
  * @author Julius Härtl <jus@bitgrid.net>
+ *
+ * @license AGPL-3.0-or-later
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+/**
+ * @copyright Copyright (c) 2019 Julius Härtl <jus@bitgrid.net>
+ *
+ * @author Julius Härtl <jus@bitgrid.net>
  * @author John Molakvoæ <skjnldsv@protonmail.com>
  *
  * @license AGPL-3.0-or-later
@@ -325,9 +417,9 @@
  */
 
 /**
- * @copyright Copyright (c) 2020 John Molakvoæ <skjnldsv@protonmail.com>
+ * @copyright Copyright (c) 2020 Georg Ehrke <georg-nextcloud@ehrke.email>
  *
- * @author John Molakvoæ <skjnldsv@protonmail.com>
+ * @author Georg Ehrke <georg-nextcloud@ehrke.email>
  *
  * @license AGPL-3.0-or-later
  *
@@ -360,6 +452,28 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+/**
+ * @copyright Copyright (c) 2020 Raimund Schlüßler <raimund.schluessler@mailbox.org>
+ *
+ * @author Raimund Schlüßler <raimund.schluessler@mailbox.org>
+ *
+ * @license AGPL-3.0-or-later
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
@@ -391,6 +505,72 @@
  */
 
 /**
+ * @copyright Copyright (c) 2021 John Molakvoæ <skjnldsv@protonmail.com>
+ *
+ * @author John Molakvoæ <skjnldsv@protonmail.com>
+ *
+ * @license AGPL-3.0-or-later
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+/**
+ * @copyright Copyright (c) 2021 Jonas Meurer <jonas@freesources.org>
+ *
+ * @author Jonas Meurer <jonas@freesources.org>
+ *
+ * @license AGPL-3.0-or-later
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+/**
+ * @copyright Copyright (c) 2021 Raimund Schlüßler <raimund.schluessler@mailbox.org>
+ *
+ * @author Raimund Schlüßler <raimund.schluessler@mailbox.org>
+ *
+ * @license AGPL-3.0-or-later
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+/**
  * @copyright Copyright (c) 2022 John Molakvoæ <skjnldsv@protonmail.com>
  *
  * @author John Molakvoæ <skjnldsv@protonmail.com>
@@ -404,6 +584,28 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+/**
+ * @copyright Copyright (c) 2022 John Molakvoæ <skjnldsv@protonmail.com>
+ *
+ * @author John Molakvoæ <skjnldsv@protonmail.com>
+ *
+ * @license AGPL-3.0-or-later
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
  *
@@ -435,9 +637,54 @@
  */
 
 /**
- * @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
+ * @copyright Copyright (c) 2023 Grigorii K. Shartsev <me@shgk.me>
  *
- * @author Louis Chemineau <louis@chmn.me>
+ * @author Grigorii K. Shartsev <me@shgk.me>
+ *
+ * @license AGPL-3.0-or-later
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+/**
+ * @copyright Copyright (c) 2023 John Molakvoæ <skjnldsv@protonmail.com>
+ *
+ * @author John Molakvoæ <skjnldsv@protonmail.com>
+ * @author Ferdinand Thiessen <opensource@fthiessen.de>
+ *
+ * @license AGPL-3.0-or-later
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+/**
+ * @copyright Copyright (c) 2024 Ferdinand Thiessen <opensource@fthiessen.de>
+ *
+ * @author Ferdinand Thiessen <opensource@fthiessen.de>
  *
  * @license AGPL-3.0-or-later
  *

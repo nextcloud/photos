@@ -1,25 +1,7 @@
 <!--
- - @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
- -
- - @author John Molakvoæ <skjnldsv@protonmail.com>
- - @author Corentin Mors <medias@pixelswap.fr>
- -
- - @license AGPL-3.0-or-later
- -
- - This program is free software: you can redistribute it and/or modify
- - it under the terms of the GNU Affero General Public License as
- - published by the Free Software Foundation, either version 3 of the
- - License, or (at your option) any later version.
- -
- - This program is distributed in the hope that it will be useful,
- - but WITHOUT ANY WARRANTY; without even the implied warranty of
- - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- - GNU Affero General Public License for more details.
- -
- - You should have received a copy of the GNU Affero General Public License
- - along with this program. If not, see <http://www.gnu.org/licenses/>.
- -
- -->
+  - SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 
 <template>
 	<!-- Errors handlers-->
@@ -43,7 +25,7 @@
 			:root-title="rootTitle"
 			@refresh="onRefresh">
 			<UploadPicker :accept="allowedMimes"
-				:destination="path"
+				:destination="folderAsFolder"
 				:multiple="true"
 				@uploaded="onUpload" />
 		</HeaderNavigation>
@@ -53,19 +35,24 @@
 			{{ t('photos', 'No photos in here') }}
 		</NcEmptyContent>
 
-		<div v-else class="grid-container">
+		<div v-else
+			class="grid-container"
+			:class="{
+				'grid-container--folders': haveFolders,
+			}">
 			<VirtualGrid ref="virtualgrid"
 				:items="contentList"
 				:scroll-element="appContent"
-				:get-column-count="() => gridConfig.count"
-				:get-grid-gap="() => gridConfig.gap" />
+				:get-column-count="() => haveFolders ? gridConfig.folderCount : gridConfig.count"
+				:get-grid-gap="() => haveFolders ? 16 : 8" />
 		</div>
 	</div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { UploadPicker, getUploader } from '@nextcloud/upload'
+import { Upload, UploadPicker, getUploader } from '@nextcloud/upload'
+import { Folder as NcFolder, davParsePermissions } from '@nextcloud/files'
 import { NcEmptyContent } from '@nextcloud/vue'
 import VirtualGrid from 'vue-virtual-grid'
 
@@ -138,6 +125,13 @@ export default {
 		folder() {
 			return this.files[this.folderId]
 		},
+		folderAsFolder() {
+			return new NcFolder({
+				...this.folder,
+				source: decodeURI(this.folder.source),
+				permissions: davParsePermissions(this.folder.permissions),
+			})
+		},
 		folderContent() {
 			return this.folders[this.folderId]
 		},
@@ -170,8 +164,8 @@ export default {
 						...folder,
 						showShared: this.showShared,
 					},
-					width: 256,
-					height: 256,
+					width: 232,
+					height: 280,
 					columnSpan: 1,
 					renderComponent: Folder,
 				}
@@ -269,15 +263,13 @@ export default {
 		/**
 		 * Fetch file Info and add them into the store
 		 *
-		 * @param {Upload[]} uploads the newly uploaded files
+		 * @param {Upload} upload the newly uploaded files
 		 */
-		onUpload(uploads) {
-			uploads.forEach(async upload => {
-				const relPath = upload.path.split(prefixPath).pop()
-				const file = await getFileInfo(relPath)
-				this.$store.dispatch('appendFiles', [file])
-				this.$store.dispatch('addFilesToFolder', { fileid: this.folderId, files: [file] })
-			})
+		async onUpload(upload) {
+			const relPath = upload.source.split(prefixPath).pop()
+			const file = await getFileInfo(relPath)
+			this.$store.dispatch('appendFiles', [file])
+			this.$store.dispatch('addFilesToFolder', { fileid: this.folderId, files: [file] })
 		},
 	},
 
@@ -290,6 +282,17 @@ export default {
 .grid-container {
 	@include grid-sizes using ($marginTop, $marginW) {
 		padding: 0px #{$marginW}px 256px #{$marginW}px;
+	}
+	&--folders {
+		padding: 32px 48px;
+		@media only screen and (max-width: 400px) {
+			display: flex;
+			justify-content: center;
+			width: 100%;
+		}
+		@media only screen and (min-width: 400px) {
+			width: fit-content;
+		}
 	}
 }
 

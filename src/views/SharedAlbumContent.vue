@@ -1,24 +1,7 @@
 <!--
- - @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
- -
- - @author Louis Chemineau <louis@chmn.me>
- -
- - @license AGPL-3.0-or-later
- -
- - This program is free software: you can redistribute it and/or modify
- - it under the terms of the GNU Affero General Public License as
- - published by the Free Software Foundation, either version 3 of the
- - License, or (at your option) any later version.
- -
- - This program is distributed in the hope that it will be useful,
- - but WITHOUT ANY WARRANTY; without even the implied warranty of
- - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- - GNU Affero General Public License for more details.
- -
- - You should have received a copy of the GNU Affero General Public License
- - along with this program. If not, see <http://www.gnu.org/licenses/>.
- -
- -->
+  - SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 <template>
 	<div>
 		<CollectionContent v-if="true"
@@ -111,23 +94,19 @@
 			</NcEmptyContent>
 		</CollectionContent>
 
-		<NcModal v-if="showAddPhotosModal"
-			size="large"
+		<PhotosPicker :open.sync="showAddPhotosModal"
 			:name="t('photos', 'Add photos to {albumName}', {albumName: albumOriginalName})"
-			@close="showAddPhotosModal = false">
-			<FilesPicker v-if="album !== undefined"
-				:destination="album.basename"
-				:blacklist-ids="albumFileIds"
-				:loading="loadingAddFilesToAlbum"
-				@files-picked="handleFilesPicked" />
-		</NcModal>
+			:destination="album.basename"
+			:blacklist-ids="albumFileIds"
+			:loading="loadingAddFilesToAlbum"
+			@files-picked="handleFilesPicked" />
 	</div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
 
-import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionSeparator, NcUserBubble, isMobile } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcButton, NcEmptyContent, NcActionSeparator, NcUserBubble, isMobile } from '@nextcloud/vue'
 import { Type } from '@nextcloud/sharing'
 import { translate } from '@nextcloud/l10n'
 
@@ -145,7 +124,7 @@ import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.j
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
-import FilesPicker from '../components/FilesPicker.vue'
+import PhotosPicker from '../components/PhotosPicker.vue'
 
 export default {
 	name: 'SharedAlbumContent',
@@ -162,11 +141,10 @@ export default {
 		NcActionButton,
 		NcActionSeparator,
 		NcButton,
-		NcModal,
 		NcUserBubble,
 		CollectionContent,
 		// ActionDownload,
-		FilesPicker,
+		PhotosPicker,
 		HeaderNavigation,
 	},
 

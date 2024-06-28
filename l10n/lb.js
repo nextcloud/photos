@@ -10,6 +10,8 @@ OC.L10N.register(
     "Shared by" : "Gedeelt vun",
     "Group" : "Grupp",
     "Favorite" : "Favorit",
+    "Go back" : "Zeréckgoen",
+    "Home" : "Doheem",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "Derbäimaachen",
     "Details" : "Detailer"

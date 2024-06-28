@@ -1,24 +1,7 @@
 <!--
- - @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
- -
- - @author Louis Chemineau <louis@chmn.me>
- -
- - @license AGPL-3.0-or-later
- -
- - This program is free software: you can redistribute it and/or modify
- - it under the terms of the GNU Affero General Public License as
- - published by the Free Software Foundation, either version 3 of the
- - License, or (at your option) any later version.
- -
- - This program is distributed in the hope that it will be useful,
- - but WITHOUT ANY WARRANTY; without even the implied warranty of
- - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- - GNU Affero General Public License for more details.
- -
- - You should have received a copy of the GNU Affero General Public License
- - along with this program. If not, see <http://www.gnu.org/licenses/>.
- -
- -->
+  - SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 <template>
 	<div>
 		<CollectionsList :collections="places"
@@ -37,9 +20,9 @@
 				:link="`/places/${collection.basename}`"
 				:alt-img="t('photos', 'Cover photo for place {placeName}', { placeName: collection.basename })"
 				:cover-url="collection.lastPhoto | coverUrl">
-				<h2 class="place__name">
+				<span class="place__name">
 					{{ collection.basename }}
-				</h2>
+				</span>
 
 				<div slot="subtitle" class="place__details">
 					{{ n('photos', '%n item', '%n photos and videos', collection.nbItems,) }}
@@ -127,6 +110,10 @@ export default {
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
+		font-size: 20px;
+		margin-bottom: 12px;
+		line-height: 30px;
+		color: var(--color-main-text);
 	}
 }
 </style>

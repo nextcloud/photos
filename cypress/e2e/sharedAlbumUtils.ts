@@ -1,23 +1,6 @@
 /**
- * @copyright Copyright (c) 2023 Louis Chmn <louis@chmn.me>
- *
- * @author Louis Chmn <louis@chmn.me>
- *
- * @license AGPL-3.0-or-later
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
+ * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
 import { selectMedia } from "./photosUtils"
@@ -40,7 +23,7 @@ export function addFilesToSharedAlbumFromSharedAlbumFromHeader(albumName: string
 	cy.intercept({ times: 1, method: 'SEARCH', url: '**/dav/' }).as('search')
 	cy.contains('Add').click()
 	cy.wait('@search')
-	cy.get('.file-picker__file-list').within(() => {
+	cy.get('.photos-picker__file-list').within(() => {
 		selectMedia(itemsIndex)
 	})
 	cy.intercept({ times: itemsIndex.length, method: 'COPY', url: '**/dav/files/**' }).as('copy')
@@ -54,7 +37,7 @@ export function addFilesToSharedAlbumFromAlbum(albumName: string, itemsIndex: nu
 	cy.intercept({ times: 1, method: 'SEARCH', url: '**/dav/' }).as('search')
 	cy.get('[aria-label="Add photos to this album"]').click()
 	cy.wait('@search')
-	cy.get('.file-picker__file-list').within(() => {
+	cy.get('.photos-picker__file-list').within(() => {
 		selectMedia(itemsIndex)
 	})
 	cy.intercept({ times: itemsIndex.length, method: 'COPY', url: '**/dav/files/**' }).as('copy')

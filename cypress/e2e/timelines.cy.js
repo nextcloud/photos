@@ -1,23 +1,6 @@
 /**
- * @copyright Copyright (c) 2022 Louis Chmn <louis@chmn.me>
- *
- * @author Louis Chmn <louis@chmn.me>
- *
- * @license AGPL-3.0-or-later
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
+ * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import { User } from '@nextcloud/cypress'
 import {
@@ -33,6 +16,7 @@ import {
 	deleteSelection,
 	downloadSelection,
 	favoriteSelection,
+	mkdir,
 	selectMedia,
 	unfavoriteSelection,
 	unselectMedia,
@@ -59,9 +43,11 @@ const bob = new User(`bob_${randHash()}`)
 describe('View list of photos in the main timeline', () => {
 	before(() => {
 		cy.createUser(alice).then(() => {
+			mkdir(alice, '/Photos')
 			uploadTestMedia(alice)
 		})
 		cy.createUser(bob).then(() => {
+			mkdir(bob, '/Photos')
 			uploadTestMedia(bob)
 		})
 		cy.login(alice)
@@ -74,20 +60,20 @@ describe('View list of photos in the main timeline', () => {
 	it('Favorite a file from a timeline', () => {
 		selectMedia([0])
 		favoriteSelection()
-		cy.get('[data-test="media"]').eq(0).find('[aria-label="The file is in the favorites"]')
+		cy.get('[data-test="media"]').eq(0).find('[aria-label="Favorite"]')
 		unfavoriteSelection()
 		unselectMedia([0])
-		cy.get('[aria-label="The file is in the favorites"]').should('not.exist')
+		cy.get('[aria-label="Favorite"]').should('not.exist')
 	})
 
 	it('Favorite multiple files from a timeline', () => {
 		selectMedia([1, 2])
 		favoriteSelection()
-		cy.get('[data-test="media"]').eq(1).find('[aria-label="The file is in the favorites"]')
-		cy.get('[data-test="media"]').eq(2).find('[aria-label="The file is in the favorites"]')
+		cy.get('[data-test="media"]').eq(1).find('[aria-label="Favorite"]')
+		cy.get('[data-test="media"]').eq(2).find('[aria-label="Favorite"]')
 		unfavoriteSelection()
 		unselectMedia([1, 2])
-		cy.get('[aria-label="The file is in the favorites"]').should('not.exist')
+		cy.get('[aria-label="Favorite"]').should('not.exist')
 	})
 
 	it('Download a file from a timeline', () => {

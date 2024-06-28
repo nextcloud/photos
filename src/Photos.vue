@@ -1,28 +1,11 @@
 <!--
- - @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
- -
- - @author John Molakvoæ <skjnldsv@protonmail.com>
- -
- - @license AGPL-3.0-or-later
- -
- - This program is free software: you can redistribute it and/or modify
- - it under the terms of the GNU Affero General Public License as
- - published by the Free Software Foundation, either version 3 of the
- - License, or (at your option) any later version.
- -
- - This program is distributed in the hope that it will be useful,
- - but WITHOUT ANY WARRANTY; without even the implied warranty of
- - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- - GNU Affero General Public License for more details.
- -
- - You should have received a copy of the GNU Affero General Public License
- - along with this program. If not, see <http://www.gnu.org/licenses/>.
- -
- -->
+  - SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 
 <template>
 	<NcContent app-name="photos">
-		<NcAppNavigation>
+		<NcAppNavigation :aria-label="t('photos', 'Photos')">
 			<template #list>
 				<NcAppNavigationItem :to="{name: 'all_media'}"
 					:name="t('photos', 'All media')"
@@ -111,7 +94,7 @@
 				</div>
 			</template>
 		</NcAppNavigation>
-		<NcAppContent :page-heading="pageHeading">
+		<NcAppContent>
 			<RouterView />
 
 			<!-- svg img loading placeholder (linked to the File component) -->
@@ -158,6 +141,7 @@ import videoplaceholder from './assets/video.svg'
 import areTagsInstalled from './services/AreTagsInstalled.js'
 import isMapsInstalled from './services/IsMapsInstalled.js'
 import isRecognizeInstalled from './services/IsRecognizeInstalled.js'
+import isAppStoreEnabled from './services/IsAppStoreEnabled.js'
 import logger from './services/logger.js'
 
 export default {
@@ -193,21 +177,14 @@ export default {
 
 			showLocationMenuEntry: getCurrentUser() === null
 				? false
-				: getCurrentUser().isAdmin || isMapsInstalled,
+				: (getCurrentUser().isAdmin && isAppStoreEnabled) || isMapsInstalled,
 			showPeopleMenuEntry: getCurrentUser() === null
 				? false
-				: getCurrentUser().isAdmin || isRecognizeInstalled,
+				: (getCurrentUser().isAdmin && loadState('photos', 'showPeopleMenuEntry', true) && isAppStoreEnabled) || isRecognizeInstalled,
 
 			openedSettings: false,
 		}
 	},
-
-	computed: {
-		pageHeading() {
-			return this.$route.meta.rootTitle?.(this.$route)
-		},
-	},
-
 	async beforeMount() {
 		// Register excluded paths
 		const files = loadState('photos', 'nomedia-paths', [])
