@@ -26,6 +26,8 @@ on:
           - stable25
           - stable26
           - stable27
+          - stable28
+          - stable29
       increment:
         description: 'Release increment'
         required: true
