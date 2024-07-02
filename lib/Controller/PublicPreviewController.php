@@ -43,7 +43,7 @@ class PublicPreviewController extends PreviewController {
 		int $fileId = -1,
 		int $x = 32,
 		int $y = 32,
-		string $token = null
+		?string $token = null
 	) {
 		if ($fileId === -1 || $x === 0 || $y === 0) {
 			return new DataResponse([], Http::STATUS_BAD_REQUEST);

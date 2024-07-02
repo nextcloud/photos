@@ -28,11 +28,11 @@ use OCA\Photos\Exception\AlreadyInAlbumException;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\IMimeTypeLoader;
-use OCP\Security\ISecureRandom;
 use OCP\IDBConnection;
-use OCP\IUserManager;
 use OCP\IGroupManager;
 use OCP\IL10N;
+use OCP\IUserManager;
+use OCP\Security\ISecureRandom;
 
 class AlbumMapper {
 	private IDBConnection $connection;

@@ -26,8 +26,8 @@ declare(strict_types=1);
 namespace OCA\Photos\Controller;
 
 use OCA\Files_Sharing\SharedStorage;
-use OCA\Photos\AppInfo\Application;
 use OCA\Photos\Album\AlbumMapper;
+use OCA\Photos\AppInfo\Application;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -37,9 +37,9 @@ use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\Node;
 use OCP\Files\NotFoundException;
+use OCP\IGroupManager;
 use OCP\IPreview;
 use OCP\IRequest;
-use OCP\IGroupManager;
 use OCP\IUserSession;
 
 class PreviewController extends Controller {

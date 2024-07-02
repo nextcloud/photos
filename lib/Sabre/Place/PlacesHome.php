@@ -25,10 +25,10 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Sabre\Place;
 
-use OCP\Files\IRootFolder;
 use OCA\Photos\DB\Place\PlaceInfo;
 use OCA\Photos\DB\Place\PlaceMapper;
 use OCA\Photos\Service\ReverseGeoCoderService;
+use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;

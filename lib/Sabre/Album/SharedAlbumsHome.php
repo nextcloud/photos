@@ -23,13 +23,13 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Sabre\Album;
 
+use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Album\AlbumWithFiles;
 use OCA\Photos\Service\UserConfigService;
-use Sabre\DAV\Exception\Forbidden;
-use OCP\IUserManager;
-use OCP\IGroupManager;
-use OCA\Photos\Album\AlbumMapper;
 use OCP\Files\IRootFolder;
+use OCP\IGroupManager;
+use OCP\IUserManager;
+use Sabre\DAV\Exception\Forbidden;
 
 class SharedAlbumsHome extends AlbumsHome {
 	private IUserManager $userManager;
