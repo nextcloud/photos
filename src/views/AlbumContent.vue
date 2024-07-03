@@ -36,8 +36,7 @@
 				</template>
 
 				<template v-if="album !== undefined" slot="right">
-					<UploadPicker v-if="album.nbItems !== 0"
-						:accept="allowedMimes"
+					<UploadPicker :accept="allowedMimes"
 						:context="uploadContext"
 						:destination="albumAsFolder"
 						:root="uploadContext.root"
