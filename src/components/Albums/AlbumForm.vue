@@ -84,6 +84,7 @@ import Send from 'vue-material-design-icons/Send.vue'
 import { NcButton, NcLoadingIcon, NcTextField } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import { translate } from '@nextcloud/l10n'
+import { generateRemoteUrl } from '@nextcloud/router'
 
 import CollaboratorsSelectionForm from './CollaboratorsSelectionForm.vue'
 
@@ -184,6 +185,7 @@ export default {
 						lastPhoto: -1,
 						date: moment().format('MMMM YYYY'),
 						collaborators,
+						source: generateRemoteUrl(`dav/${this.albumFileName}`),
 					},
 				})
 
