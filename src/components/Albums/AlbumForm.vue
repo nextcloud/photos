@@ -189,6 +189,10 @@ export default {
 					},
 				})
 
+				if (album === undefined) {
+					return
+				}
+
 				if (this.albumLocation !== '' || collaborators.length !== 0) {
 					album = await this.updateCollection(
 						{
