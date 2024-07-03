@@ -34,8 +34,18 @@ import folders from './folders.js'
 import systemtags from './systemtags.js'
 import userConfig, { getFolder } from './userConfig.js'
 
+/**
+ * Get the information of photosLocation and store it as photosLocationFolder
+ * @param store
+ * @param state
+ */
+async function initPhotosLocationFolder(store, state) {
+	const photosLocationFolder = await getFolder(state.userConfig.photosLocation)
+	store.commit('updateUserConfig', { key: 'photosLocationFolder', value: photosLocationFolder })
+}
+
 Vue.use(Vuex)
-export default new Store({
+const photosStore = new Store({
 	modules: {
 		files,
 		folders,
@@ -51,10 +61,11 @@ export default new Store({
 
 	plugins: [
 		(store) => {
+			initPhotosLocationFolder(store, store.state)
+
 			store.subscribe(async (mutation, state) => {
 				if (mutation.type === 'updateUserConfig' && mutation.payload.key === 'photosLocation') {
-					const photosLocationFolder = await getFolder(state.userConfig.photosLocation)
-					store.commit('updateUserConfig', { key: 'photosLocationFolder', value: photosLocationFolder })
+					initPhotosLocationFolder(store, state)
 				}
 			})
 		},
@@ -62,3 +73,5 @@ export default new Store({
 
 	strict: process.env.NODE_ENV !== 'production',
 })
+
+export default photosStore
