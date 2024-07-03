@@ -21,8 +21,7 @@
  -->
 <template>
 	<div class="album-container">
-		<CollectionContent v-if="true"
-			ref="collectionContent"
+		<CollectionContent ref="collectionContent"
 			:collection="album"
 			:collection-file-ids="albumFileIds"
 			:loading="loadingCollection || loadingCollectionFiles"
