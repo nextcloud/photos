@@ -125,7 +125,8 @@
 			</NcEmptyContent>
 		</CollectionContent>
 
-		<PhotosPicker :open.sync="showAddPhotosModal"
+		<PhotosPicker v-if="album !== undefined"
+			:open.sync="showAddPhotosModal"
 			:blacklist-ids="albumFileIds"
 			:destination="album.basename"
 			:name="t('photos', 'Add photos to {albumName}', {albumName: albumName})"
