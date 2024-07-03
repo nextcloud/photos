@@ -146,26 +146,19 @@ export default {
 	},
 
 	watch: {
-		file() {
+		async file() {
 			this.initialized = false
 			this.loadedSmall = false
 			this.errorSmall = false
 			this.loadedLarge = false
 			this.errorLarge = false
+
+			await this.init()
 		},
 	},
 
 	async mounted() {
-		[this.loadedSmall, this.loadedLarge] = await Promise.all([
-			await isCachedPreview(this.srcSmall),
-			await isCachedPreview(this.srcLarge),
-		])
-
-		this.initialized = true
-
-		await this.$nextTick() // Wait for next tick to have the canvas in the DOM
-
-		this.drawBlurhash()
+		await this.init()
 	},
 
 	beforeDestroy() {
@@ -179,6 +172,19 @@ export default {
 	},
 
 	methods: {
+		async init() {
+			[this.loadedSmall, this.loadedLarge] = await Promise.all([
+				await isCachedPreview(this.srcSmall),
+				await isCachedPreview(this.srcLarge),
+			])
+
+			this.initialized = true
+
+			await this.$nextTick() // Wait for next tick to have the canvas in the DOM
+
+			this.drawBlurhash()
+		},
+
 		emitClick() {
 			this.$emit('click', this.file.fileid)
 		},
