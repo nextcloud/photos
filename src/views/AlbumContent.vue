@@ -20,7 +20,7 @@
  -
  -->
 <template>
-	<div>
+	<div class="album-container">
 		<CollectionContent v-if="true"
 			ref="collectionContent"
 			:collection="album"
@@ -399,6 +399,14 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.album-container {
+	height: 100%;
+
+	:deep(.collection) {
+		height: 100%;
+	}
+}
+
 .album {
 	&__title {
 		width: 100%;

@@ -41,7 +41,7 @@
 		<slot v-if="sortedCollectionFileIds.length === 0 && !loading" name="empty-content" />
 
 		<!-- Media list -->
-		<FilesListViewer v-if="collection !== undefined"
+		<FilesListViewer v-if="collection !== undefined && sortedCollectionFileIds.length > 0 "
 			:container-element="appContent"
 			class="collection__media"
 			:file-ids="sortedCollectionFileIds"
