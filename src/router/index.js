@@ -110,7 +110,7 @@ const router = new Router({
 		{
 			path: '/albums/:albumName*',
 			component: AlbumContent,
-			name: 'albums',
+			name: 'albumsContent',
 			props: route => ({
 				albumName: route.params.albumName,
 			}),
@@ -133,7 +133,7 @@ const router = new Router({
 		{
 			path: '/sharedalbums/:albumName*',
 			component: SharedAlbumContent,
-			name: 'sharedAlbums',
+			name: 'sharedAlbumsContent',
 			props: route => ({
 				albumName: route.params.albumName,
 			}),
@@ -164,7 +164,7 @@ const router = new Router({
 		{
 			path: '/places/:placeName*',
 			component: PlaceContent,
-			name: 'places',
+			name: 'placesContent',
 			props: route => ({
 				placeName: route.params.placeName,
 			}),

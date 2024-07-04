@@ -136,7 +136,7 @@ const getters = {
 	collectionsFiles: state => state.collectionsFiles,
 	collectionsWithPrefix: state => function(prefix) {
 		return Object.values(state.collections)
-			.filter(collections => collections.filename.startsWith(prefix))
+			.filter(collection => collection.filename.startsWith(prefix))
 			.reduce((collections, collection) => ({ ...collections, [collection.filename]: collection }), {})
 	},
 }
