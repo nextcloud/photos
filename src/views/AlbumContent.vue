@@ -20,9 +20,8 @@
  -
  -->
 <template>
-	<div>
-		<CollectionContent v-if="true"
-			ref="collectionContent"
+	<div class="album-container">
+		<CollectionContent ref="collectionContent"
 			:collection="album"
 			:collection-file-ids="albumFileIds"
 			:loading="loadingCollection || loadingCollectionFiles"
@@ -53,8 +52,7 @@
 				</template>
 
 				<template v-if="album !== undefined" slot="right">
-					<UploadPicker v-if="album.nbItems !== 0"
-						:accept="allowedMimes"
+					<UploadPicker :accept="allowedMimes"
 						:context="uploadContext"
 						:destination="albumAsFolder"
 						:root="uploadContext.root"
@@ -127,7 +125,8 @@
 			</NcEmptyContent>
 		</CollectionContent>
 
-		<PhotosPicker :open.sync="showAddPhotosModal"
+		<PhotosPicker v-if="album !== undefined"
+			:open.sync="showAddPhotosModal"
 			:blacklist-ids="albumFileIds"
 			:destination="album.basename"
 			:name="t('photos', 'Add photos to {albumName}', {albumName: albumName})"
@@ -402,6 +401,14 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.album-container {
+	height: 100%;
+
+	:deep(.collection) {
+		height: 100%;
+	}
+}
+
 .album {
 	&__title {
 		width: 100%;
@@ -426,19 +433,19 @@ export default {
 	&--uploading {
 		margin-bottom: 30px;
 	}
-}
 
-:deep(.upload-picker) {
-	.upload-picker__progress {
-		position: absolute;
-		bottom: -30px;
-		left: 64px;
-		margin: 0;
-	}
-	.upload-picker__cancel {
-		position: absolute;
-		bottom: -24px;
-		right: 50px;
+	:deep(.upload-picker) {
+		.upload-picker__progress {
+			position: absolute;
+			bottom: -30px;
+			left: 64px;
+			margin: 0;
+		}
+		.upload-picker__cancel {
+			position: absolute;
+			bottom: -24px;
+			right: 50px;
+		}
 	}
 }
 </style>

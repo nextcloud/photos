@@ -321,21 +321,20 @@ export default {
 	&--uploading {
 		margin-bottom: 30px;
 	}
-}
 
-:deep(.upload-picker) {
-	.upload-picker__progress {
-		position: absolute;
-		bottom: -30px;
-		left: 64px;
-		margin: 0;
+	:deep(.upload-picker) {
+		.upload-picker__progress {
+			position: absolute;
+			bottom: -30px;
+			left: 64px;
+			margin: 0;
+		}
+
+		.upload-picker__cancel {
+			position: absolute;
+			bottom: -24px;
+			right: 50px;
+		}
 	}
-
-	.upload-picker__cancel {
-		position: absolute;
-		bottom: -24px;
-		right: 50px;
-	}
 }
-
 </style>
