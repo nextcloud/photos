@@ -201,6 +201,10 @@ export default defineComponent({
 		...mapGetters([
 			'files',
 		]),
+
+		photosLocationFolder() {
+			return this.$store.state.userConfig.photosLocationFolder
+		},
 	},
 
 	watch: {
@@ -240,9 +244,6 @@ export default defineComponent({
 				return moment(date, 'YYYYMM').format('MMM YYYY')
 			}
 			return moment(date, 'YYYYMM').format('MMMM YYYY')
-		},
-		photosLocationFolder() {
-			return this.$store.state.userConfig.photosLocationFolder
 		},
 	},
 })
