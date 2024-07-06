@@ -61,9 +61,10 @@ class SizeMetadataProvider implements IEventListener {
 			return;
 		}
 
-		$size = getimagesizefromstring($node->getContent());
+		$size = @getimagesizefromstring($node->getContent());
 
 		if ($size === false) {
+			$this->logger->debug('SizeMetadataProvider->handle(): Corrupt image data detected ' . $node->getPath());
 			return;
 		}
 
