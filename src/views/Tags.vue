@@ -38,7 +38,7 @@
 				<TagCover v-for="tag in popularTags" :key="tag.id" :tag="tag" />
 			</div>
 			<h2 v-if="tagsList.length">
-				All tags
+				{{ t('photos', 'All tags') }}
 			</h2>
 			<div class="tags">
 				<TagCover v-for="tag in tagsList" :key="tag.id" :tag="tag" />
