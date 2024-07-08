@@ -25,6 +25,7 @@ use Sabre\DAV\PropPatch;
 use Sabre\DAV\Server;
 use Sabre\DAV\ServerPlugin;
 use Sabre\DAV\Tree;
+use Sabre\DAV\Xml\Property\Complex;
 
 class PropFindPlugin extends ServerPlugin {
 	public const ORIGINAL_NAME_PROPERTYNAME = '{http://nextcloud.org/ns}original-name';
@@ -130,6 +131,10 @@ class PropFindPlugin extends ServerPlugin {
 		$node = $this->tree->getNodeForPath($path);
 		if ($node instanceof AlbumRoot) {
 			$propPatch->handle(self::LOCATION_PROPERTYNAME, function ($location) use ($node) {
+				if ($location instanceof Complex) {
+					$location = $location->getXml();
+				}
+
 				$this->albumMapper->setLocation($node->getAlbum()->getAlbum()->getId(), $location);
 				return true;
 			});
