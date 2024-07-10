@@ -126,6 +126,7 @@ OC.L10N.register(
     "No tags yet" : "Ingen etiketter enda",
     "Photos with tags will show up here" : "Bilder med etiketter vises her",
     "Popular tags" : "Populære merkelapper",
+    "All tags" : "Alle tagger",
     "One of the source folders does not exists" : "En av kildemappene finnes ikke",
     "Add" : "Legg til",
     "Add to album" : "Legg til i album",
