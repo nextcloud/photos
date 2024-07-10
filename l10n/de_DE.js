@@ -126,6 +126,7 @@ OC.L10N.register(
     "No tags yet" : "Noch keine Schlagworte vorhanden",
     "Photos with tags will show up here" : "Fotos mit Schlagworten werden hier angezeigt",
     "Popular tags" : "Beliebte Schlagworte",
+    "All tags" : "Alle Schlagworte",
     "One of the source folders does not exists" : "Einer der Quellordner existiert nicht",
     "Add" : "Hinzufügen",
     "Add to album" : "Zum Album hinzufügen",
