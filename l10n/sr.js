@@ -126,6 +126,7 @@ OC.L10N.register(
     "No tags yet" : "Још нема ознака",
     "Photos with tags will show up here" : "Слике са ознакама ће се појавити овде",
     "Popular tags" : "Популарне ознаке",
+    "All tags" : "Све ознаке",
     "One of the source folders does not exists" : "Један од изворних фолдера не постоји",
     "Add" : "Додај",
     "Add to album" : "Додај у албум",
