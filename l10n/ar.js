@@ -126,6 +126,7 @@ OC.L10N.register(
     "No tags yet" : "لا توجد وسوم حتى الآن",
     "Photos with tags will show up here" : "سوف تظهر الصور ذات الوسوم هنا",
     "Popular tags" : "سِمَاتٌ شائعةٌ",
+    "All tags" : "كل الوسوم",
     "One of the source folders does not exists" : "أحد المجلدات المصدرية غير موجود",
     "Add" : "إضافة",
     "Add to album" : "إضِف إلى ألبوم",
