@@ -7,12 +7,12 @@ namespace OCA\Photos\Dashboard;
 
 use OCA\Photos\AppInfo\Application;
 use OCP\AppFramework\Services\IInitialState;
-use OCP\Dashboard\IWidget;
+use OCP\Dashboard\IIconWidget;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\Util;
 
-class OnThisDay implements IWidget {
+class OnThisDay implements IIconWidget {
 	public function __construct(
 		private IL10N $l,
 		private IURLGenerator $url,
@@ -24,7 +24,7 @@ class OnThisDay implements IWidget {
 	 * @inheritDoc
 	 */
 	public function getId(): string {
-		return 'photos.onthisday';
+		return 'photos-onthisday';
 	}
 
 	/**
@@ -51,8 +51,15 @@ class OnThisDay implements IWidget {
 	/**
 	 * @inheritDoc
 	 */
+	public function getIconUrl(): string {
+		return $this->url->getAbsoluteURL($this->url->imagePath('core', 'places/calendar.svg'));
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function getUrl(): ?string {
-		return $this->url->linkToRoute('photos.page.indexthisday');
+		return $this->url->linkToRouteAbsolute('photos.page.indexthisday');
 	}
 
 	/**
