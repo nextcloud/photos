@@ -126,6 +126,7 @@ OC.L10N.register(
     "No tags yet" : "まだタグがありません",
     "Photos with tags will show up here" : "タグ付けされた写真がここに表示されます",
     "Popular tags" : "人気のタグ",
+    "All tags" : "全てのタグ",
     "One of the source folders does not exists" : "ソースフォルダーの1つが存在しません",
     "Add" : "追加",
     "Add to album" : "アルバムに追加",
