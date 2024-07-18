@@ -8,12 +8,10 @@
 			{{ t('photos', 'Add collaborators') }}
 		</h2>
 
-		<label class="manage-collaborators__subtitle" for="sharing-search-input">
-			{{ t('photos', 'Add people or groups who can edit your album') }}
-		</label>
 		<form class="manage-collaborators__form" @submit.prevent>
 			<NcSelect v-model="searchText"
 				input-id="sharing-search-input"
+				:input-label="t('photos', 'Add people or groups who can edit your album')"
 				:loading="loadingCollaborators"
 				label="label"
 				:filterable="false"
