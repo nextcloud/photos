@@ -126,6 +126,7 @@ OC.L10N.register(
     "No tags yet" : "Aún no hay etiquetas",
     "Photos with tags will show up here" : "Las fotos con etiquetas se mostrarán aquí",
     "Popular tags" : "Etiquetas populares",
+    "All tags" : "Todas las etiquetas",
     "One of the source folders does not exists" : "Una de las carpetas fuente no existe",
     "Add" : "Agregar",
     "Add to album" : "Añadir al álbum",
