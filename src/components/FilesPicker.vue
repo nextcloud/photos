@@ -66,7 +66,8 @@
 				:context="uploadContext"
 				:destination="photosLocation"
 				:multiple="true"
-				@uploaded="refreshFiles" />
+				@uploaded="refreshFiles"
+				@failed="handleFailure" />
 			<NcButton type="primary" :disabled="loading || selectedFileIds.length === 0" @click="emitPickedEvent">
 				<template #icon>
 					<ImagePlus v-if="!loading" />
@@ -94,6 +95,7 @@ import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
 import UserConfig from '../mixins/UserConfig.js'
 import allowedMimes from '../services/AllowedMimes.js'
+import { showError } from '@nextcloud/dialogs'
 
 export default {
 	name: 'FilesPicker',
@@ -177,6 +179,10 @@ export default {
 
 		emitPickedEvent() {
 			this.$emit('files-picked', this.selectedFileIds)
+		},
+
+		handleFailure() {
+			showError(t('photos', 'Could not upload the photo. If you are using photos for the first time, please ensure the "Photos" directory in your home folder does exist.'))
 		},
 	},
 }
