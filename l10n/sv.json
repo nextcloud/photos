@@ -162,6 +162,7 @@
     "No collaborators available" : "Inga medlemmar är tillgängliga",
     "Failed to fetch album." : "Misslyckades att hämta album.",
     "The file is in the favorites" : "Filen finns bland favoriterna",
+    "Could not upload the photo. If you are using photos for the first time, please ensure the \"Photos\" directory in your home folder does exist." : "Det gick inte att ladda upp bilden. Om du använder bilder för första gången, se till att katalogen \"Bilder\" finns i din hemmapp.",
     "Open the \"{name}\" sub-directory" : "Öppna undermappen \"{name}\"",
     "Default Photos upload and Albums location" : "Standardplats för album och bilder",
     "Select the default location for your media" : "Välj standardplats för din media",

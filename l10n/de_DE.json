@@ -162,6 +162,7 @@
     "No collaborators available" : "Keine Mitarbeitenden verfügbar",
     "Failed to fetch album." : "Album konnte nicht abgerufen werden.",
     "The file is in the favorites" : "Die Datei befindet sich in den Favoriten",
+    "Could not upload the photo. If you are using photos for the first time, please ensure the \"Photos\" directory in your home folder does exist." : "Das Foto konnte nicht hochgeladen werden. Wenn Sie Photos zum ersten Mal verwenden, stellen Sie bitte sicher, dass das Verzeichnis „Fotos“ in Ihrem Home-Ordner vorhanden ist.",
     "Open the \"{name}\" sub-directory" : "Öffne den Unterordner \"{name}\" ",
     "Default Photos upload and Albums location" : "Standardspeicherort für das Hochladen von Fotos und Alben",
     "Select the default location for your media" : "Standardspeicherort für Ihre Medien auswählen",
