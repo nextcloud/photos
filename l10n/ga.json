@@ -162,6 +162,7 @@
     "No collaborators available" : "Níl aon chomhoibrithe ar fáil",
     "Failed to fetch album." : "Theip ar an albam a fháil.",
     "The file is in the favorites" : "Tá an file sna fabhair",
+    "Could not upload the photo. If you are using photos for the first time, please ensure the \"Photos\" directory in your home folder does exist." : "Níorbh fhéidir an grianghraf a uaslódáil. Má tá grianghraif á n-úsáid agat don chéad uair, cinntigh le do thoil go bhfuil an t-eolaire \"Grianghraif\" i d'fhillteán baile.",
     "Open the \"{name}\" sub-directory" : "Oscail an fo-eolaire \"{name}\".",
     "Default Photos upload and Albums location" : "Réamhshocrú uaslódála Grianghraif agus suíomh Albaim",
     "Select the default location for your media" : "Roghnaigh an suíomh réamhshocraithe do na meáin",

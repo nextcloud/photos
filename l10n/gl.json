@@ -162,6 +162,7 @@
     "No collaborators available" : "Non hai colaboradores dispoñíbeis",
     "Failed to fetch album." : "Produciuse un fallo ao recuperar o álbum.",
     "The file is in the favorites" : "O ficheiro está nos favoritos",
+    "Could not upload the photo. If you are using photos for the first time, please ensure the \"Photos\" directory in your home folder does exist." : "Non foi posíbel enviar a foto. Se está a usar fotos por primeira vez, asegúrese de que existe o directorio «Fotos» no seu cartafol de inicio.",
     "Open the \"{name}\" sub-directory" : "Abrir o subdirectorio «{name}»",
     "Default Photos upload and Albums location" : "Localización predeterminada para enviar fotos e álbums",
     "Select the default location for your media" : "Seleccione a localización predeterminada para os seus ficheiros multimedia",
