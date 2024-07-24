@@ -164,6 +164,7 @@ OC.L10N.register(
     "No collaborators available" : "Ingen samarbeidspartnere tilgjengelig",
     "Failed to fetch album." : "Kunne ikke hente albumet.",
     "The file is in the favorites" : "Filen er i favorittene",
+    "Could not upload the photo. If you are using photos for the first time, please ensure the \"Photos\" directory in your home folder does exist." : "Kunne ikke laste opp bildet. Hvis du bruker bilder for første gang, må du sørge for at \"Bilder\"-katalogen i Hjem-mappen din eksisterer.",
     "Open the \"{name}\" sub-directory" : "Åpne undermappen \"{name}\"",
     "Default Photos upload and Albums location" : "Standard bildeopplasting og albumplassering",
     "Select the default location for your media" : "Velg standardplassering for mediefilene dine",
