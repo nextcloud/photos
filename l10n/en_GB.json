@@ -162,6 +162,7 @@
     "No collaborators available" : "No collaborators available",
     "Failed to fetch album." : "Failed to fetch album.",
     "The file is in the favorites" : "The file is in the favourites",
+    "Could not upload the photo. If you are using photos for the first time, please ensure the \"Photos\" directory in your home folder does exist." : "Could not upload the photo. If you are using photos for the first time, please ensure the \"Photos\" directory in your home folder does exist.",
     "Open the \"{name}\" sub-directory" : "Open the \"{name}\" sub-directory",
     "Default Photos upload and Albums location" : "Default Photos upload and Albums location",
     "Select the default location for your media" : "Select the default location for your media",

@@ -164,6 +164,7 @@ OC.L10N.register(
     "No collaborators available" : "No hay colaboradores disponibles",
     "Failed to fetch album." : "No se pudo obtener el álbum.",
     "The file is in the favorites" : "El archivo está en los favoritos",
+    "Could not upload the photo. If you are using photos for the first time, please ensure the \"Photos\" directory in your home folder does exist." : "No se pudo cargar la foto. Si está usando fotos por primera vez, por favor asegúrese de que el directorio \"Fotos\" en su carpeta personal existe.",
     "Open the \"{name}\" sub-directory" : "Abrir el sub-directorio de \"{name}\"",
     "Default Photos upload and Albums location" : "Ubicación predeterminada de carga de fotos y álbumes",
     "Select the default location for your media" : "Seleccionar la ubicación predeterminada para los medios",
