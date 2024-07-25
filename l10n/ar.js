@@ -164,6 +164,7 @@ OC.L10N.register(
     "No collaborators available" : "لا يوجد أي متعاونين",
     "Failed to fetch album." : "تعذّر جلب الألبوم",
     "The file is in the favorites" : "الملف في المفضلة",
+    "Could not upload the photo. If you are using photos for the first time, please ensure the \"Photos\" directory in your home folder does exist." : "تعذّر تحميل الصورة. إذا كنت تستخدم الصِّوَر لأول مرة، فيرجى التأكد من وجود دليل \"الصِّوَر\" في المجلد الرئيسي لديك.",
     "Open the \"{name}\" sub-directory" : "افتح الدليل الفرعي \"{name}\" ",
     "Default Photos upload and Albums location" : "الموقع الافتراضي لرفع الصور و الألبومات",
     "Select the default location for your media" : "إختر الموقع الافتراضي لوسائطك",
