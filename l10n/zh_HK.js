@@ -164,6 +164,7 @@ OC.L10N.register(
     "No collaborators available" : "沒有可用的協作者",
     "Failed to fetch album." : "擷取相簿失敗。",
     "The file is in the favorites" : "檔案在最愛中",
+    "Could not upload the photo. If you are using photos for the first time, please ensure the \"Photos\" directory in your home folder does exist." : "無法更新照片。若您是第一次使用「照片」，請確保您家目錄中的「照片」目錄確實存在。",
     "Open the \"{name}\" sub-directory" : "開啟「{name}」子目錄",
     "Default Photos upload and Albums location" : "默認照片上傳及相簿位置",
     "Select the default location for your media" : "選擇媒體的默認位置",
