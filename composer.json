@@ -32,8 +32,8 @@
 		"nextcloud/coding-standard": "^1.2",
 		"nextcloud/ocp": "dev-stable27",
 		"phpunit/phpunit": "^9",
-		"sabre/dav": "^4.2.1",
-		"psalm/phar": "^5.25"
+		"psalm/phar": "^5.25",
+		"sabre/dav": "^4.2.1"
 	},
 	"require": {
 		"hexogen/kdtree": "^0.2.5",
