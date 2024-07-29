@@ -1,6 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 const webpackConfig = require('@nextcloud/webpack-vue-config')
+const TerserPlugin = require('terser-webpack-plugin')
 const WebpackSPDXPlugin = require('./build-js/WebpackSPDXPlugin.js')
 const webpackRules = require('@nextcloud/webpack-vue-config/rules')
 
@@ -87,6 +88,16 @@ webpackConfig.plugins.push(
 		}],
 	})
 )
+
+// block creation of LICENSE.txt files now replaced with .license files
+webpackConfig.optimization.minimizer = [new TerserPlugin({
+	extractComments: false,
+	terserOptions: {
+		format: {
+			comments: false,
+		},
+	},
+})]
 
 webpackConfig.plugins = [
 	...webpackConfig.plugins,
