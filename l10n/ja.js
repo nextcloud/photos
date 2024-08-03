@@ -164,6 +164,7 @@ OC.L10N.register(
     "No collaborators available" : "共同作業者はいない",
     "Failed to fetch album." : "アルバムの取得に失敗しました。",
     "The file is in the favorites" : "ファイルはお気に入りにある",
+    "Could not upload the photo. If you are using photos for the first time, please ensure the \"Photos\" directory in your home folder does exist." : "写真をアップロードできませんでした。初めて写真を使用する場合は、ホームフォルダーに\"Photos\"ディレクトリが存在することを確認してください。",
     "Open the \"{name}\" sub-directory" : "サブディレクトリ \"{name}\" を開く",
     "Default Photos upload and Albums location" : "デフォルトの写真アップロードとアルバムの場所",
     "Select the default location for your media" : "メディアのデフォルトの保存場所を選択する",
