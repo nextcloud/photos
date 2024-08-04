@@ -82,8 +82,8 @@ SPDX-FileCopyrightText: Anthony Fu <anthonyfu117@hotmail.com>
 SPDX-FileCopyrightText: Andris Reinman
 SPDX-FileCopyrightText: Andrey Sitnik <andrey@sitnik.ru>
 SPDX-FileCopyrightText: Andrea Giammarchi
+SPDX-FileCopyrightText: Amit Gupta (https://solothought.com)
 SPDX-FileCopyrightText: Amit Gupta (https://amitkumargupta.work/)
-SPDX-FileCopyrightText: Amit Gupta (https://amitguptagwl.github.io)
 SPDX-FileCopyrightText: @nextcloud/dialogs developers
 
 
@@ -410,7 +410,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 3.3.0
 	- license: MIT
 - fast-xml-parser
-	- version: 4.3.1
+	- version: 4.4.1
 	- license: MIT
 - floating-vue
 	- version: 1.0.0-beta.19
