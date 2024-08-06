@@ -13,6 +13,7 @@ OC.L10N.register(
     "On this day" : "วันนี้ในอดีต",
     "Shared with you" : "แชร์กับคุณ",
     "Tags" : "แท็ก",
+    "Places" : "สถานที่",
     "Photos settings" : "การตั้งค่ารูปภาพ",
     "Mark selection as favorite" : "ระบุที่เลือกเป็นรายการโปรด",
     "Add selection to favorites" : "เพิ่มที่เลือกไปยังรายการโปรด",
