@@ -80,7 +80,7 @@ OC.L10N.register(
     "View" : "Affichage",
     "Media folders" : "Dossiers médias",
     "Choose the folders from where photos and videos are shown." : "Choisir les dossiers où les photos et vidéos seront affichées.",
-    "Upload folder" : "Téléverser un dossier",
+    "Upload folder" : "Dossier de téléversement",
     "Choose the folder where photos and albums are uploaded to." : "Choisir le dossier où les photos et albums sont téléversés.",
     "_%n photo_::_%n photos_" : ["%n photo","%n photos","%n photos"],
     "Unselect all" : "Tout désélectionner",
