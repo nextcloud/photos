@@ -20,10 +20,6 @@ const mutations = {
 	 * @param {Array} data.files list of files
 	 */
 	updateFolders(state, { fileid, files }) {
-		if (!state.folders[fileid]) {
-			Vue.set(state.folders, fileid, [])
-		}
-
 		if (files.length > 0) {
 			// sort by last modified
 			const list = files
@@ -73,7 +69,6 @@ const mutations = {
 
 const getters = {
 	folders: state => state.folders,
-	paths: state => state.paths,
 	folder: state => fileid => state.folders[fileid],
 	folderId: state => path => state.paths[path],
 }
