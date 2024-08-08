@@ -2,15 +2,19 @@
 	"extends": "@vue/tsconfig/tsconfig.json",
 	"include": ["./src/**/*.ts"],
 	"compilerOptions": {
-		"types": ["cypress", "node", "dockerode"],
-		"allowSyntheticDefaultImports": true,
-		"moduleResolution": "node",
+		"types": ["jest", "node", "vue", "vue-router"],
 		"target": "ESNext",
 		"module": "esnext",
-		"declaration": true,
-		"strict": true,
+		// Allow ts to import js files
+		"allowJs": true,
+		"allowSyntheticDefaultImports": true,
+		"declaration": false,
 		"noImplicitAny": false,
-		"resolveJsonModule": true
+		"resolveJsonModule": true,
+		"strict": true,
+	},
+	"vueCompilerOptions": {
+		"target": 2.7
 	},
 	"ts-node": {
 		// these options are overrides used only by ts-node

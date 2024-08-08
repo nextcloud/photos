@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-
+import { createPinia, PiniaVuePlugin } from 'pinia';
 import { generateFilePath } from '@nextcloud/router'
 import { getRequestToken } from '@nextcloud/auth'
 import { sync } from 'vuex-router-sync'
@@ -11,19 +11,28 @@ import Vue from 'vue'
 
 import Photos from './Photos.vue'
 import router from './router/index.js'
+
+// TODO: remove once vuex is removed
 import store from './store/index.js'
 
 // CSP config for webpack dynamic chunk loading
+// @ts-expect-error webpack variable
 // eslint-disable-next-line
-__webpack_nonce__ = btoa(getRequestToken())
+__webpack_nonce__ = btoa(getRequestToken() || '')
 
 // Correct the root of the app for chunk loading
 // OC.linkTo matches the apps folders
 // OC.generateUrl ensure the index.php (or not)
 // We do not want the index.php since we're loading files
+// @ts-expect-error webpack variable
 // eslint-disable-next-line
 __webpack_public_path__ = generateFilePath('photos', '', 'js/')
 
+// Install the Pinia plugin
+Vue.use(PiniaVuePlugin)
+const pinia = createPinia()
+
+// TODO: remove once vuex is removed
 sync(store, router)
 
 Vue.prototype.t = translate
@@ -37,7 +46,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		window.OCA.Files = {}
 	}
 	// register unused client for the sidebar to have access to its parser methods
-	Object.assign(window.OCA.Files, { App: { fileList: { filesClient: OC.Files.getClient() } } }, window.OCA.Files)
+	Object.assign(window.OCA.Files, { App: { fileList: { filesClient: window.OC.Files.getClient() } } }, window.OCA.Files)
 })
 
 export default new Vue({
@@ -46,5 +55,6 @@ export default new Vue({
 	name: 'PhotosRoot',
 	router,
 	store,
+	pinia,
 	render: h => h(Photos),
 })
