@@ -5,14 +5,16 @@
 
 <template>
 	<!-- Errors handlers-->
-	<NcEmptyContent v-if="error === 404" illustration-name="folder">
-		{{ t('photos', 'This folder does not exist') }}
+	<NcEmptyContent v-if="error === 404" :name="t('photos', 'This folder does not exist')">
+		<template #icon>
+			<FolderIcon />
+		</template>
 	</NcEmptyContent>
-	<NcEmptyContent v-else-if="error">
-		{{ t('photos', 'An error occurred') }}
-	</NcEmptyContent>
-	<NcEmptyContent v-else-if="initializing" icon="icon-loading">
-		{{ t('photos', 'Loading folders …') }}
+	<NcEmptyContent v-else-if="error" :name="t('photos', 'An error occurred')" />
+	<NcEmptyContent v-else-if="initializing" :name="t('photos', 'Loading folders …')">
+		<template #icon>
+			<NcLoadingIcon />
+		</template>
 	</NcEmptyContent>
 
 	<!-- Folder content -->
@@ -21,7 +23,7 @@
 			:class="{'photos-navigation--uploading': uploader.queue?.length > 0}"
 			:loading="loading"
 			:path="path"
-			:title="folder.basename.toString()"
+			:title="folder?.basename?.toString?.() || rootTitle"
 			:root-title="rootTitle"
 			@refresh="onRefresh">
 			<UploadPicker :accept="allowedMimes"
@@ -31,8 +33,10 @@
 		</HeaderNavigation>
 
 		<!-- Empty folder, should only happen via direct link -->
-		<NcEmptyContent v-if="isEmpty" key="emptycontent" illustration-name="empty">
-			{{ t('photos', 'No photos in here') }}
+		<NcEmptyContent v-if="isEmpty" key="emptycontent" :name="t('photos', 'No photos in here')">
+			<template #icon>
+				<FolderIcon />
+			</template>
 		</NcEmptyContent>
 
 		<div v-else
@@ -50,10 +54,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { Upload, UploadPicker, getUploader } from '@nextcloud/upload'
 import { Folder as NcFolder, davParsePermissions } from '@nextcloud/files'
-import { NcEmptyContent } from '@nextcloud/vue'
+import { mapGetters } from 'vuex'
+import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import { Upload, UploadPicker, getUploader } from '@nextcloud/upload'
+import FolderIcon from 'vue-material-design-icons/Folder.vue'
 import VirtualGrid from 'vue-virtual-grid'
 
 import FileLegacy from '../components/FileLegacy.vue'
@@ -71,10 +76,12 @@ import getFileInfo from '../services/FileInfo.js'
 export default {
 	name: 'Folders',
 	components: {
-		VirtualGrid,
+		FolderIcon,
 		HeaderNavigation,
 		NcEmptyContent,
+		NcLoadingIcon,
 		UploadPicker,
+		VirtualGrid,
 	},
 	mixins: [
 		AbortControllerMixin,
@@ -126,6 +133,10 @@ export default {
 			return this.files[this.folderId]
 		},
 		folderAsFolder() {
+			if (!this.folder) {
+				return null
+			}
+
 			return new NcFolder({
 				...this.folder,
 				source: decodeURI(this.folder.source),
@@ -133,7 +144,7 @@ export default {
 			})
 		},
 		folderContent() {
-			return this.folders[this.folderId]
+			return this.folders[this.folderId] || []
 		},
 		fileList() {
 			const list = this.folderContent
