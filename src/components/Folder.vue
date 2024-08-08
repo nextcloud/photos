@@ -12,12 +12,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
-
 import { getCurrentUser } from '@nextcloud/auth'
 
+import { useFoldersStore } from '../store/folders.ts'
+import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import FolderTagPreview from './FolderTagPreview.vue'
 import getAlbumContent from '../services/AlbumContent.js'
-import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 
 export default {
 	name: 'Folder',
@@ -38,9 +38,16 @@ export default {
 		},
 	},
 
+	setup() {
+		const foldersStore = useFoldersStore()
+		return {
+			foldersStore,
+		}
+	},
+
 	data() {
 		return {
-			previewFolder: this.item.injected.fileid,
+			previewFolder: Number(this.item.injected.fileid),
 		}
 	},
 
@@ -48,15 +55,14 @@ export default {
 		// global lists
 		...mapGetters([
 			'files',
-			'folders',
 		]),
 
 		// files list of the current folder
 		folderContent() {
-			return this.folders[this.item.injected.fileid]
+			return this.foldersStore.getFolderContentById(this.item?.injected?.fileid || 0)
 		},
 		previewFiles() {
-			const previewFolderContent = this.folders[this.previewFolder]
+			const previewFolderContent = this.foldersStore.getFolderContentById(this.previewFolder)
 
 			const previewFiles = previewFolderContent
 				? previewFolderContent
@@ -67,13 +73,13 @@ export default {
 			// If we didn't found any previews in the folder we try the next subfolder
 			// We limit to one subfolder for performance concerns
 			if (previewFiles.length === 0
-				&& this.files[this.previewFolder].folders
+				&& this.files[this.previewFolder]?.folders
 				&& this.previewFolder === this.item.injected.fileid) {
 
 				const firstChildFolder = this.files[this.previewFolder].folders[0]
 				this.updatePreviewFolder(firstChildFolder)
 
-				if (!this.folders[this.previewFolder]) {
+				if (!this.foldersStore.folders[this.previewFolder]) {
 					this.getFolderData(this.files[this.previewFolder].filename)
 				}
 			}
@@ -100,7 +106,7 @@ export default {
 					shared: this.item.injected.showShared,
 					signal: this.abortController.signal,
 				})
-				this.$store.dispatch('updateFolders', { fileid: folder.fileid, files, folders })
+				this.foldersStore.updateFolders({ fileid: folder.fileid, files, folders })
 				this.$store.dispatch('updateFiles', { folder, files, folders })
 			} catch (error) {
 				if (error.response && error.response.status) {

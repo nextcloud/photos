@@ -13,14 +13,11 @@ import sharedAlbums from './sharedAlbums.js'
 import collections from './collections.js'
 import places from './places.js'
 import faces from './faces.js'
-import folders from './folders.js'
 import systemtags from './systemtags.js'
 import userConfig, { getFolder } from './userConfig.js'
 
 /**
  * Get the information of photosLocation and store it as photosLocationFolder
- * @param store
- * @param state
  */
 async function initPhotosLocationFolder(store, state) {
 	const photosLocationFolder = await getFolder(state.userConfig.photosLocation)
@@ -31,7 +28,6 @@ Vue.use(Vuex)
 const photosStore = new Store({
 	modules: {
 		files,
-		folders,
 		albums,
 		sharedAlbums,
 		publicAlbums,
