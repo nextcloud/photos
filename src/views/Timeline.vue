@@ -6,7 +6,7 @@
 <template>
 	<!-- Errors handlers -->
 	<div v-if="errorFetchingFiles" class="timeline__empty-content">
-		<NcEmptyContent v-if="errorFetchingFiles === 404" :name="t('photos', 'One of the source folders does not exists')">
+		<NcEmptyContent v-if="errorFetchingFiles === 404" :name="t('photos', 'One of the source folders does not exist')">
 			<FolderAlertOutline slot="icon" />
 			<PhotosSourceLocationsSettings slot="action" class="timeline__update_source_directory" />
 		</NcEmptyContent>
