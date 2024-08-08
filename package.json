@@ -62,7 +62,7 @@
     "leaflet": "^1.9.4",
     "leaflet-defaulticon-compatibility": "^0.1.2",
     "path-posix": "^1.0.0",
-    "qs": "^6.11.2",
+    "qs": "^6.13.0",
     "url-parse": "^1.5.10",
     "vue": "^2.7.14",
     "vue-material-design-icons": "^5.2.0",
