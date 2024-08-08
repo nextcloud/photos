@@ -59,8 +59,8 @@ SPDX-FileCopyrightText: Arnout Kazemier
 SPDX-FileCopyrightText: Antoni Andre <antoniandre.web@gmail.com>
 SPDX-FileCopyrightText: Andris Reinman
 SPDX-FileCopyrightText: Andrea Giammarchi
+SPDX-FileCopyrightText: Amit Gupta (https://solothought.com)
 SPDX-FileCopyrightText: Amit Gupta (https://amitkumargupta.work/)
-SPDX-FileCopyrightText: Amit Gupta (https://amitguptagwl.github.io)
 
 
 This file is generated from multiple sources. Included packages:
@@ -293,7 +293,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 3.3.0
 	- license: MIT
 - fast-xml-parser
-	- version: 4.3.1
+	- version: 4.4.1
 	- license: MIT
 - for-each
 	- version: 0.3.3

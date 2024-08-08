@@ -44,8 +44,8 @@ SPDX-FileCopyrightText: Christoph Wurst <christoph@winzerhof-wurst.at>
 SPDX-FileCopyrightText: Christoph Wurst
 SPDX-FileCopyrightText: Arnout Kazemier
 SPDX-FileCopyrightText: Andris Reinman
+SPDX-FileCopyrightText: Amit Gupta (https://solothought.com)
 SPDX-FileCopyrightText: Amit Gupta (https://amitkumargupta.work/)
-SPDX-FileCopyrightText: Amit Gupta (https://amitguptagwl.github.io)
 SPDX-FileCopyrightText: @nextcloud/dialogs developers
 
 
@@ -153,7 +153,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 3.3.0
 	- license: MIT
 - fast-xml-parser
-	- version: 4.3.1
+	- version: 4.4.1
 	- license: MIT
 - for-each
 	- version: 0.3.3
