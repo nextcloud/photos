@@ -45,7 +45,6 @@ SPDX-FileCopyrightText: Evan You
 SPDX-FileCopyrightText: Eugene Sharygin <eush77@gmail.com>
 SPDX-FileCopyrightText: Eric Norris (https://github.com/ericnorris)
 SPDX-FileCopyrightText: Dr.-Ing. Mario Heiderich, Cure53 <mario@cure53.de> (https://cure53.de/)
-SPDX-FileCopyrightText: Denis Pushkarev
 SPDX-FileCopyrightText: David Clark
 SPDX-FileCopyrightText: Christoph Wurst
 SPDX-FileCopyrightText: Borys Serebrov
@@ -82,14 +81,11 @@ This file is generated from multiple sources. Included packages:
 - @nextcloud/auth
 	- version: 2.3.0
 	- license: GPL-3.0-or-later
-- @nextcloud/router
-	- version: 2.2.1
-	- license: GPL-3.0-or-later
 - axios
-	- version: 1.6.7
+	- version: 1.7.3
 	- license: MIT
 - @nextcloud/axios
-	- version: 2.4.0
+	- version: 2.5.0
 	- license: GPL-3.0-or-later
 - @nextcloud/browser-storage
 	- version: 0.4.0
@@ -104,7 +100,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 3.3.1
 	- license: GPL-3.0-or-later
 - @nextcloud/initial-state
-	- version: 2.1.0
+	- version: 2.2.0
 	- license: GPL-3.0-or-later
 - @nextcloud/router
 	- version: 3.0.1
@@ -273,9 +269,6 @@ This file is generated from multiple sources. Included packages:
 	- license: BSD-3-Clause
 - comma-separated-tokens
 	- version: 2.0.3
-	- license: MIT
-- core-js
-	- version: 3.37.0
 	- license: MIT
 - crypt
 	- version: 0.0.2
