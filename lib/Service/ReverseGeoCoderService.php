@@ -158,6 +158,7 @@ class ReverseGeoCoderService {
 		$persister->convert($tree, $kdTreeTmpFileName);
 		$kdTreeString = file_get_contents($kdTreeTmpFileName);
 		$this->geoNameFolder()->newFile('cities1000.bin', $kdTreeString);
+		unlink($kdTreeTmpFileName);
 	}
 
 	private function loadKdTree(): void {
@@ -171,5 +172,6 @@ class ReverseGeoCoderService {
 		file_put_contents($kdTreeTmpFileName, $kdTreeFileContent);
 		$fsTree = new FSKDTree($kdTreeTmpFileName, new ItemFactory());
 		$this->fsSearcher = new NearestSearch($fsTree);
+		unlink($kdTreeTmpFileName);
 	}
 }
