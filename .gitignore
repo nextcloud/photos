@@ -25,3 +25,4 @@ cypress/snapshots
 cypress/downloads
 
 js/*hot-update.*
+tests/.phpunit.result.cache
