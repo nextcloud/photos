@@ -61,6 +61,10 @@ class AlbumMapperTest extends TestCase {
 			return $this->time;
 		});
 
+		if ($this->connection->getDatabaseProvider() === IDBConnection::PLATFORM_ORACLE) {
+			$this->markTestSkipped('Feature is broken on oracle');
+		}
+
 		$this->mapper = new AlbumMapper(
 			$this->connection,
 			$this->mimeLoader,
@@ -89,6 +93,7 @@ class AlbumMapperTest extends TestCase {
 	}
 
 	private function createFile(string $name, string $mimeType, int $size = 10, int $mtime = 10000, int $permissions = Constants::PERMISSION_ALL): int {
+
 		$mimeId = $this->mimeLoader->getId($mimeType);
 		$mimePartId = $this->mimeLoader->getId(substr($mimeType, strpos($mimeType, '/')));
 		$query = $this->connection->getQueryBuilder();
