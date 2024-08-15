@@ -147,27 +147,9 @@
     "Failed to set favorite state for {fileId}." : "Nepodarilo sa nastaviť obľúbený stav pre {fileId}.",
     "Failed to set favorite state for {fileName}." : "Nepodarilo sa nastaviť obľúbený stav pre {fileName}.",
     "Could not load photos folder" : "Nepodarilo sa načítať adresár s fotkami",
-    "Go back to the previous view." : "Vrátiť sa na predchádzajúce zobrazenie.",
-    "Go to the add collaborators view." : "Ísť na zobrazenie pre pridanie spolupracujúcich.",
-    "Create the album." : "Vytvoriť album.",
-    "Back to the new album form." : "Späť na formulár pre pridanie nového albumu.",
-    "_Share with %n user_::_Share with %n users_" : ["Zdieľať s %n užívateľom","Zdieľať s %n užívateľmi","Zdieľať s %n užívateľmi","Zdieľať s %n užívateľmi"],
-    "Search for collaborators" : "Vyhľadať spolupracovníkov",
-    "Add {collaboratorLabel} to the collaborators list" : "Pridať {collaboratorLabel} na zoznam spolupracovníkov",
-    "No collaborators available" : "Nie sú dostupný žiadny spolupracovníci",
-    "Failed to fetch album." : "Nepodarilo sa načítať album.",
-    "The file is in the favorites" : "Súbor je medzi obľúbenými",
-    "Open the \"{name}\" sub-directory" : "Otvoriť podpriečinok „{name}“",
     "Default Photos upload and Albums location" : "Predvolené umiestnenie pre nahrávané Fotky a Albumy",
     "Select the default location for your media" : "Vyberte východzie umiestnenie pre vaše médiá",
     "Invalid location selected" : "Bolo vybrané neplatné umiestnenie",
-    "Photos directory" : "Priečinok pre fotky",
-    "Add photos to the album" : "Pridať fotky do albumu",
-    "Failed to fetch albums list." : "Nepodarilo sa načítať zoznam albumov.",
-    "Shared albums" : "Zdieľané albumy",
-    "Create a new album" : "Vytvoriť nový album",
-    "Add selection to an album" : "Pridať vybrané do albumu",
-    "Failed to create {albumName}." : "Zlyhalo vytváranie {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Chyba pri premenovávaní {currentAlbumName} na {newAlbumName}."
+    "Photos directory" : "Priečinok pre fotky"
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);"
 }

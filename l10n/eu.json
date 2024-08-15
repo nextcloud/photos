@@ -151,27 +151,9 @@
     "Failed to set favorite state for {fileId}." : "Ezin izan da ezarri gogoko egoera {fileId}(r)entzat.",
     "Failed to set favorite state for {fileName}." : "Ezin izan da ezarri gogoko egoera {fileName}(r)entzat.",
     "Could not load photos folder" : "Ezin izan da argazkien karpeta kargatu",
-    "Go back to the previous view." : "Itzuli aurreko ikuspegira.",
-    "Go to the add collaborators view." : "Joan kolaboratzaileak gehitzeko ikuspegira.",
-    "Create the album." : "Sortu albuma.",
-    "Back to the new album form." : "Itzuli album berrien formulariora",
-    "_Share with %n user_::_Share with %n users_" : ["Partekatu %n erabiltzailearekin","Partekatu %n erabiltzaileekin"],
-    "Search for collaborators" : "Bilatu kolaboratzaileak",
-    "Add {collaboratorLabel} to the collaborators list" : "Gehitu {collaboratorLabel} kolaboratzaile zerrendara",
-    "No collaborators available" : "Ez dago kolaboratzailerik eskuragarri",
-    "Failed to fetch album." : "Ezin izan da albuma lortu.",
-    "The file is in the favorites" : "Fitxategia gogokoetan dago",
-    "Open the \"{name}\" sub-directory" : "Ireki \"{name}\" azpi-direktorioa",
     "Default Photos upload and Albums location" : "Argazkien karga eta albumen kokaleku lehenetsia",
     "Select the default location for your media" : "Hautatu zure multimediaren kokaleku lehenetsia",
     "Invalid location selected" : "Kokaleku baliogabea hautatu da",
-    "Photos directory" : "Argazkien direktorioa",
-    "Add photos to the album" : "Gehitu argazkiak albumera",
-    "Failed to fetch albums list." : "Ezin izan da album zerrenda eskuratu.",
-    "Shared albums" : "Partekaturiko albumak",
-    "Create a new album" : "Sortu album berri bat",
-    "Add selection to an album" : "Gehitu hautatutakoak album batera",
-    "Failed to create {albumName}." : "Ezin izan da {albumName} sortu.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Ezin izan da {currentAlbumName} berrizendatu {newAlbumName} gisa."
+    "Photos directory" : "Argazkien direktorioa"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -122,27 +122,9 @@
     "Failed to delete {fileName}." : "Неуспешно бришење на {fileName}.",
     "Failed to set favorite state for {fileId}." : "Неуспешно поставување на омилен статус за {fileId}.",
     "Failed to set favorite state for {fileName}." : "Неуспешно поставување на омилен статус за {fileName}.",
-    "Go back to the previous view." : "Врати се на предходниот поглед",
-    "Go to the add collaborators view." : "Оди за да додадеш соработници",
-    "Create the album." : "Креирај го албумот.",
-    "Back to the new album form." : "Врати се на формата за нов албум.",
-    "_Share with %n user_::_Share with %n users_" : ["Споделено со 1 корисник","Споделено со %n корисници"],
-    "Search for collaborators" : "Барај соработници",
-    "Add {collaboratorLabel} to the collaborators list" : "Додади {collaboratorLabel} на листата на соработници",
-    "No collaborators available" : "Нема достапни соработници",
-    "Failed to fetch album." : "Неуспешно добивање на албум",
-    "The file is in the favorites" : "Оваа датотека е во омилеми",
-    "Open the \"{name}\" sub-directory" : "Отвори го поддиректориумот \"{name}\"",
     "Default Photos upload and Albums location" : "Стандардна локација за прикачени фотографии и албуми",
     "Select the default location for your media" : "Изберете стандардна локација за вашите медиа датотеки",
     "Invalid location selected" : "Избрана невалидна локација",
-    "Photos directory" : "Директориум за фотографии",
-    "Add photos to the album" : "Додади фотографии во албумот",
-    "Failed to fetch albums list." : "Неуспешно добивање на листа со албуми.",
-    "Shared albums" : "Споделени албуми",
-    "Create a new album" : "Креирај нов албум",
-    "Add selection to an album" : "Додади ги избраните во албумот",
-    "Failed to create {albumName}." : "Неуспешно креирање {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Неуспешно преименување на {currentAlbumName} во {newAlbumName}."
+    "Photos directory" : "Директориум за фотографии"
 },"pluralForm" :"nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;"
 }
