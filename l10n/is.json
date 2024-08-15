@@ -130,27 +130,9 @@
     "Failed to delete {fileName}." : "Tókst ekki að eyða {fileName}.",
     "Failed to set favorite state for {fileId}." : "Mistókst að setja stöðu sem eftirlæti fyrir {fileId}.",
     "Failed to set favorite state for {fileName}." : "Mistókst að setja stöðu sem eftirlæti fyrir {fileName}.",
-    "Go back to the previous view." : "Fara til baka á fyrri sýn.",
-    "Go to the add collaborators view." : "Skipta yfir í sýn með samstarfsfólki.",
-    "Create the album." : "Búa til albúmið.",
-    "Back to the new album form." : "Aftur á innfyllingarformið fyrir ný albúm.",
-    "_Share with %n user_::_Share with %n users_" : ["Deila með %n notanda","Deila með %n notendum"],
-    "Search for collaborators" : "Leita að samstarfsfólki",
-    "Add {collaboratorLabel} to the collaborators list" : "Bæta {collaboratorLabel} á listann yfir samstarfsfólk",
-    "No collaborators available" : "Ekkert samstarfsfólk tiltækt",
-    "Failed to fetch album." : "Mistókst að sækja albúm.",
-    "The file is in the favorites" : "Skráin er í eftirlætunum",
-    "Open the \"{name}\" sub-directory" : "Opna \"{name}\" undirmöppuna",
     "Default Photos upload and Albums location" : "Sjálfgefin staðsetning fyrir innsendingar ljósmynda og albúma",
     "Select the default location for your media" : "Veldu sjálfgefna staðsetningu fyrir myndefnið þitt",
     "Invalid location selected" : "Ógild staðsetning valin",
-    "Photos directory" : "Ljósmyndamappa",
-    "Add photos to the album" : "Bæta myndum í albúmið",
-    "Failed to fetch albums list." : "Mistókst að ná í lista með albúmum.",
-    "Shared albums" : "Sameiginleg albúm",
-    "Create a new album" : "Búa til nýtt albúm",
-    "Add selection to an album" : "Bæta vali í albúm",
-    "Failed to create {albumName}." : "Gat ekki búið til {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Mistókst að endurnefna {currentAlbumName} sem {newAlbumName}."
+    "Photos directory" : "Ljósmyndamappa"
 },"pluralForm" :"nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);"
 }

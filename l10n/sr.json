@@ -152,27 +152,9 @@
     "Failed to set favorite state for {fileId}." : "Није успело постављање стања омиљено за {fileId}.",
     "Failed to set favorite state for {fileName}." : "Није успело постављање стања омиљено за {fileName}.",
     "Could not load photos folder" : "Не може да се учита фолдер фотографија",
-    "Go back to the previous view." : "Повратак на претходни поглед.",
-    "Go to the add collaborators view." : "Враћање на поглед додавања сарадника",
-    "Create the album." : "Креирање албума.",
-    "Back to the new album form." : "Повратак на форму новог албума.",
-    "_Share with %n user_::_Share with %n users_" : ["Подели са %n корисником","Подели са %n корисника","Подели са %n корисника"],
-    "Search for collaborators" : "Претрага сарадника",
-    "Add {collaboratorLabel} to the collaborators list" : "Додај {collaboratorLabel} на листу сарадника",
-    "No collaborators available" : "Нема достуоних сарадника",
-    "Failed to fetch album." : "Није успело добављање албума.",
-    "The file is in the favorites" : "Фајл се налази у омиљенима",
-    "Open the \"{name}\" sub-directory" : "Отвори „{name}” поддиректоријум",
     "Default Photos upload and Albums location" : "Подразумевано место за отпремање фотографија и албума",
     "Select the default location for your media" : "Изаберите подразумевано место за своје медије",
     "Invalid location selected" : "Изабрана је неисправна локација",
-    "Photos directory" : "Директоријум фотографија",
-    "Add photos to the album" : "Додај фотографије у албум",
-    "Failed to fetch albums list." : "Није успело добављање листе албума.",
-    "Shared albums" : "Дељени албуми",
-    "Create a new album" : "Креирај нови албум",
-    "Add selection to an album" : "Додај изабрано у албум",
-    "Failed to create {albumName}." : "{albumName} није могао да се креира.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Није успела промена имена {currentAlbumName} у {newAlbumName}."
+    "Photos directory" : "Директоријум фотографија"
 },"pluralForm" :"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
 }

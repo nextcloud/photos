@@ -151,27 +151,9 @@
     "Failed to set favorite state for {fileId}." : "Nie udało się ustawić statusu ulubionego dla {fileId}.",
     "Failed to set favorite state for {fileName}." : "Nie udało się ustawić statusu ulubionego dla {fileName}.",
     "Could not load photos folder" : "Nie można wczytać folderu ze zdjęciami",
-    "Go back to the previous view." : "Wróć do poprzedniego widoku.",
-    "Go to the add collaborators view." : "Przejdź do widoku dodawania współpracowników.",
-    "Create the album." : "Utwórz album.",
-    "Back to the new album form." : "Powrót do nowej formy albumu.",
-    "_Share with %n user_::_Share with %n users_" : ["Udostępnij %n użytkownikowi","Udostępnij %n użytkownikom","Udostępnij %n użytkownikom","Udostępnij %n użytkownikom"],
-    "Search for collaborators" : "Szukaj współpracowników",
-    "Add {collaboratorLabel} to the collaborators list" : "Dodaj {collaboratorLabel} do listy współpracowników",
-    "No collaborators available" : "Brak dostępnych współpracowników",
-    "Failed to fetch album." : "Nie udało się pobrać albumu.",
-    "The file is in the favorites" : "Plik znajduje się w ulubionych",
-    "Open the \"{name}\" sub-directory" : "Otwórz podkatalog \"{name}\"",
     "Default Photos upload and Albums location" : "Domyślna lokalizacja wysyłania zdjęć i albumów",
     "Select the default location for your media" : "Wybierz domyślną lokalizację swoich multimediów",
     "Invalid location selected" : "Wybrano nieprawidłową lokalizację",
-    "Photos directory" : "Katalog zdjęć",
-    "Add photos to the album" : "Dodaj zdjęcia do albumu",
-    "Failed to fetch albums list." : "Nie udało się pobrać listy albumów.",
-    "Shared albums" : "Udostępnione albumy",
-    "Create a new album" : "Utwórz nowy album",
-    "Add selection to an album" : "Dodaj wybrane do albumu",
-    "Failed to create {albumName}." : "Nie udało się utworzyć {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Nie udało się zmienić nazwy {currentAlbumName} na {newAlbumName}."
+    "Photos directory" : "Katalog zdjęć"
 },"pluralForm" :"nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);"
 }

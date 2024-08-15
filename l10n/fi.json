@@ -147,27 +147,9 @@
     "Failed to delete {fileName}." : "Tiedoston {fileName} poisto epäonnistui.",
     "Failed to set favorite state for {fileId}." : "Suosikkimääritelmän asettaminen kohteelle {fileId} epäonnistui.",
     "Failed to set favorite state for {fileName}." : "Suosikkimääritelmän asettaminen kohteelle {fileName} epäonnistui.",
-    "Go back to the previous view." : "Siirry takaisin edelliseen näkymään.",
-    "Go to the add collaborators view." : "Avaa osanottajien lisäysnäkymä.",
-    "Create the album." : "Luo albumi.",
-    "Back to the new album form." : "Takaisin uuden albumin lomakkeeseen.",
-    "_Share with %n user_::_Share with %n users_" : ["Jaa %n käyttäjän kanssa","Jaa %n käyttäjän kanssa"],
-    "Search for collaborators" : "Etsi osanottajia",
-    "Add {collaboratorLabel} to the collaborators list" : "Lisää {collaboratorLabel} osanottajiin",
-    "No collaborators available" : "Osanottajia ei löytynyt",
-    "Failed to fetch album." : "Albumin noutaminen epäonnistui.",
-    "The file is in the favorites" : "Tämä tiedosto on suosikeissa",
-    "Open the \"{name}\" sub-directory" : "Avaa \"{name}\"-alikansio",
     "Default Photos upload and Albums location" : "Kuvien ja albumien oletusarvoinen lähetyssijainti",
     "Select the default location for your media" : "Valitse oletussijainti medialle",
     "Invalid location selected" : "Virheellinen sijainti valittu",
-    "Photos directory" : "Kuvat-kansio",
-    "Add photos to the album" : "Lisää kuvia albumiin",
-    "Failed to fetch albums list." : "Albumien listan noutaminen epäonnistui.",
-    "Shared albums" : "Jaetut albumit",
-    "Create a new album" : "Luo uusi albumi",
-    "Add selection to an album" : "Lisää valinta albumiin",
-    "Failed to create {albumName}." : "Albumin {albumName} luominen epäonnistui.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Albumin {currentAlbumName} nimen muuttaminen muotoon {newAlbumName} epäonnistui."
+    "Photos directory" : "Kuvat-kansio"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

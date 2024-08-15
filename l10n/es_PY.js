@@ -26,8 +26,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Fotos con etiquetas serán mostradas aquí",
     "Add" : "Agregar",
     "Tagged photos" : "Fotos etiquetadas",
-    "Details" : "Detalles",
-    "Open the \"{name}\" sub-directory" : "Abrir el subdirectorio \"{name}\"",
-    "Shared albums" : "Álbums compartidos"
+    "Details" : "Detalles"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

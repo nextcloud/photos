@@ -151,27 +151,9 @@
     "Failed to set favorite state for {fileId}." : "Impostazione dello stato di preferito a {fileId} non riuscita.",
     "Failed to set favorite state for {fileName}." : "Impostazione dello stato di preferito a {fileName} non riuscita.",
     "Could not load photos folder" : "Non è stato possibile caricare la cartella foto",
-    "Go back to the previous view." : "Vai alla vista precedente.",
-    "Go to the add collaborators view." : "Vai alla vista per aggiungere collaboratori.",
-    "Create the album." : "Crea l'album.",
-    "Back to the new album form." : "Torna al modulo nuovo album.",
-    "_Share with %n user_::_Share with %n users_" : ["Condividi con %n utente","Condividi con %n utenti","Condividi con %n utenti"],
-    "Search for collaborators" : "Cerca collaboratori",
-    "Add {collaboratorLabel} to the collaborators list" : "Aggiungi {collaboratorLabel} all'elenco dei collaboratori",
-    "No collaborators available" : "Nessun collaboratore disponibile",
-    "Failed to fetch album." : "Recupero dell'album non riuscito.",
-    "The file is in the favorites" : "Il file è nei preferiti",
-    "Open the \"{name}\" sub-directory" : "Apri la sottocartella \"{name}\"",
     "Default Photos upload and Albums location" : "Percorso predefinito caricamento foto e album",
     "Select the default location for your media" : "Seleziona il percorso predefinito per i tuoi file",
     "Invalid location selected" : "Percorso selezionato non valido",
-    "Photos directory" : "Cartella delle foto",
-    "Add photos to the album" : "Aggiungi foto all'album",
-    "Failed to fetch albums list." : "Recupero della lista di album non riuscito.",
-    "Shared albums" : "Album condivisi",
-    "Create a new album" : "Crea un nuovo album",
-    "Add selection to an album" : "Aggiungi selezione ad un album",
-    "Failed to create {albumName}." : "Creazione di {albumName} non riuscita",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Rinominazione di {currentAlbumName} in {newAlbumName} non riuscita."
+    "Photos directory" : "Cartella delle foto"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

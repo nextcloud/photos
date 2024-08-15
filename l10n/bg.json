@@ -122,27 +122,9 @@
     "Failed to delete {fileName}." : "Неуспешно изтриване на {fileName}.",
     "Failed to set favorite state for {fileId}." : "Неуспешно задаване на предпочитано/любимо/ състояние за {fileId}.",
     "Failed to set favorite state for {fileName}." : "Неуспешно задаване на предпочитано/любимо/ състояние за {fileName}.",
-    "Go back to the previous view." : "Връщане към предишния изглед.",
-    "Go to the add collaborators view." : "Отиване до изглед за добавяне на сътрудници.",
-    "Create the album." : "Създаване на албума.",
-    "Back to the new album form." : "Обратно към формата на новия албум.",
-    "_Share with %n user_::_Share with %n users_" : ["Споделяне с %n потребители","Споделяне с %n потребители"],
-    "Search for collaborators" : "Търсене на сътрудници",
-    "Add {collaboratorLabel} to the collaborators list" : "Добавяне на {collaboratorLabel} към списъка със сътрудници",
-    "No collaborators available" : "Няма налични сътрудници",
-    "Failed to fetch album." : "Неуспешно извличане на албум.",
-    "The file is in the favorites" : "Файлът е в любими",
-    "Open the \"{name}\" sub-directory" : "Отваряне на \"{name}“  поддиректория ",
     "Default Photos upload and Albums location" : "Качване на снимки и местоположение на албуми по подразбиране",
     "Select the default location for your media" : "Избор на местоположение по подразбиране за вашата медия",
     "Invalid location selected" : "Избрано е невалидно местоположение",
-    "Photos directory" : "Директория със снимки",
-    "Add photos to the album" : "Добавяне на снимки към албума",
-    "Failed to fetch albums list." : "Неуспешно извличане на списък с албуми.",
-    "Shared albums" : "Споделени албуми",
-    "Create a new album" : "Създаване на нов албум",
-    "Add selection to an album" : "Добавяне на селекция към албум",
-    "Failed to create {albumName}." : "Неуспешно създаване на {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Неуспешно преименуване от {currentAlbumName} на {newAlbumName}."
+    "Photos directory" : "Директория със снимки"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
