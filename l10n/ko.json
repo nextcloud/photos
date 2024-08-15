@@ -56,16 +56,6 @@
     "Unassigned faces" : "지정되지 않은 얼굴",
     "Details" : "세부사항",
     "Failed to delete {fileName}." : "{fileName}(을)를 삭제하지 못했습니다.",
-    "Go back to the previous view." : "이전 보기로 이동하세요.",
-    "Go to the add collaborators view." : "공동 작업자 추가 화면으로 이동하세요.",
-    "Back to the new album form." : "새 앨범 양식으로 돌아가기",
-    "_Share with %n user_::_Share with %n users_" : ["%n명의 사용자와 공유"],
-    "Search for collaborators" : "공동 작업자 검색",
-    "Add {collaboratorLabel} to the collaborators list" : "공동 작업자 목록에 {collaboratorLabel} 추가",
-    "No collaborators available" : "가능한 공동 작업자 없음",
-    "Failed to fetch album." : "앨범을 가져오기에 실패했습니다.",
-    "Invalid location selected" : "잘못된 위치가 선택됨",
-    "Failed to create {albumName}." : "{albumName} 앨범을 만들지 못했습니다.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "{currentAlbumName}에서 {newAlbumName}(으)로 이름을 바꾸지 못했습니다."
+    "Invalid location selected" : "잘못된 위치가 선택됨"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

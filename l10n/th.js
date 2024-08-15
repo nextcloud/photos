@@ -46,11 +46,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "รูปภาพที่ติดแท็กจะแสดงที่นี่",
     "Add" : "เพิ่ม",
     "Tagged photos" : "รูปภาพที่ติดแท็ก",
-    "Details" : "รายละเอียด",
-    "Go back to the previous view." : "กลับไปยังมุมมองก่อนหน้า",
-    "Create the album." : "สร้างอัลบั้ม",
-    "Back to the new album form." : "กลับไปยังแบบฟอร์มอัลบั้มใหม่",
-    "_Share with %n user_::_Share with %n users_" : ["แชร์กับผู้ใช้ %n คน"],
-    "Open the \"{name}\" sub-directory" : "เปิดไดเรกทอรีรอง \"{name}\""
+    "Details" : "รายละเอียด"
 },
 "nplurals=1; plural=0;");
