@@ -87,20 +87,7 @@
     "Failed to delete {faceName}." : "Nepavyko ištrinti {faceName}.",
     "Failed to delete {fileId}." : "Nepavyko ištrinti {fileId}.",
     "Failed to delete {fileName}." : "Nepavyko ištrinti {fileName}.",
-    "Go back to the previous view." : "Grįžti į ankstesnį rodinį.",
-    "Create the album." : "Sukurti albumą.",
-    "Back to the new album form." : "Atgal į naujo albumo formą.",
-    "_Share with %n user_::_Share with %n users_" : ["Bendrinti su %n naudotoju","Bendrinti su %n naudotojais","Bendrinti su %n naudotojų","Bendrinti su %n naudotoju"],
-    "Failed to fetch album." : "Nepavyko gauti albumo.",
-    "Open the \"{name}\" sub-directory" : "Atverti „{name}“ pakatalogį",
     "Invalid location selected" : "Pasirinkta neteisinga vieta",
-    "Photos directory" : "Nuotraukų katalogas",
-    "Add photos to the album" : "Pridėti nuotraukų į albumą",
-    "Failed to fetch albums list." : "Nepavyko gauti albumų sąrašo.",
-    "Shared albums" : "Bendrinami albumai",
-    "Create a new album" : "Sukurti naują albumą",
-    "Add selection to an album" : "Pridėti žymėjimą į albumą",
-    "Failed to create {albumName}." : "Nepavyko sukurti {albumName}.",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Nepavyko pervadinti {currentAlbumName} į {newAlbumName}."
+    "Photos directory" : "Nuotraukų katalogas"
 },"pluralForm" :"nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);"
 }

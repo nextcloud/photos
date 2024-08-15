@@ -129,27 +129,9 @@
     "Failed to delete {fileName}." : "Не удалось удалить файл «{fileName}».",
     "Failed to set favorite state for {fileId}." : "Не удалось отметить или снять отметку избранного с «{fileId}».",
     "Failed to set favorite state for {fileName}." : "Не удалось отметить или снять отметку избранного с «{fileId}».",
-    "Go back to the previous view." : "Вернуться к предыдущему режиму просмотра.",
-    "Go to the add collaborators view." : "Перейти к просмотру соавторов.",
-    "Create the album." : "Создать альбом",
-    "Back to the new album form." : "Вернуться к диалогу создания альбома.",
-    "_Share with %n user_::_Share with %n users_" : ["Доступно для %n пользователя","Доступно для %n пользователей","Доступно для %n пользователей","Доступно для %n пользователей"],
-    "Search for collaborators" : "Поиск людей и групп для добавления в соавторы",
-    "Add {collaboratorLabel} to the collaborators list" : "Добавить {collaboratorLabel} в соавторы",
-    "No collaborators available" : "Нет ни одного возможного соавтора",
-    "Failed to fetch album." : "Не удалось получить альбом.",
-    "The file is in the favorites" : "Этот файл добавлен в избранное",
-    "Open the \"{name}\" sub-directory" : "Открыть вложенную папке «{name}»",
     "Default Photos upload and Albums location" : "Расположение загружаемых на сервер фотографий и альбомов по умолчанию",
     "Select the default location for your media" : "Выбор расположения медиафайлов по умолчанию",
     "Invalid location selected" : "Указано недействительное расположение",
-    "Photos directory" : "Каталог с фотографиями",
-    "Add photos to the album" : "Добавить фотографии в альбом",
-    "Failed to fetch albums list." : "Не удалось получить список альбомов.",
-    "Shared albums" : "Полученные альбомы",
-    "Create a new album" : "Создать альбом",
-    "Add selection to an album" : "Добавить выбранное в альбом",
-    "Failed to create {albumName}." : "Не удалось создать альбом «{albumName}».",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Не удалось переименовать альбом «{currentAlbumName}» в «{newAlbumName}»."
+    "Photos directory" : "Каталог с фотографиями"
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }

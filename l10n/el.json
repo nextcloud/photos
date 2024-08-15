@@ -74,16 +74,7 @@
     "Failed to delete {faceName}." : "Απέτυχε η διαγραφή {faceName}.",
     "Failed to delete {fileId}." : "Απέτυχε η διαγραφή {fileId}.",
     "Failed to delete {fileName}." : "Απέτυχε η διαγραφή {fileName}.",
-    "No collaborators available" : "Δεν υπάρχουν διαθέσιμοι συνεργάτες",
-    "The file is in the favorites" : "Το αρχείο είναι στα αγαπημένα",
-    "Open the \"{name}\" sub-directory" : "Άνοιγμα υπό-κατάλογου του «{name}»",
     "Select the default location for your media" : "Επιλέξτε την προεπιλεγμένη τοποθεσία για τα πολυμέσα σας",
-    "Invalid location selected" : "Επιλέχθηκε μη έγκυρη τοποθεσία",
-    "Add photos to the album" : "Προσθήκη φωτογραφιών στο άλμπουμ",
-    "Shared albums" : "Κοινόχρηστα άλμπουμ",
-    "Create a new album" : "Δημιουργία ενός νέου άλμπουμ",
-    "Add selection to an album" : "Προσθήκη σε ένα άλμπουμ",
-    "Failed to create {albumName}." : "Απέτυχε η δημιουργία {albumName}",
-    "Failed to rename {currentAlbumName} to {newAlbumName}." : "Απέτυχε η μετονομασία του {currentAlbumName} σε {newAlbumName}."
+    "Invalid location selected" : "Επιλέχθηκε μη έγκυρη τοποθεσία"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

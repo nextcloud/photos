@@ -35,8 +35,6 @@ OC.L10N.register(
     "Add" : "Agiunghe",
     "Delete selection" : "Cantzella seletzione",
     "Tagged photos" : "Fotografias etichetadas",
-    "Details" : "Detàllios",
-    "Open the \"{name}\" sub-directory" : "Aberi sa sub-cartella \"{name}\"",
-    "Shared albums" : "Album cumpartzidos"
+    "Details" : "Detàllios"
 },
 "nplurals=2; plural=(n != 1);");

@@ -30,8 +30,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Las fòtos amb etiquetas apreissaràn aquí",
     "Add" : "Apondre",
     "Tagged photos" : "Fòtos etiquetadas",
-    "Details" : "Detalhs",
-    "Open the \"{name}\" sub-directory" : "Dobrir lo jos-dossièr « {name} »",
-    "Shared albums" : "Albums partejats"
+    "Details" : "Detalhs"
 },
 "nplurals=2; plural=(n > 1);");

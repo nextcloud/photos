@@ -108,24 +108,9 @@
     "Details" : "Podrobnosti",
     "Failed to delete {fileId}." : "Brisanje polja {fileId} je spodletelo.",
     "Failed to delete {fileName}." : "Brisanje datoteke {fileName} je spodletelo.",
-    "Go back to the previous view." : "Vrni na predhodni pogled.",
-    "Go to the add collaborators view." : "Skoči na pogled dodajanja sodelujočih.",
-    "Create the album." : "Ustvari album",
-    "Back to the new album form." : "Nazaj na pogled obrazca novega albuma.",
-    "Search for collaborators" : "Iskanje sodelujočih",
-    "Add {collaboratorLabel} to the collaborators list" : "Dodaj {collaboratorLabel} na seznam sodelujočih",
-    "No collaborators available" : "Ni navedenih sodelujočih urejevalcev",
-    "Failed to fetch album." : "Pridobivanje albuma je spodletelo.",
-    "The file is in the favorites" : "Datoteka je med priljubljenimi",
-    "Open the \"{name}\" sub-directory" : "Odpri podmapo »{name}«",
     "Default Photos upload and Albums location" : "Privzeto mesto albuma in odložišča",
     "Select the default location for your media" : "Izbor privzetega mesta za predstavne datoteke",
     "Invalid location selected" : "Izbrano je neveljavno mesto",
-    "Photos directory" : "Slikovna mapa",
-    "Add photos to the album" : "Dodaj fotografije v album",
-    "Shared albums" : "Albumi v souporabi",
-    "Create a new album" : "Ustvari nov album",
-    "Add selection to an album" : "Dodaj izbor v album",
-    "Failed to create {albumName}." : "Ustvarjanje albuma {albumName} je spodletelo."
+    "Photos directory" : "Slikovna mapa"
 },"pluralForm" :"nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);"
 }

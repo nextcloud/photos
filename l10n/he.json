@@ -72,10 +72,6 @@
     "All your media" : "כל המדיה שלך",
     "Shared Albums" : "אלבומים משותפים",
     "Tagged photos" : "תמונות מתויגות",
-    "Details" : "פרטים",
-    "Go to the add collaborators view." : "מעבר לתצוגה של הוספת שותפים",
-    "Add {collaboratorLabel} to the collaborators list" : "הוסף {collaboratorLabel} לרשימת השותפים",
-    "Open the \"{name}\" sub-directory" : "לפתוח את תת־התיקייה „{name}”",
-    "Shared albums" : "אלבומים משותפים"
+    "Details" : "פרטים"
 },"pluralForm" :"nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;"
 }
