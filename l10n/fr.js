@@ -50,7 +50,7 @@ OC.L10N.register(
     "This collection does not exist" : "Cette collection n’existe pas",
     "An error occurred" : "Une erreur est survenue",
     "No picture for this day" : "Aucune image ce jour",
-    "Picture taken on this day will show up here." : "Les photos prises ce jour s’afficheront ici.",
+    "Picture taken on this day will show up here." : "Les photos prises ce jour apparaîtront ici.",
     "More photos from this day" : "Plus de photos de cette journée",
     "_%n unassigned photo_::_%n unassigned photos_" : ["%n photo non assignée","%n photos non assignées","%n photos non assignées"],
     "Favorite" : "Favoris",
