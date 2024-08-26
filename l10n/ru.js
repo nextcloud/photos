@@ -60,6 +60,7 @@ OC.L10N.register(
     "There are no photos or videos yet!" : "Пока не содержит ни одной фотографии или видео.",
     "_{years} year ago_::_{years} years ago_" : ["{years} год назад","{years} лет назад","{years} лет назад","{years} лет назад"],
     "Enable squared photos view" : "Включить квадратный просмотр фотографий",
+    "All folders" : "Все папки",
     "Home" : "Главная страница",
     "Choose default Photos upload and Albums location" : "Выберите местоположение загрузки фотографий и альбомов по умолчанию",
     "View" : "Просмотр",
