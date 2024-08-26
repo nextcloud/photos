@@ -43,7 +43,7 @@ Vue.prototype.t = translate
 Vue.prototype.n = translatePlural
 
 window.addEventListener('DOMContentLoaded', () => {
-	OCA.Dashboard.register('photos.onthisday', (el) => {
+	OCA.Dashboard.register('photos-onthisday', (el) => {
 		global.PhotosOnThisDay = new Vue({
 			el,
 			store,
