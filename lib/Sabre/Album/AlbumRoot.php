@@ -24,23 +24,13 @@ use Sabre\DAV\ICopyTarget;
 use Sabre\DAV\INode;
 
 class AlbumRoot implements ICollection, ICopyTarget {
-	protected AlbumMapper $albumMapper;
-	protected AlbumWithFiles $album;
-	protected IRootFolder $rootFolder;
-	protected string $userId;
-
 	public function __construct(
-		AlbumMapper $albumMapper,
-		AlbumWithFiles $album,
-		IRootFolder $rootFolder,
-		string $userId,
-		UserConfigService $userConfigService
+		protected AlbumMapper $albumMapper,
+		protected AlbumWithFiles $album,
+		protected IRootFolder $rootFolder,
+		protected string $userId,
+		protected UserConfigService $userConfigService
 	) {
-		$this->albumMapper = $albumMapper;
-		$this->album = $album;
-		$this->rootFolder = $rootFolder;
-		$this->userId = $userId;
-		$this->userConfigService = $userConfigService;
 	}
 
 	/**
@@ -73,7 +63,7 @@ class AlbumRoot implements ICollection, ICopyTarget {
 	 *
 	 * @param string $name
 	 * @param null|resource|string $data
-	 * @return void
+	 * @return string|null
 	 */
 	public function createFile($name, $data = null) {
 		try {
@@ -92,7 +82,7 @@ class AlbumRoot implements ICollection, ICopyTarget {
 			}
 
 			// Check for conflict and rename the file accordingly
-			$newName = \basename(\OC_Helper::buildNotExistingFileName($photosLocation, $name));
+			$newName = $photosFolder->getNonExistingName($name);
 
 			$node = $photosFolder->newFile($newName, $data);
 			$this->addFile($node->getId(), $node->getOwner()->getUID());
@@ -112,6 +102,9 @@ class AlbumRoot implements ICollection, ICopyTarget {
 		throw new Forbidden('Not allowed to create directories in this folder');
 	}
 
+	/**
+	 * @return AlbumPhoto[]
+	 */
 	public function getChildren(): array {
 		return array_map(function (AlbumFile $file) {
 			return new AlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId));

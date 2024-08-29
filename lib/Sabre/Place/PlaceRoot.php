@@ -19,7 +19,7 @@ use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\ICollection;
 
 class PlaceRoot implements ICollection {
-	/** @var PlaceFile[]|null */
+	/** @var PlacePhoto[]|null */
 	protected ?array $children = null;
 
 	public function __construct(

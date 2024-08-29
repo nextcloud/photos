@@ -57,7 +57,6 @@ class PublicAlbumRoot extends AlbumRoot {
 		throw new Forbidden('Not allowed to collaborators a public album');
 	}
 
-	/** @return never */
 	public function getChildren(): array {
 		return array_map(function (AlbumFile $file) {
 			return new PublicAlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId));

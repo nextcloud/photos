@@ -63,7 +63,7 @@ class PublicRootCollection extends AbstractPrincipalCollection {
 	 *
 	 * @throws NotFound
 	 *
-	 * @return DAV\INode
+	 * @return \Sabre\DAV\INode
 	 */
 	public function getChild($name) {
 		$this->throttler->sleepDelayOrThrowOnMax($this->request->getRemoteAddress(), self::BRUTEFORCE_ACTION);
