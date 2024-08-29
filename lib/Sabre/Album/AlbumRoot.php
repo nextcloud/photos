@@ -120,7 +120,7 @@ class AlbumRoot implements ICollection, ICopyTarget {
 
 	public function getChild($name): AlbumPhoto {
 		foreach ($this->album->getFiles() as $file) {
-			if ($file->getFileId() . "-" . $file->getName() === $name) {
+			if ($file->getFileId() . '-' . $file->getName() === $name) {
 				return new AlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId));
 			}
 		}
@@ -142,7 +142,7 @@ class AlbumRoot implements ICollection, ICopyTarget {
 
 	public function copyInto($targetName, $sourcePath, INode $sourceNode): bool {
 		if (!$sourceNode instanceof File) {
-			throw new Forbidden("The source is not a file");
+			throw new Forbidden('The source is not a file');
 		}
 
 		$sourceId = $sourceNode->getId();

@@ -37,11 +37,11 @@ class Version20003Date20221102170153 extends SimpleMigrationStep {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
-		if ($schema->hasTable("photos_albums_collabs")) {
+		if ($schema->hasTable('photos_albums_collabs')) {
 			return null;
 		}
 
-		$table = $schema->createTable("photos_albums_collabs");
+		$table = $schema->createTable('photos_albums_collabs');
 		$table->addColumn('id', Types::BIGINT, [
 			'autoincrement' => true,
 			'notnull' => true,
@@ -111,7 +111,7 @@ class Version20003Date20221102170153 extends SimpleMigrationStep {
 			$rowCount += $insert
 				->setParameter('album_id', (int)$row['album_id'], IQueryBuilder::PARAM_INT)
 				->setParameter('collaborator_id', $row['collaborator_id'])
-				->setParameter('collaborator_type', (int) $row['collaborator_type'], IQueryBuilder::PARAM_INT)
+				->setParameter('collaborator_type', (int)$row['collaborator_type'], IQueryBuilder::PARAM_INT)
 				->executeStatement();
 		}
 

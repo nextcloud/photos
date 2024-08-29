@@ -66,7 +66,7 @@ class PublicAlbumRoot extends AlbumRoot {
 
 	public function getChild($name): PublicAlbumPhoto {
 		foreach ($this->album->getFiles() as $file) {
-			if ($file->getFileId() . "-" . $file->getName() === $name) {
+			if ($file->getFileId() . '-' . $file->getName() === $name) {
 				return new PublicAlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId));
 			}
 		}

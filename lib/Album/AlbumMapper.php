@@ -51,10 +51,10 @@ class AlbumMapper {
 		$this->random = $random;
 	}
 
-	public function create(string $userId, string $name, string $location = ""): AlbumInfo {
+	public function create(string $userId, string $name, string $location = ''): AlbumInfo {
 		$created = $this->timeFactory->getTime();
 		$query = $this->connection->getQueryBuilder();
-		$query->insert("photos_albums")
+		$query->insert('photos_albums')
 			->values([
 				'user' => $query->createNamedParameter($userId),
 				'name' => $query->createNamedParameter($name),
@@ -70,8 +70,8 @@ class AlbumMapper {
 
 	public function get(int $id): ?AlbumInfo {
 		$query = $this->connection->getQueryBuilder();
-		$query->select("name", "user", "location", "created", "last_added_photo")
-			->from("photos_albums")
+		$query->select('name', 'user', 'location', 'created', 'last_added_photo')
+			->from('photos_albums')
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$row = $query->executeQuery()->fetch();
 		if ($row) {
@@ -87,8 +87,8 @@ class AlbumMapper {
 	 */
 	public function getForUser(string $userId): array {
 		$query = $this->connection->getQueryBuilder();
-		$query->select("album_id", "name", "location", "created", "last_added_photo")
-			->from("photos_albums")
+		$query->select('album_id', 'name', 'location', 'created', 'last_added_photo')
+			->from('photos_albums')
 			->where($query->expr()->eq('user', $query->createNamedParameter($userId)));
 		$rows = $query->executeQuery()->fetchAll();
 		return array_map(function (array $row) use ($userId) {
@@ -103,10 +103,10 @@ class AlbumMapper {
 	 */
 	public function getByName(string $albumName, string $userName): ?AlbumInfo {
 		$query = $this->connection->getQueryBuilder();
-		$query->select("album_id", "location", "created", "last_added_photo")
-				->from("photos_albums")
-				->where($query->expr()->eq('name', $query->createNamedParameter($albumName)))
-				->andWhere($query->expr()->eq('user', $query->createNamedParameter($userName)));
+		$query->select('album_id', 'location', 'created', 'last_added_photo')
+			->from('photos_albums')
+			->where($query->expr()->eq('name', $query->createNamedParameter($albumName)))
+			->andWhere($query->expr()->eq('user', $query->createNamedParameter($userName)));
 		$row = $query->executeQuery()->fetch();
 		if ($row) {
 			return new AlbumInfo((int)$row['album_id'], $userName, $albumName, $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
@@ -121,9 +121,9 @@ class AlbumMapper {
 	 */
 	public function getForFile(int $fileId): array {
 		$query = $this->connection->getQueryBuilder();
-		$query->select("a.album_id", "name", "user", "location", "created", "last_added_photo")
-			->from("photos_albums", "a")
-			->leftJoin("a", "photos_albums_files", "p", $query->expr()->eq("a.album_id", "p.album_id"))
+		$query->select('a.album_id', 'name', 'user', 'location', 'created', 'last_added_photo')
+			->from('photos_albums', 'a')
+			->leftJoin('a', 'photos_albums_files', 'p', $query->expr()->eq('a.album_id', 'p.album_id'))
 			->where($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
 		$rows = $query->executeQuery()->fetchAll();
 		return array_map(function (array $row) {
@@ -138,9 +138,9 @@ class AlbumMapper {
 	 */
 	public function getForUserAndFile(string $userId, int $fileId): array {
 		$query = $this->connection->getQueryBuilder();
-		$query->select("a.album_id", "name", "user", "location", "created", "last_added_photo")
-			->from("photos_albums", "a")
-			->leftJoin("a", "photos_albums_files", "p", $query->expr()->eq("a.album_id", "p.album_id"))
+		$query->select('a.album_id', 'name', 'user', 'location', 'created', 'last_added_photo')
+			->from('photos_albums', 'a')
+			->leftJoin('a', 'photos_albums_files', 'p', $query->expr()->eq('a.album_id', 'p.album_id'))
 			->where($query->expr()->eq('user', $query->createNamedParameter($userId)))
 			->andWhere($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
 		$rows = $query->executeQuery()->fetchAll();
@@ -151,16 +151,16 @@ class AlbumMapper {
 
 	public function rename(int $id, string $newName): void {
 		$query = $this->connection->getQueryBuilder();
-		$query->update("photos_albums")
-			->set("name", $query->createNamedParameter($newName))
+		$query->update('photos_albums')
+			->set('name', $query->createNamedParameter($newName))
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$query->executeStatement();
 	}
 
 	public function setLocation(int $id, string $newLocation): void {
 		$query = $this->connection->getQueryBuilder();
-		$query->update("photos_albums")
-			->set("location", $query->createNamedParameter($newLocation))
+		$query->update('photos_albums')
+			->set('location', $query->createNamedParameter($newLocation))
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$query->executeStatement();
 	}
@@ -169,17 +169,17 @@ class AlbumMapper {
 		$this->connection->beginTransaction();
 
 		$query = $this->connection->getQueryBuilder();
-		$query->delete("photos_albums")
+		$query->delete('photos_albums')
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$query->executeStatement();
 
 		$query = $this->connection->getQueryBuilder();
-		$query->delete("photos_albums_files")
+		$query->delete('photos_albums_files')
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$query->executeStatement();
 
 		$query = $this->connection->getQueryBuilder();
-		$query->delete("photos_albums_collabs")
+		$query->delete('photos_albums_collabs')
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$query->executeStatement();
 
@@ -193,12 +193,12 @@ class AlbumMapper {
 	 */
 	public function getForAlbumIdAndUserWithFiles(int $albumId, string $userId): array {
 		$query = $this->connection->getQueryBuilder();
-		$query->select("fileid", "mimetype", "a.album_id", "size", "mtime", "etag", "added", "owner")
-			->selectAlias("f.name", "file_name")
-			->selectAlias("a.name", "album_name")
-			->from("photos_albums", "a")
-			->leftJoin("a", "photos_albums_files", "p", $query->expr()->eq("a.album_id", "p.album_id"))
-			->leftJoin("p", "filecache", "f", $query->expr()->eq("p.file_id", "f.fileid"))
+		$query->select('fileid', 'mimetype', 'a.album_id', 'size', 'mtime', 'etag', 'added', 'owner')
+			->selectAlias('f.name', 'file_name')
+			->selectAlias('a.name', 'album_name')
+			->from('photos_albums', 'a')
+			->leftJoin('a', 'photos_albums_files', 'p', $query->expr()->eq('a.album_id', 'p.album_id'))
+			->leftJoin('p', 'filecache', 'f', $query->expr()->eq('p.file_id', 'f.fileid'))
 			->where($query->expr()->eq('a.album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('user', $query->createNamedParameter($userId)));
 		$rows = $query->executeQuery()->fetchAll();
@@ -221,12 +221,12 @@ class AlbumMapper {
 	 */
 	public function getForAlbumIdAndFileId(int $albumId, int $fileId): AlbumFile {
 		$query = $this->connection->getQueryBuilder();
-		$query->select("fileid", "mimetype", "a.album_id", "user", "size", "mtime", "etag", "location", "created", "last_added_photo", "added", "owner")
-			->selectAlias("f.name", "file_name")
-			->selectAlias("a.name", "album_name")
-			->from("photos_albums", "a")
-			->leftJoin("a", "photos_albums_files", "p", $query->expr()->eq("a.album_id", "p.album_id"))
-			->leftJoin("p", "filecache", "f", $query->expr()->eq("p.file_id", "f.fileid"))
+		$query->select('fileid', 'mimetype', 'a.album_id', 'user', 'size', 'mtime', 'etag', 'location', 'created', 'last_added_photo', 'added', 'owner')
+			->selectAlias('f.name', 'file_name')
+			->selectAlias('a.name', 'album_name')
+			->from('photos_albums', 'a')
+			->leftJoin('a', 'photos_albums_files', 'p', $query->expr()->eq('a.album_id', 'p.album_id'))
+			->leftJoin('p', 'filecache', 'f', $query->expr()->eq('p.file_id', 'f.fileid'))
 			->where($query->expr()->eq('a.album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
 		$row = $query->executeQuery()->fetchAll()[0];
@@ -239,20 +239,20 @@ class AlbumMapper {
 		$added = $this->timeFactory->getTime();
 		try {
 			$query = $this->connection->getQueryBuilder();
-			$query->insert("photos_albums_files")
+			$query->insert('photos_albums_files')
 				->values([
-					"album_id" => $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT),
-					"file_id" => $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT),
-					"added" => $query->createNamedParameter($added, IQueryBuilder::PARAM_INT),
-					"owner" => $query->createNamedParameter($owner),
+					'album_id' => $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT),
+					'file_id' => $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT),
+					'added' => $query->createNamedParameter($added, IQueryBuilder::PARAM_INT),
+					'owner' => $query->createNamedParameter($owner),
 				]);
 			$query->executeStatement();
 		} catch (UniqueConstraintViolationException $e) {
-			throw new AlreadyInAlbumException("File already in album", 0, $e);
+			throw new AlreadyInAlbumException('File already in album', 0, $e);
 		}
 
 		$query = $this->connection->getQueryBuilder();
-		$query->update("photos_albums")
+		$query->update('photos_albums')
 			->set('last_added_photo', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT))
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)));
 		$query->executeStatement();
@@ -260,13 +260,13 @@ class AlbumMapper {
 
 	public function removeFile(int $albumId, int $fileId): void {
 		$query = $this->connection->getQueryBuilder();
-		$query->delete("photos_albums_files")
-			->where($query->expr()->eq("album_id", $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
-			->andWhere($query->expr()->eq("file_id", $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
+		$query->delete('photos_albums_files')
+			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
 		$query->executeStatement();
 
 		$query = $this->connection->getQueryBuilder();
-		$query->update("photos_albums")
+		$query->update('photos_albums')
 			->set('last_added_photo', $query->createNamedParameter($this->getLastAdded($albumId), IQueryBuilder::PARAM_INT))
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)));
 		$query->executeStatement();
@@ -285,7 +285,7 @@ class AlbumMapper {
 
 		// Update the last added photo:
 		$query = $this->connection->getQueryBuilder();
-		$query->update("photos_albums")
+		$query->update('photos_albums')
 			->set('last_added_photo', $query->createNamedParameter($this->getLastAdded($albumId), IQueryBuilder::PARAM_INT))
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
 			->executeStatement();
@@ -298,23 +298,23 @@ class AlbumMapper {
 		// Get concerned albums before deleting them.
 		$query = $this->connection->getQueryBuilder();
 		$albumsRows = $query->select('album_id')
-			->from("photos_albums_files")
-			->where($query->expr()->eq("owner", $query->createNamedParameter($ownerId)))
-			->andWhere($query->expr()->eq("file_id", $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)))
+			->from('photos_albums_files')
+			->where($query->expr()->eq('owner', $query->createNamedParameter($ownerId)))
+			->andWhere($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)))
 			->executeQuery()
 			->fetchAll();
 
 		// Remove any occurrence of fileId when owner is ownerId.
 		$query = $this->connection->getQueryBuilder();
-		$query->delete("photos_albums_files")
-			->where($query->expr()->eq("owner", $query->createNamedParameter($ownerId)))
-			->andWhere($query->expr()->eq("file_id", $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)))
+		$query->delete('photos_albums_files')
+			->where($query->expr()->eq('owner', $query->createNamedParameter($ownerId)))
+			->andWhere($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)))
 			->executeStatement();
 
 		// Update last_added_photo for concerned albums.
 		foreach ($albumsRows as $row) {
 			$query = $this->connection->getQueryBuilder();
-			$query->update("photos_albums")
+			$query->update('photos_albums')
 				->set('last_added_photo', $query->createNamedParameter($this->getLastAdded($row['album_id']), IQueryBuilder::PARAM_INT))
 				->where($query->expr()->eq('album_id', $query->createNamedParameter($row['album_id'], IQueryBuilder::PARAM_INT)));
 			$query->executeStatement();
@@ -323,10 +323,10 @@ class AlbumMapper {
 
 	private function getLastAdded(int $albumId): int {
 		$query = $this->connection->getQueryBuilder();
-		$query->select("file_id")
-			->from("photos_albums_files")
+		$query->select('file_id')
+			->from('photos_albums_files')
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
-			->orderBy("added", "DESC")
+			->orderBy('added', 'DESC')
 			->setMaxResults(1);
 		$id = $query->executeQuery()->fetchOne();
 		if ($id === false) {
@@ -342,8 +342,8 @@ class AlbumMapper {
 	 */
 	public function getCollaborators(int $albumId): array {
 		$query = $this->connection->getQueryBuilder();
-		$query->select("collaborator_id", "collaborator_type")
-			->from("photos_albums_collabs")
+		$query->select('collaborator_id', 'collaborator_type')
+			->from('photos_albums_collabs')
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)));
 
 		$rows = $query->executeQuery()->fetchAll();
@@ -388,8 +388,8 @@ class AlbumMapper {
 	 */
 	public function isCollaborator(int $albumId, string $userId): bool {
 		$query = $this->connection->getQueryBuilder();
-		$query->select("collaborator_id", "collaborator_type")
-			->from("photos_albums_collabs")
+		$query->select('collaborator_id', 'collaborator_type')
+			->from('photos_albums_collabs')
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)));
 
 		$rows = $query->executeQuery()->fetchAll();
@@ -484,9 +484,9 @@ class AlbumMapper {
 	public function getSharedAlbumsForCollaborator(string $collaboratorId, int $collaboratorType): array {
 		$query = $this->connection->getQueryBuilder();
 		$rows = $query
-			->select("a.album_id", "name", "user", "location", "created", "last_added_photo")
-			->from("photos_albums_collabs", "c")
-			->leftJoin("c", "photos_albums", "a", $query->expr()->eq("a.album_id", "c.album_id"))
+			->select('a.album_id', 'name', 'user', 'location', 'created', 'last_added_photo')
+			->from('photos_albums_collabs', 'c')
+			->leftJoin('c', 'photos_albums', 'a', $query->expr()->eq('a.album_id', 'c.album_id'))
 			->where($query->expr()->eq('collaborator_id', $query->createNamedParameter($collaboratorId)))
 			->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter($collaboratorType, IQueryBuilder::PARAM_INT)))
 			->executeQuery()
@@ -512,14 +512,14 @@ class AlbumMapper {
 	public function getSharedAlbumsForCollaboratorWithFiles(string $collaboratorId, int $collaboratorType): array {
 		$query = $this->connection->getQueryBuilder();
 		$rows = $query
-			->select("fileid", "mimetype", "a.album_id", "size", "mtime", "etag", "location", "created", "last_added_photo", "added", 'owner')
-			->selectAlias("f.name", "file_name")
-			->selectAlias("a.name", "album_name")
-			->selectAlias("a.user", "album_user")
-			->from("photos_albums_collabs", "c")
-			->leftJoin("c", "photos_albums", "a", $query->expr()->eq("a.album_id", "c.album_id"))
-			->leftJoin("a", "photos_albums_files", "p", $query->expr()->eq("a.album_id", "p.album_id"))
-			->leftJoin("p", "filecache", "f", $query->expr()->eq("p.file_id", "f.fileid"))
+			->select('fileid', 'mimetype', 'a.album_id', 'size', 'mtime', 'etag', 'location', 'created', 'last_added_photo', 'added', 'owner')
+			->selectAlias('f.name', 'file_name')
+			->selectAlias('a.name', 'album_name')
+			->selectAlias('a.user', 'album_user')
+			->from('photos_albums_collabs', 'c')
+			->leftJoin('c', 'photos_albums', 'a', $query->expr()->eq('a.album_id', 'c.album_id'))
+			->leftJoin('a', 'photos_albums_files', 'p', $query->expr()->eq('a.album_id', 'p.album_id'))
+			->leftJoin('p', 'filecache', 'f', $query->expr()->eq('p.file_id', 'f.fileid'))
 			->where($query->expr()->eq('collaborator_id', $query->createNamedParameter($collaboratorId)))
 			->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter($collaboratorType, IQueryBuilder::PARAM_INT)))
 			->executeQuery()
@@ -592,10 +592,10 @@ class AlbumMapper {
 	public function getAlbumsForCollaboratorIdAndFileId(string $collaboratorId, int $collaboratorType, int $fileId): array {
 		$query = $this->connection->getQueryBuilder();
 		$rows = $query
-			->select("a.album_id", "name", "user", "location", "created", "last_added_photo")
-			->from("photos_albums_collabs", "c")
-			->leftJoin("c", "photos_albums", "a", $query->expr()->eq("a.album_id", "c.album_id"))
-			->leftJoin("a", "photos_albums_files", "p", $query->expr()->eq("a.album_id", "p.album_id"))
+			->select('a.album_id', 'name', 'user', 'location', 'created', 'last_added_photo')
+			->from('photos_albums_collabs', 'c')
+			->leftJoin('c', 'photos_albums', 'a', $query->expr()->eq('a.album_id', 'c.album_id'))
+			->leftJoin('a', 'photos_albums_files', 'p', $query->expr()->eq('a.album_id', 'p.album_id'))
 			->where($query->expr()->eq('collaborator_id', $query->createNamedParameter($collaboratorId)))
 			->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter($collaboratorType, IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)))

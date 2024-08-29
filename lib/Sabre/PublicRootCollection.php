@@ -76,7 +76,7 @@ class PublicRootCollection extends AbstractPrincipalCollection {
 
 		if (count($albums) !== 1) {
 			$this->throttler->registerAttempt(self::BRUTEFORCE_ACTION, $this->request->getRemoteAddress());
-			throw new NotFound("Unable to find public album");
+			throw new NotFound('Unable to find public album');
 		}
 
 		return new PublicAlbumRoot($this->albumMapper, $albums[0], $this->rootFolder, $albums[0]->getAlbum()->getUserId(), $this->userConfigService);
