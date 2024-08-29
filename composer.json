@@ -23,20 +23,23 @@
 		"lint": "find . -name \\*.php -not -path './vendor/*' -print0 | xargs -0 -n1 php -l",
 		"psalm": "psalm.phar --threads=1",
 		"psalm:update-baseline": "psalm.phar --threads=1 --update-baseline",
-		"psalm:clear": "psalm.phar --clear-cache && psalm --clear-global-cache",
+		"psalm:clear": "psalm.phar --clear-cache && psalm.phar --clear-global-cache",
 		"psalm:fix": "psalm.phar --alter --issues=InvalidReturnType,InvalidNullableReturnType,MissingParamType,InvalidFalsableReturnType",
-		"test:unit": "vendor/bin/phpunit -c tests/phpunit.xml --color --fail-on-warning --fail-on-risky"
+		"test:unit": "phpunit -c tests/phpunit.xml --color --fail-on-warning --fail-on-risky",
+		"post-install-cmd": [
+			"[ $COMPOSER_DEV_MODE -eq 0 ] || composer bin all install --ansi"
+		]
 	},
 	"require-dev": {
-		"bamarni/composer-bin-plugin": "^1.8",
-		"nextcloud/coding-standard": "1.2.1",
-		"nextcloud/ocp": "dev-master",
-		"phpunit/phpunit": "^9",
-		"psalm/phar": "^5.17",
-		"sabre/dav": "^4.2.1",
-		"symfony/console": "5.4.24"
+		"bamarni/composer-bin-plugin": "^1.8"
 	},
 	"require": {
 		"hexogen/kdtree": "^0.2.5"
+	},
+	"extra": {
+		"bamarni-bin": {
+			"bin-links": true,
+			"forward-command": true
+		}
 	}
 }
