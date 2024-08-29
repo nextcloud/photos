@@ -24,7 +24,10 @@
 				<!-- Preload large preview for near visible files -->
 				<!-- Preload small preview for further away files -->
 				<template v-if="initialized">
-					<canvas v-if="hasBlurhash && !loadedSmall && !loadedLarge" ref="canvas" class="file__blurhash" />
+					<canvas v-if="hasBlurhash && !loadedSmall && !loadedLarge"
+						ref="canvas"
+						class="file__blurhash"
+						aria-hidden="true" />
 
 					<img v-if="!loadedLarge && (loadedSmall || (distance < 5 && !errorSmall))"
 						ref="imgSmall"
