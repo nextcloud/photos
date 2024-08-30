@@ -22,8 +22,8 @@ class Version20000Date20220727125801 extends SimpleMigrationStep {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
-		if (!$schema->hasTable("photos_albums")) {
-			$table = $schema->createTable("photos_albums");
+		if (!$schema->hasTable('photos_albums')) {
+			$table = $schema->createTable('photos_albums');
 			$table->addColumn('album_id', Types::BIGINT, [
 				'autoincrement' => true,
 				'notnull' => true,

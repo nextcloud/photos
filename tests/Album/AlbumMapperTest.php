@@ -79,9 +79,9 @@ class AlbumMapperTest extends TestCase {
 	protected function tearDown():void {
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('filecache')
-			->where($query->expr()->eq('fileid', $query->createParameter("fileid")));
+			->where($query->expr()->eq('fileid', $query->createParameter('fileid')));
 		foreach ($this->createdFiles as $createdFile) {
-			$query->setParameter("fileid", $createdFile);
+			$query->setParameter('fileid', $createdFile);
 			$query->executeStatement();
 		}
 		$this->createdFiles = [];
@@ -101,8 +101,8 @@ class AlbumMapperTest extends TestCase {
 			->values([
 				'storage' => $query->createNamedParameter(-1, IQueryBuilder::PARAM_INT),
 				'parent' => $query->createNamedParameter(-1, IQueryBuilder::PARAM_INT),
-				'path' => $query->createNamedParameter("/dummy/" . $name),
-				'path_hash' => $query->createNamedParameter(md5("dummy/" . $name)),
+				'path' => $query->createNamedParameter('/dummy/' . $name),
+				'path_hash' => $query->createNamedParameter(md5('dummy/' . $name)),
 				'name' => $query->createNamedParameter($name),
 				'mimetype' => $query->createNamedParameter($mimeId, IQueryBuilder::PARAM_INT),
 				'mimepart' => $query->createNamedParameter($mimePartId, IQueryBuilder::PARAM_INT),
@@ -119,19 +119,19 @@ class AlbumMapperTest extends TestCase {
 	}
 
 	public function testCreateGet() {
-		$album = $this->mapper->create("user1", "album1");
+		$album = $this->mapper->create('user1', 'album1');
 
 		$retrievedAlbum = $this->mapper->get($album->getId());
 		$this->assertEquals($album, $retrievedAlbum);
 		$this->assertEquals(100, $retrievedAlbum->getCreated());
-		$this->assertEquals("", $retrievedAlbum->getLocation());
+		$this->assertEquals('', $retrievedAlbum->getLocation());
 		$this->assertEquals(-1, $retrievedAlbum->getLastAddedPhoto());
 	}
 
 	public function testCreateList() {
-		$album1 = $this->mapper->create("user1", "album1");
-		$album2 = $this->mapper->create("user1", "album2");
-		$this->mapper->create("user2", "album3");
+		$album1 = $this->mapper->create('user1', 'album1');
+		$album2 = $this->mapper->create('user1', 'album2');
+		$this->mapper->create('user2', 'album3');
 
 		$retrievedAlbums = $this->mapper->getForUser('user1');
 		usort($retrievedAlbums, function (AlbumInfo $a, AlbumInfo $b) {
@@ -141,7 +141,7 @@ class AlbumMapperTest extends TestCase {
 	}
 
 	public function testCreateDeleteGet() {
-		$album = $this->mapper->create("user1", "album1");
+		$album = $this->mapper->create('user1', 'album1');
 
 		$retrievedAlbum = $this->mapper->get($album->getId());
 		$this->assertEquals($album, $retrievedAlbum);
@@ -152,9 +152,9 @@ class AlbumMapperTest extends TestCase {
 	}
 
 	public function testCreateDeleteList() {
-		$album1 = $this->mapper->create("user1", "album1");
-		$album2 = $this->mapper->create("user1", "album2");
-		$this->mapper->create("user2", "album3");
+		$album1 = $this->mapper->create('user1', 'album1');
+		$album2 = $this->mapper->create('user1', 'album2');
+		$this->mapper->create('user2', 'album3');
 
 		$this->mapper->delete($album1->getId());
 
@@ -166,19 +166,19 @@ class AlbumMapperTest extends TestCase {
 	}
 
 	public function testCreateRenameGet() {
-		$album = $this->mapper->create("user1", "album1");
-		$this->mapper->rename($album->getId(), "renamed");
+		$album = $this->mapper->create('user1', 'album1');
+		$this->mapper->rename($album->getId(), 'renamed');
 
 		$retrievedAlbum = $this->mapper->get($album->getId());
-		$this->assertEquals("renamed", $retrievedAlbum->getTitle());
+		$this->assertEquals('renamed', $retrievedAlbum->getTitle());
 	}
 
 	public function testCreateUpdateGet() {
-		$album = $this->mapper->create("user1", "album1");
-		$this->mapper->setLocation($album->getId(), "nowhere");
+		$album = $this->mapper->create('user1', 'album1');
+		$this->mapper->setLocation($album->getId(), 'nowhere');
 
 		$retrievedAlbum = $this->mapper->get($album->getId());
-		$this->assertEquals("nowhere", $retrievedAlbum->getLocation());
+		$this->assertEquals('nowhere', $retrievedAlbum->getLocation());
 	}
 
 	/**

@@ -63,7 +63,7 @@ class PublicRootCollection extends AbstractPrincipalCollection {
 	 *
 	 * @throws NotFound
 	 *
-	 * @return DAV\INode
+	 * @return \Sabre\DAV\INode
 	 */
 	public function getChild($name) {
 		$this->throttler->sleepDelayOrThrowOnMax($this->request->getRemoteAddress(), self::BRUTEFORCE_ACTION);
@@ -76,7 +76,7 @@ class PublicRootCollection extends AbstractPrincipalCollection {
 
 		if (count($albums) !== 1) {
 			$this->throttler->registerAttempt(self::BRUTEFORCE_ACTION, $this->request->getRemoteAddress());
-			throw new NotFound("Unable to find public album");
+			throw new NotFound('Unable to find public album');
 		}
 
 		return new PublicAlbumRoot($this->albumMapper, $albums[0], $this->rootFolder, $albums[0]->getAlbum()->getUserId(), $this->userConfigService);

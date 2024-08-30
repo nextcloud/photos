@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
-<psalm errorLevel="4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://getpsalm.org/schema/config" xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd" errorBaseline="tests/psalm-baseline.xml">
+<psalm errorLevel="4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="https://getpsalm.org/schema/config"
+	xsi:schemaLocation="https://getpsalm.org/schema/config https://getpsalm.org/schema/config"
+	errorBaseline="tests/psalm-baseline.xml"
+	autoloader="vendor-bin/psalm/vendor/autoload.php">
 	<stubs>
 		<file name="tests/stub.phpstub" preloadClasses="true" />
 	</stubs>
@@ -7,13 +11,12 @@
 		<directory name="lib" />
 		<ignoreFiles>
 			<directory name="vendor" />
+			<directory name="vendor-bin" />
 		</ignoreFiles>
 	</projectFiles>
 	<extraFiles>
 		<directory name="vendor" />
-		<ignoreFiles>
-			<directory name="vendor/phpunit/php-code-coverage" />
-		</ignoreFiles>
+		<directory name="vendor-bin/psalm/vendor" />
 	</extraFiles>
 	<issueHandlers>
 		<UndefinedClass>

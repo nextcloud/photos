@@ -118,7 +118,7 @@ class PageController extends Controller {
 				}, $search);
 				$this->nomediaPathsCache->set($key, $paths, 60 * 60 * 24 * 28); // 28 days
 			}
-		} catch (InvalidPathException | NotFoundException | NotPermittedException | NoUserException $e) {
+		} catch (InvalidPathException|NotFoundException|NotPermittedException|NoUserException $e) {
 			$this->logger->error($e->getMessage());
 		}
 

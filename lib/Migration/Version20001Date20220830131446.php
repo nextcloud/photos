@@ -52,9 +52,9 @@ class Version20001Date20220830131446 extends SimpleMigrationStep {
 		 * }
 		 */
 
-		if (!$schema->getTable("photos_albums_files")->hasColumn("owner")) {
+		if (!$schema->getTable('photos_albums_files')->hasColumn('owner')) {
 			$modified = true;
-			$table = $schema->getTable("photos_albums_files");
+			$table = $schema->getTable('photos_albums_files');
 			$table->addColumn('owner', Types::STRING, [
 				'notnull' => false,
 				'length' => 64,

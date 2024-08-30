@@ -27,10 +27,10 @@ class OriginalDateTimeMetadataProvider implements IEventListener {
 	}
 
 	public array $regexpToDateFormatMap = [
-		"/^IMG_([0-9]{8}_[0-9]{6})/" => "Ymd_Gis",
-		"/^PANO_([0-9]{8}_[0-9]{6})/" => "Ymd_Gis",
-		"/^PXL_([0-9]{8}_[0-9]{6})/" => "Ymd_Gis",
-		"/^([0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{4})/" => "Y-m-d-G-i-s",
+		'/^IMG_([0-9]{8}_[0-9]{6})/' => 'Ymd_Gis',
+		'/^PANO_([0-9]{8}_[0-9]{6})/' => 'Ymd_Gis',
+		'/^PXL_([0-9]{8}_[0-9]{6})/' => 'Ymd_Gis',
+		'/^([0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{4})/' => 'Y-m-d-G-i-s',
 	];
 
 	private function dateToTimestamp(string $format, string $date, File $node): int|false {
@@ -81,7 +81,7 @@ class OriginalDateTimeMetadataProvider implements IEventListener {
 		// Try to use EXIF data.
 		if ($metadata->hasKey('photos-exif') && !empty($metadata->getArray('photos-exif')['DateTimeOriginal'])) {
 			$rawDateTimeOriginal = $metadata->getArray('photos-exif')['DateTimeOriginal'];
-			$timestampOriginal = $this->dateToTimestamp("Y:m:d G:i:s", $rawDateTimeOriginal, $node);
+			$timestampOriginal = $this->dateToTimestamp('Y:m:d G:i:s', $rawDateTimeOriginal, $node);
 			if ($timestampOriginal !== false) {
 				$metadata->setInt('photos-original_date_time', $timestampOriginal, true);
 				return;

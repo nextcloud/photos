@@ -33,7 +33,6 @@ class SharedAlbumRoot extends AlbumRoot {
 			$rootFolder,
 			$userId,
 			$userConfigService,
-			$userManager
 		);
 
 		$this->userManager = $userManager;

@@ -14,11 +14,11 @@ use Sabre\DAV\IFile;
 class PublicAlbumPhoto extends AlbumPhoto implements IFile {
 	/** @return void */
 	public function delete() {
-		throw new NotFoundException("Deleting photos from a public album is not allowed.");
+		throw new NotFoundException('Deleting photos from a public album is not allowed.');
 	}
 
 	/** @return void */
 	public function put($data) {
-		throw new NotFoundException("Changing a photo from a public album is not allowed.");
+		throw new NotFoundException('Changing a photo from a public album is not allowed.');
 	}
 }

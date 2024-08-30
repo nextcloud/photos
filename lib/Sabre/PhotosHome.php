@@ -80,7 +80,7 @@ class PhotosHome implements ICollection {
 	}
 
 	/**
-	 * @return (AlbumsHome)[]
+	 * @return (AlbumsHome|SharedAlbumsHome|PlacesHome)[]
 	 */
 	public function getChildren(): array {
 		return [

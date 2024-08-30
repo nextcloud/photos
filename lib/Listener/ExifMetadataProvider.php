@@ -70,7 +70,7 @@ class ExifMetadataProvider implements IEventListener {
 			// We then revert the change after having read the exif data.
 			stream_set_chunk_size($fileDescriptor, $oldBufferSize);
 		} catch (\Exception $ex) {
-			$this->logger->info("Failed to extract metadata for " . $node->getId(), ['exception' => $ex]);
+			$this->logger->info('Failed to extract metadata for ' . $node->getId(), ['exception' => $ex]);
 		}
 
 		if ($rawExifData && array_key_exists('EXIF', $rawExifData)) {
@@ -110,7 +110,7 @@ class ExifMetadataProvider implements IEventListener {
 	 */
 	private function gpsDegreesToDecimal($coordinates, ?string $hemisphere): float {
 		if (is_string($coordinates)) {
-			$coordinates = array_map("trim", explode(",", $coordinates));
+			$coordinates = array_map('trim', explode(',', $coordinates));
 		}
 
 		if (count($coordinates) !== 3) {
@@ -158,7 +158,7 @@ class ExifMetadataProvider implements IEventListener {
 			// Arbitrary limit to filter out large EXIF entries.
 			if (is_string($value) && strlen($value) > 1000) {
 				$this->logger->info(
-					"EXIF entry ignored as it is too large",
+					'EXIF entry ignored as it is too large',
 					[
 						'key' => $key,
 						'value' => $value,

@@ -24,7 +24,7 @@ class CollectionPhoto {
 	}
 
 	public function getName() {
-		return $this->file->getFileId() . "-" . $this->file->getName();
+		return $this->file->getFileId() . '-' . $this->file->getName();
 	}
 
 	/**
@@ -46,10 +46,10 @@ class CollectionPhoto {
 			if ($node instanceof File) {
 				return $node->putContent($data);
 			} else {
-				throw new NotFoundException("Photo is a folder");
+				throw new NotFoundException('Photo is a folder');
 			}
 		} else {
-			throw new NotFoundException("Photo not found for user");
+			throw new NotFoundException('Photo not found for user');
 		}
 	}
 
@@ -93,9 +93,9 @@ class CollectionPhoto {
 		$tagger = $tagManager->load('files');
 
 		switch ($favoriteState) {
-			case "0":
+			case '0':
 				return $tagger->removeFromFavorites($this->file->getFileId());
-			case "1":
+			case '1':
 				return $tagger->addToFavorites($this->file->getFileId());
 			default:
 				new \Exception('Favorite state is invalide, should be 0 or 1.');
