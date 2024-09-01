@@ -63,7 +63,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 0.11.10
 	- license: MIT
 - webpack
-	- version: 5.82.1
+	- version: 5.94.0
 	- license: MIT
 - photos
 	- version: 3.0.0
