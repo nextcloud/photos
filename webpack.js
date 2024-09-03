@@ -14,7 +14,7 @@ const { basename } = require('path')
 const isDev = process.env.NODE_ENV === 'development'
 
 webpackConfig.entry = {
-	main: path.join(__dirname, 'src', 'main.js'),
+	main: path.join(__dirname, 'src', 'main.ts'),
 	public: path.join(__dirname, 'src', 'public.js'),
 	sidebar: path.join(__dirname, 'src', 'sidebar.js'),
 	dashboard: path.join(__dirname, 'src', 'dashboard.js'),

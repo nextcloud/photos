@@ -66,12 +66,13 @@ import Folder from '../components/Folder.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 
 import { prefixPath } from '../services/DavClient.js'
+import { useFoldersStore } from '../store/folders.ts'
 import allowedMimes from '../services/AllowedMimes.js'
 import getAlbumContent from '../services/AlbumContent.js'
+import getFileInfo from '../services/FileInfo.js'
 
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import GridConfigMixin from '../mixins/GridConfig.js'
-import getFileInfo from '../services/FileInfo.js'
 
 export default {
 	name: 'Folders',
@@ -102,6 +103,13 @@ export default {
 		},
 	},
 
+	setup() {
+		const foldersStore = useFoldersStore()
+		return {
+			foldersStore,
+		}
+	},
+
 	data() {
 		return {
 			error: null,
@@ -120,12 +128,11 @@ export default {
 		// global lists
 		...mapGetters([
 			'files',
-			'folders',
 		]),
 
 		// current folder id from current path
 		folderId() {
-			return this.$store.getters.folderId(this.path)
+			return this.foldersStore.getFolderId(this.path)
 		},
 
 		// files list of the current folder
@@ -144,7 +151,7 @@ export default {
 			})
 		},
 		folderContent() {
-			return this.folders[this.folderId] || []
+			return this.foldersStore.folders[this.folderId] || []
 		},
 		fileList() {
 			const list = this.folderContent
@@ -238,7 +245,7 @@ export default {
 			OCA?.Files?.Sidebar?.close?.()
 
 			// if we don't already have some cached data let's show a loader
-			if (!this.files[this.folderId] || !this.folders[this.folderId]) {
+			if (!this.files[this.folderId] || !this.foldersStore.folders[this.folderId]) {
 				this.initializing = true
 			}
 
@@ -248,8 +255,8 @@ export default {
 					shared: this.showShared,
 					signal: this.abortController.signal,
 				})
-				this.$store.dispatch('addPath', { path: this.path, fileid: folder.fileid })
-				this.$store.dispatch('updateFolders', { fileid: folder.fileid, files, folders })
+				this.foldersStore.addPath({ path: this.path, fileid: folder.fileid })
+				this.foldersStore.updateFolders({ fileid: folder.fileid, files, folders })
 				this.$store.dispatch('updateFiles', { folder, files, folders })
 			} catch (error) {
 				if (error.response && error.response.status) {
