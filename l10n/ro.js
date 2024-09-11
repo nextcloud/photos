@@ -12,6 +12,7 @@ OC.L10N.register(
     "Back" : "Înapoi",
     "Save" : "Salvează",
     "Shared by" : "Partajat de",
+    "No recommendations. Start typing." : "Nu am găsit recomandări. Începeți să scrieți.",
     "Group" : "Grup",
     "Copy public link" : "Copiză link-ul public",
     "An error occurred" : "A apărut o eraore",
