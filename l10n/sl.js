@@ -58,6 +58,7 @@ OC.L10N.register(
     "There are no photos or videos yet!" : "Ni še naloženih fotografij in posnetkov!",
     "_{years} year ago_::_{years} years ago_" : ["pred {years} letom","pred {years} letoma","pred {years} leti","pred {years} leti"],
     "Enable squared photos view" : "Omogoči kvadratne prikaze slik",
+    "All folders" : "Vse mape",
     "Add folder" : "Dodaj mapo",
     "Home" : "Začetna stran",
     "View" : "Poglej",
