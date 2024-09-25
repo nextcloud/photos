@@ -185,7 +185,7 @@ export default defineComponent({
 			uploadContext: {
 				route: 'albumpicker',
 			},
-			currentUser: getCurrentUser(),
+			currentUser: getCurrentUser().uid,
 		}
 	},
 
