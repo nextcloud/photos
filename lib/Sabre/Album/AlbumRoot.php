@@ -14,6 +14,7 @@ use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Album\AlbumWithFiles;
 use OCA\Photos\Service\UserConfigService;
 use OCP\Files\Folder;
+use OCP\Files\InvalidDirectoryException;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use Sabre\DAV\Exception\Conflict;
@@ -79,6 +80,10 @@ class AlbumRoot implements ICollection, ICopyTarget {
 			// If the node is not a folder, we throw
 			if (!($photosFolder instanceof Folder)) {
 				throw new Conflict('The destination exists and is not a folder');
+			}
+
+			if ($photosFolder->isShared()) {
+				throw new InvalidDirectoryException('The destination is a received share');
 			}
 
 			// Check for conflict and rename the file accordingly
