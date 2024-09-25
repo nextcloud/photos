@@ -61,18 +61,25 @@
 
 		<!-- The actions on the bottom -->
 		<template #actions>
-			<UploadPicker :accept="allowedMimes"
-				:context="uploadContext"
-				:destination="photosLocationFolder"
-				:multiple="true"
-				@uploaded="refreshFiles" />
-			<NcButton type="primary" :disabled="loading || selectedFileIds.length === 0" @click="emitPickedEvent">
-				<template #icon>
-					<ImagePlus v-if="!loading" />
-					<NcLoadingIcon v-if="loading" />
-				</template>
-				{{ t('photos', 'Add to {destination}', { destination }) }}
-			</NcButton>
+			<div class="photos-picker__actions">
+				<div class="photos-picker__actions__buttons">
+					<UploadPicker :accept="allowedMimes"
+						:context="uploadContext"
+						:destination="photosLocationFolder"
+						:multiple="true"
+						@uploaded="refreshFiles" />
+					<NcButton type="primary" :disabled="loading || selectedFileIds.length === 0" @click="emitPickedEvent">
+						<template #icon>
+							<ImagePlus v-if="!loading" />
+							<NcLoadingIcon v-if="loading" />
+						</template>
+						{{ t('photos', 'Add to {destination}', { destination }) }}
+					</NcButton>
+				</div>
+				<NcNoteCard v-if="photosLocationFolder.attributes['owner-id'] !== currentUser" type="warning">
+					{{ t('photos', 'The destination folder is owned by {owner}', { owner: photosLocationFolder.attributes['owner-id'] }) }}
+				</NcNoteCard>
+			</div>
 		</template>
 
 		<FilesListViewer class="photos-picker__file-list"
@@ -107,11 +114,12 @@
 
 <script>
 import { UploadPicker } from '@nextcloud/upload'
-import { NcButton, NcDialog, NcLoadingIcon, NcSelect, useIsMobile } from '@nextcloud/vue'
+import { NcButton, NcDialog, NcLoadingIcon, NcSelect, NcNoteCard, useIsMobile } from '@nextcloud/vue'
 import { defineComponent } from 'vue'
 import { mapGetters } from 'vuex'
 
 import moment from '@nextcloud/moment'
+import { getCurrentUser } from '@nextcloud/auth'
 
 import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
 
@@ -134,6 +142,7 @@ export default defineComponent({
 		NcDialog,
 		NcLoadingIcon,
 		NcSelect,
+		NcNoteCard,
 		UploadPicker,
 	},
 
@@ -194,6 +203,7 @@ export default defineComponent({
 			uploadContext: {
 				route: 'albumpicker',
 			},
+			currentUser: getCurrentUser(),
 		}
 	},
 
@@ -296,6 +306,19 @@ export default defineComponent({
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
+		}
+	}
+
+	&__actions {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+
+		&__buttons {
+			display: flex;
+			align-items: center;
+			justify-content: end;
+			gap: 16px;
 		}
 	}
 }
