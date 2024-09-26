@@ -62,26 +62,32 @@
 		</div>
 
 		<div class="file-picker__actions">
-			<UploadPicker :accept="allowedMimes"
-				:context="uploadContext"
-				:destination="photosLocation"
-				:multiple="true"
-				@uploaded="refreshFiles"
-				@failed="handleFailure" />
-			<NcButton type="primary" :disabled="loading || selectedFileIds.length === 0" @click="emitPickedEvent">
-				<template #icon>
-					<ImagePlus v-if="!loading" />
-					<NcLoadingIcon v-if="loading" />
-				</template>
-				{{ t('photos', 'Add to {destination}', { destination }) }}
-			</NcButton>
+			<div class="file-picker__actions__buttons">
+				<UploadPicker :accept="allowedMimes"
+					:context="uploadContext"
+					:destination="photosLocation"
+					:multiple="true"
+					@uploaded="refreshFiles"
+					@failed="handleFailure" />
+				<NcButton type="primary" :disabled="loading || selectedFileIds.length === 0" @click="emitPickedEvent">
+					<template #icon>
+						<ImagePlus v-if="!loading" />
+						<NcLoadingIcon v-if="loading" />
+					</template>
+					{{ t('photos', 'Add to {destination}', { destination }) }}
+				</NcButton>
+			</div>
+			<NcNoteCard v-if="photosLocationOwner !== currentUser" type="warning">
+				{{ t('photos', 'The destination folder is owned by {owner}', { owner: photosLocationOwner }) }}
+			</NcNoteCard>
 		</div>
 	</div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { NcButton, NcLoadingIcon } from '@nextcloud/vue'
+import { NcButton, NcLoadingIcon, NcNoteCard } from '@nextcloud/vue'
+import { getCurrentUser } from '@nextcloud/auth'
 import { UploadPicker } from '@nextcloud/upload'
 import moment from '@nextcloud/moment'
 
@@ -106,6 +112,7 @@ export default {
 		ImagePlus,
 		NcButton,
 		NcLoadingIcon,
+		NcNoteCard,
 		UploadPicker,
 	},
 
@@ -151,6 +158,7 @@ export default {
 			uploadContext: {
 				route: 'albumpicker',
 			},
+			currentUser: getCurrentUser().uid,
 		}
 	},
 
@@ -268,9 +276,18 @@ export default {
 
 	&__actions {
 		display: flex;
+		flex-direction: column;
 		justify-content: space-between;
 		justify-items: center;
 		padding-top: 16px;
+		flex-grow: 1;
+
+		&__buttons {
+			display: flex;
+			align-items: center;
+			justify-content: end;
+			gap: 16px;
+		}
 	}
 }
 </style>
