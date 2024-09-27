@@ -65,6 +65,7 @@ OC.L10N.register(
     "Jump to specific date in list" : "Léim go dáta ar leith sa liosta",
     "Jump to {date}" : "Léim go {date}",
     "Add to {destination}" : "Cuir le { ceann scríbe}",
+    "The destination folder is owned by {owner}" : "Is le {owner} an fillteán sprice",
     "There are no photos or videos yet!" : "Níl aon ghrianghraif nó físeáin ann fós!",
     "_{years} year ago_::_{years} years ago_" : ["{years} bliain ó shin","{years} bliaina ó shin","{years} bliaina ó shin","{years} bliaina ó shin","{years} bliaina ó shin"],
     "Enable squared photos view" : "Cumasaigh amharc cearnógach ar ghrianghraif",

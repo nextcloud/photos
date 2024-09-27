@@ -65,6 +65,7 @@ OC.L10N.register(
     "Jump to specific date in list" : "Ir á data específica da lista",
     "Jump to {date}" : "Ir a {data}",
     "Add to {destination}" : "Engadir a {destination}",
+    "The destination folder is owned by {owner}" : "O cartafol de destino é propiedade de {owner}",
     "There are no photos or videos yet!" : "Aínda non hai fotos nin vídeos!",
     "_{years} year ago_::_{years} years ago_" : ["Hai {years} ano","Hai {years} anos"],
     "Enable squared photos view" : "Activar a vista de fotos cadradas",
