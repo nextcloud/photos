@@ -65,6 +65,7 @@ OC.L10N.register(
     "Jump to specific date in list" : "跳到清單中的指定日期",
     "Jump to {date}" : "跳到 {date}",
     "Add to {destination}" : "新增至 {destination}",
+    "The destination folder is owned by {owner}" : "目標資料夾為 {owner} 擁有",
     "There are no photos or videos yet!" : "還沒有照片或影片！",
     "_{years} year ago_::_{years} years ago_" : ["{years} 年前"],
     "Enable squared photos view" : "啟用方形照片檢視",
