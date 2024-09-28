@@ -65,6 +65,7 @@ OC.L10N.register(
     "Jump to specific date in list" : "リスト内の特定の日付にジャンプする",
     "Jump to {date}" : "{date}にジャンプ",
     "Add to {destination}" : "{destination} に追加",
+    "The destination folder is owned by {owner}" : "保存先フォルダーの所有者は{owner}です。",
     "There are no photos or videos yet!" : "写真やビデオはまだありません！",
     "_{years} year ago_::_{years} years ago_" : ["{years} 年前"],
     "Enable squared photos view" : "写真を矩形での表示を有効化",
