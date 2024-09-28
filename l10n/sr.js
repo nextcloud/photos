@@ -65,6 +65,7 @@ OC.L10N.register(
     "Jump to specific date in list" : "Скок на одређени датум у листи",
     "Jump to {date}" : "Скочи на {date}",
     "Add to {destination}" : "Додај у {destination}",
+    "The destination folder is owned by {owner}" : "{owner} је власник циљног фолдера",
     "There are no photos or videos yet!" : "Још увек нема фотографија или видео снимака!",
     "_{years} year ago_::_{years} years ago_" : ["пре {years} године","пре {years} године","пре {years} година"],
     "Enable squared photos view" : "Укључи квадратасти приказ слика",
