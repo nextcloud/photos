@@ -1,10 +1,10 @@
 "use strict";
 (self["webpackChunkphotos"] = self["webpackChunkphotos"] || []).push([["src_views_SharedAlbumContent_vue"],{
 
-/***/ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/views/SharedAlbumContent.vue?vue&type=script&lang=js&":
-/*!***********************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/views/SharedAlbumContent.vue?vue&type=script&lang=js& ***!
-  \***********************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/views/SharedAlbumContent.vue?vue&type=script&lang=js":
+/*!**********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/views/SharedAlbumContent.vue?vue&type=script&lang=js ***!
+  \**********************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -30,135 +30,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_DavRequest_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../services/DavRequest.js */ "./src/services/DavRequest.js");
 /* harmony import */ var _utils_fileUtils_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../utils/fileUtils.js */ "./src/utils/fileUtils.js");
 /* harmony import */ var _nextcloud_l10n__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @nextcloud/l10n */ "./node_modules/@nextcloud/l10n/dist/index.js");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
 
 
 
@@ -316,6 +187,183 @@ __webpack_require__.r(__webpack_exports__);
     t: _nextcloud_l10n__WEBPACK_IMPORTED_MODULE_17__.translate
   }
 });
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/views/SharedAlbumContent.vue?vue&type=template&id=259e376e&scoped=true":
+/*!*********************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/views/SharedAlbumContent.vue?vue&type=template&id=259e376e&scoped=true ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function render() {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", [ true ? _c("CollectionContent", {
+    ref: "collectionContent",
+    attrs: {
+      collection: _vm.album,
+      "collection-file-ids": _vm.albumFileIds,
+      semaphore: _vm.semaphore,
+      loading: _vm.loadingAlbums || _vm.loadingFiles,
+      error: _vm.errorFetchingAlbums || _vm.errorFetchingFiles
+    },
+    scopedSlots: _vm._u([{
+      key: "header",
+      fn: function (_ref) {
+        let {
+          selectedFileIds,
+          resetSelection
+        } = _ref;
+        return _c("HeaderNavigation", {
+          key: "navigation",
+          attrs: {
+            loading: _vm.loadingFiles,
+            params: {
+              albumName: _vm.albumName
+            },
+            path: "/" + _vm.albumName,
+            title: _vm.albumOriginalName
+          },
+          on: {
+            refresh: _vm.fetchAlbumContent
+          }
+        }, [_vm.album.location !== "" ? _c("div", {
+          staticClass: "album__location",
+          attrs: {
+            slot: "subtitle"
+          },
+          slot: "subtitle"
+        }, [_c("MapMarker"), _vm._v(_vm._s(_vm.album.location) + " ⸱ " + _vm._s(_vm.t("photos", "Shared by")) + " "), _c("NcUserBubble", {
+          attrs: {
+            "display-name": _vm.album.collaborators[0].label,
+            user: _vm.album.collaborators[0].id
+          }
+        })], 1) : _vm._e(), _vm._v(" "), _c("template", {
+          slot: "default"
+        }, [selectedFileIds.length > 0 ? _c("NcButton", {
+          attrs: {
+            "aria-label": _vm.t("photos", "Unselect all")
+          },
+          on: {
+            click: resetSelection
+          },
+          scopedSlots: _vm._u([{
+            key: "icon",
+            fn: function () {
+              return [_c("Close")];
+            },
+            proxy: true
+          }], null, true)
+        }, [_vm._v("\n\t\t\t\t\t" + _vm._s(_vm.t("photos", "Unselect all")) + "\n\t\t\t\t")]) : _vm._e()], 1), _vm._v(" "), _vm.album !== undefined ? _c("template", {
+          slot: "right"
+        }, [_vm.album.nbItems !== 0 ? _c("NcButton", {
+          attrs: {
+            type: "tertiary",
+            "aria-label": _vm.t("photos", "Add photos to this album")
+          },
+          on: {
+            click: function ($event) {
+              _vm.showAddPhotosModal = true;
+            }
+          }
+        }, [_c("Plus", {
+          attrs: {
+            slot: "icon"
+          },
+          slot: "icon"
+        })], 1) : _vm._e(), _vm._v(" "), _c("NcActions", {
+          attrs: {
+            "force-menu": true,
+            "aria-label": _vm.t("photos", "Open actions menu")
+          }
+        }, [_c("NcActionButton", {
+          attrs: {
+            "close-after-click": true
+          },
+          on: {
+            click: _vm.handleDeleteAlbum
+          }
+        }, [_vm._v("\n\t\t\t\t\t\t" + _vm._s(_vm.t("photos", "Delete album")) + "\n\t\t\t\t\t\t"), _c("Delete", {
+          attrs: {
+            slot: "icon"
+          },
+          slot: "icon"
+        })], 1), _vm._v(" "), selectedFileIds.length > 0 ? [_c("NcActionSeparator"), _vm._v(" "), _c("NcActionButton", {
+          attrs: {
+            "close-after-click": true
+          },
+          on: {
+            click: function ($event) {
+              return _vm.handleRemoveFilesFromAlbum(selectedFileIds);
+            }
+          }
+        }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(_vm.t("photos", "Remove selection from album")) + "\n\t\t\t\t\t\t\t"), _c("Close", {
+          attrs: {
+            slot: "icon"
+          },
+          slot: "icon"
+        })], 1)] : _vm._e()], 2)], 1) : _vm._e()], 2);
+      }
+    }], null, false, 1297611229)
+  }, [_vm._v(" "), _c("NcEmptyContent", {
+    staticClass: "album__empty",
+    attrs: {
+      slot: "empty-content",
+      title: _vm.t("photos", "This album does not have any photos or videos yet!")
+    },
+    slot: "empty-content"
+  }, [_c("ImagePlus", {
+    attrs: {
+      slot: "icon"
+    },
+    slot: "icon"
+  }), _vm._v(" "), _c("NcButton", {
+    attrs: {
+      slot: "action",
+      type: "primary",
+      "aria-label": _vm.t("photos", "Add photos to this album")
+    },
+    on: {
+      click: function ($event) {
+        _vm.showAddPhotosModal = true;
+      }
+    },
+    slot: "action"
+  }, [_c("Plus", {
+    attrs: {
+      slot: "icon"
+    },
+    slot: "icon"
+  }), _vm._v("\n\t\t\t\t" + _vm._s(_vm.t("photos", "Add")) + "\n\t\t\t")], 1)], 1)], 1) : 0, _vm._v(" "), _vm.showAddPhotosModal ? _c("NcModal", {
+    attrs: {
+      size: "large",
+      title: _vm.t("photos", "Add photos to the album")
+    },
+    on: {
+      close: function ($event) {
+        _vm.showAddPhotosModal = false;
+      }
+    }
+  }, [_c("FilesPicker", {
+    attrs: {
+      destination: _vm.album.basename,
+      "blacklist-ids": _vm.albumFileIds,
+      loading: _vm.loadingAddFilesToAlbum
+    },
+    on: {
+      "files-picked": _vm.handleFilesPicked
+    }
+  })], 1) : _vm._e()], 1);
+};
+var staticRenderFns = [];
+render._withStripped = true;
+
 
 /***/ }),
 
@@ -612,10 +660,10 @@ async function fetchAlbumContent(path, options) {
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-2[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/views/SharedAlbumContent.vue?vue&type=style&index=0&id=259e376e&lang=scss&scoped=true&":
-/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-2[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/views/SharedAlbumContent.vue?vue&type=style&index=0&id=259e376e&lang=scss&scoped=true& ***!
-  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-2.use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/views/SharedAlbumContent.vue?vue&type=style&index=0&id=259e376e&lang=scss&scoped=true":
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-2.use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/views/SharedAlbumContent.vue?vue&type=style&index=0&id=259e376e&lang=scss&scoped=true ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -638,10 +686,10 @@ ___CSS_LOADER_EXPORT___.push([module.id, ".album[data-v-259e376e] {\n  display: 
 
 /***/ }),
 
-/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-2[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/views/SharedAlbumContent.vue?vue&type=style&index=0&id=259e376e&lang=scss&scoped=true&":
-/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-2[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/views/SharedAlbumContent.vue?vue&type=style&index=0&id=259e376e&lang=scss&scoped=true& ***!
-  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-2.use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/views/SharedAlbumContent.vue?vue&type=style&index=0&id=259e376e&lang=scss&scoped=true":
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-2.use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/views/SharedAlbumContent.vue?vue&type=style&index=0&id=259e376e&lang=scss&scoped=true ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -660,7 +708,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! !../../node_modules/style-loader/dist/runtime/styleTagTransform.js */ "./node_modules/style-loader/dist/runtime/styleTagTransform.js");
 /* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_2_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedAlbumContent_vue_vue_type_style_index_0_id_259e376e_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! !!../../node_modules/css-loader/dist/cjs.js!../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../node_modules/postcss-loader/dist/cjs.js!../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-2[0].rules[0].use[3]!../../node_modules/vue-loader/lib/index.js??vue-loader-options!./SharedAlbumContent.vue?vue&type=style&index=0&id=259e376e&lang=scss&scoped=true& */ "./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-2[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/views/SharedAlbumContent.vue?vue&type=style&index=0&id=259e376e&lang=scss&scoped=true&");
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_2_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedAlbumContent_vue_vue_type_style_index_0_id_259e376e_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! !!../../node_modules/css-loader/dist/cjs.js!../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../node_modules/postcss-loader/dist/cjs.js!../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-2.use[3]!../../node_modules/vue-loader/lib/index.js??vue-loader-options!./SharedAlbumContent.vue?vue&type=style&index=0&id=259e376e&lang=scss&scoped=true */ "./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-2.use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/views/SharedAlbumContent.vue?vue&type=style&index=0&id=259e376e&lang=scss&scoped=true");
 
       
       
@@ -682,12 +730,12 @@ options.setAttributes = (_node_modules_style_loader_dist_runtime_setAttributesWi
 options.domAPI = (_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default());
 options.insertStyleElement = (_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default());
 
-var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_2_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedAlbumContent_vue_vue_type_style_index_0_id_259e376e_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_6__["default"], options);
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_2_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedAlbumContent_vue_vue_type_style_index_0_id_259e376e_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_6__["default"], options);
 
 
 
 
-       /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_2_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedAlbumContent_vue_vue_type_style_index_0_id_259e376e_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_6__["default"] && _node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_2_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedAlbumContent_vue_vue_type_style_index_0_id_259e376e_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_6__["default"].locals ? _node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_2_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedAlbumContent_vue_vue_type_style_index_0_id_259e376e_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_6__["default"].locals : undefined);
+       /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_2_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedAlbumContent_vue_vue_type_style_index_0_id_259e376e_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_6__["default"] && _node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_2_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedAlbumContent_vue_vue_type_style_index_0_id_259e376e_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_6__["default"].locals ? _node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_2_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedAlbumContent_vue_vue_type_style_index_0_id_259e376e_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_6__["default"].locals : undefined);
 
 
 /***/ }),
@@ -702,9 +750,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _SharedAlbumContent_vue_vue_type_template_id_259e376e_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SharedAlbumContent.vue?vue&type=template&id=259e376e&scoped=true& */ "./src/views/SharedAlbumContent.vue?vue&type=template&id=259e376e&scoped=true&");
-/* harmony import */ var _SharedAlbumContent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SharedAlbumContent.vue?vue&type=script&lang=js& */ "./src/views/SharedAlbumContent.vue?vue&type=script&lang=js&");
-/* harmony import */ var _SharedAlbumContent_vue_vue_type_style_index_0_id_259e376e_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SharedAlbumContent.vue?vue&type=style&index=0&id=259e376e&lang=scss&scoped=true& */ "./src/views/SharedAlbumContent.vue?vue&type=style&index=0&id=259e376e&lang=scss&scoped=true&");
+/* harmony import */ var _SharedAlbumContent_vue_vue_type_template_id_259e376e_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SharedAlbumContent.vue?vue&type=template&id=259e376e&scoped=true */ "./src/views/SharedAlbumContent.vue?vue&type=template&id=259e376e&scoped=true");
+/* harmony import */ var _SharedAlbumContent_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SharedAlbumContent.vue?vue&type=script&lang=js */ "./src/views/SharedAlbumContent.vue?vue&type=script&lang=js");
+/* harmony import */ var _SharedAlbumContent_vue_vue_type_style_index_0_id_259e376e_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SharedAlbumContent.vue?vue&type=style&index=0&id=259e376e&lang=scss&scoped=true */ "./src/views/SharedAlbumContent.vue?vue&type=style&index=0&id=259e376e&lang=scss&scoped=true");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -715,9 +763,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
-  _SharedAlbumContent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _SharedAlbumContent_vue_vue_type_template_id_259e376e_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
-  _SharedAlbumContent_vue_vue_type_template_id_259e376e_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  _SharedAlbumContent_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"],
+  _SharedAlbumContent_vue_vue_type_template_id_259e376e_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render,
+  _SharedAlbumContent_vue_vue_type_template_id_259e376e_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
   null,
   "259e376e",
@@ -732,384 +780,48 @@ component.options.__file = "src/views/SharedAlbumContent.vue"
 
 /***/ }),
 
-/***/ "./src/views/SharedAlbumContent.vue?vue&type=script&lang=js&":
-/*!*******************************************************************!*\
-  !*** ./src/views/SharedAlbumContent.vue?vue&type=script&lang=js& ***!
-  \*******************************************************************/
+/***/ "./src/views/SharedAlbumContent.vue?vue&type=script&lang=js":
+/*!******************************************************************!*\
+  !*** ./src/views/SharedAlbumContent.vue?vue&type=script&lang=js ***!
+  \******************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedAlbumContent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/babel-loader/lib/index.js!../../node_modules/vue-loader/lib/index.js??vue-loader-options!./SharedAlbumContent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/views/SharedAlbumContent.vue?vue&type=script&lang=js&");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedAlbumContent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedAlbumContent_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/babel-loader/lib/index.js!../../node_modules/vue-loader/lib/index.js??vue-loader-options!./SharedAlbumContent.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/views/SharedAlbumContent.vue?vue&type=script&lang=js");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedAlbumContent_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./src/views/SharedAlbumContent.vue?vue&type=style&index=0&id=259e376e&lang=scss&scoped=true&":
-/*!****************************************************************************************************!*\
-  !*** ./src/views/SharedAlbumContent.vue?vue&type=style&index=0&id=259e376e&lang=scss&scoped=true& ***!
-  \****************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_2_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedAlbumContent_vue_vue_type_style_index_0_id_259e376e_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/style-loader/dist/cjs.js!../../node_modules/css-loader/dist/cjs.js!../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../node_modules/postcss-loader/dist/cjs.js!../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-2[0].rules[0].use[3]!../../node_modules/vue-loader/lib/index.js??vue-loader-options!./SharedAlbumContent.vue?vue&type=style&index=0&id=259e376e&lang=scss&scoped=true& */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-2[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/views/SharedAlbumContent.vue?vue&type=style&index=0&id=259e376e&lang=scss&scoped=true&");
-
-
-/***/ }),
-
-/***/ "./src/views/SharedAlbumContent.vue?vue&type=template&id=259e376e&scoped=true&":
-/*!*************************************************************************************!*\
-  !*** ./src/views/SharedAlbumContent.vue?vue&type=template&id=259e376e&scoped=true& ***!
-  \*************************************************************************************/
+/***/ "./src/views/SharedAlbumContent.vue?vue&type=template&id=259e376e&scoped=true":
+/*!************************************************************************************!*\
+  !*** ./src/views/SharedAlbumContent.vue?vue&type=template&id=259e376e&scoped=true ***!
+  \************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedAlbumContent_vue_vue_type_template_id_259e376e_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedAlbumContent_vue_vue_type_template_id_259e376e_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedAlbumContent_vue_vue_type_template_id_259e376e_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedAlbumContent_vue_vue_type_template_id_259e376e_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedAlbumContent_vue_vue_type_template_id_259e376e_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../node_modules/vue-loader/lib/index.js??vue-loader-options!./SharedAlbumContent.vue?vue&type=template&id=259e376e&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/views/SharedAlbumContent.vue?vue&type=template&id=259e376e&scoped=true&");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedAlbumContent_vue_vue_type_template_id_259e376e_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/babel-loader/lib/index.js!../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!../../node_modules/vue-loader/lib/index.js??vue-loader-options!./SharedAlbumContent.vue?vue&type=template&id=259e376e&scoped=true */ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/views/SharedAlbumContent.vue?vue&type=template&id=259e376e&scoped=true");
 
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/views/SharedAlbumContent.vue?vue&type=template&id=259e376e&scoped=true&":
-/*!****************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/views/SharedAlbumContent.vue?vue&type=template&id=259e376e&scoped=true& ***!
-  \****************************************************************************************************************************************************************************************************************************/
+/***/ "./src/views/SharedAlbumContent.vue?vue&type=style&index=0&id=259e376e&lang=scss&scoped=true":
+/*!***************************************************************************************************!*\
+  !*** ./src/views/SharedAlbumContent.vue?vue&type=style&index=0&id=259e376e&lang=scss&scoped=true ***!
+  \***************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
-/* harmony export */ });
-var render = function () {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-       true
-        ? _c(
-            "CollectionContent",
-            {
-              ref: "collectionContent",
-              attrs: {
-                collection: _vm.album,
-                "collection-file-ids": _vm.albumFileIds,
-                semaphore: _vm.semaphore,
-                loading: _vm.loadingAlbums || _vm.loadingFiles,
-                error: _vm.errorFetchingAlbums || _vm.errorFetchingFiles,
-              },
-              scopedSlots: _vm._u(
-                [
-                  {
-                    key: "header",
-                    fn: function (ref) {
-                      var selectedFileIds = ref.selectedFileIds
-                      var resetSelection = ref.resetSelection
-                      return _c(
-                        "HeaderNavigation",
-                        {
-                          key: "navigation",
-                          attrs: {
-                            loading: _vm.loadingFiles,
-                            params: { albumName: _vm.albumName },
-                            path: "/" + _vm.albumName,
-                            title: _vm.albumOriginalName,
-                          },
-                          on: { refresh: _vm.fetchAlbumContent },
-                        },
-                        [
-                          _vm.album.location !== ""
-                            ? _c(
-                                "div",
-                                {
-                                  staticClass: "album__location",
-                                  attrs: { slot: "subtitle" },
-                                  slot: "subtitle",
-                                },
-                                [
-                                  _c("MapMarker"),
-                                  _vm._v(
-                                    _vm._s(_vm.album.location) +
-                                      " ⸱ " +
-                                      _vm._s(_vm.t("photos", "Shared by")) +
-                                      " "
-                                  ),
-                                  _c("NcUserBubble", {
-                                    attrs: {
-                                      "display-name":
-                                        _vm.album.collaborators[0].label,
-                                      user: _vm.album.collaborators[0].id,
-                                    },
-                                  }),
-                                ],
-                                1
-                              )
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _c(
-                            "template",
-                            { slot: "default" },
-                            [
-                              selectedFileIds.length > 0
-                                ? _c(
-                                    "NcButton",
-                                    {
-                                      attrs: {
-                                        "aria-label": _vm.t(
-                                          "photos",
-                                          "Unselect all"
-                                        ),
-                                      },
-                                      on: { click: resetSelection },
-                                      scopedSlots: _vm._u(
-                                        [
-                                          {
-                                            key: "icon",
-                                            fn: function () {
-                                              return [_c("Close")]
-                                            },
-                                            proxy: true,
-                                          },
-                                        ],
-                                        null,
-                                        true
-                                      ),
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n\t\t\t\t\t" +
-                                          _vm._s(
-                                            _vm.t("photos", "Unselect all")
-                                          ) +
-                                          "\n\t\t\t\t"
-                                      ),
-                                    ]
-                                  )
-                                : _vm._e(),
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _vm.album !== undefined
-                            ? _c(
-                                "template",
-                                { slot: "right" },
-                                [
-                                  _vm.album.nbItems !== 0
-                                    ? _c(
-                                        "NcButton",
-                                        {
-                                          attrs: {
-                                            type: "tertiary",
-                                            "aria-label": _vm.t(
-                                              "photos",
-                                              "Add photos to this album"
-                                            ),
-                                          },
-                                          on: {
-                                            click: function ($event) {
-                                              _vm.showAddPhotosModal = true
-                                            },
-                                          },
-                                        },
-                                        [
-                                          _c("Plus", {
-                                            attrs: { slot: "icon" },
-                                            slot: "icon",
-                                          }),
-                                        ],
-                                        1
-                                      )
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  _c(
-                                    "NcActions",
-                                    {
-                                      attrs: {
-                                        "force-menu": true,
-                                        "aria-label": _vm.t(
-                                          "photos",
-                                          "Open actions menu"
-                                        ),
-                                      },
-                                    },
-                                    [
-                                      _c(
-                                        "NcActionButton",
-                                        {
-                                          attrs: { "close-after-click": true },
-                                          on: { click: _vm.handleDeleteAlbum },
-                                        },
-                                        [
-                                          _vm._v(
-                                            "\n\t\t\t\t\t\t" +
-                                              _vm._s(
-                                                _vm.t("photos", "Delete album")
-                                              ) +
-                                              "\n\t\t\t\t\t\t"
-                                          ),
-                                          _c("Delete", {
-                                            attrs: { slot: "icon" },
-                                            slot: "icon",
-                                          }),
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      selectedFileIds.length > 0
-                                        ? [
-                                            _c("NcActionSeparator"),
-                                            _vm._v(" "),
-                                            _c(
-                                              "NcActionButton",
-                                              {
-                                                attrs: {
-                                                  "close-after-click": true,
-                                                },
-                                                on: {
-                                                  click: function ($event) {
-                                                    return _vm.handleRemoveFilesFromAlbum(
-                                                      selectedFileIds
-                                                    )
-                                                  },
-                                                },
-                                              },
-                                              [
-                                                _vm._v(
-                                                  "\n\t\t\t\t\t\t\t" +
-                                                    _vm._s(
-                                                      _vm.t(
-                                                        "photos",
-                                                        "Remove selection from album"
-                                                      )
-                                                    ) +
-                                                    "\n\t\t\t\t\t\t\t"
-                                                ),
-                                                _c("Close", {
-                                                  attrs: { slot: "icon" },
-                                                  slot: "icon",
-                                                }),
-                                              ],
-                                              1
-                                            ),
-                                          ]
-                                        : _vm._e(),
-                                    ],
-                                    2
-                                  ),
-                                ],
-                                1
-                              )
-                            : _vm._e(),
-                        ],
-                        2
-                      )
-                    },
-                  },
-                ],
-                null,
-                false,
-                1297611229
-              ),
-            },
-            [
-              _vm._v(" "),
-              _c(
-                "NcEmptyContent",
-                {
-                  staticClass: "album__empty",
-                  attrs: {
-                    slot: "empty-content",
-                    title: _vm.t(
-                      "photos",
-                      "This album does not have any photos or videos yet!"
-                    ),
-                  },
-                  slot: "empty-content",
-                },
-                [
-                  _c("ImagePlus", { attrs: { slot: "icon" }, slot: "icon" }),
-                  _vm._v(" "),
-                  _c(
-                    "NcButton",
-                    {
-                      attrs: {
-                        slot: "action",
-                        type: "primary",
-                        "aria-label": _vm.t(
-                          "photos",
-                          "Add photos to this album"
-                        ),
-                      },
-                      on: {
-                        click: function ($event) {
-                          _vm.showAddPhotosModal = true
-                        },
-                      },
-                      slot: "action",
-                    },
-                    [
-                      _c("Plus", { attrs: { slot: "icon" }, slot: "icon" }),
-                      _vm._v(
-                        "\n\t\t\t\t" +
-                          _vm._s(_vm.t("photos", "Add")) +
-                          "\n\t\t\t"
-                      ),
-                    ],
-                    1
-                  ),
-                ],
-                1
-              ),
-            ],
-            1
-          )
-        : 0,
-      _vm._v(" "),
-      _vm.showAddPhotosModal
-        ? _c(
-            "NcModal",
-            {
-              attrs: {
-                size: "large",
-                title: _vm.t("photos", "Add photos to the album"),
-              },
-              on: {
-                close: function ($event) {
-                  _vm.showAddPhotosModal = false
-                },
-              },
-            },
-            [
-              _c("FilesPicker", {
-                attrs: {
-                  destination: _vm.album.basename,
-                  "blacklist-ids": _vm.albumFileIds,
-                  loading: _vm.loadingAddFilesToAlbum,
-                },
-                on: { "files-picked": _vm.handleFilesPicked },
-              }),
-            ],
-            1
-          )
-        : _vm._e(),
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_2_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedAlbumContent_vue_vue_type_style_index_0_id_259e376e_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/style-loader/dist/cjs.js!../../node_modules/css-loader/dist/cjs.js!../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../node_modules/postcss-loader/dist/cjs.js!../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-2.use[3]!../../node_modules/vue-loader/lib/index.js??vue-loader-options!./SharedAlbumContent.vue?vue&type=style&index=0&id=259e376e&lang=scss&scoped=true */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-2.use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/views/SharedAlbumContent.vue?vue&type=style&index=0&id=259e376e&lang=scss&scoped=true");
 
 
 /***/ })
 
 }]);
-//# sourceMappingURL=photos-src_views_SharedAlbumContent_vue.js.map?v=7273559a8f741b50dd6f
+//# sourceMappingURL=photos-src_views_SharedAlbumContent_vue.js.map?v=e86fedc3d056aed68da7
