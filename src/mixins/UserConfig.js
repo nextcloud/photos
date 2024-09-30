@@ -36,6 +36,7 @@ export default {
 				? croppedLayoutLocalStorage === 'true'
 				: loadState('photos', 'croppedLayout', 'false') === 'true',
 			photosLocation: loadState('photos', 'photosLocation', ''),
+			photosLocationOwner: loadState('photos', 'photosLocationOwner', ''),
 		}
 	},
 

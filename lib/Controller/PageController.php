@@ -105,11 +105,19 @@ class PageController extends Controller {
 		$this->eventDispatcher->dispatch(LoadSidebar::class, new LoadSidebar());
 		$this->eventDispatcher->dispatch(LoadViewer::class, new LoadViewer());
 
+		$userFolder = $this->rootFolder->getUserFolder($user->getUid());
+		try {
+			$photosFolder = $userFolder->get($this->userConfig->getUserConfig('photosLocation'));
+		} catch (NotFoundException $e) {
+			$photosFolder = $userFolder->newFolder($this->userConfig->getUserConfig('photosLocation'));
+		}
+
 		$this->initialState->provideInitialState('image-mimes', Application::IMAGE_MIMES);
 		$this->initialState->provideInitialState('video-mimes', Application::VIDEO_MIMES);
 		$this->initialState->provideInitialState('maps', $this->appManager->isEnabledForUser('maps') === true);
 		$this->initialState->provideInitialState('recognize', $this->appManager->isEnabledForUser('recognize') === true);
 		$this->initialState->provideInitialState('systemtags', $this->appManager->isEnabledForUser('systemtags') === true);
+		$this->initialState->provideInitialState('photosLocationOwner', $photosFolder->getOwner()->getUid());
 
 		// Provide user config
 		foreach (array_keys(UserConfigService::DEFAULT_CONFIGS) as $key) {
