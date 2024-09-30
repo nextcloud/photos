@@ -107,6 +107,13 @@ class PageController extends Controller {
 		$this->eventDispatcher->dispatch(LoadSidebar::class, new LoadSidebar());
 		$this->eventDispatcher->dispatch(LoadViewer::class, new LoadViewer());
 
+		$userFolder = $this->rootFolder->getUserFolder($user->getUid());
+		try {
+			$userFolder->get($this->userConfig->getUserConfig('photosLocation'));
+		} catch (NotFoundException $e) {
+			$userFolder->newFolder($this->userConfig->getUserConfig('photosLocation'));
+		}
+
 		$this->initialState->provideInitialState('image-mimes', Application::IMAGE_MIMES);
 		$this->initialState->provideInitialState('video-mimes', Application::VIDEO_MIMES);
 		$this->initialState->provideInitialState('maps', $this->appManager->isEnabledForUser('maps') === true);
