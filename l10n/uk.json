@@ -63,6 +63,7 @@
     "Jump to specific date in list" : "Перейти до певної дати зі списку",
     "Jump to {date}" : "Перейти до {date}",
     "Add to {destination}" : "Додати до {destination}",
+    "The destination folder is owned by {owner}" : "Власником каталогу призначення є {owner}",
     "There are no photos or videos yet!" : "Ще немає фото чи відео!",
     "_{years} year ago_::_{years} years ago_" : ["{years} рік тому","{years} років тому","{years} років тому","{years} років тому"],
     "Enable squared photos view" : "Увімкнути перегляд фотографій у квадраті",
