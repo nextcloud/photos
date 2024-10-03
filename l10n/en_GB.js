@@ -65,6 +65,7 @@ OC.L10N.register(
     "Jump to specific date in list" : "Jump to specific date in list",
     "Jump to {date}" : "Jump to {date}",
     "Add to {destination}" : "Add to {destination}",
+    "The destination folder is owned by {owner}" : "The destination folder is owned by {owner}",
     "There are no photos or videos yet!" : "There are no photos or videos yet!",
     "_{years} year ago_::_{years} years ago_" : ["{years} year ago","{years} years ago"],
     "Enable squared photos view" : "Enable squared photos view",
