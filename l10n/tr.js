@@ -65,6 +65,7 @@ OC.L10N.register(
     "Jump to specific date in list" : "Listede belirli bir tarihe git",
     "Jump to {date}" : "{date} tarihine git",
     "Add to {destination}" : "{destination} üzerine ekle",
+    "The destination folder is owned by {owner}" : "Hedef klasörün sahibi {owner}",
     "There are no photos or videos yet!" : "Henüz bir fotoğraf ya da görüntü yok!",
     "_{years} year ago_::_{years} years ago_" : ["{years} yıl önce","{years} yıl önce"],
     "Enable squared photos view" : "Kare fotoğraf görünümü kullanılsın",
