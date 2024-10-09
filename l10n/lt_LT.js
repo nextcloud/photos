@@ -45,6 +45,7 @@ OC.L10N.register(
     "There are no photos or videos yet!" : "Kol kas nėra jokių nuotraukų ar vaizdo įrašų!",
     "_{years} year ago_::_{years} years ago_" : ["Prieš {years} metus","Prieš {years} metus","Prieš {years} metų","Prieš {years} metus"],
     "Enable squared photos view" : "Įjungti kvadratinį nuotraukų rodinį",
+    "All folders" : "Visi aplankai",
     "Home" : "Namai",
     "View" : "Rodyti",
     "_%n photo_::_%n photos_" : ["%n nuotrauka","%n nuotraukos","%n nuotraukų","%n nuotrauka"],
