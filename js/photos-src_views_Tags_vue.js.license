@@ -22,11 +22,11 @@ SPDX-FileCopyrightText: Sindre Sorhus
 SPDX-FileCopyrightText: Roman Shtylman <shtylman@gmail.com>
 SPDX-FileCopyrightText: Roeland Jago Douma
 SPDX-FileCopyrightText: Rob Cresswell <robcresswell@pm.me>
-SPDX-FileCopyrightText: Richie Bendall
 SPDX-FileCopyrightText: Richard Steinmetz
 SPDX-FileCopyrightText: Philipp Kewisch
 SPDX-FileCopyrightText: Paul Vorbach <paul@vorba.ch> (http://paul.vorba.ch)
 SPDX-FileCopyrightText: Paul Vorbach <paul@vorb.de> (http://vorb.de)
+SPDX-FileCopyrightText: Nextcloud GmbH and Nextcloud contributors
 SPDX-FileCopyrightText: Matt Zabriskie
 SPDX-FileCopyrightText: Mark <mark@remarkablemark.org>
 SPDX-FileCopyrightText: Mapbox
@@ -45,7 +45,6 @@ SPDX-FileCopyrightText: Evan You
 SPDX-FileCopyrightText: Eugene Sharygin <eush77@gmail.com>
 SPDX-FileCopyrightText: Eric Norris (https://github.com/ericnorris)
 SPDX-FileCopyrightText: Dr.-Ing. Mario Heiderich, Cure53 <mario@cure53.de> (https://cure53.de/)
-SPDX-FileCopyrightText: Denis Pushkarev
 SPDX-FileCopyrightText: David Clark
 SPDX-FileCopyrightText: Christoph Wurst
 SPDX-FileCopyrightText: Borys Serebrov
@@ -58,12 +57,6 @@ SPDX-FileCopyrightText: Andrea Giammarchi
 
 
 This file is generated from multiple sources. Included packages:
-- @floating-ui/core
-	- version: 0.3.1
-	- license: MIT
-- @floating-ui/dom
-	- version: 0.1.10
-	- license: MIT
 - @linusborg/vue-simple-portal
 	- version: 0.1.5
 	- license: Apache-2.0
@@ -80,16 +73,13 @@ This file is generated from multiple sources. Included packages:
 	- version: 0.2.0
 	- license: BSD-2-Clause
 - @nextcloud/auth
-	- version: 2.3.0
-	- license: GPL-3.0-or-later
-- @nextcloud/router
-	- version: 2.2.1
+	- version: 2.4.0
 	- license: GPL-3.0-or-later
 - axios
 	- version: 1.7.7
 	- license: MIT
 - @nextcloud/axios
-	- version: 2.4.0
+	- version: 2.5.1
 	- license: GPL-3.0-or-later
 - @nextcloud/browser-storage
 	- version: 0.4.0
@@ -104,7 +94,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 3.3.1
 	- license: GPL-3.0-or-later
 - @nextcloud/initial-state
-	- version: 2.1.0
+	- version: 2.2.0
 	- license: GPL-3.0-or-later
 - @nextcloud/router
 	- version: 3.0.1
@@ -113,7 +103,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 0.1.1
 	- license: AGPL-3.0-or-later
 - @nextcloud/vue-select
-	- version: 3.25.0
+	- version: 3.25.1
 	- license: MIT
 - @floating-ui/core
 	- version: 1.2.6
@@ -127,17 +117,35 @@ This file is generated from multiple sources. Included packages:
 - @nextcloud/logger
 	- version: 3.0.2
 	- license: GPL-3.0-or-later
+- @nextcloud/sharing
+	- version: 0.2.3
+	- license: GPL-3.0-or-later
+- vue-demi
+	- version: 0.14.10
+	- license: MIT
+- @vueuse/components
+	- version: 11.1.0
+	- license: MIT
+- vue-demi
+	- version: 0.14.10
+	- license: MIT
+- @vueuse/core
+	- version: 11.1.0
+	- license: MIT
+- vue-demi
+	- version: 0.14.10
+	- license: MIT
+- @vueuse/shared
+	- version: 11.1.0
+	- license: MIT
 - debounce
-	- version: 2.1.0
+	- version: 2.1.1
 	- license: MIT
 - is-plain-obj
 	- version: 4.1.0
 	- license: MIT
 - mdast-util-from-markdown
 	- version: 2.0.0
-	- license: MIT
-- mdast-util-to-hast
-	- version: 13.0.2
 	- license: MIT
 - mdast-util-to-string
 	- version: 4.0.0
@@ -160,9 +168,6 @@ This file is generated from multiple sources. Included packages:
 - micromark-factory-whitespace
 	- version: 2.0.0
 	- license: MIT
-- micromark-util-character
-	- version: 2.0.1
-	- license: MIT
 - micromark-util-chunked
 	- version: 2.0.0
 	- license: MIT
@@ -178,9 +183,6 @@ This file is generated from multiple sources. Included packages:
 - micromark-util-decode-string
 	- version: 2.0.0
 	- license: MIT
-- micromark-util-encode
-	- version: 2.0.0
-	- license: MIT
 - micromark-util-html-tag-name
 	- version: 2.0.0
 	- license: MIT
@@ -188,9 +190,6 @@ This file is generated from multiple sources. Included packages:
 	- version: 2.0.0
 	- license: MIT
 - micromark-util-resolve-all
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-sanitize-uri
 	- version: 2.0.0
 	- license: MIT
 - micromark-util-subtokenize
@@ -214,20 +213,8 @@ This file is generated from multiple sources. Included packages:
 - unist-builder
 	- version: 4.0.0
 	- license: MIT
-- unist-util-is
-	- version: 6.0.0
-	- license: MIT
-- unist-util-position
-	- version: 5.0.0
-	- license: MIT
 - unist-util-stringify-position
 	- version: 4.0.0
-	- license: MIT
-- unist-util-visit-parents
-	- version: 6.0.1
-	- license: MIT
-- unist-util-visit
-	- version: 5.0.0
 	- license: MIT
 - vfile-message
 	- version: 4.0.2
@@ -236,36 +223,15 @@ This file is generated from multiple sources. Included packages:
 	- version: 6.0.1
 	- license: MIT
 - @nextcloud/vue
-	- version: 8.13.0
+	- version: 8.19.0
 	- license: AGPL-3.0-or-later
 - @ungap/structured-clone
 	- version: 1.2.0
 	- license: ISC
-- vue-demi
-	- version: 0.14.7
-	- license: MIT
-- @vueuse/components
-	- version: 10.9.0
-	- license: MIT
-- vue-demi
-	- version: 0.14.7
-	- license: MIT
-- @vueuse/core
-	- version: 10.9.0
-	- license: MIT
-- vue-demi
-	- version: 0.14.7
-	- license: MIT
-- @vueuse/shared
-	- version: 10.9.0
-	- license: MIT
 - bail
 	- version: 2.0.2
 	- license: MIT
 - ccount
-	- version: 2.0.1
-	- license: MIT
-- char-regex
 	- version: 2.0.1
 	- license: MIT
 - charenc
@@ -274,17 +240,11 @@ This file is generated from multiple sources. Included packages:
 - comma-separated-tokens
 	- version: 2.0.3
 	- license: MIT
-- core-js
-	- version: 3.37.0
-	- license: MIT
 - crypt
 	- version: 0.0.2
 	- license: BSD-3-Clause
 - css-loader
 	- version: 6.8.1
-	- license: MIT
-- date-format-parse
-	- version: 0.2.7
 	- license: MIT
 - decode-named-character-reference
 	- version: 1.0.2
@@ -313,25 +273,16 @@ This file is generated from multiple sources. Included packages:
 - hast-util-is-element
 	- version: 3.0.0
 	- license: MIT
-- hast-util-whitespace
-	- version: 2.0.1
-	- license: MIT
 - ical.js
 	- version: 2.0.1
 	- license: MPL-2.0
 - inline-style-parser
 	- version: 0.1.1
 	- license: MIT
-- is-absolute-url
-	- version: 4.0.1
-	- license: MIT
 - is-buffer
 	- version: 1.1.6
 	- license: MIT
 - linkify-string
-	- version: 4.0.1
-	- license: MIT
-- linkifyjs
 	- version: 4.0.1
 	- license: MIT
 - lodash.get
@@ -349,17 +300,8 @@ This file is generated from multiple sources. Included packages:
 - escape-string-regexp
 	- version: 5.0.0
 	- license: MIT
-- unist-util-is
-	- version: 6.0.0
-	- license: MIT
-- unist-util-visit-parents
-	- version: 6.0.1
-	- license: MIT
 - mdast-util-find-and-replace
 	- version: 3.0.1
-	- license: MIT
-- micromark-util-character
-	- version: 2.0.1
 	- license: MIT
 - mdast-util-gfm-autolink-literal
 	- version: 2.0.0
@@ -385,11 +327,11 @@ This file is generated from multiple sources. Included packages:
 - mdast-util-newline-to-break
 	- version: 2.0.0
 	- license: MIT
-- unist-util-is
-	- version: 6.0.0
-	- license: MIT
 - mdast-util-phrasing
 	- version: 4.0.0
+	- license: MIT
+- mdast-util-to-hast
+	- version: 13.2.0
 	- license: MIT
 - mdast-util-to-string
 	- version: 4.0.0
@@ -400,26 +342,8 @@ This file is generated from multiple sources. Included packages:
 - micromark-util-decode-string
 	- version: 2.0.0
 	- license: MIT
-- unist-util-is
-	- version: 6.0.0
-	- license: MIT
-- unist-util-visit-parents
-	- version: 6.0.1
-	- license: MIT
-- unist-util-visit
-	- version: 5.0.0
-	- license: MIT
 - mdast-util-to-markdown
 	- version: 2.1.0
-	- license: MIT
-- micromark-util-character
-	- version: 2.0.1
-	- license: MIT
-- micromark-util-encode
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-sanitize-uri
-	- version: 2.0.0
 	- license: MIT
 - micromark-extension-gfm-autolink-literal
 	- version: 2.0.0
@@ -442,16 +366,10 @@ This file is generated from multiple sources. Included packages:
 - micromark-factory-whitespace
 	- version: 2.0.0
 	- license: MIT
-- micromark-util-character
-	- version: 2.0.1
-	- license: MIT
 - micromark-util-chunked
 	- version: 2.0.0
 	- license: MIT
 - micromark-util-classify-character
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-encode
 	- version: 2.0.0
 	- license: MIT
 - micromark-util-html-tag-name
@@ -463,17 +381,11 @@ This file is generated from multiple sources. Included packages:
 - micromark-util-resolve-all
 	- version: 2.0.0
 	- license: MIT
-- micromark-util-sanitize-uri
-	- version: 2.0.0
-	- license: MIT
 - micromark-util-subtokenize
 	- version: 2.0.0
 	- license: MIT
 - micromark-extension-gfm-footnote
 	- version: 2.0.0
-	- license: MIT
-- micromark-util-character
-	- version: 2.0.1
 	- license: MIT
 - micromark-util-chunked
 	- version: 2.0.0
@@ -490,9 +402,6 @@ This file is generated from multiple sources. Included packages:
 - micromark-factory-space
 	- version: 2.0.0
 	- license: MIT
-- micromark-util-character
-	- version: 2.0.1
-	- license: MIT
 - micromark-extension-gfm-table
 	- version: 2.0.0
 	- license: MIT
@@ -501,9 +410,6 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - micromark-factory-space
 	- version: 2.0.0
-	- license: MIT
-- micromark-util-character
-	- version: 2.0.1
 	- license: MIT
 - micromark-extension-gfm-task-list-item
 	- version: 2.0.1
@@ -517,6 +423,15 @@ This file is generated from multiple sources. Included packages:
 - micromark-extension-gfm
 	- version: 3.0.0
 	- license: MIT
+- micromark-util-character
+	- version: 2.1.0
+	- license: MIT
+- micromark-util-encode
+	- version: 2.0.0
+	- license: MIT
+- micromark-util-sanitize-uri
+	- version: 2.0.0
+	- license: MIT
 - nanoid
 	- version: 3.3.7
 	- license: MIT
@@ -528,15 +443,6 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - property-information
 	- version: 6.2.0
-	- license: MIT
-- unist-util-is
-	- version: 6.0.0
-	- license: MIT
-- unist-util-visit-parents
-	- version: 6.0.1
-	- license: MIT
-- unist-util-visit
-	- version: 5.0.0
 	- license: MIT
 - rehype-external-links
 	- version: 3.0.0
@@ -553,12 +459,6 @@ This file is generated from multiple sources. Included packages:
 - splitpanes
 	- version: 2.4.1
 	- license: MIT
-- ansi-regex
-	- version: 6.0.1
-	- license: MIT
-- strip-ansi
-	- version: 7.0.1
-	- license: MIT
 - string-length
 	- version: 5.0.1
 	- license: MIT
@@ -571,9 +471,6 @@ This file is generated from multiple sources. Included packages:
 - style-to-object
 	- version: 0.4.1
 	- license: MIT
-- tabbable
-	- version: 6.2.0
-	- license: MIT
 - tributejs
 	- version: 5.1.3
 	- license: MIT
@@ -582,6 +479,18 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - trough
 	- version: 2.1.0
+	- license: MIT
+- unist-util-is
+	- version: 6.0.0
+	- license: MIT
+- unist-util-position
+	- version: 5.0.0
+	- license: MIT
+- unist-util-visit-parents
+	- version: 6.0.1
+	- license: MIT
+- unist-util-visit
+	- version: 5.0.0
 	- license: MIT
 - vue-color
 	- version: 2.8.1
