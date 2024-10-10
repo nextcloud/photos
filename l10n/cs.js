@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Public link" : "Veřejný odkaz",
     "Photos" : "Fotky",
+    "On This Day" : "V tento den",
     "Your memories under your control" : "Vaše vzpomínky pod vaší kontrolou",
     "All media" : "Veškerá média",
     "Videos" : "Videa",
@@ -54,6 +55,7 @@ OC.L10N.register(
     "_%n unassigned photo_::_%n unassigned photos_" : ["%n nepřiřazená fotka","%n nepřiřazené fotky","%n nepřiřazených fotek","%n nepřiřazené fotky"],
     "Favorite" : "Přidat do oblíbených",
     "Select image {imageName}" : "Vybrat obrázek {imageName}",
+    "Favorite image, open the full size \"{name}\" image" : "Zařadit obrázek mezi oblíbené, otevřít obrázek „{name}“ v plné velikosti",
     "Open the full size \"{name}\" image" : "Otevřít obrázek „{name}“ v plné velikosti",
     "Open the \"{name}\" folder" : "Otevřít složku „{name}“",
     "Go back" : "Jít zpět",
