@@ -65,7 +65,7 @@ OC.L10N.register(
     "Jump to specific date in list" : "إقفِز للتاريخ المحدد في القائمة",
     "Jump to {date}" : "إنتقِل إلى {date}",
     "Add to {destination}" : "أضِف إلى {destination}",
-    "The destination folder is owned by {owner}" : "المجلد المَقصِد يملكه {owner}",
+    "The destination folder is owned by {owner}" : "المجلد الوجهة يملكه {owner}",
     "There are no photos or videos yet!" : "لا توجد أي صور أو فيديوهات بعدُ!",
     "_{years} year ago_::_{years} years ago_" : ["سنوات {years} مضت","سنة {years} مضت","سنوات {years} مضت","سنوات {years} مضت","سنوات {years} مضت","سنوات {years} مضت"],
     "Enable squared photos view" : "تفعيل عرض الصور المربعة",
