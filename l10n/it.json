@@ -63,6 +63,7 @@
     "Jump to specific date in list" : "Vai alla data specifica nella lista",
     "Jump to {date}" : "Vai a {date}",
     "Add to {destination}" : "Aggiungi a {destination}",
+    "The destination folder is owned by {owner}" : "La cartella di destinazione è di proprietà di {owner}",
     "There are no photos or videos yet!" : "Non ci sono foto o video ancora",
     "_{years} year ago_::_{years} years ago_" : ["{years} anno fa","{years} anni fa","{years} anni fa"],
     "Enable squared photos view" : "Abilita vista foto quadrate",
