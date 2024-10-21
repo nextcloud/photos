@@ -65,6 +65,7 @@ OC.L10N.register(
     "Jump to specific date in list" : "Sauter à une date spécifique dans la liste",
     "Jump to {date}" : "Aller au {date}",
     "Add to {destination}" : "Ajouter à {destination}",
+    "The destination folder is owned by {owner}" : "La destination du dossier appartient à {owner}",
     "There are no photos or videos yet!" : "Il n’y a pas encore de photos ou de vidéos !",
     "_{years} year ago_::_{years} years ago_" : ["Il y a {years} ans","Il y a {years} ans","Il y a {years} an(s)"],
     "Enable squared photos view" : "Activer l’affichage en miniatures carrées",
