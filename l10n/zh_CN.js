@@ -9,7 +9,7 @@ OC.L10N.register(
     "Videos" : "视频",
     "Albums" : "专辑",
     "Collaborative albums" : "协作相册",
-    "People" : "人物",
+    "People" : "用户",
     "Folders" : "文件夹",
     "Favorites" : "收藏",
     "On this day" : "当年今日",
