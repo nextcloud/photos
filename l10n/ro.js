@@ -9,6 +9,7 @@ OC.L10N.register(
     "Favorites" : "Favorite",
     "Shared with you" : "Partajat cu tine",
     "Tags" : "Etichete",
+    "Places" : "Locuri",
     "Back" : "Înapoi",
     "Save" : "Salvează",
     "Shared by" : "Partajat de",
