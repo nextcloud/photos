@@ -37,6 +37,7 @@ OC.L10N.register(
     "Rename person" : "Pārsaukt personu",
     "Remove from favorites" : "Noņemt no izlases",
     "Remove person" : "Noņemt personu",
+    "Back to tags overview" : "Atpakaļ uz birku pārskatu",
     "Add" : "Pievienot",
     "Details" : "Detaļas",
     "Invalid location selected" : "Ir izvēlēta nederīga atrašanās vieta "
