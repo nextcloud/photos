@@ -62,7 +62,7 @@
     "Dates" : "Datas",
     "Jump to specific date in list" : "Ir para uma data específica na lista",
     "Jump to {date}" : "Ir para {data}",
-    "Add to {destination}" : "Adicionar a {destionation}",
+    "Add to {destination}" : "Adicionar a {destination}",
     "The destination folder is owned by {owner}" : "A pasta de destino pertence a {owner}",
     "There are no photos or videos yet!" : "Ainda não há fotos ou vídeos!",
     "_{years} year ago_::_{years} years ago_" : ["{anos} ano atrás","{anos} anos atrás","{anos} anos atrás"],
