@@ -128,7 +128,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Etiketlenmiş fotoğraflar burada görüntülenir",
     "Popular tags" : "Sık kullanılan etiketler",
     "All tags" : "Tüm etiketler",
-    "One of the source folders does not exists" : "Kaynak klasörlerden biri bulunamadı",
     "Add" : "Ekle",
     "Add to album" : "Albüme ekle",
     "Delete selection" : "Seçilmişleri sil",
@@ -158,6 +157,7 @@ OC.L10N.register(
     "Default Photos upload and Albums location" : "Varsayılan Fotoğraflar yükleme ve Albümler konumu",
     "Select the default location for your media" : "Ortamlarınızın varsayılan konumunu seçin",
     "Invalid location selected" : "Seçilen konum geçersiz",
-    "Photos directory" : "Fotoğraflar klasörü"
+    "Photos directory" : "Fotoğraflar klasörü",
+    "One of the source folders does not exists" : "Kaynak klasörlerden biri bulunamadı"
 },
 "nplurals=2; plural=(n > 1);");

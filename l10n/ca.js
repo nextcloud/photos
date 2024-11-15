@@ -126,7 +126,6 @@ OC.L10N.register(
     "No tags yet" : "Encara no hi ha cap etiqueta",
     "Photos with tags will show up here" : "Les fotos amb etiquetes es mostraran aquí",
     "Popular tags" : "Etiquetes populars",
-    "One of the source folders does not exists" : "Una de les carpetes d'origen no existeix",
     "Add" : "Afegeix",
     "Add to album" : "Afegeix a un àlbum",
     "Delete selection" : "Suprimeix la selecció",
@@ -156,6 +155,7 @@ OC.L10N.register(
     "Default Photos upload and Albums location" : "Ubicació per defecte de les pujades de fotos i els àlbums",
     "Select the default location for your media" : "Seleccioneu la ubicació per defecte per al contingut multimèdia",
     "Invalid location selected" : "La ubicació seleccionada no és vàlida",
-    "Photos directory" : "Carpeta de fotos"
+    "Photos directory" : "Carpeta de fotos",
+    "One of the source folders does not exists" : "Una de les carpetes d'origen no existeix"
 },
 "nplurals=2; plural=(n != 1);");

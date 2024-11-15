@@ -128,7 +128,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Taispeánfar grianghraif le clibeanna anseo",
     "Popular tags" : "Clibeanna Coitianta",
     "All tags" : "Gach clibeanna",
-    "One of the source folders does not exists" : "Níl ceann de na fillteáin foinse ann",
     "Add" : "Cuir",
     "Add to album" : "Cuir leis an albam",
     "Delete selection" : "Scrios an roghnúchán",
@@ -158,6 +157,7 @@ OC.L10N.register(
     "Default Photos upload and Albums location" : "Réamhshocrú uaslódála Grianghraif agus suíomh Albaim",
     "Select the default location for your media" : "Roghnaigh an suíomh réamhshocraithe do na meáin",
     "Invalid location selected" : "Suíomh neamhbhailí roghnaithe",
-    "Photos directory" : "Eolaire grianghraif"
+    "Photos directory" : "Eolaire grianghraif",
+    "One of the source folders does not exists" : "Níl ceann de na fillteáin foinse ann"
 },
 "nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);");

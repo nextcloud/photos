@@ -127,7 +127,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "A címkével rendelkező fényképek itt fognak megjelenni",
     "Popular tags" : "Népszerű címkék",
     "All tags" : "Összes jelölés",
-    "One of the source folders does not exists" : "Az egyik forrás könyvtár nem létezik",
     "Add" : "Hozzáadás",
     "Add to album" : "Hozzáadás az albumhoz",
     "Delete selection" : "Kiválasztás törlése",
@@ -157,6 +156,7 @@ OC.L10N.register(
     "Default Photos upload and Albums location" : "Fényképfeltöltés és Albumok alapértelmezett helye",
     "Select the default location for your media" : "Válassza ki a médiafájlok alapértelmezett helyét",
     "Invalid location selected" : "Érvénytelen hely választva",
-    "Photos directory" : "Fényképek könyvtár"
+    "Photos directory" : "Fényképek könyvtár",
+    "One of the source folders does not exists" : "Az egyik forrás könyvtár nem létezik"
 },
 "nplurals=2; plural=(n != 1);");

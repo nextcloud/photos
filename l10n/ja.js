@@ -128,7 +128,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "タグ付けされた写真がここに表示されます",
     "Popular tags" : "人気のタグ",
     "All tags" : "全てのタグ",
-    "One of the source folders does not exists" : "ソースフォルダーの1つが存在しません",
     "Add" : "追加",
     "Add to album" : "アルバムに追加",
     "Delete selection" : "選択した項目を削除",
@@ -158,6 +157,7 @@ OC.L10N.register(
     "Default Photos upload and Albums location" : "デフォルトの写真アップロードとアルバムの場所",
     "Select the default location for your media" : "メディアのデフォルトの保存場所を選択する",
     "Invalid location selected" : "選択した場所が無効",
-    "Photos directory" : "写真ディレクトリ"
+    "Photos directory" : "写真ディレクトリ",
+    "One of the source folders does not exists" : "ソースフォルダーの1つが存在しません"
 },
 "nplurals=1; plural=0;");

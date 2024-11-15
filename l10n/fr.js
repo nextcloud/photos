@@ -128,7 +128,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Les photos étiquetées apparaîtront ici",
     "Popular tags" : "Étiquettes populaires",
     "All tags" : "Toutes les étiquettes",
-    "One of the source folders does not exists" : "L’un des dossiers source n’existe pas",
     "Add" : "Ajouter",
     "Add to album" : "Ajouter à l’album",
     "Delete selection" : "Supprimer la sélection",
@@ -158,6 +157,7 @@ OC.L10N.register(
     "Default Photos upload and Albums location" : "Emplacement par défaut du téléversement des photos et des albums",
     "Select the default location for your media" : "Sélectionnez l’emplacement par défaut de vos médias",
     "Invalid location selected" : "Emplacement sélectionné non valide",
-    "Photos directory" : "Dossier des photos"
+    "Photos directory" : "Dossier des photos",
+    "One of the source folders does not exists" : "L’un des dossiers source n’existe pas"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

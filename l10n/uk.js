@@ -128,7 +128,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Світлини з мітками буде показано тут",
     "Popular tags" : "Популярні мітки",
     "All tags" : "Всі мітки",
-    "One of the source folders does not exists" : "Один з каталогів джерел відсутній",
     "Add" : "Додати",
     "Add to album" : "Додати в альбом",
     "Delete selection" : "Вилучити виділення",
@@ -158,6 +157,7 @@ OC.L10N.register(
     "Default Photos upload and Albums location" : "Типове місце завантажених світлин та альбомів",
     "Select the default location for your media" : "Виберіть типове розташування для ваших зображень та відео",
     "Invalid location selected" : "Вибрано недійсне місце розташування",
-    "Photos directory" : "Каталог фотографій"
+    "Photos directory" : "Каталог фотографій",
+    "One of the source folders does not exists" : "Один з каталогів джерел відсутній"
 },
 "nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);");

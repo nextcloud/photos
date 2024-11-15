@@ -123,7 +123,6 @@ OC.L10N.register(
     "No tags yet" : "Ei vielä tunnisteita",
     "Photos with tags will show up here" : "Tunnisteilla varustetut kuvat näkyvät täällä",
     "Popular tags" : "Suositut tunnisteet",
-    "One of the source folders does not exists" : "Yksi lähdekansioista ei ole olemassa",
     "Add" : "Lisää",
     "Add to album" : "Lisää albumiin",
     "Delete selection" : "Poista valinta",
@@ -152,6 +151,7 @@ OC.L10N.register(
     "Default Photos upload and Albums location" : "Kuvien ja albumien oletusarvoinen lähetyssijainti",
     "Select the default location for your media" : "Valitse oletussijainti medialle",
     "Invalid location selected" : "Virheellinen sijainti valittu",
-    "Photos directory" : "Kuvat-kansio"
+    "Photos directory" : "Kuvat-kansio",
+    "One of the source folders does not exists" : "Yksi lähdekansioista ei ole olemassa"
 },
 "nplurals=2; plural=(n != 1);");
