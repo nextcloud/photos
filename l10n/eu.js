@@ -127,7 +127,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Etiketadun argazkiak hemen erakutsiko dira",
     "Popular tags" : "Etiketa ohikoak",
     "All tags" : "Etiketa guztiak",
-    "One of the source folders does not exists" : "Iturburu-karpeta bat ez da existitzen",
     "Add" : "Gehitu",
     "Add to album" : "Gehitu albumera",
     "Delete selection" : "Ezabatu hautatutakoak",
@@ -157,6 +156,7 @@ OC.L10N.register(
     "Default Photos upload and Albums location" : "Argazkien karga eta albumen kokaleku lehenetsia",
     "Select the default location for your media" : "Hautatu zure multimediaren kokaleku lehenetsia",
     "Invalid location selected" : "Kokaleku baliogabea hautatu da",
-    "Photos directory" : "Argazkien direktorioa"
+    "Photos directory" : "Argazkien direktorioa",
+    "One of the source folders does not exists" : "Iturburu-karpeta bat ez da existitzen"
 },
 "nplurals=2; plural=(n != 1);");

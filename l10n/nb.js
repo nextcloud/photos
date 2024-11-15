@@ -127,7 +127,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Bilder med etiketter vises her",
     "Popular tags" : "Populære merkelapper",
     "All tags" : "Alle tagger",
-    "One of the source folders does not exists" : "En av kildemappene finnes ikke",
     "Add" : "Legg til",
     "Add to album" : "Legg til i album",
     "Delete selection" : "Slett utvalg",
@@ -157,6 +156,7 @@ OC.L10N.register(
     "Default Photos upload and Albums location" : "Standard bildeopplasting og albumplassering",
     "Select the default location for your media" : "Velg standardplassering for mediefilene dine",
     "Invalid location selected" : "Invalid location selected",
-    "Photos directory" : "Bildemappe"
+    "Photos directory" : "Bildemappe",
+    "One of the source folders does not exists" : "En av kildemappene finnes ikke"
 },
 "nplurals=2; plural=(n != 1);");
