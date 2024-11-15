@@ -128,7 +128,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "此處會顯示圖片的標籤",
     "Popular tags" : "熱門標籤",
     "All tags" : "全部標籤",
-    "One of the source folders does not exists" : "其中一個來源資料夾不存在",
     "Add" : "新增",
     "Add to album" : "新增至相簿",
     "Delete selection" : "刪除選擇",
@@ -158,6 +157,7 @@ OC.L10N.register(
     "Default Photos upload and Albums location" : "預設照片上傳與相簿位置",
     "Select the default location for your media" : "選取您媒體的預設位置",
     "Invalid location selected" : "選取無效的位置",
-    "Photos directory" : "照片目錄"
+    "Photos directory" : "照片目錄",
+    "One of the source folders does not exists" : "其中一個來源資料夾不存在"
 },
 "nplurals=1; plural=0;");

@@ -126,7 +126,6 @@ OC.L10N.register(
     "No tags yet" : "Nun hai nenguna etiqueta",
     "Photos with tags will show up here" : "Equí apaecen les semeyes etiquetaes",
     "Popular tags" : "Etiquetes populares",
-    "One of the source folders does not exists" : "Nun esiste una de les carpetes d'orixe",
     "Add" : "Amestar",
     "Add to album" : "Amestar al álbum",
     "Delete selection" : "Desaniciar la seleición",
@@ -156,6 +155,7 @@ OC.L10N.register(
     "Default Photos upload and Albums location" : "Llocalización predeterminada de los álbumes y la xuba de semeyes",
     "Select the default location for your media" : "Seleiciona la llocalización predeterminada pa los elementos multimedia",
     "Invalid location selected" : "Seleicionóse una llocalización inválida",
-    "Photos directory" : "Direutoriu de datos"
+    "Photos directory" : "Direutoriu de datos",
+    "One of the source folders does not exists" : "Nun esiste una de les carpetes d'orixe"
 },
 "nplurals=2; plural=(n != 1);");

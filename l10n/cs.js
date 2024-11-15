@@ -128,7 +128,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Fotky opatřené štítky se objeví zde",
     "Popular tags" : "Oblíbené štítky",
     "All tags" : "Všechny štítky",
-    "One of the source folders does not exists" : "Jedna ze zdrojových složek neexistuje",
     "Add" : "Přidat",
     "Add to album" : "Přidat do alba",
     "Delete selection" : "Smazat výběr",
@@ -158,6 +157,7 @@ OC.L10N.register(
     "Default Photos upload and Albums location" : "Výchozí umístění nahrávání fotek a alb",
     "Select the default location for your media" : "Vyberte výchozí umístění pro vaše média",
     "Invalid location selected" : "Vybráno neplatné umístění",
-    "Photos directory" : "Složka pro fotky"
+    "Photos directory" : "Složka pro fotky",
+    "One of the source folders does not exists" : "Jedna ze zdrojových složek neexistuje"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

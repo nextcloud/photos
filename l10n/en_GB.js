@@ -128,7 +128,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Photos with tags will show up here",
     "Popular tags" : "Popular tags",
     "All tags" : "All tags",
-    "One of the source folders does not exists" : "One of the source folders does not exists",
     "Add" : "Add",
     "Add to album" : "Add to album",
     "Delete selection" : "Delete selection",
@@ -158,6 +157,7 @@ OC.L10N.register(
     "Default Photos upload and Albums location" : "Default Photos upload and Albums location",
     "Select the default location for your media" : "Select the default location for your media",
     "Invalid location selected" : "Invalid location selected",
-    "Photos directory" : "Photos directory"
+    "Photos directory" : "Photos directory",
+    "One of the source folders does not exists" : "One of the source folders does not exists"
 },
 "nplurals=2; plural=(n != 1);");

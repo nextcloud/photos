@@ -122,7 +122,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "بەلگە قويۇلغان رەسىملەر بۇ يەردە كۆرۈنىدۇ",
     "Popular tags" : "داڭلىق خەتكۈچلەر",
     "All tags" : "بارلىق خەتكۈچلەر",
-    "One of the source folders does not exists" : "مەنبە قىسقۇچلارنىڭ بىرى مەۋجۇت ئەمەس",
     "Add" : "قوش",
     "Add to album" : "ئالبۇمغا قوشۇڭ",
     "Delete selection" : "تاللاشنى ئۆچۈرۈڭ",
@@ -151,6 +150,7 @@ OC.L10N.register(
     "Default Photos upload and Albums location" : "سۈكۈتتىكى رەسىملەرنى يوللاش ۋە پىلاستىنكا ئورنى",
     "Select the default location for your media" : "مېدىياڭىزنىڭ سۈكۈتتىكى ئورنىنى تاللاڭ",
     "Invalid location selected" : "ئىناۋەتسىز ئورۇن تاللانغان",
-    "Photos directory" : "رەسىم مۇندەرىجىسى"
+    "Photos directory" : "رەسىم مۇندەرىجىسى",
+    "One of the source folders does not exists" : "مەنبە قىسقۇچلارنىڭ بىرى مەۋجۇت ئەمەس"
 },
 "nplurals=2; plural=(n != 1);");

@@ -126,7 +126,6 @@ OC.L10N.register(
     "No tags yet" : "Todavía no hay etiquetas",
     "Photos with tags will show up here" : "Las fotos con etiquetas aparecerán aquí",
     "Popular tags" : "Etiquetas populares",
-    "One of the source folders does not exists" : "Una de las carpetas fuente no existe",
     "Add" : "Añadir",
     "Add to album" : "Añadir al álbum",
     "Delete selection" : "Borrar la selección",
@@ -156,6 +155,7 @@ OC.L10N.register(
     "Default Photos upload and Albums location" : "Ubicación por defecto de subida para fotos y álbumes",
     "Select the default location for your media" : "Seleccione la ubicación por defecto para sus medios",
     "Invalid location selected" : "Se seleccionó una ubicación inválida",
-    "Photos directory" : "Carpeta de fotos"
+    "Photos directory" : "Carpeta de fotos",
+    "One of the source folders does not exists" : "Una de las carpetas fuente no existe"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
