@@ -128,7 +128,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "سوف تظهر الصور ذات الوسوم هنا",
     "Popular tags" : "وسوم شائعة",
     "All tags" : "كل الوسوم",
-    "One of the source folders does not exists" : "أحد المجلدات المصدرية غير موجود",
     "Add" : "إضافة",
     "Add to album" : "إضِف إلى ألبوم",
     "Delete selection" : "حذف ما تمّ تحديده",
@@ -158,6 +157,7 @@ OC.L10N.register(
     "Default Photos upload and Albums location" : "الموقع الافتراضي لرفع الصور و الألبومات",
     "Select the default location for your media" : "إختر الموقع الافتراضي لوسائطك",
     "Invalid location selected" : "الموقع المُختار غير صحيح",
-    "Photos directory" : "دليل الصور"
+    "Photos directory" : "دليل الصور",
+    "One of the source folders does not exists" : "أحد المجلدات المصدرية غير موجود"
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");

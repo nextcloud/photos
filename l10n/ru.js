@@ -127,7 +127,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Здесь будут показаны фотографии, которым присвоены метки",
     "Popular tags" : "Популярные метки",
     "All tags" : "Все теги",
-    "One of the source folders does not exists" : "Одна из исходных папок не существует",
     "Add" : "Добавить",
     "Add to album" : "Добавить в альбом",
     "Delete selection" : "Удалить выбранное",
@@ -157,6 +156,7 @@ OC.L10N.register(
     "Default Photos upload and Albums location" : "Расположение загружаемых на сервер фотографий и альбомов по умолчанию",
     "Select the default location for your media" : "Выбор расположения медиафайлов по умолчанию",
     "Invalid location selected" : "Указано недействительное расположение",
-    "Photos directory" : "Каталог с фотографиями"
+    "Photos directory" : "Каталог с фотографиями",
+    "One of the source folders does not exists" : "Одна из исходных папок не существует"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

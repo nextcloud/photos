@@ -128,7 +128,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Bilder med taggar visas här",
     "Popular tags" : "Populära taggar",
     "All tags" : "Alla taggar",
-    "One of the source folders does not exists" : "En av källmapparna finns inte",
     "Add" : "Lägg till",
     "Add to album" : "Lägg till i album",
     "Delete selection" : "Ta bort urval",
@@ -158,6 +157,7 @@ OC.L10N.register(
     "Default Photos upload and Albums location" : "Standardplats för album och bilder",
     "Select the default location for your media" : "Välj standardplats för din media",
     "Invalid location selected" : "Ogiltig plats vald",
-    "Photos directory" : "Bildmapp"
+    "Photos directory" : "Bildmapp",
+    "One of the source folders does not exists" : "En av källmapparna finns inte"
 },
 "nplurals=2; plural=(n != 1);");
