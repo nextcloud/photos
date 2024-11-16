@@ -128,6 +128,7 @@ OC.L10N.register(
     "Photos with tags will show up here" : "此處會顯示圖片的標籤",
     "Popular tags" : "熱門標籤",
     "All tags" : "全部標籤",
+    "One of the source folders does not exist" : "其中一個來源資料夾不存在",
     "Add" : "新增",
     "Add to album" : "新增至相簿",
     "Delete selection" : "刪除選擇",
