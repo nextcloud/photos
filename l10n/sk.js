@@ -128,6 +128,7 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Fotografie so štítkami sa zobrazia tu",
     "Popular tags" : "Populárne štítky",
     "All tags" : "Všetky štítky",
+    "One of the source folders does not exist" : "Jeden zo zdrojových priečinkov neexistuje",
     "Add" : "Pridať",
     "Add to album" : "Pridať do albumu",
     "Delete selection" : "Vymazať výber",
