@@ -128,6 +128,7 @@ OC.L10N.register(
     "Photos with tags will show up here" : "سوف تظهر الصور ذات الوسوم هنا",
     "Popular tags" : "وسوم شائعة",
     "All tags" : "كل الوسوم",
+    "One of the source folders does not exist" : "أحد المجلدات المصدرية غير موجود",
     "Add" : "إضافة",
     "Add to album" : "إضِف إلى ألبوم",
     "Delete selection" : "حذف ما تمّ تحديده",
