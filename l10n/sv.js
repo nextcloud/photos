@@ -128,6 +128,7 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Bilder med taggar visas här",
     "Popular tags" : "Populära taggar",
     "All tags" : "Alla taggar",
+    "One of the source folders does not exist" : "En av källmapparna finns inte",
     "Add" : "Lägg till",
     "Add to album" : "Lägg till i album",
     "Delete selection" : "Ta bort urval",
