@@ -128,6 +128,7 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Taispeánfar grianghraif le clibeanna anseo",
     "Popular tags" : "Clibeanna Coitianta",
     "All tags" : "Gach clibeanna",
+    "One of the source folders does not exist" : "Níl ceann de na fillteáin foinse ann",
     "Add" : "Cuir",
     "Add to album" : "Cuir leis an albam",
     "Delete selection" : "Scrios an roghnúchán",
