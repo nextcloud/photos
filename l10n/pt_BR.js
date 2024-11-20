@@ -128,6 +128,7 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Fotos com marcações serão mostradas aqui",
     "Popular tags" : "Etiquetas populares",
     "All tags" : "Todas as etiquetas",
+    "One of the source folders does not exist" : "Um dos arquivos da fonte não existe",
     "Add" : "Adicionar",
     "Add to album" : "Adicionar a álbum",
     "Delete selection" : "Excluir seleção",
