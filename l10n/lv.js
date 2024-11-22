@@ -33,6 +33,8 @@ OC.L10N.register(
     "Add folder" : "Pievienot mapi",
     "Home" : "Sākums",
     "View" : "Skats",
+    "Choose the folders from where photos and videos are shown." : "Izvēlēties mapes, no kurām tiek rādīti fotoattēli un video.",
+    "Choose the folder where photos and albums are uploaded to." : "Izvēlēties mapi, kurā tiek augšupielādēti fotoattēli un albumi.",
     "Edit album details" : "Labot albuma datus",
     "Rename person" : "Pārsaukt personu",
     "Remove from favorites" : "Noņemt no izlases",
@@ -40,6 +42,7 @@ OC.L10N.register(
     "Back to tags overview" : "Atpakaļ uz birku pārskatu",
     "Add" : "Pievienot",
     "Details" : "Detaļas",
+    "Could not load photos folder" : "Nevarēja ielādēt fotoattēlu mapi",
     "Invalid location selected" : "Ir izvēlēta nederīga atrašanās vieta "
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");
