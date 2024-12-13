@@ -128,6 +128,7 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Слике са ознакама ће се појавити овде",
     "Popular tags" : "Популарне ознаке",
     "All tags" : "Све ознаке",
+    "One of the source folders does not exist" : "Један од изворних фолдера не постоји",
     "Add" : "Додај",
     "Add to album" : "Додај у албум",
     "Delete selection" : "Обриши одабир",
