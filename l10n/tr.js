@@ -128,6 +128,7 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Etiketlenmiş fotoğraflar burada görüntülenir",
     "Popular tags" : "Sık kullanılan etiketler",
     "All tags" : "Tüm etiketler",
+    "One of the source folders does not exist" : "Kaynak klasörlerden biri bulunamadı",
     "Add" : "Ekle",
     "Add to album" : "Albüme ekle",
     "Delete selection" : "Seçilmişleri sil",
