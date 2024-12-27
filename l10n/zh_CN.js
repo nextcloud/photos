@@ -128,6 +128,7 @@ OC.L10N.register(
     "Photos with tags will show up here" : "带标签的照片将显示在此处",
     "Popular tags" : "常用标签",
     "All tags" : "所有标签",
+    "One of the source folders does not exist" : "其中一个源文件夹不存在",
     "Add" : "添加",
     "Add to album" : "添加至相册",
     "Delete selection" : "删除选择项",
