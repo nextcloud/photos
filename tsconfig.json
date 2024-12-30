@@ -1,27 +1,15 @@
 {
 	"extends": "@vue/tsconfig/tsconfig.json",
-	"include": ["./src/**/*.ts"],
+	"include": ["./src"],
 	"compilerOptions": {
-		"types": ["cypress", "node", "dockerode"],
-		"allowSyntheticDefaultImports": true,
-		"moduleResolution": "node",
-		"target": "ESNext",
-		"module": "esnext",
-		"declaration": true,
-		"strict": true,
+		"lib": [
+			"DOM",
+			"ES2015"
+		],
+		"rootDir": "src",
 		"noImplicitAny": false,
-		"resolveJsonModule": true
 	},
 	"vueCompilerOptions": {
 		"target": 2.7
-	},
-	"ts-node": {
-		// these options are overrides used only by ts-node
-		// same as our --compilerOptions flag and our TS_NODE_COMPILER_OPTIONS environment variable
-		"compilerOptions": {
-			"moduleResolution": "node",
-			"module": "commonjs",
-			"verbatimModuleSyntax": false
-		}
 	}
 }

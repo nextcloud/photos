@@ -1,14 +1,10 @@
-
-import {
-	configureNextcloud,
-	startNextcloud,
-	stopNextcloud,
-	waitOnNextcloud,
-} from './cypress/dockerNode'
-import { defineConfig } from 'cypress'
-
-import browserify from '@cypress/browserify-preprocessor'
+/**
+ * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+import { configureNextcloud, startNextcloud, stopNextcloud, waitOnNextcloud } from '@nextcloud/cypress/docker'
 import { configureVisualRegression } from 'cypress-visual-regression/dist/plugin'
+import { defineConfig } from 'cypress'
 
 export default defineConfig({
 	projectId: 'okzqgr',
@@ -34,19 +30,18 @@ export default defineConfig({
 	// Visual regression testing
 	env: {
 		failSilently: false,
-		type: 'actual',
+		visualRegressionType: 'regression',
 	},
 	screenshotsFolder: 'cypress/snapshots/actual',
 	trashAssetsBeforeRuns: true,
 
 	e2e: {
+		// Disable session isolation
 		testIsolation: false,
 
 		// We've imported your old cypress plugins here.
 		// You may want to clean this up later by importing these.
 		async setupNodeEvents(on, config) {
-			// Fix browserslist extend https://github.com/cypress-io/cypress/issues/2983#issuecomment-570616682
-			on('file:preprocessor', browserify({ typescript: require.resolve('typescript') }))
 			configureVisualRegression(on)
 
 			// Disable spell checking to prevent rendering differences
@@ -69,22 +64,19 @@ export default defineConfig({
 
 			// Remove container after run
 			on('after:run', () => {
-				stopNextcloud()
+				if (!process.env.CI) {
+					stopNextcloud()
+				}
 			})
 
 			// Before the browser launches
 			// starting Nextcloud testing container
-			return startNextcloud(process.env.BRANCH)
-				.then((ip) => {
-					// Setting container's IP as base Url
-					config.baseUrl = `http://${ip}/index.php`
-					return ip
-				})
-				.then(waitOnNextcloud)
-				.then(() => configureNextcloud(process.env.BRANCH))
-				.then(() => {
-					return config
-				})
+			const ip = await startNextcloud(process.env.BRANCH || 'stable30')
+			// Setting container's IP as base Url
+			config.baseUrl = `http://${ip}/index.php`
+			await waitOnNextcloud(ip)
+			await configureNextcloud(['viewer'])
+			return config
 		},
 	},
 })
