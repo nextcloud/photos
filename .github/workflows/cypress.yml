@@ -42,7 +42,9 @@ jobs:
           exit 1
 
       - name: Checkout app
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Check composer.json
         id: check_composer
@@ -62,7 +64,7 @@ jobs:
           fallbackNpm: "^10"
 
       - name: Set up node ${{ steps.versions.outputs.nodeVersion }}
-        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
+        uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
         with:
           node-version: ${{ steps.versions.outputs.nodeVersion }}
 
@@ -75,7 +77,7 @@ jobs:
           TESTING=true npm run build --if-present
 
       - name: Save context
-        uses: buildjet/cache/save@e376f15c6ec6dc595375c78633174c7e5f92dc0e # v3
+        uses: buildjet/cache/save@v4
         with:
           key: cypress-context-${{ github.run_id }}
           path: ./
@@ -89,20 +91,20 @@ jobs:
       matrix:
         # Run multiple copies of the current job in parallel
         # Please increase the number or runners as your tests suite grows
-        containers: ['1', '2', '3']
+        containers: ['component', '1', '2', '3']
 
     name: runner ${{ matrix.containers }}
 
     steps:
       - name: Restore context
-        uses: buildjet/cache/restore@e376f15c6ec6dc595375c78633174c7e5f92dc0e # v3
+        uses: buildjet/cache/restore@v4
         with:
           fail-on-cache-miss: true
           key: cypress-context-${{ github.run_id }}
           path: ./
 
       - name: Set up node ${{ needs.init.outputs.nodeVersion }}
-        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
+        uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
         with:
           node-version: ${{ needs.init.outputs.nodeVersion }}
 
@@ -110,7 +112,7 @@ jobs:
         run: npm i -g 'npm@${{ needs.init.outputs.npmVersion }}'
 
       - name: Run ${{ matrix.containers == 'component' && 'component' || 'E2E' }} cypress tests
-        uses: cypress-io/github-action@df7484c5ba85def7eef30db301afa688187bc378 # v6.7.2
+        uses: cypress-io/github-action@57b70560982e6a11d23d4b8bec7f8a487cdbb71b # v6.7.8
         with:
           record: ${{ secrets.CYPRESS_RECORD_KEY && true }}
           parallel: ${{ secrets.CYPRESS_RECORD_KEY && true }}
@@ -133,7 +135,7 @@ jobs:
           CYPRESS_GROUP: Run ${{ matrix.containers == 'component' && 'component' || 'E2E' }}
 
       - name: Upload snapshots
-        uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4.3.6
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
         if: always()
         with:
           name: snapshots_${{ matrix.containers }}
@@ -144,7 +146,7 @@ jobs:
         run: docker logs nextcloud-cypress-tests-${{ env.APP_NAME }} > nextcloud.log
 
       - name: Upload NC logs
-        uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4.3.6
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
         if: failure() && matrix.containers != 'component'
         with:
           name: nc_logs_${{ matrix.containers }}
