@@ -11,7 +11,6 @@ SPDX-FileCopyrightText: inherits developers
 SPDX-FileCopyrightText: escape-html developers
 SPDX-FileCopyrightText: Varun A P
 SPDX-FileCopyrightText: Tobias Koppers @sokra
-SPDX-FileCopyrightText: Thiago de Arruda
 SPDX-FileCopyrightText: T. Jameson Little <t.jameson.little@gmail.com>
 SPDX-FileCopyrightText: Sindre Sorhus
 SPDX-FileCopyrightText: Roman Shtylman <shtylman@gmail.com>
@@ -105,7 +104,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 3.0.1
 	- license: GPL-3.0-or-later
 - available-typed-arrays
-	- version: 1.0.5
+	- version: 1.0.7
 	- license: MIT
 - axios
 	- version: 0.27.2
@@ -125,8 +124,14 @@ This file is generated from multiple sources. Included packages:
 - byte-length
 	- version: 1.0.2
 	- license: MIT
+- call-bind-apply-helpers
+	- version: 1.0.1
+	- license: MIT
 - call-bind
-	- version: 1.0.2
+	- version: 1.0.8
+	- license: MIT
+- call-bound
+	- version: 1.0.3
 	- license: MIT
 - camelcase
 	- version: 8.0.0
@@ -143,9 +148,24 @@ This file is generated from multiple sources. Included packages:
 - css-loader
 	- version: 6.8.1
 	- license: MIT
+- define-data-property
+	- version: 1.1.4
+	- license: MIT
 - dompurify
 	- version: 3.1.5
 	- license: (MPL-2.0 OR Apache-2.0)
+- dunder-proto
+	- version: 1.0.1
+	- license: MIT
+- es-define-property
+	- version: 1.0.1
+	- license: MIT
+- es-errors
+	- version: 1.3.0
+	- license: MIT
+- es-object-atoms
+	- version: 1.0.0
+	- license: MIT
 - escape-html
 	- version: 1.0.3
 	- license: MIT
@@ -159,25 +179,25 @@ This file is generated from multiple sources. Included packages:
 	- version: 0.3.3
 	- license: MIT
 - function-bind
-	- version: 1.1.1
+	- version: 1.1.2
 	- license: MIT
 - get-intrinsic
-	- version: 1.2.1
+	- version: 1.2.6
 	- license: MIT
 - gopd
-	- version: 1.0.1
+	- version: 1.2.0
 	- license: MIT
-- has-proto
-	- version: 1.0.1
+- has-property-descriptors
+	- version: 1.0.2
 	- license: MIT
 - has-symbols
-	- version: 1.0.3
+	- version: 1.1.0
 	- license: MIT
 - has-tostringtag
-	- version: 1.0.0
+	- version: 1.0.2
 	- license: MIT
-- has
-	- version: 1.0.3
+- hasown
+	- version: 2.0.2
 	- license: MIT
 - he
 	- version: 1.2.0
@@ -212,6 +232,9 @@ This file is generated from multiple sources. Included packages:
 - lodash.get
 	- version: 4.4.2
 	- license: MIT
+- math-intrinsics
+	- version: 1.1.0
+	- license: MIT
 - md5
 	- version: 2.3.0
 	- license: BSD-3-Clause
@@ -230,6 +253,9 @@ This file is generated from multiple sources. Included packages:
 - path-posix
 	- version: 1.0.0
 	- license: ISC
+- possible-typed-array-names
+	- version: 1.0.0
+	- license: MIT
 - process
 	- version: 0.11.10
 	- license: MIT
@@ -241,6 +267,9 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - safe-buffer
 	- version: 5.1.2
+	- license: MIT
+- set-function-length
+	- version: 1.2.2
 	- license: MIT
 - readable-stream
 	- version: 3.6.0
@@ -291,7 +320,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 4.11.3
 	- license: MIT
 - which-typed-array
-	- version: 1.1.9
+	- version: 1.1.18
 	- license: MIT
 - photos
 	- version: 4.0.0
