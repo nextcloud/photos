@@ -84,7 +84,7 @@ OC.L10N.register(
     "Upload folder" : "Enviar cartafol",
     "Choose the folder where photos and albums are uploaded to." : "Escolla o cartafol ao que se enviarán as fotos e os álbums.",
     "_%n photo_::_%n photos_" : ["%n foto","%n fotos"],
-    "Unselect all" : "Desmarcar todo",
+    "Unselect all" : "Deseleccionar todo",
     "Manage collaborators for this album" : "Xestionar os colaboradores deste álbum",
     "Open actions menu" : "Abrir o menú de accións",
     "Edit album details" : "Editar os detalles do álbum",
