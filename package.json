@@ -57,7 +57,7 @@
     "@nextcloud/vue": "^8.13.0",
     "blurhash": "^2.0.5",
     "camelcase": "^8.0.0",
-    "debounce": "^1.2.1",
+    "debounce": "^2.2.0",
     "he": "^1.2.0",
     "leaflet": "^1.9.4",
     "leaflet-defaulticon-compatibility": "^0.1.2",
