@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -42,7 +43,7 @@ class AlbumsManagementEventListener implements IEventListener {
 				foreach ($albums as $album) {
 					$this->albumMapper->removeFile($album->getId(), $event->getNode()->getId());
 				}
-			} catch(\Throwable $ex) {
+			} catch (\Throwable $ex) {
 				// If an error occur, return silently as we don't want to block the rest of the deletion process.
 				// It happened already during migrations when the albums table is not yet created, but a folder is deleted by the theming app.
 				$this->logger->error($ex->getMessage(), ['exception' => $ex]);
