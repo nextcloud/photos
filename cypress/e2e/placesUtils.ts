@@ -13,5 +13,5 @@ export function navigateToPlace(locationName: string) {
 }
 
 export function runOccCommand(command: string) {
-	cy.exec(`docker exec --user www-data nextcloud-cypress-tests-photos php ./occ ${command}`)
+	cy.exec(`docker exec --user www-data nextcloud-cypress-tests_photos php ./occ ${command}`)
 }

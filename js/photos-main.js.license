@@ -23,7 +23,6 @@ SPDX-FileCopyrightText: Varun A P
 SPDX-FileCopyrightText: Tobias Koppers @sokra
 SPDX-FileCopyrightText: Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)
 SPDX-FileCopyrightText: Thorsten Lünborg
-SPDX-FileCopyrightText: Thiago de Arruda
 SPDX-FileCopyrightText: T. Jameson Little <t.jameson.little@gmail.com>
 SPDX-FileCopyrightText: Sindre Sorhus
 SPDX-FileCopyrightText: Roman Shtylman <shtylman@gmail.com>
@@ -317,7 +316,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 10.9.0
 	- license: MIT
 - available-typed-arrays
-	- version: 1.0.5
+	- version: 1.0.7
 	- license: MIT
 - axios
 	- version: 0.27.2
@@ -340,8 +339,14 @@ This file is generated from multiple sources. Included packages:
 - byte-length
 	- version: 1.0.2
 	- license: MIT
+- call-bind-apply-helpers
+	- version: 1.0.1
+	- license: MIT
 - call-bind
-	- version: 1.0.2
+	- version: 1.0.8
+	- license: MIT
+- call-bound
+	- version: 1.0.3
 	- license: MIT
 - camelcase
 	- version: 8.0.0
@@ -376,15 +381,30 @@ This file is generated from multiple sources. Included packages:
 - decode-named-character-reference
 	- version: 1.0.2
 	- license: MIT
+- define-data-property
+	- version: 1.1.4
+	- license: MIT
 - devlop
 	- version: 1.1.0
 	- license: MIT
 - dompurify
 	- version: 3.1.5
 	- license: (MPL-2.0 OR Apache-2.0)
+- dunder-proto
+	- version: 1.0.1
+	- license: MIT
 - emoji-mart-vue-fast
 	- version: 15.0.1
 	- license: BSD-3-Clause
+- es-define-property
+	- version: 1.0.1
+	- license: MIT
+- es-errors
+	- version: 1.3.0
+	- license: MIT
+- es-object-atoms
+	- version: 1.0.0
+	- license: MIT
 - escape-html
 	- version: 1.0.3
 	- license: MIT
@@ -404,25 +424,25 @@ This file is generated from multiple sources. Included packages:
 	- version: 0.3.3
 	- license: MIT
 - function-bind
-	- version: 1.1.1
+	- version: 1.1.2
 	- license: MIT
 - get-intrinsic
-	- version: 1.2.1
+	- version: 1.2.6
 	- license: MIT
 - gopd
-	- version: 1.0.1
+	- version: 1.2.0
 	- license: MIT
-- has-proto
-	- version: 1.0.1
+- has-property-descriptors
+	- version: 1.0.2
 	- license: MIT
 - has-symbols
-	- version: 1.0.3
+	- version: 1.1.0
 	- license: MIT
 - has-tostringtag
-	- version: 1.0.0
+	- version: 1.0.2
 	- license: MIT
-- has
-	- version: 1.0.3
+- hasown
+	- version: 2.0.2
 	- license: MIT
 - hast-to-hyperscript
 	- version: 10.0.3
@@ -486,6 +506,9 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - markdown-table
 	- version: 3.0.3
+	- license: MIT
+- math-intrinsics
+	- version: 1.1.0
 	- license: MIT
 - md5
 	- version: 2.3.0
@@ -679,6 +702,9 @@ This file is generated from multiple sources. Included packages:
 - path-posix
 	- version: 1.0.0
 	- license: ISC
+- possible-typed-array-names
+	- version: 1.0.0
+	- license: MIT
 - process
 	- version: 0.11.10
 	- license: MIT
@@ -711,6 +737,9 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - safe-buffer
 	- version: 5.1.2
+	- license: MIT
+- set-function-length
+	- version: 1.2.2
 	- license: MIT
 - space-separated-tokens
 	- version: 2.0.2
@@ -818,7 +847,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 5.94.0
 	- license: MIT
 - which-typed-array
-	- version: 1.1.9
+	- version: 1.1.18
 	- license: MIT
 - zwitch
 	- version: 2.0.4
