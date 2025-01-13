@@ -128,6 +128,7 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Світлини з мітками буде показано тут",
     "Popular tags" : "Популярні мітки",
     "All tags" : "Всі мітки",
+    "One of the source folders does not exist" : "Один із каталогів призначення відсутній",
     "Add" : "Додати",
     "Add to album" : "Додати в альбом",
     "Delete selection" : "Вилучити виділення",
