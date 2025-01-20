@@ -79,7 +79,7 @@ OC.L10N.register(
     "Choose a different folder" : "Vyberte iný priečinok",
     "Select the default upload location for your media" : "Vyberte predvolené umiestnenie pre vaše médiá",
     "View" : "Prezerať",
-    "Media folders" : "Priečinky médií",
+    "Media folders" : "Adresáre médií",
     "Choose the folders from where photos and videos are shown." : "Vyberte priečinky, v ktorých sa budú zobrazovať fotografie a videá.",
     "Upload folder" : "Nahrať priečinok",
     "Choose the folder where photos and albums are uploaded to." : "Vyberte priečinok, do ktorého sa budú nahrávať fotografie a albumy.",
