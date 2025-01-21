@@ -83,7 +83,7 @@ OC.L10N.register(
     "Upload folder" : "Subir carpeta",
     "Choose the folder where photos and albums are uploaded to." : "Elija la carpeta donde se cargan las fotos y los álbumes.",
     "_%n photo_::_%n photos_" : ["%n foto","%n fotos","%n fotos"],
-    "Unselect all" : "De-seleccionar todos",
+    "Unselect all" : "Deseleccionar todos",
     "Manage collaborators for this album" : "Administrar colaboradores para este álbum",
     "Open actions menu" : "Abrir menú de acciones",
     "Edit album details" : "Editar los detalles del álbum",
