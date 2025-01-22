@@ -23,7 +23,6 @@ import {
 	addFilesToAlbumFromAlbum,
 	addFilesToAlbumFromAlbumFromHeader,
 	createAnAlbumFromAlbums,
-	deleteAnAlbumFromAlbumContent,
 	goToAlbum,
 	removeSelectionFromAlbum,
 } from './albumsUtils'
@@ -44,7 +43,7 @@ Cypress.on('uncaught:exception', (err) => {
 	}
 })
 
-describe('Manage albums', { testIsolation: true }, () => {
+describe('Manage albums', () => {
 	let user = null
 
 	beforeEach(function() {
