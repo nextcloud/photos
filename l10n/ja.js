@@ -155,10 +155,6 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "{fileId} のお気に入り状態の設定に失敗しました。",
     "Failed to set favorite state for {fileName}." : "{fileName} のお気に入り状態の設定に失敗しました。",
     "Could not load photos folder" : "写真フォルダを読み込めませんでした",
-    "Default Photos upload and Albums location" : "デフォルトの写真アップロードとアルバムの場所",
-    "Select the default location for your media" : "メディアのデフォルトの保存場所を選択する",
-    "Invalid location selected" : "選択した場所が無効",
-    "Photos directory" : "写真ディレクトリ",
     "One of the source folders does not exists" : "ソースフォルダーの1つが存在しません"
 },
 "nplurals=1; plural=0;");

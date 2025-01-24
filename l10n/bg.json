@@ -121,10 +121,6 @@
     "Failed to delete {fileId}." : "Неуспешно изтриване на {fileId}.",
     "Failed to delete {fileName}." : "Неуспешно изтриване на {fileName}.",
     "Failed to set favorite state for {fileId}." : "Неуспешно задаване на предпочитано/любимо/ състояние за {fileId}.",
-    "Failed to set favorite state for {fileName}." : "Неуспешно задаване на предпочитано/любимо/ състояние за {fileName}.",
-    "Default Photos upload and Albums location" : "Качване на снимки и местоположение на албуми по подразбиране",
-    "Select the default location for your media" : "Избор на местоположение по подразбиране за вашата медия",
-    "Invalid location selected" : "Избрано е невалидно местоположение",
-    "Photos directory" : "Директория със снимки"
+    "Failed to set favorite state for {fileName}." : "Неуспешно задаване на предпочитано/любимо/ състояние за {fileName}."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

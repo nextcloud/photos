@@ -155,10 +155,6 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "Није успело постављање стања омиљено за {fileId}.",
     "Failed to set favorite state for {fileName}." : "Није успело постављање стања омиљено за {fileName}.",
     "Could not load photos folder" : "Не може да се учита фолдер фотографија",
-    "Default Photos upload and Albums location" : "Подразумевано место за отпремање фотографија и албума",
-    "Select the default location for your media" : "Изаберите подразумевано место за своје медије",
-    "Invalid location selected" : "Изабрана је неисправна локација",
-    "Photos directory" : "Директоријум фотографија",
     "One of the source folders does not exists" : "Један од изворних фолдера не постоји"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

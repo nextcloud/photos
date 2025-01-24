@@ -155,10 +155,6 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "Det gick inte att ange favoritstatus för {fileId}.",
     "Failed to set favorite state for {fileName}." : "Det gick inte att ange favoritstatus för {fileName}.",
     "Could not load photos folder" : "Kunde inte ladda fotomappen",
-    "Default Photos upload and Albums location" : "Standardplats för album och bilder",
-    "Select the default location for your media" : "Välj standardplats för din media",
-    "Invalid location selected" : "Ogiltig plats vald",
-    "Photos directory" : "Bildmapp",
     "One of the source folders does not exists" : "En av källmapparna finns inte"
 },
 "nplurals=2; plural=(n != 1);");

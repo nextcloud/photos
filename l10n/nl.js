@@ -155,10 +155,6 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "Favorietenstatus instellen voor {fileId} mislukt.",
     "Failed to set favorite state for {fileName}." : "Favorietenstatus instellen voor {fileName} mislukt.",
     "Could not load photos folder" : "Kon de fotomap niet laden",
-    "Default Photos upload and Albums location" : "Standaardlocatie voor het uploaden van foto's en albums",
-    "Select the default location for your media" : "Selecteer de standaardlocatie voor je media",
-    "Invalid location selected" : "Ongeldige locatie geselecteerd",
-    "Photos directory" : "Map voor foto's",
     "One of the source folders does not exists" : "Een van de bronmappen bestaat niet"
 },
 "nplurals=2; plural=(n != 1);");

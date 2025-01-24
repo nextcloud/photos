@@ -153,10 +153,6 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "No se pudo establecer el estado de favorito para {fileId}.",
     "Failed to set favorite state for {fileName}." : "No se pudo establecer el estado de favorito para {fileName}.",
     "Could not load photos folder" : "No se pudo cargar la carpeta de fotos",
-    "Default Photos upload and Albums location" : "Ubicación predeterminada de carga de fotos y álbumes",
-    "Select the default location for your media" : "Seleccionar la ubicación predeterminada para los medios",
-    "Invalid location selected" : "Ubicación inválida seleccionada",
-    "Photos directory" : "Directorio de fotos",
     "One of the source folders does not exists" : "Una de las carpetas fuente no existe"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

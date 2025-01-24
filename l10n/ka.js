@@ -21,7 +21,6 @@ OC.L10N.register(
     "Unselect all" : "Unselect all",
     "Remove from favorites" : "Remove from favorites",
     "Add" : "Add",
-    "Details" : "Details",
-    "Invalid location selected" : "Invalid location selected"
+    "Details" : "Details"
 },
 "nplurals=2; plural=(n!=1);");

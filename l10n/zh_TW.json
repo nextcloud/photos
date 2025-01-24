@@ -153,10 +153,6 @@
     "Failed to set favorite state for {fileId}." : "未能為 {fileId} 設定最愛狀態。",
     "Failed to set favorite state for {fileName}." : "未能為 {fileName} 設定最愛狀態。",
     "Could not load photos folder" : "無法載入照片資料夾",
-    "Default Photos upload and Albums location" : "預設照片上傳與相簿位置",
-    "Select the default location for your media" : "選取您媒體的預設位置",
-    "Invalid location selected" : "選取無效的位置",
-    "Photos directory" : "照片目錄",
     "One of the source folders does not exists" : "其中一個來源資料夾不存在"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

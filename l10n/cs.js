@@ -155,10 +155,6 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "Nepodařilo se nastavit stav zařazení mezi oblíbené pro {fileId}.",
     "Failed to set favorite state for {fileName}." : "Nepodařil se nastavit stav zařazení mezi oblíbené pro {fileName}.",
     "Could not load photos folder" : "Nepodařilo se načíst složku s fotkami",
-    "Default Photos upload and Albums location" : "Výchozí umístění nahrávání fotek a alb",
-    "Select the default location for your media" : "Vyberte výchozí umístění pro vaše média",
-    "Invalid location selected" : "Vybráno neplatné umístění",
-    "Photos directory" : "Složka pro fotky",
     "One of the source folders does not exists" : "Jedna ze zdrojových složek neexistuje"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

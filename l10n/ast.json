@@ -150,10 +150,6 @@
     "Failed to set favorite state for {fileId}." : "Nun se pue afitar l'estáu favoritu de: {fileId}",
     "Failed to set favorite state for {fileName}." : "Nun se pue afitar l'estáu favoritu de: {fileName}",
     "Could not load photos folder" : "Nun se puen cargar la carpeta de semeyes",
-    "Default Photos upload and Albums location" : "Llocalización predeterminada de los álbumes y la xuba de semeyes",
-    "Select the default location for your media" : "Seleiciona la llocalización predeterminada pa los elementos multimedia",
-    "Invalid location selected" : "Seleicionóse una llocalización inválida",
-    "Photos directory" : "Direutoriu de datos",
     "One of the source folders does not exists" : "Nun esiste una de les carpetes d'orixe"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

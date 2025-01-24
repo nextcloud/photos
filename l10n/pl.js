@@ -152,10 +152,6 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "Nie udało się ustawić statusu ulubionego dla {fileId}.",
     "Failed to set favorite state for {fileName}." : "Nie udało się ustawić statusu ulubionego dla {fileName}.",
     "Could not load photos folder" : "Nie można wczytać katalogu ze zdjęciami",
-    "Default Photos upload and Albums location" : "Domyślna lokalizacja wysyłania zdjęć i albumów",
-    "Select the default location for your media" : "Wybierz domyślną lokalizację swoich multimediów",
-    "Invalid location selected" : "Wybrano nieprawidłową lokalizację",
-    "Photos directory" : "Katalog zdjęć",
     "One of the source folders does not exists" : "Jeden z katalogów źródłowych nie istnieje"
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");

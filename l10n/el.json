@@ -73,8 +73,6 @@
     "Failed to rename {oldName} to {faceName}." : "Απέτυχε η μετονομασία του {oldName} σε {faceName}.",
     "Failed to delete {faceName}." : "Απέτυχε η διαγραφή {faceName}.",
     "Failed to delete {fileId}." : "Απέτυχε η διαγραφή {fileId}.",
-    "Failed to delete {fileName}." : "Απέτυχε η διαγραφή {fileName}.",
-    "Select the default location for your media" : "Επιλέξτε την προεπιλεγμένη τοποθεσία για τα πολυμέσα σας",
-    "Invalid location selected" : "Επιλέχθηκε μη έγκυρη τοποθεσία"
+    "Failed to delete {fileName}." : "Απέτυχε η διαγραφή {fileName}."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
