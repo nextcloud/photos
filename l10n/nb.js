@@ -153,10 +153,6 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "Kunne ikke angi favorittstatus for {fileId}.",
     "Failed to set favorite state for {fileName}." : "Kunne ikke angi favorittstatus for {fileName}.",
     "Could not load photos folder" : "Kunne ikke laste bildemappen",
-    "Default Photos upload and Albums location" : "Standard bildeopplasting og albumplassering",
-    "Select the default location for your media" : "Velg standardplassering for mediefilene dine",
-    "Invalid location selected" : "Invalid location selected",
-    "Photos directory" : "Bildemappe",
     "One of the source folders does not exists" : "En av kildemappene finnes ikke"
 },
 "nplurals=2; plural=(n != 1);");

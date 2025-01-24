@@ -126,10 +126,6 @@
     "Failed to delete {fileId}." : "{fileId} حذف نشد.",
     "Failed to delete {fileName}." : "{fileName} حذف نشد.",
     "Failed to set favorite state for {fileId}." : "حالت دلخواه برای {fileId} تنظیم نشد.",
-    "Failed to set favorite state for {fileName}." : "تنظیم حالت دلخواه برای {fileName} انجام نشد.",
-    "Default Photos upload and Albums location" : "پیش‌فرض آپلود عکس‌ها و مکان آلبوم‌ها",
-    "Select the default location for your media" : "مکان پیش فرض را برای رسانه خود انتخاب کنید",
-    "Invalid location selected" : "مکان نامعتبر انتخاب شده است",
-    "Photos directory" : "دایرکتوری عکس ها"
+    "Failed to set favorite state for {fileName}." : "تنظیم حالت دلخواه برای {fileName} انجام نشد."
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

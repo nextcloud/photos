@@ -155,10 +155,6 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "Theip ar an staid is fearr leat a shocrú le haghaidh {fileId}.",
     "Failed to set favorite state for {fileName}." : "Theip ar an staid is fearr leat a shocrú le haghaidh {fileName}.",
     "Could not load photos folder" : "Níorbh fhéidir fillteán na ngrianghraf a lódáil",
-    "Default Photos upload and Albums location" : "Réamhshocrú uaslódála Grianghraif agus suíomh Albaim",
-    "Select the default location for your media" : "Roghnaigh an suíomh réamhshocraithe do na meáin",
-    "Invalid location selected" : "Suíomh neamhbhailí roghnaithe",
-    "Photos directory" : "Eolaire grianghraif",
     "One of the source folders does not exists" : "Níl ceann de na fillteáin foinse ann"
 },
 "nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);");

@@ -108,10 +108,6 @@
     "{title}'s face" : "{title}: obraz",
     "Details" : "Podrobnosti",
     "Failed to delete {fileId}." : "Brisanje polja {fileId} je spodletelo.",
-    "Failed to delete {fileName}." : "Brisanje datoteke {fileName} je spodletelo.",
-    "Default Photos upload and Albums location" : "Privzeto mesto albuma in odložišča",
-    "Select the default location for your media" : "Izbor privzetega mesta za predstavne datoteke",
-    "Invalid location selected" : "Izbrano je neveljavno mesto",
-    "Photos directory" : "Slikovna mapa"
+    "Failed to delete {fileName}." : "Brisanje datoteke {fileName} je spodletelo."
 },"pluralForm" :"nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);"
 }

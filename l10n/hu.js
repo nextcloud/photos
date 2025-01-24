@@ -155,10 +155,6 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "A(z) {fileId} kedvenc állapotának beállítása sikertelen.",
     "Failed to set favorite state for {fileName}." : "A(z) {fileName} kedvenc állapotának beállítása sikertelen.",
     "Could not load photos folder" : "Nem lehet a fotók könyvtárat betölteni",
-    "Default Photos upload and Albums location" : "Fényképfeltöltés és Albumok alapértelmezett helye",
-    "Select the default location for your media" : "Válassza ki a médiafájlok alapértelmezett helyét",
-    "Invalid location selected" : "Érvénytelen hely választva",
-    "Photos directory" : "Fényképek könyvtár",
     "One of the source folders does not exists" : "Az egyik forrás könyvtár nem létezik"
 },
 "nplurals=2; plural=(n != 1);");

@@ -127,10 +127,6 @@
     "Failed to delete {fileId}." : "Error al eliminar {idArchivo}.",
     "Failed to delete {fileName}." : "Error al eliminar {nombreArchivo}.",
     "Failed to set favorite state for {fileId}." : "Error al establecer el estado de favorito para {idArchivo}.",
-    "Failed to set favorite state for {fileName}." : "Error al establecer el estado de favorito para {nombreArchivo}.",
-    "Default Photos upload and Albums location" : "Ubicación predeterminada de carga de fotos y álbumes",
-    "Select the default location for your media" : "Seleccionar la ubicación predeterminada para tus medios",
-    "Invalid location selected" : "Ubicación seleccionada no válida",
-    "Photos directory" : "Directorio de fotos"
+    "Failed to set favorite state for {fileName}." : "Error al establecer el estado de favorito para {nombreArchivo}."
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
