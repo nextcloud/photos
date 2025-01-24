@@ -155,10 +155,6 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "未能為 {fileId} 設置收藏狀態。",
     "Failed to set favorite state for {fileName}." : "未能為 {fileName} 設置收藏狀態。",
     "Could not load photos folder" : "無法載入照片資料夾",
-    "Default Photos upload and Albums location" : "默認照片上傳及相簿位置",
-    "Select the default location for your media" : "選擇媒體的默認位置",
-    "Invalid location selected" : "所選的位置無效",
-    "Photos directory" : "照片目錄",
     "One of the source folders does not exists" : "其中一個來源資料夾不存在"
 },
 "nplurals=1; plural=0;");

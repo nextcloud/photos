@@ -153,10 +153,6 @@
     "Failed to set favorite state for {fileId}." : "为{field}设定收藏状态失败",
     "Failed to set favorite state for {fileName}." : "为{fileName}设定收藏状态失败",
     "Could not load photos folder" : "无法加载照片文件夹",
-    "Default Photos upload and Albums location" : "默认的照片上传与相册位置",
-    "Select the default location for your media" : "选择您媒体的默认位置",
-    "Invalid location selected" : "所选位置无效",
-    "Photos directory" : "照片目录",
     "One of the source folders does not exists" : "其中一个源文件夹不存在"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

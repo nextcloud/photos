@@ -155,10 +155,6 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "{fileId} için sık kullanılan durumu ayarlanamadı.",
     "Failed to set favorite state for {fileName}." : "{fileName} için sık kullanılan durumu ayarlanamadı.",
     "Could not load photos folder" : "Fotoğraflar klasörü yüklenemedi",
-    "Default Photos upload and Albums location" : "Varsayılan Fotoğraflar yükleme ve Albümler konumu",
-    "Select the default location for your media" : "Ortamlarınızın varsayılan konumunu seçin",
-    "Invalid location selected" : "Seçilen konum geçersiz",
-    "Photos directory" : "Fotoğraflar klasörü",
     "One of the source folders does not exists" : "Kaynak klasörlerden biri bulunamadı"
 },
 "nplurals=2; plural=(n > 1);");

@@ -155,10 +155,6 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "تعذّر تعيين حالة \"مُفضّل\" لـ {fileId}.",
     "Failed to set favorite state for {fileName}." : "تعذّر تعيين حالة \"مُفضّل\" لـ {fileName}.",
     "Could not load photos folder" : "تعذّر رفع مجلد الصِّور",
-    "Default Photos upload and Albums location" : "الموقع الافتراضي لرفع الصور و الألبومات",
-    "Select the default location for your media" : "إختر الموقع الافتراضي لوسائطك",
-    "Invalid location selected" : "الموقع المُختار غير صحيح",
-    "Photos directory" : "دليل الصور",
     "One of the source folders does not exists" : "أحد المجلدات المصدرية غير موجود"
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");

@@ -42,7 +42,6 @@ OC.L10N.register(
     "Back to tags overview" : "Atpakaļ uz birku pārskatu",
     "Add" : "Pievienot",
     "Details" : "Detaļas",
-    "Could not load photos folder" : "Nevarēja ielādēt fotoattēlu mapi",
-    "Invalid location selected" : "Ir izvēlēta nederīga atrašanās vieta "
+    "Could not load photos folder" : "Nevarēja ielādēt fotoattēlu mapi"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

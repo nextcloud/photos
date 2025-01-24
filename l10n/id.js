@@ -130,10 +130,6 @@ OC.L10N.register(
     "Failed to delete {fileId}." : "Gagal menghapus {field}.",
     "Failed to delete {fileName}." : "Gagal menghapus {fileName}.",
     "Failed to set favorite state for {fileId}." : "Gagal menetapkan keadaan favorit untuk {field}.",
-    "Failed to set favorite state for {fileName}." : "Gagal menetapkan keadaan favorit untuk {fileName}.",
-    "Default Photos upload and Albums location" : "Lokasi unggahan Foto dan Album",
-    "Select the default location for your media" : "Pilih lokasi bawaan untuk media Anda",
-    "Invalid location selected" : "Lokasi yang tidak valid dipilih",
-    "Photos directory" : "Direktori Foto"
+    "Failed to set favorite state for {fileName}." : "Gagal menetapkan keadaan favorit untuk {fileName}."
 },
 "nplurals=1; plural=0;");

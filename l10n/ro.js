@@ -23,7 +23,6 @@ OC.L10N.register(
     "Unselect all" : "Deselectează tot",
     "Remove from favorites" : "Șterge din favorite",
     "Add" : "Adaugă",
-    "Details" : "Detalii",
-    "Invalid location selected" : "Locație invalidă"
+    "Details" : "Detalii"
 },
 "nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));");
