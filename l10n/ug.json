@@ -145,10 +145,6 @@
     "Failed to set favorite state for {fileId}." : "{fileId} for ئۈچۈن ياخشى كۆرىدىغان ھالەتنى بەلگىلىيەلمىدى.",
     "Failed to set favorite state for {fileName}." : "{fileName} for ئۈچۈن ياقتۇرىدىغان ھالەتنى بەلگىلىيەلمىدى.",
     "Could not load photos folder" : "رەسىم قىسقۇچنى يۈكلىيەلمىدى",
-    "Default Photos upload and Albums location" : "سۈكۈتتىكى رەسىملەرنى يوللاش ۋە پىلاستىنكا ئورنى",
-    "Select the default location for your media" : "مېدىياڭىزنىڭ سۈكۈتتىكى ئورنىنى تاللاڭ",
-    "Invalid location selected" : "ئىناۋەتسىز ئورۇن تاللانغان",
-    "Photos directory" : "رەسىم مۇندەرىجىسى",
     "One of the source folders does not exists" : "مەنبە قىسقۇچلارنىڭ بىرى مەۋجۇت ئەمەس"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -155,10 +155,6 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "Ezin izan da ezarri gogoko egoera {fileId}(r)entzat.",
     "Failed to set favorite state for {fileName}." : "Ezin izan da ezarri gogoko egoera {fileName}(r)entzat.",
     "Could not load photos folder" : "Ezin izan da argazkien karpeta kargatu",
-    "Default Photos upload and Albums location" : "Argazkien karga eta albumen kokaleku lehenetsia",
-    "Select the default location for your media" : "Hautatu zure multimediaren kokaleku lehenetsia",
-    "Invalid location selected" : "Kokaleku baliogabea hautatu da",
-    "Photos directory" : "Argazkien direktorioa",
     "One of the source folders does not exists" : "Iturburu-karpeta bat ez da existitzen"
 },
 "nplurals=2; plural=(n != 1);");

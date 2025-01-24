@@ -155,10 +155,6 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "Failed to set favourite state for {fileId}.",
     "Failed to set favorite state for {fileName}." : "Failed to set favourite state for {fileName}.",
     "Could not load photos folder" : "Could not load photos folder",
-    "Default Photos upload and Albums location" : "Default Photos upload and Albums location",
-    "Select the default location for your media" : "Select the default location for your media",
-    "Invalid location selected" : "Invalid location selected",
-    "Photos directory" : "Photos directory",
     "One of the source folders does not exists" : "One of the source folders does not exists"
 },
 "nplurals=2; plural=(n != 1);");

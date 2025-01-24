@@ -120,10 +120,6 @@ OC.L10N.register(
     "Details" : "Üksikasjad",
     "Failed to delete {faceName}." : "{faceName} kustutamine ebaõnnestus.",
     "Failed to delete {fileId}." : "{fileId} kustutamine ebaõnnestus.",
-    "Failed to delete {fileName}." : "{fileName} kustutamine ebaõnnestus.",
-    "Default Photos upload and Albums location" : "Vaikimisi fotode üleslaadimise ja albumite asukoht",
-    "Select the default location for your media" : "Vali oma meedia vaikimisi asukoht",
-    "Invalid location selected" : "Vigane asukoht valitud",
-    "Photos directory" : "Fotode kataloog"
+    "Failed to delete {fileName}." : "{fileName} kustutamine ebaõnnestus."
 },
 "nplurals=2; plural=(n != 1);");

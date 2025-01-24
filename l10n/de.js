@@ -128,6 +128,7 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Fotos mit Tags werden hier angezeigt",
     "Popular tags" : "Beliebte Schlagwörter",
     "All tags" : "Alle Schlagworte",
+    "One of the source folders does not exist" : "Einer der Quellordner existiert nicht",
     "Add" : "Hinzufügen",
     "Add to album" : "Zum Album hinzufügen",
     "Delete selection" : "Auswahl löschen",
@@ -154,10 +155,6 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "Fehler beim Festlegen des Favoritenstatus für {fileId}.",
     "Failed to set favorite state for {fileName}." : "Fehler beim Festlegen des Favoritenstatus für {fileName}.",
     "Could not load photos folder" : "Fotos-Ordner konnte nicht geladen werden",
-    "Default Photos upload and Albums location" : "Standardspeicherort für das Hochladen von Fotos und Alben",
-    "Select the default location for your media" : "Standardspeicherort für deine Medien auswählen",
-    "Invalid location selected" : "Ungültiger Speicherort ausgewählt",
-    "Photos directory" : "Verzeichnis für Fotos",
     "One of the source folders does not exists" : "Einer der Quellordner existiert nicht"
 },
 "nplurals=2; plural=(n != 1);");

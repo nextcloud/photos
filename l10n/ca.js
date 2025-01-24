@@ -152,10 +152,6 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "No s'ha pogut establir l'estat de preferit per a {fileId}.",
     "Failed to set favorite state for {fileName}." : "No s'ha pogut establir l'estat de preferit per a {fileName}.",
     "Could not load photos folder" : "No s'ha pogut carregar la carpeta de fotos",
-    "Default Photos upload and Albums location" : "Ubicació per defecte de les pujades de fotos i els àlbums",
-    "Select the default location for your media" : "Seleccioneu la ubicació per defecte per al contingut multimèdia",
-    "Invalid location selected" : "La ubicació seleccionada no és vàlida",
-    "Photos directory" : "Carpeta de fotos",
     "One of the source folders does not exists" : "Una de les carpetes d'origen no existeix"
 },
 "nplurals=2; plural=(n != 1);");

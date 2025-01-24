@@ -57,9 +57,6 @@ OC.L10N.register(
     "_%n photos_::_%n photos_" : ["%n foto","%n fotos"],
     "Tagged photos" : "Markerede billeder",
     "Details" : "Detaljer",
-    "Failed to delete {fileName}." : "Kunne ikke slette {fileName}.",
-    "Default Photos upload and Albums location" : "Standard upload af fotos og albumplacering",
-    "Select the default location for your media" : "Vælg standardplaceringen for dine medier",
-    "Invalid location selected" : "Ugyldig placering er valgt"
+    "Failed to delete {fileName}." : "Kunne ikke slette {fileName}."
 },
 "nplurals=2; plural=(n != 1);");

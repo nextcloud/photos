@@ -153,10 +153,6 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "Не удалось отметить или снять отметку избранного с «{fileId}».",
     "Failed to set favorite state for {fileName}." : "Не удалось отметить или снять отметку избранного с «{fileId}».",
     "Could not load photos folder" : "Не удалось загрузить папку с фотографиями",
-    "Default Photos upload and Albums location" : "Расположение загружаемых на сервер фотографий и альбомов по умолчанию",
-    "Select the default location for your media" : "Выбор расположения медиафайлов по умолчанию",
-    "Invalid location selected" : "Указано недействительное расположение",
-    "Photos directory" : "Каталог с фотографиями",
     "One of the source folders does not exists" : "Одна из исходных папок не существует"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");
