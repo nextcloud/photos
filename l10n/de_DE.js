@@ -114,7 +114,7 @@ OC.L10N.register(
     "This might take some time depending on the size of your photo library." : "Dies kann je nach Größe Ihrer Fotobibliothek einige Zeit dauern.",
     "Recognized people will show up here" : "Erkannte Menschen werden hier angezeigt werden",
     "This folder does not exist" : "Dieser Ordner existiert nicht",
-    "Loading folders …" : "Ordner werden geladen...",
+    "Loading folders …" : "Ordner werden geladen …",
     "No photos in here" : "Keine Fotos vorhanden",
     "Taken on {date} at {time}" : "Aufgenommen am {date} um {time}",
     "This place does not have any photos or videos yet!" : "Dieser Ort enthält noch keine Fotos oder Videos!",
