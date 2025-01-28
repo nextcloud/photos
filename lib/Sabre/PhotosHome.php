@@ -18,6 +18,7 @@ use OCA\Photos\Service\UserConfigService;
 use OCP\Files\IRootFolder;
 use OCP\IGroupManager;
 use OCP\IUserManager;
+use Psr\Log\LoggerInterface;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\ICollection;
@@ -33,6 +34,7 @@ class PhotosHome implements ICollection {
 		private IUserManager $userManager,
 		private IGroupManager $groupManager,
 		private UserConfigService $userConfigService,
+		private LoggerInterface $logger,
 	) {
 	}
 
@@ -69,9 +71,9 @@ class PhotosHome implements ICollection {
 	public function getChild($name) {
 		switch ($name) {
 			case AlbumsHome::NAME:
-				return new AlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userConfigService);
+				return new AlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userConfigService, $this->logger);
 			case SharedAlbumsHome::NAME:
-				return new SharedAlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userManager, $this->groupManager, $this->userConfigService);
+				return new SharedAlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userManager, $this->groupManager, $this->userConfigService, $this->logger);
 			case PlacesHome::NAME:
 				return new PlacesHome($this->userId, $this->rootFolder, $this->reverseGeoCoderService, $this->placeMapper);
 		}
@@ -84,8 +86,8 @@ class PhotosHome implements ICollection {
 	 */
 	public function getChildren(): array {
 		return [
-			new AlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userConfigService),
-			new SharedAlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userManager, $this->groupManager, $this->userConfigService),
+			new AlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userConfigService, $this->logger),
+			new SharedAlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userManager, $this->groupManager, $this->userConfigService, $this->logger),
 			new PlacesHome($this->userId, $this->rootFolder, $this->reverseGeoCoderService, $this->placeMapper),
 		];
 	}
