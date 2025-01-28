@@ -38,6 +38,7 @@ SPDX-FileCopyrightText: Perry Mitchell <perry@perrymitchell.net>
 SPDX-FileCopyrightText: Paul Vorbach <paul@vorba.ch> (http://paul.vorba.ch)
 SPDX-FileCopyrightText: Paul Vorbach <paul@vorb.de> (http://vorb.de)
 SPDX-FileCopyrightText: Olivier Scherrer <pode.fr@gmail.com>
+SPDX-FileCopyrightText: Nextcloud GmbH and Nextcloud contributors
 SPDX-FileCopyrightText: Nathan Rajlich <nathan@tootallnate.net> (http://n8.io/)
 SPDX-FileCopyrightText: Matt Zabriskie
 SPDX-FileCopyrightText: Mathias Bynens
@@ -714,9 +715,6 @@ This file is generated from multiple sources. Included packages:
 - eventemitter3
 	- version: 5.0.1
 	- license: MIT
-- path-browserify
-	- version: 1.0.1
-	- license: MIT
 - path-posix
 	- version: 1.0.0
 	- license: ISC
@@ -867,6 +865,15 @@ This file is generated from multiple sources. Included packages:
 - zwitch
 	- version: 2.0.4
 	- license: MIT
-- photos
-	- version: 5.0.0-dev.0
+- inherits
+	- version: 2.0.3
+	- license: ISC
+- util
+	- version: 0.10.4
+	- license: MIT
+- path
+	- version: 0.12.7
+	- license: MIT
+- nextcloud
+	- version: 1.0.0
 	- license: AGPL-3.0-or-later
