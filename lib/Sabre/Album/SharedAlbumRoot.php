@@ -13,19 +13,19 @@ use OCA\Photos\Album\AlbumWithFiles;
 use OCA\Photos\Service\UserConfigService;
 use OCP\Files\IRootFolder;
 use OCP\IUserManager;
+use Psr\Log\LoggerInterface;
 use Sabre\DAV\Exception\Conflict;
 use Sabre\DAV\Exception\Forbidden;
 
 class SharedAlbumRoot extends AlbumRoot {
-	private IUserManager $userManager;
-
 	public function __construct(
 		AlbumMapper $albumMapper,
 		AlbumWithFiles $album,
 		IRootFolder $rootFolder,
 		string $userId,
 		UserConfigService $userConfigService,
-		IUserManager $userManager
+		LoggerInterface $logger,
+		private IUserManager $userManager,
 	) {
 		parent::__construct(
 			$albumMapper,
@@ -33,9 +33,8 @@ class SharedAlbumRoot extends AlbumRoot {
 			$rootFolder,
 			$userId,
 			$userConfigService,
+			$logger,
 		);
-
-		$this->userManager = $userManager;
 	}
 
 	/**

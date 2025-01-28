@@ -13,17 +13,12 @@ use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Album\AlbumWithFiles;
 use OCA\Photos\Service\UserConfigService;
 use OCP\Files\IRootFolder;
+use Psr\Log\LoggerInterface;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\ICollection;
 
 class AlbumsHome implements ICollection {
-	protected AlbumMapper $albumMapper;
-	protected array $principalInfo;
-	protected string $userId;
-	protected IRootFolder $rootFolder;
-	protected UserConfigService $userConfigService;
-
 	public const NAME = 'albums';
 
 	/**
@@ -32,17 +27,13 @@ class AlbumsHome implements ICollection {
 	protected ?array $children = null;
 
 	public function __construct(
-		array $principalInfo,
-		AlbumMapper $albumMapper,
-		string $userId,
-		IRootFolder $rootFolder,
-		UserConfigService $userConfigService
+		protected array $principalInfo,
+		protected AlbumMapper $albumMapper,
+		protected string $userId,
+		protected IRootFolder $rootFolder,
+		protected UserConfigService $userConfigService,
+		protected LoggerInterface $logger,
 	) {
-		$this->principalInfo = $principalInfo;
-		$this->albumMapper = $albumMapper;
-		$this->userId = $userId;
-		$this->rootFolder = $rootFolder;
-		$this->userConfigService = $userConfigService;
 	}
 
 	/**
@@ -91,7 +82,14 @@ class AlbumsHome implements ICollection {
 		if ($this->children === null) {
 			$albumInfos = $this->albumMapper->getForUser($this->userId);
 			$this->children = array_map(function (AlbumInfo $albumInfo) {
-				return new AlbumRoot($this->albumMapper, new AlbumWithFiles($albumInfo, $this->albumMapper), $this->rootFolder, $this->userId, $this->userConfigService);
+				return new AlbumRoot(
+					$this->albumMapper,
+					new AlbumWithFiles($albumInfo, $this->albumMapper),
+					$this->rootFolder,
+					$this->userId,
+					$this->userConfigService,
+					$this->logger,
+				);
 			}, $albumInfos);
 		}
 
