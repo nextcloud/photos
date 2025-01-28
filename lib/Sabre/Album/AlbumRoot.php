@@ -17,6 +17,7 @@ use OCP\Files\Folder;
 use OCP\Files\InvalidDirectoryException;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
+use Psr\Log\LoggerInterface;
 use Sabre\DAV\Exception\Conflict;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;
@@ -30,7 +31,8 @@ class AlbumRoot implements ICollection, ICopyTarget {
 		protected AlbumWithFiles $album,
 		protected IRootFolder $rootFolder,
 		protected string $userId,
-		protected UserConfigService $userConfigService
+		protected UserConfigService $userConfigService,
+		protected LoggerInterface $logger,
 	) {
 	}
 
@@ -96,6 +98,7 @@ class AlbumRoot implements ICollection, ICopyTarget {
 			\header('OC-FileId: ' . $node->getId());
 			return '"' . $node->getEtag() . '"';
 		} catch (\Exception $e) {
+			$this->logger->error('Could not create file', ['exception' => $e]);
 			throw new Forbidden('Could not create file');
 		}
 	}
