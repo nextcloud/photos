@@ -68,7 +68,6 @@ export function addFilesToAlbumFromAlbum(albumName: string, itemsIndex: number[]
 }
 
 export function addFilesToAlbumFromAlbumFromHeader(albumName: string, itemsIndex: number[]) {
-	cy.contains('New').click()
 	cy.contains('Add photos to this album').click()
 	cy.get('.photos-picker__file-list').within(() => {
 		selectMedia(itemsIndex)
