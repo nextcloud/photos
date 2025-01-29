@@ -14,12 +14,10 @@ use OCA\Photos\Service\UserConfigService;
 use OCP\Files\IRootFolder;
 use OCP\IGroupManager;
 use OCP\IUserManager;
+use Psr\Log\LoggerInterface;
 use Sabre\DAV\Exception\Forbidden;
 
 class SharedAlbumsHome extends AlbumsHome {
-	private IUserManager $userManager;
-	private IGroupManager $groupManager;
-
 	public const NAME = 'sharedalbums';
 
 	public function __construct(
@@ -27,20 +25,20 @@ class SharedAlbumsHome extends AlbumsHome {
 		AlbumMapper $albumMapper,
 		string $userId,
 		IRootFolder $rootFolder,
-		IUserManager $userManager,
-		IGroupManager $groupManager,
-		UserConfigService $userConfigService
+		private IUserManager $userManager,
+		private IGroupManager $groupManager,
+		UserConfigService $userConfigService,
+		LoggerInterface $logger,
+
 	) {
 		parent::__construct(
 			$principalInfo,
 			$albumMapper,
 			$userId,
 			$rootFolder,
-			$userConfigService
+			$userConfigService,
+			$logger,
 		);
-
-		$this->userManager = $userManager;
-		$this->groupManager = $groupManager;
 	}
 
 	/**
@@ -66,7 +64,15 @@ class SharedAlbumsHome extends AlbumsHome {
 			}
 
 			$this->children = array_map(function (AlbumWithFiles $album) {
-				return new SharedAlbumRoot($this->albumMapper, $album, $this->rootFolder, $this->userId, $this->userConfigService, $this->userManager);
+				return new SharedAlbumRoot(
+					$this->albumMapper,
+					$album,
+					$this->rootFolder,
+					$this->userId,
+					$this->userConfigService,
+					$this->logger,
+					$this->userManager,
+				);
 			}, $albums);
 		}
 

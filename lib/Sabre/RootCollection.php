@@ -16,6 +16,7 @@ use OCP\Files\IRootFolder;
 use OCP\IGroupManager;
 use OCP\IUserManager;
 use OCP\IUserSession;
+use Psr\Log\LoggerInterface;
 use Sabre\DAVACL\AbstractPrincipalCollection;
 use Sabre\DAVACL\PrincipalBackend;
 
@@ -30,6 +31,7 @@ class RootCollection extends AbstractPrincipalCollection {
 		private IUserManager $userManager,
 		private IGroupManager $groupManager,
 		private UserConfigService $userConfigService,
+		private LoggerInterface $logger,
 	) {
 		parent::__construct($principalBackend, 'principals/users');
 	}
@@ -49,7 +51,7 @@ class RootCollection extends AbstractPrincipalCollection {
 		if (is_null($user) || $name !== $user->getUID()) {
 			throw new \Sabre\DAV\Exception\Forbidden();
 		}
-		return new PhotosHome($principalInfo, $this->albumMapper, $this->placeMapper, $this->reverseGeoCoderService, $name, $this->rootFolder, $this->userManager, $this->groupManager, $this->userConfigService);
+		return new PhotosHome($principalInfo, $this->albumMapper, $this->placeMapper, $this->reverseGeoCoderService, $name, $this->rootFolder, $this->userManager, $this->groupManager, $this->userConfigService, $this->logger);
 	}
 
 	public function getName(): string {
