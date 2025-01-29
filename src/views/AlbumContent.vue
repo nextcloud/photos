@@ -32,13 +32,14 @@
 			<HeaderNavigation key="navigation"
 				slot="header"
 				slot-scope="{selectedFileIds, resetSelection}"
-				:class="{'photos-navigation--uploading': uploader.queue?.length > 0}"
 				:loading="loadingFiles"
 				:params="{ albumName }"
 				:path="'/' + albumName"
 				:title="albumName"
 				@refresh="fetchAlbumContent">
-				<div v-if="album.location !== ''" slot="subtitle" class="album__location">
+				<div v-if="album.location !== ''"
+					slot="subtitle"
+					class="album__location">
 					<MapMarker />{{ album.location }}
 				</div>
 
@@ -54,13 +55,12 @@
 				</template>
 
 				<template v-if="album !== undefined" slot="right">
-					<UploadPicker v-if="album.nbItems !== 0"
-						:accept="allowedMimes"
-						:context="uploadContext"
-						:destination="album.basename"
-						:root="uploadContext.root"
-						:multiple="true"
-						@uploaded="onUpload" />
+					<NcButton @click="showAddPhotosModal = true">
+						<template #icon>
+							<Plus :size="20" />
+						</template>
+						{{ t('photos', 'Add photos to this album' ) }}
+					</NcButton>
 
 					<NcButton v-if="sharingEnabled"
 						type="tertiary"
@@ -166,12 +166,9 @@
 </template>
 
 <script>
-import { addNewFileMenuEntry, removeNewFileMenuEntry } from '@nextcloud/files'
 import { getCurrentUser } from '@nextcloud/auth'
 import { mapActions, mapGetters } from 'vuex'
 import { NcActions, NcActionButton, NcButton, NcModal, NcEmptyContent, NcActionSeparator, NcLoadingIcon, isMobile } from '@nextcloud/vue'
-import { UploadPicker, getUploader } from '@nextcloud/upload'
-import debounce from 'debounce'
 
 import Close from 'vue-material-design-icons/Close.vue'
 import Delete from 'vue-material-design-icons/Delete.vue'
@@ -181,7 +178,6 @@ import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import Pencil from 'vue-material-design-icons/Pencil.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
-import PlusSvg from '@mdi/svg/svg/plus.svg'
 import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
 
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
@@ -198,7 +194,6 @@ import FilesPicker from '../components/FilesPicker.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 
 import { genFileInfo } from '../utils/fileUtils.js'
-import allowedMimes from '../services/AllowedMimes.js'
 import client from '../services/DavClient.js'
 import DavRequest from '../services/DavRequest.js'
 import logger from '../services/logger.js'
@@ -229,7 +224,6 @@ export default {
 		Pencil,
 		Plus,
 		ShareVariant,
-		UploadPicker,
 	},
 
 	mixins: [
@@ -249,26 +243,11 @@ export default {
 
 	data() {
 		return {
-			allowedMimes,
-
 			showAddPhotosModal: false,
 			showManageCollaboratorView: false,
 			showEditAlbumForm: false,
 
 			loadingAddCollaborators: false,
-
-			uploader: getUploader(),
-
-			newFileMenuEntry: {
-				id: 'album-add',
-				displayName: t('photos', 'Add photos to this album'),
-				templateName: '',
-				if: (context) => context.route === this.$route.name,
-				/** Existing icon css class */
-				iconSvgInline: PlusSvg,
-				/** Function to be run after creation */
-				handler: () => { this.showAddPhotosModal = true },
-			},
 		}
 	},
 
@@ -297,20 +276,6 @@ export default {
 		sharingEnabled() {
 			return OC.Share !== undefined
 		},
-
-		/**
-		 * The upload picker context
-		 * We're uploading to the album folder, and the backend handle
-		 * the writing to the default location as well as the album update.
-		 * The context is also used for the NewFileMenu.
-		 */
-		uploadContext() {
-			return {
-				...this.album,
-				route: this.$route.name,
-				root: `dav/photos/${getCurrentUser()?.uid}/albums`,
-			}
-		},
 	},
 
 	watch: {
@@ -323,11 +288,6 @@ export default {
 
 	mounted() {
 		this.fetchAlbumContent()
-		addNewFileMenuEntry(this.newFileMenuEntry)
-	},
-
-	destroyed() {
-		removeNewFileMenuEntry(this.newFileMenuEntry)
 	},
 
 	methods: {
@@ -431,15 +391,6 @@ export default {
 				this.loadingAddCollaborators = false
 			}
 		},
-
-		/**
-		 * A new File has been uploaded, let's add it
-		 *
-		 * @param {Upload[]} uploads
-		 */
-		onUpload: debounce(function() {
-			this.fetchAlbumContent()
-		}, 500),
 	},
 }
 </script>
@@ -459,28 +410,6 @@ export default {
 		margin-left: -4px;
 		display: flex;
 		color: var(--color-text-lighter);
-	}
-}
-
-.photos-navigation {
-	position: relative;
-	// Add space at the bottom for the progress bar.
-	&--uploading {
-		margin-bottom: 30px;
-	}
-}
-
-:deep(.upload-picker) {
-	.upload-picker__progress {
-		position: absolute;
-		bottom: -30px;
-		left: 64px;
-		margin: 0;
-	}
-	.upload-picker__cancel {
-		position: absolute;
-		bottom: -24px;
-		right: 50px;
 	}
 }
 </style>
