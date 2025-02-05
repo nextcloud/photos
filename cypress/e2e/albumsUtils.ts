@@ -6,7 +6,6 @@
 import { selectMedia } from './photosUtils'
 
 export function createAnAlbumFromTimeline(albumName: string) {
-	cy.contains('Add').click()
 	cy.contains('Create new album').click()
 	cy.get('form [name="name"]').type(albumName)
 	cy.contains('Create album').click()

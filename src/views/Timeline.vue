@@ -25,22 +25,15 @@
 			@refresh="resetFetchFilesState">
 			<div class="timeline__header__left">
 				<!-- TODO: UploadPicker -->
-				<NcActions v-if="selectedFileIds.length === 0"
-					ref="addActions"
-					:force-menu="true"
-					:menu-name="t('photos', 'Add')">
+				<NcButton v-if="selectedFileIds.length === 0"
+					ref="newAlbumButton"
+					:aria-label="t('photos', 'Create new album')"
+					@click="showAlbumCreationForm = true">
+					{{ t('photos', 'Create new album') }}
 					<template #icon>
-						<Plus />
+						<PlusBoxMultiple />
 					</template>
-					<NcActionButton :close-after-click="true"
-						:aria-label="t('photos', 'Create new album')"
-						@click="showAlbumCreationForm = true">
-						{{ t('photos', 'Create new album') }}
-						<template #icon>
-							<PlusBoxMultiple />
-						</template>
-					</NcActionButton>
-				</NcActions>
+				</NcButton>
 
 				<template v-else>
 					<NcButton :close-after-click="true"
@@ -114,7 +107,7 @@
 
 		<NcModal v-if="showAlbumCreationForm"
 			key="albumCreationForm"
-			:set-return-focus="$refs.addActions?.$refs.menuButton?.$el"
+			:set-return-focus="$refs.newAlbumButton?.$el"
 			@close="showAlbumCreationForm = false">
 			<h2 class="timeline__heading">
 				{{ t('photos', 'New album') }}
