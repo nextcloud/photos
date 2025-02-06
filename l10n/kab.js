@@ -10,7 +10,7 @@ OC.L10N.register(
     "Favorite" : "Menyif",
     "Home" : "Asnubeg",
     "Remove from favorites" : "Kkes-it seg ismal",
-    "Add" : "Rnu",
-    "Details" : "Talqayt"
+    "Details" : "Talqayt",
+    "Add" : "Rnu"
 },
 "nplurals=2; plural=(n != 1);");

@@ -21,8 +21,8 @@ OC.L10N.register(
     "Home" : "Hejmo",
     "View" : "Vidi",
     "Remove from favorites" : "Forigi el pliŝataĵoj",
-    "Add" : "Aldoni",
     "Delete selection" : "Forigi elekton",
-    "Details" : "Detaloj"
+    "Details" : "Detaloj",
+    "Add" : "Aldoni"
 },
 "nplurals=2; plural=(n != 1);");

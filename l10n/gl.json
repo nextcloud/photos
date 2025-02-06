@@ -127,7 +127,6 @@
     "Popular tags" : "Etiquetas populares",
     "All tags" : "Todas as etiquetas",
     "One of the source folders does not exist" : "Un dos cartafoles de orixe non existe",
-    "Add" : "Engadir",
     "Add to album" : "Engadir ao álbum",
     "Delete selection" : "Eliminar a selección",
     "No photos or videos in here" : "Aquí non hai fotos nin vídeos",
@@ -153,6 +152,7 @@
     "Failed to set favorite state for {fileId}." : "Non foi posíbel definir o estado de favorito para {fileId}.",
     "Failed to set favorite state for {fileName}." : "Non foi posíbel definir o estado de favorito para {fileName}.",
     "Could not load photos folder" : "Non foi posíbel cargar o cartafol de fotos",
-    "One of the source folders does not exists" : "Un dos cartafoles de orixe non existe"
+    "One of the source folders does not exists" : "Un dos cartafoles de orixe non existe",
+    "Add" : "Engadir"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

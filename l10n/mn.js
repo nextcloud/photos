@@ -14,7 +14,7 @@ OC.L10N.register(
     "Go back" : "Буцах",
     "Home" : "Нүүр",
     "Remove from favorites" : "Remove from favorites",
-    "Add" : "нэмэх",
-    "Details" : "Дэлгэрэнгүй"
+    "Details" : "Дэлгэрэнгүй",
+    "Add" : "нэмэх"
 },
 "nplurals=2; plural=(n != 1);");

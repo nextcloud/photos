@@ -20,7 +20,7 @@ OC.L10N.register(
     "View" : "View",
     "Unselect all" : "Unselect all",
     "Remove from favorites" : "Remove from favorites",
-    "Add" : "Add",
-    "Details" : "Details"
+    "Details" : "Details",
+    "Add" : "Add"
 },
 "nplurals=2; plural=(n!=1);");

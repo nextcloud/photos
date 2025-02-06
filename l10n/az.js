@@ -12,7 +12,7 @@ OC.L10N.register(
     "Favorite" : "İstəkli",
     "Home" : "Ev",
     "Remove from favorites" : "Remove from favorites",
-    "Add" : "Əlavə etmək",
-    "Details" : "Detallar"
+    "Details" : "Detallar",
+    "Add" : "Əlavə etmək"
 },
 "nplurals=2; plural=(n != 1);");

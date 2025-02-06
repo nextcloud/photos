@@ -126,7 +126,6 @@ OC.L10N.register(
     "No tags yet" : "Encara no hi ha cap etiqueta",
     "Photos with tags will show up here" : "Les fotos amb etiquetes es mostraran aquí",
     "Popular tags" : "Etiquetes populars",
-    "Add" : "Afegeix",
     "Add to album" : "Afegeix a un àlbum",
     "Delete selection" : "Suprimeix la selecció",
     "No photos or videos in here" : "No hi ha cap foto ni vídeo aquí",
@@ -152,6 +151,7 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "No s'ha pogut establir l'estat de preferit per a {fileId}.",
     "Failed to set favorite state for {fileName}." : "No s'ha pogut establir l'estat de preferit per a {fileName}.",
     "Could not load photos folder" : "No s'ha pogut carregar la carpeta de fotos",
-    "One of the source folders does not exists" : "Una de les carpetes d'origen no existeix"
+    "One of the source folders does not exists" : "Una de les carpetes d'origen no existeix",
+    "Add" : "Afegeix"
 },
 "nplurals=2; plural=(n != 1);");

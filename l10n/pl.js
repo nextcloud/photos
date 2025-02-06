@@ -126,7 +126,6 @@ OC.L10N.register(
     "No tags yet" : "Brak etykiet",
     "Photos with tags will show up here" : "Zdjęcia z etykietami pojawią się tutaj",
     "Popular tags" : "Popularne etykiety",
-    "Add" : "Dodaj",
     "Add to album" : "Dodaj do albumu",
     "Delete selection" : "Usuń wybrane",
     "No photos or videos in here" : "Nie ma tu zdjęć ani filmów",
@@ -152,6 +151,7 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "Nie udało się ustawić statusu ulubionego dla {fileId}.",
     "Failed to set favorite state for {fileName}." : "Nie udało się ustawić statusu ulubionego dla {fileName}.",
     "Could not load photos folder" : "Nie można wczytać katalogu ze zdjęciami",
-    "One of the source folders does not exists" : "Jeden z katalogów źródłowych nie istnieje"
+    "One of the source folders does not exists" : "Jeden z katalogów źródłowych nie istnieje",
+    "Add" : "Dodaj"
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");

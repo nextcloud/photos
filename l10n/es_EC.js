@@ -106,7 +106,6 @@ OC.L10N.register(
     "No tags yet" : "Aún no hay etiquetas",
     "Photos with tags will show up here" : "Aquí aparecerán las fotos con etiquetas",
     "Popular tags" : "Etiquetas populares",
-    "Add" : "Agregar",
     "Add to album" : "Agregar al álbum",
     "Delete selection" : "Eliminar selección",
     "No photos or videos in here" : "No hay fotos o videos aquí",
@@ -129,6 +128,7 @@ OC.L10N.register(
     "Failed to delete {fileId}." : "Error al eliminar {idArchivo}.",
     "Failed to delete {fileName}." : "Error al eliminar {nombreArchivo}.",
     "Failed to set favorite state for {fileId}." : "Error al establecer el estado de favorito para {idArchivo}.",
-    "Failed to set favorite state for {fileName}." : "Error al establecer el estado de favorito para {nombreArchivo}."
+    "Failed to set favorite state for {fileName}." : "Error al establecer el estado de favorito para {nombreArchivo}.",
+    "Add" : "Agregar"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

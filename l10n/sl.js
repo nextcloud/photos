@@ -93,7 +93,6 @@ OC.L10N.register(
     "No tags yet" : "Ni še dodane nobene oznake",
     "Photos with tags will show up here" : "Na tem mestu bodo prikazane fotografije z oznakami.",
     "Popular tags" : "Priljubljene oznake",
-    "Add" : "Dodaj",
     "Add to album" : "Dodaj album",
     "Delete selection" : "Izbriši izbor",
     "No photos or videos in here" : "Ni še nobenih slik in posnetkov",
@@ -110,6 +109,7 @@ OC.L10N.register(
     "{title}'s face" : "{title}: obraz",
     "Details" : "Podrobnosti",
     "Failed to delete {fileId}." : "Brisanje polja {fileId} je spodletelo.",
-    "Failed to delete {fileName}." : "Brisanje datoteke {fileName} je spodletelo."
+    "Failed to delete {fileName}." : "Brisanje datoteke {fileName} je spodletelo.",
+    "Add" : "Dodaj"
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");

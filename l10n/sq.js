@@ -16,7 +16,7 @@ OC.L10N.register(
     "Home" : "Kryefaqja",
     "View" : "Shiko",
     "Remove from favorites" : "Remove from favorites",
-    "Add" : "Shto",
-    "Details" : "Detajet"
+    "Details" : "Detajet",
+    "Add" : "Shto"
 },
 "nplurals=2; plural=(n != 1);");

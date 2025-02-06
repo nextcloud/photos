@@ -32,8 +32,8 @@ OC.L10N.register(
     "No photos in here" : "Không có ảnh nào trong này",
     "No tags yet" : "Chưa gắn nhãn",
     "Photos with tags will show up here" : "Ảnh đã gắn nhãn sẽ được cho thấy trên này",
-    "Add" : "Thêm",
     "Tagged photos" : "Ảnh gắn nhãn",
-    "Details" : "Chi tiết"
+    "Details" : "Chi tiết",
+    "Add" : "Thêm"
 },
 "nplurals=1; plural=0;");

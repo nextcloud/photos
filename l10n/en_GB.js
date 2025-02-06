@@ -129,7 +129,6 @@ OC.L10N.register(
     "Popular tags" : "Popular tags",
     "All tags" : "All tags",
     "One of the source folders does not exist" : "One of the source folders does not exist",
-    "Add" : "Add",
     "Add to album" : "Add to album",
     "Delete selection" : "Delete selection",
     "No photos or videos in here" : "No photos or videos in here",
@@ -155,6 +154,7 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "Failed to set favourite state for {fileId}.",
     "Failed to set favorite state for {fileName}." : "Failed to set favourite state for {fileName}.",
     "Could not load photos folder" : "Could not load photos folder",
-    "One of the source folders does not exists" : "One of the source folders does not exists"
+    "One of the source folders does not exists" : "One of the source folders does not exists",
+    "Add" : "Add"
 },
 "nplurals=2; plural=(n != 1);");

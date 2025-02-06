@@ -44,8 +44,8 @@ OC.L10N.register(
     "No photos in here" : "ไม่มีรูปภาพที่นี่",
     "No tags yet" : "ยังไม่มีแท็ก",
     "Photos with tags will show up here" : "รูปภาพที่ติดแท็กจะแสดงที่นี่",
-    "Add" : "เพิ่ม",
     "Tagged photos" : "รูปภาพที่ติดแท็ก",
-    "Details" : "รายละเอียด"
+    "Details" : "รายละเอียด",
+    "Add" : "เพิ่ม"
 },
 "nplurals=1; plural=0;");

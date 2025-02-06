@@ -129,7 +129,6 @@ OC.L10N.register(
     "Popular tags" : "Etiketa ohikoak",
     "All tags" : "Etiketa guztiak",
     "One of the source folders does not exist" : "Iturburu-karpeta bat ez da existitzen",
-    "Add" : "Gehitu",
     "Add to album" : "Gehitu albumera",
     "Delete selection" : "Ezabatu hautatutakoak",
     "No photos or videos in here" : "Ez dago argazki edo bideorik hemen",
@@ -155,6 +154,7 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "Ezin izan da ezarri gogoko egoera {fileId}(r)entzat.",
     "Failed to set favorite state for {fileName}." : "Ezin izan da ezarri gogoko egoera {fileName}(r)entzat.",
     "Could not load photos folder" : "Ezin izan da argazkien karpeta kargatu",
-    "One of the source folders does not exists" : "Iturburu-karpeta bat ez da existitzen"
+    "One of the source folders does not exists" : "Iturburu-karpeta bat ez da existitzen",
+    "Add" : "Gehitu"
 },
 "nplurals=2; plural=(n != 1);");

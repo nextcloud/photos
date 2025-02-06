@@ -13,7 +13,7 @@ OC.L10N.register(
     "Go back" : "Zeréckgoen",
     "Home" : "Doheem",
     "Remove from favorites" : "Remove from favorites",
-    "Add" : "Derbäimaachen",
-    "Details" : "Detailer"
+    "Details" : "Detailer",
+    "Add" : "Derbäimaachen"
 },
 "nplurals=2; plural=(n != 1);");

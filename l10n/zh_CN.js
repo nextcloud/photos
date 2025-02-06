@@ -129,7 +129,6 @@ OC.L10N.register(
     "Popular tags" : "常用标签",
     "All tags" : "所有标签",
     "One of the source folders does not exist" : "其中一个源文件夹不存在",
-    "Add" : "添加",
     "Add to album" : "添加至相册",
     "Delete selection" : "删除选择项",
     "No photos or videos in here" : "此处没有图片或视频",
@@ -155,6 +154,7 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "为{field}设定收藏状态失败",
     "Failed to set favorite state for {fileName}." : "为{fileName}设定收藏状态失败",
     "Could not load photos folder" : "无法加载照片文件夹",
-    "One of the source folders does not exists" : "其中一个源文件夹不存在"
+    "One of the source folders does not exists" : "其中一个源文件夹不存在",
+    "Add" : "添加"
 },
 "nplurals=1; plural=0;");
