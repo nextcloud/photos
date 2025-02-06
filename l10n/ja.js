@@ -129,7 +129,6 @@ OC.L10N.register(
     "Popular tags" : "人気のタグ",
     "All tags" : "全てのタグ",
     "One of the source folders does not exist" : "ソースフォルダーの1つが存在しません",
-    "Add" : "追加",
     "Add to album" : "アルバムに追加",
     "Delete selection" : "選択した項目を削除",
     "No photos or videos in here" : "ここには写真も動画もありません",
@@ -155,6 +154,7 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "{fileId} のお気に入り状態の設定に失敗しました。",
     "Failed to set favorite state for {fileName}." : "{fileName} のお気に入り状態の設定に失敗しました。",
     "Could not load photos folder" : "写真フォルダを読み込めませんでした",
-    "One of the source folders does not exists" : "ソースフォルダーの1つが存在しません"
+    "One of the source folders does not exists" : "ソースフォルダーの1つが存在しません",
+    "Add" : "追加"
 },
 "nplurals=1; plural=0;");

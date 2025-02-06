@@ -11,7 +11,7 @@ OC.L10N.register(
     "Favorite" : "விருப்பமான",
     "Home" : "அகம்",
     "Remove from favorites" : "Remove from favorites",
-    "Add" : "சேர்க்க",
-    "Details" : "விவரங்கள்"
+    "Details" : "விவரங்கள்",
+    "Add" : "சேர்க்க"
 },
 "nplurals=2; plural=(n != 1);");

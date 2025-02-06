@@ -52,11 +52,11 @@ OC.L10N.register(
     "No photos in here" : "Ingen billeder her",
     "No tags yet" : "Ingen tags endnu",
     "Photos with tags will show up here" : "Billeder med tags vil vise sig her",
-    "Add" : "Tilføj",
     "Delete selection" : "Slet valgte",
     "_%n photos_::_%n photos_" : ["%n foto","%n fotos"],
     "Tagged photos" : "Markerede billeder",
     "Details" : "Detaljer",
-    "Failed to delete {fileName}." : "Kunne ikke slette {fileName}."
+    "Failed to delete {fileName}." : "Kunne ikke slette {fileName}.",
+    "Add" : "Tilføj"
 },
 "nplurals=2; plural=(n != 1);");

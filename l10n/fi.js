@@ -123,7 +123,6 @@ OC.L10N.register(
     "No tags yet" : "Ei vielä tunnisteita",
     "Photos with tags will show up here" : "Tunnisteilla varustetut kuvat näkyvät täällä",
     "Popular tags" : "Suositut tunnisteet",
-    "Add" : "Lisää",
     "Add to album" : "Lisää albumiin",
     "Delete selection" : "Poista valinta",
     "No photos or videos in here" : "Ei kuvia tai videoita",
@@ -148,6 +147,7 @@ OC.L10N.register(
     "Failed to delete {fileName}." : "Tiedoston {fileName} poisto epäonnistui.",
     "Failed to set favorite state for {fileId}." : "Suosikkimääritelmän asettaminen kohteelle {fileId} epäonnistui.",
     "Failed to set favorite state for {fileName}." : "Suosikkimääritelmän asettaminen kohteelle {fileName} epäonnistui.",
-    "One of the source folders does not exists" : "Yksi lähdekansioista ei ole olemassa"
+    "One of the source folders does not exists" : "Yksi lähdekansioista ei ole olemassa",
+    "Add" : "Lisää"
 },
 "nplurals=2; plural=(n != 1);");

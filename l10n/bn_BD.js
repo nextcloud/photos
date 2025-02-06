@@ -13,7 +13,7 @@ OC.L10N.register(
     "Go back" : "ফিরে যাও",
     "Home" : "বাড়ি",
     "Remove from favorites" : "Remove from favorites",
-    "Add" : "যোগ করুন",
-    "Details" : "বিসতারিত"
+    "Details" : "বিসতারিত",
+    "Add" : "যোগ করুন"
 },
 "nplurals=2; plural=(n != 1);");

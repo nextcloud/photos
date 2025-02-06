@@ -9,7 +9,7 @@ OC.L10N.register(
     "Save" : "Save",
     "Favorite" : "Favorite",
     "Home" : "Home",
-    "Add" : "Add",
-    "Details" : "Details"
+    "Details" : "Details",
+    "Add" : "Add"
 },
 "nplurals=1; plural=0;");

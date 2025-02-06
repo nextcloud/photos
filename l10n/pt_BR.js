@@ -129,7 +129,6 @@ OC.L10N.register(
     "Popular tags" : "Etiquetas populares",
     "All tags" : "Todas as etiquetas",
     "One of the source folders does not exist" : "Um dos arquivos da fonte não existe",
-    "Add" : "Adicionar",
     "Add to album" : "Adicionar a álbum",
     "Delete selection" : "Excluir seleção",
     "No photos or videos in here" : "Não há fotos ou vídeos aqui",
@@ -155,6 +154,7 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "Falha ao definir o estado de favorito para {fileId}.",
     "Failed to set favorite state for {fileName}." : "Falha ao definir o estado de favorito para {fileName}.",
     "Could not load photos folder" : "Não foi possível carregar a pasta de fotos",
-    "One of the source folders does not exists" : "Uma das pastas de origem não existe"
+    "One of the source folders does not exists" : "Uma das pastas de origem não existe",
+    "Add" : "Adicionar"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

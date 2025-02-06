@@ -129,7 +129,6 @@ OC.L10N.register(
     "Popular tags" : "Vinsæl merki",
     "All tags" : "Öll merki",
     "One of the source folders does not exist" : "Ein af upprunamöppunum er ekki til",
-    "Add" : "Bæta við",
     "Add to album" : "Bæta í albúm",
     "Delete selection" : "Eyða vali",
     "No photos or videos in here" : "Engar ljósmyndir eða myndskeið hér",
@@ -155,6 +154,7 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "Mistókst að setja stöðu sem eftirlæti fyrir {fileId}.",
     "Failed to set favorite state for {fileName}." : "Mistókst að setja stöðu sem eftirlæti fyrir {fileName}.",
     "Could not load photos folder" : "Gat ekki að hlaðið inn ljósmyndamöppunni",
-    "One of the source folders does not exists" : "Ein af upprunamöppunum er ekki til"
+    "One of the source folders does not exists" : "Ein af upprunamöppunum er ekki til",
+    "Add" : "Bæta við"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

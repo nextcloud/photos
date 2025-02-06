@@ -40,8 +40,8 @@ OC.L10N.register(
     "Remove from favorites" : "Noņemt no izlases",
     "Remove person" : "Noņemt personu",
     "Back to tags overview" : "Atpakaļ uz birku pārskatu",
-    "Add" : "Pievienot",
     "Details" : "Detaļas",
-    "Could not load photos folder" : "Nevarēja ielādēt fotoattēlu mapi"
+    "Could not load photos folder" : "Nevarēja ielādēt fotoattēlu mapi",
+    "Add" : "Pievienot"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

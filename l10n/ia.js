@@ -14,7 +14,7 @@ OC.L10N.register(
     "Home" : "Initio",
     "View" : "Vider",
     "Remove from favorites" : "Remove from favorites",
-    "Add" : "Adder",
-    "Details" : "Detalios"
+    "Details" : "Detalios",
+    "Add" : "Adder"
 },
 "nplurals=2; plural=(n != 1);");

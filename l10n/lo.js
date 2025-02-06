@@ -11,7 +11,7 @@ OC.L10N.register(
     "Favorite" : "ລາຍການທີ່ມັກ",
     "Home" : "ໜ້າຫຼັກ",
     "Remove from favorites" : "ຍ້າຍຈາກລາຍການທີ່ມັກ",
-    "Add" : "ເພີ່ມ",
-    "Details" : "ລາຍລະອຽດ"
+    "Details" : "ລາຍລະອຽດ",
+    "Add" : "ເພີ່ມ"
 },
 "nplurals=1; plural=0;");

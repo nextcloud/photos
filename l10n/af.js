@@ -18,7 +18,7 @@ OC.L10N.register(
     "Home" : "Tuis",
     "View" : "Bekyk",
     "Remove from favorites" : "Verwyder uit gunstelinge",
-    "Add" : "Voeg by",
-    "Details" : "Besonderhede"
+    "Details" : "Besonderhede",
+    "Add" : "Voeg by"
 },
 "nplurals=2; plural=(n != 1);");

@@ -8,7 +8,7 @@ OC.L10N.register(
     "Group" : "Խումբ",
     "Home" : "Սկիզբ",
     "Remove from favorites" : "Remove from favorites",
-    "Add" : "Ավելացնել",
-    "Details" : "Մանրամասներ"
+    "Details" : "Մանրամասներ",
+    "Add" : "Ավելացնել"
 },
 "nplurals=2; plural=(n != 1);");

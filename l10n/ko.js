@@ -53,11 +53,11 @@ OC.L10N.register(
     "Merge with different person" : "다른 사람에게 병합",
     "Remove from favorites" : "즐겨찾기에서 제거",
     "Remove person" : "사람 제거",
-    "Add" : "추가",
     "Add to album" : "앨범에 추가",
     "Delete selection" : "선택 항목 삭제",
     "Unassigned faces" : "지정되지 않은 얼굴",
     "Details" : "세부사항",
-    "Failed to delete {fileName}." : "{fileName}(을)를 삭제하지 못했습니다."
+    "Failed to delete {fileName}." : "{fileName}(을)를 삭제하지 못했습니다.",
+    "Add" : "추가"
 },
 "nplurals=1; plural=0;");

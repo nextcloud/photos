@@ -129,7 +129,6 @@ OC.L10N.register(
     "Popular tags" : "Oblíbené štítky",
     "All tags" : "Všechny štítky",
     "One of the source folders does not exist" : "Jedna ze zdrojových složek neexistuje",
-    "Add" : "Přidat",
     "Add to album" : "Přidat do alba",
     "Delete selection" : "Smazat výběr",
     "No photos or videos in here" : "Nenacházejí se zde žádné fotky nebo videa",
@@ -155,6 +154,7 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "Nepodařilo se nastavit stav zařazení mezi oblíbené pro {fileId}.",
     "Failed to set favorite state for {fileName}." : "Nepodařil se nastavit stav zařazení mezi oblíbené pro {fileName}.",
     "Could not load photos folder" : "Nepodařilo se načíst složku s fotkami",
-    "One of the source folders does not exists" : "Jedna ze zdrojových složek neexistuje"
+    "One of the source folders does not exists" : "Jedna ze zdrojových složek neexistuje",
+    "Add" : "Přidat"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");
