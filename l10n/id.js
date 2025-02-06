@@ -106,7 +106,6 @@ OC.L10N.register(
     "No tags yet" : "Belum ada tag",
     "Photos with tags will show up here" : "Foto dengan tag akan muncul di sini",
     "Popular tags" : "Tag populer",
-    "Add" : "Masukkan",
     "Add to album" : "Tambahkan album",
     "Delete selection" : "Hapus pilihan",
     "No photos or videos in here" : "Tidak ada foto atau video di sini",
@@ -130,6 +129,7 @@ OC.L10N.register(
     "Failed to delete {fileId}." : "Gagal menghapus {field}.",
     "Failed to delete {fileName}." : "Gagal menghapus {fileName}.",
     "Failed to set favorite state for {fileId}." : "Gagal menetapkan keadaan favorit untuk {field}.",
-    "Failed to set favorite state for {fileName}." : "Gagal menetapkan keadaan favorit untuk {fileName}."
+    "Failed to set favorite state for {fileName}." : "Gagal menetapkan keadaan favorit untuk {fileName}.",
+    "Add" : "Masukkan"
 },
 "nplurals=1; plural=0;");

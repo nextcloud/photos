@@ -15,7 +15,7 @@ OC.L10N.register(
     "Dates" : "თარიღები",
     "Home" : "სახლი",
     "Remove from favorites" : "რჩეულებიდან ამოშლა",
-    "Add" : "დამატება",
-    "Details" : "დეტალები"
+    "Details" : "დეტალები",
+    "Add" : "დამატება"
 },
 "nplurals=2; plural=(n!=1);");

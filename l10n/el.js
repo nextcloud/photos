@@ -65,7 +65,6 @@ OC.L10N.register(
     "No tags yet" : "Χωρίς ετικέτες ακόμη",
     "Photos with tags will show up here" : "Φωτογραφίες με ετικέτες εμφανίζονται εδώ πάνω",
     "Popular tags" : "Δημοφιλείς ετικέτες",
-    "Add" : "Προσθήκη",
     "Add to album" : "Προσθήκη στο άλμπουμ",
     "Delete selection" : "Διαγραφή επιλογής",
     "No photos or videos in here" : "Δεν υπάρχουν φωτογραφίες ή βίντεο εδώ",
@@ -75,6 +74,7 @@ OC.L10N.register(
     "Failed to rename {oldName} to {faceName}." : "Απέτυχε η μετονομασία του {oldName} σε {faceName}.",
     "Failed to delete {faceName}." : "Απέτυχε η διαγραφή {faceName}.",
     "Failed to delete {fileId}." : "Απέτυχε η διαγραφή {fileId}.",
-    "Failed to delete {fileName}." : "Απέτυχε η διαγραφή {fileName}."
+    "Failed to delete {fileName}." : "Απέτυχε η διαγραφή {fileName}.",
+    "Add" : "Προσθήκη"
 },
 "nplurals=2; plural=(n != 1);");

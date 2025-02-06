@@ -22,8 +22,8 @@
     "No photos in here" : "No hay fotos aquí",
     "No tags yet" : "Aún no hay etiquetas",
     "Photos with tags will show up here" : "Fotos con etiquetas serán mostradas aquí",
-    "Add" : "Agregar",
     "Tagged photos" : "Fotos etiquetadas",
-    "Details" : "Detalles"
+    "Details" : "Detalles",
+    "Add" : "Agregar"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

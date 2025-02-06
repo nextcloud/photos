@@ -59,6 +59,7 @@ OC.L10N.register(
     "_{years} year ago_::_{years} years ago_" : ["{years} aasta tagasi","{years} aastat tagasi"],
     "Home" : "Avaleht",
     "Choose default Photos upload and Albums location" : "Vali vaikimisi fotode üleslaadimise ja albumite asukoht",
+    "View" : "Vaata",
     "_%n photo_::_%n photos_" : ["%n foto","%n fotot"],
     "Add photos to this album" : "Lisa sellesse albumisse fotosid",
     "Manage collaborators for this album" : "Halda selle albumi kaastöölisi",
@@ -100,7 +101,6 @@ OC.L10N.register(
     "No tags yet" : "Silte pole veel",
     "Photos with tags will show up here" : "Siin näidatakse sildistatud fotosid",
     "Popular tags" : "Populaarsed sildid",
-    "Add" : "Lisa",
     "Add to album" : "Lisa albumisse",
     "Delete selection" : "Kustuta valik",
     "No photos or videos in here" : "Siin pole fotosid ega videosid",
@@ -120,6 +120,7 @@ OC.L10N.register(
     "Details" : "Üksikasjad",
     "Failed to delete {faceName}." : "{faceName} kustutamine ebaõnnestus.",
     "Failed to delete {fileId}." : "{fileId} kustutamine ebaõnnestus.",
-    "Failed to delete {fileName}." : "{fileName} kustutamine ebaõnnestus."
+    "Failed to delete {fileName}." : "{fileName} kustutamine ebaõnnestus.",
+    "Add" : "Lisa"
 },
 "nplurals=2; plural=(n != 1);");

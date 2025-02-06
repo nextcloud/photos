@@ -129,7 +129,6 @@ OC.L10N.register(
     "Popular tags" : "Популарне ознаке",
     "All tags" : "Све ознаке",
     "One of the source folders does not exist" : "Један од изворних фолдера не постоји",
-    "Add" : "Додај",
     "Add to album" : "Додај у албум",
     "Delete selection" : "Обриши одабир",
     "No photos or videos in here" : "Овде нема фотографија или видео снимака",
@@ -155,6 +154,7 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "Није успело постављање стања омиљено за {fileId}.",
     "Failed to set favorite state for {fileName}." : "Није успело постављање стања омиљено за {fileName}.",
     "Could not load photos folder" : "Не може да се учита фолдер фотографија",
-    "One of the source folders does not exists" : "Један од изворних фолдера не постоји"
+    "One of the source folders does not exists" : "Један од изворних фолдера не постоји",
+    "Add" : "Додај"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

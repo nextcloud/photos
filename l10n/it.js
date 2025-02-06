@@ -129,7 +129,6 @@ OC.L10N.register(
     "Popular tags" : "Etichette popolari",
     "All tags" : "Tutte le etichette",
     "One of the source folders does not exist" : "Una delle cartelle di origine non esiste",
-    "Add" : "Aggiungi",
     "Add to album" : "Aggiungi all'album",
     "Delete selection" : "Elimina selezione",
     "No photos or videos in here" : "Nessuna foto o video qui",
@@ -155,6 +154,7 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "Impostazione dello stato di preferito a {fileId} non riuscita.",
     "Failed to set favorite state for {fileName}." : "Impostazione dello stato di preferito a {fileName} non riuscita.",
     "Could not load photos folder" : "Non è stato possibile caricare la cartella foto",
-    "One of the source folders does not exists" : "Una delle cartelle sorgenti non esiste"
+    "One of the source folders does not exists" : "Una delle cartelle sorgenti non esiste",
+    "Add" : "Aggiungi"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

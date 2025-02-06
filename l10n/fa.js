@@ -105,7 +105,6 @@ OC.L10N.register(
     "No tags yet" : "هنوز برچسپی وجود ندارد",
     "Photos with tags will show up here" : "عکس های دارای برچسب در اینجا نشان داده می شوند",
     "Popular tags" : "برچسب های محبوب",
-    "Add" : "افزودن",
     "Add to album" : "به آلبوم اضافه کنید",
     "Delete selection" : "انتخاب را حذف کنید",
     "No photos or videos in here" : "هیچ عکس یا ویدیویی در اینجا وجود ندارد",
@@ -128,6 +127,7 @@ OC.L10N.register(
     "Failed to delete {fileId}." : "{fileId} حذف نشد.",
     "Failed to delete {fileName}." : "{fileName} حذف نشد.",
     "Failed to set favorite state for {fileId}." : "حالت دلخواه برای {fileId} تنظیم نشد.",
-    "Failed to set favorite state for {fileName}." : "تنظیم حالت دلخواه برای {fileName} انجام نشد."
+    "Failed to set favorite state for {fileName}." : "تنظیم حالت دلخواه برای {fileName} انجام نشد.",
+    "Add" : "افزودن"
 },
 "nplurals=2; plural=(n > 1);");

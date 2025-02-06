@@ -37,9 +37,9 @@ OC.L10N.register(
     "No photos in here" : "Peruna fotografia inoghe",
     "No tags yet" : "Ancora peruna eticheta",
     "Photos with tags will show up here" : "Is fotografias etichetadas ant a aparèssere inoghe",
-    "Add" : "Agiunghe",
     "Delete selection" : "Cantzella seletzione",
     "Tagged photos" : "Fotografias etichetadas",
-    "Details" : "Detàllios"
+    "Details" : "Detàllios",
+    "Add" : "Agiunghe"
 },
 "nplurals=2; plural=(n != 1);");

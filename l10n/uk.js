@@ -129,7 +129,6 @@ OC.L10N.register(
     "Popular tags" : "Популярні мітки",
     "All tags" : "Всі мітки",
     "One of the source folders does not exist" : "Один із каталогів призначення відсутній",
-    "Add" : "Додати",
     "Add to album" : "Додати в альбом",
     "Delete selection" : "Вилучити виділення",
     "No photos or videos in here" : "Тут немає фотографій та відео",
@@ -155,6 +154,7 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "Не вдалося позначити зірочкою {fileId}.",
     "Failed to set favorite state for {fileName}." : "Не вдалося позначити зірочкою {fileName}.",
     "Could not load photos folder" : "Неможливо завантажити каталог зі світлинами",
-    "One of the source folders does not exists" : "Один з каталогів джерел відсутній"
+    "One of the source folders does not exists" : "Один з каталогів джерел відсутній",
+    "Add" : "Додати"
 },
 "nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);");

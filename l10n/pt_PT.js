@@ -35,10 +35,10 @@ OC.L10N.register(
     "No photos in here" : "Aqui não existem fotos ",
     "No tags yet" : "Ainda sem marcações",
     "Photos with tags will show up here" : "Fotos com marcações serão mostradas aqui",
-    "Add" : "Adicionar",
     "All your media" : "Toda a sua média",
     "Tagged photos" : "Fotos marcadas",
     "Details" : "Detalhes",
-    "Failed to delete {fileName}." : "Falha ao remover {fileName}."
+    "Failed to delete {fileName}." : "Falha ao remover {fileName}.",
+    "Add" : "Adicionar"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

@@ -69,11 +69,11 @@ OC.L10N.register(
     "No photos in here" : "אין כאן תמונות",
     "No tags yet" : "אין תגיות עדיין",
     "Photos with tags will show up here" : "תמונות עם תגיות תמיד תופענה כאן",
-    "Add" : "הוספה",
     "Delete selection" : "מחיקת בחירה",
     "All your media" : "כל המדיה שלך",
     "Shared Albums" : "אלבומים משותפים",
     "Tagged photos" : "תמונות מתויגות",
-    "Details" : "פרטים"
+    "Details" : "פרטים",
+    "Add" : "הוספה"
 },
 "nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");

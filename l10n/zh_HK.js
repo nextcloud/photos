@@ -129,7 +129,6 @@ OC.L10N.register(
     "Popular tags" : "熱門標籤",
     "All tags" : "全部標籤",
     "One of the source folders does not exist" : "其中一個來源資料夾不存在",
-    "Add" : "添加",
     "Add to album" : "添加至相簿",
     "Delete selection" : "刪除所選",
     "No photos or videos in here" : "此處沒有照片或視像",
@@ -155,6 +154,7 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "未能為 {fileId} 設置收藏狀態。",
     "Failed to set favorite state for {fileName}." : "未能為 {fileName} 設置收藏狀態。",
     "Could not load photos folder" : "無法載入照片資料夾",
-    "One of the source folders does not exists" : "其中一個來源資料夾不存在"
+    "One of the source folders does not exists" : "其中一個來源資料夾不存在",
+    "Add" : "添加"
 },
 "nplurals=1; plural=0;");

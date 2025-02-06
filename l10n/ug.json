@@ -120,7 +120,6 @@
     "Photos with tags will show up here" : "بەلگە قويۇلغان رەسىملەر بۇ يەردە كۆرۈنىدۇ",
     "Popular tags" : "داڭلىق خەتكۈچلەر",
     "All tags" : "بارلىق خەتكۈچلەر",
-    "Add" : "قوش",
     "Add to album" : "ئالبۇمغا قوشۇڭ",
     "Delete selection" : "تاللاشنى ئۆچۈرۈڭ",
     "No photos or videos in here" : "بۇ يەردە رەسىم ياكى سىن يوق",
@@ -145,6 +144,7 @@
     "Failed to set favorite state for {fileId}." : "{fileId} for ئۈچۈن ياخشى كۆرىدىغان ھالەتنى بەلگىلىيەلمىدى.",
     "Failed to set favorite state for {fileName}." : "{fileName} for ئۈچۈن ياقتۇرىدىغان ھالەتنى بەلگىلىيەلمىدى.",
     "Could not load photos folder" : "رەسىم قىسقۇچنى يۈكلىيەلمىدى",
-    "One of the source folders does not exists" : "مەنبە قىسقۇچلارنىڭ بىرى مەۋجۇت ئەمەس"
+    "One of the source folders does not exists" : "مەنبە قىسقۇچلارنىڭ بىرى مەۋجۇت ئەمەس",
+    "Add" : "قوش"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
