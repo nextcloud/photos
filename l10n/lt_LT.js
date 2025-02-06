@@ -81,7 +81,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Čia bus rodomos nuotraukos su žymėmis",
     "Popular tags" : "Populiarios žymės",
     "All tags" : "Visos žymės",
-    "Add" : "Pridėti",
     "Add to album" : "Pridėti į albumą",
     "Delete selection" : "Ištrinti žymėjimą",
     "No photos or videos in here" : "Čia nėra jokių nuotraukų ar vaizdo įrašų",
@@ -95,6 +94,7 @@ OC.L10N.register(
     "Failed to rename {oldName} to {faceName}." : "Nepavyko pervadinti {oldName} į {faceName}.",
     "Failed to delete {faceName}." : "Nepavyko ištrinti {faceName}.",
     "Failed to delete {fileId}." : "Nepavyko ištrinti {fileId}.",
-    "Failed to delete {fileName}." : "Nepavyko ištrinti {fileName}."
+    "Failed to delete {fileName}." : "Nepavyko ištrinti {fileName}.",
+    "Add" : "Pridėti"
 },
 "nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);");

@@ -126,7 +126,6 @@ OC.L10N.register(
     "No tags yet" : "Nun hai nenguna etiqueta",
     "Photos with tags will show up here" : "Equí apaecen les semeyes etiquetaes",
     "Popular tags" : "Etiquetes populares",
-    "Add" : "Amestar",
     "Add to album" : "Amestar al álbum",
     "Delete selection" : "Desaniciar la seleición",
     "No photos or videos in here" : "Equí nun hai nenguna semeya nin nengún videu",
@@ -152,6 +151,7 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "Nun se pue afitar l'estáu favoritu de: {fileId}",
     "Failed to set favorite state for {fileName}." : "Nun se pue afitar l'estáu favoritu de: {fileName}",
     "Could not load photos folder" : "Nun se puen cargar la carpeta de semeyes",
-    "One of the source folders does not exists" : "Nun esiste una de les carpetes d'orixe"
+    "One of the source folders does not exists" : "Nun esiste una de les carpetes d'orixe",
+    "Add" : "Amestar"
 },
 "nplurals=2; plural=(n != 1);");

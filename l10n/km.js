@@ -10,7 +10,7 @@ OC.L10N.register(
     "Shared by" : "បាន​ចែក​រំលែក​ដោយ",
     "Home" : "ទំព័រដើម",
     "Remove from favorites" : "Remove from favorites",
-    "Add" : "បញ្ចូល",
-    "Details" : "ព័ត៌មាន​លម្អិត"
+    "Details" : "ព័ត៌មាន​លម្អិត",
+    "Add" : "បញ្ចូល"
 },
 "nplurals=1; plural=0;");

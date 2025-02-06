@@ -101,7 +101,6 @@ OC.L10N.register(
     "No tags yet" : "Сеуште нема ознаки",
     "Photos with tags will show up here" : "Фотографиите со ознаки ќе се појават овде",
     "Popular tags" : "Популарни ознаки",
-    "Add" : "Додади",
     "Add to album" : "Додади во албум",
     "Delete selection" : "Избриши ги селектираните",
     "No photos or videos in here" : "Овде нема фотографии или видеа",
@@ -124,6 +123,7 @@ OC.L10N.register(
     "Failed to delete {fileId}." : "Неуспешно бришење на {fileId}.",
     "Failed to delete {fileName}." : "Неуспешно бришење на {fileName}.",
     "Failed to set favorite state for {fileId}." : "Неуспешно поставување на омилен статус за {fileId}.",
-    "Failed to set favorite state for {fileName}." : "Неуспешно поставување на омилен статус за {fileName}."
+    "Failed to set favorite state for {fileName}." : "Неуспешно поставување на омилен статус за {fileName}.",
+    "Add" : "Додади"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

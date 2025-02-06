@@ -129,7 +129,6 @@ OC.L10N.register(
     "Popular tags" : "Népszerű címkék",
     "All tags" : "Összes jelölés",
     "One of the source folders does not exist" : "Az egyik forrás könyvtár nem létezik",
-    "Add" : "Hozzáadás",
     "Add to album" : "Hozzáadás az albumhoz",
     "Delete selection" : "Kiválasztás törlése",
     "No photos or videos in here" : "Itt nincs fénykép vagy videó",
@@ -155,6 +154,7 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "A(z) {fileId} kedvenc állapotának beállítása sikertelen.",
     "Failed to set favorite state for {fileName}." : "A(z) {fileName} kedvenc állapotának beállítása sikertelen.",
     "Could not load photos folder" : "Nem lehet a fotók könyvtárat betölteni",
-    "One of the source folders does not exists" : "Az egyik forrás könyvtár nem létezik"
+    "One of the source folders does not exists" : "Az egyik forrás könyvtár nem létezik",
+    "Add" : "Hozzáadás"
 },
 "nplurals=2; plural=(n != 1);");

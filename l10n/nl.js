@@ -129,7 +129,6 @@ OC.L10N.register(
     "Popular tags" : "Populaire tags",
     "All tags" : "Alle tags",
     "One of the source folders does not exist" : "Een van de bronmappen bestaat niet",
-    "Add" : "Toevoegen",
     "Add to album" : "Toevoegen aan album",
     "Delete selection" : "Verwijder selectie",
     "No photos or videos in here" : "Geen foto's of video's hier",
@@ -155,6 +154,7 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "Favorietenstatus instellen voor {fileId} mislukt.",
     "Failed to set favorite state for {fileName}." : "Favorietenstatus instellen voor {fileName} mislukt.",
     "Could not load photos folder" : "Kon de fotomap niet laden",
-    "One of the source folders does not exists" : "Een van de bronmappen bestaat niet"
+    "One of the source folders does not exists" : "Een van de bronmappen bestaat niet",
+    "Add" : "Toevoegen"
 },
 "nplurals=2; plural=(n != 1);");

@@ -129,7 +129,6 @@ OC.L10N.register(
     "Popular tags" : "Sık kullanılan etiketler",
     "All tags" : "Tüm etiketler",
     "One of the source folders does not exist" : "Kaynak klasörlerden biri bulunamadı",
-    "Add" : "Ekle",
     "Add to album" : "Albüme ekle",
     "Delete selection" : "Seçilmişleri sil",
     "No photos or videos in here" : "Henüz bir fotoğraf ya da görüntü yok",
@@ -155,6 +154,7 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}." : "{fileId} için sık kullanılan durumu ayarlanamadı.",
     "Failed to set favorite state for {fileName}." : "{fileName} için sık kullanılan durumu ayarlanamadı.",
     "Could not load photos folder" : "Fotoğraflar klasörü yüklenemedi",
-    "One of the source folders does not exists" : "Kaynak klasörlerden biri bulunamadı"
+    "One of the source folders does not exists" : "Kaynak klasörlerden biri bulunamadı",
+    "Add" : "Ekle"
 },
 "nplurals=2; plural=(n > 1);");

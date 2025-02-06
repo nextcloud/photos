@@ -28,8 +28,8 @@ OC.L10N.register(
     "No photos in here" : "Cap de fòto aquí",
     "No tags yet" : "Cap d’etiqueta pel moment",
     "Photos with tags will show up here" : "Las fòtos amb etiquetas apreissaràn aquí",
-    "Add" : "Apondre",
     "Tagged photos" : "Fòtos etiquetadas",
-    "Details" : "Detalhs"
+    "Details" : "Detalhs",
+    "Add" : "Apondre"
 },
 "nplurals=2; plural=(n > 1);");
