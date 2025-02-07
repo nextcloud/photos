@@ -51,10 +51,10 @@ OC.L10N.register(
     "This folder does not exist" : "Denne mappe findes ikke",
     "No photos in here" : "Ingen billeder her",
     "No tags yet" : "Ingen tags endnu",
-    "Photos with tags will show up here" : "Billeder med tags vil vise sig her",
+    "Photos with tags will show up here" : "Billeder med tags vil blive vist her",
     "Delete selection" : "Slet valgte",
-    "_%n photos_::_%n photos_" : ["%n foto","%n fotos"],
-    "Tagged photos" : "Markerede billeder",
+    "_%n photos_::_%n photos_" : ["%n foto","%n billeder"],
+    "Tagged photos" : "Taggede billeder",
     "Details" : "Detaljer",
     "Failed to delete {fileName}." : "Kunne ikke slette {fileName}.",
     "Add" : "Tilføj"
