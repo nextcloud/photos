@@ -4,11 +4,6 @@
  */
 
 /*!
- * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
- * SPDX-License-Identifier: GPL-3.0-or-later
- */
-
-/*!
  * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
@@ -28,8 +23,6 @@
  */
 
 /*! @license DOMPurify 3.2.4 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/3.2.4/LICENSE */
-
-/*! For license information please see index.js.LICENSE.txt */
 
 /**
  * @copyright Copyright (c) 2023 Louis Chemineau <louis@chmn.me>
