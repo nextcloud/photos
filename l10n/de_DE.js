@@ -73,6 +73,7 @@ OC.L10N.register(
     "All folders" : "Alle Ordner",
     "Add a Photos source for the timelines" : "In Fotos eine Quelle für die Zeitleisten hinzufügen",
     "Add folder" : "Ordner hinzufügen",
+    "Pick folder" : "Ordner auswählen",
     "Select a source folder for your media" : "Quellordner für Ihre Medien wählen",
     "Home" : "Startseite",
     "Choose default Photos upload and Albums location" : "Den Standardspeicherort für das Hochladen von Fotos und Alben wählen",

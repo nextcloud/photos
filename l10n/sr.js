@@ -73,6 +73,7 @@ OC.L10N.register(
     "All folders" : "Сви фолдери",
     "Add a Photos source for the timelines" : "Додајте извор који ће Фотографије употребити за временске линије",
     "Add folder" : "Додај фасциклу",
+    "Pick folder" : "Изаберите фолдер",
     "Select a source folder for your media" : "Изаберите извирни фолдер за своје медије",
     "Home" : "Почетна",
     "Choose default Photos upload and Albums location" : "Изаберите подразумевано место за отпремање Фотографија и албума",
