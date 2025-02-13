@@ -73,6 +73,7 @@ OC.L10N.register(
     "All folders" : "Todos os cartafoles",
     "Add a Photos source for the timelines" : "Engada unha orixe de Fotos para as cronoloxías",
     "Add folder" : "Engadir cartafol",
+    "Pick folder" : "Escoller cartafol",
     "Select a source folder for your media" : "Seleccione un cartafol de orixe para os seus ficheiros multimedia",
     "Home" : "Inicio",
     "Choose default Photos upload and Albums location" : "Escolla o envío predeterminado en Fotos e a localización en Álbums",

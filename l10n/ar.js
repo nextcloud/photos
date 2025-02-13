@@ -73,6 +73,7 @@ OC.L10N.register(
     "All folders" : "كل المجلدات",
     "Add a Photos source for the timelines" : "إضافة مصادر الصور إلى الخطوط الزمنية",
     "Add folder" : "إضافة مجلد",
+    "Pick folder" : "إختَر مُجلّداً",
     "Select a source folder for your media" : "إختَر المجلد المصدر لوسائطك ",
     "Home" : "الرئيسية",
     "Choose default Photos upload and Albums location" : "اختر افتراضي رفع الصور وموقع الألبومات",
