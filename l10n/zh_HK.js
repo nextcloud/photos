@@ -73,6 +73,7 @@ OC.L10N.register(
     "All folders" : "所有資料夾",
     "Add a Photos source for the timelines" : "添加時間軸的照片來源",
     "Add folder" : "添加資料夾",
+    "Pick folder" : "挑選資料夾",
     "Select a source folder for your media" : "選擇您媒體的來源資料夾",
     "Home" : "主頁",
     "Choose default Photos upload and Albums location" : "選擇默認照片上傳及相簿位置",
