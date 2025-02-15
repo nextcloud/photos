@@ -73,6 +73,7 @@ OC.L10N.register(
     "All folders" : "Všetky adresáre",
     "Add a Photos source for the timelines" : "Pridajte zdroj fotografií pre časové osi",
     "Add folder" : "Pridať priečinok",
+    "Pick folder" : "Vyberte adresár",
     "Select a source folder for your media" : "Vyberte zdrojový adresár pre vaše médiá.",
     "Home" : "Domov",
     "Choose default Photos upload and Albums location" : "Vyberte predvolené umiestnenie pre nahrávané fotky a albumy",
