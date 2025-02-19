@@ -3,7 +3,8 @@
 	xmlns="https://getpsalm.org/schema/config"
 	xsi:schemaLocation="https://getpsalm.org/schema/config https://getpsalm.org/schema/config"
 	errorBaseline="tests/psalm-baseline.xml"
-	autoloader="vendor-bin/psalm/vendor/autoload.php">
+	autoloader="vendor-bin/psalm/vendor/autoload.php"
+	phpVersion="8.1">
 	<stubs>
 		<file name="tests/stub.phpstub" preloadClasses="true" />
 	</stubs>
