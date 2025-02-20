@@ -64,6 +64,7 @@ SPDX-FileCopyrightText: Borys Serebrov
 SPDX-FileCopyrightText: Arnout Kazemier
 SPDX-FileCopyrightText: Antoni Andre <antoniandre.web@gmail.com>
 SPDX-FileCopyrightText: Anthony Fu <https://github.com/antfu>
+SPDX-FileCopyrightText: Anthony Fu <anthonyfu117@hotmail.com>
 SPDX-FileCopyrightText: Andris Reinman
 SPDX-FileCopyrightText: Andrea Giammarchi
 SPDX-FileCopyrightText: Amit Gupta (https://solothought.com)
@@ -121,12 +122,6 @@ This file is generated from multiple sources. Included packages:
 - @nextcloud/logger
 	- version: 2.7.0
 	- license: GPL-3.0-or-later
-- @nextcloud/l10n
-	- version: 1.6.0
-	- license: GPL-3.0-or-later
-- @nextcloud/moment
-	- version: 1.2.1
-	- license: GPL-3.0-or-later
 - @nextcloud/paths
 	- version: 2.2.1
 	- license: GPL-3.0-or-later
@@ -137,7 +132,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 3.25.1
 	- license: MIT
 - @nextcloud/l10n
-	- version: 3.1.0
+	- version: 3.2.0
 	- license: GPL-3.0-or-later
 - @vueuse/core
 	- version: 11.3.0
@@ -151,77 +146,11 @@ This file is generated from multiple sources. Included packages:
 - is-plain-obj
 	- version: 4.1.0
 	- license: MIT
-- mdast-util-from-markdown
-	- version: 2.0.0
-	- license: MIT
 - mdast-util-to-hast
 	- version: 13.0.2
 	- license: MIT
-- mdast-util-to-string
-	- version: 4.0.0
-	- license: MIT
-- micromark-core-commonmark
-	- version: 2.0.0
-	- license: MIT
-- micromark-factory-destination
-	- version: 2.0.0
-	- license: MIT
-- micromark-factory-label
-	- version: 2.0.0
-	- license: MIT
-- micromark-factory-space
-	- version: 2.0.0
-	- license: MIT
-- micromark-factory-title
-	- version: 2.0.0
-	- license: MIT
-- micromark-factory-whitespace
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-character
-	- version: 2.0.1
-	- license: MIT
-- micromark-util-chunked
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-classify-character
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-combine-extensions
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-decode-numeric-character-reference
-	- version: 2.0.1
-	- license: MIT
-- micromark-util-decode-string
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-encode
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-html-tag-name
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-normalize-identifier
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-resolve-all
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-sanitize-uri
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-subtokenize
-	- version: 2.0.0
-	- license: MIT
-- micromark
-	- version: 4.0.0
-	- license: MIT
 - remark-breaks
 	- version: 4.0.0
-	- license: MIT
-- remark-parse
-	- version: 11.0.0
 	- license: MIT
 - remark-rehype
 	- version: 11.0.0
@@ -245,7 +174,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 6.0.1
 	- license: MIT
 - @nextcloud/vue
-	- version: 8.22.0
+	- version: 8.23.1
 	- license: AGPL-3.0-or-later
 - @ungap/structured-clone
 	- version: 1.2.0
@@ -302,7 +231,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 0.0.2
 	- license: BSD-3-Clause
 - css-loader
-	- version: 6.8.1
+	- version: 7.1.2
 	- license: MIT
 - decode-named-character-reference
 	- version: 1.0.2
@@ -314,7 +243,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.1.0
 	- license: MIT
 - dompurify
-	- version: 3.1.5
+	- version: 3.2.4
 	- license: (MPL-2.0 OR Apache-2.0)
 - dunder-proto
 	- version: 1.0.1
@@ -422,7 +351,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 3.1.0
 	- license: MIT
 - markdown-table
-	- version: 3.0.3
+	- version: 3.0.4
 	- license: MIT
 - math-intrinsics
 	- version: 1.1.0
@@ -436,17 +365,17 @@ This file is generated from multiple sources. Included packages:
 - mdast-util-find-and-replace
 	- version: 3.0.1
 	- license: MIT
-- micromark-util-character
-	- version: 2.0.1
+- unist-util-stringify-position
+	- version: 4.0.0
+	- license: MIT
+- mdast-util-from-markdown
+	- version: 2.0.2
 	- license: MIT
 - mdast-util-gfm-autolink-literal
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-normalize-identifier
-	- version: 2.0.0
+	- version: 2.0.1
 	- license: MIT
 - mdast-util-gfm-footnote
-	- version: 2.0.0
+	- version: 2.1.0
 	- license: MIT
 - mdast-util-gfm-strikethrough
 	- version: 2.0.0
@@ -458,133 +387,100 @@ This file is generated from multiple sources. Included packages:
 	- version: 2.0.0
 	- license: MIT
 - mdast-util-gfm
-	- version: 3.0.0
+	- version: 3.1.0
 	- license: MIT
 - mdast-util-newline-to-break
 	- version: 2.0.0
 	- license: MIT
 - mdast-util-phrasing
-	- version: 4.0.0
+	- version: 4.1.0
+	- license: MIT
+- mdast-util-to-markdown
+	- version: 2.1.2
 	- license: MIT
 - mdast-util-to-string
 	- version: 4.0.0
 	- license: MIT
-- micromark-util-decode-numeric-character-reference
-	- version: 2.0.1
-	- license: MIT
-- micromark-util-decode-string
-	- version: 2.0.0
-	- license: MIT
-- mdast-util-to-markdown
-	- version: 2.1.0
-	- license: MIT
-- micromark-util-character
-	- version: 2.0.1
-	- license: MIT
-- micromark-util-encode
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-sanitize-uri
-	- version: 2.0.0
+- micromark-core-commonmark
+	- version: 2.0.2
 	- license: MIT
 - micromark-extension-gfm-autolink-literal
-	- version: 2.0.0
-	- license: MIT
-- micromark-core-commonmark
-	- version: 2.0.0
-	- license: MIT
-- micromark-factory-destination
-	- version: 2.0.0
-	- license: MIT
-- micromark-factory-label
-	- version: 2.0.0
-	- license: MIT
-- micromark-factory-space
-	- version: 2.0.0
-	- license: MIT
-- micromark-factory-title
-	- version: 2.0.0
-	- license: MIT
-- micromark-factory-whitespace
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-character
-	- version: 2.0.1
-	- license: MIT
-- micromark-util-chunked
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-classify-character
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-encode
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-html-tag-name
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-normalize-identifier
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-resolve-all
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-sanitize-uri
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-subtokenize
-	- version: 2.0.0
+	- version: 2.1.0
 	- license: MIT
 - micromark-extension-gfm-footnote
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-character
-	- version: 2.0.1
-	- license: MIT
-- micromark-util-chunked
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-classify-character
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-resolve-all
-	- version: 2.0.0
+	- version: 2.1.0
 	- license: MIT
 - micromark-extension-gfm-strikethrough
-	- version: 2.0.0
-	- license: MIT
-- micromark-factory-space
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-character
-	- version: 2.0.1
+	- version: 2.1.0
 	- license: MIT
 - micromark-extension-gfm-table
-	- version: 2.0.0
+	- version: 2.1.1
 	- license: MIT
 - micromark-extension-gfm-tagfilter
 	- version: 2.0.0
 	- license: MIT
-- micromark-factory-space
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-character
-	- version: 2.0.1
-	- license: MIT
 - micromark-extension-gfm-task-list-item
-	- version: 2.0.1
-	- license: MIT
-- micromark-util-chunked
-	- version: 2.0.0
-	- license: MIT
-- micromark-util-combine-extensions
-	- version: 2.0.0
+	- version: 2.1.0
 	- license: MIT
 - micromark-extension-gfm
 	- version: 3.0.0
 	- license: MIT
+- micromark-factory-destination
+	- version: 2.0.1
+	- license: MIT
+- micromark-factory-label
+	- version: 2.0.1
+	- license: MIT
+- micromark-factory-space
+	- version: 2.0.1
+	- license: MIT
+- micromark-factory-title
+	- version: 2.0.1
+	- license: MIT
+- micromark-factory-whitespace
+	- version: 2.0.1
+	- license: MIT
+- micromark-util-character
+	- version: 2.1.1
+	- license: MIT
+- micromark-util-chunked
+	- version: 2.0.1
+	- license: MIT
+- micromark-util-classify-character
+	- version: 2.0.1
+	- license: MIT
+- micromark-util-combine-extensions
+	- version: 2.0.1
+	- license: MIT
+- micromark-util-decode-numeric-character-reference
+	- version: 2.0.2
+	- license: MIT
+- micromark-util-decode-string
+	- version: 2.0.1
+	- license: MIT
+- micromark-util-encode
+	- version: 2.0.1
+	- license: MIT
+- micromark-util-html-tag-name
+	- version: 2.0.1
+	- license: MIT
+- micromark-util-normalize-identifier
+	- version: 2.0.1
+	- license: MIT
+- micromark-util-resolve-all
+	- version: 2.0.1
+	- license: MIT
+- micromark-util-sanitize-uri
+	- version: 2.0.1
+	- license: MIT
+- micromark-util-subtokenize
+	- version: 2.0.4
+	- license: MIT
+- micromark
+	- version: 4.0.1
+	- license: MIT
 - moment
-	- version: 2.29.4
+	- version: 2.30.1
 	- license: MIT
 - nested-property
 	- version: 4.0.0
@@ -617,7 +513,10 @@ This file is generated from multiple sources. Included packages:
 	- version: 7.1.2
 	- license: MIT
 - remark-gfm
-	- version: 4.0.0
+	- version: 4.0.1
+	- license: MIT
+- remark-parse
+	- version: 11.0.0
 	- license: MIT
 - requires-port
 	- version: 1.0.0
@@ -650,7 +549,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.0.5
 	- license: MIT
 - style-loader
-	- version: 3.3.3
+	- version: 4.0.0
 	- license: MIT
 - style-to-object
 	- version: 0.4.1
@@ -686,10 +585,13 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.0.2
 	- license: MIT
 - util
-	- version: 0.12.4
+	- version: 0.12.5
 	- license: MIT
 - vue-color
 	- version: 2.8.1
+	- license: MIT
+- vue-demi
+	- version: 0.14.10
 	- license: MIT
 - vue-frag
 	- version: 1.4.3
