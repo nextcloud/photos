@@ -24,7 +24,7 @@ use Psr\Log\LoggerInterface;
  */
 class ExifMetadataProvider implements IEventListener {
 	public function __construct(
-		private LoggerInterface $logger
+		private LoggerInterface $logger,
 	) {
 	}
 
@@ -145,7 +145,7 @@ class ExifMetadataProvider implements IEventListener {
 
 		foreach ($data as $key => $value) {
 			if (is_string($value) && !mb_check_encoding($value, 'UTF-8')) {
-				$value = 'base64:'.base64_encode($value);
+				$value = 'base64:' . base64_encode($value);
 			} elseif (is_string($value)) {
 				// TODO: Can be remove when the Sidebar use the @nextcloud/files to fetch and parse the DAV response.
 				$value = preg_replace('/[[:cntrl:]]/u', '', $value);

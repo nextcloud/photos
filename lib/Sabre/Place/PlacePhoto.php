@@ -24,7 +24,7 @@ class PlacePhoto extends CollectionPhoto implements IFile {
 		private PlaceInfo $placeInfo,
 		PlaceFile $file,
 		private IRootFolder $rootFolder,
-		Folder $userFolder
+		Folder $userFolder,
 	) {
 		parent::__construct($file, $userFolder);
 	}
