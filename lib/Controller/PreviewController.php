@@ -40,7 +40,7 @@ class PreviewController extends Controller {
 		IRootFolder $rootFolder,
 		AlbumMapper $albumMapper,
 		IPreview $preview,
-		IGroupManager $groupManager
+		IGroupManager $groupManager,
 	) {
 		parent::__construct(Application::APP_ID, $request);
 
@@ -61,7 +61,7 @@ class PreviewController extends Controller {
 	public function index(
 		int $fileId = -1,
 		int $x = 32,
-		int $y = 32
+		int $y = 32,
 	) {
 		if ($fileId === -1 || $x === 0 || $y === 0) {
 			return new DataResponse([], Http::STATUS_BAD_REQUEST);
@@ -148,7 +148,7 @@ class PreviewController extends Controller {
 	protected function fetchPreview(
 		Node $node,
 		int $x,
-		int $y
+		int $y,
 	) : Http\Response {
 		if (!($node instanceof File) || !$this->preview->isAvailable($node)) {
 			return new DataResponse([], Http::STATUS_NOT_FOUND);

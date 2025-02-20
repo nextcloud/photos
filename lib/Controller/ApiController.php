@@ -26,7 +26,7 @@ class ApiController extends Controller {
 	public function __construct(
 		IRequest $request,
 		IConfig $config,
-		IUserSession $userSession
+		IUserSession $userSession,
 	) {
 		parent::__construct(Application::APP_ID, $request);
 
@@ -63,7 +63,7 @@ class ApiController extends Controller {
 	 * @NoCSRFRequired
 	 */
 	public function serviceWorker(): StreamResponse {
-		$response = new StreamResponse(__DIR__.'/../../js/photos-service-worker.js');
+		$response = new StreamResponse(__DIR__ . '/../../js/photos-service-worker.js');
 		$response->setHeaders([
 			'Content-Type' => 'application/javascript',
 			'Service-Worker-Allowed' => '/'
