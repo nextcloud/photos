@@ -32,7 +32,7 @@ class AlbumsController extends Controller {
 		string $userId,
 		IRequest $request,
 		IRootFolder $rootFolder,
-		IPreview $previewManager
+		IPreview $previewManager,
 	) {
 		parent::__construct(Application::APP_ID, $request);
 

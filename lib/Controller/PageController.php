@@ -51,17 +51,17 @@ class PageController extends Controller {
 	private LoggerInterface $logger;
 
 	public function __construct(
-		IRequest          $request,
-		IAppManager       $appManager,
-		IEventDispatcher  $eventDispatcher,
+		IRequest $request,
+		IAppManager $appManager,
+		IEventDispatcher $eventDispatcher,
 		UserConfigService $userConfig,
-		IInitialState     $initialState,
-		IUserSession      $userSession,
-		IRootFolder       $rootFolder,
-		ICacheFactory     $cacheFactory,
-		LoggerInterface   $logger,
-		private IConfig   $config,
-		IL10N $l10n
+		IInitialState $initialState,
+		IUserSession $userSession,
+		IRootFolder $rootFolder,
+		ICacheFactory $cacheFactory,
+		LoggerInterface $logger,
+		private IConfig $config,
+		IL10N $l10n,
 	) {
 		parent::__construct(Application::APP_ID, $request);
 

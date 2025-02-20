@@ -24,7 +24,7 @@ class PublicAlbumController extends Controller {
 	public function __construct(
 		IRequest $request,
 		IEventDispatcher $eventDispatcher,
-		IInitialState $initialState
+		IInitialState $initialState,
 	) {
 		parent::__construct(Application::APP_ID, $request);
 
