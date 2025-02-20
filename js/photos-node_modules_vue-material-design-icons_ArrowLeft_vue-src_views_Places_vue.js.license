@@ -60,6 +60,7 @@ SPDX-FileCopyrightText: Borys Serebrov
 SPDX-FileCopyrightText: Arnout Kazemier
 SPDX-FileCopyrightText: Antoni Andre <antoniandre.web@gmail.com>
 SPDX-FileCopyrightText: Anthony Fu <https://github.com/antfu>
+SPDX-FileCopyrightText: Anthony Fu <anthonyfu117@hotmail.com>
 SPDX-FileCopyrightText: Andris Reinman
 SPDX-FileCopyrightText: Andrea Giammarchi
 SPDX-FileCopyrightText: Amit Gupta (https://solothought.com)
@@ -122,19 +123,16 @@ This file is generated from multiple sources. Included packages:
 	- version: 3.25.1
 	- license: MIT
 - @nextcloud/l10n
-	- version: 3.1.0
+	- version: 3.2.0
 	- license: GPL-3.0-or-later
 - @vueuse/core
-	- version: 11.3.0
-	- license: MIT
-- @vueuse/shared
 	- version: 11.3.0
 	- license: MIT
 - debounce
 	- version: 2.2.0
 	- license: MIT
 - @nextcloud/vue
-	- version: 8.22.0
+	- version: 8.23.1
 	- license: AGPL-3.0-or-later
 - @ungap/structured-clone
 	- version: 1.2.1
@@ -194,7 +192,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.1.0
 	- license: MIT
 - dompurify
-	- version: 3.2.3
+	- version: 3.2.4
 	- license: (MPL-2.0 OR Apache-2.0)
 - emoji-mart-vue-fast
 	- version: 15.0.3
@@ -272,7 +270,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 2.0.1
 	- license: MIT
 - mdast-util-gfm-footnote
-	- version: 2.0.0
+	- version: 2.1.0
 	- license: MIT
 - mdast-util-gfm-strikethrough
 	- version: 2.0.0
@@ -284,7 +282,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 2.0.0
 	- license: MIT
 - mdast-util-gfm
-	- version: 3.0.0
+	- version: 3.1.0
 	- license: MIT
 - mdast-util-newline-to-break
 	- version: 2.0.0
@@ -314,7 +312,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 2.1.0
 	- license: MIT
 - micromark-extension-gfm-table
-	- version: 2.1.0
+	- version: 2.1.1
 	- license: MIT
 - micromark-extension-gfm-tagfilter
 	- version: 2.0.0
@@ -374,7 +372,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 2.0.1
 	- license: MIT
 - micromark-util-subtokenize
-	- version: 2.0.3
+	- version: 2.0.4
 	- license: MIT
 - micromark
 	- version: 4.0.1
@@ -422,7 +420,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 4.0.0
 	- license: MIT
 - remark-gfm
-	- version: 4.0.0
+	- version: 4.0.1
 	- license: MIT
 - remark-parse
 	- version: 11.0.0
@@ -513,6 +511,9 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - vue-color
 	- version: 2.8.1
+	- license: MIT
+- vue-demi
+	- version: 0.14.10
 	- license: MIT
 - vue-frag
 	- version: 1.4.3
