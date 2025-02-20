@@ -40,7 +40,7 @@ class AlbumMapper {
 		IUserManager $userManager,
 		IGroupManager $groupManager,
 		IL10N $l,
-		ISecureRandom $random
+		ISecureRandom $random,
 	) {
 		$this->connection = $connection;
 		$this->mimeTypeLoader = $mimeTypeLoader;
@@ -496,7 +496,7 @@ class AlbumMapper {
 			return new AlbumInfo(
 				(int)$row['album_id'],
 				$row['user'],
-				$row['name'].' ('.$row['user'].')',
+				$row['name'] . ' (' . $row['user'] . ')',
 				$row['location'],
 				(int)$row['created'],
 				(int)$row['last_added_photo']
@@ -539,7 +539,7 @@ class AlbumMapper {
 				// Suffix album name with the album owner to prevent duplicates.
 				// Not done for public link as it would leak the owner's uid.
 				if ($collaboratorType !== self::TYPE_LINK) {
-					$albumName = $row['album_name'].' ('.$row['album_user'].')';
+					$albumName = $row['album_name'] . ' (' . $row['album_user'] . ')';
 				}
 				$albumsById[$albumId] = new AlbumInfo($albumId, $row['album_user'], $albumName, $row['location'], (int)$row['created'], (int)$row['last_added_photo'], $collaboratorType);
 			}
@@ -608,7 +608,7 @@ class AlbumMapper {
 			return new AlbumInfo(
 				(int)$row['album_id'],
 				$row['user'],
-				$row['name'].' ('.$row['user'].')',
+				$row['name'] . ' (' . $row['user'] . ')',
 				$row['location'],
 				(int)$row['created'],
 				(int)$row['last_added_photo']

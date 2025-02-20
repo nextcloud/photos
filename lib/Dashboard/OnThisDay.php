@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -16,7 +17,7 @@ class OnThisDay implements IIconWidget {
 	public function __construct(
 		private IL10N $l,
 		private IURLGenerator $url,
-		private IInitialState $initialState
+		private IInitialState $initialState,
 	) {
 	}
 
