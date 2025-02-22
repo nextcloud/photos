@@ -73,6 +73,7 @@ OC.L10N.register(
     "All folders" : "全てのフォルダー",
     "Add a Photos source for the timelines" : "タイムラインの写真ソースを追加する",
     "Add folder" : "フォルダーを追加",
+    "Pick folder" : "フォルダーを選択",
     "Select a source folder for your media" : "メディアのソースフォルダーを選択してください",
     "Home" : "ホーム",
     "Choose default Photos upload and Albums location" : "デフォルトの写真のアップロードとアルバムの場所を選択する",
