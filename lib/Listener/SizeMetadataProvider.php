@@ -21,7 +21,7 @@ use Psr\Log\LoggerInterface;
  */
 class SizeMetadataProvider implements IEventListener {
 	public function __construct(
-		private LoggerInterface $logger
+		private LoggerInterface $logger,
 	) {
 	}
 

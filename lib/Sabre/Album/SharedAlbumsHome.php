@@ -29,7 +29,6 @@ class SharedAlbumsHome extends AlbumsHome {
 		private IGroupManager $groupManager,
 		UserConfigService $userConfigService,
 		LoggerInterface $logger,
-
 	) {
 		parent::__construct(
 			$principalInfo,

@@ -22,7 +22,7 @@ class AlbumFile extends PhotosFile {
 		int $mtime,
 		string $etag,
 		int $added,
-		string $owner
+		string $owner,
 	) {
 		parent::__construct(
 			$fileId,
