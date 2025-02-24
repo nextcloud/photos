@@ -81,6 +81,9 @@ This file is generated from multiple sources. Included packages:
 - @nextcloud/initial-state
 	- version: 2.2.0
 	- license: GPL-3.0-or-later
+- @nextcloud/l10n
+	- version: 3.2.0
+	- license: GPL-3.0-or-later
 - @nextcloud/router
 	- version: 3.0.1
 	- license: GPL-3.0-or-later
@@ -90,9 +93,6 @@ This file is generated from multiple sources. Included packages:
 - @nextcloud/vue-select
 	- version: 3.25.1
 	- license: MIT
-- @nextcloud/l10n
-	- version: 3.2.0
-	- license: GPL-3.0-or-later
 - @vueuse/core
 	- version: 11.3.0
 	- license: MIT
