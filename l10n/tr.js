@@ -70,6 +70,7 @@ OC.L10N.register(
     "_{years} year ago_::_{years} years ago_" : ["{years} yıl önce","{years} yıl önce"],
     "Enable squared photos view" : "Kare fotoğraf görünümü kullanılsın",
     "Delete source directory" : "Kaynak klasörü sil",
+    "Pick folder" : "Klasör seçin",
     "Select a source folder for your media" : "Ortamlarınız için bir kaynak klasör seçin",
     "All folders" : "Tüm klasörler",
     "Add a Photos source for the timelines" : "Zaman akışları için bir fotoğraf kaynağı ekleyin",
