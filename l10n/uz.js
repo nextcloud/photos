@@ -14,6 +14,7 @@ OC.L10N.register(
     "Favorite" : "Favorite",
     "Back to {folder}" : "{folder}ga qaytish",
     "Home" : "Home",
+    "Remove from favorites" : "Sevimlilardan olib tashlang",
     "Details" : "Details",
     "Add" : "Add"
 },
