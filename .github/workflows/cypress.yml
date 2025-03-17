@@ -24,6 +24,10 @@ env:
   # n.b. server will use head_ref, as we want to test the PR branch.
   BRANCH: ${{ github.base_ref || github.ref_name }}
 
+
+permissions:
+  contents: read
+
 jobs:
   init:
     runs-on: ubuntu-latest
@@ -64,7 +68,7 @@ jobs:
           fallbackNpm: "^10"
 
       - name: Set up node ${{ steps.versions.outputs.nodeVersion }}
-        uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
         with:
           node-version: ${{ steps.versions.outputs.nodeVersion }}
 
@@ -77,7 +81,7 @@ jobs:
           TESTING=true npm run build --if-present
 
       - name: Save context
-        uses: buildjet/cache/save@v4
+        uses: buildjet/cache/save@3e70d19e31d6a8030aeddf6ed8dbe601f94d09f4 # v4.0.2
         with:
           key: cypress-context-${{ github.run_id }}
           path: ./
@@ -97,14 +101,14 @@ jobs:
 
     steps:
       - name: Restore context
-        uses: buildjet/cache/restore@v4
+        uses: buildjet/cache/restore@3e70d19e31d6a8030aeddf6ed8dbe601f94d09f4 # v4.0.2
         with:
           fail-on-cache-miss: true
           key: cypress-context-${{ github.run_id }}
           path: ./
 
       - name: Set up node ${{ needs.init.outputs.nodeVersion }}
-        uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
         with:
           node-version: ${{ needs.init.outputs.nodeVersion }}
 
