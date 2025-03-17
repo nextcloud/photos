@@ -70,3 +70,11 @@ updates:
     # ignore all GitHub linguist patch updates
     - dependency-name: "*"
       update-types: ["version-update:semver-major", "version-update:semver-minor"]
+
+- package-ecosystem: "github-actions"
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: sunday
+    time: "09:00"
+    timezone: Europe/Paris
