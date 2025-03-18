@@ -13,6 +13,7 @@ OC.L10N.register(
     "Copy public link" : "Umumiy havoladan nusxa oling",
     "Favorite" : "Favorite",
     "Back to {folder}" : "{folder}ga qaytish",
+    "Add to {destination}" : " {destination}ni qo`shish",
     "Home" : "Home",
     "Remove from favorites" : "Sevimlilardan olib tashlang",
     "Details" : "Details",
