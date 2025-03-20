@@ -69,6 +69,7 @@ OC.L10N.register(
     "There are no photos or videos yet!" : "Ühtegi fotot ega videot pole veel!",
     "_{years} year ago_::_{years} years ago_" : ["{years} aasta tagasi","{years} aastat tagasi"],
     "Enable squared photos view" : "Luba piltide ruutvaade",
+    "All folders" : "Kõik kaustad",
     "Home" : "Avaleht",
     "Choose default Photos upload and Albums location" : "Vali vaikimisi fotode üleslaadimise ja albumite asukoht",
     "View" : "Vaata",
