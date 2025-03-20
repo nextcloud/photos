@@ -68,6 +68,7 @@
     "_{years} year ago_::_{years} years ago_" : ["{anos} ano atrás","{anos} anos atrás","{anos} anos atrás"],
     "Enable squared photos view" : "Ativar exibição de fotos quadradas",
     "Delete source directory" : "Excluir diretório de origem",
+    "Pick folder" : "Selecionar pasta",
     "Select a source folder for your media" : "Selecione uma pasta de origem para sua mídia",
     "All folders" : "Todas as pastas",
     "Add a Photos source for the timelines" : "Adicione uma fonte de fotos para os cronogramas",
