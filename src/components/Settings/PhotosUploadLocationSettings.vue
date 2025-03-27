@@ -42,6 +42,7 @@ import { getFilePickerBuilder } from '@nextcloud/dialogs'
 import { translate as t } from '@nextcloud/l10n'
 
 import PhotosFolder from './PhotosFolder.vue'
+import logger from '../../services/logger.js'
 
 export default defineComponent({
 	name: 'PhotosUploadLocationSettings',
@@ -77,11 +78,13 @@ export default defineComponent({
 		async openFilePicker(title) {
 			const picker = getFilePickerBuilder(title)
 				.setMultiSelect(false)
-				.setModal(true)
-				.setType(1)
 				.addMimeTypeFilter('httpd/unix-directory')
 				.allowDirectories()
 				.startAt(this.photosLocation)
+				.addButton({
+					label: t('photos', 'Pick folder'),
+					callback: (nodes) => logger.debug('Picked', { nodes }),
+				})
 				.build()
 
 			return picker.pick()
