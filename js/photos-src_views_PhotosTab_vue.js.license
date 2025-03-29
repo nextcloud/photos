@@ -10,6 +10,7 @@ SPDX-FileCopyrightText: Tobias Koppers @sokra
 SPDX-FileCopyrightText: Roman Shtylman <shtylman@gmail.com>
 SPDX-FileCopyrightText: Roeland Jago Douma
 SPDX-FileCopyrightText: Rob Cresswell <robcresswell@pm.me>
+SPDX-FileCopyrightText: Perry Mitchell <perry@perrymitchell.net>
 SPDX-FileCopyrightText: Nextcloud GmbH and Nextcloud contributors
 SPDX-FileCopyrightText: Mickael Bouchaud
 SPDX-FileCopyrightText: Jonas Schade <derzade@gmail.com>
@@ -124,6 +125,9 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - vue2-leaflet
 	- version: 2.7.1
+	- license: MIT
+- webdav
+	- version: 5.8.0
 	- license: MIT
 - photos
 	- version: 5.0.0-dev.0
