@@ -1,1 +1,6 @@
+build-js/
+composer/
+cypress/
 js/
+vendor/
+vendor-bin/
