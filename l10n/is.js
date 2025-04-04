@@ -121,7 +121,6 @@ OC.L10N.register(
     "Add photos to this place" : "Bæta við ljósmyndum á þennan stað",
     "Cover photo for place {placeName}" : "Forsíðumynd fyrir staðinn {placeName}",
     "There is no place yet!" : "Það er enn enginn staður!",
-    "Cover photo for shared album {albumName}." : "Forsíðumynd fyrir sameiginlega albúmið {albumName}.",
     "Back to tags overview" : "Fara aftur í yfirlit merkja",
     "No photos with this tag yet" : "Ennþá engar ljósmyndir með þessu merki",
     "No tags yet" : "Engin merki ennþá",
@@ -147,14 +146,15 @@ OC.L10N.register(
     "{title}'s face" : "Andlit á {title}",
     "{startDate} to {endDate}" : "{startDate} til {endDate}",
     "Details" : "Nánar",
+    "Could not load photos folder" : "Gat ekki að hlaðið inn ljósmyndamöppunni",
+    "Cover photo for shared album {albumName}." : "Forsíðumynd fyrir sameiginlega albúmið {albumName}.",
+    "One of the source folders does not exists" : "Ein af upprunamöppunum er ekki til",
+    "Add" : "Bæta við",
     "Failed to rename {oldName} to {faceName}." : "Mistókst að endurnefna {oldName} sem {faceName}.",
     "Failed to delete {faceName}." : "Tókst ekki að eyða {faceName}.",
     "Failed to delete {fileId}." : "Tókst ekki að eyða {fileId}.",
     "Failed to delete {fileName}." : "Tókst ekki að eyða {fileName}.",
     "Failed to set favorite state for {fileId}." : "Mistókst að setja stöðu sem eftirlæti fyrir {fileId}.",
-    "Failed to set favorite state for {fileName}." : "Mistókst að setja stöðu sem eftirlæti fyrir {fileName}.",
-    "Could not load photos folder" : "Gat ekki að hlaðið inn ljósmyndamöppunni",
-    "One of the source folders does not exists" : "Ein af upprunamöppunum er ekki til",
-    "Add" : "Bæta við"
+    "Failed to set favorite state for {fileName}." : "Mistókst að setja stöðu sem eftirlæti fyrir {fileName}."
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

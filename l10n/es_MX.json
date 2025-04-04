@@ -118,7 +118,6 @@
     "Add photos to this place" : "Añadir fotos a este lugar",
     "Cover photo for place {placeName}" : "Foto de portada para el lugar {placeName}",
     "There is no place yet!" : "¡Aún no hay ningún lugar!",
-    "Cover photo for shared album {albumName}." : "Foto de portada para el álbum compartido {albumName}.",
     "Back to tags overview" : "Volver a la vista general de etiquetas",
     "No photos with this tag yet" : "Aún no hay fotos con esta etiqueta",
     "No tags yet" : "Aún no hay etiquetas",
@@ -143,14 +142,15 @@
     "{title}'s face" : "Cara de {title}",
     "{startDate} to {endDate}" : "{startDate} a {endDate}",
     "Details" : "Detalles",
+    "Could not load photos folder" : "No se pudo cargar la carpeta de fotos",
+    "Cover photo for shared album {albumName}." : "Foto de portada para el álbum compartido {albumName}.",
+    "One of the source folders does not exists" : "Una de las carpetas fuente no existe",
+    "Add" : "Agregar",
     "Failed to rename {oldName} to {faceName}." : "No se pudo renombrar {oldName} a {faceName}.",
     "Failed to delete {faceName}." : "No se pudo borrar {faceName}.",
     "Failed to delete {fileId}." : "No se pudo borrar {fileId}.",
     "Failed to delete {fileName}." : "No se pudo eliminar {fileName}.",
     "Failed to set favorite state for {fileId}." : "No se pudo establecer el estado de favorito para {fileId}.",
-    "Failed to set favorite state for {fileName}." : "No se pudo establecer el estado de favorito para {fileName}.",
-    "Could not load photos folder" : "No se pudo cargar la carpeta de fotos",
-    "One of the source folders does not exists" : "Una de las carpetas fuente no existe",
-    "Add" : "Agregar"
+    "Failed to set favorite state for {fileName}." : "No se pudo establecer el estado de favorito para {fileName}."
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

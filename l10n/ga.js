@@ -122,7 +122,6 @@ OC.L10N.register(
     "Add photos to this place" : "Cuir grianghraif leis an áit seo",
     "Cover photo for place {placeName}" : "Grianghraf clúdaigh don áit {placeName}",
     "There is no place yet!" : "Níl aon áit fós!",
-    "Cover photo for shared album {albumName}." : "Grianghraf clúdaigh don albam comhroinnte {albumName}.",
     "Back to tags overview" : "Ar ais go forbhreathnú clibeanna",
     "No photos with this tag yet" : "Níl aon ghrianghraif leis an gclib seo fós",
     "No tags yet" : "Gan clibeanna fós",
@@ -148,14 +147,15 @@ OC.L10N.register(
     "{title}'s face" : "aghaidh {title}",
     "{startDate} to {endDate}" : "{startDate} go dtí {endDate}",
     "Details" : "Sonraí",
+    "Could not load photos folder" : "Níorbh fhéidir fillteán na ngrianghraf a lódáil",
+    "Cover photo for shared album {albumName}." : "Grianghraf clúdaigh don albam comhroinnte {albumName}.",
+    "One of the source folders does not exists" : "Níl ceann de na fillteáin foinse ann",
+    "Add" : "Cuir",
     "Failed to rename {oldName} to {faceName}." : "Theip ar {oldName} a athainmniú go {faceName}.",
     "Failed to delete {faceName}." : "Theip ar scriosadh {faceName}.",
     "Failed to delete {fileId}." : "Theip ar scriosadh {fileId}.",
     "Failed to delete {fileName}." : "Theip ar scriosadh {fileName}.",
     "Failed to set favorite state for {fileId}." : "Theip ar an staid is fearr leat a shocrú le haghaidh {fileId}.",
-    "Failed to set favorite state for {fileName}." : "Theip ar an staid is fearr leat a shocrú le haghaidh {fileName}.",
-    "Could not load photos folder" : "Níorbh fhéidir fillteán na ngrianghraf a lódáil",
-    "One of the source folders does not exists" : "Níl ceann de na fillteáin foinse ann",
-    "Add" : "Cuir"
+    "Failed to set favorite state for {fileName}." : "Theip ar an staid is fearr leat a shocrú le haghaidh {fileName}."
 },
 "nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);");

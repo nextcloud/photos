@@ -40,7 +40,7 @@ OC.L10N.register(
     "All your media" : "Toda a sua média",
     "Tagged photos" : "Fotos marcadas",
     "Details" : "Detalhes",
-    "Failed to delete {fileName}." : "Falha ao remover {fileName}.",
-    "Add" : "Adicionar"
+    "Add" : "Adicionar",
+    "Failed to delete {fileName}." : "Falha ao remover {fileName}."
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

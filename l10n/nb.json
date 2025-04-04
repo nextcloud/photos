@@ -118,7 +118,6 @@
     "Add photos to this place" : "Legg bilder til denne plasseringen",
     "Cover photo for place {placeName}" : "Forsidebilde for sted {placeName}",
     "There is no place yet!" : "Det er ingen steder enda!",
-    "Cover photo for shared album {albumName}." : "Forsidebilde for delt album {albumName}.",
     "Back to tags overview" : "Tilbake til merkelappoversikt",
     "No photos with this tag yet" : "Ingen bilder med denne merkelappen ennå",
     "No tags yet" : "Ingen etiketter enda",
@@ -143,14 +142,15 @@
     "{title}'s face" : "{title} sitt ansikt",
     "{startDate} to {endDate}" : "{startDate} til {endDate}",
     "Details" : "Detaljer",
+    "Could not load photos folder" : "Kunne ikke laste bildemappen",
+    "Cover photo for shared album {albumName}." : "Forsidebilde for delt album {albumName}.",
+    "One of the source folders does not exists" : "En av kildemappene finnes ikke",
+    "Add" : "Legg til",
     "Failed to rename {oldName} to {faceName}." : "Kunne ikke endre navn på {oldName} til {faceName}.",
     "Failed to delete {faceName}." : "Kunne ikke slette {faceName}.",
     "Failed to delete {fileId}." : "Kunne ikke slette {fileId}.",
     "Failed to delete {fileName}." : "Kunne ikke slette {fileName}.",
     "Failed to set favorite state for {fileId}." : "Kunne ikke angi favorittstatus for {fileId}.",
-    "Failed to set favorite state for {fileName}." : "Kunne ikke angi favorittstatus for {fileName}.",
-    "Could not load photos folder" : "Kunne ikke laste bildemappen",
-    "One of the source folders does not exists" : "En av kildemappene finnes ikke",
-    "Add" : "Legg til"
+    "Failed to set favorite state for {fileName}." : "Kunne ikke angi favorittstatus for {fileName}."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

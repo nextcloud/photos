@@ -120,7 +120,6 @@
     "Add photos to this place" : "Engadir fotos a este lugar",
     "Cover photo for place {placeName}" : "Foto de portada do lugar {placeName}",
     "There is no place yet!" : "Aínda non hai lugar!",
-    "Cover photo for shared album {albumName}." : "Foto de portada do álbum compartido {albumName}.",
     "Back to tags overview" : "Volver á vista xeral das etiquetas",
     "No photos with this tag yet" : "Aínda non hai fotos con esta etiqueta",
     "No tags yet" : "Non hai ren etiquetado",
@@ -146,14 +145,15 @@
     "{title}'s face" : "A faciana de {title}",
     "{startDate} to {endDate}" : "{startDate} ata o {endDate}",
     "Details" : "Detalles",
+    "Could not load photos folder" : "Non foi posíbel cargar o cartafol de fotos",
+    "Cover photo for shared album {albumName}." : "Foto de portada do álbum compartido {albumName}.",
+    "One of the source folders does not exists" : "Un dos cartafoles de orixe non existe",
+    "Add" : "Engadir",
     "Failed to rename {oldName} to {faceName}." : "Non foi posíbel cambiar o nome de {oldName} a {faceName}.",
     "Failed to delete {faceName}." : "Produciuse un fallo ao eliminar {faceName}.",
     "Failed to delete {fileId}." : "Produciuse un fallo ao eliminar {fileId}.",
     "Failed to delete {fileName}." : "Produciuse un fallo ao eliminar {fileName}.",
     "Failed to set favorite state for {fileId}." : "Non foi posíbel definir o estado de favorito para {fileId}.",
-    "Failed to set favorite state for {fileName}." : "Non foi posíbel definir o estado de favorito para {fileName}.",
-    "Could not load photos folder" : "Non foi posíbel cargar o cartafol de fotos",
-    "One of the source folders does not exists" : "Un dos cartafoles de orixe non existe",
-    "Add" : "Engadir"
+    "Failed to set favorite state for {fileName}." : "Non foi posíbel definir o estado de favorito para {fileName}."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

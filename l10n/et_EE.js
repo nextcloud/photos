@@ -122,7 +122,6 @@ OC.L10N.register(
     "Add photos to this place" : "Lisa siia kohta fotosid",
     "Cover photo for place {placeName}" : "Koha {placeName} kaanepilt",
     "There is no place yet!" : "Ühtegi kohta pole veel!",
-    "Cover photo for shared album {albumName}." : "Jagatud albumi {albumName} kaanepilt.",
     "Back to tags overview" : "Tagasi siltide ülevaatesse",
     "No photos with this tag yet" : "Selle sildiga pole veel fotosid",
     "No tags yet" : "Silte pole veel",
@@ -148,14 +147,15 @@ OC.L10N.register(
     "{title}'s face" : "{title} nägu",
     "{startDate} to {endDate}" : "{startDate} kuni {endDate}",
     "Details" : "Üksikasjad",
+    "Could not load photos folder" : "Fotode kausta laadimine ei õnnestunud",
+    "Cover photo for shared album {albumName}." : "Jagatud albumi {albumName} kaanepilt.",
+    "One of the source folders does not exists" : "Ühte lähtekaustadest pole olemas",
+    "Add" : "Lisa",
     "Failed to rename {oldName} to {faceName}." : "Nime muutmine ei õnnestunud: {oldName} → {faceName}.",
     "Failed to delete {faceName}." : "{faceName} kustutamine ebaõnnestus.",
     "Failed to delete {fileId}." : "{fileId} kustutamine ebaõnnestus.",
     "Failed to delete {fileName}." : "{fileName} kustutamine ebaõnnestus.",
     "Failed to set favorite state for {fileId}." : "„{fileId}“ määramine lemmikuks ei õnnestunud.",
-    "Failed to set favorite state for {fileName}." : "„{fileName}“ määramine lemmikuks ei õnnestunud.",
-    "Could not load photos folder" : "Fotode kausta laadimine ei õnnestunud",
-    "One of the source folders does not exists" : "Ühte lähtekaustadest pole olemas",
-    "Add" : "Lisa"
+    "Failed to set favorite state for {fileName}." : "„{fileName}“ määramine lemmikuks ei õnnestunud."
 },
 "nplurals=2; plural=(n != 1);");
