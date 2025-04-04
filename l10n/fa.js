@@ -99,7 +99,6 @@ OC.L10N.register(
     "Add photos to this place" : "عکس ها را به این مکان اضافه کنید",
     "Cover photo for place {placeName}" : "عکس روی جلد مکان {placeName}",
     "There is no place yet!" : "هنوز جایی نیست!",
-    "Cover photo for shared album {albumName}." : "عکس روی جلد آلبوم مشترک {albumName}.",
     "Back to tags overview" : "بازگشت به نمای کلی برچسب ها",
     "No photos with this tag yet" : "هنوز عکسی با این برچسب وجود ندارد",
     "No tags yet" : "هنوز برچسپی وجود ندارد",
@@ -122,12 +121,13 @@ OC.L10N.register(
     "Tagged photo {title}" : "عکس برچسب شده {title}",
     "{title}'s face" : "چهره {title}",
     "Details" : "جزییات",
+    "Cover photo for shared album {albumName}." : "عکس روی جلد آلبوم مشترک {albumName}.",
+    "Add" : "افزودن",
     "Failed to rename {oldName} to {faceName}." : "تغییر نام {oldName} به {faceName} انجام نشد.",
     "Failed to delete {faceName}." : "{faceName} حذف نشد.",
     "Failed to delete {fileId}." : "{fileId} حذف نشد.",
     "Failed to delete {fileName}." : "{fileName} حذف نشد.",
     "Failed to set favorite state for {fileId}." : "حالت دلخواه برای {fileId} تنظیم نشد.",
-    "Failed to set favorite state for {fileName}." : "تنظیم حالت دلخواه برای {fileName} انجام نشد.",
-    "Add" : "افزودن"
+    "Failed to set favorite state for {fileName}." : "تنظیم حالت دلخواه برای {fileName} انجام نشد."
 },
 "nplurals=2; plural=(n > 1);");

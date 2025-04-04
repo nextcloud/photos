@@ -122,7 +122,6 @@ OC.L10N.register(
     "Add photos to this place" : "Afegeix fotos a aquest lloc",
     "Cover photo for place {placeName}" : "Foto de portada del lloc {placeName}",
     "There is no place yet!" : "Encara no hi ha cap lloc!",
-    "Cover photo for shared album {albumName}." : "Foto de portada de l'àlbum compartit {albumName}.",
     "Back to tags overview" : "Torna a la visualització general d'etiquetes",
     "No photos with this tag yet" : "Encara no hi ha cap foto amb aquesta etiqueta",
     "No tags yet" : "Encara no hi ha cap etiqueta",
@@ -148,14 +147,15 @@ OC.L10N.register(
     "{title}'s face" : "Cara de {title}",
     "{startDate} to {endDate}" : "{startDate} a {endDate}",
     "Details" : "Detalls",
+    "Could not load photos folder" : "No s'ha pogut carregar la carpeta de fotos",
+    "Cover photo for shared album {albumName}." : "Foto de portada de l'àlbum compartit {albumName}.",
+    "One of the source folders does not exists" : "Una de les carpetes d'origen no existeix",
+    "Add" : "Afegeix",
     "Failed to rename {oldName} to {faceName}." : "No s'ha pogut canviar el nom de la persona {oldName} a {faceName}.",
     "Failed to delete {faceName}." : "No s'ha pogut suprimir {faceName}.",
     "Failed to delete {fileId}." : "No s'ha pogut suprimir {fileId}.",
     "Failed to delete {fileName}." : "No s'ha pogut suprimir {fileName}.",
     "Failed to set favorite state for {fileId}." : "No s'ha pogut establir l'estat de preferit per a {fileId}.",
-    "Failed to set favorite state for {fileName}." : "No s'ha pogut establir l'estat de preferit per a {fileName}.",
-    "Could not load photos folder" : "No s'ha pogut carregar la carpeta de fotos",
-    "One of the source folders does not exists" : "Una de les carpetes d'origen no existeix",
-    "Add" : "Afegeix"
+    "Failed to set favorite state for {fileName}." : "No s'ha pogut establir l'estat de preferit per a {fileName}."
 },
 "nplurals=2; plural=(n != 1);");

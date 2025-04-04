@@ -95,7 +95,6 @@ OC.L10N.register(
     "Add photos to this place" : "Додади фотографии во ова место",
     "Cover photo for place {placeName}" : "Насловна фотографија за местото {placeName}",
     "There is no place yet!" : "Сè уште нема места!",
-    "Cover photo for shared album {albumName}." : "Насловна фотографија за споделениот албум {albumName}",
     "Back to tags overview" : "Назад до преглед на ознаки",
     "No photos with this tag yet" : "Сеуште нема фотографии со оваа ознака",
     "No tags yet" : "Сеуште нема ознаки",
@@ -118,12 +117,13 @@ OC.L10N.register(
     "{title}'s face" : "Лицето на {title}",
     "{startDate} to {endDate}" : "{startDate} до {endDate}",
     "Details" : "Детали",
+    "Cover photo for shared album {albumName}." : "Насловна фотографија за споделениот албум {albumName}",
+    "Add" : "Додади",
     "Failed to rename {oldName} to {faceName}." : "Неуспешно преименување на {oldName} во {faceName}.",
     "Failed to delete {faceName}." : "Неуспешно бришење на {faceName}.",
     "Failed to delete {fileId}." : "Неуспешно бришење на {fileId}.",
     "Failed to delete {fileName}." : "Неуспешно бришење на {fileName}.",
     "Failed to set favorite state for {fileId}." : "Неуспешно поставување на омилен статус за {fileId}.",
-    "Failed to set favorite state for {fileName}." : "Неуспешно поставување на омилен статус за {fileName}.",
-    "Add" : "Додади"
+    "Failed to set favorite state for {fileName}." : "Неуспешно поставување на омилен статус за {fileName}."
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

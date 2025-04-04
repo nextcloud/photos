@@ -115,7 +115,6 @@ OC.L10N.register(
     "Add photos to this place" : "بۇ يەرگە رەسىم قوشۇڭ",
     "Cover photo for place {placeName}" : "ئورۇننىڭ يېپىلىش سۈرىتى {placeName}",
     "There is no place yet!" : "ھازىرچە يەر يوق!",
-    "Cover photo for shared album {albumName}." : "ھەمبەھىرلەنگەن پىلاستىنكا {albumName} for نىڭ مۇقاۋا سۈرىتى.",
     "Back to tags overview" : "خەتكۈچ ئومۇمىي كۆرۈنۈشىگە قايتىڭ",
     "No photos with this tag yet" : "بۇ خەتكۈچ بىلەن رەسىم يوق",
     "No tags yet" : "خەتكۈچ يوق",
@@ -139,14 +138,15 @@ OC.L10N.register(
     "{title}'s face" : "{title} 'face",
     "{startDate} to {endDate}" : "{startDate} دىن {endDate}",
     "Details" : "تەپسىلاتى",
+    "Could not load photos folder" : "رەسىم قىسقۇچنى يۈكلىيەلمىدى",
+    "Cover photo for shared album {albumName}." : "ھەمبەھىرلەنگەن پىلاستىنكا {albumName} for نىڭ مۇقاۋا سۈرىتى.",
+    "One of the source folders does not exists" : "مەنبە قىسقۇچلارنىڭ بىرى مەۋجۇت ئەمەس",
+    "Add" : "قوش",
     "Failed to rename {oldName} to {faceName}." : "{oldName} نىڭ نامىنى {faceName} غا ئۆزگەرتەلمىدى.",
     "Failed to delete {faceName}." : "{faceName} نى ئۆچۈرەلمىدى.",
     "Failed to delete {fileId}." : "{fileId} نى ئۆچۈرەلمىدى.",
     "Failed to delete {fileName}." : "{fileName} نى ئۆچۈرەلمىدى.",
     "Failed to set favorite state for {fileId}." : "{fileId} for ئۈچۈن ياخشى كۆرىدىغان ھالەتنى بەلگىلىيەلمىدى.",
-    "Failed to set favorite state for {fileName}." : "{fileName} for ئۈچۈن ياقتۇرىدىغان ھالەتنى بەلگىلىيەلمىدى.",
-    "Could not load photos folder" : "رەسىم قىسقۇچنى يۈكلىيەلمىدى",
-    "One of the source folders does not exists" : "مەنبە قىسقۇچلارنىڭ بىرى مەۋجۇت ئەمەس",
-    "Add" : "قوش"
+    "Failed to set favorite state for {fileName}." : "{fileName} for ئۈچۈن ياقتۇرىدىغان ھالەتنى بەلگىلىيەلمىدى."
 },
 "nplurals=2; plural=(n != 1);");

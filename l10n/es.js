@@ -121,7 +121,6 @@ OC.L10N.register(
     "Add photos to this place" : "Añadir fotos a este lugar",
     "Cover photo for place {placeName}" : "Foto de cubierta para el lugar {placeName}",
     "There is no place yet!" : "¡Todavía no hay lugar!",
-    "Cover photo for shared album {albumName}." : "Foto de cubierta para el álbum compartido {albumName}.",
     "Back to tags overview" : "Regresar a la vista general de etiquetas",
     "No photos with this tag yet" : "No hay fotos con esta etiqueta todavía",
     "No tags yet" : "Todavía no hay etiquetas",
@@ -147,14 +146,15 @@ OC.L10N.register(
     "{title}'s face" : "Rostro de {title}",
     "{startDate} to {endDate}" : "{startDate} a {endDate}",
     "Details" : "Detalles",
+    "Could not load photos folder" : "No se pudo cargar la carpeta de fotos",
+    "Cover photo for shared album {albumName}." : "Foto de cubierta para el álbum compartido {albumName}.",
+    "One of the source folders does not exists" : "Una de las carpetas fuente no existe",
+    "Add" : "Añadir",
     "Failed to rename {oldName} to {faceName}." : "Fallo al renombrar {oldName} a {faceName}",
     "Failed to delete {faceName}." : "Fallo al borrar {faceName}",
     "Failed to delete {fileId}." : "Fallo al borrar {fileId}.",
     "Failed to delete {fileName}." : "Fallo al borrar {fileName}.",
     "Failed to set favorite state for {fileId}." : "Fallo al establecer el estado de favorito para {fileId}.",
-    "Failed to set favorite state for {fileName}." : "Fallo al establecer el estado de favorito para {fileName}.",
-    "Could not load photos folder" : "No se pudo cargar la carpeta de fotos",
-    "One of the source folders does not exists" : "Una de las carpetas fuente no existe",
-    "Add" : "Añadir"
+    "Failed to set favorite state for {fileName}." : "Fallo al establecer el estado de favorito para {fileName}."
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

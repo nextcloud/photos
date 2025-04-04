@@ -71,10 +71,10 @@ OC.L10N.register(
     "All your media" : "Όλα τα media σας",
     "Tagged photos" : "Φωτογραφίες με ετικέτα",
     "Details" : "Λεπτομέρειες",
+    "Add" : "Προσθήκη",
     "Failed to rename {oldName} to {faceName}." : "Απέτυχε η μετονομασία του {oldName} σε {faceName}.",
     "Failed to delete {faceName}." : "Απέτυχε η διαγραφή {faceName}.",
     "Failed to delete {fileId}." : "Απέτυχε η διαγραφή {fileId}.",
-    "Failed to delete {fileName}." : "Απέτυχε η διαγραφή {fileName}.",
-    "Add" : "Προσθήκη"
+    "Failed to delete {fileName}." : "Απέτυχε η διαγραφή {fileName}."
 },
 "nplurals=2; plural=(n != 1);");
