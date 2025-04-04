@@ -17,7 +17,7 @@
 		<CollectionCover :key="collection.basename"
 			slot-scope="{collection}"
 			:link="`/sharedalbums/${collection.basename}`"
-			:alt-img="t('photos', 'Cover photo for shared album {albumName}.', { albumName: collection.basename })"
+			:alt-img="t('photos', 'Cover photo for shared album {albumName}', { albumName: collection.basename })"
 			:data-test="collection.basename"
 			:cover-url="collection.lastPhoto | coverUrl">
 			<span class="album__name">
