@@ -190,8 +190,8 @@ const actions = {
 				try {
 					await client.deleteFile(file.filename)
 				} catch (error) {
-					logger.error(t('photos', 'Failed to delete {fileId}.', { fileId }), { error })
-					showError(t('photos', 'Failed to delete {fileName}.', { fileName: file.basename }))
+					logger.error(t('photos', 'Failed to delete {fileId}', { fileId }), { error })
+					showError(t('photos', 'Failed to delete {fileName}', { fileName: file.basename }))
 					console.error(error)
 					context.dispatch('appendFiles', [file])
 				} finally {
@@ -239,8 +239,8 @@ const actions = {
 					)
 				} catch (error) {
 					context.commit('favoriteFile', { fileId, favoriteState: favoriteState === 0 ? 1 : 0 })
-					logger.error(t('photos', 'Failed to set favorite state for {fileId}.', { fileId: file.fileid }), { error })
-					showError(t('photos', 'Failed to set favorite state for {fileName}.', { fileName: file.basename }))
+					logger.error(t('photos', 'Failed to set favorite state for {fileId}', { fileId: file.fileid }), { error })
+					showError(t('photos', 'Failed to set favorite state for {fileName}', { fileName: file.basename }))
 				}
 
 				return semaphore.release(symbole)
