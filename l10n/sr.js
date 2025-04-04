@@ -122,7 +122,6 @@ OC.L10N.register(
     "Add photos to this place" : "Додај фотографије на ово место",
     "Cover photo for place {placeName}" : "Фотографија омота за место {placeName}",
     "There is no place yet!" : "Још увек нема места!",
-    "Cover photo for shared album {albumName}." : "Фотографија омота за дељени албум {albumName}.",
     "Back to tags overview" : "Назад на преглед ознака",
     "No photos with this tag yet" : "Још увек нема фотографија са овом ознаком",
     "No tags yet" : "Још нема ознака",
@@ -148,14 +147,15 @@ OC.L10N.register(
     "{title}'s face" : "лице {title}",
     "{startDate} to {endDate}" : "{startDate} до {endDate}",
     "Details" : "Детаљи",
+    "Could not load photos folder" : "Не може да се учита фолдер фотографија",
+    "Cover photo for shared album {albumName}." : "Фотографија омота за дељени албум {albumName}.",
+    "One of the source folders does not exists" : "Један од изворних фолдера не постоји",
+    "Add" : "Додај",
     "Failed to rename {oldName} to {faceName}." : "Није успела промена имена {oldName} у {faceName}.",
     "Failed to delete {faceName}." : "Није успело брисање {faceName}.",
     "Failed to delete {fileId}." : "Није успело брисање {fileId}.",
     "Failed to delete {fileName}." : "Није успело брисање {fileName}.",
     "Failed to set favorite state for {fileId}." : "Није успело постављање стања омиљено за {fileId}.",
-    "Failed to set favorite state for {fileName}." : "Није успело постављање стања омиљено за {fileName}.",
-    "Could not load photos folder" : "Не може да се учита фолдер фотографија",
-    "One of the source folders does not exists" : "Један од изворних фолдера не постоји",
-    "Add" : "Додај"
+    "Failed to set favorite state for {fileName}." : "Није успело постављање стања омиљено за {fileName}."
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

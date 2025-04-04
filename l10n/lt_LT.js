@@ -74,7 +74,6 @@ OC.L10N.register(
     "This folder does not exist" : "Šio aplanko nėra",
     "Loading folders …" : "Įkeliami aplankai…",
     "No photos in here" : "Čia nuotraukų nėra",
-    "Cover photo for shared album {albumName}." : "Viršelio nuotrauka, skirta bendrinamam albumui {albumName}.",
     "Back to tags overview" : "Atgal į žymių apžvalgą",
     "No photos with this tag yet" : "Kol kas nėra nuotraukų su šia žyme",
     "No tags yet" : "Kol kas žymių nėra",
@@ -91,12 +90,13 @@ OC.L10N.register(
     "Tagged photos" : "Pažymėtos nuotraukos",
     "{startDate} to {endDate}" : "Nuo {startDate} iki {endDate}",
     "Details" : "Išsamiau",
+    "Could not load photos folder" : "Nepavyko įkelti nuotraukų aplanko",
+    "Cover photo for shared album {albumName}." : "Viršelio nuotrauka, skirta bendrinamam albumui {albumName}.",
+    "One of the source folders does not exists" : "Vieno iš šaltinio aplankų nėra",
+    "Add" : "Pridėti",
     "Failed to rename {oldName} to {faceName}." : "Nepavyko pervadinti {oldName} į {faceName}.",
     "Failed to delete {faceName}." : "Nepavyko ištrinti {faceName}.",
     "Failed to delete {fileId}." : "Nepavyko ištrinti {fileId}.",
-    "Failed to delete {fileName}." : "Nepavyko ištrinti {fileName}.",
-    "Could not load photos folder" : "Nepavyko įkelti nuotraukų aplanko",
-    "One of the source folders does not exists" : "Vieno iš šaltinio aplankų nėra",
-    "Add" : "Pridėti"
+    "Failed to delete {fileName}." : "Nepavyko ištrinti {fileName}."
 },
 "nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);");

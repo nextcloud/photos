@@ -98,7 +98,6 @@
     "Add photos to this place" : "Agregar fotos a este lugar",
     "Cover photo for place {placeName}" : "Foto de portada para el lugar {nombreLugar}",
     "There is no place yet!" : "¡Aún no hay ningún lugar!",
-    "Cover photo for shared album {albumName}." : "Foto de portada para el álbum compartido {nombreÁlbum}.",
     "Back to tags overview" : "Volver a la vista general de etiquetas",
     "No photos with this tag yet" : "Aún no hay fotos con esta etiqueta",
     "No tags yet" : "Aún no hay etiquetas",
@@ -121,12 +120,13 @@
     "Tagged photo {title}" : "Foto etiquetada {título}",
     "{title}'s face" : "Rostro de {título}",
     "Details" : "Detalles",
+    "Cover photo for shared album {albumName}." : "Foto de portada para el álbum compartido {nombreÁlbum}.",
+    "Add" : "Agregar",
     "Failed to rename {oldName} to {faceName}." : "Error al cambiar el nombre de {antiguoNombre} a {nuevoNombre}.",
     "Failed to delete {faceName}." : "Error al eliminar {nombreRostro}.",
     "Failed to delete {fileId}." : "Error al eliminar {idArchivo}.",
     "Failed to delete {fileName}." : "Error al eliminar {nombreArchivo}.",
     "Failed to set favorite state for {fileId}." : "Error al establecer el estado de favorito para {idArchivo}.",
-    "Failed to set favorite state for {fileName}." : "Error al establecer el estado de favorito para {nombreArchivo}.",
-    "Add" : "Agregar"
+    "Failed to set favorite state for {fileName}." : "Error al establecer el estado de favorito para {nombreArchivo}."
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

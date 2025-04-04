@@ -121,7 +121,6 @@ OC.L10N.register(
     "Add photos to this place" : "Fényképek hozzáadása ehhez a helyhez",
     "Cover photo for place {placeName}" : "A következő hely borítóképe: {placeName}",
     "There is no place yet!" : "Még nincsenek helyek.",
-    "Cover photo for shared album {albumName}." : "Borítókép a(z) „{albumName}” megosztott albumhoz.",
     "Back to tags overview" : "Vissza a címkeáttekintőhöz",
     "No photos with this tag yet" : "Még nincsenek fényképek ezzel a címkével",
     "No tags yet" : "Még nincsenek címkék",
@@ -147,14 +146,15 @@ OC.L10N.register(
     "{title}'s face" : "{title} arca",
     "{startDate} to {endDate}" : "{startDate} – {endDate}",
     "Details" : "Részletek",
+    "Could not load photos folder" : "Nem lehet a fotók könyvtárat betölteni",
+    "Cover photo for shared album {albumName}." : "Borítókép a(z) „{albumName}” megosztott albumhoz.",
+    "One of the source folders does not exists" : "Az egyik forrás könyvtár nem létezik",
+    "Add" : "Hozzáadás",
     "Failed to rename {oldName} to {faceName}." : "A(z) {oldName} átnevezése a következőre sikertelen: {faceName}.",
     "Failed to delete {faceName}." : "A(z) {faceName} törlése sikertelen.",
     "Failed to delete {fileId}." : "A(z) {fileId} törlése sikertelen.",
     "Failed to delete {fileName}." : "A(z) {fileName} törlése sikertelen.",
     "Failed to set favorite state for {fileId}." : "A(z) {fileId} kedvenc állapotának beállítása sikertelen.",
-    "Failed to set favorite state for {fileName}." : "A(z) {fileName} kedvenc állapotának beállítása sikertelen.",
-    "Could not load photos folder" : "Nem lehet a fotók könyvtárat betölteni",
-    "One of the source folders does not exists" : "Az egyik forrás könyvtár nem létezik",
-    "Add" : "Hozzáadás"
+    "Failed to set favorite state for {fileName}." : "A(z) {fileName} kedvenc állapotának beállítása sikertelen."
 },
 "nplurals=2; plural=(n != 1);");

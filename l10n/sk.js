@@ -122,7 +122,6 @@ OC.L10N.register(
     "Add photos to this place" : "Pridať fotky do tohto miesta",
     "Cover photo for place {placeName}" : "Titulná fotografia pre miesto {placeName}",
     "There is no place yet!" : "Zatiaľ tu nie je žiadne miesto!",
-    "Cover photo for shared album {albumName}." : "Titulná fotka pre zdieľaný album {albumName}.",
     "Back to tags overview" : "Späť k prehladu štítkov",
     "No photos with this tag yet" : "Zatiaľ nie sú žiadne fotky s týmto štítkom",
     "No tags yet" : "Zatiaľ žiadne štítky",
@@ -148,14 +147,15 @@ OC.L10N.register(
     "{title}'s face" : "Tvár {title}",
     "{startDate} to {endDate}" : "{startDate} do {endDate}",
     "Details" : "Podrobnosti",
+    "Could not load photos folder" : "Nepodarilo sa načítať priečinok s fotkami",
+    "Cover photo for shared album {albumName}." : "Titulná fotka pre zdieľaný album {albumName}.",
+    "One of the source folders does not exists" : "Jeden zo zdrojových priečinkov neexistuje",
+    "Add" : "Pridať",
     "Failed to rename {oldName} to {faceName}." : "Chyba pri premenovávaní {oldName} na {faceName}.",
     "Failed to delete {faceName}." : "Nepodarilo sa zmazať {faceName}.",
     "Failed to delete {fileId}." : "Nepodarilo sa zmazať {fileId}.",
     "Failed to delete {fileName}." : "Nepodarilo sa zmazať {fileName}.",
     "Failed to set favorite state for {fileId}." : "Nepodarilo sa nastaviť obľúbený stav pre {fileId}.",
-    "Failed to set favorite state for {fileName}." : "Nepodarilo sa nastaviť obľúbený stav pre {fileName}.",
-    "Could not load photos folder" : "Nepodarilo sa načítať priečinok s fotkami",
-    "One of the source folders does not exists" : "Jeden zo zdrojových priečinkov neexistuje",
-    "Add" : "Pridať"
+    "Failed to set favorite state for {fileName}." : "Nepodarilo sa nastaviť obľúbený stav pre {fileName}."
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

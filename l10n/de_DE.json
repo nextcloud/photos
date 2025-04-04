@@ -120,7 +120,6 @@
     "Add photos to this place" : "Fotos zu diesem Ort hinzufügen",
     "Cover photo for place {placeName}" : "Titelbild für Ort {placeName}",
     "There is no place yet!" : "Es gibt noch keinen Ort",
-    "Cover photo for shared album {albumName}." : "Titelbild für das geteilte Album {albumName}.",
     "Back to tags overview" : "Zurück zur Schlagwortübersicht",
     "No photos with this tag yet" : "Noch keine Fotos mit diesem Schlagwort",
     "No tags yet" : "Noch keine Schlagworte vorhanden",
@@ -146,14 +145,15 @@
     "{title}'s face" : "{title}s Gesicht",
     "{startDate} to {endDate}" : "{startDate} bis {endDate}",
     "Details" : "Details",
+    "Could not load photos folder" : "Fotos-Ordner konnte nicht geladen werden",
+    "Cover photo for shared album {albumName}." : "Titelbild für das geteilte Album {albumName}.",
+    "One of the source folders does not exists" : "Einer der Quellordner existiert nicht",
+    "Add" : "Hinzufügen",
     "Failed to rename {oldName} to {faceName}." : "{oldName} konnte nicht in {faceName} umbenannt werden.",
     "Failed to delete {faceName}." : "{faceName} konnte nicht gelöscht werden.",
     "Failed to delete {fileId}." : "{fileId} konnte nicht gelöscht werden.",
     "Failed to delete {fileName}." : "{fileName} konnte nicht gelöscht werden.",
     "Failed to set favorite state for {fileId}." : "Fehler beim Festlegen des Favoritenstatus für {fileId}.",
-    "Failed to set favorite state for {fileName}." : "Fehler beim Festlegen des Favoritenstatus für {fileName}.",
-    "Could not load photos folder" : "Fotos-Ordner konnte nicht geladen werden",
-    "One of the source folders does not exists" : "Einer der Quellordner existiert nicht",
-    "Add" : "Hinzufügen"
+    "Failed to set favorite state for {fileName}." : "Fehler beim Festlegen des Favoritenstatus für {fileName}."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

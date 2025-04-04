@@ -120,7 +120,6 @@ OC.L10N.register(
     "Add photos to this place" : "Amestar semeyes a esti llugar",
     "Cover photo for place {placeName}" : "Portada pal llugar «{placeName}»",
     "There is no place yet!" : "¡Nun hai nengún llugar!",
-    "Cover photo for shared album {albumName}." : "Portada pal álbum compartíu «{albumName}».",
     "Back to tags overview" : "Volver a la vista xeneral d'etiquetes",
     "No photos with this tag yet" : "Nun hai nenguna semeya con esta etiqueta",
     "No tags yet" : "Nun hai nenguna etiqueta",
@@ -144,14 +143,15 @@ OC.L10N.register(
     "{title}'s face" : "Cara de: {title}",
     "{startDate} to {endDate}" : "{startDate} hasta'l {endDate}",
     "Details" : "Detalles",
+    "Could not load photos folder" : "Nun se puen cargar la carpeta de semeyes",
+    "Cover photo for shared album {albumName}." : "Portada pal álbum compartíu «{albumName}».",
+    "One of the source folders does not exists" : "Nun esiste una de les carpetes d'orixe",
+    "Add" : "Amestar",
     "Failed to rename {oldName} to {faceName}." : "Nun se pue renomar «{oldName}» a «{faceName}».",
     "Failed to delete {faceName}." : "Nun se pue desaniciar «{faceName}».",
     "Failed to delete {fileId}." : "Nun se pue desaniciar «{fileId}».",
     "Failed to delete {fileName}." : "Nun se pue desaniciar «{fileName}»",
     "Failed to set favorite state for {fileId}." : "Nun se pue afitar l'estáu favoritu de: {fileId}",
-    "Failed to set favorite state for {fileName}." : "Nun se pue afitar l'estáu favoritu de: {fileName}",
-    "Could not load photos folder" : "Nun se puen cargar la carpeta de semeyes",
-    "One of the source folders does not exists" : "Nun esiste una de les carpetes d'orixe",
-    "Add" : "Amestar"
+    "Failed to set favorite state for {fileName}." : "Nun se pue afitar l'estáu favoritu de: {fileName}"
 },
 "nplurals=2; plural=(n != 1);");
