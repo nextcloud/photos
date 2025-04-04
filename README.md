@@ -36,7 +36,7 @@ Use the Android/iOS App to view your photos. It's possible to auto-upload them.
 
 * [John Molakvoæ](https://github.com/skjnldsv)
 
-If you'd like to join, just go through the [issues list](https://github.com/nextcloud/photos/issues) and fix some!
+If you not like to join, just go through the [issues list](https://github.com/nextcloud/photos/issues) and fix some!
 
 ## 🏗 Development setup
 
