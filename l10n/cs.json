@@ -120,7 +120,6 @@
     "Add photos to this place" : "Přidat tomuto umístění nějaké fotky",
     "Cover photo for place {placeName}" : "Foto na obálku pro umístění {placeName}",
     "There is no place yet!" : "Zatím zde není žádné umístění!",
-    "Cover photo for shared album {albumName}." : "Foto na obálku sdíleného alba {albumName}.",
     "Back to tags overview" : "Zpět na přehled štítků",
     "No photos with this tag yet" : "Zatím žádné fotky s tímto štítkem",
     "No tags yet" : "Zatím žádné štítky",
@@ -146,14 +145,15 @@
     "{title}'s face" : "Obličej {title}",
     "{startDate} to {endDate}" : "{startDate} až {endDate}",
     "Details" : "Podrobnosti",
+    "Could not load photos folder" : "Nepodařilo se načíst složku s fotkami",
+    "Cover photo for shared album {albumName}." : "Foto na obálku sdíleného alba {albumName}.",
+    "One of the source folders does not exists" : "Jedna ze zdrojových složek neexistuje",
+    "Add" : "Přidat",
     "Failed to rename {oldName} to {faceName}." : "Nepodařilo se přejmenovat {oldName} na {faceName}.",
     "Failed to delete {faceName}." : "Nepodařilo se smazat {faceName}.",
     "Failed to delete {fileId}." : "Nepodařilo se smazat {fileId}.",
     "Failed to delete {fileName}." : "Nepodařilo se smazat {fileName}.",
     "Failed to set favorite state for {fileId}." : "Nepodařilo se nastavit stav zařazení mezi oblíbené pro {fileId}.",
-    "Failed to set favorite state for {fileName}." : "Nepodařil se nastavit stav zařazení mezi oblíbené pro {fileName}.",
-    "Could not load photos folder" : "Nepodařilo se načíst složku s fotkami",
-    "One of the source folders does not exists" : "Jedna ze zdrojových složek neexistuje",
-    "Add" : "Přidat"
+    "Failed to set favorite state for {fileName}." : "Nepodařil se nastavit stav zařazení mezi oblíbené pro {fileName}."
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;"
 }

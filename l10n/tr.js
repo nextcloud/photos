@@ -122,7 +122,6 @@ OC.L10N.register(
     "Add photos to this place" : "Bu yere fotoğraflar ekle",
     "Cover photo for place {placeName}" : "{placeName} yerinin kapak görseli",
     "There is no place yet!" : "Henüz bir yer yok!",
-    "Cover photo for shared album {albumName}." : "{albumName} paylaşılmış albümünün kapak görseli.",
     "Back to tags overview" : "Etiket özetine geri dön",
     "No photos with this tag yet" : "Henüz bu şekilde etiketlenmiş bir fotoğraf yok",
     "No tags yet" : "Henüz bir etiket yok",
@@ -148,14 +147,15 @@ OC.L10N.register(
     "{title}'s face" : "{title} yüzü",
     "{startDate} to {endDate}" : "{startDate} - {endDate}",
     "Details" : "Ayrıntılar",
+    "Could not load photos folder" : "Fotoğraflar klasörü yüklenemedi",
+    "Cover photo for shared album {albumName}." : "{albumName} paylaşılmış albümünün kapak görseli.",
+    "One of the source folders does not exists" : "Kaynak klasörlerden biri bulunamadı",
+    "Add" : "Ekle",
     "Failed to rename {oldName} to {faceName}." : "{oldName} adı {faceName} olarak değiştirilemedi.",
     "Failed to delete {faceName}." : "{faceName} silinemedi.",
     "Failed to delete {fileId}." : "{fileId} silinemedi.",
     "Failed to delete {fileName}." : "{fileName} silinemedi.",
     "Failed to set favorite state for {fileId}." : "{fileId} için sık kullanılan durumu ayarlanamadı.",
-    "Failed to set favorite state for {fileName}." : "{fileName} için sık kullanılan durumu ayarlanamadı.",
-    "Could not load photos folder" : "Fotoğraflar klasörü yüklenemedi",
-    "One of the source folders does not exists" : "Kaynak klasörlerden biri bulunamadı",
-    "Add" : "Ekle"
+    "Failed to set favorite state for {fileName}." : "{fileName} için sık kullanılan durumu ayarlanamadı."
 },
 "nplurals=2; plural=(n > 1);");

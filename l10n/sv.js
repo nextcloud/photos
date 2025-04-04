@@ -122,7 +122,6 @@ OC.L10N.register(
     "Add photos to this place" : "Lägg till bilder till denna plats",
     "Cover photo for place {placeName}" : "Omslagsbild för plats {placeName}",
     "There is no place yet!" : "Det finns ingen plats ännu!",
-    "Cover photo for shared album {albumName}." : "Omslagsbild för delat album {albumName}.",
     "Back to tags overview" : "Tillbaka till tagg-översikten",
     "No photos with this tag yet" : "Inga bilder med denna tagg ännu",
     "No tags yet" : "Inga taggar än",
@@ -148,14 +147,15 @@ OC.L10N.register(
     "{title}'s face" : "{title}s ansikte",
     "{startDate} to {endDate}" : "{startDate} till {endDate}",
     "Details" : "Detaljer",
+    "Could not load photos folder" : "Kunde inte ladda fotomappen",
+    "Cover photo for shared album {albumName}." : "Omslagsbild för delat album {albumName}.",
+    "One of the source folders does not exists" : "En av källmapparna finns inte",
+    "Add" : "Lägg till",
     "Failed to rename {oldName} to {faceName}." : "Lyckades inte döpa om {oldName} till {faceName}.",
     "Failed to delete {faceName}." : "Misslyckades att radera {faceName}.",
     "Failed to delete {fileId}." : "Misslyckades att radera {fileId}.",
     "Failed to delete {fileName}." : "Misslyckades att radera {fileName}.",
     "Failed to set favorite state for {fileId}." : "Det gick inte att ange favoritstatus för {fileId}.",
-    "Failed to set favorite state for {fileName}." : "Det gick inte att ange favoritstatus för {fileName}.",
-    "Could not load photos folder" : "Kunde inte ladda fotomappen",
-    "One of the source folders does not exists" : "En av källmapparna finns inte",
-    "Add" : "Lägg till"
+    "Failed to set favorite state for {fileName}." : "Det gick inte att ange favoritstatus för {fileName}."
 },
 "nplurals=2; plural=(n != 1);");

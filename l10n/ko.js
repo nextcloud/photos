@@ -57,7 +57,7 @@ OC.L10N.register(
     "Delete selection" : "선택 항목 삭제",
     "Unassigned faces" : "지정되지 않은 얼굴",
     "Details" : "세부사항",
-    "Failed to delete {fileName}." : "{fileName}(을)를 삭제하지 못했습니다.",
-    "Add" : "추가"
+    "Add" : "추가",
+    "Failed to delete {fileName}." : "{fileName}(을)를 삭제하지 못했습니다."
 },
 "nplurals=1; plural=0;");

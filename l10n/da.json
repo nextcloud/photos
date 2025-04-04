@@ -120,7 +120,6 @@
     "Add photos to this place" : "Tilføj fotos til dette sted",
     "Cover photo for place {placeName}" : "Forsidefoto til sted {placeName}",
     "There is no place yet!" : "Der er endnu ikke noget sted!",
-    "Cover photo for shared album {albumName}." : "Forsidefoto til delt album {albumName}.",
     "Back to tags overview" : "Tilbage til tags oversigt",
     "No photos with this tag yet" : "Endnu ingen fotos med dette tag",
     "No tags yet" : "Ingen tags endnu",
@@ -146,14 +145,15 @@
     "{title}'s face" : "{title}'s ansigt",
     "{startDate} to {endDate}" : "{startDate} til {endDate}",
     "Details" : "Detaljer",
+    "Could not load photos folder" : "Kunne ikke indlæse fotomappe",
+    "Cover photo for shared album {albumName}." : "Forsidefoto til delt album {albumName}.",
+    "One of the source folders does not exists" : "En af kildemapperne eksisterer ikke",
+    "Add" : "Tilføj",
     "Failed to rename {oldName} to {faceName}." : "Kunne ikke omdøbe {oldName} til {faceName}",
     "Failed to delete {faceName}." : "Kunne ikke slette {faceName}.",
     "Failed to delete {fileId}." : "Kunne ikke slette {fileId}.",
     "Failed to delete {fileName}." : "Kunne ikke slette {fileName}.",
     "Failed to set favorite state for {fileId}." : "Kunne ikke indstille favorit tilstand for {fileId}.",
-    "Failed to set favorite state for {fileName}." : "Kunne ikke indstille favorittilstand for {fileName}.",
-    "Could not load photos folder" : "Kunne ikke indlæse fotomappe",
-    "One of the source folders does not exists" : "En af kildemapperne eksisterer ikke",
-    "Add" : "Tilføj"
+    "Failed to set favorite state for {fileName}." : "Kunne ikke indstille favorittilstand for {fileName}."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

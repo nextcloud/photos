@@ -122,7 +122,6 @@ OC.L10N.register(
     "Add photos to this place" : "إضافة صور إلى هذا المكان",
     "Cover photo for place {placeName}" : "صورة الغلاف للمكان {placeName}",
     "There is no place yet!" : "لا توجد أي أماكن حتى الآن!",
-    "Cover photo for shared album {albumName}." : "صورة الغلاف للألبوم المشترك {albumName}.",
     "Back to tags overview" : "عودة إلى عرض الوسم",
     "No photos with this tag yet" : "لا توجد أي صورة بهذا الوسم حتى الآن",
     "No tags yet" : "لا توجد وسوم حتى الآن",
@@ -148,14 +147,15 @@ OC.L10N.register(
     "{title}'s face" : "وجه {title}",
     "{startDate} to {endDate}" : "{startDate} إلى {endDate}",
     "Details" : "التفاصيل",
+    "Could not load photos folder" : "تعذّر رفع مجلد الصِّور",
+    "Cover photo for shared album {albumName}." : "صورة الغلاف للألبوم المشترك {albumName}.",
+    "One of the source folders does not exists" : "أحد المجلدات المصدرية غير موجود",
+    "Add" : "إضافة",
     "Failed to rename {oldName} to {faceName}." : "تعذّر تغيير تسمية {oldName} إلى {faceName}.",
     "Failed to delete {faceName}." : "تعذّر حذف {faceName}.",
     "Failed to delete {fileId}." : "تعذّر حذف {fileId}.",
     "Failed to delete {fileName}." : "تعذّر حذف {fileName}.",
     "Failed to set favorite state for {fileId}." : "تعذّر تعيين حالة \"مُفضّل\" لـ {fileId}.",
-    "Failed to set favorite state for {fileName}." : "تعذّر تعيين حالة \"مُفضّل\" لـ {fileName}.",
-    "Could not load photos folder" : "تعذّر رفع مجلد الصِّور",
-    "One of the source folders does not exists" : "أحد المجلدات المصدرية غير موجود",
-    "Add" : "إضافة"
+    "Failed to set favorite state for {fileName}." : "تعذّر تعيين حالة \"مُفضّل\" لـ {fileName}."
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");

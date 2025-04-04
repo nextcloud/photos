@@ -122,7 +122,6 @@ OC.L10N.register(
     "Add photos to this place" : "この場所に写真を追加",
     "Cover photo for place {placeName}" : "{placeName} の表紙写真",
     "There is no place yet!" : "まだ場所がない！",
-    "Cover photo for shared album {albumName}." : "共有アルバム {albumName} の表紙写真。",
     "Back to tags overview" : "タグの概要へ戻る",
     "No photos with this tag yet" : "このタグの写真はまだありません",
     "No tags yet" : "まだタグがありません",
@@ -148,14 +147,15 @@ OC.L10N.register(
     "{title}'s face" : "{title} の顔",
     "{startDate} to {endDate}" : "{startDate} から {endDate}",
     "Details" : "詳細",
+    "Could not load photos folder" : "写真フォルダを読み込めませんでした",
+    "Cover photo for shared album {albumName}." : "共有アルバム {albumName} の表紙写真。",
+    "One of the source folders does not exists" : "ソースフォルダーの1つが存在しません",
+    "Add" : "追加",
     "Failed to rename {oldName} to {faceName}." : "{oldName} から {faceName} への名前の変更に失敗しました。",
     "Failed to delete {faceName}." : "{faceName} の削除に失敗しました。",
     "Failed to delete {fileId}." : "{fileId} の削除に失敗しました。",
     "Failed to delete {fileName}." : "{fileName} の削除に失敗しました。",
     "Failed to set favorite state for {fileId}." : "{fileId} のお気に入り状態の設定に失敗しました。",
-    "Failed to set favorite state for {fileName}." : "{fileName} のお気に入り状態の設定に失敗しました。",
-    "Could not load photos folder" : "写真フォルダを読み込めませんでした",
-    "One of the source folders does not exists" : "ソースフォルダーの1つが存在しません",
-    "Add" : "追加"
+    "Failed to set favorite state for {fileName}." : "{fileName} のお気に入り状態の設定に失敗しました。"
 },
 "nplurals=1; plural=0;");
