@@ -36,7 +36,7 @@ OC.L10N.register(
     "Choose the folders from where photos and videos are shown." : "Izvēlēties mapes, no kurām tiek rādīti fotoattēli un video.",
     "Choose the folder where photos and albums are uploaded to." : "Izvēlēties mapi, kurā tiek augšupielādēti fotoattēli un albumi.",
     "Edit album details" : "Labot albuma datus",
-    "Rename person" : "Pārsaukt personu",
+    "Rename person" : "Pārdēvēt cilvēku",
     "Remove from favorites" : "Noņemt no izlases",
     "Remove person" : "Noņemt personu",
     "Back to tags overview" : "Atpakaļ uz birku pārskatu",
