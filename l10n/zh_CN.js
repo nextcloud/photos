@@ -122,6 +122,7 @@ OC.L10N.register(
     "Add photos to this place" : "添加照片至此地点",
     "Cover photo for place {placeName}" : "地点{placeName}的封面照片",
     "There is no place yet!" : "还没有地点！",
+    "Cover photo for shared album {albumName}" : "共享相册的封面照片 {albumName}",
     "Back to tags overview" : "回到标签一览",
     "No photos with this tag yet" : "还没有照片拥有该标签",
     "No tags yet" : "尚无标签",
@@ -147,6 +148,12 @@ OC.L10N.register(
     "{title}'s face" : "{title}的脸",
     "{startDate} to {endDate}" : "{startDate} 到 {endDate}",
     "Details" : "详情",
+    "Failed to rename {oldName} to {faceName}" : "无法将 {oldName} 重命名为 {faceName}",
+    "Failed to delete {faceName}" : "无法删除 {faceName}",
+    "Failed to delete {fileId}" : "无法删除 {fileId}",
+    "Failed to delete {fileName}" : "无法删除 {fileName}",
+    "Failed to set favorite state for {fileId}" : "无法为 {fileId} 设置收藏状态",
+    "Failed to set favorite state for {fileName}" : "无法为 {fileName} 设置收藏状态",
     "Could not load photos folder" : "无法加载照片文件夹",
     "Cover photo for shared album {albumName}." : "共享相册 {albumName} 的封面照片",
     "One of the source folders does not exists" : "其中一个源文件夹不存在",
@@ -155,7 +162,7 @@ OC.L10N.register(
     "Failed to delete {faceName}." : "删除 {faceName} 失败",
     "Failed to delete {fileId}." : "删除{field}失败",
     "Failed to delete {fileName}." : "删除{fileName}失败",
-    "Failed to set favorite state for {fileId}." : "为{field}设定收藏状态失败",
-    "Failed to set favorite state for {fileName}." : "为{fileName}设定收藏状态失败"
+    "Failed to set favorite state for {fileId}." : "无法为 {fileId} 设置收藏状态。",
+    "Failed to set favorite state for {fileName}." : "无法为 {fileName} 设置收藏状态。"
 },
 "nplurals=1; plural=0;");
