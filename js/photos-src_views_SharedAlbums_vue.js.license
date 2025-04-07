@@ -9,12 +9,13 @@ SPDX-FileCopyrightText: xiaokai <kexiaokai@gmail.com>
 SPDX-FileCopyrightText: string_decoder developers
 SPDX-FileCopyrightText: rhysd <lin90162@yahoo.co.jp>
 SPDX-FileCopyrightText: readable-stream developers
+SPDX-FileCopyrightText: p-queue developers
+SPDX-FileCopyrightText: omahlama
 SPDX-FileCopyrightText: jden <jason@denizac.org>
 SPDX-FileCopyrightText: inline-style-parser developers
 SPDX-FileCopyrightText: inherits developers
 SPDX-FileCopyrightText: escape-html developers
 SPDX-FileCopyrightText: debounce developers
-SPDX-FileCopyrightText: Victor Felder <victor@draft.li> (https://draft.li)
 SPDX-FileCopyrightText: Tobias Koppers @sokra
 SPDX-FileCopyrightText: Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)
 SPDX-FileCopyrightText: T. Jameson Little <t.jameson.little@gmail.com>
@@ -98,10 +99,10 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.2.0
 	- license: GPL-3.0-or-later
 - semver
-	- version: 7.6.2
+	- version: 7.7.1
 	- license: ISC
 - @nextcloud/event-bus
-	- version: 3.3.1
+	- version: 3.3.2
 	- license: GPL-3.0-or-later
 - @nextcloud/initial-state
 	- version: 2.2.0
@@ -136,9 +137,6 @@ This file is generated from multiple sources. Included packages:
 - @vueuse/shared
 	- version: 11.3.0
 	- license: MIT
-- is-plain-obj
-	- version: 4.1.0
-	- license: MIT
 - mdast-util-to-hast
 	- version: 13.0.2
 	- license: MIT
@@ -167,7 +165,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 6.0.1
 	- license: MIT
 - @nextcloud/vue
-	- version: 8.23.1
+	- version: 8.24.0
 	- license: AGPL-3.0-or-later
 - @ungap/structured-clone
 	- version: 1.2.0
@@ -190,6 +188,9 @@ This file is generated from multiple sources. Included packages:
 - base64-js
 	- version: 1.5.1
 	- license: MIT
+- blurhash
+	- version: 2.0.5
+	- license: MIT
 - buffer
 	- version: 6.0.3
 	- license: MIT
@@ -207,9 +208,6 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - camelcase
 	- version: 8.0.0
-	- license: MIT
-- ccount
-	- version: 2.0.1
 	- license: MIT
 - charenc
 	- version: 0.0.2
@@ -230,7 +228,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 2.2.0
 	- license: MIT
 - decode-named-character-reference
-	- version: 1.0.2
+	- version: 1.1.0
 	- license: MIT
 - define-data-property
 	- version: 1.1.4
@@ -245,7 +243,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.0.1
 	- license: MIT
 - emoji-mart-vue-fast
-	- version: 15.0.1
+	- version: 15.0.4
 	- license: BSD-3-Clause
 - es-define-property
 	- version: 1.0.1
@@ -337,6 +335,9 @@ This file is generated from multiple sources. Included packages:
 - is-generator-function
 	- version: 1.0.10
 	- license: MIT
+- is-plain-obj
+	- version: 4.1.0
+	- license: MIT
 - is-typed-array
 	- version: 1.1.15
 	- license: MIT
@@ -345,12 +346,6 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - lodash.get
 	- version: 4.4.2
-	- license: MIT
-- longest-streak
-	- version: 3.1.0
-	- license: MIT
-- markdown-table
-	- version: 3.0.4
 	- license: MIT
 - math-intrinsics
 	- version: 1.1.0
@@ -370,59 +365,14 @@ This file is generated from multiple sources. Included packages:
 - mdast-util-from-markdown
 	- version: 2.0.2
 	- license: MIT
-- mdast-util-gfm-autolink-literal
-	- version: 2.0.1
-	- license: MIT
-- mdast-util-gfm-footnote
-	- version: 2.1.0
-	- license: MIT
-- mdast-util-gfm-strikethrough
-	- version: 2.0.0
-	- license: MIT
-- mdast-util-gfm-table
-	- version: 2.0.0
-	- license: MIT
-- mdast-util-gfm-task-list-item
-	- version: 2.0.0
-	- license: MIT
-- mdast-util-gfm
-	- version: 3.1.0
-	- license: MIT
 - mdast-util-newline-to-break
 	- version: 2.0.0
-	- license: MIT
-- mdast-util-phrasing
-	- version: 4.1.0
-	- license: MIT
-- mdast-util-to-markdown
-	- version: 2.1.2
 	- license: MIT
 - mdast-util-to-string
 	- version: 4.0.0
 	- license: MIT
 - micromark-core-commonmark
-	- version: 2.0.2
-	- license: MIT
-- micromark-extension-gfm-autolink-literal
-	- version: 2.1.0
-	- license: MIT
-- micromark-extension-gfm-footnote
-	- version: 2.1.0
-	- license: MIT
-- micromark-extension-gfm-strikethrough
-	- version: 2.1.0
-	- license: MIT
-- micromark-extension-gfm-table
-	- version: 2.1.1
-	- license: MIT
-- micromark-extension-gfm-tagfilter
-	- version: 2.0.0
-	- license: MIT
-- micromark-extension-gfm-task-list-item
-	- version: 2.1.0
-	- license: MIT
-- micromark-extension-gfm
-	- version: 3.0.0
+	- version: 2.0.3
 	- license: MIT
 - micromark-factory-destination
 	- version: 2.0.1
@@ -473,10 +423,10 @@ This file is generated from multiple sources. Included packages:
 	- version: 2.0.1
 	- license: MIT
 - micromark-util-subtokenize
-	- version: 2.0.4
+	- version: 2.1.0
 	- license: MIT
 - micromark
-	- version: 4.0.1
+	- version: 4.0.2
 	- license: MIT
 - moment
 	- version: 2.30.1
@@ -486,6 +436,12 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - node-gettext
 	- version: 3.0.0
+	- license: MIT
+- eventemitter3
+	- version: 5.0.1
+	- license: MIT
+- p-queue
+	- version: 8.1.0
 	- license: MIT
 - path-posix
 	- version: 1.0.0
@@ -507,9 +463,6 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - rehype-react
 	- version: 7.1.2
-	- license: MIT
-- remark-gfm
-	- version: 4.0.1
 	- license: MIT
 - remark-parse
 	- version: 11.0.0
@@ -618,9 +571,6 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - which-typed-array
 	- version: 1.1.18
-	- license: MIT
-- zwitch
-	- version: 2.0.4
 	- license: MIT
 - photos
 	- version: 5.0.0-dev.0
