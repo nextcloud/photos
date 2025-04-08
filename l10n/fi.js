@@ -140,14 +140,7 @@ OC.L10N.register(
     "{title}'s face" : "Henkilön {title} kasvot",
     "{startDate} to {endDate}" : "{startDate} - {endDate}",
     "Details" : "Tiedot",
-    "Cover photo for shared album {albumName}." : "Kansikuva jaetulle albumille {albumName}.",
     "One of the source folders does not exists" : "Yksi lähdekansioista ei ole olemassa",
-    "Add" : "Lisää",
-    "Failed to rename {oldName} to {faceName}." : "Henkilön {oldName} nimeäminen muotoon {faceName} epäonnistui.",
-    "Failed to delete {faceName}." : "Henkilön {faceName} poistaminen epäonnistui.",
-    "Failed to delete {fileId}." : "Kohteen {fileId} poistaminen epäonnistui.",
-    "Failed to delete {fileName}." : "Tiedoston {fileName} poisto epäonnistui.",
-    "Failed to set favorite state for {fileId}." : "Suosikkimääritelmän asettaminen kohteelle {fileId} epäonnistui.",
-    "Failed to set favorite state for {fileName}." : "Suosikkimääritelmän asettaminen kohteelle {fileName} epäonnistui."
+    "Add" : "Lisää"
 },
 "nplurals=2; plural=(n != 1);");

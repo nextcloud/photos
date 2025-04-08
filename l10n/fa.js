@@ -121,13 +121,6 @@ OC.L10N.register(
     "Tagged photo {title}" : "عکس برچسب شده {title}",
     "{title}'s face" : "چهره {title}",
     "Details" : "جزییات",
-    "Cover photo for shared album {albumName}." : "عکس روی جلد آلبوم مشترک {albumName}.",
-    "Add" : "افزودن",
-    "Failed to rename {oldName} to {faceName}." : "تغییر نام {oldName} به {faceName} انجام نشد.",
-    "Failed to delete {faceName}." : "{faceName} حذف نشد.",
-    "Failed to delete {fileId}." : "{fileId} حذف نشد.",
-    "Failed to delete {fileName}." : "{fileName} حذف نشد.",
-    "Failed to set favorite state for {fileId}." : "حالت دلخواه برای {fileId} تنظیم نشد.",
-    "Failed to set favorite state for {fileName}." : "تنظیم حالت دلخواه برای {fileName} انجام نشد."
+    "Add" : "افزودن"
 },
 "nplurals=2; plural=(n > 1);");

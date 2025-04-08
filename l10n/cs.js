@@ -155,14 +155,7 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}" : "Nepodařilo se nastavit stav zařazení mezi oblíbené pro {fileId}",
     "Failed to set favorite state for {fileName}" : "Nepodařilo se nastavit stav zařazení mezi oblíbené pro {fileName}",
     "Could not load photos folder" : "Nepodařilo se načíst složku s fotkami",
-    "Cover photo for shared album {albumName}." : "Foto na obálku sdíleného alba {albumName}.",
     "One of the source folders does not exists" : "Jedna ze zdrojových složek neexistuje",
-    "Add" : "Přidat",
-    "Failed to rename {oldName} to {faceName}." : "Nepodařilo se přejmenovat {oldName} na {faceName}.",
-    "Failed to delete {faceName}." : "Nepodařilo se smazat {faceName}.",
-    "Failed to delete {fileId}." : "Nepodařilo se smazat {fileId}.",
-    "Failed to delete {fileName}." : "Nepodařilo se smazat {fileName}.",
-    "Failed to set favorite state for {fileId}." : "Nepodařilo se nastavit stav zařazení mezi oblíbené pro {fileId}.",
-    "Failed to set favorite state for {fileName}." : "Nepodařil se nastavit stav zařazení mezi oblíbené pro {fileName}."
+    "Add" : "Přidat"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

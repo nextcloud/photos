@@ -147,14 +147,7 @@ OC.L10N.register(
     "{startDate} to {endDate}" : "{startDate} – {endDate}",
     "Details" : "Részletek",
     "Could not load photos folder" : "Nem lehet a fotók könyvtárat betölteni",
-    "Cover photo for shared album {albumName}." : "Borítókép a(z) „{albumName}” megosztott albumhoz.",
     "One of the source folders does not exists" : "Az egyik forrás könyvtár nem létezik",
-    "Add" : "Hozzáadás",
-    "Failed to rename {oldName} to {faceName}." : "A(z) {oldName} átnevezése a következőre sikertelen: {faceName}.",
-    "Failed to delete {faceName}." : "A(z) {faceName} törlése sikertelen.",
-    "Failed to delete {fileId}." : "A(z) {fileId} törlése sikertelen.",
-    "Failed to delete {fileName}." : "A(z) {fileName} törlése sikertelen.",
-    "Failed to set favorite state for {fileId}." : "A(z) {fileId} kedvenc állapotának beállítása sikertelen.",
-    "Failed to set favorite state for {fileName}." : "A(z) {fileName} kedvenc állapotának beállítása sikertelen."
+    "Add" : "Hozzáadás"
 },
 "nplurals=2; plural=(n != 1);");

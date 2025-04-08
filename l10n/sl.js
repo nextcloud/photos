@@ -108,8 +108,6 @@ OC.L10N.register(
     "Tagged photo {title}" : "Označena fotografija {title}",
     "{title}'s face" : "{title}: obraz",
     "Details" : "Podrobnosti",
-    "Add" : "Dodaj",
-    "Failed to delete {fileId}." : "Brisanje polja {fileId} je spodletelo.",
-    "Failed to delete {fileName}." : "Brisanje datoteke {fileName} je spodletelo."
+    "Add" : "Dodaj"
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");

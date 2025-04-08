@@ -155,14 +155,7 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}" : "Failed to set favourite state for {fileId}",
     "Failed to set favorite state for {fileName}" : "Failed to set favourite state for {fileName}",
     "Could not load photos folder" : "Could not load photos folder",
-    "Cover photo for shared album {albumName}." : "Cover photo for shared album {albumName}.",
     "One of the source folders does not exists" : "One of the source folders does not exists",
-    "Add" : "Add",
-    "Failed to rename {oldName} to {faceName}." : "Failed to rename {oldName} to {faceName}.",
-    "Failed to delete {faceName}." : "Failed to delete {faceName}.",
-    "Failed to delete {fileId}." : "Failed to delete {fileId}.",
-    "Failed to delete {fileName}." : "Failed to delete {fileName}.",
-    "Failed to set favorite state for {fileId}." : "Failed to set favourite state for {fileId}.",
-    "Failed to set favorite state for {fileName}." : "Failed to set favourite state for {fileName}."
+    "Add" : "Add"
 },
 "nplurals=2; plural=(n != 1);");

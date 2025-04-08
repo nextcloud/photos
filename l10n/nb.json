@@ -143,14 +143,7 @@
     "{startDate} to {endDate}" : "{startDate} til {endDate}",
     "Details" : "Detaljer",
     "Could not load photos folder" : "Kunne ikke laste bildemappen",
-    "Cover photo for shared album {albumName}." : "Forsidebilde for delt album {albumName}.",
     "One of the source folders does not exists" : "En av kildemappene finnes ikke",
-    "Add" : "Legg til",
-    "Failed to rename {oldName} to {faceName}." : "Kunne ikke endre navn på {oldName} til {faceName}.",
-    "Failed to delete {faceName}." : "Kunne ikke slette {faceName}.",
-    "Failed to delete {fileId}." : "Kunne ikke slette {fileId}.",
-    "Failed to delete {fileName}." : "Kunne ikke slette {fileName}.",
-    "Failed to set favorite state for {fileId}." : "Kunne ikke angi favorittstatus for {fileId}.",
-    "Failed to set favorite state for {fileName}." : "Kunne ikke angi favorittstatus for {fileName}."
+    "Add" : "Legg til"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

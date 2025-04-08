@@ -116,13 +116,6 @@ OC.L10N.register(
     "{title}'s face" : "Лицето на {title}",
     "{startDate} to {endDate}" : "{startDate} до {endDate}",
     "Details" : "Подробности",
-    "Cover photo for shared album {albumName}." : "Снимка на корицата на споделен албум {albumName}",
-    "Add" : "Добавяне",
-    "Failed to rename {oldName} to {faceName}." : "Неуспешно преименуване от {oldName} на {faceName}.",
-    "Failed to delete {faceName}." : "Неуспешно изтриване на {faceName}.",
-    "Failed to delete {fileId}." : "Неуспешно изтриване на {fileId}.",
-    "Failed to delete {fileName}." : "Неуспешно изтриване на {fileName}.",
-    "Failed to set favorite state for {fileId}." : "Неуспешно задаване на предпочитано/любимо/ състояние за {fileId}.",
-    "Failed to set favorite state for {fileName}." : "Неуспешно задаване на предпочитано/любимо/ състояние за {fileName}."
+    "Add" : "Добавяне"
 },
 "nplurals=2; plural=(n != 1);");

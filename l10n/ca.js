@@ -148,14 +148,7 @@ OC.L10N.register(
     "{startDate} to {endDate}" : "{startDate} a {endDate}",
     "Details" : "Detalls",
     "Could not load photos folder" : "No s'ha pogut carregar la carpeta de fotos",
-    "Cover photo for shared album {albumName}." : "Foto de portada de l'àlbum compartit {albumName}.",
     "One of the source folders does not exists" : "Una de les carpetes d'origen no existeix",
-    "Add" : "Afegeix",
-    "Failed to rename {oldName} to {faceName}." : "No s'ha pogut canviar el nom de la persona {oldName} a {faceName}.",
-    "Failed to delete {faceName}." : "No s'ha pogut suprimir {faceName}.",
-    "Failed to delete {fileId}." : "No s'ha pogut suprimir {fileId}.",
-    "Failed to delete {fileName}." : "No s'ha pogut suprimir {fileName}.",
-    "Failed to set favorite state for {fileId}." : "No s'ha pogut establir l'estat de preferit per a {fileId}.",
-    "Failed to set favorite state for {fileName}." : "No s'ha pogut establir l'estat de preferit per a {fileName}."
+    "Add" : "Afegeix"
 },
 "nplurals=2; plural=(n != 1);");
