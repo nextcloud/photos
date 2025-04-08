@@ -14,6 +14,7 @@ OC.L10N.register(
     "Favorite" : "Pennrollañ",
     "Home" : "Degemer",
     "View" : "Gwell",
+    "Unselect all" : "Diziuzañ pep tra",
     "Remove from favorites" : "Diverkañañ eus ar pennrolloù",
     "Details" : "Munudoù",
     "Add" : "Ouzhpennañ"
