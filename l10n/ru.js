@@ -145,14 +145,7 @@ OC.L10N.register(
     "{startDate} to {endDate}" : "С {startDate} по {endDate}",
     "Details" : "Свойства",
     "Could not load photos folder" : "Не удалось загрузить папку с фотографиями",
-    "Cover photo for shared album {albumName}." : "Заглавное изображение опубликованного альбома «{albumName}».",
     "One of the source folders does not exists" : "Одна из исходных папок не существует",
-    "Add" : "Добавить",
-    "Failed to rename {oldName} to {faceName}." : "Не удалось переименовать метку лица «{oldName}» в «{faceName}».",
-    "Failed to delete {faceName}." : "Не удалось удалить метку лица «{faceName}».",
-    "Failed to delete {fileId}." : "Не удалось удалить «{fileId}».",
-    "Failed to delete {fileName}." : "Не удалось удалить файл «{fileName}».",
-    "Failed to set favorite state for {fileId}." : "Не удалось отметить или снять отметку избранного с «{fileId}».",
-    "Failed to set favorite state for {fileName}." : "Не удалось отметить или снять отметку избранного с «{fileId}»."
+    "Add" : "Добавить"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

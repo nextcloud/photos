@@ -123,13 +123,6 @@ OC.L10N.register(
     "{title}'s face" : "Wajah {title}",
     "{startDate} to {endDate}" : "{startDate} ke {endDate}",
     "Details" : "Detail",
-    "Cover photo for shared album {albumName}." : "Foto cover untuk album terbagi {albumName}.",
-    "Add" : "Masukkan",
-    "Failed to rename {oldName} to {faceName}." : "Gagal mengubah nama {oldName} to {faceName}.",
-    "Failed to delete {faceName}." : "Gagal menghapus {faceName}.",
-    "Failed to delete {fileId}." : "Gagal menghapus {field}.",
-    "Failed to delete {fileName}." : "Gagal menghapus {fileName}.",
-    "Failed to set favorite state for {fileId}." : "Gagal menetapkan keadaan favorit untuk {field}.",
-    "Failed to set favorite state for {fileName}." : "Gagal menetapkan keadaan favorit untuk {fileName}."
+    "Add" : "Masukkan"
 },
 "nplurals=1; plural=0;");

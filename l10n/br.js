@@ -4,6 +4,7 @@ OC.L10N.register(
     "Public link" : "Liamm publik",
     "Photos" : "Fotoioù",
     "Videos" : "Videoioù",
+    "People" : "Tud",
     "Favorites" : "Pennrolloù",
     "Shared with you" : "Rannet ganeoc'h",
     "Tags" : "Klavioù",

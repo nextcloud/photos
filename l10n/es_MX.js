@@ -145,14 +145,7 @@ OC.L10N.register(
     "{startDate} to {endDate}" : "{startDate} a {endDate}",
     "Details" : "Detalles",
     "Could not load photos folder" : "No se pudo cargar la carpeta de fotos",
-    "Cover photo for shared album {albumName}." : "Foto de portada para el álbum compartido {albumName}.",
     "One of the source folders does not exists" : "Una de las carpetas fuente no existe",
-    "Add" : "Agregar",
-    "Failed to rename {oldName} to {faceName}." : "No se pudo renombrar {oldName} a {faceName}.",
-    "Failed to delete {faceName}." : "No se pudo borrar {faceName}.",
-    "Failed to delete {fileId}." : "No se pudo borrar {fileId}.",
-    "Failed to delete {fileName}." : "No se pudo eliminar {fileName}.",
-    "Failed to set favorite state for {fileId}." : "No se pudo establecer el estado de favorito para {fileId}.",
-    "Failed to set favorite state for {fileName}." : "No se pudo establecer el estado de favorito para {fileName}."
+    "Add" : "Agregar"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

@@ -145,14 +145,7 @@
     "{startDate} to {endDate}" : "{startDate} - {endDate}",
     "Details" : "Xehetasunak",
     "Could not load photos folder" : "Ezin izan da argazkien karpeta kargatu",
-    "Cover photo for shared album {albumName}." : "{albumName} album partekatuko azaleko argazkia",
     "One of the source folders does not exists" : "Iturburu-karpeta bat ez da existitzen",
-    "Add" : "Gehitu",
-    "Failed to rename {oldName} to {faceName}." : "Ezin izan da {oldName} berrizendatu {faceName} gisa.",
-    "Failed to delete {faceName}." : "Ezin izan da  {faceName} ezabatu.",
-    "Failed to delete {fileId}." : "{fileId} ezabatzeak huts egin du.",
-    "Failed to delete {fileName}." : "{fileName} ezabatzeak huts egin du.",
-    "Failed to set favorite state for {fileId}." : "Ezin izan da ezarri gogoko egoera {fileId}(r)entzat.",
-    "Failed to set favorite state for {fileName}." : "Ezin izan da ezarri gogoko egoera {fileName}(r)entzat."
+    "Add" : "Gehitu"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

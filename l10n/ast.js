@@ -144,14 +144,7 @@ OC.L10N.register(
     "{startDate} to {endDate}" : "{startDate} hasta'l {endDate}",
     "Details" : "Detalles",
     "Could not load photos folder" : "Nun se puen cargar la carpeta de semeyes",
-    "Cover photo for shared album {albumName}." : "Portada pal álbum compartíu «{albumName}».",
     "One of the source folders does not exists" : "Nun esiste una de les carpetes d'orixe",
-    "Add" : "Amestar",
-    "Failed to rename {oldName} to {faceName}." : "Nun se pue renomar «{oldName}» a «{faceName}».",
-    "Failed to delete {faceName}." : "Nun se pue desaniciar «{faceName}».",
-    "Failed to delete {fileId}." : "Nun se pue desaniciar «{fileId}».",
-    "Failed to delete {fileName}." : "Nun se pue desaniciar «{fileName}»",
-    "Failed to set favorite state for {fileId}." : "Nun se pue afitar l'estáu favoritu de: {fileId}",
-    "Failed to set favorite state for {fileName}." : "Nun se pue afitar l'estáu favoritu de: {fileName}"
+    "Add" : "Amestar"
 },
 "nplurals=2; plural=(n != 1);");

@@ -139,14 +139,7 @@ OC.L10N.register(
     "{startDate} to {endDate}" : "{startDate} دىن {endDate}",
     "Details" : "تەپسىلاتى",
     "Could not load photos folder" : "رەسىم قىسقۇچنى يۈكلىيەلمىدى",
-    "Cover photo for shared album {albumName}." : "ھەمبەھىرلەنگەن پىلاستىنكا {albumName} for نىڭ مۇقاۋا سۈرىتى.",
     "One of the source folders does not exists" : "مەنبە قىسقۇچلارنىڭ بىرى مەۋجۇت ئەمەس",
-    "Add" : "قوش",
-    "Failed to rename {oldName} to {faceName}." : "{oldName} نىڭ نامىنى {faceName} غا ئۆزگەرتەلمىدى.",
-    "Failed to delete {faceName}." : "{faceName} نى ئۆچۈرەلمىدى.",
-    "Failed to delete {fileId}." : "{fileId} نى ئۆچۈرەلمىدى.",
-    "Failed to delete {fileName}." : "{fileName} نى ئۆچۈرەلمىدى.",
-    "Failed to set favorite state for {fileId}." : "{fileId} for ئۈچۈن ياخشى كۆرىدىغان ھالەتنى بەلگىلىيەلمىدى.",
-    "Failed to set favorite state for {fileName}." : "{fileName} for ئۈچۈن ياقتۇرىدىغان ھالەتنى بەلگىلىيەلمىدى."
+    "Add" : "قوش"
 },
 "nplurals=2; plural=(n != 1);");

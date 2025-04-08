@@ -146,14 +146,7 @@
     "{startDate} to {endDate}" : "{startDate} から {endDate}",
     "Details" : "詳細",
     "Could not load photos folder" : "写真フォルダを読み込めませんでした",
-    "Cover photo for shared album {albumName}." : "共有アルバム {albumName} の表紙写真。",
     "One of the source folders does not exists" : "ソースフォルダーの1つが存在しません",
-    "Add" : "追加",
-    "Failed to rename {oldName} to {faceName}." : "{oldName} から {faceName} への名前の変更に失敗しました。",
-    "Failed to delete {faceName}." : "{faceName} の削除に失敗しました。",
-    "Failed to delete {fileId}." : "{fileId} の削除に失敗しました。",
-    "Failed to delete {fileName}." : "{fileName} の削除に失敗しました。",
-    "Failed to set favorite state for {fileId}." : "{fileId} のお気に入り状態の設定に失敗しました。",
-    "Failed to set favorite state for {fileName}." : "{fileName} のお気に入り状態の設定に失敗しました。"
+    "Add" : "追加"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

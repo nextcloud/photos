@@ -155,14 +155,7 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}" : "无法为 {fileId} 设置收藏状态",
     "Failed to set favorite state for {fileName}" : "无法为 {fileName} 设置收藏状态",
     "Could not load photos folder" : "无法加载照片文件夹",
-    "Cover photo for shared album {albumName}." : "共享相册 {albumName} 的封面照片",
     "One of the source folders does not exists" : "其中一个源文件夹不存在",
-    "Add" : "添加",
-    "Failed to rename {oldName} to {faceName}." : "重命名 {oldName} 为 {faceName} 的操作失败",
-    "Failed to delete {faceName}." : "删除 {faceName} 失败",
-    "Failed to delete {fileId}." : "删除{field}失败",
-    "Failed to delete {fileName}." : "删除{fileName}失败",
-    "Failed to set favorite state for {fileId}." : "无法为 {fileId} 设置收藏状态。",
-    "Failed to set favorite state for {fileName}." : "无法为 {fileName} 设置收藏状态。"
+    "Add" : "添加"
 },
 "nplurals=1; plural=0;");

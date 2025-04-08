@@ -155,14 +155,7 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}" : "Не вдалося додати зірочку до {fileId}",
     "Failed to set favorite state for {fileName}" : "Не вдалося додати зірочку до {fileName}",
     "Could not load photos folder" : "Неможливо завантажити каталог зі світлинами",
-    "Cover photo for shared album {albumName}." : "Обкладинка для спільного альбому {albumName}.",
     "One of the source folders does not exists" : "Один з каталогів джерел відсутній",
-    "Add" : "Додати",
-    "Failed to rename {oldName} to {faceName}." : "Не вдалося перейменувати {oldName} на {faceName}.",
-    "Failed to delete {faceName}." : "Не вдалося вилучити {faceName}.",
-    "Failed to delete {fileId}." : "Не вдалося вилучити {fileId}.",
-    "Failed to delete {fileName}." : "Не вдалося вилучити {fileName}.",
-    "Failed to set favorite state for {fileId}." : "Не вдалося позначити зірочкою {fileId}.",
-    "Failed to set favorite state for {fileName}." : "Не вдалося позначити зірочкою {fileName}."
+    "Add" : "Додати"
 },
 "nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);");
