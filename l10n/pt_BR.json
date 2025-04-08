@@ -153,14 +153,7 @@
     "Failed to set favorite state for {fileId}" : "Falha ao definir o estado de favorito para {fileId}",
     "Failed to set favorite state for {fileName}" : "Falha ao definir o estado de favorito para {fileName}",
     "Could not load photos folder" : "Não foi possível carregar a pasta de fotos",
-    "Cover photo for shared album {albumName}." : "Foto da capa do álbum compartilhado {albumName}.",
     "One of the source folders does not exists" : "Uma das pastas de origem não existe",
-    "Add" : "Adicionar",
-    "Failed to rename {oldName} to {faceName}." : "Falha ao renomear {oldName} para {faceName}.",
-    "Failed to delete {faceName}." : "Falha ao excluir {faceName}.",
-    "Failed to delete {fileId}." : "Falha ao excluir {fileId}.",
-    "Failed to delete {fileName}." : "Falha ao excluir {fileName}.",
-    "Failed to set favorite state for {fileId}." : "Falha ao definir o estado de favorito para {fileId}.",
-    "Failed to set favorite state for {fileName}." : "Falha ao definir o estado de favorito para {fileName}."
+    "Add" : "Adicionar"
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

@@ -147,14 +147,7 @@ OC.L10N.register(
     "{startDate} to {endDate}" : "{startDate} tot {endDate}",
     "Details" : "Details",
     "Could not load photos folder" : "Kon de fotomap niet laden",
-    "Cover photo for shared album {albumName}." : "Omslagfoto voor gedeeld album {albumName}.",
     "One of the source folders does not exists" : "Een van de bronmappen bestaat niet",
-    "Add" : "Toevoegen",
-    "Failed to rename {oldName} to {faceName}." : "Hernoemen van {oldName} naar {faceName} mislukt.",
-    "Failed to delete {faceName}." : "Verwijderen van {faceName} mislukt.",
-    "Failed to delete {fileId}." : "Verwijderen van {fileId} mislukt.",
-    "Failed to delete {fileName}." : "Verwijderen van {fileName} mislukt.",
-    "Failed to set favorite state for {fileId}." : "Favorietenstatus instellen voor {fileId} mislukt.",
-    "Failed to set favorite state for {fileName}." : "Favorietenstatus instellen voor {fileName} mislukt."
+    "Add" : "Toevoegen"
 },
 "nplurals=2; plural=(n != 1);");

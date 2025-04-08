@@ -146,14 +146,7 @@
     "{startDate} to {endDate}" : "{startDate} kuni {endDate}",
     "Details" : "Üksikasjad",
     "Could not load photos folder" : "Fotode kausta laadimine ei õnnestunud",
-    "Cover photo for shared album {albumName}." : "Jagatud albumi {albumName} kaanepilt.",
     "One of the source folders does not exists" : "Ühte lähtekaustadest pole olemas",
-    "Add" : "Lisa",
-    "Failed to rename {oldName} to {faceName}." : "Nime muutmine ei õnnestunud: {oldName} → {faceName}.",
-    "Failed to delete {faceName}." : "{faceName} kustutamine ebaõnnestus.",
-    "Failed to delete {fileId}." : "{fileId} kustutamine ebaõnnestus.",
-    "Failed to delete {fileName}." : "{fileName} kustutamine ebaõnnestus.",
-    "Failed to set favorite state for {fileId}." : "„{fileId}“ määramine lemmikuks ei õnnestunud.",
-    "Failed to set favorite state for {fileName}." : "„{fileName}“ määramine lemmikuks ei õnnestunud."
+    "Add" : "Lisa"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
