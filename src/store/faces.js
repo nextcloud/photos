@@ -166,8 +166,8 @@ const actions = {
 					}
 					semaphore.release(symbol)
 				} catch (error) {
-					logger.error(t('photos', 'Failed to move {fileBaseName} to person {faceName}.', { fileBaseName, faceName }), { error })
-					showError(t('photos', 'Failed to move {fileBaseName} to person {faceName}.', { fileBaseName, faceName }))
+					logger.error(t('photos', 'Failed to move {fileBaseName} to person {faceName}', { fileBaseName, faceName }), { error })
+					showError(t('photos', 'Failed to move {fileBaseName} to person {faceName}', { fileBaseName, faceName }))
 					semaphore.release(symbol)
 					throw error
 				}
@@ -199,8 +199,8 @@ const actions = {
 				} catch (error) {
 					context.commit('addFilesToFace', { faceName, fileIdsToAdd: [fileId] })
 
-					logger.error(t('photos', 'Failed to remove {fileBaseName}.', { fileBaseName }), { error })
-					showError(t('photos', 'Failed to remove {fileBaseName}.', { fileBaseName }))
+					logger.error(t('photos', 'Failed to remove {fileBaseName}', { fileBaseName }), { error })
+					showError(t('photos', 'Failed to remove {fileBaseName}', { fileBaseName }))
 				} finally {
 					semaphore.release(symbol)
 				}
@@ -232,8 +232,8 @@ const actions = {
 			face = { ...face, basename: faceName }
 			context.commit('addFaces', { faces: [face] })
 		} catch (error) {
-			logger.error(t('photos', 'Failed to rename {oldName} to {faceName}.', { oldName, faceName }), { error })
-			showError(t('photos', 'Failed to rename {oldName} to {faceName}.', { oldName, faceName }))
+			logger.error(t('photos', 'Failed to rename {oldName} to {faceName}', { oldName, faceName }), { error })
+			showError(t('photos', 'Failed to rename {oldName} to {faceName}', { oldName, faceName }))
 			throw error
 		}
 	},
@@ -250,8 +250,8 @@ const actions = {
 			await client.deleteFile(`/recognize/${getCurrentUser()?.uid}/faces/${faceName}`)
 			context.commit('removeFaces', { faceNames: [faceName] })
 		} catch (error) {
-			logger.error(t('photos', 'Failed to delete {faceName}.', { faceName }), { error })
-			showError(t('photos', 'Failed to delete {faceName}.', { faceName }))
+			logger.error(t('photos', 'Failed to delete {faceName}', { faceName }), { error })
+			showError(t('photos', 'Failed to delete {faceName}', { faceName }))
 		}
 	},
 }
