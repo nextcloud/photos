@@ -153,14 +153,7 @@
     "Failed to set favorite state for {fileId}" : "تعذّر تعيين الحالة المُفضَّلة لـ{fileId}",
     "Failed to set favorite state for {fileName}" : "تعذّر تعيين الحالة المُفضَّلة لـ{fileName}",
     "Could not load photos folder" : "تعذّر رفع مجلد الصِّور",
-    "Cover photo for shared album {albumName}." : "صورة الغلاف للألبوم المشترك {albumName}.",
     "One of the source folders does not exists" : "أحد المجلدات المصدرية غير موجود",
-    "Add" : "إضافة",
-    "Failed to rename {oldName} to {faceName}." : "تعذّر تغيير تسمية {oldName} إلى {faceName}.",
-    "Failed to delete {faceName}." : "تعذّر حذف {faceName}.",
-    "Failed to delete {fileId}." : "تعذّر حذف {fileId}.",
-    "Failed to delete {fileName}." : "تعذّر حذف {fileName}.",
-    "Failed to set favorite state for {fileId}." : "تعذّر تعيين حالة \"مُفضّل\" لـ {fileId}.",
-    "Failed to set favorite state for {fileName}." : "تعذّر تعيين حالة \"مُفضّل\" لـ {fileName}."
+    "Add" : "إضافة"
 },"pluralForm" :"nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;"
 }

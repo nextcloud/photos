@@ -153,14 +153,7 @@
     "Failed to set favorite state for {fileId}" : "Kunde inte ställa in favoritstatus för {fileId}",
     "Failed to set favorite state for {fileName}" : "Kunde inte ställa in favoritstatus för {fileName}",
     "Could not load photos folder" : "Kunde inte ladda fotomappen",
-    "Cover photo for shared album {albumName}." : "Omslagsbild för delat album {albumName}.",
     "One of the source folders does not exists" : "En av källmapparna finns inte",
-    "Add" : "Lägg till",
-    "Failed to rename {oldName} to {faceName}." : "Lyckades inte döpa om {oldName} till {faceName}.",
-    "Failed to delete {faceName}." : "Misslyckades att radera {faceName}.",
-    "Failed to delete {fileId}." : "Misslyckades att radera {fileId}.",
-    "Failed to delete {fileName}." : "Misslyckades att radera {fileName}.",
-    "Failed to set favorite state for {fileId}." : "Det gick inte att ange favoritstatus för {fileId}.",
-    "Failed to set favorite state for {fileName}." : "Det gick inte att ange favoritstatus för {fileName}."
+    "Add" : "Lägg till"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

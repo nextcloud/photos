@@ -148,14 +148,7 @@ OC.L10N.register(
     "{startDate} to {endDate}" : "{startDate} ata o {endDate}",
     "Details" : "Detalles",
     "Could not load photos folder" : "Non foi posíbel cargar o cartafol de fotos",
-    "Cover photo for shared album {albumName}." : "Foto de portada do álbum compartido {albumName}.",
     "One of the source folders does not exists" : "Un dos cartafoles de orixe non existe",
-    "Add" : "Engadir",
-    "Failed to rename {oldName} to {faceName}." : "Non foi posíbel cambiar o nome de {oldName} a {faceName}.",
-    "Failed to delete {faceName}." : "Produciuse un fallo ao eliminar {faceName}.",
-    "Failed to delete {fileId}." : "Produciuse un fallo ao eliminar {fileId}.",
-    "Failed to delete {fileName}." : "Produciuse un fallo ao eliminar {fileName}.",
-    "Failed to set favorite state for {fileId}." : "Non foi posíbel definir o estado de favorito para {fileId}.",
-    "Failed to set favorite state for {fileName}." : "Non foi posíbel definir o estado de favorito para {fileName}."
+    "Add" : "Engadir"
 },
 "nplurals=2; plural=(n != 1);");

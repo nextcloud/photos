@@ -148,14 +148,7 @@ OC.L10N.register(
     "{startDate} to {endDate}" : "{startDate} do {endDate}",
     "Details" : "Szczegóły",
     "Could not load photos folder" : "Nie można wczytać katalogu ze zdjęciami",
-    "Cover photo for shared album {albumName}." : "Zdjęcie na okładkę albumu udostępnionego {albumName}.",
     "One of the source folders does not exists" : "Jeden z katalogów źródłowych nie istnieje",
-    "Add" : "Dodaj",
-    "Failed to rename {oldName} to {faceName}." : "Nie udało się zmienić nazwy {oldName} na {faceName}.",
-    "Failed to delete {faceName}." : "Nie udało się usunąć {faceName}.",
-    "Failed to delete {fileId}." : "Nie udało się usunąć {fileId}.",
-    "Failed to delete {fileName}." : "Nie udało się usunąć {fileName}.",
-    "Failed to set favorite state for {fileId}." : "Nie udało się ustawić statusu ulubionego dla {fileId}.",
-    "Failed to set favorite state for {fileName}." : "Nie udało się ustawić statusu ulubionego dla {fileName}."
+    "Add" : "Dodaj"
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");
