@@ -6,17 +6,10 @@ import Vue from 'vue'
 // eslint-disable-next-line n/no-missing-import, import/no-unresolved
 import InformationOutline from '@mdi/svg/svg/information-outline.svg?raw'
 import { translate as t, translatePlural as n } from '@nextcloud/l10n'
-import { getRequestToken } from '@nextcloud/auth'
-import { generateFilePath } from '@nextcloud/router'
 import { registerDavProperty } from '@nextcloud/files/dav'
 
 Vue.prototype.t = t
 Vue.prototype.n = n
-
-// eslint-disable-next-line no-undef, camelcase
-__webpack_nonce__ = btoa(getRequestToken() ?? '')
-// eslint-disable-next-line no-undef, camelcase
-__webpack_public_path__ = generateFilePath('photos', '', 'js/')
 
 registerDavProperty('nc:metadata-photos-exif')
 registerDavProperty('nc:metadata-photos-ifd0')

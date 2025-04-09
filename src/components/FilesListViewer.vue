@@ -69,7 +69,6 @@ import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import TiledLayout from '../components/TiledLayout/TiledLayout.vue'
 import { fetchFile } from '../services/fileFetcher.ts'
 import VirtualScrolling from '../components/VirtualScrolling.vue'
-import EmptyBox from '../assets/Illustrations/empty.svg'
 
 export default {
 	name: 'FilesListViewer',
@@ -137,7 +136,6 @@ export default {
 
 	data() {
 		return {
-			EmptyBox,
 			placeholderFiles: Array(20).fill(0).map((_, index) => {
 				const height = 200
 				const width = this.croppedLayout ? height : height * (1 + Math.random() * 2)

@@ -21,12 +21,12 @@
   "homepage": "https://github.com/nextcloud/photos",
   "license": "AGPL-3.0-or-later",
   "private": true,
+  "type": "module",
   "scripts": {
-    "build": "NODE_ENV=production webpack --progress --config webpack.js",
+    "build": "vite --mode production build",
     "postbuild": "build-js/npm-post-build.sh",
-    "dev": "NODE_ENV=development webpack --progress --config webpack.js",
-    "watch": "NODE_ENV=development webpack --progress --watch --config webpack.js",
-    "serve": "NODE_ENV=development webpack serve --progress --config webpack.js",
+    "dev": "vite --mode development build",
+    "watch": "vite --mode development build --watch",
     "test": "jest",
     "lint": "eslint --ext .js,.vue src",
     "lint:fix": "eslint --ext .js,.vue src --fix",
@@ -90,6 +90,7 @@
     "@nextcloud/cypress": "^1.0.0-beta.12",
     "@nextcloud/eslint-config": "^8.3.0",
     "@nextcloud/stylelint-config": "^3.0.1",
+    "@nextcloud/vite-config": "^1.4.0",
     "@nextcloud/webpack-vue-config": "^6.2.0",
     "@types/dockerode": "^3.3.32",
     "@types/jest": "^29.5.1",
@@ -97,7 +98,6 @@
     "@vue/tsconfig": "^0.5.1",
     "@vue/vue2-jest": "^29.2.6",
     "autoprefixer": "^10.4.14",
-    "babel-loader-exclude-node-modules-except": "^1.2.1",
     "cypress-split": "^1.24.14",
     "cypress-visual-regression": "^5.2.2",
     "cypress-wait-until": "^3.0.2",
@@ -107,12 +107,11 @@
     "jest-environment-jsdom": "^29.7.0",
     "module-replace-webpack-plugin": "0.0.12",
     "postcss": "^8.4.38",
-    "postcss-loader": "^8.1.1",
-    "raw-loader": "^4.0.2",
     "ts-node": "^10.9.2",
     "tslib": "^2.8.1",
     "typescript": "~5.3.3",
-    "wait-on": "^8.0.3",
-    "workbox-webpack-plugin": "^7.3.0"
+    "vite-plugin-pwa": "^1.0.0",
+    "vitest": "^3.1.1",
+    "wait-on": "^8.0.3"
   }
 }
