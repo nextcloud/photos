@@ -5,11 +5,11 @@
 
 import { showError } from '@nextcloud/dialogs'
 import { getCurrentUser } from '@nextcloud/auth'
+import Vue from 'vue'
 
-import client from '../services/DavClient.js'
+import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
-import Vue from 'vue'
 
 /**
  * @typedef {object} Face
@@ -153,9 +153,9 @@ const actions = {
 				const symbol = await semaphore.acquire()
 
 				try {
-					await client.moveFile(
+					await davClient.moveFile(
 						oldFace ? `/recognize/${getCurrentUser()?.uid}/faces/${oldFace}/${fileBaseName}` : `/recognize/${getCurrentUser()?.uid}/unassigned-faces/${fileBaseName}`,
-						`/recognize/${getCurrentUser()?.uid}/faces/${faceName}/${fileBaseName}`
+						`/recognize/${getCurrentUser()?.uid}/faces/${faceName}/${fileBaseName}`,
 					)
 					file.faceDetections.find(detection => detection.title === oldFace).title = faceName
 					await context.commit('addFilesToFace', { faceName, fileIdsToAdd: [fileId] })
@@ -195,7 +195,7 @@ const actions = {
 				const symbol = await semaphore.acquire()
 
 				try {
-					await client.deleteFile(`/recognize/${getCurrentUser()?.uid}/faces/${faceName}/${fileBaseName}`)
+					await davClient.deleteFile(`/recognize/${getCurrentUser()?.uid}/faces/${faceName}/${fileBaseName}`)
 				} catch (error) {
 					context.commit('addFilesToFace', { faceName, fileIdsToAdd: [fileId] })
 
@@ -224,7 +224,7 @@ const actions = {
 			if (state.faces[faceName]) {
 				throw new Error('Name already exists')
 			}
-			await client.moveFile(
+			await davClient.moveFile(
 				`/recognize/${getCurrentUser()?.uid}/faces/${oldName}`,
 				`/recognize/${getCurrentUser()?.uid}/faces/${faceName}`,
 			)
@@ -247,7 +247,7 @@ const actions = {
 	 */
 	async deleteFace(context, { faceName }) {
 		try {
-			await client.deleteFile(`/recognize/${getCurrentUser()?.uid}/faces/${faceName}`)
+			await davClient.deleteFile(`/recognize/${getCurrentUser()?.uid}/faces/${faceName}`)
 			context.commit('removeFaces', { faceNames: [faceName] })
 		} catch (error) {
 			logger.error(t('photos', 'Failed to delete {faceName}', { faceName }), { error })

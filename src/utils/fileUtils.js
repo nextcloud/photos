@@ -2,9 +2,8 @@
  * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { generateRemoteUrl } from '@nextcloud/router'
+import { defaultRemoteURL } from '@nextcloud/files/dav'
 import camelcase from 'camelcase'
-import { rootPath } from '../services/DavClient.js'
 import { isNumber } from './numberUtils.js'
 
 /**
@@ -43,7 +42,7 @@ const extractFilePaths = function(path) {
  * @param {object} fileInfo1 file 1 fileinfo
  * @param {object} fileInfo2 file 2 fileinfo
  * @param {string} key key to sort with
- * @param {boolean} [asc=true] sort ascending?
+ * @param {boolean} [asc] sort ascending?
  * @return {number}
  */
 const sortCompare = function(fileInfo1, fileInfo2, key, asc = true) {
@@ -89,8 +88,10 @@ function genFileInfo(obj) {
 	const fileInfo = flattenAndFormatObject(obj, flattenAndFormatObject)
 
 	if (fileInfo.filename) {
+		const url = new URL(fileInfo.filename, defaultRemoteURL)
 		// Adding context
-		fileInfo.source = generateRemoteUrl(rootPath) + encodeFilePath(fileInfo.filename)
+		fileInfo.source = url.href
+		fileInfo.filename = fileInfo.filename.replace('remote.php/dav/', '')
 	}
 
 	return fileInfo

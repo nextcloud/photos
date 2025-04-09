@@ -18,6 +18,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import FolderTagPreview from './FolderTagPreview.vue'
 import getAlbumContent from '../services/AlbumContent.js'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
+import logger from '../services/logger'
 
 export default {
 	name: 'Folder',
@@ -104,7 +105,9 @@ export default {
 				this.$store.dispatch('updateFiles', { folder, files, folders })
 			} catch (error) {
 				if (error.response && error.response.status) {
-					console.error('Failed to get folder content', filename, error.response)
+					logger.error('Failed to get folder content', { error, filename })
+				} else {
+					logger.debug(error)
 				}
 			}
 		},

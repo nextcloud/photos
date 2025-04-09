@@ -5,6 +5,7 @@
 
 import { generateFilePath } from '@nextcloud/router'
 import { getRequestToken } from '@nextcloud/auth'
+import { registerDavProperty } from '@nextcloud/files/dav'
 import { sync } from 'vuex-router-sync'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import Vue from 'vue'
@@ -28,6 +29,11 @@ sync(store, router)
 
 Vue.prototype.t = translate
 Vue.prototype.n = translatePlural
+
+registerDavProperty('nc:metadata-photos-size')
+registerDavProperty('nc:metadata-files-live-photo')
+registerDavProperty('nc:metadata-blurhash')
+registerDavProperty('nc:metadata-photos-original_date_time')
 
 // TODO: remove when we have a proper fileinfo standalone library
 // original scripts are loaded from

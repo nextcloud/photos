@@ -54,10 +54,10 @@
 </template>
 
 <script>
-import { Folder as NcFolder, davParsePermissions } from '@nextcloud/files'
 import { mapGetters } from 'vuex'
 import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import { Upload, UploadPicker, getUploader } from '@nextcloud/upload'
+import { Folder as NcFolder, davRootPath, davParsePermissions } from '@nextcloud/files'
 import FolderIcon from 'vue-material-design-icons/Folder.vue'
 import VirtualGrid from 'vue-virtual-grid'
 
@@ -65,13 +65,13 @@ import FileLegacy from '../components/FileLegacy.vue'
 import Folder from '../components/Folder.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 
-import { prefixPath } from '../services/DavClient.js'
 import allowedMimes from '../services/AllowedMimes.js'
 import getAlbumContent from '../services/AlbumContent.js'
 
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import GridConfigMixin from '../mixins/GridConfig.js'
-import getFileInfo from '../services/FileInfo.js'
+import { fetchFile } from '../services/fileFetcher'
+import logger from '../services/logger'
 
 export default {
 	name: 'Folders',
@@ -263,7 +263,7 @@ export default {
 					}
 				}
 				// cancelled request, moving on...
-				console.error('Error fetching album data', error)
+				logger.error('Error fetching album data', { error })
 			} finally {
 				// done loading even with errors
 				this.loading = false
@@ -277,8 +277,8 @@ export default {
 		 * @param {Upload} upload the newly uploaded files
 		 */
 		async onUpload(upload) {
-			const relPath = upload.source.split(prefixPath).pop()
-			const file = await getFileInfo(relPath)
+			const relPath = upload.source.split(davRootPath).pop()
+			const file = await fetchFile(relPath)
 			this.$store.dispatch('appendFiles', [file])
 			this.$store.dispatch('addFilesToFolder', { fileid: this.folderId, files: [file] })
 		},
@@ -294,13 +294,16 @@ export default {
 	@include grid-sizes using ($marginTop, $marginW) {
 		padding: 0px #{$marginW}px 256px #{$marginW}px;
 	}
+
 	&--folders {
 		padding: 32px 48px;
+
 		@media only screen and (max-width: 400px) {
 			display: flex;
 			justify-content: center;
 			width: 100%;
 		}
+
 		@media only screen and (min-width: 400px) {
 			width: fit-content;
 		}

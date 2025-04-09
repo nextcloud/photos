@@ -6,6 +6,8 @@
 import Vue from 'vue'
 import Vuex, { Store } from 'vuex'
 
+import { getCurrentUser } from '@nextcloud/auth'
+
 import files from './files.js'
 import albums from './albums.js'
 import publicAlbums from './publicAlbums.js'
@@ -44,7 +46,9 @@ const photosStore = new Store({
 
 	plugins: [
 		(store) => {
-			initPhotosLocationFolder(store, store.state)
+			if (getCurrentUser() !== null) {
+				initPhotosLocationFolder(store, store.state)
+			}
 
 			store.subscribe(async (mutation, state) => {
 				if (mutation.type === 'updateUserConfig' && mutation.payload.key === 'photosLocation') {

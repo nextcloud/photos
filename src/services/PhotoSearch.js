@@ -3,14 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { genFileInfo } from '../utils/fileUtils.js'
-import { allMimes } from './AllowedMimes.js'
-import client from './DavClient.js'
-import { props } from './DavRequest.js'
 import moment from '@nextcloud/moment'
 import store from '../store/index.js'
-import { davRootPath } from '@nextcloud/files'
 import { joinPaths } from '@nextcloud/paths'
+
+import { allMimes } from './AllowedMimes.js'
+import { genFileInfo } from '../utils/fileUtils.js'
+import { getDefaultDavProps } from './DavRequest.ts'
+import { davClient } from './DavClient.ts'
+import { davRootPath } from '@nextcloud/files'
 
 /**
  * List files from a folder and filter out unwanted mimes
@@ -82,15 +83,11 @@ export default async function(options = {}) {
 			<d:scope>
 				<d:href>${joinPaths(davRootPath, folder)}</d:href>
 				<d:depth>infinity</d:depth>
-			</d:scope>`
+			</d:scope>`,
 		)
 		.join('\n')
 
 	options = Object.assign({
-		method: 'SEARCH',
-		headers: {
-			'content-Type': 'text/xml',
-		},
 		data: `<?xml version="1.0" encoding="UTF-8"?>
 			<d:searchrequest xmlns:d="DAV:"
 				xmlns:oc="http://owncloud.org/ns"
@@ -100,7 +97,7 @@ export default async function(options = {}) {
 				<d:basicsearch>
 					<d:select>
 						<d:prop>
-							${props}
+							${getDefaultDavProps()}
 						</d:prop>
 					</d:select>
 					<d:from>
@@ -135,7 +132,7 @@ export default async function(options = {}) {
 		details: true,
 	}, options)
 
-	const response = await client.getDirectoryContents('', options)
+	const response = await davClient.search('/', options)
 
-	return response.data.map(data => genFileInfo(data))
+	return response.data.results.map((data) => genFileInfo(data))
 }
