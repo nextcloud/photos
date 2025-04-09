@@ -300,7 +300,7 @@ export default {
 				z-index: 1;
 				opacity: 0.8;
 
-				:deep .material-design-icon__svg {
+				:deep(.material-design-icon__svg) {
 					fill: var(--color-main-background);
 				}
 			}
@@ -342,7 +342,7 @@ export default {
 			outline-offset: 0px;
 		}
 
-		:deep .checkbox-radio-switch__content {
+		:deep(.checkbox-radio-switch__content) {
 			padding: 10px;
 			box-sizing: border-box;
 			background: var(--color-main-background);
