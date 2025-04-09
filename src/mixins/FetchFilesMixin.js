@@ -102,7 +102,7 @@ export default {
 							logger.error('Fail to create source directory', { error })
 						}
 					}
-				} else if (error.code === 'ERR_CANCELED') {
+				} else if (error instanceof DOMException && error.code === error.ABORT_ERR) {
 					return []
 				} else {
 					this.errorFetchingFiles = error
