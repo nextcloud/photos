@@ -93,5 +93,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../mixins/FaceCover';
+@use '../../mixins/FaceCover';
 </style>

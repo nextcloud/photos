@@ -109,7 +109,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../mixins/FileFolder';
+@use '../mixins/FileFolder';
 
 .transition-group {
 	display: contents;
