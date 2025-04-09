@@ -99,7 +99,7 @@ export async function fetchCollection(path, options, extraProps = [], client = d
 
 		return formatCollection(response.data)
 	} catch (error) {
-		if (error.code === 'ERR_CANCELED') {
+		if (error instanceof DOMException && error.code === error.ABORT_ERR) {
 			return null
 		}
 
@@ -129,7 +129,7 @@ export async function fetchCollections(path, options, extraProps = [], client = 
 			.filter(collection => collection.filename !== path)
 			.map(formatCollection)
 	} catch (error) {
-		if (error.code === 'ERR_CANCELED') {
+		if (error instanceof DOMException && error.code === error.ABORT_ERR) {
 			return []
 		}
 
@@ -200,7 +200,7 @@ export async function fetchCollectionFiles(path, options, extraProps = [], clien
 
 		return fetchedFiles
 	} catch (error) {
-		if (error.code === 'ERR_CANCELED') {
+		if (error instanceof DOMException && error.code === error.ABORT_ERR) {
 			return []
 		}
 
