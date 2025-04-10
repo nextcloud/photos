@@ -288,7 +288,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../mixins/GridSizes';
+@use 'sass:map';
+
+@mixin grid-sizes() {
+	$previous: 0;
+
+	@each $size, $config in $sizes {
+		$count: map.get($config, 'count');
+		$marginTop: map.get($config, 'marginTop');
+		$marginW: map.get($config, 'marginW');
+
+		@if $size == 'max' {
+			@media (min-width: #{$previous}px) {
+				@content($marginTop, $marginW);
+			}
+		}
+
+		@else {
+			@media (min-width: #{$previous}px) and (max-width: #{$size}px) {
+				@content($marginTop, $marginW);
+			}
+		}
+
+		$previous: $size;
+	}
+}
 
 .grid-container {
 	@include grid-sizes using ($marginTop, $marginW) {

@@ -5,12 +5,12 @@
 
 // sass plugin to implement js configs into scss
 
-// eslint-disable-next-line n/no-extraneous-require
-const sass = require('sass')
-// eslint-disable-next-line n/no-extraneous-require
-const { OrderedMap } = require('immutable')
+// eslint-disable-next-line n/no-extraneous-import
+import * as sass from 'sass'
+// eslint-disable-next-line n/no-extraneous-import
+import { OrderedMap } from 'immutable'
 
-const { sizes } = require('../assets/grid-sizes.js')
+import sizes from '../assets/grid-sizes.js'
 
 const gridConfigKeys = Object.keys(sizes)
 const gridConfigMap = OrderedMap().asMutable()
@@ -26,4 +26,4 @@ gridConfigKeys.forEach(size => {
 	gridConfigMap.set(new sass.SassString(size), new sass.SassMap(configMap))
 })
 
-module.exports = `$sizes: ${new sass.SassMap(gridConfigMap)};`
+export default `$sizes: ${new sass.SassMap(gridConfigMap)};`

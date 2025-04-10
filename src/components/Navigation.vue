@@ -125,7 +125,7 @@ export default {
 
 <style lang="scss" scoped>
 @use 'sass:math';
-@import '../mixins/GridSizes';
+@use '../mixins/GridSizes';
 
 .icon-confirm {
 	transform: rotate(180deg)
