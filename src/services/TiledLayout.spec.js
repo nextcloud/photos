@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { describe, expect, test } from 'vitest'
+
 import { splitItemsInRows } from './TiledLayout.js'
 
 /** @type {import('./TiledLayout.js').TiledItem} */
