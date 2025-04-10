@@ -21,9 +21,6 @@ export const getDefaultDavProps = () => {
 	return props
 }
 
-/**
- * @param extraProps - Extra properties to add to the DAV request.
- */
 export function getPropFind(extraProps: string[] = []): string {
 	return `<?xml version="1.0"?>
 			<d:propfind xmlns:d="DAV:"

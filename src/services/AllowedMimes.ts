@@ -5,8 +5,8 @@
 
 import { loadState } from '@nextcloud/initial-state'
 
-const imageMimes = loadState('photos', 'image-mimes')
-const videoMimes = loadState('photos', 'video-mimes')
-const allMimes = [...imageMimes, ...videoMimes]
+const imageMimes = loadState('photos', 'image-mimes', [])
+const videoMimes = loadState('photos', 'video-mimes', [])
+const allMimes = [...imageMimes, ...videoMimes] as string[]
 
 export { allMimes as default, allMimes, imageMimes, videoMimes }

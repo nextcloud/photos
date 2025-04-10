@@ -3,59 +3,48 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/**
- * @typedef {object} TiledItem
- * @property {string} id - Unique id for the item.
- * @property {number} width Real width of the item.
- * @property {number} height Real height of the item.
- * @property {number} ratio The aspect ratio of the item.
- */
+export type TiledItem = {
+	id: string // Unique id for the item.
+	width: number // Real width of the item.
+	height: number // Real height of the item.
+	ratio: number // The aspect ratio of the item.
+}
 
-/**
- * @typedef {object} Section
- * @property {string} id - Unique id for the section.
- * @property {TiledItem[]} items Real width of the item.
- */
+type Section = {
+	id: string // Unique id for the section.
+	items: TiledItem[] // Real width of the item.
+}
 
-/**
- * @typedef {object} TiledRow
- * @property {TiledItem[]} items - List of item in the row.
- * @property {number} height - Height of the row.
- * @property {string} key - Unique key for the row.
- */
+export type TiledRow = {
+	items: TiledItem[] // List of item in the row.
+	height: number // Height of the row.
+	key: string // Unique key for the row.
+}
 
-/**
- * @typedef {Section} TiledSection
- * @property {string} key - Unique key for the section.
- * @property {TiledRow[]} rows Real width of the item.
- * @property {number} height - Height of the section.
- */
+export type TiledSection = Section & {
+	key: string // Unique key for the section.
+	rows: TiledRow[] // Real width of the item.
+	height: number // Height of the section.
+}
 
 /**
  * Split items in rows of equal width.
  * The last row will not be forced to match containerWidth.
- *
- * @param {TiledItem[]} items The list of item to split in row of equal width.
- * @param {number} containerWidth The width of a row.
- * @param {number} baseHeight The base height of the rows.
- * @return {TiledRow[]}
  */
-export function splitItemsInRows(items, containerWidth, baseHeight = 200) {
+export function splitItemsInRows(items: TiledItem[], containerWidth: number, baseHeight: number = 200): TiledRow[] {
 	if (containerWidth === 0) {
 		return []
 	}
 
-	const rows = []
+	const rows: TiledRow[] = []
 	let rowNumber = 0
 	let currentItem = 0
 
 	while (currentItem < items.length) {
-		/** @type { TiledItem[] } */
-		const rowItems = []
+		const rowItems: TiledItem[] = []
 
 		// Fill the row with new items as long as the width is less than containerWidth.
 		do {
-			// @ts-ignore - We know that items.shift() is not undefined as we always check that items.length > 0.
 			rowItems.push(items[currentItem++])
 		} while (
 			currentItem < items.length
@@ -82,13 +71,7 @@ export function splitItemsInRows(items, containerWidth, baseHeight = 200) {
 	return rows
 }
 
-/**
- *
- * @param {TiledItem[]} items The list of items in the row.
- * @param {number} baseHeight The base height of the rows.
- * @return {number} The width of the row
- */
-function computeRowWidth(items, baseHeight) {
+function computeRowWidth(items: TiledItem[], baseHeight: number): number {
 	return items
 		.map(item => baseHeight * item.ratio)
 		.reduce((sum, itemWidth) => sum + itemWidth)
@@ -111,14 +94,8 @@ function computeRowWidth(items, baseHeight) {
  * So Wc = (R1 * Hr) + (R2 * Hr) + ... + (Rn * Hr)
  * So Wc = Hr * (R1 + R2 + ... + Rn)
  * So Hr = Wc / (R1 + R2 + ... + Rn)
- *
- * @param {TiledItem[]} items The list of items in the row.
- * @param {number} containerWidth The width of the row.
- * @param {boolean} isLastRow Whether we are computing the height for the last row.
- * @param {number} baseHeight The base height of the rows.
- * @return {number} The height of the row
  */
-function computeRowHeight(items, containerWidth, isLastRow, baseHeight) {
+function computeRowHeight(items: TiledItem[], containerWidth: number, isLastRow: boolean, baseHeight: number): number {
 	const sumOfItemsRatio = items
 		.map(item => item.ratio)
 		.reduce((sum, itemRatio) => sum + itemRatio,

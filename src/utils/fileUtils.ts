@@ -3,16 +3,23 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import { defaultRemoteURL } from '@nextcloud/files/dav'
+import { getLanguage } from '@nextcloud/l10n'
 import camelcase from 'camelcase'
 import { isNumber } from './numberUtils.js'
 
+export type PhotoNode = {
+	fileid: string
+	filename: string
+	source: string
+	isFavorite: boolean
+	type: 'file' | 'folder'
+	mime: string
+}
+
 /**
  * Get an url encoded path
- *
- * @param {string} path the full path
- * @return {string} url encoded file path
  */
-const encodeFilePath = function(path) {
+const encodeFilePath = function(path: string): string {
 	const pathSections = (path.startsWith('/') ? path : `/${path}`).split('/')
 	let relativePath = ''
 	pathSections.forEach((section) => {
@@ -25,11 +32,8 @@ const encodeFilePath = function(path) {
 
 /**
  * Extract dir and name from file path
- *
- * @param {string} path the full path
- * @return {string[]} [dirPath, fileName]
  */
-const extractFilePaths = function(path) {
+const extractFilePaths = function(path: string): [string, string] {
 	const pathSections = path.split('/')
 	const fileName = pathSections[pathSections.length - 1]
 	const dirPath = pathSections.slice(0, pathSections.length - 1).join('/')
@@ -38,14 +42,8 @@ const extractFilePaths = function(path) {
 
 /**
  * Sorting comparison function
- *
- * @param {object} fileInfo1 file 1 fileinfo
- * @param {object} fileInfo2 file 2 fileinfo
- * @param {string} key key to sort with
- * @param {boolean} [asc] sort ascending?
- * @return {number}
  */
-const sortCompare = function(fileInfo1, fileInfo2, key, asc = true) {
+const sortCompare = function(fileInfo1: PhotoNode, fileInfo2: PhotoNode, key: string, asc: boolean = true): number {
 
 	// favorite always first
 	if (fileInfo1.isFavorite && !fileInfo2.isFavorite) {
@@ -77,15 +75,12 @@ const sortCompare = function(fileInfo1, fileInfo2, key, asc = true) {
 
 	// finally sort by name
 	return asc
-		? fileInfo1[key]?.toString()?.localeCompare(fileInfo2[key].toString(), OC.getLanguage()) || 1
-		: -fileInfo1[key]?.toString()?.localeCompare(fileInfo2[key].toString(), OC.getLanguage()) || -1
+		? fileInfo1[key]?.toString()?.localeCompare(fileInfo2[key].toString(), getLanguage()) || 1
+		: -fileInfo1[key]?.toString()?.localeCompare(fileInfo2[key].toString(), getLanguage()) || -1
 }
 
-/**
- * @param {object} obj - object to flatten and format.
- */
-function genFileInfo(obj) {
-	const fileInfo = flattenAndFormatObject(obj, flattenAndFormatObject)
+function genFileInfo(obj: { filename: string }): PhotoNode {
+	const fileInfo = flattenAndFormatObject(obj, flattenAndFormatObject) as PhotoNode
 
 	if (fileInfo.filename) {
 		const url = new URL(fileInfo.filename, defaultRemoteURL)
@@ -97,19 +92,11 @@ function genFileInfo(obj) {
 	return fileInfo
 }
 
-/**
- * @param {object} obj - object to flatten and format.
- */
-function extractTagInfo(obj) {
-	return flattenAndFormatObject(obj, flattenAndFormatObject)
+function extractTagInfo(obj: object): PhotoNode {
+	return flattenAndFormatObject(obj, flattenAndFormatObject) as PhotoNode
 }
 
-/**
- *
- * @param {object} obj
- * @param {Function|null} callback
- */
-function flattenAndFormatObject(obj, callback) {
+function flattenAndFormatObject(obj: object, callback?: (data: object) => Partial<PhotoNode>): Partial<PhotoNode> {
 	return Object.entries(obj).reduce((resultObj, [key, data]) => {
 		// flatten object if any
 		if (!!data && typeof data === 'object' && !Array.isArray(data)) {

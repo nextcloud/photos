@@ -3,30 +3,30 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import type { FileStat, ResponseDataDetailed, StatOptions, WebDAVClient } from 'webdav'
+
 import moment from '@nextcloud/moment'
 import { translate as t } from '@nextcloud/l10n'
 
 import logger from '../services/logger.js'
-import { genFileInfo } from '../utils/fileUtils.js'
+import { genFileInfo, type PhotoNode } from '../utils/fileUtils.js'
 import { davClient } from './DavClient.ts'
 import { getPropFind } from './DavRequest.ts'
+import type { RawCollection } from './collectionFetcher.ts'
 
-/**
- * @typedef {object} Album
- * @property {string} id - The id of the album.
- * @property {string} name - The name of the album.
- * @property {number} creationDate - The creation date of the album.
- * @property {string} isShared - Whether the current user as shared the album.
- * @property {string} isCollaborative - Whether the album can be edited by other users.
- * @property {number} itemCount - The number of item in the album.
- * @property {number} cover - The cover of the album.
- */
+type Album = PhotoNode & {
+	id: string // The id of the album.
+	name: string // The name of the album.
+	creationDate: number // The creation date of the album.
+	isShared: string // Whether the current user as shared the album.
+	isCollaborative: string // Whether the album can be edited by other users.
+	itemCount: number // The number of item in the album.
+	cover: number // The cover of the album.
+	collaborators: object[] // The list of collaborators.
+	date: string // The date of the album.
+}
 
-/**
- * @param {string} extraProps - Extra properties to add to the DAV request.
- * @return {string}
- */
-function getDavRequest(extraProps = '') {
+function getDavRequest(extraProps: string = ''): string {
 	return `<?xml version="1.0"?>
 			<d:propfind xmlns:d="DAV:"
 				xmlns:oc="http://owncloud.org/ns"
@@ -43,21 +43,13 @@ function getDavRequest(extraProps = '') {
 			</d:propfind>`
 }
 
-/**
- *
- * @param {string} path - Albums' root path.
- * @param {import('webdav').StatOptions} options - Options to forward to the webdav client.
- * @param {string} extraProps - Extra properties to add to the DAV request.
- * @param {import('webdav').WebDAVClient} client - The DAV client to use.
- * @return {Promise<Album|null>}
- */
-export async function fetchAlbum(path, options, extraProps = '', client = davClient) {
+export async function fetchAlbum(path: string, options: StatOptions, extraProps: string = '', client: WebDAVClient = davClient): Promise<Album|null> {
 	try {
 		const response = await client.stat(path, {
 			data: getDavRequest(extraProps),
 			details: true,
 			...options,
-		})
+		}) as ResponseDataDetailed<RawCollection>
 
 		logger.debug('[Albums] Fetched an album: ', { data: response.data })
 
@@ -71,21 +63,13 @@ export async function fetchAlbum(path, options, extraProps = '', client = davCli
 	}
 }
 
-/**
- *
- * @param {string} path - Albums' root path.
- * @param {import('webdav').StatOptions} options - Options to forward to the webdav client.
- * @param {string} extraProps - Extra properties to add to the DAV request.
- * @param {import('webdav').WebDAVClient} client - The DAV client to use.
- * @return {Promise<Album[]>}
- */
-export async function fetchAlbums(path, options, extraProps = '', client = davClient) {
+export async function fetchAlbums(path: string, options: StatOptions, extraProps: string = '', client: WebDAVClient = davClient): Promise<Album[]> {
 	try {
 		const response = await client.getDirectoryContents(path, {
 			data: getDavRequest(extraProps),
 			details: true,
 			...options,
-		})
+		}) as ResponseDataDetailed<Array<RawCollection>>
 
 		logger.debug(`[Albums] Fetched ${response.data.length} albums: `, { data: response.data })
 
@@ -101,28 +85,26 @@ export async function fetchAlbums(path, options, extraProps = '', client = davCl
 	}
 }
 
-/**
- *
- * @param {object} album - An album received from a webdav request.
- * @return {Album}
- */
-function formatAlbum(album) {
+function formatAlbum(rawAlbum: RawCollection): Album {
+	let collaborators: object[] = []
+
 	// Ensure that we have a proper collaborators array.
-	if (album.props.collaborators === '') {
-		album.props.collaborators = []
-	} else if (typeof album.props.collaborators.collaborator === 'object') {
-		if (Array.isArray(album.props.collaborators.collaborator)) {
-			album.props.collaborators = album.props.collaborators.collaborator
+	if (rawAlbum.props.collaborators === '') {
+		collaborators = []
+	} else if (typeof rawAlbum.props.collaborators.collaborator === 'object') {
+		if (Array.isArray(rawAlbum.props.collaborators.collaborator)) {
+			collaborators = rawAlbum.props.collaborators.collaborator
 		} else {
-			album.props.collaborators = [album.props.collaborators.collaborator]
+			collaborators = [rawAlbum.props.collaborators.collaborator]
 		}
 	}
 
 	// Extract custom props.
-	album = genFileInfo(album)
+	const album = genFileInfo(rawAlbum) as Album
+	album.collaborators = collaborators
 
 	// Compute date range label.
-	const dateRange = JSON.parse(album.dateRange?.replace(/&quot;/g, '"') ?? '{}')
+	const dateRange = JSON.parse(rawAlbum.dateRange?.replace(/&quot;/g, '"') ?? '{}')
 	if (dateRange.start === null) {
 		dateRange.start = moment().unix()
 		dateRange.end = moment().unix()
@@ -140,26 +122,19 @@ function formatAlbum(album) {
 	return album
 }
 
-/**
- *
- * @param {string} path - Albums' root path.
- * @param {import('webdav').StatOptions} options - Options to forward to the webdav client.
- * @param {import('webdav').WebDAVClient} client - The DAV client to use.
- * @return {Promise<Array>}
- */
-export async function fetchAlbumContent(path, options, client = davClient) {
+export async function fetchAlbumContent(path: string, options: StatOptions, client: WebDAVClient = davClient): Promise<PhotoNode[]> {
 	try {
 		const response = await client.getDirectoryContents(path, {
 			data: getPropFind(),
 			details: true,
 			...options,
-		})
+		}) as ResponseDataDetailed<Array<FileStat>>
 
 		const fetchedFiles = response.data
 			.map(file => genFileInfo(file))
 			.filter(file => file.fileid)
 
-		logger.debug(`[Albums] Fetched ${fetchedFiles.length} new files: `, fetchedFiles)
+		logger.debug(`[Albums] Fetched ${fetchedFiles.length} new files: `, { fetchedFiles })
 
 		return fetchedFiles
 	} catch (error) {

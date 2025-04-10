@@ -3,27 +3,32 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+type SemaphoreWithPriorityItem = {
+	symbol: symbol
+	priority: () => number
+	resolve: (value: symbol) => void
+}
+
 /**
  *
- * @param {number} capacity - The number of simultaneous access to the ressource.
+ * @param capacity - The number of simultaneous access to the ressource.
  */
 export default class SemaphoreWithPriority {
 
-	#capacity = 0
-	/** @type {{symbol: symbol, priority: Function, resolve: Function}[]} */
-	#queue = []
-	#active = []
+	#capacity: number = 0
+	#queue: SemaphoreWithPriorityItem[] = []
+	#active: symbol[] = []
 
-	constructor(capacity) {
+	constructor(capacity: number) {
 		this.#capacity = capacity
 
 	}
 
 	/**
-	 * @param {Function} priority - A function that return a priority. This function will be call when looking for a next job to run so keep it quick.
-	 * @param {string} info - An additional string to initialise the Symbol and help debugging.
+	 * @param priority - A function that return a priority. This function will be call when looking for a next job to run so keep it quick.
+	 * @param info - An additional string to initialise the Symbol and help debugging.
 	 */
-	async acquire(priority = () => 1, info = '') {
+	async acquire(priority: () => number = () => 1, info: string = ''): Promise<symbol> {
 		const symbol = Symbol(info)
 
 		return new Promise((resolve) => {
@@ -36,9 +41,9 @@ export default class SemaphoreWithPriority {
 
 	/**
 	 *
-	 * @param {symbol} symbol - The symbole returned by the acquire method.
+	 * @param symbol - The symbole returned by the acquire method.
 	 */
-	release(symbol) {
+	release(symbol: symbol) {
 		const symbolIndex = this.#active.indexOf(symbol)
 		if (symbolIndex === -1) {
 			throw new Error("Can't release non active symbol")
@@ -51,7 +56,7 @@ export default class SemaphoreWithPriority {
 	}
 
 	#callNextJob() {
-		const prioritizedQueue = {}
+		const prioritizedQueue: Record<number, SemaphoreWithPriorityItem[]> = {}
 
 		for (const item of this.#queue) {
 			const itemPriority = item.priority()
@@ -59,7 +64,7 @@ export default class SemaphoreWithPriority {
 			prioritizedQueue[itemPriority].push(item)
 		}
 
-		const highestPriority = Object.keys(prioritizedQueue).sort()[0]
+		const highestPriority = Number.parseInt(Object.keys(prioritizedQueue).sort()[0])
 		const nextJob = prioritizedQueue[highestPriority][0]
 		const jobIndex = this.#queue.indexOf(nextJob)
 		if (jobIndex === -1) {
@@ -70,5 +75,4 @@ export default class SemaphoreWithPriority {
 		this.#active.push(nextJob.symbol)
 		nextJob.resolve(nextJob.symbol)
 	}
-
 }

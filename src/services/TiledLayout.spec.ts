@@ -5,9 +5,8 @@
 
 import { describe, expect, test } from 'vitest'
 
-import { splitItemsInRows } from './TiledLayout.js'
+import { splitItemsInRows, type TiledItem, type TiledRow } from './TiledLayout.js'
 
-/** @type {import('./TiledLayout.js').TiledItem} */
 const squareImage1 = {
 	id: 'squareImage1',
 	width: 200,
@@ -15,7 +14,6 @@ const squareImage1 = {
 	ratio: 200 / 250,
 }
 
-/** @type {import('./TiledLayout.js').TiledItem} */
 const squareImage2 = {
 	id: 'squareImage2',
 	width: 200,
@@ -23,7 +21,6 @@ const squareImage2 = {
 	ratio: 200 / 250,
 }
 
-/** @type {import('./TiledLayout.js').TiledItem} */
 const squareImage3 = {
 	id: 'squareImage3',
 	width: 200,
@@ -31,7 +28,6 @@ const squareImage3 = {
 	ratio: 200 / 250,
 }
 
-/** @type {import('./TiledLayout.js').TiledItem} */
 const tallImage1 = {
 	id: 'tallImage1',
 	width: 200,
@@ -39,7 +35,6 @@ const tallImage1 = {
 	ratio: 200 / 10000,
 }
 
-/** @type {import('./TiledLayout.js').TiledItem} */
 const wideImage1 = {
 	id: 'wideImage1',
 	width: 10000,
@@ -47,11 +42,9 @@ const wideImage1 = {
 	ratio: 10000 / 250,
 }
 
-const items = [squareImage1, wideImage1, squareImage2, squareImage3, tallImage1]
+const items: TiledItem[] = [squareImage1, wideImage1, squareImage2, squareImage3, tallImage1]
 
-/** @type {import('./TiledLayout.js').TiledRow[]} */
-const expectedLayout = [
-
+const expectedLayout: TiledRow[] = [
 	{
 		items: [{
 			...squareImage1,

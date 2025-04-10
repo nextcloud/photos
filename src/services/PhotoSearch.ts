@@ -8,32 +8,34 @@ import store from '../store/index.js'
 import { joinPaths } from '@nextcloud/paths'
 
 import { allMimes } from './AllowedMimes.js'
-import { genFileInfo } from '../utils/fileUtils.js'
+import { genFileInfo, type PhotoNode } from '../utils/fileUtils.js'
 import { getDefaultDavProps } from './DavRequest.ts'
 import { davClient } from './DavClient.ts'
-import { davRootPath } from '@nextcloud/files'
+import { defaultRootPath } from '@nextcloud/files/dav'
+import type { ResponseDataDetailed, SearchOptions, SearchResult } from 'webdav'
+
+type InternalSearchOptions = SearchOptions & {
+	firstResult: number // Index of the first result that we want (starts at 0). Default: 0.
+	nbResults: number // The number of file to fetch. Default: 200.
+	mimesType: string[] // Mime type of the files. Default: allMimes.
+	full: boolean // get full data of the files. Default: false.
+	onThisDay: boolean // get only items from this day of year. Default: false.
+	onlyFavorites: boolean // get only favorite items. Default: false.
+}
 
 /**
  * List files from a folder and filter out unwanted mimes
- *
- * @param {object} [options] used for the cancellable requests
- * @param {number} [options.firstResult=0] Index of the first result that we want (starts at 0)
- * @param {number} [options.nbResults=200] The number of file to fetch
- * @param {string[]} [options.mimesType=allMimes] Mime type of the files
- * @param {boolean} [options.full=false] get full data of the files
- * @param {boolean} [options.onThisDay=false] get only items from this day of year
- * @param {boolean} [options.onlyFavorites=false] get only favorite items
- * @return {Promise<object[]>} the file list
  */
-export default async function(options = {}) {
+export default async function(_options: Partial<InternalSearchOptions> = {}): Promise<PhotoNode[]> {
 	// default function options
-	options = {
+	const options: InternalSearchOptions = {
 		firstResult: 0,
 		nbResults: 200,
 		mimesType: allMimes,
 		onThisDay: false,
 		onlyFavorites: false,
-		...options,
+		full: false,
+		..._options,
 	}
 
 	// generating the search or condition
@@ -81,58 +83,56 @@ export default async function(options = {}) {
 	const sourceFolders = store.state.userConfig.photosSourceFolders
 		.map(folder => `
 			<d:scope>
-				<d:href>${joinPaths(davRootPath, folder)}</d:href>
+				<d:href>${joinPaths(defaultRootPath, folder)}</d:href>
 				<d:depth>infinity</d:depth>
 			</d:scope>`,
 		)
 		.join('\n')
 
-	options = Object.assign({
-		data: `<?xml version="1.0" encoding="UTF-8"?>
-			<d:searchrequest xmlns:d="DAV:"
-				xmlns:oc="http://owncloud.org/ns"
-				xmlns:nc="http://nextcloud.org/ns"
-				xmlns:ns="https://github.com/icewind1991/SearchDAV/ns"
-				xmlns:ocs="http://open-collaboration-services.org/ns">
-				<d:basicsearch>
-					<d:select>
-						<d:prop>
-							${getDefaultDavProps()}
-						</d:prop>
-					</d:select>
-					<d:from>
-						${sourceFolders}
-					</d:from>
-					<d:where>
-						<d:and>
-							<d:or>
-								${orMime}
-							</d:or>
-							${eqFavorites}
-							${onThisDay}
-						</d:and>
-					</d:where>
-					<d:orderby>
-						<d:order>
-							<d:prop><nc:metadata-photos-original_date_time/></d:prop>
-							<d:descending/>
-						</d:order>
-						<d:order>
-							<d:prop><d:getlastmodified/></d:prop>
-							<d:descending/>
-						</d:order>
-					</d:orderby>
-					<d:limit>
-						<d:nresults>${options.nbResults}</d:nresults>
-						<ns:firstresult>${options.firstResult}</ns:firstresult>
-					</d:limit>
-				</d:basicsearch>
-			</d:searchrequest>`,
-		deep: true,
-		details: true,
-	}, options)
+	options.data = `<?xml version="1.0" encoding="UTF-8"?>
+		<d:searchrequest xmlns:d="DAV:"
+			xmlns:oc="http://owncloud.org/ns"
+			xmlns:nc="http://nextcloud.org/ns"
+			xmlns:ns="https://github.com/icewind1991/SearchDAV/ns"
+			xmlns:ocs="http://open-collaboration-services.org/ns">
+			<d:basicsearch>
+				<d:select>
+					<d:prop>
+						${getDefaultDavProps()}
+					</d:prop>
+				</d:select>
+				<d:from>
+					${sourceFolders}
+				</d:from>
+				<d:where>
+					<d:and>
+						<d:or>
+							${orMime}
+						</d:or>
+						${eqFavorites}
+						${onThisDay}
+					</d:and>
+				</d:where>
+				<d:orderby>
+					<d:order>
+						<d:prop><nc:metadata-photos-original_date_time/></d:prop>
+						<d:descending/>
+					</d:order>
+					<d:order>
+						<d:prop><d:getlastmodified/></d:prop>
+						<d:descending/>
+					</d:order>
+				</d:orderby>
+				<d:limit>
+					<d:nresults>${options.nbResults}</d:nresults>
+					<ns:firstresult>${options.firstResult}</ns:firstresult>
+				</d:limit>
+			</d:basicsearch>
+		</d:searchrequest>`
 
-	const response = await davClient.search('/', options)
+	options.details = true
+
+	const response = await davClient.search('/', options) as ResponseDataDetailed<SearchResult>
 
 	return response.data.results.map((data) => genFileInfo(data))
 }
