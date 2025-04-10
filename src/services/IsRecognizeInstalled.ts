@@ -5,5 +5,5 @@
 
 import { loadState } from '@nextcloud/initial-state'
 
-const recognize = loadState('photos', 'recognize')
+const recognize = loadState('photos', 'recognize', false) as boolean
 export default recognize

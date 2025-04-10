@@ -3,17 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { genFileInfo } from '../utils/fileUtils.js'
+import type { FileStat, GetDirectoryContentsOptions, ResponseDataDetailed } from 'webdav'
+import { genFileInfo, type PhotoNode } from '../utils/fileUtils.js'
 import { davClient } from './DavClient.ts'
 
 /**
  * List system tags
- *
- * @param {string} path the path relative to the user root
- * @param {object} [options] optional options for axios
- * @return {Promise<object[]>} the file list
  */
-export default async function(path, options = {}) {
+export default async function(path: string, options: GetDirectoryContentsOptions = {}): Promise<PhotoNode[]> {
 	const response = await davClient.getDirectoryContents('/systemtags-assigned/image', Object.assign({}, {
 		data: `<?xml version="1.0"?>
 			<d:propfind  xmlns:d="DAV:"
@@ -29,7 +26,7 @@ export default async function(path, options = {}) {
 				</d:prop>
 			</d:propfind>`,
 		details: true,
-	}, options))
+	}, options)) as ResponseDataDetailed<FileStat[]>
 
 	return response.data.map(data => genFileInfo(data))
 }

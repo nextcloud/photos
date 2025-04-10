@@ -6,13 +6,11 @@
 // The preview service worker cache name (see webpack config)
 const SWCacheName = 'images'
 const hotCache = []
+
 /**
  * Check if the preview is already cached by the service worker
- *
- * @param {string} previewUrl - The URL of the preview to check
- * @return {Promise<boolean>}
  */
-export const isCachedPreview = async function(previewUrl) {
+export const isCachedPreview = async function(previewUrl: string): Promise<boolean> {
 	try {
 		// Browser's cache take ~100ms to check, hot cache ~10ms.
 		if (!hotCache[previewUrl]) {

@@ -5,5 +5,5 @@
 
 import { loadState } from '@nextcloud/initial-state'
 
-const appStoreEnabled = loadState('photos', 'appStoreEnabled')
+const appStoreEnabled = loadState('photos', 'appStoreEnabled', false) as boolean
 export default appStoreEnabled
