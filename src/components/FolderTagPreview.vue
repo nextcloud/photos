@@ -26,7 +26,7 @@
 	</router-link>
 </template>
 
-<script>
+<script lang='ts'>
 import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 

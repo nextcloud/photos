@@ -94,7 +94,7 @@
 	</NcDialog>
 </template>
 
-<script>
+<script lang='ts'>
 import { UploadPicker } from '@nextcloud/upload'
 import { NcButton, NcDialog, NcLoadingIcon, NcSelect, NcNoteCard, useIsMobile } from '@nextcloud/vue'
 import { defineComponent } from 'vue'

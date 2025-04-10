@@ -145,7 +145,7 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 import { mapActions } from 'vuex'
 
 import { NcActions, NcActionButton, NcButton, NcDialog, NcModal, NcEmptyContent, NcActionSeparator, NcLoadingIcon, isMobile } from '@nextcloud/vue'

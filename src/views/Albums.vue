@@ -54,7 +54,7 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 import Plus from 'vue-material-design-icons/Plus.vue'
 import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
 
