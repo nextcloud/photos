@@ -6,25 +6,11 @@
 import { splitItemsInRows } from './TiledLayout.js'
 
 /** @type {import('./TiledLayout.js').TiledItem} */
-const sectionHeader1 = {
-	id: '202204',
-	sectionHeader: true,
-	height: 75,
-}
-
-/** @type {import('./TiledLayout.js').TiledItem} */
 const squareImage1 = {
 	id: 'squareImage1',
 	width: 200,
 	height: 250,
 	ratio: 200 / 250,
-}
-
-/** @type {import('./TiledLayout.js').TiledItem} */
-const sectionHeader2 = {
-	id: '202205',
-	sectionHeader: true,
-	height: 75,
 }
 
 /** @type {import('./TiledLayout.js').TiledItem} */
@@ -59,33 +45,49 @@ const wideImage1 = {
 	ratio: 10000 / 250,
 }
 
-const items = [sectionHeader1, squareImage1, sectionHeader2, wideImage1, squareImage2, squareImage3, tallImage1]
+const items = [squareImage1, wideImage1, squareImage2, squareImage3, tallImage1]
 
 /** @type {import('./TiledLayout.js').TiledRow[]} */
 const expectedLayout = [
 
 	{
-		items: [sectionHeader1],
-		height: 75,
-		key: '202204',
-	},
-	{
-		items: [squareImage1],
-		height: 220,
+		items: [{
+			...squareImage1,
+			// "* 10" to fit the width
+			width: squareImage1.width * 10, // 2000
+			height: squareImage1.height * 10, // 2500
+		}],
+		height: squareImage1.height * 10, // 2500
 		key: 'squareImage1',
 	},
 	{
-		items: [sectionHeader2],
-		height: 75,
-		key: '202205',
-	},
-	{
-		items: [wideImage1],
-		height: 50,
+		items: [{
+			...wideImage1,
+			// "/ 5" to fit the width
+			width: wideImage1.width / 5, // 2000
+			height: wideImage1.height / 5, // 50
+		}],
+		height: wideImage1.height / 5, // 50
 		key: 'wideImage1',
 	},
 	{
-		items: [squareImage2, squareImage3, tallImage1],
+		items: [
+			{
+				...squareImage2,
+				width: 176,
+				height: 220,
+			},
+			{
+				...squareImage3,
+				width: 176,
+				height: 220,
+			},
+			{
+				...tallImage1,
+				width: 4.4,
+				height: 220,
+			},
+		],
 		height: 220,
 		key: 'squareImage2-squareImage3-tallImage1',
 	},
