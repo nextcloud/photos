@@ -39,7 +39,7 @@
 	</a>
 </template>
 
-<script>
+<script lang='ts'>
 import { generateUrl } from '@nextcloud/router'
 
 export default {

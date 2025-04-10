@@ -14,7 +14,7 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 import logger from '../../services/logger.js'
 import { splitItemsInRows } from '../../services/TiledLayout.js'
 import TiledRows from './TiledRows.vue'
