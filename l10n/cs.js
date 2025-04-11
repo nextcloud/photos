@@ -138,6 +138,7 @@ OC.L10N.register(
     "Failed to fetch collection." : "Sbírku se nepodařilo stáhnout.",
     "Failed to fetch collections list." : "Nepodařilo se získat seznam sbírek.",
     "Failed to fetch faces list." : "Nepodařilo se získat seznam obličejů.",
+    "Error fetching files" : "Chyba při získávání souborů",
     "All your media" : "Veškerá vaše média",
     "Album {title}" : "Album {title}",
     "Shared Albums" : "Sdílená alba",

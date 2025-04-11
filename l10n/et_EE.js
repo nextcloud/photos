@@ -138,6 +138,7 @@ OC.L10N.register(
     "Failed to fetch collection." : "Kollektsiooni laadimine ebaõnnestus.",
     "Failed to fetch collections list." : "Kollektsioonide loendi laadimine ebaõnnestus.",
     "Failed to fetch faces list." : "Nägude loendi laadimine ebaõnnestus.",
+    "Error fetching files" : "Viga failide laadimisel.",
     "All your media" : "Kogu su meedia",
     "Album {title}" : "Album {title}",
     "Shared Albums" : "Jagatud albumid",

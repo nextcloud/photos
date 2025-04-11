@@ -138,6 +138,7 @@ OC.L10N.register(
     "Failed to fetch collection." : "Sammlung konnte nicht abgerufen werden.",
     "Failed to fetch collections list." : "Sammlungsliste konnte nicht geladen werden.",
     "Failed to fetch faces list." : "Liste mit Gesichter konnte nicht geladen werden.",
+    "Error fetching files" : "Fehler beim Abrufen der Dateien",
     "All your media" : "Alle deine Medien",
     "Album {title}" : "Album {title}",
     "Shared Albums" : "Geteilte Alben",
