@@ -136,6 +136,7 @@
     "Failed to fetch collection." : "Sammlung konnte nicht abgerufen werden.",
     "Failed to fetch collections list." : "Sammlungsliste konnte nicht geladen werden.",
     "Failed to fetch faces list." : "Gesichter-Liste konnte nicht geladen werden.",
+    "Error fetching files" : "Fehler beim Abrufen der Dateien",
     "All your media" : "Alle Ihre Medien",
     "Album {title}" : "Album {title}",
     "Shared Albums" : "Geteilte Alben",
