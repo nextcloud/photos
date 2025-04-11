@@ -138,6 +138,7 @@ OC.L10N.register(
     "Failed to fetch collection." : "Није успело добављање колекције.",
     "Failed to fetch collections list." : "Није успело добављање листе колекција.",
     "Failed to fetch faces list." : "Није успело добављање листе лица.",
+    "Error fetching files" : "Грешка приликом преузимања фајлова",
     "All your media" : "Сви ваши медији",
     "Album {title}" : "Албум {title}",
     "Shared Albums" : "Дељени албуми",

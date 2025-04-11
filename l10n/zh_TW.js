@@ -138,6 +138,7 @@ OC.L10N.register(
     "Failed to fetch collection." : "擷取收藏品失敗。",
     "Failed to fetch collections list." : "擷取收藏清單失敗。",
     "Failed to fetch faces list." : "擷取臉部清單失敗。",
+    "Error fetching files" : "擷取檔案時發生錯誤",
     "All your media" : "您所有的媒體",
     "Album {title}" : "相簿 {title}",
     "Shared Albums" : "已分享的相簿",
