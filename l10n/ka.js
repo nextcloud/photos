@@ -7,6 +7,7 @@ OC.L10N.register(
     "Favorites" : "Favorites",
     "Shared with you" : "Shared with you",
     "Tags" : "Tags",
+    "Places" : "ადგილები",
     "Back" : "Back",
     "Save" : "Save",
     "Shared by" : "Shared by",
