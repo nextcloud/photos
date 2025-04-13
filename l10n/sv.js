@@ -138,6 +138,7 @@ OC.L10N.register(
     "Failed to fetch collection." : "Det gick inte att hämta samlingen.",
     "Failed to fetch collections list." : "Det gick inte att hämta samlingslistan.",
     "Failed to fetch faces list." : "Lyckades inte hämta lista på ansikte",
+    "Error fetching files" : "Fel vid hämtning av filer",
     "All your media" : "All din media",
     "Album {title}" : "Album {title}",
     "Shared Albums" : "Delade Album",
