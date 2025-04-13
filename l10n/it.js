@@ -138,6 +138,7 @@ OC.L10N.register(
     "Failed to fetch collection." : "Recupero della categoria non riuscito.",
     "Failed to fetch collections list." : "Recupero della lista di collezioni non riuscito.",
     "Failed to fetch faces list." : "Recupero della lista di volti non riuscito.",
+    "Error fetching files" : "Errore durante il recupero dei file",
     "All your media" : "Tutti i tuoi media",
     "Album {title}" : "Album {title}",
     "Shared Albums" : "Album condivisi",

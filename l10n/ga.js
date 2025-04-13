@@ -138,6 +138,7 @@ OC.L10N.register(
     "Failed to fetch collection." : "Theip ar bhailiú a fháil.",
     "Failed to fetch collections list." : "Theip ar an liosta bailiúcháin a fháil.",
     "Failed to fetch faces list." : "Theip ar an liosta aghaidheanna a fháil.",
+    "Error fetching files" : "Earráid agus comhaid á bhfáil",
     "All your media" : "Na meáin go léir agat",
     "Album {title}" : "Albam {title}",
     "Shared Albums" : "Albaim Roinnte",
