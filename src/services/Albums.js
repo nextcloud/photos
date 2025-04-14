@@ -63,7 +63,7 @@ export async function fetchAlbum(path, options, extraProps = '', client = defaul
 
 		return formatAlbum(response.data)
 	} catch (error) {
-		if (error.code === 'ERR_CANCELED') {
+		if (error instanceof DOMException && error.code === error.ABORT_ERR) {
 			return null
 		}
 
@@ -93,7 +93,7 @@ export async function fetchAlbums(path, options, extraProps = '', client = defau
 			.filter(album => album.filename !== path)
 			.map(formatAlbum)
 	} catch (error) {
-		if (error.code === 'ERR_CANCELED') {
+		if (error instanceof DOMException && error.code === error.ABORT_ERR) {
 			return []
 		}
 
@@ -163,7 +163,7 @@ export async function fetchAlbumContent(path, options, client = defaultClient) {
 
 		return fetchedFiles
 	} catch (error) {
-		if (error.code === 'ERR_CANCELED') {
+		if (error instanceof DOMException && error.code === error.ABORT_ERR) {
 			return []
 		}
 

@@ -97,7 +97,8 @@ describe('Manage albums', () => {
 	it('Edit an album\'s name', () => {
 		cy.get('[aria-label="Open actions menu"]').click()
 		cy.contains('Edit album details').click()
-		cy.get('form [name="name"]').clear().type('New name')
+		cy.get('form [name="name"]').clear()
+		cy.get('form [name="name"]').type('New name')
 		cy.contains('Save').click()
 
 		cy.contains('New name')
@@ -108,15 +109,19 @@ describe('Manage albums', () => {
 
 		cy.get('[aria-label="Open actions menu"]').click()
 		cy.contains('Edit album details').click()
-		cy.get('form [name="name"]').clear().type('albums_test')
+		cy.get('form [name="name"]').clear()
+		cy.get('form [name="name"]').type('albums_test')
 		cy.contains('Save').click()
 	})
 
 	it('Edit an album\'s location', () => {
 		cy.get('[aria-label="Open actions menu"]').click()
 		cy.contains('Edit album details').click()
-		cy.get('form [name="location"]').clear().type('New location')
+		cy.get('form [name="location"]').clear()
+		cy.get('form [name="location"]').type('New location')
+		cy.intercept({ times: 1, method: 'PROPPATCH', url: '/remote.php/dav/photos/*/albums/*' }).as('propPatchAlbum')
 		cy.contains('Save').click()
+		cy.wait('@propPatchAlbum')
 
 		cy.contains('New location')
 
