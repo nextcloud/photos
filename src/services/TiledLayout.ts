@@ -10,7 +10,7 @@ export type TiledItem = {
 	ratio: number // The aspect ratio of the item.
 }
 
-type Section = {
+export type Section = {
 	id: string // Unique id for the section.
 	items: TiledItem[] // Real width of the item.
 }

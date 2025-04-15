@@ -9,6 +9,7 @@ import { isNumber } from './numberUtils.js'
 
 export type PhotoNode = {
 	fileid: string
+	basename: string
 	filename: string
 	source: string
 	isFavorite: boolean

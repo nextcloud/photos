@@ -5,6 +5,18 @@
 
 import { mapGetters } from 'vuex'
 import he from 'he'
+import type { PhotoNode } from '../utils/fileUtils'
+import type { Collection } from '../services/collectionFetcher'
+import type { ComponentOptions } from 'vue'
+
+type Cover = {
+	detection: {
+		x: number
+		y: number
+		width: number
+		height: number
+	}
+}
 
 export default {
 	name: 'FaceCoverMixin',
@@ -18,18 +30,15 @@ export default {
 	},
 
 	methods: {
-		getFaceCover(faceName) {
+		getFaceCover(faceName): Cover {
 			return JSON.parse(he.decode(this.faces[faceName].props['face-preview-image'] || '{}'))
 		},
 
 		/**
 		 * This will produce an inline style to apply to images
 		 * to zoom toward the detected face
-		 *
-		 * @param faceName
-		 * @return {{}|{transform: string, width: string, transformOrigin: string}}
 		 */
-		getCoverStyle(faceName) {
+		getCoverStyle(faceName: string): Record<string, never>|{transform: string, width: string, transformOrigin: string} {
 			const cover = this.getFaceCover(faceName)
 			if (!cover || !cover.detection) {
 				return {}

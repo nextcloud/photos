@@ -8,8 +8,7 @@ export default {
 
 	data() {
 		return {
-			/** @type {Object<string, boolean>} */
-			selection: {},
+			selection: {} as Record<string, boolean>,
 		}
 	},
 
@@ -20,27 +19,21 @@ export default {
 	},
 
 	methods: {
-		onFileSelectToggle({ id, value }) {
+		onFileSelectToggle({ id, value }): void {
 			this.$set(this.selection, id, value)
 		},
 
-		/**
-		 * @param {string[]} filesIds - The ids of the files to uncheck.
-		 */
-		onUncheckFiles(filesIds) {
-			filesIds.forEach((/** @type {string} */ filesId) => this.$set(this.selection, filesId, false))
+		onUncheckFiles(filesIds: string[]): void {
+			filesIds.forEach((filesId: string) => this.$set(this.selection, filesId, false))
 		},
 
-		resetSelection() {
+		resetSelection(): void {
 			this.selection = {}
 		},
 	},
 
 	computed: {
-		/**
-		 * @return {string[]}
-		 */
-		selectedFileIds() {
+		selectedFileIds(): string[] {
 			return Object.keys(this.selection).filter(fileId => this.selection[fileId])
 		},
 	},

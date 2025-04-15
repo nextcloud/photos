@@ -49,6 +49,7 @@ import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
 import CollectionsList from '../components/Collection/CollectionsList.vue'
 import CollectionCover from '../components/Collection/CollectionCover.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import type { Collection } from '../services/collectionFetcher.js'
 
 export default {
 	name: 'Places',
@@ -78,10 +79,7 @@ export default {
 	],
 
 	computed: {
-		/**
-		 * @return {import('../services/collectionFetcher.js').IndexedCollections}
-		 */
-		places() {
+		places(): Record<string, Collection> {
 			return this.$store.getters.places
 		},
 	},

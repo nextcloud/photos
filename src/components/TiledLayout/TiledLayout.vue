@@ -15,8 +15,9 @@
 </template>
 
 <script lang='ts'>
+import type { PropType } from 'vue'
 import logger from '../../services/logger.js'
-import { splitItemsInRows } from '../../services/TiledLayout.js'
+import { splitItemsInRows, type Section, type TiledSection } from '../../services/TiledLayout.js'
 import TiledRows from './TiledRows.vue'
 
 export default {
@@ -27,9 +28,8 @@ export default {
 	},
 
 	props: {
-		/** @type {import('vue').PropType<import('../VirtualScrolling.vue').Section[]>} */
 		sections: {
-			type: Array,
+			type: Array as PropType<Section[]>,
 			required: true,
 		},
 		baseHeight: {
@@ -41,14 +41,12 @@ export default {
 	data() {
 		return {
 			containerWidth: 0,
-			/** @type {ResizeObserver} */
-			resizeObserver: null,
+			resizeObserver: null as ResizeObserver|null,
 		}
 	},
 
 	computed: {
-		/** @return {import('../../services/TiledLayout.js').TiledSection[]} */
-		tiledSections() {
+		tiledSections(): TiledSection[] {
 			logger.debug('[TiledLayout] Computing rows', { items: this.sections })
 
 			return this.sections.map(section => {
@@ -73,11 +71,11 @@ export default {
 			}
 		})
 
-		this.resizeObserver.observe(this.$refs.tiledLayoutContainer)
+		this.resizeObserver.observe(this.$refs.tiledLayoutContainer as Element)
 	},
 
 	beforeDestroy() {
-		this.resizeObserver.disconnect()
+		this.resizeObserver?.disconnect()
 	},
 }
 </script>

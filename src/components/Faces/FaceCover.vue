@@ -29,6 +29,7 @@ import { mapGetters } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
 import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
 import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
+import type { Collection } from '../../services/collectionFetcher.js'
 
 export default {
 	name: 'FaceCover',
@@ -62,17 +63,11 @@ export default {
 			'facesFiles',
 		]),
 
-		/**
-		 * @return {Face}
-		 */
-		face() {
+		face(): Collection {
 			return this.faces[this.baseName]
 		},
 
-		/**
-		 * @return {string}
-		 */
-		coverUrl() {
+		coverUrl(): string {
 			if (!this.cover) {
 				return ''
 			}

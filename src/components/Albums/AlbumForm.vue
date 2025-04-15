@@ -87,6 +87,8 @@ import { translate } from '@nextcloud/l10n'
 import { generateRemoteUrl } from '@nextcloud/router'
 
 import CollaboratorsSelectionForm from './CollaboratorsSelectionForm.vue'
+import type { Album, Collaborator } from '../../store/albums'
+import type { PropType } from 'vue'
 
 export default {
 	name: 'AlbumForm',
@@ -102,9 +104,8 @@ export default {
 	},
 
 	props: {
-		/** @type {import('vue').PropType<import('../../store/albums.js').Album|null>} */
 		album: {
-			type: Object,
+			type: Object as PropType<Album|null>,
 			default: null,
 		},
 		displayBackButton: {
@@ -123,24 +124,15 @@ export default {
 	},
 
 	computed: {
-		/**
-		 * @return {boolean} Whether sharing is enabled.
-		 */
-		editMode() {
+		editMode(): boolean {
 			return this.album !== null
 		},
 
-		/**
-		 * @return {boolean} Whether sharing is enabled.
-		 */
-		sharingEnabled() {
+		sharingEnabled(): boolean {
 			return OC.Share !== undefined
 		},
 
-		/**
-		 * @return {string} The album's filename based on its name. Useful to fetch the location information and content.
-		 */
-		albumFileName() {
+		albumFileName(): string {
 			return this.$store.getters.getAlbumName(this.albumName)
 		},
 	},
@@ -159,8 +151,7 @@ export default {
 	methods: {
 		...mapActions(['createCollection', 'renameCollection', 'updateCollection']),
 
-		/** @param {import('../../store/albums.js').Collaborator[]} collaborators */
-		submit(collaborators = []) {
+		submit(collaborators: Collaborator[] = []) {
 			if (this.albumName === '' || this.loading) {
 				return
 			}
@@ -172,8 +163,7 @@ export default {
 			}
 		},
 
-		/** @param {import('../../store/albums.js').Collaborator[]} collaborators */
-		async handleCreateAlbum(collaborators = []) {
+		async handleCreateAlbum(collaborators: Collaborator[] = []) {
 			try {
 				this.loading = true
 				let album = await this.createCollection({

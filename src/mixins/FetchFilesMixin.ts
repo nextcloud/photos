@@ -4,15 +4,17 @@
  */
 
 import { showError } from '@nextcloud/dialogs'
-import { davRootPath } from '@nextcloud/files'
+import { defaultRootPath } from '@nextcloud/files/dav'
 import { joinPaths } from '@nextcloud/paths'
+import { translate as t } from '@nextcloud/l10n'
 
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
-import getPhotos from '../services/PhotoSearch.js'
+import getPhotos, { type PhotoSearchOptions } from '../services/PhotoSearch.js'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
 import AbortControllerMixin from './AbortControllerMixin.js'
 import store from '../store/index.js'
+import type { ComponentOptions } from 'vue'
 
 export default {
 	name: 'FetchFilesMixin',
@@ -27,7 +29,7 @@ export default {
 			loadingFiles: false,
 			doneFetchingFiles: false,
 			fetchSemaphore: new SemaphoreWithPriority(1),
-			fetchedFileIds: [],
+			fetchedFileIds: [] as string[],
 		}
 	},
 
@@ -39,12 +41,12 @@ export default {
 
 	methods: {
 		/**
-		 * @param {object} options - Options to pass to getPhotos.
-		 * @param {string[]} [blacklist=[]] - Array of ids to filter out.
-		 * @param {boolean} [force=false] - Force fetching even if doneFetchingFiles is true
+		 * @param options - Options to pass to getPhotos.
+		 * @param blacklist - Array of ids to filter out.
+		 * @param force - Force fetching even if doneFetchingFiles is true
 		 * @return {Promise<string[]>} - The next batch of data depending on global offset.
 		 */
-		async fetchFiles(options = {}, blacklist = [], force = false) {
+		async fetchFiles(options: Partial<PhotoSearchOptions> = {}, blacklist: string[] = [], force: boolean = false) {
 			if ((this.doneFetchingFiles && !force) || this.loadingFiles) {
 				return []
 			}
@@ -82,7 +84,7 @@ export default {
 
 				this.$store.dispatch('appendFiles', fetchedFiles)
 
-				logger.debug(`[FetchFilesMixin] Fetched ${fileIds.length} new files: `, fileIds)
+				logger.debug(`[FetchFilesMixin] Fetched ${fileIds.length} new files: `, { fileIds })
 
 				return fileIds
 			} catch (error) {
@@ -94,7 +96,7 @@ export default {
 						}
 						logger.debug(`The ${source} folder does not exist, creating it.`)
 						try {
-							await davClient.createDirectory(joinPaths(davRootPath, source))
+							await davClient.createDirectory(joinPaths(defaultRootPath, source))
 							this.resetFetchFilesState()
 							return []
 						} catch (error) {
@@ -126,4 +128,4 @@ export default {
 			this.fetchedFileIds = []
 		},
 	},
-}
+} as ComponentOptions<Vue>

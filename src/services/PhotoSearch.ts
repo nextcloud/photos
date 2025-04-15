@@ -14,7 +14,7 @@ import { davClient } from './DavClient.ts'
 import { defaultRootPath } from '@nextcloud/files/dav'
 import type { ResponseDataDetailed, SearchOptions, SearchResult } from 'webdav'
 
-type InternalSearchOptions = SearchOptions & {
+export type PhotoSearchOptions = SearchOptions & {
 	firstResult: number // Index of the first result that we want (starts at 0). Default: 0.
 	nbResults: number // The number of file to fetch. Default: 200.
 	mimesType: string[] // Mime type of the files. Default: allMimes.
@@ -26,9 +26,9 @@ type InternalSearchOptions = SearchOptions & {
 /**
  * List files from a folder and filter out unwanted mimes
  */
-export default async function(_options: Partial<InternalSearchOptions> = {}): Promise<PhotoNode[]> {
+export default async function(_options: Partial<PhotoSearchOptions> = {}): Promise<PhotoNode[]> {
 	// default function options
-	const options: InternalSearchOptions = {
+	const options: PhotoSearchOptions = {
 		firstResult: 0,
 		nbResults: 200,
 		mimesType: allMimes,

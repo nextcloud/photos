@@ -62,6 +62,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 
 import FetchCollectionsMixin from '../../mixins/FetchCollectionsMixin.js'
 import AlbumForm from './AlbumForm.vue'
+import type { Album } from '../../store/albums.js'
 
 export default {
 	name: 'AlbumPicker',
@@ -77,11 +78,7 @@ export default {
 	},
 
 	filters: {
-		/**
-		 * @param {string} fileId - The id of the file.
-		 * @return {string}
-		 */
-		toCoverUrl(fileId) {
+		toCoverUrl(fileId: string): string {
 			return generateUrl(`/apps/photos/api/v1/preview/${fileId}?x=${64}&y=${64}`)
 		},
 	},
@@ -102,10 +99,7 @@ export default {
 			'sharedAlbums',
 		]),
 
-		/**
-		 * @return {import('../../store/albums.js').Album[]}
-		 */
-		allAlbums() {
+		allAlbums(): Album[] {
 			return [...Object.values(this.albums), ...Object.values(this.sharedAlbums)]
 		},
 	},
@@ -125,23 +119,15 @@ export default {
 			this.fetchAlbumList()
 		},
 
-		pickAlbum(album) {
+		pickAlbum(album: Album) {
 			this.$emit('album-picked', album)
 		},
 
-		/**
-		 * @param {object} album
-		 * @return {boolean}
-		 */
-		isSharedAlbum(album) {
+		isSharedAlbum(album: Album): boolean {
 			return album.filename.match(/^\/photos\/.+\/sharedalbums\//) !== null
 		},
 
-		/**
-		 * @param {object} album The album's full name, including the userid.
-		 * @return {string} The album name without the userId between parentheses.
-		 */
-		originalName(album) {
+		originalName(album: Album): string {
 			if (this.isSharedAlbum(album)) {
 				return album.basename.replace(new RegExp(`\\(${album.collaborators[0].id}\\)$`), '')
 			} else {
