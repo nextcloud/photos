@@ -4,5 +4,14 @@ module.exports = {
 	],
 	globals: {
 		appName: true,
-	}
+	},
+	overrides: [
+		{
+			files: ['*.ts', '*.vue'],
+			rules: {
+				'jsdoc/require-jsdoc': 'off',
+				'jsdoc/require-param': 'off',
+			},
+		},
+	],
 }

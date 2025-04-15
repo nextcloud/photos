@@ -9,10 +9,6 @@ import { genFileInfo } from '../utils/fileUtils.js'
 import { davClient } from './DavClient'
 import { getPropFind } from './DavRequest'
 
-/**
- * @param fileName - The full file's name
- * @param options - Options to forward to the webdav client.
- */
 export async function fetchFile(fileName: string, options: StatOptions = {}) {
 	try {
 		const response = await davClient.stat(fileName, {

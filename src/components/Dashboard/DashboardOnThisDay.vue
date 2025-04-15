@@ -23,7 +23,7 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 import Image from 'vue-material-design-icons/Image.vue'
 
 import { generateUrl } from '@nextcloud/router'

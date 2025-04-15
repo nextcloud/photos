@@ -37,7 +37,7 @@
 	</CollectionsList>
 </template>
 
-<script>
+<script lang='ts'>
 import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
 
 import { generateUrl } from '@nextcloud/router'
@@ -49,6 +49,7 @@ import CollectionsList from '../components/Collection/CollectionsList.vue'
 import CollectionCover from '../components/Collection/CollectionCover.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
+import type { Album } from '../store/albums.js'
 
 export default {
 	name: 'SharedAlbums',
@@ -62,11 +63,7 @@ export default {
 	},
 
 	filters: {
-		/**
-		 * @param {string} lastPhoto The album's last photos.
-		 * @return {string}
-		 */
-		coverUrl(lastPhoto) {
+		coverUrl(lastPhoto: number): string {
 			if (lastPhoto === -1) {
 				return ''
 			}
@@ -74,11 +71,7 @@ export default {
 			return generateUrl(`/apps/photos/api/v1/preview/${lastPhoto}?x=${512}&y=${512}`)
 		},
 
-		/**
-		 * @param {import('../services/Albums.js').Album} album The album's full name, including the userid.
-		 * @return {string} The album name without the userId between parentheses.
-		 */
-		albumOriginalName(album) {
+		albumOriginalName(album: Album): string {
 			return album.basename.replace(new RegExp(`\\(${album.collaborators[0].id}\\)$`), '')
 		},
 	},
@@ -88,10 +81,7 @@ export default {
 	],
 
 	computed: {
-		/**
-		 * @return {import('../services/Albums').IndexedAlbums}
-		 */
-		sharedAlbums() {
+		sharedAlbums(): Record<string, Album> {
 			return this.$store.getters.sharedAlbums
 		},
 	},

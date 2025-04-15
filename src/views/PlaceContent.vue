@@ -38,7 +38,7 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 import Plus from 'vue-material-design-icons/Plus.vue'
 import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
 
@@ -49,6 +49,7 @@ import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.j
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import { getCurrentUser } from '@nextcloud/auth'
+import type { Collection } from '../services/collectionFetcher.js'
 
 export default {
 	name: 'PlaceContent',
@@ -84,10 +85,7 @@ export default {
 	},
 
 	computed: {
-		/**
-		 * @return {import('../services/collectionFetcher.js').Collection} The place information for the current placeName.
-		 */
-		place() {
+		place(): Collection {
 			return this.$store.getters.getPlace(this.placeName)
 		},
 

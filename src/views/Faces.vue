@@ -39,7 +39,7 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
 
 import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'

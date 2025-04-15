@@ -33,7 +33,7 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 import CalendarOutline from 'vue-material-design-icons/CalendarOutline.vue'
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import CameraIris from 'vue-material-design-icons/CameraIris.vue'

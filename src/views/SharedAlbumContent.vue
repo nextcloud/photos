@@ -103,7 +103,7 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 import { mapActions, mapGetters } from 'vuex'
 
 import { NcActions, NcActionButton, NcButton, NcEmptyContent, NcActionSeparator, NcUserBubble, isMobile } from '@nextcloud/vue'
@@ -125,6 +125,7 @@ import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
 import PhotosPicker from '../components/PhotosPicker.vue'
+import type { Album } from '../store/albums.js'
 
 export default {
 	name: 'SharedAlbumContent',
@@ -176,31 +177,19 @@ export default {
 			'sharedAlbumsFiles',
 		]),
 
-		/**
-		 * @return {import('../store/sharedAlbums.js').SharedAlbum|undefined} The album information for the current albumName.
-		 */
-		album() {
+		album(): Album|undefined {
 			return this.$store.getters.getSharedAlbum(this.albumName)
 		},
 
-		/**
-		 * @return {string[]} The list of files for the current albumName.
-		 */
-		albumFileIds() {
+		albumFileIds(): string[] {
 			return this.$store.getters.getSharedAlbumFiles(this.albumName)
 		},
 
-		/**
-		 * @return {string} The album name without the userId between parentheses.
-		 */
-		albumOriginalName() {
+		albumOriginalName(): string {
 			return this.albumName.replace(new RegExp(`\\(${this.album.collaborators[0].id}\\)$`), '')
 		},
 
-		/**
-		 * @return {string} The album's filename based on its name. Useful to fetch the location information and content.
-		 */
-		albumFileName() {
+		albumFileName(): string {
 			return this.$store.getters.getSharedAlbumName(this.albumName)
 		},
 	},

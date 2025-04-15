@@ -30,7 +30,7 @@
 	</NcAppSettingsDialog>
 </template>
 
-<script>
+<script lang='ts'>
 import { NcAppSettingsDialog, NcAppSettingsSection } from '@nextcloud/vue'
 import { translate as t } from '@nextcloud/l10n'
 

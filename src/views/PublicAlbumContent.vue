@@ -71,7 +71,7 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 import { mapActions } from 'vuex'
 
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
@@ -90,6 +90,7 @@ import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
 import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
 import { getClient } from '@nextcloud/files/dav'
+import type { PublicAlbum } from '../store/publicAlbums.js'
 
 export default {
 	name: 'PublicAlbumContent',
@@ -134,31 +135,19 @@ export default {
 	},
 
 	computed: {
-		/**
-		 * @return {import('../store/publicAlbums.js').PublicAlbum} The album information for the current albumName.
-		 */
-		album() {
+		album(): PublicAlbum {
 			return this.$store.getters.getPublicAlbum(this.albumName)
 		},
 
-		/**
-		 * @return {string} The album's name is the token.
-		 */
-		albumName() {
+		albumName(): string {
 			return this.token
 		},
 
-		/**
-		 * @return {string[]} The list of files for the current albumName.
-		 */
-		albumFileIds() {
+		albumFileIds(): string[] {
 			return this.$store.getters.getPublicAlbumFiles(this.albumName)
 		},
 
-		/**
-		 * @return {string} The album's filename based on its name. Useful to fetch the location information and content.
-		 */
-		publicAlbumFileName() {
+		publicAlbumFileName(): string {
 			return this.$store.getters.getPublicAlbumName(this.albumName)
 		},
 	},

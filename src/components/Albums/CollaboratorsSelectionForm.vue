@@ -34,8 +34,8 @@
 					:display-name="availableCollaborators[collaboratorKey].label"
 					:name="availableCollaborators[collaboratorKey].label"
 					:user="availableCollaborators[collaboratorKey].id"
-					:is-no-user="availableCollaborators[collaboratorKey].type !== collaboratorTypes.SHARE_TYPE_USER">
-					<AccountGroup v-if="availableCollaborators[collaboratorKey].type === collaboratorTypes.SHARE_TYPE_GROUP" :title="t('photos', 'Group')" />
+					:is-no-user="availableCollaborators[collaboratorKey].type !== collaboratorTypes.User">
+					<AccountGroup v-if="availableCollaborators[collaboratorKey].type === collaboratorTypes.Group" :title="t('photos', 'Group')" />
 					<NcButton type="tertiary"
 						:aria-label="t('photos', 'Remove {collaboratorLabel} from the collaborators list', {collaboratorLabel: availableCollaborators[collaboratorKey].label})"
 						@click="unselectEntity(collaboratorKey)">
@@ -85,7 +85,7 @@
 		</div>
 	</div>
 </template>
-<script>
+<script lang='ts'>
 import { mapActions } from 'vuex'
 
 import Close from 'vue-material-design-icons/Close.vue'
@@ -100,25 +100,19 @@ import { showError } from '@nextcloud/dialogs'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { NcButton, NcListItemIcon, NcSelect } from '@nextcloud/vue'
-import { Type } from '@nextcloud/sharing'
+import { ShareType } from '@nextcloud/sharing'
 import { translate } from '@nextcloud/l10n'
 
 import logger from '../../services/logger.js'
 import FetchCollectionContentMixin from '../../mixins/FetchCollectionContentMixin.js'
+import type { Collaborator } from '../../store/albums.js'
+import type { PropType } from 'vue'
 
-/**
- * @typedef {object} Collaborator
- * @property {string} id - The id of the collaborator.
- * @property {string} label - The label of the collaborator for display.
- * @property {Type.SHARE_TYPE_USER|Type.SHARE_TYPE_GROUP|Type.SHARE_TYPE_LINK} type - The type of the collaborator.
- */
-
-/**
- * @typedef {Collaborator} SearchResult
- * @property {string} key
- * @property {string} displayName - The label of the collaborator for display.
- * @property {Element} [iconSvg] - An icon to differentiate the collaborator type.
- */
+type CollaboratorSearchResult = Collaborator & {
+	key: string
+	displayName: string // The label of the collaborator for display.
+	iconSvg?: Element // An icon to differentiate the collaborator type.
+}
 
 export default {
 	name: 'CollaboratorsSelectionForm',
@@ -142,9 +136,8 @@ export default {
 			required: true,
 		},
 
-		/** @type {import('vue').PropType<import('../../store/albums.js').Collaborator[]>} */
 		collaborators: {
-			type: Array,
+			type: Array as PropType<Collaborator[]>,
 			default: () => [],
 		},
 
@@ -157,16 +150,13 @@ export default {
 	data() {
 		return {
 			searchText: null,
-			/** @type {import('../../store/albums.js').IndexedCollaborators} */
-			availableCollaborators: {},
-			/** @type {string[]} */
-			selectedCollaboratorsKeys: [],
-			/** @type {import('../../store/albums.js').Collaborator[]} */
-			currentSearchResults: [],
+			availableCollaborators: {} as Record<string, Collaborator>,
+			selectedCollaboratorsKeys: [] as string[],
+			currentSearchResults: [] as Collaborator[],
 			loadingCollaborators: false,
 			randomId: Math.random().toString().substring(2, 10),
 			publicLinkCopied: false,
-			collaboratorTypes: Type,
+			collaboratorTypes: ShareType,
 			config: {
 				minSearchStringLength: parseInt(OC.config['sharing.minSearchStringLength'], 10) || 0,
 			},
@@ -174,59 +164,42 @@ export default {
 	},
 
 	computed: {
-		/**
-		 * @return {SearchResult[]}
-		 */
-		searchResults() {
+		searchResults(): CollaboratorSearchResult[] {
 			return this.currentSearchResults
-				.filter(({ id }) => id !== getCurrentUser().uid)
+				.filter(({ id }) => id !== getCurrentUser()?.uid)
 				.map((collaborator) => {
 					return {
 						...collaborator,
 						key: `${collaborator.type}:${collaborator.id}`,
-						iconSvg: collaborator.type === Type.SHARE_TYPE_GROUP ? AccountGroupSvg : undefined,
+						iconSvg: collaborator.type === ShareType.Group ? AccountGroupSvg : undefined,
 					}
 				})
 				.filter(({ key }) => !this.selectedCollaboratorsKeys.includes(key))
 		},
 
-		/**
-		 * @return {string[]}
-		 */
-		listableSelectedCollaboratorsKeys() {
+		listableSelectedCollaboratorsKeys(): string[] {
 			return this.selectedCollaboratorsKeys
-				.filter(collaboratorKey => this.availableCollaborators[collaboratorKey].type !== Type.SHARE_TYPE_LINK)
+				.filter(collaboratorKey => this.availableCollaborators[collaboratorKey].type !== ShareType.Link)
 		},
 
-		/**
-		 * @return {import('../../store/albums.js').Collaborator[]}
-		 */
-		selectedCollaborators() {
+		selectedCollaborators(): Collaborator[] {
 			return this.selectedCollaboratorsKeys
 				.map((collaboratorKey) => this.availableCollaborators[collaboratorKey])
 		},
 
-		/**
-		 * @return {boolean}
-		 */
-		isPublicLinkSelected() {
-			return this.selectedCollaboratorsKeys.includes(`${Type.SHARE_TYPE_LINK}`)
+		isPublicLinkSelected(): boolean {
+			return this.selectedCollaboratorsKeys.includes(`${ShareType.Link}`)
 		},
 
-		/** @return {import('../../store/albums.js').Collaborator} */
-		publicLink() {
-			return this.availableCollaborators[Type.SHARE_TYPE_LINK]
+		publicLink(): Collaborator {
+			return this.availableCollaborators[ShareType.Link]
 		},
 
-		/** @return {string} */
-		publicLinkURL() {
+		publicLinkURL(): string {
 			return `${window.location.protocol}//${window.location.host}${generateUrl(`apps/photos/public/${this.publicLink.id}`)}`
 		},
 
-		/**
-		 * @return {string} The album's filename based on its name. Useful to fetch the location information and content.
-		 */
-		albumFileName() {
+		albumFileName(): string {
 			return this.$store.getters.getAlbumName(this.albumName)
 		},
 	},
@@ -246,10 +219,8 @@ export default {
 
 		/**
 		 * Fetch possible collaborators.
-		 *
-		 * @param {string} query
 		 */
-		async searchCollaborators(query) {
+		async searchCollaborators(query: string) {
 			if (query === undefined) {
 				return
 			}
@@ -267,8 +238,8 @@ export default {
 						search: query,
 						itemType: 'share-recipients',
 						shareTypes: [
-							Type.SHARE_TYPE_USER,
-							Type.SHARE_TYPE_GROUP,
+							ShareType.User,
+							ShareType.Group,
 						],
 					},
 				})
@@ -277,9 +248,9 @@ export default {
 					.map(collaborator => {
 						switch (collaborator.source) {
 						case 'users':
-							return { id: collaborator.id, label: collaborator.label, type: Type.SHARE_TYPE_USER }
+							return { id: collaborator.id, label: collaborator.label, type: ShareType.User }
 						case 'groups':
-							return { id: collaborator.id, label: collaborator.label, type: Type.SHARE_TYPE_GROUP }
+							return { id: collaborator.id, label: collaborator.label, type: ShareType.Group }
 						default:
 							throw new Error(`Invalid collaborator source ${collaborator.source}`)
 						}
@@ -291,8 +262,8 @@ export default {
 				}
 			} catch (error) {
 				this.errorFetchingCollaborators = error
-				logger.error(t('photos', 'Failed to fetch collaborators list.'), error)
-				showError(t('photos', 'Failed to fetch collaborators list.'))
+				logger.error(this.t('photos', 'Failed to fetch collaborators list.'), { error })
+				showError(this.t('photos', 'Failed to fetch collaborators list.'))
 			} finally {
 				this.loadingCollaborators = false
 			}
@@ -300,33 +271,27 @@ export default {
 
 		/**
 		 * Populate selectedCollaboratorsKeys and availableCollaborators.
-		 *
-		 * @param {import('../../store/albums.js').Collaborator[]} collaborators - The list of collaborators
 		 */
-		populateCollaborators(collaborators) {
+		populateCollaborators(collaborators: Collaborator[]) {
 			const initialCollaborators = collaborators.reduce(this.indexCollaborators, {})
 			this.selectedCollaboratorsKeys = Object.keys(initialCollaborators)
 			this.availableCollaborators = {
 				3: {
 					id: '',
-					label: t('photos', 'Public link'),
-					type: Type.SHARE_TYPE_LINK,
+					label: this.t('photos', 'Public link'),
+					type: ShareType.Link,
 				},
 				...this.availableCollaborators,
 				...initialCollaborators,
 			}
 		},
 
-		/**
-		 * @param {import('../../store/albums.js').IndexedCollaborators} collaborators - Index of collaborators
-		 * @param {import('../../store/albums.js').Collaborator} collaborator - A collaborator
-		 */
-		indexCollaborators(collaborators, collaborator) {
-			return { ...collaborators, [`${collaborator.type}${collaborator.type === Type.SHARE_TYPE_LINK ? '' : ':'}${collaborator.type === Type.SHARE_TYPE_LINK ? '' : collaborator.id}`]: collaborator }
+		indexCollaborators(collaborators: Record<string, Collaborator>, collaborator: Collaborator) {
+			return { ...collaborators, [`${collaborator.type}${collaborator.type === ShareType.Link ? '' : ':'}${collaborator.type === ShareType.Link ? '' : collaborator.id}`]: collaborator }
 		},
 
 		async createPublicLinkForAlbum() {
-			this.selectEntity(`${Type.SHARE_TYPE_LINK}`)
+			this.selectEntity(`${ShareType.Link}`)
 			await this.updateAlbumCollaborators()
 			await this.fetchCollection(
 				this.albumFileName,
@@ -335,11 +300,11 @@ export default {
 		},
 
 		async deletePublicLink() {
-			this.unselectEntity(`${Type.SHARE_TYPE_LINK}`)
+			this.unselectEntity(`${ShareType.Link}`)
 			this.availableCollaborators[3] = {
 				id: '',
-				label: t('photos', 'Public link'),
-				type: Type.SHARE_TYPE_LINK,
+				label: this.t('photos', 'Public link'),
+				type: ShareType.Link,
 			}
 			this.publicLinkCopied = false
 			await this.updateAlbumCollaborators()

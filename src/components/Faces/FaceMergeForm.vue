@@ -12,7 +12,7 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 import { mapGetters } from 'vuex'
 
 import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
