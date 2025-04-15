@@ -15,6 +15,8 @@ import axios from '@nextcloud/axios'
 
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
+import type { FileStat, ResponseDataDetailed } from 'webdav'
+import type { Folder } from '@nextcloud/files'
 
 export const configChangedEvent = 'photos:user-config-changed'
 
@@ -22,13 +24,13 @@ export async function getFolder(path) {
 	const location = joinPaths(defaultRootPath, path) + '/'
 
 	try {
-		const stat = await davClient.stat(location, { details: true, data: getDefaultPropfind() })
+		const stat = await davClient.stat(location, { details: true, data: getDefaultPropfind() }) as ResponseDataDetailed<FileStat>
 		return resultToNode(stat.data)
 	} catch (error) {
 		if (error.response?.status === 404) {
 			logger.debug('Photo location does not exist, creating it.')
 			await davClient.createDirectory(location)
-			const stat = await davClient.stat(location, { details: true, data: getDefaultPropfind() })
+			const stat = await davClient.stat(location, { details: true, data: getDefaultPropfind() }) as ResponseDataDetailed<FileStat>
 			return resultToNode(stat.data)
 		} else {
 			logger.fatal(error)
@@ -39,26 +41,24 @@ export async function getFolder(path) {
 	throw new Error("Couldn't fetch photos upload folder")
 }
 
-/**
- * @typedef {object} UserConfigState
- * @property {boolean} croppedLayout
- * @property {string[]} photosSourceFolders
- * @property {string} photosLocation
- * @property {import('@nextcloud/files').Folder} [photosLocationFolder]
- */
+type UserConfigState = {
+	croppedLayout: boolean
+	photosSourceFolders: string[]
+	photosLocation: string
+	photosLocationFolder?: Folder
+}
 
-/** @type {import('vuex').Module<UserConfigState, object>} */
 const module = {
 	state() {
 		return {
-			croppedLayout: loadState('photos', 'croppedLayout', 'false') === 'true',
+			croppedLayout: loadState('photos', 'croppedLayout', 'false') as 'false'|'true' === 'true',
 			photosSourceFolders: JSON.parse(loadState('photos', 'photosSourceFolders', '["/Photos"]')),
 			photosLocation: loadState('photos', 'photosLocation', ''),
 			photosLocationFolder: undefined,
-		}
+		} as UserConfigState
 	},
 	mutations: {
-		updateUserConfig(state, { key, value }) {
+		updateUserConfig(state: UserConfigState, { key, value }) {
 			state[key] = value
 		},
 	},

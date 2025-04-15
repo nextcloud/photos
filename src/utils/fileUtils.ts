@@ -14,6 +14,13 @@ export type PhotoNode = {
 	isFavorite: boolean
 	type: 'file' | 'folder'
 	mime: string
+	hidden: boolean
+	metadataPhotosSize: { width: number, height: number }
+	metadataPhotosOriginalDateTime: number
+	lastmod: number
+	timestamp: number
+	month: string
+	day: string
 }
 
 /**

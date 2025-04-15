@@ -21,10 +21,8 @@ import userConfig, { getFolder } from './userConfig.js'
 
 /**
  * Get the information of photosLocation and store it as photosLocationFolder
- * @param store
- * @param state
  */
-async function initPhotosLocationFolder(store, state) {
+async function initPhotosLocationFolder(store: typeof photosStore, state) {
 	const photosLocationFolder = await getFolder(state.userConfig.photosLocation)
 	store.commit('updateUserConfig', { key: 'photosLocationFolder', value: photosLocationFolder })
 }

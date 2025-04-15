@@ -11,7 +11,7 @@ import { genFileInfo, type PhotoNode } from '../utils/fileUtils.js'
 import { davClient } from './DavClient.ts'
 import type { FileStat, ResponseDataDetailed, StatOptions, WebDAVClient } from 'webdav'
 
-type Collection = PhotoNode & {
+export type Collection = PhotoNode & {
 	basename: string // The name of the collection (ex: "Athens").
 	filename: string // The filename of the collection (ex: "/photos/admin/places/Athens").
 	source: string // The full source of the collection (ex: "https://nextcloud_server1.test/remote.php/dav//photos/admin/places/Athens").

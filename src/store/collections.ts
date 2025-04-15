@@ -3,43 +3,37 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { MutationTree } from 'vuex'
+
 import { showError } from '@nextcloud/dialogs'
 import { translate as t } from '@nextcloud/l10n'
 
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
+import type { Collection } from '../services/collectionFetcher.ts'
 
 /**
  * Collections are indexed by their `filename`.
  */
 const state = {
-	/**
-	 * @type {Object<string, import('../services/collectionFetcher').Collection>}
-	 */
 	collections: {
 		// "photos/{userName}/{collection}/{collectionName}": Collection,
 		// ...
-	},
-	/**
-	 * @type {Object<string, string[]>}
-	 */
+	} as Record<string, Collection>,
 	collectionsFiles: {
 		// "photos/{userName}/{collection}/{collectionName}": ["1", "2", ...],
 		// ...
-	},
+	} as Record<string, string[]>,
 }
 
-/** @type {import('vuex').MutationTree<state, any>} */
-const mutations = {
+type CollectionState = typeof state
+
+const mutations: MutationTree = {
 	/**
 	 * Add new collections.
-	 *
-	 * @param state vuex state
-	 * @param {object} data destructuring object
-	 * @param {import('../services/collectionFetcher').Collection[]} data.collections list of collections
 	 */
-	addCollections(state, { collections }) {
+	addCollections(state: CollectionState, { collections }: { collections: Collection[]}) {
 		state.collections = {
 			...state.collections,
 			...collections.reduce((collections, collection) => ({ ...collections, [collection.filename]: collection }), {}),
@@ -48,36 +42,23 @@ const mutations = {
 
 	/**
 	 * Add collections to the collection collection.
-	 *
-	 * @param state vuex state
-	 * @param {object} data destructuring object
-	 * @param {import('../services/collectionFetcher').Collection} data.collection the collection to update
 	 */
-	updateCollection(state, { collection }) {
+	updateCollection(state: CollectionState, { collection }: { collection: Collection}) {
 		state.collections[collection.filename] = collection
 	},
 
 	/**
 	 * Remove collections from the collection collection.
-	 *
-	 * @param state vuex state
-	 * @param {object} data destructuring object
-	 * @param {string[]} data.collectionFileNames list of collections ids
 	 */
-	removeCollections(state, { collectionFileNames }) {
+	removeCollections(state: CollectionState, { collectionFileNames }: { collectionFileNames: string[]}) {
 		collectionFileNames.forEach(collectionFileName => delete state.collections[collectionFileName])
 		collectionFileNames.forEach(collectionFileName => delete state.collectionsFiles[collectionFileName])
 	},
 
 	/**
 	 * Add files to an collection.
-	 *
-	 * @param state vuex state
-	 * @param {object} data destructuring object
-	 * @param {string} data.collectionFileName the collection id
-	 * @param {string[]} data.fileIds list of files
 	 */
-	setCollectionFiles(state, { collectionFileName, fileIds = [] }) {
+	setCollectionFiles(state: CollectionState, { collectionFileName, fileIds = [] }: { collectionFileName: string, fileIds: string[]}) {
 		const collectionFiles = state.collectionsFiles[collectionFileName] || []
 		state.collectionsFiles = {
 			...state.collectionsFiles,
@@ -92,13 +73,8 @@ const mutations = {
 
 	/**
 	 * Add files to an collection.
-	 *
-	 * @param state vuex state
-	 * @param {object} data destructuring object
-	 * @param {string} data.collectionFileName the collection id
-	 * @param {string[]} data.fileIdsToAdd list of files
 	 */
-	addFilesToCollection(state, { collectionFileName, fileIdsToAdd }) {
+	addFilesToCollection(state: CollectionState, { collectionFileName, fileIdsToAdd }: { collectionFileName: string, fileIdsToAdd: string[]}) {
 		const collectionFiles = state.collectionsFiles[collectionFileName] || []
 		state.collectionsFiles = {
 			...state.collectionsFiles,
@@ -111,13 +87,8 @@ const mutations = {
 
 	/**
 	 * Remove files from a collection.
-	 *
-	 * @param state vuex state
-	 * @param {object} data destructuring object
-	 * @param {string} data.collectionFileName the collection id
-	 * @param {string[]} data.fileIdsToRemove list of files
 	 */
-	removeFilesFromCollection(state, { collectionFileName, fileIdsToRemove }) {
+	removeFilesFromCollection(state: CollectionState, { collectionFileName, fileIdsToRemove }: { collectionFileName: string, fileIdsToRemove: string[]}) {
 		state.collectionsFiles = {
 			...state.collectionsFiles,
 			[collectionFileName]: state.collectionsFiles[collectionFileName].filter(fileId => !fileIdsToRemove.includes(fileId)),
@@ -130,39 +101,28 @@ const mutations = {
 	},
 }
 
-/** @type {import('vuex').GetterTree<state, any>} */
 const getters = {
-	collections: state => state.collections,
-	collectionsFiles: state => state.collectionsFiles,
-	collectionsWithPrefix: state => function(prefix) {
+	collections: (state: CollectionState) => state.collections,
+	collectionsFiles: (state: CollectionState) => state.collectionsFiles,
+	collectionsWithPrefix: (state: CollectionState) => function(prefix) {
 		return Object.values(state.collections)
 			.filter(collection => collection.filename.startsWith(prefix))
 			.reduce((collections, collection) => ({ ...collections, [collection.filename]: collection }), {})
 	},
 }
 
-/** @type {import('vuex').ActionTree<state, any>} */
 const actions = {
 	/**
 	 * Update files and collections
-	 *
-	 * @param context vuex context
-	 * @param {object} data destructuring object
-	 * @param {import('../services/collectionFetcher').Collection[]} data.collections list of collections
 	 */
-	addCollections(context, { collections }) {
+	addCollections(context, { collections }: { collections: Collection[]}) {
 		context.commit('addCollections', { collections })
 	},
 
 	/**
 	 * Add files to an collection.
-	 *
-	 * @param context vuex context
-	 * @param {object} data destructuring object
-	 * @param {string} data.collectionFileName the collection name
-	 * @param {string[]} data.fileIdsToAdd list of files ids to add
 	 */
-	async addFilesToCollection(context, { collectionFileName, fileIdsToAdd }) {
+	async addFilesToCollection(context, { collectionFileName, fileIdsToAdd }: { collectionFileName: string, fileIdsToAdd: string[] }) {
 		const semaphore = new Semaphore(5)
 
 		context.commit('addFilesToCollection', { collectionFileName, fileIdsToAdd })
@@ -195,13 +155,8 @@ const actions = {
 
 	/**
 	 * Remove files to an collection.
-	 *
-	 * @param context vuex context
-	 * @param {object} data destructuring object
-	 * @param {string} data.collectionFileName the collection name
-	 * @param {string[]} data.fileIdsToRemove list of files ids to remove
 	 */
-	async removeFilesFromCollection(context, { collectionFileName, fileIdsToRemove }) {
+	async removeFilesFromCollection(context, { collectionFileName, fileIdsToRemove }: { collectionFileName: string, fileIdsToRemove: string[] }) {
 		const semaphore = new Semaphore(5)
 
 		context.commit('removeFilesFromCollection', { collectionFileName, fileIdsToRemove })
@@ -228,12 +183,8 @@ const actions = {
 
 	/**
 	 * Create an collection.
-	 *
-	 * @param context vuex context
-	 * @param {object} data destructuring object
-	 * @param {import('../services/collectionFetcher').Collection} data.collection the collection
 	 */
-	async createCollection(context, { collection }) {
+	async createCollection(context, { collection }: { collection: Collection }) {
 		try {
 			await davClient.createDirectory(collection.filename)
 			context.commit('addCollections', { collections: [collection] })
@@ -246,13 +197,8 @@ const actions = {
 
 	/**
 	 * Rename an collection.
-	 *
-	 * @param context vuex context
-	 * @param {object} data destructuring object
-	 * @param {string} data.collectionFileName - The current name of the collection.
-	 * @param {string} data.newBaseName - The wanted name for the collection.
 	 */
-	async renameCollection(context, { collectionFileName, newBaseName }) {
+	async renameCollection(context, { collectionFileName, newBaseName }: { collectionFileName: string, newBaseName: string}) {
 		const collection = state.collections[collectionFileName]
 		const newCollection = {
 			...collection,
@@ -276,13 +222,8 @@ const actions = {
 
 	/**
 	 * Update an collection's properties.
-	 *
-	 * @param {object} context vuex context
-	 * @param {object} data destructuring object
-	 * @param {string} data.collectionFileName - The name of the collection.
-	 * @param {object} data.properties - The properties to update.
 	 */
-	async updateCollection(context, { collectionFileName, properties }) {
+	async updateCollection(context, { collectionFileName, properties }: { collectionFileName: string, properties: object }) {
 		const collection = context.state.collections[collectionFileName]
 
 		const updatedCollection = { ...collection, ...properties }
@@ -333,12 +274,8 @@ const actions = {
 
 	/**
 	 * Delete an collection.
-	 *
-	 * @param {object} context vuex context
-	 * @param {object} data destructuring object
-	 * @param {string} data.collectionFileName the id of the collection
 	 */
-	async deleteCollection(context, { collectionFileName }) {
+	async deleteCollection(context, { collectionFileName }: { collectionFileName: string}) {
 		try {
 			const collection = context.getters.collections[collectionFileName]
 			await davClient.deleteFile(collection.filename)
