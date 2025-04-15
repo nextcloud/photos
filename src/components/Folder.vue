@@ -10,7 +10,7 @@
 		:file-list="previewFiles" />
 </template>
 
-<script>
+<script lang='ts'>
 import { mapGetters } from 'vuex'
 
 import { getCurrentUser } from '@nextcloud/auth'

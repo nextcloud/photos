@@ -20,7 +20,7 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 import logger from '../services/logger.js'
 
 /**

@@ -66,7 +66,7 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 import VideoIcon from 'vue-material-design-icons/Video.vue'
 import PlayCircleIcon from 'vue-material-design-icons/PlayCircle.vue'
 import { decode } from 'blurhash'

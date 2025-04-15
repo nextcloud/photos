@@ -6,7 +6,7 @@
 	<NcIconSvgWrapper class="favorite-marker-icon" :name="t('photos', 'Favorite')" :svg="StarSvg" />
 </template>
 
-<script>
+<script lang='ts'>
 import { translate as t } from '@nextcloud/l10n'
 import { NcIconSvgWrapper } from '@nextcloud/vue'
 import { defineComponent } from 'vue'

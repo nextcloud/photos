@@ -50,7 +50,7 @@
 		@done="albumCreatedHandler" />
 </template>
 
-<script>
+<script lang='ts'>
 import { mapGetters } from 'vuex'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'

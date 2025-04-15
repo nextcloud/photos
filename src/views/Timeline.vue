@@ -123,7 +123,7 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 import { mapActions, mapGetters } from 'vuex'
 import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
