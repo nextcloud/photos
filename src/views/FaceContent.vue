@@ -187,6 +187,7 @@ import logger from '../services/logger.js'
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
 import Vue from 'vue'
 import FaceMergeForm from '../components/Faces/FaceMergeForm.vue'
+import type { Collection } from '../services/collectionFetcher.js'
 
 export default {
 	name: 'FaceContent',
@@ -247,22 +248,15 @@ export default {
 			'facesFiles',
 		]),
 
-		/**
-		 * @return {string[]} The face information for the current faceName.
-		 */
-		face() {
+		face(): Collection {
 			return this.faces[this.faceName]
 		},
 
-		/**
-		 * @return {string[]} The list of files for the current faceName.
-		 */
-		faceFileIds() {
+		faceFileIds(): string[] {
 			return this.facesFiles[this.faceName] || []
 		},
 
-		/** @type {boolean} */
-		shouldFavoriteSelection() {
+		shouldFavoriteSelection(): boolean {
 			// Favorite all selection if at least one file is not on the favorites.
 			return this.selectedFileIds.some((fileId) => this.$store.state.files.files[fileId].favorite === 0)
 		},
@@ -291,7 +285,7 @@ export default {
 			'moveFilesToFace',
 		]),
 
-		openViewer(fileId) {
+		openViewer(fileId: string) {
 			const file = this.files[fileId]
 			OCA.Viewer.open({
 				path: '/' + file.filename.split('/').slice(3).join('/'),
@@ -301,7 +295,7 @@ export default {
 			})
 		},
 
-		async handleRemoveFilesFromFace(fileIds) {
+		async handleRemoveFilesFromFace(fileIds: string[]) {
 			try {
 				this.loadingCount++
 				await this.removeFilesFromFace({ faceName: this.faceName, fileIdsToRemove: fileIds })
@@ -325,7 +319,7 @@ export default {
 			}
 		},
 
-		async handleRenameFace(faceName) {
+		async handleRenameFace(faceName: string) {
 			try {
 				this.loadingCount++
 				this.showRenameModal = false
@@ -339,7 +333,7 @@ export default {
 			}
 		},
 
-		async handleMerge(faceName) {
+		async handleMerge(faceName: string) {
 			try {
 				this.loadingCount++
 				await this.moveFilesToFace({ oldFace: this.faceName, faceName, fileIdsToMove: this.facesFiles[this.faceName] })
@@ -353,7 +347,7 @@ export default {
 			}
 		},
 
-		async handleMove(faceName, fileIds) {
+		async handleMove(faceName: string, fileIds: string[]) {
 			try {
 				this.loadingCount++
 				await this.moveFilesToFace({ oldFace: this.faceName, faceName, fileIdsToMove: fileIds })

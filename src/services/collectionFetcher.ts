@@ -12,31 +12,14 @@ import { davClient } from './DavClient.ts'
 import type { FileStat, ResponseDataDetailed, StatOptions, WebDAVClient } from 'webdav'
 
 export type Collection = PhotoNode & {
-	basename: string // The name of the collection (ex: "Athens").
-	filename: string // The filename of the collection (ex: "/photos/admin/places/Athens").
-	source: string // The full source of the collection (ex: "https://nextcloud_server1.test/remote.php/dav//photos/admin/places/Athens").
 	nbItems: number // The number of item in the collection.
 	lastPhoto: number // The file id for the cover of the collection.
 	date: string // The date of the collection.
 	collaborators: object[] // The list of collaborators.
 }
 
-type CollectionFile = PhotoNode & {
-	fileid: string // The id of the file.
-	basename: string // The name of the file (ex: "790-IMG_20180906_085724.jpg").
-	filename: string // The file name of the file (ex: "/photos/admin/places/Athens/790-IMG_20180906_085724.jpg").
-	source: string // The full source of the collection (ex: "https://nextcloud_server1.test/remote.php/dav//photos/admin/places/Athens/790-IMG_20180906_085724.jpg").
-	metadataPhotosSize: { // The metadata of the file.
-		width: number // The width of the file.
-		height: number // The height of the file.
-	}
-}
-
 export type RawCollaborators = ''|{collaborator: object[]|object}
 export type RawCollection = FileStat & { filename: string, props: { collaborators: RawCollaborators }, dateRange: string }
-
-export type IndexedCollections = Record<string, Collection>
-export type IndexedCollectionFiles = Record<string, CollectionFile>
 
 function getCollectionDavRequest(extraProps: string[] = []): string {
 	return `<?xml version="1.0"?>

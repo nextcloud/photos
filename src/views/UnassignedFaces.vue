@@ -150,15 +150,11 @@ export default {
 			'unassignedFiles',
 		]),
 
-		/**
-		 * @return {string[]} The list of files for the current faceName.
-		 */
-		faceFileIds() {
+		faceFileIds(): string[] {
 			return this.unassignedFiles || []
 		},
 
-		/** @type {boolean} */
-		shouldFavoriteSelection() {
+		shouldFavoriteSelection(): boolean {
 			// Favorite all selection if at least one file is not on the favorites.
 			return this.selectedFileIds.some((fileId) => this.$store.state.files.files[fileId].favorite === 0)
 		},

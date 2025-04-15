@@ -173,6 +173,7 @@ import PhotosPicker from '../components/PhotosPicker.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 
 import logger from '../services/logger.js'
+import type { Album } from '../store/albums.js'
 
 export default {
 	name: 'AlbumContent',
@@ -227,31 +228,19 @@ export default {
 	},
 
 	computed: {
-		/**
-		 * @return {import('../store/albums.js').Album|undefined} The album information for the current albumName.
-		 */
-		album() {
+		album(): Album|undefined {
 			return this.$store.getters.getAlbum(this.albumName)
 		},
 
-		/**
-		 * @return {string[]} The list of files for the current albumName.
-		 */
-		albumFileIds() {
+		albumFileIds(): string[] {
 			return this.$store.getters.getAlbumFiles(this.albumName)
 		},
 
-		/**
-		 * @return {boolean} Whether sharing is enabled.
-		 */
-		sharingEnabled() {
+		sharingEnabled(): boolean {
 			return OC.Share !== undefined
 		},
 
-		/**
-		 * @return {string} The album's filename based on its name. Useful to fetch the location information and content.
-		 */
-		albumFileName() {
+		albumFileName(): string {
 			return this.$store.getters.getAlbumName(this.albumName)
 		},
 	},

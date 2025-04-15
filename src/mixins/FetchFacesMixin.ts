@@ -4,11 +4,13 @@
  */
 
 import { showError } from '@nextcloud/dialogs'
+import { translate as t } from '@nextcloud/l10n'
 import { getCurrentUser } from '@nextcloud/auth'
 import { mapActions, mapGetters } from 'vuex'
 import he from 'he'
+import type { FileStat, ResponseDataDetailed } from 'webdav'
 
-import { genFileInfo } from '../utils/fileUtils.js'
+import { genFileInfo, type PhotoNode } from '../utils/fileUtils.js'
 import logger from '../services/logger.js'
 import AbortControllerMixin from './AbortControllerMixin.js'
 import { davClient } from '../services/DavClient.ts'
@@ -19,6 +21,12 @@ const recognizeDAVProps = [
 	'nc:face-preview-image',
 	'nc:realpath',
 ]
+
+type FaceNode = PhotoNode & {
+	faceDetections: string
+	facePreviewImage: string
+	realpath: string
+}
 
 export default {
 	name: 'FetchFacesMixin',
@@ -68,9 +76,9 @@ export default {
 					data: getPropFind(recognizeDAVProps),
 					details: true,
 					signal: this.abortController.signal,
-				})
+				}) as ResponseDataDetailed<FileStat[]>
 				this.$store.dispatch('addFaces', { faces })
-				logger.debug(`[FetchFacesMixin] Fetched ${faces.length} new faces: `, faces)
+				logger.debug(`[FetchFacesMixin] Fetched ${faces.length} new faces: `, {faces})
 			} catch (error) {
 				if (error.response && error.response.status) {
 					if (error.response.status === 404) {
@@ -99,18 +107,18 @@ export default {
 				this.errorFetchingFiles = null
 				this.loadingFiles = true
 
-				let { data: fetchedFiles } = await davClient.getDirectoryContents(
+				const { data: fetchedRawFiles } = await davClient.getDirectoryContents(
 					`/recognize/${getCurrentUser()?.uid}/faces/${faceName}`,
 					{
 						data: getPropFind(recognizeDAVProps),
 						details: true,
 						signal: this.abortController.signal,
 					},
-				)
+				) as ResponseDataDetailed<FileStat[]>
 
-				fetchedFiles = fetchedFiles
-					.map(file => genFileInfo(file))
-					.map(file => ({ ...file, filename: he.decode(file.realpath).replace(`/${getCurrentUser().uid}/files`, `/files/${getCurrentUser().uid}`) }))
+				const fetchedFiles = fetchedRawFiles
+					.map(file => genFileInfo(file) as FaceNode)
+					.map(file => ({ ...file, filename: he.decode(file.realpath).replace(`/${getCurrentUser()?.uid}/files`, `/files/${getCurrentUser()?.uid}`) }))
 					.map(file => ({ ...file, faceDetections: JSON.parse(he.decode(file.faceDetections)) }))
 
 				const fileIds = fetchedFiles.map(file => '' + file.fileid)
@@ -121,7 +129,7 @@ export default {
 					await this.$store.commit('addFilesToFace', { faceName, fileIdsToAdd: fileIds })
 				}
 
-				logger.debug(`[FetchFacesMixin] Fetched ${fileIds.length} new files: `, fileIds)
+				logger.debug(`[FetchFacesMixin] Fetched ${fileIds.length} new files: `, { fileIds })
 			} catch (error) {
 				if (error.response && error.response.status) {
 					if (error.response.status === 404) {
@@ -151,18 +159,18 @@ export default {
 				this.errorFetchingFiles = null
 				this.loadingFiles = true
 
-				let { data: fetchedFiles } = await davClient.getDirectoryContents(
+				const { data: fetchedRawFiles } = await davClient.getDirectoryContents(
 					`/recognize/${getCurrentUser()?.uid}/unassigned-faces`,
 					{
 						data: getPropFind(recognizeDAVProps),
 						details: true,
 						signal: this.abortController.signal,
 					},
-				)
+				) as ResponseDataDetailed<FileStat[]>
 
-				fetchedFiles = fetchedFiles
-					.map(file => genFileInfo(file))
-					.map(file => ({ ...file, filename: he.decode(file.realpath).replace(`/${getCurrentUser().uid}/files`, `/files/${getCurrentUser().uid}`) }))
+				const fetchedFiles = fetchedRawFiles
+					.map(file => genFileInfo(file) as FaceNode)
+					.map(file => ({ ...file, filename: he.decode(file.realpath).replace(`/${getCurrentUser()?.uid}/files`, `/files/${getCurrentUser()?.uid}`) }))
 					.map(file => ({ ...file, faceDetections: JSON.parse(he.decode(file.faceDetections)) }))
 
 				const fileIds = fetchedFiles.map(file => '' + file.fileid)
@@ -173,7 +181,7 @@ export default {
 					await this.$store.commit('addUnassignedFiles', { fileIdsToAdd: fileIds })
 				}
 
-				logger.debug(`[FetchFacesMixin] Fetched ${fileIds.length} new unassigned files: `, fileIds)
+				logger.debug(`[FetchFacesMixin] Fetched ${fileIds.length} new unassigned files: `, { fileIds })
 			} catch (error) {
 				if (error.response && error.response.status) {
 					if (error.response.status === 404) {
@@ -199,13 +207,13 @@ export default {
 						details: true,
 						signal: this.abortController.signal,
 					},
-				)
+				) as ResponseDataDetailed<FileStat>
 
-				const count = Number(unassignedFacesRoot.props.nbItems)
+				const count = Number(unassignedFacesRoot.props?.nbItems)
 
 				await this.$store.commit('setUnassignedFilesCount', count)
 
-				logger.debug('[FetchFacesMixin] Fetched unassigned files count: ', count)
+				logger.debug('[FetchFacesMixin] Fetched unassigned files count: ', { count })
 			} catch (error) {
 				// cancelled request, moving on...
 				logger.error('Error fetching unassigned files count', { error })

@@ -69,6 +69,8 @@ import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import TiledLayout from '../components/TiledLayout/TiledLayout.vue'
 import { fetchFile } from '../services/fileFetcher.ts'
 import VirtualScrolling from '../components/VirtualScrolling.vue'
+import type { TiledItem } from '../services/TiledLayout.ts'
+import type { PhotoNode } from '../utils/fileUtils.ts'
 
 export default {
 	name: 'FilesListViewer',
@@ -154,17 +156,11 @@ export default {
 			'files',
 		]),
 
-		/**
-		 * @return {boolean} The list of items to pass to TiledLayout.
-		 */
-		showPlaceholders() {
+		showPlaceholders(): boolean {
 			return this.loading && (this.fileIds?.length === 0 || this.sections?.length === 0)
 		},
 
-		/**
-		 * @return {{id: string, items: import('../services/TiledLayout.js').TiledItem[][]}[]} The list of items to pass to TiledLayout.
-		 */
-		itemsBySections() {
+		itemsBySections(): {id: string, items: TiledItem[][]}[] {
 			if (this.fileIds !== undefined) {
 				if (this.showPlaceholders) {
 					return [{ id: '', items: this.placeholderFiles }]
@@ -200,8 +196,7 @@ export default {
 			return this.itemsBySections.map(({ items }) => items.length).reduce((total, length) => total + length, 0)
 		},
 
-		/** @return {boolean} The list of items to pass to TiledLayout. */
-		showLoader() {
+		showLoader(): boolean {
 			return this.loading && (this.fileIds?.length !== 0 || this.sections?.length !== 0)
 		},
 		croppedLayout() {
@@ -227,12 +222,8 @@ export default {
 			this.$emit('need-content')
 		},
 
-		/**
-		 * @param {string} fileId
-		 * @return {import('../services/TiledLayout.js').TiledItem[]}
-		 */
-		mapFileToItem(fileId) {
-			const file = this.files[fileId]
+		mapFileToItem(fileId: string): TiledItem {
+			const file = this.files[fileId] as PhotoNode
 			return {
 				id: file.fileid,
 				width: file.metadataPhotosSize.width,
@@ -241,11 +232,7 @@ export default {
 			}
 		},
 
-		/**
-		 * @param {object} data
-		 * @param {string} data.fileid - The file id of the updated file.
-		 */
-		async handleFileUpdated({ fileid }) {
+		async handleFileUpdated({ fileid }: PhotoNode) {
 			const fetchedFile = await fetchFile(this.files[fileid].filename)
 			this.appendFiles([fetchedFile])
 		},

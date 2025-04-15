@@ -6,8 +6,9 @@
 import { mapActions } from 'vuex'
 
 import AbortControllerMixin from './AbortControllerMixin.js'
-import { fetchCollections } from '../services/collectionFetcher.js'
+import { fetchCollections, type Collection } from '../services/collectionFetcher.js'
 import logger from '../services/logger.js'
+import type { WebDAVClient } from 'webdav'
 
 export default {
 	name: 'FetchCollectionsMixin',
@@ -28,13 +29,7 @@ export default {
 			'addCollections',
 		]),
 
-		/**
-		 * @param {string} collectionHome
-		 * @param {string[]} [extraProps] - Extra properties to add to the DAV request.
-		 * @param {import('webdav').WebDAVClient} [client] - The DAV client to use.
-		 * @return {Promise<import('../services/collectionFetcher.js').Collection[]>}
-		 */
-		async fetchCollections(collectionHome, extraProps, client) {
+		async fetchCollections(collectionHome: string, extraProps: string[], client: WebDAVClient): Promise<Collection[]> {
 			if (this.loadingCollections) {
 				return []
 			}

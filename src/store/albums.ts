@@ -9,7 +9,7 @@ import type { ShareType } from '@nextcloud/sharing'
 import type { Collection } from '../services/collectionFetcher'
 import type { PhotoNode } from '../utils/fileUtils'
 
-type Collaborator = {
+export type Collaborator = {
 	id: string // - The id of the collaborator.
 	label: string // - The label of the collaborator for display.
 	type: ShareType.User|ShareType.Group|ShareType.Link // - The type of the collaborator.

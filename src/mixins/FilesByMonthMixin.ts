@@ -7,10 +7,7 @@ export default {
 	name: 'FilesByMonthMixin',
 
 	computed: {
-		/**
-		 * @return {Object<string, []>}
-		 */
-		fileIdsByMonth() {
+		fileIdsByMonth(): Record<string, string[]> {
 			const filesByMonth = {}
 			for (const fileId of this.fetchedFileIds) {
 				const file = this.files[fileId]
@@ -27,10 +24,7 @@ export default {
 			return filesByMonth
 		},
 
-		/**
-		 * @return {string[]}
-		 */
-		monthsList() {
+		monthsList(): string[] {
 			return Object
 				.keys(this.fileIdsByMonth)
 				.sort((month1, month2) => month1 > month2 ? -1 : 1)
@@ -38,12 +32,7 @@ export default {
 	},
 
 	methods: {
-		/**
-		 * @param {string} fileId1 The first file ID
-		 * @param {string} fileId2 The second file ID
-		 * @return {-1 | 1}
-		 */
-		sortFilesByTimestamp(fileId1, fileId2) {
+		sortFilesByTimestamp(fileId1: string, fileId2: string): -1|1 {
 			return this.files[fileId1].timestamp > this.files[fileId2].timestamp ? -1 : 1
 		},
 	},

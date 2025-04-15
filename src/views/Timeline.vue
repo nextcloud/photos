@@ -178,16 +178,10 @@ export default {
 	},
 
 	filters: {
-		/**
-		 * @param {string} date - In the following format: YYYYMM
-		 */
-		dateMonth(date) {
+		dateMonth(date: string): string {
 			return moment(date, 'YYYYMM').format('MMMM')
 		},
-		/**
-		 * @param {string} date - In the following format: YYYYMM
-		 */
-		dateYear(date) {
+		dateYear(date: string): string {
 			return moment(date, 'YYYYMM').format('YYYY')
 		},
 	},
@@ -232,18 +226,18 @@ export default {
 		}
 	},
 
+	computed: {
+		...mapGetters([
+			'files',
+		]),
+	},
+
 	mounted() {
 		subscribe(configChangedEvent, this.handleUserConfigChange)
 	},
 
 	destroyed() {
 		unsubscribe(configChangedEvent, this.handleUserConfigChange)
-	},
-
-	computed: {
-		...mapGetters([
-			'files',
-		]),
 	},
 
 	methods: {

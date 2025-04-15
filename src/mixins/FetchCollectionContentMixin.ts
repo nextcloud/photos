@@ -4,13 +4,15 @@
  */
 
 import { mapActions } from 'vuex'
+import type { WebDAVClient } from 'webdav'
 
 import { showError } from '@nextcloud/dialogs'
 
 import AbortControllerMixin from './AbortControllerMixin.js'
-import { fetchCollection, fetchCollectionFiles } from '../services/collectionFetcher.js'
+import { fetchCollection, fetchCollectionFiles, type Collection } from '../services/collectionFetcher.js'
 import logger from '../services/logger.js'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
+import type { PhotoNode } from '../utils/fileUtils.js'
 
 export default {
 	name: 'FetchCollectionContentMixin',
@@ -35,13 +37,7 @@ export default {
 			'addCollections',
 			'setCollectionFiles',
 		]),
-		/**
-		 * @param {string} collectionFileName
-		 * @param {string[]} [extraProps] - Extra properties to add to the DAV request.
-		 * @param {import('webdav').WebDAVClient} [client] - The DAV client to use.
-		 * @return {Promise<import('../services/collectionFetcher.js').Collection|null>}
-		 */
-		async fetchCollection(collectionFileName, extraProps, client) {
+		async fetchCollection(collectionFileName: string, extraProps: string[], client: WebDAVClient): Promise<Collection|null> {
 			if (this.loadingCollection) {
 				return null
 			}
@@ -69,14 +65,7 @@ export default {
 			return null
 		},
 
-		/**
-		 * @param {string} collectionFileName
-		 * @param {string[]} [extraProps] - Extra properties to add to the DAV request.
-		 * @param {import('webdav').WebDAVClient} [client] - The DAV client to use.
-		 * @param {((value: import('../services/collectionFetcher.js').CollectionFile, index: number, array: import('../services/collectionFetcher.js').CollectionFile[]) => any)[]} [mappers] - Callback that can transform files before they are appended.
-		 * @return {Promise<import('../services/collectionFetcher.js').CollectionFile[]>}
-		 */
-		async fetchCollectionFiles(collectionFileName, extraProps, client, mappers = []) {
+		async fetchCollectionFiles(collectionFileName: string, extraProps: string[], client: WebDAVClient, mappers: ((nodes: PhotoNode) => PhotoNode)[] = []): Promise<PhotoNode[]> {
 			if (this.loadingCollectionFiles) {
 				return []
 			}

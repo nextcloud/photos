@@ -68,6 +68,7 @@ import CollectionCover from '../components/Collection/CollectionCover.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
+import type { Album } from '../store/albums.js'
 
 export default {
 	name: 'Albums',
@@ -114,10 +115,7 @@ export default {
 	},
 
 	computed: {
-		/**
-		 * @return {import('../services/Albums').IndexedAlbums}
-		 */
-		albums() {
+		albums(): Record<string, Album> {
 			return this.$store.getters.albums
 		},
 	},
