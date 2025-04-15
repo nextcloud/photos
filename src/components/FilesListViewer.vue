@@ -58,7 +58,7 @@
 		</TiledLayout>
 	</div>
 </template>
-<script>
+<script lang='ts'>
 import { mapActions, mapGetters } from 'vuex'
 
 import PackageVariant from 'vue-material-design-icons/PackageVariant.vue'

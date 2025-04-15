@@ -19,7 +19,7 @@
 	</NcContent>
 </template>
 
-<script>
+<script lang='ts'>
 import { generateUrl } from '@nextcloud/router'
 
 import { NcContent, NcAppContent } from '@nextcloud/vue'

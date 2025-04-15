@@ -37,7 +37,7 @@
 	</CollectionsList>
 </template>
 
-<script>
+<script lang='ts'>
 import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
 
 import { generateUrl } from '@nextcloud/router'

@@ -164,7 +164,7 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 import { mapActions, mapGetters } from 'vuex'
 import Pencil from 'vue-material-design-icons/Pencil.vue'
 import Close from 'vue-material-design-icons/Close.vue'

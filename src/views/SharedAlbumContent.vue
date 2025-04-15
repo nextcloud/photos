@@ -103,7 +103,7 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 import { mapActions, mapGetters } from 'vuex'
 
 import { NcActions, NcActionButton, NcButton, NcEmptyContent, NcActionSeparator, NcUserBubble, isMobile } from '@nextcloud/vue'

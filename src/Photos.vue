@@ -111,7 +111,7 @@
 	</NcContent>
 </template>
 
-<script>
+<script lang='ts'>
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
 import { loadState } from '@nextcloud/initial-state'

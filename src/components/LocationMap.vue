@@ -28,7 +28,7 @@
 	</LMap>
 </template>
 
-<script>
+<script lang='ts'>
 import {
 	LControlAttribution,
 	LTooltip,

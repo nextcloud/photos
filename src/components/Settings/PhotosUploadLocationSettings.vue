@@ -14,7 +14,7 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 import debounce from 'debounce'
 import { defineComponent } from 'vue'
 

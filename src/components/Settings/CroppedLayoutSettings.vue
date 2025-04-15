@@ -11,7 +11,7 @@
 	</NcCheckboxRadioSwitch>
 </template>
 
-<script>
+<script lang='ts'>
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 
 export default {

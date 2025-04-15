@@ -36,7 +36,7 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 
 import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
 

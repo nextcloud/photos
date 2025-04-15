@@ -38,7 +38,7 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 import Plus from 'vue-material-design-icons/Plus.vue'
 import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
 

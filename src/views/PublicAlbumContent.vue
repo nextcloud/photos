@@ -71,7 +71,7 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 import { mapActions } from 'vuex'
 
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'

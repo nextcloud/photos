@@ -41,7 +41,7 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
 import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
 

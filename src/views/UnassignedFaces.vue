@@ -87,7 +87,7 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 import { mapActions, mapGetters } from 'vuex'
 import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
 import Star from 'vue-material-design-icons/Star.vue'
