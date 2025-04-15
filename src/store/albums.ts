@@ -4,29 +4,28 @@
  */
 
 import { getCurrentUser } from '@nextcloud/auth'
+import type { ShareType } from '@nextcloud/sharing'
 
-/**
- * @typedef {object} Collaborator
- * @property {string} id - The id of the collaborator.
- * @property {string} label - The label of the collaborator for display.
- * @property {Type.SHARE_TYPE_USER|Type.SHARE_TYPE_GROUP|Type.SHARE_TYPE_LINK} type - The type of the collaborator.
- *
- * @typedef {object} _Album
- * @property {string} location - The user set location of the album.
- * @property {Collaborator[]} collaborators - The file id for the cover of the collection.
- *
- * @typedef {import("../services/collectionFetcher").Collection&_Album} Album
- *
- * @typedef {Object<string, Album>} IndexedAlbums
- * @typedef {Object<string, Collaborator>} IndexedCollaborators
- */
+import type { Collection } from '../services/collectionFetcher'
+import type { PhotoNode } from '../utils/fileUtils'
+
+type Collaborator = {
+	id: string // - The id of the collaborator.
+	label: string // - The label of the collaborator for display.
+	type: ShareType.User|ShareType.Group|ShareType.Link // - The type of the collaborator.
+}
+
+export type Album = Collection & {
+	location: string // - The user set location of the album.
+	collaborators: Collaborator[] // - The list of collaborators.
+}
 
 const albumsPrefix = `/photos/${getCurrentUser()?.uid}/albums/`
 
 const getters = {
-	albums: (_, __, ___, rootGetters) => rootGetters.collectionsWithPrefix(albumsPrefix),
-	getAlbum: (_, __, rootState) => albumName => rootState.collections.collections[`${albumsPrefix}${albumName}`],
-	getAlbumFiles: (_, __, rootState) => albumName => rootState.collections.collectionsFiles[`${albumsPrefix}${albumName}`] || [],
+	albums: (_, __, ___, rootGetters): Album[] => rootGetters.collectionsWithPrefix(albumsPrefix),
+	getAlbum: (_, __, rootState) => (albumName): Album => rootState.collections.collections[`${albumsPrefix}${albumName}`],
+	getAlbumFiles: (_, __, rootState) => (albumName): PhotoNode[] => rootState.collections.collectionsFiles[`${albumsPrefix}${albumName}`] || [],
 	getAlbumName: (_, __, ___) => albumName => `${albumsPrefix}${albumName}`,
 }
 export default { getters }

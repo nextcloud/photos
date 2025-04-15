@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import Vue from 'vue'
-import { sortCompare } from '../utils/fileUtils.js'
+import { sortCompare, type PhotoNode } from '../utils/fileUtils.js'
 import getTaggedImages from '../services/TaggedImages.js'
 import getSystemTags from '../services/SystemTags.js'
 import logger from '../services/logger.js'
@@ -13,14 +13,13 @@ const state = {
 	names: {},
 }
 
+type SystemTagsState = typeof state
+
 const mutations = {
 	/**
 	 * Order and save tags
-	 *
-	 * @param {object} state vuex state
-	 * @param {Array} tags the tags list
 	 */
-	updateTags(state, tags) {
+	updateTags(state: SystemTagsState, tags: string[]) {
 		if (tags.length > 0) {
 			// sort by basename
 			const list = tags.sort((a, b) => sortCompare(a, b, 'displayName'))
@@ -35,25 +34,16 @@ const mutations = {
 
 	/**
 	 * Update tag files list
-	 *
-	 * @param {object} state vuex state
-	 * @param {object} data destructuring object
-	 * @param {number} data.id current tag id
 	 */
-	removeTag(state, { id }) {
+	removeTag(state: SystemTagsState, { id }: { id: number }) {
 		Vue.delete(state.names, state.tags[id].displayName)
 		Vue.delete(state.tags, id)
 	},
 
 	/**
 	 * Update tag files list
-	 *
-	 * @param {object} state vuex state
-	 * @param {object} data destructuring object
-	 * @param {number} data.id current tag id
-	 * @param {object[]} data.files list of files
 	 */
-	updateTag(state, { id, files }) {
+	updateTag(state: SystemTagsState, { id, files }: { id: number; files: PhotoNode[] }) {
 		if (files.length === 0) {
 			// Remove this tag from the list if there's no files for it
 			Vue.delete(state.names, state.tags[id].displayName)
@@ -71,32 +61,24 @@ const mutations = {
 }
 
 const getters = {
-	tags: state => state.tags,
-	tagsNames: state => state.names,
-	tag: state => id => state.tags[id],
-	tagId: state => name => state.names[name],
+	tags: (state: SystemTagsState) => state.tags,
+	tagsNames: (state: SystemTagsState) => state.names,
+	tag: (state: SystemTagsState) => id => state.tags[id],
+	tagId: (state: SystemTagsState) => name => state.names[name],
 }
 
 const actions = {
 	/**
 	 * Update files and folders
-	 *
-	 * @param {object} context vuex context
-	 * @param {Array} tags the tag list
 	 */
-	updateTags(context, tags) {
+	updateTags(context, tags: string[]) {
 		context.commit('updateTags', tags)
 	},
 
 	/**
 	 * Update tag files list
-	 *
-	 * @param {object} context vuex context
-	 * @param {object} data destructuring object
-	 * @param {number} data.id current tag id
-	 * @param {object[]} data.files list of files
 	 */
-	updateTag(context, { id, files }) {
+	updateTag(context, { id, files }: { id: number, files: PhotoNode[] }) {
 		if (files.length === 0) {
 			// Remove this tag from the list if there's no files for it
 			context.commit('removeTag', { id })
@@ -104,15 +86,7 @@ const actions = {
 		context.commit('updateTag', { id, files })
 	},
 
-	/**
-	 *
-	 * @param context
-	 * @param obj
-	 * @param obj.id the tag id to fetch files for
-	 * @param obj.signal AbortController signal
-	 * @return {Promise<void>}
-	 */
-	async fetchTagFiles(context, { id, signal }) {
+	async fetchTagFiles(context, { id, signal }: { id: number; signal: AbortSignal }) {
 		try {
 			// get data
 			const files = await getTaggedImages(id, { signal })
@@ -127,7 +101,7 @@ const actions = {
 		}
 	},
 
-	async fetchAllTags(context, { signal }) {
+	async fetchAllTags(context, { signal }: { signal: AbortSignal }) {
 		const tags = await getSystemTags('', {
 			signal,
 		})

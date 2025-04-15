@@ -7,6 +7,8 @@ import { generateUrl } from '@nextcloud/router'
 import Router from 'vue-router'
 import Vue from 'vue'
 
+import { t } from '@nextcloud/l10n'
+
 import isMapsInstalled from '../services/IsMapsInstalled.js'
 import areTagsInstalled from '../services/AreTagsInstalled.js'
 import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
@@ -41,11 +43,8 @@ if (!isMapsInstalled) {
 /**
  * Parse the path of a route : join the elements of the array and return a single string with slashes
  * + always lead current path with a slash
- *
- * @param {string | Array} path path arguments to parse
- * @return {string}
  */
-const parsePathParams = (path) => {
+const parsePathParams = (path: string|string[]): string => {
 	return `/${Array.isArray(path) ? path.join('/') : path || ''}`
 }
 
@@ -60,7 +59,7 @@ const router = new Router({
 			path: '/',
 			component: Timeline,
 			name: 'all_media',
-			props: route => ({
+			props: () => ({
 				rootTitle: t('photos', 'All your media'),
 			}),
 			meta: {
@@ -73,7 +72,7 @@ const router = new Router({
 			path: '/photos',
 			component: Timeline,
 			name: 'photos',
-			props: route => ({
+			props: () => ({
 				rootTitle: t('photos', 'Photos'),
 				mimesType: imageMimes,
 			}),
@@ -87,7 +86,7 @@ const router = new Router({
 			path: '/videos',
 			component: Timeline,
 			name: 'videos',
-			props: route => ({
+			props: () => ({
 				rootTitle: t('photos', 'Videos'),
 				mimesType: videoMimes,
 			}),
@@ -206,7 +205,7 @@ const router = new Router({
 			path: '/favorites',
 			component: Timeline,
 			name: 'favorites',
-			props: route => ({
+			props: () => ({
 				rootTitle: t('photos', 'Favorites'),
 				onlyFavorites: true,
 			}),
@@ -220,7 +219,7 @@ const router = new Router({
 			path: '/tags/',
 			component: Tags,
 			name: 'tags',
-			redirect: !areTagsInstalled ? { name: 'timeline' } : null,
+			redirect: !areTagsInstalled ? { name: 'timeline' } : undefined,
 			props: route => ({
 				path: '',
 				isRoot: !route.params.path,
@@ -236,7 +235,7 @@ const router = new Router({
 			path: '/tags/:path',
 			component: TagContent,
 			name: 'tagcontent',
-			redirect: !areTagsInstalled ? { name: 'timeline' } : null,
+			redirect: !areTagsInstalled ? { name: 'timeline' } : undefined,
 			props: route => ({
 				path: `${route.params.path ? route.params.path : ''}`,
 			}),
@@ -258,7 +257,7 @@ const router = new Router({
 			path: '/thisday',
 			name: 'thisday',
 			component: Timeline,
-			props: route => ({
+			props: () => ({
 				rootTitle: t('photos', 'On this day'),
 				onThisDay: true,
 			}),
@@ -284,7 +283,7 @@ const router = new Router({
 			name: 'unassignedfaces',
 			component: UnassignedFaces,
 			meta: {
-				rootTitle: (to) => {
+				rootTitle: () => {
 					return t('photos', 'Unassigned faces')
 				},
 			},
@@ -307,7 +306,7 @@ const router = new Router({
 })
 
 router.afterEach((to) => {
-	const rootTitle = to.meta.rootTitle?.(to)
+	const rootTitle = to.meta?.rootTitle?.(to)
 	if (rootTitle) {
 		document.title = `${rootTitle} - ${baseTitle}`
 	} else {

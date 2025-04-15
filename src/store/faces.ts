@@ -5,35 +5,33 @@
 
 import { showError } from '@nextcloud/dialogs'
 import { getCurrentUser } from '@nextcloud/auth'
+import { t } from '@nextcloud/l10n'
 import Vue from 'vue'
 
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
 
-/**
- * @typedef {object} Face
- * @property {string} basename - The name of the face.
- * @property {number} lastmod - The creation date of the face.
- * @property {string} size - The number of items in the face.
- */
+type Face = {
+	basename: string // The name of the face.
+	lastmod: number // The creation date of the face.
+	size: string // The number of items in the face.
+}
 
 const state = {
-	faces: {},
-	facesFiles: {},
-	unassignedFiles: [],
+	faces: {} as Record<string, Face>,
+	facesFiles: {} as Record<string, string[]>,
+	unassignedFiles: [] as string[],
 	unassignedFilesCount: 0,
 }
+
+type FaceState = typeof state
 
 const mutations = {
 	/**
 	 * Add faces to the face collection.
-	 *
-	 * @param {object} state vuex state
-	 * @param {object} data destructuring object
-	 * @param {Array} data.faces list of faces
 	 */
-	addFaces(state, { faces }) {
+	addFaces(state: FaceState, { faces }: { faces: Face[] }) {
 		for (const face of faces) {
 			Vue.set(state.faces, face.basename, face)
 		}
@@ -41,25 +39,16 @@ const mutations = {
 
 	/**
 	 * Remove faces from the face collection.
-	 *
-	 * @param {object} state vuex state
-	 * @param {object} data destructuring object
-	 * @param {Array} data.faceNames list of faces ids
 	 */
-	removeFaces(state, { faceNames }) {
+	removeFaces(state: FaceState, { faceNames }: { faceNames: string[] }) {
 		faceNames.forEach(faceName => Vue.delete(state.faces, faceName))
 		faceNames.forEach(faceName => Vue.delete(state.facesFiles, faceName))
 	},
 
 	/**
 	 * Add files to a face.
-	 *
-	 * @param {object} state vuex state
-	 * @param {object} data destructuring object
-	 * @param {string} data.faceName the face name
-	 * @param {string[]} data.fileIdsToAdd list of files
 	 */
-	addFilesToFace(state, { faceName, fileIdsToAdd }) {
+	addFilesToFace(state: FaceState, { faceName, fileIdsToAdd }: { faceName: string, fileIdsToAdd: string[] }) {
 		if (!state.facesFiles[faceName]) {
 			Vue.set(state.facesFiles, faceName, [])
 		}
@@ -69,12 +58,8 @@ const mutations = {
 
 	/**
 	 * Add files to a face.
-	 *
-	 * @param {object} state vuex state
-	 * @param {object} data destructuring object
-	 * @param {string[]} data.fileIdsToAdd list of files
 	 */
-	addUnassignedFiles(state, { fileIdsToAdd }) {
+	addUnassignedFiles(state: FaceState, { fileIdsToAdd }: { fileIdsToAdd: string[] }) {
 		if (!state.unassignedFiles) {
 			state.unassignedFiles = []
 		}
@@ -84,66 +69,42 @@ const mutations = {
 
 	/**
 	 * Remove files from the unassigned Files collection
-	 *
-	 * @param state
-	 * @param fileIdsToRemove.fileIdsToRemove
-	 * @param fileIdsToRemove
 	 */
-	removeUnassignedFile(state, { fileIdsToRemove }) {
+	removeUnassignedFile(state: FaceState, { fileIdsToRemove }: { fileIdsToRemove: string[] }) {
 		state.unassignedFiles = state.unassignedFiles.filter(fileId => !fileIdsToRemove.includes(fileId))
 	},
 
 	/**
 	 * Remove files from a face.
-	 *
-	 * @param {object} state vuex state
-	 * @param {object} data destructuring object
-	 * @param {string} data.faceName the face id
-	 * @param {string[]} data.fileIdsToRemove list of files
 	 */
-	removeFilesFromFace(state, { faceName, fileIdsToRemove }) {
+	removeFilesFromFace(state: FaceState, { faceName, fileIdsToRemove }: { faceName: string, fileIdsToRemove: string[] }) {
 		Vue.set(state.facesFiles, faceName, state.facesFiles[faceName].filter(fileId => !fileIdsToRemove.includes(fileId)))
 	},
 
-	/**
-	 *
-	 * @param state
-	 * @param count
-	 */
-	setUnassignedFilesCount(state, count) {
+	setUnassignedFilesCount(state: FaceState, count: number) {
 		state.unassignedFilesCount = count
 	},
 }
 
 const getters = {
-	faces: state => state.faces,
-	facesFiles: state => state.facesFiles,
-	unassignedFiles: state => state.unassignedFiles,
-	unassignedFilesCount: state => state.unassignedFilesCount,
+	faces: (state: FaceState) => state.faces,
+	facesFiles: (state: FaceState) => state.facesFiles,
+	unassignedFiles: (state: FaceState) => state.unassignedFiles,
+	unassignedFilesCount: (state: FaceState) => state.unassignedFilesCount,
 }
 
 const actions = {
 	/**
 	 * Update files and faces
-	 *
-	 * @param {object} context vuex context
-	 * @param {object} data destructuring object
-	 * @param {Face[]} data.faces list of faces
 	 */
-	addFaces(context, { faces }) {
+	addFaces(context, { faces }: { faces: Face[] }) {
 		context.commit('addFaces', { faces })
 	},
 
 	/**
 	 * Add files to a face.
-	 *
-	 * @param {object} context vuex context
-	 * @param {object} data destructuring object
-	 * @param {string} data.faceName the new face name
-	 * @param {?string} data.oldFace the old face name
-	 * @param {string[]} data.fileIdsToMove list of files ids to move
 	 */
-	async moveFilesToFace(context, { oldFace, faceName, fileIdsToMove }) {
+	async moveFilesToFace(context, { oldFace, faceName, fileIdsToMove }: { oldFace?: string, faceName: string, fileIdsToMove: string[] }) {
 		const semaphore = new Semaphore(5)
 
 		const promises = fileIdsToMove
@@ -178,13 +139,8 @@ const actions = {
 
 	/**
 	 * Remove files to an face.
-	 *
-	 * @param {object} context vuex context
-	 * @param {object} data destructuring object
-	 * @param {string} data.faceName the face name
-	 * @param {string[]} data.fileIdsToRemove list of files ids to remove
 	 */
-	async removeFilesFromFace(context, { faceName, fileIdsToRemove }) {
+	async removeFilesFromFace(context, { faceName, fileIdsToRemove }: { faceName: string, fileIdsToRemove: string[] }) {
 		const semaphore = new Semaphore(5)
 
 		await context.commit('removeFilesFromFace', { faceName, fileIdsToRemove })
@@ -211,13 +167,8 @@ const actions = {
 
 	/**
 	 * Rename an face.
-	 *
-	 * @param {object} context vuex context
-	 * @param {object} data destructuring object
-	 * @param {string} data.oldName - The current name of the face.
-	 * @param {string} data.faceName - The wanted name for the face.
 	 */
-	async renameFace(context, { oldName, faceName }) {
+	async renameFace(context, { oldName, faceName }: { oldName: string, faceName: string }) {
 		let face = state.faces[oldName]
 
 		try {
@@ -240,12 +191,8 @@ const actions = {
 
 	/**
 	 * Delete an face.
-	 *
-	 * @param {object} context vuex context
-	 * @param {object} data destructuring object
-	 * @param {string} data.faceName the id of the face
 	 */
-	async deleteFace(context, { faceName }) {
+	async deleteFace(context, { faceName }: { faceName: string}) {
 		try {
 			await davClient.deleteFile(`/recognize/${getCurrentUser()?.uid}/faces/${faceName}`)
 			context.commit('removeFaces', { faceNames: [faceName] })

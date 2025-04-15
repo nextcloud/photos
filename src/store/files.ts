@@ -6,32 +6,33 @@ import Vue from 'vue'
 
 import moment from '@nextcloud/moment'
 import { showError } from '@nextcloud/dialogs'
-import { davRootPath } from '@nextcloud/files'
+import { defaultRootPath } from '@nextcloud/files/dav'
+import { t } from '@nextcloud/l10n'
 
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
 import { davClient } from '../services/DavClient.ts'
+import type { PhotoNode } from '../utils/fileUtils.ts'
 
 const state = {
 	files: {},
-	nomediaPaths: [],
+	nomediaPaths: [] as string[],
 }
+
+type FilesState = typeof state
 
 const mutations = {
 	/**
 	 * Append or update given files
-	 *
-	 * @param {object} state the store mutations
-	 * @param {Array} newFiles the store mutations
 	 */
-	updateFiles(state, newFiles) {
+	updateFiles(state: FilesState, newFiles: PhotoNode[]) {
 		const files = {}
 		newFiles
 			.filter(file => !file.hidden)
 			.forEach(file => {
 				// Ignore the file if the path is excluded
 				if (state.nomediaPaths.some(nomediaPath => file.filename.startsWith(nomediaPath)
-					|| file.filename.startsWith(`${davRootPath}${nomediaPath}`))) {
+					|| file.filename.startsWith(`${defaultRootPath}${nomediaPath}`))) {
 					return
 				}
 
@@ -60,13 +61,8 @@ const mutations = {
 
 	/**
 	 * Set a folder subfolders
-	 *
-	 * @param {object} state the store mutations
-	 * @param {object} data destructuring object
-	 * @param {number} data.fileid current folder id
-	 * @param {Array} data.folders list of folders
 	 */
-	setSubFolders(state, { fileid, folders }) {
+	setSubFolders(state: FilesState, { fileid, folders }: { fileid: number, folders: PhotoNode[] }) {
 		if (state.files[fileid]) {
 			const subfolders = folders
 				.map(folder => folder.fileid)
@@ -78,53 +74,36 @@ const mutations = {
 
 	/**
 	 * Set list of all .nomedia/.noimage files
-	 *
-	 * @param {object} state the store mutations
-	 * @param {Array} paths list of files
 	 */
-	setNomediaPaths(state, paths) {
+	setNomediaPaths(state: FilesState, paths: string[]) {
 		state.nomediaPaths = paths
 	},
 
 	/**
 	 * Delete a file
-	 *
-	 * @param {object} state the store mutations
-	 * @param {number} fileId - The id of the file
 	 */
-	deleteFile(state, fileId) {
+	deleteFile(state: FilesState, fileId: number) {
 		Vue.delete(state.files, fileId)
 	},
 
 	/**
 	 * Favorite a list of files
-	 *
-	 * @param {object} state the store mutations
-	 * @param {object} params -
-	 * @param {number} params.fileId - The id of the file
-	 * @param {0|1} params.favoriteState - The ew state of the favorite property
 	 */
-	favoriteFile(state, { fileId, favoriteState }) {
+	favoriteFile(state: FilesState, { fileId, favoriteState }: { fileId: number, favoriteState: 0|1 }) {
 		Vue.set(state.files[fileId], 'favorite', favoriteState)
 	},
 }
 
 const getters = {
-	files: state => state.files,
-	nomediaPaths: state => state.nomediaPaths,
+	files: (state: FilesState) => state.files,
+	nomediaPaths: (state: FilesState) => state.nomediaPaths,
 }
 
 const actions = {
 	/**
 	 * Update files, folders and their respective subfolders
-	 *
-	 * @param {object} context the store mutations
-	 * @param {object} data destructuring object
-	 * @param {object} data.folder current folder fileinfo
-	 * @param {Array} data.files list of files
-	 * @param {Array} data.folders list of folders within current folder
 	 */
-	updateFiles(context, { folder, files = [], folders = [] } = {}) {
+	updateFiles(context, { folder, files = [], folders = [] }: { folder: PhotoNode, files: PhotoNode[], folders: PhotoNode[]}) {
 		// we want all the FileInfo! Folders included!
 		context.commit('updateFiles', [folder, ...files, ...folders])
 		context.commit('setSubFolders', { fileid: folder.fileid, folders })
@@ -132,32 +111,23 @@ const actions = {
 
 	/**
 	 * Append or update given files
-	 *
-	 * @param {object} context the store mutations
-	 * @param {Array} files list of files
 	 */
-	appendFiles(context, files = []) {
+	appendFiles(context, files: PhotoNode[] = []) {
 		context.commit('updateFiles', files)
 	},
 
 	/**
 	 * Set list of all .nomedia/.noimage files
-	 *
-	 * @param {object} context the store mutations
-	 * @param {Array} paths list of files
 	 */
-	setNomediaPaths(context, paths) {
+	setNomediaPaths(context, paths: string[]) {
 		logger.debug('Ignored paths', { paths })
 		context.commit('setNomediaPaths', paths)
 	},
 
 	/**
 	 * Delete a list of files
-	 *
-	 * @param {object} context the store mutations
-	 * @param {number[]} fileIds - The ids of the files
 	 */
-	deleteFiles(context, fileIds) {
+	deleteFiles(context, fileIds: number[]) {
 		const semaphore = new Semaphore(5)
 
 		const files = fileIds
@@ -187,13 +157,8 @@ const actions = {
 
 	/**
 	 * Favorite a list of files
-	 *
-	 * @param {object} context the store mutations
-	 * @param {object} params -
-	 * @param {number[]} params.fileIds - The ids of the files
-	 * @param {0|1} params.favoriteState - The favorite state to set
 	 */
-	toggleFavoriteForFiles(context, { fileIds, favoriteState }) {
+	toggleFavoriteForFiles(context, { fileIds, favoriteState }: { fileIds: string[], favoriteState: 0|1 }) {
 		const semaphore = new Semaphore(5)
 
 		const promises = fileIds

@@ -3,23 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import Vue from 'vue'
-import { sortCompare } from '../utils/fileUtils.js'
+import { sortCompare, type PhotoNode } from '../utils/fileUtils.js'
 
 const state = {
 	paths: {},
 	folders: {},
 }
 
+type FoldersState = typeof state
+
 const mutations = {
 	/**
 	 * Index folders paths and ids
-	 *
-	 * @param {object} state vuex state
-	 * @param {object} data destructuring object
-	 * @param {number} data.fileid current folder id
-	 * @param {Array} data.files list of files
 	 */
-	updateFolders(state, { fileid, files }) {
+	updateFolders(state: FoldersState, { fileid, files }: { fileid: number, files: PhotoNode[] }) {
 		if (files.length > 0) {
 			// sort by last modified
 			const list = files
@@ -35,13 +32,8 @@ const mutations = {
 
 	/**
 	 * Index folders paths and ids
-	 *
-	 * @param {object} state vuex state
-	 * @param {object} data destructuring object
-	 * @param {string} data.path path of this folder
-	 * @param {number} data.fileid id of this folder
 	 */
-	addPath(state, { path, fileid }) {
+	addPath(state: FoldersState, { path, fileid }: { path: string, fileid: number }) {
 		if (fileid >= 0) {
 			Vue.set(state.paths, path, fileid)
 		}
@@ -49,13 +41,8 @@ const mutations = {
 
 	/**
 	 * Append files to a folder
-	 *
-	 * @param {object} state vuex state
-	 * @param {object} data destructuring object
-	 * @param {number} data.fileid id of this folder
-	 * @param {Array} data.files list of files to add
 	 */
-	addFilesToFolder(state, { fileid, files }) {
+	addFilesToFolder(state: FoldersState, { fileid, files }: { fileid: number, files: PhotoNode[] }) {
 		if (fileid >= 0 && files.length > 0) {
 			// and sort by last modified
 			const list = files
@@ -68,22 +55,16 @@ const mutations = {
 }
 
 const getters = {
-	folders: state => state.folders,
-	folder: state => fileid => state.folders[fileid],
-	folderId: state => path => state.paths[path],
+	folders: (state: FoldersState) => state.folders,
+	folder: (state: FoldersState) => fileid => state.folders[fileid],
+	folderId: (state: FoldersState) => path => state.paths[path],
 }
 
 const actions = {
 	/**
 	 * Update files and folders
-	 *
-	 * @param {object} context vuex context
-	 * @param {object} data destructuring object
-	 * @param {number} data.fileid current folder id
-	 * @param {Array} data.files list of files
-	 * @param {Array} data.folders list of folders
 	 */
-	updateFolders(context, { fileid, files, folders }) {
+	updateFolders(context, { fileid, files, folders }: { fileid: string, files: PhotoNode[], folders: PhotoNode[] }) {
 		context.commit('updateFolders', { fileid, files })
 
 		// then add each folders path indexes
@@ -92,25 +73,15 @@ const actions = {
 
 	/**
 	 * Index folders paths and ids
-	 *
-	 * @param {object} context vuex context
-	 * @param {object} data destructuring object
-	 * @param {string} data.path path of this folder
-	 * @param {number} data.fileid id of this folder
 	 */
-	addPath(context, { path, fileid }) {
+	addPath(context, { path, fileid }: { path: string, fileid: string }) {
 		context.commit('addPath', { path, fileid })
 	},
 
 	/**
 	 * Append files to a folder
-	 *
-	 * @param {object} context vuex context
-	 * @param {object} data destructuring object
-	 * @param {number} data.fileid id of this folder
-	 * @param {Array} data.files list of files to add
 	 */
-	addFilesToFolder(context, { fileid, files }) {
+	addFilesToFolder(context, { fileid, files }: { fileid: string, files: PhotoNode[] }) {
 		context.commit('addFilesToFolder', { fileid, files })
 	},
 }
