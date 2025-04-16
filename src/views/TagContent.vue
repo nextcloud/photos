@@ -46,10 +46,10 @@
 </template>
 
 <script lang='ts'>
-import { mapGetters } from 'vuex'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 
 import { NcEmptyContent, NcActions, NcActionButton, NcLoadingIcon, useIsMobile } from '@nextcloud/vue'
+import { translatePlural as n, translate as t } from '@nextcloud/l10n'
 
 import File from '../components/File.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
@@ -94,12 +94,13 @@ export default {
 	},
 
 	computed: {
-		// global lists
-		...mapGetters([
-			'files',
-			'tags',
-			'tagsNames',
-		]),
+		files() {
+			return this.$store.state.files.files
+		},
+
+		tags() {
+			return this.$store.state.systemtags.tags
+		},
 
 		// current tag id from current path
 		tagId() {
@@ -157,15 +158,18 @@ export default {
 			}
 		},
 
-		openViewer(fileId) {
+		openViewer(fileId: number) {
 			const file = this.files[fileId]
 			OCA.Viewer.open({
-				path: file.filename,
+				path: file.path,
 				list: this.fileIds.map(fileId => this.files[fileId]),
 				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
 				canLoop: file.canLoop,
 			})
 		},
+
+		t,
+		n,
 	},
 }
 </script>

@@ -25,7 +25,6 @@
 </template>
 
 <script lang='ts'>
-import { mapGetters } from 'vuex'
 import ImageMultipleIcon from 'vue-material-design-icons/ImageMultiple.vue'
 
 import { generateUrl } from '@nextcloud/router'
@@ -58,16 +57,15 @@ export default {
 	},
 
 	computed: {
-		// global lists
-		...mapGetters([
-			'files',
-			'tags',
-		]),
+		tags() {
+			return this.$store.state.systemtags.tags
+		},
 
-		/**
-		 * @return {string}
-		 */
-		coverUrl() {
+		files() {
+			return this.$store.state.files.files
+		},
+
+		coverUrl(): string {
 			if (!this.loadCover) {
 				return ''
 			}

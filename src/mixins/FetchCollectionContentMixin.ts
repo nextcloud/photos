@@ -12,7 +12,7 @@ import AbortControllerMixin from './AbortControllerMixin.js'
 import { fetchCollection, fetchCollectionFiles, type Collection } from '../services/collectionFetcher.js'
 import logger from '../services/logger.js'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
-import type { PhotoNode } from '../utils/fileUtils.js'
+import type { File } from '@nextcloud/files'
 
 export default {
 	name: 'FetchCollectionContentMixin',
@@ -65,7 +65,7 @@ export default {
 			return null
 		},
 
-		async fetchCollectionFiles(collectionFileName: string, extraProps: string[], client: WebDAVClient, mappers: ((nodes: PhotoNode) => PhotoNode)[] = []): Promise<PhotoNode[]> {
+		async fetchCollectionFiles(collectionFileName: string, extraProps: string[], client: WebDAVClient): Promise<File[]> {
 			if (this.loadingCollectionFiles) {
 				return []
 			}
@@ -78,8 +78,6 @@ export default {
 
 				let fetchedFiles = await fetchCollectionFiles(collectionFileName, { signal: this.abortController.signal }, extraProps, client)
 				const fileIds = fetchedFiles.map(file => file.fileid.toString())
-
-				mappers.forEach(mapper => (fetchedFiles = fetchedFiles.map(mapper)))
 
 				this.appendFiles(fetchedFiles)
 

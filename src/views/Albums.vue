@@ -29,7 +29,7 @@
 				slot-scope="{collection}"
 				:link="`/albums/${collection.basename}`"
 				:alt-img="t('photos', 'Cover photo for album {albumName}', { albumName: collection.basename })"
-				:cover-url="collection.lastPhoto | coverUrl">
+				:cover-url="collection['last-photo'] | coverUrl">
 				<span class="album__name">
 					{{ collection.basename }}
 				</span>
@@ -85,10 +85,7 @@ export default {
 	},
 
 	filters: {
-		/**
-		 * @param {string} lastPhoto The album's last photos.
-		 */
-		coverUrl(lastPhoto) {
+		coverUrl(lastPhoto: number) {
 			if (lastPhoto === -1) {
 				return ''
 			}

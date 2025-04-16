@@ -3,16 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import moment from '@nextcloud/moment'
-import store from '../store/index.js'
-import { joinPaths } from '@nextcloud/paths'
+import type { ResponseDataDetailed, SearchOptions, SearchResult } from 'webdav'
 
+import moment from '@nextcloud/moment'
+import { joinPaths } from '@nextcloud/paths'
+import { defaultRootPath, resultToNode } from '@nextcloud/files/dav'
+import type { File } from '@nextcloud/files'
+
+import store from '../store/index.js'
 import { allMimes } from './AllowedMimes.js'
-import { genFileInfo, type PhotoNode } from '../utils/fileUtils.js'
 import { getDefaultDavProps } from './DavRequest.ts'
 import { davClient } from './DavClient.ts'
-import { defaultRootPath } from '@nextcloud/files/dav'
-import type { ResponseDataDetailed, SearchOptions, SearchResult } from 'webdav'
 
 export type PhotoSearchOptions = SearchOptions & {
 	firstResult: number // Index of the first result that we want (starts at 0). Default: 0.
@@ -26,7 +27,7 @@ export type PhotoSearchOptions = SearchOptions & {
 /**
  * List files from a folder and filter out unwanted mimes
  */
-export default async function(_options: Partial<PhotoSearchOptions> = {}): Promise<PhotoNode[]> {
+export default async function(_options: Partial<PhotoSearchOptions> = {}): Promise<File[]> {
 	// default function options
 	const options: PhotoSearchOptions = {
 		firstResult: 0,
@@ -134,5 +135,5 @@ export default async function(_options: Partial<PhotoSearchOptions> = {}): Promi
 
 	const response = await davClient.search('/', options) as ResponseDataDetailed<SearchResult>
 
-	return response.data.results.map((data) => genFileInfo(data))
+	return response.data.results.map((data) => resultToNode(data) as File)
 }

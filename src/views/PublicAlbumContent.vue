@@ -21,8 +21,8 @@
 				:root-title="albumOriginalName"
 				:title="albumOriginalName"
 				@refresh="fetchAlbumContent">
-				<div v-if="album.location !== ''" slot="subtitle" class="album__location">
-					<MapMarker />{{ album.location }}
+				<div v-if="album.attributes.location !== ''" slot="subtitle" class="album__location">
+					<MapMarker />{{ album.attributes.location }}
 				</div>
 				<template v-if="album !== undefined" slot="right">
 					<NcActions :force-menu="true" :aria-label="t('photos', 'Open actions menu')">
@@ -72,8 +72,6 @@
 </template>
 
 <script lang='ts'>
-import { mapActions } from 'vuex'
-
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 // import Plus from 'vue-material-design-icons/Plus.vue'
 // import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
@@ -158,13 +156,6 @@ export default {
 	},
 
 	methods: {
-		...mapActions([
-			'appendFiles',
-			'addCollection',
-			'addFilesToCollection',
-			'removeFilesFromCollection',
-		]),
-
 		async fetchAlbumInfo() {
 			const album = await this.fetchCollection(
 				`/photospublic/${this.token}`,
@@ -194,14 +185,14 @@ export default {
 
 		async handleFilesPicked(fileIds) {
 			this.showAddPhotosModal = false
-			await this.addFilesToCollection({ collectionFileName: this.albumName, fileIdsToAdd: fileIds })
+			await this.$store.dispatch('addFilesToCollection', { collectionFileName: this.album.root + this.albumName, fileIdsToAdd: fileIds })
 			// Re-fetch album content to have the proper filenames.
 			await this.fetchAlbumContent()
 		},
 
-		async handleRemoveFilesFromAlbum(fileIds) {
+		async handleRemoveFilesFromAlbum(fileIds: string[]) {
 			this.$refs.collectionContent.onUncheckFiles(fileIds)
-			await this.removeFilesFromCollection({ collectionFileName: this.albumName, fileIdsToRemove: fileIds })
+			await this.$store.dispatch('removeFilesFromCollection', { collectionFileName: this.album.root + this.albumName, fileIdsToRemove: fileIds })
 		},
 
 		t: translate,

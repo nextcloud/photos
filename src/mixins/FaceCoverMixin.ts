@@ -3,11 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { mapGetters } from 'vuex'
 import he from 'he'
-import type { PhotoNode } from '../utils/fileUtils'
+import type { PhotoFile } from '../store/files'
 import type { Collection } from '../services/collectionFetcher'
-import type { ComponentOptions } from 'vue'
 
 type Cover = {
 	detection: {
@@ -22,16 +20,22 @@ export default {
 	name: 'FaceCoverMixin',
 
 	computed: {
-		...mapGetters([
-			'faces',
-			'facesFiles',
-			'files',
-		]),
+		files() {
+			return this.$store.state.files.files
+		},
+
+		faces() {
+			return this.$store.state.faces.faces
+		},
+
+		facesFiles() {
+			return this.$store.state.faces.facesFiles
+		},
 	},
 
 	methods: {
 		getFaceCover(faceName): Cover {
-			return JSON.parse(he.decode(this.faces[faceName].props['face-preview-image'] || '{}'))
+			return JSON.parse(he.decode(this.faces[faceName].attributes['face-preview-image'] || '{}'))
 		},
 
 		/**

@@ -54,12 +54,15 @@
 </template>
 
 <script lang='ts'>
-import { mapGetters } from 'vuex'
-import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
-import { Upload, UploadPicker, getUploader } from '@nextcloud/upload'
-import { Folder as NcFolder, davRootPath, davParsePermissions } from '@nextcloud/files'
+import { AxiosError, isAxiosError } from 'axios'
 import FolderIcon from 'vue-material-design-icons/Folder.vue'
 import VirtualGrid from 'vue-virtual-grid'
+
+import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import { UploadPicker, getUploader } from '@nextcloud/upload'
+import { Folder as NcFolder } from '@nextcloud/files'
+import { defaultRootPath, parsePermissions } from '@nextcloud/files/dav'
+import { translate as t } from '@nextcloud/l10n'
 
 import FileLegacy from '../components/FileLegacy.vue'
 import Folder from '../components/Folder.vue'
@@ -104,7 +107,7 @@ export default {
 
 	data() {
 		return {
-			error: null,
+			error: null as null|404|AxiosError,
 			allowedMimes,
 
 			initializing: true,
@@ -117,11 +120,13 @@ export default {
 	},
 
 	computed: {
-		// global lists
-		...mapGetters([
-			'files',
-			'folders',
-		]),
+		files() {
+			return this.$store.state.files.files
+		},
+
+		folders() {
+			return this.$store.state.folders.folders
+		},
 
 		// current folder id from current path
 		folderId() {
@@ -134,13 +139,13 @@ export default {
 		},
 		folderAsFolder() {
 			if (!this.folder) {
-				return null
+				return undefined
 			}
 
 			return new NcFolder({
 				...this.folder,
 				source: decodeURI(this.folder.source),
-				permissions: davParsePermissions(this.folder.permissions),
+				permissions: parsePermissions(this.folder.permissions),
 			})
 		},
 		folderContent() {
@@ -248,15 +253,15 @@ export default {
 					shared: this.showShared,
 					signal: this.abortController.signal,
 				})
-				this.$store.dispatch('addPath', { path: this.path, fileid: folder.fileid })
-				this.$store.dispatch('updateFolders', { fileid: folder.fileid, files, folders })
+				this.$store.dispatch('addPath', { path: this.path, fileid: folder?.fileid })
+				this.$store.dispatch('updateFolders', { fileid: folder?.fileid, files, folders })
 				this.$store.dispatch('updateFiles', { folder, files, folders })
 			} catch (error) {
-				if (error.response && error.response.status) {
+				if (isAxiosError(error) && error.response && error.response.status) {
 					if (error.response.status === 404) {
 						this.error = 404
 						setTimeout(() => {
-							this.$router.push({ name: this.$route.name })
+							this.$router.push({ name: this.$route.name ?? undefined })
 						}, 3000)
 					} else {
 						this.error = error
@@ -277,11 +282,13 @@ export default {
 		 * @param {Upload} upload the newly uploaded files
 		 */
 		async onUpload(upload) {
-			const relPath = upload.source.split(davRootPath).pop()
+			const relPath = upload.source.split(defaultRootPath).pop()
 			const file = await fetchFile(relPath)
 			this.$store.dispatch('appendFiles', [file])
 			this.$store.dispatch('addFilesToFolder', { fileid: this.folderId, files: [file] })
 		},
+
+		t,
 	},
 
 }

@@ -14,8 +14,8 @@
 
 			<!-- image and loading placeholder -->
 			<div class="file__images">
-				<VideoIcon v-if="file.mime.includes('video')" class="icon-overlay" :size="64" />
-				<PlayCircleIcon v-else-if="file.metadataFilesLivePhoto !== undefined" class="icon-overlay" :size="64" />
+				<VideoIcon v-if="file.mime?.includes('video')" class="icon-overlay" :size="64" />
+				<PlayCircleIcon v-else-if="file.attributes['metadata-files-live-photo'] !== undefined" class="icon-overlay" :size="64" />
 
 				<!-- We have two img elements to load the small and large preview -->
 				<!-- Do not show the small preview if the larger one is loaded -->
@@ -60,7 +60,7 @@
 			:checked="selected"
 			@update:checked="onToggle" />
 
-		<FavoriteIcon v-if="file.favorite === 1"
+		<FavoriteIcon v-if="file.attributes.favorite === 1"
 			v-once
 			class="favorite-state" />
 	</div>
@@ -70,12 +70,15 @@
 import VideoIcon from 'vue-material-design-icons/Video.vue'
 import PlayCircleIcon from 'vue-material-design-icons/PlayCircle.vue'
 import { decode } from 'blurhash'
+import type { PropType } from 'vue'
 
 import { generateUrl } from '@nextcloud/router'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+import { translate as t } from '@nextcloud/l10n'
 
 import FavoriteIcon from './FavoriteIcon.vue'
 import { isCachedPreview } from '../services/PreviewService.js'
+import type { PhotoFile } from '../store/files.js'
 
 export default {
 	name: 'File',
@@ -88,7 +91,7 @@ export default {
 	inheritAttrs: false,
 	props: {
 		file: {
-			type: Object,
+			type: Object as PropType<PhotoFile>,
 			required: true,
 		},
 		selected: {
@@ -116,35 +119,29 @@ export default {
 	},
 
 	computed: {
-		/** @return {string} */
-		ariaLabel() {
-			if (this.file.favorite) {
+		ariaLabel(): string {
+			if (this.file.attributes.favorite) {
 				return t('photos', 'Favorite image, open the full size "{name}" image', { name: this.file.basename })
 			}
 			return t('photos', 'Open the full size "{name}" image', { name: this.file.basename })
 		},
-		/** @return {boolean} */
-		isImage() {
-			return this.file.mime.startsWith('image')
+		isImage(): boolean {
+			return this.file.mime?.startsWith('image') ?? false
 		},
-		/** @return {string} */
-		decodedEtag() {
-			return this.file.etag.replace('&quot;', '').replace('&quot;', '')
+		decodedEtag(): string {
+			return this.file.attributes.etag.replace('&quot;', '').replace('&quot;', '')
 		},
-		/** @return {string} */
-		srcLarge() {
+		srcLarge(): string {
 			return this.getItemURL(512)
 		},
-		/** @return {string} */
-		srcSmall() {
+		srcSmall(): string {
 			return this.getItemURL(64)
 		},
-		/** @return {boolean} */
-		isVisible() {
+		isVisible(): boolean {
 			return this.distance === 0
 		},
 		hasBlurhash() {
-			return this.file.metadataBlurhash !== undefined
+			return this.file.attributes.metadataBlurhash !== undefined
 		},
 	},
 
@@ -167,10 +164,10 @@ export default {
 	beforeDestroy() {
 		// cancel any pending load
 		if (this.$refs.imgSmall !== undefined) {
-			this.$refs.imgSmall.src = ''
+			(this.$refs.imgSmall as HTMLImageElement).src = ''
 		}
 		if (this.$refs.srcLarge !== undefined) {
-			this.$refs.srcLarge.src = ''
+			(this.$refs.srcLarge as HTMLImageElement).src = ''
 		}
 	},
 
@@ -225,16 +222,18 @@ export default {
 				return
 			}
 
-			const width = this.$refs.canvas.width
-			const height = this.$refs.canvas.height
+			const width = (this.$refs.canvas as HTMLCanvasElement).width
+			const height = (this.$refs.canvas as HTMLCanvasElement).height
 
-			const pixels = decode(this.file.metadataBlurhash, width, height)
+			const pixels = decode(this.file.attributes.metadataBlurhash, width, height)
 
-			const ctx = this.$refs.canvas.getContext('2d')
-			const imageData = ctx.createImageData(width, height)
+			const ctx = (this.$refs.canvas as HTMLCanvasElement).getContext('2d') as CanvasRenderingContext2D
+			const imageData = ctx.createImageData(width, height) as ImageData
 			imageData.data.set(pixels)
 			ctx.putImageData(imageData, 0, 0)
 		},
+
+		t,
 	},
 
 }

@@ -56,8 +56,7 @@ export default defineComponent({
 	},
 
 	computed: {
-		/** @return {string[]} */
-		photosSourceFolders() {
+		photosSourceFolders(): string[] {
 			return this.$store.state.userConfig.photosSourceFolders
 		},
 	},
@@ -65,9 +64,9 @@ export default defineComponent({
 	methods: {
 		debounceAddSourceFolder: debounce(function(...args) {
 			this.addSourceFolder(...args)
-		}, 200, false),
+		}, 200, { immediate: false }),
 
-		async openFilePicker(title) {
+		async openFilePicker(title: string): Promise<string> {
 			const picker = getFilePickerBuilder(title)
 				.setMultiSelect(false)
 				.addMimeTypeFilter('httpd/unix-directory')

@@ -14,7 +14,6 @@ import getPhotos, { type PhotoSearchOptions } from '../services/PhotoSearch.js'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
 import AbortControllerMixin from './AbortControllerMixin.js'
 import store from '../store/index.js'
-import type { ComponentOptions } from 'vue'
 
 export default {
 	name: 'FetchFilesMixin',
@@ -44,9 +43,9 @@ export default {
 		 * @param options - Options to pass to getPhotos.
 		 * @param blacklist - Array of ids to filter out.
 		 * @param force - Force fetching even if doneFetchingFiles is true
-		 * @return {Promise<string[]>} - The next batch of data depending on global offset.
+		 * @return The next batch of data depending on global offset.
 		 */
-		async fetchFiles(options: Partial<PhotoSearchOptions> = {}, blacklist: string[] = [], force: boolean = false) {
+		async fetchFiles(options: Partial<PhotoSearchOptions> = {}, blacklist: number[] = [], force: boolean = false): Promise<number[]> {
 			if ((this.doneFetchingFiles && !force) || this.loadingFiles) {
 				return []
 			}
@@ -74,12 +73,10 @@ export default {
 
 				const fileIds = fetchedFiles
 					.map(file => file.fileid)
-					.filter(fileId => !this.fetchedFileIds.includes(fileId.toString())) // Filter to prevent duplicate fileIds.
+					.filter(fileId => !this.fetchedFileIds.includes(fileId)) as number[] // Filter to prevent duplicate fileIds.
 
 				this.fetchedFileIds.push(
-					...fileIds
-						.map((fileId) => fileId.toString())
-						.filter((fileId) => !blacklist.includes(fileId)),
+					...fileIds.filter((fileId) => !blacklist.includes(fileId)),
 				)
 
 				this.$store.dispatch('appendFiles', fetchedFiles)
@@ -128,4 +125,4 @@ export default {
 			this.fetchedFileIds = []
 		},
 	},
-} as ComponentOptions<Vue>
+}

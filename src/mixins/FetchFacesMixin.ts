@@ -6,15 +6,16 @@
 import { showError } from '@nextcloud/dialogs'
 import { translate as t } from '@nextcloud/l10n'
 import { getCurrentUser } from '@nextcloud/auth'
-import { mapActions, mapGetters } from 'vuex'
+import type { File } from '@nextcloud/files'
+import { resultToNode } from '@nextcloud/files/dav'
 import he from 'he'
 import type { FileStat, ResponseDataDetailed } from 'webdav'
 
-import { genFileInfo, type PhotoNode } from '../utils/fileUtils.js'
 import logger from '../services/logger.js'
 import AbortControllerMixin from './AbortControllerMixin.js'
 import { davClient } from '../services/DavClient.ts'
 import { getPropFind } from '../services/DavRequest.ts'
+import { isAxiosError } from 'axios'
 
 const recognizeDAVProps = [
 	'nc:face-detections',
@@ -22,10 +23,12 @@ const recognizeDAVProps = [
 	'nc:realpath',
 ]
 
-type FaceNode = PhotoNode & {
-	faceDetections: string
-	facePreviewImage: string
-	realpath: string
+type FaceNode = File & {
+	attributes: {
+		'face-detections': string
+		'face-preview-image': string
+		'realpath': string
+	}
 }
 
 export default {
@@ -49,16 +52,12 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'faces',
-		]),
+		faces() {
+			return this.$store.state.faces.faces
+		},
 	},
 
 	methods: {
-		...mapActions([
-			'appendFiles',
-		]),
-
 		async fetchFaces() {
 			if (this.loadingFaces) {
 				return
@@ -72,20 +71,20 @@ export default {
 				this.loadingFaces = true
 				this.errorFetchingFaces = null
 
-				const { data: faces } = await davClient.getDirectoryContents(`/recognize/${getCurrentUser()?.uid}/faces/`, {
+				const { data: fetchedRawFaces } = await davClient.getDirectoryContents(`/recognize/${getCurrentUser()?.uid}/faces/`, {
 					data: getPropFind(recognizeDAVProps),
 					details: true,
 					signal: this.abortController.signal,
 				}) as ResponseDataDetailed<FileStat[]>
-				this.$store.dispatch('addFaces', { faces })
-				logger.debug(`[FetchFacesMixin] Fetched ${faces.length} new faces: `, {faces})
+
+				const fetchedFace = fetchedRawFaces.map(file => resultToNode(file) as FaceNode)
+				this.$store.dispatch('addFaces', { fetchedFace })
+				logger.debug(`[FetchFacesMixin] Fetched ${fetchedFace.length} new faces: `, { fetchedFace })
 			} catch (error) {
-				if (error.response && error.response.status) {
-					if (error.response.status === 404) {
-						this.errorFetchingFaces = 404
-					} else {
-						this.errorFetchingFaces = error
-					}
+				if (isAxiosError(error) && error.response?.status === 404) {
+					this.errorFetchingFaces = 404
+				} else {
+					this.errorFetchingFaces = error
 				}
 				logger.error(t('photos', 'Failed to fetch faces list.'), { error })
 				showError(t('photos', 'Failed to fetch faces list.'))
@@ -117,13 +116,13 @@ export default {
 				) as ResponseDataDetailed<FileStat[]>
 
 				const fetchedFiles = fetchedRawFiles
-					.map(file => genFileInfo(file) as FaceNode)
-					.map(file => ({ ...file, filename: he.decode(file.realpath).replace(`/${getCurrentUser()?.uid}/files`, `/files/${getCurrentUser()?.uid}`) }))
-					.map(file => ({ ...file, faceDetections: JSON.parse(he.decode(file.faceDetections)) }))
+					.map(file => ({ ...file, filename: he.decode(file.props?.realpath).replace(`/${getCurrentUser()?.uid}/files`, `/files/${getCurrentUser()?.uid}`) }))
+					.map(file => ({ ...file, faceDetections: JSON.parse(he.decode(file.props?.faceDetections)) }))
+					.map(file => resultToNode(file) as FaceNode)
 
-				const fileIds = fetchedFiles.map(file => '' + file.fileid)
+				const fileIds = fetchedFiles.map(file => file.fileid?.toString() as string)
 
-				this.appendFiles(fetchedFiles)
+				this.$store.dispatch('appendFiles', fetchedFiles)
 
 				if (fetchedFiles.length > 0) {
 					await this.$store.commit('addFilesToFace', { faceName, fileIdsToAdd: fileIds })
@@ -131,12 +130,10 @@ export default {
 
 				logger.debug(`[FetchFacesMixin] Fetched ${fileIds.length} new files: `, { fileIds })
 			} catch (error) {
-				if (error.response && error.response.status) {
-					if (error.response.status === 404) {
-						this.errorFetchingFiles = 404
-					} else {
-						this.errorFetchingFiles = error
-					}
+				if (isAxiosError(error) && error.response?.status === 404) {
+					this.errorFetchingFaces = 404
+				} else {
+					this.errorFetchingFaces = error
 				}
 
 				// cancelled request, moving on...
@@ -169,13 +166,13 @@ export default {
 				) as ResponseDataDetailed<FileStat[]>
 
 				const fetchedFiles = fetchedRawFiles
-					.map(file => genFileInfo(file) as FaceNode)
-					.map(file => ({ ...file, filename: he.decode(file.realpath).replace(`/${getCurrentUser()?.uid}/files`, `/files/${getCurrentUser()?.uid}`) }))
-					.map(file => ({ ...file, faceDetections: JSON.parse(he.decode(file.faceDetections)) }))
+					.map(file => ({ ...file, filename: he.decode(file.props?.realpath).replace(`/${getCurrentUser()?.uid}/files`, `/files/${getCurrentUser()?.uid}`) }))
+					.map(file => ({ ...file, faceDetections: JSON.parse(he.decode(file.props?.faceDetections)) }))
+					.map(file => resultToNode(file) as FaceNode)
 
 				const fileIds = fetchedFiles.map(file => '' + file.fileid)
 
-				this.appendFiles(fetchedFiles)
+				this.$store('appendFiles', fetchedFiles)
 
 				if (fetchedFiles.length > 0) {
 					await this.$store.commit('addUnassignedFiles', { fileIdsToAdd: fileIds })
@@ -183,12 +180,10 @@ export default {
 
 				logger.debug(`[FetchFacesMixin] Fetched ${fileIds.length} new unassigned files: `, { fileIds })
 			} catch (error) {
-				if (error.response && error.response.status) {
-					if (error.response.status === 404) {
-						this.errorFetchingFiles = 404
-					} else {
-						this.errorFetchingFiles = error
-					}
+				if (isAxiosError(error) && error.response?.status === 404) {
+					this.errorFetchingFaces = 404
+				} else {
+					this.errorFetchingFaces = error
 				}
 
 				// cancelled request, moving on...
@@ -209,7 +204,7 @@ export default {
 					},
 				) as ResponseDataDetailed<FileStat>
 
-				const count = Number(unassignedFacesRoot.props?.nbItems)
+				const count = Number(unassignedFacesRoot.props.nbItems)
 
 				await this.$store.commit('setUnassignedFilesCount', count)
 

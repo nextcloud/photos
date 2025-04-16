@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { mapActions } from 'vuex'
+import type { WebDAVClient } from 'webdav'
 
 import AbortControllerMixin from './AbortControllerMixin.js'
 import { fetchCollections, type Collection } from '../services/collectionFetcher.js'
 import logger from '../services/logger.js'
-import type { WebDAVClient } from 'webdav'
+import { davClient } from '../services/DavClient.ts'
 
 export default {
 	name: 'FetchCollectionsMixin',
@@ -25,11 +25,7 @@ export default {
 	],
 
 	methods: {
-		...mapActions([
-			'addCollections',
-		]),
-
-		async fetchCollections(collectionHome: string, extraProps: string[], client: WebDAVClient): Promise<Collection[]> {
+		async fetchCollections(collectionHome: string, extraProps: string[], client: WebDAVClient= davClient): Promise<Collection[]> {
 			if (this.loadingCollections) {
 				return []
 			}
@@ -40,7 +36,7 @@ export default {
 
 				const collections = await fetchCollections(collectionHome, { signal: this.abortController.signal }, extraProps, client)
 
-				this.addCollections({ collections })
+				this.$store.dispatch('addCollections', { collections })
 
 				return collections
 			} catch (error) {

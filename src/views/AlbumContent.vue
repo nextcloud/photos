@@ -18,10 +18,10 @@
 				:path="'/' + albumName"
 				:title="albumName"
 				@refresh="fetchAlbumContent">
-				<div v-if="album !== undefined && album.location !== ''"
+				<div v-if="album !== undefined && album.attributes.location !== ''"
 					slot="subtitle"
 					class="album__location">
-					<MapMarker />{{ album.location }}
+					<MapMarker />{{ album.attributes.location }}
 				</div>
 
 				<template slot="default">
@@ -92,7 +92,7 @@
 			</HeaderNavigation>
 
 			<!-- No content -->
-			<NcEmptyContent v-if="album !== undefined && album.nbItems === 0 && !(loadingCollectionFiles || loadingCollection)"
+			<NcEmptyContent v-if="album !== undefined && album.attributes.nbItems === 0 && !(loadingCollectionFiles || loadingCollection)"
 				slot="empty-content"
 				:name="t('photos', 'This album does not have any photos or videos yet!')"
 				class="album__empty">
@@ -120,7 +120,7 @@
 			:name="t('photos', 'Manage collaborators')"
 			@close="showManageCollaboratorView = false">
 			<CollaboratorsSelectionForm :album-name="album.basename"
-				:collaborators="album.collaborators">
+				:collaborators="album.attributes.collaborators">
 				<template slot-scope="{collaborators}">
 					<NcButton :aria-label="t('photos', 'Save collaborators for this album.')"
 						type="primary"
@@ -146,8 +146,6 @@
 </template>
 
 <script lang='ts'>
-import { mapActions } from 'vuex'
-
 import { NcActions, NcActionButton, NcButton, NcDialog, NcModal, NcEmptyContent, NcActionSeparator, NcLoadingIcon, isMobile } from '@nextcloud/vue'
 import { translate } from '@nextcloud/l10n'
 
@@ -251,13 +249,6 @@ export default {
 	},
 
 	methods: {
-		...mapActions([
-			'addFilesToCollection',
-			'removeFilesFromCollection',
-			'deleteCollection',
-			'updateCollection',
-		]),
-
 		async fetchAlbum() {
 			await this.fetchCollection(
 				this.albumFileName,
@@ -272,25 +263,25 @@ export default {
 		redirectToNewName({ album }) {
 			this.showEditAlbumForm = false
 
-			if (this.album.basename !== album.basename) {
+			if (this.album?.basename !== album.basename) {
 				this.$router.push(`/albums/${album.basename}`)
 			}
 		},
 
-		async handleFilesPicked(fileIds) {
+		async handleFilesPicked(fileIds: string[]) {
 			this.showAddPhotosModal = false
-			await this.addFilesToCollection({ collectionFileName: this.album.filename, fileIdsToAdd: fileIds })
+			await this.$store.dispatch('addFilesToCollection', { collectionFileName: this.album?.root + this.album?.path, fileIdsToAdd: fileIds })
 			// Re-fetch album content to have the proper filenames.
 			await this.fetchAlbumContent()
 		},
 
-		async handleRemoveFilesFromAlbum(fileIds) {
+		async handleRemoveFilesFromAlbum(fileIds: string[]) {
 			this.$refs.collectionContent.onUncheckFiles(fileIds)
-			await this.removeFilesFromCollection({ collectionFileName: this.album.filename, fileIdsToRemove: fileIds })
+			await this.$store.dispatch('removeFilesFromCollection', { collectionFileName: this.album?.root + this.album?.path, fileIdsToRemove: fileIds })
 		},
 
 		async handleDeleteAlbum() {
-			await this.deleteCollection({ collectionFileName: this.album.filename })
+			await this.$store.dispatch('deleteCollection', { collectionFileName: this.album?.root + this.album?.path })
 			this.$router.push('/albums')
 		},
 
@@ -298,7 +289,7 @@ export default {
 			try {
 				this.loadingAddCollaborators = true
 				this.showManageCollaboratorView = false
-				await this.updateCollection({ collectionFileName: this.album.filename, properties: { collaborators } })
+				await this.$store.dispatch('updateCollection', { collectionFileName: this.album?.root + this.album?.path, properties: { collaborators } })
 			} catch (error) {
 				logger.error('Error while setting album collaborators', { error })
 			} finally {

@@ -11,22 +11,22 @@
 
 		<ul class="albums-container">
 			<NcListItem v-for="album in allAlbums"
-				:key="album.filename"
+				:key="album.attributes.filename"
 				class="album"
 				:name="originalName(album)"
 				:aria-label="t('photos', 'Add selection to album {albumName}', {albumName: album.basename})"
 				@click="pickAlbum(album)">
 				<template slot="icon">
-					<img v-if="album.lastPhoto !== -1" class="album__image" :src="album.lastPhoto | toCoverUrl">
+					<img v-if="album.attributes['last-photo'] !== -1" class="album__image" :src="album.attributes['last-photo'] | toCoverUrl">
 					<div v-else class="album__image album__image--placeholder">
 						<ImageMultiple :size="32" />
 					</div>
 				</template>
 
 				<template #subname>
-					{{ n('photos', '%n item', '%n photos and videos', album.nbItems) }}
+					{{ n('photos', '%n item', '%n photos and videos', album.attributes.nbItems) }}
 					<template v-if="isSharedAlbum(album)">
-						⸱ {{ t('photos', 'Shared by') }}&nbsp;<NcUserBubble :display-name="album.collaborators[0].label" :user="album.collaborators[0].id" />
+						⸱ {{ t('photos', 'Shared by') }}&nbsp;<NcUserBubble :display-name="album.attributes.collaborators[0].label" :user="album.attributes.collaborators[0].id" />
 					</template>
 				</template>
 			</NcListItem>
@@ -51,7 +51,6 @@
 </template>
 
 <script lang='ts'>
-import { mapGetters } from 'vuex'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
 
@@ -63,8 +62,9 @@ import { getCurrentUser } from '@nextcloud/auth'
 import FetchCollectionsMixin from '../../mixins/FetchCollectionsMixin.js'
 import AlbumForm from './AlbumForm.vue'
 import type { Album } from '../../store/albums.js'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
 	name: 'AlbumPicker',
 
 	components: {
@@ -94,13 +94,16 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'albums',
-			'sharedAlbums',
-		]),
+		albums() {
+			return this.$store.getters.albums
+		},
 
-		allAlbums(): Album[] {
-			return [...Object.values(this.albums), ...Object.values(this.sharedAlbums)]
+		sharedAlbums() {
+			return this.$store.getters.sharedAlbums
+		},
+
+		allAlbums() {
+			return [...Object.values(this.albums), ...Object.values(this.sharedAlbums)] as Album[]
 		},
 	},
 
@@ -123,13 +126,13 @@ export default {
 			this.$emit('album-picked', album)
 		},
 
-		isSharedAlbum(album: Album): boolean {
-			return album.filename.match(/^\/photos\/.+\/sharedalbums\//) !== null
+		isSharedAlbum(album: Album) {
+			return album.path.match(/^\/photos\/.+\/sharedalbums\//) !== null
 		},
 
-		originalName(album: Album): string {
+		originalName(album: Album) {
 			if (this.isSharedAlbum(album)) {
-				return album.basename.replace(new RegExp(`\\(${album.collaborators[0].id}\\)$`), '')
+				return album.basename.replace(new RegExp(`\\(${album.attributes.collaborators[0].id}\\)$`), '')
 			} else {
 				return album.basename
 			}
@@ -138,7 +141,7 @@ export default {
 		t: translate,
 		n: translatePlural,
 	},
-}
+})
 </script>
 
 <style lang="scss" scoped>

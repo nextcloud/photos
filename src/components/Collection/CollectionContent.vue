@@ -54,7 +54,7 @@ import FilesSelectionMixin from '../../mixins/FilesSelectionMixin.js'
 import FilesListViewer from '.././FilesListViewer.vue'
 import File from '.././File.vue'
 import type { Collection } from '../../services/collectionFetcher.js'
-import type { PhotoNode } from '../../utils/fileUtils.js'
+import type { File } from '@nextcloud/files'
 
 export default {
 	name: 'CollectionContent',
@@ -106,7 +106,7 @@ export default {
 	},
 
 	computed: {
-		files(): Record<string, PhotoNode> {
+		files(): Record<string, File> {
 			return this.$store.getters.files
 		},
 

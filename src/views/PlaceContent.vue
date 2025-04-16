@@ -89,17 +89,11 @@ export default {
 			return this.$store.getters.getPlace(this.placeName)
 		},
 
-		/**
-		 * @return {string} The place's filename based on its name. Useful to fetch the place information and content.
-		 */
-		placeFileName() {
+		placeFileName(): string {
 			return `/photos/${getCurrentUser()?.uid}/places/${this.placeName}`
 		},
 
-		/**
-		 * @return {string[]} The list of files for the current placeName.
-		 */
-		placeFileIds() {
+		placeFileIds(): string[] {
 			return this.$store.getters.getPlaceFiles(this.placeName)
 		},
 	},

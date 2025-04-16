@@ -8,16 +8,47 @@ import Vuex, { Store } from 'vuex'
 
 import { getCurrentUser } from '@nextcloud/auth'
 
-import files from './files.js'
-import albums from './albums.js'
-import publicAlbums from './publicAlbums.js'
+import files, { type FilesState } from './files.js'
+import albums, { type Album } from './albums.js'
+import publicAlbums, { type PublicAlbum } from './publicAlbums.js'
 import sharedAlbums from './sharedAlbums.js'
-import collections from './collections.js'
+import collections, { type CollectionState } from './collections.js'
 import places from './places.js'
-import faces from './faces.js'
-import folders from './folders.js'
-import systemtags from './systemtags.js'
-import userConfig, { getFolder } from './userConfig.js'
+import faces, { type FacesState } from './faces.js'
+import folders, { type FoldersState } from './folders.js'
+import systemtags, { type SystemTagsState } from './systemtags.js'
+import userConfig, { getFolder, type UserConfigState } from './userConfig.js'
+
+export type PhotosRootSate = {
+	files: FilesState
+	collections: CollectionState
+	faces: FacesState
+	folders: FoldersState
+	systemtags: SystemTagsState
+	userConfig: UserConfigState
+}
+
+export type PhotosContext<T> = {
+	rootState: PhotosRootSate
+	state: T
+	commit(mutationName: string, arg: unknown): void
+	dispatch(actionName: string, arg: unknown): Promise<unknown>
+	getters: {
+		albums(): Album[]
+		publicAlbums(): Album[]
+		sharedAlbums(): Album[]
+		getAlbumName(name: string): string
+		getAlbum(albumName: string): Album
+		getAlbumFiles(albumName: string): string[]
+		getPublicAlbum(publicAlbumName: string): PublicAlbum
+		getPublicAlbumFiles(publicAlbumName: string): string[]
+		getPublicAlbumName(publicAlbumName: string): string,
+		getSharedAlbum(sharedAlbumName: string): Album
+		getSharedAlbumFiles(sharedAlbumName: string): string[]
+		getSharedAlbumName(sharedAlbumName: string): string,
+		tagId(name: string): string,
+	}
+}
 
 /**
  * Get the information of photosLocation and store it as photosLocationFolder

@@ -7,23 +7,24 @@ import type { FileStat, ResponseDataDetailed, StatOptions, WebDAVClient } from '
 
 import moment from '@nextcloud/moment'
 import { translate as t } from '@nextcloud/l10n'
+import type { File, Folder } from '@nextcloud/files'
+import { resultToNode } from '@nextcloud/files/dav'
 
 import logger from '../services/logger.js'
-import { genFileInfo, type PhotoNode } from '../utils/fileUtils.js'
 import { davClient } from './DavClient.ts'
 import { getPropFind } from './DavRequest.ts'
 import type { RawCollection } from './collectionFetcher.ts'
 
-type Album = PhotoNode & {
-	id: string // The id of the album.
-	name: string // The name of the album.
-	creationDate: number // The creation date of the album.
-	isShared: string // Whether the current user as shared the album.
-	isCollaborative: string // Whether the album can be edited by other users.
-	itemCount: number // The number of item in the album.
-	cover: number // The cover of the album.
-	collaborators: object[] // The list of collaborators.
-	date: string // The date of the album.
+type Album = Folder & {
+	attributes: {
+		creationDate: number // The creation date of the album.
+		isShared: string // Whether the current user as shared the album.
+		isCollaborative: string // Whether the album can be edited by other users.
+		itemCount: number // The number of item in the album.
+		cover: number // The cover of the album.
+		collaborators: object[] // The list of collaborators.
+		date: string // The date of the album.
+	}
 }
 
 function getDavRequest(extraProps: string = ''): string {
@@ -86,25 +87,19 @@ export async function fetchAlbums(path: string, options: StatOptions, extraProps
 }
 
 function formatAlbum(rawAlbum: RawCollection): Album {
-	let collaborators: object[] = []
-
 	// Ensure that we have a proper collaborators array.
 	if (rawAlbum.props.collaborators === '') {
-		collaborators = []
+		rawAlbum.props.collaborators = []
 	} else if (typeof rawAlbum.props.collaborators.collaborator === 'object') {
 		if (Array.isArray(rawAlbum.props.collaborators.collaborator)) {
-			collaborators = rawAlbum.props.collaborators.collaborator
+			rawAlbum.props.collaborators = rawAlbum.props.collaborators.collaborator
 		} else {
-			collaborators = [rawAlbum.props.collaborators.collaborator]
+			rawAlbum.props.collaborators = [rawAlbum.props.collaborators.collaborator]
 		}
 	}
 
-	// Extract custom props.
-	const album = genFileInfo(rawAlbum) as Album
-	album.collaborators = collaborators
-
 	// Compute date range label.
-	const dateRange = JSON.parse(rawAlbum.dateRange?.replace(/&quot;/g, '"') ?? '{}')
+	const dateRange = JSON.parse(rawAlbum.props.dateRange?.replace(/&quot;/g, '"') ?? '{}')
 	if (dateRange.start === null) {
 		dateRange.start = moment().unix()
 		dateRange.end = moment().unix()
@@ -114,15 +109,15 @@ function formatAlbum(rawAlbum: RawCollection): Album {
 		endDate: moment.unix(dateRange.end).format('MMMM YYYY'),
 	}
 	if (dateRangeFormatted.startDate === dateRangeFormatted.endDate) {
-		album.date = dateRangeFormatted.startDate
+		rawAlbum.props.date = dateRangeFormatted.startDate
 	} else {
-		album.date = t('photos', '{startDate} to {endDate}', dateRangeFormatted)
+		rawAlbum.props.date = t('photos', '{startDate} to {endDate}', dateRangeFormatted)
 	}
 
-	return album
+	return resultToNode(rawAlbum) as Album
 }
 
-export async function fetchAlbumContent(path: string, options: StatOptions, client: WebDAVClient = davClient): Promise<PhotoNode[]> {
+export async function fetchAlbumContent(path: string, options: StatOptions, client: WebDAVClient = davClient): Promise<File[]> {
 	try {
 		const response = await client.getDirectoryContents(path, {
 			data: getPropFind(),
@@ -131,8 +126,8 @@ export async function fetchAlbumContent(path: string, options: StatOptions, clie
 		}) as ResponseDataDetailed<Array<FileStat>>
 
 		const fetchedFiles = response.data
-			.map(file => genFileInfo(file))
-			.filter(file => file.fileid)
+			.filter(file => file['fileid'] !== undefined)
+			.map(file => resultToNode(file) as File)
 
 		logger.debug(`[Albums] Fetched ${fetchedFiles.length} new files: `, { fetchedFiles })
 

@@ -3,24 +3,26 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import Vue from 'vue'
-import { sortCompare, type PhotoNode } from '../utils/fileUtils.js'
+import { sortCompare } from '../utils/fileUtils.js'
+import type { File } from '@nextcloud/files'
+import type { PhotoFile } from './files.js'
 
 const state = {
 	paths: {},
 	folders: {},
 }
 
-type FoldersState = typeof state
+export type FoldersState = typeof state
 
 const mutations = {
 	/**
 	 * Index folders paths and ids
 	 */
-	updateFolders(state: FoldersState, { fileid, files }: { fileid: number, files: PhotoNode[] }) {
+	updateFolders(state: FoldersState, { fileid, files }: { fileid: number, files: PhotoFile[] }) {
 		if (files.length > 0) {
 			// sort by last modified
 			const list = files
-				.sort((a, b) => sortCompare(a, b, 'lastmod'))
+				.sort((a, b) => sortCompare(a, b, 'mtime'))
 				.filter(file => file.fileid >= 0)
 
 			// Set folder list
@@ -42,11 +44,11 @@ const mutations = {
 	/**
 	 * Append files to a folder
 	 */
-	addFilesToFolder(state: FoldersState, { fileid, files }: { fileid: number, files: PhotoNode[] }) {
+	addFilesToFolder(state: FoldersState, { fileid, files }: { fileid: number, files: PhotoFile[] }) {
 		if (fileid >= 0 && files.length > 0) {
 			// and sort by last modified
 			const list = files
-				.sort((a, b) => sortCompare(a, b, 'lastmod'))
+				.sort((a, b) => sortCompare(a, b, 'mtime'))
 				.filter(file => file.fileid >= 0)
 				.map(file => file.fileid)
 			Vue.set(state.folders, fileid, [...list, ...state.folders[fileid]])
@@ -64,11 +66,11 @@ const actions = {
 	/**
 	 * Update files and folders
 	 */
-	updateFolders(context, { fileid, files, folders }: { fileid: string, files: PhotoNode[], folders: PhotoNode[] }) {
+	updateFolders(context, { fileid, files, folders }: { fileid: string, files: File[], folders: File[] }) {
 		context.commit('updateFolders', { fileid, files })
 
 		// then add each folders path indexes
-		folders.forEach(folder => context.commit('addPath', { path: folder.filename, fileid: folder.fileid }))
+		folders.forEach(folder => context.commit('addPath', { path: folder.path, fileid: folder.fileid }))
 	},
 
 	/**
@@ -81,7 +83,7 @@ const actions = {
 	/**
 	 * Append files to a folder
 	 */
-	addFilesToFolder(context, { fileid, files }: { fileid: string, files: PhotoNode[] }) {
+	addFilesToFolder(context, { fileid, files }: { fileid: string, files: File[] }) {
 		context.commit('addFilesToFolder', { fileid, files })
 	},
 }

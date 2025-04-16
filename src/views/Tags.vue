@@ -30,9 +30,8 @@
 </template>
 
 <script lang='ts'>
-import { mapGetters } from 'vuex'
-
 import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import { translate as t } from '@nextcloud/l10n'
 
 import TagCover from '../components/TagCover.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
@@ -56,12 +55,17 @@ export default {
 	},
 
 	computed: {
-		// global lists
-		...mapGetters([
-			'files',
-			'tags',
-			'tagsNames',
-		]),
+		files() {
+			return this.$store.state.files.files
+		},
+
+		tags() {
+			return this.$store.state.systemtags.tags
+		},
+
+		tagsNames() {
+			return this.$store.state.systemtags.names
+		},
 
 		tagsList() {
 			return Object.keys(this.tagsNames)
@@ -71,8 +75,8 @@ export default {
 
 		popularTags() {
 			return Object.keys(this.tagsNames)
-				.filter(tagName => (this.tags[this.tagsNames[tagName]].filesAssigned) > 50)
-				.sort((a, b) => (this.tags[this.tagsNames[b]].filesAssigned || this.tagCounts[b]) - (this.tags[this.tagsNames[a]].filesAssigned || this.tagCounts[a]))
+				.filter(tagName => (this.tags[this.tagsNames[tagName]].attributes['files-assigned']) > 50)
+				.sort((a, b) => (this.tags[this.tagsNames[b]]['files-assigned'] || this.tagCounts[b]) - (this.tags[this.tagsNames[a]]['files-assigned'] || this.tagCounts[a]))
 				.slice(0, 9)
 				.map(tagName => this.tags[this.tagsNames[tagName]])
 		},
@@ -105,6 +109,8 @@ export default {
 				this.loading = false
 			}
 		},
+
+		t,
 	},
 
 }

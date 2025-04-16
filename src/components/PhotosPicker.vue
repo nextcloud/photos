@@ -190,9 +190,10 @@ export default defineComponent({
 	},
 
 	computed: {
-		...mapGetters([
-			'files',
-		]),
+		files() {
+			return this.$store.state.files.files
+		},
+
 
 		photosLocationFolder() {
 			return this.$store.state.userConfig.photosLocationFolder

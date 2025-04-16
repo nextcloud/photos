@@ -1,0 +1,4 @@
+
+> photos@5.0.0-dev.0 watch
+> export NODE_ENV=development; vite --mode development build --watch
+

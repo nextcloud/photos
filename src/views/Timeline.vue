@@ -124,7 +124,6 @@
 </template>
 
 <script lang='ts'>
-import { mapActions, mapGetters } from 'vuex'
 import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import Delete from 'vue-material-design-icons/Delete.vue'
@@ -151,6 +150,7 @@ import ActionDownload from '../components/Actions/ActionDownload.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
 import { configChangedEvent } from '../store/userConfig.js'
+import type { Album } from '../store/albums.js'
 
 export default {
 	name: 'Timeline',
@@ -227,9 +227,9 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'files',
-		]),
+		files() {
+			return this.$store.state.files.files
+		},
 	},
 
 	mounted() {
@@ -241,11 +241,6 @@ export default {
 	},
 
 	methods: {
-		...mapActions([
-			'deleteFiles',
-			'addFilesToCollection',
-		]),
-
 		getContent() {
 			this.fetchFiles({
 				mimesType: this.mimesType,
@@ -268,9 +263,9 @@ export default {
 			// TODO: finish when implementing upload
 		},
 
-		async addSelectionToAlbum(album) {
+		async addSelectionToAlbum(album: Album) {
 			this.showAlbumPicker = false
-			await this.addFilesToCollection({ collectionFileName: album.filename, fileIdsToAdd: this.selectedFileIds })
+			await this.$store.dispatch('addFilesToCollection', { collectionFileName: album.root + album.path, fileIdsToAdd: this.selectedFileIds })
 		},
 
 		async deleteSelection() {
@@ -278,7 +273,7 @@ export default {
 			const fileIds = this.selectedFileIds
 			this.onUncheckFiles(fileIds)
 			this.fetchedFileIds = this.fetchedFileIds.filter(fileid => !fileIds.includes(fileid))
-			await this.deleteFiles(fileIds)
+			await this.$store.dispatch('deleteFiles', fileIds)
 		},
 
 		handleUserConfigChange({ key }) {

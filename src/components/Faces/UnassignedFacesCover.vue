@@ -17,7 +17,8 @@
 </template>
 
 <script lang='ts'>
-import { mapGetters } from 'vuex'
+import { translatePlural as n } from '@nextcloud/l10n'
+
 import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
 import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
 import AccountOffIcon from 'vue-material-design-icons/AccountOff.vue'
@@ -40,12 +41,17 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'unassignedFilesCount',
-		]),
+		unassignedFilesCount() {
+			return this.$store.state.faces.unassignedFilesCount
+		},
+
 		colorMainBackground() {
 			return getComputedStyle(document.documentElement).getPropertyValue('--color-main-background')
 		},
+	},
+
+	methods: {
+		n,
 	},
 
 	async mounted() {

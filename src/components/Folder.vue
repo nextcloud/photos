@@ -11,8 +11,6 @@
 </template>
 
 <script lang='ts'>
-import { mapGetters } from 'vuex'
-
 import { getCurrentUser } from '@nextcloud/auth'
 
 import FolderTagPreview from './FolderTagPreview.vue'
@@ -46,11 +44,13 @@ export default {
 	},
 
 	computed: {
-		// global lists
-		...mapGetters([
-			'files',
-			'folders',
-		]),
+		files() {
+			return this.$store.state.files.files
+		},
+
+		folders() {
+			return this.$store.state.folders.folders
+		},
 
 		// files list of the current folder
 		folderContent() {
@@ -75,7 +75,7 @@ export default {
 				this.updatePreviewFolder(firstChildFolder)
 
 				if (!this.folders[this.previewFolder]) {
-					this.getFolderData(this.files[this.previewFolder].filename)
+					this.getFolderData(this.files[this.previewFolder].path)
 				}
 			}
 
@@ -101,14 +101,10 @@ export default {
 					shared: this.item.injected.showShared,
 					signal: this.abortController.signal,
 				})
-				this.$store.dispatch('updateFolders', { fileid: folder.fileid, files, folders })
+				this.$store.dispatch('updateFolders', { fileid: folder?.fileid, files, folders })
 				this.$store.dispatch('updateFiles', { folder, files, folders })
 			} catch (error) {
-				if (error.response && error.response.status) {
-					logger.error('Failed to get folder content', { error, filename })
-				} else {
-					logger.debug(error)
-				}
+				logger.error('Failed to get folder content', { error, filename })
 			}
 		},
 
