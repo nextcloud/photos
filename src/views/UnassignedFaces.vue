@@ -237,5 +237,5 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import '../mixins/FaceContent';
+@use '../mixins/FaceContent';
 </style>
