@@ -75,7 +75,7 @@ export default {
 		&--placeholder {
 			background: var(--color-primary-element-light);
 
-			:deep .material-design-icon {
+			:deep(.material-design-icon) {
 				width: 100%;
 				height: 100%;
 
