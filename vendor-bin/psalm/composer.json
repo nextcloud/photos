@@ -1,8 +1,13 @@
 {
-    "require-dev": {
-        "psalm/phar": "^5.25",
-        "nextcloud/ocp": "dev-master",
-        "symfony/console": "v7.2.5",
-        "sabre/dav": "^4.4.0"
-    }
+	"config": {
+		"platform": {
+			"php": "8.1"
+		}
+	},
+	"require-dev": {
+		"nextcloud/ocp": "dev-master",
+		"symfony/console": "v6.0.0",
+		"sabre/dav": "^4.7.0",
+		"vimeo/psalm": "^5.26"
+	}
 }
