@@ -2,7 +2,7 @@
     "require-dev": {
         "psalm/phar": "^5.25",
         "nextcloud/ocp": "dev-master",
-        "symfony/console": "v6",
+        "symfony/console": "v7.2.5",
         "sabre/dav": "^4.4.0"
     }
 }
