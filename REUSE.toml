@@ -12,7 +12,13 @@ SPDX-FileCopyrightText = "none"
 SPDX-License-Identifier = "CC0-1.0"
 
 [[annotations]]
-path = ["l10n/**.js", "l10n/**.json", "js/**.js.map", "js/**.js", "js/**.mjs", "js/**.mjs.map", "js/templates/**.handlebars", "screenshots/screenshot1.png", "src/assets/file-placeholder.svg"]
+path = ["js/**.map"]
+precedence = "override"
+SPDX-FileCopyrightText = "2019 Nextcloud GmbH and Nextcloud contributors"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = ["l10n/**.js", "l10n/**.json", "css/**.css", "js/**.mjs", "js/photos-service-worker.js", "screenshots/screenshot1.png", "src/assets/file-placeholder.svg"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2019 Nextcloud GmbH and Nextcloud contributors"
 SPDX-License-Identifier = "AGPL-3.0-or-later"

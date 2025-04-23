@@ -68,6 +68,7 @@ class OnThisDay implements IIconWidget {
 	 */
 	public function load(): void {
 		Util::addScript('photos', 'photos-dashboard');
+		Util::addStyle('photos', 'photos-dashboard');
 		$this->initialState->provideInitialState('image-mimes', Application::IMAGE_MIMES);
 		$this->initialState->provideInitialState('video-mimes', Application::VIDEO_MIMES);
 	}

@@ -46,6 +46,7 @@ class PublicAlbumController extends Controller {
 		$this->initialState->provideInitialState('systemtags', false);
 
 		Util::addScript(Application::APP_ID, 'photos-public');
+		Util::addStyle(Application::APP_ID, 'photos-public');
 
 		$response = new PublicTemplateResponse(Application::APP_ID, 'public');
 

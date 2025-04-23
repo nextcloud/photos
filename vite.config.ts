@@ -13,10 +13,25 @@ export default createAppConfig({
 	sidebar: join(__dirname, 'src', 'sidebar.js'),
 	dashboard: join(__dirname, 'src', 'dashboard.js'),
 }, {
-	inlineCSS: { relativeCSSInjection: true },
 	thirdPartyLicense: false,
 	extractLicenseInformation: true,
+	createEmptyCSSEntryPoints: true,
+	emptyOutputDirectory: {
+		// also clear the css directory
+		additionalDirectories: ['css'],
+	},
 	config: {
+		build: {
+			rollupOptions: {
+				output: {
+					manualChunks(id: string) {
+						if (id.includes('vue-material-design-icon')) {
+							return 'icons'
+						}
+					},
+				},
+			},
+		},
 		css: {
 			preprocessorOptions: {
 				scss: {
