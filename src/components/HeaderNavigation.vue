@@ -38,7 +38,7 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 
 import { NcButton, NcLoadingIcon } from '@nextcloud/vue'

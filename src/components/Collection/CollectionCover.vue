@@ -24,7 +24,7 @@
 		</router-link>
 	</li>
 </template>
-<script>
+<script lang='ts'>
 import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
 
 export default {

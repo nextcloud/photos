@@ -41,7 +41,9 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
+import type { PropType } from 'vue'
+
 import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
 import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
 
@@ -51,6 +53,8 @@ import { translate } from '@nextcloud/l10n'
 import FilesSelectionMixin from '../../mixins/FilesSelectionMixin.js'
 import FilesListViewer from '.././FilesListViewer.vue'
 import File from '.././File.vue'
+import type { Collection } from '../../services/collectionFetcher.js'
+import type { PhotoNode } from '../../utils/fileUtils.js'
 
 export default {
 	name: 'CollectionContent',
@@ -69,15 +73,13 @@ export default {
 	],
 
 	props: {
-		/** @type {import('vue').PropType<import('../../services/collectionFetcher').Collection>} */
 		collection: {
-			type: Object,
+			type: Object as PropType<Collection>,
 			default: () => undefined,
 		},
 
-		/** @type {import('vue').PropType<string[]>} */
 		collectionFileIds: {
-			type: Array,
+			type: Array as PropType<string[]>,
 			required: true,
 		},
 
@@ -104,8 +106,7 @@ export default {
 	},
 
 	computed: {
-		/** @return {import('../../services/collectionFetcher').IndexedCollectionFiles} */
-		files() {
+		files(): Record<string, PhotoNode> {
 			return this.$store.getters.files
 		},
 

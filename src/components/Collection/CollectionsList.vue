@@ -24,11 +24,13 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
 
 import { NcEmptyContent } from '@nextcloud/vue'
 import { translate } from '@nextcloud/l10n'
+import type { Collection } from '../../services/collectionFetcher'
+import type { PropType } from 'vue'
 
 export default {
 	name: 'CollectionsList',
@@ -39,9 +41,8 @@ export default {
 	},
 
 	props: {
-		/** @type {import('vue').PropType<import('../../services/collectionFetcher').IndexedCollections>} */
 		collections: {
-			type: Object,
+			type: Object as PropType<Record<string, Collection>>,
 			required: true,
 		},
 		loading: {
@@ -55,10 +56,7 @@ export default {
 	},
 
 	computed: {
-		/**
-		 * @return {boolean} Whether the list of collections is empty or not.
-		 */
-		noCollection() {
+		noCollection(): boolean {
 			return Object.keys(this.collections).length === 0
 		},
 	},

@@ -45,7 +45,7 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 import { mapGetters } from 'vuex'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 

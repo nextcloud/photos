@@ -23,7 +23,7 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 import { NcActions, NcActionButton } from '@nextcloud/vue'
 export default {
 	name: 'Navigation',

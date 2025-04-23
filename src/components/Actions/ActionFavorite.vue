@@ -19,7 +19,7 @@
 	</NcActionButton>
 </template>
 
-<script>
+<script lang='ts'>
 import { mapActions, mapGetters } from 'vuex'
 import Star from 'vue-material-design-icons/Star.vue'
 

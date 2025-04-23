@@ -33,6 +33,7 @@
     "lint:fix": "eslint --ext .js,.vue src --fix",
     "stylelint": "stylelint src",
     "stylelint:fix": "stylelint src --fix",
+    "ts:check": "vue-tsc --noEmit",
     "cypress": "npm run cypress:component && npm run cypress:e2e",
     "cypress:component": "cypress run --component",
     "cypress:e2e": "cypress run --e2e",
@@ -109,6 +110,7 @@
     "typescript": "~5.3.3",
     "vite-plugin-pwa": "^1.0.0",
     "vitest": "^3.1.1",
+    "vue-tsc": "^2.2.10",
     "wait-on": "^8.0.3"
   }
 }

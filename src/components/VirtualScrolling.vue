@@ -20,40 +20,36 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
+import type { PropType } from 'vue'
 import logger from '../services/logger.js'
 
-/**
- * @typedef {object} Section
- * @property {string} key - Unique key for the section.
- * @property {Row[]} rows - The height of the row.
- * @property {number} height - Height of the section, excluding the header.
- */
+export type Row = {
+	key: string // Unique key for the row.
+	height: number // The height of the row.
+	sectionKey: string // Unique key for the row.
+}
 
-/**
- * @typedef {Section} VisibleSection
- * @property {VisibleRow[]} rows - The height of the row.
- */
+export type VisibleRow = Row & {
+	distance: number // The distance from the visible viewport
+}
 
-/**
- * @typedef {object} Row
- * @property {string} key - Unique key for the row.
- * @property {number} height - The height of the row.
- * @property {string} sectionKey - Unique key for the row.
- */
+export type Section = {
+	id: string // Unique key for the section.
+	rows: Row[] // The height of the row.
+	height: number // Height of the section, excluding the header.
+}
 
-/**
- * @typedef {Row} VisibleRow
- * @property {number} distance - The distance from the visible viewport
- */
+export type VisibleSection = Section & {
+	rows: VisibleRow[] // The height of the row.
+}
 
 export default {
 	name: 'VirtualScrolling',
 
 	props: {
-		/** @type {import('vue').PropType<Section[]}>} */
 		sections: {
-			type: Array,
+			type: Array as PropType<Section[]>,
 			required: true,
 		},
 
@@ -90,14 +86,12 @@ export default {
 			scrollPosition: 0,
 			containerHeight: 0,
 			rowsContainerHeight: 0,
-			/** @type {ResizeObserver} */
-			resizeObserver: null,
+			resizeObserver: null as ResizeObserver|null,
 		}
 	},
 
 	computed: {
-		/** @return {VisibleSection[]} */
-		visibleSections() {
+		visibleSections(): VisibleSection[] {
 			logger.debug('[VirtualScrolling] Computing visible section', { sections: this.sections })
 
 			// Optimisation: get those computed properties once to not go through vue's internal every time we need them.
@@ -139,7 +133,7 @@ export default {
 									distance,
 								},
 							]
-						}, []),
+						}, [] as VisibleRow[]),
 					}
 				})
 				.filter(section => section.rows.length > 0)
@@ -173,10 +167,8 @@ export default {
 
 		/**
 		 * Total height of all the rows + some room for the loader.
-		 *
-		 * @return {number}
 		 */
-		totalHeight() {
+		totalHeight(): number {
 			const loaderHeight = 200
 
 			return this.sections
@@ -184,10 +176,7 @@ export default {
 				.reduce((totalHeight, sectionHeight) => totalHeight + sectionHeight, 0) + loaderHeight
 		},
 
-		/**
-		 * @return {number}
-		 */
-		paddingTop() {
+		paddingTop(): number {
 			if (this.visibleSections.length === 0) {
 				return 0
 			}
@@ -216,10 +205,8 @@ export default {
 
 		/**
 		 * padding-top is used to replace not included item in the container.
-		 *
-		 * @return {{heigh: string, paddingTop: string}}
 		 */
-		rowsContainerStyle() {
+		rowsContainerStyle(): {height: string, paddingTop: string} {
 			return {
 				height: `${this.totalHeight}px`,
 				paddingTop: `${this.paddingTop}px`,
@@ -229,25 +216,20 @@ export default {
 		/**
 		 * Whether the user is near the bottom.
 		 * If true, then the need-content event will be emitted.
-		 *
-		 * @return {boolean}
 		 */
-		isNearBottom() {
+		isNearBottom(): boolean {
 			const buffer = this.containerHeight * this.bottomBufferRatio
 			return this.scrollPosition + this.containerHeight >= this.totalHeight - buffer
 		},
 
-		/**
-		 * @return {HTMLElement}
-		 */
-		container() {
+		container(): HTMLElement|Window {
 			logger.debug('[VirtualScrolling] Computing container')
 			if (this.containerElement !== null) {
 				return this.containerElement
 			} else if (this.useWindow) {
 				return window
 			} else {
-				return this.$refs.container
+				return this.$refs.container as HTMLElement
 			}
 		},
 	},
@@ -281,7 +263,7 @@ export default {
 			}
 
 			logger.debug('[VirtualScrolling] Scrolling to', { currentRowTopDistanceFromTop })
-			this.$refs.container.scrollTo({ top: currentRowTopDistanceFromTop, behavior: 'smooth' })
+			;(this.$refs.container as Element).scrollTo({ top: currentRowTopDistanceFromTop, behavior: 'smooth' })
 		},
 	},
 
@@ -306,11 +288,11 @@ export default {
 			window.addEventListener('resize', this.updateContainerSize, { passive: true })
 			this.containerHeight = window.innerHeight
 		} else {
-			this.resizeObserver.observe(this.container)
+			this.resizeObserver.observe(this.container as Element)
 		}
 
-		this.resizeObserver.observe(this.$refs.rowsContainer)
-		this.container.addEventListener('scroll', this.updateScrollPosition, { passive: true })
+		this.resizeObserver.observe(this.$refs.rowsContainer as Element)
+		this.container?.addEventListener('scroll', this.updateScrollPosition, { passive: true })
 	},
 
 	beforeDestroy() {
@@ -318,8 +300,8 @@ export default {
 			window.removeEventListener('resize', this.updateContainerSize)
 		}
 
-		this.resizeObserver.disconnect()
-		this.container.removeEventListener('scroll', this.updateScrollPosition)
+		this.resizeObserver?.disconnect()
+		this.container?.removeEventListener('scroll', this.updateScrollPosition)
 	},
 
 	methods: {
@@ -327,9 +309,9 @@ export default {
 			this._onScrollHandle ??= requestAnimationFrame(() => {
 				this._onScrollHandle = null
 				if (this.useWindow) {
-					this.scrollPosition = this.container.scrollY
+					this.scrollPosition = (this.container as Window).scrollY
 				} else {
-					this.scrollPosition = this.container.scrollTop
+					this.scrollPosition = (this.container as HTMLElement).scrollTop
 				}
 			})
 		},
