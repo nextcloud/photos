@@ -21,6 +21,17 @@ export default createAppConfig({
 		additionalDirectories: ['css'],
 	},
 	config: {
+		build: {
+			rollupOptions: {
+				output: {
+					manualChunks(id: string) {
+						if (id.includes('vue-material-design-icon')) {
+							return 'icons'
+						}
+					},
+				},
+			},
+		},
 		css: {
 			preprocessorOptions: {
 				scss: {
