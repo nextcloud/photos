@@ -101,7 +101,7 @@
     "cypress-visual-regression": "^5.2.2",
     "cypress-wait-until": "^3.0.2",
     "dockerode": "^4.0.4",
-    "eslint-plugin-cypress": "^3.6.0",
+    "eslint-plugin-cypress": "^4.3.0",
     "happy-dom": "^17.4.4",
     "postcss": "^8.4.38",
     "ts-node": "^10.9.2",
