@@ -36,5 +36,6 @@ class LoadSidebarScripts implements IEventListener {
 		}
 
 		Util::addScript(Application::APP_ID, 'photos-sidebar');
+		Util::addStyle(Application::APP_ID, 'photos-sidebar');
 	}
 }
