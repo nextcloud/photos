@@ -8,7 +8,7 @@ import camelcase from 'camelcase'
 import { isNumber } from './numberUtils.js'
 
 export type PhotoNode = {
-	fileid: string
+	fileid: number
 	basename: string
 	filename: string
 	source: string

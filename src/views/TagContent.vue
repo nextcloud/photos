@@ -46,6 +46,7 @@
 </template>
 
 <script lang='ts'>
+import { defineComponent } from 'vue'
 import { mapGetters } from 'vuex'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 
@@ -56,8 +57,9 @@ import FilesListViewer from '../components/FilesListViewer.vue'
 
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
+import logger from '../services/logger.js'
 
-export default {
+export default defineComponent({
 	name: 'TagContent',
 	components: {
 		File,
@@ -87,7 +89,7 @@ export default {
 
 	data() {
 		return {
-			error: null,
+			error: false,
 			loading: false,
 			appContent: document.getElementById('app-content-vue'),
 		}
@@ -134,10 +136,10 @@ export default {
 	methods: {
 		async fetchContent() {
 			// close any potential opened viewer
-			OCA.Viewer.close()
+			window.OCA.Viewer.close()
 
 			this.loading = true
-			this.error = null
+			this.error = false
 
 			try {
 				// if we don't already have some cached data let's show a loader
@@ -149,7 +151,7 @@ export default {
 					await this.$store.dispatch('fetchTagFiles', { id: this.tagId, signal: this.abortController.signal })
 				}
 			} catch (error) {
-				logger.error(error)
+				logger.error('Failed to fetch tag content', { error })
 				this.error = true
 			} finally {
 				// done loading
@@ -159,7 +161,7 @@ export default {
 
 		openViewer(fileId) {
 			const file = this.files[fileId]
-			OCA.Viewer.open({
+			window.OCA.Viewer.open({
 				path: file.filename,
 				list: this.fileIds.map(fileId => this.files[fileId]),
 				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
@@ -167,7 +169,7 @@ export default {
 			})
 		},
 	},
-}
+})
 </script>
 <style scoped lang="scss">
 .loader {

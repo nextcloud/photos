@@ -3,6 +3,8 @@
  * SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+import type { Folder } from '@nextcloud/files'
+import type { FileStat, ResponseDataDetailed } from 'webdav'
 
 import { getDefaultPropfind, resultToNode, defaultRootPath } from '@nextcloud/files/dav'
 import { loadState } from '@nextcloud/initial-state'
@@ -15,8 +17,6 @@ import axios from '@nextcloud/axios'
 
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
-import type { FileStat, ResponseDataDetailed } from 'webdav'
-import type { Folder } from '@nextcloud/files'
 
 export const configChangedEvent = 'photos:user-config-changed'
 
@@ -26,14 +26,14 @@ export async function getFolder(path) {
 	try {
 		const stat = await davClient.stat(location, { details: true, data: getDefaultPropfind() }) as ResponseDataDetailed<FileStat>
 		return resultToNode(stat.data)
-	} catch (error) {
+	} catch (error: unknown) {
 		if (error.response?.status === 404) {
 			logger.debug('Photo location does not exist, creating it.')
 			await davClient.createDirectory(location)
 			const stat = await davClient.stat(location, { details: true, data: getDefaultPropfind() }) as ResponseDataDetailed<FileStat>
 			return resultToNode(stat.data)
 		} else {
-			logger.fatal(error)
+			logger.fatal('Could not load photos folder', { error })
 			showError(t('photos', 'Could not load photos folder'))
 		}
 	}

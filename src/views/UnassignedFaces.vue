@@ -88,6 +88,7 @@
 </template>
 
 <script lang='ts'>
+import Vue, { defineComponent } from 'vue'
 import { mapActions, mapGetters } from 'vuex'
 import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
 import Star from 'vue-material-design-icons/Star.vue'
@@ -103,11 +104,11 @@ import FilesListViewer from '../components/FilesListViewer.vue'
 import File from '../components/File.vue'
 import logger from '../services/logger.js'
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
-import Vue from 'vue'
 import FaceMergeForm from '../components/Faces/FaceMergeForm.vue'
 
-export default {
+export default defineComponent({
 	name: 'UnassignedFaces',
+
 	components: {
 		Star,
 		Download,
@@ -177,7 +178,7 @@ export default {
 
 		openViewer(fileId) {
 			const file = this.files[fileId]
-			OCA.Viewer.open({
+			window.OCA.Viewer.open({
 				path: '/' + file.filename.split('/').slice(3).join('/'),
 				list: this.faceFileIds.map(fileId => ({ ...this.files[fileId], filename: '/' + this.files[fileId].filename.split('/').slice(3).join('/') })),
 				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
@@ -191,7 +192,7 @@ export default {
 				await this.moveFilesToFace({ oldFace: null, faceName, fileIdsToMove: fileIds })
 				this.showMoveModal = false
 			} catch (error) {
-				logger.error(error)
+				logger.error('Cannot move selected files', { error })
 			} finally {
 				this.loadingCount--
 			}
@@ -202,7 +203,7 @@ export default {
 				this.loadingCount++
 				await this.toggleFavoriteForFiles({ fileIds: this.selectedFileIds, favoriteState: true })
 			} catch (error) {
-				logger.error(error)
+				logger.error('Cannot favorite selected files', { error })
 			} finally {
 				this.loadingCount--
 			}
@@ -213,7 +214,7 @@ export default {
 				this.loadingCount++
 				await this.toggleFavoriteForFiles({ fileIds: this.selectedFileIds, favoriteState: false })
 			} catch (error) {
-				logger.error(error)
+				logger.error('Cannot unfavorite selected files', { error })
 			} finally {
 				this.loadingCount--
 			}
@@ -224,14 +225,15 @@ export default {
 				this.loadingCount++
 				await this.downloadFiles(this.selectedFileIds)
 			} catch (error) {
-				logger.error(error)
+				logger.error('Cannot download selected files', { error })
 			} finally {
 				this.loadingCount--
 			}
 		},
 	},
-}
+})
 </script>
+
 <style lang="scss" scoped>
 @use '../mixins/FaceContent';
 </style>
