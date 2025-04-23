@@ -116,7 +116,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 11.3.0
 	- license: MIT
 - @nextcloud/vue
-	- version: 8.23.1
+	- version: 8.25.1
 	- license: AGPL-3.0-or-later
 - available-typed-arrays
 	- version: 1.0.7
