@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { MutationTree } from 'vuex'
+import { isAxiosError } from 'axios'
 
 import { showError } from '@nextcloud/dialogs'
 import { translate as t } from '@nextcloud/l10n'
@@ -12,6 +12,8 @@ import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
 import type { Collection } from '../services/collectionFetcher.ts'
+import type { PhotosContext } from './index.ts'
+import { resultToNode } from '@nextcloud/files/dav'
 
 /**
  * Collections are indexed by their `filename`.
@@ -27,16 +29,16 @@ const state = {
 	} as Record<string, string[]>,
 }
 
-type CollectionState = typeof state
+export type CollectionState = typeof state
 
-const mutations: MutationTree = {
+const mutations = {
 	/**
 	 * Add new collections.
 	 */
 	addCollections(state: CollectionState, { collections }: { collections: Collection[]}) {
 		state.collections = {
 			...state.collections,
-			...collections.reduce((collections, collection) => ({ ...collections, [collection.filename]: collection }), {}),
+			...collections.reduce((collections, collection) => ({ ...collections, [collection.root + collection.path]: collection }), {}),
 		}
 	},
 
@@ -44,7 +46,7 @@ const mutations: MutationTree = {
 	 * Add collections to the collection collection.
 	 */
 	updateCollection(state: CollectionState, { collection }: { collection: Collection}) {
-		state.collections[collection.filename] = collection
+		state.collections[collection.root + collection.path] = collection
 	},
 
 	/**
@@ -66,8 +68,8 @@ const mutations: MutationTree = {
 		}
 
 		if (state.collections[collectionFileName] !== undefined) {
-			state.collections[collectionFileName].nbItems = fileIds.length
-			state.collections[collectionFileName].lastPhoto = Number.parseInt(fileIds[fileIds.length - 1])
+			state.collections[collectionFileName].attributes.nbItems = fileIds.length
+			state.collections[collectionFileName].attributes['last-photo'] = Number.parseInt(fileIds[fileIds.length - 1])
 		}
 	},
 
@@ -81,8 +83,8 @@ const mutations: MutationTree = {
 			[collectionFileName]: [...new Set([...collectionFiles, ...fileIdsToAdd])],
 		}
 
-		state.collections[collectionFileName].nbItems += fileIdsToAdd.length
-		state.collections[collectionFileName].lastPhoto = Number.parseInt(fileIdsToAdd[fileIdsToAdd.length - 1])
+		state.collections[collectionFileName].attributes.nbItems += fileIdsToAdd.length
+		state.collections[collectionFileName].attributes['last-photo'] = Number.parseInt(fileIdsToAdd[fileIdsToAdd.length - 1])
 	},
 
 	/**
@@ -94,9 +96,9 @@ const mutations: MutationTree = {
 			[collectionFileName]: state.collectionsFiles[collectionFileName].filter(fileId => !fileIdsToRemove.includes(fileId)),
 		}
 
-		state.collections[collectionFileName].nbItems -= fileIdsToRemove.length
-		if (fileIdsToRemove.includes(state.collections[collectionFileName].lastPhoto.toString())) {
-			state.collections[collectionFileName].lastPhoto = Number.parseInt(state.collectionsFiles[collectionFileName][state.collectionsFiles[collectionFileName].length])
+		state.collections[collectionFileName].attributes.nbItems -= fileIdsToRemove.length
+		if (fileIdsToRemove.includes(state.collections[collectionFileName].attributes['last-photo'].toString())) {
+			state.collections[collectionFileName].attributes['last-photo'] = Number.parseInt(state.collectionsFiles[collectionFileName][state.collectionsFiles[collectionFileName].length])
 		}
 	},
 }
@@ -104,10 +106,10 @@ const mutations: MutationTree = {
 const getters = {
 	collections: (state: CollectionState) => state.collections,
 	collectionsFiles: (state: CollectionState) => state.collectionsFiles,
-	collectionsWithPrefix: (state: CollectionState) => function(prefix) {
+	collectionsWithPrefix: (state: CollectionState) => function(prefix: string) {
 		return Object.values(state.collections)
-			.filter(collection => collection.filename.startsWith(prefix))
-			.reduce((collections, collection) => ({ ...collections, [collection.filename]: collection }), {})
+			.filter(collection => collection.root === prefix)
+			.reduce((collections, collection) => ({ ...collections, [collection.root + collection.path]: collection }), {})
 	},
 }
 
@@ -115,31 +117,31 @@ const actions = {
 	/**
 	 * Update files and collections
 	 */
-	addCollections(context, { collections }: { collections: Collection[]}) {
+	addCollections(context: PhotosContext<CollectionState>, { collections }: { collections: Collection[]}) {
 		context.commit('addCollections', { collections })
 	},
 
 	/**
 	 * Add files to an collection.
 	 */
-	async addFilesToCollection(context, { collectionFileName, fileIdsToAdd }: { collectionFileName: string, fileIdsToAdd: string[] }) {
+	async addFilesToCollection(context: PhotosContext<CollectionState>, { collectionFileName, fileIdsToAdd }: { collectionFileName: string, fileIdsToAdd: string[] }) {
 		const semaphore = new Semaphore(5)
 
 		context.commit('addFilesToCollection', { collectionFileName, fileIdsToAdd })
 
 		const promises = fileIdsToAdd
 			.map(async (fileId) => {
-				const file = context.getters.files[fileId]
-				const collection = context.getters.collections[collectionFileName]
+				const file = context.rootState.files.files[fileId]
+				const collection = context.state.collections[collectionFileName]
 				const symbol = await semaphore.acquire()
 
 				try {
 					await davClient.copyFile(
-						file.filename,
-						`${collection.filename}/${file.basename}`,
+						file.root + file.path,
+						`${collection.root + collection.path}/${file.basename}`,
 					)
 				} catch (error) {
-					if (error.response.status !== 409) { // Already in the collection.
+					if (isAxiosError(error) && error.response?.status !== 409) { // Already in the collection.
 						context.commit('removeFilesFromCollection', { collectionFileName, fileIdsToRemove: [fileId] })
 
 						logger.error(t('photos', 'Failed to add {fileBaseName} to collection {collectionFileName}', { fileBaseName: file.basename, collectionFileName }), { error })
@@ -156,18 +158,18 @@ const actions = {
 	/**
 	 * Remove files to an collection.
 	 */
-	async removeFilesFromCollection(context, { collectionFileName, fileIdsToRemove }: { collectionFileName: string, fileIdsToRemove: string[] }) {
+	async removeFilesFromCollection(context: PhotosContext<CollectionState>, { collectionFileName, fileIdsToRemove }: { collectionFileName: string, fileIdsToRemove: string[] }) {
 		const semaphore = new Semaphore(5)
 
 		context.commit('removeFilesFromCollection', { collectionFileName, fileIdsToRemove })
 
 		const promises = fileIdsToRemove
 			.map(async (fileId) => {
-				const file = context.getters.files[fileId]
+				const file = context.rootState.files.files[fileId]
 				const symbol = await semaphore.acquire()
 
 				try {
-					await davClient.deleteFile(file.filename)
+					await davClient.deleteFile(file.root + file.path)
 				} catch (error) {
 					context.commit('addFilesToCollection', { collectionFileName, fileIdsToAdd: [fileId] })
 
@@ -184,38 +186,35 @@ const actions = {
 	/**
 	 * Create an collection.
 	 */
-	async createCollection(context, { collection }: { collection: Collection }) {
+	async createCollection(context: PhotosContext<CollectionState>, { collection }: { collection: Collection }) {
 		try {
-			await davClient.createDirectory(collection.filename)
+			await davClient.createDirectory(collection.root + collection.path)
 			context.commit('addCollections', { collections: [collection] })
 			return collection
 		} catch (error) {
-			logger.error(t('photos', 'Failed to create {collectionFileName}', { collectionFileName: collection.filename }), { error })
-			showError(t('photos', 'Failed to create {collectionFileName}', { collectionFileName: collection.filename }))
+			logger.error(t('photos', 'Failed to create {collectionFileName}', { collectionFileName: collection.path }), { error })
+			showError(t('photos', 'Failed to create {collectionFileName}', { collectionFileName: collection.path }))
 		}
 	},
 
 	/**
 	 * Rename an collection.
 	 */
-	async renameCollection(context, { collectionFileName, newBaseName }: { collectionFileName: string, newBaseName: string}) {
+	async renameCollection(context: PhotosContext<CollectionState>, { collectionFileName, newBaseName }: { collectionFileName: string, newBaseName: string}) {
 		const collection = state.collections[collectionFileName]
-		const newCollection = {
-			...collection,
-			basename: newBaseName,
-			filename: collection.filename.replace(new RegExp(`${collection.basename}$`), newBaseName),
-		}
+		const newCollection = collection.clone()
+		newCollection.rename(newBaseName)
 
 		try {
 			context.commit('addCollections', { collections: [newCollection] })
-			context.commit('setCollectionFiles', { collectionFileName: newCollection.filename, fileIds: context.state.collectionsFiles[collectionFileName] })
-			await davClient.moveFile(collection.filename, newCollection.filename)
+			context.commit('setCollectionFiles', { collectionFileName: newCollection.root + newCollection.path, fileIds: context.state.collectionsFiles[collectionFileName] })
+			await davClient.moveFile(collection.root + collection.path, collection.root + newCollection.path)
 			context.commit('removeCollections', { collectionFileNames: [collectionFileName] })
 			return newCollection
 		} catch (error) {
-			context.commit('removeCollections', { collectionFileNames: [newCollection.filename] })
-			logger.error(t('photos', 'Failed to rename {currentCollectionFileName} to {newCollectionFileName}', { currentCollectionFileName: collectionFileName, newCollectionFileName: newCollection.filename }), { error })
-			showError(t('photos', 'Failed to rename {currentCollectionFileName} to {newCollectionFileName}', { currentCollectionFileName: collectionFileName, newCollectionFileName: newCollection.filename }))
+			context.commit('removeCollections', { collectionFileNames: [newCollection.path] })
+			logger.error(t('photos', 'Failed to rename {currentCollectionFileName} to {newCollectionFileName}', { currentCollectionFileName: collectionFileName, newCollectionFileName: newCollection.path }), { error })
+			showError(t('photos', 'Failed to rename {currentCollectionFileName} to {newCollectionFileName}', { currentCollectionFileName: collectionFileName, newCollectionFileName: newCollection.path }))
 			return collection
 		}
 	},
@@ -223,10 +222,11 @@ const actions = {
 	/**
 	 * Update an collection's properties.
 	 */
-	async updateCollection(context, { collectionFileName, properties }: { collectionFileName: string, properties: object }) {
+	async updateCollection(context: PhotosContext<CollectionState>, { collectionFileName, properties }: { collectionFileName: string, properties: object }) {
 		const collection = context.state.collections[collectionFileName]
 
-		const updatedCollection = { ...collection, ...properties }
+		const updatedCollection = collection.clone()
+		updatedCollection.update(properties)
 
 		const stringifiedProperties = Object
 			.entries(properties)
@@ -246,7 +246,7 @@ const actions = {
 			context.commit('updateCollection', { collection: updatedCollection })
 
 			await davClient.customRequest(
-				collection.filename,
+				collection.root + collection.path,
 				{
 					method: 'PROPPATCH',
 					data: `<?xml version="1.0"?>
@@ -275,10 +275,10 @@ const actions = {
 	/**
 	 * Delete an collection.
 	 */
-	async deleteCollection(context, { collectionFileName }: { collectionFileName: string}) {
+	async deleteCollection(context: PhotosContext<CollectionState>, { collectionFileName }: { collectionFileName: string}) {
 		try {
-			const collection = context.getters.collections[collectionFileName]
-			await davClient.deleteFile(collection.filename)
+			const collection = context.state.collections[collectionFileName]
+			await davClient.deleteFile(collection.root + collection.path)
 			context.commit('removeCollections', { collectionFileNames: [collectionFileName] })
 		} catch (error) {
 			logger.error(t('photos', 'Failed to delete {collectionFileName}', { collectionFileName }), { error })

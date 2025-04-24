@@ -4,13 +4,16 @@
  */
 
 import type { FileStat, GetDirectoryContentsOptions, ResponseDataDetailed } from 'webdav'
-import { genFileInfo, type PhotoNode } from '../utils/fileUtils.js'
+
+import { resultToNode } from '@nextcloud/files/dav'
+import type { File } from '@nextcloud/files'
+
 import { davClient } from './DavClient.ts'
 
 /**
  * List system tags
  */
-export default async function(path: string, options: GetDirectoryContentsOptions = {}): Promise<PhotoNode[]> {
+export default async function(path: string, options: GetDirectoryContentsOptions = {}): Promise<File[]> {
 	const response = await davClient.getDirectoryContents('/systemtags-assigned/image', Object.assign({}, {
 		data: `<?xml version="1.0"?>
 			<d:propfind  xmlns:d="DAV:"
@@ -28,5 +31,5 @@ export default async function(path: string, options: GetDirectoryContentsOptions
 		details: true,
 	}, options)) as ResponseDataDetailed<FileStat[]>
 
-	return response.data.map(data => genFileInfo(data))
+	return response.data.map(data => resultToNode(data, '/systemtags-assigned/image') as File)
 }

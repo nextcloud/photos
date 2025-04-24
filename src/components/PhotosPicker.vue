@@ -98,7 +98,6 @@
 import { UploadPicker } from '@nextcloud/upload'
 import { NcButton, NcDialog, NcLoadingIcon, NcSelect, NcNoteCard, useIsMobile } from '@nextcloud/vue'
 import { defineComponent } from 'vue'
-import { mapGetters } from 'vuex'
 
 import moment from '@nextcloud/moment'
 import { getCurrentUser } from '@nextcloud/auth'
@@ -190,9 +189,9 @@ export default defineComponent({
 	},
 
 	computed: {
-		...mapGetters([
-			'files',
-		]),
+		files() {
+			return this.$store.state.files.files
+		},
 
 		photosLocationFolder() {
 			return this.$store.state.userConfig.photosLocationFolder

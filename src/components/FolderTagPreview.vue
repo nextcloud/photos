@@ -27,10 +27,16 @@
 </template>
 
 <script lang='ts'>
+import type { PropType } from 'vue'
+
 import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
+import { translate as t } from '@nextcloud/l10n'
 
 import Folder from 'vue-material-design-icons/Folder.vue'
+import type { Route } from 'vue-router'
+
+import type { FoldersNode } from '../services/FolderContent'
 
 export default {
 	name: 'FolderTagPreview',
@@ -57,18 +63,14 @@ export default {
 			default: '',
 		},
 		fileList: {
-			type: Array,
+			type: Array as PropType<FoldersNode[]>,
 			default: () => [],
-		},
-		to: {
-			type: Object,
-			default: null,
 		},
 	},
 
 	data() {
 		return {
-			failed: [],
+			failed: [] as number[],
 		}
 	},
 
@@ -84,10 +86,8 @@ export default {
 
 		/**
 		 * Previews list without the failed ones
-		 *
-		 * @return {object[]} the previews fileinfo
 		 */
-		previewList() {
+		previewList(): FoldersNode[] {
 			return this.fileList
 				.filter(file => this.failed.indexOf(file.fileid) === -1)
 		},
@@ -96,7 +96,9 @@ export default {
 			if (this.previewList.length === 0) {
 				return null
 			}
-			const { fileid, etag } = this.previewList.at(-1)
+
+			// TODO: Check that etag is not null
+			const { fileid, etag } = this.previewList.at(-1) as FoldersNode
 			// use etag to force cache reload if file changed
 			return generateUrl(`/core/preview?fileId=${fileid}&c=${etag}&x=${250}&y=${250}&forceIcon=0&a=0`)
 		},
@@ -107,14 +109,8 @@ export default {
 		 * current named route, get the final url back, decode it
 		 * and use it as a direct string.
 		 * Which vue-router does not encode afterwards!
-		 *
-		 * @return {string}
 		 */
-		toLink() {
-			if (this.to) {
-				return this.to
-			}
-
+		toLink(): Route {
 			// Remove leading /file/{userId}
 			const prefix = `/files/${getCurrentUser()?.uid}`
 			let path = this.path.replace(new RegExp(`^${prefix}`), '')
@@ -122,7 +118,7 @@ export default {
 			// always remove first slash, the router
 			// manage it automatically
 			const regex = /^\/?(.+)/i
-			path = regex.exec(path)[1]
+			path = (regex.exec(path) as string[])[1]
 
 			// apply to current route
 			return Object.assign({}, this.$route, {
@@ -135,6 +131,8 @@ export default {
 		onPreviewFail({ fileid }) {
 			this.failed.push(fileid)
 		},
+
+		t,
 	},
 }
 </script>

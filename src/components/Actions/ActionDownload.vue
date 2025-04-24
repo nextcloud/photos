@@ -13,7 +13,7 @@
 </template>
 
 <script lang='ts'>
-import { mapGetters } from 'vuex'
+import type { PropType } from 'vue'
 
 import { generateUrl } from '@nextcloud/router'
 import { NcActionLink } from '@nextcloud/vue'
@@ -32,26 +32,26 @@ export default {
 		},
 
 		selectedFileIds: {
-			type: Array,
+			type: Array as PropType<string[]>,
 			required: true,
 		},
 	},
 
 	computed: {
-		...mapGetters([
-			'files',
-		]),
+		files() {
+			return this.$store.state.files.files
+		},
 
 		downloadUrl() {
 			const params = new URLSearchParams()
-			const filePaths = this.fileNames.map(fileName => '/' + fileName.split('/').splice(3).join('/'))
-			params.append('files', JSON.stringify(filePaths))
+			params.append('files', JSON.stringify(this.paths))
 
+			// TODO: FIX ME
 			return generateUrl(`/apps/files/ajax/download.php?${params}`)
 		},
 
-		fileNames() {
-			return this.selectedFileIds.map(fileId => this.files[fileId].filename)
+		paths() {
+			return this.selectedFileIds.map(fileId => this.files[fileId].path)
 		},
 	},
 }

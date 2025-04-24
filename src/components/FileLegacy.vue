@@ -40,14 +40,20 @@
 </template>
 
 <script lang='ts'>
+import type { PropType } from 'vue'
+
 import { generateUrl } from '@nextcloud/router'
+import { translate as t } from '@nextcloud/l10n'
+
+import { legacyToViewerFileInfo } from '../utils/fileUtils'
+import type { InjectedItem } from './Folder.vue'
 
 export default {
 	name: 'FileLegacy',
 	inheritAttrs: false,
 	props: {
 		item: {
-			type: Object,
+			type: Object as PropType<InjectedItem>,
 			required: true,
 		},
 	},
@@ -87,11 +93,9 @@ export default {
 
 	methods: {
 		openViewer() {
-			OCA.Viewer.open({
-				fileInfo: this.item.injected,
-				list: this.item.injected.list,
-				loadMore: this.item.injected.loadMore ? async () => await this.item.injected.loadMore(true) : () => [],
-				canLoop: this.item.injected.canLoop,
+			window.OCA.Viewer.open({
+				fileInfo: legacyToViewerFileInfo(this.item.injected),
+				list: this.item.injected.list.map(file => legacyToViewerFileInfo(file)),
 			})
 		},
 
@@ -103,6 +107,8 @@ export default {
 		onError() {
 			this.error = true
 		},
+
+		t,
 	},
 
 }

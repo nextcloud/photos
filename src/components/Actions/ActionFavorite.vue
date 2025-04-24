@@ -20,12 +20,13 @@
 </template>
 
 <script lang='ts'>
-import { mapActions, mapGetters } from 'vuex'
+import { defineComponent, type PropType } from 'vue'
 import Star from 'vue-material-design-icons/Star.vue'
 
 import { NcActionButton } from '@nextcloud/vue'
+import { translate as t } from '@nextcloud/l10n'
 
-export default {
+export default defineComponent({
 	name: 'ActionFavorite',
 	components: {
 		Star,
@@ -34,35 +35,32 @@ export default {
 
 	props: {
 		selectedFileIds: {
-			type: Array,
+			type: Array as PropType<string[]>,
 			required: true,
 		},
 	},
 
 	computed: {
-		...mapGetters([
-			'files',
-		]),
+		files() {
+			return this.$store.state.files.files
+		},
 
-		/** @return {boolean} */
 		shouldFavoriteSelection() {
 			// Favorite all selection if at least one file is not in the favorites.
-			return this.selectedFileIds.some((fileId) => this.files[fileId].favorite === 0)
+			return this.selectedFileIds.some((fileId) => this.files[fileId].attributes.favorite === 0)
 		},
 	},
 
 	methods: {
-		...mapActions([
-			'toggleFavoriteForFiles',
-		]),
-
 		async favoriteSelection() {
-			await this.toggleFavoriteForFiles({ fileIds: this.selectedFileIds, favoriteState: 1 })
+			await this.$store.dispatch('toggleFavoriteForFiles', { fileIds: this.selectedFileIds, favoriteState: 1 })
 		},
 
 		async unFavoriteSelection() {
-			await this.toggleFavoriteForFiles({ fileIds: this.selectedFileIds, favoriteState: 0 })
+			await this.$store.dispatch('toggleFavoriteForFiles', { fileIds: this.selectedFileIds, favoriteState: 0 })
 		},
+
+		t,
 	},
-}
+})
 </script>

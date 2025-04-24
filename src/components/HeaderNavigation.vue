@@ -42,6 +42,7 @@
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 
 import { NcButton, NcLoadingIcon } from '@nextcloud/vue'
+import { translate as t } from '@nextcloud/l10n'
 
 export default {
 	name: 'HeaderNavigation',
@@ -117,14 +118,12 @@ export default {
 		 * so we generate a new valid route object, get the final url back
 		 * decode it and use it as a direct string, which vue-router
 		 * does not encode afterwards
-		 *
-		 * @return {string|object}
 		 */
-		to() {
+		to(): string|object {
 			// always remove first slash, the router
 			// manage it automatically
 			const regex = /^\/?(.*)/i
-			const path = regex.exec(this.parentPath)[1]
+			const path = (regex.exec(this.parentPath) as string[])[1]
 
 			// apply to current route
 			const { name, params } = Object.assign({}, this.$route, {
@@ -138,7 +137,7 @@ export default {
 			}
 
 			// returning a string prevent vue-router to encode it again
-			return decodeURIComponent(this.$router.resolve({ name, params }).resolved.path)
+			return decodeURIComponent(this.$router.resolve({ name: name ?? undefined, params }).resolved.path)
 		},
 	},
 
@@ -158,6 +157,8 @@ export default {
 				navigationToggle.style.display = hide ? 'none' : null
 			}
 		},
+
+		t,
 	},
 }
 </script>

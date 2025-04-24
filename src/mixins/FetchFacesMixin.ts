@@ -3,39 +3,45 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import he from 'he'
+import type { FileStat, ResponseDataDetailed } from 'webdav'
+import { defineComponent } from 'vue'
+import { isAxiosError } from 'axios'
+
 import { showError } from '@nextcloud/dialogs'
 import { translate as t } from '@nextcloud/l10n'
 import { getCurrentUser } from '@nextcloud/auth'
-import { mapActions, mapGetters } from 'vuex'
-import he from 'he'
-import type { FileStat, ResponseDataDetailed } from 'webdav'
+import type { File } from '@nextcloud/files'
+import { resultToNode } from '@nextcloud/files/dav'
 
-import { genFileInfo, type PhotoNode } from '../utils/fileUtils.js'
 import logger from '../services/logger.js'
 import AbortControllerMixin from './AbortControllerMixin.js'
 import { davClient } from '../services/DavClient.ts'
 import { getPropFind } from '../services/DavRequest.ts'
 
 const recognizeDAVProps = [
-	'nc:face-detections',
-	'nc:face-preview-image',
-	'nc:realpath',
+	'<nc:face-detections/>',
+	'<nc:face-preview-image/>',
+	'<nc:realpath/>',
+	'<nc:nbItems/>',
 ]
 
-type FaceNode = PhotoNode & {
-	faceDetections: string
-	facePreviewImage: string
-	realpath: string
+type FaceNode = File & {
+	attributes: {
+		'face-detections': string
+		'face-preview-image': string
+		'realpath': string
+	}
 }
 
-export default {
+export default defineComponent({
 	name: 'FetchFacesMixin',
 
 	data() {
 		return {
-			errorFetchingFaces: null,
+			errorFetchingFaces: null as null|number|Error|unknown,
 			loadingFaces: false,
-			errorFetchingFiles: null,
+			errorFetchingFiles: null as null|number|Error|unknown,
 			loadingFiles: false,
 		}
 	},
@@ -49,16 +55,12 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'faces',
-		]),
+		faces() {
+			return this.$store.state.faces.faces
+		},
 	},
 
 	methods: {
-		...mapActions([
-			'appendFiles',
-		]),
-
 		async fetchFaces() {
 			if (this.loadingFaces) {
 				return
@@ -72,20 +74,20 @@ export default {
 				this.loadingFaces = true
 				this.errorFetchingFaces = null
 
-				const { data: faces } = await davClient.getDirectoryContents(`/recognize/${getCurrentUser()?.uid}/faces/`, {
+				const { data: fetchedRawFaces } = await davClient.getDirectoryContents(`/recognize/${getCurrentUser()?.uid}/faces/`, {
 					data: getPropFind(recognizeDAVProps),
 					details: true,
 					signal: this.abortController.signal,
 				}) as ResponseDataDetailed<FileStat[]>
-				this.$store.dispatch('addFaces', { faces })
-				logger.debug(`[FetchFacesMixin] Fetched ${faces.length} new faces: `, {faces})
+
+				const fetchedFace = fetchedRawFaces.map(file => resultToNode(file, `/recognize/${getCurrentUser()?.uid}/faces/`) as FaceNode)
+				this.$store.dispatch('addFaces', { faces: fetchedFace })
+				logger.debug(`[FetchFacesMixin] Fetched ${fetchedFace.length} new faces: `, { fetchedFace })
 			} catch (error) {
-				if (error.response && error.response.status) {
-					if (error.response.status === 404) {
-						this.errorFetchingFaces = 404
-					} else {
-						this.errorFetchingFaces = error
-					}
+				if (isAxiosError(error) && error.response?.status === 404) {
+					this.errorFetchingFaces = 404
+				} else {
+					this.errorFetchingFaces = error
 				}
 				logger.error(t('photos', 'Failed to fetch faces list.'), { error })
 				showError(t('photos', 'Failed to fetch faces list.'))
@@ -117,13 +119,16 @@ export default {
 				) as ResponseDataDetailed<FileStat[]>
 
 				const fetchedFiles = fetchedRawFiles
-					.map(file => genFileInfo(file) as FaceNode)
-					.map(file => ({ ...file, filename: he.decode(file.realpath).replace(`/${getCurrentUser()?.uid}/files`, `/files/${getCurrentUser()?.uid}`) }))
-					.map(file => ({ ...file, faceDetections: JSON.parse(he.decode(file.faceDetections)) }))
+					.map(file => ({
+						...file,
+						filename: he.decode(file.props?.realpath).replace(`/${getCurrentUser()?.uid}/files`, `/files/${getCurrentUser()?.uid}`),
+						'face-detections': JSON.parse(he.decode(file.props?.['face-detections'])),
+					}))
+					.map(file => resultToNode(file) as FaceNode)
 
-				const fileIds = fetchedFiles.map(file => '' + file.fileid)
+				const fileIds = fetchedFiles.map(file => file.fileid?.toString() as string)
 
-				this.appendFiles(fetchedFiles)
+				this.$store.dispatch('appendFiles', fetchedFiles)
 
 				if (fetchedFiles.length > 0) {
 					await this.$store.commit('addFilesToFace', { faceName, fileIdsToAdd: fileIds })
@@ -131,12 +136,10 @@ export default {
 
 				logger.debug(`[FetchFacesMixin] Fetched ${fileIds.length} new files: `, { fileIds })
 			} catch (error) {
-				if (error.response && error.response.status) {
-					if (error.response.status === 404) {
-						this.errorFetchingFiles = 404
-					} else {
-						this.errorFetchingFiles = error
-					}
+				if (isAxiosError(error) && error.response?.status === 404) {
+					this.errorFetchingFaces = 404
+				} else {
+					this.errorFetchingFaces = error
 				}
 
 				// cancelled request, moving on...
@@ -169,13 +172,15 @@ export default {
 				) as ResponseDataDetailed<FileStat[]>
 
 				const fetchedFiles = fetchedRawFiles
-					.map(file => genFileInfo(file) as FaceNode)
-					.map(file => ({ ...file, filename: he.decode(file.realpath).replace(`/${getCurrentUser()?.uid}/files`, `/files/${getCurrentUser()?.uid}`) }))
-					.map(file => ({ ...file, faceDetections: JSON.parse(he.decode(file.faceDetections)) }))
+					.map(file => ({
+						...file,
+						filename: he.decode(file.props?.realpath).replace(`/${getCurrentUser()?.uid}/files`, `/files/${getCurrentUser()?.uid}`),
+						'face-detections': JSON.parse(he.decode(file.props?.['face-detections'])),
+					}))
+					.map(file => resultToNode(file) as FaceNode)
 
-				const fileIds = fetchedFiles.map(file => '' + file.fileid)
-
-				this.appendFiles(fetchedFiles)
+				const fileIds = [...new Set(fetchedFiles.map(file => '' + file.fileid))]
+				this.$store.dispatch('appendFiles', fetchedFiles)
 
 				if (fetchedFiles.length > 0) {
 					await this.$store.commit('addUnassignedFiles', { fileIdsToAdd: fileIds })
@@ -183,12 +188,10 @@ export default {
 
 				logger.debug(`[FetchFacesMixin] Fetched ${fileIds.length} new unassigned files: `, { fileIds })
 			} catch (error) {
-				if (error.response && error.response.status) {
-					if (error.response.status === 404) {
-						this.errorFetchingFiles = 404
-					} else {
-						this.errorFetchingFiles = error
-					}
+				if (isAxiosError(error) && error.response?.status === 404) {
+					this.errorFetchingFaces = 404
+				} else {
+					this.errorFetchingFaces = error
 				}
 
 				// cancelled request, moving on...
@@ -220,4 +223,4 @@ export default {
 			}
 		},
 	},
-}
+})

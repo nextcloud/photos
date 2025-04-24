@@ -3,18 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { mapActions } from 'vuex'
 import type { WebDAVClient } from 'webdav'
+import { defineComponent } from 'vue'
 
 import { showError } from '@nextcloud/dialogs'
+import type { File } from '@nextcloud/files'
+import { translate as t } from '@nextcloud/l10n'
 
 import AbortControllerMixin from './AbortControllerMixin.js'
 import { fetchCollection, fetchCollectionFiles, type Collection } from '../services/collectionFetcher.js'
 import logger from '../services/logger.js'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
-import type { PhotoNode } from '../utils/fileUtils.js'
+import { isAxiosError } from 'axios'
 
-export default {
+export default defineComponent({
 	name: 'FetchCollectionContentMixin',
 
 	data() {
@@ -22,8 +24,8 @@ export default {
 			fetchSemaphore: new SemaphoreWithPriority(1),
 			loadingCollection: false,
 			loadingCollectionFiles: false,
-			errorFetchingCollection: null,
-			errorFetchingCollectionFiles: null,
+			errorFetchingCollection: null as null|number|Error|unknown,
+			errorFetchingCollectionFiles: null as null|number|Error|unknown,
 		}
 	},
 
@@ -32,12 +34,7 @@ export default {
 	],
 
 	methods: {
-		...mapActions([
-			'appendFiles',
-			'addCollections',
-			'setCollectionFiles',
-		]),
-		async fetchCollection(collectionFileName: string, extraProps: string[], client: WebDAVClient): Promise<Collection|null> {
+		async fetchCollection(collectionFileName: string, extraProps: string[], client?: WebDAVClient): Promise<Collection|null> {
 			if (this.loadingCollection) {
 				return null
 			}
@@ -47,17 +44,17 @@ export default {
 				this.errorFetchingCollection = null
 
 				const collection = await fetchCollection(collectionFileName, { signal: this.abortController.signal }, extraProps, client)
-				this.addCollections({ collections: [collection] })
+				this.$store.dispatch('addCollections', { collections: [collection] })
 				return collection
 			} catch (error) {
-				if (error.response?.status === 404) {
+				if (isAxiosError(error) && error.response?.status === 404) {
 					this.errorFetchingCollection = 404
 					return null
 				}
 
 				this.errorFetchingCollection = error
 				logger.error('[PublicCollectionContent] Error fetching collection', { error })
-				showError(this.t('photos', 'Failed to fetch collection.'))
+				showError(t('photos', 'Failed to fetch collection.'))
 			} finally {
 				this.loadingCollection = false
 			}
@@ -65,7 +62,7 @@ export default {
 			return null
 		},
 
-		async fetchCollectionFiles(collectionFileName: string, extraProps: string[], client: WebDAVClient, mappers: ((nodes: PhotoNode) => PhotoNode)[] = []): Promise<PhotoNode[]> {
+		async fetchCollectionFiles(collectionFileName: string, extraProps?: string[], client?: WebDAVClient): Promise<File[]> {
 			if (this.loadingCollectionFiles) {
 				return []
 			}
@@ -76,12 +73,10 @@ export default {
 				this.errorFetchingCollectionFiles = null
 				this.loadingCollectionFiles = true
 
-				let fetchedFiles = await fetchCollectionFiles(collectionFileName, { signal: this.abortController.signal }, extraProps, client)
-				const fileIds = fetchedFiles.map(file => file.fileid.toString())
+				const fetchedFiles = await fetchCollectionFiles(collectionFileName, { signal: this.abortController.signal }, extraProps, client)
+				const fileIds = fetchedFiles.map(file => file.fileid?.toString())
 
-				mappers.forEach(mapper => (fetchedFiles = fetchedFiles.map(mapper)))
-
-				this.appendFiles(fetchedFiles)
+				this.$store.dispatch('appendFiles', fetchedFiles)
 
 				if (fetchedFiles.length > 0) {
 					await this.$store.commit('setCollectionFiles', { collectionFileName, fileIds })
@@ -89,14 +84,14 @@ export default {
 
 				return fetchedFiles
 			} catch (error) {
-				if (error.response?.status === 404) {
+				if (isAxiosError(error) && error.response?.status === 404) {
 					this.errorFetchingCollectionFiles = 404
 					return []
 				}
 
 				this.errorFetchingCollectionFiles = error
 
-				showError(this.t('photos', 'Failed to fetch collections list.'))
+				showError(t('photos', 'Failed to fetch collections list.'))
 				logger.error('[PublicCollectionContent] Error fetching collection files', { error })
 			} finally {
 				this.loadingCollectionFiles = false
@@ -106,4 +101,4 @@ export default {
 			return []
 		},
 	},
-}
+})

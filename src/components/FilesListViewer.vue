@@ -59,18 +59,18 @@
 	</div>
 </template>
 <script lang='ts'>
-import { mapActions, mapGetters } from 'vuex'
-
 import PackageVariant from 'vue-material-design-icons/PackageVariant.vue'
 
 import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import type { File } from '@nextcloud/files'
 
 import TiledLayout from '../components/TiledLayout/TiledLayout.vue'
 import { fetchFile } from '../services/fileFetcher.ts'
 import VirtualScrolling from '../components/VirtualScrolling.vue'
 import type { TiledItem } from '../services/TiledLayout.ts'
-import type { PhotoNode } from '../utils/fileUtils.ts'
+import type { PropType } from 'vue'
+import type { PhotoFile } from '../store/files.ts'
 
 export default {
 	name: 'FilesListViewer',
@@ -86,17 +86,17 @@ export default {
 	props: {
 		// Array of file ids that should be rendered.
 		fileIds: {
-			type: Array,
+			type: Array as PropType<string[]>,
 			default: undefined,
 		},
 		// An object mapping a list of section to a list of fileIds.
 		fileIdsBySection: {
-			type: Object,
+			type: Object as PropType<Record<string, string[]>>,
 			default: undefined,
 		},
 		// The list of sorted sections.
 		sections: {
-			type: Array,
+			type: Array as PropType<string[]>,
 			default: undefined,
 		},
 		// Whether we should display a loading indicator.
@@ -126,7 +126,7 @@ export default {
 		},
 		// The containerElement props to forward to TileLayout.
 		containerElement: {
-			type: HTMLElement,
+			type: [HTMLElement, null],
 			default: null,
 		},
 		// The useWindow props to forward to TileLayout.
@@ -142,7 +142,7 @@ export default {
 				const height = 200
 				const width = this.croppedLayout ? height : height * (1 + Math.random() * 2)
 				return {
-					id: index,
+					id: index.toString(),
 					width,
 					height,
 					ratio: width / height,
@@ -152,15 +152,15 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'files',
-		]),
+		files(): Record<string, PhotoFile> {
+			return this.$store.state.files.files
+		},
 
 		showPlaceholders(): boolean {
 			return this.loading && (this.fileIds?.length === 0 || this.sections?.length === 0)
 		},
 
-		itemsBySections(): {id: string, items: TiledItem[][]}[] {
+		itemsBySections(): {id: string, items: TiledItem[]}[] {
 			if (this.fileIds !== undefined) {
 				if (this.showPlaceholders) {
 					return [{ id: '', items: this.placeholderFiles }]
@@ -192,14 +192,14 @@ export default {
 			return []
 		},
 
-		photosCount() {
+		photosCount(): number {
 			return this.itemsBySections.map(({ items }) => items.length).reduce((total, length) => total + length, 0)
 		},
 
 		showLoader(): boolean {
 			return this.loading && (this.fileIds?.length !== 0 || this.sections?.length !== 0)
 		},
-		croppedLayout() {
+		croppedLayout(): boolean {
 			return this.$store.state.userConfig.croppedLayout
 		},
 	},
@@ -213,28 +213,24 @@ export default {
 	},
 
 	methods: {
-		...mapActions([
-			'appendFiles',
-		]),
-
 		// Ask the parent for more content.
-		needContent() {
+		needContent(): void {
 			this.$emit('need-content')
 		},
 
 		mapFileToItem(fileId: string): TiledItem {
-			const file = this.files[fileId] as PhotoNode
+			const file = this.files[fileId] as File
 			return {
-				id: file.fileid,
-				width: file.metadataPhotosSize.width,
-				height: file.metadataPhotosSize.height,
-				ratio: this.croppedLayout ? 1 : file.metadataPhotosSize.width / file.metadataPhotosSize.height,
+				id: file.fileid?.toString() as string,
+				width: file.attributes['metadata-photos-size'].width,
+				height: file.attributes['metadata-photos-size'].height,
+				ratio: this.croppedLayout ? 1 : file.attributes['metadata-photos-size'].width / file.attributes['metadata-photos-size'].height,
 			}
 		},
 
-		async handleFileUpdated({ fileid }: PhotoNode) {
-			const fetchedFile = await fetchFile(this.files[fileid].filename)
-			this.appendFiles([fetchedFile])
+		async handleFileUpdated({ fileid }: File): Promise<void> {
+			const fetchedFile = await fetchFile(this.files[fileid as number].path)
+			this.$store.dispatch('appendFiles', [fetchedFile])
 		},
 	},
 }

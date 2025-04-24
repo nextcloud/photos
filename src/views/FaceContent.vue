@@ -165,7 +165,6 @@
 </template>
 
 <script lang='ts'>
-import { mapActions, mapGetters } from 'vuex'
 import Pencil from 'vue-material-design-icons/Pencil.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
@@ -178,6 +177,7 @@ import AccountSwitch from 'vue-material-design-icons/AccountSwitch.vue'
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
 
 import { NcActions, NcActionButton, NcDialog, NcEmptyContent, NcButton, NcLoadingIcon } from '@nextcloud/vue'
+import { translate as t, translatePlural as n } from '@nextcloud/l10n'
 
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
@@ -188,6 +188,7 @@ import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
 import Vue from 'vue'
 import FaceMergeForm from '../components/Faces/FaceMergeForm.vue'
 import type { Collection } from '../services/collectionFetcher.js'
+import { toViewerFileInfo } from '../utils/fileUtils.js'
 
 export default {
 	name: 'FaceContent',
@@ -243,10 +244,13 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'files',
-			'facesFiles',
-		]),
+		files() {
+			return this.$store.state.files.files
+		},
+
+		facesFiles() {
+			return this.$store.state.faces.facesFiles
+		},
 
 		face(): Collection {
 			return this.faces[this.faceName]
@@ -258,7 +262,7 @@ export default {
 
 		shouldFavoriteSelection(): boolean {
 			// Favorite all selection if at least one file is not on the favorites.
-			return this.selectedFileIds.some((fileId) => this.$store.state.files.files[fileId].favorite === 0)
+			return this.selectedFileIds.some((fileId) => this.$store.state.files.files[fileId].attributes.favorite === 0)
 		},
 	},
 
@@ -275,30 +279,17 @@ export default {
 	},
 
 	methods: {
-		...mapActions([
-			'appendFiles',
-			'deleteFace',
-			'renameFace',
-			'downloadFiles',
-			'toggleFavoriteForFiles',
-			'removeFilesFromFace',
-			'moveFilesToFace',
-		]),
-
 		openViewer(fileId: string) {
-			const file = this.files[fileId]
-			OCA.Viewer.open({
-				path: '/' + file.filename.split('/').slice(3).join('/'),
-				list: this.faceFileIds.map(fileId => ({ ...this.files[fileId], filename: '/' + this.files[fileId].filename.split('/').slice(3).join('/') })),
-				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
-				canLoop: file.canLoop,
+			window.OCA.Viewer.open({
+				fileInfo: toViewerFileInfo(this.files[fileId]),
+				list: this.faceFileIds.map(fileId => toViewerFileInfo(this.files[fileId])),
 			})
 		},
 
 		async handleRemoveFilesFromFace(fileIds: string[]) {
 			try {
 				this.loadingCount++
-				await this.removeFilesFromFace({ faceName: this.faceName, fileIdsToRemove: fileIds })
+				await this.$store.dispatch('removeFilesFromFace', { faceName: this.faceName, fileIdsToRemove: fileIds })
 				this.resetSelection()
 			} catch (error) {
 				logger.error(error)
@@ -310,7 +301,7 @@ export default {
 		async handleDeleteFace() {
 			try {
 				this.loadingCount++
-				await this.deleteFace({ faceName: this.faceName })
+				await this.$store.dispatch('deleteFace', { faceName: this.faceName })
 				this.$router.push('/faces')
 			} catch (error) {
 				logger.error(error)
@@ -324,7 +315,7 @@ export default {
 				this.loadingCount++
 				this.showRenameModal = false
 				const oldName = this.faceName
-				await this.renameFace({ oldName, faceName })
+				await this.$store.dispatch('renameFace', { oldName, faceName })
 				this.$router.push({ name: 'facecontent', params: { faceName } })
 			} catch (error) {
 				logger.error(error)
@@ -336,8 +327,8 @@ export default {
 		async handleMerge(faceName: string) {
 			try {
 				this.loadingCount++
-				await this.moveFilesToFace({ oldFace: this.faceName, faceName, fileIdsToMove: this.facesFiles[this.faceName] })
-				await this.deleteFace({ faceName: this.faceName })
+				await this.$store.dispatch('moveFilesToFace', { oldFace: this.faceName, faceName, fileIdsToMove: this.facesFiles[this.faceName] })
+				await this.$store.dispatch('deleteFace', { faceName: this.faceName })
 				this.showMergeModal = false
 				this.$router.push({ name: 'facecontent', params: { faceName } })
 			} catch (error) {
@@ -350,7 +341,7 @@ export default {
 		async handleMove(faceName: string, fileIds: string[]) {
 			try {
 				this.loadingCount++
-				await this.moveFilesToFace({ oldFace: this.faceName, faceName, fileIdsToMove: fileIds })
+				await this.$store.dispatch('moveFilesToFace', { oldFace: this.faceName, faceName, fileIdsToMove: fileIds })
 				this.showMoveModal = false
 			} catch (error) {
 				logger.error(error)
@@ -362,7 +353,7 @@ export default {
 		async favoriteSelection() {
 			try {
 				this.loadingCount++
-				await this.toggleFavoriteForFiles({ fileIds: this.selectedFileIds, favoriteState: true })
+				await this.$store.dispatch('toggleFavoriteForFiles', { fileIds: this.selectedFileIds, favoriteState: true })
 			} catch (error) {
 				logger.error(error)
 			} finally {
@@ -373,7 +364,7 @@ export default {
 		async unFavoriteSelection() {
 			try {
 				this.loadingCount++
-				await this.toggleFavoriteForFiles({ fileIds: this.selectedFileIds, favoriteState: false })
+				await this.$store.dispatch('toggleFavoriteForFiles', { fileIds: this.selectedFileIds, favoriteState: false })
 			} catch (error) {
 				logger.error(error)
 			} finally {
@@ -384,13 +375,16 @@ export default {
 		async downloadSelection() {
 			try {
 				this.loadingCount++
-				await this.downloadFiles(this.selectedFileIds)
+				await this.$store.dispatch('downloadFiles', this.selectedFileIds)
 			} catch (error) {
 				logger.error(error)
 			} finally {
 				this.loadingCount--
 			}
 		},
+
+		t,
+		n,
 	},
 }
 </script>

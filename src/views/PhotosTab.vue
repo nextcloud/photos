@@ -17,17 +17,20 @@
 			<div class="photo-detail__gps__title">
 				<MapMarker /> {{ place }}
 			</div>
-			<LocationMap class="photo-detail__gps__map"
+			<LocationMap v-if="gps !== undefined"
+				class="photo-detail__gps__map"
 				:latitude="gps.latitude"
 				:longitude="gps.longitude"
 				:name="place" />
 		</div>
 
-		<div v-if="ifd0 && (ifd0.Make || ifd0.Model) || irisInfo.length !== 0" class="photo-detail photo-detail__camera">
+		<div v-if="ifd0 && (ifd0.Make || ifd0.Model) || irisInfo.length !== 0"
+			class="photo-detail photo-detail__camera">
 			<CameraIris />
 			<span>
 				<div v-if="ifd0.Make || ifd0.Model">{{ ifd0.Make }} {{ ifd0.Model }}</div>
-				<div v-if="irisInfo.length !== 0" class="photo-detail--secondary">{{ irisInfo }}</div>
+				<div v-if="irisInfo.length !== 0" class="photo-detail--secondary">{{ irisInfo }}
+				</div>
 			</span>
 		</div>
 	</div>
@@ -37,14 +40,16 @@
 import CalendarOutline from 'vue-material-design-icons/CalendarOutline.vue'
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import CameraIris from 'vue-material-design-icons/CameraIris.vue'
+import { defineComponent } from 'vue'
 
 import { translate as t } from '@nextcloud/l10n'
 import { formatFileSize } from '@nextcloud/files'
 import moment from '@nextcloud/moment'
 
 import LocationMap from '../components/LocationMap.vue'
+import type { PhotoFile } from '../store/files'
 
-export default {
+export default defineComponent({
 	name: 'PhotosTab',
 	components: {
 		CalendarOutline,
@@ -54,7 +59,7 @@ export default {
 	},
 	data() {
 		return {
-			fileInfo: null,
+			fileInfo: null as PhotoFile|null,
 			url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 			// The zoom level of the map in the messages list
 			previewZoom: 13,
@@ -65,28 +70,16 @@ export default {
 		}
 	},
 	computed: {
-		/**
-		 * @return {object}
-		 */
-		exif() {
+		exif(): { FNumber: string, FocalLength: string, ExposureTime: string, ISOSpeedRatings: string } {
 			return this.fileInfo['metadata-photos-exif']
 		},
-		/**
-		 * @return {object}
-		 */
-		ifd0() {
+		ifd0(): { Make: string, Model: string, ImageWidth: number, ImageLength: number } {
 			return this.fileInfo['metadata-photos-ifd0']
 		},
-		/**
-		 * @return {object}
-		 */
-		place() {
+		place(): string {
 			return this.fileInfo['metadata-photos-place']
 		},
-		/**
-		 * @return {object}
-		 */
-		gps() {
+		gps(): { latitude: number, longitude: number, altitude: number }|undefined {
 			const gps = this.fileInfo['metadata-photos-gps']
 			if (!gps) {
 				return undefined
@@ -98,68 +91,44 @@ export default {
 				altitude: Number.parseFloat(gps.altitude || 0),
 			}
 		},
-		/**
-		 * @return {object}
-		 */
-		originalDateTime() {
+		originalDateTime(): number {
 			return this.fileInfo['metadata-photos-original_date_time'] * 1000
 		},
-		/**
-		 * @return {string}
-		 */
-		takenDate() {
+		takenDate(): string {
 			return moment(this.originalDateTime).format('ll')
 		},
-		/**
-		 * @return {string}
-		 */
-		takenTime() {
+		takenTime(): string {
 			return moment(this.originalDateTime).format('LT')
 		},
-		/**
-		 * @return {number}
-		 */
-		focal() {
+		focal(): number {
 			if (!this.exif?.FNumber) {
 				return 0
 			}
 
 			const [a, b] = this.exif.FNumber.split('/')
-			return a / b
+			return Number.parseInt(a) / Number.parseInt(b)
 		},
-		/**
-		 * @return {number}
-		 */
-		focalLength() {
+		focalLength(): number {
 			if (!this.exif?.FocalLength) {
 				return 0
 			}
 
 			const [a, b] = this.exif.FocalLength.split('/')
-			return a / b
+			return Number.parseInt(a) / Number.parseInt(b)
 		},
-		/**
-		 * @return {string}
-		 */
-		size() {
-			return formatFileSize(this.fileInfo.size)
+		size(): string {
+			return formatFileSize(this.fileInfo?.size as number)
 		},
-		/**
-		 * @return {string}
-		 */
-		normalizedExposureTime() {
+		normalizedExposureTime(): number {
 			if (!this.exif?.ExposureTime) {
 				return 0
 			}
 
 			const [a, b] = this.exif.ExposureTime.split('/')
-			return Math.round(b / a)
+			return Math.round(Number.parseInt(b) / Number.parseInt(a))
 		},
-		/**
-		 * @return {string}
-		 */
-		irisInfo() {
-			const info = []
+		irisInfo(): string {
+			const info = [] as string[]
 
 			if (this.focal) {
 				info.push(`ƒ/${this.focal}`)
@@ -176,10 +145,7 @@ export default {
 
 			return info.join(' ⸱ ')
 		},
-		/**
-		 * @return {string}
-		 */
-		pixelCount() {
+		pixelCount(): string {
 			let count = this.ifd0.ImageWidth * this.ifd0.ImageLength
 			let round = 0
 
@@ -196,16 +162,14 @@ export default {
 	methods: {
 		/**
 		 * Update current fileInfo and fetch new activities
-		 *
-		 * @param {object} fileInfo the current file FileInfo
 		 */
-		async update(fileInfo) {
+		async update(fileInfo: PhotoFile) {
 			this.fileInfo = fileInfo
 		},
 
 		t,
 	},
-}
+})
 </script>
 
 <style scoped lang="scss">

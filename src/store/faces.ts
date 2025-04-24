@@ -11,27 +11,23 @@ import Vue from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
-
-type Face = {
-	basename: string // The name of the face.
-	lastmod: number // The creation date of the face.
-	size: string // The number of items in the face.
-}
+import type { Collection } from '../services/collectionFetcher.ts'
+import type { PhotosContext } from './index.ts'
 
 const state = {
-	faces: {} as Record<string, Face>,
+	faces: {} as Record<string, Collection>,
 	facesFiles: {} as Record<string, string[]>,
 	unassignedFiles: [] as string[],
 	unassignedFilesCount: 0,
 }
 
-type FaceState = typeof state
+export type FacesState = typeof state
 
 const mutations = {
 	/**
 	 * Add faces to the face collection.
 	 */
-	addFaces(state: FaceState, { faces }: { faces: Face[] }) {
+	addFaces(state: FacesState, { faces }: { faces: Collection[] }) {
 		for (const face of faces) {
 			Vue.set(state.faces, face.basename, face)
 		}
@@ -40,7 +36,7 @@ const mutations = {
 	/**
 	 * Remove faces from the face collection.
 	 */
-	removeFaces(state: FaceState, { faceNames }: { faceNames: string[] }) {
+	removeFaces(state: FacesState, { faceNames }: { faceNames: string[] }) {
 		faceNames.forEach(faceName => Vue.delete(state.faces, faceName))
 		faceNames.forEach(faceName => Vue.delete(state.facesFiles, faceName))
 	},
@@ -48,7 +44,7 @@ const mutations = {
 	/**
 	 * Add files to a face.
 	 */
-	addFilesToFace(state: FaceState, { faceName, fileIdsToAdd }: { faceName: string, fileIdsToAdd: string[] }) {
+	addFilesToFace(state: FacesState, { faceName, fileIdsToAdd }: { faceName: string, fileIdsToAdd: string[] }) {
 		if (!state.facesFiles[faceName]) {
 			Vue.set(state.facesFiles, faceName, [])
 		}
@@ -59,7 +55,7 @@ const mutations = {
 	/**
 	 * Add files to a face.
 	 */
-	addUnassignedFiles(state: FaceState, { fileIdsToAdd }: { fileIdsToAdd: string[] }) {
+	addUnassignedFiles(state: FacesState, { fileIdsToAdd }: { fileIdsToAdd: string[] }) {
 		if (!state.unassignedFiles) {
 			state.unassignedFiles = []
 		}
@@ -70,46 +66,46 @@ const mutations = {
 	/**
 	 * Remove files from the unassigned Files collection
 	 */
-	removeUnassignedFile(state: FaceState, { fileIdsToRemove }: { fileIdsToRemove: string[] }) {
+	removeUnassignedFile(state: FacesState, { fileIdsToRemove }: { fileIdsToRemove: string[] }) {
 		state.unassignedFiles = state.unassignedFiles.filter(fileId => !fileIdsToRemove.includes(fileId))
 	},
 
 	/**
 	 * Remove files from a face.
 	 */
-	removeFilesFromFace(state: FaceState, { faceName, fileIdsToRemove }: { faceName: string, fileIdsToRemove: string[] }) {
+	removeFilesFromFace(state: FacesState, { faceName, fileIdsToRemove }: { faceName: string, fileIdsToRemove: string[] }) {
 		Vue.set(state.facesFiles, faceName, state.facesFiles[faceName].filter(fileId => !fileIdsToRemove.includes(fileId)))
 	},
 
-	setUnassignedFilesCount(state: FaceState, count: number) {
+	setUnassignedFilesCount(state: FacesState, count: number) {
 		state.unassignedFilesCount = count
 	},
 }
 
 const getters = {
-	faces: (state: FaceState) => state.faces,
-	facesFiles: (state: FaceState) => state.facesFiles,
-	unassignedFiles: (state: FaceState) => state.unassignedFiles,
-	unassignedFilesCount: (state: FaceState) => state.unassignedFilesCount,
+	faces: (state: FacesState) => state.faces,
+	facesFiles: (state: FacesState) => state.facesFiles,
+	unassignedFiles: (state: FacesState) => state.unassignedFiles,
+	unassignedFilesCount: (state: FacesState) => state.unassignedFilesCount,
 }
 
 const actions = {
 	/**
 	 * Update files and faces
 	 */
-	addFaces(context, { faces }: { faces: Face[] }) {
+	addFaces(context: PhotosContext<FacesState>, { faces }: { faces: Collection[] }) {
 		context.commit('addFaces', { faces })
 	},
 
 	/**
 	 * Add files to a face.
 	 */
-	async moveFilesToFace(context, { oldFace, faceName, fileIdsToMove }: { oldFace?: string, faceName: string, fileIdsToMove: string[] }) {
+	async moveFilesToFace(context: PhotosContext<FacesState>, { oldFace, faceName, fileIdsToMove }: { oldFace?: string, faceName: string, fileIdsToMove: string[] }) {
 		const semaphore = new Semaphore(5)
 
 		const promises = fileIdsToMove
 			.map(async (fileId) => {
-				const file = context.getters.files[fileId]
+				const file = context.rootState.files.files[fileId]
 				const fileBaseName = file.basename
 				const symbol = await semaphore.acquire()
 
@@ -140,14 +136,14 @@ const actions = {
 	/**
 	 * Remove files to an face.
 	 */
-	async removeFilesFromFace(context, { faceName, fileIdsToRemove }: { faceName: string, fileIdsToRemove: string[] }) {
+	async removeFilesFromFace(context: PhotosContext<FacesState>, { faceName, fileIdsToRemove }: { faceName: string, fileIdsToRemove: string[] }) {
 		const semaphore = new Semaphore(5)
 
 		await context.commit('removeFilesFromFace', { faceName, fileIdsToRemove })
 
 		const promises = fileIdsToRemove
 			.map(async (fileId) => {
-				const fileBaseName = context.getters.files[fileId].basename
+				const fileBaseName = context.rootState.files[fileId].basename
 				const symbol = await semaphore.acquire()
 
 				try {
@@ -168,7 +164,7 @@ const actions = {
 	/**
 	 * Rename an face.
 	 */
-	async renameFace(context, { oldName, faceName }: { oldName: string, faceName: string }) {
+	async renameFace(context: PhotosContext<FacesState>, { oldName, faceName }: { oldName: string, faceName: string }) {
 		let face = state.faces[oldName]
 
 		try {
@@ -180,7 +176,7 @@ const actions = {
 				`/recognize/${getCurrentUser()?.uid}/faces/${faceName}`,
 			)
 			context.commit('removeFaces', { faceNames: [oldName] })
-			face = { ...face, basename: faceName }
+			face.rename(faceName)
 			context.commit('addFaces', { faces: [face] })
 		} catch (error) {
 			logger.error(t('photos', 'Failed to rename {oldName} to {faceName}', { oldName, faceName }), { error })
@@ -192,7 +188,7 @@ const actions = {
 	/**
 	 * Delete an face.
 	 */
-	async deleteFace(context, { faceName }: { faceName: string}) {
+	async deleteFace(context: PhotosContext<FacesState>, { faceName }: { faceName: string}) {
 		try {
 			await davClient.deleteFile(`/recognize/${getCurrentUser()?.uid}/faces/${faceName}`)
 			context.commit('removeFaces', { faceNames: [faceName] })

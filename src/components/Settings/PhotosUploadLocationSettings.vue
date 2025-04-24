@@ -42,8 +42,7 @@ export default defineComponent({
 	},
 
 	computed: {
-		/** @return {string} */
-		photosLocation() {
+		photosLocation(): string {
 			return this.$store.state.userConfig.photosLocation
 		},
 	},
@@ -53,12 +52,12 @@ export default defineComponent({
 			this.selectPhotosFolder()
 		}),
 
-		async selectPhotosFolder() {
+		async selectPhotosFolder(): Promise<void> {
 			const pickedFolder = await this.openFilePicker(t('photos', 'Select the default upload location for your media'))
 			this.updatePhotosFolder(pickedFolder)
 		},
 
-		async openFilePicker(title) {
+		async openFilePicker(title: string): Promise<string> {
 			const picker = getFilePickerBuilder(title)
 				.setMultiSelect(false)
 				.addMimeTypeFilter('httpd/unix-directory')
@@ -73,7 +72,7 @@ export default defineComponent({
 			return picker.pick()
 		},
 
-		updatePhotosFolder(path) {
+		updatePhotosFolder(path: string): void {
 			this.$store.dispatch('updateUserConfig', { key: 'photosLocation', value: path })
 		},
 

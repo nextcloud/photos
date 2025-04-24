@@ -8,67 +8,63 @@ import moment from '@nextcloud/moment'
 import { showError } from '@nextcloud/dialogs'
 import { defaultRootPath } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
+import type { File, Folder } from '@nextcloud/files'
 
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
 import { davClient } from '../services/DavClient.ts'
-import type { PhotoNode } from '../utils/fileUtils.ts'
+import type { PhotosContext } from './index.ts'
+
+export type PhotoFile = File & {
+	fileid: number
+	attributes: {
+		'metadata-photos-original-date-time': number
+		'metadata-photos-size': { width: number, height: number }
+		timestamp: number
+		month: string
+		day: string
+	}
+}
 
 const state = {
-	files: {},
+	files: {} as Record<string, PhotoFile>,
 	nomediaPaths: [] as string[],
 }
 
-type FilesState = typeof state
+export type FilesState = typeof state
 
 const mutations = {
 	/**
 	 * Append or update given files
 	 */
-	updateFiles(state: FilesState, newFiles: PhotoNode[]) {
+	updateFiles(state: FilesState, newFiles: File[]) {
 		const files = {}
 		newFiles
-			.filter(file => !file.hidden)
+			.filter(file => !file.attributes.hidden)
 			.forEach(file => {
 				// Ignore the file if the path is excluded
-				if (state.nomediaPaths.some(nomediaPath => file.filename.startsWith(nomediaPath)
-					|| file.filename.startsWith(`${defaultRootPath}${nomediaPath}`))) {
+				// TODO: Check that it works
+				if (state.nomediaPaths.some(nomediaPath => file.path.startsWith(nomediaPath)
+					|| file.path.startsWith(`${defaultRootPath}${nomediaPath}`))) {
 					return
 				}
 
-				if (file.fileid >= 0) {
-					file.metadataPhotosSize ??= { width: 256, height: 256 }
+				if ((file.fileid as number) >= 0) {
+					file.attributes['metadata-photos-size'] ??= { width: 256, height: 256 }
 				}
 
-				// Make the fileId a string once and for all.
-				file.fileid = file.fileid.toString()
-
 				// Precalculate dates as it is expensive.
-				const date = moment((file.metadataPhotosOriginalDateTime * 1000) || file.lastmod)
-				file.timestamp = date.unix() // For sorting
-				file.month = date.format('YYYYMM') // For grouping by month
-				file.day = date.format('MMDD') // For On this day
+				const date = moment((file.attributes['metadata-photos-original-date-time'] * 1000) || file.mtime)
+				file.attributes.timestamp = date.unix() // For sorting
+				file.attributes.month = date.format('YYYYMM') // For grouping by month
+				file.attributes.day = date.format('MMDD') // For On this day
 
-				// Schedule the file to add
-				files[file.fileid] = file
+				files[file.fileid as number] = file
 			})
 
 		state.files = {
 			...state.files,
 			...files,
-		}
-	},
-
-	/**
-	 * Set a folder subfolders
-	 */
-	setSubFolders(state: FilesState, { fileid, folders }: { fileid: number, folders: PhotoNode[] }) {
-		if (state.files[fileid]) {
-			const subfolders = folders
-				.map(folder => folder.fileid)
-				// some invalid folders have an id of -1 (ext storage)
-				.filter(id => id >= 0)
-			Vue.set(state.files[fileid], 'folders', subfolders)
 		}
 	},
 
@@ -90,7 +86,7 @@ const mutations = {
 	 * Favorite a list of files
 	 */
 	favoriteFile(state: FilesState, { fileId, favoriteState }: { fileId: number, favoriteState: 0|1 }) {
-		Vue.set(state.files[fileId], 'favorite', favoriteState)
+		Vue.set(state.files[fileId].attributes, 'favorite', favoriteState)
 	},
 }
 
@@ -103,7 +99,7 @@ const actions = {
 	/**
 	 * Update files, folders and their respective subfolders
 	 */
-	updateFiles(context, { folder, files = [], folders = [] }: { folder: PhotoNode, files: PhotoNode[], folders: PhotoNode[]}) {
+	updateFiles(context: PhotosContext<FilesState>, { folder, files = [], folders = [] }: { folder: Folder, files: File[], folders: Folder[]}) {
 		// we want all the FileInfo! Folders included!
 		context.commit('updateFiles', [folder, ...files, ...folders])
 		context.commit('setSubFolders', { fileid: folder.fileid, folders })
@@ -112,14 +108,14 @@ const actions = {
 	/**
 	 * Append or update given files
 	 */
-	appendFiles(context, files: PhotoNode[] = []) {
+	appendFiles(context: PhotosContext<FilesState>, files: File[] = []) {
 		context.commit('updateFiles', files)
 	},
 
 	/**
 	 * Set list of all .nomedia/.noimage files
 	 */
-	setNomediaPaths(context, paths: string[]) {
+	setNomediaPaths(context: PhotosContext<FilesState>, paths: string[]) {
 		logger.debug('Ignored paths', { paths })
 		context.commit('setNomediaPaths', paths)
 	},
@@ -127,12 +123,12 @@ const actions = {
 	/**
 	 * Delete a list of files
 	 */
-	deleteFiles(context, fileIds: number[]) {
+	deleteFiles(context: PhotosContext<FilesState>, fileIds: number[]) {
 		const semaphore = new Semaphore(5)
 
 		const files = fileIds
 			.map(fileId => state.files[fileId])
-			.reduce((files, file) => ({ ...files, [file.fileid]: file }), {})
+			.reduce((files, file) => ({ ...files, [file.fileid]: file }), {} as Record<string, PhotoFile>)
 
 		fileIds.forEach(fileId => context.commit('deleteFile', fileId))
 
@@ -142,7 +138,7 @@ const actions = {
 				const symbol = await semaphore.acquire()
 
 				try {
-					await davClient.deleteFile(file.filename)
+					await davClient.deleteFile(file.root + file.path)
 				} catch (error) {
 					logger.error(t('photos', 'Failed to delete {fileId}', { fileId }), { error })
 					showError(t('photos', 'Failed to delete {fileName}', { fileName: file.basename }))
@@ -158,7 +154,7 @@ const actions = {
 	/**
 	 * Favorite a list of files
 	 */
-	toggleFavoriteForFiles(context, { fileIds, favoriteState }: { fileIds: string[], favoriteState: 0|1 }) {
+	toggleFavoriteForFiles(context: PhotosContext<FilesState>, { fileIds, favoriteState }: { fileIds: string[], favoriteState: 0|1 }) {
 		const semaphore = new Semaphore(5)
 
 		const promises = fileIds
@@ -169,7 +165,7 @@ const actions = {
 				try {
 					context.commit('favoriteFile', { fileId, favoriteState })
 					await davClient.customRequest(
-						file.filename,
+						file.root + file.path,
 						{
 							method: 'PROPPATCH',
 							data: `<?xml version="1.0"?>

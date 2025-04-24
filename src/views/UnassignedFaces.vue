@@ -88,7 +88,6 @@
 </template>
 
 <script lang='ts'>
-import { mapActions, mapGetters } from 'vuex'
 import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
 import Star from 'vue-material-design-icons/Star.vue'
 import Download from 'vue-material-design-icons/Download.vue'
@@ -96,6 +95,7 @@ import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 import AccountSwitch from 'vue-material-design-icons/AccountSwitch.vue'
 
 import { NcActions, NcActionButton, NcDialog, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import { translate as t } from '@nextcloud/l10n'
 
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
@@ -105,6 +105,7 @@ import logger from '../services/logger.js'
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
 import Vue from 'vue'
 import FaceMergeForm from '../components/Faces/FaceMergeForm.vue'
+import { toViewerFileInfo } from '../utils/fileUtils.js'
 
 export default {
 	name: 'UnassignedFaces',
@@ -145,10 +146,13 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'files',
-			'unassignedFiles',
-		]),
+		files() {
+			return this.$store.state.files.files
+		},
+
+		unassignedFiles() {
+			return this.$store.state.faces.unassignedFiles
+		},
 
 		faceFileIds(): string[] {
 			return this.unassignedFiles || []
@@ -156,7 +160,7 @@ export default {
 
 		shouldFavoriteSelection(): boolean {
 			// Favorite all selection if at least one file is not on the favorites.
-			return this.selectedFileIds.some((fileId) => this.$store.state.files.files[fileId].favorite === 0)
+			return this.selectedFileIds.some((fileId) => this.$store.state.files.files[fileId].attributes.favorite === 0)
 		},
 	},
 
@@ -165,33 +169,20 @@ export default {
 	},
 
 	methods: {
-		...mapActions([
-			'appendFiles',
-			'deleteFace',
-			'renameFace',
-			'downloadFiles',
-			'toggleFavoriteForFiles',
-			'removeFilesFromFace',
-			'moveFilesToFace',
-		]),
-
 		openViewer(fileId) {
-			const file = this.files[fileId]
-			OCA.Viewer.open({
-				path: '/' + file.filename.split('/').slice(3).join('/'),
-				list: this.faceFileIds.map(fileId => ({ ...this.files[fileId], filename: '/' + this.files[fileId].filename.split('/').slice(3).join('/') })),
-				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
-				canLoop: file.canLoop,
+			window.OCA.Viewer.open({
+				fileInfo: toViewerFileInfo(this.files[fileId]),
+				list: this.faceFileIds.map(fileId => toViewerFileInfo(this.files[fileId])),
 			})
 		},
 
 		async handleMove(faceName, fileIds) {
 			try {
 				this.loadingCount++
-				await this.moveFilesToFace({ oldFace: null, faceName, fileIdsToMove: fileIds })
+				await this.$store.dispatch('moveFilesToFace', { oldFace: null, faceName, fileIdsToMove: fileIds })
 				this.showMoveModal = false
 			} catch (error) {
-				logger.error(error)
+				logger.error('Failed to move selection', { error })
 			} finally {
 				this.loadingCount--
 			}
@@ -200,9 +191,9 @@ export default {
 		async favoriteSelection() {
 			try {
 				this.loadingCount++
-				await this.toggleFavoriteForFiles({ fileIds: this.selectedFileIds, favoriteState: true })
+				await this.$store.dispatch('toggleFavoriteForFiles', { fileIds: this.selectedFileIds, favoriteState: true })
 			} catch (error) {
-				logger.error(error)
+				logger.error('Failed to favorite selection', { error })
 			} finally {
 				this.loadingCount--
 			}
@@ -211,9 +202,9 @@ export default {
 		async unFavoriteSelection() {
 			try {
 				this.loadingCount++
-				await this.toggleFavoriteForFiles({ fileIds: this.selectedFileIds, favoriteState: false })
+				await this.$store.dispatch('toggleFavoriteForFiles', { fileIds: this.selectedFileIds, favoriteState: false })
 			} catch (error) {
-				logger.error(error)
+				logger.error('Failed to unfavorite selection', { error })
 			} finally {
 				this.loadingCount--
 			}
@@ -222,13 +213,15 @@ export default {
 		async downloadSelection() {
 			try {
 				this.loadingCount++
-				await this.downloadFiles(this.selectedFileIds)
+				await this.$store.dispatch('downloadFiles', this.selectedFileIds)
 			} catch (error) {
-				logger.error(error)
+				logger.error('Faile to download selection', { error })
 			} finally {
 				this.loadingCount--
 			}
 		},
+
+		t,
 	},
 }
 </script>

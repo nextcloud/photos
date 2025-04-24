@@ -5,21 +5,26 @@
 
 import moment from '@nextcloud/moment'
 import { translate as t } from '@nextcloud/l10n'
+import type { File, Folder } from '@nextcloud/files'
 
 import logger from './logger.js'
-import { genFileInfo, type PhotoNode } from '../utils/fileUtils.js'
 import { davClient } from './DavClient.ts'
 import type { FileStat, ResponseDataDetailed, StatOptions, WebDAVClient } from 'webdav'
+import { resultToNode } from '@nextcloud/files/dav'
 
-export type Collection = PhotoNode & {
-	nbItems: number // The number of item in the collection.
-	lastPhoto: number // The file id for the cover of the collection.
-	date: string // The date of the collection.
-	collaborators: object[] // The list of collaborators.
+export type Collection = Folder & {
+	attributes: {
+		nbItems: number // The number of item in the collection.
+		'last-photo': number // The file id for the cover of the collection.
+	}
 }
 
-export type RawCollaborators = ''|{collaborator: object[]|object}
-export type RawCollection = FileStat & { filename: string, props: { collaborators: RawCollaborators }, dateRange: string }
+export type RawCollection = FileStat & {
+	props: {
+		collaborators: ''|{collaborator: object[]|object}|object[]
+		dateRange: string
+	},
+}
 
 function getCollectionDavRequest(extraProps: string[] = []): string {
 	return `<?xml version="1.0"?>
@@ -70,7 +75,7 @@ export async function fetchCollection(path: string, options: StatOptions, extraP
 
 		logger.debug('[Collections] Fetched a collection: ', { data: response.data })
 
-		return formatCollection(response.data)
+		return formatCollection(response.data, path.split('/').slice(0, -1).join('/'))
 	} catch (error) {
 		if (error instanceof DOMException && error.code === error.ABORT_ERR) {
 			return null
@@ -92,7 +97,7 @@ export async function fetchCollections(path: string, options: StatOptions, extra
 
 		return response.data
 			.filter(collection => collection.filename !== path)
-			.map(formatCollection)
+			.map((rawCollection) => formatCollection(rawCollection, path))
 	} catch (error) {
 		if (error instanceof DOMException && error.code === error.ABORT_ERR) {
 			return []
@@ -102,26 +107,20 @@ export async function fetchCollections(path: string, options: StatOptions, extra
 	}
 }
 
-function formatCollection(rawCollection: RawCollection): Collection {
-	let collaborators: object[] = []
-
+function formatCollection(rawCollection: RawCollection, root: string): Collection {
 	// Ensure that we have a proper collaborators array.
 	if (rawCollection.props.collaborators === undefined || rawCollection.props.collaborators === '') {
-		collaborators = []
+		rawCollection.props.collaborators = []
 	} else if (typeof rawCollection.props.collaborators.collaborator === 'object') {
 		if (Array.isArray(rawCollection.props.collaborators.collaborator)) {
-			collaborators = rawCollection.props.collaborators.collaborator
+			rawCollection.props.collaborators = rawCollection.props.collaborators.collaborator
 		} else {
-			collaborators = [rawCollection.props.collaborators.collaborator]
+			rawCollection.props.collaborators = [rawCollection.props.collaborators.collaborator]
 		}
 	}
 
-	// Extract custom props.
-	const collection = genFileInfo(rawCollection) as Collection
-	collection.collaborators = collaborators
-
 	// Compute date range label.
-	const dateRange = JSON.parse(rawCollection.dateRange?.replace(/&quot;/g, '"') ?? '{}')
+	const dateRange = JSON.parse(rawCollection.props.dateRange?.replace(/&quot;/g, '"') ?? '{}')
 	if (dateRange.start === null) {
 		dateRange.start = moment().unix()
 		dateRange.end = moment().unix()
@@ -131,15 +130,15 @@ function formatCollection(rawCollection: RawCollection): Collection {
 		endDate: moment.unix(dateRange.end).format('MMMM YYYY'),
 	}
 	if (dateRangeFormatted.startDate === dateRangeFormatted.endDate) {
-		collection.date = dateRangeFormatted.startDate
+		rawCollection.props.date = dateRangeFormatted.startDate
 	} else {
-		collection.date = t('photos', '{startDate} to {endDate}', dateRangeFormatted)
+		rawCollection.props.date = t('photos', '{startDate} to {endDate}', dateRangeFormatted)
 	}
 
-	return collection
+	return resultToNode(rawCollection, root) as Collection
 }
 
-export async function fetchCollectionFiles(path: string, options: StatOptions, extraProps: string[] = [], client: WebDAVClient = davClient): Promise<PhotoNode[]> {
+export async function fetchCollectionFiles(path: string, options: StatOptions, extraProps: string[] = [], client: WebDAVClient = davClient): Promise<File[]> {
 	try {
 		const response = await client.getDirectoryContents(path, {
 			data: getCollectionFilesDavRequest(extraProps),
@@ -147,9 +146,10 @@ export async function fetchCollectionFiles(path: string, options: StatOptions, e
 			...options,
 		}) as ResponseDataDetailed<Array<FileStat>>
 
+		const filesRoot = path.split('/').slice(0, -1).join('/')
 		const fetchedFiles = response.data
-			.map(file => genFileInfo(file))
-			.filter(file => file.fileid)
+			.map(file => resultToNode(file, filesRoot) as File)
+			.filter(file => file.fileid !== undefined)
 
 		logger.debug(`[Collections] Fetched ${fetchedFiles.length} new files: `, { fetchedFiles })
 

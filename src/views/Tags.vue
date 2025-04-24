@@ -30,9 +30,8 @@
 </template>
 
 <script lang='ts'>
-import { mapGetters } from 'vuex'
-
 import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import { translate as t } from '@nextcloud/l10n'
 
 import TagCover from '../components/TagCover.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
@@ -49,30 +48,35 @@ export default {
 
 	data() {
 		return {
-			error: null,
+			error: null as boolean|null,
 			loading: false,
 			showTags: false,
 		}
 	},
 
 	computed: {
-		// global lists
-		...mapGetters([
-			'files',
-			'tags',
-			'tagsNames',
-		]),
+		files() {
+			return this.$store.state.files.files
+		},
+
+		tags() {
+			return this.$store.state.systemtags.tags
+		},
+
+		tagsNames() {
+			return this.$store.state.systemtags.names
+		},
 
 		tagsList() {
 			return Object.keys(this.tagsNames)
 				.map(tagName => this.tags[this.tagsNames[tagName]])
-				.filter(tag => tag && tag.id)
+				.filter(tag => tag && tag.attributes.id)
 		},
 
 		popularTags() {
 			return Object.keys(this.tagsNames)
-				.filter(tagName => (this.tags[this.tagsNames[tagName]].filesAssigned) > 50)
-				.sort((a, b) => (this.tags[this.tagsNames[b]].filesAssigned || this.tagCounts[b]) - (this.tags[this.tagsNames[a]].filesAssigned || this.tagCounts[a]))
+				.filter(tagName => (this.tags[this.tagsNames[tagName]].attributes['files-assigned']) > 50)
+				.sort((a, b) => (this.tags[this.tagsNames[b]]['files-assigned'] || this.tagCounts[b]) - (this.tags[this.tagsNames[a]]['files-assigned'] || this.tagCounts[a]))
 				.slice(0, 9)
 				.map(tagName => this.tags[this.tagsNames[tagName]])
 		},
@@ -85,7 +89,7 @@ export default {
 	methods: {
 		async fetchRootContent() {
 			// close any potential opened viewer
-			OCA.Viewer.close()
+			window.OCA.Viewer.close()
 
 			this.error = null
 
@@ -98,13 +102,15 @@ export default {
 					})
 				}
 			} catch (error) {
-				logger.error(error)
+				logger.error('Failed to fetch tags', { error })
 				this.error = true
 			} finally {
 				// done loading
 				this.loading = false
 			}
 		},
+
+		t,
 	},
 
 }

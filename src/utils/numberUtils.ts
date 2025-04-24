@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-const isNumber = function(num: number): boolean {
+const isNumber = function(num: string | number | boolean): boolean {
 	if (!num) {
 		return false
 	}

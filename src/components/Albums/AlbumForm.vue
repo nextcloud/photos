@@ -75,8 +75,6 @@
 	</CollaboratorsSelectionForm>
 </template>
 <script lang='ts'>
-import { mapActions } from 'vuex'
-
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import AccountMultiplePlus from 'vue-material-design-icons/AccountMultiplePlus.vue'
 import Send from 'vue-material-design-icons/Send.vue'
@@ -85,6 +83,7 @@ import { NcButton, NcLoadingIcon, NcTextField } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import { translate } from '@nextcloud/l10n'
 import { generateRemoteUrl } from '@nextcloud/router'
+import { getCurrentUser } from '@nextcloud/auth'
 
 import CollaboratorsSelectionForm from './CollaboratorsSelectionForm.vue'
 import type { Album, Collaborator } from '../../store/albums'
@@ -139,8 +138,8 @@ export default {
 
 	mounted() {
 		if (this.editMode) {
-			this.albumName = this.album.basename
-			this.albumLocation = this.album.location ?? ''
+			this.albumName = this.album?.basename as string
+			this.albumLocation = this.album?.attributes.location ?? ''
 		}
 
 		this.$nextTick(() => {
@@ -149,8 +148,6 @@ export default {
 	},
 
 	methods: {
-		...mapActions(['createCollection', 'renameCollection', 'updateCollection']),
-
 		submit(collaborators: Collaborator[] = []) {
 			if (this.albumName === '' || this.loading) {
 				return
@@ -166,13 +163,14 @@ export default {
 		async handleCreateAlbum(collaborators: Collaborator[] = []) {
 			try {
 				this.loading = true
-				let album = await this.createCollection({
+				let album = await this.$store.dispatch('createCollection', {
 					collection: {
 						basename: this.albumName,
-						filename: this.albumFileName,
+						path: this.albumName,
+						root: `/photos/${getCurrentUser()?.uid}/albums/`,
 						nbItems: 0,
 						location: this.albumLocation,
-						lastPhoto: -1,
+						'last-photo': -1,
 						date: moment().format('MMMM YYYY'),
 						collaborators,
 						source: generateRemoteUrl(`dav/${this.albumFileName}`),
@@ -184,7 +182,7 @@ export default {
 				}
 
 				if (this.albumLocation !== '' || collaborators.length !== 0) {
-					album = await this.updateCollection(
+					album = await this.$store.dispatch('updateCollection',
 						{
 							collectionFileName: this.albumFileName,
 							properties: {
@@ -204,14 +202,14 @@ export default {
 			try {
 				this.loading = true
 
-				let album = { ...this.album }
+				let album = this.album?.clone() as Album
 
-				if (this.album.basename !== this.albumName) {
-					album = await this.renameCollection({ collectionFileName: this.album.filename, newBaseName: this.albumName })
+				if (this.album?.basename !== this.albumName) {
+					album = await this.$store.dispatch('renameCollection', { collectionFileName: this.album?.root + this.album?.path, newBaseName: this.albumName })
 				}
 
-				if (this.album.location !== this.albumLocation) {
-					album = await this.updateCollection({ collectionFileName: album.filename, properties: { location: this.albumLocation } })
+				if (this.album?.attributes.location !== this.albumLocation) {
+					album = await this.$store.dispatch('updateCollection', { collectionFileName: album.root + album.path, properties: { location: this.albumLocation } })
 				}
 
 				this.$emit('done', { album })

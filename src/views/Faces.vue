@@ -43,11 +43,12 @@
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
 
 import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import { translate as t } from '@nextcloud/l10n'
 
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
 import FaceCover from '../components/Faces/FaceCover.vue'
-import { mapGetters } from 'vuex'
 import UnassignedFacesCover from '../components/Faces/UnassignedFacesCover.vue'
+import type { Collection } from '../services/collectionFetcher.js'
 
 export default {
 	name: 'Faces',
@@ -64,22 +65,22 @@ export default {
 	],
 
 	computed: {
-		...mapGetters([
-			'facesFiles',
-			'unassignedFilesCount',
-		]),
+		facesFiles() {
+			return this.$store.state.faces.facesFiles
+		},
 
-		/**
-		 * @return {boolean} Whether the list of face is empty or not.
-		 */
-		noFaces() {
+		unassignedFilesCount() {
+			return this.$store.state.faces.unassignedFilesCount
+		},
+
+		noFaces(): boolean {
 			return Object.keys(this.faces).length === 0
 		},
 
 		orderedFaces() {
-			return Object.values(this.faces).sort((a, b) => {
-				if (a.props.nbItems && b.props.nbItems) {
-					return b.props.nbItems - a.props.nbItems
+			return Object.values(this.faces as Collection[]).sort((a, b) => {
+				if (a.attributes.nbItems && b.attributes.nbItems) {
+					return b.attributes.nbItems - a.attributes.nbItems
 				}
 				if (!this.facesFiles[b.basename] || !this.facesFiles[a.basename]) {
 					return 0
@@ -87,6 +88,10 @@ export default {
 				return this.facesFiles[b.basename].length - this.facesFiles[a.basename].length
 			})
 		},
+	},
+
+	methods: {
+		t,
 	},
 }
 </script>

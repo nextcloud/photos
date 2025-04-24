@@ -21,8 +21,8 @@
 				:root-title="albumOriginalName"
 				:title="albumOriginalName"
 				@refresh="fetchAlbumContent">
-				<div v-if="album.location !== ''" slot="subtitle" class="album__location">
-					<MapMarker />{{ album.location }}
+				<div v-if="album.attributes.location !== ''" slot="subtitle" class="album__location">
+					<MapMarker />{{ album.attributes.location }}
 				</div>
 				<template v-if="album !== undefined" slot="right">
 					<NcActions :force-menu="true" :aria-label="t('photos', 'Open actions menu')">
@@ -72,8 +72,6 @@
 </template>
 
 <script lang='ts'>
-import { mapActions } from 'vuex'
-
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 // import Plus from 'vue-material-design-icons/Plus.vue'
 // import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
@@ -84,12 +82,12 @@ import ImageOff from 'vue-material-design-icons/ImageOff.vue'
 import { NcActions, /** NcButton, */ NcEmptyContent, /** NcActionSeparator, */ isMobile } from '@nextcloud/vue'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
 import { translate } from '@nextcloud/l10n'
+import { getClient } from '@nextcloud/files/dav'
 
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
 import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
-import { getClient } from '@nextcloud/files/dav'
 import type { PublicAlbum } from '../store/publicAlbums.js'
 
 export default {
@@ -158,50 +156,43 @@ export default {
 	},
 
 	methods: {
-		...mapActions([
-			'appendFiles',
-			'addCollection',
-			'addFilesToCollection',
-			'removeFilesFromCollection',
-		]),
-
 		async fetchAlbumInfo() {
 			const album = await this.fetchCollection(
 				`/photospublic/${this.token}`,
 				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />', '<nc:original-name />'],
 				this.publicClient,
-			)
+			) as PublicAlbum
 
-			this.albumOriginalName = album.originalName
+			this.albumOriginalName = album.attributes['original-name']
 		},
 
 		async fetchAlbumContent() {
-			await this.fetchCollectionFiles(
+			const files = await this.fetchCollectionFiles(
 				`/photospublic/${this.token}`,
 				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />', '<nc:original-name />'],
 				this.publicClient,
-				[
-					file => ({
-						...file,
-						// Use custom preview URL to avoid authentication prompt
-						previewUrl: generateUrl(`/apps/photos/api/v1/publicPreview/${file.fileid}?x=2048&y=2048&token=${this.token}`),
-						// Disable use of generic file previews for public albums - for older versions of the Viewer app
-						hasPreview: false,
-					}),
-				],
 			)
+
+			files.forEach(file => {
+				file.update({
+					// Use custom preview URL to avoid authentication prompt
+					previewUrl: generateUrl(`/apps/photos/api/v1/publicPreview/${file.fileid}?x=2048&y=2048&token=${this.token}`),
+					// Disable use of generic file previews for public albums - for older versions of the Viewer app
+					hasPreview: false,
+				})
+			})
 		},
 
-		async handleFilesPicked(fileIds) {
+		async handleFilesPicked(fileIds: string[]) {
 			this.showAddPhotosModal = false
-			await this.addFilesToCollection({ collectionFileName: this.albumName, fileIdsToAdd: fileIds })
+			await this.$store.dispatch('addFilesToCollection', { collectionFileName: this.album.root + this.albumName, fileIdsToAdd: fileIds })
 			// Re-fetch album content to have the proper filenames.
 			await this.fetchAlbumContent()
 		},
 
-		async handleRemoveFilesFromAlbum(fileIds) {
+		async handleRemoveFilesFromAlbum(fileIds: string[]) {
 			this.$refs.collectionContent.onUncheckFiles(fileIds)
-			await this.removeFilesFromCollection({ collectionFileName: this.albumName, fileIdsToRemove: fileIds })
+			await this.$store.dispatch('removeFilesFromCollection', { collectionFileName: this.album.root + this.albumName, fileIdsToRemove: fileIds })
 		},
 
 		t: translate,

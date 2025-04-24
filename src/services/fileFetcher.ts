@@ -5,7 +5,9 @@
 
 import type { AxiosError } from 'axios'
 import type { FileStat, ResponseDataDetailed, StatOptions } from 'webdav'
-import { genFileInfo } from '../utils/fileUtils.js'
+
+import { resultToNode } from '@nextcloud/files/dav'
+
 import { davClient } from './DavClient'
 import { getPropFind } from './DavRequest'
 
@@ -17,7 +19,7 @@ export async function fetchFile(fileName: string, options: StatOptions = {}) {
 			...options,
 		}) as ResponseDataDetailed<FileStat>
 
-		return genFileInfo(response.data)
+		return resultToNode(response.data)
 	} catch (error) {
 		if ((error as AxiosError).code === 'ERR_CANCELED') {
 			return null

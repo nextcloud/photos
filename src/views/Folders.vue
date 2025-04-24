@@ -54,19 +54,22 @@
 </template>
 
 <script lang='ts'>
-import { mapGetters } from 'vuex'
-import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
-import { Upload, UploadPicker, getUploader } from '@nextcloud/upload'
-import { Folder as NcFolder, davRootPath, davParsePermissions } from '@nextcloud/files'
+import { AxiosError, isAxiosError } from 'axios'
 import FolderIcon from 'vue-material-design-icons/Folder.vue'
 import VirtualGrid from 'vue-virtual-grid'
+
+import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import { Upload, UploadPicker, getUploader } from '@nextcloud/upload'
+import { Folder as NcFolder } from '@nextcloud/files'
+import { defaultRootPath, parsePermissions } from '@nextcloud/files/dav'
+import { translate as t } from '@nextcloud/l10n'
 
 import FileLegacy from '../components/FileLegacy.vue'
 import Folder from '../components/Folder.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 
 import allowedMimes from '../services/AllowedMimes.js'
-import getAlbumContent from '../services/AlbumContent.js'
+import getFolderContent, { type FoldersNode } from '../services/FolderContent.js'
 
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import GridConfigMixin from '../mixins/GridConfig.js'
@@ -104,7 +107,7 @@ export default {
 
 	data() {
 		return {
-			error: null,
+			error: null as null|404|AxiosError,
 			allowedMimes,
 
 			initializing: true,
@@ -117,30 +120,32 @@ export default {
 	},
 
 	computed: {
-		// global lists
-		...mapGetters([
-			'files',
-			'folders',
-		]),
+		files() {
+			return this.$store.state.folders.files
+		},
+
+		folders() {
+			return this.$store.state.folders.folders
+		},
 
 		// current folder id from current path
 		folderId() {
-			return this.$store.getters.folderId(this.path)
+			return this.$store.state.folders.paths[this.path]
 		},
 
 		// files list of the current folder
 		folder() {
-			return this.files[this.folderId]
+			return this.files[this.folderId] as unknown as FoldersNode
 		},
 		folderAsFolder() {
 			if (!this.folder) {
-				return null
+				return undefined
 			}
 
 			return new NcFolder({
 				...this.folder,
-				source: decodeURI(this.folder.source),
-				permissions: davParsePermissions(this.folder.permissions),
+				permissions: parsePermissions(this.folder.permissions),
+				owner: null,
 			})
 		},
 		folderContent() {
@@ -158,7 +163,7 @@ export default {
 		subFolders() {
 			return this.folderId
 				&& this.files[this.folderId]
-				&& this.files[this.folderId].folders
+				&& this.$store.state.folders.subFolders[this.folderId]
 		},
 		folderList() {
 			const list = this.subFolders
@@ -168,7 +173,7 @@ export default {
 			return list
 		},
 		contentList() {
-			const folders = this.folderList?.map((folder) => {
+			const folders = this.folderList && this.folderList.map((folder) => {
 				return {
 					id: `folder-${folder.fileid}`,
 					injected: {
@@ -234,8 +239,8 @@ export default {
 			this.loading = true
 
 			// close any potential opened viewer & sidebar
-			OCA?.Viewer?.close?.()
-			OCA?.Files?.Sidebar?.close?.()
+			window.OCA?.Viewer?.close?.()
+			window.OCA?.Files?.Sidebar?.close?.()
 
 			// if we don't already have some cached data let's show a loader
 			if (!this.files[this.folderId] || !this.folders[this.folderId]) {
@@ -244,19 +249,19 @@ export default {
 
 			try {
 				// get content and current folder info
-				const { folder, folders, files } = await getAlbumContent(this.path, {
+				const { folder, folders, files } = await getFolderContent(this.path, {
 					shared: this.showShared,
 					signal: this.abortController.signal,
 				})
-				this.$store.dispatch('addPath', { path: this.path, fileid: folder.fileid })
-				this.$store.dispatch('updateFolders', { fileid: folder.fileid, files, folders })
-				this.$store.dispatch('updateFiles', { folder, files, folders })
+				this.$store.dispatch('addPath', { path: this.path, fileid: folder?.fileid })
+				this.$store.dispatch('updateFolders', { fileid: folder?.fileid, files, folders })
+				this.$store.dispatch('updateFoldersFiles', { folder, files, folders })
 			} catch (error) {
-				if (error.response && error.response.status) {
+				if (isAxiosError(error) && error.response && error.response.status) {
 					if (error.response.status === 404) {
 						this.error = 404
 						setTimeout(() => {
-							this.$router.push({ name: this.$route.name })
+							this.$router.push({ name: this.$route.name ?? undefined })
 						}, 3000)
 					} else {
 						this.error = error
@@ -273,15 +278,34 @@ export default {
 
 		/**
 		 * Fetch file Info and add them into the store
-		 *
-		 * @param {Upload} upload the newly uploaded files
 		 */
-		async onUpload(upload) {
-			const relPath = upload.source.split(davRootPath).pop()
-			const file = await fetchFile(relPath)
-			this.$store.dispatch('appendFiles', [file])
+		async onUpload(upload: Upload) {
+			const relPath = upload.source.split(defaultRootPath).pop()
+			const node = await fetchFile(defaultRootPath + relPath)
+			if (node === null) {
+				logger.error('Failed to fetch file', { relPath })
+				return
+			}
+
+			const file: FoldersNode = {
+				fileid: node.fileid as number,
+				basename: node.basename,
+				etag: node.attributes.etag,
+				filename: node.root + node.path,
+				source: node.source,
+				lastmod: node.mtime?.getTime() as number,
+				mime: node.mime as string,
+				size: node.size as number,
+				type: 'file',
+				permissions: '', // HACK: we don't need it but the format is not the expected one
+				hasPreview: node.attributes.hasPreview,
+			}
+
+			this.$store.dispatch('appendFoldersFiles', [file])
 			this.$store.dispatch('addFilesToFolder', { fileid: this.folderId, files: [file] })
 		},
+
+		t,
 	},
 
 }

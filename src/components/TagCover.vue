@@ -4,8 +4,8 @@
 -->
 
 <template>
-	<router-link class="tag-cover" :to="`/tags/${tag.displayName}`">
-		<img v-if="tag.filesAssigned !== 0"
+	<router-link class="tag-cover" :to="`/tags/${tag.attributes['display-name']}`">
+		<img v-if="tag.attributes['files-assigned'] !== 0"
 			class="tag-cover__image"
 			:src="coverUrl">
 		<div v-else class="tag-cover__image tag-cover__image--placeholder">
@@ -14,7 +14,7 @@
 		<div class="tag-cover__details">
 			<div class="tag-cover__details__first-line">
 				<h3 class="tag-cover__details__name">
-					{{ t('recognize', tag.displayName) }}
+					{{ t('recognize', tag.attributes['display-name']) }}
 				</h3>
 			</div>
 			<div class="tag-cover__details__second-line">
@@ -25,14 +25,16 @@
 </template>
 
 <script lang='ts'>
-import { mapGetters } from 'vuex'
+import { defineComponent, type PropType } from 'vue'
 import ImageMultipleIcon from 'vue-material-design-icons/ImageMultiple.vue'
 
 import { generateUrl } from '@nextcloud/router'
+import { translate as t, translatePlural as n } from '@nextcloud/l10n'
 
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
+import type { Tag } from '../store/systemtags.js'
 
-export default {
+export default defineComponent({
 	name: 'TagCover',
 
 	components: {
@@ -45,7 +47,7 @@ export default {
 
 	props: {
 		tag: {
-			type: Object,
+			type: Object as PropType<Tag>,
 			required: true,
 		},
 	},
@@ -53,38 +55,37 @@ export default {
 	data() {
 		return {
 			loadCover: false,
-			observer: null,
+			observer: null as IntersectionObserver|null,
 		}
 	},
 
 	computed: {
-		// global lists
-		...mapGetters([
-			'files',
-			'tags',
-		]),
+		tags() {
+			return this.$store.state.systemtags.tags
+		},
 
-		/**
-		 * @return {string}
-		 */
-		coverUrl() {
+		files() {
+			return this.$store.state.files.files
+		},
+
+		coverUrl(): string {
 			if (!this.loadCover) {
 				return ''
 			}
-			return generateUrl(`/core/preview?fileId=${this.tag.referenceFileid}&x=${512}&y=${512}&forceIcon=0&a=1`)
+			return generateUrl(`/core/preview?fileId=${this.tag.attributes['reference-fileid']}&x=${512}&y=${512}&forceIcon=0&a=1`)
 		},
 
 		count() {
-			return this.tag.filesAssigned
+			return this.tag.attributes['files-assigned']
 		},
 	},
 
 	watch: {
 		loadCover() {
-			if (this.tag.filesAssigned) {
+			if (this.tag.attributes['files-assigned']) {
 				return
 			}
-			this.$store.dispatch('fetchTagFiles', { id: this.tag.id, signal: this.abortController.signal })
+			this.$store.dispatch('fetchTagFiles', { id: this.tag.attributes.id, signal: this.abortController.signal })
 		},
 	},
 
@@ -92,12 +93,17 @@ export default {
 		this.observer = new IntersectionObserver((entries) => {
 			if (entries[0].isIntersecting) {
 				this.loadCover = true
-				this.observer.disconnect()
+				this.observer?.disconnect()
 			}
 		})
 		this.observer.observe(this.$el)
 	},
-}
+
+	methods: {
+		t,
+		n,
+	},
+})
 </script>
 <style scoped lang="scss">
 .tag-cover {

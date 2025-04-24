@@ -46,16 +46,18 @@
 </template>
 
 <script lang='ts'>
-import { mapGetters } from 'vuex'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 
 import { NcEmptyContent, NcActions, NcActionButton, NcLoadingIcon, useIsMobile } from '@nextcloud/vue'
+import { translatePlural as n, translate as t } from '@nextcloud/l10n'
 
 import File from '../components/File.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
+import { toViewerFileInfo } from '../utils/fileUtils.js'
+import logger from '../services/logger.js'
 
 export default {
 	name: 'TagContent',
@@ -87,19 +89,20 @@ export default {
 
 	data() {
 		return {
-			error: null,
+			error: null as boolean|null,
 			loading: false,
 			appContent: document.getElementById('app-content-vue'),
 		}
 	},
 
 	computed: {
-		// global lists
-		...mapGetters([
-			'files',
-			'tags',
-			'tagsNames',
-		]),
+		files() {
+			return this.$store.state.files.files
+		},
+
+		tags() {
+			return this.$store.state.systemtags.tags
+		},
 
 		// current tag id from current path
 		tagId() {
@@ -113,7 +116,7 @@ export default {
 
 		// files list of the current tag
 		fileIds() {
-			return this.tag?.files ?? []
+			return this.$store.state.systemtags.tagsFiles[this.tagId]
 		},
 
 		isEmpty() {
@@ -134,7 +137,7 @@ export default {
 	methods: {
 		async fetchContent() {
 			// close any potential opened viewer
-			OCA.Viewer.close()
+			window.OCA.Viewer.close()
 
 			this.loading = true
 			this.error = null
@@ -145,11 +148,11 @@ export default {
 					await this.$store.dispatch('fetchAllTags', { signal: this.abortController.signal })
 				}
 
-				if (this.tag && !this.tag.files) {
+				if (this.tag && !this.fileIds) {
 					await this.$store.dispatch('fetchTagFiles', { id: this.tagId, signal: this.abortController.signal })
 				}
 			} catch (error) {
-				logger.error(error)
+				logger.error('Failed to fetch tags', { error })
 				this.error = true
 			} finally {
 				// done loading
@@ -157,15 +160,15 @@ export default {
 			}
 		},
 
-		openViewer(fileId) {
-			const file = this.files[fileId]
-			OCA.Viewer.open({
-				path: file.filename,
-				list: this.fileIds.map(fileId => this.files[fileId]),
-				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
-				canLoop: file.canLoop,
+		openViewer(fileId: number) {
+			window.OCA.Viewer.open({
+				fileInfo: toViewerFileInfo(this.files[fileId]),
+				list: this.fileIds.map(fileId => toViewerFileInfo(this.files[fileId])),
 			})
 		},
+
+		t,
+		n,
 	},
 }
 </script>
