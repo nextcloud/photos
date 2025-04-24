@@ -154,9 +154,4 @@ class PlaceMapper {
 			$rows[0]['meta_value_string']
 		);
 	}
-
-	public function setPlaceForFile(string $place, int $fileId): void {
-		$metadata = $this->filesMetadataManager->getMetadata($fileId, true);
-		$metadata->setString('gps', $place, true);
-	}
 }

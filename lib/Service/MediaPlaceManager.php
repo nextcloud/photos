@@ -9,8 +9,8 @@ declare(strict_types=1);
 namespace OCA\Photos\Service;
 
 use OCA\Photos\DB\Place\PlaceMapper;
-use OCP\FilesMetadata\Exceptions\FilesMetadataNotFoundException;
 use OCP\FilesMetadata\IFilesMetadataManager;
+use OCP\FilesMetadata\Model\IFilesMetadata;
 
 class MediaPlaceManager {
 	public function __construct(
@@ -21,22 +21,17 @@ class MediaPlaceManager {
 	}
 
 	public function setPlaceForFile(int $fileId): void {
-		$place = $this->getPlaceForFile($fileId);
+		$metadata = $this->filesMetadataManager->getMetadata($fileId, true);
+		$place = $this->getPlaceForMetadata($metadata);
 
 		if ($place === null) {
 			return;
 		}
 
-		$this->placeMapper->setPlaceForFile($place, $fileId);
+		$metadata->setString('gps', $place, true);
 	}
 
-	public function getPlaceForFile(int $fileId): ?string {
-		try {
-			$metadata = $this->filesMetadataManager->getMetadata($fileId, true);
-		} catch (FilesMetadataNotFoundException) {
-			return null;
-		}
-
+	public function getPlaceForMetadata(IFilesMetadata $metadata): ?string {
 		if (!$this->rgcService->arePlacesEnabled() || !$metadata->hasKey('photos-gps')) {
 			return null;
 		}
