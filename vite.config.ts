@@ -28,6 +28,28 @@ export default createAppConfig({
 						if (id.includes('vue-material-design-icon')) {
 							return 'icons'
 						}
+						if (id.toLowerCase().includes('album')) {
+							return 'albums'
+						}
+						if (id.toLowerCase().includes('folder')) {
+							return 'folders'
+						}
+						if (id.toLowerCase().includes('place')) {
+							return 'places'
+						}
+						if (id.toLowerCase().includes('tag')) {
+							return 'tags'
+						}
+						if (id.toLowerCase().includes('face')) {
+							return 'faces'
+						}
+						if (id.toLowerCase().includes('sidebar') || id.toLowerCase().includes('tab') || id.toLowerCase().includes('leaflet')) {
+							return 'photos-sidebar'
+						}
+						if (id.toLowerCase().includes('node_modules')) {
+							return 'vendor'
+						}
+						return 'shared'
 					},
 				},
 			},

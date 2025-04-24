@@ -1,0 +1,12 @@
+SPDX-License-Identifier: AGPL-3.0-or-later
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: Denis Pushkarev
+SPDX-FileCopyrightText: John Molakvoæ <skjnldsv@protonmail.com>
+
+This file is generated from multiple sources. Included packages:
+- core-js
+	- version: 3.37.0
+	- license: MIT
+- photos
+	- version: 5.0.0-dev.0
+	- license: AGPL-3.0-or-later
