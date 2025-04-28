@@ -23,7 +23,7 @@
 import { defineComponent, type PropType } from 'vue'
 import Star from 'vue-material-design-icons/Star.vue'
 
-import { NcActionButton } from '@nextcloud/vue'
+import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
 import { translate as t } from '@nextcloud/l10n'
 
 export default defineComponent({

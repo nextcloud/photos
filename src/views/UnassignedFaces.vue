@@ -94,7 +94,11 @@ import Download from 'vue-material-design-icons/Download.vue'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 import AccountSwitch from 'vue-material-design-icons/AccountSwitch.vue'
 
-import { NcActions, NcActionButton, NcDialog, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
+import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
+import NcDialog from '@nextcloud/vue/dist/Components/NcDialog.js'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon.js'
 import { translate as t } from '@nextcloud/l10n'
 
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'

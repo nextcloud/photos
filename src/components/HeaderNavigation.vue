@@ -41,7 +41,8 @@
 <script lang='ts'>
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 
-import { NcButton, NcLoadingIcon } from '@nextcloud/vue'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon.js'
 import { translate as t } from '@nextcloud/l10n'
 
 export default {

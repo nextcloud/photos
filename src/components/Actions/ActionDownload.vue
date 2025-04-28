@@ -16,7 +16,7 @@
 import type { PropType } from 'vue'
 
 import { generateUrl } from '@nextcloud/router'
-import { NcActionLink } from '@nextcloud/vue'
+import NcActionLink from '@nextcloud/vue/dist/Components/NcActionLink.js'
 
 export default {
 	name: 'ActionDownload',

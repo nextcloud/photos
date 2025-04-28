@@ -30,7 +30,7 @@ import { defineComponent } from 'vue'
 import Folder from 'vue-material-design-icons/Folder.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 
-import { NcButton } from '@nextcloud/vue'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import { translate as t } from '@nextcloud/l10n'
 
 export default defineComponent({

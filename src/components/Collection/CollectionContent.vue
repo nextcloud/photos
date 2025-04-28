@@ -47,7 +47,8 @@ import { defineComponent, type PropType } from 'vue'
 import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
 import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
 
-import { NcEmptyContent, isMobile } from '@nextcloud/vue'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import { translate } from '@nextcloud/l10n'
 
 import FilesSelectionMixin from '../../mixins/FilesSelectionMixin.js'

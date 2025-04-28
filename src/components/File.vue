@@ -73,7 +73,7 @@ import { decode } from 'blurhash'
 import type { PropType } from 'vue'
 
 import { generateUrl } from '@nextcloud/router'
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
 import { translate as t } from '@nextcloud/l10n'
 
 import FavoriteIcon from './FavoriteIcon.vue'

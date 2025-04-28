@@ -1,0 +1,12 @@
+SPDX-License-Identifier: AGPL-3.0-or-later
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: John Molakvoæ (skjnldsv) <skjnldsv@protonmail.com>
+SPDX-FileCopyrightText: debounce developers
+
+This file is generated from multiple sources. Included packages:
+- @nextcloud/vue
+	- version: 8.25.1
+	- license: AGPL-3.0-or-later
+- debounce
+	- version: 2.2.0
+	- license: MIT

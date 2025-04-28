@@ -8,7 +8,7 @@
 
 <script lang='ts'>
 import { translate as t } from '@nextcloud/l10n'
-import { NcIconSvgWrapper } from '@nextcloud/vue'
+import NcIconSvgWrapper from '@nextcloud/vue/dist/Components/NcIconSvgWrapper.js'
 import { defineComponent } from 'vue'
 
 // eslint-disable-next-line import/no-unresolved, n/no-missing-import

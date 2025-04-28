@@ -30,7 +30,8 @@
 </template>
 
 <script lang='ts'>
-import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon.js'
 import { translate as t } from '@nextcloud/l10n'
 
 import TagCover from '../components/TagCover.vue'

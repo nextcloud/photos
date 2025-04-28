@@ -1,2 +1,0 @@
-const i={name:"FilesByMonthMixin",computed:{fileIdsByMonth(){const t={};for(const s of this.fetchedFileIds){const e=this.files[s];e&&(t[e.month]=t[e.month]??[],t[e.month].push(e.fileid))}return Object.keys(t).forEach(s=>t[s].sort(this.sortFilesByTimestamp)),t},monthsList(){return Object.keys(this.fileIdsByMonth).sort((t,s)=>t>s?-1:1)}},methods:{sortFilesByTimestamp(t,s){return this.files[t].timestamp>this.files[s].timestamp?-1:1}}};export{i as F};
-//# sourceMappingURL=FilesByMonthMixin-BImgcI8o.chunk.mjs.map

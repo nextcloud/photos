@@ -31,7 +31,8 @@
 </template>
 
 <script lang='ts'>
-import { NcAppSettingsDialog, NcAppSettingsSection } from '@nextcloud/vue'
+import NcAppSettingsDialog from '@nextcloud/vue/dist/Components/NcAppSettingsDialog.js'
+import NcAppSettingsSection from '@nextcloud/vue/dist/Components/NcAppSettingsSection.js'
 import { translate as t } from '@nextcloud/l10n'
 
 import CroppedLayoutSettings from './CroppedLayoutSettings.vue'

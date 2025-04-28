@@ -96,7 +96,12 @@
 
 <script lang='ts'>
 import { UploadPicker } from '@nextcloud/upload'
-import { NcButton, NcDialog, NcLoadingIcon, NcSelect, NcNoteCard, useIsMobile } from '@nextcloud/vue'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import NcDialog from '@nextcloud/vue/dist/Components/NcDialog.js'
+import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon.js'
+import NcSelect from '@nextcloud/vue/dist/Components/NcSelect.js'
+import NcNoteCard from '@nextcloud/vue/dist/Components/NcNoteCard.js'
+import { useIsMobile } from '@nextcloud/vue/dist/Composables/useIsMobile.js'
 import { defineComponent } from 'vue'
 
 import moment from '@nextcloud/moment'

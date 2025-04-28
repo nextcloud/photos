@@ -105,7 +105,13 @@
 </template>
 
 <script lang='ts'>
-import { NcActions, NcActionButton, NcButton, NcEmptyContent, NcActionSeparator, NcUserBubble, isMobile } from '@nextcloud/vue'
+import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
+import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+import NcActionSeparator from '@nextcloud/vue/dist/Components/NcActionSeparator.js'
+import NcUserBubble from '@nextcloud/vue/dist/Components/NcUserBubble.js'
+import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import { ShareType } from '@nextcloud/sharing'
 import { translate } from '@nextcloud/l10n'
 

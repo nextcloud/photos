@@ -131,7 +131,11 @@ import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
 import Cog from 'vue-material-design-icons/Cog.vue'
 
-import { NcContent, NcAppContent, NcAppNavigation, NcAppNavigationItem, NcButton } from '@nextcloud/vue'
+import NcContent from '@nextcloud/vue/dist/Components/NcContent.js'
+import NcAppContent from '@nextcloud/vue/dist/Components/NcAppContent.js'
+import NcAppNavigation from '@nextcloud/vue/dist/Components/NcAppNavigation.js'
+import NcAppNavigationItem from '@nextcloud/vue/dist/Components/NcAppNavigationItem.js'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 
 import SettingsDialog from './components/Settings/SettingsDialog.vue'
 

@@ -24,7 +24,8 @@
 </template>
 
 <script lang='ts'>
-import { NcActions, NcActionButton } from '@nextcloud/vue'
+import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
+import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
 import { translate as t } from '@nextcloud/l10n'
 
 export default {

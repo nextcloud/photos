@@ -33,7 +33,7 @@ import { defineComponent } from 'vue'
 import FolderMultiple from 'vue-material-design-icons/FolderMultiple.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 
-import { NcButton } from '@nextcloud/vue'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import { getFilePickerBuilder } from '@nextcloud/dialogs'
 import { translate as t } from '@nextcloud/l10n'
 
