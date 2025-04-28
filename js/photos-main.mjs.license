@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: John Molakvoæ <skjnldsv@protonmail.com>
 
 This file is generated from multiple sources. Included packages:
 - @nextcloud/vue
-	- version: 8.25.1
+	- version: 8.26.0
 	- license: AGPL-3.0-or-later
 - photos
 	- version: 5.0.0-dev.0
