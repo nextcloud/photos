@@ -49,7 +49,7 @@ export default {
 
 	data() {
 		return {
-			error: null,
+			error: false,
 			loading: false,
 			showTags: false,
 		}
@@ -85,9 +85,9 @@ export default {
 	methods: {
 		async fetchRootContent() {
 			// close any potential opened viewer
-			OCA.Viewer.close()
+			window.OCA.Viewer.close()
 
-			this.error = null
+			this.error = false
 
 			try {
 				// fetch content
@@ -98,7 +98,7 @@ export default {
 					})
 				}
 			} catch (error) {
-				logger.error(error)
+				logger.error('Failed to fetch root content', { error })
 				this.error = true
 			} finally {
 				// done loading

@@ -124,7 +124,9 @@
 </template>
 
 <script lang='ts'>
+import { defineComponent } from 'vue'
 import { mapActions, mapGetters } from 'vuex'
+
 import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import Delete from 'vue-material-design-icons/Delete.vue'
@@ -152,7 +154,7 @@ import HeaderNavigation from '../components/HeaderNavigation.vue'
 import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
 import { configChangedEvent } from '../store/userConfig.js'
 
-export default {
+export default defineComponent({
 	name: 'Timeline',
 	components: {
 		Delete,
@@ -256,7 +258,7 @@ export default {
 
 		openViewer(fileId) {
 			const file = this.files[fileId]
-			OCA.Viewer.open({
+			window.OCA.Viewer.open({
 				fileInfo: file,
 				list: Object.values(this.fileIdsByMonth).flat().map(fileId => this.files[fileId]),
 				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
@@ -289,8 +291,9 @@ export default {
 
 		t: translate,
 	},
-}
+})
 </script>
+
 <style lang="scss" scoped>
 .timeline {
 	display: flex;
