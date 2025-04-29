@@ -7,7 +7,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import type { PhotosRootSate } from '.'
 import type { Collection } from '../services/collectionFetcher'
 
-const placesPrefix = `/photos/${getCurrentUser()?.uid}/places`
+export const placesPrefix = `/photos/${getCurrentUser()?.uid}/places`
 
 const getters = {
 	places: (_, __, ___, rootGetters): Record<string, Collection[]> => rootGetters.collectionsWithPrefix(placesPrefix),

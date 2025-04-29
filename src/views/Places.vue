@@ -42,14 +42,13 @@ import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.v
 
 import { generateUrl } from '@nextcloud/router'
 import { NcEmptyContent } from '@nextcloud/vue'
-import { getCurrentUser } from '@nextcloud/auth'
 import { translate, translatePlural } from '@nextcloud/l10n'
 
 import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
 import CollectionsList from '../components/Collection/CollectionsList.vue'
 import CollectionCover from '../components/Collection/CollectionCover.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-import type { Collection } from '../services/collectionFetcher.js'
+import { placesPrefix } from '../store/places.js'
 
 export default {
 	name: 'Places',
@@ -62,10 +61,7 @@ export default {
 	},
 
 	filters: {
-		/**
-		 * @param {string} fileId The place's last photo.
-		 */
-		coverUrl(fileId) {
+		coverUrl(fileId: number) {
 			if (fileId === -1) {
 				return ''
 			}
@@ -79,7 +75,7 @@ export default {
 	],
 
 	computed: {
-		places(): Record<string, Collection> {
+		places() {
 			return this.$store.getters.places
 		},
 	},
@@ -90,7 +86,7 @@ export default {
 
 	methods: {
 		fetchPlaces() {
-			this.fetchCollections(`/photos/${getCurrentUser()?.uid}/places`)
+			this.fetchCollections(placesPrefix)
 		},
 
 		t: translate,

@@ -4,7 +4,9 @@
  */
 
 import { dateRangeFilter } from './dateRangeFilter.ts'
+import { placesFilter } from './placesFilter.ts'
 
 export default [
 	dateRangeFilter,
+	placesFilter,
 ]

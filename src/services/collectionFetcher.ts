@@ -85,7 +85,7 @@ export async function fetchCollection(path: string, options: StatOptions, extraP
 	}
 }
 
-export async function fetchCollections(path: string, options: StatOptions, extraProps: string[] = [], client: WebDAVClient = davClient): Promise<Collection[]> {
+export async function fetchCollections(path: string, options: StatOptions = {}, extraProps: string[] = [], client: WebDAVClient = davClient): Promise<Collection[]> {
 	try {
 		const response = await client.getDirectoryContents(path, {
 			data: getCollectionDavRequest(extraProps),

@@ -18,6 +18,7 @@ import faces, { type FacesState } from './faces.ts'
 import folders, { type FoldersState } from './folders.ts'
 import systemtags, { type SystemTagsState } from './systemtags.ts'
 import userConfig, { getFolder, type UserConfigState } from './userConfig.ts'
+import type { Collection } from '../services/collectionFetcher.ts'
 
 export type PhotosRootSate = {
 	files: FilesState
@@ -36,6 +37,7 @@ export type PhotosStore = {
 		albums(): Record<string, Album>
 		publicAlbums(): Record<string, PublicAlbum>
 		sharedAlbums(): Record<string, Album>
+		places(): Record<string, Collection>
 		getAlbumName(name: string): string
 		getAlbum(albumName: string): Album
 		getAlbumFiles(albumName: string): string[]
