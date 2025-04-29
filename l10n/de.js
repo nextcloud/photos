@@ -40,7 +40,7 @@ OC.L10N.register(
     "Search people or groups" : "Nach Benutzer oder Gruppen suchen",
     "No recommendations. Start typing." : "Keine Vorschläge, beginne mit der Eingabe.",
     "Group" : "Gruppe",
-    "Remove {collaboratorLabel} from the collaborators list" : "{collaboratorLabel} aus der Liste der Mitarbeitenden löschen",
+    "Remove {collaboratorLabel} from the collaborators list" : "{collaboratorLabel} aus der Liste der Mitarbeitenden entfernen",
     "Copy the public link" : "Den öffentlichen Link kopieren",
     "Public link copied!" : "Öffentlicher Link kopiert",
     "Copy public link" : "Öffentlichen Link kopieren",
