@@ -69,13 +69,13 @@ export default async function(_options: Partial<PhotoSearchOptions> = {}): Promi
 				return `<d:and>
 				<d:gt>
 					<d:prop>
-						<d:getlastmodified />
+						<nc:metadata-photos-original_date_time/>
 					</d:prop>
 					<d:literal>${start.format(moment.defaultFormatUtc)}</d:literal>
 				</d:gt>
 				<d:lt>
 					<d:prop>
-						<d:getlastmodified />
+						<nc:metadata-photos-original_date_time/>
 					</d:prop>
 					<d:literal>${end.format(moment.defaultFormatUtc)}</d:literal>
 				</d:lt>
