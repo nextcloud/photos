@@ -29,13 +29,13 @@
 				slot-scope="{collection}"
 				:link="`/albums/${collection.basename}`"
 				:alt-img="t('photos', 'Cover photo for album {albumName}', { albumName: collection.basename })"
-				:cover-url="collection.lastPhoto | coverUrl">
+				:cover-url="collection.attributes['last-photo'] | coverUrl">
 				<span class="album__name">
 					{{ collection.basename }}
 				</span>
 
 				<div slot="subtitle" class="album__details">
-					{{ collection.date }} ⸱ {{ n('photos', '%n item', '%n photos and videos', collection.nbItems,) }}
+					{{ collection.attributes.date }} ⸱ {{ n('photos', '%n item', '%n photos and videos', collection.attributes.nbItems,) }}
 				</div>
 			</CollectionCover>
 
@@ -45,6 +45,7 @@
 		</CollectionsList>
 
 		<NcModal v-if="showAlbumCreationForm"
+			label-id="new-album-form"
 			@close="showAlbumCreationForm = false">
 			<h2 class="album-creation__heading">
 				{{ t('photos', 'New album') }}
@@ -85,10 +86,7 @@ export default {
 	},
 
 	filters: {
-		/**
-		 * @param {string} lastPhoto The album's last photos.
-		 */
-		coverUrl(lastPhoto) {
+		coverUrl(lastPhoto: number): string {
 			if (lastPhoto === -1) {
 				return ''
 			}

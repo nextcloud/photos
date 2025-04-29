@@ -5,14 +5,14 @@
 
 import { getCurrentUser } from '@nextcloud/auth'
 import type { Album } from './albums'
-import type { PhotoNode } from '../utils/fileUtils'
+import type { PhotosRootSate } from '.'
 
-const sharedAlbumsPrefix = `/photos/${getCurrentUser()?.uid}/sharedalbums/`
+const sharedAlbumsPrefix = `/photos/${getCurrentUser()?.uid}/sharedalbums`
 
 const getters = {
-	sharedAlbums: (_, __, ___, rootGetters): Album[] => rootGetters.collectionsWithPrefix(sharedAlbumsPrefix),
-	getSharedAlbum: (_, __, rootState) => (sharedAlbumName): Album => rootState.collections.collections[`${sharedAlbumsPrefix}${sharedAlbumName}`],
-	getSharedAlbumFiles: (_, __, rootState) => (sharedAlbumName): PhotoNode[] => rootState.collections.collectionsFiles[`${sharedAlbumsPrefix}${sharedAlbumName}`] || [],
-	getSharedAlbumName: (_, __, ___) => sharedAlbumName => `${sharedAlbumsPrefix}${sharedAlbumName}`,
+	sharedAlbums: (_, __, ___, rootGetters): Album[] => rootGetters.collectionsWithPrefix(sharedAlbumsPrefix) as unknown as Album[],
+	getSharedAlbum: (_, __, rootState: PhotosRootSate) => (sharedAlbumName: string): Album => rootState.collections.collections[`${sharedAlbumsPrefix}/${sharedAlbumName}`] as unknown as Album,
+	getSharedAlbumFiles: (_, __, rootState: PhotosRootSate) => (sharedAlbumName: string): string[] => rootState.collections.collectionsFiles[`${sharedAlbumsPrefix}/${sharedAlbumName}`] || [],
+	getSharedAlbumName: (_, __, ___) => (sharedAlbumName: string) => `${sharedAlbumsPrefix}/${sharedAlbumName}`,
 }
 export default { getters }

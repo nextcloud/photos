@@ -42,7 +42,7 @@
 </template>
 
 <script lang='ts'>
-import type { PropType } from 'vue'
+import { defineComponent, type PropType } from 'vue'
 
 import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
 import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
@@ -51,12 +51,12 @@ import { NcEmptyContent, isMobile } from '@nextcloud/vue'
 import { translate } from '@nextcloud/l10n'
 
 import FilesSelectionMixin from '../../mixins/FilesSelectionMixin.js'
-import FilesListViewer from '.././FilesListViewer.vue'
-import File from '.././File.vue'
-import type { Collection } from '../../services/collectionFetcher.js'
-import type { PhotoNode } from '../../utils/fileUtils.js'
+import FilesListViewer from '../FilesListViewer.vue'
+import File from '../File.vue'
+import type { PublicAlbum } from '../../store/publicAlbums.js'
+import { toViewerFileInfo } from '../../utils/fileUtils.js'
 
-export default {
+export default defineComponent({
 	name: 'CollectionContent',
 
 	components: {
@@ -74,7 +74,7 @@ export default {
 
 	props: {
 		collection: {
-			type: Object as PropType<Collection>,
+			type: Object as PropType<PublicAlbum>,
 			default: () => undefined,
 		},
 
@@ -106,29 +106,27 @@ export default {
 	},
 
 	computed: {
-		files(): Record<string, PhotoNode> {
+		files() {
 			return this.$store.getters.files
 		},
 
 		sortedCollectionFileIds() {
-			return this.collectionFileIds.toSorted((fileId1, fileId2) => this.files[fileId1].timestamp < this.files[fileId2].timestamp ? -1 : 1)
+			return this.collectionFileIds.toSorted((fileId1, fileId2) => this.files[fileId1].attributes.timestamp < this.files[fileId2].attributes.timestamp ? -1 : 1)
 		},
 	},
 
 	methods: {
-		openViewer(fileId) {
-			const file = this.files[fileId]
-			OCA.Viewer.open({
-				fileInfo: file,
-				list: this.sortedCollectionFileIds.map(fileId => this.files[fileId]).filter(file => !file.sectionHeader),
-				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
-				canLoop: file.canLoop,
+		openViewer(fileId: string) {
+			window.OCA.Viewer.open({
+				fileInfo: toViewerFileInfo(this.files[fileId]),
+				list: this.sortedCollectionFileIds.map(fileId => toViewerFileInfo(this.files[fileId])),
 			})
 		},
 
 		t: translate,
 	},
-}
+})
+
 </script>
 <style lang="scss" scoped>
 .collection {

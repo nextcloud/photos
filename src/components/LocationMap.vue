@@ -86,8 +86,7 @@ export default {
 		}
 	},
 	computed: {
-		/** @return {[number, number]} */
-		center() {
+		center(): [number, number] {
 			return [this.latitude, this.longitude]
 		},
 	},

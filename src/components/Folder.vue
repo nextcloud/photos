@@ -11,16 +11,28 @@
 </template>
 
 <script lang='ts'>
-import { mapGetters } from 'vuex'
+import Vue, { defineComponent, type PropType } from 'vue'
 
 import { getCurrentUser } from '@nextcloud/auth'
 
 import FolderTagPreview from './FolderTagPreview.vue'
-import getAlbumContent from '../services/AlbumContent.js'
-import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
-import logger from '../services/logger'
+import getFolderContent, { type FoldersNode } from '../services/FolderContent.ts'
+import AbortControllerMixin from '../mixins/AbortControllerMixin.ts'
+import logger from '../services/logger.ts'
 
-export default {
+export type InjectedItem = {
+	id: string,
+	injected: FoldersNode & {
+		showShared: true,
+		list: FoldersNode[],
+	},
+	width: number,
+	height: number,
+	columnSpan: number,
+	renderComponent: Vue,
+}
+
+export default defineComponent({
 	name: 'Folder',
 
 	components: {
@@ -34,7 +46,7 @@ export default {
 
 	props: {
 		item: {
-			type: Object,
+			type: Object as PropType<InjectedItem>,
 			required: true,
 		},
 	},
@@ -46,11 +58,17 @@ export default {
 	},
 
 	computed: {
-		// global lists
-		...mapGetters([
-			'files',
-			'folders',
-		]),
+		files() {
+			return this.$store.state.folders.files
+		},
+
+		subFolders() {
+			return this.$store.state.folders.subFolders
+		},
+
+		folders() {
+			return this.$store.state.folders.folders
+		},
 
 		// files list of the current folder
 		folderContent() {
@@ -68,10 +86,10 @@ export default {
 			// If we didn't found any previews in the folder we try the next subfolder
 			// We limit to one subfolder for performance concerns
 			if (previewFiles.length === 0
-				&& this.files[this.previewFolder].folders
+				&& this.subFolders[this.previewFolder]
 				&& this.previewFolder === this.item.injected.fileid) {
 
-				const firstChildFolder = this.files[this.previewFolder].folders[0]
+				const firstChildFolder = this.subFolders[this.previewFolder][0]
 				this.updatePreviewFolder(firstChildFolder)
 
 				if (!this.folders[this.previewFolder]) {
@@ -97,18 +115,14 @@ export default {
 				const unPrefixedFileName = filename.replace(new RegExp(`^${prefix}`), '')
 
 				// get data
-				const { folder, folders, files } = await getAlbumContent(unPrefixedFileName, {
+				const { folder, folders, files } = await getFolderContent(unPrefixedFileName, {
 					shared: this.item.injected.showShared,
 					signal: this.abortController.signal,
 				})
-				this.$store.dispatch('updateFolders', { fileid: folder.fileid, files, folders })
-				this.$store.dispatch('updateFiles', { folder, files, folders })
+				this.$store.dispatch('updateFolders', { fileid: folder?.fileid, files, folders })
+				this.$store.dispatch('updateFoldersFiles', { folder, files, folders })
 			} catch (error) {
-				if (error.response && error.response.status) {
-					logger.error('Failed to get folder content', { error, filename })
-				} else {
-					logger.debug(error)
-				}
+				logger.error('Failed to get folder content', { error, filename })
 			}
 		},
 
@@ -116,7 +130,7 @@ export default {
 			this.previewFolder = path
 		},
 	},
-}
+})
 </script>
 
 <style lang="scss" scoped>

@@ -86,7 +86,6 @@
 	</div>
 </template>
 <script lang='ts'>
-import { mapActions } from 'vuex'
 
 import Close from 'vue-material-design-icons/Close.vue'
 import Check from 'vue-material-design-icons/Check.vue'
@@ -215,8 +214,6 @@ export default {
 	},
 
 	methods: {
-		...mapActions(['updateCollection']),
-
 		/**
 		 * Fetch possible collaborators.
 		 */
@@ -312,7 +309,7 @@ export default {
 
 		async updateAlbumCollaborators() {
 			try {
-				await this.updateCollection({
+				await this.$store.dispatch('updateCollection', {
 					collectionFileName: this.albumFileName,
 					properties: {
 						collaborators: this.selectedCollaborators,

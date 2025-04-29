@@ -3,10 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { defineComponent } from 'vue'
+
 import { showError } from '@nextcloud/dialogs'
 import { defaultRootPath } from '@nextcloud/files/dav'
 import { joinPaths } from '@nextcloud/paths'
-import { translate as t } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
@@ -14,9 +16,8 @@ import getPhotos, { type PhotoSearchOptions } from '../services/PhotoSearch.js'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
 import AbortControllerMixin from './AbortControllerMixin.js'
 import store from '../store/index.js'
-import type { ComponentOptions } from 'vue'
 
-export default {
+export default defineComponent({
 	name: 'FetchFilesMixin',
 
 	mixins: [
@@ -25,11 +26,11 @@ export default {
 
 	data() {
 		return {
-			errorFetchingFiles: null,
+			errorFetchingFiles: null as null|number|Error|unknown,
 			loadingFiles: false,
 			doneFetchingFiles: false,
 			fetchSemaphore: new SemaphoreWithPriority(1),
-			fetchedFileIds: [] as string[],
+			fetchedFileIds: [] as number[],
 		}
 	},
 
@@ -44,9 +45,9 @@ export default {
 		 * @param options - Options to pass to getPhotos.
 		 * @param blacklist - Array of ids to filter out.
 		 * @param force - Force fetching even if doneFetchingFiles is true
-		 * @return {Promise<string[]>} - The next batch of data depending on global offset.
+		 * @return The next batch of data depending on global offset.
 		 */
-		async fetchFiles(options: Partial<PhotoSearchOptions> = {}, blacklist: string[] = [], force: boolean = false) {
+		async fetchFiles(options: Partial<PhotoSearchOptions> = {}, blacklist: number[] = [], force: boolean = false): Promise<number[]> {
 			if ((this.doneFetchingFiles && !force) || this.loadingFiles) {
 				return []
 			}
@@ -73,13 +74,11 @@ export default {
 				}
 
 				const fileIds = fetchedFiles
-					.map(file => file.fileid)
-					.filter(fileId => !this.fetchedFileIds.includes(fileId.toString())) // Filter to prevent duplicate fileIds.
+					.map(file => file.fileid as number)
+					.filter(fileId => !this.fetchedFileIds.includes(fileId)) // Filter to prevent duplicate fileIds.
 
 				this.fetchedFileIds.push(
-					...fileIds
-						.map((fileId) => fileId.toString())
-						.filter((fileId) => !blacklist.includes(fileId)),
+					...fileIds.filter((fileId) => !blacklist.includes(fileId)),
 				)
 
 				this.$store.dispatch('appendFiles', fetchedFiles)
@@ -112,7 +111,7 @@ export default {
 
 				// cancelled request, moving on...
 				showError(t('photos', 'Error fetching files'))
-				logger.error(error)
+				logger.error(t('photos', 'Error fetching files'), { error })
 			} finally {
 				this.loadingFiles = false
 				this.fetchSemaphore.release(fetchSemaphoreSymbol)
@@ -128,4 +127,4 @@ export default {
 			this.fetchedFileIds = []
 		},
 	},
-} as ComponentOptions<Vue>
+})

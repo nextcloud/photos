@@ -8,16 +8,50 @@ import Vuex, { Store } from 'vuex'
 
 import { getCurrentUser } from '@nextcloud/auth'
 
-import files from './files.js'
-import albums from './albums.js'
-import publicAlbums from './publicAlbums.js'
-import sharedAlbums from './sharedAlbums.js'
-import collections from './collections.js'
-import places from './places.js'
-import faces from './faces.js'
-import folders from './folders.js'
-import systemtags from './systemtags.js'
-import userConfig, { getFolder } from './userConfig.js'
+import files, { type FilesState } from './files.ts'
+import albums, { type Album } from './albums.ts'
+import publicAlbums, { type PublicAlbum } from './publicAlbums.ts'
+import sharedAlbums from './sharedAlbums.ts'
+import collections, { type CollectionState } from './collections.ts'
+import places from './places.ts'
+import faces, { type FacesState } from './faces.ts'
+import folders, { type FoldersState } from './folders.ts'
+import systemtags, { type SystemTagsState } from './systemtags.ts'
+import userConfig, { getFolder, type UserConfigState } from './userConfig.ts'
+
+export type PhotosRootSate = {
+	files: FilesState
+	collections: CollectionState
+	faces: FacesState
+	folders: FoldersState
+	systemtags: SystemTagsState
+	userConfig: UserConfigState
+}
+
+export type PhotosStore = {
+	state: PhotosRootSate
+	commit(mutationName: string, arg: unknown): void
+	dispatch(actionName: string, arg: unknown): Promise<unknown>
+	getters: {
+		albums(): Album[]
+		publicAlbums(): Album[]
+		sharedAlbums(): Album[]
+		getAlbumName(name: string): string
+		getAlbum(albumName: string): Album
+		getAlbumFiles(albumName: string): string[]
+		getPublicAlbum(publicAlbumName: string): PublicAlbum
+		getPublicAlbumFiles(publicAlbumName: string): string[]
+		getPublicAlbumName(publicAlbumName: string): string,
+		getSharedAlbum(sharedAlbumName: string): Album
+		getSharedAlbumFiles(sharedAlbumName: string): string[]
+		getSharedAlbumName(sharedAlbumName: string): string,
+		tagId(name: string): string,
+	}
+}
+export type PhotosContext<T> = PhotosStore & {
+	state: T
+	rootState: PhotosRootSate
+}
 
 /**
  * Get the information of photosLocation and store it as photosLocationFolder

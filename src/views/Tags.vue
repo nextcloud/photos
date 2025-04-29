@@ -17,28 +17,29 @@
 				{{ t('photos', 'Popular tags') }}
 			</h2>
 			<div class="popular-tags">
-				<TagCover v-for="tag in popularTags" :key="tag.id" :tag="tag" />
+				<TagCover v-for="tag in popularTags" :key="tag.attributes.id" :tag="tag" />
 			</div>
 			<h2 v-if="tagsList.length">
 				{{ t('photos', 'All tags') }}
 			</h2>
 			<div class="tags">
-				<TagCover v-for="tag in tagsList" :key="tag.id" :tag="tag" />
+				<TagCover v-for="tag in tagsList" :key="tag.attributes.id" :tag="tag" />
 			</div>
 		</div>
 	</div>
 </template>
 
 <script lang='ts'>
-import { mapGetters } from 'vuex'
+import { defineComponent } from 'vue'
 
 import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import { t } from '@nextcloud/l10n'
 
 import TagCover from '../components/TagCover.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import logger from '../services/logger'
 
-export default {
+export default defineComponent({
 	name: 'Tags',
 	components: {
 		TagCover,
@@ -49,30 +50,35 @@ export default {
 
 	data() {
 		return {
-			error: null,
+			error: null as boolean|null,
 			loading: false,
 			showTags: false,
 		}
 	},
 
 	computed: {
-		// global lists
-		...mapGetters([
-			'files',
-			'tags',
-			'tagsNames',
-		]),
+		files() {
+			return this.$store.state.files.files
+		},
+
+		tags() {
+			return this.$store.state.systemtags.tags
+		},
+
+		tagsNames() {
+			return this.$store.state.systemtags.names
+		},
 
 		tagsList() {
 			return Object.keys(this.tagsNames)
 				.map(tagName => this.tags[this.tagsNames[tagName]])
-				.filter(tag => tag && tag.id)
+				.filter(tag => tag && tag.attributes.id)
 		},
 
 		popularTags() {
 			return Object.keys(this.tagsNames)
-				.filter(tagName => (this.tags[this.tagsNames[tagName]].filesAssigned) > 50)
-				.sort((a, b) => (this.tags[this.tagsNames[b]].filesAssigned || this.tagCounts[b]) - (this.tags[this.tagsNames[a]].filesAssigned || this.tagCounts[a]))
+				.filter(tagName => (this.tags[this.tagsNames[tagName]].attributes['files-assigned']) > 50)
+				.sort((a, b) => (this.tags[this.tagsNames[b]]['files-assigned']) - (this.tags[this.tagsNames[a]]['files-assigned']))
 				.slice(0, 9)
 				.map(tagName => this.tags[this.tagsNames[tagName]])
 		},
@@ -85,7 +91,7 @@ export default {
 	methods: {
 		async fetchRootContent() {
 			// close any potential opened viewer
-			OCA.Viewer.close()
+			window.OCA.Viewer.close()
 
 			this.error = null
 
@@ -98,16 +104,18 @@ export default {
 					})
 				}
 			} catch (error) {
-				logger.error(error)
+				logger.error('Failed to fetch tags', { error })
 				this.error = true
 			} finally {
 				// done loading
 				this.loading = false
 			}
 		},
+
+		t,
 	},
 
-}
+})
 </script>
 
 <style lang="scss" scoped>

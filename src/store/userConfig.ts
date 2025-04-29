@@ -3,20 +3,20 @@
  * SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+import type { FileStat, ResponseDataDetailed } from 'webdav'
 
 import { getDefaultPropfind, resultToNode, defaultRootPath } from '@nextcloud/files/dav'
 import { loadState } from '@nextcloud/initial-state'
 import { joinPaths } from '@nextcloud/paths'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
-import { translate as t } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
+import type { Folder } from '@nextcloud/files'
 
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
-import type { FileStat, ResponseDataDetailed } from 'webdav'
-import type { Folder } from '@nextcloud/files'
 
 export const configChangedEvent = 'photos:user-config-changed'
 
@@ -33,7 +33,7 @@ export async function getFolder(path) {
 			const stat = await davClient.stat(location, { details: true, data: getDefaultPropfind() }) as ResponseDataDetailed<FileStat>
 			return resultToNode(stat.data)
 		} else {
-			logger.fatal(error)
+			logger.fatal('Could not load photos folder', { error })
 			showError(t('photos', 'Could not load photos folder'))
 		}
 	}
@@ -41,7 +41,7 @@ export async function getFolder(path) {
 	throw new Error("Couldn't fetch photos upload folder")
 }
 
-type UserConfigState = {
+export type UserConfigState = {
 	croppedLayout: boolean
 	photosSourceFolders: string[]
 	photosLocation: string

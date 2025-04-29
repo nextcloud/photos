@@ -27,8 +27,8 @@ export default new Vue({
 	methods: {
 		handleWindowResize() {
 			// find the first grid size that fit the current window width
-			const currentSize = Object.keys(sizes).find(size => size > document.documentElement.clientWidth)
-			this.gridConfig = sizes[currentSize] || sizes.max
+			const currentSize = Object.keys(sizes).map(size => Number.parseInt(size)).find(size => size > document.documentElement.clientWidth)
+			this.gridConfig = sizes[currentSize as number] || sizes.max
 		},
 	},
 })

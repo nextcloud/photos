@@ -18,15 +18,16 @@
 				</span>
 			</div>
 			<div v-if="!small" class="face-cover__details__second-line">
-				{{ n('photos', '%n photos', '%n photos', face.props['nbItems']) }}
+				{{ n('photos', '%n photos', '%n photos', face.attributes.nbItems) }}
 			</div>
 		</div>
 	</div>
 </template>
 
 <script lang='ts'>
-import { mapGetters } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
+import { translatePlural as n } from '@nextcloud/l10n'
+
 import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
 import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
 import type { Collection } from '../../services/collectionFetcher.js'
@@ -57,11 +58,17 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'files',
-			'faces',
-			'facesFiles',
-		]),
+		files() {
+			return this.$store.state.files.files
+		},
+
+		faces() {
+			return this.$store.state.faces.faces
+		},
+
+		facesFiles() {
+			return this.$store.state.faces.facesFiles
+		},
 
 		face(): Collection {
 			return this.faces[this.baseName]
@@ -83,6 +90,10 @@ export default {
 			if (!this.cover) return {}
 			return this.getCoverStyle(this.face.basename)
 		},
+	},
+
+	methods: {
+		n,
 	},
 }
 </script>
