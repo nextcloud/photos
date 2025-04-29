@@ -13,8 +13,6 @@
 </template>
 
 <script lang='ts'>
-import { mapGetters } from 'vuex'
-
 import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
 import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
 import FaceCover from './FaceCover.vue'
@@ -38,18 +36,24 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters([
-			'files',
-			'faces',
-			'facesFiles',
-		]),
+		files() {
+			return this.$store.state.files.files
+		},
+
+		faces() {
+			return this.$store.state.faces.faces
+		},
+
+		facesFiles() {
+			return this.$store.getters.facesFiles
+		},
 
 		filteredFaces() {
 			return Object.values(this.faces)
 				.filter(face => face.basename !== this.firstFace)
 				.sort((a, b) => {
-					if (a.props.nbItems && b.props.nbItems) {
-						return b.props.nbItems - a.props.nbItems
+					if (a.attributes.nbItems && b.attributes.nbItems) {
+						return b.attributes.nbItems - a.attributes.nbItems
 					}
 					if (!this.facesFiles[b.basename] || !this.facesFiles[a.basename]) {
 						return 0

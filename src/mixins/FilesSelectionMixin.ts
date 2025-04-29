@@ -3,7 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
 	name: 'FilesSelectionMixin',
 
 	data() {
@@ -37,4 +39,4 @@ export default {
 			return Object.keys(this.selection).filter(fileId => this.selection[fileId])
 		},
 	},
-}
+})

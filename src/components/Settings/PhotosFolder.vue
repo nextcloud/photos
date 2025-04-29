@@ -31,7 +31,7 @@ import Folder from 'vue-material-design-icons/Folder.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 
 import { NcButton } from '@nextcloud/vue'
-import { translate as t } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 
 export default defineComponent({
 	name: 'PhotosFolder',

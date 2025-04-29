@@ -3,30 +3,73 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import Vue from 'vue'
-import { sortCompare, type PhotoNode } from '../utils/fileUtils.js'
+
+import { sortCompareFileInfo } from '../utils/fileUtils.js'
+import type { FoldersNode } from '../services/FolderContent.js'
+import type { PhotosContext } from './index.js'
+import { defaultRootPath } from '@nextcloud/files/dav'
 
 const state = {
-	paths: {},
-	folders: {},
+	paths: {} as Record<string, number>,
+	folders: {} as Record<string, number[]>,
+	files: {} as Record<string, FoldersNode>,
+	subFolders: {} as Record<string, number[]>,
 }
 
-type FoldersState = typeof state
+export type FoldersState = typeof state
 
 const mutations = {
 	/**
 	 * Index folders paths and ids
 	 */
-	updateFolders(state: FoldersState, { fileid, files }: { fileid: number, files: PhotoNode[] }) {
+	updateFolders(state: FoldersState, { fileid, files }: { fileid: number, files: FoldersNode[] }) {
 		if (files.length > 0) {
 			// sort by last modified
 			const list = files
-				.sort((a, b) => sortCompare(a, b, 'lastmod'))
+				.sort((a, b) => sortCompareFileInfo(a, b, 'lastmod'))
 				.filter(file => file.fileid >= 0)
 
 			// Set folder list
 			Vue.set(state.folders, fileid, list.map(file => file.fileid))
 		} else {
 			Vue.set(state.folders, fileid, [])
+		}
+	},
+
+	/**
+	 * Append or update given files
+	 */
+	updateFoldersFiles(state: FoldersState, { newFiles, nomediaPaths }: { newFiles: FoldersNode[], nomediaPaths: string[] }) {
+		const files = {}
+		newFiles
+			// TODO: Is this needed? .filter(file => !file.hidden)
+			.forEach(file => {
+				// Ignore the file if the path is excluded
+				// TODO: Check that it works
+				if (nomediaPaths.some(nomediaPath => file.filename.startsWith(nomediaPath)
+					|| file.filename.startsWith(`${defaultRootPath}${nomediaPath}`))) {
+					return
+				}
+
+				files[file.fileid as number] = file
+			})
+
+		state.files = {
+			...state.files,
+			...files,
+		}
+	},
+
+	/**
+	 * Set a folder subfolders
+	 */
+	setSubFolders(state: FoldersState, { fileid, folders }: { fileid: number, folders: FoldersNode[] }) {
+		if (state.folders[fileid]) {
+			const subfolders = folders
+				.map(folder => folder.fileid as number)
+				// some invalid folders have an id of -1 (ext storage)
+				.filter(id => id >= 0)
+			Vue.set(state.subFolders, fileid, subfolders)
 		}
 	},
 
@@ -42,11 +85,11 @@ const mutations = {
 	/**
 	 * Append files to a folder
 	 */
-	addFilesToFolder(state: FoldersState, { fileid, files }: { fileid: number, files: PhotoNode[] }) {
+	addFilesToFolder(state: FoldersState, { fileid, files }: { fileid: number, files: FoldersNode[] }) {
 		if (fileid >= 0 && files.length > 0) {
 			// and sort by last modified
 			const list = files
-				.sort((a, b) => sortCompare(a, b, 'lastmod'))
+				.sort((a, b) => sortCompareFileInfo(a, b, 'lastmod'))
 				.filter(file => file.fileid >= 0)
 				.map(file => file.fileid)
 			Vue.set(state.folders, fileid, [...list, ...state.folders[fileid]])
@@ -56,15 +99,31 @@ const mutations = {
 
 const getters = {
 	folders: (state: FoldersState) => state.folders,
-	folder: (state: FoldersState) => fileid => state.folders[fileid],
-	folderId: (state: FoldersState) => path => state.paths[path],
+	folder: (state: FoldersState) => (fileid: number) => state.folders[fileid],
+	folderId: (state: FoldersState) => (path: string) => state.paths[path],
 }
 
 const actions = {
 	/**
+	 * Update files, folders and their respective subfolders
+	 */
+	updateFoldersFiles(context: PhotosContext<FoldersState>, { folder, files = [], folders = [] }: { folder: FoldersNode, files: FoldersNode[], folders: FoldersNode[]}) {
+		// we want all the FileInfo! Folders included!
+		context.commit('updateFoldersFiles', { newFiles: [folder, ...files, ...folders], nomediaPaths: context.rootState.files.nomediaPaths })
+		context.commit('setSubFolders', { fileid: folder.fileid, folders })
+	},
+
+	/**
+	 * Append or update given files
+	 */
+	appendFoldersFiles(context: PhotosContext<FoldersState>, files: FoldersNode[] = []) {
+		context.commit('updateFoldersFiles', { newFiles: files, nomediaPaths: context.rootState.files.nomediaPaths })
+	},
+
+	/**
 	 * Update files and folders
 	 */
-	updateFolders(context, { fileid, files, folders }: { fileid: string, files: PhotoNode[], folders: PhotoNode[] }) {
+	updateFolders(context: PhotosContext<FoldersState>, { fileid, files, folders }: { fileid: number, files: FoldersNode[], folders: FoldersNode[] }) {
 		context.commit('updateFolders', { fileid, files })
 
 		// then add each folders path indexes
@@ -74,14 +133,14 @@ const actions = {
 	/**
 	 * Index folders paths and ids
 	 */
-	addPath(context, { path, fileid }: { path: string, fileid: string }) {
+	addPath(context: PhotosContext<FoldersState>, { path, fileid }: { path: string, fileid: number }) {
 		context.commit('addPath', { path, fileid })
 	},
 
 	/**
 	 * Append files to a folder
 	 */
-	addFilesToFolder(context, { fileid, files }: { fileid: string, files: PhotoNode[] }) {
+	addFilesToFolder(context: PhotosContext<FoldersState>, { fileid, files }: { fileid: number, files: FoldersNode[] }) {
 		context.commit('addFilesToFolder', { fileid, files })
 	},
 }

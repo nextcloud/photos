@@ -53,7 +53,7 @@ const photosTab = new OCA.Files.Sidebar.Tab({
 
 window.addEventListener('DOMContentLoaded', async function() {
 	if (OCA.Files && OCA.Files.Sidebar) {
-		OCA.Files.Sidebar.registerTab(photosTab)
+		window.OCA.Files.Sidebar.registerTab(photosTab)
 		const { default: PhotosTab } = await import(/* webpackPreload: true */ './views/PhotosTab.vue')
 		PhotosTabView = PhotosTabView ?? Vue.extend(PhotosTab)
 	}

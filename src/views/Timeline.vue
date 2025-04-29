@@ -107,6 +107,7 @@
 
 		<NcModal v-if="showAlbumCreationForm"
 			key="albumCreationForm"
+			label-id="new-album-form"
 			:set-return-focus="$refs.newAlbumButton?.$el"
 			@close="showAlbumCreationForm = false">
 			<h2 class="timeline__heading">
@@ -117,6 +118,7 @@
 
 		<NcModal v-if="showAlbumPicker"
 			key="albumPicker"
+			:label-id="t('photos', 'album-picker')"
 			@close="showAlbumPicker = false">
 			<AlbumPicker @album-picked="addSelectionToAlbum" />
 		</NcModal>
@@ -124,7 +126,6 @@
 </template>
 
 <script lang='ts'>
-import { mapActions, mapGetters } from 'vuex'
 import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import Delete from 'vue-material-design-icons/Delete.vue'
@@ -151,6 +152,8 @@ import ActionDownload from '../components/Actions/ActionDownload.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
 import { configChangedEvent } from '../store/userConfig.js'
+import type { Album } from '../store/albums.js'
+import { toViewerFileInfo } from '../utils/fileUtils.js'
 
 export default {
 	name: 'Timeline',
@@ -227,9 +230,9 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'files',
-		]),
+		files() {
+			return this.$store.state.files.files
+		},
 	},
 
 	mounted() {
@@ -241,11 +244,6 @@ export default {
 	},
 
 	methods: {
-		...mapActions([
-			'deleteFiles',
-			'addFilesToCollection',
-		]),
-
 		getContent() {
 			this.fetchFiles({
 				mimesType: this.mimesType,
@@ -255,12 +253,9 @@ export default {
 		},
 
 		openViewer(fileId) {
-			const file = this.files[fileId]
-			OCA.Viewer.open({
-				fileInfo: file,
-				list: Object.values(this.fileIdsByMonth).flat().map(fileId => this.files[fileId]),
-				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
-				canLoop: file.canLoop,
+			window.OCA.Viewer.open({
+				fileInfo: toViewerFileInfo(this.files[fileId]),
+				list: Object.values(this.fileIdsByMonth).flat().map(fileId => toViewerFileInfo(this.files[fileId])),
 			})
 		},
 
@@ -268,9 +263,9 @@ export default {
 			// TODO: finish when implementing upload
 		},
 
-		async addSelectionToAlbum(album) {
+		async addSelectionToAlbum(album: Album) {
 			this.showAlbumPicker = false
-			await this.addFilesToCollection({ collectionFileName: album.filename, fileIdsToAdd: this.selectedFileIds })
+			await this.$store.dispatch('addFilesToCollection', { collectionFileName: album.root + album.path, fileIdsToAdd: this.selectedFileIds })
 		},
 
 		async deleteSelection() {
@@ -278,7 +273,7 @@ export default {
 			const fileIds = this.selectedFileIds
 			this.onUncheckFiles(fileIds)
 			this.fetchedFileIds = this.fetchedFileIds.filter(fileid => !fileIds.includes(fileid))
-			await this.deleteFiles(fileIds)
+			await this.$store.dispatch('deleteFiles', fileIds)
 		},
 
 		handleUserConfigChange({ key }) {

@@ -3,19 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type { Collection } from "../services/collectionFetcher"
+import type { PhotosRootSate } from '.'
+import type { Album } from './albums'
 
-export type PublicAlbum = Collection & {
-	originalName: string // The original name of the album.
-	location: string // The user set location of the album.
+export type PublicAlbum = Album & {
+	attributes: {
+		'original-name': string // The original name of the album.
+	}
 }
 
-const publicAlbumsPrefix = '/photospublic/'
+const publicAlbumsPrefix = '/photospublic'
 
 const getters = {
 	publicAlbums: (_, __, ___, rootGetters): PublicAlbum[] => rootGetters.collectionsWithPrefix(publicAlbumsPrefix),
-	getPublicAlbum: (_, __, rootState) => (publicAlbumName): PublicAlbum => rootState.collections.collections[`${publicAlbumsPrefix}${publicAlbumName}`] || null,
-	getPublicAlbumFiles: (_, __, rootState) => publicAlbumName => rootState.collections.collectionsFiles[`${publicAlbumsPrefix}${publicAlbumName}`] || [],
-	getPublicAlbumName: (_, __, ___) => publicAlbumName => `${publicAlbumsPrefix}${publicAlbumName}`,
+	getPublicAlbum: (_, __, rootState: PhotosRootSate) => (publicAlbumName: string): PublicAlbum => rootState.collections.collections[`${publicAlbumsPrefix}/${publicAlbumName}`] as unknown as PublicAlbum || null,
+	getPublicAlbumFiles: (_, __, rootState: PhotosRootSate) => (publicAlbumName: string): string[] => rootState.collections.collectionsFiles[`${publicAlbumsPrefix}/${publicAlbumName}`] || [],
+	getPublicAlbumName: (_, __, ___) => (publicAlbumName: string) => `${publicAlbumsPrefix}/${publicAlbumName}`,
 }
 export default { getters }

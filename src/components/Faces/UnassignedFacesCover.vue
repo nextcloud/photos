@@ -6,7 +6,7 @@
 <template>
 	<div :class="['face-cover', small && 'face-cover--small']" @click="$emit('click')">
 		<div class="face-cover__crop-container">
-			<AccountOffIcon :size="'auto'" :fill-color="colorMainBackground" />
+			<AccountOffIcon :size="128" :fill-color="colorMainBackground" />
 		</div>
 		<div class="face-cover__details">
 			<div v-if="!small" class="face-cover__details__second-line">
@@ -17,7 +17,8 @@
 </template>
 
 <script lang='ts'>
-import { mapGetters } from 'vuex'
+import { translatePlural as n } from '@nextcloud/l10n'
+
 import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
 import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
 import AccountOffIcon from 'vue-material-design-icons/AccountOff.vue'
@@ -40,9 +41,10 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'unassignedFilesCount',
-		]),
+		unassignedFilesCount() {
+			return this.$store.state.faces.unassignedFilesCount
+		},
+
 		colorMainBackground() {
 			return getComputedStyle(document.documentElement).getPropertyValue('--color-main-background')
 		},
@@ -50,6 +52,10 @@ export default {
 
 	async mounted() {
 		await this.fetchUnassignedFacesCount()
+	},
+
+	methods: {
+		n,
 	},
 }
 </script>

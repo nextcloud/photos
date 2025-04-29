@@ -3,7 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
 	name: 'AbortControllerMixin',
 
 	data() {
@@ -21,4 +23,4 @@ export default {
 		this.abortController = new AbortController()
 		next()
 	},
-}
+})

@@ -3,17 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-export default {
+import { defineComponent } from 'vue'
+import type { PhotoFile } from '../store/files.ts'
+
+export default defineComponent({
 	name: 'FilesByMonthMixin',
 
 	computed: {
 		fileIdsByMonth(): Record<string, string[]> {
 			const filesByMonth = {}
-			for (const fileId of this.fetchedFileIds) {
-				const file = this.files[fileId]
+			for (const fileId of (this.fetchedFileIds as number[])) {
+				const file = (this.files as Record<string, PhotoFile>)[fileId]
 				if (file) {
-					filesByMonth[file.month] = filesByMonth[file.month] ?? []
-					filesByMonth[file.month].push(file.fileid)
+					filesByMonth[file.attributes.month] = filesByMonth[file.attributes.month] ?? []
+					filesByMonth[file.attributes.month].push(file.fileid)
 				}
 			}
 
@@ -33,7 +36,7 @@ export default {
 
 	methods: {
 		sortFilesByTimestamp(fileId1: string, fileId2: string): -1|1 {
-			return this.files[fileId1].timestamp > this.files[fileId2].timestamp ? -1 : 1
+			return (this.files as Record<string, PhotoFile>)[fileId1].attributes.timestamp > (this.files as Record<string, PhotoFile>)[fileId2].attributes.timestamp ? -1 : 1
 		},
 	},
-}
+})

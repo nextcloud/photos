@@ -32,7 +32,7 @@
 
 <script lang='ts'>
 import { NcAppSettingsDialog, NcAppSettingsSection } from '@nextcloud/vue'
-import { translate as t } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 
 import CroppedLayoutSettings from './CroppedLayoutSettings.vue'
 import PhotosSourceLocationsSettings from './PhotosSourceLocationsSettings.vue'

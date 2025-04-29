@@ -58,8 +58,8 @@
 						{{ t('photos', 'Add to {destination}', { destination }) }}
 					</NcButton>
 				</div>
-				<NcNoteCard v-if="photosLocationFolder.attributes['owner-id'] !== currentUser" type="warning">
-					{{ t('photos', 'The destination folder is owned by {owner}', { owner: photosLocationFolder.attributes['owner-id'] }) }}
+				<NcNoteCard v-if="photosLocationFolder?.attributes['owner-id'] !== currentUser" type="warning">
+					{{ t('photos', 'The destination folder is owned by {owner}', { owner: photosLocationFolder?.attributes['owner-id'] }) }}
 				</NcNoteCard>
 			</div>
 		</template>
@@ -95,10 +95,10 @@
 </template>
 
 <script lang='ts'>
+import { defineComponent, type PropType } from 'vue'
 import { UploadPicker } from '@nextcloud/upload'
+import { t } from '@nextcloud/l10n'
 import { NcButton, NcDialog, NcLoadingIcon, NcSelect, NcNoteCard, useIsMobile } from '@nextcloud/vue'
-import { defineComponent } from 'vue'
-import { mapGetters } from 'vuex'
 
 import moment from '@nextcloud/moment'
 import { getCurrentUser } from '@nextcloud/auth'
@@ -159,7 +159,7 @@ export default defineComponent({
 
 		// List of file ids to not show.
 		blacklistIds: {
-			type: Array,
+			type: Array as PropType<number[]>,
 			default: () => [],
 		},
 
@@ -181,18 +181,18 @@ export default defineComponent({
 	data() {
 		return {
 			allowedMimes,
-			targetMonth: null,
+			targetMonth: null as string|null,
 			uploadContext: {
 				route: 'albumpicker',
 			},
-			currentUser: getCurrentUser().uid,
+			currentUser: getCurrentUser()?.uid,
 		}
 	},
 
 	computed: {
-		...mapGetters([
-			'files',
-		]),
+		files() {
+			return this.$store.state.files.files
+		},
 
 		photosLocationFolder() {
 			return this.$store.state.userConfig.photosLocationFolder
@@ -208,12 +208,9 @@ export default defineComponent({
 	},
 
 	methods: {
-		/**
-		 * @param {FocusEvent} event The focus event
-		 */
-		onFocusOut(event) {
+		onFocusOut(event: FocusEvent) {
 			if (event.relatedTarget === null) { // Focus escaping to body
-				event.target.focus({ preventScroll: true })
+				event.target?.focus({ preventScroll: true })
 			}
 		},
 
@@ -237,6 +234,8 @@ export default defineComponent({
 			}
 			return moment(date, 'YYYYMM').format('MMMM YYYY')
 		},
+
+		t,
 	},
 })
 </script>

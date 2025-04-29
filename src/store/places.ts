@@ -4,13 +4,15 @@
  */
 
 import { getCurrentUser } from '@nextcloud/auth'
+import type { PhotosRootSate } from '.'
+import type { Collection } from '../services/collectionFetcher'
 
-const placesPrefix = `/photos/${getCurrentUser()?.uid}/places/`
+const placesPrefix = `/photos/${getCurrentUser()?.uid}/places`
 
 const getters = {
-	places: (_, __, ___, rootGetters) => rootGetters.collectionsWithPrefix(placesPrefix),
-	getPlace: (_, __, rootState) => placeName => rootState.collections.collections[`${placesPrefix}${placeName}`] || null,
-	getPlaceFiles: (_, __, rootState) => placeName => rootState.collections.collectionsFiles[`${placesPrefix}${placeName}`] || [],
+	places: (_, __, ___, rootGetters): Collection[] => rootGetters.collectionsWithPrefix(placesPrefix),
+	getPlace: (_, __, rootState: PhotosRootSate) => (placeName: string): Collection => rootState.collections.collections[`${placesPrefix}/${placeName}`] || null,
+	getPlaceFiles: (_, __, rootState: PhotosRootSate) => (placeName: string) => rootState.collections.collectionsFiles[`${placesPrefix}/${placeName}`] || [],
 }
 
 export default { getters }

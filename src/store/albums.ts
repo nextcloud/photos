@@ -7,7 +7,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import type { ShareType } from '@nextcloud/sharing'
 
 import type { Collection } from '../services/collectionFetcher'
-import type { PhotoNode } from '../utils/fileUtils'
+import type { PhotosRootSate } from '.'
 
 export type Collaborator = {
 	id: string // - The id of the collaborator.
@@ -16,16 +16,19 @@ export type Collaborator = {
 }
 
 export type Album = Collection & {
-	location: string // - The user set location of the album.
-	collaborators: Collaborator[] // - The list of collaborators.
+	attributes: {
+		location: string // - The user set location of the album.
+		collaborators: Collaborator[] // - The list of collaborators.
+		date: string // The date of the collection.
+	}
 }
 
-const albumsPrefix = `/photos/${getCurrentUser()?.uid}/albums/`
+const albumsPrefix = `/photos/${getCurrentUser()?.uid}/albums`
 
 const getters = {
-	albums: (_, __, ___, rootGetters): Album[] => rootGetters.collectionsWithPrefix(albumsPrefix),
-	getAlbum: (_, __, rootState) => (albumName): Album => rootState.collections.collections[`${albumsPrefix}${albumName}`],
-	getAlbumFiles: (_, __, rootState) => (albumName): PhotoNode[] => rootState.collections.collectionsFiles[`${albumsPrefix}${albumName}`] || [],
-	getAlbumName: (_, __, ___) => albumName => `${albumsPrefix}${albumName}`,
+	albums: (_, __, ___, rootGetters): Record<string, Album> => rootGetters.collectionsWithPrefix(albumsPrefix),
+	getAlbum: (_, __, rootState: PhotosRootSate) => (albumName: string): Album => rootState.collections.collections[`${albumsPrefix}/${albumName}`] as unknown as Album,
+	getAlbumFiles: (_, __, rootState: PhotosRootSate) => (albumName: string): string[] => rootState.collections.collectionsFiles[`${albumsPrefix}/${albumName}`] || [],
+	getAlbumName: (_, __, ___) => (albumName: string) => `${albumsPrefix}/${albumName}`,
 }
 export default { getters }

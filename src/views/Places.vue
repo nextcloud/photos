@@ -19,13 +19,13 @@
 				slot-scope="{collection}"
 				:link="`/places/${collection.basename}`"
 				:alt-img="t('photos', 'Cover photo for place {placeName}', { placeName: collection.basename })"
-				:cover-url="collection.lastPhoto | coverUrl">
+				:cover-url="collection.attributes['last-photo'] | coverUrl">
 				<span class="place__name">
 					{{ collection.basename }}
 				</span>
 
 				<div slot="subtitle" class="place__details">
-					{{ n('photos', '%n item', '%n photos and videos', collection.nbItems,) }}
+					{{ n('photos', '%n item', '%n photos and videos', collection.attributes.nbItems,) }}
 				</div>
 			</CollectionCover>
 

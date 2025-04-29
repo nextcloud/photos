@@ -7,7 +7,7 @@
 </template>
 
 <script lang='ts'>
-import { translate as t } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 import { NcIconSvgWrapper } from '@nextcloud/vue'
 import { defineComponent } from 'vue'
 
