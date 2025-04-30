@@ -52,6 +52,7 @@ export default defineComponent({
 				return []
 			}
 
+			const signal = this.abortController.signal
 			const fetchSemaphoreSymbol = await this.fetchSemaphore.acquire()
 
 			try {
@@ -65,7 +66,7 @@ export default defineComponent({
 					firstResult: this.fetchedFileIds.length,
 					nbResults: numberOfImagesPerBatch,
 					...options,
-					signal: this.abortController.signal,
+					signal,
 				})
 
 				// If we get less files than requested that means we got to the end
@@ -121,6 +122,7 @@ export default defineComponent({
 		},
 
 		resetFetchFilesState() {
+			this.abortPendingRequest()
 			this.doneFetchingFiles = false
 			this.errorFetchingFiles = null
 			this.loadingFiles = false
