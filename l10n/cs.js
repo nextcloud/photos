@@ -134,6 +134,7 @@ OC.L10N.register(
     "Add to album" : "Přidat do alba",
     "Delete selection" : "Smazat výběr",
     "No photos or videos in here" : "Nenacházejí se zde žádné fotky nebo videa",
+    "album-picker" : "výběr alba",
     "Unassigned faces" : "Nepřiřazené obličeje",
     "Failed to fetch collection." : "Sbírku se nepodařilo stáhnout.",
     "Failed to fetch collections list." : "Nepodařilo se získat seznam sbírek.",
