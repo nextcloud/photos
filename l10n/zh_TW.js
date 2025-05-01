@@ -134,6 +134,7 @@ OC.L10N.register(
     "Add to album" : "新增至相簿",
     "Delete selection" : "刪除選擇",
     "No photos or videos in here" : "此處沒有照片或影片",
+    "album-picker" : "相簿選取程式",
     "Unassigned faces" : "未指派的臉孔",
     "Failed to fetch collection." : "擷取收藏品失敗。",
     "Failed to fetch collections list." : "擷取收藏清單失敗。",
