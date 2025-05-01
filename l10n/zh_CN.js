@@ -134,6 +134,7 @@ OC.L10N.register(
     "Add to album" : "添加至相册",
     "Delete selection" : "删除选择项",
     "No photos or videos in here" : "此处没有图片或视频",
+    "album-picker" : "相册选择器",
     "Unassigned faces" : "未指派的人脸",
     "Failed to fetch collection." : "获取合集失败",
     "Failed to fetch collections list." : "获取合集列表失败",
