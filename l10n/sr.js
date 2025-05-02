@@ -134,6 +134,7 @@ OC.L10N.register(
     "Add to album" : "Додај у албум",
     "Delete selection" : "Обриши одабир",
     "No photos or videos in here" : "Овде нема фотографија или видео снимака",
+    "album-picker" : "бирач-албума",
     "Unassigned faces" : "Недодељена лица",
     "Failed to fetch collection." : "Није успело добављање колекције.",
     "Failed to fetch collections list." : "Није успело добављање листе колекција.",
