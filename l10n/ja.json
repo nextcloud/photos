@@ -132,6 +132,7 @@
     "Add to album" : "アルバムに追加",
     "Delete selection" : "選択した項目を削除",
     "No photos or videos in here" : "ここには写真も動画もありません",
+    "album-picker" : "アルバムピッカー",
     "Unassigned faces" : "未割り当ての顔",
     "Failed to fetch collection." : "コレクションの取得に失敗しました。",
     "Failed to fetch collections list." : "コレクションリストの取得に失敗しました。",
