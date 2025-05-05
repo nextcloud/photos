@@ -19,11 +19,13 @@ SPDX-FileCopyrightText: escape-html developers
 SPDX-FileCopyrightText: debounce developers
 SPDX-FileCopyrightText: Tobias Koppers @sokra
 SPDX-FileCopyrightText: Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)
+SPDX-FileCopyrightText: Thorsten Lünborg
 SPDX-FileCopyrightText: T. Jameson Little <t.jameson.little@gmail.com>
 SPDX-FileCopyrightText: Sindre Sorhus
 SPDX-FileCopyrightText: Roman Shtylman <shtylman@gmail.com>
 SPDX-FileCopyrightText: Roeland Jago Douma
 SPDX-FileCopyrightText: Rob Cresswell <robcresswell@pm.me>
+SPDX-FileCopyrightText: Richie Bendall
 SPDX-FileCopyrightText: Raynos <raynos2@gmail.com>
 SPDX-FileCopyrightText: Perry Mitchell <perry@perrymitchell.net>
 SPDX-FileCopyrightText: Paul Vorbach <paul@vorba.ch> (http://paul.vorba.ch)
@@ -38,14 +40,17 @@ SPDX-FileCopyrightText: Mapbox
 SPDX-FileCopyrightText: Julian Gruber
 SPDX-FileCopyrightText: Joyent
 SPDX-FileCopyrightText: José F. Romaniello <jfromaniello@gmail.com> (http://joseoncode.com)
+SPDX-FileCopyrightText: Jordan Humphreys <jordan@zurb.com>
 SPDX-FileCopyrightText: Jordan Harband <ljharb@gmail.com>
 SPDX-FileCopyrightText: Jordan Harband
 SPDX-FileCopyrightText: John Molakvoæ <skjnldsv@protonmail.com>
 SPDX-FileCopyrightText: John Molakvoæ (skjnldsv) <skjnldsv@protonmail.com>
 SPDX-FileCopyrightText: Jeff Sagal <sagalbot@gmail.com>
 SPDX-FileCopyrightText: James Halliday
+SPDX-FileCopyrightText: Jacob Clevenger<https://github.com/wheatjs>
 SPDX-FileCopyrightText: Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me)
 SPDX-FileCopyrightText: Irakli Gozalishvili <rfobic@gmail.com> (http://jeditoolkit.com)
+SPDX-FileCopyrightText: Hypercontext
 SPDX-FileCopyrightText: Hiroki Osame
 SPDX-FileCopyrightText: Guillaume Chau <guillaume.b.chau@gmail.com>
 SPDX-FileCopyrightText: GitHub Inc.
@@ -64,12 +69,16 @@ SPDX-FileCopyrightText: Arnout Kazemier
 SPDX-FileCopyrightText: Antoni Andre <antoniandre.web@gmail.com>
 SPDX-FileCopyrightText: Anthony Fu <https://github.com/antfu>
 SPDX-FileCopyrightText: Anthony Fu <anthonyfu117@hotmail.com>
+SPDX-FileCopyrightText: Andrey Sitnik <andrey@sitnik.ru>
 SPDX-FileCopyrightText: Andrea Giammarchi
 SPDX-FileCopyrightText: Amit Gupta (https://solothought.com)
 SPDX-FileCopyrightText: Amit Gupta (https://amitkumargupta.work/)
 
 
 This file is generated from multiple sources. Included packages:
+- @linusborg/vue-simple-portal
+	- version: 0.1.5
+	- license: Apache-2.0
 - unist-util-is
 	- version: 3.0.0
 	- license: MIT
@@ -175,6 +184,9 @@ This file is generated from multiple sources. Included packages:
 - @ungap/structured-clone
 	- version: 1.2.0
 	- license: ISC
+- @vueuse/components
+	- version: 11.3.0
+	- license: MIT
 - available-typed-arrays
 	- version: 1.0.7
 	- license: MIT
@@ -213,6 +225,9 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - camelcase
 	- version: 8.0.0
+	- license: MIT
+- char-regex
+	- version: 2.0.1
 	- license: MIT
 - charenc
 	- version: 0.0.2
@@ -263,7 +278,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 3.3.0
 	- license: MIT
 - fast-xml-parser
-	- version: 4.4.1
+	- version: 4.5.3
 	- license: MIT
 - floating-vue
 	- version: 1.0.0-beta.19
@@ -339,6 +354,12 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - layerr
 	- version: 0.1.2
+	- license: MIT
+- linkify-string
+	- version: 4.0.1
+	- license: MIT
+- linkifyjs
+	- version: 4.0.1
 	- license: MIT
 - math-intrinsics
 	- version: 1.1.0
@@ -421,6 +442,9 @@ This file is generated from multiple sources. Included packages:
 - micromark
 	- version: 4.0.2
 	- license: MIT
+- nanoid
+	- version: 3.3.8
+	- license: MIT
 - nested-property
 	- version: 4.0.0
 	- license: MIT
@@ -475,6 +499,15 @@ This file is generated from multiple sources. Included packages:
 - stream-browserify
 	- version: 3.0.0
 	- license: MIT
+- ansi-regex
+	- version: 6.0.1
+	- license: MIT
+- strip-ansi
+	- version: 7.0.1
+	- license: MIT
+- string-length
+	- version: 5.0.1
+	- license: MIT
 - string_decoder
 	- version: 1.1.1
 	- license: MIT
@@ -482,7 +515,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 3.2.0
 	- license: MIT
 - strnum
-	- version: 1.0.5
+	- version: 1.1.2
 	- license: MIT
 - style-loader
 	- version: 4.0.0
@@ -492,6 +525,9 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - tabbable
 	- version: 6.2.0
+	- license: MIT
+- tributejs
+	- version: 5.1.3
 	- license: MIT
 - trim-lines
 	- version: 3.0.1
