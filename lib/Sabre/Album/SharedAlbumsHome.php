@@ -18,14 +18,14 @@ use Psr\Log\LoggerInterface;
 use Sabre\DAV\Exception\Forbidden;
 
 class SharedAlbumsHome extends AlbumsHome {
-	public const NAME = 'sharedalbums';
+	public const string NAME = 'sharedalbums';
 
 	public function __construct(
 		array $principalInfo,
 		AlbumMapper $albumMapper,
 		string $userId,
 		IRootFolder $rootFolder,
-		private readonly IUserManager $userManager,
+		IUserManager $userManager,
 		private readonly IGroupManager $groupManager,
 		UserConfigService $userConfigService,
 		LoggerInterface $logger,
@@ -37,6 +37,7 @@ class SharedAlbumsHome extends AlbumsHome {
 			$rootFolder,
 			$userConfigService,
 			$logger,
+			$userManager,
 		);
 	}
 
@@ -48,7 +49,7 @@ class SharedAlbumsHome extends AlbumsHome {
 	}
 
 	/**
-	 * @return SharedAlbumRoot[]
+	 * @return AlbumRootBase[]
 	 */
 	public function getChildren(): array {
 		if ($this->children === null) {

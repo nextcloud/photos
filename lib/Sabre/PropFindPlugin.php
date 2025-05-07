@@ -9,9 +9,9 @@ declare(strict_types=1);
 namespace OCA\Photos\Sabre;
 
 use OCA\DAV\Connector\Sabre\FilesPlugin;
-use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Sabre\Album\AlbumPhoto;
 use OCA\Photos\Sabre\Album\AlbumRoot;
+use OCA\Photos\Sabre\Album\AlbumRootBase;
 use OCA\Photos\Sabre\Album\PublicAlbumPhoto;
 use OCA\Photos\Sabre\Place\PlacePhoto;
 use OCA\Photos\Sabre\Place\PlaceRoot;
@@ -19,6 +19,7 @@ use OCP\Files\DavUtil;
 use OCP\Files\NotFoundException;
 use OCP\FilesMetadata\IFilesMetadataManager;
 use OCP\IPreview;
+use Sabre\DAV\ICollection;
 use Sabre\DAV\INode;
 use Sabre\DAV\PropFind;
 use Sabre\DAV\PropPatch;
@@ -110,10 +111,13 @@ class PropFindPlugin extends ServerPlugin {
 
 		}
 
-		if ($node instanceof AlbumRoot) {
+		if ($node instanceof ICollection) {
+			$propFind->handle(self::NBITEMS_PROPERTYNAME, fn (): int => count($node->getChildren()));
+		}
+
+		if ($node instanceof AlbumRootBase) {
 			$propFind->handle(self::ORIGINAL_NAME_PROPERTYNAME, fn (): string => $node->getAlbum()->getAlbum()->getTitle());
 			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn (): int => $node->getAlbum()->getAlbum()->getLastAddedPhoto());
-			$propFind->handle(self::NBITEMS_PROPERTYNAME, fn (): int => count($node->getChildren()));
 			$propFind->handle(self::LOCATION_PROPERTYNAME, fn (): string => $node->getAlbum()->getAlbum()->getLocation());
 			$propFind->handle(self::DATE_RANGE_PROPERTYNAME, fn () => json_encode($node->getDateRange()));
 			$propFind->handle(self::COLLABORATORS_PROPERTYNAME, fn (): array => $node->getCollaborators());
@@ -121,7 +125,6 @@ class PropFindPlugin extends ServerPlugin {
 
 		if ($node instanceof PlaceRoot) {
 			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn (): int => $node->getFirstPhoto());
-			$propFind->handle(self::NBITEMS_PROPERTYNAME, fn (): int => count($node->getChildren()));
 		}
 	}
 
@@ -132,8 +135,7 @@ class PropFindPlugin extends ServerPlugin {
 				if ($location instanceof Complex) {
 					$location = $location->getXml();
 				}
-
-				$this->albumMapper->setLocation($node->getAlbum()->getAlbum()->getId(), $location);
+				$node->setLocation($location);
 				return true;
 			});
 			$propPatch->handle(self::COLLABORATORS_PROPERTYNAME, function ($collaborators) use ($node) {

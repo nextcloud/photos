@@ -17,6 +17,7 @@ class AlbumInfo {
 		private readonly int $created,
 		private readonly int $lastAdded,
 		private readonly ?int $receivedFrom = null,
+		private readonly ?array $filters = null,
 	) {
 	}
 
@@ -46,5 +47,9 @@ class AlbumInfo {
 
 	public function getReceivedFrom(): ?int {
 		return $this->receivedFrom;
+	}
+
+	public function getFilters(): ?array {
+		return $this->filters;
 	}
 }
