@@ -29,11 +29,6 @@ declare global {
 			 * **Warning**: Using this function will reset the previous session
 			 */
 			uploadContent(user: User, content: Blob, mimeType: string, target: string): Cypress.Chainable<void>,
-
-			/**
-			 * Run an occ command in the docker container.
-			 */
-			runOccCommand(command: string): Cypress.Chainable<void>,
 		}
 	}
 }

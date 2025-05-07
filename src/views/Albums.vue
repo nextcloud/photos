@@ -8,40 +8,48 @@
 			:loading="loadingCollections"
 			:error="errorFetchingCollections"
 			class="albums-list">
-			<HeaderNavigation key="navigation"
-				slot="header"
-				:loading="loadingCollections"
-				:title="t('photos', 'Albums')"
-				:root-title="t('photos', 'Albums')"
-				@refresh="fetchAlbums">
-				<NcButton :aria-label="isMobile ? t('photos', 'New album') : undefined"
-					@click="showAlbumCreationForm = true">
+			<template #header>
+				<HeaderNavigation key="navigation"
+					:loading="loadingCollections"
+					:title="t('photos', 'Albums')"
+					:root-title="t('photos', 'Albums')"
+					@refresh="fetchAlbums">
+					<NcButton :aria-label="isMobile ? t('photos', 'New album') : undefined"
+						@click="showAlbumCreationForm = true">
+						<template #icon>
+							<Plus :size="20" />
+						</template>
+						<template v-if="!isMobile" #default>
+							{{ t('photos', 'New album') }}
+						</template>
+					</NcButton>
+				</HeaderNavigation>
+			</template>
+
+			<template #default="{collection}">
+				<CollectionCover :key="collection.basename"
+					:link="`/albums/${collection.basename}`"
+					:alt-img="t('photos', 'Cover photo for album {albumName}', { albumName: collection.basename })"
+					:cover-url="collection.attributes['last-photo'] | coverUrl">
+					<span class="album__name">
+						{{ collection.basename }}
+					</span>
+
+					<template #subtitle>
+						<div class="album__details">
+							{{ collection.attributes.date }} ⸱ {{ n('photos', '%n item', '%n photos and videos', collection.attributes.nbItems,) }}
+						</div>
+					</template>
+				</CollectionCover>
+			</template>
+
+			<template #empty-collections-list>
+				<NcEmptyContent :name="t('photos', 'There is no album yet!')">
 					<template #icon>
-						<Plus :size="20" />
+						<FolderMultipleImage />
 					</template>
-					<template v-if="!isMobile" #default>
-						{{ t('photos', 'New album') }}
-					</template>
-				</NcButton>
-			</HeaderNavigation>
-
-			<CollectionCover :key="collection.basename"
-				slot-scope="{collection}"
-				:link="`/albums/${collection.basename}`"
-				:alt-img="t('photos', 'Cover photo for album {albumName}', { albumName: collection.basename })"
-				:cover-url="collection.attributes['last-photo'] | coverUrl">
-				<span class="album__name">
-					{{ collection.basename }}
-				</span>
-
-				<div slot="subtitle" class="album__details">
-					{{ collection.attributes.date }} ⸱ {{ n('photos', '%n item', '%n photos and videos', collection.attributes.nbItems,) }}
-				</div>
-			</CollectionCover>
-
-			<NcEmptyContent slot="empty-collections-list" :name="t('photos', 'There is no album yet!')">
-				<FolderMultipleImage slot="icon" />
-			</NcEmptyContent>
+				</NcEmptyContent>
+			</template>
 		</CollectionsList>
 
 		<NcModal v-if="showAlbumCreationForm"
@@ -58,20 +66,20 @@
 <script lang='ts'>
 import Plus from 'vue-material-design-icons/Plus.vue'
 import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
+import { defineComponent } from 'vue'
 
 import { generateUrl } from '@nextcloud/router'
 import { NcModal, NcButton, NcEmptyContent, useIsSmallMobile } from '@nextcloud/vue'
 import { translate, translatePlural } from '@nextcloud/l10n'
-import { getCurrentUser } from '@nextcloud/auth'
 
 import CollectionsList from '../components/Collection/CollectionsList.vue'
 import CollectionCover from '../components/Collection/CollectionCover.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
-import type { Album } from '../store/albums.js'
+import { albumsPrefix } from '../store/albums.js'
 
-export default {
+export default defineComponent({
 	name: 'Albums',
 	components: {
 		Plus,
@@ -113,7 +121,7 @@ export default {
 	},
 
 	computed: {
-		albums(): Record<string, Album> {
+		albums() {
 			return this.$store.getters.albums
 		},
 	},
@@ -125,20 +133,20 @@ export default {
 	methods: {
 		fetchAlbums() {
 			this.fetchCollections(
-				`/photos/${getCurrentUser()?.uid}/albums`,
+				albumsPrefix,
 				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />'],
 			)
 		},
 
 		handleAlbumCreated({ album }) {
 			this.showAlbumCreationForm = false
-			this.$router.push(`albums/${album.basename}`)
+			this.$router.push(`/albums/${album.basename}`)
 		},
 
 		t: translate,
 		n: translatePlural,
 	},
-}
+})
 </script>
 <style lang="scss" scoped>
 .albums-list {

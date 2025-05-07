@@ -31,7 +31,7 @@
 				</NcAppNavigationItem>
 				<NcAppNavigationItem :to="{name: 'sharedAlbums'}"
 					:name="t('photos', 'Collaborative albums')"
-					data-id-app-nav-item="shared-albums">
+					data-id-app-nav-item="sharedalbums">
 					<AccountGroup slot="icon" :size="20" />
 				</NcAppNavigationItem>
 				<NcAppNavigationItem v-if="showPeopleMenuEntry"
@@ -115,6 +115,7 @@
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
 import { loadState } from '@nextcloud/initial-state'
+import { t } from '@nextcloud/l10n'
 
 import Camera from 'vue-material-design-icons/Camera.vue'
 import ImageIcon from 'vue-material-design-icons/Image.vue'
@@ -222,6 +223,8 @@ export default {
 		showSettings() {
 			this.openedSettings = true
 		},
+
+		t,
 	},
 }
 </script>

@@ -17,9 +17,9 @@
 
 		<!-- List -->
 		<ul v-else-if="!noCollection" class="collections__list">
-			<slot v-for="collection in collections"
-				:collection="collection"
-				class="collection" />
+			<li v-for="collection in collections" :key="collection.basename" :data-cy-collections-list-collection="collection.basename">
+				<slot :collection="collection" />
+			</li>
 		</ul>
 	</div>
 </template>
