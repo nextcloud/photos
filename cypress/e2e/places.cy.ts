@@ -2,8 +2,8 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { mkdir, uploadTestMedia } from './photosUtils'
-import { navigateToPlace, runOccCommand } from './placesUtils'
+import type { User } from '@nextcloud/cypress'
+import { navigateToCollection, navigateToCollections, setupPhotosTests } from './photosUtils.ts'
 
 const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/
 Cypress.on('uncaught:exception', (err) => {
@@ -13,20 +13,23 @@ Cypress.on('uncaught:exception', (err) => {
 	}
 })
 
+let alice: User
+
 describe('Manage places', () => {
-	before(function () {
-		cy.createRandomUser()
-			.then((user) => {
-				mkdir(user, '/Photos')
-				uploadTestMedia(user)
-				runOccCommand('files:scan --all --generate-metadata')
-				cy.login(user)
-				cy.visit('/apps/photos')
-			})
+	before(() => {
+		setupPhotosTests()
+		.then((setupInfo) => {
+			alice = setupInfo.alice
+		})
 	})
 
 	beforeEach(() => {
-		cy.visit('apps/photos/places')
+		cy.login(alice)
+		cy.visit('/apps/photos')
+	})
+
+	beforeEach(() => {
+		navigateToCollections('places')
 	})
 
 	it('Check that we detect some places out of the existing files', () => {
@@ -34,7 +37,7 @@ describe('Manage places', () => {
 	})
 
 	it('Navigate to place and check that it contains some files', () => {
-		navigateToPlace('Lauris')
+		navigateToCollection('places', 'Lauris')
 		cy.get('[data-test="media"]').should('have.length', 1)
 	})
 })

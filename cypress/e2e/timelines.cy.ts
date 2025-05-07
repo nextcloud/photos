@@ -2,32 +2,25 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { User } from '@nextcloud/cypress'
+import type { User } from '@nextcloud/cypress'
 import {
 	addCollaborators,
 	addFilesToAlbumFromTimeline,
 	createAnAlbumFromAlbums,
 	createAnAlbumFromTimeline,
 	deleteAnAlbumFromAlbumContent,
-	goToAlbum,
-} from './albumsUtils'
-
+} from './albumsUtils.ts'
 import {
 	deleteSelection,
 	downloadSelection,
 	favoriteSelection,
-	mkdir,
+	navigateToCollection,
 	selectMedia,
 	unfavoriteSelection,
 	unselectMedia,
-	uploadTestMedia,
-} from './photosUtils'
-import {
-	goToSharedAlbum,
-} from './sharedAlbumUtils'
-import {
-	randHash,
-} from '../utils/index.js'
+} from './photosUtils.ts'
+import { navigateToTimeline } from './timelines.ts'
+import { setupPhotosTests } from './photosUtils.ts'
 
 const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/
 Cypress.on('uncaught:exception', (err) => {
@@ -37,23 +30,20 @@ Cypress.on('uncaught:exception', (err) => {
 	}
 })
 
-const alice = new User(`alice_${randHash()}`)
-const bob = new User(`bob_${randHash()}`)
+let alice: User
+let bob: User
 
 describe('View list of photos in the main timeline', () => {
 	before(() => {
-		cy.createUser(alice).then(() => {
-			mkdir(alice, '/Photos')
-			uploadTestMedia(alice)
+		setupPhotosTests()
+		.then((setupInfo) => {
+			alice = setupInfo.alice
+			bob = setupInfo.bob
 		})
-		cy.createUser(bob).then(() => {
-			mkdir(bob, '/Photos')
-			uploadTestMedia(bob)
-		})
-		cy.login(alice)
 	})
 
 	beforeEach(() => {
+		cy.login(alice)
 		cy.visit('/apps/photos')
 	})
 
@@ -89,42 +79,49 @@ describe('View list of photos in the main timeline', () => {
 	})
 
 	it('Add file to an album from a timeline', () => {
-		createAnAlbumFromTimeline('timeline_test_single')
+		const albumName = 'timeline_test_single'
+		createAnAlbumFromTimeline(albumName)
 		selectMedia([0])
-		addFilesToAlbumFromTimeline('timeline_test_single')
-		goToAlbum('timeline_test_single')
+		addFilesToAlbumFromTimeline(albumName)
+		navigateToCollection('albums', albumName)
 		cy.get('[data-test="media"]').should('have.length', 1)
-		deleteAnAlbumFromAlbumContent()
+		deleteAnAlbumFromAlbumContent(albumName)
 	})
 
 	it('Add multiple files to an album from a timeline', () => {
-		createAnAlbumFromTimeline('timeline_test_multiple')
+		const albumName = 'timeline_test_multiple'
+		createAnAlbumFromTimeline(albumName)
 		selectMedia([1, 2])
-		addFilesToAlbumFromTimeline('timeline_test_multiple')
-		goToAlbum('timeline_test_multiple')
+		addFilesToAlbumFromTimeline(albumName)
+		navigateToCollection('albums', albumName)
 		cy.get('[data-test="media"]').should('have.length', 2)
-		deleteAnAlbumFromAlbumContent()
+		deleteAnAlbumFromAlbumContent(albumName)
 	})
 
 	it('Add file to a shared album from a timeline', () => {
-		cy.visit('apps/photos/albums')
-		createAnAlbumFromAlbums('timeline_test_shared_album')
+		const albumName = 'timeline_test_shared_album'
+		createAnAlbumFromAlbums(albumName)
 		addCollaborators([bob.userId])
 		cy.login(bob)
-		cy.visit('apps/photos')
+		cy.visit('/apps/photos')
 		selectMedia([0])
-		addFilesToAlbumFromTimeline('timeline_test_shared_album')
-		goToSharedAlbum('timeline_test_shared_album')
+		addFilesToAlbumFromTimeline(albumName)
+		navigateToCollection('sharedalbums', `${albumName} (${alice.userId})`)
 		cy.get('[data-test="media"]').should('have.length', 1)
 	})
 
 	it('Add multiple files to a shared album from a timeline', () => {
+		const albumName = 'timeline_test_shared_album'
 		cy.login(bob)
-		cy.visit('apps/photos')
+		cy.visit('/apps/photos')
+		navigateToTimeline('all-media')
 		selectMedia([1, 2])
-		addFilesToAlbumFromTimeline('timeline_test_shared_album')
-		goToSharedAlbum('timeline_test_shared_album')
+		addFilesToAlbumFromTimeline(albumName)
+		navigateToCollection('sharedalbums', `${albumName} (${alice.userId})`)
 		cy.get('[data-test="media"]').should('have.length', 3)
+		cy.login(alice)
+		cy.visit('/apps/photos')
+		navigateToTimeline('all-media')
 	})
 
 	it('Delete a file from photos', () => {

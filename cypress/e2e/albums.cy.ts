@@ -6,18 +6,18 @@ import {
 	addFilesToAlbumFromAlbum,
 	addFilesToAlbumFromAlbumFromHeader,
 	createAnAlbumFromAlbums,
-	goToAlbum,
-	removeSelectionFromAlbum,
-} from './albumsUtils'
+	removeSelectionFromCollection,
+} from './albumsUtils.ts'
 import {
 	deleteSelection,
 	favoriteSelection,
-	mkdir,
+	navigateToCollection,
+	navigateToCollections,
 	selectMedia,
+	setupPhotosTests,
 	unfavoriteSelection,
 	unselectMedia,
-	uploadTestMedia,
-} from './photosUtils'
+} from './photosUtils.ts'
 
 const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/
 Cypress.on('uncaught:exception', (err) => {
@@ -28,19 +28,14 @@ Cypress.on('uncaught:exception', (err) => {
 })
 
 describe('Manage albums', () => {
-	let user = null
+	const albumName = 'albums_test'
 
 	beforeEach(function () {
-		cy.createRandomUser()
-			.then(_user => {
-				user = _user
-				mkdir(user, '/Photos')
-				uploadTestMedia(user)
-				cy.login(user)
-			})
-		cy.visit(`${Cypress.env('baseUrl')}/index.php/apps/photos/albums`)
-		createAnAlbumFromAlbums('albums_test')
-		addFilesToAlbumFromAlbum('albums_test', [0, 1, 2])
+		setupPhotosTests()
+
+		navigateToCollections('albums')
+		createAnAlbumFromAlbums(albumName)
+		addFilesToAlbumFromAlbum(albumName, [0, 1, 2])
 	})
 
 	it('Create an album, populate it and delete it', () => {
@@ -48,16 +43,19 @@ describe('Manage albums', () => {
 	})
 
 	it('Remove a file to an album from an album content view', () => {
+		navigateToCollection('albums', albumName)
 		selectMedia([0])
-		removeSelectionFromAlbum()
+		removeSelectionFromCollection('albums', albumName)
 	})
 
 	it('Remove multiple files to an album from an album content view', () => {
+		navigateToCollection('albums', albumName)
 		selectMedia([0, 1])
-		removeSelectionFromAlbum()
+		removeSelectionFromCollection('albums', albumName)
 	})
 
 	it('Favorite a file from an album content view', () => {
+		navigateToCollection('albums', albumName)
 		selectMedia([0])
 		favoriteSelection()
 		cy.get('[data-test="media"]').eq(0).find('[aria-label="Favorite"]')
@@ -67,6 +65,7 @@ describe('Manage albums', () => {
 	})
 
 	it('Favorite multiple files from an album content view', () => {
+		navigateToCollection('albums', albumName)
 		selectMedia([1, 2])
 		favoriteSelection()
 		cy.get('[data-test="media"]').eq(1).find('[aria-label="Favorite"]')
@@ -76,25 +75,26 @@ describe('Manage albums', () => {
 		cy.get('[aria-label="Favorite"]').should('not.exist')
 	})
 
-	// it('Download a file from an album content view', () => {
-	// 	selectMedia([0])
-	// 	downloadSelection()
-	// 	unselectMedia([0])
-	// })
+	xit('Download a file from an album content view', () => {
+		selectMedia([0])
+		// downloadSelection()
+		unselectMedia([0])
+	})
 
-	// it('Download multiple files from an album content view', () => {
-	// 	selectMedia([1, 2])
-	// 	downloadSelection()
-	// 	unselectMedia([1, 2])
-	// })
+	xit('Download multiple files from an album content view', () => {
+		selectMedia([1, 2])
+		// downloadSelection()
+		unselectMedia([1, 2])
+	})
 
-	// it('Download all files from an album content view', () => {
-	// 	selectMedia([1, 2])
-	// 	downloadSelection()
-	// 	unselectMedia([1, 2])
-	// })
+	xit('Download all files from an album content view', () => {
+		selectMedia([1, 2])
+		// downloadSelection()
+		unselectMedia([1, 2])
+	})
 
 	it('Edit an album\'s name', () => {
+		navigateToCollection('albums', albumName)
 		cy.get('[aria-label="Open actions menu"]').click()
 		cy.contains('Edit album details').click()
 		cy.get('form [name="name"]').clear()
@@ -115,6 +115,7 @@ describe('Manage albums', () => {
 	})
 
 	it('Edit an album\'s location', () => {
+		navigateToCollection('albums', albumName)
 		cy.get('[aria-label="Open actions menu"]').click()
 		cy.contains('Edit album details').click()
 		cy.get('form [name="location"]').clear()
@@ -141,7 +142,7 @@ describe('Manage albums', () => {
 		cy.visit('/apps/photos')
 		selectMedia([3])
 		deleteSelection()
-		goToAlbum('albums_test')
+		navigateToCollection('albums', 'albums_test')
 		cy.get('[data-test="media"]').should('have.length', 3)
 	})
 })
