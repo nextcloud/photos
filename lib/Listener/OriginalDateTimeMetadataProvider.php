@@ -35,6 +35,7 @@ class OriginalDateTimeMetadataProvider implements IEventListener {
 
 	private function dateToTimestamp(string $format, string $date, File $node): int|false {
 		try {
+			// Note: We do not have the timezone when parsing the date, so the timestamp will be off by X hours.
 			$dateTime = DateTime::createFromFormat($format, $date);
 			if ($dateTime !== false) {
 				return $dateTime->getTimestamp();

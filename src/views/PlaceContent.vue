@@ -48,8 +48,8 @@ import { translate } from '@nextcloud/l10n'
 import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-import { getCurrentUser } from '@nextcloud/auth'
 import type { Collection } from '../services/collectionFetcher.js'
+import { placesPrefix } from '../store/places.js'
 
 export default {
 	name: 'PlaceContent',
@@ -90,7 +90,7 @@ export default {
 		},
 
 		placeFileName(): string {
-			return `/photos/${getCurrentUser()?.uid}/places/${this.placeName}`
+			return `${placesPrefix}/${this.placeName}`
 		},
 
 		placeFileIds(): string[] {

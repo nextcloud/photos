@@ -26,7 +26,7 @@ export default defineComponent({
 	],
 
 	methods: {
-		async fetchCollections(collectionHome: string, extraProps: string[], client: WebDAVClient= davClient): Promise<Collection[]> {
+		async fetchCollections(collectionHome: string, extraProps: string[] = [], client: WebDAVClient = davClient): Promise<Collection[]> {
 			if (this.loadingCollections) {
 				return []
 			}

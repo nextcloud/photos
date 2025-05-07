@@ -76,8 +76,24 @@
 						</NcActionButton>
 					</NcActions>
 				</template>
+
+				<NcButton :title="t('photos', 'Toggle filter')"
+					:aria-label="t('photos', 'Toggle filter')"
+					data-cy-timeline-action="toggle-filters"
+					type="tertiary"
+					@click="toggleFilters">
+					<template #icon>
+						<FilterOff v-if="showFilters" />
+						<FilterIcon v-else />
+					</template>
+				</NcButton>
 			</div>
 		</HeaderNavigation>
+
+		<TimelineFilters v-if="showFilters"
+			v-model="extraFilters"
+			class="timeline__filters"
+			@input="handleFiltersChange" />
 
 		<FilesListViewer ref="filesListViewer"
 			:container-element="appContent"
@@ -127,6 +143,8 @@
 
 <script lang='ts'>
 import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
+import Filter from 'vue-material-design-icons/Filter.vue'
+import FilterOff from 'vue-material-design-icons/FilterOff.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import Delete from 'vue-material-design-icons/Delete.vue'
 import PlusBoxMultiple from 'vue-material-design-icons/PlusBoxMultiple.vue'
@@ -151,9 +169,11 @@ import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import ActionDownload from '../components/Actions/ActionDownload.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
+import TimelineFilters from '../components/TimelineFilters/TimelineFilters.vue'
 import { configChangedEvent } from '../store/userConfig.js'
 import type { Album } from '../store/albums.js'
 import { toViewerFileInfo } from '../utils/fileUtils.js'
+import timelineFilters from '../services/TimelineFilters'
 
 export default {
 	name: 'Timeline',
@@ -178,6 +198,9 @@ export default {
 		HeaderNavigation,
 		PhotosSourceLocationsSettings,
 		AlertCircle,
+		TimelineFilters,
+		FilterIcon: Filter,
+		FilterOff,
 	},
 
 	filters: {
@@ -226,12 +249,20 @@ export default {
 			showAlbumCreationForm: false,
 			showAlbumPicker: false,
 			appContent: document.getElementById('app-content-vue'),
+			showFilters: false,
+			extraFilters: {} as Record<string, unknown>,
 		}
 	},
 
 	computed: {
 		files() {
 			return this.$store.state.files.files
+		},
+	},
+
+	watch: {
+		'$route.path'() {
+			this.extraFilters = {}
 		},
 	},
 
@@ -249,10 +280,13 @@ export default {
 				mimesType: this.mimesType,
 				onThisDay: this.onThisDay,
 				onlyFavorites: this.onlyFavorites,
+				extraFilters: Object.entries(this.extraFilters)
+					.map(([key, value]) => timelineFilters.find(filter => filter.id === key)?.getQuery(value))
+					.join('\n'),
 			})
 		},
 
-		openViewer(fileId) {
+		openViewer(fileId: string) {
 			window.OCA.Viewer.open({
 				fileInfo: toViewerFileInfo(this.files[fileId]),
 				list: Object.values(this.fileIdsByMonth).flat().map(fileId => toViewerFileInfo(this.files[fileId])),
@@ -280,6 +314,19 @@ export default {
 			if (key === 'photosSourceFolders') {
 				this.resetFetchFilesState()
 			}
+		},
+
+		toggleFilters() {
+			this.showFilters = !this.showFilters
+			if (!this.showFilters) {
+				this.extraFilters = {}
+				this.resetFetchFilesState()
+			}
+		},
+
+		handleFiltersChange() {
+			this.resetFetchFilesState()
+			this.getContent()
 		},
 
 		t: translate,
@@ -312,6 +359,10 @@ export default {
 			display: flex;
 			gap: 4px;
 		}
+	}
+
+	&__filters {
+		padding: 16px 64px;
 	}
 
 	&__heading {

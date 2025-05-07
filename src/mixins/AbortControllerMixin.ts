@@ -14,13 +14,19 @@ export default defineComponent({
 		}
 	},
 
+	methods: {
+		abortPendingRequest() {
+			this.abortController.abort()
+			this.abortController = new AbortController()
+		},
+	},
+
 	beforeDestroy() {
 		this.abortController.abort()
 	},
 
 	beforeRouteLeave(from, to, next) {
-		this.abortController.abort()
-		this.abortController = new AbortController()
+		this.abortPendingRequest()
 		next()
 	},
 })

@@ -22,6 +22,7 @@ export type PhotoSearchOptions = SearchOptions & {
 	full: boolean // get full data of the files. Default: false.
 	onThisDay: boolean // get only items from this day of year. Default: false.
 	onlyFavorites: boolean // get only favorite items. Default: false.
+	extraFilters: string // a raw dav string that will be added in the 'where' clause. Default: ''.
 }
 
 /**
@@ -36,6 +37,7 @@ export default async function(_options: Partial<PhotoSearchOptions> = {}): Promi
 		onThisDay: false,
 		onlyFavorites: false,
 		full: false,
+		extraFilters: '',
 		..._options,
 	}
 
@@ -67,13 +69,13 @@ export default async function(_options: Partial<PhotoSearchOptions> = {}): Promi
 				return `<d:and>
 				<d:gt>
 					<d:prop>
-						<d:getlastmodified />
+						<nc:metadata-photos-original_date_time/>
 					</d:prop>
 					<d:literal>${start.format(moment.defaultFormatUtc)}</d:literal>
 				</d:gt>
 				<d:lt>
 					<d:prop>
-						<d:getlastmodified />
+						<nc:metadata-photos-original_date_time/>
 					</d:prop>
 					<d:literal>${end.format(moment.defaultFormatUtc)}</d:literal>
 				</d:lt>
@@ -112,6 +114,7 @@ export default async function(_options: Partial<PhotoSearchOptions> = {}): Promi
 						</d:or>
 						${eqFavorites}
 						${onThisDay}
+						${options.extraFilters}
 					</d:and>
 				</d:where>
 				<d:orderby>
