@@ -26,9 +26,6 @@ describe('Manage places', () => {
 	beforeEach(() => {
 		cy.login(alice)
 		cy.visit('/apps/photos')
-	})
-
-	beforeEach(() => {
 		navigateToCollections('places')
 	})
 
