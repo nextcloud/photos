@@ -27,9 +27,9 @@
 				<!-- TODO: UploadPicker -->
 				<NcButton v-if="selectedFileIds.length === 0"
 					ref="newAlbumButton"
-					:aria-label="t('photos', 'Create new album')"
+					:aria-label="createAlbumButtonLabel"
 					@click="showAlbumCreationForm = true">
-					{{ t('photos', 'Create new album') }}
+					{{ createAlbumButtonLabel }}
 					<template #icon>
 						<PlusBoxMultiple />
 					</template>
@@ -129,7 +129,7 @@
 			<h2 class="timeline__heading">
 				{{ t('photos', 'New album') }}
 			</h2>
-			<AlbumForm @done="showAlbumCreationForm = false" />
+			<AlbumForm :filters="extraFilters" @done="showAlbumCreationForm = false" />
 		</NcModal>
 
 		<NcModal v-if="showAlbumPicker"
@@ -257,6 +257,14 @@ export default {
 	computed: {
 		files() {
 			return this.$store.state.files.files
+		},
+
+		createAlbumButtonLabel() {
+			if (Object.keys(this.extraFilters).length > 0) {
+				return this.t('photos', 'Create album from filters')
+			} else {
+				return this.t('photos', 'Create album')
+			}
 		},
 	},
 

@@ -78,6 +78,7 @@ import HeaderNavigation from '../components/HeaderNavigation.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
 import { albumsPrefix } from '../store/albums.js'
+import { albumsExtraProps } from '../store/albums.ts'
 
 export default defineComponent({
 	name: 'Albums',
@@ -134,7 +135,7 @@ export default defineComponent({
 		fetchAlbums() {
 			this.fetchCollections(
 				albumsPrefix,
-				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />'],
+				albumsExtraProps,
 			)
 		},
 

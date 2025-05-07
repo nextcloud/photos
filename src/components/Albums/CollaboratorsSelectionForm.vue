@@ -93,6 +93,7 @@ import ContentCopy from 'vue-material-design-icons/ContentCopy.vue'
 import AccountGroup from 'vue-material-design-icons/AccountGroup.vue'
 import Earth from 'vue-material-design-icons/Earth.vue'
 import AccountGroupSvg from '@mdi/svg/svg/account-group.svg'
+import type { PropType } from 'vue'
 
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
@@ -105,7 +106,7 @@ import { translate } from '@nextcloud/l10n'
 import logger from '../../services/logger.js'
 import FetchCollectionContentMixin from '../../mixins/FetchCollectionContentMixin.js'
 import type { Collaborator } from '../../store/albums.js'
-import type { PropType } from 'vue'
+import { albumsExtraProps } from '../../store/albums.ts'
 
 type CollaboratorSearchResult = Collaborator & {
 	key: string
@@ -292,7 +293,7 @@ export default {
 			await this.updateAlbumCollaborators()
 			await this.fetchCollection(
 				this.albumFileName,
-				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />'],
+				albumsExtraProps,
 			)
 		},
 
