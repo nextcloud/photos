@@ -10,7 +10,7 @@ import type { Collection } from '../services/collectionFetcher'
 const placesPrefix = `/photos/${getCurrentUser()?.uid}/places`
 
 const getters = {
-	places: (_, __, ___, rootGetters): Collection[] => rootGetters.collectionsWithPrefix(placesPrefix),
+	places: (_, __, ___, rootGetters): Record<string, Collection[]> => rootGetters.collectionsWithPrefix(placesPrefix),
 	getPlace: (_, __, rootState: PhotosRootSate) => (placeName: string): Collection => rootState.collections.collections[`${placesPrefix}/${placeName}`] || null,
 	getPlaceFiles: (_, __, rootState: PhotosRootSate) => (placeName: string) => rootState.collections.collectionsFiles[`${placesPrefix}/${placeName}`] || [],
 }

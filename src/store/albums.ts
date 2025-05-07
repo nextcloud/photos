@@ -23,7 +23,7 @@ export type Album = Collection & {
 	}
 }
 
-const albumsPrefix = `/photos/${getCurrentUser()?.uid}/albums`
+export const albumsPrefix = `/photos/${getCurrentUser()?.uid}/albums`
 
 const getters = {
 	albums: (_, __, ___, rootGetters): Record<string, Album> => rootGetters.collectionsWithPrefix(albumsPrefix),

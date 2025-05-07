@@ -33,9 +33,9 @@ export type PhotosStore = {
 	commit(mutationName: string, arg: unknown): void
 	dispatch(actionName: string, arg: unknown): Promise<unknown>
 	getters: {
-		albums(): Album[]
-		publicAlbums(): Album[]
-		sharedAlbums(): Album[]
+		albums(): Record<string, Album>
+		publicAlbums(): Record<string, PublicAlbum>
+		sharedAlbums(): Record<string, Album>
 		getAlbumName(name: string): string
 		getAlbum(albumName: string): Album
 		getAlbumFiles(albumName: string): string[]

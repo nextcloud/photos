@@ -106,7 +106,7 @@ const getters = {
 	collectionsWithPrefix: (state: CollectionState) => function(prefix: string) {
 		return Object.values(state.collections)
 			.filter(collection => collection.root === prefix)
-			.reduce((collections, collection) => ({ ...collections, [collection.root + collection.path]: collection }), {})
+			.reduce((collections, collection) => ({ ...collections, [collection.root + collection.path]: collection }), {} as Record<string, Collection>)
 	},
 }
 

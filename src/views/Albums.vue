@@ -62,14 +62,13 @@ import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.v
 import { generateUrl } from '@nextcloud/router'
 import { NcModal, NcButton, NcEmptyContent, useIsSmallMobile } from '@nextcloud/vue'
 import { translate, translatePlural } from '@nextcloud/l10n'
-import { getCurrentUser } from '@nextcloud/auth'
 
 import CollectionsList from '../components/Collection/CollectionsList.vue'
 import CollectionCover from '../components/Collection/CollectionCover.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
-import type { Album } from '../store/albums.js'
+import { albumsPrefix } from '../store/albums.js'
 
 export default {
 	name: 'Albums',
@@ -113,7 +112,7 @@ export default {
 	},
 
 	computed: {
-		albums(): Record<string, Album> {
+		albums() {
 			return this.$store.getters.albums
 		},
 	},
@@ -125,14 +124,14 @@ export default {
 	methods: {
 		fetchAlbums() {
 			this.fetchCollections(
-				`/photos/${getCurrentUser()?.uid}/albums`,
+				albumsPrefix,
 				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />'],
 			)
 		},
 
 		handleAlbumCreated({ album }) {
 			this.showAlbumCreationForm = false
-			this.$router.push(`albums/${album.basename}`)
+			this.$router.push(`/albums/${album.basename}`)
 		},
 
 		t: translate,
