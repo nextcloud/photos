@@ -177,4 +177,8 @@ abstract class AlbumRootBase implements ICollection, ICopyTarget {
 	 * @return array{array{'nc:collaborator': array{'id': string, 'label': string, 'type': int}}}
 	 */
 	abstract public function getCollaborators(): array;
+
+	final public function getFilters(): ?string {
+		return $this->album->getAlbum()->getFilters();
+	}
 }

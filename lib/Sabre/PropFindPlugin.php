@@ -37,17 +37,15 @@ class PropFindPlugin extends ServerPlugin {
 	public const LAST_PHOTO_PROPERTYNAME = '{http://nextcloud.org/ns}last-photo';
 	public const NBITEMS_PROPERTYNAME = '{http://nextcloud.org/ns}nbItems';
 	public const COLLABORATORS_PROPERTYNAME = '{http://nextcloud.org/ns}collaborators';
+	public const FILTERS_PROPERTYNAME = '{http://nextcloud.org/ns}filters';
 	public const PERMISSIONS_PROPERTYNAME = '{http://owncloud.org/ns}permissions';
 
-	private readonly IPreview $previewManager;
 	private ?Tree $tree = null;
 
 	public function __construct(
-		IPreview $previewManager,
-		private readonly AlbumMapper $albumMapper,
+		private readonly IPreview $previewManager,
 		private readonly IFilesMetadataManager $filesMetadataManager,
 	) {
-		$this->previewManager = $previewManager;
 	}
 
 	/**
@@ -121,6 +119,7 @@ class PropFindPlugin extends ServerPlugin {
 			$propFind->handle(self::LOCATION_PROPERTYNAME, fn (): string => $node->getAlbum()->getAlbum()->getLocation());
 			$propFind->handle(self::DATE_RANGE_PROPERTYNAME, fn () => json_encode($node->getDateRange()));
 			$propFind->handle(self::COLLABORATORS_PROPERTYNAME, fn (): array => $node->getCollaborators());
+			$propFind->handle(self::FILTERS_PROPERTYNAME, fn (): ?string => $node->getFilters());
 		}
 
 		if ($node instanceof PlaceRoot) {
@@ -139,7 +138,11 @@ class PropFindPlugin extends ServerPlugin {
 				return true;
 			});
 			$propPatch->handle(self::COLLABORATORS_PROPERTYNAME, function ($collaborators) use ($node) {
-				$collaborators = $node->setCollaborators(json_decode($collaborators, true));
+				$node->setCollaborators(json_decode($collaborators, true));
+				return true;
+			});
+			$propPatch->handle(self::FILTERS_PROPERTYNAME, function ($filters) use ($node) {
+				$node->setFilters($filters);
 				return true;
 			});
 		}

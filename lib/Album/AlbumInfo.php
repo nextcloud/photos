@@ -16,8 +16,8 @@ class AlbumInfo {
 		private readonly string $location,
 		private readonly int $created,
 		private readonly int $lastAdded,
-		private readonly ?int $receivedFrom = null,
 		private readonly ?array $filters = null,
+		private readonly ?int $receivedFrom = null,
 	) {
 	}
 
@@ -49,7 +49,11 @@ class AlbumInfo {
 		return $this->receivedFrom;
 	}
 
-	public function getFilters(): ?array {
+	public function getFilters(): ?string {
 		return $this->filters;
+	}
+
+	public function getDecodedFilters(): array {
+		return json_decode($this->filters ?? '{}', true);
 	}
 }

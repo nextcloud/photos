@@ -87,8 +87,9 @@ import { getClient } from '@nextcloud/files/dav'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
-import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
-import type { PublicAlbum } from '../store/publicAlbums.js'
+import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.ts'
+import type { PublicAlbum } from '../store/publicAlbums.ts'
+import { publicAlbumsPrefix, publicAlbumsExtraProps } from '../store/publicAlbums.ts'
 
 export default {
 	name: 'PublicAlbumContent',
@@ -158,8 +159,8 @@ export default {
 	methods: {
 		async fetchAlbumInfo() {
 			const album = await this.fetchCollection(
-				`/photospublic/${this.token}`,
-				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />', '<nc:original-name />'],
+				`/${publicAlbumsPrefix}/${this.token}`,
+				publicAlbumsExtraProps,
 				this.publicClient,
 			) as PublicAlbum
 
@@ -170,8 +171,8 @@ export default {
 
 		async fetchAlbumContent() {
 			const files = await this.fetchCollectionFiles(
-				`/photospublic/${this.token}`,
-				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />', '<nc:original-name />'],
+				`/${publicAlbumsPrefix}/${this.token}`,
+				publicAlbumsExtraProps,
 				this.publicClient,
 			)
 

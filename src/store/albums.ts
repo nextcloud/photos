@@ -15,13 +15,24 @@ export type Collaborator = {
 	type: ShareType.User|ShareType.Group|ShareType.Link // - The type of the collaborator.
 }
 
+export type AlbumEditableProperties = {
+	location: string // - The user set location of the album.
+	collaborators: Collaborator[] // - The list of collaborators.
+	filters?: Record<string, unknown> // - The list of filters.
+}
+
 export type Album = Collection & {
-	attributes: {
-		location: string // - The user set location of the album.
-		collaborators: Collaborator[] // - The list of collaborators.
+	attributes: AlbumEditableProperties & {
 		date: string // The date of the collection.
 	}
 }
+
+export const albumsExtraProps = [
+	'<nc:location />',
+	'<nc:dateRange />',
+	'<nc:collaborators />',
+	'<nc:filters />',
+]
 
 export const albumsPrefix = `/photos/${getCurrentUser()?.uid}/albums`
 

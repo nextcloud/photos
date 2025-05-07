@@ -169,9 +169,9 @@ import CollaboratorsSelectionForm from '../components/Albums/CollaboratorsSelect
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import PhotosPicker from '../components/PhotosPicker.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-
 import logger from '../services/logger.js'
 import type { Album } from '../store/albums.js'
+import { albumsExtraProps } from '../store/albums.ts'
 
 export default {
 	name: 'AlbumContent',
@@ -252,7 +252,7 @@ export default {
 		async fetchAlbum() {
 			await this.fetchCollection(
 				this.albumFileName,
-				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />'],
+				albumsExtraProps,
 			)
 		},
 
