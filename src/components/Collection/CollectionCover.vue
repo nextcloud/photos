@@ -3,26 +3,24 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<li>
-		<router-link class="collection-cover" :to="link">
-			<img v-if="coverUrl !== ''"
-				class="collection-cover__image"
-				:src="coverUrl"
-				:alt="altImg">
+	<router-link class="collection-cover" :to="link">
+		<img v-if="coverUrl !== ''"
+			class="collection-cover__image"
+			:src="coverUrl"
+			:alt="altImg">
 
-			<div v-else class="collection-cover__image collection-cover__image--placeholder">
-				<ImageMultiple :size="128" />
+		<div v-else class="collection-cover__image collection-cover__image--placeholder">
+			<ImageMultiple :size="128" />
+		</div>
+		<div class="collection-cover__details">
+			<div class="collection-cover__details__title">
+				<slot name="default" />
 			</div>
-			<div class="collection-cover__details">
-				<div class="collection-cover__details__title">
-					<slot name="default" />
-				</div>
-				<div class="collection-cover__details__subtitle">
-					<slot name="subtitle" />
-				</div>
+			<div class="collection-cover__details__subtitle">
+				<slot name="subtitle" />
 			</div>
-		</router-link>
-	</li>
+		</div>
+	</router-link>
 </template>
 <script lang='ts'>
 import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
