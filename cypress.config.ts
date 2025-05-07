@@ -36,9 +36,6 @@ export default defineConfig({
 	trashAssetsBeforeRuns: true,
 
 	e2e: {
-		// Disable session isolation
-		testIsolation: false,
-
 		// We've imported your old cypress plugins here.
 		// You may want to clean this up later by importing these.
 		async setupNodeEvents(on, config) {
