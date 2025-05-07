@@ -20,13 +20,6 @@ use OCP\IUserManager;
 use OCP\Security\ISecureRandom;
 
 class AlbumMapper {
-	private IDBConnection $connection;
-	private IMimeTypeLoader $mimeTypeLoader;
-	private ITimeFactory $timeFactory;
-	private IUserManager $userManager;
-	private IGroupManager $groupManager;
-	protected IL10N $l;
-	protected ISecureRandom $random;
 
 	// Same mapping as IShare.
 	public const TYPE_USER = 0;
@@ -34,21 +27,14 @@ class AlbumMapper {
 	public const TYPE_LINK = 3;
 
 	public function __construct(
-		IDBConnection $connection,
-		IMimeTypeLoader $mimeTypeLoader,
-		ITimeFactory $timeFactory,
-		IUserManager $userManager,
-		IGroupManager $groupManager,
-		IL10N $l,
-		ISecureRandom $random,
+		private IDBConnection $connection,
+		private IMimeTypeLoader $mimeTypeLoader,
+		private ITimeFactory $timeFactory,
+		private IUserManager $userManager,
+		private IGroupManager $groupManager,
+		private IL10N $l,
+		private ISecureRandom $random,
 	) {
-		$this->connection = $connection;
-		$this->mimeTypeLoader = $mimeTypeLoader;
-		$this->timeFactory = $timeFactory;
-		$this->userManager = $userManager;
-		$this->groupManager = $groupManager;
-		$this->l = $l;
-		$this->random = $random;
 	}
 
 	public function create(string $userId, string $name, string $location = ''): AlbumInfo {
@@ -82,7 +68,6 @@ class AlbumMapper {
 	}
 
 	/**
-	 * @param string $userId
 	 * @return AlbumInfo[]
 	 */
 	public function getForUser(string $userId): array {
@@ -97,8 +82,6 @@ class AlbumMapper {
 	}
 
 	/**
-	 * @param string $albumName
-	 * @param string $userName
 	 * @return AlbumInfo
 	 */
 	public function getByName(string $albumName, string $userName): ?AlbumInfo {
@@ -116,7 +99,6 @@ class AlbumMapper {
 	}
 
 	/**
-	 * @param int $fileId
 	 * @return AlbumInfo[]
 	 */
 	public function getForFile(int $fileId): array {
@@ -132,8 +114,6 @@ class AlbumMapper {
 	}
 
 	/**
-	 * @param string $userId
-	 * @param int $fileId
 	 * @return AlbumInfo[]
 	 */
 	public function getForUserAndFile(string $userId, int $fileId): array {
@@ -187,13 +167,12 @@ class AlbumMapper {
 	}
 
 	/**
-	 * @param int $albumId
-	 * @param string $userId
 	 * @return AlbumFile[]
 	 */
 	public function getForAlbumIdAndUserWithFiles(int $albumId, string $userId): array {
+		// TODO: Add search from filters
 		$query = $this->connection->getQueryBuilder();
-		$query->select('fileid', 'mimetype', 'a.album_id', 'size', 'mtime', 'etag', 'added', 'owner')
+		$query->select('fileid', 'mimetype', 'a.album_id', 'size', 'mtime', 'etag', 'added', 'owner', 'filters')
 			->selectAlias('f.name', 'file_name')
 			->selectAlias('a.name', 'album_name')
 			->from('photos_albums', 'a')
@@ -214,11 +193,6 @@ class AlbumMapper {
 		return $files;
 	}
 
-	/**
-	 * @param int $albumId
-	 * @param int $fileId
-	 * @return AlbumFile
-	 */
 	public function getForAlbumIdAndFileId(int $albumId, int $fileId): AlbumFile {
 		$query = $this->connection->getQueryBuilder();
 		$query->select('fileid', 'mimetype', 'a.album_id', 'user', 'size', 'mtime', 'etag', 'location', 'created', 'last_added_photo', 'added', 'owner')
@@ -337,7 +311,6 @@ class AlbumMapper {
 	}
 
 	/**
-	 * @param int $albumId
 	 * @return array<array{'id': string, 'label': string, 'type': int}>
 	 */
 	public function getCollaborators(int $albumId): array {
@@ -381,11 +354,6 @@ class AlbumMapper {
 	}
 
 
-	/**
-	 * @param int $albumId
-	 * @param string $userId
-	 * @return bool
-	 */
 	public function isCollaborator(int $albumId, string $userId): bool {
 		$query = $this->connection->getQueryBuilder();
 		$query->select('collaborator_id', 'collaborator_type')
@@ -415,7 +383,6 @@ class AlbumMapper {
 	}
 
 	/**
-	 * @param int $albumId
 	 * @param array{'id': string, 'type': int} $collaborators
 	 */
 	public function setCollaborators(int $albumId, array $collaborators): void {
@@ -477,8 +444,6 @@ class AlbumMapper {
 	}
 
 	/**
-	 * @param string $collaboratorId
-	 * @param int $collaboratorType
 	 * @return AlbumInfo[]
 	 */
 	public function getSharedAlbumsForCollaborator(string $collaboratorId, int $collaboratorType): array {
@@ -505,8 +470,6 @@ class AlbumMapper {
 	}
 
 	/**
-	 * @param string $collaboratorId
-	 * @param string $collaboratorsType - The type of the collaborator, either a user or a group.
 	 * @return AlbumWithFiles[]
 	 */
 	public function getSharedAlbumsForCollaboratorWithFiles(string $collaboratorId, int $collaboratorType): array {
@@ -552,11 +515,6 @@ class AlbumMapper {
 		return $result;
 	}
 
-	/**
-	 * @param string $userId
-	 * @param int $albumId
-	 * @return void
-	 */
 	public function deleteUserFromAlbumCollaboratorsList(string $userId, int $albumId): void {
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('photos_albums_collabs')
@@ -569,11 +527,6 @@ class AlbumMapper {
 		$this->removeFilesForUser($albumId, $userId);
 	}
 
-	/**
-	 * @param string $groupId
-	 * @param int $albumId
-	 * @return void
-	 */
 	public function deleteGroupFromAlbumCollaboratorsList(string $groupId, int $albumId): void {
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('photos_albums_collabs')
@@ -584,9 +537,6 @@ class AlbumMapper {
 	}
 
 	/**
-	 * @param string $collaboratorId
-	 * @param int $collaboratorType
-	 * @param int $fileId
 	 * @return AlbumInfo[]
 	 */
 	public function getAlbumsForCollaboratorIdAndFileId(string $collaboratorId, int $collaboratorType, int $fileId): array {
@@ -614,5 +564,13 @@ class AlbumMapper {
 				(int)$row['last_added_photo']
 			);
 		}, $rows);
+	}
+
+	public function setAlbumFilters(int $albumId, array $filters): void {
+		$query = $this->connection->getQueryBuilder();
+		$query->update('photos_albums')
+			->set('filters', $query->createNamedParameter(json_encode($filters)))
+			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_STR)));
+		$query->executeStatement();
 	}
 }

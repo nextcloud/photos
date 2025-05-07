@@ -18,7 +18,8 @@ class AlbumWithFiles {
 	public function __construct(
 		AlbumInfo $info,
 		AlbumMapper $albumMapper,
-		array $files = []) {
+		array $files = [],
+	) {
 		$this->info = $info;
 		$this->albumMapper = $albumMapper;
 		$this->files = $files;

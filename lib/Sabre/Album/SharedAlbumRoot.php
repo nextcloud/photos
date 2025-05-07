@@ -8,47 +8,31 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Sabre\Album;
 
-use OCA\Photos\Album\AlbumMapper;
-use OCA\Photos\Album\AlbumWithFiles;
-use OCA\Photos\Service\UserConfigService;
-use OCP\Files\IRootFolder;
-use OCP\IUserManager;
-use Psr\Log\LoggerInterface;
+use OCA\Photos\Album\AlbumFile;
 use Sabre\DAV\Exception\Conflict;
 use Sabre\DAV\Exception\Forbidden;
+use Sabre\DAV\INode;
 
-class SharedAlbumRoot extends AlbumRoot {
-	public function __construct(
-		AlbumMapper $albumMapper,
-		AlbumWithFiles $album,
-		IRootFolder $rootFolder,
-		string $userId,
-		UserConfigService $userConfigService,
-		LoggerInterface $logger,
-		private IUserManager $userManager,
-	) {
-		parent::__construct(
-			$albumMapper,
-			$album,
-			$rootFolder,
-			$userId,
-			$userConfigService,
-			$logger,
-		);
-	}
+class SharedAlbumRoot extends AlbumRootBase {
 
-	/**
-	 * @return void
-	 */
-	public function delete() {
+	public function delete(): void {
 		$this->albumMapper->deleteUserFromAlbumCollaboratorsList($this->userId, $this->album->getAlbum()->getId());
 	}
 
-	/**
-	 * @return void
-	 */
-	public function setName($name) {
+	public function setName($name): void {
 		throw new Forbidden('Not allowed to rename a shared album');
+	}
+
+	public function createFile($name, $data = null) {
+		return parent::createFileInCurrentUserFolder($name, $data);
+	}
+
+	public function getAlbumPhoto(AlbumFile $file): AlbumPhoto {
+		return new AlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId));
+	}
+
+	public function copyInto($targetName, $sourcePath, INode $sourceNode): bool {
+		return parent::copyIntoAlbum($targetName, $sourcePath, $sourceNode);
 	}
 
 	protected function addFile(int $sourceId, string $ownerUID): bool {

@@ -9,30 +9,17 @@ declare(strict_types=1);
 namespace OCA\Photos\Album;
 
 class AlbumInfo {
-	private int $id;
-	private string $userId;
-	private string $title;
-	private string $location;
-	private int $created;
-	private int $lastAdded;
-	private ?int $receivedFrom;
 
 	public function __construct(
-		int $id,
-		string $userId,
-		string $title,
-		string $location,
-		int $created,
-		int $lastAdded,
-		?int $receivedFrom = null,
+		private int $id,
+		private string $userId,
+		private string $title,
+		private string $location,
+		private int $created,
+		private int $lastAdded,
+		private ?int $receivedFrom = null,
+		private ?array $filters = null,
 	) {
-		$this->id = $id;
-		$this->userId = $userId;
-		$this->title = $title;
-		$this->location = $location;
-		$this->created = $created;
-		$this->lastAdded = $lastAdded;
-		$this->receivedFrom = $receivedFrom;
 	}
 
 	public function getId(): int {
@@ -61,5 +48,9 @@ class AlbumInfo {
 
 	public function getReceivedFrom(): ?int {
 		return $this->receivedFrom;
+	}
+
+	public function getFilters(): ?array {
+		return $this->filters;
 	}
 }
