@@ -134,6 +134,7 @@ OC.L10N.register(
     "Add to album" : "Adicionar a álbum",
     "Delete selection" : "Excluir seleção",
     "No photos or videos in here" : "Não há fotos ou vídeos aqui",
+    "album-picker" : "seletor-de-álbuns",
     "Unassigned faces" : "Rostos não atribuídos",
     "Failed to fetch collection." : "Falha ao obter a coleção.",
     "Failed to fetch collections list." : "Falha ao obter a lista de coleções.",
