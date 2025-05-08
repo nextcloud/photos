@@ -34,6 +34,7 @@ OC.L10N.register(
     "Favorite" : "Izlasē",
     "Go back" : "Atpakaļ",
     "Dates" : "Datumi",
+    "_{years} year ago_::_{years} years ago_" : ["pirms {years} gadiem","pirms {years} gada","pirms {years} gadiem"],
     "Add folder" : "Pievienot mapi",
     "Home" : "Sākums",
     "View" : "Skats",
