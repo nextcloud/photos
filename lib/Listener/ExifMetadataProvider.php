@@ -23,6 +23,11 @@ use Psr\Log\LoggerInterface;
  * @template-implements IEventListener<MetadataLiveEvent>
  */
 class ExifMetadataProvider implements IEventListener {
+
+	const string METADATA_KEY_EXIF = 'photos-exif';
+	const string METADATA_KEY_IFD0 = 'photos-ifd0';
+	const string METADATA_KEY_GPS = 'photos-gps';
+
 	public function __construct(
 		private LoggerInterface $logger,
 	) {
@@ -74,11 +79,11 @@ class ExifMetadataProvider implements IEventListener {
 		}
 
 		if ($rawExifData && array_key_exists('EXIF', $rawExifData)) {
-			$event->getMetadata()->setArray('photos-exif', $this->sanitizeEntries($rawExifData['EXIF'], $node));
+			$event->getMetadata()->setArray(self::METADATA_KEY_EXIF, $this->sanitizeEntries($rawExifData['EXIF'], $node));
 		}
 
 		if ($rawExifData && array_key_exists('IFD0', $rawExifData)) {
-			$event->getMetadata()->setArray('photos-ifd0', $this->sanitizeEntries($rawExifData['IFD0'], $node));
+			$event->getMetadata()->setArray(self::METADATA_KEY_IFD0, $this->sanitizeEntries($rawExifData['IFD0'], $node));
 		}
 
 		if (
@@ -100,7 +105,7 @@ class ExifMetadataProvider implements IEventListener {
 			}
 
 			if (!empty($gps)) {
-				$event->getMetadata()->setArray('photos-gps', $gps);
+				$event->getMetadata()->setArray(self::METADATA_KEY_GPS, $gps);
 			}
 		}
 	}

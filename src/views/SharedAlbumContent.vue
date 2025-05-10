@@ -124,6 +124,7 @@ import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
 import PhotosPicker from '../components/PhotosPicker.vue'
+import { albumsExtraProps } from '../store/albums.ts'
 
 export default {
 	name: 'SharedAlbumContent',
@@ -200,7 +201,7 @@ export default {
 		async fetchAlbum() {
 			await this.fetchCollection(
 				this.albumFileName,
-				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />'],
+				albumsExtraProps,
 			)
 		},
 

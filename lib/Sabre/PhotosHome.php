@@ -71,7 +71,7 @@ class PhotosHome implements ICollection {
 	public function getChild($name) {
 		switch ($name) {
 			case AlbumsHome::NAME:
-				return new AlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userConfigService, $this->logger);
+				return new AlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userConfigService, $this->logger, $this->userManager);
 			case SharedAlbumsHome::NAME:
 				return new SharedAlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userManager, $this->groupManager, $this->userConfigService, $this->logger);
 			case PlacesHome::NAME:
@@ -86,7 +86,7 @@ class PhotosHome implements ICollection {
 	 */
 	public function getChildren(): array {
 		return [
-			new AlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userConfigService, $this->logger),
+			new AlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userConfigService, $this->logger, $this->userManager),
 			new SharedAlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userManager, $this->groupManager, $this->userConfigService, $this->logger),
 			new PlacesHome($this->userId, $this->rootFolder, $this->reverseGeoCoderService, $this->placeMapper),
 		];

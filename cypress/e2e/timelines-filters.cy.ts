@@ -40,8 +40,7 @@ describe('View list of photos in the main timeline', () => {
 		cy.get('[data-cy-timeline-action="toggle-filters"]').click()
 	})
 
-	// TODO: Needs https://github.com/nextcloud/server/pull/52542 to work
-	xit('Apply places filter to timeline', () => {
+	it('Apply places filter to timeline', () => {
 		cy.get('[data-cy-timeline-action="toggle-filters"]').click()
 		cy.get('[data-cy-timeline-filters="places"] input[type="search"]').type('Lauris{enter}', { scrollBehavior: 'nearest' })
 		cy.get('[data-test="media"]').should('have.length', 1)

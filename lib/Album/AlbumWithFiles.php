@@ -18,7 +18,8 @@ class AlbumWithFiles {
 	public function __construct(
 		AlbumInfo $info,
 		AlbumMapper $albumMapper,
-		array $files = []) {
+		array $files = [],
+	) {
 		$this->info = $info;
 		$this->albumMapper = $albumMapper;
 		$this->files = $files;
@@ -63,6 +64,10 @@ class AlbumWithFiles {
 	 * @return AlbumFile[]
 	 */
 	private function fetchFiles(): array {
-		return $this->albumMapper->getForAlbumIdAndUserWithFiles($this->info->getId(), $this->info->getUserId());
+		return $this->albumMapper->getForAlbumIdAndUserWithFiles(
+			$this->info->getId(),
+			$this->info->getUserId(),
+			$this->info->getDecodedFilters(),
+		);
 	}
 }

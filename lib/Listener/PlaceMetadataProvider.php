@@ -20,6 +20,9 @@ use OCP\FilesMetadata\Event\MetadataLiveEvent;
  * @template-implements IEventListener<Event|MetadataLiveEvent|MetadataBackgroundEvent>
  */
 class PlaceMetadataProvider implements IEventListener {
+
+	const string METADATA_KEY = 'photos-place';
+
 	public function __construct(
 		private MediaPlaceManager $mediaPlaceManager,
 	) {
@@ -44,7 +47,7 @@ class PlaceMetadataProvider implements IEventListener {
 			$metadata = $event->getMetadata();
 			$place = $this->mediaPlaceManager->getPlaceForMetadata($metadata);
 			if ($place !== null) {
-				$metadata->setString('photos-place', $place, true);
+				$metadata->setString(self::METADATA_KEY, $place, true);
 			}
 		}
 	}
