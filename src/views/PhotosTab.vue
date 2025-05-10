@@ -71,16 +71,16 @@ export default defineComponent({
 	},
 	computed: {
 		exif(): { FNumber: string, FocalLength: string, ExposureTime: string, ISOSpeedRatings: string } {
-			return this.fileInfo['metadata-photos-exif']
+			return this.fileInfo?.attributes['metadata-photos-exif']
 		},
 		ifd0(): { Make: string, Model: string, ImageWidth: number, ImageLength: number } {
-			return this.fileInfo['metadata-photos-ifd0']
+			return this.fileInfo?.attributes['metadata-photos-ifd0']
 		},
 		place(): string {
-			return this.fileInfo['metadata-photos-place']
+			return this.fileInfo?.attributes['metadata-photos-place']
 		},
 		gps(): { latitude: number, longitude: number, altitude: number }|undefined {
-			const gps = this.fileInfo['metadata-photos-gps']
+			const gps = this.fileInfo?.attributes['metadata-photos-gps']
 			if (!gps) {
 				return undefined
 			}
@@ -92,7 +92,7 @@ export default defineComponent({
 			}
 		},
 		originalDateTime(): number {
-			return this.fileInfo['metadata-photos-original_date_time'] * 1000
+			return (this.fileInfo?.attributes['metadata-photos-original_date_time'] ?? 0) * 1000
 		},
 		takenDate(): string {
 			return moment(this.originalDateTime).format('ll')
