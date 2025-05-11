@@ -134,7 +134,7 @@
 
 		<NcModal v-if="showAlbumPicker"
 			key="albumPicker"
-			:label-id="t('photos', 'album-picker')"
+			:label-id="t('photos', 'album picker')"
 			@close="showAlbumPicker = false">
 			<AlbumPicker @album-picked="addSelectionToAlbum" />
 		</NcModal>
