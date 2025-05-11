@@ -29,6 +29,7 @@ OC.L10N.register(
     "Go back" : "In segus",
     "Share this folder" : "Cumpartzi custa cartella",
     "Enable squared photos view" : "Ativa sa visualizatzione a fotos cuadradas",
+    "All folders" : "Totu is cartellas",
     "Home" : "Pàgina printzipale",
     "View" : "Visualiza",
     "Unselect all" : "Deseletziona totu",
