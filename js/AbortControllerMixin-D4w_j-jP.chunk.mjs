@@ -1,2 +1,0 @@
-import{d as t}from"./vue.runtime.esm-C8-0a0Ou.chunk.mjs";const a=t({name:"AbortControllerMixin",data(){return{abortController:new AbortController}},methods:{abortPendingRequest(){this.abortController.abort(),this.abortController=new AbortController}},beforeDestroy(){this.abortController.abort()},beforeRouteLeave(r,e,o){this.abortPendingRequest(),o()}});export{a as A};
-//# sourceMappingURL=AbortControllerMixin-D4w_j-jP.chunk.mjs.map
