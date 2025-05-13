@@ -138,7 +138,6 @@ OC.L10N.register(
     "Delete selection" : "Elimina selezione",
     "Toggle filter" : "Attiva/disattiva filtro",
     "No photos or videos in here" : "Nessuna foto o video qui",
-    "album-picker" : "selettore-album",
     "Unassigned faces" : "Volti non assegnati",
     "Failed to fetch collection." : "Recupero della categoria non riuscito.",
     "Failed to fetch collections list." : "Recupero della lista di collezioni non riuscito.",
