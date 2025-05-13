@@ -138,7 +138,6 @@ OC.L10N.register(
     "Delete selection" : "Smazat výběr",
     "Toggle filter" : "Vyp/zap. filtr",
     "No photos or videos in here" : "Nenacházejí se zde žádné fotky nebo videa",
-    "album-picker" : "výběr alba",
     "Unassigned faces" : "Nepřiřazené obličeje",
     "Failed to fetch collection." : "Sbírku se nepodařilo stáhnout.",
     "Failed to fetch collections list." : "Nepodařilo se získat seznam sbírek.",

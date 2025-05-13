@@ -134,7 +134,6 @@ OC.L10N.register(
     "Add to album" : "Додати в альбом",
     "Delete selection" : "Вилучити виділення",
     "No photos or videos in here" : "Тут немає фотографій та відео",
-    "album-picker" : "вибір альбому",
     "Unassigned faces" : "Неідентифіковані обличчя",
     "Failed to fetch collection." : "Не вдалося отримати колекцію.",
     "Failed to fetch collections list." : "Не вдалося отримати список колекцій.",

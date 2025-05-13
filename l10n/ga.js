@@ -134,7 +134,6 @@ OC.L10N.register(
     "Add to album" : "Cuir leis an albam",
     "Delete selection" : "Scrios an roghnúchán",
     "No photos or videos in here" : "Níl grianghraif nó físeáin ar bith anseo",
-    "album-picker" : "roghnóir-albam",
     "Unassigned faces" : "Aghaidheanna neamhshannta",
     "Failed to fetch collection." : "Theip ar bhailiú a fháil.",
     "Failed to fetch collections list." : "Theip ar an liosta bailiúcháin a fháil.",
