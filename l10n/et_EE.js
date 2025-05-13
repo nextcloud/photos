@@ -138,7 +138,6 @@ OC.L10N.register(
     "Delete selection" : "Kustuta valik",
     "Toggle filter" : "Lülita filter sisse/välja",
     "No photos or videos in here" : "Siin pole fotosid ega videosid",
-    "album-picker" : "Albumivalija",
     "Unassigned faces" : "Määramata näod",
     "Failed to fetch collection." : "Kollektsiooni laadimine ebaõnnestus.",
     "Failed to fetch collections list." : "Kollektsioonide loendi laadimine ebaõnnestus.",

@@ -138,7 +138,6 @@ OC.L10N.register(
     "Delete selection" : "刪除所選",
     "Toggle filter" : "切換過濾器",
     "No photos or videos in here" : "此處沒有照片或視像",
-    "album-picker" : "相簿選擇器",
     "Unassigned faces" : "未指派的臉孔",
     "Failed to fetch collection." : "擷取收藏品失敗。",
     "Failed to fetch collections list." : "擷取收藏品清單失敗。",
