@@ -64,7 +64,7 @@
     "Jump to specific date in list" : "Hüppa nimekirjas kindlale kuupäevale",
     "Jump to {date}" : "Hüppa {date} juurde",
     "Add to {destination}" : "Lisa {destination}-sse",
-    "The destination folder is owned by {owner}" : "Sihtkausta omab {owner}",
+    "The destination folder is owned by {owner}" : "Sihtkausta omanik on {owner}",
     "There are no photos or videos yet!" : "Ühtegi fotot ega videot pole veel!",
     "_{years} year ago_::_{years} years ago_" : ["{years} aasta tagasi","{years} aastat tagasi"],
     "Enable squared photos view" : "Luba piltide ruutvaade",
