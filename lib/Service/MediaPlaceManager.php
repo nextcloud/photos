@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\Photos\Service;
 
 use OCA\Photos\DB\Place\PlaceMapper;
+use OCA\Photos\Listener\ExifMetadataProvider;
 use OCP\FilesMetadata\IFilesMetadataManager;
 use OCP\FilesMetadata\Model\IFilesMetadata;
 
@@ -32,11 +33,11 @@ class MediaPlaceManager {
 	}
 
 	public function getPlaceForMetadata(IFilesMetadata $metadata): ?string {
-		if (!$this->rgcService->arePlacesEnabled() || !$metadata->hasKey('photos-gps')) {
+		if (!$this->rgcService->arePlacesEnabled() || !$metadata->hasKey(ExifMetadataProvider::METADATA_KEY_GPS)) {
 			return null;
 		}
 
-		$coordinate = $metadata->getArray('photos-gps');
+		$coordinate = $metadata->getArray(ExifMetadataProvider::METADATA_KEY_GPS);
 
 		$latitude = $coordinate['latitude'] ?? null;
 		$longitude = $coordinate['longitude'] ?? null;
