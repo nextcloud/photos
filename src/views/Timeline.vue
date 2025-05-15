@@ -90,10 +90,10 @@
 			</div>
 		</HeaderNavigation>
 
-		<TimelineFilters v-if="showFilters"
-			v-model="extraFilters"
+		<PhotosFilters v-if="showFilters"
+			:value="filters"
 			class="timeline__filters"
-			@input="handleFiltersChange" />
+			@update:value="handleFiltersChange" />
 
 		<FilesListViewer ref="filesListViewer"
 			:container-element="appContent"
@@ -129,7 +129,7 @@
 			<h2 class="timeline__heading">
 				{{ t('photos', 'New album') }}
 			</h2>
-			<AlbumForm :filters="extraFilters" @done="showAlbumCreationForm = false" />
+			<AlbumForm :filters="filters" @done="showAlbumCreationForm = false" />
 		</NcModal>
 
 		<NcModal v-if="showAlbumPicker"
@@ -157,10 +157,10 @@ import moment from '@nextcloud/moment'
 import { translate } from '@nextcloud/l10n'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
-import { allMimes } from '../services/AllowedMimes.js'
-import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
-import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
-import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
+import { allMimes } from '../services/AllowedMimes.ts'
+import FetchFilesMixin from '../mixins/FetchFilesMixin.ts'
+import FilesByMonthMixin from '../mixins/FilesByMonthMixin.ts'
+import FilesSelectionMixin from '../mixins/FilesSelectionMixin.ts'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import File from '../components/File.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
@@ -169,11 +169,11 @@ import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import ActionDownload from '../components/Actions/ActionDownload.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
-import TimelineFilters from '../components/TimelineFilters/TimelineFilters.vue'
-import { configChangedEvent } from '../store/userConfig.js'
-import type { Album } from '../store/albums.js'
-import { toViewerFileInfo } from '../utils/fileUtils.js'
-import timelineFilters from '../services/TimelineFilters'
+import PhotosFilters from '../components/PhotosFilters/PhotosFilters.vue'
+import { configChangedEvent } from '../store/userConfig.ts'
+import type { Album } from '../store/albums.ts'
+import { toViewerFileInfo } from '../utils/fileUtils.ts'
+import photosFilters from '../services/PhotosFilters'
 
 export default {
 	name: 'Timeline',
@@ -198,7 +198,7 @@ export default {
 		HeaderNavigation,
 		PhotosSourceLocationsSettings,
 		AlertCircle,
-		TimelineFilters,
+		PhotosFilters,
 		FilterIcon: Filter,
 		FilterOff,
 	},
@@ -250,7 +250,7 @@ export default {
 			showAlbumPicker: false,
 			appContent: document.getElementById('app-content-vue'),
 			showFilters: false,
-			extraFilters: {} as Record<string, unknown>,
+			filters: {} as Record<string, unknown>,
 		}
 	},
 
@@ -260,7 +260,7 @@ export default {
 		},
 
 		createAlbumButtonLabel() {
-			if (Object.keys(this.extraFilters).length > 0) {
+			if (Object.keys(this.filters).length > 0) {
 				return this.t('photos', 'Create album from filters')
 			} else {
 				return this.t('photos', 'Create album')
@@ -288,8 +288,8 @@ export default {
 				mimesType: this.mimesType,
 				onThisDay: this.onThisDay,
 				onlyFavorites: this.onlyFavorites,
-				extraFilters: Object.entries(this.extraFilters)
-					.map(([key, value]) => timelineFilters.find(filter => filter.id === key)?.getQuery(value))
+				extraFilters: Object.entries(this.filters)
+					.map(([key, value]) => photosFilters.find(filter => filter.id === key)?.getQuery(value))
 					.join('\n'),
 			})
 		},
@@ -327,12 +327,13 @@ export default {
 		toggleFilters() {
 			this.showFilters = !this.showFilters
 			if (!this.showFilters) {
-				this.extraFilters = {}
+				this.filters = {}
 				this.resetFetchFilesState()
 			}
 		},
 
-		handleFiltersChange() {
+		handleFiltersChange(filters) {
+			this.filters = filters
 			this.resetFetchFilesState()
 			this.getContent()
 		},
