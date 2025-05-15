@@ -10,8 +10,8 @@ namespace OCA\Photos\DB\Place;
 
 class PlaceInfo {
 	public function __construct(
-		private string $userId,
-		private string $place,
+		private readonly string $userId,
+		private readonly string $place,
 	) {
 	}
 

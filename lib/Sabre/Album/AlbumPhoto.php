@@ -21,10 +21,10 @@ use Sabre\DAV\IFile;
 
 class AlbumPhoto extends CollectionPhoto implements IFile {
 	public function __construct(
-		private AlbumMapper $albumMapper,
-		private AlbumInfo $album,
-		private AlbumFile $albumFile,
-		private IRootFolder $rootFolder,
+		private readonly AlbumMapper $albumMapper,
+		private readonly AlbumInfo $album,
+		private readonly AlbumFile $albumFile,
+		private readonly IRootFolder $rootFolder,
 		Folder $userFolder,
 	) {
 		parent::__construct($albumFile, $userFolder);

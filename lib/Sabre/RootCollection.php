@@ -22,16 +22,16 @@ use Sabre\DAVACL\PrincipalBackend;
 
 class RootCollection extends AbstractPrincipalCollection {
 	public function __construct(
-		private AlbumMapper $albumMapper,
-		private PlaceMapper $placeMapper,
-		private ReverseGeoCoderService $reverseGeoCoderService,
-		private IUserSession $userSession,
-		private IRootFolder $rootFolder,
+		private readonly AlbumMapper $albumMapper,
+		private readonly PlaceMapper $placeMapper,
+		private readonly ReverseGeoCoderService $reverseGeoCoderService,
+		private readonly IUserSession $userSession,
+		private readonly IRootFolder $rootFolder,
 		PrincipalBackend\BackendInterface $principalBackend,
-		private IUserManager $userManager,
-		private IGroupManager $groupManager,
-		private UserConfigService $userConfigService,
-		private LoggerInterface $logger,
+		private readonly IUserManager $userManager,
+		private readonly IGroupManager $groupManager,
+		private readonly UserConfigService $userConfigService,
+		private readonly LoggerInterface $logger,
 	) {
 		parent::__construct($principalBackend, 'principals/users');
 	}

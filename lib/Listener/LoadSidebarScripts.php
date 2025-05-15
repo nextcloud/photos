@@ -21,7 +21,7 @@ use OCP\Util;
 class LoadSidebarScripts implements IEventListener {
 
 	public function __construct(
-		private IRequest $request,
+		private readonly IRequest $request,
 	) {
 	}
 
@@ -31,7 +31,7 @@ class LoadSidebarScripts implements IEventListener {
 		}
 
 		// Only load sidebar tab in the photos app.
-		if (!preg_match('/^photos\.page\..+/', $this->request->getParams()['_route'])) {
+		if (!preg_match('/^photos\.page\..+/', (string)$this->request->getParams()['_route'])) {
 			return;
 		}
 

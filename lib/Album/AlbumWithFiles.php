@@ -9,19 +9,12 @@ declare(strict_types=1);
 namespace OCA\Photos\Album;
 
 class AlbumWithFiles {
-	private AlbumInfo $info;
-	private AlbumMapper $albumMapper;
-
-	/** @var AlbumFile[] */
-	private array $files;
-
 	public function __construct(
-		AlbumInfo $info,
-		AlbumMapper $albumMapper,
-		array $files = []) {
-		$this->info = $info;
-		$this->albumMapper = $albumMapper;
-		$this->files = $files;
+		private readonly AlbumInfo $info,
+		private readonly AlbumMapper $albumMapper,
+		/** @var AlbumFile[] */
+		private array $files = [],
+	) {
 	}
 
 	public function getAlbum(): AlbumInfo {
@@ -54,9 +47,7 @@ class AlbumWithFiles {
 	 * @return int[]
 	 */
 	public function getFileIds(): array {
-		return array_map(function (AlbumFile $file) {
-			return $file->getFileId();
-		}, $this->getFiles());
+		return array_map(fn (AlbumFile $file) => $file->getFileId(), $this->getFiles());
 	}
 
 	/**

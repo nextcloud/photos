@@ -21,9 +21,9 @@ use Sabre\DAV\IFile;
 
 class PlacePhoto extends CollectionPhoto implements IFile {
 	public function __construct(
-		private PlaceInfo $placeInfo,
+		private readonly PlaceInfo $placeInfo,
 		PlaceFile $file,
-		private IRootFolder $rootFolder,
+		private readonly IRootFolder $rootFolder,
 		Folder $userFolder,
 	) {
 		parent::__construct($file, $userFolder);
@@ -32,7 +32,7 @@ class PlacePhoto extends CollectionPhoto implements IFile {
 	/**
 	 * @return void
 	 */
-	public function delete() {
+	public function delete(): never {
 		throw new Forbidden('Cannot remove from a place');
 	}
 

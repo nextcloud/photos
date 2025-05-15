@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class UpdateReverseGeocodingFilesCommand extends Command {
 	public function __construct(
-		private ReverseGeoCoderService $rgcService,
+		private readonly ReverseGeoCoderService $rgcService,
 	) {
 		parent::__construct();
 	}

@@ -38,17 +38,15 @@ class PropFindPlugin extends ServerPlugin {
 	public const COLLABORATORS_PROPERTYNAME = '{http://nextcloud.org/ns}collaborators';
 	public const PERMISSIONS_PROPERTYNAME = '{http://owncloud.org/ns}permissions';
 
-	private IPreview $previewManager;
-	private ?Tree $tree;
-	private AlbumMapper $albumMapper;
+	private readonly IPreview $previewManager;
+	private ?Tree $tree = null;
 
 	public function __construct(
 		IPreview $previewManager,
-		AlbumMapper $albumMapper,
-		private IFilesMetadataManager $filesMetadataManager,
+		private readonly AlbumMapper $albumMapper,
+		private readonly IFilesMetadataManager $filesMetadataManager,
 	) {
 		$this->previewManager = $previewManager;
-		$this->albumMapper = $albumMapper;
 	}
 
 	/**
@@ -69,8 +67,8 @@ class PropFindPlugin extends ServerPlugin {
 	 */
 	public function initialize(Server $server) {
 		$this->tree = $server->tree;
-		$server->on('propFind', [$this, 'propFind']);
-		$server->on('propPatch', [$this, 'handleUpdateProperties']);
+		$server->on('propFind', $this->propFind(...));
+		$server->on('propPatch', $this->handleUpdateProperties(...));
 	}
 
 	public function propFind(PropFind $propFind, INode $node): void {
@@ -79,7 +77,7 @@ class PropFindPlugin extends ServerPlugin {
 			// Should be pre-emptively handled by the NodeDeletedEvent
 			try {
 				$fileInfo = $node->getFileInfo();
-			} catch (NotFoundException $e) {
+			} catch (NotFoundException) {
 				return;
 			}
 

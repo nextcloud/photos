@@ -20,8 +20,8 @@ use OCP\IRequest;
 use OCP\IUserSession;
 
 class ApiController extends Controller {
-	private IConfig $config;
-	private IUserSession $userSession;
+	private readonly IConfig $config;
+	private readonly IUserSession $userSession;
 
 	public function __construct(
 		IRequest $request,

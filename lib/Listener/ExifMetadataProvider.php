@@ -24,7 +24,7 @@ use Psr\Log\LoggerInterface;
  */
 class ExifMetadataProvider implements IEventListener {
 	public function __construct(
-		private LoggerInterface $logger,
+		private readonly LoggerInterface $logger,
 	) {
 	}
 

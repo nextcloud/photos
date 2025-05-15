@@ -23,13 +23,13 @@ class PublicRootCollection extends AbstractPrincipalCollection {
 	private const BRUTEFORCE_ACTION = 'publicphotos_webdav_auth';
 
 	public function __construct(
-		private AlbumMapper $albumMapper,
-		private IRootFolder $rootFolder,
+		private readonly AlbumMapper $albumMapper,
+		private readonly IRootFolder $rootFolder,
 		PrincipalBackend\BackendInterface $principalBackend,
-		private UserConfigService $userConfigService,
-		private IRequest $request,
-		private IThrottler $throttler,
-		private LoggerInterface $logger,
+		private readonly UserConfigService $userConfigService,
+		private readonly IRequest $request,
+		private readonly IThrottler $throttler,
+		private readonly LoggerInterface $logger,
 	) {
 		parent::__construct($principalBackend, 'principals/token');
 	}

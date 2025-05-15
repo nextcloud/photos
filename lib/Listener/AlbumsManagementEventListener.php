@@ -23,15 +23,10 @@ use Psr\Log\LoggerInterface;
  * @template-implements IEventListener<Event|NodeDeletedEvent|GroupDeletedEvent|ShareDeletedEvent|UserDeletedEvent>
  */
 class AlbumsManagementEventListener implements IEventListener {
-	private AlbumMapper $albumMapper;
-	private LoggerInterface $logger;
-
 	public function __construct(
-		AlbumMapper $albumMapper,
-		LoggerInterface $logger,
+		private readonly AlbumMapper $albumMapper,
+		private readonly LoggerInterface $logger,
 	) {
-		$this->albumMapper = $albumMapper;
-		$this->logger = $logger;
 	}
 
 	public function handle(Event $event): void {

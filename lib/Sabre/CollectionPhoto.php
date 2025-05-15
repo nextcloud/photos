@@ -30,7 +30,7 @@ class CollectionPhoto {
 	/**
 	 * @return never
 	 */
-	public function setName($name) {
+	public function setName($name): never {
 		throw new Forbidden('Can\'t rename photos trough this api');
 	}
 
