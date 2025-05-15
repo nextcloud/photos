@@ -9,34 +9,42 @@
 			:key="filter.id"
 			v-model="innerValue[filter.id]"
 			:data-cy-timeline-filters="filter.id"
-			@input="emit('input', innerValue)" />
+			@update:value="newFilterValue => updateFilterValue(filter.id, newFilterValue)" />
 	</div>
 </template>
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
 
-import filters from '../../services/TimelineFilters'
+import filters from '../../services/PhotosFilters'
 
 const props = defineProps<{
 	value: Record<string, unknown>
 }>()
 
 const emit = defineEmits<{
-	(event: 'input', value: Record<string, unknown>): void
+	(event: 'update:value', value: Record<string, unknown>): void
 }>()
 
 const innerValue = ref<Record<string, unknown>>({})
 
 watch(
 	() => props.value,
-	(newValue) => { innerValue.value = newValue },
-	{ deep: true, immediate: true },
+	(newValue) => { innerValue.value = { ...newValue } },
+	{ immediate: true },
 )
+
+function updateFilterValue(filterId: string, newFilterValue: unknown) {
+	emit('update:value', {
+		...innerValue.value,
+		[filterId]: newFilterValue,
+	})
+}
 </script>
 <style lang="scss" scoped>
 .timeline-filters {
 	display: flex;
 	align-items: center;
 	gap: 16px;
+	flex-wrap: wrap;
 }
 </style>

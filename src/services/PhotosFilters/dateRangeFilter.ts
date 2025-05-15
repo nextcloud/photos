@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type { TimelineFilter } from './TimelineFilter.ts'
-import DateRangeFilter from '../../components/TimelineFilters/DateRangeFilter.vue'
+import type { PhotosFilter } from './PhotosFilter.ts'
+import DateRangeFilter from '../../components/PhotosFilters/DateRangeFilter.vue'
 
 export type DateRangeValueType = { start: number; end: number }|undefined
 
 export const dateRangeFilterId = 'date-range'
 
-export const dateRangeFilter: TimelineFilter = {
+export const dateRangeFilter: PhotosFilter = {
 	id: dateRangeFilterId,
 	component: DateRangeFilter,
 	getQuery(dateRange: DateRangeValueType): string {

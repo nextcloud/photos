@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type { TimelineFilter } from './TimelineFilter.ts'
-import PlacesFilter from '../../components/TimelineFilters/PlacesFilter.vue'
+import type { PhotosFilter } from './PhotosFilter.ts'
+import PlacesFilter from '../../components/PhotosFilters/PlacesFilter.vue'
 
 export type PlacesValueType = string[]|undefined
 
 export const placesFilterId = 'places'
 
-export const placesFilter: TimelineFilter = {
+export const placesFilter: PhotosFilter = {
 	id: placesFilterId,
 	component: PlacesFilter,
 	getQuery(places: PlacesValueType): string {
