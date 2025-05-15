@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\Photos\Controller;
 
 use OCA\Files_Sharing\SharedStorage;
+use OCA\GroupFolders\Mount\GroupFolderStorage;
 use OCA\Photos\AppInfo\Application;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
@@ -148,7 +149,7 @@ class AlbumsController extends Controller {
 
 	private function isShared(Node $node): bool {
 		return $node->getStorage()->instanceOfStorage(SharedStorage::class) ||
-			$node->getStorage()->instanceOfStorage(\OCA\GroupFolders\Mount\GroupFolderStorage::class);
+			$node->getStorage()->instanceOfStorage(GroupFolderStorage::class);
 	}
 
 	private function scanFolder(Folder $folder, int $depth, bool $shared): bool {

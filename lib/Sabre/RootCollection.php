@@ -17,8 +17,9 @@ use OCP\IGroupManager;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
+use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAVACL\AbstractPrincipalCollection;
-use Sabre\DAVACL\PrincipalBackend;
+use Sabre\DAVACL\PrincipalBackend\BackendInterface;
 
 class RootCollection extends AbstractPrincipalCollection {
 	public function __construct(
@@ -27,7 +28,7 @@ class RootCollection extends AbstractPrincipalCollection {
 		private readonly ReverseGeoCoderService $reverseGeoCoderService,
 		private readonly IUserSession $userSession,
 		private readonly IRootFolder $rootFolder,
-		PrincipalBackend\BackendInterface $principalBackend,
+		BackendInterface $principalBackend,
 		private readonly IUserManager $userManager,
 		private readonly IGroupManager $groupManager,
 		private readonly UserConfigService $userConfigService,
@@ -46,10 +47,10 @@ class RootCollection extends AbstractPrincipalCollection {
 	 * @param array $principalInfo
 	 */
 	public function getChildForPrincipal(array $principalInfo): PhotosHome {
-		[, $name] = \Sabre\Uri\split($principalInfo['uri']);
+		[, $name] = preg_split($principalInfo['uri']);
 		$user = $this->userSession->getUser();
 		if (is_null($user) || $name !== $user->getUID()) {
-			throw new \Sabre\DAV\Exception\Forbidden();
+			throw new Forbidden();
 		}
 		return new PhotosHome($principalInfo, $this->albumMapper, $this->placeMapper, $this->reverseGeoCoderService, $name, $this->rootFolder, $this->userManager, $this->groupManager, $this->userConfigService, $this->logger);
 	}

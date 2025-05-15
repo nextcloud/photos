@@ -13,7 +13,9 @@ use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\Node;
 use OCP\Files\NotFoundException;
+use OCP\ITagManager;
 use OCP\ITags;
+use OCP\Server;
 use Sabre\DAV\Exception\Forbidden;
 
 class CollectionPhoto {
@@ -74,7 +76,7 @@ class CollectionPhoto {
 	}
 
 	public function isFavorite(): bool {
-		$tagManager = \OCP\Server::get(\OCP\ITagManager::class);
+		$tagManager = Server::get(ITagManager::class);
 		$tagger = $tagManager->load('files');
 		if ($tagger === null) {
 			return false;
@@ -89,7 +91,7 @@ class CollectionPhoto {
 	}
 
 	public function setFavoriteState($favoriteState): bool {
-		$tagManager = \OCP\Server::get(\OCP\ITagManager::class);
+		$tagManager = Server::get(ITagManager::class);
 		$tagger = $tagManager->load('files');
 
 		switch ($favoriteState) {
