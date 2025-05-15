@@ -37,16 +37,10 @@ class SharedAlbumRoot extends AlbumRoot {
 		);
 	}
 
-	/**
-	 * @return void
-	 */
 	public function delete() {
 		$this->albumMapper->deleteUserFromAlbumCollaboratorsList($this->userId, $this->album->getAlbum()->getId());
 	}
 
-	/**
-	 * @return void
-	 */
 	public function setName($name): never {
 		throw new Forbidden('Not allowed to rename a shared album');
 	}

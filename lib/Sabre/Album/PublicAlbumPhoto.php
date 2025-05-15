@@ -12,12 +12,10 @@ use OCP\Files\NotFoundException;
 use Sabre\DAV\IFile;
 
 class PublicAlbumPhoto extends AlbumPhoto implements IFile {
-	/** @return void */
 	public function delete(): never {
 		throw new NotFoundException('Deleting photos from a public album is not allowed.');
 	}
 
-	/** @return void */
 	public function put($data): never {
 		throw new NotFoundException('Changing a photo from a public album is not allowed.');
 	}
