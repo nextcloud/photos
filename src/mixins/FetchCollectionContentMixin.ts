@@ -77,9 +77,7 @@ export default defineComponent({
 
 				this.$store.dispatch('appendFiles', fetchedFiles)
 
-				if (fetchedFiles.length > 0) {
-					await this.$store.commit('setCollectionFiles', { collectionFileName, fileIds })
-				}
+				await this.$store.commit('setCollectionFiles', { collectionFileName, fileIds })
 
 				return fetchedFiles
 			} catch (error) {
