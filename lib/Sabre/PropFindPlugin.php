@@ -81,10 +81,10 @@ class PropFindPlugin extends ServerPlugin {
 				return;
 			}
 
-			$propFind->handle(FilesPlugin::INTERNAL_FILEID_PROPERTYNAME, fn () => $node->getFile()->getFileId());
+			$propFind->handle(FilesPlugin::INTERNAL_FILEID_PROPERTYNAME, fn (): int => $node->getFile()->getFileId());
 			$propFind->handle(FilesPlugin::GETETAG_PROPERTYNAME, fn () => $node->getETag());
-			$propFind->handle(self::FILE_NAME_PROPERTYNAME, fn () => $node->getFile()->getName());
-			$propFind->handle(self::FAVORITE_PROPERTYNAME, fn () => $node->isFavorite() ? 1 : 0);
+			$propFind->handle(self::FILE_NAME_PROPERTYNAME, fn (): string => $node->getFile()->getName());
+			$propFind->handle(self::FAVORITE_PROPERTYNAME, fn (): int => $node->isFavorite() ? 1 : 0);
 			$propFind->handle(FilesPlugin::HAS_PREVIEW_PROPERTYNAME, fn () => json_encode($this->previewManager->isAvailable($fileInfo)));
 			$propFind->handle(FilesPlugin::PERMISSIONS_PROPERTYNAME, function () use ($node): string {
 				$permissions = DavUtil::getDavPermissions($node->getFileInfo());
@@ -111,17 +111,17 @@ class PropFindPlugin extends ServerPlugin {
 		}
 
 		if ($node instanceof AlbumRoot) {
-			$propFind->handle(self::ORIGINAL_NAME_PROPERTYNAME, fn () => $node->getAlbum()->getAlbum()->getTitle());
-			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn () => $node->getAlbum()->getAlbum()->getLastAddedPhoto());
-			$propFind->handle(self::NBITEMS_PROPERTYNAME, fn () => count($node->getChildren()));
-			$propFind->handle(self::LOCATION_PROPERTYNAME, fn () => $node->getAlbum()->getAlbum()->getLocation());
+			$propFind->handle(self::ORIGINAL_NAME_PROPERTYNAME, fn (): string => $node->getAlbum()->getAlbum()->getTitle());
+			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn (): int => $node->getAlbum()->getAlbum()->getLastAddedPhoto());
+			$propFind->handle(self::NBITEMS_PROPERTYNAME, fn (): int => count($node->getChildren()));
+			$propFind->handle(self::LOCATION_PROPERTYNAME, fn (): string => $node->getAlbum()->getAlbum()->getLocation());
 			$propFind->handle(self::DATE_RANGE_PROPERTYNAME, fn () => json_encode($node->getDateRange()));
-			$propFind->handle(self::COLLABORATORS_PROPERTYNAME, fn () => $node->getCollaborators());
+			$propFind->handle(self::COLLABORATORS_PROPERTYNAME, fn (): array => $node->getCollaborators());
 		}
 
 		if ($node instanceof PlaceRoot) {
-			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn () => $node->getFirstPhoto());
-			$propFind->handle(self::NBITEMS_PROPERTYNAME, fn () => count($node->getChildren()));
+			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn (): int => $node->getFirstPhoto());
+			$propFind->handle(self::NBITEMS_PROPERTYNAME, fn (): int => count($node->getChildren()));
 		}
 	}
 

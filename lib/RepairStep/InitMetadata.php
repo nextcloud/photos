@@ -19,7 +19,7 @@ class InitMetadata implements IRepairStep {
 	) {
 	}
 
-	public function getName() {
+	public function getName(): string {
 		return 'init metadata';
 	}
 

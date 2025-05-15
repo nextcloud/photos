@@ -49,7 +49,7 @@ class PlaceMapper {
 			->executeQuery()
 			->fetchAll();
 
-		return array_map(fn ($row) => new PlaceInfo($userId, $row['meta_value_string']), $rows);
+		return array_map(fn ($row): \OCA\Photos\DB\Place\PlaceInfo => new PlaceInfo($userId, $row['meta_value_string']), $rows);
 	}
 
 	/** @return PlaceInfo */
@@ -104,7 +104,7 @@ class PlaceMapper {
 			->fetchAll();
 
 		return array_map(
-			fn ($row) => new PlaceFile(
+			fn ($row): \OCA\Photos\DB\Place\PlaceFile => new PlaceFile(
 				(int)$row['fileid'],
 				$row['name'],
 				$this->mimeTypeLoader->getMimetypeById($row['mimetype']),

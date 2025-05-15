@@ -74,7 +74,7 @@ class PlacesHome implements ICollection {
 	public function getChildren(): array {
 		if ($this->children === null) {
 			$this->children = array_map(
-				fn (PlaceInfo $placeInfo) => new PlaceRoot($this->placeMapper, $this->reverseGeoCoderService, $placeInfo, $this->userId, $this->rootFolder),
+				fn (PlaceInfo $placeInfo): \OCA\Photos\Sabre\Place\PlaceRoot => new PlaceRoot($this->placeMapper, $this->reverseGeoCoderService, $placeInfo, $this->userId, $this->rootFolder),
 				$this->placeMapper->findPlacesForUser($this->userId)
 			);
 		}

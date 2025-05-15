@@ -57,7 +57,7 @@ class AlbumMapperTest extends TestCase {
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->l10n = $this->createMock(IL10N::class);
 		$this->secureRandom = $this->createMock(ISecureRandom::class);
-		$this->timeFactory->method('getTime')->willReturnCallback(fn () => $this->time);
+		$this->timeFactory->method('getTime')->willReturnCallback(fn (): int => $this->time);
 
 		if ($this->connection->getDatabaseProvider() === IDBConnection::PLATFORM_ORACLE) {
 			$this->markTestSkipped('Feature is broken on oracle');
@@ -132,7 +132,7 @@ class AlbumMapperTest extends TestCase {
 		$this->mapper->create('user2', 'album3');
 
 		$retrievedAlbums = $this->mapper->getForUser('user1');
-		usort($retrievedAlbums, fn (AlbumInfo $a, AlbumInfo $b) => $a->getId() <=> $b->getId());
+		usort($retrievedAlbums, fn (AlbumInfo $a, AlbumInfo $b): int => $a->getId() <=> $b->getId());
 		$this->assertEquals([$album1, $album2], $retrievedAlbums);
 	}
 
@@ -155,7 +155,7 @@ class AlbumMapperTest extends TestCase {
 		$this->mapper->delete($album1->getId());
 
 		$retrievedAlbums = $this->mapper->getForUser('user1');
-		usort($retrievedAlbums, fn (AlbumInfo $a, AlbumInfo $b) => $a->getId() <=> $b->getId());
+		usort($retrievedAlbums, fn (AlbumInfo $a, AlbumInfo $b): int => $a->getId() <=> $b->getId());
 		$this->assertEquals([$album2], $retrievedAlbums);
 	}
 
