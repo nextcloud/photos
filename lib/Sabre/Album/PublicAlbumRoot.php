@@ -14,16 +14,10 @@ use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\INode;
 
 class PublicAlbumRoot extends AlbumRoot {
-	/**
-	 * @return void
-	 */
 	public function delete(): never {
 		throw new Forbidden('Not allowed to delete a public album');
 	}
 
-	/**
-	 * @return void
-	 */
 	public function setName($name): never {
 		throw new Forbidden('Not allowed to rename a public album');
 	}

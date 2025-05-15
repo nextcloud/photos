@@ -149,7 +149,7 @@ class AlbumsController extends Controller {
 
 	private function isShared(Node $node): bool {
 		return $node->getStorage()->instanceOfStorage(SharedStorage::class) ||
-			$node->getStorage()->instanceOfStorage(GroupFolderStorage::class);
+			$node->getStorage()->instanceOfStorage(\OCA\GroupFolders\Mount\GroupFolderStorage::class);
 	}
 
 	private function scanFolder(Folder $folder, int $depth, bool $shared): bool {

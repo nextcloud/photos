@@ -47,7 +47,7 @@ class RootCollection extends AbstractPrincipalCollection {
 	 * @param array $principalInfo
 	 */
 	public function getChildForPrincipal(array $principalInfo): PhotosHome {
-		[, $name] = preg_split($principalInfo['uri']);
+		[, $name] = \Sabre\Uri\split($principalInfo['uri']);
 		$user = $this->userSession->getUser();
 		if (is_null($user) || $name !== $user->getUID()) {
 			throw new Forbidden();

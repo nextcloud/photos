@@ -29,9 +29,6 @@ class PlacePhoto extends CollectionPhoto implements IFile {
 		parent::__construct($file, $userFolder);
 	}
 
-	/**
-	 * @return void
-	 */
 	public function delete(): never {
 		throw new Forbidden('Cannot remove from a place');
 	}
