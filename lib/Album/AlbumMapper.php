@@ -10,6 +10,7 @@ namespace OCA\Photos\Album;
 
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use OCA\Photos\Exception\AlreadyInAlbumException;
+use OCA\Photos\Filters\FiltersManager;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\IMimeTypeLoader;
@@ -34,6 +35,7 @@ class AlbumMapper {
 		private IGroupManager $groupManager,
 		private IL10N $l,
 		private ISecureRandom $random,
+		private FiltersManager $filtersManager,
 	) {
 	}
 
@@ -170,8 +172,7 @@ class AlbumMapper {
 	/**
 	 * @return AlbumFile[]
 	 */
-	public function getForAlbumIdAndUserWithFiles(int $albumId, string $userId): array {
-		// TODO: Add search from filters
+	public function getForAlbumIdAndUserWithFiles(int $albumId, string $userId, array $filters): array {
 		$query = $this->connection->getQueryBuilder();
 		$query->select('fileid', 'mimetype', 'a.album_id', 'size', 'mtime', 'etag', 'added', 'owner')
 			->selectAlias('f.name', 'file_name')
@@ -191,7 +192,14 @@ class AlbumMapper {
 			}
 		}
 
-		return $files;
+		$fileIds = array_map(fn ($file) => $file->getFileId(), $files);
+
+		$smartAlbumFiles = array_filter(
+			$this->filtersManager->getFilesBasedOnFilters($userId, $filters),
+			fn ($file) => array_search($file->getFileId(), $fileIds) === false,
+		);
+
+		return [...$files, ...$smartAlbumFiles];
 	}
 
 	public function getForAlbumIdAndFileId(int $albumId, int $fileId): AlbumFile {
@@ -496,7 +504,16 @@ class AlbumMapper {
 			$albumId = (int)$row['album_id'];
 			if ($row['fileid']) {
 				$mimeType = $this->mimeTypeLoader->getMimetypeById((int)$row['mimetype']);
-				$filesByAlbum[$albumId][] = new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
+				$filesByAlbum[$albumId][] = new AlbumFile(
+					(int)$row['fileid'],
+					$row['file_name'],
+					$mimeType,
+					(int)$row['size'],
+					(int)$row['mtime'],
+					$row['etag'],
+					(int)$row['added'],
+					$row['owner']
+				);
 			}
 
 			if (!isset($albumsById[$albumId])) {
@@ -506,13 +523,30 @@ class AlbumMapper {
 				if ($collaboratorType !== self::TYPE_LINK) {
 					$albumName = $row['album_name'] . ' (' . $row['album_user'] . ')';
 				}
-				$albumsById[$albumId] = new AlbumInfo($albumId, $row['album_user'], $albumName, $row['location'], (int)$row['created'], (int)$row['last_added_photo'], $row['filters'], $collaboratorType);
+				$albumsById[$albumId] = new AlbumInfo(
+					$albumId,
+					$row['album_user'],
+					$albumName,
+					$row['location'],
+					(int)$row['created'],
+					(int)$row['last_added_photo'],
+					$row['filters'],
+					$collaboratorType,
+				);
 			}
 		}
 
 		$result = [];
 		foreach ($albumsById as $id => $album) {
-			$result[] = new AlbumWithFiles($album, $this, $filesByAlbum[$id] ?? []);
+			$filesByAlbum[$id] ??= [];
+			$fileIds = array_map(fn ($file) => $file->getFileId(), $filesByAlbum[$id]);
+
+			$smartAlbumFiles = array_filter(
+				$this->filtersManager->getFilesBasedOnFilters($album->getUserId(), $album->getDecodedFilters()),
+				fn ($file) => array_search($file->getFileId(), $fileIds) === false,
+			);
+
+			$result[] = new AlbumWithFiles($album, $this, [...$filesByAlbum[$id], ...$smartAlbumFiles]);
 		}
 		return $result;
 	}
