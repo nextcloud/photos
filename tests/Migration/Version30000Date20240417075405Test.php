@@ -75,7 +75,7 @@ class Version30000Date20240417075405Test extends TestCase {
 
 		$migration->postSchemaChange(
 			$this->createMock(IOutput::class),
-			\Closure::fromCallable(fn () => false),
+			\Closure::fromCallable(fn (): bool => false),
 			[]
 		);
 

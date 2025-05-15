@@ -109,7 +109,7 @@ class PageController extends Controller {
 					new SearchComparison(ISearchComparison::COMPARE_EQUAL, 'name', '.nomedia'),
 					new SearchComparison(ISearchComparison::COMPARE_EQUAL, 'name', '.noimage')
 				]), 0, 0, [], $user));
-				$paths = array_map(fn (Node $node) => substr(dirname($node->getPath()), strlen((string)$userFolder->getPath())), $search);
+				$paths = array_map(fn (Node $node): string => substr(dirname($node->getPath()), strlen((string)$userFolder->getPath())), $search);
 				$this->nomediaPathsCache->set($key, $paths, 60 * 60 * 24 * 28); // 28 days
 			}
 		} catch (InvalidPathException|NotFoundException|NotPermittedException|NoUserException $e) {

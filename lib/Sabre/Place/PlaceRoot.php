@@ -71,7 +71,7 @@ class PlaceRoot implements ICollection {
 	public function getChildren(): array {
 		if ($this->children === null) {
 			$this->children = array_map(
-				fn (PlaceFile $file) => new PlacePhoto($this->placeInfo, $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId)),
+				fn (PlaceFile $file): \OCA\Photos\Sabre\Place\PlacePhoto => new PlacePhoto($this->placeInfo, $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId)),
 				$this->placeMapper->findFilesForUserAndPlace($this->placeInfo->getUserId(), $this->placeInfo->getPlace())
 			);
 		}
@@ -115,7 +115,7 @@ class PlaceRoot implements ICollection {
 	 * @return int[]
 	 */
 	public function getFileIds(): array {
-		return array_map(fn (PlacePhoto $file) => $file->getFileId(), $this->getChildren());
+		return array_map(fn (PlacePhoto $file): int => $file->getFileId(), $this->getChildren());
 	}
 
 	/**

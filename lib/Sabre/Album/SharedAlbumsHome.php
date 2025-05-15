@@ -58,11 +58,11 @@ class SharedAlbumsHome extends AlbumsHome {
 			$userGroups = $this->groupManager->getUserGroupIds($user);
 			foreach ($userGroups as $groupId) {
 				$albumsForGroup = $this->albumMapper->getSharedAlbumsForCollaboratorWithFiles($groupId, AlbumMapper::TYPE_GROUP);
-				$albumsForGroup = array_udiff($albumsForGroup, $albums, fn ($a, $b) => $a->getAlbum()->getId() - $b->getAlbum()->getId());
+				$albumsForGroup = array_udiff($albumsForGroup, $albums, fn ($a, $b): int => $a->getAlbum()->getId() - $b->getAlbum()->getId());
 				$albums = array_merge($albums, $albumsForGroup);
 			}
 
-			$this->children = array_map(fn (AlbumWithFiles $album) => new SharedAlbumRoot(
+			$this->children = array_map(fn (AlbumWithFiles $album): \OCA\Photos\Sabre\Album\SharedAlbumRoot => new SharedAlbumRoot(
 				$this->albumMapper,
 				$album,
 				$this->rootFolder,

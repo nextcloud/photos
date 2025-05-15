@@ -47,7 +47,7 @@ class AlbumWithFiles {
 	 * @return int[]
 	 */
 	public function getFileIds(): array {
-		return array_map(fn (AlbumFile $file) => $file->getFileId(), $this->getFiles());
+		return array_map(fn (AlbumFile $file): int => $file->getFileId(), $this->getFiles());
 	}
 
 	/**
