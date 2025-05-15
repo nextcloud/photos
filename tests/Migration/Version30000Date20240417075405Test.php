@@ -12,6 +12,7 @@ namespace OCA\Photos\Tests\Migration;
 use OCA\Photos\Migration\Version30000Date20240417075405;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
+use OCP\Server;
 use Test\TestCase;
 
 /**
@@ -23,7 +24,7 @@ class Version30000Date20240417075405Test extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();
 
-		$this->connection = \OCP\Server::get(IDBConnection::class);
+		$this->connection = Server::get(IDBConnection::class);
 	}
 
 	protected function tearDown(): void {

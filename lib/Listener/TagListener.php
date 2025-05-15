@@ -11,6 +11,7 @@ use OCP\EventDispatcher\IEventListener;
 use OCP\Files\Config\ICachedMountInfo;
 use OCP\Files\Config\IUserMountCache;
 use OCP\Files\IRootFolder;
+use OCP\ICache;
 use OCP\ICacheFactory;
 use OCP\SystemTag\MapperEvent;
 
@@ -18,7 +19,7 @@ use OCP\SystemTag\MapperEvent;
  * @template-implements IEventListener<MapperEvent>
  */
 class TagListener implements IEventListener {
-	private readonly \OCP\ICache $tagCountsCache;
+	private readonly ICache $tagCountsCache;
 	private readonly IRootFolder $rootFolder;
 	private readonly IUserMountCache $userMountCache;
 

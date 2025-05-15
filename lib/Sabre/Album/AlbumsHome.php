@@ -81,7 +81,7 @@ class AlbumsHome implements ICollection {
 	public function getChildren(): array {
 		if ($this->children === null) {
 			$albumInfos = $this->albumMapper->getForUser($this->userId);
-			$this->children = array_map(fn (AlbumInfo $albumInfo): \OCA\Photos\Sabre\Album\AlbumRoot => new AlbumRoot(
+			$this->children = array_map(fn (AlbumInfo $albumInfo): AlbumRoot => new AlbumRoot(
 				$this->albumMapper,
 				new AlbumWithFiles($albumInfo, $this->albumMapper),
 				$this->rootFolder,

@@ -91,7 +91,7 @@ class AlbumMapper {
 			->from('photos_albums')
 			->where($query->expr()->eq('user', $query->createNamedParameter($userId)));
 		$rows = $query->executeQuery()->fetchAll();
-		return array_map(fn (array $row): \OCA\Photos\Album\AlbumInfo => new AlbumInfo((int)$row['album_id'], $userId, $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']), $rows);
+		return array_map(fn (array $row): AlbumInfo => new AlbumInfo((int)$row['album_id'], $userId, $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']), $rows);
 	}
 
 	/**
@@ -124,7 +124,7 @@ class AlbumMapper {
 			->leftJoin('a', 'photos_albums_files', 'p', $query->expr()->eq('a.album_id', 'p.album_id'))
 			->where($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
 		$rows = $query->executeQuery()->fetchAll();
-		return array_map(fn (array $row): \OCA\Photos\Album\AlbumInfo => new AlbumInfo((int)$row['album_id'], $row['user'], $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']), $rows);
+		return array_map(fn (array $row): AlbumInfo => new AlbumInfo((int)$row['album_id'], $row['user'], $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']), $rows);
 	}
 
 	/**
@@ -140,7 +140,7 @@ class AlbumMapper {
 			->where($query->expr()->eq('user', $query->createNamedParameter($userId)))
 			->andWhere($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
 		$rows = $query->executeQuery()->fetchAll();
-		return array_map(fn (array $row): \OCA\Photos\Album\AlbumInfo => new AlbumInfo((int)$row['album_id'], $row['user'], $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']), $rows);
+		return array_map(fn (array $row): AlbumInfo => new AlbumInfo((int)$row['album_id'], $row['user'], $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']), $rows);
 	}
 
 	public function rename(int $id, string $newName): void {
@@ -477,7 +477,7 @@ class AlbumMapper {
 			->executeQuery()
 			->fetchAll();
 
-		return array_map(fn (array $row): \OCA\Photos\Album\AlbumInfo => new AlbumInfo(
+		return array_map(fn (array $row): AlbumInfo => new AlbumInfo(
 			(int)$row['album_id'],
 			$row['user'],
 			$row['name'] . ' (' . $row['user'] . ')',
@@ -587,7 +587,7 @@ class AlbumMapper {
 			->fetchAll();
 
 
-		return array_map(fn (array $row): \OCA\Photos\Album\AlbumInfo => new AlbumInfo(
+		return array_map(fn (array $row): AlbumInfo => new AlbumInfo(
 			(int)$row['album_id'],
 			$row['user'],
 			$row['name'] . ' (' . $row['user'] . ')',

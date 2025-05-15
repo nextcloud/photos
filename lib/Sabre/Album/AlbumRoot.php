@@ -114,7 +114,7 @@ class AlbumRoot implements ICollection, ICopyTarget {
 	 * @return AlbumPhoto[]
 	 */
 	public function getChildren(): array {
-		return array_map(fn (AlbumFile $file): \OCA\Photos\Sabre\Album\AlbumPhoto => new AlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId)), $this->album->getFiles());
+		return array_map(fn (AlbumFile $file): AlbumPhoto => new AlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId)), $this->album->getFiles());
 	}
 
 	public function getChild($name): AlbumPhoto {

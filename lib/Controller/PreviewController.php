@@ -8,12 +8,14 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Controller;
 
+use OCA\Photos\Album\AlbumInfo;
 use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\AppInfo\Application;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\FileDisplayResponse;
+use OCP\AppFramework\Http\Response;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
@@ -86,7 +88,7 @@ class PreviewController extends Controller {
 			},
 		);
 
-		/** @var \OCA\Photos\Album\AlbumInfo[] */
+		/** @var AlbumInfo[] */
 		$checkedAlbums = [];
 		if (\count($nodes) === 0) {
 			$albumsOfCurrentUser = $this->albumMapper->getForUserAndFile($user->getUID(), $fileId);
@@ -145,7 +147,7 @@ class PreviewController extends Controller {
 		Node $node,
 		int $x,
 		int $y,
-	) : Http\Response {
+	) : Response {
 		if (!($node instanceof File) || !$this->preview->isAvailable($node)) {
 			return new DataResponse([], Http::STATUS_NOT_FOUND);
 		}

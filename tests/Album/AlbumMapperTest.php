@@ -21,6 +21,7 @@ use OCP\IGroupManager;
 use OCP\IL10N;
 use OCP\IUserManager;
 use OCP\Security\ISecureRandom;
+use OCP\Server;
 use Test\TestCase;
 
 /**
@@ -50,8 +51,8 @@ class AlbumMapperTest extends TestCase {
 		parent::setUp();
 
 		$this->createdFiles = [];
-		$this->connection = \OC::$server->get(IDBConnection::class);
-		$this->mimeLoader = \OC::$server->get(IMimeTypeLoader::class);
+		$this->connection = Server::get(IDBConnection::class);
+		$this->mimeLoader = Server::get(IMimeTypeLoader::class);
 		$this->timeFactory = $this->createMock(ITimeFactory::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);

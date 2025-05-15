@@ -46,7 +46,7 @@ class PhotosHome implements ICollection {
 	}
 
 	public function getName(): string {
-		[, $name] = \Sabre\Uri\split($this->principalInfo['uri']);
+		[, $name] = preg_split($this->principalInfo['uri']);
 		return $name;
 	}
 

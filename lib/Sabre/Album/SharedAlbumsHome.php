@@ -62,7 +62,7 @@ class SharedAlbumsHome extends AlbumsHome {
 				$albums = array_merge($albums, $albumsForGroup);
 			}
 
-			$this->children = array_map(fn (AlbumWithFiles $album): \OCA\Photos\Sabre\Album\SharedAlbumRoot => new SharedAlbumRoot(
+			$this->children = array_map(fn (AlbumWithFiles $album): SharedAlbumRoot => new SharedAlbumRoot(
 				$this->albumMapper,
 				$album,
 				$this->rootFolder,
