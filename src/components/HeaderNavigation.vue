@@ -26,14 +26,16 @@
 		</div>
 
 		<!-- Main slot -->
-		<div v-if="$slots.default" class="photos-navigation__content">
-			<slot />
-		</div>
+		<div class="photos-navigation__content">
+			<div v-if="$slots.default" class="photos-navigation__content__left">
+				<slot />
+			</div>
 
-		<NcLoadingIcon v-show="loading" class="photos-navigation__loader" />
+			<NcLoadingIcon v-show="loading" class="photos-navigation__loader" />
 
-		<div class="photos-navigation__content-right">
-			<slot name="right" />
+			<div class="photos-navigation__content__right">
+				<slot name="right" />
+			</div>
 		</div>
 	</div>
 </template>
@@ -153,9 +155,9 @@ export default {
 
 		toggleNavigationButton(hide) {
 			// Hide the navigation toggle if the back button is shown
-			const navigationToggle = document.querySelector('button.app-navigation-toggle')
-			if (navigationToggle !== null) {
-				navigationToggle.style.display = hide ? 'none' : null
+			const navigationToggle = document.querySelector('button.app-navigation-toggle') as HTMLElement
+			if (navigationToggle !== null && hide) {
+				navigationToggle.style.display = 'none'
 			}
 		},
 
@@ -170,8 +172,6 @@ export default {
 	z-index: 20;
 	top: 0;
 	display: flex;
-	// We need to wrap on small devices for accessibility
-	flex-wrap: wrap;
 	gap: calc(2 * var(--app-navigation-padding));
 	align-items: center;
 	justify-content: flex-start;
@@ -211,11 +211,27 @@ export default {
 		margin-inline-start: 32px;
 	}
 
-	&__content-right {
+	&__content {
 		display: flex;
-		align-items: center;
-		justify-content: center;
-		margin-inline-start: auto;
+		flex-grow: 1;
+		// We need to wrap on small devices for accessibility
+		flex-wrap: wrap;
+		gap: 16px;
+
+		&__left {
+			display: flex;
+			flex-grow: 1;
+			align-items: center;
+			gap: 16px;
+			flex-wrap: wrap;
+		}
+
+		&__right {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
 	}
 }
 
