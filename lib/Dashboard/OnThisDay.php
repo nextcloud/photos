@@ -15,9 +15,9 @@ use OCP\Util;
 
 class OnThisDay implements IIconWidget {
 	public function __construct(
-		private IL10N $l,
-		private IURLGenerator $url,
-		private IInitialState $initialState,
+		private readonly IL10N $l,
+		private readonly IURLGenerator $url,
+		private readonly IInitialState $initialState,
 	) {
 	}
 

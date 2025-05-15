@@ -18,9 +18,9 @@ use OCP\SystemTag\MapperEvent;
  * @template-implements IEventListener<MapperEvent>
  */
 class TagListener implements IEventListener {
-	private \OCP\ICache $tagCountsCache;
-	private IRootFolder $rootFolder;
-	private IUserMountCache $userMountCache;
+	private readonly \OCP\ICache $tagCountsCache;
+	private readonly IRootFolder $rootFolder;
+	private readonly IUserMountCache $userMountCache;
 
 	public function __construct(ICacheFactory $cacheFactory, IRootFolder $rootFolder, IUserMountCache $userMountCache) {
 		$this->tagCountsCache = $cacheFactory->createLocal('photos:tag-counts');
@@ -41,9 +41,7 @@ class TagListener implements IEventListener {
 				return;
 			}
 			$mounts = $this->userMountCache->getMountsForRootId($node->getMountPoint()->getStorageRootId());
-			$userIds = array_map(static function (ICachedMountInfo $mount) {
-				return $mount->getUser()->getUID();
-			}, $mounts);
+			$userIds = array_map(static fn (ICachedMountInfo $mount) => $mount->getUser()->getUID(), $mounts);
 			foreach ($userIds as $userId) {
 				$this->tagCountsCache->remove($userId);
 			}

@@ -20,10 +20,10 @@ class PlaceMapper {
 	public const METADATA_KEY = 'photos-place';
 
 	public function __construct(
-		private IDBConnection $connection,
-		private IMimeTypeLoader $mimeTypeLoader,
-		private IRootFolder $rootFolder,
-		private IFilesMetadataManager $filesMetadataManager,
+		private readonly IDBConnection $connection,
+		private readonly IMimeTypeLoader $mimeTypeLoader,
+		private readonly IRootFolder $rootFolder,
+		private readonly IFilesMetadataManager $filesMetadataManager,
 	) {
 	}
 

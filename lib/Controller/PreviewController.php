@@ -26,28 +26,24 @@ use OCP\IRequest;
 use OCP\IUserSession;
 
 class PreviewController extends Controller {
-	private IUserSession $userSession;
-	private ?Folder $userFolder;
-	private IRootFolder $rootFolder;
-	protected AlbumMapper $albumMapper;
-	private IPreview $preview;
-	private IGroupManager $groupManager;
+	private readonly IUserSession $userSession;
+	private readonly IRootFolder $rootFolder;
+	private readonly IPreview $preview;
+	private readonly IGroupManager $groupManager;
 
 	public function __construct(
 		IRequest $request,
 		IUserSession $userSession,
-		?Folder $userFolder,
+		private readonly ?Folder $userFolder,
 		IRootFolder $rootFolder,
-		AlbumMapper $albumMapper,
+		protected AlbumMapper $albumMapper,
 		IPreview $preview,
 		IGroupManager $groupManager,
 	) {
 		parent::__construct(Application::APP_ID, $request);
 
 		$this->userSession = $userSession;
-		$this->userFolder = $userFolder;
 		$this->rootFolder = $rootFolder;
-		$this->albumMapper = $albumMapper;
 		$this->preview = $preview;
 		$this->groupManager = $groupManager;
 	}
@@ -164,9 +160,9 @@ class PreviewController extends Controller {
 			]);
 			$response->cacheFor(3600 * 24, false, true);
 			return $response;
-		} catch (NotFoundException $e) {
+		} catch (NotFoundException) {
 			return new DataResponse([], Http::STATUS_NOT_FOUND);
-		} catch (\InvalidArgumentException $e) {
+		} catch (\InvalidArgumentException) {
 			return new DataResponse([], Http::STATUS_BAD_REQUEST);
 		}
 	}

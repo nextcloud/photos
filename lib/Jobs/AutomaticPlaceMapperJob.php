@@ -21,9 +21,9 @@ use OCP\IUserManager;
 class AutomaticPlaceMapperJob extends TimedJob {
 	public function __construct(
 		ITimeFactory $time,
-		private IConfig $config,
-		private IRootFolder $rootFolder,
-		private IUserManager $userManager,
+		private readonly IConfig $config,
+		private readonly IRootFolder $rootFolder,
+		private readonly IUserManager $userManager,
 		private MediaPlaceManager $mediaPlaceManager,
 	) {
 		parent::__construct($time);
@@ -88,7 +88,7 @@ class AutomaticPlaceMapperJob extends TimedJob {
 				continue;
 			}
 
-			if (!str_starts_with($node->getMimeType(), 'image')) {
+			if (!str_starts_with((string)$node->getMimeType(), 'image')) {
 				continue;
 			}
 

@@ -26,22 +26,22 @@ use Sabre\DAV\ICollection;
 class PhotosHome implements ICollection {
 	public function __construct(
 		private array $principalInfo,
-		private AlbumMapper $albumMapper,
-		private PlaceMapper $placeMapper,
-		private ReverseGeoCoderService $reverseGeoCoderService,
-		private string $userId,
-		private IRootFolder $rootFolder,
-		private IUserManager $userManager,
-		private IGroupManager $groupManager,
-		private UserConfigService $userConfigService,
-		private LoggerInterface $logger,
+		private readonly AlbumMapper $albumMapper,
+		private readonly PlaceMapper $placeMapper,
+		private readonly ReverseGeoCoderService $reverseGeoCoderService,
+		private readonly string $userId,
+		private readonly IRootFolder $rootFolder,
+		private readonly IUserManager $userManager,
+		private readonly IGroupManager $groupManager,
+		private readonly UserConfigService $userConfigService,
+		private readonly LoggerInterface $logger,
 	) {
 	}
 
 	/**
 	 * @return never
 	 */
-	public function delete() {
+	public function delete(): never {
 		throw new Forbidden();
 	}
 
@@ -53,32 +53,28 @@ class PhotosHome implements ICollection {
 	/**
 	 * @return never
 	 */
-	public function setName($name) {
+	public function setName($name): never {
 		throw new Forbidden('Permission denied to rename this folder');
 	}
 
-	public function createFile($name, $data = null) {
+	public function createFile($name, $data = null): never {
 		throw new Forbidden('Not allowed to create files in this folder');
 	}
 
 	/**
 	 * @return never
 	 */
-	public function createDirectory($name) {
+	public function createDirectory($name): never {
 		throw new Forbidden('Permission denied to create folders in this folder');
 	}
 
 	public function getChild($name) {
-		switch ($name) {
-			case AlbumsHome::NAME:
-				return new AlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userConfigService, $this->logger);
-			case SharedAlbumsHome::NAME:
-				return new SharedAlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userManager, $this->groupManager, $this->userConfigService, $this->logger);
-			case PlacesHome::NAME:
-				return new PlacesHome($this->userId, $this->rootFolder, $this->reverseGeoCoderService, $this->placeMapper);
-		}
-
-		throw new NotFound();
+		return match ($name) {
+			AlbumsHome::NAME => new AlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userConfigService, $this->logger),
+			SharedAlbumsHome::NAME => new SharedAlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userManager, $this->groupManager, $this->userConfigService, $this->logger),
+			PlacesHome::NAME => new PlacesHome($this->userId, $this->rootFolder, $this->reverseGeoCoderService, $this->placeMapper),
+			default => throw new NotFound(),
+		};
 	}
 
 	/**

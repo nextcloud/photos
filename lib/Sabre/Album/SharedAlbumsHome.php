@@ -25,8 +25,8 @@ class SharedAlbumsHome extends AlbumsHome {
 		AlbumMapper $albumMapper,
 		string $userId,
 		IRootFolder $rootFolder,
-		private IUserManager $userManager,
-		private IGroupManager $groupManager,
+		private readonly IUserManager $userManager,
+		private readonly IGroupManager $groupManager,
 		UserConfigService $userConfigService,
 		LoggerInterface $logger,
 	) {
@@ -43,7 +43,7 @@ class SharedAlbumsHome extends AlbumsHome {
 	/**
 	 * @return never
 	 */
-	public function createDirectory($name) {
+	public function createDirectory($name): never {
 		throw new Forbidden('Not allowed to create folders in this folder');
 	}
 
@@ -62,17 +62,15 @@ class SharedAlbumsHome extends AlbumsHome {
 				$albums = array_merge($albums, $albumsForGroup);
 			}
 
-			$this->children = array_map(function (AlbumWithFiles $album) {
-				return new SharedAlbumRoot(
-					$this->albumMapper,
-					$album,
-					$this->rootFolder,
-					$this->userId,
-					$this->userConfigService,
-					$this->logger,
-					$this->userManager,
-				);
-			}, $albums);
+			$this->children = array_map(fn (AlbumWithFiles $album) => new SharedAlbumRoot(
+				$this->albumMapper,
+				$album,
+				$this->rootFolder,
+				$this->userId,
+				$this->userConfigService,
+				$this->logger,
+				$this->userManager,
+			), $albums);
 		}
 
 		return $this->children;

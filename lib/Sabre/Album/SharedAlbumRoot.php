@@ -25,7 +25,7 @@ class SharedAlbumRoot extends AlbumRoot {
 		string $userId,
 		UserConfigService $userConfigService,
 		LoggerInterface $logger,
-		private IUserManager $userManager,
+		private readonly IUserManager $userManager,
 	) {
 		parent::__construct(
 			$albumMapper,
@@ -47,7 +47,7 @@ class SharedAlbumRoot extends AlbumRoot {
 	/**
 	 * @return void
 	 */
-	public function setName($name) {
+	public function setName($name): never {
 		throw new Forbidden('Not allowed to rename a shared album');
 	}
 

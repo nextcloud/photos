@@ -15,7 +15,7 @@ use OCP\Migration\IRepairStep;
 
 class InitMetadata implements IRepairStep {
 	public function __construct(
-		private IFilesMetadataManager $metadataManager,
+		private readonly IFilesMetadataManager $metadataManager,
 	) {
 	}
 
