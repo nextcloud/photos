@@ -33,6 +33,25 @@
 						</template>
 						{{ t('photos', 'Unselect all') }}
 					</NcButton>
+
+					<span>
+						<NcButton v-if="album !== undefined && album.attributes.filters !== undefined"
+							:title="t('photos', 'Toggle filter')"
+							:aria-label="t('photos', 'Toggle filter')"
+							data-cy-timeline-action="toggle-filters"
+							type="tertiary"
+							@click="toggleFilters">
+							<template #icon>
+								<FilterOff v-if="showFilters" />
+								<FilterIcon v-else />
+							</template>
+						</NcButton>
+
+						<PhotosFilters v-if="showFilters"
+							:value="album.attributes.filters"
+							class="timeline__filters"
+							@update:value="handleFiltersChange" />
+					</span>
 				</template>
 
 				<template v-if="album !== undefined" slot="right">
@@ -158,6 +177,8 @@ import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import Pencil from 'vue-material-design-icons/Pencil.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
+import Filter from 'vue-material-design-icons/Filter.vue'
+import FilterOff from 'vue-material-design-icons/FilterOff.vue'
 
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
@@ -167,6 +188,7 @@ import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import CollaboratorsSelectionForm from '../components/Albums/CollaboratorsSelectionForm.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
+import PhotosFilters from '../components/PhotosFilters/PhotosFilters.vue'
 import PhotosPicker from '../components/PhotosPicker.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import logger from '../services/logger.js'
@@ -200,6 +222,9 @@ export default {
 		Pencil,
 		Plus,
 		ShareVariant,
+		FilterIcon: Filter,
+		FilterOff,
+		PhotosFilters,
 	},
 
 	mixins: [
@@ -220,6 +245,7 @@ export default {
 			showAddPhotosModal: false,
 			showManageCollaboratorView: false,
 			showEditAlbumForm: false,
+			showFilters: false,
 
 			loadingAddCollaborators: false,
 		}
@@ -295,6 +321,19 @@ export default {
 			} finally {
 				this.loadingAddCollaborators = false
 			}
+		},
+
+		toggleFilters() {
+			this.showFilters = !this.showFilters
+			if (!this.showFilters) {
+				this.extraFilters = {}
+				this.resetFetchFilesState()
+			}
+		},
+
+		async handleFiltersChange(filters) {
+			await this.$store.dispatch('updateCollection', { collectionFileName: this.album?.root + this.album?.path, properties: { filters } })
+			this.fetchAlbumContent()
 		},
 
 		t: translate,
