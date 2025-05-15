@@ -14,6 +14,7 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
+use OCP\Files\Mount\IMovableMount;
 use OCP\IConfig;
 use OCP\IUserManager;
 
@@ -77,7 +78,7 @@ class AutomaticPlaceMapperJob extends TimedJob {
 
 	private function scanFolder(Folder $folder): void {
 		// Do not scan share and other moveable mounts.
-		if ($folder->getMountPoint() instanceof \OC\Files\Mount\MoveableMount) {
+		if ($folder->getMountPoint() instanceof IMovableMount) {
 			return;
 		}
 

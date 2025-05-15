@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Controller;
 
-use OCA\Files_Sharing\SharedStorage;
 use OCA\Photos\AppInfo\Application;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
@@ -19,6 +18,7 @@ use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\Node;
 use OCP\Files\NotFoundException;
+use OCP\Files\Storage\ISharedStorage;
 use OCP\Files\StorageNotAvailableException;
 use OCP\IPreview;
 use OCP\IRequest;
@@ -150,7 +150,12 @@ class AlbumsController extends Controller {
 	}
 
 	private function isShared(Node $node): bool {
-		return $node->getStorage()->instanceOfStorage(SharedStorage::class) ||
+		/**
+		 * @psalm-suppress UndefinedClass
+		 * Adding the GroupFolderStorage class to the stubs would mean adding a lot of other classes.
+		 * This is enough for the current usage.
+		 */
+		return $node->getStorage()->instanceOfStorage(ISharedStorage::class) ||
 			$node->getStorage()->instanceOfStorage(\OCA\GroupFolders\Mount\GroupFolderStorage::class);
 	}
 
