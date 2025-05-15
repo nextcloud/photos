@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Photos\RepairStep;
 
+use OCA\Photos\Listener\OriginalDateTimeMetadataProvider;
 use OCP\FilesMetadata\IFilesMetadataManager;
 use OCP\FilesMetadata\Model\IMetadataValueWrapper;
 use OCP\Migration\IOutput;
@@ -24,6 +25,6 @@ class InitMetadata implements IRepairStep {
 	}
 
 	public function run(IOutput $output) {
-		$this->metadataManager->initMetadata('photos-original_date_time', IMetadataValueWrapper::TYPE_INT, true, IMetadataValueWrapper::EDIT_FORBIDDEN);
+		$this->metadataManager->initMetadata(OriginalDateTimeMetadataProvider::METADATA_KEY, IMetadataValueWrapper::TYPE_INT, true, IMetadataValueWrapper::EDIT_FORBIDDEN);
 	}
 }

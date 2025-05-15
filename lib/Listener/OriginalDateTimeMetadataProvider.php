@@ -21,6 +21,9 @@ use Psr\Log\LoggerInterface;
  * @template-implements IEventListener<MetadataLiveEvent|MetadataBackgroundEvent>
  */
 class OriginalDateTimeMetadataProvider implements IEventListener {
+
+	public const string METADATA_KEY = 'photos-original_date_time';
+
 	public function __construct(
 		private readonly LoggerInterface $logger,
 	) {
@@ -78,11 +81,14 @@ class OriginalDateTimeMetadataProvider implements IEventListener {
 		$metadata = $event->getMetadata();
 
 		// Try to use EXIF data.
-		if ($metadata->hasKey('photos-exif') && !empty($metadata->getArray('photos-exif')['DateTimeOriginal'])) {
-			$rawDateTimeOriginal = $metadata->getArray('photos-exif')['DateTimeOriginal'];
+		if (
+			$metadata->hasKey(ExifMetadataProvider::METADATA_KEY_EXIF)
+			&& !empty($metadata->getArray(ExifMetadataProvider::METADATA_KEY_EXIF)['DateTimeOriginal'])
+		) {
+			$rawDateTimeOriginal = $metadata->getArray(ExifMetadataProvider::METADATA_KEY_EXIF)['DateTimeOriginal'];
 			$timestampOriginal = $this->dateToTimestamp('Y:m:d G:i:s', $rawDateTimeOriginal, $node);
 			if ($timestampOriginal !== false) {
-				$metadata->setInt('photos-original_date_time', $timestampOriginal, true);
+				$metadata->setInt(self::METADATA_KEY, $timestampOriginal, true);
 				return;
 			}
 		}
@@ -99,12 +105,12 @@ class OriginalDateTimeMetadataProvider implements IEventListener {
 
 			$timestampOriginal = $this->dateToTimestamp($format, $matches[1], $node);
 			if ($timestampOriginal !== false) {
-				$metadata->setInt('photos-original_date_time', $timestampOriginal, true);
+				$metadata->setInt(self::METADATA_KEY, $timestampOriginal, true);
 				return;
 			}
 		}
 
 		// Fallback to the mtime.
-		$metadata->setInt('photos-original_date_time', $node->getMTime(), true);
+		$metadata->setInt(self::METADATA_KEY, $node->getMTime(), true);
 	}
 }
