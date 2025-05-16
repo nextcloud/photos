@@ -7,7 +7,7 @@
 		<MapMarker /> <b>{{ t('photos', 'Places') }}: </b>
 		<span v-for="place in selectedPlaces" :key="place.label">
 			<NcChip no-close>
-				<template #icon>
+				<template v-if="place.previewUrl !== undefined" #icon>
 					<img :src="place.previewUrl" class="place__preview">
 				</template>
 				<template #default>

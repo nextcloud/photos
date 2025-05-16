@@ -24,6 +24,12 @@
 				<div v-if="album.attributes.location !== ''" slot="subtitle" class="album__location">
 					<MapMarker />{{ album.attributes.location }}
 				</div>
+				<template slot="default">
+					<span v-if="album !== undefined" class="album-container__filters">
+						<PhotosFiltersDisplay :filters-value="album.attributes.filters" />
+					</span>
+				</template>
+
 				<template v-if="album !== undefined" slot="right">
 					<NcActions :force-menu="true" :aria-label="t('photos', 'Open actions menu')">
 						<!-- TODO: enable download on public albums -->
@@ -84,6 +90,7 @@ import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
 import { translate } from '@nextcloud/l10n'
 import { getClient } from '@nextcloud/files/dav'
 
+import PhotosFiltersDisplay from '../components/PhotosFilters/PhotosFiltersDisplay.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
@@ -107,6 +114,7 @@ export default {
 		CollectionContent,
 		// ActionDownload,
 		HeaderNavigation,
+		PhotosFiltersDisplay,
 	},
 
 	mixins: [
