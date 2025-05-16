@@ -4,7 +4,8 @@
  */
 
 import type { PhotosFilter } from './PhotosFilter.ts'
-import PlacesFilter from '../../components/PhotosFilters/PlacesFilter.vue'
+import PlacesFilterInput from '../../components/PhotosFilters/PlacesFilterInput.vue'
+import PlacesFilterDisplay from '../../components/PhotosFilters/PlacesFilterDisplay.vue'
 
 export type PlacesValueType = string[]|undefined
 
@@ -12,7 +13,8 @@ export const placesFilterId = 'places'
 
 export const placesFilter: PhotosFilter = {
 	id: placesFilterId,
-	component: PlacesFilter,
+	inputComponent: PlacesFilterInput,
+	displayComponent: PlacesFilterDisplay,
 	getQuery(places: PlacesValueType): string {
 		if (places === undefined) {
 			return ''

@@ -90,7 +90,7 @@
 			</div>
 		</HeaderNavigation>
 
-		<PhotosFilters v-if="showFilters"
+		<PhotosFiltersInput v-if="showFilters"
 			:value="filters"
 			class="timeline__filters"
 			@update:value="handleFiltersChange" />
@@ -129,7 +129,7 @@
 			<h2 class="timeline__heading">
 				{{ t('photos', 'New album') }}
 			</h2>
-			<AlbumForm :filters="filters" @done="showAlbumCreationForm = false" />
+			<AlbumForm :filters-value="filters" @done="showAlbumCreationForm = false" />
 		</NcModal>
 
 		<NcModal v-if="showAlbumPicker"
@@ -169,7 +169,7 @@ import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import ActionDownload from '../components/Actions/ActionDownload.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
-import PhotosFilters from '../components/PhotosFilters/PhotosFilters.vue'
+import PhotosFiltersInput from '../components/PhotosFilters/PhotosFiltersInput.vue'
 import { configChangedEvent } from '../store/userConfig.ts'
 import type { Album } from '../store/albums.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.ts'
@@ -198,7 +198,7 @@ export default {
 		HeaderNavigation,
 		PhotosSourceLocationsSettings,
 		AlertCircle,
-		PhotosFilters,
+		PhotosFiltersInput,
 		FilterIcon: Filter,
 		FilterOff,
 	},

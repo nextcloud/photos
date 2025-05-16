@@ -44,9 +44,7 @@ const emit = defineEmits<{
 
 const loading = ref(true)
 const availableOptions = ref<NcSelectPlaceOption[]>([])
-const selectedOptions = ref((props.value ?? [])
-	.map(place => availableOptions.value.find(option => option.label === place))
-	.filter(place => place !== undefined))
+const selectedOptions = ref<NcSelectPlaceOption[]>([])
 
 watch(selectedOptions, (newSelectedOptionValue) => {
 	if (newSelectedOptionValue.length === 0) {
@@ -62,6 +60,11 @@ fetchCollections(placesPrefix)
 			label: place.basename,
 			previewUrl: generateUrl(`/apps/photos/api/v1/preview/${place.attributes['last-photo']}?x=${64}&y=${64}`),
 		}))
+
+		selectedOptions.value = (props.value ?? [])
+			.map(place => availableOptions.value.find(option => option.label === place))
+			.filter(place => place !== undefined)
+
 		loading.value = false
 	})
 </script>

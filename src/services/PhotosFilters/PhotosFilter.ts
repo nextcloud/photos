@@ -7,6 +7,7 @@ import type { ComponentPublicInstanceConstructor } from 'vue/types/v3-component-
 
 export type PhotosFilter = {
 	id: string
-	component: ComponentPublicInstanceConstructor
+	inputComponent: ComponentPublicInstanceConstructor
+	displayComponent: ComponentPublicInstanceConstructor
 	getQuery(value: unknown): string
 }
