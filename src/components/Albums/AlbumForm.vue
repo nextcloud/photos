@@ -20,6 +20,9 @@
 				</template>
 			</NcTextField>
 		</div>
+
+		<PhotosFiltersDisplay :filters-value="filtersValue" />
+
 		<div class="form-buttons">
 			<span class="left-buttons">
 				<NcButton v-if="displayBackButton"
@@ -84,11 +87,11 @@ import { NcButton, NcLoadingIcon, NcTextField } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import { translate } from '@nextcloud/l10n'
 import { generateRemoteUrl } from '@nextcloud/router'
-import { getCurrentUser } from '@nextcloud/auth'
 import { resultToNode } from '@nextcloud/files/dav'
 
 import CollaboratorsSelectionForm from './CollaboratorsSelectionForm.vue'
 import { albumsPrefix, type Album, type AlbumEditableProperties, type Collaborator } from '../../store/albums'
+import PhotosFiltersDisplay from '../PhotosFilters/PhotosFiltersDisplay.vue'
 
 export default {
 	name: 'AlbumForm',
@@ -101,6 +104,7 @@ export default {
 		NcLoadingIcon,
 		NcTextField,
 		CollaboratorsSelectionForm,
+		PhotosFiltersDisplay,
 	},
 
 	props: {
@@ -108,7 +112,7 @@ export default {
 			type: Object as PropType<Album|null>,
 			default: null,
 		},
-		filters: {
+		filtersValue: {
 			type: Object as PropType<Record<string, unknown>>,
 			default: () => ({}),
 		},
@@ -184,7 +188,7 @@ export default {
 						'last-photo': -1,
 						date: moment().format('MMMM YYYY'),
 						collaborators,
-						filters: this.filters,
+						filters: this.filtersValue,
 						source: generateRemoteUrl(`dav/${this.albumFileName}`),
 					},
 				}, albumsPrefix)
@@ -206,7 +210,7 @@ export default {
 				}
 
 				if (this.albumLocation !== '' || collaborators.length !== 0) {
-					propertiesToUpdate.filters = this.filters
+					propertiesToUpdate.filters = this.filtersValue
 				}
 
 				album = await this.$store.dispatch('updateCollection', {
@@ -252,6 +256,7 @@ export default {
 .album-form {
 	display: flex;
 	flex-direction: column;
+	justify-content: space-between;
 	height: 350px;
 	padding: calc(var(--default-grid-baseline) * 4);
 
@@ -264,7 +269,6 @@ export default {
 	}
 
 	.form-inputs {
-		flex: 1;
 		display: flex;
 		flex-direction: column;
 		gap: calc(var(--default-grid-baseline) * 4);

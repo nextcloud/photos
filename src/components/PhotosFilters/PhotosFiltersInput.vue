@@ -3,12 +3,12 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<div class="timeline-filters">
-		<component :is="filter.component"
+	<div class="photos-filters">
+		<component :is="filter.inputComponent"
 			v-for="filter in filters"
 			:key="filter.id"
 			v-model="innerValue[filter.id]"
-			:data-cy-timeline-filters="filter.id"
+			:data-cy-photos-filters="filter.id"
 			@update:value="newFilterValue => updateFilterValue(filter.id, newFilterValue)" />
 	</div>
 </template>
@@ -41,7 +41,7 @@ function updateFilterValue(filterId: string, newFilterValue: unknown) {
 }
 </script>
 <style lang="scss" scoped>
-.timeline-filters {
+.photos-filters {
 	display: flex;
 	align-items: center;
 	gap: 16px;

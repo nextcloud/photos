@@ -4,7 +4,8 @@
  */
 
 import type { PhotosFilter } from './PhotosFilter.ts'
-import DateRangeFilter from '../../components/PhotosFilters/DateRangeFilter.vue'
+import DateRangeFilterInput from '../../components/PhotosFilters/DateRangeFilterInput.vue';
+import DateRangeFilterDisplay from '../../components/PhotosFilters/DateRangeFilterDisplay.vue';
 
 export type DateRangeValueType = { start: number; end: number }|undefined
 
@@ -12,7 +13,8 @@ export const dateRangeFilterId = 'date-range'
 
 export const dateRangeFilter: PhotosFilter = {
 	id: dateRangeFilterId,
-	component: DateRangeFilter,
+	inputComponent: DateRangeFilterInput,
+	displayComponent: DateRangeFilterDisplay,
 	getQuery(dateRange: DateRangeValueType): string {
 		if (dateRange === undefined) {
 			return ''
