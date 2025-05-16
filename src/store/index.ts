@@ -46,6 +46,9 @@ export type PhotosStore = {
 		getPublicAlbumName(publicAlbumName: string): string,
 		getSharedAlbum(sharedAlbumName: string): Album
 		getSharedAlbumFiles(sharedAlbumName: string): string[]
+		getPlaceName(sharedAlbumName: string): string,
+		getPlace(sharedAlbumName: string): Collection|undefined
+		getPlaceFiles(sharedAlbumName: string): string[]
 		getSharedAlbumName(sharedAlbumName: string): string,
 		tagId(name: string): string,
 	}
@@ -93,6 +96,6 @@ const photosStore = new Store({
 	],
 
 	strict: process.env.NODE_ENV !== 'production',
-})
+}) as PhotosStore
 
 export default photosStore
