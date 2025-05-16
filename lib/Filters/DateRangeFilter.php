@@ -11,12 +11,12 @@ namespace OCA\Photos\Filters;
 use OC\Files\Search\SearchBinaryOperator;
 use OC\Files\Search\SearchComparison;
 use OCA\Photos\Listener\OriginalDateTimeMetadataProvider;
+use OCP\Files\Search\ISearchBinaryOperator;
 use OCP\Files\Search\ISearchComparison;
 use OCP\FilesMetadata\IMetadataQuery;
-use OCP\Files\Search\ISearchBinaryOperator;
 
 class DateRangeFilter implements IFilter {
-	public const string ID = 'date-range';
+	public const ID = 'date-range';
 
 	public function getId(): string {
 		return self::ID;

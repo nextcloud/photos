@@ -27,7 +27,7 @@ class Version32000Date20250507132617 extends SimpleMigrationStep {
 		$albumsTable = $schema->getTable('photos_albums');
 
 		if (!$albumsTable->hasColumn('filters')) {
-			$albumsTable->addColumn('filters', Types::TEXT);
+			$albumsTable->addColumn('filters', Types::TEXT, ['notnull' => false ]);
 		}
 
 		return $schema;

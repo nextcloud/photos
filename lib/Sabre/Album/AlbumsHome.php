@@ -20,7 +20,7 @@ use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\ICollection;
 
 class AlbumsHome implements ICollection {
-	public const string NAME = 'albums';
+	public const NAME = 'albums';
 
 	/**
 	 * @var AlbumRootBase[]|null
