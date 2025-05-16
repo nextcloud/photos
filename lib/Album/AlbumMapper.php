@@ -196,7 +196,7 @@ class AlbumMapper {
 		return [...$files, ...$smartAlbumFiles];
 	}
 
-	public function getForAlbumIdAndFileId(int $albumId, int $fileId): AlbumFile {
+	public function getForAlbumIdAndFileId(int $albumId, int $fileId): ?AlbumFile {
 		$query = $this->connection->getQueryBuilder();
 		$query->select('fileid', 'mimetype', 'a.album_id', 'user', 'size', 'mtime', 'etag', 'location', 'created', 'last_added_photo', 'added', 'owner')
 			->selectAlias('f.name', 'file_name')
@@ -207,6 +207,10 @@ class AlbumMapper {
 			->where($query->expr()->eq('a.album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
 		$row = $query->executeQuery()->fetchAll()[0];
+
+		if ($row === null) {
+			return null;
+		}
 
 		$mimeType = $this->mimeTypeLoader->getMimetypeById((int)$row['mimetype']);
 		return new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
@@ -448,6 +452,7 @@ class AlbumMapper {
 			->leftJoin('c', 'photos_albums', 'a', $query->expr()->eq('a.album_id', 'c.album_id'))
 			->where($query->expr()->eq('collaborator_id', $query->createNamedParameter($collaboratorId)))
 			->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter($collaboratorType, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->isNotNull('a.album_id'))
 			->executeQuery()
 			->fetchAll();
 
@@ -468,7 +473,7 @@ class AlbumMapper {
 	public function getSharedAlbumsForCollaboratorWithFiles(string $collaboratorId, int $collaboratorType): array {
 		$query = $this->connection->getQueryBuilder();
 		$rows = $query
-			->select('fileid', 'mimetype', 'a.album_id', 'size', 'mtime', 'etag', 'location', 'created', 'last_added_photo', 'added', 'owner')
+			->select('fileid', 'mimetype', 'a.album_id', 'size', 'mtime', 'etag', 'location', 'created', 'last_added_photo', 'added', 'owner', 'filters')
 			->selectAlias('f.name', 'file_name')
 			->selectAlias('a.name', 'album_name')
 			->selectAlias('a.user', 'album_user')
@@ -478,6 +483,7 @@ class AlbumMapper {
 			->leftJoin('p', 'filecache', 'f', $query->expr()->eq('p.file_id', 'f.fileid'))
 			->where($query->expr()->eq('collaborator_id', $query->createNamedParameter($collaboratorId)))
 			->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter($collaboratorType, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->isNotNull('a.album_id'))
 			->executeQuery()
 			->fetchAll();
 
