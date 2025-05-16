@@ -21,7 +21,7 @@ use OCP\FilesMetadata\Event\MetadataLiveEvent;
  */
 class PlaceMetadataProvider implements IEventListener {
 
-	public const string METADATA_KEY = 'photos-place';
+	public const METADATA_KEY = 'photos-place';
 
 	public function __construct(
 		private readonly MediaPlaceManager $mediaPlaceManager,

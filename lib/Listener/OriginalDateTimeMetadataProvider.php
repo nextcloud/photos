@@ -22,7 +22,7 @@ use Psr\Log\LoggerInterface;
  */
 class OriginalDateTimeMetadataProvider implements IEventListener {
 
-	public const string METADATA_KEY = 'photos-original_date_time';
+	public const METADATA_KEY = 'photos-original_date_time';
 
 	public function __construct(
 		private readonly LoggerInterface $logger,

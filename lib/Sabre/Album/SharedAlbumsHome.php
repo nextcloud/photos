@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface;
 use Sabre\DAV\Exception\Forbidden;
 
 class SharedAlbumsHome extends AlbumsHome {
-	public const string NAME = 'sharedalbums';
+	public const NAME = 'sharedalbums';
 
 	public function __construct(
 		array $principalInfo,

@@ -45,7 +45,7 @@ describe('View list of photos in the main timeline', () => {
 		cy.get('[data-cy-photos-filters="places"] input[type="search"]').type('Lauris{enter}', { scrollBehavior: 'nearest' })
 		cy.get('[data-test="media"]').should('have.length', 1)
 		cy.get('[data-cy-photos-filters="places"] input[type="search"]').type('Annot{enter}', { scrollBehavior: 'nearest' })
-		cy.get('[data-test="media"]').should('have.length', 2)
+		cy.get('[data-test="media"]').should('have.length', 3)
 		cy.get('[data-cy-photos-filters="places"] input[type="search"]').clear()
 		cy.get('[data-test="media"]').should('have.length', 5)
 		cy.get('[data-cy-timeline-action="toggle-filters"]').click()

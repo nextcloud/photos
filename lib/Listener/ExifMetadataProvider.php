@@ -24,9 +24,9 @@ use Psr\Log\LoggerInterface;
  */
 class ExifMetadataProvider implements IEventListener {
 
-	public const string METADATA_KEY_EXIF = 'photos-exif';
-	public const string METADATA_KEY_IFD0 = 'photos-ifd0';
-	public const string METADATA_KEY_GPS = 'photos-gps';
+	public const METADATA_KEY_EXIF = 'photos-exif';
+	public const METADATA_KEY_IFD0 = 'photos-ifd0';
+	public const METADATA_KEY_GPS = 'photos-gps';
 
 	public function __construct(
 		private readonly LoggerInterface $logger,
