@@ -45,7 +45,6 @@ import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 
 import { NcButton, NcLoadingIcon } from '@nextcloud/vue'
 import { t } from '@nextcloud/l10n'
-import type { Location } from 'vue-router'
 
 export default {
 	name: 'HeaderNavigation',
@@ -95,58 +94,11 @@ export default {
 			}
 			return this.title
 		},
-
-		parentPath() {
-			const path = this.path.split('/')
-			path.pop()
-			const parent = path.join('/')
-			return this.isRoot || parent.trim() === ''
-				? '/'
-				: path.join('/')
-		},
-
-		parentName() {
-			return this.parentPath && this.parentPath.split('/').pop()
-		},
-
-		backToText() {
-			if (this.parentPath === '/') {
-				return t('photos', 'Back to {folder}', { folder: this.rootTitle })
-			}
-			return t('photos', 'Back to {folder}', { folder: this.parentName })
-		},
-
-		/**
-		 * We do not want encoded slashes when browsing by folder
-		 * so we generate a new valid route object, get the final url back
-		 * decode it and use it as a direct string, which vue-router
-		 * does not encode afterwards
-		 */
-		to(): string|Location {
-			// always remove first slash, the router
-			// manage it automatically
-			const regex = /^\/?(.*)/i
-			const path = (regex.exec(this.parentPath) as string[])[1]
-
-			// apply to current route
-			const { name, params } = Object.assign({}, this.$route, {
-				params: this.params || { path },
-			})
-
-			// return the full object as we don't care about
-			// an empty path if this is route
-			if (path === '') {
-				return { name: name ?? undefined }
-			}
-
-			// returning a string prevent vue-router to encode it again
-			return decodeURIComponent(this.$router.resolve({ name: name ?? undefined, params }).resolved.path)
-		},
 	},
 
 	methods: {
 		folderUp() {
-			this.$router.push(this.to)
+			this.$router.push(this.$route.path.split('/').slice(0, -1).join('/'))
 		},
 
 		refresh() {
