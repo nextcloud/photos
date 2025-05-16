@@ -115,7 +115,7 @@ class PropFindPlugin extends ServerPlugin {
 
 		if ($node instanceof AlbumRootBase) {
 			$propFind->handle(self::ORIGINAL_NAME_PROPERTYNAME, fn (): string => $node->getAlbum()->getAlbum()->getTitle());
-			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn (): int => $node->getAlbum()->getAlbum()->getLastAddedPhoto());
+			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn (): int => $node->getCover());
 			$propFind->handle(self::LOCATION_PROPERTYNAME, fn (): string => $node->getAlbum()->getAlbum()->getLocation());
 			$propFind->handle(self::DATE_RANGE_PROPERTYNAME, fn () => json_encode($node->getDateRange()));
 			$propFind->handle(self::COLLABORATORS_PROPERTYNAME, fn (): array => $node->getCollaborators());
