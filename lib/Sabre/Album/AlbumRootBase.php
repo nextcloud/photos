@@ -121,7 +121,7 @@ abstract class AlbumRootBase implements ICollection, ICopyTarget {
 		return array_map(fn (AlbumFile $file) => $this->getAlbumPhoto($file), $this->album->getFiles());
 	}
 
-	final public function getChild($name): PublicAlbumPhoto {
+	final public function getChild($name): AlbumPhoto {
 		foreach ($this->album->getFiles() as $file) {
 			if ($file->getFileId() . '-' . $file->getName() === $name) {
 				return $this->getAlbumPhoto($file);

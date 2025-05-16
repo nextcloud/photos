@@ -159,7 +159,7 @@ export default {
 	methods: {
 		async fetchAlbumInfo() {
 			const album = await this.fetchCollection(
-				`/${publicAlbumsPrefix}/${this.token}`,
+				`${publicAlbumsPrefix}/${this.token}`,
 				publicAlbumsExtraProps,
 				this.publicClient,
 			) as PublicAlbum
@@ -171,7 +171,7 @@ export default {
 
 		async fetchAlbumContent() {
 			const files = await this.fetchCollectionFiles(
-				`/${publicAlbumsPrefix}/${this.token}`,
+				`${publicAlbumsPrefix}/${this.token}`,
 				publicAlbumsExtraProps,
 				this.publicClient,
 			)

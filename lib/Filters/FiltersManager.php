@@ -9,10 +9,12 @@ declare(strict_types=1);
 namespace OCA\Photos\Filters;
 
 use OC\Files\Search\SearchBinaryOperator;
+use OC\Files\Search\SearchComparison;
 use OC\Files\Search\SearchQuery;
 use OCA\Photos\Album\AlbumFile;
 use OCP\Files\IRootFolder;
 use OCP\Files\Search\ISearchBinaryOperator;
+use OCP\Files\Search\ISearchComparison;
 
 class FiltersManager {
 	/**
@@ -35,7 +37,7 @@ class FiltersManager {
 	 * @param array<string, mixed> $userFilters
 	 * @return AlbumFile[]
 	 */
-	public function getFilesBasedOnFilters(string $userId, array $userFilters): array {
+	public function getFilesBasedOnFilters(string $userId, array $userFilters, ?int $fileId = null): array {
 		if (empty($userFilters)) {
 			return [];
 		}
@@ -46,6 +48,14 @@ class FiltersManager {
 			if (is_array($filterValue)) {
 				$filtersOperations[] = $this->registeredFilters[$filterId]->getSearchOperator($filterValue);
 			}
+		}
+
+		if ($fileId !== null) {
+			$filtersOperations[] = new SearchComparison(
+						ISearchComparison::COMPARE_EQUAL,
+						'fileid',
+						$fileId,
+					);
 		}
 
 		$query = new SearchQuery(new SearchBinaryOperator(ISearchBinaryOperator::OPERATOR_AND, $filtersOperations), 1000, 0, []);
