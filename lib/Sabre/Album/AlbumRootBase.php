@@ -181,4 +181,15 @@ abstract class AlbumRootBase implements ICollection, ICopyTarget {
 	final public function getFilters(): ?string {
 		return $this->album->getAlbum()->getFilters();
 	}
+
+	public function getCover(): int {
+		$lastAddedPhoto = $this->album->getAlbum()->getLastAddedPhoto();
+
+		// If the album might be empty, but still contain photos based on filters.
+		if ($lastAddedPhoto === -1 && isset($this->getChildren()[0])) {
+			return $this->getChildren()[0]->getFileId();
+		} else {
+			return $lastAddedPhoto;
+		}
+	}
 }
