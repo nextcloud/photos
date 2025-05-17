@@ -20,8 +20,8 @@ class UserConfigService {
 		'photosSourceFolders' => '["/Photos"]',
 	];
 
-	private IConfig $config;
-	private IUserSession $userSession;
+	private readonly IConfig $config;
+	private readonly IUserSession $userSession;
 
 	public function __construct(
 		IConfig $config,

@@ -20,10 +20,10 @@ class PlaceMapper {
 	public const METADATA_KEY = 'photos-place';
 
 	public function __construct(
-		private IDBConnection $connection,
-		private IMimeTypeLoader $mimeTypeLoader,
-		private IRootFolder $rootFolder,
-		private IFilesMetadataManager $filesMetadataManager,
+		private readonly IDBConnection $connection,
+		private readonly IMimeTypeLoader $mimeTypeLoader,
+		private readonly IRootFolder $rootFolder,
+		private readonly IFilesMetadataManager $filesMetadataManager,
 	) {
 	}
 
@@ -49,7 +49,7 @@ class PlaceMapper {
 			->executeQuery()
 			->fetchAll();
 
-		return array_map(fn ($row) => new PlaceInfo($userId, $row['meta_value_string']), $rows);
+		return array_map(fn ($row): PlaceInfo => new PlaceInfo($userId, $row['meta_value_string']), $rows);
 	}
 
 	/** @return PlaceInfo */
@@ -104,7 +104,7 @@ class PlaceMapper {
 			->fetchAll();
 
 		return array_map(
-			fn ($row) => new PlaceFile(
+			fn ($row): PlaceFile => new PlaceFile(
 				(int)$row['fileid'],
 				$row['name'],
 				$this->mimeTypeLoader->getMimetypeById($row['mimetype']),

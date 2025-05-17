@@ -34,7 +34,7 @@ class PlaceRoot implements ICollection {
 	/**
 	 * @return never
 	 */
-	public function delete() {
+	public function delete(): never {
 		throw new Forbidden('Not allowed to delete a place collection');
 	}
 
@@ -45,7 +45,7 @@ class PlaceRoot implements ICollection {
 	/**
 	 * @return never
 	 */
-	public function setName($name) {
+	public function setName($name): never {
 		throw new Forbidden('Cannot change the place collection name');
 	}
 
@@ -54,14 +54,14 @@ class PlaceRoot implements ICollection {
 	 * @param null|resource|string $data
 	 * @return never
 	 */
-	public function createFile($name, $data = null) {
+	public function createFile($name, $data = null): never {
 		throw new Forbidden('Cannot create a file in a place collection');
 	}
 
 	/**
 	 * @return never
 	 */
-	public function createDirectory($name) {
+	public function createDirectory($name): never {
 		throw new Forbidden('Not allowed to create directories in this folder');
 	}
 
@@ -71,7 +71,7 @@ class PlaceRoot implements ICollection {
 	public function getChildren(): array {
 		if ($this->children === null) {
 			$this->children = array_map(
-				fn (PlaceFile $file) => new PlacePhoto($this->placeInfo, $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId)),
+				fn (PlaceFile $file): PlacePhoto => new PlacePhoto($this->placeInfo, $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId)),
 				$this->placeMapper->findFilesForUserAndPlace($this->placeInfo->getUserId(), $this->placeInfo->getPlace())
 			);
 		}
@@ -81,7 +81,7 @@ class PlaceRoot implements ICollection {
 
 	public function getChild($name): PlacePhoto {
 		try {
-			[$fileId, $fileName] = explode('-', $name, 2);
+			[$fileId, $fileName] = explode('-', (string)$name, 2);
 			$placeFile = $this->placeMapper->findFileForUserAndPlace($this->placeInfo->getUserId(), $this->placeInfo->getPlace(), $fileId, $fileName);
 			return new PlacePhoto($this->placeInfo, $placeFile, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId));
 		} catch (NotFoundException $ex) {
@@ -93,7 +93,7 @@ class PlaceRoot implements ICollection {
 		try {
 			$this->getChild($name);
 			return true;
-		} catch (NotFound $e) {
+		} catch (NotFound) {
 			return false;
 		}
 	}
@@ -115,9 +115,7 @@ class PlaceRoot implements ICollection {
 	 * @return int[]
 	 */
 	public function getFileIds(): array {
-		return array_map(function (PlacePhoto $file) {
-			return $file->getFileId();
-		}, $this->getChildren());
+		return array_map(fn (PlacePhoto $file): int => $file->getFileId(), $this->getChildren());
 	}
 
 	/**

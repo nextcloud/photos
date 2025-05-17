@@ -23,15 +23,10 @@ use Psr\Log\LoggerInterface;
  * @template-implements IEventListener<Event|NodeDeletedEvent|GroupDeletedEvent|ShareDeletedEvent|UserDeletedEvent>
  */
 class AlbumsManagementEventListener implements IEventListener {
-	private AlbumMapper $albumMapper;
-	private LoggerInterface $logger;
-
 	public function __construct(
-		AlbumMapper $albumMapper,
-		LoggerInterface $logger,
+		private readonly AlbumMapper $albumMapper,
+		private readonly LoggerInterface $logger,
 	) {
-		$this->albumMapper = $albumMapper;
-		$this->logger = $logger;
 	}
 
 	public function handle(Event $event): void {
@@ -74,7 +69,7 @@ class AlbumsManagementEventListener implements IEventListener {
 			// Get all albums shared with this specific user:
 			$albums_user = $this->albumMapper->getSharedAlbumsForCollaborator($event->getUser()->getUID(), AlbumMapper::TYPE_USER);
 			// Get all group-shared albums that are not directly shared with the removed user in addition
-			$albums = array_udiff($albums_group, $albums_user, fn ($a, $b) => ($a->getId() - $b->getId()));
+			$albums = array_udiff($albums_group, $albums_user, fn ($a, $b): int => ($a->getId() - $b->getId()));
 
 			// Remove their photos from theses albums:
 			foreach ($albums as $album) {
@@ -92,7 +87,7 @@ class AlbumsManagementEventListener implements IEventListener {
 				$albums_user = $this->albumMapper->getSharedAlbumsForCollaborator($user->getUID(), AlbumMapper::TYPE_USER);
 
 				// Get all group-shared albums that are not directly shared with the removed user in addition
-				$albums = array_udiff($albums_group, $albums_user, fn ($a, $b) => ($a->getId() - $b->getId()));
+				$albums = array_udiff($albums_group, $albums_user, fn ($a, $b): int => ($a->getId() - $b->getId()));
 
 				// Remove their photos from theses albums:
 				foreach ($albums as $album) {

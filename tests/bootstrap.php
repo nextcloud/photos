@@ -1,5 +1,7 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -17,7 +19,7 @@ require_once __DIR__ . '/../../../lib/base.php';
 // Fix for "Autoload path not allowed: .../photos/tests/testcase.php"
 \OC_App::loadApp('photos');
 
-if (!class_exists('\PHPUnit\Framework\TestCase')) {
+if (!class_exists(TestCase::class)) {
 	require_once('PHPUnit/Autoload.php');
 }
 

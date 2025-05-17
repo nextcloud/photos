@@ -11,9 +11,6 @@ namespace OCA\Photos\Album;
 use OCA\Photos\DB\PhotosFile;
 
 class AlbumFile extends PhotosFile {
-	private int $added;
-	private string $owner;
-
 	public function __construct(
 		int $fileId,
 		string $name,
@@ -21,8 +18,8 @@ class AlbumFile extends PhotosFile {
 		int $size,
 		int $mtime,
 		string $etag,
-		int $added,
-		string $owner,
+		private readonly int $added,
+		private readonly string $owner,
 	) {
 		parent::__construct(
 			$fileId,
@@ -32,9 +29,6 @@ class AlbumFile extends PhotosFile {
 			$mtime,
 			$etag
 		);
-
-		$this->added = $added;
-		$this->owner = $owner;
 	}
 
 	public function getAdded(): int {

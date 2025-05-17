@@ -18,7 +18,7 @@ class PlaceFile extends PhotosFile {
 		int $size,
 		int $mtime,
 		string $etag,
-		private string $place,
+		private readonly string $place,
 	) {
 		parent::__construct(
 			$fileId,

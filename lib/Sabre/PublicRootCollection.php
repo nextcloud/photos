@@ -15,21 +15,22 @@ use OCP\Files\IRootFolder;
 use OCP\IRequest;
 use OCP\Security\Bruteforce\IThrottler;
 use Psr\Log\LoggerInterface;
+use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAVACL\AbstractPrincipalCollection;
-use Sabre\DAVACL\PrincipalBackend;
+use Sabre\DAVACL\PrincipalBackend\BackendInterface;
 
 class PublicRootCollection extends AbstractPrincipalCollection {
 	private const BRUTEFORCE_ACTION = 'publicphotos_webdav_auth';
 
 	public function __construct(
-		private AlbumMapper $albumMapper,
-		private IRootFolder $rootFolder,
-		PrincipalBackend\BackendInterface $principalBackend,
-		private UserConfigService $userConfigService,
-		private IRequest $request,
-		private IThrottler $throttler,
-		private LoggerInterface $logger,
+		private readonly AlbumMapper $albumMapper,
+		private readonly IRootFolder $rootFolder,
+		BackendInterface $principalBackend,
+		private readonly UserConfigService $userConfigService,
+		private readonly IRequest $request,
+		private readonly IThrottler $throttler,
+		private readonly LoggerInterface $logger,
 	) {
 		parent::__construct($principalBackend, 'principals/token');
 	}
@@ -44,7 +45,7 @@ class PublicRootCollection extends AbstractPrincipalCollection {
 	 * @param array $principalInfo
 	 */
 	public function getChildForPrincipal(array $principalInfo): PublicAlbumRoot {
-		throw new \Sabre\DAV\Exception\Forbidden();
+		throw new Forbidden();
 	}
 
 	/**
@@ -60,7 +61,7 @@ class PublicRootCollection extends AbstractPrincipalCollection {
 		$this->throttler->sleepDelayOrThrowOnMax($this->request->getRemoteAddress(), self::BRUTEFORCE_ACTION);
 
 		if (is_null($name)) {
-			throw new \Sabre\DAV\Exception\Forbidden();
+			throw new Forbidden();
 		}
 
 		$albums = $this->albumMapper->getSharedAlbumsForCollaboratorWithFiles($name, AlbumMapper::TYPE_LINK);

@@ -17,15 +17,13 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class AlbumCreateCommand extends Command {
-	private IUserManager $userManager;
-	private AlbumMapper $albumMapper;
+	private readonly IUserManager $userManager;
 
 	public function __construct(
-		AlbumMapper $albumMapper,
+		private readonly AlbumMapper $albumMapper,
 		IUserManager $userManager,
 	) {
 		$this->userManager = $userManager;
-		$this->albumMapper = $albumMapper;
 		parent::__construct();
 	}
 

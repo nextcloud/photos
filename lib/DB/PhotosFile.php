@@ -10,12 +10,12 @@ namespace OCA\Photos\DB;
 
 class PhotosFile {
 	public function __construct(
-		private int $fileId,
-		private string $name,
-		private string $mimeType,
-		private int $size,
-		private int $mtime,
-		private string $etag,
+		private readonly int $fileId,
+		private readonly string $name,
+		private readonly string $mimeType,
+		private readonly int $size,
+		private readonly int $mtime,
+		private readonly string $etag,
 	) {
 	}
 

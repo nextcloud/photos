@@ -20,11 +20,11 @@ use OCP\IUserManager;
 use OCP\Security\ISecureRandom;
 
 class AlbumMapper {
-	private IDBConnection $connection;
-	private IMimeTypeLoader $mimeTypeLoader;
-	private ITimeFactory $timeFactory;
-	private IUserManager $userManager;
-	private IGroupManager $groupManager;
+	private readonly IDBConnection $connection;
+	private readonly IMimeTypeLoader $mimeTypeLoader;
+	private readonly ITimeFactory $timeFactory;
+	private readonly IUserManager $userManager;
+	private readonly IGroupManager $groupManager;
 	protected IL10N $l;
 	protected ISecureRandom $random;
 
@@ -91,9 +91,7 @@ class AlbumMapper {
 			->from('photos_albums')
 			->where($query->expr()->eq('user', $query->createNamedParameter($userId)));
 		$rows = $query->executeQuery()->fetchAll();
-		return array_map(function (array $row) use ($userId) {
-			return new AlbumInfo((int)$row['album_id'], $userId, $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
-		}, $rows);
+		return array_map(fn (array $row): AlbumInfo => new AlbumInfo((int)$row['album_id'], $userId, $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']), $rows);
 	}
 
 	/**
@@ -126,9 +124,7 @@ class AlbumMapper {
 			->leftJoin('a', 'photos_albums_files', 'p', $query->expr()->eq('a.album_id', 'p.album_id'))
 			->where($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
 		$rows = $query->executeQuery()->fetchAll();
-		return array_map(function (array $row) {
-			return new AlbumInfo((int)$row['album_id'], $row['user'], $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
-		}, $rows);
+		return array_map(fn (array $row): AlbumInfo => new AlbumInfo((int)$row['album_id'], $row['user'], $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']), $rows);
 	}
 
 	/**
@@ -144,9 +140,7 @@ class AlbumMapper {
 			->where($query->expr()->eq('user', $query->createNamedParameter($userId)))
 			->andWhere($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
 		$rows = $query->executeQuery()->fetchAll();
-		return array_map(function (array $row) {
-			return new AlbumInfo((int)$row['album_id'], $row['user'], $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
-		}, $rows);
+		return array_map(fn (array $row): AlbumInfo => new AlbumInfo((int)$row['album_id'], $row['user'], $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']), $rows);
 	}
 
 	public function rename(int $id, string $newName): void {
@@ -352,19 +346,12 @@ class AlbumMapper {
 			/** @var string|null */
 			$displayName = null;
 
-			switch ($row['collaborator_type']) {
-				case self::TYPE_USER:
-					$displayName = $this->userManager->get($row['collaborator_id'])?->getDisplayName();
-					break;
-				case self::TYPE_GROUP:
-					$displayName = $this->groupManager->get($row['collaborator_id'])?->getDisplayName();
-					break;
-				case self::TYPE_LINK:
-					$displayName = $this->l->t('Public link');
-					break;
-				default:
-					throw new \Exception('Invalid collaborator type: ' . $row['collaborator_type']);
-			}
+			$displayName = match ($row['collaborator_type']) {
+				self::TYPE_USER => $this->userManager->get($row['collaborator_id'])?->getDisplayName(),
+				self::TYPE_GROUP => $this->groupManager->get($row['collaborator_id'])?->getDisplayName(),
+				self::TYPE_LINK => $this->l->t('Public link'),
+				default => throw new \Exception('Invalid collaborator type: ' . $row['collaborator_type']),
+			};
 
 			if (is_null($displayName)) {
 				return null;
@@ -377,7 +364,7 @@ class AlbumMapper {
 			];
 		}, $rows);
 
-		return array_values(array_filter($collaborators, fn ($c) => $c !== null));
+		return array_values(array_filter($collaborators, fn ($c): bool => $c !== null));
 	}
 
 
@@ -422,12 +409,10 @@ class AlbumMapper {
 		$existingCollaborators = $this->getCollaborators($albumId);
 
 		// Different behavior if type is link to prevent creating multiple link.
-		$computeKey = function ($c) {
-			return ($c['type'] === AlbumMapper::TYPE_LINK ? '' : $c['id']) . $c['type'];
-		};
+		$computeKey = (fn ($c): string => ($c['type'] === AlbumMapper::TYPE_LINK ? '' : $c['id']) . $c['type']);
 
-		$collaboratorsToAdd = array_udiff($collaborators, $existingCollaborators, fn ($a, $b) => strcmp($computeKey($a), $computeKey($b)));
-		$collaboratorsToRemove = array_udiff($existingCollaborators, $collaborators, fn ($a, $b) => strcmp($computeKey($a), $computeKey($b)));
+		$collaboratorsToAdd = array_udiff($collaborators, $existingCollaborators, fn ($a, $b): int => strcmp($computeKey($a), $computeKey($b)));
+		$collaboratorsToRemove = array_udiff($existingCollaborators, $collaborators, fn ($a, $b): int => strcmp($computeKey($a), $computeKey($b)));
 
 		$this->connection->beginTransaction();
 
@@ -492,16 +477,14 @@ class AlbumMapper {
 			->executeQuery()
 			->fetchAll();
 
-		return array_map(function (array $row) {
-			return new AlbumInfo(
-				(int)$row['album_id'],
-				$row['user'],
-				$row['name'] . ' (' . $row['user'] . ')',
-				$row['location'],
-				(int)$row['created'],
-				(int)$row['last_added_photo']
-			);
-		}, $rows);
+		return array_map(fn (array $row): AlbumInfo => new AlbumInfo(
+			(int)$row['album_id'],
+			$row['user'],
+			$row['name'] . ' (' . $row['user'] . ')',
+			$row['location'],
+			(int)$row['created'],
+			(int)$row['last_added_photo']
+		), $rows);
 	}
 
 	/**
@@ -604,15 +587,13 @@ class AlbumMapper {
 			->fetchAll();
 
 
-		return array_map(function (array $row) {
-			return new AlbumInfo(
-				(int)$row['album_id'],
-				$row['user'],
-				$row['name'] . ' (' . $row['user'] . ')',
-				$row['location'],
-				(int)$row['created'],
-				(int)$row['last_added_photo']
-			);
-		}, $rows);
+		return array_map(fn (array $row): AlbumInfo => new AlbumInfo(
+			(int)$row['album_id'],
+			$row['user'],
+			$row['name'] . ' (' . $row['user'] . ')',
+			$row['location'],
+			(int)$row['created'],
+			(int)$row['last_added_photo']
+		), $rows);
 	}
 }
