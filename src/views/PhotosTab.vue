@@ -28,7 +28,7 @@
 			class="photo-detail photo-detail__camera">
 			<CameraIris />
 			<span>
-				<div v-if="ifd0.Make || ifd0.Model">{{ ifd0.Make }} {{ ifd0.Model }}</div>
+				<div v-if="ifd0?.Make || ifd0?.Model">{{ ifd0.Make }} {{ ifd0.Model }}</div>
 				<div v-if="irisInfo.length !== 0" class="photo-detail--secondary">{{ irisInfo }}
 				</div>
 			</span>
@@ -49,6 +49,16 @@ import moment from '@nextcloud/moment'
 import LocationMap from '../components/LocationMap.vue'
 import type { PhotoFile } from '../store/files'
 
+type SideBarFile = PhotoFile & {
+	attributes: {
+		'metadata-photos-exif': { FNumber: string, FocalLength: string, ExposureTime: string, ISOSpeedRatings: string }
+		'metadata-photos-ifd0': { Make: string, Model: string, ImageWidth: number, ImageLength: number }
+		'metadata-photos-place': string
+		'metadata-photos-gps': { latitude: string, longitude: string, altitude: string }|undefined
+		'metadata-photos-original_date_time': number
+	}
+}
+
 export default defineComponent({
 	name: 'PhotosTab',
 	components: {
@@ -59,7 +69,7 @@ export default defineComponent({
 	},
 	data() {
 		return {
-			fileInfo: null as PhotoFile|null,
+			fileInfo: null as SideBarFile|null,
 			url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 			// The zoom level of the map in the messages list
 			previewZoom: 13,
@@ -70,37 +80,37 @@ export default defineComponent({
 		}
 	},
 	computed: {
-		exif(): { FNumber: string, FocalLength: string, ExposureTime: string, ISOSpeedRatings: string } {
-			return this.fileInfo['metadata-photos-exif']
+		exif() {
+			return this.fileInfo?.attributes['metadata-photos-exif']
 		},
-		ifd0(): { Make: string, Model: string, ImageWidth: number, ImageLength: number } {
-			return this.fileInfo['metadata-photos-ifd0']
+		ifd0() {
+			return this.fileInfo?.attributes['metadata-photos-ifd0']
 		},
-		place(): string {
-			return this.fileInfo['metadata-photos-place']
+		place() {
+			return this.fileInfo?.attributes['metadata-photos-place']
 		},
-		gps(): { latitude: number, longitude: number, altitude: number }|undefined {
-			const gps = this.fileInfo['metadata-photos-gps']
+		gps() {
+			const gps = this.fileInfo?.attributes['metadata-photos-gps']
 			if (!gps) {
 				return undefined
 			}
 
 			return {
-				latitude: Number.parseFloat(gps.latitude || 0),
-				longitude: Number.parseFloat(gps.longitude || 0),
-				altitude: Number.parseFloat(gps.altitude || 0),
+				latitude: Number.parseFloat(gps.latitude || '0'),
+				longitude: Number.parseFloat(gps.longitude || '0'),
+				altitude: Number.parseFloat(gps.altitude || '0'),
 			}
 		},
-		originalDateTime(): number {
-			return this.fileInfo['metadata-photos-original_date_time'] * 1000
+		originalDateTime() {
+			return (this.fileInfo?.attributes['metadata-photos-original_date_time'] ?? 0) * 1000
 		},
-		takenDate(): string {
+		takenDate() {
 			return moment(this.originalDateTime).format('ll')
 		},
-		takenTime(): string {
+		takenTime() {
 			return moment(this.originalDateTime).format('LT')
 		},
-		focal(): number {
+		focal() {
 			if (!this.exif?.FNumber) {
 				return 0
 			}
@@ -108,7 +118,7 @@ export default defineComponent({
 			const [a, b] = this.exif.FNumber.split('/')
 			return Number.parseInt(a) / Number.parseInt(b)
 		},
-		focalLength(): number {
+		focalLength() {
 			if (!this.exif?.FocalLength) {
 				return 0
 			}
@@ -116,10 +126,10 @@ export default defineComponent({
 			const [a, b] = this.exif.FocalLength.split('/')
 			return Number.parseInt(a) / Number.parseInt(b)
 		},
-		size(): string {
+		size() {
 			return formatFileSize(this.fileInfo?.size as number)
 		},
-		normalizedExposureTime(): number {
+		normalizedExposureTime() {
 			if (!this.exif?.ExposureTime) {
 				return 0
 			}
@@ -127,7 +137,7 @@ export default defineComponent({
 			const [a, b] = this.exif.ExposureTime.split('/')
 			return Math.round(Number.parseInt(b) / Number.parseInt(a))
 		},
-		irisInfo(): string {
+		irisInfo() {
 			const info = [] as string[]
 
 			if (this.focal) {
@@ -145,7 +155,11 @@ export default defineComponent({
 
 			return info.join(' ⸱ ')
 		},
-		pixelCount(): string {
+		pixelCount() {
+			if (this.ifd0 === undefined) {
+				return undefined
+			}
+
 			let count = this.ifd0.ImageWidth * this.ifd0.ImageLength
 			let round = 0
 
@@ -163,7 +177,7 @@ export default defineComponent({
 		/**
 		 * Update current fileInfo and fetch new activities
 		 */
-		async update(fileInfo: PhotoFile) {
+		async update(fileInfo: SideBarFile) {
 			this.fileInfo = fileInfo
 		},
 

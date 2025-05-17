@@ -57,22 +57,4 @@ window.addEventListener('DOMContentLoaded', async function() {
 		const { default: PhotosTab } = await import(/* webpackPreload: true */ './views/PhotosTab.vue')
 		PhotosTabView = PhotosTabView ?? Vue.extend(PhotosTab)
 	}
-
-	/**
-	 *
-	 * @param metadataArray
-	 */
-	function parseMetadataArray(metadataArray) {
-		return metadataArray?.reduce((parsedArray, metadata) => ({ ...parsedArray, [metadata.nodeName]: metadata.textContent }), {})
-	}
-
-	OC.Files.getClient().addFileInfoParser(function(response) {
-		return {
-			'metadata-photos-original_date_time': response.propStat[0].properties[`{${OC.Files.Client.NS_NEXTCLOUD}}metadata-photos-original_date_time`],
-			'metadata-photos-exif': parseMetadataArray(response.propStat[0].properties[`{${OC.Files.Client.NS_NEXTCLOUD}}metadata-photos-exif`]),
-			'metadata-photos-ifd0': parseMetadataArray(response.propStat[0].properties[`{${OC.Files.Client.NS_NEXTCLOUD}}metadata-photos-ifd0`]),
-			'metadata-photos-gps': parseMetadataArray(response.propStat[0].properties[`{${OC.Files.Client.NS_NEXTCLOUD}}metadata-photos-gps`]),
-			'metadata-photos-place': response.propStat[0].properties[`{${OC.Files.Client.NS_NEXTCLOUD}}metadata-photos-place`],
-		}
-	})
 })

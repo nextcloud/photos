@@ -27,10 +27,8 @@ class OriginalDateTimeMetadataProvider implements IEventListener {
 	}
 
 	public array $regexpToDateFormatMap = [
-		'/^IMG_([0-9]{8}_[0-9]{6})/' => 'Ymd_Gis',
-		'/^PANO_([0-9]{8}_[0-9]{6})/' => 'Ymd_Gis',
-		'/^PXL_([0-9]{8}_[0-9]{6})/' => 'Ymd_Gis',
-		'/^([0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{4})/' => 'Y-m-d-G-i-s',
+		'/^[A-Z]{3,4}_([0-9]{8}_[0-9]{6})/' => 'Ymd_Gis', // Covers prefixes like "IMG_", "PANO_", "PXL_" and others
+		'/^([0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}).+/' => 'Y-m-d-G-i-s',
 	];
 
 	private function dateToTimestamp(string $format, string $date, File $node): int|false {
