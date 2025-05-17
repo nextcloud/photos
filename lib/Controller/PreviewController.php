@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Controller;
 
-use OCA\Files_Sharing\SharedStorage;
 use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\AppInfo\Application;
 use OCP\AppFramework\Controller;
@@ -20,6 +19,7 @@ use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\Node;
 use OCP\Files\NotFoundException;
+use OCP\Files\Storage\ISharedStorage;
 use OCP\IGroupManager;
 use OCP\IPreview;
 use OCP\IRequest;
@@ -78,11 +78,11 @@ class PreviewController extends Controller {
 			$nodes,
 			function ($node) {
 				$storage = $node->getStorage();
-				if (!$storage->instanceOfStorage(SharedStorage::class)) {
+				if (!$storage->instanceOfStorage(ISharedStorage::class)) {
 					return true;
 				}
 
-				/** @var SharedStorage $storage */
+				/** @var ISharedStorage $storage */
 				$share = $storage->getShare();
 				$attributes = $share->getAttributes();
 
