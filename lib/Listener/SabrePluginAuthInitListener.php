@@ -33,6 +33,7 @@ class SabrePluginAuthInitListener implements IEventListener {
 			return;
 		}
 
+		/** @var \Sabre\DAV\Auth\Plugin */
 		$authPlugin = $server->getPlugin('auth');
 		$authPlugin->addBackend($this->publicAlbumAuthBackend);
 	}

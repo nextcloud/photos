@@ -96,6 +96,7 @@ export default {
 
 		&__title {
 			display: flex;
+			justify-content: space-between;
 		}
 
 		&__subtitle {

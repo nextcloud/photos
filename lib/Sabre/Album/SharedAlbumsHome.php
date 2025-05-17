@@ -25,7 +25,7 @@ class SharedAlbumsHome extends AlbumsHome {
 		AlbumMapper $albumMapper,
 		string $userId,
 		IRootFolder $rootFolder,
-		private IUserManager $userManager,
+		IUserManager $userManager,
 		private IGroupManager $groupManager,
 		UserConfigService $userConfigService,
 		LoggerInterface $logger,
@@ -37,6 +37,7 @@ class SharedAlbumsHome extends AlbumsHome {
 			$rootFolder,
 			$userConfigService,
 			$logger,
+			$userManager,
 		);
 	}
 
@@ -48,7 +49,7 @@ class SharedAlbumsHome extends AlbumsHome {
 	}
 
 	/**
-	 * @return SharedAlbumRoot[]
+	 * @return AlbumRootBase[]
 	 */
 	public function getChildren(): array {
 		if ($this->children === null) {

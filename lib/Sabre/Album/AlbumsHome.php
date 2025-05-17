@@ -13,6 +13,7 @@ use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Album\AlbumWithFiles;
 use OCA\Photos\Service\UserConfigService;
 use OCP\Files\IRootFolder;
+use OCP\IUserManager;
 use Psr\Log\LoggerInterface;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;
@@ -22,7 +23,7 @@ class AlbumsHome implements ICollection {
 	public const NAME = 'albums';
 
 	/**
-	 * @var AlbumRoot[]
+	 * @var AlbumRootBase[]|null
 	 */
 	protected ?array $children = null;
 
@@ -33,6 +34,7 @@ class AlbumsHome implements ICollection {
 		protected IRootFolder $rootFolder,
 		protected UserConfigService $userConfigService,
 		protected LoggerInterface $logger,
+		protected IUserManager $userManager,
 	) {
 	}
 
@@ -76,7 +78,7 @@ class AlbumsHome implements ICollection {
 	}
 
 	/**
-	 * @return AlbumRoot[]
+	 * @return AlbumRootBase[]
 	 */
 	public function getChildren(): array {
 		if ($this->children === null) {
@@ -89,6 +91,7 @@ class AlbumsHome implements ICollection {
 					$this->userId,
 					$this->userConfigService,
 					$this->logger,
+					$this->userManager,
 				);
 			}, $albumInfos);
 		}

@@ -31,7 +31,7 @@ class CollectionPhoto {
 	 * @return never
 	 */
 	public function setName($name) {
-		throw new Forbidden('Can\'t rename photos trough this api');
+		throw new Forbidden('Can\'t rename photos through this api');
 	}
 
 	public function getLastModified() {

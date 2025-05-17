@@ -33,6 +33,25 @@
 						</template>
 						{{ t('photos', 'Unselect all') }}
 					</NcButton>
+
+					<span v-if="album !== undefined" class="album-container__filters">
+						<PhotosFiltersInput v-if="editFilters"
+							:value="album.attributes.filters"
+							class="timeline__filters"
+							@update:value="handleFiltersChange" />
+						<PhotosFiltersDisplay v-else :filters-value="album.attributes.filters" />
+
+						<NcButton :title="t('photos', 'Toggle filter')"
+							:aria-label="t('photos', 'Toggle filter')"
+							data-cy-timeline-action="toggle-filters"
+							type="tertiary"
+							@click="toggleFilters">
+							<template #icon>
+								<FilterCheck v-if="editFilters" />
+								<FilterPlus v-else />
+							</template>
+						</NcButton>
+					</span>
 				</template>
 
 				<template v-if="album !== undefined" slot="right">
@@ -158,6 +177,8 @@ import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import Pencil from 'vue-material-design-icons/Pencil.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
+import FilterPlus from 'vue-material-design-icons/FilterPlus.vue'
+import FilterCheck from 'vue-material-design-icons/FilterCheck.vue'
 
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
@@ -167,11 +188,13 @@ import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import CollaboratorsSelectionForm from '../components/Albums/CollaboratorsSelectionForm.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
+import PhotosFiltersInput from '../components/PhotosFilters/PhotosFiltersInput.vue'
+import PhotosFiltersDisplay from '../components/PhotosFilters/PhotosFiltersDisplay.vue'
 import PhotosPicker from '../components/PhotosPicker.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-
 import logger from '../services/logger.js'
 import type { Album } from '../store/albums.js'
+import { albumsExtraProps } from '../store/albums.ts'
 
 export default {
 	name: 'AlbumContent',
@@ -200,6 +223,10 @@ export default {
 		Pencil,
 		Plus,
 		ShareVariant,
+		FilterPlus,
+		FilterCheck,
+		PhotosFiltersInput,
+		PhotosFiltersDisplay,
 	},
 
 	mixins: [
@@ -220,6 +247,7 @@ export default {
 			showAddPhotosModal: false,
 			showManageCollaboratorView: false,
 			showEditAlbumForm: false,
+			editFilters: false,
 
 			loadingAddCollaborators: false,
 		}
@@ -252,7 +280,7 @@ export default {
 		async fetchAlbum() {
 			await this.fetchCollection(
 				this.albumFileName,
-				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />'],
+				albumsExtraProps,
 			)
 		},
 
@@ -297,6 +325,19 @@ export default {
 			}
 		},
 
+		toggleFilters() {
+			this.editFilters = !this.editFilters
+			if (!this.editFilters) {
+				this.extraFilters = {}
+				this.resetFetchFilesState()
+			}
+		},
+
+		async handleFiltersChange(filters) {
+			await this.$store.dispatch('updateCollection', { collectionFileName: this.album?.root + this.album?.path, properties: { filters } })
+			this.fetchAlbumContent()
+		},
+
 		t: translate,
 	},
 }
@@ -307,6 +348,11 @@ export default {
 
 	:deep(.collection) {
 		height: 100%;
+	}
+
+	&__filters {
+		display: flex;
+		gap: 8px;
 	}
 }
 

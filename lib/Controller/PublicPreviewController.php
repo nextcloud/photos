@@ -36,7 +36,7 @@ class PublicPreviewController extends PreviewController {
 			return new DataResponse([], Http::STATUS_FORBIDDEN);
 		}
 
-		$publicAlbums = $this->albumMapper->getAlbumsForCollaboratorIdAndFileId($token, AlbumMapper::TYPE_LINK, $fileId);
+		$publicAlbums = $this->albumMapper->getSharedAlbumsForCollaborator($token, AlbumMapper::TYPE_LINK);
 		$nodes = $this->getFileIdForAlbums($fileId, $publicAlbums);
 
 		if (\count($nodes) === 0) {

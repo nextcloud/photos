@@ -13,6 +13,7 @@ use OCA\Photos\Sabre\Album\PublicAlbumRoot;
 use OCA\Photos\Service\UserConfigService;
 use OCP\Files\IRootFolder;
 use OCP\IRequest;
+use OCP\IUserManager;
 use OCP\Security\Bruteforce\IThrottler;
 use Psr\Log\LoggerInterface;
 use Sabre\DAV\Exception\NotFound;
@@ -30,6 +31,7 @@ class PublicRootCollection extends AbstractPrincipalCollection {
 		private IRequest $request,
 		private IThrottler $throttler,
 		private LoggerInterface $logger,
+		protected IUserManager $userManager,
 	) {
 		parent::__construct($principalBackend, 'principals/token');
 	}
@@ -77,6 +79,7 @@ class PublicRootCollection extends AbstractPrincipalCollection {
 			$albums[0]->getAlbum()->getUserId(),
 			$this->userConfigService,
 			$this->logger,
+			$this->userManager,
 		);
 	}
 }

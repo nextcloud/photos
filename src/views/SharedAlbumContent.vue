@@ -32,6 +32,10 @@
 						</template>
 						{{ t('photos', 'Unselect all') }}
 					</NcButton>
+
+					<span v-if="album !== undefined" class="album-container__filters">
+						<PhotosFiltersDisplay :filters-value="album.attributes.filters" />
+					</span>
 				</template>
 
 				<template v-if="album !== undefined" slot="right">
@@ -120,10 +124,12 @@ import Close from 'vue-material-design-icons/Close.vue'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
 
+import PhotosFiltersDisplay from '../components/PhotosFilters/PhotosFiltersDisplay.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
 import PhotosPicker from '../components/PhotosPicker.vue'
+import { albumsExtraProps } from '../store/albums.ts'
 
 export default {
 	name: 'SharedAlbumContent',
@@ -145,6 +151,7 @@ export default {
 		// ActionDownload,
 		PhotosPicker,
 		HeaderNavigation,
+		PhotosFiltersDisplay,
 	},
 
 	mixins: [
@@ -200,7 +207,7 @@ export default {
 		async fetchAlbum() {
 			await this.fetchCollection(
 				this.albumFileName,
-				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />'],
+				albumsExtraProps,
 			)
 		},
 

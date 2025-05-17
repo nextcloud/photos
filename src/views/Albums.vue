@@ -31,9 +31,12 @@
 					:link="`/albums/${collection.basename}`"
 					:alt-img="t('photos', 'Cover photo for album {albumName}', { albumName: collection.basename })"
 					:cover-url="collection.attributes['last-photo'] | coverUrl">
-					<span class="album__name">
-						{{ collection.basename }}
-					</span>
+					<template #default>
+						<span class="album__name">
+							{{ collection.basename }}
+						</span>
+						<FilterIcon v-if="Object.keys(collection.attributes.filters).length !== 0" fill-color="var(--color-text-lighter)" />
+					</template>
 
 					<template #subtitle>
 						<div class="album__details">
@@ -66,6 +69,7 @@
 <script lang='ts'>
 import Plus from 'vue-material-design-icons/Plus.vue'
 import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
+import Filter from 'vue-material-design-icons/Filter.vue'
 import { defineComponent } from 'vue'
 
 import { generateUrl } from '@nextcloud/router'
@@ -77,7 +81,7 @@ import CollectionCover from '../components/Collection/CollectionCover.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
-import { albumsPrefix } from '../store/albums.js'
+import { albumsPrefix, albumsExtraProps } from '../store/albums.js'
 
 export default defineComponent({
 	name: 'Albums',
@@ -91,6 +95,7 @@ export default defineComponent({
 		CollectionCover,
 		HeaderNavigation,
 		AlbumForm,
+		FilterIcon: Filter,
 	},
 
 	filters: {
@@ -134,7 +139,7 @@ export default defineComponent({
 		fetchAlbums() {
 			this.fetchCollections(
 				albumsPrefix,
-				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />'],
+				albumsExtraProps,
 			)
 		},
 
@@ -159,8 +164,6 @@ export default defineComponent({
 		white-space: nowrap;
 		text-overflow: ellipsis;
 		font-size: 20px;
-		margin-bottom: 12px;
-		line-height: 30px;
 		color: var(--color-main-text);
 	}
 }
