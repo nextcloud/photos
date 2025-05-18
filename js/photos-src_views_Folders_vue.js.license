@@ -96,7 +96,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 0.2.0
 	- license: BSD-2-Clause
 - @nextcloud/auth
-	- version: 2.4.0
+	- version: 2.5.1
 	- license: GPL-3.0-or-later
 - axios
 	- version: 1.8.3
@@ -111,7 +111,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.2.0
 	- license: GPL-3.0-or-later
 - @nextcloud/dialogs
-	- version: 6.2.0
+	- version: 6.3.0
 	- license: AGPL-3.0-or-later
 - semver
 	- version: 7.7.1
@@ -135,7 +135,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 0.2.4
 	- license: GPL-3.0-or-later
 - @nextcloud/upload
-	- version: 1.9.1
+	- version: 1.10.0
 	- license: AGPL-3.0-or-later
 - @nextcloud/vue-select
 	- version: 3.25.1
@@ -183,7 +183,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 6.0.1
 	- license: MIT
 - @nextcloud/vue
-	- version: 8.26.0
+	- version: 8.26.1
 	- license: AGPL-3.0-or-later
 - @ungap/structured-clone
 	- version: 1.2.0
