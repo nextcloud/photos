@@ -20,7 +20,7 @@ use Psr\Log\LoggerInterface;
  * Extract EXIF, IFD0, and GPS data from a picture file.
  * EXIF data reference: https://web.archive.org/web/20220428165430/exif.org/Exif2-2.PDF
  *
- * @template-implements IEventListener<MetadataLiveEvent>
+ * @template-implements IEventListener<MetadataLiveEvent|MetadataBackgroundEvent>
  */
 class ExifMetadataProvider implements IEventListener {
 	public function __construct(
