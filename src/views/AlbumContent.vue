@@ -43,7 +43,7 @@
 
 						<NcButton :title="t('photos', 'Toggle filter')"
 							:aria-label="t('photos', 'Toggle filter')"
-							data-cy-timeline-action="toggle-filters"
+							data-cy-header-action="toggle-filters"
 							type="tertiary"
 							@click="toggleFilters">
 							<template #icon>
