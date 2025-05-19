@@ -24,5 +24,3 @@ if (!class_exists(TestCase::class)) {
 }
 
 Server::get(IAppManager::class)->loadApp('photos');
-
-OC_Hook::clear();
