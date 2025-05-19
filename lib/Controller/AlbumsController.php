@@ -24,19 +24,16 @@ use OCP\IPreview;
 use OCP\IRequest;
 
 class AlbumsController extends Controller {
-	private string $userId;
-	private IRootFolder $rootFolder;
-	private IPreview $previewManager;
+	private readonly IRootFolder $rootFolder;
+	private readonly IPreview $previewManager;
 
 	public function __construct(
-		string $userId,
+		private readonly string $userId,
 		IRequest $request,
 		IRootFolder $rootFolder,
 		IPreview $previewManager,
 	) {
 		parent::__construct(Application::APP_ID, $request);
-
-		$this->userId = $userId;
 		$this->rootFolder = $rootFolder;
 		$this->previewManager = $previewManager;
 	}
@@ -62,7 +59,7 @@ class AlbumsController extends Controller {
 		if ($path !== '') {
 			try {
 				$folder = $userFolder->get($path);
-			} catch (NotFoundException $e) {
+			} catch (NotFoundException) {
 				return new JSONResponse([], Http::STATUS_NOT_FOUND);
 			}
 		}
@@ -171,7 +168,7 @@ class AlbumsController extends Controller {
 			}
 
 			$nodes = $folder->getDirectoryListing();
-		} catch (StorageNotAvailableException $e) {
+		} catch (StorageNotAvailableException) {
 			return false;
 		}
 

@@ -17,21 +17,22 @@ use OCP\IGroupManager;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
+use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAVACL\AbstractPrincipalCollection;
-use Sabre\DAVACL\PrincipalBackend;
+use Sabre\DAVACL\PrincipalBackend\BackendInterface;
 
 class RootCollection extends AbstractPrincipalCollection {
 	public function __construct(
-		private AlbumMapper $albumMapper,
-		private PlaceMapper $placeMapper,
-		private ReverseGeoCoderService $reverseGeoCoderService,
-		private IUserSession $userSession,
-		private IRootFolder $rootFolder,
-		PrincipalBackend\BackendInterface $principalBackend,
-		private IUserManager $userManager,
-		private IGroupManager $groupManager,
-		private UserConfigService $userConfigService,
-		private LoggerInterface $logger,
+		private readonly AlbumMapper $albumMapper,
+		private readonly PlaceMapper $placeMapper,
+		private readonly ReverseGeoCoderService $reverseGeoCoderService,
+		private readonly IUserSession $userSession,
+		private readonly IRootFolder $rootFolder,
+		BackendInterface $principalBackend,
+		private readonly IUserManager $userManager,
+		private readonly IGroupManager $groupManager,
+		private readonly UserConfigService $userConfigService,
+		private readonly LoggerInterface $logger,
 	) {
 		parent::__construct($principalBackend, 'principals/users');
 	}
@@ -49,7 +50,7 @@ class RootCollection extends AbstractPrincipalCollection {
 		[, $name] = \Sabre\Uri\split($principalInfo['uri']);
 		$user = $this->userSession->getUser();
 		if (is_null($user) || $name !== $user->getUID()) {
-			throw new \Sabre\DAV\Exception\Forbidden();
+			throw new Forbidden();
 		}
 		return new PhotosHome($principalInfo, $this->albumMapper, $this->placeMapper, $this->reverseGeoCoderService, $name, $this->rootFolder, $this->userManager, $this->groupManager, $this->userConfigService, $this->logger);
 	}

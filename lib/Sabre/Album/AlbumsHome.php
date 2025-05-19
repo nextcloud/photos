@@ -39,7 +39,7 @@ class AlbumsHome implements ICollection {
 	/**
 	 * @return never
 	 */
-	public function delete() {
+	public function delete(): never {
 		throw new Forbidden();
 	}
 
@@ -50,11 +50,11 @@ class AlbumsHome implements ICollection {
 	/**
 	 * @return never
 	 */
-	public function setName($name) {
+	public function setName($name): never {
 		throw new Forbidden('Permission denied to rename this folder');
 	}
 
-	public function createFile($name, $data = null) {
+	public function createFile($name, $data = null): never {
 		throw new Forbidden('Not allowed to create files in this folder');
 	}
 
@@ -81,16 +81,14 @@ class AlbumsHome implements ICollection {
 	public function getChildren(): array {
 		if ($this->children === null) {
 			$albumInfos = $this->albumMapper->getForUser($this->userId);
-			$this->children = array_map(function (AlbumInfo $albumInfo) {
-				return new AlbumRoot(
-					$this->albumMapper,
-					new AlbumWithFiles($albumInfo, $this->albumMapper),
-					$this->rootFolder,
-					$this->userId,
-					$this->userConfigService,
-					$this->logger,
-				);
-			}, $albumInfos);
+			$this->children = array_map(fn (AlbumInfo $albumInfo): AlbumRoot => new AlbumRoot(
+				$this->albumMapper,
+				new AlbumWithFiles($albumInfo, $this->albumMapper),
+				$this->rootFolder,
+				$this->userId,
+				$this->userConfigService,
+				$this->logger,
+			), $albumInfos);
 		}
 
 		return $this->children;
@@ -100,7 +98,7 @@ class AlbumsHome implements ICollection {
 		try {
 			$this->getChild($name);
 			return true;
-		} catch (NotFound $e) {
+		} catch (NotFound) {
 			return false;
 		}
 	}

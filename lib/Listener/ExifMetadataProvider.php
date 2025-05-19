@@ -24,7 +24,7 @@ use Psr\Log\LoggerInterface;
  */
 class ExifMetadataProvider implements IEventListener {
 	public function __construct(
-		private LoggerInterface $logger,
+		private readonly LoggerInterface $logger,
 	) {
 	}
 
@@ -117,7 +117,7 @@ class ExifMetadataProvider implements IEventListener {
 			throw new \Exception('Invalid coordinate format: ' . json_encode($coordinates));
 		}
 
-		[$degrees, $minutes, $seconds] = array_map(fn ($rawDegree) => $this->parseGPSData($rawDegree), $coordinates);
+		[$degrees, $minutes, $seconds] = array_map(fn ($rawDegree): float => $this->parseGPSData($rawDegree), $coordinates);
 
 		$sign = ($hemisphere === 'W' || $hemisphere === 'S') ? -1 : 1;
 		return $sign * ($degrees + $minutes / 60 + $seconds / 3600);

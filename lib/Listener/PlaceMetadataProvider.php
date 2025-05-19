@@ -21,7 +21,7 @@ use OCP\FilesMetadata\Event\MetadataLiveEvent;
  */
 class PlaceMetadataProvider implements IEventListener {
 	public function __construct(
-		private MediaPlaceManager $mediaPlaceManager,
+		private readonly MediaPlaceManager $mediaPlaceManager,
 	) {
 	}
 

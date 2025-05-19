@@ -38,17 +38,15 @@ class PropFindPlugin extends ServerPlugin {
 	public const COLLABORATORS_PROPERTYNAME = '{http://nextcloud.org/ns}collaborators';
 	public const PERMISSIONS_PROPERTYNAME = '{http://owncloud.org/ns}permissions';
 
-	private IPreview $previewManager;
-	private ?Tree $tree;
-	private AlbumMapper $albumMapper;
+	private readonly IPreview $previewManager;
+	private ?Tree $tree = null;
 
 	public function __construct(
 		IPreview $previewManager,
-		AlbumMapper $albumMapper,
-		private IFilesMetadataManager $filesMetadataManager,
+		private readonly AlbumMapper $albumMapper,
+		private readonly IFilesMetadataManager $filesMetadataManager,
 	) {
 		$this->previewManager = $previewManager;
-		$this->albumMapper = $albumMapper;
 	}
 
 	/**
@@ -69,8 +67,8 @@ class PropFindPlugin extends ServerPlugin {
 	 */
 	public function initialize(Server $server) {
 		$this->tree = $server->tree;
-		$server->on('propFind', [$this, 'propFind']);
-		$server->on('propPatch', [$this, 'handleUpdateProperties']);
+		$server->on('propFind', $this->propFind(...));
+		$server->on('propPatch', $this->handleUpdateProperties(...));
 	}
 
 	public function propFind(PropFind $propFind, INode $node): void {
@@ -79,14 +77,14 @@ class PropFindPlugin extends ServerPlugin {
 			// Should be pre-emptively handled by the NodeDeletedEvent
 			try {
 				$fileInfo = $node->getFileInfo();
-			} catch (NotFoundException $e) {
+			} catch (NotFoundException) {
 				return;
 			}
 
-			$propFind->handle(FilesPlugin::INTERNAL_FILEID_PROPERTYNAME, fn () => $node->getFile()->getFileId());
+			$propFind->handle(FilesPlugin::INTERNAL_FILEID_PROPERTYNAME, fn (): int => $node->getFile()->getFileId());
 			$propFind->handle(FilesPlugin::GETETAG_PROPERTYNAME, fn () => $node->getETag());
-			$propFind->handle(self::FILE_NAME_PROPERTYNAME, fn () => $node->getFile()->getName());
-			$propFind->handle(self::FAVORITE_PROPERTYNAME, fn () => $node->isFavorite() ? 1 : 0);
+			$propFind->handle(self::FILE_NAME_PROPERTYNAME, fn (): string => $node->getFile()->getName());
+			$propFind->handle(self::FAVORITE_PROPERTYNAME, fn (): int => $node->isFavorite() ? 1 : 0);
 			$propFind->handle(FilesPlugin::HAS_PREVIEW_PROPERTYNAME, fn () => json_encode($this->previewManager->isAvailable($fileInfo)));
 			$propFind->handle(FilesPlugin::PERMISSIONS_PROPERTYNAME, function () use ($node): string {
 				$permissions = DavUtil::getDavPermissions($node->getFileInfo());
@@ -113,17 +111,17 @@ class PropFindPlugin extends ServerPlugin {
 		}
 
 		if ($node instanceof AlbumRoot) {
-			$propFind->handle(self::ORIGINAL_NAME_PROPERTYNAME, fn () => $node->getAlbum()->getAlbum()->getTitle());
-			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn () => $node->getAlbum()->getAlbum()->getLastAddedPhoto());
-			$propFind->handle(self::NBITEMS_PROPERTYNAME, fn () => count($node->getChildren()));
-			$propFind->handle(self::LOCATION_PROPERTYNAME, fn () => $node->getAlbum()->getAlbum()->getLocation());
+			$propFind->handle(self::ORIGINAL_NAME_PROPERTYNAME, fn (): string => $node->getAlbum()->getAlbum()->getTitle());
+			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn (): int => $node->getAlbum()->getAlbum()->getLastAddedPhoto());
+			$propFind->handle(self::NBITEMS_PROPERTYNAME, fn (): int => count($node->getChildren()));
+			$propFind->handle(self::LOCATION_PROPERTYNAME, fn (): string => $node->getAlbum()->getAlbum()->getLocation());
 			$propFind->handle(self::DATE_RANGE_PROPERTYNAME, fn () => json_encode($node->getDateRange()));
-			$propFind->handle(self::COLLABORATORS_PROPERTYNAME, fn () => $node->getCollaborators());
+			$propFind->handle(self::COLLABORATORS_PROPERTYNAME, fn (): array => $node->getCollaborators());
 		}
 
 		if ($node instanceof PlaceRoot) {
-			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn () => $node->getFirstPhoto());
-			$propFind->handle(self::NBITEMS_PROPERTYNAME, fn () => count($node->getChildren()));
+			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn (): int => $node->getFirstPhoto());
+			$propFind->handle(self::NBITEMS_PROPERTYNAME, fn (): int => count($node->getChildren()));
 		}
 	}
 

@@ -11,6 +11,7 @@ namespace OCA\Photos\Jobs;
 use OCA\Photos\AppInfo\Application;
 use OCA\Photos\Service\MediaPlaceManager;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\BackgroundJob\IJob;
 use OCP\BackgroundJob\TimedJob;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
@@ -21,15 +22,15 @@ use OCP\IUserManager;
 class AutomaticPlaceMapperJob extends TimedJob {
 	public function __construct(
 		ITimeFactory $time,
-		private IConfig $config,
-		private IRootFolder $rootFolder,
-		private IUserManager $userManager,
+		private readonly IConfig $config,
+		private readonly IRootFolder $rootFolder,
+		private readonly IUserManager $userManager,
 		private MediaPlaceManager $mediaPlaceManager,
 	) {
 		parent::__construct($time);
 		$this->mediaPlaceManager = $mediaPlaceManager;
 
-		$this->setTimeSensitivity(\OCP\BackgroundJob\IJob::TIME_INSENSITIVE);
+		$this->setTimeSensitivity(IJob::TIME_INSENSITIVE);
 		$this->setInterval(24 * 3600);
 	}
 
@@ -88,7 +89,7 @@ class AutomaticPlaceMapperJob extends TimedJob {
 				continue;
 			}
 
-			if (!str_starts_with($node->getMimeType(), 'image')) {
+			if (!str_starts_with((string)$node->getMimeType(), 'image')) {
 				continue;
 			}
 

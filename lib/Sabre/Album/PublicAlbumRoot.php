@@ -14,17 +14,11 @@ use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\INode;
 
 class PublicAlbumRoot extends AlbumRoot {
-	/**
-	 * @return void
-	 */
-	public function delete() {
+	public function delete(): never {
 		throw new Forbidden('Not allowed to delete a public album');
 	}
 
-	/**
-	 * @return void
-	 */
-	public function setName($name) {
+	public function setName($name): never {
 		throw new Forbidden('Not allowed to rename a public album');
 	}
 
@@ -39,7 +33,7 @@ class PublicAlbumRoot extends AlbumRoot {
 		return [$photosLocation, $userFolder];
 	}
 
-	public function createFile($name, $data = null) {
+	public function createFile($name, $data = null): never {
 		throw new Forbidden('Not allowed to create a file in a public album');
 	}
 
@@ -58,9 +52,7 @@ class PublicAlbumRoot extends AlbumRoot {
 	}
 
 	public function getChildren(): array {
-		return array_map(function (AlbumFile $file) {
-			return new PublicAlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId));
-		}, $this->album->getFiles());
+		return array_map(fn (AlbumFile $file): PublicAlbumPhoto => new PublicAlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId)), $this->album->getFiles());
 	}
 
 	public function getChild($name): PublicAlbumPhoto {

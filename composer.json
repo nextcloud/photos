@@ -9,7 +9,7 @@
 			"bamarni/composer-bin-plugin": true
 		},
 		"platform": {
-			"php": "8.3"
+			"php": "8.1.17"
 		}
 	},
 	"autoload": {
@@ -25,6 +25,7 @@
 		"psalm:clear": "psalm --clear-cache && psalm --clear-global-cache",
 		"psalm:fix": "psalm --alter --issues=InvalidReturnType,InvalidNullableReturnType,MissingParamType,InvalidFalsableReturnType",
 		"test:unit": "phpunit -c tests/phpunit.xml --color --fail-on-warning --fail-on-risky",
+		"rector": "rector && composer cs:fix",
 		"post-install-cmd": [
 			"[ $COMPOSER_DEV_MODE -eq 0 ] || composer bin all install --ansi"
 		],

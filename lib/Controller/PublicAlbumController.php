@@ -18,8 +18,8 @@ use OCP\IRequest;
 use OCP\Util;
 
 class PublicAlbumController extends Controller {
-	private IEventDispatcher $eventDispatcher;
-	private IInitialState $initialState;
+	private readonly IEventDispatcher $eventDispatcher;
+	private readonly IInitialState $initialState;
 
 	public function __construct(
 		IRequest $request,

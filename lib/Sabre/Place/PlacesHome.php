@@ -36,7 +36,7 @@ class PlacesHome implements ICollection {
 	/**
 	 * @return never
 	 */
-	public function delete() {
+	public function delete(): never {
 		throw new Forbidden();
 	}
 
@@ -47,15 +47,15 @@ class PlacesHome implements ICollection {
 	/**
 	 * @return never
 	 */
-	public function setName($name) {
+	public function setName($name): never {
 		throw new Forbidden('Permission denied to rename this folder');
 	}
 
-	public function createFile($name, $data = null) {
+	public function createFile($name, $data = null): never {
 		throw new Forbidden('Not allowed to create files in this folder');
 	}
 
-	public function createDirectory($name) {
+	public function createDirectory($name): never {
 		throw new Forbidden('Not allowed to create folder in this folder');
 	}
 
@@ -74,7 +74,7 @@ class PlacesHome implements ICollection {
 	public function getChildren(): array {
 		if ($this->children === null) {
 			$this->children = array_map(
-				fn (PlaceInfo $placeInfo) => new PlaceRoot($this->placeMapper, $this->reverseGeoCoderService, $placeInfo, $this->userId, $this->rootFolder),
+				fn (PlaceInfo $placeInfo): PlaceRoot => new PlaceRoot($this->placeMapper, $this->reverseGeoCoderService, $placeInfo, $this->userId, $this->rootFolder),
 				$this->placeMapper->findPlacesForUser($this->userId)
 			);
 		}
@@ -86,7 +86,7 @@ class PlacesHome implements ICollection {
 		try {
 			$this->getChild($name);
 			return true;
-		} catch (NotFound $e) {
+		} catch (NotFound) {
 			return false;
 		}
 	}

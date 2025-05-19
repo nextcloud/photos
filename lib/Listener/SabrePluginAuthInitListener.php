@@ -16,10 +16,9 @@ use OCP\EventDispatcher\IEventListener;
  * @template-implements IEventListener<SabrePluginAuthInitEvent>
  */
 class SabrePluginAuthInitListener implements IEventListener {
-	private PublicAlbumAuthBackend $publicAlbumAuthBackend;
-
-	public function __construct(PublicAlbumAuthBackend $publicAlbumAuthBackend) {
-		$this->publicAlbumAuthBackend = $publicAlbumAuthBackend;
+	public function __construct(
+		private readonly PublicAlbumAuthBackend $publicAlbumAuthBackend,
+	) {
 	}
 
 	public function handle(Event $event): void {
@@ -29,7 +28,7 @@ class SabrePluginAuthInitListener implements IEventListener {
 
 		$server = $event->getServer();
 
-		if (!str_starts_with($server->getRequestUri(), 'photospublic/')) {
+		if (!str_starts_with((string)$server->getRequestUri(), 'photospublic/')) {
 			return;
 		}
 

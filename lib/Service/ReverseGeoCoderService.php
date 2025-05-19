@@ -30,9 +30,9 @@ class ReverseGeoCoderService {
 	private ?array $citiesMapping = null;
 
 	public function __construct(
-		private IAppData $appData,
-		private IClientService $clientService,
-		private IConfig $config,
+		private readonly IAppData $appData,
+		private readonly IClientService $clientService,
+		private readonly IConfig $config,
 	) {
 	}
 
@@ -46,7 +46,7 @@ class ReverseGeoCoderService {
 		if ($this->geoNameFolderCache === null) {
 			try {
 				$this->geoNameFolderCache = $this->appData->getFolder('geonames');
-			} catch (NotFoundException $ex) {
+			} catch (NotFoundException) {
 				$this->geoNameFolderCache = $this->appData->newFolder('geonames');
 			}
 		}

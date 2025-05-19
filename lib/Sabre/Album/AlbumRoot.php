@@ -106,7 +106,7 @@ class AlbumRoot implements ICollection, ICopyTarget {
 	/**
 	 * @return never
 	 */
-	public function createDirectory($name) {
+	public function createDirectory($name): never {
 		throw new Forbidden('Not allowed to create directories in this folder');
 	}
 
@@ -114,9 +114,7 @@ class AlbumRoot implements ICollection, ICopyTarget {
 	 * @return AlbumPhoto[]
 	 */
 	public function getChildren(): array {
-		return array_map(function (AlbumFile $file) {
-			return new AlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId));
-		}, $this->album->getFiles());
+		return array_map(fn (AlbumFile $file): AlbumPhoto => new AlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId)), $this->album->getFiles());
 	}
 
 	public function getChild($name): AlbumPhoto {
@@ -132,7 +130,7 @@ class AlbumRoot implements ICollection, ICopyTarget {
 		try {
 			$this->getChild($name);
 			return true;
-		} catch (NotFound $e) {
+		} catch (NotFound) {
 			return false;
 		}
 	}
@@ -180,7 +178,7 @@ class AlbumRoot implements ICollection, ICopyTarget {
 		foreach ($this->getChildren() as $child) {
 			try {
 				$childCreationDate = $child->getFileInfo()->getMtime();
-			} catch (NotFoundException $e) {
+			} catch (NotFoundException) {
 				continue;
 			}
 
@@ -214,7 +212,7 @@ class AlbumRoot implements ICollection, ICopyTarget {
 	 */
 	public function getCollaborators(): array {
 		return array_map(
-			fn (array $collaborator) => [ 'nc:collaborator' => $collaborator ],
+			fn (array $collaborator): array => [ 'nc:collaborator' => $collaborator ],
 			$this->albumMapper->getCollaborators($this->album->getAlbum()->getId()),
 		);
 	}

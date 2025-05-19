@@ -14,9 +14,9 @@ use OCP\FilesMetadata\Model\IFilesMetadata;
 
 class MediaPlaceManager {
 	public function __construct(
-		private IFilesMetadataManager $filesMetadataManager,
-		private ReverseGeoCoderService $rgcService,
-		private PlaceMapper $placeMapper,
+		private readonly IFilesMetadataManager $filesMetadataManager,
+		private readonly ReverseGeoCoderService $rgcService,
+		private readonly PlaceMapper $placeMapper,
 	) {
 	}
 

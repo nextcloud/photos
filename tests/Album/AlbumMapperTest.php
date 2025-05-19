@@ -21,6 +21,7 @@ use OCP\IGroupManager;
 use OCP\IL10N;
 use OCP\IUserManager;
 use OCP\Security\ISecureRandom;
+use OCP\Server;
 use Test\TestCase;
 
 /**
@@ -50,16 +51,14 @@ class AlbumMapperTest extends TestCase {
 		parent::setUp();
 
 		$this->createdFiles = [];
-		$this->connection = \OC::$server->get(IDBConnection::class);
-		$this->mimeLoader = \OC::$server->get(IMimeTypeLoader::class);
+		$this->connection = Server::get(IDBConnection::class);
+		$this->mimeLoader = Server::get(IMimeTypeLoader::class);
 		$this->timeFactory = $this->createMock(ITimeFactory::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->l10n = $this->createMock(IL10N::class);
 		$this->secureRandom = $this->createMock(ISecureRandom::class);
-		$this->timeFactory->method('getTime')->willReturnCallback(function () {
-			return $this->time;
-		});
+		$this->timeFactory->method('getTime')->willReturnCallback(fn (): int => $this->time);
 
 		if ($this->connection->getDatabaseProvider() === IDBConnection::PLATFORM_ORACLE) {
 			$this->markTestSkipped('Feature is broken on oracle');
@@ -134,9 +133,7 @@ class AlbumMapperTest extends TestCase {
 		$this->mapper->create('user2', 'album3');
 
 		$retrievedAlbums = $this->mapper->getForUser('user1');
-		usort($retrievedAlbums, function (AlbumInfo $a, AlbumInfo $b) {
-			return $a->getId() <=> $b->getId();
-		});
+		usort($retrievedAlbums, fn (AlbumInfo $a, AlbumInfo $b): int => $a->getId() <=> $b->getId());
 		$this->assertEquals([$album1, $album2], $retrievedAlbums);
 	}
 
@@ -159,9 +156,7 @@ class AlbumMapperTest extends TestCase {
 		$this->mapper->delete($album1->getId());
 
 		$retrievedAlbums = $this->mapper->getForUser('user1');
-		usort($retrievedAlbums, function (AlbumInfo $a, AlbumInfo $b) {
-			return $a->getId() <=> $b->getId();
-		});
+		usort($retrievedAlbums, fn (AlbumInfo $a, AlbumInfo $b): int => $a->getId() <=> $b->getId());
 		$this->assertEquals([$album2], $retrievedAlbums);
 	}
 
