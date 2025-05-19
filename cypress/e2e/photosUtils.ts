@@ -118,7 +118,6 @@ export function setupPhotosTests(): Cypress.Chainable<SetupInfo> {
 			}
 
 			return cy.then(() => {
-				Cypress.session.clearAllSavedSessions()
 				cy.login(setupInfo.alice)
 				cy.visit('/apps/photos')
 				return cy.wrap(setupInfo)
