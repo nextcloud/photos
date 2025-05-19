@@ -209,7 +209,7 @@ export default {
 					propertiesToUpdate.collaborators = collaborators
 				}
 
-				if (this.albumLocation !== '' || collaborators.length !== 0) {
+				if (Object.keys(this.filtersValue).length > 0) {
 					propertiesToUpdate.filters = this.filtersValue
 				}
 
