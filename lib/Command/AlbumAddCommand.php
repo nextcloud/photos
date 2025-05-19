@@ -17,16 +17,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class AlbumAddCommand extends Command {
-	private readonly IRootFolder $rootFolder;
-	private readonly IUserManager $userManager;
 
 	public function __construct(
 		private readonly AlbumMapper $albumMapper,
-		IRootFolder $rootFolder,
-		IUserManager $userManager,
+		private readonly IRootFolder $rootFolder,
+		private readonly IUserManager $userManager,
 	) {
-		$this->rootFolder = $rootFolder;
-		$this->userManager = $userManager;
 		parent::__construct();
 	}
 
