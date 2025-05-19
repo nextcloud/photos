@@ -1,26 +1,28 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
+declare(strict_types=1);
 
 /**
- * SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-FileCopyrightText: 2025 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  */
+
+use OCP\App\IAppManager;
+use OCP\Server;
+use PHPUnit\Framework\TestCase;
+
 if (!defined('PHPUNIT_RUN')) {
 	define('PHPUNIT_RUN', 1);
 }
 
 require_once __DIR__ . '/../../../lib/base.php';
-
-// Fix for "Autoload path not allowed: .../tests/lib/testcase.php"
-\OC::$loader->addValidRoot(OC::$SERVERROOT . '/tests');
-
-// Fix for "Autoload path not allowed: .../photos/tests/testcase.php"
-\OC_App::loadApp('photos');
+require_once __DIR__ . '/../../../tests/autoload.php';
 
 if (!class_exists(TestCase::class)) {
 	require_once('PHPUnit/Autoload.php');
 }
+
+Server::get(IAppManager::class)->loadApp('photos');
 
 OC_Hook::clear();
