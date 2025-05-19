@@ -95,7 +95,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 7.4.47
 	- license: Apache-2.0
 - @nextcloud/auth
-	- version: 2.4.0
+	- version: 2.5.1
 	- license: GPL-3.0-or-later
 - axios
 	- version: 1.8.3
@@ -179,7 +179,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 6.0.1
 	- license: MIT
 - @nextcloud/vue
-	- version: 8.26.0
+	- version: 8.26.1
 	- license: AGPL-3.0-or-later
 - @ungap/structured-clone
 	- version: 1.2.0
