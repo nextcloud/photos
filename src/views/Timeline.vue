@@ -28,6 +28,7 @@
 				<NcButton v-if="selectedFileIds.length === 0"
 					ref="newAlbumButton"
 					:aria-label="createAlbumButtonLabel"
+					data-cy-header-action="create-album"
 					@click="showAlbumCreationForm = true">
 					{{ createAlbumButtonLabel }}
 					<template #icon>
@@ -39,6 +40,7 @@
 					<NcButton :close-after-click="true"
 						type="primary"
 						:aria-label="t('photos', 'Add to album')"
+						data-cy-header-action="add-to-album"
 						@click="showAlbumPicker = true">
 						<template #icon>
 							<Plus />
@@ -50,6 +52,7 @@
 
 					<NcButton v-if="selectedFileIds.length > 0"
 						:aria-label="t('photos', 'Unselect all')"
+						data-cy-header-action="unselect-all"
 						@click="resetSelection">
 						<template #icon>
 							<Close />
@@ -60,7 +63,9 @@
 					</NcButton>
 
 					<NcActions :aria-label="t('photos', 'Open actions menu')">
-						<ActionDownload :selected-file-ids="selectedFileIds" :title="t('photos', 'Download selected files')">
+						<ActionDownload :selected-file-ids="selectedFileIds"
+							:title="t('photos', 'Download selected files')"
+							data-cy-header-action="download-selection">
 							<Download slot="icon" />
 						</ActionDownload>
 
@@ -68,6 +73,7 @@
 
 						<NcActionButton :close-after-click="true"
 							:aria-label="t('photos', 'Delete selection')"
+							data-cy-header-action="delete-selection"
 							@click="deleteSelection">
 							{{ t('photos', 'Delete selection') }}
 							<template #icon>
@@ -79,7 +85,7 @@
 
 				<NcButton :title="t('photos', 'Toggle filter')"
 					:aria-label="t('photos', 'Toggle filter')"
-					data-cy-timeline-action="toggle-filters"
+					data-cy-header-action="toggle-filters"
 					type="tertiary"
 					@click="toggleFilters">
 					<template #icon>
@@ -129,7 +135,7 @@
 			<h2 class="timeline__heading">
 				{{ t('photos', 'New album') }}
 			</h2>
-			<AlbumForm :filters-value="filters" @done="showAlbumCreationForm = false" />
+			<AlbumForm :filters-value="filters" @done="handleFormCreationDone" />
 		</NcModal>
 
 		<NcModal v-if="showAlbumPicker"
@@ -336,6 +342,11 @@ export default {
 			this.filters = filters
 			this.resetFetchFilesState()
 			this.getContent()
+		},
+
+		handleFormCreationDone({ album }: { album: Album}) {
+			this.showAlbumCreationForm = false
+			this.$router.push(`/albums/${album.basename}`)
 		},
 
 		t: translate,
