@@ -266,7 +266,7 @@ export default {
 		},
 
 		createAlbumButtonLabel() {
-			if (Object.keys(this.filters).length > 0) {
+			if (Object.values(this.filters).filter(v => v !== undefined).length > 0) {
 				return this.t('photos', 'Create new album from filters')
 			} else {
 				return this.t('photos', 'Create new album')
