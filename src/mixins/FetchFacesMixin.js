@@ -27,10 +27,16 @@ import { getCurrentUser } from '@nextcloud/auth'
 
 import client from '../services/DavClient.js'
 import logger from '../services/logger.js'
-import DavRequest from '../services/DavRequest.js'
+import { getCollectionDavRequest, getCollectionFilesDavRequest } from '../services/collectionFetcher.js'
 import { genFileInfo } from '../utils/fileUtils.js'
 import AbortControllerMixin from './AbortControllerMixin.js'
 import he from 'he'
+
+const recognizeDAVProps = [
+	'<nc:face-detections/>',
+	'<nc:face-preview-image/>',
+	'<nc:realpath/>',
+]
 
 export default {
 	name: 'FetchFacesMixin',
@@ -77,7 +83,7 @@ export default {
 				this.errorFetchingFaces = null
 
 				const { data: faces } = await client.getDirectoryContents(`/recognize/${getCurrentUser()?.uid}/faces/`, {
-					data: DavRequest,
+					data: getCollectionDavRequest(recognizeDAVProps),
 					details: true,
 					signal: this.abortController.signal,
 				})
@@ -114,7 +120,7 @@ export default {
 				let { data: fetchedFiles } = await client.getDirectoryContents(
 					`/recognize/${getCurrentUser()?.uid}/faces/${faceName}`,
 					{
-						data: DavRequest,
+						data: getCollectionFilesDavRequest(),
 						details: true,
 						signal: this.abortController.signal,
 					}
@@ -166,7 +172,7 @@ export default {
 				let { data: fetchedFiles } = await client.getDirectoryContents(
 					`/recognize/${getCurrentUser()?.uid}/unassigned-faces`,
 					{
-						data: DavRequest,
+						data: getCollectionDavRequest(recognizeDAVProps),
 						details: true,
 						signal: this.abortController.signal,
 					}
@@ -207,7 +213,7 @@ export default {
 				const { data: unassignedFacesRoot } = await client.stat(
 					`/recognize/${getCurrentUser()?.uid}/unassigned-faces`,
 					{
-						data: DavRequest,
+						data: getCollectionDavRequest(recognizeDAVProps),
 						details: true,
 						signal: this.abortController.signal,
 					}

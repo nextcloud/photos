@@ -54,7 +54,7 @@ import { genFileInfo } from '../utils/fileUtils.js'
  * @param {string[]} extraProps - Extra properties to add to the DAV request.
  * @return {string}
  */
-function getCollectionDavRequest(extraProps = []) {
+export function getCollectionDavRequest(extraProps = []) {
 	return `<?xml version="1.0"?>
 			<d:propfind xmlns:d="DAV:"
 				xmlns:oc="http://owncloud.org/ns"
@@ -72,7 +72,7 @@ function getCollectionDavRequest(extraProps = []) {
  * @param {string[]} extraProps - Extra properties to add to the DAV request.
  * @return {string}
  */
-function getCollectionFilesDavRequest(extraProps = []) {
+export function getCollectionFilesDavRequest(extraProps = []) {
 	return `<?xml version="1.0"?>
 			<d:propfind xmlns:d="DAV:"
 				xmlns:oc="http://owncloud.org/ns"
