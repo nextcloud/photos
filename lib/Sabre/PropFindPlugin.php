@@ -11,7 +11,6 @@ namespace OCA\Photos\Sabre;
 use OCA\DAV\Connector\Sabre\FilesPlugin;
 use OCA\Photos\Album\AlbumFile;
 use OCA\Photos\Sabre\Album\AlbumPhoto;
-use OCA\Photos\Sabre\Album\AlbumRoot;
 use OCA\Photos\Sabre\Album\AlbumRootBase;
 use OCA\Photos\Sabre\Album\PublicAlbumPhoto;
 use OCA\Photos\Sabre\Place\PlacePhoto;

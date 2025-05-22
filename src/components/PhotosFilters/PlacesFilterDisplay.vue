@@ -24,7 +24,7 @@ import { t } from '@nextcloud/l10n'
 import NcChip from '@nextcloud/vue/components/NcChip'
 
 import usePlaceFilter from './usePlaceFilter.ts'
-import type { PlacesValueType } from '../../services/PhotosFilters/placesFilter.ts';
+import type { PlacesValueType } from '../../services/PhotosFilters/placesFilter.ts'
 
 const props = defineProps<{
 	value: PlacesValueType

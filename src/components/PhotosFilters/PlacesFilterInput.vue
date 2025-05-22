@@ -34,7 +34,7 @@ import NcListItemIcon from '@nextcloud/vue/components/NcListItemIcon'
 import { t } from '@nextcloud/l10n'
 
 import usePlaceFilter from './usePlaceFilter.ts'
-import type { PlacesValueType } from '../../services/PhotosFilters/placesFilter.ts';
+import type { PlacesValueType } from '../../services/PhotosFilters/placesFilter.ts'
 
 const props = defineProps<{
 	value: PlacesValueType

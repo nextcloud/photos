@@ -16,7 +16,7 @@ class AlbumInfo {
 		private readonly string $location,
 		private readonly int $created,
 		private readonly int $lastAdded,
-		private readonly ?array $filters = null,
+		private readonly ?string $filters = null,
 		private readonly ?int $receivedFrom = null,
 	) {
 	}

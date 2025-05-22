@@ -13,7 +13,7 @@ class AlbumWithFiles {
 		private readonly AlbumInfo $info,
 		private readonly AlbumMapper $albumMapper,
 		/** @var AlbumFile[] */
-		private readonly array $files = [],
+		private array $files = [],
 	) {
 	}
 

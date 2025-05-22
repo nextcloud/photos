@@ -52,10 +52,10 @@ class FiltersManager {
 
 		if ($fileId !== null) {
 			$filtersOperations[] = new SearchComparison(
-						ISearchComparison::COMPARE_EQUAL,
-						'fileid',
-						$fileId,
-					);
+				ISearchComparison::COMPARE_EQUAL,
+				'fileid',
+				$fileId,
+			);
 		}
 
 		$query = new SearchQuery(new SearchBinaryOperator(ISearchBinaryOperator::OPERATOR_AND, $filtersOperations), 1000, 0, []);
