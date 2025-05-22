@@ -182,7 +182,7 @@ class AlbumMapper {
 		foreach ($rows as $row) {
 			if ($row['fileid']) {
 				$mimeType = $this->mimeTypeLoader->getMimetypeById((int)$row['mimetype']);
-				$files[] = new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
+				$files[] = new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner'], 'user');
 			}
 		}
 
@@ -213,7 +213,7 @@ class AlbumMapper {
 		}
 
 		$mimeType = $this->mimeTypeLoader->getMimetypeById((int)$row['mimetype']);
-		return new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
+		return new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner'], 'user');
 	}
 
 	public function addFile(int $albumId, int $fileId, string $owner): void {
@@ -501,7 +501,8 @@ class AlbumMapper {
 					(int)$row['mtime'],
 					$row['etag'],
 					(int)$row['added'],
-					$row['owner']
+					$row['owner'],
+					'user',
 				);
 			}
 

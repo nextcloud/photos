@@ -100,8 +100,9 @@
 
 							<ActionFavorite :selected-file-ids="selectedFileIds" />
 
-							<NcActionButton :close-after-click="true"
-								@click="handleRemoveFilesFromAlbum(selectedFileIds)">
+							<NcActionButton v-if="removableSelectedFiles.length !== 0"
+								:close-after-click="true"
+								@click="handleRemoveFilesFromAlbum(removableSelectedFiles)">
 								{{ t('photos', 'Remove selection from album') }}
 								<Close slot="icon" />
 							</NcActionButton>
@@ -194,7 +195,7 @@ import PhotosPicker from '../components/PhotosPicker.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import logger from '../services/logger.js'
 import type { Album } from '../store/albums.js'
-import { albumsExtraProps } from '../store/albums.ts'
+import { albumFilesExtraProps, albumsExtraProps } from '../store/albums.ts'
 
 export default {
 	name: 'AlbumContent',
@@ -254,7 +255,7 @@ export default {
 	},
 
 	computed: {
-		album(): Album|undefined {
+		album(): Album {
 			return this.$store.getters.getAlbum(this.albumName)
 		},
 
@@ -268,6 +269,13 @@ export default {
 
 		albumFileName(): string {
 			return this.$store.getters.getAlbumName(this.albumName)
+		},
+
+		removableSelectedFiles() {
+			return (this.$refs.collectionContent?.selectedFileIds as string[])
+				.map((fileId) => this.$store.state.files.files[fileId])
+				.filter(file => file.attributes['photos-album-file-origin'] !== 'filters')
+				.map(file => file.fileid.toString())
 		},
 	},
 
@@ -285,7 +293,7 @@ export default {
 		},
 
 		async fetchAlbumContent() {
-			await this.fetchCollectionFiles(this.albumFileName)
+			await this.fetchCollectionFiles(this.albumFileName, albumFilesExtraProps)
 		},
 
 		redirectToNewName({ album }) {
@@ -304,7 +312,7 @@ export default {
 		},
 
 		async handleRemoveFilesFromAlbum(fileIds: string[]) {
-			this.$refs.collectionContent.onUncheckFiles(fileIds)
+			this.$refs.collectionContent?.onUncheckFiles(fileIds)
 			await this.$store.dispatch('removeFilesFromCollection', { collectionFileName: this.album?.root + this.album?.path, fileIdsToRemove: fileIds })
 		},
 

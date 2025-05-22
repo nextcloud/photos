@@ -34,6 +34,10 @@ export const albumsExtraProps = [
 	'<nc:filters />',
 ]
 
+export const albumFilesExtraProps = [
+	'<nc:photos-album-file-origin />',
+]
+
 export const albumsPrefix = `/photos/${getCurrentUser()?.uid}/albums`
 
 const getters = {

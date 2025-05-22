@@ -73,6 +73,7 @@ class FiltersManager {
 					$file->getEtag(),
 					0,
 					$userId,
+					'filters',
 				);
 			},
 			$files

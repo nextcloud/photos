@@ -97,6 +97,7 @@ import HeaderNavigation from '../components/HeaderNavigation.vue'
 import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.ts'
 import type { PublicAlbum } from '../store/publicAlbums.ts'
 import { publicAlbumsPrefix, publicAlbumsExtraProps } from '../store/publicAlbums.ts'
+import { albumFilesExtraProps } from '../store/albums.ts'
 
 export default {
 	name: 'PublicAlbumContent',
@@ -180,7 +181,7 @@ export default {
 		async fetchAlbumContent() {
 			const files = await this.fetchCollectionFiles(
 				`${publicAlbumsPrefix}/${this.token}`,
-				publicAlbumsExtraProps,
+				[...albumFilesExtraProps, ...publicAlbumsExtraProps],
 				this.publicClient,
 			)
 

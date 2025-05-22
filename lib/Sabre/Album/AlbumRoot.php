@@ -42,7 +42,7 @@ class AlbumRoot extends AlbumRootBase implements ICollection, ICopyTarget {
 		if ($ownerUID === $this->userId) {
 			$this->albumMapper->addFile($this->album->getAlbum()->getId(), $sourceId, $ownerUID);
 			$node = current($this->rootFolder->getUserFolder($ownerUID)->getById($sourceId));
-			$this->album->addFile(new AlbumFile($sourceId, $node->getName(), $node->getMimetype(), $node->getSize(), $node->getMTime(), $node->getEtag(), $node->getCreationTime(), $ownerUID));
+			$this->album->addFile(new AlbumFile($sourceId, $node->getName(), $node->getMimetype(), $node->getSize(), $node->getMTime(), $node->getEtag(), $node->getCreationTime(), $ownerUID, 'user'));
 			return true;
 		}
 		return false;

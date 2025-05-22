@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\Photos\Sabre;
 
 use OCA\DAV\Connector\Sabre\FilesPlugin;
+use OCA\Photos\Album\AlbumFile;
 use OCA\Photos\Sabre\Album\AlbumPhoto;
 use OCA\Photos\Sabre\Album\AlbumRoot;
 use OCA\Photos\Sabre\Album\AlbumRootBase;
@@ -41,6 +42,7 @@ class PropFindPlugin extends ServerPlugin {
 	public const COLLABORATORS_PROPERTYNAME = '{http://nextcloud.org/ns}collaborators';
 	public const FILTERS_PROPERTYNAME = '{http://nextcloud.org/ns}filters';
 	public const PERMISSIONS_PROPERTYNAME = '{http://owncloud.org/ns}permissions';
+	public const PHOTOS_ALBUM_FILE_ORIGIN_PROPERTYNAME = '{http://nextcloud.org/ns}photos-album-file-origin';
 
 	private ?Tree $tree = null;
 
@@ -104,12 +106,19 @@ class PropFindPlugin extends ServerPlugin {
 				$propFind->handle(FilesPlugin::FILE_METADATA_PREFIX . $metadataKey, $metadataValue);
 			}
 
-
 			$propFind->handle(FilesPlugin::HIDDEN_PROPERTYNAME, function () use ($node) {
 				$metadata = $this->filesMetadataManager->getMetadata((int)$node->getFileInfo()->getId(), true);
 				return $metadata->hasKey('files-live-photo') && $node->getFileInfo()->getMimetype() === 'video/quicktime' ? 'true' : 'false';
 			});
 
+			$propFind->handle(self::PHOTOS_ALBUM_FILE_ORIGIN_PROPERTYNAME, function () use ($node) {
+				$file = $node->getFile();
+				if ($file instanceof AlbumFile) {
+					return $file->origin;
+				} else {
+					return null;
+				}
+			});
 		}
 
 		if ($node instanceof ICollection) {
