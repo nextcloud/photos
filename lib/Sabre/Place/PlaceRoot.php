@@ -117,17 +117,4 @@ class PlaceRoot implements ICollection {
 	public function getFileIds(): array {
 		return array_map(fn (PlacePhoto $file): int => $file->getFileId(), $this->getChildren());
 	}
-
-	/**
-	 * @return int|null
-	 */
-	public function getCover() {
-		$children = $this->getChildren();
-
-		if (count($children) > 0) {
-			return $children[0]->getFileId();
-		} else {
-			return null;
-		}
-	}
 }

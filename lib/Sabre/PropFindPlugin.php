@@ -9,9 +9,9 @@ declare(strict_types=1);
 namespace OCA\Photos\Sabre;
 
 use OCA\DAV\Connector\Sabre\FilesPlugin;
-use OCA\Photos\Album\AlbumMapper;
+use OCA\Photos\Album\AlbumFile;
 use OCA\Photos\Sabre\Album\AlbumPhoto;
-use OCA\Photos\Sabre\Album\AlbumRoot;
+use OCA\Photos\Sabre\Album\AlbumRootBase;
 use OCA\Photos\Sabre\Album\PublicAlbumPhoto;
 use OCA\Photos\Sabre\Place\PlacePhoto;
 use OCA\Photos\Sabre\Place\PlaceRoot;
@@ -19,6 +19,9 @@ use OCP\Files\DavUtil;
 use OCP\Files\NotFoundException;
 use OCP\FilesMetadata\IFilesMetadataManager;
 use OCP\IPreview;
+use OCP\IUserSession;
+use Sabre\DAV\Exception\Forbidden;
+use Sabre\DAV\ICollection;
 use Sabre\DAV\INode;
 use Sabre\DAV\PropFind;
 use Sabre\DAV\PropPatch;
@@ -36,17 +39,17 @@ class PropFindPlugin extends ServerPlugin {
 	public const LAST_PHOTO_PROPERTYNAME = '{http://nextcloud.org/ns}last-photo';
 	public const NBITEMS_PROPERTYNAME = '{http://nextcloud.org/ns}nbItems';
 	public const COLLABORATORS_PROPERTYNAME = '{http://nextcloud.org/ns}collaborators';
+	public const FILTERS_PROPERTYNAME = '{http://nextcloud.org/ns}filters';
 	public const PERMISSIONS_PROPERTYNAME = '{http://owncloud.org/ns}permissions';
+	public const PHOTOS_ALBUM_FILE_ORIGIN_PROPERTYNAME = '{http://nextcloud.org/ns}photos-album-file-origin';
 
-	private readonly IPreview $previewManager;
 	private ?Tree $tree = null;
 
 	public function __construct(
-		IPreview $previewManager,
-		private readonly AlbumMapper $albumMapper,
+		private readonly IPreview $previewManager,
 		private readonly IFilesMetadataManager $filesMetadataManager,
+		private readonly IUserSession $userSession,
 	) {
-		$this->previewManager = $previewManager;
 	}
 
 	/**
@@ -102,48 +105,65 @@ class PropFindPlugin extends ServerPlugin {
 				$propFind->handle(FilesPlugin::FILE_METADATA_PREFIX . $metadataKey, $metadataValue);
 			}
 
-
 			$propFind->handle(FilesPlugin::HIDDEN_PROPERTYNAME, function () use ($node) {
 				$metadata = $this->filesMetadataManager->getMetadata((int)$node->getFileInfo()->getId(), true);
 				return $metadata->hasKey('files-live-photo') && $node->getFileInfo()->getMimetype() === 'video/quicktime' ? 'true' : 'false';
 			});
 
+			$propFind->handle(self::PHOTOS_ALBUM_FILE_ORIGIN_PROPERTYNAME, function () use ($node) {
+				$file = $node->getFile();
+				if ($file instanceof AlbumFile) {
+					return $file->origin;
+				} else {
+					return null;
+				}
+			});
 		}
 
-		if ($node instanceof AlbumRoot) {
-			$propFind->handle(self::ORIGINAL_NAME_PROPERTYNAME, fn (): string => $node->getAlbum()->getAlbum()->getTitle());
-			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn (): int => $node->getAlbum()->getAlbum()->getLastAddedPhoto());
+		if ($node instanceof ICollection) {
 			$propFind->handle(self::NBITEMS_PROPERTYNAME, fn (): int => count($node->getChildren()));
+		}
+
+		if ($node instanceof AlbumRootBase) {
+			$propFind->handle(self::ORIGINAL_NAME_PROPERTYNAME, fn (): string => $node->getAlbum()->getAlbum()->getTitle());
+			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn (): int => $node->getCover());
 			$propFind->handle(self::LOCATION_PROPERTYNAME, fn (): string => $node->getAlbum()->getAlbum()->getLocation());
 			$propFind->handle(self::DATE_RANGE_PROPERTYNAME, fn () => json_encode($node->getDateRange()));
 			$propFind->handle(self::COLLABORATORS_PROPERTYNAME, fn (): array => $node->getCollaborators());
+			$propFind->handle(self::FILTERS_PROPERTYNAME, fn (): ?string => $node->getFilters());
 		}
 
 		if ($node instanceof PlaceRoot) {
 			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn (): int => $node->getFirstPhoto());
-			$propFind->handle(self::NBITEMS_PROPERTYNAME, fn (): int => count($node->getChildren()));
 		}
 	}
 
 	public function handleUpdateProperties($path, PropPatch $propPatch): void {
 		$node = $this->tree->getNodeForPath($path);
-		if ($node instanceof AlbumRoot) {
+		if ($node instanceof AlbumRootBase) {
 			$propPatch->handle(self::LOCATION_PROPERTYNAME, function ($location) use ($node) {
 				if ($location instanceof Complex) {
 					$location = $location->getXml();
 				}
-
-				$this->albumMapper->setLocation($node->getAlbum()->getAlbum()->getId(), $location);
+				$node->setLocation($location);
 				return true;
 			});
 			$propPatch->handle(self::COLLABORATORS_PROPERTYNAME, function ($collaborators) use ($node) {
-				$collaborators = $node->setCollaborators(json_decode($collaborators, true));
+				$node->setCollaborators(json_decode($collaborators, true));
+				return true;
+			});
+			$propPatch->handle(self::FILTERS_PROPERTYNAME, function ($filters) use ($node) {
+				$node->setFilters($filters);
 				return true;
 			});
 		}
 
 		if ($node instanceof AlbumPhoto) {
 			$propPatch->handle(self::FAVORITE_PROPERTYNAME, function ($favoriteState) use ($node) {
+				if ($this->userSession->getUser() !== $node->getFileInfo()->getOwner()) {
+					throw new Forbidden('Only the owner can favorite its photos');
+				}
+
 				$node->setFavoriteState($favoriteState);
 				return true;
 			});

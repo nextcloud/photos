@@ -7,11 +7,15 @@ import type { User } from '@nextcloud/cypress'
 import axios from 'axios'
 
 export function uploadTestMedia(user: User, destination = '/Photos') {
-	cy.exec('ls cypress/fixtures/media')
+	return cy.exec('ls cypress/fixtures/media')
 		.then((result) => {
-			for (const fileName of result.stdout.split('\n')) {
+			const fileIdsMap = {} as Record<string, number>
+			result.stdout.split('\n').map((fileName) => {
 				cy.uploadFile(user, `media/${fileName}`, 'image/png', `/${destination}/${fileName}`)
-			}
+					.then(fileId => fileIdsMap[fileName] = fileId)
+			})
+			cy.log('Uploaded files:', JSON.stringify(fileIdsMap))
+			return cy.wrap(fileIdsMap)
 		})
 }
 
@@ -87,6 +91,9 @@ type SetupInfo = {
 	alice: User
 	bob: User
 	charlie: User
+	alicesFiles: Record<string, number>
+	bobsFiles: Record<string, number>
+	charliesFiles: Record<string, number>
 }
 
 export function setupPhotosTests(): Cypress.Chainable<SetupInfo> {
@@ -105,8 +112,11 @@ export function setupPhotosTests(): Cypress.Chainable<SetupInfo> {
 					mkdir(setupInfo.bob, '/Photos')
 					mkdir(setupInfo.charlie, '/Photos')
 					uploadTestMedia(setupInfo.alice)
+						.then(fileIdsMap => setupInfo.alicesFiles = fileIdsMap)
 					uploadTestMedia(setupInfo.bob)
+						.then(fileIdsMap => setupInfo.bobsFiles = fileIdsMap)
 					uploadTestMedia(setupInfo.charlie)
+						.then(fileIdsMap => setupInfo.charliesFiles = fileIdsMap)
 				})
 
 				cy.runOccCommand('files:scan --all --generate-metadata')

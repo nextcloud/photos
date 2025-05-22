@@ -33,6 +33,25 @@
 						</template>
 						{{ t('photos', 'Unselect all') }}
 					</NcButton>
+
+					<span v-if="album !== undefined" class="album-container__filters">
+						<PhotosFiltersInput v-if="editFilters"
+							:value="album.attributes.filters"
+							class="timeline__filters"
+							@update:value="handleFiltersChange" />
+						<PhotosFiltersDisplay v-else :filters-value="album.attributes.filters" />
+
+						<NcButton :title="t('photos', 'Toggle filter')"
+							:aria-label="t('photos', 'Toggle filter')"
+							data-cy-header-action="toggle-filters"
+							type="tertiary"
+							@click="toggleFilters">
+							<template #icon>
+								<FilterCheck v-if="editFilters" />
+								<FilterPlus v-else />
+							</template>
+						</NcButton>
+					</span>
 				</template>
 
 				<template v-if="album !== undefined" slot="right">
@@ -81,8 +100,9 @@
 
 							<ActionFavorite :selected-file-ids="selectedFileIds" />
 
-							<NcActionButton :close-after-click="true"
-								@click="handleRemoveFilesFromAlbum(selectedFileIds)">
+							<NcActionButton v-if="removableSelectedFiles.length !== 0"
+								:close-after-click="true"
+								@click="handleRemoveFilesFromAlbum(removableSelectedFiles)">
 								{{ t('photos', 'Remove selection from album') }}
 								<Close slot="icon" />
 							</NcActionButton>
@@ -158,6 +178,8 @@ import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import Pencil from 'vue-material-design-icons/Pencil.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
+import FilterPlus from 'vue-material-design-icons/FilterPlus.vue'
+import FilterCheck from 'vue-material-design-icons/FilterCheck.vue'
 
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
@@ -167,11 +189,13 @@ import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import CollaboratorsSelectionForm from '../components/Albums/CollaboratorsSelectionForm.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
+import PhotosFiltersInput from '../components/PhotosFilters/PhotosFiltersInput.vue'
+import PhotosFiltersDisplay from '../components/PhotosFilters/PhotosFiltersDisplay.vue'
 import PhotosPicker from '../components/PhotosPicker.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-
 import logger from '../services/logger.js'
 import type { Album } from '../store/albums.js'
+import { albumFilesExtraProps, albumsExtraProps } from '../store/albums.ts'
 
 export default {
 	name: 'AlbumContent',
@@ -200,6 +224,10 @@ export default {
 		Pencil,
 		Plus,
 		ShareVariant,
+		FilterPlus,
+		FilterCheck,
+		PhotosFiltersInput,
+		PhotosFiltersDisplay,
 	},
 
 	mixins: [
@@ -220,13 +248,14 @@ export default {
 			showAddPhotosModal: false,
 			showManageCollaboratorView: false,
 			showEditAlbumForm: false,
+			editFilters: false,
 
 			loadingAddCollaborators: false,
 		}
 	},
 
 	computed: {
-		album(): Album|undefined {
+		album(): Album {
 			return this.$store.getters.getAlbum(this.albumName)
 		},
 
@@ -241,6 +270,13 @@ export default {
 		albumFileName(): string {
 			return this.$store.getters.getAlbumName(this.albumName)
 		},
+
+		removableSelectedFiles() {
+			return (this.$refs.collectionContent?.selectedFileIds as string[])
+				.map((fileId) => this.$store.state.files.files[fileId])
+				.filter(file => file.attributes['photos-album-file-origin'] !== 'filters')
+				.map(file => file.fileid.toString())
+		},
 	},
 
 	async mounted() {
@@ -252,12 +288,12 @@ export default {
 		async fetchAlbum() {
 			await this.fetchCollection(
 				this.albumFileName,
-				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />'],
+				albumsExtraProps,
 			)
 		},
 
 		async fetchAlbumContent() {
-			await this.fetchCollectionFiles(this.albumFileName)
+			await this.fetchCollectionFiles(this.albumFileName, albumFilesExtraProps)
 		},
 
 		redirectToNewName({ album }) {
@@ -276,7 +312,7 @@ export default {
 		},
 
 		async handleRemoveFilesFromAlbum(fileIds: string[]) {
-			this.$refs.collectionContent.onUncheckFiles(fileIds)
+			this.$refs.collectionContent?.onUncheckFiles(fileIds)
 			await this.$store.dispatch('removeFilesFromCollection', { collectionFileName: this.album?.root + this.album?.path, fileIdsToRemove: fileIds })
 		},
 
@@ -297,6 +333,19 @@ export default {
 			}
 		},
 
+		toggleFilters() {
+			this.editFilters = !this.editFilters
+			if (!this.editFilters) {
+				this.extraFilters = {}
+				this.resetFetchFilesState()
+			}
+		},
+
+		async handleFiltersChange(filters) {
+			await this.$store.dispatch('updateCollection', { collectionFileName: this.album?.root + this.album?.path, properties: { filters } })
+			this.fetchAlbumContent()
+		},
+
 		t: translate,
 	},
 }
@@ -307,6 +356,11 @@ export default {
 
 	:deep(.collection) {
 		height: 100%;
+	}
+
+	&__filters {
+		display: flex;
+		gap: 8px;
 	}
 }
 

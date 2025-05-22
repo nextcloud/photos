@@ -32,6 +32,10 @@
 						</template>
 						{{ t('photos', 'Unselect all') }}
 					</NcButton>
+
+					<span v-if="album !== undefined" class="album-container__filters">
+						<PhotosFiltersDisplay :filters-value="album.attributes.filters" />
+					</span>
 				</template>
 
 				<template v-if="album !== undefined" slot="right">
@@ -66,8 +70,9 @@
 								<Download slot="icon" />
 							</ActionDownload> -->
 
-							<NcActionButton :close-after-click="true"
-								@click="handleRemoveFilesFromAlbum(selectedFileIds)">
+							<NcActionButton v-if="removableSelectedFiles.length !== 0"
+								:close-after-click="true"
+								@click="handleRemoveFilesFromAlbum(removableSelectedFiles)">
 								{{ t('photos', 'Remove selection from album') }}
 								<Close slot="icon" />
 							</NcActionButton>
@@ -120,10 +125,12 @@ import Close from 'vue-material-design-icons/Close.vue'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
 
+import PhotosFiltersDisplay from '../components/PhotosFilters/PhotosFiltersDisplay.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
 import PhotosPicker from '../components/PhotosPicker.vue'
+import { albumFilesExtraProps, albumsExtraProps } from '../store/albums.ts'
 
 export default {
 	name: 'SharedAlbumContent',
@@ -145,6 +152,7 @@ export default {
 		// ActionDownload,
 		PhotosPicker,
 		HeaderNavigation,
+		PhotosFiltersDisplay,
 	},
 
 	mixins: [
@@ -189,6 +197,13 @@ export default {
 		albumFileName(): string {
 			return this.$store.getters.getSharedAlbumName(this.albumName)
 		},
+
+		removableSelectedFiles() {
+			return (this.$refs.collectionContent?.selectedFileIds as string[])
+				.map((fileId) => this.$store.state.files.files[fileId])
+				.filter(file => file.attributes['photos-album-file-origin'] !== 'filters')
+				.map(file => file.fileid.toString())
+		},
 	},
 
 	async mounted() {
@@ -200,12 +215,12 @@ export default {
 		async fetchAlbum() {
 			await this.fetchCollection(
 				this.albumFileName,
-				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />'],
+				albumsExtraProps,
 			)
 		},
 
 		async fetchAlbumContent() {
-			await this.fetchCollectionFiles(this.albumFileName)
+			await this.fetchCollectionFiles(this.albumFileName, albumFilesExtraProps)
 		},
 
 		async handleFilesPicked(fileIds) {
@@ -215,8 +230,8 @@ export default {
 			await this.fetchAlbumContent()
 		},
 
-		async handleRemoveFilesFromAlbum(fileIds) {
-			this.$refs.collectionContent.onUncheckFiles(fileIds)
+		async handleRemoveFilesFromAlbum(fileIds: string[]) {
+			this.$refs.collectionContent?.onUncheckFiles(fileIds)
 			await this.$store.dispatch('removeFilesFromCollection', { collectionFileName: this.album.root + this.album.path, fileIdsToRemove: fileIds })
 		},
 

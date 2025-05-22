@@ -10,6 +10,7 @@ namespace OCA\Photos\Album;
 
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use OCA\Photos\Exception\AlreadyInAlbumException;
+use OCA\Photos\Filters\FiltersManager;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\IMimeTypeLoader;
@@ -20,13 +21,6 @@ use OCP\IUserManager;
 use OCP\Security\ISecureRandom;
 
 class AlbumMapper {
-	private readonly IDBConnection $connection;
-	private readonly IMimeTypeLoader $mimeTypeLoader;
-	private readonly ITimeFactory $timeFactory;
-	private readonly IUserManager $userManager;
-	private readonly IGroupManager $groupManager;
-	protected IL10N $l;
-	protected ISecureRandom $random;
 
 	// Same mapping as IShare.
 	public const TYPE_USER = 0;
@@ -34,24 +28,18 @@ class AlbumMapper {
 	public const TYPE_LINK = 3;
 
 	public function __construct(
-		IDBConnection $connection,
-		IMimeTypeLoader $mimeTypeLoader,
-		ITimeFactory $timeFactory,
-		IUserManager $userManager,
-		IGroupManager $groupManager,
-		IL10N $l,
-		ISecureRandom $random,
+		private readonly IDBConnection $connection,
+		private readonly IMimeTypeLoader $mimeTypeLoader,
+		private readonly ITimeFactory $timeFactory,
+		private readonly IUserManager $userManager,
+		private readonly IGroupManager $groupManager,
+		private readonly IL10N $l,
+		private readonly ISecureRandom $random,
+		private readonly FiltersManager $filtersManager,
 	) {
-		$this->connection = $connection;
-		$this->mimeTypeLoader = $mimeTypeLoader;
-		$this->timeFactory = $timeFactory;
-		$this->userManager = $userManager;
-		$this->groupManager = $groupManager;
-		$this->l = $l;
-		$this->random = $random;
 	}
 
-	public function create(string $userId, string $name, string $location = ''): AlbumInfo {
+	public function create(string $userId, string $name, string $location = '', ?string $filters = null): AlbumInfo {
 		$created = $this->timeFactory->getTime();
 		$query = $this->connection->getQueryBuilder();
 		$query->insert('photos_albums')
@@ -61,86 +49,81 @@ class AlbumMapper {
 				'location' => $query->createNamedParameter($location),
 				'created' => $query->createNamedParameter($created, IQueryBuilder::PARAM_INT),
 				'last_added_photo' => $query->createNamedParameter(-1, IQueryBuilder::PARAM_INT),
+				'filters' => $query->createNamedParameter($filters, IQueryBuilder::PARAM_STR),
 			]);
 		$query->executeStatement();
 		$id = $query->getLastInsertId();
 
-		return new AlbumInfo($id, $userId, $name, $location, $created, -1);
+		return new AlbumInfo($id, $userId, $name, $location, $created, -1, $filters);
 	}
 
 	public function get(int $id): ?AlbumInfo {
 		$query = $this->connection->getQueryBuilder();
-		$query->select('name', 'user', 'location', 'created', 'last_added_photo')
+		$query->select('name', 'user', 'location', 'created', 'last_added_photo', 'filters')
 			->from('photos_albums')
 			->where($query->expr()->eq('album_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$row = $query->executeQuery()->fetch();
 		if ($row) {
-			return new AlbumInfo($id, $row['user'], $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
+			return new AlbumInfo($id, $row['user'], $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo'], $row['filters']);
 		} else {
 			return null;
 		}
 	}
 
 	/**
-	 * @param string $userId
 	 * @return AlbumInfo[]
 	 */
 	public function getForUser(string $userId): array {
 		$query = $this->connection->getQueryBuilder();
-		$query->select('album_id', 'name', 'location', 'created', 'last_added_photo')
+		$query->select('album_id', 'name', 'location', 'created', 'last_added_photo', 'filters')
 			->from('photos_albums')
 			->where($query->expr()->eq('user', $query->createNamedParameter($userId)));
 		$rows = $query->executeQuery()->fetchAll();
-		return array_map(fn (array $row): AlbumInfo => new AlbumInfo((int)$row['album_id'], $userId, $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']), $rows);
+		return array_map(fn (array $row): AlbumInfo => new AlbumInfo((int)$row['album_id'], $userId, $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo'], $row['filters']), $rows);
 	}
 
 	/**
-	 * @param string $albumName
-	 * @param string $userName
 	 * @return AlbumInfo
 	 */
 	public function getByName(string $albumName, string $userName): ?AlbumInfo {
 		$query = $this->connection->getQueryBuilder();
-		$query->select('album_id', 'location', 'created', 'last_added_photo')
+		$query->select('album_id', 'location', 'created', 'last_added_photo', 'filters')
 			->from('photos_albums')
 			->where($query->expr()->eq('name', $query->createNamedParameter($albumName)))
 			->andWhere($query->expr()->eq('user', $query->createNamedParameter($userName)));
 		$row = $query->executeQuery()->fetch();
 		if ($row) {
-			return new AlbumInfo((int)$row['album_id'], $userName, $albumName, $row['location'], (int)$row['created'], (int)$row['last_added_photo']);
+			return new AlbumInfo((int)$row['album_id'], $userName, $albumName, $row['location'], (int)$row['created'], (int)$row['last_added_photo'], $row['filters']);
 		} else {
 			return null;
 		}
 	}
 
 	/**
-	 * @param int $fileId
 	 * @return AlbumInfo[]
 	 */
 	public function getForFile(int $fileId): array {
 		$query = $this->connection->getQueryBuilder();
-		$query->select('a.album_id', 'name', 'user', 'location', 'created', 'last_added_photo')
+		$query->select('a.album_id', 'name', 'user', 'location', 'created', 'last_added_photo', 'filters')
 			->from('photos_albums', 'a')
 			->leftJoin('a', 'photos_albums_files', 'p', $query->expr()->eq('a.album_id', 'p.album_id'))
 			->where($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
 		$rows = $query->executeQuery()->fetchAll();
-		return array_map(fn (array $row): AlbumInfo => new AlbumInfo((int)$row['album_id'], $row['user'], $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']), $rows);
+		return array_map(fn (array $row): AlbumInfo => new AlbumInfo((int)$row['album_id'], $row['user'], $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo'], $row['filters']), $rows);
 	}
 
 	/**
-	 * @param string $userId
-	 * @param int $fileId
 	 * @return AlbumInfo[]
 	 */
 	public function getForUserAndFile(string $userId, int $fileId): array {
 		$query = $this->connection->getQueryBuilder();
-		$query->select('a.album_id', 'name', 'user', 'location', 'created', 'last_added_photo')
+		$query->select('a.album_id', 'name', 'user', 'location', 'created', 'last_added_photo', 'filters')
 			->from('photos_albums', 'a')
 			->leftJoin('a', 'photos_albums_files', 'p', $query->expr()->eq('a.album_id', 'p.album_id'))
 			->where($query->expr()->eq('user', $query->createNamedParameter($userId)))
 			->andWhere($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
 		$rows = $query->executeQuery()->fetchAll();
-		return array_map(fn (array $row): AlbumInfo => new AlbumInfo((int)$row['album_id'], $row['user'], $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo']), $rows);
+		return array_map(fn (array $row): AlbumInfo => new AlbumInfo((int)$row['album_id'], $row['user'], $row['name'], $row['location'], (int)$row['created'], (int)$row['last_added_photo'], $row['filters']), $rows);
 	}
 
 	public function rename(int $id, string $newName): void {
@@ -181,11 +164,9 @@ class AlbumMapper {
 	}
 
 	/**
-	 * @param int $albumId
-	 * @param string $userId
 	 * @return AlbumFile[]
 	 */
-	public function getForAlbumIdAndUserWithFiles(int $albumId, string $userId): array {
+	public function getForAlbumIdAndUserWithFiles(int $albumId, string $userId, array $filters): array {
 		$query = $this->connection->getQueryBuilder();
 		$query->select('fileid', 'mimetype', 'a.album_id', 'size', 'mtime', 'etag', 'added', 'owner')
 			->selectAlias('f.name', 'file_name')
@@ -201,19 +182,21 @@ class AlbumMapper {
 		foreach ($rows as $row) {
 			if ($row['fileid']) {
 				$mimeType = $this->mimeTypeLoader->getMimetypeById((int)$row['mimetype']);
-				$files[] = new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
+				$files[] = new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner'], 'user');
 			}
 		}
 
-		return $files;
+		$fileIds = array_map(fn ($file) => $file->getFileId(), $files);
+
+		$smartAlbumFiles = array_filter(
+			$this->filtersManager->getFilesBasedOnFilters($userId, $filters),
+			fn ($file) => array_search($file->getFileId(), $fileIds) === false,
+		);
+
+		return [...$files, ...$smartAlbumFiles];
 	}
 
-	/**
-	 * @param int $albumId
-	 * @param int $fileId
-	 * @return AlbumFile
-	 */
-	public function getForAlbumIdAndFileId(int $albumId, int $fileId): AlbumFile {
+	public function getForAlbumIdAndFileId(int $albumId, int $fileId): ?AlbumFile {
 		$query = $this->connection->getQueryBuilder();
 		$query->select('fileid', 'mimetype', 'a.album_id', 'user', 'size', 'mtime', 'etag', 'location', 'created', 'last_added_photo', 'added', 'owner')
 			->selectAlias('f.name', 'file_name')
@@ -225,8 +208,12 @@ class AlbumMapper {
 			->andWhere($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
 		$row = $query->executeQuery()->fetchAll()[0];
 
+		if ($row === null) {
+			return null;
+		}
+
 		$mimeType = $this->mimeTypeLoader->getMimetypeById((int)$row['mimetype']);
-		return new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
+		return new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner'], 'user');
 	}
 
 	public function addFile(int $albumId, int $fileId, string $owner): void {
@@ -331,7 +318,6 @@ class AlbumMapper {
 	}
 
 	/**
-	 * @param int $albumId
 	 * @return array<array{'id': string, 'label': string, 'type': int}>
 	 */
 	public function getCollaborators(int $albumId): array {
@@ -368,11 +354,6 @@ class AlbumMapper {
 	}
 
 
-	/**
-	 * @param int $albumId
-	 * @param string $userId
-	 * @return bool
-	 */
 	public function isCollaborator(int $albumId, string $userId): bool {
 		$query = $this->connection->getQueryBuilder();
 		$query->select('collaborator_id', 'collaborator_type')
@@ -402,7 +383,6 @@ class AlbumMapper {
 	}
 
 	/**
-	 * @param int $albumId
 	 * @param array{'id': string, 'type': int} $collaborators
 	 */
 	public function setCollaborators(int $albumId, array $collaborators): void {
@@ -462,18 +442,17 @@ class AlbumMapper {
 	}
 
 	/**
-	 * @param string $collaboratorId
-	 * @param int $collaboratorType
 	 * @return AlbumInfo[]
 	 */
 	public function getSharedAlbumsForCollaborator(string $collaboratorId, int $collaboratorType): array {
 		$query = $this->connection->getQueryBuilder();
 		$rows = $query
-			->select('a.album_id', 'name', 'user', 'location', 'created', 'last_added_photo')
+			->select('a.album_id', 'name', 'user', 'location', 'created', 'last_added_photo', 'filters')
 			->from('photos_albums_collabs', 'c')
 			->leftJoin('c', 'photos_albums', 'a', $query->expr()->eq('a.album_id', 'c.album_id'))
 			->where($query->expr()->eq('collaborator_id', $query->createNamedParameter($collaboratorId)))
 			->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter($collaboratorType, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->isNotNull('a.album_id'))
 			->executeQuery()
 			->fetchAll();
 
@@ -483,19 +462,18 @@ class AlbumMapper {
 			$row['name'] . ' (' . $row['user'] . ')',
 			$row['location'],
 			(int)$row['created'],
-			(int)$row['last_added_photo']
+			(int)$row['last_added_photo'],
+			$row['filters'],
 		), $rows);
 	}
 
 	/**
-	 * @param string $collaboratorId
-	 * @param string $collaboratorsType - The type of the collaborator, either a user or a group.
 	 * @return AlbumWithFiles[]
 	 */
 	public function getSharedAlbumsForCollaboratorWithFiles(string $collaboratorId, int $collaboratorType): array {
 		$query = $this->connection->getQueryBuilder();
 		$rows = $query
-			->select('fileid', 'mimetype', 'a.album_id', 'size', 'mtime', 'etag', 'location', 'created', 'last_added_photo', 'added', 'owner')
+			->select('fileid', 'mimetype', 'a.album_id', 'size', 'mtime', 'etag', 'location', 'created', 'last_added_photo', 'added', 'owner', 'filters')
 			->selectAlias('f.name', 'file_name')
 			->selectAlias('a.name', 'album_name')
 			->selectAlias('a.user', 'album_user')
@@ -505,6 +483,7 @@ class AlbumMapper {
 			->leftJoin('p', 'filecache', 'f', $query->expr()->eq('p.file_id', 'f.fileid'))
 			->where($query->expr()->eq('collaborator_id', $query->createNamedParameter($collaboratorId)))
 			->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter($collaboratorType, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->isNotNull('a.album_id'))
 			->executeQuery()
 			->fetchAll();
 
@@ -514,7 +493,17 @@ class AlbumMapper {
 			$albumId = (int)$row['album_id'];
 			if ($row['fileid']) {
 				$mimeType = $this->mimeTypeLoader->getMimetypeById((int)$row['mimetype']);
-				$filesByAlbum[$albumId][] = new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
+				$filesByAlbum[$albumId][] = new AlbumFile(
+					(int)$row['fileid'],
+					$row['file_name'],
+					$mimeType,
+					(int)$row['size'],
+					(int)$row['mtime'],
+					$row['etag'],
+					(int)$row['added'],
+					$row['owner'],
+					'user',
+				);
 			}
 
 			if (!isset($albumsById[$albumId])) {
@@ -524,22 +513,34 @@ class AlbumMapper {
 				if ($collaboratorType !== self::TYPE_LINK) {
 					$albumName = $row['album_name'] . ' (' . $row['album_user'] . ')';
 				}
-				$albumsById[$albumId] = new AlbumInfo($albumId, $row['album_user'], $albumName, $row['location'], (int)$row['created'], (int)$row['last_added_photo'], $collaboratorType);
+				$albumsById[$albumId] = new AlbumInfo(
+					$albumId,
+					$row['album_user'],
+					$albumName,
+					$row['location'],
+					(int)$row['created'],
+					(int)$row['last_added_photo'],
+					$row['filters'],
+					$collaboratorType,
+				);
 			}
 		}
 
 		$result = [];
 		foreach ($albumsById as $id => $album) {
-			$result[] = new AlbumWithFiles($album, $this, $filesByAlbum[$id] ?? []);
+			$filesByAlbum[$id] ??= [];
+			$fileIds = array_map(fn ($file) => $file->getFileId(), $filesByAlbum[$id]);
+
+			$smartAlbumFiles = array_filter(
+				$this->filtersManager->getFilesBasedOnFilters($album->getUserId(), $album->getDecodedFilters()),
+				fn ($file) => array_search($file->getFileId(), $fileIds) === false,
+			);
+
+			$result[] = new AlbumWithFiles($album, $this, [...$filesByAlbum[$id], ...$smartAlbumFiles]);
 		}
 		return $result;
 	}
 
-	/**
-	 * @param string $userId
-	 * @param int $albumId
-	 * @return void
-	 */
 	public function deleteUserFromAlbumCollaboratorsList(string $userId, int $albumId): void {
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('photos_albums_collabs')
@@ -552,11 +553,6 @@ class AlbumMapper {
 		$this->removeFilesForUser($albumId, $userId);
 	}
 
-	/**
-	 * @param string $groupId
-	 * @param int $albumId
-	 * @return void
-	 */
 	public function deleteGroupFromAlbumCollaboratorsList(string $groupId, int $albumId): void {
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('photos_albums_collabs')
@@ -567,15 +563,12 @@ class AlbumMapper {
 	}
 
 	/**
-	 * @param string $collaboratorId
-	 * @param int $collaboratorType
-	 * @param int $fileId
 	 * @return AlbumInfo[]
 	 */
 	public function getAlbumsForCollaboratorIdAndFileId(string $collaboratorId, int $collaboratorType, int $fileId): array {
 		$query = $this->connection->getQueryBuilder();
 		$rows = $query
-			->select('a.album_id', 'name', 'user', 'location', 'created', 'last_added_photo')
+			->select('a.album_id', 'name', 'user', 'location', 'created', 'last_added_photo', 'filters')
 			->from('photos_albums_collabs', 'c')
 			->leftJoin('c', 'photos_albums', 'a', $query->expr()->eq('a.album_id', 'c.album_id'))
 			->leftJoin('a', 'photos_albums_files', 'p', $query->expr()->eq('a.album_id', 'p.album_id'))
@@ -593,7 +586,16 @@ class AlbumMapper {
 			$row['name'] . ' (' . $row['user'] . ')',
 			$row['location'],
 			(int)$row['created'],
-			(int)$row['last_added_photo']
+			(int)$row['last_added_photo'],
+			$row['filters'],
 		), $rows);
+	}
+
+	public function setAlbumFilters(int $albumId, string $filters): void {
+		$query = $this->connection->getQueryBuilder();
+		$query->update('photos_albums')
+			->set('filters', $query->createNamedParameter($filters))
+			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_STR)));
+		$query->executeStatement();
 	}
 }

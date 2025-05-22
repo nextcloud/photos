@@ -81,6 +81,7 @@ describe('View list of photos in the main timeline', () => {
 	it('Add file to an album from a timeline', () => {
 		const albumName = 'timeline_test_single'
 		createAnAlbumFromTimeline(albumName)
+		navigateToTimeline('all-media')
 		selectMedia([0])
 		addFilesToAlbumFromTimeline(albumName)
 		navigateToCollection('albums', albumName)
@@ -91,6 +92,7 @@ describe('View list of photos in the main timeline', () => {
 	it('Add multiple files to an album from a timeline', () => {
 		const albumName = 'timeline_test_multiple'
 		createAnAlbumFromTimeline(albumName)
+		navigateToTimeline('all-media')
 		selectMedia([1, 2])
 		addFilesToAlbumFromTimeline(albumName)
 		navigateToCollection('albums', albumName)

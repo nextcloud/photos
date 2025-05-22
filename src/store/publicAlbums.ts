@@ -4,7 +4,7 @@
  */
 
 import type { PhotosRootSate } from '.'
-import type { Album } from './albums'
+import { albumsExtraProps, type Album } from './albums'
 
 export type PublicAlbum = Album & {
 	attributes: {
@@ -12,7 +12,11 @@ export type PublicAlbum = Album & {
 	}
 }
 
-const publicAlbumsPrefix = '/photospublic'
+export const publicAlbumsExtraProps = [
+	...albumsExtraProps,
+	'<nc:original-name />',
+]
+export const publicAlbumsPrefix = '/photospublic'
 
 const getters = {
 	publicAlbums: (_, __, ___, rootGetters): Record<string, PublicAlbum> => rootGetters.collectionsWithPrefix(publicAlbumsPrefix),

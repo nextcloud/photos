@@ -16,7 +16,7 @@ use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\Node;
-use OCP\Files\NotFoundException;
+use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\IFile;
 
 class AlbumPhoto extends CollectionPhoto implements IFile {
@@ -45,7 +45,7 @@ class AlbumPhoto extends CollectionPhoto implements IFile {
 		if ($node) {
 			return $node;
 		} else {
-			throw new NotFoundException('Photo not found for user');
+			throw new NotFound('Photo not found for user');
 		}
 	}
 
@@ -54,7 +54,7 @@ class AlbumPhoto extends CollectionPhoto implements IFile {
 		if ($node instanceof File) {
 			return $node->fopen('r');
 		} else {
-			throw new NotFoundException('Photo is a folder');
+			throw new NotFound('Photo is a folder');
 		}
 	}
 

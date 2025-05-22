@@ -22,13 +22,13 @@ declare global {
 			 * Upload a file from the fixtures folder to a given user storage.
 			 * **Warning**: Using this function will reset the previous session
 			 */
-			uploadFile(user: User, fixture?: string, mimeType?: string, target?: string): Cypress.Chainable<void>,
+			uploadFile(user: User, fixture?: string, mimeType?: string, target?: string): Cypress.Chainable<number>,
 
 			/**
 			 * Upload a raw content to a given user storage.
 			 * **Warning**: Using this function will reset the previous session
 			 */
-			uploadContent(user: User, content: Blob, mimeType: string, target: string): Cypress.Chainable<void>,
+			uploadContent(user: User, content: Blob, mimeType: string, target: string): Cypress.Chainable<number>,
 		}
 	}
 }
@@ -47,10 +47,10 @@ Cypress.env('baseUrl', url)
  */
 Cypress.Commands.add('uploadFile', (user, fixture = 'image.jpg', mimeType = 'image/jpeg', target = `/${fixture}`) => {
 	// get fixture
-	return cy.fixture(fixture, 'base64').then(async file => {
+	return cy.fixture(fixture, 'base64').then(file => {
 		// convert the base64 string to a blob
 		const blob = Cypress.Blob.base64StringToBlob(file, mimeType)
-		cy.uploadContent(user, blob, mimeType, target)
+		return cy.uploadContent(user, blob, mimeType, target)
 	})
 })
 
@@ -64,7 +64,7 @@ Cypress.Commands.add('uploadFile', (user, fixture = 'image.jpg', mimeType = 'ima
  * @param {string} target the target of the file relative to the user root
  */
 Cypress.Commands.add('uploadContent', (user, blob, mimeType, target) => {
-	cy.clearCookies()
+	return cy.clearCookies()
 		.then(async () => {
 			const fileName = basename(target)
 
@@ -73,7 +73,7 @@ Cypress.Commands.add('uploadContent', (user, blob, mimeType, target) => {
 			const filePath = target.split('/').map(encodeURIComponent).join('/')
 			try {
 				const file = new File([blob], fileName, { type: mimeType })
-				await axios({
+				return axios({
 					url: `${rootPath}${filePath}`,
 					method: 'PUT',
 					data: file,
@@ -86,6 +86,7 @@ Cypress.Commands.add('uploadContent', (user, blob, mimeType, target) => {
 					},
 				}).then(response => {
 					cy.log(`Uploaded content as ${fileName}`, response)
+					return Number.parseInt(response.headers['oc-fileid'].split('oc')[0])
 				})
 			} catch (error) {
 				cy.log('error', error)

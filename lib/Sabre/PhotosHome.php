@@ -71,7 +71,7 @@ class PhotosHome implements ICollection {
 
 	public function getChild($name) {
 		return match ($name) {
-			AlbumsHome::NAME => new AlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userConfigService, $this->logger),
+			AlbumsHome::NAME => new AlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userConfigService, $this->logger, $this->userManager),
 			SharedAlbumsHome::NAME => new SharedAlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userManager, $this->groupManager, $this->userConfigService, $this->logger),
 			PlacesHome::NAME => new PlacesHome($this->userId, $this->rootFolder, $this->reverseGeoCoderService, $this->placeMapper),
 			default => throw new NotFound(),
@@ -83,7 +83,7 @@ class PhotosHome implements ICollection {
 	 */
 	public function getChildren(): array {
 		return [
-			new AlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userConfigService, $this->logger),
+			new AlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userConfigService, $this->logger, $this->userManager),
 			new SharedAlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userManager, $this->groupManager, $this->userConfigService, $this->logger),
 			new PlacesHome($this->userId, $this->rootFolder, $this->reverseGeoCoderService, $this->placeMapper),
 		];

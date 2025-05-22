@@ -3,7 +3,7 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<form v-if="!showCollaboratorView" class="album-form" @submit.prevent="submit">
+	<form v-if="!showCollaboratorView" class="album-form" @submit.prevent="submit()">
 		<div class="form-inputs">
 			<NcTextField ref="nameInput"
 				:value.sync="albumName"
@@ -20,6 +20,9 @@
 				</template>
 			</NcTextField>
 		</div>
+
+		<PhotosFiltersDisplay :filters-value="filtersValue" />
+
 		<div class="form-buttons">
 			<span class="left-buttons">
 				<NcButton v-if="displayBackButton"
@@ -78,16 +81,17 @@
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import AccountMultiplePlus from 'vue-material-design-icons/AccountMultiplePlus.vue'
 import Send from 'vue-material-design-icons/Send.vue'
+import type { PropType } from 'vue'
 
 import { NcButton, NcLoadingIcon, NcTextField } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import { translate } from '@nextcloud/l10n'
 import { generateRemoteUrl } from '@nextcloud/router'
-import { getCurrentUser } from '@nextcloud/auth'
+import { resultToNode } from '@nextcloud/files/dav'
 
 import CollaboratorsSelectionForm from './CollaboratorsSelectionForm.vue'
-import type { Album, Collaborator } from '../../store/albums'
-import type { PropType } from 'vue'
+import { albumsPrefix, type Album, type AlbumEditableProperties, type Collaborator } from '../../store/albums'
+import PhotosFiltersDisplay from '../PhotosFilters/PhotosFiltersDisplay.vue'
 
 export default {
 	name: 'AlbumForm',
@@ -100,12 +104,17 @@ export default {
 		NcLoadingIcon,
 		NcTextField,
 		CollaboratorsSelectionForm,
+		PhotosFiltersDisplay,
 	},
 
 	props: {
 		album: {
 			type: Object as PropType<Album|null>,
 			default: null,
+		},
+		filtersValue: {
+			type: Object as PropType<Record<string, unknown>>,
+			default: () => ({}),
 		},
 		displayBackButton: {
 			type: Boolean,
@@ -143,7 +152,7 @@ export default {
 		}
 
 		this.$nextTick(() => {
-			this.$refs.nameInput.$el.getElementsByTagName('input')[0].focus()
+			(this.$refs!.nameInput! as NcTextField).$el.getElementsByTagName('input')[0].focus()
 		})
 	},
 
@@ -163,34 +172,51 @@ export default {
 		async handleCreateAlbum(collaborators: Collaborator[] = []) {
 			try {
 				this.loading = true
-				let album = await this.$store.dispatch('createCollection', {
-					collection: {
-						basename: this.albumName,
-						path: this.albumName,
-						root: `/photos/${getCurrentUser()?.uid}/albums/`,
+
+				const localAlbum = resultToNode({
+					basename: this.albumName,
+					filename: albumsPrefix + '/' + this.albumName,
+					lastmod: '',
+					size: 0,
+					type: 'directory',
+					etag: null,
+					props: {
+						displayname: this.albumName,
+						resourcetype: {},
 						nbItems: 0,
 						location: this.albumLocation,
 						'last-photo': -1,
 						date: moment().format('MMMM YYYY'),
 						collaborators,
+						filters: this.filtersValue,
 						source: generateRemoteUrl(`dav/${this.albumFileName}`),
 					},
-				})
+				}, albumsPrefix)
+
+				let album = await this.$store.dispatch('createCollection', { collection: localAlbum })
 
 				if (album === undefined) {
 					return
 				}
 
-				if (this.albumLocation !== '' || collaborators.length !== 0) {
-					album = await this.$store.dispatch('updateCollection',
-						{
-							collectionFileName: this.albumFileName,
-							properties: {
-								location: this.albumLocation,
-								collaborators,
-							},
-						})
+				const propertiesToUpdate: Partial<AlbumEditableProperties> = {}
+
+				if (this.albumLocation !== '') {
+					propertiesToUpdate.location = this.albumLocation
 				}
+
+				if (this.albumLocation !== '' || collaborators.length !== 0) {
+					propertiesToUpdate.collaborators = collaborators
+				}
+
+				if (Object.keys(this.filtersValue).length > 0) {
+					propertiesToUpdate.filters = this.filtersValue
+				}
+
+				album = await this.$store.dispatch('updateCollection', {
+					collectionFileName: this.albumFileName,
+					properties: propertiesToUpdate,
+				})
 
 				this.$emit('done', { album })
 			} finally {
@@ -204,12 +230,12 @@ export default {
 
 				let album = this.album?.clone() as Album
 
-				if (this.album?.basename !== this.albumName) {
-					album = await this.$store.dispatch('renameCollection', { collectionFileName: this.album?.root + this.album?.path, newBaseName: this.albumName })
+				if (this.album !== null && this.album.basename !== this.albumName) {
+					album = await this.$store.dispatch('renameCollection', { collectionFileName: this.album.root + this.album.path, newBaseName: this.albumName }) as Album
 				}
 
-				if (this.album?.attributes.location !== this.albumLocation) {
-					album = await this.$store.dispatch('updateCollection', { collectionFileName: album.root + album.path, properties: { location: this.albumLocation } })
+				if (this.album !== null && this.album.attributes.location !== this.albumLocation) {
+					album = await this.$store.dispatch('updateCollection', { collectionFileName: album.root + album.path, properties: { location: this.albumLocation } }) as Album
 				}
 
 				this.$emit('done', { album })
@@ -230,6 +256,7 @@ export default {
 .album-form {
 	display: flex;
 	flex-direction: column;
+	justify-content: space-between;
 	height: 350px;
 	padding: calc(var(--default-grid-baseline) * 4);
 
@@ -242,7 +269,6 @@ export default {
 	}
 
 	.form-inputs {
-		flex: 1;
 		display: flex;
 		flex-direction: column;
 		gap: calc(var(--default-grid-baseline) * 4);

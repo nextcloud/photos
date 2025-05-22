@@ -1,0 +1,21 @@
+SPDX-License-Identifier: AGPL-3.0-or-later
+SPDX-License-Identifier: BSD-2-Clause
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: Boris Seang
+SPDX-FileCopyrightText: John Molakvoæ <skjnldsv@protonmail.com>
+SPDX-FileCopyrightText: Mickael Bouchaud
+SPDX-FileCopyrightText: leaflet developers
+
+This file is generated from multiple sources. Included packages:
+- leaflet
+	- version: 1.9.4
+	- license: BSD-2-Clause
+- leaflet-defaulticon-compatibility
+	- version: 0.1.2
+	- license: BSD-2-Clause
+- photos
+	- version: 5.0.0-dev.1
+	- license: AGPL-3.0-or-later
+- vue2-leaflet
+	- version: 2.7.1
+	- license: MIT
