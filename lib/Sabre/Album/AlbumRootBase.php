@@ -14,7 +14,6 @@ use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Album\AlbumWithFiles;
 use OCA\Photos\Service\UserConfigService;
 use OCP\Files\Folder;
-use OCP\Files\InvalidDirectoryException;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\IUserManager;
@@ -56,9 +55,9 @@ abstract class AlbumRootBase implements ICollection, ICopyTarget {
 	/**
 	 * We cannot create files in an Album
 	 * We add the file to the default Photos folder and then link it there.
-	 * @param string $data
+	 * @param string|resource|null $data
 	 */
-	public function createFileInCurrentUserFolder(string $name, ?string $data = null): string {
+	public function createFileInCurrentUserFolder(string $name, mixed $data = null): string {
 		try {
 			[$photosLocation, $userFolder] = $this->getPhotosLocationInfo();
 
@@ -75,7 +74,7 @@ abstract class AlbumRootBase implements ICollection, ICopyTarget {
 			}
 
 			if ($photosFolder->isShared()) {
-				throw new InvalidDirectoryException('The destination is a received share');
+				throw new Forbidden('The destination is a received share');
 			}
 
 			// Check for conflict and rename the file accordingly
@@ -109,7 +108,7 @@ abstract class AlbumRootBase implements ICollection, ICopyTarget {
 	}
 
 	final public function createDirectory($name) {
-		throw new Forbidden('Not allowed to create directories in this folder');
+		throw new Forbidden('Not allowed to create directories in an album');
 	}
 
 	abstract public function getAlbumPhoto(AlbumFile $file): AlbumPhoto;
@@ -178,8 +177,20 @@ abstract class AlbumRootBase implements ICollection, ICopyTarget {
 	 */
 	abstract public function getCollaborators(): array;
 
+	public function setCollaborators(array $collaborators): array {
+		throw new Forbidden('Setting the collaborators is not allowed on this type of album');
+	}
+
+	public function setLocation(string $location): void {
+		throw new Forbidden('Setting the location is not allowed on this type of album');
+	}
+
 	final public function getFilters(): ?string {
 		return $this->album->getAlbum()->getFilters();
+	}
+
+	public function setFilters(string $filters) {
+		throw new Forbidden('Setting the filters is not allowed on this type of album');
 	}
 
 	public function getCover(): int {

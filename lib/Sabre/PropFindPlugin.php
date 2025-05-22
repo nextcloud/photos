@@ -19,6 +19,8 @@ use OCP\Files\DavUtil;
 use OCP\Files\NotFoundException;
 use OCP\FilesMetadata\IFilesMetadataManager;
 use OCP\IPreview;
+use OCP\IUserSession;
+use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\ICollection;
 use Sabre\DAV\INode;
 use Sabre\DAV\PropFind;
@@ -45,6 +47,7 @@ class PropFindPlugin extends ServerPlugin {
 	public function __construct(
 		private readonly IPreview $previewManager,
 		private readonly IFilesMetadataManager $filesMetadataManager,
+		private readonly IUserSession $userSession,
 	) {
 	}
 
@@ -129,7 +132,7 @@ class PropFindPlugin extends ServerPlugin {
 
 	public function handleUpdateProperties($path, PropPatch $propPatch): void {
 		$node = $this->tree->getNodeForPath($path);
-		if ($node instanceof AlbumRoot) {
+		if ($node instanceof AlbumRootBase) {
 			$propPatch->handle(self::LOCATION_PROPERTYNAME, function ($location) use ($node) {
 				if ($location instanceof Complex) {
 					$location = $location->getXml();
@@ -149,6 +152,10 @@ class PropFindPlugin extends ServerPlugin {
 
 		if ($node instanceof AlbumPhoto) {
 			$propPatch->handle(self::FAVORITE_PROPERTYNAME, function ($favoriteState) use ($node) {
+				if ($this->userSession->getUser() !== $node->getFileInfo()->getOwner()) {
+					throw new Forbidden('Only the owner can favorite its photos');
+				}
+
 				$node->setFavoriteState($favoriteState);
 				return true;
 			});

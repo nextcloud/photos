@@ -53,11 +53,11 @@ class AlbumsHome implements ICollection {
 	 * @return never
 	 */
 	public function setName($name): never {
-		throw new Forbidden('Permission denied to rename this folder');
+		throw new Forbidden('Permission denied to rename albums home');
 	}
 
 	public function createFile($name, $data = null): never {
-		throw new Forbidden('Not allowed to create files in this folder');
+		throw new Forbidden('Not allowed to create files in albums');
 	}
 
 	/**
