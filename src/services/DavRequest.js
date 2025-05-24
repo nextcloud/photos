@@ -8,19 +8,15 @@ const props = `
 	<d:getetag />
 	<d:getlastmodified />
 	<d:resourcetype />
-	<nc:face-detections />
-	<nc:face-preview-image />
 	<nc:metadata-photos-size />
 	<nc:metadata-photos-original_date_time />
 	<nc:metadata-files-live-photo />
 	<nc:metadata-blurhash/>
 	<nc:has-preview />
-	<nc:realpath />
 	<nc:hidden />
 	<oc:favorite />
 	<oc:fileid />
 	<oc:permissions />
-	<nc:nbItems />
 `
 
 export { props }
