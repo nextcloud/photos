@@ -83,14 +83,38 @@ export default async function(_options: Partial<PhotoSearchOptions> = {}): Promi
 			}).join('\n')}</d:or>`
 		: ''
 
-	const sourceFolders = store.state.userConfig.photosSourceFolders
-		.map(folder => `
-			<d:scope>
-				<d:href>${joinPaths(defaultRootPath, folder)}</d:href>
-				<d:depth>infinity</d:depth>
-			</d:scope>`,
-		)
+	// Ensure photosSourceFolders is an array and contains valid strings
+	const sourceFolders = Array.isArray(store.state.userConfig?.photosSourceFolders)
+		? store.state.userConfig.photosSourceFolders
+		: []
+
+	if (sourceFolders.length === 0) {
+		logger.error('No valid source folders configured. Please check your photos settings.')
+		return []
+	}
+
+	const validSourceFolders = sourceFolders
+		.filter(folder => typeof folder === 'string' && folder.trim() !== '')
+		.map(folder => {
+			try {
+				const path = joinPaths(defaultRootPath, folder.trim())
+				return `
+				<d:scope>
+					<d:href>${path}</d:href>
+					<d:depth>infinity</d:depth>
+				</d:scope>`
+			} catch (error) {
+				logger.error('Error processing source folder:', { folder, error })
+				return null
+			}
+		})
+		.filter(Boolean) // Remove any null entries from failed processing
 		.join('\n')
+
+	if (!validSourceFolders) {
+		logger.error('No valid source folders could be processed')
+		return []
+	}
 
 	options.data = `<?xml version="1.0" encoding="UTF-8"?>
 		<d:searchrequest xmlns:d="DAV:"
@@ -105,7 +129,7 @@ export default async function(_options: Partial<PhotoSearchOptions> = {}): Promi
 					</d:prop>
 				</d:select>
 				<d:from>
-					${sourceFolders}
+					${validSourceFolders}
 				</d:from>
 				<d:where>
 					<d:and>
