@@ -39,7 +39,6 @@ SPDX-FileCopyrightText: Mapbox
 SPDX-FileCopyrightText: Julian Gruber
 SPDX-FileCopyrightText: Joyent
 SPDX-FileCopyrightText: José F. Romaniello <jfromaniello@gmail.com> (http://joseoncode.com)
-SPDX-FileCopyrightText: John-David Dalton <john.david.dalton@gmail.com> (http://allyoucanleet.com/)
 SPDX-FileCopyrightText: John Molakvoæ <skjnldsv@protonmail.com>
 SPDX-FileCopyrightText: John Molakvoæ (skjnldsv) <skjnldsv@protonmail.com>
 SPDX-FileCopyrightText: Jeff Sagal <sagalbot@gmail.com>
@@ -65,7 +64,6 @@ SPDX-FileCopyrightText: Arnout Kazemier
 SPDX-FileCopyrightText: Antoni Andre <antoniandre.web@gmail.com>
 SPDX-FileCopyrightText: Anthony Fu <https://github.com/antfu>
 SPDX-FileCopyrightText: Anthony Fu <anthonyfu117@hotmail.com>
-SPDX-FileCopyrightText: Andris Reinman
 SPDX-FileCopyrightText: Andrea Giammarchi
 SPDX-FileCopyrightText: Amit Gupta (https://solothought.com)
 SPDX-FileCopyrightText: Amit Gupta (https://amitkumargupta.work/)
@@ -121,8 +119,11 @@ This file is generated from multiple sources. Included packages:
 - @nextcloud/logger
 	- version: 2.7.0
 	- license: GPL-3.0-or-later
+- @nextcloud/l10n
+	- version: 3.2.0
+	- license: GPL-3.0-or-later
 - @nextcloud/moment
-	- version: 1.3.2
+	- version: 1.3.4
 	- license: GPL-3.0-or-later
 - @nextcloud/router
 	- version: 3.0.1
@@ -259,9 +260,6 @@ This file is generated from multiple sources. Included packages:
 - layerr
 	- version: 0.1.2
 	- license: MIT
-- lodash.get
-	- version: 4.4.2
-	- license: MIT
 - md5
 	- version: 2.3.0
 	- license: BSD-3-Clause
@@ -345,9 +343,6 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - nested-property
 	- version: 4.0.0
-	- license: MIT
-- node-gettext
-	- version: 3.0.0
 	- license: MIT
 - buffer
 	- version: 6.0.3
