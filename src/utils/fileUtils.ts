@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import { getLanguage } from '@nextcloud/l10n'
-import { FileType, type Node } from '@nextcloud/files'
+import { FileType, Permission, type Node } from '@nextcloud/files'
 import { generateUrl } from '@nextcloud/router'
 
 import { isNumber } from './numberUtils.js'
@@ -79,6 +79,14 @@ export function sortCompareFileInfo(fileInfo1: FoldersNode, fileInfo2: FoldersNo
 }
 
 export function toViewerFileInfo(file: Node) {
+	let permissions = ''
+
+	if ((file.permissions & Permission.CREATE) === Permission.CREATE) { permissions += 'CK' }
+	if ((file.permissions & Permission.UPDATE) === Permission.UPDATE) { permissions += 'WNV' }
+	if ((file.permissions & Permission.READ) === Permission.READ) { permissions += 'G' }
+	if ((file.permissions & Permission.DELETE) === Permission.DELETE) { permissions += 'D' }
+	if ((file.permissions & Permission.SHARE) === Permission.SHARE) { permissions += 'R' }
+
 	return {
 		fileid: file.fileid,
 		basename: file.basename,
@@ -90,6 +98,7 @@ export function toViewerFileInfo(file: Node) {
 		hasPreview: file.attributes.hasPreview,
 		previewUrl: file.attributes.previewUrl ?? generateUrl(`/apps/photos/api/v1/preview/${file.fileid}?x=2048&y=2048`),
 		etag: file.attributes.etag,
+		permissions,
 	}
 }
 
@@ -103,5 +112,6 @@ export function legacyToViewerFileInfo(file: FoldersNode) {
 		source: file.source,
 		hasPreview: file.hasPreview,
 		etag: file.etag,
+		permissions: file.permissions,
 	}
 }
