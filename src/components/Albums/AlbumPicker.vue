@@ -53,16 +53,17 @@
 <script lang='ts'>
 import Plus from 'vue-material-design-icons/Plus.vue'
 import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
+import { defineComponent } from 'vue'
 
 import { NcButton, NcListItem, NcLoadingIcon, NcUserBubble } from '@nextcloud/vue'
 import { generateUrl } from '@nextcloud/router'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { getCurrentUser } from '@nextcloud/auth'
 
-import FetchCollectionsMixin from '../../mixins/FetchCollectionsMixin.js'
+import FetchCollectionsMixin from '../../mixins/FetchCollectionsMixin.ts'
 import AlbumForm from './AlbumForm.vue'
-import type { Album } from '../../store/albums.js'
-import { defineComponent } from 'vue'
+import { albumsExtraProps } from '../../store/albums.ts'
+import type { Album } from '../../store/albums.ts'
 
 export default defineComponent({
 	name: 'AlbumPicker',
@@ -113,8 +114,8 @@ export default defineComponent({
 
 	methods: {
 		async fetchAlbumList() {
-			await this.fetchCollections(`/photos/${getCurrentUser()?.uid}/albums`, ['<nc:location />', '<nc:dateRange />', '<nc:collaborators />'])
-			await this.fetchCollections(`/photos/${getCurrentUser()?.uid}/sharedalbums`, ['<nc:location />', '<nc:dateRange />', '<nc:collaborators />'])
+			await this.fetchCollections(`/photos/${getCurrentUser()?.uid}/albums`, albumsExtraProps)
+			await this.fetchCollections(`/photos/${getCurrentUser()?.uid}/sharedalbums`, albumsExtraProps)
 		},
 
 		albumCreatedHandler() {

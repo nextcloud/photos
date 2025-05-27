@@ -20,6 +20,8 @@ class AlbumFile extends PhotosFile {
 		string $etag,
 		private readonly int $added,
 		private readonly string $owner,
+		/** @var 'user'|'filters' */
+		public readonly string $origin,
 	) {
 		parent::__construct(
 			$fileId,

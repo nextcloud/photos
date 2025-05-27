@@ -50,6 +50,7 @@ import CollectionCover from '../components/Collection/CollectionCover.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
 import type { Album } from '../store/albums.js'
+import { albumsExtraProps } from '../store/albums.ts'
 
 export default {
 	name: 'SharedAlbums',
@@ -94,7 +95,7 @@ export default {
 		fetchSharedAlbums() {
 			this.fetchCollections(
 				`/photos/${getCurrentUser()?.uid}/sharedalbums`,
-				['<nc:location />', '<nc:dateRange />', '<nc:collaborators />'],
+				albumsExtraProps,
 			)
 		},
 

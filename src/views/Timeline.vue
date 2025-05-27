@@ -27,9 +27,10 @@
 				<!-- TODO: UploadPicker -->
 				<NcButton v-if="selectedFileIds.length === 0"
 					ref="newAlbumButton"
-					:aria-label="t('photos', 'Create new album')"
+					:aria-label="createAlbumButtonLabel"
+					data-cy-header-action="create-album"
 					@click="showAlbumCreationForm = true">
-					{{ t('photos', 'Create new album') }}
+					{{ createAlbumButtonLabel }}
 					<template #icon>
 						<PlusBoxMultiple />
 					</template>
@@ -39,6 +40,7 @@
 					<NcButton :close-after-click="true"
 						type="primary"
 						:aria-label="t('photos', 'Add to album')"
+						data-cy-header-action="add-to-album"
 						@click="showAlbumPicker = true">
 						<template #icon>
 							<Plus />
@@ -50,6 +52,7 @@
 
 					<NcButton v-if="selectedFileIds.length > 0"
 						:aria-label="t('photos', 'Unselect all')"
+						data-cy-header-action="unselect-all"
 						@click="resetSelection">
 						<template #icon>
 							<Close />
@@ -60,7 +63,9 @@
 					</NcButton>
 
 					<NcActions :aria-label="t('photos', 'Open actions menu')">
-						<ActionDownload :selected-file-ids="selectedFileIds" :title="t('photos', 'Download selected files')">
+						<ActionDownload :selected-file-ids="selectedFileIds"
+							:title="t('photos', 'Download selected files')"
+							data-cy-header-action="download-selection">
 							<Download slot="icon" />
 						</ActionDownload>
 
@@ -68,6 +73,7 @@
 
 						<NcActionButton :close-after-click="true"
 							:aria-label="t('photos', 'Delete selection')"
+							data-cy-header-action="delete-selection"
 							@click="deleteSelection">
 							{{ t('photos', 'Delete selection') }}
 							<template #icon>
@@ -79,7 +85,7 @@
 
 				<NcButton :title="t('photos', 'Toggle filter')"
 					:aria-label="t('photos', 'Toggle filter')"
-					data-cy-timeline-action="toggle-filters"
+					data-cy-header-action="toggle-filters"
 					type="tertiary"
 					@click="toggleFilters">
 					<template #icon>
@@ -90,10 +96,10 @@
 			</div>
 		</HeaderNavigation>
 
-		<TimelineFilters v-if="showFilters"
-			v-model="extraFilters"
+		<PhotosFiltersInput v-if="showFilters"
+			:value="filters"
 			class="timeline__filters"
-			@input="handleFiltersChange" />
+			@update:value="handleFiltersChange" />
 
 		<FilesListViewer ref="filesListViewer"
 			:container-element="appContent"
@@ -129,7 +135,7 @@
 			<h2 class="timeline__heading">
 				{{ t('photos', 'New album') }}
 			</h2>
-			<AlbumForm @done="showAlbumCreationForm = false" />
+			<AlbumForm :filters-value="filters" @done="handleFormCreationDone" />
 		</NcModal>
 
 		<NcModal v-if="showAlbumPicker"
@@ -157,10 +163,10 @@ import moment from '@nextcloud/moment'
 import { translate } from '@nextcloud/l10n'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
-import { allMimes } from '../services/AllowedMimes.js'
-import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
-import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
-import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
+import { allMimes } from '../services/AllowedMimes.ts'
+import FetchFilesMixin from '../mixins/FetchFilesMixin.ts'
+import FilesByMonthMixin from '../mixins/FilesByMonthMixin.ts'
+import FilesSelectionMixin from '../mixins/FilesSelectionMixin.ts'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import File from '../components/File.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
@@ -169,11 +175,11 @@ import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import ActionDownload from '../components/Actions/ActionDownload.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
-import TimelineFilters from '../components/TimelineFilters/TimelineFilters.vue'
-import { configChangedEvent } from '../store/userConfig.js'
-import type { Album } from '../store/albums.js'
-import { toViewerFileInfo } from '../utils/fileUtils.js'
-import timelineFilters from '../services/TimelineFilters'
+import PhotosFiltersInput from '../components/PhotosFilters/PhotosFiltersInput.vue'
+import { configChangedEvent } from '../store/userConfig.ts'
+import type { Album } from '../store/albums.ts'
+import { toViewerFileInfo } from '../utils/fileUtils.ts'
+import photosFilters from '../services/PhotosFilters'
 
 export default {
 	name: 'Timeline',
@@ -198,7 +204,7 @@ export default {
 		HeaderNavigation,
 		PhotosSourceLocationsSettings,
 		AlertCircle,
-		TimelineFilters,
+		PhotosFiltersInput,
 		FilterIcon: Filter,
 		FilterOff,
 	},
@@ -250,7 +256,7 @@ export default {
 			showAlbumPicker: false,
 			appContent: document.getElementById('app-content-vue'),
 			showFilters: false,
-			extraFilters: {} as Record<string, unknown>,
+			filters: {} as Record<string, unknown>,
 		}
 	},
 
@@ -258,11 +264,19 @@ export default {
 		files() {
 			return this.$store.state.files.files
 		},
+
+		createAlbumButtonLabel() {
+			if (Object.values(this.filters).filter(v => v !== undefined).length > 0) {
+				return this.t('photos', 'Create new album from filters')
+			} else {
+				return this.t('photos', 'Create new album')
+			}
+		},
 	},
 
 	watch: {
 		'$route.path'() {
-			this.extraFilters = {}
+			this.filters = {}
 		},
 	},
 
@@ -280,8 +294,8 @@ export default {
 				mimesType: this.mimesType,
 				onThisDay: this.onThisDay,
 				onlyFavorites: this.onlyFavorites,
-				extraFilters: Object.entries(this.extraFilters)
-					.map(([key, value]) => timelineFilters.find(filter => filter.id === key)?.getQuery(value))
+				extraFilters: Object.entries(this.filters)
+					.map(([key, value]) => photosFilters.find(filter => filter.id === key)?.getQuery(value))
 					.join('\n'),
 			})
 		},
@@ -319,14 +333,20 @@ export default {
 		toggleFilters() {
 			this.showFilters = !this.showFilters
 			if (!this.showFilters) {
-				this.extraFilters = {}
+				this.filters = {}
 				this.resetFetchFilesState()
 			}
 		},
 
-		handleFiltersChange() {
+		handleFiltersChange(filters) {
+			this.filters = filters
 			this.resetFetchFilesState()
 			this.getContent()
+		},
+
+		handleFormCreationDone({ album }: { album: Album}) {
+			this.showAlbumCreationForm = false
+			this.$router.push(`/albums/${album.basename}`)
 		},
 
 		t: translate,

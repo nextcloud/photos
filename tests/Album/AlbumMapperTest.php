@@ -12,6 +12,7 @@ use OCA\Photos\Album\AlbumFile;
 use OCA\Photos\Album\AlbumInfo;
 use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Album\AlbumWithFiles;
+use OCA\Photos\Filters\FiltersManager;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
@@ -22,29 +23,23 @@ use OCP\IL10N;
 use OCP\IUserManager;
 use OCP\Security\ISecureRandom;
 use OCP\Server;
+use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
 /**
  * @group DB
  */
 class AlbumMapperTest extends TestCase {
-	/** @var IDBConnection */
-	private $connection;
+	private IDBConnection $connection;
 	private array $createdFiles = [];
-	/** @var IMimeTypeLoader */
-	private $mimeLoader;
-	/** @var AlbumMapper */
-	private $mapper;
-	/** @var ITimeFactory|MockObject */
-	private $timeFactory;
-	/** @var IUserManager|MockObject */
-	private $userManager;
-	/** @var IGroupManager|MockObject */
-	private $groupManager;
-	/** @var IL10N|MockObject */
-	private $l10n;
-	/** @var ISecureRandom|MockObject */
-	private $secureRandom;
+	private IMimeTypeLoader $mimeLoader;
+	private AlbumMapper $mapper;
+	private ITimeFactory&MockObject $timeFactory;
+	private IUserManager&MockObject $userManager;
+	private IGroupManager&MockObject $groupManager;
+	private IL10N&MockObject $l10n;
+	private ISecureRandom&MockObject $secureRandom;
+	private FiltersManager&MockObject $filtersManager;
 	private int $time = 100;
 
 	protected function setUp(): void {
@@ -58,6 +53,7 @@ class AlbumMapperTest extends TestCase {
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->l10n = $this->createMock(IL10N::class);
 		$this->secureRandom = $this->createMock(ISecureRandom::class);
+		$this->filtersManager = $this->createMock(FiltersManager::class);
 		$this->timeFactory->method('getTime')->willReturnCallback(fn (): int => $this->time);
 
 		if ($this->connection->getDatabaseProvider() === IDBConnection::PLATFORM_ORACLE) {
@@ -72,6 +68,7 @@ class AlbumMapperTest extends TestCase {
 			$this->groupManager,
 			$this->l10n,
 			$this->secureRandom,
+			$this->filtersManager,
 		);
 	}
 

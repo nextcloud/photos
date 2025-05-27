@@ -8,9 +8,15 @@ import { navigateToTimeline } from './timelines'
 
 export function createAnAlbumFromTimeline(albumName: string) {
 	navigateToTimeline('all-media')
-	cy.contains('Create new album').click()
+	cy.get('[data-cy-header-action="create-album"]').click()
 	cy.get('form [name="name"]').type(albumName)
+	cy.intercept({ times: 1, method: 'MKCOL', url: `/remote.php/dav/photos/*/albums/${albumName}` }).as('mkcol')
+	cy.intercept({ times: 1, method: 'PROPPATCH', url: `/remote.php/dav/photos/*/albums/${albumName}` }).as('propPatch')
+	cy.intercept({ times: 2, method: 'PROPFIND', url: `/remote.php/dav/photos/*/albums/${albumName}` }).as('propFind')
 	cy.contains('Create album').click()
+	cy.wait('@mkcol')
+	cy.wait('@propPatch')
+	cy.wait('@propFind')
 }
 
 export function createAnAlbumFromAlbums(albumName: string) {

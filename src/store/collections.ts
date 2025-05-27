@@ -58,10 +58,9 @@ const mutations = {
 	 * Add files to an collection.
 	 */
 	setCollectionFiles(state: CollectionState, { collectionFileName, fileIds = [] }: { collectionFileName: string, fileIds: string[]}) {
-		const collectionFiles = state.collectionsFiles[collectionFileName] || []
 		state.collectionsFiles = {
 			...state.collectionsFiles,
-			[collectionFileName]: [...new Set([...collectionFiles, ...fileIds])],
+			[collectionFileName]: fileIds,
 		}
 
 		if (state.collections[collectionFileName] !== undefined) {

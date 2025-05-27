@@ -57,8 +57,8 @@ class SizeMetadataProvider implements IEventListener {
 		// The image might have a rotation stored in the EXIF data.
 		// If that is the case and the rotation is 90/270 degrees the width and height need to be swapped.
 		// This is necessary because the clients will take the rotation into account when displaying the image.
-		if ($event->getMetadata()->hasKey('photos-ifd0')) {
-			$ifd0 = $event->getMetadata()->getArray('photos-ifd0');
+		if ($event->getMetadata()->hasKey(ExifMetadataProvider::METADATA_KEY_IFD0)) {
+			$ifd0 = $event->getMetadata()->getArray(ExifMetadataProvider::METADATA_KEY_IFD0);
 			if (array_key_exists('Orientation', $ifd0)) {
 				/** @var int $orientation */
 				$orientation = $ifd0['Orientation'];

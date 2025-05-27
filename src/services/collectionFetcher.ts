@@ -135,6 +135,8 @@ function formatCollection(rawCollection: RawCollection, root: string): Collectio
 		rawCollection.props.date = t('photos', '{startDate} to {endDate}', dateRangeFormatted)
 	}
 
+	rawCollection.props.filters = JSON.parse((rawCollection.props.filters as string|null) ?? '{}')
+
 	return resultToNode(rawCollection, root) as Collection
 }
 

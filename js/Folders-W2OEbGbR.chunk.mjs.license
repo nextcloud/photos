@@ -1,0 +1,12 @@
+SPDX-License-Identifier: AGPL-3.0-or-later
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: Corentin Mors <corentin@pixelswap.fr>
+SPDX-FileCopyrightText: John Molakvoæ <skjnldsv@protonmail.com>
+
+This file is generated from multiple sources. Included packages:
+- photos
+	- version: 5.0.0-dev.1
+	- license: AGPL-3.0-or-later
+- vue-virtual-grid
+	- version: 2.5.0
+	- license: MIT
