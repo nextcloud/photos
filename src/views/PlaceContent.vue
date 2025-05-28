@@ -46,7 +46,7 @@
 import type { Collection } from '../services/collectionFetcher.js'
 
 import { translate } from '@nextcloud/l10n'
-import isMobile from '@nextcloud/vue/mixins/isMobile'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
@@ -67,16 +67,20 @@ export default {
 		HeaderNavigation,
 	},
 
-	mixins: [
-		FetchCollectionContentMixin,
-		isMobile,
-	],
+	mixins: [FetchCollectionContentMixin],
 
 	props: {
 		placeName: {
 			type: String,
 			default: '/',
 		},
+	},
+
+	setup() {
+		const isMobile = useIsMobile()
+		return {
+			isMobile,
+		}
 	},
 
 	data() {
