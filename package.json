@@ -24,8 +24,7 @@
   "type": "module",
   "scripts": {
     "build": "vite --mode production build",
-    "cypress": "npm run cypress:component && npm run cypress:e2e",
-    "cypress:component": "cypress run --component",
+    "cypress": "npm run cypress:e2e",
     "cypress:e2e": "cypress run --e2e",
     "cypress:gui": "cypress open",
     "dev": "export NODE_ENV=development; vite --mode development build",

@@ -166,7 +166,7 @@ import type { Album } from '../store/albums.ts'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { translate } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
-import isMobile from '@nextcloud/vue/mixins/isMobile'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -240,7 +240,6 @@ export default {
 		FetchFilesMixin,
 		FilesSelectionMixin,
 		FilesByMonthMixin,
-		isMobile,
 	],
 
 	beforeRouteLeave(to, from, next) {
@@ -268,6 +267,13 @@ export default {
 			type: String,
 			required: true,
 		},
+	},
+
+	setup() {
+		const isMobile = useIsMobile()
+		return {
+			isMobile,
+		}
 	},
 
 	data() {

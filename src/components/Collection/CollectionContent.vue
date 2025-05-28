@@ -46,15 +46,12 @@
 </template>
 
 <script lang='ts'>
+import type { PropType } from 'vue'
 import type { PublicAlbum } from '../../store/publicAlbums.js'
 
 import { translate } from '@nextcloud/l10n'
-import isMobile from '@nextcloud/vue/mixins/isMobile'
-import {
-	type PropType,
-
-	defineComponent,
-} from 'vue'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
+import { defineComponent } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
 import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
@@ -74,10 +71,7 @@ export default defineComponent({
 		FileComponent,
 	},
 
-	mixins: [
-		FilesSelectionMixin,
-		isMobile,
-	],
+	mixins: [FilesSelectionMixin],
 
 	props: {
 		collection: {
@@ -104,6 +98,12 @@ export default defineComponent({
 			type: [Error, Number],
 			default: null,
 		},
+	},
+
+	setup() {
+		return {
+			isMobile: useIsMobile(),
+		}
 	},
 
 	data() {

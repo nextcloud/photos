@@ -186,7 +186,7 @@
 import type { Album } from '../store/albums.js'
 
 import { translate } from '@nextcloud/l10n'
-import isMobile from '@nextcloud/vue/mixins/isMobile'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
@@ -256,7 +256,6 @@ export default {
 	mixins: [
 		FetchCollectionContentMixin,
 		FetchFilesMixin,
-		isMobile,
 	],
 
 	props: {
@@ -264,6 +263,13 @@ export default {
 			type: String,
 			default: '/',
 		},
+	},
+
+	setup() {
+		const isMobile = useIsMobile()
+		return {
+			isMobile,
+		}
 	},
 
 	data() {
