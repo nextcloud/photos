@@ -3,7 +3,7 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<router-link class="collection-cover" :to="link">
+	<RouterLink class="collection-cover" :to="link">
 		<img
 			v-if="coverUrl !== ''"
 			class="collection-cover__image"
@@ -21,10 +21,11 @@
 				<slot name="subtitle" />
 			</div>
 		</div>
-	</router-link>
+	</RouterLink>
 </template>
 
 <script lang='ts'>
+import { RouterLink } from 'vue-router'
 import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
 
 export default {
@@ -32,6 +33,7 @@ export default {
 
 	components: {
 		ImageMultiple,
+		RouterLink,
 	},
 
 	props: {

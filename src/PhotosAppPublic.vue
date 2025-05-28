@@ -37,7 +37,7 @@ import videoplaceholder from './assets/video.svg'
 import logger from './services/logger.js'
 
 export default {
-	name: 'PhotosPublic',
+	name: 'PhotosAppPublic',
 	components: {
 		NcAppContent,
 		NcContent,

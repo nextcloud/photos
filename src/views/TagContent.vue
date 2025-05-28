@@ -35,7 +35,7 @@
 			:file-ids="fileIds"
 			:base-height="isMobile ? 120 : 200"
 			:loading="loading">
-			<File
+			<FileComponent
 				slot-scope="{ file, distance }"
 				:file="files[file.id]"
 				:allow-selection="true"
@@ -51,7 +51,7 @@
 import { translatePlural as n, translate as t } from '@nextcloud/l10n'
 import { NcActionButton, NcActions, NcEmptyContent, NcLoadingIcon, useIsMobile } from '@nextcloud/vue'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
-import File from '../components/File.vue'
+import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
@@ -61,7 +61,7 @@ import { toViewerFileInfo } from '../utils/fileUtils.js'
 export default {
 	name: 'TagContent',
 	components: {
-		File,
+		FileComponent,
 		FilesListViewer,
 		NcEmptyContent,
 		NcActions,

@@ -73,7 +73,7 @@
 			:container-element="appContent"
 			:file-ids="faceFileIds"
 			:loading="loadingFiles || loadingFaces">
-			<File
+			<FileComponent
 				slot-scope="{ file, distance }"
 				:file="files[file.id]"
 				:allow-selection="true"
@@ -104,7 +104,7 @@ import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 import Download from 'vue-material-design-icons/Download.vue'
 import Star from 'vue-material-design-icons/Star.vue'
 import FaceMergeForm from '../components/Faces/FaceMergeForm.vue'
-import File from '../components/File.vue'
+import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
@@ -121,7 +121,7 @@ export default {
 		ArrowLeft,
 		FaceMergeForm,
 		FilesListViewer,
-		File,
+		FileComponent,
 		NcLoadingIcon,
 		NcEmptyContent,
 		NcActions,

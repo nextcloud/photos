@@ -7,8 +7,8 @@ import type { AxiosError } from 'axios'
 import type { FileStat, ResponseDataDetailed, StatOptions } from 'webdav'
 
 import { resultToNode } from '@nextcloud/files/dav'
-import { davClient } from './DavClient'
-import { getPropFind } from './DavRequest'
+import { davClient } from './DavClient.ts'
+import { getPropFind } from './DavRequest.ts'
 
 export async function fetchFile(fileName: string, options: StatOptions = {}) {
 	try {

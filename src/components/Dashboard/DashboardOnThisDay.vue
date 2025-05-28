@@ -14,7 +14,7 @@
 			</template>
 		</NcEmptyContent>
 		<template v-else>
-			<File
+			<FileComponent
 				class="on-this-day-dashboard__file"
 				:file="items[0]"
 				:allow-selection="false" />
@@ -26,10 +26,11 @@
 </template>
 
 <script lang='ts'>
+import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { NcButton, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
-import Image from 'vue-material-design-icons/Image.vue'
-import File from '../File.vue'
+import { default as ImageIcon } from 'vue-material-design-icons/Image.vue'
+import FileComponent from '../FileComponent.vue'
 import { allMimes } from '../../services/AllowedMimes.js'
 import logger from '../../services/logger.js'
 import getPhotos from '../../services/PhotoSearch.js'
@@ -37,11 +38,11 @@ import getPhotos from '../../services/PhotoSearch.js'
 export default {
 	name: 'DashboardOnThisDay',
 	components: {
-		File,
+		FileComponent,
 		NcButton,
 		NcLoadingIcon,
 		NcEmptyContent,
-		ImageIcon: Image,
+		ImageIcon,
 	},
 
 	data() {
@@ -70,6 +71,10 @@ export default {
 		} finally {
 			this.loading = false
 		}
+	},
+
+	methods: {
+		t,
 	},
 }
 </script>

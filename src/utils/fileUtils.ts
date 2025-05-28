@@ -1,4 +1,4 @@
-import type { FoldersNode } from '../services/FolderContent.js'
+import type { FoldersNode } from '../services/FolderContent.ts'
 
 import {
 	type Node,
@@ -85,11 +85,21 @@ export function sortCompareFileInfo(fileInfo1: FoldersNode, fileInfo2: FoldersNo
 export function toViewerFileInfo(file: Node) {
 	let permissions = ''
 
-	if ((file.permissions & Permission.CREATE) === Permission.CREATE) { permissions += 'CK' }
-	if ((file.permissions & Permission.UPDATE) === Permission.UPDATE) { permissions += 'WNV' }
-	if ((file.permissions & Permission.READ) === Permission.READ) { permissions += 'G' }
-	if ((file.permissions & Permission.DELETE) === Permission.DELETE) { permissions += 'D' }
-	if ((file.permissions & Permission.SHARE) === Permission.SHARE) { permissions += 'R' }
+	if ((file.permissions & Permission.CREATE) === Permission.CREATE) {
+		permissions += 'CK'
+	}
+	if ((file.permissions & Permission.UPDATE) === Permission.UPDATE) {
+		permissions += 'WNV'
+	}
+	if ((file.permissions & Permission.READ) === Permission.READ) {
+		permissions += 'G'
+	}
+	if ((file.permissions & Permission.DELETE) === Permission.DELETE) {
+		permissions += 'D'
+	}
+	if ((file.permissions & Permission.SHARE) === Permission.SHARE) {
+		permissions += 'R'
+	}
 
 	return {
 		fileid: file.fileid,

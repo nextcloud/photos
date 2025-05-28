@@ -77,12 +77,6 @@ export default {
 			type: String,
 			default: t('photos', 'Photos'),
 		},
-
-		// The route params
-		params: {
-			type: Object,
-			default: null,
-		},
 	},
 
 	computed: {

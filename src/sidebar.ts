@@ -1,4 +1,3 @@
-// eslint-disable-next-line n/no-missing-import, import/no-unresolved
 import InformationOutline from '@mdi/svg/svg/information-outline.svg?raw'
 import { registerDavProperty } from '@nextcloud/files/dav'
 import { translatePlural as n, translate as t } from '@nextcloud/l10n'

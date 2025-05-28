@@ -4,7 +4,7 @@
  */
 
 import { computed, onUnmounted, ref } from 'vue'
-import router from '../router'
+import router from '../router/index.ts'
 
 export default function() {
 	const abortController = ref(new AbortController())

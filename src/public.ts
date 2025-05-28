@@ -6,7 +6,7 @@
 import { translate, translatePlural } from '@nextcloud/l10n'
 import Vue from 'vue'
 import { sync } from 'vuex-router-sync'
-import PhotosPublic from './PhotosPublic.vue'
+import PhotosAppPublic from './PhotosAppPublic.vue'
 import router from './router/index.js'
 import store from './store/index.js'
 
@@ -17,9 +17,8 @@ Vue.prototype.n = translatePlural
 
 export default new Vue({
 	el: '#content',
-	// eslint-disable-next-line vue/match-component-file-name
 	name: 'PhotosRoot',
 	router,
 	store,
-	render: (h) => h(PhotosPublic),
+	render: (h) => h(PhotosAppPublic),
 })

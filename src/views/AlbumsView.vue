@@ -76,7 +76,7 @@ import { translate, translatePlural } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { NcButton, NcEmptyContent, NcModal, useIsSmallMobile } from '@nextcloud/vue'
 import { defineComponent } from 'vue'
-import Filter from 'vue-material-design-icons/Filter.vue'
+import { default as FilterIcon } from 'vue-material-design-icons/Filter.vue'
 import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
@@ -87,7 +87,7 @@ import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
 import { albumsExtraProps, albumsPrefix } from '../store/albums.js'
 
 export default defineComponent({
-	name: 'Albums',
+	name: 'AlbumsView',
 	components: {
 		Plus,
 		FolderMultipleImage,
@@ -98,7 +98,7 @@ export default defineComponent({
 		CollectionCover,
 		HeaderNavigation,
 		AlbumForm,
-		FilterIcon: Filter,
+		FilterIcon,
 	},
 
 	filters: {

@@ -13,7 +13,7 @@ import {
 } from '../services/collectionFetcher.js'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
-import store from '../store'
+import store from '../store/index.ts'
 import useAbortController from './useAbortController.ts'
 
 export default function() {

@@ -12,18 +12,18 @@ import areTagsInstalled from '../services/AreTagsInstalled.js'
 import isMapsInstalled from '../services/IsMapsInstalled.js'
 import isRecognizeInstalled from '../services/IsRecognizeInstalled.js'
 
-const Folders = () => import('../views/Folders.vue')
-const Albums = () => import('../views/Albums.vue')
+const FoldersView = () => import('../views/FoldersView.vue')
+const AlbumsView = () => import('../views/AlbumsView.vue')
 const AlbumContent = () => import('../views/AlbumContent.vue')
 const SharedAlbums = () => import('../views/SharedAlbums.vue')
 const SharedAlbumContent = () => import('../views/SharedAlbumContent.vue')
 const PublicAlbumContent = () => import('../views/PublicAlbumContent.vue')
-const Places = () => import('../views/Places.vue')
+const PlacesView = () => import('../views/PlacesView.vue')
 const PlaceContent = () => import('../views/PlaceContent.vue')
-const Tags = () => import('../views/Tags.vue')
+const TagsView = () => import('../views/TagsView.vue')
 const TagContent = () => import('../views/TagContent.vue')
-const Timeline = () => import('../views/Timeline.vue')
-const Faces = () => import('../views/Faces.vue')
+const TimelineView = () => import('../views/TimelineView.vue')
+const FacesView = () => import('../views/FacesView.vue')
 const FaceContent = () => import('../views/FaceContent.vue')
 
 const UnassignedFaces = () => import('../views/UnassignedFaces.vue')
@@ -54,7 +54,7 @@ const router = new Router({
 	routes: [
 		{
 			path: '/',
-			component: Timeline,
+			component: TimelineView,
 			name: 'all_media',
 			props: () => ({
 				rootTitle: t('photos', 'All your media'),
@@ -67,7 +67,7 @@ const router = new Router({
 		},
 		{
 			path: '/photos',
-			component: Timeline,
+			component: TimelineView,
 			name: 'photos',
 			props: () => ({
 				rootTitle: t('photos', 'Photos'),
@@ -81,7 +81,7 @@ const router = new Router({
 		},
 		{
 			path: '/videos',
-			component: Timeline,
+			component: TimelineView,
 			name: 'videos',
 			props: () => ({
 				rootTitle: t('photos', 'Videos'),
@@ -95,7 +95,7 @@ const router = new Router({
 		},
 		{
 			path: '/albums',
-			component: Albums,
+			component: AlbumsView,
 			name: 'albums',
 			meta: {
 				rootTitle: () => {
@@ -154,7 +154,7 @@ const router = new Router({
 		},
 		{
 			path: '/places',
-			component: Places,
+			component: PlacesView,
 			name: 'places',
 		},
 		{
@@ -167,7 +167,7 @@ const router = new Router({
 		},
 		{
 			path: '/folders/:path*',
-			component: Folders,
+			component: FoldersView,
 			name: 'folders',
 			props: (route) => ({
 				path: parsePathParams(route.params.path),
@@ -183,7 +183,7 @@ const router = new Router({
 		},
 		{
 			path: '/shared/:path*',
-			component: Folders,
+			component: FoldersView,
 			name: 'shared',
 			props: (route) => ({
 				path: parsePathParams(route.params.path),
@@ -200,7 +200,7 @@ const router = new Router({
 		},
 		{
 			path: '/favorites',
-			component: Timeline,
+			component: TimelineView,
 			name: 'favorites',
 			props: () => ({
 				rootTitle: t('photos', 'Favorites'),
@@ -214,7 +214,7 @@ const router = new Router({
 		},
 		{
 			path: '/tags/',
-			component: Tags,
+			component: TagsView,
 			name: 'tags',
 			redirect: !areTagsInstalled ? { name: 'timeline' } : undefined,
 			props: (route) => ({
@@ -253,7 +253,7 @@ const router = new Router({
 		{
 			path: '/thisday',
 			name: 'thisday',
-			component: Timeline,
+			component: TimelineView,
 			props: () => ({
 				rootTitle: t('photos', 'On this day'),
 				onThisDay: true,
@@ -267,7 +267,7 @@ const router = new Router({
 		{
 			path: '/faces',
 			name: 'faces',
-			component: Faces,
+			component: FacesView,
 			...((!isRecognizeInstalled) && {
 				beforeEnter() {
 					const recognizeInstallLink = generateUrl('/settings/apps/installed/recognize')

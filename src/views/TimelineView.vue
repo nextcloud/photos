@@ -127,7 +127,7 @@
 					<b>{{ file.id | dateMonth }}</b>
 					{{ file.id | dateYear }}
 				</h2>
-				<File
+				<FileComponent
 					v-else
 					:file="files[file.id]"
 					:allow-selection="true"
@@ -171,7 +171,7 @@ import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 import Delete from 'vue-material-design-icons/Delete.vue'
 import Download from 'vue-material-design-icons/Download.vue'
-import Filter from 'vue-material-design-icons/Filter.vue'
+import { default as FilterIcon } from 'vue-material-design-icons/Filter.vue'
 import FilterOff from 'vue-material-design-icons/FilterOff.vue'
 import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
@@ -180,7 +180,7 @@ import ActionDownload from '../components/Actions/ActionDownload.vue'
 import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import AlbumPicker from '../components/Albums/AlbumPicker.vue'
-import File from '../components/File.vue'
+import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import PhotosFiltersInput from '../components/PhotosFilters/PhotosFiltersInput.vue'
@@ -189,12 +189,12 @@ import FetchFilesMixin from '../mixins/FetchFilesMixin.ts'
 import FilesByMonthMixin from '../mixins/FilesByMonthMixin.ts'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.ts'
 import { allMimes } from '../services/AllowedMimes.ts'
-import photosFilters from '../services/PhotosFilters'
+import photosFilters from '../services/PhotosFilters/index.ts'
 import { configChangedEvent } from '../store/userConfig.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
 export default {
-	name: 'Timeline',
+	name: 'TimelineView',
 	components: {
 		Delete,
 		PlusBoxMultiple,
@@ -210,14 +210,14 @@ export default {
 		AlbumForm,
 		AlbumPicker,
 		FilesListViewer,
-		File,
+		FileComponent,
 		ActionFavorite,
 		ActionDownload,
 		HeaderNavigation,
 		PhotosSourceLocationsSettings,
 		AlertCircle,
 		PhotosFiltersInput,
-		FilterIcon: Filter,
+		FilterIcon,
 		FilterOff,
 	},
 

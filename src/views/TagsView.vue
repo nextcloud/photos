@@ -35,10 +35,10 @@ import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import { defineComponent } from 'vue'
 import TagCover from '../components/TagCover.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
-import logger from '../services/logger'
+import logger from '../services/logger.js'
 
 export default defineComponent({
-	name: 'Tags',
+	name: 'TagsView',
 	components: {
 		TagCover,
 		NcLoadingIcon,

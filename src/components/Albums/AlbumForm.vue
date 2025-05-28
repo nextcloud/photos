@@ -103,7 +103,7 @@ import {
 	type Album, type AlbumEditableProperties, type Collaborator,
 
 	albumsPrefix,
-} from '../../store/albums'
+} from '../../store/albums.ts'
 
 export default {
 	name: 'AlbumForm',
