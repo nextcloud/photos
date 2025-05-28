@@ -8,7 +8,7 @@ import type { User } from '@nextcloud/cypress'
 import { randHash } from '../utils/index.js'
 import { addCollaborators, addFilesToAlbumFromTimeline, createAnAlbumFromAlbums, createPublicShare } from './albumsUtils.ts'
 import { navigateToCollection, selectMedia, setupPhotosTests } from './photosUtils.ts'
-import { navigateToTimeline } from './timelines.ts'
+import { navigateToTimeline } from './timelinesUtils.ts'
 
 const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/
 Cypress.on('uncaught:exception', (err) => {

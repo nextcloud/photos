@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-/* eslint-disable n/no-unpublished-import */
+
 import type { User } from '@nextcloud/cypress'
 
 import { addCommands } from '@nextcloud/cypress'
@@ -19,6 +19,7 @@ addCompareSnapshotCommand()
 declare global {
 	// eslint-disable-next-line @typescript-eslint/no-namespace
 	namespace Cypress {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
 		interface Chainable<Subject = any> {
 			/**
 			 * Upload a file from the fixtures folder to a given user storage.

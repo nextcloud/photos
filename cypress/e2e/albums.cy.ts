@@ -10,12 +10,12 @@ import {
 } from './albumsUtils.ts'
 import {
 	deleteSelection,
-	favoriteSelection,
 	navigateToCollection,
 	navigateToCollections,
+	selectAndFavorite,
+	selectAndUnfavorite,
 	selectMedia,
 	setupPhotosTests,
-	unfavoriteSelection,
 	unselectMedia,
 } from './photosUtils.ts'
 
@@ -56,22 +56,18 @@ describe('Manage albums', () => {
 
 	it('Favorite a file from an album content view', () => {
 		navigateToCollection('albums', albumName)
-		selectMedia([0])
-		favoriteSelection()
+		selectAndFavorite([0])
 		cy.get('[data-test="media"]').eq(0).find('[aria-label="Favorite"]')
-		unfavoriteSelection()
-		unselectMedia([0])
+		selectAndUnfavorite([0])
 		cy.get('[aria-label="Favorite"]').should('not.exist')
 	})
 
 	it('Favorite multiple files from an album content view', () => {
 		navigateToCollection('albums', albumName)
-		selectMedia([1, 2])
-		favoriteSelection()
+		selectAndFavorite([1, 2])
 		cy.get('[data-test="media"]').eq(1).find('[aria-label="Favorite"]')
 		cy.get('[data-test="media"]').eq(2).find('[aria-label="Favorite"]')
-		unfavoriteSelection()
-		unselectMedia([1, 2])
+		selectAndUnfavorite([1, 2])
 		cy.get('[aria-label="Favorite"]').should('not.exist')
 	})
 

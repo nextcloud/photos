@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { navigateToCollection, navigateToCollections, selectMedia } from './photosUtils'
-import { navigateToTimeline } from './timelines'
+import { navigateToCollection, navigateToCollections, selectMedia } from './photosUtils.ts'
+import { navigateToTimeline } from './timelinesUtils.ts'
 
 /**
  *
