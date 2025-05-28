@@ -30,7 +30,8 @@
 <script lang='ts'>
 import { generateUrl } from '@nextcloud/router'
 
-import { NcContent, NcAppContent } from '@nextcloud/vue'
+import NcContent from '@nextcloud/vue/dist/Components/NcContent.js'
+import NcAppContent from '@nextcloud/vue/dist/Components/NcAppContent.js'
 
 import logger from './services/logger.js'
 import svgplaceholder from './assets/file-placeholder.svg'

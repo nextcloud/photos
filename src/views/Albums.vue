@@ -73,7 +73,10 @@ import Filter from 'vue-material-design-icons/Filter.vue'
 import { defineComponent } from 'vue'
 
 import { generateUrl } from '@nextcloud/router'
-import { NcModal, NcButton, NcEmptyContent, useIsSmallMobile } from '@nextcloud/vue'
+import NcModal from '@nextcloud/vue/dist/Components/NcModal.js'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+import { useIsSmallMobile } from '@nextcloud/vue/dist/Composables/useIsMobile.js'
 import { translate, translatePlural } from '@nextcloud/l10n'
 
 import CollectionsList from '../components/Collection/CollectionsList.vue'

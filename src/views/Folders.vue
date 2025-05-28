@@ -57,7 +57,8 @@
 import FolderIcon from 'vue-material-design-icons/Folder.vue'
 import VirtualGrid from 'vue-virtual-grid'
 
-import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon.js'
 import { Upload, UploadPicker, getUploader } from '@nextcloud/upload'
 import { Folder as NcFolder } from '@nextcloud/files'
 import { defaultRootPath, parsePermissions } from '@nextcloud/files/dav'

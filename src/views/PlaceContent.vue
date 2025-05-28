@@ -42,7 +42,9 @@
 import Plus from 'vue-material-design-icons/Plus.vue'
 import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
 
-import { NcButton, NcEmptyContent, isMobile } from '@nextcloud/vue'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import { translate } from '@nextcloud/l10n'
 
 import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
