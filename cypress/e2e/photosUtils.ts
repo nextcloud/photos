@@ -51,18 +51,34 @@ export function unselectMedia(indexes: number[]) {
 
 /**
  *
+ * @param selection
  */
-export function favoriteSelection() {
+export function selectAndFavorite(selection: number[]) {
+	selectMedia(selection)
+
 	cy.get('[aria-label="Open actions menu"]').click()
+
+	cy.intercept({ times: 1, method: 'PROPPATCH', url: '/remote.php/dav/**' }).as('favoriteProppatch')
 	cy.get('[aria-label="Mark selection as favorite"]').click()
+	cy.wait('@favoriteProppatch')
+
+	unselectMedia(selection)
 }
 
 /**
  *
+ * @param selection
  */
-export function unfavoriteSelection() {
+export function selectAndUnfavorite(selection: number[]) {
+	selectMedia(selection)
+
 	cy.get('[aria-label="Open actions menu"]').click()
+
+	cy.intercept({ times: 1, method: 'PROPPATCH', url: '/remote.php/dav/**' }).as('unfavoriteProppatch')
 	cy.get('[aria-label="Remove selection from favorites"]').click()
+	cy.wait('@unfavoriteProppatch')
+
+	unselectMedia(selection)
 }
 
 /**
@@ -93,12 +109,10 @@ export function deleteSelection() {
 }
 
 /**
- *
- * @param user
- * @param target
+ * @param user - User to create directory for
+ * @param target - Target path of the directory
  */
 export function mkdir(user: User, target: string) {
-	// eslint-disable-next-line cypress/unsafe-to-chain-command
 	cy.clearCookies()
 		.then({ timeout: 8000 }, async () => {
 			try {
@@ -140,9 +154,15 @@ export function setupPhotosTests(): Cypress.Chainable<SetupInfo> {
 			if (setupInfo.snapshot) {
 				cy.restoreState(setupInfo.snapshot)
 			} else {
-				cy.createRandomUser().then((user) => { setupInfo.alice = user })
-				cy.createRandomUser().then((user) => { setupInfo.bob = user })
-				cy.createRandomUser().then((user) => { setupInfo.charlie = user })
+				cy.createRandomUser().then((user) => {
+					setupInfo.alice = user
+				})
+				cy.createRandomUser().then((user) => {
+					setupInfo.bob = user
+				})
+				cy.createRandomUser().then((user) => {
+					setupInfo.charlie = user
+				})
 
 				cy.then(() => {
 					mkdir(setupInfo.alice, '/Photos')
@@ -159,7 +179,9 @@ export function setupPhotosTests(): Cypress.Chainable<SetupInfo> {
 				cy.runOccCommand('files:scan --all --generate-metadata')
 
 				cy.then(() => {
-					cy.saveState().then((value) => { setupInfo.snapshot = value })
+					cy.saveState().then((value) => {
+						setupInfo.snapshot = value
+					})
 					cy.task('setVariable', { key: 'timeline-data', value: setupInfo })
 				})
 			}

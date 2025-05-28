@@ -12,7 +12,7 @@ import {
 	deletePublicShare,
 	removeCollaborators,
 	removeSelectionFromCollection,
-} from './albumsUtils'
+} from './albumsUtils.ts'
 import {
 	deleteSelection,
 	downloadAllFiles,
@@ -22,13 +22,13 @@ import {
 	selectMedia,
 	setupPhotosTests,
 	uploadTestMedia,
-} from './photosUtils'
+} from './photosUtils.ts'
 import {
 	addFilesToSharedAlbumFromAlbum,
 	addFilesToSharedAlbumFromSharedAlbumFromHeader,
 	removeSharedAlbums,
-} from './sharedAlbumUtils'
-import { navigateToTimeline } from './timelines'
+} from './sharedAlbumUtils.ts'
+import { navigateToTimeline } from './timelinesUtils.ts'
 
 let alice: User
 let bob: User
