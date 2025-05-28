@@ -4,7 +4,7 @@
  */
 
 import { navigateToCollection, navigateToCollections, selectMedia } from './photosUtils'
-import { navigateToTimeline } from './timelines'
+import { navigateToTimeline } from './timelinesUtils'
 
 export function createAnAlbumFromTimeline(albumName: string) {
 	navigateToTimeline('all-media')

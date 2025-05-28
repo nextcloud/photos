@@ -13,13 +13,13 @@ import {
 import {
 	deleteSelection,
 	downloadSelection,
-	favoriteSelection,
+	selectAndFavorite,
 	navigateToCollection,
 	selectMedia,
-	unfavoriteSelection,
+	selectAndUnfavorite,
 	unselectMedia,
 } from './photosUtils.ts'
-import { navigateToTimeline } from './timelines.ts'
+import { navigateToTimeline } from './timelinesUtils.ts'
 import { setupPhotosTests } from './photosUtils.ts'
 
 const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/
@@ -48,21 +48,17 @@ describe('View list of photos in the main timeline', () => {
 	})
 
 	it('Favorite a file from a timeline', () => {
-		selectMedia([0])
-		favoriteSelection()
+		selectAndFavorite([0])
 		cy.get('[data-test="media"]').eq(0).find('[aria-label="Favorite"]')
-		unfavoriteSelection()
-		unselectMedia([0])
+		selectAndUnfavorite([0])
 		cy.get('[aria-label="Favorite"]').should('not.exist')
 	})
 
 	it('Favorite multiple files from a timeline', () => {
-		selectMedia([1, 2])
-		favoriteSelection()
+		selectAndFavorite([1, 2])
 		cy.get('[data-test="media"]').eq(1).find('[aria-label="Favorite"]')
 		cy.get('[data-test="media"]').eq(2).find('[aria-label="Favorite"]')
-		unfavoriteSelection()
-		unselectMedia([1, 2])
+		selectAndUnfavorite([1, 2])
 		cy.get('[aria-label="Favorite"]').should('not.exist')
 	})
 

@@ -27,7 +27,7 @@ import {
 	addFilesToSharedAlbumFromSharedAlbumFromHeader,
 	removeSharedAlbums,
 } from './sharedAlbumUtils'
-import { navigateToTimeline } from './timelines'
+import { navigateToTimeline } from './timelinesUtils'
 
 let alice: User
 let bob: User

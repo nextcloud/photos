@@ -35,14 +35,28 @@ export function unselectMedia(indexes: number[]) {
 	})
 }
 
-export function favoriteSelection() {
+export function selectAndFavorite(selection: number[]) {
+	selectMedia(selection)
+
 	cy.get('[aria-label="Open actions menu"]').click()
+
+	cy.intercept({ times: 1, method: 'PROPPATCH', url: '/remote.php/dav/**' }).as('favoriteProppatch')
 	cy.get('[aria-label="Mark selection as favorite"]').click()
+	cy.wait('@favoriteProppatch')
+
+	unselectMedia(selection)
 }
 
-export function unfavoriteSelection() {
+export function selectAndUnfavorite(selection: number[]) {
+	selectMedia(selection)
+
 	cy.get('[aria-label="Open actions menu"]').click()
+
+	cy.intercept({ times: 1, method: 'PROPPATCH', url: '/remote.php/dav/**' }).as('unfavoriteProppatch')
 	cy.get('[aria-label="Remove selection from favorites"]').click()
+	cy.wait('@unfavoriteProppatch')
+
+	unselectMedia(selection)
 }
 
 export function downloadSelection() {
