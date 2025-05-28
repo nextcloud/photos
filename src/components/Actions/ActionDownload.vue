@@ -3,7 +3,8 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<NcActionLink :close-after-click="true"
+	<NcActionLink
+		:close-after-click="true"
 		:href="downloadUrl"
 		:download="downloadUrl"
 		:aria-label="title">
@@ -51,7 +52,7 @@ export default {
 		},
 
 		paths() {
-			return this.selectedFileIds.map(fileId => this.files[fileId].path)
+			return this.selectedFileIds.map((fileId) => this.files[fileId].path)
 		},
 	},
 }

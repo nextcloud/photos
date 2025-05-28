@@ -1,19 +1,18 @@
+import type { File, Folder } from '@nextcloud/files'
+import type { PhotosContext } from './index.ts'
+
+import { showError } from '@nextcloud/dialogs'
+import { defaultRootPath } from '@nextcloud/files/dav'
+import { t } from '@nextcloud/l10n'
+import moment from '@nextcloud/moment'
 /**
  * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import Vue from 'vue'
-
-import moment from '@nextcloud/moment'
-import { showError } from '@nextcloud/dialogs'
-import { defaultRootPath } from '@nextcloud/files/dav'
-import { t } from '@nextcloud/l10n'
-import type { File, Folder } from '@nextcloud/files'
-
+import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
-import { davClient } from '../services/DavClient.ts'
-import type { PhotosContext } from './index.ts'
 
 export type PhotoFile = File & {
 	fileid: number
@@ -40,11 +39,11 @@ const mutations = {
 	updateFiles(state: FilesState, newFiles: File[]) {
 		const files = {}
 		newFiles
-			.filter(file => !file.attributes.hidden)
-			.forEach(file => {
+			.filter((file) => !file.attributes.hidden)
+			.forEach((file) => {
 				// Ignore the file if the path is excluded
 				// TODO: Check that it works
-				if (state.nomediaPaths.some(nomediaPath => file.path.startsWith(nomediaPath)
+				if (state.nomediaPaths.some((nomediaPath) => file.path.startsWith(nomediaPath)
 					|| file.path.startsWith(`${defaultRootPath}${nomediaPath}`))) {
 					return
 				}
@@ -85,7 +84,7 @@ const mutations = {
 	/**
 	 * Favorite a list of files
 	 */
-	favoriteFile(state: FilesState, { fileId, favoriteState }: { fileId: number, favoriteState: 0|1 }) {
+	favoriteFile(state: FilesState, { fileId, favoriteState }: { fileId: number, favoriteState: 0 | 1 }) {
 		Vue.set(state.files[fileId].attributes, 'favorite', favoriteState)
 	},
 }
@@ -99,7 +98,7 @@ const actions = {
 	/**
 	 * Update files, folders and their respective subfolders
 	 */
-	updateFiles(context: PhotosContext<FilesState>, { folder, files = [], folders = [] }: { folder: Folder, files: File[], folders: Folder[]}) {
+	updateFiles(context: PhotosContext<FilesState>, { folder, files = [], folders = [] }: { folder: Folder, files: File[], folders: Folder[] }) {
 		// we want all the FileInfo! Folders included!
 		context.commit('updateFiles', [folder, ...files, ...folders])
 		context.commit('setSubFolders', { fileid: folder.fileid, folders })
@@ -127,10 +126,10 @@ const actions = {
 		const semaphore = new Semaphore(5)
 
 		const files = fileIds
-			.map(fileId => state.files[fileId])
+			.map((fileId) => state.files[fileId])
 			.reduce((files, file) => ({ ...files, [file.fileid]: file }), {} as Record<string, PhotoFile>)
 
-		fileIds.forEach(fileId => context.commit('deleteFile', fileId))
+		fileIds.forEach((fileId) => context.commit('deleteFile', fileId))
 
 		const promises = fileIds
 			.map(async (fileId) => {
@@ -154,7 +153,7 @@ const actions = {
 	/**
 	 * Favorite a list of files
 	 */
-	toggleFavoriteForFiles(context: PhotosContext<FilesState>, { fileIds, favoriteState }: { fileIds: string[], favoriteState: 0|1 }) {
+	toggleFavoriteForFiles(context: PhotosContext<FilesState>, { fileIds, favoriteState }: { fileIds: string[], favoriteState: 0 | 1 }) {
 		const semaphore = new Semaphore(5)
 
 		const promises = fileIds

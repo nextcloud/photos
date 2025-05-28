@@ -1,13 +1,17 @@
+import type { FoldersNode } from '../services/FolderContent.js'
+
+import {
+	type Node,
+
+	FileType, Permission,
+} from '@nextcloud/files'
 /**
  * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import { getLanguage } from '@nextcloud/l10n'
-import { FileType, Permission, type Node } from '@nextcloud/files'
 import { generateUrl } from '@nextcloud/router'
-
 import { isNumber } from './numberUtils.js'
-import type { FoldersNode } from '../services/FolderContent.js'
 
 /**
  * Sorting comparison function

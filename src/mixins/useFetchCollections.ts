@@ -4,16 +4,20 @@
  */
 
 import type { WebDAVClient } from 'webdav'
-import { ref } from 'vue'
 
-import { fetchCollections, type Collection } from '../services/collectionFetcher.js'
+import { ref } from 'vue'
+import {
+	type Collection,
+
+	fetchCollections,
+} from '../services/collectionFetcher.js'
+import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import store from '../store'
-import { davClient } from '../services/DavClient.ts'
 import useAbortController from './useAbortController.ts'
 
 export default function() {
-	const errorFetchingCollections = ref(null as null|number|Error|unknown)
+	const errorFetchingCollections = ref(null as null | number | Error | unknown)
 	const loadingCollections = ref(false)
 	const { abortSignal } = useAbortController()
 

@@ -30,11 +30,9 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent } from 'vue'
-
-import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import { t } from '@nextcloud/l10n'
-
+import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import { defineComponent } from 'vue'
 import TagCover from '../components/TagCover.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import logger from '../services/logger'
@@ -46,11 +44,12 @@ export default defineComponent({
 		NcLoadingIcon,
 		NcEmptyContent,
 	},
+
 	mixins: [AbortControllerMixin],
 
 	data() {
 		return {
-			error: null as boolean|null,
+			error: null as boolean | null,
 			loading: false,
 			showTags: false,
 		}
@@ -71,16 +70,16 @@ export default defineComponent({
 
 		tagsList() {
 			return Object.keys(this.tagsNames)
-				.map(tagName => this.tags[this.tagsNames[tagName]])
-				.filter(tag => tag && tag.attributes.id)
+				.map((tagName) => this.tags[this.tagsNames[tagName]])
+				.filter((tag) => tag && tag.attributes.id)
 		},
 
 		popularTags() {
 			return Object.keys(this.tagsNames)
-				.filter(tagName => (this.tags[this.tagsNames[tagName]].attributes['files-assigned']) > 50)
+				.filter((tagName) => (this.tags[this.tagsNames[tagName]].attributes['files-assigned']) > 50)
 				.sort((a, b) => (this.tags[this.tagsNames[b]]['files-assigned']) - (this.tags[this.tagsNames[a]]['files-assigned']))
 				.slice(0, 9)
-				.map(tagName => this.tags[this.tagsNames[tagName]])
+				.map((tagName) => this.tags[this.tagsNames[tagName]])
 		},
 	},
 

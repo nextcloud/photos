@@ -3,14 +3,16 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<NcActionButton v-if="shouldFavoriteSelection"
+	<NcActionButton
+		v-if="shouldFavoriteSelection"
 		:close-after-click="true"
 		:aria-label="t('photos', 'Mark selection as favorite')"
 		@click="favoriteSelection">
 		{{ t('photos', 'Add selection to favorites') }}
 		<Star slot="icon" />
 	</NcActionButton>
-	<NcActionButton v-else
+	<NcActionButton
+		v-else
 		:close-after-click="true"
 		:aria-label="t('photos', 'Remove selection from favorites')"
 		@click="unFavoriteSelection">
@@ -20,11 +22,14 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, type PropType } from 'vue'
-import Star from 'vue-material-design-icons/Star.vue'
-
-import { NcActionButton } from '@nextcloud/vue'
 import { t } from '@nextcloud/l10n'
+import { NcActionButton } from '@nextcloud/vue'
+import {
+	type PropType,
+
+	defineComponent,
+} from 'vue'
+import Star from 'vue-material-design-icons/Star.vue'
 
 export default defineComponent({
 	name: 'ActionFavorite',

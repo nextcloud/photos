@@ -4,10 +4,9 @@
  */
 
 import axios, { type AxiosRequestConfig } from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
-
-import allowedMimes from './AllowedMimes.js'
 import { defaultRemoteURL, defaultRootPath } from '@nextcloud/files/dav'
+import { generateUrl } from '@nextcloud/router'
+import allowedMimes from './AllowedMimes.js'
 
 export type FoldersNode = {
 	basename: string
@@ -32,14 +31,14 @@ export default async function(path: string = '/', options: AxiosRequestConfig & 
 	// fetch listing
 	const response = await axios.get(endpoint + path, options)
 	const list: FoldersNode[] = response.data
-		.map(data => ({
+		.map((data) => ({
 			...data,
 			filename: `${defaultRootPath}${data.filename}`,
 			source: decodeURI(defaultRemoteURL + `${defaultRootPath}${data.filename}`),
 		}))
 
 	// filter all the files and folders
-	let folder: FoldersNode|undefined
+	let folder: FoldersNode | undefined
 	const folders: FoldersNode[] = []
 	const files: FoldersNode[] = []
 

@@ -9,7 +9,8 @@
 		</h2>
 
 		<form class="manage-collaborators__form" @submit.prevent>
-			<NcSelect v-model="searchText"
+			<NcSelect
+				v-model="searchText"
 				input-id="sharing-search-input"
 				:input-label="t('photos', 'Add people or groups who can edit your album')"
 				:loading="loadingCollaborators"
@@ -21,23 +22,26 @@
 				:append-to-body="false"
 				:options="searchResults"
 				@search="searchCollaborators"
-				@option:selected="({key}) => selectEntity(key)">
+				@option:selected="({ key }) => selectEntity(key)">
 				{{ t('photos', 'No recommendations. Start typing.') }}
 			</NcSelect>
 		</form>
 
 		<ul class="manage-collaborators__selection">
-			<li v-for="collaboratorKey of listableSelectedCollaboratorsKeys"
+			<li
+				v-for="collaboratorKey of listableSelectedCollaboratorsKeys"
 				:key="collaboratorKey"
 				class="manage-collaborators__selection__item">
-				<NcListItemIcon :id="availableCollaborators[collaboratorKey].id"
+				<NcListItemIcon
+					:id="availableCollaborators[collaboratorKey].id"
 					:display-name="availableCollaborators[collaboratorKey].label"
 					:name="availableCollaborators[collaboratorKey].label"
 					:user="availableCollaborators[collaboratorKey].id"
 					:is-no-user="availableCollaborators[collaboratorKey].type !== collaboratorTypes.User">
 					<AccountGroup v-if="availableCollaborators[collaboratorKey].type === collaboratorTypes.Group" :title="t('photos', 'Group')" />
-					<NcButton type="tertiary"
-						:aria-label="t('photos', 'Remove {collaboratorLabel} from the collaborators list', {collaboratorLabel: availableCollaborators[collaboratorKey].label})"
+					<NcButton
+						type="tertiary"
+						:aria-label="t('photos', 'Remove {collaboratorLabel} from the collaborators list', { collaboratorLabel: availableCollaborators[collaboratorKey].label })"
 						@click="unselectEntity(collaboratorKey)">
 						<Close slot="icon" :size="20" />
 					</NcButton>
@@ -48,7 +52,8 @@
 		<div class="actions">
 			<div v-if="allowPublicLink" class="actions__public-link">
 				<template v-if="isPublicLinkSelected && publicLink.id !== ''">
-					<NcButton class="manage-collaborators__public-link-button"
+					<NcButton
+						class="manage-collaborators__public-link-button"
 						:aria-label="t('photos', 'Copy the public link')"
 						:title="publicLinkURL"
 						@click="copyPublicLink">
@@ -63,13 +68,15 @@
 							<ContentCopy v-else />
 						</template>
 					</NcButton>
-					<NcButton type="tertiary"
+					<NcButton
+						type="tertiary"
 						:aria-label="t('photos', 'Delete the public link')"
 						@click="deletePublicLink">
 						<Close slot="icon" />
 					</NcButton>
 				</template>
-				<NcButton v-else
+				<NcButton
+					v-else
 					:disabled="isPublicLinkSelected && publicLink.id === ''"
 					:aria-label="t('photos', 'Create public link share')"
 					class="manage-collaborators__public-link-button"
@@ -85,27 +92,27 @@
 		</div>
 	</div>
 </template>
+
 <script lang='ts'>
 
-import Close from 'vue-material-design-icons/Close.vue'
-import Check from 'vue-material-design-icons/Check.vue'
-import ContentCopy from 'vue-material-design-icons/ContentCopy.vue'
-import AccountGroup from 'vue-material-design-icons/AccountGroup.vue'
-import Earth from 'vue-material-design-icons/Earth.vue'
-import AccountGroupSvg from '@mdi/svg/svg/account-group.svg'
 import type { PropType } from 'vue'
+import type { Collaborator } from '../../store/albums.js'
 
+import AccountGroupSvg from '@mdi/svg/svg/account-group.svg'
+import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
-import { getCurrentUser } from '@nextcloud/auth'
-import { generateOcsUrl, generateUrl } from '@nextcloud/router'
-import { NcButton, NcListItemIcon, NcSelect } from '@nextcloud/vue'
-import { ShareType } from '@nextcloud/sharing'
 import { translate } from '@nextcloud/l10n'
-
-import logger from '../../services/logger.js'
+import { generateOcsUrl, generateUrl } from '@nextcloud/router'
+import { ShareType } from '@nextcloud/sharing'
+import { NcButton, NcListItemIcon, NcSelect } from '@nextcloud/vue'
+import AccountGroup from 'vue-material-design-icons/AccountGroup.vue'
+import Check from 'vue-material-design-icons/Check.vue'
+import Close from 'vue-material-design-icons/Close.vue'
+import ContentCopy from 'vue-material-design-icons/ContentCopy.vue'
+import Earth from 'vue-material-design-icons/Earth.vue'
 import FetchCollectionContentMixin from '../../mixins/FetchCollectionContentMixin.js'
-import type { Collaborator } from '../../store/albums.js'
+import logger from '../../services/logger.js'
 import { albumsExtraProps } from '../../store/albums.ts'
 
 type CollaboratorSearchResult = Collaborator & {
@@ -179,7 +186,7 @@ export default {
 
 		listableSelectedCollaboratorsKeys(): string[] {
 			return this.selectedCollaboratorsKeys
-				.filter(collaboratorKey => this.availableCollaborators[collaboratorKey].type !== ShareType.Link)
+				.filter((collaboratorKey) => this.availableCollaborators[collaboratorKey].type !== ShareType.Link)
 		},
 
 		selectedCollaborators(): Collaborator[] {
@@ -243,14 +250,14 @@ export default {
 				})
 
 				this.currentSearchResults = response.data.ocs.data
-					.map(collaborator => {
+					.map((collaborator) => {
 						switch (collaborator.source) {
-						case 'users':
-							return { id: collaborator.id, label: collaborator.label, type: ShareType.User }
-						case 'groups':
-							return { id: collaborator.id, label: collaborator.label, type: ShareType.Group }
-						default:
-							throw new Error(`Invalid collaborator source ${collaborator.source}`)
+							case 'users':
+								return { id: collaborator.id, label: collaborator.label, type: ShareType.User }
+							case 'groups':
+								return { id: collaborator.id, label: collaborator.label, type: ShareType.Group }
+							default:
+								throw new Error(`Invalid collaborator source ${collaborator.source}`)
 						}
 					})
 
@@ -279,6 +286,7 @@ export default {
 					label: this.t('photos', 'Public link'),
 					type: ShareType.Link,
 				},
+
 				...this.availableCollaborators,
 				...initialCollaborators,
 			}
@@ -354,6 +362,7 @@ export default {
 	},
 }
 </script>
+
 <style lang="scss" scoped>
 .manage-collaborators {
 	display: flex;

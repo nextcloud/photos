@@ -3,17 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import type { File } from '@nextcloud/files'
 import type { WebDAVClient } from 'webdav'
-import { defineComponent } from 'vue'
 
 import { showError } from '@nextcloud/dialogs'
-import type { File } from '@nextcloud/files'
 import { t } from '@nextcloud/l10n'
+import { defineComponent } from 'vue'
+import {
+	type Collection,
 
-import AbortControllerMixin from './AbortControllerMixin.js'
-import { fetchCollection, fetchCollectionFiles, type Collection } from '../services/collectionFetcher.js'
+	fetchCollection, fetchCollectionFiles,
+} from '../services/collectionFetcher.js'
 import logger from '../services/logger.js'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
+import AbortControllerMixin from './AbortControllerMixin.js'
 
 export default defineComponent({
 	name: 'FetchCollectionContentMixin',
@@ -23,17 +26,15 @@ export default defineComponent({
 			fetchSemaphore: new SemaphoreWithPriority(1),
 			loadingCollection: false,
 			loadingCollectionFiles: false,
-			errorFetchingCollection: null as null|number|Error|unknown,
-			errorFetchingCollectionFiles: null as null|number|Error|unknown,
+			errorFetchingCollection: null as null | number | Error | unknown,
+			errorFetchingCollectionFiles: null as null | number | Error | unknown,
 		}
 	},
 
-	mixins: [
-		AbortControllerMixin,
-	],
+	mixins: [AbortControllerMixin],
 
 	methods: {
-		async fetchCollection(collectionFileName: string, extraProps: string[], client?: WebDAVClient): Promise<Collection|null> {
+		async fetchCollection(collectionFileName: string, extraProps: string[], client?: WebDAVClient): Promise<Collection | null> {
 			if (this.loadingCollection) {
 				return null
 			}
@@ -73,7 +74,7 @@ export default defineComponent({
 				this.loadingCollectionFiles = true
 
 				const fetchedFiles = await fetchCollectionFiles(collectionFileName, { signal: this.abortController.signal }, extraProps, client)
-				const fileIds = fetchedFiles.map(file => file.fileid?.toString())
+				const fileIds = fetchedFiles.map((file) => file.fileid?.toString())
 
 				this.$store.dispatch('appendFiles', fetchedFiles)
 

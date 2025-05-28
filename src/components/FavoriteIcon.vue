@@ -7,12 +7,11 @@
 </template>
 
 <script lang='ts'>
+// eslint-disable-next-line import/no-unresolved, n/no-missing-import
+import StarSvg from '@mdi/svg/svg/star.svg?raw'
 import { t } from '@nextcloud/l10n'
 import { NcIconSvgWrapper } from '@nextcloud/vue'
 import { defineComponent } from 'vue'
-
-// eslint-disable-next-line import/no-unresolved, n/no-missing-import
-import StarSvg from '@mdi/svg/svg/star.svg?raw'
 
 /**
  * A favorite icon to be used for overlaying favorite entries like the file preview / icon
@@ -30,11 +29,13 @@ export default defineComponent({
 	components: {
 		NcIconSvgWrapper,
 	},
+
 	data() {
 		return {
 			StarSvg,
 		}
 	},
+
 	mounted() {
 		this.$nextTick(() => {
 			// MDI default viewbox is "0 0 24 24" but we add a stroke of 10px so we must adjust it
@@ -42,6 +43,7 @@ export default defineComponent({
 			el?.setAttribute?.('viewBox', '-4 -4 30 30')
 		})
 	},
+
 	methods: {
 		t,
 	},

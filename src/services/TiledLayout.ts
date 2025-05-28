@@ -59,10 +59,10 @@ export function splitItemsInRows(items: TiledItem[], containerWidth: number, bas
 		)
 
 		rows[rowNumber] = {
-			items: rowItems.map(item => ({ ...item, width: rowHeight * item.ratio, height: rowHeight })),
+			items: rowItems.map((item) => ({ ...item, width: rowHeight * item.ratio, height: rowHeight })),
 			// Key to help vue to keep track of the row in VirtualScrolling.
 			height: rowHeight,
-			key: rowItems.map(item => item.id).join('-'),
+			key: rowItems.map((item) => item.id).join('-'),
 		}
 
 		rowNumber += 1
@@ -73,7 +73,7 @@ export function splitItemsInRows(items: TiledItem[], containerWidth: number, bas
 
 function computeRowWidth(items: TiledItem[], baseHeight: number): number {
 	return items
-		.map(item => baseHeight * item.ratio)
+		.map((item) => baseHeight * item.ratio)
 		.reduce((sum, itemWidth) => sum + itemWidth)
 }
 
@@ -97,9 +97,8 @@ function computeRowWidth(items: TiledItem[], baseHeight: number): number {
  */
 function computeRowHeight(items: TiledItem[], containerWidth: number, isLastRow: boolean, baseHeight: number): number {
 	const sumOfItemsRatio = items
-		.map(item => item.ratio)
-		.reduce((sum, itemRatio) => sum + itemRatio,
-		)
+		.map((item) => item.ratio)
+		.reduce((sum, itemRatio) => sum + itemRatio)
 
 	let rowHeight = containerWidth / sumOfItemsRatio
 

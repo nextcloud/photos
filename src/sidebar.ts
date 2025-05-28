@@ -1,12 +1,12 @@
+// eslint-disable-next-line n/no-missing-import, import/no-unresolved
+import InformationOutline from '@mdi/svg/svg/information-outline.svg?raw'
+import { registerDavProperty } from '@nextcloud/files/dav'
+import { translatePlural as n, translate as t } from '@nextcloud/l10n'
 /**
  * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import Vue from 'vue'
-// eslint-disable-next-line n/no-missing-import, import/no-unresolved
-import InformationOutline from '@mdi/svg/svg/information-outline.svg?raw'
-import { translate as t, translatePlural as n } from '@nextcloud/l10n'
-import { registerDavProperty } from '@nextcloud/files/dav'
 
 Vue.prototype.t = t
 Vue.prototype.n = n

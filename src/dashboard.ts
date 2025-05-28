@@ -5,9 +5,8 @@
 
 import { translate, translatePlural } from '@nextcloud/l10n'
 import Vue from 'vue'
-
-import store from './store/index.js'
 import DashboardOnThisDay from './components/Dashboard/DashboardOnThisDay.vue'
+import store from './store/index.js'
 
 Vue.prototype.t = translate
 Vue.prototype.n = translatePlural
@@ -17,7 +16,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		global.PhotosOnThisDay = new Vue({
 			el,
 			store,
-			render: h => h(DashboardOnThisDay),
+			render: (h) => h(DashboardOnThisDay),
 		})
 	})
 })

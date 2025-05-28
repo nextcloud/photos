@@ -4,14 +4,16 @@
 -->
 <template>
 	<div>
-		<CollectionContent ref="collectionContent"
+		<CollectionContent
+			ref="collectionContent"
 			:collection="place"
 			:collection-file-ids="placeFileIds"
 			:allow-selection="false"
 			:loading="loadingCollection || loadingCollectionFiles"
 			:error="errorFetchingCollection || errorFetchingCollectionFiles">
 			<!-- Header -->
-			<HeaderNavigation v-if="place !== null"
+			<HeaderNavigation
+				v-if="place !== null"
 				key="navigation"
 				slot="header"
 				:loading="loadingCollection || loadingCollectionFiles"
@@ -21,12 +23,14 @@
 				@refresh="fetchPlaceFiles" />
 
 			<!-- No content -->
-			<NcEmptyContent slot="empty-content"
+			<NcEmptyContent
+				slot="empty-content"
 				:name="t('photos', 'This place does not have any photos or videos yet!')"
 				class="place__empty">
 				<ImagePlus slot="icon" />
 
-				<NcButton slot="action"
+				<NcButton
+					slot="action"
 					type="primary"
 					:aria-label="t('photos', 'Add photos to this place')"
 					@click="showAddPhotosModal = true">
@@ -39,16 +43,15 @@
 </template>
 
 <script lang='ts'>
-import Plus from 'vue-material-design-icons/Plus.vue'
-import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
+import type { Collection } from '../services/collectionFetcher.js'
 
-import { NcButton, NcEmptyContent, isMobile } from '@nextcloud/vue'
 import { translate } from '@nextcloud/l10n'
-
-import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
+import { isMobile, NcButton, NcEmptyContent } from '@nextcloud/vue'
+import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
+import Plus from 'vue-material-design-icons/Plus.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-import type { Collection } from '../services/collectionFetcher.js'
+import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
 import { placesPrefix } from '../store/places.js'
 
 export default {
@@ -116,6 +119,7 @@ export default {
 	},
 }
 </script>
+
 <style lang="scss" scoped>
 .place {
 	display: flex;

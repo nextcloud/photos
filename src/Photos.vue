@@ -7,74 +7,87 @@
 	<NcContent app-name="photos">
 		<NcAppNavigation :aria-label="t('photos', 'Photos')">
 			<template #list>
-				<NcAppNavigationItem :to="{name: 'all_media'}"
+				<NcAppNavigationItem
+					:to="{ name: 'all_media' }"
 					:name="t('photos', 'All media')"
 					class="app-navigation__all_media"
 					data-id-app-nav-item="all-media"
 					exact>
 					<ImageIcon slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem to="/photos"
+				<NcAppNavigationItem
+					to="/photos"
 					:name="t('photos', 'Photos')"
 					data-id-app-nav-item="photos">
 					<Camera slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem to="/videos"
+				<NcAppNavigationItem
+					to="/videos"
 					:name="t('photos', 'Videos')"
 					data-id-app-nav-item="videos">
 					<VideoIcon slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem :to="{name: 'albums'}"
+				<NcAppNavigationItem
+					:to="{ name: 'albums' }"
 					:name="t('photos', 'Albums')"
 					data-id-app-nav-item="albums">
 					<FolderMultipleImage slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem :to="{name: 'sharedAlbums'}"
+				<NcAppNavigationItem
+					:to="{ name: 'sharedAlbums' }"
 					:name="t('photos', 'Collaborative albums')"
 					data-id-app-nav-item="sharedalbums">
 					<AccountGroup slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem v-if="showPeopleMenuEntry"
-					:to="{name: 'faces'}"
+				<NcAppNavigationItem
+					v-if="showPeopleMenuEntry"
+					:to="{ name: 'faces' }"
 					:name="t('photos', 'People')"
 					data-id-app-nav-item="faces">
 					<template #icon>
 						<AccountBoxMultipleOutline :size="20" />
 					</template>
 				</NcAppNavigationItem>
-				<NcAppNavigationItem :to="{name: 'folders'}"
+				<NcAppNavigationItem
+					:to="{ name: 'folders' }"
 					:name="t('photos', 'Folders')"
 					data-id-app-nav-item="folders">
 					<Folder slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem to="/favorites"
+				<NcAppNavigationItem
+					to="/favorites"
 					:name="t('photos', 'Favorites')"
 					data-id-app-nav-item="favorites">
 					<Star slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem :to="{name: 'thisday'}"
+				<NcAppNavigationItem
+					:to="{ name: 'thisday' }"
 					:name="t('photos', 'On this day')"
 					data-id-app-nav-item="this-day">
 					<CalendarToday slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem :to="{name: 'shared'}"
+				<NcAppNavigationItem
+					:to="{ name: 'shared' }"
 					:name="t('photos', 'Shared with you')"
 					data-id-app-nav-item="shared">
 					<ShareVariant slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem v-if="areTagsInstalled"
-					:to="{name: 'tags'}"
+				<NcAppNavigationItem
+					v-if="areTagsInstalled"
+					:to="{ name: 'tags' }"
 					:name="t('photos', 'Tags')"
 					data-id-app-nav-item="tags">
 					<Tag slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem :to="{name: 'places'}"
+				<NcAppNavigationItem
+					:to="{ name: 'places' }"
 					:name="t('photos', 'Places')"
 					data-id-app-nav-item="places">
 					<MapMarker slot="icon" :size="20" />
 				</NcAppNavigationItem>
-				<NcAppNavigationItem v-if="showLocationMenuEntry"
-					:to="{name: 'maps'}"
+				<NcAppNavigationItem
+					v-if="showLocationMenuEntry"
+					:to="{ name: 'maps' }"
 					:name="t('photos', 'Map')"
 					data-id-app-nav-item="maps">
 					<MapIcon slot="icon" :size="20" />
@@ -82,7 +95,8 @@
 			</template>
 			<template #footer>
 				<div class="app-navigation__footer">
-					<NcButton type="tertiary"
+					<NcButton
+						type="tertiary"
 						alignment="start"
 						wide
 						@click="showSettings">
@@ -113,36 +127,32 @@
 
 <script lang='ts'>
 import { getCurrentUser } from '@nextcloud/auth'
-import { generateUrl } from '@nextcloud/router'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
-
-import Camera from 'vue-material-design-icons/Camera.vue'
-import ImageIcon from 'vue-material-design-icons/Image.vue'
-import VideoIcon from 'vue-material-design-icons/Video.vue'
-import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
-import Folder from 'vue-material-design-icons/Folder.vue'
-import Star from 'vue-material-design-icons/Star.vue'
-import CalendarToday from 'vue-material-design-icons/CalendarToday.vue'
+import { generateUrl } from '@nextcloud/router'
+import { NcAppContent, NcAppNavigation, NcAppNavigationItem, NcButton, NcContent } from '@nextcloud/vue'
+import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
 import AccountGroup from 'vue-material-design-icons/AccountGroup.vue'
-import Tag from 'vue-material-design-icons/Tag.vue'
+import CalendarToday from 'vue-material-design-icons/CalendarToday.vue'
+import Camera from 'vue-material-design-icons/Camera.vue'
+import Cog from 'vue-material-design-icons/Cog.vue'
+import Folder from 'vue-material-design-icons/Folder.vue'
+import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
+import ImageIcon from 'vue-material-design-icons/Image.vue'
 import MapIcon from 'vue-material-design-icons/Map.vue'
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
-import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
-import Cog from 'vue-material-design-icons/Cog.vue'
-
-import { NcContent, NcAppContent, NcAppNavigation, NcAppNavigationItem, NcButton } from '@nextcloud/vue'
-
+import Star from 'vue-material-design-icons/Star.vue'
+import Tag from 'vue-material-design-icons/Tag.vue'
+import VideoIcon from 'vue-material-design-icons/Video.vue'
 import SettingsDialog from './components/Settings/SettingsDialog.vue'
-
 import svgplaceholder from './assets/file-placeholder.svg'
 import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'
 import areTagsInstalled from './services/AreTagsInstalled.js'
+import isAppStoreEnabled from './services/IsAppStoreEnabled.js'
 import isMapsInstalled from './services/IsMapsInstalled.js'
 import isRecognizeInstalled from './services/IsRecognizeInstalled.js'
-import isAppStoreEnabled from './services/IsAppStoreEnabled.js'
 import logger from './services/logger.js'
 
 export default {
@@ -169,6 +179,7 @@ export default {
 		NcContent,
 		SettingsDialog,
 	},
+
 	data() {
 		return {
 			svgplaceholder,
@@ -179,6 +190,7 @@ export default {
 			showLocationMenuEntry: getCurrentUser() === null
 				? false
 				: (getCurrentUser().isAdmin && isAppStoreEnabled) || isMapsInstalled,
+
 			showPeopleMenuEntry: getCurrentUser() === null
 				? false
 				: (getCurrentUser().isAdmin && loadState('photos', 'showPeopleMenuEntry', true) && isAppStoreEnabled) || isRecognizeInstalled,
@@ -186,6 +198,7 @@ export default {
 			openedSettings: false,
 		}
 	},
+
 	async beforeMount() {
 		// Register excluded paths
 		const files = loadState('photos', 'nomedia-paths', [])
@@ -199,12 +212,11 @@ export default {
 					noRewrite: true,
 				}), {
 					scope: generateUrl('/apps/photos'),
-				}).then(registration => {
+				}).then((registration) => {
 					logger.debug('SW registered: ', { registration })
-				}).catch(registrationError => {
+				}).catch((registrationError) => {
 					logger.error('SW registration failed: ', { registrationError })
 				})
-
 			})
 		} else {
 			logger.debug('Service Worker is not enabled on this browser.')
@@ -228,6 +240,7 @@ export default {
 	},
 }
 </script>
+
 <style lang="scss">
 .app-content {
 	display: flex;

@@ -4,7 +4,8 @@
 -->
 
 <template>
-	<NcCheckboxRadioSwitch :checked="croppedLayout"
+	<NcCheckboxRadioSwitch
+		:checked="croppedLayout"
 		type="switch"
 		@update:checked="updateSetting">
 		{{ t('photos', 'Enable squared photos view') }}

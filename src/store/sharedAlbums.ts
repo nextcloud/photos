@@ -3,9 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { getCurrentUser } from '@nextcloud/auth'
-import type { Album } from './albums'
 import type { PhotosRootSate } from '.'
+import type { Album } from './albums'
+
+import { getCurrentUser } from '@nextcloud/auth'
 
 const sharedAlbumsPrefix = `/photos/${getCurrentUser()?.uid}/sharedalbums`
 

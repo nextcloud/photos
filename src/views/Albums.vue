@@ -4,17 +4,20 @@
 -->
 <template>
 	<div>
-		<CollectionsList :collections="albums"
+		<CollectionsList
+			:collections="albums"
 			:loading="loadingCollections"
 			:error="errorFetchingCollections"
 			class="albums-list">
 			<template #header>
-				<HeaderNavigation key="navigation"
+				<HeaderNavigation
+					key="navigation"
 					:loading="loadingCollections"
 					:title="t('photos', 'Albums')"
 					:root-title="t('photos', 'Albums')"
 					@refresh="fetchAlbums">
-					<NcButton :aria-label="isMobile ? t('photos', 'New album') : undefined"
+					<NcButton
+						:aria-label="isMobile ? t('photos', 'New album') : undefined"
 						@click="showAlbumCreationForm = true">
 						<template #icon>
 							<Plus :size="20" />
@@ -26,8 +29,9 @@
 				</HeaderNavigation>
 			</template>
 
-			<template #default="{collection}">
-				<CollectionCover :key="collection.basename"
+			<template #default="{ collection }">
+				<CollectionCover
+					:key="collection.basename"
 					:link="`/albums/${collection.basename}`"
 					:alt-img="t('photos', 'Cover photo for album {albumName}', { albumName: collection.basename })"
 					:cover-url="collection.attributes['last-photo'] | coverUrl">
@@ -40,7 +44,7 @@
 
 					<template #subtitle>
 						<div class="album__details">
-							{{ collection.attributes.date }} ⸱ {{ n('photos', '%n item', '%n photos and videos', collection.attributes.nbItems,) }}
+							{{ collection.attributes.date }} ⸱ {{ n('photos', '%n item', '%n photos and videos', collection.attributes.nbItems) }}
 						</div>
 					</template>
 				</CollectionCover>
@@ -55,7 +59,8 @@
 			</template>
 		</CollectionsList>
 
-		<NcModal v-if="showAlbumCreationForm"
+		<NcModal
+			v-if="showAlbumCreationForm"
 			label-id="new-album-form"
 			@close="showAlbumCreationForm = false">
 			<h2 class="album-creation__heading">
@@ -67,21 +72,19 @@
 </template>
 
 <script lang='ts'>
-import Plus from 'vue-material-design-icons/Plus.vue'
-import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
-import Filter from 'vue-material-design-icons/Filter.vue'
-import { defineComponent } from 'vue'
-
-import { generateUrl } from '@nextcloud/router'
-import { NcModal, NcButton, NcEmptyContent, useIsSmallMobile } from '@nextcloud/vue'
 import { translate, translatePlural } from '@nextcloud/l10n'
-
-import CollectionsList from '../components/Collection/CollectionsList.vue'
-import CollectionCover from '../components/Collection/CollectionCover.vue'
-import HeaderNavigation from '../components/HeaderNavigation.vue'
+import { generateUrl } from '@nextcloud/router'
+import { NcButton, NcEmptyContent, NcModal, useIsSmallMobile } from '@nextcloud/vue'
+import { defineComponent } from 'vue'
+import Filter from 'vue-material-design-icons/Filter.vue'
+import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
+import Plus from 'vue-material-design-icons/Plus.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
+import CollectionCover from '../components/Collection/CollectionCover.vue'
+import CollectionsList from '../components/Collection/CollectionsList.vue'
+import HeaderNavigation from '../components/HeaderNavigation.vue'
 import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
-import { albumsPrefix, albumsExtraProps } from '../store/albums.js'
+import { albumsExtraProps, albumsPrefix } from '../store/albums.js'
 
 export default defineComponent({
 	name: 'Albums',
@@ -108,9 +111,7 @@ export default defineComponent({
 		},
 	},
 
-	mixins: [
-		FetchCollectionsMixin,
-	],
+	mixins: [FetchCollectionsMixin],
 
 	setup() {
 		const isMobile = useIsSmallMobile()
@@ -153,6 +154,7 @@ export default defineComponent({
 	},
 })
 </script>
+
 <style lang="scss" scoped>
 .albums-list {
 	display: flex;

@@ -19,14 +19,16 @@
 
 	<!-- Folder content -->
 	<div v-else-if="!initializing">
-		<HeaderNavigation key="navigation"
-			:class="{'photos-navigation--uploading': uploader.queue?.length > 0}"
+		<HeaderNavigation
+			key="navigation"
+			:class="{ 'photos-navigation--uploading': uploader.queue?.length > 0 }"
 			:loading="loading"
 			:path="path"
 			:title="folder?.basename?.toString?.() || rootTitle"
 			:root-title="rootTitle"
 			@refresh="onRefresh">
-			<UploadPicker :accept="allowedMimes"
+			<UploadPicker
+				:accept="allowedMimes"
 				:destination="folderAsFolder"
 				:multiple="true"
 				@uploaded="onUpload" />
@@ -39,12 +41,14 @@
 			</template>
 		</NcEmptyContent>
 
-		<div v-else
+		<div
+			v-else
 			class="grid-container"
 			:class="{
 				'grid-container--folders': haveFolders,
 			}">
-			<VirtualGrid ref="virtualgrid"
+			<VirtualGrid
+				ref="virtualgrid"
 				:items="contentList"
 				:scroll-element="appContent"
 				:get-column-count="() => haveFolders ? gridConfig.folderCount : gridConfig.count"
@@ -54,25 +58,23 @@
 </template>
 
 <script lang='ts'>
-import FolderIcon from 'vue-material-design-icons/Folder.vue'
-import VirtualGrid from 'vue-virtual-grid'
+import type { Upload } from '@nextcloud/upload'
 
-import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
-import { Upload, UploadPicker, getUploader } from '@nextcloud/upload'
 import { Folder as NcFolder } from '@nextcloud/files'
 import { defaultRootPath, parsePermissions } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
-
+import { getUploader, UploadPicker } from '@nextcloud/upload'
+import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import VirtualGrid from 'vue-virtual-grid'
+import FolderIcon from 'vue-material-design-icons/Folder.vue'
 import FileLegacy from '../components/FileLegacy.vue'
 import Folder from '../components/Folder.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-
-import allowedMimes from '../services/AllowedMimes.js'
-import getFolderContent, { type FoldersNode } from '../services/FolderContent.js'
-
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import GridConfigMixin from '../mixins/GridConfig.js'
+import allowedMimes from '../services/AllowedMimes.js'
 import { fetchFile } from '../services/fileFetcher'
+import getFolderContent, { type FoldersNode } from '../services/FolderContent.js'
 import logger from '../services/logger'
 
 export default {
@@ -85,19 +87,23 @@ export default {
 		UploadPicker,
 		VirtualGrid,
 	},
+
 	mixins: [
 		AbortControllerMixin,
 		GridConfigMixin,
 	],
+
 	props: {
 		rootTitle: {
 			type: String,
 			required: true,
 		},
+
 		path: {
 			type: String,
 			default: '/',
 		},
+
 		showShared: {
 			type: Boolean,
 			default: false,
@@ -106,7 +112,7 @@ export default {
 
 	data() {
 		return {
-			error: null as null|404|Error,
+			error: null as null | 404 | Error,
 			allowedMimes,
 
 			initializing: true,
@@ -136,6 +142,7 @@ export default {
 		folder() {
 			return this.files[this.folderId] as unknown as FoldersNode
 		},
+
 		folderAsFolder() {
 			if (!this.folder) {
 				return undefined
@@ -147,14 +154,16 @@ export default {
 				owner: null,
 			})
 		},
+
 		folderContent() {
 			return this.folders[this.folderId] || []
 		},
+
 		fileList() {
 			const list = this.folderContent
 				&& this.folderContent
-					.map(id => this.files[id])
-					.filter(file => !!file)
+					.map((id) => this.files[id])
+					.filter((file) => !!file)
 			return list
 		},
 
@@ -164,13 +173,15 @@ export default {
 				&& this.files[this.folderId]
 				&& this.$store.state.folders.subFolders[this.folderId]
 		},
+
 		folderList() {
 			const list = this.subFolders
 				&& this.subFolders
-					.map(id => this.files[id])
-					.filter(file => !!file)
+					.map((id) => this.files[id])
+					.filter((file) => !!file)
 			return list
 		},
+
 		contentList() {
 			const folders = this.folderList && this.folderList.map((folder) => {
 				return {
@@ -207,9 +218,11 @@ export default {
 		isEmpty() {
 			return !this.haveFiles && !this.haveFolders
 		},
+
 		haveFiles() {
 			return !!this.fileList && this.fileList.length !== 0
 		},
+
 		haveFolders() {
 			return !!this.folderList && this.folderList.length !== 0
 		},
@@ -219,6 +232,7 @@ export default {
 		path() {
 			this.fetchFolderContent()
 		},
+
 		showShared() {
 			this.fetchFolderContent()
 		},

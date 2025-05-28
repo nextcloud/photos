@@ -26,12 +26,14 @@
 		</div>
 
 		<div v-else-if="!noFaces" class="faces__list">
-			<router-link v-for="face in orderedFaces"
+			<router-link
+				v-for="face in orderedFaces"
 				:key="face.basename"
 				:to="`/faces/${encodeURIComponent(face.basename)}`">
 				<FaceCover :base-name="face.basename" />
 			</router-link>
-			<router-link key="unassigned"
+			<router-link
+				key="unassigned"
 				:to="`/faces/unassigned`">
 				<UnassignedFacesCover />
 			</router-link>
@@ -40,15 +42,14 @@
 </template>
 
 <script lang='ts'>
-import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
+import type { Collection } from '../services/collectionFetcher.js'
 
-import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import { t } from '@nextcloud/l10n'
-
-import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
+import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
 import FaceCover from '../components/Faces/FaceCover.vue'
 import UnassignedFacesCover from '../components/Faces/UnassignedFacesCover.vue'
-import type { Collection } from '../services/collectionFetcher.js'
+import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
 
 export default {
 	name: 'Faces',
@@ -60,9 +61,7 @@ export default {
 		AccountBoxMultipleOutline,
 	},
 
-	mixins: [
-		FetchFacesMixin,
-	],
+	mixins: [FetchFacesMixin],
 
 	computed: {
 		facesFiles() {
@@ -95,6 +94,7 @@ export default {
 	},
 }
 </script>
+
 <style lang="scss" scoped>
 .faces {
 	display: flex;

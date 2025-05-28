@@ -12,13 +12,13 @@
 		</span>
 	</div>
 </template>
+
 <script lang="ts" setup>
-import CalendarMonth from 'vue-material-design-icons/CalendarMonth.vue'
+import type { DateRangeValueType } from '../../services/PhotosFilters/dateRangeFilter.ts'
 
 import { t } from '@nextcloud/l10n'
 import { NcDateTime } from '@nextcloud/vue'
-
-import type { DateRangeValueType } from '../../services/PhotosFilters/dateRangeFilter.ts'
+import CalendarMonth from 'vue-material-design-icons/CalendarMonth.vue'
 
 defineProps<{
 	value: DateRangeValueType

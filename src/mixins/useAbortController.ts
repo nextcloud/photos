@@ -4,7 +4,6 @@
  */
 
 import { computed, onUnmounted, ref } from 'vue'
-
 import router from '../router'
 
 export default function() {

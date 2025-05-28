@@ -4,7 +4,8 @@
 -->
 
 <template>
-	<LMap class="location-map"
+	<LMap
+		class="location-map"
 		:zoom="previewZoom"
 		:center="center"
 		:options="{
@@ -15,13 +16,16 @@
 		}"
 		@scroll.prevent="">
 		<LTileLayer :url="url" />
-		<LControlAttribution position="bottomright"
+		<LControlAttribution
+			position="bottomright"
 			:prefix="attribution" />
 		<LMarker :lat-lng="center">
-			<LTooltip :options="{
-				direction: 'top',
-				permanent: 'true',
-				offset: [-16,-14]}">
+			<LTooltip
+				:options="{
+					direction: 'top',
+					permanent: 'true',
+					offset: [-16, -14],
+				}">
 				{{ name }}
 			</LTooltip>
 		</LMarker>
@@ -31,16 +35,15 @@
 <script lang='ts'>
 import {
 	LControlAttribution,
-	LTooltip,
 	LMap,
 	LMarker,
 	LTileLayer,
+	LTooltip,
 } from 'vue2-leaflet'
+
 // Leaflet icon patch
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css' // Re-uses images from ~leaflet package
 import 'leaflet/dist/leaflet.css'
-
-// eslint-disable-next-line
 import 'leaflet-defaulticon-compatibility'
 
 export default {
@@ -52,6 +55,7 @@ export default {
 		LMarker,
 		LTooltip,
 	},
+
 	props: {
 		/**
 		 * The latitude of the location
@@ -77,6 +81,7 @@ export default {
 			default: '',
 		},
 	},
+
 	data() {
 		return {
 			url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -85,6 +90,7 @@ export default {
 			attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
 		}
 	},
+
 	computed: {
 		center(): [number, number] {
 			return [this.latitude, this.longitude]

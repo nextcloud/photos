@@ -3,28 +3,27 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { computed, ref, watch } from 'vue'
+import type { PlacesValueType } from '../../services/PhotosFilters/placesFilter.ts'
 
 import { generateUrl } from '@nextcloud/router'
-
-import { placesPrefix } from '../../store/places.ts'
+import { computed, ref, watch } from 'vue'
 import useFetchCollections from '../../mixins/useFetchCollections.ts'
 import store from '../../store/index.ts'
-import type { PlacesValueType } from '../../services/PhotosFilters/placesFilter.ts'
+import { placesPrefix } from '../../store/places.ts'
 
 type NcSelectPlaceOption = {
 	label: string
 	previewUrl?: string
 }
 
-export default function(props: Readonly<{ value: PlacesValueType }>, emit: (event: 'update:value', args: PlacesValueType) => void,) {
+export default function(props: Readonly<{ value: PlacesValueType }>, emit: (event: 'update:value', args: PlacesValueType) => void) {
 	const { fetchCollections, loadingCollections } = useFetchCollections()
 
 	const availablePlaces = ref<NcSelectPlaceOption[]>([])
 
 	const selectedPlaces = computed<NcSelectPlaceOption[]>({
 		get() {
-			return (props.value ?? []).map(placeId => {
+			return (props.value ?? []).map((placeId) => {
 				const place = store.getters.getPlace(placeId)
 
 				return {
@@ -37,9 +36,9 @@ export default function(props: Readonly<{ value: PlacesValueType }>, emit: (even
 			if (newSelectedPlacesValue.length === 0) {
 				emit('update:value', undefined)
 			} else {
-				emit('update:value', newSelectedPlacesValue.map(place => place.label))
+				emit('update:value', newSelectedPlacesValue.map((place) => place.label))
 			}
-		}
+		},
 	})
 
 	const availablePlacesWithoutSelections = computed(() => availablePlaces.value.filter((option) => !selectedPlaces.value.includes(option)))

@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import type { Collection } from '../services/collectionFetcher.ts'
+import type { PhotosContext } from './index.ts'
+
 import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
-
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
-import type { Collection } from '../services/collectionFetcher.ts'
-import type { PhotosContext } from './index.ts'
 
 /**
  * Collections are indexed by their `filename`.
@@ -32,7 +32,7 @@ const mutations = {
 	/**
 	 * Add new collections.
 	 */
-	addCollections(state: CollectionState, { collections }: { collections: Collection[]}) {
+	addCollections(state: CollectionState, { collections }: { collections: Collection[] }) {
 		state.collections = {
 			...state.collections,
 			...collections.reduce((collections, collection) => ({ ...collections, [collection.root + collection.path]: collection }), {}),
@@ -42,22 +42,22 @@ const mutations = {
 	/**
 	 * Add collections to the collection collection.
 	 */
-	updateCollection(state: CollectionState, { collection }: { collection: Collection}) {
+	updateCollection(state: CollectionState, { collection }: { collection: Collection }) {
 		state.collections[collection.root + collection.path] = collection
 	},
 
 	/**
 	 * Remove collections from the collection collection.
 	 */
-	removeCollections(state: CollectionState, { collectionFileNames }: { collectionFileNames: string[]}) {
-		collectionFileNames.forEach(collectionFileName => delete state.collections[collectionFileName])
-		collectionFileNames.forEach(collectionFileName => delete state.collectionsFiles[collectionFileName])
+	removeCollections(state: CollectionState, { collectionFileNames }: { collectionFileNames: string[] }) {
+		collectionFileNames.forEach((collectionFileName) => delete state.collections[collectionFileName])
+		collectionFileNames.forEach((collectionFileName) => delete state.collectionsFiles[collectionFileName])
 	},
 
 	/**
 	 * Add files to an collection.
 	 */
-	setCollectionFiles(state: CollectionState, { collectionFileName, fileIds = [] }: { collectionFileName: string, fileIds: string[]}) {
+	setCollectionFiles(state: CollectionState, { collectionFileName, fileIds = [] }: { collectionFileName: string, fileIds: string[] }) {
 		state.collectionsFiles = {
 			...state.collectionsFiles,
 			[collectionFileName]: fileIds,
@@ -72,7 +72,7 @@ const mutations = {
 	/**
 	 * Add files to an collection.
 	 */
-	addFilesToCollection(state: CollectionState, { collectionFileName, fileIdsToAdd }: { collectionFileName: string, fileIdsToAdd: string[]}) {
+	addFilesToCollection(state: CollectionState, { collectionFileName, fileIdsToAdd }: { collectionFileName: string, fileIdsToAdd: string[] }) {
 		const collectionFiles = state.collectionsFiles[collectionFileName] || []
 		state.collectionsFiles = {
 			...state.collectionsFiles,
@@ -86,10 +86,10 @@ const mutations = {
 	/**
 	 * Remove files from a collection.
 	 */
-	removeFilesFromCollection(state: CollectionState, { collectionFileName, fileIdsToRemove }: { collectionFileName: string, fileIdsToRemove: string[]}) {
+	removeFilesFromCollection(state: CollectionState, { collectionFileName, fileIdsToRemove }: { collectionFileName: string, fileIdsToRemove: string[] }) {
 		state.collectionsFiles = {
 			...state.collectionsFiles,
-			[collectionFileName]: state.collectionsFiles[collectionFileName].filter(fileId => !fileIdsToRemove.includes(fileId)),
+			[collectionFileName]: state.collectionsFiles[collectionFileName].filter((fileId) => !fileIdsToRemove.includes(fileId)),
 		}
 
 		state.collections[collectionFileName].attributes.nbItems -= fileIdsToRemove.length
@@ -104,7 +104,7 @@ const getters = {
 	collectionsFiles: (state: CollectionState) => state.collectionsFiles,
 	collectionsWithPrefix: (state: CollectionState) => function(prefix: string) {
 		return Object.values(state.collections)
-			.filter(collection => collection.root === prefix)
+			.filter((collection) => collection.root === prefix)
 			.reduce((collections, collection) => ({ ...collections, [collection.root + collection.path]: collection }), {} as Record<string, Collection>)
 	},
 }
@@ -113,7 +113,7 @@ const actions = {
 	/**
 	 * Update files and collections
 	 */
-	addCollections(context: PhotosContext<CollectionState>, { collections }: { collections: Collection[]}) {
+	addCollections(context: PhotosContext<CollectionState>, { collections }: { collections: Collection[] }) {
 		context.commit('addCollections', { collections })
 	},
 
@@ -196,7 +196,7 @@ const actions = {
 	/**
 	 * Rename an collection.
 	 */
-	async renameCollection(context: PhotosContext<CollectionState>, { collectionFileName, newBaseName }: { collectionFileName: string, newBaseName: string}) {
+	async renameCollection(context: PhotosContext<CollectionState>, { collectionFileName, newBaseName }: { collectionFileName: string, newBaseName: string }) {
 		const collection = state.collections[collectionFileName]
 		const newCollection = collection.clone()
 		newCollection.rename(newBaseName)
@@ -228,12 +228,12 @@ const actions = {
 			.entries(properties)
 			.map(([name, value]) => {
 				switch (typeof value) {
-				case 'string':
-					return `<nc:${name}>${value}</nc:${name}>`
-				case 'object':
-					return `<nc:${name}>${JSON.stringify(value)}</nc:${name}>`
-				default:
-					return ''
+					case 'string':
+						return `<nc:${name}>${value}</nc:${name}>`
+					case 'object':
+						return `<nc:${name}>${JSON.stringify(value)}</nc:${name}>`
+					default:
+						return ''
 				}
 			})
 			.join()
@@ -271,7 +271,7 @@ const actions = {
 	/**
 	 * Delete an collection.
 	 */
-	async deleteCollection(context: PhotosContext<CollectionState>, { collectionFileName }: { collectionFileName: string}) {
+	async deleteCollection(context: PhotosContext<CollectionState>, { collectionFileName }: { collectionFileName: string }) {
 		try {
 			const collection = context.state.collections[collectionFileName]
 			await davClient.deleteFile(collection.root + collection.path)

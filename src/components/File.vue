@@ -4,10 +4,12 @@
 -->
 
 <template>
-	<div class="file-container"
+	<div
+		class="file-container"
 		data-test="media"
-		:class="{selected}">
-		<a class="file"
+		:class="{ selected }">
+		<a
+			class="file"
 			:href="file.source"
 			:aria-label="ariaLabel"
 			@click.stop.prevent="emitClick">
@@ -24,12 +26,14 @@
 				<!-- Preload large preview for near visible files -->
 				<!-- Preload small preview for further away files -->
 				<template v-if="initialized">
-					<canvas v-if="hasBlurhash && !loadedSmall && !loadedLarge"
+					<canvas
+						v-if="hasBlurhash && !loadedSmall && !loadedLarge"
 						ref="canvas"
 						class="file__blurhash"
 						aria-hidden="true" />
 
-					<img v-if="!loadedLarge && (loadedSmall || (distance < 5 && !errorSmall))"
+					<img
+						v-if="!loadedLarge && (loadedSmall || (distance < 5 && !errorSmall))"
 						ref="imgSmall"
 						:key="`${file.basename}-small`"
 						:src="srcSmall"
@@ -40,7 +44,8 @@
 						@load="onLoadSmall"
 						@error="onErrorSmall">
 
-					<img v-if="loadedLarge || ((isVisible || (distance < 2 && (loadedSmall || errorSmall))) && !errorLarge)"
+					<img
+						v-if="loadedLarge || ((isVisible || (distance < 2 && (loadedSmall || errorSmall))) && !errorLarge)"
 						ref="imgLarge"
 						:key="`${file.basename}-large`"
 						:src="srcLarge"
@@ -54,31 +59,32 @@
 			</div>
 		</a>
 
-		<NcCheckboxRadioSwitch v-if="allowSelection"
+		<NcCheckboxRadioSwitch
+			v-if="allowSelection"
 			class="selection-checkbox"
-			:aria-label="t('photos', 'Select image {imageName}', {imageName: file.basename})"
+			:aria-label="t('photos', 'Select image {imageName}', { imageName: file.basename })"
 			:checked="selected"
 			@update:checked="onToggle" />
 
-		<FavoriteIcon v-if="file.attributes.favorite === 1"
+		<FavoriteIcon
+			v-if="file.attributes.favorite === 1"
 			v-once
 			class="favorite-state" />
 	</div>
 </template>
 
 <script lang='ts'>
-import VideoIcon from 'vue-material-design-icons/Video.vue'
-import PlayCircleIcon from 'vue-material-design-icons/PlayCircle.vue'
-import { decode } from 'blurhash'
 import type { PropType } from 'vue'
+import type { PhotoFile } from '../store/files.js'
 
+import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { t } from '@nextcloud/l10n'
-
+import { decode } from 'blurhash'
+import PlayCircleIcon from 'vue-material-design-icons/PlayCircle.vue'
+import VideoIcon from 'vue-material-design-icons/Video.vue'
 import FavoriteIcon from './FavoriteIcon.vue'
 import { isCachedPreview } from '../services/PreviewService.js'
-import type { PhotoFile } from '../store/files.js'
 
 export default {
 	name: 'File',
@@ -88,20 +94,24 @@ export default {
 		VideoIcon,
 		PlayCircleIcon,
 	},
+
 	inheritAttrs: false,
 	props: {
 		file: {
 			type: Object as PropType<PhotoFile>,
 			required: true,
 		},
+
 		selected: {
 			type: Boolean,
 			default: false,
 		},
+
 		allowSelection: {
 			type: Boolean,
 			default: true,
 		},
+
 		distance: {
 			type: Number,
 			default: 0,
@@ -125,21 +135,27 @@ export default {
 			}
 			return t('photos', 'Open the full size "{name}" image', { name: this.file.basename })
 		},
+
 		isImage(): boolean {
 			return this.file.mime?.startsWith('image') ?? false
 		},
+
 		decodedEtag(): string {
 			return this.file.attributes.etag.replace('&quot;', '').replace('&quot;', '')
 		},
+
 		srcLarge(): string {
 			return this.getItemURL(512)
 		},
+
 		srcSmall(): string {
 			return this.getItemURL(64)
 		},
+
 		isVisible(): boolean {
 			return this.distance === 0
 		},
+
 		hasBlurhash() {
 			return this.file.attributes.metadataBlurhash !== undefined
 		},
@@ -217,6 +233,7 @@ export default {
 				return generateUrl(`/apps/photos/api/v1/preview/${this.file.fileid}?etag=${this.decodedEtag}&x=${size}&y=${size}`)
 			}
 		},
+
 		drawBlurhash() {
 			if (!this.hasBlurhash || !this.$refs.canvas) {
 				return

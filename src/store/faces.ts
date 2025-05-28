@@ -3,16 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { showError } from '@nextcloud/dialogs'
+import type { Collection } from '../services/collectionFetcher.ts'
+import type { PhotosContext } from './index.ts'
+
 import { getCurrentUser } from '@nextcloud/auth'
+import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import Vue from 'vue'
-
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
-import type { Collection } from '../services/collectionFetcher.ts'
-import type { PhotosContext } from './index.ts'
 
 const state = {
 	faces: {} as Record<string, Collection>,
@@ -37,8 +37,8 @@ const mutations = {
 	 * Remove faces from the face collection.
 	 */
 	removeFaces(state: FacesState, { faceNames }: { faceNames: string[] }) {
-		faceNames.forEach(faceName => Vue.delete(state.faces, faceName))
-		faceNames.forEach(faceName => Vue.delete(state.facesFiles, faceName))
+		faceNames.forEach((faceName) => Vue.delete(state.faces, faceName))
+		faceNames.forEach((faceName) => Vue.delete(state.facesFiles, faceName))
 	},
 
 	/**
@@ -49,7 +49,7 @@ const mutations = {
 			Vue.set(state.facesFiles, faceName, [])
 		}
 		const faceFiles = state.facesFiles[faceName]
-		faceFiles.push(...fileIdsToAdd.filter(fileId => !faceFiles.includes(fileId))) // Filter to prevent duplicate fileId.
+		faceFiles.push(...fileIdsToAdd.filter((fileId) => !faceFiles.includes(fileId))) // Filter to prevent duplicate fileId.
 	},
 
 	/**
@@ -60,21 +60,21 @@ const mutations = {
 			state.unassignedFiles = []
 		}
 		const files = state.unassignedFiles
-		files.push(...fileIdsToAdd.filter(fileId => !files.includes(fileId))) // Filter to prevent duplicate fileId.
+		files.push(...fileIdsToAdd.filter((fileId) => !files.includes(fileId))) // Filter to prevent duplicate fileId.
 	},
 
 	/**
 	 * Remove files from the unassigned Files collection
 	 */
 	removeUnassignedFile(state: FacesState, { fileIdsToRemove }: { fileIdsToRemove: string[] }) {
-		state.unassignedFiles = state.unassignedFiles.filter(fileId => !fileIdsToRemove.includes(fileId))
+		state.unassignedFiles = state.unassignedFiles.filter((fileId) => !fileIdsToRemove.includes(fileId))
 	},
 
 	/**
 	 * Remove files from a face.
 	 */
 	removeFilesFromFace(state: FacesState, { faceName, fileIdsToRemove }: { faceName: string, fileIdsToRemove: string[] }) {
-		Vue.set(state.facesFiles, faceName, state.facesFiles[faceName].filter(fileId => !fileIdsToRemove.includes(fileId)))
+		Vue.set(state.facesFiles, faceName, state.facesFiles[faceName].filter((fileId) => !fileIdsToRemove.includes(fileId)))
 	},
 
 	setUnassignedFilesCount(state: FacesState, count: number) {
@@ -114,7 +114,7 @@ const actions = {
 						oldFace ? `/recognize/${getCurrentUser()?.uid}/faces/${oldFace}/${fileBaseName}` : `/recognize/${getCurrentUser()?.uid}/unassigned-faces/${fileBaseName}`,
 						`/recognize/${getCurrentUser()?.uid}/faces/${faceName}/${fileBaseName}`,
 					)
-					file.faceDetections.find(detection => detection.title === oldFace).title = faceName
+					file.faceDetections.find((detection) => detection.title === oldFace).title = faceName
 					await context.commit('addFilesToFace', { faceName, fileIdsToAdd: [fileId] })
 					if (oldFace) {
 						await context.commit('removeFilesFromFace', { faceName: oldFace, fileIdsToRemove: [fileId] })
@@ -165,7 +165,7 @@ const actions = {
 	 * Rename an face.
 	 */
 	async renameFace(context: PhotosContext<FacesState>, { oldName, faceName }: { oldName: string, faceName: string }) {
-		let face = state.faces[oldName]
+		const face = state.faces[oldName]
 
 		try {
 			if (state.faces[faceName]) {
@@ -188,7 +188,7 @@ const actions = {
 	/**
 	 * Delete an face.
 	 */
-	async deleteFace(context: PhotosContext<FacesState>, { faceName }: { faceName: string}) {
+	async deleteFace(context: PhotosContext<FacesState>, { faceName }: { faceName: string }) {
 		try {
 			await davClient.deleteFile(`/recognize/${getCurrentUser()?.uid}/faces/${faceName}`)
 			context.commit('removeFaces', { faceNames: [faceName] })

@@ -4,14 +4,16 @@
 -->
 <template>
 	<div v-if="!useWindow && containerElement === null" ref="container" class="vs-container">
-		<div ref="rowsContainer"
+		<div
+			ref="rowsContainer"
 			class="vs-rows-container"
 			:style="rowsContainerStyle">
 			<slot :visible-sections="visibleSections" />
 			<slot name="loader" />
 		</div>
 	</div>
-	<div v-else
+	<div
+		v-else
 		ref="rowsContainer"
 		class="vs-rows-container"
 		:style="rowsContainerStyle">
@@ -22,6 +24,7 @@
 
 <script lang='ts'>
 import type { PropType } from 'vue'
+
 import logger from '../services/logger.js'
 
 export type Row = {
@@ -67,14 +70,17 @@ export default {
 			type: Number,
 			default: 75,
 		},
+
 		renderDistance: {
 			type: Number,
 			default: 0.5,
 		},
+
 		bottomBufferRatio: {
 			type: Number,
 			default: 2,
 		},
+
 		scrollToKey: {
 			type: String,
 			default: '',
@@ -86,7 +92,7 @@ export default {
 			scrollPosition: 0,
 			containerHeight: 0,
 			rowsContainerHeight: 0,
-			resizeObserver: null as ResizeObserver|null,
+			resizeObserver: null as ResizeObserver | null,
 		}
 	},
 
@@ -105,7 +111,7 @@ export default {
 			// Compute whether a row should be included in the DOM (shouldRender)
 			// And how visible the row is.
 			const visibleSections = this.sections
-				.map(section => {
+				.map((section) => {
 					currentRowBottom += this.headerHeight
 
 					return {
@@ -136,7 +142,7 @@ export default {
 						}, [] as VisibleRow[]),
 					}
 				})
-				.filter(section => section.rows.length > 0)
+				.filter((section) => section.rows.length > 0)
 
 			// To allow vue to recycle the DOM elements instead of adding and deleting new ones,
 			// we assign a random key to each items. When a item removed, we recycle its key for new items,
@@ -145,17 +151,17 @@ export default {
 				.flatMap(({ rows }) => rows)
 				.flatMap(({ items }) => items)
 
-			visibleItems.forEach(item => (item.key = this.rowIdToKeyMap[item.id]))
+			visibleItems.forEach((item) => (item.key = this.rowIdToKeyMap[item.id]))
 
 			const usedTokens = visibleItems
 				.map(({ key }) => key)
-				.filter(key => key !== undefined)
+				.filter((key) => key !== undefined)
 
-			const unusedTokens = Object.values(this.rowIdToKeyMap).filter(key => !usedTokens.includes(key))
+			const unusedTokens = Object.values(this.rowIdToKeyMap).filter((key) => !usedTokens.includes(key))
 
 			visibleItems
 				.filter(({ key }) => key === undefined)
-				.forEach(item => (item.key = unusedTokens.pop() ?? Math.random().toString(36).substr(2)))
+				.forEach((item) => (item.key = unusedTokens.pop() ?? Math.random().toString(36).substr(2)))
 
 			// this.rowIdToKeyMap is created in the beforeCreate hook, so value changes are not tracked.
 			// Therefore, we wont trigger the computation of visibleSections again if we alter the value of this.rowIdToKeyMap.
@@ -172,7 +178,7 @@ export default {
 			const loaderHeight = 200
 
 			return this.sections
-				.map(section => this.headerHeight + section.height)
+				.map((section) => this.headerHeight + section.height)
 				.reduce((totalHeight, sectionHeight) => totalHeight + sectionHeight, 0) + loaderHeight
 		},
 
@@ -206,7 +212,7 @@ export default {
 		/**
 		 * padding-top is used to replace not included item in the container.
 		 */
-		rowsContainerStyle(): {height: string, paddingTop: string} {
+		rowsContainerStyle(): { height: string, paddingTop: string } {
 			return {
 				height: `${this.totalHeight}px`,
 				paddingTop: `${this.paddingTop}px`,
@@ -222,7 +228,7 @@ export default {
 			return this.scrollPosition + this.containerHeight >= this.totalHeight - buffer
 		},
 
-		container(): HTMLElement|Window {
+		container(): HTMLElement | Window {
 			logger.debug('[VirtualScrolling] Computing container')
 			if (this.containerElement !== null) {
 				return this.containerElement
@@ -272,7 +278,7 @@ export default {
 	},
 
 	mounted() {
-		this.resizeObserver = new ResizeObserver(entries => {
+		this.resizeObserver = new ResizeObserver((entries) => {
 			for (const entry of entries) {
 				const cr = entry.contentRect
 				if (entry.target === this.container) {

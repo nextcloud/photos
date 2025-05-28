@@ -8,7 +8,7 @@ import { getDavProperties } from '@nextcloud/files/dav'
 /**
  * Used to cache the props
  */
-let props: string|null = null
+let props: string | null = null
 
 /**
  * Get the default WebDAV properties
