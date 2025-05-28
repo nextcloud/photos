@@ -36,7 +36,7 @@
 		<NcButton
 			:aria-label="t('photos', 'Create a new album.')"
 			class="new-album-button"
-			type="tertiary"
+			variant="tertiary"
 			@click="showAlbumCreationForm = true">
 			<template #icon>
 				<Plus />

@@ -50,7 +50,7 @@
 							:title="t('photos', 'Toggle filter')"
 							:aria-label="t('photos', 'Toggle filter')"
 							data-cy-header-action="toggle-filters"
-							type="tertiary"
+							variant="tertiary"
 							@click="toggleFilters">
 							<template #icon>
 								<FilterCheck v-if="editFilters" />
@@ -70,7 +70,7 @@
 
 					<NcButton
 						v-if="sharingEnabled"
-						type="tertiary"
+						variant="tertiary"
 						:aria-label="t('photos', 'Manage collaborators for this album')"
 						@click="showManageCollaboratorView = true">
 						<ShareVariant slot="icon" />
@@ -132,7 +132,7 @@
 				<NcButton
 					slot="action"
 					class="album__empty__button"
-					type="primary"
+					variant="primary"
 					:aria-label="t('photos', 'Add photos to this album')"
 					@click="showAddPhotosModal = true">
 					<Plus slot="icon" />
@@ -159,7 +159,7 @@
 				<template slot-scope="{ collaborators }">
 					<NcButton
 						:aria-label="t('photos', 'Save collaborators for this album.')"
-						type="primary"
+						variant="primary"
 						:disabled="loadingAddCollaborators"
 						@click="handleSetCollaborators(collaborators)">
 						<template #icon>

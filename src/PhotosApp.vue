@@ -96,7 +96,7 @@
 			<template #footer>
 				<div class="app-navigation__footer">
 					<NcButton
-						type="tertiary"
+						variant="tertiary"
 						alignment="start"
 						wide
 						@click="showSettings">
