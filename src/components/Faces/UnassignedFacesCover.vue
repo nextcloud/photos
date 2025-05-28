@@ -18,10 +18,9 @@
 
 <script lang='ts'>
 import { translatePlural as n } from '@nextcloud/l10n'
-
-import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
-import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
 import AccountOffIcon from 'vue-material-design-icons/AccountOff.vue'
+import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
+import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
 
 export default {
 	name: 'UnassignedFacesCover',

@@ -3,9 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { navigateToCollection, navigateToCollections, selectMedia } from './photosUtils'
-import { navigateToTimeline } from './timelines'
+import { navigateToCollection, navigateToCollections, selectMedia } from './photosUtils.ts'
+import { navigateToTimeline } from './timelinesUtils.ts'
 
+/**
+ *
+ * @param albumName
+ */
 export function createAnAlbumFromTimeline(albumName: string) {
 	navigateToTimeline('all-media')
 	cy.get('[data-cy-header-action="create-album"]').click()
@@ -19,6 +23,10 @@ export function createAnAlbumFromTimeline(albumName: string) {
 	cy.wait('@propFind')
 }
 
+/**
+ *
+ * @param albumName
+ */
 export function createAnAlbumFromAlbums(albumName: string) {
 	navigateToCollections('albums')
 	cy.contains('New album').click()
@@ -28,12 +36,20 @@ export function createAnAlbumFromAlbums(albumName: string) {
 	cy.wait('@propFind')
 }
 
+/**
+ *
+ * @param albumName
+ */
 export function deleteAnAlbumFromAlbumContent(albumName: string) {
 	navigateToCollection('albums', albumName)
 	cy.get('[aria-label="Open actions menu"]').click()
 	cy.contains('Delete album').click()
 }
 
+/**
+ *
+ * @param albumName
+ */
 export function addFilesToAlbumFromTimeline(albumName: string) {
 	navigateToTimeline('all-media')
 	cy.intercept({ times: 1, method: 'COPY', url: '/remote.php/dav/files/**' }).as('copy')
@@ -46,6 +62,11 @@ export function addFilesToAlbumFromTimeline(albumName: string) {
 	cy.wait('@copy')
 }
 
+/**
+ *
+ * @param albumName
+ * @param itemsIndex
+ */
 export function addFilesToAlbumFromAlbum(albumName: string, itemsIndex: number[]) {
 	navigateToCollection('albums', albumName)
 	cy.intercept({ times: 1, method: 'SEARCH', url: '/remote.php/dav/' }).as('search')
@@ -61,6 +82,11 @@ export function addFilesToAlbumFromAlbum(albumName: string, itemsIndex: number[]
 	cy.wait('@propFind')
 }
 
+/**
+ *
+ * @param albumName
+ * @param itemsIndex
+ */
 export function addFilesToAlbumFromAlbumFromHeader(albumName: string, itemsIndex: number[]) {
 	navigateToCollection('albums', albumName)
 	cy.contains('Add photos to this album').click()
@@ -73,6 +99,11 @@ export function addFilesToAlbumFromAlbumFromHeader(albumName: string, itemsIndex
 	cy.wait('@propFind')
 }
 
+/**
+ *
+ * @param collectionId
+ * @param albumName
+ */
 export function removeSelectionFromCollection(collectionId: string, albumName: string) {
 	cy.get('[aria-label="Open actions menu"]').click()
 	cy.intercept({ times: 1, method: 'DELETE', url: `/remote.php/dav/photos/*/${collectionId}/${encodeURIComponent(albumName)}/*` }).as('deleteFromAlbum')
@@ -80,6 +111,10 @@ export function removeSelectionFromCollection(collectionId: string, albumName: s
 	cy.wait('@deleteFromAlbum')
 }
 
+/**
+ *
+ * @param collaborators
+ */
 export function addCollaborators(collaborators: string[]) {
 	cy.get('[aria-label="Manage collaborators for this album"]').click()
 	collaborators.forEach((collaborator: string) => {
@@ -89,6 +124,10 @@ export function addCollaborators(collaborators: string[]) {
 	cy.contains('Save').click()
 }
 
+/**
+ *
+ * @param collaborators
+ */
 export function removeCollaborators(collaborators: string[]) {
 	cy.get('[aria-label="Manage collaborators for this album"]').click()
 	collaborators.forEach((collaborator: string) => {
@@ -103,6 +142,9 @@ export function removeCollaborators(collaborators: string[]) {
 	cy.contains('Save').click()
 }
 
+/**
+ *
+ */
 export function createPublicShare() {
 	cy.get('[aria-label="Manage collaborators for this album"]').click()
 	cy.intercept({ times: 1, method: 'PROPPATCH', url: '/remote.php/dav/photos/*/albums/*' }).as('patchCall')
@@ -115,6 +157,9 @@ export function createPublicShare() {
 		.invoke('attr', 'title') as Cypress.Chainable<string>
 }
 
+/**
+ *
+ */
 export function deletePublicShare() {
 	cy.get('[aria-label="Manage collaborators for this album"]').click()
 	cy.get('[aria-label="Delete the public link"]').click()

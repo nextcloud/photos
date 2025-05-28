@@ -4,21 +4,31 @@
  */
 
 import type { User } from '@nextcloud/cypress'
+
 import axios from 'axios'
 
+/**
+ *
+ * @param user
+ * @param destination
+ */
 export function uploadTestMedia(user: User, destination = '/Photos') {
 	return cy.exec('ls cypress/fixtures/media')
 		.then((result) => {
 			const fileIdsMap = {} as Record<string, number>
 			result.stdout.split('\n').map((fileName) => {
 				cy.uploadFile(user, `media/${fileName}`, 'image/png', `/${destination}/${fileName}`)
-					.then(fileId => fileIdsMap[fileName] = fileId)
+					.then((fileId) => fileIdsMap[fileName] = fileId)
 			})
 			cy.log('Uploaded files:', JSON.stringify(fileIdsMap))
 			return cy.wrap(fileIdsMap)
 		})
 }
 
+/**
+ *
+ * @param indexes
+ */
 export function selectMedia(indexes: number[]) {
 	indexes.forEach((index: number) => {
 		cy.get('[data-test="media"]').eq(index)
@@ -27,6 +37,10 @@ export function selectMedia(indexes: number[]) {
 	})
 }
 
+/**
+ *
+ * @param indexes
+ */
 export function unselectMedia(indexes: number[]) {
 	indexes.forEach((index: number) => {
 		cy.get('[data-test="media"]').eq(index)
@@ -35,26 +49,57 @@ export function unselectMedia(indexes: number[]) {
 	})
 }
 
-export function favoriteSelection() {
+/**
+ *
+ * @param selection
+ */
+export function selectAndFavorite(selection: number[]) {
+	selectMedia(selection)
+
 	cy.get('[aria-label="Open actions menu"]').click()
+
+	cy.intercept({ times: 1, method: 'PROPPATCH', url: '/remote.php/dav/**' }).as('favoriteProppatch')
 	cy.get('[aria-label="Mark selection as favorite"]').click()
+	cy.wait('@favoriteProppatch')
+
+	unselectMedia(selection)
 }
 
-export function unfavoriteSelection() {
+/**
+ *
+ * @param selection
+ */
+export function selectAndUnfavorite(selection: number[]) {
+	selectMedia(selection)
+
 	cy.get('[aria-label="Open actions menu"]').click()
+
+	cy.intercept({ times: 1, method: 'PROPPATCH', url: '/remote.php/dav/**' }).as('unfavoriteProppatch')
 	cy.get('[aria-label="Remove selection from favorites"]').click()
+	cy.wait('@unfavoriteProppatch')
+
+	unselectMedia(selection)
 }
 
+/**
+ *
+ */
 export function downloadSelection() {
 	cy.get('[aria-label="Open actions menu"]').click()
 	cy.get('[aria-label="Download selected files"]').trigger('click')
 }
 
+/**
+ *
+ */
 export function downloadAllFiles() {
 	cy.get('[aria-label="Open actions menu"]').click()
 	cy.get('[aria-label="Download all files in album"]').trigger('click')
 }
 
+/**
+ *
+ */
 export function deleteSelection() {
 	cy.intercept({ times: 1, method: 'DELETE' }).as('deleteRequests')
 	cy.get('[aria-label="Open actions menu"]').click()
@@ -63,8 +108,11 @@ export function deleteSelection() {
 		.wait('@deleteRequests')
 }
 
+/**
+ * @param user - User to create directory for
+ * @param target - Target path of the directory
+ */
 export function mkdir(user: User, target: string) {
-	// eslint-disable-next-line cypress/unsafe-to-chain-command
 	cy.clearCookies()
 		.then({ timeout: 8000 }, async () => {
 			try {
@@ -96,6 +144,9 @@ type SetupInfo = {
 	charliesFiles: Record<string, number>
 }
 
+/**
+ *
+ */
 export function setupPhotosTests(): Cypress.Chainable<SetupInfo> {
 	return cy.task('getVariable', { key: 'timeline-data' })
 		.then((_setupInfo) => {
@@ -103,26 +154,34 @@ export function setupPhotosTests(): Cypress.Chainable<SetupInfo> {
 			if (setupInfo.snapshot) {
 				cy.restoreState(setupInfo.snapshot)
 			} else {
-				cy.createRandomUser().then(user => { setupInfo.alice = user })
-				cy.createRandomUser().then(user => { setupInfo.bob = user })
-				cy.createRandomUser().then(user => { setupInfo.charlie = user })
+				cy.createRandomUser().then((user) => {
+					setupInfo.alice = user
+				})
+				cy.createRandomUser().then((user) => {
+					setupInfo.bob = user
+				})
+				cy.createRandomUser().then((user) => {
+					setupInfo.charlie = user
+				})
 
 				cy.then(() => {
 					mkdir(setupInfo.alice, '/Photos')
 					mkdir(setupInfo.bob, '/Photos')
 					mkdir(setupInfo.charlie, '/Photos')
 					uploadTestMedia(setupInfo.alice)
-						.then(fileIdsMap => setupInfo.alicesFiles = fileIdsMap)
+						.then((fileIdsMap) => setupInfo.alicesFiles = fileIdsMap)
 					uploadTestMedia(setupInfo.bob)
-						.then(fileIdsMap => setupInfo.bobsFiles = fileIdsMap)
+						.then((fileIdsMap) => setupInfo.bobsFiles = fileIdsMap)
 					uploadTestMedia(setupInfo.charlie)
-						.then(fileIdsMap => setupInfo.charliesFiles = fileIdsMap)
+						.then((fileIdsMap) => setupInfo.charliesFiles = fileIdsMap)
 				})
 
 				cy.runOccCommand('files:scan --all --generate-metadata')
 
 				cy.then(() => {
-					cy.saveState().then((value) => { setupInfo.snapshot = value })
+					cy.saveState().then((value) => {
+						setupInfo.snapshot = value
+					})
 					cy.task('setVariable', { key: 'timeline-data', value: setupInfo })
 				})
 			}
@@ -135,7 +194,11 @@ export function setupPhotosTests(): Cypress.Chainable<SetupInfo> {
 		})
 }
 
-export function navigateToCollections(collectionId: 'places'|'albums'|'sharedalbums') {
+/**
+ *
+ * @param collectionId
+ */
+export function navigateToCollections(collectionId: 'places' | 'albums' | 'sharedalbums') {
 	cy.url()
 		.then((url) => {
 			if (!url.endsWith(`/apps/photos/${collectionId}/`) && !url.endsWith(`/apps/photos/${collectionId}`)) {
@@ -146,7 +209,12 @@ export function navigateToCollections(collectionId: 'places'|'albums'|'sharedalb
 		})
 }
 
-export function navigateToCollection(collectionId: 'places'|'albums'|'sharedalbums', collectionName: string) {
+/**
+ *
+ * @param collectionId
+ * @param collectionName
+ */
+export function navigateToCollection(collectionId: 'places' | 'albums' | 'sharedalbums', collectionName: string) {
 	cy.url()
 		.then((url) => {
 			if (!url.endsWith(`/apps/photos/${collectionId}/${encodeURIComponent(collectionName)}`)) {

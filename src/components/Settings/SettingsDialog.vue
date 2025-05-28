@@ -4,7 +4,8 @@
 -->
 
 <template>
-	<NcAppSettingsDialog :open="open"
+	<NcAppSettingsDialog
+		:open="open"
 		:show-navigation="true"
 		:name="t('photos', 'Photos settings')"
 		@update:open="onClose">
@@ -31,10 +32,9 @@
 </template>
 
 <script lang='ts'>
-import NcAppSettingsDialog from '@nextcloud/vue/dist/Components/NcAppSettingsDialog.js'
-import NcAppSettingsSection from '@nextcloud/vue/dist/Components/NcAppSettingsSection.js'
 import { t } from '@nextcloud/l10n'
-
+import NcAppSettingsDialog from '@nextcloud/vue/components/NcAppSettingsDialog'
+import NcAppSettingsSection from '@nextcloud/vue/components/NcAppSettingsSection'
 import CroppedLayoutSettings from './CroppedLayoutSettings.vue'
 import PhotosSourceLocationsSettings from './PhotosSourceLocationsSettings.vue'
 import PhotosUploadLocationSettings from './PhotosUploadLocationSettings.vue'

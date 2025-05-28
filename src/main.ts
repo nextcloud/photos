@@ -4,11 +4,10 @@
  */
 
 import { registerDavProperty } from '@nextcloud/files/dav'
-import { sync } from 'vuex-router-sync'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import Vue from 'vue'
-
-import Photos from './Photos.vue'
+import { sync } from 'vuex-router-sync'
+import PhotosApp from './PhotosApp.vue'
 import router from './router/index.js'
 import store from './store/index.js'
 
@@ -24,9 +23,8 @@ registerDavProperty('nc:metadata-photos-original_date_time')
 
 export default new Vue({
 	el: '#content',
-	// eslint-disable-next-line vue/match-component-file-name
 	name: 'PhotosRoot',
 	router,
 	store,
-	render: h => h(Photos),
+	render: (h) => h(PhotosApp),
 })

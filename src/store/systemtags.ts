@@ -1,16 +1,15 @@
+import type { File, Folder } from '@nextcloud/files'
+import type { PhotosContext } from './index.js'
+
 /**
  * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import Vue from 'vue'
-
-import type { File, Folder } from '@nextcloud/files'
-
-import { sortCompare } from '../utils/fileUtils.js'
-import getTaggedImages from '../services/TaggedImages.js'
-import getSystemTags from '../services/SystemTags.js'
 import logger from '../services/logger.js'
-import type { PhotosContext } from './index.js'
+import getSystemTags from '../services/SystemTags.js'
+import getTaggedImages from '../services/TaggedImages.js'
+import { sortCompare } from '../utils/fileUtils.js'
 
 export type Tag = Folder & {
 	attributes: {
@@ -35,6 +34,9 @@ export type SystemTagsState = typeof state
 const mutations = {
 	/**
 	 * Order and save tags
+	 *
+	 * @param state
+	 * @param tags
 	 */
 	updateTags(state: SystemTagsState, tags: Tag[]) {
 		if (tags.length > 0) {
@@ -42,7 +44,7 @@ const mutations = {
 			const list = tags.sort((a, b) => sortCompare(a, b, 'display-name'))
 
 			// store tag and its index
-			list.forEach(tag => {
+			list.forEach((tag) => {
 				Vue.set(state.tags, tag.attributes.id, tag)
 				Vue.set(state.names, tag.attributes['display-name'], tag.attributes.id)
 			})
@@ -51,6 +53,10 @@ const mutations = {
 
 	/**
 	 * Update tag files list
+	 *
+	 * @param state
+	 * @param root0
+	 * @param root0.id
 	 */
 	removeTag(state: SystemTagsState, { id }: { id: number }) {
 		Vue.delete(state.names, state.tags[id].attributes.displayname)
@@ -59,8 +65,13 @@ const mutations = {
 
 	/**
 	 * Update tag files list
+	 *
+	 * @param state
+	 * @param root0
+	 * @param root0.id
+	 * @param root0.files
 	 */
-	updateTag(state: SystemTagsState, { id, files }: { id: number; files: File[] }) {
+	updateTag(state: SystemTagsState, { id, files }: { id: number, files: File[] }) {
 		if (files.length === 0) {
 			// Remove this tag from the list if there's no files for it
 			Vue.delete(state.names, state.tags[id].attributes.displayname)
@@ -73,7 +84,7 @@ const mutations = {
 
 		// overwrite list
 		logger.debug(`Overwrite list, id: ${id}`, { list })
-		Vue.set(state.tagsFiles, id, list.map(file => file.fileid))
+		Vue.set(state.tagsFiles, id, list.map((file) => file.fileid))
 	},
 }
 
@@ -87,6 +98,9 @@ const getters = {
 const actions = {
 	/**
 	 * Update files and folders
+	 *
+	 * @param context
+	 * @param tags
 	 */
 	updateTags(context: PhotosContext<SystemTagsState>, tags: string[]) {
 		context.commit('updateTags', tags)
@@ -94,6 +108,11 @@ const actions = {
 
 	/**
 	 * Update tag files list
+	 *
+	 * @param context
+	 * @param root0
+	 * @param root0.id
+	 * @param root0.files
 	 */
 	updateTag(context: PhotosContext<SystemTagsState>, { id, files }: { id: number, files: File[] }) {
 		if (files.length === 0) {
@@ -103,7 +122,7 @@ const actions = {
 		context.commit('updateTag', { id, files })
 	},
 
-	async fetchTagFiles(context: PhotosContext<SystemTagsState>, { id, signal }: { id: number; signal: AbortSignal }) {
+	async fetchTagFiles(context: PhotosContext<SystemTagsState>, { id, signal }: { id: number, signal: AbortSignal }) {
 		try {
 			// get data
 			const files = await getTaggedImages(id, { signal })

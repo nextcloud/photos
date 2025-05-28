@@ -26,44 +26,45 @@
 		</div>
 
 		<div v-else-if="!noFaces" class="faces__list">
-			<router-link v-for="face in orderedFaces"
+			<RouterLink
+				v-for="face in orderedFaces"
 				:key="face.basename"
 				:to="`/faces/${encodeURIComponent(face.basename)}`">
 				<FaceCover :base-name="face.basename" />
-			</router-link>
-			<router-link key="unassigned"
+			</RouterLink>
+			<RouterLink
+				key="unassigned"
 				:to="`/faces/unassigned`">
 				<UnassignedFacesCover />
-			</router-link>
+			</RouterLink>
 		</div>
 	</div>
 </template>
 
 <script lang='ts'>
-import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
-
-import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
-import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon.js'
-import { t } from '@nextcloud/l10n'
-
-import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
-import FaceCover from '../components/Faces/FaceCover.vue'
-import UnassignedFacesCover from '../components/Faces/UnassignedFacesCover.vue'
+import type { RouterLink } from 'vue-router'
 import type { Collection } from '../services/collectionFetcher.js'
 
+import { t } from '@nextcloud/l10n'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
+import FaceCover from '../components/Faces/FaceCover.vue'
+import UnassignedFacesCover from '../components/Faces/UnassignedFacesCover.vue'
+import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
+
 export default {
-	name: 'Faces',
+	name: 'FacesView',
 	components: {
 		UnassignedFacesCover,
 		FaceCover,
 		NcEmptyContent,
 		NcLoadingIcon,
+		RouterLink,
 		AccountBoxMultipleOutline,
 	},
 
-	mixins: [
-		FetchFacesMixin,
-	],
+	mixins: [FetchFacesMixin],
 
 	computed: {
 		facesFiles() {
@@ -96,6 +97,7 @@ export default {
 	},
 }
 </script>
+
 <style lang="scss" scoped>
 .faces {
 	display: flex;

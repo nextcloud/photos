@@ -5,8 +5,9 @@
 
 import type { User } from '@nextcloud/cypress'
 
-import { navigateToTimeline } from './timelines.ts'
 import { navigateToCollection, setupPhotosTests } from './photosUtils.ts'
+import { setDateRangeFilter, setPlacesFilter, toggleFilters } from './timelinesFiltersUtils.ts'
+import { navigateToTimeline } from './timelinesUtils.ts'
 
 const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/
 Cypress.on('uncaught:exception', (err) => {
@@ -21,9 +22,9 @@ let alice: User
 describe('View list of photos in the main timeline', () => {
 	before(() => {
 		setupPhotosTests()
-		.then((setupInfo) => {
-			alice = setupInfo.alice
-		})
+			.then((setupInfo) => {
+				alice = setupInfo.alice
+			})
 	})
 
 	beforeEach(() => {
@@ -32,61 +33,71 @@ describe('View list of photos in the main timeline', () => {
 	})
 
 	it('Apply date range filter to timeline', () => {
-		cy.get('[data-cy-header-action="toggle-filters"]').click()
-		cy.get('[data-cy-photos-filters="date-range"] input[name="date"]').type('2020-01-01 ~ 2020-12-31{enter}', { scrollBehavior: 'nearest' })
+		toggleFilters()
+
+		setDateRangeFilter('2020-01-01 ~ 2020-12-31')
 		cy.get('[data-test="media"]').should('have.length', 2)
-		cy.get('[data-cy-photos-filters="date-range"] input[name="date"]').clear()
-		cy.get('[data-cy-photos-filters="date-range"] input[name="date"]').type('{enter}')
+
+		setDateRangeFilter('')
 		cy.get('[data-test="media"]').should('have.length', 5)
-		cy.get('[data-cy-header-action="toggle-filters"]').click()
+
+		toggleFilters()
 	})
 
 	it('Apply places filter to timeline', () => {
-		cy.get('[data-cy-header-action="toggle-filters"]').click()
-		cy.get('[data-cy-photos-filters="places"] input[type="search"]').type('Lauris{enter}', { scrollBehavior: 'nearest' })
+		toggleFilters()
+
+		setPlacesFilter(['Lauris'])
 		cy.get('[data-test="media"]').should('have.length', 1)
-		cy.get('[data-cy-photos-filters="places"] input[type="search"]').type('Annot{enter}', { scrollBehavior: 'nearest' })
+
+		setPlacesFilter(['Annot'])
 		cy.get('[data-test="media"]').should('have.length', 3)
+
 		cy.get('[data-cy-photos-filters="places"] button.vs__deselect').eq(1).click()
 		cy.get('[data-cy-photos-filters="places"] button.vs__deselect').eq(0).click()
 		cy.get('[data-test="media"]').should('have.length', 5)
-		cy.get('[data-cy-header-action="toggle-filters"]').click()
+
+		toggleFilters()
 	})
 
 	it('Apply multiple filters to timeline', () => {
-		cy.get('[data-cy-header-action="toggle-filters"]').click()
-		cy.get('[data-cy-photos-filters="date-range"] input[name="date"]').type('2019-01-01 ~ 2019-12-31{enter}', { scrollBehavior: 'nearest' })
+		toggleFilters()
+
+		setDateRangeFilter('2019-01-01 ~ 2019-12-31')
 		cy.get('[data-test="media"]').should('have.length', 3)
-		cy.get('[data-cy-photos-filters="places"] input[type="search"]').type('Lauris{enter}', { scrollBehavior: 'nearest' })
+
+		setPlacesFilter(['Lauris'])
 		cy.get('[data-test="media"]').should('have.length', 1)
-		cy.get('[data-cy-photos-filters="date-range"] input[name="date"]').clear()
-		cy.get('[data-cy-photos-filters="date-range"] input[name="date"]').type('{enter}')
-		cy.get('[data-cy-photos-filters="places"] button.vs__deselect').click()
+
+		setDateRangeFilter('')
+		setPlacesFilter([])
 		cy.get('[data-test="media"]').should('have.length', 5)
-		cy.get('[data-cy-header-action="toggle-filters"]').click()
+
+		toggleFilters()
 	})
 
 	it('Toggling filters resets filters', () => {
-		cy.get('[data-cy-header-action="toggle-filters"]').click()
-		cy.get('[data-cy-photos-filters="date-range"]').click()
-		cy.get('[data-cy-photos-filters="date-range"] input[name="date"]').type('2020-01-01 ~ 2020-12-31{enter}', { scrollBehavior: 'nearest' })
-		cy.get('[data-cy-header-action="toggle-filters"]').click()
+		toggleFilters()
+
+		setDateRangeFilter('2020-01-01 ~ 2020-12-31')
+		toggleFilters()
 		cy.get('[data-test="media"]').should('have.length', 5)
 	})
 
 	it('Changing view resets filters', () => {
-		cy.get('[data-cy-header-action="toggle-filters"]').click()
-		cy.get('[data-cy-photos-filters="date-range"]').click()
-		cy.get('[data-cy-photos-filters="date-range"] input[name="date"]').type('2020-01-01 ~ 2020-12-31{enter}', { scrollBehavior: 'nearest' })
+		toggleFilters()
+
+		setDateRangeFilter('2020-01-01 ~ 2020-12-31')
+
 		navigateToTimeline('photos')
 		cy.get('[data-test="media"]').should('have.length', 5)
 	})
 
 	it('Should allow to create an album based on the filters', () => {
-		cy.get('[data-cy-header-action="toggle-filters"]').click()
-		cy.get('[data-cy-photos-filters="date-range"]').click()
-		cy.get('[data-cy-photos-filters="date-range"] input[name="date"]').type('2019-01-01 ~ 2019-12-31{enter}', { scrollBehavior: 'nearest' })
-		cy.get('[data-cy-photos-filters="places"] input[type="search"]').type('Lauris{enter}', { scrollBehavior: 'nearest' })
+		toggleFilters()
+
+		setDateRangeFilter('2019-01-01 ~ 2019-12-31')
+		setPlacesFilter(['Lauris'])
 
 		cy.get('[data-cy-header-action="create-album"]').click()
 		cy.get('form [name="name"]').type('Smart album from timeline')

@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import type { User } from '@nextcloud/cypress'
+
 import { setupPhotosTests } from './photosUtils.ts'
 
 const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/
@@ -18,9 +19,9 @@ let alice: User
 describe('Sidebar tab', () => {
 	before(() => {
 		setupPhotosTests()
-		.then((setupInfo) => {
-			alice = setupInfo.alice
-		})
+			.then((setupInfo) => {
+				alice = setupInfo.alice
+			})
 	})
 
 	beforeEach(() => {
@@ -55,5 +56,3 @@ describe('Sidebar tab', () => {
 		cy.get('.photo-detail__camera').contains('ƒ/1.7 ⸱ 1/269 ⸱ 4.103mm ⸱ ISO250')
 	})
 })
-
-

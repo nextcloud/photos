@@ -30,6 +30,6 @@ export default defineComponent({
 	methods: {
 		handleGridConfigChange(val: typeof getGridConfig.gridConfig) {
 			this.gridConfig = val
-		}
-	}
+		},
+	},
 })

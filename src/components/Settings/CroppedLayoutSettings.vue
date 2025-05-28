@@ -4,7 +4,8 @@
 -->
 
 <template>
-	<NcCheckboxRadioSwitch :checked="croppedLayout"
+	<NcCheckboxRadioSwitch
+		:checked="croppedLayout"
 		type="switch"
 		@update:checked="updateSetting">
 		{{ t('photos', 'Enable squared photos view') }}
@@ -12,7 +13,7 @@
 </template>
 
 <script lang='ts'>
-import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 
 export default {
 	name: 'CroppedLayoutSettings',

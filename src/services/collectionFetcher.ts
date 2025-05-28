@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import moment from '@nextcloud/moment'
-import { t } from '@nextcloud/l10n'
 import type { File, Folder } from '@nextcloud/files'
-
-import logger from './logger.js'
-import { davClient } from './DavClient.ts'
 import type { FileStat, ResponseDataDetailed, StatOptions, WebDAVClient } from 'webdav'
+
 import { resultToNode } from '@nextcloud/files/dav'
+import { t } from '@nextcloud/l10n'
+import moment from '@nextcloud/moment'
+import { davClient } from './DavClient.ts'
+import logger from './logger.js'
 
 export type Collection = Folder & {
 	attributes: {
@@ -21,11 +21,15 @@ export type Collection = Folder & {
 
 export type RawCollection = FileStat & {
 	props: {
-		collaborators: ''|{collaborator: object[]|object}|object[]
+		collaborators: '' | { collaborator: object[] | object } | object[]
 		dateRange: string
-	},
+	}
 }
 
+/**
+ *
+ * @param extraProps
+ */
 function getCollectionDavRequest(extraProps: string[] = []): string {
 	return `<?xml version="1.0"?>
 			<d:propfind xmlns:d="DAV:"
@@ -40,6 +44,10 @@ function getCollectionDavRequest(extraProps: string[] = []): string {
 			</d:propfind>`
 }
 
+/**
+ *
+ * @param extraProps
+ */
 function getCollectionFilesDavRequest(extraProps: string[] = []): string {
 	return `<?xml version="1.0"?>
 			<d:propfind xmlns:d="DAV:"
@@ -65,7 +73,14 @@ function getCollectionFilesDavRequest(extraProps: string[] = []): string {
 			</d:propfind>`
 }
 
-export async function fetchCollection(path: string, options: StatOptions, extraProps: string[] = [], client: WebDAVClient = davClient): Promise<Collection|null> {
+/**
+ *
+ * @param path
+ * @param options
+ * @param extraProps
+ * @param client
+ */
+export async function fetchCollection(path: string, options: StatOptions, extraProps: string[] = [], client: WebDAVClient = davClient): Promise<Collection | null> {
 	try {
 		const response = await client.stat(path, {
 			data: getCollectionDavRequest(extraProps),
@@ -85,6 +100,13 @@ export async function fetchCollection(path: string, options: StatOptions, extraP
 	}
 }
 
+/**
+ *
+ * @param path
+ * @param options
+ * @param extraProps
+ * @param client
+ */
 export async function fetchCollections(path: string, options: StatOptions = {}, extraProps: string[] = [], client: WebDAVClient = davClient): Promise<Collection[]> {
 	try {
 		const response = await client.getDirectoryContents(path, {
@@ -96,7 +118,7 @@ export async function fetchCollections(path: string, options: StatOptions = {}, 
 		logger.debug(`[Collections] Fetched ${response.data.length} collections: `, { data: response.data })
 
 		return response.data
-			.filter(collection => collection.filename !== path)
+			.filter((collection) => collection.filename !== path)
 			.map((rawCollection) => formatCollection(rawCollection, path))
 	} catch (error) {
 		if (error instanceof DOMException && error.code === error.ABORT_ERR) {
@@ -107,6 +129,11 @@ export async function fetchCollections(path: string, options: StatOptions = {}, 
 	}
 }
 
+/**
+ *
+ * @param rawCollection
+ * @param root
+ */
 function formatCollection(rawCollection: RawCollection, root: string): Collection {
 	// Ensure that we have a proper collaborators array.
 	if (rawCollection.props.collaborators === undefined || rawCollection.props.collaborators === '') {
@@ -135,11 +162,18 @@ function formatCollection(rawCollection: RawCollection, root: string): Collectio
 		rawCollection.props.date = t('photos', '{startDate} to {endDate}', dateRangeFormatted)
 	}
 
-	rawCollection.props.filters = JSON.parse((rawCollection.props.filters as string|null) ?? '{}')
+	rawCollection.props.filters = JSON.parse((rawCollection.props.filters as string | null) ?? '{}')
 
 	return resultToNode(rawCollection, root) as Collection
 }
 
+/**
+ *
+ * @param path
+ * @param options
+ * @param extraProps
+ * @param client
+ */
 export async function fetchCollectionFiles(path: string, options: StatOptions, extraProps: string[] = [], client: WebDAVClient = davClient): Promise<File[]> {
 	try {
 		const response = await client.getDirectoryContents(path, {
@@ -150,8 +184,8 @@ export async function fetchCollectionFiles(path: string, options: StatOptions, e
 
 		const filesRoot = path.split('/').slice(0, -1).join('/')
 		const fetchedFiles = response.data
-			.map(file => resultToNode(file, filesRoot) as File)
-			.filter(file => file.fileid !== undefined)
+			.map((file) => resultToNode(file, filesRoot) as File)
+			.filter((file) => file.fileid !== undefined)
 
 		logger.debug(`[Collections] Fetched ${fetchedFiles.length} new files: `, { fetchedFiles })
 

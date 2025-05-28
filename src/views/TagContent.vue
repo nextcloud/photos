@@ -13,7 +13,7 @@
 	<div v-else>
 		<div class="photos-navigation">
 			<NcActions class="photos-navigation__back">
-				<NcActionButton @click="$router.push({name: 'tags'})">
+				<NcActionButton @click="$router.push({ name: 'tags' })">
 					<template #icon>
 						<ArrowLeft />
 					</template>
@@ -25,16 +25,18 @@
 			</h2>
 		</div>
 		<div class="heading-subline">
-			{{ n('photos', '%n photo', '%n photos', fileIds.length,) }}
+			{{ n('photos', '%n photo', '%n photos', fileIds.length) }}
 		</div>
 		<NcEmptyContent v-if="isEmpty" :name="t('photos', 'No photos with this tag yet')" />
 
-		<FilesListViewer class="tag__photos"
+		<FilesListViewer
+			class="tag__photos"
 			:container-element="appContent"
 			:file-ids="fileIds"
 			:base-height="isMobile ? 120 : 200"
 			:loading="loading">
-			<File slot-scope="{file, distance}"
+			<FileComponent
+				slot-scope="{ file, distance }"
 				:file="files[file.id]"
 				:allow-selection="true"
 				:selected="selection[file.id] === true"
@@ -46,27 +48,24 @@
 </template>
 
 <script lang='ts'>
-import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
-
-import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
-import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
-import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
-import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon.js'
-import { useIsMobile } from '@nextcloud/vue/dist/Composables/useIsMobile.js'
 import { translatePlural as n, translate as t } from '@nextcloud/l10n'
-
-import File from '../components/File.vue'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
+import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcActions from '@nextcloud/vue/components/NcActions'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
+import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
-
-import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
-import { toViewerFileInfo } from '../utils/fileUtils.js'
+import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import logger from '../services/logger.js'
+import { toViewerFileInfo } from '../utils/fileUtils.js'
 
 export default {
 	name: 'TagContent',
 	components: {
-		File,
+		FileComponent,
 		FilesListViewer,
 		NcEmptyContent,
 		NcActions,
@@ -74,10 +73,12 @@ export default {
 		NcLoadingIcon,
 		ArrowLeft,
 	},
+
 	mixins: [
 		FilesSelectionMixin,
 		AbortControllerMixin,
 	],
+
 	props: {
 		path: {
 			type: String,
@@ -93,7 +94,7 @@ export default {
 
 	data() {
 		return {
-			error: null as boolean|null,
+			error: null as boolean | null,
 			loading: false,
 			appContent: document.getElementById('app-content-vue'),
 		}
@@ -167,7 +168,7 @@ export default {
 		openViewer(fileId: number) {
 			window.OCA.Viewer.open({
 				fileInfo: toViewerFileInfo(this.files[fileId]),
-				list: this.fileIds.map(fileId => toViewerFileInfo(this.files[fileId])),
+				list: this.fileIds.map((fileId) => toViewerFileInfo(this.files[fileId])),
 			})
 		},
 
@@ -176,6 +177,7 @@ export default {
 	},
 }
 </script>
+
 <style scoped lang="scss">
 .loader {
 	margin-top: 30vh;

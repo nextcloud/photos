@@ -4,7 +4,12 @@
  */
 
 import type { PhotosRootSate } from '.'
-import { albumsExtraProps, type Album } from './albums'
+
+import {
+	type Album,
+
+	albumsExtraProps,
+} from './albums.ts'
 
 export type PublicAlbum = Album & {
 	attributes: {
@@ -22,6 +27,6 @@ const getters = {
 	publicAlbums: (_, __, ___, rootGetters): Record<string, PublicAlbum> => rootGetters.collectionsWithPrefix(publicAlbumsPrefix),
 	getPublicAlbum: (_, __, rootState: PhotosRootSate) => (publicAlbumName: string): PublicAlbum => rootState.collections.collections[`${publicAlbumsPrefix}/${publicAlbumName}`] as unknown as PublicAlbum || null,
 	getPublicAlbumFiles: (_, __, rootState: PhotosRootSate) => (publicAlbumName: string): string[] => rootState.collections.collectionsFiles[`${publicAlbumsPrefix}/${publicAlbumName}`] || [],
-	getPublicAlbumName: (_, __, ___) => (publicAlbumName: string) => `${publicAlbumsPrefix}/${publicAlbumName}`,
+	getPublicAlbumName: () => (publicAlbumName: string) => `${publicAlbumsPrefix}/${publicAlbumName}`,
 }
 export default { getters }

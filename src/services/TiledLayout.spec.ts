@@ -4,8 +4,11 @@
  */
 
 import { describe, expect, test } from 'vitest'
+import {
+	type TiledItem, type TiledRow,
 
-import { splitItemsInRows, type TiledItem, type TiledRow } from './TiledLayout.js'
+	splitItemsInRows,
+} from './TiledLayout.js'
 
 const squareImage1 = {
 	id: 'squareImage1',
@@ -46,22 +49,26 @@ const items: TiledItem[] = [squareImage1, wideImage1, squareImage2, squareImage3
 
 const expectedLayout: TiledRow[] = [
 	{
-		items: [{
-			...squareImage1,
-			// "* 10" to fit the width
-			width: squareImage1.width * 10, // 2000
-			height: squareImage1.height * 10, // 2500
-		}],
+		items: [
+			{
+				...squareImage1,
+				// "* 10" to fit the width
+				width: squareImage1.width * 10, // 2000
+				height: squareImage1.height * 10, // 2500
+			},
+		],
 		height: squareImage1.height * 10, // 2500
 		key: 'squareImage1',
 	},
 	{
-		items: [{
-			...wideImage1,
-			// "/ 5" to fit the width
-			width: wideImage1.width / 5, // 2000
-			height: wideImage1.height / 5, // 50
-		}],
+		items: [
+			{
+				...wideImage1,
+				// "/ 5" to fit the width
+				width: wideImage1.width / 5, // 2000
+				height: wideImage1.height / 5, // 50
+			},
+		],
 		height: wideImage1.height / 5, // 50
 		key: 'wideImage1',
 	},

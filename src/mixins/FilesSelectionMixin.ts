@@ -36,7 +36,7 @@ export default defineComponent({
 
 	computed: {
 		selectedFileIds(): string[] {
-			return Object.keys(this.selection).filter(fileId => this.selection[fileId])
+			return Object.keys(this.selection).filter((fileId) => this.selection[fileId])
 		},
 	},
 })

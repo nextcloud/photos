@@ -10,11 +10,12 @@
 		</h2>
 
 		<ul class="albums-container">
-			<NcListItem v-for="album in allAlbums"
+			<NcListItem
+				v-for="album in allAlbums"
 				:key="album.attributes.filename"
 				class="album"
 				:name="originalName(album)"
-				:aria-label="t('photos', 'Add selection to album {albumName}', {albumName: album.basename})"
+				:aria-label="t('photos', 'Add selection to album {albumName}', { albumName: album.basename })"
 				@click="pickAlbum(album)">
 				<template slot="icon">
 					<img v-if="album.attributes['last-photo'] !== -1" class="album__image" :src="album.attributes['last-photo'] | toCoverUrl">
@@ -32,7 +33,8 @@
 			</NcListItem>
 		</ul>
 
-		<NcButton :aria-label="t('photos', 'Create a new album.')"
+		<NcButton
+			:aria-label="t('photos', 'Create a new album.')"
 			class="new-album-button"
 			type="tertiary"
 			@click="showAlbumCreationForm = true">
@@ -43,7 +45,8 @@
 		</NcButton>
 	</div>
 
-	<AlbumForm v-else
+	<AlbumForm
+		v-else
 		:display-back-button="true"
 		:title="t('photos', 'New album')"
 		@back="showAlbumCreationForm = false"
@@ -51,22 +54,21 @@
 </template>
 
 <script lang='ts'>
-import Plus from 'vue-material-design-icons/Plus.vue'
-import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
-import { defineComponent } from 'vue'
-
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
-import NcListItem from '@nextcloud/vue/dist/Components/NcListItem.js'
-import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon.js'
-import NcUserBubble from '@nextcloud/vue/dist/Components/NcUserBubble.js'
-import { generateUrl } from '@nextcloud/router'
-import { translate, translatePlural } from '@nextcloud/l10n'
-import { getCurrentUser } from '@nextcloud/auth'
-
-import FetchCollectionsMixin from '../../mixins/FetchCollectionsMixin.ts'
-import AlbumForm from './AlbumForm.vue'
-import { albumsExtraProps } from '../../store/albums.ts'
 import type { Album } from '../../store/albums.ts'
+
+import { getCurrentUser } from '@nextcloud/auth'
+import { translate, translatePlural } from '@nextcloud/l10n'
+import { generateUrl } from '@nextcloud/router'
+import { defineComponent } from 'vue'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcListItem from '@nextcloud/vue/components/NcListItem'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
+import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
+import Plus from 'vue-material-design-icons/Plus.vue'
+import AlbumForm from './AlbumForm.vue'
+import FetchCollectionsMixin from '../../mixins/FetchCollectionsMixin.ts'
+import { albumsExtraProps } from '../../store/albums.ts'
 
 export default defineComponent({
 	name: 'AlbumPicker',
@@ -87,9 +89,7 @@ export default defineComponent({
 		},
 	},
 
-	mixins: [
-		FetchCollectionsMixin,
-	],
+	mixins: [FetchCollectionsMixin],
 
 	data() {
 		return {
