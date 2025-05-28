@@ -53,9 +53,7 @@ OC.L10N.register(
     "Favorite" : "Favorit",
     "Open the full size \"{name}\" image" : "Buka gambar \"{name}\" ukuran penuh",
     "Select image {imageName}" : "Pilih gambar {imageName}",
-    "Back to {folder}" : "Kembali ke {folder}",
     "Go back" : "Kembali",
-    "Share this folder" : "Bagikan folder ini",
     "Add to {destination}" : "Tambahkan ke {destination}",
     "There are no photos or videos yet!" : "Belum ada foto atau video!",
     "_{years} year ago_::_{years} years ago_" : ["{years} tahun yang lalu"],
@@ -123,6 +121,8 @@ OC.L10N.register(
     "{title}'s face" : "Wajah {title}",
     "{startDate} to {endDate}" : "{startDate} ke {endDate}",
     "Details" : "Detail",
+    "Back to {folder}" : "Kembali ke {folder}",
+    "Share this folder" : "Bagikan folder ini",
     "Add" : "Masukkan"
 },
 "nplurals=1; plural=0;");

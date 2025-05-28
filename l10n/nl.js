@@ -59,9 +59,7 @@ OC.L10N.register(
     "Open the full size \"{name}\" image" : "Open het \"{name}\" beeld in originele grootte",
     "Select image {imageName}" : "Selecteer afbeelding {imageName}",
     "Open the \"{name}\" folder" : "Open de \"{name}\" map",
-    "Back to {folder}" : "Terug naar {folder}",
     "Go back" : "Ga terug",
-    "Share this folder" : "Deze map delen",
     "Dates" : "Data",
     "Jump to specific date in list" : "Spring naar de gespecificeerde datum in de lijst",
     "Jump to {date}" : "Spring naar {date}",
@@ -147,6 +145,8 @@ OC.L10N.register(
     "{startDate} to {endDate}" : "{startDate} tot {endDate}",
     "Details" : "Details",
     "Could not load photos folder" : "Kon de fotomap niet laden",
+    "Back to {folder}" : "Terug naar {folder}",
+    "Share this folder" : "Deze map delen",
     "One of the source folders does not exists" : "Een van de bronmappen bestaat niet",
     "Add" : "Toevoegen"
 },

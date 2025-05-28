@@ -55,9 +55,7 @@ OC.L10N.register(
     "Favorite" : "Омилени",
     "Open the full size \"{name}\" image" : "Отвори ја сликата \"{name}\" во целосна големина",
     "Select image {imageName}" : "Избери слика {imageName}",
-    "Back to {folder}" : "Назад кон {folder}",
     "Go back" : "Назад",
-    "Share this folder" : "Сподели ја оваа папка",
     "Dates" : "Датуми",
     "Add to {destination}" : "Додај до {destination}",
     "There are no photos or videos yet!" : "Овде сеуште нема фотографии и видеа!",
@@ -127,6 +125,8 @@ OC.L10N.register(
     "{title}'s face" : "Лицето на {title}",
     "{startDate} to {endDate}" : "{startDate} до {endDate}",
     "Details" : "Детали",
+    "Back to {folder}" : "Назад кон {folder}",
+    "Share this folder" : "Сподели ја оваа папка",
     "Add" : "Додади"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

@@ -19,9 +19,7 @@ OC.L10N.register(
     "An error occurred" : "Có lỗi đã xảy ra",
     "Favorite" : "Ưa thích",
     "Open the full size \"{name}\" image" : "Mở kích thước đủ của ảnh \"{name}\"",
-    "Back to {folder}" : "Trở về {folder}",
     "Go back" : "Quay lại",
-    "Share this folder" : "Chia sẻ thư mục này",
     "Enable squared photos view" : "Bật chế độ xem theo ô",
     "All folders" : "All folders",
     "Home" : "Trang chủ",
@@ -34,6 +32,8 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Ảnh đã gắn nhãn sẽ được cho thấy trên này",
     "Tagged photos" : "Ảnh gắn nhãn",
     "Details" : "Chi tiết",
+    "Back to {folder}" : "Trở về {folder}",
+    "Share this folder" : "Chia sẻ thư mục này",
     "Add" : "Thêm"
 },
 "nplurals=1; plural=0;");

@@ -25,9 +25,7 @@ OC.L10N.register(
     "An error occurred" : "B'at àpidu un'errore",
     "Favorite" : "Preferidu",
     "Open the full size \"{name}\" image" : "Aberi s'immàgine \"{name}\" a mannària prena",
-    "Back to {folder}" : "Torra a {folder}",
     "Go back" : "In segus",
-    "Share this folder" : "Cumpartzi custa cartella",
     "Enable squared photos view" : "Ativa sa visualizatzione a fotos cuadradas",
     "All folders" : "Totu is cartellas",
     "Home" : "Pàgina printzipale",
@@ -41,6 +39,8 @@ OC.L10N.register(
     "Delete selection" : "Cantzella seletzione",
     "Tagged photos" : "Fotografias etichetadas",
     "Details" : "Detàllios",
+    "Back to {folder}" : "Torra a {folder}",
+    "Share this folder" : "Cumpartzi custa cartella",
     "Add" : "Agiunghe"
 },
 "nplurals=2; plural=(n != 1);");

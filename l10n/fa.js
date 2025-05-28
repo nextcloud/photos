@@ -53,9 +53,7 @@ OC.L10N.register(
     "Favorite" : "مورد‌ ‌علاقه‌",
     "Open the full size \"{name}\" image" : "اندازه کامل \"{نام}\" باز کردن تصویر",
     "Select image {imageName}" : "انتخاب تصویر {imageName}",
-    "Back to {folder}" : "برگشت به {} پوشه",
     "Go back" : "برگرد",
-    "Share this folder" : "این پوشه را به اشتراک بگذار",
     "Add to {destination}" : "افزودن به {destination}",
     "There are no photos or videos yet!" : "هنوز هیچ عکس یا ویدیویی وجود ندارد!",
     "_{years} year ago_::_{years} years ago_" : ["{سال} سال پیش","{سال} سال پیش"],
@@ -121,6 +119,8 @@ OC.L10N.register(
     "Tagged photo {title}" : "عکس برچسب شده {title}",
     "{title}'s face" : "چهره {title}",
     "Details" : "جزییات",
+    "Back to {folder}" : "برگشت به {} پوشه",
+    "Share this folder" : "این پوشه را به اشتراک بگذار",
     "Add" : "افزودن"
 },
 "nplurals=2; plural=(n > 1);");

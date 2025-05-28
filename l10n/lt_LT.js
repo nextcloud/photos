@@ -39,9 +39,7 @@ OC.L10N.register(
     "_%n photos_::_%n photos_" : ["%n nuotrauka","%n nuotraukos","%n nuotraukų","%n nuotrauka"],
     "Favorite" : "Mėgstamas",
     "Open the full size \"{name}\" image" : "Atverti viso dydžio „{name}“ paveikslą",
-    "Back to {folder}" : "Atgal į {folder}",
     "Go back" : "Grįžti",
-    "Share this folder" : "Bendrinti šį aplanką",
     "Dates" : "Datos",
     "Add to {destination}" : "Pridėti į {destination}",
     "The destination folder is owned by {owner}" : "Paskirties aplanko savininkas yra {owner}",
@@ -91,6 +89,8 @@ OC.L10N.register(
     "{startDate} to {endDate}" : "Nuo {startDate} iki {endDate}",
     "Details" : "Išsamiau",
     "Could not load photos folder" : "Nepavyko įkelti nuotraukų aplanko",
+    "Back to {folder}" : "Atgal į {folder}",
+    "Share this folder" : "Bendrinti šį aplanką",
     "One of the source folders does not exists" : "Vieno iš šaltinio aplankų nėra",
     "Add" : "Pridėti"
 },
