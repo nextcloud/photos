@@ -5,13 +5,15 @@
 <template>
 	<form v-if="!showCollaboratorView" class="album-form" @submit.prevent="submit()">
 		<div class="form-inputs">
-			<NcTextField ref="nameInput"
+			<NcTextField
+				ref="nameInput"
 				:value.sync="albumName"
 				type="text"
 				name="name"
 				:required="true"
 				:label="t('photos', 'Name of the album')" />
-			<NcTextField :value.sync="albumLocation"
+			<NcTextField
+				:value.sync="albumLocation"
 				name="location"
 				type="text"
 				:label="t('photos', 'Location of the album')">
@@ -25,14 +27,16 @@
 
 		<div class="form-buttons">
 			<span class="left-buttons">
-				<NcButton v-if="displayBackButton"
+				<NcButton
+					v-if="displayBackButton"
 					type="tertiary"
 					@click="back">
 					{{ t('photos', 'Back') }}
 				</NcButton>
 			</span>
 			<span class="right-buttons">
-				<NcButton v-if="sharingEnabled && !editMode"
+				<NcButton
+					v-if="sharingEnabled && !editMode"
 					type="secondary"
 					:disabled="albumName.trim() === '' || loading"
 					@click="showCollaboratorView = true">
@@ -41,7 +45,8 @@
 					</template>
 					{{ t('photos', 'Add collaborators') }}
 				</NcButton>
-				<NcButton type="primary"
+				<NcButton
+					type="primary"
 					:disabled="albumName === '' || loading"
 					@click="submit()">
 					<template #icon>
@@ -53,18 +58,21 @@
 			</span>
 		</div>
 	</form>
-	<CollaboratorsSelectionForm v-else
+	<CollaboratorsSelectionForm
+		v-else
 		:album-name="albumName"
 		:allow-public-link="false">
 		<template #default="{ collaborators }">
 			<span class="left-buttons">
-				<NcButton type="tertiary"
+				<NcButton
+					type="tertiary"
 					@click="showCollaboratorView = false">
 					{{ t('photos', 'Back') }}
 				</NcButton>
 			</span>
 			<span class="right-buttons">
-				<NcButton type="primary"
+				<NcButton
+					type="primary"
 					:disabled="albumName.trim() === '' || loading"
 					@click="submit(collaborators)">
 					<template #icon>
@@ -77,23 +85,27 @@
 		</template>
 	</CollaboratorsSelectionForm>
 </template>
+
 <script lang='ts'>
-import MapMarker from 'vue-material-design-icons/MapMarker.vue'
-import AccountMultiplePlus from 'vue-material-design-icons/AccountMultiplePlus.vue'
-import Send from 'vue-material-design-icons/Send.vue'
 import type { PropType } from 'vue'
 
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
-import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon.js'
-import NcTextField from '@nextcloud/vue/dist/Components/NcTextField.js'
-import moment from '@nextcloud/moment'
-import { translate } from '@nextcloud/l10n'
-import { generateRemoteUrl } from '@nextcloud/router'
 import { resultToNode } from '@nextcloud/files/dav'
-
-import CollaboratorsSelectionForm from './CollaboratorsSelectionForm.vue'
-import { albumsPrefix, type Album, type AlbumEditableProperties, type Collaborator } from '../../store/albums'
+import { translate } from '@nextcloud/l10n'
+import moment from '@nextcloud/moment'
+import { generateRemoteUrl } from '@nextcloud/router'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+import NcTextField from '@nextcloud/vue/components/NcTextField'
+import AccountMultiplePlus from 'vue-material-design-icons/AccountMultiplePlus.vue'
+import MapMarker from 'vue-material-design-icons/MapMarker.vue'
+import Send from 'vue-material-design-icons/Send.vue'
 import PhotosFiltersDisplay from '../PhotosFilters/PhotosFiltersDisplay.vue'
+import CollaboratorsSelectionForm from './CollaboratorsSelectionForm.vue'
+import {
+	type Album, type AlbumEditableProperties, type Collaborator,
+
+	albumsPrefix,
+} from '../../store/albums'
 
 export default {
 	name: 'AlbumForm',
@@ -111,13 +123,15 @@ export default {
 
 	props: {
 		album: {
-			type: Object as PropType<Album|null>,
+			type: Object as PropType<Album | null>,
 			default: null,
 		},
+
 		filtersValue: {
 			type: Object as PropType<Record<string, unknown>>,
 			default: () => ({}),
 		},
+
 		displayBackButton: {
 			type: Boolean,
 			default: false,
@@ -254,6 +268,7 @@ export default {
 	},
 }
 </script>
+
 <style lang="scss" scoped>
 .album-form {
 	display: flex;

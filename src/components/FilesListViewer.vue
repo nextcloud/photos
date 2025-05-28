@@ -4,33 +4,37 @@
 -->
 <template>
 	<div class="files-list-viewer">
-		<NcEmptyContent v-if="emptyMessage !== '' && photosCount === 0 && !loading"
+		<NcEmptyContent
+			v-if="emptyMessage !== '' && photosCount === 0 && !loading"
 			key="emptycontent"
 			:name="emptyMessage">
 			<PackageVariant slot="icon" />
 		</NcEmptyContent>
 
 		<TiledLayout :base-height="baseHeight" :sections="itemsBySections">
-			<VirtualScrolling slot-scope="{tiledSections}"
+			<VirtualScrolling
+				slot-scope="{ tiledSections }"
 				:use-window="useWindow"
 				:container-element="containerElement"
 				:sections="tiledSections"
 				:scroll-to-key="scrollToSection"
 				:header-height="sectionHeaderHeight"
 				@need-content="needContent">
-				<template slot-scope="{visibleSections}">
+				<template slot-scope="{ visibleSections }">
 					<div v-for="section of visibleSections" :key="section.id">
 						<template v-if="section.id !== ''">
 							<!-- Placeholder when initial loading -->
-							<div v-if="showPlaceholders"
+							<div
+								v-if="showPlaceholders"
 								class="files-list-viewer__placeholder"
-								:style="{ 'flex-basis': '100%', height: `${sectionHeaderHeight}px`}" />
+								:style="{ 'flex-basis': '100%', height: `${sectionHeaderHeight}px` }" />
 							<!-- Real file. -->
-							<slot v-else
-								:file="{id: section.id}"
+							<slot
+								v-else
+								:file="{ id: section.id }"
 								:is-header="true"
 								class="files-list-viewer__section-header"
-								:style="{ 'flex-basis': '100%', height: `${sectionHeaderHeight}px`}" />
+								:style="{ 'flex-basis': '100%', height: `${sectionHeaderHeight}px` }" />
 						</template>
 
 						<ul>
@@ -40,10 +44,11 @@
 									The flex algo will then compensate with flex-grow.
 									'last-tiled-row' prevents the last row's items from growing.
 								-->
-								<li v-for="item of row.items"
+								<li
+									v-for="item of row.items"
 									:key="item.key"
 									:class="{ 'last-tiled-rows': rowIndex === section.rows.length - 1 }"
-									:style="{ 'flex-basis': `${item.width - 1}px`, height: `${item.height}px`}">
+									:style="{ 'flex-basis': `${item.width - 1}px`, height: `${item.height}px` }">
 									<!-- Placeholder when initial loading -->
 									<div v-if="showPlaceholders" class="files-list-viewer__placeholder" />
 									<!-- Real file. -->
@@ -58,20 +63,20 @@
 		</TiledLayout>
 	</div>
 </template>
+
 <script lang='ts'>
-import PackageVariant from 'vue-material-design-icons/PackageVariant.vue'
-
-import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
-import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon.js'
-import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import type { File } from '@nextcloud/files'
-
-import TiledLayout from '../components/TiledLayout/TiledLayout.vue'
-import { fetchFile } from '../services/fileFetcher.ts'
-import VirtualScrolling from '../components/VirtualScrolling.vue'
-import type { TiledItem } from '../services/TiledLayout.ts'
 import type { PropType } from 'vue'
+import type { TiledItem } from '../services/TiledLayout.ts'
 import type { PhotoFile } from '../store/files.ts'
+
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+import PackageVariant from 'vue-material-design-icons/PackageVariant.vue'
+import TiledLayout from '../components/TiledLayout/TiledLayout.vue'
+import VirtualScrolling from '../components/VirtualScrolling.vue'
+import { fetchFile } from '../services/fileFetcher.ts'
 
 export default {
 	name: 'FilesListViewer',
@@ -90,46 +95,55 @@ export default {
 			type: Array as PropType<string[]>,
 			default: undefined,
 		},
+
 		// An object mapping a list of section to a list of fileIds.
 		fileIdsBySection: {
 			type: Object as PropType<Record<string, string[]>>,
 			default: undefined,
 		},
+
 		// The list of sorted sections.
 		sections: {
 			type: Array as PropType<string[]>,
 			default: undefined,
 		},
+
 		// Whether we should display a loading indicator.
 		loading: {
 			type: Boolean,
 			default: false,
 		},
+
 		// Message to display when there is no files.
 		emptyMessage: {
 			type: String,
 			default: '',
 		},
+
 		// The base height to forward to TileLayout.
 		baseHeight: {
 			type: Number,
 			default: 200,
 		},
+
 		// The height to use for section headers.
 		sectionHeaderHeight: {
 			type: Number,
 			default: 75,
 		},
+
 		// Instruct VirtualScrolling to scroll to the given section id.
 		scrollToSection: {
 			type: String,
 			default: '',
 		},
+
 		// The containerElement props to forward to TileLayout.
 		containerElement: {
 			type: [HTMLElement, null],
 			default: null,
 		},
+
 		// The useWindow props to forward to TileLayout.
 		useWindow: {
 			type: Boolean,
@@ -161,18 +175,20 @@ export default {
 			return this.loading && (this.fileIds?.length === 0 || this.sections?.length === 0)
 		},
 
-		itemsBySections(): {id: string, items: TiledItem[]}[] {
+		itemsBySections(): { id: string, items: TiledItem[] }[] {
 			if (this.fileIds !== undefined) {
 				if (this.showPlaceholders) {
 					return [{ id: '', items: this.placeholderFiles }]
 				}
 
-				return [{
-					id: '',
-					items: this.fileIds
-						.filter(fileId => this.files[fileId])
-						.map(this.mapFileToItem),
-				}]
+				return [
+					{
+						id: '',
+						items: this.fileIds
+							.filter((fileId) => this.files[fileId])
+							.map(this.mapFileToItem),
+					},
+				]
 			}
 
 			if (this.sections !== undefined) {
@@ -184,7 +200,7 @@ export default {
 					return {
 						id: sectionId,
 						items: this.fileIdsBySection[sectionId]
-							.filter(fileId => this.files[fileId])
+							.filter((fileId) => this.files[fileId])
 							.map(this.mapFileToItem),
 					}
 				})
@@ -200,6 +216,7 @@ export default {
 		showLoader(): boolean {
 			return this.loading && (this.fileIds?.length !== 0 || this.sections?.length !== 0)
 		},
+
 		croppedLayout(): boolean {
 			return this.$store.state.userConfig.croppedLayout
 		},
@@ -236,6 +253,7 @@ export default {
 	},
 }
 </script>
+
 <style lang="scss" scoped>
 .files-list-viewer {
 	height: 100%;

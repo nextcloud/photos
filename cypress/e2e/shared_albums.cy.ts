@@ -2,7 +2,8 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { User } from '@nextcloud/cypress'
+import type { User } from '@nextcloud/cypress'
+
 import {
 	addCollaborators,
 	addFilesToAlbumFromAlbum,
@@ -44,7 +45,7 @@ Cypress.on('uncaught:exception', (err) => {
 describe('Manage shared albums', () => {
 	before(() => {
 		setupPhotosTests()
-			.then(setupInfo => {
+			.then((setupInfo) => {
 				alice = setupInfo.alice
 				bob = setupInfo.bob
 				charlie = setupInfo.charlie
@@ -320,7 +321,7 @@ describe('Manage shared albums', () => {
 
 		it('Create a public link', () => {
 			createPublicShare()
-				.then(publicLink => {
+				.then((publicLink) => {
 					cy.logout()
 					cy.intercept({ times: 1, method: 'PROPFIND', url: '/remote.php/dav/photospublic/*' }).as('propFindAlbum')
 					cy.intercept({ times: 1, method: 'PROPFIND', url: '/remote.php/dav/photospublic/*/' }).as('propFindContent')

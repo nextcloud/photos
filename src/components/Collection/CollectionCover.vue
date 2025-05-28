@@ -4,7 +4,8 @@
 -->
 <template>
 	<router-link class="collection-cover" :to="link">
-		<img v-if="coverUrl !== ''"
+		<img
+			v-if="coverUrl !== ''"
 			class="collection-cover__image"
 			:src="coverUrl"
 			:alt="altImg">
@@ -22,6 +23,7 @@
 		</div>
 	</router-link>
 </template>
+
 <script lang='ts'>
 import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
 
@@ -37,10 +39,12 @@ export default {
 			type: String,
 			required: true,
 		},
+
 		altImg: {
 			type: String,
 			required: true,
 		},
+
 		link: {
 			type: String,
 			required: true,
@@ -48,6 +52,7 @@ export default {
 	},
 }
 </script>
+
 <style lang="scss" scoped>
 .collection-cover {
 	display: flex;

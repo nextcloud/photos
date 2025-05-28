@@ -4,17 +4,20 @@
 -->
 
 <template>
-	<router-link class="folder"
+	<router-link
+		class="folder"
 		:to="toLink"
 		:aria-label="ariaLabel">
-		<img v-if="previewUrl"
+		<img
+			v-if="previewUrl"
 			class="folder__image"
 			:src="previewUrl"
 			alt=""
 			@error="onPreviewFail(file)">
 
 		<span v-else class="folder__image folder__image--placeholder">
-			<Folder class="folder__icon"
+			<Folder
+				class="folder__icon"
 				:size="96"
 				fill-color="var(--color-primary-element)" />
 		</span>
@@ -28,15 +31,13 @@
 
 <script lang='ts'>
 import type { PropType } from 'vue'
+import type { Route } from 'vue-router'
+import type { FoldersNode } from '../services/FolderContent'
 
-import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { t } from '@nextcloud/l10n'
-
+import { generateUrl } from '@nextcloud/router'
 import Folder from 'vue-material-design-icons/Folder.vue'
-import type { Route } from 'vue-router'
-
-import type { FoldersNode } from '../services/FolderContent'
 
 export default {
 	name: 'FolderTagPreview',
@@ -50,18 +51,22 @@ export default {
 			type: String,
 			default: 'icon-folder',
 		},
+
 		id: {
 			type: [Number, String],
 			required: true,
 		},
+
 		name: {
 			type: String,
 			required: true,
 		},
+
 		path: {
 			type: String,
 			default: '',
 		},
+
 		fileList: {
 			type: Array as PropType<FoldersNode[]>,
 			default: () => [],
@@ -89,7 +94,7 @@ export default {
 		 */
 		previewList(): FoldersNode[] {
 			return this.fileList
-				.filter(file => this.failed.indexOf(file.fileid) === -1)
+				.filter((file) => this.failed.indexOf(file.fileid) === -1)
 		},
 
 		previewUrl() {
@@ -121,9 +126,7 @@ export default {
 			path = (regex.exec(path) as string[])[1]
 
 			// apply to current route
-			return Object.assign({}, this.$route, {
-				params: { path: path.split('/') },
-			})
+			return { ...this.$route, params: { path: path.split('/') } }
 		},
 	},
 

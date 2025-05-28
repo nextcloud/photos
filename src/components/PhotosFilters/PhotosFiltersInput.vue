@@ -4,7 +4,8 @@
 -->
 <template>
 	<div class="photos-filters">
-		<component :is="filter.inputComponent"
+		<component
+			:is="filter.inputComponent"
 			v-for="filter in filters"
 			:key="filter.id"
 			v-model="innerValue[filter.id]"
@@ -12,9 +13,9 @@
 			@update:value="newFilterValue => updateFilterValue(filter.id, newFilterValue)" />
 	</div>
 </template>
+
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
-
 import filters from '../../services/PhotosFilters'
 
 const props = defineProps<{
@@ -33,6 +34,11 @@ watch(
 	{ immediate: true },
 )
 
+/**
+ *
+ * @param filterId
+ * @param newFilterValue
+ */
 function updateFilterValue(filterId: string, newFilterValue: unknown) {
 	emit('update:value', {
 		...innerValue.value,
@@ -40,6 +46,7 @@ function updateFilterValue(filterId: string, newFilterValue: unknown) {
 	})
 }
 </script>
+
 <style lang="scss" scoped>
 .photos-filters {
 	display: flex;

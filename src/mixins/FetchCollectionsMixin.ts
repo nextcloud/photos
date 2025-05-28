@@ -4,26 +4,28 @@
  */
 
 import type { WebDAVClient } from 'webdav'
-import { defineComponent } from 'vue'
 
-import AbortControllerMixin from './AbortControllerMixin.js'
-import { fetchCollections, type Collection } from '../services/collectionFetcher.js'
-import logger from '../services/logger.js'
+import { defineComponent } from 'vue'
+import {
+	type Collection,
+
+	fetchCollections,
+} from '../services/collectionFetcher.js'
 import { davClient } from '../services/DavClient.ts'
+import logger from '../services/logger.js'
+import AbortControllerMixin from './AbortControllerMixin.js'
 
 export default defineComponent({
 	name: 'FetchCollectionsMixin',
 
 	data() {
 		return {
-			errorFetchingCollections: null as null|number|Error|unknown,
+			errorFetchingCollections: null as null | number | Error | unknown,
 			loadingCollections: false,
 		}
 	},
 
-	mixins: [
-		AbortControllerMixin,
-	],
+	mixins: [AbortControllerMixin],
 
 	methods: {
 		async fetchCollections(collectionHome: string, extraProps: string[] = [], client: WebDAVClient = davClient): Promise<Collection[]> {

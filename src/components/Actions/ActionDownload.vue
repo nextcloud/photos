@@ -3,7 +3,8 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<NcActionLink :close-after-click="true"
+	<NcActionLink
+		:close-after-click="true"
 		:href="downloadUrl"
 		:download="downloadUrl"
 		:aria-label="title">
@@ -16,7 +17,7 @@
 import type { PropType } from 'vue'
 
 import { generateUrl } from '@nextcloud/router'
-import NcActionLink from '@nextcloud/vue/dist/Components/NcActionLink.js'
+import NcActionLink from '@nextcloud/vue/components/NcActionLink'
 
 export default {
 	name: 'ActionDownload',
@@ -51,7 +52,7 @@ export default {
 		},
 
 		paths() {
-			return this.selectedFileIds.map(fileId => this.files[fileId].path)
+			return this.selectedFileIds.map((fileId) => this.files[fileId].path)
 		},
 	},
 }

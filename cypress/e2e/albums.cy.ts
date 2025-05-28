@@ -30,7 +30,7 @@ Cypress.on('uncaught:exception', (err) => {
 describe('Manage albums', () => {
 	const albumName = 'albums_test'
 
-	beforeEach(function () {
+	beforeEach(function() {
 		setupPhotosTests()
 
 		navigateToCollections('albums')

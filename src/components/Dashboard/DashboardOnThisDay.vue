@@ -5,7 +5,8 @@
 <template>
 	<div class="on-this-day-dashboard">
 		<NcLoadingIcon v-if="loading" :size="48" />
-		<NcEmptyContent v-else-if="items.length === 0"
+		<NcEmptyContent
+			v-else-if="items.length === 0"
 			:name="t('photos', 'No picture for this day')"
 			:description="t('photos', 'Picture taken on this day will show up here.')">
 			<template #icon>
@@ -13,7 +14,8 @@
 			</template>
 		</NcEmptyContent>
 		<template v-else>
-			<File class="on-this-day-dashboard__file"
+			<File
+				class="on-this-day-dashboard__file"
 				:file="items[0]"
 				:allow-selection="false" />
 			<NcButton :href="moreUrl">
@@ -24,17 +26,15 @@
 </template>
 
 <script lang='ts'>
-import Image from 'vue-material-design-icons/Image.vue'
-
 import { generateUrl } from '@nextcloud/router'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
-import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon.js'
-import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
-
-import getPhotos from '../../services/PhotoSearch.js'
-import { allMimes } from '../../services/AllowedMimes.js'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+import Image from 'vue-material-design-icons/Image.vue'
 import File from '../File.vue'
+import { allMimes } from '../../services/AllowedMimes.js'
 import logger from '../../services/logger.js'
+import getPhotos from '../../services/PhotoSearch.js'
 
 export default {
 	name: 'DashboardOnThisDay',
@@ -45,17 +45,20 @@ export default {
 		NcEmptyContent,
 		ImageIcon: Image,
 	},
+
 	data() {
 		return {
 			loading: true,
 			items: [],
 		}
 	},
+
 	computed: {
 		moreUrl() {
 			return generateUrl('/apps/photos/thisday')
 		},
 	},
+
 	async created() {
 		try {
 			this.items = await getPhotos({
@@ -72,6 +75,7 @@ export default {
 	},
 }
 </script>
+
 <style lang="scss" scoped>
 .on-this-day-dashboard {
 	display: flex;

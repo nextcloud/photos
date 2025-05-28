@@ -1,7 +1,8 @@
 import type { UserConfig } from 'vitest/node'
-import { VitePWA } from 'vite-plugin-pwa'
+
 import { createAppConfig } from '@nextcloud/vite-config'
 import { join } from 'path'
+import { VitePWA } from 'vite-plugin-pwa'
 import SassGridConfig from './src/utils/SassGridConfig.js'
 
 // replaced by vite
@@ -56,24 +57,26 @@ export default createAppConfig({
 					sourcemap: false,
 
 					// Define runtime caching rules.
-					runtimeCaching: [{
+					runtimeCaching: [
+						{
 						// Match any preview file request
-						urlPattern: /^.*\/apps\/photos\/api\/v1\/preview\/.*/,
+							urlPattern: /^.*\/apps\/photos\/api\/v1\/preview\/.*/,
 
-						// Apply a strategy.
-						handler: 'CacheFirst',
+							// Apply a strategy.
+							handler: 'CacheFirst',
 
-						options: {
+							options: {
 							// Use a custom cache name.
-							cacheName: 'images',
+								cacheName: 'images',
 
-							// Only cache 10000 images.
-							expiration: {
-								maxAgeSeconds: 3600 * 24 * 7, // one week
-								maxEntries: 10000,
+								// Only cache 10000 images.
+								expiration: {
+									maxAgeSeconds: 3600 * 24 * 7, // one week
+									maxEntries: 10000,
+								},
 							},
 						},
-					}],
+					],
 				},
 			}),
 		],

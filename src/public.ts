@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { sync } from 'vuex-router-sync'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import Vue from 'vue'
-
+import { sync } from 'vuex-router-sync'
 import PhotosPublic from './PhotosPublic.vue'
 import router from './router/index.js'
 import store from './store/index.js'
@@ -22,5 +21,5 @@ export default new Vue({
 	name: 'PhotosRoot',
 	router,
 	store,
-	render: h => h(PhotosPublic),
+	render: (h) => h(PhotosPublic),
 })

@@ -9,7 +9,8 @@
 		Needed for isPublicShare to return true
 		https://github.com/nextcloud-libraries/nextcloud-sharing/blob/15f38dfdeb2c72501008e5ae89d3eb424b83aed5/lib/publicShare.ts#L12-L20
 		 -->
-		<input id="isPublic"
+		<input
+			id="isPublic"
 			type="hidden"
 			name="isPublic"
 			value="1">
@@ -29,14 +30,12 @@
 
 <script lang='ts'>
 import { generateUrl } from '@nextcloud/router'
-
-import NcContent from '@nextcloud/vue/dist/Components/NcContent.js'
-import NcAppContent from '@nextcloud/vue/dist/Components/NcAppContent.js'
-
-import logger from './services/logger.js'
+import NcAppContent from '@nextcloud/vue/components/NcAppContent'
+import NcContent from '@nextcloud/vue/components/NcContent'
 import svgplaceholder from './assets/file-placeholder.svg'
 import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'
+import logger from './services/logger.js'
 
 export default {
 	name: 'PhotosPublic',
@@ -44,6 +43,7 @@ export default {
 		NcAppContent,
 		NcContent,
 	},
+
 	data() {
 		return {
 			svgplaceholder,
@@ -78,6 +78,7 @@ export default {
 	},
 }
 </script>
+
 <style lang="scss">
 .app-content {
 	display: flex;

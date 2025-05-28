@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import type { User } from '@nextcloud/cypress'
+
 import {
 	addCollaborators,
 	addFilesToAlbumFromTimeline,
@@ -19,8 +20,8 @@ import {
 	unfavoriteSelection,
 	unselectMedia,
 } from './photosUtils.ts'
-import { navigateToTimeline } from './timelines.ts'
 import { setupPhotosTests } from './photosUtils.ts'
+import { navigateToTimeline } from './timelines.ts'
 
 const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/
 Cypress.on('uncaught:exception', (err) => {
@@ -36,10 +37,10 @@ let bob: User
 describe('View list of photos in the main timeline', () => {
 	before(() => {
 		setupPhotosTests()
-		.then((setupInfo) => {
-			alice = setupInfo.alice
-			bob = setupInfo.bob
-		})
+			.then((setupInfo) => {
+				alice = setupInfo.alice
+				bob = setupInfo.bob
+			})
 	})
 
 	beforeEach(() => {

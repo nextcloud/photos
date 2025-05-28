@@ -4,16 +4,18 @@
 -->
 <template>
 	<div>
-		<CollectionContent v-if="true"
+		<CollectionContent
+			v-if="true"
 			ref="collectionContent"
 			:collection="album"
 			:collection-file-ids="albumFileIds"
 			:loading="loadingCollection || loadingCollectionFiles"
 			:error="errorFetchingCollection || errorFetchingCollectionFiles">
 			<!-- Header -->
-			<HeaderNavigation key="navigation"
+			<HeaderNavigation
+				key="navigation"
 				slot="header"
-				slot-scope="{selectedFileIds, resetSelection}"
+				slot-scope="{ selectedFileIds, resetSelection }"
 				:loading="loadingCollectionFiles"
 				:params="{ albumName }"
 				:path="'/' + albumName"
@@ -24,7 +26,8 @@
 				</div>
 
 				<template slot="default">
-					<NcButton v-if="selectedFileIds.length > 0"
+					<NcButton
+						v-if="selectedFileIds.length > 0"
 						:aria-label="t('photos', 'Unselect all')"
 						@click="resetSelection">
 						<template #icon>
@@ -39,7 +42,8 @@
 				</template>
 
 				<template v-if="album !== undefined" slot="right">
-					<NcButton v-if="album.attributes.nbItems !== 0"
+					<NcButton
+						v-if="album.attributes.nbItems !== 0"
 						type="secondary"
 						:aria-label="t('photos', 'Add photos to this album')"
 						@click="showAddPhotosModal = true">
@@ -55,7 +59,8 @@
 							<DownloadMultiple slot="icon" />
 						</ActionDownload> -->
 
-						<NcActionButton v-if="album.attributes.collaborators[0].type === collaboratorTypes.User"
+						<NcActionButton
+							v-if="album.attributes.collaborators[0].type === collaboratorTypes.User"
 							:close-after-click="true"
 							@click="handleDeleteAlbum">
 							{{ t('photos', 'Delete album') }}
@@ -70,7 +75,8 @@
 								<Download slot="icon" />
 							</ActionDownload> -->
 
-							<NcActionButton v-if="removableSelectedFiles.length !== 0"
+							<NcActionButton
+								v-if="removableSelectedFiles.length !== 0"
 								:close-after-click="true"
 								@click="handleRemoveFilesFromAlbum(removableSelectedFiles)">
 								{{ t('photos', 'Remove selection from album') }}
@@ -82,13 +88,15 @@
 			</HeaderNavigation>
 
 			<!-- No content -->
-			<NcEmptyContent v-if="album !== undefined && album.attributes.nbItems === 0 && !(loadingCollectionFiles || loadingCollection)"
+			<NcEmptyContent
+				v-if="album !== undefined && album.attributes.nbItems === 0 && !(loadingCollectionFiles || loadingCollection)"
 				slot="empty-content"
 				:name="t('photos', 'This album does not have any photos or videos yet!')"
 				class="album__empty">
 				<ImagePlus slot="icon" />
 
-				<NcButton slot="action"
+				<NcButton
+					slot="action"
 					class="album__empty__button"
 					type="primary"
 					:aria-label="t('photos', 'Add photos to this album')"
@@ -99,9 +107,10 @@
 			</NcEmptyContent>
 		</CollectionContent>
 
-		<PhotosPicker v-if="album !== undefined"
+		<PhotosPicker
+			v-if="album !== undefined"
 			:open.sync="showAddPhotosModal"
-			:name="t('photos', 'Add photos to {albumName}', {albumName: albumOriginalName})"
+			:name="t('photos', 'Add photos to {albumName}', { albumName: albumOriginalName })"
 			:destination="album.basename"
 			:blacklist-ids="albumFileIds"
 			:loading="loadingAddFilesToAlbum"
@@ -110,32 +119,29 @@
 </template>
 
 <script lang='ts'>
-import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
-import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
-import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
-import NcActionSeparator from '@nextcloud/vue/dist/Components/NcActionSeparator.js'
-import NcUserBubble from '@nextcloud/vue/dist/Components/NcUserBubble.js'
-import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
-import { ShareType } from '@nextcloud/sharing'
 import { translate } from '@nextcloud/l10n'
-
-import MapMarker from 'vue-material-design-icons/MapMarker.vue'
-import Plus from 'vue-material-design-icons/Plus.vue'
+import { ShareType } from '@nextcloud/sharing'
+import isMobile from '@nextcloud/vue/mixins/isMobile'
+import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcActions from '@nextcloud/vue/components/NcActions'
+import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
+import Close from 'vue-material-design-icons/Close.vue'
 import Delete from 'vue-material-design-icons/Delete.vue'
 import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
-import Close from 'vue-material-design-icons/Close.vue'
+import MapMarker from 'vue-material-design-icons/MapMarker.vue'
+import Plus from 'vue-material-design-icons/Plus.vue'
 // import Download from 'vue-material-design-icons/Download.vue'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
-
-import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
-import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
-
-import PhotosFiltersDisplay from '../components/PhotosFilters/PhotosFiltersDisplay.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import PhotosFiltersDisplay from '../components/PhotosFilters/PhotosFiltersDisplay.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
 import PhotosPicker from '../components/PhotosPicker.vue'
+import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
+import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import { albumFilesExtraProps, albumsExtraProps } from '../store/albums.ts'
 
 export default {
@@ -207,8 +213,8 @@ export default {
 		removableSelectedFiles() {
 			return (this.$refs.collectionContent?.selectedFileIds as string[])
 				.map((fileId) => this.$store.state.files.files[fileId])
-				.filter(file => file.attributes['photos-album-file-origin'] !== 'filters')
-				.map(file => file.fileid.toString())
+				.filter((file) => file.attributes['photos-album-file-origin'] !== 'filters')
+				.map((file) => file.fileid.toString())
 		},
 	},
 
@@ -250,6 +256,7 @@ export default {
 	},
 }
 </script>
+
 <style lang="scss" scoped>
 .album {
 	display: flex;

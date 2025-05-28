@@ -4,10 +4,9 @@
  */
 
 import { registerDavProperty } from '@nextcloud/files/dav'
-import { sync } from 'vuex-router-sync'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import Vue from 'vue'
-
+import { sync } from 'vuex-router-sync'
 import Photos from './Photos.vue'
 import router from './router/index.js'
 import store from './store/index.js'
@@ -28,5 +27,5 @@ export default new Vue({
 	name: 'PhotosRoot',
 	router,
 	store,
-	render: h => h(Photos),
+	render: (h) => h(Photos),
 })

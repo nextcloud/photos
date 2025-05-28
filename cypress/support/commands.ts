@@ -3,8 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 /* eslint-disable n/no-unpublished-import */
+import type { User } from '@nextcloud/cypress'
+
+import { addCommands } from '@nextcloud/cypress'
 import axios from 'axios'
-import { addCommands, User } from '@nextcloud/cypress'
 import { addCompareSnapshotCommand } from 'cypress-visual-regression/dist/command'
 import { basename } from 'path'
 
@@ -22,13 +24,13 @@ declare global {
 			 * Upload a file from the fixtures folder to a given user storage.
 			 * **Warning**: Using this function will reset the previous session
 			 */
-			uploadFile(user: User, fixture?: string, mimeType?: string, target?: string): Cypress.Chainable<number>,
+			uploadFile(user: User, fixture?: string, mimeType?: string, target?: string): Cypress.Chainable<number>
 
 			/**
 			 * Upload a raw content to a given user storage.
 			 * **Warning**: Using this function will reset the previous session
 			 */
-			uploadContent(user: User, content: Blob, mimeType: string, target: string): Cypress.Chainable<number>,
+			uploadContent(user: User, content: Blob, mimeType: string, target: string): Cypress.Chainable<number>
 		}
 	}
 }
@@ -47,7 +49,7 @@ Cypress.env('baseUrl', url)
  */
 Cypress.Commands.add('uploadFile', (user, fixture = 'image.jpg', mimeType = 'image/jpeg', target = `/${fixture}`) => {
 	// get fixture
-	return cy.fixture(fixture, 'base64').then(file => {
+	return cy.fixture(fixture, 'base64').then((file) => {
 		// convert the base64 string to a blob
 		const blob = Cypress.Blob.base64StringToBlob(file, mimeType)
 		return cy.uploadContent(user, blob, mimeType, target)
@@ -84,7 +86,7 @@ Cypress.Commands.add('uploadContent', (user, blob, mimeType, target) => {
 						username: user.userId,
 						password: user.password,
 					},
-				}).then(response => {
+				}).then((response) => {
 					cy.log(`Uploaded content as ${fileName}`, response)
 					return Number.parseInt(response.headers['oc-fileid'].split('oc')[0])
 				})

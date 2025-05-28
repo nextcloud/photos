@@ -7,7 +7,8 @@
 	<div class="photos-location">
 		<PhotosFolder :path="photosLocation" :root-folder-label="t('photos', 'Home')" :root-folder-icon="Home" />
 
-		<NcButton :aria-label="t('photos', 'Choose default Photos upload and Albums location')"
+		<NcButton
+			:aria-label="t('photos', 'Choose default Photos upload and Albums location')"
 			@click="debounceSelectPhotosFolder">
 			{{ t('photos', 'Choose a different folder') }}
 		</NcButton>
@@ -15,15 +16,12 @@
 </template>
 
 <script lang='ts'>
-import debounce from 'debounce'
-import { defineComponent } from 'vue'
-
-import Home from 'vue-material-design-icons/Home.vue'
-
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import { getFilePickerBuilder } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
-
+import debounce from 'debounce'
+import { defineComponent } from 'vue'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import Home from 'vue-material-design-icons/Home.vue'
 import PhotosFolder from './PhotosFolder.vue'
 import logger from '../../services/logger.js'
 

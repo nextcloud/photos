@@ -3,9 +3,11 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<div v-if="Object.keys(filtersValue).length !== 0"
+	<div
+		v-if="Object.keys(filtersValue).length !== 0"
 		class="photos-filters">
-		<component :is="filter.displayComponent"
+		<component
+			:is="filter.displayComponent"
 			v-for="filter in filters.filter(filter => filtersValue[filter.id] !== undefined)"
 			:key="filter.id"
 			class="photos-filters__filter"
@@ -13,6 +15,7 @@
 			:data-cy-photos-filters-display="filter.id" />
 	</div>
 </template>
+
 <script lang="ts" setup>
 import filters from '../../services/PhotosFilters'
 
@@ -20,6 +23,7 @@ defineProps<{
 	filtersValue: Record<string, unknown>
 }>()
 </script>
+
 <style lang="scss" scoped>
 .photos-filters {
 	&__filter {

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-export const getSearchParams = url => {
+export const getSearchParams = (url) => {
 	return url
 		.split(/[?&]/)
 		.reduce((acc, cur) => {

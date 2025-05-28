@@ -6,9 +6,11 @@
 <template>
 	<div class="photos-locations-container">
 		<div class="photos-locations">
-			<li v-for="(source, index) in photosSourceFolders"
+			<li
+				v-for="(source, index) in photosSourceFolders"
 				:key="index">
-				<PhotosFolder :path="source"
+				<PhotosFolder
+					:path="source"
 					:can-delete="photosSourceFolders.length !== 1"
 					:root-folder-label="t('photos', 'All folders')"
 					:root-folder-icon="FolderMultiple"
@@ -16,7 +18,8 @@
 			</li>
 		</div>
 
-		<NcButton :aria-label="t('photos', 'Add a Photos source for the timelines')"
+		<NcButton
+			:aria-label="t('photos', 'Add a Photos source for the timelines')"
 			@click="debounceAddSourceFolder">
 			<template #icon>
 				<Plus :size="20" />
@@ -27,16 +30,13 @@
 </template>
 
 <script lang='ts'>
-import debounce from 'debounce'
-import { defineComponent } from 'vue'
-
-import FolderMultiple from 'vue-material-design-icons/FolderMultiple.vue'
-import Plus from 'vue-material-design-icons/Plus.vue'
-
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import { getFilePickerBuilder } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
-
+import debounce from 'debounce'
+import { defineComponent } from 'vue'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import FolderMultiple from 'vue-material-design-icons/FolderMultiple.vue'
+import Plus from 'vue-material-design-icons/Plus.vue'
 import PhotosFolder from './PhotosFolder.vue'
 import logger from '../../services/logger.js'
 

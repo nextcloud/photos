@@ -3,30 +3,26 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { defineComponent } from 'vue'
-
 import { showError } from '@nextcloud/dialogs'
 import { defaultRootPath } from '@nextcloud/files/dav'
-import { joinPaths } from '@nextcloud/paths'
 import { t } from '@nextcloud/l10n'
-
+import { joinPaths } from '@nextcloud/paths'
+import { defineComponent } from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import getPhotos, { type PhotoSearchOptions } from '../services/PhotoSearch.js'
+import store from '../store/index.js'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
 import AbortControllerMixin from './AbortControllerMixin.js'
-import store from '../store/index.js'
 
 export default defineComponent({
 	name: 'FetchFilesMixin',
 
-	mixins: [
-		AbortControllerMixin,
-	],
+	mixins: [AbortControllerMixin],
 
 	data() {
 		return {
-			errorFetchingFiles: null as null|number|Error|unknown,
+			errorFetchingFiles: null as null | number | Error | unknown,
 			loadingFiles: false,
 			doneFetchingFiles: false,
 			fetchSemaphore: new SemaphoreWithPriority(1),
@@ -35,7 +31,7 @@ export default defineComponent({
 	},
 
 	watch: {
-		'$route.path'() {
+		'$route.path': function() {
 			this.resetFetchFilesState()
 		},
 	},
@@ -75,12 +71,10 @@ export default defineComponent({
 				}
 
 				const fileIds = fetchedFiles
-					.map(file => file.fileid as number)
-					.filter(fileId => !this.fetchedFileIds.includes(fileId)) // Filter to prevent duplicate fileIds.
+					.map((file) => file.fileid as number)
+					.filter((fileId) => !this.fetchedFileIds.includes(fileId)) // Filter to prevent duplicate fileIds.
 
-				this.fetchedFileIds.push(
-					...fileIds.filter((fileId) => !blacklist.includes(fileId)),
-				)
+				this.fetchedFileIds.push(...fileIds.filter((fileId) => !blacklist.includes(fileId)))
 
 				this.$store.dispatch('appendFiles', fetchedFiles)
 

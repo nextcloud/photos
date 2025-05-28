@@ -4,6 +4,7 @@
  */
 
 import type { WebDAVClient } from 'webdav'
+
 import { getClient } from '@nextcloud/files/dav'
 
 export const davClient: WebDAVClient = getClient()

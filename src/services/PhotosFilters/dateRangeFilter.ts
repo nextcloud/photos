@@ -4,10 +4,11 @@
  */
 
 import type { PhotosFilter } from './PhotosFilter.ts'
-import DateRangeFilterInput from '../../components/PhotosFilters/DateRangeFilterInput.vue';
-import DateRangeFilterDisplay from '../../components/PhotosFilters/DateRangeFilterDisplay.vue';
 
-export type DateRangeValueType = { start: number; end: number }|undefined
+import DateRangeFilterDisplay from '../../components/PhotosFilters/DateRangeFilterDisplay.vue'
+import DateRangeFilterInput from '../../components/PhotosFilters/DateRangeFilterInput.vue'
+
+export type DateRangeValueType = { start: number, end: number } | undefined
 
 export const dateRangeFilterId = 'date-range'
 

@@ -4,10 +4,11 @@
  */
 
 import type { PhotosFilter } from './PhotosFilter.ts'
-import PlacesFilterInput from '../../components/PhotosFilters/PlacesFilterInput.vue'
-import PlacesFilterDisplay from '../../components/PhotosFilters/PlacesFilterDisplay.vue'
 
-export type PlacesValueType = string[]|undefined
+import PlacesFilterDisplay from '../../components/PhotosFilters/PlacesFilterDisplay.vue'
+import PlacesFilterInput from '../../components/PhotosFilters/PlacesFilterInput.vue'
+
+export type PlacesValueType = string[] | undefined
 
 export const placesFilterId = 'places'
 
@@ -20,7 +21,7 @@ export const placesFilter: PhotosFilter = {
 			return ''
 		}
 
-		const dav = places.map(place => `
+		const dav = places.map((place) => `
 			<d:eq>
 				<d:prop><nc:metadata-photos-place/></d:prop>
 				<d:literal>${place}</d:literal>
