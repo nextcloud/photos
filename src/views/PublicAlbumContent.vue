@@ -68,7 +68,7 @@
 
 				<!-- Public upload is not implemented yet
 				<NcButton slot="action"
-					type="primary"
+					variant="primary"
 					:aria-label="t('photos', 'Add photos to this album')"
 					@click="showAddPhotosModal = true">
 					<Plus slot="icon" />

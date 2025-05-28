@@ -41,7 +41,7 @@
 				<template v-else>
 					<NcButton
 						:close-after-click="true"
-						type="primary"
+						variant="primary"
 						:aria-label="t('photos', 'Add to album')"
 						data-cy-header-action="add-to-album"
 						@click="showAlbumPicker = true">
@@ -93,7 +93,7 @@
 					:title="t('photos', 'Toggle filter')"
 					:aria-label="t('photos', 'Toggle filter')"
 					data-cy-header-action="toggle-filters"
-					type="tertiary"
+					variant="tertiary"
 					@click="toggleFilters">
 					<template #icon>
 						<FilterOff v-if="showFilters" />

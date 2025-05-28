@@ -29,7 +29,7 @@
 			<span class="left-buttons">
 				<NcButton
 					v-if="displayBackButton"
-					type="tertiary"
+					variant="tertiary"
 					@click="back">
 					{{ t('photos', 'Back') }}
 				</NcButton>
@@ -37,7 +37,7 @@
 			<span class="right-buttons">
 				<NcButton
 					v-if="sharingEnabled && !editMode"
-					type="secondary"
+					variant="secondary"
 					:disabled="albumName.trim() === '' || loading"
 					@click="showCollaboratorView = true">
 					<template #icon>
@@ -46,7 +46,7 @@
 					{{ t('photos', 'Add collaborators') }}
 				</NcButton>
 				<NcButton
-					type="primary"
+					variant="primary"
 					:disabled="albumName === '' || loading"
 					@click="submit()">
 					<template #icon>
@@ -65,14 +65,14 @@
 		<template #default="{ collaborators }">
 			<span class="left-buttons">
 				<NcButton
-					type="tertiary"
+					variant="tertiary"
 					@click="showCollaboratorView = false">
 					{{ t('photos', 'Back') }}
 				</NcButton>
 			</span>
 			<span class="right-buttons">
 				<NcButton
-					type="primary"
+					variant="primary"
 					:disabled="albumName.trim() === '' || loading"
 					@click="submit(collaborators)">
 					<template #icon>
