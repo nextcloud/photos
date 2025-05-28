@@ -59,9 +59,7 @@ OC.L10N.register(
     "Open the full size \"{name}\" image" : "Opna myndina \"{name}\" í fullri stærð",
     "Select image {imageName}" : "Veldu mynd {imageName}",
     "Open the \"{name}\" folder" : "Opna \"{name}\" möppuna",
-    "Back to {folder}" : "Til baka í {folder}",
     "Go back" : "Fara til baka",
-    "Share this folder" : "Deila þessari möppu",
     "Dates" : "Dagsetningar",
     "Jump to specific date in list" : "Hoppa á ákveðna dagsetningu í lista",
     "Jump to {date}" : "Hoppa á {date}",
@@ -147,6 +145,8 @@ OC.L10N.register(
     "{startDate} to {endDate}" : "{startDate} til {endDate}",
     "Details" : "Nánar",
     "Could not load photos folder" : "Gat ekki að hlaðið inn ljósmyndamöppunni",
+    "Back to {folder}" : "Til baka í {folder}",
+    "Share this folder" : "Deila þessari möppu",
     "One of the source folders does not exists" : "Ein af upprunamöppunum er ekki til",
     "Add" : "Bæta við"
 },

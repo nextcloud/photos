@@ -56,9 +56,7 @@ OC.L10N.register(
     "Open the full size \"{name}\" image" : "تولۇق چوڭلۇقتىكى \"{name}\" رەسىمنى ئېچىڭ",
     "Select image {imageName}" : "رەسىم {imageName} Select نى تاللاڭ",
     "Open the \"{name}\" folder" : "\"{name}\" ھۆججەت قىسقۇچىنى ئېچىڭ",
-    "Back to {folder}" : "{folder} قايتىش",
     "Go back" : "قايتىڭ",
-    "Share this folder" : "بۇ قىسقۇچنى ھەمبەھىرلەڭ",
     "Dates" : "چېسلا",
     "Jump to specific date in list" : "تىزىملىكتىكى كونكرېت چېسلاغا ئاتلاڭ",
     "Jump to {date}" : "{date} ئاتلاڭ",
@@ -139,6 +137,8 @@ OC.L10N.register(
     "{startDate} to {endDate}" : "{startDate} دىن {endDate}",
     "Details" : "تەپسىلاتى",
     "Could not load photos folder" : "رەسىم قىسقۇچنى يۈكلىيەلمىدى",
+    "Back to {folder}" : "{folder} قايتىش",
+    "Share this folder" : "بۇ قىسقۇچنى ھەمبەھىرلەڭ",
     "One of the source folders does not exists" : "مەنبە قىسقۇچلارنىڭ بىرى مەۋجۇت ئەمەس",
     "Add" : "قوش"
 },

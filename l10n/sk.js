@@ -59,9 +59,7 @@ OC.L10N.register(
     "Open the full size \"{name}\" image" : "Otvoriť fotografiu „{name}“ v pôvodnej veľkosti",
     "Select image {imageName}" : "Vybrať obrázok {imageName}",
     "Open the \"{name}\" folder" : "Otvoriť adresár \"{name}\"",
-    "Back to {folder}" : "Späť do {folder}",
     "Go back" : "Ísť späť",
-    "Share this folder" : "Zdieľať tento priečinok",
     "Dates" : "Dátumy",
     "Jump to specific date in list" : "Preskočiť na konkrétny dátum v zozname",
     "Jump to {date}" : "Preskočiť na {date}",
@@ -156,6 +154,8 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}" : "Nepodarilo sa nastaviť obľúbený stav pre {fileId}",
     "Failed to set favorite state for {fileName}" : "Nepodarilo sa nastaviť obľúbený stav pre {fileName}",
     "Could not load photos folder" : "Nepodarilo sa načítať priečinok s fotkami",
+    "Back to {folder}" : "Späť do {folder}",
+    "Share this folder" : "Zdieľať tento priečinok",
     "One of the source folders does not exists" : "Jeden zo zdrojových priečinkov neexistuje",
     "Add" : "Pridať"
 },

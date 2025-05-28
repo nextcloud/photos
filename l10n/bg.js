@@ -50,9 +50,7 @@ OC.L10N.register(
     "Favorite" : "Любими",
     "Open the full size \"{name}\" image" : "Отваряне на изображението\"{name}“  в пълен размер ",
     "Select image {imageName}" : "Избор на изображение {imageName}",
-    "Back to {folder}" : "Назад към {folder}",
     "Go back" : "Назад",
-    "Share this folder" : "Споделяне на тази папка",
     "Add to {destination}" : "Добавяне към  {destination}",
     "There are no photos or videos yet!" : "Все още няма снимки или видеоклипове!",
     "_{years} year ago_::_{years} years ago_" : ["Преди {years} години","Преди {years} години"],
@@ -116,6 +114,8 @@ OC.L10N.register(
     "{title}'s face" : "Лицето на {title}",
     "{startDate} to {endDate}" : "{startDate} до {endDate}",
     "Details" : "Подробности",
+    "Back to {folder}" : "Назад към {folder}",
+    "Share this folder" : "Споделяне на тази папка",
     "Add" : "Добавяне"
 },
 "nplurals=2; plural=(n != 1);");

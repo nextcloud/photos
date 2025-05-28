@@ -59,9 +59,7 @@ OC.L10N.register(
     "Open the full size \"{name}\" image" : "Åpne full størrelse av bildet \"{name}\"",
     "Select image {imageName}" : "Velg bilde {imageName}",
     "Open the \"{name}\" folder" : "Åpne {name}-mappen",
-    "Back to {folder}" : "Tilbake til {folder}",
     "Go back" : "Gå tilbake",
-    "Share this folder" : "Del denne mappen",
     "Dates" : "Datoer",
     "Jump to specific date in list" : "Gå til spesifikk dato i listen",
     "Jump to {date}" : "Gå til {date}",
@@ -145,6 +143,8 @@ OC.L10N.register(
     "{startDate} to {endDate}" : "{startDate} til {endDate}",
     "Details" : "Detaljer",
     "Could not load photos folder" : "Kunne ikke laste bildemappen",
+    "Back to {folder}" : "Tilbake til {folder}",
+    "Share this folder" : "Del denne mappen",
     "One of the source folders does not exists" : "En av kildemappene finnes ikke",
     "Add" : "Legg til"
 },

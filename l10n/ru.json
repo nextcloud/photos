@@ -57,9 +57,7 @@
     "Open the full size \"{name}\" image" : "Отрыть полноразмерное изображение «{name}»",
     "Select image {imageName}" : "Выбрать изображение «{imageName}»",
     "Open the \"{name}\" folder" : "Откройте папку \"{name}\"",
-    "Back to {folder}" : "Вернуться в {folder}",
     "Go back" : "Назад",
-    "Share this folder" : "Опубликовать эту папку",
     "Dates" : "Даты",
     "Jump to specific date in list" : "Перейти к конкретной дате в списке",
     "Jump to {date}" : "Перейти к {date}",
@@ -143,6 +141,8 @@
     "{startDate} to {endDate}" : "С {startDate} по {endDate}",
     "Details" : "Свойства",
     "Could not load photos folder" : "Не удалось загрузить папку с фотографиями",
+    "Back to {folder}" : "Вернуться в {folder}",
+    "Share this folder" : "Опубликовать эту папку",
     "One of the source folders does not exists" : "Одна из исходных папок не существует",
     "Add" : "Добавить"
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"

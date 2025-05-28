@@ -59,9 +59,7 @@ OC.L10N.register(
     "Open the full size \"{name}\" image" : "افتح الصورة بالحجم الكامل \"{name}\" ",
     "Select image {imageName}" : "إختر صورة {imageName}",
     "Open the \"{name}\" folder" : "فتح المجلد \"{name}\"  ",
-    "Back to {folder}" : "العودة إلى {folder} ",
     "Go back" : "عودة",
-    "Share this folder" : "مشاركة هذا المجلد",
     "Dates" : "التواريخ",
     "Jump to specific date in list" : "إقفِز للتاريخ المحدد في القائمة",
     "Jump to {date}" : "إنتقِل إلى {date}",
@@ -155,6 +153,8 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}" : "تعذّر تعيين الحالة المُفضَّلة لـ{fileId}",
     "Failed to set favorite state for {fileName}" : "تعذّر تعيين الحالة المُفضَّلة لـ{fileName}",
     "Could not load photos folder" : "تعذّر رفع مجلد الصِّور",
+    "Back to {folder}" : "العودة إلى {folder} ",
+    "Share this folder" : "مشاركة هذا المجلد",
     "One of the source folders does not exists" : "أحد المجلدات المصدرية غير موجود",
     "Add" : "إضافة"
 },

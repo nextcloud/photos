@@ -17,9 +17,7 @@ OC.L10N.register(
     "An error occurred" : "Una error s’es producha",
     "Favorite" : "Favorit",
     "Open the full size \"{name}\" image" : "Dobrir l’imatge {name} en talha originala",
-    "Back to {folder}" : "Tornar a {folder}",
     "Go back" : "Revenir en arrière",
-    "Share this folder" : "Partejar aqueste dossièr",
     "Enable squared photos view" : "Activar la vista amb fòtos carrat",
     "View" : "Vista",
     "Rename person" : "Renomenar la persona",
@@ -30,6 +28,8 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Las fòtos amb etiquetas apreissaràn aquí",
     "Tagged photos" : "Fòtos etiquetadas",
     "Details" : "Detalhs",
+    "Back to {folder}" : "Tornar a {folder}",
+    "Share this folder" : "Partejar aqueste dossièr",
     "Add" : "Apondre"
 },
 "nplurals=2; plural=(n > 1);");

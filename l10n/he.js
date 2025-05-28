@@ -53,9 +53,7 @@ OC.L10N.register(
     "Open the full size \"{name}\" image" : "לפתוח את התמונה „{name}” בגודל מלא",
     "Select image {imageName}" : "לבחור את התמונה {imageName}",
     "Open the \"{name}\" folder" : "לפתוח את התיקייה \"{name}\"",
-    "Back to {folder}" : "חזרה אל {folder}",
     "Go back" : "חזרה",
-    "Share this folder" : "שיתוף התיקייה הזו",
     "Dates" : "תאריכים",
     "Jump to specific date in list" : "לקפוץ ליום מסויים ברשימה",
     "Jump to {date}" : "לקפוץ ל{date}",
@@ -74,6 +72,8 @@ OC.L10N.register(
     "Shared Albums" : "אלבומים משותפים",
     "Tagged photos" : "תמונות מתויגות",
     "Details" : "פרטים",
+    "Back to {folder}" : "חזרה אל {folder}",
+    "Share this folder" : "שיתוף התיקייה הזו",
     "Add" : "הוספה"
 },
 "nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");
