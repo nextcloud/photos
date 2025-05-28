@@ -16,7 +16,7 @@
 import CalendarMonth from 'vue-material-design-icons/CalendarMonth.vue'
 
 import { t } from '@nextcloud/l10n'
-import { NcDateTime } from '@nextcloud/vue'
+import NcDateTime from '@nextcloud/vue/dist/Components/NcDateTime.js'
 
 import type { DateRangeValueType } from '../../services/PhotosFilters/dateRangeFilter.ts'
 

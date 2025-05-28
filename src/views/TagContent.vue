@@ -48,7 +48,11 @@
 <script lang='ts'>
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 
-import { NcEmptyContent, NcActions, NcActionButton, NcLoadingIcon, useIsMobile } from '@nextcloud/vue'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
+import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
+import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon.js'
+import { useIsMobile } from '@nextcloud/vue/dist/Composables/useIsMobile.js'
 import { translatePlural as n, translate as t } from '@nextcloud/l10n'
 
 import File from '../components/File.vue'

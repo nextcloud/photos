@@ -83,7 +83,9 @@ import AccountMultiplePlus from 'vue-material-design-icons/AccountMultiplePlus.v
 import Send from 'vue-material-design-icons/Send.vue'
 import type { PropType } from 'vue'
 
-import { NcButton, NcLoadingIcon, NcTextField } from '@nextcloud/vue'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon.js'
+import NcTextField from '@nextcloud/vue/dist/Components/NcTextField.js'
 import moment from '@nextcloud/moment'
 import { translate } from '@nextcloud/l10n'
 import { generateRemoteUrl } from '@nextcloud/router'

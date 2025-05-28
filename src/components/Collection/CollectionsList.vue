@@ -27,7 +27,7 @@
 <script lang='ts'>
 import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
 
-import { NcEmptyContent } from '@nextcloud/vue'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
 import { translate } from '@nextcloud/l10n'
 import type { Collection } from '../../services/collectionFetcher'
 import type { PropType } from 'vue'

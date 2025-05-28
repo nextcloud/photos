@@ -61,7 +61,8 @@
 <script lang='ts'>
 import PackageVariant from 'vue-material-design-icons/PackageVariant.vue'
 
-import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon.js'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import type { File } from '@nextcloud/files'
 

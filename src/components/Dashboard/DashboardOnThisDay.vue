@@ -27,7 +27,9 @@
 import Image from 'vue-material-design-icons/Image.vue'
 
 import { generateUrl } from '@nextcloud/router'
-import { NcButton, NcLoadingIcon, NcEmptyContent } from '@nextcloud/vue'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon.js'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
 
 import getPhotos from '../../services/PhotoSearch.js'
 import { allMimes } from '../../services/AllowedMimes.js'

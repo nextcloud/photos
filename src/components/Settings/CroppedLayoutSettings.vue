@@ -12,7 +12,7 @@
 </template>
 
 <script lang='ts'>
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
 
 export default {
 	name: 'CroppedLayoutSettings',
