@@ -5,7 +5,7 @@
 
 import type { ShareType } from '@nextcloud/sharing'
 import type { PhotosRootSate } from '.'
-import type { Collection } from '../services/collectionFetcher'
+import type { Collection } from '../services/collectionFetcher.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
 
@@ -42,6 +42,6 @@ const getters = {
 	albums: (_, __, ___, rootGetters): Record<string, Album> => rootGetters.collectionsWithPrefix(albumsPrefix),
 	getAlbum: (_, __, rootState: PhotosRootSate) => (albumName: string): Album => rootState.collections.collections[`${albumsPrefix}/${albumName}`] as unknown as Album,
 	getAlbumFiles: (_, __, rootState: PhotosRootSate) => (albumName: string): string[] => rootState.collections.collectionsFiles[`${albumsPrefix}/${albumName}`] || [],
-	getAlbumName: (_, __, ___) => (albumName: string) => `${albumsPrefix}/${albumName}`,
+	getAlbumName: () => (albumName: string) => `${albumsPrefix}/${albumName}`,
 }
 export default { getters }

@@ -7,7 +7,6 @@
 </template>
 
 <script lang='ts'>
-// eslint-disable-next-line import/no-unresolved, n/no-missing-import
 import StarSvg from '@mdi/svg/svg/star.svg?raw'
 import { t } from '@nextcloud/l10n'
 import { defineComponent } from 'vue'

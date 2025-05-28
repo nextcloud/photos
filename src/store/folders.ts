@@ -1,4 +1,4 @@
-import type { FoldersNode } from '../services/FolderContent.js'
+import type { FoldersNode } from '../services/FolderContent.ts'
 import type { PhotosContext } from './index.js'
 
 import { defaultRootPath } from '@nextcloud/files/dav'

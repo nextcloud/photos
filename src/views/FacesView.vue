@@ -26,22 +26,23 @@
 		</div>
 
 		<div v-else-if="!noFaces" class="faces__list">
-			<router-link
+			<RouterLink
 				v-for="face in orderedFaces"
 				:key="face.basename"
 				:to="`/faces/${encodeURIComponent(face.basename)}`">
 				<FaceCover :base-name="face.basename" />
-			</router-link>
-			<router-link
+			</RouterLink>
+			<RouterLink
 				key="unassigned"
 				:to="`/faces/unassigned`">
 				<UnassignedFacesCover />
-			</router-link>
+			</RouterLink>
 		</div>
 	</div>
 </template>
 
 <script lang='ts'>
+import type { RouterLink } from 'vue-router'
 import type { Collection } from '../services/collectionFetcher.js'
 
 import { t } from '@nextcloud/l10n'
@@ -53,12 +54,13 @@ import UnassignedFacesCover from '../components/Faces/UnassignedFacesCover.vue'
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
 
 export default {
-	name: 'Faces',
+	name: 'FacesView',
 	components: {
 		UnassignedFacesCover,
 		FaceCover,
 		NcEmptyContent,
 		NcLoadingIcon,
+		RouterLink,
 		AccountBoxMultipleOutline,
 	},
 

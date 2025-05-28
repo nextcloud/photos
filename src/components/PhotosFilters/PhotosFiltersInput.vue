@@ -16,7 +16,7 @@
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
-import filters from '../../services/PhotosFilters'
+import filters from '../../services/PhotosFilters/index.ts'
 
 const props = defineProps<{
 	value: Record<string, unknown>

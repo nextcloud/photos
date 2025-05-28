@@ -4,7 +4,7 @@
  */
 
 import type { PhotosRootSate } from '.'
-import type { Collection } from '../services/collectionFetcher'
+import type { Collection } from '../services/collectionFetcher.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
 

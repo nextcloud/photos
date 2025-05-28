@@ -60,7 +60,7 @@
 <script lang='ts'>
 import type { Upload } from '@nextcloud/upload'
 
-import { Folder as NcFolder } from '@nextcloud/files'
+import { Folder } from '@nextcloud/files'
 import { defaultRootPath, parsePermissions } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
 import { getUploader, UploadPicker } from '@nextcloud/upload'
@@ -69,17 +69,17 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import FolderIcon from 'vue-material-design-icons/Folder.vue'
 import FileLegacy from '../components/FileLegacy.vue'
-import Folder from '../components/Folder.vue'
+import FolderComponent from '../components/FolderComponent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import GridConfigMixin from '../mixins/GridConfig.js'
 import allowedMimes from '../services/AllowedMimes.js'
-import { fetchFile } from '../services/fileFetcher'
-import getFolderContent, { type FoldersNode } from '../services/FolderContent.js'
-import logger from '../services/logger'
+import { fetchFile } from '../services/fileFetcher.ts'
+import getFolderContent, { type FoldersNode } from '../services/FolderContent.ts'
+import logger from '../services/logger.ts'
 
 export default {
-	name: 'Folders',
+	name: 'FoldersView',
 	components: {
 		FolderIcon,
 		HeaderNavigation,
@@ -149,7 +149,7 @@ export default {
 				return undefined
 			}
 
-			return new NcFolder({
+			return new Folder({
 				...this.folder,
 				permissions: parsePermissions(this.folder.permissions),
 				owner: null,
@@ -194,7 +194,7 @@ export default {
 					width: 232,
 					height: 280,
 					columnSpan: 1,
-					renderComponent: Folder,
+					renderComponent: FolderComponent,
 				}
 			})
 
