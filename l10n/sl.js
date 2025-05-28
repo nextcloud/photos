@@ -58,9 +58,7 @@ OC.L10N.register(
     "Open the full size \"{name}\" image" : "Odpri sliko »{name}« v polni velikosti",
     "Select image {imageName}" : "Izbor slike {imageName}",
     "Open the \"{name}\" folder" : "Odpri \"{name}\" mapo",
-    "Back to {folder}" : "Nazaj v mapo {folder}",
     "Go back" : "Skoči nazaj",
-    "Share this folder" : "Omogoči souporabo mape",
     "Dates" : "Datumi",
     "Jump to specific date in list" : "Skoči na specifičen dan na seznamu",
     "Jump to {date}" : "Skoči na {date}",
@@ -150,6 +148,8 @@ OC.L10N.register(
     "Failed to delete {fileId}" : "Spodletelo brisanje {fileId}",
     "Failed to delete {fileName}" : "Spodletelo brisanje {fileName}",
     "Could not load photos folder" : "Ni mogoče naložiti mape fotografij",
+    "Back to {folder}" : "Nazaj v mapo {folder}",
+    "Share this folder" : "Omogoči souporabo mape",
     "One of the source folders does not exists" : "Ena od izvornih map ne obstaja",
     "Add" : "Dodaj"
 },

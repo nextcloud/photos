@@ -59,9 +59,7 @@ OC.L10N.register(
     "Open the full size \"{name}\" image" : "A teljes méretű „{name}” fénykép megnyitása",
     "Select image {imageName}" : "{imageName} kép kiválasztása",
     "Open the \"{name}\" folder" : "A \"{name}\" könyvtár megnyitása",
-    "Back to {folder}" : "Vissza ide: {folder}",
     "Go back" : "Visszalépés",
-    "Share this folder" : "Mappa megosztása",
     "Dates" : "Dátumok",
     "Jump to specific date in list" : "Ugrás a listán egy megadott dátumhoz",
     "Jump to {date}" : "Ugrás ekorra {date}",
@@ -147,6 +145,8 @@ OC.L10N.register(
     "{startDate} to {endDate}" : "{startDate} – {endDate}",
     "Details" : "Részletek",
     "Could not load photos folder" : "Nem lehet a fotók könyvtárat betölteni",
+    "Back to {folder}" : "Vissza ide: {folder}",
+    "Share this folder" : "Mappa megosztása",
     "One of the source folders does not exists" : "Az egyik forrás könyvtár nem létezik",
     "Add" : "Hozzáadás"
 },

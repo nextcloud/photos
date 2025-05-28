@@ -26,9 +26,7 @@ OC.L10N.register(
     "An error occurred" : "Ocorreu um erro",
     "Favorite" : "Favorito",
     "Open the full size \"{name}\" image" : "Abrir a foto \"{name}\" no tamanho original",
-    "Back to {folder}" : "Ir para {folder}",
     "Go back" : "Voltar",
-    "Share this folder" : "Partilhar esta pasta",
     "Enable squared photos view" : "Ativar vista de fotos quadradas",
     "Home" : "Início",
     "View" : "Ver",
@@ -41,6 +39,8 @@ OC.L10N.register(
     "All your media" : "Toda a sua média",
     "Tagged photos" : "Fotos marcadas",
     "Details" : "Detalhes",
+    "Back to {folder}" : "Ir para {folder}",
+    "Share this folder" : "Partilhar esta pasta",
     "Add" : "Adicionar"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

@@ -53,9 +53,7 @@ OC.L10N.register(
     "Favorite" : "Hacer favorito",
     "Open the full size \"{name}\" image" : "Abrir la imagen \"{nombre}\" en tamaño completo",
     "Select image {imageName}" : "Seleccionar imagen {nombreImagen}",
-    "Back to {folder}" : "Volver a {carpeta}",
     "Go back" : "Regresar",
-    "Share this folder" : "Compartir esta carpeta",
     "Dates" : "Fechas",
     "Add to {destination}" : "Agregar a {destino}",
     "There are no photos or videos yet!" : "¡Aún no hay fotos o videos!",
@@ -122,6 +120,8 @@ OC.L10N.register(
     "Tagged photo {title}" : "Foto etiquetada {título}",
     "{title}'s face" : "Rostro de {título}",
     "Details" : "Detalles",
+    "Back to {folder}" : "Volver a {carpeta}",
+    "Share this folder" : "Compartir esta carpeta",
     "Add" : "Agregar"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

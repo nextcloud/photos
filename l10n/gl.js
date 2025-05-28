@@ -59,9 +59,7 @@ OC.L10N.register(
     "Open the full size \"{name}\" image" : "Abrir a imaxe «{name}» a tamaño real",
     "Select image {imageName}" : "Seleccionar a imaxe {imageName}",
     "Open the \"{name}\" folder" : "Abrir o cartafol «{name}»",
-    "Back to {folder}" : "Volver a {folder}",
     "Go back" : "Volver",
-    "Share this folder" : "Compartir este cartafol",
     "Dates" : "Datas",
     "Jump to specific date in list" : "Ir á data específica da lista",
     "Jump to {date}" : "Ir a {data}",
@@ -148,6 +146,8 @@ OC.L10N.register(
     "{startDate} to {endDate}" : "{startDate} ata o {endDate}",
     "Details" : "Detalles",
     "Could not load photos folder" : "Non foi posíbel cargar o cartafol de fotos",
+    "Back to {folder}" : "Volver a {folder}",
+    "Share this folder" : "Compartir este cartafol",
     "One of the source folders does not exists" : "Un dos cartafoles de orixe non existe",
     "Add" : "Engadir"
 },

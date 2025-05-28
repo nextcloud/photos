@@ -59,9 +59,7 @@ OC.L10N.register(
     "Open the full size \"{name}\" image" : "\"{name}\" görselini tam boyutunda aç",
     "Select image {imageName}" : "{imageName} görselini seç",
     "Open the \"{name}\" folder" : "\"{name}\" klasörünü aç",
-    "Back to {folder}" : "{folder} klasörüne geri dön",
     "Go back" : "Geri dön",
-    "Share this folder" : "Bu klasörü paylaş",
     "Dates" : "Tarihler",
     "Jump to specific date in list" : "Listede belirli bir tarihe git",
     "Jump to {date}" : "{date} tarihine git",
@@ -156,6 +154,8 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}" : "{fileId} için sık kullanılan durumu ayarlanamadı",
     "Failed to set favorite state for {fileName}" : "{fileName} için sık kullanılan durumu ayarlanamadı",
     "Could not load photos folder" : "Fotoğraflar klasörü yüklenemedi",
+    "Back to {folder}" : "{folder} klasörüne geri dön",
+    "Share this folder" : "Bu klasörü paylaş",
     "One of the source folders does not exists" : "Kaynak klasörlerden biri bulunamadı",
     "Add" : "Ekle"
 },

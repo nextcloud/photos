@@ -53,6 +53,9 @@ OC.L10N.register(
     "Back to tags overview" : "Atpakaļ uz birku pārskatu",
     "Add to album" : "Pievienot albumam",
     "Details" : "Detaļas",
+    "Failed to delete {faceName}" : "Neizdevās izdzēst {faceName}",
+    "Failed to delete {fileId}" : "Neizdevās izdzēst {fileId}",
+    "Failed to delete {fileName}" : "Neizdevās izdzēst {fileName}",
     "Could not load photos folder" : "Nevarēja ielādēt fotoattēlu mapi",
     "Add" : "Pievienot"
 },

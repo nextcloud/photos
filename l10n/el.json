@@ -34,9 +34,7 @@
     "Favorite" : "Αγαπημένο",
     "Open the full size \"{name}\" image" : "Άνοιγμα εικόνας «{name}» σε πλήρη μέγεθος",
     "Select image {imageName}" : "Επιλογή εικόνας {imageName}",
-    "Back to {folder}" : "Πίσω στο {folder}",
     "Go back" : "Επιστροφή",
-    "Share this folder" : "Διαμοιρασμός αυτού του φακέλου",
     "Dates" : "Ημερομηνίες",
     "There are no photos or videos yet!" : "Δεν υπάρχουν φωτογραφίες ή βίντεο ακόμη!",
     "_{years} year ago_::_{years} years ago_" : ["{years} χρόνο πριν","{years} χρόνια πριν"],
@@ -69,6 +67,8 @@
     "All your media" : "Όλα τα media σας",
     "Tagged photos" : "Φωτογραφίες με ετικέτα",
     "Details" : "Λεπτομέρειες",
+    "Back to {folder}" : "Πίσω στο {folder}",
+    "Share this folder" : "Διαμοιρασμός αυτού του φακέλου",
     "Add" : "Προσθήκη"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

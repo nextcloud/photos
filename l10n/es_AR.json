@@ -17,9 +17,7 @@
     "An error occurred" : "Ocurrió un error",
     "Favorite" : "Favorito",
     "Open the full size \"{name}\" image" : "Abrir imagen a tamaño completo \"{nombre}\"",
-    "Back to {folder}" : "Volver a {carpeta}",
     "Go back" : "Regresar",
-    "Share this folder" : "Compartir esta carpeta",
     "_{years} year ago_::_{years} years ago_" : ["Hace {years} año","Hace {years} años","Hace {years} años"],
     "Enable squared photos view" : "Habilitar vista de fotos cuadradas",
     "Home" : "Casa",
@@ -31,6 +29,8 @@
     "Photos with tags will show up here" : "Las fotos con etiquetas aparecerán aquí",
     "Tagged photos" : "Fotos etiquetadas",
     "Details" : "Detalles",
+    "Back to {folder}" : "Volver a {carpeta}",
+    "Share this folder" : "Compartir esta carpeta",
     "Add" : "Añadir"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

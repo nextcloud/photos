@@ -59,9 +59,7 @@ OC.L10N.register(
     "Open the full size \"{name}\" image" : "Abrir la imaxe «{name}» a tamañu completu",
     "Select image {imageName}" : "Seleicionar la imaxe «{imageName}»",
     "Open the \"{name}\" folder" : "Abrir la carpeta «{name}»",
-    "Back to {folder}" : "Volver a «{folder}»",
     "Go back" : "Dir p'atrás",
-    "Share this folder" : "Compartir esta carpeta",
     "Dates" : "Dates",
     "Jump to specific date in list" : "Saltar a una data específica de la llista",
     "Jump to {date}" : "Saltar a «{date}»",
@@ -144,6 +142,8 @@ OC.L10N.register(
     "{startDate} to {endDate}" : "{startDate} hasta'l {endDate}",
     "Details" : "Detalles",
     "Could not load photos folder" : "Nun se puen cargar la carpeta de semeyes",
+    "Back to {folder}" : "Volver a «{folder}»",
+    "Share this folder" : "Compartir esta carpeta",
     "One of the source folders does not exists" : "Nun esiste una de les carpetes d'orixe",
     "Add" : "Amestar"
 },

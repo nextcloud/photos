@@ -57,9 +57,7 @@
     "Open the full size \"{name}\" image" : "Åbn billedet \"{name}\" i fuld størrelse",
     "Select image {imageName}" : "Vælg billede {imageName}",
     "Open the \"{name}\" folder" : "Åbn mappen \"{name}\"",
-    "Back to {folder}" : "Tilbage til {folder}",
     "Go back" : "Gå tilbage",
-    "Share this folder" : "Del denne mappe",
     "Dates" : "Datoer",
     "Jump to specific date in list" : "Hop til specifik dato i listen",
     "Jump to {date}" : "Hop til {date}",
@@ -154,6 +152,8 @@
     "Failed to set favorite state for {fileId}" : "Kunne ikke indstille favorittilstand for {fileId}",
     "Failed to set favorite state for {fileName}" : "Kunne ikke indstille favorittilstand for {fileName}",
     "Could not load photos folder" : "Kunne ikke indlæse fotomappe",
+    "Back to {folder}" : "Tilbage til {folder}",
+    "Share this folder" : "Del denne mappe",
     "One of the source folders does not exists" : "En af kildemapperne eksisterer ikke",
     "Add" : "Tilføj"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

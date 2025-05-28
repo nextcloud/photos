@@ -59,9 +59,7 @@ OC.L10N.register(
     "Open the full size \"{name}\" image" : "Ireki \"{name}\" neurri handian",
     "Select image {imageName}" : "Hautatu irudia {imageName}",
     "Open the \"{name}\" folder" : "Ireki \"{name}\" karpeta",
-    "Back to {folder}" : "Itzuli {folder}(e)ra",
     "Go back" : "Atzera",
-    "Share this folder" : "Partekatu karpeta hau",
     "Dates" : "Datak",
     "Jump to specific date in list" : "Joan zerrendako data zehatz batera",
     "Jump to {date}" : "Joan {date} datara",
@@ -147,6 +145,8 @@ OC.L10N.register(
     "{startDate} to {endDate}" : "{startDate} - {endDate}",
     "Details" : "Xehetasunak",
     "Could not load photos folder" : "Ezin izan da argazkien karpeta kargatu",
+    "Back to {folder}" : "Itzuli {folder}(e)ra",
+    "Share this folder" : "Partekatu karpeta hau",
     "One of the source folders does not exists" : "Iturburu-karpeta bat ez da existitzen",
     "Add" : "Gehitu"
 },

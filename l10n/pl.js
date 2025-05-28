@@ -59,9 +59,7 @@ OC.L10N.register(
     "Open the full size \"{name}\" image" : "Otwórz obraz \"{name}\" w pełnym rozmiarze",
     "Select image {imageName}" : "Wybierz obraz {imageName}",
     "Open the \"{name}\" folder" : "Otwórz katalog „{name}”.",
-    "Back to {folder}" : "Powrót do {folder}",
     "Go back" : "Wstecz",
-    "Share this folder" : "Udostępnij ten katalog",
     "Dates" : "Daty",
     "Jump to specific date in list" : "Przejdź do określonej daty na liście",
     "Jump to {date}" : "Przejdź do {date}",
@@ -148,6 +146,8 @@ OC.L10N.register(
     "{startDate} to {endDate}" : "{startDate} do {endDate}",
     "Details" : "Szczegóły",
     "Could not load photos folder" : "Nie można wczytać katalogu ze zdjęciami",
+    "Back to {folder}" : "Powrót do {folder}",
+    "Share this folder" : "Udostępnij ten katalog",
     "One of the source folders does not exists" : "Jeden z katalogów źródłowych nie istnieje",
     "Add" : "Dodaj"
 },

@@ -59,9 +59,7 @@ OC.L10N.register(
     "Open the full size \"{name}\" image" : "Відкрити повнорозмірне зображення: \"{name}\"",
     "Select image {imageName}" : "Виберіть зображення {imageName}",
     "Open the \"{name}\" folder" : "Відкрити каталог \"{name}\"",
-    "Back to {folder}" : "Повернутися до каталогу {folder}",
     "Go back" : "Повернутися назад",
-    "Share this folder" : "Надати спільний доступ до каталогу",
     "Dates" : "Дати",
     "Jump to specific date in list" : "Перейти до певної дати зі списку",
     "Jump to {date}" : "Перейти до {date}",
@@ -156,6 +154,8 @@ OC.L10N.register(
     "Failed to set favorite state for {fileId}" : "Не вдалося додати зірочку до {fileId}",
     "Failed to set favorite state for {fileName}" : "Не вдалося додати зірочку до {fileName}",
     "Could not load photos folder" : "Неможливо завантажити каталог зі світлинами",
+    "Back to {folder}" : "Повернутися до каталогу {folder}",
+    "Share this folder" : "Надати спільний доступ до каталогу",
     "One of the source folders does not exists" : "Один з каталогів джерел відсутній",
     "Add" : "Додати"
 },

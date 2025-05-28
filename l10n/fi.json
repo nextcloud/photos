@@ -56,9 +56,7 @@
     "Open the full size \"{name}\" image" : "Avaa kuva \"{name}\" todellisessa koossa",
     "Select image {imageName}" : "Valitse kuva {imageName}",
     "Open the \"{name}\" folder" : "Avaa kansio \"{name}\"",
-    "Back to {folder}" : "Takaisin kansioon {folder}",
     "Go back" : "Mene takaisin",
-    "Share this folder" : "Jaa tämä kansio",
     "Dates" : "Päivät",
     "Jump to specific date in list" : "Siirry määrättyyn päivään listassa",
     "Jump to {date}" : "Siirry päivään {date}",
@@ -147,6 +145,8 @@
     "Failed to delete {faceName}" : "Kohteen {faceName} poistaminen epäonnistui",
     "Failed to delete {fileId}" : "Kohteen {fileId} poistaminen epäonnistui",
     "Failed to delete {fileName}" : "Kohteen {fileName} poistaminen epäonnistui",
+    "Back to {folder}" : "Takaisin kansioon {folder}",
+    "Share this folder" : "Jaa tämä kansio",
     "One of the source folders does not exists" : "Yksi lähdekansioista ei ole olemassa",
     "Add" : "Lisää"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

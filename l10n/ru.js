@@ -59,9 +59,7 @@ OC.L10N.register(
     "Open the full size \"{name}\" image" : "Отрыть полноразмерное изображение «{name}»",
     "Select image {imageName}" : "Выбрать изображение «{imageName}»",
     "Open the \"{name}\" folder" : "Откройте папку \"{name}\"",
-    "Back to {folder}" : "Вернуться в {folder}",
     "Go back" : "Назад",
-    "Share this folder" : "Опубликовать эту папку",
     "Dates" : "Даты",
     "Jump to specific date in list" : "Перейти к конкретной дате в списке",
     "Jump to {date}" : "Перейти к {date}",
@@ -145,6 +143,8 @@ OC.L10N.register(
     "{startDate} to {endDate}" : "С {startDate} по {endDate}",
     "Details" : "Свойства",
     "Could not load photos folder" : "Не удалось загрузить папку с фотографиями",
+    "Back to {folder}" : "Вернуться в {folder}",
+    "Share this folder" : "Опубликовать эту папку",
     "One of the source folders does not exists" : "Одна из исходных папок не существует",
     "Add" : "Добавить"
 },

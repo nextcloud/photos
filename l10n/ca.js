@@ -59,9 +59,7 @@ OC.L10N.register(
     "Open the full size \"{name}\" image" : "Obre la imatge «{name}» a mida completa",
     "Select image {imageName}" : "Selecciona la imatge {imageName}",
     "Open the \"{name}\" folder" : "Obre la carpeta «{name}»",
-    "Back to {folder}" : "Torna a {folder}",
     "Go back" : "Torna",
-    "Share this folder" : "Comparteix la carpeta",
     "Dates" : "Dates",
     "Jump to specific date in list" : "Salta a una data específica de la llista",
     "Jump to {date}" : "Salta a {date}",
@@ -148,6 +146,8 @@ OC.L10N.register(
     "{startDate} to {endDate}" : "{startDate} a {endDate}",
     "Details" : "Detalls",
     "Could not load photos folder" : "No s'ha pogut carregar la carpeta de fotos",
+    "Back to {folder}" : "Torna a {folder}",
+    "Share this folder" : "Comparteix la carpeta",
     "One of the source folders does not exists" : "Una de les carpetes d'origen no existeix",
     "Add" : "Afegeix"
 },
