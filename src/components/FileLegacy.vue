@@ -44,11 +44,11 @@
 
 <script lang='ts'>
 import type { PropType } from 'vue'
-import type { InjectedItem } from './Folder.vue'
+import type { InjectedItem } from './FolderComponent.vue'
 
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
-import { legacyToViewerFileInfo } from '../utils/fileUtils'
+import { legacyToViewerFileInfo } from '../utils/fileUtils.ts'
 
 export default {
 	name: 'FileLegacy',

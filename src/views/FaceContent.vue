@@ -117,7 +117,7 @@
 			:container-element="appContent"
 			:file-ids="faceFileIds"
 			:loading="loadingFiles || loadingFaces">
-			<File
+			<FileComponent
 				slot-scope="{ file, distance }"
 				:file="files[file.id]"
 				:allow-selection="true"
@@ -201,7 +201,7 @@ import Pencil from 'vue-material-design-icons/Pencil.vue'
 import Send from 'vue-material-design-icons/Send.vue'
 import Star from 'vue-material-design-icons/Star.vue'
 import FaceMergeForm from '../components/Faces/FaceMergeForm.vue'
-import File from '../components/File.vue'
+import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
@@ -223,7 +223,7 @@ export default {
 		AccountBoxMultipleOutline,
 		FaceMergeForm,
 		FilesListViewer,
-		File,
+		FileComponent,
 		NcLoadingIcon,
 		NcEmptyContent,
 		NcActions,

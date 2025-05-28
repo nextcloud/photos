@@ -38,7 +38,7 @@ export type InjectedItem = {
 }
 
 export default defineComponent({
-	name: 'Folder',
+	name: 'FolderComponent',
 
 	components: {
 		FolderTagPreview,

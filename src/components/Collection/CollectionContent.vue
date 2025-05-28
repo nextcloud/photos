@@ -33,7 +33,7 @@
 			:file-ids="sortedCollectionFileIds"
 			:base-height="isMobile ? 120 : 200"
 			:loading="loading">
-			<File
+			<FileComponent
 				slot-scope="{ file, distance }"
 				:file="files[file.id]"
 				:allow-selection="allowSelection"
@@ -58,7 +58,7 @@ import {
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
 import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
-import File from '../File.vue'
+import FileComponent from '../FileComponent.vue'
 import FilesListViewer from '../FilesListViewer.vue'
 import FilesSelectionMixin from '../../mixins/FilesSelectionMixin.js'
 import { toViewerFileInfo } from '../../utils/fileUtils.js'
@@ -71,7 +71,7 @@ export default defineComponent({
 		FolderMultipleImage,
 		NcEmptyContent,
 		FilesListViewer,
-		File,
+		FileComponent,
 	},
 
 	mixins: [

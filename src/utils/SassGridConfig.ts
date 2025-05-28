@@ -5,9 +5,7 @@
 
 // sass plugin to implement js configs into scss
 
-// eslint-disable-next-line n/no-extraneous-import
 import { OrderedMap } from 'immutable'
-// eslint-disable-next-line n/no-extraneous-import
 import * as sass from 'sass'
 import sizes from '../assets/grid-sizes.js'
 

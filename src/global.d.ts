@@ -5,7 +5,7 @@
 
 declare global {
 	interface Window {
-		OCA: Record<string, any>
+		OCA: Record<string, unknown>
 	}
 }
 

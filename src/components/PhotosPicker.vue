@@ -90,7 +90,7 @@
 					{{ dateMonthAndYear(file.id) }}
 				</h3>
 
-				<File
+				<FileComponent
 					v-else
 					:file="files[file.id]"
 					:allow-selection="true"
@@ -119,7 +119,7 @@ import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 import NcSelect from '@nextcloud/vue/components/NcSelect'
 import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
-import File from './File.vue'
+import FileComponent from './FileComponent.vue'
 import FilesListViewer from './FilesListViewer.vue'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
@@ -130,7 +130,7 @@ export default defineComponent({
 	name: 'PhotosPicker',
 
 	components: {
-		File,
+		FileComponent,
 		FilesListViewer,
 		ImagePlus,
 		NcButton,

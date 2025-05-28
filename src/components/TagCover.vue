@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<router-link class="tag-cover" :to="`/tags/${tag.attributes['display-name']}`">
+	<RouterLink class="tag-cover" :to="`/tags/${tag.attributes['display-name']}`">
 		<img
 			v-if="tag.attributes['files-assigned'] !== 0"
 			class="tag-cover__image"
@@ -22,7 +22,7 @@
 				{{ n('photos', '%n photo', '%n photos', count) }}
 			</div>
 		</div>
-	</router-link>
+	</RouterLink>
 </template>
 
 <script lang='ts'>
@@ -35,6 +35,7 @@ import {
 
 	defineComponent,
 } from 'vue'
+import { RouterLink } from 'vue-router'
 import ImageMultipleIcon from 'vue-material-design-icons/ImageMultiple.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 
@@ -42,6 +43,7 @@ export default defineComponent({
 	name: 'TagCover',
 
 	components: {
+		RouterLink,
 		ImageMultipleIcon,
 	},
 

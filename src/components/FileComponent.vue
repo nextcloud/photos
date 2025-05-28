@@ -87,7 +87,7 @@ import FavoriteIcon from './FavoriteIcon.vue'
 import { isCachedPreview } from '../services/PreviewService.js'
 
 export default {
-	name: 'File',
+	name: 'FileComponent',
 	components: {
 		FavoriteIcon,
 		NcCheckboxRadioSwitch,

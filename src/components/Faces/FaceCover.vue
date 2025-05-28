@@ -89,7 +89,10 @@ export default {
 		},
 
 		coverDimensions() {
-			if (!this.cover) { return {} }
+			if (!this.cover) {
+				return {}
+			}
+
 			return this.getCoverStyle(this.face.basename)
 		},
 	},

@@ -160,7 +160,7 @@ import isRecognizeInstalled from './services/IsRecognizeInstalled.js'
 import logger from './services/logger.js'
 
 export default {
-	name: 'Photos',
+	name: 'PhotosApp',
 	components: {
 		AccountBoxMultipleOutline,
 		Cog,

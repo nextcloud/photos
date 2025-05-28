@@ -52,7 +52,7 @@ import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
 import { placesPrefix } from '../store/places.js'
 
 export default {
-	name: 'Places',
+	name: 'PlacesView',
 	components: {
 		FolderMultipleImage,
 		NcEmptyContent,

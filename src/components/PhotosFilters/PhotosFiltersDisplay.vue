@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-import filters from '../../services/PhotosFilters'
+import filters from '../../services/PhotosFilters/index.ts'
 
 defineProps<{
 	filtersValue: Record<string, unknown>

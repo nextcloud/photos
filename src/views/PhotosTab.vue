@@ -39,7 +39,7 @@
 </template>
 
 <script lang='ts'>
-import type { PhotoFile } from '../store/files'
+import type { PhotoFile } from '../store/files.ts'
 
 import { formatFileSize } from '@nextcloud/files'
 import { t } from '@nextcloud/l10n'

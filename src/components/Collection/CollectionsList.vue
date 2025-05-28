@@ -26,7 +26,7 @@
 
 <script lang='ts'>
 import type { PropType } from 'vue'
-import type { Collection } from '../../services/collectionFetcher'
+import type { Collection } from '../../services/collectionFetcher.ts'
 
 import { translate } from '@nextcloud/l10n'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'

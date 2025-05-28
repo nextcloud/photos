@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<router-link
+	<RouterLink
 		class="folder"
 		:to="toLink"
 		:aria-label="ariaLabel">
@@ -26,17 +26,18 @@
 			<Folder />
 			<span class="folder__title">{{ name }}</span>
 		</span>
-	</router-link>
+	</RouterLink>
 </template>
 
 <script lang='ts'>
 import type { PropType } from 'vue'
 import type { Route } from 'vue-router'
-import type { FoldersNode } from '../services/FolderContent'
+import type { FoldersNode } from '../services/FolderContent.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
+import { RouterLink } from 'vue-router'
 import Folder from 'vue-material-design-icons/Folder.vue'
 
 export default {
@@ -44,19 +45,10 @@ export default {
 
 	components: {
 		Folder,
+		RouterLink,
 	},
 
 	props: {
-		icon: {
-			type: String,
-			default: 'icon-folder',
-		},
-
-		id: {
-			type: [Number, String],
-			required: true,
-		},
-
 		name: {
 			type: String,
 			required: true,
