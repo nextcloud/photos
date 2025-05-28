@@ -4,7 +4,8 @@
 -->
 <template>
 	<div class="merge-form face-list">
-		<FaceCover v-for="face in filteredFaces"
+		<FaceCover
+			v-for="face in filteredFaces"
 			:key="face.basename"
 			:base-name="face.basename"
 			small
@@ -13,9 +14,9 @@
 </template>
 
 <script lang='ts'>
+import FaceCover from './FaceCover.vue'
 import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
 import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
-import FaceCover from './FaceCover.vue'
 
 export default {
 	name: 'FaceMergeForm',
@@ -24,17 +25,20 @@ export default {
 		FaceCoverMixin,
 		FetchFacesMixin,
 	],
+
 	props: {
 		firstFace: {
 			type: String,
 			required: true,
 		},
 	},
+
 	data() {
 		return {
 			loading: false,
 		}
 	},
+
 	computed: {
 		files() {
 			return this.$store.state.files.files
@@ -50,7 +54,7 @@ export default {
 
 		filteredFaces() {
 			return Object.values(this.faces)
-				.filter(face => face.basename !== this.firstFace)
+				.filter((face) => face.basename !== this.firstFace)
 				.sort((a, b) => {
 					if (a.attributes.nbItems && b.attributes.nbItems) {
 						return b.attributes.nbItems - a.attributes.nbItems
@@ -62,6 +66,7 @@ export default {
 				})
 		},
 	},
+
 	methods: {
 		handleSelect(faceName) {
 			this.$emit('select', faceName)

@@ -4,32 +4,37 @@
 -->
 
 <template>
-	<FolderTagPreview :id="item.injected.fileid"
+	<FolderTagPreview
+		:id="item.injected.fileid"
 		:name="item.injected.basename.toString()"
 		:path="item.injected.filename"
 		:file-list="previewFiles" />
 </template>
 
 <script lang='ts'>
-import Vue, { defineComponent, type PropType } from 'vue'
+import type Vue from 'vue'
 
 import { getCurrentUser } from '@nextcloud/auth'
+import {
+	type PropType,
 
+	defineComponent,
+} from 'vue'
 import FolderTagPreview from './FolderTagPreview.vue'
-import getFolderContent, { type FoldersNode } from '../services/FolderContent.ts'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.ts'
+import getFolderContent, { type FoldersNode } from '../services/FolderContent.ts'
 import logger from '../services/logger.ts'
 
 export type InjectedItem = {
-	id: string,
+	id: string
 	injected: FoldersNode & {
-		showShared: true,
-		list: FoldersNode[],
-	},
-	width: number,
-	height: number,
-	columnSpan: number,
-	renderComponent: Vue,
+		showShared: true
+		list: FoldersNode[]
+	}
+	width: number
+	height: number
+	columnSpan: number
+	renderComponent: Vue
 }
 
 export default defineComponent({
@@ -39,9 +44,8 @@ export default defineComponent({
 		FolderTagPreview,
 	},
 
-	mixins: [
-		AbortControllerMixin,
-	],
+	mixins: [AbortControllerMixin],
+
 	inheritAttrs: false,
 
 	props: {
@@ -74,13 +78,14 @@ export default defineComponent({
 		folderContent() {
 			return this.folders[this.item.injected.fileid]
 		},
+
 		previewFiles() {
 			const previewFolderContent = this.folders[this.previewFolder]
 
 			const previewFiles = previewFolderContent
 				? previewFolderContent
-					.map(id => this.files[id])
-					.slice(0, 4) // only get the 4 first images
+						.map((id) => this.files[id])
+						.slice(0, 4) // only get the 4 first images
 				: []
 
 			// If we didn't found any previews in the folder we try the next subfolder
@@ -88,7 +93,6 @@ export default defineComponent({
 			if (previewFiles.length === 0
 				&& this.subFolders[this.previewFolder]
 				&& this.previewFolder === this.item.injected.fileid) {
-
 				const firstChildFolder = this.subFolders[this.previewFolder][0]
 				this.updatePreviewFolder(firstChildFolder)
 

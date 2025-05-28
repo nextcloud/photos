@@ -3,19 +3,22 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<CollectionsList :collections="sharedAlbums"
+	<CollectionsList
+		:collections="sharedAlbums"
 		:loading="loadingCollections"
 		:error="errorFetchingCollections"
 		class="albums-list">
-		<HeaderNavigation key="navigation"
+		<HeaderNavigation
+			key="navigation"
 			slot="header"
 			:loading="loadingCollections"
 			:title="t('photos', 'Collaborative albums')"
 			:root-title="t('photos', 'Collaborative albums')"
 			@refresh="fetchSharedAlbums" />
 
-		<CollectionCover :key="collection.basename"
-			slot-scope="{collection}"
+		<CollectionCover
+			:key="collection.basename"
+			slot-scope="{ collection }"
 			:link="`/sharedalbums/${collection.basename}`"
 			:alt-img="t('photos', 'Cover photo for shared album {albumName}', { albumName: collection.basename })"
 			:data-test="collection.basename"
@@ -25,7 +28,7 @@
 			</span>
 
 			<div slot="subtitle" class="album__details">
-				{{ collection.attributes.date }} ⸱ {{ n('photos', '%n item', '%n photos and videos', collection.attributes.nbItems,) }}
+				{{ collection.attributes.date }} ⸱ {{ n('photos', '%n item', '%n photos and videos', collection.attributes.nbItems) }}
 				<br>
 				{{ t('photos', 'Shared by') }}&nbsp;<NcUserBubble :display-name="collection.attributes.collaborators[0].label" :user="collection.attributes.collaborators[0].id" />
 			</div>
@@ -38,19 +41,18 @@
 </template>
 
 <script lang='ts'>
-import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
+import type { Album } from '../store/albums.js'
 
-import { generateUrl } from '@nextcloud/router'
-import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
-import NcUserBubble from '@nextcloud/vue/dist/Components/NcUserBubble.js'
-import { translate, translatePlural } from '@nextcloud/l10n'
 import { getCurrentUser } from '@nextcloud/auth'
-
-import CollectionsList from '../components/Collection/CollectionsList.vue'
+import { translate, translatePlural } from '@nextcloud/l10n'
+import { generateUrl } from '@nextcloud/router'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
+import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
 import CollectionCover from '../components/Collection/CollectionCover.vue'
+import CollectionsList from '../components/Collection/CollectionsList.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
-import type { Album } from '../store/albums.js'
 import { albumsExtraProps } from '../store/albums.ts'
 
 export default {
@@ -78,9 +80,7 @@ export default {
 		},
 	},
 
-	mixins: [
-		FetchCollectionsMixin,
-	],
+	mixins: [FetchCollectionsMixin],
 
 	computed: {
 		sharedAlbums(): Record<string, Album> {
@@ -105,6 +105,7 @@ export default {
 	},
 }
 </script>
+
 <style lang="scss" scoped>
 .albums-list {
 	display: flex;

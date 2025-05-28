@@ -14,14 +14,12 @@ type SemaphoreWithPriorityItem = {
  * @param capacity - The number of simultaneous access to the ressource.
  */
 export default class SemaphoreWithPriority {
-
 	#capacity: number = 0
 	#queue: SemaphoreWithPriorityItem[] = []
 	#active: symbol[] = []
 
 	constructor(capacity: number) {
 		this.#capacity = capacity
-
 	}
 
 	/**

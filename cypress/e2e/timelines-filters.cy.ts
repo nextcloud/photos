@@ -5,8 +5,8 @@
 
 import type { User } from '@nextcloud/cypress'
 
-import { navigateToTimeline } from './timelines.ts'
 import { navigateToCollection, setupPhotosTests } from './photosUtils.ts'
+import { navigateToTimeline } from './timelines.ts'
 
 const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/
 Cypress.on('uncaught:exception', (err) => {
@@ -21,9 +21,9 @@ let alice: User
 describe('View list of photos in the main timeline', () => {
 	before(() => {
 		setupPhotosTests()
-		.then((setupInfo) => {
-			alice = setupInfo.alice
-		})
+			.then((setupInfo) => {
+				alice = setupInfo.alice
+			})
 	})
 
 	beforeEach(() => {

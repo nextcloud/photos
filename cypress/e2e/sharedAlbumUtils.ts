@@ -3,14 +3,23 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { navigateToCollection, selectMedia } from "./photosUtils"
+import { navigateToCollection, selectMedia } from './photosUtils'
 
+/**
+ *
+ * @param albumName
+ */
 export function removeSharedAlbums(albumName: string) {
 	navigateToCollection('sharedalbums', albumName)
 	cy.get('[aria-label="Open actions menu"]').click()
 	cy.contains('Delete album').click()
 }
 
+/**
+ *
+ * @param albumName
+ * @param itemsIndex
+ */
 export function addFilesToSharedAlbumFromSharedAlbumFromHeader(albumName: string, itemsIndex: number[]) {
 	cy.intercept({ times: 1, method: 'SEARCH', url: '/remote.php/dav/' }).as('search')
 	cy.contains('Add').click()
@@ -25,6 +34,11 @@ export function addFilesToSharedAlbumFromSharedAlbumFromHeader(albumName: string
 	cy.wait('@propFind')
 }
 
+/**
+ *
+ * @param albumName
+ * @param itemsIndex
+ */
 export function addFilesToSharedAlbumFromAlbum(albumName: string, itemsIndex: number[]) {
 	cy.intercept({ times: 1, method: 'SEARCH', url: '/remote.php/dav/' }).as('search')
 	cy.get('[aria-label="Add photos to this album"]').click()

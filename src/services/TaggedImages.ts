@@ -3,18 +3,22 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import type { File } from '@nextcloud/files'
+import type { FileStat, GetDirectoryContentsOptions, ResponseDataDetailed } from 'webdav'
+
 import { defaultRootPath, resultToNode } from '@nextcloud/files/dav'
 import allowedMimes from './AllowedMimes.js'
 import { davClient } from './DavClient.ts'
 import { getDefaultDavProps } from './DavRequest.ts'
-import type { FileStat, GetDirectoryContentsOptions, ResponseDataDetailed } from 'webdav'
-import type { File } from '@nextcloud/files'
 
 /**
  * Get tagged files based on provided tag id
+ *
+ * @param id
+ * @param options
  */
 export default async function(id: number, options: GetDirectoryContentsOptions = {}): Promise<File[]> {
-	options = Object.assign({
+	options = {
 		headers: {
 			method: 'REPORT',
 		},
@@ -32,7 +36,8 @@ export default async function(id: number, options: GetDirectoryContentsOptions =
 				</oc:filter-rules>
 			</oc:filter-files>`,
 		details: true,
-	}, options)
+		...options,
+	}
 
 	const response = await davClient.getDirectoryContents(defaultRootPath, options) as ResponseDataDetailed<FileStat[]>
 	return response.data

@@ -1,19 +1,18 @@
+import type { File, Folder } from '@nextcloud/files'
+import type { PhotosContext } from './index.ts'
+
+import { showError } from '@nextcloud/dialogs'
+import { defaultRootPath } from '@nextcloud/files/dav'
+import { t } from '@nextcloud/l10n'
+import moment from '@nextcloud/moment'
 /**
  * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import Vue from 'vue'
-
-import moment from '@nextcloud/moment'
-import { showError } from '@nextcloud/dialogs'
-import { defaultRootPath } from '@nextcloud/files/dav'
-import { t } from '@nextcloud/l10n'
-import type { File, Folder } from '@nextcloud/files'
-
+import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
-import { davClient } from '../services/DavClient.ts'
-import type { PhotosContext } from './index.ts'
 
 export type PhotoFile = File & {
 	fileid: number
@@ -36,15 +35,18 @@ export type FilesState = typeof state
 const mutations = {
 	/**
 	 * Append or update given files
+	 *
+	 * @param state
+	 * @param newFiles
 	 */
 	updateFiles(state: FilesState, newFiles: File[]) {
 		const files = {}
 		newFiles
-			.filter(file => !file.attributes.hidden)
-			.forEach(file => {
+			.filter((file) => !file.attributes.hidden)
+			.forEach((file) => {
 				// Ignore the file if the path is excluded
 				// TODO: Check that it works
-				if (state.nomediaPaths.some(nomediaPath => file.path.startsWith(nomediaPath)
+				if (state.nomediaPaths.some((nomediaPath) => file.path.startsWith(nomediaPath)
 					|| file.path.startsWith(`${defaultRootPath}${nomediaPath}`))) {
 					return
 				}
@@ -70,6 +72,9 @@ const mutations = {
 
 	/**
 	 * Set list of all .nomedia/.noimage files
+	 *
+	 * @param state
+	 * @param paths
 	 */
 	setNomediaPaths(state: FilesState, paths: string[]) {
 		state.nomediaPaths = paths
@@ -77,6 +82,9 @@ const mutations = {
 
 	/**
 	 * Delete a file
+	 *
+	 * @param state
+	 * @param fileId
 	 */
 	deleteFile(state: FilesState, fileId: number) {
 		Vue.delete(state.files, fileId)
@@ -84,8 +92,13 @@ const mutations = {
 
 	/**
 	 * Favorite a list of files
+	 *
+	 * @param state
+	 * @param root0
+	 * @param root0.fileId
+	 * @param root0.favoriteState
 	 */
-	favoriteFile(state: FilesState, { fileId, favoriteState }: { fileId: number, favoriteState: 0|1 }) {
+	favoriteFile(state: FilesState, { fileId, favoriteState }: { fileId: number, favoriteState: 0 | 1 }) {
 		Vue.set(state.files[fileId].attributes, 'favorite', favoriteState)
 	},
 }
@@ -98,8 +111,14 @@ const getters = {
 const actions = {
 	/**
 	 * Update files, folders and their respective subfolders
+	 *
+	 * @param context
+	 * @param root0
+	 * @param root0.folder
+	 * @param root0.files
+	 * @param root0.folders
 	 */
-	updateFiles(context: PhotosContext<FilesState>, { folder, files = [], folders = [] }: { folder: Folder, files: File[], folders: Folder[]}) {
+	updateFiles(context: PhotosContext<FilesState>, { folder, files = [], folders = [] }: { folder: Folder, files: File[], folders: Folder[] }) {
 		// we want all the FileInfo! Folders included!
 		context.commit('updateFiles', [folder, ...files, ...folders])
 		context.commit('setSubFolders', { fileid: folder.fileid, folders })
@@ -107,6 +126,9 @@ const actions = {
 
 	/**
 	 * Append or update given files
+	 *
+	 * @param context
+	 * @param files
 	 */
 	appendFiles(context: PhotosContext<FilesState>, files: File[] = []) {
 		context.commit('updateFiles', files)
@@ -114,6 +136,9 @@ const actions = {
 
 	/**
 	 * Set list of all .nomedia/.noimage files
+	 *
+	 * @param context
+	 * @param paths
 	 */
 	setNomediaPaths(context: PhotosContext<FilesState>, paths: string[]) {
 		logger.debug('Ignored paths', { paths })
@@ -122,15 +147,18 @@ const actions = {
 
 	/**
 	 * Delete a list of files
+	 *
+	 * @param context
+	 * @param fileIds
 	 */
 	deleteFiles(context: PhotosContext<FilesState>, fileIds: number[]) {
 		const semaphore = new Semaphore(5)
 
 		const files = fileIds
-			.map(fileId => state.files[fileId])
+			.map((fileId) => state.files[fileId])
 			.reduce((files, file) => ({ ...files, [file.fileid]: file }), {} as Record<string, PhotoFile>)
 
-		fileIds.forEach(fileId => context.commit('deleteFile', fileId))
+		fileIds.forEach((fileId) => context.commit('deleteFile', fileId))
 
 		const promises = fileIds
 			.map(async (fileId) => {
@@ -153,8 +181,13 @@ const actions = {
 
 	/**
 	 * Favorite a list of files
+	 *
+	 * @param context
+	 * @param root0
+	 * @param root0.fileIds
+	 * @param root0.favoriteState
 	 */
-	toggleFavoriteForFiles(context: PhotosContext<FilesState>, { fileIds, favoriteState }: { fileIds: string[], favoriteState: 0|1 }) {
+	toggleFavoriteForFiles(context: PhotosContext<FilesState>, { fileIds, favoriteState }: { fileIds: string[], favoriteState: 0 | 1 }) {
 		const semaphore = new Semaphore(5)
 
 		const promises = fileIds

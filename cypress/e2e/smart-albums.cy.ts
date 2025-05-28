@@ -5,9 +5,9 @@
 
 import type { User } from '@nextcloud/cypress'
 
-import { navigateToCollection, setupPhotosTests } from './photosUtils.ts'
-import { addCollaborators, createAnAlbumFromAlbums, createPublicShare } from './albumsUtils.ts'
 import { randHash } from '../utils/index.js'
+import { addCollaborators, createAnAlbumFromAlbums, createPublicShare } from './albumsUtils.ts'
+import { navigateToCollection, setupPhotosTests } from './photosUtils.ts'
 
 const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/
 Cypress.on('uncaught:exception', (err) => {
@@ -24,10 +24,10 @@ describe('View list of photos in the main timeline', () => {
 
 	before(() => {
 		setupPhotosTests()
-		.then((setupInfo) => {
-			alice = setupInfo.alice
-			bob = setupInfo.bob
-		})
+			.then((setupInfo) => {
+				alice = setupInfo.alice
+				bob = setupInfo.bob
+			})
 	})
 
 	beforeEach(() => {
@@ -95,7 +95,7 @@ describe('View list of photos in the main timeline', () => {
 		cy.get('[data-cy-header-action="toggle-filters"]').click()
 
 		createPublicShare()
-			.then(publicLink => {
+			.then((publicLink) => {
 				cy.logout()
 				cy.intercept({ times: 1, method: 'PROPFIND', url: '/remote.php/dav/photospublic/*' }).as('propFindAlbum')
 				cy.intercept({ times: 1, method: 'PROPFIND', url: '/remote.php/dav/photospublic/*/' }).as('propFindContent')

@@ -1,16 +1,25 @@
+import type { FoldersNode } from '../services/FolderContent.js'
+
+import {
+	type Node,
+
+	FileType, Permission,
+} from '@nextcloud/files'
 /**
  * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import { getLanguage } from '@nextcloud/l10n'
-import { FileType, Permission, type Node } from '@nextcloud/files'
 import { generateUrl } from '@nextcloud/router'
-
 import { isNumber } from './numberUtils.js'
-import type { FoldersNode } from '../services/FolderContent.js'
 
 /**
  * Sorting comparison function
+ *
+ * @param fileInfo1
+ * @param fileInfo2
+ * @param key
+ * @param asc
  */
 export function sortCompare(fileInfo1: Node, fileInfo2: Node, key: string, asc: boolean = true): number {
 	// favorite always first
@@ -49,6 +58,11 @@ export function sortCompare(fileInfo1: Node, fileInfo2: Node, key: string, asc: 
 
 /**
  * Sorting comparison function
+ *
+ * @param fileInfo1
+ * @param fileInfo2
+ * @param key
+ * @param asc
  */
 export function sortCompareFileInfo(fileInfo1: FoldersNode, fileInfo2: FoldersNode, key: keyof FoldersNode, asc: boolean = true): number {
 	// if this is a number, let's sort by integer
@@ -78,6 +92,10 @@ export function sortCompareFileInfo(fileInfo1: FoldersNode, fileInfo2: FoldersNo
 		: -fileInfo1[key]?.toString()?.localeCompare(fileInfo2[key].toString(), getLanguage()) || -1
 }
 
+/**
+ *
+ * @param file
+ */
 export function toViewerFileInfo(file: Node) {
 	let permissions = ''
 
@@ -102,6 +120,10 @@ export function toViewerFileInfo(file: Node) {
 	}
 }
 
+/**
+ *
+ * @param file
+ */
 export function legacyToViewerFileInfo(file: FoldersNode) {
 	return {
 		fileid: file.fileid,

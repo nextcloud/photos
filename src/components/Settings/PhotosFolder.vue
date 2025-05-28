@@ -13,7 +13,8 @@
 				{{ subname }}
 			</div>
 		</span>
-		<NcButton v-if="canDelete"
+		<NcButton
+			v-if="canDelete"
 			type="tertiary"
 			:aria-label="t('photos', 'Delete source directory')"
 			@click="emitRemoveSourceFolder">
@@ -25,13 +26,11 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent } from 'vue'
-
-import Folder from 'vue-material-design-icons/Folder.vue'
-import Close from 'vue-material-design-icons/Close.vue'
-
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import { t } from '@nextcloud/l10n'
+import { defineComponent } from 'vue'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import Close from 'vue-material-design-icons/Close.vue'
+import Folder from 'vue-material-design-icons/Folder.vue'
 
 export default defineComponent({
 	name: 'PhotosFolder',
@@ -47,14 +46,17 @@ export default defineComponent({
 			type: String,
 			required: true,
 		},
+
 		canDelete: {
 			type: Boolean,
 			default: false,
 		},
+
 		rootFolderLabel: {
 			type: String,
 			required: true,
 		},
+
 		rootFolderIcon: {
 			type: Object,
 			required: true,
@@ -85,12 +87,12 @@ export default defineComponent({
 			const slashesCount = (this.path.match(/\//g) ?? []).length
 
 			switch (slashesCount) {
-			case 1:
-				return ''
-			case 2:
-				return this.path.split('/').splice(0, 2).join('/')
-			default:
-				return this.path.split('/').splice(0, 3).join('/')
+				case 1:
+					return ''
+				case 2:
+					return this.path.split('/').splice(0, 2).join('/')
+				default:
+					return this.path.split('/').splice(0, 3).join('/')
 			}
 		},
 	},

@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { defineComponent } from 'vue'
 import type { PhotoFile } from '../store/files.ts'
+
+import { defineComponent } from 'vue'
 
 export default defineComponent({
 	name: 'FilesByMonthMixin',
@@ -22,7 +23,7 @@ export default defineComponent({
 
 			// Sort files in sections.
 			Object.keys(filesByMonth)
-				.forEach(month => filesByMonth[month].sort(this.sortFilesByTimestamp))
+				.forEach((month) => filesByMonth[month].sort(this.sortFilesByTimestamp))
 
 			return filesByMonth
 		},
@@ -35,7 +36,7 @@ export default defineComponent({
 	},
 
 	methods: {
-		sortFilesByTimestamp(fileId1: string, fileId2: string): -1|1 {
+		sortFilesByTimestamp(fileId1: string, fileId2: string): -1 | 1 {
 			return (this.files as Record<string, PhotoFile>)[fileId1].attributes.timestamp > (this.files as Record<string, PhotoFile>)[fileId2].attributes.timestamp ? -1 : 1
 		},
 	},

@@ -1,25 +1,27 @@
-/* eslint-disable jsdoc/require-jsdoc */
+import type { Folder } from '@nextcloud/files'
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import type { FileStat, ResponseDataDetailed } from 'webdav'
 
-import { getDefaultPropfind, resultToNode, defaultRootPath } from '@nextcloud/files/dav'
-import { loadState } from '@nextcloud/initial-state'
-import { joinPaths } from '@nextcloud/paths'
+import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
+import { defaultRootPath, getDefaultPropfind, resultToNode } from '@nextcloud/files/dav'
+import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
+import { joinPaths } from '@nextcloud/paths'
 import { generateUrl } from '@nextcloud/router'
-import axios from '@nextcloud/axios'
-import type { Folder } from '@nextcloud/files'
-
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 
 export const configChangedEvent = 'photos:user-config-changed'
 
+/**
+ *
+ * @param path
+ */
 export async function getFolder(path) {
 	const location = joinPaths(defaultRootPath, path) + '/'
 
@@ -51,7 +53,7 @@ export type UserConfigState = {
 const module = {
 	state() {
 		return {
-			croppedLayout: loadState('photos', 'croppedLayout', 'false') as 'false'|'true' === 'true',
+			croppedLayout: loadState('photos', 'croppedLayout', 'false') as 'false' | 'true' === 'true',
 			photosSourceFolders: JSON.parse(loadState('photos', 'photosSourceFolders', '["/Photos"]')),
 			photosLocation: loadState('photos', 'photosLocation', ''),
 			photosLocationFolder: undefined,

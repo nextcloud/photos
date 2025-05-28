@@ -4,7 +4,12 @@
  */
 
 import type { PhotosRootSate } from '.'
-import { albumsExtraProps, type Album } from './albums'
+
+import {
+	type Album,
+
+	albumsExtraProps,
+} from './albums'
 
 export type PublicAlbum = Album & {
 	attributes: {

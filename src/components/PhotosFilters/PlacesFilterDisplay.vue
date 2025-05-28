@@ -17,14 +17,14 @@
 		</span>
 	</div>
 </template>
+
 <script lang="ts" setup>
-import MapMarker from 'vue-material-design-icons/MapMarker.vue'
+import type { PlacesValueType } from '../../services/PhotosFilters/placesFilter.ts'
 
 import { t } from '@nextcloud/l10n'
 import NcChip from '@nextcloud/vue/components/NcChip'
-
+import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import usePlaceFilter from './usePlaceFilter.ts'
-import type { PlacesValueType } from '../../services/PhotosFilters/placesFilter.ts'
 
 const props = defineProps<{
 	value: PlacesValueType
@@ -36,6 +36,7 @@ const emit = defineEmits<{
 
 const { selectedPlaces } = usePlaceFilter(props, emit)
 </script>
+
 <style lang="scss" scoped>
 .place__preview {
 	width: 20px;

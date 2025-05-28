@@ -40,8 +40,10 @@ export default defineComponent({
 		/**
 		 * This will produce an inline style to apply to images
 		 * to zoom toward the detected face
+		 *
+		 * @param faceName
 		 */
-		getCoverStyle(faceName: string): Record<string, never>|{transform: string, width: string, transformOrigin: string} {
+		getCoverStyle(faceName: string): Record<string, never> | { transform: string, width: string, transformOrigin: string } {
 			const cover = this.getFaceCover(faceName)
 			if (!cover || !cover.detection) {
 				return {}

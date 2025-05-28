@@ -3,16 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { generateUrl } from '@nextcloud/router'
-import Router from 'vue-router'
-import Vue from 'vue'
-
 import { t } from '@nextcloud/l10n'
-
-import isMapsInstalled from '../services/IsMapsInstalled.js'
-import areTagsInstalled from '../services/AreTagsInstalled.js'
+import { generateUrl } from '@nextcloud/router'
+import Vue from 'vue'
+import Router from 'vue-router'
 import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
-
+import areTagsInstalled from '../services/AreTagsInstalled.js'
+import isMapsInstalled from '../services/IsMapsInstalled.js'
 import isRecognizeInstalled from '../services/IsRecognizeInstalled.js'
 
 const Folders = () => import('../views/Folders.vue')
@@ -43,8 +40,10 @@ if (!isMapsInstalled) {
 /**
  * Parse the path of a route : join the elements of the array and return a single string with slashes
  * + always lead current path with a slash
+ *
+ * @param path
  */
-const parsePathParams = (path: string|string[]): string => {
+const parsePathParams = (path: string | string[]): string => {
 	return `/${Array.isArray(path) ? path.join('/') : path || ''}`
 }
 
@@ -110,7 +109,7 @@ const router = new Router({
 			path: '/albums/:albumName*',
 			component: AlbumContent,
 			name: 'albumsContent',
-			props: route => ({
+			props: (route) => ({
 				albumName: route.params.albumName,
 			}),
 			meta: {
@@ -133,7 +132,7 @@ const router = new Router({
 			path: '/sharedalbums/:albumName*',
 			component: SharedAlbumContent,
 			name: 'sharedAlbumsContent',
-			props: route => ({
+			props: (route) => ({
 				albumName: route.params.albumName,
 			}),
 			meta: {
@@ -146,7 +145,7 @@ const router = new Router({
 			path: '/public/:token',
 			component: PublicAlbumContent,
 			name: 'publicAlbums',
-			props: route => ({
+			props: (route) => ({
 				token: route.params.token,
 			}),
 			meta: {
@@ -164,7 +163,7 @@ const router = new Router({
 			path: '/places/:placeName*',
 			component: PlaceContent,
 			name: 'placesContent',
-			props: route => ({
+			props: (route) => ({
 				placeName: route.params.placeName,
 			}),
 		},
@@ -172,7 +171,7 @@ const router = new Router({
 			path: '/folders/:path*',
 			component: Folders,
 			name: 'folders',
-			props: route => ({
+			props: (route) => ({
 				path: parsePathParams(route.params.path),
 				// if path is empty
 				isRoot: !route.params.path,
@@ -188,7 +187,7 @@ const router = new Router({
 			path: '/shared/:path*',
 			component: Folders,
 			name: 'shared',
-			props: route => ({
+			props: (route) => ({
 				path: parsePathParams(route.params.path),
 				// if path is empty
 				isRoot: !route.params.path,
@@ -220,7 +219,7 @@ const router = new Router({
 			component: Tags,
 			name: 'tags',
 			redirect: !areTagsInstalled ? { name: 'timeline' } : undefined,
-			props: route => ({
+			props: (route) => ({
 				path: '',
 				isRoot: !route.params.path,
 				rootTitle: t('photos', 'Tagged photos'),
@@ -236,7 +235,7 @@ const router = new Router({
 			component: TagContent,
 			name: 'tagcontent',
 			redirect: !areTagsInstalled ? { name: 'timeline' } : undefined,
-			props: route => ({
+			props: (route) => ({
 				path: `${route.params.path ? route.params.path : ''}`,
 			}),
 			meta: {
@@ -292,7 +291,7 @@ const router = new Router({
 			path: '/faces/:faceName',
 			name: 'facecontent',
 			component: FaceContent,
-			props: route => ({
+			props: (route) => ({
 				rootTitle: route.params.faceName,
 				faceName: route.params.faceName,
 			}),

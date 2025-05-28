@@ -28,7 +28,7 @@
 					</NcActionButton>
 				</NcActions>
 				<div class="face__header__title">
-					<h2 v-if="face !== undefined" :class="{'face-name': true, 'hidden-visually': face.basename.match(/^[0-9]+$/)}">
+					<h2 v-if="face !== undefined" :class="{ 'face-name': true, 'hidden-visually': face.basename.match(/^[0-9]+$/) }">
 						{{ face.basename }}
 					</h2>
 				</div>
@@ -37,7 +37,8 @@
 			</div>
 			<div v-if="face !== undefined" class="face__header__actions">
 				<NcActions>
-					<NcActionButton :close-after-click="true"
+					<NcActionButton
+						:close-after-click="true"
 						:aria-label="t('photos', 'Rename person')"
 						@click="showRenameModal = true">
 						<template #icon>
@@ -47,7 +48,8 @@
 					</NcActionButton>
 				</NcActions>
 				<NcActions :force-menu="true">
-					<NcActionButton v-if="Object.keys(faces).length > 1"
+					<NcActionButton
+						v-if="Object.keys(faces).length > 1"
 						:close-after-click="true"
 						:aria-label="t('photos', 'Merge with different person')"
 						@click="showMergeModal = true">
@@ -57,34 +59,39 @@
 						{{ t('photos', 'Merge with different person') }}
 					</NcActionButton>
 					<template v-if="selectedFileIds.length">
-						<NcActionButton :close-after-click="true"
+						<NcActionButton
+							:close-after-click="true"
 							:aria-label="t('photos', 'Download selected files')"
 							@click="downloadSelection">
 							<Download slot="icon" />
 							{{ t('photos', 'Download selected photos') }}
 						</NcActionButton>
-						<NcActionButton v-if="shouldFavoriteSelection"
+						<NcActionButton
+							v-if="shouldFavoriteSelection"
 							:close-after-click="true"
 							:aria-label="t('photos', 'Mark selection as favorite')"
 							@click="favoriteSelection">
 							<Star slot="icon" />
 							{{ t('photos', 'Favorite') }}
 						</NcActionButton>
-						<NcActionButton v-else
+						<NcActionButton
+							v-else
 							:close-after-click="true"
 							:aria-label="t('photos', 'Remove selection from favorites')"
 							@click="unFavoriteSelection">
 							<Star slot="icon" />
 							{{ t('photos', 'Remove from favorites') }}
 						</NcActionButton>
-						<NcActionButton :close-after-click="true"
+						<NcActionButton
+							:close-after-click="true"
 							@click="showMoveModal = true">
 							<template #icon>
 								<AccountSwitch />
 							</template>
 							{{ n('photos', 'Move photo to a different person', 'Move photos to a different person', selectedFileIds.length) }}
 						</NcActionButton>
-						<NcActionButton :close-after-click="true"
+						<NcActionButton
+							:close-after-click="true"
 							@click="handleRemoveFilesFromFace(selectedFileIds)">
 							<template #icon>
 								<Close />
@@ -92,7 +99,8 @@
 							{{ n('photos', 'Remove photo from person', 'Remove photos from person', selectedFileIds.length) }}
 						</NcActionButton>
 					</template>
-					<NcActionButton :close-after-click="true"
+					<NcActionButton
+						:close-after-click="true"
 						@click="handleDeleteFace">
 						<template #icon>
 							<Close />
@@ -103,12 +111,14 @@
 			</div>
 		</div>
 
-		<FilesListViewer v-if="face !== undefined"
+		<FilesListViewer
+			v-if="face !== undefined"
 			class="face__photos"
 			:container-element="appContent"
 			:file-ids="faceFileIds"
 			:loading="loadingFiles || loadingFaces">
-			<File slot-scope="{file, distance}"
+			<File
+				slot-scope="{ file, distance }"
 				:file="files[file.id]"
 				:allow-selection="true"
 				:selected="selection[file.id] === true"
@@ -117,13 +127,15 @@
 				@select-toggled="onFileSelectToggle" />
 		</FilesListViewer>
 
-		<NcDialog v-if="showRenameModal"
+		<NcDialog
+			v-if="showRenameModal"
 			:name="t('photos', 'Rename person')"
 			close-on-click-outside
 			size="small"
 			@closing="showRenameModal = false">
 			<div class="rename-form">
-				<input ref="nameInput"
+				<input
+					ref="nameInput"
 					v-focus
 					:value="faceName"
 					type="text"
@@ -133,7 +145,8 @@
 					@keydown.enter="handleRenameFace($refs.nameInput.value)">
 			</div>
 			<template #actions>
-				<NcButton :aria-label="t('photos', 'Save.')"
+				<NcButton
+					:aria-label="t('photos', 'Save.')"
 					type="primary"
 					:disabled="$refs.nameInput && $refs.nameInput.value.trim() === ''"
 					@click="handleRenameFace($refs.nameInput.value)">
@@ -146,7 +159,8 @@
 			</template>
 		</NcDialog>
 
-		<NcDialog v-if="showMergeModal"
+		<NcDialog
+			v-if="showMergeModal"
 			:name="t('photos', 'Merge person')"
 			close-on-click-outside
 			size="normal"
@@ -154,7 +168,8 @@
 			<FaceMergeForm :first-face="faceName" @select="handleMerge($event)" />
 		</NcDialog>
 
-		<NcDialog v-if="showMoveModal"
+		<NcDialog
+			v-if="showMoveModal"
 			:name="t('photos', 'Move to different person')"
 			close-on-click-outside
 			size="normal"
@@ -165,34 +180,33 @@
 </template>
 
 <script lang='ts'>
-import Pencil from 'vue-material-design-icons/Pencil.vue'
-import Close from 'vue-material-design-icons/Close.vue'
-import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
-import Star from 'vue-material-design-icons/Star.vue'
-import Download from 'vue-material-design-icons/Download.vue'
-import Send from 'vue-material-design-icons/Send.vue'
-import Merge from 'vue-material-design-icons/Merge.vue'
-import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
-import AccountSwitch from 'vue-material-design-icons/AccountSwitch.vue'
+import type { Collection } from '../services/collectionFetcher.js'
+
+import { translatePlural as n, translate as t } from '@nextcloud/l10n'
+import Vue from 'vue'
+import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcActions from '@nextcloud/vue/components/NcActions'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcDialog from '@nextcloud/vue/components/NcDialog'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
-
-import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
-import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
-import NcDialog from '@nextcloud/vue/dist/Components/NcDialog.js'
-import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
-import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon.js'
-import { translate as t, translatePlural as n } from '@nextcloud/l10n'
-
+import AccountSwitch from 'vue-material-design-icons/AccountSwitch.vue'
+import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
+import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
+import Close from 'vue-material-design-icons/Close.vue'
+import Download from 'vue-material-design-icons/Download.vue'
+import Merge from 'vue-material-design-icons/Merge.vue'
+import Pencil from 'vue-material-design-icons/Pencil.vue'
+import Send from 'vue-material-design-icons/Send.vue'
+import Star from 'vue-material-design-icons/Star.vue'
+import FaceMergeForm from '../components/Faces/FaceMergeForm.vue'
+import File from '../components/File.vue'
+import FilesListViewer from '../components/FilesListViewer.vue'
+import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
-import FilesListViewer from '../components/FilesListViewer.vue'
-import File from '../components/File.vue'
 import logger from '../services/logger.js'
-import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
-import Vue from 'vue'
-import FaceMergeForm from '../components/Faces/FaceMergeForm.vue'
-import type { Collection } from '../services/collectionFetcher.js'
 import { toViewerFileInfo } from '../utils/fileUtils.js'
 
 export default {
@@ -287,7 +301,7 @@ export default {
 		openViewer(fileId: string) {
 			window.OCA.Viewer.open({
 				fileInfo: toViewerFileInfo(this.files[fileId]),
-				list: this.faceFileIds.map(fileId => toViewerFileInfo(this.files[fileId])),
+				list: this.faceFileIds.map((fileId) => toViewerFileInfo(this.files[fileId])),
 			})
 		},
 
@@ -393,6 +407,7 @@ export default {
 	},
 }
 </script>
+
 <style lang="scss" scoped>
 @use '../mixins/FaceContent';
 </style>

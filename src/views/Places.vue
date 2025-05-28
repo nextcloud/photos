@@ -4,19 +4,22 @@
 -->
 <template>
 	<div>
-		<CollectionsList :collections="places"
+		<CollectionsList
+			:collections="places"
 			:loading="loadingCollections"
 			:error="errorFetchingCollections"
 			class="places-list">
-			<HeaderNavigation key="navigation"
+			<HeaderNavigation
+				key="navigation"
 				slot="header"
 				:loading="loadingCollections"
 				:title="t('photos', 'Places')"
 				:root-title="t('photos', 'Places')"
 				@refresh="fetchPlaces" />
 
-			<CollectionCover :key="collection.basename"
-				slot-scope="{collection}"
+			<CollectionCover
+				:key="collection.basename"
+				slot-scope="{ collection }"
 				:link="`/places/${collection.basename}`"
 				:alt-img="t('photos', 'Cover photo for place {placeName}', { placeName: collection.basename })"
 				:cover-url="collection.attributes['last-photo'] | coverUrl">
@@ -25,7 +28,7 @@
 				</span>
 
 				<div slot="subtitle" class="place__details">
-					{{ n('photos', '%n item', '%n photos and videos', collection.attributes.nbItems,) }}
+					{{ n('photos', '%n item', '%n photos and videos', collection.attributes.nbItems) }}
 				</div>
 			</CollectionCover>
 
@@ -38,16 +41,14 @@
 
 <script lang='ts'>
 
-import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
-
-import { generateUrl } from '@nextcloud/router'
-import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
 import { translate, translatePlural } from '@nextcloud/l10n'
-
-import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
-import CollectionsList from '../components/Collection/CollectionsList.vue'
+import { generateUrl } from '@nextcloud/router'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
 import CollectionCover from '../components/Collection/CollectionCover.vue'
+import CollectionsList from '../components/Collection/CollectionsList.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
 import { placesPrefix } from '../store/places.js'
 
 export default {
@@ -70,9 +71,7 @@ export default {
 		},
 	},
 
-	mixins: [
-		FetchCollectionsMixin,
-	],
+	mixins: [FetchCollectionsMixin],
 
 	computed: {
 		places() {
@@ -94,6 +93,7 @@ export default {
 	},
 }
 </script>
+
 <style lang="scss" scoped>
 .places-list {
 	display: flex;
