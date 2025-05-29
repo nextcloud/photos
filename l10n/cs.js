@@ -132,6 +132,7 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Fotky opatřené štítky se objeví zde",
     "Popular tags" : "Oblíbené štítky",
     "All tags" : "Všechny štítky",
+    "Create new album from filters" : "Vytvořit nové album z filtrů",
     "One of the source folders does not exist" : "Jedna ze zdrojových složek neexistuje",
     "Add to album" : "Přidat do alba",
     "Delete selection" : "Smazat výběr",

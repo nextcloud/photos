@@ -132,6 +132,7 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Photos with tags will show up here",
     "Popular tags" : "Popular tags",
     "All tags" : "All tags",
+    "Create new album from filters" : "Create new album from filters",
     "One of the source folders does not exist" : "One of the source folders does not exist",
     "Add to album" : "Add to album",
     "Delete selection" : "Delete selection",
