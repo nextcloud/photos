@@ -132,6 +132,7 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Siin näidatakse sildistatud fotosid",
     "Popular tags" : "Populaarsed sildid",
     "All tags" : "Kõik sildid",
+    "Create new album from filters" : "Loo uus album filtrite alusel",
     "One of the source folders does not exist" : "Ühte lähtekaustadest pole olemas",
     "Add to album" : "Lisa albumisse",
     "Delete selection" : "Kustuta valik",
