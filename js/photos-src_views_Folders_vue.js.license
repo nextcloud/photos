@@ -454,7 +454,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 4.0.2
 	- license: MIT
 - nanoid
-	- version: 3.3.8
+	- version: 3.3.11
 	- license: MIT
 - nested-property
 	- version: 4.0.0
