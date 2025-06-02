@@ -69,40 +69,40 @@ export default {
 		 * @return {object}
 		 */
 		exif() {
-			return this.fileInfo['metadata-photos-exif']
+			return this.fileInfo?.attributes['metadata-photos-exif']
 		},
 		/**
 		 * @return {object}
 		 */
 		ifd0() {
-			return this.fileInfo['metadata-photos-ifd0']
+			return this.fileInfo?.attributes['metadata-photos-ifd0']
 		},
 		/**
 		 * @return {object}
 		 */
 		place() {
-			return this.fileInfo['metadata-photos-place']
+			return this.fileInfo?.attributes['metadata-photos-place']
 		},
 		/**
 		 * @return {object}
 		 */
 		gps() {
-			const gps = this.fileInfo['metadata-photos-gps']
+			const gps = this.fileInfo?.attributes['metadata-photos-gps']
 			if (!gps) {
 				return undefined
 			}
 
 			return {
-				latitude: Number.parseFloat(gps.latitude || 0),
-				longitude: Number.parseFloat(gps.longitude || 0),
-				altitude: Number.parseFloat(gps.altitude || 0),
+				latitude: Number.parseFloat(gps.latitude || '0'),
+				longitude: Number.parseFloat(gps.longitude || '0'),
+				altitude: Number.parseFloat(gps.altitude || '0'),
 			}
 		},
 		/**
 		 * @return {object}
 		 */
 		originalDateTime() {
-			return this.fileInfo['metadata-photos-original_date_time'] * 1000
+			return (this.fileInfo?.attributes['metadata-photos-original_date_time'] ?? 0) * 1000
 		},
 		/**
 		 * @return {string}
@@ -180,6 +180,10 @@ export default {
 		 * @return {string}
 		 */
 		pixelCount() {
+			if (this.ifd0 === undefined) {
+				return undefined
+			}
+
 			let count = this.ifd0.ImageWidth * this.ifd0.ImageLength
 			let round = 0
 
