@@ -17,14 +17,16 @@
 			<div class="photo-detail__gps__title">
 				<MapMarker /> {{ place }}
 			</div>
-			<LocationMap v-if="gps !== undefined"
+			<LocationMap
+				v-if="gps !== undefined"
 				class="photo-detail__gps__map"
 				:latitude="gps.latitude"
 				:longitude="gps.longitude"
 				:name="place" />
 		</div>
 
-		<div v-if="ifd0 && (ifd0.Make || ifd0.Model) || irisInfo.length !== 0"
+		<div
+			v-if="ifd0 && (ifd0.Make || ifd0.Model) || irisInfo.length !== 0"
 			class="photo-detail photo-detail__camera">
 			<CameraIris />
 			<span>
@@ -37,24 +39,23 @@
 </template>
 
 <script lang='ts'>
-import CalendarOutline from 'vue-material-design-icons/CalendarOutline.vue'
-import MapMarker from 'vue-material-design-icons/MapMarker.vue'
-import CameraIris from 'vue-material-design-icons/CameraIris.vue'
-import { defineComponent } from 'vue'
+import type { PhotoFile } from '../store/files.ts'
 
-import { t } from '@nextcloud/l10n'
 import { formatFileSize } from '@nextcloud/files'
+import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
-
+import { defineComponent } from 'vue'
+import CalendarOutline from 'vue-material-design-icons/CalendarOutline.vue'
+import CameraIris from 'vue-material-design-icons/CameraIris.vue'
+import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import LocationMap from '../components/LocationMap.vue'
-import type { PhotoFile } from '../store/files'
 
 type SideBarFile = PhotoFile & {
 	attributes: {
 		'metadata-photos-exif': { FNumber: string, FocalLength: string, ExposureTime: string, ISOSpeedRatings: string }
 		'metadata-photos-ifd0': { Make: string, Model: string, ImageWidth: number, ImageLength: number }
 		'metadata-photos-place': string
-		'metadata-photos-gps': { latitude: string, longitude: string, altitude: string }|undefined
+		'metadata-photos-gps': { latitude: string, longitude: string, altitude: string } | undefined
 		'metadata-photos-original_date_time': number
 	}
 }
@@ -67,9 +68,10 @@ export default defineComponent({
 		CameraIris,
 		LocationMap,
 	},
+
 	data() {
 		return {
-			fileInfo: null as SideBarFile|null,
+			fileInfo: null as SideBarFile | null,
 			url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 			// The zoom level of the map in the messages list
 			previewZoom: 13,
@@ -79,16 +81,20 @@ export default defineComponent({
 			attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
 		}
 	},
+
 	computed: {
 		exif() {
 			return this.fileInfo?.attributes['metadata-photos-exif']
 		},
+
 		ifd0() {
 			return this.fileInfo?.attributes['metadata-photos-ifd0']
 		},
+
 		place() {
 			return this.fileInfo?.attributes['metadata-photos-place']
 		},
+
 		gps() {
 			const gps = this.fileInfo?.attributes['metadata-photos-gps']
 			if (!gps) {
@@ -101,15 +107,19 @@ export default defineComponent({
 				altitude: Number.parseFloat(gps.altitude || '0'),
 			}
 		},
+
 		originalDateTime() {
 			return (this.fileInfo?.attributes['metadata-photos-original_date_time'] ?? 0) * 1000
 		},
+
 		takenDate() {
 			return moment(this.originalDateTime).format('ll')
 		},
+
 		takenTime() {
 			return moment(this.originalDateTime).format('LT')
 		},
+
 		focal() {
 			if (!this.exif?.FNumber) {
 				return 0
@@ -118,6 +128,7 @@ export default defineComponent({
 			const [a, b] = this.exif.FNumber.split('/')
 			return Number.parseInt(a) / Number.parseInt(b)
 		},
+
 		focalLength() {
 			if (!this.exif?.FocalLength) {
 				return 0
@@ -126,9 +137,11 @@ export default defineComponent({
 			const [a, b] = this.exif.FocalLength.split('/')
 			return Number.parseInt(a) / Number.parseInt(b)
 		},
+
 		size() {
 			return formatFileSize(this.fileInfo?.size as number)
 		},
+
 		normalizedExposureTime() {
 			if (!this.exif?.ExposureTime) {
 				return 0
@@ -137,6 +150,7 @@ export default defineComponent({
 			const [a, b] = this.exif.ExposureTime.split('/')
 			return Math.round(Number.parseInt(b) / Number.parseInt(a))
 		},
+
 		irisInfo() {
 			const info = [] as string[]
 
@@ -155,6 +169,7 @@ export default defineComponent({
 
 			return info.join(' ⸱ ')
 		},
+
 		pixelCount() {
 			if (this.ifd0 === undefined) {
 				return undefined
@@ -173,9 +188,12 @@ export default defineComponent({
 			return `${Math.round(count)} ${unit[round]}P`
 		},
 	},
+
 	methods: {
 		/**
 		 * Update current fileInfo and fetch new activities
+		 *
+		 * @param fileInfo
 		 */
 		async update(fileInfo: SideBarFile) {
 			this.fileInfo = fileInfo

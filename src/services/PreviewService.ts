@@ -9,6 +9,8 @@ const hotCache = []
 
 /**
  * Check if the preview is already cached by the service worker
+ *
+ * @param previewUrl
  */
 export const isCachedPreview = async function(previewUrl: string): Promise<boolean> {
 	try {

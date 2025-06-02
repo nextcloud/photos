@@ -3,22 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Vue from 'vue'
-import Vuex, { Store } from 'vuex'
+import type { Collection } from '../services/collectionFetcher.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
-
-import files, { type FilesState } from './files.ts'
+import Vue from 'vue'
+import Vuex, { Store } from 'vuex'
 import albums, { type Album } from './albums.ts'
+import collections, { type CollectionState } from './collections.ts'
+import faces, { type FacesState } from './faces.ts'
+import files, { type FilesState } from './files.ts'
+import folders, { type FoldersState } from './folders.ts'
+import places from './places.ts'
 import publicAlbums, { type PublicAlbum } from './publicAlbums.ts'
 import sharedAlbums from './sharedAlbums.ts'
-import collections, { type CollectionState } from './collections.ts'
-import places from './places.ts'
-import faces, { type FacesState } from './faces.ts'
-import folders, { type FoldersState } from './folders.ts'
 import systemtags, { type SystemTagsState } from './systemtags.ts'
-import userConfig, { getFolder, type UserConfigState } from './userConfig.ts'
-import type { Collection } from '../services/collectionFetcher.ts'
+import userConfig, {
+	type UserConfigState,
+
+	getFolder,
+} from './userConfig.ts'
 
 export type PhotosRootSate = {
 	files: FilesState
@@ -43,14 +46,14 @@ export type PhotosStore = {
 		getAlbumFiles(albumName: string): string[]
 		getPublicAlbum(publicAlbumName: string): PublicAlbum
 		getPublicAlbumFiles(publicAlbumName: string): string[]
-		getPublicAlbumName(publicAlbumName: string): string,
+		getPublicAlbumName(publicAlbumName: string): string
 		getSharedAlbum(sharedAlbumName: string): Album
 		getSharedAlbumFiles(sharedAlbumName: string): string[]
-		getPlaceName(sharedAlbumName: string): string,
-		getPlace(sharedAlbumName: string): Collection|undefined
+		getPlaceName(sharedAlbumName: string): string
+		getPlace(sharedAlbumName: string): Collection | undefined
 		getPlaceFiles(sharedAlbumName: string): string[]
-		getSharedAlbumName(sharedAlbumName: string): string,
-		tagId(name: string): string,
+		getSharedAlbumName(sharedAlbumName: string): string
+		tagId(name: string): string
 	}
 }
 export type PhotosContext<T> = PhotosStore & {
@@ -60,6 +63,9 @@ export type PhotosContext<T> = PhotosStore & {
 
 /**
  * Get the information of photosLocation and store it as photosLocationFolder
+ *
+ * @param store
+ * @param state
  */
 async function initPhotosLocationFolder(store: typeof photosStore, state) {
 	const photosLocationFolder = await getFolder(state.userConfig.photosLocation)

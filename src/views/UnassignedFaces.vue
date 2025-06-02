@@ -22,7 +22,7 @@
 					</NcActionButton>
 				</NcActions>
 				<div class="face__header__title">
-					<h2 :class="{'face-name': true}">
+					<h2 :class="{ 'face-name': true }">
 						{{ t('photos', 'Unassigned faces') }}
 					</h2>
 				</div>
@@ -32,27 +32,31 @@
 			<div class="face__header__actions">
 				<NcActions :force-menu="true">
 					<template v-if="selectedFileIds.length">
-						<NcActionButton :close-after-click="true"
+						<NcActionButton
+							:close-after-click="true"
 							:aria-label="t('photos', 'Download selected files')"
 							@click="downloadSelection">
 							<Download slot="icon" />
 							{{ t('photos', 'Download selected photos') }}
 						</NcActionButton>
-						<NcActionButton v-if="shouldFavoriteSelection"
+						<NcActionButton
+							v-if="shouldFavoriteSelection"
 							:close-after-click="true"
 							:aria-label="t('photos', 'Mark selection as favorite')"
 							@click="favoriteSelection">
 							<Star slot="icon" />
 							{{ t('photos', 'Favorite') }}
 						</NcActionButton>
-						<NcActionButton v-else
+						<NcActionButton
+							v-else
 							:close-after-click="true"
 							:aria-label="t('photos', 'Remove selection from favorites')"
 							@click="unFavoriteSelection">
 							<Star slot="icon" />
 							{{ t('photos', 'Remove from favorites') }}
 						</NcActionButton>
-						<NcActionButton :close-after-click="true"
+						<NcActionButton
+							:close-after-click="true"
 							@click="showMoveModal = true">
 							<template #icon>
 								<AccountSwitch />
@@ -64,11 +68,13 @@
 			</div>
 		</div>
 
-		<FilesListViewer class="face__photos"
+		<FilesListViewer
+			class="face__photos"
 			:container-element="appContent"
 			:file-ids="faceFileIds"
 			:loading="loadingFiles || loadingFaces">
-			<File slot-scope="{file, distance}"
+			<FileComponent
+				slot-scope="{ file, distance }"
 				:file="files[file.id]"
 				:allow-selection="true"
 				:selected="selection[file.id] === true"
@@ -77,7 +83,8 @@
 				@select-toggled="onFileSelectToggle" />
 		</FilesListViewer>
 
-		<NcDialog v-if="showMoveModal"
+		<NcDialog
+			v-if="showMoveModal"
 			:name="t('photos', 'Move to different person')"
 			close-on-click-outside
 			size="normal"
@@ -88,27 +95,25 @@
 </template>
 
 <script lang='ts'>
-import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
-import Star from 'vue-material-design-icons/Star.vue'
-import Download from 'vue-material-design-icons/Download.vue'
-import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
-import AccountSwitch from 'vue-material-design-icons/AccountSwitch.vue'
-
-import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
-import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
-import NcDialog from '@nextcloud/vue/dist/Components/NcDialog.js'
-import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
-import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon.js'
 import { t } from '@nextcloud/l10n'
-
+import Vue from 'vue'
+import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcActions from '@nextcloud/vue/components/NcActions'
+import NcDialog from '@nextcloud/vue/components/NcDialog'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+import AccountSwitch from 'vue-material-design-icons/AccountSwitch.vue'
+import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
+import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
+import Download from 'vue-material-design-icons/Download.vue'
+import Star from 'vue-material-design-icons/Star.vue'
+import FaceMergeForm from '../components/Faces/FaceMergeForm.vue'
+import FileComponent from '../components/FileComponent.vue'
+import FilesListViewer from '../components/FilesListViewer.vue'
+import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
-import FilesListViewer from '../components/FilesListViewer.vue'
-import File from '../components/File.vue'
 import logger from '../services/logger.js'
-import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
-import Vue from 'vue'
-import FaceMergeForm from '../components/Faces/FaceMergeForm.vue'
 import { toViewerFileInfo } from '../utils/fileUtils.js'
 
 export default {
@@ -120,7 +125,7 @@ export default {
 		ArrowLeft,
 		FaceMergeForm,
 		FilesListViewer,
-		File,
+		FileComponent,
 		NcLoadingIcon,
 		NcEmptyContent,
 		NcActions,
@@ -176,7 +181,7 @@ export default {
 		openViewer(fileId) {
 			window.OCA.Viewer.open({
 				fileInfo: toViewerFileInfo(this.files[fileId]),
-				list: this.faceFileIds.map(fileId => toViewerFileInfo(this.files[fileId])),
+				list: this.faceFileIds.map((fileId) => toViewerFileInfo(this.files[fileId])),
 			})
 		},
 
@@ -229,6 +234,7 @@ export default {
 	},
 }
 </script>
+
 <style lang="scss" scoped>
 @use '../mixins/FaceContent';
 </style>

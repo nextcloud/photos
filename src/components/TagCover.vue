@@ -4,8 +4,9 @@
 -->
 
 <template>
-	<router-link class="tag-cover" :to="`/tags/${tag.attributes['display-name']}`">
-		<img v-if="tag.attributes['files-assigned'] !== 0"
+	<RouterLink class="tag-cover" :to="`/tags/${tag.attributes['display-name']}`">
+		<img
+			v-if="tag.attributes['files-assigned'] !== 0"
 			class="tag-cover__image"
 			:src="coverUrl">
 		<div v-else class="tag-cover__image tag-cover__image--placeholder">
@@ -21,29 +22,32 @@
 				{{ n('photos', '%n photo', '%n photos', count) }}
 			</div>
 		</div>
-	</router-link>
+	</RouterLink>
 </template>
 
 <script lang='ts'>
-import { defineComponent, type PropType } from 'vue'
-import ImageMultipleIcon from 'vue-material-design-icons/ImageMultiple.vue'
-
-import { generateUrl } from '@nextcloud/router'
-import { translate as t, translatePlural as n } from '@nextcloud/l10n'
-
-import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import type { Tag } from '../store/systemtags.js'
+
+import { translatePlural as n, translate as t } from '@nextcloud/l10n'
+import { generateUrl } from '@nextcloud/router'
+import {
+	type PropType,
+
+	defineComponent,
+} from 'vue'
+import { RouterLink } from 'vue-router'
+import ImageMultipleIcon from 'vue-material-design-icons/ImageMultiple.vue'
+import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 
 export default defineComponent({
 	name: 'TagCover',
 
 	components: {
+		RouterLink,
 		ImageMultipleIcon,
 	},
 
-	mixins: [
-		AbortControllerMixin,
-	],
+	mixins: [AbortControllerMixin],
 
 	props: {
 		tag: {
@@ -55,7 +59,7 @@ export default defineComponent({
 	data() {
 		return {
 			loadCover: false,
-			observer: null as IntersectionObserver|null,
+			observer: null as IntersectionObserver | null,
 		}
 	},
 
@@ -105,6 +109,7 @@ export default defineComponent({
 	},
 })
 </script>
+
 <style scoped lang="scss">
 .tag-cover {
 	display: flex;

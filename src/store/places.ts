@@ -3,9 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { getCurrentUser } from '@nextcloud/auth'
 import type { PhotosRootSate } from '.'
-import type { Collection } from '../services/collectionFetcher'
+import type { Collection } from '../services/collectionFetcher.ts'
+
+import { getCurrentUser } from '@nextcloud/auth'
 
 export const placesPrefix = `/photos/${getCurrentUser()?.uid}/places`
 

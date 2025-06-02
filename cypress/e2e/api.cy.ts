@@ -5,10 +5,10 @@
 
 import type { User } from '@nextcloud/cypress'
 
-import { navigateToCollection, selectMedia, setupPhotosTests } from './photosUtils.ts'
-import { addCollaborators, addFilesToAlbumFromTimeline, createAnAlbumFromAlbums, createPublicShare } from './albumsUtils.ts'
 import { randHash } from '../utils/index.js'
-import { navigateToTimeline } from './timelines.ts'
+import { addCollaborators, addFilesToAlbumFromTimeline, createAnAlbumFromAlbums, createPublicShare } from './albumsUtils.ts'
+import { navigateToCollection, selectMedia, setupPhotosTests } from './photosUtils.ts'
+import { navigateToTimeline } from './timelinesUtils.ts'
 
 const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/
 Cypress.on('uncaught:exception', (err) => {
@@ -146,10 +146,10 @@ describe('Test DAV API', () => {
 			headers: { 'Content-Type': 'application/xml' },
 			failOnStatusCode: false,
 		})
-		.then(({ status, body }) => {
-			expect(status).to.equal(403)
-			expect(body).to.contain('Setting the collaborators is not allowed on this type of album')
-		})
+			.then(({ status, body }) => {
+				expect(status).to.equal(403)
+				expect(body).to.contain('Setting the collaborators is not allowed on this type of album')
+			})
 	})
 
 	it('Should not allow to create a public link of shared album', () => {
@@ -172,10 +172,10 @@ describe('Test DAV API', () => {
 			headers: { 'Content-Type': 'application/xml' },
 			failOnStatusCode: false,
 		})
-		.then(({ status, body }) => {
-			expect(status).to.equal(403)
-			expect(body).to.contain('Setting the collaborators is not allowed on this type of album')
-		})
+			.then(({ status, body }) => {
+				expect(status).to.equal(403)
+				expect(body).to.contain('Setting the collaborators is not allowed on this type of album')
+			})
 	})
 
 	it('Should not allow to set collaborator of public album', () => {
@@ -197,10 +197,10 @@ describe('Test DAV API', () => {
 			headers: { 'Content-Type': 'application/xml' },
 			failOnStatusCode: false,
 		})
-		.then(({ status, body }) => {
-			expect(status).to.equal(403)
-			expect(body).to.contain('Setting the collaborators is not allowed on this type of album')
-		})
+			.then(({ status, body }) => {
+				expect(status).to.equal(403)
+				expect(body).to.contain('Setting the collaborators is not allowed on this type of album')
+			})
 	})
 
 	it('Should not allow to set filters of shared album', () => {
@@ -222,10 +222,10 @@ describe('Test DAV API', () => {
 			headers: { 'Content-Type': 'application/xml' },
 			failOnStatusCode: false,
 		})
-		.then(({ status, body }) => {
-			expect(status).to.equal(403)
-			expect(body).to.contain('Setting the filters is not allowed on this type of album')
-		})
+			.then(({ status, body }) => {
+				expect(status).to.equal(403)
+				expect(body).to.contain('Setting the filters is not allowed on this type of album')
+			})
 	})
 
 	it('Should not allow to set filters of public album', () => {
@@ -246,10 +246,10 @@ describe('Test DAV API', () => {
 			headers: { 'Content-Type': 'application/xml' },
 			failOnStatusCode: false,
 		})
-		.then(({ status, body }) => {
-			expect(status).to.equal(403)
-			expect(body).to.contain('Setting the filters is not allowed on this type of album')
-		})
+			.then(({ status, body }) => {
+				expect(status).to.equal(403)
+				expect(body).to.contain('Setting the filters is not allowed on this type of album')
+			})
 	})
 
 	it('Should not allow to add files to a public album', () => {
@@ -260,10 +260,10 @@ describe('Test DAV API', () => {
 			body: file,
 			failOnStatusCode: false,
 		})
-		.then(({ status, body }) => {
-			expect(status).to.equal(403)
-			expect(body).to.contain('Not allowed to create a file in a public album')
-		})
+			.then(({ status, body }) => {
+				expect(status).to.equal(403)
+				expect(body).to.contain('Not allowed to create a file in a public album')
+			})
 	})
 
 	it('Should not allow to delete a photo from a public album', () => {
@@ -272,10 +272,10 @@ describe('Test DAV API', () => {
 			method: 'DELETE',
 			failOnStatusCode: false,
 		})
-		.then(({ status, body }) => {
-			expect(status).to.equal(403)
-			expect(body).to.contain('Deleting photos from a public album is not allowed')
-		})
+			.then(({ status, body }) => {
+				expect(status).to.equal(403)
+				expect(body).to.contain('Deleting photos from a public album is not allowed')
+			})
 	})
 
 	it('Should not allow to favorite a photo from a shared album', () => {
@@ -295,10 +295,10 @@ describe('Test DAV API', () => {
 			headers: { 'Content-Type': 'application/xml' },
 			failOnStatusCode: false,
 		})
-		.then(({ status, body }) => {
-			expect(status).to.equal(403)
-			expect(body).to.contain('Only the owner can favorite its photos')
-		})
+			.then(({ status, body }) => {
+				expect(status).to.equal(403)
+				expect(body).to.contain('Only the owner can favorite its photos')
+			})
 	})
 
 	it('Should not allow to favorite a photo from a public album', () => {
@@ -317,9 +317,9 @@ describe('Test DAV API', () => {
 			headers: { 'Content-Type': 'application/xml' },
 			failOnStatusCode: false,
 		})
-		.then(({ status, body }) => {
-			expect(status).to.equal(403)
-			expect(body).to.contain('Only the owner can favorite its photos')
-		})
+			.then(({ status, body }) => {
+				expect(status).to.equal(403)
+				expect(body).to.contain('Only the owner can favorite its photos')
+			})
 	})
 })

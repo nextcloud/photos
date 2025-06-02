@@ -4,7 +4,8 @@
 -->
 
 <template>
-	<a :class="{
+	<a
+		:class="{
 			'file--cropped': croppedLayout,
 		}"
 		class="file"
@@ -14,7 +15,8 @@
 		<div v-if="item.injected.mime.includes('video') && item.injected.hasPreview" class="icon-video-white" />
 		<!-- image and loading placeholder -->
 		<transition-group name="fade" class="transition-group">
-			<img v-if="!error"
+			<img
+				v-if="!error"
 				ref="img"
 				:key="`${item.injected.basename}-img`"
 				:src="src"
@@ -23,7 +25,8 @@
 				@load="onLoad"
 				@error="onError">
 
-			<svg v-if="!loaded || error"
+			<svg
+				v-if="!loaded || error"
 				:key="`${item.injected.basename}-svg`"
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="0 0 32 32"
@@ -41,12 +44,11 @@
 
 <script lang='ts'>
 import type { PropType } from 'vue'
+import type { InjectedItem } from './FolderComponent.vue'
 
-import { generateUrl } from '@nextcloud/router'
 import { t } from '@nextcloud/l10n'
-
-import { legacyToViewerFileInfo } from '../utils/fileUtils'
-import type { InjectedItem } from './Folder.vue'
+import { generateUrl } from '@nextcloud/router'
+import { legacyToViewerFileInfo } from '../utils/fileUtils.ts'
 
 export default {
 	name: 'FileLegacy',
@@ -69,18 +71,23 @@ export default {
 		ariaUuid() {
 			return `image-${this.item.injected.fileid}`
 		},
+
 		ariaLabel() {
 			return t('photos', 'Open the full size "{name}" image', { name: this.item.injected.basename })
 		},
+
 		isImage() {
 			return this.item.injected.mime.startsWith('image')
 		},
+
 		decodedEtag() {
 			return this.item.injected.etag.replace('&quot;', '').replace('&quot;', '')
 		},
+
 		src() {
 			return generateUrl(`/core/preview?fileId=${this.item.injected.fileid}&c=${this.decodedEtag}&x=${250}&y=${250}&forceIcon=0&a=${this.croppedLayout ? '0' : '1'}`)
 		},
+
 		croppedLayout() {
 			return this.$store.state.userConfig.croppedLayout
 		},
@@ -95,7 +102,7 @@ export default {
 		openViewer() {
 			window.OCA.Viewer.open({
 				fileInfo: legacyToViewerFileInfo(this.item.injected),
-				list: this.item.injected.list.map(file => legacyToViewerFileInfo(file)),
+				list: this.item.injected.list.map((file) => legacyToViewerFileInfo(file)),
 			})
 		},
 

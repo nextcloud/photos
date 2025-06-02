@@ -6,7 +6,8 @@
 <template>
 	<div :class="['face-cover', small && 'face-cover--small']" @click="$emit('click')">
 		<div class="face-cover__crop-container">
-			<img ref="image"
+			<img
+				ref="image"
 				class="face-cover__image"
 				:src="coverUrl"
 				:style="coverDimensions">
@@ -25,12 +26,12 @@
 </template>
 
 <script lang='ts'>
-import { generateUrl } from '@nextcloud/router'
-import { translatePlural as n } from '@nextcloud/l10n'
-
-import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
-import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
 import type { Collection } from '../../services/collectionFetcher.js'
+
+import { translatePlural as n } from '@nextcloud/l10n'
+import { generateUrl } from '@nextcloud/router'
+import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
+import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
 
 export default {
 	name: 'FaceCover',
@@ -45,6 +46,7 @@ export default {
 			type: String,
 			required: true,
 		},
+
 		small: {
 			type: Boolean,
 			default: false,
@@ -87,7 +89,10 @@ export default {
 		},
 
 		coverDimensions() {
-			if (!this.cover) return {}
+			if (!this.cover) {
+				return {}
+			}
+
 			return this.getCoverStyle(this.face.basename)
 		},
 	},

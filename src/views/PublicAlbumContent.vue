@@ -4,17 +4,19 @@
 -->
 <template>
 	<div>
-		<CollectionContent ref="collectionContent"
+		<CollectionContent
+			ref="collectionContent"
 			:collection="album"
 			:collection-file-ids="albumFileIds"
 			:allow-selection="false"
 			:loading="loadingCollection || loadingCollectionFiles"
 			:error="errorFetchingCollection || errorFetchingCollectionFiles">
 			<!-- Header -->
-			<HeaderNavigation v-if="albumOriginalName !== ''"
+			<HeaderNavigation
+				v-if="albumOriginalName !== ''"
 				key="navigation"
 				slot="header"
-				slot-scope="{selectedFileIds}"
+				slot-scope="{ selectedFileIds }"
 				:loading="loadingCollection || loadingCollectionFiles"
 				:params="{ token }"
 				path="/"
@@ -58,7 +60,8 @@
 			</HeaderNavigation>
 
 			<!-- No content -->
-			<NcEmptyContent slot="empty-content"
+			<NcEmptyContent
+				slot="empty-content"
 				:name="t('photos', 'This album does not have any photos or videos yet!')"
 				class="album__empty">
 				<ImageOff slot="icon" />
@@ -78,26 +81,25 @@
 </template>
 
 <script lang='ts'>
-import MapMarker from 'vue-material-design-icons/MapMarker.vue'
+import type { PublicAlbum } from '../store/publicAlbums.ts'
+
+import { getClient } from '@nextcloud/files/dav'
+// import Download from 'vue-material-design-icons/Download.vue'
+// import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
+import { translate } from '@nextcloud/l10n'
+import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
+import { isMobile, /** NcButton, */ NcActions, /** NcActionSeparator, */ NcEmptyContent } from '@nextcloud/vue'
 // import Plus from 'vue-material-design-icons/Plus.vue'
 // import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
 import ImageOff from 'vue-material-design-icons/ImageOff.vue'
-// import Download from 'vue-material-design-icons/Download.vue'
-// import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
-
-import { NcActions, /** NcButton, */ NcEmptyContent, /** NcActionSeparator, */ isMobile } from '@nextcloud/vue'
-import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
-import { translate } from '@nextcloud/l10n'
-import { getClient } from '@nextcloud/files/dav'
-
-import PhotosFiltersDisplay from '../components/PhotosFilters/PhotosFiltersDisplay.vue'
+import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import PhotosFiltersDisplay from '../components/PhotosFilters/PhotosFiltersDisplay.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
 import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.ts'
-import type { PublicAlbum } from '../store/publicAlbums.ts'
-import { publicAlbumsPrefix, publicAlbumsExtraProps } from '../store/publicAlbums.ts'
 import { albumFilesExtraProps } from '../store/albums.ts'
+import { publicAlbumsExtraProps, publicAlbumsPrefix } from '../store/publicAlbums.ts'
 
 export default {
 	name: 'PublicAlbumContent',
@@ -185,7 +187,7 @@ export default {
 				this.publicClient,
 			)
 
-			files.forEach(file => {
+			files.forEach((file) => {
 				file.update({
 					// Use custom preview URL to avoid authentication prompt
 					previewUrl: generateUrl(`/apps/photos/api/v1/publicPreview/${file.fileid}?x=2048&y=2048&token=${this.token}`),
@@ -211,6 +213,7 @@ export default {
 	},
 }
 </script>
+
 <style lang="scss" scoped>
 .album {
 	display: flex;

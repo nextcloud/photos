@@ -5,9 +5,11 @@
 
 import type { User } from '@nextcloud/cypress'
 
-import { navigateToCollection, setupPhotosTests } from './photosUtils.ts'
-import { addCollaborators, createAnAlbumFromAlbums, createPublicShare } from './albumsUtils.ts'
 import { randHash } from '../utils/index.js'
+import { addCollaborators, createAnAlbumFromAlbums, createPublicShare } from './albumsUtils.ts'
+import { navigateToCollection, setupPhotosTests } from './photosUtils.ts'
+import { setDateRangeFilter, setPlacesFilter } from './smartAlbumsUtils.ts'
+import { toggleFilters } from './timelinesFiltersUtils.ts'
 
 const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/
 Cypress.on('uncaught:exception', (err) => {
@@ -24,10 +26,10 @@ describe('View list of photos in the main timeline', () => {
 
 	before(() => {
 		setupPhotosTests()
-		.then((setupInfo) => {
-			alice = setupInfo.alice
-			bob = setupInfo.bob
-		})
+			.then((setupInfo) => {
+				alice = setupInfo.alice
+				bob = setupInfo.bob
+			})
 	})
 
 	beforeEach(() => {
@@ -39,21 +41,20 @@ describe('View list of photos in the main timeline', () => {
 	})
 
 	it('Should allow to set filters and update immediately', () => {
-		cy.get('[data-cy-header-action="toggle-filters"]').click()
-		cy.get('[data-cy-photos-filters="date-range"] input[name="date"]').type('2019-01-01 ~ 2019-12-31{enter}', { scrollBehavior: 'nearest' })
+		toggleFilters()
 
+		setDateRangeFilter('2019-01-01 ~ 2019-12-31')
 		cy.get('[data-test="media"]').should('have.length', 3)
 
-		cy.get('[data-cy-photos-filters="places"] input[type="search"]').type('Lauris{enter}', { scrollBehavior: 'nearest' })
-
+		setPlacesFilter(['Lauris'])
 		cy.get('[data-test="media"]').should('have.length', 1)
 	})
 
 	it('Should display the filters in the header', () => {
-		cy.get('[data-cy-header-action="toggle-filters"]').click()
-		cy.get('[data-cy-photos-filters="date-range"] input[name="date"]').type('2019-01-01 ~ 2019-12-31{enter}', { scrollBehavior: 'nearest' })
-		cy.get('[data-cy-photos-filters="places"] input[type="search"]').type('Lauris{enter}', { scrollBehavior: 'nearest' })
-		cy.get('[data-cy-header-action="toggle-filters"]').click()
+		toggleFilters()
+		setDateRangeFilter('2019-01-01 ~ 2019-12-31')
+		setPlacesFilter(['Lauris'])
+		toggleFilters()
 
 		cy.get('.photos-navigation').within(() => {
 			cy.contains('Date range: January 1, 2019 ⸱ December 31, 2019')
@@ -62,20 +63,20 @@ describe('View list of photos in the main timeline', () => {
 	})
 
 	it('Should keep filters after a refresh', () => {
-		cy.get('[data-cy-header-action="toggle-filters"]').click()
-		cy.get('[data-cy-photos-filters="date-range"] input[name="date"]').type('2019-01-01 ~ 2019-12-31{enter}', { scrollBehavior: 'nearest' })
-		cy.get('[data-cy-photos-filters="places"] input[type="search"]').type('Lauris{enter}', { scrollBehavior: 'nearest' })
+		toggleFilters()
+		setDateRangeFilter('2019-01-01 ~ 2019-12-31')
+		setPlacesFilter(['Lauris'])
 
 		cy.get('[data-test="media"]').should('have.length', 1)
 	})
 
 	it('Should display filters and photos in shared album', () => {
-		cy.get('[data-cy-header-action="toggle-filters"]').click()
-		cy.get('[data-cy-photos-filters="date-range"] input[name="date"]').type('2019-01-01 ~ 2019-12-31{enter}', { scrollBehavior: 'nearest' })
-		cy.get('[data-cy-photos-filters="places"] input[type="search"]').type('Lauris{enter}', { scrollBehavior: 'nearest' })
-		cy.get('[data-cy-header-action="toggle-filters"]').click()
-
+		toggleFilters()
+		setDateRangeFilter('2019-01-01 ~ 2019-12-31')
+		setPlacesFilter(['Lauris'])
+		toggleFilters()
 		addCollaborators([bob.userId])
+
 		cy.login(bob)
 		cy.visit('/apps/photos')
 		navigateToCollection('sharedalbums', `${albumName} (${alice.userId})`)
@@ -89,13 +90,13 @@ describe('View list of photos in the main timeline', () => {
 	})
 
 	it('Should display filters and photos in public link', () => {
-		cy.get('[data-cy-header-action="toggle-filters"]').click()
-		cy.get('[data-cy-photos-filters="date-range"] input[name="date"]').type('2019-01-01 ~ 2019-12-31{enter}', { scrollBehavior: 'nearest' })
-		cy.get('[data-cy-photos-filters="places"] input[type="search"]').type('Lauris{enter}', { scrollBehavior: 'nearest' })
-		cy.get('[data-cy-header-action="toggle-filters"]').click()
+		toggleFilters()
+		setDateRangeFilter('2019-01-01 ~ 2019-12-31')
+		setPlacesFilter(['Lauris'])
+		toggleFilters()
 
 		createPublicShare()
-			.then(publicLink => {
+			.then((publicLink) => {
 				cy.logout()
 				cy.intercept({ times: 1, method: 'PROPFIND', url: '/remote.php/dav/photospublic/*' }).as('propFindAlbum')
 				cy.intercept({ times: 1, method: 'PROPFIND', url: '/remote.php/dav/photospublic/*/' }).as('propFindContent')

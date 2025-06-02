@@ -30,6 +30,10 @@ export type TiledSection = Section & {
 /**
  * Split items in rows of equal width.
  * The last row will not be forced to match containerWidth.
+ *
+ * @param items
+ * @param containerWidth
+ * @param baseHeight
  */
 export function splitItemsInRows(items: TiledItem[], containerWidth: number, baseHeight: number = 200): TiledRow[] {
 	if (containerWidth === 0) {
@@ -59,10 +63,10 @@ export function splitItemsInRows(items: TiledItem[], containerWidth: number, bas
 		)
 
 		rows[rowNumber] = {
-			items: rowItems.map(item => ({ ...item, width: rowHeight * item.ratio, height: rowHeight })),
+			items: rowItems.map((item) => ({ ...item, width: rowHeight * item.ratio, height: rowHeight })),
 			// Key to help vue to keep track of the row in VirtualScrolling.
 			height: rowHeight,
-			key: rowItems.map(item => item.id).join('-'),
+			key: rowItems.map((item) => item.id).join('-'),
 		}
 
 		rowNumber += 1
@@ -71,9 +75,14 @@ export function splitItemsInRows(items: TiledItem[], containerWidth: number, bas
 	return rows
 }
 
+/**
+ *
+ * @param items
+ * @param baseHeight
+ */
 function computeRowWidth(items: TiledItem[], baseHeight: number): number {
 	return items
-		.map(item => baseHeight * item.ratio)
+		.map((item) => baseHeight * item.ratio)
 		.reduce((sum, itemWidth) => sum + itemWidth)
 }
 
@@ -82,10 +91,10 @@ function computeRowWidth(items: TiledItem[], baseHeight: number): number {
  *
  * Math time !
  * With Rn the aspect ratio of item n
- *      Wn the width of item n
- *      Hn the height of item n
- *      Wc the width of the container
- *      Hr the height of the row
+ * Wn the width of item n
+ * Hn the height of item n
+ * Wc the width of the container
+ * Hr the height of the row
  * For n items we want: Wc = W1 + W2 + ... + Wn
  * We know Rn = Wn / Hn
  * So Wn = Rn * Hn
@@ -94,12 +103,16 @@ function computeRowWidth(items: TiledItem[], baseHeight: number): number {
  * So Wc = (R1 * Hr) + (R2 * Hr) + ... + (Rn * Hr)
  * So Wc = Hr * (R1 + R2 + ... + Rn)
  * So Hr = Wc / (R1 + R2 + ... + Rn)
+ *
+ * @param items
+ * @param containerWidth
+ * @param isLastRow
+ * @param baseHeight
  */
 function computeRowHeight(items: TiledItem[], containerWidth: number, isLastRow: boolean, baseHeight: number): number {
 	const sumOfItemsRatio = items
-		.map(item => item.ratio)
-		.reduce((sum, itemRatio) => sum + itemRatio,
-		)
+		.map((item) => item.ratio)
+		.reduce((sum, itemRatio) => sum + itemRatio)
 
 	let rowHeight = containerWidth / sumOfItemsRatio
 

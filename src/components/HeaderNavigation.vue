@@ -4,9 +4,10 @@
 -->
 
 <template>
-	<div :class="{'photos-navigation--root': isRoot}" class="photos-navigation" role="toolbar">
+	<div :class="{ 'photos-navigation--root': isRoot }" class="photos-navigation" role="toolbar">
 		<!-- Back navigation button -->
-		<NcButton v-if="!isRoot"
+		<NcButton
+			v-if="!isRoot"
 			class="photos-navigation__back"
 			:aria-label="t('photos', 'Go back')"
 			type="tertiary"
@@ -41,11 +42,10 @@
 </template>
 
 <script lang='ts'>
-import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
-
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
-import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon.js'
 import { t } from '@nextcloud/l10n'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 
 export default {
 	name: 'HeaderNavigation',
@@ -63,22 +63,20 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+
 		path: {
 			type: String,
 			default: '/',
 		},
+
 		title: {
 			type: String,
 			required: true,
 		},
+
 		rootTitle: {
 			type: String,
 			default: t('photos', 'Photos'),
-		},
-		// The route params
-		params: {
-			type: Object,
-			default: null,
 		},
 	},
 

@@ -25,12 +25,12 @@
 </template>
 
 <script lang='ts'>
-import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
-
-import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
-import { translate } from '@nextcloud/l10n'
-import type { Collection } from '../../services/collectionFetcher'
 import type { PropType } from 'vue'
+import type { Collection } from '../../services/collectionFetcher.ts'
+
+import { translate } from '@nextcloud/l10n'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
 
 export default {
 	name: 'CollectionsList',
@@ -45,10 +45,12 @@ export default {
 			type: Object as PropType<Record<string, Collection>>,
 			required: true,
 		},
+
 		loading: {
 			type: Boolean,
 			default: false,
 		},
+
 		error: {
 			type: Error,
 			default: null,
@@ -66,6 +68,7 @@ export default {
 	},
 }
 </script>
+
 <style lang="scss" scoped>
 .collections {
 	display: flex;

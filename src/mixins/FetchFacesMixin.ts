@@ -3,20 +3,19 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import he from 'he'
-import type { FileStat, ResponseDataDetailed } from 'webdav'
-import { defineComponent } from 'vue'
-
-import { showError } from '@nextcloud/dialogs'
-import { t } from '@nextcloud/l10n'
-import { getCurrentUser } from '@nextcloud/auth'
 import type { File } from '@nextcloud/files'
-import { resultToNode } from '@nextcloud/files/dav'
+import type { FileStat, ResponseDataDetailed } from 'webdav'
 
-import logger from '../services/logger.js'
-import AbortControllerMixin from './AbortControllerMixin.js'
+import { getCurrentUser } from '@nextcloud/auth'
+import { showError } from '@nextcloud/dialogs'
+import { resultToNode } from '@nextcloud/files/dav'
+import { t } from '@nextcloud/l10n'
+import he from 'he'
+import { defineComponent } from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import { getPropFind } from '../services/DavRequest.ts'
+import logger from '../services/logger.js'
+import AbortControllerMixin from './AbortControllerMixin.js'
 
 const recognizeDAVProps = [
 	'<nc:face-detections/>',
@@ -29,7 +28,7 @@ type FaceNode = File & {
 	attributes: {
 		'face-detections': string
 		'face-preview-image': string
-		'realpath': string
+		realpath: string
 	}
 }
 
@@ -38,16 +37,14 @@ export default defineComponent({
 
 	data() {
 		return {
-			errorFetchingFaces: null as null|number|Error|unknown,
+			errorFetchingFaces: null as null | number | Error | unknown,
 			loadingFaces: false,
-			errorFetchingFiles: null as null|number|Error|unknown,
+			errorFetchingFiles: null as null | number | Error | unknown,
 			loadingFiles: false,
 		}
 	},
 
-	mixins: [
-		AbortControllerMixin,
-	],
+	mixins: [AbortControllerMixin],
 
 	async beforeMount() {
 		this.fetchFaces()
@@ -79,7 +76,7 @@ export default defineComponent({
 					signal: this.abortController.signal,
 				}) as ResponseDataDetailed<FileStat[]>
 
-				const fetchedFace = fetchedRawFaces.map(file => resultToNode(file, `/recognize/${getCurrentUser()?.uid}/faces/`) as FaceNode)
+				const fetchedFace = fetchedRawFaces.map((file) => resultToNode(file, `/recognize/${getCurrentUser()?.uid}/faces/`) as FaceNode)
 				this.$store.dispatch('addFaces', { faces: fetchedFace })
 				logger.debug(`[FetchFacesMixin] Fetched ${fetchedFace.length} new faces: `, { fetchedFace })
 			} catch (error) {
@@ -118,14 +115,14 @@ export default defineComponent({
 				) as ResponseDataDetailed<FileStat[]>
 
 				const fetchedFiles = fetchedRawFiles
-					.map(file => ({
+					.map((file) => ({
 						...file,
 						filename: he.decode(file.props?.realpath).replace(`/${getCurrentUser()?.uid}/files`, `/files/${getCurrentUser()?.uid}`),
 						'face-detections': JSON.parse(he.decode(file.props?.['face-detections'])),
 					}))
-					.map(file => resultToNode(file) as FaceNode)
+					.map((file) => resultToNode(file) as FaceNode)
 
-				const fileIds = fetchedFiles.map(file => file.fileid?.toString() as string)
+				const fileIds = fetchedFiles.map((file) => file.fileid?.toString() as string)
 
 				this.$store.dispatch('appendFiles', fetchedFiles)
 
@@ -171,14 +168,14 @@ export default defineComponent({
 				) as ResponseDataDetailed<FileStat[]>
 
 				const fetchedFiles = fetchedRawFiles
-					.map(file => ({
+					.map((file) => ({
 						...file,
 						filename: he.decode(file.props?.realpath).replace(`/${getCurrentUser()?.uid}/files`, `/files/${getCurrentUser()?.uid}`),
 						'face-detections': JSON.parse(he.decode(file.props?.['face-detections'])),
 					}))
-					.map(file => resultToNode(file) as FaceNode)
+					.map((file) => resultToNode(file) as FaceNode)
 
-				const fileIds = [...new Set(fetchedFiles.map(file => '' + file.fileid))]
+				const fileIds = [...new Set(fetchedFiles.map((file) => '' + file.fileid))]
 				this.$store.dispatch('appendFiles', fetchedFiles)
 
 				if (fetchedFiles.length > 0) {
