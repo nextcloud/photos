@@ -1,0 +1,16 @@
+OC.L10N.register(
+    "photos",
+    {
+    "Shared with you" : "Imeshirikiwa na wewe",
+    "Tags" : "Maoni",
+    "Back" : "Rudi",
+    "Save" : "Hifadhi",
+    "No recommendations. Start typing." : "Hakuna maoni. Anza kuchapisha",
+    "Group" : "Kundi",
+    "Copy public link" : "Nakili kiungo cha umma",
+    "An error occurred" : "Hitilafu imetokea",
+    "View" : "Angalia",
+    "Details" : "Maelezo ya kina",
+    "Add" : "Ongeza"
+},
+"nplurals=2; plural=(n != 1);");
