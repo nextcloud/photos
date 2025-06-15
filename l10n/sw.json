@@ -1,4 +1,7 @@
 { "translations": {
+    "Videos" : "Picha mjongeo",
+    "Folders" : "Visanduku",
+    "Favorites" : "Vipendwa",
     "Shared with you" : "Imeshirikiwa na wewe",
     "Tags" : "Maoni",
     "Back" : "Rudi",
@@ -7,6 +10,9 @@
     "Group" : "Kundi",
     "Copy public link" : "Nakili kiungo cha umma",
     "An error occurred" : "Hitilafu imetokea",
+    "Favorite" : "Kipendwa",
+    "Go back" : "Rudi nyuma",
+    "Home" : "Nyumbani",
     "View" : "Angalia",
     "Details" : "Maelezo ya kina",
     "Add" : "Ongeza"
