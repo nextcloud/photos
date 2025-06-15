@@ -1,0 +1,25 @@
+SPDX-License-Identifier: AGPL-3.0-or-later
+SPDX-License-Identifier: Apache-2.0
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: @nextcloud/dialogs developers
+SPDX-FileCopyrightText: Anthony Fu <https://github.com/antfu>
+SPDX-FileCopyrightText: Austin Andrews
+SPDX-FileCopyrightText: Hiroki Osame
+SPDX-FileCopyrightText: John Molakvoæ (skjnldsv) <skjnldsv@protonmail.com>
+
+This file is generated from multiple sources. Included packages:
+- @mdi/js
+	- version: 7.4.47
+	- license: Apache-2.0
+- @nextcloud/dialogs
+	- version: 6.3.1
+	- license: AGPL-3.0-or-later
+- @nextcloud/vue
+	- version: 8.27.0
+	- license: AGPL-3.0-or-later
+- @vueuse/shared
+	- version: 11.3.0
+	- license: MIT
+- vue-frag
+	- version: 1.4.3
+	- license: MIT

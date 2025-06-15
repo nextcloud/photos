@@ -1,0 +1,66 @@
+SPDX-License-Identifier: AGPL-3.0-or-later
+SPDX-License-Identifier: GPL-3.0-or-later
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: @nextcloud/dialogs developers
+SPDX-FileCopyrightText: Anthony Fu <anthonyfu117@hotmail.com>
+SPDX-FileCopyrightText: Anthony Fu <https://github.com/antfu>
+SPDX-FileCopyrightText: Christoph Wurst
+SPDX-FileCopyrightText: David Clark
+SPDX-FileCopyrightText: David Myers <hello@davidmyers.dev>
+SPDX-FileCopyrightText: Evan You
+SPDX-FileCopyrightText: Guillaume Chau <guillaume.b.chau@gmail.com>
+SPDX-FileCopyrightText: John Molakvoæ (skjnldsv) <skjnldsv@protonmail.com>
+SPDX-FileCopyrightText: John Molakvoæ <skjnldsv@protonmail.com>
+SPDX-FileCopyrightText: Matt Zabriskie
+SPDX-FileCopyrightText: Varun A P
+SPDX-FileCopyrightText: atomiks
+
+This file is generated from multiple sources. Included packages:
+- @floating-ui/core
+	- version: 0.3.1
+	- license: MIT
+- @floating-ui/dom
+	- version: 0.1.10
+	- license: MIT
+- @nextcloud/axios
+	- version: 2.5.1
+	- license: GPL-3.0-or-later
+- @nextcloud/dialogs
+	- version: 6.3.1
+	- license: AGPL-3.0-or-later
+- @nextcloud/vue
+	- version: 8.27.0
+	- license: AGPL-3.0-or-later
+- @vueuse/core
+	- version: 11.3.0
+	- license: MIT
+- @vueuse/shared
+	- version: 11.3.0
+	- license: MIT
+- axios
+	- version: 1.9.0
+	- license: MIT
+- floating-vue
+	- version: 1.0.0-beta.19
+	- license: MIT
+- focus-trap
+	- version: 7.5.2
+	- license: MIT
+- photos
+	- version: 5.0.0-dev.1
+	- license: AGPL-3.0-or-later
+- tabbable
+	- version: 6.2.0
+	- license: MIT
+- toastify-js
+	- version: 1.12.0
+	- license: MIT
+- vite-plugin-node-polyfills
+	- version: 0.23.0
+	- license: MIT
+- vue-demi
+	- version: 0.14.10
+	- license: MIT
+- vuex
+	- version: 3.6.2
+	- license: MIT
