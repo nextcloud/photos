@@ -149,7 +149,7 @@ OC.L10N.register(
     "Public album {title}" : "Öffentliches Album {title}",
     "Tagged photos" : "Fotos mit Tags",
     "Tagged photo {title}" : "Fotos mit Schlagworten",
-    "{title}'s face" : "{title}´s Gesicht",
+    "{title}'s face" : "{title}s Gesicht",
     "{startDate} to {endDate}" : "{startDate} bis {endDate}",
     "Details" : "Details",
     "Failed to rename {oldName} to {faceName}" : "{oldName} konnte nicht in {faceName} umbenannt werden.",
