@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Public link" : "Публична връзка",
     "Photos" : "Снимки",
+    "On This Day" : "На този ден",
     "Your memories under your control" : "Вашите спомени под ваш контрол",
     "All media" : "Всички медии",
     "Videos" : "Видеа",
@@ -46,6 +47,8 @@ OC.L10N.register(
     "Share via public link" : "Споделяне чрез публична връзка",
     "This collection does not exist" : "Тази колекция не съществува",
     "An error occurred" : "Възникна грешка",
+    "No picture for this day" : "Няма снимка за днешния ден",
+    "Picture taken on this day will show up here." : "Снимки, заснети на този ден, ще се показват тук.",
     "_%n photos_::_%n photos_" : ["%n снимки ","%n снимки"],
     "Favorite" : "Любими",
     "Open the full size \"{name}\" image" : "Отваряне на изображението\"{name}“  в пълен размер ",
