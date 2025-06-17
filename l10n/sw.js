@@ -16,6 +16,7 @@ OC.L10N.register(
     "Go back" : "Rudi nyuma",
     "Home" : "Nyumbani",
     "View" : "Angalia",
+    "Remove from favorites" : "Ondoa kutoka katika pendwa",
     "Details" : "Maelezo ya kina",
     "Add" : "Ongeza"
 },
