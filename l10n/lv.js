@@ -53,6 +53,7 @@ OC.L10N.register(
     "Back to tags overview" : "Atpakaļ uz birku pārskatu",
     "Add to album" : "Pievienot albumam",
     "Details" : "Detaļas",
+    "Failed to rename {oldName} to {faceName}" : "Neizdevās pārdēvēt {oldName} par {faceName}",
     "Failed to delete {faceName}" : "Neizdevās izdzēst {faceName}",
     "Failed to delete {fileId}" : "Neizdevās izdzēst {fileId}",
     "Failed to delete {fileName}" : "Neizdevās izdzēst {fileName}",
