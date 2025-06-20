@@ -159,7 +159,7 @@ export default defineComponent({
 		height: 60px;
 
 		.loading-icon {
-			margin-left: 32px;
+			margin-inline-start: 32px;
 		}
 	}
 

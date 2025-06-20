@@ -136,7 +136,7 @@ export default {
 	&__back {
 		// Replaces the app navigation button
 		position: absolute !important;
-		left: var(--app-navigation-padding);
+		inset-inline-start: var(--app-navigation-padding);
 	}
 
 	&__title {

@@ -56,7 +56,7 @@ const availableFilters = computed(() => {
 			gap: 4px;
 
 			&__option {
-				margin: calc((32px - 24px)/2) 0; // 32 is the size of the icon, 24 is the size of the option. We want to match the size of the icon.
+				margin: calc((32px - 24px) / 2) 0; // 32 is the size of the icon, 24 is the size of the option. We want to match the size of the icon.
 			}
 		}
 	}
