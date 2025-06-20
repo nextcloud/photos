@@ -2,10 +2,12 @@ OC.L10N.register(
     "photos",
     {
     "Videos" : "Picha mjongeo",
+    "People" : "Watu",
     "Folders" : "Visanduku",
     "Favorites" : "Vipendwa",
     "Shared with you" : "Imeshirikiwa na wewe",
     "Tags" : "Maoni",
+    "Places" : "Maeneo",
     "Back" : "Rudi",
     "Save" : "Hifadhi",
     "No recommendations. Start typing." : "Hakuna maoni. Anza kuchapisha",
@@ -14,10 +16,12 @@ OC.L10N.register(
     "An error occurred" : "Hitilafu imetokea",
     "Favorite" : "Kipendwa",
     "Go back" : "Rudi nyuma",
+    "All folders" : "Vikasha vyote",
     "Home" : "Nyumbani",
     "View" : "Angalia",
     "Remove from favorites" : "Ondoa kutoka katika pendwa",
     "Details" : "Maelezo ya kina",
+    "Back to {folder}" : "Rudi kwenye {folder}",
     "Add" : "Ongeza"
 },
 "nplurals=2; plural=(n != 1);");
