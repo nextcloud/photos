@@ -26,11 +26,6 @@
 				<div v-if="album.attributes.location !== ''" slot="subtitle" class="album__location">
 					<MapMarker />{{ album.attributes.location }}
 				</div>
-				<template slot="default">
-					<span v-if="album !== undefined" class="album-container__filters">
-						<PhotosFiltersDisplay :filters-value="album.attributes.filters" />
-					</span>
-				</template>
 
 				<template v-if="album !== undefined" slot="right">
 					<NcActions :force-menu="true" :aria-label="t('photos', 'Open actions menu')">
@@ -95,7 +90,6 @@ import ImageOff from 'vue-material-design-icons/ImageOff.vue'
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-import PhotosFiltersDisplay from '../components/PhotosFilters/PhotosFiltersDisplay.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
 import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.ts'
 import { albumFilesExtraProps } from '../store/albums.ts'
@@ -117,7 +111,6 @@ export default {
 		CollectionContent,
 		// ActionDownload,
 		HeaderNavigation,
-		PhotosFiltersDisplay,
 	},
 
 	mixins: [

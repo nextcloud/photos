@@ -179,8 +179,9 @@ export default {
 
 		&__right {
 			display: flex;
+			flex-grow: 1;
 			align-items: center;
-			justify-content: center;
+			justify-content: flex-end;
 			flex-wrap: wrap;
 		}
 	}

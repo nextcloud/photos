@@ -6,10 +6,9 @@
 import type { User } from '@nextcloud/cypress'
 
 import { randHash } from '../utils/index.js'
-import { addCollaborators, createAnAlbumFromAlbums, createPublicShare } from './albumsUtils.ts'
-import { navigateToCollection, setupPhotosTests } from './photosUtils.ts'
-import { setDateRangeFilter, setPlacesFilter } from './smartAlbumsUtils.ts'
-import { toggleFilters } from './timelinesFiltersUtils.ts'
+import { createAnAlbumFromAlbums } from './albumsUtils.ts'
+import { setupPhotosTests } from './photosUtils.ts'
+import { openAlbumSetting, setDateRangeFilter, setPlacesFilter } from './smartAlbumsUtils.ts'
 
 const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/
 Cypress.on('uncaught:exception', (err) => {
@@ -21,14 +20,12 @@ Cypress.on('uncaught:exception', (err) => {
 
 describe('View list of photos in the main timeline', () => {
 	let alice: User
-	let bob: User
 	let albumName: string
 
 	before(() => {
 		setupPhotosTests()
 			.then((setupInfo) => {
 				alice = setupInfo.alice
-				bob = setupInfo.bob
 			})
 	})
 
@@ -40,9 +37,7 @@ describe('View list of photos in the main timeline', () => {
 		createAnAlbumFromAlbums(albumName)
 	})
 
-	it('Should allow to set filters and update immediately', () => {
-		toggleFilters()
-
+	it('Should allow to set filters in the setting dialog and on save', () => {
 		setDateRangeFilter('2019-01-01 ~ 2019-12-31')
 		cy.get('[data-test="media"]').should('have.length', 3)
 
@@ -50,66 +45,22 @@ describe('View list of photos in the main timeline', () => {
 		cy.get('[data-test="media"]').should('have.length', 1)
 	})
 
-	it('Should display the filters in the header', () => {
-		toggleFilters()
+	it('Should display the filters in the setting dialog', () => {
 		setDateRangeFilter('2019-01-01 ~ 2019-12-31')
 		setPlacesFilter(['Lauris'])
-		toggleFilters()
 
-		cy.get('.photos-navigation').within(() => {
-			cy.contains('Date range: January 1, 2019 ⸱ December 31, 2019')
-			cy.contains('Places: Lauris')
+		openAlbumSetting()
+
+		cy.get('.album-form').within(() => {
+			cy.contains('January 1, 2019 ⸱ December 31, 2019')
+			cy.contains('Lauris')
 		})
 	})
 
 	it('Should keep filters after a refresh', () => {
-		toggleFilters()
 		setDateRangeFilter('2019-01-01 ~ 2019-12-31')
 		setPlacesFilter(['Lauris'])
 
 		cy.get('[data-test="media"]').should('have.length', 1)
-	})
-
-	it('Should display filters and photos in shared album', () => {
-		toggleFilters()
-		setDateRangeFilter('2019-01-01 ~ 2019-12-31')
-		setPlacesFilter(['Lauris'])
-		toggleFilters()
-		addCollaborators([bob.userId])
-
-		cy.login(bob)
-		cy.visit('/apps/photos')
-		navigateToCollection('sharedalbums', `${albumName} (${alice.userId})`)
-
-		cy.get('.photos-navigation').within(() => {
-			cy.contains('Date range: January 1, 2019 ⸱ December 31, 2019')
-			cy.contains('Places: Lauris')
-		})
-
-		cy.get('[data-test="media"]').should('have.length', 1)
-	})
-
-	it('Should display filters and photos in public link', () => {
-		toggleFilters()
-		setDateRangeFilter('2019-01-01 ~ 2019-12-31')
-		setPlacesFilter(['Lauris'])
-		toggleFilters()
-
-		createPublicShare()
-			.then((publicLink) => {
-				cy.logout()
-				cy.intercept({ times: 1, method: 'PROPFIND', url: '/remote.php/dav/photospublic/*' }).as('propFindAlbum')
-				cy.intercept({ times: 1, method: 'PROPFIND', url: '/remote.php/dav/photospublic/*/' }).as('propFindContent')
-				cy.visit(publicLink)
-				cy.wait('@propFindAlbum')
-				cy.wait('@propFindContent')
-
-				cy.get('.photos-navigation').within(() => {
-					cy.contains('Date range: January 1, 2019 ⸱ December 31, 2019')
-					cy.contains('Places: Lauris')
-				})
-
-				cy.get('[data-test="media"]').should('have.length', 1)
-			})
 	})
 })

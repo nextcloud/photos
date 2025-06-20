@@ -14,5 +14,5 @@ interface IFilter {
 
 	public function getId(): string;
 
-	public function getSearchOperator(array $filterValue): ISearchBinaryOperator;
+	public function getSearchOperator(array $filterValues): ISearchBinaryOperator;
 }
