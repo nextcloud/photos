@@ -64,7 +64,6 @@ class PropFindPlugin extends ServerPlugin {
 		return 'photosDavPlugin';
 	}
 
-
 	/**
 	 * @return void
 	 */

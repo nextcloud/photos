@@ -6,6 +6,15 @@
 <template>
 	<NcContent app-name="photos">
 		<NcAppNavigation :aria-label="t('photos', 'Photos')">
+			<template v-if="isTimelineView" #search>
+				<PhotosFiltersInput
+					:selected-filters="selectedFilters"
+					@select-filter="selectFilter" />
+				<PhotosFiltersDisplay
+					:selected-filters="selectedFilters"
+					@deselect-filter="deselectFilter" />
+			</template>
+
 			<template #list>
 				<NcAppNavigationItem
 					:to="{ name: 'all_media' }"
@@ -163,10 +172,13 @@
 </template>
 
 <script lang='ts'>
+import type { FilterOption } from './services/PhotosFilters/PhotosFilter.ts'
+
 import { getCurrentUser } from '@nextcloud/auth'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
+import { storeToRefs } from 'pinia'
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
 import NcAppNavigation from '@nextcloud/vue/components/NcAppNavigation'
 import NcAppNavigationItem from '@nextcloud/vue/components/NcAppNavigationItem'
@@ -199,15 +211,18 @@ import Tag from 'vue-material-design-icons/Tag.vue'
 import TagOutline from 'vue-material-design-icons/TagOutline.vue'
 import VideoIcon from 'vue-material-design-icons/Video.vue'
 import VideoOutline from 'vue-material-design-icons/VideoOutline.vue'
+import PhotosFiltersDisplay from './components/PhotosFilters/PhotosFiltersDisplay.vue'
+import PhotosFiltersInput from './components/PhotosFilters/PhotosFiltersInput.vue'
 import SettingsDialog from './components/Settings/SettingsDialog.vue'
 import svgplaceholder from './assets/file-placeholder.svg'
 import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'
-import areTagsInstalled from './services/AreTagsInstalled.js'
-import isAppStoreEnabled from './services/IsAppStoreEnabled.js'
-import isMapsInstalled from './services/IsMapsInstalled.js'
-import isRecognizeInstalled from './services/IsRecognizeInstalled.js'
-import logger from './services/logger.js'
+import areTagsInstalled from './services/AreTagsInstalled.ts'
+import isAppStoreEnabled from './services/IsAppStoreEnabled.ts'
+import isMapsInstalled from './services/IsMapsInstalled.ts'
+import isRecognizeInstalled from './services/IsRecognizeInstalled.ts'
+import logger from './services/logger.ts'
+import useFilterStore from './store/filters.ts'
 
 export default {
 	name: 'PhotosApp',
@@ -245,6 +260,17 @@ export default {
 		NcButton,
 		NcContent,
 		SettingsDialog,
+		PhotosFiltersInput,
+		PhotosFiltersDisplay,
+	},
+
+	setup() {
+		const filtersStore = useFilterStore()
+		const { selectedFilters } = storeToRefs(filtersStore)
+
+		return {
+			selectedFilters,
+		}
 	},
 
 	data() {
@@ -264,6 +290,12 @@ export default {
 
 			openedSettings: false,
 		}
+	},
+
+	computed: {
+		isTimelineView() {
+			return ['all_media', 'photos', 'videos'].includes(this.$store.state.route.name || '')
+		},
 	},
 
 	async beforeMount() {
@@ -301,6 +333,18 @@ export default {
 	methods: {
 		showSettings() {
 			this.openedSettings = true
+		},
+
+		selectFilter(filterOption: FilterOption<unknown>) {
+			this.selectedFilters[filterOption.filterId].push(filterOption.value)
+		},
+
+		deselectFilter(filterOption: { filterId: string, value: unknown }) {
+			const index = this.selectedFilters[filterOption.filterId].indexOf(filterOption.value)
+
+			if (index !== -1) {
+				this.selectedFilters[filterOption.filterId].splice(index, 1)
+			}
 		},
 
 		t,

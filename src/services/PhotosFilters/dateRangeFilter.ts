@@ -5,33 +5,66 @@
 
 import type { PhotosFilter } from './PhotosFilter.ts'
 
-import DateRangeFilterDisplay from '../../components/PhotosFilters/DateRangeFilterDisplay.vue'
-import DateRangeFilterInput from '../../components/PhotosFilters/DateRangeFilterInput.vue'
+import calendarMonthSvg from '@mdi/svg/svg/calendar-month.svg?raw'
+import { t } from '@nextcloud/l10n'
+import { spawnDialog } from '@nextcloud/vue/functions/dialog'
+import CustomDateRangePickerDialog from '../../components/PhotosFilters/CustomDateRangePickerDialog.vue'
+import DateRangeOption from '../../components/PhotosFilters/DateRangeOption.vue'
 
-export type DateRangeValueType = { start: number, end: number } | undefined
+export type DateRangeValueType = { start: number, end: number }
 
 export const dateRangeFilterId = 'date-range'
 
-export const dateRangeFilter: PhotosFilter = {
+export const dateRangeFilter: PhotosFilter<DateRangeValueType> = {
 	id: dateRangeFilterId,
-	inputComponent: DateRangeFilterInput,
-	displayComponent: DateRangeFilterDisplay,
-	getQuery(dateRange: DateRangeValueType): string {
-		if (dateRange === undefined) {
-			return ''
-		}
+	icon: calendarMonthSvg,
+	renderOptionComponent: DateRangeOption,
+	async getOptions() {
+		const now = new Date()
 
+		return [
+			{
+				filterId: dateRangeFilterId,
+				label: t('photos', 'Last week'),
+				value: {
+					start: new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay() - 7).getTime(),
+					end: new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay() - 1).getTime(),
+				},
+			},
+			{
+				filterId: dateRangeFilterId,
+				label: t('photos', 'Last Month'),
+				value: {
+					start: new Date(now.getFullYear(), now.getMonth() - 1, 1).getTime(),
+					end: new Date(now.getFullYear(), now.getMonth(), 0).getTime(),
+				},
+			},
+			{
+				filterId: dateRangeFilterId,
+				label: t('photos', 'Custom…'),
+				value: undefined,
+				async getValue() {
+					return new Promise((resolve) => {
+						spawnDialog(CustomDateRangePickerDialog, undefined, resolve)
+					})
+				},
+			},
+		]
+	},
+	getQuery(dateRangeOptions: DateRangeValueType[]): string {
 		// Add one day to the end date to include the whole day.
-		return `
+		const dav = dateRangeOptions.map((option) => `
 			<d:and>
 				<d:gt>
 					<d:prop><nc:metadata-photos-original_date_time/></d:prop>
-					<d:literal>${dateRange.start / 1000}</d:literal>
+					<d:literal>${option.start / 1000}</d:literal>
 				</d:gt>
 				<d:lt>
 					<d:prop><nc:metadata-photos-original_date_time/></d:prop>
-					<d:literal>${dateRange.end / 1000 + 24 * 60 * 60}</d:literal>
+					<d:literal>${option.end / 1000 + 24 * 60 * 60}</d:literal>
 				</d:lt>
-			</d:and>`
+			</d:and>`)
+
+		return `<d:or>${dav.join('')}</d:or>`
 	},
 }

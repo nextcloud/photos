@@ -23,7 +23,12 @@
 			</NcTextField>
 		</div>
 
-		<PhotosFiltersDisplay :filters-value="filtersValue" />
+		<PhotosFiltersInput
+			:selected-filters="albumFilters"
+			@select-filter="selectFilter" />
+		<PhotosFiltersDisplay
+			:selected-filters="albumFilters"
+			@deselect-filter="deselectFilter" />
 
 		<div class="form-buttons">
 			<span class="left-buttons">
@@ -88,6 +93,8 @@
 
 <script lang='ts'>
 import type { PropType } from 'vue'
+import type { FilterOption } from '../../services/PhotosFilters/PhotosFilter.ts'
+import type { Album, AlbumEditableProperties, Collaborator } from '../../store/albums.ts'
 
 import { resultToNode } from '@nextcloud/files/dav'
 import { translate } from '@nextcloud/l10n'
@@ -100,12 +107,10 @@ import AccountMultiplePlusOutline from 'vue-material-design-icons/AccountMultipl
 import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
 import SendOutline from 'vue-material-design-icons/SendOutline.vue'
 import PhotosFiltersDisplay from '../PhotosFilters/PhotosFiltersDisplay.vue'
+import PhotosFiltersInput from '../PhotosFilters/PhotosFiltersInput.vue'
 import CollaboratorsSelectionForm from './CollaboratorsSelectionForm.vue'
-import {
-	type Album, type AlbumEditableProperties, type Collaborator,
-
-	albumsPrefix,
-} from '../../store/albums.ts'
+import filters from '../../services/PhotosFilters/index.ts'
+import { albumsPrefix } from '../../store/albums.ts'
 
 export default {
 	name: 'AlbumForm',
@@ -118,6 +123,7 @@ export default {
 		NcLoadingIcon,
 		NcTextField,
 		CollaboratorsSelectionForm,
+		PhotosFiltersInput,
 		PhotosFiltersDisplay,
 	},
 
@@ -128,7 +134,7 @@ export default {
 		},
 
 		filtersValue: {
-			type: Object as PropType<Record<string, unknown>>,
+			type: Object as PropType<Record<string, unknown[]>>,
 			default: () => ({}),
 		},
 
@@ -143,6 +149,7 @@ export default {
 			showCollaboratorView: false,
 			albumName: '',
 			albumLocation: '',
+			albumFilters: filters.reduce((acc, filter) => ({ ...acc, [filter.id]: [] }), {}),
 			loading: false,
 		}
 	},
@@ -165,6 +172,15 @@ export default {
 		if (this.editMode) {
 			this.albumName = this.album?.basename as string
 			this.albumLocation = this.album?.attributes.location ?? ''
+			this.albumFilters = {
+				...this.albumFilters,
+				...structuredClone(this.album?.attributes.filters ?? {}),
+			}
+		} else {
+			this.albumFilters = {
+				...this.albumFilters,
+				...structuredClone(this.filtersValue),
+			}
 		}
 
 		this.$nextTick(() => {
@@ -245,18 +261,38 @@ export default {
 				this.loading = true
 
 				let album = this.album?.clone() as Album
+				const changes: string[] = []
 
 				if (this.album !== null && this.album.basename !== this.albumName) {
+					changes.push('name')
 					album = await this.$store.dispatch('renameCollection', { collectionFileName: this.album.root + this.album.path, newBaseName: this.albumName }) as Album
 				}
 
 				if (this.album !== null && this.album.attributes.location !== this.albumLocation) {
+					changes.push('location')
 					album = await this.$store.dispatch('updateCollection', { collectionFileName: album.root + album.path, properties: { location: this.albumLocation } }) as Album
 				}
 
-				this.$emit('done', { album })
+				if (this.album !== null && JSON.stringify(this.album.attributes.filters) !== JSON.stringify(this.albumFilters)) {
+					changes.push('filters')
+					album = await this.$store.dispatch('updateCollection', { collectionFileName: album.root + album.path, properties: { filters: this.albumFilters } }) as Album
+				}
+
+				this.$emit('done', { album, changes })
 			} finally {
 				this.loading = false
+			}
+		},
+
+		selectFilter(filterOption: FilterOption<unknown>) {
+			this.albumFilters[filterOption.filterId].push(filterOption.value)
+		},
+
+		deselectFilter(filterOption: { filterId: string, value: unknown }) {
+			const index = this.albumFilters[filterOption.filterId].indexOf(filterOption.value)
+
+			if (index !== -1) {
+				this.albumFilters[filterOption.filterId].splice(index, 1)
 			}
 		},
 

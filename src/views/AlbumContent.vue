@@ -37,27 +37,6 @@
 						</template>
 						{{ t('photos', 'Unselect all') }}
 					</NcButton>
-
-					<span v-if="album !== undefined" class="album-container__filters">
-						<PhotosFiltersInput
-							v-if="editFilters"
-							:value="album.attributes.filters"
-							class="timeline__filters"
-							@update:value="handleFiltersChange" />
-						<PhotosFiltersDisplay v-else :filters-value="album.attributes.filters" />
-
-						<NcButton
-							:title="t('photos', 'Toggle filter')"
-							:aria-label="t('photos', 'Toggle filter')"
-							data-cy-header-action="toggle-filters"
-							type="tertiary"
-							@click="toggleFilters">
-							<template #icon>
-								<FilterCheckOutline v-if="editFilters" />
-								<FilterPlusOutline v-else />
-							</template>
-						</NcButton>
-					</span>
 				</template>
 
 				<template v-if="album !== undefined" slot="right">
@@ -177,7 +156,7 @@
 			close-on-click-outside
 			size="normal"
 			@closing="showEditAlbumForm = false">
-			<AlbumForm :album="album" @done="redirectToNewName" />
+			<AlbumForm :album="album" @done="(event) => handleAlbumUpdate(event)" />
 		</NcDialog>
 	</div>
 </template>
@@ -197,8 +176,6 @@ import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcModal from '@nextcloud/vue/components/NcModal'
 import Close from 'vue-material-design-icons/Close.vue'
 import DeleteOutline from 'vue-material-design-icons/DeleteOutline.vue'
-import FilterCheckOutline from 'vue-material-design-icons/FilterCheckOutline.vue'
-import FilterPlusOutline from 'vue-material-design-icons/FilterPlusOutline.vue'
 // import Download from 'vue-material-design-icons/Download.vue'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
 import ImagePlusOutline from 'vue-material-design-icons/ImagePlusOutline.vue'
@@ -212,8 +189,6 @@ import AlbumForm from '../components/Albums/AlbumForm.vue'
 import CollaboratorsSelectionForm from '../components/Albums/CollaboratorsSelectionForm.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-import PhotosFiltersDisplay from '../components/PhotosFilters/PhotosFiltersDisplay.vue'
-import PhotosFiltersInput from '../components/PhotosFilters/PhotosFiltersInput.vue'
 import PhotosPicker from '../components/PhotosPicker.vue'
 import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
@@ -247,10 +222,6 @@ export default {
 		PencilOutline,
 		Plus,
 		ShareVariantOutline,
-		FilterPlusOutline,
-		FilterCheckOutline,
-		PhotosFiltersInput,
-		PhotosFiltersDisplay,
 	},
 
 	mixins: [
@@ -277,7 +248,6 @@ export default {
 			showAddPhotosModal: false,
 			showManageCollaboratorView: false,
 			showEditAlbumForm: false,
-			editFilters: false,
 
 			loadingAddCollaborators: false,
 		}
@@ -325,11 +295,15 @@ export default {
 			await this.fetchCollectionFiles(this.albumFileName, albumFilesExtraProps)
 		},
 
-		redirectToNewName({ album }) {
+		async handleAlbumUpdate({ album, changes }) {
 			this.showEditAlbumForm = false
 
-			if (this.album?.basename !== album.basename) {
-				this.$router.push(`/albums/${album.basename}`)
+			if (changes.includes('name')) {
+				await this.$router.push(`/albums/${album.basename}`)
+			}
+
+			if (changes.includes('filters')) {
+				this.fetchAlbumContent()
 			}
 		},
 
@@ -359,14 +333,6 @@ export default {
 				logger.error('Error while setting album collaborators', { error })
 			} finally {
 				this.loadingAddCollaborators = false
-			}
-		},
-
-		toggleFilters() {
-			this.editFilters = !this.editFilters
-			if (!this.editFilters) {
-				this.extraFilters = {}
-				this.resetFetchFilesState()
 			}
 		},
 

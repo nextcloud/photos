@@ -12,6 +12,9 @@ use OC\Files\Search\SearchBinaryOperator;
 use OC\Files\Search\SearchComparison;
 use OC\Files\Search\SearchQuery;
 use OCA\Photos\Album\AlbumFile;
+use OCA\Photos\AppInfo\Application;
+use OCA\Photos\Service\UserConfigService;
+use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
 use OCP\Files\Search\ISearchBinaryOperator;
 use OCP\Files\Search\ISearchComparison;
@@ -24,6 +27,8 @@ class FiltersManager {
 
 	public function __construct(
 		private IRootFolder $rootFolder,
+		private readonly IMimeTypeLoader $mimeTypeLoader,
+		private readonly UserConfigService $userConfigService,
 	) {
 		$this->registerFilter(new DateRangeFilter());
 		$this->registerFilter(new PlacesFilter());
@@ -38,16 +43,14 @@ class FiltersManager {
 	 * @return AlbumFile[]
 	 */
 	public function getFilesBasedOnFilters(string $userId, array $userFilters, ?int $fileId = null): array {
-		if (empty($userFilters)) {
-			return [];
-		}
-
-		$filtersOperations = [];
-
 		foreach ($userFilters as $filterId => $filterValue) {
-			if (is_array($filterValue)) {
+			if (is_array($filterValue) && count($filterValue) > 0) {
 				$filtersOperations[] = $this->registeredFilters[$filterId]->getSearchOperator($filterValue);
 			}
+		}
+
+		if (empty($filtersOperations)) {
+			return [];
 		}
 
 		if ($fileId !== null) {
@@ -57,6 +60,8 @@ class FiltersManager {
 				$fileId,
 			);
 		}
+
+		$filtersOperations += $this->getPhotosDefaultSearchConditions();
 
 		$query = new SearchQuery(new SearchBinaryOperator(ISearchBinaryOperator::OPERATOR_AND, $filtersOperations), 1000, 0, []);
 
@@ -78,5 +83,29 @@ class FiltersManager {
 			},
 			$files
 		);
+	}
+
+	private function getPhotosDefaultSearchConditions(): array {
+		$folders = json_decode($this->userConfigService->getUserConfig('photosSourceFolders'));
+
+		return [
+			new SearchBinaryOperator(
+				ISearchBinaryOperator::OPERATOR_OR,
+				array_map(fn ($folder) => new SearchComparison(
+					ISearchComparison::COMPARE_LIKE_CASE_SENSITIVE,
+					'path',
+					'files' . $folder . '/%',
+				), $folders)
+			),
+
+			new SearchBinaryOperator(
+				ISearchBinaryOperator::OPERATOR_OR,
+				array_map(fn ($mimetype) => new SearchComparison(
+					ISearchComparison::COMPARE_EQUAL,
+					'mimetype',
+					$mimetype,
+				), [...Application::IMAGE_MIMES, ...Application::VIDEO_MIMES])
+			),
+		];
 	}
 }

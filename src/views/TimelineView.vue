@@ -92,26 +92,8 @@
 						</NcActionButton>
 					</NcActions>
 				</template>
-
-				<NcButton
-					:title="t('photos', 'Toggle filter')"
-					:aria-label="t('photos', 'Toggle filter')"
-					data-cy-header-action="toggle-filters"
-					type="tertiary"
-					@click="toggleFilters">
-					<template #icon>
-						<FilterOffOutline v-if="showFilters" />
-						<FilterOutline v-else />
-					</template>
-				</NcButton>
 			</div>
 		</HeaderNavigation>
-
-		<PhotosFiltersInput
-			v-if="showFilters"
-			:value="filters"
-			class="timeline__filters"
-			@update:value="handleFiltersChange" />
 
 		<FilesListViewer
 			ref="filesListViewer"
@@ -151,7 +133,7 @@
 			<h2 class="timeline__heading">
 				{{ t('photos', 'New album') }}
 			</h2>
-			<AlbumForm :filters-value="filters" @done="handleFormCreationDone" />
+			<AlbumForm :filters-value="selectedFilters" @done="handleFormCreationDone" />
 		</NcModal>
 
 		<NcModal
@@ -165,12 +147,14 @@
 </template>
 
 <script lang='ts'>
+import type { PropType } from 'vue'
 import type { Album } from '../store/albums.ts'
 
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { translate } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
+import { storeToRefs } from 'pinia'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -180,8 +164,6 @@ import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue
 import Close from 'vue-material-design-icons/Close.vue'
 import DeleteOutline from 'vue-material-design-icons/DeleteOutline.vue'
 import DownloadOutline from 'vue-material-design-icons/DownloadOutline.vue'
-import FilterOffOutline from 'vue-material-design-icons/FilterOffOutline.vue'
-import FilterOutline from 'vue-material-design-icons/FilterOutline.vue'
 import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import PlusBoxMultipleOutline from 'vue-material-design-icons/PlusBoxMultipleOutline.vue'
@@ -192,13 +174,12 @@ import AlbumPicker from '../components/Albums/AlbumPicker.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-import PhotosFiltersInput from '../components/PhotosFilters/PhotosFiltersInput.vue'
 import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.ts'
 import FilesByMonthMixin from '../mixins/FilesByMonthMixin.ts'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.ts'
 import { allMimes } from '../services/AllowedMimes.ts'
-import photosFilters from '../services/PhotosFilters/index.ts'
+import useFilterStore from '../store/filters.ts'
 import { configChangedEvent } from '../store/userConfig.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
@@ -225,9 +206,6 @@ export default {
 		HeaderNavigation,
 		PhotosSourceLocationsSettings,
 		AlertCircleOutline,
-		PhotosFiltersInput,
-		FilterOutline,
-		FilterOffOutline,
 	},
 
 	filters: {
@@ -249,6 +227,9 @@ export default {
 	beforeRouteLeave(to, from, next) {
 		window.scrollTo(0, 0)
 		next()
+		Object.keys(this.selectedFilters).forEach((key) => {
+			this.selectedFilters[key] = []
+		})
 	},
 
 	props: {
@@ -258,7 +239,7 @@ export default {
 		},
 
 		mimesType: {
-			type: Array,
+			type: Array as PropType<string[]>,
 			default: () => allMimes,
 		},
 
@@ -275,8 +256,14 @@ export default {
 
 	setup() {
 		const isMobile = useIsMobile()
+
+		const filtersStore = useFilterStore()
+		const { selectedFilters, filtersQuery } = storeToRefs(filtersStore)
+
 		return {
 			isMobile,
+			selectedFilters,
+			filtersQuery,
 		}
 	},
 
@@ -287,7 +274,6 @@ export default {
 			showAlbumPicker: false,
 			appContent: document.getElementById('app-content-vue'),
 			showFilters: false,
-			filters: {} as Record<string, unknown>,
 		}
 	},
 
@@ -297,7 +283,7 @@ export default {
 		},
 
 		createAlbumButtonLabel() {
-			if (Object.values(this.filters).filter((v) => v !== undefined).length > 0) {
+			if (Object.keys(this.selectedFilters).length > 0) {
 				return this.t('photos', 'Create new album from filters')
 			} else {
 				return this.t('photos', 'Create new album')
@@ -306,8 +292,9 @@ export default {
 	},
 
 	watch: {
-		'$route.path': function() {
-			this.filters = {}
+		filtersQuery() {
+			this.resetFetchFilesState()
+			this.getContent()
 		},
 	},
 
@@ -325,9 +312,7 @@ export default {
 				mimesType: this.mimesType,
 				onThisDay: this.onThisDay,
 				onlyFavorites: this.onlyFavorites,
-				extraFilters: Object.entries(this.filters)
-					.map(([key, value]) => photosFilters.find((filter) => filter.id === key)?.getQuery(value))
-					.join('\n'),
+				extraFilters: this.filtersQuery,
 			})
 		},
 
@@ -361,26 +346,12 @@ export default {
 			}
 		},
 
-		toggleFilters() {
-			this.showFilters = !this.showFilters
-			if (!this.showFilters) {
-				this.filters = {}
-				this.resetFetchFilesState()
-			}
-		},
-
-		handleFiltersChange(filters) {
-			this.filters = filters
-			this.resetFetchFilesState()
-			this.getContent()
-		},
-
 		handleFormCreationDone({ album }: { album: Album }) {
 			this.showAlbumCreationForm = false
 			this.$router.push(`/albums/${album.basename}`)
 		},
 
-		t: translate,
+		t,
 	},
 }
 </script>
