@@ -5,6 +5,7 @@
 
 import { registerDavProperty } from '@nextcloud/files/dav'
 import { translate, translatePlural } from '@nextcloud/l10n'
+import { createPinia, PiniaVuePlugin } from 'pinia'
 import Vue from 'vue'
 import { sync } from 'vuex-router-sync'
 import PhotosApp from './PhotosApp.vue'
@@ -21,10 +22,13 @@ registerDavProperty('nc:metadata-files-live-photo')
 registerDavProperty('nc:metadata-blurhash')
 registerDavProperty('nc:metadata-photos-original_date_time')
 
+Vue.use(PiniaVuePlugin)
+
 export default new Vue({
 	el: '#content',
 	name: 'PhotosRoot',
 	router,
 	store,
+	pinia: createPinia(),
 	render: (h) => h(PhotosApp),
 })

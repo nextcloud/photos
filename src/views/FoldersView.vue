@@ -386,14 +386,14 @@ export default {
 		.upload-picker__progress {
 			position: absolute;
 			bottom: -30px;
-			left: 64px;
+			inset-inline-start: 64px;
 			margin: 0;
 		}
 
 		.upload-picker__cancel {
 			position: absolute;
 			bottom: -24px;
-			right: 50px;
+			inset-inline-end: 50px;
 		}
 	}
 }
