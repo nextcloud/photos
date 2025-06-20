@@ -131,7 +131,7 @@ export default {
 .icon-video-white {
 	position: absolute;
 	top: 10px;
-	right: 10px;
+	inset-inline-end: 10px;
 	z-index: 20;
 }
 

@@ -103,7 +103,7 @@ export default {
 	display: flex;
 	flex-direction: column;
 	height: calc(100vh - var(--header-height));
-	padding-left: 64px;
+	padding-inline-start: 64px;
 
 	@media only screen and (max-width: 1020px) {
 		padding: 0;
@@ -115,7 +115,7 @@ export default {
 		align-items: center;
 
 		button {
-			margin-right: 32px;
+			margin-inline-end: 32px;
 		}
 	}
 

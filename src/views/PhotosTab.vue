@@ -230,7 +230,7 @@ export default defineComponent({
 		}
 
 		.material-design-icon {
-			margin-right: 8px;
+			margin-inline-end: 8px;
 		}
 	}
 }
