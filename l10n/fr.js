@@ -88,6 +88,7 @@ OC.L10N.register(
     "Choose the folder where photos and albums are uploaded to." : "Choisir le dossier où les photos et albums sont téléversés.",
     "_%n photo_::_%n photos_" : ["%n photo","%n photos","%n photos"],
     "Unselect all" : "Tout désélectionner",
+    "Toggle filter" : "Basculer le filtre",
     "Add photos to this album" : "Ajouter des photos à cet album",
     "Manage collaborators for this album" : "Gérer les collaborateurs pour cet album",
     "Open actions menu" : "Ouvrir le menu des actions",
