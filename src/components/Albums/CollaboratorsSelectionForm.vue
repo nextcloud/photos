@@ -399,13 +399,13 @@ export default {
 
 			input {
 				width: 100%;
-				padding-left: 34px;
+				padding-inline-start: 34px;
 			}
 
 			.loading-icon {
 				position: absolute;
 				top: calc(36px / 2 - 20px / 2);
-				right: 8px;
+				inset-inline-end: 8px;
 			}
 		}
 
@@ -463,7 +463,7 @@ export default {
 			align-items: center;
 
 			button {
-				margin-left: 8px;
+				margin-inline-start: 8px;
 			}
 		}
 

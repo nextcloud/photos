@@ -39,7 +39,7 @@
 						<span class="album__name">
 							{{ collection.basename }}
 						</span>
-						<FilterIcon v-if="Object.keys(collection.attributes.filters).length !== 0" fill-color="var(--color-text-lighter)" />
+						<Cog v-if="Object.keys(collection.attributes.filters).length !== 0" fill-color="var(--color-text-lighter)" />
 					</template>
 
 					<template #subtitle>
@@ -79,7 +79,7 @@ import { defineComponent } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcModal from '@nextcloud/vue/components/NcModal'
-import FilterIcon from 'vue-material-design-icons/Filter.vue'
+import Cog from 'vue-material-design-icons/Cog.vue'
 import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
@@ -101,7 +101,7 @@ export default defineComponent({
 		CollectionCover,
 		HeaderNavigation,
 		AlbumForm,
-		FilterIcon,
+		Cog,
 	},
 
 	filters: {

@@ -6,10 +6,6 @@
 import { navigateToCollection, navigateToCollections, selectMedia } from './photosUtils.ts'
 import { navigateToTimeline } from './timelinesUtils.ts'
 
-/**
- *
- * @param albumName
- */
 export function createAnAlbumFromTimeline(albumName: string) {
 	navigateToTimeline('all-media')
 	cy.get('[data-cy-header-action="create-album"]').click()
@@ -23,10 +19,6 @@ export function createAnAlbumFromTimeline(albumName: string) {
 	cy.wait('@propFind')
 }
 
-/**
- *
- * @param albumName
- */
 export function createAnAlbumFromAlbums(albumName: string) {
 	navigateToCollections('albums')
 	cy.contains('New album').click()
@@ -36,20 +28,12 @@ export function createAnAlbumFromAlbums(albumName: string) {
 	cy.wait('@propFind')
 }
 
-/**
- *
- * @param albumName
- */
 export function deleteAnAlbumFromAlbumContent(albumName: string) {
 	navigateToCollection('albums', albumName)
 	cy.get('[aria-label="Open actions menu"]').click()
 	cy.contains('Delete album').click()
 }
 
-/**
- *
- * @param albumName
- */
 export function addFilesToAlbumFromTimeline(albumName: string) {
 	navigateToTimeline('all-media')
 	cy.intercept({ times: 1, method: 'COPY', url: '/remote.php/dav/files/**' }).as('copy')

@@ -124,10 +124,10 @@ export default defineComponent({
 }
 
 .container {
-	padding-left: 44px;
+	padding-inline-start: 44px;
 
 	> h2 {
-		margin-left: 14px;
+		margin-inline-start: 14px;
 		margin-top: 40px;
 	}
 }

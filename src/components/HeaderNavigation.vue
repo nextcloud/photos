@@ -136,7 +136,7 @@ export default {
 	&__back {
 		// Replaces the app navigation button
 		position: absolute !important;
-		left: var(--app-navigation-padding);
+		inset-inline-start: var(--app-navigation-padding);
 	}
 
 	&__title {
@@ -179,8 +179,9 @@ export default {
 
 		&__right {
 			display: flex;
+			flex-grow: 1;
 			align-items: center;
-			justify-content: center;
+			justify-content: flex-end;
 			flex-wrap: wrap;
 		}
 	}

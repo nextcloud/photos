@@ -197,7 +197,7 @@ export default {
 }
 
 .heading-subline {
-	margin-left: 85px;
+	margin-inline-start: 85px;
 	margin-top: -11px;
 	color: var(--color-text-maxcontrast);
 }

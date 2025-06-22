@@ -18,7 +18,7 @@ export type Collaborator = {
 export type AlbumEditableProperties = {
 	location: string // - The user set location of the album.
 	collaborators: Collaborator[] // - The list of collaborators.
-	filters?: Record<string, unknown> // - The list of filters.
+	filters?: Record<string, unknown[]> // - The list of filters.
 }
 
 export type Album = Collection & {

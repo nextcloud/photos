@@ -142,7 +142,7 @@ export default {
 	}
 
 	&__place {
-		margin-left: -4px;
+		margin-inline-start: -4px;
 		display: flex;
 		color: var(--color-text-lighter);
 	}
