@@ -87,14 +87,14 @@ class ExifMetadataProvider implements IEventListener {
 		}
 
 		if (
-			$rawExifData &&
-			array_key_exists('GPS', $rawExifData)
+			$rawExifData
+			&& array_key_exists('GPS', $rawExifData)
 		) {
 			$gps = [];
 
 			if (
-				array_key_exists('GPSLatitude', $rawExifData['GPS']) && array_key_exists('GPSLatitudeRef', $rawExifData['GPS']) &&
-				array_key_exists('GPSLongitude', $rawExifData['GPS']) && array_key_exists('GPSLongitudeRef', $rawExifData['GPS'])
+				array_key_exists('GPSLatitude', $rawExifData['GPS']) && array_key_exists('GPSLatitudeRef', $rawExifData['GPS'])
+				&& array_key_exists('GPSLongitude', $rawExifData['GPS']) && array_key_exists('GPSLongitudeRef', $rawExifData['GPS'])
 			) {
 				$gps['latitude'] = $this->gpsDegreesToDecimal($rawExifData['GPS']['GPSLatitude'], $rawExifData['GPS']['GPSLatitudeRef']);
 				$gps['longitude'] = $this->gpsDegreesToDecimal($rawExifData['GPS']['GPSLongitude'], $rawExifData['GPS']['GPSLongitudeRef']);
