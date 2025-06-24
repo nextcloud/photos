@@ -152,8 +152,8 @@ class AlbumsController extends Controller {
 		 * Adding the GroupFolderStorage class to the stubs would mean adding a lot of other classes.
 		 * This is enough for the current usage.
 		 */
-		return $node->getStorage()->instanceOfStorage(ISharedStorage::class) ||
-			$node->getStorage()->instanceOfStorage(\OCA\GroupFolders\Mount\GroupFolderStorage::class);
+		return $node->getStorage()->instanceOfStorage(ISharedStorage::class)
+			|| $node->getStorage()->instanceOfStorage(\OCA\GroupFolders\Mount\GroupFolderStorage::class);
 	}
 
 	private function scanFolder(Folder $folder, int $depth, bool $shared): bool {
