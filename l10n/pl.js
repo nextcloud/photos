@@ -60,6 +60,7 @@ OC.L10N.register(
     "Select image {imageName}" : "Wybierz obraz {imageName}",
     "Open the \"{name}\" folder" : "Otwórz katalog „{name}”.",
     "Go back" : "Wstecz",
+    "Date range" : "Zakres dat",
     "Dates" : "Daty",
     "Jump to specific date in list" : "Przejdź do określonej daty na liście",
     "Jump to {date}" : "Przejdź do {date}",
