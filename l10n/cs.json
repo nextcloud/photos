@@ -150,6 +150,8 @@
     "{title}'s face" : "Obličej {title}",
     "{startDate} to {endDate}" : "{startDate} až {endDate}",
     "Details" : "Podrobnosti",
+    "Failed to delete {fileBaseName}" : "Nepodařilo se smazat {fileBaseName}",
+    "Failed to delete {collectionFileName}" : "Nepodařilo se smazat {collectionFileName}",
     "Failed to rename {oldName} to {faceName}" : "Nepodařilo se přejmenovat {oldName} na {faceName}",
     "Failed to delete {faceName}" : "Nepodařilo se smazat {faceName}",
     "Failed to delete {fileId}" : "Nepodařilo se smazat {fileId}",
