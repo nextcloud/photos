@@ -56,6 +56,7 @@ SPDX-FileCopyrightText: Hiroki Osame
 SPDX-FileCopyrightText: Guillaume Chau <guillaume.b.chau@gmail.com>
 SPDX-FileCopyrightText: GitHub Inc.
 SPDX-FileCopyrightText: Feross Aboukhadijeh
+SPDX-FileCopyrightText: Felix Geisendörfer <felix@debuggable.com> (http://debuggable.com/)
 SPDX-FileCopyrightText: Evan You
 SPDX-FileCopyrightText: Eugene Sharygin <eush77@gmail.com>
 SPDX-FileCopyrightText: Eric Norris (https://github.com/ericnorris)
@@ -192,7 +193,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.0.7
 	- license: MIT
 - axios
-	- version: 0.27.2
+	- version: 0.30.0
 	- license: MIT
 - bail
 	- version: 2.0.2
@@ -255,7 +256,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.1.0
 	- license: MIT
 - dompurify
-	- version: 3.2.4
+	- version: 3.2.6
 	- license: (MPL-2.0 OR Apache-2.0)
 - dunder-proto
 	- version: 1.0.1
@@ -289,6 +290,9 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - for-each
 	- version: 0.3.3
+	- license: MIT
+- form-data
+	- version: 4.0.0
 	- license: MIT
 - function-bind
 	- version: 1.1.2
@@ -351,7 +355,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.0.10
 	- license: MIT
 - is-typed-array
-	- version: 1.1.10
+	- version: 1.1.15
 	- license: MIT
 - layerr
 	- version: 0.1.2
@@ -591,13 +595,13 @@ This file is generated from multiple sources. Included packages:
 	- version: 2.0.1
 	- license: MIT
 - brace-expansion
-	- version: 2.0.1
+	- version: 2.0.2
 	- license: MIT
 - minimatch
 	- version: 5.1.0
 	- license: ISC
 - webdav
-	- version: 4.11.4
+	- version: 4.11.5
 	- license: MIT
 - which-typed-array
 	- version: 1.1.18
