@@ -25,6 +25,7 @@ OC.L10N.register(
     "Create a new album." : "Izveidot jaunu albumu",
     "Create new album" : "Izveidot jaunu albumu",
     "New album" : "Jauns albums",
+    "No recommendations. Start typing." : "Nav ieteikumu. Jāsāk rakstīt.",
     "Group" : "Grupa",
     "Copy the public link" : "Ievietot publisko saiti starpliktuvē",
     "Public link copied!" : "Publiskā saite nokopēta!",
