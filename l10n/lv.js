@@ -53,7 +53,7 @@ OC.L10N.register(
     "Cover photo for shared album {albumName}" : "Kopīgotā albuma \"{albumName}\" vāka attēls",
     "Back to tags overview" : "Atpakaļ uz birku pārskatu",
     "Add to album" : "Pievienot albumam",
-    "Details" : "Detaļas",
+    "Details" : "Informācija",
     "Failed to delete {fileBaseName}" : "Neizdevās izdzēst {fileBaseName}",
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Neizdevās pārdēvēt {currentCollectionFileName} par {newCollectionFileName}",
     "Failed to delete {collectionFileName}" : "Neizdevās izdzēst {collectionFileName}",
