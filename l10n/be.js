@@ -4,6 +4,7 @@ OC.L10N.register(
     "Photos" : "Фота",
     "Favorites" : "Абранае",
     "Shared with you" : "Абагулена з вамі",
+    "Back" : "Назад",
     "Save" : "Захаваць",
     "Group" : "Група",
     "All folders" : "Усе папкі",
