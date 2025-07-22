@@ -2,8 +2,13 @@ OC.L10N.register(
     "photos",
     {
     "Photos" : "Фота",
+    "Videos" : "Відэа",
+    "People" : "Людзі",
+    "Folders" : "Папкі",
     "Favorites" : "Абранае",
     "Shared with you" : "Абагулена з вамі",
+    "Tags" : "Тэгі",
+    "Places" : "Месцы",
     "Back" : "Назад",
     "Save" : "Захаваць",
     "Group" : "Група",
