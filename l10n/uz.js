@@ -9,7 +9,7 @@ OC.L10N.register(
     "Tags" : "Tags",
     "Places" : "Joylar",
     "Back" : "Orqaga",
-    "Save" : "Save",
+    "Save" : "Saqlash",
     "Copy public link" : "Umumiy havoladan nusxa oling",
     "Favorite" : "Favorite",
     "Add to {destination}" : " {destination}ni qo`shish",
