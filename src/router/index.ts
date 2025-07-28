@@ -304,12 +304,19 @@ const router = new Router({
 	],
 })
 
-router.afterEach((to) => {
+router.afterEach((to, from) => {
+	// Update page title
 	const rootTitle = to.meta?.rootTitle?.(to)
 	if (rootTitle) {
 		document.title = `${rootTitle} - ${baseTitle}`
 	} else {
 		document.title = baseTitle
+	}
+
+	// Close sidebar on view change
+	const isSidebarOpen = !!window.OCA?.Files?.Sidebar?.file
+	if (isSidebarOpen && to.name !== from.name) {
+		window.OCA.Files.Sidebar.close()
 	}
 })
 
