@@ -92,11 +92,25 @@ export function sortCompareFileInfo(fileInfo1: FoldersNode, fileInfo2: FoldersNo
 		: -fileInfo1[key]?.toString()?.localeCompare(fileInfo2[key].toString(), getLanguage()) || -1
 }
 
+export type ViewerFileInfo = {
+	fileid: number
+	basename: string
+	filename: string
+	mime: string
+	mtime: Date
+	ownerId: string
+	source: string
+	hasPreview: boolean
+	previewUrl: string
+	etag: string
+	permissions: string
+}
+
 /**
  *
  * @param file
  */
-export function toViewerFileInfo(file: Node) {
+export function toViewerFileInfo(file: Node): ViewerFileInfo {
 	let permissions = ''
 
 	if ((file.permissions & Permission.CREATE) === Permission.CREATE) {
