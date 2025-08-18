@@ -5,10 +5,11 @@
 <template>
 	<li>
 		<router-link class="collection-cover" :to="link">
-			<img v-if="coverUrl !== ''"
+			<img v-if="coverUrl !== '' && coverLoadingError === false"
 				class="collection-cover__image"
 				:src="coverUrl"
-				:alt="altImg">
+				:alt="altImg"
+				@error="coverLoadingError = true">
 
 			<div v-else class="collection-cover__image collection-cover__image--placeholder">
 				<ImageMultiple :size="128" />
@@ -47,6 +48,12 @@ export default {
 			type: String,
 			required: true,
 		},
+	},
+
+	data() {
+		return {
+			coverLoadingError: false,
+		}
 	},
 }
 </script>
