@@ -38,7 +38,7 @@
 					:name="availableCollaborators[collaboratorKey].label"
 					:user="availableCollaborators[collaboratorKey].id"
 					:is-no-user="availableCollaborators[collaboratorKey].type !== collaboratorTypes.User">
-					<AccountGroup v-if="availableCollaborators[collaboratorKey].type === collaboratorTypes.Group" :title="t('photos', 'Group')" />
+					<AccountGroupOutline v-if="availableCollaborators[collaboratorKey].type === collaboratorTypes.Group" :title="t('photos', 'Group')" />
 					<NcButton
 						type="tertiary"
 						:aria-label="t('photos', 'Remove {collaboratorLabel} from the collaborators list', { collaboratorLabel: availableCollaborators[collaboratorKey].label })"
@@ -98,7 +98,7 @@
 import type { PropType } from 'vue'
 import type { Collaborator } from '../../store/albums.js'
 
-import AccountGroupSvg from '@mdi/svg/svg/account-group.svg'
+import AccountGroupOutlineSvg from '@mdi/svg/svg/account-group-outline.svg'
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
@@ -108,7 +108,7 @@ import { ShareType } from '@nextcloud/sharing'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcListItemIcon from '@nextcloud/vue/components/NcListItemIcon'
 import NcSelect from '@nextcloud/vue/components/NcSelect'
-import AccountGroup from 'vue-material-design-icons/AccountGroup.vue'
+import AccountGroupOutline from 'vue-material-design-icons/AccountGroupOutline.vue'
 import Check from 'vue-material-design-icons/Check.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 import ContentCopy from 'vue-material-design-icons/ContentCopy.vue'
@@ -128,7 +128,7 @@ export default {
 
 	components: {
 		Close,
-		AccountGroup,
+		AccountGroupOutline,
 		ContentCopy,
 		Check,
 		Earth,
@@ -180,7 +180,7 @@ export default {
 					return {
 						...collaborator,
 						key: `${collaborator.type}:${collaborator.id}`,
-						iconSvg: collaborator.type === ShareType.Group ? AccountGroupSvg : undefined,
+						iconSvg: collaborator.type === ShareType.Group ? AccountGroupOutlineSvg : undefined,
 					}
 				})
 				.filter(({ key }) => !this.selectedCollaboratorsKeys.includes(key))

@@ -16,14 +16,14 @@
 			@error="onPreviewFail(file)">
 
 		<span v-else class="folder__image folder__image--placeholder">
-			<Folder
+			<FolderOutline
 				class="folder__icon"
 				:size="96"
 				fill-color="var(--color-primary-element)" />
 		</span>
 
 		<span class="folder__details">
-			<Folder />
+			<FolderOutline />
 			<span class="folder__title">{{ name }}</span>
 		</span>
 	</RouterLink>
@@ -38,13 +38,13 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { RouterLink } from 'vue-router'
-import Folder from 'vue-material-design-icons/Folder.vue'
+import FolderOutline from 'vue-material-design-icons/FolderOutline.vue'
 
 export default {
 	name: 'FolderTagPreview',
 
 	components: {
-		Folder,
+		FolderOutline,
 		RouterLink,
 	},
 

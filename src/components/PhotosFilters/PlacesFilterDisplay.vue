@@ -4,7 +4,7 @@
 -->
 <template>
 	<div>
-		<MapMarker /> <b>{{ t('photos', 'Places') }}: </b>
+		<MapMarkerOutline /> <b>{{ t('photos', 'Places') }}: </b>
 		<span v-for="place in selectedPlaces" :key="place.label">
 			<NcChip no-close>
 				<template v-if="place.previewUrl !== undefined" #icon>
@@ -23,7 +23,7 @@ import type { PlacesValueType } from '../../services/PhotosFilters/placesFilter.
 
 import { t } from '@nextcloud/l10n'
 import NcChip from '@nextcloud/vue/components/NcChip'
-import MapMarker from 'vue-material-design-icons/MapMarker.vue'
+import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
 import usePlaceFilter from './usePlaceFilter.ts'
 
 const props = defineProps<{

@@ -6,7 +6,7 @@
 	<!-- Errors handlers-->
 	<NcEmptyContent v-if="errorFetchingFiles">
 		<template #icon>
-			<AlertCircle />
+			<AlertCircleOutline />
 		</template>
 		{{ t('photos', 'An error occurred') }}
 	</NcEmptyContent>
@@ -36,7 +36,7 @@
 							:close-after-click="true"
 							:aria-label="t('photos', 'Download selected files')"
 							@click="downloadSelection">
-							<Download slot="icon" />
+							<DownloadOutline slot="icon" />
 							{{ t('photos', 'Download selected photos') }}
 						</NcActionButton>
 						<NcActionButton
@@ -44,7 +44,7 @@
 							:close-after-click="true"
 							:aria-label="t('photos', 'Mark selection as favorite')"
 							@click="favoriteSelection">
-							<Star slot="icon" />
+							<StarOutline slot="icon" />
 							{{ t('photos', 'Favorite') }}
 						</NcActionButton>
 						<NcActionButton
@@ -59,7 +59,7 @@
 							:close-after-click="true"
 							@click="showMoveModal = true">
 							<template #icon>
-								<AccountSwitch />
+								<AccountSwitchOutline />
 							</template>
 							{{ n('photos', 'Move photo to a different person', 'Move photos to a different person', selectedFileIds.length) }}
 						</NcActionButton>
@@ -102,11 +102,12 @@ import NcActions from '@nextcloud/vue/components/NcActions'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
-import AccountSwitch from 'vue-material-design-icons/AccountSwitch.vue'
-import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
+import AccountSwitchOutline from 'vue-material-design-icons/AccountSwitchOutline.vue'
+import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
-import Download from 'vue-material-design-icons/Download.vue'
+import DownloadOutline from 'vue-material-design-icons/DownloadOutline.vue'
 import Star from 'vue-material-design-icons/Star.vue'
+import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import FaceMergeForm from '../components/Faces/FaceMergeForm.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
@@ -120,8 +121,9 @@ export default {
 	name: 'UnassignedFaces',
 	components: {
 		Star,
-		Download,
-		AlertCircle,
+		StarOutline,
+		DownloadOutline,
+		AlertCircleOutline,
 		ArrowLeft,
 		FaceMergeForm,
 		FilesListViewer,
@@ -131,7 +133,7 @@ export default {
 		NcActions,
 		NcActionButton,
 		NcDialog,
-		AccountSwitch,
+		AccountSwitchOutline,
 	},
 
 	directives: {

@@ -21,8 +21,14 @@
 				:path="'/' + albumName"
 				:title="albumOriginalName"
 				@refresh="fetchAlbumContent">
-				<div v-if="album !== undefined && album.attributes.location !== ''" slot="subtitle" class="album__location">
-					<MapMarker />{{ album.attributes.location }} ⸱ {{ t('photos', 'Shared by') }}&nbsp;<NcUserBubble :display-name="album.attributes.collaborators[0].label" :user="album.attributes.collaborators[0].id" />
+				<div
+					v-if="album !== undefined && album.attributes.location !== ''"
+					slot="subtitle"
+					class="album__location">
+					<MapMarkerOutline />{{ album.attributes.location }} ⸱ {{ t('photos', 'Shared by') }}&nbsp;
+					<NcUserBubble
+						:display-name="album.attributes.collaborators[0].label"
+						:user="album.attributes.collaborators[0].id" />
 				</div>
 
 				<template slot="default">
@@ -64,7 +70,7 @@
 							:close-after-click="true"
 							@click="handleDeleteAlbum">
 							{{ t('photos', 'Delete album') }}
-							<Delete slot="icon" />
+							<DeleteOutline slot="icon" />
 						</NcActionButton>
 
 						<template v-if="selectedFileIds.length > 0">
@@ -93,7 +99,7 @@
 				slot="empty-content"
 				:name="t('photos', 'This album does not have any photos or videos yet!')"
 				class="album__empty">
-				<ImagePlus slot="icon" />
+				<ImagePlusOutline slot="icon" />
 
 				<NcButton
 					slot="action"
@@ -129,9 +135,9 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 import Close from 'vue-material-design-icons/Close.vue'
-import Delete from 'vue-material-design-icons/Delete.vue'
-import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
-import MapMarker from 'vue-material-design-icons/MapMarker.vue'
+import DeleteOutline from 'vue-material-design-icons/DeleteOutline.vue'
+import ImagePlusOutline from 'vue-material-design-icons/ImagePlusOutline.vue'
+import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 // import Download from 'vue-material-design-icons/Download.vue'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
@@ -147,13 +153,13 @@ import { albumFilesExtraProps, albumsExtraProps } from '../store/albums.ts'
 export default {
 	name: 'SharedAlbumContent',
 	components: {
-		MapMarker,
+		MapMarkerOutline,
 		Plus,
 		Close,
 		// Download,
 		// DownloadMultiple,
-		Delete,
-		ImagePlus,
+		DeleteOutline,
+		ImagePlusOutline,
 		NcEmptyContent,
 		NcActions,
 		NcActionButton,

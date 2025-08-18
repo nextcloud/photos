@@ -7,7 +7,7 @@
 	<!-- Errors handlers-->
 	<NcEmptyContent v-if="error === 404" :name="t('photos', 'This folder does not exist')">
 		<template #icon>
-			<FolderIcon />
+			<FolderOutline />
 		</template>
 	</NcEmptyContent>
 	<NcEmptyContent v-else-if="error" :name="t('photos', 'An error occurred')" />
@@ -37,7 +37,7 @@
 		<!-- Empty folder, should only happen via direct link -->
 		<NcEmptyContent v-if="isEmpty" key="emptycontent" :name="t('photos', 'No photos in here')">
 			<template #icon>
-				<FolderIcon />
+				<FolderOutline />
 			</template>
 		</NcEmptyContent>
 
@@ -67,7 +67,7 @@ import { getUploader, UploadPicker } from '@nextcloud/upload'
 import VirtualGrid from 'vue-virtual-grid'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
-import FolderIcon from 'vue-material-design-icons/Folder.vue'
+import FolderOutline from 'vue-material-design-icons/FolderOutline.vue'
 import FileLegacy from '../components/FileLegacy.vue'
 import FolderComponent from '../components/FolderComponent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
@@ -81,7 +81,7 @@ import logger from '../services/logger.ts'
 export default {
 	name: 'FoldersView',
 	components: {
-		FolderIcon,
+		FolderOutline,
 		HeaderNavigation,
 		NcEmptyContent,
 		NcLoadingIcon,

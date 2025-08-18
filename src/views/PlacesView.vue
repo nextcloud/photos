@@ -33,7 +33,7 @@
 			</CollectionCover>
 
 			<NcEmptyContent slot="empty-collections-list" :name="t('photos', 'There is no place yet!')">
-				<FolderMultipleImage slot="icon" />
+				<ImageMultipleOutline slot="icon" />
 			</NcEmptyContent>
 		</CollectionsList>
 	</div>
@@ -44,7 +44,7 @@
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
-import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
+import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import CollectionCover from '../components/Collection/CollectionCover.vue'
 import CollectionsList from '../components/Collection/CollectionsList.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
@@ -54,7 +54,7 @@ import { placesPrefix } from '../store/places.js'
 export default {
 	name: 'PlacesView',
 	components: {
-		FolderMultipleImage,
+		ImageMultipleOutline,
 		NcEmptyContent,
 		CollectionsList,
 		CollectionCover,

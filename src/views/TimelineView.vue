@@ -6,12 +6,16 @@
 <template>
 	<!-- Errors handlers -->
 	<div v-if="errorFetchingFiles" class="timeline__empty-content">
-		<NcEmptyContent v-if="errorFetchingFiles === 404" :name="t('photos', 'One of the source folders does not exist')">
+		<NcEmptyContent
+			v-if="errorFetchingFiles === 404"
+			:name="t('photos', 'One of the source folders does not exist')">
 			<FolderAlertOutline slot="icon" />
-			<PhotosSourceLocationsSettings slot="action" class="timeline__update_source_directory" />
+			<PhotosSourceLocationsSettings
+				slot="action"
+				class="timeline__update_source_directory" />
 		</NcEmptyContent>
 		<NcEmptyContent v-else :name="t('photos', 'An error occurred')">
-			<AlertCircle slot="icon" />
+			<AlertCircleOutline slot="icon" />
 		</NcEmptyContent>
 	</div>
 
@@ -34,7 +38,7 @@
 					@click="showAlbumCreationForm = true">
 					{{ createAlbumButtonLabel }}
 					<template #icon>
-						<PlusBoxMultiple />
+						<PlusBoxMultipleOutline />
 					</template>
 				</NcButton>
 
@@ -71,7 +75,7 @@
 							:selected-file-ids="selectedFileIds"
 							:title="t('photos', 'Download selected files')"
 							data-cy-header-action="download-selection">
-							<Download slot="icon" />
+							<DownloadOutline slot="icon" />
 						</ActionDownload>
 
 						<ActionFavorite :selected-file-ids="selectedFileIds" />
@@ -83,7 +87,7 @@
 							@click="deleteSelection">
 							{{ t('photos', 'Delete selection') }}
 							<template #icon>
-								<Delete />
+								<DeleteOutline />
 							</template>
 						</NcActionButton>
 					</NcActions>
@@ -96,8 +100,8 @@
 					type="tertiary"
 					@click="toggleFilters">
 					<template #icon>
-						<FilterOff v-if="showFilters" />
-						<FilterIcon v-else />
+						<FilterOffOutline v-if="showFilters" />
+						<FilterOutline v-else />
 					</template>
 				</NcButton>
 			</div>
@@ -172,15 +176,15 @@ import NcActions from '@nextcloud/vue/components/NcActions'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcModal from '@nextcloud/vue/components/NcModal'
-import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
+import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 import Close from 'vue-material-design-icons/Close.vue'
-import Delete from 'vue-material-design-icons/Delete.vue'
-import Download from 'vue-material-design-icons/Download.vue'
-import { default as FilterIcon } from 'vue-material-design-icons/Filter.vue'
-import FilterOff from 'vue-material-design-icons/FilterOff.vue'
+import DeleteOutline from 'vue-material-design-icons/DeleteOutline.vue'
+import DownloadOutline from 'vue-material-design-icons/DownloadOutline.vue'
+import FilterOffOutline from 'vue-material-design-icons/FilterOffOutline.vue'
+import FilterOutline from 'vue-material-design-icons/FilterOutline.vue'
 import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
-import PlusBoxMultiple from 'vue-material-design-icons/PlusBoxMultiple.vue'
+import PlusBoxMultipleOutline from 'vue-material-design-icons/PlusBoxMultipleOutline.vue'
 import ActionDownload from '../components/Actions/ActionDownload.vue'
 import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
@@ -201,9 +205,9 @@ import { toViewerFileInfo } from '../utils/fileUtils.ts'
 export default {
 	name: 'TimelineView',
 	components: {
-		Delete,
-		PlusBoxMultiple,
-		Download,
+		DeleteOutline,
+		PlusBoxMultipleOutline,
+		DownloadOutline,
 		Close,
 		Plus,
 		FolderAlertOutline,
@@ -220,10 +224,10 @@ export default {
 		ActionDownload,
 		HeaderNavigation,
 		PhotosSourceLocationsSettings,
-		AlertCircle,
+		AlertCircleOutline,
 		PhotosFiltersInput,
-		FilterIcon,
-		FilterOff,
+		FilterOutline,
+		FilterOffOutline,
 	},
 
 	filters: {

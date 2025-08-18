@@ -4,7 +4,7 @@
 -->
 <template>
 	<div v-if="value !== undefined">
-		<CalendarMonth /> <b>{{ t('photos', 'Date range') }}: </b>
+		<CalendarMonthOutline /> <b>{{ t('photos', 'Date range') }}: </b>
 		<span>
 			<NcDateTime :timestamp="value['start']" :format=" { dateStyle: 'long' }" :relative-time="false" />
 			⸱
@@ -18,7 +18,7 @@ import type { DateRangeValueType } from '../../services/PhotosFilters/dateRangeF
 
 import { t } from '@nextcloud/l10n'
 import NcDateTime from '@nextcloud/vue/components/NcDateTime'
-import CalendarMonth from 'vue-material-design-icons/CalendarMonth.vue'
+import CalendarMonthOutline from 'vue-material-design-icons/CalendarMonthOutline.vue'
 
 defineProps<{
 	value: DateRangeValueType
