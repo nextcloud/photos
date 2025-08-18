@@ -10,7 +10,7 @@
 			:name="t('photos', 'No picture for this day')"
 			:description="t('photos', 'Picture taken on this day will show up here.')">
 			<template #icon>
-				<ImageIcon />
+				<ImageOutlineIcon />
 			</template>
 		</NcEmptyContent>
 		<template v-else>
@@ -31,7 +31,7 @@ import { generateUrl } from '@nextcloud/router'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
-import ImageIcon from 'vue-material-design-icons/Image.vue'
+import ImageOutlineIcon from 'vue-material-design-icons/ImageOutline.vue'
 import FileComponent from '../FileComponent.vue'
 import { allMimes } from '../../services/AllowedMimes.js'
 import logger from '../../services/logger.js'
@@ -44,7 +44,7 @@ export default {
 		NcButton,
 		NcLoadingIcon,
 		NcEmptyContent,
-		ImageIcon,
+		ImageOutlineIcon,
 	},
 
 	data() {

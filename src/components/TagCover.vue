@@ -10,7 +10,7 @@
 			class="tag-cover__image"
 			:src="coverUrl">
 		<div v-else class="tag-cover__image tag-cover__image--placeholder">
-			<ImageMultipleIcon :size="128" />
+			<ImageMultipleOutline :size="128" />
 		</div>
 		<div class="tag-cover__details">
 			<div class="tag-cover__details__first-line">
@@ -36,7 +36,7 @@ import {
 	defineComponent,
 } from 'vue'
 import { RouterLink } from 'vue-router'
-import ImageMultipleIcon from 'vue-material-design-icons/ImageMultiple.vue'
+import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 
 export default defineComponent({
@@ -44,7 +44,7 @@ export default defineComponent({
 
 	components: {
 		RouterLink,
-		ImageMultipleIcon,
+		ImageMultipleOutline,
 	},
 
 	mixins: [AbortControllerMixin],

@@ -18,7 +18,7 @@
 				type="text"
 				:label="t('photos', 'Location of the album')">
 				<template #default>
-					<MapMarker :size="20" />
+					<MapMarkerOutline :size="20" />
 				</template>
 			</NcTextField>
 		</div>
@@ -41,7 +41,7 @@
 					:disabled="albumName.trim() === '' || loading"
 					@click="showCollaboratorView = true">
 					<template #icon>
-						<AccountMultiplePlus :size="20" />
+						<AccountMultiplePlusOutline :size="20" />
 					</template>
 					{{ t('photos', 'Add collaborators') }}
 				</NcButton>
@@ -51,7 +51,7 @@
 					@click="submit()">
 					<template #icon>
 						<NcLoadingIcon v-if="loading" :size="20" />
-						<Send v-else :size="20" />
+						<SendOutline v-else :size="20" />
 					</template>
 					{{ editMode ? t('photos', 'Save') : t('photos', 'Create album') }}
 				</NcButton>
@@ -77,7 +77,7 @@
 					@click="submit(collaborators)">
 					<template #icon>
 						<NcLoadingIcon v-if="loading" :size="20" />
-						<Send v-else :size="20" />
+						<SendOutline v-else :size="20" />
 					</template>
 					{{ editMode ? t('photos', 'Save') : t('photos', 'Create album') }}
 				</NcButton>
@@ -96,9 +96,9 @@ import { generateRemoteUrl } from '@nextcloud/router'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
-import AccountMultiplePlus from 'vue-material-design-icons/AccountMultiplePlus.vue'
-import MapMarker from 'vue-material-design-icons/MapMarker.vue'
-import Send from 'vue-material-design-icons/Send.vue'
+import AccountMultiplePlusOutline from 'vue-material-design-icons/AccountMultiplePlusOutline.vue'
+import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
+import SendOutline from 'vue-material-design-icons/SendOutline.vue'
 import PhotosFiltersDisplay from '../PhotosFilters/PhotosFiltersDisplay.vue'
 import CollaboratorsSelectionForm from './CollaboratorsSelectionForm.vue'
 import {
@@ -111,9 +111,9 @@ export default {
 	name: 'AlbumForm',
 
 	components: {
-		MapMarker,
-		AccountMultiplePlus,
-		Send,
+		MapMarkerOutline,
+		AccountMultiplePlusOutline,
+		SendOutline,
 		NcButton,
 		NcLoadingIcon,
 		NcTextField,

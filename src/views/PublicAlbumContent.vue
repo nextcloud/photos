@@ -24,7 +24,7 @@
 				:title="albumOriginalName"
 				@refresh="fetchAlbumContent">
 				<div v-if="album.attributes.location !== ''" slot="subtitle" class="album__location">
-					<MapMarker />{{ album.attributes.location }}
+					<MapMarkerOutline />{{ album.attributes.location }}
 				</div>
 				<template slot="default">
 					<span v-if="album !== undefined" class="album-container__filters">
@@ -64,7 +64,7 @@
 				slot="empty-content"
 				:name="t('photos', 'This album does not have any photos or videos yet!')"
 				class="album__empty">
-				<ImageOff slot="icon" />
+				<ImageOffOutline slot="icon" />
 
 				<!-- Public upload is not implemented yet
 				<NcButton slot="action"
@@ -91,8 +91,8 @@ import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
 import { isMobile, /** NcButton, */ NcActions, /** NcActionSeparator, */ NcEmptyContent } from '@nextcloud/vue'
 // import Plus from 'vue-material-design-icons/Plus.vue'
 // import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
-import ImageOff from 'vue-material-design-icons/ImageOff.vue'
-import MapMarker from 'vue-material-design-icons/MapMarker.vue'
+import ImageOffOutline from 'vue-material-design-icons/ImageOffOutline.vue'
+import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import PhotosFiltersDisplay from '../components/PhotosFilters/PhotosFiltersDisplay.vue'
@@ -104,12 +104,12 @@ import { publicAlbumsExtraProps, publicAlbumsPrefix } from '../store/publicAlbum
 export default {
 	name: 'PublicAlbumContent',
 	components: {
-		MapMarker,
+		MapMarkerOutline,
 		// Plus,
 		// Download,
 		// DownloadMultiple,
 		// ImagePlus,
-		ImageOff,
+		ImageOffOutline,
 		NcEmptyContent,
 		NcActions,
 		// NcActionSeparator,

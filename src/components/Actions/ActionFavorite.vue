@@ -9,7 +9,7 @@
 		:aria-label="t('photos', 'Mark selection as favorite')"
 		@click="favoriteSelection">
 		{{ t('photos', 'Add selection to favorites') }}
-		<Star slot="icon" />
+		<StarOutline slot="icon" />
 	</NcActionButton>
 	<NcActionButton
 		v-else
@@ -30,11 +30,13 @@ import {
 } from 'vue'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import Star from 'vue-material-design-icons/Star.vue'
+import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 
 export default defineComponent({
 	name: 'ActionFavorite',
 	components: {
 		Star,
+		StarOutline,
 		NcActionButton,
 	},
 

@@ -11,7 +11,7 @@
 			:alt="altImg">
 
 		<div v-else class="collection-cover__image collection-cover__image--placeholder">
-			<ImageMultiple :size="128" />
+			<ImageMultipleOutline :size="128" />
 		</div>
 		<div class="collection-cover__details">
 			<div class="collection-cover__details__title">
@@ -26,13 +26,13 @@
 
 <script lang='ts'>
 import { RouterLink } from 'vue-router'
-import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
+import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 
 export default {
 	name: 'CollectionCover',
 
 	components: {
-		ImageMultiple,
+		ImageMultipleOutline,
 		RouterLink,
 	},
 

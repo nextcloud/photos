@@ -16,8 +16,8 @@
 
 			<!-- image and loading placeholder -->
 			<div class="file__images">
-				<VideoIcon v-if="file.mime?.includes('video')" class="icon-overlay" :size="64" />
-				<PlayCircleIcon v-else-if="file.attributes['metadata-files-live-photo'] !== undefined" class="icon-overlay" :size="64" />
+				<VideoOutline v-if="file.mime?.includes('video')" class="icon-overlay" :size="64" />
+				<PlayCircleOutlineIcon v-else-if="file.attributes['metadata-files-live-photo'] !== undefined" class="icon-overlay" :size="64" />
 
 				<!-- We have two img elements to load the small and large preview -->
 				<!-- Do not show the small preview if the larger one is loaded -->
@@ -81,8 +81,8 @@ import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { decode } from 'blurhash'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-import PlayCircleIcon from 'vue-material-design-icons/PlayCircle.vue'
-import VideoIcon from 'vue-material-design-icons/Video.vue'
+import PlayCircleOutlineIcon from 'vue-material-design-icons/PlayCircleOutline.vue'
+import VideoOutline from 'vue-material-design-icons/VideoOutline.vue'
 import FavoriteIcon from './FavoriteIcon.vue'
 import { isCachedPreview } from '../services/PreviewService.js'
 
@@ -91,8 +91,8 @@ export default {
 	components: {
 		FavoriteIcon,
 		NcCheckboxRadioSwitch,
-		VideoIcon,
-		PlayCircleIcon,
+		VideoOutline,
+		PlayCircleOutlineIcon,
 	},
 
 	inheritAttrs: false,

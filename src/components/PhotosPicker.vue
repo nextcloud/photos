@@ -57,7 +57,7 @@
 						@uploaded="refreshFiles" />
 					<NcButton type="primary" :disabled="loading || selectedFileIds.length === 0" @click="emitPickedEvent">
 						<template #icon>
-							<ImagePlus v-if="!loading" />
+							<ImagePlusOutline v-if="!loading" />
 							<NcLoadingIcon v-if="loading" />
 						</template>
 						{{ t('photos', 'Add to {destination}', { destination }) }}
@@ -118,7 +118,7 @@ import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 import NcSelect from '@nextcloud/vue/components/NcSelect'
-import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
+import ImagePlusOutline from 'vue-material-design-icons/ImagePlusOutline.vue'
 import FileComponent from './FileComponent.vue'
 import FilesListViewer from './FilesListViewer.vue'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
@@ -132,7 +132,7 @@ export default defineComponent({
 	components: {
 		FileComponent,
 		FilesListViewer,
-		ImagePlus,
+		ImagePlusOutline,
 		NcButton,
 		NcDialog,
 		NcLoadingIcon,

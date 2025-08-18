@@ -5,7 +5,7 @@
 <template>
 	<!-- Errors handlers-->
 	<NcEmptyContent v-if="error" :name="t('photos', 'An error occurred') ">
-		<AlertCircle slot="icon" />
+		<AlertCircleOutline slot="icon" />
 	</NcEmptyContent>
 
 	<div v-else class="collections">
@@ -30,13 +30,13 @@ import type { Collection } from '../../services/collectionFetcher.ts'
 
 import { translate } from '@nextcloud/l10n'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
-import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
+import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 
 export default {
 	name: 'CollectionsList',
 
 	components: {
-		AlertCircle,
+		AlertCircleOutline,
 		NcEmptyContent,
 	},
 

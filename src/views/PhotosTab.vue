@@ -15,7 +15,7 @@
 
 		<div v-if="place" class="photo-detail photo-detail__gps">
 			<div class="photo-detail__gps__title">
-				<MapMarker /> {{ place }}
+				<MapMarkerOutline /> {{ place }}
 			</div>
 			<LocationMap
 				v-if="gps !== undefined"
@@ -47,7 +47,7 @@ import moment from '@nextcloud/moment'
 import { defineComponent } from 'vue'
 import CalendarOutline from 'vue-material-design-icons/CalendarOutline.vue'
 import CameraIris from 'vue-material-design-icons/CameraIris.vue'
-import MapMarker from 'vue-material-design-icons/MapMarker.vue'
+import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
 import LocationMap from '../components/LocationMap.vue'
 
 type SideBarFile = PhotoFile & {
@@ -64,7 +64,7 @@ export default defineComponent({
 	name: 'PhotosTab',
 	components: {
 		CalendarOutline,
-		MapMarker,
+		MapMarkerOutline,
 		CameraIris,
 		LocationMap,
 	},

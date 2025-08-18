@@ -6,7 +6,7 @@
 <template>
 	<div class="folder">
 		<component :is="rootFolderIcon" v-if="path === '/'" />
-		<Folder v-else />
+		<FolderOutline v-else />
 		<span class="folder__info">
 			<div class="folder__path">{{ folderName }}</div>
 			<div v-if="subname !== ''">
@@ -30,14 +30,14 @@ import { t } from '@nextcloud/l10n'
 import { defineComponent } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import Close from 'vue-material-design-icons/Close.vue'
-import Folder from 'vue-material-design-icons/Folder.vue'
+import FolderOutline from 'vue-material-design-icons/FolderOutline.vue'
 
 export default defineComponent({
 	name: 'PhotosFolder',
 
 	components: {
 		NcButton,
-		Folder,
+		FolderOutline,
 		Close,
 	},
 

@@ -6,7 +6,7 @@
 <template>
 	<div :class="['face-cover', small && 'face-cover--small']" @click="$emit('click')">
 		<div class="face-cover__crop-container">
-			<AccountOffIcon :size="128" :fill-color="colorMainBackground" />
+			<AccountOffOutlineIcon :size="128" :fill-color="colorMainBackground" />
 		</div>
 		<div class="face-cover__details">
 			<div v-if="!small" class="face-cover__details__second-line">
@@ -18,14 +18,14 @@
 
 <script lang='ts'>
 import { translatePlural as n } from '@nextcloud/l10n'
-import AccountOffIcon from 'vue-material-design-icons/AccountOff.vue'
+import AccountOffOutlineIcon from 'vue-material-design-icons/AccountOffOutline.vue'
 import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
 import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
 
 export default {
 	name: 'UnassignedFacesCover',
 
-	components: { AccountOffIcon },
+	components: { AccountOffOutlineIcon },
 
 	mixins: [
 		FetchFacesMixin,

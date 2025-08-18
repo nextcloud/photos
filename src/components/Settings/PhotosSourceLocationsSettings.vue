@@ -13,7 +13,7 @@
 					:path="source"
 					:can-delete="photosSourceFolders.length !== 1"
 					:root-folder-label="t('photos', 'All folders')"
-					:root-folder-icon="FolderMultiple"
+					:root-folder-icon="FolderMultipleOutline"
 					@remove-folder="removeSourceFolder(index)" />
 			</li>
 		</div>
@@ -35,7 +35,7 @@ import { t } from '@nextcloud/l10n'
 import debounce from 'debounce'
 import { defineComponent } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
-import FolderMultiple from 'vue-material-design-icons/FolderMultiple.vue'
+import FolderMultipleOutline from 'vue-material-design-icons/FolderMultipleOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import PhotosFolder from './PhotosFolder.vue'
 import logger from '../../services/logger.js'
@@ -51,7 +51,7 @@ export default defineComponent({
 
 	data() {
 		return {
-			FolderMultiple,
+			FolderMultipleOutline,
 		}
 	},
 

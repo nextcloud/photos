@@ -27,7 +27,7 @@
 				slot="empty-content"
 				:name="t('photos', 'This place does not have any photos or videos yet!')"
 				class="place__empty">
-				<ImagePlus slot="icon" />
+				<ImagePlusOutline slot="icon" />
 
 				<NcButton
 					slot="action"
@@ -49,7 +49,7 @@ import { translate } from '@nextcloud/l10n'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
-import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
+import ImagePlusOutline from 'vue-material-design-icons/ImagePlusOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
@@ -60,7 +60,7 @@ export default {
 	name: 'PlaceContent',
 	components: {
 		Plus,
-		ImagePlus,
+		ImagePlusOutline,
 		NcEmptyContent,
 		NcButton,
 		CollectionContent,

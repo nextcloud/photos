@@ -4,7 +4,9 @@
 -->
 <template>
 	<!-- Errors handlers-->
-	<NcEmptyContent v-if="face === undefined && !loadingFiles && !loadingFaces" class="empty-content-with-illustration">
+	<NcEmptyContent
+		v-if="face === undefined && !loadingFiles && !loadingFaces"
+		class="empty-content-with-illustration">
 		<template #icon>
 			<AccountBoxMultipleOutline />
 		</template>
@@ -12,7 +14,7 @@
 	</NcEmptyContent>
 	<NcEmptyContent v-else-if="errorFetchingFiles || errorFetchingFaces">
 		<template #icon>
-			<AlertCircle />
+			<AlertCircleOutline />
 		</template>
 		{{ t('photos', 'An error occurred') }}
 	</NcEmptyContent>
@@ -28,7 +30,9 @@
 					</NcActionButton>
 				</NcActions>
 				<div class="face__header__title">
-					<h2 v-if="face !== undefined" :class="{ 'face-name': true, 'hidden-visually': face.basename.match(/^[0-9]+$/) }">
+					<h2
+						v-if="face !== undefined"
+						:class="{ 'face-name': true, 'hidden-visually': face.basename.match(/^[0-9]+$/) }">
 						{{ face.basename }}
 					</h2>
 				</div>
@@ -42,7 +46,7 @@
 						:aria-label="t('photos', 'Rename person')"
 						@click="showRenameModal = true">
 						<template #icon>
-							<Pencil />
+							<PencilOutline />
 						</template>
 						{{ t('photos', 'Rename person') }}
 					</NcActionButton>
@@ -71,7 +75,7 @@
 							:close-after-click="true"
 							:aria-label="t('photos', 'Mark selection as favorite')"
 							@click="favoriteSelection">
-							<Star slot="icon" />
+							<StarOutline slot="icon" />
 							{{ t('photos', 'Favorite') }}
 						</NcActionButton>
 						<NcActionButton
@@ -86,7 +90,7 @@
 							:close-after-click="true"
 							@click="showMoveModal = true">
 							<template #icon>
-								<AccountSwitch />
+								<AccountSwitchOutline />
 							</template>
 							{{ n('photos', 'Move photo to a different person', 'Move photos to a different person', selectedFileIds.length) }}
 						</NcActionButton>
@@ -152,7 +156,7 @@
 					@click="handleRenameFace($refs.nameInput.value)">
 					<template #icon>
 						<NcLoadingIcon v-if="loadingCount" />
-						<Send v-else />
+						<SendOutline v-else />
 					</template>
 					{{ t('photos', 'Save') }}
 				</NcButton>
@@ -191,15 +195,16 @@ import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
-import AccountSwitch from 'vue-material-design-icons/AccountSwitch.vue'
-import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
+import AccountSwitchOutline from 'vue-material-design-icons/AccountSwitchOutline.vue'
+import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 import Download from 'vue-material-design-icons/Download.vue'
 import Merge from 'vue-material-design-icons/Merge.vue'
-import Pencil from 'vue-material-design-icons/Pencil.vue'
-import Send from 'vue-material-design-icons/Send.vue'
+import PencilOutline from 'vue-material-design-icons/PencilOutline.vue'
+import SendOutline from 'vue-material-design-icons/SendOutline.vue'
 import Star from 'vue-material-design-icons/Star.vue'
+import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import FaceMergeForm from '../components/Faces/FaceMergeForm.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
@@ -212,12 +217,13 @@ import { toViewerFileInfo } from '../utils/fileUtils.js'
 export default {
 	name: 'FaceContent',
 	components: {
-		Pencil,
+		PencilOutline,
 		Star,
+		StarOutline,
 		Download,
 		Close,
-		AlertCircle,
-		Send,
+		AlertCircleOutline,
+		SendOutline,
 		Merge,
 		ArrowLeft,
 		AccountBoxMultipleOutline,
@@ -230,7 +236,7 @@ export default {
 		NcActionButton,
 		NcDialog,
 		NcButton,
-		AccountSwitch,
+		AccountSwitchOutline,
 	},
 
 	directives: {

@@ -13,84 +13,121 @@
 					class="app-navigation__all_media"
 					data-id-app-nav-item="all-media"
 					exact>
-					<ImageIcon slot="icon" :size="20" />
+					<template #icon="{ active }">
+						<ImageIcon v-if="active" :size="20" />
+						<ImageOutline v-else :size="20" />
+					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
 					to="/photos"
 					:name="t('photos', 'Photos')"
 					data-id-app-nav-item="photos">
-					<Camera slot="icon" :size="20" />
+					<template #icon="{ active }">
+						<Camera v-if="active" :size="20" />
+						<CameraOutline v-else :size="20" />
+					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
 					to="/videos"
 					:name="t('photos', 'Videos')"
 					data-id-app-nav-item="videos">
-					<VideoIcon slot="icon" :size="20" />
+					<template #icon="{ active }">
+						<VideoIcon v-if="active" :size="20" />
+						<VideoOutline v-else :size="20" />
+					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
 					:to="{ name: 'albums' }"
 					:name="t('photos', 'Albums')"
 					data-id-app-nav-item="albums">
-					<FolderMultipleImage slot="icon" :size="20" />
+					<template #icon="{ active }">
+						<ImageMultiple v-if="active" :size="20" />
+						<ImageMultipleOutline v-else :size="20" />
+					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
 					:to="{ name: 'sharedAlbums' }"
 					:name="t('photos', 'Collaborative albums')"
 					data-id-app-nav-item="sharedalbums">
-					<AccountGroup slot="icon" :size="20" />
+					<template #icon="{ active }">
+						<AccountGroup v-if="active" :size="20" />
+						<AccountGroupOutline v-else :size="20" />
+					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
 					v-if="showPeopleMenuEntry"
 					:to="{ name: 'faces' }"
 					:name="t('photos', 'People')"
 					data-id-app-nav-item="faces">
-					<template #icon>
-						<AccountBoxMultipleOutline :size="20" />
+					<template #icon="{ active }">
+						<AccountBoxMultiple v-if="active" :size="20" />
+						<AccountBoxMultipleOutline v-else :size="20" />
 					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
 					:to="{ name: 'folders' }"
 					:name="t('photos', 'Folders')"
 					data-id-app-nav-item="folders">
-					<Folder slot="icon" :size="20" />
+					<template #icon="{ active }">
+						<Folder v-if="active" :size="20" />
+						<FolderOutline v-else :size="20" />
+					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
 					to="/favorites"
 					:name="t('photos', 'Favorites')"
 					data-id-app-nav-item="favorites">
-					<Star slot="icon" :size="20" />
+					<template #icon="{ active }">
+						<Star v-if="active" :size="20" />
+						<StarOutline v-else :size="20" />
+					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
 					:to="{ name: 'thisday' }"
 					:name="t('photos', 'On this day')"
 					data-id-app-nav-item="this-day">
-					<CalendarToday slot="icon" :size="20" />
+					<template #icon="{ active }">
+						<CalendarToday v-if="active" :size="20" />
+						<CalendarTodayOutline v-else :size="20" />
+					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
 					:to="{ name: 'shared' }"
 					:name="t('photos', 'Shared with you')"
 					data-id-app-nav-item="shared">
-					<ShareVariant slot="icon" :size="20" />
+					<template #icon="{ active }">
+						<ShareVariant v-if="active" :size="20" />
+						<ShareVariantOutline v-else :size="20" />
+					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
 					v-if="areTagsInstalled"
 					:to="{ name: 'tags' }"
 					:name="t('photos', 'Tags')"
 					data-id-app-nav-item="tags">
-					<Tag slot="icon" :size="20" />
+					<template #icon="{ active }">
+						<Tag v-if="active" :size="20" />
+						<TagOutline v-else :size="20" />
+					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
 					:to="{ name: 'places' }"
 					:name="t('photos', 'Places')"
 					data-id-app-nav-item="places">
-					<MapMarker slot="icon" :size="20" />
+					<template #icon="{ active }">
+						<MapMarker v-if="active" :size="20" />
+						<MapMarkerOutline v-else :size="20" />
+					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
 					v-if="showLocationMenuEntry"
 					:to="{ name: 'maps' }"
 					:name="t('photos', 'Map')"
 					data-id-app-nav-item="maps">
-					<MapIcon slot="icon" :size="20" />
+					<template #icon="{ active }">
+						<MapIcon v-if="active" :size="20" />
+						<MapOutline v-else :size="20" />
+					</template>
 				</NcAppNavigationItem>
 			</template>
 			<template #footer>
@@ -101,7 +138,7 @@
 						wide
 						@click="showSettings">
 						<template #icon>
-							<Cog slot="icon" :size="20" />
+							<CogOutline :size="20" />
 						</template>
 						{{ t('photos', 'Photos settings') }}
 					</NcButton>
@@ -135,20 +172,33 @@ import NcAppNavigation from '@nextcloud/vue/components/NcAppNavigation'
 import NcAppNavigationItem from '@nextcloud/vue/components/NcAppNavigationItem'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcContent from '@nextcloud/vue/components/NcContent'
+import AccountBoxMultiple from 'vue-material-design-icons/AccountBoxMultiple.vue'
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
 import AccountGroup from 'vue-material-design-icons/AccountGroup.vue'
+import AccountGroupOutline from 'vue-material-design-icons/AccountGroupOutline.vue'
 import CalendarToday from 'vue-material-design-icons/CalendarToday.vue'
+import CalendarTodayOutline from 'vue-material-design-icons/CalendarTodayOutline.vue'
 import Camera from 'vue-material-design-icons/Camera.vue'
-import Cog from 'vue-material-design-icons/Cog.vue'
+import CameraOutline from 'vue-material-design-icons/CameraOutline.vue'
+import CogOutline from 'vue-material-design-icons/CogOutline.vue'
 import Folder from 'vue-material-design-icons/Folder.vue'
-import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
+import FolderOutline from 'vue-material-design-icons/FolderOutline.vue'
 import ImageIcon from 'vue-material-design-icons/Image.vue'
+import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
+import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
+import ImageOutline from 'vue-material-design-icons/ImageOutline.vue'
 import MapIcon from 'vue-material-design-icons/Map.vue'
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
+import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
+import MapOutline from 'vue-material-design-icons/MapOutline.vue'
 import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
+import ShareVariantOutline from 'vue-material-design-icons/ShareVariantOutline.vue'
 import Star from 'vue-material-design-icons/Star.vue'
+import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import Tag from 'vue-material-design-icons/Tag.vue'
+import TagOutline from 'vue-material-design-icons/TagOutline.vue'
 import VideoIcon from 'vue-material-design-icons/Video.vue'
+import VideoOutline from 'vue-material-design-icons/VideoOutline.vue'
 import SettingsDialog from './components/Settings/SettingsDialog.vue'
 import svgplaceholder from './assets/file-placeholder.svg'
 import imgplaceholder from './assets/image.svg'
@@ -162,20 +212,33 @@ import logger from './services/logger.js'
 export default {
 	name: 'PhotosApp',
 	components: {
+		AccountBoxMultiple,
 		AccountBoxMultipleOutline,
-		Cog,
+		CogOutline,
 		CalendarToday,
+		CalendarTodayOutline,
 		Camera,
+		CameraOutline,
 		AccountGroup,
+		AccountGroupOutline,
 		Folder,
-		FolderMultipleImage,
+		FolderOutline,
+		ImageMultiple,
+		ImageMultipleOutline,
 		ImageIcon,
+		ImageOutline,
 		ShareVariant,
+		ShareVariantOutline,
 		Star,
+		StarOutline,
 		Tag,
+		TagOutline,
 		VideoIcon,
+		VideoOutline,
 		MapIcon,
+		MapOutline,
 		MapMarker,
+		MapMarkerOutline,
 		NcAppContent,
 		NcAppNavigation,
 		NcAppNavigationItem,

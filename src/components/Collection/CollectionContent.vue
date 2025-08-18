@@ -8,10 +8,10 @@
 		v-if="(collection === undefined && !loading) || error === 404"
 		class="empty-content-with-illustration"
 		:name="t('photos', 'This collection does not exist')">
-		<FolderMultipleImage slot="icon" />
+		<ImageMultipleOutline slot="icon" />
 	</NcEmptyContent>
 	<NcEmptyContent v-else-if="error" :name="t('photos', 'An error occurred')">
-		<AlertCircle slot="icon" />
+		<AlertCircleOutline slot="icon" />
 	</NcEmptyContent>
 
 	<div v-else class="collection">
@@ -53,8 +53,8 @@ import { translate } from '@nextcloud/l10n'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { defineComponent } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
-import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
-import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
+import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
+import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import FileComponent from '../FileComponent.vue'
 import FilesListViewer from '../FilesListViewer.vue'
 import FilesSelectionMixin from '../../mixins/FilesSelectionMixin.js'
@@ -64,8 +64,8 @@ export default defineComponent({
 	name: 'CollectionContent',
 
 	components: {
-		AlertCircle,
-		FolderMultipleImage,
+		AlertCircleOutline,
+		ImageMultipleOutline,
 		NcEmptyContent,
 		FilesListViewer,
 		FileComponent,

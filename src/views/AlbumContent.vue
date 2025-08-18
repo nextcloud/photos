@@ -24,7 +24,7 @@
 					v-if="album !== undefined && album.attributes.location !== ''"
 					slot="subtitle"
 					class="album__location">
-					<MapMarker />{{ album.attributes.location }}
+					<MapMarkerOutline />{{ album.attributes.location }}
 				</div>
 
 				<template slot="default">
@@ -53,8 +53,8 @@
 							type="tertiary"
 							@click="toggleFilters">
 							<template #icon>
-								<FilterCheck v-if="editFilters" />
-								<FilterPlus v-else />
+								<FilterCheckOutline v-if="editFilters" />
+								<FilterPlusOutline v-else />
 							</template>
 						</NcButton>
 					</span>
@@ -73,7 +73,7 @@
 						type="tertiary"
 						:aria-label="t('photos', 'Manage collaborators for this album')"
 						@click="showManageCollaboratorView = true">
-						<ShareVariant slot="icon" />
+						<ShareVariantOutline slot="icon" />
 					</NcButton>
 
 					<NcActions :aria-label="t('photos', 'Open actions menu')">
@@ -82,7 +82,7 @@
 							:aria-label="t('photos', 'Edit album details')"
 							@click="showEditAlbumForm = true">
 							{{ t('photos', 'Edit album details') }}
-							<Pencil slot="icon" />
+							<PencilOutline slot="icon" />
 						</NcActionButton>
 
 						<!-- Support download from arbitrary origin
@@ -96,7 +96,7 @@
 							:close-after-click="true"
 							@click="handleDeleteAlbum">
 							{{ t('photos', 'Delete album') }}
-							<Delete slot="icon" />
+							<DeleteOutline slot="icon" />
 						</NcActionButton>
 
 						<template v-if="selectedFileIds.length > 0">
@@ -127,7 +127,7 @@
 				slot="empty-content"
 				:name="t('photos', 'This album does not have any photos or videos yet!')"
 				class="album__empty">
-				<ImagePlus slot="icon" />
+				<ImagePlusOutline slot="icon" />
 
 				<NcButton
 					slot="action"
@@ -196,16 +196,16 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcModal from '@nextcloud/vue/components/NcModal'
 import Close from 'vue-material-design-icons/Close.vue'
-import Delete from 'vue-material-design-icons/Delete.vue'
-import FilterCheck from 'vue-material-design-icons/FilterCheck.vue'
-import FilterPlus from 'vue-material-design-icons/FilterPlus.vue'
+import DeleteOutline from 'vue-material-design-icons/DeleteOutline.vue'
+import FilterCheckOutline from 'vue-material-design-icons/FilterCheckOutline.vue'
+import FilterPlusOutline from 'vue-material-design-icons/FilterPlusOutline.vue'
 // import Download from 'vue-material-design-icons/Download.vue'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
-import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
-import MapMarker from 'vue-material-design-icons/MapMarker.vue'
-import Pencil from 'vue-material-design-icons/Pencil.vue'
+import ImagePlusOutline from 'vue-material-design-icons/ImagePlusOutline.vue'
+import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
+import PencilOutline from 'vue-material-design-icons/PencilOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
-import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
+import ShareVariantOutline from 'vue-material-design-icons/ShareVariantOutline.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
 import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
@@ -229,13 +229,13 @@ export default {
 		Close,
 		CollaboratorsSelectionForm,
 		CollectionContent,
-		Delete,
+		DeleteOutline,
 		// Download,
 		// DownloadMultiple,
 		PhotosPicker,
 		HeaderNavigation,
-		ImagePlus,
-		MapMarker,
+		ImagePlusOutline,
+		MapMarkerOutline,
 		NcActionButton,
 		NcActions,
 		NcActionSeparator,
@@ -244,11 +244,11 @@ export default {
 		NcEmptyContent,
 		NcLoadingIcon,
 		NcModal,
-		Pencil,
+		PencilOutline,
 		Plus,
-		ShareVariant,
-		FilterPlus,
-		FilterCheck,
+		ShareVariantOutline,
+		FilterPlusOutline,
+		FilterCheckOutline,
 		PhotosFiltersInput,
 		PhotosFiltersDisplay,
 	},

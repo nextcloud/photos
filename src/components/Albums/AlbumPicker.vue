@@ -20,7 +20,7 @@
 				<template slot="icon">
 					<img v-if="album.attributes['last-photo'] !== -1" class="album__image" :src="album.attributes['last-photo'] | toCoverUrl">
 					<div v-else class="album__image album__image--placeholder">
-						<ImageMultiple :size="32" />
+						<ImageMultipleOutline :size="32" />
 					</div>
 				</template>
 
@@ -64,7 +64,7 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 import NcListItem from '@nextcloud/vue/components/NcListItem'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
-import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
+import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import AlbumForm from './AlbumForm.vue'
 import FetchCollectionsMixin from '../../mixins/FetchCollectionsMixin.ts'
@@ -75,7 +75,7 @@ export default defineComponent({
 
 	components: {
 		Plus,
-		ImageMultiple,
+		ImageMultipleOutline,
 		NcButton,
 		NcListItem,
 		NcLoadingIcon,

@@ -35,7 +35,7 @@
 		</CollectionCover>
 
 		<NcEmptyContent slot="empty-collections-list" :name="t('photos', 'There is no album yet!')">
-			<FolderMultipleImage slot="icon" />
+			<ImageMultipleOutline slot="icon" />
 		</NcEmptyContent>
 	</CollectionsList>
 </template>
@@ -48,7 +48,7 @@ import { translate, translatePlural } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
-import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
+import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import CollectionCover from '../components/Collection/CollectionCover.vue'
 import CollectionsList from '../components/Collection/CollectionsList.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
@@ -58,7 +58,7 @@ import { albumsExtraProps } from '../store/albums.ts'
 export default {
 	name: 'SharedAlbums',
 	components: {
-		FolderMultipleImage,
+		ImageMultipleOutline,
 		NcEmptyContent,
 		CollectionsList,
 		CollectionCover,

@@ -39,7 +39,7 @@
 						<span class="album__name">
 							{{ collection.basename }}
 						</span>
-						<FilterIcon v-if="Object.keys(collection.attributes.filters).length !== 0" fill-color="var(--color-text-lighter)" />
+						<FilterOutline v-if="Object.keys(collection.attributes.filters).length !== 0" fill-color="var(--color-text-lighter)" />
 					</template>
 
 					<template #subtitle>
@@ -53,7 +53,7 @@
 			<template #empty-collections-list>
 				<NcEmptyContent :name="t('photos', 'There is no album yet!')">
 					<template #icon>
-						<FolderMultipleImage />
+						<ImageMultipleOutline />
 					</template>
 				</NcEmptyContent>
 			</template>
@@ -79,8 +79,8 @@ import { defineComponent } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcModal from '@nextcloud/vue/components/NcModal'
-import FilterIcon from 'vue-material-design-icons/Filter.vue'
-import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
+import FilterOutline from 'vue-material-design-icons/FilterOutline.vue'
+import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import CollectionCover from '../components/Collection/CollectionCover.vue'
@@ -93,7 +93,7 @@ export default defineComponent({
 	name: 'AlbumsView',
 	components: {
 		Plus,
-		FolderMultipleImage,
+		ImageMultipleOutline,
 		NcModal,
 		NcButton,
 		NcEmptyContent,
@@ -101,7 +101,7 @@ export default defineComponent({
 		CollectionCover,
 		HeaderNavigation,
 		AlbumForm,
-		FilterIcon,
+		FilterOutline,
 	},
 
 	filters: {
