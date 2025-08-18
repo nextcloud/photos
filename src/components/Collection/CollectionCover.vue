@@ -5,10 +5,11 @@
 <template>
 	<RouterLink class="collection-cover" :to="link">
 		<img
-			v-if="coverUrl !== ''"
+			v-if="coverUrl !== '' && coverLoadingError === false"
 			class="collection-cover__image"
 			:src="coverUrl"
-			:alt="altImg">
+			:alt="altImg"
+			@error="coverLoadingError = true">
 
 		<div v-else class="collection-cover__image collection-cover__image--placeholder">
 			<ImageMultipleOutline :size="128" />
@@ -51,6 +52,12 @@ export default {
 			type: String,
 			required: true,
 		},
+	},
+
+	data() {
+		return {
+			coverLoadingError: false,
+		}
 	},
 }
 </script>
