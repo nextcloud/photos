@@ -16,9 +16,6 @@ import logger from '../services/logger.js'
 import store from '../store/index.ts'
 import useAbortController from './useAbortController.ts'
 
-/**
- *
- */
 export default function() {
 	const errorFetchingCollections = ref(null as null | number | Error | unknown)
 	const loadingCollections = ref(false)

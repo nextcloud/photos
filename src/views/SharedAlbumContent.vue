@@ -41,10 +41,6 @@
 						</template>
 						{{ t('photos', 'Unselect all') }}
 					</NcButton>
-
-					<span v-if="album !== undefined" class="album-container__filters">
-						<PhotosFiltersDisplay :filters-value="album.attributes.filters" />
-					</span>
 				</template>
 
 				<template v-if="album !== undefined" slot="right">
@@ -143,7 +139,6 @@ import Plus from 'vue-material-design-icons/Plus.vue'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-import PhotosFiltersDisplay from '../components/PhotosFilters/PhotosFiltersDisplay.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
 import PhotosPicker from '../components/PhotosPicker.vue'
 import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
@@ -170,7 +165,6 @@ export default {
 		// ActionDownload,
 		PhotosPicker,
 		HeaderNavigation,
-		PhotosFiltersDisplay,
 	},
 
 	mixins: [
@@ -285,7 +279,7 @@ export default {
 	}
 
 	&__location {
-		margin-left: -4px;
+		margin-inline-start: -4px;
 		display: flex;
 		color: var(--color-text-lighter);
 	}

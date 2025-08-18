@@ -29,7 +29,7 @@
 
 		@media only screen and (max-width: 1020px) {
 			padding: 0;
-			padding-left: 64px;
+			padding-inline-start: 64px;
 		}
 
 		&__left {
@@ -39,14 +39,14 @@
 		}
 
 		&__title {
-			margin-left: 10px;
+			margin-inline-start: 10px;
 			h2 {
 				margin-bottom: 0;
 			}
 		}
 
 		&__loader {
-			margin-left: 32px;
+			margin-inline-start: 32px;
 		}
 
 		&__actions {
@@ -54,7 +54,7 @@
 			align-items: center;
 
 			button {
-				margin-left: 16px;
+				margin-inline-start: 16px;
 			}
 		}
 	}

@@ -14,11 +14,9 @@ export default [
 		],
 	},
 	{
-		files: ['**/*.vue'],
 		rules: {
-			// TODO: Fix this
-			'vue/no-boolean-default': 'warn',
-			'vue/no-unused-refs': 'warn',
+			'jsdoc/require-jsdoc': 'off',
+			'jsdoc/require-param-description': 'off',
 		},
 	},
 ]

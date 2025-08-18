@@ -22,8 +22,8 @@ class PlacesFilter implements IFilter {
 		return self::ID;
 	}
 
-	public function getSearchOperator(array $filterValue): ISearchBinaryOperator {
-		$palces = array_map(fn ($place) => is_string($place) ? $place : null, $filterValue);
+	public function getSearchOperator(array $filterValues): ISearchBinaryOperator {
+		$palces = array_map(fn ($place) => is_string($place) ? $place : null, $filterValues);
 		$places = array_filter($palces, fn ($place) => $place !== null);
 
 		return new SearchBinaryOperator(

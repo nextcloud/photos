@@ -273,7 +273,7 @@ export default {
 		&::after {
 			position: absolute;
 			top: 0;
-			left: 0;
+			inset-inline-start: 0;
 			z-index: 2;
 			width: 100%;
 			height: 100%;
@@ -310,7 +310,7 @@ export default {
 			.icon-overlay {
 				position: absolute;
 				top: 0px;
-				right: 0px;
+				inset-inline-end: 0px;
 				width: 100%;
 				height: 100%;
 				z-index: 1;
@@ -347,7 +347,7 @@ export default {
 		position: absolute;
 		top: 8px;
 		// Fancy calculation to render the checkbox in the middle of narrow images.
-		right: min(22px, calc(50% - 7px));
+		inset-inline-end: min(22px, calc(50% - 7px));
 		z-index: 1;
 		width: fit-content;
 
@@ -369,7 +369,7 @@ export default {
 				width: 16px;
 				height: 16px;
 				position: absolute;
-				left: 14px;
+				inset-inline-start: 14px;
 				z-index: -1;
 			}
 
@@ -382,7 +382,7 @@ export default {
 			position: fixed;
 			z-index: -1;
 			top: -5000px;
-			left: -5000px;
+			inset-inline-start: -5000px;
 		}
 	}
 
@@ -390,7 +390,7 @@ export default {
 		position: absolute;
 		top: 2px;
 		// Fancy calculation to render the start in the middle of narrow images.
-		right: min(2px, calc(50% - 7px));
+		inset-inline-end: min(2px, calc(50% - 7px));
 	}
 }
 </style>

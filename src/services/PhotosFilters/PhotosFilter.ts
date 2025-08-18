@@ -5,9 +5,18 @@
 
 import type { ComponentPublicInstanceConstructor } from 'vue/types/v3-component-public-instance'
 
-export type PhotosFilter = {
+export type FilterOption<T> = {
+	filterId: string
+	label: string
+	value?: T
+	imgSrc?: string
+	getValue?: () => Promise<T>
+}
+
+export type PhotosFilter<T> = {
 	id: string
-	inputComponent: ComponentPublicInstanceConstructor
-	displayComponent: ComponentPublicInstanceConstructor
-	getQuery(value: unknown): string
+	icon: string
+	renderOptionComponent: ComponentPublicInstanceConstructor
+	getQuery(value: T[]): string
+	getOptions(): Promise<FilterOption<T>[]>
 }
