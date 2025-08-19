@@ -143,6 +143,7 @@ OC.L10N.register(
     "Tagged photos" : "Fotos etiquetadas",
     "Tagged photo {title}" : "Foto etiquetada {title}",
     "{title}'s face" : "A faciana de {title}",
+    "Last week" : "Última semana",
     "{startDate} to {endDate}" : "{startDate} ata o {endDate}",
     "Details" : "Detalles",
     "Could not load photos folder" : "Non foi posíbel cargar o cartafol de fotos",

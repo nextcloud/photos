@@ -134,6 +134,7 @@ OC.L10N.register(
     "Tagged photos" : "خەتكۈچلەنگەن رەسىملەر",
     "Tagged photo {title}" : "خەتكۈچلەنگەن رەسىم {title}",
     "{title}'s face" : "{title} 'face",
+    "Last week" : "ئالدىنقى ھەپتە",
     "{startDate} to {endDate}" : "{startDate} دىن {endDate}",
     "Details" : "تەپسىلاتى",
     "Could not load photos folder" : "رەسىم قىسقۇچنى يۈكلىيەلمىدى",

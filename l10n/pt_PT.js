@@ -59,6 +59,7 @@ OC.L10N.register(
     "Unassigned faces" : "Unassigned faces",
     "All your media" : "Toda a sua média",
     "Tagged photos" : "Fotos marcadas",
+    "Last week" : "Ultima semana",
     "Details" : "Detalhes",
     "Back to {folder}" : "Ir para {folder}",
     "Share this folder" : "Partilhar esta pasta",

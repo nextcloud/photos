@@ -30,6 +30,7 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Ovdje će se prikazivati fotografije s oznakama",
     "Delete selection" : "Izbriši odabir",
     "Tagged photos" : "Označene fotografije",
+    "Last week" : "Prošli tjedan",
     "Details" : "Pojedinosti",
     "Back to {folder}" : "Natrag na {folder}",
     "Share this folder" : "Dijeli ovu mapu",

@@ -119,6 +119,7 @@ OC.L10N.register(
     "Tagged photos" : "Fotos etiquetadas",
     "Tagged photo {title}" : "Foto etiquetada {título}",
     "{title}'s face" : "Rostro de {título}",
+    "Last week" : "La semana pasada",
     "Details" : "Detalles",
     "Back to {folder}" : "Volver a {carpeta}",
     "Share this folder" : "Compartir esta carpeta",
