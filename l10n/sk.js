@@ -145,6 +145,7 @@ OC.L10N.register(
     "Tagged photos" : "Fotografie so štítkom",
     "Tagged photo {title}" : "Fotografia so štítkom {title}",
     "{title}'s face" : "Tvár {title}",
+    "Last week" : "Minulý týždeň",
     "{startDate} to {endDate}" : "{startDate} do {endDate}",
     "Details" : "Podrobnosti",
     "Failed to delete {fileBaseName}" : "Nepodarilo sa vymazať {fileBaseName}",

@@ -43,6 +43,7 @@ OC.L10N.register(
     "No tags yet" : "ยังไม่มีแท็ก",
     "Photos with tags will show up here" : "รูปภาพที่ติดแท็กจะแสดงที่นี่",
     "Tagged photos" : "รูปภาพที่ติดแท็ก",
+    "Last week" : "สัปดาห์ที่แล้ว",
     "Details" : "รายละเอียด",
     "Back to {folder}" : "กลับไปยัง {folder}",
     "Share this folder" : "แชร์โฟลเดอร์นี้",

@@ -141,6 +141,7 @@ OC.L10N.register(
     "Tagged photos" : "Označene fotografije",
     "Tagged photo {title}" : "Označena fotografija {title}",
     "{title}'s face" : "{title}: obraz",
+    "Last week" : "Zadnji teden",
     "{startDate} to {endDate}" : "od {startDate} do {endDate}",
     "Details" : "Podrobnosti",
     "Failed to delete {fileBaseName}" : "Spodletelo brisanje {fileBaseName}",

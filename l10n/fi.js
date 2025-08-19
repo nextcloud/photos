@@ -142,6 +142,7 @@ OC.L10N.register(
     "Tagged photos" : "Tunnisteilla varustetut kuvat",
     "Tagged photo {title}" : "Kuvaan {title} asetettu tunniste",
     "{title}'s face" : "Henkilön {title} kasvot",
+    "Last week" : "Viime viikko",
     "{startDate} to {endDate}" : "{startDate} - {endDate}",
     "Details" : "Tiedot",
     "Failed to delete {fileBaseName}" : "Kohteen {fileBaseName} poistaminen epäonnistui",

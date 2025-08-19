@@ -27,6 +27,7 @@ OC.L10N.register(
     "No tags yet" : "Cap d’etiqueta pel moment",
     "Photos with tags will show up here" : "Las fòtos amb etiquetas apreissaràn aquí",
     "Tagged photos" : "Fòtos etiquetadas",
+    "Last week" : "La setmana passada",
     "Details" : "Detalhs",
     "Back to {folder}" : "Tornar a {folder}",
     "Share this folder" : "Partejar aqueste dossièr",

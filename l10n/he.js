@@ -71,6 +71,7 @@ OC.L10N.register(
     "All your media" : "כל המדיה שלך",
     "Shared Albums" : "אלבומים משותפים",
     "Tagged photos" : "תמונות מתויגות",
+    "Last week" : "שבוע שעבר",
     "Details" : "פרטים",
     "Back to {folder}" : "חזרה אל {folder}",
     "Share this folder" : "שיתוף התיקייה הזו",

@@ -119,6 +119,7 @@ OC.L10N.register(
     "Tagged photos" : "Foto yang memiliki tag",
     "Tagged photo {title}" : "Foto memiliki tag {title} ",
     "{title}'s face" : "Wajah {title}",
+    "Last week" : "Minggu lalu",
     "{startDate} to {endDate}" : "{startDate} ke {endDate}",
     "Details" : "Detail",
     "Back to {folder}" : "Kembali ke {folder}",
