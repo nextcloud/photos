@@ -68,6 +68,7 @@ OC.L10N.register(
     "No photos or videos in here" : "Δεν υπάρχουν φωτογραφίες ή βίντεο εδώ",
     "All your media" : "Όλα τα media σας",
     "Tagged photos" : "Φωτογραφίες με ετικέτα",
+    "Last week" : "Προηγούμενη εβδομάδα",
     "Details" : "Λεπτομέρειες",
     "Back to {folder}" : "Πίσω στο {folder}",
     "Share this folder" : "Διαμοιρασμός αυτού του φακέλου",

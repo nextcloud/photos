@@ -38,6 +38,7 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Is fotografias etichetadas ant a aparèssere inoghe",
     "Delete selection" : "Cantzella seletzione",
     "Tagged photos" : "Fotografias etichetadas",
+    "Last week" : "Sa chida passada",
     "Details" : "Detàllios",
     "Back to {folder}" : "Torra a {folder}",
     "Share this folder" : "Cumpartzi custa cartella",

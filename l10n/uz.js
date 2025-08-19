@@ -15,6 +15,7 @@ OC.L10N.register(
     "Add to {destination}" : " {destination}ni qo`shish",
     "Home" : "Home",
     "Remove from favorites" : "Sevimlilardan olib tashlang",
+    "Last week" : "O`tgan yil",
     "Details" : "Details",
     "Back to {folder}" : "{folder}ga qaytish",
     "Add" : "Add"

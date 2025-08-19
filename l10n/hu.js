@@ -142,6 +142,7 @@ OC.L10N.register(
     "Tagged photos" : "Címkézett fényképek",
     "Tagged photo {title}" : "Címkézett fénykép: {title}",
     "{title}'s face" : "{title} arca",
+    "Last week" : "Előző hét",
     "{startDate} to {endDate}" : "{startDate} – {endDate}",
     "Details" : "Részletek",
     "Could not load photos folder" : "Nem lehet a fotók könyvtárat betölteni",

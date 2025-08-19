@@ -86,6 +86,7 @@ OC.L10N.register(
     "All your media" : "Visa jūsų medija",
     "Shared Albums" : "Bendrinami albumai",
     "Tagged photos" : "Nuotraukos, turinčios žymas",
+    "Last week" : "Praeitą savaitę",
     "{startDate} to {endDate}" : "Nuo {startDate} iki {endDate}",
     "Details" : "Išsamiau",
     "Could not load photos folder" : "Nepavyko įkelti nuotraukų aplanko",

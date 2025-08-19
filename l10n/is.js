@@ -142,6 +142,7 @@ OC.L10N.register(
     "Tagged photos" : "Merktar ljósmyndir",
     "Tagged photo {title}" : "Merkt ljósmynd {title}",
     "{title}'s face" : "Andlit á {title}",
+    "Last week" : "Í síðustu viku",
     "{startDate} to {endDate}" : "{startDate} til {endDate}",
     "Details" : "Nánar",
     "Could not load photos folder" : "Gat ekki að hlaðið inn ljósmyndamöppunni",

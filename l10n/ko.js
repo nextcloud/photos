@@ -56,6 +56,7 @@ OC.L10N.register(
     "Add to album" : "앨범에 추가",
     "Delete selection" : "선택 항목 삭제",
     "Unassigned faces" : "지정되지 않은 얼굴",
+    "Last week" : "저번 주",
     "Details" : "세부사항",
     "Add" : "추가"
 },

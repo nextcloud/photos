@@ -140,6 +140,7 @@ OC.L10N.register(
     "Tagged photos" : "Bilder med merkelapper",
     "Tagged photo {title}" : "Merket bilde {title}",
     "{title}'s face" : "{title} sitt ansikt",
+    "Last week" : "Forrige uke",
     "{startDate} to {endDate}" : "{startDate} til {endDate}",
     "Details" : "Detaljer",
     "Could not load photos folder" : "Kunne ikke laste bildemappen",

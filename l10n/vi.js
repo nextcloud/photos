@@ -31,6 +31,7 @@ OC.L10N.register(
     "No tags yet" : "Chưa gắn nhãn",
     "Photos with tags will show up here" : "Ảnh đã gắn nhãn sẽ được cho thấy trên này",
     "Tagged photos" : "Ảnh gắn nhãn",
+    "Last week" : "Tuần trước",
     "Details" : "Chi tiết",
     "Back to {folder}" : "Trở về {folder}",
     "Share this folder" : "Chia sẻ thư mục này",

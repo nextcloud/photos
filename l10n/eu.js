@@ -142,6 +142,7 @@ OC.L10N.register(
     "Tagged photos" : "Etiketaturiko argazkiak",
     "Tagged photo {title}" : "{title} etiketaturiko argazkia",
     "{title}'s face" : "{title}(r)en aurpegia",
+    "Last week" : "Joan den astean",
     "{startDate} to {endDate}" : "{startDate} - {endDate}",
     "Details" : "Xehetasunak",
     "Could not load photos folder" : "Ezin izan da argazkien karpeta kargatu",

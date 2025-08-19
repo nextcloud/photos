@@ -145,6 +145,7 @@ OC.L10N.register(
     "Tagged photos" : "Taggede billeder",
     "Tagged photo {title}" : "Tagget foto {title}",
     "{title}'s face" : "{title}'s ansigt",
+    "Last week" : "Seneste uge",
     "{startDate} to {endDate}" : "{startDate} til {endDate}",
     "Details" : "Detaljer",
     "Failed to delete {fileBaseName}" : "Kunne ikke slette {fileBaseName}",
