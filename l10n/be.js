@@ -89,6 +89,8 @@ OC.L10N.register(
     "Shared Albums" : "Абагуленыя альбомы",
     "Shared album {title}" : "Абагулены альбом {title}",
     "{title}'s face" : "Твар {title}",
+    "Last week" : "Мінулы тыдзень",
+    "Last Month" : "Мінулы месяц",
     "Could not load photos folder" : "Не ўдалося загрузіць папку з фота",
     "Back to {folder}" : "Назад да {folder}",
     "Share this folder" : "Абагуліць гэту папку",
