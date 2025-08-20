@@ -139,6 +139,7 @@ OC.L10N.register(
     "Tagged photos" : "Semeyes etiquetaes",
     "Tagged photo {title}" : "Semeya etiqueta «{title}»",
     "{title}'s face" : "Cara de: {title}",
+    "Last week" : "La selmana anterior",
     "{startDate} to {endDate}" : "{startDate} hasta'l {endDate}",
     "Details" : "Detalles",
     "Could not load photos folder" : "Nun se puen cargar la carpeta de semeyes",
