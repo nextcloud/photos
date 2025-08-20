@@ -115,6 +115,7 @@ OC.L10N.register(
     "Tagged photos" : "Маркирани снимки",
     "Tagged photo {title}" : "Маркирана снимка {title}",
     "{title}'s face" : "Лицето на {title}",
+    "Last week" : "Миналата седмица",
     "{startDate} to {endDate}" : "{startDate} до {endDate}",
     "Details" : "Подробности",
     "Back to {folder}" : "Назад към {folder}",
