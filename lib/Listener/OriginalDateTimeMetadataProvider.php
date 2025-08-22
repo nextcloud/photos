@@ -18,7 +18,7 @@ use OCP\FilesMetadata\Event\MetadataLiveEvent;
 use Psr\Log\LoggerInterface;
 
 /**
- * @template-implements IEventListener<MetadataLiveEvent>
+ * @template-implements IEventListener<MetadataLiveEvent|MetadataBackgroundEvent>
  */
 class OriginalDateTimeMetadataProvider implements IEventListener {
 	public function __construct(
