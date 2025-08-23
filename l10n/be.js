@@ -1,7 +1,7 @@
 OC.L10N.register(
     "photos",
     {
-    "Public link" : "Агульнадаступная папка",
+    "Public link" : "Публічная спасылка",
     "Photos" : "Фота",
     "On This Day" : "У гэты дзень",
     "Your memories under your control" : "Вашы ўспаміны пад вашым кантролем",
@@ -35,6 +35,11 @@ OC.L10N.register(
     "No recommendations. Start typing." : "Няма рэкамендацый. Пачніце друкаваць.",
     "Group" : "Група",
     "Remove {collaboratorLabel} from the collaborators list" : "Выдаліць {collaboratorLabel} са спісу суаўтараў",
+    "Copy the public link" : "Скапіяваць публічную спасылку",
+    "Public link copied!" : "Публічная спасылка скапіявана!",
+    "Copy public link" : "Скапіяваць публічную спасылку",
+    "Delete the public link" : "Выдаліць публічную спасылку",
+    "Share via public link" : "Абагуліць праз публічную спасылку",
     "This collection does not exist" : "Гэтай калекцыі не існуе",
     "An error occurred" : "Узнікла памылка",
     "No picture for this day" : "Няма фота за гэты дзень",
