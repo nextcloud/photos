@@ -93,6 +93,7 @@ OC.L10N.register(
     "Album {title}" : "Альбом {title}",
     "Shared Albums" : "Абагуленыя альбомы",
     "Shared album {title}" : "Абагулены альбом {title}",
+    "Public album {title}" : "Публічны альбом {title}",
     "{title}'s face" : "Твар {title}",
     "Last week" : "Мінулы тыдзень",
     "Last Month" : "Мінулы месяц",
