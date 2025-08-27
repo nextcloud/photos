@@ -148,6 +148,7 @@ OC.L10N.register(
     "Tagged photos" : "Слике са ознаком",
     "Tagged photo {title}" : "Означена фотографија {title}",
     "{title}'s face" : "лице {title}",
+    "Last week" : "Прошле недеље",
     "{startDate} to {endDate}" : "{startDate} до {endDate}",
     "Details" : "Детаљи",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "{fileBaseName} није могао да се дода у колекцију {collectionFileName}",
