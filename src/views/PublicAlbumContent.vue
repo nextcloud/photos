@@ -79,7 +79,7 @@
 import type { PublicAlbum } from '../store/publicAlbums.ts'
 
 import { getClient } from '@nextcloud/files/dav'
-// import Download from 'vue-material-design-icons/Download.vue'
+// import Download from 'vue-material-design-icons/TrayArrowDown.vue'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
 import { translate } from '@nextcloud/l10n'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
