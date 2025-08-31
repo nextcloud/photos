@@ -32,6 +32,7 @@ SPDX-FileCopyrightText: Perry Mitchell <perry@perrymitchell.net>
 SPDX-FileCopyrightText: Paul Vorbach <paul@vorba.ch> (http://paul.vorba.ch)
 SPDX-FileCopyrightText: Paul Vorbach <paul@vorb.de> (http://vorb.de)
 SPDX-FileCopyrightText: Olivier Scherrer <pode.fr@gmail.com>
+SPDX-FileCopyrightText: Nick Frasser (https://nfrasser.com)
 SPDX-FileCopyrightText: Nextcloud GmbH and Nextcloud contributors
 SPDX-FileCopyrightText: Nathan Rajlich <nathan@tootallnate.net> (http://n8.io/)
 SPDX-FileCopyrightText: Max <max@nextcloud.com>
@@ -47,7 +48,6 @@ SPDX-FileCopyrightText: Jordan Harband <ljharb@gmail.com>
 SPDX-FileCopyrightText: Jordan Harband
 SPDX-FileCopyrightText: Jonas Schade <derzade@gmail.com>
 SPDX-FileCopyrightText: John Molakvoæ <skjnldsv@protonmail.com>
-SPDX-FileCopyrightText: John Molakvoæ (skjnldsv) <skjnldsv@protonmail.com>
 SPDX-FileCopyrightText: Jeff Sagal <sagalbot@gmail.com>
 SPDX-FileCopyrightText: James Halliday
 SPDX-FileCopyrightText: Jacob Clevenger<https://github.com/wheatjs>
@@ -59,6 +59,7 @@ SPDX-FileCopyrightText: Hiroki Osame
 SPDX-FileCopyrightText: Guillaume Chau <guillaume.b.chau@gmail.com>
 SPDX-FileCopyrightText: GitHub Inc.
 SPDX-FileCopyrightText: Feross Aboukhadijeh
+SPDX-FileCopyrightText: Felix Geisendörfer <felix@debuggable.com> (http://debuggable.com/)
 SPDX-FileCopyrightText: Evan You
 SPDX-FileCopyrightText: Eugene Sharygin <eush77@gmail.com>
 SPDX-FileCopyrightText: Eric Norris (https://github.com/ericnorris)
@@ -162,7 +163,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 3.25.1
 	- license: MIT
 - @nextcloud/l10n
-	- version: 3.2.0
+	- version: 3.4.0
 	- license: GPL-3.0-or-later
 - @vueuse/core
 	- version: 11.3.0
@@ -204,7 +205,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 6.0.1
 	- license: MIT
 - @nextcloud/vue
-	- version: 8.27.0
+	- version: 8.29.2
 	- license: AGPL-3.0-or-later
 - @ungap/structured-clone
 	- version: 1.2.0
@@ -216,7 +217,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.0.7
 	- license: MIT
 - axios
-	- version: 0.27.2
+	- version: 0.30.1
 	- license: MIT
 - bail
 	- version: 2.0.2
@@ -317,6 +318,9 @@ This file is generated from multiple sources. Included packages:
 - for-each
 	- version: 0.3.3
 	- license: MIT
+- form-data
+	- version: 4.0.4
+	- license: MIT
 - function-bind
 	- version: 1.1.2
 	- license: MIT
@@ -381,7 +385,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 2.2.0
 	- license: MIT
 - is-typed-array
-	- version: 1.1.10
+	- version: 1.1.15
 	- license: MIT
 - layerr
 	- version: 0.1.2
@@ -390,7 +394,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 4.0.1
 	- license: MIT
 - linkifyjs
-	- version: 4.0.1
+	- version: 4.3.2
 	- license: MIT
 - math-intrinsics
 	- version: 1.1.0
@@ -633,13 +637,13 @@ This file is generated from multiple sources. Included packages:
 	- version: 2.0.1
 	- license: MIT
 - brace-expansion
-	- version: 2.0.1
+	- version: 2.0.2
 	- license: MIT
 - minimatch
 	- version: 5.1.0
 	- license: ISC
 - webdav
-	- version: 4.11.4
+	- version: 4.11.5
 	- license: MIT
 - which-typed-array
 	- version: 1.1.18
