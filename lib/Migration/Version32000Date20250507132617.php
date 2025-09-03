@@ -12,12 +12,15 @@ namespace OCA\Photos\Migration;
 use Closure;
 use OCP\DB\ISchemaWrapper;
 use OCP\DB\Types;
+use OCP\Migration\Attributes\AddColumn;
+use OCP\Migration\Attributes\ColumnType;
 use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 
 /**
  * Add smart_albums column
  */
+#[AddColumn(table: 'photos_albums', name: 'filters', type: ColumnType::TEXT, description: 'storing album filters')]
 class Version32000Date20250507132617 extends SimpleMigrationStep {
 
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
