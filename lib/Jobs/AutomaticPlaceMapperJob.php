@@ -42,6 +42,10 @@ class AutomaticPlaceMapperJob extends TimedJob {
 		}
 
 		$users = $this->userManager->search('');
+		if ($users === []) {
+			return;
+		}
+
 		$lastMappedUser = $this->config->getAppValue(Application::APP_ID, 'lastPlaceMappedUser', '');
 
 		if ($lastMappedUser === '') {
