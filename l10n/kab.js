@@ -11,6 +11,7 @@ OC.L10N.register(
     "Home" : "Asnubeg",
     "Remove from favorites" : "Kkes-it seg ismal",
     "Details" : "Talqayt",
+    "Back to {folder}" : "Uɣal ar {folder}",
     "Add" : "Rnu"
 },
 "nplurals=2; plural=(n != 1);");
