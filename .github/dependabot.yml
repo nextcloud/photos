@@ -38,7 +38,7 @@ updates:
 
 # Main stableXX npm
 - package-ecosystem: npm
-  target-branch: stable31
+  target-branch: stable32
   directory: "/"
   schedule:
     interval: weekly
@@ -52,6 +52,22 @@ updates:
     # do not do breaking changes on stable branches
     - dependency-name: "*"
       update-types: ["version-update:semver-major"]
+
+- package-ecosystem: npm
+  target-branch: stable31
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  labels:
+    - "3. to review"
+    - "dependencies"
+  ignore:
+    # do not do breaking changes on stable branches
+    - dependency-name: "*"
+      update-types: ["version-update:semver-major", "version-update:semver-minor"]
 
 - package-ecosystem: npm
   target-branch: stable30
