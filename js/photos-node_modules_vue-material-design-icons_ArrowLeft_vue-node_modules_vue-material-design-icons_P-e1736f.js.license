@@ -148,7 +148,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 0.2.5
 	- license: GPL-3.0-or-later
 - @nextcloud/vue-select
-	- version: 3.25.1
+	- version: 3.26.0
 	- license: MIT
 - @nextcloud/l10n
 	- version: 3.4.0
@@ -193,7 +193,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 6.0.1
 	- license: MIT
 - @nextcloud/vue
-	- version: 8.29.2
+	- version: 8.30.0
 	- license: AGPL-3.0-or-later
 - @ungap/structured-clone
 	- version: 1.2.0
