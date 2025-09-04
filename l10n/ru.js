@@ -150,7 +150,7 @@ OC.L10N.register(
     "Tagged photos" : "Фотографии с метками",
     "Tagged photo {title}" : "Фотография с метками «{title}»",
     "{title}'s face" : "Лицо {title}",
-    "Last week" : "Последняя неделя",
+    "Last week" : "Прошлая неделя",
     "Last Month" : "В прошлом месяце",
     "Custom…" : "Настроить...",
     "{startDate} to {endDate}" : "С {startDate} по {endDate}",
