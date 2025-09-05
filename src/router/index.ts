@@ -43,7 +43,7 @@ if (!isMapsInstalled) {
  *
  * @param path
  */
-const parsePathParams = (path: string | string[]): string => {
+function parsePathParams(path: string | string[]): string {
 	return `/${Array.isArray(path) ? path.join('/') : path || ''}`
 }
 

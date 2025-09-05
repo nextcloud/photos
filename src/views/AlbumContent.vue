@@ -49,7 +49,7 @@
 
 					<NcButton
 						v-if="sharingEnabled"
-						type="tertiary"
+						variant="tertiary"
 						:aria-label="t('photos', 'Manage collaborators for this album')"
 						@click="showManageCollaboratorView = true">
 						<ShareVariantOutline slot="icon" />
@@ -111,7 +111,7 @@
 				<NcButton
 					slot="action"
 					class="album__empty__button"
-					type="primary"
+					variant="primary"
 					:aria-label="t('photos', 'Add photos to this album')"
 					@click="showAddPhotosModal = true">
 					<Plus slot="icon" />
@@ -138,7 +138,7 @@
 				<template slot-scope="{ collaborators }">
 					<NcButton
 						:aria-label="t('photos', 'Save collaborators for this album.')"
-						type="primary"
+						variant="primary"
 						:disabled="loadingAddCollaborators"
 						@click="handleSetCollaborators(collaborators)">
 						<template #icon>

@@ -12,7 +12,7 @@ const hotCache = []
  *
  * @param previewUrl
  */
-export const isCachedPreview = async function(previewUrl: string): Promise<boolean> {
+export async function isCachedPreview(previewUrl: string): Promise<boolean> {
 	try {
 		// Browser's cache take ~100ms to check, hot cache ~10ms.
 		if (!hotCache[previewUrl]) {

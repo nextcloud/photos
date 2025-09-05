@@ -24,7 +24,7 @@
 		<HeaderNavigation
 			key="navigation"
 			:loading="loadingCount > 0"
-			:path="'/'"
+			path="/"
 			:title="rootTitle"
 			:root-title="rootTitle"
 			@refresh="resetFetchFilesState">
@@ -45,7 +45,7 @@
 				<template v-else>
 					<NcButton
 						:close-after-click="true"
-						type="primary"
+						variant="primary"
 						:aria-label="t('photos', 'Add to album')"
 						data-cy-header-action="add-to-album"
 						@click="showAlbumPicker = true">

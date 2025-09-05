@@ -32,7 +32,8 @@
 				<div class="face__header__title">
 					<h2
 						v-if="face !== undefined"
-						:class="{ 'face-name': true, 'hidden-visually': face.basename.match(/^[0-9]+$/) }">
+						class="face-name"
+						:class="{ 'hidden-visually': face.basename.match(/^[0-9]+$/) }">
 						{{ face.basename }}
 					</h2>
 				</div>
@@ -151,7 +152,7 @@
 			<template #actions>
 				<NcButton
 					:aria-label="t('photos', 'Save.')"
-					type="primary"
+					variant="primary"
 					:disabled="$refs.nameInput && $refs.nameInput.value.trim() === ''"
 					@click="handleRenameFace($refs.nameInput.value)">
 					<template #icon>
