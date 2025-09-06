@@ -151,7 +151,7 @@ OC.L10N.register(
     "Tagged photo {title}" : "Foto com etiqueta {title}",
     "{title}'s face" : "Rosto de {title}",
     "Last week" : "Última semana",
-    "Last Month" : "Último mês",
+    "Last Month" : "Último Mês",
     "Custom…" : "Personalizado…",
     "{startDate} to {endDate}" : "{startDate} a {endDate}",
     "Details" : "Detalhes",
