@@ -81,7 +81,7 @@ export default {
 		this.resizeObserver.observe(this.$refs.tiledLayoutContainer as Element)
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		this.resizeObserver?.disconnect()
 	},
 }

@@ -2,10 +2,20 @@
   - SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
-<template functional>
+
+<script setup lang="ts">
+import type { TiledSection } from '../../services/TiledLayout.ts'
+
+defineProps<{
+	rows: TiledSection[]
+}>()
+
+</script>
+
+<template>
 	<ul>
 		<div
-			v-for="row of props.rows"
+			v-for="row of rows"
 			:key="row.key"
 			class="tiled-row"
 			:style="{ height: `${row.height}px` }">

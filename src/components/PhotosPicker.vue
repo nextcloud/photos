@@ -80,8 +80,8 @@
 			:section-header-height="50"
 			:scroll-to-section="targetMonth"
 			@need-content="getFiles"
-			@focusout.native="onFocusOut">
-			<template slot-scope="{ file, height, isHeader, distance }">
+			@focusout="onFocusOut">
+			<template #default="{ file, height, isHeader, distance }">
 				<h3
 					v-if="isHeader"
 					:id="`photos-picker-section-header-${file.id}`"

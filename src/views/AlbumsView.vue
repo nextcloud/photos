@@ -34,7 +34,7 @@
 					:key="collection.basename"
 					:link="`/albums/${collection.basename}`"
 					:alt-img="t('photos', 'Cover photo for album {albumName}', { albumName: collection.basename })"
-					:cover-url="collection.attributes['last-photo'] | coverUrl">
+					:cover-url="coverUrl(collection.attributes['last-photo'])">
 					<template #default>
 						<span class="album__name">
 							{{ collection.basename }}
@@ -104,16 +104,6 @@ export default defineComponent({
 		CogOutline,
 	},
 
-	filters: {
-		coverUrl(lastPhoto: number): string {
-			if (lastPhoto === -1) {
-				return ''
-			}
-
-			return generateUrl(`/apps/photos/api/v1/preview/${lastPhoto}?x=${512}&y=${512}`)
-		},
-	},
-
 	mixins: [FetchCollectionsMixin],
 
 	setup() {
@@ -150,6 +140,14 @@ export default defineComponent({
 		handleAlbumCreated({ album }) {
 			this.showAlbumCreationForm = false
 			this.$router.push(`/albums/${album.basename}`)
+		},
+
+		coverUrl(lastPhoto: number): string {
+			if (lastPhoto === -1) {
+				return ''
+			}
+
+			return generateUrl(`/apps/photos/api/v1/preview/${lastPhoto}?x=${512}&y=${512}`)
 		},
 
 		t: translate,

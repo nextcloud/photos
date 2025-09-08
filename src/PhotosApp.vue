@@ -167,7 +167,7 @@
 		</NcAppContent>
 
 		<!-- Main settings Modal-->
-		<SettingsDialog :open.sync="openedSettings" />
+		<SettingsDialog v-model:open="openedSettings" />
 	</NcContent>
 </template>
 
@@ -322,7 +322,7 @@ export default {
 		}
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		window.removeEventListener('load', () => {
 			navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js', {}, {
 				noRewrite: true,

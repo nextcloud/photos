@@ -50,7 +50,9 @@
 						variant="tertiary"
 						:aria-label="t('photos', 'Delete the public link')"
 						@click="deletePublicLink">
-						<Close slot="icon" />
+						<template #icon>
+							<Close />
+						</template>
 					</NcButton>
 				</template>
 				<NcButton
@@ -59,7 +61,9 @@
 					:aria-label="t('photos', 'Create public link share')"
 					class="manage-collaborators__public-link-button"
 					@click="createPublicLinkForAlbum">
-					<Earth slot="icon" />
+					<template #icon>
+						<Earth />
+					</template>
 					{{ t('photos', 'Share via public link') }}
 				</NcButton>
 			</div>

@@ -35,14 +35,15 @@
 			:file-ids="fileIds"
 			:base-height="isMobile ? 120 : 200"
 			:loading="loading">
-			<FileComponent
-				slot-scope="{ file, distance }"
-				:file="files[file.id]"
-				:allow-selection="true"
-				:selected="selection[file.id] === true"
-				:distance="distance"
-				@click="openViewer"
-				@select-toggled="onFileSelectToggle" />
+			<template #default="{ file, distance }">
+				<FileComponent
+					:file="files[file.id]"
+					:allow-selection="true"
+					:selected="selection[file.id] === true"
+					:distance="distance"
+					@click="openViewer"
+					@select-toggled="onFileSelectToggle" />
+			</template>
 		</FilesListViewer>
 	</div>
 </template>

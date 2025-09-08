@@ -7,13 +7,13 @@
 		<div class="form-inputs">
 			<NcTextField
 				ref="nameInput"
-				:value.sync="albumName"
+				v-model:value="albumName"
 				type="text"
 				name="name"
 				:required="true"
 				:label="t('photos', 'Name of the album')" />
 			<NcTextField
-				:value.sync="albumLocation"
+				v-model:value="albumLocation"
 				name="location"
 				type="text"
 				:label="t('photos', 'Location of the album')">
@@ -143,6 +143,8 @@ export default {
 			default: false,
 		},
 	},
+
+	emits: ['done', 'back'],
 
 	data() {
 		return {
