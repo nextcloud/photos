@@ -9,7 +9,9 @@
 		:aria-label="t('photos', 'Mark selection as favorite')"
 		@click="favoriteSelection">
 		{{ t('photos', 'Add selection to favorites') }}
-		<StarOutline slot="icon" />
+		<template #icon>
+			<StarOutline />
+		</template>
 	</NcActionButton>
 	<NcActionButton
 		v-else
@@ -17,7 +19,9 @@
 		:aria-label="t('photos', 'Remove selection from favorites')"
 		@click="unFavoriteSelection">
 		{{ t('photos', 'Remove selection from favorites') }}
-		<Star slot="icon" />
+		<template #icon>
+			<Star />
+		</template>
 	</NcActionButton>
 </template>
 

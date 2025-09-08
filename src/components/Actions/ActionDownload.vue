@@ -9,7 +9,9 @@
 		:download="downloadUrl"
 		:aria-label="title">
 		{{ title }}
-		<slot slot="icon" name="icon" />
+		<template #icon>
+			<slot name="icon" />
+		</template>
 	</NcActionLink>
 </template>
 

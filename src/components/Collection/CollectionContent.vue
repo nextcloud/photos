@@ -8,10 +8,14 @@
 		v-if="(collection === undefined && !loading) || error === 404"
 		class="empty-content-with-illustration"
 		:name="t('photos', 'This collection does not exist')">
-		<ImageMultipleOutline slot="icon" />
+		<template #icon>
+			<ImageMultipleOutline />
+		</template>
 	</NcEmptyContent>
 	<NcEmptyContent v-else-if="error" :name="t('photos', 'An error occurred')">
-		<AlertCircleOutline slot="icon" />
+		<template #icon>
+			<AlertCircleOutline />
+		</template>
 	</NcEmptyContent>
 
 	<div v-else class="collection">
@@ -33,14 +37,15 @@
 			:file-ids="sortedCollectionFileIds"
 			:base-height="isMobile ? 120 : 200"
 			:loading="loading">
-			<FileComponent
-				slot-scope="{ file, distance }"
-				:file="files[file.id]"
-				:allow-selection="allowSelection"
-				:selected="selection[file.id] === true"
-				:distance="distance"
-				@click="openViewer"
-				@select-toggled="onFileSelectToggle" />
+			<template #default="{ file, distance }">
+				<FileComponent
+					:file="files[file.id]"
+					:allow-selection="allowSelection"
+					:selected="selection[file.id] === true"
+					:distance="distance"
+					@click="openViewer"
+					@select-toggled="onFileSelectToggle" />
+			</template>
 		</FilesListViewer>
 	</div>
 </template>

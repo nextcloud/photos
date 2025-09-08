@@ -5,7 +5,9 @@
 <template>
 	<!-- Errors handlers-->
 	<NcEmptyContent v-if="error" :name="t('photos', 'An error occurred') ">
-		<AlertCircleOutline slot="icon" />
+		<template #icon>
+			<AlertCircleOutline />
+		</template>
 	</NcEmptyContent>
 
 	<div v-else class="collections">

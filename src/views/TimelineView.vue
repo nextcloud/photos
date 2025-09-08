@@ -9,13 +9,19 @@
 		<NcEmptyContent
 			v-if="errorFetchingFiles === 404"
 			:name="t('photos', 'One of the source folders does not exist')">
-			<FolderAlertOutline slot="icon" />
-			<PhotosSourceLocationsSettings
-				slot="action"
-				class="timeline__update_source_directory" />
+			<template #icon>
+				<FolderAlertOutline />
+			</template>
+			<template #action>
+				<PhotosSourceLocationsSettings
+
+					class="timeline__update_source_directory" />
+			</template>
 		</NcEmptyContent>
 		<NcEmptyContent v-else :name="t('photos', 'An error occurred')">
-			<AlertCircleOutline slot="icon" />
+			<template #icon>
+				<AlertCircleOutline />
+			</template>
 		</NcEmptyContent>
 	</div>
 
@@ -75,7 +81,9 @@
 							:selected-file-ids="selectedFileIds"
 							:title="t('photos', 'Download selected files')"
 							data-cy-header-action="download-selection">
-							<DownloadOutline slot="icon" />
+							<template #icon>
+								<DownloadOutline />
+							</template>
 						</ActionDownload>
 
 						<ActionFavorite :selected-file-ids="selectedFileIds" />
@@ -105,13 +113,13 @@
 			:base-height="isMobile ? 120 : 200"
 			:empty-message="t('photos', 'No photos or videos in here')"
 			@need-content="getContent">
-			<template slot-scope="{ file, isHeader, distance }">
+			<template #default="{ file, isHeader, distance }">
 				<h2
 					v-if="isHeader"
 					:id="`file-picker-section-header-${file.id}`"
 					class="section-header">
-					<b>{{ file.id | dateMonth }}</b>
-					{{ file.id | dateYear }}
+					<b>{{ dateMonth(file.id) }}</b>
+					{{ dateYear(file.id) }}
 				</h2>
 				<FileComponent
 					v-else
@@ -208,16 +216,6 @@ export default {
 		AlertCircleOutline,
 	},
 
-	filters: {
-		dateMonth(date: string): string {
-			return moment(date, 'YYYYMM').format('MMMM')
-		},
-
-		dateYear(date: string): string {
-			return moment(date, 'YYYYMM').format('YYYY')
-		},
-	},
-
 	mixins: [
 		FetchFilesMixin,
 		FilesSelectionMixin,
@@ -302,7 +300,7 @@ export default {
 		subscribe(configChangedEvent, this.handleUserConfigChange)
 	},
 
-	destroyed() {
+	unmounted() {
 		unsubscribe(configChangedEvent, this.handleUserConfigChange)
 	},
 
@@ -349,6 +347,16 @@ export default {
 		handleFormCreationDone({ album }: { album: Album }) {
 			this.showAlbumCreationForm = false
 			this.$router.push(`/albums/${album.basename}`)
+		},
+
+		// TODO: This might be a performance issue
+		dateMonth(date: string): string {
+			return moment(date, 'YYYYMM').format('MMMM')
+		},
+
+		// TODO: This might be a performance issue
+		dateYear(date: string): string {
+			return moment(date, 'YYYYMM').format('YYYY')
 		},
 
 		t,

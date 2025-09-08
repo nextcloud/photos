@@ -68,7 +68,9 @@
 							:close-after-click="true"
 							:aria-label="t('photos', 'Download selected files')"
 							@click="downloadSelection">
-							<Download slot="icon" />
+							<template #icon>
+								<Download />
+							</template>
 							{{ t('photos', 'Download selected photos') }}
 						</NcActionButton>
 						<NcActionButton
@@ -76,7 +78,9 @@
 							:close-after-click="true"
 							:aria-label="t('photos', 'Mark selection as favorite')"
 							@click="favoriteSelection">
-							<StarOutline slot="icon" />
+							<template #icon>
+								<StarOutline />
+							</template>
 							{{ t('photos', 'Favorite') }}
 						</NcActionButton>
 						<NcActionButton
@@ -84,7 +88,9 @@
 							:close-after-click="true"
 							:aria-label="t('photos', 'Remove selection from favorites')"
 							@click="unFavoriteSelection">
-							<Star slot="icon" />
+							<template #icon>
+								<Star />
+							</template>
 							{{ t('photos', 'Remove from favorites') }}
 						</NcActionButton>
 						<NcActionButton
@@ -122,14 +128,15 @@
 			:container-element="appContent"
 			:file-ids="faceFileIds"
 			:loading="loadingFiles || loadingFaces">
-			<FileComponent
-				slot-scope="{ file, distance }"
-				:file="files[file.id]"
-				:allow-selection="true"
-				:selected="selection[file.id] === true"
-				:distance="distance"
-				@click="openViewer"
-				@select-toggled="onFileSelectToggle" />
+			<template #default="{ file, distance }">
+				<FileComponent
+					:file="files[file.id]"
+					:allow-selection="true"
+					:selected="selection[file.id] === true"
+					:distance="distance"
+					@click="openViewer"
+					@select-toggled="onFileSelectToggle" />
+			</template>
 		</FilesListViewer>
 
 		<NcDialog

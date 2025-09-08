@@ -93,7 +93,7 @@ export default {
 		},
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		// cancel any pending load
 		this.$refs.src = ''
 	},

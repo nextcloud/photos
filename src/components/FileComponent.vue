@@ -96,6 +96,7 @@ export default {
 	},
 
 	inheritAttrs: false,
+
 	props: {
 		file: {
 			type: Object as PropType<PhotoFile>,
@@ -117,6 +118,8 @@ export default {
 			default: 0,
 		},
 	},
+
+	emits: ['click', 'select-toggled'],
 
 	data() {
 		return {
@@ -177,7 +180,7 @@ export default {
 		await this.init()
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		// cancel any pending load
 		if (this.$refs.imgSmall !== undefined) {
 			(this.$refs.imgSmall as HTMLImageElement).src = ''
