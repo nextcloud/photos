@@ -45,7 +45,7 @@ OC.L10N.register(
     "Public link copied!" : "Copiouse a ligazón pública!",
     "Copy public link" : "Copiar a ligazón pública",
     "Delete the public link" : "Eliminar a ligazón pública",
-    "Create public link share" : "Crear unha ligazón pública compartida",
+    "Create public link share" : "Crear unha ligazón pública para compartir",
     "Share via public link" : "Compartir mediante ligazón pública",
     "This collection does not exist" : "Esta colección non existe",
     "An error occurred" : "Produciuse un erro",
