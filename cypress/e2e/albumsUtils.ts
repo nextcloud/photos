@@ -119,7 +119,7 @@ export function removeCollaborators(collaborators: string[]) {
 			.within(() => {
 				cy.contains(collaborator)
 					.parentsUntil('ul')
-					.get(`[aria-label="Remove ${collaborator} from the collaborators list"]`)
+					.get(`[aria-label="Deselect ${collaborator}"]`)
 					.click()
 			})
 	})

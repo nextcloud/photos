@@ -295,7 +295,7 @@ describe('Manage shared albums', () => {
 			navigateToCollection('albums', albumName)
 			cy.get('[data-test="media"]').should('have.length', 1)
 			cy.get('[aria-label="Manage collaborators for this album"]').click()
-			cy.get('.manage-collaborators__selection__item').should('have.length', 1)
+			cy.get('.manage-collaborators__form .vs__selected').should('have.length', 1)
 		})
 
 		it('Deleting a user should remove its albums for collaborators', () => {

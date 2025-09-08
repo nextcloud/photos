@@ -11,7 +11,7 @@
 		</template>
 	</NcEmptyContent>
 	<NcEmptyContent v-else-if="error" :name="t('photos', 'An error occurred')" />
-	<NcEmptyContent v-else-if="initializing" :name="t('photos', 'Loading folders …')">
+	<NcEmptyContent v-else-if="initializing" :name="t('photos', 'Loading folders…')">
 		<template #icon>
 			<NcLoadingIcon />
 		</template>

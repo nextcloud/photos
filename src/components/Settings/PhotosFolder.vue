@@ -15,7 +15,7 @@
 		</span>
 		<NcButton
 			v-if="canDelete"
-			type="tertiary"
+			variant="tertiary"
 			:aria-label="t('photos', 'Delete source directory')"
 			@click="emitRemoveSourceFolder">
 			<template #icon>

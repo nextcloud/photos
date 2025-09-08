@@ -9,8 +9,8 @@
 		</h2>
 
 		<form class="manage-collaborators__form" @submit.prevent>
-			<NcSelect
-				v-model="searchText"
+			<NcSelectUsers
+				v-model="selectedUsers"
 				input-id="sharing-search-input"
 				:input-label="t('photos', 'Add people or groups who can edit your album')"
 				:loading="loadingCollaborators"
@@ -18,36 +18,14 @@
 				:filterable="false"
 				:placeholder="t('photos', 'Search people or groups')"
 				:clear-search-on-blur="() => false"
-				:user-select="true"
+				:multiple="true"
 				:append-to-body="false"
 				:options="searchResults"
 				@search="searchCollaborators"
 				@option:selected="({ key }) => selectEntity(key)">
 				{{ t('photos', 'No recommendations. Start typing.') }}
-			</NcSelect>
+			</NcSelectUsers>
 		</form>
-
-		<ul class="manage-collaborators__selection">
-			<li
-				v-for="collaboratorKey of listableSelectedCollaboratorsKeys"
-				:key="collaboratorKey"
-				class="manage-collaborators__selection__item">
-				<NcListItemIcon
-					:id="availableCollaborators[collaboratorKey].id"
-					:display-name="availableCollaborators[collaboratorKey].label"
-					:name="availableCollaborators[collaboratorKey].label"
-					:user="availableCollaborators[collaboratorKey].id"
-					:is-no-user="availableCollaborators[collaboratorKey].type !== collaboratorTypes.User">
-					<AccountGroupOutline v-if="availableCollaborators[collaboratorKey].type === collaboratorTypes.Group" :title="t('photos', 'Group')" />
-					<NcButton
-						type="tertiary"
-						:aria-label="t('photos', 'Remove {collaboratorLabel} from the collaborators list', { collaboratorLabel: availableCollaborators[collaboratorKey].label })"
-						@click="unselectEntity(collaboratorKey)">
-						<Close slot="icon" :size="20" />
-					</NcButton>
-				</NcListItemIcon>
-			</li>
-		</ul>
 
 		<div class="actions">
 			<div v-if="allowPublicLink" class="actions__public-link">
@@ -69,7 +47,7 @@
 						</template>
 					</NcButton>
 					<NcButton
-						type="tertiary"
+						variant="tertiary"
 						:aria-label="t('photos', 'Delete the public link')"
 						@click="deletePublicLink">
 						<Close slot="icon" />
@@ -95,6 +73,8 @@
 
 <script lang='ts'>
 
+import type { AxiosResponse } from '@nextcloud/axios'
+import type { OCSResponse } from '@nextcloud/typings/ocs'
 import type { PropType } from 'vue'
 import type { Collaborator } from '../../store/albums.js'
 
@@ -106,9 +86,7 @@ import { translate } from '@nextcloud/l10n'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { ShareType } from '@nextcloud/sharing'
 import NcButton from '@nextcloud/vue/components/NcButton'
-import NcListItemIcon from '@nextcloud/vue/components/NcListItemIcon'
-import NcSelect from '@nextcloud/vue/components/NcSelect'
-import AccountGroupOutline from 'vue-material-design-icons/AccountGroupOutline.vue'
+import NcSelectUsers from '@nextcloud/vue/components/NcSelectUsers'
 import Check from 'vue-material-design-icons/Check.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 import ContentCopy from 'vue-material-design-icons/ContentCopy.vue'
@@ -117,10 +95,28 @@ import FetchCollectionContentMixin from '../../mixins/FetchCollectionContentMixi
 import logger from '../../services/logger.js'
 import { albumsExtraProps } from '../../store/albums.ts'
 
-type CollaboratorSearchResult = Collaborator & {
+interface IUserData {
 	key: string
-	displayName: string // The label of the collaborator for display.
-	iconSvg?: Element // An icon to differentiate the collaborator type.
+	id: string
+	user: string
+	displayName: string
+	iconSvg: string
+	type: 'user' | 'group'
+}
+
+interface IUserAutocompleteResult {
+	id: string
+	label: string
+	icon: 'icon-user' | 'icon-group'
+	shareWithDisplayNameUnique: string
+	source: 'users' | 'groups'
+	subline: string
+	status: {
+		status: string
+		message?: string
+		icon?: string
+		clearAt?: number
+	}
 }
 
 export default {
@@ -128,13 +124,11 @@ export default {
 
 	components: {
 		Close,
-		AccountGroupOutline,
 		ContentCopy,
 		Check,
 		Earth,
 		NcButton,
-		NcListItemIcon,
-		NcSelect,
+		NcSelectUsers,
 	},
 
 	mixins: [FetchCollectionContentMixin],
@@ -158,7 +152,6 @@ export default {
 
 	data() {
 		return {
-			searchText: null,
 			availableCollaborators: {} as Record<string, Collaborator>,
 			selectedCollaboratorsKeys: [] as string[],
 			currentSearchResults: [] as Collaborator[],
@@ -173,27 +166,44 @@ export default {
 	},
 
 	computed: {
-		searchResults(): CollaboratorSearchResult[] {
+		searchResults(): IUserData[] {
 			return this.currentSearchResults
 				.filter(({ id }) => id !== getCurrentUser()?.uid)
 				.map((collaborator) => {
 					return {
-						...collaborator,
 						key: `${collaborator.type}:${collaborator.id}`,
+						id: collaborator.id,
+						user: collaborator.id,
+						displayName: collaborator.label,
+						type: (collaborator.type === ShareType.User ? 'user' : 'group') as 'user' | 'group',
 						iconSvg: collaborator.type === ShareType.Group ? AccountGroupOutlineSvg : undefined,
 					}
 				})
 				.filter(({ key }) => !this.selectedCollaboratorsKeys.includes(key))
 		},
 
-		listableSelectedCollaboratorsKeys(): string[] {
-			return this.selectedCollaboratorsKeys
-				.filter((collaboratorKey) => this.availableCollaborators[collaboratorKey].type !== ShareType.Link)
-		},
-
 		selectedCollaborators(): Collaborator[] {
 			return this.selectedCollaboratorsKeys
 				.map((collaboratorKey) => this.availableCollaborators[collaboratorKey])
+		},
+
+		selectedUsers: {
+			get(): IUserData[] {
+				return this.selectedCollaborators
+					.filter(({ type }) => type !== ShareType.Link)
+					.map((collaborator) => ({
+						key: `${collaborator.type}:${collaborator.id}`,
+						id: collaborator.id,
+						user: collaborator.id,
+						displayName: collaborator.label,
+						type: collaborator.type === ShareType.User ? 'user' : 'group',
+						iconSvg: collaborator.type === ShareType.Group ? AccountGroupOutlineSvg : undefined,
+					}))
+			},
+
+			set(newValue: IUserData[]) {
+				this.selectedCollaboratorsKeys = newValue.map(({ key }) => key)
+			},
 		},
 
 		isPublicLinkSelected(): boolean {
@@ -251,7 +261,7 @@ export default {
 							ShareType.Group,
 						],
 					},
-				})
+				}) as AxiosResponse<OCSResponse<IUserAutocompleteResult[]>>
 
 				this.currentSearchResults = response.data.ocs.data
 					.map((collaborator) => {
@@ -345,8 +355,6 @@ export default {
 		},
 
 		selectEntity(collaboratorKey) {
-			this.searchText = null
-
 			if (this.selectedCollaboratorsKeys.includes(collaboratorKey)) {
 				return
 			}
@@ -392,6 +400,7 @@ export default {
 		margin-top: 4px 0;
 		display: flex;
 		flex-direction: column;
+		flex-grow: 1;
 
 		&__input {
 			position: relative;
