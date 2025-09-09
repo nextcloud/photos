@@ -31,7 +31,6 @@ OC.L10N.register(
     "Add people or groups who can edit your album" : "앨범을 수정할 수 있는 사람 및 그룹 추가",
     "Search people or groups" : "사람 및 그룹 검색",
     "No recommendations. Start typing." : "추천 없음. 타이핑을 시작하십시오",
-    "Remove {collaboratorLabel} from the collaborators list" : "공동 작업자 목록에서 {collaboratorLabel} 제거",
     "Copy the public link" : "공개 링크 복사",
     "Public link copied!" : "공개 링크 복사!",
     "Copy public link" : "공개 링크 복사",
@@ -53,11 +52,13 @@ OC.L10N.register(
     "Merge with different person" : "다른 사람에게 병합",
     "Remove from favorites" : "즐겨찾기에서 제거",
     "Remove person" : "사람 제거",
+    "Loading folders…" : "폴더 불러오는 중…",
     "Add to album" : "앨범에 추가",
     "Delete selection" : "선택 항목 삭제",
     "Unassigned faces" : "지정되지 않은 얼굴",
     "Last week" : "저번 주",
     "Details" : "세부사항",
+    "Remove {collaboratorLabel} from the collaborators list" : "공동 작업자 목록에서 {collaboratorLabel} 제거",
     "Add" : "추가"
 },
 "nplurals=1; plural=0;");

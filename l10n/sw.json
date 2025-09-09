@@ -37,8 +37,6 @@
     "Add people or groups who can edit your album" : "Ongeza watu au makundi ambao wanaweza kuhariri albamu yako",
     "Search people or groups" : "Tafuta watu au makundi",
     "No recommendations. Start typing." : "Hakuna maoni. Anza kuchapisha",
-    "Group" : "Kundi",
-    "Remove {collaboratorLabel} from the collaborators list" : "Ondoa {collaboratorLabel}kutoka kwenye orodha ya washiriki",
     "Copy the public link" : "Nakili kiungio cha umma",
     "Public link copied!" : "Kiungio cha umma kimenakiliwa",
     "Copy public link" : "Nakili kiungo cha umma",
@@ -116,7 +114,6 @@
     "This might take some time depending on the size of your photo library." : "Hii inaweza kuchukua muda kulingana na ukubwa wa maktaba yako ya picha.",
     "Recognized people will show up here" : "Watu wanaotambulika watajitokeza hapa",
     "This folder does not exist" : "Kisanduku hiki hakipo",
-    "Loading folders …" : "Inapakia visanduku",
     "No photos in here" : "Hakuna picha hapa",
     "Taken on {date} at {time}" : "Imechukuliwa juu ya {date} katika {time}",
     "This place does not have any photos or videos yet!" : "Eneo hili bado halina picha wala video zozote!",
@@ -168,8 +165,11 @@
     "Failed to set favorite state for {fileId}" : "Imeshindwa kuweka hali pendwa ya {fileId}",
     "Failed to set favorite state for {fileName}" : "Imeshindwa kuweka hali pendwa ya  {fileName}",
     "Could not load photos folder" : "Isingeweza kupakia kisanduku cha picha",
+    "Group" : "Kundi",
+    "Remove {collaboratorLabel} from the collaborators list" : "Ondoa {collaboratorLabel}kutoka kwenye orodha ya washiriki",
     "Back to {folder}" : "Rudi kwenye {folder}",
     "Share this folder" : "Shirikisha kisanduku hiki",
+    "Loading folders …" : "Inapakia visanduku",
     "One of the source folders does not exists" : "Moja ya folda chanzo haipo",
     "Add" : "Ongeza"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

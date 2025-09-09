@@ -19,7 +19,6 @@ OC.L10N.register(
     "New album" : "Album nou",
     "_%n item_::_%n photos and videos_" : ["%n elementu","%n fotografias e vìdeos"],
     "No recommendations. Start typing." : "Peruna racumandatzione. Cumintza a iscrìere.",
-    "Group" : "Grupu",
     "Copy the public link" : "Còpia su ligòngiu pùblicu",
     "Copy public link" : "Còpia ligòngiu pùblicu",
     "An error occurred" : "B'at àpidu un'errore",
@@ -40,6 +39,7 @@ OC.L10N.register(
     "Tagged photos" : "Fotografias etichetadas",
     "Last week" : "Sa chida passada",
     "Details" : "Detàllios",
+    "Group" : "Grupu",
     "Back to {folder}" : "Torra a {folder}",
     "Share this folder" : "Cumpartzi custa cartella",
     "Add" : "Agiunghe"

@@ -11,6 +11,7 @@ OC.L10N.register(
     "Favorite" : "Omiljene",
     "Home" : "Početak",
     "Remove from favorites" : "Ukloni iz omiljenih",
+    "Loading folders…" : "Učitavam fascikle…",
     "Details" : "Detalji",
     "Add" : "Dodaj"
 },

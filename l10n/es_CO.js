@@ -16,6 +16,7 @@ OC.L10N.register(
     "Dates" : "Fechas",
     "Home" : "Inicio",
     "Remove from favorites" : "Eliminar de favoritos",
+    "Loading folders…" : "Cargando carpetas…",
     "Details" : "Detalles",
     "Add" : "Agregar"
 },

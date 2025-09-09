@@ -30,7 +30,6 @@ OC.L10N.register(
     "Create new album" : "Δημιουργία νέου άλμπουμ. ",
     "New album" : "Νέο άλμπουμ",
     "No recommendations. Start typing." : "Δεν υπάρχουν συστάσεις. Αρχίστε να πληκτρολογείτε.",
-    "Group" : "Ομάδα",
     "Copy public link" : "Αντιγραφή δημόσιου συνδέσμου",
     "An error occurred" : "Παρουσιάστηκε σφάλμα",
     "Favorite" : "Αγαπημένο",
@@ -57,7 +56,7 @@ OC.L10N.register(
     "Remove person" : "Αφαίρεση ατόμου",
     "Save." : "Αποθηκεύστε.",
     "This folder does not exist" : "Αυτός ο φάκελος δεν υπάρχει",
-    "Loading folders …" : "Φόρτωση φακέλων...",
+    "Loading folders…" : "Φόρτωση φακέλων…",
     "No photos in here" : "Δεν υπάρχουν φωτογραφίες εδώ",
     "No photos with this tag yet" : "Δεν υπάρχουν φωτογραφίες με αυτή την ετικέτα ακόμη",
     "No tags yet" : "Χωρίς ετικέτες ακόμη",
@@ -70,8 +69,10 @@ OC.L10N.register(
     "Tagged photos" : "Φωτογραφίες με ετικέτα",
     "Last week" : "Προηγούμενη εβδομάδα",
     "Details" : "Λεπτομέρειες",
+    "Group" : "Ομάδα",
     "Back to {folder}" : "Πίσω στο {folder}",
     "Share this folder" : "Διαμοιρασμός αυτού του φακέλου",
+    "Loading folders …" : "Φόρτωση φακέλων...",
     "Add" : "Προσθήκη"
 },
 "nplurals=2; plural=(n != 1);");

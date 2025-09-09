@@ -28,7 +28,6 @@ OC.L10N.register(
     "Shared by" : "แชร์โดย",
     "_%n item_::_%n photos and videos_" : ["รูปภาพและวิดีโอ %n รายการ"],
     "No recommendations. Start typing." : "ไม่มีคำแนะนำ เริ่มพิมพ์เลย",
-    "Group" : "กลุ่ม",
     "An error occurred" : "เกิดข้อผิดพลาด",
     "Favorite" : "รายการโปรด",
     "Open the full size \"{name}\" image" : "เปิดรูปภาพขนาดเต็ม \"{name}\"",
@@ -45,6 +44,7 @@ OC.L10N.register(
     "Tagged photos" : "รูปภาพที่ติดแท็ก",
     "Last week" : "สัปดาห์ที่แล้ว",
     "Details" : "รายละเอียด",
+    "Group" : "กลุ่ม",
     "Back to {folder}" : "กลับไปยัง {folder}",
     "Share this folder" : "แชร์โฟลเดอร์นี้",
     "Add" : "เพิ่ม"

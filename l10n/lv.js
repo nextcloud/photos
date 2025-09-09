@@ -26,7 +26,6 @@ OC.L10N.register(
     "Create new album" : "Izveidot jaunu albumu",
     "New album" : "Jauns albums",
     "No recommendations. Start typing." : "Nav ieteikumu. Jāsāk rakstīt.",
-    "Group" : "Grupa",
     "Copy the public link" : "Ievietot publisko saiti starpliktuvē",
     "Public link copied!" : "Publiskā saite nokopēta!",
     "Copy public link" : "Ievietot publisko saiti starpliktuvē",
@@ -52,6 +51,7 @@ OC.L10N.register(
     "Rename person" : "Pārdēvēt cilvēku",
     "Remove from favorites" : "Noņemt no izlases",
     "Remove person" : "Noņemt personu",
+    "Loading folders…" : "Ielādē mapes…",
     "Cover photo for shared album {albumName}" : "Kopīgotā albuma \"{albumName}\" vāka attēls",
     "Back to tags overview" : "Atpakaļ uz birku pārskatu",
     "Add to album" : "Pievienot albumam",
@@ -65,6 +65,7 @@ OC.L10N.register(
     "Failed to delete {fileId}" : "Neizdevās izdzēst {fileId}",
     "Failed to delete {fileName}" : "Neizdevās izdzēst {fileName}",
     "Could not load photos folder" : "Nevarēja ielādēt fotoattēlu mapi",
+    "Group" : "Grupa",
     "Add" : "Pievienot"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");
