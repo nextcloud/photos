@@ -71,7 +71,7 @@ OC.L10N.register(
     "This might take some time depending on the size of your photo library." : "Tai, priklausomai nuo jūsų nuotraukų bibliotekos dydžio, gali šiek tiek užtrukti.",
     "Recognized people will show up here" : "Čia bus rodomi atpažinti žmonės",
     "This folder does not exist" : "Šio aplanko nėra",
-    "Loading folders …" : "Įkeliami aplankai…",
+    "Loading folders…" : "Įkeliami aplankai…",
     "No photos in here" : "Čia nuotraukų nėra",
     "Back to tags overview" : "Atgal į žymų apžvalgą",
     "No photos with this tag yet" : "Kol kas nėra nuotraukų, turinčių šią žymą",
@@ -92,6 +92,7 @@ OC.L10N.register(
     "Could not load photos folder" : "Nepavyko įkelti nuotraukų aplanko",
     "Back to {folder}" : "Atgal į {folder}",
     "Share this folder" : "Bendrinti šį aplanką",
+    "Loading folders …" : "Įkeliami aplankai…",
     "One of the source folders does not exists" : "Vieno iš šaltinio aplankų nėra",
     "Add" : "Pridėti"
 },

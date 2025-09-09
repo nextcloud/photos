@@ -8,11 +8,11 @@ OC.L10N.register(
     "Back" : "Geri",
     "Save" : "Saxla",
     "Shared by" : "Tərəfindən yayımlanıb",
-    "Group" : "Qrup",
     "Favorite" : "İstəkli",
     "Home" : "Ev",
     "Remove from favorites" : "Remove from favorites",
     "Details" : "Detallar",
+    "Group" : "Qrup",
     "Add" : "Əlavə etmək"
 },
 "nplurals=2; plural=(n != 1);");

@@ -37,8 +37,6 @@
     "Add people or groups who can edit your album" : "Amiesta a persones u grupos que puedan editar l'álbum",
     "Search people or groups" : "Buscar persones o grupos",
     "No recommendations. Start typing." : "Nun hai nenguna recomendación. Comienza a escribir.",
-    "Group" : "Grupu",
-    "Remove {collaboratorLabel} from the collaborators list" : "Quitar «{collaboratorLabel}» de la llista de collaboradores",
     "Copy the public link" : "Copiar l'enllaz públicu",
     "Public link copied!" : "¡Copióse l'enllaz públicu!",
     "Copy public link" : "Copiar l'enllaz públicu",
@@ -110,7 +108,6 @@
     "This might take some time depending on the size of your photo library." : "Quiciabes esta operación tarde tiempu según el tamañu de la biblioteca de semeyes.",
     "Recognized people will show up here" : "Equí apaecen les persones que se reconozan",
     "This folder does not exist" : "Esta carpeta nun esiste",
-    "Loading folders …" : "Cargando les carpetes…",
     "No photos in here" : "Equí nun hai nenguna semeya",
     "Taken on {date} at {time}" : "Fízose'l {date} a la hora {time}",
     "This place does not have any photos or videos yet!" : "¡Esti llugar nun tien nenguna semeya nin nengún videu!",
@@ -141,8 +138,11 @@
     "{startDate} to {endDate}" : "{startDate} hasta'l {endDate}",
     "Details" : "Detalles",
     "Could not load photos folder" : "Nun se puen cargar la carpeta de semeyes",
+    "Group" : "Grupu",
+    "Remove {collaboratorLabel} from the collaborators list" : "Quitar «{collaboratorLabel}» de la llista de collaboradores",
     "Back to {folder}" : "Volver a «{folder}»",
     "Share this folder" : "Compartir esta carpeta",
+    "Loading folders …" : "Cargando les carpetes…",
     "One of the source folders does not exists" : "Nun esiste una de les carpetes d'orixe",
     "Add" : "Amestar"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

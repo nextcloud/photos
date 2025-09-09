@@ -37,7 +37,6 @@
     "Add people or groups who can edit your album" : "Добавяне на хора или групи, които могат да редактират вашият албум",
     "Search people or groups" : "Търсене на хора или групи",
     "No recommendations. Start typing." : "Няма препоръки. Започнете да пишете.",
-    "Remove {collaboratorLabel} from the collaborators list" : "Премахване на {collaboratorLabel} от списъка със сътрудници",
     "Copy the public link" : "Копиране на публичната връзка",
     "Public link copied!" : "Копирана е публична връзка!",
     "Copy public link" : "Копирай публичната връзка",
@@ -88,7 +87,7 @@
     "This might take some time depending on the size of your photo library." : "Това може да отнеме известно време в зависимост от размера на вашата библиотека със снимки.",
     "Recognized people will show up here" : "Разпознатите хора ще се показват тук",
     "This folder does not exist" : "Тази папка не съществува",
-    "Loading folders …" : "Зареждане на папките …",
+    "Loading folders…" : "Зареждане на папките…",
     "No photos in here" : "Тук няма снимки",
     "This place does not have any photos or videos yet!" : "Това място все още няма снимки или видеоклипове!",
     "Add photos to this place" : "Добавяне на снимки към това място",
@@ -116,8 +115,10 @@
     "Last week" : "Миналата седмица",
     "{startDate} to {endDate}" : "{startDate} до {endDate}",
     "Details" : "Подробности",
+    "Remove {collaboratorLabel} from the collaborators list" : "Премахване на {collaboratorLabel} от списъка със сътрудници",
     "Back to {folder}" : "Назад към {folder}",
     "Share this folder" : "Споделяне на тази папка",
+    "Loading folders …" : "Зареждане на папките …",
     "Add" : "Добавяне"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -6,11 +6,11 @@ OC.L10N.register(
     "Tags" : "Tibzimin",
     "Back" : "Retour",
     "Save" : "Sekles",
-    "Group" : "Agraw",
     "Favorite" : "Menyif",
     "Home" : "Asnubeg",
     "Remove from favorites" : "Kkes-it seg ismal",
     "Details" : "Talqayt",
+    "Group" : "Agraw",
     "Back to {folder}" : "Uɣal ar {folder}",
     "Add" : "Rnu"
 },

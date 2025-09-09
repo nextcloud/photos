@@ -13,7 +13,6 @@ OC.L10N.register(
     "Save" : "Konservi",
     "Shared by" : "Kunhavigita de",
     "No recommendations. Start typing." : "Neniu propono. Ektajpu.",
-    "Group" : "Grupo",
     "An error occurred" : "Eraro okazis",
     "Favorite" : "Pliŝatati",
     "Go back" : "Reveni",
@@ -21,8 +20,10 @@ OC.L10N.register(
     "Home" : "Hejmo",
     "View" : "Vidi",
     "Remove from favorites" : "Forigi el pliŝataĵoj",
+    "Loading folders…" : "Ŝargado de dosierujoj...",
     "Delete selection" : "Forigi elekton",
     "Details" : "Detaloj",
+    "Group" : "Grupo",
     "Add" : "Aldoni"
 },
 "nplurals=2; plural=(n != 1);");

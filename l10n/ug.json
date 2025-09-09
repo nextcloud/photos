@@ -36,8 +36,6 @@
     "Add people or groups who can edit your album" : "پىلاستىنكىڭىزنى تەھرىرلىيەلەيدىغان كىشىلەر ياكى گۇرۇپپىلارنى قوشۇڭ",
     "Search people or groups" : "كىشىلەرنى ياكى گۇرۇپپىلارنى ئىزدەڭ",
     "No recommendations. Start typing." : "تەۋسىيە يوق. يېزىشنى باشلاڭ.",
-    "Group" : "گۇرۇپپا",
-    "Remove {collaboratorLabel} from the collaborators list" : "ھەمكارلاشقۇچىلار تىزىملىكىدىن {collaboratorLabel} Label ئۆچۈرۈڭ",
     "Copy the public link" : "ئاممىۋى ئۇلىنىشنى كۆچۈرۈڭ",
     "Public link copied!" : "ئاممىۋى ئۇلىنىش كۆچۈرۈلدى!",
     "Copy public link" : "ئاممىۋى ئۇلىنىشنى كۆچۈرۈڭ",
@@ -104,7 +102,6 @@
     "This might take some time depending on the size of your photo library." : "رەسىم ئامبىرىڭىزنىڭ چوڭ-كىچىكلىكىگە ئاساسەن بۇنىڭغا بىر ئاز ۋاقىت كېتىشى مۇمكىن.",
     "Recognized people will show up here" : "تونۇلغان كىشىلەر بۇ يەردە پەيدا بولىدۇ",
     "This folder does not exist" : "بۇ ھۆججەت قىسقۇچ مەۋجۇت ئەمەس",
-    "Loading folders …" : "ھۆججەت قىسقۇچلارنى يۈكلەۋاتىدۇ…",
     "No photos in here" : "بۇ يەردە رەسىم يوق",
     "Taken on {date} at {time}" : "{date} دا {time} دىن ئېلىندى",
     "This place does not have any photos or videos yet!" : "بۇ يەرنىڭ تېخى رەسىم ياكى سىن يوق!",
@@ -136,8 +133,11 @@
     "{startDate} to {endDate}" : "{startDate} دىن {endDate}",
     "Details" : "تەپسىلاتى",
     "Could not load photos folder" : "رەسىم قىسقۇچنى يۈكلىيەلمىدى",
+    "Group" : "گۇرۇپپا",
+    "Remove {collaboratorLabel} from the collaborators list" : "ھەمكارلاشقۇچىلار تىزىملىكىدىن {collaboratorLabel} Label ئۆچۈرۈڭ",
     "Back to {folder}" : "{folder} قايتىش",
     "Share this folder" : "بۇ قىسقۇچنى ھەمبەھىرلەڭ",
+    "Loading folders …" : "ھۆججەت قىسقۇچلارنى يۈكلەۋاتىدۇ…",
     "One of the source folders does not exists" : "مەنبە قىسقۇچلارنىڭ بىرى مەۋجۇت ئەمەس",
     "Add" : "قوش"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

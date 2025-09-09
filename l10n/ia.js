@@ -8,13 +8,13 @@ OC.L10N.register(
     "Back" : "Retro",
     "Save" : "Salveguardar",
     "Shared by" : "Compartite per",
-    "Group" : "Gruppo",
     "Favorite" : "Favorite",
     "Go back" : "Retornar",
     "Home" : "Initio",
     "View" : "Vider",
     "Remove from favorites" : "Remove from favorites",
     "Details" : "Detalios",
+    "Group" : "Gruppo",
     "Add" : "Adder"
 },
 "nplurals=2; plural=(n != 1);");

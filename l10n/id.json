@@ -36,8 +36,6 @@
     "Add people or groups who can edit your album" : "Tambahkan orang atau grup yang dapat menyunting album Anda",
     "Search people or groups" : "Cari orang atau grup",
     "No recommendations. Start typing." : "Tidak ada saran. Mulai mengetik.",
-    "Group" : "Grup",
-    "Remove {collaboratorLabel} from the collaborators list" : "Hapus {collaboratorLabel} dari daftar kolaborator",
     "Copy the public link" : "Salin tautan publik",
     "Public link copied!" : "Tautan publik disalin!",
     "Copy public link" : "Salin tautan publik",
@@ -90,7 +88,7 @@
     "This might take some time depending on the size of your photo library." : "Ini mungkin membutuhkan beberapa waktu tergantung pada ukuran pustaka foto Anda.",
     "Recognized people will show up here" : "Orang yang dikenal akan muncul di sini",
     "This folder does not exist" : "Folder ini tidak ada",
-    "Loading folders …" : "Memuat folder…",
+    "Loading folders…" : "Memuat folder…",
     "No photos in here" : "Tidak ada foto di sini",
     "Taken on {date} at {time}" : "Diambil pada tanggal {date}, jam {time}",
     "This place does not have any photos or videos yet!" : "Tempat ini belum memiliki foto atau video apa pun!",
@@ -120,8 +118,11 @@
     "Last week" : "Minggu lalu",
     "{startDate} to {endDate}" : "{startDate} ke {endDate}",
     "Details" : "Detail",
+    "Group" : "Grup",
+    "Remove {collaboratorLabel} from the collaborators list" : "Hapus {collaboratorLabel} dari daftar kolaborator",
     "Back to {folder}" : "Kembali ke {folder}",
     "Share this folder" : "Bagikan folder ini",
+    "Loading folders …" : "Memuat folder…",
     "Add" : "Masukkan"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

@@ -11,7 +11,6 @@ OC.L10N.register(
     "Back" : "Atrás",
     "Save" : "Guardar",
     "Shared by" : "Compartido por",
-    "Group" : "Grupo",
     "An error occurred" : "Se presentó un error",
     "Favorite" : "Hacer favorito",
     "Open the full size \"{name}\" image" : "Abrir la imagen \"{name}\" en tamaño completo",
@@ -24,6 +23,7 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Fotos con etiquetas serán mostradas aquí",
     "Tagged photos" : "Fotos etiquetadas",
     "Details" : "Detalles",
+    "Group" : "Grupo",
     "Back to {folder}" : "Volver a {folder}",
     "Share this folder" : "Compartir esta carpeta",
     "Add" : "Agregar"
