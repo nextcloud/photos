@@ -36,8 +36,6 @@
     "Add people or groups who can edit your album" : "Agregar personas o grupos que puedan editar tu álbum",
     "Search people or groups" : "Buscar personas o grupos",
     "No recommendations. Start typing." : "No hay recomendaciones. Comienza a escribir.",
-    "Group" : "Grupo",
-    "Remove {collaboratorLabel} from the collaborators list" : "Eliminar {etiquetaColaborador} de la lista de colaboradores",
     "Copy the public link" : "Copiar el enlace público",
     "Public link copied!" : "¡Enlace público copiado!",
     "Copy public link" : "Copiar enlace público",
@@ -91,7 +89,7 @@
     "This might take some time depending on the size of your photo library." : "Esto podría llevar algún tiempo dependiendo del tamaño de tu biblioteca de fotos.",
     "Recognized people will show up here" : "Aquí aparecerán las personas reconocidas",
     "This folder does not exist" : "Esta carpeta no existe",
-    "Loading folders …" : "Cargando carpetas...",
+    "Loading folders…" : "Cargando carpetas…",
     "No photos in here" : "No hay fotos aquí",
     "This place does not have any photos or videos yet!" : "¡Este lugar aún no tiene fotos o videos!",
     "Add photos to this place" : "Agregar fotos a este lugar",
@@ -119,8 +117,11 @@
     "{title}'s face" : "Rostro de {título}",
     "Last week" : "La semana pasada",
     "Details" : "Detalles",
+    "Group" : "Grupo",
+    "Remove {collaboratorLabel} from the collaborators list" : "Eliminar {etiquetaColaborador} de la lista de colaboradores",
     "Back to {folder}" : "Volver a {carpeta}",
     "Share this folder" : "Compartir esta carpeta",
+    "Loading folders …" : "Cargando carpetas...",
     "Add" : "Agregar"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

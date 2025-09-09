@@ -17,6 +17,7 @@ OC.L10N.register(
     "View" : "Gwell",
     "Unselect all" : "Diziuzañ pep tra",
     "Remove from favorites" : "Diverkañañ eus ar pennrolloù",
+    "Loading folders…" : "O kargañ an teuliad...",
     "Details" : "Munudoù",
     "Add" : "Ouzhpennañ"
 },

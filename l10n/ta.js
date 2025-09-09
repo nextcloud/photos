@@ -7,11 +7,11 @@ OC.L10N.register(
     "Tags" : "சீட்டுகள்",
     "Back" : "பின்னுக்கு",
     "Save" : "சேமிக்க ",
-    "Group" : "Group",
     "Favorite" : "விருப்பமான",
     "Home" : "அகம்",
     "Remove from favorites" : "Remove from favorites",
     "Details" : "விவரங்கள்",
+    "Group" : "Group",
     "Add" : "சேர்க்க"
 },
 "nplurals=2; plural=(n != 1);");

@@ -37,8 +37,6 @@
     "Add people or groups who can edit your album" : "Lisa inimesi ja gruppe, kes võivad su albumit muuta",
     "Search people or groups" : "Otsi inimesi või gruppe",
     "No recommendations. Start typing." : "Soovitusi pole. Alusta trükkimist.",
-    "Group" : "Grupp",
-    "Remove {collaboratorLabel} from the collaborators list" : "Eemalda {collaboratorLabel} kaasautorite hulgast",
     "Copy the public link" : "Kopeeri avalik link",
     "Public link copied!" : "Avalik link kopeeritud!",
     "Copy public link" : "Kopeeri avalik link",
@@ -116,7 +114,6 @@
     "This might take some time depending on the size of your photo library." : "See võib sõltuvalt fototeegi suurusest natuke aega võtta.",
     "Recognized people will show up here" : "Siin näidatakse tuvastatud inimesi",
     "This folder does not exist" : "Seda kausta pole olemas",
-    "Loading folders …" : "Kaustada laadimine …",
     "No photos in here" : "Siin ei ole fotosid",
     "Taken on {date} at {time}" : "Pildistatud {date} {time}",
     "This place does not have any photos or videos yet!" : "Siin kohas pole veel ühtegi fotot ega videot!",
@@ -168,8 +165,11 @@
     "Failed to set favorite state for {fileId}" : "Ei õnnestunud määrata olekut lemmikuna: „{fileId}“",
     "Failed to set favorite state for {fileName}" : "Ei õnnestunud määrata olekut lemmikuna: „{fileName}“",
     "Could not load photos folder" : "Fotode kausta laadimine ei õnnestunud",
+    "Group" : "Grupp",
+    "Remove {collaboratorLabel} from the collaborators list" : "Eemalda {collaboratorLabel} kaasautorite hulgast",
     "Back to {folder}" : "Tagasi kausta {folder}",
     "Share this folder" : "Jaga seda kausta",
+    "Loading folders …" : "Kaustada laadimine …",
     "One of the source folders does not exists" : "Ühte lähtekaustadest pole olemas",
     "Add" : "Lisa"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

@@ -11,12 +11,13 @@ OC.L10N.register(
     "Back" : "Atrás",
     "Save" : "Guardar",
     "Shared by" : "Compartido por",
-    "Group" : "Grupo",
     "Favorite" : "Hacer favorito",
     "Go back" : "Regresar",
     "Dates" : "Fechas",
     "Home" : "Inicio",
     "Remove from favorites" : "Eliminar de favoritos",
+    "Loading folders…" : "Cargando carpetas…",
+    "Group" : "Grupo",
     "Add" : "Agregar"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
