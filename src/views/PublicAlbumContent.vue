@@ -90,7 +90,7 @@ import { getClient } from '@nextcloud/files/dav'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
 import { translate } from '@nextcloud/l10n'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
-import { isMobile, /** NcButton, */ NcActions, /** NcActionSeparator, */ NcEmptyContent } from '@nextcloud/vue'
+import { /** NcButton, */ NcActions, /** NcActionSeparator, */ NcEmptyContent } from '@nextcloud/vue'
 // import Plus from 'vue-material-design-icons/Plus.vue'
 // import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
 import ImageOffOutline from 'vue-material-design-icons/ImageOffOutline.vue'
@@ -122,7 +122,6 @@ export default {
 
 	mixins: [
 		FetchCollectionContentMixin,
-		isMobile,
 	],
 
 	props: {
