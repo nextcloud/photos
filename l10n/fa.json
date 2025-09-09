@@ -36,8 +36,6 @@
     "Add people or groups who can edit your album" : "افراد یا گروه هایی را اضافه کنید که می توانند آلبوم شما را ویرایش کنند",
     "Search people or groups" : "افراد یا گروه ها را جستجو کنید",
     "No recommendations. Start typing." : "هیچ پیشنهادی نیست شروع به تایپ کنید.",
-    "Group" : "گروه",
-    "Remove {collaboratorLabel} from the collaborators list" : "{collaboratorLabel} را از لیست همکاران حذف کنید",
     "Copy the public link" : "لینک عمومی را کپی کنید",
     "Public link copied!" : "پیوند عمومی کپی شد!",
     "Copy public link" : "پیوند عمومی را کپی کنید",
@@ -91,7 +89,7 @@
     "This might take some time depending on the size of your photo library." : "این ممکن است بسته به اندازه کتابخانه عکس شما کمی طول بکشد.",
     "Recognized people will show up here" : "افراد شناخته شده در اینجا نشان داده می شوند",
     "This folder does not exist" : "این پوشه وجود ندارد",
-    "Loading folders …" : "در حال بارگیری پوشه ها…",
+    "Loading folders…" : "در حال بارگیری پوشه‌ها...",
     "No photos in here" : "هیچ عکسی در اینجا نیست",
     "This place does not have any photos or videos yet!" : "این مکان هنوز هیچ عکس یا فیلمی ندارد!",
     "Add photos to this place" : "عکس ها را به این مکان اضافه کنید",
@@ -119,8 +117,11 @@
     "{title}'s face" : "چهره {title}",
     "Last week" : "هفته گذشته",
     "Details" : "جزییات",
+    "Group" : "گروه",
+    "Remove {collaboratorLabel} from the collaborators list" : "{collaboratorLabel} را از لیست همکاران حذف کنید",
     "Back to {folder}" : "برگشت به {} پوشه",
     "Share this folder" : "این پوشه را به اشتراک بگذار",
+    "Loading folders …" : "در حال بارگیری پوشه ها…",
     "Add" : "افزودن"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

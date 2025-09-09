@@ -9,12 +9,12 @@ OC.L10N.register(
     "Back" : "Tilbake",
     "Save" : "Lagre",
     "Shared by" : "Delt av",
-    "Group" : "Gruppe",
     "An error occurred" : "Det oppstod ein feil.",
     "Favorite" : "Favoritt",
     "Home" : "Heim",
     "Remove from favorites" : "Remove from favorites",
     "Details" : "Detaljar",
+    "Group" : "Gruppe",
     "Add" : "Legg til"
 },
 "nplurals=2; plural=(n != 1);");

@@ -12,7 +12,6 @@ OC.L10N.register(
     "Tags" : "Etiquetas",
     "Back" : "Retorn",
     "Save" : "Enregistrar",
-    "Group" : "Grop",
     "Copy public link" : "Copiar lo ligam public",
     "An error occurred" : "Una error s’es producha",
     "Favorite" : "Favorit",
@@ -29,6 +28,7 @@ OC.L10N.register(
     "Tagged photos" : "Fòtos etiquetadas",
     "Last week" : "La setmana passada",
     "Details" : "Detalhs",
+    "Group" : "Grop",
     "Back to {folder}" : "Tornar a {folder}",
     "Share this folder" : "Partejar aqueste dossièr",
     "Add" : "Apondre"
