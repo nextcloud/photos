@@ -1,10 +1,11 @@
 /**
  * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
-*/
+ */
 
 import type { App, Component, ComponentPublicInstance } from 'vue'
 import type { PhotosTabType } from './views/PhotosTab.vue'
+
 import InformationOutline from '@mdi/svg/svg/information-outline.svg?raw'
 import { registerDavProperty } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
