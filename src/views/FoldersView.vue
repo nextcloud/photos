@@ -27,11 +27,11 @@
 			:title="folder?.basename?.toString?.() || rootTitle"
 			:root-title="rootTitle"
 			@refresh="onRefresh">
-			<UploadPicker
+			<!-- <UploadPicker
 				:accept="allowedMimes"
 				:destination="folderAsFolder"
 				:multiple="true"
-				@uploaded="onUpload" />
+				@uploaded="onUpload" /> -->
 		</HeaderNavigation>
 
 		<!-- Empty folder, should only happen via direct link -->
@@ -83,9 +83,11 @@ import { isAxiosError } from '@nextcloud/axios'
 import { Folder } from '@nextcloud/files'
 import { defaultRootPath, parsePermissions } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
-import { getUploader, UploadPicker } from '@nextcloud/upload'
+import { getUploader } from '@nextcloud/upload'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+// TODO: enable upload when UploadPicker component will be available
+// import UploadPicker from '@nextcloud/vue/components/UploadPicker'
 import FolderOutline from 'vue-material-design-icons/FolderOutline.vue'
 import FileLegacy from '../components/FileLegacy.vue'
 import FolderComponent from '../components/FolderComponent.vue'
@@ -105,7 +107,7 @@ export default {
 		HeaderNavigation,
 		NcEmptyContent,
 		NcLoadingIcon,
-		UploadPicker,
+		// UploadPicker,
 		FolderComponent,
 		FileLegacy,
 		GridLayout,
