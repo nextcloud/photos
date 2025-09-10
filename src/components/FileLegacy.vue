@@ -9,42 +9,30 @@
 			'file--cropped': croppedLayout,
 		}"
 		class="file"
-		:href="item.injected.source"
+		:href="item.source"
 		:aria-label="ariaLabel"
 		@click.prevent="openViewer">
-		<div v-if="item.injected.mime.includes('video') && item.injected.hasPreview" class="icon-video-white" />
-		<!-- image and loading placeholder -->
-		<transition-group name="fade" class="transition-group">
-			<img
-				v-if="!error"
-				ref="img"
-				:key="`${item.injected.basename}-img`"
-				:src="src"
-				:alt="item.injected.basename"
-				:aria-describedby="ariaUuid"
-				@load="onLoad"
-				@error="onError">
+		<div v-if="item.mime.includes('video') && item.hasPreview" class="icon-video-white" />
 
-			<svg
-				v-if="!loaded || error"
-				:key="`${item.injected.basename}-svg`"
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 32 32"
-				fill="url(#placeholder__gradient)">
-				<use v-if="isImage" href="#placeholder--img" />
-				<use v-else href="#placeholder--video" />
-			</svg>
-		</transition-group>
+		<img
+			v-if="!error"
+			ref="img"
+			:key="`${item.basename}-img`"
+			:src="src"
+			:alt="item.basename"
+			:aria-describedby="ariaUuid"
+			@load="onLoad"
+			@error="onError">
 
 		<!-- image name and cover -->
-		<p :id="ariaUuid" class="hidden-visually">{{ item.injected.basename }}</p>
+		<p :id="ariaUuid" class="hidden-visually">{{ item.basename }}</p>
 		<div class="cover" role="none" />
 	</a>
 </template>
 
 <script lang='ts'>
 import type { PropType } from 'vue'
-import type { InjectedItem } from './FolderComponent.vue'
+import type { FoldersNode } from '../services/FolderContent.ts'
 
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
@@ -55,7 +43,12 @@ export default {
 	inheritAttrs: false,
 	props: {
 		item: {
-			type: Object as PropType<InjectedItem>,
+			type: Object as PropType<FoldersNode>,
+			required: true,
+		},
+
+		list: {
+			type: Object as PropType<FoldersNode[]>,
 			required: true,
 		},
 	},
@@ -69,23 +62,23 @@ export default {
 
 	computed: {
 		ariaUuid() {
-			return `image-${this.item.injected.fileid}`
+			return `image-${this.item.fileid}`
 		},
 
 		ariaLabel() {
-			return t('photos', 'Open the full size "{name}" image', { name: this.item.injected.basename })
+			return t('photos', 'Open the full size "{name}" image', { name: this.item.basename })
 		},
 
 		isImage() {
-			return this.item.injected.mime.startsWith('image')
+			return this.item.mime.startsWith('image')
 		},
 
 		decodedEtag() {
-			return this.item.injected.etag.replace('&quot;', '').replace('&quot;', '')
+			return this.item.etag.replace('&quot;', '').replace('&quot;', '')
 		},
 
 		src() {
-			return generateUrl(`/core/preview?fileId=${this.item.injected.fileid}&c=${this.decodedEtag}&x=${250}&y=${250}&forceIcon=0&a=${this.croppedLayout ? '0' : '1'}`)
+			return generateUrl(`/core/preview?fileId=${this.item.fileid}&c=${this.decodedEtag}&x=${250}&y=${250}&forceIcon=0&a=${this.croppedLayout ? '0' : '1'}`)
 		},
 
 		croppedLayout() {
@@ -95,14 +88,16 @@ export default {
 
 	beforeUnmount() {
 		// cancel any pending load
-		this.$refs.src = ''
+		if (this.$refs.img !== undefined) {
+			(this.$refs.img as HTMLImageElement).src = ''
+		}
 	},
 
 	methods: {
 		openViewer() {
 			window.OCA.Viewer.open({
-				fileInfo: legacyToViewerFileInfo(this.item.injected),
-				list: this.item.injected.list.map((file) => legacyToViewerFileInfo(file)),
+				fileInfo: legacyToViewerFileInfo(this.item),
+				list: this.list.map((file) => legacyToViewerFileInfo(file)),
 			})
 		},
 

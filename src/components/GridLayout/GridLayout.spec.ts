@@ -5,10 +5,10 @@
 
 import { describe, expect, test } from 'vitest'
 import {
-	type TiledItem, type TiledRow,
+	type GridItem, type GridRow,
 
 	splitItemsInRows,
-} from './TiledLayout.js'
+} from './GridLayout.js'
 
 const squareImage1 = {
 	id: 'squareImage1',
@@ -45,58 +45,52 @@ const wideImage1 = {
 	ratio: 10000 / 250,
 }
 
-const items: TiledItem[] = [squareImage1, wideImage1, squareImage2, squareImage3, tallImage1]
+const items: GridItem[] = [squareImage1, wideImage1, squareImage2, squareImage3, tallImage1]
 
-const expectedLayout: TiledRow[] = [
+const expectedLayout: GridRow[] = [
 	{
 		items: [
 			{
 				...squareImage1,
-				// "* 10" to fit the width
-				width: squareImage1.width * 10, // 2000
-				height: squareImage1.height * 10, // 2500
+				width: 256,
+				height: 256,
 			},
-		],
-		height: squareImage1.height * 10, // 2500
-		key: 'squareImage1',
-	},
-	{
-		items: [
 			{
 				...wideImage1,
-				// "/ 5" to fit the width
-				width: wideImage1.width / 5, // 2000
-				height: wideImage1.height / 5, // 50
+				width: 256,
+				height: 256,
+			},
+			{
+				...squareImage2,
+				width: 256,
+				height: 256,
 			},
 		],
-		height: wideImage1.height / 5, // 50
-		key: 'wideImage1',
+		height: 256,
+		key: 'squareImage1-wideImage1-squareImage2',
 	},
 	{
 		items: [
 			{
-				...squareImage2,
-				width: 176,
-				height: 220,
-			},
-			{
 				...squareImage3,
-				width: 176,
-				height: 220,
+				width: 256,
+				height: 256,
 			},
 			{
 				...tallImage1,
-				width: 4.4,
-				height: 220,
+				width: 256,
+				height: 256,
 			},
 		],
-		height: 220,
-		key: 'squareImage2-squareImage3-tallImage1',
+		height: 256,
+		key: 'squareImage3-tallImage1',
 	},
 ]
 
-describe('TileLayout', () => {
+describe('GridLayout', () => {
 	test('Adding permissions', () => {
-		expect(splitItemsInRows(items, 2000)).toStrictEqual(expectedLayout)
+		expect(splitItemsInRows(items, 808, 256, 256, 20)).toStrictEqual(expectedLayout)
+		expect(splitItemsInRows(items, 800, 256, 256, 20)).toStrictEqual(expectedLayout)
+		expect(splitItemsInRows(items, 820, 256, 256, 20)).toStrictEqual(expectedLayout)
 	})
 })

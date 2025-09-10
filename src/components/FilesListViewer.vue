@@ -72,8 +72,8 @@
 <script lang='ts'>
 import type { File } from '@nextcloud/files'
 import type { PropType } from 'vue'
-import type { TiledItem } from '../services/TiledLayout.ts'
 import type { PhotoFile } from '../store/files.ts'
+import type { TiledItem } from './TiledLayout/TiledLayout.ts'
 
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
