@@ -170,6 +170,7 @@ export default {
 			window.OCA.Viewer.open({
 				fileInfo: toViewerFileInfo(this.files[fileId]),
 				list: this.fileIds.map((fileId) => toViewerFileInfo(this.files[fileId])),
+				onClose() { window.OCA.Files.Sidebar.close() },
 			})
 		},
 
