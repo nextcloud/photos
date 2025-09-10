@@ -103,7 +103,7 @@
 
 <script lang='ts'>
 import { t } from '@nextcloud/l10n'
-import Vue from 'vue'
+import { nextTick } from 'vue'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
@@ -145,7 +145,7 @@ export default {
 
 	directives: {
 		focus(el) {
-			Vue.nextTick(() => el.focus())
+			nextTick(() => el.focus())
 		},
 	},
 

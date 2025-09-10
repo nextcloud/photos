@@ -195,7 +195,7 @@
 import type { Collection } from '../services/collectionFetcher.js'
 
 import { translatePlural as n, translate as t } from '@nextcloud/l10n'
-import Vue from 'vue'
+import { nextTick } from 'vue'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -249,7 +249,7 @@ export default {
 
 	directives: {
 		focus(el) {
-			Vue.nextTick(() => el.focus())
+			nextTick(() => el.focus())
 		},
 	},
 
