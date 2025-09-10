@@ -5,8 +5,7 @@
 
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
 import areTagsInstalled from '../services/AreTagsInstalled.js'
 import isMapsInstalled from '../services/IsMapsInstalled.js'
@@ -30,8 +29,6 @@ const UnassignedFaces = () => import('../views/UnassignedFaces.vue')
 
 const baseTitle = document.title
 
-Vue.use(Router)
-
 let mapsPath = generateUrl('/apps/maps')
 if (!isMapsInstalled) {
 	mapsPath = generateUrl('/settings/apps/integration/maps')
@@ -47,11 +44,10 @@ function parsePathParams(path: string | string[]): string {
 	return `/${Array.isArray(path) ? path.join('/') : path || ''}`
 }
 
-const router = new Router({
-	mode: 'history',
+const router = createRouter({
 	// if index.php is in the url AND we got this far, then it's working:
 	// let's keep using index.php in the url
-	base: generateUrl('/apps/photos'),
+	history: createWebHistory(generateUrl('/apps/photos')),
 	linkActiveClass: 'active',
 	routes: [
 		{
@@ -214,39 +210,45 @@ const router = new Router({
 				},
 			},
 		},
-		{
-			path: '/tags/',
-			component: TagsView,
-			name: 'tags',
-			redirect: !areTagsInstalled ? { name: 'timeline' } : undefined,
-			props: (route) => ({
-				path: '',
-				isRoot: !route.params.path,
-				rootTitle: t('photos', 'Tagged photos'),
-			}),
-			meta: {
-				rootTitle: () => {
-					return t('photos', 'Tagged photos')
-				},
-			},
-		},
-		{
-			path: '/tags/:path',
-			component: TagContent,
-			name: 'tagcontent',
-			redirect: !areTagsInstalled ? { name: 'timeline' } : undefined,
-			props: (route) => ({
-				path: `${route.params.path ? route.params.path : ''}`,
-			}),
-			meta: {
-				rootTitle: (to) => {
-					return t('photos', 'Tagged photo {title}', { title: to.params.path })
-				},
-			},
-		},
+		// TODO: ensure paths are redirect to timeline as before.
+		...(!areTagsInstalled
+			? []
+			: [
+					{
+						path: '/tags/',
+						component: TagsView,
+						name: 'tags',
+						props: (route) => ({
+							path: '',
+							isRoot: !route.params.path,
+							rootTitle: t('photos', 'Tagged photos'),
+						}),
+						meta: {
+							rootTitle: () => {
+								return t('photos', 'Tagged photos')
+							},
+						},
+					},
+					{
+						path: '/tags/:path',
+						component: TagContent,
+						name: 'tagcontent',
+						props: (route) => ({
+							path: `${route.params.path ? route.params.path : ''}`,
+						}),
+						meta: {
+							rootTitle: (to) => {
+								return t('photos', 'Tagged photo {title}', { title: to.params.path })
+							},
+						},
+					},
+				]
+		),
 		{
 			path: '/maps',
 			name: 'maps',
+			// TODO: does not work
+			redirect: {},
 			// router-link doesn't support external url, let's force the redirect
 			beforeEnter() {
 				window.open(mapsPath, '_blank')
