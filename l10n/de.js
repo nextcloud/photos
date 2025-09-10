@@ -116,7 +116,7 @@ OC.L10N.register(
     "This might take some time depending on the size of your photo library." : "Dies kann je nach Größe deiner Fotobibliothek einige Zeit dauern.",
     "Recognized people will show up here" : "Erkannte Menschen werden hier angezeigt werden",
     "This folder does not exist" : "Dieser Ordner existiert nicht",
-    "Loading folders…" : "Benötigt keine Übersetzung. Für Android wird nur die formelle Übersetzung verwendet (de_DE).",
+    "Loading folders…" : "Lade Ordner…",
     "No photos in here" : "Keine Fotos vorhanden",
     "Taken on {date} at {time}" : "Aufgenommen am {date} um {time}",
     "This place does not have any photos or videos yet!" : "Dieser Ort enthält noch keine Fotos oder Videos!",
