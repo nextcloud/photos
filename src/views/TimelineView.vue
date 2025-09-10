@@ -77,20 +77,23 @@
 					</NcButton>
 
 					<NcActions :aria-label="t('photos', 'Open actions menu')">
-						<ActionDownload
-							:selected-file-ids="selectedFileIds"
-							:title="t('photos', 'Download selected files')"
-							data-cy-header-action="download-selection">
+						<NcActionButton
+							data-cy-header-action="download-selection"
+							:close-after-click="true"
+							:aria-label="t('photos', 'Download selected files')"
+							@click="downloadSelectedFiles">
+							{{ t('photos', 'Download selected files') }}
+
 							<template #icon>
 								<DownloadOutline />
 							</template>
-						</ActionDownload>
+						</NcActionButton>
 
 						<NcActionButton
-							v-if="shouldFavoriteSelection(selectedFileIds)"
+							v-if="shouldFavoriteSelection"
 							:close-after-click="true"
 							:aria-label="t('photos', 'Mark selection as favorite')"
-							@click="favoriteSelection(selectedFileIds)">
+							@click="favoriteSelection">
 							{{ t('photos', 'Add selection to favorites') }}
 							<template #icon>
 								<StarOutline />
@@ -100,7 +103,7 @@
 							v-else
 							:close-after-click="true"
 							:aria-label="t('photos', 'Remove selection from favorites')"
-							@click="unFavoriteSelection(selectedFileIds)">
+							@click="unFavoriteSelection">
 							{{ t('photos', 'Remove selection from favorites') }}
 							<template #icon>
 								<Star />
@@ -188,14 +191,13 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcModal from '@nextcloud/vue/components/NcModal'
 import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 import Close from 'vue-material-design-icons/Close.vue'
+import DownloadOutline from 'vue-material-design-icons/DownloadOutline.vue'
 import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import PlusBoxMultipleOutline from 'vue-material-design-icons/PlusBoxMultipleOutline.vue'
 import Star from 'vue-material-design-icons/Star.vue'
 import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
-import DownloadOutline from 'vue-material-design-icons/TrayArrowDown.vue'
-import ActionDownload from '../components/Actions/ActionDownload.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import AlbumPicker from '../components/Albums/AlbumPicker.vue'
 import FileComponent from '../components/FileComponent.vue'
@@ -206,6 +208,7 @@ import FetchFilesMixin from '../mixins/FetchFilesMixin.ts'
 import FilesByMonthMixin from '../mixins/FilesByMonthMixin.ts'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.ts'
 import { allMimes } from '../services/AllowedMimes.ts'
+import { downloadFiles } from '../services/downloadFiles.ts'
 import useFilterStore from '../store/filters.ts'
 import { configChangedEvent } from '../store/userConfig.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.ts'
@@ -228,7 +231,6 @@ export default {
 		AlbumPicker,
 		FilesListViewer,
 		FileComponent,
-		ActionDownload,
 		HeaderNavigation,
 		PhotosSourceLocationsSettings,
 		AlertCircleOutline,
@@ -307,6 +309,11 @@ export default {
 				return this.t('photos', 'Create new album')
 			}
 		},
+
+		shouldFavoriteSelection(): boolean {
+			// Favorite all selection if at least one file is not in the favorites.
+			return this.selectedFileIds.some((fileId) => this.files[fileId].attributes.favorite === 0)
+		},
 	},
 
 	watch: {
@@ -380,17 +387,18 @@ export default {
 			return moment(date, 'YYYYMM').format('YYYY')
 		},
 
-		async favoriteSelection(selectedFileIds: string[]) {
-			await this.$store.dispatch('toggleFavoriteForFiles', { fileIds: selectedFileIds, favoriteState: 1 })
+		async favoriteSelection() {
+			await this.$store.dispatch('toggleFavoriteForFiles', { fileIds: this.selectedFileIds, favoriteState: 1 })
 		},
 
-		async unFavoriteSelection(selectedFileIds: string[]) {
-			await this.$store.dispatch('toggleFavoriteForFiles', { fileIds: selectedFileIds, favoriteState: 0 })
+		async unFavoriteSelection() {
+			await this.$store.dispatch('toggleFavoriteForFiles', { fileIds: this.selectedFileIds, favoriteState: 0 })
 		},
 
-		shouldFavoriteSelection(selectedFileIds: string[]): boolean {
-			// Favorite all selection if at least one file is not in the favorites.
-			return selectedFileIds.some((fileId) => this.files[fileId].attributes.favorite === 0)
+		downloadSelectedFiles() {
+			const fileIds = this.selectedFileIds
+			this.onUncheckFiles(fileIds)
+			downloadFiles(fileIds.map((fileId) => this.files[fileId]))
 		},
 
 		t,
