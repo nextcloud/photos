@@ -116,6 +116,7 @@ OC.L10N.register(
     "This might take some time depending on the size of your photo library." : "See võib sõltuvalt fototeegi suurusest natuke aega võtta.",
     "Recognized people will show up here" : "Siin näidatakse tuvastatud inimesi",
     "This folder does not exist" : "Seda kausta pole olemas",
+    "Loading folders…" : "Laadin kaustu…",
     "No photos in here" : "Siin ei ole fotosid",
     "Taken on {date} at {time}" : "Pildistatud {date} {time}",
     "This place does not have any photos or videos yet!" : "Siin kohas pole veel ühtegi fotot ega videot!",
