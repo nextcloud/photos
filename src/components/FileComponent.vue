@@ -184,10 +184,10 @@ export default {
 
 	beforeUnmount() {
 		// cancel any pending load
-		if (this.$refs.imgSmall !== undefined) {
+		if (this.$refs.imgSmall !== null && this.$refs.imgSmall !== undefined) {
 			(this.$refs.imgSmall as HTMLImageElement).src = ''
 		}
-		if (this.$refs.imgLarge !== undefined) {
+		if (this.$refs.imgLarge !== null && this.$refs.imgLarge !== undefined) {
 			(this.$refs.imgLarge as HTMLImageElement).src = ''
 		}
 	},
