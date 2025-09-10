@@ -52,7 +52,7 @@
 
 <script lang='ts'>
 import type { PropType } from 'vue'
-import type { PublicAlbum } from '../../store/publicAlbums.js'
+import type { Album } from '../../store/albums.ts'
 
 import { translate } from '@nextcloud/l10n'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
@@ -62,8 +62,8 @@ import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import FileComponent from '../FileComponent.vue'
 import FilesListViewer from '../FilesListViewer.vue'
-import FilesSelectionMixin from '../../mixins/FilesSelectionMixin.js'
-import { toViewerFileInfo } from '../../utils/fileUtils.js'
+import FilesSelectionMixin from '../../mixins/FilesSelectionMixin.ts'
+import { toViewerFileInfo } from '../../utils/fileUtils.ts'
 
 export default defineComponent({
 	name: 'CollectionContent',
@@ -80,7 +80,7 @@ export default defineComponent({
 
 	props: {
 		collection: {
-			type: Object as PropType<PublicAlbum>,
+			type: Object as PropType<Album>,
 			default: () => undefined,
 		},
 
