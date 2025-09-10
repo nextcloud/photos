@@ -5,14 +5,15 @@
 
 <template>
 	<NcCheckboxRadioSwitch
-		:checked="croppedLayout"
+		:model-value="croppedLayout"
 		type="switch"
-		@update:checked="updateSetting">
+		@update:model-value="updateSetting">
 		{{ t('photos', 'Enable squared photos view') }}
 	</NcCheckboxRadioSwitch>
 </template>
 
 <script lang='ts'>
+import { t } from '@nextcloud/l10n'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 
 export default {
@@ -32,6 +33,8 @@ export default {
 		updateSetting(value) {
 			this.$store.dispatch('updateUserConfig', { key: 'croppedLayout', value })
 		},
+
+		t,
 	},
 }
 </script>
