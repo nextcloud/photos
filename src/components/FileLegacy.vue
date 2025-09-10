@@ -98,6 +98,7 @@ export default {
 			window.OCA.Viewer.open({
 				fileInfo: legacyToViewerFileInfo(this.item),
 				list: this.list.map((file) => legacyToViewerFileInfo(file)),
+				onClose() { window.OCA.Files.Sidebar.close() },
 			})
 		},
 
