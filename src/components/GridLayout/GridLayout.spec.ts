@@ -14,35 +14,30 @@ const squareImage1 = {
 	id: 'squareImage1',
 	width: 200,
 	height: 250,
-	ratio: 200 / 250,
 }
 
 const squareImage2 = {
 	id: 'squareImage2',
 	width: 200,
 	height: 250,
-	ratio: 200 / 250,
 }
 
 const squareImage3 = {
 	id: 'squareImage3',
 	width: 200,
 	height: 250,
-	ratio: 200 / 250,
 }
 
 const tallImage1 = {
 	id: 'tallImage1',
 	width: 200,
 	height: 10000,
-	ratio: 200 / 10000,
 }
 
 const wideImage1 = {
 	id: 'wideImage1',
 	width: 10000,
 	height: 250,
-	ratio: 10000 / 250,
 }
 
 const items: GridItem[] = [squareImage1, wideImage1, squareImage2, squareImage3, tallImage1]
@@ -89,8 +84,10 @@ const expectedLayout: GridRow[] = [
 
 describe('GridLayout', () => {
 	test('Adding permissions', () => {
+		expect(splitItemsInRows(items, 807, 256, 256, 20)).not.toStrictEqual(expectedLayout)
 		expect(splitItemsInRows(items, 808, 256, 256, 20)).toStrictEqual(expectedLayout)
-		expect(splitItemsInRows(items, 800, 256, 256, 20)).toStrictEqual(expectedLayout)
-		expect(splitItemsInRows(items, 820, 256, 256, 20)).toStrictEqual(expectedLayout)
+		expect(splitItemsInRows(items, 828, 256, 256, 20)).toStrictEqual(expectedLayout)
+		expect(splitItemsInRows(items, 1083, 256, 256, 20)).toStrictEqual(expectedLayout)
+		expect(splitItemsInRows(items, 1084, 256, 256, 20)).not.toStrictEqual(expectedLayout)
 	})
 })

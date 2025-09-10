@@ -7,7 +7,6 @@ export type GridItem = {
 	id: string // Unique id for the item.
 	width: number // Real width of the item.
 	height: number // Real height of the item.
-	ratio: number // The aspect ratio of the item.
 }
 
 export type Section = {
@@ -41,10 +40,11 @@ export function splitItemsInRows(items: GridItem[], containerWidth: number, item
 	// Split items in chunks of itemsPerRow.
 	const rows: GridRow[] = []
 	for (let i = 0; i < items.length; i += itemsPerRow) {
+		const row = items.slice(i, i + itemsPerRow)
 		rows.push({
-			items: items.slice(i, i + itemsPerRow).map((item) => ({ ...item, width: itemWidth, height: itemHeight })),
+			items: row.map((item) => ({ ...item, width: itemWidth, height: itemHeight })),
 			height: itemHeight,
-			key: items.map((item) => item.id).join('-'),
+			key: row.map((item) => item.id).join('-'),
 		})
 	}
 
