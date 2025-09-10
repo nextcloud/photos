@@ -3,7 +3,6 @@ import type { UserConfig } from 'vitest/node'
 import { createAppConfig } from '@nextcloud/vite-config'
 import { join } from 'path'
 import { VitePWA } from 'vite-plugin-pwa'
-import SassGridConfig from './src/utils/SassGridConfig.js'
 
 // replaced by vite
 declare const __dirname: string
@@ -30,13 +29,6 @@ export default createAppConfig({
 							return 'icons'
 						}
 					},
-				},
-			},
-		},
-		css: {
-			preprocessorOptions: {
-				scss: {
-					additionalData: SassGridConfig,
 				},
 			},
 		},

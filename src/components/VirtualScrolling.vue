@@ -57,7 +57,7 @@ export default {
 		},
 
 		containerElement: {
-			type: HTMLElement,
+			type: [HTMLElement, null],
 			default: null,
 		},
 

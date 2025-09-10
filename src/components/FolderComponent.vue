@@ -5,15 +5,13 @@
 
 <template>
 	<FolderTagPreview
-		:id="item.injected.fileid"
-		:name="item.injected.basename.toString()"
-		:path="item.injected.filename"
+		:id="item.fileid"
+		:name="item.basename.toString()"
+		:path="item.filename"
 		:file-list="previewFiles" />
 </template>
 
 <script lang='ts'>
-import type Vue from 'vue'
-
 import { getCurrentUser } from '@nextcloud/auth'
 import {
 	type PropType,
@@ -24,18 +22,6 @@ import FolderTagPreview from './FolderTagPreview.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.ts'
 import getFolderContent, { type FoldersNode } from '../services/FolderContent.ts'
 import logger from '../services/logger.ts'
-
-export type InjectedItem = {
-	id: string
-	injected: FoldersNode & {
-		showShared: true
-		list: FoldersNode[]
-	}
-	width: number
-	height: number
-	columnSpan: number
-	renderComponent: Vue
-}
 
 export default defineComponent({
 	name: 'FolderComponent',
@@ -50,14 +36,19 @@ export default defineComponent({
 
 	props: {
 		item: {
-			type: Object as PropType<InjectedItem>,
+			type: Object as PropType<FoldersNode>,
 			required: true,
+		},
+
+		showShared: {
+			type: Boolean,
+			required: false,
 		},
 	},
 
 	data() {
 		return {
-			previewFolder: this.item.injected.fileid,
+			previewFolder: this.item.fileid,
 		}
 	},
 
@@ -76,7 +67,7 @@ export default defineComponent({
 
 		// files list of the current folder
 		folderContent() {
-			return this.folders[this.item.injected.fileid]
+			return this.folders[this.item.fileid]
 		},
 
 		previewFiles() {
@@ -92,7 +83,7 @@ export default defineComponent({
 			// We limit to one subfolder for performance concerns
 			if (previewFiles.length === 0
 				&& this.subFolders[this.previewFolder]
-				&& this.previewFolder === this.item.injected.fileid) {
+				&& this.previewFolder === this.item.fileid) {
 				const firstChildFolder = this.subFolders[this.previewFolder][0]
 				this.updatePreviewFolder(firstChildFolder)
 
@@ -107,7 +98,7 @@ export default defineComponent({
 
 	async created() {
 		if (!this.folderContent) {
-			await this.getFolderData(this.item.injected.filename)
+			await this.getFolderData(this.item.filename)
 		}
 	},
 
@@ -120,7 +111,7 @@ export default defineComponent({
 
 				// get data
 				const { folder, folders, files } = await getFolderContent(unPrefixedFileName, {
-					shared: this.item.injected.showShared,
+					shared: this.showShared,
 					signal: this.abortController.signal,
 				})
 				this.$store.dispatch('updateFolders', { fileid: folder?.fileid, files, folders })
