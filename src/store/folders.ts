@@ -6,7 +6,6 @@ import { defaultRootPath } from '@nextcloud/files/dav'
  * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import Vue from 'vue'
 import { sortCompareFileInfo } from '../utils/fileUtils.js'
 
 const state = {
@@ -35,9 +34,9 @@ const mutations = {
 				.filter((file) => file.fileid >= 0)
 
 			// Set folder list
-			Vue.set(state.folders, fileid, list.map((file) => file.fileid))
+			state.folders[fileid] = list.map((file) => file.fileid)
 		} else {
-			Vue.set(state.folders, fileid, [])
+			state.folders[fileid] = []
 		}
 	},
 
@@ -84,7 +83,7 @@ const mutations = {
 				.map((folder) => folder.fileid as number)
 				// some invalid folders have an id of -1 (ext storage)
 				.filter((id) => id >= 0)
-			Vue.set(state.subFolders, fileid, subfolders)
+			state.subFolders[fileid] = subfolders
 		}
 	},
 
@@ -98,7 +97,7 @@ const mutations = {
 	 */
 	addPath(state: FoldersState, { path, fileid }: { path: string, fileid: number }) {
 		if (fileid >= 0) {
-			Vue.set(state.paths, path, fileid)
+			state.paths[path] = fileid
 		}
 	},
 
@@ -117,7 +116,7 @@ const mutations = {
 				.sort((a, b) => sortCompareFileInfo(a, b, 'lastmod'))
 				.filter((file) => file.fileid >= 0)
 				.map((file) => file.fileid)
-			Vue.set(state.folders, fileid, [...list, ...state.folders[fileid]])
+			state.folders[fileid] = [...list, ...(state.folders[fileid] ?? [])]
 		}
 	},
 }

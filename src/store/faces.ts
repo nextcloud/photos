@@ -9,7 +9,6 @@ import type { PhotosContext } from './index.ts'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
-import Vue from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
@@ -33,7 +32,7 @@ const mutations = {
 	 */
 	addFaces(state: FacesState, { faces }: { faces: Collection[] }) {
 		for (const face of faces) {
-			Vue.set(state.faces, face.basename, face)
+			state.faces[face.basename] = face
 		}
 	},
 
@@ -45,8 +44,8 @@ const mutations = {
 	 * @param root0.faceNames
 	 */
 	removeFaces(state: FacesState, { faceNames }: { faceNames: string[] }) {
-		faceNames.forEach((faceName) => Vue.delete(state.faces, faceName))
-		faceNames.forEach((faceName) => Vue.delete(state.facesFiles, faceName))
+		faceNames.forEach((faceName) => delete state.faces[faceName])
+		faceNames.forEach((faceName) => delete state.facesFiles[faceName])
 	},
 
 	/**
@@ -59,7 +58,7 @@ const mutations = {
 	 */
 	addFilesToFace(state: FacesState, { faceName, fileIdsToAdd }: { faceName: string, fileIdsToAdd: string[] }) {
 		if (!state.facesFiles[faceName]) {
-			Vue.set(state.facesFiles, faceName, [])
+			state.facesFiles[faceName] = []
 		}
 		const faceFiles = state.facesFiles[faceName]
 		faceFiles.push(...fileIdsToAdd.filter((fileId) => !faceFiles.includes(fileId))) // Filter to prevent duplicate fileId.
@@ -100,7 +99,7 @@ const mutations = {
 	 * @param root0.fileIdsToRemove
 	 */
 	removeFilesFromFace(state: FacesState, { faceName, fileIdsToRemove }: { faceName: string, fileIdsToRemove: string[] }) {
-		Vue.set(state.facesFiles, faceName, state.facesFiles[faceName].filter((fileId) => !fileIdsToRemove.includes(fileId)))
+		state.facesFiles[faceName] = state.facesFiles[faceName].filter((fileId) => !fileIdsToRemove.includes(fileId))
 	},
 
 	setUnassignedFilesCount(state: FacesState, count: number) {
