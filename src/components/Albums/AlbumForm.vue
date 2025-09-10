@@ -7,13 +7,13 @@
 		<div class="form-inputs">
 			<NcTextField
 				ref="nameInput"
-				v-model:value="albumName"
+				v-model.trim="albumName"
 				type="text"
 				name="name"
 				:required="true"
 				:label="t('photos', 'Name of the album')" />
 			<NcTextField
-				v-model:value="albumLocation"
+				v-model.trim="albumLocation"
 				name="location"
 				type="text"
 				:label="t('photos', 'Location of the album')">
@@ -43,7 +43,7 @@
 				<NcButton
 					v-if="sharingEnabled && !editMode"
 					variant="secondary"
-					:disabled="albumName.trim() === '' || loading"
+					:disabled="albumName === '' || loading"
 					@click="showCollaboratorView = true">
 					<template #icon>
 						<AccountMultiplePlusOutline :size="20" />
@@ -186,7 +186,7 @@ export default {
 		}
 
 		this.$nextTick(() => {
-			(this.$refs!.nameInput! as NcTextField).$el.getElementsByTagName('input')[0].focus()
+			(this.$refs.nameInput as typeof NcTextField).$el.getElementsByTagName('input')[0].focus()
 		})
 	},
 
