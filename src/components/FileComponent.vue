@@ -71,7 +71,6 @@
 
 		<FavoriteIcon
 			v-if="file.attributes.favorite === 1"
-			v-once
 			class="favorite-state" />
 	</div>
 </template>
