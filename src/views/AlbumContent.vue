@@ -14,7 +14,6 @@
 			<template #header="{ selectedFileIds, resetSelection }">
 				<HeaderNavigation
 					key="navigation"
-
 					:loading="loadingCollectionFiles"
 					:params="{ albumName }"
 					:path="'/' + albumName"
@@ -23,7 +22,6 @@
 					<template #subtitle>
 						<div
 							v-if="album !== undefined && album.attributes.location !== ''"
-
 							class="album__location">
 							<MapMarkerOutline />{{ album.attributes.location }}
 						</div>
@@ -94,7 +92,26 @@
 								<Download slot="icon" />
 							</ActionDownload>-->
 
-								<ActionFavorite :selected-file-ids="selectedFileIds" />
+								<NcActionButton
+									v-if="shouldFavoriteSelection(selectedFileIds)"
+									:close-after-click="true"
+									:aria-label="t('photos', 'Mark selection as favorite')"
+									@click="favoriteSelection(selectedFileIds)">
+									{{ t('photos', 'Add selection to favorites') }}
+									<template #icon>
+										<StarOutline />
+									</template>
+								</NcActionButton>
+								<NcActionButton
+									v-else
+									:close-after-click="true"
+									:aria-label="t('photos', 'Remove selection from favorites')"
+									@click="unFavoriteSelection(selectedFileIds)">
+									{{ t('photos', 'Remove selection from favorites') }}
+									<template #icon>
+										<Star />
+									</template>
+								</NcActionButton>
 
 								<NcActionButton
 									v-if="removableSelectedFiles.length !== 0"
@@ -201,9 +218,10 @@ import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
 import PencilOutline from 'vue-material-design-icons/PencilOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import ShareVariantOutline from 'vue-material-design-icons/ShareVariantOutline.vue'
+import Star from 'vue-material-design-icons/Star.vue'
+import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
-import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import CollaboratorsSelectionForm from '../components/Albums/CollaboratorsSelectionForm.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
@@ -218,7 +236,6 @@ export default {
 	name: 'AlbumContent',
 	components: {
 		// ActionDownload,
-		ActionFavorite,
 		AlbumForm,
 		Close,
 		CollaboratorsSelectionForm,
@@ -241,6 +258,8 @@ export default {
 		PencilOutline,
 		Plus,
 		ShareVariantOutline,
+		Star,
+		StarOutline,
 	},
 
 	mixins: [
@@ -294,6 +313,10 @@ export default {
 				.map((fileId) => this.$store.state.files.files[fileId])
 				.filter((file) => file.attributes['photos-album-file-origin'] !== 'filters')
 				.map((file) => file.fileid.toString())
+		},
+
+		files() {
+			return this.$store.state.files.files
 		},
 	},
 
@@ -358,6 +381,19 @@ export default {
 		async handleFiltersChange(filters) {
 			await this.$store.dispatch('updateCollection', { collectionFileName: this.album?.root + this.album?.path, properties: { filters } })
 			this.fetchAlbumContent()
+		},
+
+		async favoriteSelection(selectedFileIds: string[]) {
+			await this.$store.dispatch('toggleFavoriteForFiles', { fileIds: selectedFileIds, favoriteState: 1 })
+		},
+
+		async unFavoriteSelection(selectedFileIds: string[]) {
+			await this.$store.dispatch('toggleFavoriteForFiles', { fileIds: selectedFileIds, favoriteState: 0 })
+		},
+
+		shouldFavoriteSelection(selectedFileIds: string[]): boolean {
+			// Favorite all selection if at least one file is not in the favorites.
+			return selectedFileIds.some((fileId) => this.files[fileId].attributes.favorite === 0)
 		},
 
 		t: translate,

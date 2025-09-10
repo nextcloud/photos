@@ -86,7 +86,26 @@
 							</template>
 						</ActionDownload>
 
-						<ActionFavorite :selected-file-ids="selectedFileIds" />
+						<NcActionButton
+							v-if="shouldFavoriteSelection(selectedFileIds)"
+							:close-after-click="true"
+							:aria-label="t('photos', 'Mark selection as favorite')"
+							@click="favoriteSelection(selectedFileIds)">
+							{{ t('photos', 'Add selection to favorites') }}
+							<template #icon>
+								<StarOutline />
+							</template>
+						</NcActionButton>
+						<NcActionButton
+							v-else
+							:close-after-click="true"
+							:aria-label="t('photos', 'Remove selection from favorites')"
+							@click="unFavoriteSelection(selectedFileIds)">
+							{{ t('photos', 'Remove selection from favorites') }}
+							<template #icon>
+								<Star />
+							</template>
+						</NcActionButton>
 
 						<NcActionButton
 							:close-after-click="true"
@@ -104,7 +123,6 @@
 		</HeaderNavigation>
 
 		<FilesListViewer
-			ref="filesListViewer"
 			:container-element="appContent"
 			class="timeline__file-list"
 			:file-ids-by-section="fileIdsByMonth"
@@ -173,10 +191,11 @@ import Close from 'vue-material-design-icons/Close.vue'
 import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import PlusBoxMultipleOutline from 'vue-material-design-icons/PlusBoxMultipleOutline.vue'
+import Star from 'vue-material-design-icons/Star.vue'
+import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 import DownloadOutline from 'vue-material-design-icons/TrayArrowDown.vue'
 import ActionDownload from '../components/Actions/ActionDownload.vue'
-import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import AlbumPicker from '../components/Albums/AlbumPicker.vue'
 import FileComponent from '../components/FileComponent.vue'
@@ -209,11 +228,12 @@ export default {
 		AlbumPicker,
 		FilesListViewer,
 		FileComponent,
-		ActionFavorite,
 		ActionDownload,
 		HeaderNavigation,
 		PhotosSourceLocationsSettings,
 		AlertCircleOutline,
+		Star,
+		StarOutline,
 	},
 
 	mixins: [
@@ -358,6 +378,19 @@ export default {
 		// TODO: This might be a performance issue
 		dateYear(date: string): string {
 			return moment(date, 'YYYYMM').format('YYYY')
+		},
+
+		async favoriteSelection(selectedFileIds: string[]) {
+			await this.$store.dispatch('toggleFavoriteForFiles', { fileIds: selectedFileIds, favoriteState: 1 })
+		},
+
+		async unFavoriteSelection(selectedFileIds: string[]) {
+			await this.$store.dispatch('toggleFavoriteForFiles', { fileIds: selectedFileIds, favoriteState: 0 })
+		},
+
+		shouldFavoriteSelection(selectedFileIds: string[]): boolean {
+			// Favorite all selection if at least one file is not in the favorites.
+			return selectedFileIds.some((fileId) => this.files[fileId].attributes.favorite === 0)
 		},
 
 		t,
