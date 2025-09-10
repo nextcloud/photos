@@ -22,11 +22,11 @@ export default defineComponent({
 
 	methods: {
 		onFileSelectToggle({ id, value }): void {
-			this.$set(this.selection, id, value)
+			this.selection[id] = value
 		},
 
 		onUncheckFiles(filesIds: string[]): void {
-			filesIds.forEach((filesId: string) => this.$set(this.selection, filesId, false))
+			filesIds.forEach((filesId: string) => this.selection[filesId] = false)
 		},
 
 		resetSelection(): void {

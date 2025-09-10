@@ -17,7 +17,10 @@
 			<!-- image and loading placeholder -->
 			<div class="file__images">
 				<VideoOutline v-if="file.mime?.includes('video')" class="icon-overlay" :size="64" />
-				<PlayCircleOutlineIcon v-else-if="file.attributes['metadata-files-live-photo'] !== undefined" class="icon-overlay" :size="64" />
+				<PlayCircleOutlineIcon
+					v-else-if="file.attributes['metadata-files-live-photo'] !== undefined"
+					class="icon-overlay"
+					:size="64" />
 
 				<!-- We have two img elements to load the small and large preview -->
 				<!-- Do not show the small preview if the larger one is loaded -->
@@ -40,7 +43,7 @@
 						:alt="file.basename"
 						:decoding="loadedSmall || isVisible ? 'sync' : 'async'"
 						:fetchpriority="loadedSmall || isVisible ? 'high' : 'low'"
-						:loading="loadedSmall || isVisible ? 'eager' : distance < 2 ? 'auto' : 'lazy'"
+						:loading="loadedSmall || isVisible ? 'eager' : distance < 2 ? undefined : 'lazy'"
 						@load="onLoadSmall"
 						@error="onErrorSmall">
 
@@ -52,7 +55,7 @@
 						:alt="file.basename"
 						:decoding="loadedLarge || isVisible ? 'sync' : 'async'"
 						:fetchpriority="loadedLarge || isVisible ? 'high' : 'low'"
-						:loading="loadedLarge || isVisible ? 'auto' : 'lazy'"
+						:loading="loadedLarge || isVisible ? undefined : 'lazy'"
 						@load="onLoadLarge"
 						@error="onErrorLarge">
 				</template>
@@ -63,8 +66,8 @@
 			v-if="allowSelection"
 			class="selection-checkbox"
 			:aria-label="t('photos', 'Select image {imageName}', { imageName: file.basename })"
-			:checked="selected"
-			@update:checked="onToggle" />
+			:model-value="selected"
+			@update:model-value="onToggle" />
 
 		<FavoriteIcon
 			v-if="file.attributes.favorite === 1"
@@ -185,8 +188,8 @@ export default {
 		if (this.$refs.imgSmall !== undefined) {
 			(this.$refs.imgSmall as HTMLImageElement).src = ''
 		}
-		if (this.$refs.srcLarge !== undefined) {
-			(this.$refs.srcLarge as HTMLImageElement).src = ''
+		if (this.$refs.imgLarge !== undefined) {
+			(this.$refs.imgLarge as HTMLImageElement).src = ''
 		}
 	},
 
@@ -354,15 +357,7 @@ export default {
 		z-index: 1;
 		width: fit-content;
 
-		:deep .checkbox-radio-switch__input:focus-visible + .checkbox-radio-switch__content,
-		.checkbox-radio-switch__input:focus-visible {
-			outline: 2px solid var(--color-main-text);
-			box-shadow: 0 0 0 3px var(--color-main-background);
-			outline-offset: 0px;
-		}
-
 		:deep(.checkbox-radio-switch__content) {
-			padding: 10px;
 			box-sizing: border-box;
 			background: var(--color-main-background);
 
@@ -377,7 +372,7 @@ export default {
 			}
 
 			.checkbox-radio-switch__icon {
-				margin: 0;
+				margin-right: -4px;
 			}
 		}
 
