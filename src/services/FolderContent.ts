@@ -12,6 +12,7 @@ export type FoldersNode = {
 	basename: string
 	etag: string
 	fileid: number
+	id: number
 	filename: string
 	source: string
 	lastmod: number
@@ -36,6 +37,7 @@ export default async function(path: string = '/', options: AxiosRequestConfig & 
 	const list: FoldersNode[] = response.data
 		.map((data) => ({
 			...data,
+			id: data.fileid,
 			filename: `${defaultRootPath}${data.filename}`,
 			source: decodeURI(defaultRemoteURL + `${defaultRootPath}${data.filename}`),
 		}))

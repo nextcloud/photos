@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import type { TiledSection } from './TiledLayout.ts'
+import type { TiledSection } from '../TiledLayout/TiledLayout.ts'
 
 defineProps<{
 	rows: TiledSection[]

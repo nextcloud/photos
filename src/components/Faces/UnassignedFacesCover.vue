@@ -39,6 +39,8 @@ export default {
 		},
 	},
 
+	emits: ['click'],
+
 	computed: {
 		unassignedFilesCount() {
 			return this.$store.state.faces.unassignedFilesCount

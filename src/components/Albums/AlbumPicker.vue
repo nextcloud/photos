@@ -17,8 +17,8 @@
 				:name="originalName(album)"
 				:aria-label="t('photos', 'Add selection to album {albumName}', { albumName: album.basename })"
 				@click="pickAlbum(album)">
-				<template slot="icon">
-					<img v-if="album.attributes['last-photo'] !== -1" class="album__image" :src="album.attributes['last-photo'] | toCoverUrl">
+				<template #icon>
+					<img v-if="album.attributes['last-photo'] !== -1" class="album__image" :src="toCoverUrl(album.attributes['last-photo'])">
 					<div v-else class="album__image album__image--placeholder">
 						<ImageMultipleOutline :size="32" />
 					</div>
@@ -83,13 +83,9 @@ export default defineComponent({
 		AlbumForm,
 	},
 
-	filters: {
-		toCoverUrl(fileId: string): string {
-			return generateUrl(`/apps/photos/api/v1/preview/${fileId}?x=${64}&y=${64}`)
-		},
-	},
-
 	mixins: [FetchCollectionsMixin],
+
+	emits: ['album-picked'],
 
 	data() {
 		return {
@@ -140,6 +136,10 @@ export default defineComponent({
 			} else {
 				return album.basename
 			}
+		},
+
+		toCoverUrl(fileId: string): string {
+			return generateUrl(`/apps/photos/api/v1/preview/${fileId}?x=${64}&y=${64}`)
 		},
 
 		t: translate,

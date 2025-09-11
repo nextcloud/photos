@@ -53,6 +53,8 @@ export default {
 		},
 	},
 
+	emits: ['click'],
+
 	data() {
 		return {
 			observer: null,

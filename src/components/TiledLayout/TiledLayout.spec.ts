@@ -95,7 +95,7 @@ const expectedLayout: TiledRow[] = [
 	},
 ]
 
-describe('TileLayout', () => {
+describe('TiledLayout', () => {
 	test('Adding permissions', () => {
 		expect(splitItemsInRows(items, 2000)).toStrictEqual(expectedLayout)
 	})

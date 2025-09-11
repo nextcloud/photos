@@ -57,7 +57,7 @@ export default {
 		},
 
 		containerElement: {
-			type: HTMLElement,
+			type: [HTMLElement, null],
 			default: null,
 		},
 
@@ -86,6 +86,8 @@ export default {
 			default: '',
 		},
 	},
+
+	emits: ['need-content'],
 
 	data() {
 		return {
@@ -301,7 +303,7 @@ export default {
 		this.container?.addEventListener('scroll', this.updateScrollPosition, { passive: true })
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		if (this.useWindow) {
 			window.removeEventListener('resize', this.updateContainerSize)
 		}
