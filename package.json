@@ -111,6 +111,7 @@
     "tslib": "^2.8.1",
     "typescript": "^5.8.3",
     "vue-jest": "^3.0.7",
+    "vue-loader": "^15.11.1",
     "wait-on": "^7.0.1",
     "workbox-webpack-plugin": "^6.5.4"
   }
