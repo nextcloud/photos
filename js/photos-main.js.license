@@ -54,7 +54,6 @@ SPDX-FileCopyrightText: Jacob Clevenger<https://github.com/wheatjs>
 SPDX-FileCopyrightText: Iskren Ivov Chernev <iskren.chernev@gmail.com> (https://github.com/ichernev)
 SPDX-FileCopyrightText: Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me)
 SPDX-FileCopyrightText: Irakli Gozalishvili <rfobic@gmail.com> (http://jeditoolkit.com)
-SPDX-FileCopyrightText: Hypercontext
 SPDX-FileCopyrightText: Hiroki Osame
 SPDX-FileCopyrightText: Guillaume Chau <guillaume.b.chau@gmail.com>
 SPDX-FileCopyrightText: GitHub Inc.
@@ -67,7 +66,6 @@ SPDX-FileCopyrightText: Dylan Piercey <pierceydylan@gmail.com>
 SPDX-FileCopyrightText: Dr.-Ing. Mario Heiderich, Cure53 <mario@cure53.de> (https://cure53.de/)
 SPDX-FileCopyrightText: Denis Pushkarev
 SPDX-FileCopyrightText: David Clark
-SPDX-FileCopyrightText: Christoph Wurst <christoph@winzerhof-wurst.at>
 SPDX-FileCopyrightText: Christoph Wurst
 SPDX-FileCopyrightText: Borys Serebrov
 SPDX-FileCopyrightText: Arnout Kazemier
@@ -99,10 +97,10 @@ This file is generated from multiple sources. Included packages:
 	- version: 0.2.0
 	- license: BSD-2-Clause
 - @nextcloud/auth
-	- version: 2.5.1
+	- version: 2.5.2
 	- license: GPL-3.0-or-later
 - axios
-	- version: 1.8.3
+	- version: 1.12.1
 	- license: MIT
 - @nextcloud/axios
 	- version: 2.5.1
@@ -114,7 +112,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.2.0
 	- license: GPL-3.0-or-later
 - @nextcloud/dialogs
-	- version: 6.3.1
+	- version: 6.3.2
 	- license: AGPL-3.0-or-later
 - semver
 	- version: 7.7.1
@@ -123,7 +121,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 3.3.2
 	- license: GPL-3.0-or-later
 - @nextcloud/files
-	- version: 3.10.2
+	- version: 3.12.0
 	- license: AGPL-3.0-or-later
 - @nextcloud/initial-state
 	- version: 2.2.0
@@ -153,10 +151,16 @@ This file is generated from multiple sources. Included packages:
 	- version: 0.2.5
 	- license: GPL-3.0-or-later
 - @nextcloud/vue-select
-	- version: 3.25.1
+	- version: 3.26.0
 	- license: MIT
 - @nextcloud/l10n
 	- version: 3.4.0
+	- license: GPL-3.0-or-later
+- @nextcloud/initial-state
+	- version: 3.0.0
+	- license: GPL-3.0-or-later
+- @nextcloud/sharing
+	- version: 0.3.0
 	- license: GPL-3.0-or-later
 - @vueuse/core
 	- version: 11.3.0
@@ -198,7 +202,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 6.0.1
 	- license: MIT
 - @nextcloud/vue
-	- version: 8.29.2
+	- version: 8.31.0
 	- license: AGPL-3.0-or-later
 - @ungap/structured-clone
 	- version: 1.2.0
@@ -285,7 +289,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.0.1
 	- license: MIT
 - emoji-mart-vue-fast
-	- version: 15.0.4
+	- version: 15.0.5
 	- license: BSD-3-Clause
 - es-define-property
 	- version: 1.0.1
@@ -384,7 +388,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 0.1.2
 	- license: MIT
 - linkify-string
-	- version: 4.0.1
+	- version: 4.3.2
 	- license: MIT
 - linkifyjs
 	- version: 4.3.2
@@ -486,7 +490,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 5.0.1
 	- license: MIT
 - p-queue
-	- version: 8.1.0
+	- version: 8.1.1
 	- license: MIT
 - path-browserify
 	- version: 1.0.1
