@@ -62,10 +62,10 @@ This file is generated from multiple sources. Included packages:
 	- version: 7.7.1
 	- license: ISC
 - vite
-	- version: 6.3.4
+	- version: 7.1.5
 	- license: MIT
 - vite-plugin-node-polyfills
-	- version: 0.23.0
+	- version: 0.24.0
 	- license: MIT
 - vue
 	- version: 2.7.16
