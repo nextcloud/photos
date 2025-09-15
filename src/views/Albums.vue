@@ -44,7 +44,8 @@
 
 			<CollectionCover :key="collection.basename"
 				slot-scope="{collection}"
-				:link="`/albums/${collection.basename}`"
+				parent-route="/albums"
+				:collection-name="collection.basename"
 				:alt-img="t('photos', 'Cover photo for album {albumName}', { albumName: collection.basename })"
 				:cover-url="collection.lastPhoto | coverUrl">
 				<span class="album__name">
