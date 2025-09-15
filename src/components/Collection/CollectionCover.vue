@@ -25,37 +25,19 @@
 		</router-link>
 	</li>
 </template>
-<script>
+<script setup>
+import { computed, ref } from 'vue'
 import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
 
-export default {
-	name: 'CollectionCover',
+const props = defineProps({
+	coverUrl: String,
+	altImg: String,
+	parentRoute: String,
+	collectionName: String
+})
 
-	components: {
-		ImageMultiple,
-	},
-
-	props: {
-		coverUrl: {
-			type: String,
-			required: true,
-		},
-		altImg: {
-			type: String,
-			required: true,
-		},
-		link: {
-			type: String,
-			required: true,
-		},
-	},
-
-	data() {
-		return {
-			coverLoadingError: false,
-		}
-	},
-}
+const coverLoadingError = ref(false)
+const link = computed(() => `${props.parentRoute}/${encodeURIComponent(props.collectionName)}`)
 </script>
 <style lang="scss" scoped>
 .collection-cover {
