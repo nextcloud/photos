@@ -14,6 +14,7 @@ OC.L10N.register(
     "Favorite" : "Favorite",
     "Add to {destination}" : " {destination}ni qo`shish",
     "Home" : "Home",
+    "View" : "Ko'rish",
     "Remove from favorites" : "Sevimlilardan olib tashlang",
     "Last week" : "O`tgan yil",
     "Details" : "Details",
