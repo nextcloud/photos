@@ -12,7 +12,10 @@ export function setDateRangeFilter(dateRange: string) {
 	openAlbumSetting()
 
 	cy.get('[data-cy-photos-filters-input] input[type="search"]').type('Custom{enter}', { scrollBehavior: 'nearest' })
-	cy.get('[data-cy-photos-filters-input="custom-date-range"] input[name="date"]').type(`${dateRange}{enter}`, { scrollBehavior: 'nearest' })
+	cy.get('[data-cy-photos-filters-input="custom-date-range"] input').then(($input) => {
+		$input.val(dateRange)
+		$input[0]!.dispatchEvent(new Event('input', { bubbles: true }))
+	})
 
 	cy.intercept({ times: 1, method: 'PROPFIND', url: 'remote.php/dav/photos/*/albums/*' }).as('propfindAlbumContent')
 	cy.contains('Save').click()

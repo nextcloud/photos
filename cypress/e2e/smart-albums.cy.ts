@@ -38,7 +38,7 @@ describe('View list of photos in the main timeline', () => {
 	})
 
 	it('Should allow to set filters in the setting dialog and on save', () => {
-		setDateRangeFilter('2019-01-01 ~ 2019-12-31')
+		setDateRangeFilter('2019-01-01 - 2019-12-31')
 		cy.get('[data-test="media"]').should('have.length', 3)
 
 		setPlacesFilter(['Lauris'])
@@ -46,7 +46,7 @@ describe('View list of photos in the main timeline', () => {
 	})
 
 	it('Should display the filters in the setting dialog', () => {
-		setDateRangeFilter('2019-01-01 ~ 2019-12-31')
+		setDateRangeFilter('2019-01-01 - 2019-12-31')
 		setPlacesFilter(['Lauris'])
 
 		openAlbumSetting()
@@ -58,7 +58,7 @@ describe('View list of photos in the main timeline', () => {
 	})
 
 	it('Should keep filters after a refresh', () => {
-		setDateRangeFilter('2019-01-01 ~ 2019-12-31')
+		setDateRangeFilter('2019-01-01 - 2019-12-31')
 		setPlacesFilter(['Lauris'])
 
 		cy.get('[data-test="media"]').should('have.length', 1)

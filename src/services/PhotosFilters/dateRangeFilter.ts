@@ -44,9 +44,7 @@ export const dateRangeFilter: PhotosFilter<DateRangeValueType> = {
 				label: t('photos', 'Custom…'),
 				value: undefined,
 				async getValue() {
-					return new Promise((resolve) => {
-						spawnDialog(CustomDateRangePickerDialog, undefined, resolve)
-					})
+					return spawnDialog(CustomDateRangePickerDialog)
 				},
 			},
 		]
