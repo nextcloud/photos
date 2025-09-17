@@ -46,6 +46,8 @@ const availableFilters = computed(() => {
 
 <style lang="scss" scoped>
 .photos-filters-display {
+	padding: 0px 4px;
+
 	&__filter {
 		display: flex;
 		align-items: flex-start;
@@ -54,9 +56,11 @@ const availableFilters = computed(() => {
 			display: flex;
 			flex-wrap: wrap;
 			gap: 4px;
+			min-width: 0; // Prevent the container from overflowing its parent.
 
 			&__option {
 				margin: calc((32px - 24px) / 2) 0; // 32 is the size of the icon, 24 is the size of the option. We want to match the size of the icon.
+				min-width: 0; // Prevent the container from overflowing its parent.
 			}
 		}
 	}
