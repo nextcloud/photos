@@ -1,3 +1,8 @@
+/**
+ * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
 import type { FoldersNode } from '../services/FolderContent.ts'
 
 import {
@@ -5,10 +10,6 @@ import {
 
 	FileType, Permission,
 } from '@nextcloud/files'
-/**
- * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
 import { getLanguage } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { isNumber } from './numberUtils.js'

@@ -1,10 +1,11 @@
-import type { File, Folder } from '@nextcloud/files'
-import type { PhotosContext } from './index.js'
-
 /**
  * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
+import type { File, Folder } from '@nextcloud/files'
+import type { PhotosContext } from './index.js'
+
 import logger from '../services/logger.js'
 import getSystemTags from '../services/SystemTags.js'
 import getTaggedImages from '../services/TaggedImages.js'

@@ -1,11 +1,12 @@
-import type { FoldersNode } from '../services/FolderContent.ts'
-import type { PhotosContext } from './index.js'
-
-import { defaultRootPath } from '@nextcloud/files/dav'
 /**
  * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
+import type { FoldersNode } from '../services/FolderContent.ts'
+import type { PhotosContext } from './index.js'
+
+import { defaultRootPath } from '@nextcloud/files/dav'
 import { sortCompareFileInfo } from '../utils/fileUtils.js'
 
 const state = {

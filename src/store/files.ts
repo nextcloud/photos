@@ -1,3 +1,8 @@
+/**
+ * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
 import type { File, Folder } from '@nextcloud/files'
 import type { PhotosContext } from './index.ts'
 
@@ -5,10 +10,6 @@ import { showError } from '@nextcloud/dialogs'
 import { defaultRootPath } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
-/**
- * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
