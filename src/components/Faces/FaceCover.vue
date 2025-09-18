@@ -7,7 +7,6 @@
 	<div class="face-cover" :class="[small && 'face-cover--small']" @click="$emit('click')">
 		<div class="face-cover__crop-container">
 			<img
-				ref="image"
 				class="face-cover__image"
 				:src="coverUrl"
 				:style="coverDimensions">
@@ -28,7 +27,7 @@
 <script lang='ts'>
 import type { Collection } from '../../services/collectionFetcher.js'
 
-import { translatePlural as n } from '@nextcloud/l10n'
+import { n } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
 import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
@@ -52,6 +51,8 @@ export default {
 			default: false,
 		},
 	},
+
+	emits: ['click'],
 
 	data() {
 		return {

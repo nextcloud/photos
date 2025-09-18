@@ -49,12 +49,12 @@
 		<template #actions>
 			<div class="photos-picker__actions">
 				<div class="photos-picker__actions__buttons">
-					<UploadPicker
+					<!-- <UploadPicker
 						:accept="allowedMimes"
 						:context="uploadContext"
 						:destination="photosLocationFolder"
 						multiple
-						@uploaded="refreshFiles" />
+						@uploaded="refreshFiles" /> -->
 					<NcButton variant="primary" :disabled="loading || selectedFileIds.length === 0" @click="emitPickedEvent">
 						<template #icon>
 							<ImagePlusOutline v-if="!loading" />
@@ -80,8 +80,8 @@
 			:section-header-height="50"
 			:scroll-to-section="targetMonth"
 			@need-content="getFiles"
-			@focusout.native="onFocusOut">
-			<template slot-scope="{ file, height, isHeader, distance }">
+			@focusout="onFocusOut">
+			<template #default="{ file, height, isHeader, distance }">
 				<h3
 					v-if="isHeader"
 					:id="`photos-picker-section-header-${file.id}`"
@@ -106,7 +106,8 @@
 import { getCurrentUser } from '@nextcloud/auth'
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
-import { UploadPicker } from '@nextcloud/upload'
+// TODO: enable upload when UploadPicker component will be available
+// import UploadPicker from '@nextcloud/vue/components/UploadPicker'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import {
 	type PropType,
@@ -138,7 +139,7 @@ export default defineComponent({
 		NcLoadingIcon,
 		NcSelect,
 		NcNoteCard,
-		UploadPicker,
+		// UploadPicker,
 	},
 
 	mixins: [

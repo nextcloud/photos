@@ -1,11 +1,11 @@
-import type { File, Folder } from '@nextcloud/files'
-import type { PhotosContext } from './index.js'
-
 /**
  * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import Vue from 'vue'
+
+import type { File, Folder } from '@nextcloud/files'
+import type { PhotosContext } from './index.js'
+
 import logger from '../services/logger.js'
 import getSystemTags from '../services/SystemTags.js'
 import getTaggedImages from '../services/TaggedImages.js'
@@ -45,8 +45,8 @@ const mutations = {
 
 			// store tag and its index
 			list.forEach((tag) => {
-				Vue.set(state.tags, tag.attributes.id, tag)
-				Vue.set(state.names, tag.attributes['display-name'], tag.attributes.id)
+				state.tags[tag.attributes.id] = tag
+				state.names[tag.attributes['display-name']] = tag.attributes.id
 			})
 		}
 	},
@@ -59,8 +59,8 @@ const mutations = {
 	 * @param root0.id
 	 */
 	removeTag(state: SystemTagsState, { id }: { id: number }) {
-		Vue.delete(state.names, state.tags[id].attributes.displayname)
-		Vue.delete(state.tags, id)
+		delete state.names[state.tags[id]?.attributes.displayname]
+		delete state.tags[id]
 	},
 
 	/**
@@ -74,8 +74,8 @@ const mutations = {
 	updateTag(state: SystemTagsState, { id, files }: { id: number, files: File[] }) {
 		if (files.length === 0) {
 			// Remove this tag from the list if there's no files for it
-			Vue.delete(state.names, state.tags[id].attributes.displayname)
-			Vue.delete(state.tags, id)
+			delete state.names[state.tags[id]?.attributes.displayname]
+			delete state.tags[id]
 			return
 		}
 
@@ -84,7 +84,7 @@ const mutations = {
 
 		// overwrite list
 		logger.debug(`Overwrite list, id: ${id}`, { list })
-		Vue.set(state.tagsFiles, id, list.map((file) => file.fileid))
+		state.tagsFiles[id] = list.map((file) => file.fileid).filter((fileid) => fileid !== undefined)
 	},
 }
 

@@ -35,20 +35,21 @@
 			:file-ids="fileIds"
 			:base-height="isMobile ? 120 : 200"
 			:loading="loading">
-			<FileComponent
-				slot-scope="{ file, distance }"
-				:file="files[file.id]"
-				:allow-selection="true"
-				:selected="selection[file.id] === true"
-				:distance="distance"
-				@click="openViewer"
-				@select-toggled="onFileSelectToggle" />
+			<template #default="{ file, distance }">
+				<FileComponent
+					:file="files[file.id]"
+					:allow-selection="true"
+					:selected="selection[file.id] === true"
+					:distance="distance"
+					@click="openViewer"
+					@select-toggled="onFileSelectToggle" />
+			</template>
 		</FilesListViewer>
 	</div>
 </template>
 
 <script lang='ts'>
-import { translatePlural as n, translate as t } from '@nextcloud/l10n'
+import { n, t } from '@nextcloud/l10n'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
@@ -169,6 +170,7 @@ export default {
 			window.OCA.Viewer.open({
 				fileInfo: toViewerFileInfo(this.files[fileId]),
 				list: this.fileIds.map((fileId) => toViewerFileInfo(this.files[fileId])),
+				onClose() { window.OCA.Files.Sidebar.close() },
 			})
 		},
 

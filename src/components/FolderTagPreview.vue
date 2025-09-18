@@ -126,8 +126,6 @@ export default {
 		onPreviewFail({ fileid }) {
 			this.failed.push(fileid)
 		},
-
-		t,
 	},
 }
 </script>

@@ -1,8 +1,9 @@
-import type { Folder } from '@nextcloud/files'
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
+import type { Folder } from '@nextcloud/files'
 import type { FileStat, ResponseDataDetailed } from 'webdav'
 
 import axios from '@nextcloud/axios'

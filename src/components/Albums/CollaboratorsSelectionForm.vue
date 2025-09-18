@@ -21,8 +21,7 @@
 				:multiple="true"
 				:append-to-body="false"
 				:options="searchResults"
-				@search="searchCollaborators"
-				@option:selected="({ key }) => selectEntity(key)">
+				@search="searchCollaborators">
 				{{ t('photos', 'No recommendations. Start typing.') }}
 			</NcSelectUsers>
 		</form>
@@ -50,7 +49,9 @@
 						variant="tertiary"
 						:aria-label="t('photos', 'Delete the public link')"
 						@click="deletePublicLink">
-						<Close slot="icon" />
+						<template #icon>
+							<Close />
+						</template>
 					</NcButton>
 				</template>
 				<NcButton
@@ -59,7 +60,9 @@
 					:aria-label="t('photos', 'Create public link share')"
 					class="manage-collaborators__public-link-button"
 					@click="createPublicLinkForAlbum">
-					<Earth slot="icon" />
+					<template #icon>
+						<Earth />
+					</template>
 					{{ t('photos', 'Share via public link') }}
 				</NcButton>
 			</div>
@@ -82,7 +85,7 @@ import AccountGroupOutlineSvg from '@mdi/svg/svg/account-group-outline.svg'
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
-import { translate } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { ShareType } from '@nextcloud/sharing'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -152,7 +155,14 @@ export default {
 
 	data() {
 		return {
-			availableCollaborators: {} as Record<string, Collaborator>,
+			availableCollaborators: {
+				3: {
+					id: '',
+					label: t('photos', 'Public link'),
+					type: ShareType.Link,
+				},
+			} as Record<string, Collaborator>,
+
 			selectedCollaboratorsKeys: [] as string[],
 			currentSearchResults: [] as Collaborator[],
 			loadingCollaborators: false,
@@ -170,12 +180,17 @@ export default {
 			return this.currentSearchResults
 				.filter(({ id }) => id !== getCurrentUser()?.uid)
 				.map((collaborator) => {
+					let displayName = collaborator.label
+					if (collaborator.type === ShareType.Group) {
+						displayName = `${collaborator.label} (${t('photos', 'group')})`
+					}
+
 					return {
 						key: `${collaborator.type}:${collaborator.id}`,
 						id: collaborator.id,
 						user: collaborator.id,
-						displayName: collaborator.label,
-						type: (collaborator.type === ShareType.User ? 'user' : 'group') as 'user' | 'group',
+						displayName,
+						type: (collaborator.type === ShareType.User ? 'user' : 'group'),
 						iconSvg: collaborator.type === ShareType.Group ? AccountGroupOutlineSvg : undefined,
 					}
 				})
@@ -185,20 +200,28 @@ export default {
 		selectedCollaborators(): Collaborator[] {
 			return this.selectedCollaboratorsKeys
 				.map((collaboratorKey) => this.availableCollaborators[collaboratorKey])
+				.filter((collaborator) => collaborator !== undefined)
 		},
 
 		selectedUsers: {
 			get(): IUserData[] {
 				return this.selectedCollaborators
 					.filter(({ type }) => type !== ShareType.Link)
-					.map((collaborator) => ({
-						key: `${collaborator.type}:${collaborator.id}`,
-						id: collaborator.id,
-						user: collaborator.id,
-						displayName: collaborator.label,
-						type: collaborator.type === ShareType.User ? 'user' : 'group',
-						iconSvg: collaborator.type === ShareType.Group ? AccountGroupOutlineSvg : undefined,
-					}))
+					.map((collaborator) => {
+						let displayName = collaborator.label
+						if (collaborator.type === ShareType.Group) {
+							displayName = `${collaborator.label} (${t('photos', 'group')})`
+						}
+
+						return {
+							key: `${collaborator.type}:${collaborator.id}`,
+							id: collaborator.id,
+							user: collaborator.id,
+							displayName,
+							type: (collaborator.type === ShareType.User ? 'user' : 'group'),
+							iconSvg: collaborator.type === ShareType.Group ? AccountGroupOutlineSvg : undefined,
+						}
+					})
 			},
 
 			set(newValue: IUserData[]) {
@@ -211,7 +234,7 @@ export default {
 		},
 
 		publicLink(): Collaborator {
-			return this.availableCollaborators[ShareType.Link]
+			return this.availableCollaborators[ShareType.Link] as Collaborator
 		},
 
 		publicLinkURL(): string {
@@ -297,12 +320,6 @@ export default {
 			const initialCollaborators = collaborators.reduce(this.indexCollaborators, {})
 			this.selectedCollaboratorsKeys = Object.keys(initialCollaborators)
 			this.availableCollaborators = {
-				3: {
-					id: '',
-					label: this.t('photos', 'Public link'),
-					type: ShareType.Link,
-				},
-
 				...this.availableCollaborators,
 				...initialCollaborators,
 			}
@@ -323,11 +340,6 @@ export default {
 
 		async deletePublicLink() {
 			this.unselectEntity(`${ShareType.Link}`)
-			this.availableCollaborators[3] = {
-				id: '',
-				label: this.t('photos', 'Public link'),
-				type: ShareType.Link,
-			}
 			this.publicLinkCopied = false
 			await this.updateAlbumCollaborators()
 		},
@@ -372,7 +384,7 @@ export default {
 			this.selectedCollaboratorsKeys.splice(index, 1)
 		},
 
-		t: translate,
+		t,
 	},
 }
 </script>

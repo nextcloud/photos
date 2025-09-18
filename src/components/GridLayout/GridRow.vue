@@ -1,10 +1,10 @@
 <!--
-  - SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-FileCopyrightText: 2025 Nextcloud GmbH and Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script setup lang="ts">
-import type { TiledSection } from './TiledLayout.ts'
+import type { TiledSection } from '../TiledLayout/TiledLayout.ts'
 
 defineProps<{
 	rows: TiledSection[]

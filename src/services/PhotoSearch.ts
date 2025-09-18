@@ -138,5 +138,10 @@ export default async function(_options: Partial<PhotoSearchOptions> = {}): Promi
 
 	const response = await davClient.search('/', options) as ResponseDataDetailed<SearchResult>
 
-	return response.data.results.map((data) => resultToNode(data) as File)
+	return response.data.results
+		.map((data) => {
+			data.filename = data.filename.replace(/^\/remote.php\/dav/, '')
+			return data
+		})
+		.map((data) => resultToNode(data) as File)
 }

@@ -27,11 +27,11 @@
 			:title="folder?.basename?.toString?.() || rootTitle"
 			:root-title="rootTitle"
 			@refresh="onRefresh">
-			<UploadPicker
+			<!-- <UploadPicker
 				:accept="allowedMimes"
 				:destination="folderAsFolder"
 				:multiple="true"
-				@uploaded="onUpload" />
+				@uploaded="onUpload" /> -->
 		</HeaderNavigation>
 
 		<!-- Empty folder, should only happen via direct link -->
@@ -41,38 +41,60 @@
 			</template>
 		</NcEmptyContent>
 
-		<div
-			v-else
-			class="grid-container"
-			:class="{
-				'grid-container--folders': haveFolders,
-			}">
-			<VirtualGrid
-				ref="virtualgrid"
-				:items="contentList"
-				:scroll-element="appContent"
-				:get-column-count="() => haveFolders ? gridConfig.folderCount : gridConfig.count"
-				:get-grid-gap="() => haveFolders ? 16 : 8" />
-		</div>
+		<GridLayout v-else class="nodes-container" :sections="contentList">
+			<template #default="{ gridSections }">
+				<VirtualScrolling
+					:container-element="appContent"
+					:sections="gridSections">
+					<template #default="{ visibleSections }">
+						<ul v-if="visibleSections.length === 1">
+							<template v-for="row of visibleSections[0].rows">
+								<li
+									v-for="item of row.items"
+									:key="item.key"
+									:style="{ 'flex-basis': `${item.width}px`, height: `${item.height}px` }">
+									<FileLegacy
+										v-if="item.type === 'file'"
+										:item="item"
+										:list="fileList" />
+									<FolderComponent
+										v-if="item.type === 'dir'"
+										:item="item"
+										:show-shared="showShared" />
+								</li>
+							</template>
+						</ul>
+					</template>
+					<template #loader>
+						<NcLoadingIcon
+							v-if="loading"
+							class="files-list-viewer__loader" />
+					</template>
+				</VirtualScrolling>
+			</template>
+		</GridLayout>
 	</div>
 </template>
 
 <script lang='ts'>
 import type { Upload } from '@nextcloud/upload'
 
+import { isAxiosError } from '@nextcloud/axios'
 import { Folder } from '@nextcloud/files'
 import { defaultRootPath, parsePermissions } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
-import { getUploader, UploadPicker } from '@nextcloud/upload'
-import VirtualGrid from 'vue-virtual-grid'
+import { getUploader } from '@nextcloud/upload'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+// TODO: enable upload when UploadPicker component will be available
+// import UploadPicker from '@nextcloud/vue/components/UploadPicker'
 import FolderOutline from 'vue-material-design-icons/FolderOutline.vue'
 import FileLegacy from '../components/FileLegacy.vue'
 import FolderComponent from '../components/FolderComponent.vue'
+import GridLayout from '../components/GridLayout/GridLayout.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import VirtualScrolling from '../components/VirtualScrolling.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
-import GridConfigMixin from '../mixins/GridConfig.js'
 import allowedMimes from '../services/AllowedMimes.js'
 import { fetchFile } from '../services/fileFetcher.ts'
 import getFolderContent, { type FoldersNode } from '../services/FolderContent.ts'
@@ -85,13 +107,15 @@ export default {
 		HeaderNavigation,
 		NcEmptyContent,
 		NcLoadingIcon,
-		UploadPicker,
-		VirtualGrid,
+		// UploadPicker,
+		FolderComponent,
+		FileLegacy,
+		GridLayout,
+		VirtualScrolling,
 	},
 
 	mixins: [
 		AbortControllerMixin,
-		GridConfigMixin,
 	],
 
 	props: {
@@ -184,35 +208,12 @@ export default {
 		},
 
 		contentList() {
-			const folders = this.folderList && this.folderList.map((folder) => {
-				return {
-					id: `folder-${folder.fileid}`,
-					injected: {
-						...folder,
-						showShared: this.showShared,
-					},
-					width: 232,
-					height: 280,
-					columnSpan: 1,
-					renderComponent: FolderComponent,
-				}
-			})
-
-			const files = this.fileList?.map((file) => {
-				return {
-					id: `file-${file.fileid}`,
-					injected: {
-						...file,
-						list: this.fileList,
-					},
-					width: 256,
-					height: 256,
-					columnSpan: 1,
-					renderComponent: FileLegacy,
-				}
-			})
-
-			return [...(folders || []), ...(files || [])]
+			return [
+				{
+					id: '',
+					items: [...this.folderList, ...this.fileList],
+				},
+			]
 		},
 
 		// is current folder empty?
@@ -271,7 +272,7 @@ export default {
 				this.$store.dispatch('updateFolders', { fileid: folder?.fileid, files, folders })
 				this.$store.dispatch('updateFoldersFiles', { folder, files, folders })
 			} catch (error) {
-				if (error?.response && error.response.status) {
+				if (isAxiosError(error) && error?.response && error.response.status) {
 					if (error.response.status === 404) {
 						this.error = 404
 						setTimeout(() => {
@@ -328,52 +329,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use 'sass:map';
-
-@mixin grid-sizes() {
-	$previous: 0;
-
-	@each $size, $config in $sizes {
-		$count: map.get($config, 'count');
-		$marginTop: map.get($config, 'marginTop');
-		$marginW: map.get($config, 'marginW');
-
-		@if $size == 'max' {
-			@media (min-width: #{$previous}px) {
-				@content($marginTop, $marginW);
-			}
-		}
-
-		@else {
-			@media (min-width: #{$previous}px) and (max-width: #{$size}px) {
-				@content($marginTop, $marginW);
-			}
-		}
-
-		$previous: $size;
-	}
-}
-
-.grid-container {
-	@include grid-sizes using ($marginTop, $marginW) {
-		padding: 0px #{$marginW}px 256px #{$marginW}px;
-	}
-
-	&--folders {
-		padding: 32px 48px;
-
-		@media only screen and (max-width: 400px) {
-			display: flex;
-			justify-content: center;
-			width: 100%;
-		}
-
-		@media only screen and (min-width: 400px) {
-			width: fit-content;
-		}
-	}
-}
-
 .photos-navigation {
 	position: relative;
 
@@ -395,6 +350,16 @@ export default {
 			bottom: -24px;
 			inset-inline-end: 50px;
 		}
+	}
+}
+
+.nodes-container {
+	padding: 0 16px;
+
+	ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 50px;
 	}
 }
 </style>

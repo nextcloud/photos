@@ -34,7 +34,7 @@
 					:key="collection.basename"
 					:link="`/albums/${collection.basename}`"
 					:alt-img="t('photos', 'Cover photo for album {albumName}', { albumName: collection.basename })"
-					:cover-url="collection.attributes['last-photo'] | coverUrl">
+					:cover-url="coverUrl(collection.attributes['last-photo'])">
 					<template #default>
 						<span class="album__name">
 							{{ collection.basename }}
@@ -72,7 +72,7 @@
 </template>
 
 <script lang='ts'>
-import { translate, translatePlural } from '@nextcloud/l10n'
+import { n, t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { useIsSmallMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { defineComponent } from 'vue'
@@ -102,16 +102,6 @@ export default defineComponent({
 		HeaderNavigation,
 		AlbumForm,
 		CogOutline,
-	},
-
-	filters: {
-		coverUrl(lastPhoto: number): string {
-			if (lastPhoto === -1) {
-				return ''
-			}
-
-			return generateUrl(`/apps/photos/api/v1/preview/${lastPhoto}?x=${512}&y=${512}`)
-		},
 	},
 
 	mixins: [FetchCollectionsMixin],
@@ -152,8 +142,16 @@ export default defineComponent({
 			this.$router.push(`/albums/${album.basename}`)
 		},
 
-		t: translate,
-		n: translatePlural,
+		coverUrl(lastPhoto: number): string {
+			if (lastPhoto === -1) {
+				return ''
+			}
+
+			return generateUrl(`/apps/photos/api/v1/preview/${lastPhoto}?x=${512}&y=${512}`)
+		},
+
+		t,
+		n,
 	},
 })
 </script>

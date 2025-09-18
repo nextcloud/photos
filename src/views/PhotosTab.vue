@@ -60,7 +60,7 @@ type SideBarFile = PhotoFile & {
 	}
 }
 
-export default defineComponent({
+const PhotoTab = defineComponent({
 	name: 'PhotosTab',
 	components: {
 		CalendarOutline,
@@ -72,13 +72,6 @@ export default defineComponent({
 	data() {
 		return {
 			fileInfo: null as SideBarFile | null,
-			url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-			// The zoom level of the map in the messages list
-			previewZoom: 13,
-			// The zoom level of the map in the new openstreetmap tab upon
-			// Opening the link
-			linkZoom: 18,
-			attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
 		}
 	},
 
@@ -202,6 +195,9 @@ export default defineComponent({
 		t,
 	},
 })
+
+export default PhotoTab
+export type PhotosTabType = typeof PhotoTab
 </script>
 
 <style scoped lang="scss">

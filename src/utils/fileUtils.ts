@@ -1,3 +1,8 @@
+/**
+ * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
 import type { FoldersNode } from '../services/FolderContent.ts'
 
 import {
@@ -5,10 +10,6 @@ import {
 
 	FileType, Permission,
 } from '@nextcloud/files'
-/**
- * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
 import { getLanguage } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { isNumber } from './numberUtils.js'
@@ -130,12 +131,12 @@ export function toViewerFileInfo(file: Node): ViewerFileInfo {
 	}
 
 	return {
-		fileid: file.fileid,
+		fileid: file.fileid as number,
 		basename: file.basename,
 		filename: file.root + file.path,
 		mime: file.mime,
-		mtime: file.mtime,
-		ownerId: file.owner,
+		mtime: new Date(file.mtime ?? 0 * 1000),
+		ownerId: file.owner as string,
 		source: file.source,
 		hasPreview: file.attributes.hasPreview,
 		previewUrl: file.attributes.previewUrl ?? generateUrl(`/apps/photos/api/v1/preview/${file.fileid}?x=2048&y=2048`),
@@ -148,13 +149,15 @@ export function toViewerFileInfo(file: Node): ViewerFileInfo {
  *
  * @param file
  */
-export function legacyToViewerFileInfo(file: FoldersNode) {
+export function legacyToViewerFileInfo(file: FoldersNode): ViewerFileInfo {
 	return {
 		fileid: file.fileid,
+		ownerId: '',
+		previewUrl: generateUrl(`/apps/photos/api/v1/preview/${file.fileid}?x=2048&y=2048`),
 		basename: file.basename,
 		filename: file.filename,
 		mime: file.mime,
-		mtime: file.lastmod,
+		mtime: new Date(file.lastmod * 1000),
 		source: file.source,
 		hasPreview: file.hasPreview,
 		etag: file.etag,

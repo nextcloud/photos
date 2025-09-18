@@ -33,7 +33,7 @@ describe('View list of photos in the main timeline', () => {
 	})
 
 	it('Apply date range filter to timeline', () => {
-		setDateRangeFilter('2020-01-01 ~ 2020-12-31')
+		setDateRangeFilter('2020-01-01 - 2020-12-31')
 		cy.get('[data-test="media"]').should('have.length', 2)
 
 		clearFilters(1)
@@ -52,7 +52,7 @@ describe('View list of photos in the main timeline', () => {
 	})
 
 	it('Apply multiple filters to timeline', () => {
-		setDateRangeFilter('2019-01-01 ~ 2019-12-31')
+		setDateRangeFilter('2019-01-01 - 2019-12-31')
 		cy.get('[data-test="media"]').should('have.length', 3)
 
 		setPlacesFilter(['Lauris'])
@@ -63,14 +63,14 @@ describe('View list of photos in the main timeline', () => {
 	})
 
 	it('Changing view resets filters', () => {
-		setDateRangeFilter('2020-01-01 ~ 2020-12-31')
+		setDateRangeFilter('2020-01-01 - 2020-12-31')
 		cy.get('body').type('{esc}')
 		navigateToTimeline('photos')
 		cy.get('[data-test="media"]').should('have.length', 5)
 	})
 
 	it('Should allow to create an album based on the filters', () => {
-		setDateRangeFilter('2019-01-01 ~ 2019-12-31')
+		setDateRangeFilter('2019-01-01 - 2019-12-31')
 		setPlacesFilter(['Lauris'])
 
 		cy.get('[data-cy-header-action="create-album"]').click()

@@ -17,8 +17,8 @@
 				:name="originalName(album)"
 				:aria-label="t('photos', 'Add selection to album {albumName}', { albumName: album.basename })"
 				@click="pickAlbum(album)">
-				<template slot="icon">
-					<img v-if="album.attributes['last-photo'] !== -1" class="album__image" :src="album.attributes['last-photo'] | toCoverUrl">
+				<template #icon>
+					<img v-if="album.attributes['last-photo'] !== -1" class="album__image" :src="toCoverUrl(album.attributes['last-photo'])">
 					<div v-else class="album__image album__image--placeholder">
 						<ImageMultipleOutline :size="32" />
 					</div>
@@ -57,7 +57,7 @@
 import type { Album } from '../../store/albums.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
-import { translate, translatePlural } from '@nextcloud/l10n'
+import { n, t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { defineComponent } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -83,13 +83,9 @@ export default defineComponent({
 		AlbumForm,
 	},
 
-	filters: {
-		toCoverUrl(fileId: string): string {
-			return generateUrl(`/apps/photos/api/v1/preview/${fileId}?x=${64}&y=${64}`)
-		},
-	},
-
 	mixins: [FetchCollectionsMixin],
+
+	emits: ['album-picked'],
 
 	data() {
 		return {
@@ -142,8 +138,12 @@ export default defineComponent({
 			}
 		},
 
-		t: translate,
-		n: translatePlural,
+		toCoverUrl(fileId: string): string {
+			return generateUrl(`/apps/photos/api/v1/preview/${fileId}?x=${64}&y=${64}`)
+		},
+
+		t,
+		n,
 	},
 })
 </script>

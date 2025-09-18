@@ -7,7 +7,10 @@ export function setDateRangeFilter(dateRange: string) {
 	cy.intercept({ times: 2, method: 'SEARCH', url: 'remote.php/dav/' }).as('search')
 
 	cy.get('[data-cy-photos-filters-input] input[type="search"]').type('Custom{enter}', { scrollBehavior: 'nearest' })
-	cy.get('[data-cy-photos-filters-input="custom-date-range"] input[name="date"]').type(`${dateRange}{enter}`, { scrollBehavior: 'nearest' })
+	cy.get('[data-cy-photos-filters-input="custom-date-range"] input').then(($input) => {
+		$input.val(dateRange)
+		$input[0]!.dispatchEvent(new Event('input', { bubbles: true }))
+	})
 
 	cy.wait('@search')
 }

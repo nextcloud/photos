@@ -68,7 +68,9 @@
 							:close-after-click="true"
 							:aria-label="t('photos', 'Download selected files')"
 							@click="downloadSelection">
-							<Download slot="icon" />
+							<template #icon>
+								<Download />
+							</template>
 							{{ t('photos', 'Download selected photos') }}
 						</NcActionButton>
 						<NcActionButton
@@ -76,7 +78,9 @@
 							:close-after-click="true"
 							:aria-label="t('photos', 'Mark selection as favorite')"
 							@click="favoriteSelection">
-							<StarOutline slot="icon" />
+							<template #icon>
+								<StarOutline />
+							</template>
 							{{ t('photos', 'Favorite') }}
 						</NcActionButton>
 						<NcActionButton
@@ -84,7 +88,9 @@
 							:close-after-click="true"
 							:aria-label="t('photos', 'Remove selection from favorites')"
 							@click="unFavoriteSelection">
-							<Star slot="icon" />
+							<template #icon>
+								<Star />
+							</template>
 							{{ t('photos', 'Remove from favorites') }}
 						</NcActionButton>
 						<NcActionButton
@@ -122,14 +128,15 @@
 			:container-element="appContent"
 			:file-ids="faceFileIds"
 			:loading="loadingFiles || loadingFaces">
-			<FileComponent
-				slot-scope="{ file, distance }"
-				:file="files[file.id]"
-				:allow-selection="true"
-				:selected="selection[file.id] === true"
-				:distance="distance"
-				@click="openViewer"
-				@select-toggled="onFileSelectToggle" />
+			<template #default="{ file, distance }">
+				<FileComponent
+					:file="files[file.id]"
+					:allow-selection="true"
+					:selected="selection[file.id] === true"
+					:distance="distance"
+					@click="openViewer"
+					@select-toggled="onFileSelectToggle" />
+			</template>
 		</FilesListViewer>
 
 		<NcDialog
@@ -187,8 +194,8 @@
 <script lang='ts'>
 import type { Collection } from '../services/collectionFetcher.js'
 
-import { translatePlural as n, translate as t } from '@nextcloud/l10n'
-import Vue from 'vue'
+import { n, t } from '@nextcloud/l10n'
+import { nextTick } from 'vue'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -242,7 +249,7 @@ export default {
 
 	directives: {
 		focus(el) {
-			Vue.nextTick(() => el.focus())
+			nextTick(() => el.focus())
 		},
 	},
 
@@ -309,6 +316,7 @@ export default {
 			window.OCA.Viewer.open({
 				fileInfo: toViewerFileInfo(this.files[fileId]),
 				list: this.faceFileIds.map((fileId) => toViewerFileInfo(this.files[fileId])),
+				onClose() { window.OCA.Files.Sidebar.close() },
 			})
 		},
 

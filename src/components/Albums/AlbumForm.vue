@@ -7,13 +7,13 @@
 		<div class="form-inputs">
 			<NcTextField
 				ref="nameInput"
-				:value.sync="albumName"
+				v-model.trim="albumName"
 				type="text"
 				name="name"
 				:required="true"
 				:label="t('photos', 'Name of the album')" />
 			<NcTextField
-				:value.sync="albumLocation"
+				v-model.trim="albumLocation"
 				name="location"
 				type="text"
 				:label="t('photos', 'Location of the album')">
@@ -43,7 +43,7 @@
 				<NcButton
 					v-if="sharingEnabled && !editMode"
 					variant="secondary"
-					:disabled="albumName.trim() === '' || loading"
+					:disabled="albumName === '' || loading"
 					@click="showCollaboratorView = true">
 					<template #icon>
 						<AccountMultiplePlusOutline :size="20" />
@@ -97,7 +97,7 @@ import type { FilterOption } from '../../services/PhotosFilters/PhotosFilter.ts'
 import type { Album, AlbumEditableProperties, Collaborator } from '../../store/albums.ts'
 
 import { resultToNode } from '@nextcloud/files/dav'
-import { translate } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
 import { generateRemoteUrl } from '@nextcloud/router'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -144,6 +144,8 @@ export default {
 		},
 	},
 
+	emits: ['done', 'back'],
+
 	data() {
 		return {
 			showCollaboratorView: false,
@@ -184,7 +186,7 @@ export default {
 		}
 
 		this.$nextTick(() => {
-			(this.$refs!.nameInput! as NcTextField).$el.getElementsByTagName('input')[0].focus()
+			(this.$refs.nameInput as typeof NcTextField).$el.getElementsByTagName('input')[0].focus()
 		})
 	},
 
@@ -300,7 +302,7 @@ export default {
 			this.$emit('back')
 		},
 
-		t: translate,
+		t,
 	},
 }
 </script>

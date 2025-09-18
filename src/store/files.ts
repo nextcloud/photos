@@ -1,3 +1,8 @@
+/**
+ * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
 import type { File, Folder } from '@nextcloud/files'
 import type { PhotosContext } from './index.ts'
 
@@ -5,11 +10,6 @@ import { showError } from '@nextcloud/dialogs'
 import { defaultRootPath } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
-/**
- * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-import Vue from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
@@ -87,7 +87,7 @@ const mutations = {
 	 * @param fileId
 	 */
 	deleteFile(state: FilesState, fileId: number) {
-		Vue.delete(state.files, fileId)
+		delete state.files[fileId]
 	},
 
 	/**
@@ -99,7 +99,7 @@ const mutations = {
 	 * @param root0.favoriteState
 	 */
 	favoriteFile(state: FilesState, { fileId, favoriteState }: { fileId: number, favoriteState: 0 | 1 }) {
-		Vue.set(state.files[fileId].attributes, 'favorite', favoriteState)
+		state.files[fileId].attributes.favorite = favoriteState
 	},
 }
 

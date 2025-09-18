@@ -8,10 +8,14 @@
 		v-if="(collection === undefined && !loading) || error === 404"
 		class="empty-content-with-illustration"
 		:name="t('photos', 'This collection does not exist')">
-		<ImageMultipleOutline slot="icon" />
+		<template #icon>
+			<ImageMultipleOutline />
+		</template>
 	</NcEmptyContent>
 	<NcEmptyContent v-else-if="error" :name="t('photos', 'An error occurred')">
-		<AlertCircleOutline slot="icon" />
+		<template #icon>
+			<AlertCircleOutline />
+		</template>
 	</NcEmptyContent>
 
 	<div v-else class="collection">
@@ -33,23 +37,24 @@
 			:file-ids="sortedCollectionFileIds"
 			:base-height="isMobile ? 120 : 200"
 			:loading="loading">
-			<FileComponent
-				slot-scope="{ file, distance }"
-				:file="files[file.id]"
-				:allow-selection="allowSelection"
-				:selected="selection[file.id] === true"
-				:distance="distance"
-				@click="openViewer"
-				@select-toggled="onFileSelectToggle" />
+			<template #default="{ file, distance }">
+				<FileComponent
+					:file="files[file.id]"
+					:allow-selection="allowSelection"
+					:selected="selection[file.id] === true"
+					:distance="distance"
+					@click="openViewer"
+					@select-toggled="onFileSelectToggle" />
+			</template>
 		</FilesListViewer>
 	</div>
 </template>
 
 <script lang='ts'>
 import type { PropType } from 'vue'
-import type { PublicAlbum } from '../../store/publicAlbums.js'
+import type { Collection } from '../../services/collectionFetcher.ts'
 
-import { translate } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { defineComponent } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
@@ -57,8 +62,8 @@ import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import FileComponent from '../FileComponent.vue'
 import FilesListViewer from '../FilesListViewer.vue'
-import FilesSelectionMixin from '../../mixins/FilesSelectionMixin.js'
-import { toViewerFileInfo } from '../../utils/fileUtils.js'
+import FilesSelectionMixin from '../../mixins/FilesSelectionMixin.ts'
+import { toViewerFileInfo } from '../../utils/fileUtils.ts'
 
 export default defineComponent({
 	name: 'CollectionContent',
@@ -75,7 +80,7 @@ export default defineComponent({
 
 	props: {
 		collection: {
-			type: Object as PropType<PublicAlbum>,
+			type: Object as PropType<Collection>,
 			default: () => undefined,
 		},
 
@@ -127,10 +132,11 @@ export default defineComponent({
 			window.OCA.Viewer.open({
 				fileInfo: toViewerFileInfo(this.files[fileId]),
 				list: this.sortedCollectionFileIds.map((fileId) => toViewerFileInfo(this.files[fileId])),
+				onClose() { window.OCA.Files.Sidebar.close() },
 			})
 		},
 
-		t: translate,
+		t,
 	},
 })
 

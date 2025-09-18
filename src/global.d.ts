@@ -20,7 +20,7 @@ declare global {
 				}
 			}
 			Viewer: {
-				open: ({ fileInfo, list }: { fileInfo: ViewerFileInfo, list: ViewerFileInfo[] }) => void
+				open: ({ fileInfo, list, onClose }: { fileInfo: ViewerFileInfo, list: ViewerFileInfo[], onClose: () => void }) => void
 				close: () => void
 			}
 		}

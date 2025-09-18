@@ -80,6 +80,8 @@ export default {
 		},
 	},
 
+	emits: ['refresh'],
+
 	computed: {
 		isRoot() {
 			const isRoot = this.path === '/'

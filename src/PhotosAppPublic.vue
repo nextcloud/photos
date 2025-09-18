@@ -69,7 +69,7 @@ export default {
 		}
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		window.removeEventListener('load', () => {
 			navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js', {}, {
 				noRewrite: true,

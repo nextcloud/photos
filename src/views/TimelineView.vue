@@ -9,13 +9,19 @@
 		<NcEmptyContent
 			v-if="errorFetchingFiles === 404"
 			:name="t('photos', 'One of the source folders does not exist')">
-			<FolderAlertOutline slot="icon" />
-			<PhotosSourceLocationsSettings
-				slot="action"
-				class="timeline__update_source_directory" />
+			<template #icon>
+				<FolderAlertOutline />
+			</template>
+			<template #action>
+				<PhotosSourceLocationsSettings
+
+					class="timeline__update_source_directory" />
+			</template>
 		</NcEmptyContent>
 		<NcEmptyContent v-else :name="t('photos', 'An error occurred')">
-			<AlertCircleOutline slot="icon" />
+			<template #icon>
+				<AlertCircleOutline />
+			</template>
 		</NcEmptyContent>
 	</div>
 
@@ -71,14 +77,38 @@
 					</NcButton>
 
 					<NcActions :aria-label="t('photos', 'Open actions menu')">
-						<ActionDownload
-							:selected-file-ids="selectedFileIds"
-							:title="t('photos', 'Download selected files')"
-							data-cy-header-action="download-selection">
-							<DownloadOutline slot="icon" />
-						</ActionDownload>
+						<NcActionButton
+							data-cy-header-action="download-selection"
+							:close-after-click="true"
+							:aria-label="t('photos', 'Download selected files')"
+							@click="downloadSelectedFiles">
+							{{ t('photos', 'Download selected files') }}
 
-						<ActionFavorite :selected-file-ids="selectedFileIds" />
+							<template #icon>
+								<DownloadOutline />
+							</template>
+						</NcActionButton>
+
+						<NcActionButton
+							v-if="shouldFavoriteSelection"
+							:close-after-click="true"
+							:aria-label="t('photos', 'Mark selection as favorite')"
+							@click="favoriteSelection">
+							{{ t('photos', 'Add selection to favorites') }}
+							<template #icon>
+								<StarOutline />
+							</template>
+						</NcActionButton>
+						<NcActionButton
+							v-else
+							:close-after-click="true"
+							:aria-label="t('photos', 'Remove selection from favorites')"
+							@click="unFavoriteSelection">
+							{{ t('photos', 'Remove selection from favorites') }}
+							<template #icon>
+								<Star />
+							</template>
+						</NcActionButton>
 
 						<NcActionButton
 							:close-after-click="true"
@@ -96,7 +126,6 @@
 		</HeaderNavigation>
 
 		<FilesListViewer
-			ref="filesListViewer"
 			:container-element="appContent"
 			class="timeline__file-list"
 			:file-ids-by-section="fileIdsByMonth"
@@ -105,13 +134,13 @@
 			:base-height="isMobile ? 120 : 200"
 			:empty-message="t('photos', 'No photos or videos in here')"
 			@need-content="getContent">
-			<template slot-scope="{ file, isHeader, distance }">
+			<template #default="{ file, isHeader, distance }">
 				<h2
 					v-if="isHeader"
 					:id="`file-picker-section-header-${file.id}`"
 					class="section-header">
-					<b>{{ file.id | dateMonth }}</b>
-					{{ file.id | dateYear }}
+					<b>{{ dateMonth(file.id) }}</b>
+					{{ dateYear(file.id) }}
 				</h2>
 				<FileComponent
 					v-else
@@ -162,13 +191,13 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcModal from '@nextcloud/vue/components/NcModal'
 import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 import Close from 'vue-material-design-icons/Close.vue'
+import DownloadOutline from 'vue-material-design-icons/DownloadOutline.vue'
 import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import PlusBoxMultipleOutline from 'vue-material-design-icons/PlusBoxMultipleOutline.vue'
+import Star from 'vue-material-design-icons/Star.vue'
+import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
-import DownloadOutline from 'vue-material-design-icons/TrayArrowDown.vue'
-import ActionDownload from '../components/Actions/ActionDownload.vue'
-import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import AlbumPicker from '../components/Albums/AlbumPicker.vue'
 import FileComponent from '../components/FileComponent.vue'
@@ -179,6 +208,7 @@ import FetchFilesMixin from '../mixins/FetchFilesMixin.ts'
 import FilesByMonthMixin from '../mixins/FilesByMonthMixin.ts'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.ts'
 import { allMimes } from '../services/AllowedMimes.ts'
+import { downloadFiles } from '../services/downloadFiles.ts'
 import useFilterStore from '../store/filters.ts'
 import { configChangedEvent } from '../store/userConfig.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.ts'
@@ -201,21 +231,11 @@ export default {
 		AlbumPicker,
 		FilesListViewer,
 		FileComponent,
-		ActionFavorite,
-		ActionDownload,
 		HeaderNavigation,
 		PhotosSourceLocationsSettings,
 		AlertCircleOutline,
-	},
-
-	filters: {
-		dateMonth(date: string): string {
-			return moment(date, 'YYYYMM').format('MMMM')
-		},
-
-		dateYear(date: string): string {
-			return moment(date, 'YYYYMM').format('YYYY')
-		},
+		Star,
+		StarOutline,
 	},
 
 	mixins: [
@@ -289,6 +309,11 @@ export default {
 				return this.t('photos', 'Create new album')
 			}
 		},
+
+		shouldFavoriteSelection(): boolean {
+			// Favorite all selection if at least one file is not in the favorites.
+			return this.selectedFileIds.some((fileId) => this.files[fileId].attributes.favorite === 0)
+		},
 	},
 
 	watch: {
@@ -302,7 +327,7 @@ export default {
 		subscribe(configChangedEvent, this.handleUserConfigChange)
 	},
 
-	destroyed() {
+	unmounted() {
 		unsubscribe(configChangedEvent, this.handleUserConfigChange)
 	},
 
@@ -320,6 +345,7 @@ export default {
 			window.OCA.Viewer.open({
 				fileInfo: toViewerFileInfo(this.files[fileId]),
 				list: Object.values(this.fileIdsByMonth).flat().map((fileId) => toViewerFileInfo(this.files[fileId])),
+				onClose() { window.OCA.Files.Sidebar.close() },
 			})
 		},
 
@@ -349,6 +375,30 @@ export default {
 		handleFormCreationDone({ album }: { album: Album }) {
 			this.showAlbumCreationForm = false
 			this.$router.push(`/albums/${album.basename}`)
+		},
+
+		// TODO: This might be a performance issue
+		dateMonth(date: string): string {
+			return moment(date, 'YYYYMM').format('MMMM')
+		},
+
+		// TODO: This might be a performance issue
+		dateYear(date: string): string {
+			return moment(date, 'YYYYMM').format('YYYY')
+		},
+
+		async favoriteSelection() {
+			await this.$store.dispatch('toggleFavoriteForFiles', { fileIds: this.selectedFileIds, favoriteState: 1 })
+		},
+
+		async unFavoriteSelection() {
+			await this.$store.dispatch('toggleFavoriteForFiles', { fileIds: this.selectedFileIds, favoriteState: 0 })
+		},
+
+		downloadSelectedFiles() {
+			const fileIds = this.selectedFileIds
+			this.onUncheckFiles(fileIds)
+			downloadFiles(fileIds.map((fileId) => this.files[fileId]))
 		},
 
 		t,
