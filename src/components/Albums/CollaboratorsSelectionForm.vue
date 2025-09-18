@@ -85,7 +85,7 @@ import AccountGroupOutlineSvg from '@mdi/svg/svg/account-group-outline.svg'
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
-import { t, translate } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { ShareType } from '@nextcloud/sharing'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -384,7 +384,7 @@ export default {
 			this.selectedCollaboratorsKeys.splice(index, 1)
 		},
 
-		t: translate,
+		t,
 	},
 }
 </script>

@@ -57,7 +57,7 @@
 import type { Album } from '../../store/albums.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
-import { translate, translatePlural } from '@nextcloud/l10n'
+import { n, t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { defineComponent } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -142,8 +142,8 @@ export default defineComponent({
 			return generateUrl(`/apps/photos/api/v1/preview/${fileId}?x=${64}&y=${64}`)
 		},
 
-		t: translate,
-		n: translatePlural,
+		t,
+		n,
 	},
 })
 </script>

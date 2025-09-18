@@ -54,7 +54,7 @@
 import type { PropType } from 'vue'
 import type { Album } from '../../store/albums.ts'
 
-import { translate } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { defineComponent } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
@@ -136,7 +136,7 @@ export default defineComponent({
 			})
 		},
 
-		t: translate,
+		t,
 	},
 })
 

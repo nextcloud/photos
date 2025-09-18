@@ -194,7 +194,7 @@
 <script lang='ts'>
 import type { Collection } from '../services/collectionFetcher.js'
 
-import { translatePlural as n, translate as t } from '@nextcloud/l10n'
+import { n, t } from '@nextcloud/l10n'
 import { nextTick } from 'vue'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'

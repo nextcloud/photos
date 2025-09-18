@@ -55,7 +55,7 @@
 <script lang='ts'>
 import type { Collection } from '../services/collectionFetcher.js'
 
-import { translate } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
@@ -131,7 +131,7 @@ export default {
 			this.fetchCollectionFiles(this.placeFileName)
 		},
 
-		t: translate,
+		t,
 	},
 }
 </script>

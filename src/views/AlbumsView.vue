@@ -72,7 +72,7 @@
 </template>
 
 <script lang='ts'>
-import { translate, translatePlural } from '@nextcloud/l10n'
+import { n, t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { useIsSmallMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { defineComponent } from 'vue'
@@ -150,8 +150,8 @@ export default defineComponent({
 			return generateUrl(`/apps/photos/api/v1/preview/${lastPhoto}?x=${512}&y=${512}`)
 		},
 
-		t: translate,
-		n: translatePlural,
+		t,
+		n,
 	},
 })
 </script>

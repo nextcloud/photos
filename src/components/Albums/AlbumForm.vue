@@ -97,7 +97,7 @@ import type { FilterOption } from '../../services/PhotosFilters/PhotosFilter.ts'
 import type { Album, AlbumEditableProperties, Collaborator } from '../../store/albums.ts'
 
 import { resultToNode } from '@nextcloud/files/dav'
-import { translate } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
 import { generateRemoteUrl } from '@nextcloud/router'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -302,7 +302,7 @@ export default {
 			this.$emit('back')
 		},
 
-		t: translate,
+		t,
 	},
 }
 </script>

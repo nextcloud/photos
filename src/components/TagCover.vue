@@ -28,7 +28,7 @@
 <script lang='ts'>
 import type { Tag } from '../store/systemtags.js'
 
-import { translatePlural as n, translate as t } from '@nextcloud/l10n'
+import { n, t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import {
 	type PropType,

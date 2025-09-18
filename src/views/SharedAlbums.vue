@@ -53,7 +53,7 @@
 import type { Album } from '../store/albums.js'
 
 import { getCurrentUser } from '@nextcloud/auth'
-import { translate, translatePlural } from '@nextcloud/l10n'
+import { n, t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
@@ -107,8 +107,8 @@ export default {
 			return album.basename.replace(new RegExp(`\\(${album.attributes.collaborators[0].id}\\)$`), '')
 		},
 
-		t: translate,
-		n: translatePlural,
+		t,
+		n,
 	},
 }
 </script>

@@ -200,7 +200,7 @@
 <script lang='ts'>
 import type { Album } from '../store/albums.js'
 
-import { translate } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
@@ -396,7 +396,7 @@ export default {
 			return selectedFileIds.some((fileId) => this.files[fileId].attributes.favorite === 0)
 		},
 
-		t: translate,
+		t,
 	},
 }
 </script>

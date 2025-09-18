@@ -88,7 +88,7 @@ import type { PublicAlbum } from '../store/publicAlbums.ts'
 import { getClient } from '@nextcloud/files/dav'
 // import Download from 'vue-material-design-icons/TrayArrowDown.vue'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
-import { translate } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
 import { /** NcButton, */ NcActions, /** NcActionSeparator, */ NcEmptyContent } from '@nextcloud/vue'
 // import Plus from 'vue-material-design-icons/Plus.vue'
@@ -208,7 +208,7 @@ export default {
 			await this.$store.dispatch('removeFilesFromCollection', { collectionFileName: this.album.root + this.albumName, fileIdsToRemove: fileIds })
 		},
 
-		t: translate,
+		t,
 	},
 }
 </script>

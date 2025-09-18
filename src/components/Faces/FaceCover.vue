@@ -28,7 +28,7 @@
 <script lang='ts'>
 import type { Collection } from '../../services/collectionFetcher.js'
 
-import { translatePlural as n } from '@nextcloud/l10n'
+import { n } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
 import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'

@@ -50,7 +50,7 @@
 
 <script lang='ts'>
 
-import { translate, translatePlural } from '@nextcloud/l10n'
+import { n, t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
@@ -95,8 +95,8 @@ export default {
 			return generateUrl(`/apps/photos/api/v1/preview/${fileId}?x=${512}&y=${512}`)
 		},
 
-		t: translate,
-		n: translatePlural,
+		t,
+		n,
 	},
 }
 </script>

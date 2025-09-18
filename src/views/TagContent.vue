@@ -49,7 +49,7 @@
 </template>
 
 <script lang='ts'>
-import { translatePlural as n, translate as t } from '@nextcloud/l10n'
+import { n, t } from '@nextcloud/l10n'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'

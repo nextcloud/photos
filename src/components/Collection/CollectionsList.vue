@@ -30,7 +30,7 @@
 import type { PropType } from 'vue'
 import type { Collection } from '../../services/collectionFetcher.ts'
 
-import { translate } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 
@@ -66,7 +66,7 @@ export default {
 	},
 
 	methods: {
-		t: translate,
+		t,
 	},
 }
 </script>

@@ -138,7 +138,7 @@
 </template>
 
 <script lang='ts'>
-import { translate } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 import { ShareType } from '@nextcloud/sharing'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
@@ -275,7 +275,7 @@ export default {
 			this.$router.push('/sharedalbums')
 		},
 
-		t: translate,
+		t,
 	},
 }
 </script>
