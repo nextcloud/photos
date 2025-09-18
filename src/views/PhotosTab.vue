@@ -72,13 +72,6 @@ const PhotoTab = defineComponent({
 	data() {
 		return {
 			fileInfo: null as SideBarFile | null,
-			url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-			// The zoom level of the map in the messages list
-			previewZoom: 13,
-			// The zoom level of the map in the new openstreetmap tab upon
-			// Opening the link
-			linkZoom: 18,
-			attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
 		}
 	},
 
