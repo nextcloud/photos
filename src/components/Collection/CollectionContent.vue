@@ -52,7 +52,7 @@
 
 <script lang='ts'>
 import type { PropType } from 'vue'
-import type { Album } from '../../store/albums.ts'
+import type { Collection } from '../../services/collectionFetcher.ts'
 
 import { t } from '@nextcloud/l10n'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
@@ -80,7 +80,7 @@ export default defineComponent({
 
 	props: {
 		collection: {
-			type: Object as PropType<Album>,
+			type: Object as PropType<Collection>,
 			default: () => undefined,
 		},
 

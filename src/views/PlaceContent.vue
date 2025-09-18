@@ -5,7 +5,6 @@
 <template>
 	<div>
 		<CollectionContent
-			ref="collectionContent"
 			:collection="place"
 			:collection-file-ids="placeFileIds"
 			:allow-selection="false"
