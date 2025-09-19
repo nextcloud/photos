@@ -15,6 +15,8 @@ OC.L10N.register(
     "Tags" : "Žymos",
     "Map" : "Žemėlapis",
     "Photos settings" : "Nuotraukų nustatymai",
+    "This name is already in use." : "Šis pavadinimas jau yra naudojamas.",
+    "Invalid filename." : "Neteisingas failo pavadinimas.",
     "Name of the album" : "Albumo pavadinimas",
     "Location of the album" : "Albumo vieta",
     "Back" : "Atgal",

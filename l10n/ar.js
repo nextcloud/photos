@@ -112,6 +112,7 @@ OC.L10N.register(
     "This might take some time depending on the size of your photo library." : "يمكن أن يستغرق هذا بعض الوقت و ذلك بحسب حجم مكتبة الصور",
     "Recognized people will show up here" : "الأشخاص الذين تمّ التعرُّف عليهم سيظهرون هنا",
     "This folder does not exist" : "هذا المجلد غير موجود",
+    "Loading folders…" : "جارٍ تحميل المجلدات…",
     "No photos in here" : "لا توجد صور هنا",
     "Taken on {date} at {time}" : "أُخِذت يوم {date} الساعة {time}",
     "This place does not have any photos or videos yet!" : "هذا المكان ليس له أي صور أو مقاطع فيديو حتى الآن!",
