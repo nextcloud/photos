@@ -17,6 +17,8 @@ OC.L10N.register(
     "Places" : "Locais",
     "Map" : "Mapa",
     "Photos settings" : "Definições do Fotos",
+    "This name is already in use." : "Este nome já está em uso.",
+    "Invalid filename." : "Nome de ficheiro inválido",
     "Name of the album" : "Name of the album",
     "Location of the album" : "Location of the album",
     "Back" : "Anterior",
