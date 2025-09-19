@@ -72,13 +72,13 @@ export default async function(_options: Partial<PhotoSearchOptions> = {}): Promi
 					<d:prop>
 						<nc:metadata-photos-original_date_time/>
 					</d:prop>
-					<d:literal>${start.format(moment.defaultFormatUtc)}</d:literal>
+					<d:literal>${start.valueOf() / 1000}</d:literal>
 				</d:gt>
 				<d:lt>
 					<d:prop>
 						<nc:metadata-photos-original_date_time/>
 					</d:prop>
-					<d:literal>${end.format(moment.defaultFormatUtc)}</d:literal>
+					<d:literal>${end.valueOf() / 1000}</d:literal>
 				</d:lt>
 			</d:and>`
 			}).join('\n')}</d:or>`
