@@ -103,7 +103,7 @@ export default {
 				let { data: fetchedFiles } = await client.getDirectoryContents(
 					`/recognize/${getCurrentUser()?.uid}/faces/${faceName}`,
 					{
-						data: getCollectionFilesDavRequest(),
+						data: getCollectionFilesDavRequest(recognizeDAVProps),
 						details: true,
 						signal: this.abortController.signal,
 					}
