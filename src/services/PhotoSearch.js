@@ -65,13 +65,13 @@ export default async function(options = {}) {
 					<d:prop>
 						<d:getlastmodified />
 					</d:prop>
-					<d:literal>${start.format(moment.defaultFormatUtc)}</d:literal>
+					<d:literal>${start.unix()}</d:literal>
 				</d:gt>
 				<d:lt>
 					<d:prop>
 						<d:getlastmodified />
 					</d:prop>
-					<d:literal>${end.format(moment.defaultFormatUtc)}</d:literal>
+					<d:literal>${end.unix()}</d:literal>
 				</d:lt>
 			</d:and>`
 			}).join('\n')}</d:or>`
