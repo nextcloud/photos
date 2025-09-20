@@ -25,41 +25,20 @@
 	</RouterLink>
 </template>
 
-<script lang='ts'>
+<script lang='ts' setup>
+import { computed, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 
-export default {
-	name: 'CollectionCover',
+const props = defineProps<{
+	coverUrl: string
+	altImg: string
+	parentRoute: string
+	collectionName: string
+}>()
 
-	components: {
-		ImageMultipleOutline,
-		RouterLink,
-	},
-
-	props: {
-		coverUrl: {
-			type: String,
-			required: true,
-		},
-
-		altImg: {
-			type: String,
-			required: true,
-		},
-
-		link: {
-			type: String,
-			required: true,
-		},
-	},
-
-	data() {
-		return {
-			coverLoadingError: false,
-		}
-	},
-}
+const coverLoadingError = ref(false)
+const link = computed(() => `${props.parentRoute}/${encodeURIComponent(props.collectionName)}`)
 </script>
 
 <style lang="scss" scoped>

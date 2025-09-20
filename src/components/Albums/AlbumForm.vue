@@ -10,6 +10,8 @@
 				:value.sync="albumName"
 				type="text"
 				name="name"
+				:helper-text="albumNameValidationError"
+				:error="albumNameValidationError !== undefined"
 				:required="true"
 				:label="t('photos', 'Name of the album')" />
 			<NcTextField
@@ -43,7 +45,7 @@
 				<NcButton
 					v-if="sharingEnabled && !editMode"
 					type="secondary"
-					:disabled="albumName.trim() === '' || loading"
+					:disabled="!canSubmit"
 					@click="showCollaboratorView = true">
 					<template #icon>
 						<AccountMultiplePlusOutline :size="20" />
@@ -52,7 +54,7 @@
 				</NcButton>
 				<NcButton
 					type="primary"
-					:disabled="albumName === '' || loading"
+					:disabled="!canSubmit"
 					@click="submit()">
 					<template #icon>
 						<NcLoadingIcon v-if="loading" :size="20" />
@@ -96,8 +98,9 @@ import type { PropType } from 'vue'
 import type { FilterOption } from '../../services/PhotosFilters/PhotosFilter.ts'
 import type { Album, AlbumEditableProperties, Collaborator } from '../../store/albums.ts'
 
+import { InvalidFilenameError, InvalidFilenameErrorReason, validateFilename } from '@nextcloud/files'
 import { resultToNode } from '@nextcloud/files/dav'
-import { translate } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
 import { generateRemoteUrl } from '@nextcloud/router'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -166,6 +169,41 @@ export default {
 		albumFileName(): string {
 			return this.$store.getters.getAlbumName(this.albumName)
 		},
+
+		albumNameValidationError(): string | undefined {
+			// If loading is true, it means that the album is being created
+			// so this condition will eventually become true
+			// but we don't want to show the error message while loading
+			const existingAlbum = this.$store.getters.albums[this.albumFileName]
+			if (existingAlbum !== undefined && this.album !== existingAlbum && !this.loading) {
+				return t('files', 'This name is already in use.')
+			}
+
+			try {
+				validateFilename(this.albumName)
+			} catch (error) {
+				if (!(error instanceof InvalidFilenameError)) {
+					throw error
+				}
+
+				switch (error.reason) {
+					case InvalidFilenameErrorReason.Character:
+						return t('files', '"{char}" is not allowed inside a filename.', { char: error.segment })
+					case InvalidFilenameErrorReason.ReservedName:
+						return undefined // We don't need to enforce that for albums.
+					case InvalidFilenameErrorReason.Extension:
+						return undefined // We don't need to enforce that for albums.
+					default:
+						return t('files', 'Invalid filename.')
+				}
+			}
+
+			return undefined
+		},
+
+		canSubmit() {
+			return this.albumName !== '' && this.albumNameValidationError === undefined && !this.loading
+		},
 	},
 
 	mounted() {
@@ -190,7 +228,7 @@ export default {
 
 	methods: {
 		submit(collaborators: Collaborator[] = []) {
-			if (this.albumName === '' || this.loading) {
+			if (!this.canSubmit) {
 				return
 			}
 
@@ -300,7 +338,7 @@ export default {
 			this.$emit('back')
 		},
 
-		t: translate,
+		t,
 	},
 }
 </script>
