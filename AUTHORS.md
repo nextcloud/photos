@@ -17,3 +17,4 @@
 - Robin Appelman <robin@icewind.nl>
 - Roeland Jago Douma <roeland@famdouma.nl>
 - Thomas Citharel <nextcloud@tcit.fr>
+- Mario Moreno Meza <github@marraz.me>
