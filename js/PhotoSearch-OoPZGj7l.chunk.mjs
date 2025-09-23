@@ -1,0 +1,73 @@
+import{j as c,b as m,r as u}from"./vue.runtime.esm-zA5QjVAQ.chunk.mjs";import{m as r}from"./index-PNtmEpku.chunk.mjs";import{b as h,p as f,g,d as y}from"./index-CSC-o6Za.chunk.mjs";async function v(o={}){const d={firstResult:0,nbResults:200,mimesType:h,onThisDay:!1,onlyFavorites:!1,full:!1,extraFilters:"",...o},s=d.mimesType.reduce((e,t)=>`${e}
+		<d:eq>
+			<d:prop>
+				<d:getcontenttype/>
+			</d:prop>
+			<d:literal>${t}</d:literal>
+		</d:eq>
+	`,""),a=d.onlyFavorites?`<d:eq>
+				<d:prop>
+					<oc:favorite/>
+				</d:prop>
+				<d:literal>1</d:literal>
+			</d:eq>`:"",n=d.onThisDay?`<d:or>${Array(20).fill(1).map((e,t)=>{const l=r(Date.now()).startOf("day").subtract(3,"d").subtract(t+1,"y"),p=r(Date.now()).endOf("day").add(3,"d").subtract(t+1,"y");return`<d:and>
+				<d:gt>
+					<d:prop>
+						<nc:metadata-photos-original_date_time/>
+					</d:prop>
+					<d:literal>${l.valueOf()/1e3}</d:literal>
+				</d:gt>
+				<d:lt>
+					<d:prop>
+						<nc:metadata-photos-original_date_time/>
+					</d:prop>
+					<d:literal>${p.valueOf()/1e3}</d:literal>
+				</d:lt>
+			</d:and>`}).join(`
+`)}</d:or>`:"",i=f.state.userConfig.photosSourceFolders.map(e=>`
+			<d:scope>
+				<d:href>${c(m,e)}</d:href>
+				<d:depth>infinity</d:depth>
+			</d:scope>`).join(`
+`);return d.data=`<?xml version="1.0" encoding="UTF-8"?>
+		<d:searchrequest xmlns:d="DAV:"
+			xmlns:oc="http://owncloud.org/ns"
+			xmlns:nc="http://nextcloud.org/ns"
+			xmlns:ns="https://github.com/icewind1991/SearchDAV/ns"
+			xmlns:ocs="http://open-collaboration-services.org/ns">
+			<d:basicsearch>
+				<d:select>
+					<d:prop>
+						${g()}
+					</d:prop>
+				</d:select>
+				<d:from>
+					${i}
+				</d:from>
+				<d:where>
+					<d:and>
+						<d:or>
+							${s}
+						</d:or>
+						${a}
+						${n}
+						${d.extraFilters}
+					</d:and>
+				</d:where>
+				<d:orderby>
+					<d:order>
+						<d:prop><nc:metadata-photos-original_date_time/></d:prop>
+						<d:descending/>
+					</d:order>
+					<d:order>
+						<d:prop><d:getlastmodified/></d:prop>
+						<d:descending/>
+					</d:order>
+				</d:orderby>
+				<d:limit>
+					<d:nresults>${d.nbResults}</d:nresults>
+					<ns:firstresult>${d.firstResult}</ns:firstresult>
+				</d:limit>
+			</d:basicsearch>
+		</d:searchrequest>`,d.details=!0,(await y.search("/",d)).data.results.map(e=>u(e))}export{v as g};
+//# sourceMappingURL=PhotoSearch-OoPZGj7l.chunk.mjs.map
