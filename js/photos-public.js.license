@@ -38,6 +38,7 @@ SPDX-FileCopyrightText: Julian Gruber
 SPDX-FileCopyrightText: Joyent
 SPDX-FileCopyrightText: José F. Romaniello <jfromaniello@gmail.com> (http://joseoncode.com)
 SPDX-FileCopyrightText: Jonas Schade <derzade@gmail.com>
+SPDX-FileCopyrightText: John Molakvoæ <skjnldsv@protonmail.com>
 SPDX-FileCopyrightText: John Molakvoæ (skjnldsv) <skjnldsv@protonmail.com>
 SPDX-FileCopyrightText: Jeff Sagal <sagalbot@gmail.com>
 SPDX-FileCopyrightText: James Halliday
@@ -355,6 +356,9 @@ This file is generated from multiple sources. Included packages:
 - events
 	- version: 3.3.0
 	- license: MIT
+- path-browserify
+	- version: 1.0.1
+	- license: MIT
 - readable-stream
 	- version: 3.6.2
 	- license: MIT
@@ -517,15 +521,6 @@ This file is generated from multiple sources. Included packages:
 - webpack
 	- version: 5.97.1
 	- license: MIT
-- inherits
-	- version: 2.0.3
-	- license: ISC
-- util
-	- version: 0.10.4
-	- license: MIT
-- path
-	- version: 0.12.7
-	- license: MIT
-- nextcloud
-	- version: 1.0.0
+- photos
+	- version: 3.0.0
 	- license: AGPL-3.0-or-later

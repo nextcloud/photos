@@ -37,6 +37,7 @@ SPDX-FileCopyrightText: Mapbox
 SPDX-FileCopyrightText: Julian Gruber
 SPDX-FileCopyrightText: Joyent
 SPDX-FileCopyrightText: José F. Romaniello <jfromaniello@gmail.com> (http://joseoncode.com)
+SPDX-FileCopyrightText: John Molakvoæ <skjnldsv@protonmail.com>
 SPDX-FileCopyrightText: John Molakvoæ (skjnldsv) <skjnldsv@protonmail.com>
 SPDX-FileCopyrightText: Jeff Sagal <sagalbot@gmail.com>
 SPDX-FileCopyrightText: James Halliday
@@ -492,6 +493,6 @@ This file is generated from multiple sources. Included packages:
 - webdav
 	- version: 4.11.4
 	- license: MIT
-- nextcloud
-	- version: 1.0.0
+- photos
+	- version: 3.0.0
 	- license: AGPL-3.0-or-later
