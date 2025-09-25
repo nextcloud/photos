@@ -32,7 +32,8 @@
 			<template #default="{ collection }">
 				<CollectionCover
 					:key="collection.basename"
-					:link="`/albums/${collection.basename}`"
+					parent-route="/albums"
+					:collection-name="collection.basename"
 					:alt-img="t('photos', 'Cover photo for album {albumName}', { albumName: collection.basename })"
 					:cover-url="collection.attributes['last-photo'] | coverUrl">
 					<template #default>

@@ -20,7 +20,8 @@
 			<CollectionCover
 				:key="collection.basename"
 				slot-scope="{ collection }"
-				:link="`/places/${collection.basename}`"
+				parent-route="/places"
+				:collection-name="collection.basename"
 				:alt-img="t('photos', 'Cover photo for place {placeName}', { placeName: collection.basename })"
 				:cover-url="collection.attributes['last-photo'] | coverUrl">
 				<span class="place__name">
