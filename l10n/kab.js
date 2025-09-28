@@ -1,6 +1,7 @@
 OC.L10N.register(
     "photos",
     {
+    "Photos" : "Tiwlafin",
     "Videos" : "Tividyutin",
     "People" : "Imdanen",
     "Folders" : "Ikaramen",
@@ -10,9 +11,12 @@ OC.L10N.register(
     "Save" : "Sekles",
     "Favorite" : "Menyif",
     "Go back" : "Tuɣalin",
+    "Pick folder" : "Fren akaram",
     "All folders" : "Akk ikaramen",
+    "Add folder" : "Rnu akaram",
     "Home" : "Asnubeg",
     "Remove from favorites" : "Kkes-it seg ismal",
+    "Save." : "Sekles.",
     "Details" : "Talqayt",
     "Group" : "Agraw",
     "Back to {folder}" : "Uɣal ar {folder}",
