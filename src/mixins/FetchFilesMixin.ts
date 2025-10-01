@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import type { File } from '@nextcloud/files'
+
 import { showError } from '@nextcloud/dialogs'
 import { defaultRootPath } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
@@ -39,11 +41,11 @@ export default defineComponent({
 	methods: {
 		/**
 		 * @param options - Options to pass to getPhotos.
-		 * @param blacklist - Array of ids to filter out.
+		 * @param filter - Function to filter out some files.
 		 * @param force - Force fetching even if doneFetchingFiles is true
 		 * @return The next batch of data depending on global offset.
 		 */
-		async fetchFiles(options: Partial<PhotoSearchOptions> = {}, blacklist: number[] = [], force: boolean = false): Promise<number[]> {
+		async fetchFiles(options: Partial<PhotoSearchOptions> = {}, filter?: (file: File) => boolean, force: boolean = false): Promise<number[]> {
 			if ((this.doneFetchingFiles && !force) || this.loadingFiles) {
 				return []
 			}
@@ -58,7 +60,7 @@ export default defineComponent({
 				const numberOfImagesPerBatch = 200
 
 				// Load next batch of images
-				const fetchedFiles = await getPhotos({
+				let fetchedFiles = await getPhotos({
 					firstResult: this.fetchedFileIds.length,
 					nbResults: numberOfImagesPerBatch,
 					...options,
@@ -70,11 +72,15 @@ export default defineComponent({
 					this.doneFetchingFiles = true
 				}
 
+				if (filter !== undefined) {
+					fetchedFiles = fetchedFiles.filter(filter)
+				}
+
 				const fileIds = fetchedFiles
 					.map((file) => file.fileid as number)
 					.filter((fileId) => !this.fetchedFileIds.includes(fileId)) // Filter to prevent duplicate fileIds.
 
-				this.fetchedFileIds.push(...fileIds.filter((fileId) => !blacklist.includes(fileId)))
+				this.fetchedFileIds.push(...fileIds)
 
 				this.$store.dispatch('appendFiles', fetchedFiles)
 
