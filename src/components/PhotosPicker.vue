@@ -103,6 +103,8 @@
 </template>
 
 <script lang='ts'>
+import type { File } from '@nextcloud/files'
+
 import { getCurrentUser } from '@nextcloud/auth'
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
@@ -172,7 +174,7 @@ export default defineComponent({
 
 		// List of file ids to not show.
 		blacklistIds: {
-			type: Array as PropType<number[]>,
+			type: Array as PropType<string[]>,
 			default: () => [],
 		},
 
@@ -229,11 +231,15 @@ export default defineComponent({
 		},
 
 		getFiles() {
-			this.fetchFiles({}, this.blacklistIds)
+			this.fetchFiles({}, this.shouldShowFile)
 		},
 
 		refreshFiles() {
-			this.fetchFiles({ firstResult: 0 }, [...this.blacklistIds, ...this.fetchedFileIds], true)
+			this.fetchFiles({ firstResult: 0 }, this.shouldShowFile, true)
+		},
+
+		shouldShowFile(file: File) {
+			return file.attributes['mount-type'] === '' && !this.blacklistIds.includes(file.fileid?.toString() ?? '')
 		},
 
 		emitPickedEvent() {
