@@ -55,7 +55,7 @@ export default {
 				const numberOfImagesPerBatch = 200
 
 				// Load next batch of images
-				const fetchedFiles = await getPhotos({
+				let fetchedFiles = await getPhotos({
 					firstResult: this.fetchedFileIds.length,
 					nbResults: numberOfImagesPerBatch,
 					...options,
@@ -65,6 +65,10 @@ export default {
 				// If we get less files than requested that means we got to the end
 				if (fetchedFiles.length !== numberOfImagesPerBatch) {
 					this.doneFetchingFiles = true
+				}
+
+				if (filter !== undefined) {
+					fetchedFiles = fetchedFiles.filter(filter)
 				}
 
 				const fileIds = fetchedFiles

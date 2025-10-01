@@ -218,11 +218,15 @@ export default defineComponent({
 		},
 
 		getFiles() {
-			this.fetchFiles({}, this.blacklistIds)
+			this.fetchFiles({}, this.shouldShowFile)
 		},
 
 		refreshFiles() {
-			this.fetchFiles({ firstResult: 0 }, [...this.blacklistIds, ...this.fetchedFileIds], true)
+			this.fetchFiles({ firstResult: 0 }, this.shouldShowFile, true)
+		},
+
+		shouldShowFile(file: File) {
+			return file.attributes['mount-type'] === '' && !this.blacklistIds.includes(file.fileid?.toString() ?? '')
 		},
 
 		emitPickedEvent() {
