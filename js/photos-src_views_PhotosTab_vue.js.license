@@ -7,6 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 SPDX-License-Identifier: (MPL-2.0 OR Apache-2.0)
 SPDX-FileCopyrightText: string_decoder developers
 SPDX-FileCopyrightText: leaflet developers
+SPDX-FileCopyrightText: inherits developers
 SPDX-FileCopyrightText: escape-html developers
 SPDX-FileCopyrightText: Tobias Koppers @sokra
 SPDX-FileCopyrightText: T. Jameson Little <t.jameson.little@gmail.com>
@@ -15,9 +16,8 @@ SPDX-FileCopyrightText: Roeland Jago Douma
 SPDX-FileCopyrightText: Rob Cresswell <robcresswell@pm.me>
 SPDX-FileCopyrightText: Nextcloud GmbH and Nextcloud contributors
 SPDX-FileCopyrightText: Mickael Bouchaud
+SPDX-FileCopyrightText: Joyent
 SPDX-FileCopyrightText: Jonas Schade <derzade@gmail.com>
-SPDX-FileCopyrightText: John Molakvoæ <skjnldsv@protonmail.com>
-SPDX-FileCopyrightText: James Halliday
 SPDX-FileCopyrightText: Iskren Ivov Chernev <iskren.chernev@gmail.com> (https://github.com/ichernev)
 SPDX-FileCopyrightText: GitHub Inc.
 SPDX-FileCopyrightText: Feross Aboukhadijeh
@@ -105,9 +105,6 @@ This file is generated from multiple sources. Included packages:
 - moment
 	- version: 2.30.1
 	- license: MIT
-- path-browserify
-	- version: 1.0.1
-	- license: MIT
 - process
 	- version: 0.11.10
 	- license: MIT
@@ -135,6 +132,15 @@ This file is generated from multiple sources. Included packages:
 - vue2-leaflet
 	- version: 2.7.1
 	- license: MIT
-- photos
-	- version: 4.0.0
+- inherits
+	- version: 2.0.3
+	- license: ISC
+- util
+	- version: 0.10.4
+	- license: MIT
+- path
+	- version: 0.12.7
+	- license: MIT
+- nextcloud
+	- version: 1.0.0
 	- license: AGPL-3.0-or-later

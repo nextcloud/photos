@@ -46,7 +46,6 @@ SPDX-FileCopyrightText: Jordan Humphreys <jordan@zurb.com>
 SPDX-FileCopyrightText: Jordan Harband <ljharb@gmail.com>
 SPDX-FileCopyrightText: Jordan Harband
 SPDX-FileCopyrightText: Jonas Schade <derzade@gmail.com>
-SPDX-FileCopyrightText: John Molakvoæ <skjnldsv@protonmail.com>
 SPDX-FileCopyrightText: Jeff Sagal <sagalbot@gmail.com>
 SPDX-FileCopyrightText: James Halliday
 SPDX-FileCopyrightText: Jacob Clevenger<https://github.com/wheatjs>
@@ -488,9 +487,6 @@ This file is generated from multiple sources. Included packages:
 - p-queue
 	- version: 8.1.1
 	- license: MIT
-- path-browserify
-	- version: 1.0.1
-	- license: MIT
 - path-posix
 	- version: 1.0.0
 	- license: ISC
@@ -644,6 +640,15 @@ This file is generated from multiple sources. Included packages:
 - which-typed-array
 	- version: 1.1.18
 	- license: MIT
-- photos
-	- version: 4.0.0
+- inherits
+	- version: 2.0.3
+	- license: ISC
+- util
+	- version: 0.10.4
+	- license: MIT
+- path
+	- version: 0.12.7
+	- license: MIT
+- nextcloud
+	- version: 1.0.0
 	- license: AGPL-3.0-or-later

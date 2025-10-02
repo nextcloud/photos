@@ -28,7 +28,6 @@ SPDX-FileCopyrightText: Joyent
 SPDX-FileCopyrightText: José F. Romaniello <jfromaniello@gmail.com> (http://joseoncode.com)
 SPDX-FileCopyrightText: Jordan Harband <ljharb@gmail.com>
 SPDX-FileCopyrightText: Jordan Harband
-SPDX-FileCopyrightText: John Molakvoæ <skjnldsv@protonmail.com>
 SPDX-FileCopyrightText: James Halliday
 SPDX-FileCopyrightText: Iskren Ivov Chernev <iskren.chernev@gmail.com> (https://github.com/ichernev)
 SPDX-FileCopyrightText: Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me)
@@ -250,9 +249,6 @@ This file is generated from multiple sources. Included packages:
 - nested-property
 	- version: 4.0.0
 	- license: MIT
-- path-browserify
-	- version: 1.0.1
-	- license: MIT
 - path-posix
 	- version: 1.0.0
 	- license: ISC
@@ -331,6 +327,15 @@ This file is generated from multiple sources. Included packages:
 - which-typed-array
 	- version: 1.1.18
 	- license: MIT
-- photos
-	- version: 4.0.0
+- inherits
+	- version: 2.0.3
+	- license: ISC
+- util
+	- version: 0.10.4
+	- license: MIT
+- path
+	- version: 0.12.7
+	- license: MIT
+- nextcloud
+	- version: 1.0.0
 	- license: AGPL-3.0-or-later
