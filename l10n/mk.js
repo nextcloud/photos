@@ -133,6 +133,7 @@ OC.L10N.register(
     "Add to album" : "Додади во албум",
     "Delete selection" : "Избриши ги селектираните",
     "No photos or videos in here" : "Овде нема фотографии или видеа",
+    "Unassigned faces" : "Нераспределени лица",
     "Failed to fetch collection." : "Неуспешно добивање на колекциите.",
     "Failed to fetch collections list." : "Неуспешно добивање на листата со колекции.",
     "Failed to fetch faces list." : "Неуспешно вчитување на листата со личности.",
