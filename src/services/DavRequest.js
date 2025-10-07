@@ -8,6 +8,7 @@ const props = `
 	<d:getetag />
 	<d:getlastmodified />
 	<d:resourcetype />
+	<nc:mount-type />
 	<nc:metadata-photos-size />
 	<nc:metadata-photos-original_date_time />
 	<nc:metadata-files-live-photo />
