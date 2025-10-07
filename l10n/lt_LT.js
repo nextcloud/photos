@@ -52,6 +52,7 @@ OC.L10N.register(
     "Add folder" : "Pridėti aplanką",
     "Home" : "Namai",
     "View" : "Rodyti",
+    "Upload folder" : "Įkelti aplanką",
     "_%n photo_::_%n photos_" : ["%n nuotrauka","%n nuotraukos","%n nuotraukų","%n nuotrauka"],
     "Add photos to this album" : "Pridėti į šį albumą nuotraukų",
     "Open actions menu" : "Atverti veiksmų meniu",
