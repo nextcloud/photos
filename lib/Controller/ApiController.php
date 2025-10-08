@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Controller;
 
+use JsonException;
 use OCA\Photos\AppInfo\Application;
-use OCA\Photos\Service\UserConfigService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
@@ -50,12 +50,56 @@ class ApiController extends Controller {
 			return new JSONResponse([], Http::STATUS_PRECONDITION_FAILED);
 		}
 
-		if (!in_array($key, array_keys(UserConfigService::DEFAULT_CONFIGS))) {
-			return new JSONResponse([], Http::STATUS_PRECONDITION_FAILED);
+		switch ($key) {
+			case 'croppedLayout':
+				if ($value !== 'true' && $value !== 'false') {
+					return new JSONResponse([], Http::STATUS_BAD_REQUEST);
+				}
+				break;
+			case 'photosLocation':
+				if (!$this->validatePath($value)) {
+					return new JSONResponse([], Http::STATUS_BAD_REQUEST);
+				}
+				break;
+			case 'photosSourceFolders':
+				try {
+					$paths = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+				} catch (JsonException) {
+					return new JSONResponse([], Http::STATUS_BAD_REQUEST);
+				}
+
+				if (!array_is_list($paths)) {
+					return new JSONResponse([], Http::STATUS_BAD_REQUEST);
+				}
+
+				foreach ($paths as $path) {
+					if (!$this->validatePath($path)) {
+						return new JSONResponse([], Http::STATUS_BAD_REQUEST);
+					}
+				}
+				break;
+			default:
+				return new JSONResponse([], Http::STATUS_BAD_REQUEST);
 		}
 
 		$this->config->setUserValue($user->getUid(), Application::APP_ID, $key, $value);
 		return new JSONResponse([], Http::STATUS_OK);
+	}
+
+	private function validatePath(mixed $path): bool {
+		if (!is_string($path)) {
+			return false;
+		}
+
+		if (!str_starts_with($path, '/')) {
+			return false;
+		}
+
+		if (str_contains($path, '..')) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
