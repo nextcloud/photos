@@ -1,2 +1,554 @@
-import{V as s,e as l,u as f,s as y,d as N,t as a,l as d,_ as c,g as n,a as S,r}from"./vue.runtime.esm-CUt6bkjo.chunk.mjs";import{P as _,a as b,u as C,s as k,b as A,c as F}from"./filters-SoHYV8l-.chunk.mjs";import{u as w,N as I,a as P,r as M,m as O,s as L,v as T,i as z,b as x,c as E,d as h}from"./video-C4nEclMq.chunk.mjs";import{N as $,a as B,b as V}from"./NcAppSettingsSection-Bl2-D3_g-Ca8ZTGFj.chunk.mjs";import{n as u,t as D,c as H,g as W,N as v,l as i,p as g}from"./index-BNsvyP4z.chunk.mjs";import{l as R}from"./NcAvatar-YSp2ORHc-Bi9dNTbl.chunk.mjs";import{u as U}from"./useHotKey-C66SdeSu.chunk.mjs";import{n as p,H as j,M as q,a as G,b as K,c as J,V as Q,d as X,T as Y,e as Z,S as tt,f as et,g as ot,h as at,I as st,i as it,j as nt,k as rt,F as pt,l as lt,A as ct,m as dt,C as ut,o as ht,p as gt,q as mt,r as vt,s as ft,t as yt}from"./icons-VGG7keIQ.chunk.mjs";import{P as Nt,a as St}from"./PhotosFiltersInput-C0kp-aRU.chunk.mjs";import{N as _t}from"./NcCheckboxRadioSwitch-VeztTzpz-DkQEAoxl.chunk.mjs";import{g as bt}from"./index-C6I6h2nO.chunk.mjs";import{d as Ct}from"./index-D8nxFad8.chunk.mjs";import"./preload-helper-Dh9HmuEY.chunk.mjs";import"./NcActionButton-CuVNJJtW-BUVPInyd.chunk.mjs";import"./NcVNodes-D8Ih0Rsa.chunk.mjs";import"./NcSelect-CjUzohn5-PZ5uhVXP.chunk.mjs";import"./useModelMigration-EhAWvqDD-CvVTA-Di.chunk.mjs";import"./NcDialog-CKgpZOiy-B2_LlYUO.chunk.mjs";import"./index-D5RVJiYa.chunk.mjs";import"./dialog-jEiVWX_Y.chunk.mjs";import"./NcDateTimePicker-BMi0nFhF.chunk.mjs";import"./NcDateTime-DshRFtUU-yFYE4SvN.chunk.mjs";import"./collectionFetcher-C08Ck8hP.chunk.mjs";const kt={name:"NcAppNavigationList"};var At=function(){var t=this,e=t._self._c;return e("ul",{staticClass:"app-navigation-list"},[t._t("default")],2)},Ft=[],wt=u(kt,At,Ft,!1,null,"058e6060");const It=wt.exports,Pt={name:"NcAppNavigation",components:{NcAppNavigationList:It,NcAppNavigationToggle:$},inject:{setHasAppNavigation:{default:()=>()=>s.util.warn("NcAppNavigation is not mounted inside NcContent, this is probably an error."),from:"NcContent:setHasAppNavigation"}},props:{ariaLabel:{type:String,default:""},ariaLabelledby:{type:String,default:""}},setup(){return{isMobile:w()}},data(){return{open:!this.isMobile,focusTrap:null}},watch:{isMobile(){this.open=!this.isMobile,this.toggleFocusTrap()},open(){this.toggleFocusTrap()}},mounted(){this.setHasAppNavigation(!0),y("toggle-navigation",this.toggleNavigationByEventBus),l("navigation-toggled",{open:this.open}),this.focusTrap=H(this.$refs.appNavigationContainer,{allowOutsideClick:!0,fallbackFocus:this.$refs.appNavigationContainer,trapStack:W(),escapeDeactivates:!1}),this.toggleFocusTrap(),U("n",this.onKeyDown,{prevent:!0,stop:!0})},unmounted(){this.setHasAppNavigation(!1),f("toggle-navigation",this.toggleNavigationByEventBus),this.focusTrap.deactivate()},methods:{async toggleNavigation(t){if(this.open===t){l("navigation-toggled",{open:this.open});return}this.open=typeof t>"u"?!this.open:t;const e=getComputedStyle(document.body),o=parseInt(e.getPropertyValue("--animation-quick"))||100;this.open&&(await this.$nextTick(),this.focusFirstElement()),setTimeout(()=>{l("navigation-toggled",{open:this.open})},1.5*o)},toggleNavigationByEventBus({open:t}){this.toggleNavigation(t)},toggleFocusTrap(){this.isMobile&&this.open?this.focusTrap.activate():this.focusTrap.deactivate()},handleEsc(){this.isMobile&&this.open&&this.toggleNavigation(!1)},focusFirstElement(){const t=D(this.$refs.appNavigationContainer)[0];t&&(t.focus(),R.debug("Focusing first element in the navigation",{element:t}))},onKeyDown(t){if(t.key==="n"){if(!this.open){this.toggleNavigation(!0);return}this.isFocusWithinNavigation()&&this.toggleNavigation(!1)}},isFocusWithinNavigation(){const t=document.activeElement;return this.$refs.appNavigationContainer?.contains(t)}}};var Mt=function(){var t=this,e=t._self._c;return e("div",{ref:"appNavigationContainer",staticClass:"app-navigation",class:{"app-navigation--close":!t.open}},[e("nav",{staticClass:"app-navigation__content",attrs:{id:"app-navigation-vue","aria-hidden":t.open?"false":"true","aria-label":t.ariaLabel||void 0,"aria-labelledby":t.ariaLabelledby||void 0,inert:!t.open||void 0},on:{keydown:function(o){return!o.type.indexOf("key")&&t._k(o.keyCode,"esc",27,o.key,["Esc","Escape"])?null:t.handleEsc.apply(null,arguments)}}},[e("div",{staticClass:"app-navigation__search"},[t._t("search")],2),e("div",{staticClass:"app-navigation__body",class:{"app-navigation__body--no-list":!t.$scopedSlots.list}},[t._t("default")],2),t.$scopedSlots.list?e("NcAppNavigationList",{staticClass:"app-navigation__list"},[t._t("list")],2):t._e(),t._t("footer")],2),e("NcAppNavigationToggle",{attrs:{open:t.open},on:{"update:open":t.toggleNavigation}})],1)},Ot=[],Lt=u(Pt,Mt,Ot,!1,null,"6d2acd3d");const Tt=Lt.exports,zt={name:"NcAppSettingsSection",inject:["registerSection","unregisterSection"],props:{name:{type:String,required:!0},id:{type:String,required:!0,validator(t){return/^[a-z0-9\-_]+$/.test(t)}}},computed:{htmlId(){return"settings-section_"+this.id}},watch:{id(t,e){this.unregisterSection(e),this.registerSection(t,this.name,this.$slots?.icon)},name(t){this.unregisterSection(this.id),this.registerSection(this.id,t,this.$slots?.icon)}},mounted(){this.registerSection(this.id,this.name,this.$slots?.icon)},beforeDestroy(){this.unregisterSection(this.id)}};var xt=function(){var t=this,e=t._self._c;return e("section",{staticClass:"app-settings-section",attrs:{id:t.htmlId,"aria-labelledby":`${t.htmlId}--label`}},[e("h3",{staticClass:"app-settings-section__name",attrs:{id:`${t.htmlId}--label`}},[t._v(" "+t._s(t.name)+" ")]),t._t("default"),t._e()],2)},Et=[],$t=u(zt,xt,Et,!1,null,"e970c9f7");const Bt=$t.exports,Vt={name:"CroppedLayoutSettings",components:{NcCheckboxRadioSwitch:_t},computed:{croppedLayout(){return this.$store.state.userConfig.croppedLayout}},methods:{updateSetting(t){this.$store.dispatch("updateUserConfig",{key:"croppedLayout",value:t})}}};var Dt=function(){var t=this,e=t._self._c;return e("NcCheckboxRadioSwitch",{attrs:{checked:t.croppedLayout,type:"switch"},on:{"update:checked":t.updateSetting}},[t._v(" "+t._s(t.t("photos","Enable squared photos view"))+" ")])},Ht=[],Wt=p(Vt,Dt,Ht,!1,null,null);const Rt=Wt.exports,Ut=N({name:"PhotosUploadLocationSettings",components:{NcButton:v,PhotosFolder:_},data(){return{HomeOutline:j}},computed:{photosLocation(){return this.$store.state.userConfig.photosLocation}},methods:{debounceSelectPhotosFolder:Ct(function(){this.selectPhotosFolder()}),async selectPhotosFolder(){const t=await this.openFilePicker(a("photos","Select the default upload location for your media"));this.updatePhotosFolder(t)},async openFilePicker(t){return bt(t).setMultiSelect(!1).addMimeTypeFilter("httpd/unix-directory").allowDirectories().startAt(this.photosLocation).addButton({label:a("photos","Pick folder"),callback:e=>i.debug("Picked",{nodes:e})}).build().pick()},updatePhotosFolder(t){this.$store.dispatch("updateUserConfig",{key:"photosLocation",value:t})},t:a}});var jt=function(){var t=this,e=t._self._c;return t._self._setupProxy,e("div",{staticClass:"photos-location"},[e("PhotosFolder",{attrs:{path:t.photosLocation,"root-folder-label":t.t("photos","Home"),"root-folder-icon":t.HomeOutline}}),e("NcButton",{attrs:{"aria-label":t.t("photos","Choose default Photos upload and Albums location")},on:{click:t.debounceSelectPhotosFolder}},[t._v(" "+t._s(t.t("photos","Choose a different folder"))+" ")])],1)},qt=[],Gt=p(Ut,jt,qt,!1,null,"2647e1a5");const Kt=Gt.exports,Jt={name:"SettingsDialog",components:{NcAppSettingsDialog:B,NcAppSettingsSection:Bt,CroppedLayoutSettings:Rt,PhotosSourceLocationsSettings:b,PhotosUploadLocationSettings:Kt},props:{open:{type:Boolean,default:!1}},methods:{onClose(){this.$emit("update:open",!1)},t:a}};var Qt=function(){var t=this,e=t._self._c;return e("NcAppSettingsDialog",{attrs:{open:t.open,"show-navigation":!0,name:t.t("photos","Photos settings")},on:{"update:open":t.onClose}},[e("NcAppSettingsSection",{attrs:{id:"layout-settings",name:t.t("photos","View")}},[e("CroppedLayoutSettings")],1),e("NcAppSettingsSection",{attrs:{id:"source-directories-settings",name:t.t("photos","Media folders")}},[e("div",{staticClass:"setting-section-subline"},[t._v(" "+t._s(t.t("photos","Choose the folders from where photos and videos are shown."))+" ")]),e("PhotosSourceLocationsSettings")],1),e("NcAppSettingsSection",{attrs:{id:"upload-directory-settings",name:t.t("photos","Upload folder")}},[e("div",{staticClass:"setting-section-subline"},[t._v(" "+t._s(t.t("photos","Choose the folder where photos and albums are uploaded to."))+" ")]),e("PhotosUploadLocationSettings")],1)],1)},Xt=[],Yt=p(Jt,Qt,Xt,!1,null,null);const Zt=Yt.exports,m=d("photos","appStoreEnabled",!1),te={name:"PhotosApp",components:{AccountBoxMultiple:yt,AccountBoxMultipleOutline:ft,CogOutline:vt,CalendarToday:mt,CalendarTodayOutline:gt,Camera:ht,CameraOutline:ut,AccountGroup:dt,AccountGroupOutline:ct,Folder:lt,FolderOutline:pt,ImageMultiple:rt,ImageMultipleOutline:nt,ImageIcon:it,ImageOutline:st,ShareVariant:at,ShareVariantOutline:ot,Star:et,StarOutline:tt,Tag:Z,TagOutline:Y,VideoIcon:X,VideoOutline:Q,MapIcon:J,MapOutline:K,MapMarker:G,MapMarkerOutline:q,NcAppContent:P,NcAppNavigation:Tt,NcAppNavigationItem:V,NcButton:v,NcContent:I,SettingsDialog:Zt,PhotosFiltersInput:St,PhotosFiltersDisplay:Nt},setup(){const t=C(),{selectedFilters:e}=k(t);return{selectedFilters:e}},data(){return{svgplaceholder:x,imgplaceholder:z,videoplaceholder:T,areTagsInstalled:L,showLocationMenuEntry:n()===null?!1:n().isAdmin&&m||O,showPeopleMenuEntry:n()===null?!1:n().isAdmin&&d("photos","showPeopleMenuEntry",!0)&&m||M,openedSettings:!1}},computed:{isTimelineView(){return["all_media","photos","videos"].includes(this.$store.state.route.name||"")}},async beforeMount(){const t=d("photos","nomedia-paths",[]);this.$store.dispatch("setNomediaPaths",t),i.debug("Known .nomedia and .noimage  paths",{files:t}),"serviceWorker"in navigator?window.addEventListener("load",()=>{navigator.serviceWorker.register(c("/apps/photos/service-worker.js",{},{noRewrite:!0}),{scope:c("/apps/photos")}).then(e=>{i.debug("SW registered: ",{registration:e})}).catch(e=>{i.error("SW registration failed: ",{registrationError:e})})}):i.debug("Service Worker is not enabled on this browser.")},beforeDestroy(){window.removeEventListener("load",()=>{navigator.serviceWorker.register(c("/apps/photos/service-worker.js",{},{noRewrite:!0}))})},methods:{showSettings(){this.openedSettings=!0},selectFilter(t){this.selectedFilters[t.filterId].push(t.value)},deselectFilter(t){const e=this.selectedFilters[t.filterId].indexOf(t.value);e!==-1&&this.selectedFilters[t.filterId].splice(e,1)},t:a}};var ee=function(){var t=this,e=t._self._c;return e("NcContent",{attrs:{"app-name":"photos"}},[e("NcAppNavigation",{attrs:{"aria-label":t.t("photos","Photos")},scopedSlots:t._u([t.isTimelineView?{key:"search",fn:function(){return[e("PhotosFiltersInput",{attrs:{"selected-filters":t.selectedFilters},on:{"select-filter":t.selectFilter}}),e("PhotosFiltersDisplay",{attrs:{"selected-filters":t.selectedFilters},on:{"deselect-filter":t.deselectFilter}})]},proxy:!0}:null,{key:"list",fn:function(){return[e("NcAppNavigationItem",{staticClass:"app-navigation__all_media",attrs:{to:{name:"all_media"},name:t.t("photos","All media"),"data-id-app-nav-item":"all-media",exact:""},scopedSlots:t._u([{key:"icon",fn:function({active:o}){return[o?e("ImageIcon",{attrs:{size:20}}):e("ImageOutline",{attrs:{size:20}})]}}])}),e("NcAppNavigationItem",{attrs:{to:"/photos",name:t.t("photos","Photos"),"data-id-app-nav-item":"photos"},scopedSlots:t._u([{key:"icon",fn:function({active:o}){return[o?e("Camera",{attrs:{size:20}}):e("CameraOutline",{attrs:{size:20}})]}}])}),e("NcAppNavigationItem",{attrs:{to:"/videos",name:t.t("photos","Videos"),"data-id-app-nav-item":"videos"},scopedSlots:t._u([{key:"icon",fn:function({active:o}){return[o?e("VideoIcon",{attrs:{size:20}}):e("VideoOutline",{attrs:{size:20}})]}}])}),e("NcAppNavigationItem",{attrs:{to:{name:"albums"},name:t.t("photos","Albums"),"data-id-app-nav-item":"albums"},scopedSlots:t._u([{key:"icon",fn:function({active:o}){return[o?e("ImageMultiple",{attrs:{size:20}}):e("ImageMultipleOutline",{attrs:{size:20}})]}}])}),e("NcAppNavigationItem",{attrs:{to:{name:"sharedAlbums"},name:t.t("photos","Collaborative albums"),"data-id-app-nav-item":"sharedalbums"},scopedSlots:t._u([{key:"icon",fn:function({active:o}){return[o?e("AccountGroup",{attrs:{size:20}}):e("AccountGroupOutline",{attrs:{size:20}})]}}])}),t.showPeopleMenuEntry?e("NcAppNavigationItem",{attrs:{to:{name:"faces"},name:t.t("photos","People"),"data-id-app-nav-item":"faces"},scopedSlots:t._u([{key:"icon",fn:function({active:o}){return[o?e("AccountBoxMultiple",{attrs:{size:20}}):e("AccountBoxMultipleOutline",{attrs:{size:20}})]}}],null,!1,3295904880)}):t._e(),e("NcAppNavigationItem",{attrs:{to:{name:"folders"},name:t.t("photos","Folders"),"data-id-app-nav-item":"folders"},scopedSlots:t._u([{key:"icon",fn:function({active:o}){return[o?e("Folder",{attrs:{size:20}}):e("FolderOutline",{attrs:{size:20}})]}}])}),e("NcAppNavigationItem",{attrs:{to:"/favorites",name:t.t("photos","Favorites"),"data-id-app-nav-item":"favorites"},scopedSlots:t._u([{key:"icon",fn:function({active:o}){return[o?e("Star",{attrs:{size:20}}):e("StarOutline",{attrs:{size:20}})]}}])}),e("NcAppNavigationItem",{attrs:{to:{name:"thisday"},name:t.t("photos","On this day"),"data-id-app-nav-item":"this-day"},scopedSlots:t._u([{key:"icon",fn:function({active:o}){return[o?e("CalendarToday",{attrs:{size:20}}):e("CalendarTodayOutline",{attrs:{size:20}})]}}])}),e("NcAppNavigationItem",{attrs:{to:{name:"shared"},name:t.t("photos","Shared with you"),"data-id-app-nav-item":"shared"},scopedSlots:t._u([{key:"icon",fn:function({active:o}){return[o?e("ShareVariant",{attrs:{size:20}}):e("ShareVariantOutline",{attrs:{size:20}})]}}])}),t.areTagsInstalled?e("NcAppNavigationItem",{attrs:{to:{name:"tags"},name:t.t("photos","Tags"),"data-id-app-nav-item":"tags"},scopedSlots:t._u([{key:"icon",fn:function({active:o}){return[o?e("Tag",{attrs:{size:20}}):e("TagOutline",{attrs:{size:20}})]}}],null,!1,346180464)}):t._e(),e("NcAppNavigationItem",{attrs:{to:{name:"places"},name:t.t("photos","Places"),"data-id-app-nav-item":"places"},scopedSlots:t._u([{key:"icon",fn:function({active:o}){return[o?e("MapMarker",{attrs:{size:20}}):e("MapMarkerOutline",{attrs:{size:20}})]}}])}),t.showLocationMenuEntry?e("NcAppNavigationItem",{attrs:{to:{name:"maps"},name:t.t("photos","Map"),"data-id-app-nav-item":"maps"},scopedSlots:t._u([{key:"icon",fn:function({active:o}){return[o?e("MapIcon",{attrs:{size:20}}):e("MapOutline",{attrs:{size:20}})]}}],null,!1,257739259)}):t._e()]},proxy:!0},{key:"footer",fn:function(){return[e("div",{staticClass:"app-navigation__footer"},[e("NcButton",{attrs:{type:"tertiary",alignment:"start",wide:""},on:{click:t.showSettings},scopedSlots:t._u([{key:"icon",fn:function(){return[e("CogOutline",{attrs:{size:20}})]},proxy:!0}])},[t._v(" "+t._s(t.t("photos","Photos settings"))+" ")])],1)]},proxy:!0}],null,!0)}),e("NcAppContent",[e("RouterView"),e("span",{staticClass:"hidden-visually",attrs:{role:"none"},domProps:{innerHTML:t._s(t.svgplaceholder)}}),e("span",{staticClass:"hidden-visually",attrs:{role:"none"},domProps:{innerHTML:t._s(t.imgplaceholder)}}),e("span",{staticClass:"hidden-visually",attrs:{role:"none"},domProps:{innerHTML:t._s(t.videoplaceholder)}})],1),e("SettingsDialog",{attrs:{open:t.openedSettings},on:{"update:open":function(o){t.openedSettings=o}}})],1)},oe=[],ae=p(te,ee,oe,!1,null,null);const se=ae.exports;E.sync(g,h),s.prototype.t=a,s.prototype.n=S,r("nc:metadata-photos-size"),r("nc:metadata-files-live-photo"),r("nc:metadata-blurhash"),r("nc:metadata-photos-original_date_time"),s.use(A),new s({el:"#content",name:"PhotosRoot",router:h,store:g,pinia:F(),render:t=>t(se)});
+const appName = "photos";
+const appVersion = "5.0.0-dev.1";
+import { V as Vue, e as emit, u as unsubscribe, s as subscribe, d as defineComponent, t as translate, l as loadState, _, g as getCurrentUser, a as translatePlural, r as registerDavProperty } from "./vue.runtime.esm-Dri5gLQO.chunk.mjs";
+import { P as PhotosFolder, a as PhotosSourceLocationsSettings, u as useFilterStore, s as storeToRefs, b as PiniaVuePlugin, c as createPinia } from "./filters-BdPaD1pk.chunk.mjs";
+import { u as useIsMobile, N as NcContent, a as NcAppContent, r as recognize, m as maps, s as systemtags, v as videoplaceholder, i as imgplaceholder, b as svgplaceholder, c as vuexRouterSyncExports, d as router } from "./video-C5pfp5p8.chunk.mjs";
+import { N as NcAppNavigationToggle, a as NcAppSettingsDialog, b as NcAppNavigationItem } from "./NcAppSettingsSection-Bl2-D3_g-BYPSoxk3.chunk.mjs";
+import { n as normalizeComponent, t as tabbable, c as createFocusTrap, g as getTrapStack, N as NcButton, l as logger$1, p as photosStore } from "./index-BOzawWmL.chunk.mjs";
+import { l as logger } from "./NcAvatar-YSp2ORHc-CfTsACiM.chunk.mjs";
+import { u as useHotKey } from "./useHotKey-CDShbxMN.chunk.mjs";
+import { n as normalizeComponent$1, H as HomeOutline, M as MapMarkerOutline, a as MapMarker, b as MapOutline, c as MapIcon, V as VideoOutline, d as VideoIcon, T as TagOutline, e as Tag, S as StarOutline, f as Star, g as ShareVariantOutline, h as ShareVariant, I as ImageOutlineIcon, i as ImageIcon, j as ImageMultipleOutline, k as ImageMultiple, F as FolderOutline, l as Folder, A as AccountGroupOutline, m as AccountGroup, C as CameraOutline, o as Camera, p as CalendarTodayOutline, q as CalendarToday, r as CogOutline, s as AccountBoxMultipleOutline, t as AccountBoxMultiple } from "./icons-BZLMM6Xn.chunk.mjs";
+import { P as PhotosFiltersDisplay, a as PhotosFiltersInput } from "./PhotosFiltersInput-C83ZrtRE.chunk.mjs";
+import { N as NcCheckboxRadioSwitch } from "./NcCheckboxRadioSwitch-VeztTzpz-CPNGlVnf.chunk.mjs";
+import { g as getFilePickerBuilder } from "./index-DTU2Yy1K.chunk.mjs";
+import { d as debounce } from "./index-ClkAjefD.chunk.mjs";
+import "./preload-helper-BO5AHt9u.chunk.mjs";
+import "./NcActionButton-CuVNJJtW-5eBS5Sv2.chunk.mjs";
+import "./NcVNodes-8dPkIzmP.chunk.mjs";
+import "./NcSelect-CjUzohn5-OrPoxx8A.chunk.mjs";
+import "./useModelMigration-EhAWvqDD-DYrjrJkv.chunk.mjs";
+import "./NcDialog-CKgpZOiy-CeLaNMKv.chunk.mjs";
+import "./index-Cokc0amN.chunk.mjs";
+import "./dialog-CIZq3-6b.chunk.mjs";
+import "./NcDateTimePicker-D9wOztqD.chunk.mjs";
+import "./NcDateTime-DshRFtUU-w5TCTRwf.chunk.mjs";
+import "./collectionFetcher-COU0Vwo3.chunk.mjs";
+const _sfc_main$6 = {
+  name: "NcAppNavigationList"
+};
+var _sfc_render$6 = function render() {
+  var _vm = this, _c = _vm._self._c;
+  return _c("ul", { staticClass: "app-navigation-list" }, [_vm._t("default")], 2);
+};
+var _sfc_staticRenderFns$6 = [];
+var __component__$6 = /* @__PURE__ */ normalizeComponent(
+  _sfc_main$6,
+  _sfc_render$6,
+  _sfc_staticRenderFns$6,
+  false,
+  null,
+  "058e6060"
+);
+const NcAppNavigationList = __component__$6.exports;
+const _sfc_main$5 = {
+  name: "NcAppNavigation",
+  components: {
+    NcAppNavigationList,
+    NcAppNavigationToggle
+  },
+  // Injected from NcContent
+  inject: {
+    setHasAppNavigation: {
+      default: () => () => Vue.util.warn("NcAppNavigation is not mounted inside NcContent, this is probably an error."),
+      from: "NcContent:setHasAppNavigation"
+    }
+  },
+  props: {
+    /**
+     * The aria label to describe the navigation
+     */
+    ariaLabel: {
+      type: String,
+      default: ""
+    },
+    /**
+     * aria-labelledby attribute to describe the navigation
+     */
+    ariaLabelledby: {
+      type: String,
+      default: ""
+    }
+  },
+  setup() {
+    return {
+      isMobile: useIsMobile()
+    };
+  },
+  data() {
+    return {
+      open: !this.isMobile,
+      focusTrap: null
+    };
+  },
+  watch: {
+    isMobile() {
+      this.open = !this.isMobile;
+      this.toggleFocusTrap();
+    },
+    open() {
+      this.toggleFocusTrap();
+    }
+  },
+  mounted() {
+    this.setHasAppNavigation(true);
+    subscribe("toggle-navigation", this.toggleNavigationByEventBus);
+    emit("navigation-toggled", {
+      open: this.open
+    });
+    this.focusTrap = createFocusTrap(this.$refs.appNavigationContainer, {
+      allowOutsideClick: true,
+      fallbackFocus: this.$refs.appNavigationContainer,
+      trapStack: getTrapStack(),
+      escapeDeactivates: false
+    });
+    this.toggleFocusTrap();
+    useHotKey("n", this.onKeyDown, {
+      prevent: true,
+      stop: true
+    });
+  },
+  unmounted() {
+    this.setHasAppNavigation(false);
+    unsubscribe("toggle-navigation", this.toggleNavigationByEventBus);
+    this.focusTrap.deactivate();
+  },
+  methods: {
+    /**
+     * Toggle the navigation
+     *
+     * @param {boolean} [state] set the state instead of inverting the current one
+     */
+    async toggleNavigation(state) {
+      if (this.open === state) {
+        emit("navigation-toggled", {
+          open: this.open
+        });
+        return;
+      }
+      this.open = typeof state === "undefined" ? !this.open : state;
+      const bodyStyles = getComputedStyle(document.body);
+      const animationLength = parseInt(bodyStyles.getPropertyValue("--animation-quick")) || 100;
+      if (this.open) {
+        await this.$nextTick();
+        this.focusFirstElement();
+      }
+      setTimeout(() => {
+        emit("navigation-toggled", {
+          open: this.open
+        });
+      }, 1.5 * animationLength);
+    },
+    toggleNavigationByEventBus({ open }) {
+      this.toggleNavigation(open);
+    },
+    /**
+     * Activate focus trap if it is currently needed, otherwise deactivate
+     */
+    toggleFocusTrap() {
+      if (this.isMobile && this.open) {
+        this.focusTrap.activate();
+      } else {
+        this.focusTrap.deactivate();
+      }
+    },
+    handleEsc() {
+      if (this.isMobile && this.open) {
+        this.toggleNavigation(false);
+      }
+    },
+    focusFirstElement() {
+      const element = tabbable(this.$refs.appNavigationContainer)[0];
+      if (element) {
+        element.focus();
+        logger.debug("Focusing first element in the navigation", { element });
+      }
+    },
+    onKeyDown(event) {
+      if (event.key === "n") {
+        if (!this.open) {
+          this.toggleNavigation(true);
+          return;
+        }
+        if (this.isFocusWithinNavigation()) {
+          this.toggleNavigation(false);
+        }
+      }
+    },
+    isFocusWithinNavigation() {
+      const activeElement = document.activeElement;
+      return this.$refs.appNavigationContainer?.contains(activeElement);
+    }
+  }
+};
+var _sfc_render$5 = function render2() {
+  var _vm = this, _c = _vm._self._c;
+  return _c("div", { ref: "appNavigationContainer", staticClass: "app-navigation", class: { "app-navigation--close": !_vm.open } }, [_c("nav", { staticClass: "app-navigation__content", attrs: { "id": "app-navigation-vue", "aria-hidden": _vm.open ? "false" : "true", "aria-label": _vm.ariaLabel || void 0, "aria-labelledby": _vm.ariaLabelledby || void 0, "inert": !_vm.open || void 0 }, on: { "keydown": function($event) {
+    if (!$event.type.indexOf("key") && _vm._k($event.keyCode, "esc", 27, $event.key, ["Esc", "Escape"])) return null;
+    return _vm.handleEsc.apply(null, arguments);
+  } } }, [_c("div", { staticClass: "app-navigation__search" }, [_vm._t("search")], 2), _c("div", { staticClass: "app-navigation__body", class: { "app-navigation__body--no-list": !_vm.$scopedSlots.list } }, [_vm._t("default")], 2), _vm.$scopedSlots.list ? _c("NcAppNavigationList", { staticClass: "app-navigation__list" }, [_vm._t("list")], 2) : _vm._e(), _vm._t("footer")], 2), _c("NcAppNavigationToggle", { attrs: { "open": _vm.open }, on: { "update:open": _vm.toggleNavigation } })], 1);
+};
+var _sfc_staticRenderFns$5 = [];
+var __component__$5 = /* @__PURE__ */ normalizeComponent(
+  _sfc_main$5,
+  _sfc_render$5,
+  _sfc_staticRenderFns$5,
+  false,
+  null,
+  "6d2acd3d"
+);
+const NcAppNavigation = __component__$5.exports;
+const _sfc_main$4 = {
+  name: "NcAppSettingsSection",
+  inject: ["registerSection", "unregisterSection"],
+  props: {
+    name: {
+      type: String,
+      required: true
+    },
+    id: {
+      type: String,
+      required: true,
+      validator(id) {
+        return /^[a-z0-9\-_]+$/.test(id);
+      }
+    }
+  },
+  computed: {
+    // generate an id for each settingssection based on the name without whitespaces
+    htmlId() {
+      return "settings-section_" + this.id;
+    }
+  },
+  // Reactive changes for section navigation
+  watch: {
+    id(newId, oldId) {
+      this.unregisterSection(oldId);
+      this.registerSection(newId, this.name, this.$slots?.icon);
+    },
+    name(newName) {
+      this.unregisterSection(this.id);
+      this.registerSection(this.id, newName, this.$slots?.icon);
+    }
+  },
+  mounted() {
+    this.registerSection(this.id, this.name, this.$slots?.icon);
+  },
+  beforeDestroy() {
+    this.unregisterSection(this.id);
+  }
+};
+var _sfc_render$4 = function render3() {
+  var _vm = this, _c = _vm._self._c;
+  return _c("section", { staticClass: "app-settings-section", attrs: { "id": _vm.htmlId, "aria-labelledby": `${_vm.htmlId}--label` } }, [_c("h3", { staticClass: "app-settings-section__name", attrs: { "id": `${_vm.htmlId}--label` } }, [_vm._v(" " + _vm._s(_vm.name) + " ")]), _vm._t("default"), _vm._e()], 2);
+};
+var _sfc_staticRenderFns$4 = [];
+var __component__$4 = /* @__PURE__ */ normalizeComponent(
+  _sfc_main$4,
+  _sfc_render$4,
+  _sfc_staticRenderFns$4,
+  false,
+  null,
+  "e970c9f7"
+);
+const NcAppSettingsSection = __component__$4.exports;
+const _sfc_main$3 = {
+  name: "CroppedLayoutSettings",
+  components: {
+    NcCheckboxRadioSwitch
+  },
+  computed: {
+    croppedLayout() {
+      return this.$store.state.userConfig.croppedLayout;
+    }
+  },
+  methods: {
+    updateSetting(value) {
+      this.$store.dispatch("updateUserConfig", { key: "croppedLayout", value });
+    }
+  }
+};
+var _sfc_render$3 = function render4() {
+  var _vm = this, _c = _vm._self._c;
+  return _c("NcCheckboxRadioSwitch", { attrs: { "checked": _vm.croppedLayout, "type": "switch" }, on: { "update:checked": _vm.updateSetting } }, [_vm._v(" " + _vm._s(_vm.t("photos", "Enable squared photos view")) + " ")]);
+};
+var _sfc_staticRenderFns$3 = [];
+_sfc_render$3._withStripped = true;
+var __component__$3 = /* @__PURE__ */ normalizeComponent$1(
+  _sfc_main$3,
+  _sfc_render$3,
+  _sfc_staticRenderFns$3,
+  false,
+  null,
+  null
+);
+__component__$3.options.__file = "/Users/effem/workbench/git/personel/photos/src/components/Settings/CroppedLayoutSettings.vue";
+const CroppedLayoutSettings = __component__$3.exports;
+const _sfc_main$2 = defineComponent({
+  name: "PhotosUploadLocationSettings",
+  components: {
+    NcButton,
+    PhotosFolder
+  },
+  data() {
+    return {
+      HomeOutline
+    };
+  },
+  computed: {
+    photosLocation() {
+      return this.$store.state.userConfig.photosLocation;
+    }
+  },
+  methods: {
+    debounceSelectPhotosFolder: debounce(function() {
+      this.selectPhotosFolder();
+    }),
+    async selectPhotosFolder() {
+      const pickedFolder = await this.openFilePicker(translate("photos", "Select the default upload location for your media"));
+      this.updatePhotosFolder(pickedFolder);
+    },
+    async openFilePicker(title) {
+      const picker = getFilePickerBuilder(title).setMultiSelect(false).addMimeTypeFilter("httpd/unix-directory").allowDirectories().startAt(this.photosLocation).addButton({
+        label: translate("photos", "Pick folder"),
+        callback: (nodes) => logger$1.debug("Picked", { nodes })
+      }).build();
+      return picker.pick();
+    },
+    updatePhotosFolder(path) {
+      this.$store.dispatch("updateUserConfig", { key: "photosLocation", value: path });
+    },
+    t: translate
+  }
+});
+var _sfc_render$2 = function render5() {
+  var _vm = this, _c = _vm._self._c;
+  _vm._self._setupProxy;
+  return _c("div", { staticClass: "photos-location" }, [_c("PhotosFolder", { attrs: { "path": _vm.photosLocation, "root-folder-label": _vm.t("photos", "Home"), "root-folder-icon": _vm.HomeOutline } }), _c("NcButton", { attrs: { "aria-label": _vm.t("photos", "Choose default Photos upload and Albums location") }, on: { "click": _vm.debounceSelectPhotosFolder } }, [_vm._v(" " + _vm._s(_vm.t("photos", "Choose a different folder")) + " ")])], 1);
+};
+var _sfc_staticRenderFns$2 = [];
+_sfc_render$2._withStripped = true;
+var __component__$2 = /* @__PURE__ */ normalizeComponent$1(
+  _sfc_main$2,
+  _sfc_render$2,
+  _sfc_staticRenderFns$2,
+  false,
+  null,
+  "4524a52e"
+);
+__component__$2.options.__file = "/Users/effem/workbench/git/personel/photos/src/components/Settings/PhotosUploadLocationSettings.vue";
+const PhotosUploadLocationSettings = __component__$2.exports;
+const _sfc_main$1 = {
+  name: "SettingsDialog",
+  components: {
+    NcAppSettingsDialog,
+    NcAppSettingsSection,
+    CroppedLayoutSettings,
+    PhotosSourceLocationsSettings,
+    PhotosUploadLocationSettings
+  },
+  props: {
+    open: {
+      type: Boolean,
+      default: false
+    }
+  },
+  methods: {
+    // This can only be called if the AppSettingsDialog
+    // is shown. So closing only
+    onClose() {
+      this.$emit("update:open", false);
+    },
+    t: translate
+  }
+};
+var _sfc_render$1 = function render6() {
+  var _vm = this, _c = _vm._self._c;
+  return _c("NcAppSettingsDialog", { attrs: { "open": _vm.open, "show-navigation": true, "name": _vm.t("photos", "Photos settings") }, on: { "update:open": _vm.onClose } }, [_c("NcAppSettingsSection", { attrs: { "id": "layout-settings", "name": _vm.t("photos", "View") } }, [_c("CroppedLayoutSettings")], 1), _c("NcAppSettingsSection", { attrs: { "id": "source-directories-settings", "name": _vm.t("photos", "Media folders") } }, [_c("div", { staticClass: "setting-section-subline" }, [_vm._v(" " + _vm._s(_vm.t("photos", "Choose the folders from where photos and videos are shown.")) + " ")]), _c("PhotosSourceLocationsSettings")], 1), _c("NcAppSettingsSection", { attrs: { "id": "upload-directory-settings", "name": _vm.t("photos", "Upload folder") } }, [_c("div", { staticClass: "setting-section-subline" }, [_vm._v(" " + _vm._s(_vm.t("photos", "Choose the folder where photos and albums are uploaded to.")) + " ")]), _c("PhotosUploadLocationSettings")], 1)], 1);
+};
+var _sfc_staticRenderFns$1 = [];
+_sfc_render$1._withStripped = true;
+var __component__$1 = /* @__PURE__ */ normalizeComponent$1(
+  _sfc_main$1,
+  _sfc_render$1,
+  _sfc_staticRenderFns$1,
+  false,
+  null,
+  null
+);
+__component__$1.options.__file = "/Users/effem/workbench/git/personel/photos/src/components/Settings/SettingsDialog.vue";
+const SettingsDialog = __component__$1.exports;
+const appStoreEnabled = loadState("photos", "appStoreEnabled", false);
+const _sfc_main = {
+  name: "PhotosApp",
+  components: {
+    AccountBoxMultiple,
+    AccountBoxMultipleOutline,
+    CogOutline,
+    CalendarToday,
+    CalendarTodayOutline,
+    Camera,
+    CameraOutline,
+    AccountGroup,
+    AccountGroupOutline,
+    Folder,
+    FolderOutline,
+    ImageMultiple,
+    ImageMultipleOutline,
+    ImageIcon,
+    ImageOutline: ImageOutlineIcon,
+    ShareVariant,
+    ShareVariantOutline,
+    Star,
+    StarOutline,
+    Tag,
+    TagOutline,
+    VideoIcon,
+    VideoOutline,
+    MapIcon,
+    MapOutline,
+    MapMarker,
+    MapMarkerOutline,
+    NcAppContent,
+    NcAppNavigation,
+    NcAppNavigationItem,
+    NcButton,
+    NcContent,
+    SettingsDialog,
+    PhotosFiltersInput,
+    PhotosFiltersDisplay
+  },
+  setup() {
+    const filtersStore = useFilterStore();
+    const { selectedFilters } = storeToRefs(filtersStore);
+    return {
+      selectedFilters
+    };
+  },
+  data() {
+    return {
+      svgplaceholder,
+      imgplaceholder,
+      videoplaceholder,
+      areTagsInstalled: systemtags,
+      showLocationMenuEntry: getCurrentUser() === null ? false : getCurrentUser().isAdmin && appStoreEnabled || maps,
+      showPeopleMenuEntry: getCurrentUser() === null ? false : getCurrentUser().isAdmin && loadState("photos", "showPeopleMenuEntry", true) && appStoreEnabled || recognize,
+      openedSettings: false
+    };
+  },
+  computed: {
+    isTimelineView() {
+      return ["all_media", "photos", "videos"].includes(this.$store.state.route.name || "");
+    }
+  },
+  async beforeMount() {
+    const files = loadState("photos", "nomedia-paths", []);
+    this.$store.dispatch("setNomediaPaths", files);
+    logger$1.debug("Known .nomedia and .noimage  paths", { files });
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register(_("/apps/photos/service-worker.js", {}, {
+          noRewrite: true
+        }), {
+          scope: _("/apps/photos")
+        }).then((registration) => {
+          logger$1.debug("SW registered: ", { registration });
+        }).catch((registrationError) => {
+          logger$1.error("SW registration failed: ", { registrationError });
+        });
+      });
+    } else {
+      logger$1.debug("Service Worker is not enabled on this browser.");
+    }
+  },
+  beforeDestroy() {
+    window.removeEventListener("load", () => {
+      navigator.serviceWorker.register(_("/apps/photos/service-worker.js", {}, {
+        noRewrite: true
+      }));
+    });
+  },
+  methods: {
+    showSettings() {
+      this.openedSettings = true;
+    },
+    selectFilter(filterOption) {
+      this.selectedFilters[filterOption.filterId].push(filterOption.value);
+    },
+    deselectFilter(filterOption) {
+      const index = this.selectedFilters[filterOption.filterId].indexOf(filterOption.value);
+      if (index !== -1) {
+        this.selectedFilters[filterOption.filterId].splice(index, 1);
+      }
+    },
+    t: translate
+  }
+};
+var _sfc_render = function render7() {
+  var _vm = this, _c = _vm._self._c;
+  return _c("NcContent", { attrs: { "app-name": "photos" } }, [_c("NcAppNavigation", { attrs: { "aria-label": _vm.t("photos", "Photos") }, scopedSlots: _vm._u([_vm.isTimelineView ? { key: "search", fn: function() {
+    return [_c("PhotosFiltersInput", { attrs: { "selected-filters": _vm.selectedFilters }, on: { "select-filter": _vm.selectFilter } }), _c("PhotosFiltersDisplay", { attrs: { "selected-filters": _vm.selectedFilters }, on: { "deselect-filter": _vm.deselectFilter } })];
+  }, proxy: true } : null, { key: "list", fn: function() {
+    return [_c("NcAppNavigationItem", { staticClass: "app-navigation__all_media", attrs: { "to": { name: "all_media" }, "name": _vm.t("photos", "All media"), "data-id-app-nav-item": "all-media", "exact": "" }, scopedSlots: _vm._u([{ key: "icon", fn: function({ active }) {
+      return [active ? _c("ImageIcon", { attrs: { "size": 20 } }) : _c("ImageOutline", { attrs: { "size": 20 } })];
+    } }]) }), _c("NcAppNavigationItem", { attrs: { "to": "/photos", "name": _vm.t("photos", "Photos"), "data-id-app-nav-item": "photos" }, scopedSlots: _vm._u([{ key: "icon", fn: function({ active }) {
+      return [active ? _c("Camera", { attrs: { "size": 20 } }) : _c("CameraOutline", { attrs: { "size": 20 } })];
+    } }]) }), _c("NcAppNavigationItem", { attrs: { "to": "/videos", "name": _vm.t("photos", "Videos"), "data-id-app-nav-item": "videos" }, scopedSlots: _vm._u([{ key: "icon", fn: function({ active }) {
+      return [active ? _c("VideoIcon", { attrs: { "size": 20 } }) : _c("VideoOutline", { attrs: { "size": 20 } })];
+    } }]) }), _c("NcAppNavigationItem", { attrs: { "to": { name: "albums" }, "name": _vm.t("photos", "Albums"), "data-id-app-nav-item": "albums" }, scopedSlots: _vm._u([{ key: "icon", fn: function({ active }) {
+      return [active ? _c("ImageMultiple", { attrs: { "size": 20 } }) : _c("ImageMultipleOutline", { attrs: { "size": 20 } })];
+    } }]) }), _c("NcAppNavigationItem", { attrs: { "to": { name: "sharedAlbums" }, "name": _vm.t("photos", "Collaborative albums"), "data-id-app-nav-item": "sharedalbums" }, scopedSlots: _vm._u([{ key: "icon", fn: function({ active }) {
+      return [active ? _c("AccountGroup", { attrs: { "size": 20 } }) : _c("AccountGroupOutline", { attrs: { "size": 20 } })];
+    } }]) }), _vm.showPeopleMenuEntry ? _c("NcAppNavigationItem", { attrs: { "to": { name: "faces" }, "name": _vm.t("photos", "People"), "data-id-app-nav-item": "faces" }, scopedSlots: _vm._u([{ key: "icon", fn: function({ active }) {
+      return [active ? _c("AccountBoxMultiple", { attrs: { "size": 20 } }) : _c("AccountBoxMultipleOutline", { attrs: { "size": 20 } })];
+    } }], null, false, 3295904880) }) : _vm._e(), _c("NcAppNavigationItem", { attrs: { "to": { name: "folders" }, "name": _vm.t("photos", "Folders"), "data-id-app-nav-item": "folders" }, scopedSlots: _vm._u([{ key: "icon", fn: function({ active }) {
+      return [active ? _c("Folder", { attrs: { "size": 20 } }) : _c("FolderOutline", { attrs: { "size": 20 } })];
+    } }]) }), _c("NcAppNavigationItem", { attrs: { "to": "/favorites", "name": _vm.t("photos", "Favorites"), "data-id-app-nav-item": "favorites" }, scopedSlots: _vm._u([{ key: "icon", fn: function({ active }) {
+      return [active ? _c("Star", { attrs: { "size": 20 } }) : _c("StarOutline", { attrs: { "size": 20 } })];
+    } }]) }), _c("NcAppNavigationItem", { attrs: { "to": { name: "thisday" }, "name": _vm.t("photos", "On this day"), "data-id-app-nav-item": "this-day" }, scopedSlots: _vm._u([{ key: "icon", fn: function({ active }) {
+      return [active ? _c("CalendarToday", { attrs: { "size": 20 } }) : _c("CalendarTodayOutline", { attrs: { "size": 20 } })];
+    } }]) }), _c("NcAppNavigationItem", { attrs: { "to": { name: "shared" }, "name": _vm.t("photos", "Shared with you"), "data-id-app-nav-item": "shared" }, scopedSlots: _vm._u([{ key: "icon", fn: function({ active }) {
+      return [active ? _c("ShareVariant", { attrs: { "size": 20 } }) : _c("ShareVariantOutline", { attrs: { "size": 20 } })];
+    } }]) }), _vm.areTagsInstalled ? _c("NcAppNavigationItem", { attrs: { "to": { name: "tags" }, "name": _vm.t("photos", "Tags"), "data-id-app-nav-item": "tags" }, scopedSlots: _vm._u([{ key: "icon", fn: function({ active }) {
+      return [active ? _c("Tag", { attrs: { "size": 20 } }) : _c("TagOutline", { attrs: { "size": 20 } })];
+    } }], null, false, 346180464) }) : _vm._e(), _c("NcAppNavigationItem", { attrs: { "to": { name: "places" }, "name": _vm.t("photos", "Places"), "data-id-app-nav-item": "places" }, scopedSlots: _vm._u([{ key: "icon", fn: function({ active }) {
+      return [active ? _c("MapMarker", { attrs: { "size": 20 } }) : _c("MapMarkerOutline", { attrs: { "size": 20 } })];
+    } }]) }), _vm.showLocationMenuEntry ? _c("NcAppNavigationItem", { attrs: { "to": { name: "maps" }, "name": _vm.t("photos", "Map"), "data-id-app-nav-item": "maps" }, scopedSlots: _vm._u([{ key: "icon", fn: function({ active }) {
+      return [active ? _c("MapIcon", { attrs: { "size": 20 } }) : _c("MapOutline", { attrs: { "size": 20 } })];
+    } }], null, false, 257739259) }) : _vm._e()];
+  }, proxy: true }, { key: "footer", fn: function() {
+    return [_c("div", { staticClass: "app-navigation__footer" }, [_c("NcButton", { attrs: { "type": "tertiary", "alignment": "start", "wide": "" }, on: { "click": _vm.showSettings }, scopedSlots: _vm._u([{ key: "icon", fn: function() {
+      return [_c("CogOutline", { attrs: { "size": 20 } })];
+    }, proxy: true }]) }, [_vm._v(" " + _vm._s(_vm.t("photos", "Photos settings")) + " ")])], 1)];
+  }, proxy: true }], null, true) }), _c("NcAppContent", [_c("RouterView"), _c("span", { staticClass: "hidden-visually", attrs: { "role": "none" }, domProps: { "innerHTML": _vm._s(_vm.svgplaceholder) } }), _c("span", { staticClass: "hidden-visually", attrs: { "role": "none" }, domProps: { "innerHTML": _vm._s(_vm.imgplaceholder) } }), _c("span", { staticClass: "hidden-visually", attrs: { "role": "none" }, domProps: { "innerHTML": _vm._s(_vm.videoplaceholder) } })], 1), _c("SettingsDialog", { attrs: { "open": _vm.openedSettings }, on: { "update:open": function($event) {
+    _vm.openedSettings = $event;
+  } } })], 1);
+};
+var _sfc_staticRenderFns = [];
+_sfc_render._withStripped = true;
+var __component__ = /* @__PURE__ */ normalizeComponent$1(
+  _sfc_main,
+  _sfc_render,
+  _sfc_staticRenderFns,
+  false,
+  null,
+  null
+);
+__component__.options.__file = "/Users/effem/workbench/git/personel/photos/src/PhotosApp.vue";
+const PhotosApp = __component__.exports;
+vuexRouterSyncExports.sync(photosStore, router);
+Vue.prototype.t = translate;
+Vue.prototype.n = translatePlural;
+registerDavProperty("nc:metadata-photos-size");
+registerDavProperty("nc:metadata-files-live-photo");
+registerDavProperty("nc:metadata-blurhash");
+registerDavProperty("nc:metadata-photos-original_date_time");
+Vue.use(PiniaVuePlugin);
+new Vue({
+  el: "#content",
+  name: "PhotosRoot",
+  router,
+  store: photosStore,
+  pinia: createPinia(),
+  render: (h) => h(PhotosApp)
+});
 //# sourceMappingURL=photos-main.mjs.map

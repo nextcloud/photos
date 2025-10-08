@@ -1,0 +1,96 @@
+.date-range-picker-dialog[data-v-85fce0f5] {
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.date-range-picker-dialog__picker[data-v-85fce0f5] {
+  flex-grow: 1;
+}/**
+ * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+/**
+ * SPDX-FileCopyrightText: 2021 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+/*
+* Ensure proper alignment of the vue material icons
+*/
+.material-design-icon[data-v-a7b8715a] {
+  display: flex;
+  align-self: center;
+  justify-self: center;
+  align-items: center;
+  justify-content: center;
+}
+.nc-chip[data-v-a7b8715a] {
+  --chip-size: 24px;
+  --chip-radius: calc(var(--chip-size) / 2);
+  height: var(--chip-size);
+  max-width: fit-content;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: var(--chip-radius);
+  background-color: var(--color-background-hover);
+}
+.nc-chip--primary[data-v-a7b8715a] {
+  background-color: var(--color-primary-element);
+  color: var(--color-primary-element-text);
+}
+.nc-chip--secondary[data-v-a7b8715a] {
+  background-color: var(--color-primary-element-light);
+  color: var(--color-primary-element-light-text);
+}
+.nc-chip--no-actions .nc-chip__text[data-v-a7b8715a] {
+  padding-inline-end: calc(1.5 * var(--default-grid-baseline));
+}
+.nc-chip--no-icon .nc-chip__text[data-v-a7b8715a] {
+  padding-inline-start: calc(1.5 * var(--default-grid-baseline));
+}
+.nc-chip__text[data-v-a7b8715a] {
+  flex: 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-wrap: nowrap;
+}
+.nc-chip__icon[data-v-a7b8715a] {
+  flex: 0 0 var(--chip-size);
+  margin-inline-end: var(--default-grid-baseline);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  height: var(--chip-size);
+  width: var(--chip-size);
+}
+.nc-chip__actions[data-v-a7b8715a] {
+  flex: 0 0 var(--chip-size);
+  --default-clickable-area: var(--chip-size);
+  --border-radius-element: var(--chip-radius);
+}.place__preview[data-v-d24d89f3] {
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+}.photos-filters-display__filter[data-v-179c6a8f] {
+  display: flex;
+  align-items: flex-start;
+}
+.photos-filters-display__filter__options-container[data-v-179c6a8f] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.photos-filters-display__filter__options-container__option[data-v-179c6a8f] {
+  margin: 4px 0;
+}.photos-filters-input[data-v-98c0c251] {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8px 8px 0 8px;
+}
+[data-v-98c0c251] .vs__dropdown-toggle {
+  background-color: var(--color-main-background);
+}

@@ -1,0 +1,82 @@
+/**
+ * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+.face[data-v-b58dc974] {
+  display: flex;
+  flex-direction: column;
+}
+.face__empty[data-v-b58dc974] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.face__empty__button[data-v-b58dc974] {
+  margin-top: 32px;
+}
+.face__header[data-v-b58dc974] {
+  display: flex;
+  min-height: 60px;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  z-index: 3;
+  background: var(--color-main-background);
+  padding: 0 64px;
+}
+@media only screen and (max-width: 1020px) {
+.face__header[data-v-b58dc974] {
+    padding: 0;
+    padding-inline-start: 64px;
+}
+}
+.face__header__left[data-v-b58dc974] {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.face__header__title[data-v-b58dc974] {
+  margin-inline-start: 10px;
+}
+.face__header__title h2[data-v-b58dc974] {
+  margin-bottom: 0;
+}
+.face__header__loader[data-v-b58dc974] {
+  margin-inline-start: 32px;
+}
+.face__header__actions[data-v-b58dc974] {
+  display: flex;
+  align-items: center;
+}
+.face__header__actions button[data-v-b58dc974] {
+  margin-inline-start: 16px;
+}
+.face__photos[data-v-b58dc974] {
+  margin-top: 16px;
+  height: 100%;
+  min-height: 0;
+  padding: 0 64px;
+}
+@media only screen and (max-width: 1020px) {
+.face__photos[data-v-b58dc974] {
+    padding: 0;
+}
+}
+.empty-content-with-illustration[data-v-b58dc974] .empty-content__icon {
+  width: 200px;
+  height: 200px;
+}
+.empty-content-with-illustration[data-v-b58dc974] .empty-content__icon svg {
+  width: 200px;
+  height: 200px;
+}
+.rename-form[data-v-b58dc974] {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 70px;
+  padding: 16px;
+}
+.rename-form input[data-v-b58dc974] {
+  width: 100%;
+}
