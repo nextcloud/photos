@@ -1,0 +1,32 @@
+SPDX-License-Identifier: AGPL-3.0-or-later
+SPDX-License-Identifier: Apache-2.0
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: Andrey Sitnik <andrey@sitnik.ru>
+SPDX-FileCopyrightText: Antoni Andre <antoniandre.web@gmail.com>
+SPDX-FileCopyrightText: Evan You
+SPDX-FileCopyrightText: John Molakvoæ (skjnldsv) <skjnldsv@protonmail.com>
+SPDX-FileCopyrightText: John Molakvoæ <skjnldsv@protonmail.com>
+SPDX-FileCopyrightText: Thorsten Lünborg
+
+This file is generated from multiple sources. Included packages:
+- @linusborg/vue-simple-portal
+	- version: 0.1.5
+	- license: Apache-2.0
+- @nextcloud/vue
+	- version: 8.27.0
+	- license: AGPL-3.0-or-later
+- nanoid
+	- version: 3.3.11
+	- license: MIT
+- photos
+	- version: 5.0.0-dev.1
+	- license: AGPL-3.0-or-later
+- splitpanes
+	- version: 2.4.1
+	- license: MIT
+- vue-router
+	- version: 3.6.5
+	- license: MIT
+- vuex-router-sync
+	- version: 5.0.0
+	- license: MIT

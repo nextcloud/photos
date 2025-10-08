@@ -1,0 +1,29 @@
+SPDX-License-Identifier: AGPL-3.0-or-later
+SPDX-License-Identifier: GPL-3.0-or-later
+SPDX-License-Identifier: MIT
+SPDX-License-Identifier: MPL-2.0
+SPDX-FileCopyrightText: John Molakvoæ (skjnldsv) <skjnldsv@protonmail.com>
+SPDX-FileCopyrightText: Nextcloud GmbH and Nextcloud contributors
+SPDX-FileCopyrightText: Philipp Kewisch
+SPDX-FileCopyrightText: Richard Steinmetz
+SPDX-FileCopyrightText: xiemengxiong
+
+This file is generated from multiple sources. Included packages:
+- @nextcloud/l10n
+	- version: 3.3.0
+	- license: GPL-3.0-or-later
+- @nextcloud/timezones
+	- version: 0.2.0
+	- license: AGPL-3.0-or-later
+- @nextcloud/vue
+	- version: 8.27.0
+	- license: AGPL-3.0-or-later
+- date-format-parse
+	- version: 0.2.7
+	- license: MIT
+- ical.js
+	- version: 2.1.0
+	- license: MPL-2.0
+- vue2-datepicker
+	- version: 3.11.1
+	- license: MIT
