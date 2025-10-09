@@ -12,6 +12,8 @@ import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
 
+export const collectionFilesExtraProps = ['<nc:photos-collection-file-original-filename />']
+
 /**
  * Collections are indexed by their `filename`.
  */
