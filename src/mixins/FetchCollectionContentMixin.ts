@@ -15,6 +15,7 @@ import {
 	fetchCollection, fetchCollectionFiles,
 } from '../services/collectionFetcher.js'
 import logger from '../services/logger.js'
+import { collectionFilesExtraProps } from '../store/collections.js'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
 import AbortControllerMixin from './AbortControllerMixin.js'
 
@@ -62,10 +63,12 @@ export default defineComponent({
 			return null
 		},
 
-		async fetchCollectionFiles(collectionFileName: string, extraProps?: string[], client?: WebDAVClient): Promise<File[]> {
+		async fetchCollectionFiles(collectionFileName: string, extraProps: string[] = [], client?: WebDAVClient): Promise<File[]> {
 			if (this.loadingCollectionFiles) {
 				return []
 			}
+
+			extraProps = [...extraProps, ...collectionFilesExtraProps]
 
 			const fetchSemaphoreSymbol = await this.fetchSemaphore.acquire()
 
