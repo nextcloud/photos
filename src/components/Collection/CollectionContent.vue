@@ -46,9 +46,11 @@
 </template>
 
 <script lang='ts'>
+import type { File } from '@nextcloud/files'
 import type { PropType } from 'vue'
-import type { PublicAlbum } from '../../store/publicAlbums.js'
+import type { Collection } from '../../services/collectionFetcher.js'
 
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { translate } from '@nextcloud/l10n'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { defineComponent } from 'vue'
@@ -75,7 +77,7 @@ export default defineComponent({
 
 	props: {
 		collection: {
-			type: Object as PropType<PublicAlbum>,
+			type: Object as PropType<Collection>,
 			default: () => undefined,
 		},
 
@@ -122,12 +124,24 @@ export default defineComponent({
 		},
 	},
 
+	mounted() {
+		subscribe('files:node:deleted', this.handleFileDeleted)
+	},
+
+	destroyed() {
+		unsubscribe('files:node:deleted', this.handleFileDeleted)
+	},
+
 	methods: {
 		openViewer(fileId: string) {
 			window.OCA.Viewer.open({
 				fileInfo: toViewerFileInfo(this.files[fileId]),
 				list: this.sortedCollectionFileIds.map((fileId) => toViewerFileInfo(this.files[fileId])),
 			})
+		},
+
+		handleFileDeleted({ fileid }: File) {
+			this.$store.commit('removeFilesFromCollection', { collectionFileName: this.collection.root + this.collection.path, fileIdsToRemove: [fileid?.toString()] })
 		},
 
 		t: translate,
