@@ -245,6 +245,7 @@ export default defineComponent({
 
 		emitPickedEvent() {
 			this.$emit('files-picked', this.selectedFileIds)
+			this.resetSelection()
 		},
 		/**
 		 * @param {string} date - In the following format: YYYYMM
