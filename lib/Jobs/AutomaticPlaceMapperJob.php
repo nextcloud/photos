@@ -93,7 +93,7 @@ class AutomaticPlaceMapperJob extends TimedJob {
 				continue;
 			}
 
-			if (!str_starts_with((string)$node->getMimeType(), 'image')) {
+			if (!str_starts_with($node->getMimeType(), 'image')) {
 				continue;
 			}
 

@@ -16,6 +16,7 @@ use OCA\Photos\Sabre\Album\PublicAlbumPhoto;
 use OCA\Photos\Sabre\Place\PlacePhoto;
 use OCA\Photos\Sabre\Place\PlaceRoot;
 use OCP\Files\DavUtil;
+use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\FilesMetadata\IFilesMetadataManager;
 use OCP\IPreview;
@@ -42,6 +43,7 @@ class PropFindPlugin extends ServerPlugin {
 	public const FILTERS_PROPERTYNAME = '{http://nextcloud.org/ns}filters';
 	public const PERMISSIONS_PROPERTYNAME = '{http://owncloud.org/ns}permissions';
 	public const PHOTOS_ALBUM_FILE_ORIGIN_PROPERTYNAME = '{http://nextcloud.org/ns}photos-album-file-origin';
+	public const PHOTOS_COLLECTION_FILE_ORIGINAL_FILENAME_PROPERTYNAME = '{http://nextcloud.org/ns}photos-collection-file-original-filename';
 
 	private ?Tree $tree = null;
 
@@ -49,6 +51,7 @@ class PropFindPlugin extends ServerPlugin {
 		private readonly IPreview $previewManager,
 		private readonly IFilesMetadataManager $filesMetadataManager,
 		private readonly IUserSession $userSession,
+		private readonly IRootFolder $rootFolder,
 	) {
 	}
 
@@ -115,6 +118,19 @@ class PropFindPlugin extends ServerPlugin {
 					return $file->origin;
 				} else {
 					return null;
+				}
+			});
+
+			$propFind->handle(self::PHOTOS_COLLECTION_FILE_ORIGINAL_FILENAME_PROPERTYNAME, function () use ($node) {
+				if (!($node instanceof AlbumPhoto)) {
+					return;
+				}
+
+				$currentUser = $this->userSession->getUser();
+				$fileOwner = $node->getFileInfo()->getOwner();
+				if ($currentUser !== null && $currentUser === $fileOwner) {
+					$userFolder = $this->rootFolder->getUserFolder($currentUser->getUID());
+					return $userFolder->getRelativePath($node->getFileInfo()->getPath());
 				}
 			});
 		}

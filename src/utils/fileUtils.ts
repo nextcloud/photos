@@ -5,6 +5,7 @@ import {
 
 	FileType, Permission,
 } from '@nextcloud/files'
+import { getRemoteURL, getRootPath } from '@nextcloud/files/dav'
 /**
  * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -93,12 +94,12 @@ export function sortCompareFileInfo(fileInfo1: FoldersNode, fileInfo2: FoldersNo
 }
 
 export type ViewerFileInfo = {
-	fileid: number
+	fileid?: number
 	basename: string
 	filename: string
-	mime: string
-	mtime: Date
-	ownerId: string
+	mime?: string
+	mtime?: Date
+	ownerId: string | null
 	source: string
 	hasPreview: boolean
 	previewUrl: string
@@ -129,14 +130,23 @@ export function toViewerFileInfo(file: Node): ViewerFileInfo {
 		permissions += 'R'
 	}
 
+	let filename = file.root + file.path
+	let source = file.source
+	// Override the filename and source to allow deleting a file from the viewer.
+	// This is needed when the filename and source are related to the albums.
+	if (file.attributes['photos-collection-file-original-filename'] !== undefined) {
+		filename = file.attributes['photos-collection-file-original-filename']
+		source = getRemoteURL() + getRootPath() + filename
+	}
+
 	return {
 		fileid: file.fileid,
 		basename: file.basename,
-		filename: file.root + file.path,
+		filename,
 		mime: file.mime,
 		mtime: file.mtime,
 		ownerId: file.owner,
-		source: file.source,
+		source,
 		hasPreview: file.attributes.hasPreview,
 		previewUrl: file.attributes.previewUrl ?? generateUrl(`/apps/photos/api/v1/preview/${file.fileid}?x=2048&y=2048`),
 		etag: file.attributes.etag,

@@ -244,6 +244,7 @@ export default defineComponent({
 
 		emitPickedEvent() {
 			this.$emit('files-picked', this.selectedFileIds)
+			this.resetSelection()
 		},
 
 		/**
