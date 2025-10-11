@@ -143,7 +143,6 @@ OC.L10N.register(
     "Back to {folder}" : "{folder} قايتىش",
     "Share this folder" : "بۇ قىسقۇچنى ھەمبەھىرلەڭ",
     "Loading folders …" : "ھۆججەت قىسقۇچلارنى يۈكلەۋاتىدۇ…",
-    "One of the source folders does not exists" : "مەنبە قىسقۇچلارنىڭ بىرى مەۋجۇت ئەمەس",
     "Add" : "قوش"
 },
 "nplurals=2; plural=(n != 1);");

@@ -176,7 +176,6 @@ OC.L10N.register(
     "Back to {folder}" : "Rudi kwenye {folder}",
     "Share this folder" : "Shirikisha kisanduku hiki",
     "Loading folders …" : "Inapakia visanduku",
-    "One of the source folders does not exists" : "Moja ya folda chanzo haipo",
     "Add" : "Ongeza"
 },
 "nplurals=2; plural=(n != 1);");

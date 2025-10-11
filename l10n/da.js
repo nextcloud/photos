@@ -176,7 +176,6 @@ OC.L10N.register(
     "Back to {folder}" : "Tilbage til {folder}",
     "Share this folder" : "Del denne mappe",
     "Loading folders …" : "Indlæser mapper..",
-    "One of the source folders does not exists" : "En af kildemapperne eksisterer ikke",
     "Add" : "Tilføj"
 },
 "nplurals=2; plural=(n != 1);");

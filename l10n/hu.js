@@ -152,7 +152,6 @@ OC.L10N.register(
     "Back to {folder}" : "Vissza ide: {folder}",
     "Share this folder" : "Mappa megosztása",
     "Loading folders …" : "Mappák betöltése…",
-    "One of the source folders does not exists" : "Az egyik forrás könyvtár nem létezik",
     "Add" : "Hozzáadás"
 },
 "nplurals=2; plural=(n != 1);");

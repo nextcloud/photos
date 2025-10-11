@@ -150,7 +150,6 @@ OC.L10N.register(
     "Back to {folder}" : "Tilbake til {folder}",
     "Share this folder" : "Del denne mappen",
     "Loading folders …" : "Laster inn mapper…",
-    "One of the source folders does not exists" : "En av kildemappene finnes ikke",
     "Add" : "Legg til"
 },
 "nplurals=2; plural=(n != 1);");

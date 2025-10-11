@@ -176,7 +176,6 @@ OC.L10N.register(
     "Back to {folder}" : "Πίσω στο {folder}",
     "Share this folder" : "Διαμοιρασμός αυτού του φακέλου",
     "Loading folders …" : "Φόρτωση φακέλων...",
-    "One of the source folders does not exists" : "Ένας από τους φακέλους προέλευσης δεν υπάρχει.",
     "Add" : "Προσθήκη"
 },
 "nplurals=2; plural=(n != 1);");

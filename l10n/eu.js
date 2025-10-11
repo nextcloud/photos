@@ -174,7 +174,6 @@ OC.L10N.register(
     "Back to {folder}" : "Itzuli {folder}(e)ra",
     "Share this folder" : "Partekatu karpeta hau",
     "Loading folders …" : "Karpetak kargatzen ...",
-    "One of the source folders does not exists" : "Iturburu-karpeta bat ez da existitzen",
     "Add" : "Gehitu"
 },
 "nplurals=2; plural=(n != 1);");

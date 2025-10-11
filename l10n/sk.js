@@ -164,7 +164,6 @@ OC.L10N.register(
     "Back to {folder}" : "Späť do {folder}",
     "Share this folder" : "Zdieľať tento priečinok",
     "Loading folders …" : "Načítavanie priečinkov ...",
-    "One of the source folders does not exists" : "Jeden zo zdrojových priečinkov neexistuje",
     "Add" : "Pridať"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

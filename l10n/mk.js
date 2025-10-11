@@ -154,7 +154,6 @@ OC.L10N.register(
     "Back to {folder}" : "Назад кон {folder}",
     "Share this folder" : "Сподели ја оваа папка",
     "Loading folders …" : "Се вчитуваат папките…",
-    "One of the source folders does not exists" : "Една од папките на постои",
     "Add" : "Додади"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");
