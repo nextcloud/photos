@@ -176,7 +176,6 @@ OC.L10N.register(
     "Back to {folder}" : "Tagasi kausta {folder}",
     "Share this folder" : "Jaga seda kausta",
     "Loading folders …" : "Kaustada laadimine …",
-    "One of the source folders does not exists" : "Ühte lähtekaustadest pole olemas",
     "Add" : "Lisa"
 },
 "nplurals=2; plural=(n != 1);");

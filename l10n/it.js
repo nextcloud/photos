@@ -176,7 +176,6 @@ OC.L10N.register(
     "Back to {folder}" : "Torna a {folder}",
     "Share this folder" : "Condividi questa cartella",
     "Loading folders …" : "Caricamento cartelle …",
-    "One of the source folders does not exists" : "Una delle cartelle sorgenti non esiste",
     "Add" : "Aggiungi"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

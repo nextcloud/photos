@@ -176,7 +176,6 @@ OC.L10N.register(
     "Back to {folder}" : "{folder} klasörüne geri dön",
     "Share this folder" : "Bu klasörü paylaş",
     "Loading folders …" : "Klasörler yükleniyor…",
-    "One of the source folders does not exists" : "Kaynak klasörlerden biri bulunamadı",
     "Add" : "Ekle"
 },
 "nplurals=2; plural=(n > 1);");

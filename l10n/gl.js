@@ -176,7 +176,6 @@ OC.L10N.register(
     "Back to {folder}" : "Volver a {folder}",
     "Share this folder" : "Compartir este cartafol",
     "Loading folders …" : "Cargando cartafoles…",
-    "One of the source folders does not exists" : "Un dos cartafoles de orixe non existe",
     "Add" : "Engadir"
 },
 "nplurals=2; plural=(n != 1);");

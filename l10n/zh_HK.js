@@ -176,7 +176,6 @@ OC.L10N.register(
     "Back to {folder}" : "回到 {folder}",
     "Share this folder" : "分享這個資料夾",
     "Loading folders …" : "載入資料夾 …",
-    "One of the source folders does not exists" : "其中一個來源資料夾不存在",
     "Add" : "添加"
 },
 "nplurals=1; plural=0;");

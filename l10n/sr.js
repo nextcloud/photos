@@ -176,7 +176,6 @@ OC.L10N.register(
     "Back to {folder}" : "Назад у {folder}",
     "Share this folder" : "Дели ову фасциклу",
     "Loading folders …" : "Учитавање фолдера ...",
-    "One of the source folders does not exists" : "Један од изворних фолдера не постоји",
     "Add" : "Додај"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

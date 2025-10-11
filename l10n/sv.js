@@ -176,7 +176,6 @@ OC.L10N.register(
     "Back to {folder}" : "Tillbaka till {folder}",
     "Share this folder" : "Dela denna mapp",
     "Loading folders …" : "Laddar mappar...",
-    "One of the source folders does not exists" : "En av källmapparna finns inte",
     "Add" : "Lägg till"
 },
 "nplurals=2; plural=(n != 1);");

@@ -152,7 +152,6 @@ OC.L10N.register(
     "Back to {folder}" : "Torna a {folder}",
     "Share this folder" : "Comparteix la carpeta",
     "Loading folders …" : "S'estan carregant les carpetes…",
-    "One of the source folders does not exists" : "Una de les carpetes d'origen no existeix",
     "Add" : "Afegeix"
 },
 "nplurals=2; plural=(n != 1);");
