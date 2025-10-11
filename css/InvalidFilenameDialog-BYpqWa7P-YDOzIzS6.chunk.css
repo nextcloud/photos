@@ -1,0 +1,5 @@
+
+.invalid-filename-dialog__input[data-v-3a479259] {
+	/* Ensure the helper text can always be shown without jumping */
+	min-height: calc(var(--default-clickable-area) + 4 * var(--default-font-size));
+}

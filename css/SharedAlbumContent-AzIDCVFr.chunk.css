@@ -1,0 +1,17 @@
+.album[data-v-62af3c7b] {
+  display: flex;
+  flex-direction: column;
+}
+.album__title[data-v-62af3c7b] {
+  width: 100%;
+}
+.album__name[data-v-62af3c7b] {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.album__location[data-v-62af3c7b] {
+  margin-inline-start: -4px;
+  display: flex;
+  color: var(--color-text-lighter);
+}

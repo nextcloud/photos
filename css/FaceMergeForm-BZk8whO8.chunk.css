@@ -1,0 +1,10 @@
+.face-list[data-v-2fd738e4] {
+  display: flex;
+  flex-direction: row;
+  height: 350px;
+  flex-wrap: wrap;
+  padding: 12px;
+}
+.loader[data-v-2fd738e4] {
+  margin: 25% auto;
+}

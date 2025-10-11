@@ -1,0 +1,14 @@
+.places-list[data-v-7f60f757] {
+  display: flex;
+  flex-direction: column;
+}
+.places-list .place__name[data-v-7f60f757] {
+  font-weight: normal;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 20px;
+  margin-bottom: 12px;
+  line-height: 30px;
+  color: var(--color-main-text);
+}

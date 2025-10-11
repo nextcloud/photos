@@ -42,7 +42,7 @@
 </template>
 
 <script lang='ts'>
-import type { RouterLink } from 'vue-router'
+import { RouterLink } from 'vue-router'
 import type { Collection } from '../services/collectionFetcher.js'
 
 import { t } from '@nextcloud/l10n'

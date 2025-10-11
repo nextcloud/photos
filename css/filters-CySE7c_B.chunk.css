@@ -1,0 +1,24 @@
+.folder[data-v-2900d20d] {
+  display: flex;
+  gap: 16px;
+  min-width: 300px;
+}
+.folder__info[data-v-2900d20d] {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: center;
+}
+.folder__path[data-v-2900d20d] {
+  font-weight: bold;
+}.photos-locations-container[data-v-8d71b758] {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+}
+.photos-locations-container .photos-locations[data-v-8d71b758] {
+  margin-bottom: 16px;
+}
+.photos-locations-container .photos-locations li[data-v-8d71b758] {
+  list-style: none;
+}
