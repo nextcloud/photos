@@ -156,7 +156,6 @@ OC.L10N.register(
     "Back to {folder}" : "Takaisin kansioon {folder}",
     "Share this folder" : "Jaa tämä kansio",
     "Loading folders …" : "Ladataan kansioita…",
-    "One of the source folders does not exists" : "Yksi lähdekansioista ei ole olemassa",
     "Add" : "Lisää"
 },
 "nplurals=2; plural=(n != 1);");

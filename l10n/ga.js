@@ -176,7 +176,6 @@ OC.L10N.register(
     "Back to {folder}" : "Ar ais go {folder}",
     "Share this folder" : "Roinn an fillteán seo",
     "Loading folders …" : "fillteáin á lódáil…",
-    "One of the source folders does not exists" : "Níl ceann de na fillteáin foinse ann",
     "Add" : "Cuir"
 },
 "nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);");

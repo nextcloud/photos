@@ -176,7 +176,6 @@ OC.L10N.register(
     "Back to {folder}" : "Til baka í {folder}",
     "Share this folder" : "Deila þessari möppu",
     "Loading folders …" : "Hleð inn möppum …",
-    "One of the source folders does not exists" : "Ein af upprunamöppunum er ekki til",
     "Add" : "Bæta við"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

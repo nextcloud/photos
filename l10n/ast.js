@@ -145,7 +145,6 @@ OC.L10N.register(
     "Back to {folder}" : "Volver a «{folder}»",
     "Share this folder" : "Compartir esta carpeta",
     "Loading folders …" : "Cargando les carpetes…",
-    "One of the source folders does not exists" : "Nun esiste una de les carpetes d'orixe",
     "Add" : "Amestar"
 },
 "nplurals=2; plural=(n != 1);");

@@ -150,7 +150,6 @@ OC.L10N.register(
     "Back to {folder}" : "Regresar a {folder}",
     "Share this folder" : "Compartir esta carpeta",
     "Loading folders …" : "Cargando carpetas ...",
-    "One of the source folders does not exists" : "Una de las carpetas fuente no existe",
     "Add" : "Agregar"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

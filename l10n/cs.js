@@ -176,7 +176,6 @@ OC.L10N.register(
     "Back to {folder}" : "Zpět do {folder}",
     "Share this folder" : "Sdílet tuto složku",
     "Loading folders …" : "Načítání složek…",
-    "One of the source folders does not exists" : "Jedna ze zdrojových složek neexistuje",
     "Add" : "Přidat"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

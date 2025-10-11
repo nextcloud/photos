@@ -174,7 +174,6 @@
     "Back to {folder}" : "Back to {folder}",
     "Share this folder" : "Share this folder",
     "Loading folders …" : "Loading folders …",
-    "One of the source folders does not exists" : "One of the source folders does not exists",
     "Add" : "Add"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

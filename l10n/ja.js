@@ -176,7 +176,6 @@ OC.L10N.register(
     "Back to {folder}" : " {folder} に戻る",
     "Share this folder" : "このフォルダーを共有する",
     "Loading folders …" : "フォルダを読み込んでいる ...",
-    "One of the source folders does not exists" : "ソースフォルダーの1つが存在しません",
     "Add" : "追加"
 },
 "nplurals=1; plural=0;");

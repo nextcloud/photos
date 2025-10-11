@@ -176,7 +176,6 @@ OC.L10N.register(
     "Back to {folder}" : "Terug naar {folder}",
     "Share this folder" : "Deze map delen",
     "Loading folders …" : "Mappen laden ...",
-    "One of the source folders does not exists" : "Een van de bronmappen bestaat niet",
     "Add" : "Toevoegen"
 },
 "nplurals=2; plural=(n != 1);");
