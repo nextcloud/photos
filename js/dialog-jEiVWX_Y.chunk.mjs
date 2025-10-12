@@ -1,2 +1,0 @@
-import{V as d,aa as m}from"./vue.runtime.esm-CUt6bkjo.chunk.mjs";function i(t,e,r=()=>{}){const o=document.createElement("div");(typeof e?.container=="string"&&document.querySelector(e.container)||document.body).appendChild(o);const n=new d({el:o,name:"VueDialogHelper",render:a=>a(t,{props:e,on:{close:(...c)=>{r(...c.map(s=>m(s))),n.$destroy(),o.remove()}}})});return n}export{i as s};
-//# sourceMappingURL=dialog-jEiVWX_Y.chunk.mjs.map

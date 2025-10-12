@@ -1,0 +1,2 @@
+import{a as t}from"./index-ChMxzK25.chunk.mjs";const e={name:"NcVNodes",props:{vnodes:{type:[Array,Object],default:null}},render(){var o,l,s;return this.vnodes||((o=this.$slots)==null?void 0:o.default)||((s=(l=this.$scopedSlots)==null?void 0:l.default)==null?void 0:s.call(l))}},n=null,r=null;var d=t(e,n,r,!1,null,null);const u=d.exports;export{u as N};
+//# sourceMappingURL=NcVNodes-bNwsRsRc.chunk.mjs.map
