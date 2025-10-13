@@ -75,7 +75,7 @@ jobs:
 
     services:
       postgres:
-        image: ghcr.io/nextcloud/continuous-integration-postgres-14:latest
+        image: ghcr.io/nextcloud/continuous-integration-postgres-16:latest # zizmor: ignore[unpinned-images]
         ports:
           - 4444:5432/tcp
         env:
@@ -129,7 +129,7 @@ jobs:
         if: steps.check_composer.outputs.files_exists == 'true'
         working-directory: apps/${{ env.APP_NAME }}
         run: |
-          composer remove nextcloud/ocp --dev
+          composer remove nextcloud/ocp --dev --no-scripts
           composer i
 
       - name: Set up Nextcloud
