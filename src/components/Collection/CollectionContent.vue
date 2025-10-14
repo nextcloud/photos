@@ -52,6 +52,7 @@ import { translate } from '@nextcloud/l10n'
 import FilesSelectionMixin from '../../mixins/FilesSelectionMixin.js'
 import FilesListViewer from '.././FilesListViewer.vue'
 import File from '.././File.vue'
+import { toViewerFileInfo } from '../../utils/fileUtils.js'
 
 export default {
 	name: 'CollectionContent',
@@ -127,15 +128,15 @@ export default {
 		openViewer(fileId) {
 			const file = this.files[fileId]
 			OCA.Viewer.open({
-				fileInfo: file,
-				list: this.sortedCollectionFileIds.map(fileId => this.files[fileId]).filter(file => !file.sectionHeader),
+				fileInfo: toViewerFileInfo(file),
+				list: this.sortedCollectionFileIds.map(fileId => toViewerFileInfo(this.files[fileId])).filter(file => !file.sectionHeader),
 				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
 				canLoop: file.canLoop,
 			})
 		},
 
 		handleFileDeleted({ fileid }) {
-			this.$store.commit('removeFilesFromCollection', { collectionFileName: this.collection.root + this.collection.path, fileIdsToRemove: [fileid?.toString()] })
+			this.$store.commit('removeFilesFromCollection', { collectionFileName: this.collection.filename, fileIdsToRemove: [fileid?.toString()] })
 		},
 
 		t: translate,
