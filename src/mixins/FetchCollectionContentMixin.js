@@ -27,6 +27,7 @@ import { showError } from '@nextcloud/dialogs'
 import AbortControllerMixin from './AbortControllerMixin.js'
 import { fetchCollection, fetchCollectionFiles } from '../services/collectionFetcher.js'
 import logger from '../services/logger.js'
+import { collectionFilesExtraProps } from '../store/collections.js'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
 
 export default {
@@ -93,10 +94,12 @@ export default {
 		 * @param {((value: import('../services/collectionFetcher.js').CollectionFile, index: number, array: import('../services/collectionFetcher.js').CollectionFile[]) => any)[]} [mappers] - Callback that can transform files before they are appended.
 		 * @return {Promise<import('../services/collectionFetcher.js').CollectionFile[]>}
 		 */
-		async fetchCollectionFiles(collectionFileName, extraProps, client, mappers = []) {
+		async fetchCollectionFiles(collectionFileName, extraProps = [], client, mappers = []) {
 			if (this.loadingCollectionFiles) {
 				return []
 			}
+
+			extraProps = [...extraProps, ...collectionFilesExtraProps]
 
 			const fetchSemaphoreSymbol = await this.fetchSemaphore.acquire()
 

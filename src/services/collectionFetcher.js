@@ -1,3 +1,4 @@
+/* eslint-disable no-tabs */
 /**
  * @copyright Copyright (c) 2022 Louis Chemineau <louis@chmn.me>
  *
@@ -92,7 +93,7 @@ export function getCollectionFilesDavRequest(extraProps = []) {
 					<oc:favorite />
 					<oc:fileid />
 					<oc:permissions />
-					${extraProps.join('')}
+					${extraProps.join('\n					')}
 				</d:prop>
 			</d:propfind>`
 }
