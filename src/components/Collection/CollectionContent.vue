@@ -45,6 +45,7 @@
 import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
 import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
 
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { NcEmptyContent, isMobile } from '@nextcloud/vue'
 import { translate } from '@nextcloud/l10n'
 
@@ -114,6 +115,14 @@ export default {
 		},
 	},
 
+	mounted() {
+		subscribe('files:node:deleted', this.handleFileDeleted)
+	},
+
+	destroyed() {
+		unsubscribe('files:node:deleted', this.handleFileDeleted)
+	},
+
 	methods: {
 		openViewer(fileId) {
 			const file = this.files[fileId]
@@ -123,6 +132,10 @@ export default {
 				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
 				canLoop: file.canLoop,
 			})
+		},
+
+		handleFileDeleted({ fileid }) {
+			this.$store.commit('removeFilesFromCollection', { collectionFileName: this.collection.root + this.collection.path, fileIdsToRemove: [fileid?.toString()] })
 		},
 
 		t: translate,
