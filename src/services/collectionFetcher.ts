@@ -1,3 +1,4 @@
+/* eslint-disable @stylistic/no-tabs */
 /**
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -68,7 +69,7 @@ function getCollectionFilesDavRequest(extraProps: string[] = []): string {
 					<oc:favorite />
 					<oc:fileid />
 					<oc:permissions />
-					${extraProps.join('')}
+					${extraProps.join('\n					')}
 				</d:prop>
 			</d:propfind>`
 }
