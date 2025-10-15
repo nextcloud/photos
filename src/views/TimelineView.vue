@@ -71,12 +71,17 @@
 					</NcButton>
 
 					<NcActions :aria-label="t('photos', 'Open actions menu')">
-						<ActionDownload
-							:selected-file-ids="selectedFileIds"
-							:title="t('photos', 'Download selected files')"
-							data-cy-header-action="download-selection">
-							<DownloadOutline slot="icon" />
-						</ActionDownload>
+						<NcActionButton
+							data-cy-header-action="download-selection"
+							:close-after-click="true"
+							:aria-label="t('photos', 'Download selected files')"
+							@click="downloadSelectedFiles">
+							{{ t('photos', 'Download selected files') }}
+
+							<template #icon>
+								<DownloadOutline />
+							</template>
+						</NcActionButton>
 
 						<ActionFavorite :selected-file-ids="selectedFileIds" />
 
@@ -167,7 +172,6 @@ import Plus from 'vue-material-design-icons/Plus.vue'
 import PlusBoxMultipleOutline from 'vue-material-design-icons/PlusBoxMultipleOutline.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 import DownloadOutline from 'vue-material-design-icons/TrayArrowDown.vue'
-import ActionDownload from '../components/Actions/ActionDownload.vue'
 import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import AlbumPicker from '../components/Albums/AlbumPicker.vue'
@@ -179,6 +183,7 @@ import FetchFilesMixin from '../mixins/FetchFilesMixin.ts'
 import FilesByMonthMixin from '../mixins/FilesByMonthMixin.ts'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.ts'
 import { allMimes } from '../services/AllowedMimes.ts'
+import { downloadFiles } from '../services/downloadFiles.ts'
 import useFilterStore from '../store/filters.ts'
 import { configChangedEvent } from '../store/userConfig.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.ts'
@@ -202,7 +207,6 @@ export default {
 		FilesListViewer,
 		FileComponent,
 		ActionFavorite,
-		ActionDownload,
 		HeaderNavigation,
 		PhotosSourceLocationsSettings,
 		AlertCircleOutline,
@@ -349,6 +353,12 @@ export default {
 		handleFormCreationDone({ album }: { album: Album }) {
 			this.showAlbumCreationForm = false
 			this.$router.push(`/albums/${album.basename}`)
+		},
+
+		downloadSelectedFiles() {
+			const fileIds = this.selectedFileIds
+			this.onUncheckFiles(fileIds)
+			downloadFiles(fileIds.map((fileId) => this.files[fileId]))
 		},
 
 		t,
