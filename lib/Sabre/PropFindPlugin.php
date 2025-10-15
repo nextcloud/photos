@@ -16,9 +16,11 @@ use OCA\Photos\Sabre\Album\PublicAlbumPhoto;
 use OCA\Photos\Sabre\Place\PlacePhoto;
 use OCA\Photos\Sabre\Place\PlaceRoot;
 use OCP\Files\DavUtil;
+use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\FilesMetadata\IFilesMetadataManager;
 use OCP\IPreview;
+use OCP\IUserSession;
 use Sabre\DAV\INode;
 use Sabre\DAV\PropFind;
 use Sabre\DAV\PropPatch;
@@ -37,6 +39,7 @@ class PropFindPlugin extends ServerPlugin {
 	public const NBITEMS_PROPERTYNAME = '{http://nextcloud.org/ns}nbItems';
 	public const COLLABORATORS_PROPERTYNAME = '{http://nextcloud.org/ns}collaborators';
 	public const PERMISSIONS_PROPERTYNAME = '{http://owncloud.org/ns}permissions';
+	public const PHOTOS_COLLECTION_FILE_ORIGINAL_FILENAME_PROPERTYNAME = '{http://nextcloud.org/ns}photos-collection-file-original-filename';
 
 	private IPreview $previewManager;
 	private ?Tree $tree;
@@ -46,6 +49,8 @@ class PropFindPlugin extends ServerPlugin {
 		IPreview $previewManager,
 		AlbumMapper $albumMapper,
 		private IFilesMetadataManager $filesMetadataManager,
+		private readonly IUserSession $userSession,
+		private readonly IRootFolder $rootFolder,
 	) {
 		$this->previewManager = $previewManager;
 		$this->albumMapper = $albumMapper;
@@ -110,6 +115,18 @@ class PropFindPlugin extends ServerPlugin {
 				return $metadata->hasKey('files-live-photo') && $node->getFileInfo()->getMimetype() === 'video/quicktime' ? 'true' : 'false';
 			});
 
+			$propFind->handle(self::PHOTOS_COLLECTION_FILE_ORIGINAL_FILENAME_PROPERTYNAME, function () use ($node) {
+				if (!($node instanceof AlbumPhoto)) {
+					return;
+				}
+
+				$currentUser = $this->userSession->getUser();
+				$fileOwner = $node->getFileInfo()->getOwner();
+				if ($currentUser !== null && $currentUser === $fileOwner) {
+					$userFolder = $this->rootFolder->getUserFolder($currentUser->getUID());
+					return $userFolder->getRelativePath($node->getFileInfo()->getPath());
+				}
+			});
 		}
 
 		if ($node instanceof AlbumRoot) {

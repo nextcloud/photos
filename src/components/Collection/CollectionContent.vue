@@ -45,12 +45,14 @@
 import AlertCircle from 'vue-material-design-icons/AlertCircle.vue'
 import FolderMultipleImage from 'vue-material-design-icons/FolderMultipleImage.vue'
 
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { NcEmptyContent, isMobile } from '@nextcloud/vue'
 import { translate } from '@nextcloud/l10n'
 
 import FilesSelectionMixin from '../../mixins/FilesSelectionMixin.js'
 import FilesListViewer from '.././FilesListViewer.vue'
 import File from '.././File.vue'
+import { toViewerFileInfo } from '../../utils/fileUtils.js'
 
 export default {
 	name: 'CollectionContent',
@@ -114,15 +116,27 @@ export default {
 		},
 	},
 
+	mounted() {
+		subscribe('files:node:deleted', this.handleFileDeleted)
+	},
+
+	destroyed() {
+		unsubscribe('files:node:deleted', this.handleFileDeleted)
+	},
+
 	methods: {
 		openViewer(fileId) {
 			const file = this.files[fileId]
 			OCA.Viewer.open({
-				fileInfo: file,
-				list: this.sortedCollectionFileIds.map(fileId => this.files[fileId]).filter(file => !file.sectionHeader),
+				fileInfo: toViewerFileInfo(file),
+				list: this.sortedCollectionFileIds.map(fileId => toViewerFileInfo(this.files[fileId])).filter(file => !file.sectionHeader),
 				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
 				canLoop: file.canLoop,
 			})
+		},
+
+		handleFileDeleted({ fileid }) {
+			this.$store.commit('removeFilesFromCollection', { collectionFileName: this.collection.filename, fileIdsToRemove: [fileid?.toString()] })
 		},
 
 		t: translate,
