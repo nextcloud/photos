@@ -17,7 +17,7 @@ OC.L10N.register(
     "Tags" : "Тэгі",
     "Places" : "Месцы",
     "Map" : "Карта",
-    "Photos settings" : "Налады фота",
+    "Photos settings" : "Налады Фота",
     "Mark selection as favorite" : "Пазначыць выбранае як абранае",
     "Add selection to favorites" : "Дадаць выбранае ў абранае",
     "Remove selection from favorites" : "Выдаліць выбранае з абранага",
