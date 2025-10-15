@@ -158,6 +158,7 @@ import ActionDownload from '../components/Actions/ActionDownload.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
 import { configChangedEvent } from '../store/userConfig.js'
+import { toViewerFileInfo } from '../utils/fileUtils.js'
 
 export default {
 	name: 'Timeline',
@@ -271,7 +272,7 @@ export default {
 			const file = this.files[fileId]
 			OCA.Viewer.open({
 				fileInfo: file,
-				list: Object.values(this.fileIdsByMonth).flat().map(fileId => this.files[fileId]),
+				list: Object.values(this.fileIdsByMonth).flat().map(fileId => toViewerFileInfo(this.files[fileId])),
 				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
 				canLoop: file.canLoop,
 			})
