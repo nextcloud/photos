@@ -42,10 +42,10 @@
 </template>
 
 <script lang='ts'>
-import type { RouterLink } from 'vue-router'
 import type { Collection } from '../services/collectionFetcher.js'
 
 import { t } from '@nextcloud/l10n'
+import { RouterLink } from 'vue-router'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
