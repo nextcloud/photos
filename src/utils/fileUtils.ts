@@ -130,7 +130,7 @@ export function toViewerFileInfo(file: Node): ViewerFileInfo {
 		permissions += 'R'
 	}
 
-	let filename = file.root + file.path
+	let filename = file.path
 	let source = file.source
 	// Override the filename and source to allow deleting a file from the viewer.
 	// This is needed when the filename and source are related to the albums.
