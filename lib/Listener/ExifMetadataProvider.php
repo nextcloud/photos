@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Listener;
 
+use Nelexa\Buffer\Buffer;
+use Nelexa\Buffer\ResourceBuffer;
 use OCA\Photos\AppInfo\Application;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
@@ -15,6 +17,11 @@ use OCP\Files\File;
 use OCP\FilesMetadata\Event\MetadataBackgroundEvent;
 use OCP\FilesMetadata\Event\MetadataLiveEvent;
 use Psr\Log\LoggerInterface;
+use WoltLab\WebpExif\Chunk\Chunk;
+use WoltLab\WebpExif\Decoder;
+use WoltLab\WebpExif\Exception\FileSizeMismatch;
+use WoltLab\WebpExif\Exception\NotEnoughData;
+use WoltLab\WebpExif\Exception\UnrecognizedFileFormat;
 
 /**
  * Extract EXIF, IFD0, and GPS data from a picture file.
@@ -71,7 +78,12 @@ class ExifMetadataProvider implements IEventListener {
 			// This is to trigger this condition: https://github.com/php/php-src/blob/d64aa6f646a7b5e58359dc79479860164239580a/main/streams/streams.c#L710
 			// But I don't understand yet why 1 as a special meaning.
 			$oldBufferSize = stream_set_chunk_size($fileDescriptor, 1);
-			$rawExifData = @exif_read_data($fileDescriptor, 'EXIF, GPS', true);
+			if ($node->getMimeType() == 'image/webp') {
+				$rawExifData = $this->getExifFromWebP($fileDescriptor);
+			} else {
+				$rawExifData = @exif_read_data($fileDescriptor, 'EXIF, GPS', true);
+			}
+
 			// We then revert the change after having read the exif data.
 			stream_set_chunk_size($fileDescriptor, $oldBufferSize);
 		} catch (\Exception $ex) {
@@ -107,6 +119,71 @@ class ExifMetadataProvider implements IEventListener {
 			if (!empty($gps)) {
 				$event->getMetadata()->setArray(self::METADATA_KEY_GPS, $gps);
 			}
+		}
+	}
+
+	/**
+	 * Decodes a WebP image from binary data.
+	 * @author      Alexander Ebert
+	 * @copyright   2025 WoltLab GmbH
+	 * @license     The MIT License <https://opensource.org/license/mit>
+	 *
+	 * @param $fileDescriptor
+	 * @return array|false|null
+	 * @throws \Nelexa\Buffer\BufferException
+	 *
+	 * @psalm-suppress InternalClass
+	 * @psalm-suppress InternalMethod
+	 */
+	private function getExifFromWebP($fileDescriptor): array|false|null {
+		// override the close() function in  order to prevent the file being closed when the buffer object is destructed
+		$buffer = new class($fileDescriptor) extends ResourceBuffer {
+			public function close() {
+
+			}
+		};
+
+		$buffer->setOrder(Buffer::LITTLE_ENDIAN);
+		$buffer->setReadOnly(true);
+
+		// A RIFF container at its minimum contains the "RIFF" header, a
+		// uint32LE representing the chunk size, the "WEBP" type and the data
+		// section. The data section of a WebP at minimum contains one chunk
+		// (header + uint32LE + data).
+		//
+		// The shortest possible WebP image is a simple VP8L container that
+		// contains only the magic byte, a uint32 for the flags and dimensions,
+		// and at last a single byte of data. This takes up 26 bytes in total.
+		$expectedMinimumFileSize = 26;
+		if ($buffer->size() < $expectedMinimumFileSize) {
+			throw new NotEnoughData($expectedMinimumFileSize, $buffer->size());
+		}
+
+		$riff = $buffer->getString(4);
+		$length = $buffer->getUnsignedInt();
+		$format = $buffer->getString(4);
+		if ($riff !== 'RIFF' || $format !== 'WEBP') {
+			throw new UnrecognizedFileFormat();
+		}
+
+		// The length in the header does not include "RIFF" and the length
+		// itself. It must therefore be exactly 8 bytes shorter than the total
+		// size.
+		$actualLength = $buffer->size() - 8;
+		if ($length !== $actualLength) {
+			throw new FileSizeMismatch($length, $actualLength);
+		}
+
+		$decoder = new Decoder();
+		$chunk = null;
+		do {
+			$chunk = $decoder->decodeChunk($buffer);
+		} while ($buffer->hasRemaining() && !($chunk instanceof \WoltLab\WebpExif\Chunk\Exif));
+
+		if ($chunk instanceof \WoltLab\WebpExif\Chunk\Exif) {
+			return $chunk->getParsedExif();
+		} else {
+			return false;
 		}
 	}
 
