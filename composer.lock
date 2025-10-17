@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "78419530ee5c30da5cff4f86b790eb38",
+    "content-hash": "12ae69d73d890284a0cfe91f63a36799",
     "packages": [
         {
             "name": "hexogen/kdtree",
@@ -66,6 +66,196 @@
                 "source": "https://github.com/hexogen/kdtree/tree/v0.2.6"
             },
             "time": "2024-09-15T21:06:32+00:00"
+        },
+        {
+            "name": "nelexa/buffer",
+            "version": "1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Ne-Lexa/php-byte-buffer.git",
+                "reference": "c97bc126d5fbe0c94152fce406a054f681149fac"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Ne-Lexa/php-byte-buffer/zipball/c97bc126d5fbe0c94152fce406a054f681149fac",
+                "reference": "c97bc126d5fbe0c94152fce406a054f681149fac",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Nelexa\\Buffer\\": "src/Nelexa/Buffer"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ne-Lexa",
+                    "email": "alexey@nelexa.ru"
+                }
+            ],
+            "description": "Reading And Writing Binary Data (incl. primitive types, ex. byte, ubyte, short, ushort, int, uint, long, float, double). The classes also help with porting the I/O operations of the JAVA code.",
+            "keywords": [
+                "Double",
+                "binary",
+                "byte",
+                "float",
+                "int",
+                "io",
+                "java",
+                "long",
+                "pack",
+                "primitive",
+                "short",
+                "ubyte",
+                "uint",
+                "unpack",
+                "ushort"
+            ],
+            "support": {
+                "issues": "https://github.com/Ne-Lexa/php-byte-buffer/issues",
+                "source": "https://github.com/Ne-Lexa/php-byte-buffer/tree/master"
+            },
+            "time": "2019-05-25T17:47:34+00:00"
+        },
+        {
+            "name": "symfony/polyfill-php84",
+            "version": "v1.33.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-php84.git",
+                "reference": "d8ced4d875142b6a7426000426b8abc631d6b191"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-php84/zipball/d8ced4d875142b6a7426000426b8abc631d6b191",
+                "reference": "d8ced4d875142b6a7426000426b8abc631d6b191",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2"
+            },
+            "type": "library",
+            "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Php84\\": ""
+                },
+                "classmap": [
+                    "Resources/stubs"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill backporting some PHP 8.4+ features to lower PHP versions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/polyfill-php84/tree/v1.33.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2025-06-24T13:30:11+00:00"
+        },
+        {
+            "name": "woltlab/webp-exif",
+            "version": "v0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/WoltLab/webp-exif.git",
+                "reference": "5056d7114b3622dcd5b655340fdeaac01598997a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/WoltLab/webp-exif/zipball/5056d7114b3622dcd5b655340fdeaac01598997a",
+                "reference": "5056d7114b3622dcd5b655340fdeaac01598997a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-exif": "*",
+                "nelexa/buffer": "^1.3",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
+                "symfony/polyfill-php84": "^1.31"
+            },
+            "require-dev": {
+                "phpstan/extension-installer": "^1.4",
+                "phpstan/phpstan": "^2.1",
+                "phpstan/phpstan-deprecation-rules": "^2.0",
+                "phpstan/phpstan-phpunit": "^2.0",
+                "phpstan/phpstan-strict-rules": "^2.0",
+                "phpunit/php-code-coverage": "^12.0",
+                "phpunit/phpunit": "^12.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "WoltLab\\WebpExif\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Extract and embed EXIF metadata from and to WebP images",
+            "keywords": [
+                "Webp",
+                "exif"
+            ],
+            "support": {
+                "issues": "https://github.com/WoltLab/webp-exif/issues",
+                "source": "https://github.com/WoltLab/webp-exif/tree/v0.1.1"
+            },
+            "time": "2025-07-20T11:37:11+00:00"
         }
     ],
     "packages-dev": [
@@ -132,12 +322,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextcloud-deps/ocp.git",
-                "reference": "25ab2b7d4003621aa237292de053a4945903bb61"
+                "reference": "4556a0916442369994fdc6a7d4cd7c6e5e85d46d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/25ab2b7d4003621aa237292de053a4945903bb61",
-                "reference": "25ab2b7d4003621aa237292de053a4945903bb61",
+                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/4556a0916442369994fdc6a7d4cd7c6e5e85d46d",
+                "reference": "4556a0916442369994fdc6a7d4cd7c6e5e85d46d",
                 "shasum": ""
             },
             "require": {
@@ -173,7 +363,7 @@
                 "issues": "https://github.com/nextcloud-deps/ocp/issues",
                 "source": "https://github.com/nextcloud-deps/ocp/tree/master"
             },
-            "time": "2025-10-11T00:44:39+00:00"
+            "time": "2025-10-15T00:49:40+00:00"
         },
         {
             "name": "psr/clock",
@@ -384,8 +574,8 @@
     },
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": {},
-    "platform-dev": {},
+    "platform": [],
+    "platform-dev": [],
     "platform-overrides": {
         "php": "8.1.17"
     },
