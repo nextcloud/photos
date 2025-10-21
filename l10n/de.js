@@ -150,7 +150,7 @@ OC.L10N.register(
     "Public album {title}" : "Öffentliches Album {title}",
     "Tagged photos" : "Fotos mit Tags",
     "Tagged photo {title}" : "Fotos mit Schlagworten",
-    "{title}'s face" : "{title}s Gesicht",
+    "{title}'s face" : "{title}'s Gesicht",
     "Last week" : "Letzte Woche",
     "Last Month" : "Letzten Monat",
     "Custom…" : "Benutzerdefiniert…",
