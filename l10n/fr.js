@@ -47,7 +47,7 @@ OC.L10N.register(
     "Copy public link" : "Copier le lien public",
     "Delete the public link" : "Supprimer le lien public",
     "Create public link share" : "Créer un partage par lien public",
-    "Share via public link" : "Partager via un lien public",
+    "Share via public link" : "Partager par lien public",
     "This collection does not exist" : "Cette collection n’existe pas",
     "An error occurred" : "Une erreur est survenue",
     "No picture for this day" : "Aucune image ce jour",
