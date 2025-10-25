@@ -1,0 +1,2 @@
+import{h as t,V as d,e as i}from"./vue.runtime.esm-BVvRFtmy.chunk.mjs";function a(o,r,s=!1){const e=t().proxy;return s&&e.$props[o]===void 0&&e.$props.modelValue===void 0&&d.util.warn('Missing required prop: "modelValue" or old "'.concat(o,'"')),i({get(){return e.$props[o]!==void 0?e.$props[o]:e.$props.modelValue},set(p){e.$emit("update:modelValue",p),e.$emit("update:model-value",p),e.$emit(r,p)}})}export{a as u};
+//# sourceMappingURL=useModelMigration-DBUi8saj-C9u8EvK2.chunk.mjs.map
