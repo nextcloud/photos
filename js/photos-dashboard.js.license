@@ -9,7 +9,6 @@ SPDX-FileCopyrightText: xiaokai <kexiaokai@gmail.com>
 SPDX-FileCopyrightText: string_decoder developers
 SPDX-FileCopyrightText: rhysd <lin90162@yahoo.co.jp>
 SPDX-FileCopyrightText: readable-stream developers
-SPDX-FileCopyrightText: p-queue developers
 SPDX-FileCopyrightText: jden <jason@denizac.org>
 SPDX-FileCopyrightText: inline-style-parser developers
 SPDX-FileCopyrightText: inherits developers
@@ -87,22 +86,19 @@ This file is generated from multiple sources. Included packages:
 	- version: 0.2.0
 	- license: BSD-2-Clause
 - @nextcloud/auth
+	- version: 2.5.3
+	- license: GPL-3.0-or-later
+- @nextcloud/axios
 	- version: 2.5.2
 	- license: GPL-3.0-or-later
-- axios
-	- version: 1.12.1
-	- license: MIT
-- @nextcloud/axios
-	- version: 2.5.1
-	- license: GPL-3.0-or-later
 - @nextcloud/browser-storage
-	- version: 0.4.0
+	- version: 0.5.0
 	- license: GPL-3.0-or-later
 - @nextcloud/capabilities
 	- version: 1.2.0
 	- license: GPL-3.0-or-later
 - @nextcloud/dialogs
-	- version: 6.3.2
+	- version: 6.4.1
 	- license: AGPL-3.0-or-later
 - semver
 	- version: 7.7.1
@@ -177,7 +173,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 6.0.1
 	- license: MIT
 - @nextcloud/vue
-	- version: 8.31.0
+	- version: 8.33.0
 	- license: AGPL-3.0-or-later
 - @ungap/structured-clone
 	- version: 1.2.0
@@ -246,7 +242,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.1.0
 	- license: MIT
 - dompurify
-	- version: 3.2.6
+	- version: 3.3.0
 	- license: (MPL-2.0 OR Apache-2.0)
 - dunder-proto
 	- version: 1.0.1
@@ -442,9 +438,6 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - eventemitter3
 	- version: 5.0.1
-	- license: MIT
-- p-queue
-	- version: 8.1.1
 	- license: MIT
 - path-browserify
 	- version: 1.0.1
