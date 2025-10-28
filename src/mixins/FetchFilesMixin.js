@@ -37,11 +37,11 @@ export default {
 	methods: {
 		/**
 		 * @param {object} options - Options to pass to getPhotos.
-		 * @param {string[]} [blacklist=[]] - Array of ids to filter out.
+		 * @param {Function} [filter] - Function to filter out some files.
 		 * @param {boolean} [force=false] - Force fetching even if doneFetchingFiles is true
 		 * @return {Promise<string[]>} - The next batch of data depending on global offset.
 		 */
-		async fetchFiles(options = {}, blacklist = [], force = false) {
+		async fetchFiles(options = {}, filter = undefined, force = false) {
 			if ((this.doneFetchingFiles && !force) || this.loadingFiles) {
 				return []
 			}
@@ -55,7 +55,7 @@ export default {
 				const numberOfImagesPerBatch = 200
 
 				// Load next batch of images
-				const fetchedFiles = await getPhotos({
+				let fetchedFiles = await getPhotos({
 					firstResult: this.fetchedFileIds.length,
 					nbResults: numberOfImagesPerBatch,
 					...options,
@@ -67,14 +67,16 @@ export default {
 					this.doneFetchingFiles = true
 				}
 
+				if (filter !== undefined) {
+					fetchedFiles = fetchedFiles.filter(filter)
+				}
+
 				const fileIds = fetchedFiles
 					.map(file => file.fileid)
 					.filter(fileId => !this.fetchedFileIds.includes(fileId.toString())) // Filter to prevent duplicate fileIds.
 
 				this.fetchedFileIds.push(
-					...fileIds
-						.map((fileId) => fileId.toString())
-						.filter((fileId) => !blacklist.includes(fileId))
+					...fileIds.map((fileId) => fileId.toString())
 				)
 
 				this.$store.dispatch('appendFiles', fetchedFiles)
