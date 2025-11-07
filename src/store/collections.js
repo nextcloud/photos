@@ -280,7 +280,7 @@ const actions = {
 		try {
 			context.commit('addCollections', { collections: [newCollection] })
 			context.commit('setCollectionFiles', { collectionFileName: newCollection.filename, fileIds: context.state.collectionsFiles[collectionFileName] })
-			await client.moveFile(collection.filename, newCollection.filename)
+			await client.moveFile(collection.filename, newCollection.filename, { overwrite: false })
 			context.commit('removeCollections', { collectionFileNames: [collectionFileName] })
 			return newCollection
 		} catch (error) {
