@@ -256,7 +256,7 @@ const actions = {
 		try {
 			context.commit('addCollections', { collections: [newCollection] })
 			context.commit('setCollectionFiles', { collectionFileName: newCollection.root + newCollection.path, fileIds: context.state.collectionsFiles[collectionFileName] })
-			await davClient.moveFile(collection.root + collection.path, collection.root + newCollection.path)
+			await davClient.moveFile(collection.root + collection.path, collection.root + newCollection.path, { overwrite: false })
 			context.commit('removeCollections', { collectionFileNames: [collectionFileName] })
 			return newCollection
 		} catch (error) {
