@@ -115,6 +115,7 @@
     "Last week" : "Миналата седмица",
     "{startDate} to {endDate}" : "{startDate} до {endDate}",
     "Details" : "Подробности",
+    "Group" : "Група",
     "Remove {collaboratorLabel} from the collaborators list" : "Премахване на {collaboratorLabel} от списъка със сътрудници",
     "Back to {folder}" : "Назад към {folder}",
     "Share this folder" : "Споделяне на тази папка",
