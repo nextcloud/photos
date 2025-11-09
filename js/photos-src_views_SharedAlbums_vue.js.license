@@ -193,7 +193,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 6.0.1
 	- license: MIT
 - @nextcloud/vue
-	- version: 8.33.0
+	- version: 8.34.0
 	- license: AGPL-3.0-or-later
 - @ungap/structured-clone
 	- version: 1.2.0
@@ -301,7 +301,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.0.0-beta.19
 	- license: MIT
 - focus-trap
-	- version: 7.5.2
+	- version: 7.6.6
 	- license: MIT
 - for-each
 	- version: 0.3.3
@@ -559,7 +559,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 0.4.1
 	- license: MIT
 - tabbable
-	- version: 6.2.0
+	- version: 6.3.0
 	- license: MIT
 - tributejs
 	- version: 5.1.3
