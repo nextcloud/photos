@@ -57,6 +57,7 @@ OC.L10N.register(
     "There are no photos or videos yet!" : "Все още няма снимки или видеоклипове!",
     "_{years} year ago_::_{years} years ago_" : ["Преди {years} години","Преди {years} години"],
     "Enable squared photos view" : "Активирайте изгледа на снимки в квадратче",
+    "All folders" : "Всички папки",
     "Add folder" : "Добави папка",
     "Home" : "Начало",
     "View" : "Изглед",
