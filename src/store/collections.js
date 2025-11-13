@@ -263,6 +263,15 @@ const actions = {
 		}
 
 		try {
+			await client.stat(newCollection.filename)
+			logger.error(t('photos', 'Failed to rename {currentCollectionFileName} to {newCollectionFileName}', { currentCollectionFileName: collectionFileName, newCollectionFileName: newCollection.filename }), { error: new Error('Target collection already exists') })
+			showError(t('photos', 'Failed to rename {currentCollectionFileName} to {newCollectionFileName}', { currentCollectionFileName: collectionFileName, newCollectionFileName: newCollection.filename }))
+			return collection
+		} catch (error) {
+			// If the stat fails, it means that the target does not exist yet, so all good.
+		}
+
+		try {
 			context.commit('addCollections', { collections: [newCollection] })
 			context.commit('setCollectionFiles', { collectionFileName: newCollection.filename, fileIds: context.state.collectionsFiles[collectionFileName] })
 			await client.moveFile(collection.filename, newCollection.filename)
