@@ -7,7 +7,7 @@
 		<div class="form-inputs">
 			<NcTextField
 				ref="nameInput"
-				:value.sync="albumName"
+				v-model.trim="albumName"
 				type="text"
 				name="name"
 				:helper-text="albumNameValidationError"
@@ -80,7 +80,7 @@
 			<span class="right-buttons">
 				<NcButton
 					variant="primary"
-					:disabled="albumName.trim() === '' || loading"
+					:disabled="!canSubmit"
 					@click="submit(collaborators)">
 					<template #icon>
 						<NcLoadingIcon v-if="loading" :size="20" />
