@@ -304,6 +304,10 @@ export default {
 				if (this.album !== null && this.album.basename !== this.albumName) {
 					changes.push('name')
 					album = await this.$store.dispatch('renameCollection', { collectionFileName: this.album.root + this.album.path, newBaseName: this.albumName }) as Album
+
+					if (album === this.album) {
+						return // Abort, and do not close the form if renaming failed
+					}
 				}
 
 				if (this.album !== null && this.album.attributes.location !== this.albumLocation) {
@@ -370,7 +374,8 @@ export default {
 		justify-content: space-between;
 		flex-direction: column;
 
-		.left-buttons, .right-buttons {
+		.left-buttons,
+		.right-buttons {
 			display: flex;
 			gap: calc(var(--default-grid-baseline) * 4);
 		}
