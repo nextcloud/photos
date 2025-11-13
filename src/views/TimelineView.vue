@@ -229,7 +229,7 @@ export default {
 	],
 
 	beforeRouteLeave(to, from, next) {
-		window.scrollTo(0, 0)
+		this.appContent?.scrollTo(0, 0)
 		next()
 		Object.keys(this.selectedFilters).forEach((key) => {
 			this.selectedFilters[key] = []
