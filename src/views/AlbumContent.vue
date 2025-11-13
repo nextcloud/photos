@@ -113,7 +113,7 @@
 			:open.sync="showAddPhotosModal"
 			:blacklist-ids="albumFileIds"
 			:destination="album.basename"
-			:name="t('photos', 'Add photos to {albumName}', {albumName: albumName})"
+			:name="t('photos', 'Add photos to {albumName}', {albumName: albumName}, undefined, {escape: false, sanitize: false,})"
 			@files-picked="handleFilesPicked" />
 
 		<NcModal v-if="showManageCollaboratorView && album !== undefined"
