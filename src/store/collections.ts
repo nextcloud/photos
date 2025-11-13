@@ -260,7 +260,7 @@ const actions = {
 			context.commit('removeCollections', { collectionFileNames: [collectionFileName] })
 			return newCollection
 		} catch (error) {
-			context.commit('removeCollections', { collectionFileNames: [newCollection.path] })
+			context.commit('removeCollections', { collectionFileNames: [collection.root + newCollection.path] })
 			logger.error(t('photos', 'Failed to rename {currentCollectionFileName} to {newCollectionFileName}', { currentCollectionFileName: collectionFileName, newCollectionFileName: newCollection.path }), { error })
 			showError(t('photos', 'Failed to rename {currentCollectionFileName} to {newCollectionFileName}', { currentCollectionFileName: collectionFileName, newCollectionFileName: newCollection.path }))
 			return collection
