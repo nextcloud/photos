@@ -23,6 +23,7 @@ import { generateRemoteUrl } from '@nextcloud/router'
 import camelcase from 'camelcase'
 import { rootPath } from '../services/DavClient.js'
 import { isNumber } from './numberUtils.js'
+import { getRemoteURL, getRootPath } from '@nextcloud/files/dav'
 
 /**
  * Get an url encoded path
@@ -60,7 +61,7 @@ const extractFilePaths = function(path) {
  * @param {object} fileInfo1 file 1 fileinfo
  * @param {object} fileInfo2 file 2 fileinfo
  * @param {string} key key to sort with
- * @param {boolean} [asc=true] sort ascending?
+ * @param {boolean} [asc] sort ascending?
  * @return {number}
  */
 const sortCompare = function(fileInfo1, fileInfo2, key, asc = true) {
@@ -144,4 +145,25 @@ function flattenAndFormatObject(obj, callback) {
 	}, {})
 }
 
-export { encodeFilePath, extractFilePaths, sortCompare, genFileInfo, extractTagInfo }
+/**
+ *
+ * @param file
+ */
+function toViewerFileInfo(file) {
+	let filename = file.filename
+	let source = file.source
+	// Override the filename and source to allow deleting a file from the viewer.
+	// This is needed when the filename and source are related to the albums.
+	if (file.photosCollectionFileOriginalFilename !== undefined) {
+		filename = file.photosCollectionFileOriginalFilename
+		source = getRemoteURL() + getRootPath() + filename
+	}
+
+	return {
+		...file,
+		filename,
+		source,
+	}
+}
+
+export { encodeFilePath, extractFilePaths, sortCompare, genFileInfo, extractTagInfo, toViewerFileInfo }

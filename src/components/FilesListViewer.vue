@@ -230,10 +230,12 @@ export default {
 
 	mounted() {
 		subscribe('files:node:updated', this.handleFileUpdated)
+		subscribe('files:node:deleted', this.handleFileDeleted)
 	},
 
 	destroyed() {
 		unsubscribe('files:node:updated', this.handleFileUpdated)
+		unsubscribe('files:node:deleted', this.handleFileDeleted)
 	},
 
 	methods: {
@@ -267,6 +269,10 @@ export default {
 		async handleFileUpdated({ fileid }) {
 			const fetchedFile = await fetchFile(this.files[fileid].filename)
 			this.appendFiles([fetchedFile])
+		},
+
+		handleFileDeleted({ fileid }) {
+			this.$store.commit('deleteFile', fileid)
 		},
 	},
 }

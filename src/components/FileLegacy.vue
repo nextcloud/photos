@@ -58,6 +58,7 @@
 
 <script>
 import { generateUrl } from '@nextcloud/router'
+import { toViewerFileInfo } from '../utils/fileUtils.js'
 
 export default {
 	name: 'FileLegacy',
@@ -105,8 +106,8 @@ export default {
 	methods: {
 		openViewer() {
 			OCA.Viewer.open({
-				fileInfo: this.item.injected,
-				list: this.item.injected.list,
+				fileInfo: toViewerFileInfo(this.item.injected),
+				list: this.item.injected.list.map(file => toViewerFileInfo(file)),
 				loadMore: this.item.injected.loadMore ? async () => await this.item.injected.loadMore(true) : () => [],
 				canLoop: this.item.injected.canLoop,
 			})

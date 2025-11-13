@@ -75,6 +75,7 @@ import FilesListViewer from '../components/FilesListViewer.vue'
 
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
+import { toViewerFileInfo } from '../utils/fileUtils.js'
 
 export default {
 	name: 'TagContent',
@@ -175,7 +176,7 @@ export default {
 			const file = this.files[fileId]
 			OCA.Viewer.open({
 				path: file.filename,
-				list: this.fileIds.map(fileId => this.files[fileId]),
+				list: this.fileIds.map(fileId => toViewerFileInfo(this.files[fileId])),
 				loadMore: file.loadMore ? async () => await file.loadMore(true) : () => [],
 				canLoop: file.canLoop,
 			})
