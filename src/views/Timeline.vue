@@ -227,7 +227,7 @@ export default {
 	],
 
 	beforeRouteLeave(to, from, next) {
-		window.scrollTo(0, 0)
+		this.appContent?.scrollTo(0, 0)
 		next()
 	},
 
