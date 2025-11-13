@@ -60,7 +60,7 @@
 							<ImagePlusOutline v-if="!loading" />
 							<NcLoadingIcon v-if="loading" />
 						</template>
-						{{ t('photos', 'Add to {destination}', { destination }) }}
+						{{ t('photos', 'Add to {destination}', { destination }, undefined, { escape: false, sanitize: false }) }}
 					</NcButton>
 				</div>
 				<NcNoteCard v-if="photosLocationFolder?.attributes['owner-id'] !== currentUser" type="warning">
