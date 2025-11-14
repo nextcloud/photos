@@ -98,7 +98,6 @@ export default {
 	computed: {
 		isRoot() {
 			const isRoot = this.path === '/'
-			this.toggleNavigationButton(!isRoot)
 			return isRoot
 		},
 
@@ -167,14 +166,6 @@ export default {
 		refresh() {
 			this.$emit('refresh')
 		},
-
-		toggleNavigationButton(hide) {
-			// Hide the navigation toggle if the back button is shown
-			const navigationToggle = document.querySelector('button.app-navigation-toggle')
-			if (navigationToggle !== null) {
-				navigationToggle.style.display = hide ? 'none' : null
-			}
-		},
 	},
 }
 </script>
@@ -196,12 +187,6 @@ export default {
 	// Align with app navigation toggle
 	padding-block: var(--app-navigation-padding);
 	background: var(--color-main-background);
-
-	&__back {
-		// Replaces the app navigation button
-		position: absolute !important;
-		left: var(--app-navigation-padding);
-	}
 
 	&__title {
 		max-width: 45%;
@@ -233,5 +218,4 @@ export default {
 		margin-inline-start: auto;
 	}
 }
-
 </style>
