@@ -23,7 +23,7 @@
 	<form v-if="!showCollaboratorView" class="album-form" @submit.prevent="submit">
 		<div class="form-inputs">
 			<NcTextField ref="nameInput"
-				:value.sync="albumName"
+				v-model="albumName"
 				type="text"
 				name="name"
 				:helper-text="albumNameValidationError"
@@ -81,7 +81,7 @@
 			</span>
 			<span class="right-buttons">
 				<NcButton type="primary"
-					:disabled="albumName.trim() === '' || loading"
+					:disabled="!canSubmit"
 					@click="submit(collaborators)">
 					<template #icon>
 						<NcLoadingIcon v-if="loading" :size="20" />
