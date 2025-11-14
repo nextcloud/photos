@@ -267,6 +267,10 @@ export default {
 
 				if (this.album.basename !== this.albumName) {
 					album = await this.renameCollection({ collectionFileName: this.album.filename, newBaseName: this.albumName })
+
+					if (album === this.album) {
+						return // Abort, and do not close the form if renaming failed
+					}
 				}
 
 				if (this.album.location !== this.albumLocation) {
