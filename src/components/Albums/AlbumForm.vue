@@ -256,6 +256,10 @@ export default {
 
 				if (this.album.basename !== this.albumName) {
 					album = await this.renameCollection({ collectionFileName: this.album.filename, newBaseName: this.albumName })
+
+					if (album === this.album) {
+						return // Abort, and do not close the form if renaming failed
+					}
 				}
 
 				if (this.album.location !== this.albumLocation) {
@@ -303,7 +307,8 @@ export default {
 		justify-content: space-between;
 		flex-direction: column;
 
-		.left-buttons, .right-buttons {
+		.left-buttons,
+		.right-buttons {
 			display: flex;
 			gap: calc(var(--default-grid-baseline) * 4);
 		}
