@@ -105,10 +105,18 @@ class PageController extends Controller {
 			$key = $user->getUID() . ':' . $userFolder->getEtag();
 			$paths = $this->nomediaPathsCache->get($key);
 			if ($paths === null) {
-				$search = $userFolder->search(new SearchQuery(new SearchBinaryOperator(ISearchBinaryOperator::OPERATOR_OR, [
+				$nameCondition = new SearchBinaryOperator(ISearchBinaryOperator::OPERATOR_OR, [
 					new SearchComparison(ISearchComparison::COMPARE_EQUAL, 'name', '.nomedia'),
 					new SearchComparison(ISearchComparison::COMPARE_EQUAL, 'name', '.noimage')
-				]), 0, 0, [], $user));
+				]);
+				// Optimisation: This will speed up the search as the size column has an index.
+				$sizeCondition = new SearchComparison(ISearchComparison::COMPARE_EQUAL, 'size', 0);
+				$search = $userFolder->search(
+					new SearchQuery(
+						new SearchBinaryOperator(ISearchBinaryOperator::OPERATOR_AND, [$nameCondition, $sizeCondition]),
+						0, 0, [], $user
+					),
+				);
 				$paths = array_map(fn (Node $node): string => substr(dirname($node->getPath()), strlen((string)$userFolder->getPath())), $search);
 				$this->nomediaPathsCache->set($key, $paths, 60 * 60 * 24 * 28); // 28 days
 			}
