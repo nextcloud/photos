@@ -64,6 +64,7 @@ OC.L10N.register(
     "Add to {destination}" : "{destination} قوش",
     "The destination folder is owned by {owner}" : "نىشان ھۆججەت قىسقۇچى {owner} نىڭ ئىگىدارچىلىقىدا",
     "There are no photos or videos yet!" : "ھازىرچە رەسىم ياكى سىن يوق!",
+    "_{years} year ago_::_{years} years ago_" : ["{years} يىل ئىلگىرى","{years} يىل ئىلگىرى"],
     "Enable squared photos view" : "كۋادرات رەسىم كۆرۈنۈشىنى قوزغىتىڭ",
     "Delete source directory" : "مەنبە مۇندەرىجىسىنى ئۆچۈرۈڭ",
     "Select a source folder for your media" : "مېدىياڭىزنىڭ مەنبە قىسقۇچىنى تاللاڭ",
