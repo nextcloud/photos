@@ -21,6 +21,7 @@ OC.L10N.register(
     "Mark selection as favorite" : "Маркиране на селекцията като любима",
     "Add selection to favorites" : "Добавяне на селекция към любими",
     "Remove selection from favorites" : "Премахване на селекция от любими",
+    "Invalid filename." : "Невалидно име на файл.",
     "Name of the album" : "Име на албума",
     "Location of the album" : "Местоположение на албума",
     "Back" : "Назад",
