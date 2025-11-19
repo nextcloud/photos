@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: Nextcloud GmbH and Nextcloud contributors
 
 This file is generated from multiple sources. Included packages:
 - @nextcloud/vue
-	- version: 8.30.0
+	- version: 8.34.0
 	- license: AGPL-3.0-or-later
 - photos
 	- version: 6.0.0-dev.0
