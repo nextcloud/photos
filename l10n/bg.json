@@ -19,6 +19,8 @@
     "Mark selection as favorite" : "Маркиране на селекцията като любима",
     "Add selection to favorites" : "Добавяне на селекция към любими",
     "Remove selection from favorites" : "Премахване на селекция от любими",
+    "This name is already in use." : "Това име вече се използва.",
+    "\"{char}\" is not allowed inside a filename." : "\"{char}\" не е разрешено в името на файла.",
     "Invalid filename." : "Невалидно име на файл.",
     "Name of the album" : "Име на албума",
     "Location of the album" : "Местоположение на албума",
