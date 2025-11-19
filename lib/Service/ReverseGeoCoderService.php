@@ -68,6 +68,10 @@ class ReverseGeoCoderService {
 	}
 
 	public function arePlacesEnabled(): bool {
+		if (!$this->config->getSystemValueBool('has_internet_connection', true)) {
+			/* This feature cannot work without internet access */
+			return false;
+		}
 		return ($this->config->getAppValue(Application::APP_ID, self::CONFIG_DISABLE_PLACES, '0') !== '1');
 	}
 
