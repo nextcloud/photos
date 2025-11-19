@@ -5,7 +5,7 @@
 
 <template>
 	<div class="photos-locations-container">
-		<div class="photos-locations">
+		<ul class="photos-locations">
 			<li
 				v-for="(source, index) in photosSourceFolders"
 				:key="index">
@@ -16,7 +16,7 @@
 					:root-folder-icon="FolderMultipleOutline"
 					@remove-folder="removeSourceFolder(index)" />
 			</li>
-		</div>
+		</ul>
 
 		<NcFormBox>
 			<NcFormBoxButton
