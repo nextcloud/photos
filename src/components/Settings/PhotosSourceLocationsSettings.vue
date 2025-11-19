@@ -18,14 +18,16 @@
 			</li>
 		</div>
 
-		<NcButton
-			:aria-label="t('photos', 'Add a Photos source for the timelines')"
-			@click="debounceAddSourceFolder">
-			<template #icon>
-				<Plus :size="20" />
-			</template>
-			{{ t('photos', 'Add folder') }}
-		</NcButton>
+		<NcFormBox>
+			<NcFormBoxButton
+				:aria-label="t('photos', 'Add a Photos source for the timelines')"
+				@click="debounceAddSourceFolder">
+				<template #icon>
+					<Plus :size="20" />
+				</template>
+				{{ t('photos', 'Add folder') }}
+			</NcFormBoxButton>
+		</NcFormBox>
 	</div>
 </template>
 
@@ -34,7 +36,8 @@ import { getFilePickerBuilder } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import debounce from 'debounce'
 import { defineComponent } from 'vue'
-import NcButton from '@nextcloud/vue/components/NcButton'
+import NcFormBox from '@nextcloud/vue/components/NcFormBox'
+import NcFormBoxButton from '@nextcloud/vue/components/NcFormBoxButton'
 import FolderMultipleOutline from 'vue-material-design-icons/FolderMultipleOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import PhotosFolder from './PhotosFolder.vue'
@@ -44,7 +47,8 @@ export default defineComponent({
 	name: 'PhotosSourceLocationsSettings',
 
 	components: {
-		NcButton,
+		NcFormBox,
+		NcFormBoxButton,
 		PhotosFolder,
 		Plus,
 	},
@@ -103,7 +107,6 @@ export default defineComponent({
 .photos-locations-container {
 	display: flex;
 	flex-direction: column;
-	width: fit-content;
 
 	.photos-locations {
 		margin-bottom: 16px;
