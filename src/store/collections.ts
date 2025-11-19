@@ -6,7 +6,7 @@
 import type { Collection } from '../services/collectionFetcher.ts'
 import type { PhotosContext } from './index.ts'
 
-import { showError } from '@nextcloud/dialogs'
+import { DialogSeverity, getDialogBuilder, showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
@@ -332,16 +332,63 @@ const actions = {
 	 * @param root0
 	 * @param root0.collectionFileName
 	 */
-	async deleteCollection(context: PhotosContext<CollectionState>, { collectionFileName }: { collectionFileName: string }) {
+	async deleteCollection(context: PhotosContext<CollectionState>, { collectionFileName }: { collectionFileName: string }): Promise<boolean> {
 		try {
+			// Collection file name looks like that: "/photos/<user-id>/albums/<album-name>"
+			const collectionRoot = collectionFileName.split('/')[3]
+			const collectionName = collectionFileName.split('/').splice(4).join('/')
+
+			let confirmTitle = t('photos', 'Delete collection')
+
+			switch (collectionRoot) {
+				case 'albums':
+					confirmTitle = t('photos', 'Delete album')
+					break
+				case 'sharedalbums':
+					confirmTitle = t('photos', 'Leave shared album')
+					break
+			}
+			const result = await confirmOperation(
+				confirmTitle,
+				t('photos', 'Are you sure you want to delete {collectionName}? This action cannot be undone.', { collectionName }),
+			)
+
+			if (!result) {
+				return false
+			}
+
 			const collection = context.state.collections[collectionFileName]
 			await davClient.deleteFile(collection.root + collection.path)
 			context.commit('removeCollections', { collectionFileNames: [collectionFileName] })
+			return true
 		} catch (error) {
 			logger.error(t('photos', 'Failed to delete {collectionFileName}', { collectionFileName }), { error })
 			showError(t('photos', 'Failed to delete {collectionFileName}', { collectionFileName }))
+			return false
 		}
 	},
+}
+
+export async function confirmOperation(name: string, text: string): Promise<boolean> {
+	let result = false
+	const dialog = getDialogBuilder(name)
+		.setText(text)
+		.setSeverity(DialogSeverity.Warning)
+		.addButton({
+			label: t('photos', 'Cancel'),
+			callback() {},
+		})
+		.addButton({
+			label: t('photos', 'Confirm'),
+			variant: 'error',
+			callback() {
+				result = true
+			},
+		})
+		.build()
+
+	await dialog.show()
+	return result
 }
 
 export default { state, mutations, getters, actions }

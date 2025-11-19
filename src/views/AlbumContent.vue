@@ -320,8 +320,10 @@ export default {
 		},
 
 		async handleDeleteAlbum() {
-			await this.$store.dispatch('deleteCollection', { collectionFileName: this.album?.root + this.album?.path })
-			this.$router.push('/albums')
+			const isDeleted = await this.$store.dispatch('deleteCollection', { collectionFileName: this.album?.root + this.album?.path })
+			if (isDeleted) {
+				this.$router.push('/albums')
+			}
 		},
 
 		async handleSetCollaborators(collaborators) {
