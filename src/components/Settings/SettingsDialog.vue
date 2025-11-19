@@ -8,6 +8,7 @@
 		:open="open"
 		:show-navigation="true"
 		:name="t('photos', 'Photos settings')"
+		:legacy="false"
 		@update:open="onClose">
 		<NcAppSettingsSection id="layout-settings" :name="t('photos', 'View')">
 			<CroppedLayoutSettings />

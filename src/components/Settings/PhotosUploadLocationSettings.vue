@@ -7,11 +7,16 @@
 	<div class="photos-location">
 		<PhotosFolder :path="photosLocation" :root-folder-label="t('photos', 'Home')" :root-folder-icon="HomeOutline" />
 
-		<NcButton
-			:aria-label="t('photos', 'Choose default Photos upload and Albums location')"
-			@click="debounceSelectPhotosFolder">
-			{{ t('photos', 'Choose a different folder') }}
-		</NcButton>
+		<NcFormBox>
+			<NcFormBoxButton
+				:aria-label="t('photos', 'Choose default Photos upload and Albums location')"
+				@click="debounceSelectPhotosFolder">
+				<template #icon>
+					<FolderEditOutline :size="20" />
+				</template>
+				{{ t('photos', 'Choose a different folder') }}
+			</NcFormBoxButton>
+		</NcFormBox>
 	</div>
 </template>
 
@@ -20,7 +25,9 @@ import { getFilePickerBuilder } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import debounce from 'debounce'
 import { defineComponent } from 'vue'
-import NcButton from '@nextcloud/vue/components/NcButton'
+import NcFormBox from '@nextcloud/vue/components/NcFormBox'
+import NcFormBoxButton from '@nextcloud/vue/components/NcFormBoxButton'
+import FolderEditOutline from 'vue-material-design-icons/FolderEditOutline.vue'
 import HomeOutline from 'vue-material-design-icons/HomeOutline.vue'
 import PhotosFolder from './PhotosFolder.vue'
 import logger from '../../services/logger.js'
@@ -29,8 +36,10 @@ export default defineComponent({
 	name: 'PhotosUploadLocationSettings',
 
 	components: {
-		NcButton,
+		NcFormBox,
+		NcFormBoxButton,
 		PhotosFolder,
+		FolderEditOutline,
 	},
 
 	data() {
@@ -83,7 +92,6 @@ export default defineComponent({
 .photos-location {
 	display: flex;
 	flex-direction: column;
-	width: fit-content;
 
 	.folder {
 		margin-bottom: 16px;
