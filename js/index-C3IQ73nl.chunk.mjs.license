@@ -1,0 +1,7 @@
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: Arnout Kazemier
+
+This file is generated from multiple sources. Included packages:
+- eventemitter3
+	- version: 5.0.1
+	- license: MIT

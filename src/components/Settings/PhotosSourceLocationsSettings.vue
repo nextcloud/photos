@@ -4,8 +4,15 @@
 -->
 
 <template>
-	<div class="photos-locations-container">
-		<ul class="photos-locations">
+	<div class="photos-locations">
+		<div class="photos-locations__title">
+			{{ t('photos', 'Media folders') }}
+		</div>
+		<div class="photos-locations__description">
+			{{ t('photos', 'Choose the folders from where photos and videos are shown.') }}
+		</div>
+
+		<ul class="photos-locations__list">
 			<li
 				v-for="(source, index) in photosSourceFolders"
 				:key="index">
@@ -18,16 +25,15 @@
 			</li>
 		</ul>
 
-		<NcFormBox>
-			<NcFormBoxButton
-				:aria-label="t('photos', 'Add a Photos source for the timelines')"
-				@click="debounceAddSourceFolder">
-				<template #icon>
-					<Plus :size="20" />
-				</template>
-				{{ t('photos', 'Add folder') }}
-			</NcFormBoxButton>
-		</NcFormBox>
+		<NcButton
+			:aria-label="t('photos', 'Add a Photos source for the timelines')"
+			:wide="true"
+			@click="debounceAddSourceFolder">
+			<template #icon>
+				<Plus :size="20" />
+			</template>
+			{{ t('photos', 'Add folder') }}
+		</NcButton>
 	</div>
 </template>
 
@@ -36,8 +42,7 @@ import { getFilePickerBuilder } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import debounce from 'debounce'
 import { defineComponent } from 'vue'
-import NcFormBox from '@nextcloud/vue/components/NcFormBox'
-import NcFormBoxButton from '@nextcloud/vue/components/NcFormBoxButton'
+import NcButton from '@nextcloud/vue/components/NcButton'
 import FolderMultipleOutline from 'vue-material-design-icons/FolderMultipleOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import PhotosFolder from './PhotosFolder.vue'
@@ -47,8 +52,7 @@ export default defineComponent({
 	name: 'PhotosSourceLocationsSettings',
 
 	components: {
-		NcFormBox,
-		NcFormBoxButton,
+		NcButton,
 		PhotosFolder,
 		Plus,
 	},
@@ -104,12 +108,20 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.photos-locations-container {
-	display: flex;
-	flex-direction: column;
+.photos-locations {
+	&__title {
+		padding-inline-start: 12px;
+		font-weight: bold;
+	}
 
-	.photos-locations {
-		margin-bottom: 16px;
+	&__description {
+		padding-inline-start: 12px;
+		color: var(--color-text-lighter);
+	}
+
+	&__list {
+		padding-inline-start: 12px;
+		margin: 16px 0;
 
 		li {
 			list-style: none;
