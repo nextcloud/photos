@@ -23,10 +23,6 @@
 		</NcAppSettingsSection>
 
 		<NcAppSettingsSection id="upload-directory-settings" :name="t('photos', 'Upload folder')">
-			<div class="setting-section-subline">
-				{{ t('photos', 'Choose the folder where photos and albums are uploaded to.') }}
-			</div>
-
 			<PhotosUploadLocationSettings />
 		</NcAppSettingsSection>
 	</NcAppSettingsDialog>

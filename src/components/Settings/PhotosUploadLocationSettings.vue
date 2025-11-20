@@ -5,16 +5,15 @@
 
 <template>
 	<div class="photos-location">
-		<PhotosFolder :path="photosLocation" :root-folder-label="t('photos', 'Home')" :root-folder-icon="HomeOutline" />
-
 		<NcFormBox>
 			<NcFormBoxButton
-				:aria-label="t('photos', 'Choose default Photos upload and Albums location')"
+				:description="photosLocationName"
+				:inverted-accent="true"
 				@click="debounceSelectPhotosFolder">
 				<template #icon>
-					<FolderEditOutline :size="20" />
+					<FolderOpenOutline :size="20" />
 				</template>
-				{{ t('photos', 'Choose a different folder') }}
+				{{ t('photos', 'Upload folder') }}
 			</NcFormBoxButton>
 		</NcFormBox>
 	</div>
@@ -27,9 +26,8 @@ import debounce from 'debounce'
 import { defineComponent } from 'vue'
 import NcFormBox from '@nextcloud/vue/components/NcFormBox'
 import NcFormBoxButton from '@nextcloud/vue/components/NcFormBoxButton'
-import FolderEditOutline from 'vue-material-design-icons/FolderEditOutline.vue'
+import FolderOpenOutline from 'vue-material-design-icons/FolderOpenOutline.vue'
 import HomeOutline from 'vue-material-design-icons/HomeOutline.vue'
-import PhotosFolder from './PhotosFolder.vue'
 import logger from '../../services/logger.js'
 
 export default defineComponent({
@@ -38,8 +36,7 @@ export default defineComponent({
 	components: {
 		NcFormBox,
 		NcFormBoxButton,
-		PhotosFolder,
-		FolderEditOutline,
+		FolderOpenOutline,
 	},
 
 	data() {
@@ -51,6 +48,15 @@ export default defineComponent({
 	computed: {
 		photosLocation(): string {
 			return this.$store.state.userConfig.photosLocation
+		},
+
+		photosLocationName(): string {
+			switch (this.photosLocation) {
+				case '/':
+					return t('photos', 'Home')
+				default:
+					return this.photosLocation
+			}
 		},
 	},
 
