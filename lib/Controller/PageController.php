@@ -69,7 +69,7 @@ class PageController extends Controller {
 		$this->userSession = $userSession;
 		$this->rootFolder = $rootFolder;
 		$this->cacheFactory = $cacheFactory;
-		$this->nomediaPathsCache = $this->cacheFactory->createLocal('photos:nomedia-paths');
+		$this->nomediaPathsCache = $this->cacheFactory->createDistributed('photos:nomedia-paths');
 		$this->l10n = $l10n;
 	}
 
