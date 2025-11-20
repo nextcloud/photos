@@ -46,7 +46,7 @@
     "@mdi/svg": "^7.4.47",
     "@nextcloud/auth": "^2.1.0",
     "@nextcloud/axios": "^2.1.0",
-    "@nextcloud/dialogs": "^6.1.1",
+    "@nextcloud/dialogs": "^6.4.1",
     "@nextcloud/eslint-config": "^9.0.0-rc.5",
     "@nextcloud/event-bus": "^3.1.0",
     "@nextcloud/files": "^3.10.2",
