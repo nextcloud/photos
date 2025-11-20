@@ -6,24 +6,13 @@
 <template>
 	<NcAppSettingsDialog
 		:open="open"
-		:show-navigation="true"
 		:name="t('photos', 'Photos settings')"
 		:legacy="false"
 		@update:open="onClose">
-		<NcAppSettingsSection id="layout-settings" :name="t('photos', 'View')">
-			<CroppedLayoutSettings />
-		</NcAppSettingsSection>
-
-		<NcAppSettingsSection id="source-directories-settings" :name="t('photos', 'Media folders')">
-			<div class="setting-section-subline">
-				{{ t('photos', 'Choose the folders from where photos and videos are shown.') }}
-			</div>
-
+		<NcAppSettingsSection id="layout-settings" :name="t('photos', 'General')">
 			<PhotosSourceLocationsSettings />
-		</NcAppSettingsSection>
-
-		<NcAppSettingsSection id="upload-directory-settings" :name="t('photos', 'Upload folder')">
 			<PhotosUploadLocationSettings />
+			<CroppedLayoutSettings />
 		</NcAppSettingsSection>
 	</NcAppSettingsDialog>
 </template>
@@ -65,12 +54,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="scss">
-.app-settings {
-	.setting-section-subline {
-		color: var(--color-text-lighter);
-		margin-bottom: 8px;
-	}
-}
-</style>

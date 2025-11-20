@@ -4,8 +4,15 @@
 -->
 
 <template>
-	<div>
-		<ul class="photos-locations">
+	<div class="photos-locations">
+		<div class="photos-locations__title">
+			{{ t('photos', 'Media folders') }}
+		</div>
+		<div class="photos-locations__description">
+			{{ t('photos', 'Choose the folders from where photos and videos are shown.') }}
+		</div>
+
+		<ul class="photos-locations__list">
 			<li
 				v-for="(source, index) in photosSourceFolders"
 				:key="index">
@@ -102,10 +109,23 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .photos-locations {
-	margin-bottom: 16px;
+	&__title {
+		padding-inline-start: 12px;
+		font-weight: bold;
+	}
 
-	li {
-		list-style: none;
+	&__description {
+		padding-inline-start: 12px;
+		color: var(--color-text-lighter);
+	}
+
+	&__list {
+		padding-inline-start: 12px;
+		margin: 16px 0;
+
+		li {
+			list-style: none;
+		}
 	}
 }
 </style>
