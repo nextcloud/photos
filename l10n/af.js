@@ -16,10 +16,10 @@ OC.L10N.register(
     "Go back" : "Gaan terug",
     "Add folder" : "Voeg 'n gids by",
     "Home" : "Tuis",
-    "View" : "Bekyk",
     "Remove from favorites" : "Verwyder uit gunstelinge",
     "Loading folders…" : "Laai tans gidse...",
     "Details" : "Besonderhede",
+    "View" : "Bekyk",
     "Add" : "Voeg by"
 },
 "nplurals=2; plural=(n != 1);");

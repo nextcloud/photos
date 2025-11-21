@@ -25,10 +25,8 @@ OC.L10N.register(
     "Favorite" : "Preferidu",
     "Open the full size \"{name}\" image" : "Aberi s'immàgine \"{name}\" a mannària prena",
     "Go back" : "In segus",
-    "Enable squared photos view" : "Ativa sa visualizatzione a fotos cuadradas",
     "All folders" : "Totu is cartellas",
     "Home" : "Pàgina printzipale",
-    "View" : "Visualiza",
     "Unselect all" : "Deseletziona totu",
     "Remove from favorites" : "Boga·nche dae preferidos",
     "This folder does not exist" : "Custa cartella no esistit",
@@ -42,6 +40,8 @@ OC.L10N.register(
     "Group" : "Grupu",
     "Back to {folder}" : "Torra a {folder}",
     "Share this folder" : "Cumpartzi custa cartella",
+    "Enable squared photos view" : "Ativa sa visualizatzione a fotos cuadradas",
+    "View" : "Visualiza",
     "Add" : "Agiunghe"
 },
 "nplurals=2; plural=(n != 1);");

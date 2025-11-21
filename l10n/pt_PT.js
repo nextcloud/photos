@@ -42,9 +42,8 @@ OC.L10N.register(
     "Favorite" : "Favorito",
     "Open the full size \"{name}\" image" : "Abrir a foto \"{name}\" no tamanho original",
     "Go back" : "Voltar",
-    "Enable squared photos view" : "Ativar vista de fotos quadradas",
     "Home" : "Início",
-    "View" : "Ver",
+    "General" : "Geral",
     "Unselect all" : "Remover seleção",
     "Edit album details" : "Edit album details",
     "Save collaborators for this album." : "Save collaborators for this album.",
@@ -66,6 +65,8 @@ OC.L10N.register(
     "Remove {collaboratorLabel} from the collaborators list" : "Remove {collaboratorLabel} from the collaborators list",
     "Back to {folder}" : "Ir para {folder}",
     "Share this folder" : "Partilhar esta pasta",
+    "Enable squared photos view" : "Ativar vista de fotos quadradas",
+    "View" : "Ver",
     "Add" : "Adicionar"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
