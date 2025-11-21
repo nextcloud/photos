@@ -14,6 +14,7 @@ OC.L10N.register(
     "Go back" : "უკან დაბრუნება",
     "Dates" : "თარიღები",
     "Home" : "სახლი",
+    "General" : "ზოგადი",
     "Remove from favorites" : "რჩეულებიდან ამოშლა",
     "Details" : "დეტალები",
     "Add" : "დამატება"

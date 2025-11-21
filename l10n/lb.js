@@ -11,6 +11,7 @@ OC.L10N.register(
     "Favorite" : "Favorit",
     "Go back" : "Zeréckgoen",
     "Home" : "Doheem",
+    "General" : "Allgemeng",
     "Remove from favorites" : "Remove from favorites",
     "Details" : "Detailer",
     "Group" : "Grupp",

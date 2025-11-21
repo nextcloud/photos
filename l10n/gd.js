@@ -8,6 +8,7 @@ OC.L10N.register(
     "Save" : "Sàbhail",
     "Favorite" : "Annsachd",
     "Home" : "Dachaigh",
+    "General" : "Coitcheann",
     "Last week" : "An t-seachdain seo chaidh",
     "Details" : "Mion-fhiosrachadh"
 },

@@ -22,10 +22,9 @@ OC.L10N.register(
     "Favorite" : "Ưa thích",
     "Open the full size \"{name}\" image" : "Mở kích thước đủ của ảnh \"{name}\"",
     "Go back" : "Quay lại",
-    "Enable squared photos view" : "Bật chế độ xem theo ô",
     "All folders" : "All folders",
     "Home" : "Trang chủ",
-    "View" : "Xem",
+    "General" : "Cài đặt chung",
     "Unselect all" : "Bỏ chọn tất cả",
     "Remove from favorites" : "Xóa khỏi ưa thích",
     "This folder does not exist" : "Thư mục này không tồn tại",
@@ -39,6 +38,8 @@ OC.L10N.register(
     "Group" : "Nhóm",
     "Back to {folder}" : "Trở về {folder}",
     "Share this folder" : "Chia sẻ thư mục này",
+    "Enable squared photos view" : "Bật chế độ xem theo ô",
+    "View" : "Xem",
     "Add" : "Thêm"
 },
 "nplurals=1; plural=0;");

@@ -19,10 +19,9 @@ OC.L10N.register(
     "Favorite" : "Favorit",
     "Open the full size \"{name}\" image" : "Otvori sliku „{name}” u punoj veličini",
     "Go back" : "Natrag",
-    "Enable squared photos view" : "Omogući kvadratni prikaz fotografija",
     "Add folder" : "Dodaj mapu",
     "Home" : "Doma",
-    "View" : "Pregledaj",
+    "General" : "Općenito",
     "Remove from favorites" : "Ukloni iz favorita",
     "This folder does not exist" : "Ova mapa ne postoji",
     "No photos in here" : "Ovdje nema fotografija",
@@ -34,6 +33,8 @@ OC.L10N.register(
     "Details" : "Pojedinosti",
     "Back to {folder}" : "Natrag na {folder}",
     "Share this folder" : "Dijeli ovu mapu",
+    "Enable squared photos view" : "Omogući kvadratni prikaz fotografija",
+    "View" : "Pregledaj",
     "Add" : "Dodaj"
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");

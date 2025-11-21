@@ -20,9 +20,8 @@ OC.L10N.register(
     "Open the full size \"{name}\" image" : "Abrir imagen a tamaño completo \"{nombre}\"",
     "Go back" : "Regresar",
     "_{years} year ago_::_{years} years ago_" : ["Hace {years} año","Hace {years} años","Hace {years} años"],
-    "Enable squared photos view" : "Habilitar vista de fotos cuadradas",
     "Home" : "Casa",
-    "View" : "Ver",
+    "General" : "General",
     "Remove from favorites" : "Eliminado de favoritos",
     "This folder does not exist" : "Esta carpeta no existe",
     "Loading folders…" : "Cargando carpetas…",
@@ -34,6 +33,8 @@ OC.L10N.register(
     "Group" : "Grupo",
     "Back to {folder}" : "Volver a {carpeta}",
     "Share this folder" : "Compartir esta carpeta",
+    "Enable squared photos view" : "Habilitar vista de fotos cuadradas",
+    "View" : "Ver",
     "Add" : "Añadir"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

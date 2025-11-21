@@ -18,12 +18,13 @@ OC.L10N.register(
     "An error occurred" : "A apărut o eraore",
     "Favorite" : "Favorite",
     "Go back" : "Înapoi",
-    "View" : "Vizualizare",
+    "General" : "General",
     "Unselect all" : "Deselectează tot",
     "Remove from favorites" : "Șterge din favorite",
     "Loading folders…" : "Încărcare dosare…",
     "Details" : "Detalii",
     "Group" : "Grup",
+    "View" : "Vizualizare",
     "Add" : "Adaugă"
 },
 "nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));");

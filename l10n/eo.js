@@ -18,12 +18,13 @@ OC.L10N.register(
     "Go back" : "Reveni",
     "Add folder" : "Aldoni dosierujon",
     "Home" : "Hejmo",
-    "View" : "Vidi",
+    "General" : "Ĝenerala",
     "Remove from favorites" : "Forigi el pliŝataĵoj",
     "Loading folders…" : "Ŝargado de dosierujoj...",
     "Delete selection" : "Forigi elekton",
     "Details" : "Detaloj",
     "Group" : "Grupo",
+    "View" : "Vidi",
     "Add" : "Aldoni"
 },
 "nplurals=2; plural=(n != 1);");
