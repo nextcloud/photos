@@ -57,10 +57,9 @@ OC.L10N.register(
     "Jump to {date}" : "לקפוץ ל{date}",
     "Add to {destination}" : "הוספה ל{destination}",
     "There are no photos or videos yet!" : "אין עדיין תמונות וקטעי ווידאו",
-    "Enable squared photos view" : "הפעלת תצוגת תמונות מרובעות",
     "All folders" : "כל התיקיות",
     "Add folder" : "הוספת תיקייה",
-    "View" : "צפייה",
+    "General" : "כללי",
     "Remove from favorites" : "הסרה מהמועדפים",
     "Loading folders…" : "התיקיות נטענות…",
     "No photos in here" : "אין כאן תמונות",
@@ -76,6 +75,8 @@ OC.L10N.register(
     "Remove {collaboratorLabel} from the collaborators list" : "הסר את {collaboratorLabel} מרשימת השותפים",
     "Back to {folder}" : "חזרה אל {folder}",
     "Share this folder" : "שיתוף התיקייה הזו",
+    "Enable squared photos view" : "הפעלת תצוגת תמונות מרובעות",
+    "View" : "צפייה",
     "Add" : "הוספה"
 },
 "nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");

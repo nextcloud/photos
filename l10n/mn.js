@@ -13,6 +13,7 @@ OC.L10N.register(
     "Favorite" : "Дуртай",
     "Go back" : "Буцах",
     "Home" : "Нүүр",
+    "General" : "ерөнхий",
     "Remove from favorites" : "Remove from favorites",
     "Details" : "Дэлгэрэнгүй",
     "Add" : "нэмэх"

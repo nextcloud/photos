@@ -32,9 +32,8 @@ OC.L10N.register(
     "Favorite" : "รายการโปรด",
     "Open the full size \"{name}\" image" : "เปิดรูปภาพขนาดเต็ม \"{name}\"",
     "Go back" : "กลับไป",
-    "Enable squared photos view" : "เปิดมุมมองรูปภาพสี่เหลี่ยม",
     "Home" : "หน้าหลัก",
-    "View" : "มุมมอง",
+    "General" : "ทั่วไป",
     "Remove from favorites" : "เอาออกจากรายการโปรด",
     "Save." : "บันทึก",
     "This folder does not exist" : "ไม่มีโฟลเดอร์นี้",
@@ -47,6 +46,8 @@ OC.L10N.register(
     "Group" : "กลุ่ม",
     "Back to {folder}" : "กลับไปยัง {folder}",
     "Share this folder" : "แชร์โฟลเดอร์นี้",
+    "Enable squared photos view" : "เปิดมุมมองรูปภาพสี่เหลี่ยม",
+    "View" : "มุมมอง",
     "Add" : "เพิ่ม"
 },
 "nplurals=1; plural=0;");

@@ -15,6 +15,7 @@ OC.L10N.register(
     "Go back" : "Regresar",
     "Dates" : "Fechas",
     "Home" : "Inicio",
+    "General" : "General",
     "Remove from favorites" : "Eliminar de favoritos",
     "Loading folders…" : "Cargando carpetas…",
     "Details" : "Detalles",

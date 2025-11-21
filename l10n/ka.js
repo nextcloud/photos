@@ -17,12 +17,13 @@ OC.L10N.register(
     "Favorite" : "Favorite",
     "Go back" : "Go back",
     "Home" : "მთავარი",
-    "View" : "View",
+    "General" : "General",
     "Unselect all" : "Unselect all",
     "Remove from favorites" : "Remove from favorites",
     "Last week" : "Last week",
     "Details" : "Details",
     "Group" : "Group",
+    "View" : "View",
     "Add" : "Add"
 },
 "nplurals=2; plural=(n!=1);");

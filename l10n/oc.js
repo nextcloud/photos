@@ -17,8 +17,7 @@ OC.L10N.register(
     "Favorite" : "Favorit",
     "Open the full size \"{name}\" image" : "Dobrir l’imatge {name} en talha originala",
     "Go back" : "Revenir en arrière",
-    "Enable squared photos view" : "Activar la vista amb fòtos carrat",
-    "View" : "Vista",
+    "General" : "Generals",
     "Rename person" : "Renomenar la persona",
     "Remove from favorites" : "Tirar dels favorits",
     "This folder does not exist" : "Aqueste dossièr existís pas",
@@ -31,6 +30,8 @@ OC.L10N.register(
     "Group" : "Grop",
     "Back to {folder}" : "Tornar a {folder}",
     "Share this folder" : "Partejar aqueste dossièr",
+    "Enable squared photos view" : "Activar la vista amb fòtos carrat",
+    "View" : "Vista",
     "Add" : "Apondre"
 },
 "nplurals=2; plural=(n > 1);");

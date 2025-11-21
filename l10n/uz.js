@@ -14,11 +14,12 @@ OC.L10N.register(
     "Favorite" : "Favorite",
     "Add to {destination}" : " {destination}ni qo`shish",
     "Home" : "Home",
-    "View" : "Ko'rish",
+    "General" : "Umumiy",
     "Remove from favorites" : "Sevimlilardan olib tashlang",
     "Last week" : "O`tgan yil",
     "Details" : "Details",
     "Back to {folder}" : "{folder}ga qaytish",
+    "View" : "Ko'rish",
     "Add" : "Add"
 },
 "nplurals=1; plural=0;");

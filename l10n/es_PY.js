@@ -17,6 +17,7 @@ OC.L10N.register(
     "Go back" : "Regresar",
     "Dates" : "Fechas",
     "Home" : "Inicio",
+    "General" : "General",
     "Remove from favorites" : "Eliminar de favoritos",
     "No photos in here" : "No hay fotos aquí",
     "No tags yet" : "Aún no hay etiquetas",

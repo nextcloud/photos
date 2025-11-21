@@ -36,11 +36,10 @@ OC.L10N.register(
     "Go back" : "Atpakaļ",
     "Dates" : "Datumi",
     "_{years} year ago_::_{years} years ago_" : ["pirms {years} gadiem","pirms {years} gada","pirms {years} gadiem"],
+    "Choose the folders from where photos and videos are shown." : "Izvēlēties mapes, no kurām tiek rādīti fotoattēli un video.",
     "Add folder" : "Pievienot mapi",
     "Home" : "Sākums",
-    "View" : "Skats",
-    "Choose the folders from where photos and videos are shown." : "Izvēlēties mapes, no kurām tiek rādīti fotoattēli un video.",
-    "Choose the folder where photos and albums are uploaded to." : "Izvēlēties mapi, kurā tiek augšupielādēti fotoattēli un albumi.",
+    "General" : "Vispārīgi",
     "Add photos to this album" : "Pievienot šim albumam fotoattēlus",
     "Open actions menu" : "Atvērt darbību izvēlni",
     "Edit album details" : "Labot albuma datus",
@@ -66,6 +65,8 @@ OC.L10N.register(
     "Failed to delete {fileName}" : "Neizdevās izdzēst {fileName}",
     "Could not load photos folder" : "Nevarēja ielādēt fotoattēlu mapi",
     "Group" : "Grupa",
+    "View" : "Skats",
+    "Choose the folder where photos and albums are uploaded to." : "Izvēlēties mapi, kurā tiek augšupielādēti fotoattēli un albumi.",
     "Add" : "Pievienot"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");
