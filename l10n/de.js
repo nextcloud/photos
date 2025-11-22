@@ -72,6 +72,7 @@ OC.L10N.register(
     "The destination folder is owned by {owner}" : "Der Zielordner gehört {owner}",
     "There are no photos or videos yet!" : "Es gibt noch keine Fotos oder Videos!",
     "_{years} year ago_::_{years} years ago_" : ["Vor {years} Jahr","Vor {years} Jahren"],
+    "Squared photos view" : "Quadratische Fotoansicht",
     "Delete source directory" : "Quellverzeichnis löschen",
     "Pick folder" : "Ordner auswählen",
     "Select a source folder for your media" : "Quellordner für deine Medien wählen",

@@ -72,6 +72,7 @@ OC.L10N.register(
     "The destination folder is owned by {owner}" : "Sihtkausta omanik on {owner}",
     "There are no photos or videos yet!" : "Ühtegi fotot ega videot pole veel!",
     "_{years} year ago_::_{years} years ago_" : ["{years} aasta tagasi","{years} aastat tagasi"],
+    "Squared photos view" : "Piltide ruudustikuvaade",
     "Delete source directory" : "Kustuta lähtekaust",
     "Pick folder" : "Vali kaust",
     "Select a source folder for your media" : "Vali oma meediale lähtekaust",

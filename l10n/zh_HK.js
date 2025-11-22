@@ -72,6 +72,7 @@ OC.L10N.register(
     "The destination folder is owned by {owner}" : "目標資料夾為 {owner} 擁有",
     "There are no photos or videos yet!" : "還沒有照片或視像！",
     "_{years} year ago_::_{years} years ago_" : ["{years} 年前"],
+    "Squared photos view" : "方形照片檢視",
     "Delete source directory" : "刪除來源目錄",
     "Pick folder" : "挑選資料夾",
     "Select a source folder for your media" : "選擇您媒體的來源資料夾",
