@@ -1,0 +1,2 @@
+import{h as s,V as d,f as i}from"./preload-helper-3AjuMuUS.chunk.mjs";function l(o,r,t=!1){const e=s().proxy;return t&&e.$props[o]===void 0&&e.$props.modelValue===void 0&&d.util.warn(`Missing required prop: "modelValue" or old "${o}"`),i({get(){return e.$props[o]!==void 0?e.$props[o]:e.$props.modelValue},set(p){e.$emit("update:modelValue",p),e.$emit("update:model-value",p),e.$emit(r,p)}})}export{l as u};
+//# sourceMappingURL=useModelMigration-EhAWvqDD-kTTXbVGW.chunk.mjs.map
