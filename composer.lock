@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "12ae69d73d890284a0cfe91f63a36799",
+    "content-hash": "0d8d1383e3571fd6e215b2241751d294",
     "packages": [
         {
             "name": "hexogen/kdtree",
@@ -209,16 +209,16 @@
         },
         {
             "name": "woltlab/webp-exif",
-            "version": "v0.1.1",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WoltLab/webp-exif.git",
-                "reference": "5056d7114b3622dcd5b655340fdeaac01598997a"
+                "reference": "6bc88266f538380bbb68b5b0a45a76fb3ec23650"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WoltLab/webp-exif/zipball/5056d7114b3622dcd5b655340fdeaac01598997a",
-                "reference": "5056d7114b3622dcd5b655340fdeaac01598997a",
+                "url": "https://api.github.com/repos/WoltLab/webp-exif/zipball/6bc88266f538380bbb68b5b0a45a76fb3ec23650",
+                "reference": "6bc88266f538380bbb68b5b0a45a76fb3ec23650",
                 "shasum": ""
             },
             "require": {
@@ -253,9 +253,9 @@
             ],
             "support": {
                 "issues": "https://github.com/WoltLab/webp-exif/issues",
-                "source": "https://github.com/WoltLab/webp-exif/tree/v0.1.1"
+                "source": "https://github.com/WoltLab/webp-exif/tree/v0.1.2"
             },
-            "time": "2025-07-20T11:37:11+00:00"
+            "time": "2025-11-17T15:29:03+00:00"
         }
     ],
     "packages-dev": [
