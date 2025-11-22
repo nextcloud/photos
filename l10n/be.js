@@ -83,6 +83,7 @@ OC.L10N.register(
     "Home" : "Дадому",
     "Select the default upload location for your media" : "Выберыце прадвызначанае размяшчэнне для запампаваных медыя",
     "Upload folder" : "Папка для запамповак",
+    "General" : "Агульныя",
     "_%n photo_::_%n photos_" : ["%n фота","%n фота","%n фота","%n фота"],
     "Unselect all" : "Скасаваць выбар усіх",
     "Add photos to this album" : "Дадаць фота ў альбом",

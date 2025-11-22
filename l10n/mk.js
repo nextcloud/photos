@@ -72,6 +72,7 @@ OC.L10N.register(
     "The destination folder is owned by {owner}" : "Папката е во сопственост на {owner}",
     "There are no photos or videos yet!" : "Овде сеуште нема фотографии и видеа!",
     "_{years} year ago_::_{years} years ago_" : ["пред 1 година","пред {years} години"],
+    "Squared photos view" : "Поглед на фотографиите во квадрати",
     "Delete source directory" : "Избриши ја изворната папка",
     "Pick folder" : "Избери папка",
     "Select a source folder for your media" : "Избери изворна папка за твоите медиуми",

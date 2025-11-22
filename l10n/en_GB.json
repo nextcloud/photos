@@ -70,6 +70,7 @@
     "The destination folder is owned by {owner}" : "The destination folder is owned by {owner}",
     "There are no photos or videos yet!" : "There are no photos or videos yet!",
     "_{years} year ago_::_{years} years ago_" : ["{years} year ago","{years} years ago"],
+    "Squared photos view" : "Squared photos view",
     "Delete source directory" : "Delete source directory",
     "Pick folder" : "Pick folder",
     "Select a source folder for your media" : "Select a source folder for your media",
