@@ -74,6 +74,7 @@ OC.L10N.register(
     "Home" : "Aniciu",
     "Select the default upload location for your media" : "Seleiciona la llocalización de xuba predeterminada pa los elementos multimedia",
     "Upload folder" : "Carpeta de xuba",
+    "General" : "Xeneral",
     "_%n photo_::_%n photos_" : ["%n semeya","%n semeyes"],
     "Unselect all" : "Deseleicionar too",
     "Add photos to this album" : "Amestar semeyes a esti álbum",

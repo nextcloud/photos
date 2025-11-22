@@ -72,6 +72,7 @@ OC.L10N.register(
     "The destination folder is owned by {owner}" : "Cílová složka je vlastněna {owner}",
     "There are no photos or videos yet!" : "Zatím zde nejsou žádné fotky či videa!",
     "_{years} year ago_::_{years} years ago_" : ["Před {years} rokem","Před {years} roky","Před {years} lety","Před {years} roky"],
+    "Squared photos view" : "Čtvercové zobrazení fotek",
     "Delete source directory" : "Smazat zdrojovou složku",
     "Pick folder" : "Vybrat složku",
     "Select a source folder for your media" : "Vyberte zdrojovou složku pro svá média",

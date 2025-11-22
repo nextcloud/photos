@@ -79,6 +79,7 @@ OC.L10N.register(
     "Home" : "الرئيسية",
     "Select the default upload location for your media" : "إختَر موضع الرفع التلقائي للوسائط",
     "Upload folder" : "مجلد الرفع",
+    "General" : "عامٌّ",
     "_%n photo_::_%n photos_" : ["%n صور","%n صورة","%n صور","%n صور","%n صور","%n صور"],
     "Unselect all" : "إلغاء الاختيار للكل",
     "Add photos to this album" : "إضِف صوراً إلى هذا الألبوم",
