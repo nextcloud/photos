@@ -70,6 +70,7 @@
     "The destination folder is owned by {owner}" : "Målmappen ägs av {owner}",
     "There are no photos or videos yet!" : "Det finns inga bilder eller videor än!",
     "_{years} year ago_::_{years} years ago_" : ["{years} år sedan","{years} år sedan"],
+    "Squared photos view" : "Kvadratisk fotovy",
     "Delete source directory" : "Ta bort källkatalog",
     "Pick folder" : "Välj mapp",
     "Select a source folder for your media" : "Välj en källmapp för ditt media",
