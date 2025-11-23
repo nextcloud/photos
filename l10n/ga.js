@@ -72,6 +72,7 @@ OC.L10N.register(
     "The destination folder is owned by {owner}" : "Is le {owner} an fillteán sprice",
     "There are no photos or videos yet!" : "Níl aon ghrianghraif nó físeáin ann fós!",
     "_{years} year ago_::_{years} years ago_" : ["{years} bliain ó shin","{years} bliaina ó shin","{years} bliaina ó shin","{years} bliaina ó shin","{years} bliaina ó shin"],
+    "Squared photos view" : "Radharc grianghraf cearnógach",
     "Delete source directory" : "Scrios eolaire foinse",
     "Pick folder" : "Pioc fillteán",
     "Select a source folder for your media" : "Roghnaigh fillteán foinse do na meáin",
