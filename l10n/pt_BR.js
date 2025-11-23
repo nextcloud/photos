@@ -72,6 +72,7 @@ OC.L10N.register(
     "The destination folder is owned by {owner}" : "A pasta de destino pertence a {owner}",
     "There are no photos or videos yet!" : "Ainda não há fotos ou vídeos!",
     "_{years} year ago_::_{years} years ago_" : ["há {years} ano","há {years} anos","há {years} anos"],
+    "Squared photos view" : "Visualização de fotos quadradas",
     "Delete source directory" : "Excluir diretório de origem",
     "Pick folder" : "Selecionar pasta",
     "Select a source folder for your media" : "Selecione uma pasta de origem para sua mídia",
