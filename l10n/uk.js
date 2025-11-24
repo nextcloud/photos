@@ -72,6 +72,7 @@ OC.L10N.register(
     "The destination folder is owned by {owner}" : "Власником каталогу призначення є {owner}",
     "There are no photos or videos yet!" : "Ще немає фото чи відео!",
     "_{years} year ago_::_{years} years ago_" : ["{years} рік тому","{years} років тому","{years} років тому","{years} років тому"],
+    "Squared photos view" : "Прямокутний вигляд фото",
     "Delete source directory" : "Вилучити каталог джерела",
     "Pick folder" : "Вибрати каталог",
     "Select a source folder for your media" : "Виберіть каталог джерела для ваших світлин чи відеозаписів",
