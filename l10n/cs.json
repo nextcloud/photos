@@ -114,7 +114,7 @@
     "This might take some time depending on the size of your photo library." : "Toto může zabrat nějakou dobu v závislosti na velikosti vaší knihovny fotek.",
     "Recognized people will show up here" : "Rozpoznaní lidé se zobrazí zde",
     "This folder does not exist" : "Tato složka neexistuje",
-    "Loading folders…" : "Načítání složek…",
+    "Loading folders…" : "Načítání složek …",
     "No photos in here" : "Tady nejsou žádné fotky",
     "Taken on {date} at {time}" : "Pořízeno {date} v {time}",
     "This place does not have any photos or videos yet!" : "Toto umístění zatím nemá ještě žádné fotky nebo videa!",
@@ -148,7 +148,7 @@
     "{title}'s face" : "Obličej {title}",
     "Last week" : "Uplynulý týden",
     "Last Month" : "Uplynulý měsíc",
-    "Custom…" : "Uživatelsky určené…",
+    "Custom…" : "Uživatelsky určené …",
     "{startDate} to {endDate}" : "{startDate} až {endDate}",
     "Details" : "Podrobnosti",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Nepodařilo se přidat {fileBaseName} do sbírky {collectionFileName}",
@@ -175,7 +175,7 @@
     "Choose a different folder" : "Vyberte jinou složku",
     "View" : "Zobrazit",
     "Choose the folder where photos and albums are uploaded to." : "Zvolte složku do které nahrávat fotky a alba.",
-    "Loading folders …" : "Načítání složek…",
+    "Loading folders …" : "Načítání složek …",
     "Add" : "Přidat"
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;"
 }
