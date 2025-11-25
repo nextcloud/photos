@@ -1,0 +1,33 @@
+SPDX-License-Identifier: AGPL-3.0-or-later
+SPDX-License-Identifier: Apache-2.0
+SPDX-License-Identifier: GPL-3.0-or-later
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: @nextcloud/dialogs developers
+SPDX-FileCopyrightText: Anthony Fu <https://github.com/antfu>
+SPDX-FileCopyrightText: Austin Andrews
+SPDX-FileCopyrightText: Nextcloud GmbH and Nextcloud contributors
+SPDX-FileCopyrightText: Sindre Sorhus
+SPDX-FileCopyrightText: p-queue developers
+
+This file is generated from multiple sources. Included packages:
+- @mdi/js
+	- version: 7.4.47
+	- license: Apache-2.0
+- @nextcloud/dialogs
+	- version: 6.4.1
+	- license: AGPL-3.0-or-later
+- @nextcloud/initial-state
+	- version: 3.0.0
+	- license: GPL-3.0-or-later
+- @nextcloud/sharing
+	- version: 0.3.0
+	- license: GPL-3.0-or-later
+- @vueuse/shared
+	- version: 11.3.0
+	- license: MIT
+- p-queue
+	- version: 9.0.1
+	- license: MIT
+- p-timeout
+	- version: 7.0.1
+	- license: MIT
