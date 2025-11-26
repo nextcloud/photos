@@ -159,6 +159,8 @@ OC.L10N.register(
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Ei õnnestunud muuta nime: „{currentCollectionFileName}“ → „{newCollectionFileName}“",
     "Failed to update properties of {collectionFileName} with {properties}" : "„{collectionFileName}“ faili „{properties}“ omaduste muutmine ei õnnestunud",
     "Failed to delete {collectionFileName}" : "Ei õnnestunud kustutada: „{collectionFileName}“",
+    "Cancel" : "Katkesta",
+    "Confirm" : "Kinnita",
     "Failed to move {fileBaseName} to person {faceName}" : "„{fileBaseName}“ teisaldamine kasutajale „{faceName}“ ei õnnestunud",
     "Failed to remove {fileBaseName}" : "„{fileBaseName}“ eemaldamine ei õnnestunud",
     "Failed to rename {oldName} to {faceName}" : "Ei õnnestunud muuta nime: „{oldName}“ → „{faceName}“",

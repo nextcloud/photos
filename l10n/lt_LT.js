@@ -91,6 +91,8 @@ OC.L10N.register(
     "Last week" : "Praeitą savaitę",
     "{startDate} to {endDate}" : "Nuo {startDate} iki {endDate}",
     "Details" : "Išsamiau",
+    "Cancel" : "Atsisakyti",
+    "Confirm" : "Patvirtinti",
     "Could not load photos folder" : "Nepavyko įkelti nuotraukų aplanko",
     "Back to {folder}" : "Atgal į {folder}",
     "Share this folder" : "Bendrinti šį aplanką",

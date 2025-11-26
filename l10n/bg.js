@@ -62,6 +62,7 @@ OC.L10N.register(
     "All folders" : "Всички папки",
     "Add folder" : "Добави папка",
     "Home" : "Начало",
+    "General" : "Общи",
     "_%n photo_::_%n photos_" : ["%n снимки","%n снимки"],
     "Unselect all" : "Отмяна на избора на всички",
     "Add photos to this album" : "Добавяне на снимки към този албум",

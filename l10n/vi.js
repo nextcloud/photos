@@ -35,6 +35,8 @@ OC.L10N.register(
     "Tagged photos" : "Ảnh gắn nhãn",
     "Last week" : "Tuần trước",
     "Details" : "Chi tiết",
+    "Cancel" : "Cancel",
+    "Confirm" : "Xác nhận",
     "Group" : "Nhóm",
     "Back to {folder}" : "Trở về {folder}",
     "Share this folder" : "Chia sẻ thư mục này",

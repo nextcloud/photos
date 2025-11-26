@@ -57,6 +57,8 @@
     "Failed to delete {fileBaseName}" : "Neizdevās izdzēst {fileBaseName}",
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Neizdevās pārdēvēt {currentCollectionFileName} par {newCollectionFileName}",
     "Failed to delete {collectionFileName}" : "Neizdevās izdzēst {collectionFileName}",
+    "Cancel" : "Atcelt",
+    "Confirm" : "Apstiprināt",
     "Failed to rename {oldName} to {faceName}" : "Neizdevās pārdēvēt {oldName} par {faceName}",
     "Failed to delete {faceName}" : "Neizdevās izdzēst {faceName}",
     "Failed to delete {fileId}" : "Neizdevās izdzēst {fileId}",

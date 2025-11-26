@@ -12,6 +12,7 @@ OC.L10N.register(
     "General" : "பொதுவான",
     "Remove from favorites" : "Remove from favorites",
     "Details" : "விவரங்கள்",
+    "Cancel" : "Cancel",
     "Group" : "Group",
     "Add" : "சேர்க்க"
 },

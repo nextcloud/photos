@@ -159,6 +159,8 @@ OC.L10N.register(
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "重新命名 {currentCollectionFileName} 為 {newCollectionFileName} 失敗",
     "Failed to update properties of {collectionFileName} with {properties}" : "無法使用 {properties} 更新 {collectionFileName} 的屬性",
     "Failed to delete {collectionFileName}" : "刪除 {collectionFileName} 失敗",
+    "Cancel" : "取消",
+    "Confirm" : "確認",
     "Failed to move {fileBaseName} to person {faceName}" : "無法將 {fileBaseName} 移動至人物 {faceName}",
     "Failed to remove {fileBaseName}" : "無法移除 {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "重新命名 {oldName} 為 {faceName} 失敗",

@@ -14,6 +14,7 @@ OC.L10N.register(
     "Copy public link" : "Eilañ al liamm foran",
     "Favorite" : "Pennrollañ",
     "Home" : "Degemer",
+    "General" : "Hollek",
     "Unselect all" : "Diziuzañ pep tra",
     "Remove from favorites" : "Diverkañañ eus ar pennrolloù",
     "Loading folders…" : "O kargañ an teuliad...",

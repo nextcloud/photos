@@ -118,6 +118,8 @@ OC.L10N.register(
     "Last week" : "Minggu lalu",
     "{startDate} to {endDate}" : "{startDate} ke {endDate}",
     "Details" : "Detail",
+    "Cancel" : "Cancel",
+    "Confirm" : "Konfirmasi",
     "Group" : "Grup",
     "Remove {collaboratorLabel} from the collaborators list" : "Hapus {collaboratorLabel} dari daftar kolaborator",
     "Back to {folder}" : "Kembali ke {folder}",

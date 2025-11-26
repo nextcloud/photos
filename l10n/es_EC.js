@@ -117,6 +117,8 @@ OC.L10N.register(
     "{title}'s face" : "Rostro de {título}",
     "Last week" : "La semana pasada",
     "Details" : "Detalles",
+    "Cancel" : "Cancelar",
+    "Confirm" : "Confirmar",
     "Group" : "Grupo",
     "Remove {collaboratorLabel} from the collaborators list" : "Eliminar {etiquetaColaborador} de la lista de colaboradores",
     "Back to {folder}" : "Volver a {carpeta}",

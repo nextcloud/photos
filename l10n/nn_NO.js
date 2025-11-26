@@ -15,6 +15,7 @@ OC.L10N.register(
     "General" : "Generelt",
     "Remove from favorites" : "Remove from favorites",
     "Details" : "Detaljar",
+    "Cancel" : "Cancel",
     "Group" : "Gruppe",
     "Add" : "Legg til"
 },

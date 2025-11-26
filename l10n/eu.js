@@ -158,6 +158,8 @@ OC.L10N.register(
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Huts egin du {currentCollectionFileName} bildumari {newCollectionFileName}izen berria jartzean",
     "Failed to update properties of {collectionFileName} with {properties}" : "Huts egin du{collectionFileName}eguneratzean {properties} propietateak",
     "Failed to delete {collectionFileName}" : "Huts egin du {collectionFileName} ezabatzean",
+    "Cancel" : "Cancel",
+    "Confirm" : "Berretsi",
     "Failed to move {fileBaseName} to person {faceName}" : "Errorea {fileBaseName} {faceName} pertsonarengana mugitzean",
     "Failed to remove {fileBaseName}" : "Huts egin du {fileBaseName} kentzean",
     "Failed to rename {oldName} to {faceName}" : "Huts egin du {oldName} bildumari {faceName}izen berria jartzean",

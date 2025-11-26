@@ -71,6 +71,8 @@ OC.L10N.register(
     "Tagged photos" : "תמונות מתויגות",
     "Last week" : "שבוע שעבר",
     "Details" : "פרטים",
+    "Cancel" : "Cancel",
+    "Confirm" : "אישור",
     "Group" : "קבוצה",
     "Remove {collaboratorLabel} from the collaborators list" : "הסר את {collaboratorLabel} מרשימת השותפים",
     "Back to {folder}" : "חזרה אל {folder}",
