@@ -143,6 +143,8 @@
     "Failed to delete {fileBaseName}" : "Spodletelo brisanje {fileBaseName}",
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Spodletelo preimenovanje {currentCollectionFileName} v {newCollectionFileName}",
     "Failed to delete {collectionFileName}" : "Spodletelo brisanje {collectionFileName}",
+    "Cancel" : "Prekliči",
+    "Confirm" : "Potrdi",
     "Failed to rename {oldName} to {faceName}" : "Spodletelo preimenovanje {oldName} v {faceName}",
     "Failed to delete {faceName}" : "Spodletelo brisanje {faceName}",
     "Failed to delete {fileId}" : "Spodletelo brisanje {fileId}",

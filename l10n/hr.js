@@ -31,6 +31,8 @@ OC.L10N.register(
     "Tagged photos" : "Označene fotografije",
     "Last week" : "Prošli tjedan",
     "Details" : "Pojedinosti",
+    "Cancel" : "Cancel",
+    "Confirm" : "Potvrdi",
     "Back to {folder}" : "Natrag na {folder}",
     "Share this folder" : "Dijeli ovu mapu",
     "Enable squared photos view" : "Omogući kvadratni prikaz fotografija",

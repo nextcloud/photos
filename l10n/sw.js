@@ -158,6 +158,8 @@ OC.L10N.register(
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Imeshindwa kuita jina upya {currentCollectionFileName} kwenda {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Imeshindwa kusasisha sifa za {collectionFileName} na {properties}",
     "Failed to delete {collectionFileName}" : "Imeshindwa kufuta {collectionFileName}",
+    "Cancel" : "Ghairi",
+    "Confirm" : "Thibitisha",
     "Failed to move {fileBaseName} to person {faceName}" : "Imeshindwa kuhamisha {fileBaseName} kwa mtu {faceName}",
     "Failed to remove {fileBaseName}" : "Imeshindwa kuhamisha {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Imeshindwa kuita jina upya {oldName} kwenda {faceName}",

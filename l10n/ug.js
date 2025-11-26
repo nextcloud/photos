@@ -159,6 +159,8 @@ OC.L10N.register(
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "{currentCollectionFileName} نىڭ ئىسمىنى {newCollectionFileName} غا ئۆزگەرتىش مەغلۇپ بولدى",
     "Failed to update properties of {collectionFileName} with {properties}" : "{collectionFileName} نىڭ خاسلىقىنى {properties} بىلەن يېڭىلاش مەغلۇپ بولدى",
     "Failed to delete {collectionFileName}" : "{collectionFileName} نى ئۆچۈرۈش مەغلۇپ بولدى",
+    "Cancel" : "Cancel",
+    "Confirm" : "جەزملەشتۈرۈڭ",
     "Failed to move {fileBaseName} to person {faceName}" : "{fileBaseName} نى {faceName} غا يۆتكەش مەغلۇپ بولدى",
     "Failed to remove {fileBaseName}" : "{fileBaseName} نىڭ ئىسمىنى ئۆزگەرتىش مەغلۇپ بولدى",
     "Failed to rename {oldName} to {faceName}" : "{oldName} نىڭ ئىسمىنى {faceName} غا ئۆزگەرتىش مەغلۇپ بولدى",

@@ -22,6 +22,8 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Last week" : "Last week",
     "Details" : "Details",
+    "Cancel" : "Cancel",
+    "Confirm" : "Confirm",
     "Group" : "Group",
     "View" : "View",
     "Add" : "Add"

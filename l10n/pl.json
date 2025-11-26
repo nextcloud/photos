@@ -156,6 +156,8 @@
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Nie udało się zmienić nazwy {currentCollectionFileName} na {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Nie udało się zaktualizować właściwości {collectionFileName} o {properties}",
     "Failed to delete {collectionFileName}" : "Nie udało się usunąć {collectionFileName}",
+    "Cancel" : "Anuluj",
+    "Confirm" : "Potwierdź",
     "Failed to move {fileBaseName} to person {faceName}" : "Nie udało się przenieść {fileBaseName} do osoby {faceName}",
     "Failed to remove {fileBaseName}" : "Nie udało się usunąć {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Nie udało się zmienić nazwy {oldName} na {faceName}",

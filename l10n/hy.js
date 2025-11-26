@@ -9,6 +9,7 @@ OC.L10N.register(
     "General" : "Ընդհանուր",
     "Remove from favorites" : "Remove from favorites",
     "Details" : "Մանրամասներ",
+    "Cancel" : "Cancel",
     "Group" : "Խումբ",
     "Add" : "Ավելացնել"
 },

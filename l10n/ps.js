@@ -9,6 +9,7 @@ OC.L10N.register(
     "Favorite" : "په نښه شوی",
     "Home" : "کور",
     "Remove from favorites" : "له نښو ويستل",
-    "Details" : "معلومات"
+    "Details" : "معلومات",
+    "Cancel" : "Cancel"
 },
 "nplurals=2; plural=(n != 1);");

@@ -158,6 +158,8 @@ OC.L10N.register(
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Impossibile rinominare {currentCollectionFileName} in {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Impossibile aggiornare le proprietà di {collectionFileName} con {properties}",
     "Failed to delete {collectionFileName}" : "Impossibile eliminare {collectionFileName}",
+    "Cancel" : "Cancel",
+    "Confirm" : "Conferma",
     "Failed to move {fileBaseName} to person {faceName}" : "Impossibile spostare {fileBaseName} alla persona{faceName}",
     "Failed to remove {fileBaseName}" : "Impossibile rimuovere {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Impossibile rinominare {oldName} in {faceName}",

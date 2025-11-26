@@ -157,6 +157,8 @@
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Не успеа да се преименува {currentCollectionFileName} во {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Не успеа да се ажурираат својствата на {collectionFileName} со {properties}",
     "Failed to delete {collectionFileName}" : "Не успеа да се избрише {collectionFileName}",
+    "Cancel" : "Откажи",
+    "Confirm" : "Потврди",
     "Failed to move {fileBaseName} to person {faceName}" : "Не успеа да се премести {fileBaseName} кај личноста {faceName}",
     "Failed to remove {fileBaseName}" : "Не успеа да се отстрани {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Не успеа да се преименува {oldName} во {faceName}",

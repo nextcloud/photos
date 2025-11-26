@@ -24,6 +24,8 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Fotos con etiquetas serán mostradas aquí",
     "Tagged photos" : "Fotos etiquetadas",
     "Details" : "Detalles",
+    "Cancel" : "Cancel",
+    "Confirm" : "Confirmar",
     "Group" : "Grupo",
     "Back to {folder}" : "Volver a {folder}",
     "Share this folder" : "Compartir esta carpeta",

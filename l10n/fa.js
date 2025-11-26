@@ -120,6 +120,8 @@ OC.L10N.register(
     "{title}'s face" : "چهره {title}",
     "Last week" : "هفته گذشته",
     "Details" : "جزییات",
+    "Cancel" : "انصراف",
+    "Confirm" : "تأیید",
     "Group" : "گروه",
     "Remove {collaboratorLabel} from the collaborators list" : "{collaboratorLabel} را از لیست همکاران حذف کنید",
     "Back to {folder}" : "برگشت به {} پوشه",

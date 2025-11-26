@@ -23,6 +23,8 @@ OC.L10N.register(
     "Remove from favorites" : "Șterge din favorite",
     "Loading folders…" : "Încărcare dosare…",
     "Details" : "Detalii",
+    "Cancel" : "Cancel",
+    "Confirm" : "Confirmă",
     "Group" : "Grup",
     "View" : "Vizualizare",
     "Add" : "Adaugă"

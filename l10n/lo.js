@@ -56,6 +56,8 @@ OC.L10N.register(
     "Last week" : "Last week",
     "Details" : "ລາຍລະອຽດ",
     "Failed to create {collectionFileName}" : "ສ້າງ {collectionFileName} ບໍ່ສຳເລັດ",
+    "Cancel" : "ຍົກເລີກ",
+    "Confirm" : "ຢືນຢັນ",
     "Group" : "Group",
     "Remove {collaboratorLabel} from the collaborators list" : "ລຶບ {collaboratorLabel} ອອກຈາກລາຍຊື່ຜູ້ຮ່ວມມື",
     "Back to {folder}" : "ກັບໄປທີ່ {folder}",

@@ -159,6 +159,8 @@ OC.L10N.register(
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Kunde inte byta namn från {currentCollectionFileName} till {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Kunde inte uppdatera egenskaperna på {collectionFileName} med {properties}",
     "Failed to delete {collectionFileName}" : "Kunde inte ta bort {collectionFileName}",
+    "Cancel" : "Avbryt",
+    "Confirm" : "Bekräfta",
     "Failed to move {fileBaseName} to person {faceName}" : "Kunde inte flytta {fileBaseName} till personen {faceName}",
     "Failed to remove {fileBaseName}" : "Kunde inte ta bort {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Kunde inte byta namn från {oldName} till {faceName}",

@@ -158,6 +158,8 @@ OC.L10N.register(
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Αποτυχία μετονομασίας {currentCollectionFileName} σε {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Αποτυχία ενημέρωσης ιδιοτήτων {collectionFileName} με {properties}",
     "Failed to delete {collectionFileName}" : "Αποτυχία διαγραφής {collectionFileName}",
+    "Cancel" : "Ακύρωση",
+    "Confirm" : "Επιβεβαίωση",
     "Failed to move {fileBaseName} to person {faceName}" : "Αποτυχία μετακίνησης {fileBaseName} στο άτομο {faceName}",
     "Failed to remove {fileBaseName}" : "Αποτυχία αφαίρεσης {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Αποτυχία μετονομασίας {oldName} σε {faceName}",

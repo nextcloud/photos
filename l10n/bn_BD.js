@@ -11,6 +11,7 @@ OC.L10N.register(
     "Favorite" : "প্রিয়জন",
     "Go back" : "ফিরে যাও",
     "Home" : "বাড়ি",
+    "General" : "সাধারণ",
     "Remove from favorites" : "Remove from favorites",
     "Details" : "বিসতারিত",
     "Group" : "গোষ্ঠীসমূহ",

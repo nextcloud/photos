@@ -142,6 +142,8 @@ OC.L10N.register(
     "Last week" : "Előző hét",
     "{startDate} to {endDate}" : "{startDate} – {endDate}",
     "Details" : "Részletek",
+    "Cancel" : "Cancel",
+    "Confirm" : "Megerősítés",
     "Could not load photos folder" : "Nem lehet a fotók könyvtárat betölteni",
     "Group" : "Csoport",
     "Remove {collaboratorLabel} from the collaborators list" : "{collaboratorLabel} eltávolítása a közreműködőktől",

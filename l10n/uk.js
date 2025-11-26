@@ -159,6 +159,8 @@ OC.L10N.register(
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Не вдалося перейменувати {currentCollectionFileName} у {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Не вдалося оновити властивості {collectionFileName} на {properties}",
     "Failed to delete {collectionFileName}" : "Не вдалося вилучити {collectionFileName}",
+    "Cancel" : "Скасувати",
+    "Confirm" : "Підтвердити",
     "Failed to move {fileBaseName} to person {faceName}" : "Не вдалося перенести {fileBaseName} до особи {faceName}",
     "Failed to remove {fileBaseName}" : "Не вдалося вилучити {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Не вдалося перейменувати {oldName} у {faceName}",

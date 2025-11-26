@@ -148,6 +148,8 @@ OC.L10N.register(
     "Failed to delete {fileBaseName}" : "Nepodarilo sa vymazať {fileBaseName}",
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Nepodarilo sa premenovať {currentCollectionFileName} na {newCollectionFileName}",
     "Failed to delete {collectionFileName}" : "Nepodarilo sa vymazať {collectionFileName}",
+    "Cancel" : "Cancel",
+    "Confirm" : "Potvrdiť",
     "Failed to rename {oldName} to {faceName}" : "Nepodarilo sa premenovať {oldName} na {faceName}",
     "Failed to delete {faceName}" : "Nepodarilo sa vymazať {faceName}",
     "Failed to delete {fileId}" : "Nepodarilo sa vymazať {fileId}",

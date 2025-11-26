@@ -159,6 +159,8 @@ OC.L10N.register(
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Theip ar {currentCollectionFileName} a athainmniú go {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Theip ar airíonna {collectionFileName} a nuashonrú le {properties}",
     "Failed to delete {collectionFileName}" : "Theip ar scriosadh {collectionFileName}",
+    "Cancel" : "Cealaigh",
+    "Confirm" : "Deimhnigh",
     "Failed to move {fileBaseName} to person {faceName}" : "Theip ar {fileBaseName} a bhogadh chuig an duine {faceName}",
     "Failed to remove {fileBaseName}" : "Theip ar {fileBaseName} a bhaint",
     "Failed to rename {oldName} to {faceName}" : "Theip ar {oldName} a athainmniú go {faceName}",
