@@ -18,6 +18,8 @@ OC.L10N.register(
     "General" : "General",
     "Remove from favorites" : "Eliminar de favoritos",
     "Details" : "Detalles",
+    "Cancel" : "Cancel",
+    "Confirm" : "Confirmar",
     "Group" : "Grupo",
     "Add" : "Agregar"
 },

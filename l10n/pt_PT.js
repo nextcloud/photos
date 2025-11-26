@@ -61,6 +61,8 @@ OC.L10N.register(
     "Tagged photos" : "Fotos marcadas",
     "Last week" : "Ultima semana",
     "Details" : "Detalhes",
+    "Cancel" : "Cancel",
+    "Confirm" : "Confirmar",
     "Group" : "Grupo",
     "Remove {collaboratorLabel} from the collaborators list" : "Remove {collaboratorLabel} from the collaborators list",
     "Back to {folder}" : "Ir para {folder}",

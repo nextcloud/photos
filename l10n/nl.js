@@ -158,6 +158,8 @@ OC.L10N.register(
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Hernoemen van {currentCollectionFileName} naar {newCollectionFileName} is mislukt",
     "Failed to update properties of {collectionFileName} with {properties}" : "Bijwerken van {collectionFileName} met eigenschappen {properties} is mislukt",
     "Failed to delete {collectionFileName}" : "Verwijderen van {collectionFileName} mislukt",
+    "Cancel" : "Annuleren",
+    "Confirm" : "Bevestigen",
     "Failed to move {fileBaseName} to person {faceName}" : "Verplaatsen van {fileBaseName} naar persoon {faceName} is mislukt",
     "Failed to remove {fileBaseName}" : "Verwijderen van {fileBaseName} is mislukt",
     "Failed to rename {oldName} to {faceName}" : "Hernoemen van {oldName} naar {faceName} is mislukt",

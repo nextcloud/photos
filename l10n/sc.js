@@ -37,6 +37,8 @@ OC.L10N.register(
     "Tagged photos" : "Fotografias etichetadas",
     "Last week" : "Sa chida passada",
     "Details" : "Detàllios",
+    "Cancel" : "Cancel",
+    "Confirm" : "Cunfirma",
     "Group" : "Grupu",
     "Back to {folder}" : "Torra a {folder}",
     "Share this folder" : "Cumpartzi custa cartella",

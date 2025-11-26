@@ -19,6 +19,8 @@ OC.L10N.register(
     "Remove from favorites" : "Kkes-it seg ismal",
     "Save." : "Sekles.",
     "Details" : "Talqayt",
+    "Cancel" : "Semmet",
+    "Confirm" : "Sergeg",
     "Group" : "Agraw",
     "Back to {folder}" : "Uɣal ar {folder}",
     "Add" : "Rnu"

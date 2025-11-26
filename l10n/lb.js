@@ -14,6 +14,8 @@ OC.L10N.register(
     "General" : "Allgemeng",
     "Remove from favorites" : "Remove from favorites",
     "Details" : "Detailer",
+    "Cancel" : "Cancel",
+    "Confirm" : "Konfirméieren",
     "Group" : "Grupp",
     "Add" : "Derbäimaachen"
 },

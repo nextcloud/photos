@@ -61,6 +61,8 @@ OC.L10N.register(
     "Unassigned faces" : "지정되지 않은 얼굴",
     "Last week" : "저번 주",
     "Details" : "세부사항",
+    "Cancel" : "취소",
+    "Confirm" : "확인",
     "Remove {collaboratorLabel} from the collaborators list" : "공동 작업자 목록에서 {collaboratorLabel} 제거",
     "View" : "보기",
     "Add" : "추가"

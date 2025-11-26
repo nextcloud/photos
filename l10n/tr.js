@@ -158,6 +158,8 @@ OC.L10N.register(
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "{currentCollectionFileName} adı {newCollectionFileName} olarak değiştirilemedi",
     "Failed to update properties of {collectionFileName} with {properties}" : "{collectionFileName} özellikleri {properties} olarak güncellenemedi",
     "Failed to delete {collectionFileName}" : "{collectionFileName} silinemedi",
+    "Cancel" : "İptal",
+    "Confirm" : "Onayla",
     "Failed to move {fileBaseName} to person {faceName}" : "{fileBaseName}, {faceName} kişisine taşınamadı",
     "Failed to remove {fileBaseName}" : "{fileBaseName} kaldırılamadı",
     "Failed to rename {oldName} to {faceName}" : "{oldName} adı {faceName} olarak değiştirilemedi",

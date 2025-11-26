@@ -158,6 +158,8 @@ OC.L10N.register(
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Mistókst að endurnefna {currentCollectionFileName} sem {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Mistókst að uppfæra eiginleika á {collectionFileName} með {properties}",
     "Failed to delete {collectionFileName}" : "Tókst ekki að eyða {collectionFileName}",
+    "Cancel" : "Cancel",
+    "Confirm" : "Staðfesta",
     "Failed to move {fileBaseName} to person {faceName}" : "Mistókst að færa {fileBaseName} á persónuna {faceName}",
     "Failed to remove {fileBaseName}" : "Mistókst að fjarlægja {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Mistókst að endurnefna {oldName} sem {faceName}",

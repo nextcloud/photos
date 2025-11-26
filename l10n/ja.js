@@ -158,6 +158,8 @@ OC.L10N.register(
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "{currentCollectionFileName} から {newCollectionFileName} への名前の変更に失敗しました",
     "Failed to update properties of {collectionFileName} with {properties}" : "{collectionFileName}のプロパティを{properties}で更新できませんでした",
     "Failed to delete {collectionFileName}" : "{collectionFileName} の削除に失敗しました",
+    "Cancel" : "キャンセル",
+    "Confirm" : "承認",
     "Failed to move {fileBaseName} to person {faceName}" : "{fileBaseName}を{faceName}への移動に失敗しました",
     "Failed to remove {fileBaseName}" : "{fileBaseName}の削除に失敗しました",
     "Failed to rename {oldName} to {faceName}" : "{oldName} から {faceName} への名前の変更に失敗しました",

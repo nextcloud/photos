@@ -18,6 +18,8 @@ OC.L10N.register(
     "Remove from favorites" : "Sevimlilardan olib tashlang",
     "Last week" : "O`tgan yil",
     "Details" : "Details",
+    "Cancel" : "Bekor qilish",
+    "Confirm" : "Tasdiqlash",
     "Back to {folder}" : "{folder}ga qaytish",
     "View" : "Ko'rish",
     "Add" : "Add"

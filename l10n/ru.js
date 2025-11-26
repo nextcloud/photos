@@ -158,6 +158,8 @@ OC.L10N.register(
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Не удалось переименовать {currentCollectionFileName} в {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Не удалось обновить свойства {collectionFileName} следующими параметрами: {properties}",
     "Failed to delete {collectionFileName}" : "Не удалось удалить {collectionFileName}",
+    "Cancel" : "Cancel",
+    "Confirm" : "Подтвердить",
     "Failed to move {fileBaseName} to person {faceName}" : "Не удалось переместить {fileBaseName} к {faceName}",
     "Failed to remove {fileBaseName}" : "Не удалось удалить {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Не удалось переименовать {oldName} в {faceName}",

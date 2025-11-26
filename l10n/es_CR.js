@@ -19,6 +19,8 @@ OC.L10N.register(
     "Remove from favorites" : "Eliminar de favoritos",
     "Loading folders…" : "Cargando carpetas…",
     "Details" : "Detalles",
+    "Cancel" : "Cancel",
+    "Confirm" : "Confirmar",
     "Group" : "Grupo",
     "Add" : "Agregar"
 },

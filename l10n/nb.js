@@ -140,6 +140,8 @@ OC.L10N.register(
     "Last week" : "Forrige uke",
     "{startDate} to {endDate}" : "{startDate} til {endDate}",
     "Details" : "Detaljer",
+    "Cancel" : "Cancel",
+    "Confirm" : "Bekreft",
     "Could not load photos folder" : "Kunne ikke laste bildemappen",
     "Group" : "Gruppe",
     "Remove {collaboratorLabel} from the collaborators list" : "Fjern {collaboratorLabel} fra samarbeidspartnerlisten",

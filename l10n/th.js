@@ -43,6 +43,8 @@ OC.L10N.register(
     "Tagged photos" : "รูปภาพที่ติดแท็ก",
     "Last week" : "สัปดาห์ที่แล้ว",
     "Details" : "รายละเอียด",
+    "Cancel" : "Cancel",
+    "Confirm" : "ยืนยัน",
     "Group" : "กลุ่ม",
     "Back to {folder}" : "กลับไปยัง {folder}",
     "Share this folder" : "แชร์โฟลเดอร์นี้",

@@ -10,6 +10,7 @@ OC.L10N.register(
     "Home" : "Rumah",
     "General" : "Umum",
     "Remove from favorites" : "Remove from favorites",
+    "Cancel" : "Cancel",
     "Add" : "Tambah"
 },
 "nplurals=1; plural=0;");

@@ -10,6 +10,7 @@ OC.L10N.register(
     "Favorite" : "Halaýan",
     "Home" : "Baş sahypa",
     "General" : "Esasy",
-    "Details" : "Jikme-jiklikler"
+    "Details" : "Jikme-jiklikler",
+    "Cancel" : "Cancel"
 },
 "nplurals=2; plural=(n != 1);");

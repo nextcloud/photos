@@ -144,6 +144,8 @@ OC.L10N.register(
     "Details" : "Tiedot",
     "Failed to delete {fileBaseName}" : "Kohteen {fileBaseName} poistaminen epäonnistui",
     "Failed to delete {collectionFileName}" : "Kohteen {collectionFileName} poistaminen epäonnistui",
+    "Cancel" : "Peruuta",
+    "Confirm" : "Vahvista",
     "Failed to delete {faceName}" : "Kohteen {faceName} poistaminen epäonnistui",
     "Failed to delete {fileId}" : "Kohteen {fileId} poistaminen epäonnistui",
     "Failed to delete {fileName}" : "Kohteen {fileName} poistaminen epäonnistui",

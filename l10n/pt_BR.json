@@ -157,6 +157,8 @@
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Falha ao renomear {currentCollectionFileName} para {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Falha ao atualizar as propriedades de {collectionFileName} com {properties}",
     "Failed to delete {collectionFileName}" : "Falha ao excluir {collectionFileName}",
+    "Cancel" : "Cancelar",
+    "Confirm" : "Confirmar",
     "Failed to move {fileBaseName} to person {faceName}" : "Falha ao mover {fileBaseName} à pessoa {faceName}",
     "Failed to remove {fileBaseName}" : "Falha ao remover {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Falha ao renomear {oldName} para {faceName}",

@@ -140,6 +140,8 @@ OC.L10N.register(
     "Last week" : "Semana pasada",
     "{startDate} to {endDate}" : "{startDate} a {endDate}",
     "Details" : "Detalles",
+    "Cancel" : "Cancel",
+    "Confirm" : "Confirmar",
     "Could not load photos folder" : "No se pudo cargar la carpeta de fotos",
     "Group" : "Grupo",
     "Remove {collaboratorLabel} from the collaborators list" : "Eliminar {collaboratorLabel} de la lista de colaboradores",
