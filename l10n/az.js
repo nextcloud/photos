@@ -13,6 +13,8 @@ OC.L10N.register(
     "General" : "Ümumi",
     "Remove from favorites" : "Remove from favorites",
     "Details" : "Detallar",
+    "Cancel" : "Cancel",
+    "Confirm" : "Təsdiq edin",
     "Group" : "Qrup",
     "Add" : "Əlavə etmək"
 },

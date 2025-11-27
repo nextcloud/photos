@@ -59,6 +59,7 @@ OC.L10N.register(
     "There are no photos or videos yet!" : "אין עדיין תמונות וקטעי ווידאו",
     "All folders" : "כל התיקיות",
     "Add folder" : "הוספת תיקייה",
+    "Home" : "בית",
     "General" : "כללי",
     "Remove from favorites" : "הסרה מהמועדפים",
     "Loading folders…" : "התיקיות נטענות…",

@@ -19,6 +19,8 @@ OC.L10N.register(
     "Remove from favorites" : "Verwyder uit gunstelinge",
     "Loading folders…" : "Laai tans gidse...",
     "Details" : "Besonderhede",
+    "Cancel" : "Cancel",
+    "Confirm" : "Bevestig",
     "View" : "Bekyk",
     "Add" : "Voeg by"
 },

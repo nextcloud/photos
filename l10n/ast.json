@@ -133,6 +133,8 @@
     "Last week" : "La selmana anterior",
     "{startDate} to {endDate}" : "{startDate} hasta'l {endDate}",
     "Details" : "Detalles",
+    "Cancel" : "Cancel",
+    "Confirm" : "Confirmar",
     "Could not load photos folder" : "Nun se puen cargar la carpeta de semeyes",
     "Group" : "Grupu",
     "Remove {collaboratorLabel} from the collaborators list" : "Quitar «{collaboratorLabel}» de la llista de collaboradores",
