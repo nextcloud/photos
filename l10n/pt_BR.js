@@ -158,6 +158,7 @@ OC.L10N.register(
     "Failed to create {collectionFileName}" : "Falha ao criar {collectionFileName}",
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Falha ao renomear {currentCollectionFileName} para {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Falha ao atualizar as propriedades de {collectionFileName} com {properties}",
+    "Delete collection" : "Excluir coleção",
     "Failed to delete {collectionFileName}" : "Falha ao excluir {collectionFileName}",
     "Cancel" : "Cancelar",
     "Confirm" : "Confirmar",

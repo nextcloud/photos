@@ -158,6 +158,8 @@ OC.L10N.register(
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Не ўдалося перайменаваць {currentCollectionFileName} у {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Не ўдалосяся абнавіць уласцівасці {collectionFileName} новымі значэннямі: {properties}",
     "Failed to delete {collectionFileName}" : "Не ўдалося выдаліць {collectionFileName}.",
+    "Cancel" : "Скасаваць",
+    "Confirm" : "Пацвердзіць",
     "Failed to move {fileBaseName} to person {faceName}" : "Не ўдалося перамясціць {fileBaseName} да чалавека {faceName}",
     "Failed to remove {fileBaseName}" : "Не ўдалося выдаліць {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Не ўдалося перайменаваць {oldName} у {faceName}",
