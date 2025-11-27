@@ -146,6 +146,8 @@ OC.L10N.register(
     "Failed to delete {fileBaseName}" : "تعذّر حذف {fileBaseName}",
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "تعذر تغيير تسمية {currentCollectionFileName} إلى {newCollectionFileName}",
     "Failed to delete {collectionFileName}" : "تعذّر حذف {collectionFileName}",
+    "Cancel" : "Cancel",
+    "Confirm" : "تأكيد",
     "Failed to rename {oldName} to {faceName}" : "تعذر تغيير تسمية {oldName} إلى {faceName}",
     "Failed to delete {faceName}" : "تعذّر حذف{faceName}",
     "Failed to delete {fileId}" : "تعذّر حذف {fileId}",
