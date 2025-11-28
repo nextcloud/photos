@@ -160,7 +160,7 @@ OC.L10N.register(
     "Failed to update properties of {collectionFileName} with {properties}" : "Die Eigenschaften von {collectionFileName} konnten nicht mit {properties} aktualisiert werden",
     "Delete collection" : "Sammlung löschen",
     "Leave shared album" : "Geteiltes Album verlassen",
-    "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Soll {collectionName} wirklich gelöscht werden? Das kann nicht rückgängig gemacht werden.",
+    "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Soll {collectionName} gelöscht werden? Das kann nicht rückgängig gemacht werden.",
     "Failed to delete {collectionFileName}" : "{collectionFileName} konnte nicht gelöscht werden",
     "Cancel" : "Abbrechen",
     "Confirm" : "Bestätigen",
