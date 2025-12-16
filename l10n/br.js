@@ -19,6 +19,8 @@ OC.L10N.register(
     "Remove from favorites" : "Diverkañañ eus ar pennrolloù",
     "Loading folders…" : "O kargañ an teuliad...",
     "Details" : "Munudoù",
+    "Cancel" : "Cancel",
+    "Confirm" : "Kadarnaat",
     "View" : "Gwell",
     "Add" : "Ouzhpennañ"
 },

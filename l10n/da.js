@@ -158,6 +158,8 @@ OC.L10N.register(
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Kunne ikke omdøbe {currentCollectionFileName} til {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Kunne ikke opdatere indstillinger for {collectionFileName} med {properties}",
     "Failed to delete {collectionFileName}" : "Kunne ikke slette {collectionFileName}",
+    "Cancel" : "Annullér",
+    "Confirm" : "Bekræft",
     "Failed to move {fileBaseName} to person {faceName}" : "Kunne ikke flytte {fileBaseName} til person {faceName}",
     "Failed to remove {fileBaseName}" : "Kunne ikke fjerne {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Kunne ikke omdøbe {oldName} til {faceName}",
