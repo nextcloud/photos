@@ -142,6 +142,8 @@ OC.L10N.register(
     "{title}'s face" : "Cara de {title}",
     "{startDate} to {endDate}" : "{startDate} a {endDate}",
     "Details" : "Detalls",
+    "Cancel" : "Cancel",
+    "Confirm" : "Confirma",
     "Could not load photos folder" : "No s'ha pogut carregar la carpeta de fotos",
     "Group" : "Grup",
     "Remove {collaboratorLabel} from the collaborators list" : "Suprimeix {collaboratorLabel} de la llista de col·laboradors",

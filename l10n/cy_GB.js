@@ -18,6 +18,8 @@ OC.L10N.register(
     "General" : "Cyffredinol",
     "Remove from favorites" : "Remove from favorites",
     "Details" : "Manylion",
+    "Cancel" : "Cancel",
+    "Confirm" : "Cadarnhau",
     "Group" : "Grŵp",
     "View" : "Golwg",
     "Add" : "Ychwanegu"

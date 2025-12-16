@@ -120,6 +120,8 @@ OC.L10N.register(
     "Last week" : "Миналата седмица",
     "{startDate} to {endDate}" : "{startDate} до {endDate}",
     "Details" : "Подробности",
+    "Cancel" : "Cancel",
+    "Confirm" : "Потвърдете",
     "Group" : "Група",
     "Remove {collaboratorLabel} from the collaborators list" : "Премахване на {collaboratorLabel} от списъка със сътрудници",
     "Back to {folder}" : "Назад към {folder}",
