@@ -9,6 +9,7 @@ OC.L10N.register(
     "Favorite" : "Favorit",
     "Home" : "Početna stranica",
     "Remove from favorites" : "Remove from favorites",
+    "Cancel" : "Cancel",
     "Group" : "Grupa",
     "Add" : "Dodaj"
 },

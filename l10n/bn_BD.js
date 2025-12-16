@@ -14,6 +14,7 @@ OC.L10N.register(
     "General" : "সাধারণ",
     "Remove from favorites" : "Remove from favorites",
     "Details" : "বিসতারিত",
+    "Cancel" : "Cancel",
     "Group" : "গোষ্ঠীসমূহ",
     "Add" : "যোগ করুন"
 },
