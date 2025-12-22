@@ -159,7 +159,7 @@ OC.L10N.register(
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Falha ao renomear {currentCollectionFileName} para {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Falha ao atualizar as propriedades de {collectionFileName} com {properties}",
     "Delete collection" : "Excluir coleção",
-    "Leave shared album" : "Deixe o álbum compartilhado",
+    "Leave shared album" : "Deixar o álbum compartilhado",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Tem certeza de que deseja excluir {collectionName}? Esta ação não pode ser desfeita.",
     "Failed to delete {collectionFileName}" : "Falha ao excluir {collectionFileName}",
     "Cancel" : "Cancelar",
