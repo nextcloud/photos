@@ -10,6 +10,7 @@ OC.L10N.register(
     "Places" : "Joylar",
     "Back" : "Orqaga",
     "Save" : "Saqlash",
+    "No recommendations. Start typing." : "Tavsiyalar yo'q. Yozishni boshlang.",
     "Copy public link" : "Umumiy havoladan nusxa oling",
     "Favorite" : "Favorite",
     "Add to {destination}" : " {destination}ni qo`shish",
