@@ -80,7 +80,6 @@ class ReverseGeoCoderService {
 			return;
 		}
 
-		// Download zip file to a tmp file.
 		$response = $this->clientService->newClient()->get('https://download.nextcloud.com/server/apps/photos/cities1000.zip');
 		$tmpFile = tmpfile();
 		$cities1000ZipTmpFileName = stream_get_meta_data($tmpFile)['uri'];
@@ -91,37 +90,64 @@ class ReverseGeoCoderService {
 		$zip = new \ZipArchive;
 		$res = $zip->open($cities1000ZipTmpFileName);
 		if ($res !== true) {
-			throw new \Exception("Fail to unzip place file: $res", $res);
+			unlink($cities1000ZipTmpFileName);
+			throw new \Exception("Failed to unzip place file: $res", $res);
 		}
-		$cities1000TxtSteam = $zip->getStream('cities1000.txt');
+
+		$cities1000TxtStream = $zip->getStream('cities1000.txt');
+		if ($cities1000TxtStream === false) {
+			$zip->close();
+			unlink($cities1000ZipTmpFileName);
+			throw new \Exception("Could not extract 'cities1000.txt' from ZIP archive.");
+		}
 
 		// Dump the txt file info into a smaller csv file.
 		$destinationStream = $this->geoNameFolder()->newFile('cities1000.csv')->write();
-
-		while (($fields = fgetcsv($cities1000TxtSteam, 0, '	')) !== false) {
-			$result = fputcsv(
-				$destinationStream,
-				[
-					'id' => (int)$fields[0],
-					'name' => $fields[1],
-					'latitude' => (float)$fields[4],
-					'longitude' => (float)$fields[5],
-				]
-			);
-
-			if ($result === false) {
-				throw new \Exception('Failed to write csv line to tmp stream');
-			}
+		if ($destinationStream === false || !is_resource($destinationStream)) {
+			fclose($cities1000TxtStream);
+			$zip->close();
+			unlink($cities1000ZipTmpFileName);
+			throw new \Exception('Failed to open destination stream for cities1000.csv');
 		}
 
-		$zip->close();
+		try {
+			while (($fields = fgetcsv($cities1000TxtStream, 0, "\t")) !== false) {
+				if (count($fields) < 6) {
+					throw new \Exception('Malformed cities1000.txt row: expected at least 6 fields, got ' . count($fields));
+				}
+				$result = fputcsv(
+					$destinationStream,
+					[
+						'id' => (int)$fields[0],
+						'name' => $fields[1],
+						'latitude' => (float)$fields[4],
+						'longitude' => (float)$fields[5],
+					]
+				);
+				if ($result === false) {
+					throw new \Exception('Failed to write csv line to tmp stream');
+				}
+			}
+		} finally {
+			fclose($cities1000TxtStream);
+			fclose($destinationStream);
+			$zip->close();
+			unlink($cities1000ZipTmpFileName);
+		}
 	}
 
 	private function loadCities1000(): array {
 		$csvStream = $this->geoNameFolder()->getFile('cities1000.csv')->read();
+		if ($csvStream === false || !is_resource($csvStream)) {
+			throw new \Exception('Failed to open cities1000.csv for reading.');
+		}
 		$cities = [];
 
-		while (($fields = fgetcsv($csvStream)) !== false) {
+		while (($fields = fgetcsv($csvStream, 0, ',', '"', '\\')) !== false) {
+			if (count($fields) < 4) {
+				fclose($csvStream);
+				throw new \Exception('Malformed cities1000.csv row: expected at least 4 fields, got ' . count($fields));
+			}
 			$cities[] = [
 				'id' => (int)$fields[0],
 				'name' => $fields[1],
@@ -130,6 +156,7 @@ class ReverseGeoCoderService {
 			];
 		}
 
+		fclose($csvStream);
 		return $cities;
 	}
 
