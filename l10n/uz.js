@@ -21,6 +21,7 @@ OC.L10N.register(
     "Details" : "Details",
     "Cancel" : "Bekor qilish",
     "Confirm" : "Tasdiqlash",
+    "Group" : "Guruh",
     "Back to {folder}" : "{folder}ga qaytish",
     "View" : "Ko'rish",
     "Add" : "Add"
