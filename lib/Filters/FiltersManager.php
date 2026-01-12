@@ -87,8 +87,8 @@ class FiltersManager {
 		);
 	}
 
-	private function getPhotosDefaultSearchConditions(): array {
-		$folders = json_decode($this->userConfigService->getUserConfig('photosSourceFolders'));
+	private function getPhotosDefaultSearchConditions(string $userId): array {
+		$folders = json_decode($this->userConfigService->getConfigForUser($userId, 'photosSourceFolders'));
 
 		return [
 			new SearchBinaryOperator(
