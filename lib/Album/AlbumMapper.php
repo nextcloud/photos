@@ -206,9 +206,9 @@ class AlbumMapper {
 			->leftJoin('p', 'filecache', 'f', $query->expr()->eq('p.file_id', 'f.fileid'))
 			->where($query->expr()->eq('a.album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
-		$row = $query->executeQuery()->fetchAll()[0];
+		$row = $query->executeQuery()->fetch();
 
-		if ($row === null) {
+		if ($row === false) {
 			return null;
 		}
 
