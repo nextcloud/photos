@@ -131,6 +131,10 @@ class PreviewController extends Controller {
 				$albumFile = array_pop($albumFiles);
 			}
 
+			if ($albumFile === null) {
+				continue;
+			}
+
 			$nodes = $this->rootFolder
 				->getUserFolder($albumFile->getOwner())
 				->getById($fileId);
