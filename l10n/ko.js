@@ -63,6 +63,7 @@ OC.L10N.register(
     "Details" : "세부사항",
     "Cancel" : "취소",
     "Confirm" : "확인",
+    "Group" : "구룹",
     "Remove {collaboratorLabel} from the collaborators list" : "공동 작업자 목록에서 {collaboratorLabel} 제거",
     "View" : "보기",
     "Add" : "추가"
