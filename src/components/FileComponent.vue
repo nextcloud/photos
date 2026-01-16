@@ -27,13 +27,13 @@
 				<!-- Preload small preview for further away files -->
 				<template v-if="initialized">
 					<canvas
-						v-if="hasBlurhash && !loadedSmall && !loadedLarge"
+						v-if="hasBlurhash && distance < 5"
 						ref="canvas"
 						class="file__blurhash"
 						aria-hidden="true" />
 
 					<img
-						v-if="!loadedLarge && (loadedSmall || (distance < 5 && !errorSmall))"
+						v-if="!hasBlurhash && !loadedLarge && (loadedSmall || (distance < 5 && !errorSmall))"
 						ref="imgSmall"
 						:key="`${file.basename}-small`"
 						:src="srcSmall"
@@ -45,7 +45,7 @@
 						@error="onErrorSmall">
 
 					<img
-						v-if="loadedLarge || ((isVisible || (distance < 2 && (loadedSmall || errorSmall))) && !errorLarge)"
+						v-if="loadedLarge || ((isVisible || (distance < 2 && (hasBlurhash || loadedSmall || errorSmall))) && !errorLarge)"
 						ref="imgLarge"
 						:key="`${file.basename}-large`"
 						:src="srcLarge"
@@ -332,7 +332,9 @@ export default {
 	}
 
 	// Reveal checkbox on hover.
-	&:hover, &.selected, &:focus-within {
+	&:hover,
+	&.selected,
+	&:focus-within {
 		.selection-checkbox {
 			opacity: 1;
 		}
@@ -351,7 +353,7 @@ export default {
 		z-index: 1;
 		width: fit-content;
 
-		:deep .checkbox-radio-switch__input:focus-visible + .checkbox-radio-switch__content,
+		:deep .checkbox-radio-switch__input:focus-visible+.checkbox-radio-switch__content,
 		.checkbox-radio-switch__input:focus-visible {
 			outline: 2px solid var(--color-main-text);
 			box-shadow: 0 0 0 3px var(--color-main-background);
