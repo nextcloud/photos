@@ -27,7 +27,7 @@
 				<!-- Preload small preview for further away files -->
 				<template v-if="initialized">
 					<canvas
-						v-if="hasBlurhash"
+						v-if="hasBlurhash && !loadedLarge"
 						ref="canvas"
 						class="file__blurhash"
 						aria-hidden="true" />
