@@ -27,32 +27,32 @@
 				<!-- Preload small preview for further away files -->
 				<template v-if="initialized">
 					<canvas
-						v-if="hasBlurhash && distance < 5"
+						v-if="hasBlurhash"
 						ref="canvas"
 						class="file__blurhash"
 						aria-hidden="true" />
 
 					<img
-						v-if="!hasBlurhash && !loadedLarge && (loadedSmall || (distance < 5 && !errorSmall))"
+						v-if="!hasBlurhash && !loadedLarge && (loadedSmall || !errorSmall)"
 						ref="imgSmall"
 						:key="`${file.basename}-small`"
 						:src="srcSmall"
 						:alt="file.basename"
-						:decoding="loadedSmall || isVisible ? 'sync' : 'async'"
-						:fetchpriority="loadedSmall || isVisible ? 'high' : 'low'"
-						:loading="loadedSmall || isVisible ? 'eager' : distance < 2 ? 'auto' : 'lazy'"
+						:decoding="loadedSmall ? 'sync' : 'async'"
+						:fetchpriority="loadedSmall ? 'high' : 'low'"
+						:loading="loadedSmall ? 'eager' : undefined"
 						@load="onLoadSmall"
 						@error="onErrorSmall">
 
 					<img
-						v-if="loadedLarge || ((isVisible || (distance < 2 && (hasBlurhash || loadedSmall || errorSmall))) && !errorLarge)"
+						v-if="loadedLarge || ((hasBlurhash || loadedSmall || errorSmall) && !errorLarge)"
 						ref="imgLarge"
 						:key="`${file.basename}-large`"
 						:src="srcLarge"
 						:alt="file.basename"
-						:decoding="loadedLarge || isVisible ? 'sync' : 'async'"
-						:fetchpriority="loadedLarge || isVisible ? 'high' : 'low'"
-						:loading="loadedLarge || isVisible ? 'auto' : 'lazy'"
+						:decoding="loadedLarge ? 'sync' : 'async'"
+						:fetchpriority="loadedLarge ? 'high' : 'low'"
+						:loading="loadedLarge ? undefined : 'lazy'"
 						@load="onLoadLarge"
 						@error="onErrorLarge">
 				</template>
@@ -112,11 +112,6 @@ export default {
 			type: Boolean,
 			default: true,
 		},
-
-		distance: {
-			type: Number,
-			default: 0,
-		},
 	},
 
 	data() {
@@ -152,10 +147,6 @@ export default {
 
 		srcSmall(): string {
 			return this.getItemURL(64)
-		},
-
-		isVisible(): boolean {
-			return this.distance === 0
 		},
 
 		hasBlurhash() {
