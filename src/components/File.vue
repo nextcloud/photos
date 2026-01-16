@@ -112,6 +112,7 @@ export default {
 			errorSmall: false,
 			loadedLarge: false,
 			errorLarge: false,
+			isMobile: useIsMobile(),
 		}
 	},
 
