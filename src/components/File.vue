@@ -31,9 +31,9 @@
 						:key="`${file.basename}-small`"
 						:src="srcSmall"
 						:alt="file.basename"
-						:decoding="loadedSmall || isVisible ? 'sync' : 'async'"
-						:fetchpriority="loadedSmall || isVisible ? 'high' : 'low'"
-						:loading="loadedSmall || isVisible ? 'eager' : distance < 2 ? 'auto' : 'lazy'"
+						:decoding="loadedSmall ? 'sync' : 'async'"
+						:fetchpriority="loadedSmall ? 'high' : 'low'"
+						:loading="loadedSmall ? 'eager' : undefined"
 						@load="onLoadSmall"
 						@error="onErrorSmall">
 
@@ -42,9 +42,9 @@
 						:key="`${file.basename}-large`"
 						:src="srcLarge"
 						:alt="file.basename"
-						:decoding="loadedLarge || isVisible ? 'sync' : 'async'"
-						:fetchpriority="loadedLarge || isVisible ? 'high' : 'low'"
-						:loading="loadedLarge || isVisible ? 'auto' : 'lazy'"
+						:decoding="loadedLarge ? 'sync' : 'async'"
+						:fetchpriority="loadedLarge ? 'high' : 'low'"
+						:loading="loadedLarge ? undefined : 'lazy'"
 						@load="onLoadLarge"
 						@error="onErrorLarge">
 				</template>
@@ -109,6 +109,7 @@ export default {
 			errorSmall: false,
 			loadedLarge: false,
 			errorLarge: false,
+			isMobile: useIsMobile(),
 		}
 	},
 
@@ -313,7 +314,9 @@ export default {
 	}
 
 	// Reveal checkbox on hover.
-	&:hover, &.selected, &:focus-within {
+	&:hover,
+	&.selected,
+	&:focus-within {
 		.selection-checkbox {
 			opacity: 1;
 		}
@@ -332,7 +335,7 @@ export default {
 		z-index: 1;
 		width: fit-content;
 
-		:deep .checkbox-radio-switch__input:focus-visible + .checkbox-radio-switch__content,
+		:deep .checkbox-radio-switch__input:focus-visible+.checkbox-radio-switch__content,
 		.checkbox-radio-switch__input:focus-visible {
 			outline: 2px solid var(--color-main-text);
 			box-shadow: 0 0 0 3px var(--color-main-background);
