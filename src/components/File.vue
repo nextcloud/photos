@@ -316,7 +316,9 @@ export default {
 	}
 
 	// Reveal checkbox on hover.
-	&:hover, &.selected, &:focus-within {
+	&:hover,
+	&.selected,
+	&:focus-within {
 		.selection-checkbox {
 			opacity: 1;
 		}
@@ -335,7 +337,7 @@ export default {
 		z-index: 1;
 		width: fit-content;
 
-		:deep .checkbox-radio-switch__input:focus-visible + .checkbox-radio-switch__content,
+		:deep .checkbox-radio-switch__input:focus-visible+.checkbox-radio-switch__content,
 		.checkbox-radio-switch__input:focus-visible {
 			outline: 2px solid var(--color-main-text);
 			box-shadow: 0 0 0 3px var(--color-main-background);
