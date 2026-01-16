@@ -31,9 +31,9 @@
 						:key="`${file.basename}-small`"
 						:src="srcSmall"
 						:alt="file.basename"
-						:decoding="loadedSmall || isVisible ? 'sync' : 'async'"
-						:fetchpriority="loadedSmall || isVisible ? 'high' : 'low'"
-						:loading="loadedSmall || isVisible ? 'eager' : distance < 2 ? 'auto' : 'lazy'"
+						:decoding="loadedSmall ? 'sync' : 'async'"
+						:fetchpriority="loadedSmall ? 'high' : 'low'"
+						:loading="loadedSmall ? 'eager' : undefined"
 						@load="onLoadSmall"
 						@error="onErrorSmall">
 
@@ -42,9 +42,9 @@
 						:key="`${file.basename}-large`"
 						:src="srcLarge"
 						:alt="file.basename"
-						:decoding="loadedLarge || isVisible ? 'sync' : 'async'"
-						:fetchpriority="loadedLarge || isVisible ? 'high' : 'low'"
-						:loading="loadedLarge || isVisible ? 'auto' : 'lazy'"
+						:decoding="loadedLarge ? 'sync' : 'async'"
+						:fetchpriority="loadedLarge ? 'high' : 'low'"
+						:loading="loadedLarge ? undefined : 'lazy'"
 						@load="onLoadLarge"
 						@error="onErrorLarge">
 				</template>
