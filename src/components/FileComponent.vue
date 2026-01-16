@@ -157,7 +157,7 @@ export default {
 		},
 
 		hasBlurhash() {
-			return this.file.attributes.metadataBlurhash !== undefined
+			return this.file.attributes['metadata-blurhash'] !== undefined
 		},
 	},
 
@@ -242,7 +242,7 @@ export default {
 			const width = (this.$refs.canvas as HTMLCanvasElement).width
 			const height = (this.$refs.canvas as HTMLCanvasElement).height
 
-			const pixels = decode(this.file.attributes.metadataBlurhash, width, height)
+			const pixels = decode(this.file.attributes['metadata-blurhash'], width, height)
 
 			const ctx = (this.$refs.canvas as HTMLCanvasElement).getContext('2d') as CanvasRenderingContext2D
 			const imageData = ctx.createImageData(width, height) as ImageData
