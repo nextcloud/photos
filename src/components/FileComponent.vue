@@ -145,7 +145,7 @@ export default {
 		},
 
 		srcLarge(): string {
-			return this.getItemURL(512)
+			return this.getItemURL(1024)
 		},
 
 		srcSmall(): string {
