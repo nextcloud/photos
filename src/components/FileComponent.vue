@@ -27,32 +27,32 @@
 				<!-- Preload small preview for further away files -->
 				<template v-if="initialized">
 					<canvas
-						v-if="hasBlurhash && !loadedSmall && !loadedLarge"
+						v-if="hasBlurhash && !loadedLarge"
 						ref="canvas"
 						class="file__blurhash"
 						aria-hidden="true" />
 
 					<img
-						v-if="!loadedLarge && (loadedSmall || (distance < 5 && !errorSmall))"
+						v-if="!hasBlurhash && !loadedLarge && (loadedSmall || !errorSmall)"
 						ref="imgSmall"
 						:key="`${file.basename}-small`"
 						:src="srcSmall"
 						:alt="file.basename"
-						:decoding="loadedSmall || isVisible ? 'sync' : 'async'"
-						:fetchpriority="loadedSmall || isVisible ? 'high' : 'low'"
-						:loading="loadedSmall || isVisible ? 'eager' : distance < 2 ? 'auto' : 'lazy'"
+						:decoding="loadedSmall ? 'sync' : 'async'"
+						:fetchpriority="loadedSmall ? 'high' : 'low'"
+						:loading="loadedSmall ? 'eager' : undefined"
 						@load="onLoadSmall"
 						@error="onErrorSmall">
 
 					<img
-						v-if="loadedLarge || ((isVisible || (distance < 2 && (loadedSmall || errorSmall))) && !errorLarge)"
+						v-if="loadedLarge || ((hasBlurhash || loadedSmall || errorSmall) && !errorLarge)"
 						ref="imgLarge"
 						:key="`${file.basename}-large`"
 						:src="srcLarge"
 						:alt="file.basename"
-						:decoding="loadedLarge || isVisible ? 'sync' : 'async'"
-						:fetchpriority="loadedLarge || isVisible ? 'high' : 'low'"
-						:loading="loadedLarge || isVisible ? 'auto' : 'lazy'"
+						:decoding="loadedLarge ? 'sync' : 'async'"
+						:fetchpriority="loadedLarge ? 'high' : 'low'"
+						:loading="loadedLarge ? undefined : 'lazy'"
 						@load="onLoadLarge"
 						@error="onErrorLarge">
 				</template>
@@ -79,6 +79,7 @@ import type { PhotoFile } from '../store/files.js'
 
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { decode } from 'blurhash'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import PlayCircleOutlineIcon from 'vue-material-design-icons/PlayCircleOutline.vue'
@@ -111,11 +112,6 @@ export default {
 			type: Boolean,
 			default: true,
 		},
-
-		distance: {
-			type: Number,
-			default: 0,
-		},
 	},
 
 	data() {
@@ -125,6 +121,7 @@ export default {
 			errorSmall: false,
 			loadedLarge: false,
 			errorLarge: false,
+			isMobile: useIsMobile(),
 		}
 	},
 
@@ -145,19 +142,15 @@ export default {
 		},
 
 		srcLarge(): string {
-			return this.getItemURL(512)
+			return this.isMobile ? this.getItemURL(256) : this.getItemURL(1024)
 		},
 
 		srcSmall(): string {
 			return this.getItemURL(64)
 		},
 
-		isVisible(): boolean {
-			return this.distance === 0
-		},
-
 		hasBlurhash() {
-			return this.file.attributes.metadataBlurhash !== undefined
+			return this.file.attributes['metadata-blurhash'] !== undefined
 		},
 	},
 
@@ -242,7 +235,7 @@ export default {
 			const width = (this.$refs.canvas as HTMLCanvasElement).width
 			const height = (this.$refs.canvas as HTMLCanvasElement).height
 
-			const pixels = decode(this.file.attributes.metadataBlurhash, width, height)
+			const pixels = decode(this.file.attributes['metadata-blurhash'], width, height)
 
 			const ctx = (this.$refs.canvas as HTMLCanvasElement).getContext('2d') as CanvasRenderingContext2D
 			const imageData = ctx.createImageData(width, height) as ImageData
@@ -332,7 +325,9 @@ export default {
 	}
 
 	// Reveal checkbox on hover.
-	&:hover, &.selected, &:focus-within {
+	&:hover,
+	&.selected,
+	&:focus-within {
 		.selection-checkbox {
 			opacity: 1;
 		}
@@ -351,7 +346,7 @@ export default {
 		z-index: 1;
 		width: fit-content;
 
-		:deep .checkbox-radio-switch__input:focus-visible + .checkbox-radio-switch__content,
+		:deep .checkbox-radio-switch__input:focus-visible+.checkbox-radio-switch__content,
 		.checkbox-radio-switch__input:focus-visible {
 			outline: 2px solid var(--color-main-text);
 			box-shadow: 0 0 0 3px var(--color-main-background);
