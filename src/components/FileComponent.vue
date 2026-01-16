@@ -79,6 +79,7 @@ import type { PhotoFile } from '../store/files.js'
 
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { decode } from 'blurhash'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import PlayCircleOutlineIcon from 'vue-material-design-icons/PlayCircleOutline.vue'
@@ -125,6 +126,7 @@ export default {
 			errorSmall: false,
 			loadedLarge: false,
 			errorLarge: false,
+			isMobile: useIsMobile(),
 		}
 	},
 
@@ -145,7 +147,7 @@ export default {
 		},
 
 		srcLarge(): string {
-			return this.getItemURL(1024)
+			return this.isMobile ? this.getItemURL(256) : this.getItemURL(1024)
 		},
 
 		srcSmall(): string {
