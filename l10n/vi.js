@@ -4,6 +4,7 @@ OC.L10N.register(
     "Photos" : "Ảnh",
     "Your memories under your control" : "Các ký ức của bạn dưới sự kiểm soát của bạn",
     "Videos" : "Phim",
+    "Albums" : "Albums",
     "People" : "Mọi người",
     "Folders" : "Thư mục",
     "Favorites" : "Ưa thích",
