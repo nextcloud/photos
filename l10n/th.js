@@ -40,6 +40,7 @@ OC.L10N.register(
     "No photos in here" : "ไม่มีรูปภาพที่นี่",
     "No tags yet" : "ยังไม่มีแท็ก",
     "Photos with tags will show up here" : "รูปภาพที่ติดแท็กจะแสดงที่นี่",
+    "All your media" : "สื่อทั้งหมดของคุณ",
     "Tagged photos" : "รูปภาพที่ติดแท็ก",
     "Last week" : "สัปดาห์ที่แล้ว",
     "Details" : "รายละเอียด",
