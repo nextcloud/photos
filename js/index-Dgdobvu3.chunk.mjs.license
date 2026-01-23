@@ -45,7 +45,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 7.6.6
 	- license: MIT
 - photos
-	- version: 6.0.0-dev.0
+	- version: 7.0.0-dev.0
 	- license: AGPL-3.0-or-later
 - tabbable
 	- version: 6.3.0
