@@ -10,15 +10,6 @@ declare global {
 			Dashboard: {
 				register(name: string, callback: (el: HTMLElement) => void): void
 			}
-			Files: {
-				Sidebar: {
-					open: (path: string) => void
-					close: () => void
-					file: string | null | undefined
-					registerTab(tab: unknown): void
-					Tab: unknown
-				}
-			}
 			Viewer: {
 				open: ({ fileInfo, list }: { fileInfo: ViewerFileInfo, list: ViewerFileInfo[] }) => void
 				close: () => void
