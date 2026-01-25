@@ -47,7 +47,7 @@ OC.L10N.register(
     "Copy public link" : "Копіювати публічне посилання",
     "Delete the public link" : "Вилучити публічне посилання",
     "Create public link share" : "Створити посилання спільного доступу",
-    "Share via public link" : "Поділіться через публічне посилання",
+    "Share via public link" : "Поділітися через публічне посилання",
     "This collection does not exist" : "Ця колекція не існує",
     "An error occurred" : "Виникла помилка",
     "No picture for this day" : "Відсутні зображення цього дня",
