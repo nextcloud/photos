@@ -250,7 +250,7 @@ export default defineComponent({
 		/**
 		 * @param date - In the following format: YYYYMM
 		 */
-		dateMonthAndYear(date) {
+		dateMonthAndYear(date: string) {
 			if (this.isMobile) {
 				return moment(date, 'YYYYMM').format('MMM YYYY')
 			}
