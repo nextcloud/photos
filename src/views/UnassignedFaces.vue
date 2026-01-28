@@ -22,7 +22,7 @@
 					</NcActionButton>
 				</NcActions>
 				<div class="face__header__title">
-					<h2 :class="{ 'face-name': true }">
+					<h2 class="face-name">
 						{{ t('photos', 'Unassigned faces') }}
 					</h2>
 				</div>
