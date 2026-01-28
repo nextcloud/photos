@@ -29,6 +29,8 @@ const props = defineProps<{
 	value: PlacesValueType
 }>()
 
+const emit = defineEmits(['deselect'])
+
 const { fetchCollections } = useFetchCollections()
 
 const placeImageSource = computed<string>(() => {
@@ -45,7 +47,6 @@ if (Object.values(store.getters.places).length === 0) {
 	fetchCollections(placesPrefix)
 }
 
-const emit = defineEmits(['deselect'])
 </script>
 
 <style lang="scss" scoped>
