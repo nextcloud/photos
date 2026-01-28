@@ -5,7 +5,8 @@
 
 import { describe, expect, test } from 'vitest'
 import {
-	type TiledItem, type TiledRow,
+	type TiledItem,
+	type TiledRow,
 
 	splitItemsInRows,
 } from './TiledLayout.js'

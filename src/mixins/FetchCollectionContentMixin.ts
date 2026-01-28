@@ -12,7 +12,8 @@ import { defineComponent } from 'vue'
 import {
 	type Collection,
 
-	fetchCollection, fetchCollectionFiles,
+	fetchCollection,
+	fetchCollectionFiles,
 } from '../services/collectionFetcher.js'
 import logger from '../services/logger.js'
 import { collectionFilesExtraProps } from '../store/collections.js'
