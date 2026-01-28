@@ -22,7 +22,7 @@
 					</NcActionButton>
 				</NcActions>
 				<div class="face__header__title">
-					<h2 :class="{ 'face-name': true }">
+					<h2 class="face-name">
 						{{ t('photos', 'Unassigned faces') }}
 					</h2>
 				</div>
@@ -89,7 +89,7 @@
 			close-on-click-outside
 			size="normal"
 			@closing="showMoveModal = false">
-			<FaceMergeForm :first-face="'-1'" @select="handleMove($event, selectedFileIds)" />
+			<FaceMergeForm first-face="-1" @select="handleMove($event, selectedFileIds)" />
 		</NcDialog>
 	</div>
 </template>

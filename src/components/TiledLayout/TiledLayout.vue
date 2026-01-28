@@ -21,7 +21,8 @@ import type { PropType } from 'vue'
 import TiledRows from './TiledRows.vue'
 import logger from '../../services/logger.js'
 import {
-	type Section, type TiledSection,
+	type Section,
+	type TiledSection,
 
 	splitItemsInRows,
 } from '../../services/TiledLayout.js'

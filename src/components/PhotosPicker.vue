@@ -36,7 +36,7 @@
 					:key="month"
 					class="photos-picker__navigation__month">
 					<NcButton
-						:type="targetMonth === month ? 'secondary' : 'tertiary'"
+						:variant="targetMonth === month ? 'secondary' : 'tertiary'"
 						:aria-label="t('photos', 'Jump to {date}', { date: dateMonthAndYear(month) })"
 						@click="targetMonth = month">
 						{{ dateMonthAndYear(month) }}
@@ -55,7 +55,7 @@
 						:destination="photosLocationFolder"
 						multiple
 						@uploaded="refreshFiles" />
-					<NcButton type="primary" :disabled="loading || selectedFileIds.length === 0" @click="emitPickedEvent">
+					<NcButton variant="primary" :disabled="loading || selectedFileIds.length === 0" @click="emitPickedEvent">
 						<template #icon>
 							<ImagePlusOutline v-if="!loading" />
 							<NcLoadingIcon v-if="loading" />
@@ -250,7 +250,7 @@ export default defineComponent({
 		/**
 		 * @param date - In the following format: YYYYMM
 		 */
-		dateMonthAndYear(date) {
+		dateMonthAndYear(date: string) {
 			if (this.isMobile) {
 				return moment(date, 'YYYYMM').format('MMM YYYY')
 			}

@@ -63,8 +63,8 @@
 			v-if="allowSelection"
 			class="selection-checkbox"
 			:aria-label="t('photos', 'Select image {imageName}', { imageName: file.basename })"
-			:checked="selected"
-			@update:checked="onToggle" />
+			:model-value="selected"
+			@update:model-value="onToggle" />
 
 		<FavoriteIcon
 			v-if="file.attributes.favorite === 1"

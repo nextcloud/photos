@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<div :class="['face-cover', small && 'face-cover--small']" @click="$emit('click')">
+	<div class="face-cover" :class="[small && 'face-cover--small']" @click="$emit('click')">
 		<div class="face-cover__crop-container">
 			<AccountOffOutlineIcon :size="128" :fill-color="colorMainBackground" />
 		</div>
