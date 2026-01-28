@@ -62,21 +62,24 @@ This file is generated from multiple sources. Included packages:
 - @nextcloud/browser-storage
 	- version: 0.5.0
 	- license: GPL-3.0-or-later
+- @nextcloud/paths
+	- version: 3.0.0
+	- license: GPL-3.0-or-later
 - @nextcloud/dialogs
-	- version: 6.4.1
+	- version: 6.4.2
 	- license: AGPL-3.0-or-later
 - semver
-	- version: 7.7.1
+	- version: 7.7.3
 	- license: ISC
 - @nextcloud/event-bus
-	- version: 3.3.2
+	- version: 3.3.3
+	- license: GPL-3.0-or-later
+- @nextcloud/paths
+	- version: 3.0.0
 	- license: GPL-3.0-or-later
 - @nextcloud/files
-	- version: 3.12.0
+	- version: 3.12.2
 	- license: AGPL-3.0-or-later
-- @nextcloud/initial-state
-	- version: 2.2.0
-	- license: GPL-3.0-or-later
 - @nextcloud/router
 	- version: 2.2.1
 	- license: GPL-3.0-or-later
@@ -92,17 +95,11 @@ This file is generated from multiple sources. Included packages:
 - @nextcloud/moment
 	- version: 1.3.4
 	- license: GPL-3.0-or-later
-- @nextcloud/paths
-	- version: 2.2.1
-	- license: GPL-3.0-or-later
 - @nextcloud/router
-	- version: 3.0.1
-	- license: GPL-3.0-or-later
-- @nextcloud/sharing
-	- version: 0.2.5
+	- version: 3.1.0
 	- license: GPL-3.0-or-later
 - @nextcloud/l10n
-	- version: 3.4.0
+	- version: 3.4.1
 	- license: GPL-3.0-or-later
 - @vueuse/core
 	- version: 11.3.0
@@ -111,7 +108,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 11.3.0
 	- license: MIT
 - @nextcloud/vue
-	- version: 8.33.0
+	- version: 8.35.3
 	- license: AGPL-3.0-or-later
 - available-typed-arrays
 	- version: 1.0.7
@@ -165,7 +162,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.1.4
 	- license: MIT
 - dompurify
-	- version: 3.3.0
+	- version: 3.3.1
 	- license: (MPL-2.0 OR Apache-2.0)
 - dunder-proto
 	- version: 1.0.1
@@ -192,7 +189,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.0.0-beta.19
 	- license: MIT
 - focus-trap
-	- version: 7.5.2
+	- version: 7.8.0
 	- license: MIT
 - for-each
 	- version: 0.3.3
@@ -263,9 +260,6 @@ This file is generated from multiple sources. Included packages:
 - nested-property
 	- version: 4.0.0
 	- license: MIT
-- path-browserify
-	- version: 1.0.1
-	- license: MIT
 - path-posix
 	- version: 1.0.0
 	- license: ISC
@@ -303,7 +297,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 4.0.0
 	- license: MIT
 - tabbable
-	- version: 6.2.0
+	- version: 6.4.0
 	- license: MIT
 - toastify-js
 	- version: 1.12.0

@@ -23,7 +23,6 @@ SPDX-FileCopyrightText: Thorsten Lünborg
 SPDX-FileCopyrightText: T. Jameson Little <t.jameson.little@gmail.com>
 SPDX-FileCopyrightText: Sindre Sorhus
 SPDX-FileCopyrightText: Roman Shtylman <shtylman@gmail.com>
-SPDX-FileCopyrightText: Roeland Jago Douma
 SPDX-FileCopyrightText: Rob Cresswell <robcresswell@pm.me>
 SPDX-FileCopyrightText: Richie Bendall
 SPDX-FileCopyrightText: Raynos <raynos2@gmail.com>
@@ -103,16 +102,19 @@ This file is generated from multiple sources. Included packages:
 	- version: 0.5.0
 	- license: GPL-3.0-or-later
 - @nextcloud/capabilities
-	- version: 1.2.0
+	- version: 1.2.1
 	- license: GPL-3.0-or-later
 - semver
-	- version: 7.7.1
+	- version: 7.7.3
 	- license: ISC
 - @nextcloud/event-bus
-	- version: 3.3.2
+	- version: 3.3.3
+	- license: GPL-3.0-or-later
+- @nextcloud/paths
+	- version: 3.0.0
 	- license: GPL-3.0-or-later
 - @nextcloud/files
-	- version: 3.12.0
+	- version: 3.12.2
 	- license: AGPL-3.0-or-later
 - @nextcloud/initial-state
 	- version: 2.2.0
@@ -132,20 +134,14 @@ This file is generated from multiple sources. Included packages:
 - @nextcloud/moment
 	- version: 1.3.4
 	- license: GPL-3.0-or-later
-- @nextcloud/paths
-	- version: 2.2.1
-	- license: GPL-3.0-or-later
 - @nextcloud/router
-	- version: 3.0.1
-	- license: GPL-3.0-or-later
-- @nextcloud/sharing
-	- version: 0.2.5
+	- version: 3.1.0
 	- license: GPL-3.0-or-later
 - @nextcloud/vue-select
 	- version: 3.26.0
 	- license: MIT
 - @nextcloud/l10n
-	- version: 3.4.0
+	- version: 3.4.1
 	- license: GPL-3.0-or-later
 - @nextcloud/initial-state
 	- version: 3.0.0
@@ -165,9 +161,6 @@ This file is generated from multiple sources. Included packages:
 - is-plain-obj
 	- version: 4.1.0
 	- license: MIT
-- mdast-util-to-hast
-	- version: 13.0.2
-	- license: MIT
 - remark-breaks
 	- version: 4.0.0
 	- license: MIT
@@ -180,9 +173,6 @@ This file is generated from multiple sources. Included packages:
 - unist-builder
 	- version: 4.0.0
 	- license: MIT
-- unist-util-position
-	- version: 5.0.0
-	- license: MIT
 - unist-util-stringify-position
 	- version: 4.0.0
 	- license: MIT
@@ -193,7 +183,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 6.0.1
 	- license: MIT
 - @nextcloud/vue
-	- version: 8.33.0
+	- version: 8.35.3
 	- license: AGPL-3.0-or-later
 - @ungap/structured-clone
 	- version: 1.2.0
@@ -271,7 +261,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.1.0
 	- license: MIT
 - dompurify
-	- version: 3.3.0
+	- version: 3.3.1
 	- license: (MPL-2.0 OR Apache-2.0)
 - dunder-proto
 	- version: 1.0.1
@@ -301,7 +291,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.0.0-beta.19
 	- license: MIT
 - focus-trap
-	- version: 7.5.2
+	- version: 7.8.0
 	- license: MIT
 - for-each
 	- version: 0.3.3
@@ -405,6 +395,9 @@ This file is generated from multiple sources. Included packages:
 - mdast-util-newline-to-break
 	- version: 2.0.0
 	- license: MIT
+- mdast-util-to-hast
+	- version: 13.2.1
+	- license: MIT
 - mdast-util-to-string
 	- version: 4.0.0
 	- license: MIT
@@ -483,9 +476,6 @@ This file is generated from multiple sources. Included packages:
 - p-timeout
 	- version: 6.1.2
 	- license: MIT
-- path-browserify
-	- version: 1.0.1
-	- license: MIT
 - path-posix
 	- version: 1.0.0
 	- license: ISC
@@ -559,7 +549,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 0.4.1
 	- license: MIT
 - tabbable
-	- version: 6.2.0
+	- version: 6.4.0
 	- license: MIT
 - tributejs
 	- version: 5.1.3
@@ -572,6 +562,9 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - unist-util-is
 	- version: 6.0.0
+	- license: MIT
+- unist-util-position
+	- version: 5.0.0
 	- license: MIT
 - unist-util-visit-parents
 	- version: 6.0.1
