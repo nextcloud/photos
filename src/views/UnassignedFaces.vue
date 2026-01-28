@@ -89,7 +89,7 @@
 			close-on-click-outside
 			size="normal"
 			@closing="showMoveModal = false">
-			<FaceMergeForm :first-face="'-1'" @select="handleMove($event, selectedFileIds)" />
+			<FaceMergeForm first-face="-1" @select="handleMove($event, selectedFileIds)" />
 		</NcDialog>
 	</div>
 </template>

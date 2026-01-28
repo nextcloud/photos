@@ -24,7 +24,7 @@
 		<HeaderNavigation
 			key="navigation"
 			:loading="loadingCount > 0"
-			:path="'/'"
+			path="/"
 			:title="rootTitle"
 			:root-title="rootTitle"
 			@refresh="resetFetchFilesState">

@@ -34,7 +34,7 @@
 			</RouterLink>
 			<RouterLink
 				key="unassigned"
-				:to="`/faces/unassigned`">
+				to="/faces/unassigned">
 				<UnassignedFacesCover />
 			</RouterLink>
 		</div>
