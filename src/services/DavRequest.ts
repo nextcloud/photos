@@ -14,7 +14,7 @@ let props: string | null = null
  * Get the default WebDAV properties
  * This is cached for performance reasons
  */
-export const getDefaultDavProps = () => {
+export function getDefaultDavProps() {
 	if (props === null) {
 		props = getDavProperties()
 	}
