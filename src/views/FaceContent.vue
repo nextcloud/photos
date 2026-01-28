@@ -152,7 +152,7 @@
 			<template #actions>
 				<NcButton
 					:aria-label="t('photos', 'Save.')"
-					type="primary"
+					variant="primary"
 					:disabled="$refs.nameInput && $refs.nameInput.value.trim() === ''"
 					@click="handleRenameFace($refs.nameInput.value)">
 					<template #icon>

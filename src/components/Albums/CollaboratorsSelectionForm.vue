@@ -40,7 +40,7 @@
 					:is-no-user="availableCollaborators[collaboratorKey].type !== collaboratorTypes.User">
 					<AccountGroupOutline v-if="availableCollaborators[collaboratorKey].type === collaboratorTypes.Group" :title="t('photos', 'Group')" />
 					<NcButton
-						type="tertiary"
+						variant="tertiary"
 						:aria-label="t('photos', 'Remove {collaboratorLabel} from the collaborators list', { collaboratorLabel: availableCollaborators[collaboratorKey].label })"
 						@click="unselectEntity(collaboratorKey)">
 						<Close slot="icon" :size="20" />
@@ -69,7 +69,7 @@
 						</template>
 					</NcButton>
 					<NcButton
-						type="tertiary"
+						variant="tertiary"
 						:aria-label="t('photos', 'Delete the public link')"
 						@click="deletePublicLink">
 						<Close slot="icon" />

@@ -45,7 +45,7 @@
 				<template v-else>
 					<NcButton
 						:close-after-click="true"
-						type="primary"
+						variant="primary"
 						:aria-label="t('photos', 'Add to album')"
 						data-cy-header-action="add-to-album"
 						@click="showAlbumPicker = true">
