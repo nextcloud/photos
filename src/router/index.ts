@@ -11,6 +11,7 @@ import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
 import areTagsInstalled from '../services/AreTagsInstalled.js'
 import isMapsInstalled from '../services/IsMapsInstalled.js'
 import isRecognizeInstalled from '../services/IsRecognizeInstalled.js'
+import { getSidebar } from '@nextcloud/files'
 
 const FoldersView = () => import('../views/FoldersView.vue')
 const AlbumsView = () => import('../views/AlbumsView.vue')
@@ -314,9 +315,9 @@ router.afterEach((to, from) => {
 	}
 
 	// Close sidebar on view change
-	const isSidebarOpen = !!window.OCA?.Files?.Sidebar?.file
-	if (isSidebarOpen && to.name !== from.name) {
-		window.OCA.Files.Sidebar.close()
+	const sidebar = getSidebar()
+	if (sidebar.isOpen && to.name !== from.name) {
+		sidebar.close()
 	}
 })
 
