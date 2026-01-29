@@ -81,7 +81,7 @@
 			:scroll-to-section="targetMonth"
 			@need-content="getFiles"
 			@focusout.native="onFocusOut">
-			<template slot-scope="{ file, height, isHeader, distance }">
+			<template slot-scope="{ file, height, isHeader }">
 				<h3
 					v-if="isHeader"
 					:id="`photos-picker-section-header-${file.id}`"
@@ -95,7 +95,6 @@
 					:file="files[file.id]"
 					:allow-selection="true"
 					:selected="selection[file.id] === true"
-					:distance="distance"
 					@select-toggled="onFileSelectToggle" />
 			</template>
 		</FilesListViewer>
