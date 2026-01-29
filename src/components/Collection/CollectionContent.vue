@@ -34,7 +34,6 @@
 				:file="files[file.id]"
 				:allow-selection="allowSelection"
 				:selected="selection[file.id] === true"
-				:distance="distance"
 				@click="openViewer"
 				@select-toggled="onFileSelectToggle" />
 		</FilesListViewer>
