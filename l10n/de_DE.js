@@ -183,6 +183,7 @@ OC.L10N.register(
     "View" : "Ansicht",
     "Choose the folder where photos and albums are uploaded to." : "Ordner wählen, in den Fotos und Videos hochgeladen werden.",
     "Loading folders …" : "Ordner werden geladen …",
-    "Add" : "Hinzufügen"
+    "Add" : "Hinzufügen",
+    "Loading folders …" : "Lade Ordner …"
 },
 "nplurals=2; plural=(n != 1);");
