@@ -183,6 +183,7 @@ OC.L10N.register(
     "View" : "Vaata",
     "Choose the folder where photos and albums are uploaded to." : "Vali kaust, kuhu fotod ja albumid üles laaditakse",
     "Loading folders …" : "Kaustada laadimine …",
-    "Add" : "Lisa"
+    "Add" : "Lisa",
+    "Loading folders …" : "Laadin kaustu…"
 },
 "nplurals=2; plural=(n != 1);");

@@ -183,6 +183,7 @@ OC.L10N.register(
     "View" : "Exibição",
     "Choose the folder where photos and albums are uploaded to." : "Escolha a pasta na qual as fotos e os álbuns serão carregados.",
     "Loading folders …" : "Carregando pastas …",
-    "Add" : "Adicionar"
+    "Add" : "Adicionar",
+    "Loading folders …" : "Carregando pastas …"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
