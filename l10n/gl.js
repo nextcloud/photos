@@ -183,6 +183,7 @@ OC.L10N.register(
     "View" : "Ver",
     "Choose the folder where photos and albums are uploaded to." : "Escolla o cartafol ao que se enviarán as fotos e os álbums.",
     "Loading folders …" : "Cargando cartafoles…",
-    "Add" : "Engadir"
+    "Add" : "Engadir",
+    "Loading folders …" : "Cargando cartafoles…"
 },
 "nplurals=2; plural=(n != 1);");
