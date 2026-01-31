@@ -72,6 +72,7 @@ OC.L10N.register(
     "The destination folder is owned by {owner}" : "保存先フォルダーの所有者は{owner}です。",
     "There are no photos or videos yet!" : "写真やビデオはまだありません！",
     "_{years} year ago_::_{years} years ago_" : ["{years} 年前"],
+    "Squared photos view" : "正方形の写真ビュー",
     "Delete source directory" : "ソースディレクトリの削除",
     "Pick folder" : "フォルダーを選択",
     "Select a source folder for your media" : "メディアのソースフォルダーを選択してください",
@@ -157,6 +158,9 @@ OC.L10N.register(
     "Failed to create {collectionFileName}" : "{collectionFileName} の作成に失敗しました",
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "{currentCollectionFileName} から {newCollectionFileName} への名前の変更に失敗しました",
     "Failed to update properties of {collectionFileName} with {properties}" : "{collectionFileName}のプロパティを{properties}で更新できませんでした",
+    "Delete collection" : "コレクションを削除",
+    "Leave shared album" : "共有アルバムを離れる",
+    "Are you sure you want to delete {collectionName}? This action cannot be undone." : "本当に{collectionName}を削除しますか？この操作は元に戻すことができません。",
     "Failed to delete {collectionFileName}" : "{collectionFileName} の削除に失敗しました",
     "Cancel" : "キャンセル",
     "Confirm" : "承認",
@@ -179,6 +183,7 @@ OC.L10N.register(
     "View" : "表示",
     "Choose the folder where photos and albums are uploaded to." : "写真やアルバムをアップロードするフォルダを選択します。",
     "Loading folders …" : "フォルダを読み込んでいる ...",
-    "Add" : "追加"
+    "Add" : "追加",
+    "Loading folders …" : "フォルダを読み込み中…"
 },
 "nplurals=1; plural=0;");
