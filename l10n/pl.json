@@ -70,6 +70,7 @@
     "The destination folder is owned by {owner}" : "Katalog docelowy jest własnością {owner}",
     "There are no photos or videos yet!" : "Nie ma jeszcze zdjęć ani filmów!",
     "_{years} year ago_::_{years} years ago_" : ["{years} rok temu","{years} lata temu","{years} lat temu","{years} lat temu"],
+    "Squared photos view" : "Widok zdjęć w siatce",
     "Delete source directory" : "Usuń katalog źródłowy",
     "Pick folder" : "Wybierz katalog",
     "Select a source folder for your media" : "Wybierz katalog źródłowy dla multimediów",
@@ -155,6 +156,9 @@
     "Failed to create {collectionFileName}" : "Nie udało się utworzyć {collectionFileName}",
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Nie udało się zmienić nazwy {currentCollectionFileName} na {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Nie udało się zaktualizować właściwości {collectionFileName} o {properties}",
+    "Delete collection" : "Usuń kolekcję",
+    "Leave shared album" : "Opuść album udostępniony",
+    "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Czy na pewno chcesz usunąć {collectionName}? Tej operacji nie można cofnąć.",
     "Failed to delete {collectionFileName}" : "Nie udało się usunąć {collectionFileName}",
     "Cancel" : "Anuluj",
     "Confirm" : "Potwierdź",
@@ -177,6 +181,7 @@
     "View" : "Podgląd",
     "Choose the folder where photos and albums are uploaded to." : "Wybierz katalog, do którego przesyłane są zdjęcia i albumy.",
     "Loading folders …" : "Wczytywanie katalogów …",
-    "Add" : "Dodaj"
+    "Add" : "Dodaj",
+    "Loading folders …" : "Wczytywanie folderów…"
 },"pluralForm" :"nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);"
 }
