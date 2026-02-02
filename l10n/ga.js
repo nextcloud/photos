@@ -183,6 +183,7 @@ OC.L10N.register(
     "View" : "Amharc",
     "Choose the folder where photos and albums are uploaded to." : "Roghnaigh an fillteán ina ndéantar grianghraif agus albam a uaslódáil.",
     "Loading folders …" : "fillteáin á lódáil…",
-    "Add" : "Cuir"
+    "Add" : "Cuir",
+    "Loading folders …" : "Ag lódáil fillteáin …"
 },
 "nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);");
