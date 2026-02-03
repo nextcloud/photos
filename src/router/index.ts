@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { getSidebar } from '@nextcloud/files'
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
-import { getSidebar } from '@nextcloud/files'
 import Vue from 'vue'
 import Router from 'vue-router'
 import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
