@@ -37,7 +37,7 @@ class TagListener implements IEventListener {
 			if ($event->getObjectType() !== 'files') {
 				return;
 			}
-			$node = current($this->rootFolder->getById((int)$event->getObjectId()));
+			$node = $this->rootFolder->getFirstNodeById((int)$event->getObjectId());
 			if (!$node) {
 				return;
 			}
