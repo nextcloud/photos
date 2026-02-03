@@ -5,13 +5,13 @@
 
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
+import { getSidebar } from '@nextcloud/files'
 import Vue from 'vue'
 import Router from 'vue-router'
 import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
 import areTagsInstalled from '../services/AreTagsInstalled.js'
 import isMapsInstalled from '../services/IsMapsInstalled.js'
 import isRecognizeInstalled from '../services/IsRecognizeInstalled.js'
-import { getSidebar } from '@nextcloud/files'
 
 const FoldersView = () => import('../views/FoldersView.vue')
 const AlbumsView = () => import('../views/AlbumsView.vue')
