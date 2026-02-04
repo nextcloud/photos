@@ -183,6 +183,7 @@ OC.L10N.register(
     "View" : "檢視",
     "Choose the folder where photos and albums are uploaded to." : "選擇照片與相簿上傳到的資料夾。",
     "Loading folders …" : "載入資料夾 …",
-    "Add" : "添加"
+    "Add" : "添加",
+    "Loading folders …" : "載入資料夾 …"
 },
 "nplurals=1; plural=0;");
