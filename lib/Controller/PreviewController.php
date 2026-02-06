@@ -131,6 +131,11 @@ class PreviewController extends Controller {
 	protected function getFileIdForAlbums($fileId, $albums) {
 		foreach ($albums as $album) {
 			$albumFile = $this->albumMapper->getForAlbumIdAndFileId($album->getId(), $fileId);
+
+			if ($albumFile === null) {
+				continue;
+			}
+
 			$nodes = $this->rootFolder
 				->getUserFolder($albumFile->getOwner())
 				->getById($fileId);

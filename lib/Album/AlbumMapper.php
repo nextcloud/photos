@@ -229,7 +229,11 @@ class AlbumMapper {
 			->leftJoin('p', 'filecache', 'f', $query->expr()->eq('p.file_id', 'f.fileid'))
 			->where($query->expr()->eq('a.album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
-		$row = $query->executeQuery()->fetchAll()[0];
+		$row = $query->executeQuery()->fetch();
+
+		if ($row === false) {
+			throw new \Exception('File ' . $fileId . ' not found in album ' . $albumId);
+		}
 
 		$mimeType = $this->mimeTypeLoader->getMimetypeById((int)$row['mimetype']);
 		return new AlbumFile((int)$row['fileid'], $row['file_name'], $mimeType, (int)$row['size'], (int)$row['mtime'], $row['etag'], (int)$row['added'], $row['owner']);
