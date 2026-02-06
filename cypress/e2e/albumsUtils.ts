@@ -34,7 +34,7 @@ export function deleteAnAlbumFromAlbumContent(albumName: string) {
 	cy.contains('Delete album').click()
 	cy.contains(`Are you sure you want to delete ${albumName}? This action cannot be undone.`)
 		.parentsUntil('.modal')
-		.contains('Delete')
+		.contains('Confirm')
 		.click()
 }
 
