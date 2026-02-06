@@ -43,6 +43,8 @@ class FiltersManager {
 	 * @return AlbumFile[]
 	 */
 	public function getFilesBasedOnFilters(string $userId, array $userFilters, ?int $fileId = null): array {
+		$filtersOperations = [];
+
 		foreach ($userFilters as $filterId => $filterValue) {
 			if (is_array($filterValue) && count($filterValue) > 0) {
 				$filtersOperations[] = $this->registeredFilters[$filterId]->getSearchOperator($filterValue);
@@ -61,7 +63,7 @@ class FiltersManager {
 			);
 		}
 
-		$filtersOperations += $this->getPhotosDefaultSearchConditions();
+		array_push($filtersOperations, ...$this->getPhotosDefaultSearchConditions($userId));
 
 		$query = new SearchQuery(new SearchBinaryOperator(ISearchBinaryOperator::OPERATOR_AND, $filtersOperations), 1000, 0, []);
 
@@ -85,8 +87,8 @@ class FiltersManager {
 		);
 	}
 
-	private function getPhotosDefaultSearchConditions(): array {
-		$folders = json_decode($this->userConfigService->getUserConfig('photosSourceFolders'));
+	private function getPhotosDefaultSearchConditions(string $userId): array {
+		$folders = json_decode($this->userConfigService->getConfigForUser($userId, 'photosSourceFolders'));
 
 		return [
 			new SearchBinaryOperator(
