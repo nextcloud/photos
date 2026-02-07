@@ -183,6 +183,7 @@ OC.L10N.register(
     "View" : "Görüntüle",
     "Choose the folder where photos and albums are uploaded to." : "Fotoğraf ve albümlerin yükleneceği klasörü seçin.",
     "Loading folders …" : "Klasörler yükleniyor…",
-    "Add" : "Ekle"
+    "Add" : "Ekle",
+    "Loading folders …" : "Klasörler yükleniyor…"
 },
 "nplurals=2; plural=(n > 1);");
