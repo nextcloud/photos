@@ -158,6 +158,8 @@ OC.L10N.register(
     "Failed to create {collectionFileName}" : "Impossible de créer {collectionFileName}",
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Impossible de renommer {currentCollectionFileName} en {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Impossible de mettre à jour {collectionFileName} avec {properties}",
+    "Leave shared album" : "Quitter l'album partagé",
+    "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Êtes-vous sûr de vouloir supprimer {collectionName} ? Cette action ne peut pas être annulée.",
     "Failed to delete {collectionFileName}" : "Impossible de supprimer {collectionFileName}",
     "Cancel" : "Annuler",
     "Confirm" : "Confirmer",
@@ -180,6 +182,7 @@ OC.L10N.register(
     "View" : "Affichage",
     "Choose the folder where photos and albums are uploaded to." : "Choisir le dossier où les photos et albums sont téléversés.",
     "Loading folders …" : "Chargement des dossiers ...",
-    "Add" : "Ajouter"
+    "Add" : "Ajouter",
+    "Loading folders …" : "Chargement des dossiers…"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
