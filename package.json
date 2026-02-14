@@ -67,7 +67,7 @@
     "leaflet-defaulticon-compatibility": "^0.1.2",
     "path-posix": "^1.0.0",
     "pinia": "^2.3.1",
-    "qs": "^6.14.0",
+    "qs": "^6.14.2",
     "url-parse": "^1.5.10",
     "vue": "^2.7.14",
     "vue-material-design-icons": "^5.3.1",
