@@ -122,7 +122,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '../mixins/FileFolder';
+@use '../mixins/FileFolder.scss' as *;
 
 .transition-group {
 	display: contents;

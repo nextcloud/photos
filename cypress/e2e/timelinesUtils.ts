@@ -4,8 +4,9 @@
  */
 
 /**
+ * Navigate to a specific timeline
  *
- * @param timelineId
+ * @param timelineId - The id of the timeline to navigate to.
  */
 export function navigateToTimeline(timelineId: 'all-media' | 'photos' | 'this-day' | 'favorites') {
 	cy.url()

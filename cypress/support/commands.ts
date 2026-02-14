@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type { User } from '@nextcloud/cypress'
+import type { User } from '@nextcloud/e2e-test-server/cypress'
 
-import { addCommands } from '@nextcloud/cypress'
+import { addCommands } from '@nextcloud/e2e-test-server/cypress'
 import axios from 'axios'
 import { addCompareSnapshotCommand } from 'cypress-visual-regression/dist/command'
 import { basename } from 'path'
