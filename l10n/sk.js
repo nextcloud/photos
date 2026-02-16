@@ -183,6 +183,7 @@ OC.L10N.register(
     "View" : "Prezerať",
     "Choose the folder where photos and albums are uploaded to." : "Vyberte priečinok, do ktorého sa budú nahrávať fotografie a albumy.",
     "Loading folders …" : "Načítavanie priečinkov ...",
-    "Add" : "Pridať"
+    "Add" : "Pridať",
+    "Loading folders …" : "Načítavanie priečinkov …"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");
