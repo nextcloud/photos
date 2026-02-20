@@ -47,10 +47,7 @@ OC.L10N.register(
     "Cancel" : "Cancel",
     "Confirm" : "ยืนยัน",
     "Group" : "กลุ่ม",
-    "Back to {folder}" : "กลับไปยัง {folder}",
-    "Share this folder" : "แชร์โฟลเดอร์นี้",
     "Enable squared photos view" : "เปิดมุมมองรูปภาพสี่เหลี่ยม",
-    "View" : "มุมมอง",
-    "Add" : "เพิ่ม"
+    "View" : "มุมมอง"
 },
 "nplurals=1; plural=0;");

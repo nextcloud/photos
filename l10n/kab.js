@@ -21,8 +21,6 @@ OC.L10N.register(
     "Details" : "Talqayt",
     "Cancel" : "Semmet",
     "Confirm" : "Sergeg",
-    "Group" : "Agraw",
-    "Back to {folder}" : "Uɣal ar {folder}",
-    "Add" : "Rnu"
+    "Group" : "Agraw"
 },
 "nplurals=2; plural=(n != 1);");

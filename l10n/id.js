@@ -175,14 +175,10 @@ OC.L10N.register(
     "Could not load photos folder" : "Tidak dapat memuat folder foto",
     "Group" : "Grup",
     "Remove {collaboratorLabel} from the collaborators list" : "Hapus {collaboratorLabel} dari daftar kolaborator",
-    "Back to {folder}" : "Kembali ke {folder}",
-    "Share this folder" : "Bagikan folder ini",
     "Enable squared photos view" : "Aktifkan tampilan foto kotak",
     "Choose default Photos upload and Albums location" : "PIlih lokasi unggahan Foto dan lokasi Album bawaan",
     "Choose a different folder" : "Pilih folder lain",
     "View" : "Tampilan",
-    "Choose the folder where photos and albums are uploaded to." : "Pilih folder tempat foto dan album diunggah.",
-    "Loading folders …" : "Memuat folder…",
-    "Add" : "Masukkan"
+    "Choose the folder where photos and albums are uploaded to." : "Pilih folder tempat foto dan album diunggah."
 },
 "nplurals=1; plural=0;");

@@ -26,7 +26,6 @@ OC.L10N.register(
     "Cancel" : "Cancel",
     "Confirm" : "Konfirmi",
     "Group" : "Grupo",
-    "View" : "Vidi",
-    "Add" : "Aldoni"
+    "View" : "Vidi"
 },
 "nplurals=2; plural=(n != 1);");

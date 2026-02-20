@@ -20,7 +20,6 @@ OC.L10N.register(
     "Loading folders…" : "Cargando carpetas…",
     "Cancel" : "Cancel",
     "Confirm" : "Confirmar",
-    "Group" : "Grupo",
-    "Add" : "Agregar"
+    "Group" : "Grupo"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

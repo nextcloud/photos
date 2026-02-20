@@ -13,7 +13,6 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Details" : "விவரங்கள்",
     "Cancel" : "Cancel",
-    "Group" : "Group",
-    "Add" : "சேர்க்க"
+    "Group" : "Group"
 },
 "nplurals=2; plural=(n != 1);");

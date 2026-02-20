@@ -175,15 +175,11 @@ OC.L10N.register(
     "Could not load photos folder" : "Non è stato possibile caricare la cartella foto",
     "Group" : "Gruppo",
     "Remove {collaboratorLabel} from the collaborators list" : "Rimuovi {collaboratorLabel} dall'elenco dei collaboratori",
-    "Back to {folder}" : "Torna a {folder}",
-    "Share this folder" : "Condividi questa cartella",
     "Enable squared photos view" : "Abilita vista foto quadrate",
     "Choose default Photos upload and Albums location" : "Scegli il percorso predefinito di caricamento di foto e album",
     "Choose a different folder" : "Scegli una cartella diversa",
     "View" : "Visualizza",
     "Choose the folder where photos and albums are uploaded to." : "Scegli la cartella dove foto e album saranno caricati",
-    "Loading folders …" : "Caricamento cartelle …",
-    "Add" : "Aggiungi",
     "Loading folders …" : "Caricamento delle cartelle …"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

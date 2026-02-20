@@ -175,15 +175,11 @@ OC.L10N.register(
     "Could not load photos folder" : "Could not load photos folder",
     "Group" : "Group",
     "Remove {collaboratorLabel} from the collaborators list" : "Remove {collaboratorLabel} from the collaborators list",
-    "Back to {folder}" : "Back to {folder}",
-    "Share this folder" : "Share this folder",
     "Enable squared photos view" : "Enable squared photos view",
     "Choose default Photos upload and Albums location" : "Choose default Photos upload and Albums location",
     "Choose a different folder" : "Choose a different folder",
     "View" : "View",
     "Choose the folder where photos and albums are uploaded to." : "Choose the folder where photos and albums are uploaded to.",
-    "Loading folders …" : "Loading folders …",
-    "Add" : "Add",
     "Loading folders …" : "Loading folders …"
 },
 "nplurals=2; plural=(n != 1);");

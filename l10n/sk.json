@@ -173,15 +173,11 @@
     "Could not load photos folder" : "Nepodarilo sa načítať priečinok s fotkami",
     "Group" : "Skupina",
     "Remove {collaboratorLabel} from the collaborators list" : "Odobrať {collaboratorLabel} zo zoznamu spolupracovníkov",
-    "Back to {folder}" : "Späť do {folder}",
-    "Share this folder" : "Zdieľať tento priečinok",
     "Enable squared photos view" : "Zapnúť štvorcové zobrazenie fotiek",
     "Choose default Photos upload and Albums location" : "Vyberte predvolené umiestnenie pre nahrávané fotky a albumy",
     "Choose a different folder" : "Vyberte iný priečinok",
     "View" : "Prezerať",
     "Choose the folder where photos and albums are uploaded to." : "Vyberte priečinok, do ktorého sa budú nahrávať fotografie a albumy.",
-    "Loading folders …" : "Načítavanie priečinkov ...",
-    "Add" : "Pridať",
     "Loading folders …" : "Načítavanie priečinkov …"
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);"
 }

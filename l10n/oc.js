@@ -30,10 +30,7 @@ OC.L10N.register(
     "Cancel" : "Cancel",
     "Confirm" : "Confirmar",
     "Group" : "Grop",
-    "Back to {folder}" : "Tornar a {folder}",
-    "Share this folder" : "Partejar aqueste dossièr",
     "Enable squared photos view" : "Activar la vista amb fòtos carrat",
-    "View" : "Vista",
-    "Add" : "Apondre"
+    "View" : "Vista"
 },
 "nplurals=2; plural=(n > 1);");

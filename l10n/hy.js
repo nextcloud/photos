@@ -10,7 +10,6 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Details" : "Մանրամասներ",
     "Cancel" : "Cancel",
-    "Group" : "Խումբ",
-    "Add" : "Ավելացնել"
+    "Group" : "Խումբ"
 },
 "nplurals=2; plural=(n != 1);");

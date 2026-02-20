@@ -16,7 +16,6 @@ OC.L10N.register(
     "Details" : "Detailer",
     "Cancel" : "Cancel",
     "Confirm" : "Konfirméieren",
-    "Group" : "Grupp",
-    "Add" : "Derbäimaachen"
+    "Group" : "Grupp"
 },
 "nplurals=2; plural=(n != 1);");

@@ -9,7 +9,6 @@ OC.L10N.register(
     "Home" : "﻿ಮುಖಪುಟ",
     "Remove from favorites" : "Remove from favorites",
     "Cancel" : "Cancel",
-    "Group" : "﻿ಗುಂಪು",
-    "Add" : "﻿ಸೇರಿಸಿ"
+    "Group" : "﻿ಗುಂಪು"
 },
 "nplurals=2; plural=(n > 1);");

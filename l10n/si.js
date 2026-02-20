@@ -10,7 +10,6 @@ OC.L10N.register(
     "Home" : "මුල් පිටුව",
     "General" : "සමාන්‍යය",
     "Cancel" : "Cancel",
-    "Confirm" : "තහවුරු කරන්න",
-    "Add" : "එකතු කරන්න"
+    "Confirm" : "තහවුරු කරන්න"
 },
 "nplurals=2; plural=(n != 1);");

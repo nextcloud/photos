@@ -17,7 +17,6 @@ OC.L10N.register(
     "Cancel" : "Cancel",
     "Confirm" : "Confirmar",
     "Group" : "Gruppo",
-    "View" : "Vider",
-    "Add" : "Adder"
+    "View" : "Vider"
 },
 "nplurals=2; plural=(n != 1);");

@@ -154,13 +154,9 @@ OC.L10N.register(
     "Could not load photos folder" : "Ni mogoče naložiti mape fotografij",
     "Group" : "Skupina",
     "Remove {collaboratorLabel} from the collaborators list" : "Odstrani {collaboratorLabel} s seznama sodelujočih",
-    "Back to {folder}" : "Nazaj v mapo {folder}",
-    "Share this folder" : "Omogoči souporabo mape",
     "Enable squared photos view" : "Omogoči kvadratne prikaze slik",
     "Choose a different folder" : "Izberite drugo mapo",
     "View" : "Poglej",
-    "Choose the folder where photos and albums are uploaded to." : "Izberi mapo, kamor se bodo naložile fotografije in albumi",
-    "Loading folders …" : "Poteka nalaganje map …",
-    "Add" : "Dodaj"
+    "Choose the folder where photos and albums are uploaded to." : "Izberi mapo, kamor se bodo naložile fotografije in albumi"
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");

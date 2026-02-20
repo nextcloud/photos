@@ -15,7 +15,6 @@ OC.L10N.register(
     "Details" : "Detallar",
     "Cancel" : "Cancel",
     "Confirm" : "Təsdiq edin",
-    "Group" : "Qrup",
-    "Add" : "Əlavə etmək"
+    "Group" : "Qrup"
 },
 "nplurals=2; plural=(n != 1);");
