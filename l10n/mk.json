@@ -170,14 +170,10 @@
     "Could not load photos folder" : "Не можеше да се вчита папката со фотографии",
     "Group" : "Група",
     "Remove {collaboratorLabel} from the collaborators list" : "Избриши {collaboratorLabel} од листата на соработници",
-    "Back to {folder}" : "Назад кон {folder}",
-    "Share this folder" : "Сподели ја оваа папка",
     "Enable squared photos view" : "Овозможи поглед на фотографиите во квадрати",
     "Choose default Photos upload and Albums location" : "Стандардна локација за прикачени фотографии и локации на албуми",
     "Choose a different folder" : "Избери друга папка",
     "View" : "Погледни",
-    "Choose the folder where photos and albums are uploaded to." : "Изберете ги папките од каде што се прикачуваат фотографиите и албумите.",
-    "Loading folders …" : "Се вчитуваат папките…",
-    "Add" : "Додади"
+    "Choose the folder where photos and albums are uploaded to." : "Изберете ги папките од каде што се прикачуваат фотографиите и албумите."
 },"pluralForm" :"nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;"
 }

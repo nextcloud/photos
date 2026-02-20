@@ -26,9 +26,6 @@ OC.L10N.register(
     "Details" : "Detalles",
     "Cancel" : "Cancel",
     "Confirm" : "Confirmar",
-    "Group" : "Grupo",
-    "Back to {folder}" : "Volver a {folder}",
-    "Share this folder" : "Compartir esta carpeta",
-    "Add" : "Agregar"
+    "Group" : "Grupo"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

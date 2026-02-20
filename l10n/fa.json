@@ -122,12 +122,8 @@
     "Confirm" : "تأیید",
     "Group" : "گروه",
     "Remove {collaboratorLabel} from the collaborators list" : "{collaboratorLabel} را از لیست همکاران حذف کنید",
-    "Back to {folder}" : "برگشت به {} پوشه",
-    "Share this folder" : "این پوشه را به اشتراک بگذار",
     "Enable squared photos view" : "نمایش عکس های مربعی را فعال کنید",
     "Choose default Photos upload and Albums location" : "مکان پیش‌فرض آلبوم‌ها و بارگذاری عکس‌ها را انتخاب کنید",
-    "View" : "نمایش",
-    "Loading folders …" : "در حال بارگیری پوشه ها…",
-    "Add" : "افزودن"
+    "View" : "نمایش"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

@@ -169,14 +169,10 @@
     "Could not load photos folder" : "Kunne ikke indlæse fotomappe",
     "Group" : "Gruppe",
     "Remove {collaboratorLabel} from the collaborators list" : "Fjern {collaboratorLabel} fra listen over samarbejdspartnere",
-    "Back to {folder}" : "Tilbage til {folder}",
-    "Share this folder" : "Del denne mappe",
     "Enable squared photos view" : "Aktiver kvadratisk fotovisning",
     "Choose default Photos upload and Albums location" : "Vælg standard fotoupload og albumplacering",
     "Choose a different folder" : "Vælg en anden mappe",
     "View" : "Vis",
-    "Choose the folder where photos and albums are uploaded to." : "Vælg mappen som fotos og albummer uploades til.",
-    "Loading folders …" : "Indlæser mapper..",
-    "Add" : "Tilføj"
+    "Choose the folder where photos and albums are uploaded to." : "Vælg mappen som fotos og albummer uploades til."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

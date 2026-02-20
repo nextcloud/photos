@@ -175,14 +175,10 @@ OC.L10N.register(
     "Could not load photos folder" : "Kunde inte ladda fotomappen",
     "Group" : "Grupp",
     "Remove {collaboratorLabel} from the collaborators list" : "Ta bort {collaboratorLabel} från medlemslistan",
-    "Back to {folder}" : "Tillbaka till {folder}",
-    "Share this folder" : "Dela denna mapp",
     "Enable squared photos view" : "Aktivera kvadratiska bild-vyn",
     "Choose default Photos upload and Albums location" : "Välj standardplats uppladdning av bilder och plats för album",
     "Choose a different folder" : "Välj annan mapp",
     "View" : "Visa",
-    "Choose the folder where photos and albums are uploaded to." : "Välj mapp dit foton och album laddas upp.",
-    "Loading folders …" : "Laddar mappar...",
-    "Add" : "Lägg till"
+    "Choose the folder where photos and albums are uploaded to." : "Välj mapp dit foton och album laddas upp."
 },
 "nplurals=2; plural=(n != 1);");

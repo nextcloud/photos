@@ -175,15 +175,11 @@ OC.L10N.register(
     "Could not load photos folder" : "无法加载照片文件夹",
     "Group" : "群组",
     "Remove {collaboratorLabel} from the collaborators list" : "将 {collaboratorLabel} 移除协作者列表",
-    "Back to {folder}" : "返回 {folder}",
-    "Share this folder" : "分享此文件夹",
     "Enable squared photos view" : "启用方形照片视图",
     "Choose default Photos upload and Albums location" : "选择预设照片上传与相册位置",
     "Choose a different folder" : "选择一个不同的文件夹",
     "View" : "查看",
     "Choose the folder where photos and albums are uploaded to." : "选择照片和相册上传的文件夹。",
-    "Loading folders …" : "正在加载文件夹……",
-    "Add" : "添加",
     "Loading folders …" : "正在加载文件夹 …"
 },
 "nplurals=1; plural=0;");

@@ -173,15 +173,11 @@
     "Could not load photos folder" : "Níorbh fhéidir fillteán na ngrianghraf a lódáil",
     "Group" : "Grúpa",
     "Remove {collaboratorLabel} from the collaborators list" : "Bain {collaboratorLabel} de liosta na gcomhoibritheoirí",
-    "Back to {folder}" : "Ar ais go {folder}",
-    "Share this folder" : "Roinn an fillteán seo",
     "Enable squared photos view" : "Cumasaigh amharc cearnógach ar ghrianghraif",
     "Choose default Photos upload and Albums location" : "Roghnaigh suíomh réamhshocraithe uaslódála Grianghraif agus Albaim",
     "Choose a different folder" : "Roghnaigh fillteán eile",
     "View" : "Amharc",
     "Choose the folder where photos and albums are uploaded to." : "Roghnaigh an fillteán ina ndéantar grianghraif agus albam a uaslódáil.",
-    "Loading folders …" : "fillteáin á lódáil…",
-    "Add" : "Cuir",
     "Loading folders …" : "Ag lódáil fillteáin …"
 },"pluralForm" :"nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);"
 }

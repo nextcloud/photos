@@ -175,15 +175,11 @@ OC.L10N.register(
     "Could not load photos folder" : "無法載入照片資料夾",
     "Group" : "群組",
     "Remove {collaboratorLabel} from the collaborators list" : "從協作者清單移除 {collaboratorLabel}",
-    "Back to {folder}" : "回到 {folder}",
-    "Share this folder" : "分享此資料夾",
     "Enable squared photos view" : "啟用方形照片檢視",
     "Choose default Photos upload and Albums location" : "選擇預設照片上傳與相簿位置",
     "Choose a different folder" : "選擇其他資料夾",
     "View" : "檢視",
     "Choose the folder where photos and albums are uploaded to." : "選擇照片與相簿上傳到的資料夾。",
-    "Loading folders …" : "正在載入資料夾……",
-    "Add" : "新增",
     "Loading folders …" : "正在載入資料夾……"
 },
 "nplurals=1; plural=0;");

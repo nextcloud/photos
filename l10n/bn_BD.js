@@ -15,7 +15,6 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Details" : "বিসতারিত",
     "Cancel" : "Cancel",
-    "Group" : "গোষ্ঠীসমূহ",
-    "Add" : "যোগ করুন"
+    "Group" : "গোষ্ঠীসমূহ"
 },
 "nplurals=2; plural=(n != 1);");

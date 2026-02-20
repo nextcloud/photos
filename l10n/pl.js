@@ -175,15 +175,11 @@ OC.L10N.register(
     "Could not load photos folder" : "Nie można wczytać katalogu ze zdjęciami",
     "Group" : "Grupa",
     "Remove {collaboratorLabel} from the collaborators list" : "Usuń {collaboratorLabel} z listy współpracowników",
-    "Back to {folder}" : "Powrót do {folder}",
-    "Share this folder" : "Udostępnij ten katalog",
     "Enable squared photos view" : "Włącz zdjęcia w widoku kwadratowym",
     "Choose default Photos upload and Albums location" : "Wybierz domyślną lokalizację wysyłania zdjęć i albumów",
     "Choose a different folder" : "Wybierz inny katalog",
     "View" : "Podgląd",
     "Choose the folder where photos and albums are uploaded to." : "Wybierz katalog, do którego przesyłane są zdjęcia i albumy.",
-    "Loading folders …" : "Wczytywanie katalogów …",
-    "Add" : "Dodaj",
     "Loading folders …" : "Wczytywanie folderów…"
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");

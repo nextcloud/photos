@@ -171,14 +171,10 @@ OC.L10N.register(
     "Could not load photos folder" : "Isingeweza kupakia kisanduku cha picha",
     "Group" : "Kundi",
     "Remove {collaboratorLabel} from the collaborators list" : "Ondoa {collaboratorLabel}kutoka kwenye orodha ya washiriki",
-    "Back to {folder}" : "Rudi kwenye {folder}",
-    "Share this folder" : "Shirikisha kisanduku hiki",
     "Enable squared photos view" : "Washa mwonekano wa picha za mraba",
     "Choose default Photos upload and Albums location" : "Chagua upakiaji chaguomsingi wa Picha na eneo la Albamu",
     "Choose a different folder" : "Chagua kisanduku tofauti",
     "View" : "Angalia",
-    "Choose the folder where photos and albums are uploaded to." : "Chagua folda ambapo picha na albamu hupakiwa",
-    "Loading folders …" : "Inapakia visanduku",
-    "Add" : "Ongeza"
+    "Choose the folder where photos and albums are uploaded to." : "Chagua folda ambapo picha na albamu hupakiwa"
 },
 "nplurals=2; plural=(n != 1);");

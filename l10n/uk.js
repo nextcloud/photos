@@ -175,15 +175,11 @@ OC.L10N.register(
     "Could not load photos folder" : "Неможливо завантажити каталог зі світлинами",
     "Group" : "Група",
     "Remove {collaboratorLabel} from the collaborators list" : "Вилучити {collaboratorLabel} зі списку співавторів",
-    "Back to {folder}" : "Повернутися до каталогу {folder}",
-    "Share this folder" : "Надати спільний доступ до каталогу",
     "Enable squared photos view" : "Увімкнути перегляд фотографій у квадраті",
     "Choose default Photos upload and Albums location" : "Виберіть типове розташування для завантаження світлин та альбомів",
     "Choose a different folder" : "Виберіть інший каталог",
     "View" : "Перегляд",
     "Choose the folder where photos and albums are uploaded to." : "Виберіть каталог, до якого завантажувати світлини та альбоми.",
-    "Loading folders …" : "Завантаження папок…",
-    "Add" : "Додати",
     "Loading folders …" : "Завантаження каталогів ..."
 },
 "nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);");

@@ -169,14 +169,10 @@
     "Could not load photos folder" : "Не удалось загрузить папку с фотографиями",
     "Group" : "Группа",
     "Remove {collaboratorLabel} from the collaborators list" : "Убрать {collaboratorLabel} из списка соавторов ",
-    "Back to {folder}" : "Вернуться в {folder}",
-    "Share this folder" : "Опубликовать эту папку",
     "Enable squared photos view" : "Включить квадратный просмотр фотографий",
     "Choose default Photos upload and Albums location" : "Выберите местоположение загрузки фотографий и альбомов по умолчанию",
     "Choose a different folder" : "Выбрать другую папку",
     "View" : "Просмотр",
-    "Choose the folder where photos and albums are uploaded to." : "Выберите папку, в которую загружаются фотографии и альбомы.",
-    "Loading folders …" : "Выполняется загрузка папок…",
-    "Add" : "Добавить"
+    "Choose the folder where photos and albums are uploaded to." : "Выберите папку, в которую загружаются фотографии и альбомы."
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }

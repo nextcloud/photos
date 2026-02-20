@@ -17,7 +17,6 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Details" : "Дэлгэрэнгүй",
     "Cancel" : "Cancel",
-    "Confirm" : "Батлах",
-    "Add" : "нэмэх"
+    "Confirm" : "Батлах"
 },
 "nplurals=2; plural=(n != 1);");

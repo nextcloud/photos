@@ -22,8 +22,6 @@ OC.L10N.register(
     "Cancel" : "Bekor qilish",
     "Confirm" : "Tasdiqlash",
     "Group" : "Guruh",
-    "Back to {folder}" : "{folder}ga qaytish",
-    "View" : "Ko'rish",
-    "Add" : "Add"
+    "View" : "Ko'rish"
 },
 "nplurals=1; plural=0;");

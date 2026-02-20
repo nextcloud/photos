@@ -147,14 +147,10 @@ OC.L10N.register(
     "Could not load photos folder" : "Nem lehet a fotók könyvtárat betölteni",
     "Group" : "Csoport",
     "Remove {collaboratorLabel} from the collaborators list" : "{collaboratorLabel} eltávolítása a közreműködőktől",
-    "Back to {folder}" : "Vissza ide: {folder}",
-    "Share this folder" : "Mappa megosztása",
     "Enable squared photos view" : "A négyzet alakú fotónézet engedélyezése",
     "Choose default Photos upload and Albums location" : "A Fényképfeltöltés és az Albumok alapértelmezett helyének kiválasztása",
     "Choose a different folder" : "Válassz másik könyvtárat",
     "View" : "Megtekintés",
-    "Choose the folder where photos and albums are uploaded to." : "Válassz másik könyvtárat a fotók és albumok feltöltése számára.",
-    "Loading folders …" : "Mappák betöltése…",
-    "Add" : "Hozzáadás"
+    "Choose the folder where photos and albums are uploaded to." : "Válassz másik könyvtárat a fotók és albumok feltöltése számára."
 },
 "nplurals=2; plural=(n != 1);");

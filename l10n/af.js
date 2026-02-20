@@ -21,7 +21,6 @@ OC.L10N.register(
     "Details" : "Besonderhede",
     "Cancel" : "Cancel",
     "Confirm" : "Bevestig",
-    "View" : "Bekyk",
-    "Add" : "Voeg by"
+    "View" : "Bekyk"
 },
 "nplurals=2; plural=(n != 1);");

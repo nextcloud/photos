@@ -155,14 +155,10 @@
     "Could not load photos folder" : "تعذّر رفع مجلد الصِّور",
     "Group" : "مجموعة",
     "Remove {collaboratorLabel} from the collaborators list" : "حذف {collaboratorLabel} من قائمة المتعاونين",
-    "Back to {folder}" : "العودة إلى {folder} ",
-    "Share this folder" : "مشاركة هذا المجلد",
     "Enable squared photos view" : "تفعيل عرض الصور المربعة",
     "Choose default Photos upload and Albums location" : "اختر افتراضي رفع الصور وموقع الألبومات",
     "Choose a different folder" : "إختَر مجلداً مختلفاً",
     "View" : "عرض",
-    "Choose the folder where photos and albums are uploaded to." : "إختَر المجلد الذي تُرفع إليه الصور و الألبومات",
-    "Loading folders …" : "تحميل مجلدات ...",
-    "Add" : "إضافة"
+    "Choose the folder where photos and albums are uploaded to." : "إختَر المجلد الذي تُرفع إليه الصور و الألبومات"
 },"pluralForm" :"nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;"
 }

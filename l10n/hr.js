@@ -175,15 +175,11 @@ OC.L10N.register(
     "Could not load photos folder" : "Nije moguće učitati mapu fotografija",
     "Group" : "Grupa",
     "Remove {collaboratorLabel} from the collaborators list" : "Ukloni {collaboratorLabel} s popisa suradnika",
-    "Back to {folder}" : "Natrag na {folder}",
-    "Share this folder" : "Dijeli ovu mapu",
     "Enable squared photos view" : "Omogući kvadratni prikaz fotografija",
     "Choose default Photos upload and Albums location" : "Odaberi zadanu lokaciju za učitavanje fotografija i albuma",
     "Choose a different folder" : "Odaberi drugu mapu",
     "View" : "Pregledaj",
     "Choose the folder where photos and albums are uploaded to." : "Odaberite mapu u koju se učitavaju fotografije i albumi.",
-    "Loading folders …" : "Učitavanje mapa ...",
-    "Add" : "Dodaj",
     "Loading folders …" : "Učitavanje mapa …"
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");

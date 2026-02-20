@@ -169,14 +169,10 @@
     "Could not load photos folder" : "Gat ekki að hlaðið inn ljósmyndamöppunni",
     "Group" : "Hópur",
     "Remove {collaboratorLabel} from the collaborators list" : "Fjarlægja {collaboratorLabel} af listanum yfir samstarfsfólk",
-    "Back to {folder}" : "Til baka í {folder}",
-    "Share this folder" : "Deila þessari möppu",
     "Enable squared photos view" : "Virkja sýn með ferköntuðum myndum",
     "Choose default Photos upload and Albums location" : "Veldu sjálfgefna staðsetningu fyrir innsendingar ljósmynda og albúma",
     "Choose a different folder" : "Velja aðra möppu",
     "View" : "Skoða",
-    "Choose the folder where photos and albums are uploaded to." : "Veldu möppurnar þangað sem ljósmyndir og myndskeið eru send.",
-    "Loading folders …" : "Hleð inn möppum …",
-    "Add" : "Bæta við"
+    "Choose the folder where photos and albums are uploaded to." : "Veldu möppurnar þangað sem ljósmyndir og myndskeið eru send."
 },"pluralForm" :"nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);"
 }

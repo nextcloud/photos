@@ -18,7 +18,6 @@ OC.L10N.register(
     "Remove from favorites" : "რჩეულებიდან ამოშლა",
     "Details" : "დეტალები",
     "Cancel" : "Cancel",
-    "Confirm" : "დადასტურება",
-    "Add" : "დამატება"
+    "Confirm" : "დადასტურება"
 },
 "nplurals=2; plural=(n!=1);");

@@ -145,14 +145,10 @@
     "Could not load photos folder" : "No s'ha pogut carregar la carpeta de fotos",
     "Group" : "Grup",
     "Remove {collaboratorLabel} from the collaborators list" : "Suprimeix {collaboratorLabel} de la llista de col·laboradors",
-    "Back to {folder}" : "Torna a {folder}",
-    "Share this folder" : "Comparteix la carpeta",
     "Enable squared photos view" : "Habilita la visualització de fotos quadrada",
     "Choose default Photos upload and Albums location" : "Tria la ubicació per defecte de les pujades de fotos i dels àlbums",
     "Choose a different folder" : "Tria una carpeta diferent",
     "View" : "Visualització",
-    "Choose the folder where photos and albums are uploaded to." : "Trieu la carpeta on es pugen les fotos i els àlbums.",
-    "Loading folders …" : "S'estan carregant les carpetes…",
-    "Add" : "Afegeix"
+    "Choose the folder where photos and albums are uploaded to." : "Trieu la carpeta on es pugen les fotos i els àlbums."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

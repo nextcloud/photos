@@ -20,7 +20,6 @@ OC.L10N.register(
     "Cancel" : "Cancel",
     "Confirm" : "Konfirmo",
     "Group" : "Grup",
-    "View" : "Shiko",
-    "Add" : "Shto"
+    "View" : "Shiko"
 },
 "nplurals=2; plural=(n != 1);");

@@ -175,15 +175,11 @@ OC.L10N.register(
     "Could not load photos folder" : "Fotos-Ordner konnte nicht geladen werden",
     "Group" : "Gruppe",
     "Remove {collaboratorLabel} from the collaborators list" : "{collaboratorLabel} aus der Liste der Mitarbeitenden entfernen",
-    "Back to {folder}" : "Zurück zu {folder}",
-    "Share this folder" : "Diesen Ordner teilen",
     "Enable squared photos view" : "Quadratische Fotoansicht aktivieren",
     "Choose default Photos upload and Albums location" : "Den Standardspeicherort für das Hochladen von Fotos und Alben wählen",
     "Choose a different folder" : "Anderen Ordner wählen",
     "View" : "Ansicht",
     "Choose the folder where photos and albums are uploaded to." : "Ordner wählen, in den Fotos und Videos hochgeladen werden.",
-    "Loading folders …" : "Ordner werden geladen …",
-    "Add" : "Hinzufügen",
     "Loading folders …" : "Lade Ordner …"
 },
 "nplurals=2; plural=(n != 1);");

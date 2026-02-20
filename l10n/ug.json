@@ -173,14 +173,10 @@
     "Could not load photos folder" : "رەسىم قىسقۇچنى يۈكلىيەلمىدى",
     "Group" : "گۇرۇپپا",
     "Remove {collaboratorLabel} from the collaborators list" : "ھەمكارلاشقۇچىلار تىزىملىكىدىن {collaboratorLabel} نى ئۆچۈرۈڭ",
-    "Back to {folder}" : "{folder} قايتىش",
-    "Share this folder" : "بۇ قىسقۇچنى ھەمبەھىرلەڭ",
     "Enable squared photos view" : "كۋادرات رەسىم كۆرۈنۈشىنى قوزغىتىڭ",
     "Choose default Photos upload and Albums location" : "سۈكۈتتىكى رەسىم يوللاش ۋە پىلاستىنكا ئورنىنى تاللاڭ",
     "Choose a different folder" : "باشقا ھۆججەت قىسقۇچنى تاللاڭ",
     "View" : "كۆرۈش",
-    "Choose the folder where photos and albums are uploaded to." : "رەسىم ۋە پىلاستىنكىلار يۈكلەنگەن ھۆججەت قىسقۇچنى تاللاڭ.",
-    "Loading folders …" : "ھۆججەت قىسقۇچلارنى يۈكلەۋاتىدۇ…",
-    "Add" : "قوش"
+    "Choose the folder where photos and albums are uploaded to." : "رەسىم ۋە پىلاستىنكىلار يۈكلەنگەن ھۆججەت قىسقۇچنى تاللاڭ."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

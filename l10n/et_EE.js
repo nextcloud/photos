@@ -175,15 +175,11 @@ OC.L10N.register(
     "Could not load photos folder" : "Fotode kausta laadimine ei õnnestunud",
     "Group" : "Grupp",
     "Remove {collaboratorLabel} from the collaborators list" : "Eemalda {collaboratorLabel} kaasautorite hulgast",
-    "Back to {folder}" : "Tagasi kausta {folder}",
-    "Share this folder" : "Jaga seda kausta",
     "Enable squared photos view" : "Luba piltide ruutvaade",
     "Choose default Photos upload and Albums location" : "Vali vaikimisi fotode üleslaadimise ja albumite asukoht",
     "Choose a different folder" : "Vali mõni muu kaust",
     "View" : "Vaata",
     "Choose the folder where photos and albums are uploaded to." : "Vali kaust, kuhu fotod ja albumid üles laaditakse",
-    "Loading folders …" : "Kaustada laadimine …",
-    "Add" : "Lisa",
     "Loading folders …" : "Laadin kaustu…"
 },
 "nplurals=2; plural=(n != 1);");
