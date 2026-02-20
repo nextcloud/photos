@@ -173,15 +173,11 @@
     "Could not load photos folder" : "Nepodařilo se načíst složku s fotkami",
     "Group" : "Skupina",
     "Remove {collaboratorLabel} from the collaborators list" : "Odebrat {collaboratorLabel} ze seznamu spolupracujících",
-    "Back to {folder}" : "Zpět do {folder}",
-    "Share this folder" : "Sdílet tuto složku",
     "Enable squared photos view" : "Zapnout čtvercové zobrazení fotek",
     "Choose default Photos upload and Albums location" : "Zvolte ýchozí umístění nahrávání fotek a alb",
     "Choose a different folder" : "Vyberte jinou složku",
     "View" : "Zobrazit",
     "Choose the folder where photos and albums are uploaded to." : "Zvolte složku do které nahrávat fotky a alba.",
-    "Loading folders …" : "Načítání složek …",
-    "Add" : "Přidat",
     "Loading folders …" : "Načítání složek …"
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;"
 }

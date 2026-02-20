@@ -175,15 +175,11 @@ OC.L10N.register(
     "Could not load photos folder" : "写真フォルダを読み込めませんでした",
     "Group" : "グループ",
     "Remove {collaboratorLabel} from the collaborators list" : "コラボレーターリストから {collaboratorLabel} を削除する",
-    "Back to {folder}" : " {folder} に戻る",
-    "Share this folder" : "このフォルダーを共有する",
     "Enable squared photos view" : "写真を矩形での表示を有効化",
     "Choose default Photos upload and Albums location" : "デフォルトの写真のアップロードとアルバムの場所を選択する",
     "Choose a different folder" : "別のフォルダーを選択する",
     "View" : "表示",
     "Choose the folder where photos and albums are uploaded to." : "写真やアルバムをアップロードするフォルダを選択します。",
-    "Loading folders …" : "フォルダを読み込んでいる ...",
-    "Add" : "追加",
     "Loading folders …" : "フォルダを読み込み中…"
 },
 "nplurals=1; plural=0;");

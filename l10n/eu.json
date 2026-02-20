@@ -173,14 +173,10 @@
     "Could not load photos folder" : "Ezin izan da argazkien karpeta kargatu",
     "Group" : "Taldea",
     "Remove {collaboratorLabel} from the collaborators list" : "Kendu {collaboratorLabel} kolaboratzaile zerrendatik",
-    "Back to {folder}" : "Itzuli {folder}(e)ra",
-    "Share this folder" : "Partekatu karpeta hau",
     "Enable squared photos view" : "Gaitu lauki formako argazki ikuspegia",
     "Choose default Photos upload and Albums location" : "Aukeratu argazkien igoera eta albumen kokaleku lehenetsia",
     "Choose a different folder" : "Aukeratu beste karpeta bat",
     "View" : "Ikusi",
-    "Choose the folder where photos and albums are uploaded to." : "Aukeratu zein karpetatara igoko diren argazki eta albumak.",
-    "Loading folders …" : "Karpetak kargatzen ...",
-    "Add" : "Gehitu"
+    "Choose the folder where photos and albums are uploaded to." : "Aukeratu zein karpetatara igoko diren argazki eta albumak."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

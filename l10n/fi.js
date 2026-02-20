@@ -163,15 +163,11 @@ OC.L10N.register(
     "Failed to delete {fileName}" : "Kohteen {fileName} poistaminen epäonnistui",
     "Group" : "Ryhmä",
     "Remove {collaboratorLabel} from the collaborators list" : "Poista {collaboratorLabel} osanottajista",
-    "Back to {folder}" : "Takaisin kansioon {folder}",
-    "Share this folder" : "Jaa tämä kansio",
     "Enable squared photos view" : "Ota käyttöön neliömäinen kuvanäkymä",
     "Choose default Photos upload and Albums location" : "Valitse kuvien ja albumien oletussijainti",
     "Choose a different folder" : "Valitse eri kansio",
     "View" : "Näytä",
     "Choose the folder where photos and albums are uploaded to." : "Valitse kansio, johon kuvat ja albumit lähetetään.",
-    "Loading folders …" : "Ladataan kansioita…",
-    "Add" : "Lisää",
     "Loading folders …" : "Ladataan kansioita …"
 },
 "nplurals=2; plural=(n != 1);");

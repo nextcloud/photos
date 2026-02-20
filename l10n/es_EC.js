@@ -121,12 +121,8 @@ OC.L10N.register(
     "Confirm" : "Confirmar",
     "Group" : "Grupo",
     "Remove {collaboratorLabel} from the collaborators list" : "Eliminar {etiquetaColaborador} de la lista de colaboradores",
-    "Back to {folder}" : "Volver a {carpeta}",
-    "Share this folder" : "Compartir esta carpeta",
     "Enable squared photos view" : "Habilitar vista de fotos cuadradas",
     "Choose default Photos upload and Albums location" : "Seleccionar ubicación predeterminada de carga de fotos y álbumes",
-    "View" : "Ver",
-    "Loading folders …" : "Cargando carpetas...",
-    "Add" : "Agregar"
+    "View" : "Ver"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

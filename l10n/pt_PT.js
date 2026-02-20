@@ -69,10 +69,7 @@ OC.L10N.register(
     "Confirm" : "Confirmar",
     "Group" : "Grupo",
     "Remove {collaboratorLabel} from the collaborators list" : "Remove {collaboratorLabel} from the collaborators list",
-    "Back to {folder}" : "Ir para {folder}",
-    "Share this folder" : "Partilhar esta pasta",
     "Enable squared photos view" : "Ativar vista de fotos quadradas",
-    "View" : "Ver",
-    "Add" : "Adicionar"
+    "View" : "Ver"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

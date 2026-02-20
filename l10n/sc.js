@@ -40,10 +40,7 @@ OC.L10N.register(
     "Cancel" : "Cancel",
     "Confirm" : "Cunfirma",
     "Group" : "Grupu",
-    "Back to {folder}" : "Torra a {folder}",
-    "Share this folder" : "Cumpartzi custa cartella",
     "Enable squared photos view" : "Ativa sa visualizatzione a fotos cuadradas",
-    "View" : "Visualiza",
-    "Add" : "Agiunghe"
+    "View" : "Visualiza"
 },
 "nplurals=2; plural=(n != 1);");

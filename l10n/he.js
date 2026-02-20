@@ -76,10 +76,7 @@ OC.L10N.register(
     "Confirm" : "אישור",
     "Group" : "קבוצה",
     "Remove {collaboratorLabel} from the collaborators list" : "הסר את {collaboratorLabel} מרשימת השותפים",
-    "Back to {folder}" : "חזרה אל {folder}",
-    "Share this folder" : "שיתוף התיקייה הזו",
     "Enable squared photos view" : "הפעלת תצוגת תמונות מרובעות",
-    "View" : "צפייה",
-    "Add" : "הוספה"
+    "View" : "צפייה"
 },
 "nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");

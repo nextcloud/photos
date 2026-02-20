@@ -175,15 +175,11 @@ OC.L10N.register(
     "Could not load photos folder" : "Não foi possível carregar a pasta de fotos",
     "Group" : "Grupo",
     "Remove {collaboratorLabel} from the collaborators list" : "Remover {collaboratorLabel} da lista de colaboradores",
-    "Back to {folder}" : "Voltar para {folder}",
-    "Share this folder" : "Compartilhar esta pasta",
     "Enable squared photos view" : "Ativar exibição de fotos quadradas",
     "Choose default Photos upload and Albums location" : "Escolha o local padrão para upload de Fotos e Álbuns",
     "Choose a different folder" : "Escolha uma pasta diferente",
     "View" : "Exibição",
     "Choose the folder where photos and albums are uploaded to." : "Escolha a pasta na qual as fotos e os álbuns serão carregados.",
-    "Loading folders …" : "Carregando pastas …",
-    "Add" : "Adicionar",
     "Loading folders …" : "Carregando pastas …"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

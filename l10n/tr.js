@@ -175,15 +175,11 @@ OC.L10N.register(
     "Could not load photos folder" : "Fotoğraflar klasörü yüklenemedi",
     "Group" : "Grup",
     "Remove {collaboratorLabel} from the collaborators list" : "{collaboratorLabel} kullanıcısını katılımcı listesinden çıkar",
-    "Back to {folder}" : "{folder} klasörüne geri dön",
-    "Share this folder" : "Bu klasörü paylaş",
     "Enable squared photos view" : "Kare fotoğraf görünümü kullanılsın",
     "Choose default Photos upload and Albums location" : "Varsayılan Fotoğraflar yüklemesini ve Albümlerin konumu seçin",
     "Choose a different folder" : "Farklı bir klasör seçin",
     "View" : "Görüntüle",
     "Choose the folder where photos and albums are uploaded to." : "Fotoğraf ve albümlerin yükleneceği klasörü seçin.",
-    "Loading folders …" : "Klasörler yükleniyor…",
-    "Add" : "Ekle",
     "Loading folders …" : "Klasörler yükleniyor…"
 },
 "nplurals=2; plural=(n > 1);");

@@ -171,14 +171,10 @@ OC.L10N.register(
     "Could not load photos folder" : "Не може да се учита фолдер фотографија",
     "Group" : "Група",
     "Remove {collaboratorLabel} from the collaborators list" : "Уклони {collaboratorLabel} из листе сарадника",
-    "Back to {folder}" : "Назад у {folder}",
-    "Share this folder" : "Дели ову фасциклу",
     "Enable squared photos view" : "Укључи квадратасти приказ слика",
     "Choose default Photos upload and Albums location" : "Изаберите подразумевано место за отпремање Фотографија и албума",
     "Choose a different folder" : "Изаберите неки други фолдер",
     "View" : "Погледај",
-    "Choose the folder where photos and albums are uploaded to." : "Изаберите фолдер у који се отпремају фотографије и албуми.",
-    "Loading folders …" : "Учитавање фолдера ...",
-    "Add" : "Додај"
+    "Choose the folder where photos and albums are uploaded to." : "Изаберите фолдер у који се отпремају фотографије и албуми."
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

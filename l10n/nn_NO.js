@@ -16,7 +16,6 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Details" : "Detaljar",
     "Cancel" : "Cancel",
-    "Group" : "Gruppe",
-    "Add" : "Legg til"
+    "Group" : "Gruppe"
 },
 "nplurals=2; plural=(n != 1);");

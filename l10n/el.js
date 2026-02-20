@@ -171,14 +171,10 @@ OC.L10N.register(
     "Could not load photos folder" : "Δεν ήταν δυνατή η φόρτωση του φακέλου φωτογραφιών",
     "Group" : "Ομάδα",
     "Remove {collaboratorLabel} from the collaborators list" : "Αφαίρεση {collaboratorLabel} από τη λίστα συνεργατών",
-    "Back to {folder}" : "Πίσω στο {folder}",
-    "Share this folder" : "Διαμοιρασμός αυτού του φακέλου",
     "Enable squared photos view" : "Ενεργοποίηση προβολής τετραγωνικών φωτογραφιών",
     "Choose default Photos upload and Albums location" : "Επιλογή προεπιλεγμένης τοποθεσίας μεταφόρτωσης Φωτογραφιών και Αλμπουμ",
     "Choose a different folder" : "Επιλογή διαφορετικού φακέλου",
     "View" : "Προβολή",
-    "Choose the folder where photos and albums are uploaded to." : "Επιλέξτε τον φάκελο στον οποίο μεταφορτώνονται φωτογραφίες και άλμπουμ.",
-    "Loading folders …" : "Φόρτωση φακέλων...",
-    "Add" : "Προσθήκη"
+    "Choose the folder where photos and albums are uploaded to." : "Επιλέξτε τον φάκελο στον οποίο μεταφορτώνονται φωτογραφίες και άλμπουμ."
 },
 "nplurals=2; plural=(n != 1);");

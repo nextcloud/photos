@@ -173,15 +173,11 @@
     "Could not load photos folder" : "Non foi posíbel cargar o cartafol de fotos",
     "Group" : "Grupo",
     "Remove {collaboratorLabel} from the collaborators list" : "Retirar a {collaboratorLabel} da lista de colaboradores",
-    "Back to {folder}" : "Volver a {folder}",
-    "Share this folder" : "Compartir este cartafol",
     "Enable squared photos view" : "Activar a vista das fotos en cadrado",
     "Choose default Photos upload and Albums location" : "Escolla o envío predeterminado en Fotos e a localización en Álbums",
     "Choose a different folder" : "Escolla un cartafol diferente",
     "View" : "Ver",
     "Choose the folder where photos and albums are uploaded to." : "Escolla o cartafol ao que se enviarán as fotos e os álbums.",
-    "Loading folders …" : "Cargando cartafoles…",
-    "Add" : "Engadir",
     "Loading folders …" : "Cargando cartafoles…"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

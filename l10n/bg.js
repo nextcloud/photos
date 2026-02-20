@@ -124,11 +124,7 @@ OC.L10N.register(
     "Confirm" : "Потвърдете",
     "Group" : "Група",
     "Remove {collaboratorLabel} from the collaborators list" : "Премахване на {collaboratorLabel} от списъка със сътрудници",
-    "Back to {folder}" : "Назад към {folder}",
-    "Share this folder" : "Споделяне на тази папка",
     "Enable squared photos view" : "Активирайте изгледа на снимки в квадратче",
-    "View" : "Изглед",
-    "Loading folders …" : "Зареждане на папките …",
-    "Add" : "Добавяне"
+    "View" : "Изглед"
 },
 "nplurals=2; plural=(n != 1);");

@@ -39,10 +39,7 @@ OC.L10N.register(
     "Cancel" : "Cancel",
     "Confirm" : "Xác nhận",
     "Group" : "Nhóm",
-    "Back to {folder}" : "Trở về {folder}",
-    "Share this folder" : "Chia sẻ thư mục này",
     "Enable squared photos view" : "Bật chế độ xem theo ô",
-    "View" : "Xem",
-    "Add" : "Thêm"
+    "View" : "Xem"
 },
 "nplurals=1; plural=0;");
