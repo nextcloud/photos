@@ -47,7 +47,7 @@
     "@nextcloud/auth": "^2.1.0",
     "@nextcloud/axios": "^2.1.0",
     "@nextcloud/dialogs": "^6.4.1",
-    "@nextcloud/eslint-config": "^9.0.0-rc.5",
+    "@nextcloud/eslint-config": "^9.0.0-rc.7",
     "@nextcloud/event-bus": "^3.1.0",
     "@nextcloud/files": "^3.10.2",
     "@nextcloud/initial-state": "^2.1.0",
