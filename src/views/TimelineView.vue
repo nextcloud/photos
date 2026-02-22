@@ -110,7 +110,7 @@
 			:base-height="isMobile ? 120 : 200"
 			:empty-message="t('photos', 'No photos or videos in here')"
 			@need-content="getContent">
-			<template slot-scope="{ file, isHeader, distance }">
+			<template slot-scope="{ file, isHeader }">
 				<h2
 					v-if="isHeader"
 					:id="`file-picker-section-header-${file.id}`"
@@ -123,7 +123,6 @@
 					:file="files[file.id]"
 					:allow-selection="true"
 					:selected="selection[file.id] === true"
-					:distance="distance"
 					@click="openViewer"
 					@select-toggled="onFileSelectToggle" />
 			</template>
