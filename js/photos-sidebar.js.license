@@ -82,10 +82,10 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.1.1
 	- license: MIT
 - typescript-event-target
-	- version: 1.1.1
+	- version: 1.1.2
 	- license: MIT
 - webpack
-	- version: 5.94.0
+	- version: 5.105.2
 	- license: MIT
 - photos
 	- version: 4.0.0
