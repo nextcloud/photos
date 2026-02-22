@@ -60,7 +60,7 @@
 <script lang='ts'>
 import type { Upload } from '@nextcloud/upload'
 
-import { Folder } from '@nextcloud/files'
+import { Folder, getSidebar } from '@nextcloud/files'
 import { defaultRootPath, parsePermissions } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
 import { getUploader, UploadPicker } from '@nextcloud/upload'
@@ -254,7 +254,8 @@ export default {
 
 			// close any potential opened viewer & sidebar
 			window.OCA?.Viewer?.close?.()
-			window.OCA?.Files?.Sidebar?.close?.()
+			const sidebar = getSidebar()
+			sidebar.close()
 
 			// if we don't already have some cached data let's show a loader
 			if (!this.files[this.folderId] || !this.folders[this.folderId]) {

@@ -1,0 +1,11 @@
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: Alkemics
+SPDX-FileCopyrightText: string_decoder developers
+
+This file is generated from multiple sources. Included packages:
+- cancelable-promise
+	- version: 4.3.1
+	- license: MIT
+- string_decoder
+	- version: 1.1.1
+	- license: MIT

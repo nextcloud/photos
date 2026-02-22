@@ -39,18 +39,20 @@
 </template>
 
 <script lang='ts'>
-import type { PhotoFile } from '../store/files.ts'
-
 import { formatFileSize } from '@nextcloud/files'
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
-import { defineComponent } from 'vue'
+import {
+	type PropType,
+
+	defineComponent,
+} from 'vue'
 import CalendarOutline from 'vue-material-design-icons/CalendarOutline.vue'
 import CameraIris from 'vue-material-design-icons/CameraIris.vue'
 import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
 import LocationMap from '../components/LocationMap.vue'
 
-type SideBarFile = PhotoFile & {
+type SideBarFile = File & {
 	attributes: {
 		'metadata-photos-exif': { FNumber: string, FocalLength: string, ExposureTime: string, ISOSpeedRatings: string }
 		'metadata-photos-ifd0': { Make: string, Model: string, ImageWidth: number, ImageLength: number }
@@ -69,9 +71,15 @@ export default defineComponent({
 		LocationMap,
 	},
 
+	props: {
+		node: {
+			type: Object as PropType<SideBarFile>,
+			required: true,
+		},
+	},
+
 	data() {
 		return {
-			fileInfo: null as SideBarFile | null,
 			url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 			// The zoom level of the map in the messages list
 			previewZoom: 13,
@@ -84,19 +92,19 @@ export default defineComponent({
 
 	computed: {
 		exif() {
-			return this.fileInfo?.attributes['metadata-photos-exif']
+			return this.node.attributes['metadata-photos-exif']
 		},
 
 		ifd0() {
-			return this.fileInfo?.attributes['metadata-photos-ifd0']
+			return this.node.attributes['metadata-photos-ifd0']
 		},
 
 		place() {
-			return this.fileInfo?.attributes['metadata-photos-place']
+			return this.node.attributes['metadata-photos-place']
 		},
 
 		gps() {
-			const gps = this.fileInfo?.attributes['metadata-photos-gps']
+			const gps = this.node.attributes['metadata-photos-gps']
 			if (!gps) {
 				return undefined
 			}
@@ -109,7 +117,7 @@ export default defineComponent({
 		},
 
 		originalDateTime() {
-			return (this.fileInfo?.attributes['metadata-photos-original_date_time'] ?? 0) * 1000
+			return (this.node.attributes['metadata-photos-original_date_time'] ?? 0) * 1000
 		},
 
 		takenDate() {
@@ -139,7 +147,7 @@ export default defineComponent({
 		},
 
 		size() {
-			return formatFileSize(this.fileInfo?.size as number)
+			return formatFileSize(this.node.size)
 		},
 
 		normalizedExposureTime() {
@@ -190,15 +198,6 @@ export default defineComponent({
 	},
 
 	methods: {
-		/**
-		 * Update current fileInfo and fetch new activities
-		 *
-		 * @param fileInfo
-		 */
-		async update(fileInfo: SideBarFile) {
-			this.fileInfo = fileInfo
-		},
-
 		t,
 	},
 })
