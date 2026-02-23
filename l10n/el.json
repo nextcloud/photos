@@ -70,6 +70,7 @@
     "The destination folder is owned by {owner}" : "Ο φάκελος προορισμού ανήκει στον {owner}",
     "There are no photos or videos yet!" : "Δεν υπάρχουν φωτογραφίες ή βίντεο ακόμη!",
     "_{years} year ago_::_{years} years ago_" : ["{years} χρόνο πριν","{years} χρόνια πριν"],
+    "Squared photos view" : "Προβολή τετραγωνισμένων φωτογραφιών",
     "Delete source directory" : "Διαγραφή καταλόγου πηγής",
     "Pick folder" : "Επιλογή φακέλου",
     "Select a source folder for your media" : "Επιλογή φακέλου πηγής για τα μέσα σας",
@@ -155,6 +156,9 @@
     "Failed to create {collectionFileName}" : "Αποτυχία δημιουργίας {collectionFileName}",
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Αποτυχία μετονομασίας {currentCollectionFileName} σε {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Αποτυχία ενημέρωσης ιδιοτήτων {collectionFileName} με {properties}",
+    "Delete collection" : "Διαγραφή συλλογής",
+    "Leave shared album" : "Αποχώρηση από κοινόχρηστο άλμπουμ",
+    "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Είστε βέβαιοι ότι θέλετε να διαγράψετε τη συλλογή {collectionName}; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.",
     "Failed to delete {collectionFileName}" : "Αποτυχία διαγραφής {collectionFileName}",
     "Cancel" : "Ακύρωση",
     "Confirm" : "Επιβεβαίωση",
@@ -173,6 +177,7 @@
     "Choose default Photos upload and Albums location" : "Επιλογή προεπιλεγμένης τοποθεσίας μεταφόρτωσης Φωτογραφιών και Αλμπουμ",
     "Choose a different folder" : "Επιλογή διαφορετικού φακέλου",
     "View" : "Προβολή",
-    "Choose the folder where photos and albums are uploaded to." : "Επιλέξτε τον φάκελο στον οποίο μεταφορτώνονται φωτογραφίες και άλμπουμ."
+    "Choose the folder where photos and albums are uploaded to." : "Επιλέξτε τον φάκελο στον οποίο μεταφορτώνονται φωτογραφίες και άλμπουμ.",
+    "Loading folders …" : "Φόρτωση φακέλων …"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

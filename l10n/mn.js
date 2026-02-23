@@ -156,7 +156,7 @@ OC.L10N.register(
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "{fileBaseName}-г {collectionFileName} цуглуулгад нэмэхэд алдаа гарлаа",
     "Failed to delete {fileBaseName}" : "{fileBaseName} устгахад алдаа гарлаа",
     "Failed to create {collectionFileName}" : "{collectionFileName} үүсгэхэд алдаа гарлаа",
-    "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "{currentCollectionFileName}-г {newCollectionFileName} болгож өөрчлөхөд алдаа гарлаа",
+    "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "{currentCollectionFileName}-г {newCollectionFileName} болгож нэрлэх амжилтгүй боллоо",
     "Failed to update properties of {collectionFileName} with {properties}" : "{collectionFileName}-ийн шинж чанарыг {properties}-ээр шинэчлэхэд алдаа гарлаа",
     "Delete collection" : "Цуглуулга устгах",
     "Leave shared album" : "Хуваалцсан цомгоос гарах",
