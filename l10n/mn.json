@@ -158,6 +158,7 @@
     "Failed to update properties of {collectionFileName} with {properties}" : "{collectionFileName}-ийн шинж чанарыг {properties}-ээр шинэчлэхэд алдаа гарлаа",
     "Delete collection" : "Цуглуулга устгах",
     "Leave shared album" : "Хуваалцсан цомгоос гарах",
+    "Are you sure you want to delete {collectionName}? This action cannot be undone." : "{collectionName}-г устгахдаа итгэлтэй байна уу? Энэ үйлдлийг буцаах боломжгүй.",
     "Failed to delete {collectionFileName}" : "{collectionFileName} устгахад алдаа гарлаа",
     "Cancel" : "Cancel",
     "Confirm" : "Батлах",
