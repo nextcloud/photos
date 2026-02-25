@@ -128,6 +128,11 @@
 			</template>
 		</FilesListViewer>
 
+		<NcAppSidebar
+			:open="selectedFile !== null"
+			no-toggle
+			:name="selectedFile?.displayname ?? ''" />
+
 		<NcModal
 			v-if="showAlbumCreationForm"
 			key="albumCreationForm"
@@ -151,12 +156,15 @@
 </template>
 
 <script lang='ts'>
+import type { File } from '@nextcloud/files'
 import type { PropType } from 'vue'
 import type { Album } from '../store/albums.ts'
 
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { getSidebar } from '@nextcloud/files'
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
+import { NcAppSidebar } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { storeToRefs } from 'pinia'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
@@ -183,9 +191,12 @@ import FilesByMonthMixin from '../mixins/FilesByMonthMixin.ts'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.ts'
 import { allMimes } from '../services/AllowedMimes.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
+import logger from '../services/logger.ts'
 import useFilterStore from '../store/filters.ts'
 import { configChangedEvent } from '../store/userConfig.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.ts'
+
+const sidebar = getSidebar()
 
 export default {
 	name: 'TimelineView',
@@ -201,6 +212,7 @@ export default {
 		NcActions,
 		NcActionButton,
 		NcButton,
+		NcAppSidebar,
 		AlbumForm,
 		AlbumPicker,
 		FilesListViewer,
@@ -277,6 +289,7 @@ export default {
 			showAlbumPicker: false,
 			appContent: document.getElementById('app-content-vue'),
 			showFilters: false,
+			selectedFile: null as null | File,
 		}
 	},
 
@@ -303,10 +316,12 @@ export default {
 
 	mounted() {
 		subscribe(configChangedEvent, this.handleUserConfigChange)
+		subscribe('viewer:sidebar:open', this.handleViewerSidebarOpen)
 	},
 
 	destroyed() {
 		unsubscribe(configChangedEvent, this.handleUserConfigChange)
+		unsubscribe('viewer:sidebar:open', this.handleViewerSidebarOpen)
 	},
 
 	methods: {
@@ -323,6 +338,7 @@ export default {
 			window.OCA.Viewer.open({
 				fileInfo: toViewerFileInfo(this.files[fileId]),
 				list: Object.values(this.fileIdsByMonth).flat().map((fileId) => toViewerFileInfo(this.files[fileId])),
+				enabledSidebar: true,
 			})
 		},
 
@@ -346,6 +362,16 @@ export default {
 		handleUserConfigChange({ key }) {
 			if (key === 'photosSourceFolders') {
 				this.resetFetchFilesState()
+			}
+		},
+
+		handleViewerSidebarOpen({ source }) {
+			this.selectedFile = Object.values(this.files).find((node: Node) => node.source === source)
+			if (this.selectedFile) {
+				logger.debug('Opening sidebar for node from Viewer.', { node: this.selectedFile })
+				sidebar.open(this.selectedFile)
+			} else {
+				logger.error(`Cannot open sidebar for node '${source}' because it was not found in the current view.`)
 			}
 		},
 

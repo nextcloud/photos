@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { getSidebar } from '@nextcloud/files'
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import Vue from 'vue'
@@ -314,9 +315,9 @@ router.afterEach((to, from) => {
 	}
 
 	// Close sidebar on view change
-	const isSidebarOpen = !!window.OCA?.Files?.Sidebar?.file
-	if (isSidebarOpen && to.name !== from.name) {
-		window.OCA.Files.Sidebar.close()
+	const sidebar = getSidebar()
+	if (sidebar.isOpen && to.name !== from.name) {
+		sidebar.close()
 	}
 })
 

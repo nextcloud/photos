@@ -1,7 +1,9 @@
 SPDX-License-Identifier: AGPL-3.0-or-later
 SPDX-License-Identifier: Apache-2.0
+SPDX-License-Identifier: MIT
 SPDX-FileCopyrightText: Austin Andrews
 SPDX-FileCopyrightText: John Molakvoæ <skjnldsv@protonmail.com>
+SPDX-FileCopyrightText: Karol Fabjańczuk
 
 This file is generated from multiple sources. Included packages:
 - @mdi/svg
@@ -10,3 +12,6 @@ This file is generated from multiple sources. Included packages:
 - photos
 	- version: 7.0.0-dev.0
 	- license: AGPL-3.0-or-later
+- vue-custom-element
+	- version: 3.3.0
+	- license: MIT
