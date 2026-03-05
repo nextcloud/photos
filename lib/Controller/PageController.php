@@ -60,6 +60,7 @@ class PageController extends Controller {
 		private readonly LoggerInterface $logger,
 		private readonly IConfig $config,
 		IL10N $l10n,
+		private ?\OCA\Recognize\Public\ApiKeyManager $apiKeyManager,
 	) {
 		parent::__construct(Application::APP_ID, $request);
 
@@ -93,6 +94,14 @@ class PageController extends Controller {
 		$this->initialState->provideInitialState('systemtags', $this->appManager->isEnabledForUser('systemtags') === true);
 		$this->initialState->provideInitialState('showPeopleMenuEntry', $this->config->getAppValue('photos', 'showPeopleMenuEntry', 'true') === 'true');
 		$this->initialState->provideInitialState('appStoreEnabled', $this->config->getSystemValueBool('appstoreenabled', true));
+
+		if ($this->apiKeyManager !== null) {
+			try {
+				$this->initialState->provideInitialState('recognizeApiKey', $this->apiKeyManager->generateApiKey());
+			} catch (\JsonException $e) {
+				$this->logger->error('Failed to generate recognized api key', ['exception' => $e]);
+			}
+		}
 
 		// Provide user config
 		foreach (array_keys(UserConfigService::DEFAULT_CONFIGS) as $key) {
