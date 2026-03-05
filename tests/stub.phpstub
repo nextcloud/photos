@@ -285,3 +285,11 @@ namespace OC\User {
 	}
 }
 
+namespace OCA\Recognize\Public {
+    class ApiKeyManager {
+        /**
+         * @throws \JsonException
+         */
+        public function generateApiKey():string;
+    }
+}

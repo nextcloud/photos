@@ -96,7 +96,11 @@ class PageController extends Controller {
 		$this->initialState->provideInitialState('appStoreEnabled', $this->config->getSystemValueBool('appstoreenabled', true));
 
 		if ($this->apiKeyManager !== null) {
-			$this->initialState->provideInitialState('recognizeApiKey', $this->apiKeyManager->generateApiKey());
+			try {
+				$this->initialState->provideInitialState('recognizeApiKey', $this->apiKeyManager->generateApiKey());
+			} catch (\JsonException $e) {
+				$this->logger->error('Failed to generate recognized api key', ['exception' => $e]);
+			}
 		}
 
 		// Provide user config
