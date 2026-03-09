@@ -72,6 +72,7 @@ OC.L10N.register(
     "The destination folder is owned by {owner}" : "De doelmap is eigendom van {owner}",
     "There are no photos or videos yet!" : "Er zijn nog geen foto's of video's!",
     "_{years} year ago_::_{years} years ago_" : ["{years} jaar geleden","{years} jaren geleden"],
+    "Squared photos view" : "Vierkante foto overzicht",
     "Delete source directory" : "Verwijder bronmap",
     "Pick folder" : "Map kiezen",
     "Select a source folder for your media" : "Selecteer een bronmap voor je media",
@@ -157,6 +158,9 @@ OC.L10N.register(
     "Failed to create {collectionFileName}" : "Aanmaken van {collectionFileName} is mislukt",
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Hernoemen van {currentCollectionFileName} naar {newCollectionFileName} is mislukt",
     "Failed to update properties of {collectionFileName} with {properties}" : "Bijwerken van {collectionFileName} met eigenschappen {properties} is mislukt",
+    "Delete collection" : "Verwijder verzameling",
+    "Leave shared album" : "Verlaat gedeeld album",
+    "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Weet je zeker dat je {collectionName} wil wissen? Deze actie kan niet ongedaan worden gemaakt",
     "Failed to delete {collectionFileName}" : "Verwijderen van {collectionFileName} mislukt",
     "Cancel" : "Annuleren",
     "Confirm" : "Bevestigen",
@@ -175,6 +179,7 @@ OC.L10N.register(
     "Choose default Photos upload and Albums location" : "Kies de standaardlocatie voor het uploaden van foto's en albums.",
     "Choose a different folder" : "Kies een andere map",
     "View" : "Bekijken",
-    "Choose the folder where photos and albums are uploaded to." : "Kies de mappen waar foto's en video's naar geüpload worden."
+    "Choose the folder where photos and albums are uploaded to." : "Kies de mappen waar foto's en video's naar geüpload worden.",
+    "Loading folders …" : "Mappen laden ..."
 },
 "nplurals=2; plural=(n != 1);");
