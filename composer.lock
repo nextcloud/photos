@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0d8d1383e3571fd6e215b2241751d294",
+    "content-hash": "89abd82253550106fe1ff748a1a6d196",
     "packages": [
         {
             "name": "hexogen/kdtree",
@@ -209,22 +209,22 @@
         },
         {
             "name": "woltlab/webp-exif",
-            "version": "v0.1.2",
+            "version": "v0.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WoltLab/webp-exif.git",
-                "reference": "6bc88266f538380bbb68b5b0a45a76fb3ec23650"
+                "reference": "f6783274c07041f6cc88783d830d0230c9e14720"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WoltLab/webp-exif/zipball/6bc88266f538380bbb68b5b0a45a76fb3ec23650",
-                "reference": "6bc88266f538380bbb68b5b0a45a76fb3ec23650",
+                "url": "https://api.github.com/repos/WoltLab/webp-exif/zipball/f6783274c07041f6cc88783d830d0230c9e14720",
+                "reference": "f6783274c07041f6cc88783d830d0230c9e14720",
                 "shasum": ""
             },
             "require": {
                 "ext-exif": "*",
                 "nelexa/buffer": "^1.3",
-                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
                 "symfony/polyfill-php84": "^1.31"
             },
             "require-dev": {
@@ -253,9 +253,9 @@
             ],
             "support": {
                 "issues": "https://github.com/WoltLab/webp-exif/issues",
-                "source": "https://github.com/WoltLab/webp-exif/tree/v0.1.2"
+                "source": "https://github.com/WoltLab/webp-exif/tree/v0.1.3"
             },
-            "time": "2025-11-17T15:29:03+00:00"
+            "time": "2026-03-09T22:42:18+00:00"
         }
     ],
     "packages-dev": [
