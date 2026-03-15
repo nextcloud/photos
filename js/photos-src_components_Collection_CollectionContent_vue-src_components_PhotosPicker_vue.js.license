@@ -153,8 +153,11 @@ This file is generated from multiple sources. Included packages:
 - @nextcloud/router
 	- version: 3.1.0
 	- license: GPL-3.0-or-later
+- eventemitter3
+	- version: 5.0.4
+	- license: MIT
 - @nextcloud/upload
-	- version: 1.11.0
+	- version: 1.11.1
 	- license: AGPL-3.0-or-later
 - @nextcloud/vue-select
 	- version: 3.26.0
@@ -202,7 +205,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 6.0.1
 	- license: MIT
 - @nextcloud/vue
-	- version: 8.35.3
+	- version: 8.36.0
 	- license: AGPL-3.0-or-later
 - @ungap/structured-clone
 	- version: 1.2.0
@@ -214,7 +217,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.0.7
 	- license: MIT
 - axios
-	- version: 0.30.2
+	- version: 0.30.3
 	- license: MIT
 - bail
 	- version: 2.0.2
@@ -280,7 +283,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.1.0
 	- license: MIT
 - dompurify
-	- version: 3.3.1
+	- version: 3.3.3
 	- license: (MPL-2.0 OR Apache-2.0)
 - dunder-proto
 	- version: 1.0.1
@@ -304,7 +307,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 3.3.0
 	- license: MIT
 - fast-xml-parser
-	- version: 4.5.3
+	- version: 4.5.4
 	- license: MIT
 - floating-vue
 	- version: 1.0.0-beta.19
@@ -316,7 +319,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 0.3.3
 	- license: MIT
 - form-data
-	- version: 4.0.4
+	- version: 4.0.5
 	- license: MIT
 - function-bind
 	- version: 1.1.2
@@ -589,7 +592,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 2.1.0
 	- license: MIT
 - typescript-event-target
-	- version: 1.1.1
+	- version: 1.1.2
 	- license: MIT
 - unist-util-is
 	- version: 6.0.0
@@ -601,7 +604,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 6.0.1
 	- license: MIT
 - unist-util-visit
-	- version: 5.0.0
+	- version: 5.1.0
 	- license: MIT
 - url-join
 	- version: 4.0.1
@@ -646,7 +649,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 2.0.2
 	- license: MIT
 - minimatch
-	- version: 5.1.0
+	- version: 5.1.9
 	- license: ISC
 - webdav
 	- version: 4.11.5
