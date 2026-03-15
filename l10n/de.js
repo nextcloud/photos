@@ -150,7 +150,7 @@ OC.L10N.register(
     "{title}'s face" : "{title}'s Gesicht",
     "Last week" : "Letzte Woche",
     "Last Month" : "Letzten Monat",
-    "Custom…" : "Benutzerdefiniert…",
+    "Custom…" : "Benutzerdefiniert …",
     "{startDate} to {endDate}" : "{startDate} bis {endDate}",
     "Details" : "Details",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "{fileBaseName} konnte nicht der Sammlung {collectionFileName} hinzugefügt werden",
