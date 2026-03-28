@@ -78,15 +78,18 @@ class ExifMetadataProvider implements IEventListener {
 			// This is to trigger this condition: https://github.com/php/php-src/blob/d64aa6f646a7b5e58359dc79479860164239580a/main/streams/streams.c#L710
 			// But I don't understand yet why 1 as a special meaning.
 			$oldBufferSize = stream_set_chunk_size($fileDescriptor, 1);
-			if ($node->getMimeType() == 'image/webp') {
+			if ($node->getMimeType() === 'image/webp') {
 				$rawExifData = $this->getExifFromWebP($fileDescriptor);
-			} else {
+			}
+
+			$exifSupportedMimes = ['image/jpeg', 'image/tiff'];
+			if (in_array($node->getMimeType(), $exifSupportedMimes, true)) {
 				$rawExifData = @exif_read_data($fileDescriptor, 'EXIF, GPS', true);
 			}
 
 			// We then revert the change after having read the exif data.
 			stream_set_chunk_size($fileDescriptor, $oldBufferSize);
-		} catch (\Exception $ex) {
+		} catch (\Throwable $ex) {
 			$this->logger->info('Failed to extract metadata for ' . $node->getId(), ['exception' => $ex]);
 		}
 
