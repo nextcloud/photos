@@ -179,6 +179,7 @@ OC.L10N.register(
     "Choose default Photos upload and Albums location" : "Aukeratu argazkien igoera eta albumen kokaleku lehenetsia",
     "Choose a different folder" : "Aukeratu beste karpeta bat",
     "View" : "Ikusi",
-    "Choose the folder where photos and albums are uploaded to." : "Aukeratu zein karpetatara igoko diren argazki eta albumak."
+    "Choose the folder where photos and albums are uploaded to." : "Aukeratu zein karpetatara igoko diren argazki eta albumak.",
+    "Loading folders …" : "Karpetak kargatzen …"
 },
 "nplurals=2; plural=(n != 1);");
