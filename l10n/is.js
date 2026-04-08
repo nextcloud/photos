@@ -72,6 +72,7 @@ OC.L10N.register(
     "The destination folder is owned by {owner}" : "Móttökumappan er í eigu {owner}",
     "There are no photos or videos yet!" : "Það eru enn engar ljósmyndir eða myndskeið!",
     "_{years} year ago_::_{years} years ago_" : ["Fyrir {years} ári","Fyrir {years} árum"],
+    "Squared photos view" : "Sýn með ferköntuðum myndum",
     "Delete source directory" : "Eyða upprunamöppu",
     "Pick folder" : "Veldu möppu",
     "Select a source folder for your media" : "Veldu upprunamöppu fyrir myndefnið þitt",
@@ -157,6 +158,9 @@ OC.L10N.register(
     "Failed to create {collectionFileName}" : "Tókst ekki að búa til {collectionFileName}",
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Mistókst að endurnefna {currentCollectionFileName} sem {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Mistókst að uppfæra eiginleika á {collectionFileName} með {properties}",
+    "Delete collection" : "Eyða safni",
+    "Leave shared album" : "Yfirgefa samnýtta möppu",
+    "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Ertu viss um að þú viljir eyða {collectionName}? Þessi aðgerð er óafturkræf.",
     "Failed to delete {collectionFileName}" : "Tókst ekki að eyða {collectionFileName}",
     "Cancel" : "Cancel",
     "Confirm" : "Staðfesta",
@@ -175,6 +179,7 @@ OC.L10N.register(
     "Choose default Photos upload and Albums location" : "Veldu sjálfgefna staðsetningu fyrir innsendingar ljósmynda og albúma",
     "Choose a different folder" : "Velja aðra möppu",
     "View" : "Skoða",
-    "Choose the folder where photos and albums are uploaded to." : "Veldu möppurnar þangað sem ljósmyndir og myndskeið eru send."
+    "Choose the folder where photos and albums are uploaded to." : "Veldu möppurnar þangað sem ljósmyndir og myndskeið eru send.",
+    "Loading folders …" : "Hleð inn möppum …"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");
