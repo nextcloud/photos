@@ -39,7 +39,7 @@
 	},
 	"require": {
 		"hexogen/kdtree": "^0.2.5",
-		"woltlab/webp-exif": "^0.1.2"
+		"woltlab/webp-exif": "^0.1.3"
 	},
 	"extra": {
 		"bamarni-bin": {
