@@ -179,6 +179,7 @@ OC.L10N.register(
     "Choose default Photos upload and Albums location" : "Välj standardplats uppladdning av bilder och plats för album",
     "Choose a different folder" : "Välj annan mapp",
     "View" : "Visa",
-    "Choose the folder where photos and albums are uploaded to." : "Välj mapp dit foton och album laddas upp."
+    "Choose the folder where photos and albums are uploaded to." : "Välj mapp dit foton och album laddas upp.",
+    "Loading folders …" : "Läser in mappar …"
 },
 "nplurals=2; plural=(n != 1);");
