@@ -64,7 +64,7 @@ OC.L10N.register(
     "Select a custom date range" : "Pasirinkite norimą datų intervalą",
     "Select a date range" : "Pasirinkite datų intervalą",
     "Date range" : "Laikotarpis",
-    "Select filters" : "Pasirinkite filtrus",
+    "Select filters" : "Pasirinkti filtrus",
     "Dates" : "Datos",
     "Jump to specific date in list" : "Pereiti prie konkrečios datos sąraše",
     "Jump to {date}" : "Pereiti prie {date}",
