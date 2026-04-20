@@ -16,9 +16,11 @@ import {
 import {
 	deleteSelection,
 	downloadAllFiles,
+	downloadPublicFileCurrentlyOpenInViewer,
 	downloadSelection,
 	mkdir,
 	navigateToCollection,
+	openFileInFullSize,
 	selectMedia,
 	setupPhotosTests,
 	uploadTestMedia,
@@ -31,6 +33,7 @@ import {
 import { navigateToTimeline } from './timelinesUtils.ts'
 
 let alice: User
+let alicesFiles: Record<string, number>
 let bob: User
 let charlie: User
 
@@ -47,6 +50,7 @@ describe('Manage shared albums', () => {
 		setupPhotosTests()
 			.then((setupInfo) => {
 				alice = setupInfo.alice
+				alicesFiles = setupInfo.alicesFiles
 				bob = setupInfo.bob
 				charlie = setupInfo.charlie
 			})
@@ -306,6 +310,7 @@ describe('Manage shared albums', () => {
 			cy.createUser(alice)
 			mkdir(alice, '/Photos')
 			uploadTestMedia(alice)
+				.then((fileIdsMap) => alicesFiles = fileIdsMap)
 		})
 	})
 
@@ -317,6 +322,12 @@ describe('Manage shared albums', () => {
 			cy.visit('/apps/photos/albums')
 			createAnAlbumFromAlbums(albumName)
 			addFilesToAlbumFromAlbum(albumName, [0, 1, 2])
+		})
+
+		beforeEach(() => {
+			cy.login(alice)
+			cy.visit('/apps/photos/albums')
+			navigateToCollection('albums', albumName)
 		})
 
 		it('Create a public link', () => {
@@ -339,6 +350,26 @@ describe('Manage shared albums', () => {
 					cy.visit(publicLink)
 					cy.wait('@propFindAlbum')
 					cy.contains('This collection does not exist')
+				})
+		})
+
+		it('Download a file', () => {
+			createPublicShare()
+				.then((publicLink) => {
+					const publicShareToken = publicLink.split('/').pop() as string
+
+					cy.logout()
+					cy.intercept({ times: 1, method: 'PROPFIND', url: '/remote.php/dav/photospublic/*' }).as('propFindAlbum')
+					cy.intercept({ times: 1, method: 'PROPFIND', url: '/remote.php/dav/photospublic/*/' }).as('propFindContent')
+					cy.visit(publicLink)
+					cy.wait('@propFindAlbum')
+					cy.wait('@propFindContent')
+					cy.contains(albumName)
+					cy.get('[data-test="media"]').should('have.length', 3)
+
+					const fileName = `${alicesFiles['IMG_20191031_173558.jpg']}-IMG_20191031_173558.jpg`
+					openFileInFullSize(fileName)
+					downloadPublicFileCurrentlyOpenInViewer(publicShareToken, fileName)
 				})
 		})
 	})
