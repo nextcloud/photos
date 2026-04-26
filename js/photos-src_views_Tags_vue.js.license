@@ -13,6 +13,7 @@ SPDX-FileCopyrightText: omahlama
 SPDX-FileCopyrightText: inline-style-parser developers
 SPDX-FileCopyrightText: escape-html developers
 SPDX-FileCopyrightText: debounce developers
+SPDX-FileCopyrightText: Victor Felder <victor@draft.li> (https://draft.li)
 SPDX-FileCopyrightText: Tobias Koppers @sokra
 SPDX-FileCopyrightText: Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)
 SPDX-FileCopyrightText: Thorsten Lünborg
@@ -101,7 +102,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 3.0.0
 	- license: GPL-3.0-or-later
 - @nextcloud/sharing
-	- version: 0.3.0
+	- version: 0.4.0
 	- license: GPL-3.0-or-later
 - @vueuse/core
 	- version: 11.3.0
@@ -137,7 +138,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 6.0.1
 	- license: MIT
 - @nextcloud/vue
-	- version: 8.35.3
+	- version: 8.37.0
 	- license: AGPL-3.0-or-later
 - @ungap/structured-clone
 	- version: 1.2.0
@@ -179,7 +180,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.1.0
 	- license: MIT
 - dompurify
-	- version: 3.3.1
+	- version: 3.4.1
 	- license: (MPL-2.0 OR Apache-2.0)
 - emoji-mart-vue-fast
 	- version: 15.0.5
@@ -220,6 +221,9 @@ This file is generated from multiple sources. Included packages:
 - linkifyjs
 	- version: 4.3.2
 	- license: MIT
+- longest-streak
+	- version: 3.1.0
+	- license: MIT
 - md5
 	- version: 2.3.0
 	- license: BSD-3-Clause
@@ -241,8 +245,14 @@ This file is generated from multiple sources. Included packages:
 - mdast-util-newline-to-break
 	- version: 2.0.0
 	- license: MIT
+- mdast-util-phrasing
+	- version: 4.1.0
+	- license: MIT
 - mdast-util-to-hast
 	- version: 13.2.1
+	- license: MIT
+- mdast-util-to-markdown
+	- version: 2.1.2
 	- license: MIT
 - mdast-util-to-string
 	- version: 4.0.0
@@ -331,6 +341,9 @@ This file is generated from multiple sources. Included packages:
 - remark-parse
 	- version: 11.0.0
 	- license: MIT
+- remark-stringify
+	- version: 11.0.0
+	- license: MIT
 - remark-unlink-protocols
 	- version: 1.0.0
 	- license: MIT
@@ -380,7 +393,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 6.0.1
 	- license: MIT
 - unist-util-visit
-	- version: 5.0.0
+	- version: 5.1.0
 	- license: MIT
 - vue-color
 	- version: 2.8.1
@@ -408,6 +421,9 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - web-namespaces
 	- version: 2.0.1
+	- license: MIT
+- zwitch
+	- version: 2.0.4
 	- license: MIT
 - photos
 	- version: 4.0.0
