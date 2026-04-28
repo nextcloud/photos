@@ -27,18 +27,17 @@
 
 		<!-- Media list -->
 		<FilesListViewer
-			v-if="collection !== undefined && sortedCollectionFileIds.length > 0 "
+			v-if="collection !== undefined && sortedCollectionFileIds.length > 0"
 			:container-element="appContent"
 			class="collection__media"
 			:file-ids="sortedCollectionFileIds"
 			:base-height="isMobile ? 120 : 200"
 			:loading="loading">
 			<FileComponent
-				slot-scope="{ file, distance }"
+				slot-scope="{ file }"
 				:file="files[file.id]"
 				:allow-selection="allowSelection"
 				:selected="selection[file.id] === true"
-				:distance="distance"
 				@click="openViewer"
 				@select-toggled="onFileSelectToggle" />
 		</FilesListViewer>

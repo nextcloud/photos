@@ -183,7 +183,7 @@ export default {
 			files.forEach((file) => {
 				file.update({
 					// Use custom preview URL to avoid authentication prompt
-					previewUrl: generateUrl(`/apps/photos/api/v1/publicPreview/${file.fileid}?x=2048&y=2048&token=${this.token}`),
+					previewUrl: generateUrl(`/apps/photos/api/v1/publicPreview/${file.fileid}?x=4096&y=4096&token=${this.token}`),
 					// Disable use of generic file previews for public albums - for older versions of the Viewer app
 					hasPreview: false,
 				})
