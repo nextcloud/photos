@@ -34,6 +34,12 @@ export async function getFolder(path) {
 			await davClient.createDirectory(location)
 			const stat = await davClient.stat(location, { details: true, data: getDefaultPropfind() }) as ResponseDataDetailed<FileStat>
 			return resultToNode(stat.data)
+		}
+
+		// In case terms of service is installed, the dav endpoint
+		// will return 403 until TOS is accepted.
+		if (error.response?.status === 403) {
+			logger.debug('User is not authenticated, cannot load photos folder')
 		} else {
 			logger.fatal('Could not load photos folder', { error })
 			showError(t('photos', 'Could not load photos folder'))
