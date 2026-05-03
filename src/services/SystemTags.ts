@@ -4,7 +4,7 @@
  */
 
 import type { File } from '@nextcloud/files'
-import type { FileStat, GetDirectoryContentsOptions, ResponseDataDetailed } from 'webdav'
+import type { FileStat, GetDirectoryContentsOptionsWithDetails, ResponseDataDetailed } from 'webdav'
 
 import { resultToNode } from '@nextcloud/files/dav'
 import { davClient } from './DavClient.ts'
@@ -15,7 +15,7 @@ import { davClient } from './DavClient.ts'
  * @param path
  * @param options
  */
-export default async function(path: string, options: GetDirectoryContentsOptions = {}): Promise<File[]> {
+export default async function(path: string, options: Partial<GetDirectoryContentsOptionsWithDetails> = {}): Promise<File[]> {
 	const response = await davClient.getDirectoryContents('/systemtags-assigned/image', {
 		data: `<?xml version="1.0"?>
 			<d:propfind  xmlns:d="DAV:"

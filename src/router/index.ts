@@ -5,14 +5,14 @@
 
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
 import areTagsInstalled from '../services/AreTagsInstalled.js'
-import isMapsInstalled from '../services/IsMapsInstalled.js'
 import isRecognizeInstalled from '../services/IsRecognizeInstalled.js'
 
 const FoldersView = () => import('../views/FoldersView.vue')
+const MapView = () => import('../views/MapView.vue')
+const MemoriesView = () => import('../views/MemoriesView.vue')
 const AlbumsView = () => import('../views/AlbumsView.vue')
 const AlbumContent = () => import('../views/AlbumContent.vue')
 const SharedAlbums = () => import('../views/SharedAlbums.vue')
@@ -30,28 +30,20 @@ const UnassignedFaces = () => import('../views/UnassignedFaces.vue')
 
 const baseTitle = document.title
 
-Vue.use(Router)
-
-let mapsPath = generateUrl('/apps/maps')
-if (!isMapsInstalled) {
-	mapsPath = generateUrl('/settings/apps/integration/maps')
-}
-
 /**
  * Parse the path of a route : join the elements of the array and return a single string with slashes
  * + always lead current path with a slash
  *
  * @param path
  */
-function parsePathParams(path: string | string[]): string {
+function parsePathParams(path: string | string[] = ''): string {
 	return `/${Array.isArray(path) ? path.join('/') : path || ''}`
 }
 
-const router = new Router({
-	mode: 'history',
+const router = createRouter({
 	// if index.php is in the url AND we got this far, then it's working:
 	// let's keep using index.php in the url
-	base: generateUrl('/apps/photos'),
+	history: createWebHistory(generateUrl('/apps/photos')),
 	linkActiveClass: 'active',
 	routes: [
 		{
@@ -106,7 +98,7 @@ const router = new Router({
 			},
 		},
 		{
-			path: '/albums/:albumName*',
+			path: '/albums/:albumName',
 			component: AlbumContent,
 			name: 'albumsContent',
 			props: (route) => ({
@@ -129,7 +121,7 @@ const router = new Router({
 			},
 		},
 		{
-			path: '/sharedalbums/:albumName*',
+			path: '/sharedalbums/:albumName',
 			component: SharedAlbumContent,
 			name: 'sharedAlbumsContent',
 			props: (route) => ({
@@ -160,7 +152,7 @@ const router = new Router({
 			name: 'places',
 		},
 		{
-			path: '/places/:placeName*',
+			path: '/places/:placeName',
 			component: PlaceContent,
 			name: 'placesContent',
 			props: (route) => ({
@@ -214,42 +206,53 @@ const router = new Router({
 				},
 			},
 		},
+		// Tag routes are only registered when the systemtags app is installed.
+		...(!areTagsInstalled
+			? []
+			: [
+					{
+						path: '/tags/',
+						component: TagsView,
+						name: 'tags',
+						props: (route) => ({
+							path: '',
+							isRoot: !route.params.path,
+							rootTitle: t('photos', 'Tagged photos'),
+						}),
+						meta: {
+							rootTitle: () => {
+								return t('photos', 'Tagged photos')
+							},
+						},
+					},
+					{
+						path: '/tags/:path',
+						component: TagContent,
+						name: 'tagcontent',
+						props: (route) => ({
+							path: `${route.params.path ? route.params.path : ''}`,
+						}),
+						meta: {
+							rootTitle: (to) => {
+								return t('photos', 'Tagged photo {title}', { title: to.params.path })
+							},
+						},
+					},
+				]
+		),
 		{
-			path: '/tags/',
-			component: TagsView,
-			name: 'tags',
-			redirect: !areTagsInstalled ? { name: 'timeline' } : undefined,
-			props: (route) => ({
-				path: '',
-				isRoot: !route.params.path,
-				rootTitle: t('photos', 'Tagged photos'),
+			// Inline photos-on-a-map view. Replaces the previous /maps
+			// route that redirected to the external Maps app — that
+			// integration is still available via the "Open in Maps app"
+			// button on the inline view when the Maps app is installed.
+			path: '/map',
+			name: 'map',
+			component: MapView,
+			props: () => ({
+				rootTitle: t('photos', 'Photo map'),
 			}),
 			meta: {
-				rootTitle: () => {
-					return t('photos', 'Tagged photos')
-				},
-			},
-		},
-		{
-			path: '/tags/:path',
-			component: TagContent,
-			name: 'tagcontent',
-			redirect: !areTagsInstalled ? { name: 'timeline' } : undefined,
-			props: (route) => ({
-				path: `${route.params.path ? route.params.path : ''}`,
-			}),
-			meta: {
-				rootTitle: (to) => {
-					return t('photos', 'Tagged photo {title}', { title: to.params.path })
-				},
-			},
-		},
-		{
-			path: '/maps',
-			name: 'maps',
-			// router-link doesn't support external url, let's force the redirect
-			beforeEnter() {
-				window.open(mapsPath, '_blank')
+				rootTitle: () => t('photos', 'Photo map'),
 			},
 		},
 		{
@@ -264,6 +267,17 @@ const router = new Router({
 				rootTitle: () => {
 					return t('photos', 'On this day')
 				},
+			},
+		},
+		{
+			path: '/memories',
+			name: 'memories',
+			component: MemoriesView,
+			props: () => ({
+				rootTitle: t('photos', 'Memories'),
+			}),
+			meta: {
+				rootTitle: () => t('photos', 'Memories'),
 			},
 		},
 		{

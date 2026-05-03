@@ -4,15 +4,28 @@
 -->
 
 <template>
-	<NcContent app-name="photos">
+	<NcContent appName="photos">
 		<NcAppNavigation :aria-label="t('photos', 'Photos')">
 			<template v-if="isTimelineView" #search>
+				<NcTextField
+					class="app-navigation__search"
+					:label="t('photos', 'Search by name, tag or date (e.g. 2023, May 2023)')"
+					:modelValue="searchTerm"
+					trailingButtonIcon="close"
+					:showTrailingButton="searchTerm.length > 0"
+					:trailingButtonLabel="t('photos', 'Clear search')"
+					@update:modelValue="onSearchInput"
+					@trailingButtonClick="clearSearch">
+					<template #icon>
+						<Magnify :size="16" />
+					</template>
+				</NcTextField>
 				<PhotosFiltersInput
-					:selected-filters="selectedFilters"
-					@select-filter="selectFilter" />
+					:selectedFilters="selectedFilters"
+					@selectFilter="selectFilter" />
 				<PhotosFiltersDisplay
-					:selected-filters="selectedFilters"
-					@deselect-filter="deselectFilter" />
+					:selectedFilters="selectedFilters"
+					@deselectFilter="deselectFilter" />
 			</template>
 
 			<template #list>
@@ -20,8 +33,7 @@
 					:to="{ name: 'all_media' }"
 					:name="t('photos', 'All media')"
 					class="app-navigation__all_media"
-					data-id-app-nav-item="all-media"
-					exact>
+					data-id-app-nav-item="all-media">
 					<template #icon="{ active }">
 						<ImageIcon v-if="active" :size="20" />
 						<ImageOutline v-else :size="20" />
@@ -101,6 +113,14 @@
 					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
+					:to="{ name: 'memories' }"
+					:name="t('photos', 'Memories')"
+					data-id-app-nav-item="memories">
+					<template #icon>
+						<TimelapseIcon :size="20" />
+					</template>
+				</NcAppNavigationItem>
+				<NcAppNavigationItem
 					:to="{ name: 'shared' }"
 					:name="t('photos', 'Shared with you')"
 					data-id-app-nav-item="shared">
@@ -129,10 +149,9 @@
 					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
-					v-if="showLocationMenuEntry"
-					:to="{ name: 'maps' }"
+					:to="{ name: 'map' }"
 					:name="t('photos', 'Map')"
-					data-id-app-nav-item="maps">
+					data-id-app-nav-item="map">
 					<template #icon="{ active }">
 						<MapIcon v-if="active" :size="20" />
 						<MapOutline v-else :size="20" />
@@ -167,7 +186,7 @@
 		</NcAppContent>
 
 		<!-- Main settings Modal-->
-		<SettingsDialog :open.sync="openedSettings" />
+		<SettingsDialog v-model:open="openedSettings" />
 	</NcContent>
 </template>
 
@@ -184,6 +203,7 @@ import NcAppNavigation from '@nextcloud/vue/components/NcAppNavigation'
 import NcAppNavigationItem from '@nextcloud/vue/components/NcAppNavigationItem'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcContent from '@nextcloud/vue/components/NcContent'
+import NcTextField from '@nextcloud/vue/components/NcTextField'
 import AccountBoxMultiple from 'vue-material-design-icons/AccountBoxMultiple.vue'
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
 import AccountGroup from 'vue-material-design-icons/AccountGroup.vue'
@@ -199,6 +219,7 @@ import ImageIcon from 'vue-material-design-icons/Image.vue'
 import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import ImageOutline from 'vue-material-design-icons/ImageOutline.vue'
+import Magnify from 'vue-material-design-icons/Magnify.vue'
 import MapIcon from 'vue-material-design-icons/Map.vue'
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
@@ -209,6 +230,7 @@ import Star from 'vue-material-design-icons/Star.vue'
 import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import Tag from 'vue-material-design-icons/Tag.vue'
 import TagOutline from 'vue-material-design-icons/TagOutline.vue'
+import TimelapseIcon from 'vue-material-design-icons/Timelapse.vue'
 import VideoIcon from 'vue-material-design-icons/Video.vue'
 import VideoOutline from 'vue-material-design-icons/VideoOutline.vue'
 import PhotosFiltersDisplay from './components/PhotosFilters/PhotosFiltersDisplay.vue'
@@ -248,6 +270,7 @@ export default {
 		StarOutline,
 		Tag,
 		TagOutline,
+		TimelapseIcon,
 		VideoIcon,
 		VideoOutline,
 		MapIcon,
@@ -259,6 +282,8 @@ export default {
 		NcAppNavigationItem,
 		NcButton,
 		NcContent,
+		NcTextField,
+		Magnify,
 		SettingsDialog,
 		PhotosFiltersInput,
 		PhotosFiltersDisplay,
@@ -289,6 +314,9 @@ export default {
 				: (getCurrentUser().isAdmin && loadState('photos', 'showPeopleMenuEntry', true) && isAppStoreEnabled) || isRecognizeInstalled,
 
 			openedSettings: false,
+
+			searchTerm: '',
+			searchDebounceHandle: null as ReturnType<typeof setTimeout> | null,
 		}
 	},
 
@@ -322,7 +350,7 @@ export default {
 		}
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		window.removeEventListener('load', () => {
 			navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js', {}, {
 				noRewrite: true,
@@ -347,6 +375,31 @@ export default {
 			}
 		},
 
+		// Debounce typing into the timeline search field so we don't
+		// fire off a DAV REPORT on every keystroke. The user gets ~300ms
+		// of pause before the server-side filter is updated.
+		onSearchInput(value: string) {
+			this.searchTerm = value
+
+			if (this.searchDebounceHandle !== null) {
+				clearTimeout(this.searchDebounceHandle)
+			}
+
+			this.searchDebounceHandle = setTimeout(() => {
+				this.applySearchTerm(value)
+			}, 300)
+		},
+
+		applySearchTerm(value: string) {
+			const trimmed = value.trim()
+			this.selectedFilters.name = trimmed.length === 0 ? [] : [trimmed]
+		},
+
+		clearSearch() {
+			this.searchTerm = ''
+			this.applySearchTerm('')
+		},
+
 		t,
 	},
 }
@@ -366,5 +419,10 @@ export default {
 
 .app-navigation__footer {
 	padding: calc(var(--default-grid-baseline) * 2);
+}
+
+.app-navigation__search {
+	margin: calc(var(--default-grid-baseline) * 2);
+	margin-bottom: calc(var(--default-grid-baseline));
 }
 </style>

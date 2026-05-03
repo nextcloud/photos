@@ -19,7 +19,7 @@
 			<FolderOutline
 				class="folder__icon"
 				:size="96"
-				fill-color="var(--color-primary-element)" />
+				fillColor="var(--color-primary-element)" />
 		</span>
 
 		<span class="folder__details">
@@ -31,7 +31,7 @@
 
 <script lang='ts'>
 import type { PropType } from 'vue'
-import type { Route } from 'vue-router'
+import type { RouteLocationNamedRaw } from 'vue-router'
 import type { FoldersNode } from '../services/FolderContent.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
@@ -107,7 +107,7 @@ export default {
 		 * and use it as a direct string.
 		 * Which vue-router does not encode afterwards!
 		 */
-		toLink(): Route {
+		toLink(): RouteLocationNamedRaw {
 			// Remove leading /file/{userId}
 			const prefix = `/files/${getCurrentUser()?.uid}`
 			let path = this.path.replace(new RegExp(`^${prefix}`), '')

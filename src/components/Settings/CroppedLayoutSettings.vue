@@ -6,7 +6,7 @@
 <template>
 	<NcFormBox>
 		<NcFormBoxSwitch
-			:model-value="croppedLayout"
+			:modelValue="croppedLayout"
 			:label="t('photos', 'Squared photos view')"
 			@update:modelValue="updateSetting" />
 	</NcFormBox>

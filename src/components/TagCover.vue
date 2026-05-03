@@ -34,6 +34,7 @@ import {
 	type PropType,
 
 	defineComponent,
+	markRaw,
 } from 'vue'
 import { RouterLink } from 'vue-router'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
@@ -94,12 +95,13 @@ export default defineComponent({
 	},
 
 	mounted() {
-		this.observer = new IntersectionObserver((entries) => {
+		// markRaw: IntersectionObserver uses private class fields that throw under Vue 3's reactive Proxy.
+		this.observer = markRaw(new IntersectionObserver((entries) => {
 			if (entries[0].isIntersecting) {
 				this.loadCover = true
 				this.observer?.disconnect()
 			}
-		})
+		}))
 		this.observer.observe(this.$el)
 	},
 
