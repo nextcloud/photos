@@ -35,6 +35,40 @@
 			@refresh="resetFetchFilesState">
 			<div class="timeline__header__left">
 				<!-- TODO: UploadPicker -->
+				<NcActions
+					v-if="selectedFileIds.length === 0"
+					:aria-label="t('photos', 'Change tile density')"
+					:menuName="t('photos', 'Density')"
+					data-cy-header-action="density">
+					<template #icon>
+						<ViewGridIcon :size="20" />
+					</template>
+					<!-- NcActionRadio is a radio group: modelValue is the active
+						selection (string), and the radio whose `value` matches
+						modelValue renders checked. We pass the same modelValue
+						to all three so they form one group. -->
+					<NcActionRadio
+						name="photos-density"
+						value="small"
+						:modelValue="gridDensity"
+						@update:modelValue="setDensity">
+						{{ t('photos', 'Small tiles') }}
+					</NcActionRadio>
+					<NcActionRadio
+						name="photos-density"
+						value="medium"
+						:modelValue="gridDensity"
+						@update:modelValue="setDensity">
+						{{ t('photos', 'Default') }}
+					</NcActionRadio>
+					<NcActionRadio
+						name="photos-density"
+						value="large"
+						:modelValue="gridDensity"
+						@update:modelValue="setDensity">
+						{{ t('photos', 'Large tiles') }}
+					</NcActionRadio>
+				</NcActions>
 				<NcButton
 					v-if="selectedFileIds.length === 0"
 					ref="newAlbumButton"
@@ -111,7 +145,7 @@
 			:fileIdsBySection="fileIdsByMonth"
 			:sections="monthsList"
 			:loading="loadingFiles"
-			:baseHeight="isMobile ? 120 : 200"
+			:baseHeight="tileBaseHeight"
 			:emptyMessage="t('photos', 'No photos or videos in here')"
 			@needContent="getContent">
 			<template #default="{ file, isHeader }">
@@ -164,6 +198,7 @@ import moment from '@nextcloud/moment'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { storeToRefs } from 'pinia'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcActionRadio from '@nextcloud/vue/components/NcActionRadio'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
@@ -175,6 +210,7 @@ import Plus from 'vue-material-design-icons/Plus.vue'
 import PlusBoxMultipleOutline from 'vue-material-design-icons/PlusBoxMultipleOutline.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 import DownloadOutline from 'vue-material-design-icons/TrayArrowDown.vue'
+import ViewGridIcon from 'vue-material-design-icons/ViewGridOutline.vue'
 import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import AlbumPicker from '../components/Albums/AlbumPicker.vue'
@@ -204,6 +240,7 @@ export default {
 		NcModal,
 		NcActions,
 		NcActionButton,
+		NcActionRadio,
 		NcButton,
 		AlbumForm,
 		AlbumPicker,
@@ -213,6 +250,7 @@ export default {
 		HeaderNavigation,
 		PhotosSourceLocationsSettings,
 		AlertCircleOutline,
+		ViewGridIcon,
 	},
 
 	mixins: [
@@ -286,6 +324,21 @@ export default {
 				return this.t('photos', 'Create new album')
 			}
 		},
+
+		gridDensity(): 'small' | 'medium' | 'large' {
+			return this.$store.state.userConfig.gridDensity
+		},
+
+		// Tile-row target height per density. The mobile-medium fallback
+		// (120px) is preserved from the original behaviour.
+		tileBaseHeight(): number {
+			switch (this.gridDensity) {
+				case 'small': return this.isMobile ? 80 : 120
+				case 'large': return this.isMobile ? 200 : 320
+				case 'medium':
+				default: return this.isMobile ? 120 : 200
+			}
+		},
 	},
 
 	watch: {
@@ -304,6 +357,10 @@ export default {
 	},
 
 	methods: {
+		setDensity(value: 'small' | 'medium' | 'large') {
+			this.$store.dispatch('updateUserConfig', { key: 'gridDensity', value })
+		},
+
 		dateMonth(date: string): string {
 			return moment(date, 'YYYYMM').format('MMMM')
 		},

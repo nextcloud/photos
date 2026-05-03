@@ -42,18 +42,22 @@
 			</template>
 		</NcEmptyContent>
 
-		<GridLayout v-else class="nodes-container" :sections="contentList">
-			<template #default="{ gridSections }">
+		<TiledLayout
+			v-else
+			class="nodes-container"
+			:sections="contentList"
+			:baseHeight="220">
+			<template #default="{ tiledSections }">
 				<VirtualScrolling
 					:containerElement="appContent"
-					:sections="gridSections">
+					:sections="tiledSections">
 					<template #default="{ visibleSections }">
 						<ul v-if="visibleSections.length === 1">
 							<template v-for="row of visibleSections[0].rows" :key="row.key">
 								<li
 									v-for="item of row.items"
 									:key="item.id"
-									:style="{ 'flex-basis': `${item.width}px`, height: `${item.height}px` }">
+									:style="{ 'flex-basis': `${item.width - 1}px`, height: `${item.height}px` }">
 									<FileLegacy
 										v-if="item.type === 'file'"
 										:item="item"
@@ -73,7 +77,7 @@
 					</template>
 				</VirtualScrolling>
 			</template>
-		</GridLayout>
+		</TiledLayout>
 	</div>
 </template>
 
@@ -91,9 +95,9 @@ import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import FolderOutline from 'vue-material-design-icons/FolderOutline.vue'
 import FileLegacy from '../components/FileLegacy.vue'
 import FolderComponent from '../components/FolderComponent.vue'
-import GridLayout from '../components/GridLayout/GridLayout.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import LocalUploadPicker from '../components/LocalUploadPicker.vue'
+import TiledLayout from '../components/TiledLayout/TiledLayout.vue'
 import VirtualScrolling from '../components/VirtualScrolling.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import allowedMimes from '../services/AllowedMimes.js'
@@ -111,7 +115,7 @@ export default defineComponent({
 		NcLoadingIcon,
 		FolderComponent,
 		FileLegacy,
-		GridLayout,
+		TiledLayout,
 		VirtualScrolling,
 	},
 
@@ -210,10 +214,25 @@ export default defineComponent({
 		},
 
 		contentList() {
+			// TiledLayout consumes `{ id, ratio }` per item. We default to a
+			// square ratio (1) for both folders and files since the folder
+			// listing endpoint doesn't return per-photo dimensions; the inner
+			// FileLegacy / FolderComponent uses `object-fit: cover` to fill
+			// whatever tile shape TiledLayout assigns.
+			const folders = (this.folderList || []).map((folder) => ({
+				...folder,
+				id: `folder-${folder.fileid}`,
+				ratio: 1,
+			}))
+			const files = (this.fileList || []).map((file) => ({
+				...file,
+				id: `file-${file.fileid}`,
+				ratio: 1,
+			}))
 			return [
 				{
 					id: '',
-					items: [...(this.folderList || []), ...(this.fileList || [])],
+					items: [...folders, ...files],
 				},
 			]
 		},

@@ -19,39 +19,44 @@
 				<VideoOutline v-if="file.mime?.includes('video')" class="icon-overlay" :size="64" />
 				<PlayCircleOutlineIcon v-else-if="file.attributes['metadata-files-live-photo'] !== undefined" class="icon-overlay" :size="64" />
 
-				<!-- We have two img elements to load the small and large preview -->
-				<!-- Do not show the small preview if the larger one is loaded -->
-				<!-- Prioritize visible files -->
-				<!-- Load small preview first, then the larger one -->
-				<!-- Preload large preview for near visible files -->
-				<!-- Preload small preview for further away files -->
+				<!--
+					Three layers stacked, each fading in when its source loads.
+					blurhash sits at the bottom, small thumbnail above it, full
+					preview on top. Crossfade happens naturally as the higher
+					layer's opacity goes 0 → 1 while the layer beneath stays
+					rendered.
+				-->
 				<template v-if="initialized">
 					<canvas
-						v-if="hasBlurhash && !loadedLarge"
+						v-if="hasBlurhash"
 						ref="canvas"
-						class="file__blurhash"
+						class="file__layer file__layer--blurhash"
 						aria-hidden="true" />
 
 					<img
-						v-if="!hasBlurhash && !loadedLarge && (loadedSmall || !errorSmall)"
+						v-if="!errorSmall"
 						ref="imgSmall"
 						:key="`${file.basename}-small`"
+						class="file__layer file__layer--small"
+						:class="{ 'file__layer--visible': loadedSmall }"
 						:src="srcSmall"
 						:alt="file.basename"
-						:decoding="loadedSmall ? 'sync' : 'async'"
-						:fetchpriority="loadedSmall ? 'high' : 'low'"
-						:loading="loadedSmall ? 'eager' : undefined"
+						decoding="async"
+						fetchpriority="low"
 						@load="onLoadSmall"
 						@error="onErrorSmall">
 
 					<img
-						v-if="loadedLarge || ((hasBlurhash || loadedSmall || errorSmall) && !errorLarge)"
+						v-if="!errorLarge"
+						ref="imgLarge"
 						:key="`${file.basename}-large`"
+						class="file__layer file__layer--large"
+						:class="{ 'file__layer--visible': loadedLarge }"
 						:src="srcLarge"
 						:alt="file.basename"
-						:decoding="loadedLarge ? 'sync' : 'async'"
-						:fetchpriority="loadedLarge ? 'high' : 'low'"
-						:loading="loadedLarge ? undefined : 'lazy'"
+						decoding="async"
+						:fetchpriority="loadedSmall ? 'high' : 'low'"
+						loading="lazy"
 						@load="onLoadLarge"
 						@error="onErrorLarge">
 				</template>
@@ -171,12 +176,14 @@ export default {
 	},
 
 	beforeUnmount() {
-		// cancel any pending load
+		// Cancel any pending image load by clearing the src on each layer.
+		// The previous code had a typo (`srcLarge`) and never cancelled the
+		// large preview; now both are addressed.
 		if (this.$refs.imgSmall !== undefined) {
 			(this.$refs.imgSmall as HTMLImageElement).src = ''
 		}
-		if (this.$refs.srcLarge !== undefined) {
-			(this.$refs.srcLarge as HTMLImageElement).src = ''
+		if (this.$refs.imgLarge !== undefined) {
+			(this.$refs.imgLarge as HTMLImageElement).src = ''
 		}
 	},
 
@@ -288,14 +295,6 @@ export default {
 		outline: none; // Override global focus state.
 		display: flex; // Fill parent size
 
-		&__blurhash {
-			position: absolute;
-			top: 0;
-			height: 100%;
-			width: 100%;
-			object-fit: cover;
-		}
-
 		&__images {
 			width: 100%;
 			height: 100%;
@@ -306,7 +305,7 @@ export default {
 				inset-inline-end: 0px;
 				width: 100%;
 				height: 100%;
-				z-index: 1;
+				z-index: 4; // above all preview layers
 				opacity: 0.8;
 
 				:deep(.material-design-icon__svg) {
@@ -314,12 +313,42 @@ export default {
 				}
 			}
 
-			img {
+			// Three stacked preview layers: blurhash at the bottom, small
+			// thumbnail above it, full preview on top. Each img layer starts
+			// at opacity 0 and fades in once its `load` event fires; the
+			// canvas blurhash is always visible, sitting beneath everything.
+			.file__layer {
+				position: absolute;
+				top: 0;
+				inset-inline-start: 0;
 				width: 100%;
 				height: 100%;
 				object-fit: cover;
-				position: absolute;
-				color: transparent; /// Hide alt='' text when loading.
+				color: transparent; // Hide alt='' text when loading.
+			}
+
+			.file__layer--blurhash {
+				z-index: 1;
+			}
+
+			.file__layer--small {
+				z-index: 2;
+				opacity: 0;
+				transition: opacity 200ms ease-out;
+
+				&.file__layer--visible {
+					opacity: 1;
+				}
+			}
+
+			.file__layer--large {
+				z-index: 3;
+				opacity: 0;
+				transition: opacity 250ms ease-out;
+
+				&.file__layer--visible {
+					opacity: 1;
+				}
 			}
 		}
 	}

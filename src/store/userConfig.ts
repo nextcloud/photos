@@ -49,17 +49,25 @@ export async function getFolder(path) {
 	throw new Error("Couldn't fetch photos upload folder")
 }
 
+export type GridDensity = 'small' | 'medium' | 'large'
+
 export type UserConfigState = {
 	croppedLayout: boolean
+	gridDensity: GridDensity
 	photosSourceFolders: string[]
 	photosLocation: string
 	photosLocationFolder?: Folder
+}
+
+function parseGridDensity(value: string): GridDensity {
+	return value === 'small' || value === 'large' ? value : 'medium'
 }
 
 const module = {
 	state() {
 		return {
 			croppedLayout: loadState('photos', 'croppedLayout', 'false') as 'false' | 'true' === 'true',
+			gridDensity: parseGridDensity(loadState('photos', 'gridDensity', 'medium')),
 			photosSourceFolders: JSON.parse(loadState('photos', 'photosSourceFolders', '["/Photos"]')),
 			photosLocation: loadState('photos', 'photosLocation', ''),
 			photosLocationFolder: undefined,
