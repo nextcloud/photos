@@ -249,11 +249,11 @@ img {
 	// (it has overflow: hidden via FileFolder mixin), so the image
 	// scales without spilling onto neighbouring tiles. Reduced-motion
 	// users opt out via the media query below.
-	transition: transform 220ms ease-out;
+	transition: transform 360ms ease-out;
 }
 
 .file-legacy-wrap:hover img {
-	transform: scale(1.04);
+	transform: scale(1.07);
 }
 
 @media (prefers-reduced-motion: reduce) {

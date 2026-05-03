@@ -468,7 +468,7 @@ export default {
 		.file__layer--small,
 		.file__layer--large,
 		.file__layer--blurhash {
-			transform: scale(1.04);
+			transform: scale(1.07);
 		}
 	}
 
@@ -574,7 +574,7 @@ export default {
 				// blurhash + small + large in lockstep during the
 				// magnify so the layers don't slide relative to each
 				// other.
-				transition: transform 220ms ease-out;
+				transition: transform 360ms ease-out;
 			}
 
 			.file__layer--blurhash {
