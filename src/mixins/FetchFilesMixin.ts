@@ -11,9 +11,11 @@ import { t } from '@nextcloud/l10n'
 import { joinPaths } from '@nextcloud/paths'
 import { defineComponent, markRaw } from 'vue'
 import { davClient } from '../services/DavClient.ts'
+import { getIndexedPhotos, resetIndexedCursor } from '../services/IndexedTimelineSearch.ts'
 import logger from '../services/logger.js'
 import getPhotos, { type PhotoSearchOptions } from '../services/PhotoSearch.js'
 import store from '../store/index.js'
+import indexStatusStore from '../store/indexStatus.ts'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
 import AbortControllerMixin from './AbortControllerMixin.js'
 
@@ -62,13 +64,42 @@ export default defineComponent({
 
 				const numberOfImagesPerBatch = 200
 
-				// Load next batch of images
-				let fetchedFiles = await getPhotos({
-					firstResult: this.fetchedFileIds.length,
-					nbResults: numberOfImagesPerBatch,
-					...options,
-					signal,
-				})
+				// Load next batch of images. Prefer the indexed read
+				// path when the per-user backfill has finished AND the
+				// caller didn't pass options that the indexed endpoint
+				// doesn't yet implement (filters, onThisDay, favourites
+				// scoping). On any failure we fall back to DAV — the
+				// indexed endpoint is purely an optimisation, never
+				// load-bearing for correctness.
+				const indexStatus = indexStatusStore()
+				const canUseIndexed = indexStatus.ready === true
+					&& options.onThisDay !== true
+					&& options.onlyFavorites !== true
+					&& (options.extraFilters ?? '') === ''
+
+				let fetchedFiles: File[] | null = null
+				if (canUseIndexed) {
+					try {
+						fetchedFiles = await getIndexedPhotos({
+							firstResult: this.fetchedFileIds.length,
+							nbResults: numberOfImagesPerBatch,
+							...options,
+							signal,
+						})
+					} catch (e) {
+						logger.warn('[FetchFilesMixin] Indexed timeline failed; falling back to DAV', { error: e })
+						fetchedFiles = null
+					}
+				}
+
+				if (fetchedFiles === null) {
+					fetchedFiles = await getPhotos({
+						firstResult: this.fetchedFileIds.length,
+						nbResults: numberOfImagesPerBatch,
+						...options,
+						signal,
+					})
+				}
 
 				// If we get less files than requested that means we got to the end
 				if (fetchedFiles.length !== numberOfImagesPerBatch) {
@@ -130,6 +161,10 @@ export default defineComponent({
 			this.errorFetchingFiles = null
 			this.loadingFiles = false
 			this.fetchedFileIds = []
+			// Drop the indexed cursor so the next fetch starts at the
+			// most recent photo again (mirrors how the DAV path resets
+			// its `firstResult` offset to 0).
+			resetIndexedCursor()
 		},
 	},
 })

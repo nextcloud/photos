@@ -151,35 +151,50 @@
 			</div>
 		</HeaderNavigation>
 
-		<FilesListViewer
-			:containerElement="appContent"
-			class="timeline__file-list"
-			:fileIdsBySection="fileIdsByMonth"
-			:sections="monthsList"
-			:loading="loadingFiles"
-			:baseHeight="tileBaseHeight"
-			:emptyMessage="t('photos', 'No photos or videos in here')"
-			@needContent="getContent">
-			<template #default="{ file, isHeader }">
-				<h2
-					v-if="isHeader"
-					:id="`file-picker-section-header-${file.id}`"
-					class="section-header">
-					<b>{{ dateMonth(file.id) }}</b>
-					{{ dateYear(file.id) }}
-				</h2>
-				<FileComponent
-					v-else
-					:file="files[file.id]"
-					:allowSelection="true"
-					:selected="selection[file.id] === true"
-					@click="openViewer"
-					@selectToggled="onFileSelectToggle"
-					@requestAddToAlbum="onRequestAddToAlbum"
-					@requestShare="onRequestShare"
-					@requestDelete="onRequestDelete" />
-			</template>
-		</FilesListViewer>
+		<!-- Migration progress: shown only while the per-user backfill
+			of oc_photos_index is still running. Self-hides once the
+			backend reports `ready`. -->
+		<IndexProgressBanner />
+
+		<div class="timeline__viewer-wrap">
+			<FilesListViewer
+				:containerElement="appContent"
+				class="timeline__file-list"
+				:fileIdsBySection="fileIdsByMonth"
+				:sections="monthsList"
+				:loading="loadingFiles"
+				:baseHeight="tileBaseHeight"
+				:emptyMessage="t('photos', 'No photos or videos in here')"
+				:scrollToSection="scrubberTarget"
+				@needContent="getContent">
+				<template #default="{ file, isHeader }">
+					<h2
+						v-if="isHeader"
+						:id="`file-picker-section-header-${file.id}`"
+						class="section-header">
+						<b>{{ dateMonth(file.id) }}</b>
+						{{ dateYear(file.id) }}
+					</h2>
+					<FileComponent
+						v-else
+						:file="files[file.id]"
+						:allowSelection="true"
+						:selected="selection[file.id] === true"
+						@click="openViewer"
+						@selectToggled="onFileSelectToggle"
+						@requestAddToAlbum="onRequestAddToAlbum"
+						@requestShare="onRequestShare"
+						@requestDelete="onRequestDelete" />
+				</template>
+			</FilesListViewer>
+
+			<!-- Drag-to-jump date navigation (iOS-style). Hidden when
+				there's only one month — there's nothing to scrub. -->
+			<DateScrubber
+				:months="monthsList"
+				:currentMonth="scrubberTarget || monthsList[0]"
+				@jump="onScrubberJump" />
+		</div>
 
 		<NcModal
 			v-if="showAlbumCreationForm"
@@ -236,9 +251,11 @@ import ViewGridIcon from 'vue-material-design-icons/ViewGridOutline.vue'
 import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import AlbumPicker from '../components/Albums/AlbumPicker.vue'
+import DateScrubber from '../components/DateScrubber.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import IndexProgressBanner from '../components/IndexProgressBanner.vue'
 import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
 import Slideshow from '../components/Slideshow.vue'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.ts'
@@ -246,6 +263,7 @@ import FilesByMonthMixin from '../mixins/FilesByMonthMixin.ts'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.ts'
 import { allMimes } from '../services/AllowedMimes.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
+import burstStore from '../store/bursts.ts'
 import useFilterStore from '../store/filters.ts'
 import { configChangedEvent } from '../store/userConfig.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.ts'
@@ -267,10 +285,12 @@ export default {
 		NcButton,
 		AlbumForm,
 		AlbumPicker,
+		DateScrubber,
 		FilesListViewer,
 		FileComponent,
 		ActionFavorite,
 		HeaderNavigation,
+		IndexProgressBanner,
 		PhotosSourceLocationsSettings,
 		AlertCircleOutline,
 		PlayIcon,
@@ -339,6 +359,11 @@ export default {
 			// (from the per-tile actions menu) instead of the bulk
 			// selection. Cleared after picking.
 			singleFileForAlbumPicker: null as { fileid: number } | null,
+			// The month section the user clicked / dragged to in the
+			// DateScrubber. Forwarded to FilesListViewer's
+			// `scrollToSection`. Empty string = "no override, default
+			// to top of grid".
+			scrubberTarget: '' as string,
 		}
 	},
 
@@ -424,10 +449,34 @@ export default {
 			})
 		},
 
+		// Date-scrubber jump: just stash the target month; the
+		// FilesListViewer's `scrollToSection` prop reactivity does
+		// the actual scroll. Emitting via the watcher would risk
+		// recursion (scroll → emit → set → scroll), so the data flow
+		// is one-way.
+		onScrubberJump(month: string) {
+			this.scrubberTarget = month
+		},
+
 		openViewer(fileId: string) {
+			// If this tile is a burst-stack leader, scope the viewer's
+			// prev/next to the stack members so the user can flip
+			// through ONLY the burst (instead of jumping out into the
+			// full timeline). Singletons fall through to the previous
+			// behaviour: prev/next walks every tile in the grid.
+			// Pinia singleton — see FilesByMonthMixin for the
+			// rationale on not relying on this.bursts.
+			const stack = burstStore().getStack(fileId.toString())
+			const listIds = stack !== undefined
+				? stack.memberIds
+				: Object.values(this.fileIdsByMonth).flat()
+
 			window.OCA.Viewer.open({
 				fileInfo: toViewerFileInfo(this.files[fileId]),
-				list: Object.values(this.fileIdsByMonth).flat().map((fileId) => toViewerFileInfo(this.files[fileId])),
+				list: listIds
+					.map((id) => this.files[id])
+					.filter((file) => file !== undefined)
+					.map(toViewerFileInfo),
 			})
 		},
 
@@ -540,6 +589,22 @@ export default {
 
 	&__filters {
 		padding: 16px 64px;
+	}
+
+	// Wraps the grid + the absolutely-positioned date scrubber so the
+	// scrubber pins to the grid's right edge regardless of the rest of
+	// the page layout above it.
+	&__viewer-wrap {
+		position: relative;
+		flex: 1;
+		min-height: 0;
+		display: flex;
+		flex-direction: column;
+	}
+
+	&__file-list {
+		flex: 1;
+		min-height: 0;
 	}
 
 	&__heading {

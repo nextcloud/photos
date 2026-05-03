@@ -7,7 +7,22 @@
 	<div
 		class="file-container"
 		data-test="media"
-		:class="{ selected }">
+		:class="{ selected, 'is-stack': isStack }">
+		<!--
+			Burst-stack decoration: two thin "card backs" peeking out
+			behind the tile so the user can see at a glance that it
+			represents multiple photos. Pure CSS — no extra <img> loads.
+			Plus a count badge in the top-right that tells them how
+			many photos are folded into this stack.
+		-->
+		<template v-if="isStack">
+			<div class="stack-back stack-back--two" aria-hidden="true" />
+			<div class="stack-back stack-back--one" aria-hidden="true" />
+			<span class="stack-count" :aria-label="t('photos', '{count} photos in burst', { count: stackCount })">
+				{{ stackCount }}
+			</span>
+		</template>
+
 		<a
 			class="file"
 			:href="file.source"
@@ -129,6 +144,7 @@ import VideoOutline from 'vue-material-design-icons/VideoOutline.vue'
 import FavoriteIcon from './FavoriteIcon.vue'
 import PhotoActionsMenu from './PhotoActionsMenu.vue'
 import { isCachedPreview } from '../services/PreviewService.js'
+import burstStore from '../store/bursts.ts'
 
 export default {
 	name: 'FileComponent',
@@ -212,6 +228,24 @@ export default {
 
 		hasBlurhash() {
 			return this.file.attributes['metadata-blurhash'] !== undefined
+		},
+
+		// True iff this file is the leader of a burst stack (i.e. has
+		// other photos folded into it). Drives the stacked-card visual
+		// + count badge + the on-click slideshow seeding. Reaches for
+		// the Pinia singleton directly (see FilesByMonthMixin for the
+		// rationale — mixin / setup-return ordering isn't reliable).
+		stack() {
+			const id = this.file.fileid?.toString()
+			return id !== undefined ? burstStore().getStack(id) : undefined
+		},
+
+		isStack(): boolean {
+			return this.stack !== undefined
+		},
+
+		stackCount(): number {
+			return this.stack?.memberIds.length ?? 0
 		},
 	},
 
@@ -348,6 +382,8 @@ export default {
 
 <style lang="scss" scoped>
 .file-container {
+	// `contain: strict` is dropped on stack tiles further down so the
+	// stack-back pseudo-cards can extend past the tile bounds.
 	contain: strict;
 	background: var(--color-primary-element-light);
 	position: relative;
@@ -359,6 +395,92 @@ export default {
 	// selection). Replaces the previous hard outline ring with a softer
 	// affordance that doesn't fight the photo for visual weight.
 	transition: transform 160ms ease-out, box-shadow 160ms ease-out;
+
+	// --- Burst stack decoration ---
+	// Two thin "card backs" peek out behind the tile so the user can
+	// see at a glance that this represents multiple photos. We let
+	// them overflow the container, so we relax `contain` for stacks.
+	&.is-stack {
+		contain: layout paint;
+		// Reserve a few pixels of margin so the stack-backs don't get
+		// clipped by the neighbouring tile.
+		margin-inline-end: 6px;
+		margin-block-end: 6px;
+	}
+
+	.stack-back {
+		position: absolute;
+		inset: 0;
+		background: var(--color-background-hover);
+		border: 2px solid var(--color-main-background);
+		border-radius: inherit;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+		pointer-events: none;
+		z-index: 0;
+		// The two backs sit progressively further behind. The
+		// translate is the offset; the scale slightly shrinks them
+		// so they look like a stacked deck.
+		&--one {
+			transform: translate(3px, 3px) scale(0.985);
+			opacity: 0.85;
+		}
+		&--two {
+			transform: translate(6px, 6px) scale(0.97);
+			opacity: 0.6;
+		}
+	}
+
+	.stack-count {
+		position: absolute;
+		top: 6px;
+		inset-inline-end: 6px;
+		z-index: 4;
+		min-width: 22px;
+		height: 22px;
+		padding: 0 7px;
+		border-radius: 11px;
+		background: rgba(0, 0, 0, 0.6);
+		color: #fff;
+		backdrop-filter: blur(6px);
+		font-size: 12px;
+		font-weight: 600;
+		font-variant-numeric: tabular-nums;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		pointer-events: none;
+	}
+
+	// --- Subtle hover ---
+	// A photo tile is its own small object — when the user hovers we
+	// give it just enough lift to feel tactile: the image inside
+	// gently magnifies (clipped by the tile's overflow), the tile
+	// itself lifts 1px, and a soft shadow appears underneath. Held
+	// to 220ms so it doesn't drag, and gated behind `:not(.selected)`
+	// so the selection visual stays the dominant state.
+	//
+	// Reduced-motion users get just the shadow + lift without the
+	// scale, which is the cheapest part of the effect.
+	&:hover:not(.selected) {
+		box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+		z-index: 1;
+
+		.file__layer--small,
+		.file__layer--large,
+		.file__layer--blurhash {
+			transform: scale(1.07);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		&:hover:not(.selected) {
+			.file__layer--small,
+			.file__layer--large,
+			.file__layer--blurhash {
+				transform: none;
+			}
+		}
+	}
 
 	// Selection state: softer ring + lift + shadow.
 	&.selected {
@@ -447,6 +569,16 @@ export default {
 				height: 100%;
 				object-fit: cover;
 				color: transparent; // Hide alt='' text when loading.
+				// `transform` is animated by the tile's :hover rule.
+				// Specifying it here (rather than in each layer) keeps
+				// blurhash + small + large in lockstep during the
+				// magnify so the layers don't slide relative to each
+				// other.
+				// 520ms with an "ease-out-quint" curve (cubic-bezier
+				// 0.22, 1, 0.36, 1) — quick to start responding, then
+				// settles slowly into place. Reads as deliberate /
+				// cinematic rather than UI-snappy.
+				transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 			}
 
 			.file__layer--blurhash {
