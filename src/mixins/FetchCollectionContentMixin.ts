@@ -8,11 +8,12 @@ import type { WebDAVClient } from 'webdav'
 
 import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
-import { defineComponent } from 'vue'
+import { defineComponent, markRaw } from 'vue'
 import {
 	type Collection,
 
-	fetchCollection, fetchCollectionFiles,
+	fetchCollection,
+	fetchCollectionFiles,
 } from '../services/collectionFetcher.js'
 import logger from '../services/logger.js'
 import { collectionFilesExtraProps } from '../store/collections.js'
@@ -24,7 +25,10 @@ export default defineComponent({
 
 	data() {
 		return {
-			fetchSemaphore: new SemaphoreWithPriority(1),
+			// markRaw: SemaphoreWithPriority uses private class fields that
+			// throw "Cannot access invalid private field" under Vue 3's
+			// reactive Proxy.
+			fetchSemaphore: markRaw(new SemaphoreWithPriority(1)),
 			loadingCollection: false,
 			loadingCollectionFiles: false,
 			errorFetchingCollection: null as null | number | Error | unknown,

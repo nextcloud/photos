@@ -4,61 +4,78 @@
 -->
 
 <template>
-	<a
-		:class="{
-			'file--cropped': croppedLayout,
-		}"
-		class="file"
-		:href="item.injected.source"
-		:aria-label="ariaLabel"
-		@click.prevent="openViewer">
-		<div v-if="item.injected.mime.includes('video') && item.injected.hasPreview" class="icon-video-white" />
-		<!-- image and loading placeholder -->
-		<transition-group name="fade" class="transition-group">
+	<div class="file-legacy-wrap">
+		<a
+			:class="{
+				'file--cropped': croppedLayout,
+			}"
+			class="file"
+			:href="item.source"
+			:aria-label="ariaLabel"
+			@click.prevent="openViewer">
+			<div v-if="item.mime.includes('video') && item.hasPreview" class="icon-video-white" />
+
 			<img
 				v-if="!error"
 				ref="img"
-				:key="`${item.injected.basename}-img`"
+				:key="`${item.basename}-img`"
 				:src="src"
-				:alt="item.injected.basename"
+				:alt="item.basename"
 				:aria-describedby="ariaUuid"
 				@load="onLoad"
 				@error="onError">
 
-			<svg
-				v-if="!loaded || error"
-				:key="`${item.injected.basename}-svg`"
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 32 32"
-				fill="url(#placeholder__gradient)">
-				<use v-if="isImage" href="#placeholder--img" />
-				<use v-else href="#placeholder--video" />
-			</svg>
-		</transition-group>
+			<!-- image name and cover -->
+			<p :id="ariaUuid" class="hidden-visually">{{ item.basename }}</p>
+			<div class="cover" role="none" />
+		</a>
 
-		<!-- image name and cover -->
-		<p :id="ariaUuid" class="hidden-visually">{{ item.injected.basename }}</p>
-		<div class="cover" role="none" />
-	</a>
+		<!--
+			Per-photo overflow menu — same component the timeline uses.
+			Accepts the FoldersNode shape via the ActionMenuFile
+			interface; missing EXIF / favorite attributes degrade
+			gracefully (View metadata shows just the filename, the
+			favorite toggle still works because it goes through the
+			store's PROPPATCH which only needs the fileid).
+		-->
+		<PhotoActionsMenu
+			class="file-legacy-wrap__actions"
+			:file="actionFile"
+			@requestDelete="onRequestDelete" />
+	</div>
 </template>
 
 <script lang='ts'>
 import type { PropType } from 'vue'
-import type { InjectedItem } from './FolderComponent.vue'
+import type { FoldersNode } from '../services/FolderContent.ts'
 
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
+import PhotoActionsMenu from './PhotoActionsMenu.vue'
 import { legacyToViewerFileInfo } from '../utils/fileUtils.ts'
 
 export default {
 	name: 'FileLegacy',
+
+	components: {
+		PhotoActionsMenu,
+	},
+
 	inheritAttrs: false,
+
 	props: {
 		item: {
-			type: Object as PropType<InjectedItem>,
+			type: Object as PropType<FoldersNode>,
+			required: true,
+		},
+
+		list: {
+			type: Object as PropType<FoldersNode[]>,
 			required: true,
 		},
 	},
+
+	emits: ['delete-requested'],
 
 	data() {
 		return {
@@ -69,23 +86,44 @@ export default {
 
 	computed: {
 		ariaUuid() {
-			return `image-${this.item.injected.fileid}`
+			return `image-${this.item.fileid}`
+		},
+
+		// Adapter: PhotoActionsMenu's `file` prop accepts the
+		// ActionMenuFile interface (fileid, basename, optional
+		// path/attributes). FoldersNode satisfies it directly; we just
+		// forward.
+		actionFile() {
+			return {
+				fileid: this.item.fileid,
+				basename: this.item.basename,
+				path: this.item.filename,
+				// Synthesise an attributes bag with the favorite bit
+				// the menu's "Add to favorites / Remove from favorites"
+				// logic reads. FoldersNode doesn't track this directly
+				// (folder listings don't include the oc:favorite prop)
+				// so the toggle starts from "not favorited" — toggling
+				// flips it on the server regardless. Acceptable for
+				// the folder view since users don't frequently
+				// favorite from there.
+				attributes: { favorite: 0 },
+			}
 		},
 
 		ariaLabel() {
-			return t('photos', 'Open the full size "{name}" image', { name: this.item.injected.basename })
+			return t('photos', 'Open the full size "{name}" image', { name: this.item.basename })
 		},
 
 		isImage() {
-			return this.item.injected.mime.startsWith('image')
+			return this.item.mime.startsWith('image')
 		},
 
 		decodedEtag() {
-			return this.item.injected.etag.replace('&quot;', '').replace('&quot;', '')
+			return this.item.etag.replace('&quot;', '').replace('&quot;', '')
 		},
 
 		src() {
-			return generateUrl(`/core/preview?fileId=${this.item.injected.fileid}&c=${this.decodedEtag}&x=${250}&y=${250}&forceIcon=0&a=${this.croppedLayout ? '0' : '1'}`)
+			return generateUrl(`/core/preview?fileId=${this.item.fileid}&c=${this.decodedEtag}&x=${250}&y=${250}&forceIcon=0&a=${this.croppedLayout ? '0' : '1'}`)
 		},
 
 		croppedLayout() {
@@ -93,17 +131,29 @@ export default {
 		},
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		// cancel any pending load
-		this.$refs.src = ''
+		if (this.$refs.img !== undefined) {
+			(this.$refs.img as HTMLImageElement).src = ''
+		}
 	},
 
 	methods: {
 		openViewer() {
 			window.OCA.Viewer.open({
-				fileInfo: legacyToViewerFileInfo(this.item.injected),
-				list: this.item.injected.list.map((file) => legacyToViewerFileInfo(file)),
+				fileInfo: legacyToViewerFileInfo(this.item),
+				list: this.list.map((file) => legacyToViewerFileInfo(file)),
+				onClose() { window.OCA.Files.Sidebar.close() },
 			})
+		},
+
+		// Forward the menu's delete request to the parent (FoldersView).
+		// We don't dispatch the photos store action here because the
+		// folder view doesn't use that store — it has its own
+		// folder-content cache that needs invalidating after a delete.
+		// Wiring is parent's responsibility.
+		onRequestDelete() {
+			this.$emit('delete-requested', this.item)
 		},
 
 		/** When the image is fully loaded by browser we remove the placeholder */
@@ -128,6 +178,52 @@ export default {
 	display: contents;
 }
 
+// Wrapper around the legacy <a class="file"> so PhotoActionsMenu
+// (absolutely positioned) can pin to the same coordinate space.
+// Inherits sizing from the parent grid so the underlying <a> still
+// fills the tile.
+.file-legacy-wrap {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	// Lift + soft shadow on hover. Pairs with the image-magnify
+	// effect below; same 220ms ease-out so the two animations land
+	// together. Mirrors the FileComponent timeline tile so the
+	// folder view feels like the same product.
+	transition: box-shadow 220ms ease-out;
+
+	&:hover {
+		box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+		z-index: 1;
+	}
+
+	&__actions {
+		// Reveal on hover/focus, mirroring how FileComponent's menu
+		// behaves — keeps the affordance discoverable without
+		// permanently cluttering the tile.
+		opacity: 0;
+		transition: opacity 160ms ease-out;
+	}
+
+	&:hover &__actions,
+	&__actions:focus-within {
+		opacity: 1;
+	}
+
+	// FileLegacy's existing `img { z-index: 10 }` rule sits in front
+	// of PhotoActionsMenu's default `z-index: 3`, so clicks aimed at
+	// the menu button land on the image (which is inside the `<a>`
+	// tag) and open the viewer instead. Lift the menu's root above
+	// the image. `:deep()` reaches the scoped class inside the menu
+	// component; the `.file-legacy-wrap`-rooted selector is the
+	// containment-aware version of the previous attempt that didn't
+	// match because `.photo-actions` and `.file-legacy-wrap__actions`
+	// resolve to the same element, not a parent/child pair.
+	:deep(.photo-actions) {
+		z-index: 11;
+	}
+}
+
 .icon-video-white {
 	position: absolute;
 	top: 10px;
@@ -147,6 +243,24 @@ img {
 
 	.file--cropped & {
 		object-fit: cover;
+	}
+
+	// Subtle magnify on hover. The `<a class="file">` clips overflow
+	// (it has overflow: hidden via FileFolder mixin), so the image
+	// scales without spilling onto neighbouring tiles. Reduced-motion
+	// users opt out via the media query below.
+	// 520ms with an "ease-out-quint" curve — see FileComponent for
+	// the same pairing on the timeline tile.
+	transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.file-legacy-wrap:hover img {
+	transform: scale(1.07);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.file-legacy-wrap:hover img {
+		transform: none;
 	}
 }
 

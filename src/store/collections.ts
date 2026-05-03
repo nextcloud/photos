@@ -6,7 +6,7 @@
 import type { Collection } from '../services/collectionFetcher.ts'
 import type { PhotosContext } from './index.ts'
 
-import { DialogSeverity, getDialogBuilder, showError } from '@nextcloud/dialogs'
+import { getDialogBuilder, showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
@@ -373,7 +373,7 @@ export async function confirmOperation(name: string, text: string): Promise<bool
 	let result = false
 	const dialog = getDialogBuilder(name)
 		.setText(text)
-		.setSeverity(DialogSeverity.Warning)
+		.setSeverity('warning')
 		.addButton({
 			label: t('photos', 'Cancel'),
 			callback() {},

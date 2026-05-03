@@ -43,6 +43,8 @@ export default {
 		},
 	},
 
+	emits: ['update:open'],
+
 	methods: {
 		// This can only be called if the AppSettingsDialog
 		// is shown. So closing only
