@@ -249,7 +249,9 @@ img {
 	// (it has overflow: hidden via FileFolder mixin), so the image
 	// scales without spilling onto neighbouring tiles. Reduced-motion
 	// users opt out via the media query below.
-	transition: transform 360ms ease-out;
+	// 520ms with an "ease-out-quint" curve — see FileComponent for
+	// the same pairing on the timeline tile.
+	transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .file-legacy-wrap:hover img {

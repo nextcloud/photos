@@ -574,7 +574,11 @@ export default {
 				// blurhash + small + large in lockstep during the
 				// magnify so the layers don't slide relative to each
 				// other.
-				transition: transform 360ms ease-out;
+				// 520ms with an "ease-out-quint" curve (cubic-bezier
+				// 0.22, 1, 0.36, 1) — quick to start responding, then
+				// settles slowly into place. Reads as deliberate /
+				// cinematic rather than UI-snappy.
+				transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 			}
 
 			.file__layer--blurhash {
