@@ -116,6 +116,8 @@ export type PhotoTarget = {
 	davPath: string
 	/** Permissions of the current user on the photo. */
 	permissions: number
+	/** Whether the current user marked the photo as a favorite. */
+	favorite: boolean
 }
 
 /**
@@ -133,6 +135,7 @@ export function toPhotoTarget(file: Node): PhotoTarget {
 			basename: file.basename,
 			davPath: `${file.root}${file.path}`,
 			permissions: file.permissions,
+			favorite: file.attributes.favorite === 1,
 		}
 	}
 
@@ -141,6 +144,7 @@ export function toPhotoTarget(file: Node): PhotoTarget {
 		basename: basename(originalFilename),
 		davPath: `${getRootPath()}${originalFilename}`,
 		permissions: file.permissions,
+		favorite: file.attributes.favorite === 1,
 	}
 }
 
@@ -153,6 +157,10 @@ export function legacyToPhotoTarget(file: FoldersNode): PhotoTarget {
 		basename: file.basename,
 		davPath: file.filename,
 		permissions: parsePermissions(file.permissions),
+		// Folder listings are not read over DAV and carry no favorite bit, so a
+		// photo of the folders view starts out as "not a favorite" — the action
+		// marks it as one, which is what it says it does.
+		favorite: false,
 	}
 }
 
