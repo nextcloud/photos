@@ -20,6 +20,11 @@ registerDavProperty('nc:metadata-photos-original_date_time')
 // GPS metadata is needed by the map view to plot photo markers; without
 // this registration the timeline endpoint won't return the field.
 registerDavProperty('nc:metadata-photos-gps')
+// EXIF + IFD0 fuel the optional overlay in the slideshow viewer (camera
+// make/model, lens, aperture, exposure, ISO). Cheap to fetch alongside
+// the photo size we already pull.
+registerDavProperty('nc:metadata-photos-exif')
+registerDavProperty('nc:metadata-photos-ifd0')
 
 const app = createApp(PhotosApp)
 app.use(store)

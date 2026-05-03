@@ -64,6 +64,94 @@ export function detectTrips(photos: PhotoFile[], gapDays = 2, minPhotos = 8): Tr
 	return trips.sort((a, b) => b.endTimestamp - a.endTimestamp)
 }
 
+export type YearRecap = {
+	year: number
+	totalCount: number
+	curated: PhotoFile[] // The hand-picked subset (cover + slideshow material).
+	cover: PhotoFile // The single photo to put on the recap card.
+}
+
+const RECAP_TARGET_COUNT = 60 // Photos to include in the curated set.
+
+/**
+ * Build a "Your year in photos" recap from the loaded photo set.
+ *
+ * Curation strategy (intentionally lightweight; pure JS over what's
+ * already in the store):
+ *
+ *   1. Pick the most recent year that has any photos.
+ *   2. Of that year's photos, prefer favourites first, then sample
+ *      evenly across the calendar so December and February get a fair
+ *      shake instead of last-month dominating.
+ *   3. Pick a cover photo near the middle of the curated set —
+ *      avoids the "first or last photo of the year" trap.
+ *
+ * Returns `null` when there aren't enough photos to make a meaningful
+ * recap (currently <30) — the threshold keeps us from surfacing a
+ * "recap" of someone's first three test uploads.
+ *
+ * @param photos - All loaded photos.
+ */
+export function buildYearRecap(photos: PhotoFile[]): YearRecap | null {
+	if (photos.length === 0) {
+		return null
+	}
+
+	// Group by year (using the photo's pre-computed timestamp).
+	const byYear = new Map<number, PhotoFile[]>()
+	for (const photo of photos) {
+		const year = new Date(photo.attributes.timestamp * 1000).getFullYear()
+		const bucket = byYear.get(year)
+		if (bucket === undefined) {
+			byYear.set(year, [photo])
+		} else {
+			bucket.push(photo)
+		}
+	}
+
+	// Most recent year with at least 30 photos.
+	const candidate = [...byYear.entries()]
+		.sort(([a], [b]) => b - a)
+		.find(([, bucket]) => bucket.length >= 30)
+
+	if (candidate === undefined) {
+		return null
+	}
+
+	const [year, yearPhotos] = candidate
+
+	// Sort by timestamp (oldest first) so even-spaced sampling lands
+	// on a chronologically distributed set.
+	const sorted = [...yearPhotos].sort((a, b) => a.attributes.timestamp - b.attributes.timestamp)
+
+	const favourites = sorted.filter((photo) => photo.attributes.favorite === 1)
+	const remaining = sorted.filter((photo) => photo.attributes.favorite !== 1)
+
+	// Always include all favourites (capped at the target). Then fill
+	// the rest by sampling evenly from the non-favourite pool.
+	const curated: PhotoFile[] = favourites.slice(0, RECAP_TARGET_COUNT)
+	const slotsLeft = Math.max(0, RECAP_TARGET_COUNT - curated.length)
+	if (slotsLeft > 0 && remaining.length > 0) {
+		const stride = Math.max(1, Math.floor(remaining.length / slotsLeft))
+		for (let i = 0; i < remaining.length && curated.length < RECAP_TARGET_COUNT; i += stride) {
+			curated.push(remaining[i])
+		}
+	}
+
+	// Re-sort the final selection so the slideshow plays in
+	// chronological order instead of "favourites bunched at the start".
+	curated.sort((a, b) => a.attributes.timestamp - b.attributes.timestamp)
+
+	const cover = curated[Math.floor(curated.length / 2)] ?? curated[0]
+
+	return {
+		year,
+		totalCount: yearPhotos.length,
+		curated,
+		cover,
+	}
+}
+
 /**
  * Build a Trip record from an already-clustered set of photos.
  *

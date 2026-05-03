@@ -37,6 +37,19 @@
 						class="file__layer file__layer--blurhash"
 						aria-hidden="true" />
 
+					<!--
+						Shimmer placeholder. Overlays the blurhash (or
+						the empty primary-element-light background when
+						no blurhash exists) until the small or large
+						preview lands. Pure CSS — a translating gradient
+						sweep — so it's cheap to animate and doesn't
+						need JS bookkeeping.
+					-->
+					<div
+						v-if="!loadedSmall && !loadedLarge"
+						class="file__layer file__layer--shimmer"
+						aria-hidden="true" />
+
 					<img
 						v-if="!errorSmall"
 						ref="imgSmall"
@@ -74,10 +87,17 @@
 			:modelValue="selected"
 			@update:modelValue="onToggle" />
 
-		<FavoriteIcon
-			v-if="file.attributes.favorite === 1"
-			v-once
-			class="favorite-state" />
+		<!--
+			Favourite-star toggle animation: enter spawns a quick scale-up
+			bounce; leave fades out. The original v-once was preventing
+			the icon from ever re-rendering, which masked favorite-state
+			changes coming from the bulk-action menu.
+		-->
+		<Transition name="favorite-pop">
+			<FavoriteIcon
+				v-if="file.attributes.favorite === 1"
+				class="favorite-state" />
+		</Transition>
 	</div>
 </template>
 
@@ -309,9 +329,26 @@ export default {
 	width: 100%;
 	border: 2px solid var(--color-main-background); // Use border so create a separation between images.
 	box-sizing: border-box;
+	// Subtle lift + shadow when a tile is interacted with (focus or
+	// selection). Replaces the previous hard outline ring with a softer
+	// affordance that doesn't fight the photo for visual weight.
+	transition: transform 160ms ease-out, box-shadow 160ms ease-out;
 
-	// Selection border.
-	&.selected,
+	// Selection state: softer ring + lift + shadow.
+	&.selected {
+		transform: scale(0.97);
+		box-shadow:
+			0 0 0 3px var(--color-primary-element),
+			0 6px 18px rgba(0, 0, 0, 0.18);
+		z-index: 2;
+
+		.selection-checkbox {
+			opacity: 1;
+		}
+	}
+
+	// Keyboard focus state — keep the existing visible outline but
+	// without the lift so focus and selection are visually distinct.
 	&:focus-within,
 	&:has(:focus) {
 		&::after {
@@ -322,9 +359,10 @@ export default {
 			width: 100%;
 			height: 100%;
 			content: '';
-			outline: var(--color-primary-element) solid 4px;
-			outline-offset: -4px;
+			outline: var(--color-primary-element) solid 3px;
+			outline-offset: -3px;
 			pointer-events: none;
+			border-radius: 4px;
 		}
 
 		.selection-checkbox {
@@ -373,6 +411,39 @@ export default {
 
 			.file__layer--blurhash {
 				z-index: 1;
+			}
+
+			// Shimmer sweep — a translucent diagonal gradient travels
+			// across the tile while we wait for the preview. The
+			// `var(--color-…)` references read the user's NC theme so
+			// the shimmer adapts to dark mode automatically.
+			.file__layer--shimmer {
+				z-index: 2;
+				pointer-events: none;
+				background: linear-gradient(
+					115deg,
+					rgba(255, 255, 255, 0) 30%,
+					rgba(255, 255, 255, 0.18) 50%,
+					rgba(255, 255, 255, 0) 70%
+				);
+				background-size: 220% 100%;
+				background-repeat: no-repeat;
+				animation: file-layer-shimmer 1500ms linear infinite;
+				// Slight fade out as the small/large preview takes over;
+				// this just trims the visual handover so the sweep
+				// doesn't pop.
+				transition: opacity 200ms ease-out;
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				.file__layer--shimmer {
+					animation: none;
+				}
+			}
+
+			@keyframes file-layer-shimmer {
+				0%   { background-position: 120% 0; }
+				100% { background-position: -120% 0; }
 			}
 
 			.file__layer--small {
@@ -459,6 +530,27 @@ export default {
 		top: 2px;
 		// Fancy calculation to render the start in the middle of narrow images.
 		inset-inline-end: min(2px, calc(50% - 7px));
+	}
+
+	// Pop-in animation when a file becomes a favourite. The bounce
+	// timing function gives a satisfying overshoot. Keep durations short
+	// (320ms in / 180ms out) so bulk-favourite still feels snappy.
+	.favorite-pop-enter-active {
+		animation: favorite-pop-keyframes 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
+		transform-origin: center;
+	}
+	.favorite-pop-leave-active {
+		transition: opacity 180ms ease-out, transform 180ms ease-out;
+	}
+	.favorite-pop-leave-to {
+		opacity: 0;
+		transform: scale(0.8);
+	}
+
+	@keyframes favorite-pop-keyframes {
+		0%   { opacity: 0; transform: scale(0.5); }
+		60%  { opacity: 1; transform: scale(1.25); }
+		100% { opacity: 1; transform: scale(1); }
 	}
 }
 </style>
