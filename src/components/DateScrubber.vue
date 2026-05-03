@@ -206,20 +206,36 @@ export default defineComponent({
 			return this.months[idx] ?? null
 		},
 
+		// Both track + thumb funnel into the same start. Pressing
+		// anywhere on the track jumps to that point AND begins a
+		// drag, so a press-and-drag works whether the user grabs the
+		// thumb or any blank stretch of track. We don't bother with
+		// setPointerCapture — it can drop the capture on browser
+		// quirks (Safari was the original failure mode here) and the
+		// document-level pointermove + pointerup are reliable.
 		onTrackPointerDown(e: PointerEvent) {
-			// Click on bare track: jump immediately.
-			const month = this.monthAtY(e.clientY)
-			if (month !== null) {
-				this.$emit('jump', month)
-			}
+			this.startDrag(e)
 		},
 
 		onThumbPointerDown(e: PointerEvent) {
-			(e.target as HTMLElement).setPointerCapture(e.pointerId)
+			this.startDrag(e)
+		},
+
+		startDrag(e: PointerEvent) {
+			// Treat the press as both an immediate jump and the
+			// beginning of a drag. Pre-set dragMonth so the thumb
+			// doesn't snap to a stale activeMonth on the first frame.
+			const initial = this.monthAtY(e.clientY)
+			if (initial !== null) {
+				this.dragMonth = initial
+			}
 			this.isDragging = true
-			this.dragMonth = this.activeMonth
-			window.addEventListener('pointermove', this.onPointerMove)
-			window.addEventListener('pointerup', this.onPointerUp, { once: true })
+			if (initial !== null) {
+				this.$emit('jump', initial)
+			}
+			document.addEventListener('pointermove', this.onPointerMove)
+			document.addEventListener('pointerup', this.onPointerUp, { once: true })
+			document.addEventListener('pointercancel', this.onPointerUp, { once: true })
 		},
 
 		onPointerMove(e: PointerEvent) {
@@ -230,9 +246,7 @@ export default defineComponent({
 			if (month !== null && month !== this.dragMonth) {
 				this.dragMonth = month
 				// Live update the timeline as the user drags — feels
-				// more responsive than waiting for release. The scroll
-				// is light because FilesListViewer just updates its
-				// virtual window.
+				// more responsive than waiting for release.
 				this.$emit('jump', month)
 			}
 		},
@@ -240,7 +254,7 @@ export default defineComponent({
 		onPointerUp() {
 			this.isDragging = false
 			this.dragMonth = ''
-			window.removeEventListener('pointermove', this.onPointerMove)
+			document.removeEventListener('pointermove', this.onPointerMove)
 		},
 
 		// Keyboard navigation: ArrowUp/Down step by month, Home/End
@@ -314,6 +328,10 @@ export default defineComponent({
 		);
 		pointer-events: auto;
 		cursor: pointer;
+		// Without `touch-action: none` browsers swallow the vertical
+		// drag as a page-scroll gesture before our pointermove handler
+		// ever sees it (mobile + macOS trackpad two-finger scroll).
+		touch-action: none;
 	}
 
 	&__year-label {
@@ -341,6 +359,10 @@ export default defineComponent({
 		transition: transform 120ms ease-out, box-shadow 120ms ease-out;
 		pointer-events: auto;
 		cursor: grab;
+		// Same touch-action gotcha as the track — without this, a
+		// drag starting on the thumb may be eaten by the browser's
+		// scroll behaviour before pointermove fires.
+		touch-action: none;
 
 		&:active {
 			cursor: grabbing;
