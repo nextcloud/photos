@@ -134,6 +134,125 @@ class PhotoIndexMapper {
 		return $rows;
 	}
 
+	/**
+	 * Enriched timeline rows: index ⨝ filecache ⨝ vcategory_to_object
+	 * (favorites). Replaces the DAV REPORT search that the client used
+	 * to issue — one SQL with a covering index instead of a full-storage
+	 * mimetype scan.
+	 *
+	 * EXIF / blurhash / GPS metadata aren't joined here; the controller
+	 * fetches them in a single batch via IFilesMetadataManager which
+	 * has its own per-fileId cache and avoids JOINing the variable-shape
+	 * `oc_files_metadata` JSON column at SQL level.
+	 *
+	 * @return list<array{
+	 *   file_id: int,
+	 *   mimetype: string,
+	 *   mtime: int,
+	 *   taken_at: int,
+	 *   size: int,
+	 *   path: string,
+	 *   name: string,
+	 *   etag: string,
+	 *   permissions: int,
+	 *   storage_id: int,
+	 *   favorite: int,
+	 * }>
+	 *
+	 * `homeStorageId` filters rows to the user's primary storage so the
+	 * client can construct DAV source URLs against `/files/<user>/...`
+	 * without dealing with group-folder / external-storage path mapping.
+	 * Photos outside the home storage stay reachable via the legacy
+	 * DAV-report fetcher when the client falls back.
+	 */
+	public function getEnrichedTimelineForUser(string $userId, int $homeStorageId, ?int $beforeDate, int $limit): array {
+		$qb = $this->connection->getQueryBuilder();
+		$qb->select(
+			'idx.file_id',
+			'idx.mimetype',
+			'idx.mtime',
+			'idx.taken_at',
+			'idx.size',
+			'fc.path',
+			'fc.name',
+			'fc.etag',
+			'fc.permissions',
+			'fc.storage',
+			// COUNT() over the favorite join: 1 if the favorite tag is
+			// mapped to this fileid for this user, else 0. Phrased as a
+			// COUNT-of-tag.id rather than a CASE WHEN so we don't have
+			// to rely on dialect-specific boolean coercion.
+			$qb->func()->count('tag.id', 'favorite_count'),
+		)
+			->from('photos_index', 'idx')
+			->leftJoin('idx', 'filecache', 'fc', $qb->expr()->eq('idx.file_id', 'fc.fileid'))
+			->leftJoin(
+				'fc',
+				'vcategory_to_object',
+				'tagmap',
+				$qb->expr()->eq('fc.fileid', 'tagmap.objid'),
+			)
+			->leftJoin(
+				'tagmap',
+				'vcategory',
+				'tag',
+				$qb->expr()->andX(
+					$qb->expr()->eq('tagmap.categoryid', 'tag.id'),
+					$qb->expr()->eq('tag.type', $qb->createNamedParameter('files')),
+					$qb->expr()->eq('tag.uid', $qb->createNamedParameter($userId)),
+					$qb->expr()->eq('tag.category', $qb->createNamedParameter('_$!<Favorite>!$_')),
+				),
+			)
+			->where($qb->expr()->eq('idx.user_id', $qb->createNamedParameter($userId)))
+			->andWhere($qb->expr()->eq('fc.storage', $qb->createNamedParameter($homeStorageId, IQueryBuilder::PARAM_INT)))
+			->groupBy(
+				'idx.file_id',
+				'idx.mimetype',
+				'idx.mtime',
+				'idx.taken_at',
+				'idx.size',
+				'fc.path',
+				'fc.name',
+				'fc.etag',
+				'fc.permissions',
+				'fc.storage',
+			)
+			->orderBy('idx.taken_at', 'DESC')
+			->addOrderBy('idx.file_id', 'DESC')
+			->setMaxResults($limit);
+
+		if ($beforeDate !== null) {
+			$qb->andWhere($qb->expr()->lt('idx.taken_at', $qb->createNamedParameter($beforeDate, IQueryBuilder::PARAM_INT)));
+		}
+
+		$result = $qb->executeQuery();
+		$rows = [];
+		while ($row = $result->fetch()) {
+			// Filter out rows whose filecache row vanished — that means
+			// the index is stale; the live listener / next backfill
+			// will tidy them up. Skipping keeps the API contract clean
+			// for the client.
+			if ($row['path'] === null) {
+				continue;
+			}
+			$rows[] = [
+				'file_id' => (int)$row['file_id'],
+				'mimetype' => (string)$row['mimetype'],
+				'mtime' => (int)$row['mtime'],
+				'taken_at' => (int)$row['taken_at'],
+				'size' => (int)$row['size'],
+				'path' => (string)$row['path'],
+				'name' => (string)$row['name'],
+				'etag' => (string)$row['etag'],
+				'permissions' => (int)$row['permissions'],
+				'storage_id' => (int)$row['storage'],
+				'favorite' => ((int)($row['favorite_count'] ?? 0)) > 0 ? 1 : 0,
+			];
+		}
+		$result->closeCursor();
+		return $rows;
+	}
+
 	public function countForUser(string $userId): int {
 		$qb = $this->connection->getQueryBuilder();
 		$qb->select($qb->func()->count('*', 'cnt'))
@@ -153,7 +272,7 @@ class PhotoIndexMapper {
 	 * because they're scanned per-mount during backfill (and live
 	 * events keep them up to date afterwards).
 	 */
-	public function estimateTotalForUser(string $userId, int $storageId): int {
+	public function estimateTotalForUser(int $storageId): int {
 		$mimetypeIds = [];
 		foreach ([...Application::IMAGE_MIMES, ...Application::VIDEO_MIMES] as $mime) {
 			$id = $this->mimeTypeLoader->getId($mime);
