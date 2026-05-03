@@ -193,20 +193,24 @@ export default {
 		// permanently cluttering the tile.
 		opacity: 0;
 		transition: opacity 160ms ease-out;
-		// FileLegacy's existing `img { z-index: 10 }` sits in front
-		// of PhotoActionsMenu's default z-index 3, so clicks land on
-		// the image (i.e. the `<a>`) and open the viewer instead of
-		// the menu. Lift the menu above the image — :deep because the
-		// z-index lives on `.photo-actions` inside the menu, not on
-		// the wrapper class we own here.
-		:deep(.photo-actions) {
-			z-index: 11;
-		}
 	}
 
 	&:hover &__actions,
 	&__actions:focus-within {
 		opacity: 1;
+	}
+
+	// FileLegacy's existing `img { z-index: 10 }` rule sits in front
+	// of PhotoActionsMenu's default `z-index: 3`, so clicks aimed at
+	// the menu button land on the image (which is inside the `<a>`
+	// tag) and open the viewer instead. Lift the menu's root above
+	// the image. `:deep()` reaches the scoped class inside the menu
+	// component; the `.file-legacy-wrap`-rooted selector is the
+	// containment-aware version of the previous attempt that didn't
+	// match because `.photo-actions` and `.file-legacy-wrap__actions`
+	// resolve to the same element, not a parent/child pair.
+	:deep(.photo-actions) {
+		z-index: 11;
 	}
 }
 
