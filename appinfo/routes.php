@@ -123,6 +123,10 @@ return [
 			]
 		],
 
+		// Indexed timeline + migration status (see lib/Service/PhotoIndexService).
+		['name' => 'index#status', 'url' => '/api/v1/index/status', 'verb' => 'GET'],
+		['name' => 'index#timeline', 'url' => '/api/v1/index/timeline', 'verb' => 'GET'],
+
 		[
 			'name' => 'publicPreview#index',
 			'url' => '/api/v1/publicPreview/{fileId}',

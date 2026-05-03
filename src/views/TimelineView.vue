@@ -151,6 +151,11 @@
 			</div>
 		</HeaderNavigation>
 
+		<!-- Migration progress: shown only while the per-user backfill
+			of oc_photos_index is still running. Self-hides once the
+			backend reports `ready`. -->
+		<IndexProgressBanner />
+
 		<FilesListViewer
 			:containerElement="appContent"
 			class="timeline__file-list"
@@ -239,6 +244,7 @@ import AlbumPicker from '../components/Albums/AlbumPicker.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import IndexProgressBanner from '../components/IndexProgressBanner.vue'
 import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
 import Slideshow from '../components/Slideshow.vue'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.ts'
@@ -271,6 +277,7 @@ export default {
 		FileComponent,
 		ActionFavorite,
 		HeaderNavigation,
+		IndexProgressBanner,
 		PhotosSourceLocationsSettings,
 		AlertCircleOutline,
 		PlayIcon,
