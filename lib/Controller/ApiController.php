@@ -56,6 +56,11 @@ class ApiController extends Controller {
 					return new JSONResponse([], Http::STATUS_BAD_REQUEST);
 				}
 				break;
+			case 'gridDensity':
+				if (!in_array($value, ['small', 'medium', 'large'], true)) {
+					return new JSONResponse([], Http::STATUS_BAD_REQUEST);
+				}
+				break;
 			case 'photosLocation':
 				if (!$this->validatePath($value)) {
 					return new JSONResponse([], Http::STATUS_BAD_REQUEST);

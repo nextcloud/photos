@@ -5,39 +5,45 @@
 <template>
 	<div>
 		<CollectionContent
-			ref="collectionContent"
 			:collection="place"
-			:collection-file-ids="placeFileIds"
-			:allow-selection="false"
+			:collectionFileIds="placeFileIds"
+			:allowSelection="false"
 			:loading="loadingCollection || loadingCollectionFiles"
 			:error="errorFetchingCollection || errorFetchingCollectionFiles">
 			<!-- Header -->
-			<HeaderNavigation
-				v-if="place !== null"
-				key="navigation"
-				slot="header"
-				:loading="loadingCollection || loadingCollectionFiles"
-				:params="{ placeName }"
-				:path="'/' + placeName"
-				:title="place.basename"
-				@refresh="fetchPlaceFiles" />
+			<template #header>
+				<HeaderNavigation
+					v-if="place !== null"
+					key="navigation"
+					:loading="loadingCollection || loadingCollectionFiles"
+					:params="{ placeName }"
+					:path="'/' + placeName"
+					:title="place.basename"
+					@refresh="fetchPlaceFiles" />
+			</template>
 
 			<!-- No content -->
-			<NcEmptyContent
-				slot="empty-content"
-				:name="t('photos', 'This place does not have any photos or videos yet!')"
-				class="place__empty">
-				<ImagePlusOutline slot="icon" />
+			<template #empty-content>
+				<NcEmptyContent
+					:name="t('photos', 'This place does not have any photos or videos yet!')"
+					class="place__empty">
+					<template #icon>
+						<ImagePlusOutline />
+					</template>
 
-				<NcButton
-					slot="action"
-					variant="primary"
-					:aria-label="t('photos', 'Add photos to this place')"
-					@click="showAddPhotosModal = true">
-					<Plus slot="icon" />
-					{{ t('photos', "Add") }}
-				</NcButton>
-			</NcEmptyContent>
+					<template #action>
+						<NcButton
+							variant="primary"
+							:aria-label="t('photos', 'Add photos to this place')"
+							@click="showAddPhotosModal = true">
+							<template #icon>
+								<Plus />
+							</template>
+							{{ t('photos', "Add") }}
+						</NcButton>
+					</template>
+				</NcEmptyContent>
+			</template>
 		</CollectionContent>
 	</div>
 </template>

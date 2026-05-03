@@ -123,6 +123,17 @@ return [
 			]
 		],
 
+		// Indexed timeline + migration status (see lib/Service/PhotoIndexService).
+		['name' => 'index#status', 'url' => '/api/v1/index/status', 'verb' => 'GET'],
+		['name' => 'index#timeline', 'url' => '/api/v1/index/timeline', 'verb' => 'GET'],
+		['name' => 'index#search', 'url' => '/api/v1/index/search', 'verb' => 'GET'],
+
+		// HLS transcoding for browser-incompatible video codecs (HEVC, etc).
+		['name' => 'transcode#manifest', 'url' => '/api/v1/transcode/{fileId}/master.m3u8', 'verb' => 'GET',
+			'requirements' => ['fileId' => '\d+']],
+		['name' => 'transcode#segment', 'url' => '/api/v1/transcode/{fileId}/{segment}', 'verb' => 'GET',
+			'requirements' => ['fileId' => '\d+', 'segment' => 'seg-\d+\.ts']],
+
 		[
 			'name' => 'publicPreview#index',
 			'url' => '/api/v1/publicPreview/{fileId}',
