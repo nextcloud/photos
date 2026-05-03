@@ -8,10 +8,11 @@ import { generateUrl } from '@nextcloud/router'
 import { createRouter, createWebHistory } from 'vue-router'
 import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
 import areTagsInstalled from '../services/AreTagsInstalled.js'
-import isMapsInstalled from '../services/IsMapsInstalled.js'
 import isRecognizeInstalled from '../services/IsRecognizeInstalled.js'
 
 const FoldersView = () => import('../views/FoldersView.vue')
+const MapView = () => import('../views/MapView.vue')
+const MemoriesView = () => import('../views/MemoriesView.vue')
 const AlbumsView = () => import('../views/AlbumsView.vue')
 const AlbumContent = () => import('../views/AlbumContent.vue')
 const SharedAlbums = () => import('../views/SharedAlbums.vue')
@@ -28,11 +29,6 @@ const FaceContent = () => import('../views/FaceContent.vue')
 const UnassignedFaces = () => import('../views/UnassignedFaces.vue')
 
 const baseTitle = document.title
-
-let mapsPath = generateUrl('/apps/maps')
-if (!isMapsInstalled) {
-	mapsPath = generateUrl('/settings/apps/integration/maps')
-}
 
 /**
  * Parse the path of a route : join the elements of the array and return a single string with slashes
@@ -245,15 +241,19 @@ const router = createRouter({
 				]
 		),
 		{
-			path: '/maps',
-			name: 'maps',
-			// router-link doesn't support external URLs, so we open the maps app in a new tab
-			// and redirect this tab back to the timeline.
-			beforeEnter() {
-				window.open(mapsPath, '_blank')
-				return { name: 'all_media' }
+			// Inline photos-on-a-map view. Replaces the previous /maps
+			// route that redirected to the external Maps app — that
+			// integration is still available via the "Open in Maps app"
+			// button on the inline view when the Maps app is installed.
+			path: '/map',
+			name: 'map',
+			component: MapView,
+			props: () => ({
+				rootTitle: t('photos', 'Photo map'),
+			}),
+			meta: {
+				rootTitle: () => t('photos', 'Photo map'),
 			},
-			component: TimelineView,
 		},
 		{
 			path: '/thisday',
@@ -267,6 +267,17 @@ const router = createRouter({
 				rootTitle: () => {
 					return t('photos', 'On this day')
 				},
+			},
+		},
+		{
+			path: '/memories',
+			name: 'memories',
+			component: MemoriesView,
+			props: () => ({
+				rootTitle: t('photos', 'Memories'),
+			}),
+			meta: {
+				rootTitle: () => t('photos', 'Memories'),
 			},
 		},
 		{
