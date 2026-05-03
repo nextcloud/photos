@@ -1,0 +1,16 @@
+SPDX-License-Identifier: BSD-2-Clause
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: Boris Seang
+SPDX-FileCopyrightText: Nicolò Maria Mezzopera
+SPDX-FileCopyrightText: leaflet developers
+
+This file is generated from multiple sources. Included packages:
+- @vue-leaflet/vue-leaflet
+	- version: 0.10.1
+	- license: MIT
+- leaflet
+	- version: 1.9.4
+	- license: BSD-2-Clause
+- leaflet-defaulticon-compatibility
+	- version: 0.1.2
+	- license: BSD-2-Clause

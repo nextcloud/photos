@@ -1,0 +1,2 @@
+import{d as r,m as o}from"./icons-CHd5Pway.chunk.mjs";const l=r({name:"AbortControllerMixin",data(){return{abortController:o(new AbortController)}},methods:{abortPendingRequest(){this.abortController.abort(),this.abortController=o(new AbortController)}},beforeUnmount(){this.abortController.abort()},beforeRouteLeave(e,n,t){this.abortPendingRequest(),t()}});export{l as A};
+//# sourceMappingURL=AbortControllerMixin-K1njpxt8.chunk.mjs.map
