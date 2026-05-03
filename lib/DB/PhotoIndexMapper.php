@@ -33,6 +33,13 @@ class PhotoIndexMapper {
 
 	/**
 	 * Insert or refresh a row. Safe to call from concurrent paths.
+	 *
+	 * `width` / `height` are denormalised from EXIF metadata so the
+	 * timeline endpoint can serve the justified-grid layout straight
+	 * from the index. They're nullable: a freshly-written file may
+	 * be indexed before the metadata pipeline has produced
+	 * `photos-size`, so the first index pass writes NULL and a
+	 * subsequent NodeWritten / metadata-event re-index fills them in.
 	 */
 	public function upsert(
 		string $userId,
@@ -41,6 +48,8 @@ class PhotoIndexMapper {
 		int $size,
 		int $mtime,
 		?int $takenAt,
+		?int $width,
+		?int $height,
 		int $indexedAt,
 	): void {
 		$isVideo = str_starts_with($mimetype, 'video/') ? 1 : 0;
@@ -55,6 +64,8 @@ class PhotoIndexMapper {
 				'size' => $qb->createNamedParameter($size, IQueryBuilder::PARAM_INT),
 				'mtime' => $qb->createNamedParameter($mtime, IQueryBuilder::PARAM_INT),
 				'taken_at' => $qb->createNamedParameter($takenAt ?? $mtime, IQueryBuilder::PARAM_INT),
+				'width' => $qb->createNamedParameter($width, $width === null ? IQueryBuilder::PARAM_NULL : IQueryBuilder::PARAM_INT),
+				'height' => $qb->createNamedParameter($height, $height === null ? IQueryBuilder::PARAM_NULL : IQueryBuilder::PARAM_INT),
 				'indexed_at' => $qb->createNamedParameter($indexedAt, IQueryBuilder::PARAM_INT),
 			]);
 
@@ -72,6 +83,8 @@ class PhotoIndexMapper {
 				->set('size', $update->createNamedParameter($size, IQueryBuilder::PARAM_INT))
 				->set('mtime', $update->createNamedParameter($mtime, IQueryBuilder::PARAM_INT))
 				->set('taken_at', $update->createNamedParameter($takenAt ?? $mtime, IQueryBuilder::PARAM_INT))
+				->set('width', $update->createNamedParameter($width, $width === null ? IQueryBuilder::PARAM_NULL : IQueryBuilder::PARAM_INT))
+				->set('height', $update->createNamedParameter($height, $height === null ? IQueryBuilder::PARAM_NULL : IQueryBuilder::PARAM_INT))
 				->set('indexed_at', $update->createNamedParameter($indexedAt, IQueryBuilder::PARAM_INT))
 				->where($update->expr()->eq('user_id', $update->createNamedParameter($userId)))
 				->andWhere($update->expr()->eq('file_id', $update->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
@@ -179,6 +192,8 @@ class PhotoIndexMapper {
 			'idx.mtime',
 			'idx.taken_at',
 			'idx.size',
+			'idx.width',
+			'idx.height',
 			'fc.path',
 			'fc.name',
 			'fc.etag',
@@ -217,6 +232,8 @@ class PhotoIndexMapper {
 				'idx.mtime',
 				'idx.taken_at',
 				'idx.size',
+				'idx.width',
+				'idx.height',
 				'fc.path',
 				'fc.name',
 				'fc.etag',
@@ -253,6 +270,8 @@ class PhotoIndexMapper {
 				'mtime' => (int)$row['mtime'],
 				'taken_at' => (int)$row['taken_at'],
 				'size' => (int)$row['size'],
+				'width' => $row['width'] === null ? null : (int)$row['width'],
+				'height' => $row['height'] === null ? null : (int)$row['height'],
 				'path' => (string)$row['path'],
 				'name' => (string)$row['name'],
 				'etag' => (string)$row['etag'],
@@ -317,6 +336,8 @@ class PhotoIndexMapper {
 			'idx.mtime',
 			'idx.taken_at',
 			'idx.size',
+			'idx.width',
+			'idx.height',
 			'fc.path',
 			'fc.name',
 			'fc.etag',
@@ -383,6 +404,8 @@ class PhotoIndexMapper {
 				'idx.mtime',
 				'idx.taken_at',
 				'idx.size',
+				'idx.width',
+				'idx.height',
 				'fc.path',
 				'fc.name',
 				'fc.etag',
@@ -415,6 +438,8 @@ class PhotoIndexMapper {
 				'mtime' => (int)$row['mtime'],
 				'taken_at' => (int)$row['taken_at'],
 				'size' => (int)$row['size'],
+				'width' => $row['width'] === null ? null : (int)$row['width'],
+				'height' => $row['height'] === null ? null : (int)$row['height'],
 				'path' => (string)$row['path'],
 				'name' => (string)$row['name'],
 				'etag' => (string)$row['etag'],

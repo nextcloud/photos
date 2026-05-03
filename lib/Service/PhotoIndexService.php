@@ -65,7 +65,7 @@ class PhotoIndexService {
 			return;
 		}
 		/** @var File $node */
-		$takenAt = $this->extractTakenAt($node);
+		[$takenAt, $width, $height] = $this->extractIndexFields($node);
 		try {
 			$this->mapper->upsert(
 				$userId,
@@ -74,6 +74,8 @@ class PhotoIndexService {
 				$node->getSize(),
 				$node->getMTime(),
 				$takenAt,
+				$width,
+				$height,
 				$this->time->getTime(),
 			);
 		} catch (\Throwable $e) {
@@ -88,23 +90,60 @@ class PhotoIndexService {
 	}
 
 	/**
-	 * Read the cached EXIF capture time written by
-	 * OriginalDateTimeMetadataProvider, or null if not yet populated.
+	 * One DB roundtrip for the three values we denormalise onto the
+	 * index row: capture time, width, height. Pulling them together
+	 * avoids three separate `getMetadata` calls during a backfill
+	 * pass — the metadata manager fetches the whole record either
+	 * way, so the per-call overhead is the round trip, not the read.
+	 *
+	 * Returns nulls for any field whose metadata isn't populated
+	 * yet — the metadata pipeline is async, so a freshly-written
+	 * file may be indexed before the size/EXIF is computed. The
+	 * mapper's upsert handles nulls, and a subsequent re-index
+	 * (next NodeWritten or backfill pass) fills them.
+	 *
+	 * @return array{0: ?int, 1: ?int, 2: ?int}  [takenAt, width, height]
 	 */
-	public function extractTakenAt(File $node): ?int {
+	private function extractIndexFields(File $node): array {
+		$takenAt = null;
+		$width = null;
+		$height = null;
 		try {
 			$metadata = $this->metadataManager->getMetadata($node->getId(), false);
 			if ($metadata->hasKey(OriginalDateTimeMetadataProvider::METADATA_KEY)) {
 				$value = $metadata->getInt(OriginalDateTimeMetadataProvider::METADATA_KEY);
 				if ($value > 0) {
-					return $value;
+					$takenAt = $value;
+				}
+			}
+			// SizeMetadataProvider stores under literal `photos-size`
+			// (no shared constant — the listener inlines the key).
+			if ($metadata->hasKey('photos-size')) {
+				$size = $metadata->getArray('photos-size');
+				$rawW = $size['width'] ?? null;
+				$rawH = $size['height'] ?? null;
+				if (is_int($rawW) && $rawW > 0) {
+					$width = $rawW;
+				}
+				if (is_int($rawH) && $rawH > 0) {
+					$height = $rawH;
 				}
 			}
 		} catch (\Throwable) {
-			// Metadata may not exist yet for newly written files. Fall
-			// back to mtime in the mapper.
+			// Metadata may not exist yet for newly written files. The
+			// mapper accepts nulls; a subsequent re-index fills in
+			// once the metadata pipeline has run.
 		}
-		return null;
+		return [$takenAt, $width, $height];
+	}
+
+	/**
+	 * Back-compat wrapper for callers that just want the date.
+	 * Internally delegates to `extractIndexFields` so we don't have
+	 * two slightly-different metadata read paths drifting over time.
+	 */
+	public function extractTakenAt(File $node): ?int {
+		return $this->extractIndexFields($node)[0];
 	}
 
 	public function deleteFile(int $fileId): void {

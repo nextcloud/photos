@@ -272,7 +272,6 @@ class IndexController extends Controller {
 		$ifd0 = null;
 		$gps = null;
 		$place = null;
-		$photoSize = null;
 		$takenAtMeta = null;
 
 		if ($metadata !== null) {
@@ -288,12 +287,23 @@ class IndexController extends Controller {
 			$place = $metadata->hasKey(PlaceMetadataProvider::METADATA_KEY)
 				? $metadata->getString(PlaceMetadataProvider::METADATA_KEY)
 				: null;
-			$photoSize = $metadata->hasKey('photos-size')
-				? $metadata->getArray('photos-size')
-				: null;
 			$takenAtMeta = $metadata->hasKey(OriginalDateTimeMetadataProvider::METADATA_KEY)
 				? $metadata->getInt(OriginalDateTimeMetadataProvider::METADATA_KEY)
 				: null;
+		}
+
+		// `photos-size` is now denormalised onto the index row, so we
+		// read width/height straight from the row rather than
+		// re-extracting from the metadata blob. Falls back to the
+		// metadata path for rows that haven't been re-indexed since
+		// the migration added the columns (NULL on disk, present in
+		// the metadata blob until the next NodeWritten / backfill
+		// pass refreshes the row).
+		$photoSize = null;
+		if (isset($row['width'], $row['height']) && $row['width'] > 0 && $row['height'] > 0) {
+			$photoSize = ['width' => (int)$row['width'], 'height' => (int)$row['height']];
+		} elseif ($metadata !== null && $metadata->hasKey('photos-size')) {
+			$photoSize = $metadata->getArray('photos-size');
 		}
 
 		// Layer the per-user override on top of the EXIF view.
