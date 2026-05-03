@@ -88,6 +88,20 @@
 			@update:modelValue="onToggle" />
 
 		<!--
+			Per-photo overflow menu (3-dot). Forwards its action requests
+			up so the parent (TimelineView etc.) can hook into the
+			existing album-picker / sidebar / delete flows. Hidden when
+			the parent is in a picking context (PhotosPicker).
+		-->
+		<PhotoActionsMenu
+			v-if="showActionsMenu"
+			:file="file"
+			class="photo-actions-menu"
+			@requestAddToAlbum="$emit('request-add-to-album', $event)"
+			@requestShare="$emit('request-share', $event)"
+			@requestDelete="$emit('request-delete', $event)" />
+
+		<!--
 			Favourite-star toggle animation: enter spawns a quick scale-up
 			bounce; leave fades out. The original v-once was preventing
 			the icon from ever re-rendering, which masked favorite-state
@@ -113,6 +127,7 @@ import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwit
 import PlayCircleOutlineIcon from 'vue-material-design-icons/PlayCircleOutline.vue'
 import VideoOutline from 'vue-material-design-icons/VideoOutline.vue'
 import FavoriteIcon from './FavoriteIcon.vue'
+import PhotoActionsMenu from './PhotoActionsMenu.vue'
 import { isCachedPreview } from '../services/PreviewService.js'
 
 export default {
@@ -120,8 +135,9 @@ export default {
 	components: {
 		FavoriteIcon,
 		NcCheckboxRadioSwitch,
-		VideoOutline,
+		PhotoActionsMenu,
 		PlayCircleOutlineIcon,
+		VideoOutline,
 	},
 
 	props: {
@@ -139,9 +155,19 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+
+		// Whether to render the per-photo overflow menu (EXIF / add to
+		// album / share / delete). Defaults to true; disable when the
+		// component is rendered inside a picker / read-only context
+		// where managing the photo doesn't make sense.
+		showActionsMenu: {
+			type: Boolean,
+			// eslint-disable-next-line vue/no-boolean-default
+			default: true,
+		},
 	},
 
-	emits: ['click', 'select-toggled'],
+	emits: ['click', 'select-toggled', 'request-add-to-album', 'request-share', 'request-delete'],
 
 	data() {
 		return {
@@ -365,9 +391,23 @@ export default {
 			border-radius: 4px;
 		}
 
-		.selection-checkbox {
+		.selection-checkbox,
+		.photo-actions-menu {
 			opacity: 1;
 		}
+	}
+
+	// Reveal the per-photo overflow menu on hover (matches the
+	// existing checkbox affordance). The menu component is always
+	// in the DOM so its dialogs can stay mounted across hover-out.
+	&:hover .photo-actions-menu,
+	.photo-actions-menu:focus-within {
+		opacity: 1;
+	}
+
+	.photo-actions-menu {
+		opacity: 0;
+		transition: opacity 160ms ease-out;
 	}
 
 	.file {

@@ -174,7 +174,10 @@
 					:allowSelection="true"
 					:selected="selection[file.id] === true"
 					@click="openViewer"
-					@selectToggled="onFileSelectToggle" />
+					@selectToggled="onFileSelectToggle"
+					@requestAddToAlbum="onRequestAddToAlbum"
+					@requestShare="onRequestShare"
+					@requestDelete="onRequestDelete" />
 			</template>
 		</FilesListViewer>
 
@@ -331,6 +334,10 @@ export default {
 			appContent: document.getElementById('app-content-vue'),
 			showFilters: false,
 			slideshowOpen: false,
+			// When set, the AlbumPicker flow targets a single photo
+			// (from the per-tile actions menu) instead of the bulk
+			// selection. Cleared after picking.
+			singleFileForAlbumPicker: null as { fileid: number } | null,
 		}
 	},
 
@@ -429,7 +436,40 @@ export default {
 
 		async addSelectionToAlbum(album: Album) {
 			this.showAlbumPicker = false
-			await this.$store.dispatch('addFilesToCollection', { collectionFileName: album.root + album.path, fileIdsToAdd: this.selectedFileIds })
+			// Per-tile flow takes precedence: if a single file was queued
+			// up, add only it and clear the queue. Otherwise fall back
+			// to the bulk-selection ids as before.
+			const fileIdsToAdd = this.singleFileForAlbumPicker !== null
+				? [this.singleFileForAlbumPicker.fileid.toString()]
+				: this.selectedFileIds
+			this.singleFileForAlbumPicker = null
+			await this.$store.dispatch('addFilesToCollection', { collectionFileName: album.root + album.path, fileIdsToAdd })
+		},
+
+		// --- per-photo actions menu wiring ---
+
+		onRequestAddToAlbum(file: { fileid: number }) {
+			this.singleFileForAlbumPicker = file
+			this.showAlbumPicker = true
+		},
+
+		onRequestShare(file: { path?: string }) {
+			// The Files sidebar already exposes a Sharing tab; opening
+			// it on the file is the cheapest way to surface NC's full
+			// share UI without re-implementing it here.
+			const path = typeof file.path === 'string' ? file.path : ''
+			if (window.OCA?.Files?.Sidebar?.open !== undefined && path !== '') {
+				window.OCA.Files.Sidebar.open(path)
+			}
+		},
+
+		async onRequestDelete(file: { fileid: number }) {
+			const fileIdStr = file.fileid.toString()
+			// Drop from local state first so the tile disappears
+			// immediately; the dispatched deleteFiles re-adds it on
+			// failure (see store/files.ts deleteFiles error path).
+			this.fetchedFileIds = this.fetchedFileIds.filter((id) => id !== fileIdStr)
+			await this.$store.dispatch('deleteFiles', [fileIdStr])
 		},
 
 		async deleteSelection() {

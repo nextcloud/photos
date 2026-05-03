@@ -94,6 +94,7 @@
 					v-else
 					:file="files[file.id]"
 					:allowSelection="true"
+					:showActionsMenu="false"
 					:selected="selection[file.id] === true"
 					@selectToggled="onFileSelectToggle" />
 			</template>
