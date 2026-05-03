@@ -7,7 +7,7 @@
 		<FaceCover
 			v-for="face in filteredFaces"
 			:key="face.basename"
-			:base-name="face.basename"
+			:baseName="face.basename"
 			small
 			@click="handleSelect(face.basename)" />
 	</div>
@@ -32,6 +32,8 @@ export default {
 			required: true,
 		},
 	},
+
+	emits: ['select'],
 
 	data() {
 		return {

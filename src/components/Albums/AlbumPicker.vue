@@ -17,8 +17,8 @@
 				:name="originalName(album)"
 				:aria-label="t('photos', 'Add selection to album {albumName}', { albumName: album.basename })"
 				@click="pickAlbum(album)">
-				<template slot="icon">
-					<img v-if="album.attributes['last-photo'] !== -1" class="album__image" :src="album.attributes['last-photo'] | toCoverUrl">
+				<template #icon>
+					<img v-if="album.attributes['last-photo'] !== -1" class="album__image" :src="toCoverUrl(album.attributes['last-photo'])">
 					<div v-else class="album__image album__image--placeholder">
 						<ImageMultipleOutline :size="32" />
 					</div>
@@ -27,7 +27,7 @@
 				<template #subname>
 					{{ n('photos', '%n item', '%n photos and videos', album.attributes.nbItems) }}
 					<template v-if="isSharedAlbum(album)">
-						⸱ {{ t('photos', 'Shared by') }}&nbsp;<NcUserBubble :display-name="album.attributes.collaborators[0].label" :user="album.attributes.collaborators[0].id" />
+						⸱ {{ t('photos', 'Shared by') }}&nbsp;<NcUserBubble :displayName="album.attributes.collaborators[0].label" :user="album.attributes.collaborators[0].id" />
 					</template>
 				</template>
 			</NcListItem>
@@ -47,7 +47,7 @@
 
 	<AlbumForm
 		v-else
-		:display-back-button="true"
+		:displayBackButton="true"
 		:title="t('photos', 'New album')"
 		@back="showAlbumCreationForm = false"
 		@done="albumCreatedHandler" />
@@ -83,13 +83,9 @@ export default defineComponent({
 		AlbumForm,
 	},
 
-	filters: {
-		toCoverUrl(fileId: string): string {
-			return generateUrl(`/apps/photos/api/v1/preview/${fileId}?x=${64}&y=${64}`)
-		},
-	},
-
 	mixins: [FetchCollectionsMixin],
+
+	emits: ['album-picked'],
 
 	data() {
 		return {
@@ -116,6 +112,10 @@ export default defineComponent({
 	},
 
 	methods: {
+		toCoverUrl(fileId: number | string): string {
+			return generateUrl(`/apps/photos/api/v1/preview/${fileId}?x=${64}&y=${64}`)
+		},
+
 		async fetchAlbumList() {
 			await this.fetchCollections(`/photos/${getCurrentUser()?.uid}/albums`, albumsExtraProps)
 			await this.fetchCollections(`/photos/${getCurrentUser()?.uid}/sharedalbums`, albumsExtraProps)

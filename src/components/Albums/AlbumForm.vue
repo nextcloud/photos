@@ -6,16 +6,15 @@
 	<form v-if="!showCollaboratorView" class="album-form" @submit.prevent="submit()">
 		<div class="form-inputs">
 			<NcTextField
-				ref="nameInput"
 				v-model.trim="albumName"
 				type="text"
 				name="name"
-				:helper-text="albumNameValidationError"
+				:helperText="albumNameValidationError"
 				:error="albumNameValidationError !== undefined"
 				:required="true"
 				:label="t('photos', 'Name of the album')" />
 			<NcTextField
-				:value.sync="albumLocation"
+				v-model="albumLocation"
 				name="location"
 				type="text"
 				:label="t('photos', 'Location of the album')">
@@ -26,11 +25,11 @@
 		</div>
 
 		<PhotosFiltersInput
-			:selected-filters="albumFilters"
-			@select-filter="selectFilter" />
+			:selectedFilters="albumFilters"
+			@selectFilter="selectFilter" />
 		<PhotosFiltersDisplay
-			:selected-filters="albumFilters"
-			@deselect-filter="deselectFilter" />
+			:selectedFilters="albumFilters"
+			@deselectFilter="deselectFilter" />
 
 		<div class="form-buttons">
 			<span class="left-buttons">
@@ -67,8 +66,8 @@
 	</form>
 	<CollaboratorsSelectionForm
 		v-else
-		:album-name="albumName"
-		:allow-public-link="false">
+		:albumName="albumName"
+		:allowPublicLink="false">
 		<template #default="{ collaborators }">
 			<span class="left-buttons">
 				<NcButton
@@ -146,6 +145,8 @@ export default {
 			default: false,
 		},
 	},
+
+	emits: ['done', 'back'],
 
 	data() {
 		return {

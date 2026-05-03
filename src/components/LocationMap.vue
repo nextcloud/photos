@@ -13,17 +13,16 @@
 			zoomControl: false,
 			dragging: false,
 			attributionControl: false,
-		}"
-		@scroll.prevent="">
+		}">
 		<LTileLayer :url="url" />
 		<LControlAttribution
 			position="bottomright"
 			:prefix="attribution" />
-		<LMarker :lat-lng="center">
+		<LMarker :latLng="center">
 			<LTooltip
 				:options="{
 					direction: 'top',
-					permanent: 'true',
+					permanent: true,
 					offset: [-16, -14],
 				}">
 				{{ name }}
@@ -32,21 +31,22 @@
 	</LMap>
 </template>
 
-<script lang='ts'>
+<script lang="ts">
 import {
 	LControlAttribution,
 	LMap,
 	LMarker,
 	LTileLayer,
 	LTooltip,
-} from 'vue2-leaflet'
+} from '@vue-leaflet/vue-leaflet'
+import { defineComponent } from 'vue'
 
 // Leaflet icon patch
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css' // Re-uses images from ~leaflet package
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-defaulticon-compatibility'
 
-export default {
+export default defineComponent({
 	name: 'LocationMap',
 	components: {
 		LControlAttribution,
@@ -96,7 +96,7 @@ export default {
 			return [this.latitude, this.longitude]
 		},
 	},
-}
+})
 </script>
 
 <style scoped lang="scss">

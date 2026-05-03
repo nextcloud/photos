@@ -56,8 +56,6 @@ export default {
 		NcLoadingIcon,
 	},
 
-	inheritAttrs: false,
-
 	props: {
 		loading: {
 			type: Boolean,
@@ -79,6 +77,8 @@ export default {
 			default: t('photos', 'Photos'),
 		},
 	},
+
+	emits: ['refresh'],
 
 	computed: {
 		isRoot() {

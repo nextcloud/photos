@@ -8,10 +8,14 @@
 		v-if="(collection === undefined && !loading) || error === 404"
 		class="empty-content-with-illustration"
 		:name="t('photos', 'This collection does not exist')">
-		<ImageMultipleOutline slot="icon" />
+		<template #icon>
+			<ImageMultipleOutline />
+		</template>
 	</NcEmptyContent>
 	<NcEmptyContent v-else-if="error" :name="t('photos', 'An error occurred')">
-		<AlertCircleOutline slot="icon" />
+		<template #icon>
+			<AlertCircleOutline />
+		</template>
 	</NcEmptyContent>
 
 	<div v-else class="collection">
@@ -19,8 +23,8 @@
 		<slot
 			class="collection__header"
 			name="header"
-			:selected-file-ids="selectedFileIds"
-			:reset-selection="resetSelection" />
+			:selectedFileIds="selectedFileIds"
+			:resetSelection="resetSelection" />
 
 		<!-- No content -->
 		<slot v-if="sortedCollectionFileIds.length === 0 && !loading" name="empty-content" />
@@ -28,18 +32,19 @@
 		<!-- Media list -->
 		<FilesListViewer
 			v-if="collection !== undefined && sortedCollectionFileIds.length > 0"
-			:container-element="appContent"
+			:containerElement="appContent"
 			class="collection__media"
-			:file-ids="sortedCollectionFileIds"
-			:base-height="isMobile ? 120 : 200"
+			:fileIds="sortedCollectionFileIds"
+			:baseHeight="isMobile ? 120 : 200"
 			:loading="loading">
-			<FileComponent
-				slot-scope="{ file }"
-				:file="files[file.id]"
-				:allow-selection="allowSelection"
-				:selected="selection[file.id] === true"
-				@click="openViewer"
-				@select-toggled="onFileSelectToggle" />
+			<template #default="{ file }">
+				<FileComponent
+					:file="files[file.id]"
+					:allowSelection="allowSelection"
+					:selected="selection[file.id] === true"
+					@click="openViewer"
+					@selectToggled="onFileSelectToggle" />
+			</template>
 		</FilesListViewer>
 	</div>
 </template>
@@ -92,6 +97,7 @@ export default defineComponent({
 
 		allowSelection: {
 			type: Boolean,
+			// eslint-disable-next-line vue/no-boolean-default -- selection is the default; read-only collections opt out via :allow-selection="false"
 			default: true,
 		},
 
@@ -127,7 +133,7 @@ export default defineComponent({
 		subscribe('files:node:deleted', this.handleFileDeleted)
 	},
 
-	destroyed() {
+	unmounted() {
 		unsubscribe('files:node:deleted', this.handleFileDeleted)
 	},
 

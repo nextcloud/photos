@@ -8,14 +8,13 @@
 		:id="item.injected.fileid"
 		:name="item.injected.basename.toString()"
 		:path="item.injected.filename"
-		:file-list="previewFiles" />
+		:fileList="previewFiles" />
 </template>
 
 <script lang='ts'>
-import type Vue from 'vue'
-
 import { getCurrentUser } from '@nextcloud/auth'
 import {
+	type Component,
 	type PropType,
 
 	defineComponent,
@@ -34,7 +33,7 @@ export type InjectedItem = {
 	width: number
 	height: number
 	columnSpan: number
-	renderComponent: Vue
+	renderComponent: Component
 }
 
 export default defineComponent({

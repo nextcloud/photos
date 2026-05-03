@@ -4,15 +4,15 @@
 -->
 
 <template>
-	<NcContent app-name="photos">
+	<NcContent appName="photos">
 		<NcAppNavigation :aria-label="t('photos', 'Photos')">
 			<template v-if="isTimelineView" #search>
 				<PhotosFiltersInput
-					:selected-filters="selectedFilters"
-					@select-filter="selectFilter" />
+					:selectedFilters="selectedFilters"
+					@selectFilter="selectFilter" />
 				<PhotosFiltersDisplay
-					:selected-filters="selectedFilters"
-					@deselect-filter="deselectFilter" />
+					:selectedFilters="selectedFilters"
+					@deselectFilter="deselectFilter" />
 			</template>
 
 			<template #list>
@@ -20,8 +20,7 @@
 					:to="{ name: 'all_media' }"
 					:name="t('photos', 'All media')"
 					class="app-navigation__all_media"
-					data-id-app-nav-item="all-media"
-					exact>
+					data-id-app-nav-item="all-media">
 					<template #icon="{ active }">
 						<ImageIcon v-if="active" :size="20" />
 						<ImageOutline v-else :size="20" />
@@ -167,7 +166,7 @@
 		</NcAppContent>
 
 		<!-- Main settings Modal-->
-		<SettingsDialog :open.sync="openedSettings" />
+		<SettingsDialog v-model:open="openedSettings" />
 	</NcContent>
 </template>
 
@@ -322,7 +321,7 @@ export default {
 		}
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		window.removeEventListener('load', () => {
 			navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js', {}, {
 				noRewrite: true,

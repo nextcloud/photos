@@ -46,7 +46,6 @@
 
 					<img
 						v-if="loadedLarge || ((hasBlurhash || loadedSmall || errorSmall) && !errorLarge)"
-						ref="imgLarge"
 						:key="`${file.basename}-large`"
 						:src="srcLarge"
 						:alt="file.basename"
@@ -63,8 +62,8 @@
 			v-if="allowSelection"
 			class="selection-checkbox"
 			:aria-label="t('photos', 'Select image {imageName}', { imageName: file.basename })"
-			:checked="selected"
-			@update:checked="onToggle" />
+			:modelValue="selected"
+			@update:modelValue="onToggle" />
 
 		<FavoriteIcon
 			v-if="file.attributes.favorite === 1"
@@ -96,7 +95,6 @@ export default {
 		PlayCircleOutlineIcon,
 	},
 
-	inheritAttrs: false,
 	props: {
 		file: {
 			type: Object as PropType<PhotoFile>,
@@ -110,9 +108,11 @@ export default {
 
 		allowSelection: {
 			type: Boolean,
-			default: true,
+			default: false,
 		},
 	},
+
+	emits: ['click', 'select-toggled'],
 
 	data() {
 		return {
@@ -170,7 +170,7 @@ export default {
 		await this.init()
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		// cancel any pending load
 		if (this.$refs.imgSmall !== undefined) {
 			(this.$refs.imgSmall as HTMLImageElement).src = ''
@@ -346,8 +346,8 @@ export default {
 		z-index: 1;
 		width: fit-content;
 
-		:deep .checkbox-radio-switch__input:focus-visible+.checkbox-radio-switch__content,
-		.checkbox-radio-switch__input:focus-visible {
+		:deep(.checkbox-radio-switch__input:focus-visible+.checkbox-radio-switch__content),
+		:deep(.checkbox-radio-switch__input:focus-visible) {
 			outline: 2px solid var(--color-main-text);
 			box-shadow: 0 0 0 3px var(--color-main-background);
 			outline-offset: 0px;
