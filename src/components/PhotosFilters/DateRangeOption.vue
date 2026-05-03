@@ -10,12 +10,12 @@
 			<NcDateTime
 				:timestamp="value['start']"
 				:format=" { dateStyle: 'long' }"
-				:relative-time="false" />
+				:relativeTime="false" />
 			⸱
 			<NcDateTime
 				:timestamp="value['end']"
 				:format=" { dateStyle: 'long' }"
-				:relative-time="false" />
+				:relativeTime="false" />
 		</template>
 	</NcChip>
 </template>

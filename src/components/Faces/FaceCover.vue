@@ -7,7 +7,6 @@
 	<div class="face-cover" :class="[small && 'face-cover--small']" @click="$emit('click')">
 		<div class="face-cover__crop-container">
 			<img
-				ref="image"
 				class="face-cover__image"
 				:src="coverUrl"
 				:style="coverDimensions">
@@ -52,6 +51,8 @@ export default {
 			default: false,
 		},
 	},
+
+	emits: ['click'],
 
 	data() {
 		return {

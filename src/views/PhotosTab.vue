@@ -60,7 +60,7 @@ type SideBarFile = PhotoFile & {
 	}
 }
 
-export default defineComponent({
+const PhotosTab = defineComponent({
 	name: 'PhotosTab',
 	components: {
 		CalendarOutline,
@@ -202,6 +202,9 @@ export default defineComponent({
 		t,
 	},
 })
+
+export default PhotosTab
+export type PhotosTabType = typeof PhotosTab
 </script>
 
 <style scoped lang="scss">

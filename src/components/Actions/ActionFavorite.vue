@@ -5,19 +5,23 @@
 <template>
 	<NcActionButton
 		v-if="shouldFavoriteSelection"
-		:close-after-click="true"
+		:closeAfterClick="true"
 		:aria-label="t('photos', 'Mark selection as favorite')"
 		@click="favoriteSelection">
+		<template #icon>
+			<StarOutline />
+		</template>
 		{{ t('photos', 'Add selection to favorites') }}
-		<StarOutline slot="icon" />
 	</NcActionButton>
 	<NcActionButton
 		v-else
-		:close-after-click="true"
+		:closeAfterClick="true"
 		:aria-label="t('photos', 'Remove selection from favorites')"
 		@click="unFavoriteSelection">
+		<template #icon>
+			<Star />
+		</template>
 		{{ t('photos', 'Remove selection from favorites') }}
-		<Star slot="icon" />
 	</NcActionButton>
 </template>
 

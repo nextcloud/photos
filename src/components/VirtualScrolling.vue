@@ -8,7 +8,7 @@
 			ref="rowsContainer"
 			class="vs-rows-container"
 			:style="rowsContainerStyle">
-			<slot :visible-sections="visibleSections" />
+			<slot :visibleSections="visibleSections" />
 			<slot name="loader" />
 		</div>
 	</div>
@@ -17,7 +17,7 @@
 		ref="rowsContainer"
 		class="vs-rows-container"
 		:style="rowsContainerStyle">
-		<slot :visible-sections="visibleSections" />
+		<slot :visibleSections="visibleSections" />
 		<slot name="loader" />
 	</div>
 </template>
@@ -25,6 +25,7 @@
 <script lang='ts'>
 import type { PropType } from 'vue'
 
+import { markRaw } from 'vue'
 import logger from '../services/logger.js'
 
 export type Row = {
@@ -86,6 +87,8 @@ export default {
 			default: '',
 		},
 	},
+
+	emits: ['need-content'],
 
 	data() {
 		return {
@@ -278,7 +281,8 @@ export default {
 	},
 
 	mounted() {
-		this.resizeObserver = new ResizeObserver((entries) => {
+		// markRaw: ResizeObserver uses private class fields that throw under Vue 3's reactive Proxy.
+		this.resizeObserver = markRaw(new ResizeObserver((entries) => {
 			for (const entry of entries) {
 				const cr = entry.contentRect
 				if (entry.target === this.container) {
@@ -288,7 +292,7 @@ export default {
 					this.rowsContainerHeight = cr.height
 				}
 			}
-		})
+		}))
 
 		if (this.useWindow) {
 			window.addEventListener('resize', this.updateContainerSize, { passive: true })
@@ -301,7 +305,7 @@ export default {
 		this.container?.addEventListener('scroll', this.updateScrollPosition, { passive: true })
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		if (this.useWindow) {
 			window.removeEventListener('resize', this.updateContainerSize)
 		}

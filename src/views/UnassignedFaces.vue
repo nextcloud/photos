@@ -30,33 +30,39 @@
 				<NcLoadingIcon v-if="loadingCount > 0 || loadingFaces" />
 			</div>
 			<div class="face__header__actions">
-				<NcActions :force-menu="true">
+				<NcActions :forceMenu="true">
 					<template v-if="selectedFileIds.length">
 						<NcActionButton
-							:close-after-click="true"
+							:closeAfterClick="true"
 							:aria-label="t('photos', 'Download selected files')"
 							@click="downloadSelection">
-							<DownloadOutline slot="icon" />
+							<template #icon>
+								<DownloadOutline />
+							</template>
 							{{ t('photos', 'Download selected photos') }}
 						</NcActionButton>
 						<NcActionButton
 							v-if="shouldFavoriteSelection"
-							:close-after-click="true"
+							:closeAfterClick="true"
 							:aria-label="t('photos', 'Mark selection as favorite')"
 							@click="favoriteSelection">
-							<StarOutline slot="icon" />
+							<template #icon>
+								<StarOutline />
+							</template>
 							{{ t('photos', 'Favorite') }}
 						</NcActionButton>
 						<NcActionButton
 							v-else
-							:close-after-click="true"
+							:closeAfterClick="true"
 							:aria-label="t('photos', 'Remove selection from favorites')"
 							@click="unFavoriteSelection">
-							<Star slot="icon" />
+							<template #icon>
+								<Star />
+							</template>
 							{{ t('photos', 'Remove from favorites') }}
 						</NcActionButton>
 						<NcActionButton
-							:close-after-click="true"
+							:closeAfterClick="true"
 							@click="showMoveModal = true">
 							<template #icon>
 								<AccountSwitchOutline />
@@ -70,32 +76,33 @@
 
 		<FilesListViewer
 			class="face__photos"
-			:container-element="appContent"
-			:file-ids="faceFileIds"
+			:containerElement="appContent"
+			:fileIds="faceFileIds"
 			:loading="loadingFiles || loadingFaces">
-			<FileComponent
-				slot-scope="{ file }"
-				:file="files[file.id]"
-				:allow-selection="true"
-				:selected="selection[file.id] === true"
-				@click="openViewer"
-				@select-toggled="onFileSelectToggle" />
+			<template #default="{ file }">
+				<FileComponent
+					:file="files[file.id]"
+					:allowSelection="true"
+					:selected="selection[file.id] === true"
+					@click="openViewer"
+					@selectToggled="onFileSelectToggle" />
+			</template>
 		</FilesListViewer>
 
 		<NcDialog
 			v-if="showMoveModal"
 			:name="t('photos', 'Move to different person')"
-			close-on-click-outside
+			closeOnClickOutside
 			size="normal"
 			@closing="showMoveModal = false">
-			<FaceMergeForm first-face="-1" @select="handleMove($event, selectedFileIds)" />
+			<FaceMergeForm firstFace="-1" @select="handleMove($event, selectedFileIds)" />
 		</NcDialog>
 	</div>
 </template>
 
 <script lang='ts'>
 import { t } from '@nextcloud/l10n'
-import Vue from 'vue'
+import { nextTick } from 'vue'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
@@ -136,8 +143,10 @@ export default {
 	},
 
 	directives: {
-		focus(el) {
-			Vue.nextTick(() => el.focus())
+		focus: {
+			mounted(el) {
+				nextTick(() => el.focus())
+			},
 		},
 	},
 
