@@ -186,6 +186,16 @@ export default {
 	position: relative;
 	width: 100%;
 	height: 100%;
+	// Lift + soft shadow on hover. Pairs with the image-magnify
+	// effect below; same 220ms ease-out so the two animations land
+	// together. Mirrors the FileComponent timeline tile so the
+	// folder view feels like the same product.
+	transition: box-shadow 220ms ease-out;
+
+	&:hover {
+		box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+		z-index: 1;
+	}
 
 	&__actions {
 		// Reveal on hover/focus, mirroring how FileComponent's menu
@@ -233,6 +243,22 @@ img {
 
 	.file--cropped & {
 		object-fit: cover;
+	}
+
+	// Subtle magnify on hover. The `<a class="file">` clips overflow
+	// (it has overflow: hidden via FileFolder mixin), so the image
+	// scales without spilling onto neighbouring tiles. Reduced-motion
+	// users opt out via the media query below.
+	transition: transform 220ms ease-out;
+}
+
+.file-legacy-wrap:hover img {
+	transform: scale(1.04);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.file-legacy-wrap:hover img {
+		transform: none;
 	}
 }
 

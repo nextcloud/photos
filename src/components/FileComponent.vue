@@ -451,6 +451,37 @@ export default {
 		pointer-events: none;
 	}
 
+	// --- Subtle hover ---
+	// A photo tile is its own small object — when the user hovers we
+	// give it just enough lift to feel tactile: the image inside
+	// gently magnifies (clipped by the tile's overflow), the tile
+	// itself lifts 1px, and a soft shadow appears underneath. Held
+	// to 220ms so it doesn't drag, and gated behind `:not(.selected)`
+	// so the selection visual stays the dominant state.
+	//
+	// Reduced-motion users get just the shadow + lift without the
+	// scale, which is the cheapest part of the effect.
+	&:hover:not(.selected) {
+		box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+		z-index: 1;
+
+		.file__layer--small,
+		.file__layer--large,
+		.file__layer--blurhash {
+			transform: scale(1.04);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		&:hover:not(.selected) {
+			.file__layer--small,
+			.file__layer--large,
+			.file__layer--blurhash {
+				transform: none;
+			}
+		}
+	}
+
 	// Selection state: softer ring + lift + shadow.
 	&.selected {
 		transform: scale(0.97);
@@ -538,6 +569,12 @@ export default {
 				height: 100%;
 				object-fit: cover;
 				color: transparent; // Hide alt='' text when loading.
+				// `transform` is animated by the tile's :hover rule.
+				// Specifying it here (rather than in each layer) keeps
+				// blurhash + small + large in lockstep during the
+				// magnify so the layers don't slide relative to each
+				// other.
+				transition: transform 220ms ease-out;
 			}
 
 			.file__layer--blurhash {
