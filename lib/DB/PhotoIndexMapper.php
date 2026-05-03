@@ -164,8 +164,14 @@ class PhotoIndexMapper {
 	 * without dealing with group-folder / external-storage path mapping.
 	 * Photos outside the home storage stay reachable via the legacy
 	 * DAV-report fetcher when the client falls back.
+	 *
+	 * `kind` scopes the result to images-only or videos-only — drives
+	 * the /photos and /videos timeline tabs. `null` means "all media".
+	 * The boolean form (`is_video`) is denormalised at insert time so
+	 * this stays a pure index lookup with no mimetype string parsing
+	 * at query time.
 	 */
-	public function getEnrichedTimelineForUser(string $userId, int $homeStorageId, ?int $beforeDate, int $limit): array {
+	public function getEnrichedTimelineForUser(string $userId, int $homeStorageId, ?int $beforeDate, int $limit, ?string $kind = null): array {
 		$qb = $this->connection->getQueryBuilder();
 		$qb->select(
 			'idx.file_id',
@@ -223,6 +229,12 @@ class PhotoIndexMapper {
 
 		if ($beforeDate !== null) {
 			$qb->andWhere($qb->expr()->lt('idx.taken_at', $qb->createNamedParameter($beforeDate, IQueryBuilder::PARAM_INT)));
+		}
+
+		if ($kind === 'images') {
+			$qb->andWhere($qb->expr()->eq('idx.is_video', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		} elseif ($kind === 'videos') {
+			$qb->andWhere($qb->expr()->eq('idx.is_video', $qb->createNamedParameter(1, IQueryBuilder::PARAM_INT)));
 		}
 
 		$result = $qb->executeQuery();

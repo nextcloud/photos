@@ -27,6 +27,7 @@ import axios from '@nextcloud/axios'
 import { File } from '@nextcloud/files'
 import { defaultRemoteURL, defaultRootPath } from '@nextcloud/files/dav'
 import { generateUrl } from '@nextcloud/router'
+import { imageMimes, videoMimes } from './AllowedMimes.ts'
 
 interface IndexedTimelineRow {
 	fileId: number
@@ -134,6 +135,33 @@ export function resetIndexedCursor(): void {
 }
 
 /**
+ * Map the legacy `mimesType` option onto the indexed API's `kind`
+ * query param. The router passes `imageMimes` for /photos and
+ * `videoMimes` for /videos; everything else (the default
+ * `allMimes`, or callers that override) means "all media".
+ *
+ * Set comparison rather than array equality so a future caller that
+ * passes the same set in a different order still maps cleanly.
+ *
+ * @param mimesType
+ */
+function detectKind(mimesType: string[] | undefined): 'images' | 'videos' | undefined {
+	if (mimesType === undefined) {
+		return undefined
+	}
+	const requested = new Set(mimesType)
+	const matchesAll = (target: string[]) => target.length === requested.size
+		&& target.every((m) => requested.has(m))
+	if (matchesAll(imageMimes)) {
+		return 'images'
+	}
+	if (matchesAll(videoMimes)) {
+		return 'videos'
+	}
+	return undefined
+}
+
+/**
  * Same shape as the legacy `getPhotos` from `PhotoSearch.ts` — the
  * caller passes `firstResult` and `nbResults`, gets back `File[]`.
  * `firstResult === 0` resets the cursor.
@@ -167,6 +195,10 @@ export async function getIndexedPhotos(options: Partial<PhotoSearchOptions> = {}
 	const params: Record<string, string> = { limit: String(limit) }
 	if (before !== null) {
 		params.before = String(before)
+	}
+	const kind = detectKind(options.mimesType)
+	if (kind !== undefined) {
+		params.kind = kind
 	}
 
 	const { data } = await axios.get<IndexedTimelineResponse>(

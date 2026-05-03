@@ -92,13 +92,24 @@ class IndexController extends Controller {
 	 * round trips of the legacy fetcher.
 	 */
 	#[NoAdminRequired]
-	public function timeline(?int $before = null, int $limit = 100): JSONResponse {
+	public function timeline(?int $before = null, int $limit = 100, ?string $kind = null): JSONResponse {
 		// Cap to a reasonable page; protects against pathological
 		// clients while still letting initial loads cover ~one screen
 		// of justified-grid tiles in a single round trip.
 		$limit = max(1, min($limit, 500));
 
-		$rows = $this->mapper->getEnrichedTimelineForUser($this->userId, $this->getHomeStorageId(), $before, $limit);
+		// Sanity-check `kind`: only the two values the mapper
+		// understands. Any other input is treated as "all media" so
+		// a typo doesn't silently return zero results.
+		$normalisedKind = ($kind === 'images' || $kind === 'videos') ? $kind : null;
+
+		$rows = $this->mapper->getEnrichedTimelineForUser(
+			$this->userId,
+			$this->getHomeStorageId(),
+			$before,
+			$limit,
+			$normalisedKind,
+		);
 
 		// Batch-fetch metadata for the page in a single DB call. The
 		// metadata manager caches per-fileId, so the "miss" cost is
