@@ -18,10 +18,10 @@
 				:key="index">
 				<PhotosFolder
 					:path="source"
-					:can-delete="photosSourceFolders.length !== 1"
-					:root-folder-label="t('photos', 'All folders')"
-					:root-folder-icon="FolderMultipleOutline"
-					@remove-folder="removeSourceFolder(index)" />
+					:canDelete="photosSourceFolders.length !== 1"
+					:rootFolderLabel="t('photos', 'All folders')"
+					:rootFolderIcon="FolderMultipleOutline"
+					@removeFolder="removeSourceFolder(index)" />
 			</li>
 		</ul>
 

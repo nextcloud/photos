@@ -9,13 +9,18 @@
 		<NcEmptyContent
 			v-if="errorFetchingFiles === 404"
 			:name="t('photos', 'One of the source folders does not exist')">
-			<FolderAlertOutline slot="icon" />
-			<PhotosSourceLocationsSettings
-				slot="action"
-				class="timeline__update_source_directory" />
+			<template #icon>
+				<FolderAlertOutline />
+			</template>
+			<template #action>
+				<PhotosSourceLocationsSettings
+					class="timeline__update_source_directory" />
+			</template>
 		</NcEmptyContent>
 		<NcEmptyContent v-else :name="t('photos', 'An error occurred')">
-			<AlertCircleOutline slot="icon" />
+			<template #icon>
+				<AlertCircleOutline />
+			</template>
 		</NcEmptyContent>
 	</div>
 
@@ -26,7 +31,7 @@
 			:loading="loadingCount > 0"
 			path="/"
 			:title="rootTitle"
-			:root-title="rootTitle"
+			:rootTitle="rootTitle"
 			@refresh="resetFetchFilesState">
 			<div class="timeline__header__left">
 				<!-- TODO: UploadPicker -->
@@ -44,7 +49,7 @@
 
 				<template v-else>
 					<NcButton
-						:close-after-click="true"
+						:closeAfterClick="true"
 						variant="primary"
 						:aria-label="t('photos', 'Add to album')"
 						data-cy-header-action="add-to-album"
@@ -73,7 +78,7 @@
 					<NcActions :aria-label="t('photos', 'Open actions menu')">
 						<NcActionButton
 							data-cy-header-action="download-selection"
-							:close-after-click="true"
+							:closeAfterClick="true"
 							:aria-label="t('photos', 'Download selected files')"
 							@click="downloadSelectedFiles">
 							{{ t('photos', 'Download selected files') }}
@@ -83,10 +88,10 @@
 							</template>
 						</NcActionButton>
 
-						<ActionFavorite :selected-file-ids="selectedFileIds" />
+						<ActionFavorite :selectedFileIds="selectedFileIds" />
 
 						<NcActionButton
-							:close-after-click="true"
+							:closeAfterClick="true"
 							:aria-label="t('photos', 'Delete selection')"
 							data-cy-header-action="delete-selection"
 							@click="deleteSelection">
@@ -101,51 +106,50 @@
 		</HeaderNavigation>
 
 		<FilesListViewer
-			ref="filesListViewer"
-			:container-element="appContent"
+			:containerElement="appContent"
 			class="timeline__file-list"
-			:file-ids-by-section="fileIdsByMonth"
+			:fileIdsBySection="fileIdsByMonth"
 			:sections="monthsList"
 			:loading="loadingFiles"
-			:base-height="isMobile ? 120 : 200"
-			:empty-message="t('photos', 'No photos or videos in here')"
-			@need-content="getContent">
-			<template slot-scope="{ file, isHeader }">
+			:baseHeight="isMobile ? 120 : 200"
+			:emptyMessage="t('photos', 'No photos or videos in here')"
+			@needContent="getContent">
+			<template #default="{ file, isHeader }">
 				<h2
 					v-if="isHeader"
 					:id="`file-picker-section-header-${file.id}`"
 					class="section-header">
-					<b>{{ file.id | dateMonth }}</b>
-					{{ file.id | dateYear }}
+					<b>{{ dateMonth(file.id) }}</b>
+					{{ dateYear(file.id) }}
 				</h2>
 				<FileComponent
 					v-else
 					:file="files[file.id]"
-					:allow-selection="true"
+					:allowSelection="true"
 					:selected="selection[file.id] === true"
 					@click="openViewer"
-					@select-toggled="onFileSelectToggle" />
+					@selectToggled="onFileSelectToggle" />
 			</template>
 		</FilesListViewer>
 
 		<NcModal
 			v-if="showAlbumCreationForm"
 			key="albumCreationForm"
-			label-id="new-album-form"
-			:set-return-focus="$refs.newAlbumButton?.$el"
+			labelId="new-album-form"
+			:setReturnFocus="$refs.newAlbumButton?.$el"
 			@close="showAlbumCreationForm = false">
 			<h2 class="timeline__heading">
 				{{ t('photos', 'New album') }}
 			</h2>
-			<AlbumForm :filters-value="selectedFilters" @done="handleFormCreationDone" />
+			<AlbumForm :filtersValue="selectedFilters" @done="handleFormCreationDone" />
 		</NcModal>
 
 		<NcModal
 			v-if="showAlbumPicker"
 			key="albumPicker"
-			label-id="album-picker"
+			labelId="album-picker"
 			@close="showAlbumPicker = false">
-			<AlbumPicker @album-picked="addSelectionToAlbum" />
+			<AlbumPicker @albumPicked="addSelectionToAlbum" />
 		</NcModal>
 	</div>
 </template>
@@ -209,16 +213,6 @@ export default {
 		HeaderNavigation,
 		PhotosSourceLocationsSettings,
 		AlertCircleOutline,
-	},
-
-	filters: {
-		dateMonth(date: string): string {
-			return moment(date, 'YYYYMM').format('MMMM')
-		},
-
-		dateYear(date: string): string {
-			return moment(date, 'YYYYMM').format('YYYY')
-		},
 	},
 
 	mixins: [
@@ -305,11 +299,19 @@ export default {
 		subscribe(configChangedEvent, this.handleUserConfigChange)
 	},
 
-	destroyed() {
+	unmounted() {
 		unsubscribe(configChangedEvent, this.handleUserConfigChange)
 	},
 
 	methods: {
+		dateMonth(date: string): string {
+			return moment(date, 'YYYYMM').format('MMMM')
+		},
+
+		dateYear(date: string): string {
+			return moment(date, 'YYYYMM').format('YYYY')
+		},
+
 		getContent() {
 			this.fetchFiles({
 				mimesType: this.mimesType,

@@ -17,7 +17,6 @@
 		<transition-group name="fade" class="transition-group">
 			<img
 				v-if="!error"
-				ref="img"
 				:key="`${item.injected.basename}-img`"
 				:src="src"
 				:alt="item.injected.basename"
@@ -93,7 +92,7 @@ export default {
 		},
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		// cancel any pending load
 		this.$refs.src = ''
 	},

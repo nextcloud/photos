@@ -4,32 +4,16 @@
  */
 
 import { defineComponent } from 'vue'
-import getGridConfig from '../services/GridConfig.js'
-import logger from '../services/logger.js'
+import gridConfigState from '../services/GridConfig.js'
 
 /**
- * Get the current used grid config
+ * Expose the current grid config as a reactive computed property.
+ * The underlying state is shared and updated on window resize.
  */
 export default defineComponent({
-	data() {
-		return {
-			gridConfig: {} as typeof getGridConfig.gridConfig,
-		}
-	},
-
-	created() {
-		getGridConfig.$on('changed', this.handleGridConfigChange)
-		logger.debug('Grid config', { gridConfig: getGridConfig.gridConfig })
-		this.gridConfig = getGridConfig.gridConfig
-	},
-
-	beforeDestroy() {
-		getGridConfig.$off('changed', this.handleGridConfigChange)
-	},
-
-	methods: {
-		handleGridConfigChange(val: typeof getGridConfig.gridConfig) {
-			this.gridConfig = val
+	computed: {
+		gridConfig() {
+			return gridConfigState.gridConfig
 		},
 	},
 })

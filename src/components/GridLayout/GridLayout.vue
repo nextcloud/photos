@@ -1,38 +1,39 @@
 <!--
-  - SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-FileCopyrightText: 2025 Nextcloud GmbH and Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
+
 <template>
 	<div
-		ref="tiledLayoutContainer"
-		class="tiled-container">
-		<!-- Slot to allow changing the rows before passing them to TiledRows -->
+		ref="gridLayoutContainer"
+		class="grid-container">
+		<!-- Slot to allow changing the rows before passing them to GridRows -->
 		<!-- Useful for partially rendering rows like with VirtualScrolling -->
-		<slot :tiledSections="tiledSections">
+		<slot :gridSections="gridSections">
 			<!-- Default rendering -->
-			<TiledRows :rows="tiledSections" />
+			<GridRows :rows="gridSections" />
 		</slot>
 	</div>
 </template>
 
-<script lang='ts'>
+<script lang="ts">
 import type { PropType } from 'vue'
 
-import { markRaw } from 'vue'
-import TiledRows from './TiledRows.vue'
+import { defineComponent, markRaw } from 'vue'
+import GridRows from './GridRow.vue'
 import logger from '../../services/logger.js'
 import {
+	type GridSection,
 	type Section,
-	type TiledSection,
 
 	splitItemsInRows,
-} from '../../services/TiledLayout.js'
+} from './GridLayout.ts'
 
-export default {
-	name: 'TiledLayout',
+export default defineComponent({
+	name: 'GridLayout',
 
 	components: {
-		TiledRows,
+		GridRows,
 	},
 
 	props: {
@@ -41,9 +42,19 @@ export default {
 			required: true,
 		},
 
-		baseHeight: {
+		itemWidth: {
 			type: Number,
-			default: 200,
+			default: 256,
+		},
+
+		itemHeight: {
+			type: Number,
+			default: 256,
+		},
+
+		gridGap: {
+			type: Number,
+			default: 50,
 		},
 	},
 
@@ -55,11 +66,11 @@ export default {
 	},
 
 	computed: {
-		tiledSections(): TiledSection[] {
-			logger.debug('[TiledLayout] Computing rows', { items: this.sections })
+		gridSections(): GridSection[] {
+			logger.debug('[GridLayout] Computing rows', { items: this.sections })
 
 			return this.sections.map((section) => {
-				const rows = splitItemsInRows(section.items, this.containerWidth, this.baseHeight)
+				const rows = splitItemsInRows(section.items, this.containerWidth, this.itemWidth, this.itemHeight, this.gridGap)
 				return {
 					...section,
 					key: section.id,
@@ -75,26 +86,26 @@ export default {
 		this.resizeObserver = markRaw(new ResizeObserver((entries) => {
 			for (const entry of entries) {
 				const cr = entry.contentRect
-				if (entry.target.classList.contains('tiled-container')) {
+				if (entry.target.classList.contains('grid-container')) {
 					this.containerWidth = cr.width
 				}
 			}
 		}))
 
-		this.resizeObserver.observe(this.$refs.tiledLayoutContainer as Element)
+		this.resizeObserver.observe(this.$refs.gridLayoutContainer as Element)
 	},
 
 	beforeUnmount() {
 		this.resizeObserver?.disconnect()
 	},
-}
+})
 </script>
 
 <style scoped lang="scss">
-.tiled-container {
+.grid-container {
 	height: 100%;
 
-	.tiled-row {
+	.grid-row {
 		display: flex;
 	}
 }

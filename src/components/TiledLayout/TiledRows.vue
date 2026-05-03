@@ -2,10 +2,10 @@
   - SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
-<template functional>
+<template>
 	<ul>
 		<div
-			v-for="row of props.rows"
+			v-for="row of rows"
 			:key="row.key"
 			class="tiled-row"
 			:style="{ height: `${row.height}px` }">
@@ -18,6 +18,31 @@
 		</div>
 	</ul>
 </template>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+interface TiledRowItem {
+	id: string | number
+	ratio?: number
+}
+
+interface TiledRow {
+	key: string | number
+	height: number
+	items: TiledRowItem[]
+}
+
+export default defineComponent({
+	name: 'TiledRows',
+	props: {
+		rows: {
+			type: Array as () => TiledRow[],
+			required: true,
+		},
+	},
+})
+</script>
 
 <style lang="scss" scoped>
 .tiled-row {
