@@ -17,6 +17,9 @@ registerDavProperty('nc:metadata-photos-size')
 registerDavProperty('nc:metadata-files-live-photo')
 registerDavProperty('nc:metadata-blurhash')
 registerDavProperty('nc:metadata-photos-original_date_time')
+// GPS metadata is needed by the map view to plot photo markers; without
+// this registration the timeline endpoint won't return the field.
+registerDavProperty('nc:metadata-photos-gps')
 
 const app = createApp(PhotosApp)
 app.use(store)

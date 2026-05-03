@@ -70,6 +70,18 @@
 					</NcActionRadio>
 				</NcActions>
 				<NcButton
+					v-if="selectedFileIds.length === 0 && fetchedFileIds.length > 0"
+					:aria-label="t('photos', 'Start slideshow')"
+					data-cy-header-action="slideshow"
+					@click="startSlideshow">
+					<template #icon>
+						<PlayIcon :size="20" />
+					</template>
+					<template v-if="!isMobile" #default>
+						{{ t('photos', 'Slideshow') }}
+					</template>
+				</NcButton>
+				<NcButton
 					v-if="selectedFileIds.length === 0"
 					ref="newAlbumButton"
 					:aria-label="createAlbumButtonLabel"
@@ -185,6 +197,11 @@
 			@close="showAlbumPicker = false">
 			<AlbumPicker @albumPicked="addSelectionToAlbum" />
 		</NcModal>
+
+		<Slideshow
+			v-if="slideshowOpen"
+			:photos="slideshowPhotos"
+			@close="slideshowOpen = false" />
 	</div>
 </template>
 
@@ -206,6 +223,7 @@ import NcModal from '@nextcloud/vue/components/NcModal'
 import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
+import PlayIcon from 'vue-material-design-icons/Play.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import PlusBoxMultipleOutline from 'vue-material-design-icons/PlusBoxMultipleOutline.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
@@ -218,6 +236,7 @@ import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
+import Slideshow from '../components/Slideshow.vue'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.ts'
 import FilesByMonthMixin from '../mixins/FilesByMonthMixin.ts'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.ts'
@@ -250,6 +269,8 @@ export default {
 		HeaderNavigation,
 		PhotosSourceLocationsSettings,
 		AlertCircleOutline,
+		PlayIcon,
+		Slideshow,
 		ViewGridIcon,
 	},
 
@@ -309,6 +330,7 @@ export default {
 			showAlbumPicker: false,
 			appContent: document.getElementById('app-content-vue'),
 			showFilters: false,
+			slideshowOpen: false,
 		}
 	},
 
@@ -327,6 +349,16 @@ export default {
 
 		gridDensity(): 'small' | 'medium' | 'large' {
 			return this.$store.state.userConfig.gridDensity
+		},
+
+		// Photos to feed into the slideshow when invoked. Uses the same
+		// fetched IDs that drive the timeline so order matches what the
+		// user sees, and only includes files that have hydrated into the
+		// store.
+		slideshowPhotos() {
+			return this.fetchedFileIds
+				.map((id) => this.files[id])
+				.filter((file) => file !== undefined)
 		},
 
 		// Tile-row target height per density. The mobile-medium fallback
@@ -359,6 +391,12 @@ export default {
 	methods: {
 		setDensity(value: 'small' | 'medium' | 'large') {
 			this.$store.dispatch('updateUserConfig', { key: 'gridDensity', value })
+		},
+
+		startSlideshow() {
+			if (this.slideshowPhotos.length > 0) {
+				this.slideshowOpen = true
+			}
 		},
 
 		dateMonth(date: string): string {

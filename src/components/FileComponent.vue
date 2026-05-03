@@ -12,7 +12,11 @@
 			class="file"
 			:href="file.source"
 			:aria-label="ariaLabel"
-			@click.stop.prevent="emitClick">
+			@click.stop.prevent="onTileClick"
+			@pointerdown="onTilePointerDown"
+			@pointerup="onTilePointerUp"
+			@pointercancel="cancelLongPress"
+			@pointerleave="cancelLongPress">
 
 			<!-- image and loading placeholder -->
 			<div class="file__images">
@@ -127,6 +131,12 @@ export default {
 			loadedLarge: false,
 			errorLarge: false,
 			isMobile: useIsMobile(),
+			// Long-press detection: a press held for >500ms starts a
+			// selection instead of opening the viewer. The handle is
+			// kept on `this` (not in data so we don't bother with
+			// reactivity) and cleared on cancel / release.
+			longPressTimer: null as ReturnType<typeof setTimeout> | null,
+			longPressFired: false,
 		}
 	},
 
@@ -185,6 +195,7 @@ export default {
 		if (this.$refs.imgLarge !== undefined) {
 			(this.$refs.imgLarge as HTMLImageElement).src = ''
 		}
+		this.cancelLongPress()
 	},
 
 	methods: {
@@ -203,6 +214,39 @@ export default {
 
 		emitClick() {
 			this.$emit('click', this.file.fileid)
+		},
+
+		// Tap = open viewer. Long-press (>500ms) = toggle selection.
+		// We swallow the click that follows a long-press so a release
+		// after the timeout doesn't also trigger the open.
+		onTileClick() {
+			if (this.longPressFired) {
+				this.longPressFired = false
+				return
+			}
+			this.emitClick()
+		},
+
+		onTilePointerDown() {
+			if (!this.allowSelection) {
+				return
+			}
+			this.cancelLongPress()
+			this.longPressTimer = setTimeout(() => {
+				this.longPressFired = true
+				this.onToggle(!this.selected)
+			}, 500)
+		},
+
+		onTilePointerUp() {
+			this.cancelLongPress()
+		},
+
+		cancelLongPress() {
+			if (this.longPressTimer !== null) {
+				clearTimeout(this.longPressTimer)
+				this.longPressTimer = null
+			}
 		},
 
 		onLoadSmall() {
