@@ -11,6 +11,7 @@ namespace OCA\Photos\Controller;
 
 use OCA\Photos\AppInfo\Application;
 use OCA\Photos\DB\PhotoIndexMapper;
+use OCA\Photos\DB\PhotoMetadataEditMapper;
 use OCA\Photos\Listener\ExifMetadataProvider;
 use OCA\Photos\Listener\OriginalDateTimeMetadataProvider;
 use OCA\Photos\Listener\PlaceMetadataProvider;
@@ -34,6 +35,7 @@ class IndexController extends Controller {
 		IRequest $request,
 		private readonly PhotoIndexService $indexService,
 		private readonly PhotoIndexMapper $mapper,
+		private readonly PhotoMetadataEditMapper $editMapper,
 		private readonly IRootFolder $rootFolder,
 		private readonly IFilesMetadataManager $metadataManager,
 		private readonly string $userId,
@@ -125,11 +127,13 @@ class IndexController extends Controller {
 				$metadataByFileId = [];
 			}
 		}
+		$editsByFileId = $this->editMapper->getForUserFiles($this->userId, $fileIds);
 
 		$items = [];
 		foreach ($rows as $row) {
 			$metadata = $metadataByFileId[$row['file_id']] ?? null;
-			$items[] = $this->composeItem($row, $metadata);
+			$edits = $editsByFileId[$row['file_id']] ?? null;
+			$items[] = $this->composeItem($row, $metadata, $edits);
 		}
 
 		return new JSONResponse([
@@ -181,11 +185,13 @@ class IndexController extends Controller {
 				$metadataByFileId = [];
 			}
 		}
+		$editsByFileId = $this->editMapper->getForUserFiles($this->userId, $fileIds);
 
 		$items = [];
 		foreach ($rows as $row) {
 			$metadata = $metadataByFileId[$row['file_id']] ?? null;
-			$items[] = $this->composeItem($row, $metadata);
+			$edits = $editsByFileId[$row['file_id']] ?? null;
+			$items[] = $this->composeItem($row, $metadata, $edits);
 		}
 
 		return new JSONResponse([
@@ -246,16 +252,22 @@ class IndexController extends Controller {
 	/**
 	 * Compose the JSON shape `timeline()` returns for one row +
 	 * metadata pair. Extracted so `search()` can reuse the exact
-	 * same response decoder client-side.
+	 * same response decoder client-side. `$edits` (when present)
+	 * applies the user's per-photo overrides on top of the
+	 * EXIF-derived values — `taken_at` from the override wins over
+	 * the EXIF capture time, and the GPS override replaces the
+	 * EXIF GPS array entirely. The frontend reads from the same
+	 * `metadata` keys it always has.
 	 *
 	 * @param array{
 	 *   file_id: int, name: string, path: string, mimetype: string, size: int,
 	 *   mtime: int, taken_at: int, etag: string, permissions: int, favorite: int,
 	 * } $row
 	 * @param \OCP\FilesMetadata\Model\IFilesMetadata|null $metadata
+	 * @param array{taken_at: ?int, gps_lat: ?float, gps_lng: ?float}|null $edits
 	 * @return array<string, mixed>
 	 */
-	private function composeItem(array $row, $metadata): array {
+	private function composeItem(array $row, $metadata, ?array $edits = null): array {
 		$exif = null;
 		$ifd0 = null;
 		$gps = null;
@@ -284,6 +296,33 @@ class IndexController extends Controller {
 				: null;
 		}
 
+		// Layer the per-user override on top of the EXIF view.
+		// `editedTakenAt` flows into both the response's top-level
+		// `takenAt` (timeline sort key) and the metadata bag's
+		// `photos-original_date_time` (display key) so the photos
+		// UI stays internally consistent.
+		$editedTakenAt = $edits['taken_at'] ?? null;
+		$resolvedTakenAt = $editedTakenAt ?? $takenAtMeta ?? $row['taken_at'];
+
+		$editedLat = $edits['gps_lat'] ?? null;
+		$editedLng = $edits['gps_lng'] ?? null;
+		if ($editedLat !== null && $editedLng !== null) {
+			// Replace the EXIF GPS array entirely. `latitude` /
+			// `longitude` keys match what ExifMetadataProvider
+			// produces, so the slideshow / metadata dialog don't
+			// need to know about overrides — they read the same
+			// shape.
+			$gps = [
+				'latitude' => $editedLat,
+				'longitude' => $editedLng,
+			];
+		} elseif ($edits !== null && $editedLat === null && $editedLng === null && array_key_exists('gps_lat', $edits)) {
+			// Edits row exists but GPS was explicitly cleared —
+			// hide the EXIF GPS too so the dialog reflects the
+			// user's intent ("no location for this photo").
+			$gps = null;
+		}
+
 		return [
 			'fileId' => $row['file_id'],
 			'name' => $row['name'],
@@ -291,7 +330,7 @@ class IndexController extends Controller {
 			'mimetype' => $row['mimetype'],
 			'size' => $row['size'],
 			'mtime' => $row['mtime'],
-			'takenAt' => $takenAtMeta ?? $row['taken_at'],
+			'takenAt' => $resolvedTakenAt,
 			'etag' => $row['etag'],
 			'permissions' => $row['permissions'],
 			'favorite' => $row['favorite'],
@@ -302,7 +341,7 @@ class IndexController extends Controller {
 				'photos-gps' => $gps,
 				'photos-place' => $place,
 				'photos-size' => $photoSize,
-				'photos-original_date_time' => $takenAtMeta,
+				'photos-original_date_time' => $resolvedTakenAt,
 			],
 		];
 	}

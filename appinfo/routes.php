@@ -134,6 +134,12 @@ return [
 		['name' => 'transcode#segment', 'url' => '/api/v1/transcode/{fileId}/{segment}', 'verb' => 'GET',
 			'requirements' => ['fileId' => '\d+', 'segment' => 'seg-\d+\.ts']],
 
+		// Per-user EXIF override editor (date / GPS).
+		['name' => 'metadataEdit#get', 'url' => '/api/v1/metadata/{fileId}', 'verb' => 'GET',
+			'requirements' => ['fileId' => '\d+']],
+		['name' => 'metadataEdit#put', 'url' => '/api/v1/metadata/{fileId}', 'verb' => 'PUT',
+			'requirements' => ['fileId' => '\d+']],
+
 		[
 			'name' => 'publicPreview#index',
 			'url' => '/api/v1/publicPreview/{fileId}',
