@@ -19,7 +19,7 @@
 			:name="t('photos', 'No geotagged photos')"
 			:description="t('photos', 'Photos with GPS metadata will appear here. Take more photos with location enabled, or scroll the timeline first to load more.')">
 			<template #icon>
-				<MapMarkerOutline />
+				<EmptyIllustration variant="map" />
 			</template>
 		</NcEmptyContent>
 
@@ -63,7 +63,7 @@ import {
 } from '@vue-leaflet/vue-leaflet'
 import { defineComponent } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
-import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
+import EmptyIllustration from '../components/EmptyIllustration.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import { allMimes } from '../services/AllowedMimes.ts'
@@ -80,12 +80,12 @@ export default defineComponent({
 	name: 'MapView',
 
 	components: {
+		EmptyIllustration,
 		HeaderNavigation,
 		LControlAttribution,
 		LMap,
 		LMarker,
 		LTileLayer,
-		MapMarkerOutline,
 		NcEmptyContent,
 	},
 

@@ -14,15 +14,54 @@
 			@refresh="refresh" />
 
 		<NcEmptyContent
-			v-if="!loadingFiles && trips.length === 0"
+			v-if="!loadingFiles && trips.length === 0 && yearRecap === null"
 			:name="t('photos', 'No memories yet')"
 			:description="t('photos', 'Memories surface trips and multi-day events from your library. Take more photos and check back here.')">
 			<template #icon>
-				<TimelapseIcon />
+				<EmptyIllustration variant="memories" />
 			</template>
 		</NcEmptyContent>
 
-		<ul v-else class="memories__list">
+		<!--
+			Year-in-review feature card. Spans the full width above the
+			trip grid when there's a recap to show. Clicking opens the
+			curated set in the in-app slideshow.
+		-->
+		<div
+			v-if="yearRecap !== null"
+			class="memories__feature">
+			<button
+				type="button"
+				class="memories__feature__link"
+				:aria-label="featureAriaLabel"
+				:style="{ backgroundImage: `url('${coverUrl(yearRecap.cover)}')` }"
+				@click="openYearRecap">
+				<div class="memories__feature__scrim" />
+				<div class="memories__feature__content">
+					<div class="memories__feature__eyebrow">
+						{{ t('photos', 'Year in review') }}
+					</div>
+					<div class="memories__feature__title">
+						{{ t('photos', 'Your {year} in photos', { year: yearRecap.year }) }}
+					</div>
+					<div class="memories__feature__meta">
+						<AnimatedNumber :value="yearRecap.curated.length">
+							<template #default="{ displayValue }">
+								{{ n('photos', '%n highlight', '%n highlights', displayValue) }}
+							</template>
+						</AnimatedNumber>
+						<span class="memories__feature__meta__sep">·</span>
+						<AnimatedNumber :value="yearRecap.totalCount">
+							<template #default="{ displayValue }">
+								{{ n('photos', '%n photo this year', '%n photos this year', displayValue) }}
+							</template>
+						</AnimatedNumber>
+					</div>
+				</div>
+			</button>
+		</div>
+
+		<ul v-if="trips.length > 0" class="memories__list">
 			<li v-for="trip in trips" :key="trip.id" class="memories__card">
 				<button
 					type="button"
@@ -40,37 +79,50 @@
 							{{ formatTripDateRange(trip) }}
 						</div>
 						<div class="memories__card__meta">
-							{{ n('photos', '%n photo', '%n photos', trip.photos.length) }}
+							<AnimatedNumber :value="trip.photos.length">
+								<template #default="{ displayValue }">
+									{{ n('photos', '%n photo', '%n photos', displayValue) }}
+								</template>
+							</AnimatedNumber>
 						</div>
 					</div>
 				</button>
 			</li>
 		</ul>
+
+		<Slideshow
+			v-if="recapSlideshowOpen && yearRecap !== null"
+			:photos="yearRecap.curated"
+			@close="recapSlideshowOpen = false" />
 	</div>
 </template>
 
 <script lang="ts">
-import type { Trip } from '../services/memories.ts'
+import type { Trip, YearRecap } from '../services/memories.ts'
 
 import { translatePlural as n, translate as t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
 import { defineComponent } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
-import TimelapseIcon from 'vue-material-design-icons/Timelapse.vue'
+import AnimatedNumber from '../components/AnimatedNumber.vue'
+import EmptyIllustration from '../components/EmptyIllustration.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import Slideshow from '../components/Slideshow.vue'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import { allMimes } from '../services/AllowedMimes.ts'
-import { detectTrips } from '../services/memories.ts'
+import { buildYearRecap, detectTrips } from '../services/memories.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
 export default defineComponent({
 	name: 'MemoriesView',
 
 	components: {
+		AnimatedNumber,
+		EmptyIllustration,
 		HeaderNavigation,
 		NcEmptyContent,
-		TimelapseIcon,
+		Slideshow,
 	},
 
 	mixins: [FetchFilesMixin],
@@ -80,6 +132,12 @@ export default defineComponent({
 			type: String,
 			required: true,
 		},
+	},
+
+	data() {
+		return {
+			recapSlideshowOpen: false,
+		}
 	},
 
 	computed: {
@@ -94,6 +152,24 @@ export default defineComponent({
 		trips(): Trip[] {
 			const allPhotos = Object.values(this.files)
 			return detectTrips(allPhotos)
+		},
+
+		// "Your year in photos" recap. May be null if there isn't enough
+		// data yet to make a meaningful recap.
+		yearRecap(): YearRecap | null {
+			const allPhotos = Object.values(this.files)
+			return buildYearRecap(allPhotos)
+		},
+
+		featureAriaLabel(): string {
+			if (this.yearRecap === null) {
+				return ''
+			}
+			return t(
+				'photos',
+				'Your {year} in photos — open a slideshow of {count} highlights',
+				{ year: this.yearRecap.year, count: this.yearRecap.curated.length },
+			)
 		},
 	},
 
@@ -125,6 +201,10 @@ export default defineComponent({
 				list: trip.photos.map((photo) => toViewerFileInfo(photo)),
 				onClose() { window.OCA.Files.Sidebar.close() },
 			})
+		},
+
+		openYearRecap() {
+			this.recapSlideshowOpen = true
 		},
 
 		cardAriaLabel(trip: Trip): string {
@@ -167,6 +247,88 @@ export default defineComponent({
 <style lang="scss" scoped>
 .memories {
 	padding: 16px;
+
+	// Year-in-review feature card. Spans full width, stands out from
+	// the trip grid below via height + larger typography.
+	&__feature {
+		margin: 16px 0 0;
+
+		&__link {
+			position: relative;
+			display: block;
+			width: 100%;
+			height: 280px;
+			padding: 0;
+			border: none;
+			border-radius: var(--border-radius-large);
+			overflow: hidden;
+			background-size: cover;
+			background-position: center;
+			background-color: var(--color-primary-element-light);
+			color: #fff;
+			cursor: pointer;
+			text-align: inherit;
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+			transition: transform 220ms ease, box-shadow 220ms ease;
+
+			&:hover, &:focus-visible {
+				transform: translateY(-2px);
+				box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+			}
+
+			&:focus-visible {
+				outline: 3px solid var(--color-primary-element);
+				outline-offset: 2px;
+			}
+		}
+
+		&__scrim {
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(
+				to bottom,
+				rgba(0, 0, 0, 0.05) 0%,
+				rgba(0, 0, 0, 0.2) 40%,
+				rgba(0, 0, 0, 0.7) 100%
+			);
+		}
+
+		&__content {
+			position: absolute;
+			left: 32px;
+			right: 32px;
+			bottom: 28px;
+			text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+		}
+
+		&__eyebrow {
+			text-transform: uppercase;
+			letter-spacing: 0.12em;
+			font-size: 0.75rem;
+			font-weight: 600;
+			opacity: 0.85;
+			margin-bottom: 6px;
+		}
+
+		&__title {
+			font-size: 2.25rem;
+			font-weight: 700;
+			line-height: 1.05;
+			margin-bottom: 10px;
+		}
+
+		&__meta {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			font-size: 0.95rem;
+			opacity: 0.95;
+
+			&__sep {
+				opacity: 0.6;
+			}
+		}
+	}
 
 	&__list {
 		display: grid;

@@ -24,7 +24,8 @@
 			@keydown.esc.prevent="close"
 			@keydown.left.prevent="prev"
 			@keydown.right.prevent="next"
-			@keydown.space.prevent="togglePlay">
+			@keydown.space.prevent="togglePlay"
+			@keydown.i.exact="toggleExif">
 			<img
 				v-if="currentPhoto"
 				:key="currentPhoto.fileid"
@@ -40,6 +41,23 @@
 					{{ index + 1 }} / {{ photos.length }}
 				</div>
 			</div>
+
+			<!--
+				EXIF overlay. Toggled with the `i` key; renders nothing
+				when the current photo has no EXIF data (so we don't
+				show an empty grey panel).
+			-->
+			<aside
+				v-if="exifVisible && exifLines.length > 0"
+				class="slideshow__exif"
+				:aria-label="t('photos', 'Photo metadata')">
+				<dl>
+					<template v-for="line in exifLines" :key="line.label">
+						<dt>{{ line.label }}</dt>
+						<dd>{{ line.value }}</dd>
+					</template>
+				</dl>
+			</aside>
 
 			<div class="slideshow__controls">
 				<NcButton
@@ -138,12 +156,56 @@ export default defineComponent({
 			// but defensive markRaw guards against any platform that returns
 			// a class instance (Node typings carry over to some bundlers).
 			timer: null as ReturnType<typeof setInterval> | null,
+			exifVisible: false,
 		}
 	},
 
 	computed: {
 		currentPhoto(): PhotoFile | undefined {
 			return this.photos[this.index]
+		},
+
+		// Pull a small set of human-friendly EXIF lines from the
+		// current photo's metadata. The fields we display come back
+		// from the server when `nc:metadata-photos-exif` /
+		// `nc:metadata-photos-ifd0` are registered in main.ts —
+		// otherwise this gracefully returns [] and the overlay hides.
+		exifLines(): { label: string, value: string }[] {
+			if (this.currentPhoto === undefined) {
+				return []
+			}
+			const attrs = this.currentPhoto.attributes as Record<string, unknown>
+			const exif = (attrs['metadata-photos-exif'] ?? {}) as Record<string, string | number>
+			const ifd0 = (attrs['metadata-photos-ifd0'] ?? {}) as Record<string, string | number>
+
+			const lines: { label: string, value: string }[] = []
+
+			if (ifd0.Make || ifd0.Model) {
+				const make = (ifd0.Make ?? '').toString().trim()
+				const model = (ifd0.Model ?? '').toString().trim()
+				const camera = [make, model].filter(Boolean).join(' ')
+				if (camera.length > 0) {
+					lines.push({ label: t('photos', 'Camera'), value: camera })
+				}
+			}
+
+			if (exif.FNumber) {
+				lines.push({ label: t('photos', 'Aperture'), value: `ƒ/${exif.FNumber}` })
+			}
+
+			if (exif.FocalLength) {
+				lines.push({ label: t('photos', 'Focal length'), value: `${exif.FocalLength} mm` })
+			}
+
+			if (exif.ExposureTime) {
+				lines.push({ label: t('photos', 'Exposure'), value: `${exif.ExposureTime} s` })
+			}
+
+			if (exif.ISOSpeedRatings) {
+				lines.push({ label: t('photos', 'ISO'), value: String(exif.ISOSpeedRatings) })
+			}
+
+			return lines
 		},
 	},
 
@@ -185,6 +247,10 @@ export default defineComponent({
 			} else {
 				this.stopTimer()
 			}
+		},
+
+		toggleExif() {
+			this.exifVisible = !this.exifVisible
 		},
 
 		close() {
@@ -254,6 +320,40 @@ export default defineComponent({
 
 		&__counter {
 			opacity: 0.7;
+			font-variant-numeric: tabular-nums;
+		}
+	}
+
+	&__exif {
+		position: absolute;
+		top: 24px;
+		inset-inline-end: 24px;
+		max-width: 280px;
+		padding: 16px 20px;
+		background: rgba(0, 0, 0, 0.55);
+		color: rgba(255, 255, 255, 0.95);
+		border-radius: 12px;
+		font-size: 0.9rem;
+		backdrop-filter: blur(12px);
+
+		dl {
+			display: grid;
+			grid-template-columns: auto 1fr;
+			gap: 6px 16px;
+			margin: 0;
+		}
+
+		dt {
+			opacity: 0.7;
+			font-weight: 500;
+			text-transform: uppercase;
+			letter-spacing: 0.04em;
+			font-size: 0.7rem;
+			align-self: center;
+		}
+
+		dd {
+			margin: 0;
 			font-variant-numeric: tabular-nums;
 		}
 	}
