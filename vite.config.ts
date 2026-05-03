@@ -56,23 +56,89 @@ export default createAppConfig({
 					inlineWorkboxRuntime: true,
 					sourcemap: false,
 
-					// Define runtime caching rules.
+					// Runtime caching rules. Order matters — the first
+					// pattern that matches wins, so put narrow rules
+					// (segments, status) before broad ones (timeline).
 					runtimeCaching: [
 						{
-						// Match any preview file request
-							urlPattern: /^.*\/apps\/photos\/api\/v1\/preview\/.*/,
-
-							// Apply a strategy.
+							// Preview thumbnails — content-addressed by
+							// `?etag=…`, so safe to cache aggressively.
+							// CacheFirst returns instantly for repeat
+							// scrolls and skips even the SW's own
+							// network probe.
+							urlPattern: /^.*\/apps\/photos\/api\/v1\/(public)?[Pp]review\/.*/,
 							handler: 'CacheFirst',
-
 							options: {
-							// Use a custom cache name.
-								cacheName: 'images',
-
-								// Only cache 10000 images.
+								cacheName: 'photos-previews',
 								expiration: {
 									maxAgeSeconds: 3600 * 24 * 7, // one week
 									maxEntries: 10000,
+								},
+							},
+						},
+						{
+							// HLS transcode segments — also
+							// content-addressed (segment N is immutable
+							// once the manifest references it). Long
+							// TTL because re-fetching is expensive.
+							urlPattern: /^.*\/apps\/photos\/api\/v1\/transcode\/\d+\/seg-\d+\.ts$/,
+							handler: 'CacheFirst',
+							options: {
+								cacheName: 'photos-transcode-segments',
+								expiration: {
+									maxAgeSeconds: 3600 * 24 * 30, // one month
+									maxEntries: 2000,
+								},
+							},
+						},
+						{
+							// Index status — frequent updates while the
+							// migration runs, so NetworkFirst with a
+							// short SW timeout fall-back to cache.
+							urlPattern: /^.*\/apps\/photos\/api\/v1\/index\/status$/,
+							handler: 'NetworkFirst',
+							options: {
+								cacheName: 'photos-index-status',
+								networkTimeoutSeconds: 3,
+								expiration: {
+									maxAgeSeconds: 60,
+									maxEntries: 4,
+								},
+							},
+						},
+						{
+							// Search — interactive, freshness matters
+							// more than offline behaviour. Tiny cache
+							// window so a stale result doesn't linger
+							// when a new photo lands and the query
+							// would now include it.
+							urlPattern: /^.*\/apps\/photos\/api\/v1\/index\/search/,
+							handler: 'NetworkFirst',
+							options: {
+								cacheName: 'photos-search',
+								networkTimeoutSeconds: 4,
+								expiration: {
+									maxAgeSeconds: 30,
+									maxEntries: 50,
+								},
+							},
+						},
+						{
+							// Indexed timeline — the hot path on
+							// navigation between Photos / Videos /
+							// Favorites tabs. StaleWhileRevalidate
+							// returns the previous response instantly
+							// (sub-50ms feel) while the SW kicks off a
+							// network fetch in the background; if the
+							// new response differs the cache updates
+							// for the next visit. Tabs feel "instant".
+							urlPattern: /^.*\/apps\/photos\/api\/v1\/index\/timeline/,
+							handler: 'StaleWhileRevalidate',
+							options: {
+								cacheName: 'photos-timeline',
+								expiration: {
+									maxAgeSeconds: 3600 * 6, // 6 hours
+									maxEntries: 200,
 								},
 							},
 						},
