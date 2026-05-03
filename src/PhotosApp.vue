@@ -9,7 +9,7 @@
 			<template v-if="isTimelineView" #search>
 				<NcTextField
 					class="app-navigation__search"
-					:label="t('photos', 'Search photos by filename')"
+					:label="t('photos', 'Search by name, tag or date (e.g. 2023, May 2023)')"
 					:modelValue="searchTerm"
 					trailingButtonIcon="close"
 					:showTrailingButton="searchTerm.length > 0"

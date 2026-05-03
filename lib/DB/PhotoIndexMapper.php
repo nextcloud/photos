@@ -265,6 +265,168 @@ class PhotoIndexMapper {
 		return $rows;
 	}
 
+	/**
+	 * Indexed search. Returns the same enriched rows as the timeline,
+	 * filtered to those whose:
+	 *   - filecache.name LIKE %term%, OR
+	 *   - the file is tagged with a systemtag whose name LIKE %term%, OR
+	 *   - the photo's `taken_at` falls inside the parsed `dateRange`
+	 *     (the controller parses "2023" / "May 2023" / "2023-05" into
+	 *     a [start, end) unix-second range; pass null to skip).
+	 *
+	 * `term` is escaped for LIKE wildcards by the caller. The systemtag
+	 * tables aren't joined in `getEnrichedTimelineForUser` because most
+	 * timeline queries don't need them — pulling them in here keeps the
+	 * common timeline path lean.
+	 *
+	 * Same `homeStorageId` / `kind` semantics as the timeline.
+	 *
+	 * @param array{start: int, end: int}|null $dateRange
+	 * @return list<array{
+	 *   file_id: int,
+	 *   mimetype: string,
+	 *   mtime: int,
+	 *   taken_at: int,
+	 *   size: int,
+	 *   path: string,
+	 *   name: string,
+	 *   etag: string,
+	 *   permissions: int,
+	 *   storage_id: int,
+	 *   favorite: int,
+	 * }>
+	 */
+	public function searchUserTimeline(
+		string $userId,
+		int $homeStorageId,
+		string $term,
+		?array $dateRange,
+		?int $beforeDate,
+		int $limit,
+		?string $kind = null,
+	): array {
+		// Escape SQL LIKE wildcards in the user-supplied term so a
+		// term containing `%` or `_` doesn't match more than expected.
+		$escaped = addcslashes($term, '\\_%');
+		$pattern = '%' . $escaped . '%';
+
+		$qb = $this->connection->getQueryBuilder();
+		$qb->select(
+			'idx.file_id',
+			'idx.mimetype',
+			'idx.mtime',
+			'idx.taken_at',
+			'idx.size',
+			'fc.path',
+			'fc.name',
+			'fc.etag',
+			'fc.permissions',
+			'fc.storage',
+			$qb->func()->count('tag.id', 'favorite_count'),
+		)
+			->from('photos_index', 'idx')
+			->leftJoin('idx', 'filecache', 'fc', $qb->expr()->eq('idx.file_id', 'fc.fileid'))
+			// Favorites — same join as the timeline path.
+			->leftJoin(
+				'fc',
+				'vcategory_to_object',
+				'tagmap',
+				$qb->expr()->eq('fc.fileid', 'tagmap.objid'),
+			)
+			->leftJoin(
+				'tagmap',
+				'vcategory',
+				'tag',
+				$qb->expr()->andX(
+					$qb->expr()->eq('tagmap.categoryid', 'tag.id'),
+					$qb->expr()->eq('tag.type', $qb->createNamedParameter('files')),
+					$qb->expr()->eq('tag.uid', $qb->createNamedParameter($userId)),
+					$qb->expr()->eq('tag.category', $qb->createNamedParameter('_$!<Favorite>!$_')),
+				),
+			)
+			// System tags. Two joins: object→tag membership, then the
+			// tag itself for the name match. Left-joined so files
+			// without any tag still surface (matched on name / date).
+			->leftJoin(
+				'fc',
+				'systemtag_object_mapping',
+				'sttom',
+				$qb->expr()->andX(
+					$qb->expr()->eq('fc.fileid', $qb->expr()->castColumn('sttom.objectid', IQueryBuilder::PARAM_INT)),
+					$qb->expr()->eq('sttom.objecttype', $qb->createNamedParameter('files')),
+				),
+			)
+			->leftJoin(
+				'sttom',
+				'systemtag',
+				'sttag',
+				$qb->expr()->eq('sttom.systemtagid', 'sttag.id'),
+			);
+
+		$where = $qb->expr()->orX(
+			$qb->expr()->iLike('fc.name', $qb->createNamedParameter($pattern)),
+			$qb->expr()->iLike('sttag.name', $qb->createNamedParameter($pattern)),
+		);
+		if ($dateRange !== null) {
+			$where->add($qb->expr()->andX(
+				$qb->expr()->gte('idx.taken_at', $qb->createNamedParameter($dateRange['start'], IQueryBuilder::PARAM_INT)),
+				$qb->expr()->lt('idx.taken_at', $qb->createNamedParameter($dateRange['end'], IQueryBuilder::PARAM_INT)),
+			));
+		}
+
+		$qb->where($qb->expr()->eq('idx.user_id', $qb->createNamedParameter($userId)))
+			->andWhere($qb->expr()->eq('fc.storage', $qb->createNamedParameter($homeStorageId, IQueryBuilder::PARAM_INT)))
+			->andWhere($where)
+			->groupBy(
+				'idx.file_id',
+				'idx.mimetype',
+				'idx.mtime',
+				'idx.taken_at',
+				'idx.size',
+				'fc.path',
+				'fc.name',
+				'fc.etag',
+				'fc.permissions',
+				'fc.storage',
+			)
+			->orderBy('idx.taken_at', 'DESC')
+			->addOrderBy('idx.file_id', 'DESC')
+			->setMaxResults($limit);
+
+		if ($beforeDate !== null) {
+			$qb->andWhere($qb->expr()->lt('idx.taken_at', $qb->createNamedParameter($beforeDate, IQueryBuilder::PARAM_INT)));
+		}
+
+		if ($kind === 'images') {
+			$qb->andWhere($qb->expr()->eq('idx.is_video', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		} elseif ($kind === 'videos') {
+			$qb->andWhere($qb->expr()->eq('idx.is_video', $qb->createNamedParameter(1, IQueryBuilder::PARAM_INT)));
+		}
+
+		$result = $qb->executeQuery();
+		$rows = [];
+		while ($row = $result->fetch()) {
+			if ($row['path'] === null) {
+				continue;
+			}
+			$rows[] = [
+				'file_id' => (int)$row['file_id'],
+				'mimetype' => (string)$row['mimetype'],
+				'mtime' => (int)$row['mtime'],
+				'taken_at' => (int)$row['taken_at'],
+				'size' => (int)$row['size'],
+				'path' => (string)$row['path'],
+				'name' => (string)$row['name'],
+				'etag' => (string)$row['etag'],
+				'permissions' => (int)$row['permissions'],
+				'storage_id' => (int)$row['storage'],
+				'favorite' => ((int)($row['favorite_count'] ?? 0)) > 0 ? 1 : 0,
+			];
+		}
+		$result->closeCursor();
+		return $rows;
+	}
+
 	public function countForUser(string $userId): int {
 		$qb = $this->connection->getQueryBuilder();
 		$qb->select($qb->func()->count('*', 'cnt'))

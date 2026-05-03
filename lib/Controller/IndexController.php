@@ -129,69 +129,182 @@ class IndexController extends Controller {
 		$items = [];
 		foreach ($rows as $row) {
 			$metadata = $metadataByFileId[$row['file_id']] ?? null;
-
-			// All four keys may be absent (older files, non-images, or
-			// metadata not yet populated). The frontend tolerates null
-			// — File.attributes just won't carry the corresponding
-			// entry.
-			$exif = null;
-			$ifd0 = null;
-			$gps = null;
-			$place = null;
-			$photoSize = null;
-			$takenAtMeta = null;
-
-			if ($metadata !== null) {
-				$exif = $metadata->hasKey(ExifMetadataProvider::METADATA_KEY_EXIF)
-					? $metadata->getArray(ExifMetadataProvider::METADATA_KEY_EXIF)
-					: null;
-				$ifd0 = $metadata->hasKey(ExifMetadataProvider::METADATA_KEY_IFD0)
-					? $metadata->getArray(ExifMetadataProvider::METADATA_KEY_IFD0)
-					: null;
-				$gps = $metadata->hasKey(ExifMetadataProvider::METADATA_KEY_GPS)
-					? $metadata->getArray(ExifMetadataProvider::METADATA_KEY_GPS)
-					: null;
-				$place = $metadata->hasKey(PlaceMetadataProvider::METADATA_KEY)
-					? $metadata->getString(PlaceMetadataProvider::METADATA_KEY)
-					: null;
-				// SizeMetadataProvider stores under the literal
-				// `photos-size` (no shared constant). Hard-coding the
-				// key here matches the listener directly.
-				$photoSize = $metadata->hasKey('photos-size')
-					? $metadata->getArray('photos-size')
-					: null;
-				$takenAtMeta = $metadata->hasKey(OriginalDateTimeMetadataProvider::METADATA_KEY)
-					? $metadata->getInt(OriginalDateTimeMetadataProvider::METADATA_KEY)
-					: null;
-			}
-
-			$items[] = [
-				'fileId' => $row['file_id'],
-				'name' => $row['name'],
-				'path' => $row['path'],
-				'mimetype' => $row['mimetype'],
-				'size' => $row['size'],
-				'mtime' => $row['mtime'],
-				'takenAt' => $takenAtMeta ?? $row['taken_at'],
-				'etag' => $row['etag'],
-				'permissions' => $row['permissions'],
-				'favorite' => $row['favorite'],
-				'ownerId' => $this->userId,
-				'metadata' => [
-					'photos-exif' => $exif,
-					'photos-ifd0' => $ifd0,
-					'photos-gps' => $gps,
-					'photos-place' => $place,
-					'photos-size' => $photoSize,
-					'photos-original_date_time' => $takenAtMeta,
-				],
-			];
+			$items[] = $this->composeItem($row, $metadata);
 		}
 
 		return new JSONResponse([
 			'items' => $items,
 			'nextBefore' => $items === [] ? null : end($items)['takenAt'],
 		]);
+	}
+
+	/**
+	 * Indexed search — same enriched-row response as `timeline()` but
+	 * filtered to rows whose filename contains `q`, OR are tagged
+	 * with a system tag whose name contains `q`, OR were captured in
+	 * a date range parsed out of `q` ("2023" / "May 2023" / "2023-05").
+	 *
+	 * Bypasses the DAV SEARCH backend entirely — useful when DAV
+	 * SEARCH is misbehaving (e.g. NC34 dev builds with strict lazy
+	 * AppConfig validation throwing inside `getKnownMetadata()`),
+	 * and faster anyway because we avoid parsing the SearchDAV body.
+	 */
+	#[NoAdminRequired]
+	public function search(string $q, ?int $before = null, int $limit = 100, ?string $kind = null): JSONResponse {
+		$query = trim($q);
+		if ($query === '') {
+			return new JSONResponse(['items' => [], 'nextBefore' => null]);
+		}
+
+		$limit = max(1, min($limit, 500));
+		$normalisedKind = ($kind === 'images' || $kind === 'videos') ? $kind : null;
+		$dateRange = $this->parseDateRange($query);
+
+		$rows = $this->mapper->searchUserTimeline(
+			$this->userId,
+			$this->getHomeStorageId(),
+			$query,
+			$dateRange,
+			$before,
+			$limit,
+			$normalisedKind,
+		);
+
+		// Same metadata enrichment as the timeline path so the client
+		// can reuse the same response decoder.
+		$fileIds = array_map(static fn (array $r) => $r['file_id'], $rows);
+		$metadataByFileId = [];
+		if ($fileIds !== []) {
+			try {
+				$metadataByFileId = $this->metadataManager->getMetadataForFiles($fileIds);
+			} catch (\Throwable) {
+				$metadataByFileId = [];
+			}
+		}
+
+		$items = [];
+		foreach ($rows as $row) {
+			$metadata = $metadataByFileId[$row['file_id']] ?? null;
+			$items[] = $this->composeItem($row, $metadata);
+		}
+
+		return new JSONResponse([
+			'items' => $items,
+			'nextBefore' => $items === [] ? null : end($items)['takenAt'],
+		]);
+	}
+
+	/**
+	 * Year ("2023"), year-month ("2023-05" / "2023-5" / "5/2023") or
+	 * named-month-year ("May 2023" / "Mai 2023") → [start, end) unix
+	 * seconds. Returns null when the term doesn't look like a date.
+	 *
+	 * Tight grammar on purpose so a generic word like "dog" doesn't
+	 * accidentally match a date and OR in irrelevant rows.
+	 *
+	 * @return array{start: int, end: int}|null
+	 */
+	private function parseDateRange(string $term): ?array {
+		// Year-only, 1900..2100.
+		if (preg_match('/^(\d{4})$/', $term, $m) === 1) {
+			$year = (int)$m[1];
+			if ($year < 1900 || $year > 2100) {
+				return null;
+			}
+			$start = (new \DateTimeImmutable("$year-01-01T00:00:00Z"))->getTimestamp();
+			$end = (new \DateTimeImmutable(($year + 1) . '-01-01T00:00:00Z'))->getTimestamp();
+			return ['start' => $start, 'end' => $end];
+		}
+
+		// Year-month numeric variants.
+		$numericFormats = ['Y-m', 'Y-n', 'n/Y', 'm/Y'];
+		foreach ($numericFormats as $format) {
+			$dt = \DateTimeImmutable::createFromFormat('!' . $format, $term, new \DateTimeZone('UTC'));
+			if ($dt !== false) {
+				$start = $dt->getTimestamp();
+				$end = $dt->modify('+1 month')->getTimestamp();
+				return ['start' => $start, 'end' => $end];
+			}
+		}
+
+		// Named-month variants. PHP's `F Y` / `M Y` parse English month
+		// names; locale-specific names need an explicit IntlDateFormatter
+		// which is more setup than the value justifies for now.
+		$namedFormats = ['F Y', 'M Y'];
+		foreach ($namedFormats as $format) {
+			$dt = \DateTimeImmutable::createFromFormat('!' . $format, $term, new \DateTimeZone('UTC'));
+			if ($dt !== false) {
+				$start = $dt->getTimestamp();
+				$end = $dt->modify('+1 month')->getTimestamp();
+				return ['start' => $start, 'end' => $end];
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Compose the JSON shape `timeline()` returns for one row +
+	 * metadata pair. Extracted so `search()` can reuse the exact
+	 * same response decoder client-side.
+	 *
+	 * @param array{
+	 *   file_id: int, name: string, path: string, mimetype: string, size: int,
+	 *   mtime: int, taken_at: int, etag: string, permissions: int, favorite: int,
+	 * } $row
+	 * @param \OCP\FilesMetadata\Model\IFilesMetadata|null $metadata
+	 * @return array<string, mixed>
+	 */
+	private function composeItem(array $row, $metadata): array {
+		$exif = null;
+		$ifd0 = null;
+		$gps = null;
+		$place = null;
+		$photoSize = null;
+		$takenAtMeta = null;
+
+		if ($metadata !== null) {
+			$exif = $metadata->hasKey(ExifMetadataProvider::METADATA_KEY_EXIF)
+				? $metadata->getArray(ExifMetadataProvider::METADATA_KEY_EXIF)
+				: null;
+			$ifd0 = $metadata->hasKey(ExifMetadataProvider::METADATA_KEY_IFD0)
+				? $metadata->getArray(ExifMetadataProvider::METADATA_KEY_IFD0)
+				: null;
+			$gps = $metadata->hasKey(ExifMetadataProvider::METADATA_KEY_GPS)
+				? $metadata->getArray(ExifMetadataProvider::METADATA_KEY_GPS)
+				: null;
+			$place = $metadata->hasKey(PlaceMetadataProvider::METADATA_KEY)
+				? $metadata->getString(PlaceMetadataProvider::METADATA_KEY)
+				: null;
+			$photoSize = $metadata->hasKey('photos-size')
+				? $metadata->getArray('photos-size')
+				: null;
+			$takenAtMeta = $metadata->hasKey(OriginalDateTimeMetadataProvider::METADATA_KEY)
+				? $metadata->getInt(OriginalDateTimeMetadataProvider::METADATA_KEY)
+				: null;
+		}
+
+		return [
+			'fileId' => $row['file_id'],
+			'name' => $row['name'],
+			'path' => $row['path'],
+			'mimetype' => $row['mimetype'],
+			'size' => $row['size'],
+			'mtime' => $row['mtime'],
+			'takenAt' => $takenAtMeta ?? $row['taken_at'],
+			'etag' => $row['etag'],
+			'permissions' => $row['permissions'],
+			'favorite' => $row['favorite'],
+			'ownerId' => $this->userId,
+			'metadata' => [
+				'photos-exif' => $exif,
+				'photos-ifd0' => $ifd0,
+				'photos-gps' => $gps,
+				'photos-place' => $place,
+				'photos-size' => $photoSize,
+				'photos-original_date_time' => $takenAtMeta,
+			],
+		];
 	}
 
 	/**
