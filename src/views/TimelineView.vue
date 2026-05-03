@@ -215,6 +215,7 @@ import type { Album } from '../store/albums.ts'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
+import { generateUrl } from '@nextcloud/router'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { storeToRefs } from 'pinia'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
@@ -453,14 +454,21 @@ export default {
 			this.showAlbumPicker = true
 		},
 
-		onRequestShare(file: { path?: string }) {
-			// The Files sidebar already exposes a Sharing tab; opening
-			// it on the file is the cheapest way to surface NC's full
-			// share UI without re-implementing it here.
-			const path = typeof file.path === 'string' ? file.path : ''
-			if (window.OCA?.Files?.Sidebar?.open !== undefined && path !== '') {
-				window.OCA.Files.Sidebar.open(path)
+		onRequestShare(file: { fileid: number }) {
+			// The Files app's details sidebar is where NC's share UI
+			// lives (Sharing tab: link shares, share-with-user, email,
+			// expiry, password, public-link options). The legacy
+			// `OCA.Files.Sidebar.open(path)` we used to call was
+			// removed in NC34, and the modern `getSidebar()` API needs
+			// a Files-app navigation/active-folder context that the
+			// photos app doesn't set up. So we navigate to the Files
+			// app on the photo with `opendetails=true`, which lands the
+			// user directly on the file with the sidebar already open.
+			if (typeof file.fileid !== 'number' || !Number.isFinite(file.fileid)) {
+				return
 			}
+			const url = generateUrl('/apps/files/files/{fileid}?opendetails=true', { fileid: file.fileid })
+			window.location.href = url
 		},
 
 		async onRequestDelete(file: { fileid: number }) {
