@@ -263,6 +263,7 @@ import FilesByMonthMixin from '../mixins/FilesByMonthMixin.ts'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.ts'
 import { allMimes } from '../services/AllowedMimes.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
+import burstStore from '../store/bursts.ts'
 import useFilterStore from '../store/filters.ts'
 import { configChangedEvent } from '../store/userConfig.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.ts'
@@ -463,7 +464,9 @@ export default {
 			// through ONLY the burst (instead of jumping out into the
 			// full timeline). Singletons fall through to the previous
 			// behaviour: prev/next walks every tile in the grid.
-			const stack = this.bursts.getStack(fileId.toString())
+			// Pinia singleton — see FilesByMonthMixin for the
+			// rationale on not relying on this.bursts.
+			const stack = burstStore().getStack(fileId.toString())
 			const listIds = stack !== undefined
 				? stack.memberIds
 				: Object.values(this.fileIdsByMonth).flat()

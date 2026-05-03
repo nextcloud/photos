@@ -185,13 +185,6 @@ export default {
 
 	emits: ['click', 'select-toggled', 'request-add-to-album', 'request-share', 'request-delete'],
 
-	setup() {
-		// Read-only handle to the burst store. The mixin populates it;
-		// FileComponent only consumes.
-		const bursts = burstStore()
-		return { bursts }
-	},
-
 	data() {
 		return {
 			initialized: false,
@@ -239,10 +232,12 @@ export default {
 
 		// True iff this file is the leader of a burst stack (i.e. has
 		// other photos folded into it). Drives the stacked-card visual
-		// + count badge + the on-click slideshow seeding.
+		// + count badge + the on-click slideshow seeding. Reaches for
+		// the Pinia singleton directly (see FilesByMonthMixin for the
+		// rationale — mixin / setup-return ordering isn't reliable).
 		stack() {
 			const id = this.file.fileid?.toString()
-			return id !== undefined ? this.bursts.getStack(id) : undefined
+			return id !== undefined ? burstStore().getStack(id) : undefined
 		},
 
 		isStack(): boolean {

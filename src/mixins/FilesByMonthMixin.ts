@@ -9,17 +9,14 @@ import { defineComponent } from 'vue'
 import burstStore from '../store/bursts.ts'
 import { applyBurstStacks, clusterBursts } from '../utils/burstClustering.ts'
 
+// Pinia stores are singletons — calling the use* function from
+// anywhere returns the same instance. We reach for it directly inside
+// computed / methods rather than going through a `setup() return`,
+// because Vue 3 doesn't reliably hoist a mixin's setup-return values
+// onto the consuming component's `this`.
+
 export default defineComponent({
 	name: 'FilesByMonthMixin',
-
-	setup() {
-		// Pinia store the mixin pushes the per-month burst clusters
-		// into. FileComponent reads the same store to render the
-		// stacked-card decoration; TimelineView reads it to seed the
-		// slideshow with all stack members on click.
-		const bursts = burstStore()
-		return { bursts }
-	},
 
 	computed: {
 		// Raw grouping by month, before burst clustering. Kept as an
@@ -63,7 +60,7 @@ export default defineComponent({
 			// rest of the UI sees it. Done in the computed because
 			// Vuex/Vue 3 fires this on `fetchedFileIds` changes — same
 			// reactivity surface as the consumers.
-			this.bursts.setStacks(allStacks)
+			burstStore().setStacks(allStacks)
 
 			return result
 		},
