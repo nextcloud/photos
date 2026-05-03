@@ -4,30 +4,45 @@
 -->
 
 <template>
-	<a
-		:class="{
-			'file--cropped': croppedLayout,
-		}"
-		class="file"
-		:href="item.source"
-		:aria-label="ariaLabel"
-		@click.prevent="openViewer">
-		<div v-if="item.mime.includes('video') && item.hasPreview" class="icon-video-white" />
+	<div class="file-legacy-wrap">
+		<a
+			:class="{
+				'file--cropped': croppedLayout,
+			}"
+			class="file"
+			:href="item.source"
+			:aria-label="ariaLabel"
+			@click.prevent="openViewer">
+			<div v-if="item.mime.includes('video') && item.hasPreview" class="icon-video-white" />
 
-		<img
-			v-if="!error"
-			ref="img"
-			:key="`${item.basename}-img`"
-			:src="src"
-			:alt="item.basename"
-			:aria-describedby="ariaUuid"
-			@load="onLoad"
-			@error="onError">
+			<img
+				v-if="!error"
+				ref="img"
+				:key="`${item.basename}-img`"
+				:src="src"
+				:alt="item.basename"
+				:aria-describedby="ariaUuid"
+				@load="onLoad"
+				@error="onError">
 
-		<!-- image name and cover -->
-		<p :id="ariaUuid" class="hidden-visually">{{ item.basename }}</p>
-		<div class="cover" role="none" />
-	</a>
+			<!-- image name and cover -->
+			<p :id="ariaUuid" class="hidden-visually">{{ item.basename }}</p>
+			<div class="cover" role="none" />
+		</a>
+
+		<!--
+			Per-photo overflow menu — same component the timeline uses.
+			Accepts the FoldersNode shape via the ActionMenuFile
+			interface; missing EXIF / favorite attributes degrade
+			gracefully (View metadata shows just the filename, the
+			favorite toggle still works because it goes through the
+			store's PROPPATCH which only needs the fileid).
+		-->
+		<PhotoActionsMenu
+			class="file-legacy-wrap__actions"
+			:file="actionFile"
+			@requestDelete="onRequestDelete" />
+	</div>
 </template>
 
 <script lang='ts'>
@@ -36,11 +51,18 @@ import type { FoldersNode } from '../services/FolderContent.ts'
 
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
+import PhotoActionsMenu from './PhotoActionsMenu.vue'
 import { legacyToViewerFileInfo } from '../utils/fileUtils.ts'
 
 export default {
 	name: 'FileLegacy',
+
+	components: {
+		PhotoActionsMenu,
+	},
+
 	inheritAttrs: false,
+
 	props: {
 		item: {
 			type: Object as PropType<FoldersNode>,
@@ -53,6 +75,8 @@ export default {
 		},
 	},
 
+	emits: ['delete-requested'],
+
 	data() {
 		return {
 			loaded: false,
@@ -63,6 +87,27 @@ export default {
 	computed: {
 		ariaUuid() {
 			return `image-${this.item.fileid}`
+		},
+
+		// Adapter: PhotoActionsMenu's `file` prop accepts the
+		// ActionMenuFile interface (fileid, basename, optional
+		// path/attributes). FoldersNode satisfies it directly; we just
+		// forward.
+		actionFile() {
+			return {
+				fileid: this.item.fileid,
+				basename: this.item.basename,
+				path: this.item.filename,
+				// Synthesise an attributes bag with the favorite bit
+				// the menu's "Add to favorites / Remove from favorites"
+				// logic reads. FoldersNode doesn't track this directly
+				// (folder listings don't include the oc:favorite prop)
+				// so the toggle starts from "not favorited" — toggling
+				// flips it on the server regardless. Acceptable for
+				// the folder view since users don't frequently
+				// favorite from there.
+				attributes: { favorite: 0 },
+			}
 		},
 
 		ariaLabel() {
@@ -102,6 +147,15 @@ export default {
 			})
 		},
 
+		// Forward the menu's delete request to the parent (FoldersView).
+		// We don't dispatch the photos store action here because the
+		// folder view doesn't use that store — it has its own
+		// folder-content cache that needs invalidating after a delete.
+		// Wiring is parent's responsibility.
+		onRequestDelete() {
+			this.$emit('delete-requested', this.item)
+		},
+
 		/** When the image is fully loaded by browser we remove the placeholder */
 		onLoad() {
 			this.loaded = true
@@ -122,6 +176,29 @@ export default {
 
 .transition-group {
 	display: contents;
+}
+
+// Wrapper around the legacy <a class="file"> so PhotoActionsMenu
+// (absolutely positioned) can pin to the same coordinate space.
+// Inherits sizing from the parent grid so the underlying <a> still
+// fills the tile.
+.file-legacy-wrap {
+	position: relative;
+	width: 100%;
+	height: 100%;
+
+	&__actions {
+		// Reveal on hover/focus, mirroring how FileComponent's menu
+		// behaves — keeps the affordance discoverable without
+		// permanently cluttering the tile.
+		opacity: 0;
+		transition: opacity 160ms ease-out;
+	}
+
+	&:hover &__actions,
+	&__actions:focus-within {
+		opacity: 1;
+	}
 }
 
 .icon-video-white {
