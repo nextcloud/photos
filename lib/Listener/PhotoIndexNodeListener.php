@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Listener;
 
+use OCA\Photos\DB\PhotoPreviewWarmupMapper;
 use OCA\Photos\DB\PhotoTranscodeMapper;
 use OCA\Photos\Service\PhotoIndexService;
 use OCA\Photos\Service\PhotoTranscodeService;
@@ -49,6 +50,7 @@ class PhotoIndexNodeListener implements IEventListener {
 		private readonly PhotoIndexService $indexService,
 		private readonly PhotoTranscodeService $transcodeService,
 		private readonly PhotoTranscodeMapper $transcodeMapper,
+		private readonly PhotoPreviewWarmupMapper $warmupMapper,
 		private readonly IUserMountCache $userMountCache,
 		private readonly ITimeFactory $time,
 		private readonly LoggerInterface $logger,
@@ -108,6 +110,12 @@ class PhotoIndexNodeListener implements IEventListener {
 		if ($this->transcodeService->shouldQueue($node)) {
 			$this->transcodeMapper->markPending($node->getId(), $this->time->getTime());
 		}
+
+		// Queue every photo/video for preview-cache warming so the
+		// first scroll doesn't pay the on-demand `IPreview::getPreview`
+		// cost. Idempotent — `markPending` is a no-op for files that
+		// are already pending / warmed.
+		$this->warmupMapper->markPending($node->getId(), $this->time->getTime());
 	}
 
 	private function onDeleted(Node $node): void {
@@ -118,5 +126,9 @@ class PhotoIndexNodeListener implements IEventListener {
 		// Wipe any cached transcode segments — drops the row + the
 		// on-disk segments so the cache doesn't outlive the file.
 		$this->transcodeService->deleteForFileId($node->getId());
+		// Drop the warmup queue row. NC's preview cache itself is
+		// cleaned by NC's own NodeDeleted hooks; this just clears
+		// our bookkeeping.
+		$this->warmupMapper->deleteByFileId($node->getId());
 	}
 }
