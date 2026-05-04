@@ -140,6 +140,12 @@ return [
 		['name' => 'metadataEdit#put', 'url' => '/api/v1/metadata/{fileId}', 'verb' => 'PUT',
 			'requirements' => ['fileId' => '\d+']],
 
+		// Emoji reactions on photos in (shared or owned) albums.
+		['name' => 'reactions#get', 'url' => '/api/v1/albums/{albumId}/files/{fileId}/reactions', 'verb' => 'GET',
+			'requirements' => ['albumId' => '\d+', 'fileId' => '\d+']],
+		['name' => 'reactions#toggle', 'url' => '/api/v1/albums/{albumId}/files/{fileId}/reactions', 'verb' => 'POST',
+			'requirements' => ['albumId' => '\d+', 'fileId' => '\d+']],
+
 		[
 			'name' => 'publicPreview#index',
 			'url' => '/api/v1/publicPreview/{fileId}',

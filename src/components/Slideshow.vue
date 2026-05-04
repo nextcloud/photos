@@ -43,6 +43,19 @@
 				</div>
 			</div>
 
+			<!-- Reaction bar — only shown when this slideshow was
+				opened from inside an album (caller passes
+				`albumId`). Reactions are an album-scoped feature so
+				they have a recipient list. -->
+			<div
+				v-if="albumId > 0 && currentPhoto"
+				class="slideshow__reactions">
+				<ReactionBar
+					:key="`react-${currentPhoto.fileid}`"
+					:albumId="albumId"
+					:fileId="Number(currentPhoto.fileid)" />
+			</div>
+
 			<!--
 				EXIF overlay. Toggled with the `i` key; renders nothing
 				when the current photo has no EXIF data (so we don't
@@ -113,6 +126,7 @@ import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import PauseIcon from 'vue-material-design-icons/Pause.vue'
 import PlayIcon from 'vue-material-design-icons/Play.vue'
+import ReactionBar from './ReactionBar.vue'
 
 export default defineComponent({
 	name: 'PhotoSlideshow',
@@ -124,6 +138,7 @@ export default defineComponent({
 		NcButton,
 		PauseIcon,
 		PlayIcon,
+		ReactionBar,
 	},
 
 	props: {
@@ -142,6 +157,15 @@ export default defineComponent({
 
 		// Index of the photo to start with.
 		initialIndex: {
+			type: Number,
+			default: 0,
+		},
+
+		// Optional: when the slideshow is opened from inside a
+		// shared / collaborative album, pass the albumId so the
+		// reaction bar surfaces. Empty / 0 → no reactions UI
+		// (album-only feature).
+		albumId: {
 			type: Number,
 			default: 0,
 		},
@@ -413,6 +437,14 @@ export default defineComponent({
 		object-fit: contain;
 		// Subtle fade as photos swap.
 		animation: slideshow-fade-in 350ms ease-out;
+	}
+
+	&__reactions {
+		position: absolute;
+		bottom: 96px; // sit above the prev/play/next bar
+		left: 50%;
+		transform: translateX(-50%);
+		z-index: 5;
 	}
 
 	&__caption {
