@@ -21,6 +21,7 @@
 			aria-modal="true"
 			:aria-label="t('photos', 'Slideshow')"
 			tabindex="-1"
+			:style="chromeStyle"
 			@keydown.esc.prevent="close"
 			@keydown.left.prevent="prev"
 			@keydown.right.prevent="next"
@@ -157,6 +158,15 @@ export default defineComponent({
 			// a class instance (Node typings carry over to some bundlers).
 			timer: null as ReturnType<typeof setInterval> | null,
 			exifVisible: false,
+			// Dominant-colour cache, keyed by fileid. Decoded once per
+			// blurhash and reused on every re-show — sampling the
+			// 32×32 decoded canvas is ~1 ms but pre-allocating a Map
+			// keeps the slide transition hitch-free.
+			dominantColourCache: new Map<string, string>() as Map<string, string>,
+			// Currently-applied chrome colour (CSS rgb string). Updated
+			// from the cache when the photo changes; transitions via
+			// the CSS `--slideshow-chrome` variable.
+			chromeColour: '#000',
 		}
 	},
 
@@ -170,6 +180,16 @@ export default defineComponent({
 		// from the server when `nc:metadata-photos-exif` /
 		// `nc:metadata-photos-ifd0` are registered in main.ts —
 		// otherwise this gracefully returns [] and the overlay hides.
+		// CSS custom properties drive the chrome's colour theme;
+		// transitioning the variable is much smoother than swapping
+		// inline style strings (no layout pass, the renderer just
+		// tweens the gradient stops).
+		chromeStyle(): Record<string, string> {
+			return {
+				'--slideshow-chrome': this.chromeColour,
+			}
+		},
+
 		exifLines(): { label: string, value: string }[] {
 			if (this.currentPhoto === undefined) {
 				return []
@@ -209,6 +229,23 @@ export default defineComponent({
 		},
 	},
 
+	watch: {
+		// Refresh the chrome colour as the user moves through photos.
+		// The decode is async so we don't block the slide transition.
+		currentPhoto: {
+			immediate: true,
+			handler(photo: PhotoFile | undefined) {
+				if (photo === undefined) {
+					return
+				}
+				this.refreshChromeColour(photo).catch(() => {
+					// Decoding the blurhash can fail for malformed
+					// data; we just stay on whatever colour we had.
+				})
+			},
+		},
+	},
+
 	mounted() {
 		this.startTimer()
 		// Focus the dialog so keyboard shortcuts work without first
@@ -228,6 +265,67 @@ export default defineComponent({
 		largeUrl(photo: PhotoFile): string {
 			const etag = photo.attributes.etag.replace(/&quot;/g, '')
 			return generateUrl(`/apps/photos/api/v1/preview/${photo.fileid}?etag=${etag}&x=2048&y=2048`)
+		},
+
+		// Decode the blurhash to a 32×32 canvas, average the centre
+		// pixels, and store the result as the chrome colour. Blurhash
+		// is already on disk for every indexed photo and decoding it
+		// is ~1 ms, so this is a cheap way to get a representative
+		// dominant tone without round-tripping the full preview.
+		// Falls back silently when the photo has no blurhash (the
+		// chrome stays whatever colour it was).
+		async refreshChromeColour(photo: PhotoFile): Promise<void> {
+			const id = photo.fileid?.toString()
+			if (id !== undefined) {
+				const cached = this.dominantColourCache.get(id)
+				if (cached !== undefined) {
+					this.chromeColour = cached
+					return
+				}
+			}
+
+			const blurhash = (photo.attributes['metadata-blurhash'] ?? '') as string
+			if (blurhash === '') {
+				return
+			}
+
+			// `decode()` is the same import FileComponent uses for the
+			// tile-level blurhash render; reusing it here keeps the
+			// dependency footprint small.
+			const { decode } = await import('blurhash')
+			const size = 32
+			const pixels = decode(blurhash, size, size)
+
+			// Sample the centre 16×16 region so frame edges (often
+			// dark vignetting) don't bias the colour. Average RGB,
+			// drop alpha.
+			let r = 0
+			let g = 0
+			let b = 0
+			let count = 0
+			for (let y = 8; y < 24; y++) {
+				for (let x = 8; x < 24; x++) {
+					const idx = (y * size + x) * 4
+					r += pixels[idx]
+					g += pixels[idx + 1]
+					b += pixels[idx + 2]
+					count++
+				}
+			}
+			r = Math.round(r / count)
+			g = Math.round(g / count)
+			b = Math.round(b / count)
+
+			// Pull the brightness down a notch so the chrome doesn't
+			// fight the photo for visual weight — we want a
+			// background that *whispers* the colour, not shouts it.
+			const dim = (c: number) => Math.round(c * 0.55)
+			const colour = `rgb(${dim(r)}, ${dim(g)}, ${dim(b)})`
+
+			if (id !== undefined) {
+				this.dominantColourCache.set(id, colour)
+			}
+			this.chromeColour = colour
 		},
 
 		next() {
@@ -293,7 +391,20 @@ export default defineComponent({
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: #000;
+	// Colour-themed chrome: the background fades to the dominant
+	// colour of the current photo (see `refreshChromeColour`).
+	// Linear gradient anchors the dominant tone in the middle and
+	// fades to black at the corners so the photo always reads
+	// against deep contrast at its edges. The CSS variable is
+	// updated by the watcher; the 800ms transition makes the swap
+	// feel like a slow exhale rather than a flicker.
+	background:
+		radial-gradient(
+			ellipse at center,
+			var(--slideshow-chrome, #000) 0%,
+			#000 90%
+		);
+	transition: background 800ms ease-out;
 	outline: none;
 
 	&__photo {
