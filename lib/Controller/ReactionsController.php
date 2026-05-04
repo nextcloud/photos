@@ -11,6 +11,7 @@ namespace OCA\Photos\Controller;
 
 use OCA\Photos\AppInfo\Application;
 use OCA\Photos\Album\AlbumMapper;
+use OCA\Photos\DB\PhotoActivityMapper;
 use OCA\Photos\DB\PhotoReactionMapper;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
@@ -47,6 +48,7 @@ class ReactionsController extends Controller {
 	public function __construct(
 		IRequest $request,
 		private readonly PhotoReactionMapper $mapper,
+		private readonly PhotoActivityMapper $activityMapper,
 		private readonly AlbumMapper $albumMapper,
 		private readonly ITimeFactory $time,
 		private readonly string $userId,
@@ -97,7 +99,26 @@ class ReactionsController extends Controller {
 			return new JSONResponse(['error' => 'unsupported emoji'], Http::STATUS_UNPROCESSABLE_ENTITY);
 		}
 
-		$added = $this->mapper->toggle($albumId, $fileId, $this->userId, $emoji, $this->time->getTime());
+		$now = $this->time->getTime();
+		$added = $this->mapper->toggle($albumId, $fileId, $this->userId, $emoji, $now);
+
+		// Log to the activity feed so the album sidebar can render
+		// "Bob reacted ❤️ to IMG_001". Failure to log is non-fatal —
+		// the reaction itself already persisted.
+		try {
+			$this->activityMapper->log(
+				$albumId,
+				$this->userId,
+				$added ? PhotoActivityMapper::ACTION_REACT_ADD : PhotoActivityMapper::ACTION_REACT_REMOVE,
+				(string)$fileId,
+				PhotoActivityMapper::KIND_FILE,
+				['emoji' => $emoji],
+				$now,
+			);
+		} catch (\Throwable) {
+			// swallowed
+		}
+
 		return new JSONResponse(['added' => $added]);
 	}
 

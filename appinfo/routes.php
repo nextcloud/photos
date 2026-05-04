@@ -146,6 +146,10 @@ return [
 		['name' => 'reactions#toggle', 'url' => '/api/v1/albums/{albumId}/files/{fileId}/reactions', 'verb' => 'POST',
 			'requirements' => ['albumId' => '\d+', 'fileId' => '\d+']],
 
+		// Read-only activity feed for an album.
+		['name' => 'activity#get', 'url' => '/api/v1/albums/{albumId}/activity', 'verb' => 'GET',
+			'requirements' => ['albumId' => '\d+']],
+
 		[
 			'name' => 'publicPreview#index',
 			'url' => '/api/v1/publicPreview/{fileId}',
