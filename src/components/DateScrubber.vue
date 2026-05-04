@@ -35,18 +35,42 @@
 			ref="track"
 			class="date-scrubber__track"
 			@pointerdown="onTrackPointerDown">
-			<!-- Year labels: decimated to fit the available height. -->
+			<!--
+				Density tick marks — one per month. Tick width is
+				proportional to the month's photo count so the
+				scrubber doubles as a tiny histogram of where the
+				user's library is dense. Months without any photos
+				get the minimum-width tick so the spacing stays
+				visually rhythmic.
+			-->
+			<span
+				v-for="tick in monthTicks"
+				:key="tick.month"
+				class="date-scrubber__tick"
+				:class="{ 'date-scrubber__tick--in-active-year': tick.year === activeYear }"
+				:style="{
+					top: `${tick.percent}%`,
+					'--tick-density': tick.density,
+				}" />
+
+			<!-- Year labels: pill-shaped, frosted glass, decimated
+				to fit the available height. -->
 			<span
 				v-for="label in yearLabels"
 				:key="label.year"
 				class="date-scrubber__year-label"
+				:class="{ 'date-scrubber__year-label--active': label.year === activeYear }"
 				:style="{ top: `${label.percent}%` }">
 				{{ label.year }}
 			</span>
 
-			<!-- Thumb. Position is the percent through the months list
-				of whichever section is currently in view. Drag the
-				thumb to scrub. -->
+			<!--
+				Glassy capsule thumb. Inactive: a thin pill that just
+				marks the position. Active (hovered or scrubbing):
+				expands to show the month/year inline — the previous
+				floating tooltip becomes part of the thumb so the
+				user's eye doesn't have to dart between two surfaces.
+			-->
 			<div
 				class="date-scrubber__thumb"
 				:style="{ top: `${thumbPercent}%` }"
@@ -58,20 +82,12 @@
 				:aria-valuetext="activeMonthLabel"
 				tabindex="0"
 				@pointerdown.stop="onThumbPointerDown"
-				@keydown="onThumbKey" />
-		</div>
-
-		<!-- Floating "what month am I about to land on" tooltip. Only
-			visible while scrubbing (isActive); positioned next to the
-			thumb so the user's eye doesn't have to dart. -->
-		<Transition name="date-scrubber-tooltip">
-			<div
-				v-if="isActive"
-				class="date-scrubber__tooltip"
-				:style="{ top: `${thumbPercent}%` }">
-				{{ activeMonthLabel }}
+				@keydown="onThumbKey">
+				<span class="date-scrubber__thumb__pill">
+					<span class="date-scrubber__thumb__date">{{ activeMonthLabel }}</span>
+				</span>
 			</div>
-		</Transition>
+		</div>
 	</div>
 </template>
 
@@ -85,6 +101,17 @@ import { defineComponent } from 'vue'
 interface YearLabel {
 	year: string
 	percent: number
+}
+
+interface MonthTick {
+	month: string
+	year: string
+	percent: number
+	// 0..1 normalised photo count for this month, where 1.0 is the
+	// densest month in the library. Drives the tick's width via a
+	// CSS custom property so the renderer keeps everything visual
+	// (no inline width calc needed).
+	density: number
 }
 
 export default defineComponent({
@@ -104,6 +131,15 @@ export default defineComponent({
 		currentMonth: {
 			type: String,
 			default: '',
+		},
+
+		// Per-month photo counts. Optional — when present, drives the
+		// density tick marks (longer tick = more photos that month).
+		// When absent, every tick renders at the minimum width and
+		// the scrubber falls back to a uniform-rhythm strip.
+		monthCounts: {
+			type: Object as PropType<Record<string, number>>,
+			default: () => ({}),
 		},
 	},
 
@@ -186,6 +222,41 @@ export default defineComponent({
 				return 0
 			}
 			return (idx / (this.months.length - 1)) * 100
+		},
+
+		activeYear(): string {
+			return this.activeMonth.substring(0, 4)
+		},
+
+		// One tick per month, with `density` normalised to 0..1
+		// against the heaviest month. The visual maps that 0..1 to
+		// a min..max tick width via a CSS custom property — small
+		// for sparse months, longer for dense ones. Caps the spread
+		// at the 95th percentile so a single bursty month doesn't
+		// crush every other tick to the floor.
+		monthTicks(): MonthTick[] {
+			const total = this.months.length
+			if (total === 0) {
+				return []
+			}
+
+			// 95th-percentile-clamped max so heavy outliers don't
+			// dominate the visual scale.
+			const counts = this.months.map((m) => this.monthCounts[m] ?? 0)
+			const sortedCounts = [...counts].filter((n) => n > 0).sort((a, b) => a - b)
+			const p95Index = Math.floor(sortedCounts.length * 0.95)
+			const cap = sortedCounts.length === 0 ? 1 : Math.max(1, sortedCounts[p95Index] ?? 1)
+
+			return this.months.map((month, i) => {
+				const raw = this.monthCounts[month] ?? 0
+				const density = raw === 0 ? 0 : Math.min(1, raw / cap)
+				return {
+					month,
+					year: month.substring(0, 4),
+					percent: total === 1 ? 0 : (i / (total - 1)) * 100,
+					density,
+				}
+			})
 		},
 	},
 
@@ -293,114 +364,217 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+// Modern scrubber: a thin glassy track with density-mapped tick
+// marks (a tiny histogram of where the user's library is dense),
+// pill-shaped year labels, and a capsule thumb that grows to show
+// the active month inline on hover/scrub. State transitions ease
+// with a long ease-out cubic so the whole thing feels deliberate
+// rather than UI-snappy.
+//
+// Idle state is intentionally minimal — a faint vertical line —
+// so it doesn't compete with the photo grid for visual weight.
 .date-scrubber {
 	position: absolute;
 	top: 0;
 	bottom: 0;
 	inset-inline-end: 4px;
-	width: 64px;
+	width: 84px;
 	z-index: 4;
 	display: flex;
 	align-items: stretch;
 	pointer-events: none; // children opt back in
-	opacity: 0.4;
-	transition: opacity 200ms ease-out;
 
-	// Hide on short viewports — too cramped to be useful.
 	@media (max-height: 480px) {
 		display: none;
-	}
-
-	&--active,
-	&:hover {
-		opacity: 1;
 	}
 
 	&__track {
 		position: relative;
 		flex: 1;
-		margin-block: 16px;
-		border-radius: 2px;
-		background: linear-gradient(
-			to bottom,
-			color-mix(in srgb, var(--color-primary-element) 15%, transparent) 0%,
-			color-mix(in srgb, var(--color-primary-element) 4%, transparent) 100%
-		);
+		margin-block: 24px;
+		// Idle: a hairline that softly hints "there's a thing here
+		// you can drag". Active state below promotes it to a full
+		// glassy strip.
+		&::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			inset-inline-end: 12px;
+			width: 2px;
+			border-radius: 1px;
+			background: linear-gradient(
+				to bottom,
+				color-mix(in srgb, var(--color-primary-element) 25%, transparent),
+				color-mix(in srgb, var(--color-primary-element) 8%, transparent)
+			);
+			transition: opacity 280ms ease-out, transform 280ms ease-out;
+		}
 		pointer-events: auto;
 		cursor: pointer;
-		// Without `touch-action: none` browsers swallow the vertical
-		// drag as a page-scroll gesture before our pointermove handler
-		// ever sees it (mobile + macOS trackpad two-finger scroll).
 		touch-action: none;
 	}
 
+	// Density tick marks. One per month. Width comes from the
+	// `--tick-density` variable bound on the element (0..1).
+	// Idle: ticks are short + faint. Active: full length, full
+	// opacity. The hover/scrub upgrade is the moment the histogram
+	// becomes legible.
+	&__tick {
+		position: absolute;
+		inset-inline-end: 8px;
+		height: 1.5px;
+		// Width range: 4px (empty month) to 22px (densest month)
+		// — reads as a histogram while still leaving room for the
+		// thumb at the right edge.
+		width: calc(4px + var(--tick-density, 0) * 18px);
+		border-radius: 1px;
+		background: color-mix(in srgb, var(--color-primary-element) 35%, transparent);
+		transform: translateY(-50%);
+		opacity: 0;
+		transition: opacity 280ms ease-out, background 200ms ease-out;
+		pointer-events: none;
+	}
+
+	// Year labels. Frosted-glass pills that slide in from the
+	// right edge alongside the track when the scrubber is active.
 	&__year-label {
 		position: absolute;
-		inset-inline-end: 28px;
-		transform: translateY(-50%);
-		font-size: 11px;
+		inset-inline-end: 32px;
+		transform: translateY(-50%) translateX(8px);
+		padding: 1px 7px;
+		border-radius: 999px;
+		background: color-mix(in srgb, var(--color-main-background) 70%, transparent);
+		backdrop-filter: blur(6px);
+		font-size: 10.5px;
 		font-variant-numeric: tabular-nums;
 		font-weight: 600;
-		letter-spacing: 0.04em;
+		letter-spacing: 0.03em;
 		color: var(--color-text-maxcontrast);
 		white-space: nowrap;
 		pointer-events: none;
+		opacity: 0;
+		transition: opacity 280ms ease-out, transform 280ms cubic-bezier(0.22, 1, 0.36, 1), color 200ms ease-out;
+
+		// Year that contains the currently-active month gets a
+		// stronger treatment so the user always knows which year
+		// the thumb is sitting in.
+		&--active {
+			color: var(--color-primary-element);
+			background: var(--color-main-background);
+			font-weight: 700;
+		}
 	}
 
+	// The thumb itself. A glassy capsule that hugs the right edge
+	// when idle, then expands to show the active month inline
+	// when hovered or scrubbing. The pill replaces the previous
+	// floating tooltip so the user's eye doesn't have to dart
+	// between two surfaces.
 	&__thumb {
 		position: absolute;
-		inset-inline-end: 8px;
-		width: 14px;
-		height: 14px;
-		margin-top: -7px;
-		border-radius: 50%;
-		background: var(--color-primary-element);
-		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-		transition: transform 120ms ease-out, box-shadow 120ms ease-out;
+		inset-inline-end: 6px;
+		transform: translateY(-50%);
+		display: flex;
+		align-items: center;
 		pointer-events: auto;
 		cursor: grab;
-		// Same touch-action gotcha as the track — without this, a
-		// drag starting on the thumb may be eaten by the browser's
-		// scroll behaviour before pointermove fires.
 		touch-action: none;
+		outline: none;
 
 		&:active {
 			cursor: grabbing;
-			transform: scale(1.2);
-			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 		}
 
-		&:focus-visible {
+		&:focus-visible &__pill {
 			outline: 2px solid var(--color-primary-element);
 			outline-offset: 3px;
 		}
+
+		&__pill {
+			display: inline-flex;
+			align-items: center;
+			justify-content: flex-end;
+			height: 24px;
+			min-width: 14px;
+			padding: 0;
+			border-radius: 999px;
+			background: var(--color-primary-element);
+			color: #fff;
+			box-shadow:
+				0 2px 6px rgba(0, 0, 0, 0.25),
+				0 0 0 0 color-mix(in srgb, var(--color-primary-element) 50%, transparent);
+			overflow: hidden;
+			transition:
+				min-width 360ms cubic-bezier(0.22, 1, 0.36, 1),
+				padding 360ms cubic-bezier(0.22, 1, 0.36, 1),
+				box-shadow 280ms ease-out,
+				transform 200ms ease-out;
+		}
+
+		&__date {
+			display: inline-block;
+			max-width: 0;
+			overflow: hidden;
+			white-space: nowrap;
+			font-size: 12px;
+			font-weight: 600;
+			letter-spacing: 0.01em;
+			line-height: 1;
+			transition:
+				max-width 360ms cubic-bezier(0.22, 1, 0.36, 1),
+				margin 360ms cubic-bezier(0.22, 1, 0.36, 1),
+				opacity 240ms ease-out 80ms;
+			opacity: 0;
+		}
 	}
 
-	&__tooltip {
-		position: absolute;
-		inset-inline-end: 36px;
-		transform: translateY(-50%);
-		padding: 6px 12px;
-		border-radius: 6px;
-		background: var(--color-main-background);
-		color: var(--color-main-text);
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-		font-size: 13px;
-		font-weight: 500;
-		white-space: nowrap;
-		pointer-events: none;
-	}
-}
+	// --- Active-state upgrades ---
+	// Promotes the idle hairline + faint ticks to a full visual
+	// presence: track gets a glassy fill, ticks light up, year
+	// pills slide in, thumb expands to show the date.
+	&--active,
+	&:hover {
+		.date-scrubber__track::before {
+			background: linear-gradient(
+				to bottom,
+				color-mix(in srgb, var(--color-primary-element) 35%, transparent),
+				color-mix(in srgb, var(--color-primary-element) 12%, transparent)
+			);
+		}
 
-// Tooltip enter/leave: tiny slide + fade, kept short so the visual
-// follows the pointer rather than chasing it.
-.date-scrubber-tooltip-enter-active,
-.date-scrubber-tooltip-leave-active {
-	transition: opacity 120ms ease-out, transform 120ms ease-out;
-}
-.date-scrubber-tooltip-enter-from,
-.date-scrubber-tooltip-leave-to {
-	opacity: 0;
-	transform: translate(-4px, -50%);
+		.date-scrubber__tick {
+			opacity: 1;
+		}
+
+		.date-scrubber__year-label {
+			opacity: 1;
+			transform: translateY(-50%) translateX(0);
+		}
+
+		.date-scrubber__thumb__pill {
+			min-width: 110px;
+			padding: 0 12px 0 14px;
+			box-shadow:
+				0 4px 14px rgba(0, 0, 0, 0.32),
+				0 0 0 6px color-mix(in srgb, var(--color-primary-element) 22%, transparent);
+		}
+
+		.date-scrubber__thumb__date {
+			max-width: 120px;
+			margin-inline-end: 4px;
+			opacity: 1;
+		}
+	}
+
+	// Active scrubbing — extra emphasis on the thumb (slight grow
+	// + tighter shadow halo) so the user feels they have a firm
+	// grip on it.
+	&--active .date-scrubber__thumb__pill {
+		transform: scale(1.04);
+		box-shadow:
+			0 6px 18px rgba(0, 0, 0, 0.4),
+			0 0 0 8px color-mix(in srgb, var(--color-primary-element) 30%, transparent);
+	}
 }
 </style>

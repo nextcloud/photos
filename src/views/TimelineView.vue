@@ -192,6 +192,7 @@
 				there's only one month — there's nothing to scrub. -->
 			<DateScrubber
 				:months="monthsList"
+				:monthCounts="monthCounts"
 				:currentMonth="scrubberTarget || monthsList[0]"
 				@jump="onScrubberJump" />
 		</div>
@@ -404,6 +405,21 @@ export default {
 			return this.fetchedFileIds
 				.map((id) => this.files[id])
 				.filter((file) => file !== undefined)
+		},
+
+		// Per-month photo counts. Drives the density tick marks on
+		// the date scrubber (months with more photos render taller
+		// ticks — a tiny histogram of where the user's library is
+		// dense). Uses the ungrouped count (i.e. before burst stacks
+		// fold their members) so the tick reflects the true
+		// distribution, not the visible-tile count.
+		monthCounts(): Record<string, number> {
+			const out: Record<string, number> = {}
+			const ungrouped = this.fileIdsByMonthUngrouped as Record<string, string[]>
+			for (const month of Object.keys(ungrouped)) {
+				out[month] = ungrouped[month].length
+			}
+			return out
 		},
 
 		// Tile-row target height per density. The mobile-medium fallback
