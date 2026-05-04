@@ -90,15 +90,26 @@
 			</li>
 		</ul>
 
-		<Slideshow
-			v-if="recapSlideshowOpen && yearRecap !== null"
-			:photos="yearRecap.curated"
-			@close="recapSlideshowOpen = false" />
+		<!--
+			Cinematic recap player. Replaces the previous in-app
+			slideshow for the year-in-review and trip cards: same
+			photos, but presented with a Ken-Burns pan/zoom +
+			cross-dissolve + colour-themed chrome (iOS Memories'
+			signature look). The Files Viewer flow stays available
+			for users who want a step-through experience — it's
+			reachable from the album/timeline tile click.
+		-->
+		<CinematicRecap
+			v-if="recapState !== null"
+			:photos="recapState.photos"
+			:title="recapState.title"
+			@close="recapState = null" />
 	</div>
 </template>
 
 <script lang="ts">
 import type { Trip, YearRecap } from '../services/memories.ts'
+import type { PhotoFile } from '../store/files.ts'
 
 import { translatePlural as n, translate as t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
@@ -106,23 +117,22 @@ import { generateUrl } from '@nextcloud/router'
 import { defineComponent } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import AnimatedNumber from '../components/AnimatedNumber.vue'
+import CinematicRecap from '../components/CinematicRecap.vue'
 import EmptyIllustration from '../components/EmptyIllustration.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-import Slideshow from '../components/Slideshow.vue'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import { allMimes } from '../services/AllowedMimes.ts'
 import { buildYearRecap, detectTrips } from '../services/memories.ts'
-import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
 export default defineComponent({
 	name: 'MemoriesView',
 
 	components: {
 		AnimatedNumber,
+		CinematicRecap,
 		EmptyIllustration,
 		HeaderNavigation,
 		NcEmptyContent,
-		Slideshow,
 	},
 
 	mixins: [FetchFilesMixin],
@@ -136,7 +146,11 @@ export default defineComponent({
 
 	data() {
 		return {
-			recapSlideshowOpen: false,
+			// When set, opens the cinematic recap player with the
+			// supplied photos + title. Cleared on close. Single
+			// state object so trips and year-recap don't fight
+			// over two mutually exclusive flags.
+			recapState: null as { photos: PhotoFile[], title: string } | null,
 		}
 	},
 
@@ -196,15 +210,24 @@ export default defineComponent({
 		},
 
 		openTrip(trip: Trip) {
-			window.OCA.Viewer.open({
-				fileInfo: toViewerFileInfo(trip.cover),
-				list: trip.photos.map((photo) => toViewerFileInfo(photo)),
-				onClose() { window.OCA.Files.Sidebar.close() },
-			})
+			// Drive the cinematic recap with the trip's photos in
+			// chronological order (the trip is already sorted by
+			// detectTrips). Title format matches the card label so
+			// the recap feels continuous with what the user clicked.
+			this.recapState = {
+				photos: trip.photos,
+				title: this.formatTripDateRange(trip),
+			}
 		},
 
 		openYearRecap() {
-			this.recapSlideshowOpen = true
+			if (this.yearRecap === null) {
+				return
+			}
+			this.recapState = {
+				photos: this.yearRecap.curated,
+				title: t('photos', 'Your {year} in photos', { year: this.yearRecap.year }),
+			}
 		},
 
 		cardAriaLabel(trip: Trip): string {
