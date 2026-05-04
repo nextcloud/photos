@@ -206,6 +206,35 @@ const router = createRouter({
 				},
 			},
 		},
+		// Smart auto-albums — heuristic-classified subsets of the
+		// timeline. Implemented as TimelineView + a per-tile filter
+		// rather than separate views so all the existing affordances
+		// (selection, hover preview, actions menu, scrubber) come
+		// along for the ride.
+		{
+			path: '/smart/screenshots',
+			component: TimelineView,
+			name: 'smart-screenshots',
+			props: () => ({
+				rootTitle: t('photos', 'Screenshots'),
+				smartAlbumKind: 'screenshots',
+			}),
+			meta: {
+				rootTitle: () => t('photos', 'Screenshots'),
+			},
+		},
+		{
+			path: '/smart/bursts',
+			component: TimelineView,
+			name: 'smart-bursts',
+			props: () => ({
+				rootTitle: t('photos', 'Bursts'),
+				smartAlbumKind: 'bursts',
+			}),
+			meta: {
+				rootTitle: () => t('photos', 'Bursts'),
+			},
+		},
 		// Tag routes are only registered when the systemtags app is installed.
 		...(!areTagsInstalled
 			? []

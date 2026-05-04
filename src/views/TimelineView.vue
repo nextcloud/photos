@@ -226,6 +226,7 @@
 <script lang='ts'>
 import type { PropType } from 'vue'
 import type { Album } from '../store/albums.ts'
+import type { SmartAlbumKind } from '../utils/smartAlbums.ts'
 
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
@@ -267,6 +268,7 @@ import burstStore from '../store/bursts.ts'
 import useFilterStore from '../store/filters.ts'
 import { configChangedEvent } from '../store/userConfig.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.ts'
+import { smartAlbumFilter } from '../utils/smartAlbums.ts'
 
 export default {
 	name: 'TimelineView',
@@ -326,6 +328,16 @@ export default {
 		onThisDay: {
 			type: Boolean,
 			default: false,
+		},
+
+		// Optional client-side filter for "smart" auto-album views
+		// (Screenshots, Bursts). Empty string → no filter. The actual
+		// matcher is resolved in `fileIdsByMonthUngrouped` so the
+		// timeline's month grouping / scrubber / virtual scroll all
+		// stay in sync.
+		smartAlbumKind: {
+			type: String,
+			default: '',
 		},
 
 		rootTitle: {
@@ -448,13 +460,24 @@ export default {
 			// older instances still works.
 			const nameValues = (this.selectedFilters.name ?? []) as string[]
 			const searchQuery = nameValues.join(' ').trim()
+
+			// Smart-album views resolve their classifier here and
+			// pass it as the per-tile filter. Returning a true
+			// predicate (instead of `undefined`) tells fetchFiles to
+			// drop non-matching files before they enter the store —
+			// keeps the timeline / month grouping / scrubber clean.
+			const kind = this.smartAlbumKind as SmartAlbumKind | ''
+			const filter = kind === ''
+				? undefined
+				: smartAlbumFilter(kind)
+
 			this.fetchFiles({
 				mimesType: this.mimesType,
 				onThisDay: this.onThisDay,
 				onlyFavorites: this.onlyFavorites,
 				extraFilters: this.filtersQuery,
 				searchQuery,
-			})
+			}, filter)
 		},
 
 		// Date-scrubber jump: just stash the target month; the

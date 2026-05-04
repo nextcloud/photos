@@ -104,6 +104,22 @@
 					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
+					to="/smart/screenshots"
+					:name="t('photos', 'Screenshots')"
+					data-id-app-nav-item="smart-screenshots">
+					<template #icon>
+						<MonitorScreenshot :size="20" />
+					</template>
+				</NcAppNavigationItem>
+				<NcAppNavigationItem
+					to="/smart/bursts"
+					:name="t('photos', 'Bursts')"
+					data-id-app-nav-item="smart-bursts">
+					<template #icon>
+						<ImageMultipleOutline :size="20" />
+					</template>
+				</NcAppNavigationItem>
+				<NcAppNavigationItem
 					:to="{ name: 'thisday' }"
 					:name="t('photos', 'On this day')"
 					data-id-app-nav-item="this-day">
@@ -224,6 +240,7 @@ import MapIcon from 'vue-material-design-icons/Map.vue'
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
 import MapOutline from 'vue-material-design-icons/MapOutline.vue'
+import MonitorScreenshot from 'vue-material-design-icons/MonitorScreenshot.vue'
 import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
 import ShareVariantOutline from 'vue-material-design-icons/ShareVariantOutline.vue'
 import Star from 'vue-material-design-icons/Star.vue'
@@ -277,6 +294,7 @@ export default {
 		MapOutline,
 		MapMarker,
 		MapMarkerOutline,
+		MonitorScreenshot,
 		NcAppContent,
 		NcAppNavigation,
 		NcAppNavigationItem,
