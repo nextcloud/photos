@@ -7,54 +7,117 @@
 	<div
 		class="file-container"
 		data-test="media"
-		:class="{ selected }">
+		:class="{ selected, 'is-stack': isStack }">
+		<!--
+			Burst-stack decoration: two thin "card backs" peeking out
+			behind the tile so the user can see at a glance that it
+			represents multiple photos. Pure CSS — no extra <img> loads.
+			Plus a count badge in the top-right that tells them how
+			many photos are folded into this stack.
+		-->
+		<template v-if="isStack">
+			<div class="stack-back stack-back--two" aria-hidden="true" />
+			<div class="stack-back stack-back--one" aria-hidden="true" />
+			<span class="stack-count" :aria-label="t('photos', '{count} photos in burst', { count: stackCount })">
+				{{ stackCount }}
+			</span>
+		</template>
+
 		<a
 			class="file"
 			:href="file.source"
 			:aria-label="ariaLabel"
-			@click.stop.prevent="emitClick">
+			@click.stop.prevent="onTileClick"
+			@pointerdown="onTilePointerDown"
+			@pointerup="onTilePointerUp"
+			@pointercancel="cancelLongPress"
+			@pointerleave="cancelLongPress"
+			@mouseenter="schedulePreview"
+			@mouseleave="cancelPreview">
 
 			<!-- image and loading placeholder -->
 			<div class="file__images">
 				<VideoOutline v-if="file.mime?.includes('video')" class="icon-overlay" :size="64" />
 				<PlayCircleOutlineIcon v-else-if="file.attributes['metadata-files-live-photo'] !== undefined" class="icon-overlay" :size="64" />
 
-				<!-- We have two img elements to load the small and large preview -->
-				<!-- Do not show the small preview if the larger one is loaded -->
-				<!-- Prioritize visible files -->
-				<!-- Load small preview first, then the larger one -->
-				<!-- Preload large preview for near visible files -->
-				<!-- Preload small preview for further away files -->
+				<!--
+					Three layers stacked, each fading in when its source loads.
+					blurhash sits at the bottom, small thumbnail above it, full
+					preview on top. Crossfade happens naturally as the higher
+					layer's opacity goes 0 → 1 while the layer beneath stays
+					rendered.
+				-->
 				<template v-if="initialized">
 					<canvas
-						v-if="hasBlurhash && !loadedLarge"
+						v-if="hasBlurhash"
 						ref="canvas"
-						class="file__blurhash"
+						class="file__layer file__layer--blurhash"
+						aria-hidden="true" />
+
+					<!--
+						Shimmer placeholder. Overlays the blurhash (or
+						the empty primary-element-light background when
+						no blurhash exists) until the small or large
+						preview lands. Pure CSS — a translating gradient
+						sweep — so it's cheap to animate and doesn't
+						need JS bookkeeping.
+					-->
+					<div
+						v-if="!loadedSmall && !loadedLarge"
+						class="file__layer file__layer--shimmer"
 						aria-hidden="true" />
 
 					<img
-						v-if="!hasBlurhash && !loadedLarge && (loadedSmall || !errorSmall)"
+						v-if="!errorSmall"
 						ref="imgSmall"
 						:key="`${file.basename}-small`"
+						class="file__layer file__layer--small"
+						:class="{ 'file__layer--visible': loadedSmall }"
 						:src="srcSmall"
 						:alt="file.basename"
-						:decoding="loadedSmall ? 'sync' : 'async'"
-						:fetchpriority="loadedSmall ? 'high' : 'low'"
-						:loading="loadedSmall ? 'eager' : undefined"
+						decoding="async"
+						fetchpriority="low"
 						@load="onLoadSmall"
 						@error="onErrorSmall">
 
 					<img
-						v-if="loadedLarge || ((hasBlurhash || loadedSmall || errorSmall) && !errorLarge)"
+						v-if="!errorLarge"
 						ref="imgLarge"
 						:key="`${file.basename}-large`"
+						class="file__layer file__layer--large"
+						:class="{ 'file__layer--visible': loadedLarge }"
 						:src="srcLarge"
 						:alt="file.basename"
-						:decoding="loadedLarge ? 'sync' : 'async'"
-						:fetchpriority="loadedLarge ? 'high' : 'low'"
-						:loading="loadedLarge ? undefined : 'lazy'"
+						decoding="async"
+						:fetchpriority="loadedSmall ? 'high' : 'low'"
+						loading="lazy"
 						@load="onLoadLarge"
 						@error="onErrorLarge">
+
+					<!--
+						Hover-autoplay video preview. Mounted only after
+						the cursor has been on a video tile for the
+						preview-delay (~250ms) so a quick swipe across
+						many tiles doesn't fire dozens of media loads.
+						Muted + playsinline + autoplay satisfies the
+						browser autoplay policy without user gesture.
+						Codec gating in `isPreviewableVideo` keeps
+						HEIC/HEVC/etc. on the still-thumbnail path —
+						those need a transcode pipeline we don't have.
+					-->
+					<video
+						v-if="videoPreviewActive"
+						ref="videoPreview"
+						class="file__layer file__layer--video"
+						:src="file.source"
+						muted
+						loop
+						autoplay
+						playsinline
+						preload="metadata"
+						aria-hidden="true"
+						@canplay="onVideoPreviewReady"
+						@error="onVideoPreviewError" />
 				</template>
 			</div>
 		</a>
@@ -63,13 +126,34 @@
 			v-if="allowSelection"
 			class="selection-checkbox"
 			:aria-label="t('photos', 'Select image {imageName}', { imageName: file.basename })"
-			:checked="selected"
-			@update:checked="onToggle" />
+			:modelValue="selected"
+			@update:modelValue="onToggle" />
 
-		<FavoriteIcon
-			v-if="file.attributes.favorite === 1"
-			v-once
-			class="favorite-state" />
+		<!--
+			Per-photo overflow menu (3-dot). Forwards its action requests
+			up so the parent (TimelineView etc.) can hook into the
+			existing album-picker / sidebar / delete flows. Hidden when
+			the parent is in a picking context (PhotosPicker).
+		-->
+		<PhotoActionsMenu
+			v-if="showActionsMenu"
+			:file="file"
+			class="photo-actions-menu"
+			@requestAddToAlbum="$emit('request-add-to-album', $event)"
+			@requestShare="$emit('request-share', $event)"
+			@requestDelete="$emit('request-delete', $event)" />
+
+		<!--
+			Favourite-star toggle animation: enter spawns a quick scale-up
+			bounce; leave fades out. The original v-once was preventing
+			the icon from ever re-rendering, which masked favorite-state
+			changes coming from the bulk-action menu.
+		-->
+		<Transition name="favorite-pop">
+			<FavoriteIcon
+				v-if="file.attributes.favorite === 1"
+				class="favorite-state" />
+		</Transition>
 	</div>
 </template>
 
@@ -85,18 +169,20 @@ import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwit
 import PlayCircleOutlineIcon from 'vue-material-design-icons/PlayCircleOutline.vue'
 import VideoOutline from 'vue-material-design-icons/VideoOutline.vue'
 import FavoriteIcon from './FavoriteIcon.vue'
+import PhotoActionsMenu from './PhotoActionsMenu.vue'
 import { isCachedPreview } from '../services/PreviewService.js'
+import burstStore from '../store/bursts.ts'
 
 export default {
 	name: 'FileComponent',
 	components: {
 		FavoriteIcon,
 		NcCheckboxRadioSwitch,
-		VideoOutline,
+		PhotoActionsMenu,
 		PlayCircleOutlineIcon,
+		VideoOutline,
 	},
 
-	inheritAttrs: false,
 	props: {
 		file: {
 			type: Object as PropType<PhotoFile>,
@@ -110,9 +196,21 @@ export default {
 
 		allowSelection: {
 			type: Boolean,
+			default: false,
+		},
+
+		// Whether to render the per-photo overflow menu (EXIF / add to
+		// album / share / delete). Defaults to true; disable when the
+		// component is rendered inside a picker / read-only context
+		// where managing the photo doesn't make sense.
+		showActionsMenu: {
+			type: Boolean,
+			// eslint-disable-next-line vue/no-boolean-default
 			default: true,
 		},
 	},
+
+	emits: ['click', 'select-toggled', 'request-add-to-album', 'request-share', 'request-delete'],
 
 	data() {
 		return {
@@ -122,6 +220,16 @@ export default {
 			loadedLarge: false,
 			errorLarge: false,
 			isMobile: useIsMobile(),
+			// Long-press detection: a press held for >500ms starts a
+			// selection instead of opening the viewer. The handle is
+			// kept on `this` (not in data so we don't bother with
+			// reactivity) and cleared on cancel / release.
+			longPressTimer: null as ReturnType<typeof setTimeout> | null,
+			longPressFired: false,
+			// Hover video preview state.
+			videoPreviewActive: false,
+			videoPreviewTimer: null as ReturnType<typeof setTimeout> | null,
+			videoPreviewError: false,
 		}
 	},
 
@@ -152,6 +260,40 @@ export default {
 		hasBlurhash() {
 			return this.file.attributes['metadata-blurhash'] !== undefined
 		},
+
+		// True iff this file is the leader of a burst stack (i.e. has
+		// other photos folded into it). Drives the stacked-card visual
+		// + count badge + the on-click slideshow seeding. Reaches for
+		// the Pinia singleton directly (see FilesByMonthMixin for the
+		// rationale — mixin / setup-return ordering isn't reliable).
+		stack() {
+			const id = this.file.fileid?.toString()
+			return id !== undefined ? burstStore().getStack(id) : undefined
+		},
+
+		isStack(): boolean {
+			return this.stack !== undefined
+		},
+
+		stackCount(): number {
+			return this.stack?.memberIds.length ?? 0
+		},
+
+		// Browser-playable video formats. We can't transcode, so codecs
+		// the browser refuses (HEVC, ProRes, AV1 in older browsers)
+		// stay on the still-thumbnail path. mp4 + webm + ogg cover the
+		// vast majority of files uploaded from desktops and modern
+		// Android. iOS HEVC remains a known gap until we add
+		// transcoding (see PR description).
+		isPreviewableVideo(): boolean {
+			const mime = this.file.mime ?? ''
+			if (!mime.startsWith('video/')) {
+				return false
+			}
+			return mime === 'video/mp4'
+				|| mime === 'video/webm'
+				|| mime === 'video/ogg'
+		},
 	},
 
 	watch: {
@@ -170,14 +312,18 @@ export default {
 		await this.init()
 	},
 
-	beforeDestroy() {
-		// cancel any pending load
+	beforeUnmount() {
+		// Cancel any pending image load by clearing the src on each layer.
+		// The previous code had a typo (`srcLarge`) and never cancelled the
+		// large preview; now both are addressed.
 		if (this.$refs.imgSmall !== undefined) {
 			(this.$refs.imgSmall as HTMLImageElement).src = ''
 		}
-		if (this.$refs.srcLarge !== undefined) {
-			(this.$refs.srcLarge as HTMLImageElement).src = ''
+		if (this.$refs.imgLarge !== undefined) {
+			(this.$refs.imgLarge as HTMLImageElement).src = ''
 		}
+		this.cancelLongPress()
+		this.cancelPreview()
 	},
 
 	methods: {
@@ -198,6 +344,39 @@ export default {
 			this.$emit('click', this.file.fileid)
 		},
 
+		// Tap = open viewer. Long-press (>500ms) = toggle selection.
+		// We swallow the click that follows a long-press so a release
+		// after the timeout doesn't also trigger the open.
+		onTileClick() {
+			if (this.longPressFired) {
+				this.longPressFired = false
+				return
+			}
+			this.emitClick()
+		},
+
+		onTilePointerDown() {
+			if (!this.allowSelection) {
+				return
+			}
+			this.cancelLongPress()
+			this.longPressTimer = setTimeout(() => {
+				this.longPressFired = true
+				this.onToggle(!this.selected)
+			}, 500)
+		},
+
+		onTilePointerUp() {
+			this.cancelLongPress()
+		},
+
+		cancelLongPress() {
+			if (this.longPressTimer !== null) {
+				clearTimeout(this.longPressTimer)
+				this.longPressTimer = null
+			}
+		},
+
 		onLoadSmall() {
 			this.loadedSmall = true
 		},
@@ -212,6 +391,60 @@ export default {
 
 		onErrorLarge() {
 			this.errorLarge = true
+		},
+
+		// --- Hover video preview ---
+		// 250ms delay before mounting the <video> so a fast cursor
+		// sweep across the grid doesn't fire dozens of media loads.
+		// Honours `prefers-reduced-motion` (no autoplay) and skips
+		// codecs the browser can't play (still-thumbnail fallback).
+		schedulePreview() {
+			if (!this.isPreviewableVideo || this.videoPreviewError) {
+				return
+			}
+			if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+				return
+			}
+			this.cancelPreview()
+			this.videoPreviewTimer = setTimeout(() => {
+				this.videoPreviewActive = true
+				this.videoPreviewTimer = null
+			}, 250)
+		},
+
+		cancelPreview() {
+			if (this.videoPreviewTimer !== null) {
+				clearTimeout(this.videoPreviewTimer)
+				this.videoPreviewTimer = null
+			}
+			if (this.videoPreviewActive) {
+				// Pause + clear src so the browser releases the buffer
+				// instead of keeping the (potentially big) video in
+				// memory after hover-out.
+				const video = this.$refs.videoPreview as HTMLVideoElement | undefined
+				if (video !== undefined) {
+					video.pause()
+					video.removeAttribute('src')
+					video.load()
+				}
+				this.videoPreviewActive = false
+			}
+		},
+
+		onVideoPreviewReady() {
+			// canplay fired — nothing else to do, the element is
+			// already autoplaying. Hook is left in place so future
+			// affordances (e.g. fade-in, loading indicator) have a
+			// natural attachment point.
+		},
+
+		onVideoPreviewError() {
+			// Codec error / 404 / network drop — back off to the
+			// still thumbnail and remember not to retry on the next
+			// hover (else we'd churn loads forever for a broken
+			// file).
+			this.videoPreviewError = true
+			this.videoPreviewActive = false
 		},
 
 		onToggle(value) {
@@ -251,6 +484,8 @@ export default {
 
 <style lang="scss" scoped>
 .file-container {
+	// `contain: strict` is dropped on stack tiles further down so the
+	// stack-back pseudo-cards can extend past the tile bounds.
 	contain: strict;
 	background: var(--color-primary-element-light);
 	position: relative;
@@ -258,9 +493,112 @@ export default {
 	width: 100%;
 	border: 2px solid var(--color-main-background); // Use border so create a separation between images.
 	box-sizing: border-box;
+	// Subtle lift + shadow when a tile is interacted with (focus or
+	// selection). Replaces the previous hard outline ring with a softer
+	// affordance that doesn't fight the photo for visual weight.
+	transition: transform 160ms ease-out, box-shadow 160ms ease-out;
 
-	// Selection border.
-	&.selected,
+	// --- Burst stack decoration ---
+	// Two thin "card backs" peek out behind the tile so the user can
+	// see at a glance that this represents multiple photos. We let
+	// them overflow the container, so we relax `contain` for stacks.
+	&.is-stack {
+		contain: layout paint;
+		// Reserve a few pixels of margin so the stack-backs don't get
+		// clipped by the neighbouring tile.
+		margin-inline-end: 6px;
+		margin-block-end: 6px;
+	}
+
+	.stack-back {
+		position: absolute;
+		inset: 0;
+		background: var(--color-background-hover);
+		border: 2px solid var(--color-main-background);
+		border-radius: inherit;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+		pointer-events: none;
+		z-index: 0;
+		// The two backs sit progressively further behind. The
+		// translate is the offset; the scale slightly shrinks them
+		// so they look like a stacked deck.
+		&--one {
+			transform: translate(3px, 3px) scale(0.985);
+			opacity: 0.85;
+		}
+		&--two {
+			transform: translate(6px, 6px) scale(0.97);
+			opacity: 0.6;
+		}
+	}
+
+	.stack-count {
+		position: absolute;
+		top: 6px;
+		inset-inline-end: 6px;
+		z-index: 4;
+		min-width: 22px;
+		height: 22px;
+		padding: 0 7px;
+		border-radius: 11px;
+		background: rgba(0, 0, 0, 0.6);
+		color: #fff;
+		backdrop-filter: blur(6px);
+		font-size: 12px;
+		font-weight: 600;
+		font-variant-numeric: tabular-nums;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		pointer-events: none;
+	}
+
+	// --- Subtle hover ---
+	// A photo tile is its own small object — when the user hovers we
+	// give it just enough lift to feel tactile: the image inside
+	// gently magnifies (clipped by the tile's overflow), the tile
+	// itself lifts 1px, and a soft shadow appears underneath. Held
+	// to 220ms so it doesn't drag, and gated behind `:not(.selected)`
+	// so the selection visual stays the dominant state.
+	//
+	// Reduced-motion users get just the shadow + lift without the
+	// scale, which is the cheapest part of the effect.
+	&:hover:not(.selected) {
+		box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+		z-index: 1;
+
+		.file__layer--small,
+		.file__layer--large,
+		.file__layer--blurhash {
+			transform: scale(1.07);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		&:hover:not(.selected) {
+			.file__layer--small,
+			.file__layer--large,
+			.file__layer--blurhash {
+				transform: none;
+			}
+		}
+	}
+
+	// Selection state: softer ring + lift + shadow.
+	&.selected {
+		transform: scale(0.97);
+		box-shadow:
+			0 0 0 3px var(--color-primary-element),
+			0 6px 18px rgba(0, 0, 0, 0.18);
+		z-index: 2;
+
+		.selection-checkbox {
+			opacity: 1;
+		}
+	}
+
+	// Keyboard focus state — keep the existing visible outline but
+	// without the lift so focus and selection are visually distinct.
 	&:focus-within,
 	&:has(:focus) {
 		&::after {
@@ -271,14 +609,29 @@ export default {
 			width: 100%;
 			height: 100%;
 			content: '';
-			outline: var(--color-primary-element) solid 4px;
-			outline-offset: -4px;
+			outline: var(--color-primary-element) solid 3px;
+			outline-offset: -3px;
 			pointer-events: none;
+			border-radius: 4px;
 		}
 
-		.selection-checkbox {
+		.selection-checkbox,
+		.photo-actions-menu {
 			opacity: 1;
 		}
+	}
+
+	// Reveal the per-photo overflow menu on hover (matches the
+	// existing checkbox affordance). The menu component is always
+	// in the DOM so its dialogs can stay mounted across hover-out.
+	&:hover .photo-actions-menu,
+	.photo-actions-menu:focus-within {
+		opacity: 1;
+	}
+
+	.photo-actions-menu {
+		opacity: 0;
+		transition: opacity 160ms ease-out;
 	}
 
 	.file {
@@ -287,14 +640,6 @@ export default {
 		box-sizing: border-box;
 		outline: none; // Override global focus state.
 		display: flex; // Fill parent size
-
-		&__blurhash {
-			position: absolute;
-			top: 0;
-			height: 100%;
-			width: 100%;
-			object-fit: cover;
-		}
 
 		&__images {
 			width: 100%;
@@ -306,7 +651,7 @@ export default {
 				inset-inline-end: 0px;
 				width: 100%;
 				height: 100%;
-				z-index: 1;
+				z-index: 4; // above all preview layers
 				opacity: 0.8;
 
 				:deep(.material-design-icon__svg) {
@@ -314,12 +659,101 @@ export default {
 				}
 			}
 
-			img {
+			// Three stacked preview layers: blurhash at the bottom, small
+			// thumbnail above it, full preview on top. Each img layer starts
+			// at opacity 0 and fades in once its `load` event fires; the
+			// canvas blurhash is always visible, sitting beneath everything.
+			.file__layer {
+				position: absolute;
+				top: 0;
+				inset-inline-start: 0;
 				width: 100%;
 				height: 100%;
 				object-fit: cover;
-				position: absolute;
-				color: transparent; /// Hide alt='' text when loading.
+				color: transparent; // Hide alt='' text when loading.
+				// `transform` is animated by the tile's :hover rule.
+				// Specifying it here (rather than in each layer) keeps
+				// blurhash + small + large in lockstep during the
+				// magnify so the layers don't slide relative to each
+				// other.
+				// 520ms with an "ease-out-quint" curve (cubic-bezier
+				// 0.22, 1, 0.36, 1) — quick to start responding, then
+				// settles slowly into place. Reads as deliberate /
+				// cinematic rather than UI-snappy.
+				transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+			}
+
+			.file__layer--blurhash {
+				z-index: 1;
+			}
+
+			// Shimmer sweep — a translucent diagonal gradient travels
+			// across the tile while we wait for the preview. The
+			// `var(--color-…)` references read the user's NC theme so
+			// the shimmer adapts to dark mode automatically.
+			.file__layer--shimmer {
+				z-index: 2;
+				pointer-events: none;
+				background: linear-gradient(
+					115deg,
+					rgba(255, 255, 255, 0) 30%,
+					rgba(255, 255, 255, 0.18) 50%,
+					rgba(255, 255, 255, 0) 70%
+				);
+				background-size: 220% 100%;
+				background-repeat: no-repeat;
+				animation: file-layer-shimmer 1500ms linear infinite;
+				// Slight fade out as the small/large preview takes over;
+				// this just trims the visual handover so the sweep
+				// doesn't pop.
+				transition: opacity 200ms ease-out;
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				.file__layer--shimmer {
+					animation: none;
+				}
+			}
+
+			@keyframes file-layer-shimmer {
+				0%   { background-position: 120% 0; }
+				100% { background-position: -120% 0; }
+			}
+
+			.file__layer--small {
+				z-index: 2;
+				opacity: 0;
+				transition: opacity 200ms ease-out;
+
+				&.file__layer--visible {
+					opacity: 1;
+				}
+			}
+
+			.file__layer--large {
+				z-index: 3;
+				opacity: 0;
+				transition: opacity 250ms ease-out;
+
+				&.file__layer--visible {
+					opacity: 1;
+				}
+			}
+
+			// Hover video preview sits above the still layers (it's
+			// the freshest content) and crops to the same square as
+			// the photos via object-fit so motion doesn't reflow the
+			// tile. Briefly fades in so the swap from still → motion
+			// reads as a transition, not a pop.
+			.file__layer--video {
+				z-index: 5;
+				object-fit: cover;
+				animation: file-layer-video-fade-in 240ms ease-out;
+			}
+
+			@keyframes file-layer-video-fade-in {
+				from { opacity: 0; }
+				to { opacity: 1; }
 			}
 		}
 	}
@@ -346,8 +780,8 @@ export default {
 		z-index: 1;
 		width: fit-content;
 
-		:deep .checkbox-radio-switch__input:focus-visible+.checkbox-radio-switch__content,
-		.checkbox-radio-switch__input:focus-visible {
+		:deep(.checkbox-radio-switch__input:focus-visible+.checkbox-radio-switch__content),
+		:deep(.checkbox-radio-switch__input:focus-visible) {
 			outline: 2px solid var(--color-main-text);
 			box-shadow: 0 0 0 3px var(--color-main-background);
 			outline-offset: 0px;
@@ -386,6 +820,27 @@ export default {
 		top: 2px;
 		// Fancy calculation to render the start in the middle of narrow images.
 		inset-inline-end: min(2px, calc(50% - 7px));
+	}
+
+	// Pop-in animation when a file becomes a favourite. The bounce
+	// timing function gives a satisfying overshoot. Keep durations short
+	// (320ms in / 180ms out) so bulk-favourite still feels snappy.
+	.favorite-pop-enter-active {
+		animation: favorite-pop-keyframes 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
+		transform-origin: center;
+	}
+	.favorite-pop-leave-active {
+		transition: opacity 180ms ease-out, transform 180ms ease-out;
+	}
+	.favorite-pop-leave-to {
+		opacity: 0;
+		transform: scale(0.8);
+	}
+
+	@keyframes favorite-pop-keyframes {
+		0%   { opacity: 0; transform: scale(0.5); }
+		60%  { opacity: 1; transform: scale(1.25); }
+		100% { opacity: 1; transform: scale(1); }
 	}
 }
 </style>

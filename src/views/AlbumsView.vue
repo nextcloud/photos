@@ -14,7 +14,7 @@
 					key="navigation"
 					:loading="loadingCollections"
 					:title="t('photos', 'Albums')"
-					:root-title="t('photos', 'Albums')"
+					:rootTitle="t('photos', 'Albums')"
 					@refresh="fetchAlbums">
 					<NcButton
 						:aria-label="isMobile ? t('photos', 'New album') : undefined"
@@ -32,15 +32,15 @@
 			<template #default="{ collection }">
 				<CollectionCover
 					:key="collection.basename"
-					parent-route="/albums"
-					:collection-name="collection.basename"
-					:alt-img="t('photos', 'Cover photo for album {albumName}', { albumName: collection.basename })"
-					:cover-url="collection.attributes['last-photo'] | coverUrl">
+					parentRoute="/albums"
+					:collectionName="collection.basename"
+					:altImg="t('photos', 'Cover photo for album {albumName}', { albumName: collection.basename })"
+					:coverUrl="coverUrl(collection.attributes['last-photo'])">
 					<template #default>
 						<span class="album__name">
 							{{ collection.basename }}
 						</span>
-						<CogOutline v-if="Object.keys(collection.attributes.filters).length !== 0" fill-color="var(--color-text-lighter)" />
+						<CogOutline v-if="Object.keys(collection.attributes.filters).length !== 0" fillColor="var(--color-text-lighter)" />
 					</template>
 
 					<template #subtitle>
@@ -62,7 +62,7 @@
 
 		<NcModal
 			v-if="showAlbumCreationForm"
-			label-id="new-album-form"
+			labelId="new-album-form"
 			@close="showAlbumCreationForm = false">
 			<h2 class="album-creation__heading">
 				{{ t('photos', 'New album') }}
@@ -105,16 +105,6 @@ export default defineComponent({
 		CogOutline,
 	},
 
-	filters: {
-		coverUrl(lastPhoto: number): string {
-			if (lastPhoto === -1) {
-				return ''
-			}
-
-			return generateUrl(`/apps/photos/api/v1/preview/${lastPhoto}?x=${512}&y=${512}`)
-		},
-	},
-
 	mixins: [FetchCollectionsMixin],
 
 	setup() {
@@ -146,6 +136,14 @@ export default defineComponent({
 				albumsPrefix,
 				albumsExtraProps,
 			)
+		},
+
+		coverUrl(lastPhoto: number): string {
+			if (lastPhoto === -1) {
+				return ''
+			}
+
+			return generateUrl(`/apps/photos/api/v1/preview/${lastPhoto}?x=${512}&y=${512}`)
 		},
 
 		handleAlbumCreated({ album }) {

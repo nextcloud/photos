@@ -6,12 +6,24 @@
 import type { PhotoFile } from '../store/files.ts'
 
 import { defineComponent } from 'vue'
+import burstStore from '../store/bursts.ts'
+import { applyBurstStacks, clusterBursts } from '../utils/burstClustering.ts'
+
+// Pinia stores are singletons — calling the use* function from
+// anywhere returns the same instance. We reach for it directly inside
+// computed / methods rather than going through a `setup() return`,
+// because Vue 3 doesn't reliably hoist a mixin's setup-return values
+// onto the consuming component's `this`.
 
 export default defineComponent({
 	name: 'FilesByMonthMixin',
 
 	computed: {
-		fileIdsByMonth(): Record<string, string[]> {
+		// Raw grouping by month, before burst clustering. Kept as an
+		// internal step so the scrubber / count widgets can show the
+		// "true" photo count per month (including hidden burst members)
+		// without recomputing from scratch.
+		fileIdsByMonthUngrouped(): Record<string, string[]> {
 			const filesByMonth = {}
 			for (const fileId of (this.fetchedFileIds as number[])) {
 				const file = (this.files as Record<string, PhotoFile>)[fileId]
@@ -26,6 +38,31 @@ export default defineComponent({
 				.forEach((month) => filesByMonth[month].sort(this.sortFilesByTimestamp))
 
 			return filesByMonth
+		},
+
+		// Same shape as the legacy `fileIdsByMonth` consumers expect,
+		// but burst members are folded into their leader. The store is
+		// kept in sync so FileComponent + TimelineView can look up
+		// stack membership by leader id.
+		fileIdsByMonth(): Record<string, string[]> {
+			const ungrouped = this.fileIdsByMonthUngrouped
+			const allStacks: Record<string, ReturnType<typeof clusterBursts>[string]> = {}
+			const result: Record<string, string[]> = {}
+
+			for (const month of Object.keys(ungrouped)) {
+				const ids = ungrouped[month]
+				const monthStacks = clusterBursts(ids, this.files as Record<string, PhotoFile>)
+				Object.assign(allStacks, monthStacks)
+				result[month] = applyBurstStacks(ids, monthStacks)
+			}
+
+			// Push the latest stack map into the Pinia store so the
+			// rest of the UI sees it. Done in the computed because
+			// Vuex/Vue 3 fires this on `fetchedFileIds` changes — same
+			// reactivity surface as the consumers.
+			burstStore().setStacks(allStacks)
+
+			return result
 		},
 
 		monthsList(): string[] {

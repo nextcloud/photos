@@ -9,11 +9,13 @@ import { showError } from '@nextcloud/dialogs'
 import { defaultRootPath } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
 import { joinPaths } from '@nextcloud/paths'
-import { defineComponent } from 'vue'
+import { defineComponent, markRaw } from 'vue'
 import { davClient } from '../services/DavClient.ts'
+import { getIndexedPhotos, getIndexedSearchPhotos, resetIndexedCursor } from '../services/IndexedTimelineSearch.ts'
 import logger from '../services/logger.js'
 import getPhotos, { type PhotoSearchOptions } from '../services/PhotoSearch.js'
 import store from '../store/index.js'
+import indexStatusStore from '../store/indexStatus.ts'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
 import AbortControllerMixin from './AbortControllerMixin.js'
 
@@ -27,7 +29,10 @@ export default defineComponent({
 			errorFetchingFiles: null as null | number | Error | unknown,
 			loadingFiles: false,
 			doneFetchingFiles: false,
-			fetchSemaphore: new SemaphoreWithPriority(1),
+			// markRaw: SemaphoreWithPriority uses private class fields that
+			// throw "Cannot access invalid private field" under Vue 3's
+			// reactive Proxy.
+			fetchSemaphore: markRaw(new SemaphoreWithPriority(1)),
 			fetchedFileIds: [] as number[],
 		}
 	},
@@ -59,13 +64,60 @@ export default defineComponent({
 
 				const numberOfImagesPerBatch = 200
 
-				// Load next batch of images
-				let fetchedFiles = await getPhotos({
-					firstResult: this.fetchedFileIds.length,
-					nbResults: numberOfImagesPerBatch,
-					...options,
-					signal,
-				})
+				// Three-way routing for the data path:
+				//   1. Search active + index ready → /api/v1/index/search
+				//      (bypasses DAV SEARCH entirely; works on instances
+				//      where DAV SEARCH is broken — e.g. NC34 dev builds
+				//      with strict lazy-AppConfig validation throwing in
+				//      `getKnownMetadata()`).
+				//   2. No search + index ready + no exotic filters →
+				//      /api/v1/index/timeline.
+				//   3. Anything else → legacy DAV REPORT.
+				// Indexed paths are best-effort: any HTTP failure falls
+				// back to DAV silently.
+				const indexStatus = indexStatusStore()
+				const searchQuery = (options.searchQuery ?? '').trim()
+				const indexReady = indexStatus.ready === true
+				const noExoticFilters = options.onThisDay !== true
+					&& options.onlyFavorites !== true
+					&& (options.extraFilters ?? '') === ''
+
+				let fetchedFiles: File[] | null = null
+
+				if (searchQuery !== '' && indexReady) {
+					try {
+						fetchedFiles = await getIndexedSearchPhotos(searchQuery, {
+							firstResult: this.fetchedFileIds.length,
+							nbResults: numberOfImagesPerBatch,
+							...options,
+							signal,
+						})
+					} catch (e) {
+						logger.warn('[FetchFilesMixin] Indexed search failed; falling back to DAV', { error: e })
+						fetchedFiles = null
+					}
+				} else if (searchQuery === '' && indexReady && noExoticFilters) {
+					try {
+						fetchedFiles = await getIndexedPhotos({
+							firstResult: this.fetchedFileIds.length,
+							nbResults: numberOfImagesPerBatch,
+							...options,
+							signal,
+						})
+					} catch (e) {
+						logger.warn('[FetchFilesMixin] Indexed timeline failed; falling back to DAV', { error: e })
+						fetchedFiles = null
+					}
+				}
+
+				if (fetchedFiles === null) {
+					fetchedFiles = await getPhotos({
+						firstResult: this.fetchedFileIds.length,
+						nbResults: numberOfImagesPerBatch,
+						...options,
+						signal,
+					})
+				}
 
 				// If we get less files than requested that means we got to the end
 				if (fetchedFiles.length !== numberOfImagesPerBatch) {
@@ -127,6 +179,10 @@ export default defineComponent({
 			this.errorFetchingFiles = null
 			this.loadingFiles = false
 			this.fetchedFileIds = []
+			// Drop the indexed cursor so the next fetch starts at the
+			// most recent photo again (mirrors how the DAV path resets
+			// its `firstResult` offset to 0).
+			resetIndexedCursor()
 		},
 	},
 })

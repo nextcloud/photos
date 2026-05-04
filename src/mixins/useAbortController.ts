@@ -3,14 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { computed, onUnmounted, ref } from 'vue'
+import { computed, onUnmounted, shallowRef } from 'vue'
 import router from '../router/index.ts'
 
 /**
  *
  */
 export default function() {
-	const abortController = ref(new AbortController())
+	// shallowRef: AbortController uses private class fields that throw
+	// "Cannot access invalid private field" under Vue 3's deep-reactive Proxy.
+	const abortController = shallowRef(new AbortController())
 
 	const abortSignal = computed(() => abortController.value.signal)
 

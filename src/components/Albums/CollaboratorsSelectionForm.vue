@@ -11,15 +11,15 @@
 		<form class="manage-collaborators__form" @submit.prevent>
 			<NcSelectUsers
 				v-model="selectedUsers"
-				input-id="sharing-search-input"
-				:input-label="t('photos', 'Add people or groups who can edit your album')"
+				inputId="sharing-search-input"
+				:inputLabel="t('photos', 'Add people or groups who can edit your album')"
 				:loading="loadingCollaborators"
 				label="label"
 				:filterable="false"
 				:placeholder="t('photos', 'Search people or groups')"
-				:clear-search-on-blur="() => false"
+				:clearSearchOnBlur="() => false"
 				:multiple="true"
-				:append-to-body="false"
+				:appendToBody="false"
 				:options="searchResults"
 				@search="searchCollaborators"
 				@option:selected="({ key }) => selectEntity(key)">
@@ -50,7 +50,9 @@
 						variant="tertiary"
 						:aria-label="t('photos', 'Delete the public link')"
 						@click="deletePublicLink">
-						<Close slot="icon" />
+						<template #icon>
+							<Close />
+						</template>
 					</NcButton>
 				</template>
 				<NcButton
@@ -59,7 +61,9 @@
 					:aria-label="t('photos', 'Create public link share')"
 					class="manage-collaborators__public-link-button"
 					@click="createPublicLinkForAlbum">
-					<Earth slot="icon" />
+					<template #icon>
+						<Earth />
+					</template>
 					{{ t('photos', 'Share via public link') }}
 				</NcButton>
 			</div>
@@ -146,6 +150,7 @@ export default {
 
 		allowPublicLink: {
 			type: Boolean,
+			// eslint-disable-next-line vue/no-boolean-default -- public link sharing is the default; opt-out via :allow-public-link="false"
 			default: true,
 		},
 	},

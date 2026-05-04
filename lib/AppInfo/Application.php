@@ -17,6 +17,7 @@ use OCA\Photos\Listener\CSPListener;
 use OCA\Photos\Listener\ExifMetadataProvider;
 use OCA\Photos\Listener\LoadSidebarScripts;
 use OCA\Photos\Listener\OriginalDateTimeMetadataProvider;
+use OCA\Photos\Listener\PhotoIndexNodeListener;
 use OCA\Photos\Listener\PlaceMetadataProvider;
 use OCA\Photos\Listener\SabrePluginAuthInitListener;
 use OCA\Photos\Listener\SizeMetadataProvider;
@@ -25,7 +26,10 @@ use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
+use OCP\Files\Events\Node\NodeCreatedEvent;
 use OCP\Files\Events\Node\NodeDeletedEvent;
+use OCP\Files\Events\Node\NodeRenamedEvent;
+use OCP\Files\Events\Node\NodeWrittenEvent;
 use OCP\FilesMetadata\Event\MetadataBackgroundEvent;
 use OCP\FilesMetadata\Event\MetadataLiveEvent;
 use OCP\Group\Events\GroupDeletedEvent;
@@ -93,6 +97,14 @@ class Application extends App implements IBootstrap {
 
 		$context->registerEventListener(MapperEvent::EVENT_ASSIGN, TagListener::class);
 		$context->registerEventListener(MapperEvent::EVENT_UNASSIGN, TagListener::class);
+
+		// Photo index: keep `oc_photos_index` in sync on every file
+		// mutation. NodeDeleted is shared with AlbumsManagementEventListener
+		// — both run on the same event without ordering issues.
+		$context->registerEventListener(NodeCreatedEvent::class, PhotoIndexNodeListener::class);
+		$context->registerEventListener(NodeWrittenEvent::class, PhotoIndexNodeListener::class);
+		$context->registerEventListener(NodeRenamedEvent::class, PhotoIndexNodeListener::class);
+		$context->registerEventListener(NodeDeletedEvent::class, PhotoIndexNodeListener::class);
 	}
 
 	public function boot(IBootContext $context): void {

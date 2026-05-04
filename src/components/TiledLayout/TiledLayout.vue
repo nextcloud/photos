@@ -8,7 +8,7 @@
 		class="tiled-container">
 		<!-- Slot to allow changing the rows before passing them to TiledRows -->
 		<!-- Useful for partially rendering rows like with VirtualScrolling -->
-		<slot :tiled-sections="tiledSections">
+		<slot :tiledSections="tiledSections">
 			<!-- Default rendering -->
 			<TiledRows :rows="tiledSections" />
 		</slot>
@@ -18,10 +18,12 @@
 <script lang='ts'>
 import type { PropType } from 'vue'
 
+import { markRaw } from 'vue'
 import TiledRows from './TiledRows.vue'
 import logger from '../../services/logger.js'
 import {
-	type Section, type TiledSection,
+	type Section,
+	type TiledSection,
 
 	splitItemsInRows,
 } from '../../services/TiledLayout.js'
@@ -69,19 +71,20 @@ export default {
 	},
 
 	mounted() {
-		this.resizeObserver = new ResizeObserver((entries) => {
+		// markRaw: ResizeObserver uses private class fields that throw under Vue 3's reactive Proxy.
+		this.resizeObserver = markRaw(new ResizeObserver((entries) => {
 			for (const entry of entries) {
 				const cr = entry.contentRect
 				if (entry.target.classList.contains('tiled-container')) {
 					this.containerWidth = cr.width
 				}
 			}
-		})
+		}))
 
 		this.resizeObserver.observe(this.$refs.tiledLayoutContainer as Element)
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		this.resizeObserver?.disconnect()
 	},
 }

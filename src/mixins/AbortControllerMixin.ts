@@ -3,25 +3,28 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { defineComponent } from 'vue'
+import { defineComponent, markRaw } from 'vue'
 
 export default defineComponent({
 	name: 'AbortControllerMixin',
 
 	data() {
 		return {
-			abortController: new AbortController(),
+			// markRaw is required: AbortController uses private class fields
+			// (`#aborted`, `#signal`, …) which throw "Cannot access invalid
+			// private field" when Vue 3 wraps the instance in a reactive Proxy.
+			abortController: markRaw(new AbortController()),
 		}
 	},
 
 	methods: {
 		abortPendingRequest() {
 			this.abortController.abort()
-			this.abortController = new AbortController()
+			this.abortController = markRaw(new AbortController())
 		},
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		this.abortController.abort()
 	},
 

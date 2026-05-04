@@ -6,7 +6,7 @@
 <template>
 	<div class="face-cover" :class="[small && 'face-cover--small']" @click="$emit('click')">
 		<div class="face-cover__crop-container">
-			<AccountOffOutlineIcon :size="128" :fill-color="colorMainBackground" />
+			<AccountOffOutlineIcon :size="128" :fillColor="colorMainBackground" />
 		</div>
 		<div class="face-cover__details">
 			<div v-if="!small" class="face-cover__details__second-line">
@@ -38,6 +38,8 @@ export default {
 			default: false,
 		},
 	},
+
+	emits: ['click'],
 
 	computed: {
 		unassignedFilesCount() {

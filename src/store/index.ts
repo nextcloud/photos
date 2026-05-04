@@ -6,8 +6,7 @@
 import type { Collection } from '../services/collectionFetcher.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
-import Vue from 'vue'
-import Vuex, { Store } from 'vuex'
+import { createStore } from 'vuex'
 import albums, { type Album } from './albums.ts'
 import collections, { type CollectionState } from './collections.ts'
 import faces, { type FacesState } from './faces.ts'
@@ -72,8 +71,7 @@ async function initPhotosLocationFolder(store: typeof photosStore, state) {
 	store.commit('updateUserConfig', { key: 'photosLocationFolder', value: photosLocationFolder })
 }
 
-Vue.use(Vuex)
-const photosStore = new Store({
+const photosStore = createStore({
 	modules: {
 		files,
 		folders,
@@ -102,6 +100,6 @@ const photosStore = new Store({
 	],
 
 	strict: process.env.NODE_ENV !== 'production',
-}) as PhotosStore
+})
 
 export default photosStore
