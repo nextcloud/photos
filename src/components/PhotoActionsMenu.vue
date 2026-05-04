@@ -89,6 +89,23 @@
 				{{ t('photos', 'Add to album') }}
 			</NcActionButton>
 
+			<!-- Burst-only: turn the stack into a looping WebM. Hidden
+				when the file isn't a stack leader so we don't tempt
+				the user with a one-frame "animation". -->
+			<NcActionButton
+				v-if="burstStackSize > 1"
+				:closeAfterClick="true"
+				:disabled="encodingClip"
+				@click="onExportBurstClip">
+				<template #icon>
+					<NcLoadingIcon v-if="encodingClip" :size="20" />
+					<MovieOpenOutline v-else :size="20" />
+				</template>
+				{{ encodingClip
+					? t('photos', 'Encoding burst…')
+					: t('photos', 'Save burst as animation') }}
+			</NcActionButton>
+
 			<NcActionButton
 				:closeAfterClick="true"
 				@click="onShare">
@@ -220,6 +237,7 @@ import type { PhotoTag } from '../services/PhotoTagService.ts'
 
 import { showError } from '@nextcloud/dialogs'
 import { translate as t } from '@nextcloud/l10n'
+import { generateUrl } from '@nextcloud/router'
 import { defineComponent } from 'vue'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
@@ -232,6 +250,7 @@ import NcTextField from '@nextcloud/vue/components/NcTextField'
 import DotsVertical from 'vue-material-design-icons/DotsVertical.vue'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import InformationOutline from 'vue-material-design-icons/InformationOutline.vue'
+import MovieOpenOutline from 'vue-material-design-icons/MovieOpenOutline.vue'
 import PencilOutline from 'vue-material-design-icons/PencilOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import ShareVariantOutline from 'vue-material-design-icons/ShareVariantOutline.vue'
@@ -248,6 +267,8 @@ import {
 	fetchTagsForFile,
 	unassignTagFromFile,
 } from '../services/PhotoTagService.ts'
+import burstStore from '../store/bursts.ts'
+import { downloadBurstClip, renderBurstClip } from '../utils/burstAnimator.ts'
 
 // Minimum-viable file shape. PhotoFile (timeline) and FoldersNode
 // (folder view) both satisfy this — the actions menu doesn't depend
@@ -269,6 +290,7 @@ export default defineComponent({
 		ImageMultipleOutline,
 		InformationOutline,
 		MetadataEditDialog,
+		MovieOpenOutline,
 		NcActionButton,
 		NcActionSeparator,
 		NcActions,
@@ -306,6 +328,7 @@ export default defineComponent({
 			busyTagIds: new Set<number>(),
 			newTagName: '',
 			creatingTag: false,
+			encodingClip: false,
 		}
 	},
 
@@ -361,6 +384,14 @@ export default defineComponent({
 				: Number.parseInt(String(this.file.fileid))
 		},
 
+		// 0 if this file isn't a burst leader, else the number of
+		// frames in the stack. Drives whether the "Save burst as
+		// animation" entry is rendered.
+		burstStackSize(): number {
+			const stack = burstStore().getStack(String(this.file.fileid))
+			return stack?.memberIds.length ?? 0
+		},
+
 		// EXIF-derived seeds for the edit dialog. The dialog reads
 		// these as fallbacks when the user hasn't stored an
 		// override yet, AND uses them as the "reset to original"
@@ -407,6 +438,32 @@ export default defineComponent({
 
 		onAddToAlbum() {
 			this.$emit('request-add-to-album', this.file)
+		},
+
+		// Encode the current burst's frames into a looping WebM and
+		// trigger a download. Done client-side via Canvas +
+		// MediaRecorder so there's no server round trip; cost is
+		// ~(N × 250 ms) of in-browser encoding for N frames, which
+		// is fine for the typical 10-frame iPhone burst.
+		async onExportBurstClip() {
+			const stack = burstStore().getStack(String(this.file.fileid))
+			if (stack === undefined || this.encodingClip) {
+				return
+			}
+			this.encodingClip = true
+			try {
+				// Pull the same large preview the slideshow uses so
+				// the encoded clip stays high-quality without
+				// downloading the originals.
+				const urls = stack.memberIds.map((memberId) => generateUrl(`/apps/photos/api/v1/preview/${memberId}?x=1024&y=1024`))
+				const blob = await renderBurstClip(urls)
+				downloadBurstClip(blob, this.fileIdNumber)
+			} catch (e) {
+				showError(t('photos', 'Failed to encode burst animation'))
+				logger.error('photos: burst clip encode failed', { error: e })
+			} finally {
+				this.encodingClip = false
+			}
 		},
 
 		onShare() {
