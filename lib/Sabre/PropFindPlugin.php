@@ -91,8 +91,8 @@ class PropFindPlugin extends ServerPlugin {
 			$propFind->handle(self::FILE_NAME_PROPERTYNAME, fn (): string => $node->getFile()->getName());
 			$propFind->handle(self::FAVORITE_PROPERTYNAME, fn (): int => $node->isFavorite() ? 1 : 0);
 			$propFind->handle(FilesPlugin::HAS_PREVIEW_PROPERTYNAME, fn () => json_encode($this->previewManager->isAvailable($fileInfo)));
-			$propFind->handle(FilesPlugin::PERMISSIONS_PROPERTYNAME, function () use ($node): string {
-				$permissions = DavUtil::getDavPermissions($node->getFileInfo());
+			$propFind->handle(FilesPlugin::PERMISSIONS_PROPERTYNAME, function () use ($node, $fileInfo): string {
+				$permissions = DavUtil::getDavPermissions($fileInfo, $fileInfo->getParent());
 				$filteredPermissions = str_replace('R', '', $permissions);
 
 				if ($node instanceof PublicAlbumPhoto) {
