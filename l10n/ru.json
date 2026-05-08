@@ -70,6 +70,7 @@
     "The destination folder is owned by {owner}" : "Целевая папка принадлежит пользователю {owner}",
     "There are no photos or videos yet!" : "Пока не содержит ни одной фотографии или видео.",
     "_{years} year ago_::_{years} years ago_" : ["{years} год назад","{years} лет назад","{years} лет назад","{years} лет назад"],
+    "Squared photos view" : "Вид - квадратные фотографии",
     "Delete source directory" : "Удалить исходный каталог",
     "Pick folder" : "Выберите папку",
     "Select a source folder for your media" : "Выберите исходную папку для ваших медиафайлов",
@@ -155,6 +156,9 @@
     "Failed to create {collectionFileName}" : "Не удалось создать {collectionFileName}",
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Не удалось переименовать {currentCollectionFileName} в {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Не удалось обновить свойства {collectionFileName} следующими параметрами: {properties}",
+    "Delete collection" : "Удалить коллекцию",
+    "Leave shared album" : "Выйти из общего альбома",
+    "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Вы уверены, что хотите удалить {collectionName}? Это действие нельзя отменить.",
     "Failed to delete {collectionFileName}" : "Не удалось удалить {collectionFileName}",
     "Cancel" : "Cancel",
     "Confirm" : "Подтвердить",
@@ -173,6 +177,7 @@
     "Choose default Photos upload and Albums location" : "Выберите местоположение загрузки фотографий и альбомов по умолчанию",
     "Choose a different folder" : "Выбрать другую папку",
     "View" : "Просмотр",
-    "Choose the folder where photos and albums are uploaded to." : "Выберите папку, в которую загружаются фотографии и альбомы."
+    "Choose the folder where photos and albums are uploaded to." : "Выберите папку, в которую загружаются фотографии и альбомы.",
+    "Loading folders …" : "Загрузка папок  …"
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }
