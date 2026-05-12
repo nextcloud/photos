@@ -3,17 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type { User } from '@nextcloud/cypress'
+import type { User } from '@nextcloud/e2e-test-server'
 
-import { addCommands } from '@nextcloud/cypress'
+import { addCommands } from '@nextcloud/e2e-test-server/cypress'
 import axios from 'axios'
-import { addCompareSnapshotCommand } from 'cypress-visual-regression/dist/command'
 import { basename } from 'path'
 
 // Add custom commands
 import 'cypress-wait-until'
 addCommands()
-addCompareSnapshotCommand()
 
 // Register this file's custom commands types
 declare global {
@@ -41,7 +39,7 @@ Cypress.env('baseUrl', url)
 
 /**
  * cy.uploadedFile - uploads a file from the fixtures folder
- * TODO: standardise in @nextcloud/cypress
+ * TODO: standardise in @nextcloud/e2e-test-server
  *
  * @param {User} user the owner of the file, e.g. admin
  * @param {string} fixture the fixture file name, e.g. image1.jpg
@@ -59,7 +57,7 @@ Cypress.Commands.add('uploadFile', (user, fixture = 'image.jpg', mimeType = 'ima
 
 /**
  * cy.uploadedContent - uploads a raw content
- * TODO: standardise in @nextcloud/cypress
+ * TODO: standardise in @nextcloud/e2e-test-server
  *
  * @param {User} user the owner of the file, e.g. admin
  * @param {Blob} blob the content to upload
