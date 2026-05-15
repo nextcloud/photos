@@ -7,6 +7,8 @@ updates:
     day: sunday
     time: "06:00"
     timezone: Europe/Paris
+  cooldown:
+    default-days: 10
 
 - package-ecosystem: composer
   versioning-strategy: increase
@@ -20,6 +22,8 @@ updates:
     day: saturday
     time: "03:00"
     timezone: Europe/Paris
+  cooldown:
+    default-days: 10
   labels:
     - "3. to review"
     - "dependencies"
@@ -32,11 +36,31 @@ updates:
     day: saturday
     time: "03:00"
     timezone: Europe/Paris
+  cooldown:
+    default-days: 10
   labels:
     - "3. to review"
     - "dependencies"
 
 # Main stableXX npm
+- package-ecosystem: npm
+  target-branch: stable34
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  cooldown:
+    default-days: 10
+  labels:
+    - "3. to review"
+    - "dependencies"
+  ignore:
+    # do not do breaking changes on stable branches
+    - dependency-name: "*"
+      update-types: ["version-update:semver-major", "version-update:semver-minor"]
+
 - package-ecosystem: npm
   target-branch: stable33
   directory: "/"
@@ -45,6 +69,8 @@ updates:
     day: saturday
     time: "03:00"
     timezone: Europe/Paris
+  cooldown:
+    default-days: 10
   labels:
     - "3. to review"
     - "dependencies"
@@ -61,6 +87,8 @@ updates:
     day: saturday
     time: "03:00"
     timezone: Europe/Paris
+  cooldown:
+    default-days: 10
   labels:
     - "3. to review"
     - "dependencies"
@@ -68,20 +96,4 @@ updates:
     # do not do breaking changes on stable branches
     - dependency-name: "*"
       update-types: ["version-update:semver-major"]
-
-- package-ecosystem: npm
-  target-branch: stable31
-  directory: "/"
-  schedule:
-    interval: weekly
-    day: saturday
-    time: "03:00"
-    timezone: Europe/Paris
-  labels:
-    - "3. to review"
-    - "dependencies"
-  ignore:
-    # do not do breaking changes on stable branches
-    - dependency-name: "*"
-      update-types: ["version-update:semver-major", "version-update:semver-minor"]
 
