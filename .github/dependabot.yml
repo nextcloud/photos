@@ -14,9 +14,7 @@ updates:
   versioning-strategy: increase
   directories:
     - "/"
-    - "/vendor-bin/cs-fixer"
-    - "/vendor-bin/phpunit"
-    - "/vendor-bin/psalm"
+    - "/vendor-bin/*"
   schedule:
     interval: weekly
     day: saturday
