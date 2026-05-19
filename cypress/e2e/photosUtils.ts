@@ -109,6 +109,24 @@ export function deleteSelection() {
 }
 
 /**
+ * @param fileName the name of the file to open
+ */
+export function openFileInFullSize(fileName: string) {
+	cy.get(`[aria-label="Open the full size \\"${fileName}\\" image"]`).click()
+}
+
+/**
+ * @param publicShareToken the token of the public share that the file belongs to
+ * @param fileName the name of the file currently open in viewer
+ */
+export function downloadPublicFileCurrentlyOpenInViewer(publicShareToken: string, fileName: string) {
+	cy.intercept({ times: 1, method: 'GET', url: `/remote.php/dav/photospublic/${publicShareToken}/${fileName}` }).as('downloadPublicFile')
+	cy.get('[aria-label="Actions"]').click()
+	cy.get('[role="menuitem"]').contains('Download').click()
+	cy.wait('@downloadPublicFile')
+}
+
+/**
  * @param user - User to create directory for
  * @param target - Target path of the directory
  */

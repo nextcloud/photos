@@ -10,6 +10,7 @@ import type { FileStat, ResponseDataDetailed, StatOptions, WebDAVClient } from '
 import { resultToNode } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
+import { generateRemoteUrl } from '@nextcloud/router'
 import { davClient } from './DavClient.ts'
 import logger from './logger.js'
 
@@ -185,7 +186,7 @@ export async function fetchCollectionFiles(path: string, options: StatOptions, e
 
 		const filesRoot = path.split('/').slice(0, -1).join('/')
 		const fetchedFiles = response.data
-			.map((file) => resultToNode(file, filesRoot) as File)
+			.map((file) => resultToNode(file, filesRoot, generateRemoteUrl('dav')) as File)
 			.filter((file) => file.fileid !== undefined)
 
 		logger.debug(`[Collections] Fetched ${fetchedFiles.length} new files: `, { fetchedFiles })
