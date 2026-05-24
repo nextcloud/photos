@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Public link" : "Publiskā saite",
     "Photos" : "Fotoattēli",
+    "On This Day" : "Šajā dienā",
     "Videos" : "Video",
     "Albums" : "Albumi",
     "People" : "Cilvēki",
@@ -32,6 +33,7 @@ OC.L10N.register(
     "Delete the public link" : "Izdzēst publisko saiti",
     "Share via public link" : "Kopīgot ar publisku saiti",
     "An error occurred" : "Gadījās kļūda",
+    "Picture taken on this day will show up here." : "Šeit tiks rādīti šajā dienā uzņemtie attēli.",
     "Favorite" : "Izlasē",
     "Go back" : "Atpakaļ",
     "Dates" : "Datumi",
