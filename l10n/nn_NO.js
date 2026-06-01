@@ -3,6 +3,8 @@ OC.L10N.register(
     {
     "Photos" : "Foto",
     "Videos" : "Video",
+    "People" : "Folk",
+    "Folders" : "Mapper",
     "Favorites" : "Favorit",
     "Shared with you" : "Shared with you",
     "Tags" : "Emneord",
