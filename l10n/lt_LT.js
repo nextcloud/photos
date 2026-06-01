@@ -79,7 +79,7 @@ OC.L10N.register(
     "Media folders" : "Medijos aplankai",
     "Choose the folders from where photos and videos are shown." : "Pasirinkite aplankus, kuriuose rodomos nuotraukos ir vaizdo įrašai.",
     "All folders" : "Visi aplankai",
-    "Add a Photos source for the timelines" : "Pridėti nuotraukų šaltinį laiko juostoms",
+    "Add a Photos source for the timelines" : "Pridėti nuotraukų šaltinį laiko skalėms",
     "Add folder" : "Pridėti aplanką",
     "Home" : "Namai",
     "Select the default upload location for your media" : "Pasirinkite numatytąją medijos įkėlimo vietą",
