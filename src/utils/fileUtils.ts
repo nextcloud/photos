@@ -139,6 +139,8 @@ export function toViewerFileInfo(file: Node): ViewerFileInfo {
 		source = getRemoteURL() + getRootPath() + filename
 	}
 
+	const decodedEtag = String(file.attributes.etag).replace(/&quot;/g, '')
+
 	return {
 		fileid: file.fileid,
 		basename: file.basename,
@@ -148,7 +150,7 @@ export function toViewerFileInfo(file: Node): ViewerFileInfo {
 		ownerId: file.owner,
 		source,
 		hasPreview: file.attributes.hasPreview,
-		previewUrl: file.attributes.previewUrl ?? generateUrl(`/apps/photos/api/v1/preview/${file.fileid}?x=4096&y=4096`),
+		previewUrl: file.attributes.previewUrl ?? generateUrl(`/apps/photos/api/v1/preview/${file.fileid}?etag=${decodedEtag}&x=4096&y=4096`),
 		etag: file.attributes.etag,
 		permissions,
 	}
