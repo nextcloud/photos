@@ -107,7 +107,7 @@
     "vite-plugin-pwa": "^1.0.3",
     "vitest": "^3.2.4",
     "vue-tsc": "^2.2.10",
-    "wait-on": "^8.0.3"
+    "wait-on": "^8.0.5"
   },
   "engines": {
     "node": "^24.0.0",
