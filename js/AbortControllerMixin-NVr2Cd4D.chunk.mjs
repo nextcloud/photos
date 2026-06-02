@@ -1,0 +1,2 @@
+import{d as t}from"./preload-helper-BKveOr2o.chunk.mjs";const a=t({name:"AbortControllerMixin",data(){return{abortController:new AbortController}},methods:{abortPendingRequest(){this.abortController.abort(),this.abortController=new AbortController}},beforeDestroy(){this.abortController.abort()},beforeRouteLeave(r,e,o){this.abortPendingRequest(),o()}});export{a as A};
+//# sourceMappingURL=AbortControllerMixin-NVr2Cd4D.chunk.mjs.map
