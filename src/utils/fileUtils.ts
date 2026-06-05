@@ -171,3 +171,31 @@ export function legacyToViewerFileInfo(file: FoldersNode) {
 		permissions: file.permissions,
 	}
 }
+
+export async function getVideoDurationFromUrl(url): Promise<number> {
+	return new Promise((resolve, reject) => {
+		const video = document.createElement('video')
+		video.preload = 'metadata'
+
+		const cleanup = () => {
+			video.removeAttribute('src')
+		}
+
+		video.onloadedmetadata = () => {
+			const seconds = video.duration
+			cleanup()
+			if (!Number.isFinite(seconds)) {
+				reject(new Error('Could not read non-finite duration.'))
+				return
+			}
+			resolve(Math.floor(seconds))
+		}
+
+		video.onerror = () => {
+			cleanup()
+			reject(new Error('Failed to load video metadata (auth/CORS/url issue).'))
+		}
+
+		video.src = url
+	})
+}
