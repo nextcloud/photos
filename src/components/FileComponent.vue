@@ -16,8 +16,11 @@
 
 			<!-- image and loading placeholder -->
 			<div class="file__images">
-				<VideoOutline v-if="file.mime?.includes('video')" class="icon-overlay" :size="64" />
-				<PlayCircleOutlineIcon v-else-if="file.attributes['metadata-files-live-photo'] !== undefined" class="icon-overlay" :size="64" />
+				<div v-if="isVideo" class="file__duration">
+					<span class="file__duration__label">{{ videoDuration }}</span>
+					<PlayCircleOutlineIcon class="file__duration__icon" :size="16" />
+				</div>
+				<PlayCircleOutlineIcon v-else-if="file.attributes['metadata-files-live-photo'] !== undefined" :size="64" />
 
 				<!-- We have two img elements to load the small and large preview -->
 				<!-- Do not show the small preview if the larger one is loaded -->
@@ -83,16 +86,16 @@ import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { decode } from 'blurhash'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import PlayCircleOutlineIcon from 'vue-material-design-icons/PlayCircleOutline.vue'
-import VideoOutline from 'vue-material-design-icons/VideoOutline.vue'
 import FavoriteIcon from './FavoriteIcon.vue'
+import logger from '../services/logger.ts'
 import { isCachedPreview } from '../services/PreviewService.js'
+import { getVideoDurationFromUrl } from '../utils/fileUtils.ts'
 
 export default {
 	name: 'FileComponent',
 	components: {
 		FavoriteIcon,
 		NcCheckboxRadioSwitch,
-		VideoOutline,
 		PlayCircleOutlineIcon,
 	},
 
@@ -122,6 +125,7 @@ export default {
 			loadedLarge: false,
 			errorLarge: false,
 			isMobile: useIsMobile(),
+			videoDuration: '',
 		}
 	},
 
@@ -135,6 +139,10 @@ export default {
 
 		isImage(): boolean {
 			return this.file.mime?.startsWith('image') ?? false
+		},
+
+		isVideo(): boolean {
+			return this.file.mime?.includes('video') ?? false
 		},
 
 		decodedEtag(): string {
@@ -161,6 +169,7 @@ export default {
 			this.errorSmall = false
 			this.loadedLarge = false
 			this.errorLarge = false
+			this.videoDuration = ''
 
 			await this.init()
 		},
@@ -192,6 +201,7 @@ export default {
 			await this.$nextTick() // Wait for next tick to have the canvas in the DOM
 
 			this.drawBlurhash()
+			await this.getVideoDuration()
 		},
 
 		emitClick() {
@@ -241,6 +251,27 @@ export default {
 			const imageData = ctx.createImageData(width, height) as ImageData
 			imageData.data.set(pixels)
 			ctx.putImageData(imageData, 0, 0)
+		},
+
+		async getVideoDuration() {
+			if (!this.isVideo) {
+				return
+			}
+
+			try {
+				const totalSeconds = await getVideoDurationFromUrl(this.file.source)
+				const hours = Math.floor(totalSeconds / 3600)
+				const minutes = Math.floor((totalSeconds % 3600) / 60)
+				const seconds = totalSeconds % 60
+
+				if (hours > 0) {
+					this.videoDuration = `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+				}
+
+				this.videoDuration = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+			} catch (error) {
+				logger.error('Failed to get video duration for file', { error, filename: this.file.basename })
+			}
 		},
 
 		t,
@@ -300,26 +331,31 @@ export default {
 			width: 100%;
 			height: 100%;
 
-			.icon-overlay {
-				position: absolute;
-				top: 0px;
-				inset-inline-end: 0px;
-				width: 100%;
-				height: 100%;
-				z-index: 1;
-				opacity: 0.8;
-
-				:deep(.material-design-icon__svg) {
-					fill: var(--color-main-background);
-				}
-			}
-
 			img {
 				width: 100%;
 				height: 100%;
 				object-fit: cover;
 				position: absolute;
 				color: transparent; /// Hide alt='' text when loading.
+			}
+		}
+
+		&__duration {
+			position: absolute;
+			bottom: 8px;
+			inset-inline-end: 8px;
+			height: 24px;
+			display: inline-flex;
+			align-items: center;
+			gap: 4px;
+			padding: 0 8px;
+			border-radius: var(--border-radius);
+			background: rgba(0, 0, 0, 0.4);
+			color: #fff;
+			z-index: 2;
+
+			&__label {
+				font-weight: 600;
 			}
 		}
 	}
