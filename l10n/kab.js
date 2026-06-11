@@ -7,6 +7,7 @@ OC.L10N.register(
     "Folders" : "Ikaramen",
     "Favorites" : "Imenyafen",
     "Tags" : "Tibzimin",
+    "This name is already in use." : "Isem-a yettuseqdec yakan",
     "Back" : "Retour",
     "Save" : "Sekles",
     "Favorite" : "Menyif",
