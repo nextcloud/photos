@@ -1,13 +1,19 @@
 { "translations": {
+    "Public link" : "Aseɣwen azayaz",
     "Photos" : "Tiwlafin",
     "Videos" : "Tividyutin",
+    "Albums" : "Albums",
     "People" : "Imdanen",
     "Folders" : "Ikaramen",
     "Favorites" : "Imenyafen",
+    "On this day" : "Ass-a",
     "Tags" : "Tibzimin",
+    "Places" : "Imeḍqan",
+    "Map" : "Tagertilt",
     "This name is already in use." : "Isem-a yettuseqdec yakan",
     "Back" : "Retour",
     "Save" : "Sekles",
+    "An error occurred" : "Teḍra-d tuccḍa",
     "Favorite" : "Menyif",
     "Go back" : "Tuɣalin",
     "Pick folder" : "Fren akaram",
@@ -17,9 +23,11 @@
     "General" : "Amatu",
     "Remove from favorites" : "Kkes-it seg ismal",
     "Save." : "Sekles.",
+    "Last week" : "Amalas yezrin",
     "Details" : "Talqayt",
     "Cancel" : "Semmet",
     "Confirm" : "Sergeg",
-    "Group" : "Agraw"
+    "Group" : "Agraw",
+    "View" : "Askan"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
