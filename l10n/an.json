@@ -1,0 +1,12 @@
+{ "translations": {
+    "Favorites" : "Favoritos",
+    "Tags" : "Etiquetas",
+    "Back" : "Dezaga",
+    "Save" : "Save",
+    "Favorite" : "Favorito",
+    "Home" : "Casa",
+    "Details" : "Detalles",
+    "Cancel" : "Cancel",
+    "Group" : "Grupo"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
