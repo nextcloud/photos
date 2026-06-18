@@ -156,7 +156,7 @@
     "Failed to create {collectionFileName}" : "Nepavyko sukurti {collectionFileName}",
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Nepavyko pervadinti {currentCollectionFileName} į {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Nepavyko atnaujinti {collectionFileName} savybių pagal {properties}",
-    "Delete collection" : "Ištrinti kolekciją",
+    "Delete collection" : "Ištrinti rinkinį",
     "Leave shared album" : "Išeiti iš bendro albumo",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Ar tikrai norite ištrinti {collectionName}? Šio veiksmo negalima atšaukti.",
     "Failed to delete {collectionFileName}" : "Nepavyko ištrinti {collectionFileName}",
