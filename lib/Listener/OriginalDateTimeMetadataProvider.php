@@ -67,13 +67,6 @@ class OriginalDateTimeMetadataProvider implements IEventListener {
 			return;
 		}
 
-		// We need the file content to extract the EXIF data.
-		// This can be slow for remote storage, so we do it in a background job.
-		if (!$node->getStorage()->isLocal() && $event instanceof MetadataLiveEvent) {
-			$event->requestBackgroundJob();
-			return;
-		}
-
 		if (!in_array($node->getMimeType(), Application::IMAGE_MIMES) && !in_array($node->getMimeType(), Application::VIDEO_MIMES)) {
 			return;
 		}
