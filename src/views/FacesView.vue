@@ -29,11 +29,14 @@
 			<RouterLink
 				v-for="face in orderedFaces"
 				:key="face.basename"
+				data-test="face"
+				:data-test-face-name="face.basename"
 				:to="`/faces/${encodeURIComponent(face.basename)}`">
 				<FaceCover :base-name="face.basename" />
 			</RouterLink>
 			<RouterLink
 				key="unassigned"
+				data-test="unassigned-faces"
 				to="/faces/unassigned">
 				<UnassignedFacesCover />
 			</RouterLink>

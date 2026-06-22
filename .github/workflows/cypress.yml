@@ -80,6 +80,34 @@ jobs:
           npm ci
           TESTING=true npm run build --if-present
 
+      # The faces tests drive the recognize WebDAV API, so we build a recognize
+      # checkout here (models are tracked in the repo, the TensorFlow binaries are
+      # fetched by `make all`) and ship it inside the cached context. It is later
+      # mounted into the test container via RECOGNIZE_APP_PATH (see cypress.config.ts).
+      - name: Set up PHP for recognize
+        uses: shivammathur/setup-php@cf4cade2721270509d5b1c766ab3549210a39a2a # v2.33.0
+        with:
+          php-version: "8.3"
+          extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite, gd, zip, bz2
+          tools: composer
+
+      - name: Checkout recognize
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          repository: nextcloud/recognize
+          ref: ${{ env.RECOGNIZE_BRANCH }}
+          path: recognize-app
+          persist-credentials: false
+
+      - name: Build recognize
+        working-directory: recognize-app
+        run: |
+          composer install --no-dev
+          make all
+          # Drop git metadata to keep the cached context small; the working tree
+          # (models + TensorFlow binaries) is all that is needed at runtime.
+          rm -rf .git
+
       - name: Save context
         uses: buildjet/cache/save@3e70d19e31d6a8030aeddf6ed8dbe601f94d09f4 # v4.0.2
         with:
@@ -137,6 +165,8 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           CYPRESS_BUILD_ID: ${{ github.sha }}-${{ github.run_number }}
           CYPRESS_GROUP: Run ${{ matrix.containers == 'component' && 'component' || 'E2E' }}
+          # Built recognize app, mounted into the test container for the faces tests
+          RECOGNIZE_APP_PATH: ${{ github.workspace }}/recognize-app
 
       - name: Upload snapshots
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
