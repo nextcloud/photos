@@ -4,6 +4,7 @@
  */
 
 import type { Collection } from '../services/collectionFetcher.ts'
+import type { PhotoFile } from './files.ts'
 import type { PhotosContext } from './index.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
@@ -13,6 +14,47 @@ import Vue from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
+
+type FaceDetection = {
+	id: number
+	clusterId: number | null
+	title: string | null
+}
+
+/**
+ * Find the face detection of a file that belongs to the given face.
+ *
+ * The recognize WebDAV API names every detected face `{detectionId}-{fileName}`
+ * (see FacePhoto::getName) and resolves children by parsing the detection id out
+ * of that name (see FaceRoot::getChild). Addressing a face photo by its bare file
+ * name therefore yields a 404, so we need the detection to build the correct path.
+ *
+ * @param file The photo node carrying the parsed `face-detections` attribute.
+ * @param face The name of the face the detection belongs to, or `undefined` for
+ *             the unassigned-faces collection.
+ */
+function findFaceDetection(file: PhotoFile, face?: string): FaceDetection {
+	const detections = ((file.attributes as Record<string, unknown>)['face-detections'] ?? []) as FaceDetection[]
+	// recognize lists unassigned faces as detections with a cluster id of -1, and
+	// names a face after its cluster title, falling back to the cluster id.
+	const detection = face === undefined
+		? detections.find((d) => d.clusterId === -1)
+		: detections.find((d) => (d.title || `${d.clusterId}`) === face)
+	if (detection === undefined) {
+		throw new Error(`No face detection found for file "${file.basename}" in face "${face ?? 'unassigned'}"`)
+	}
+	return detection
+}
+
+/**
+ * Build the WebDAV file name used by the recognize faces API for a detection.
+ *
+ * @param detection The face detection being addressed.
+ * @param fileBaseName The bare file name of the photo.
+ */
+function getRecognizeFileName(detection: FaceDetection, fileBaseName: string): string {
+	return `${detection.id}-${fileBaseName}`
+}
 
 const state = {
 	faces: {} as Record<string, Collection>,
@@ -143,14 +185,16 @@ const actions = {
 			.map(async (fileId) => {
 				const file = context.rootState.files.files[fileId]
 				const fileBaseName = file.basename
+				const detection = findFaceDetection(file, oldFace)
+				const recognizeFileName = getRecognizeFileName(detection, fileBaseName)
 				const symbol = await semaphore.acquire()
 
 				try {
 					await davClient.moveFile(
-						oldFace ? `/recognize/${getCurrentUser()?.uid}/faces/${oldFace}/${fileBaseName}` : `/recognize/${getCurrentUser()?.uid}/unassigned-faces/${fileBaseName}`,
-						`/recognize/${getCurrentUser()?.uid}/faces/${faceName}/${fileBaseName}`,
+						oldFace ? `/recognize/${getCurrentUser()?.uid}/faces/${oldFace}/${recognizeFileName}` : `/recognize/${getCurrentUser()?.uid}/unassigned-faces/${recognizeFileName}`,
+						`/recognize/${getCurrentUser()?.uid}/faces/${faceName}/${recognizeFileName}`,
 					)
-					file.faceDetections.find((detection) => detection.title === oldFace).title = faceName
+					detection.title = faceName
 					await context.commit('addFilesToFace', { faceName, fileIdsToAdd: [fileId] })
 					if (oldFace) {
 						await context.commit('removeFilesFromFace', { faceName: oldFace, fileIdsToRemove: [fileId] })
@@ -184,11 +228,13 @@ const actions = {
 
 		const promises = fileIdsToRemove
 			.map(async (fileId) => {
-				const fileBaseName = context.rootState.files[fileId].basename
+				const file = context.rootState.files.files[fileId]
+				const fileBaseName = file.basename
+				const recognizeFileName = getRecognizeFileName(findFaceDetection(file, faceName), fileBaseName)
 				const symbol = await semaphore.acquire()
 
 				try {
-					await davClient.deleteFile(`/recognize/${getCurrentUser()?.uid}/faces/${faceName}/${fileBaseName}`)
+					await davClient.deleteFile(`/recognize/${getCurrentUser()?.uid}/faces/${faceName}/${recognizeFileName}`)
 				} catch (error) {
 					context.commit('addFilesToFace', { faceName, fileIdsToAdd: [fileId] })
 
