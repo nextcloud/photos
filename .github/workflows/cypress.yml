@@ -26,7 +26,7 @@ env:
 
   # The recognize branch to build for the faces tests. recognize master supports
   # the current server releases; override for stable branches if needed.
-  RECOGNIZE_BRANCH: master
+  RECOGNIZE_BRANCH: main
 
 permissions:
   contents: read
