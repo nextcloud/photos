@@ -1,0 +1,170 @@
+/**
+ * SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+import type { User } from '@nextcloud/e2e-test-server'
+
+import { mkdir } from './photosUtils.ts'
+
+/**
+ * recognize's FaceClusterAnalyzer only starts forming clusters once it has
+ * gathered at least MIN_DATASET_SIZE (120) face detections. Our committed face
+ * fixture set is much smaller than that, so we upload every fixture image
+ * several times (under distinct names) to comfortably clear the threshold.
+ * The duplicated detections share the same face vector and therefore cluster
+ * tightly, which keeps the resulting clusters deterministic enough to test.
+ */
+export const FACE_UPLOAD_MULTIPLIER = 5
+
+/**
+ * Folder, relative to `cypress/fixtures`, that holds the face fixture images.
+ * It is populated from the recognize repository's `test-files/FaceID-550`
+ * dataset (see the Cypress workflow / `npm run cypress:setup-faces`).
+ */
+export const FACES_FIXTURE_DIR = 'faces'
+
+export type FacesSetupInfo = {
+	snapshot?: string
+	user: User
+}
+
+/**
+ * Upload the face fixture images for a user.
+ *
+ * Each image is uploaded `FACE_UPLOAD_MULTIPLIER` times under a distinct name
+ * so recognize ends up with enough detections to cluster.
+ *
+ * @param user The user to upload the fixtures for.
+ * @param destination The target folder, relative to the user root.
+ */
+export function uploadFaceMedia(user: User, destination = '/Photos') {
+	return cy.exec(`find cypress/fixtures/${FACES_FIXTURE_DIR} -type f \\( -iname '*.jpg' -o -iname '*.jpeg' \\)`)
+		.then((result) => {
+			const files = result.stdout.split('\n').map((line) => line.trim()).filter(Boolean)
+			expect(files.length, 'face fixture images are present').to.be.greaterThan(0)
+
+			files.forEach((absolutePath) => {
+				// Path relative to the fixtures folder, e.g. "faces/Sao_Mai/Sao_Mai_1.jpg".
+				const fixturePath = absolutePath.replace(/^cypress\/fixtures\//, '')
+				const fileName = fixturePath.split('/').pop() as string
+
+				for (let copy = 0; copy < FACE_UPLOAD_MULTIPLIER; copy++) {
+					const targetName = copy === 0 ? fileName : `${copy}-${fileName}`
+					cy.uploadFile(user, fixturePath, 'image/jpeg', `/${destination}/${targetName}`)
+				}
+			})
+		})
+}
+
+/**
+ * Run the recognize face detection + clustering pipeline.
+ *
+ * This mirrors recognize's own CI: scan the files, classify them to produce
+ * face detections, then run several clustering passes to stabilise the
+ * resulting clusters.
+ */
+export function classifyFaces() {
+	// Enable faces and disable the API key requirement so the Photos WebDAV
+	// requests are accepted without a signed recognize key.
+	cy.runOccCommand('config:app:set --value true recognize faces.enabled')
+	cy.runOccCommand('config:app:set --value false recognize require_api_key')
+	// GitHub runners only have a couple of cores available.
+	cy.runOccCommand('config:app:set --value 1 recognize tensorflow.cores')
+
+	cy.runOccCommand('files:scan --all --generate-metadata', { timeout: 5 * 60 * 1000 })
+	cy.runOccCommand('recognize:classify', { timeout: 30 * 60 * 1000 })
+
+	// Several passes, as a single pass does not necessarily assign every
+	// detection to its final cluster.
+	for (let pass = 0; pass < 6; pass++) {
+		cy.runOccCommand('recognize:cluster-faces -b 10000', { timeout: 10 * 60 * 1000 })
+	}
+}
+
+/**
+ * Set up the data needed for the faces tests.
+ *
+ * The face classification pipeline is expensive, so it is run only once and
+ * the resulting Nextcloud data directory is snapshotted; subsequent tests
+ * restore that snapshot instead of re-classifying.
+ */
+export function setupFacesTests(): Cypress.Chainable<FacesSetupInfo> {
+	return cy.task('getVariable', { key: 'faces-data' })
+		.then((_setupInfo) => {
+			const setupInfo = (_setupInfo as FacesSetupInfo) || ({} as FacesSetupInfo)
+
+			if (setupInfo.snapshot) {
+				cy.restoreState(setupInfo.snapshot)
+			} else {
+				cy.createRandomUser().then((user) => {
+					setupInfo.user = user
+				})
+
+				cy.then(() => {
+					mkdir(setupInfo.user, '/Photos')
+					uploadFaceMedia(setupInfo.user)
+				})
+
+				classifyFaces()
+
+				cy.then(() => {
+					cy.saveState().then((value) => {
+						setupInfo.snapshot = value
+					})
+					cy.task('setVariable', { key: 'faces-data', value: setupInfo })
+				})
+			}
+
+			return cy.then(() => {
+				cy.login(setupInfo.user)
+				cy.visit('/apps/photos')
+				return cy.wrap(setupInfo)
+			})
+		})
+}
+
+/**
+ * Navigate to the faces view and wait for the faces list to be fetched.
+ */
+export function navigateToFaces() {
+	cy.url().then((url) => {
+		if (!url.includes('/apps/photos/faces')) {
+			cy.intercept({ times: 1, method: 'PROPFIND', url: '/remote.php/dav/recognize/*/faces/' }).as('propFindFaces')
+			cy.get('[data-id-app-nav-item="faces"]').click()
+			cy.wait('@propFindFaces')
+		}
+	})
+	// Wait for at least one recognized person to be rendered.
+	cy.get('[data-test="face"]', { timeout: 10000 }).should('have.length.at.least', 1)
+}
+
+/**
+ * Open the n-th recognized person and wait for their photos to load.
+ *
+ * @param index The index of the person in the faces list.
+ */
+export function openFace(index = 0) {
+	cy.intercept({ method: 'PROPFIND', url: '/remote.php/dav/recognize/*/faces/*' }).as('propFindFaceContent')
+	cy.get('[data-test="face"]').eq(index).click()
+	cy.wait('@propFindFaceContent')
+	cy.get('[data-test="media"]', { timeout: 10000 }).should('have.length.at.least', 1)
+}
+
+/**
+ * Select the n-th photo in the currently open person view.
+ *
+ * @param index The index of the photo.
+ */
+export function selectFacePhoto(index = 0) {
+	cy.get('[data-test="media"]').eq(index)
+		.find('a').focus()
+		.parent().find('input').check({ force: true })
+}
+
+/**
+ * Open the selection actions menu in the person view.
+ */
+export function openFaceActionsMenu() {
+	cy.get('.face__header__actions [aria-label="Open actions menu"]').click()
+}
