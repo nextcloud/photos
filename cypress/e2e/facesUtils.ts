@@ -15,7 +15,7 @@ import { mkdir } from './photosUtils.ts'
  * The duplicated detections share the same face vector and therefore cluster
  * tightly, which keeps the resulting clusters deterministic enough to test.
  */
-export const FACE_UPLOAD_MULTIPLIER = 5
+export const FACE_UPLOAD_MULTIPLIER = 7
 
 /**
  * Folder, relative to `cypress/fixtures`, that holds the face fixture images.
