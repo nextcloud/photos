@@ -236,5 +236,5 @@ export function selectFacePhoto(index = 0) {
  * Open the selection actions menu in the person view.
  */
 export function openFaceActionsMenu() {
-	cy.get('.face__header__actions [aria-label="Open actions menu"]').click()
+	cy.get('.face__header__actions [aria-label="Actions"]').click()
 }
