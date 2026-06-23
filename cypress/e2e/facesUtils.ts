@@ -71,6 +71,16 @@ export function classifyFaces() {
 	cy.runOccCommand('config:app:set --value false recognize require_api_key')
 	// GitHub runners only have a couple of cores available.
 	cy.runOccCommand('config:app:set --value 1 recognize tensorflow.cores')
+	// recognize's InstallDeps migration cannot download its Node runtime because
+	// the app is mounted read-only, so point it at the binary pre-staged by the
+	// workflow (see .github/workflows/cypress.yml). Without this the classifier
+	// process never starts and no faces are detected.
+	cy.runOccCommand('config:app:set --lazy --value /var/www/html/apps/recognize/bin/node recognize node_binary')
+	// Debug logging, written to data/nextcloud.log, so recognize's classifier
+	// errors and "ClusterDebug: …" lines (e.g. "Not enough face detections
+	// found") are available for diagnosis from inside the test container.
+	cy.runOccCommand('config:system:set loglevel --value 0')
+	cy.runOccCommand('config:system:set log_type --value file')
 
 	cy.runOccCommand('files:scan --all --generate-metadata', { timeout: 5 * 60 * 1000 })
 	cy.runOccCommand('recognize:classify', { timeout: 30 * 60 * 1000 })
@@ -80,6 +90,63 @@ export function classifyFaces() {
 	for (let pass = 0; pass < 6; pass++) {
 		cy.runOccCommand('recognize:cluster-faces -b 10000', { timeout: 10 * 60 * 1000 })
 	}
+}
+
+/**
+ * Verify that the recognize pipeline actually produced face clusters.
+ *
+ * Without this, a pipeline that yields no clusters only surfaces much later as
+ * an opaque "[data-test="face"] not found" timeout in the faces view. Querying
+ * the same WebDAV endpoint the app uses turns that into a clear, actionable
+ * failure, and the detection count helps tell apart "classification produced
+ * nothing" from "fewer than the 120 detections recognize needs to cluster".
+ *
+ * @param user The user whose faces were classified.
+ */
+export function verifyFacesClassification(user: User) {
+	const diagnostics: { detections?: string, logTail?: string } = {}
+
+	// Gather diagnostics from the live test container. The post-run workflow
+	// steps can't do this: the container is already gone by then. The occ
+	// commands above prove it is up here, so read straight from it. We derive
+	// the container name exactly like @nextcloud/cypress's getContainerName
+	// (nextcloud-cypress-tests_<basename of cwd>) instead of `docker ps`, which
+	// returned nothing in CI.
+	cy.exec('pwd')
+		.then(({ stdout }) => {
+			const container = `nextcloud-cypress-tests_${stdout.trim().split('/').pop()}`
+			const dockerExec = (command: string) => cy.exec(`docker exec --user www-data --workdir /var/www/html ${container} ${command}`, { failOnNonZeroExit: false })
+
+			// Count face detections directly in the DB (php is always present in
+			// the container, sqlite3 may not be).
+			dockerExec('php -r \'try { $f = glob("data/*.db"); echo $f ? (new PDO("sqlite:".$f[0]))->query("SELECT COUNT(*) FROM oc_recognize_face_detections")->fetchColumn() : "no-db"; } catch (Throwable $e) { echo "err: ".$e->getMessage(); }\'')
+				.then(({ stdout: detections }) => {
+					diagnostics.detections = (detections || '').trim()
+				})
+			dockerExec("sh -c 'grep -iE \"recognize|face|cluster|tensor|classif|node\" data/nextcloud.log 2>/dev/null | tail -n 60'")
+				.then(({ stdout: logTail }) => {
+					diagnostics.logTail = (logTail || '').trim()
+				})
+		})
+
+	// Hard check: the faces collection must expose at least one cluster.
+	cy.request({
+		method: 'PROPFIND',
+		url: `${Cypress.env('baseUrl')}/remote.php/dav/recognize/${encodeURIComponent(user.userId)}/faces/`,
+		auth: { user: user.userId, pass: user.password },
+		headers: { Depth: '1' },
+	}).then((response) => {
+		// Depth:1 returns the faces collection itself plus one entry per cluster.
+		const responseCount = (response.body.match(/<\w+:response[\s>]/g) || []).length
+		const clusterCount = Math.max(responseCount - 1, 0)
+		cy.log(`recognize face clusters: ${clusterCount}, detections: ${diagnostics.detections}`)
+		expect(
+			clusterCount,
+			'recognize formed at least one face cluster.\n'
+			+ `Face detections in DB: ${diagnostics.detections ?? 'unknown'} (clustering needs ≥120).\n`
+			+ `recognize log tail:\n${diagnostics.logTail ?? '(empty)'}`,
+		).to.be.greaterThan(0)
+	})
 }
 
 /**
@@ -107,6 +174,12 @@ export function setupFacesTests(): Cypress.Chainable<FacesSetupInfo> {
 				})
 
 				classifyFaces()
+
+				// Fail early and clearly if classification produced no clusters,
+				// rather than snapshotting an empty state and timing out later.
+				cy.then(() => {
+					verifyFacesClassification(setupInfo.user)
+				})
 
 				cy.then(() => {
 					cy.saveState().then((value) => {
