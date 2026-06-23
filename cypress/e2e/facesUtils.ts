@@ -106,27 +106,20 @@ export function classifyFaces() {
 export function verifyFacesClassification(user: User) {
 	const diagnostics: { detections?: string, logTail?: string } = {}
 
-	// Gather diagnostics from the live test container. The post-run workflow
-	// steps can't do this: the container is already gone by then. The occ
-	// commands above prove it is up here, so read straight from it. We derive
-	// the container name exactly like @nextcloud/cypress's getContainerName
-	// (nextcloud-cypress-tests_<basename of cwd>) instead of `docker ps`, which
-	// returned nothing in CI.
-	cy.exec('pwd')
-		.then(({ stdout }) => {
-			const container = `nextcloud-cypress-tests_${stdout.trim().split('/').pop()}`
-			const dockerExec = (command: string) => cy.exec(`docker exec --user www-data --workdir /var/www/html ${container} ${command}`, { failOnNonZeroExit: false })
-
-			// Count face detections directly in the DB (php is always present in
-			// the container, sqlite3 may not be).
-			dockerExec('php -r \'try { $f = glob("data/*.db"); echo $f ? (new PDO("sqlite:".$f[0]))->query("SELECT COUNT(*) FROM oc_recognize_face_detections")->fetchColumn() : "no-db"; } catch (Throwable $e) { echo "err: ".$e->getMessage(); }\'')
-				.then(({ stdout: detections }) => {
-					diagnostics.detections = (detections || '').trim()
-				})
-			dockerExec("sh -c 'grep -iE \"recognize|face|cluster|tensor|classif|node\" data/nextcloud.log 2>/dev/null | tail -n 60'")
-				.then(({ stdout: logTail }) => {
-					diagnostics.logTail = (logTail || '').trim()
-				})
+	// Gather diagnostics from the live test container via a Node task (the
+	// post-run workflow steps can't: the container is gone by then). The task
+	// uses execFileSync so stderr is captured too — earlier cy.exec attempts
+	// returned nothing because of shell quoting/PATH issues.
+	const phpCount = 'try { $f = glob("data/*.db"); echo $f ? (new PDO("sqlite:".$f[0]))->query("SELECT COUNT(*) FROM oc_recognize_face_detections")->fetchColumn() : "no-db"; } catch (Throwable $e) { echo "err: ".$e->getMessage(); }'
+	cy.task('execInContainer', { args: ['php', '-r', phpCount] })
+		.then((result) => {
+			const { stdout, stderr } = result as { stdout: string, stderr: string }
+			diagnostics.detections = (stdout || '').trim() || `stderr: ${(stderr || '').trim()}`
+		})
+	cy.task('execInContainer', { args: ['sh', '-c', 'grep -iE "recognize|face|cluster|tensor|classif|node" data/nextcloud.log 2>/dev/null | tail -n 60'] })
+		.then((result) => {
+			const { stdout, stderr } = result as { stdout: string, stderr: string }
+			diagnostics.logTail = (stdout || '').trim() || (stderr || '').trim()
 		})
 
 	// Hard check: the faces collection must expose at least one cluster.

@@ -1,3 +1,5 @@
+import { configureNextcloud, startNextcloud, stopNextcloud, waitOnNextcloud } from '@nextcloud/e2e-test-server/docker'
+import { defineConfig } from 'cypress'
 /**
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -51,6 +53,24 @@ export default defineConfig({
 				},
 				getVariable({ key }) {
 					return data[key] ?? null
+				},
+				// Run a command inside the Nextcloud test container and return its
+				// output (stdout AND stderr). Used by the faces tests to read
+				// recognize diagnostics straight from the container. execFileSync
+				// (argv array, no shell) avoids the quoting/PATH pitfalls that make
+				// `cy.exec('docker exec … php -r …')` silently return nothing.
+				execInContainer({ args }) {
+					const container = `nextcloud-cypress-tests_${basename(process.cwd())}`
+					try {
+						const stdout = execFileSync('docker', ['exec', '--user', 'www-data', '--workdir', '/var/www/html', container, ...args], { encoding: 'utf8' })
+						return { stdout, stderr: '' }
+					} catch (error) {
+						const e = error as { stdout?: { toString(): string }, stderr?: { toString(): string } }
+						return {
+							stdout: e.stdout?.toString() ?? '',
+							stderr: e.stderr?.toString() ?? String(error),
+						}
+					}
 				},
 			})
 
