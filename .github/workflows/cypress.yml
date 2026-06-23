@@ -206,13 +206,14 @@ jobs:
           path: nextcloud.log
 
       # The template's "Extract NC logs" step uses the wrong container name
-      # (an underscore is used, not a dash) and recognize's classifier errors
-      # may go to either data/nextcloud.log or the container's stderr depending
-      # on log_type. Discover the container and grab both for the faces tests.
+      # (@nextcloud/e2e-test-server names it nextcloud-e2e-test-server_<app>) and
+      # recognize's classifier errors may go to either data/nextcloud.log or the
+      # container's stderr depending on log_type. Discover the container by
+      # listing all of them and grab both logs for the faces tests.
       - name: Extract Nextcloud app log
         if: failure() && matrix.containers != 'component'
         run: |
-          container=$(docker ps -a --filter name=nextcloud-cypress-tests --format '{{.Names}}' | head -n1)
+          container=$(docker ps -a --format '{{.Names}}' | grep -iE 'nextcloud|cypress' | head -n1)
           echo "Using container: $container"
           mkdir -p nc-logs
           docker exec "$container" sh -c 'cat /var/www/html/data/nextcloud.log' > nc-logs/nextcloud.log 2>&1 || true
