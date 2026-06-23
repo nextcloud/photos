@@ -104,21 +104,24 @@ export function classifyFaces() {
  * @param user The user whose faces were classified.
  */
 export function verifyFacesClassification(user: User) {
-	const diagnostics: { detections?: string, logTail?: string } = {}
+	const diagnostics: { detections?: string, logTail?: string, container?: string } = {}
 
 	// Gather diagnostics from the live test container via a Node task (the
 	// post-run workflow steps can't: the container is gone by then). The task
-	// uses execFileSync so stderr is captured too — earlier cy.exec attempts
-	// returned nothing because of shell quoting/PATH issues.
+	// discovers the container via `docker ps` and uses execFileSync so stderr is
+	// captured too — earlier cy.exec attempts returned nothing because of shell
+	// quoting/PATH issues and a wrongly-reconstructed container name.
+	type ExecResult = { stdout: string, stderr: string, container?: string }
 	const phpCount = 'try { $f = glob("data/*.db"); echo $f ? (new PDO("sqlite:".$f[0]))->query("SELECT COUNT(*) FROM oc_recognize_face_detections")->fetchColumn() : "no-db"; } catch (Throwable $e) { echo "err: ".$e->getMessage(); }'
 	cy.task('execInContainer', { args: ['php', '-r', phpCount] })
 		.then((result) => {
-			const { stdout, stderr } = result as { stdout: string, stderr: string }
+			const { stdout, stderr, container } = result as ExecResult
+			diagnostics.container = container
 			diagnostics.detections = (stdout || '').trim() || `stderr: ${(stderr || '').trim()}`
 		})
 	cy.task('execInContainer', { args: ['sh', '-c', 'grep -iE "recognize|face|cluster|tensor|classif|node" data/nextcloud.log 2>/dev/null | tail -n 60'] })
 		.then((result) => {
-			const { stdout, stderr } = result as { stdout: string, stderr: string }
+			const { stdout, stderr } = result as ExecResult
 			diagnostics.logTail = (stdout || '').trim() || (stderr || '').trim()
 		})
 
@@ -136,6 +139,7 @@ export function verifyFacesClassification(user: User) {
 		expect(
 			clusterCount,
 			'recognize formed at least one face cluster.\n'
+			+ `Container: ${diagnostics.container || 'unknown'}.\n`
 			+ `Face detections in DB: ${diagnostics.detections ?? 'unknown'} (clustering needs ≥120).\n`
 			+ `recognize log tail:\n${diagnostics.logTail ?? '(empty)'}`,
 		).to.be.greaterThan(0)
