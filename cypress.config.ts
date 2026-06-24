@@ -54,37 +54,6 @@ export default defineConfig({
 				getVariable({ key }) {
 					return data[key] ?? null
 				},
-				// Run a command inside the Nextcloud test container and return its
-				// output (stdout AND stderr). Used by the faces tests to read
-				// recognize diagnostics straight from the container. execFileSync
-				// (argv array, no shell) avoids the quoting/PATH pitfalls that make
-				// `cy.exec('docker exec … php -r …')` silently return nothing. The
-				// container name varies by e2e-test-server version, so discover it
-				// via `docker ps` rather than reconstructing it.
-				execInContainer({ args }) {
-					let container = ''
-					try {
-						const names = execFileSync('docker', ['ps', '--format', '{{.Names}}'], { encoding: 'utf8' })
-							.split('\n').map((name) => name.trim()).filter(Boolean)
-						container = names.find((name) => /nextcloud|cypress/i.test(name)) ?? names[0] ?? ''
-					} catch (error) {
-						return { stdout: '', stderr: `docker ps failed: ${String(error)}`, container: '' }
-					}
-					if (!container) {
-						return { stdout: '', stderr: 'no running container found', container: '' }
-					}
-					try {
-						const stdout = execFileSync('docker', ['exec', '--user', 'www-data', '--workdir', '/var/www/html', container, ...args], { encoding: 'utf8' })
-						return { stdout, stderr: '', container }
-					} catch (error) {
-						const e = error as { stdout?: { toString(): string }, stderr?: { toString(): string } }
-						return {
-							stdout: e.stdout?.toString() ?? '',
-							stderr: e.stderr?.toString() ?? String(error),
-							container,
-						}
-					}
-				},
 			})
 
 			// Disable spell checking to prevent rendering differences
