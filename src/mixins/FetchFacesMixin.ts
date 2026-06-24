@@ -118,9 +118,15 @@ export default defineComponent({
 					.map((file) => ({
 						...file,
 						filename: he.decode(file.props?.realpath).replace(`/${getCurrentUser()?.uid}/files`, `/files/${getCurrentUser()?.uid}`),
-						'face-detections': JSON.parse(he.decode(file.props?.['face-detections'])),
 					}))
-					.map((file) => resultToNode(file) as FaceNode)
+					.map((file) => {
+						const node = resultToNode(file) as FaceNode
+						// Set the parsed detections after resultToNode: it builds attributes
+						// as `{ ...node, ...props }`, so assigning before would be overwritten
+						// by the raw JSON string still held in props.
+						node.attributes['face-detections'] = JSON.parse(he.decode(file.props?.['face-detections']))
+						return node
+					})
 
 				const fileIds = fetchedFiles.map((file) => file.fileid?.toString() as string)
 
@@ -171,9 +177,15 @@ export default defineComponent({
 					.map((file) => ({
 						...file,
 						filename: he.decode(file.props?.realpath).replace(`/${getCurrentUser()?.uid}/files`, `/files/${getCurrentUser()?.uid}`),
-						'face-detections': JSON.parse(he.decode(file.props?.['face-detections'])),
 					}))
-					.map((file) => resultToNode(file) as FaceNode)
+					.map((file) => {
+						const node = resultToNode(file) as FaceNode
+						// Set the parsed detections after resultToNode: it builds attributes
+						// as `{ ...node, ...props }`, so assigning before would be overwritten
+						// by the raw JSON string still held in props.
+						node.attributes['face-detections'] = JSON.parse(he.decode(file.props?.['face-detections']))
+						return node
+					})
 
 				const fileIds = [...new Set(fetchedFiles.map((file) => '' + file.fileid))]
 				this.$store.dispatch('appendFiles', fetchedFiles)
