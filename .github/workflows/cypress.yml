@@ -24,6 +24,10 @@ env:
   # n.b. server will use head_ref, as we want to test the PR branch.
   BRANCH: ${{ github.base_ref || github.ref_name }}
 
+  # The recognize branch to build for the faces tests. recognize master supports
+  # the current server releases; override for stable branches if needed.
+  RECOGNIZE_BRANCH: main
+
 permissions:
   contents: read
 
@@ -78,6 +82,53 @@ jobs:
         run: |
           npm ci
           TESTING=true npm run build --if-present
+
+      # The faces tests drive the recognize WebDAV API, so we build a recognize
+      # checkout here (models are tracked in the repo, the TensorFlow binaries are
+      # fetched by `make all`) and ship it inside the cached context. It is later
+      # mounted into the test container via RECOGNIZE_APP_PATH (see cypress.config.ts).
+      - name: Set up PHP for recognize
+        uses: shivammathur/setup-php@cf4cade2721270509d5b1c766ab3549210a39a2a # v2.33.0
+        with:
+          php-version: "8.3"
+          extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite, gd, zip, bz2
+          tools: composer
+
+      # recognize spawns a bundled Node runtime and loads the TensorFlow native
+      # addon built during `npm ci`; build it under the Node version recognize
+      # runs at runtime (NODE_VERSION below) so the addon ABI matches.
+      - name: Set up node 20 for recognize
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: "20"
+
+      - name: Checkout recognize
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          repository: nextcloud/recognize
+          ref: ${{ env.RECOGNIZE_BRANCH }}
+          path: recognize-app
+          persist-credentials: false
+
+      - name: Build recognize
+        working-directory: recognize-app
+        env:
+          # Keep in sync with recognize's InstallDeps::NODE_VERSION.
+          NODE_VERSION: v20.9.0
+        run: |
+          composer install --no-dev
+          make all
+          # recognize's InstallDeps migration normally downloads this Node binary
+          # on app:enable, but it cannot here: the app is mounted read-only in the
+          # test container. Pre-stage it so the classifier process can start.
+          curl -fsSL "https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}-linux-x64.tar.gz" -o /tmp/node.tar.gz
+          tar -xzf /tmp/node.tar.gz -C /tmp
+          mkdir -p bin
+          cp "/tmp/node-${NODE_VERSION}-linux-x64/bin/node" bin/node
+          chmod +x bin/node
+          # Drop git metadata to keep the cached context small; the working tree
+          # (models + TensorFlow binaries) is all that is needed at runtime.
+          rm -rf .git
 
       - name: Save context
         uses: actions/cache/save@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
@@ -136,6 +187,8 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           CYPRESS_BUILD_ID: ${{ github.sha }}-${{ github.run_number }}
           CYPRESS_GROUP: Run ${{ matrix.containers == 'component' && 'component' || 'E2E' }}
+          # Built recognize app, mounted into the test container for the faces tests
+          RECOGNIZE_APP_PATH: ${{ github.workspace }}/recognize-app
 
       - name: Upload snapshots
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -154,6 +207,27 @@ jobs:
         with:
           name: nc_logs_${{ matrix.containers }}
           path: nextcloud.log
+
+      # The template's "Extract NC logs" step uses the wrong container name
+      # (@nextcloud/e2e-test-server names it nextcloud-e2e-test-server_<app>) and
+      # recognize's classifier errors may go to either data/nextcloud.log or the
+      # container's stderr depending on log_type. Discover the container by
+      # listing all of them and grab both logs for the faces tests.
+      - name: Extract Nextcloud app log
+        if: failure() && matrix.containers != 'component'
+        run: |
+          container=$(docker ps -a --format '{{.Names}}' | grep -iE 'nextcloud|cypress' | head -n1)
+          echo "Using container: $container"
+          mkdir -p nc-logs
+          docker exec "$container" sh -c 'cat /var/www/html/data/nextcloud.log' > nc-logs/nextcloud.log 2>&1 || true
+          docker logs "$container" > nc-logs/docker.log 2>&1 || true
+
+      - name: Upload Nextcloud app log
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: failure() && matrix.containers != 'component'
+        with:
+          name: nc_app_log_${{ matrix.containers }}
+          path: nc-logs/
 
   summary:
     runs-on: ubuntu-latest-low
