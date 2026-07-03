@@ -12,7 +12,7 @@ name: Update workflows
 on:
   workflow_dispatch:
   schedule:
-    - cron: "5 2 * * 0"
+      - cron: "5 2 * * 0"
 
 permissions:
   contents: read
@@ -26,8 +26,9 @@ jobs:
       matrix:
         branches:
           - ${{ github.event.repository.default_branch }}
-          - "stable33"
-          - "stable32"
+          - 'stable34'
+          - 'stable33'
+          - 'stable32'
 
     name: Update workflows in ${{ matrix.branches }}
 
@@ -123,15 +124,13 @@ jobs:
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           token: ${{ secrets.COMMAND_BOT_WORKFLOWS }}
-          commit-message: "ci(actions): Update workflow templates from organization
-            template repository"
+          commit-message: 'ci(actions): Update workflow templates from organization template repository'
           committer: GitHub <noreply@github.com>
           author: nextcloud-command <nextcloud-command@users.noreply.github.com>
           path: target
           signoff: true
-          branch: "automated/noid/${{ matrix.branches }}-update-workflows"
-          title: "[${{ matrix.branches }}] ci(actions): Update workflow templates from
-            organization template repository"
+          branch: 'automated/noid/${{ matrix.branches }}-update-workflows'
+          title: '[${{ matrix.branches }}] ci(actions): Update workflow templates from organization template repository'
           draft: ${{ env.DRAFT_ONLY == 1 }}
           add-paths: .github/workflows/*.yml,.github/actions-lock.txt
           body: |
