@@ -87,7 +87,6 @@
 					:file="files[file.id]"
 					:allow-selection="true"
 					:selected="selection[file.id] === true"
-					:distance="distance"
 					@select-toggled="onFileSelectToggle" />
 			</template>
 		</FilesListViewer>
