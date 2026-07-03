@@ -48,7 +48,6 @@ class DateRangeFilter implements IFilter {
 					}
 
 					return new SearchBinaryOperator(ISearchBinaryOperator::OPERATOR_AND, $operators);
-
 				},
 				$filterValues
 			)
