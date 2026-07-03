@@ -44,6 +44,7 @@ class SharedAlbumsHome extends AlbumsHome {
 	/**
 	 * @return never
 	 */
+	#[\Override]
 	public function createDirectory($name): never {
 		throw new Forbidden('Not allowed to create folders in shared albums home');
 	}
@@ -51,6 +52,7 @@ class SharedAlbumsHome extends AlbumsHome {
 	/**
 	 * @return AlbumRootBase[]
 	 */
+	#[\Override]
 	public function getChildren(): array {
 		if ($this->children === null) {
 			$albums = $this->albumMapper->getSharedAlbumsForCollaboratorWithFiles($this->userId, AlbumMapper::TYPE_USER);

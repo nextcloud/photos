@@ -20,10 +20,12 @@ class InitMetadata implements IRepairStep {
 	) {
 	}
 
+	#[\Override]
 	public function getName(): string {
 		return 'init metadata';
 	}
 
+	#[\Override]
 	public function run(IOutput $output) {
 		$this->metadataManager->initMetadata(OriginalDateTimeMetadataProvider::METADATA_KEY, IMetadataValueWrapper::TYPE_INT, true, IMetadataValueWrapper::EDIT_FORBIDDEN);
 	}

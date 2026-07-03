@@ -27,3 +27,4 @@ e92532f6ac32d39a1ff5c5d57b9686ba phpunit-pgsql.yml
 a3440826636c0fd7c2d20b1de50363da update-nextcloud-ocp-approve-merge.yml
 39db87018db395caf41007931817cdbd update-nextcloud-ocp.yml
 22604c31b526de270a080eb19967a638 update-stable-titles.yml
+fcdb95d98ab64de64587191bbd71b2cb npm-build.yml

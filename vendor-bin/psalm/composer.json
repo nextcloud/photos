@@ -1,13 +1,13 @@
 {
 	"config": {
 		"platform": {
-			"php": "8.3"
+			"php": "8.3.16"
 		}
 	},
 	"require-dev": {
 		"nextcloud/ocp": "dev-master",
 		"symfony/console": "v6.0.0",
 		"sabre/dav": "^4.7.0",
-		"vimeo/psalm": "^5.26"
+		"vimeo/psalm": "^6.16.1"
 	}
 }

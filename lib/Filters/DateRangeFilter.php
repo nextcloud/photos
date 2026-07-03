@@ -18,10 +18,12 @@ use OCP\FilesMetadata\IMetadataQuery;
 class DateRangeFilter implements IFilter {
 	public const ID = 'date-range';
 
+	#[\Override]
 	public function getId(): string {
 		return self::ID;
 	}
 
+	#[\Override]
 	public function getSearchOperator(array $filterValues): ISearchBinaryOperator {
 		return new SearchBinaryOperator(
 			ISearchBinaryOperator::OPERATOR_OR,
