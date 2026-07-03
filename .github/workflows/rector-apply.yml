@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
   schedule:
     # At 14:30 on Sundays
-    - cron: "30 14 * * 0"
+    - cron: '30 14 * * 0'
 
 permissions:
   contents: read
@@ -36,12 +36,10 @@ jobs:
         uses: icewind1991/nextcloud-version-matrix@8a7bac6300b2f0f3100088b297995a229558ddba # v1.3.2
 
       - name: Set up php${{ steps.versions.outputs.php-min }}
-        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2.37.2
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: ${{ steps.versions.outputs.php-min }}
-          extensions: bz2, ctype, curl, dom, fileinfo, gd, iconv, intl, json, libxml,
-            mbstring, openssl, pcntl, posix, session, simplexml, xmlreader,
-            xmlwriter, zip, zlib, sqlite, pdo_sqlite
+          extensions: bz2, ctype, curl, dom, fileinfo, gd, iconv, intl, json, libxml, mbstring, openssl, pcntl, posix, session, simplexml, xmlreader, xmlwriter, zip, zlib, sqlite, pdo_sqlite
           coverage: none
           ini-file: development
         env:
@@ -59,12 +57,12 @@ jobs:
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           token: ${{ secrets.COMMAND_BOT_PAT }}
-          commit-message: "refactor: Apply rector changes"
+          commit-message: 'refactor: Apply rector changes'
           committer: GitHub <noreply@github.com>
           author: nextcloud-command <nextcloud-command@users.noreply.github.com>
           signoff: true
           branch: automated/noid/rector-changes
-          title: "Apply rector changes"
+          title: 'Apply rector changes'
           labels: |
             technical debt
             3. to review
