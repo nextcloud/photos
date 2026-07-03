@@ -15,14 +15,17 @@ use Sabre\DAV\ICopyTarget;
 use Sabre\DAV\INode;
 
 class AlbumRoot extends AlbumRootBase implements ICollection, ICopyTarget {
+	#[\Override]
 	public function delete(): void {
 		$this->albumMapper->delete($this->album->getAlbum()->getId());
 	}
 
+	#[\Override]
 	public function setName($name): void {
 		$this->albumMapper->rename($this->album->getAlbum()->getId(), $name);
 	}
 
+	#[\Override]
 	public function createFile($name, $data = null) {
 		return parent::createFileInCurrentUserFolder($name, $data);
 	}

@@ -12,10 +12,12 @@ use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\IFile;
 
 class PublicAlbumPhoto extends AlbumPhoto implements IFile {
+	#[\Override]
 	public function delete(): never {
 		throw new Forbidden('Deleting photos from a public album is not allowed.');
 	}
 
+	#[\Override]
 	public function put($data): never {
 		throw new Forbidden('Changing a photo from a public album is not allowed.');
 	}

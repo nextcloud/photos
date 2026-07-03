@@ -18,10 +18,12 @@ use OCP\FilesMetadata\IMetadataQuery;
 class PlacesFilter implements IFilter {
 	public const ID = 'places';
 
+	#[\Override]
 	public function getId(): string {
 		return self::ID;
 	}
 
+	#[\Override]
 	public function getSearchOperator(array $filterValues): ISearchBinaryOperator {
 		$palces = array_map(fn ($place) => is_string($place) ? $place : null, $filterValues);
 		$places = array_filter($palces, fn ($place) => $place !== null);

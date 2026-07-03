@@ -13,10 +13,12 @@ use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\INode;
 
 class PublicAlbumRoot extends AlbumRootBase {
+	#[\Override]
 	public function delete(): never {
 		throw new Forbidden('Not allowed to delete a public album');
 	}
 
+	#[\Override]
 	public function setName($name): never {
 		throw new Forbidden('Not allowed to rename a public album');
 	}
@@ -25,6 +27,7 @@ class PublicAlbumRoot extends AlbumRootBase {
 		throw new Forbidden('Not allowed to copy into a public album');
 	}
 
+	#[\Override]
 	public function createFile($name, $data = null) {
 		throw new Forbidden('Not allowed to create a file in a public album');
 	}

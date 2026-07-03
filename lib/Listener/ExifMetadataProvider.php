@@ -40,6 +40,7 @@ class ExifMetadataProvider implements IEventListener {
 	) {
 	}
 
+	#[\Override]
 	public function handle(Event $event): void {
 		if (!($event instanceof MetadataLiveEvent) && !($event instanceof MetadataBackgroundEvent)) {
 			return;
@@ -138,6 +139,7 @@ class ExifMetadataProvider implements IEventListener {
 	private function getExifFromWebP($fileDescriptor): array|false|null {
 		// override the close() function in  order to prevent the file being closed when the buffer object is destructed
 		$buffer = new class($fileDescriptor) extends ResourceBuffer {
+			#[\Override]
 			public function close() {
 
 			}

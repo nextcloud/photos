@@ -22,6 +22,7 @@ class PublicPreviewController extends PreviewController {
 	 *
 	 * @return DataResponse|FileDisplayResponse
 	 */
+	#[\Override]
 	public function index(
 		int $fileId = -1,
 		int $x = 32,

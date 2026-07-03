@@ -36,14 +36,19 @@ abstract class AlbumRootBase implements ICollection, ICopyTarget {
 		protected IUserManager $userManager,
 	) {
 	}
+
+	#[\Override]
 	abstract public function delete(): void;
 
+	#[\Override]
 	final public function getName(): string {
 		return basename($this->album->getAlbum()->getTitle());
 	}
 
+	#[\Override]
 	abstract public function setName($name): void;
 
+	#[\Override]
 	abstract public function createFile($name, $data = null);
 
 	private function getPhotosLocationInfo() {
@@ -107,6 +112,7 @@ abstract class AlbumRootBase implements ICollection, ICopyTarget {
 		return $this->addFile($sourceId, $ownerUID);
 	}
 
+	#[\Override]
 	final public function createDirectory($name) {
 		throw new Forbidden('Not allowed to create directories in an album');
 	}
@@ -116,10 +122,12 @@ abstract class AlbumRootBase implements ICollection, ICopyTarget {
 	/**
 	 * @return AlbumPhoto[]
 	 */
+	#[\Override]
 	final public function getChildren(): array {
 		return array_map(fn (AlbumFile $file) => $this->getAlbumPhoto($file), $this->album->getFiles());
 	}
 
+	#[\Override]
 	final public function getChild($name): AlbumPhoto {
 		foreach ($this->album->getFiles() as $file) {
 			if ($file->getFileId() . '-' . $file->getName() === $name) {
@@ -130,6 +138,7 @@ abstract class AlbumRootBase implements ICollection, ICopyTarget {
 		throw new NotFound("$name not found");
 	}
 
+	#[\Override]
 	final public function childExists($name): bool {
 		try {
 			$this->getChild($name);
@@ -139,6 +148,7 @@ abstract class AlbumRootBase implements ICollection, ICopyTarget {
 		}
 	}
 
+	#[\Override]
 	final public function getLastModified(): int {
 		return 0;
 	}

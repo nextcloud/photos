@@ -37,6 +37,7 @@ class PublicRootCollection extends AbstractPrincipalCollection {
 		parent::__construct($principalBackend, 'principals/token');
 	}
 
+	#[\Override]
 	public function getName(): string {
 		return 'photospublic';
 	}
@@ -46,6 +47,7 @@ class PublicRootCollection extends AbstractPrincipalCollection {
 	 * This should never be called.
 	 * @param array $principalInfo
 	 */
+	#[\Override]
 	public function getChildForPrincipal(array $principalInfo): PublicAlbumRoot {
 		throw new Forbidden();
 	}
@@ -59,6 +61,7 @@ class PublicRootCollection extends AbstractPrincipalCollection {
 	 *
 	 * @return \Sabre\DAV\INode
 	 */
+	#[\Override]
 	public function getChild($name) {
 		$this->throttler->sleepDelayOrThrowOnMax($this->request->getRemoteAddress(), self::BRUTEFORCE_ACTION);
 

@@ -41,10 +41,12 @@ class PhotosHome implements ICollection {
 	/**
 	 * @return never
 	 */
+	#[\Override]
 	public function delete(): never {
 		throw new Forbidden();
 	}
 
+	#[\Override]
 	public function getName(): string {
 		[, $name] = \Sabre\Uri\split($this->principalInfo['uri']);
 
@@ -54,10 +56,12 @@ class PhotosHome implements ICollection {
 	/**
 	 * @return never
 	 */
+	#[\Override]
 	public function setName($name): never {
 		throw new Forbidden('Permission denied to rename this folder');
 	}
 
+	#[\Override]
 	public function createFile($name, $data = null): never {
 		throw new Forbidden('Not allowed to create files in this folder');
 	}
@@ -65,10 +69,12 @@ class PhotosHome implements ICollection {
 	/**
 	 * @return never
 	 */
+	#[\Override]
 	public function createDirectory($name): never {
 		throw new Forbidden('Permission denied to create folders in this folder');
 	}
 
+	#[\Override]
 	public function getChild($name) {
 		return match ($name) {
 			AlbumsHome::NAME => new AlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userConfigService, $this->logger, $this->userManager),
@@ -81,6 +87,7 @@ class PhotosHome implements ICollection {
 	/**
 	 * @return (AlbumsHome|SharedAlbumsHome|PlacesHome)[]
 	 */
+	#[\Override]
 	public function getChildren(): array {
 		return [
 			new AlbumsHome($this->principalInfo, $this->albumMapper, $this->userId, $this->rootFolder, $this->userConfigService, $this->logger, $this->userManager),
@@ -89,10 +96,12 @@ class PhotosHome implements ICollection {
 		];
 	}
 
+	#[\Override]
 	public function childExists($name): bool {
 		return $name === AlbumsHome::NAME || $name === SharedAlbumsHome::NAME || $name === PlacesHome::NAME;
 	}
 
+	#[\Override]
 	public function getLastModified(): int {
 		return 0;
 	}
