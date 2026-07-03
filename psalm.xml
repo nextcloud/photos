@@ -4,7 +4,8 @@
 	xsi:schemaLocation="https://getpsalm.org/schema/config vendor-bin/psalm/vendor/vimeo/psalm/config.xsd"
 	autoloader="vendor-bin/psalm/vendor/autoload.php"
 	findUnusedCode="false"
-	phpVersion="8.3">
+	phpVersion="8.3"
+	errorBaseline="tests/psalm-baseline.xml">
 	<stubs>
 		<file name="tests/stub.phpstub" preloadClasses="true" />
 	</stubs>
