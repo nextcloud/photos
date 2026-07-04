@@ -48,6 +48,7 @@ SPDX-FileCopyrightText: Hiroki Osame
 SPDX-FileCopyrightText: Guillaume Chau <guillaume.b.chau@gmail.com>
 SPDX-FileCopyrightText: GitHub Inc.
 SPDX-FileCopyrightText: Feross Aboukhadijeh
+SPDX-FileCopyrightText: Felix Geisendörfer <felix@debuggable.com> (http://debuggable.com/)
 SPDX-FileCopyrightText: Evan You
 SPDX-FileCopyrightText: Eugene Sharygin <eush77@gmail.com>
 SPDX-FileCopyrightText: Eric Norris (https://github.com/ericnorris)
@@ -227,6 +228,9 @@ This file is generated from multiple sources. Included packages:
 	- license: MIT
 - focus-trap
 	- version: 7.6.2
+	- license: MIT
+- form-data
+	- version: 4.0.1
 	- license: MIT
 - hast-to-hyperscript
 	- version: 10.0.3
@@ -499,13 +503,13 @@ This file is generated from multiple sources. Included packages:
 	- version: 2.0.1
 	- license: MIT
 - axios
-	- version: 0.27.2
+	- version: 0.30.0
 	- license: MIT
 - minimatch
 	- version: 5.1.6
 	- license: ISC
 - webdav
-	- version: 4.11.4
+	- version: 4.11.5
 	- license: MIT
 - photos
 	- version: 3.0.0

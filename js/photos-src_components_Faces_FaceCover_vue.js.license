@@ -34,6 +34,7 @@ SPDX-FileCopyrightText: Irakli Gozalishvili <rfobic@gmail.com> (http://jeditoolk
 SPDX-FileCopyrightText: Guillaume Chau <guillaume.b.chau@gmail.com>
 SPDX-FileCopyrightText: GitHub Inc.
 SPDX-FileCopyrightText: Feross Aboukhadijeh
+SPDX-FileCopyrightText: Felix Geisendörfer <felix@debuggable.com> (http://debuggable.com/)
 SPDX-FileCopyrightText: Evan You
 SPDX-FileCopyrightText: Dylan Piercey <pierceydylan@gmail.com>
 SPDX-FileCopyrightText: Dr.-Ing. Mario Heiderich, Cure53 <mario@cure53.de> (https://cure53.de/)
@@ -165,6 +166,9 @@ This file is generated from multiple sources. Included packages:
 - focus-trap
 	- version: 7.6.2
 	- license: MIT
+- form-data
+	- version: 4.0.1
+	- license: MIT
 - he
 	- version: 1.2.0
 	- license: MIT
@@ -265,13 +269,13 @@ This file is generated from multiple sources. Included packages:
 	- version: 3.6.2
 	- license: MIT
 - axios
-	- version: 0.27.2
+	- version: 0.30.0
 	- license: MIT
 - minimatch
 	- version: 5.1.6
 	- license: ISC
 - webdav
-	- version: 4.11.4
+	- version: 4.11.5
 	- license: MIT
 - photos
 	- version: 3.0.0
