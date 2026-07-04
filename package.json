@@ -94,7 +94,7 @@
     "@vue/tsconfig": "^0.5.1",
     "autoprefixer": "^10.4.21",
     "cypress": "^15.15.0",
-    "cypress-split": "^1.24.14",
+    "cypress-split": "^1.24.31",
     "cypress-wait-until": "^3.0.2",
     "dockerode": "^4.0.7",
     "eslint-plugin-cypress": "^5.1.0",
