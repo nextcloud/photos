@@ -89,7 +89,7 @@ jobs:
       # fetched by `make all`) and ship it inside the cached context. It is later
       # mounted into the test container via RECOGNIZE_APP_PATH (see cypress.config.ts).
       - name: Set up PHP for recognize
-        uses: shivammathur/setup-php@cf4cade2721270509d5b1c766ab3549210a39a2a # v2.33.0
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2.37.2
         with:
           php-version: "8.3"
           extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite, gd, zip, bz2
