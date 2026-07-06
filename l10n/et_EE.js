@@ -141,7 +141,7 @@ OC.L10N.register(
     "Failed to fetch faces list." : "Nägude loendi laadimine ebaõnnestus.",
     "Error fetching files" : "Viga failide laadimisel",
     "All your media" : "Kogu su meedia",
-    "Album {title}" : "Album {title}",
+    "Album {title}" : "„{title}“ album",
     "Shared Albums" : "Jagatud albumid",
     "Shared album {title}" : "Jagatud album {title}",
     "Public album {title}" : "Avalik album {title}",
