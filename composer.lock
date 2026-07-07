@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c8bfc79e3f53a2713454321f13e49a79",
+    "content-hash": "0fff1ee36222121b5a57bbd879222b46",
     "packages": [
         {
             "name": "hexogen/kdtree",
@@ -129,16 +129,16 @@
         },
         {
             "name": "symfony/polyfill-php84",
-            "version": "v1.33.0",
+            "version": "v1.38.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php84.git",
-                "reference": "d8ced4d875142b6a7426000426b8abc631d6b191"
+                "reference": "f4e1dfaee5b74aba5964fe1fd4dfc7ba5e3085fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php84/zipball/d8ced4d875142b6a7426000426b8abc631d6b191",
-                "reference": "d8ced4d875142b6a7426000426b8abc631d6b191",
+                "url": "https://api.github.com/repos/symfony/polyfill-php84/zipball/f4e1dfaee5b74aba5964fe1fd4dfc7ba5e3085fa",
+                "reference": "f4e1dfaee5b74aba5964fe1fd4dfc7ba5e3085fa",
                 "shasum": ""
             },
             "require": {
@@ -185,7 +185,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php84/tree/v1.33.0"
+                "source": "https://github.com/symfony/polyfill-php84/tree/v1.38.1"
             },
             "funding": [
                 {
@@ -205,26 +205,26 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-06-24T13:30:11+00:00"
+            "time": "2026-05-26T12:51:13+00:00"
         },
         {
             "name": "woltlab/webp-exif",
-            "version": "v0.1.2",
+            "version": "v0.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WoltLab/webp-exif.git",
-                "reference": "6bc88266f538380bbb68b5b0a45a76fb3ec23650"
+                "reference": "c2692d7ba8545839f9a681e9c9b5cfb169c64740"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WoltLab/webp-exif/zipball/6bc88266f538380bbb68b5b0a45a76fb3ec23650",
-                "reference": "6bc88266f538380bbb68b5b0a45a76fb3ec23650",
+                "url": "https://api.github.com/repos/WoltLab/webp-exif/zipball/c2692d7ba8545839f9a681e9c9b5cfb169c64740",
+                "reference": "c2692d7ba8545839f9a681e9c9b5cfb169c64740",
                 "shasum": ""
             },
             "require": {
                 "ext-exif": "*",
                 "nelexa/buffer": "^1.3",
-                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
                 "symfony/polyfill-php84": "^1.31"
             },
             "require-dev": {
@@ -253,9 +253,9 @@
             ],
             "support": {
                 "issues": "https://github.com/WoltLab/webp-exif/issues",
-                "source": "https://github.com/WoltLab/webp-exif/tree/v0.1.2"
+                "source": "https://github.com/WoltLab/webp-exif/tree/v0.1.4"
             },
-            "time": "2025-11-17T15:29:03+00:00"
+            "time": "2026-06-04T19:30:22+00:00"
         }
     ],
     "packages-dev": [
