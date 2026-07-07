@@ -187,6 +187,10 @@ abstract class AlbumRootBase implements ICollection, ICopyTarget {
 	 */
 	abstract public function getCollaborators(): array;
 
+	/**
+	 * @param array{'id': string, 'type': int} $collaborators
+	 * @return array{array{'nc:collaborator': array{'id': string, 'label': string, 'type': int}}}
+	 */
 	public function setCollaborators(array $collaborators): array {
 		throw new Forbidden('Setting the collaborators is not allowed on this type of album');
 	}
