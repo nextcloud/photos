@@ -1,0 +1,13 @@
+{
+	"config": {
+		"platform": {
+			"php": "8.3"
+		}
+	},
+	"require-dev": {
+		"nextcloud/ocp": "dev-master",
+		"symfony/console": "^6.4.12",
+		"sabre/dav": "^4.7.0",
+		"sabre/uri": "^2.3.4"
+	}
+}

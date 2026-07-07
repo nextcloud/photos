@@ -6,6 +6,7 @@
 	phpVersion="8.1">
 	<stubs>
 		<file name="tests/stub.phpstub" preloadClasses="true" />
+		<file name="tests/stubs/oca_dav.phpstub" preloadClasses="true" />
 	</stubs>
 	<projectFiles>
 		<directory name="lib" />
@@ -16,7 +17,7 @@
 	</projectFiles>
 	<extraFiles>
 		<directory name="vendor" />
-		<directory name="vendor-bin/psalm/vendor" />
+		<directory name="vendor-bin/nextcloud-ocp/vendor" />
 	</extraFiles>
 	<issueHandlers>
 		<UndefinedClass>
