@@ -5,9 +5,6 @@
 		}
 	},
 	"require-dev": {
-		"nextcloud/ocp": "dev-master",
-		"symfony/console": "^6.4.12",
-		"sabre/dav": "^4.7.0",
 		"vimeo/psalm": "^6.16.1"
 	}
 }
