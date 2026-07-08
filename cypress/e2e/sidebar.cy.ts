@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import type { User } from '@nextcloud/cypress'
+import type { User } from '@nextcloud/e2e-test-server'
 
 import { setupPhotosTests } from './photosUtils.ts'
 
@@ -16,7 +16,8 @@ Cypress.on('uncaught:exception', (err) => {
 
 let alice: User
 
-describe('Sidebar tab', () => {
+// skipped as sidebar is disabled in 33+ for now
+describe.skip('Sidebar tab', () => {
 	before(() => {
 		setupPhotosTests()
 			.then((setupInfo) => {

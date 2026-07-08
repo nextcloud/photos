@@ -2,9 +2,8 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { configureNextcloud, startNextcloud, stopNextcloud, waitOnNextcloud } from '@nextcloud/cypress/docker'
+import { configureNextcloud, runExec, startNextcloud, stopNextcloud, waitOnNextcloud } from '@nextcloud/e2e-test-server/docker'
 import { defineConfig } from 'cypress'
-import { configureVisualRegression } from 'cypress-visual-regression/dist/plugin'
 
 export default defineConfig({
 	projectId: 'okzqgr',
@@ -39,8 +38,6 @@ export default defineConfig({
 		// We've imported your old cypress plugins here.
 		// You may want to clean this up later by importing these.
 		async setupNodeEvents(on, config) {
-			configureVisualRegression(on)
-
 			// This allows to store global data (e.g. the name of a snapshot)
 			// because Cypress.env() and other options are local to the current spec file.
 			const data = {}
@@ -81,11 +78,16 @@ export default defineConfig({
 
 			// Before the browser launches
 			// starting Nextcloud testing container
-			const ip = await startNextcloud(process.env.BRANCH || 'master', undefined, { exposePort: 8080 })
+			const ip = await startNextcloud(process.env.BRANCH || 'stable33', undefined, { exposePort: 8080 })
 			// Setting container's IP as base Url
 			config.baseUrl = `http://${ip}/index.php`
 			await waitOnNextcloud(ip)
 			await configureNextcloud(['viewer'])
+			// eslint-disable-next-line no-console
+			console.log('|- Running cron.php to ensure that the background jobs are executed')
+			await runExec(['php', './cron.php'])
+			// eslint-disable-next-line no-console
+			console.log('  |- Done')
 			return config
 		},
 	},
