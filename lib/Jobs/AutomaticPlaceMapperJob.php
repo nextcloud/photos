@@ -81,7 +81,6 @@ class AutomaticPlaceMapperJob extends TimedJob {
 		$this->scanFolder($userFolder);
 	}
 
-
 	private function scanFolder(Folder $folder): void {
 		// Do not scan share and other moveable mounts.
 		if ($folder->getMountPoint() instanceof IMovableMount) {

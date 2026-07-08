@@ -353,7 +353,6 @@ class AlbumMapper {
 		return array_values(array_filter($collaborators, fn ($c): bool => $c !== null));
 	}
 
-
 	public function isCollaborator(int $albumId, string $userId): bool {
 		$query = $this->connection->getQueryBuilder();
 		$query->select('collaborator_id', 'collaborator_type')
@@ -577,7 +576,6 @@ class AlbumMapper {
 			->groupBy('a.album_id')
 			->executeQuery()
 			->fetchAll();
-
 
 		return array_map(fn (array $row): AlbumInfo => new AlbumInfo(
 			(int)$row['album_id'],
