@@ -138,7 +138,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@use '../mixins/FileFolder';
+@use '../mixins/FileFolder.scss' as *;
 
 .folder-content {
 	position: absolute;
