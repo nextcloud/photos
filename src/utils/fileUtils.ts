@@ -1,15 +1,16 @@
-import type { FoldersNode } from '../services/FolderContent.ts'
-
-import {
-	type Node,
-
-	FileType, Permission,
-} from '@nextcloud/files'
-import { getRemoteURL, getRootPath } from '@nextcloud/files/dav'
-/**
+/*
  * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
+import type { Node } from '@nextcloud/files'
+import type { FoldersNode } from '../services/FolderContent.ts'
+
+import {
+	FileType,
+	Permission,
+} from '@nextcloud/files'
+import { getRemoteURL, getRootPath } from '@nextcloud/files/dav'
 import { getLanguage } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { isNumber } from './numberUtils.js'

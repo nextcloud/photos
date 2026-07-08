@@ -91,7 +91,7 @@ Cypress.Commands.add('uploadContent', (user, blob, mimeType, target) => {
 				})
 			} catch (error) {
 				cy.log('error', error)
-				throw new Error('Unable to process fixture')
+				throw new Error('Unable to process fixture', { cause: error })
 			}
 		})
 })

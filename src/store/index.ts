@@ -4,22 +4,28 @@
  */
 
 import type { Collection } from '../services/collectionFetcher.ts'
+import type { Album } from './albums.ts'
+import type { CollectionState } from './collections.ts'
+import type { FacesState } from './faces.ts'
+import type { FilesState } from './files.ts'
+import type { FoldersState } from './folders.ts'
+import type { PublicAlbum } from './publicAlbums.ts'
+import type { SystemTagsState } from './systemtags.ts'
+import type { UserConfigState } from './userConfig.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import Vue from 'vue'
 import Vuex, { Store } from 'vuex'
-import albums, { type Album } from './albums.ts'
-import collections, { type CollectionState } from './collections.ts'
-import faces, { type FacesState } from './faces.ts'
-import files, { type FilesState } from './files.ts'
-import folders, { type FoldersState } from './folders.ts'
+import albums from './albums.ts'
+import collections from './collections.ts'
+import faces from './faces.ts'
+import files from './files.ts'
+import folders from './folders.ts'
 import places from './places.ts'
-import publicAlbums, { type PublicAlbum } from './publicAlbums.ts'
+import publicAlbums from './publicAlbums.ts'
 import sharedAlbums from './sharedAlbums.ts'
-import systemtags, { type SystemTagsState } from './systemtags.ts'
+import systemtags from './systemtags.ts'
 import userConfig, {
-	type UserConfigState,
-
 	getFolder,
 } from './userConfig.ts'
 
