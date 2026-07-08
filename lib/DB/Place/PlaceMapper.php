@@ -33,7 +33,6 @@ class PlaceMapper {
 			->getMountPoint()
 			->getNumericStorageId();
 
-
 		$mimetypes = array_map(fn ($mimetype) => $this->mimeTypeLoader->getId($mimetype), Application::IMAGE_MIMES);
 
 		$qb = $this->connection->getQueryBuilder();
