@@ -16,7 +16,8 @@ Cypress.on('uncaught:exception', (err) => {
 
 let alice: User
 
-describe('Sidebar tab', () => {
+// skipped as sidebar is disabled in 33+ for now
+describe.skip('Sidebar tab', () => {
 	before(() => {
 		setupPhotosTests()
 			.then((setupInfo) => {
