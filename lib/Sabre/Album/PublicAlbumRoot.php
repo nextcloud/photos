@@ -23,7 +23,8 @@ class PublicAlbumRoot extends AlbumRootBase {
 		throw new Forbidden('Not allowed to rename a public album');
 	}
 
-	public function copyInto($targetName, $sourcePath, INode $sourceNode): bool {
+	#[\Override]
+	public function copyInto($targetName, $sourcePath, INode $sourceNode, ?int $depth = null): bool {
 		throw new Forbidden('Not allowed to copy into a public album');
 	}
 
@@ -32,14 +33,17 @@ class PublicAlbumRoot extends AlbumRootBase {
 		throw new Forbidden('Not allowed to create a file in a public album');
 	}
 
+	#[\Override]
 	protected function addFile(int $sourceId, string $ownerUID): bool {
 		throw new Forbidden('Not allowed to add a file to a public album');
 	}
 
+	#[\Override]
 	public function getCollaborators(): array {
 		return [];
 	}
 
+	#[\Override]
 	public function getAlbumPhoto(AlbumFile $file): AlbumPhoto {
 		return new PublicAlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId));
 	}

@@ -30,14 +30,17 @@ class AlbumRoot extends AlbumRootBase implements ICollection, ICopyTarget {
 		return parent::createFileInCurrentUserFolder($name, $data);
 	}
 
+	#[\Override]
 	public function getAlbumPhoto(AlbumFile $file): AlbumPhoto {
 		return new AlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId));
 	}
 
-	public function copyInto($targetName, $sourcePath, INode $sourceNode): bool {
+	#[\Override]
+	public function copyInto($targetName, $sourcePath, INode $sourceNode, ?int $depth = null): bool {
 		return parent::copyIntoAlbum($targetName, $sourcePath, $sourceNode);
 	}
 
+	#[\Override]
 	protected function addFile(int $sourceId, string $ownerUID): bool {
 		if (in_array($sourceId, $this->album->getFileIds())) {
 			throw new Conflict("File $sourceId is already in the folder");
@@ -51,6 +54,7 @@ class AlbumRoot extends AlbumRootBase implements ICollection, ICopyTarget {
 		return false;
 	}
 
+	#[\Override]
 	public function getCollaborators(): array {
 		return array_map(
 			fn (array $collaborator): array => [ 'nc:collaborator' => $collaborator ],
@@ -58,19 +62,18 @@ class AlbumRoot extends AlbumRootBase implements ICollection, ICopyTarget {
 		);
 	}
 
-	/**
-	 * @param array{'id': string, 'type': int} $collaborators
-	 * @return array{array{'nc:collaborator': array{'id': string, 'label': string, 'type': int}}}
-	 */
+	#[\Override]
 	public function setCollaborators(array $collaborators): array {
 		$this->albumMapper->setCollaborators($this->getAlbum()->getAlbum()->getId(), $collaborators);
 		return $this->getCollaborators();
 	}
 
+	#[\Override]
 	public function setLocation(string $location): void {
 		$this->albumMapper->setLocation($this->getAlbum()->getAlbum()->getId(), $location);
 	}
 
+	#[\Override]
 	public function setFilters(string $filters) {
 		$this->albumMapper->setAlbumFilters($this->getAlbum()->getAlbum()->getId(), $filters);
 	}

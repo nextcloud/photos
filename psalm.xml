@@ -3,11 +3,13 @@
 	xmlns="https://getpsalm.org/schema/config"
 	xsi:schemaLocation="https://getpsalm.org/schema/config vendor-bin/psalm/vendor/vimeo/psalm/config.xsd"
 	autoloader="vendor-bin/psalm/vendor/autoload.php"
+	allFunctionsGlobal="true"
 	findUnusedCode="false"
 	phpVersion="8.3"
 	errorBaseline="tests/psalm-baseline.xml">
 	<stubs>
 		<file name="tests/stub.phpstub" preloadClasses="true" />
+		<file name="tests/stubs/oca_dav.phpstub" preloadClasses="true" />
 	</stubs>
 	<projectFiles>
 		<directory name="lib" />
@@ -18,7 +20,7 @@
 	</projectFiles>
 	<extraFiles>
 		<directory name="vendor" />
-		<directory name="vendor-bin/psalm/vendor" />
+		<directory name="vendor-bin/nextcloud-ocp/vendor" />
 	</extraFiles>
 	<issueHandlers>
 		<UndefinedClass>
