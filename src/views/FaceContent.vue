@@ -415,5 +415,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '../mixins/FaceContent';
+@use '../mixins/FaceContent.scss' as *;
 </style>
