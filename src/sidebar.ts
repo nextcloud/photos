@@ -1,10 +1,11 @@
-import InformationOutline from '@mdi/svg/svg/information-outline.svg?raw'
-import { registerDavProperty } from '@nextcloud/files/dav'
-import { translatePlural as n, translate as t } from '@nextcloud/l10n'
-/**
+/*
  * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
+import InformationOutline from '@mdi/svg/svg/information-outline.svg?raw'
+import { registerDavProperty } from '@nextcloud/files/dav'
+import { translatePlural as n, translate as t } from '@nextcloud/l10n'
 import Vue from 'vue'
 
 Vue.prototype.t = t
@@ -18,6 +19,8 @@ registerDavProperty('nc:metadata-photos-place')
 // Init Photos tab component
 let PhotosTabView = null
 let PhotosTabInstance = null
+// TODO: implement custom logic for sidebar
+// eslint-disable-next-line @nextcloud/no-removed-globals
 const photosTab = new OCA.Files.Sidebar.Tab({
 	id: 'photos',
 	name: t('photos', 'Details'),

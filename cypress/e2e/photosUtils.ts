@@ -147,7 +147,7 @@ export function mkdir(user: User, target: string) {
 				cy.log(`Created directory ${target}`, response)
 			} catch (error) {
 				cy.log('error', error)
-				throw new Error('Unable to process fixture')
+				throw new Error('Unable to process fixture', { cause: error })
 			}
 		})
 }

@@ -22,12 +22,10 @@
 </template>
 
 <script lang='ts'>
-import { t } from '@nextcloud/l10n'
-import {
-	type PropType,
+import type { PropType } from 'vue'
 
-	defineComponent,
-} from 'vue'
+import { t } from '@nextcloud/l10n'
+import { defineComponent } from 'vue'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import Star from 'vue-material-design-icons/Star.vue'
 import StarOutline from 'vue-material-design-icons/StarOutline.vue'

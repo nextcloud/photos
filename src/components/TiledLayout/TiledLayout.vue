@@ -17,14 +17,11 @@
 
 <script lang='ts'>
 import type { PropType } from 'vue'
+import type { Section, TiledSection } from '../../services/TiledLayout.js'
 
 import TiledRows from './TiledRows.vue'
 import logger from '../../services/logger.js'
-import {
-	type Section, type TiledSection,
-
-	splitItemsInRows,
-} from '../../services/TiledLayout.js'
+import { splitItemsInRows } from '../../services/TiledLayout.js'
 
 export default {
 	name: 'TiledLayout',

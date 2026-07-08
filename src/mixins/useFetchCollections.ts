@@ -4,11 +4,10 @@
  */
 
 import type { WebDAVClient } from 'webdav'
+import type { Collection } from '../services/collectionFetcher.js'
 
 import { ref } from 'vue'
 import {
-	type Collection,
-
 	fetchCollections,
 } from '../services/collectionFetcher.js'
 import { davClient } from '../services/DavClient.ts'

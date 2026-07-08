@@ -103,6 +103,7 @@
 
 <script lang='ts'>
 import type { File } from '@nextcloud/files'
+import type { PropType } from 'vue'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import { t } from '@nextcloud/l10n'
@@ -110,8 +111,6 @@ import moment from '@nextcloud/moment'
 import { UploadPicker } from '@nextcloud/upload'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import {
-	type PropType,
-
 	defineComponent,
 } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
