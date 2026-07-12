@@ -62,7 +62,9 @@ jobs:
 
       - name: Install composer dependencies
         if: steps.check_composer.outputs.files_exists == 'true'
-        run: composer install --no-dev
+        uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # 4.0.0
+        with:
+          composer-options: '--no-dev'
 
       - name: Read package.json node and npm engines version
         uses: skjnldsv/read-package-engines-version-actions@06d6baf7d8f41934ab630e97d9e6c0bc9c9ac5e4 # v3
@@ -89,7 +91,7 @@ jobs:
       # fetched by `make all`) and ship it inside the cached context. It is later
       # mounted into the test container via RECOGNIZE_APP_PATH (see cypress.config.ts).
       - name: Set up PHP for recognize
-        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2.37.2
+        uses: shivammathur/setup-php@cf4cade2721270509d5b1c766ab3549210a39a2a # v2.33.0
         with:
           php-version: "8.3"
           extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite, gd, zip, bz2
@@ -104,7 +106,7 @@ jobs:
           node-version: "20"
 
       - name: Checkout recognize
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           repository: nextcloud/recognize
           ref: ${{ env.RECOGNIZE_BRANCH }}
