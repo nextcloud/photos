@@ -97,7 +97,7 @@
     "cypress-split": "^1.24.14",
     "cypress-wait-until": "^3.0.2",
     "dockerode": "^5.0.1",
-    "eslint-plugin-cypress": "^5.1.0",
+    "eslint-plugin-cypress": "^6.4.2",
     "happy-dom": "^20.0.8",
     "postcss": "^8.5.6",
     "ts-node": "^10.9.2",
