@@ -1,0 +1,96 @@
+SPDX-License-Identifier: AGPL-3.0-or-later
+SPDX-License-Identifier: GPL-3.0-or-later
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: @nextcloud/dialogs developers
+SPDX-FileCopyrightText: Anthony Fu <https://github.com/antfu>
+SPDX-FileCopyrightText: Christoph Wurst
+SPDX-FileCopyrightText: David Clark
+SPDX-FileCopyrightText: David Myers <hello@davidmyers.dev>
+SPDX-FileCopyrightText: Eduardo San Martin Morote
+SPDX-FileCopyrightText: Evan You
+SPDX-FileCopyrightText: Guillaume Chau <guillaume.b.chau@gmail.com>
+SPDX-FileCopyrightText: Iskren Ivov Chernev <iskren.chernev@gmail.com> (https://github.com/ichernev)
+SPDX-FileCopyrightText: Matt Zabriskie
+SPDX-FileCopyrightText: Nextcloud GmbH and Nextcloud contributors
+SPDX-FileCopyrightText: Varun A P
+SPDX-FileCopyrightText: atomiks
+
+This file is generated from multiple sources. Included packages:
+- @floating-ui/core
+	- version: 1.8.0
+	- license: MIT
+- @floating-ui/dom
+	- version: 1.1.1
+	- license: MIT
+- @floating-ui/utils
+	- version: 0.2.12
+	- license: MIT
+- @nextcloud/axios
+	- version: 2.6.0
+	- license: GPL-3.0-or-later
+- @nextcloud/dialogs
+	- version: 7.4.1
+	- license: AGPL-3.0-or-later
+- @nextcloud/l10n
+	- version: 3.4.1
+	- license: GPL-3.0-or-later
+- @nextcloud/moment
+	- version: 1.3.5
+	- license: GPL-3.0-or-later
+- @nextcloud/vue
+	- version: 8.40.0
+	- license: AGPL-3.0-or-later
+- @nextcloud/vue
+	- version: 9.9.0
+	- license: AGPL-3.0-or-later
+- @vue/reactivity
+	- version: 3.5.40
+	- license: MIT
+- @vue/runtime-core
+	- version: 3.5.40
+	- license: MIT
+- @vue/runtime-dom
+	- version: 3.5.40
+	- license: MIT
+- @vue/shared
+	- version: 3.5.40
+	- license: MIT
+- @vueuse/core
+	- version: 14.3.0
+	- license: MIT
+- @vueuse/shared
+	- version: 14.3.0
+	- license: MIT
+- axios
+	- version: 1.16.0
+	- license: MIT
+- floating-vue
+	- version: 5.2.2
+	- license: MIT
+- focus-trap
+	- version: 8.2.2
+	- license: MIT
+- moment
+	- version: 2.30.1
+	- license: MIT
+- photos
+	- version: 8.0.0-dev.0
+	- license: AGPL-3.0-or-later
+- tabbable
+	- version: 6.5.0
+	- license: MIT
+- toastify-js
+	- version: 1.12.0
+	- license: MIT
+- vite
+	- version: 7.3.6
+	- license: MIT
+- vite-plugin-node-polyfills
+	- version: 0.24.0
+	- license: MIT
+- vue-router
+	- version: 5.2.0
+	- license: MIT
+- vuex
+	- version: 3.6.2
+	- license: MIT
