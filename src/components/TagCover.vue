@@ -26,13 +26,12 @@
 </template>
 
 <script lang='ts'>
+import type { PropType } from 'vue'
 import type { Tag } from '../store/systemtags.js'
 
 import { translatePlural as n, translate as t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import {
-	type PropType,
-
 	defineComponent,
 } from 'vue'
 import { RouterLink } from 'vue-router'

@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import type { TiledItem, TiledRow } from './TiledLayout.js'
+
 import { describe, expect, test } from 'vitest'
 import {
-	type TiledItem, type TiledRow,
-
 	splitItemsInRows,
 } from './TiledLayout.js'
 

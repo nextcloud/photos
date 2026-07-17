@@ -4,15 +4,16 @@
  */
 
 import type { File } from '@nextcloud/files'
+import type { PhotoSearchOptions } from '../services/PhotoSearch.js'
 
 import { showError } from '@nextcloud/dialogs'
 import { defaultRootPath } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
-import { joinPaths } from '@nextcloud/paths'
+import { join } from '@nextcloud/paths'
 import { defineComponent } from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
-import getPhotos, { type PhotoSearchOptions } from '../services/PhotoSearch.js'
+import getPhotos from '../services/PhotoSearch.js'
 import store from '../store/index.js'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
 import AbortControllerMixin from './AbortControllerMixin.js'
@@ -96,7 +97,7 @@ export default defineComponent({
 						}
 						logger.debug(`The ${source} folder does not exist, creating it.`)
 						try {
-							await davClient.createDirectory(joinPaths(defaultRootPath, source))
+							await davClient.createDirectory(join(defaultRootPath, source))
 							this.resetFetchFilesState()
 							return []
 						} catch (error) {
