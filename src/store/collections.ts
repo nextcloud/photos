@@ -6,8 +6,9 @@
 import type { Collection } from '../services/collectionFetcher.ts'
 import type { PhotosContext } from './index.ts'
 
-import { DialogSeverity, getDialogBuilder, showError } from '@nextcloud/dialogs'
+import { showConfirmation, showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
+import { isAxiosError } from 'axios'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
@@ -175,7 +176,7 @@ const actions = {
 						`${collection.root + collection.path}/${file.basename}`,
 					)
 				} catch (error) {
-					if (error.response?.status !== 409) { // Already in the collection.
+					if (isAxiosError(error) && error.response?.status !== 409) { // Already in the collection.
 						context.commit('removeFilesFromCollection', { collectionFileName, fileIdsToRemove: [fileId] })
 
 						logger.error(t('photos', 'Failed to add {fileBaseName} to collection {collectionFileName}', { fileBaseName: file.basename, collectionFileName }), { error })
@@ -370,24 +371,11 @@ const actions = {
 }
 
 export async function confirmOperation(name: string, text: string): Promise<boolean> {
-	let result = false
-	const dialog = getDialogBuilder(name)
-		.setText(text)
-		.setSeverity(DialogSeverity.Warning)
-		.addButton({
-			label: t('photos', 'Cancel'),
-			callback() {},
-		})
-		.addButton({
-			label: t('photos', 'Confirm'),
-			variant: 'error',
-			callback() {
-				result = true
-			},
-		})
-		.build()
-
-	await dialog.show()
+	const result = await showConfirmation({
+		name,
+		text,
+		severity: 'warning',
+	})
 	return result
 }
 
