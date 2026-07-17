@@ -15,7 +15,7 @@
 				:required="true"
 				:label="t('photos', 'Name of the album')" />
 			<NcTextField
-				:value.sync="albumLocation"
+				v-model="albumLocation"
 				name="location"
 				type="text"
 				:label="t('photos', 'Location of the album')">

@@ -5,14 +5,14 @@
 
 import type { File } from '@nextcloud/files'
 import type { WebDAVClient } from 'webdav'
+import type { Collection } from '../services/collectionFetcher.js'
 
 import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import { defineComponent } from 'vue'
 import {
-	type Collection,
-
-	fetchCollection, fetchCollectionFiles,
+	fetchCollection,
+	fetchCollectionFiles,
 } from '../services/collectionFetcher.js'
 import logger from '../services/logger.js'
 import { collectionFilesExtraProps } from '../store/collections.js'

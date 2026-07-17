@@ -3,7 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import axios, { type AxiosRequestConfig } from '@nextcloud/axios'
+import type { AxiosRequestConfig } from '@nextcloud/axios'
+
+import axios from '@nextcloud/axios'
 import { defaultRemoteURL, defaultRootPath } from '@nextcloud/files/dav'
 import { generateUrl } from '@nextcloud/router'
 import allowedMimes from './AllowedMimes.js'

@@ -11,7 +11,7 @@ import { emit } from '@nextcloud/event-bus'
 import { defaultRootPath, getDefaultPropfind, resultToNode } from '@nextcloud/files/dav'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
-import { joinPaths } from '@nextcloud/paths'
+import { join } from '@nextcloud/paths'
 import { generateUrl } from '@nextcloud/router'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
@@ -23,7 +23,7 @@ export const configChangedEvent = 'photos:user-config-changed'
  * @param path
  */
 export async function getFolder(path) {
-	const location = joinPaths(defaultRootPath, path) + '/'
+	const location = join(defaultRootPath, path) + '/'
 
 	try {
 		const stat = await davClient.stat(location, { details: true, data: getDefaultPropfind() }) as ResponseDataDetailed<FileStat>

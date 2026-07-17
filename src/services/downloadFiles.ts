@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import type { Node } from '@nextcloud/files'
+
 import axios from '@nextcloud/axios'
 import {
-	type Node,
-
 	FileType,
 } from '@nextcloud/files'
 

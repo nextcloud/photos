@@ -8,7 +8,7 @@ import type { ResponseDataDetailed, SearchOptions, SearchResult } from 'webdav'
 
 import { defaultRootPath, resultToNode } from '@nextcloud/files/dav'
 import moment from '@nextcloud/moment'
-import { joinPaths } from '@nextcloud/paths'
+import { join } from '@nextcloud/paths'
 import he from 'he'
 import store from '../store/index.js'
 import { allMimes } from './AllowedMimes.js'
@@ -88,7 +88,7 @@ export default async function(_options: Partial<PhotoSearchOptions> = {}): Promi
 	const sourceFolders = store.state.userConfig.photosSourceFolders
 		.map((folder) => `
 			<d:scope>
-				<d:href>${joinPaths(defaultRootPath, he.encode(folder))}</d:href>
+				<d:href>${join(defaultRootPath, he.encode(folder))}</d:href>
 				<d:depth>infinity</d:depth>
 			</d:scope>`)
 		.join('\n')

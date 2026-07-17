@@ -59,6 +59,7 @@
 
 <script lang='ts'>
 import type { Upload } from '@nextcloud/upload'
+import type { FoldersNode } from '../services/FolderContent.ts'
 
 import { Folder } from '@nextcloud/files'
 import { defaultRootPath, parsePermissions } from '@nextcloud/files/dav'
@@ -75,7 +76,7 @@ import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import GridConfigMixin from '../mixins/GridConfig.js'
 import allowedMimes from '../services/AllowedMimes.js'
 import { fetchFile } from '../services/fileFetcher.ts'
-import getFolderContent, { type FoldersNode } from '../services/FolderContent.ts'
+import getFolderContent from '../services/FolderContent.ts'
 import logger from '../services/logger.ts'
 
 export default {
