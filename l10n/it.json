@@ -150,7 +150,6 @@
     "Last Month" : "Il mese scorso",
     "Custom…" : "Personalizzato…",
     "{startDate} to {endDate}" : "{startDate} a {endDate}",
-    "Details" : "Dettagli",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Impossibile aggiungere {fileBaseName}alla raccolta {collectionFileName}",
     "Failed to delete {fileBaseName}" : "Impossibile eliminare {fileBaseName}",
     "Failed to create {collectionFileName}" : "Impossibile creare {collectionFileName}",
@@ -160,8 +159,6 @@
     "Leave shared album" : "Lascia gli album condivisi",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Vuoi veramente eliminare {collectionName}? Questa azione non può essere annullata.",
     "Failed to delete {collectionFileName}" : "Impossibile eliminare {collectionFileName}",
-    "Cancel" : "Cancel",
-    "Confirm" : "Conferma",
     "Failed to move {fileBaseName} to person {faceName}" : "Impossibile spostare {fileBaseName} alla persona{faceName}",
     "Failed to remove {fileBaseName}" : "Impossibile rimuovere {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Impossibile rinominare {oldName} in {faceName}",
@@ -178,6 +175,9 @@
     "Choose a different folder" : "Scegli una cartella diversa",
     "View" : "Visualizza",
     "Choose the folder where photos and albums are uploaded to." : "Scegli la cartella dove foto e album saranno caricati",
-    "Loading folders …" : "Caricamento delle cartelle …"
+    "Loading folders …" : "Caricamento delle cartelle …",
+    "Details" : "Dettagli",
+    "Cancel" : "Cancel",
+    "Confirm" : "Conferma"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

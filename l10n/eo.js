@@ -22,10 +22,10 @@ OC.L10N.register(
     "Remove from favorites" : "Forigi el pliŝataĵoj",
     "Loading folders…" : "Ŝargado de dosierujoj...",
     "Delete selection" : "Forigi elekton",
+    "Group" : "Grupo",
+    "View" : "Vidi",
     "Details" : "Detaloj",
     "Cancel" : "Cancel",
-    "Confirm" : "Konfirmi",
-    "Group" : "Grupo",
-    "View" : "Vidi"
+    "Confirm" : "Konfirmi"
 },
 "nplurals=2; plural=(n != 1);");

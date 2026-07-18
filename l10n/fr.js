@@ -152,7 +152,6 @@ OC.L10N.register(
     "Last Month" : "Le mois dernier",
     "Custom…" : "Personnalisé...",
     "{startDate} to {endDate}" : "{startDate} au {endDate}",
-    "Details" : "Détails",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Impossible d'ajouter {fileBaseName} à la collection {collectionFileName}",
     "Failed to delete {fileBaseName}" : "Impossible de supprimer {fileBaseName}",
     "Failed to create {collectionFileName}" : "Impossible de créer {collectionFileName}",
@@ -162,8 +161,6 @@ OC.L10N.register(
     "Leave shared album" : "Quitter l'album partagé",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Êtes-vous sûr de vouloir supprimer {collectionName} ? Cette action ne peut pas être annulée.",
     "Failed to delete {collectionFileName}" : "Impossible de supprimer {collectionFileName}",
-    "Cancel" : "Annuler",
-    "Confirm" : "Confirmer",
     "Failed to move {fileBaseName} to person {faceName}" : "Impossible de déplacer {fileBaseName} vers {faceName} ",
     "Failed to remove {fileBaseName}" : "Impossible de supprimer {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Impossible de renommer {oldName} en {faceName}",
@@ -180,6 +177,9 @@ OC.L10N.register(
     "Choose a different folder" : "Choisir un dossier différent ",
     "View" : "Affichage",
     "Choose the folder where photos and albums are uploaded to." : "Choisir le dossier où les photos et albums sont téléversés.",
-    "Loading folders …" : "Chargement des dossiers…"
+    "Loading folders …" : "Chargement des dossiers…",
+    "Details" : "Détails",
+    "Cancel" : "Annuler",
+    "Confirm" : "Confirmer"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

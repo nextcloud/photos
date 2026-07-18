@@ -152,7 +152,6 @@ OC.L10N.register(
     "Last Month" : "Último mes",
     "Custom…" : "Personalizado…",
     "{startDate} to {endDate}" : "{startDate} ata o {endDate}",
-    "Details" : "Detalles",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Produciuse un fallo ao engadir {fileBaseName} á colección {collectionFileName}",
     "Failed to delete {fileBaseName}" : "Produciuse un fallo ao eliminar {fileBaseName}",
     "Failed to create {collectionFileName}" : "Produciuse un fallo ao crear {collectionFileName}",
@@ -162,8 +161,6 @@ OC.L10N.register(
     "Leave shared album" : "Abandonar o álbum compartido",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Confirma que quere eliminar {collectionName}? Esta acción non é posíbel desfacela.",
     "Failed to delete {collectionFileName}" : "Produciuse un fallo ao eliminar {collectionFileName}",
-    "Cancel" : "Cancelar",
-    "Confirm" : "Confirmar",
     "Failed to move {fileBaseName} to person {faceName}" : "Produciuse un fallo ao mover {fileBaseName} para a persoa {faceName}",
     "Failed to remove {fileBaseName}" : "Produciuse un fallo ao retirar {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Produciuse un fallo ao cambiar o nome de {oldName} a {faceName}",
@@ -180,6 +177,9 @@ OC.L10N.register(
     "Choose a different folder" : "Escolla un cartafol diferente",
     "View" : "Ver",
     "Choose the folder where photos and albums are uploaded to." : "Escolla o cartafol ao que se enviarán as fotos e os álbums.",
-    "Loading folders …" : "Cargando cartafoles…"
+    "Loading folders …" : "Cargando cartafoles…",
+    "Details" : "Detalles",
+    "Cancel" : "Cancelar",
+    "Confirm" : "Confirmar"
 },
 "nplurals=2; plural=(n != 1);");

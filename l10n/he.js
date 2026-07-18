@@ -71,12 +71,12 @@ OC.L10N.register(
     "Shared Albums" : "אלבומים משותפים",
     "Tagged photos" : "תמונות מתויגות",
     "Last week" : "שבוע שעבר",
-    "Details" : "פרטים",
-    "Cancel" : "Cancel",
-    "Confirm" : "אישור",
     "Group" : "קבוצה",
     "Remove {collaboratorLabel} from the collaborators list" : "הסר את {collaboratorLabel} מרשימת השותפים",
     "Enable squared photos view" : "הפעלת תצוגת תמונות מרובעות",
-    "View" : "צפייה"
+    "View" : "צפייה",
+    "Details" : "פרטים",
+    "Cancel" : "Cancel",
+    "Confirm" : "אישור"
 },
 "nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");

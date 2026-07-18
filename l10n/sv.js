@@ -152,7 +152,6 @@ OC.L10N.register(
     "Last Month" : "Förra månaden",
     "Custom…" : "Anpassad...",
     "{startDate} to {endDate}" : "{startDate} till {endDate}",
-    "Details" : "Detaljer",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Kunde inte lägga till {fileBaseName} i samlingen {collectionFileName}",
     "Failed to delete {fileBaseName}" : "Kunde inte ta bort {fileBaseName}",
     "Failed to create {collectionFileName}" : "Kunde inte skapa {collectionFileName}",
@@ -162,8 +161,6 @@ OC.L10N.register(
     "Leave shared album" : "Lämna delat album",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Är du säker på att du vill ta bort {collectionName}? Denna åtgärd kan inte ångras.",
     "Failed to delete {collectionFileName}" : "Kunde inte ta bort {collectionFileName}",
-    "Cancel" : "Avbryt",
-    "Confirm" : "Bekräfta",
     "Failed to move {fileBaseName} to person {faceName}" : "Kunde inte flytta {fileBaseName} till personen {faceName}",
     "Failed to remove {fileBaseName}" : "Kunde inte ta bort {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Kunde inte byta namn från {oldName} till {faceName}",
@@ -180,6 +177,9 @@ OC.L10N.register(
     "Choose a different folder" : "Välj annan mapp",
     "View" : "Visa",
     "Choose the folder where photos and albums are uploaded to." : "Välj mapp dit foton och album laddas upp.",
-    "Loading folders …" : "Läser in mappar …"
+    "Loading folders …" : "Läser in mappar …",
+    "Details" : "Detaljer",
+    "Cancel" : "Avbryt",
+    "Confirm" : "Bekräfta"
 },
 "nplurals=2; plural=(n != 1);");

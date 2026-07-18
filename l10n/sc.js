@@ -36,11 +36,11 @@ OC.L10N.register(
     "Delete selection" : "Cantzella seletzione",
     "Tagged photos" : "Fotografias etichetadas",
     "Last week" : "Sa chida passada",
-    "Details" : "Detàllios",
-    "Cancel" : "Cancel",
-    "Confirm" : "Cunfirma",
     "Group" : "Grupu",
     "Enable squared photos view" : "Ativa sa visualizatzione a fotos cuadradas",
-    "View" : "Visualiza"
+    "View" : "Visualiza",
+    "Details" : "Detàllios",
+    "Cancel" : "Cancel",
+    "Confirm" : "Cunfirma"
 },
 "nplurals=2; plural=(n != 1);");

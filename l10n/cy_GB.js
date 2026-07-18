@@ -17,10 +17,10 @@ OC.L10N.register(
     "Home" : "Cartref",
     "General" : "Cyffredinol",
     "Remove from favorites" : "Remove from favorites",
+    "Group" : "Grŵp",
+    "View" : "Golwg",
     "Details" : "Manylion",
     "Cancel" : "Cancel",
-    "Confirm" : "Cadarnhau",
-    "Group" : "Grŵp",
-    "View" : "Golwg"
+    "Confirm" : "Cadarnhau"
 },
 "nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;");

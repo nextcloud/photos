@@ -150,7 +150,6 @@
     "Last Month" : "上个月",
     "Custom…" : "自定义…",
     "{startDate} to {endDate}" : "{startDate} 到 {endDate}",
-    "Details" : "详情",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "无法将 {fileBaseName} 添加到收藏 {collectionFileName}",
     "Failed to delete {fileBaseName}" : "无法删除 {fileBaseName}",
     "Failed to create {collectionFileName}" : "无法创建 {collectionFileName}",
@@ -160,8 +159,6 @@
     "Leave shared album" : "离开共享相册",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "是否确定要删除 {collectionName}？此操作无法撤销。",
     "Failed to delete {collectionFileName}" : "无法删除 {collectionFileName}",
-    "Cancel" : "取消",
-    "Confirm" : "确认",
     "Failed to move {fileBaseName} to person {faceName}" : "无法将 {fileBaseName} 移至人物 {faceName}",
     "Failed to remove {fileBaseName}" : "无法移除 {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "无法将 {oldName} 重命名为 {faceName}",
@@ -178,6 +175,9 @@
     "Choose a different folder" : "选择一个不同的文件夹",
     "View" : "查看",
     "Choose the folder where photos and albums are uploaded to." : "选择照片和相册上传的文件夹。",
-    "Loading folders …" : "正在加载文件夹 …"
+    "Loading folders …" : "正在加载文件夹 …",
+    "Details" : "详情",
+    "Cancel" : "取消",
+    "Confirm" : "确认"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

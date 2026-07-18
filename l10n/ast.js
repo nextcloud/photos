@@ -134,9 +134,6 @@ OC.L10N.register(
     "{title}'s face" : "Cara de: {title}",
     "Last week" : "La selmana anterior",
     "{startDate} to {endDate}" : "{startDate} hasta'l {endDate}",
-    "Details" : "Detalles",
-    "Cancel" : "Cancel",
-    "Confirm" : "Confirmar",
     "Could not load photos folder" : "Nun se puen cargar la carpeta de semeyes",
     "Group" : "Grupu",
     "Remove {collaboratorLabel} from the collaborators list" : "Quitar «{collaboratorLabel}» de la llista de collaboradores",
@@ -144,6 +141,9 @@ OC.L10N.register(
     "Choose default Photos upload and Albums location" : "Escueyi la llocalización pa los álbumes y la xuba de semeyes",
     "Choose a different folder" : "Escueyi una carpeta diferente",
     "View" : "Ver",
-    "Choose the folder where photos and albums are uploaded to." : "Escueyu la carpeta a onde se xuben les semeyes y los álbumes."
+    "Choose the folder where photos and albums are uploaded to." : "Escueyu la carpeta a onde se xuben les semeyes y los álbumes.",
+    "Details" : "Detalles",
+    "Cancel" : "Cancel",
+    "Confirm" : "Confirmar"
 },
 "nplurals=2; plural=(n != 1);");

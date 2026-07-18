@@ -57,12 +57,9 @@ OC.L10N.register(
     "Back to tags overview" : "Atpakaļ uz birku pārskatu",
     "Add to album" : "Pievienot albumam",
     "Error fetching files" : "Kļūda datņu ieguvē",
-    "Details" : "Informācija",
     "Failed to delete {fileBaseName}" : "Neizdevās izdzēst {fileBaseName}",
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Neizdevās pārdēvēt {currentCollectionFileName} par {newCollectionFileName}",
     "Failed to delete {collectionFileName}" : "Neizdevās izdzēst {collectionFileName}",
-    "Cancel" : "Atcelt",
-    "Confirm" : "Apstiprināt",
     "Failed to rename {oldName} to {faceName}" : "Neizdevās pārdēvēt {oldName} par {faceName}",
     "Failed to delete {faceName}" : "Neizdevās izdzēst {faceName}",
     "Failed to delete {fileId}" : "Neizdevās izdzēst {fileId}",
@@ -70,6 +67,9 @@ OC.L10N.register(
     "Could not load photos folder" : "Nevarēja ielādēt fotoattēlu mapi",
     "Group" : "Grupa",
     "View" : "Skats",
-    "Choose the folder where photos and albums are uploaded to." : "Izvēlēties mapi, kurā tiek augšupielādēti fotoattēli un albumi."
+    "Choose the folder where photos and albums are uploaded to." : "Izvēlēties mapi, kurā tiek augšupielādēti fotoattēli un albumi.",
+    "Details" : "Informācija",
+    "Cancel" : "Atcelt",
+    "Confirm" : "Apstiprināt"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

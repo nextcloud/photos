@@ -152,7 +152,6 @@ OC.L10N.register(
     "Last Month" : "上個月",
     "Custom…" : "自訂……",
     "{startDate} to {endDate}" : "{startDate} 到 {endDate}",
-    "Details" : "詳細資訊",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "無法將 {fileBaseName} 新增至收藏 {collectionFileName}",
     "Failed to delete {fileBaseName}" : "刪除 {fileBaseName} 失敗",
     "Failed to create {collectionFileName}" : "建立 {collectionFileName} 失敗",
@@ -162,8 +161,6 @@ OC.L10N.register(
     "Leave shared album" : "離開已分享的相簿",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "您確定您想要刪除 {collectionName} 嗎？此動作無法還原。",
     "Failed to delete {collectionFileName}" : "刪除 {collectionFileName} 失敗",
-    "Cancel" : "取消",
-    "Confirm" : "確認",
     "Failed to move {fileBaseName} to person {faceName}" : "將 {fileBaseName} 移動到人物 {faceName} 失敗",
     "Failed to remove {fileBaseName}" : "移除 {fileBaseName} 失敗",
     "Failed to rename {oldName} to {faceName}" : "無法將 {oldName} 重新命名為 {faceName}",
@@ -180,6 +177,9 @@ OC.L10N.register(
     "Choose a different folder" : "選擇其他資料夾",
     "View" : "檢視",
     "Choose the folder where photos and albums are uploaded to." : "選擇照片與相簿上傳到的資料夾。",
-    "Loading folders …" : "正在載入資料夾……"
+    "Loading folders …" : "正在載入資料夾……",
+    "Details" : "詳細資訊",
+    "Cancel" : "取消",
+    "Confirm" : "確認"
 },
 "nplurals=1; plural=0;");

@@ -151,15 +151,12 @@ OC.L10N.register(
     "Last Month" : "Último mes",
     "Custom…" : "Personalizado…",
     "{startDate} to {endDate}" : "{startDate} a {endDate}",
-    "Details" : "Detalles",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Fallo al añadir {fileBaseName} a la colección {collectionFileName}",
     "Failed to delete {fileBaseName}" : "Fallo al eliminar {fileBaseName}",
     "Failed to create {collectionFileName}" : "Fallo al crear {collectionFileName}",
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Fallo al renombrar {currentCollectionFileName} a {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Fallo al actualizar las propiedades de {collectionFileName} con {properties}",
     "Failed to delete {collectionFileName}" : "Fallo al eliminar {collectionFileName}",
-    "Cancel" : "Cancelar",
-    "Confirm" : "Confirmar",
     "Failed to move {fileBaseName} to person {faceName}" : "Fallo al mover {fileBaseName} a la persona {faceName}",
     "Failed to remove {fileBaseName}" : "Fallo al quitar {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Fallo al renombrar {oldName} a {faceName}",
@@ -175,6 +172,9 @@ OC.L10N.register(
     "Choose default Photos upload and Albums location" : "Ubicación por defecto de subida para Fotos y Álbumes",
     "Choose a different folder" : "Elija una carpeta diferente",
     "View" : "Ver",
-    "Choose the folder where photos and albums are uploaded to." : "Elija la carpeta donde se cargan las fotos y los álbumes."
+    "Choose the folder where photos and albums are uploaded to." : "Elija la carpeta donde se cargan las fotos y los álbumes.",
+    "Details" : "Detalles",
+    "Cancel" : "Cancelar",
+    "Confirm" : "Confirmar"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

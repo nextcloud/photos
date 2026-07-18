@@ -152,7 +152,6 @@ OC.L10N.register(
     "Last Month" : "Eelmisel kuul",
     "Custom…" : "Kohandatud…",
     "{startDate} to {endDate}" : "{startDate} kuni {endDate}",
-    "Details" : "Üksikasjad",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "„{fileBaseName}“ lisamine „{collectionFileName}“ kogumikku ei õnnestunud",
     "Failed to delete {fileBaseName}" : "Ei õnnestunud kustutada: „{fileBaseName}“",
     "Failed to create {collectionFileName}" : "„{collectionFileName}“ kogumiku loomine ei õnnestunud",
@@ -162,8 +161,6 @@ OC.L10N.register(
     "Leave shared album" : "Lahku jagatud albumist",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Kas sa oled kindel, et soovid „{collectionName}“ kogumiku kustutada? Seda tegevust ei saa tagasi pöörata.",
     "Failed to delete {collectionFileName}" : "Kogumiku kustutamine ei õnnestunud: „{collectionFileName}“",
-    "Cancel" : "Katkesta",
-    "Confirm" : "Kinnita",
     "Failed to move {fileBaseName} to person {faceName}" : "„{fileBaseName}“ teisaldamine kasutajale „{faceName}“ ei õnnestunud",
     "Failed to remove {fileBaseName}" : "„{fileBaseName}“ eemaldamine ei õnnestunud",
     "Failed to rename {oldName} to {faceName}" : "Ei õnnestunud muuta nime: „{oldName}“ → „{faceName}“",
@@ -180,6 +177,9 @@ OC.L10N.register(
     "Choose a different folder" : "Vali mõni muu kaust",
     "View" : "Vaata",
     "Choose the folder where photos and albums are uploaded to." : "Vali kaust, kuhu fotod ja albumid üles laaditakse",
-    "Loading folders …" : "Laadin kaustu…"
+    "Loading folders …" : "Laadin kaustu…",
+    "Details" : "Üksikasjad",
+    "Cancel" : "Katkesta",
+    "Confirm" : "Kinnita"
 },
 "nplurals=2; plural=(n != 1);");

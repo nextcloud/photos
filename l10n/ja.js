@@ -152,7 +152,6 @@ OC.L10N.register(
     "Last Month" : "先月",
     "Custom…" : "カスタム…",
     "{startDate} to {endDate}" : "{startDate} から {endDate}",
-    "Details" : "詳細",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "{fileBaseName}をコレクション{collectionFileName}に追加できませんでした",
     "Failed to delete {fileBaseName}" : "{fileBaseName} の削除に失敗しました",
     "Failed to create {collectionFileName}" : "{collectionFileName} の作成に失敗しました",
@@ -162,8 +161,6 @@ OC.L10N.register(
     "Leave shared album" : "共有アルバムを離れる",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "本当に{collectionName}を削除しますか？この操作は元に戻すことができません。",
     "Failed to delete {collectionFileName}" : "{collectionFileName} の削除に失敗しました",
-    "Cancel" : "キャンセル",
-    "Confirm" : "承認",
     "Failed to move {fileBaseName} to person {faceName}" : "{fileBaseName}を{faceName}への移動に失敗しました",
     "Failed to remove {fileBaseName}" : "{fileBaseName}の削除に失敗しました",
     "Failed to rename {oldName} to {faceName}" : "{oldName} から {faceName} への名前の変更に失敗しました",
@@ -180,6 +177,9 @@ OC.L10N.register(
     "Choose a different folder" : "別のフォルダーを選択する",
     "View" : "表示",
     "Choose the folder where photos and albums are uploaded to." : "写真やアルバムをアップロードするフォルダを選択します。",
-    "Loading folders …" : "フォルダを読み込み中…"
+    "Loading folders …" : "フォルダを読み込み中…",
+    "Details" : "詳細",
+    "Cancel" : "キャンセル",
+    "Confirm" : "承認"
 },
 "nplurals=1; plural=0;");

@@ -150,7 +150,6 @@
     "Last Month" : "В прошлом месяце",
     "Custom…" : "Настроить...",
     "{startDate} to {endDate}" : "С {startDate} по {endDate}",
-    "Details" : "Свойства",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Не удалось добавить {fileBaseName} в коллекцию {collectionFileName}",
     "Failed to delete {fileBaseName}" : "Не удалось удалить {fileBaseName}",
     "Failed to create {collectionFileName}" : "Не удалось создать {collectionFileName}",
@@ -160,8 +159,6 @@
     "Leave shared album" : "Выйти из общего альбома",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Вы уверены, что хотите удалить {collectionName}? Это действие нельзя отменить.",
     "Failed to delete {collectionFileName}" : "Не удалось удалить {collectionFileName}",
-    "Cancel" : "Cancel",
-    "Confirm" : "Подтвердить",
     "Failed to move {fileBaseName} to person {faceName}" : "Не удалось переместить {fileBaseName} к {faceName}",
     "Failed to remove {fileBaseName}" : "Не удалось удалить {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Не удалось переименовать {oldName} в {faceName}",
@@ -178,6 +175,9 @@
     "Choose a different folder" : "Выбрать другую папку",
     "View" : "Просмотр",
     "Choose the folder where photos and albums are uploaded to." : "Выберите папку, в которую загружаются фотографии и альбомы.",
-    "Loading folders …" : "Загрузка папок  …"
+    "Loading folders …" : "Загрузка папок  …",
+    "Details" : "Свойства",
+    "Cancel" : "Cancel",
+    "Confirm" : "Подтвердить"
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }
