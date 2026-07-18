@@ -139,9 +139,6 @@ OC.L10N.register(
     "{title}'s face" : "Cara de {title}",
     "Last week" : "Semana pasada",
     "{startDate} to {endDate}" : "{startDate} a {endDate}",
-    "Details" : "Detalles",
-    "Cancel" : "Cancel",
-    "Confirm" : "Confirmar",
     "Could not load photos folder" : "No se pudo cargar la carpeta de fotos",
     "Group" : "Grupo",
     "Remove {collaboratorLabel} from the collaborators list" : "Eliminar {collaboratorLabel} de la lista de colaboradores",
@@ -149,6 +146,9 @@ OC.L10N.register(
     "Choose default Photos upload and Albums location" : "Seleccionar la ubicación predeterminada de carga de fotos y álbumes",
     "Choose a different folder" : "Elegir una carpeta diferente",
     "View" : "Ver",
-    "Choose the folder where photos and albums are uploaded to." : "Elegir la carpeta donde se carguen las fotos y videos."
+    "Choose the folder where photos and albums are uploaded to." : "Elegir la carpeta donde se carguen las fotos y videos.",
+    "Details" : "Detalles",
+    "Cancel" : "Cancel",
+    "Confirm" : "Confirmar"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

@@ -152,15 +152,12 @@ OC.L10N.register(
     "Last Month" : "Минатиот месец",
     "Custom…" : "Прилагодено...",
     "{startDate} to {endDate}" : "{startDate} до {endDate}",
-    "Details" : "Детали",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Не успеа да се додаде {fileBaseName} во колекцијата {collectionFileName}",
     "Failed to delete {fileBaseName}" : "Не успеа да се избрише {fileBaseName}",
     "Failed to create {collectionFileName}" : "Не успеа да се креира {collectionFileName}",
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Не успеа да се преименува {currentCollectionFileName} во {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Не успеа да се ажурираат својствата на {collectionFileName} со {properties}",
     "Failed to delete {collectionFileName}" : "Не успеа да се избрише {collectionFileName}",
-    "Cancel" : "Откажи",
-    "Confirm" : "Потврди",
     "Failed to move {fileBaseName} to person {faceName}" : "Не успеа да се премести {fileBaseName} кај личноста {faceName}",
     "Failed to remove {fileBaseName}" : "Не успеа да се отстрани {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Не успеа да се преименува {oldName} во {faceName}",
@@ -176,6 +173,9 @@ OC.L10N.register(
     "Choose default Photos upload and Albums location" : "Стандардна локација за прикачени фотографии и локации на албуми",
     "Choose a different folder" : "Избери друга папка",
     "View" : "Погледни",
-    "Choose the folder where photos and albums are uploaded to." : "Изберете ги папките од каде што се прикачуваат фотографиите и албумите."
+    "Choose the folder where photos and albums are uploaded to." : "Изберете ги папките од каде што се прикачуваат фотографиите и албумите.",
+    "Details" : "Детали",
+    "Cancel" : "Откажи",
+    "Confirm" : "Потврди"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

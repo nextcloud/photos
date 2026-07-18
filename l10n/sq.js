@@ -16,10 +16,10 @@ OC.L10N.register(
     "General" : "Të përgjithshme",
     "Remove from favorites" : "Remove from favorites",
     "Loading folders…" : "Duke ngarkuar dosjet…",
+    "Group" : "Grup",
+    "View" : "Shiko",
     "Details" : "Detajet",
     "Cancel" : "Cancel",
-    "Confirm" : "Konfirmo",
-    "Group" : "Grup",
-    "View" : "Shiko"
+    "Confirm" : "Konfirmo"
 },
 "nplurals=2; plural=(n != 1);");

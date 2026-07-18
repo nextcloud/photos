@@ -150,7 +150,6 @@
     "Last Month" : "Προηγούμενος μήνας",
     "Custom…" : "Προσαρμοσμένο…",
     "{startDate} to {endDate}" : "{startDate} έως {endDate}",
-    "Details" : "Λεπτομέρειες",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Αποτυχία προσθήκης {fileBaseName} στη συλλογή {collectionFileName}",
     "Failed to delete {fileBaseName}" : "Αποτυχία διαγραφής {fileBaseName}",
     "Failed to create {collectionFileName}" : "Αποτυχία δημιουργίας {collectionFileName}",
@@ -160,8 +159,6 @@
     "Leave shared album" : "Αποχώρηση από κοινόχρηστο άλμπουμ",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Είστε βέβαιοι ότι θέλετε να διαγράψετε τη συλλογή {collectionName}; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.",
     "Failed to delete {collectionFileName}" : "Αποτυχία διαγραφής {collectionFileName}",
-    "Cancel" : "Ακύρωση",
-    "Confirm" : "Επιβεβαίωση",
     "Failed to move {fileBaseName} to person {faceName}" : "Αποτυχία μετακίνησης {fileBaseName} στο άτομο {faceName}",
     "Failed to remove {fileBaseName}" : "Αποτυχία αφαίρεσης {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Αποτυχία μετονομασίας {oldName} σε {faceName}",
@@ -178,6 +175,9 @@
     "Choose a different folder" : "Επιλογή διαφορετικού φακέλου",
     "View" : "Προβολή",
     "Choose the folder where photos and albums are uploaded to." : "Επιλέξτε τον φάκελο στον οποίο μεταφορτώνονται φωτογραφίες και άλμπουμ.",
-    "Loading folders …" : "Φόρτωση φακέλων …"
+    "Loading folders …" : "Φόρτωση φακέλων …",
+    "Details" : "Λεπτομέρειες",
+    "Cancel" : "Ακύρωση",
+    "Confirm" : "Επιβεβαίωση"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

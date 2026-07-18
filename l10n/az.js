@@ -12,9 +12,9 @@ OC.L10N.register(
     "Home" : "Ev",
     "General" : "Ümumi",
     "Remove from favorites" : "Remove from favorites",
+    "Group" : "Qrup",
     "Details" : "Detallar",
     "Cancel" : "Cancel",
-    "Confirm" : "Təsdiq edin",
-    "Group" : "Qrup"
+    "Confirm" : "Təsdiq edin"
 },
 "nplurals=2; plural=(n != 1);");

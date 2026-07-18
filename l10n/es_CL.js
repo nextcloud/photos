@@ -18,8 +18,8 @@ OC.L10N.register(
     "General" : "General",
     "Remove from favorites" : "Eliminar de favoritos",
     "Loading folders…" : "Cargando carpetas…",
+    "Group" : "Grupo",
     "Cancel" : "Cancel",
-    "Confirm" : "Confirmar",
-    "Group" : "Grupo"
+    "Confirm" : "Confirmar"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

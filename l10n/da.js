@@ -151,15 +151,12 @@ OC.L10N.register(
     "Last Month" : "Sidste måned",
     "Custom…" : "Brugerdefineret...",
     "{startDate} to {endDate}" : "{startDate} til {endDate}",
-    "Details" : "Detaljer",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Kunne ikke tilføje {fileBaseName} til samling {collectionFileName}",
     "Failed to delete {fileBaseName}" : "Kunne ikke slette {fileBaseName}",
     "Failed to create {collectionFileName}" : "Kunne ikke oprette {collectionFileName}",
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Kunne ikke omdøbe {currentCollectionFileName} til {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Kunne ikke opdatere indstillinger for {collectionFileName} med {properties}",
     "Failed to delete {collectionFileName}" : "Kunne ikke slette {collectionFileName}",
-    "Cancel" : "Annullér",
-    "Confirm" : "Bekræft",
     "Failed to move {fileBaseName} to person {faceName}" : "Kunne ikke flytte {fileBaseName} til person {faceName}",
     "Failed to remove {fileBaseName}" : "Kunne ikke fjerne {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Kunne ikke omdøbe {oldName} til {faceName}",
@@ -175,6 +172,9 @@ OC.L10N.register(
     "Choose default Photos upload and Albums location" : "Vælg standard fotoupload og albumplacering",
     "Choose a different folder" : "Vælg en anden mappe",
     "View" : "Vis",
-    "Choose the folder where photos and albums are uploaded to." : "Vælg mappen som fotos og albummer uploades til."
+    "Choose the folder where photos and albums are uploaded to." : "Vælg mappen som fotos og albummer uploades til.",
+    "Details" : "Detaljer",
+    "Cancel" : "Annullér",
+    "Confirm" : "Bekræft"
 },
 "nplurals=2; plural=(n != 1);");

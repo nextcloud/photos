@@ -11,8 +11,8 @@ OC.L10N.register(
     "Home" : "அகம்",
     "General" : "பொதுவான",
     "Remove from favorites" : "Remove from favorites",
+    "Group" : "Group",
     "Details" : "விவரங்கள்",
-    "Cancel" : "Cancel",
-    "Group" : "Group"
+    "Cancel" : "Cancel"
 },
 "nplurals=2; plural=(n != 1);");

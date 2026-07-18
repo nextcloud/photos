@@ -26,10 +26,10 @@ OC.L10N.register(
     "Remove from favorites" : "Kkes-it seg ismal",
     "Save." : "Sekles.",
     "Last week" : "Amalas yezrin",
+    "Group" : "Agraw",
+    "View" : "Askan",
     "Details" : "Talqayt",
     "Cancel" : "Semmet",
-    "Confirm" : "Sergeg",
-    "Group" : "Agraw",
-    "View" : "Askan"
+    "Confirm" : "Sergeg"
 },
 "nplurals=2; plural=(n != 1);");

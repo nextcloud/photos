@@ -8,7 +8,7 @@ OC.L10N.register(
     "Favorite" : "ಅಚ್ಚುಮೆಚ್ಚಿನ",
     "Home" : "﻿ಮುಖಪುಟ",
     "Remove from favorites" : "Remove from favorites",
-    "Cancel" : "Cancel",
-    "Group" : "﻿ಗುಂಪು"
+    "Group" : "﻿ಗುಂಪು",
+    "Cancel" : "Cancel"
 },
 "nplurals=2; plural=(n > 1);");

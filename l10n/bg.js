@@ -119,12 +119,12 @@ OC.L10N.register(
     "{title}'s face" : "Лицето на {title}",
     "Last week" : "Миналата седмица",
     "{startDate} to {endDate}" : "{startDate} до {endDate}",
-    "Details" : "Подробности",
-    "Cancel" : "Cancel",
-    "Confirm" : "Потвърдете",
     "Group" : "Група",
     "Remove {collaboratorLabel} from the collaborators list" : "Премахване на {collaboratorLabel} от списъка със сътрудници",
     "Enable squared photos view" : "Активирайте изгледа на снимки в квадратче",
-    "View" : "Изглед"
+    "View" : "Изглед",
+    "Details" : "Подробности",
+    "Cancel" : "Cancel",
+    "Confirm" : "Потвърдете"
 },
 "nplurals=2; plural=(n != 1);");

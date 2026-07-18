@@ -43,11 +43,11 @@ OC.L10N.register(
     "All your media" : "สื่อทั้งหมดของคุณ",
     "Tagged photos" : "รูปภาพที่ติดแท็ก",
     "Last week" : "สัปดาห์ที่แล้ว",
-    "Details" : "รายละเอียด",
-    "Cancel" : "Cancel",
-    "Confirm" : "ยืนยัน",
     "Group" : "กลุ่ม",
     "Enable squared photos view" : "เปิดมุมมองรูปภาพสี่เหลี่ยม",
-    "View" : "มุมมอง"
+    "View" : "มุมมอง",
+    "Details" : "รายละเอียด",
+    "Cancel" : "Cancel",
+    "Confirm" : "ยืนยัน"
 },
 "nplurals=1; plural=0;");

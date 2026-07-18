@@ -152,7 +152,6 @@ OC.L10N.register(
     "Last Month" : "Í síðasta mánuði",
     "Custom…" : "Sérsniðið…",
     "{startDate} to {endDate}" : "{startDate} til {endDate}",
-    "Details" : "Nánar",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Mistókst að bæta {fileBaseName} í safnið {collectionFileName}",
     "Failed to delete {fileBaseName}" : "Tókst ekki að eyða {fileBaseName}",
     "Failed to create {collectionFileName}" : "Tókst ekki að búa til {collectionFileName}",
@@ -162,8 +161,6 @@ OC.L10N.register(
     "Leave shared album" : "Yfirgefa samnýtta möppu",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Ertu viss um að þú viljir eyða {collectionName}? Þessi aðgerð er óafturkræf.",
     "Failed to delete {collectionFileName}" : "Tókst ekki að eyða {collectionFileName}",
-    "Cancel" : "Cancel",
-    "Confirm" : "Staðfesta",
     "Failed to move {fileBaseName} to person {faceName}" : "Mistókst að færa {fileBaseName} á persónuna {faceName}",
     "Failed to remove {fileBaseName}" : "Mistókst að fjarlægja {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Mistókst að endurnefna {oldName} sem {faceName}",
@@ -180,6 +177,9 @@ OC.L10N.register(
     "Choose a different folder" : "Velja aðra möppu",
     "View" : "Skoða",
     "Choose the folder where photos and albums are uploaded to." : "Veldu möppurnar þangað sem ljósmyndir og myndskeið eru send.",
-    "Loading folders …" : "Hleð inn möppum …"
+    "Loading folders …" : "Hleð inn möppum …",
+    "Details" : "Nánar",
+    "Cancel" : "Cancel",
+    "Confirm" : "Staðfesta"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

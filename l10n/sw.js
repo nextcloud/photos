@@ -151,15 +151,12 @@ OC.L10N.register(
     "Last Month" : "Mwezi uliopita",
     "Custom…" : "Desturi...",
     "{startDate} to {endDate}" : "{startDate} kwenda {endDate}",
-    "Details" : "Maelezo ya kina",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Imeshindwa kuongeza {fileBaseName} kwa mkusanyiko {collectionFileName}",
     "Failed to delete {fileBaseName}" : "Imeshindwa kufuta {fileBaseName}",
     "Failed to create {collectionFileName}" : "Imeshindwa kutengeneza {collectionFileName}",
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Imeshindwa kuita jina upya {currentCollectionFileName} kwenda {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Imeshindwa kusasisha sifa za {collectionFileName} na {properties}",
     "Failed to delete {collectionFileName}" : "Imeshindwa kufuta {collectionFileName}",
-    "Cancel" : "Ghairi",
-    "Confirm" : "Thibitisha",
     "Failed to move {fileBaseName} to person {faceName}" : "Imeshindwa kuhamisha {fileBaseName} kwa mtu {faceName}",
     "Failed to remove {fileBaseName}" : "Imeshindwa kuhamisha {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Imeshindwa kuita jina upya {oldName} kwenda {faceName}",
@@ -175,6 +172,9 @@ OC.L10N.register(
     "Choose default Photos upload and Albums location" : "Chagua upakiaji chaguomsingi wa Picha na eneo la Albamu",
     "Choose a different folder" : "Chagua kisanduku tofauti",
     "View" : "Angalia",
-    "Choose the folder where photos and albums are uploaded to." : "Chagua folda ambapo picha na albamu hupakiwa"
+    "Choose the folder where photos and albums are uploaded to." : "Chagua folda ambapo picha na albamu hupakiwa",
+    "Details" : "Maelezo ya kina",
+    "Cancel" : "Ghairi",
+    "Confirm" : "Thibitisha"
 },
 "nplurals=2; plural=(n != 1);");

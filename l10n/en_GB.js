@@ -152,7 +152,6 @@ OC.L10N.register(
     "Last Month" : "Last Month",
     "Custom…" : "Custom…",
     "{startDate} to {endDate}" : "{startDate} to {endDate}",
-    "Details" : "Details",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Failed to add {fileBaseName} to collection {collectionFileName}",
     "Failed to delete {fileBaseName}" : "Failed to delete {fileBaseName}",
     "Failed to create {collectionFileName}" : "Failed to create {collectionFileName}",
@@ -162,8 +161,6 @@ OC.L10N.register(
     "Leave shared album" : "Leave shared album",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Are you sure you want to delete {collectionName}? This action cannot be undone.",
     "Failed to delete {collectionFileName}" : "Failed to delete {collectionFileName}",
-    "Cancel" : "Cancel",
-    "Confirm" : "Confirm",
     "Failed to move {fileBaseName} to person {faceName}" : "Failed to move {fileBaseName} to person {faceName}",
     "Failed to remove {fileBaseName}" : "Failed to remove {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Failed to rename {oldName} to {faceName}",
@@ -180,6 +177,9 @@ OC.L10N.register(
     "Choose a different folder" : "Choose a different folder",
     "View" : "View",
     "Choose the folder where photos and albums are uploaded to." : "Choose the folder where photos and albums are uploaded to.",
-    "Loading folders …" : "Loading folders …"
+    "Loading folders …" : "Loading folders …",
+    "Details" : "Details",
+    "Cancel" : "Cancel",
+    "Confirm" : "Confirm"
 },
 "nplurals=2; plural=(n != 1);");

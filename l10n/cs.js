@@ -152,7 +152,6 @@ OC.L10N.register(
     "Last Month" : "Uplynulý měsíc",
     "Custom…" : "Uživatelsky určené …",
     "{startDate} to {endDate}" : "{startDate} až {endDate}",
-    "Details" : "Podrobnosti",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Nepodařilo se přidat {fileBaseName} do sbírky {collectionFileName}",
     "Failed to delete {fileBaseName}" : "Nepodařilo se smazat {fileBaseName}",
     "Failed to create {collectionFileName}" : "Nepodařilo se vytvořit {collectionFileName}",
@@ -162,8 +161,6 @@ OC.L10N.register(
     "Leave shared album" : "Opustit sdílené album",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Opravdu chcete {collectionName} smazat? Tuto akci nepůjde vzít zpět.",
     "Failed to delete {collectionFileName}" : "Nepodařilo se smazat {collectionFileName}",
-    "Cancel" : "Zrušit",
-    "Confirm" : "Potvrdit",
     "Failed to move {fileBaseName} to person {faceName}" : "Nepodařil ose přesunout {fileBaseName} k osobě {faceName}",
     "Failed to remove {fileBaseName}" : "Nepodařilo se odebrat {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Nepodařilo se přejmenovat {oldName} na {faceName}",
@@ -180,6 +177,9 @@ OC.L10N.register(
     "Choose a different folder" : "Vyberte jinou složku",
     "View" : "Zobrazit",
     "Choose the folder where photos and albums are uploaded to." : "Zvolte složku do které nahrávat fotky a alba.",
-    "Loading folders …" : "Načítání složek …"
+    "Loading folders …" : "Načítání složek …",
+    "Details" : "Podrobnosti",
+    "Cancel" : "Zrušit",
+    "Confirm" : "Potvrdit"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

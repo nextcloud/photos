@@ -141,12 +141,9 @@ OC.L10N.register(
     "{title}'s face" : "{title}: obraz",
     "Last week" : "Zadnji teden",
     "{startDate} to {endDate}" : "od {startDate} do {endDate}",
-    "Details" : "Podrobnosti",
     "Failed to delete {fileBaseName}" : "Spodletelo brisanje {fileBaseName}",
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Spodletelo preimenovanje {currentCollectionFileName} v {newCollectionFileName}",
     "Failed to delete {collectionFileName}" : "Spodletelo brisanje {collectionFileName}",
-    "Cancel" : "Prekliči",
-    "Confirm" : "Potrdi",
     "Failed to rename {oldName} to {faceName}" : "Spodletelo preimenovanje {oldName} v {faceName}",
     "Failed to delete {faceName}" : "Spodletelo brisanje {faceName}",
     "Failed to delete {fileId}" : "Spodletelo brisanje {fileId}",
@@ -157,6 +154,9 @@ OC.L10N.register(
     "Enable squared photos view" : "Omogoči kvadratne prikaze slik",
     "Choose a different folder" : "Izberite drugo mapo",
     "View" : "Poglej",
-    "Choose the folder where photos and albums are uploaded to." : "Izberi mapo, kamor se bodo naložile fotografije in albumi"
+    "Choose the folder where photos and albums are uploaded to." : "Izberi mapo, kamor se bodo naložile fotografije in albumi",
+    "Details" : "Podrobnosti",
+    "Cancel" : "Prekliči",
+    "Confirm" : "Potrdi"
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");

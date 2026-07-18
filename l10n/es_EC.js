@@ -116,13 +116,13 @@ OC.L10N.register(
     "Tagged photo {title}" : "Foto etiquetada {título}",
     "{title}'s face" : "Rostro de {título}",
     "Last week" : "La semana pasada",
-    "Details" : "Detalles",
-    "Cancel" : "Cancelar",
-    "Confirm" : "Confirmar",
     "Group" : "Grupo",
     "Remove {collaboratorLabel} from the collaborators list" : "Eliminar {etiquetaColaborador} de la lista de colaboradores",
     "Enable squared photos view" : "Habilitar vista de fotos cuadradas",
     "Choose default Photos upload and Albums location" : "Seleccionar ubicación predeterminada de carga de fotos y álbumes",
-    "View" : "Ver"
+    "View" : "Ver",
+    "Details" : "Detalles",
+    "Cancel" : "Cancelar",
+    "Confirm" : "Confirmar"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
