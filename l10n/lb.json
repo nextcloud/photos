@@ -11,9 +11,9 @@
     "Home" : "Doheem",
     "General" : "Allgemeng",
     "Remove from favorites" : "Remove from favorites",
+    "Group" : "Grupp",
     "Details" : "Detailer",
     "Cancel" : "Cancel",
-    "Confirm" : "Konfirméieren",
-    "Group" : "Grupp"
+    "Confirm" : "Konfirméieren"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

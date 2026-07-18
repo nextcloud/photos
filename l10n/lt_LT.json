@@ -150,7 +150,6 @@
     "Last Month" : "Praėjusį mėnesį",
     "Custom…" : "Pasirinktinis…",
     "{startDate} to {endDate}" : "Nuo {startDate} iki {endDate}",
-    "Details" : "Išsamiau",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Nepavyko pridėti {fileBaseName} prie {collectionFileName} kolekcijos ",
     "Failed to delete {fileBaseName}" : "Nepavyko ištrinti {fileBaseName}",
     "Failed to create {collectionFileName}" : "Nepavyko sukurti {collectionFileName}",
@@ -160,8 +159,6 @@
     "Leave shared album" : "Išeiti iš bendro albumo",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Ar tikrai norite ištrinti {collectionName}? Šio veiksmo negalima atšaukti.",
     "Failed to delete {collectionFileName}" : "Nepavyko ištrinti {collectionFileName}",
-    "Cancel" : "Atsisakyti",
-    "Confirm" : "Patvirtinti",
     "Failed to move {fileBaseName} to person {faceName}" : "Nepavyko {fileBaseName} perkelti asmeniui vardu {faceName}",
     "Failed to remove {fileBaseName}" : "Nepavyko pašalinti {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Nepavyko pervadinti {oldName} į {faceName}",
@@ -178,6 +175,9 @@
     "Choose a different folder" : "Pasirinkti kitą aplanką",
     "View" : "Rodyti",
     "Choose the folder where photos and albums are uploaded to." : "Pasirinkti aplanką, į kurį įkeliamos nuotraukos ir albumai.",
-    "Loading folders …" : "Įkeliami aplankai  …"
+    "Loading folders …" : "Įkeliami aplankai  …",
+    "Details" : "Išsamiau",
+    "Cancel" : "Atsisakyti",
+    "Confirm" : "Patvirtinti"
 },"pluralForm" :"nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);"
 }

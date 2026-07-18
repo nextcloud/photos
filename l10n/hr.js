@@ -152,7 +152,6 @@ OC.L10N.register(
     "Last Month" : "Prošli mjesec",
     "Custom…" : "Prilagođeno...",
     "{startDate} to {endDate}" : "{startDate} do {endDate}",
-    "Details" : "Pojedinosti",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Neuspjelo dodavanje {fileBaseName} u zbirku {collectionFileName}",
     "Failed to delete {fileBaseName}" : "Brisanje {fileBaseName} nije uspjelo",
     "Failed to create {collectionFileName}" : "Stvaranje {collectionFileName} nije uspjelo",
@@ -162,8 +161,6 @@ OC.L10N.register(
     "Leave shared album" : "Napusti dijeljeni album",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Jeste li sigurni da želite izbrisati {collectionName}? Ova radnja se ne može poništiti.",
     "Failed to delete {collectionFileName}" : "Brisanje {collectionFileName} nije uspjelo",
-    "Cancel" : "Odustani",
-    "Confirm" : "Potvrdi",
     "Failed to move {fileBaseName} to person {faceName}" : "Neuspjelo premještanje {fileBaseName} osobi {faceName}",
     "Failed to remove {fileBaseName}" : "Brisanje {fileBaseName} nije uspjelo",
     "Failed to rename {oldName} to {faceName}" : "Neuspjelo preimenovanje {oldName} u {faceName}",
@@ -180,6 +177,9 @@ OC.L10N.register(
     "Choose a different folder" : "Odaberi drugu mapu",
     "View" : "Pregledaj",
     "Choose the folder where photos and albums are uploaded to." : "Odaberite mapu u koju se učitavaju fotografije i albumi.",
-    "Loading folders …" : "Učitavanje mapa …"
+    "Loading folders …" : "Učitavanje mapa …",
+    "Details" : "Pojedinosti",
+    "Cancel" : "Odustani",
+    "Confirm" : "Potvrdi"
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");

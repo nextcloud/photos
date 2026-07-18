@@ -150,7 +150,6 @@
     "Last Month" : "Bulan Lalu",
     "Custom…" : "Kustom…",
     "{startDate} to {endDate}" : "{startDate} ke {endDate}",
-    "Details" : "Detail",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Gagal menambahkan {fileBaseName} ke koleksi {collectionFileName}",
     "Failed to delete {fileBaseName}" : "Gagal menghapus {fileBaseName}",
     "Failed to create {collectionFileName}" : "Gagal membuat {collectionFileName}",
@@ -160,8 +159,6 @@
     "Leave shared album" : "Tinggalkan album bersama",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Apakah Anda yakin ingin menghapus {collectionName}? Tindakan ini tidak dapat dibatalkan.",
     "Failed to delete {collectionFileName}" : "Gagal menghapus {collectionFileName}",
-    "Cancel" : "Cancel",
-    "Confirm" : "Konfirmasi",
     "Failed to move {fileBaseName} to person {faceName}" : "Gagal memindahkan {fileBaseName} ke orang {faceName}",
     "Failed to remove {fileBaseName}" : "Gagal menghapus {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Gagal mengganti nama {oldName} menjadi {faceName}",
@@ -177,6 +174,9 @@
     "Choose default Photos upload and Albums location" : "PIlih lokasi unggahan Foto dan lokasi Album bawaan",
     "Choose a different folder" : "Pilih folder lain",
     "View" : "Tampilan",
-    "Choose the folder where photos and albums are uploaded to." : "Pilih folder tempat foto dan album diunggah."
+    "Choose the folder where photos and albums are uploaded to." : "Pilih folder tempat foto dan album diunggah.",
+    "Details" : "Detail",
+    "Cancel" : "Cancel",
+    "Confirm" : "Konfirmasi"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

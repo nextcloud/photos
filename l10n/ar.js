@@ -142,12 +142,9 @@ OC.L10N.register(
     "Tagged photo {title}" : "صور موسومة {title}",
     "{title}'s face" : "وجه {title}",
     "{startDate} to {endDate}" : "{startDate} إلى {endDate}",
-    "Details" : "التفاصيل",
     "Failed to delete {fileBaseName}" : "تعذّر حذف {fileBaseName}",
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "تعذر تغيير تسمية {currentCollectionFileName} إلى {newCollectionFileName}",
     "Failed to delete {collectionFileName}" : "تعذّر حذف {collectionFileName}",
-    "Cancel" : "Cancel",
-    "Confirm" : "تأكيد",
     "Failed to rename {oldName} to {faceName}" : "تعذر تغيير تسمية {oldName} إلى {faceName}",
     "Failed to delete {faceName}" : "تعذّر حذف{faceName}",
     "Failed to delete {fileId}" : "تعذّر حذف {fileId}",
@@ -161,6 +158,9 @@ OC.L10N.register(
     "Choose default Photos upload and Albums location" : "اختر افتراضي رفع الصور وموقع الألبومات",
     "Choose a different folder" : "إختَر مجلداً مختلفاً",
     "View" : "عرض",
-    "Choose the folder where photos and albums are uploaded to." : "إختَر المجلد الذي تُرفع إليه الصور و الألبومات"
+    "Choose the folder where photos and albums are uploaded to." : "إختَر المجلد الذي تُرفع إليه الصور و الألبومات",
+    "Details" : "التفاصيل",
+    "Cancel" : "Cancel",
+    "Confirm" : "تأكيد"
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");

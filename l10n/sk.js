@@ -152,7 +152,6 @@ OC.L10N.register(
     "Last Month" : "Minulý mesiac",
     "Custom…" : "Vlastné...",
     "{startDate} to {endDate}" : "{startDate} do {endDate}",
-    "Details" : "Podrobnosti",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Nepodarilo sa pridať {fileBaseName} do kolekcie {collectionFileName}",
     "Failed to delete {fileBaseName}" : "Nepodarilo sa vymazať {fileBaseName}",
     "Failed to create {collectionFileName}" : "Nepodarilo sa vytvoriť {collectionFileName}",
@@ -162,8 +161,6 @@ OC.L10N.register(
     "Leave shared album" : "Opustiť zdieľaný album",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Ste si istí, že chcete odstrániť {collectionName}? Táto akcia je nevratná.",
     "Failed to delete {collectionFileName}" : "Nepodarilo sa vymazať {collectionFileName}",
-    "Cancel" : "Cancel",
-    "Confirm" : "Potvrdiť",
     "Failed to move {fileBaseName} to person {faceName}" : "Nepodarilo sa presunúť {fileBaseName} na osobu {faceName}",
     "Failed to remove {fileBaseName}" : "Nepodarilo sa odstrániť {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Nepodarilo sa premenovať {oldName} na {faceName}",
@@ -180,6 +177,9 @@ OC.L10N.register(
     "Choose a different folder" : "Vyberte iný priečinok",
     "View" : "Prezerať",
     "Choose the folder where photos and albums are uploaded to." : "Vyberte priečinok, do ktorého sa budú nahrávať fotografie a albumy.",
-    "Loading folders …" : "Načítavanie priečinkov …"
+    "Loading folders …" : "Načítavanie priečinkov …",
+    "Details" : "Podrobnosti",
+    "Cancel" : "Cancel",
+    "Confirm" : "Potvrdiť"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

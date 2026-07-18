@@ -152,7 +152,6 @@ OC.L10N.register(
     "Last Month" : "An Mhí Seo Caite",
     "Custom…" : "Saincheaptha…",
     "{startDate} to {endDate}" : "{startDate} go dtí {endDate}",
-    "Details" : "Sonraí",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Theip ar {fileBaseName} a chur leis an mbailiúchán {collectionFileName}",
     "Failed to delete {fileBaseName}" : "Theip ar scriosadh {fileBaseName}",
     "Failed to create {collectionFileName}" : "Theip ar {collectionFileName} a chruthú",
@@ -162,8 +161,6 @@ OC.L10N.register(
     "Leave shared album" : "Fág an t-albam comhroinnte",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "An bhfuil tú cinnte gur mian leat {collectionName} a scriosadh? Ní féidir an gníomh seo a chealú.",
     "Failed to delete {collectionFileName}" : "Theip ar scriosadh {collectionFileName}",
-    "Cancel" : "Cealaigh",
-    "Confirm" : "Deimhnigh",
     "Failed to move {fileBaseName} to person {faceName}" : "Theip ar {fileBaseName} a bhogadh chuig an duine {faceName}",
     "Failed to remove {fileBaseName}" : "Theip ar {fileBaseName} a bhaint",
     "Failed to rename {oldName} to {faceName}" : "Theip ar {oldName} a athainmniú go {faceName}",
@@ -180,6 +177,9 @@ OC.L10N.register(
     "Choose a different folder" : "Roghnaigh fillteán eile",
     "View" : "Amharc",
     "Choose the folder where photos and albums are uploaded to." : "Roghnaigh an fillteán ina ndéantar grianghraif agus albam a uaslódáil.",
-    "Loading folders …" : "Ag lódáil fillteáin …"
+    "Loading folders …" : "Ag lódáil fillteáin …",
+    "Details" : "Sonraí",
+    "Cancel" : "Cealaigh",
+    "Confirm" : "Deimhnigh"
 },
 "nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);");

@@ -152,7 +152,6 @@ OC.L10N.register(
     "Last Month" : "Letzten Monat",
     "Custom…" : "Benutzerdefiniert …",
     "{startDate} to {endDate}" : "{startDate} bis {endDate}",
-    "Details" : "Details",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "{fileBaseName} konnte nicht der Sammlung {collectionFileName} hinzugefügt werden",
     "Failed to delete {fileBaseName}" : "{fileBaseName} konnte nicht gelöscht werden",
     "Failed to create {collectionFileName}" : "{collectionFileName} konnte nicht erstellt werden",
@@ -162,8 +161,6 @@ OC.L10N.register(
     "Leave shared album" : "Geteiltes Album verlassen",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Soll {collectionName} gelöscht werden? Dies kann nicht rückgängig gemacht werden.",
     "Failed to delete {collectionFileName}" : "{collectionFileName} konnte nicht gelöscht werden",
-    "Cancel" : "Abbrechen",
-    "Confirm" : "Bestätigen",
     "Failed to move {fileBaseName} to person {faceName}" : "{fileBaseName} konnte nicht an {faceName} übertragen werden",
     "Failed to remove {fileBaseName}" : "{fileBaseName} konnte nicht entfernt werden",
     "Failed to rename {oldName} to {faceName}" : "{oldName} konnte nicht in {faceName} umbenannt werden.",
@@ -180,6 +177,9 @@ OC.L10N.register(
     "Choose a different folder" : "Anderen Ordner wählen",
     "View" : "Ansicht",
     "Choose the folder where photos and albums are uploaded to." : "Ordner wählen, in den Fotos und Videos hochgeladen werden.",
-    "Loading folders …" : "Lade Ordner …"
+    "Loading folders …" : "Lade Ordner …",
+    "Details" : "Details",
+    "Cancel" : "Abbrechen",
+    "Confirm" : "Bestätigen"
 },
 "nplurals=2; plural=(n != 1);");

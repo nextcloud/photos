@@ -151,15 +151,12 @@ OC.L10N.register(
     "Last Month" : "Мінулы месяц",
     "Custom…" : "Карыстальніцкі…",
     "{startDate} to {endDate}" : "ад {startDate} да {endDate}",
-    "Details" : "Падрабязнасці",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Не ўдалося дадаць {fileBaseName} у калекцыю {collectionFileName}",
     "Failed to delete {fileBaseName}" : "Не ўдалося выдаліць {fileBaseName}.",
     "Failed to create {collectionFileName}" : "Не ўдалося стварыць {collectionFileName}",
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Не ўдалося перайменаваць {currentCollectionFileName} у {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Не ўдалосяся абнавіць уласцівасці {collectionFileName} новымі значэннямі: {properties}",
     "Failed to delete {collectionFileName}" : "Не ўдалося выдаліць {collectionFileName}.",
-    "Cancel" : "Скасаваць",
-    "Confirm" : "Пацвердзіць",
     "Failed to move {fileBaseName} to person {faceName}" : "Не ўдалося перамясціць {fileBaseName} да чалавека {faceName}",
     "Failed to remove {fileBaseName}" : "Не ўдалося выдаліць {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Не ўдалося перайменаваць {oldName} у {faceName}",
@@ -176,6 +173,9 @@ OC.L10N.register(
     "Choose a different folder" : "Выберыце іншую папку",
     "View" : "Выгляд",
     "Choose the folder where photos and albums are uploaded to." : "Выберыце папку, у якую будуць запампоўвацца фота і альбомы.",
-    "Loading folders …" : "Загрузка папак …"
+    "Loading folders …" : "Загрузка папак …",
+    "Details" : "Падрабязнасці",
+    "Cancel" : "Скасаваць",
+    "Confirm" : "Пацвердзіць"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

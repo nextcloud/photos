@@ -21,10 +21,10 @@ OC.L10N.register(
     "Unselect all" : "Unselect all",
     "Remove from favorites" : "Remove from favorites",
     "Last week" : "Last week",
+    "Group" : "Group",
+    "View" : "View",
     "Details" : "Details",
     "Cancel" : "Cancel",
-    "Confirm" : "Confirm",
-    "Group" : "Group",
-    "View" : "View"
+    "Confirm" : "Confirm"
 },
 "nplurals=2; plural=(n!=1);");

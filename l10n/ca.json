@@ -139,9 +139,6 @@
     "Tagged photo {title}" : "Foto etiquetada {title}",
     "{title}'s face" : "Cara de {title}",
     "{startDate} to {endDate}" : "{startDate} a {endDate}",
-    "Details" : "Detalls",
-    "Cancel" : "Cancel",
-    "Confirm" : "Confirma",
     "Could not load photos folder" : "No s'ha pogut carregar la carpeta de fotos",
     "Group" : "Grup",
     "Remove {collaboratorLabel} from the collaborators list" : "Suprimeix {collaboratorLabel} de la llista de col·laboradors",
@@ -149,6 +146,9 @@
     "Choose default Photos upload and Albums location" : "Tria la ubicació per defecte de les pujades de fotos i dels àlbums",
     "Choose a different folder" : "Tria una carpeta diferent",
     "View" : "Visualització",
-    "Choose the folder where photos and albums are uploaded to." : "Trieu la carpeta on es pugen les fotos i els àlbums."
+    "Choose the folder where photos and albums are uploaded to." : "Trieu la carpeta on es pugen les fotos i els àlbums.",
+    "Details" : "Detalls",
+    "Cancel" : "Cancel",
+    "Confirm" : "Confirma"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
