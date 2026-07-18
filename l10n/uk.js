@@ -152,7 +152,6 @@ OC.L10N.register(
     "Last Month" : "Минулого місяця",
     "Custom…" : "Власний…",
     "{startDate} to {endDate}" : "{startDate} до {endDate}",
-    "Details" : "Деталі",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Не вдалося додати {fileBaseName} до колекції {collectionFileName}",
     "Failed to delete {fileBaseName}" : "Не вдалося вилучити {fileBaseName}",
     "Failed to create {collectionFileName}" : "Не вдалося створити {collectionFileName}",
@@ -162,8 +161,6 @@ OC.L10N.register(
     "Leave shared album" : "Вийти зі спільного альбому",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Дійсно вилучити {collectionName}? Цю дію неможливо буде повернути.",
     "Failed to delete {collectionFileName}" : "Не вдалося вилучити {collectionFileName}",
-    "Cancel" : "Скасувати",
-    "Confirm" : "Підтвердити",
     "Failed to move {fileBaseName} to person {faceName}" : "Не вдалося перенести {fileBaseName} до особи {faceName}",
     "Failed to remove {fileBaseName}" : "Не вдалося вилучити {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Не вдалося перейменувати {oldName} у {faceName}",
@@ -180,6 +177,9 @@ OC.L10N.register(
     "Choose a different folder" : "Виберіть інший каталог",
     "View" : "Перегляд",
     "Choose the folder where photos and albums are uploaded to." : "Виберіть каталог, до якого завантажувати світлини та альбоми.",
-    "Loading folders …" : "Завантаження каталогів ..."
+    "Loading folders …" : "Завантаження каталогів ...",
+    "Details" : "Деталі",
+    "Cancel" : "Скасувати",
+    "Confirm" : "Підтвердити"
 },
 "nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);");

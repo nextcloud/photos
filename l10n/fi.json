@@ -147,15 +147,12 @@
     "Last Month" : "Viime kuukausi",
     "Custom…" : "Omavalintainen…",
     "{startDate} to {endDate}" : "{startDate} - {endDate}",
-    "Details" : "Tiedot",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Kohteen {fileBaseName} lisääminen kokoelmaan {collectionFileName} epäonnistui",
     "Failed to delete {fileBaseName}" : "Kohteen {fileBaseName} poistaminen epäonnistui",
     "Failed to create {collectionFileName}" : "Kokoelman {collectionFileName} luominen epäonnistui",
     "Delete collection" : "Poista kokoelma",
     "Leave shared album" : "Poistu jaetusta albumista",
     "Failed to delete {collectionFileName}" : "Kohteen {collectionFileName} poistaminen epäonnistui",
-    "Cancel" : "Peruuta",
-    "Confirm" : "Vahvista",
     "Failed to delete {faceName}" : "Kohteen {faceName} poistaminen epäonnistui",
     "Failed to delete {fileId}" : "Kohteen {fileId} poistaminen epäonnistui",
     "Failed to delete {fileName}" : "Kohteen {fileName} poistaminen epäonnistui",
@@ -166,6 +163,9 @@
     "Choose a different folder" : "Valitse eri kansio",
     "View" : "Näytä",
     "Choose the folder where photos and albums are uploaded to." : "Valitse kansio, johon kuvat ja albumit lähetetään.",
-    "Loading folders …" : "Ladataan kansioita …"
+    "Loading folders …" : "Ladataan kansioita …",
+    "Details" : "Tiedot",
+    "Cancel" : "Peruuta",
+    "Confirm" : "Vahvista"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

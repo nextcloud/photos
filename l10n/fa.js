@@ -152,7 +152,6 @@ OC.L10N.register(
     "Last Month" : "ماه گذشته",
     "Custom…" : "سفارشی…",
     "{startDate} to {endDate}" : "{startDate} تا {endDate}",
-    "Details" : "جزئیات",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "افزودن {fileBaseName} به مجموعه {collectionFileName} انجام نشد",
     "Failed to delete {fileBaseName}" : "حذف {fileBaseName} انجام نشد",
     "Failed to create {collectionFileName}" : "ایجاد {collectionFileName} انجام نشد",
@@ -162,8 +161,6 @@ OC.L10N.register(
     "Leave shared album" : "ترک آلبوم اشتراکی",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "آیا مطمئن هستید که می‌خواهید {collectionName} را حذف کنید؟ این عمل قابل بازگشت نیست.",
     "Failed to delete {collectionFileName}" : "حذف {collectionFileName} انجام نشد",
-    "Cancel" : "لغو",
-    "Confirm" : "تأیید",
     "Failed to move {fileBaseName} to person {faceName}" : "انتقال {fileBaseName} به شخص {faceName} انجام نشد",
     "Failed to remove {fileBaseName}" : "حذف {fileBaseName} انجام نشد",
     "Failed to rename {oldName} to {faceName}" : "تغییر نام {oldName} به {faceName} انجام نشد",
@@ -180,6 +177,9 @@ OC.L10N.register(
     "Choose a different folder" : "انتخاب پوشه دیگر",
     "View" : "نمایش",
     "Choose the folder where photos and albums are uploaded to." : "پوشه‌ای را انتخاب کنید که عکس‌ها و آلبوم‌ها در آن بارگذاری شوند.",
-    "Loading folders …" : "در حال بارگیری پوشه‌ها..."
+    "Loading folders …" : "در حال بارگیری پوشه‌ها...",
+    "Details" : "جزئیات",
+    "Cancel" : "لغو",
+    "Confirm" : "تأیید"
 },
 "nplurals=2; plural=(n > 1);");

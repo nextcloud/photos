@@ -29,11 +29,11 @@ OC.L10N.register(
     "No tags yet" : "Todavía no hay etiquetas",
     "Photos with tags will show up here" : "Las fotos con etiquetas aparecerán aquí",
     "Tagged photos" : "Fotos etiquetadas",
-    "Details" : "Detalles",
-    "Cancel" : "Cancel",
-    "Confirm" : "Confirmar",
     "Group" : "Grupo",
     "Enable squared photos view" : "Habilitar vista de fotos cuadradas",
-    "View" : "Ver"
+    "View" : "Ver",
+    "Details" : "Detalles",
+    "Cancel" : "Cancel",
+    "Confirm" : "Confirmar"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

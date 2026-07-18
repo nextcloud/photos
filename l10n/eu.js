@@ -152,7 +152,6 @@ OC.L10N.register(
     "Last Month" : "Azken hilabetea",
     "Custom…" : "Pertsonalizatu...",
     "{startDate} to {endDate}" : "{startDate} - {endDate}",
-    "Details" : "Xehetasunak",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Huts egin du {fileBaseName} {collectionFileName} bildumara gehitzean",
     "Failed to delete {fileBaseName}" : "Huts egin du {fileBaseName} ezabatzean",
     "Failed to create {collectionFileName}" : "Huts egin du {collectionFileName} sortzean",
@@ -162,8 +161,6 @@ OC.L10N.register(
     "Leave shared album" : "Utzi partekatutako albuma",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Ziur zaude {collectionName} bilduma ezabatu nahi duzula? Ekintza honek ezin da desegin.",
     "Failed to delete {collectionFileName}" : "Huts egin du {collectionFileName} ezabatzean",
-    "Cancel" : "Cancel",
-    "Confirm" : "Berretsi",
     "Failed to move {fileBaseName} to person {faceName}" : "Errorea {fileBaseName} {faceName} pertsonarengana mugitzean",
     "Failed to remove {fileBaseName}" : "Huts egin du {fileBaseName} kentzean",
     "Failed to rename {oldName} to {faceName}" : "Huts egin du {oldName} bildumari {faceName}izen berria jartzean",
@@ -180,6 +177,9 @@ OC.L10N.register(
     "Choose a different folder" : "Aukeratu beste karpeta bat",
     "View" : "Ikusi",
     "Choose the folder where photos and albums are uploaded to." : "Aukeratu zein karpetatara igoko diren argazki eta albumak.",
-    "Loading folders …" : "Karpetak kargatzen …"
+    "Loading folders …" : "Karpetak kargatzen …",
+    "Details" : "Xehetasunak",
+    "Cancel" : "Cancel",
+    "Confirm" : "Berretsi"
 },
 "nplurals=2; plural=(n != 1);");

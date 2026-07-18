@@ -7,8 +7,8 @@ OC.L10N.register(
     "Save" : "Save",
     "Favorite" : "Favorito",
     "Home" : "Casa",
+    "Group" : "Grupo",
     "Details" : "Detalles",
-    "Cancel" : "Cancel",
-    "Group" : "Grupo"
+    "Cancel" : "Cancel"
 },
 "nplurals=2; plural=(n != 1);");

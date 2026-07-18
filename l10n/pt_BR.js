@@ -152,7 +152,6 @@ OC.L10N.register(
     "Last Month" : "Último Mês",
     "Custom…" : "Personalizado…",
     "{startDate} to {endDate}" : "{startDate} a {endDate}",
-    "Details" : "Detalhes",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Falha ao adicionar {fileBaseName} à coleção {collectionFileName}",
     "Failed to delete {fileBaseName}" : "Falha ao excluir {fileBaseName}",
     "Failed to create {collectionFileName}" : "Falha ao criar {collectionFileName}",
@@ -162,8 +161,6 @@ OC.L10N.register(
     "Leave shared album" : "Deixar o álbum compartilhado",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Tem certeza de que deseja excluir {collectionName}? Esta ação não pode ser desfeita.",
     "Failed to delete {collectionFileName}" : "Falha ao excluir {collectionFileName}",
-    "Cancel" : "Cancelar",
-    "Confirm" : "Confirmar",
     "Failed to move {fileBaseName} to person {faceName}" : "Falha ao mover {fileBaseName} à pessoa {faceName}",
     "Failed to remove {fileBaseName}" : "Falha ao remover {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Falha ao renomear {oldName} para {faceName}",
@@ -180,6 +177,9 @@ OC.L10N.register(
     "Choose a different folder" : "Escolha uma pasta diferente",
     "View" : "Exibição",
     "Choose the folder where photos and albums are uploaded to." : "Escolha a pasta na qual as fotos e os álbuns serão carregados.",
-    "Loading folders …" : "Carregando pastas …"
+    "Loading folders …" : "Carregando pastas …",
+    "Details" : "Detalhes",
+    "Cancel" : "Cancelar",
+    "Confirm" : "Confirmar"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

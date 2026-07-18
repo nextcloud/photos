@@ -18,10 +18,10 @@ OC.L10N.register(
     "General" : "Umumiy",
     "Remove from favorites" : "Sevimlilardan olib tashlang",
     "Last week" : "O`tgan yil",
+    "Group" : "Guruh",
+    "View" : "Ko'rish",
     "Details" : "Details",
     "Cancel" : "Bekor qilish",
-    "Confirm" : "Tasdiqlash",
-    "Group" : "Guruh",
-    "View" : "Ko'rish"
+    "Confirm" : "Tasdiqlash"
 },
 "nplurals=1; plural=0;");

@@ -152,7 +152,6 @@ OC.L10N.register(
     "Last Month" : "Vorige maand",
     "Custom…" : "Aangepast...",
     "{startDate} to {endDate}" : "{startDate} tot {endDate}",
-    "Details" : "Details",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "Toevoegen van {fileBaseName} aan collectie {collectionFileName} is mislukt",
     "Failed to delete {fileBaseName}" : "Verwijderen van {fileBaseName} mislukt",
     "Failed to create {collectionFileName}" : "Aanmaken van {collectionFileName} is mislukt",
@@ -162,8 +161,6 @@ OC.L10N.register(
     "Leave shared album" : "Verlaat gedeeld album",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "Weet je zeker dat je {collectionName} wil wissen? Deze actie kan niet ongedaan worden gemaakt",
     "Failed to delete {collectionFileName}" : "Verwijderen van {collectionFileName} mislukt",
-    "Cancel" : "Annuleren",
-    "Confirm" : "Bevestigen",
     "Failed to move {fileBaseName} to person {faceName}" : "Verplaatsen van {fileBaseName} naar persoon {faceName} is mislukt",
     "Failed to remove {fileBaseName}" : "Verwijderen van {fileBaseName} is mislukt",
     "Failed to rename {oldName} to {faceName}" : "Hernoemen van {oldName} naar {faceName} is mislukt",
@@ -180,6 +177,9 @@ OC.L10N.register(
     "Choose a different folder" : "Kies een andere map",
     "View" : "Bekijken",
     "Choose the folder where photos and albums are uploaded to." : "Kies de mappen waar foto's en video's naar geüpload worden.",
-    "Loading folders …" : "Mappen laden ..."
+    "Loading folders …" : "Mappen laden ...",
+    "Details" : "Details",
+    "Cancel" : "Annuleren",
+    "Confirm" : "Bevestigen"
 },
 "nplurals=2; plural=(n != 1);");

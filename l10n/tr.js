@@ -152,7 +152,6 @@ OC.L10N.register(
     "Last Month" : "Önceki ay",
     "Custom…" : "Özel…",
     "{startDate} to {endDate}" : "{startDate} - {endDate}",
-    "Details" : "Ayrıntılar",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "{fileBaseName}, {collectionFileName} derlemesine eklenemedi",
     "Failed to delete {fileBaseName}" : "{fileBaseName} silinemedi",
     "Failed to create {collectionFileName}" : "{collectionFileName} oluşturulamadı",
@@ -162,8 +161,6 @@ OC.L10N.register(
     "Leave shared album" : "Paylaşılmış albümden ayrıl",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "{collectionName} derlemesini silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
     "Failed to delete {collectionFileName}" : "{collectionFileName} silinemedi",
-    "Cancel" : "İptal",
-    "Confirm" : "Onayla",
     "Failed to move {fileBaseName} to person {faceName}" : "{fileBaseName}, {faceName} kişisine taşınamadı",
     "Failed to remove {fileBaseName}" : "{fileBaseName} kaldırılamadı",
     "Failed to rename {oldName} to {faceName}" : "{oldName} adı {faceName} olarak değiştirilemedi",
@@ -180,6 +177,9 @@ OC.L10N.register(
     "Choose a different folder" : "Farklı bir klasör seçin",
     "View" : "Görüntüle",
     "Choose the folder where photos and albums are uploaded to." : "Fotoğraf ve albümlerin yükleneceği klasörü seçin.",
-    "Loading folders …" : "Klasörler yükleniyor…"
+    "Loading folders …" : "Klasörler yükleniyor…",
+    "Details" : "Ayrıntılar",
+    "Cancel" : "İptal",
+    "Confirm" : "Onayla"
 },
 "nplurals=2; plural=(n > 1);");

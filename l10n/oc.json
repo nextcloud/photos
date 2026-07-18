@@ -24,11 +24,11 @@
     "Photos with tags will show up here" : "Las fòtos amb etiquetas apreissaràn aquí",
     "Tagged photos" : "Fòtos etiquetadas",
     "Last week" : "La setmana passada",
-    "Details" : "Detalhs",
-    "Cancel" : "Cancel",
-    "Confirm" : "Confirmar",
     "Group" : "Grop",
     "Enable squared photos view" : "Activar la vista amb fòtos carrat",
-    "View" : "Vista"
+    "View" : "Vista",
+    "Details" : "Detalhs",
+    "Cancel" : "Cancel",
+    "Confirm" : "Confirmar"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

@@ -152,7 +152,6 @@ OC.L10N.register(
     "Last Month" : "ئالدىنقى ئاي",
     "Custom…" : "خاس...",
     "{startDate} to {endDate}" : "{startDate} دىن {endDate}",
-    "Details" : "تەپسىلاتى",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "{fileBaseName} نى {collectionFileName} يىغمىسىغا قۇشۇش مەغلۇپ بولدى",
     "Failed to delete {fileBaseName}" : "{fileBaseName} نى ئۆچۈرۈش مەغلۇپ بولدى",
     "Failed to create {collectionFileName}" : "{collectionFileName} نى قۇرۇش مەغلۇپ بولدى",
@@ -162,8 +161,6 @@ OC.L10N.register(
     "Leave shared album" : "ئورتاقلاشقان ئالبۇمدىن ئايرىل",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "سىز {collectionName} نى ئۆچۈرۈشنى جەزىملەشتۈرەمسىز؟ بۇ ھەركەتنى كەينىگە قايتۇرغىلى بولمايدۇ.",
     "Failed to delete {collectionFileName}" : "{collectionFileName} نى ئۆچۈرۈش مەغلۇپ بولدى",
-    "Cancel" : "ۋاز كەچ",
-    "Confirm" : "جەزملەشتۈرۈڭ",
     "Failed to move {fileBaseName} to person {faceName}" : "{fileBaseName} نى {faceName} غا يۆتكەش مەغلۇپ بولدى",
     "Failed to remove {fileBaseName}" : "{fileBaseName} نىڭ ئىسمىنى ئۆزگەرتىش مەغلۇپ بولدى",
     "Failed to rename {oldName} to {faceName}" : "{oldName} نىڭ ئىسمىنى {faceName} غا ئۆزگەرتىش مەغلۇپ بولدى",
@@ -179,6 +176,9 @@ OC.L10N.register(
     "Choose default Photos upload and Albums location" : "سۈكۈتتىكى رەسىم يوللاش ۋە پىلاستىنكا ئورنىنى تاللاڭ",
     "Choose a different folder" : "باشقا ھۆججەت قىسقۇچنى تاللاڭ",
     "View" : "كۆرۈش",
-    "Choose the folder where photos and albums are uploaded to." : "رەسىم ۋە پىلاستىنكىلار يۈكلەنگەن ھۆججەت قىسقۇچنى تاللاڭ."
+    "Choose the folder where photos and albums are uploaded to." : "رەسىم ۋە پىلاستىنكىلار يۈكلەنگەن ھۆججەت قىسقۇچنى تاللاڭ.",
+    "Details" : "تەپسىلاتى",
+    "Cancel" : "ۋاز كەچ",
+    "Confirm" : "جەزملەشتۈرۈڭ"
 },
 "nplurals=2; plural=(n != 1);");

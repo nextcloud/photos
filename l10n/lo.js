@@ -55,12 +55,12 @@ OC.L10N.register(
     "Delete selection" : "Delete selection",
     "Unassigned faces" : "ໃບໜ້າທີ່ຍັງບໍ່ໄດ້ກຳນົດ",
     "Last week" : "Last week",
-    "Details" : "ລາຍລະອຽດ",
     "Failed to create {collectionFileName}" : "ສ້າງ {collectionFileName} ບໍ່ສຳເລັດ",
-    "Cancel" : "ຍົກເລີກ",
-    "Confirm" : "ຢືນຢັນ",
     "Group" : "Group",
     "Remove {collaboratorLabel} from the collaborators list" : "ລຶບ {collaboratorLabel} ອອກຈາກລາຍຊື່ຜູ້ຮ່ວມມື",
-    "View" : "ເບິ່ງ"
+    "View" : "ເບິ່ງ",
+    "Details" : "ລາຍລະອຽດ",
+    "Cancel" : "ຍົກເລີກ",
+    "Confirm" : "ຢືນຢັນ"
 },
 "nplurals=1; plural=0;");

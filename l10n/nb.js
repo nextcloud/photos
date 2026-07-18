@@ -139,9 +139,6 @@ OC.L10N.register(
     "{title}'s face" : "{title} sitt ansikt",
     "Last week" : "Forrige uke",
     "{startDate} to {endDate}" : "{startDate} til {endDate}",
-    "Details" : "Detaljer",
-    "Cancel" : "Cancel",
-    "Confirm" : "Bekreft",
     "Could not load photos folder" : "Kunne ikke laste bildemappen",
     "Group" : "Gruppe",
     "Remove {collaboratorLabel} from the collaborators list" : "Fjern {collaboratorLabel} fra samarbeidspartnerlisten",
@@ -149,6 +146,9 @@ OC.L10N.register(
     "Choose default Photos upload and Albums location" : "Velg standard bildeopplasting og albumplassering",
     "Choose a different folder" : "Velg en annen mappe",
     "View" : "Vis",
-    "Choose the folder where photos and albums are uploaded to." : "Velg mappen der bilder og album lastes opp."
+    "Choose the folder where photos and albums are uploaded to." : "Velg mappen der bilder og album lastes opp.",
+    "Details" : "Detaljer",
+    "Cancel" : "Cancel",
+    "Confirm" : "Bekreft"
 },
 "nplurals=2; plural=(n != 1);");

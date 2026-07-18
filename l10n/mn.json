@@ -150,7 +150,6 @@
     "Last Month" : "Өнгөрсөн сар",
     "Custom…" : "Өөрийн…",
     "{startDate} to {endDate}" : "{startDate}-с {endDate}",
-    "Details" : "Дэлгэрэнгүй",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "{fileBaseName}-г {collectionFileName} цуглуулгад нэмэхэд алдаа гарлаа",
     "Failed to delete {fileBaseName}" : "{fileBaseName} устгахад алдаа гарлаа",
     "Failed to create {collectionFileName}" : "{collectionFileName} үүсгэхэд алдаа гарлаа",
@@ -160,8 +159,6 @@
     "Leave shared album" : "Хуваалцсан цомгоос гарах",
     "Are you sure you want to delete {collectionName}? This action cannot be undone." : "{collectionName}-г устгахдаа итгэлтэй байна уу? Энэ үйлдлийг буцаах боломжгүй.",
     "Failed to delete {collectionFileName}" : "{collectionFileName} устгахад алдаа гарлаа",
-    "Cancel" : "Cancel",
-    "Confirm" : "Батлах",
     "Failed to move {fileBaseName} to person {faceName}" : "{fileBaseName}-г {faceName} хүн рүү зөөхөд алдаа гарлаа",
     "Failed to remove {fileBaseName}" : "{fileBaseName} устгахад алдаа гарлаа",
     "Failed to rename {oldName} to {faceName}" : "{oldName}-г {faceName} болгож өөрчлөхөд алдаа гарлаа",
@@ -178,6 +175,9 @@
     "Choose a different folder" : "Өөр хавтас сонгох",
     "View" : "Харах",
     "Choose the folder where photos and albums are uploaded to." : "Зураг болон цомгуудыг оруулах хавтсыг сонгоно уу.",
-    "Loading folders …" : "Хавтасуудыг ачааллаж байна …"
+    "Loading folders …" : "Хавтасуудыг ачааллаж байна …",
+    "Details" : "Дэлгэрэнгүй",
+    "Cancel" : "Cancel",
+    "Confirm" : "Батлах"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

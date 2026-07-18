@@ -149,15 +149,12 @@
     "Last Month" : "Последњи месец",
     "Custom…" : "Произвољно",
     "{startDate} to {endDate}" : "{startDate} до {endDate}",
-    "Details" : "Детаљи",
     "Failed to add {fileBaseName} to collection {collectionFileName}" : "{fileBaseName} није могао да се дода у колекцију {collectionFileName}",
     "Failed to delete {fileBaseName}" : "Није успело брисање {fileBaseName}",
     "Failed to create {collectionFileName}" : "Није могла да се креира {collectionFileName}",
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Није успела промена имена {currentCollectionFileName} у {newCollectionFileName}",
     "Failed to update properties of {collectionFileName} with {properties}" : "Није успело ажурирање особина {collectionFileName} са {properties}",
     "Failed to delete {collectionFileName}" : "Није успело брисање {collectionFileName}",
-    "Cancel" : "Откажи",
-    "Confirm" : "Потврди",
     "Failed to move {fileBaseName} to person {faceName}" : "Није успело премештање {fileBaseName} особи {faceName}",
     "Failed to remove {fileBaseName}" : "Није успело уклањање {fileBaseName}",
     "Failed to rename {oldName} to {faceName}" : "Није успела промена имена {oldName} у {faceName}",
@@ -173,6 +170,9 @@
     "Choose default Photos upload and Albums location" : "Изаберите подразумевано место за отпремање Фотографија и албума",
     "Choose a different folder" : "Изаберите неки други фолдер",
     "View" : "Погледај",
-    "Choose the folder where photos and albums are uploaded to." : "Изаберите фолдер у који се отпремају фотографије и албуми."
+    "Choose the folder where photos and albums are uploaded to." : "Изаберите фолдер у који се отпремају фотографије и албуми.",
+    "Details" : "Детаљи",
+    "Cancel" : "Откажи",
+    "Confirm" : "Потврди"
 },"pluralForm" :"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
 }
