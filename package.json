@@ -105,7 +105,7 @@
     "typescript": "^5.9.2",
     "vite": "^7.3.6",
     "vite-plugin-pwa": "^1.0.3",
-    "vitest": "^3.2.4",
+    "vitest": "^3.2.7",
     "vue-tsc": "^2.2.12",
     "wait-on": "^8.0.5"
   },
