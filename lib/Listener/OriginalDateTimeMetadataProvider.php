@@ -38,7 +38,7 @@ class OriginalDateTimeMetadataProvider implements IEventListener {
 		try {
 			// Note: We do not have the timezone when parsing the date, so the timestamp will be off by X hours.
 			$dateTime = DateTime::createFromFormat($format, $date);
-			if ($dateTime !== false) {
+			if ($dateTime !== false && $dateTime->getTimestamp() > 0) {
 				return $dateTime->getTimestamp();
 			}
 			return false;
@@ -112,6 +112,9 @@ class OriginalDateTimeMetadataProvider implements IEventListener {
 		}
 
 		// Fallback to the mtime.
-		$metadata->setInt(self::METADATA_KEY, $node->getMTime(), true);
+		$mtime = $node->getMTime();
+		if ($mtime > 0) {
+			$metadata->setInt(self::METADATA_KEY, $mtime, true);
+		}
 	}
 }
