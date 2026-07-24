@@ -3,7 +3,7 @@ OC.L10N.register(
     {
     "Public link" : "Link público",
     "Photos" : "Fotos",
-    "On This Day" : "Neste Dia",
+    "On This Day" : "Neste dia",
     "Your memories under your control" : "Suas memórias sob seu controle",
     "All media" : "Todas as mídias",
     "Videos" : "Vídeos",
