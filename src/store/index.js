@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { getCurrentUser } from '@nextcloud/auth'
 import Vue from 'vue'
 import Vuex, { Store } from 'vuex'
 
@@ -19,10 +20,14 @@ import userConfig, { getFolder } from './userConfig.js'
 
 /**
  * Get the information of photosLocation and store it as photosLocationFolder
- * @param store
- * @param state
+ * @param store - The Vuex store
+ * @param state - The Vuex state
  */
 async function initPhotosLocationFolder(store, state) {
+	// skip init on public shares
+	if (getCurrentUser() === null) {
+		return
+	}
 	const photosLocationFolder = await getFolder(state.userConfig.photosLocation)
 	store.commit('updateUserConfig', { key: 'photosLocationFolder', value: photosLocationFolder })
 }
