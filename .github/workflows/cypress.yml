@@ -91,7 +91,7 @@ jobs:
       # fetched by `make all`) and ship it inside the cached context. It is later
       # mounted into the test container via RECOGNIZE_APP_PATH (see cypress.config.ts).
       - name: Set up PHP for recognize
-        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2.37.2
+        uses: shivammathur/setup-php@cf4cade2721270509d5b1c766ab3549210a39a2a # v2.33.0
         with:
           php-version: "8.3"
           extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite, gd, zip, bz2
@@ -101,12 +101,12 @@ jobs:
       # addon built during `npm ci`; build it under the Node version recognize
       # runs at runtime (NODE_VERSION below) so the addon ABI matches.
       - name: Set up node 20 for recognize
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: "20"
 
       - name: Checkout recognize
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           repository: nextcloud/recognize
           ref: ${{ env.RECOGNIZE_BRANCH }}
