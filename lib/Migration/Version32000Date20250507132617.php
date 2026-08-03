@@ -23,6 +23,7 @@ use OCP\Migration\SimpleMigrationStep;
 #[AddColumn(table: 'photos_albums', name: 'filters', type: ColumnType::TEXT, description: 'storing album filters')]
 class Version32000Date20250507132617 extends SimpleMigrationStep {
 
+	#[\Override]
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();

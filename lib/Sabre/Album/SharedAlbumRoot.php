@@ -15,14 +15,17 @@ use Sabre\DAV\INode;
 
 class SharedAlbumRoot extends AlbumRootBase {
 
+	#[\Override]
 	public function delete(): void {
 		$this->albumMapper->deleteUserFromAlbumCollaboratorsList($this->userId, $this->album->getAlbum()->getId());
 	}
 
+	#[\Override]
 	public function setName($name): never {
 		throw new Forbidden('Not allowed to rename a shared album');
 	}
 
+	#[\Override]
 	public function createFile($name, $data = null) {
 		return parent::createFileInCurrentUserFolder($name, $data);
 	}

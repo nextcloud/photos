@@ -23,6 +23,7 @@ class UpdateReverseGeocodingFilesCommand extends Command {
 	/**
 	 * Configure the command
 	 */
+	#[\Override]
 	protected function configure(): void {
 		$this->setName('photos:update-1000-cities')
 			->setDescription('Update the list of 1000 and more inhabitant cities');
@@ -31,6 +32,7 @@ class UpdateReverseGeocodingFilesCommand extends Command {
 	/**
 	 * Execute the command
 	 */
+	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		try {
 			if (!$this->rgcService->arePlacesEnabled()) {

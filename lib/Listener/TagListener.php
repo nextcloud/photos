@@ -33,6 +33,7 @@ class TagListener implements IEventListener {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function handle(Event $event): void {
 		if ($event instanceof MapperEvent) {
 			if ($event->getObjectType() !== 'files') {

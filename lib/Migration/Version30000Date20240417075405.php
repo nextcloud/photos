@@ -30,6 +30,7 @@ class Version30000Date20240417075405 extends SimpleMigrationStep {
 	 * @param Closure(): ISchemaWrapper $schemaClosure
 	 * @param array $options
 	 */
+	#[\Override]
 	public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options): void {
 		$select = $this->db->getQueryBuilder();
 		$select->select('userid')
