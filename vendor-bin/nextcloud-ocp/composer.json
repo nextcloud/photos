@@ -1,13 +1,13 @@
 {
 	"config": {
 		"platform": {
-			"php": "8.3"
+			"php": "8.2"
 		}
 	},
 	"require-dev": {
 		"nextcloud/ocp": "dev-stable34",
-		"symfony/console": "^6.4.12",
-		"sabre/dav": "^4.7.0",
-		"sabre/uri": "^2.3.4"
+		"symfony/console": "6.4.41",
+		"sabre/dav": "4.7.0",
+		"sabre/uri": "2.3.4"
 	}
 }
