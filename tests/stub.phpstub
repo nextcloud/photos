@@ -224,16 +224,17 @@ namespace OC\Files\Search {
 }
 
 namespace OCA\DAV\Connector\Sabre {
-    class Node extends \Sabre\Dav\INode {
-        public function getNode(): \OCP\Files\Node { }
-        public function getId(): int {}
-    }
-    class File extends Node {}
-    class Directory extends Node {}
+	class Node extends \Sabre\Dav\INode {
+		public function getFileInfo(): \OCP\Files\FileInfo { }
+		public function getNode(): \OCP\Files\Node { }
+		public function getId(): int {}
+	}
+	class File extends Node {}
+	class Directory extends Node {}
 }
 
 namespace Doctrine\DBAL\Exception {
-    class UniqueConstraintViolationException extends \Exception {}
+	class UniqueConstraintViolationException extends \Exception {}
 }
 
 namespace OCA\Files\Event {
@@ -286,10 +287,10 @@ namespace OC\User {
 }
 
 namespace OCA\Recognize\Public {
-    class ApiKeyManager {
-        /**
-         * @throws \JsonException
-         */
-        public function generateApiKey():string;
-    }
+	class ApiKeyManager {
+		/**
+		 * @throws \JsonException
+		 */
+		public function generateApiKey():string;
+	}
 }
