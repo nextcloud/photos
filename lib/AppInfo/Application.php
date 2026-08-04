@@ -63,6 +63,7 @@ class Application extends App implements IBootstrap {
 		parent::__construct(self::APP_ID);
 	}
 
+	#[\Override]
 	public function register(IRegistrationContext $context): void {
 		$context->registerDashboardWidget(OnThisDay::class);
 		/** Register $principalBackend for the DAV collection */
@@ -95,6 +96,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(MapperEvent::EVENT_UNASSIGN, TagListener::class);
 	}
 
+	#[\Override]
 	public function boot(IBootContext $context): void {
 	}
 }

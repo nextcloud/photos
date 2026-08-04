@@ -40,6 +40,7 @@ class ExifMetadataProvider implements IEventListener {
 	) {
 	}
 
+	#[\Override]
 	public function handle(Event $event): void {
 		if (!($event instanceof MetadataLiveEvent) && !($event instanceof MetadataBackgroundEvent)) {
 			return;
@@ -113,7 +114,7 @@ class ExifMetadataProvider implements IEventListener {
 			}
 
 			if (array_key_exists('GPSAltitude', $rawExifData['GPS']) && array_key_exists('GPSAltitudeRef', $rawExifData['GPS']) && is_string($rawExifData['GPS']['GPSAltitude'])) {
-				$gps['altitude'] = ($rawExifData['GPS']['GPSAltitudeRef'] === '1' || $rawExifData['GPS']['GPSAltitudeRef'] === "\u{0001}" ? -1 : 1) * $this->parseGPSData($rawExifData['GPS']['GPSAltitude']);
+				$gps['altitude'] = ($rawExifData['GPS']['GPSAltitudeRef'] === '1' || $rawExifData['GPS']['GPSAltitudeRef'] === "\u{0001}" ? -1.0 : 1.0) * $this->parseGPSData($rawExifData['GPS']['GPSAltitude']);
 			}
 
 			if (!empty($gps)) {
@@ -138,6 +139,7 @@ class ExifMetadataProvider implements IEventListener {
 	private function getExifFromWebP($fileDescriptor): array|false|null {
 		// override the close() function in  order to prevent the file being closed when the buffer object is destructed
 		$buffer = new class($fileDescriptor) extends ResourceBuffer {
+			#[\Override]
 			public function close() {
 
 			}
@@ -201,8 +203,8 @@ class ExifMetadataProvider implements IEventListener {
 
 		[$degrees, $minutes, $seconds] = array_map(fn ($rawDegree): float => $this->parseGPSData($rawDegree), $coordinates);
 
-		$sign = ($hemisphere === 'W' || $hemisphere === 'S') ? -1 : 1;
-		return $sign * ($degrees + $minutes / 60 + $seconds / 3600);
+		$sign = ($hemisphere === 'W' || $hemisphere === 'S') ? -1.0 : 1.0;
+		return $sign * ($degrees + $minutes / 60.0 + $seconds / 3600.0);
 	}
 
 	private function parseGPSData(string $rawData): float {

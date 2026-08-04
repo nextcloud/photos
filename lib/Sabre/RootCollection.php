@@ -46,6 +46,7 @@ class RootCollection extends AbstractPrincipalCollection {
 	 *
 	 * @param array $principalInfo
 	 */
+	#[\Override]
 	public function getChildForPrincipal(array $principalInfo): PhotosHome {
 		[, $name] = \Sabre\Uri\split($principalInfo['uri']);
 		$user = $this->userSession->getUser();
@@ -55,6 +56,7 @@ class RootCollection extends AbstractPrincipalCollection {
 		return new PhotosHome($principalInfo, $this->albumMapper, $this->placeMapper, $this->reverseGeoCoderService, $name, $this->rootFolder, $this->userManager, $this->groupManager, $this->userConfigService, $this->logger);
 	}
 
+	#[\Override]
 	public function getName(): string {
 		return 'photos';
 	}

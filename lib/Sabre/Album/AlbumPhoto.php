@@ -33,6 +33,7 @@ class AlbumPhoto extends CollectionPhoto implements IFile {
 	/**
 	 * @return void
 	 */
+	#[\Override]
 	public function delete() {
 		$this->albumMapper->removeFile($this->album->getId(), $this->file->getFileId());
 	}
@@ -49,6 +50,7 @@ class AlbumPhoto extends CollectionPhoto implements IFile {
 		}
 	}
 
+	#[\Override]
 	public function get() {
 		$node = $this->getNode();
 		if ($node instanceof File) {
