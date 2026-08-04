@@ -4,6 +4,7 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 namespace OCA\Photos\Listener;
 
 use OCA\Photos\Album\AlbumMapper;
@@ -29,6 +30,7 @@ class AlbumsManagementEventListener implements IEventListener {
 	) {
 	}
 
+	#[\Override]
 	public function handle(Event $event): void {
 		if ($event instanceof NodeDeletedEvent) {
 			try {

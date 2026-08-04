@@ -6,7 +6,6 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 namespace OCA\Photos\Tests\Migration;
 
 use OCA\Photos\Migration\Version30000Date20240417075405;
@@ -72,7 +71,6 @@ class Version30000Date20240417075405Test extends TestCase {
 		$migration = new Version30000Date20240417075405($this->connection);
 
 		$this->createTestEntries();
-
 
 		$migration->postSchemaChange(
 			$this->createMock(IOutput::class),

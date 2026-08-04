@@ -4,6 +4,7 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 namespace OCA\Photos\Sabre;
 
 use Sabre\DAV\Auth\Backend\BackendInterface;
@@ -40,6 +41,7 @@ class PublicAlbumAuthBackend implements BackendInterface {
 	 *
 	 * @return array
 	 */
+	#[\Override]
 	public function check(RequestInterface $request, ResponseInterface $response) {
 		\OC_User::setIncognitoMode(true);
 		return [true, 'principals/token'];
@@ -57,6 +59,7 @@ class PublicAlbumAuthBackend implements BackendInterface {
 	 * append your own WWW-Authenticate header instead of overwriting the
 	 * existing one.
 	 */
+	#[\Override]
 	public function challenge(RequestInterface $request, ResponseInterface $response) {
 		// This is intended to be public - there is no need to set WWW-Authenticate header
 	}

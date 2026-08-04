@@ -41,10 +41,12 @@ class AlbumsHome implements ICollection {
 	/**
 	 * @return never
 	 */
+	#[\Override]
 	public function delete(): never {
 		throw new Forbidden();
 	}
 
+	#[\Override]
 	public function getName(): string {
 		return self::NAME;
 	}
@@ -52,10 +54,12 @@ class AlbumsHome implements ICollection {
 	/**
 	 * @return never
 	 */
+	#[\Override]
 	public function setName($name): never {
 		throw new Forbidden('Permission denied to rename albums home');
 	}
 
+	#[\Override]
 	public function createFile($name, $data = null): never {
 		throw new Forbidden('Not allowed to create files in albums');
 	}
@@ -63,10 +67,12 @@ class AlbumsHome implements ICollection {
 	/**
 	 * @return void
 	 */
+	#[\Override]
 	public function createDirectory($name) {
 		$this->albumMapper->create($this->userId, $name);
 	}
 
+	#[\Override]
 	public function getChild($name) {
 		foreach ($this->getChildren() as $child) {
 			if ($child->getName() === $name) {
@@ -80,6 +86,7 @@ class AlbumsHome implements ICollection {
 	/**
 	 * @return AlbumRootBase[]
 	 */
+	#[\Override]
 	public function getChildren(): array {
 		if ($this->children === null) {
 			$albumInfos = $this->albumMapper->getForUser($this->userId);
@@ -97,6 +104,7 @@ class AlbumsHome implements ICollection {
 		return $this->children;
 	}
 
+	#[\Override]
 	public function childExists($name): bool {
 		try {
 			$this->getChild($name);
@@ -106,6 +114,7 @@ class AlbumsHome implements ICollection {
 		}
 	}
 
+	#[\Override]
 	public function getLastModified(): int {
 		return 0;
 	}

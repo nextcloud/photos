@@ -15,26 +15,32 @@ use Sabre\DAV\INode;
 
 class SharedAlbumRoot extends AlbumRootBase {
 
+	#[\Override]
 	public function delete(): void {
 		$this->albumMapper->deleteUserFromAlbumCollaboratorsList($this->userId, $this->album->getAlbum()->getId());
 	}
 
+	#[\Override]
 	public function setName($name): never {
 		throw new Forbidden('Not allowed to rename a shared album');
 	}
 
+	#[\Override]
 	public function createFile($name, $data = null) {
 		return parent::createFileInCurrentUserFolder($name, $data);
 	}
 
+	#[\Override]
 	public function getAlbumPhoto(AlbumFile $file): AlbumPhoto {
 		return new AlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId));
 	}
 
-	public function copyInto($targetName, $sourcePath, INode $sourceNode): bool {
+	#[\Override]
+	public function copyInto($targetName, $sourcePath, INode $sourceNode, ?int $depth = null): bool {
 		return parent::copyIntoAlbum($targetName, $sourcePath, $sourceNode);
 	}
 
+	#[\Override]
 	protected function addFile(int $sourceId, string $ownerUID): bool {
 		if (in_array($sourceId, $this->album->getFileIds())) {
 			throw new Conflict("File $sourceId is already in the folder");
@@ -51,6 +57,7 @@ class SharedAlbumRoot extends AlbumRootBase {
 	/**
 	 * Return only the owner, and do not reveal other collaborators.
 	 */
+	#[\Override]
 	public function getCollaborators(): array {
 		return [[
 			'nc:collaborator' => [

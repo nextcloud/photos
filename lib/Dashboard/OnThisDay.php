@@ -4,6 +4,7 @@
  * SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 namespace OCA\Photos\Dashboard;
 
 use OCA\Photos\AppInfo\Application;
@@ -24,6 +25,7 @@ class OnThisDay implements IIconWidget {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getId(): string {
 		return 'photos-onthisday';
 	}
@@ -31,6 +33,7 @@ class OnThisDay implements IIconWidget {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getTitle(): string {
 		return $this->l->t('On This Day');
 	}
@@ -38,6 +41,7 @@ class OnThisDay implements IIconWidget {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getOrder(): int {
 		return 20;
 	}
@@ -45,6 +49,7 @@ class OnThisDay implements IIconWidget {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getIconClass(): string {
 		return 'icon-calendar-dark';
 	}
@@ -52,6 +57,7 @@ class OnThisDay implements IIconWidget {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getIconUrl(): string {
 		return $this->url->getAbsoluteURL($this->url->imagePath('core', 'places/calendar.svg'));
 	}
@@ -59,6 +65,7 @@ class OnThisDay implements IIconWidget {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getUrl(): ?string {
 		return $this->url->linkToRouteAbsolute('photos.page.indexthisday');
 	}
@@ -66,6 +73,7 @@ class OnThisDay implements IIconWidget {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function load(): void {
 		Util::addScript('photos', 'photos-dashboard');
 		Util::addStyle('photos', 'photos-dashboard');

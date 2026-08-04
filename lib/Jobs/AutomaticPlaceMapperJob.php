@@ -34,6 +34,7 @@ class AutomaticPlaceMapperJob extends TimedJob {
 		$this->setInterval(24 * 3600);
 	}
 
+	#[\Override]
 	protected function run($argument) {
 		$placeMappingDone = $this->config->getAppValue(Application::APP_ID, 'lastPlaceMappingDone', 'false');
 
@@ -79,7 +80,6 @@ class AutomaticPlaceMapperJob extends TimedJob {
 		$userFolder = $this->rootFolder->getUserFolder($userId);
 		$this->scanFolder($userFolder);
 	}
-
 
 	private function scanFolder(Folder $folder): void {
 		// Do not scan share and other moveable mounts.

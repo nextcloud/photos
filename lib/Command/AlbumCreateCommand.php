@@ -5,11 +5,11 @@ declare(strict_types=1);
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 namespace OCA\Photos\Command;
 
 use OCA\Photos\Album\AlbumMapper;
 use OCP\IUserManager;
-
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -28,6 +28,7 @@ class AlbumCreateCommand extends Command {
 	/**
 	 * Configure the command
 	 */
+	#[\Override]
 	protected function configure(): void {
 		$this->setName('photos:albums:create')
 			->setDescription('Create a new album for a user')
@@ -39,6 +40,7 @@ class AlbumCreateCommand extends Command {
 	/**
 	 * Execute the command
 	 */
+	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$userString = $input->getArgument('user');
 		$albumString = $input->getArgument('album');
