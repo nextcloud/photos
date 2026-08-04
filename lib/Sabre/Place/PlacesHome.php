@@ -36,10 +36,12 @@ class PlacesHome implements ICollection {
 	/**
 	 * @return never
 	 */
+	#[\Override]
 	public function delete(): never {
 		throw new Forbidden();
 	}
 
+	#[\Override]
 	public function getName(): string {
 		return self::NAME;
 	}
@@ -47,18 +49,22 @@ class PlacesHome implements ICollection {
 	/**
 	 * @return never
 	 */
+	#[\Override]
 	public function setName($name): never {
 		throw new Forbidden('Permission denied to rename this folder');
 	}
 
+	#[\Override]
 	public function createFile($name, $data = null): never {
 		throw new Forbidden('Not allowed to create files in this folder');
 	}
 
+	#[\Override]
 	public function createDirectory($name): never {
 		throw new Forbidden('Not allowed to create folder in this folder');
 	}
 
+	#[\Override]
 	public function getChild($name): PlaceRoot {
 		try {
 			$placeInfo = $this->placeMapper->findPlaceForUser($this->userId, $name);
@@ -71,6 +77,7 @@ class PlacesHome implements ICollection {
 	/**
 	 * @return PlaceRoot[]
 	 */
+	#[\Override]
 	public function getChildren(): array {
 		if ($this->children === null) {
 			$this->children = array_map(
@@ -82,6 +89,7 @@ class PlacesHome implements ICollection {
 		return $this->children;
 	}
 
+	#[\Override]
 	public function childExists($name): bool {
 		try {
 			$this->getChild($name);
@@ -91,6 +99,7 @@ class PlacesHome implements ICollection {
 		}
 	}
 
+	#[\Override]
 	public function getLastModified(): int {
 		return 0;
 	}

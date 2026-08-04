@@ -34,10 +34,12 @@ class PlaceRoot implements ICollection {
 	/**
 	 * @return never
 	 */
+	#[\Override]
 	public function delete(): never {
 		throw new Forbidden('Not allowed to delete a place collection');
 	}
 
+	#[\Override]
 	public function getName(): string {
 		return $this->placeInfo->getPlace();
 	}
@@ -45,6 +47,7 @@ class PlaceRoot implements ICollection {
 	/**
 	 * @return never
 	 */
+	#[\Override]
 	public function setName($name): never {
 		throw new Forbidden('Cannot change the place collection name');
 	}
@@ -54,6 +57,7 @@ class PlaceRoot implements ICollection {
 	 * @param null|resource|string $data
 	 * @return never
 	 */
+	#[\Override]
 	public function createFile($name, $data = null): never {
 		throw new Forbidden('Cannot create a file in a place collection');
 	}
@@ -61,6 +65,7 @@ class PlaceRoot implements ICollection {
 	/**
 	 * @return never
 	 */
+	#[\Override]
 	public function createDirectory($name): never {
 		throw new Forbidden('Not allowed to create directories in this folder');
 	}
@@ -68,6 +73,7 @@ class PlaceRoot implements ICollection {
 	/**
 	 * @return PlacePhoto[]
 	 */
+	#[\Override]
 	public function getChildren(): array {
 		if ($this->children === null) {
 			$this->children = array_map(
@@ -79,6 +85,7 @@ class PlaceRoot implements ICollection {
 		return $this->children;
 	}
 
+	#[\Override]
 	public function getChild($name): PlacePhoto {
 		try {
 			[$fileId, $fileName] = explode('-', (string)$name, 2);
@@ -89,6 +96,7 @@ class PlaceRoot implements ICollection {
 		}
 	}
 
+	#[\Override]
 	public function childExists($name): bool {
 		try {
 			$this->getChild($name);
@@ -98,6 +106,7 @@ class PlaceRoot implements ICollection {
 		}
 	}
 
+	#[\Override]
 	public function getLastModified(): int {
 		return 0;
 	}

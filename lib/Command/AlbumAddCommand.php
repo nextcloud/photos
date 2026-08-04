@@ -29,6 +29,7 @@ class AlbumAddCommand extends Command {
 	/**
 	 * Configure the command
 	 */
+	#[\Override]
 	protected function configure(): void {
 		$this->setName('photos:albums:add')
 			->setDescription('Add specified photo to album')
@@ -41,6 +42,7 @@ class AlbumAddCommand extends Command {
 	/**
 	 * Execute the command
 	 */
+	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$userString = $input->getArgument('user');
 		$albumString = $input->getArgument('album');
