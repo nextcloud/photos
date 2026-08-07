@@ -14,9 +14,11 @@ OC.L10N.register(
     "An error occurred" : "Det oppstod ein feil.",
     "Favorite" : "Favoritt",
     "Home" : "Heim",
+    "Upload folder" : "Last opp mappe",
     "General" : "Generelt",
     "Remove from favorites" : "Remove from favorites",
     "Group" : "Gruppe",
+    "View" : "Vis",
     "Details" : "Detaljar",
     "Cancel" : "Cancel"
 },
