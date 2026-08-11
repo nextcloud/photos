@@ -257,6 +257,10 @@ export default {
 		},
 
 		scrollToKey(key) {
+			if (!this.sections.some((section) => section.key === key)) {
+				return
+			}
+
 			let currentRowTopDistanceFromTop = 0
 
 			for (const section of this.sections) {
@@ -268,8 +272,16 @@ export default {
 				break
 			}
 
-			logger.debug('[VirtualScrolling] Scrolling to', { currentRowTopDistanceFromTop })
-			;(this.$refs.container as Element).scrollTo({ top: currentRowTopDistanceFromTop, behavior: 'smooth' })
+			// Section offsets are relative to the rows container, which is not
+			// necessarily at the top of the scroll container - the timeline
+			// renders its own header above the grid.
+			const rowsContainer = this.$refs.rowsContainer as HTMLElement
+			const containerTop = this.useWindow ? 0 : (this.container as HTMLElement).getBoundingClientRect().top
+			const scrollTop = this.useWindow ? window.scrollY : (this.container as HTMLElement).scrollTop
+			const top = scrollTop + rowsContainer.getBoundingClientRect().top - containerTop + currentRowTopDistanceFromTop
+
+			logger.debug('[VirtualScrolling] Scrolling to', { top })
+			this.container.scrollTo({ top, behavior: 'smooth' })
 		},
 	},
 

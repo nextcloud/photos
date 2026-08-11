@@ -109,6 +109,7 @@
 			:loading="loadingFiles"
 			:base-height="isMobile ? 120 : 200"
 			:empty-message="t('photos', 'No photos or videos in here')"
+			:scroll-to-section="scrubberTarget"
 			@need-content="getContent">
 			<template slot-scope="{ file, isHeader }">
 				<h2
@@ -127,6 +128,14 @@
 					@select-toggled="onFileSelectToggle" />
 			</template>
 		</FilesListViewer>
+
+		<!-- Drag-to-jump date navigation, hidden when there is only one
+			month - there is nothing to scrub then. -->
+		<DateScrubber
+			:months="monthsList"
+			:month-counts="monthCounts"
+			:current-month="scrubberTarget || monthsList[0]"
+			@jump="onScrubberJump" />
 
 		<NcModal
 			v-if="showAlbumCreationForm"
@@ -174,6 +183,7 @@ import DownloadOutline from 'vue-material-design-icons/TrayArrowDown.vue'
 import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import AlbumPicker from '../components/Albums/AlbumPicker.vue'
+import DateScrubber from '../components/DateScrubber.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
@@ -203,6 +213,7 @@ export default {
 		NcButton,
 		AlbumForm,
 		AlbumPicker,
+		DateScrubber,
 		FilesListViewer,
 		FileComponent,
 		ActionFavorite,
@@ -277,12 +288,21 @@ export default {
 			showAlbumPicker: false,
 			appContent: document.getElementById('app-content-vue'),
 			showFilters: false,
+			// Month section the user picked in the DateScrubber, forwarded to
+			// FilesListViewer's `scrollToSection`. Empty means no override.
+			scrubberTarget: '',
 		}
 	},
 
 	computed: {
 		files() {
 			return this.$store.state.files.files
+		},
+
+		// Photo count per month, drives the density ticks of the scrubber.
+		monthCounts(): Record<string, number> {
+			const entries = Object.entries(this.fileIdsByMonth as Record<string, string[]>)
+			return Object.fromEntries(entries.map(([month, fileIds]) => [month, fileIds.length]))
 		},
 
 		createAlbumButtonLabel() {
@@ -317,6 +337,12 @@ export default {
 				onlyFavorites: this.onlyFavorites,
 				extraFilters: this.filtersQuery,
 			})
+		},
+
+		// FilesListViewer scrolls on its `scrollToSection` prop, so stashing
+		// the month is all there is to do.
+		onScrubberJump(month: string) {
+			this.scrubberTarget = month
 		},
 
 		openViewer(fileId: string) {
