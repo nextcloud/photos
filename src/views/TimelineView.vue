@@ -36,7 +36,9 @@
 					:aria-label="createAlbumButtonLabel"
 					data-cy-header-action="create-album"
 					@click="showAlbumCreationForm = true">
-					{{ createAlbumButtonLabel }}
+					<template v-if="!isMobile" #default>
+						{{ createAlbumButtonLabel }}
+					</template>
 					<template #icon>
 						<PlusBoxMultipleOutline />
 					</template>
