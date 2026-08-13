@@ -53,6 +53,7 @@ OC.L10N.register(
     "No picture for this day" : "Bu günde çekilmiş bir fotoğraf yok",
     "Picture taken on this day will show up here." : "Bu gün çekilmiş fotoğraflar burada görüntülenir.",
     "More photos from this day" : "Bu gün çekilmiş diğer fotoğraflar",
+    "Jump to a month" : "Bir aya git",
     "_%n photos_::_%n photos_" : ["%n fotoğraf","%n fotoğraf"],
     "_%n unassigned photo_::_%n unassigned photos_" : ["%n ilişkilendirilmemiş fotoğraf","%n ilişkilendirilmemiş fotoğraf"],
     "Favorite" : "Sık kullanılanlara ekle",
