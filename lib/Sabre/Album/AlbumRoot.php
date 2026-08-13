@@ -31,7 +31,11 @@ class AlbumRoot extends AlbumRootBase implements ICollection, ICopyTarget {
 		return new AlbumPhoto($this->albumMapper, $this->album->getAlbum(), $file, $this->rootFolder, $this->rootFolder->getUserFolder($this->userId));
 	}
 
-	public function copyInto($targetName, $sourcePath, INode $sourceNode): bool {
+	/**
+	 * Albums are flat and only accept files, so the copy $depth is ignored.
+	 * It is optional as it was only added with sabre/dav 4.7.1.
+	 */
+	public function copyInto($targetName, $sourcePath, INode $sourceNode, int $depth = 0): bool {
 		return parent::copyIntoAlbum($targetName, $sourcePath, $sourceNode);
 	}
 

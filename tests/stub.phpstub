@@ -226,6 +226,7 @@ namespace OC\Files\Search {
 namespace OCA\DAV\Connector\Sabre {
     class Node extends \Sabre\Dav\INode {
         public function getNode(): \OCP\Files\Node { }
+        public function getFileInfo(): \OCP\Files\FileInfo {}
         public function getId(): int {}
     }
     class File extends Node {}

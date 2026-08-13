@@ -2,7 +2,7 @@
 <psalm errorLevel="4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns="https://getpsalm.org/schema/config"
 	xsi:schemaLocation="https://getpsalm.org/schema/config vendor-bin/psalm/vendor/vimeo/psalm/config.xsd"
-	autoloader="vendor-bin/psalm/vendor/autoload.php"
+	autoloader="vendor-bin/nextcloud-ocp/vendor/autoload.php"
 	phpVersion="8.1">
 	<stubs>
 		<file name="tests/stub.phpstub" preloadClasses="true" />
