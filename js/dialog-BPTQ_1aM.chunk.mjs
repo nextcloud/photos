@@ -1,2 +1,0 @@
-import{V as s,c as d}from"./dav-eG2rUW7X.chunk.mjs";function m(i,e={},n={},t=()=>{}){typeof n=="function"&&(t=n,n={});let{container:o}=n;"container"in e&&typeof e.container=="string"&&(o??=e.container);const r=(typeof o=="string"&&document.querySelector(o)||document.body).appendChild(document.createElement("div")),c=new s({el:r,name:"VueDialogHelper",render:a=>a(i,{props:{container:null,...e},on:{close:(...p)=>{t(...p.map(l=>d(l))),c.$destroy(),r.remove()}}})});return c}export{m as s};
-//# sourceMappingURL=dialog-BPTQ_1aM.chunk.mjs.map
