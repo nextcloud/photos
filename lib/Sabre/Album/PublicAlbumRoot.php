@@ -21,7 +21,10 @@ class PublicAlbumRoot extends AlbumRootBase {
 		throw new Forbidden('Not allowed to rename a public album');
 	}
 
-	public function copyInto($targetName, $sourcePath, INode $sourceNode): bool {
+	/**
+	 * The $depth parameter is optional as it was only added with sabre/dav 4.7.1.
+	 */
+	public function copyInto($targetName, $sourcePath, INode $sourceNode, int $depth = 0): bool {
 		throw new Forbidden('Not allowed to copy into a public album');
 	}
 
