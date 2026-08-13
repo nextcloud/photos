@@ -134,9 +134,13 @@ export default {
 
 <style lang="scss" scoped>
 .folder {
+	// The tile size is given by the layout, the preview fills it.
 	display: flex;
 	flex-direction: column;
-	padding: 16px;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	padding: 8px;
 	border-radius: var(--border-radius-large);
 
 	&:hover,
@@ -145,36 +149,38 @@ export default {
 	}
 
 	&__image {
-		width: 200px;
-		height: 200px;
+		// The image takes all the space the title does not need.
+		flex: 1 1 auto;
+		min-height: 0;
+		width: 100%;
 		object-fit: cover;
 		border-radius: var(--border-radius-large);
 
 		&--placeholder {
+			display: flex;
+			align-items: center;
+			justify-content: center;
 			background-color: var(--color-primary-element-light);
 		}
 	}
 
 	&__icon {
-		width: 100%;
-		height: 100%;
+		max-width: 100%;
+		max-height: 100%;
 	}
 
 	&__details {
 		display: flex;
 		align-items: center;
-		gap: 12px;
-		margin-top: 16px;
-		width: 200px;
+		gap: 8px;
+		margin-top: 8px;
+		width: 100%;
 	}
 
 	&__title {
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
-		font-size: 20px;
-		margin-bottom: 2px;
-		line-height: 30px;
 		color: var(--color-main-text);
 	}
 }

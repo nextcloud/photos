@@ -30,6 +30,37 @@
 			@refresh="resetFetchFilesState">
 			<div class="timeline__header__left">
 				<!-- TODO: UploadPicker -->
+				<NcActions
+					v-if="selectedFileIds.length === 0"
+					:aria-label="t('photos', 'Change tile density')"
+					:menu-name="t('photos', 'Density')"
+					data-cy-header-action="density">
+					<template #icon>
+						<ViewGridOutline :size="20" />
+					</template>
+					<NcActionRadio
+						name="photos-density"
+						value="small"
+						:model-value="gridDensity"
+						@update:model-value="setGridDensity">
+						{{ t('photos', 'Small tiles') }}
+					</NcActionRadio>
+					<NcActionRadio
+						name="photos-density"
+						value="medium"
+						:model-value="gridDensity"
+						@update:model-value="setGridDensity">
+						{{ t('photos', 'Default') }}
+					</NcActionRadio>
+					<NcActionRadio
+						name="photos-density"
+						value="large"
+						:model-value="gridDensity"
+						@update:model-value="setGridDensity">
+						{{ t('photos', 'Large tiles') }}
+					</NcActionRadio>
+				</NcActions>
+
 				<NcButton
 					v-if="selectedFileIds.length === 0"
 					ref="newAlbumButton"
@@ -107,7 +138,7 @@
 			:file-ids-by-section="fileIdsByMonth"
 			:sections="monthsList"
 			:loading="loadingFiles"
-			:base-height="isMobile ? 120 : 200"
+			:base-height="tileBaseHeight"
 			:empty-message="t('photos', 'No photos or videos in here')"
 			:scroll-to-section="scrubberTarget"
 			@need-content="getContent">
@@ -169,6 +200,7 @@ import moment from '@nextcloud/moment'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { storeToRefs } from 'pinia'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcActionRadio from '@nextcloud/vue/components/NcActionRadio'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
@@ -180,6 +212,7 @@ import Plus from 'vue-material-design-icons/Plus.vue'
 import PlusBoxMultipleOutline from 'vue-material-design-icons/PlusBoxMultipleOutline.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 import DownloadOutline from 'vue-material-design-icons/TrayArrowDown.vue'
+import ViewGridOutline from 'vue-material-design-icons/ViewGridOutline.vue'
 import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import AlbumPicker from '../components/Albums/AlbumPicker.vue'
@@ -188,6 +221,7 @@ import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
+import { useGridDensity } from '../composables/useGridDensity.ts'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.ts'
 import FilesByMonthMixin from '../mixins/FilesByMonthMixin.ts'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.ts'
@@ -210,6 +244,7 @@ export default {
 		NcModal,
 		NcActions,
 		NcActionButton,
+		NcActionRadio,
 		NcButton,
 		AlbumForm,
 		AlbumPicker,
@@ -220,6 +255,7 @@ export default {
 		HeaderNavigation,
 		PhotosSourceLocationsSettings,
 		AlertCircleOutline,
+		ViewGridOutline,
 	},
 
 	filters: {
@@ -274,10 +310,15 @@ export default {
 		const filtersStore = useFilterStore()
 		const { selectedFilters, filtersQuery } = storeToRefs(filtersStore)
 
+		const { gridDensity, tileBaseHeight, setGridDensity } = useGridDensity()
+
 		return {
 			isMobile,
 			selectedFilters,
 			filtersQuery,
+			gridDensity,
+			tileBaseHeight,
+			setGridDensity,
 		}
 	},
 

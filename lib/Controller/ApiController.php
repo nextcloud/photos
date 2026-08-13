@@ -15,23 +15,17 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\StreamResponse;
-use OCP\IConfig;
+use OCP\Config\IUserConfig;
 use OCP\IRequest;
 use OCP\IUserSession;
 
 class ApiController extends Controller {
-	private readonly IConfig $config;
-	private readonly IUserSession $userSession;
-
 	public function __construct(
 		IRequest $request,
-		IConfig $config,
-		IUserSession $userSession,
+		private readonly IUserConfig $userConfig,
+		private readonly IUserSession $userSession,
 	) {
 		parent::__construct(Application::APP_ID, $request);
-
-		$this->config = $config;
-		$this->userSession = $userSession;
 	}
 
 	/**
@@ -53,6 +47,11 @@ class ApiController extends Controller {
 		switch ($key) {
 			case 'croppedLayout':
 				if ($value !== 'true' && $value !== 'false') {
+					return new JSONResponse([], Http::STATUS_BAD_REQUEST);
+				}
+				break;
+			case 'gridDensity':
+				if (!in_array($value, ['small', 'medium', 'large'], true)) {
 					return new JSONResponse([], Http::STATUS_BAD_REQUEST);
 				}
 				break;
@@ -82,7 +81,7 @@ class ApiController extends Controller {
 				return new JSONResponse([], Http::STATUS_BAD_REQUEST);
 		}
 
-		$this->config->setUserValue($user->getUid(), Application::APP_ID, $key, $value);
+		$this->userConfig->setValueString($user->getUid(), Application::APP_ID, $key, $value);
 		return new JSONResponse([], Http::STATUS_OK);
 	}
 

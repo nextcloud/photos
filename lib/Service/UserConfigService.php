@@ -10,26 +10,22 @@ namespace OCA\Photos\Service;
 
 use Exception;
 use OCA\Photos\AppInfo\Application;
-use OCP\IConfig;
+use OCP\Config\IUserConfig;
 use OCP\IUserSession;
 
 class UserConfigService {
-	public const DEFAULT_CONFIGS = [
+	public const array DEFAULT_CONFIGS = [
 		'croppedLayout' => 'false',
+		'gridDensity' => 'medium',
 		'photosLocation' => '/Photos',
 		'photosSourceFolders' => '["/Photos"]',
 		/** If you add any new configs, make sure to validate the contents in {@see \OCA\Photos\Controller\ApiController::setUserConfig} */
 	];
 
-	private readonly IConfig $config;
-	private readonly IUserSession $userSession;
-
 	public function __construct(
-		IConfig $config,
-		IUserSession $userSession,
+		private readonly IUserConfig $userConfig,
+		private readonly IUserSession $userSession,
 	) {
-		$this->config = $config;
-		$this->userSession = $userSession;
 	}
 
 	public function getUserConfig(string $key): string {
@@ -43,7 +39,7 @@ class UserConfigService {
 		}
 
 		$default = self::DEFAULT_CONFIGS[$key];
-		$value = $this->config->getUserValue($userId, Application::APP_ID, $key, $default);
+		$value = $this->userConfig->getValueString($userId, Application::APP_ID, $key, $default);
 
 		return $value;
 	}

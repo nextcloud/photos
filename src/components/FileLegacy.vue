@@ -9,123 +9,100 @@
 			'file--cropped': croppedLayout,
 		}"
 		class="file"
-		:href="item.injected.source"
+		:href="item.source"
 		:aria-label="ariaLabel"
 		@click.prevent="openViewer">
-		<div v-if="item.injected.mime.includes('video') && item.injected.hasPreview" class="icon-video-white" />
-		<!-- image and loading placeholder -->
-		<transition-group name="fade" class="transition-group">
-			<img
-				v-if="!error"
-				ref="img"
-				:key="`${item.injected.basename}-img`"
-				:src="src"
-				:alt="item.injected.basename"
-				:aria-describedby="ariaUuid"
-				@load="onLoad"
-				@error="onError">
+		<div v-if="item.mime.includes('video') && item.hasPreview" class="icon-video-white" />
 
-			<svg
-				v-if="!loaded || error"
-				:key="`${item.injected.basename}-svg`"
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 32 32"
-				fill="url(#placeholder__gradient)">
-				<use v-if="isImage" href="#placeholder--img" />
-				<use v-else href="#placeholder--video" />
-			</svg>
-		</transition-group>
+		<img
+			v-if="!error"
+			ref="img"
+			:key="`${item.basename}-img`"
+			:src="src"
+			:alt="item.basename"
+			:aria-describedby="ariaUuid"
+			@error="error = true">
 
 		<!-- image name and cover -->
-		<p :id="ariaUuid" class="hidden-visually">{{ item.injected.basename }}</p>
+		<p :id="ariaUuid" class="hidden-visually">{{ item.basename }}</p>
 		<div class="cover" role="none" />
 	</a>
 </template>
 
-<script lang='ts'>
+<script setup lang='ts'>
 import type { PropType } from 'vue'
-import type { InjectedItem } from './FolderComponent.vue'
+import type { FoldersNode } from '../services/FolderContent.ts'
 
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
+import { computed, onBeforeUnmount, ref } from 'vue'
+import store from '../store/index.ts'
 import { legacyToViewerFileInfo } from '../utils/fileUtils.ts'
 
-export default {
-	name: 'FileLegacy',
-	inheritAttrs: false,
-	props: {
-		item: {
-			type: Object as PropType<InjectedItem>,
-			required: true,
-		},
+const props = defineProps({
+	item: {
+		type: Object as PropType<FoldersNode>,
+		required: true,
 	},
 
-	data() {
-		return {
-			loaded: false,
-			error: false,
-		}
+	/** Files of the same folder, used as the viewer's file list. */
+	list: {
+		type: Array as PropType<FoldersNode[]>,
+		required: true,
 	},
+})
 
-	computed: {
-		ariaUuid() {
-			return `image-${this.item.injected.fileid}`
-		},
+const img = ref<HTMLImageElement>()
+const error = ref(false)
 
-		ariaLabel() {
-			return t('photos', 'Open the full size "{name}" image', { name: this.item.injected.basename })
-		},
+const croppedLayout = computed<boolean>(() => store.state.userConfig.croppedLayout)
 
-		isImage() {
-			return this.item.injected.mime.startsWith('image')
-		},
+const ariaUuid = computed(() => `image-${props.item.fileid}`)
 
-		decodedEtag() {
-			return this.item.injected.etag.replace('&quot;', '').replace('&quot;', '')
-		},
+const ariaLabel = computed(() => t('photos', 'Open the full size "{name}" image', { name: props.item.basename }))
 
-		src() {
-			return generateUrl(`/core/preview?fileId=${this.item.injected.fileid}&c=${this.decodedEtag}&x=${250}&y=${250}&forceIcon=0&a=${this.croppedLayout ? '0' : '1'}`)
-		},
+const decodedEtag = computed(() => props.item.etag.replace('&quot;', '').replace('&quot;', ''))
 
-		croppedLayout() {
-			return this.$store.state.userConfig.croppedLayout
-		},
-	},
+const src = computed(() => generateUrl(`/core/preview?fileId=${props.item.fileid}&c=${decodedEtag.value}&x=${250}&y=${250}&forceIcon=0&a=${croppedLayout.value ? '0' : '1'}`))
 
-	beforeDestroy() {
-		// cancel any pending load
-		this.$refs.src = ''
-	},
+// Cancel any pending load.
+onBeforeUnmount(() => {
+	if (img.value !== undefined) {
+		img.value.src = ''
+	}
+})
 
-	methods: {
-		openViewer() {
-			window.OCA.Viewer.open({
-				fileInfo: legacyToViewerFileInfo(this.item.injected),
-				list: this.item.injected.list.map((file) => legacyToViewerFileInfo(file)),
-			})
-		},
-
-		/** When the image is fully loaded by browser we remove the placeholder */
-		onLoad() {
-			this.loaded = true
-		},
-
-		onError() {
-			this.error = true
-		},
-
-		t,
-	},
-
+/**
+ * Open the file in the viewer, with all the files of the folder as a list.
+ */
+function openViewer() {
+	window.OCA.Viewer.open({
+		fileInfo: legacyToViewerFileInfo(props.item),
+		list: props.list.map((file) => legacyToViewerFileInfo(file)),
+		onClose: () => window.OCA?.Files?.Sidebar?.close?.(),
+	})
 }
 </script>
 
 <style lang="scss" scoped>
 @use '../mixins/FileFolder';
 
-.transition-group {
-	display: contents;
+.file {
+	// The tile size is given by the layout, the preview fills it.
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	border: 2px solid var(--color-main-background); // Use border to create a separation between images.
+	background-color: var(--color-primary-element-light);
+
+	.cover {
+		position: absolute;
+		top: 0;
+		inset-inline-start: 0;
+		width: 100%;
+		height: 100%;
+		padding-bottom: 0;
+	}
 }
 
 .icon-video-white {
@@ -148,11 +125,5 @@ img {
 	.file--cropped & {
 		object-fit: cover;
 	}
-}
-
-svg {
-	position: absolute;
-	width: 70%;
-	height: 70%;
 }
 </style>
