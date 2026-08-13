@@ -53,6 +53,7 @@ OC.L10N.register(
     "No picture for this day" : "Šios dienos nuotraukos nėra",
     "Picture taken on this day will show up here." : "Šią dieną padaryta nuotrauka bus rodoma čia.",
     "More photos from this day" : "Daugiau nuotraukų iš šios dienos",
+    "Jump to a month" : "Pereiti prie mėnesio",
     "_%n photos_::_%n photos_" : ["%n nuotrauka","%n nuotraukos","%n nuotraukų","%n nuotrauka"],
     "_%n unassigned photo_::_%n unassigned photos_" : ["%n nepriskirta nuotrauka","%n nepriskirtos nuotraukos","%n nepriskirtų nuotraukų","%n nepriskirtų nuotraukų"],
     "Favorite" : "Mėgstamas",

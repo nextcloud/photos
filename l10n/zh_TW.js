@@ -53,6 +53,7 @@ OC.L10N.register(
     "No picture for this day" : "這天沒有照片",
     "Picture taken on this day will show up here." : "這天拍攝的照片將會顯示在此處。",
     "More photos from this day" : "更多這天的照片",
+    "Jump to a month" : "跳至一個月",
     "_%n photos_::_%n photos_" : ["%n 個照片"],
     "_%n unassigned photo_::_%n unassigned photos_" : ["%n 個未指派的照片"],
     "Favorite" : "收藏",

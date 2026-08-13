@@ -51,6 +51,7 @@
     "No picture for this day" : "Kein Bild für diesen Tag",
     "Picture taken on this day will show up here." : "Ein Bild, das an diesem Tag aufgenommen wurde, wird hier angezeigt.",
     "More photos from this day" : "Weitere Bilder von diesem Tag",
+    "Jump to a month" : "Zu einem Monat springen",
     "_%n photos_::_%n photos_" : ["%n Foto","%n Fotos"],
     "_%n unassigned photo_::_%n unassigned photos_" : ["%n nicht zugewiesenes Foto","%n nicht zugewiesene Fotos"],
     "Favorite" : "Favorisieren",
