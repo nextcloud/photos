@@ -16,7 +16,7 @@
 	</projectFiles>
 	<extraFiles>
 		<directory name="vendor" />
-		<directory name="vendor-bin/psalm/vendor" />
+		<directory name="vendor-bin/nextcloud-ocp/vendor" />
 	</extraFiles>
 	<issueHandlers>
 		<UndefinedClass>
