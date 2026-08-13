@@ -22,40 +22,44 @@
 				</div>
 				<PlayCircleOutlineIcon v-else-if="file.attributes['metadata-files-live-photo'] !== undefined" :size="64" />
 
-				<!-- We have two img elements to load the small and large preview -->
-				<!-- Do not show the small preview if the larger one is loaded -->
-				<!-- Prioritize visible files -->
-				<!-- Load small preview first, then the larger one -->
-				<!-- Preload large preview for near visible files -->
-				<!-- Preload small preview for further away files -->
+				<!--
+					Three layers stacked on top of each other, each one fading in
+					once its source is loaded: blurhash at the bottom, small
+					thumbnail above it and the full preview on top.
+					The layer beneath stays rendered while the one above fades in,
+					which gives a blurred → pixelated → sharp progression.
+				-->
 				<template v-if="initialized">
 					<canvas
-						v-if="hasBlurhash && !loadedLarge"
+						v-if="hasBlurhash"
 						ref="canvas"
-						class="file__blurhash"
+						class="file__layer file__layer--blurhash"
 						aria-hidden="true" />
 
 					<img
-						v-if="!hasBlurhash && !loadedLarge && (loadedSmall || !errorSmall)"
+						v-if="!errorSmall"
 						ref="imgSmall"
 						:key="`${file.basename}-small`"
+						class="file__layer file__layer--small"
+						:class="{ 'file__layer--visible': loadedSmall }"
 						:src="srcSmall"
 						:alt="file.basename"
-						:decoding="loadedSmall ? 'sync' : 'async'"
-						:fetchpriority="loadedSmall ? 'high' : 'low'"
-						:loading="loadedSmall ? 'eager' : undefined"
+						decoding="async"
+						fetchpriority="low"
 						@load="onLoadSmall"
 						@error="onErrorSmall">
 
 					<img
-						v-if="loadedLarge || ((hasBlurhash || loadedSmall || errorSmall) && !errorLarge)"
+						v-if="!errorLarge"
 						ref="imgLarge"
 						:key="`${file.basename}-large`"
+						class="file__layer file__layer--large"
+						:class="{ 'file__layer--visible': loadedLarge }"
 						:src="srcLarge"
 						:alt="file.basename"
-						:decoding="loadedLarge ? 'sync' : 'async'"
-						:fetchpriority="loadedLarge ? 'high' : 'low'"
-						:loading="loadedLarge ? undefined : 'lazy'"
+						decoding="async"
+						:fetchpriority="loadedSmall ? 'high' : 'low'"
+						loading="lazy"
 						@load="onLoadLarge"
 						@error="onErrorLarge">
 				</template>
@@ -184,8 +188,8 @@ export default {
 		if (this.$refs.imgSmall !== undefined) {
 			(this.$refs.imgSmall as HTMLImageElement).src = ''
 		}
-		if (this.$refs.srcLarge !== undefined) {
-			(this.$refs.srcLarge as HTMLImageElement).src = ''
+		if (this.$refs.imgLarge !== undefined) {
+			(this.$refs.imgLarge as HTMLImageElement).src = ''
 		}
 	},
 
@@ -298,7 +302,7 @@ export default {
 			position: absolute;
 			top: 0;
 			inset-inline-start: 0;
-			z-index: 2;
+			z-index: 5; // above the preview layers
 			width: 100%;
 			height: 100%;
 			content: '';
@@ -319,24 +323,38 @@ export default {
 		outline: none; // Override global focus state.
 		display: flex; // Fill parent size
 
-		&__blurhash {
-			position: absolute;
-			top: 0;
-			height: 100%;
-			width: 100%;
-			object-fit: cover;
-		}
-
 		&__images {
 			width: 100%;
 			height: 100%;
 
-			img {
+			.file__layer {
+				position: absolute;
+				top: 0;
+				inset-inline-start: 0;
 				width: 100%;
 				height: 100%;
 				object-fit: cover;
-				position: absolute;
-				color: transparent; /// Hide alt='' text when loading.
+				color: transparent; // Hide alt='' text when loading.
+			}
+
+			.file__layer--blurhash {
+				z-index: 1;
+			}
+
+			.file__layer--small {
+				z-index: 2;
+				opacity: 0;
+				transition: opacity var(--animation-quick) ease-out;
+			}
+
+			.file__layer--large {
+				z-index: 3;
+				opacity: 0;
+				transition: opacity var(--animation-slow) ease-out;
+			}
+
+			.file__layer--visible {
+				opacity: 1;
 			}
 		}
 
@@ -352,7 +370,7 @@ export default {
 			border-radius: var(--border-radius);
 			background: rgba(0, 0, 0, 0.4);
 			color: #fff;
-			z-index: 2;
+			z-index: 4; // above the preview layers
 
 			&__label {
 				font-weight: 600;
@@ -379,7 +397,7 @@ export default {
 		top: 8px;
 		// Fancy calculation to render the checkbox in the middle of narrow images.
 		inset-inline-end: min(22px, calc(50% - 7px));
-		z-index: 1;
+		z-index: 5; // above the preview layers
 		width: fit-content;
 
 		:deep .checkbox-radio-switch__input:focus-visible+.checkbox-radio-switch__content,
@@ -419,6 +437,7 @@ export default {
 
 	.favorite-state {
 		position: absolute;
+		z-index: 5; // above the preview layers
 		top: 2px;
 		// Fancy calculation to render the start in the middle of narrow images.
 		inset-inline-end: min(2px, calc(50% - 7px));

@@ -41,39 +41,65 @@
 			</template>
 		</NcEmptyContent>
 
-		<div
+		<TiledLayout
 			v-else
-			class="grid-container"
-			:class="{
-				'grid-container--folders': haveFolders,
-			}">
-			<VirtualGrid
-				ref="virtualgrid"
-				:items="contentList"
-				:scroll-element="appContent"
-				:get-column-count="() => haveFolders ? gridConfig.folderCount : gridConfig.count"
-				:get-grid-gap="() => haveFolders ? 16 : 8" />
-		</div>
+			class="nodes-container"
+			:sections="contentList"
+			:base-height="220">
+			<template #default="{ tiledSections }">
+				<VirtualScrolling
+					:container-element="appContent"
+					:header-height="0"
+					:sections="tiledSections">
+					<template #default="{ visibleSections }">
+						<ul v-if="visibleSections.length === 1">
+							<template v-for="(row, rowIndex) of visibleSections[0].rows">
+								<!--
+									We are subtracting 1 from flex-basis to compensate for rounding issues.
+									The flex algo will then compensate with flex-grow.
+									'last-tiled-row' prevents the last row's items from growing.
+								-->
+								<li
+									v-for="item of row.items"
+									:key="item.id"
+									:class="{ 'last-tiled-row': rowIndex === visibleSections[0].rows.length - 1 }"
+									:style="{ flexBasis: `${item.width - 1}px`, height: `${item.height}px` }">
+									<FileLegacy
+										v-if="item.type === 'file'"
+										:item="item"
+										:list="fileList" />
+									<FolderComponent
+										v-else
+										:item="item"
+										:show-shared="showShared" />
+								</li>
+							</template>
+						</ul>
+					</template>
+				</VirtualScrolling>
+			</template>
+		</TiledLayout>
 	</div>
 </template>
 
 <script lang='ts'>
 import type { Upload } from '@nextcloud/upload'
 import type { FoldersNode } from '../services/FolderContent.ts'
+import type { Section, TiledItem } from '../services/TiledLayout.ts'
 
 import { Folder } from '@nextcloud/files'
 import { defaultRootPath, parsePermissions } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
 import { getUploader, UploadPicker } from '@nextcloud/upload'
-import VirtualGrid from 'vue-virtual-grid'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import FolderOutline from 'vue-material-design-icons/FolderOutline.vue'
 import FileLegacy from '../components/FileLegacy.vue'
 import FolderComponent from '../components/FolderComponent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import TiledLayout from '../components/TiledLayout/TiledLayout.vue'
+import VirtualScrolling from '../components/VirtualScrolling.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
-import GridConfigMixin from '../mixins/GridConfig.js'
 import allowedMimes from '../services/AllowedMimes.js'
 import { fetchFile } from '../services/fileFetcher.ts'
 import getFolderContent from '../services/FolderContent.ts'
@@ -82,17 +108,19 @@ import logger from '../services/logger.ts'
 export default {
 	name: 'FoldersView',
 	components: {
+		FileLegacy,
+		FolderComponent,
 		FolderOutline,
 		HeaderNavigation,
 		NcEmptyContent,
 		NcLoadingIcon,
+		TiledLayout,
 		UploadPicker,
-		VirtualGrid,
+		VirtualScrolling,
 	},
 
 	mixins: [
 		AbortControllerMixin,
-		GridConfigMixin,
 	],
 
 	props: {
@@ -184,36 +212,16 @@ export default {
 			return list
 		},
 
-		contentList() {
-			const folders = this.folderList && this.folderList.map((folder) => {
-				return {
-					id: `folder-${folder.fileid}`,
-					injected: {
-						...folder,
-						showShared: this.showShared,
-					},
-					width: 232,
-					height: 280,
-					columnSpan: 1,
-					renderComponent: FolderComponent,
-				}
-			})
-
-			const files = this.fileList?.map((file) => {
-				return {
-					id: `file-${file.fileid}`,
-					injected: {
-						...file,
-						list: this.fileList,
-					},
-					width: 256,
-					height: 256,
-					columnSpan: 1,
-					renderComponent: FileLegacy,
-				}
-			})
-
-			return [...(folders || []), ...(files || [])]
+		contentList(): Section[] {
+			return [
+				{
+					id: '',
+					items: [
+						...(this.folderList || []).map(this.mapNodeToItem),
+						...(this.fileList || []).map(this.mapNodeToItem),
+					],
+				},
+			]
 		},
 
 		// is current folder empty?
@@ -247,6 +255,24 @@ export default {
 	methods: {
 		onRefresh() {
 			this.fetchFolderContent()
+		},
+
+		/**
+		 * TiledLayout justifies the rows from the `ratio` of the items, the given
+		 * width and height are only the untiled defaults.
+		 * Folders and files are laid out as squares as the folder listing endpoint
+		 * does not return the photo dimensions; both fill their tile with `object-fit: cover`.
+		 *
+		 * @param node - The folder or file to lay out
+		 */
+		mapNodeToItem(node: FoldersNode): FoldersNode & TiledItem {
+			return {
+				...node,
+				id: `${node.type}-${node.fileid}`,
+				width: 220,
+				height: 220,
+				ratio: 1,
+			}
 		},
 
 		async fetchFolderContent() {
@@ -329,48 +355,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use 'sass:map';
+.nodes-container {
+	padding: 0 64px 256px;
 
-@mixin grid-sizes() {
-	$previous: 0;
-
-	@each $size, $config in $sizes {
-		$count: map.get($config, 'count');
-		$marginTop: map.get($config, 'marginTop');
-		$marginW: map.get($config, 'marginW');
-
-		@if $size == 'max' {
-			@media (min-width: #{$previous}px) {
-				@content($marginTop, $marginW);
-			}
-		}
-
-		@else {
-			@media (min-width: #{$previous}px) and (max-width: #{$size}px) {
-				@content($marginTop, $marginW);
-			}
-		}
-
-		$previous: $size;
-	}
-}
-
-.grid-container {
-	@include grid-sizes using ($marginTop, $marginW) {
-		padding: 0px #{$marginW}px 256px #{$marginW}px;
+	@media only screen and (max-width: 1200px) {
+		padding: 0 4px 256px;
 	}
 
-	&--folders {
-		padding: 32px 48px;
+	ul {
+		display: flex;
+		flex-wrap: wrap;
 
-		@media only screen and (max-width: 400px) {
-			display: flex;
-			justify-content: center;
-			width: 100%;
-		}
-
-		@media only screen and (min-width: 400px) {
-			width: fit-content;
+		// The last row is not justified, so its items must not grow.
+		li:not(.last-tiled-row) {
+			flex-grow: 1;
 		}
 	}
 }
