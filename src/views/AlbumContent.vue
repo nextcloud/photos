@@ -4,6 +4,12 @@
 -->
 <template>
 	<div class="album-container">
+		<AlbumHero
+			v-if="album !== undefined"
+			:cover-file-id="album.attributes['last-photo']"
+			:title="albumName"
+			:subtitle="albumSubtitle" />
+
 		<CollectionContent
 			ref="collectionContent"
 			:collection="album"
@@ -164,7 +170,7 @@
 <script lang='ts'>
 import type { Album } from '../store/albums.js'
 
-import { translate } from '@nextcloud/l10n'
+import { translate, translatePlural } from '@nextcloud/l10n'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
@@ -185,6 +191,7 @@ import ShareVariantOutline from 'vue-material-design-icons/ShareVariantOutline.v
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
 import ActionFavorite from '../components/Actions/ActionFavorite.vue'
+import AlbumHero from '../components/AlbumHero.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import CollaboratorsSelectionForm from '../components/Albums/CollaboratorsSelectionForm.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
@@ -201,6 +208,7 @@ export default {
 		// ActionDownload,
 		ActionFavorite,
 		AlbumForm,
+		AlbumHero,
 		Close,
 		CollaboratorsSelectionForm,
 		CollectionContent,
@@ -268,6 +276,19 @@ export default {
 
 		albumFileName(): string {
 			return this.$store.getters.getAlbumName(this.albumName)
+		},
+
+		// Line shown under the album name in the hero, both parts of it are
+		// optional so that it degrades to an empty string.
+		albumSubtitle(): string {
+			if (this.album === undefined) {
+				return ''
+			}
+
+			return [
+				this.album.attributes.location,
+				translatePlural('photos', '%n photo', '%n photos', this.album.attributes.nbItems),
+			].filter((part) => part !== '').join(' · ')
 		},
 
 		removableSelectedFiles() {

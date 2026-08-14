@@ -40,6 +40,12 @@
 						class="file__layer file__layer--blurhash"
 						aria-hidden="true" />
 
+					<!-- Sweeps over the blurhash, or over the empty tile when there is none, until a preview lands. -->
+					<div
+						v-if="!loadedSmall && !loadedLarge"
+						class="file__layer file__layer--shimmer"
+						aria-hidden="true" />
+
 					<img
 						v-if="!errorSmall"
 						ref="imgSmall"
@@ -77,10 +83,9 @@
 			:model-value="selected"
 			@update:checked="onToggle" />
 
-		<FavoriteIcon
-			v-if="file.attributes.favorite === 1"
-			v-once
-			class="favorite-state" />
+		<Transition name="favorite-pop">
+			<FavoriteIcon v-if="file.attributes.favorite === 1" class="favorite-state" />
+		</Transition>
 	</div>
 </template>
 
@@ -330,9 +335,19 @@ export default {
 	width: 100%;
 	border: 2px solid var(--color-main-background); // Use border so create a separation between images.
 	box-sizing: border-box;
+	transition: transform var(--animation-quick) ease-out, box-shadow var(--animation-quick) ease-out;
 
-	// Selection border.
-	&.selected,
+	// Selected images shrink into a glowing frame, which is softer than an
+	// outline and does not fight the photo for attention.
+	&.selected {
+		transform: scale(0.97);
+		box-shadow:
+			0 0 0 3px var(--color-primary-element),
+			0 6px 18px rgba(0, 0, 0, 0.18);
+		z-index: 2;
+	}
+
+	// Keyboard focus keeps an outline, so that it stays distinct from selection.
 	&:focus-within,
 	&:has(:focus) {
 		&::after {
@@ -376,6 +391,19 @@ export default {
 
 			.file__layer--blurhash {
 				z-index: 1;
+			}
+
+			.file__layer--shimmer {
+				z-index: 2;
+				pointer-events: none;
+				background-image: linear-gradient(115deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.18) 50%, rgba(255, 255, 255, 0) 70%);
+				background-size: 220% 100%;
+				background-repeat: no-repeat;
+				animation: file-layer-shimmer 1500ms linear infinite;
+
+				@media (prefers-reduced-motion: reduce) {
+					animation: none;
+				}
 			}
 
 			.file__layer--small {
@@ -479,5 +507,41 @@ export default {
 		// Fancy calculation to render the start in the middle of narrow images.
 		inset-inline-end: min(2px, calc(50% - 7px));
 	}
+
+	// The star pops in when an image is marked as favorite, and fades out when
+	// it is not one anymore. Both stay short so that marking a whole selection
+	// still feels snappy.
+	.favorite-pop-enter-active {
+		transform-origin: center;
+		animation: favorite-pop 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
+	}
+
+	.favorite-pop-leave-active {
+		transition: opacity var(--animation-quick) ease-out, transform var(--animation-quick) ease-out;
+	}
+
+	.favorite-pop-leave-to {
+		opacity: 0;
+		transform: scale(0.8);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.favorite-pop-enter-active,
+		.favorite-pop-leave-active {
+			animation: none;
+			transition: none;
+		}
+	}
+}
+
+@keyframes file-layer-shimmer {
+	0% { background-position: 120% 0; }
+	100% { background-position: -120% 0; }
+}
+
+@keyframes favorite-pop {
+	0% { opacity: 0; transform: scale(0.5); }
+	60% { opacity: 1; transform: scale(1.25); }
+	100% { opacity: 1; transform: scale(1); }
 }
 </style>

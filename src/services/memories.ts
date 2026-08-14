@@ -58,6 +58,116 @@ export function detectTrips(photos: PhotoFile[], gapDays: number = 2, minPhotos:
 	return trips.sort((trip1, trip2) => trip2.endTimestamp - trip1.endTimestamp)
 }
 
+export type YearRecap = {
+	/** Year the recap covers. */
+	year: number
+	/** Number of photos taken during that year. */
+	totalCount: number
+	/** Photos selected for the recap, in chronological order. */
+	highlights: PhotoFile[]
+	/** Photo to use as the cover of the recap. */
+	cover: PhotoFile
+}
+
+/** Number of photos a recap aims for. */
+const RECAP_HIGHLIGHT_COUNT = 60
+
+/** Below this, a year does not hold enough material to be worth a recap. */
+const RECAP_MIN_PHOTOS = 30
+
+/**
+ * Build a "year in photos" recap out of the loaded photos, for the most recent
+ * year holding enough of them.
+ *
+ * @param photos - Photos to build the recap from
+ * @return The recap, `null` when no year has enough photos
+ */
+export function buildYearRecap(photos: PhotoFile[]): YearRecap | null {
+	const years = [...groupPhotos(photos, (photo) => getCaptureDate(photo).getFullYear()).entries()]
+		.sort(([year1], [year2]) => year2 - year1)
+
+	const recapYear = years.find(([, yearPhotos]) => yearPhotos.length >= RECAP_MIN_PHOTOS)
+	if (recapYear === undefined) {
+		return null
+	}
+
+	const [year, yearPhotos] = recapYear
+	const highlights = pickHighlights(yearPhotos)
+
+	return {
+		year,
+		totalCount: yearPhotos.length,
+		highlights,
+		// A photo from the middle of the year is more representative than the
+		// first or the last one of it.
+		cover: highlights[Math.floor(highlights.length / 2)],
+	}
+}
+
+/**
+ * Select the photos of a recap: all the favorites first, then a share of every
+ * month until the recap is full.
+ *
+ * @param photos - Photos taken during the year of the recap
+ * @return The selected photos, in chronological order
+ */
+function pickHighlights(photos: PhotoFile[]): PhotoFile[] {
+	const chronological = [...photos].sort((photo1, photo2) => photo1.attributes.timestamp - photo2.attributes.timestamp)
+
+	const highlights = new Set(chronological
+		.filter((photo) => photo.attributes.favorite === 1)
+		.slice(0, RECAP_HIGHLIGHT_COUNT))
+
+	const months = [...groupPhotos(
+		chronological.filter((photo) => !highlights.has(photo)),
+		(photo) => getCaptureDate(photo).getMonth(),
+	).values()]
+
+	// Photos are not evenly spread over a year, so the free slots are shared
+	// between the months rather than between the photos: this keeps a single
+	// busy month from taking over the whole recap. Months holding less photos
+	// than their share leave their remaining slots to the following ones.
+	for (const [monthIndex, month] of months.entries()) {
+		const quota = Math.min(month.length, Math.ceil((RECAP_HIGHLIGHT_COUNT - highlights.size) / (months.length - monthIndex)))
+
+		// Spread the picks over the month instead of taking its first photos.
+		for (let index = 0; index < quota; index++) {
+			highlights.add(month[Math.floor((index * month.length) / quota)])
+		}
+	}
+
+	return [...highlights].sort((photo1, photo2) => photo1.attributes.timestamp - photo2.attributes.timestamp)
+}
+
+/**
+ * @param photo - Photo to get the capture date of
+ */
+function getCaptureDate(photo: PhotoFile): Date {
+	return new Date(photo.attributes.timestamp * 1000)
+}
+
+/**
+ * @param photos - Photos to group
+ * @param getKey - Gives the group a photo belongs to
+ * @return The groups, in the order their first photo appears in
+ */
+function groupPhotos<Key>(photos: PhotoFile[], getKey: (photo: PhotoFile) => Key): Map<Key, PhotoFile[]> {
+	const groups = new Map<Key, PhotoFile[]>()
+
+	for (const photo of photos) {
+		const key = getKey(photo)
+		const group = groups.get(key)
+
+		if (group === undefined) {
+			groups.set(key, [photo])
+		} else {
+			group.push(photo)
+		}
+	}
+
+	return groups
+}
+
 /**
  * Build a trip out of an already clustered set of photos.
  *

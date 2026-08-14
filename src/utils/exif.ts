@@ -1,0 +1,132 @@
+/**
+ * SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+import { translate as t } from '@nextcloud/l10n'
+
+/**
+ * Raw EXIF metadata of a photo. Entries are only sanitized server side, their
+ * presence and their type depend on what the camera wrote in the file.
+ */
+export type PhotoExif = {
+	/** The EXIF IFD, holding the shooting settings. */
+	exif: Record<string, unknown>
+	/** The IFD0, holding the camera description. */
+	ifd0: Record<string, unknown>
+}
+
+export type ExifEntry = {
+	/** Translated name of the entry. */
+	label: string
+	/** Value of the entry, ready to be displayed. */
+	value: string
+}
+
+/**
+ * Summarize the shooting settings of a photo. EXIF metadata is optional and
+ * often partial, so entries which cannot be read are left out and the returned
+ * list can be empty.
+ *
+ * @param metadata - Raw metadata of the photo
+ * @return The entries to display, in reading order
+ */
+export function getExifSummary(metadata: PhotoExif): ExifEntry[] {
+	const { exif, ifd0 } = metadata
+
+	return [
+		{ label: t('photos', 'Camera'), value: formatCamera(ifd0.Make, ifd0.Model) },
+		{ label: t('photos', 'Aperture'), value: formatAperture(exif.FNumber) },
+		{ label: t('photos', 'Focal length'), value: formatFocalLength(exif.FocalLength) },
+		{ label: t('photos', 'Exposure'), value: formatExposureTime(exif.ExposureTime) },
+		{ label: t('photos', 'ISO'), value: formatIsoSpeed(exif.ISOSpeedRatings) },
+	].filter((entry) => entry.value !== '')
+}
+
+/**
+ * EXIF stores most numbers as a `numerator/denominator` string.
+ *
+ * @param value - Raw value of an EXIF entry
+ * @return The value as a number, `NaN` when it cannot be read
+ */
+function parseRational(value: unknown): number {
+	if (typeof value === 'number') {
+		return value
+	}
+
+	if (typeof value !== 'string') {
+		return Number.NaN
+	}
+
+	const [numerator, denominator = '1'] = value.split('/')
+	return Number(numerator) / Number(denominator)
+}
+
+/**
+ * @param make - Manufacturer of the camera
+ * @param model - Model of the camera
+ */
+function formatCamera(make: unknown, model: unknown): string {
+	const parts = [make, model]
+		.map((part) => (typeof part === 'string' ? part.trim() : ''))
+		.filter((part) => part !== '')
+
+	// The model often already carries the manufacturer name, repeating it would
+	// give something like "NIKON CORPORATION NIKON D750".
+	if (parts.length === 2 && parts[1].toLowerCase().startsWith(parts[0].toLowerCase())) {
+		return parts[1]
+	}
+
+	return parts.join(' ')
+}
+
+/**
+ * @param fNumber - Raw `FNumber` EXIF entry
+ */
+function formatAperture(fNumber: unknown): string {
+	const aperture = parseRational(fNumber)
+	if (!Number.isFinite(aperture) || aperture <= 0) {
+		return ''
+	}
+
+	return `ƒ/${Number(aperture.toFixed(1))}`
+}
+
+/**
+ * @param focalLength - Raw `FocalLength` EXIF entry
+ */
+function formatFocalLength(focalLength: unknown): string {
+	const millimeters = parseRational(focalLength)
+	if (!Number.isFinite(millimeters) || millimeters <= 0) {
+		return ''
+	}
+
+	return t('photos', '{focalLength} mm', { focalLength: Math.round(millimeters) })
+}
+
+/**
+ * @param exposureTime - Raw `ExposureTime` EXIF entry
+ */
+function formatExposureTime(exposureTime: unknown): string {
+	const seconds = parseRational(exposureTime)
+	if (!Number.isFinite(seconds) || seconds <= 0) {
+		return ''
+	}
+
+	// Shutter speeds shorter than a second are written as a fraction.
+	const duration = seconds < 1 ? `1/${Math.round(1 / seconds)}` : String(Number(seconds.toFixed(1)))
+	return t('photos', '{exposureTime} s', { exposureTime: duration })
+}
+
+/**
+ * @param isoSpeed - Raw `ISOSpeedRatings` EXIF entry, an array on cameras
+ *   reporting several sensitivities
+ */
+function formatIsoSpeed(isoSpeed: unknown): string {
+	const speed = parseRational(Array.isArray(isoSpeed) ? isoSpeed[0] : isoSpeed)
+	if (!Number.isFinite(speed) || speed <= 0) {
+		return ''
+	}
+
+	return String(Math.round(speed))
+}
