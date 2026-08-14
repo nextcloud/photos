@@ -179,6 +179,7 @@ export default {
 			}
 
 			return new Folder({
+				root: defaultRootPath,
 				...this.folder,
 				permissions: parsePermissions(this.folder.permissions),
 				owner: null,
