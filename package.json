@@ -1,6 +1,6 @@
 {
   "name": "photos",
-  "version": "6.0.0-dev.0",
+  "version": "6.0.0",
   "private": true,
   "description": "Your memories under your control",
   "keywords": [
@@ -17,7 +17,7 @@
     "url": "https://github.com/nextcloud/photos"
   },
   "license": "AGPL-3.0-or-later",
-  "author": "John Molakvoæ <skjnldsv@protonmail.com>",
+  "author": "Nextcloud GmbH and Nextcloud contributors",
   "contributors": [
     "John Molakvoæ <skjnldsv@protonmail.com>"
   ],
