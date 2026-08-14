@@ -132,6 +132,7 @@ OC.L10N.register(
     "All tags" : "全部標籤",
     "Create new album from filters" : "從過濾器創建新相簿",
     "One of the source folders does not exist" : "其中一個來源資料夾不存在",
+    "Default" : "默認",
     "Add to album" : "添加至相簿",
     "Delete selection" : "刪除所選",
     "No photos or videos in here" : "此處沒有照片或視像",

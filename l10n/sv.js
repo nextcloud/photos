@@ -132,6 +132,7 @@ OC.L10N.register(
     "All tags" : "Alla taggar",
     "Create new album from filters" : "Skapa ett nytt album från filtren",
     "One of the source folders does not exist" : "En av källmapparna finns inte",
+    "Default" : "Standard",
     "Add to album" : "Lägg till i album",
     "Delete selection" : "Ta bort urvalet",
     "No photos or videos in here" : "Det finns inga foton eller videor här",

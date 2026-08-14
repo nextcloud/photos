@@ -132,6 +132,7 @@ OC.L10N.register(
     "All tags" : "Todas as etiquetas",
     "Create new album from filters" : "Crear un novo álbum a partir de filtros",
     "One of the source folders does not exist" : "Un dos cartafoles de orixe non existe",
+    "Default" : "Predeterminado",
     "Add to album" : "Engadir ao álbum",
     "Delete selection" : "Eliminar a selección",
     "No photos or videos in here" : "Aquí non hai fotos nin vídeos",

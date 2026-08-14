@@ -51,6 +51,7 @@ OC.L10N.register(
     "Merge with different person" : "ຮວມກັບບຸກຄົນອື່ນ",
     "Remove from favorites" : "ຍ້າຍຈາກລາຍການທີ່ມັກ",
     "Remove person" : "ລຶບບຸກຄົນ",
+    "Default" : "ຄ່າເລີ່ມຕົ້ນ",
     "Add to album" : "ເພີ່ມໃສ່ອະລະບໍ້າ",
     "Delete selection" : "Delete selection",
     "Unassigned faces" : "ໃບໜ້າທີ່ຍັງບໍ່ໄດ້ກຳນົດ",

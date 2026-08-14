@@ -132,6 +132,7 @@ OC.L10N.register(
     "All tags" : "Toutes les étiquettes",
     "Create new album from filters" : "Créer un nouvel album à partir des filtres",
     "One of the source folders does not exist" : "L'un des dossiers source n'existe pas",
+    "Default" : "Par défaut",
     "Add to album" : "Ajouter à l’album",
     "Delete selection" : "Supprimer la sélection",
     "No photos or videos in here" : "Aucune photo ou vidéo ici",

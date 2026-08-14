@@ -132,6 +132,7 @@ OC.L10N.register(
     "All tags" : "Όλες οι ετικέτες",
     "Create new album from filters" : "Δημιουργία νέου άλμπουμ από φίλτρα",
     "One of the source folders does not exist" : "Ένας από τους φακέλους πηγής δεν υπάρχει",
+    "Default" : "Προεπιλογή",
     "Add to album" : "Προσθήκη στο άλμπουμ",
     "Delete selection" : "Διαγραφή επιλογής",
     "No photos or videos in here" : "Δεν υπάρχουν φωτογραφίες ή βίντεο εδώ",

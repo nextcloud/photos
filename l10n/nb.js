@@ -122,6 +122,7 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Bilder med etiketter vises her",
     "Popular tags" : "Populære merkelapper",
     "All tags" : "Alle tagger",
+    "Default" : "Forvalg",
     "Add to album" : "Legg til i album",
     "Delete selection" : "Slett utvalg",
     "No photos or videos in here" : "Ingen bilder eller videoer her",

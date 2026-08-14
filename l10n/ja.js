@@ -132,6 +132,7 @@ OC.L10N.register(
     "All tags" : "全てのタグ",
     "Create new album from filters" : "フィルターから新しいアルバムを作成する",
     "One of the source folders does not exist" : "ソースフォルダーの1つが存在しません",
+    "Default" : "デフォルト",
     "Add to album" : "アルバムに追加",
     "Delete selection" : "選択した項目を削除",
     "No photos or videos in here" : "ここには写真も動画もありません",
