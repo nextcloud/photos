@@ -132,6 +132,7 @@ OC.L10N.register(
     "All tags" : "Бүх таг",
     "Create new album from filters" : "Шүүлтүүрүүдээс шинэ цомог үүсгэх",
     "One of the source folders does not exist" : "Эх хавтаснуудын нэг байхгүй байна",
+    "Default" : "Өгөгдмөл",
     "Add to album" : "Цомогт нэмэх",
     "Delete selection" : "Сонголтыг устгах",
     "No photos or videos in here" : "Энд зураг эсвэл видео байхгүй",

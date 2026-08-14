@@ -132,6 +132,7 @@ OC.L10N.register(
     "All tags" : "Etiketa guztiak",
     "Create new album from filters" : "Sortu album berria iragazkitik abiatuta",
     "One of the source folders does not exist" : "Iturburu-karpeta bat ez da existitzen",
+    "Default" : "Lehenetsia",
     "Add to album" : "Gehitu albumera",
     "Delete selection" : "Ezabatu hautatutakoak",
     "No photos or videos in here" : "Ez dago argazki edo bideorik hemen",

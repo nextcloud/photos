@@ -17,6 +17,7 @@ OC.L10N.register(
     "Home" : "Home",
     "General" : "Umumiy",
     "Remove from favorites" : "Sevimlilardan olib tashlang",
+    "Default" : "Standart",
     "Last week" : "O`tgan yil",
     "Group" : "Guruh",
     "View" : "Ko'rish",

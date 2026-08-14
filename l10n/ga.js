@@ -132,6 +132,7 @@ OC.L10N.register(
     "All tags" : "Gach clibeanna",
     "Create new album from filters" : "Cruthaigh albam nua ó scagairí",
     "One of the source folders does not exist" : "Níl ceann de na fillteáin foinse ann",
+    "Default" : "Réamhshocrú",
     "Add to album" : "Cuir leis an albam",
     "Delete selection" : "Scrios an roghnúchán",
     "No photos or videos in here" : "Níl grianghraif nó físeáin ar bith anseo",

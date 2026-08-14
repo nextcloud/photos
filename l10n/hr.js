@@ -132,6 +132,7 @@ OC.L10N.register(
     "All tags" : "Sve oznake",
     "Create new album from filters" : "Stvori novi album iz filtera",
     "One of the source folders does not exist" : "Jedna od izvorišnih mapa ne postoji",
+    "Default" : "Zadano",
     "Add to album" : "Dodaj u album",
     "Delete selection" : "Izbriši odabir",
     "No photos or videos in here" : "Ovdje nema fotografija i video zapisa",

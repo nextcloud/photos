@@ -133,6 +133,7 @@ OC.L10N.register(
     "All tags" : "Alle Schlagworte",
     "Create new album from filters" : "Neues Album aus Filtern erstellen",
     "One of the source folders does not exist" : "Einer der Quellordner existiert nicht",
+    "Default" : "Standard",
     "Add to album" : "Zum Album hinzufügen",
     "Delete selection" : "Auswahl löschen",
     "No photos or videos in here" : "Hier gibt es keine Fotos oder Videos.",

@@ -123,6 +123,7 @@ OC.L10N.register(
     "Popular tags" : "Priljubljene oznake",
     "All tags" : "Vse oznake",
     "One of the source folders does not exist" : "Ena od izvornih map ne obstaja",
+    "Default" : "Privzeto",
     "Add to album" : "Dodaj album",
     "Delete selection" : "Izbriši izbor",
     "No photos or videos in here" : "Ni še nobenih slik in posnetkov",

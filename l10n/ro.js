@@ -22,6 +22,7 @@ OC.L10N.register(
     "Unselect all" : "Deselectează tot",
     "Remove from favorites" : "Șterge din favorite",
     "Loading folders…" : "Încărcare dosare…",
+    "Default" : "Implicită",
     "Group" : "Grup",
     "View" : "Vizualizare",
     "Details" : "Detalii",

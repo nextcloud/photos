@@ -132,6 +132,7 @@ OC.L10N.register(
     "All tags" : "Öll merki",
     "Create new album from filters" : "Búa til nýtt albúm út frá síum",
     "One of the source folders does not exist" : "Ein af upprunamöppunum er ekki til",
+    "Default" : "Sjálfgefið",
     "Add to album" : "Bæta í albúm",
     "Delete selection" : "Eyða vali",
     "No photos or videos in here" : "Engar ljósmyndir eða myndskeið hér",

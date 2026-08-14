@@ -129,6 +129,7 @@ OC.L10N.register(
     "All tags" : "Kaikki tunnisteet",
     "Create new album from filters" : "Luo uusi albumi suodattimista",
     "One of the source folders does not exist" : "Jotakin lähdekansiota ei ole olemassa",
+    "Default" : "Oletus",
     "Add to album" : "Lisää albumiin",
     "Delete selection" : "Poista valinta",
     "No photos or videos in here" : "Ei kuvia tai videoita",

@@ -125,6 +125,7 @@ OC.L10N.register(
     "Popular tags" : "Etiquetes populars",
     "All tags" : "Totes les etiquetes",
     "One of the source folders does not exist" : "Una de les carpetes font no existeix",
+    "Default" : "Per defecte",
     "Add to album" : "Afegeix a un àlbum",
     "Delete selection" : "Suprimeix la selecció",
     "No photos or videos in here" : "No hi ha cap foto ni vídeo aquí",
