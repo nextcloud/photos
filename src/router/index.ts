@@ -9,10 +9,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
 import areTagsInstalled from '../services/AreTagsInstalled.js'
-import isMapsInstalled from '../services/IsMapsInstalled.js'
 import isRecognizeInstalled from '../services/IsRecognizeInstalled.js'
 
 const FoldersView = () => import('../views/FoldersView.vue')
+const MapView = () => import('../views/MapView.vue')
+const MemoriesView = () => import('../views/MemoriesView.vue')
 const AlbumsView = () => import('../views/AlbumsView.vue')
 const AlbumContent = () => import('../views/AlbumContent.vue')
 const SharedAlbums = () => import('../views/SharedAlbums.vue')
@@ -31,11 +32,6 @@ const UnassignedFaces = () => import('../views/UnassignedFaces.vue')
 const baseTitle = document.title
 
 Vue.use(Router)
-
-let mapsPath = generateUrl('/apps/maps')
-if (!isMapsInstalled) {
-	mapsPath = generateUrl('/settings/apps/integration/maps')
-}
 
 /**
  * Parse the path of a route : join the elements of the array and return a single string with slashes
@@ -245,11 +241,34 @@ const router = new Router({
 			},
 		},
 		{
+			path: '/map',
+			name: 'map',
+			component: MapView,
+			props: () => ({
+				rootTitle: t('photos', 'Map'),
+			}),
+			meta: {
+				rootTitle: () => {
+					return t('photos', 'Map')
+				},
+			},
+		},
+		{
+			// The map used to be handled by the Maps app, keep the old links working.
 			path: '/maps',
-			name: 'maps',
-			// router-link doesn't support external url, let's force the redirect
-			beforeEnter() {
-				window.open(mapsPath, '_blank')
+			redirect: { name: 'map' },
+		},
+		{
+			path: '/memories',
+			name: 'memories',
+			component: MemoriesView,
+			props: () => ({
+				rootTitle: t('photos', 'Memories'),
+			}),
+			meta: {
+				rootTitle: () => {
+					return t('photos', 'Memories')
+				},
 			},
 		},
 		{

@@ -16,7 +16,8 @@ export type FilterOption<T> = {
 export type PhotosFilter<T> = {
 	id: string
 	icon: string
-	renderOptionComponent: ComponentPublicInstanceConstructor
+	/** Component rendering a selected value, filters without one are not displayed. */
+	renderOptionComponent?: ComponentPublicInstanceConstructor
 	getQuery(value: T[]): string
 	getOptions(): Promise<FilterOption<T>[]>
 }

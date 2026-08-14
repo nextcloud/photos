@@ -39,7 +39,7 @@ const emit = defineEmits<{
 const availableFilters = computed(() => {
 	return filters.filter((filter) => {
 		const filterOptions = props.selectedFilters[filter.id]
-		return filterOptions !== undefined && filterOptions.length !== 0
+		return filter.renderOptionComponent !== undefined && filterOptions !== undefined && filterOptions.length !== 0
 	})
 })
 </script>

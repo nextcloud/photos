@@ -62,6 +62,19 @@
 				</NcActions>
 
 				<NcButton
+					v-if="selectedFileIds.length === 0 && fetchedFileIds.length > 0"
+					:aria-label="t('photos', 'Start slideshow')"
+					data-cy-header-action="slideshow"
+					@click="showSlideshow = true">
+					<template #icon>
+						<Play :size="20" />
+					</template>
+					<template v-if="!isMobile" #default>
+						{{ t('photos', 'Slideshow') }}
+					</template>
+				</NcButton>
+
+				<NcButton
 					v-if="selectedFileIds.length === 0"
 					ref="newAlbumButton"
 					:aria-label="createAlbumButtonLabel"
@@ -187,6 +200,11 @@
 			@close="showAlbumPicker = false">
 			<AlbumPicker @album-picked="addSelectionToAlbum" />
 		</NcModal>
+
+		<PhotoSlideshow
+			v-if="showSlideshow"
+			:photos="timelinePhotos"
+			@close="showSlideshow = false" />
 	</div>
 </template>
 
@@ -208,6 +226,7 @@ import NcModal from '@nextcloud/vue/components/NcModal'
 import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
+import Play from 'vue-material-design-icons/Play.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import PlusBoxMultipleOutline from 'vue-material-design-icons/PlusBoxMultipleOutline.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
@@ -220,6 +239,7 @@ import DateScrubber from '../components/DateScrubber.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import PhotoSlideshow from '../components/PhotoSlideshow.vue'
 import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
 import { useGridDensity } from '../composables/useGridDensity.ts'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.ts'
@@ -238,6 +258,7 @@ export default {
 		PlusBoxMultipleOutline,
 		DownloadOutline,
 		Close,
+		Play,
 		Plus,
 		FolderAlertOutline,
 		NcEmptyContent,
@@ -255,6 +276,7 @@ export default {
 		HeaderNavigation,
 		PhotosSourceLocationsSettings,
 		AlertCircleOutline,
+		PhotoSlideshow,
 		ViewGridOutline,
 	},
 
@@ -329,6 +351,7 @@ export default {
 			showAlbumPicker: false,
 			appContent: document.getElementById('app-content-vue'),
 			showFilters: false,
+			showSlideshow: false,
 			// Month section the user picked in the DateScrubber, forwarded to
 			// FilesListViewer's `scrollToSection`. Empty means no override.
 			scrubberTarget: '',
@@ -338,6 +361,13 @@ export default {
 	computed: {
 		files() {
 			return this.$store.state.files.files
+		},
+
+		// Photos of the timeline that are loaded, in the order they are shown.
+		timelinePhotos() {
+			return this.fetchedFileIds
+				.map((fileId: number) => this.files[fileId])
+				.filter((file) => file !== undefined)
 		},
 
 		// Photo count per month, drives the density ticks of the scrubber.

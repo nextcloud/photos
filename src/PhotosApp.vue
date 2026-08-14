@@ -7,6 +7,17 @@
 	<NcContent app-name="photos">
 		<NcAppNavigation :aria-label="t('photos', 'Photos')">
 			<template v-if="isTimelineView" #search>
+				<NcTextField
+					v-model="searchTerm"
+					class="app-navigation__search"
+					:label="t('photos', 'Search by file name')"
+					:show-trailing-button="searchTerm.length > 0"
+					:trailing-button-label="t('photos', 'Clear search')"
+					@trailing-button-click="searchTerm = ''">
+					<template #icon>
+						<Magnify :size="20" />
+					</template>
+				</NcTextField>
 				<PhotosFiltersInput
 					:selected-filters="selectedFilters"
 					@select-filter="selectFilter" />
@@ -101,6 +112,14 @@
 					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
+					:to="{ name: 'memories' }"
+					:name="t('photos', 'Memories')"
+					data-id-app-nav-item="memories">
+					<template #icon>
+						<TimelapseIcon :size="20" />
+					</template>
+				</NcAppNavigationItem>
+				<NcAppNavigationItem
 					:to="{ name: 'shared' }"
 					:name="t('photos', 'Shared with you')"
 					data-id-app-nav-item="shared">
@@ -129,10 +148,9 @@
 					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
-					v-if="showLocationMenuEntry"
-					:to="{ name: 'maps' }"
+					:to="{ name: 'map' }"
 					:name="t('photos', 'Map')"
-					data-id-app-nav-item="maps">
+					data-id-app-nav-item="map">
 					<template #icon="{ active }">
 						<MapIcon v-if="active" :size="20" />
 						<MapOutline v-else :size="20" />
@@ -178,12 +196,15 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
+import debounce from 'debounce'
 import { storeToRefs } from 'pinia'
+import { ref, watch } from 'vue'
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
 import NcAppNavigation from '@nextcloud/vue/components/NcAppNavigation'
 import NcAppNavigationItem from '@nextcloud/vue/components/NcAppNavigationItem'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcContent from '@nextcloud/vue/components/NcContent'
+import NcTextField from '@nextcloud/vue/components/NcTextField'
 import AccountBoxMultiple from 'vue-material-design-icons/AccountBoxMultiple.vue'
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
 import AccountGroup from 'vue-material-design-icons/AccountGroup.vue'
@@ -199,6 +220,7 @@ import ImageIcon from 'vue-material-design-icons/Image.vue'
 import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import ImageOutline from 'vue-material-design-icons/ImageOutline.vue'
+import Magnify from 'vue-material-design-icons/Magnify.vue'
 import MapIcon from 'vue-material-design-icons/Map.vue'
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
@@ -209,6 +231,7 @@ import Star from 'vue-material-design-icons/Star.vue'
 import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import Tag from 'vue-material-design-icons/Tag.vue'
 import TagOutline from 'vue-material-design-icons/TagOutline.vue'
+import TimelapseIcon from 'vue-material-design-icons/Timelapse.vue'
 import VideoIcon from 'vue-material-design-icons/Video.vue'
 import VideoOutline from 'vue-material-design-icons/VideoOutline.vue'
 import PhotosFiltersDisplay from './components/PhotosFilters/PhotosFiltersDisplay.vue'
@@ -219,9 +242,9 @@ import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'
 import areTagsInstalled from './services/AreTagsInstalled.ts'
 import isAppStoreEnabled from './services/IsAppStoreEnabled.ts'
-import isMapsInstalled from './services/IsMapsInstalled.ts'
 import isRecognizeInstalled from './services/IsRecognizeInstalled.ts'
 import logger from './services/logger.ts'
+import { nameFilterId } from './services/PhotosFilters/nameFilter.ts'
 import useFilterStore from './store/filters.ts'
 
 export default {
@@ -248,8 +271,10 @@ export default {
 		StarOutline,
 		Tag,
 		TagOutline,
+		TimelapseIcon,
 		VideoIcon,
 		VideoOutline,
+		Magnify,
 		MapIcon,
 		MapOutline,
 		MapMarker,
@@ -259,6 +284,7 @@ export default {
 		NcAppNavigationItem,
 		NcButton,
 		NcContent,
+		NcTextField,
 		SettingsDialog,
 		PhotosFiltersInput,
 		PhotosFiltersDisplay,
@@ -268,8 +294,27 @@ export default {
 		const filtersStore = useFilterStore()
 		const { selectedFilters } = storeToRefs(filtersStore)
 
+		const searchTerm = ref('')
+
+		// Debounced so that a search request is not sent on every keystroke.
+		const applySearchTerm = debounce((value: string) => {
+			selectedFilters.value[nameFilterId] = value === '' ? [] : [value]
+		}, 300)
+
+		watch(searchTerm, (value) => applySearchTerm(value.trim()))
+
+		// Keep the field in sync when the filter is cleared somewhere else,
+		// like when leaving the timeline.
+		watch(() => selectedFilters.value[nameFilterId], (values) => {
+			const [value = ''] = values as string[]
+			if (value !== searchTerm.value.trim()) {
+				searchTerm.value = value
+			}
+		})
+
 		return {
 			selectedFilters,
+			searchTerm,
 		}
 	},
 
@@ -279,10 +324,6 @@ export default {
 			imgplaceholder,
 			videoplaceholder,
 			areTagsInstalled,
-
-			showLocationMenuEntry: getCurrentUser() === null
-				? false
-				: (getCurrentUser().isAdmin && isAppStoreEnabled) || isMapsInstalled,
 
 			showPeopleMenuEntry: getCurrentUser() === null
 				? false
@@ -366,5 +407,9 @@ export default {
 
 .app-navigation__footer {
 	padding: calc(var(--default-grid-baseline) * 2);
+}
+
+.app-navigation__search {
+	padding: calc(var(--default-grid-baseline) * 2) calc(var(--default-grid-baseline) * 2) 0;
 }
 </style>

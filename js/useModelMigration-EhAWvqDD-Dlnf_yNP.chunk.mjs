@@ -1,0 +1,2 @@
+import{p as s,V as d,c as i}from"./dav-nbOO4jRw.chunk.mjs";function l(o,p,t=!1){const e=s().proxy;return t&&e.$props[o]===void 0&&e.$props.modelValue===void 0&&d.util.warn(`Missing required prop: "modelValue" or old "${o}"`),i({get(){return e.$props[o]!==void 0?e.$props[o]:e.$props.modelValue},set(r){e.$emit("update:modelValue",r),e.$emit("update:model-value",r),e.$emit(p,r)}})}export{l as u};
+//# sourceMappingURL=useModelMigration-EhAWvqDD-Dlnf_yNP.chunk.mjs.map

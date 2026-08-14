@@ -1,3 +1,8 @@
+/*!
+ * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
 import type { Node } from '@nextcloud/files'
 import type { FoldersNode } from '../services/FolderContent.ts'
 
@@ -6,10 +11,6 @@ import {
 	Permission,
 } from '@nextcloud/files'
 import { getRemoteURL, getRootPath } from '@nextcloud/files/dav'
-/**
- * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
 import { getLanguage } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { isNumber } from './numberUtils.js'
@@ -93,6 +94,17 @@ export function sortCompareFileInfo(fileInfo1: FoldersNode, fileInfo2: FoldersNo
 		: -fileInfo1[key]?.toString()?.localeCompare(fileInfo2[key].toString(), getLanguage()) || -1
 }
 
+/**
+ * Get the URL of the photos preview endpoint for a given file.
+ *
+ * @param file - The file to get a preview of
+ * @param size - Maximum width and height of the preview
+ */
+export function getPreviewUrl(file: Node, size: number): string {
+	const decodedEtag = String(file.attributes.etag).replace(/(&quot;|")/g, '')
+	return generateUrl(`/apps/photos/api/v1/preview/${file.fileid}?etag=${decodedEtag}&x=${size}&y=${size}`)
+}
+
 export type ViewerFileInfo = {
 	fileid?: number
 	basename: string
@@ -139,8 +151,6 @@ export function toViewerFileInfo(file: Node): ViewerFileInfo {
 		source = getRemoteURL() + getRootPath() + filename
 	}
 
-	const decodedEtag = String(file.attributes.etag).replace(/(&quot;|")/g, '')
-
 	return {
 		fileid: file.fileid,
 		basename: file.basename,
@@ -150,7 +160,7 @@ export function toViewerFileInfo(file: Node): ViewerFileInfo {
 		ownerId: file.owner,
 		source,
 		hasPreview: file.attributes.hasPreview,
-		previewUrl: file.attributes.previewUrl ?? generateUrl(`/apps/photos/api/v1/preview/${file.fileid}?etag=${decodedEtag}&x=4096&y=4096`),
+		previewUrl: file.attributes.previewUrl ?? getPreviewUrl(file, 4096),
 		etag: file.attributes.etag,
 		permissions,
 	}

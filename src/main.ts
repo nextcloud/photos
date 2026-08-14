@@ -21,6 +21,9 @@ registerDavProperty('nc:metadata-photos-size')
 registerDavProperty('nc:metadata-files-live-photo')
 registerDavProperty('nc:metadata-blurhash')
 registerDavProperty('nc:metadata-photos-original_date_time')
+// Needed by the map view to place the photos, the timeline does not return the
+// property unless it is registered.
+registerDavProperty('nc:metadata-photos-gps')
 
 Vue.use(PiniaVuePlugin)
 
