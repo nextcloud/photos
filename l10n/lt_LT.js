@@ -133,6 +133,7 @@ OC.L10N.register(
     "All tags" : "Visos žymos",
     "Create new album from filters" : "Sukurti naują albumą naudojant filtrus",
     "One of the source folders does not exist" : "Vienas iš šaltinio aplankų neegzistuoja",
+    "Default" : "Numatytasis",
     "Add to album" : "Pridėti į albumą",
     "Delete selection" : "Ištrinti kas pažymėta",
     "No photos or videos in here" : "Čia nėra jokių nuotraukų ar vaizdo įrašų",

@@ -133,6 +133,7 @@ OC.L10N.register(
     "All tags" : "Tüm etiketler",
     "Create new album from filters" : "Süzgeçlerden yeni albüm oluştur",
     "One of the source folders does not exist" : "Kaynak klasörlerden biri bulunamadı",
+    "Default" : "Varsayılan",
     "Add to album" : "Albüme ekle",
     "Delete selection" : "Seçilmişleri sil",
     "No photos or videos in here" : "Henüz bir fotoğraf ya da görüntü yok",

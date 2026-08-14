@@ -16,6 +16,7 @@ OC.L10N.register(
     "Home" : "სახლი",
     "General" : "ზოგადი",
     "Remove from favorites" : "რჩეულებიდან ამოშლა",
+    "Default" : "საწყისი პარამეტრები",
     "Details" : "დეტალები",
     "Cancel" : "Cancel",
     "Confirm" : "დადასტურება"

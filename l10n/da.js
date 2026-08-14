@@ -131,6 +131,7 @@ OC.L10N.register(
     "All tags" : "Alle tags",
     "Create new album from filters" : "Opret nyt album fra filtre",
     "One of the source folders does not exist" : "En af kildemapperne eksisterer ikke",
+    "Default" : "Standard",
     "Add to album" : "Tilføj til album",
     "Delete selection" : "Slet valgte",
     "No photos or videos in here" : "Ingen fotos eller videoer her",

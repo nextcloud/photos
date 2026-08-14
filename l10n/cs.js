@@ -132,6 +132,7 @@ OC.L10N.register(
     "All tags" : "Všechny štítky",
     "Create new album from filters" : "Vytvořit nové album z filtrů",
     "One of the source folders does not exist" : "Jedna ze zdrojových složek neexistuje",
+    "Default" : "Výchozí",
     "Add to album" : "Přidat do alba",
     "Delete selection" : "Smazat výběr",
     "No photos or videos in here" : "Nenacházejí se zde žádné fotky nebo videa",

@@ -33,6 +33,7 @@ OC.L10N.register(
     "No photos in here" : "Peruna fotografia inoghe",
     "No tags yet" : "Ancora peruna eticheta",
     "Photos with tags will show up here" : "Is fotografias etichetadas ant a aparèssere inoghe",
+    "Default" : "Predefinidu",
     "Delete selection" : "Cantzella seletzione",
     "Tagged photos" : "Fotografias etichetadas",
     "Last week" : "Sa chida passada",

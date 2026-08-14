@@ -122,6 +122,7 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Las fotos con etiquetas se mostrarán aquí",
     "Popular tags" : "Etiquetas populares",
     "All tags" : "Todas las etiquetas",
+    "Default" : "Por omisión",
     "Add to album" : "Añadir al álbum",
     "Delete selection" : "Borrar selección",
     "No photos or videos in here" : "No hay fotos ni videos aquí",

@@ -9,6 +9,7 @@ OC.L10N.register(
     "Favorite" : "Annsachd",
     "Home" : "Dachaigh",
     "General" : "Coitcheann",
+    "Default" : "Bunaiteach",
     "Last week" : "An t-seachdain seo chaidh",
     "Details" : "Mion-fhiosrachadh",
     "Cancel" : "Cancel"

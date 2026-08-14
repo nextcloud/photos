@@ -18,6 +18,7 @@ OC.L10N.register(
     "General" : "General",
     "Remove from favorites" : "Eliminar de favoritos",
     "Loading folders…" : "Cargando carpetas…",
+    "Default" : "Por defecto",
     "Group" : "Grupo",
     "Cancel" : "Cancel",
     "Confirm" : "Confirmar"

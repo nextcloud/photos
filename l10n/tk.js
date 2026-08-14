@@ -10,6 +10,7 @@ OC.L10N.register(
     "Favorite" : "Halaýan",
     "Home" : "Baş sahypa",
     "General" : "Esasy",
+    "Default" : "Bellenen",
     "Details" : "Jikme-jiklikler",
     "Cancel" : "Cancel"
 },

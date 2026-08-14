@@ -16,6 +16,7 @@ OC.L10N.register(
     "General" : "Të përgjithshme",
     "Remove from favorites" : "Remove from favorites",
     "Loading folders…" : "Duke ngarkuar dosjet…",
+    "Default" : "Paraprake",
     "Group" : "Grup",
     "View" : "Shiko",
     "Details" : "Detajet",
