@@ -132,6 +132,7 @@ OC.L10N.register(
     "All tags" : "Сите ознаки",
     "Create new album from filters" : "Креирај нов албум од филтрите",
     "One of the source folders does not exist" : "Една од папките на постои",
+    "Default" : "Предефиниран",
     "Add to album" : "Додади во албум",
     "Delete selection" : "Избриши ги селектираните",
     "No photos or videos in here" : "Овде нема фотографии или видеа",

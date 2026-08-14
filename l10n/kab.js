@@ -25,6 +25,7 @@ OC.L10N.register(
     "General" : "Amatu",
     "Remove from favorites" : "Kkes-it seg ismal",
     "Save." : "Sekles.",
+    "Default" : "Prédéfini(e)",
     "Last week" : "Amalas yezrin",
     "Group" : "Agraw",
     "View" : "Askan",

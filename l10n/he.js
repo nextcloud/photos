@@ -66,6 +66,7 @@ OC.L10N.register(
     "No photos in here" : "אין כאן תמונות",
     "No tags yet" : "אין תגיות עדיין",
     "Photos with tags will show up here" : "תמונות עם תגיות תמיד תופענה כאן",
+    "Default" : "ברירת מחדל",
     "Delete selection" : "מחיקת בחירה",
     "All your media" : "כל המדיה שלך",
     "Shared Albums" : "אלבומים משותפים",

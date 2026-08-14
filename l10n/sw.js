@@ -131,6 +131,7 @@ OC.L10N.register(
     "All tags" : "Lebo zote",
     "Create new album from filters" : "Unda albamu mpya kutoka kwa vichujio",
     "One of the source folders does not exist" : "Moja ya visanduku chanzo havipo",
+    "Default" : "Chaguo msingi",
     "Add to album" : "Ongeza kwenye albamu",
     "Delete selection" : "Futa machaguo",
     "No photos or videos in here" : "Hakuna picha au video hapa",

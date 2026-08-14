@@ -132,6 +132,7 @@ OC.L10N.register(
     "All tags" : "همه برچسب‌ها",
     "Create new album from filters" : "ایجاد آلبوم جدید از فیلترها",
     "One of the source folders does not exist" : "یکی از پوشه‌های مبدأ وجود ندارد",
+    "Default" : "پیش‌فرض",
     "Add to album" : "افزودن به آلبوم",
     "Delete selection" : "حذف انتخاب",
     "No photos or videos in here" : "هیچ عکس یا ویدیویی اینجا نیست",

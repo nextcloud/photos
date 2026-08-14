@@ -132,6 +132,7 @@ OC.L10N.register(
     "All tags" : "Все теги",
     "Create new album from filters" : "Создать новый альбом на основе фильтров",
     "One of the source folders does not exist" : "Одна из исходных папок не существует",
+    "Default" : "По умолчанию",
     "Add to album" : "Добавить в альбом",
     "Delete selection" : "Удалить выбранное",
     "No photos or videos in here" : "Нет ни одной фотографии или видео",

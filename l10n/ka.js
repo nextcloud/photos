@@ -20,6 +20,7 @@ OC.L10N.register(
     "General" : "General",
     "Unselect all" : "Unselect all",
     "Remove from favorites" : "Remove from favorites",
+    "Default" : "Default",
     "Last week" : "Last week",
     "Group" : "Group",
     "View" : "View",

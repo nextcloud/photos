@@ -132,6 +132,7 @@ OC.L10N.register(
     "All tags" : "Всі мітки",
     "Create new album from filters" : "Новий альбом на основі фільтрів",
     "One of the source folders does not exist" : "Один із каталогів призначення відсутній",
+    "Default" : "Типово",
     "Add to album" : "Додати в альбом",
     "Delete selection" : "Вилучити виділення",
     "No photos or videos in here" : "Тут немає фотографій та відео",

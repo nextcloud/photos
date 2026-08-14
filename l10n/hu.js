@@ -124,6 +124,7 @@ OC.L10N.register(
     "Popular tags" : "Népszerű címkék",
     "All tags" : "Összes jelölés",
     "One of the source folders does not exist" : "Az egyik forrás könyvtár nem létezik",
+    "Default" : "Alapértelmezett",
     "Add to album" : "Hozzáadás az albumhoz",
     "Delete selection" : "Kiválasztás törlése",
     "No photos or videos in here" : "Itt nincs fénykép vagy videó",
