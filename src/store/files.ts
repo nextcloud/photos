@@ -1,3 +1,8 @@
+/*!
+ * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
 import type { File, Folder } from '@nextcloud/files'
 import type { PhotosContext } from './index.ts'
 
@@ -5,10 +10,6 @@ import { showError } from '@nextcloud/dialogs'
 import { defaultRootPath } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
-/**
- * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
 import Vue from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
@@ -19,6 +20,7 @@ export type PhotoFile = File & {
 	attributes: {
 		'metadata-photos-original_date_time': number
 		'metadata-photos-size': { width: number, height: number }
+		'metadata-photos-gps'?: { latitude: string, longitude: string, altitude: string }
 		timestamp: number
 		month: string
 		day: string

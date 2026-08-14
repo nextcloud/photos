@@ -12,7 +12,11 @@
 			class="file"
 			:href="file.source"
 			:aria-label="ariaLabel"
-			@click.stop.prevent="emitClick">
+			@click.stop.prevent="onClick"
+			@pointerdown="startLongPress"
+			@pointerup="cancelLongPress"
+			@pointercancel="cancelLongPress"
+			@pointerleave="cancelLongPress">
 
 			<!-- image and loading placeholder -->
 			<div class="file__images">
@@ -130,6 +134,8 @@ export default {
 			errorLarge: false,
 			isMobile: useIsMobile(),
 			videoDuration: '',
+			longPressTimeout: null as null | ReturnType<typeof setTimeout>,
+			longPressed: false,
 		}
 	},
 
@@ -191,6 +197,8 @@ export default {
 		if (this.$refs.imgLarge !== undefined) {
 			(this.$refs.imgLarge as HTMLImageElement).src = ''
 		}
+
+		this.cancelLongPress()
 	},
 
 	methods: {
@@ -208,8 +216,37 @@ export default {
 			await this.getVideoDuration()
 		},
 
-		emitClick() {
+		onClick() {
+			// A long press toggles the selection, the click it ends with must
+			// not open the file on top of it.
+			if (this.longPressed) {
+				this.longPressed = false
+				return
+			}
+
 			this.$emit('click', this.file.fileid)
+		},
+
+		// Long pressing a file selects it, which is easier to hit on a touch
+		// device than the checkbox.
+		startLongPress() {
+			if (!this.allowSelection) {
+				return
+			}
+
+			this.cancelLongPress()
+			this.longPressed = false
+			this.longPressTimeout = setTimeout(() => {
+				this.longPressed = true
+				this.onToggle(!this.selected)
+			}, 500)
+		},
+
+		cancelLongPress() {
+			if (this.longPressTimeout !== null) {
+				clearTimeout(this.longPressTimeout)
+				this.longPressTimeout = null
+			}
 		},
 
 		onLoadSmall() {

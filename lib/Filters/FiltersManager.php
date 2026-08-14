@@ -31,6 +31,7 @@ class FiltersManager {
 		private readonly UserConfigService $userConfigService,
 	) {
 		$this->registerFilter(new DateRangeFilter());
+		$this->registerFilter(new NameFilter());
 		$this->registerFilter(new PlacesFilter());
 	}
 
@@ -46,7 +47,8 @@ class FiltersManager {
 		$filtersOperations = [];
 
 		foreach ($userFilters as $filterId => $filterValue) {
-			if (is_array($filterValue) && count($filterValue) > 0) {
+			// Ignore filters that are not known, they might come from another version of the app.
+			if (is_array($filterValue) && count($filterValue) > 0 && isset($this->registeredFilters[$filterId])) {
 				$filtersOperations[] = $this->registeredFilters[$filterId]->getSearchOperator($filterValue);
 			}
 		}
