@@ -1,0 +1,23 @@
+SPDX-License-Identifier: AGPL-3.0-or-later
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: David Clark
+SPDX-FileCopyrightText: Guillaume Chau <guillaume.b.chau@gmail.com>
+SPDX-FileCopyrightText: Nextcloud GmbH and Nextcloud contributors
+SPDX-FileCopyrightText: atomiks
+
+This file is generated from multiple sources. Included packages:
+- @floating-ui/core
+	- version: 0.3.1
+	- license: MIT
+- @floating-ui/dom
+	- version: 0.1.10
+	- license: MIT
+- @nextcloud/vue
+	- version: 8.40.0
+	- license: AGPL-3.0-or-later
+- floating-vue
+	- version: 1.0.0-beta.19
+	- license: MIT
+- focus-trap
+	- version: 7.8.0
+	- license: MIT

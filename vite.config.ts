@@ -15,7 +15,9 @@ export default createAppConfig({
 	dashboard: join(__dirname, 'src', 'dashboard.js'),
 }, {
 	thirdPartyLicense: false,
-	extractLicenseInformation: true,
+	extractLicenseInformation: {
+		includeSourceMaps: true,
+	},
 	createEmptyCSSEntryPoints: true,
 	emptyOutputDirectory: {
 		// also clear the css directory
