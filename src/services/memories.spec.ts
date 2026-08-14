@@ -6,7 +6,7 @@
 import type { PhotoFile } from '../store/files.ts'
 
 import { describe, expect, test } from 'vitest'
-import { detectTrips } from './memories.ts'
+import { buildYearRecap, detectTrips } from './memories.ts'
 
 const DAY = 24 * 60 * 60
 
@@ -110,5 +110,94 @@ describe('detectTrips', () => {
 
 		expect(detectTrips(photos, 0.25, 3).map((trip) => trip.id)).toEqual(['trip-11-13', 'trip-1-3'])
 		expect(detectTrips(photos, 1, 3).map((trip) => trip.id)).toEqual(['trip-1-13'])
+	})
+})
+
+/**
+ * Build photos evenly spread over a whole year.
+ *
+ * @param year - Year the photos are taken in
+ * @param count - Number of photos to build
+ * @param firstFileId - File id of the first photo
+ */
+function buildPhotosOverYear(year: number, count: number, firstFileId: number = 1): PhotoFile[] {
+	const start = new Date(year, 0, 1).getTime() / 1000
+	const step = (new Date(year + 1, 0, 1).getTime() / 1000 - start) / count
+
+	return Array.from({ length: count }, (_, index) => ({
+		fileid: firstFileId + index,
+		attributes: { timestamp: Math.floor(start + index * step) },
+	} as PhotoFile))
+}
+
+/**
+ * @param photos - Photos to get the months of
+ * @return The months the photos were taken in, starting at 0 for January
+ */
+function getMonths(photos: PhotoFile[]): Set<number> {
+	return new Set(photos.map((photo) => new Date(photo.attributes.timestamp * 1000).getMonth()))
+}
+
+describe('buildYearRecap', () => {
+	test('returns no recap without photos', () => {
+		expect(buildYearRecap([])).toBeNull()
+	})
+
+	test('returns no recap when no year holds enough photos', () => {
+		expect(buildYearRecap(buildPhotosOverYear(2024, 29))).toBeNull()
+	})
+
+	test('recaps the most recent year holding enough photos', () => {
+		const recap = buildYearRecap([
+			...buildPhotosOverYear(2023, 40, 1),
+			...buildPhotosOverYear(2024, 40, 41),
+			...buildPhotosOverYear(2025, 10, 81),
+		])
+
+		expect(recap?.year).toBe(2024)
+		expect(recap?.totalCount).toBe(40)
+	})
+
+	test('caps the number of highlights', () => {
+		const recap = buildYearRecap(buildPhotosOverYear(2024, 400))
+
+		expect(recap?.totalCount).toBe(400)
+		expect(recap?.highlights).toHaveLength(60)
+	})
+
+	test('keeps all the favorites', () => {
+		const photos = buildPhotosOverYear(2024, 400)
+		const favorites = [photos[3], photos[100], photos[399]]
+		for (const photo of favorites) {
+			photo.attributes.favorite = 1
+		}
+
+		const recap = buildYearRecap(photos)
+
+		expect(recap?.highlights).toEqual(expect.arrayContaining(favorites))
+	})
+
+	test('spreads the highlights over the year rather than over the photos', () => {
+		const recap = buildYearRecap([
+			...buildPhotosOverYear(2024, 60, 1),
+			// A single month holding most of the photos of the year.
+			...buildPhotos(new Date(2024, 6, 1).getTime() / 1000, 500, 61),
+		])
+
+		expect(getMonths(recap?.highlights ?? [])).toHaveProperty('size', 12)
+	})
+
+	test('returns the highlights in chronological order', () => {
+		const recap = buildYearRecap(buildPhotosOverYear(2024, 120))
+		const timestamps = (recap?.highlights ?? []).map((photo) => photo.attributes.timestamp)
+
+		expect(timestamps).toEqual([...timestamps].sort((timestamp1, timestamp2) => timestamp1 - timestamp2))
+	})
+
+	test('uses a photo from the middle of the highlights as cover', () => {
+		const recap = buildYearRecap(buildPhotosOverYear(2024, 120))
+		const highlights = recap?.highlights ?? []
+
+		expect(recap?.cover).toBe(highlights[Math.floor(highlights.length / 2)])
 	})
 })

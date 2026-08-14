@@ -25,11 +25,11 @@
 
 		<NcEmptyContent
 			v-if="geotaggedPhotos.length === 0"
-			class="photos-map__empty-content"
+			class="photos-map__empty-content empty-content-with-illustration"
 			:name="loading ? t('photos', 'Looking for geotagged photos…') : t('photos', 'No geotagged photos')"
 			:description="t('photos', 'Photos taken with a device recording its location are shown on this map.')">
 			<template #icon>
-				<MapMarkerOutline />
+				<EmptyIllustration variant="map" />
 			</template>
 		</NcEmptyContent>
 
@@ -70,7 +70,7 @@ import {
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import MapIcon from 'vue-material-design-icons/Map.vue'
-import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
+import EmptyIllustration from '../components/EmptyIllustration.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import { useLoadedPhotos } from '../composables/useLoadedPhotos.ts'
 import isMapsInstalled from '../services/IsMapsInstalled.ts'
@@ -155,6 +155,20 @@ function openPhoto(photo: PhotoFile): void {
 	&__map {
 		flex: 1;
 		min-height: 0;
+	}
+}
+
+// The illustration stands in for the icon, so it must not be held to the icon size.
+.empty-content-with-illustration :deep(.empty-content__icon) {
+	width: 220px;
+	height: auto;
+	opacity: 1;
+
+	svg {
+		width: 100% !important;
+		height: auto !important;
+		max-width: none !important;
+		max-height: none !important;
 	}
 }
 </style>
