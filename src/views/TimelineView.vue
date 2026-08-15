@@ -170,8 +170,12 @@
 					:file="files[file.id]"
 					:allow-selection="true"
 					:selected="selection[file.id] === true"
+					show-actions-menu
 					@click="openViewer"
-					@select-toggled="onFileSelectToggle" />
+					@select-toggled="onFileSelectToggle"
+					@request-add-to-album="onRequestAddToAlbum"
+					@request-share="onRequestShare"
+					@request-delete="onRequestDelete" />
 			</template>
 		</FilesListViewer>
 
@@ -199,7 +203,7 @@
 			v-if="showAlbumPicker"
 			key="albumPicker"
 			label-id="album-picker"
-			@close="showAlbumPicker = false">
+			@close="closeAlbumPicker">
 			<AlbumPicker @album-picked="addSelectionToAlbum" />
 		</NcModal>
 
@@ -213,10 +217,12 @@
 <script lang='ts'>
 import type { PropType } from 'vue'
 import type { Album } from '../store/albums.ts'
+import type { PhotoFile } from '../store/files.ts'
 
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
+import { generateUrl } from '@nextcloud/router'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { storeToRefs } from 'pinia'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
@@ -351,6 +357,9 @@ export default {
 			loadingCount: 0,
 			showAlbumCreationForm: false,
 			showAlbumPicker: false,
+			// Photo the album picker was opened for, when it was opened from a
+			// single photo instead of the selection.
+			fileForAlbumPicker: null as PhotoFile | null,
 			appContent: document.getElementById('app-content-vue'),
 			showFilters: false,
 			showSlideshow: false,
@@ -430,8 +439,37 @@ export default {
 		},
 
 		async addSelectionToAlbum(album: Album) {
+			const fileIdsToAdd = this.fileForAlbumPicker === null
+				? this.selectedFileIds
+				: [this.fileForAlbumPicker.fileid.toString()]
+
+			this.closeAlbumPicker()
+			await this.$store.dispatch('addFilesToCollection', { collectionFileName: album.root + album.path, fileIdsToAdd })
+		},
+
+		closeAlbumPicker() {
 			this.showAlbumPicker = false
-			await this.$store.dispatch('addFilesToCollection', { collectionFileName: album.root + album.path, fileIdsToAdd: this.selectedFileIds })
+			this.fileForAlbumPicker = null
+		},
+
+		onRequestAddToAlbum(file: PhotoFile) {
+			this.fileForAlbumPicker = file
+			this.showAlbumPicker = true
+		},
+
+		// The sharing UI lives in the details sidebar of the Files app, and its
+		// API needs a navigation context which the photos app does not set up,
+		// so the user is sent there with the sidebar already open.
+		onRequestShare(file: PhotoFile) {
+			window.location.href = generateUrl('/apps/files/files/{fileid}?opendetails=true', { fileid: file.fileid })
+		},
+
+		// The photo leaves the timeline right away; the store puts it back if
+		// the deletion fails.
+		async onRequestDelete(file: PhotoFile) {
+			this.onUncheckFiles([file.fileid.toString()])
+			this.fetchedFileIds = this.fetchedFileIds.filter((fileId) => fileId !== file.fileid)
+			await this.$store.dispatch('deleteFiles', [file.fileid])
 		},
 
 		async deleteSelection() {

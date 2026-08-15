@@ -83,6 +83,14 @@
 			:model-value="selected"
 			@update:checked="onToggle" />
 
+		<PhotoActionsMenu
+			v-if="showActionsMenu"
+			class="photo-actions-menu"
+			:file="file"
+			@request-add-to-album="$emit('request-add-to-album', $event)"
+			@request-share="$emit('request-share', $event)"
+			@request-delete="$emit('request-delete', $event)" />
+
 		<Transition name="favorite-pop">
 			<FavoriteIcon v-if="file.attributes.favorite === 1" class="favorite-state" />
 		</Transition>
@@ -100,6 +108,7 @@ import { decode } from 'blurhash'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import PlayCircleOutlineIcon from 'vue-material-design-icons/PlayCircleOutline.vue'
 import FavoriteIcon from './FavoriteIcon.vue'
+import PhotoActionsMenu from './PhotoActionsMenu.vue'
 import logger from '../services/logger.ts'
 import { isCachedPreview } from '../services/PreviewService.js'
 import { getVideoDurationFromUrl } from '../utils/fileUtils.ts'
@@ -109,6 +118,7 @@ export default {
 	components: {
 		FavoriteIcon,
 		NcCheckboxRadioSwitch,
+		PhotoActionsMenu,
 		PlayCircleOutlineIcon,
 	},
 
@@ -128,7 +138,16 @@ export default {
 			type: Boolean,
 			default: true,
 		},
+
+		// Opt-in: the requests emitted by the menu are only meaningful in a
+		// view which handles them.
+		showActionsMenu: {
+			type: Boolean,
+			default: false,
+		},
 	},
+
+	emits: ['click', 'select-toggled', 'request-add-to-album', 'request-share', 'request-delete'],
 
 	data() {
 		return {
@@ -363,7 +382,8 @@ export default {
 			pointer-events: none;
 		}
 
-		.selection-checkbox {
+		.selection-checkbox,
+		.photo-actions-menu {
 			opacity: 1;
 		}
 	}
@@ -443,11 +463,12 @@ export default {
 		}
 	}
 
-	// Reveal checkbox on hover.
+	// Reveal checkbox and actions menu on hover.
 	&:hover,
 	&.selected,
 	&:focus-within {
-		.selection-checkbox {
+		.selection-checkbox,
+		.photo-actions-menu {
 			opacity: 1;
 		}
 
