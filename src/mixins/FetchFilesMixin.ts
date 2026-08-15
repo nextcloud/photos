@@ -4,6 +4,7 @@
  */
 
 import type { File } from '@nextcloud/files'
+import type { PhotoSearchOptions } from '../services/PhotoSearch.js'
 
 import { showError } from '@nextcloud/dialogs'
 import { defaultRootPath } from '@nextcloud/files/dav'
@@ -12,7 +13,7 @@ import { joinPaths } from '@nextcloud/paths'
 import { defineComponent } from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
-import getPhotos, { type PhotoSearchOptions } from '../services/PhotoSearch.js'
+import getPhotos from '../services/PhotoSearch.js'
 import store from '../store/index.js'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
 import AbortControllerMixin from './AbortControllerMixin.js'
