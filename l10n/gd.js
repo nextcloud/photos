@@ -11,6 +11,7 @@ OC.L10N.register(
     "General" : "Coitcheann",
     "Default" : "Bunaiteach",
     "Last week" : "An t-seachdain seo chaidh",
+    "Camera" : "Camara",
     "Details" : "Mion-fhiosrachadh",
     "Cancel" : "Cancel"
 },

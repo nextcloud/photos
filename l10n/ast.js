@@ -117,6 +117,7 @@ OC.L10N.register(
     "No tags yet" : "Nun hai nenguna etiqueta",
     "Photos with tags will show up here" : "Equí apaecen les semeyes etiquetaes",
     "Popular tags" : "Etiquetes populares",
+    "Default" : "Por defeutu",
     "Add to album" : "Amestar al álbum",
     "Delete selection" : "Desaniciar la seleición",
     "No photos or videos in here" : "Equí nun hai nenguna semeya nin nengún videu",

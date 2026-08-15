@@ -2,6 +2,7 @@ OC.L10N.register(
     "photos",
     {
     "Photos" : "Foto",
+    "Clear search" : "Tøm søk",
     "Videos" : "Video",
     "People" : "Folk",
     "Folders" : "Mapper",

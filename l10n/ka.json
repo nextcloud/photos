@@ -1,5 +1,6 @@
 { "translations": {
     "Public link" : "Public link",
+    "Clear search" : "ძებნის გასუფთავება",
     "Videos" : "Videos",
     "People" : "People",
     "Favorites" : "Favorites",
@@ -20,6 +21,7 @@
     "Remove from favorites" : "Remove from favorites",
     "Default" : "Default",
     "Last week" : "Last week",
+    "Camera" : "Camera",
     "Group" : "Group",
     "View" : "View",
     "Details" : "Details",

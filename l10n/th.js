@@ -4,6 +4,7 @@ OC.L10N.register(
     "Public link" : "ลิงก์สาธารณะ",
     "Photos" : "รูปภาพ",
     "Your memories under your control" : "ความทรงจำของคุณ ภายใต้ความควบคุมของคุณ",
+    "Clear search" : "ล้างการค้นหา",
     "All media" : "สื่อทั้งหมด",
     "Videos" : "วิดีโอ",
     "Albums" : "อัลบั้ม",
