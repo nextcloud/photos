@@ -23,6 +23,7 @@ OC.L10N.register(
     "Remove from favorites" : "Șterge din favorite",
     "Loading folders…" : "Încărcare dosare…",
     "Default" : "Implicită",
+    "Camera" : "Camera",
     "Group" : "Grup",
     "View" : "Vizualizare",
     "Details" : "Detalii",

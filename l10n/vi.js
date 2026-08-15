@@ -35,6 +35,7 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Ảnh đã gắn nhãn sẽ được cho thấy trên này",
     "Tagged photos" : "Ảnh gắn nhãn",
     "Last week" : "Tuần trước",
+    "Camera" : "Máy Ảnh",
     "Group" : "Nhóm",
     "Enable squared photos view" : "Bật chế độ xem theo ô",
     "View" : "Xem",

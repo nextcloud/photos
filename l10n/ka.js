@@ -2,6 +2,7 @@ OC.L10N.register(
     "photos",
     {
     "Public link" : "Public link",
+    "Clear search" : "ძებნის გასუფთავება",
     "Videos" : "Videos",
     "People" : "People",
     "Favorites" : "Favorites",
@@ -22,6 +23,7 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Default" : "Default",
     "Last week" : "Last week",
+    "Camera" : "Camera",
     "Group" : "Group",
     "View" : "View",
     "Details" : "Details",
