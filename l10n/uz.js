@@ -2,6 +2,7 @@ OC.L10N.register(
     "photos",
     {
     "Photos" : "Photos",
+    "Clear search" : "Qidiruvni tozalash",
     "Videos" : "Videos",
     "People" : "Shaxs",
     "Favorites" : "Favorites",
@@ -18,7 +19,9 @@ OC.L10N.register(
     "General" : "Umumiy",
     "Remove from favorites" : "Sevimlilardan olib tashlang",
     "Default" : "Standart",
+    "Start slideshow" : "Slayd-shouni boshlash",
     "Last week" : "O`tgan yil",
+    "Camera" : "Kamera",
     "Group" : "Guruh",
     "View" : "Ko'rish",
     "Details" : "Details",

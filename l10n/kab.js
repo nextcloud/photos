@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Public link" : "Aseɣwen azayaz",
     "Photos" : "Tiwlafin",
+    "Clear search" : "Sfeḍ anadi",
     "Videos" : "Tividyutin",
     "Albums" : "Albums",
     "People" : "Imdanen",
@@ -26,7 +27,9 @@ OC.L10N.register(
     "Remove from favorites" : "Kkes-it seg ismal",
     "Save." : "Sekles.",
     "Default" : "Prédéfini(e)",
+    "Slideshow" : "Tigri",
     "Last week" : "Amalas yezrin",
+    "Camera" : "Takamiṛat",
     "Group" : "Agraw",
     "View" : "Askan",
     "Details" : "Talqayt",
