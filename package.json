@@ -85,7 +85,7 @@
     "@nextcloud/browserslist-config": "^3.1.2",
     "@nextcloud/e2e-test-server": "^0.4.0",
     "@nextcloud/eslint-config": "^9.0.0-rc.8",
-    "@nextcloud/stylelint-config": "^3.2.1",
+    "@nextcloud/stylelint-config": "^3.2.2",
     "@nextcloud/vite-config": "^1.7.2",
     "@types/dockerode": "^4.0.1",
     "@vitest/coverage-v8": "^3.2.6",
