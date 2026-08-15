@@ -4,7 +4,7 @@
  */
 
 import { describe, expect, test } from 'vitest'
-import { getExifSummary } from './exif.ts'
+import { getExifSummary, getPhotoLocation, parseCoordinate } from './exif.ts'
 
 /**
  * @param exif - Entries of the EXIF IFD
@@ -51,5 +51,41 @@ describe('getExifSummary', () => {
 
 	test('takes the first sensitivity of cameras reporting several', () => {
 		expect(summarize({ ISOSpeedRatings: [800, 800] })).toEqual({ ISO: '800' })
+	})
+})
+
+describe('getPhotoLocation', () => {
+	test('reads the coordinates written as strings over DAV', () => {
+		expect(getPhotoLocation({ latitude: '43.739255555556', longitude: '5.31345', altitude: '202.33' }))
+			.toEqual({ latitude: 43.739255555556, longitude: 5.31345 })
+	})
+
+	test('returns nothing for a photo without position', () => {
+		expect(getPhotoLocation(undefined)).toBeNull()
+		expect(getPhotoLocation({})).toBeNull()
+	})
+
+	test('returns nothing when only one coordinate can be read', () => {
+		expect(getPhotoLocation({ latitude: '43.7' })).toBeNull()
+		expect(getPhotoLocation({ latitude: '43.7', longitude: 'east' })).toBeNull()
+	})
+})
+
+describe('parseCoordinate', () => {
+	test('reads decimal degrees, spaces included', () => {
+		expect(parseCoordinate(' -5.31 ', 180)).toBe(-5.31)
+		expect(parseCoordinate(0, 90)).toBe(0)
+	})
+
+	test('refuses what is not a coordinate', () => {
+		expect(parseCoordinate('', 90)).toBeNull()
+		expect(parseCoordinate('   ', 90)).toBeNull()
+		expect(parseCoordinate('north', 90)).toBeNull()
+		expect(parseCoordinate(undefined, 90)).toBeNull()
+	})
+
+	test('refuses coordinates which are off world', () => {
+		expect(parseCoordinate('90.1', 90)).toBeNull()
+		expect(parseCoordinate('-180.1', 180)).toBeNull()
 	})
 })

@@ -21,6 +21,13 @@
 				{{ t('photos', 'View metadata') }}
 			</NcActionButton>
 
+			<NcActionButton close-after-click @click="metadataEditShown = true">
+				<template #icon>
+					<PencilOutline :size="20" />
+				</template>
+				{{ t('photos', 'Edit metadata') }}
+			</NcActionButton>
+
 			<NcActionButton close-after-click @click="emit('request-add-to-album', file)">
 				<template #icon>
 					<ImageMultipleOutline :size="20" />
@@ -68,6 +75,11 @@
 			</p>
 		</NcDialog>
 
+		<PhotoMetadataEditDialog
+			v-if="metadataEditShown"
+			:file="file"
+			@close="metadataEditShown = false" />
+
 		<NcDialog
 			v-if="deleteConfirmationShown"
 			:name="t('photos', 'Delete photo')"
@@ -101,8 +113,10 @@ import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import DotsVertical from 'vue-material-design-icons/DotsVertical.vue'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import InformationOutline from 'vue-material-design-icons/InformationOutline.vue'
+import PencilOutline from 'vue-material-design-icons/PencilOutline.vue'
 import ShareVariantOutline from 'vue-material-design-icons/ShareVariantOutline.vue'
 import TrashCanOutline from 'vue-material-design-icons/TrashCanOutline.vue'
+import PhotoMetadataEditDialog from './PhotoMetadataEditDialog.vue'
 import { fetchPhotoExif } from '../services/exifFetcher.ts'
 import { getExifSummary } from '../utils/exif.ts'
 
@@ -121,6 +135,7 @@ const emit = defineEmits<{
 
 const menuOpen = ref(false)
 const metadataShown = ref(false)
+const metadataEditShown = ref(false)
 const deleteConfirmationShown = ref(false)
 
 /** Metadata of the photo, `undefined` while it is being fetched. */

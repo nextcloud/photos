@@ -265,6 +265,25 @@ namespace OCA\DAV\Events {
 		*/
 		public function getServer(): Server;
 	}
+
+	/**
+	* @since 26.0.0
+	*/
+	class SabrePluginAddEvent extends Event {
+
+		/** @var Server */
+		private $server;
+
+		/**
+		* @since 26.0.0
+		*/
+		public function __construct(Server $server);
+
+		/**
+		* @since 26.0.0
+		*/
+		public function getServer(): Server;
+	}
 }
 
 namespace OCA\Viewer\Event {
