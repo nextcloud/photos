@@ -98,7 +98,7 @@
 import type { PropType } from 'vue'
 import type { Collaborator } from '../../store/albums.js'
 
-import AccountGroupOutlineSvg from '@mdi/svg/svg/account-group-outline.svg'
+import AccountGroupOutlineSvg from '@mdi/svg/svg/account-group-outline.svg?raw'
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'

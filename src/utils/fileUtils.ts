@@ -1,8 +1,7 @@
+import type { Node } from '@nextcloud/files'
 import type { FoldersNode } from '../services/FolderContent.ts'
 
 import {
-	type Node,
-
 	FileType,
 	Permission,
 } from '@nextcloud/files'
