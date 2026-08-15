@@ -4,7 +4,7 @@
  */
 
 import { describe, expect, test } from 'vitest'
-import { getExifSummary, getPhotoLocation, parseCoordinate } from './exif.ts'
+import { formatCoordinates, getExifSummary, getPhotoLocation, parseCoordinate } from './exif.ts'
 
 /**
  * @param exif - Entries of the EXIF IFD
@@ -68,6 +68,16 @@ describe('getPhotoLocation', () => {
 	test('returns nothing when only one coordinate can be read', () => {
 		expect(getPhotoLocation({ latitude: '43.7' })).toBeNull()
 		expect(getPhotoLocation({ latitude: '43.7', longitude: 'east' })).toBeNull()
+	})
+})
+
+describe('formatCoordinates', () => {
+	test('rounds the coordinates down to about a meter', () => {
+		expect(formatCoordinates({ latitude: 43.739255555556, longitude: 5.31345 })).toBe('43.73926, 5.31345')
+	})
+
+	test('does not pad the coordinates with zeroes', () => {
+		expect(formatCoordinates({ latitude: -12.5, longitude: 0 })).toBe('-12.5, 0')
 	})
 })
 

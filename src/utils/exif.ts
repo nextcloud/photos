@@ -20,6 +20,8 @@ export type PhotoExif = {
 		longitude?: string
 		altitude?: string
 	}
+	/** Name of the place the coordinates were resolved to, when enabled. */
+	place?: string
 }
 
 /** Position a photo was taken at, in decimal degrees. */
@@ -97,6 +99,19 @@ export function getExifSummary(metadata: PhotoExif): ExifEntry[] {
 		{ label: t('photos', 'Exposure'), value: formatExposureTime(exif.ExposureTime) },
 		{ label: t('photos', 'ISO'), value: formatIsoSpeed(exif.ISOSpeedRatings) },
 	].filter((entry) => entry.value !== '')
+}
+
+/**
+ * Write a position as decimal degrees. Coordinates are stored with the full
+ * precision of the camera, which is far below what a photo is worth showing.
+ *
+ * @param location - Position to display
+ * @return The coordinates, rounded to about a meter
+ */
+export function formatCoordinates(location: PhotoLocation): string {
+	const round = (coordinate: number) => Number(coordinate.toFixed(5))
+
+	return `${round(location.latitude)}, ${round(location.longitude)}`
 }
 
 /**

@@ -44,12 +44,12 @@
 					{{ t('photos', 'Remove location') }}
 				</NcButton>
 
-				<LocationMap
-					v-if="location !== null"
-					class="metadata-editor__location__map"
-					:latitude="location.latitude"
-					:longitude="location.longitude"
-					:name="file.basename" />
+				<div v-if="location !== null" class="metadata-editor__location__map">
+					<LocationMap
+						:latitude="location.latitude"
+						:longitude="location.longitude"
+						:name="file.basename" />
+				</div>
 			</fieldset>
 		</form>
 
@@ -215,10 +215,13 @@ async function save(): Promise<void> {
 		}
 
 		&__map {
-			// The map of the sidebar is inset, here it fills the dialog.
-			margin: 0;
-			width: 100%;
-			height: 200px;
+			// The map is inset for the sidebar it was written for, here it
+			// fills the width of the dialog.
+			:deep(.location-map) {
+				margin: 0;
+				width: 100%;
+				height: 200px;
+			}
 		}
 	}
 }

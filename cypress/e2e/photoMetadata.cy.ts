@@ -31,15 +31,63 @@ function fieldByLabel(label: string) {
 }
 
 /**
- * @param fileName - Name of the photo to edit
+ * @param fileName - Name of the photo to act on
+ * @param action - Name of the entry to pick in the actions menu
+ * @param dialogName - Name of the dialog the entry opens
  */
-function openMetadataEditor(fileName: string) {
+function openPhotoAction(fileName: string, action: string, dialogName: string) {
 	// The menu is revealed by hovering or focusing the photo it belongs to.
 	cy.get(`[aria-label="Open the full size \\"${fileName}\\" image"]`).focus()
 	cy.get(`[aria-label="Actions for ${fileName}"]`).click({ force: true })
-	cy.get('[role="menuitem"]').contains('Edit metadata').click()
-	return cy.contains('h2', 'Edit metadata').should('be.visible')
+	cy.get('[role="menuitem"]').contains(action).click()
+	return cy.contains('h2', dialogName).should('be.visible')
 }
+
+/**
+ * @param fileName - Name of the photo to edit
+ */
+function openMetadataEditor(fileName: string) {
+	return openPhotoAction(fileName, 'Edit metadata', 'Edit metadata')
+}
+
+/**
+ * @param label - Name of the metadata entry
+ */
+function entryByName(label: string) {
+	return cy.contains('dt', label).siblings('dd')
+}
+
+describe('Show the metadata of a photo', () => {
+	before(() => {
+		setupPhotosTests()
+			.then((setupInfo) => {
+				alice = setupInfo.alice
+			})
+	})
+
+	beforeEach(() => {
+		cy.login(alice)
+		cy.visit('/apps/photos')
+		openPhotoAction(photo, 'View metadata', 'Photo metadata')
+	})
+
+	it('Shows the place and the coordinates of the photo', () => {
+		entryByName('Place').should('have.text', 'Lauris')
+		entryByName('Location').should('have.text', '43.73926, 5.31345')
+	})
+
+	it('Shows the photo on a map', () => {
+		// A map carries no accessible name of its own, its marker names the
+		// place it points at.
+		cy.get('.leaflet-container').should('be.visible')
+		cy.get('.leaflet-tooltip').should('have.text', 'Lauris')
+	})
+
+	it('Shows the camera the photo was taken with', () => {
+		// The manufacturer is left out, the model already carries it.
+		entryByName('Camera').should('have.text', 'ONEPLUS A5000')
+	})
+})
 
 describe('Edit the metadata of a photo', () => {
 	before(() => {

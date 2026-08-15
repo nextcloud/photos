@@ -52,28 +52,10 @@
 			</NcActionButton>
 		</NcActions>
 
-		<NcDialog
+		<PhotoMetadataDialog
 			v-if="metadataShown"
-			:name="t('photos', 'Photo metadata')"
-			@update:open="metadataShown = false">
-			<NcLoadingIcon v-if="exifEntries === undefined" :size="32" class="photo-actions__loading" />
-
-			<dl v-else class="photo-actions__metadata">
-				<div class="photo-actions__metadata__entry">
-					<dt>{{ t('photos', 'Filename') }}</dt>
-					<dd>{{ file.basename }}</dd>
-				</div>
-				<div v-for="entry in exifEntries" :key="entry.label" class="photo-actions__metadata__entry">
-					<dt>{{ entry.label }}</dt>
-					<dd>{{ entry.value }}</dd>
-				</div>
-			</dl>
-
-			<!-- EXIF is optional, so an empty summary is a normal outcome rather than an error. -->
-			<p v-if="exifEntries?.length === 0" class="photo-actions__metadata__empty">
-				{{ t('photos', 'This photo carries no camera metadata.') }}
-			</p>
-		</NcDialog>
+			:file="file"
+			@close="metadataShown = false" />
 
 		<PhotoMetadataEditDialog
 			v-if="metadataEditShown"
@@ -100,25 +82,22 @@
 
 <script lang="ts" setup>
 import type { PhotoFile } from '../store/files.ts'
-import type { ExifEntry } from '../utils/exif.ts'
 
 import { translate as t } from '@nextcloud/l10n'
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
-import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import DotsVertical from 'vue-material-design-icons/DotsVertical.vue'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import InformationOutline from 'vue-material-design-icons/InformationOutline.vue'
 import PencilOutline from 'vue-material-design-icons/PencilOutline.vue'
 import ShareVariantOutline from 'vue-material-design-icons/ShareVariantOutline.vue'
 import TrashCanOutline from 'vue-material-design-icons/TrashCanOutline.vue'
+import PhotoMetadataDialog from './PhotoMetadataDialog.vue'
 import PhotoMetadataEditDialog from './PhotoMetadataEditDialog.vue'
-import { fetchPhotoExif } from '../services/exifFetcher.ts'
-import { getExifSummary } from '../utils/exif.ts'
 
 const props = defineProps<{
 	/** Photo the actions apply to. */
@@ -137,20 +116,6 @@ const menuOpen = ref(false)
 const metadataShown = ref(false)
 const metadataEditShown = ref(false)
 const deleteConfirmationShown = ref(false)
-
-/** Metadata of the photo, `undefined` while it is being fetched. */
-const exifEntries = ref<ExifEntry[] | undefined>()
-
-// The EXIF properties are not part of the file listings, so they are only
-// fetched once the user asks for them.
-watch(metadataShown, async (shown) => {
-	if (!shown) {
-		return
-	}
-
-	exifEntries.value = undefined
-	exifEntries.value = getExifSummary(await fetchPhotoExif(props.file))
-})
 
 function confirmDelete(): void {
 	deleteConfirmationShown.value = false
@@ -181,35 +146,6 @@ function confirmDelete(): void {
 		&:hover,
 		&:focus-visible {
 			background-color: rgba(0, 0, 0, 0.6);
-		}
-	}
-
-	&__loading {
-		margin: calc(var(--default-grid-baseline) * 4) auto;
-	}
-
-	&__metadata {
-		margin: 0;
-
-		&__entry {
-			display: flex;
-			align-items: baseline;
-			justify-content: space-between;
-			gap: calc(var(--default-grid-baseline) * 4);
-		}
-
-		dt {
-			color: var(--color-text-maxcontrast);
-		}
-
-		dd {
-			margin: 0;
-			font-variant-numeric: tabular-nums;
-			word-break: break-all;
-		}
-
-		&__empty {
-			color: var(--color-text-maxcontrast);
 		}
 	}
 }
