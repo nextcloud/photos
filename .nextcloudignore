@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: 2026 Nextcloud GmbH
+# SPDX-License-Identifier: CC0-1.0
+/.git
+/.github
+/.tx
+/cypress
+/doc
+/node_modules
+/patches
+/screenshots
+/src
+/tests
+/vendor-bin
+/__tests__
+/.gitattributes
+/.gitignore
+/.l10nignore
+/.nextcloudignore
+/.php-cs-fixer.dist.php
+/cypress.config.ts
+/eslint.config.js
+/eslint-suppressions.json
+/krankerl.toml
+/playwright.config.ts
+/psalm.xml
+/rector.php
+/stylelint.config.cjs
+/tsconfig.json
+/vite.config.ts
+/vitest.config.ts

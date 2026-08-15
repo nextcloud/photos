@@ -1,6 +1,6 @@
 {
   "src/components/Albums/CollaboratorsSelectionForm.vue": {
-    "@nextcloud/vue/no-deprecated-props": {
+    "@nextcloud/no-deprecated-library-props": {
       "count": 1
     }
   }

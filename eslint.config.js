@@ -4,9 +4,11 @@
  */
 
 import { recommendedVue2 } from '@nextcloud/eslint-config'
+import { defineConfig } from 'eslint/config'
 
-export default [
+export default defineConfig([
 	...recommendedVue2,
+
 	{
 		ignores: [
 			'js/',
@@ -19,4 +21,4 @@ export default [
 			'jsdoc/require-param-description': 'off',
 		},
 	},
-]
+])
