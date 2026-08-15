@@ -117,7 +117,7 @@ class OriginalDateTimeMetadataProvider implements IEventListener {
 			$metadata->setInt(self::METADATA_KEY, $mtime, true);
 			return;
 		}
-		
-		$metadata->setInt(self::METADATA_KEY,  $node->getUploadTime(), true);		
+
+		$metadata->setInt(self::METADATA_KEY, $node->getUploadTime(), true);
 	}
 }
