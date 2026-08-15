@@ -126,6 +126,7 @@ OC.L10N.register(
     "Popular tags" : "وسوم شائعة",
     "All tags" : "كل الوسوم",
     "One of the source folders does not exist" : "أحد المجلدات المصدرية غير موجود",
+    "Default" : "التلقائي",
     "Add to album" : "إضِف إلى ألبوم",
     "Delete selection" : "حذف ما تمّ تحديده",
     "No photos or videos in here" : "لا توجد أي صور أو مقاطع فيديو هنا.",
