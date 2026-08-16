@@ -52,14 +52,6 @@ return [
 				'path' => '',
 			]
 		],
-		['name' => 'page#index', 'url' => '/folders/{path}', 'verb' => 'GET', 'postfix' => 'folders',
-			'requirements' => [
-				'path' => '.*',
-			],
-			'defaults' => [
-				'path' => '',
-			]
-		],
 		['name' => 'page#index', 'url' => '/faces/{path}', 'verb' => 'GET', 'postfix' => 'faces',
 			'requirements' => [
 				'path' => '.*',
@@ -72,6 +64,9 @@ return [
 			'requirements' => [
 				'path' => '.*',
 			],
+			'defaults' => [
+				'path' => '',
+			]
 		],
 		['name' => 'page#index', 'url' => '/tags/{path}', 'verb' => 'GET', 'postfix' => 'tags',
 			'requirements' => [
