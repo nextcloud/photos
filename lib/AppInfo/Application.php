@@ -74,9 +74,9 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(AddContentSecurityPolicyEvent::class, CSPListener::class);
 
 		// Metadata
-		$context->registerEventListener(MetadataLiveEvent::class, ExifMetadataProvider::class);
-		$context->registerEventListener(MetadataBackgroundEvent::class, ExifMetadataProvider::class);
-		// SizeMetadataProvider optionally depends on ExifMetadataProvider, so it has to be registered afterwards
+		$context->registerEventListener(MetadataLiveEvent::class, ExifMetadataProvider::class, 10);
+		$context->registerEventListener(MetadataBackgroundEvent::class, ExifMetadataProvider::class, 10);
+		// SizeMetadataProvider depends on ExifMetadataProvider, which is why it's given a higher priority (above)
 		$context->registerEventListener(MetadataLiveEvent::class, SizeMetadataProvider::class);
 		$context->registerEventListener(MetadataBackgroundEvent::class, SizeMetadataProvider::class);
 		$context->registerEventListener(MetadataLiveEvent::class, OriginalDateTimeMetadataProvider::class);
