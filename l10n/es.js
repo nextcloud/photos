@@ -63,6 +63,10 @@ OC.L10N.register(
     "Select image {imageName}" : "Seleccionar imagen {imageName}",
     "Open the \"{name}\" folder" : "Abrir la carpeta \"{name}\"",
     "Go back" : "Ir atrás",
+    "Add to album" : "Añadir al álbum",
+    "Share" : "Compartir",
+    "Delete" : "Eliminar",
+    "Cancel" : "Cancelar",
     "Select a custom date range" : "Seleccione un rango de fechas personalizado",
     "Select a date range" : "Seleccione un rango de fechas",
     "Date range" : "Rango de fechas",
@@ -136,7 +140,6 @@ OC.L10N.register(
     "Default" : "Predeterminado",
     "Start slideshow" : "Iniciar presentación de diapositivas",
     "Slideshow" : "Presentación de diapositivas",
-    "Add to album" : "Añadir al álbum",
     "Delete selection" : "Borrar la selección",
     "No photos or videos in here" : "No hay fotos ni videos aquí",
     "Unassigned faces" : "Caras sin asignar",
@@ -182,7 +185,6 @@ OC.L10N.register(
     "View" : "Ver",
     "Choose the folder where photos and albums are uploaded to." : "Elija la carpeta donde se cargan las fotos y los álbumes.",
     "Details" : "Detalles",
-    "Cancel" : "Cancelar",
     "Confirm" : "Confirmar"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

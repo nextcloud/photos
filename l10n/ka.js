@@ -17,6 +17,10 @@ OC.L10N.register(
     "An error occurred" : "An error occurred",
     "Favorite" : "Favorite",
     "Go back" : "Go back",
+    "Share" : "გაზიარება",
+    "Delete" : "წაშლა",
+    "Filename" : "Filename",
+    "Cancel" : "Cancel",
     "Home" : "მთავარი",
     "General" : "General",
     "Unselect all" : "Unselect all",
@@ -27,7 +31,6 @@ OC.L10N.register(
     "Group" : "Group",
     "View" : "View",
     "Details" : "Details",
-    "Cancel" : "Cancel",
     "Confirm" : "Confirm"
 },
 "nplurals=2; plural=(n!=1);");

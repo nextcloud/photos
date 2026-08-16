@@ -63,6 +63,11 @@ OC.L10N.register(
     "Select image {imageName}" : "Velg bilde {imageName}",
     "Open the \"{name}\" folder" : "Åpne {name}-mappen",
     "Go back" : "Gå tilbake",
+    "Add to album" : "Legg til i album",
+    "Share" : "Dele",
+    "Delete" : "Delete",
+    "Filename" : "Filnavn",
+    "Cancel" : "Cancel",
     "Dates" : "Datoer",
     "Jump to specific date in list" : "Gå til spesifikk dato i listen",
     "Jump to {date}" : "Gå til {date}",
@@ -127,7 +132,6 @@ OC.L10N.register(
     "Default" : "Forvalg",
     "Start slideshow" : "Start lysbildefremvisning",
     "Slideshow" : "Lysbildefremvisning",
-    "Add to album" : "Legg til i album",
     "Delete selection" : "Slett utvalg",
     "No photos or videos in here" : "Ingen bilder eller videoer her",
     "Unassigned faces" : "Ikke-tilordnede ansikter",
@@ -156,7 +160,6 @@ OC.L10N.register(
     "View" : "Vis",
     "Choose the folder where photos and albums are uploaded to." : "Velg mappen der bilder og album lastes opp.",
     "Details" : "Detaljer",
-    "Cancel" : "Cancel",
     "Confirm" : "Bekreft"
 },
 "nplurals=2; plural=(n != 1);");

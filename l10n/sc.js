@@ -25,6 +25,10 @@ OC.L10N.register(
     "Favorite" : "Preferidu",
     "Open the full size \"{name}\" image" : "Aberi s'immàgine \"{name}\" a mannària prena",
     "Go back" : "In segus",
+    "Share" : "Cumpartzidura",
+    "Delete" : "Delete",
+    "Filename" : "Nùmene de s'archìviu",
+    "Cancel" : "Cancel",
     "All folders" : "Totu is cartellas",
     "Home" : "Pàgina printzipale",
     "Unselect all" : "Deseletziona totu",
@@ -44,7 +48,6 @@ OC.L10N.register(
     "Enable squared photos view" : "Ativa sa visualizatzione a fotos cuadradas",
     "View" : "Visualiza",
     "Details" : "Detàllios",
-    "Cancel" : "Cancel",
     "Confirm" : "Cunfirma"
 },
 "nplurals=2; plural=(n != 1);");

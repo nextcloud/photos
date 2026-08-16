@@ -63,6 +63,11 @@ OC.L10N.register(
     "Select image {imageName}" : "Välj fotot {imageName}",
     "Open the \"{name}\" folder" : "Öppna mappen ”{name}”",
     "Go back" : "Gå tillbaka",
+    "Add to album" : "Lägg till i album",
+    "Share" : "Resurs",
+    "Delete" : "Ta bort",
+    "Filename" : "Filnamn",
+    "Cancel" : "Avbryt",
     "Select a custom date range" : "Välj ett anpassat datumintervall",
     "Select a date range" : "Välj ett datumintervall",
     "Date range" : "Datumintervall",
@@ -137,7 +142,6 @@ OC.L10N.register(
     "Default" : "Standard",
     "Start slideshow" : "Starta bildspel",
     "Slideshow" : "Bildspel",
-    "Add to album" : "Lägg till i album",
     "Delete selection" : "Ta bort urvalet",
     "No photos or videos in here" : "Det finns inga foton eller videor här",
     "Unassigned faces" : "Otilldelade ansikten",
@@ -187,7 +191,6 @@ OC.L10N.register(
     "Choose the folder where photos and albums are uploaded to." : "Välj mappen som foton och album ska laddas upp till.",
     "Loading folders …" : "Läser in mappar …",
     "Details" : "Information",
-    "Cancel" : "Avbryt",
     "Confirm" : "Bekräfta"
 },
 "nplurals=2; plural=(n != 1);");

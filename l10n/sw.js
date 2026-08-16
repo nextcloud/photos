@@ -63,6 +63,11 @@ OC.L10N.register(
     "Select image {imageName}" : "Chagua taswaira {imageName}",
     "Open the \"{name}\" folder" : "Fungua \"{name}\" kisanduku",
     "Go back" : "Rudi nyuma",
+    "Add to album" : "Ongeza kwenye albamu",
+    "Share" : "Shiriki",
+    "Delete" : "Futa",
+    "Filename" : "Jina la faili",
+    "Cancel" : "Ghairi",
     "Select a custom date range" : "Chagua kipindi maalum cha tarehe",
     "Select a date range" : "Chagua safu za tarehe",
     "Date range" : "Safu za tarehe",
@@ -135,7 +140,6 @@ OC.L10N.register(
     "One of the source folders does not exist" : "Moja ya visanduku chanzo havipo",
     "Default" : "Chaguo msingi",
     "Start slideshow" : "Anza onyesho la slaidi",
-    "Add to album" : "Ongeza kwenye albamu",
     "Delete selection" : "Futa machaguo",
     "No photos or videos in here" : "Hakuna picha au video hapa",
     "Unassigned faces" : "Nyuso ambazo hazijakabidhiwa",
@@ -181,7 +185,6 @@ OC.L10N.register(
     "View" : "Angalia",
     "Choose the folder where photos and albums are uploaded to." : "Chagua folda ambapo picha na albamu hupakiwa",
     "Details" : "Maelezo ya kina",
-    "Cancel" : "Ghairi",
     "Confirm" : "Thibitisha"
 },
 "nplurals=2; plural=(n != 1);");

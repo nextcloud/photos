@@ -12,6 +12,10 @@ OC.L10N.register(
     "Shared by" : "Shpërndarë nga",
     "Favorite" : "I/E Preferuar",
     "Go back" : "Shko prapa",
+    "Share" : "Ndaj",
+    "Delete" : "Delete",
+    "Filename" : "Emri i skedarit",
+    "Cancel" : "Cancel",
     "Home" : "Kryefaqja",
     "General" : "Të përgjithshme",
     "Remove from favorites" : "Remove from favorites",
@@ -20,7 +24,6 @@ OC.L10N.register(
     "Group" : "Grup",
     "View" : "Shiko",
     "Details" : "Detajet",
-    "Cancel" : "Cancel",
     "Confirm" : "Konfirmo"
 },
 "nplurals=2; plural=(n != 1);");

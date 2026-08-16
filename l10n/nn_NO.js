@@ -14,13 +14,16 @@ OC.L10N.register(
     "Shared by" : "Delt av",
     "An error occurred" : "Det oppstod ein feil.",
     "Favorite" : "Favoritt",
+    "Share" : "Del",
+    "Delete" : "Delete",
+    "Filename" : "Filnamn",
+    "Cancel" : "Cancel",
     "Home" : "Heim",
     "Upload folder" : "Last opp mappe",
     "General" : "Generelt",
     "Remove from favorites" : "Remove from favorites",
     "Group" : "Gruppe",
     "View" : "Vis",
-    "Details" : "Detaljar",
-    "Cancel" : "Cancel"
+    "Details" : "Detaljar"
 },
 "nplurals=2; plural=(n != 1);");

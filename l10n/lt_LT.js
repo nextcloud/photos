@@ -65,6 +65,11 @@ OC.L10N.register(
     "Select image {imageName}" : "Pasirinkti {imageName} paveikslėlį ",
     "Open the \"{name}\" folder" : "Atidaryti \"{name}\" aplanką",
     "Go back" : "Grįžti",
+    "Add to album" : "Pridėti į albumą",
+    "Share" : "Bendrinti",
+    "Delete" : "Ištrinti",
+    "Filename" : "Failo pavadinimas",
+    "Cancel" : "Atsisakyti",
     "Select a custom date range" : "Pasirinkti norimą datų rėžį",
     "Select a date range" : "Pasirinkti datų rėžį",
     "Date range" : "Datos rėžis",
@@ -139,7 +144,6 @@ OC.L10N.register(
     "Default" : "Numatytasis",
     "Start slideshow" : "Pradėti skaidrių rodymą",
     "Slideshow" : "Skaidrių rodymas",
-    "Add to album" : "Pridėti į albumą",
     "Delete selection" : "Ištrinti kas pažymėta",
     "No photos or videos in here" : "Čia nėra jokių nuotraukų ar vaizdo įrašų",
     "Unassigned faces" : "Nepriskirti veidai",
@@ -189,7 +193,6 @@ OC.L10N.register(
     "Choose the folder where photos and albums are uploaded to." : "Pasirinkti aplanką, į kurį įkeliamos nuotraukos ir albumai.",
     "Loading folders …" : "Įkeliami aplankai  …",
     "Details" : "Išsamiau",
-    "Cancel" : "Atsisakyti",
     "Confirm" : "Patvirtinti"
 },
 "nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);");

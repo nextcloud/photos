@@ -63,6 +63,11 @@ OC.L10N.register(
     "Select image {imageName}" : "رەسىم {imageName} Select نى تاللاڭ",
     "Open the \"{name}\" folder" : "\"{name}\" ھۆججەت قىسقۇچىنى ئېچىڭ",
     "Go back" : "قايتىڭ",
+    "Add to album" : "ئالبۇمغا قوشۇڭ",
+    "Share" : "ھەمبەھىرلەش",
+    "Delete" : "Delete",
+    "Filename" : "ھۆججەت ئىسمى",
+    "Cancel" : "ۋاز كەچ",
     "Select a custom date range" : "ئىختىيارى چېسلا دائىرىسىنى تاللاڭ",
     "Select a date range" : "ھۆججەت دائىرىسىنى تاللاڭ",
     "Date range" : "چېسلا دائىرىسى",
@@ -137,7 +142,6 @@ OC.L10N.register(
     "Default" : "كۆڭۈلدىكى",
     "Start slideshow" : "تام تەسۋىرنى باشلاڭ",
     "Slideshow" : "تام تەسۋىر",
-    "Add to album" : "ئالبۇمغا قوشۇڭ",
     "Delete selection" : "تاللاشنى ئۆچۈرۈڭ",
     "No photos or videos in here" : "بۇ يەردە رەسىم ياكى سىن يوق",
     "Unassigned faces" : "ئىمزاسىز چىراي",
@@ -186,7 +190,6 @@ OC.L10N.register(
     "View" : "كۆرۈش",
     "Choose the folder where photos and albums are uploaded to." : "رەسىم ۋە پىلاستىنكىلار يۈكلەنگەن ھۆججەت قىسقۇچنى تاللاڭ.",
     "Details" : "تەپسىلاتى",
-    "Cancel" : "ۋاز كەچ",
     "Confirm" : "جەزملەشتۈرۈڭ"
 },
 "nplurals=2; plural=(n != 1);");

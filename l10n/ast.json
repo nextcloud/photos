@@ -11,6 +11,7 @@
     "Folders" : "Carpetes",
     "Favorites" : "Favoritos",
     "On this day" : "Tal día como güei",
+    "Memories" : "Recuerdos",
     "Shared with you" : "Compartióse contigo",
     "Tags" : "Etiquetes",
     "Places" : "Llugares",
@@ -56,6 +57,8 @@
     "Select image {imageName}" : "Seleicionar la imaxe «{imageName}»",
     "Open the \"{name}\" folder" : "Abrir la carpeta «{name}»",
     "Go back" : "Dir p'atrás",
+    "Add to album" : "Amestar al álbum",
+    "Cancel" : "Cancel",
     "Dates" : "Dates",
     "Jump to specific date in list" : "Saltar a una data específica de la llista",
     "Jump to {date}" : "Saltar a «{date}»",
@@ -116,7 +119,7 @@
     "Photos with tags will show up here" : "Equí apaecen les semeyes etiquetaes",
     "Popular tags" : "Etiquetes populares",
     "Default" : "Por defeutu",
-    "Add to album" : "Amestar al álbum",
+    "Start slideshow" : "Aniciar la proyeición",
     "Delete selection" : "Desaniciar la seleición",
     "No photos or videos in here" : "Equí nun hai nenguna semeya nin nengún videu",
     "Unassigned faces" : "Cares ensin asignar",
@@ -134,6 +137,9 @@
     "Last week" : "La selmana anterior",
     "{startDate} to {endDate}" : "{startDate} hasta'l {endDate}",
     "Could not load photos folder" : "Nun se puen cargar la carpeta de semeyes",
+    "Camera" : "Cámara",
+    "Focal length" : "Llongura focal",
+    "Exposure" : "Esposición",
     "Group" : "Grupu",
     "Remove {collaboratorLabel} from the collaborators list" : "Quitar «{collaboratorLabel}» de la llista de collaboradores",
     "Enable squared photos view" : "Activar la vista de semeyes en cuadráu",
@@ -142,7 +148,6 @@
     "View" : "Ver",
     "Choose the folder where photos and albums are uploaded to." : "Escueyu la carpeta a onde se xuben les semeyes y los álbumes.",
     "Details" : "Detalles",
-    "Cancel" : "Cancel",
     "Confirm" : "Confirmar"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

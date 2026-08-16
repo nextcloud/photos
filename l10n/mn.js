@@ -63,6 +63,11 @@ OC.L10N.register(
     "Select image {imageName}" : "{imageName} зураг сонгох",
     "Open the \"{name}\" folder" : "\"{name}\" хавтас нээх",
     "Go back" : "Буцах",
+    "Add to album" : "Цомогт нэмэх",
+    "Share" : "–¢“Ø–≥—ç—ç—Ö",
+    "Delete" : "–£—Å—Ç–≥–∞—Ö",
+    "Filename" : "–§–∞–π–ª—ã–Ω –Ω—ç—Ä",
+    "Cancel" : "Cancel",
     "Select a custom date range" : "Өөрийн огнооны хүрээ сонгох",
     "Select a date range" : "Огнооны хүрээ сонгох",
     "Date range" : "Огнооны хүрээ",
@@ -136,7 +141,6 @@ OC.L10N.register(
     "One of the source folders does not exist" : "Эх хавтаснуудын нэг байхгүй байна",
     "Default" : "Өгөгдмөл",
     "Start slideshow" : "Слайд шоу эхлүүлэх",
-    "Add to album" : "Цомогт нэмэх",
     "Delete selection" : "Сонголтыг устгах",
     "No photos or videos in here" : "Энд зураг эсвэл видео байхгүй",
     "Unassigned faces" : "Хуваарилаагүй царайнууд",
@@ -185,7 +189,6 @@ OC.L10N.register(
     "Choose the folder where photos and albums are uploaded to." : "Зураг болон цомгуудыг оруулах хавтсыг сонгоно уу.",
     "Loading folders …" : "Хавтасуудыг ачааллаж байна …",
     "Details" : "Дэлгэрэнгүй",
-    "Cancel" : "Cancel",
     "Confirm" : "Батлах"
 },
 "nplurals=2; plural=(n != 1);");

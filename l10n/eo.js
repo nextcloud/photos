@@ -16,6 +16,8 @@ OC.L10N.register(
     "An error occurred" : "Eraro okazis",
     "Favorite" : "Pliŝatati",
     "Go back" : "Reveni",
+    "Delete" : "Delete",
+    "Cancel" : "Cancel",
     "Add folder" : "Aldoni dosierujon",
     "Home" : "Hejmo",
     "General" : "Ĝenerala",
@@ -25,7 +27,6 @@ OC.L10N.register(
     "Group" : "Grupo",
     "View" : "Vidi",
     "Details" : "Detaloj",
-    "Cancel" : "Cancel",
     "Confirm" : "Konfirmi"
 },
 "nplurals=2; plural=(n != 1);");
