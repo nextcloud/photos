@@ -164,10 +164,10 @@ class AlbumMapper {
 			$this->connection->commit();
 		} catch (\Throwable $e) {
 			$this->connection->rollBack();
- 			throw $e;
- 		}
- 	}
-			
+			throw $e;
+		}
+	}
+
 	/**
 	 * @return AlbumFile[]
 	 */
@@ -453,6 +453,7 @@ class AlbumMapper {
 		} catch (\Throwable $e) {
 			$this->connection->rollBack();
 			throw $e;
+		}
 	}
 
 	/**
