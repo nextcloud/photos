@@ -63,6 +63,11 @@ OC.L10N.register(
     "Select image {imageName}" : "Wybierz obraz {imageName}",
     "Open the \"{name}\" folder" : "Otwórz katalog „{name}”.",
     "Go back" : "Wstecz",
+    "Add to album" : "Dodaj do albumu",
+    "Share" : "Udostępnij",
+    "Delete" : "Usuń",
+    "Filename" : "Nazwa pliku",
+    "Cancel" : "Anuluj",
     "Select a custom date range" : "Wybierz niestandardowy zakres dat",
     "Select a date range" : "Wybierz zakres dat",
     "Date range" : "Zakres dat",
@@ -136,7 +141,6 @@ OC.L10N.register(
     "One of the source folders does not exist" : "Jeden z katalogów źródłowych nie istnieje",
     "Default" : "Domyślny",
     "Slideshow" : "Pokaz slajdów",
-    "Add to album" : "Dodaj do albumu",
     "Delete selection" : "Usuń wybrane",
     "No photos or videos in here" : "Nie ma tu zdjęć ani filmów",
     "Unassigned faces" : "Nieprzypisane twarze",
@@ -186,7 +190,6 @@ OC.L10N.register(
     "Choose the folder where photos and albums are uploaded to." : "Wybierz katalog, do którego przesyłane są zdjęcia i albumy.",
     "Loading folders …" : "Wczytywanie folderów…",
     "Details" : "Szczegóły",
-    "Cancel" : "Anuluj",
     "Confirm" : "Potwierdź"
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");

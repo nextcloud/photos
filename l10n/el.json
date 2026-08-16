@@ -12,6 +12,7 @@
     "Folders" : "Φάκελοι",
     "Favorites" : "Αγαπημένα",
     "On this day" : "Αυτή τη μέρα",
+    "Memories" : "Αναμνήσεις",
     "Shared with you" : "Διαμοιρασμένα μαζί σας",
     "Tags" : "Ετικέτες",
     "Places" : "Τοποθεσίες",
@@ -60,6 +61,9 @@
     "Select image {imageName}" : "Επιλογή εικόνας {imageName}",
     "Open the \"{name}\" folder" : "Άνοιγμα του φακέλου \"{name}\"",
     "Go back" : "Επιστροφή",
+    "Add to album" : "Προσθήκη στο άλμπουμ",
+    "Share" : "Κοινή χρήση",
+    "Cancel" : "Ακύρωση",
     "Select a custom date range" : "Επιλογή προσαρμοσμένου εύρους ημερομηνιών",
     "Select a date range" : "Επιλογή εύρους ημερομηνιών",
     "Date range" : "Εύρος ημερομηνιών",
@@ -133,7 +137,7 @@
     "One of the source folders does not exist" : "Ένας από τους φακέλους πηγής δεν υπάρχει",
     "Default" : "Προεπιλογή",
     "Start slideshow" : "Έναρξη παρουσίασης",
-    "Add to album" : "Προσθήκη στο άλμπουμ",
+    "Slideshow" : "Παρουσίαση",
     "Delete selection" : "Διαγραφή επιλογής",
     "No photos or videos in here" : "Δεν υπάρχουν φωτογραφίες ή βίντεο εδώ",
     "Unassigned faces" : "Μη αντιστοιχισμένα πρόσωπα",
@@ -172,6 +176,7 @@
     "Failed to set favorite state for {fileName}" : "Αποτυχία ρύθμισης κατάστασης αγαπημένου για {fileName}",
     "Could not load photos folder" : "Δεν ήταν δυνατή η φόρτωση του φακέλου φωτογραφιών",
     "Camera" : "Κάμερα",
+    "Focal length" : "Εστιακό μήκος",
     "Exposure" : "Εκθεση",
     "Group" : "Ομάδα",
     "Remove {collaboratorLabel} from the collaborators list" : "Αφαίρεση {collaboratorLabel} από τη λίστα συνεργατών",
@@ -182,7 +187,6 @@
     "Choose the folder where photos and albums are uploaded to." : "Επιλέξτε τον φάκελο στον οποίο μεταφορτώνονται φωτογραφίες και άλμπουμ.",
     "Loading folders …" : "Φόρτωση φακέλων …",
     "Details" : "Λεπτομέρειες",
-    "Cancel" : "Ακύρωση",
     "Confirm" : "Επιβεβαίωση"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -42,6 +42,11 @@
     "An error occurred" : "오류가 발생함",
     "Favorite" : "즐겨찾기",
     "Go back" : "뒤로 가기",
+    "Add to album" : "앨범에 추가",
+    "Share" : "공유하기",
+    "Delete" : "Delete",
+    "Filename" : "파일 이름",
+    "Cancel" : "취소",
     "Dates" : "날짜",
     "All folders" : "모든 폴더",
     "Add folder" : "폴더 추가",
@@ -58,7 +63,6 @@
     "Loading folders…" : "폴더 불러오는 중…",
     "Default" : "디폴트",
     "Slideshow" : "슬라이드쇼",
-    "Add to album" : "앨범에 추가",
     "Delete selection" : "선택 항목 삭제",
     "Unassigned faces" : "지정되지 않은 얼굴",
     "Last week" : "저번 주",
@@ -69,7 +73,6 @@
     "Remove {collaboratorLabel} from the collaborators list" : "공동 작업자 목록에서 {collaboratorLabel} 제거",
     "View" : "보기",
     "Details" : "세부사항",
-    "Cancel" : "취소",
     "Confirm" : "확인"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

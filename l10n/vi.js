@@ -23,6 +23,10 @@ OC.L10N.register(
     "Favorite" : "Ưa thích",
     "Open the full size \"{name}\" image" : "Mở kích thước đủ của ảnh \"{name}\"",
     "Go back" : "Quay lại",
+    "Share" : "Chia sẻ",
+    "Delete" : "Delete",
+    "Filename" : "Tên tập tin",
+    "Cancel" : "Cancel",
     "All folders" : "All folders",
     "Home" : "Trang chủ",
     "General" : "Cài đặt chung",
@@ -40,7 +44,6 @@ OC.L10N.register(
     "Enable squared photos view" : "Bật chế độ xem theo ô",
     "View" : "Xem",
     "Details" : "Chi tiết",
-    "Cancel" : "Cancel",
     "Confirm" : "Xác nhận"
 },
 "nplurals=1; plural=0;");

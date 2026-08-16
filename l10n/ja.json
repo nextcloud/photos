@@ -61,6 +61,11 @@
     "Select image {imageName}" : "画像 {imageName} を選択",
     "Open the \"{name}\" folder" : "\"{name}\"フォルダーを開く",
     "Go back" : "戻る",
+    "Add to album" : "アルバムに追加",
+    "Share" : "共有",
+    "Delete" : "削除",
+    "Filename" : "ファイル名",
+    "Cancel" : "キャンセル",
     "Select a custom date range" : "カスタム日付範囲の選択",
     "Select a date range" : "日付範囲を選択",
     "Date range" : "日付範囲",
@@ -133,7 +138,6 @@
     "Create new album from filters" : "フィルターから新しいアルバムを作成する",
     "One of the source folders does not exist" : "ソースフォルダーの1つが存在しません",
     "Default" : "デフォルト",
-    "Add to album" : "アルバムに追加",
     "Delete selection" : "選択した項目を削除",
     "No photos or videos in here" : "ここには写真も動画もありません",
     "Unassigned faces" : "未割り当ての顔",
@@ -181,7 +185,6 @@
     "Choose the folder where photos and albums are uploaded to." : "写真やアルバムをアップロードするフォルダを選択します。",
     "Loading folders …" : "フォルダを読み込み中…",
     "Details" : "詳細",
-    "Cancel" : "キャンセル",
     "Confirm" : "承認"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

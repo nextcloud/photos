@@ -63,6 +63,11 @@ OC.L10N.register(
     "Select image {imageName}" : "{imageName} kép kiválasztása",
     "Open the \"{name}\" folder" : "A \"{name}\" könyvtár megnyitása",
     "Go back" : "Visszalépés",
+    "Add to album" : "Hozzáadás az albumhoz",
+    "Share" : "Megosztás",
+    "Delete" : "Delete",
+    "Filename" : "Fájlnév",
+    "Cancel" : "Cancel",
     "Dates" : "Dátumok",
     "Jump to specific date in list" : "Ugrás a listán egy megadott dátumhoz",
     "Jump to {date}" : "Ugrás ekorra {date}",
@@ -129,7 +134,6 @@ OC.L10N.register(
     "Default" : "Alapértelmezett",
     "Start slideshow" : "Diavetítés indítása",
     "Slideshow" : "Diavetítés",
-    "Add to album" : "Hozzáadás az albumhoz",
     "Delete selection" : "Kiválasztás törlése",
     "No photos or videos in here" : "Itt nincs fénykép vagy videó",
     "Unassigned faces" : "Nem hozzárendelt arcok",
@@ -158,7 +162,6 @@ OC.L10N.register(
     "View" : "Megtekintés",
     "Choose the folder where photos and albums are uploaded to." : "Válassz másik könyvtárat a fotók és albumok feltöltése számára.",
     "Details" : "Részletek",
-    "Cancel" : "Cancel",
     "Confirm" : "Megerősítés"
 },
 "nplurals=2; plural=(n != 1);");

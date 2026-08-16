@@ -62,6 +62,11 @@ OC.L10N.register(
     "Select image {imageName}" : "Veldu mynd {imageName}",
     "Open the \"{name}\" folder" : "Opna \"{name}\" möppuna",
     "Go back" : "Fara til baka",
+    "Add to album" : "Bæta í albúm",
+    "Share" : "Deila",
+    "Delete" : "Delete",
+    "Filename" : "Skráarheiti",
+    "Cancel" : "Cancel",
     "Select a custom date range" : "Velja sérsniðið svið dagsetninga",
     "Select a date range" : "Velja svið dagsetninga",
     "Date range" : "Tímabil",
@@ -134,7 +139,6 @@ OC.L10N.register(
     "Create new album from filters" : "Búa til nýtt albúm út frá síum",
     "One of the source folders does not exist" : "Ein af upprunamöppunum er ekki til",
     "Default" : "Sjálfgefið",
-    "Add to album" : "Bæta í albúm",
     "Delete selection" : "Eyða vali",
     "No photos or videos in here" : "Engar ljósmyndir eða myndskeið hér",
     "Unassigned faces" : "Óúthlutuð andlit",
@@ -184,7 +188,6 @@ OC.L10N.register(
     "Choose the folder where photos and albums are uploaded to." : "Veldu möppurnar þangað sem ljósmyndir og myndskeið eru send.",
     "Loading folders …" : "Hleð inn möppum …",
     "Details" : "Nánar",
-    "Cancel" : "Cancel",
     "Confirm" : "Staðfesta"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

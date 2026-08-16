@@ -63,6 +63,11 @@ OC.L10N.register(
     "Select image {imageName}" : "Pilih gambar {imageName}",
     "Open the \"{name}\" folder" : "Buka folder \"{name}\"",
     "Go back" : "Kembali",
+    "Add to album" : "Tambahkan album",
+    "Share" : "Bagikan",
+    "Delete" : "Delete",
+    "Filename" : "Nama file",
+    "Cancel" : "Cancel",
     "Select a custom date range" : "Pilih rentang tanggal kustom",
     "Select a date range" : "Pilih rentang tanggal",
     "Date range" : "Rentang tanggal",
@@ -136,7 +141,6 @@ OC.L10N.register(
     "One of the source folders does not exist" : "Salah satu folder sumber tidak ada",
     "Default" : "Default",
     "Start slideshow" : "Mulai slideshow",
-    "Add to album" : "Tambahkan album",
     "Delete selection" : "Hapus pilihan",
     "No photos or videos in here" : "Tidak ada foto atau video di sini",
     "Unassigned faces" : "Wajah yang belum ditetapkan",
@@ -183,7 +187,6 @@ OC.L10N.register(
     "View" : "Tampilan",
     "Choose the folder where photos and albums are uploaded to." : "Pilih folder tempat foto dan album diunggah.",
     "Details" : "Detail",
-    "Cancel" : "Cancel",
     "Confirm" : "Konfirmasi"
 },
 "nplurals=1; plural=0;");

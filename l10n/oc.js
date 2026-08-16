@@ -17,6 +17,10 @@ OC.L10N.register(
     "Favorite" : "Favorit",
     "Open the full size \"{name}\" image" : "Dobrir l’imatge {name} en talha originala",
     "Go back" : "Revenir en arrière",
+    "Share" : "Partejar",
+    "Delete" : "Delete",
+    "Filename" : "Nom de fichièr",
+    "Cancel" : "Cancel",
     "General" : "Generals",
     "Rename person" : "Renomenar la persona",
     "Remove from favorites" : "Tirar dels favorits",
@@ -32,7 +36,6 @@ OC.L10N.register(
     "Enable squared photos view" : "Activar la vista amb fòtos carrat",
     "View" : "Vista",
     "Details" : "Detalhs",
-    "Cancel" : "Cancel",
     "Confirm" : "Confirmar"
 },
 "nplurals=2; plural=(n > 1);");

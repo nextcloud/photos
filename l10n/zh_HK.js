@@ -64,6 +64,12 @@ OC.L10N.register(
     "Select image {imageName}" : "選擇圖像 {imageName}",
     "Open the \"{name}\" folder" : "開啟「{name}」資料夾",
     "Go back" : "返回",
+    "Add to album" : "添加至相簿",
+    "Share" : "分享",
+    "Delete" : "刪除",
+    "Filename" : "檔案名",
+    "Delete photo" : "刪除相片",
+    "Cancel" : "取消",
     "Select a custom date range" : "選擇自訂日期範圍",
     "Select a date range" : "選取日期範圍",
     "Date range" : "日期範圍",
@@ -138,7 +144,6 @@ OC.L10N.register(
     "Default" : "默認",
     "Start slideshow" : "開始放映幻燈片",
     "Slideshow" : "圖片播放",
-    "Add to album" : "添加至相簿",
     "Delete selection" : "刪除所選",
     "No photos or videos in here" : "此處沒有照片或視像",
     "Unassigned faces" : "未指派的臉孔",
@@ -188,7 +193,6 @@ OC.L10N.register(
     "Choose the folder where photos and albums are uploaded to." : "選擇照片與相簿上傳到的資料夾。",
     "Loading folders …" : "載入資料夾 …",
     "Details" : "細節",
-    "Cancel" : "取消",
     "Confirm" : "確認"
 },
 "nplurals=1; plural=0;");

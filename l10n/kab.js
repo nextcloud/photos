@@ -19,6 +19,10 @@ OC.L10N.register(
     "An error occurred" : "Teḍra-d tuccḍa",
     "Favorite" : "Menyif",
     "Go back" : "Tuɣalin",
+    "Share" : "Bḍu",
+    "Delete" : "Kkes",
+    "Filename" : "Isem n ufaylu",
+    "Cancel" : "Semmet",
     "Pick folder" : "Fren akaram",
     "All folders" : "Akk ikaramen",
     "Add folder" : "Rnu akaram",
@@ -33,7 +37,6 @@ OC.L10N.register(
     "Group" : "Agraw",
     "View" : "Askan",
     "Details" : "Talqayt",
-    "Cancel" : "Semmet",
     "Confirm" : "Sergeg"
 },
 "nplurals=2; plural=(n != 1);");

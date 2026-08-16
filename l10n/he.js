@@ -52,6 +52,10 @@ OC.L10N.register(
     "Select image {imageName}" : "לבחור את התמונה {imageName}",
     "Open the \"{name}\" folder" : "לפתוח את התיקייה \"{name}\"",
     "Go back" : "חזרה",
+    "Share" : "שתף",
+    "Delete" : "Delete",
+    "Filename" : "שם קובץ",
+    "Cancel" : "Cancel",
     "Dates" : "תאריכים",
     "Jump to specific date in list" : "לקפוץ ליום מסויים ברשימה",
     "Jump to {date}" : "לקפוץ ל{date}",
@@ -77,7 +81,6 @@ OC.L10N.register(
     "Enable squared photos view" : "הפעלת תצוגת תמונות מרובעות",
     "View" : "צפייה",
     "Details" : "פרטים",
-    "Cancel" : "Cancel",
     "Confirm" : "אישור"
 },
 "nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");

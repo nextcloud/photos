@@ -13,13 +13,15 @@ OC.L10N.register(
     "Shared by" : "Compartido por",
     "Favorite" : "Hacer favorito",
     "Go back" : "Regresar",
+    "Delete" : "Delete",
+    "Filename" : "Nombre de archivo",
+    "Cancel" : "Cancel",
     "Dates" : "Fechas",
     "Home" : "Inicio",
     "General" : "General",
     "Remove from favorites" : "Eliminar de favoritos",
     "Loading folders…" : "Cargando carpetas…",
     "Details" : "Detalles",
-    "Cancel" : "Cancel",
     "Confirm" : "Confirmar"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

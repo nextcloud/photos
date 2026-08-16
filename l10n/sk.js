@@ -63,6 +63,11 @@ OC.L10N.register(
     "Select image {imageName}" : "Vybrať obrázok {imageName}",
     "Open the \"{name}\" folder" : "Otvoriť adresár \"{name}\"",
     "Go back" : "Ísť späť",
+    "Add to album" : "Pridať do albumu",
+    "Share" : "Zdieľaný priečinok",
+    "Delete" : "Delete",
+    "Filename" : "Názov súboru",
+    "Cancel" : "Cancel",
     "Select a custom date range" : "Vyberte vlastný rozsah dátumov",
     "Select a date range" : "Vyberte časové obdobie",
     "Date range" : "Rozsah dátumov",
@@ -137,7 +142,6 @@ OC.L10N.register(
     "Default" : "Predvolené",
     "Start slideshow" : "Spustiť prehliadku",
     "Slideshow" : "Prehliadka",
-    "Add to album" : "Pridať do albumu",
     "Delete selection" : "Vymazať výber",
     "No photos or videos in here" : "Nie sú tu žiadne obrázky ani videá",
     "Unassigned faces" : "Nepriradené tváre",
@@ -187,7 +191,6 @@ OC.L10N.register(
     "Choose the folder where photos and albums are uploaded to." : "Vyberte priečinok, do ktorého sa budú nahrávať fotografie a albumy.",
     "Loading folders …" : "Načítavanie priečinkov …",
     "Details" : "Podrobnosti",
-    "Cancel" : "Cancel",
     "Confirm" : "Potvrdiť"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

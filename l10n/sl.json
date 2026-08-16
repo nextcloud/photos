@@ -60,6 +60,11 @@
     "Select image {imageName}" : "Izbor slike {imageName}",
     "Open the \"{name}\" folder" : "Odpri \"{name}\" mapo",
     "Go back" : "Skoči nazaj",
+    "Add to album" : "Dodaj album",
+    "Share" : "Souporaba",
+    "Delete" : "Delete",
+    "Filename" : "Ime datoteke",
+    "Cancel" : "Prekliči",
     "Dates" : "Datumi",
     "Jump to specific date in list" : "Skoči na specifičen dan na seznamu",
     "Jump to {date}" : "Skoči na {date}",
@@ -125,7 +130,6 @@
     "One of the source folders does not exist" : "Ena od izvornih map ne obstaja",
     "Default" : "Privzeto",
     "Slideshow" : "Projekcija",
-    "Add to album" : "Dodaj album",
     "Delete selection" : "Izbriši izbor",
     "No photos or videos in here" : "Ni še nobenih slik in posnetkov",
     "Unassigned faces" : "Nedodeljeni obrazi",
@@ -161,7 +165,6 @@
     "View" : "Poglej",
     "Choose the folder where photos and albums are uploaded to." : "Izberi mapo, kamor se bodo naložile fotografije in albumi",
     "Details" : "Podrobnosti",
-    "Cancel" : "Prekliči",
     "Confirm" : "Potrdi"
 },"pluralForm" :"nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);"
 }

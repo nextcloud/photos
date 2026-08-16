@@ -7,12 +7,15 @@ OC.L10N.register(
     "Back" : "Air ais",
     "Save" : "Sàbhail",
     "Favorite" : "Annsachd",
+    "Share" : "Co-roinn",
+    "Delete" : "Delete",
+    "Filename" : "Ainm an fhaidhle",
+    "Cancel" : "Cancel",
     "Home" : "Dachaigh",
     "General" : "Coitcheann",
     "Default" : "Bunaiteach",
     "Last week" : "An t-seachdain seo chaidh",
     "Camera" : "Camara",
-    "Details" : "Mion-fhiosrachadh",
-    "Cancel" : "Cancel"
+    "Details" : "Mion-fhiosrachadh"
 },
 "nplurals=4; plural=(n==1 || n==11) ? 0 : (n==2 || n==12) ? 1 : (n > 2 && n < 20) ? 2 : 3;");

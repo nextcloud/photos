@@ -64,6 +64,11 @@ OC.L10N.register(
     "Select image {imageName}" : "Hautatu irudia {imageName}",
     "Open the \"{name}\" folder" : "Ireki \"{name}\" karpeta",
     "Go back" : "Atzera",
+    "Add to album" : "Gehitu albumera",
+    "Share" : "Partekatu",
+    "Delete" : "Delete",
+    "Filename" : "Fitxategi-izena",
+    "Cancel" : "Cancel",
     "Select a custom date range" : "Hautatu data tarte pertsonalizatu bat",
     "Select a date range" : "Hautatu data tarte bat",
     "Date range" : "Data tartea",
@@ -138,7 +143,6 @@ OC.L10N.register(
     "Default" : "Lehenetsia",
     "Start slideshow" : "Hasi diapositiba-aurkezpena",
     "Slideshow" : "Diapositiba-aurkezpena",
-    "Add to album" : "Gehitu albumera",
     "Delete selection" : "Ezabatu hautatutakoak",
     "No photos or videos in here" : "Ez dago argazki edo bideorik hemen",
     "Unassigned faces" : "Esleitu gabeko aurpegiak",
@@ -188,7 +192,6 @@ OC.L10N.register(
     "Choose the folder where photos and albums are uploaded to." : "Aukeratu zein karpetatara igoko diren argazki eta albumak.",
     "Loading folders …" : "Karpetak kargatzen …",
     "Details" : "Xehetasunak",
-    "Cancel" : "Cancel",
     "Confirm" : "Berretsi"
 },
 "nplurals=2; plural=(n != 1);");

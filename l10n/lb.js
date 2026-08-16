@@ -10,12 +10,13 @@ OC.L10N.register(
     "Shared by" : "Gedeelt vun",
     "Favorite" : "Favorit",
     "Go back" : "Zeréckgoen",
+    "Delete" : "Delete",
+    "Cancel" : "Cancel",
     "Home" : "Doheem",
     "General" : "Allgemeng",
     "Remove from favorites" : "Remove from favorites",
     "Group" : "Grupp",
     "Details" : "Detailer",
-    "Cancel" : "Cancel",
     "Confirm" : "Konfirméieren"
 },
 "nplurals=2; plural=(n != 1);");

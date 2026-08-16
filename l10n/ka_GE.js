@@ -12,13 +12,14 @@ OC.L10N.register(
     "Shared by" : "გამზიარებელი",
     "Favorite" : "რჩეული",
     "Go back" : "უკან დაბრუნება",
+    "Delete" : "Delete",
+    "Cancel" : "Cancel",
     "Dates" : "თარიღები",
     "Home" : "სახლი",
     "General" : "ზოგადი",
     "Remove from favorites" : "რჩეულებიდან ამოშლა",
     "Default" : "საწყისი პარამეტრები",
     "Details" : "დეტალები",
-    "Cancel" : "Cancel",
     "Confirm" : "დადასტურება"
 },
 "nplurals=2; plural=(n!=1);");

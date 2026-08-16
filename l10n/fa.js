@@ -63,6 +63,12 @@ OC.L10N.register(
     "Select image {imageName}" : "انتخاب تصویر {imageName}",
     "Open the \"{name}\" folder" : "باز کردن پوشه \"{name}\"",
     "Go back" : "بازگشت",
+    "Add to album" : "افزودن به آلبوم",
+    "Share" : "اشتراک‌گذاری",
+    "Delete" : "حذف",
+    "Filename" : "نام فایل",
+    "Delete photo" : "حذف عکس",
+    "Cancel" : "لغو",
     "Select a custom date range" : "انتخاب بازه زمانی دلخواه",
     "Select a date range" : "انتخاب یک بازه زمانی",
     "Date range" : "بازه زمانی",
@@ -137,7 +143,6 @@ OC.L10N.register(
     "Default" : "پیش‌فرض",
     "Start slideshow" : "شروع نمایش اسلاید",
     "Slideshow" : "نمایش اسلاید",
-    "Add to album" : "افزودن به آلبوم",
     "Delete selection" : "حذف انتخاب",
     "No photos or videos in here" : "هیچ عکس یا ویدیویی اینجا نیست",
     "Unassigned faces" : "چهره‌های تخصیص‌نیافته",
@@ -187,7 +192,6 @@ OC.L10N.register(
     "Choose the folder where photos and albums are uploaded to." : "پوشه‌ای را انتخاب کنید که عکس‌ها و آلبوم‌ها در آن بارگذاری شوند.",
     "Loading folders …" : "در حال بارگیری پوشه‌ها...",
     "Details" : "جزئیات",
-    "Cancel" : "لغو",
     "Confirm" : "تأیید"
 },
 "nplurals=2; plural=(n > 1);");
