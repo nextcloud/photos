@@ -63,6 +63,11 @@ OC.L10N.register(
     "Select image {imageName}" : "Selecteer afbeelding {imageName}",
     "Open the \"{name}\" folder" : "Open de \"{name}\" map",
     "Go back" : "Ga terug",
+    "Add to album" : "Toevoegen aan album",
+    "Share" : "Delen",
+    "Delete" : "Verwijderen",
+    "Filename" : "Bestandsnaam",
+    "Cancel" : "Annuleren",
     "Select a custom date range" : "Selecteer een aangepast datumbereik",
     "Select a date range" : "Datumbereik selecteren",
     "Date range" : "Datumbereik",
@@ -137,7 +142,6 @@ OC.L10N.register(
     "Default" : "Standaard",
     "Start slideshow" : "Start diavoorstelling",
     "Slideshow" : "Diavoorstelling",
-    "Add to album" : "Toevoegen aan album",
     "Delete selection" : "Verwijder selectie",
     "No photos or videos in here" : "Geen foto's of video's hier",
     "Unassigned faces" : "Niet toegewezen gezichten",
@@ -187,7 +191,6 @@ OC.L10N.register(
     "Choose the folder where photos and albums are uploaded to." : "Kies de mappen waar foto's en video's naar geüpload worden.",
     "Loading folders …" : "Mappen laden ...",
     "Details" : "Details",
-    "Cancel" : "Annuleren",
     "Confirm" : "Bevestigen"
 },
 "nplurals=2; plural=(n != 1);");

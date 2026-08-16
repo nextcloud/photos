@@ -33,6 +33,9 @@ OC.L10N.register(
     "Favorite" : "รายการโปรด",
     "Open the full size \"{name}\" image" : "เปิดรูปภาพขนาดเต็ม \"{name}\"",
     "Go back" : "กลับไป",
+    "Delete" : "Delete",
+    "Filename" : "ชื่อไฟล์",
+    "Cancel" : "Cancel",
     "Home" : "หน้าหลัก",
     "General" : "ทั่วไป",
     "Remove from favorites" : "เอาออกจากรายการโปรด",
@@ -48,7 +51,6 @@ OC.L10N.register(
     "Enable squared photos view" : "เปิดมุมมองรูปภาพสี่เหลี่ยม",
     "View" : "มุมมอง",
     "Details" : "รายละเอียด",
-    "Cancel" : "Cancel",
     "Confirm" : "ยืนยัน"
 },
 "nplurals=1; plural=0;");

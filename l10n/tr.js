@@ -65,6 +65,12 @@ OC.L10N.register(
     "Select image {imageName}" : "{imageName} görselini seç",
     "Open the \"{name}\" folder" : "\"{name}\" klasörünü aç",
     "Go back" : "Geri dön",
+    "Add to album" : "Albüme ekle",
+    "Share" : "Paylaşma",
+    "Delete" : "Sil",
+    "Filename" : "Dosya adı",
+    "Delete photo" : "Fotoğrafı sil",
+    "Cancel" : "İptal",
     "Select a custom date range" : "Bir özel tarih aralığı seçin",
     "Select a date range" : "Bir tarih aralığı seçin",
     "Date range" : "Tarih aralığı",
@@ -139,7 +145,6 @@ OC.L10N.register(
     "Default" : "Varsayılan",
     "Start slideshow" : "Slayt sunumunu başlat",
     "Slideshow" : "Slayt sunumu",
-    "Add to album" : "Albüme ekle",
     "Delete selection" : "Seçilmişleri sil",
     "No photos or videos in here" : "Henüz bir fotoğraf ya da görüntü yok",
     "Unassigned faces" : "İlişkilendirilmemiş yüzler",
@@ -189,7 +194,6 @@ OC.L10N.register(
     "Choose the folder where photos and albums are uploaded to." : "Fotoğraf ve albümlerin yükleneceği klasörü seçin.",
     "Loading folders …" : "Klasörler yükleniyor…",
     "Details" : "Ayrıntılar",
-    "Cancel" : "İptal",
     "Confirm" : "Onayla"
 },
 "nplurals=2; plural=(n > 1);");

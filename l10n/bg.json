@@ -56,6 +56,8 @@
     "Open the full size \"{name}\" image" : "Отваряне на изображението\"{name}“  в пълен размер ",
     "Select image {imageName}" : "Избор на изображение {imageName}",
     "Go back" : "Назад",
+    "Add to album" : "Добави към албум",
+    "Cancel" : "Cancel",
     "Add to {destination}" : "Добавяне към  {destination}",
     "There are no photos or videos yet!" : "Все още няма снимки или видеоклипове!",
     "_{years} year ago_::_{years} years ago_" : ["Преди {years} години","Преди {years} години"],
@@ -106,7 +108,6 @@
     "Default" : "По подразбиране",
     "Start slideshow" : "Стартиране на слайдшоуто",
     "Slideshow" : "Слайдшоу",
-    "Add to album" : "Добави към албум",
     "Delete selection" : "Изтриите селекцията",
     "No photos or videos in here" : "Тук няма снимки или видеоклипове",
     "Failed to fetch collection." : "Неуспешно извличане на колекция.",
@@ -123,13 +124,13 @@
     "Last week" : "Миналата седмица",
     "{startDate} to {endDate}" : "{startDate} до {endDate}",
     "Camera" : "Камера",
+    "Focal length" : "Фокусно разстояние",
     "Exposure" : "Експонация",
     "Group" : "Група",
     "Remove {collaboratorLabel} from the collaborators list" : "Премахване на {collaboratorLabel} от списъка със сътрудници",
     "Enable squared photos view" : "Активирайте изгледа на снимки в квадратче",
     "View" : "Изглед",
     "Details" : "Подробности",
-    "Cancel" : "Cancel",
     "Confirm" : "Потвърдете"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

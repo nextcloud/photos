@@ -15,6 +15,9 @@ OC.L10N.register(
     "Favorite" : "Hacer favorito",
     "Open the full size \"{name}\" image" : "Abrir la imagen \"{name}\" en tamaño completo",
     "Go back" : "Regresar",
+    "Delete" : "Delete",
+    "Filename" : "Nombre de archivo",
+    "Cancel" : "Cancel",
     "Dates" : "Fechas",
     "Home" : "Inicio",
     "General" : "General",
@@ -25,7 +28,6 @@ OC.L10N.register(
     "Tagged photos" : "Fotos etiquetadas",
     "Group" : "Grupo",
     "Details" : "Detalles",
-    "Cancel" : "Cancel",
     "Confirm" : "Confirmar"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

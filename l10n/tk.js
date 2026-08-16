@@ -8,10 +8,13 @@ OC.L10N.register(
     "Back" : "Yzyna",
     "Save" : "Saklamak",
     "Favorite" : "Halaýan",
+    "Share" : "Paýlaş",
+    "Delete" : "Delete",
+    "Filename" : "Faýlyň ady",
+    "Cancel" : "Cancel",
     "Home" : "Baş sahypa",
     "General" : "Esasy",
     "Default" : "Bellenen",
-    "Details" : "Jikme-jiklikler",
-    "Cancel" : "Cancel"
+    "Details" : "Jikme-jiklikler"
 },
 "nplurals=2; plural=(n != 1);");

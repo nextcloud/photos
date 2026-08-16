@@ -11,6 +11,9 @@
     "Shared by" : "Compartido por",
     "Favorite" : "Hacer favorito",
     "Go back" : "Regresar",
+    "Delete" : "Delete",
+    "Filename" : "Nombre de archivo",
+    "Cancel" : "Cancel",
     "Dates" : "Fechas",
     "Home" : "Inicio",
     "General" : "General",
@@ -18,7 +21,6 @@
     "Loading folders…" : "Cargando carpetas…",
     "Group" : "Grupo",
     "Details" : "Detalles",
-    "Cancel" : "Cancel",
     "Confirm" : "Confirmar"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

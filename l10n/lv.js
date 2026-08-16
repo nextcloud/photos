@@ -37,6 +37,11 @@ OC.L10N.register(
     "Picture taken on this day will show up here." : "Šeit tiks rādīti šajā dienā uzņemtie attēli.",
     "Favorite" : "Izlasē",
     "Go back" : "Atpakaļ",
+    "Add to album" : "Pievienot albumam",
+    "Share" : "Kopīgot",
+    "Delete" : "Delete",
+    "Filename" : "Datnes nosaukums",
+    "Cancel" : "Atcelt",
     "Dates" : "Datumi",
     "_{years} year ago_::_{years} years ago_" : ["pirms {years} gadiem","pirms {years} gada","pirms {years} gadiem"],
     "Choose the folders from where photos and videos are shown." : "Izvēlēties mapes, no kurām tiek rādīti fotoattēli un video.",
@@ -58,7 +63,6 @@ OC.L10N.register(
     "Back to tags overview" : "Atpakaļ uz birku pārskatu",
     "Start slideshow" : "Sākt slīdrādi",
     "Slideshow" : "Slīdrāde",
-    "Add to album" : "Pievienot albumam",
     "Error fetching files" : "Kļūda datņu ieguvē",
     "Failed to delete {fileBaseName}" : "Neizdevās izdzēst {fileBaseName}",
     "Failed to rename {currentCollectionFileName} to {newCollectionFileName}" : "Neizdevās pārdēvēt {currentCollectionFileName} par {newCollectionFileName}",
@@ -72,7 +76,6 @@ OC.L10N.register(
     "View" : "Skats",
     "Choose the folder where photos and albums are uploaded to." : "Izvēlēties mapi, kurā tiek augšupielādēti fotoattēli un albumi.",
     "Details" : "Informācija",
-    "Cancel" : "Atcelt",
     "Confirm" : "Apstiprināt"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

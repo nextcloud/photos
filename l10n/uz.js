@@ -14,6 +14,10 @@ OC.L10N.register(
     "No recommendations. Start typing." : "Tavsiyalar yo'q. Yozishni boshlang.",
     "Copy public link" : "Umumiy havoladan nusxa oling",
     "Favorite" : "Favorite",
+    "Share" : "Ulashish",
+    "Delete" : "Oʻchirish",
+    "Filename" : "Fayl nomi",
+    "Cancel" : "Bekor qilish",
     "Add to {destination}" : " {destination}ni qo`shish",
     "Home" : "Home",
     "General" : "Umumiy",
@@ -25,7 +29,6 @@ OC.L10N.register(
     "Group" : "Guruh",
     "View" : "Ko'rish",
     "Details" : "Details",
-    "Cancel" : "Bekor qilish",
     "Confirm" : "Tasdiqlash"
 },
 "nplurals=1; plural=0;");
