@@ -4,8 +4,8 @@
  */
 
 import type { FileStat, ResponseDataDetailed } from 'webdav'
-import type { PhotoFile } from '../store/files.ts'
 import type { PhotoExif } from '../utils/exif.ts'
+import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { davClient } from './DavClient.ts'
 import logger from './logger.ts'
@@ -17,11 +17,12 @@ const exifPropFind = `<?xml version="1.0"?>
 				<nc:metadata-photos-ifd0 />
 				<nc:metadata-photos-gps />
 				<nc:metadata-photos-place />
+				<nc:metadata-photos-original_date_time />
 			</d:prop>
 		</d:propfind>`
 
 /**
- * Fetch the EXIF metadata of a single photo.
+ * Fetch the metadata of a single photo.
  *
  * These properties are not registered as default DAV properties on purpose:
  * they hold dozens of entries per photo, which would weigh down the listings
@@ -31,9 +32,9 @@ const exifPropFind = `<?xml version="1.0"?>
  * @param photo - Photo to fetch the metadata of
  * @return The metadata of the photo, empty when it carries none
  */
-export async function fetchPhotoExif(photo: PhotoFile): Promise<PhotoExif> {
+export async function fetchPhotoExif(photo: PhotoTarget): Promise<PhotoExif> {
 	try {
-		const response = await davClient.stat(`${photo.root}${photo.path}`, {
+		const response = await davClient.stat(photo.davPath, {
 			data: exifPropFind,
 			details: true,
 		}) as ResponseDataDetailed<FileStat>
@@ -45,6 +46,7 @@ export async function fetchPhotoExif(photo: PhotoFile): Promise<PhotoExif> {
 			ifd0: (props['metadata-photos-ifd0'] ?? {}) as Record<string, unknown>,
 			gps: props['metadata-photos-gps'] as PhotoExif['gps'],
 			place: props['metadata-photos-place'] as PhotoExif['place'],
+			takenAt: props['metadata-photos-original_date_time'] as PhotoExif['takenAt'],
 		}
 	} catch (error) {
 		logger.error('Error fetching the metadata of a photo', { error, filename: photo.basename })

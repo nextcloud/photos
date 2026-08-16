@@ -13,7 +13,7 @@
 			<dl class="photo-metadata">
 				<div class="photo-metadata__entry">
 					<dt>{{ t('photos', 'Filename') }}</dt>
-					<dd>{{ file.basename }}</dd>
+					<dd>{{ photo.basename }}</dd>
 				</div>
 				<div v-for="entry in exifEntries" :key="entry.label" class="photo-metadata__entry">
 					<dt>{{ entry.label }}</dt>
@@ -33,7 +33,7 @@
 				<LocationMap
 					:latitude="location.latitude"
 					:longitude="location.longitude"
-					:name="metadata?.place || file.basename" />
+					:name="metadata?.place || photo.basename" />
 			</div>
 
 			<!-- EXIF is optional, so an empty summary is a normal outcome rather than an error. -->
@@ -45,8 +45,8 @@
 </template>
 
 <script lang="ts" setup>
-import type { PhotoFile } from '../store/files.ts'
 import type { PhotoExif } from '../utils/exif.ts'
+import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { translate as t } from '@nextcloud/l10n'
 import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
@@ -57,7 +57,7 @@ import { formatCoordinates, getExifSummary, getPhotoLocation } from '../utils/ex
 
 const props = defineProps<{
 	/** Photo to show the metadata of. */
-	file: PhotoFile
+	photo: PhotoTarget
 }>()
 
 const emit = defineEmits<{
@@ -76,7 +76,7 @@ const location = computed(() => metadata.value === undefined ? null : getPhotoLo
 // The EXIF properties are not part of the file listings, they are only fetched
 // once the user asks for them.
 onMounted(async () => {
-	metadata.value = await fetchPhotoExif(props.file)
+	metadata.value = await fetchPhotoExif(props.photo)
 })
 </script>
 

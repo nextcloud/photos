@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type { PhotoFile } from '../store/files.ts'
 import type { PhotoLocation } from '../utils/exif.ts'
+import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { davClient } from './DavClient.ts'
 
@@ -26,7 +26,7 @@ export type PhotoMetadataUpdate = {
  * @param update - Values to store
  * @throws {Error} When the server rejects the update
  */
-export async function savePhotoMetadata(photo: PhotoFile, update: PhotoMetadataUpdate): Promise<void> {
+export async function savePhotoMetadata(photo: PhotoTarget, update: PhotoMetadataUpdate): Promise<void> {
 	const { takenAt, location } = update
 
 	const setProperties = [
@@ -46,7 +46,7 @@ export async function savePhotoMetadata(photo: PhotoFile, update: PhotoMetadataU
 		? '<d:remove><d:prop><nc:metadata-photos-gps /></d:prop></d:remove>'
 		: ''
 
-	await davClient.customRequest(`${photo.root}${photo.path}`, {
+	await davClient.customRequest(photo.davPath, {
 		method: 'PROPPATCH',
 		data: `<?xml version="1.0"?>
 			<d:propertyupdate xmlns:d="DAV:" xmlns:nc="http://nextcloud.org/ns">
@@ -58,4 +58,14 @@ export async function savePhotoMetadata(photo: PhotoFile, update: PhotoMetadataU
 				${removeProperties}
 			</d:propertyupdate>`,
 	})
+}
+
+/**
+ * Move a photo to the trash.
+ *
+ * @param photo - Photo to delete
+ * @throws {Error} When the server refuses to delete the photo
+ */
+export async function deletePhoto(photo: PhotoTarget): Promise<void> {
+	await davClient.deleteFile(photo.davPath)
 }

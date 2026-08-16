@@ -95,6 +95,7 @@
 					:file="files[file.id]"
 					:allow-selection="true"
 					:selected="selection[file.id] === true"
+					:show-actions-menu="false"
 					@select-toggled="onFileSelectToggle" />
 			</template>
 		</FilesListViewer>

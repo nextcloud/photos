@@ -42,6 +42,19 @@ const mutations = {
 	},
 
 	/**
+	 * Delete a file
+	 *
+	 * The folders keep the ids of the files they hold, but the listings skip
+	 * the ones which are gone.
+	 *
+	 * @param state
+	 * @param fileId
+	 */
+	deleteFolderFile(state: FoldersState, fileId: number) {
+		Vue.delete(state.files, fileId)
+	},
+
+	/**
 	 * Append or update given files
 	 *
 	 * @param state

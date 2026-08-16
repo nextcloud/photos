@@ -79,7 +79,8 @@
 				:allow-selection="true"
 				:selected="selection[file.id] === true"
 				@click="openViewer"
-				@select-toggled="onFileSelectToggle" />
+				@select-toggled="onFileSelectToggle"
+				@deleted="onPhotoDeleted" />
 		</FilesListViewer>
 
 		<NcDialog
@@ -179,6 +180,13 @@ export default {
 	},
 
 	methods: {
+		// The photo is already gone from the store, it only has to leave the
+		// list of the unassigned faces.
+		onPhotoDeleted(photo) {
+			this.onUncheckFiles([photo.fileid.toString()])
+			this.$store.commit('removeUnassignedFile', { fileIdsToRemove: [photo.fileid.toString()] })
+		},
+
 		openViewer(fileId) {
 			window.OCA.Viewer.open({
 				fileInfo: toViewerFileInfo(this.files[fileId]),

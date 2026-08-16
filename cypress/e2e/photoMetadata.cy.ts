@@ -4,7 +4,9 @@
  */
 import type { User } from '@nextcloud/e2e-test-server'
 
-import { setupPhotosTests } from './photosUtils.ts'
+import { createAnAlbumFromTimeline } from './albumsUtils.ts'
+import { navigateToCollection, setupPhotosTests } from './photosUtils.ts'
+import { navigateToTimeline } from './timelinesUtils.ts'
 
 const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/
 Cypress.on('uncaught:exception', (err) => {
@@ -36,9 +38,9 @@ function fieldByLabel(label: string) {
  * @param dialogName - Name of the dialog the entry opens
  */
 function openPhotoAction(fileName: string, action: string, dialogName: string) {
-	// The menu is revealed by hovering or focusing the photo it belongs to.
-	cy.get(`[aria-label="Open the full size \\"${fileName}\\" image"]`).focus()
-	cy.get(`[aria-label="Actions for ${fileName}"]`).click({ force: true })
+	// The menu is only revealed once the photo it belongs to is hovered or
+	// holds the focus.
+	cy.get(`[aria-label="Actions for ${fileName}"]`).focus().click({ force: true })
 	cy.get('[role="menuitem"]').contains(action).click()
 	return cy.contains('h2', dialogName).should('be.visible')
 }
@@ -80,7 +82,7 @@ describe('Show the metadata of a photo', () => {
 		// A map carries no accessible name of its own, its marker names the
 		// place it points at.
 		cy.get('.leaflet-container').should('be.visible')
-		cy.get('.leaflet-tooltip').should('have.text', 'Lauris')
+		cy.get('.leaflet-tooltip').should('contain.text', 'Lauris')
 	})
 
 	it('Shows the camera the photo was taken with', () => {
@@ -170,5 +172,53 @@ describe('Edit the metadata of a photo', () => {
 
 		fieldByLabel('Latitude').should('have.value', '')
 		fieldByLabel('Longitude').should('have.value', '')
+	})
+})
+
+describe('Reach the actions of a photo outside of the timeline', () => {
+	before(() => {
+		setupPhotosTests()
+			.then((setupInfo) => {
+				alice = setupInfo.alice
+			})
+	})
+
+	beforeEach(() => {
+		cy.login(alice)
+	})
+
+	it('Manages a photo from the folders view', () => {
+		cy.visit('/apps/photos/folders/Photos')
+
+		openPhotoAction(photo, 'View metadata', 'Photo metadata')
+		entryByName('Filename').should('have.text', photo)
+	})
+
+	it('Manages a photo from an album', () => {
+		cy.visit('/apps/photos')
+		createAnAlbumFromTimeline('Actions')
+		navigateToTimeline('all-media')
+
+		cy.intercept({ times: 1, method: 'COPY', url: '/remote.php/dav/files/**' }).as('copy')
+		openPhotoAction(photo, 'Add to album', 'Add to Album')
+		cy.get('[aria-label="Add selection to album Actions"]').click()
+		cy.wait('@copy')
+
+		navigateToCollection('albums', 'Actions')
+
+		// Photos of an album are named after their id, the actions are about
+		// the original file.
+		openPhotoAction(photo, 'View metadata', 'Photo metadata')
+		entryByName('Filename').should('have.text', photo)
+	})
+
+	it('Leaves the picking of photos alone', () => {
+		cy.visit('/apps/photos')
+		createAnAlbumFromTimeline('Picking')
+		cy.get('[aria-label="Add photos to this album"]').first().click()
+		cy.contains('h2', 'Add photos to Picking').should('be.visible')
+
+		// Picking photos is not managing them.
+		cy.get('[aria-label^="Actions for"]').should('not.exist')
 	})
 })

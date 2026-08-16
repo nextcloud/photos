@@ -4,7 +4,8 @@
  */
 
 import type { File, Folder } from '@nextcloud/files'
-import type { PhotoMetadataUpdate } from '../services/photoMetadataEditor.ts'
+import type { PhotoMetadataUpdate } from '../services/photoActions.ts'
+import type { PhotoTarget } from '../utils/fileUtils.ts'
 import type { PhotosContext } from './index.ts'
 
 import { showError } from '@nextcloud/dialogs'
@@ -14,7 +15,7 @@ import moment from '@nextcloud/moment'
 import Vue from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
-import { savePhotoMetadata } from '../services/photoMetadataEditor.ts'
+import { deletePhoto, savePhotoMetadata } from '../services/photoActions.ts'
 import Semaphore from '../utils/semaphoreWithPriority.js'
 
 export type PhotoFile = File & {
@@ -188,14 +189,29 @@ const actions = {
 	 *
 	 * @param context
 	 * @param root0
-	 * @param root0.fileId
+	 * @param root0.photo
 	 * @param root0.takenAt
 	 * @param root0.location
 	 * @throws {Error} When the server rejects the update
 	 */
-	async updatePhotoMetadata(context: PhotosContext<FilesState>, { fileId, takenAt, location }: { fileId: number } & PhotoMetadataUpdate) {
-		await savePhotoMetadata(context.state.files[fileId], { takenAt, location })
-		context.commit('setPhotoMetadata', { fileId, takenAt, location })
+	async updatePhotoMetadata(context: PhotosContext<FilesState>, { photo, takenAt, location }: { photo: PhotoTarget } & PhotoMetadataUpdate) {
+		await savePhotoMetadata(photo, { takenAt, location })
+		context.commit('setPhotoMetadata', { fileId: photo.fileid, takenAt, location })
+	},
+
+	/**
+	 * Move a photo to the trash
+	 *
+	 * Photos of the folders view are not part of this store, so the file is
+	 * only dropped from it when it is known.
+	 *
+	 * @param context
+	 * @param photo
+	 * @throws {Error} When the server refuses to delete the photo
+	 */
+	async deletePhoto(context: PhotosContext<FilesState>, photo: PhotoTarget) {
+		await deletePhoto(photo)
+		context.commit('deleteFile', photo.fileid)
 	},
 
 	/**

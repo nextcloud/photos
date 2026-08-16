@@ -22,6 +22,8 @@ export type PhotoExif = {
 	}
 	/** Name of the place the coordinates were resolved to, when enabled. */
 	place?: string
+	/** Moment the photo was taken, as a unix timestamp in seconds. */
+	takenAt?: number
 }
 
 /** Position a photo was taken at, in decimal degrees. */

@@ -128,7 +128,8 @@
 				:allow-selection="true"
 				:selected="selection[file.id] === true"
 				@click="openViewer"
-				@select-toggled="onFileSelectToggle" />
+				@select-toggled="onFileSelectToggle"
+				@deleted="onPhotoDeleted" />
 		</FilesListViewer>
 
 		<NcDialog
@@ -185,6 +186,7 @@
 
 <script lang='ts'>
 import type { Collection } from '../services/collectionFetcher.js'
+import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { translatePlural as n, translate as t } from '@nextcloud/l10n'
 import Vue from 'vue'
@@ -304,6 +306,16 @@ export default {
 	},
 
 	methods: {
+		// The photo is already gone from the store, it only has to leave the
+		// face it was recognized on.
+		onPhotoDeleted(photo: PhotoTarget) {
+			this.onUncheckFiles([photo.fileid.toString()])
+			this.$store.commit('removeFilesFromFace', {
+				faceName: this.faceName,
+				fileIdsToRemove: [photo.fileid.toString()],
+			})
+		},
+
 		openViewer(fileId: string) {
 			window.OCA.Viewer.open({
 				fileInfo: toViewerFileInfo(this.files[fileId]),

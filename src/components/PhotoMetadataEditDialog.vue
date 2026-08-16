@@ -48,7 +48,7 @@
 					<LocationMap
 						:latitude="location.latitude"
 						:longitude="location.longitude"
-						:name="file.basename" />
+						:name="photo.basename" />
 				</div>
 			</fieldset>
 		</form>
@@ -68,8 +68,8 @@
 </template>
 
 <script lang="ts" setup>
-import type { PhotoFile } from '../store/files.ts'
 import type { PhotoLocation } from '../utils/exif.ts'
+import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { showError } from '@nextcloud/dialogs'
 import { translate as t } from '@nextcloud/l10n'
@@ -87,7 +87,7 @@ import { COORDINATE_LIMITS, getPhotoLocation, parseCoordinate } from '../utils/e
 
 const props = defineProps<{
 	/** Photo to edit the metadata of. */
-	file: PhotoFile
+	photo: PhotoTarget
 }>()
 
 const emit = defineEmits<{
@@ -100,21 +100,24 @@ const LocationMap = defineAsyncComponent(() => import('./LocationMap.vue'))
 const loading = ref(true)
 const saving = ref(false)
 
-// The timestamp is the taken date of the photo, or its modification time when
-// none could be extracted from the picture.
-const takenAt = ref<Date | null>(new Date(props.file.attributes.timestamp * 1000))
+const takenAt = ref<Date | null>(null)
 const latitude = ref('')
 const longitude = ref('')
 
-// The coordinates are not part of the file listings, so the position the photo
-// already carries has to be fetched before it can be edited.
+// Neither the coordinates nor the taken date the server holds are part of the
+// file listings, so they are fetched before they can be edited.
 onMounted(async () => {
-	const location = getPhotoLocation((await fetchPhotoExif(props.file)).gps)
+	const metadata = await fetchPhotoExif(props.photo)
+	const location = getPhotoLocation(metadata.gps)
 
 	if (location !== null) {
 		latitude.value = String(location.latitude)
 		longitude.value = String(location.longitude)
 	}
+
+	// Photos always carry a taken date, at worst the one of their upload, but
+	// a photo whose metadata was never extracted has none to show.
+	takenAt.value = metadata.takenAt === undefined ? new Date() : new Date(metadata.takenAt * 1000)
 
 	loading.value = false
 })
@@ -175,14 +178,14 @@ async function save(): Promise<void> {
 
 	try {
 		await store.dispatch('updatePhotoMetadata', {
-			fileId: props.file.fileid,
+			photo: props.photo,
 			takenAt: Math.floor(date.getTime() / 1000),
 			location: location.value,
 		})
 		emit('close')
 	} catch (error) {
-		logger.error('Error saving the metadata of a photo', { error, filename: props.file.basename })
-		showError(t('photos', 'Failed to save the metadata of {fileName}', { fileName: props.file.basename }))
+		logger.error('Error saving the metadata of a photo', { error, filename: props.photo.basename })
+		showError(t('photos', 'Failed to save the metadata of {fileName}', { fileName: props.photo.basename }))
 	} finally {
 		saving.value = false
 	}
