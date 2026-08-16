@@ -65,6 +65,11 @@ OC.L10N.register(
     "Select image {imageName}" : "Виберіть зображення {imageName}",
     "Open the \"{name}\" folder" : "Відкрити каталог \"{name}\"",
     "Go back" : "Повернутися назад",
+    "Add to album" : "Додати в альбом",
+    "Share" : "Спільний доступ",
+    "Delete" : "Вилучити",
+    "Filename" : "Ім'я файлу",
+    "Cancel" : "Скасувати",
     "Select a custom date range" : "Виберіть власний діапазон дат",
     "Select a date range" : "Виберіть часовий проміжок",
     "Date range" : "Проміжок часу",
@@ -143,7 +148,6 @@ OC.L10N.register(
     "Large tiles" : "Великі плитки",
     "Start slideshow" : "Почати показ слайдів",
     "Slideshow" : "Слайд-шоу",
-    "Add to album" : "Додати в альбом",
     "Delete selection" : "Вилучити виділення",
     "No photos or videos in here" : "Тут немає фотографій та відео",
     "Unassigned faces" : "Неідентифіковані обличчя",
@@ -193,7 +197,6 @@ OC.L10N.register(
     "Choose the folder where photos and albums are uploaded to." : "Виберіть каталог, до якого завантажувати світлини та альбоми.",
     "Loading folders …" : "Завантаження каталогів ...",
     "Details" : "Деталі",
-    "Cancel" : "Скасувати",
     "Confirm" : "Підтвердити"
 },
 "nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);");

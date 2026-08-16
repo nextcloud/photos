@@ -40,6 +40,11 @@ OC.L10N.register(
     "An error occurred" : "An error occurred",
     "Favorite" : "ລາຍການທີ່ມັກ",
     "Go back" : "Go back",
+    "Add to album" : "ເພີ່ມໃສ່ອະລະບໍ້າ",
+    "Share" : "ແບ່ງປັນ",
+    "Delete" : "Delete",
+    "Filename" : "ຊື່ຟາຍ",
+    "Cancel" : "ຍົກເລີກ",
     "Date range" : "ຊ່ວງວັນທີ",
     "Add to {destination}" : "Add to {destination}",
     "_{years} year ago_::_{years} years ago_" : ["{years} years ago"],
@@ -55,7 +60,6 @@ OC.L10N.register(
     "Remove person" : "ລຶບບຸກຄົນ",
     "Default" : "ຄ່າເລີ່ມຕົ້ນ",
     "Slideshow" : "ສະໄລ້ໂຊ",
-    "Add to album" : "ເພີ່ມໃສ່ອະລະບໍ້າ",
     "Delete selection" : "Delete selection",
     "Unassigned faces" : "ໃບໜ້າທີ່ຍັງບໍ່ໄດ້ກຳນົດ",
     "Last week" : "Last week",
@@ -65,7 +69,6 @@ OC.L10N.register(
     "Remove {collaboratorLabel} from the collaborators list" : "ລຶບ {collaboratorLabel} ອອກຈາກລາຍຊື່ຜູ້ຮ່ວມມື",
     "View" : "ເບິ່ງ",
     "Details" : "ລາຍລະອຽດ",
-    "Cancel" : "ຍົກເລີກ",
     "Confirm" : "ຢືນຢັນ"
 },
 "nplurals=1; plural=0;");

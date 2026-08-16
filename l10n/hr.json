@@ -60,6 +60,11 @@
     "Select image {imageName}" : "Odaberi sliku {imageName}",
     "Open the \"{name}\" folder" : "Otvori u mapi \"{name}\" ",
     "Go back" : "Natrag",
+    "Add to album" : "Dodaj u album",
+    "Share" : "Dijeli",
+    "Delete" : "Izbriši",
+    "Filename" : "Naziv datoteke",
+    "Cancel" : "Odustani",
     "Select a custom date range" : "Odaberi prilagođeni raspon datuma",
     "Select a date range" : "Odaberi raspon datuma",
     "Date range" : "Raspon datuma",
@@ -132,7 +137,6 @@
     "Create new album from filters" : "Stvori novi album iz filtera",
     "One of the source folders does not exist" : "Jedna od izvorišnih mapa ne postoji",
     "Default" : "Zadano",
-    "Add to album" : "Dodaj u album",
     "Delete selection" : "Izbriši odabir",
     "No photos or videos in here" : "Ovdje nema fotografija i video zapisa",
     "Unassigned faces" : "Nedodijeljena lica",
@@ -182,7 +186,6 @@
     "Choose the folder where photos and albums are uploaded to." : "Odaberite mapu u koju se učitavaju fotografije i albumi.",
     "Loading folders …" : "Učitavanje mapa …",
     "Details" : "Pojedinosti",
-    "Cancel" : "Odustani",
     "Confirm" : "Potvrdi"
 },"pluralForm" :"nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;"
 }

@@ -19,6 +19,8 @@ OC.L10N.register(
     "Favorite" : "Favorito",
     "Open the full size \"{name}\" image" : "Abrir imagen a tamaño completo \"{nombre}\"",
     "Go back" : "Regresar",
+    "Delete" : "Delete",
+    "Cancel" : "Cancel",
     "_{years} year ago_::_{years} years ago_" : ["Hace {years} año","Hace {years} años","Hace {years} años"],
     "Home" : "Casa",
     "General" : "General",
@@ -33,7 +35,6 @@ OC.L10N.register(
     "Enable squared photos view" : "Habilitar vista de fotos cuadradas",
     "View" : "Ver",
     "Details" : "Detalles",
-    "Cancel" : "Cancel",
     "Confirm" : "Confirmar"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

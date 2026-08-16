@@ -63,6 +63,11 @@ OC.L10N.register(
     "Select image {imageName}" : "Выбрать изображение «{imageName}»",
     "Open the \"{name}\" folder" : "Откройте папку \"{name}\"",
     "Go back" : "Назад",
+    "Add to album" : "Добавить в альбом",
+    "Share" : "Поделиться",
+    "Delete" : "Удалить",
+    "Filename" : "Имя файла",
+    "Cancel" : "Cancel",
     "Select a custom date range" : "Выберите произвольный диапазон дат",
     "Select a date range" : "Выберите диапазон дат",
     "Date range" : "Диапазон дат",
@@ -137,7 +142,6 @@ OC.L10N.register(
     "Default" : "По умолчанию",
     "Start slideshow" : "Начать слайд шоу",
     "Slideshow" : "Слайд шоу",
-    "Add to album" : "Добавить в альбом",
     "Delete selection" : "Удалить выбранное",
     "No photos or videos in here" : "Нет ни одной фотографии или видео",
     "Unassigned faces" : "Неназначенные лица",
@@ -187,7 +191,6 @@ OC.L10N.register(
     "Choose the folder where photos and albums are uploaded to." : "Выберите папку, в которую загружаются фотографии и альбомы.",
     "Loading folders …" : "Загрузка папок  …",
     "Details" : "Свойства",
-    "Cancel" : "Cancel",
     "Confirm" : "Подтвердить"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

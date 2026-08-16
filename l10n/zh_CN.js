@@ -63,6 +63,11 @@ OC.L10N.register(
     "Select image {imageName}" : "选择图像 {imageName}",
     "Open the \"{name}\" folder" : "打开 “{name}” 文件夹",
     "Go back" : "返回",
+    "Add to album" : "添加至相册",
+    "Share" : "共享",
+    "Delete" : "删除",
+    "Filename" : "文件名",
+    "Cancel" : "取消",
     "Select a custom date range" : "选择自定义日期范围",
     "Select a date range" : "选择日期范围",
     "Date range" : "日期范围",
@@ -136,7 +141,6 @@ OC.L10N.register(
     "One of the source folders does not exist" : "其中一个源文件夹不存在",
     "Default" : "默认",
     "Slideshow" : "幻灯片",
-    "Add to album" : "添加至相册",
     "Delete selection" : "删除选择项",
     "No photos or videos in here" : "此处没有图片或视频",
     "Unassigned faces" : "未指派的人脸",
@@ -186,7 +190,6 @@ OC.L10N.register(
     "Choose the folder where photos and albums are uploaded to." : "选择照片和相册上传的文件夹。",
     "Loading folders …" : "正在加载文件夹 …",
     "Details" : "详情",
-    "Cancel" : "取消",
     "Confirm" : "确认"
 },
 "nplurals=1; plural=0;");

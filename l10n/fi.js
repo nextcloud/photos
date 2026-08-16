@@ -62,6 +62,11 @@ OC.L10N.register(
     "Select image {imageName}" : "Valitse kuva {imageName}",
     "Open the \"{name}\" folder" : "Avaa kansio \"{name}\"",
     "Go back" : "Mene takaisin",
+    "Add to album" : "Lisää albumiin",
+    "Share" : "Jaa",
+    "Delete" : "Delete",
+    "Filename" : "Tiedostonimi",
+    "Cancel" : "Peruuta",
     "Select a custom date range" : "Valitse omavalintainen aikaväli",
     "Select a date range" : "Valitse aikaväli",
     "Date range" : "Päiväväli",
@@ -134,7 +139,6 @@ OC.L10N.register(
     "Default" : "Oletus",
     "Start slideshow" : "Aloita diaesitys",
     "Slideshow" : "Diaesitys",
-    "Add to album" : "Lisää albumiin",
     "Delete selection" : "Poista valinta",
     "No photos or videos in here" : "Ei kuvia tai videoita",
     "Unassigned faces" : "Määrittämättömät kasvot",
@@ -175,7 +179,6 @@ OC.L10N.register(
     "Choose the folder where photos and albums are uploaded to." : "Valitse kansio, johon kuvat ja albumit lähetetään.",
     "Loading folders …" : "Ladataan kansioita …",
     "Details" : "Tiedot",
-    "Cancel" : "Peruuta",
     "Confirm" : "Vahvista"
 },
 "nplurals=2; plural=(n != 1);");

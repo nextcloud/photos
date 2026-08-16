@@ -53,6 +53,10 @@ OC.L10N.register(
     "Open the full size \"{name}\" image" : "Abrir la imagen \"{nombre}\" en tamaño completo",
     "Select image {imageName}" : "Seleccionar imagen {nombreImagen}",
     "Go back" : "Regresar",
+    "Add to album" : "Agregar al álbum",
+    "Delete" : "Delete",
+    "Filename" : "Nombre de archivo",
+    "Cancel" : "Cancelar",
     "Dates" : "Fechas",
     "Add to {destination}" : "Agregar a {destino}",
     "There are no photos or videos yet!" : "¡Aún no hay fotos o videos!",
@@ -103,7 +107,6 @@ OC.L10N.register(
     "Popular tags" : "Etiquetas populares",
     "Start slideshow" : "Iniciar presentación de diapositivas",
     "Slideshow" : "Presentación de Diapositivas",
-    "Add to album" : "Agregar al álbum",
     "Delete selection" : "Eliminar selección",
     "No photos or videos in here" : "No hay fotos o videos aquí",
     "Unassigned faces" : "Rostros sin asignar",
@@ -128,7 +131,6 @@ OC.L10N.register(
     "Choose default Photos upload and Albums location" : "Seleccionar ubicación predeterminada de carga de fotos y álbumes",
     "View" : "Ver",
     "Details" : "Detalles",
-    "Cancel" : "Cancelar",
     "Confirm" : "Confirmar"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

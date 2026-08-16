@@ -63,6 +63,11 @@ OC.L10N.register(
     "Select image {imageName}" : "Seleccionar imagen {imageName}",
     "Open the \"{name}\" folder" : "Abrir la carpeta \"{name}\"",
     "Go back" : "Regresar",
+    "Add to album" : "Añadir al álbum",
+    "Share" : "Compartir",
+    "Delete" : "Delete",
+    "Filename" : "Nombre del archivo",
+    "Cancel" : "Cancel",
     "Dates" : "Fechas",
     "Jump to specific date in list" : "Saltar a una fecha específica en la lista",
     "Jump to {date}" : "Saltar a {date}",
@@ -125,7 +130,6 @@ OC.L10N.register(
     "Popular tags" : "Etiquetas populares",
     "All tags" : "Todas las etiquetas",
     "Default" : "Por omisión",
-    "Add to album" : "Añadir al álbum",
     "Delete selection" : "Borrar selección",
     "No photos or videos in here" : "No hay fotos ni videos aquí",
     "Unassigned faces" : "Caras sin asignar",
@@ -152,7 +156,6 @@ OC.L10N.register(
     "View" : "Ver",
     "Choose the folder where photos and albums are uploaded to." : "Elegir la carpeta donde se carguen las fotos y videos.",
     "Details" : "Detalles",
-    "Cancel" : "Cancel",
     "Confirm" : "Confirmar"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

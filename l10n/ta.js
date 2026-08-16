@@ -8,11 +8,12 @@ OC.L10N.register(
     "Back" : "பின்னுக்கு",
     "Save" : "சேமிக்க ",
     "Favorite" : "விருப்பமான",
+    "Delete" : "Delete",
+    "Cancel" : "Cancel",
     "Home" : "அகம்",
     "General" : "பொதுவான",
     "Remove from favorites" : "Remove from favorites",
     "Group" : "Group",
-    "Details" : "விவரங்கள்",
-    "Cancel" : "Cancel"
+    "Details" : "விவரங்கள்"
 },
 "nplurals=2; plural=(n != 1);");

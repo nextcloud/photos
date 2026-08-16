@@ -3,6 +3,7 @@
     "Photos" : "Фота",
     "On This Day" : "У гэты дзень",
     "Your memories under your control" : "Вашы ўспаміны пад вашым кантролем",
+    "Clear search" : "Ачысціць пошук",
     "All media" : "Усе медыя",
     "Videos" : "Відэа",
     "Albums" : "Альбомы",
@@ -59,6 +60,8 @@
     "Select image {imageName}" : "Выбраць відарыс {imageName}",
     "Open the \"{name}\" folder" : "Адкрыць папку \"{name}\"",
     "Go back" : "Назад",
+    "Add to album" : "Дадаць у альбом",
+    "Cancel" : "Скасаваць",
     "Select a custom date range" : "Выберыце ўласны дыяпазон дат",
     "Select a date range" : "Выберыце дыяпазон дат",
     "Date range" : "Дыяпазон дат",
@@ -130,7 +133,6 @@
     "Create new album from filters" : "Стварыць новы альбом на аснове фільтраў",
     "One of the source folders does not exist" : "Адна з зыходных папак не існуе",
     "Default" : "Прадвызначаныя",
-    "Add to album" : "Дадаць у альбом",
     "Delete selection" : "Выдаліць выбранае",
     "No photos or videos in here" : "Тут няма фота або відэа",
     "Unassigned faces" : "Непрызначаныя твары",
@@ -165,6 +167,7 @@
     "Failed to set favorite state for {fileId}" : "Не ўдалося задаць статус абранага для {fileId}",
     "Failed to set favorite state for {fileName}" : "Не ўдалося задаць статус абранага для {fileName}",
     "Could not load photos folder" : "Не ўдалося загрузіць папку з фота",
+    "Camera" : "Камера",
     "Group" : "Група",
     "Remove {collaboratorLabel} from the collaborators list" : "Выдаліць {collaboratorLabel} са спісу суаўтараў",
     "Enable squared photos view" : "Уключыць квадратны выгляд фота",
@@ -174,7 +177,6 @@
     "Choose the folder where photos and albums are uploaded to." : "Выберыце папку, у якую будуць запампоўвацца фота і альбомы.",
     "Loading folders …" : "Загрузка папак …",
     "Details" : "Падрабязнасці",
-    "Cancel" : "Скасаваць",
     "Confirm" : "Пацвердзіць"
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }

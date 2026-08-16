@@ -64,6 +64,12 @@ OC.L10N.register(
     "Select image {imageName}" : "Vali pilt „{imageName}“",
     "Open the \"{name}\" folder" : "Ava kaust \"{name}\"",
     "Go back" : "Mine tagasi",
+    "Add to album" : "Lisa albumisse",
+    "Share" : "Jagamine",
+    "Delete" : "Kustuta",
+    "Filename" : "Failinimi",
+    "Delete photo" : "Kustuta foto",
+    "Cancel" : "Katkesta",
     "Select a custom date range" : "Vali enda määratud ajavahemik",
     "Select a date range" : "Vali kuupäevavahemik",
     "Date range" : "Kuupäevade vahemik",
@@ -142,7 +148,6 @@ OC.L10N.register(
     "Large tiles" : "Suured paanid",
     "Start slideshow" : "Käivita slaidiesitlus",
     "Slideshow" : "Slaidiesitlus",
-    "Add to album" : "Lisa albumisse",
     "Delete selection" : "Kustuta valik",
     "No photos or videos in here" : "Siin pole fotosid ega videosid",
     "Unassigned faces" : "Määramata näod",
@@ -192,7 +197,6 @@ OC.L10N.register(
     "Choose the folder where photos and albums are uploaded to." : "Vali kaust, kuhu fotod ja albumid üles laaditakse",
     "Loading folders …" : "Laadin kaustu…",
     "Details" : "Üksikasjad",
-    "Cancel" : "Katkesta",
     "Confirm" : "Kinnita"
 },
 "nplurals=2; plural=(n != 1);");

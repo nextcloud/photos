@@ -63,6 +63,11 @@ OC.L10N.register(
     "Select image {imageName}" : "Изабери слику {imageName}",
     "Open the \"{name}\" folder" : "Отвори „{name}” директоријум",
     "Go back" : "Иди назад",
+    "Add to album" : "Додај у албум",
+    "Share" : "Пдели",
+    "Delete" : "Delete",
+    "Filename" : "Назив фајла",
+    "Cancel" : "Откажи",
     "Select a custom date range" : "Изаберите произвољни опсег датума",
     "Select a date range" : "Изаберите опсег датума",
     "Date range" : "Опсег датума",
@@ -136,7 +141,6 @@ OC.L10N.register(
     "Default" : "Подразумевано",
     "Start slideshow" : "Покрени пројектор слајдова",
     "Slideshow" : "Пројектор слајдова",
-    "Add to album" : "Додај у албум",
     "Delete selection" : "Обриши одабир",
     "No photos or videos in here" : "Овде нема фотографија или видео снимака",
     "Unassigned faces" : "Недодељена лица",
@@ -182,7 +186,6 @@ OC.L10N.register(
     "View" : "Погледај",
     "Choose the folder where photos and albums are uploaded to." : "Изаберите фолдер у који се отпремају фотографије и албуми.",
     "Details" : "Детаљи",
-    "Cancel" : "Откажи",
     "Confirm" : "Потврди"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");
