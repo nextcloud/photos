@@ -12,8 +12,8 @@ class AlbumWithFiles {
 	public function __construct(
 		private readonly AlbumInfo $info,
 		private readonly AlbumMapper $albumMapper,
-		/** @var AlbumFile[] */
-		private array $files = [],
+		/** @var AlbumFile[]|null */
+		private ?array $files = null,
 	) {
 	}
 
@@ -25,21 +25,16 @@ class AlbumWithFiles {
 	 * @return AlbumFile[]
 	 */
 	public function getFiles(): array {
-		if (empty($this->files)) {
-			$this->files = $this->fetchFiles();
-		}
-		return $this->files;
+		return $this->files ??= $this->fetchFiles();
 	}
 
 	/**
 	 * @return AlbumFile[]
 	 */
 	public function addFile(AlbumFile $file): array {
-		if (empty($this->files)) {
-			$this->files = $this->fetchFiles();
-		}
+		$this->files ??= $this->fetchFiles();
 
-		array_push($this->files, $file);
+		$this->files[] = $file;
 		return $this->files;
 	}
 
