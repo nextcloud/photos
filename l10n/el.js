@@ -65,6 +65,8 @@ OC.L10N.register(
     "Go back" : "Επιστροφή",
     "Add to album" : "Προσθήκη στο άλμπουμ",
     "Share" : "Κοινή χρήση",
+    "Delete" : "Διαγραφή",
+    "Filename" : "Όνομα αρχείου",
     "Cancel" : "Ακύρωση",
     "Select a custom date range" : "Επιλογή προσαρμοσμένου εύρους ημερομηνιών",
     "Select a date range" : "Επιλογή εύρους ημερομηνιών",
