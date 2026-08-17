@@ -86,10 +86,8 @@
 		<PhotoActionsMenu
 			v-if="showActionsMenu"
 			class="photo-actions-menu"
-			:file="file"
-			@request-add-to-album="$emit('request-add-to-album', $event)"
-			@request-share="$emit('request-share', $event)"
-			@request-delete="$emit('request-delete', $event)" />
+			:photo="photoTarget"
+			@deleted="$emit('deleted', $event)" />
 
 		<Transition name="favorite-pop">
 			<FavoriteIcon v-if="file.attributes.favorite === 1" class="favorite-state" />
@@ -100,6 +98,7 @@
 <script lang='ts'>
 import type { PropType } from 'vue'
 import type { PhotoFile } from '../store/files.js'
+import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
@@ -111,7 +110,7 @@ import FavoriteIcon from './FavoriteIcon.vue'
 import PhotoActionsMenu from './PhotoActionsMenu.vue'
 import logger from '../services/logger.ts'
 import { isCachedPreview } from '../services/PreviewService.js'
-import { getVideoDurationFromUrl } from '../utils/fileUtils.ts'
+import { getVideoDurationFromUrl, toPhotoTarget } from '../utils/fileUtils.ts'
 
 export default {
 	name: 'FileComponent',
@@ -139,15 +138,16 @@ export default {
 			default: true,
 		},
 
-		// Opt-in: the requests emitted by the menu are only meaningful in a
-		// view which handles them.
+		// Opt-out: the menu manages the photo it belongs to, which only gets in
+		// the way where photos are being picked rather than managed.
 		showActionsMenu: {
 			type: Boolean,
-			default: false,
+			// eslint-disable-next-line vue/no-boolean-default
+			default: true,
 		},
 	},
 
-	emits: ['click', 'select-toggled', 'request-add-to-album', 'request-share', 'request-delete'],
+	emits: ['click', 'select-toggled', 'deleted'],
 
 	data() {
 		return {
@@ -164,6 +164,10 @@ export default {
 	},
 
 	computed: {
+		photoTarget(): PhotoTarget {
+			return toPhotoTarget(this.file)
+		},
+
 		ariaLabel(): string {
 			if (this.file.attributes.favorite) {
 				return t('photos', 'Favorite image, open the full size "{name}" image', { name: this.file.basename })

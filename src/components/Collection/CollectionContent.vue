@@ -39,7 +39,8 @@
 				:allow-selection="allowSelection"
 				:selected="selection[file.id] === true"
 				@click="openViewer"
-				@select-toggled="onFileSelectToggle" />
+				@select-toggled="onFileSelectToggle"
+				@deleted="onPhotoDeleted" />
 		</FilesListViewer>
 	</div>
 </template>
@@ -48,6 +49,7 @@
 import type { File } from '@nextcloud/files'
 import type { PropType } from 'vue'
 import type { Collection } from '../../services/collectionFetcher.js'
+import type { PhotoTarget } from '../../utils/fileUtils.ts'
 
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { translate } from '@nextcloud/l10n'
@@ -140,7 +142,21 @@ export default defineComponent({
 		},
 
 		handleFileDeleted({ fileid }: File) {
-			this.$store.commit('removeFilesFromCollection', { collectionFileName: this.collection.root + this.collection.path, fileIdsToRemove: [fileid?.toString()] })
+			this.removeFromCollection(fileid as number)
+		},
+
+		// The photo is already gone from the store, it only has to leave the
+		// collection it was shown in.
+		onPhotoDeleted(photo: PhotoTarget) {
+			this.onUncheckFiles([photo.fileid.toString()])
+			this.removeFromCollection(photo.fileid)
+		},
+
+		removeFromCollection(fileId: number) {
+			this.$store.commit('removeFilesFromCollection', {
+				collectionFileName: this.collection.root + this.collection.path,
+				fileIdsToRemove: [fileId?.toString()],
+			})
 		},
 
 		t: translate,

@@ -41,12 +41,15 @@
 				:allow-selection="true"
 				:selected="selection[file.id] === true"
 				@click="openViewer"
-				@select-toggled="onFileSelectToggle" />
+				@select-toggled="onFileSelectToggle"
+				@deleted="onPhotoDeleted" />
 		</FilesListViewer>
 	</div>
 </template>
 
 <script lang='ts'>
+import type { PhotoTarget } from '../utils/fileUtils.ts'
+
 import { translatePlural as n, translate as t } from '@nextcloud/l10n'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
@@ -139,6 +142,13 @@ export default {
 	},
 
 	methods: {
+		// The photo is already gone from the store, it only has to leave the
+		// list of the photos this view fetched.
+		onPhotoDeleted(photo: PhotoTarget) {
+			this.onUncheckFiles([photo.fileid.toString()])
+			this.fetchedFileIds = this.fetchedFileIds.filter((fileId) => fileId !== photo.fileid)
+		},
+
 		async fetchContent() {
 			// close any potential opened viewer
 			window.OCA.Viewer.close()

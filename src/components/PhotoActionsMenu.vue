@@ -6,7 +6,7 @@
 <template>
 	<div class="photo-actions" :class="{ 'photo-actions--open': menuOpen }" @click.stop>
 		<NcActions
-			:aria-label="t('photos', 'Actions for {name}', { name: file.basename })"
+			:aria-label="t('photos', 'Actions for {name}', { name: photo.basename })"
 			force-menu
 			:open="menuOpen"
 			@update:open="menuOpen = $event">
@@ -21,23 +21,30 @@
 				{{ t('photos', 'View metadata') }}
 			</NcActionButton>
 
-			<NcActionButton close-after-click @click="emit('request-add-to-album', file)">
+			<NcActionButton v-if="canEdit" close-after-click @click="metadataEditShown = true">
+				<template #icon>
+					<PencilOutline :size="20" />
+				</template>
+				{{ t('photos', 'Edit metadata') }}
+			</NcActionButton>
+
+			<NcActionButton v-if="isLoggedIn" close-after-click @click="albumPickerShown = true">
 				<template #icon>
 					<ImageMultipleOutline :size="20" />
 				</template>
 				{{ t('photos', 'Add to album') }}
 			</NcActionButton>
 
-			<NcActionButton close-after-click @click="emit('request-share', file)">
+			<NcActionButton v-if="canShare" close-after-click @click="share">
 				<template #icon>
 					<ShareVariantOutline :size="20" />
 				</template>
 				{{ t('photos', 'Share') }}
 			</NcActionButton>
 
-			<NcActionSeparator />
+			<NcActionSeparator v-if="canDelete" />
 
-			<NcActionButton close-after-click @click="deleteConfirmationShown = true">
+			<NcActionButton v-if="canDelete" close-after-click @click="deleteConfirmationShown = true">
 				<template #icon>
 					<TrashCanOutline :size="20" />
 				</template>
@@ -45,34 +52,28 @@
 			</NcActionButton>
 		</NcActions>
 
-		<NcDialog
+		<PhotoMetadataDialog
 			v-if="metadataShown"
-			:name="t('photos', 'Photo metadata')"
-			@update:open="metadataShown = false">
-			<NcLoadingIcon v-if="exifEntries === undefined" :size="32" class="photo-actions__loading" />
+			:photo="photo"
+			@close="metadataShown = false" />
 
-			<dl v-else class="photo-actions__metadata">
-				<div class="photo-actions__metadata__entry">
-					<dt>{{ t('photos', 'Filename') }}</dt>
-					<dd>{{ file.basename }}</dd>
-				</div>
-				<div v-for="entry in exifEntries" :key="entry.label" class="photo-actions__metadata__entry">
-					<dt>{{ entry.label }}</dt>
-					<dd>{{ entry.value }}</dd>
-				</div>
-			</dl>
+		<PhotoMetadataEditDialog
+			v-if="metadataEditShown"
+			:photo="photo"
+			@close="metadataEditShown = false" />
 
-			<!-- EXIF is optional, so an empty summary is a normal outcome rather than an error. -->
-			<p v-if="exifEntries?.length === 0" class="photo-actions__metadata__empty">
-				{{ t('photos', 'This photo carries no camera metadata.') }}
-			</p>
-		</NcDialog>
+		<NcModal
+			v-if="albumPickerShown"
+			:label-id="`album-picker-${photo.fileid}`"
+			@close="albumPickerShown = false">
+			<AlbumPicker @album-picked="addToAlbum" />
+		</NcModal>
 
 		<NcDialog
 			v-if="deleteConfirmationShown"
 			:name="t('photos', 'Delete photo')"
 			@update:open="deleteConfirmationShown = false">
-			<p>{{ t('photos', 'Are you sure you want to move "{name}" to the trash?', { name: file.basename }) }}</p>
+			<p>{{ t('photos', 'Are you sure you want to move "{name}" to the trash?', { name: photo.basename }) }}</p>
 
 			<template #actions>
 				<NcButton variant="tertiary" @click="deleteConfirmationShown = false">
@@ -87,59 +88,86 @@
 </template>
 
 <script lang="ts" setup>
-import type { PhotoFile } from '../store/files.ts'
-import type { ExifEntry } from '../utils/exif.ts'
+import type { Album } from '../store/albums.ts'
+import type { PhotoTarget } from '../utils/fileUtils.ts'
 
+import { getCurrentUser } from '@nextcloud/auth'
+import { showError } from '@nextcloud/dialogs'
+import { Permission } from '@nextcloud/files'
 import { translate as t } from '@nextcloud/l10n'
-import { ref, watch } from 'vue'
+import { generateUrl } from '@nextcloud/router'
+import { computed, ref } from 'vue'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
-import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+import NcModal from '@nextcloud/vue/components/NcModal'
 import DotsVertical from 'vue-material-design-icons/DotsVertical.vue'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import InformationOutline from 'vue-material-design-icons/InformationOutline.vue'
+import PencilOutline from 'vue-material-design-icons/PencilOutline.vue'
 import ShareVariantOutline from 'vue-material-design-icons/ShareVariantOutline.vue'
 import TrashCanOutline from 'vue-material-design-icons/TrashCanOutline.vue'
-import { fetchPhotoExif } from '../services/exifFetcher.ts'
-import { getExifSummary } from '../utils/exif.ts'
+import AlbumPicker from './Albums/AlbumPicker.vue'
+import PhotoMetadataDialog from './PhotoMetadataDialog.vue'
+import PhotoMetadataEditDialog from './PhotoMetadataEditDialog.vue'
+import logger from '../services/logger.ts'
+import store from '../store/index.ts'
 
 const props = defineProps<{
 	/** Photo the actions apply to. */
-	file: PhotoFile
+	photo: PhotoTarget
 }>()
 
-// Adding to an album, sharing and deleting need the surrounding view: it owns
-// the album picker, the file list and the selection.
+// The photo is gone from the server once it is deleted, but each view keeps
+// its own list of the photos it shows and has to drop it from there.
 const emit = defineEmits<{
-	(event: 'request-add-to-album', file: PhotoFile): void
-	(event: 'request-share', file: PhotoFile): void
-	(event: 'request-delete', file: PhotoFile): void
+	(event: 'deleted', photo: PhotoTarget): void
 }>()
 
 const menuOpen = ref(false)
 const metadataShown = ref(false)
+const metadataEditShown = ref(false)
+const albumPickerShown = ref(false)
 const deleteConfirmationShown = ref(false)
 
-/** Metadata of the photo, `undefined` while it is being fetched. */
-const exifEntries = ref<ExifEntry[] | undefined>()
+// Public shares are browsed without an account, the actions writing anything
+// have nowhere to write to.
+const isLoggedIn = getCurrentUser() !== null
 
-// The EXIF properties are not part of the file listings, so they are only
-// fetched once the user asks for them.
-watch(metadataShown, async (shown) => {
-	if (!shown) {
-		return
-	}
+// Writing is the permission to change the content of the photo, which is what
+// the server checks before it stores corrected metadata.
+const canEdit = computed(() => isLoggedIn && (props.photo.permissions & Permission.WRITE) !== 0)
+const canShare = computed(() => isLoggedIn && (props.photo.permissions & Permission.SHARE) !== 0)
+const canDelete = computed(() => isLoggedIn && (props.photo.permissions & Permission.DELETE) !== 0)
 
-	exifEntries.value = undefined
-	exifEntries.value = getExifSummary(await fetchPhotoExif(props.file))
-})
+// The sharing UI lives in the details sidebar of the Files app, and its API
+// needs a navigation context which the photos app does not set up, so the user
+// is sent there with the sidebar already open.
+function share(): void {
+	window.location.href = generateUrl('/apps/files/files/{fileid}?opendetails=true', { fileid: props.photo.fileid })
+}
 
-function confirmDelete(): void {
+async function addToAlbum(album: Album): Promise<void> {
+	albumPickerShown.value = false
+
+	await store.dispatch('addFilesToCollection', {
+		collectionFileName: album.root + album.path,
+		fileIdsToAdd: [props.photo.fileid.toString()],
+	})
+}
+
+async function confirmDelete(): Promise<void> {
 	deleteConfirmationShown.value = false
-	emit('request-delete', props.file)
+
+	try {
+		await store.dispatch('deletePhoto', props.photo)
+		emit('deleted', props.photo)
+	} catch (error) {
+		logger.error('Error deleting a photo', { error, filename: props.photo.basename })
+		showError(t('photos', 'Failed to delete {fileName}', { fileName: props.photo.basename }))
+	}
 }
 </script>
 
@@ -166,35 +194,6 @@ function confirmDelete(): void {
 		&:hover,
 		&:focus-visible {
 			background-color: rgba(0, 0, 0, 0.6);
-		}
-	}
-
-	&__loading {
-		margin: calc(var(--default-grid-baseline) * 4) auto;
-	}
-
-	&__metadata {
-		margin: 0;
-
-		&__entry {
-			display: flex;
-			align-items: baseline;
-			justify-content: space-between;
-			gap: calc(var(--default-grid-baseline) * 4);
-		}
-
-		dt {
-			color: var(--color-text-maxcontrast);
-		}
-
-		dd {
-			margin: 0;
-			font-variant-numeric: tabular-nums;
-			word-break: break-all;
-		}
-
-		&__empty {
-			color: var(--color-text-maxcontrast);
 		}
 	}
 }

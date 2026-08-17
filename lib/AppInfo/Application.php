@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\Photos\AppInfo;
 
 use OCA\DAV\Connector\Sabre\Principal;
+use OCA\DAV\Events\SabrePluginAddEvent;
 use OCA\DAV\Events\SabrePluginAuthInitEvent;
 use OCA\Files\Event\LoadSidebar;
 use OCA\Photos\Dashboard\OnThisDay;
@@ -18,6 +19,7 @@ use OCA\Photos\Listener\ExifMetadataProvider;
 use OCA\Photos\Listener\LoadSidebarScripts;
 use OCA\Photos\Listener\OriginalDateTimeMetadataProvider;
 use OCA\Photos\Listener\PlaceMetadataProvider;
+use OCA\Photos\Listener\SabrePluginAddListener;
 use OCA\Photos\Listener\SabrePluginAuthInitListener;
 use OCA\Photos\Listener\SizeMetadataProvider;
 use OCA\Photos\Listener\TagListener;
@@ -90,6 +92,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(UserDeletedEvent::class, AlbumsManagementEventListener::class);
 		$context->registerEventListener(ShareDeletedEvent::class, AlbumsManagementEventListener::class);
 
+		$context->registerEventListener(SabrePluginAddEvent::class, SabrePluginAddListener::class);
 		$context->registerEventListener(SabrePluginAuthInitEvent::class, SabrePluginAuthInitListener::class);
 
 		$context->registerEventListener(MapperEvent::EVENT_ASSIGN, TagListener::class);

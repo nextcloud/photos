@@ -29,6 +29,7 @@
 				<referencedClass name="OCA\DAV\Connector\Sabre\Principal" />
 				<referencedClass name="OCA\DAV\Connector\Sabre\File" />
 				<referencedClass name="OCA\DAV\Connector\Sabre\FilesPlugin" />
+				<referencedClass name="OCA\DAV\Events\SabrePluginAddEvent" />
 				<referencedClass name="OCA\DAV\Events\SabrePluginAuthInitEvent" />
 				<referencedClass name="OC_User" />
 			</errorLevel>

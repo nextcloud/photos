@@ -4,6 +4,8 @@
  */
 
 import type { File, Folder } from '@nextcloud/files'
+import type { PhotoMetadataUpdate } from '../services/photoActions.ts'
+import type { PhotoTarget } from '../utils/fileUtils.ts'
 import type { PhotosContext } from './index.ts'
 
 import { showError } from '@nextcloud/dialogs'
@@ -13,6 +15,7 @@ import moment from '@nextcloud/moment'
 import Vue from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
+import { deletePhoto, savePhotoMetadata } from '../services/photoActions.ts'
 import Semaphore from '../utils/semaphoreWithPriority.js'
 
 export type PhotoFile = File & {
@@ -20,7 +23,7 @@ export type PhotoFile = File & {
 	attributes: {
 		'metadata-photos-original_date_time': number
 		'metadata-photos-size': { width: number, height: number }
-		'metadata-photos-gps'?: { latitude: string, longitude: string, altitude: string }
+		'metadata-photos-gps'?: { latitude: string, longitude: string, altitude?: string }
 		timestamp: number
 		month: string
 		day: string
@@ -103,6 +106,40 @@ const mutations = {
 	favoriteFile(state: FilesState, { fileId, favoriteState }: { fileId: number, favoriteState: 0 | 1 }) {
 		Vue.set(state.files[fileId].attributes, 'favorite', favoriteState)
 	},
+
+	/**
+	 * Store the corrected taken date and position of a photo
+	 *
+	 * @param state
+	 * @param root0
+	 * @param root0.fileId
+	 * @param root0.takenAt
+	 * @param root0.location
+	 */
+	setPhotoMetadata(state: FilesState, { fileId, takenAt, location }: { fileId: number } & PhotoMetadataUpdate) {
+		const attributes = state.files[fileId]?.attributes
+		if (attributes === undefined) {
+			return
+		}
+
+		// The dates driving the sorting and the grouping are precalculated, so
+		// they have to be recomputed for the photo to move to its new month.
+		const date = moment(takenAt * 1000)
+		Vue.set(attributes, 'metadata-photos-original_date_time', takenAt)
+		Vue.set(attributes, 'timestamp', date.unix())
+		Vue.set(attributes, 'month', date.format('YYYYMM'))
+		Vue.set(attributes, 'day', date.format('MMDD'))
+
+		if (location === null) {
+			Vue.delete(attributes, 'metadata-photos-gps')
+		} else {
+			// Coordinates are strings once they come back from a DAV listing.
+			Vue.set(attributes, 'metadata-photos-gps', {
+				latitude: String(location.latitude),
+				longitude: String(location.longitude),
+			})
+		}
+	},
 }
 
 const getters = {
@@ -145,6 +182,36 @@ const actions = {
 	setNomediaPaths(context: PhotosContext<FilesState>, paths: string[]) {
 		logger.debug('Ignored paths', { paths })
 		context.commit('setNomediaPaths', paths)
+	},
+
+	/**
+	 * Correct the taken date and the position of a photo
+	 *
+	 * @param context
+	 * @param root0
+	 * @param root0.photo
+	 * @param root0.takenAt
+	 * @param root0.location
+	 * @throws {Error} When the server rejects the update
+	 */
+	async updatePhotoMetadata(context: PhotosContext<FilesState>, { photo, takenAt, location }: { photo: PhotoTarget } & PhotoMetadataUpdate) {
+		await savePhotoMetadata(photo, { takenAt, location })
+		context.commit('setPhotoMetadata', { fileId: photo.fileid, takenAt, location })
+	},
+
+	/**
+	 * Move a photo to the trash
+	 *
+	 * Photos of the folders view are not part of this store, so the file is
+	 * only dropped from it when it is known.
+	 *
+	 * @param context
+	 * @param photo
+	 * @throws {Error} When the server refuses to delete the photo
+	 */
+	async deletePhoto(context: PhotosContext<FilesState>, photo: PhotoTarget) {
+		await deletePhoto(photo)
+		context.commit('deleteFile', photo.fileid)
 	},
 
 	/**

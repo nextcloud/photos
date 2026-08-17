@@ -64,10 +64,13 @@
 									:key="item.id"
 									:class="{ 'last-tiled-row': rowIndex === visibleSections[0].rows.length - 1 }"
 									:style="{ flexBasis: `${item.width - 1}px`, height: `${item.height}px` }">
-									<FileLegacy
-										v-if="item.type === 'file'"
-										:item="item"
-										:list="fileList" />
+									<template v-if="item.type === 'file'">
+										<FileLegacy :item="item" :list="fileList" />
+										<PhotoActionsMenu
+											class="photo-actions-menu"
+											:photo="legacyToPhotoTarget(item)"
+											@deleted="onPhotoDeleted" />
+									</template>
 									<FolderComponent
 										v-else
 										:item="item"
@@ -86,6 +89,7 @@
 import type { Upload } from '@nextcloud/upload'
 import type { FoldersNode } from '../services/FolderContent.ts'
 import type { Section, TiledItem } from '../services/TiledLayout.ts'
+import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { Folder } from '@nextcloud/files'
 import { defaultRootPath, parsePermissions } from '@nextcloud/files/dav'
@@ -97,6 +101,7 @@ import FolderOutline from 'vue-material-design-icons/FolderOutline.vue'
 import FileLegacy from '../components/FileLegacy.vue'
 import FolderComponent from '../components/FolderComponent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import PhotoActionsMenu from '../components/PhotoActionsMenu.vue'
 import TiledLayout from '../components/TiledLayout/TiledLayout.vue'
 import VirtualScrolling from '../components/VirtualScrolling.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
@@ -104,11 +109,13 @@ import allowedMimes from '../services/AllowedMimes.js'
 import { fetchFile } from '../services/fileFetcher.ts'
 import getFolderContent from '../services/FolderContent.ts'
 import logger from '../services/logger.ts'
+import { legacyToPhotoTarget } from '../utils/fileUtils.ts'
 
 export default {
 	name: 'FoldersView',
 	components: {
 		FileLegacy,
+		PhotoActionsMenu,
 		FolderComponent,
 		FolderOutline,
 		HeaderNavigation,
@@ -254,6 +261,14 @@ export default {
 	},
 
 	methods: {
+		legacyToPhotoTarget,
+
+		// Folders keep the ids of the files they hold, the listing skips the
+		// ones which are gone.
+		onPhotoDeleted(photo: PhotoTarget) {
+			this.$store.commit('deleteFolderFile', photo.fileid)
+		},
+
 		onRefresh() {
 			this.fetchFolderContent()
 		},
@@ -366,6 +381,19 @@ export default {
 	ul {
 		display: flex;
 		flex-wrap: wrap;
+
+		li {
+			// The actions menu is laid over the photo it belongs to.
+			position: relative;
+
+			// Reveal the menu on hover, like the photo tiles of the timeline.
+			&:hover,
+			&:focus-within {
+				.photo-actions-menu {
+					opacity: 1;
+				}
+			}
+		}
 
 		// The last row is not justified, so its items must not grow.
 		li:not(.last-tiled-row) {

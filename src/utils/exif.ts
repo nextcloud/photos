@@ -14,6 +14,66 @@ export type PhotoExif = {
 	exif: Record<string, unknown>
 	/** The IFD0, holding the camera description. */
 	ifd0: Record<string, unknown>
+	/** The GPS IFD, already converted to decimal degrees server side. */
+	gps?: {
+		latitude?: string
+		longitude?: string
+		altitude?: string
+	}
+	/** Name of the place the coordinates were resolved to, when enabled. */
+	place?: string
+	/** Moment the photo was taken, as a unix timestamp in seconds. */
+	takenAt?: number
+}
+
+/** Position a photo was taken at, in decimal degrees. */
+export type PhotoLocation = {
+	latitude: number
+	longitude: number
+}
+
+/** Maximum absolute value of a coordinate, in degrees. */
+export const COORDINATE_LIMITS = {
+	latitude: 90,
+	longitude: 180,
+} as const
+
+/**
+ * Read a coordinate written as decimal degrees.
+ *
+ * @param value - Coordinate to read
+ * @param limit - Absolute maximum of the coordinate, in degrees
+ * @return The coordinate, `null` when it is empty, not a number or off world
+ */
+export function parseCoordinate(value: unknown, limit: number): number | null {
+	if (typeof value !== 'string' && typeof value !== 'number') {
+		return null
+	}
+
+	const coordinate = typeof value === 'number' ? value : Number(value.trim())
+	if (String(value).trim() === '' || !Number.isFinite(coordinate) || Math.abs(coordinate) > limit) {
+		return null
+	}
+
+	return coordinate
+}
+
+/**
+ * Read the coordinates of a photo. They are transported as strings over DAV
+ * and are absent from photos which carry no position.
+ *
+ * @param gps - Raw GPS metadata of the photo
+ * @return The position of the photo, `null` when it has none
+ */
+export function getPhotoLocation(gps: PhotoExif['gps']): PhotoLocation | null {
+	const latitude = parseCoordinate(gps?.latitude, COORDINATE_LIMITS.latitude)
+	const longitude = parseCoordinate(gps?.longitude, COORDINATE_LIMITS.longitude)
+
+	if (latitude === null || longitude === null) {
+		return null
+	}
+
+	return { latitude, longitude }
 }
 
 export type ExifEntry = {
@@ -41,6 +101,19 @@ export function getExifSummary(metadata: PhotoExif): ExifEntry[] {
 		{ label: t('photos', 'Exposure'), value: formatExposureTime(exif.ExposureTime) },
 		{ label: t('photos', 'ISO'), value: formatIsoSpeed(exif.ISOSpeedRatings) },
 	].filter((entry) => entry.value !== '')
+}
+
+/**
+ * Write a position as decimal degrees. Coordinates are stored with the full
+ * precision of the camera, which is far below what a photo is worth showing.
+ *
+ * @param location - Position to display
+ * @return The coordinates, rounded to about a meter
+ */
+export function formatCoordinates(location: PhotoLocation): string {
+	const round = (coordinate: number) => Number(coordinate.toFixed(5))
+
+	return `${round(location.latitude)}, ${round(location.longitude)}`
 }
 
 /**

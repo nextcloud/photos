@@ -10,8 +10,9 @@ import {
 	FileType,
 	Permission,
 } from '@nextcloud/files'
-import { getRemoteURL, getRootPath } from '@nextcloud/files/dav'
+import { getRemoteURL, getRootPath, parsePermissions } from '@nextcloud/files/dav'
 import { getLanguage } from '@nextcloud/l10n'
+import { basename } from '@nextcloud/paths'
 import { generateUrl } from '@nextcloud/router'
 import { isNumber } from './numberUtils.js'
 
@@ -103,6 +104,56 @@ export function sortCompareFileInfo(fileInfo1: FoldersNode, fileInfo2: FoldersNo
 export function getPreviewUrl(file: Node, size: number): string {
 	const decodedEtag = String(file.attributes.etag).replace(/(&quot;|")/g, '')
 	return generateUrl(`/apps/photos/api/v1/preview/${file.fileid}?etag=${decodedEtag}&x=${size}&y=${size}`)
+}
+
+/**
+ * The bits of a photo the actions need, whichever listing it was read from.
+ */
+export type PhotoTarget = {
+	fileid: number
+	basename: string
+	/** Path of the photo on the files DAV endpoint. */
+	davPath: string
+	/** Permissions of the current user on the photo. */
+	permissions: number
+}
+
+/**
+ * @param file - Photo of a DAV listing
+ */
+export function toPhotoTarget(file: Node): PhotoTarget {
+	// Photos of a collection are exposed under the collection itself, with a
+	// name prefixed by their id, but only the original file carries the
+	// metadata and can be written to.
+	const originalFilename = file.attributes['photos-collection-file-original-filename']
+
+	if (originalFilename === undefined) {
+		return {
+			fileid: file.fileid as number,
+			basename: file.basename,
+			davPath: `${file.root}${file.path}`,
+			permissions: file.permissions,
+		}
+	}
+
+	return {
+		fileid: file.fileid as number,
+		basename: basename(originalFilename),
+		davPath: `${getRootPath()}${originalFilename}`,
+		permissions: file.permissions,
+	}
+}
+
+/**
+ * @param file - Photo of a folder listing, which is not read over DAV
+ */
+export function legacyToPhotoTarget(file: FoldersNode): PhotoTarget {
+	return {
+		fileid: file.fileid,
+		basename: file.basename,
+		davPath: file.filename,
+		permissions: parsePermissions(file.permissions),
+	}
 }
 
 export type ViewerFileInfo = {
