@@ -14,6 +14,8 @@ OC.L10N.register(
     "An error occurred" : "'n Fout het voorgekom",
     "Favorite" : "Gunsteling",
     "Go back" : "Gaan terug",
+    "Delete" : "Delete",
+    "Filename" : "Lêernaam",
     "Cancel" : "Cancel",
     "Add folder" : "Voeg 'n gids by",
     "Home" : "Tuis",

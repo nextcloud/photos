@@ -13,6 +13,8 @@ OC.L10N.register(
     "An error occurred" : "Digwyddodd gwall",
     "Favorite" : "Ffefryn",
     "Go back" : "Nôl",
+    "Delete" : "Delete",
+    "Filename" : "Enw ffeil",
     "Cancel" : "Cancel",
     "Add folder" : "Ychwanegu ffolder",
     "Home" : "Cartref",

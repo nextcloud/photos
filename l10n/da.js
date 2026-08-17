@@ -65,6 +65,8 @@ OC.L10N.register(
     "Go back" : "Gå tilbage",
     "Add to album" : "Tilføj til album",
     "Share" : "Del",
+    "Delete" : "Delete",
+    "Filename" : "Filnavn",
     "Cancel" : "Annullér",
     "Select a custom date range" : "Vælg et brugerdefineret datoområde",
     "Select a date range" : "Vælg et datoområde",
