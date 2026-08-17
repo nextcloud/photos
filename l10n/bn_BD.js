@@ -10,6 +10,7 @@ OC.L10N.register(
     "Shared by" : "যাদের মাঝে ভাগাভাগি করা হয়েছে",
     "Favorite" : "প্রিয়জন",
     "Go back" : "ফিরে যাও",
+    "Delete" : "Delete",
     "Cancel" : "Cancel",
     "Home" : "বাড়ি",
     "General" : "সাধারণ",

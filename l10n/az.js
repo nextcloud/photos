@@ -9,6 +9,8 @@ OC.L10N.register(
     "Save" : "Saxla",
     "Shared by" : "Tərəfindən yayımlanıb",
     "Favorite" : "İstəkli",
+    "Share" : "Yayımla",
+    "Delete" : "Delete",
     "Cancel" : "Cancel",
     "Home" : "Ev",
     "General" : "Ümumi",
