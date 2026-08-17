@@ -174,7 +174,7 @@ abstract class AlbumRootBase implements ICollection, ICopyTarget {
 				$earliestDate = $childCreationDate;
 			}
 
-			if ($childCreationDate > $earliestDate || $latestDate === null) {
+			if ($childCreationDate > $latestDate || $latestDate === null) {
 				$latestDate = $childCreationDate;
 			}
 		}
