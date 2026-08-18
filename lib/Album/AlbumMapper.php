@@ -308,6 +308,71 @@ class AlbumMapper {
 		}
 	}
 
+	/**
+	 * Remove album entries whose file is gone from the file cache.
+	 *
+	 * @param int $limit How many orphan file ids to take on at most
+	 * @return int The number of removed entries.
+	 */
+	public function deleteOrphanFiles(int $limit): int {
+		$deleted = 0;
+		while ($limit > 0) {
+			$sqlLimit = min($limit, 1000);
+
+			$qbOuter = $this->connection->getQueryBuilder();
+			$qbInner = $this->connection->getQueryBuilder();
+			$innerQuery = $qbInner->selectDistinct('af.file_id')
+				->from('photos_albums_files', 'af')
+				->leftJoin('af', 'filecache', 'fc', $qbInner->expr()->eq('af.file_id', 'fc.fileid'))
+				->where($qbInner->expr()->isNull('fc.fileid'))
+				->setMaxResults($sqlLimit);
+
+			// fix for MySQL which needs a nested table, as directly selecting from a table that is being deleted is not possible.
+			$orphans = $qbOuter->createFunction('SELECT file_id FROM (' . $innerQuery->getSQL() . ') orphans');
+
+			$removed = $qbOuter->delete('photos_albums_files')
+				->where($qbOuter->expr()->in('file_id', $orphans))
+				->executeStatement();
+
+			// Nothing left to collect, no point running the remaining passes.
+			if ($removed === 0) {
+				break;
+			}
+
+			$deleted += $removed;
+			$limit -= $sqlLimit;
+		}
+
+		$this->repairOrphanCovers();
+
+		return $deleted;
+	}
+
+	/**
+	 * Give a new cover to albums whose cover is a file the cache no longer knows.
+	 *
+	 * Derived from the albums themselves rather than from what was just deleted,
+	 * so it also repairs covers left dangling by an earlier run or an older bug.
+	 */
+	private function repairOrphanCovers(): void {
+		$query = $this->connection->getQueryBuilder();
+		$albumIds = $query->select('a.album_id')
+			->from('photos_albums', 'a')
+			->leftJoin('a', 'filecache', 'fc', $query->expr()->eq('a.last_added_photo', 'fc.fileid'))
+			->where($query->expr()->neq('a.last_added_photo', $query->createNamedParameter(-1, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->isNull('fc.fileid'))
+			->executeQuery()
+			->fetchFirstColumn();
+
+		foreach ($albumIds as $albumId) {
+			$query = $this->connection->getQueryBuilder();
+			$query->update('photos_albums')
+				->set('last_added_photo', $query->createNamedParameter($this->getLastAdded((int)$albumId), IQueryBuilder::PARAM_INT))
+				->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
+				->executeStatement();
+		}
+	}
+
 	private function getLastAdded(int $albumId): int {
 		$query = $this->connection->getQueryBuilder();
 		$query->select('file_id')
