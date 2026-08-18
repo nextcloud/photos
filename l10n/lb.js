@@ -12,6 +12,7 @@ OC.L10N.register(
     "Go back" : "Zeréckgoen",
     "Delete" : "Delete",
     "Cancel" : "Cancel",
+    "Location" : "Uert",
     "Home" : "Doheem",
     "General" : "Allgemeng",
     "Remove from favorites" : "Remove from favorites",

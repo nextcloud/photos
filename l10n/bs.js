@@ -10,6 +10,7 @@ OC.L10N.register(
     "Share" : "Podijeli",
     "Delete" : "Delete",
     "Cancel" : "Cancel",
+    "Location" : "Lokacija",
     "Home" : "Početna stranica",
     "Remove from favorites" : "Remove from favorites",
     "Group" : "Grupa"
