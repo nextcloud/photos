@@ -21,6 +21,8 @@ OC.L10N.register(
     "Go back" : "Regresar",
     "Delete" : "Delete",
     "Cancel" : "Cancel",
+    "Filename" : "Nombre de archivo",
+    "Location" : "Ubicación",
     "_{years} year ago_::_{years} years ago_" : ["Hace {years} año","Hace {years} años","Hace {years} años"],
     "Home" : "Casa",
     "General" : "General",

@@ -14,6 +14,8 @@ OC.L10N.register(
     "Go back" : "Regresar",
     "Delete" : "Delete",
     "Cancel" : "Cancel",
+    "Filename" : "Nombre de archivo",
+    "Location" : "Ubicación",
     "Dates" : "Fechas",
     "Home" : "Inicio",
     "General" : "General",

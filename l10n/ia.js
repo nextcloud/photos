@@ -12,6 +12,7 @@ OC.L10N.register(
     "Go back" : "Retornar",
     "Delete" : "Delete",
     "Cancel" : "Cancel",
+    "Location" : "Loco",
     "Home" : "Initio",
     "General" : "General",
     "Remove from favorites" : "Remove from favorites",

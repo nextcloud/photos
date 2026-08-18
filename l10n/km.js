@@ -10,6 +10,7 @@ OC.L10N.register(
     "Shared by" : "បាន​ចែក​រំលែក​ដោយ",
     "Delete" : "Delete",
     "Cancel" : "Cancel",
+    "Location" : "ទីតាំង",
     "Home" : "ទំព័រដើម",
     "General" : "ទូទៅ",
     "Remove from favorites" : "Remove from favorites",

@@ -8,6 +8,7 @@ OC.L10N.register(
     "Share" : "կիսվել",
     "Delete" : "Delete",
     "Cancel" : "Cancel",
+    "Location" : "Տեղակայություն",
     "Home" : "Սկիզբ",
     "General" : "Ընդհանուր",
     "Remove from favorites" : "Remove from favorites",
