@@ -9,8 +9,9 @@ OC.L10N.register(
     "Go back" : "ආපසු යන්න",
     "Share" : "බෙදාගන්න",
     "Delete" : "Delete",
-    "Filename" : "ගොනුවේ නම",
     "Cancel" : "Cancel",
+    "Filename" : "ගොනුවේ නම",
+    "Location" : "ස්ථානය",
     "Home" : "මුල් පිටුව",
     "General" : "සමාන්‍යය",
     "Confirm" : "තහවුරු කරන්න"

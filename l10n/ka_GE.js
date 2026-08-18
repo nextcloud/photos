@@ -14,6 +14,7 @@ OC.L10N.register(
     "Go back" : "უკან დაბრუნება",
     "Delete" : "Delete",
     "Cancel" : "Cancel",
+    "Location" : "ადგილმდებარეობა",
     "Dates" : "თარიღები",
     "Home" : "სახლი",
     "General" : "ზოგადი",

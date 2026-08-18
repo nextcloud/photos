@@ -18,6 +18,8 @@ OC.L10N.register(
     "Go back" : "Reveni",
     "Delete" : "Delete",
     "Cancel" : "Cancel",
+    "Filename" : "Dosiernomo",
+    "Location" : "Loko",
     "Add folder" : "Aldoni dosierujon",
     "Home" : "Hejmo",
     "General" : "Ĝenerala",

@@ -10,6 +10,7 @@ OC.L10N.register(
     "Favorite" : "விருப்பமான",
     "Delete" : "Delete",
     "Cancel" : "Cancel",
+    "Location" : "இடம்",
     "Home" : "அகம்",
     "General" : "பொதுவான",
     "Remove from favorites" : "Remove from favorites",
