@@ -20,6 +20,11 @@ use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\IFile;
 
 class AlbumPhoto extends CollectionPhoto implements IFile {
+	/**
+	 * Resolved node, or `false` once we know there is none.
+	 */
+	private Node|false|null $node = null;
+
 	public function __construct(
 		private readonly AlbumMapper $albumMapper,
 		private readonly AlbumInfo $album,
@@ -38,14 +43,29 @@ class AlbumPhoto extends CollectionPhoto implements IFile {
 	}
 
 	private function getNode(): Node {
-		$nodes = $this->rootFolder
-			->getUserFolder($this->albumFile->getOwner() ?: $this->album->getUserId())
-			->getById($this->file->getFileId());
-		$node = current($nodes);
-		if ($node) {
-			return $node;
-		} else {
+		if ($this->node === null) {
+			$nodes = $this->rootFolder
+				->getUserFolder($this->albumFile->getOwner() ?: $this->album->getUserId())
+				->getById($this->file->getFileId());
+			$this->node = current($nodes) ?: false;
+		}
+
+		if ($this->node === false) {
 			throw new NotFound('Photo not found for user');
+		}
+
+		return $this->node;
+	}
+
+	/**
+	 * Whether the file behind this entry can still be reached by its owner.
+	 */
+	public function exists(): bool {
+		try {
+			$this->getNode();
+			return true;
+		} catch (NotFound) {
+			return false;
 		}
 	}
 
