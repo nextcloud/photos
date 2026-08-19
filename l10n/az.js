@@ -12,6 +12,7 @@ OC.L10N.register(
     "Share" : "Yayımla",
     "Delete" : "Delete",
     "Cancel" : "Cancel",
+    "Location" : "Yerləşdiyiniz ünvan",
     "Home" : "Ev",
     "General" : "Ümumi",
     "Remove from favorites" : "Remove from favorites",
