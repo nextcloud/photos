@@ -68,6 +68,7 @@ OC.L10N.register(
     "Delete" : "Delete",
     "Cancel" : "Скасаваць",
     "Filename" : "Назва файла",
+    "Location" : "Месцазнаходжанне",
     "Select a custom date range" : "Выберыце ўласны дыяпазон дат",
     "Select a date range" : "Выберыце дыяпазон дат",
     "Date range" : "Дыяпазон дат",
