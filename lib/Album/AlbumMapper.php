@@ -186,11 +186,17 @@ class AlbumMapper {
 			}
 		}
 
-		$fileIds = array_map(fn ($file) => $file->getFileId(), $files);
+		$fileIds = array_fill_keys(
+			array_map(
+				static fn (AlbumFile $file): int => $file->getFileId(),
+				$files,
+			),
+			true,
+		);
 
 		$smartAlbumFiles = array_filter(
 			$this->filtersManager->getFilesBasedOnFilters($userId, $filters),
-			fn ($file) => array_search($file->getFileId(), $fileIds) === false,
+			static fn (AlbumFile $file): bool => !isset($fileIds[$file->getFileId()]),
 		);
 
 		return [...$files, ...$smartAlbumFiles];
@@ -527,11 +533,18 @@ class AlbumMapper {
 		$result = [];
 		foreach ($albumsById as $id => $album) {
 			$filesByAlbum[$id] ??= [];
-			$fileIds = array_map(fn ($file) => $file->getFileId(), $filesByAlbum[$id]);
+
+			$fileIds = array_fill_keys(
+				array_map(
+					static fn (AlbumFile $file): int => $file->getFileId(),
+					$filesByAlbum[$id],
+				),
+				true,
+			);
 
 			$smartAlbumFiles = array_filter(
 				$this->filtersManager->getFilesBasedOnFilters($album->getUserId(), $album->getDecodedFilters()),
-				fn ($file) => array_search($file->getFileId(), $fileIds) === false,
+				static fn (AlbumFile $file): bool => !isset($fileIds[$file->getFileId()]),
 			);
 
 			$result[] = new AlbumWithFiles($album, $this, [...$filesByAlbum[$id], ...$smartAlbumFiles]);
