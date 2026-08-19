@@ -26,6 +26,9 @@ use Sabre\DAV\ICopyTarget;
 use Sabre\DAV\INode;
 
 abstract class AlbumRootBase implements ICollection, ICopyTarget {
+	/** @var AlbumPhoto[]|null */
+	private ?array $children = null;
+
 	public function __construct(
 		protected AlbumMapper $albumMapper,
 		protected AlbumWithFiles $album,
@@ -86,7 +89,7 @@ abstract class AlbumRootBase implements ICollection, ICopyTarget {
 			$newName = $photosFolder->getNonExistingName($name);
 
 			$node = $photosFolder->newFile($newName, $data);
-			$this->addFile($node->getId(), $node->getOwner()->getUID());
+			$this->addFileToAlbum($node->getId(), $node->getOwner()->getUID());
 			// Cheating with header because we are using fileID-fileName
 			// https://github.com/nextcloud/server/blob/af29b978078ffd9169a9bd9146feccbb7974c900/apps/dav/lib/Connector/Sabre/FilesPlugin.php#L564-L585
 			\header('OC-FileId: ' . $node->getId());
@@ -109,7 +112,7 @@ abstract class AlbumRootBase implements ICollection, ICopyTarget {
 			throw new Forbidden("Can't add file to album, only files from $uid can be added");
 		}
 
-		return $this->addFile($sourceId, $ownerUID);
+		return $this->addFileToAlbum($sourceId, $ownerUID);
 	}
 
 	#[\Override]
@@ -120,11 +123,21 @@ abstract class AlbumRootBase implements ICollection, ICopyTarget {
 	abstract public function getAlbumPhoto(AlbumFile $file): AlbumPhoto;
 
 	/**
+	 * Entries whose file the owner can no longer reach are left out: listing
+	 * them would only produce children without properties, and a cover or a
+	 * date range taken from a file that is not there.
+	 *
+	 * Resolving costs a lookup per photo, hence the per-request cache - a
+	 * single PROPFIND otherwise walks the children several times over.
+	 *
 	 * @return AlbumPhoto[]
 	 */
 	#[\Override]
 	final public function getChildren(): array {
-		return array_map(fn (AlbumFile $file) => $this->getAlbumPhoto($file), $this->album->getFiles());
+		return $this->children ??= array_values(array_filter(
+			array_map(fn (AlbumFile $file): AlbumPhoto => $this->getAlbumPhoto($file), $this->album->getFiles()),
+			fn (AlbumPhoto $photo): bool => $photo->exists(),
+		));
 	}
 
 	#[\Override]
@@ -155,6 +168,16 @@ abstract class AlbumRootBase implements ICollection, ICopyTarget {
 
 	abstract protected function addFile(int $sourceId, string $ownerUID);
 
+	/**
+	 * Add a file and drop the resolved children, which just went stale.
+	 */
+	final protected function addFileToAlbum(int $sourceId, string $ownerUID): bool {
+		$added = $this->addFile($sourceId, $ownerUID);
+		$this->children = null;
+
+		return $added;
+	}
+
 	final public function getAlbum(): AlbumWithFiles {
 		return $this->album;
 	}
@@ -166,7 +189,11 @@ abstract class AlbumRootBase implements ICollection, ICopyTarget {
 		foreach ($this->getChildren() as $child) {
 			try {
 				$childCreationDate = $child->getFileInfo()->getMtime();
-			} catch (NotFoundException $e) {
+			} catch (NotFoundException|NotFound $e) {
+				// An album entry whose file cannot be resolved anymore must not
+				// take the whole album listing down with it.
+				// AlbumPhoto throws the Sabre exception, the other collections
+				// throw the OCP one.
 				continue;
 			}
 
