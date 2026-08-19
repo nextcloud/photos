@@ -1,0 +1,238 @@
+# SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: MIT
+
+name: Playwright Tests
+
+on:
+  pull_request:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+env:
+  # The recognize branch to build for the faces tests. recognize main supports the
+  # current server releases; override for stable branches if needed.
+  RECOGNIZE_BRANCH: main
+
+jobs:
+  playwright-setup:
+    timeout-minutes: 15
+    name: Playwright setup
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
+    - name: Read package.json
+      uses: nextcloud-libraries/parse-package-engines-action@122ae05d4257008180a514e1ddeb0c1b9d094bdd # v0.1.0
+      id: versions
+    - name: Set up node
+      uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      with:
+        node-version: ${{ steps.versions.outputs.node-version }}
+    - name: Set up npm
+      run: npm i -g 'npm@${{ steps.versions.outputs.package-manager-version }}'
+    - name: Install dependencies and build
+      run: |
+        npm ci
+        npm run build --if-present
+
+    # The faces tests drive recognize's WebDAV API, so a recognize checkout is
+    # built here (its models are tracked in the repository, the TensorFlow
+    # binaries are fetched by `make all`) and shipped inside the cached context.
+    # It is mounted into the test container through RECOGNIZE_APP_PATH, see
+    # tests/playwright/start-nextcloud-server.js.
+    - name: Set up PHP for recognize
+      uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2.37.2
+      with:
+        php-version: "8.3"
+        extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite, gd, zip, bz2
+        tools: composer
+
+    # recognize spawns a bundled Node runtime and loads the TensorFlow native
+    # addon built during `npm ci`; build it under the Node version recognize runs
+    # at runtime (NODE_VERSION below) so the addon ABI matches.
+    - name: Set up node 20 for recognize
+      uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      with:
+        node-version: "20"
+
+    - name: Checkout recognize
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        repository: nextcloud/recognize
+        ref: ${{ env.RECOGNIZE_BRANCH }}
+        path: recognize-app
+        persist-credentials: false
+
+    - name: Build recognize
+      working-directory: recognize-app
+      env:
+        # Keep in sync with recognize's InstallDeps::NODE_VERSION.
+        NODE_VERSION: v20.9.0
+      run: |
+        composer install --no-dev
+        make all
+        # recognize's InstallDeps migration normally downloads this Node binary on
+        # app:enable, but it cannot here: the app is mounted read-only in the test
+        # container. Pre-stage it so the classifier process can start.
+        curl -fsSL "https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}-linux-x64.tar.gz" -o /tmp/node.tar.gz
+        tar -xzf /tmp/node.tar.gz -C /tmp
+        mkdir -p bin
+        cp "/tmp/node-${NODE_VERSION}-linux-x64/bin/node" bin/node
+        chmod +x bin/node
+        # Drop the git metadata to keep the cached context small; the working tree
+        # (models plus TensorFlow binaries) is all that is needed at runtime.
+        rm -rf .git
+
+    - name: Save context
+      uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        key: playwright-context-${{ github.run_id }}
+        path: ./
+
+  playwright-tests:
+    needs: [playwright-setup]
+    timeout-minutes: 60
+    name: Playwright tests ${{ matrix.shardIndex }} / ${{ matrix.shardTotal }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shardIndex: [1, 2, 3]
+        shardTotal: [3]
+    outputs:
+      node-version: ${{ steps.versions.outputs.node-version }}
+      package-manager-version: ${{ steps.versions.outputs.package-manager-version }}
+
+    steps:
+    - name: Restore context
+      id: cache
+      uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        key: playwright-context-${{ github.run_id }}
+        path: ./
+
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      if: steps.cache.outputs.cache-hit != 'true'
+      with:
+        persist-credentials: false
+        submodules: true # for 3rdparty
+
+    - name: Read package.json
+      uses: nextcloud-libraries/parse-package-engines-action@122ae05d4257008180a514e1ddeb0c1b9d094bdd # v0.1.0
+      id: versions
+
+    - name: Set up node
+      uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      with:
+        node-version: ${{ steps.versions.outputs.node-version }}
+
+    - name: Set up npm
+      run: npm i -g 'npm@${{ steps.versions.outputs.package-manager-version }}'
+
+    - name: Install dependencies and build
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: |
+        npm ci
+        npm run build --if-present
+
+    - name: Install Playwright browsers
+      run: npx playwright install --with-deps
+
+    - name: Run Playwright tests
+      run: npm run playwright -- --shard='${{ matrix.shardIndex }}/${{ matrix.shardTotal }}'
+      env:
+        # The built recognize checkout, mounted into the container so the faces
+        # tests can run instead of skipping themselves.
+        RECOGNIZE_APP_PATH: ${{ github.workspace }}/recognize-app
+
+    - name: Show logs
+      if: failure()
+      run: |
+        # @nextcloud/e2e-test-server names the container after the app directory,
+        # so it is discovered rather than hardcoded.
+        container=$(docker ps -a --format '{{.Names}}' | grep -i nextcloud | head -n1)
+        echo "=== Logs of container ${container} ==="
+        docker logs "$container" || true
+        echo '=== Nextcloud server logs ==='
+        docker exec "$container" cat data/nextcloud.log || true
+
+    - name: Upload blob report to GitHub Actions Artifacts
+      if: ${{ !cancelled() }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: blob-report-${{ matrix.shardIndex }}
+        path: blob-report
+        retention-days: 1
+
+  merge-reports:
+    # Merge reports after playwright-tests, even if some shards have failed
+    if: ${{ !cancelled() }}
+    needs: [playwright-tests]
+
+    runs-on: ubuntu-latest-low
+    steps:
+    - name: Restore context
+      id: cache
+      uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        key: playwright-context-${{ github.run_id }}
+        path: ./
+
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      if: steps.cache.outputs.cache-hit != 'true'
+      with:
+        persist-credentials: false
+
+    - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      if: steps.cache.outputs.cache-hit != 'true'
+      with:
+        node-version: ${{ needs.playwright-tests.outputs.node-version }}
+
+    - name: Set up npm
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: npm i -g 'npm@${{ needs.playwright-tests.outputs.package-manager-version }}'
+
+    - name: Install dependencies
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: npm ci
+
+    - name: Download blob reports from GitHub Actions Artifacts
+      uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+      with:
+        path: all-blob-reports
+        pattern: blob-report-*
+        merge-multiple: true
+
+    - name: Merge into HTML Report
+      run: npx playwright merge-reports --config tests/playwright/merge.config.ts --reporter html,github ./all-blob-reports
+
+    - name: Upload HTML report
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: html-report--attempt-${{ github.run_attempt }}
+        path: playwright-report
+        retention-days: 5
+
+    - name: Show the logs
+      run: |
+        echo 'To view the report:'
+        echo '  1. Extract the folder from the zip file'
+        echo '  2. run "npx playwright show-report name-of-my-extracted-playwright-report"'
+
+  summary:
+    permissions:
+      contents: none
+    runs-on: ubuntu-latest-low
+    needs: [playwright-tests]
+
+    if: always()
+
+    name: playwright-test-summary
+
+    steps:
+      - name: Summary status
+        run: if ${{ needs.playwright-tests.result != 'success' }}; then exit 1; fi
