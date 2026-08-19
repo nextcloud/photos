@@ -81,16 +81,29 @@ export async function classifyFaces(user: User): Promise<void> {
 	await setAppConfig('recognize', 'require_api_key', 'false')
 	// CI runners only have a couple of cores available.
 	await setAppConfig('recognize', 'tensorflow.cores', '1')
-	// recognize's install migration cannot download its Node runtime, as the app is
-	// mounted read only — point it at the binary the workflow pre-staged instead.
-	// Without this the classifier never starts and no face is ever detected.
-	await runOcc(['config:app:set', '--lazy', '--value=/var/www/html/apps/recognize/bin/node', 'recognize', 'node_binary'])
+	await expectNodeRuntime()
 
 	await runOcc(['files:scan', user.userId, '--generate-metadata'], { verbose: true })
 	await runOcc(['recognize:classify'], { verbose: true })
 
 	for (let pass = 0; pass < 6; pass++) {
 		await runOcc(['recognize:cluster-faces', '-b', '10000'], { verbose: true })
+	}
+}
+
+/**
+ * Assert that recognize has the Node runtime it spawns its classifiers with.
+ */
+async function expectNodeRuntime(): Promise<void> {
+	const { stdout: configured } = await runOcc(['config:app:get', 'recognize', 'node_binary'], { failOnError: false })
+	const { stdout: appPath } = await runOcc(['app:getpath', 'recognize'])
+
+	const nodeBinary = configured.trim() || `${appPath.trim()}/bin/node`
+	const { exitCode } = await runExec(['test', '-x', nodeBinary], { failOnError: false })
+	expect(exitCode, `recognize installed an executable Node runtime at ${nodeBinary}`).toBe(0)
+
+	if (configured.trim() === '') {
+		await runOcc(['config:app:set', '--lazy', `--value=${nodeBinary}`, 'recognize', 'node_binary'])
 	}
 }
 
@@ -134,8 +147,10 @@ export async function expectFaceClusters(request: APIRequestContext, user: User)
  * a diagnostic into the reported failure.
  */
 async function countFaceDetections(): Promise<string> {
+	// Through PHP's SQLite binding rather than the `sqlite3` client, which the
+	// container does not ship.
 	const { stdout, stderr } = await runExec(
-		['bash', '-c', "sqlite3 data/*.db 'SELECT COUNT(*) FROM oc_recognize_face_detections'"],
+		['php', '-r', 'echo (new SQLite3("data/owncloud.db"))->querySingle("SELECT COUNT(*) FROM oc_recognize_face_detections");'],
 		{ failOnError: false },
 	)
 	return stdout.trim() || `unknown (${stderr.trim()})`

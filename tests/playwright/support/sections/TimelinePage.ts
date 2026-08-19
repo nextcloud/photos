@@ -127,11 +127,7 @@ export class TimelinePage {
 
 	/** Open the picker choosing which album to add the selection to. */
 	public async openAlbumPicker(): Promise<AlbumPickerDialog> {
-		await this.addToAlbumButton().click()
-
-		const picker = new AlbumPickerDialog(this.page)
-		await expect(picker.dialog()).toBeVisible()
-		return picker
+		return await AlbumPickerDialog.open(this.page, () => this.addToAlbumButton().click())
 	}
 
 	/**

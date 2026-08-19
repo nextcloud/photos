@@ -6,7 +6,7 @@
 import type { Locator, Page } from '@playwright/test'
 
 import { expect } from '@playwright/test'
-import { waitForDavRequest } from '../utils/requests.ts'
+import { ALBUM_ENDPOINT, SHARED_ALBUM_ENDPOINT, waitForDavRequest } from '../utils/requests.ts'
 
 /**
  * The dialog listing the albums a selection can be added to — both the own ones
@@ -14,6 +14,31 @@ import { waitForDavRequest } from '../utils/requests.ts'
  */
 export class AlbumPickerDialog {
 	constructor(public readonly page: Page) {}
+
+	/**
+	 * Open the picker through the action that triggers it, and return it once its
+	 * album list has arrived.
+	 *
+	 * @param page - Page the app runs on
+	 * @param openPicker - The action opening the picker, armed before it runs
+	 */
+	public static async open(page: Page, openPicker: () => Promise<void>): Promise<AlbumPickerDialog> {
+		const listings = Promise.all([
+			waitForDavRequest(page, 'PROPFIND', ALBUM_ENDPOINT),
+			waitForDavRequest(page, 'PROPFIND', SHARED_ALBUM_ENDPOINT),
+		])
+		// A picker that never opens fails on the assertion below, which leaves these
+		// waits behind — and an unhandled rejection of theirs would be reported
+		// against whatever test runs next. Awaiting them still throws.
+		listings.catch(() => {})
+
+		const picker = new AlbumPickerDialog(page)
+		await openPicker()
+		await expect(picker.dialog()).toBeVisible()
+		await listings
+
+		return picker
+	}
 
 	public dialog(): Locator {
 		return this.page.getByRole('dialog')
@@ -43,8 +68,8 @@ export class AlbumPickerDialog {
 	 */
 	public async pickAlbum(albumName: string, photoCount: number): Promise<void> {
 		const album = this.getAlbum(albumName)
-		// The list is fetched when the dialog mounts, so a missing entry would
-		// otherwise be reported as "album does not exist".
+		// The listings the entries are rendered from were awaited in `open`, so a
+		// missing entry here really is a missing album.
 		await expect(album).toBeVisible()
 
 		const copies = Array.from({ length: photoCount }, () => waitForDavRequest(this.page, 'COPY'))

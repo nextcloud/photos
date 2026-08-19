@@ -50,10 +50,7 @@ export class PhotoActionsMenu {
 
 	/** Open the album picker to add the photo to an album. */
 	public async addToAlbum(): Promise<AlbumPickerDialog> {
-		await this.getEntry('Add to album').click()
-		const picker = new AlbumPickerDialog(this.page)
-		await expect(picker.dialog()).toBeVisible()
-		return picker
+		return await AlbumPickerDialog.open(this.page, () => this.getEntry('Add to album').click())
 	}
 
 	/** The confirmation dialog of the delete entry. */

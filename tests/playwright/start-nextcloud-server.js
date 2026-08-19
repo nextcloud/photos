@@ -30,6 +30,14 @@ async function start() {
 	await runOcc(['config:system:set', 'cache_app_config', '--value', 'false', '--type', 'boolean'])
 	process.stdout.write('├─ Disabled caching AppConfig\n')
 
+	// The media fixtures are 16 megapixel photos, and scaling each of them down to
+	// the default 4096px max preview costs seconds. The photo grid asks for 1024px
+	// at most.
+	for (const axis of ['preview_max_x', 'preview_max_y']) {
+		await runOcc(['config:system:set', axis, '--value', '1024', '--type', 'integer'])
+	}
+	process.stdout.write('├─ Capped previews at 1024px so they are cheap to generate\n')
+
 	// createRandomUser() generates short passwords that the policy would reject
 	await runOcc(['app:disable', 'password_policy'])
 	process.stdout.write('├─ Disabled password policy for random test users\n')
