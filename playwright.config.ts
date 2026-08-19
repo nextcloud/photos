@@ -9,7 +9,7 @@ import { defineConfig, devices } from '@playwright/test'
 const NEXTCLOUD_PORT = 8090
 
 /** Spec file of the faces tests, which get their own project. */
-const FACES_SPEC = '**/faces.spec.ts'
+const FACES_SPEC = /(\.|\/)faces\.spec\.ts$/
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -48,6 +48,9 @@ export default defineConfig({
 			testIgnore: FACES_SPEC,
 			use: {
 				...devices['Desktop Chrome'],
+				channel: process.env.CI
+					? 'chrome' // use the pre-installed chrome on the GitHub Actions runner
+					: 'chromium', // use the chromium that Playwright installed, so we have a known version
 			},
 		},
 
@@ -63,7 +66,16 @@ export default defineConfig({
 			timeout: 45 * 60 * 1000,
 			use: {
 				...devices['Desktop Chrome'],
+				channel: process.env.CI
+					? 'chrome' // use the pre-installed chrome on the GitHub Actions runner
+					: 'chromium', // use the chromium that Playwright installed, so we have a known version
 			},
+			dependencies: ['install-recognize'],
+		},
+
+		{
+			name: 'install-recognize',
+			testMatch: /install-recognize\.ts$/,
 		},
 	],
 

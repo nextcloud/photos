@@ -11,11 +11,6 @@ on:
 permissions:
   contents: read
 
-env:
-  # The recognize branch to build for the faces tests. recognize main supports the
-  # current server releases; override for stable branches if needed.
-  RECOGNIZE_BRANCH: main
-
 jobs:
   playwright-setup:
     timeout-minutes: 15
@@ -25,67 +20,41 @@ jobs:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         persist-credentials: false
+
+    - name: Get version matrix
+      id: php-versions
+      uses: icewind1991/nextcloud-version-matrix@8a7bac6300b2f0f3100088b297995a229558ddba # v1.3.2
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2.37.2
+      with:
+        php-version: ${{ steps.php-versions.outputs.php-min }}
+        extensions: bz2, ctype, curl, dom, fileinfo, gd, iconv, intl, json, libxml, mbstring, openssl, pcntl, posix, session, simplexml, xmlreader, xmlwriter, zip, zlib, oci8
+        coverage: none
+        ini-file: development
+        tools: composer
+        ini-values: disable_functions=
+
+    - name: Install PHP dependencies
+      run: |
+        composer install --no-dev --no-scripts
+
     - name: Read package.json
       uses: nextcloud-libraries/parse-package-engines-action@122ae05d4257008180a514e1ddeb0c1b9d094bdd # v0.1.0
       id: versions
+
     - name: Set up node
       uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
       with:
         node-version: ${{ steps.versions.outputs.node-version }}
+
     - name: Set up npm
       run: npm i -g 'npm@${{ steps.versions.outputs.package-manager-version }}'
+
     - name: Install dependencies and build
       run: |
         npm ci
         npm run build --if-present
-
-    # The faces tests drive recognize's WebDAV API, so a recognize checkout is
-    # built here (its models are tracked in the repository, the TensorFlow
-    # binaries are fetched by `make all`) and shipped inside the cached context.
-    # It is mounted into the test container through RECOGNIZE_APP_PATH, see
-    # tests/playwright/start-nextcloud-server.js.
-    - name: Set up PHP for recognize
-      uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2.37.2
-      with:
-        php-version: "8.3"
-        extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite, gd, zip, bz2
-        tools: composer
-
-    # recognize spawns a bundled Node runtime and loads the TensorFlow native
-    # addon built during `npm ci`; build it under the Node version recognize runs
-    # at runtime (NODE_VERSION below) so the addon ABI matches.
-    - name: Set up node 20 for recognize
-      uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-      with:
-        node-version: "20"
-
-    - name: Checkout recognize
-      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      with:
-        repository: nextcloud/recognize
-        ref: ${{ env.RECOGNIZE_BRANCH }}
-        path: recognize-app
-        persist-credentials: false
-
-    - name: Build recognize
-      working-directory: recognize-app
-      env:
-        # Keep in sync with recognize's InstallDeps::NODE_VERSION.
-        NODE_VERSION: v20.9.0
-      run: |
-        composer install --no-dev
-        make all
-        # recognize's InstallDeps migration normally downloads this Node binary on
-        # app:enable, but it cannot here: the app is mounted read-only in the test
-        # container. Pre-stage it so the classifier process can start.
-        curl -fsSL "https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}-linux-x64.tar.gz" -o /tmp/node.tar.gz
-        tar -xzf /tmp/node.tar.gz -C /tmp
-        mkdir -p bin
-        cp "/tmp/node-${NODE_VERSION}-linux-x64/bin/node" bin/node
-        chmod +x bin/node
-        # Drop the git metadata to keep the cached context small; the working tree
-        # (models plus TensorFlow binaries) is all that is needed at runtime.
-        rm -rf .git
 
     - name: Save context
       uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
@@ -96,12 +65,12 @@ jobs:
   playwright-tests:
     needs: [playwright-setup]
     timeout-minutes: 60
-    name: Playwright tests ${{ matrix.shardIndex }} / ${{ matrix.shardTotal }}
+    name: Playwright tests ${{ matrix.shardIndex == 'recognize' && 'with "recognize" app' || format('{0} / {1}', matrix.shardIndex, matrix.shardTotal) }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        shardIndex: [1, 2, 3]
+        shardIndex: [1, 2, 3, "recognize"]
         shardTotal: [3]
     outputs:
       node-version: ${{ steps.versions.outputs.node-version }}
@@ -119,7 +88,6 @@ jobs:
       if: steps.cache.outputs.cache-hit != 'true'
       with:
         persist-credentials: false
-        submodules: true # for 3rdparty
 
     - name: Read package.json
       uses: nextcloud-libraries/parse-package-engines-action@122ae05d4257008180a514e1ddeb0c1b9d094bdd # v0.1.0
@@ -131,6 +99,7 @@ jobs:
         node-version: ${{ steps.versions.outputs.node-version }}
 
     - name: Set up npm
+      if: steps.cache.outputs.cache-hit != 'true'
       run: npm i -g 'npm@${{ steps.versions.outputs.package-manager-version }}'
 
     - name: Install dependencies and build
@@ -139,15 +108,17 @@ jobs:
         npm ci
         npm run build --if-present
 
-    - name: Install Playwright browsers
-      run: npx playwright install --with-deps
+    # We use the default chrome shipped with the actions runner
+    # - name: Install Playwright browsers
+    #   run: npm run playwright:install
 
     - name: Run Playwright tests
+      if: matrix.shardIndex != 'recognize'
       run: npm run playwright -- --shard='${{ matrix.shardIndex }}/${{ matrix.shardTotal }}'
-      env:
-        # The built recognize checkout, mounted into the container so the faces
-        # tests can run instead of skipping themselves.
-        RECOGNIZE_APP_PATH: ${{ github.workspace }}/recognize-app
+
+    - name: Run Playwright tests for recognize integration
+      if: matrix.shardIndex == 'recognize'
+      run: npm run playwright:faces
 
     - name: Show logs
       if: failure()

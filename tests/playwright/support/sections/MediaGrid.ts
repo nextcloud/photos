@@ -11,11 +11,6 @@ import { PhotoActionsMenu } from './PhotoActionsMenu.ts'
 /**
  * A grid of photo tiles — the timeline, the contents of a collection and the
  * photo picker all render the same tiles, so they all use this section.
- *
- * A tile is addressed through the link that opens the photo, whose accessible
- * name carries the file name and whether the photo is a favorite. That name is
- * therefore also how the favorite state is asserted: the star overlay is hidden
- * by CSS while the tile is hovered or selected, so its visibility says nothing.
  */
 export class MediaGrid {
 	constructor(
@@ -60,10 +55,6 @@ export class MediaGrid {
 
 	/**
 	 * Select the first photo of the grid.
-	 *
-	 * For the photos of a person the name is made up of the id of the detection they
-	 * belong to, which only the server knows — so there the photo to act on has to
-	 * be taken by position rather than by name.
 	 */
 	public async selectFirst(): Promise<void> {
 		const checkbox = this.container.getByRole('checkbox', { name: /^Select image / }).first()
@@ -84,12 +75,6 @@ export class MediaGrid {
 
 	/**
 	 * Bring the selection state of a photo to what it should be.
-	 *
-	 * A tile is re-rendered whenever the photo behind it changes — its favorite
-	 * state, for instance — and such a re-render can swallow a click on the
-	 * checkbox it holds. The click is therefore retried until the state took, and
-	 * only made while the state is still the wrong one so a retry cannot toggle it
-	 * back.
 	 *
 	 * @param name - Name of the photo file
 	 * @param selected - The state to bring it to
@@ -122,19 +107,7 @@ export class MediaGrid {
 	/**
 	 * Open the actions menu of a photo.
 	 *
-	 * The menu is opened from the keyboard: the trigger is only revealed once its
-	 * tile is hovered or holds the focus, and in the folders view the preview of the
-	 * photo is laid over it — focusing needs neither, and is how a keyboard user
-	 * reaches it.
-	 *
-	 * Opening is retried until the menu is really there: the trigger is an
-	 * `NcActions` which can swallow the first activation while it is still mounting
-	 * its popover, and only acting while the menu is closed keeps a retry from
-	 * toggling an open menu shut again.
-	 *
-	 * @param photoName - Name of the photo file the actions are about. Inside a
-	 * collection that is the name of the original file, not the one the entry of the
-	 * collection is shown under.
+	 * @param photoName - Name of the photo file the actions are about.
 	 */
 	public async openActionsMenu(photoName: string): Promise<PhotoActionsMenu> {
 		const trigger = this.getActionsMenuTrigger(photoName)

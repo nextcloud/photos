@@ -27,14 +27,14 @@ const FACES_FIXTURE_DIR = 'tests/playwright/fixtures/faces'
  */
 const FACE_UPLOAD_MULTIPLIER = 7
 
-/**
- * Whether the faces tests can run at all.
- *
- * They drive recognize's WebDAV API, and recognize has to be built (TensorFlow
- * binaries and models) and mounted into the container for that — which the
- * server script only does when it was pointed at such a checkout.
- */
-export const isRecognizeAvailable = Boolean(process.env.RECOGNIZE_APP_PATH)
+let _isRecognizeAvailable: boolean
+export async function isRecognizeAvailable(): Promise<boolean> {
+	if (_isRecognizeAvailable === undefined) {
+		const { stdout: recognizeAppPath, exitCode } = await runOcc(['app:getpath', 'recognize'], { failOnError: false })
+		_isRecognizeAvailable = exitCode === 0 && recognizeAppPath.trim() !== ''
+	}
+	return _isRecognizeAvailable
+}
 
 /**
  * Upload the face fixtures into the photos folder of an account.

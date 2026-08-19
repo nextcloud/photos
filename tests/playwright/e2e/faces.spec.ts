@@ -9,12 +9,6 @@ import { expect, test } from '../support/fixtures/faces.ts'
 import { isRecognizeAvailable } from '../support/utils/faces.ts'
 
 /**
- * The people view is driven by recognize, which has to be built and mounted into
- * the test container for any of this to exist — see `start-nextcloud-server.js`.
- */
-test.skip(!isRecognizeAvailable, 'RECOGNIZE_APP_PATH is not set, so recognize is not installed')
-
-/**
  * Detecting and clustering the faces costs minutes of TensorFlow work, so all of
  * these tests share one classified account. They therefore run in order, and the
  * one that shrinks the set of people comes last: merging two of them leaves fewer
@@ -22,23 +16,11 @@ test.skip(!isRecognizeAvailable, 'RECOGNIZE_APP_PATH is not set, so recognize is
  */
 test.describe.configure({ mode: 'serial' })
 
-/**
- * Assert that a request to recognize succeeded, and in particular that it did not
- * 404.
- *
- * Addressing a photo by its bare file name instead of the `{detectionId}-{name}`
- * recognize expects used to make these requests 404 while the UI happily reported
- * success, which is the regression these tests guard.
- *
- * @param response - The recognize request to check
- */
-async function expectRecognizeSuccess(response: Response): Promise<void> {
-	const request = `${response.request().method()} ${response.url()}`
-	expect(response.status(), `${request} must not 404`).not.toBe(404)
-	expect([200, 201, 204, 207], `unexpected status for ${request}`).toContain(response.status())
-}
-
 test.describe('The people recognize found', () => {
+	test.beforeAll(async () => {
+		test.fail(!await isRecognizeAvailable(), 'The "recognize" app is not available')
+	})
+
 	test('lists them, together with the faces it could not assign', async ({ photosApp }) => {
 		const { faces } = photosApp
 
@@ -105,3 +87,15 @@ test.describe('The people recognize found', () => {
 		await expectRecognizeSuccess(await face.mergeIntoFirstOtherPerson())
 	})
 })
+
+/**
+ * Assert that a request to recognize succeeded, and in particular that it did not
+ * 404.
+ *
+ * @param response - The recognize request to check
+ */
+async function expectRecognizeSuccess(response: Response): Promise<void> {
+	const request = `${response.request().method()} ${response.url()}`
+	expect(response.status(), `${request} must not 404`).not.toBe(404)
+	expect([200, 201, 204, 207], `unexpected status for ${request}`).toContain(response.status())
+}
