@@ -17,6 +17,7 @@ OC.L10N.register(
     "Delete" : "Delete",
     "Cancel" : "Cancel",
     "Filename" : "Anv restr",
+    "Location" : "Lec'hiadur",
     "Home" : "Degemer",
     "General" : "Hollek",
     "Unselect all" : "Diziuzañ pep tra",
