@@ -12,6 +12,7 @@ OC.L10N.register(
     "Go back" : "ফিরে যাও",
     "Delete" : "Delete",
     "Cancel" : "Cancel",
+    "Location" : "অবস্থান",
     "Home" : "বাড়ি",
     "General" : "সাধারণ",
     "Remove from favorites" : "Remove from favorites",
