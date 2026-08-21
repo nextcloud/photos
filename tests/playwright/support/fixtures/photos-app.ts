@@ -6,13 +6,14 @@
 import type { User } from '@nextcloud/e2e-test-server'
 import type { Page } from '@playwright/test'
 import type { PhotosAccount, PhotosSession } from '../utils/accounts.ts'
-import type { SeededMedia } from '../utils/media.ts'
+import type { MediaFixture, SeededMedia } from '../utils/media.ts'
 
 import { login } from '@nextcloud/e2e-test-server/playwright'
 import { test as baseTest } from '@playwright/test'
 import { PhotosApp } from '../sections/PhotosApp.ts'
 import { createPhotosAccounts, openPhotosSession, withRequestContext } from '../utils/accounts.ts'
-import { removeMediaLocations, seedPhotosTakenAt } from '../utils/media.ts'
+import { assignSystemTag, createSystemTag, readFileTags, readPhotoFavorite } from '../utils/dav.ts'
+import { PHOTOS_FOLDER, removeMediaLocations, seedPhotosTakenAt } from '../utils/media.ts'
 import { deleteUser } from '../utils/occ.ts'
 import { withRetry } from '../utils/retry.ts'
 
@@ -64,6 +65,19 @@ interface PhotosFixtures {
 	 * a library that has nothing to show on a map.
 	 */
 	removePhotoLocations: () => Promise<void>
+	/**
+	 * Create a tag of the instance and put it on the given photos of the test
+	 * account.
+	 *
+	 * Tags are shared by the whole instance, so a test that asserts on one has to
+	 * name it after its own account — the tests run in parallel, and every one of
+	 * them sees the tags of all the others.
+	 */
+	seedTag: (displayName: string, photoNames?: MediaFixture[]) => Promise<void>
+	/** The names of the tags the server holds for a photo of the test account. */
+	readTags: (photoName: MediaFixture) => Promise<string[]>
+	/** Whether the server has a photo of the test account marked as a favorite. */
+	readFavorite: (photoName: MediaFixture) => Promise<boolean>
 }
 
 /**
@@ -127,6 +141,36 @@ export const test = baseTest.extend<PhotosOptions & PhotosFixtures>({
 			playwright.request,
 			baseURL,
 			(request) => removeMediaLocations(request, account.user),
+		))
+	},
+
+	seedTag: async ({ playwright, baseURL, account }, use) => {
+		await use((displayName: string, photoNames: MediaFixture[] = []) => withRequestContext(
+			playwright.request,
+			baseURL,
+			async (request) => {
+				const tagId = await createSystemTag(request, account.user, displayName)
+
+				for (const name of photoNames) {
+					await assignSystemTag(request, account.user, account.media[name], tagId)
+				}
+			},
+		))
+	},
+
+	readTags: async ({ playwright, baseURL, account }, use) => {
+		await use((photoName: MediaFixture) => withRequestContext(
+			playwright.request,
+			baseURL,
+			(request) => readFileTags(request, account.user, account.media[photoName]),
+		))
+	},
+
+	readFavorite: async ({ playwright, baseURL, account }, use) => {
+		await use((photoName: MediaFixture) => withRequestContext(
+			playwright.request,
+			baseURL,
+			(request) => readPhotoFavorite(request, account.user, `${PHOTOS_FOLDER}/${photoName}`),
 		))
 	},
 

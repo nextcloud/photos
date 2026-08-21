@@ -23,6 +23,12 @@ export const PUBLIC_ALBUM_ENDPOINT = /\/dav\/photospublic\//
 /** The faces recognize detected, exposed under its own endpoint. */
 export const FACES_ENDPOINT = /\/dav\/recognize\/[^/]+\/faces\//
 
+/** The tags of the instance, which is where a new one is created. */
+export const SYSTEMTAGS_ENDPOINT = /\/dav\/systemtags\/?$/
+
+/** The tags a file carries, where they are put on it and taken off again. */
+export const TAG_ASSIGNMENT_ENDPOINT = /\/dav\/systemtags-relations\/files\//
+
 /**
  * Wait for a DAV request the app makes, armed before the action that triggers it.
  *

@@ -74,7 +74,6 @@ export class MediaGrid {
 	 * @param name - Name of the photo file
 	 */
 	public getFavoriteMarker(name: string): Locator {
-		this.leaveTiles()
 		return this.getTile(name).getByRole('img', { name: 'Favorite' })
 	}
 
