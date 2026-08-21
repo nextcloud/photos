@@ -50,7 +50,7 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import NcModal from '@nextcloud/vue/components/NcModal'
 import { fetchPhotoExif } from '../services/exifFetcher.ts'
 import { getExifSummary } from '../utils/exif.ts'
-import { getPreviewUrl } from '../utils/fileUtils.ts'
+import { getPreviewUrl, toPhotoTarget } from '../utils/fileUtils.ts'
 
 const props = withDefaults(defineProps<{
 	/** Photos to play through, in the order they are shown. */
@@ -100,7 +100,9 @@ watch([currentPhoto, exifShown], async ([photo, shown]) => {
 		return
 	}
 
-	const entries = getExifSummary(await fetchPhotoExif(photo))
+	// The metadata is read from the file itself, which a photo of a collection is
+	// only a reference to — `toPhotoTarget` resolves the one to the other.
+	const entries = getExifSummary(await fetchPhotoExif(toPhotoTarget(photo)))
 
 	if (request === pendingRequest) {
 		exifEntries.value = entries

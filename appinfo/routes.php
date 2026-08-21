@@ -49,6 +49,26 @@ return [
 			'verb' => 'GET',
 			'postfix' => 'favorites',
 		],
+		[
+			'name' => 'page#index',
+			'url' => '/memories',
+			'verb' => 'GET',
+			'postfix' => 'memories',
+		],
+		[
+			'name' => 'page#index',
+			'url' => '/map',
+			'verb' => 'GET',
+			'postfix' => 'map',
+		],
+		[
+			// The map used to be handled by the Maps app, the frontend router sends
+			// the old links to the map view.
+			'name' => 'page#index',
+			'url' => '/maps',
+			'verb' => 'GET',
+			'postfix' => 'maps',
+		],
 
 		// Collection and folder views
 		[
