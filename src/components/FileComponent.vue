@@ -359,6 +359,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// The magnify a tile answers a hover with. Carried by every preview layer, so
+// that blurhash, small and large stay in lockstep and do not slide against each
+// other. The curve is ease-out-quint: quick to answer the pointer, then settling
+// slowly into the final scale. Layers that transition something of their own
+// have to list this alongside it, as the shorthand would otherwise drop it.
+$magnify-transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+
 .file-container {
 	// How much of the tile is left to the card backs of a folded run of photos.
 	// Zero for a tile standing for a single photo, so its preview and everything
@@ -506,11 +513,7 @@ export default {
 				height: 100%;
 				object-fit: cover;
 				color: transparent; // Hide alt='' text when loading.
-				// The hover magnify is timed here, on every layer at once, so that
-				// blurhash, small and large stay in lockstep and do not slide against
-				// each other. The curve is ease-out-quint: quick to answer the pointer,
-				// then settling slowly into the final scale.
-				transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+				transition: $magnify-transition;
 			}
 
 			.file__layer--blurhash {
@@ -533,13 +536,13 @@ export default {
 			.file__layer--small {
 				z-index: 2;
 				opacity: 0;
-				transition: opacity var(--animation-quick) ease-out;
+				transition: $magnify-transition, opacity var(--animation-quick) ease-out;
 			}
 
 			.file__layer--large {
 				z-index: 3;
 				opacity: 0;
-				transition: opacity var(--animation-slow) ease-out;
+				transition: $magnify-transition, opacity var(--animation-slow) ease-out;
 			}
 
 			.file__layer--visible {
