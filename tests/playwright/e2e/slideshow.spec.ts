@@ -4,6 +4,7 @@
  */
 
 import { expect, test } from '../support/fixtures/photos-app.ts'
+import { MEDIA_COUNT } from '../support/utils/media.ts'
 
 /**
  * The camera settings the fixtures share, as they were all taken with the same
@@ -51,6 +52,59 @@ test.describe('The slideshow of the timeline', () => {
 		await slideshow.showPrevious(shown)
 
 		await slideshow.close()
+		await timeline.waitForPhotos()
+	})
+
+	test('says how far into the timeline it is', async ({ photosApp }) => {
+		const slideshow = await photosApp.timeline.startSlideshow()
+
+		await slideshow.pauseButton().click()
+		await expect(slideshow.playButton()).toBeVisible()
+		await expect(slideshow.position()).toHaveText(`1 of ${MEDIA_COUNT}`)
+
+		await slideshow.nextButton().click()
+		await expect(slideshow.position()).toHaveText(`2 of ${MEDIA_COUNT}`)
+
+		// Going back past the first photo wraps around to the last one, as the
+		// slideshow plays the set in a loop.
+		await slideshow.previousButton().click()
+		await slideshow.previousButton().click()
+		await expect(slideshow.position()).toHaveText(`${MEDIA_COUNT} of ${MEDIA_COUNT}`)
+	})
+
+	test('walks through the photos with the arrow keys', async ({ photosApp }) => {
+		const slideshow = await photosApp.timeline.startSlideshow()
+
+		await slideshow.pauseButton().click()
+		await expect(slideshow.playButton()).toBeVisible()
+
+		await slideshow.press('ArrowRight')
+		await expect(slideshow.position()).toHaveText(`2 of ${MEDIA_COUNT}`)
+
+		await slideshow.press('ArrowLeft')
+		await expect(slideshow.position()).toHaveText(`1 of ${MEDIA_COUNT}`)
+	})
+
+	test('plays and pauses with the space bar', async ({ photosApp }) => {
+		const slideshow = await photosApp.timeline.startSlideshow()
+
+		// It comes up playing, so the first press is the one that holds it.
+		await expect(slideshow.pauseButton()).toBeVisible()
+
+		await slideshow.press(' ')
+		await expect(slideshow.playButton()).toBeVisible()
+
+		await slideshow.press(' ')
+		await expect(slideshow.pauseButton()).toBeVisible()
+	})
+
+	test('closes with the escape key', async ({ photosApp }) => {
+		const { timeline } = photosApp
+		const slideshow = await timeline.startSlideshow()
+
+		await slideshow.press('Escape')
+
+		await expect(slideshow.dialog()).toHaveCount(0)
 		await timeline.waitForPhotos()
 	})
 

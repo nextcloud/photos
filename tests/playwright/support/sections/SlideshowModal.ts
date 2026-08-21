@@ -64,10 +64,29 @@ export class SlideshowModal {
 		return this.dialog().getByRole('button', { name: 'Close' })
 	}
 
+	/**
+	 * How far into the set of photos the slideshow is, e.g. `2 of 5`. It is a line
+	 * of text carrying no role and no name of its own, hence the class.
+	 */
+	public position(): Locator {
+		return this.dialog().locator('.slideshow__position')
+	}
+
 	/** Close the slideshow and wait for it to be gone. */
 	public async close(): Promise<void> {
 		await this.closeButton().click()
 		await expect(this.dialog()).toHaveCount(0)
+	}
+
+	/**
+	 * Send a key press to the slideshow itself, rather than to whichever of its
+	 * controls happens to hold the focus — the shortcuts are bound to the document
+	 * and a control would swallow the press.
+	 *
+	 * @param key - The key to press
+	 */
+	public async press(key: string): Promise<void> {
+		await this.dialog().press(key)
 	}
 
 	/**

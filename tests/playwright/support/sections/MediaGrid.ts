@@ -130,6 +130,38 @@ export class MediaGrid {
 	}
 
 	/**
+	 * Press a photo and hold it until its selection is toggled — the gesture that
+	 * selects without aiming for the checkbox, which is a finicky target on a
+	 * touch device.
+	 *
+	 * @param name - Name of the photo file
+	 */
+	public async longPress(name: string): Promise<void> {
+		const checkbox = this.getSelectionCheckbox(name)
+		const selected = await checkbox.isChecked()
+
+		await this.getMedia(name).hover()
+		await this.page.mouse.down()
+		await expect(checkbox).toBeChecked({ checked: !selected })
+		await this.page.mouse.up()
+
+		// Releasing the press fires a click, which the app swallows. Letting the
+		// browser paint once is what puts that click behind us, so that a following
+		// assertion is about a viewer that stayed closed rather than about one that
+		// has not opened yet.
+		await this.page.evaluate(() => new Promise((resolve) => requestAnimationFrame(resolve)))
+	}
+
+	/**
+	 * Open a photo, i.e. press it and release right away.
+	 *
+	 * @param name - Name of the photo file
+	 */
+	public async open(name: string): Promise<void> {
+		await this.getMedia(name).click()
+	}
+
+	/**
 	 * Bring the selection state of a photo to what it should be.
 	 *
 	 * @param name - Name of the photo file

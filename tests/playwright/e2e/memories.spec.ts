@@ -72,6 +72,20 @@ test.describe('The memories of a library', () => {
 		await expect(memories.tripCounters()).toHaveText(`${TRIP_PHOTO_COUNT} photos`)
 	})
 
+	test('opens the photos of a trip in the viewer', async ({ photosApp }) => {
+		const { memories } = photosApp
+		const tripPhotoNames = photoNames.slice(-TRIP_PHOTO_COUNT)
+
+		const viewer = await memories.openTrip()
+
+		// It opens on the cover of the trip, which is one of its December photos
+		// rather than one of the single ones the year is otherwise made of.
+		expect(tripPhotoNames).toContain(await viewer.currentPhotoName())
+		// And the whole trip is handed over as the gallery to walk through.
+		await expect(viewer.nextButton()).toBeVisible()
+		await expect(viewer.previousButton()).toBeVisible()
+	})
+
 	test('plays the highlights of a year on its own', async ({ photosApp }) => {
 		const slideshow = await photosApp.memories.openRecapSlideshow(RECAP_YEAR)
 

@@ -8,6 +8,7 @@ import type { Locator, Page } from '@playwright/test'
 import { expect } from '@playwright/test'
 import { waitForTimelineSearch } from '../utils/requests.ts'
 import { SlideshowModal } from './SlideshowModal.ts'
+import { ViewerModal } from './ViewerModal.ts'
 
 /** The memories view, showing the trips and the year recap of a library. */
 export class MemoriesPage {
@@ -98,6 +99,20 @@ export class MemoriesPage {
 	/** The photo counters of the trip cards, one per card. */
 	public tripCounters(): Locator {
 		return this.tripCards().locator('.animated-number')
+	}
+
+	/**
+	 * Open the photos of a trip in the viewer.
+	 *
+	 * @param index - Position of the trip card, most recent trip first
+	 * @return The viewer, showing the cover of the trip
+	 */
+	public async openTrip(index = 0): Promise<ViewerModal> {
+		await this.tripCards().nth(index).getByRole('button').click()
+
+		const viewer = new ViewerModal(this.page)
+		await expect(viewer.dialog()).toBeVisible()
+		return viewer
 	}
 
 	/**

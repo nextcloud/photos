@@ -18,6 +18,7 @@ import { PublicAlbumPage } from './PublicAlbumPage.ts'
 import { SharedAlbumPage } from './SharedAlbumPage.ts'
 import { SharedAlbumsPage } from './SharedAlbumsPage.ts'
 import { TimelinePage } from './TimelinePage.ts'
+import { ViewerModal } from './ViewerModal.ts'
 
 /**
  * The photos app of one browser session, gathering the page objects of its views.
@@ -41,6 +42,7 @@ export class PhotosApp {
 	public readonly folders: FoldersPage
 	public readonly faces: FacesPage
 	public readonly face: FacePage
+	public readonly viewer: ViewerModal
 
 	constructor(public readonly page: Page) {
 		this.navigation = new PhotosNavigation(page)
@@ -56,5 +58,6 @@ export class PhotosApp {
 		this.folders = new FoldersPage(page)
 		this.faces = new FacesPage(page)
 		this.face = new FacePage(page)
+		this.viewer = new ViewerModal(page)
 	}
 }

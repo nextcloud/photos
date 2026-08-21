@@ -56,4 +56,12 @@ export class PhotosNavigation {
 	public searchInput(): Locator {
 		return this.navigation().getByRole('textbox', { name: 'Search by file name' })
 	}
+
+	/**
+	 * The button emptying the search field, which is only rendered while the field
+	 * holds something.
+	 */
+	public clearSearchButton(): Locator {
+		return this.navigation().getByRole('button', { name: 'Clear search' })
+	}
 }

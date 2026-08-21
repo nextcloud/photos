@@ -7,6 +7,7 @@ import type { Locator, Page } from '@playwright/test'
 
 import { expect } from '@playwright/test'
 import { waitForTimelineSearch } from '../utils/requests.ts'
+import { ViewerModal } from './ViewerModal.ts'
 
 /** The map view, plotting the photos which carry a position. */
 export class MapPage {
@@ -47,5 +48,34 @@ export class MapPage {
 	/** The markers of the photos, which the map labels with their file name. */
 	public markers(): Locator {
 		return this.map().locator('.leaflet-marker-icon')
+	}
+
+	/**
+	 * The marker of one photo. Leaflet renders a marker as an image with the label
+	 * it was given as its title, which is the only handle it offers.
+	 *
+	 * @param name - Name of the photo file
+	 */
+	public marker(name: string): Locator {
+		return this.map().getByTitle(name)
+	}
+
+	/**
+	 * Open a photo through its marker.
+	 *
+	 * @param name - Name of the photo file
+	 * @return The viewer, showing that photo
+	 */
+	public async openMarker(name: string): Promise<ViewerModal> {
+		await this.marker(name).click()
+
+		const viewer = new ViewerModal(this.page)
+		await viewer.waitForPhoto(name)
+		return viewer
+	}
+
+	/** The button leading to the maps app, only offered when it is installed. */
+	public mapsAppButton(): Locator {
+		return this.page.getByRole('link', { name: 'Open the Maps app' })
 	}
 }

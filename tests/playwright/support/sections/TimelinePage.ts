@@ -38,10 +38,14 @@ export class TimelinePage {
 	/** The filters of the timeline, which live in the app navigation. */
 	public readonly filters: PhotosFilters
 
+	/** The app navigation, which holds the search field of the timeline. */
+	private readonly navigation: PhotosNavigation
+
 	constructor(public readonly page: Page) {
 		this.grid = new MediaGrid(page, page.getByRole('main'))
 		this.actions = new ActionsMenu(page)
-		this.filters = new PhotosNavigation(page).filters
+		this.navigation = new PhotosNavigation(page)
+		this.filters = this.navigation.filters
 	}
 
 	/**
@@ -163,6 +167,33 @@ export class TimelinePage {
 		const searched = waitForTimelineSearch(this.page)
 		await action()
 		await searched
+	}
+
+	/** The field filtering the timeline by file name. */
+	public searchInput(): Locator {
+		return this.navigation.searchInput()
+	}
+
+	/** The button emptying the search field. */
+	public clearSearchButton(): Locator {
+		return this.navigation.clearSearchButton()
+	}
+
+	/**
+	 * Filter the timeline by a search term and wait for the matching photos.
+	 *
+	 * @param searchTerm - Term to look for in the file names
+	 */
+	public async search(searchTerm: string): Promise<void> {
+		await this.withRefetch(async () => {
+			await this.searchInput().fill(searchTerm)
+		})
+	}
+
+	/** Empty the search field through its button and wait for the whole library. */
+	public async clearSearch(): Promise<void> {
+		await this.withRefetch(() => this.clearSearchButton().click())
+		await expect(this.searchInput()).toHaveValue('')
 	}
 
 	/**
