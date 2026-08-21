@@ -184,6 +184,44 @@ export class AlbumPage {
 	}
 
 	/**
+	 * The hero of the album: its cover photo, with the name of the album over it.
+	 */
+	public hero(): Locator {
+		return this.page.locator('.album-hero')
+	}
+
+	public heroTitle(): Locator {
+		return this.hero().locator('.album-hero__title')
+	}
+
+	public heroSubtitle(): Locator {
+		return this.hero().locator('.album-hero__subtitle')
+	}
+
+	/** The cover photo of the hero, which is the background of a layer of its own. */
+	public heroCover(): Locator {
+		return this.hero().locator('.album-hero__cover')
+	}
+
+	/**
+	 * How far the cover photo currently trails the page, in pixels.
+	 */
+	public heroCoverOffset(): Promise<number> {
+		return this.heroCover().evaluate((element) => {
+			return new DOMMatrix(window.getComputedStyle(element).transform).m42
+		})
+	}
+
+	/**
+	 * Scroll the album page to its end.
+	 */
+	public async scrollToBottom(): Promise<void> {
+		await this.page.getByRole('main').evaluate((element) => {
+			element.scrollTop = element.scrollHeight
+		})
+	}
+
+	/**
 	 * Remove the selected photos from the album and wait for them to be gone.
 	 *
 	 * @param names - Names of the selected photo files, as they are named inside
@@ -248,9 +286,6 @@ export class AlbumPage {
 
 	/**
 	 * Await the favorite state of every photo of a selection to have been written.
-	 *
-	 * The app marks the tiles optimistically and only rolls back on failure, so
-	 * without awaiting the requests a following reload could read the old state.
 	 *
 	 * @param photoCount - Number of photos in the selection
 	 * @param action - The action triggering the updates

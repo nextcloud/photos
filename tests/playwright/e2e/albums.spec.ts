@@ -147,3 +147,55 @@ test.describe('Managing an album', () => {
 		await expect(album.grid.getAllMedia()).toHaveCount(ALBUM_PHOTOS.length)
 	})
 })
+
+test.describe('The hero of an album', () => {
+	test.beforeEach(async ({ photosApp }) => {
+		await photosApp.albums.open()
+		await photosApp.albums.createAlbum(ALBUM_NAME)
+	})
+
+	test('stays away from an album that has no photo to show', async ({ photosApp }) => {
+		const { album } = photosApp
+
+		await expect(album.emptyMessage()).toBeVisible()
+		await expect(album.hero()).toHaveCount(0)
+	})
+
+	test('shows a photo of the album under its name', async ({ media, photosApp }) => {
+		const { album } = photosApp
+		await album.addPhotos(ALBUM_NAME, [...ALBUM_PHOTOS])
+
+		await expect(album.hero()).toBeVisible()
+		await expect(album.heroTitle()).toHaveText(ALBUM_NAME)
+		await expect(album.heroSubtitle()).toHaveText(`${ALBUM_PHOTOS.length} photos`)
+
+		// The cover is the last photo the album was given, which is one of the three
+		// that were added — the order they end up in is the server's to decide.
+		const coverIds = ALBUM_PHOTOS.map((photo) => media[photo as keyof SeededMedia])
+		await expect(album.heroCover())
+			.toHaveCSS('background-image', new RegExp(`/preview/(${coverIds.join('|')})`))
+	})
+
+	test('names the location of the album next to its photo count', async ({ photosApp }) => {
+		const { album } = photosApp
+		await album.addPhotos(ALBUM_NAME, [...ALBUM_PHOTOS])
+
+		await album.setLocation('Lauris')
+		await album.open(ALBUM_NAME)
+
+		await expect(album.heroSubtitle()).toHaveText(`Lauris · ${ALBUM_PHOTOS.length} photos`)
+	})
+
+	test('lets the cover trail the page while it scrolls', async ({ photosApp }) => {
+		const { album } = photosApp
+		await album.addPhotos(ALBUM_NAME, [...ALBUM_PHOTOS])
+
+		expect(await album.heroCoverOffset()).toBe(0)
+
+		await album.scrollToBottom()
+
+		// The cover is given extra height and pushed down by a share of the scrolled
+		// distance, so it moves slower than the page rather than out of it.
+		await expect.poll(() => album.heroCoverOffset()).toBeGreaterThan(0)
+	})
+})

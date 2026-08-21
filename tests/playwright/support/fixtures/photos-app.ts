@@ -12,6 +12,7 @@ import { login } from '@nextcloud/e2e-test-server/playwright'
 import { test as baseTest } from '@playwright/test'
 import { PhotosApp } from '../sections/PhotosApp.ts'
 import { createPhotosAccounts, openPhotosSession, withRequestContext } from '../utils/accounts.ts'
+import { removeMediaLocations, seedPhotosTakenAt } from '../utils/media.ts'
 import { deleteUser } from '../utils/occ.ts'
 import { withRetry } from '../utils/retry.ts'
 
@@ -53,6 +54,16 @@ interface PhotosFixtures {
 	 * of.
 	 */
 	deleteAccount: (user: User) => Promise<void>
+	/**
+	 * Add photos to the library of the test account, taken at the given moments,
+	 * and return their names.
+	 */
+	seedPhotos: (namePrefix: string, takenAt: Date[]) => Promise<string[]>
+	/**
+	 * Drop the coordinates of every photo of the test account, for the tests about
+	 * a library that has nothing to show on a map.
+	 */
+	removePhotoLocations: () => Promise<void>
 }
 
 /**
@@ -97,6 +108,22 @@ export const test = baseTest.extend<PhotosOptions & PhotosFixtures>({
 			playwright.request,
 			baseURL,
 			(request) => deleteUser(request, user),
+		))
+	},
+
+	seedPhotos: async ({ playwright, baseURL, account }, use) => {
+		await use((namePrefix: string, takenAt: Date[]) => withRequestContext(
+			playwright.request,
+			baseURL,
+			(request) => seedPhotosTakenAt(request, account.user, namePrefix, takenAt),
+		))
+	},
+
+	removePhotoLocations: async ({ playwright, baseURL, account }, use) => {
+		await use(() => withRequestContext(
+			playwright.request,
+			baseURL,
+			(request) => removeMediaLocations(request, account.user),
 		))
 	},
 

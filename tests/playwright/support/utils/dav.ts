@@ -201,6 +201,62 @@ export async function uploadFile(
 }
 
 /**
+ * Copy a file inside the home of an account.
+ *
+ * @param request - Request context to use
+ * @param user - Owner of both paths
+ * @param sourcePath - Path of the file to copy, relative to the account's root
+ * @param targetPath - Path of the copy, relative to the account's root
+ */
+export async function copyFile(request: APIRequestContext, user: User, sourcePath: string, targetPath: string): Promise<void> {
+	await davRequest(request, user, 'COPY', filesDavUrl(user, sourcePath), {
+		headers: { Destination: filesDavUrl(user, targetPath) },
+	})
+}
+
+/**
+ * Set the moment a photo was taken at, the way the metadata editor of the app
+ * does.
+ *
+ * @param request - Request context to use
+ * @param user - Owner of the photo
+ * @param path - Path of the photo, relative to the account's root
+ * @param takenAt - Moment the photo should count as taken at
+ */
+export async function setPhotoTakenAt(request: APIRequestContext, user: User, path: string, takenAt: Date): Promise<void> {
+	await davRequest(request, user, 'PROPPATCH', filesDavUrl(user, path), {
+		headers: { 'Content-Type': 'application/xml' },
+		data: `<?xml version="1.0"?>
+			<d:propertyupdate xmlns:d="DAV:" xmlns:nc="http://nextcloud.org/ns">
+				<d:set>
+					<d:prop>
+						<nc:metadata-photos-original_date_time>${Math.floor(takenAt.getTime() / 1000)}</nc:metadata-photos-original_date_time>
+					</d:prop>
+				</d:set>
+			</d:propertyupdate>`,
+	})
+}
+
+/**
+ * Drop the coordinates of a photo, as the metadata editor of the app does.
+ *
+ * @param request - Request context to use
+ * @param user - Owner of the photo
+ * @param path - Path of the photo, relative to the account's root
+ */
+export async function removePhotoLocation(request: APIRequestContext, user: User, path: string): Promise<void> {
+	await davRequest(request, user, 'PROPPATCH', filesDavUrl(user, path), {
+		headers: { 'Content-Type': 'application/xml' },
+		data: `<?xml version="1.0"?>
+			<d:propertyupdate xmlns:d="DAV:" xmlns:nc="http://nextcloud.org/ns">
+				<d:remove>
+					<d:prop><nc:metadata-photos-gps /></d:prop>
+				</d:remove>
+			</d:propertyupdate>`,
+	})
+}
+
+/**
  * Read the place a photo was taken at, as the server resolved it out of the
  * coordinates the picture carries.
  *
@@ -277,10 +333,6 @@ export async function setAlbumCollaborators(
 
 /**
  * Share an album through a public link and return the token of that link.
- *
- * The token is minted by the server, so it has to be read back from the album.
- * It is the only 32 character alphanumeric id among the collaborators — account
- * and group ids are the short random names the test accounts are created with.
  *
  * @param request - Request context to use
  * @param user - Owner of the album

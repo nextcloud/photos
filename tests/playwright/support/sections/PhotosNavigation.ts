@@ -23,7 +23,9 @@ export const NavigationEntry = {
 	folders: 'Folders',
 	favorites: 'Favorites',
 	onThisDay: 'On this day',
+	memories: 'Memories',
 	places: 'Places',
+	map: 'Map',
 } as const
 
 export type NavigationEntryName = (typeof NavigationEntry)[keyof typeof NavigationEntry]

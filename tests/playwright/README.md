@@ -85,6 +85,14 @@ test('shares an album', async ({ photosApp, user, createAccounts, openSession })
 
 Ask for all extra accounts in a single `createAccounts` call: creating them shells out to `occ`, which every worker of the run contends over, and that is the slowest part of the setup.
 
+The views built on a whole library need more than the five fixtures — memories only calls a stretch of photos a trip from eight of them on, and only sums a year up from thirty. `seedPhotos` adds as many photos as a test needs, each taken when it says:
+
+```typescript
+const names = await seedPhotos('recap', [new Date(Date.UTC(2024, 0, 5, 12)), …])
+```
+
+They are server-side copies of a fixture, so a library of dozens of them costs no upload, and their taken date is stored the way the metadata editor of the app does it. Date them around noon UTC: the day a photo counts as taken on is read in the timezone the browser runs in, which differs between a local run and CI. `removePhotoLocations()` is the counterpart for the tests about a library with nothing to place on a map.
+
 ## Writing a test
 
 - `test` and `expect` come from `support/fixtures/photos-app.ts`; `photosApp` gathers the page objects of all the views of one session.

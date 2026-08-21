@@ -34,12 +34,68 @@ export class MediaGrid {
 	}
 
 	/**
+	 * Name of the first photo file of the grid, i.e. the newest one of a timeline.
+	 */
+	public async getFirstMediaName(): Promise<string> {
+		const label = await this.getAllMedia().first().getAttribute('aria-label') ?? ''
+		return label.match(/"(.+)"/)?.[1] ?? ''
+	}
+
+	/**
 	 * The selection checkbox of a photo.
 	 *
 	 * @param name - Name of the photo file
 	 */
 	public getSelectionCheckbox(name: string): Locator {
 		return this.container.getByRole('checkbox', { name: `Select image ${name}` })
+	}
+
+	/**
+	 * The tile of a photo, i.e. the frame holding its preview together with its
+	 * checkbox, its actions and its favorite star.
+	 *
+	 * @param name - Name of the photo file
+	 */
+	public getTile(name: string): Locator {
+		// The link is looked up from the page rather than through `getMedia`: a
+		// `has` locator is resolved inside the element it filters, where the grid
+		// container of `getMedia` is nowhere to be found.
+		return this.container.locator('.file-container').filter({
+			has: this.page.getByRole('link', { name: `open the full size "${name}" image` }),
+		})
+	}
+
+	/**
+	 * The star a tile overlays on the preview of a favorite photo.
+	 *
+	 * Call `leaveTiles` before looking for it: a tile hides the star while it is
+	 * hovered, selected or focused, as the checkbox takes that corner then.
+	 *
+	 * @param name - Name of the photo file
+	 */
+	public getFavoriteMarker(name: string): Locator {
+		this.leaveTiles()
+		return this.getTile(name).getByRole('img', { name: 'Favorite' })
+	}
+
+	/**
+	 * Take the pointer and the keyboard focus off the tiles, so that none of them
+	 * is left in a state that hides what it overlays on its preview.
+	 */
+	public async leaveTiles(): Promise<void> {
+		await this.page.mouse.move(0, 0)
+		await this.page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur())
+	}
+
+	/**
+	 * The placeholder sweeping over a tile until a preview of the photo arrives.
+	 * It stands in for the picture, so it is hidden from assistive technology and
+	 * addressed by its class.
+	 *
+	 * @param name - Name of the photo file
+	 */
+	public getPlaceholder(name: string): Locator {
+		return this.getTile(name).locator('.file__layer--shimmer')
 	}
 
 	/**
