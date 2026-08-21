@@ -58,7 +58,7 @@
 <script lang="ts" setup>
 import type { PhotoFile } from '../store/files.ts'
 
-import { translate as t } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { computed, onMounted, ref, watch } from 'vue'
 import {
@@ -76,10 +76,7 @@ import { useLoadedPhotos } from '../composables/useLoadedPhotos.ts'
 import isMapsInstalled from '../services/IsMapsInstalled.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
-// Leaflet icon patch
-import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css' // Re-uses images from ~leaflet package
 import 'leaflet/dist/leaflet.css'
-import 'leaflet-defaulticon-compatibility'
 
 defineProps<{
 	rootTitle: string
@@ -152,6 +149,10 @@ function openPhoto(photo: PhotoFile): void {
 		list: geotaggedPhotos.value.map((geotaggedPhoto) => toViewerFileInfo(geotaggedPhoto)),
 	})
 }
+</script>
+
+<script lang="ts">
+import '../utils/leaflet-icons.ts'
 </script>
 
 <style lang="scss" scoped>

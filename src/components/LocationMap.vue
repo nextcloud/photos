@@ -41,10 +41,8 @@ import {
 	LTooltip,
 } from 'vue2-leaflet'
 
-// Leaflet icon patch
-import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css' // Re-uses images from ~leaflet package
 import 'leaflet/dist/leaflet.css'
-import 'leaflet-defaulticon-compatibility'
+import '../utils/leaflet-icons.ts'
 
 export default {
 	name: 'LocationMap',
