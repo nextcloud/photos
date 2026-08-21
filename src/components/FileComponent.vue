@@ -32,7 +32,9 @@
 			@pointerdown="startLongPress"
 			@pointerup="cancelLongPress"
 			@pointercancel="cancelLongPress"
-			@pointerleave="cancelLongPress">
+			@pointerleave="cancelLongPress"
+			@mouseenter="schedulePreview"
+			@mouseleave="cancelPreview">
 
 			<!-- image and loading placeholder -->
 			<div class="file__images">
@@ -87,6 +89,28 @@
 						loading="lazy"
 						@load="onLoadLarge"
 						@error="onErrorLarge">
+
+					<!--
+						The video of a tile, played on top of its preview while the
+						pointer rests on it. It shows the same picture the layers below
+						already do, so it is left out of the accessibility tree and
+						carries no controls of its own.
+					-->
+					<video
+						v-if="videoPreviewPlaying"
+						ref="videoPreview"
+						class="file__layer file__layer--video"
+						:src="file.source"
+						muted
+						loop
+						autoplay
+						playsinline
+						disablepictureinpicture
+						disableremoteplayback
+						preload="metadata"
+						aria-hidden="true"
+						tabindex="-1"
+						@error="onVideoPreviewError" />
 				</template>
 			</div>
 		</a>
@@ -126,6 +150,7 @@ import PhotoActionsMenu from './PhotoActionsMenu.vue'
 import logger from '../services/logger.ts'
 import { isCachedPreview } from '../services/PreviewService.js'
 import { getVideoDurationFromUrl, toPhotoTarget } from '../utils/fileUtils.ts'
+import { isPreviewableVideoMime, playsVideoPreviews, VIDEO_PREVIEW_DELAY } from '../utils/videoPreview.ts'
 
 export default {
 	name: 'FileComponent',
@@ -184,6 +209,11 @@ export default {
 			videoDuration: '',
 			longPressTimeout: null as null | ReturnType<typeof setTimeout>,
 			longPressed: false,
+			videoPreviewPlaying: false,
+			videoPreviewTimeout: null as null | ReturnType<typeof setTimeout>,
+			// A video that could not be played once is not tried again, or a broken
+			// file would fire a load on every pass of the pointer.
+			videoPreviewFailed: false,
 		}
 	},
 
@@ -226,6 +256,10 @@ export default {
 		blurhash(): string | undefined {
 			return this.file.attributes['metadata-blurhash']
 		},
+
+		isPreviewableVideo(): boolean {
+			return isPreviewableVideoMime(this.file.mime)
+		},
 	},
 
 	watch: {
@@ -236,6 +270,11 @@ export default {
 			this.loadedLarge = false
 			this.errorLarge = false
 			this.videoDuration = ''
+
+			// The grid recycles a tile for the next photo as it scrolls, so what was
+			// found about the previous one says nothing about this one.
+			this.cancelPreview()
+			this.videoPreviewFailed = false
 
 			await this.init()
 		},
@@ -255,6 +294,7 @@ export default {
 		}
 
 		this.cancelLongPress()
+		this.cancelPreview()
 	},
 
 	methods: {
@@ -316,6 +356,47 @@ export default {
 
 		onErrorLarge() {
 			this.errorLarge = true
+		},
+
+		// Start playing the video of a tile once the pointer has rested on it, which
+		// is what keeps a sweep across the grid from loading every video it passes.
+		schedulePreview() {
+			if (!this.isPreviewableVideo || this.videoPreviewFailed || !playsVideoPreviews()) {
+				return
+			}
+
+			this.cancelPreview()
+			this.videoPreviewTimeout = setTimeout(() => {
+				this.videoPreviewTimeout = null
+				this.videoPreviewPlaying = true
+			}, VIDEO_PREVIEW_DELAY)
+		},
+
+		cancelPreview() {
+			if (this.videoPreviewTimeout !== null) {
+				clearTimeout(this.videoPreviewTimeout)
+				this.videoPreviewTimeout = null
+			}
+
+			if (!this.videoPreviewPlaying) {
+				return
+			}
+
+			// Emptying the source before the element goes away is what makes the
+			// browser let go of the buffered video instead of holding on to it.
+			const video = this.$refs.videoPreview as HTMLVideoElement | undefined
+			if (video !== undefined) {
+				video.pause()
+				video.removeAttribute('src')
+				video.load()
+			}
+
+			this.videoPreviewPlaying = false
+		},
+
+		onVideoPreviewError() {
+			this.videoPreviewFailed = true
+			this.videoPreviewPlaying = false
 		},
 
 		onToggle(value) {
@@ -442,7 +523,8 @@ $magnify-transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 
 		.file__layer--small,
 		.file__layer--large,
-		.file__layer--blurhash {
+		.file__layer--blurhash,
+		.file__layer--video {
 			transform: scale(1.07);
 		}
 	}
@@ -548,6 +630,19 @@ $magnify-transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 			.file__layer--visible {
 				opacity: 1;
 			}
+
+			// The video is the freshest picture of the file, so it covers the still
+			// layers. It fades in over them rather than replacing them at once, and
+			// crops the same way, so that the swap reads as the picture coming alive
+			// instead of as a second one being put on top.
+			.file__layer--video {
+				z-index: 4;
+				animation: file-layer-video-fade-in var(--animation-quick) ease-out;
+
+				@media (prefers-reduced-motion: reduce) {
+					animation: none;
+				}
+			}
 		}
 
 		&__duration {
@@ -562,7 +657,7 @@ $magnify-transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 			border-radius: var(--border-radius);
 			background: rgba(0, 0, 0, 0.4);
 			color: #fff;
-			z-index: 4; // above the preview layers
+			z-index: 5; // above the preview layers, the playing video among them
 
 			&__label {
 				font-weight: 600;
@@ -660,6 +755,11 @@ $magnify-transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 			transition: none;
 		}
 	}
+}
+
+@keyframes file-layer-video-fade-in {
+	from { opacity: 0; }
+	to { opacity: 1; }
 }
 
 @keyframes file-layer-shimmer {

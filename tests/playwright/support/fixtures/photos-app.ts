@@ -13,7 +13,7 @@ import { test as baseTest } from '@playwright/test'
 import { PhotosApp } from '../sections/PhotosApp.ts'
 import { createPhotosAccounts, openPhotosSession, withRequestContext } from '../utils/accounts.ts'
 import { assignSystemTag, createSystemTag, readFileTags, readPhotoFavorite } from '../utils/dav.ts'
-import { PHOTOS_FOLDER, removeMediaLocations, seedPhotosTakenAt } from '../utils/media.ts'
+import { PHOTOS_FOLDER, removeMediaLocations, seedPhotosTakenAt, seedVideos } from '../utils/media.ts'
 import { deleteUser } from '../utils/occ.ts'
 import { withRetry } from '../utils/retry.ts'
 
@@ -60,6 +60,12 @@ interface PhotosFixtures {
 	 * and return their names.
 	 */
 	seedPhotos: (namePrefix: string, takenAt: Date[]) => Promise<string[]>
+	/**
+	 * Add the video fixtures to the library of the test account, for the tests
+	 * about what a tile does with a video. Call it before the app is opened, as
+	 * the views only read the library once.
+	 */
+	seedVideos: () => Promise<void>
 	/**
 	 * Drop the coordinates of every photo of the test account, for the tests about
 	 * a library that has nothing to show on a map.
@@ -136,6 +142,16 @@ export const test = baseTest.extend<PhotosOptions & PhotosFixtures>({
 			baseURL,
 			(request) => seedPhotosTakenAt(request, account.user, namePrefix, takenAt),
 		))
+	},
+
+	seedVideos: async ({ playwright, baseURL, account }, use) => {
+		await use(async () => {
+			await withRequestContext(
+				playwright.request,
+				baseURL,
+				(request) => seedVideos(request, account.user),
+			)
+		})
 	},
 
 	removePhotoLocations: async ({ playwright, baseURL, account }, use) => {
