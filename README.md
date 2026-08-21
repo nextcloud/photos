@@ -44,9 +44,13 @@ This app requires the [Viewer app](https://github.com/nextcloud/viewer) to be in
 Follow its development setup and then continue here.
 
 1. ☁ Clone this into your `apps` folder of your Nextcloud.
-1. 👩‍💻 In a terminal, run the command `make dev-setup` to install the dependencies.
-1. 🏗 Then to build the Javascript whenever you make changes, run `make build-js`. To create a pull request use `make build-js-production`. Watch changes with: `make watch-js`.
-1. ✅ Enable the app through the app management of your Nextcloud.
-1. 🎉 Partytime!
-1. 💻 Fix easily linting issues with `npm run lint:fix`.
+2. 👩‍💻 In a terminal, run the command `make dev-setup` to install the dependencies.
+3. 🏗 Then to build the Javascript whenever you make changes, run `make build-js`. To create a pull request use `make build-js-production`. Watch changes with: `make watch-js`.
+4. ✅ Enable the app through the app management of your Nextcloud.
+5. 🎉 Partytime!
+6. 💻 Fix easily linting issues with `npm run lint:fix`.
 
+### Adding new tests
+To ensure quality of this app we use both unit tests, PHPUnit tests on the backend and Vitest unit tests on the frontend, and end-to-end tests.
+
+When adding new features at least an end-to-end test for the feature should be added, some documentation on how to do so can be found [here](./tests/playwright/README.md).

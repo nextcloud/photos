@@ -20,9 +20,9 @@ vendor
 .php_cs.cache
 .php-cs-fixer.cache
 
-cypress/videos
-cypress/snapshots
-cypress/downloads
+blob-report/
+playwright-report/
+test-results/
 
 js/*hot-update.*
 tests/.phpunit.result.cache

@@ -1,0 +1,116 @@
+/*!
+ * SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: MIT
+ */
+
+import type { User } from '@nextcloud/e2e-test-server'
+import type { Page } from '@playwright/test'
+import type { PhotosAccount, PhotosSession } from '../utils/accounts.ts'
+import type { SeededMedia } from '../utils/media.ts'
+
+import { login } from '@nextcloud/e2e-test-server/playwright'
+import { test as baseTest } from '@playwright/test'
+import { PhotosApp } from '../sections/PhotosApp.ts'
+import { createPhotosAccounts, openPhotosSession, withRequestContext } from '../utils/accounts.ts'
+import { deleteUser } from '../utils/occ.ts'
+import { withRetry } from '../utils/retry.ts'
+
+interface PhotosOptions {
+	/**
+	 * Whether the places of the seeded photos have to be resolved before the test
+	 * runs. Declare it per spec file or per describe block with
+	 * `test.use({ withPlaces: true })`.
+	 *
+	 * Resolving them costs an `occ` round trip, so only the tests about places,
+	 * and the filters built on them, ask for it — see `createPhotosAccounts`.
+	 */
+	withPlaces: boolean
+}
+
+interface PhotosFixtures {
+	/** The account of the test, with the media fixtures in its photos folder. */
+	account: PhotosAccount
+	/** The account of the test. */
+	user: User
+	/** File ids of the seeded photos, by file name. */
+	media: SeededMedia
+	/** The photos app, on the page of {@link PhotosFixtures.account}. */
+	photosApp: PhotosApp
+	/**
+	 * Create further accounts, seeded like the one of the test.
+	 *
+	 * Ask for all of them in a single call: the `occ` work is shared between them,
+	 * and it is the slowest part of the setup.
+	 */
+	createAccounts: (count: number) => Promise<PhotosAccount[]>
+	/**
+	 * Sign an account in on a browser session of its own, so a test can act as
+	 * two people at once. Closed again when the test ends.
+	 */
+	openSession: (account: PhotosAccount) => Promise<PhotosSession>
+	/**
+	 * Delete an account, for the tests about what becomes of the albums it was part
+	 * of.
+	 */
+	deleteAccount: (user: User) => Promise<void>
+}
+
+/**
+ * A fresh account with the media fixtures uploaded, signed in and ready to drive
+ * the photos app.
+ *
+ * Every test gets its own account. The tests favorite, delete, rename and share
+ * things, so sharing an account between them would make them depend on the order
+ * they happen to run in — and Playwright runs them in parallel across workers.
+ */
+export const test = baseTest.extend<PhotosOptions & PhotosFixtures>({
+	withPlaces: [false, { option: true }],
+
+	account: async ({ playwright, baseURL, withPlaces }, use) => {
+		const [account] = await createPhotosAccounts(playwright.request, baseURL, 1, { withPlaces })
+		await use(account)
+	},
+
+	user: ({ account }, use) => use(account.user),
+
+	media: ({ account }, use) => use(account.media),
+
+	page: async ({ browser, baseURL, account }, use) => {
+		// Important: authenticate in a clean environment by unsetting storage state.
+		const page = await browser.newPage({ storageState: undefined, baseURL })
+		await withRetry(() => login(page.request, account.user), `authenticate as "${account.user.userId}"`)
+
+		await use(page)
+		await page.close()
+	},
+
+	photosApp: async ({ page }, use) => {
+		await use(new PhotosApp(page))
+	},
+
+	createAccounts: async ({ playwright, baseURL, withPlaces }, use) => {
+		await use((count: number) => createPhotosAccounts(playwright.request, baseURL, count, { withPlaces }))
+	},
+
+	deleteAccount: async ({ playwright, baseURL }, use) => {
+		await use((user: User) => withRequestContext(
+			playwright.request,
+			baseURL,
+			(request) => deleteUser(request, user),
+		))
+	},
+
+	openSession: async ({ browser, baseURL }, use) => {
+		const pages: Page[] = []
+
+		await use(async (account: PhotosAccount) => {
+			const session = await openPhotosSession(browser, baseURL, account)
+			pages.push(session.page)
+			return session
+		})
+
+		await Promise.all(pages.map((page) => page.close()))
+	},
+})
+
+export { expect } from '@playwright/test'
