@@ -18,6 +18,17 @@ test.describe('The map of a library', () => {
 		await expect(map.markers()).toHaveCount(MEDIA_COUNT)
 	})
 
+	test('asks the tile server for its tiles with a referrer', async ({ photosApp }) => {
+		const { map } = photosApp
+
+		await map.open()
+
+		// Nextcloud answers with `Referrer-Policy: no-referrer` and the tile server
+		// turns a request carrying no referrer down, so the tiles have to override
+		// the policy of the page they are drawn on.
+		await expect(map.tiles().first()).toHaveAttribute('referrerpolicy', 'strict-origin-when-cross-origin')
+	})
+
 	test('opens a photo through its marker', async ({ photosApp }) => {
 		const { map } = photosApp
 

@@ -45,6 +45,11 @@ export class MapPage {
 		return this.page.locator('.leaflet-container')
 	}
 
+	/** The tiles the map is drawn out of, which Leaflet marks with its own class. */
+	public tiles(): Locator {
+		return this.map().locator('img.leaflet-tile')
+	}
+
 	/** The markers of the photos, which the map labels with their file name. */
 	public markers(): Locator {
 		return this.map().locator('.leaflet-marker-icon')
