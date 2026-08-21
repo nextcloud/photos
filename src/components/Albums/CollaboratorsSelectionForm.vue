@@ -157,6 +157,8 @@ export default {
 			currentSearchResults: [] as Collaborator[],
 			loadingCollaborators: false,
 			randomId: Math.random().toString().substring(2, 10),
+			// Sequence number of the latest lookup, to tell the answers of the ones before it apart.
+			searchSequence: 0,
 			publicLinkCopied: false,
 			collaboratorTypes: ShareType,
 			config: {

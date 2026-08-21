@@ -426,6 +426,31 @@ export default {
 		pointer-events: none;
 	}
 
+	// Hovering lifts the tile with a soft shadow and magnifies the preview inside
+	// it, clipped by the tile's paint containment. Gated on `:not(.selected)` so
+	// the selection visual above stays the dominant state.
+	&:hover:not(.selected) {
+		box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+		z-index: 1;
+
+		.file__layer--small,
+		.file__layer--large,
+		.file__layer--blurhash {
+			transform: scale(1.07);
+		}
+	}
+
+	// Reduced motion keeps the shadow, which does not move, and drops the magnify.
+	@media (prefers-reduced-motion: reduce) {
+		&:hover:not(.selected) {
+			.file__layer--small,
+			.file__layer--large,
+			.file__layer--blurhash {
+				transform: none;
+			}
+		}
+	}
+
 	// Selected images shrink into a glowing frame, which is softer than an
 	// outline and does not fight the photo for attention.
 	&.selected {
@@ -481,6 +506,11 @@ export default {
 				height: 100%;
 				object-fit: cover;
 				color: transparent; // Hide alt='' text when loading.
+				// The hover magnify is timed here, on every layer at once, so that
+				// blurhash, small and large stay in lockstep and do not slide against
+				// each other. The curve is ease-out-quint: quick to answer the pointer,
+				// then settling slowly into the final scale.
+				transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 			}
 
 			.file__layer--blurhash {

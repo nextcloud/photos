@@ -94,6 +94,14 @@ function openViewer() {
 	box-sizing: border-box;
 	border: 2px solid var(--color-main-background); // Use border to create a separation between images.
 	background-color: var(--color-primary-element-light);
+	// Hover lift, paired with the preview magnify below. Mirrors the tile of
+	// FileComponent, so the folder view hovers like the timeline.
+	transition: box-shadow 220ms ease-out;
+
+	&:hover {
+		box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+		z-index: 1;
+	}
 
 	.cover {
 		position: absolute;
@@ -124,6 +132,20 @@ img {
 
 	.file--cropped & {
 		object-fit: cover;
+	}
+
+	// The magnify is clipped by `.file`, which is `overflow: hidden` through the
+	// FileFolder mixin, so the preview never spills onto the neighbouring tile.
+	transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.file:hover img {
+	transform: scale(1.07);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.file:hover img {
+		transform: none;
 	}
 }
 </style>

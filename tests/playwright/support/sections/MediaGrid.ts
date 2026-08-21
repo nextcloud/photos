@@ -9,6 +9,37 @@ import { expect } from '@playwright/test'
 import { PhotoActionsMenu } from './PhotoActionsMenu.ts'
 
 /**
+ * How a grid builds a tile.
+ *
+ * `layered` tiles stack three preview layers — blurhash, small and large —
+ * inside a frame that also holds the checkbox, the actions and the favorite
+ * star. `legacy` tiles, which only the folders view still renders, are the link
+ * itself with a single preview image in it.
+ */
+export type TileFlavour = 'layered' | 'legacy'
+
+/** The scale a tile magnifies its preview to while it is hovered. */
+const MAGNIFIED_TRANSFORM = 'matrix(1.07, 0, 0, 1.07, 0, 0)'
+
+/**
+ * How a preview layer is timed to magnify: 520ms on an ease-out-quint curve.
+ *
+ * A layer that also fades lists its own transition after the magnify, so only
+ * the first entry of each computed value is the magnify's.
+ */
+const MAGNIFY_TIMING = {
+	property: /^transform(,|$)/,
+	duration: /^0\.52s(,|$)/,
+	timingFunction: /^cubic-bezier\(0\.22, 1, 0\.36, 1\)(,|$)/,
+} as const
+
+/**
+ * How long to leave a hovered tile alone before a preview found unscaled can be
+ * called one that never scaled. Long enough for the magnify above to have run.
+ */
+const MAGNIFY_SETTLE = 800
+
+/**
  * A grid of photo tiles — the timeline, the contents of a collection and the
  * photo picker all render the same tiles, so they all use this section.
  */
@@ -17,6 +48,8 @@ export class MediaGrid {
 		public readonly page: Page,
 		/** The element the grid is rendered in, so two grids cannot be confused. */
 		private readonly container: Locator,
+		/** How this grid builds its tiles. */
+		private readonly flavour: TileFlavour = 'layered',
 	) {}
 
 	/** Every photo of the grid. */
@@ -52,17 +85,60 @@ export class MediaGrid {
 
 	/**
 	 * The tile of a photo, i.e. the frame holding its preview together with its
-	 * checkbox, its actions and its favorite star.
+	 * checkbox, its actions and its favorite star. A `legacy` grid has no such
+	 * frame, so there the tile is the link itself.
 	 *
 	 * @param name - Name of the photo file
 	 */
 	public getTile(name: string): Locator {
+		if (this.flavour === 'legacy') {
+			return this.getMedia(name)
+		}
+
 		// The link is looked up from the page rather than through `getMedia`: a
 		// `has` locator is resolved inside the element it filters, where the grid
 		// container of `getMedia` is nowhere to be found.
 		return this.container.locator('.file-container').filter({
 			has: this.page.getByRole('link', { name: `open the full size "${name}" image` }),
 		})
+	}
+
+	/**
+	 * The layers a tile stacks its preview out of. They are the picture rather
+	 * than anything a reader could name, so they are hidden from assistive
+	 * technology and addressed by their class.
+	 *
+	 * The placeholder is left out: it stands in for a preview that has not landed
+	 * yet, and unlike the preview it does not follow the tile's magnify.
+	 *
+	 * @param name - Name of the photo file
+	 */
+	public getPreviewLayers(name: string): Locator {
+		return this.getTile(name).locator(this.flavour === 'legacy'
+			? 'img'
+			: '.file__layer--blurhash, .file__layer--small, .file__layer--large')
+	}
+
+	/**
+	 * Put the pointer on a tile, which is what makes it lift and magnify.
+	 *
+	 * @param name - Name of the photo file
+	 */
+	public async hoverTile(name: string): Promise<void> {
+		await this.getMedia(name).hover()
+	}
+
+	/**
+	 * Put the pointer on a tile and leave it there long enough for the magnify to
+	 * have run, so that a preview found unscaled afterwards is one that never
+	 * scaled. Proving that something never happens takes waiting out the time in
+	 * which it would have, hence a pause rather than a poll.
+	 *
+	 * @param name - Name of the photo file
+	 */
+	public async hoverTileAndSettle(name: string): Promise<void> {
+		await this.hoverTile(name)
+		await this.page.waitForTimeout(MAGNIFY_SETTLE)
 	}
 
 	/**
@@ -204,6 +280,63 @@ export class MediaGrid {
 		await expect(this.getMedia(name)).toHaveAccessibleName(favorite
 			? `Favorite image, open the full size "${name}" image`
 			: `Open the full size "${name}" image`)
+	}
+
+	/**
+	 * Assert whether the preview of a photo is magnified, as it is while the tile
+	 * is hovered.
+	 *
+	 * Every layer of the preview is asserted, which is what keeps them in lockstep:
+	 * a layer left behind would slide against the others during the magnify.
+	 *
+	 * @param name - Name of the photo file
+	 * @param magnified - The state to assert
+	 */
+	public async expectPreviewMagnified(name: string, magnified: boolean): Promise<void> {
+		const layers = this.getPreviewLayers(name)
+
+		// The count is read first: asserting on the layers of a tile that renders
+		// none of them would pass without having looked at anything.
+		await expect(layers.first()).toBeAttached()
+		const count = await layers.count()
+
+		for (let index = 0; index < count; index++) {
+			await expect(layers.nth(index)).toHaveCSS('transform', magnified ? MAGNIFIED_TRANSFORM : 'none')
+		}
+	}
+
+	/**
+	 * Assert whether a tile is lifted off the grid by the soft shadow it takes
+	 * while it is hovered.
+	 *
+	 * @param name - Name of the photo file
+	 * @param lifted - The state to assert
+	 */
+	public async expectTileLifted(name: string, lifted: boolean): Promise<void> {
+		await expect(this.getTile(name)).toHaveCSS('box-shadow', lifted
+			? /^rgba\(0, 0, 0, 0\.14\) 0px 6px 18px 0px$/
+			: 'none')
+	}
+
+	/**
+	 * Assert that every layer of a preview is timed to magnify on the same curve.
+	 * A layer timed differently would slide against the others on the way to the
+	 * magnified scale, however well they agree on where to end up.
+	 *
+	 * @param name - Name of the photo file
+	 */
+	public async expectMagnifyTiming(name: string): Promise<void> {
+		const layers = this.getPreviewLayers(name)
+
+		await expect(layers.first()).toBeAttached()
+		const count = await layers.count()
+
+		for (let index = 0; index < count; index++) {
+			const layer = layers.nth(index)
+			await expect(layer).toHaveCSS('transition-property', MAGNIFY_TIMING.property)
+			await expect(layer).toHaveCSS('transition-duration', MAGNIFY_TIMING.duration)
+			await expect(layer).toHaveCSS('transition-timing-function', MAGNIFY_TIMING.timingFunction)
+		}
 	}
 
 	/**

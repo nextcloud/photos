@@ -102,7 +102,9 @@ export const test = baseTest.extend<PhotosOptions & PhotosFixtures>({
 
 	// The page is built here rather than taken from Playwright, so the service
 	// worker option has to be carried over by hand - `test.use` sets it on the
-	// context Playwright would have built.
+	// context Playwright would have built. Options that are no fixture of their
+	// own, `reducedMotion` among them, cannot be reached from here at all and have
+	// to be emulated on the page instead.
 	page: async ({ browser, baseURL, account, serviceWorkers }, use) => {
 		// Important: authenticate in a clean environment by unsetting storage state.
 		const page = await browser.newPage({ storageState: undefined, baseURL, serviceWorkers })
