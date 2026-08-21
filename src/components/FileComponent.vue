@@ -34,11 +34,10 @@
 					which gives a blurred → pixelated → sharp progression.
 				-->
 				<template v-if="initialized">
-					<canvas
-						v-if="hasBlurhash"
-						ref="canvas"
+					<NcBlurHash
+						v-if="blurhash !== undefined"
 						class="file__layer file__layer--blurhash"
-						aria-hidden="true" />
+						:hash="blurhash" />
 
 					<!-- Sweeps over the blurhash, or over the empty tile when there is none, until a preview lands. -->
 					<div
@@ -103,7 +102,7 @@ import type { PhotoTarget } from '../utils/fileUtils.ts'
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
-import { decode } from 'blurhash'
+import NcBlurHash from '@nextcloud/vue/components/NcBlurHash'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import PlayCircleOutlineIcon from 'vue-material-design-icons/PlayCircleOutline.vue'
 import FavoriteIcon from './FavoriteIcon.vue'
@@ -116,6 +115,7 @@ export default {
 	name: 'FileComponent',
 	components: {
 		FavoriteIcon,
+		NcBlurHash,
 		NcCheckboxRadioSwitch,
 		PhotoActionsMenu,
 		PlayCircleOutlineIcon,
@@ -195,8 +195,8 @@ export default {
 			return this.getItemURL(64)
 		},
 
-		hasBlurhash() {
-			return this.file.attributes['metadata-blurhash'] !== undefined
+		blurhash(): string | undefined {
+			return this.file.attributes['metadata-blurhash']
 		},
 	},
 
@@ -238,9 +238,6 @@ export default {
 
 			this.initialized = true
 
-			await this.$nextTick() // Wait for next tick to have the canvas in the DOM
-
-			this.drawBlurhash()
 			await this.getVideoDuration()
 		},
 
@@ -304,22 +301,6 @@ export default {
 			} else {
 				return generateUrl(`/apps/photos/api/v1/preview/${this.file.fileid}?etag=${this.decodedEtag}&x=${size}&y=${size}`)
 			}
-		},
-
-		drawBlurhash() {
-			if (!this.hasBlurhash || !this.$refs.canvas) {
-				return
-			}
-
-			const width = (this.$refs.canvas as HTMLCanvasElement).width
-			const height = (this.$refs.canvas as HTMLCanvasElement).height
-
-			const pixels = decode(this.file.attributes['metadata-blurhash'], width, height)
-
-			const ctx = (this.$refs.canvas as HTMLCanvasElement).getContext('2d') as CanvasRenderingContext2D
-			const imageData = ctx.createImageData(width, height) as ImageData
-			imageData.data.set(pixels)
-			ctx.putImageData(imageData, 0, 0)
 		},
 
 		async getVideoDuration() {

@@ -86,9 +86,12 @@ export const test = baseTest.extend<PhotosOptions & PhotosFixtures>({
 
 	media: ({ account }, use) => use(account.media),
 
-	page: async ({ browser, baseURL, account }, use) => {
+	// The page is built here rather than taken from Playwright, so the service
+	// worker option has to be carried over by hand - `test.use` sets it on the
+	// context Playwright would have built.
+	page: async ({ browser, baseURL, account, serviceWorkers }, use) => {
 		// Important: authenticate in a clean environment by unsetting storage state.
-		const page = await browser.newPage({ storageState: undefined, baseURL })
+		const page = await browser.newPage({ storageState: undefined, baseURL, serviceWorkers })
 		await withRetry(() => login(page.request, account.user), `authenticate as "${account.user.userId}"`)
 
 		await use(page)

@@ -172,8 +172,8 @@ test.describe('The hero of an album', () => {
 		// The cover is the last photo the album was given, which is one of the three
 		// that were added — the order they end up in is the server's to decide.
 		const coverIds = ALBUM_PHOTOS.map((photo) => media[photo as keyof SeededMedia])
-		await expect(album.heroCover())
-			.toHaveCSS('background-image', new RegExp(`/preview/(${coverIds.join('|')})`))
+		await expect(album.heroPhoto())
+			.toHaveAttribute('src', new RegExp(`/preview/(${coverIds.join('|')})`))
 	})
 
 	test('names the location of the album next to its photo count', async ({ photosApp }) => {
@@ -197,5 +197,37 @@ test.describe('The hero of an album', () => {
 		// The cover is given extra height and pushed down by a share of the scrolled
 		// distance, so it moves slower than the page rather than out of it.
 		await expect.poll(() => album.heroCoverOffset()).toBeGreaterThan(0)
+	})
+})
+
+test.describe('The hero of an album whose cover photo cannot be previewed', () => {
+	test.use({
+		// The metadata pass resolving the places of the photos is the same one
+		// that generates their blurhash, which is what the hero falls back to.
+		withPlaces: true,
+		// Previews are answered by the service worker out of its own cache, and
+		// requests it makes cannot be intercepted — the page has to make them
+		// itself for the failing preview below to be simulated at all.
+		serviceWorkers: 'block',
+	})
+
+	test.beforeEach(async ({ photosApp }) => {
+		await photosApp.albums.open()
+		await photosApp.albums.createAlbum(ALBUM_NAME)
+		await photosApp.album.addPhotos(ALBUM_NAME, [...ALBUM_PHOTOS])
+	})
+
+	test('falls back to the blurhash of the cover photo', async ({ photosApp }) => {
+		const { album } = photosApp
+
+		// A preview is generated on demand and can fail, which the hero has to
+		// survive - the photo is dropped rather than shown as a broken image.
+		await album.page.route('**/apps/photos/api/v1/preview/**', (route) => route.abort())
+		await album.open(ALBUM_NAME)
+
+		await expect(album.hero()).toBeVisible()
+		await expect(album.heroTitle()).toHaveText(ALBUM_NAME)
+		await expect(album.heroPhoto()).toHaveCount(0)
+		await expect(album.heroBlurhash()).toBeVisible()
 	})
 })

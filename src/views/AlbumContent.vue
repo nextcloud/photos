@@ -6,7 +6,8 @@
 	<div class="album-container">
 		<AlbumHero
 			v-if="album !== undefined"
-			:cover-file-id="album.attributes['last-photo']"
+			:cover-file-id="coverFileId"
+			:blurhash="coverBlurhash"
 			:title="albumName"
 			:subtitle="albumSubtitle" />
 
@@ -169,6 +170,7 @@
 
 <script lang='ts'>
 import type { Album } from '../store/albums.js'
+import type { PhotoFile } from '../store/files.ts'
 
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
@@ -201,6 +203,7 @@ import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.j
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import logger from '../services/logger.js'
 import { albumFilesExtraProps, albumsExtraProps } from '../store/albums.ts'
+import { pickAlbumCover } from '../utils/albumCover.ts'
 
 export default {
 	name: 'AlbumContent',
@@ -276,6 +279,26 @@ export default {
 
 		albumFileName(): string {
 			return this.$store.getters.getAlbumName(this.albumName)
+		},
+
+		albumPhotos(): PhotoFile[] {
+			return this.albumFileIds
+				.map((fileId) => this.$store.state.files.files[fileId])
+				.filter((file) => file !== undefined)
+		},
+
+		// The photo shown by the hero, which is only known once the album
+		// content is there - until then the album cover is used as is.
+		coverPhoto(): PhotoFile | undefined {
+			return pickAlbumCover(this.albumPhotos, this.album?.attributes['last-photo'] ?? -1)
+		},
+
+		coverFileId(): number {
+			return this.coverPhoto?.fileid ?? this.album?.attributes['last-photo'] ?? -1
+		},
+
+		coverBlurhash(): string | undefined {
+			return this.coverPhoto?.attributes['metadata-blurhash']
 		},
 
 		// Line shown under the album name in the hero, both parts of it are

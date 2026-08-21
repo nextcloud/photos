@@ -198,9 +198,19 @@ export class AlbumPage {
 		return this.hero().locator('.album-hero__subtitle')
 	}
 
-	/** The cover photo of the hero, which is the background of a layer of its own. */
+	/** The layer of the hero the cover photo and its blurhash are stacked in. */
 	public heroCover(): Locator {
 		return this.hero().locator('.album-hero__cover')
+	}
+
+	/** The cover photo itself, gone as soon as its preview cannot be loaded. */
+	public heroPhoto(): Locator {
+		return this.heroCover().locator('.album-hero__photo')
+	}
+
+	/** The blurhash of the cover photo, standing in for its preview. */
+	public heroBlurhash(): Locator {
+		return this.heroCover().locator('canvas')
 	}
 
 	/**

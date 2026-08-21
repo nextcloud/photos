@@ -145,7 +145,7 @@ class PropFindPlugin extends ServerPlugin {
 
 		if ($node instanceof AlbumRootBase) {
 			$propFind->handle(self::ORIGINAL_NAME_PROPERTYNAME, fn (): string => $node->getAlbum()->getAlbum()->getTitle());
-			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn (): int => $node->getCover());
+			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn (): int => $this->getCoverWithPreview($node));
 			$propFind->handle(self::LOCATION_PROPERTYNAME, fn (): string => $node->getAlbum()->getAlbum()->getLocation());
 			$propFind->handle(self::DATE_RANGE_PROPERTYNAME, fn () => json_encode($node->getDateRange()));
 			$propFind->handle(self::COLLABORATORS_PROPERTYNAME, fn (): array => $node->getCollaborators());
@@ -154,6 +154,61 @@ class PropFindPlugin extends ServerPlugin {
 
 		if ($node instanceof PlaceRoot) {
 			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn (): int => $node->getFirstPhoto());
+		}
+	}
+
+	/**
+	 * The cover of an album, preferring a photo a preview can be built for.
+	 *
+	 * The album points at the photo added last, which may well be one no
+	 * preview provider can handle - a cover clients cannot display at all. The
+	 * most recently added photo with a preview is a better one, and the photo
+	 * added last stays the answer when none of them has one.
+	 */
+	private function getCoverWithPreview(AlbumRootBase $node): int {
+		$cover = $node->getCover();
+		$children = $node->getChildren();
+
+		foreach ($children as $child) {
+			if ($child->getFileId() === $cover) {
+				if ($this->hasPreview($child)) {
+					return $cover;
+				}
+
+				break;
+			}
+		}
+
+		usort($children, fn (AlbumPhoto $a, AlbumPhoto $b): int => $this->getAddedTime($b) <=> $this->getAddedTime($a));
+
+		foreach ($children as $child) {
+			if ($this->hasPreview($child)) {
+				return $child->getFileId();
+			}
+		}
+
+		return $cover;
+	}
+
+	/**
+	 * When the photo was added to the album.
+	 *
+	 * Photos that are part of it through a filter were never added to it and
+	 * carry no such time, so the time they were last modified stands in for it.
+	 */
+	private function getAddedTime(AlbumPhoto $photo): int {
+		$file = $photo->getFile();
+
+		return $file instanceof AlbumFile && $file->origin === 'user'
+			? $file->getAdded()
+			: $file->getMTime();
+	}
+
+	private function hasPreview(AlbumPhoto $photo): bool {
+		try {
+			return $this->previewManager->isAvailable($photo->getFileInfo());
+		} catch (NotFoundException|NotFound) {
+			return false;
 		}
 	}
 
