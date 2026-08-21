@@ -6,9 +6,11 @@
 import type { Locator, Page } from '@playwright/test'
 
 import { expect } from '@playwright/test'
+import { expectStored, waitForDavRequest } from '../utils/requests.ts'
 import { AlbumPickerDialog } from './AlbumPickerDialog.ts'
 import { PhotoMetadataDialog } from './PhotoMetadataDialog.ts'
 import { PhotoMetadataEditDialog } from './PhotoMetadataEditDialog.ts'
+import { PhotoTagsDialog } from './PhotoTagsDialog.ts'
 
 /**
  * The actions menu a single photo carries, laid over its tile.
@@ -51,6 +53,53 @@ export class PhotoActionsMenu {
 	/** Open the album picker to add the photo to an album. */
 	public async addToAlbum(): Promise<AlbumPickerDialog> {
 		return await AlbumPickerDialog.open(this.page, () => this.getEntry('Add to album').click())
+	}
+
+	/**
+	 * The entry marking the photo as a favorite. It is replaced by
+	 * {@link removeFromFavoritesEntry} once the photo is one.
+	 */
+	public addToFavoritesEntry(): Locator {
+		return this.getEntry('Add to favorites')
+	}
+
+	public removeFromFavoritesEntry(): Locator {
+		return this.getEntry('Remove from favorites')
+	}
+
+	public manageTagsEntry(): Locator {
+		return this.getEntry('Manage tags')
+	}
+
+	/** Mark the photo as a favorite and wait for the server to have stored it. */
+	public async favorite(): Promise<void> {
+		await this.storeFavorite(this.addToFavoritesEntry(), 'mark the photo as a favorite')
+	}
+
+	/** Take the photo out of the favorites and wait for the server to have stored it. */
+	public async unfavorite(): Promise<void> {
+		await this.storeFavorite(this.removeFromFavoritesEntry(), 'take the photo out of the favorites')
+	}
+
+	/** Open the dialog managing the tags of the photo. */
+	public async manageTags(): Promise<PhotoTagsDialog> {
+		await this.manageTagsEntry().click()
+
+		const dialog = new PhotoTagsDialog(this.page)
+		await dialog.waitForLoaded()
+		return dialog
+	}
+
+	/**
+	 * Click an entry of the favorites and wait for the state to be written.
+	 *
+	 * @param entry - The entry to click
+	 * @param description - What the entry does, for the message of a failure
+	 */
+	private async storeFavorite(entry: Locator, description: string): Promise<void> {
+		const stored = waitForDavRequest(this.page, 'PROPPATCH')
+		await entry.click()
+		await expectStored(await stored, description)
 	}
 
 	/** The confirmation dialog of the delete entry. */

@@ -7,7 +7,23 @@
 	<div
 		class="file-container"
 		data-test="media"
-		:class="{ selected }">
+		:class="{ selected, 'file-container--stack': isStack }">
+		<!--
+			A tile standing for a run of photos taken in one go is drawn as a deck of
+			cards: two backs peeking out behind the preview, which costs no further
+			image to load, and a badge counting what is folded into it.
+		-->
+		<template v-if="isStack">
+			<span class="stack-back stack-back--second" aria-hidden="true" />
+			<span class="stack-back stack-back--first" aria-hidden="true" />
+			<span
+				class="stack-count"
+				role="img"
+				:aria-label="t('photos', '{count} photos taken in one go', { count: burstCount })">
+				{{ burstCount }}
+			</span>
+		</template>
+
 		<a
 			class="file"
 			:href="file.source"
@@ -34,11 +50,10 @@
 					which gives a blurred → pixelated → sharp progression.
 				-->
 				<template v-if="initialized">
-					<canvas
-						v-if="hasBlurhash"
-						ref="canvas"
+					<NcBlurHash
+						v-if="blurhash !== undefined"
 						class="file__layer file__layer--blurhash"
-						aria-hidden="true" />
+						:hash="blurhash" />
 
 					<!-- Sweeps over the blurhash, or over the empty tile when there is none, until a preview lands. -->
 					<div
@@ -103,7 +118,7 @@ import type { PhotoTarget } from '../utils/fileUtils.ts'
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
-import { decode } from 'blurhash'
+import NcBlurHash from '@nextcloud/vue/components/NcBlurHash'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import PlayCircleOutlineIcon from 'vue-material-design-icons/PlayCircleOutline.vue'
 import FavoriteIcon from './FavoriteIcon.vue'
@@ -116,6 +131,7 @@ export default {
 	name: 'FileComponent',
 	components: {
 		FavoriteIcon,
+		NcBlurHash,
 		NcCheckboxRadioSwitch,
 		PhotoActionsMenu,
 		PlayCircleOutlineIcon,
@@ -136,6 +152,14 @@ export default {
 		allowSelection: {
 			type: Boolean,
 			default: true,
+		},
+
+		// How many photos this tile stands for, one being itself. A tile standing for
+		// several of them was folded out of a run of photos taken in one go, and is
+		// drawn as a deck of cards carrying their count.
+		burstCount: {
+			type: Number,
+			default: 1,
 		},
 
 		// Opt-out: the menu manages the photo it belongs to, which only gets in
@@ -175,6 +199,10 @@ export default {
 			return t('photos', 'Open the full size "{name}" image', { name: this.file.basename })
 		},
 
+		isStack(): boolean {
+			return this.burstCount > 1
+		},
+
 		isImage(): boolean {
 			return this.file.mime?.startsWith('image') ?? false
 		},
@@ -195,8 +223,8 @@ export default {
 			return this.getItemURL(64)
 		},
 
-		hasBlurhash() {
-			return this.file.attributes['metadata-blurhash'] !== undefined
+		blurhash(): string | undefined {
+			return this.file.attributes['metadata-blurhash']
 		},
 	},
 
@@ -238,9 +266,6 @@ export default {
 
 			this.initialized = true
 
-			await this.$nextTick() // Wait for next tick to have the canvas in the DOM
-
-			this.drawBlurhash()
 			await this.getVideoDuration()
 		},
 
@@ -306,22 +331,6 @@ export default {
 			}
 		},
 
-		drawBlurhash() {
-			if (!this.hasBlurhash || !this.$refs.canvas) {
-				return
-			}
-
-			const width = (this.$refs.canvas as HTMLCanvasElement).width
-			const height = (this.$refs.canvas as HTMLCanvasElement).height
-
-			const pixels = decode(this.file.attributes['metadata-blurhash'], width, height)
-
-			const ctx = (this.$refs.canvas as HTMLCanvasElement).getContext('2d') as CanvasRenderingContext2D
-			const imageData = ctx.createImageData(width, height) as ImageData
-			imageData.data.set(pixels)
-			ctx.putImageData(imageData, 0, 0)
-		},
-
 		async getVideoDuration() {
 			if (!this.isVideo) {
 				return
@@ -351,6 +360,10 @@ export default {
 
 <style lang="scss" scoped>
 .file-container {
+	// How much of the tile is left to the card backs of a folded run of photos.
+	// Zero for a tile standing for a single photo, so its preview and everything
+	// overlaid on it keep filling the whole tile.
+	--stack-peek: 0px;
 	contain: strict;
 	background: var(--color-primary-element-light);
 	position: relative;
@@ -359,6 +372,59 @@ export default {
 	border: 2px solid var(--color-main-background); // Use border so create a separation between images.
 	box-sizing: border-box;
 	transition: transform var(--animation-quick) ease-out, box-shadow var(--animation-quick) ease-out;
+
+	// A tile standing for a run of photos taken in one go pads the corner the deck
+	// peeks out of, so that the cards stay inside the tile instead of covering the
+	// photo next to it.
+	&--stack {
+		--stack-peek: 6px;
+		padding-inline-end: var(--stack-peek);
+		padding-block-end: var(--stack-peek);
+	}
+
+	// The two card backs, each one further out of the corner than the one before.
+	// Drawn rather than loaded, so a deck costs no further preview.
+	.stack-back {
+		position: absolute;
+		inset-block-start: calc(var(--stack-peek) / 2);
+		inset-inline-start: calc(var(--stack-peek) / 2);
+		z-index: 0; // below the preview layers
+		width: calc(100% - var(--stack-peek));
+		height: calc(100% - var(--stack-peek));
+		box-sizing: border-box;
+		border: 2px solid var(--color-main-background); // The separation the tile itself uses.
+		background: var(--color-background-dark);
+		pointer-events: none;
+
+		&--second {
+			inset-block-start: var(--stack-peek);
+			inset-inline-start: var(--stack-peek);
+			opacity: 0.6;
+		}
+	}
+
+	// How many photos the deck holds. In the corner the checkbox, the actions and
+	// the favorite star leave free, so it never has to hide for one of them.
+	.stack-count {
+		position: absolute;
+		inset-block-end: calc(8px + var(--stack-peek));
+		inset-inline-start: 8px;
+		z-index: 6; // above the preview layers and the overlays
+		height: 24px;
+		min-width: 24px;
+		padding-inline: 8px;
+		box-sizing: border-box;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: var(--border-radius-pill);
+		background: rgba(0, 0, 0, 0.4);
+		color: #fff;
+		font-weight: 600;
+		// Tabular figures, so the badge does not jitter as the count grows.
+		font-variant-numeric: tabular-nums;
+		pointer-events: none;
+	}
 
 	// Selected images shrink into a glowing frame, which is softer than an
 	// outline and does not fight the photo for attention.
@@ -393,6 +459,10 @@ export default {
 	}
 
 	.file {
+		// The preview layers and the duration belong to the picture rather than to
+		// the tile, so they are positioned against the link holding them: it is the
+		// same box, until a deck of cards leaves it the tile minus `--stack-peek`.
+		position: relative;
 		width: 100%;
 		height: 100%;
 		box-sizing: border-box;
@@ -486,7 +556,7 @@ export default {
 		position: absolute;
 		top: 8px;
 		// Fancy calculation to render the checkbox in the middle of narrow images.
-		inset-inline-end: min(22px, calc(50% - 7px));
+		inset-inline-end: calc(min(22px, calc(50% - 7px)) + var(--stack-peek));
 		z-index: 5; // above the preview layers
 		width: fit-content;
 
@@ -530,7 +600,7 @@ export default {
 		z-index: 5; // above the preview layers
 		top: 2px;
 		// Fancy calculation to render the start in the middle of narrow images.
-		inset-inline-end: min(2px, calc(50% - 7px));
+		inset-inline-end: calc(min(2px, calc(50% - 7px)) + var(--stack-peek));
 	}
 
 	// The star pops in when an image is marked as favorite, and fades out when

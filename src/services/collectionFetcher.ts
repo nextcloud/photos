@@ -62,6 +62,7 @@ function getCollectionFilesDavRequest(extraProps: string[] = []): string {
 					<d:getetag />
 					<d:getlastmodified />
 					<d:resourcetype />
+					<nc:metadata-blurhash />
 					<nc:metadata-photos-size />
 					<nc:metadata-photos-original_date_time />
 					<nc:metadata-files-live-photo />

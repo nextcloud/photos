@@ -28,6 +28,23 @@
 				{{ t('photos', 'Edit metadata') }}
 			</NcActionButton>
 
+			<NcActionButton v-if="isLoggedIn" close-after-click @click="toggleFavorite">
+				<template #icon>
+					<Star v-if="photo.favorite" :size="20" />
+					<StarOutline v-else :size="20" />
+				</template>
+				{{ photo.favorite
+					? t('photos', 'Remove from favorites')
+					: t('photos', 'Add to favorites') }}
+			</NcActionButton>
+
+			<NcActionButton v-if="canTag" close-after-click @click="tagsShown = true">
+				<template #icon>
+					<TagMultipleOutline :size="20" />
+				</template>
+				{{ t('photos', 'Manage tags') }}
+			</NcActionButton>
+
 			<NcActionButton v-if="isLoggedIn" close-after-click @click="albumPickerShown = true">
 				<template #icon>
 					<ImageMultipleOutline :size="20" />
@@ -61,6 +78,11 @@
 			v-if="metadataEditShown"
 			:photo="photo"
 			@close="metadataEditShown = false" />
+
+		<PhotoTagsDialog
+			v-if="tagsShown"
+			:photo="photo"
+			@close="tagsShown = false" />
 
 		<NcModal
 			v-if="albumPickerShown"
@@ -108,10 +130,15 @@ import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline
 import InformationOutline from 'vue-material-design-icons/InformationOutline.vue'
 import PencilOutline from 'vue-material-design-icons/PencilOutline.vue'
 import ShareVariantOutline from 'vue-material-design-icons/ShareVariantOutline.vue'
+import Star from 'vue-material-design-icons/Star.vue'
+import StarOutline from 'vue-material-design-icons/StarOutline.vue'
+import TagMultipleOutline from 'vue-material-design-icons/TagMultipleOutline.vue'
 import TrashCanOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 import AlbumPicker from './Albums/AlbumPicker.vue'
 import PhotoMetadataDialog from './PhotoMetadataDialog.vue'
 import PhotoMetadataEditDialog from './PhotoMetadataEditDialog.vue'
+import PhotoTagsDialog from './PhotoTagsDialog.vue'
+import areTagsInstalled from '../services/AreTagsInstalled.ts'
 import logger from '../services/logger.ts'
 import store from '../store/index.ts'
 
@@ -129,6 +156,7 @@ const emit = defineEmits<{
 const menuOpen = ref(false)
 const metadataShown = ref(false)
 const metadataEditShown = ref(false)
+const tagsShown = ref(false)
 const albumPickerShown = ref(false)
 const deleteConfirmationShown = ref(false)
 
@@ -142,11 +170,28 @@ const canEdit = computed(() => isLoggedIn && (props.photo.permissions & Permissi
 const canShare = computed(() => isLoggedIn && (props.photo.permissions & Permission.SHARE) !== 0)
 const canDelete = computed(() => isLoggedIn && (props.photo.permissions & Permission.DELETE) !== 0)
 
+// Tags belong to their own app, and the server refuses to put one on a photo
+// the account cannot write to.
+const canTag = computed(() => areTagsInstalled && canEdit.value)
+
 // The sharing UI lives in the details sidebar of the Files app, and its API
 // needs a navigation context which the photos app does not set up, so the user
 // is sent there with the sidebar already open.
 function share(): void {
 	window.location.href = generateUrl('/apps/files/files/{fileid}?opendetails=true', { fileid: props.photo.fileid })
+}
+
+async function toggleFavorite(): Promise<void> {
+	const favorite = !props.photo.favorite
+
+	try {
+		await store.dispatch('setPhotoFavorite', { photo: props.photo, favorite })
+	} catch (error) {
+		logger.error('Error setting the favorite state of a photo', { error, filename: props.photo.basename })
+		showError(favorite
+			? t('photos', 'Failed to add {fileName} to the favorites', { fileName: props.photo.basename })
+			: t('photos', 'Failed to remove {fileName} from the favorites', { fileName: props.photo.basename }))
+	}
 }
 
 async function addToAlbum(album: Album): Promise<void> {

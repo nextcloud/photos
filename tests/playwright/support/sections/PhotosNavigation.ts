@@ -23,7 +23,9 @@ export const NavigationEntry = {
 	folders: 'Folders',
 	favorites: 'Favorites',
 	onThisDay: 'On this day',
+	memories: 'Memories',
 	places: 'Places',
+	map: 'Map',
 } as const
 
 export type NavigationEntryName = (typeof NavigationEntry)[keyof typeof NavigationEntry]
@@ -53,5 +55,13 @@ export class PhotosNavigation {
 	/** The field filtering the timeline by file name. */
 	public searchInput(): Locator {
 		return this.navigation().getByRole('textbox', { name: 'Search by file name' })
+	}
+
+	/**
+	 * The button emptying the search field, which is only rendered while the field
+	 * holds something.
+	 */
+	public clearSearchButton(): Locator {
+		return this.navigation().getByRole('button', { name: 'Clear search' })
 	}
 }

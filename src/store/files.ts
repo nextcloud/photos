@@ -15,15 +15,18 @@ import moment from '@nextcloud/moment'
 import Vue from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
-import { deletePhoto, savePhotoMetadata } from '../services/photoActions.ts'
+import { deletePhoto, savePhotoMetadata, setPhotoFavorite } from '../services/photoActions.ts'
 import Semaphore from '../utils/semaphoreWithPriority.js'
 
 export type PhotoFile = File & {
 	fileid: number
 	attributes: {
+		'metadata-blurhash'?: string
 		'metadata-photos-original_date_time': number
 		'metadata-photos-size': { width: number, height: number }
 		'metadata-photos-gps'?: { latitude: string, longitude: string, altitude?: string }
+		/** Whether a preview can be generated for this file - not whether one exists already. */
+		hasPreview?: boolean
 		timestamp: number
 		month: string
 		day: string
@@ -98,13 +101,21 @@ const mutations = {
 	/**
 	 * Favorite a list of files
 	 *
+	 * Photos of the folders view are not part of this store, so the state is
+	 * only updated when the file is known.
+	 *
 	 * @param state
 	 * @param root0
 	 * @param root0.fileId
 	 * @param root0.favoriteState
 	 */
 	favoriteFile(state: FilesState, { fileId, favoriteState }: { fileId: number, favoriteState: 0 | 1 }) {
-		Vue.set(state.files[fileId].attributes, 'favorite', favoriteState)
+		const attributes = state.files[fileId]?.attributes
+		if (attributes === undefined) {
+			return
+		}
+
+		Vue.set(attributes, 'favorite', favoriteState)
 	},
 
 	/**
@@ -197,6 +208,20 @@ const actions = {
 	async updatePhotoMetadata(context: PhotosContext<FilesState>, { photo, takenAt, location }: { photo: PhotoTarget } & PhotoMetadataUpdate) {
 		await savePhotoMetadata(photo, { takenAt, location })
 		context.commit('setPhotoMetadata', { fileId: photo.fileid, takenAt, location })
+	},
+
+	/**
+	 * Mark a single photo as a favorite, or take that mark off again
+	 *
+	 * @param context
+	 * @param root0
+	 * @param root0.photo
+	 * @param root0.favorite
+	 * @throws {Error} When the server rejects the update
+	 */
+	async setPhotoFavorite(context: PhotosContext<FilesState>, { photo, favorite }: { photo: PhotoTarget, favorite: boolean }) {
+		await setPhotoFavorite(photo, favorite)
+		context.commit('favoriteFile', { fileId: photo.fileid, favoriteState: favorite ? 1 : 0 })
 	},
 
 	/**

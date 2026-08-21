@@ -22,6 +22,11 @@
 			:src="getPreviewUrl(currentPhoto, PREVIEW_SIZE)"
 			:alt="currentPhoto.basename">
 
+		<!-- How far into the set the slideshow is, as the header only names the photo. -->
+		<p class="slideshow__position">
+			{{ positionLabel }}
+		</p>
+
 		<!-- Nothing is shown for photos without EXIF metadata, rather than an empty panel. -->
 		<aside
 			v-if="exifEntries.length > 0"
@@ -50,7 +55,7 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import NcModal from '@nextcloud/vue/components/NcModal'
 import { fetchPhotoExif } from '../services/exifFetcher.ts'
 import { getExifSummary } from '../utils/exif.ts'
-import { getPreviewUrl } from '../utils/fileUtils.ts'
+import { getPreviewUrl, toPhotoTarget } from '../utils/fileUtils.ts'
 
 const props = withDefaults(defineProps<{
 	/** Photos to play through, in the order they are shown. */
@@ -76,6 +81,14 @@ const index = ref(props.startIndex)
 
 const currentPhoto = computed<PhotoFile | undefined>(() => props.photos[index.value])
 
+const positionLabel = computed<string>(() => t('photos', '{position} of {count}', {
+	position: index.value + 1,
+	count: props.photos.length,
+}))
+
+/** Elements a key press belongs to rather than to the slideshow around them. */
+const CONTROL_SELECTOR = 'button, a[href], input, select, textarea, [contenteditable]'
+
 /** Whether the metadata of the current photo is shown, toggled with the `i` key. */
 const exifShown = ref(false)
 const exifEntries = ref<ExifEntry[]>([])
@@ -100,7 +113,9 @@ watch([currentPhoto, exifShown], async ([photo, shown]) => {
 		return
 	}
 
-	const entries = getExifSummary(await fetchPhotoExif(photo))
+	// The metadata is read from the file itself, which a photo of a collection is
+	// only a reference to — `toPhotoTarget` resolves the one to the other.
+	const entries = getExifSummary(await fetchPhotoExif(toPhotoTarget(photo)))
 
 	if (request === pendingRequest) {
 		exifEntries.value = entries
@@ -119,9 +134,30 @@ function showPrevious(): void {
  * @param event - The key press to handle
  */
 function onKeyDown(event: KeyboardEvent): void {
-	if (event.key === 'i' && !event.ctrlKey && !event.metaKey && !event.altKey) {
-		exifShown.value = !exifShown.value
+	if (event.ctrlKey || event.metaKey || event.altKey) {
+		return
 	}
+
+	if (event.key === 'i') {
+		exifShown.value = !exifShown.value
+		return
+	}
+
+	// Space plays and pauses, unless a control has the focus: the press activates
+	// that control on its own, and toggling on top of it would take it back.
+	if (event.key === ' ' && !isControl(event.target)) {
+		// Without this the page behind the slideshow scrolls as well.
+		event.preventDefault()
+		modal.value?.togglePlayPause()
+	}
+}
+
+/**
+ * @param target - Element a key press was aimed at
+ * @return Whether the press belongs to that element rather than to the slideshow
+ */
+function isControl(target: EventTarget | null): boolean {
+	return target instanceof Element && target.closest(CONTROL_SELECTOR) !== null
 }
 </script>
 
@@ -130,6 +166,18 @@ function onKeyDown(event: KeyboardEvent): void {
 	width: 100%;
 	height: 100%;
 	object-fit: contain;
+}
+
+.slideshow__position {
+	position: absolute;
+	inset-block-end: calc(var(--default-grid-baseline) * 4);
+	inset-inline: 0;
+	margin: 0;
+	text-align: center;
+	color: #fff;
+	font-variant-numeric: tabular-nums;
+	text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+	pointer-events: none;
 }
 
 .slideshow__exif {

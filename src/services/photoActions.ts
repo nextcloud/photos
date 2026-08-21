@@ -61,6 +61,30 @@ export async function savePhotoMetadata(photo: PhotoTarget, update: PhotoMetadat
 }
 
 /**
+ * Mark a photo as a favorite, or take that mark off again.
+ *
+ * Favorites are per account rather than per file, which is why this works on a
+ * photo shared by someone else as well.
+ *
+ * @param photo - Photo to update
+ * @param favorite - Whether the photo should be a favorite
+ * @throws {Error} When the server rejects the update
+ */
+export async function setPhotoFavorite(photo: PhotoTarget, favorite: boolean): Promise<void> {
+	await davClient.customRequest(photo.davPath, {
+		method: 'PROPPATCH',
+		data: `<?xml version="1.0"?>
+			<d:propertyupdate xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">
+				<d:set>
+					<d:prop>
+						<oc:favorite>${favorite ? 1 : 0}</oc:favorite>
+					</d:prop>
+				</d:set>
+			</d:propertyupdate>`,
+	})
+}
+
+/**
  * Move a photo to the trash.
  *
  * @param photo - Photo to delete

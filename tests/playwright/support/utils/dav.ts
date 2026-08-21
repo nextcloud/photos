@@ -15,6 +15,12 @@ export const PUBLIC_PHOTOS_DAV_ROOT = '/remote.php/dav/photospublic'
 /** WebDAV endpoint of recognize, the faces are exposed under it. */
 export const RECOGNIZE_DAV_ROOT = '/remote.php/dav/recognize'
 
+/** WebDAV endpoint of the tags of the instance. */
+export const SYSTEMTAGS_DAV_ROOT = '/remote.php/dav/systemtags'
+
+/** WebDAV endpoint of the tags assigned to a file. */
+export const TAG_ASSIGNMENTS_DAV_ROOT = '/remote.php/dav/systemtags-relations/files'
+
 /**
  * Type of a collaborator of an album, mirroring `ShareType` of the app and
  * `AlbumMapper::TYPE_*` of the server.
@@ -87,11 +93,6 @@ export function sharedAlbumsDavUrl(user: User, albumName = ''): string {
 
 /**
  * Statuses that say "the server was busy", not "the request was wrong".
- *
- * Writing a file extracts its metadata and propagates the size of its folder,
- * both inside a transaction — and every worker of the run does that against the
- * same SQLite database. Losing that race is answered with a locked or
- * unavailable status, which says nothing about what a test is checking.
  */
 const TRANSIENT_STATUSES = [423, 429, 500, 503]
 
@@ -201,6 +202,62 @@ export async function uploadFile(
 }
 
 /**
+ * Copy a file inside the home of an account.
+ *
+ * @param request - Request context to use
+ * @param user - Owner of both paths
+ * @param sourcePath - Path of the file to copy, relative to the account's root
+ * @param targetPath - Path of the copy, relative to the account's root
+ */
+export async function copyFile(request: APIRequestContext, user: User, sourcePath: string, targetPath: string): Promise<void> {
+	await davRequest(request, user, 'COPY', filesDavUrl(user, sourcePath), {
+		headers: { Destination: filesDavUrl(user, targetPath) },
+	})
+}
+
+/**
+ * Set the moment a photo was taken at, the way the metadata editor of the app
+ * does.
+ *
+ * @param request - Request context to use
+ * @param user - Owner of the photo
+ * @param path - Path of the photo, relative to the account's root
+ * @param takenAt - Moment the photo should count as taken at
+ */
+export async function setPhotoTakenAt(request: APIRequestContext, user: User, path: string, takenAt: Date): Promise<void> {
+	await davRequest(request, user, 'PROPPATCH', filesDavUrl(user, path), {
+		headers: { 'Content-Type': 'application/xml' },
+		data: `<?xml version="1.0"?>
+			<d:propertyupdate xmlns:d="DAV:" xmlns:nc="http://nextcloud.org/ns">
+				<d:set>
+					<d:prop>
+						<nc:metadata-photos-original_date_time>${Math.floor(takenAt.getTime() / 1000)}</nc:metadata-photos-original_date_time>
+					</d:prop>
+				</d:set>
+			</d:propertyupdate>`,
+	})
+}
+
+/**
+ * Drop the coordinates of a photo, as the metadata editor of the app does.
+ *
+ * @param request - Request context to use
+ * @param user - Owner of the photo
+ * @param path - Path of the photo, relative to the account's root
+ */
+export async function removePhotoLocation(request: APIRequestContext, user: User, path: string): Promise<void> {
+	await davRequest(request, user, 'PROPPATCH', filesDavUrl(user, path), {
+		headers: { 'Content-Type': 'application/xml' },
+		data: `<?xml version="1.0"?>
+			<d:propertyupdate xmlns:d="DAV:" xmlns:nc="http://nextcloud.org/ns">
+				<d:remove>
+					<d:prop><nc:metadata-photos-gps /></d:prop>
+				</d:remove>
+			</d:propertyupdate>`,
+	})
+}
+
+/**
  * Read the place a photo was taken at, as the server resolved it out of the
  * coordinates the picture carries.
  *
@@ -219,6 +276,93 @@ export async function readPhotoPlace(request: APIRequestContext, user: User, pat
 	})
 
 	return body.match(/<[^>]*metadata-photos-place>([^<]*)</)?.[1] ?? ''
+}
+
+/**
+ * Read whether an account has a photo marked as one of its favorites.
+ *
+ * @param request - Request context to use
+ * @param user - Account the favorites belong to
+ * @param path - Path of the photo, relative to the account's root
+ */
+export async function readPhotoFavorite(request: APIRequestContext, user: User, path: string): Promise<boolean> {
+	const body = await davRequest(request, user, 'PROPFIND', filesDavUrl(user, path), {
+		headers: { 'Content-Type': 'application/xml', Depth: '0' },
+		data: `<?xml version="1.0"?>
+			<d:propfind xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">
+				<d:prop><oc:favorite /></d:prop>
+			</d:propfind>`,
+	})
+
+	return body.match(/<[^>]*favorite>([^<]*)</)?.[1] === '1'
+}
+
+/**
+ * Create a tag of the instance.
+ *
+ * Tags are not owned by an account, only created by one — the name has to be
+ * unique across the whole instance, and the tests run against a shared one.
+ *
+ * @param request - Request context to use
+ * @param user - Account to create the tag as
+ * @param displayName - Name of the tag
+ * @return The id the server assigned, which is how a tag is assigned to a file
+ */
+export async function createSystemTag(request: APIRequestContext, user: User, displayName: string): Promise<string> {
+	const response = await fetchWithRetry(request, SYSTEMTAGS_DAV_ROOT, {
+		method: 'POST',
+		headers: { ...basicAuth(user), 'Content-Type': 'application/json' },
+		data: JSON.stringify({ name: displayName, userVisible: true, userAssignable: true }),
+	})
+
+	if (!response.ok()) {
+		throw new Error(`Failed to create the tag "${displayName}": ${response.status()} ${await response.text()}`)
+	}
+
+	const tagId = (response.headers()['content-location'] ?? '').match(/\/systemtags\/(\d+)/)?.[1]
+	if (tagId === undefined) {
+		throw new Error(`Creating the tag "${displayName}" returned no id`)
+	}
+
+	return tagId
+}
+
+/**
+ * Put a tag on a file.
+ *
+ * @param request - Request context to use
+ * @param user - Account to assign the tag as
+ * @param fileId - File id of the photo, as the upload reported it
+ * @param tagId - Id of the tag
+ */
+export async function assignSystemTag(request: APIRequestContext, user: User, fileId: string, tagId: string): Promise<void> {
+	await davRequest(request, user, 'PUT', `${TAG_ASSIGNMENTS_DAV_ROOT}/${fileId}/${tagId}`, {
+		headers: { 'Content-Type': 'application/json' },
+		data: JSON.stringify({ name: tagId, userVisible: true, userAssignable: true }),
+	})
+}
+
+/**
+ * Read the names of the tags a file carries.
+ *
+ * @param request - Request context to use
+ * @param user - Account to read as
+ * @param fileId - File id of the photo, as the upload reported it
+ */
+export async function readFileTags(request: APIRequestContext, user: User, fileId: string): Promise<string[]> {
+	const body = await davRequest(request, user, 'PROPFIND', `${TAG_ASSIGNMENTS_DAV_ROOT}/${fileId}`, {
+		headers: { 'Content-Type': 'application/xml', Depth: '1' },
+		data: `<?xml version="1.0"?>
+			<d:propfind xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">
+				<d:prop><oc:display-name /></d:prop>
+			</d:propfind>`,
+	})
+
+	// The listing leads with the collection itself, which carries no name of its
+	// own and is answered with an empty property.
+	return [...body.matchAll(/<[^>]*display-name>([^<]*)</g)]
+		.map(([, name]) => name)
+		.filter((name) => name !== '')
 }
 
 /**
@@ -277,10 +421,6 @@ export async function setAlbumCollaborators(
 
 /**
  * Share an album through a public link and return the token of that link.
- *
- * The token is minted by the server, so it has to be read back from the album.
- * It is the only 32 character alphanumeric id among the collaborators — account
- * and group ids are the short random names the test accounts are created with.
  *
  * @param request - Request context to use
  * @param user - Owner of the album

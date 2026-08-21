@@ -10,12 +10,15 @@ import { AlbumsPage } from './AlbumsPage.ts'
 import { FacePage } from './FacePage.ts'
 import { FacesPage } from './FacesPage.ts'
 import { FoldersPage } from './FoldersPage.ts'
+import { MapPage } from './MapPage.ts'
+import { MemoriesPage } from './MemoriesPage.ts'
 import { PhotosNavigation } from './PhotosNavigation.ts'
 import { PlacesPage } from './PlacesPage.ts'
 import { PublicAlbumPage } from './PublicAlbumPage.ts'
 import { SharedAlbumPage } from './SharedAlbumPage.ts'
 import { SharedAlbumsPage } from './SharedAlbumsPage.ts'
 import { TimelinePage } from './TimelinePage.ts'
+import { ViewerModal } from './ViewerModal.ts'
 
 /**
  * The photos app of one browser session, gathering the page objects of its views.
@@ -34,9 +37,12 @@ export class PhotosApp {
 	public readonly sharedAlbum: SharedAlbumPage
 	public readonly publicAlbum: PublicAlbumPage
 	public readonly places: PlacesPage
+	public readonly map: MapPage
+	public readonly memories: MemoriesPage
 	public readonly folders: FoldersPage
 	public readonly faces: FacesPage
 	public readonly face: FacePage
+	public readonly viewer: ViewerModal
 
 	constructor(public readonly page: Page) {
 		this.navigation = new PhotosNavigation(page)
@@ -47,8 +53,11 @@ export class PhotosApp {
 		this.sharedAlbum = new SharedAlbumPage(page)
 		this.publicAlbum = new PublicAlbumPage(page)
 		this.places = new PlacesPage(page)
+		this.map = new MapPage(page)
+		this.memories = new MemoriesPage(page)
 		this.folders = new FoldersPage(page)
 		this.faces = new FacesPage(page)
 		this.face = new FacePage(page)
+		this.viewer = new ViewerModal(page)
 	}
 }

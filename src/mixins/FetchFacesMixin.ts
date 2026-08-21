@@ -151,7 +151,7 @@ export default defineComponent({
 			}
 		},
 
-		async fetchUnassignedFaces(force) {
+		async fetchUnassignedFaces(force = false) {
 			if (this.loadingFiles) {
 				return
 			}

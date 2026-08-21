@@ -147,3 +147,87 @@ test.describe('Managing an album', () => {
 		await expect(album.grid.getAllMedia()).toHaveCount(ALBUM_PHOTOS.length)
 	})
 })
+
+test.describe('The hero of an album', () => {
+	test.beforeEach(async ({ photosApp }) => {
+		await photosApp.albums.open()
+		await photosApp.albums.createAlbum(ALBUM_NAME)
+	})
+
+	test('stays away from an album that has no photo to show', async ({ photosApp }) => {
+		const { album } = photosApp
+
+		await expect(album.emptyMessage()).toBeVisible()
+		await expect(album.hero()).toHaveCount(0)
+	})
+
+	test('shows a photo of the album under its name', async ({ media, photosApp }) => {
+		const { album } = photosApp
+		await album.addPhotos(ALBUM_NAME, [...ALBUM_PHOTOS])
+
+		await expect(album.hero()).toBeVisible()
+		await expect(album.heroTitle()).toHaveText(ALBUM_NAME)
+		await expect(album.heroSubtitle()).toHaveText(`${ALBUM_PHOTOS.length} photos`)
+
+		// The cover is the last photo the album was given, which is one of the three
+		// that were added — the order they end up in is the server's to decide.
+		const coverIds = ALBUM_PHOTOS.map((photo) => media[photo as keyof SeededMedia])
+		await expect(album.heroPhoto())
+			.toHaveAttribute('src', new RegExp(`/preview/(${coverIds.join('|')})`))
+	})
+
+	test('names the location of the album next to its photo count', async ({ photosApp }) => {
+		const { album } = photosApp
+		await album.addPhotos(ALBUM_NAME, [...ALBUM_PHOTOS])
+
+		await album.setLocation('Lauris')
+		await album.open(ALBUM_NAME)
+
+		await expect(album.heroSubtitle()).toHaveText(`Lauris · ${ALBUM_PHOTOS.length} photos`)
+	})
+
+	test('lets the cover trail the page while it scrolls', async ({ photosApp }) => {
+		const { album } = photosApp
+		await album.addPhotos(ALBUM_NAME, [...ALBUM_PHOTOS])
+
+		expect(await album.heroCoverOffset()).toBe(0)
+
+		await album.scrollToBottom()
+
+		// The cover is given extra height and pushed down by a share of the scrolled
+		// distance, so it moves slower than the page rather than out of it.
+		await expect.poll(() => album.heroCoverOffset()).toBeGreaterThan(0)
+	})
+})
+
+test.describe('The hero of an album whose cover photo cannot be previewed', () => {
+	test.use({
+		// The metadata pass resolving the places of the photos is the same one
+		// that generates their blurhash, which is what the hero falls back to.
+		withPlaces: true,
+		// Previews are answered by the service worker out of its own cache, and
+		// requests it makes cannot be intercepted — the page has to make them
+		// itself for the failing preview below to be simulated at all.
+		serviceWorkers: 'block',
+	})
+
+	test.beforeEach(async ({ photosApp }) => {
+		await photosApp.albums.open()
+		await photosApp.albums.createAlbum(ALBUM_NAME)
+		await photosApp.album.addPhotos(ALBUM_NAME, [...ALBUM_PHOTOS])
+	})
+
+	test('falls back to the blurhash of the cover photo', async ({ photosApp }) => {
+		const { album } = photosApp
+
+		// A preview is generated on demand and can fail, which the hero has to
+		// survive - the photo is dropped rather than shown as a broken image.
+		await album.page.route('**/apps/photos/api/v1/preview/**', (route) => route.abort())
+		await album.open(ALBUM_NAME)
+
+		await expect(album.hero()).toBeVisible()
+		await expect(album.heroTitle()).toHaveText(ALBUM_NAME)
+		await expect(album.heroPhoto()).toHaveCount(0)
+		await expect(album.heroBlurhash()).toBeVisible()
+	})
+})

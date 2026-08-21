@@ -12,8 +12,10 @@ import { waitForTimelineSearch } from '../utils/requests.ts'
 import { ActionsMenu } from './ActionsMenu.ts'
 import { AlbumFormDialog } from './AlbumFormDialog.ts'
 import { AlbumPickerDialog } from './AlbumPickerDialog.ts'
+import { DateScrubber } from './DateScrubber.ts'
 import { MediaGrid } from './MediaGrid.ts'
 import { PhotosNavigation } from './PhotosNavigation.ts'
+import { SlideshowModal } from './SlideshowModal.ts'
 
 /** The timeline views of the app, which all share one component. */
 export const Timeline = {
@@ -37,10 +39,18 @@ export class TimelinePage {
 	/** The filters of the timeline, which live in the app navigation. */
 	public readonly filters: PhotosFilters
 
+	/** The scrubber jumping the grid between month sections. */
+	public readonly scrubber: DateScrubber
+
+	/** The app navigation, which holds the search field of the timeline. */
+	private readonly navigation: PhotosNavigation
+
 	constructor(public readonly page: Page) {
 		this.grid = new MediaGrid(page, page.getByRole('main'))
 		this.actions = new ActionsMenu(page)
-		this.filters = new PhotosNavigation(page).filters
+		this.navigation = new PhotosNavigation(page)
+		this.filters = this.navigation.filters
+		this.scrubber = new DateScrubber(page)
 	}
 
 	/**
@@ -78,9 +88,37 @@ export class TimelinePage {
 		await expect(this.grid.getAllMedia().first()).toBeVisible()
 	}
 
+	/**
+	 * The heading of a month section of the grid. Only the sections the grid
+	 * currently renders have one — it only holds what is near the viewport.
+	 *
+	 * @param month - The month as the heading names it, e.g. `May 2021`
+	 */
+	public monthHeading(month: string): Locator {
+		return this.page.getByRole('heading', { level: 2, name: month })
+	}
+
 	/** The message shown instead of the grid when nothing matches. */
 	public emptyMessage(): Locator {
 		return this.page.getByRole('note', { name: 'No photos or videos in here' })
+	}
+
+	/**
+	 * The button playing the photos of the timeline as a slideshow. It is scoped
+	 * to the header, as the slideshow itself carries a button of the same name to
+	 * resume playing.
+	 */
+	public slideshowButton(): Locator {
+		return this.page.getByRole('toolbar').getByRole('button', { name: 'Start slideshow' })
+	}
+
+	/** Play the photos of the timeline as a slideshow. */
+	public async startSlideshow(): Promise<SlideshowModal> {
+		await this.slideshowButton().click()
+
+		const slideshow = new SlideshowModal(this.page)
+		await expect(slideshow.photo()).toBeVisible()
+		return slideshow
 	}
 
 	public createAlbumButton(): Locator {
@@ -144,6 +182,33 @@ export class TimelinePage {
 		const searched = waitForTimelineSearch(this.page)
 		await action()
 		await searched
+	}
+
+	/** The field filtering the timeline by file name. */
+	public searchInput(): Locator {
+		return this.navigation.searchInput()
+	}
+
+	/** The button emptying the search field. */
+	public clearSearchButton(): Locator {
+		return this.navigation.clearSearchButton()
+	}
+
+	/**
+	 * Filter the timeline by a search term and wait for the matching photos.
+	 *
+	 * @param searchTerm - Term to look for in the file names
+	 */
+	public async search(searchTerm: string): Promise<void> {
+		await this.withRefetch(async () => {
+			await this.searchInput().fill(searchTerm)
+		})
+	}
+
+	/** Empty the search field through its button and wait for the whole library. */
+	public async clearSearch(): Promise<void> {
+		await this.withRefetch(() => this.clearSearchButton().click())
+		await expect(this.searchInput()).toHaveValue('')
 	}
 
 	/**
