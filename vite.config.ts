@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: MIT
+ */
+
 import type { UserConfig } from 'vitest/node'
 
 import { createAppConfig } from '@nextcloud/vite-config'

@@ -1,4 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+	<!--
+	- SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
+	- SPDX-License-Identifier: AGPL-3.0-or-later
+	-->
 	<defs>
 		<linearGradient id="placeholder__gradient">
 			<stop offset="0%" stop-color="#ededed"><animate attributeName="stop-color" values="#ededed; #ededed; #cccccc; #cccccc; #ededed" dur="2s" repeatCount="indefinite"/></stop>
