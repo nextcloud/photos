@@ -132,8 +132,8 @@ export default {
 		&__main {
 			cursor: pointer;
 			font-weight: 700;
-			font-size: 20px;
-			line-height: 44px;
+			font-size: calc(var(--default-clickable-area) / 1.5);
+			line-height: var(--default-clickable-area);
 		}
 
 		&__main, &__sub {

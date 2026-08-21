@@ -88,6 +88,21 @@ export class MediaGrid {
 	}
 
 	/**
+	 * The badge a tile carries when it stands for a run of photos taken in one go,
+	 * counting how many of them it holds.
+	 *
+	 * @param name - Name of the photo file the tile shows
+	 */
+	public getBurstBadge(name: string): Locator {
+		return this.getTile(name).getByRole('img', { name: /photos taken in one go$/ })
+	}
+
+	/** The badges of every tile of the grid standing for a run of photos. */
+	public getAllBurstBadges(): Locator {
+		return this.container.getByRole('img', { name: /photos taken in one go$/ })
+	}
+
+	/**
 	 * The placeholder sweeping over a tile until a preview of the photo arrives.
 	 * It stands in for the picture, so it is hidden from assistive technology and
 	 * addressed by its class.

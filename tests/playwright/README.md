@@ -13,7 +13,7 @@ End-to-end tests for the Photos app. The runner starts a Nextcloud instance in D
 # Install the browser binary once
 npm run playwright:install
 
-# Run everything (starts the server automatically)
+# Run everything except the people tests (starts the server automatically)
 npm run playwright
 
 # Run a single spec
@@ -46,6 +46,7 @@ For a failure on CI, download the "HTML report" artifact from the job summary, e
 ```
 tests/playwright/
 ├── e2e/                      # The specs, one file per feature area
+│   └── install-recognize.ts  # Setup step of the people tests, installs recognize
 ├── fixtures/
 │   ├── media/                # The five photos every test account is seeded with
 │   └── faces/                # Portraits for the people tests, from recognize's dataset
@@ -96,7 +97,7 @@ They are server-side copies of a fixture, so a library of dozens of them costs n
 ## Writing a test
 
 - `test` and `expect` come from `support/fixtures/photos-app.ts`; `photosApp` gathers the page objects of all the views of one session.
-- **Locate by role and accessible name.** A photo tile is found through the link that opens it (`Open the full size "…" image`), its selection through the checkbox (`Select image …`), its menu through the trigger (`Actions for …`). Fall back to a class or a `data-*` attribute only for elements that carry no accessible name — a face cover, the filter chips, a Leaflet map, the position line of the slideshow — and say so in a comment.
+- **Locate by role and accessible name.** A photo tile is found through the link that opens it (`Open the full size "…" image`), its selection through the checkbox (`Select image …`), its menu through the trigger (`Actions for …`). Fall back to a class or a `data-*` attribute only for elements that carry no accessible name — a face cover, the filter chips, a Leaflet map, the position line of the slideshow, the track and graduation of the date scrubber — and say so in a comment.
 - **The viewer belongs to another app.** A photo opened from the timeline, a map marker or a trip card lands in the viewer app, which `sections/ViewerModal.ts` addresses through the roles of its dialog only. Its arrows are what says a view handed it a gallery rather than the single photo that was clicked.
 - **Assert the outcome, not the wait.** `toHaveCount`, `toBeVisible` and friends retry, so they need no explicit sleep.
 - **Arm a `waitForResponse` before the action that triggers it.** The grid keeps showing the previous listing until a new one arrives, so "the list did not change yet" and "the list is final" look the same to an assertion. `support/utils/requests.ts` has the helpers, and the page objects wrap the ones that belong to an action.
@@ -104,10 +105,20 @@ They are server-side copies of a fixture, so a library of dozens of them costs n
 
 ## The people tests
 
-`e2e/faces.spec.ts` needs [recognize](https://github.com/nextcloud/recognize) to have detected and clustered faces, which needs a built recognize checkout mounted into the container:
+`e2e/faces.spec.ts` covers the views built on the faces [recognize](https://github.com/nextcloud/recognize) finds. They have a Playwright project of their own, so the minutes they cost never hold up the rest:
 
 ```bash
-RECOGNIZE_APP_PATH=/path/to/built/recognize npm run playwright -- --project=faces
+npm run playwright:faces
 ```
 
-Without that variable the spec skips itself. Detecting and clustering costs minutes of TensorFlow work, so the spec shares a single classified account and runs its tests in order — the one that merges two people comes last, as it leaves fewer of them behind than the others need.
+The project brings its own recognize: `e2e/install-recognize.ts` runs ahead of the spec as a setup dependency and installs the app from the app store into the container, so nothing has to be mounted or built by hand. When that does not work out — no app store reachable, or no release for the server under test — `isRecognizeAvailable()` says so and the spec marks its tests as expected failures (`test.fail`) instead of reporting green.
+
+Getting from the fixtures to a cluster is three steps, all in `support/utils/faces.ts`:
+
+- **Seeding.** The portraits of `fixtures/faces` are uploaded into a fresh account, each one seven times over (`FACE_UPLOAD_MULTIPLIER`). recognize forms no cluster before it has gathered 120 detections, which the committed set is far short of; the copies share the face vector of their original, so they cluster tightly and the outcome stays something a test can assert on.
+- **Classifying.** `files:scan --generate-metadata`, then `recognize:classify`, then several `recognize:cluster-faces` passes — one does not necessarily assign every detection to its final cluster.
+- **Checking.** `expectFaceClusters` asks the very recognize WebDAV endpoint the app uses whether there are clusters, and if there are none it fails with the number of stored detections and the tail of what recognize logged. Without it an empty pipeline only surfaced much later, as an opaque "no person found" timeout.
+
+Because all of that is minutes of TensorFlow work, the whole spec shares one classified account (the worker-scoped `faceAccount` of `support/fixtures/faces.ts`), the project runs a single worker with a 45-minute timeout, and the tests run in declaration order — the one that merges two people comes last, as it leaves fewer of them behind than the others need. Each test still signs in on a session of its own.
+
+On CI the project is a matrix entry of its own, next to the four shards the default project is split over.

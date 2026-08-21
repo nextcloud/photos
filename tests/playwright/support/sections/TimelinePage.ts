@@ -12,6 +12,7 @@ import { waitForTimelineSearch } from '../utils/requests.ts'
 import { ActionsMenu } from './ActionsMenu.ts'
 import { AlbumFormDialog } from './AlbumFormDialog.ts'
 import { AlbumPickerDialog } from './AlbumPickerDialog.ts'
+import { DateScrubber } from './DateScrubber.ts'
 import { MediaGrid } from './MediaGrid.ts'
 import { PhotosNavigation } from './PhotosNavigation.ts'
 import { SlideshowModal } from './SlideshowModal.ts'
@@ -38,6 +39,9 @@ export class TimelinePage {
 	/** The filters of the timeline, which live in the app navigation. */
 	public readonly filters: PhotosFilters
 
+	/** The scrubber jumping the grid between month sections. */
+	public readonly scrubber: DateScrubber
+
 	/** The app navigation, which holds the search field of the timeline. */
 	private readonly navigation: PhotosNavigation
 
@@ -46,6 +50,7 @@ export class TimelinePage {
 		this.actions = new ActionsMenu(page)
 		this.navigation = new PhotosNavigation(page)
 		this.filters = this.navigation.filters
+		this.scrubber = new DateScrubber(page)
 	}
 
 	/**
@@ -81,6 +86,16 @@ export class TimelinePage {
 	 */
 	public async waitForPhotos(): Promise<void> {
 		await expect(this.grid.getAllMedia().first()).toBeVisible()
+	}
+
+	/**
+	 * The heading of a month section of the grid. Only the sections the grid
+	 * currently renders have one — it only holds what is near the viewport.
+	 *
+	 * @param month - The month as the heading names it, e.g. `May 2021`
+	 */
+	public monthHeading(month: string): Locator {
+		return this.page.getByRole('heading', { level: 2, name: month })
 	}
 
 	/** The message shown instead of the grid when nothing matches. */

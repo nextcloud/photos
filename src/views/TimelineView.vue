@@ -169,6 +169,7 @@
 					v-else
 					:file="files[file.id]"
 					:allow-selection="true"
+					:burst-count="burstCount(file.id)"
 					:selected="selection[file.id] === true"
 					@click="openViewer"
 					@select-toggled="onFileSelectToggle"
@@ -374,9 +375,16 @@ export default {
 				.filter((file) => file !== undefined)
 		},
 
-		// Photo count per month, drives the density ticks of the scrubber.
+		// Photos taken in one go are shown as a single tile of the timeline, and are
+		// reachable from the viewer it opens.
+		foldBursts(): boolean {
+			return true
+		},
+
+		// Photo count per month, drives the density ticks of the scrubber. Counted
+		// before the folding, so a month of bursts reads as dense as it is.
 		monthCounts(): Record<string, number> {
-			const entries = Object.entries(this.fileIdsByMonth as Record<string, string[]>)
+			const entries = Object.entries(this.fileIdsByMonthUngrouped as Record<string, string[]>)
 			return Object.fromEntries(entries.map(([month, fileIds]) => [month, fileIds.length]))
 		},
 
@@ -420,10 +428,35 @@ export default {
 			this.scrubberTarget = month
 		},
 
+		// Selecting the tile of a run selects every photo of it: the photos folded
+		// into it have no tile of their own to be picked from, and favoriting,
+		// downloading or deleting a part of a burst would silently leave the rest
+		// behind.
+		onFileSelectToggle({ id, value }: { id: string, value: boolean }): void {
+			const fileIds = this.burstStacks[id]?.memberIds ?? [id]
+			for (const fileId of fileIds) {
+				this.$set(this.selection, fileId, value)
+			}
+		},
+
+		// How many photos the tile of a photo stands for, one being itself.
+		burstCount(fileId: string): number {
+			return this.burstStacks[fileId]?.memberIds.length ?? 1
+		},
+
 		openViewer(fileId: string) {
+			// A tile standing for a run of photos hands the viewer that run alone, so
+			// flipping through it stays inside the burst rather than leaving it for the
+			// rest of the timeline. Every other tile hands it the whole grid.
+			const fileIds = this.burstStacks[fileId]?.memberIds
+				?? Object.values(this.fileIdsByMonth).flat()
+
 			window.OCA.Viewer.open({
 				fileInfo: toViewerFileInfo(this.files[fileId]),
-				list: Object.values(this.fileIdsByMonth).flat().map((fileId) => toViewerFileInfo(this.files[fileId])),
+				list: fileIds
+					.map((id) => this.files[id])
+					.filter((file) => file !== undefined)
+					.map(toViewerFileInfo),
 			})
 		},
 
