@@ -68,6 +68,16 @@ export class CollaboratorsDialog {
 	}
 
 	/**
+	 * Wait for the lookup of one search term to be answered.
+	 *
+	 * @param search - The term that was typed
+	 */
+	private searchAnswered(search: string): Promise<unknown> {
+		return this.page.waitForResponse((response) => response.url().includes(AUTOCOMPLETE_ENDPOINT)
+			&& new URL(response.url()).searchParams.get('search') === search)
+	}
+
+	/**
 	 * Add collaborators to the album and save.
 	 *
 	 * The recipients are looked up on the server, so the answer to that lookup is
@@ -80,7 +90,7 @@ export class CollaboratorsDialog {
 		await expect(this.dialog()).toBeVisible()
 
 		for (const collaborator of collaborators) {
-			const searched = this.page.waitForResponse((response) => response.url().includes(AUTOCOMPLETE_ENDPOINT))
+			const searched = this.searchAnswered(collaborator)
 			await this.searchInput().fill(collaborator)
 			await searched
 
