@@ -159,6 +159,8 @@ OC.L10N.register(
     "Memories gather the photos of your trips and multi-day events." : "回憶會整理你的旅程及多日活動相片。",
     "Year in review" : "年度回顧",
     "Your {year} in photos" : "你的 {year} 年相片回顧",
+    "_%n highlight_::_%n highlights_" : ["%n 精彩片段"],
+    "_%n photo this year_::_%n photos this year_" : ["今年有 %n 張照片"],
     "Taken on {date} at {time}" : "攝於 {date} {time}",
     "This place does not have any photos or videos yet!" : "此處還沒有任何照片或影片！",
     "Add photos to this place" : "添加照片至此處",
