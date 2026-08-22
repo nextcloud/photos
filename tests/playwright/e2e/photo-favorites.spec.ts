@@ -76,8 +76,6 @@ test.describe('Marking a photo outside of the timeline', () => {
 		const { folders } = photosApp
 
 		await folders.open(PHOTOS_FOLDER)
-		// The folder listing carries no favorite state, so the entry offers to mark
-		// the photo whether it is one already or not.
 		await (await folders.grid.openActionsMenu(PHOTO)).favorite()
 
 		expect(await readFavorite(PHOTO)).toBe(true)

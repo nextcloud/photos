@@ -4,24 +4,60 @@
  */
 
 import type { AxiosRequestConfig } from '@nextcloud/axios'
+import type { NodeData } from '@nextcloud/files'
 
 import axios from '@nextcloud/axios'
-import { defaultRemoteURL, defaultRootPath } from '@nextcloud/files/dav'
+import { File, Folder } from '@nextcloud/files'
+import { defaultRemoteURL, defaultRootPath, parsePermissions } from '@nextcloud/files/dav'
 import { generateUrl } from '@nextcloud/router'
 import allowedMimes from './AllowedMimes.js'
 
-export type FoldersNode = {
-	basename: string
-	etag: string
-	fileid: number
+/**
+ * A node of a folder listing, as the endpoint describes it: the fields a DAV node
+ * is built from, with everything the properties of a DAV listing would carry
+ * gathered under `attributes`.
+ */
+type FolderListingEntry = {
+	/** Id of the node, a string as the ids of a server are moving to snowflakes. */
+	id: string
+	/** Path of the node, relative to the root of the account. */
 	filename: string
-	source: string
-	lastmod: number
 	mime: string
+	/** Moment the node was last modified, as a unix timestamp in seconds. */
+	mtime: number
 	size: number
-	type: string
+	type: 'file' | 'dir'
+	/** Permissions of the account on the node, as the DAV endpoint spells them. */
 	permissions: string
-	hasPreview: boolean
+	owner: string | null
+	attributes: Record<string, unknown>
+}
+
+/**
+ * Build the node of a listing entry.
+ *
+ * The endpoint names the path of a node rather than its URL, the DAV endpoint it
+ * lives under being the browser's own.
+ *
+ * @param entry - Node of a folder listing
+ */
+function toNode(entry: FolderListingEntry): File | Folder {
+	const data: NodeData = {
+		// A node only answers for its `fileid` as long as it was built from a number,
+		// and that is what the app addresses a photo by — from the preview endpoints
+		// to the listings the views keep.
+		id: Number(entry.id),
+		source: decodeURI(`${defaultRemoteURL}${defaultRootPath}${entry.filename}`),
+		root: defaultRootPath,
+		mime: entry.mime,
+		mtime: new Date(entry.mtime * 1000),
+		size: entry.size,
+		permissions: parsePermissions(entry.permissions),
+		owner: entry.owner,
+		attributes: entry.attributes,
+	}
+
+	return entry.type === 'file' ? new File(data) : new Folder(data)
 }
 
 /**
@@ -35,24 +71,24 @@ export default async function(path: string = '/', options: AxiosRequestConfig & 
 
 	// fetch listing
 	const response = await axios.get(endpoint + path, options)
-	const list: FoldersNode[] = response.data
-		.map((data) => ({
-			...data,
-			filename: `${defaultRootPath}${data.filename}`,
-			source: decodeURI(defaultRemoteURL + `${defaultRootPath}${data.filename}`),
-		}))
+	const list = (response.data as FolderListingEntry[]).map(toNode)
+
+	// The folder itself is listed alongside its content.
+	const currentPath = path.replace(/\/$/, '') || '/'
 
 	// filter all the files and folders
-	let folder: FoldersNode | undefined
-	const folders: FoldersNode[] = []
-	const files: FoldersNode[] = []
+	let folder: Folder | undefined
+	const folders: Folder[] = []
+	const files: File[] = []
 
 	for (const entry of list) {
-		// is this the current provided path ?
-		if (entry.filename === `${defaultRootPath}${path}`) {
-			folder = entry
-		} else if (entry.type !== 'file') {
-			folders.push(entry)
+		if (entry instanceof Folder) {
+			// is this the current provided path ?
+			if (entry.path === currentPath) {
+				folder = entry
+			} else {
+				folders.push(entry)
+			}
 		} else if (allowedMimes.indexOf(entry.mime) > -1) {
 			files.push(entry)
 		}
