@@ -114,6 +114,166 @@ class AlbumMapperTest extends TestCase {
 		return $id;
 	}
 
+	/**
+	 * Take a file out of the cache without telling anyone, the way a file can
+	 * go missing when the deletion never reaches AlbumsManagementEventListener.
+	 */
+	private function removeFromCache(int $fileId): void {
+		$query = $this->connection->getQueryBuilder();
+		$query->delete('filecache')
+			->where($query->expr()->eq('fileid', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)))
+			->executeStatement();
+	}
+
+	/**
+	 * Read the album entries straight from the table: the regular queries join
+	 * the file cache and would hide exactly the rows these tests are about.
+	 *
+	 * @return int[]
+	 */
+	private function getAlbumFileIds(int $albumId): array {
+		$query = $this->connection->getQueryBuilder();
+		$fileIds = $query->select('file_id')
+			->from('photos_albums_files')
+			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
+			->orderBy('file_id', 'ASC')
+			->executeQuery()
+			->fetchFirstColumn();
+
+		return array_map(intval(...), $fileIds);
+	}
+
+	public function testDeleteOrphanFilesRemovesOnlyEntriesWithoutAFile() {
+		$album = $this->mapper->create('user1', 'album1');
+		$keptFile = $this->createFile('kept', 'image/png');
+		$goneFile = $this->createFile('gone', 'image/png');
+
+		$this->time = 110;
+		$this->mapper->addFile($album->getId(), $keptFile, 'user1');
+		$this->time = 120;
+		$this->mapper->addFile($album->getId(), $goneFile, 'user1');
+
+		$this->removeFromCache($goneFile);
+
+		$this->assertEquals(1, $this->mapper->deleteOrphanFiles(1000));
+		$this->assertEquals([$keptFile], $this->getAlbumFileIds($album->getId()));
+	}
+
+	public function testDeleteOrphanFilesLeavesAHealthyAlbumAlone() {
+		$album = $this->mapper->create('user1', 'album1');
+		$file1 = $this->createFile('file1', 'image/png');
+		$file2 = $this->createFile('file2', 'image/png');
+
+		$this->time = 110;
+		$this->mapper->addFile($album->getId(), $file1, 'user1');
+		$this->time = 120;
+		$this->mapper->addFile($album->getId(), $file2, 'user1');
+
+		$this->assertEquals(0, $this->mapper->deleteOrphanFiles(1000));
+		$this->assertEquals([$file1, $file2], $this->getAlbumFileIds($album->getId()));
+		$this->assertEquals($file2, $this->mapper->get($album->getId())->getLastAddedPhoto());
+	}
+
+	/**
+	 * A file id is either cached or it is not, so it is stale in every album at
+	 * once - and the return value counts entries, not files.
+	 */
+	public function testDeleteOrphanFilesRemovesTheFileFromEveryAlbum() {
+		$album1 = $this->mapper->create('user1', 'album1');
+		$album2 = $this->mapper->create('user1', 'album2');
+		$goneFile = $this->createFile('gone', 'image/png');
+
+		$this->time = 110;
+		$this->mapper->addFile($album1->getId(), $goneFile, 'user1');
+		$this->mapper->addFile($album2->getId(), $goneFile, 'user1');
+
+		$this->removeFromCache($goneFile);
+
+		$this->assertEquals(2, $this->mapper->deleteOrphanFiles(1000));
+		$this->assertEquals([], $this->getAlbumFileIds($album1->getId()));
+		$this->assertEquals([], $this->getAlbumFileIds($album2->getId()));
+	}
+
+	public function testDeleteOrphanFilesGivesTheAlbumANewCover() {
+		$album = $this->mapper->create('user1', 'album1');
+		$keptFile = $this->createFile('kept', 'image/png');
+		$coverFile = $this->createFile('cover', 'image/png');
+
+		$this->time = 110;
+		$this->mapper->addFile($album->getId(), $keptFile, 'user1');
+		$this->time = 120;
+		$this->mapper->addFile($album->getId(), $coverFile, 'user1');
+		$this->assertEquals($coverFile, $this->mapper->get($album->getId())->getLastAddedPhoto());
+
+		$this->removeFromCache($coverFile);
+		$this->mapper->deleteOrphanFiles(1000);
+
+		$this->assertEquals($keptFile, $this->mapper->get($album->getId())->getLastAddedPhoto());
+	}
+
+	/**
+	 * The cover is repaired from the albums themselves, not from what was just
+	 * deleted, so a cover left dangling by an earlier run gets picked up on the
+	 * next one even though there is nothing left to delete.
+	 */
+	public function testDeleteOrphanFilesRepairsADanglingCoverOnItsOwn() {
+		$album = $this->mapper->create('user1', 'album1');
+		$keptFile = $this->createFile('kept', 'image/png');
+		$coverFile = $this->createFile('cover', 'image/png');
+
+		$this->time = 110;
+		$this->mapper->addFile($album->getId(), $keptFile, 'user1');
+		$this->time = 120;
+		$this->mapper->addFile($album->getId(), $coverFile, 'user1');
+
+		// Drop the entry without going through removeFile(), which would
+		// refresh the cover: only the stale cover is left behind.
+		$query = $this->connection->getQueryBuilder();
+		$query->delete('photos_albums_files')
+			->where($query->expr()->eq('file_id', $query->createNamedParameter($coverFile, IQueryBuilder::PARAM_INT)))
+			->executeStatement();
+		$this->removeFromCache($coverFile);
+
+		$this->assertEquals(0, $this->mapper->deleteOrphanFiles(1000));
+		$this->assertEquals($keptFile, $this->mapper->get($album->getId())->getLastAddedPhoto());
+	}
+
+	public function testDeleteOrphanFilesClearsTheCoverOfAnEmptiedAlbum() {
+		$album = $this->mapper->create('user1', 'album1');
+		$goneFile = $this->createFile('gone', 'image/png');
+
+		$this->time = 110;
+		$this->mapper->addFile($album->getId(), $goneFile, 'user1');
+
+		$this->removeFromCache($goneFile);
+		$this->mapper->deleteOrphanFiles(1000);
+
+		$this->assertEquals([], $this->getAlbumFileIds($album->getId()));
+		$this->assertEquals(-1, $this->mapper->get($album->getId())->getLastAddedPhoto());
+	}
+
+	/**
+	 * The limit counts orphan files, so that a large backlog is worked off over
+	 * several runs rather than in one long statement.
+	 */
+	public function testDeleteOrphanFilesStopsAtTheLimit() {
+		$album = $this->mapper->create('user1', 'album1');
+
+		$this->time = 110;
+		foreach (['gone1', 'gone2', 'gone3'] as $name) {
+			$fileId = $this->createFile($name, 'image/png');
+			$this->mapper->addFile($album->getId(), $fileId, 'user1');
+			$this->removeFromCache($fileId);
+			$this->time += 10;
+		}
+
+		$this->assertEquals(2, $this->mapper->deleteOrphanFiles(2));
+		$this->assertCount(1, $this->getAlbumFileIds($album->getId()));
+
+		$this->assertEquals(1, $this->mapper->deleteOrphanFiles(2));
+		$this->assertEquals([], $this->getAlbumFileIds($album->getId()));
+	}
+
 	public function testCreateGet() {
 		$album = $this->mapper->create('user1', 'album1');
 
