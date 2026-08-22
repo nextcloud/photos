@@ -64,13 +64,13 @@
 									:key="item.id"
 									:class="{ 'last-tiled-row': rowIndex === visibleSections[0].rows.length - 1 }"
 									:style="{ flexBasis: `${item.width - 1}px`, height: `${item.height}px` }">
-									<template v-if="item.type === 'file'">
-										<FileLegacy :item="item" :list="fileList" />
-										<PhotoActionsMenu
-											class="photo-actions-menu"
-											:photo="legacyToPhotoTarget(item)"
-											@deleted="onPhotoDeleted" />
-									</template>
+									<FileComponent
+										v-if="item.type === 'file'"
+										:file="photoFiles[item.fileid]"
+										:allow-selection="false"
+										:cropped="croppedLayout"
+										@click="openViewer"
+										@deleted="onPhotoDeleted" />
 									<FolderComponent
 										v-else
 										:item="item"
@@ -89,6 +89,7 @@
 import type { Upload } from '@nextcloud/upload'
 import type { FoldersNode } from '../services/FolderContent.ts'
 import type { Section, TiledItem } from '../services/TiledLayout.ts'
+import type { PhotoFile } from '../store/files.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { Folder } from '@nextcloud/files'
@@ -98,10 +99,9 @@ import { getUploader, UploadPicker } from '@nextcloud/upload'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import FolderOutline from 'vue-material-design-icons/FolderOutline.vue'
-import FileLegacy from '../components/FileLegacy.vue'
+import FileComponent from '../components/FileComponent.vue'
 import FolderComponent from '../components/FolderComponent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-import PhotoActionsMenu from '../components/PhotoActionsMenu.vue'
 import TiledLayout from '../components/TiledLayout/TiledLayout.vue'
 import VirtualScrolling from '../components/VirtualScrolling.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
@@ -109,13 +109,12 @@ import allowedMimes from '../services/AllowedMimes.js'
 import { fetchFile } from '../services/fileFetcher.ts'
 import getFolderContent from '../services/FolderContent.ts'
 import logger from '../services/logger.ts'
-import { legacyToPhotoTarget } from '../utils/fileUtils.ts'
+import { legacyToPhotoFile, legacyToViewerFileInfo } from '../utils/fileUtils.ts'
 
 export default {
 	name: 'FoldersView',
 	components: {
-		FileLegacy,
-		PhotoActionsMenu,
+		FileComponent,
 		FolderComponent,
 		FolderOutline,
 		HeaderNavigation,
@@ -205,6 +204,21 @@ export default {
 			return list
 		},
 
+		/** The photos of the open folder, as the photo tile reads them, by file id. */
+		photoFiles(): Record<number, PhotoFile> {
+			return Object.fromEntries((this.fileList || [])
+				.map((file: FoldersNode) => [file.fileid, legacyToPhotoFile(file)]))
+		},
+
+		/**
+		 * Whether a photo is cropped to its tile rather than shown whole inside it.
+		 * The tiles here are squares, as the listing does not say what shape the
+		 * photos are, so there is always something to crop away.
+		 */
+		croppedLayout(): boolean {
+			return this.$store.state.userConfig.croppedLayout
+		},
+
 		// subfolders of the current folder
 		subFolders() {
 			return this.folderId
@@ -261,7 +275,18 @@ export default {
 	},
 
 	methods: {
-		legacyToPhotoTarget,
+		/**
+		 * Open a photo in the viewer, with the whole folder as its gallery.
+		 *
+		 * @param fileid - Id of the photo to open
+		 */
+		openViewer(fileid: number) {
+			window.OCA.Viewer.open({
+				fileInfo: legacyToViewerFileInfo(this.files[fileid]),
+				list: this.fileList.map((file: FoldersNode) => legacyToViewerFileInfo(file)),
+				onClose: () => window.OCA?.Files?.Sidebar?.close?.(),
+			})
+		},
 
 		// Folders keep the ids of the files they hold, the listing skips the
 		// ones which are gone.
@@ -277,7 +302,7 @@ export default {
 		 * TiledLayout justifies the rows from the `ratio` of the items, the given
 		 * width and height are only the untiled defaults.
 		 * Folders and files are laid out as squares as the folder listing endpoint
-		 * does not return the photo dimensions; both fill their tile with `object-fit: cover`.
+		 * does not return the photo dimensions.
 		 *
 		 * @param node - The folder or file to lay out
 		 */
@@ -381,19 +406,6 @@ export default {
 	ul {
 		display: flex;
 		flex-wrap: wrap;
-
-		li {
-			// The actions menu is laid over the photo it belongs to.
-			position: relative;
-
-			// Reveal the menu on hover, like the photo tiles of the timeline.
-			&:hover,
-			&:focus-within {
-				.photo-actions-menu {
-					opacity: 1;
-				}
-			}
-		}
 
 		// The last row is not justified, so its items must not grow.
 		li:not(.last-tiled-row) {
