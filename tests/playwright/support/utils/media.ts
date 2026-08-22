@@ -34,6 +34,25 @@ export const MEDIA_FIXTURES = [
 
 export type MediaFixture = (typeof MEDIA_FIXTURES)[number]
 
+/**
+ * The videos a test can add to an account, by the mime type they are stored
+ * under. They are not part of the seed: a library that holds them counts
+ * differently, and only the tests about videos care.
+ */
+export const VIDEO_FIXTURES = {
+	'video/mp4': 'VID_20191024_081301.mp4',
+	'video/quicktime': 'VID_20191027_134014.mov',
+} as const
+
+export type VideoMime = keyof typeof VIDEO_FIXTURES
+export type VideoFixture = (typeof VIDEO_FIXTURES)[VideoMime]
+
+/** The video the tiles play inline, the only fixture of a format they can. */
+export const PLAYABLE_VIDEO: VideoFixture = VIDEO_FIXTURES['video/mp4']
+
+/** The video the tiles cannot play, so it has to keep its still preview. */
+export const UNPLAYABLE_VIDEO: VideoFixture = VIDEO_FIXTURES['video/quicktime']
+
 /** Number of photos an account is seeded with. */
 export const MEDIA_COUNT = MEDIA_FIXTURES.length
 
@@ -109,6 +128,41 @@ export async function seedPhotosTakenAt(
 	}
 
 	return names
+}
+
+/**
+ * Add the video fixtures to the photos folder of an account.
+ *
+ * @param request - Request context to upload with
+ * @param user - Account to upload for
+ * @return The names of the videos, by the mime type they are stored under
+ */
+export async function seedVideos(request: APIRequestContext, user: User): Promise<Record<VideoMime, string>> {
+	// One upload at a time, for the reason given in `seedMedia`.
+	for (const [mime, name] of Object.entries(VIDEO_FIXTURES) as [VideoMime, VideoFixture][]) {
+		const content = await readFile(resolve(process.cwd(), MEDIA_FIXTURE_DIR, name))
+		await uploadFile(request, user, `${PHOTOS_FOLDER}/${name}`, content, mime)
+		await setPhotoTakenAt(request, user, `${PHOTOS_FOLDER}/${name}`, videoTakenAt(name))
+	}
+
+	return { ...VIDEO_FIXTURES }
+}
+
+/**
+ * The moment a video fixture was taken at, as its name spells it out.
+ *
+ * @param name - Name of the video file, `VID_<date>_<time>.<extension>`
+ */
+function videoTakenAt(name: VideoFixture): Date {
+	const [, date, time] = name.match(/^VID_(\d{8})_(\d{6})\./) as RegExpMatchArray
+	return new Date(Date.UTC(
+		Number(date.slice(0, 4)),
+		Number(date.slice(4, 6)) - 1,
+		Number(date.slice(6, 8)),
+		Number(time.slice(0, 2)),
+		Number(time.slice(2, 4)),
+		Number(time.slice(4, 6)),
+	))
 }
 
 /**

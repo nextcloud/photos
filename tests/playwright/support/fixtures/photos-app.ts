@@ -13,7 +13,7 @@ import { test as baseTest } from '@playwright/test'
 import { PhotosApp } from '../sections/PhotosApp.ts'
 import { createPhotosAccounts, openPhotosSession, withRequestContext } from '../utils/accounts.ts'
 import { assignSystemTag, createSystemTag, readFileTags, readPhotoFavorite } from '../utils/dav.ts'
-import { PHOTOS_FOLDER, removeMediaLocations, seedPhotosTakenAt } from '../utils/media.ts'
+import { PHOTOS_FOLDER, removeMediaLocations, seedPhotosTakenAt, seedVideos } from '../utils/media.ts'
 import { deleteUser } from '../utils/occ.ts'
 import { withRetry } from '../utils/retry.ts'
 
@@ -61,6 +61,12 @@ interface PhotosFixtures {
 	 */
 	seedPhotos: (namePrefix: string, takenAt: Date[]) => Promise<string[]>
 	/**
+	 * Add the video fixtures to the library of the test account, for the tests
+	 * about what a tile does with a video. Call it before the app is opened, as
+	 * the views only read the library once.
+	 */
+	seedVideos: () => Promise<void>
+	/**
 	 * Drop the coordinates of every photo of the test account, for the tests about
 	 * a library that has nothing to show on a map.
 	 */
@@ -102,7 +108,9 @@ export const test = baseTest.extend<PhotosOptions & PhotosFixtures>({
 
 	// The page is built here rather than taken from Playwright, so the service
 	// worker option has to be carried over by hand - `test.use` sets it on the
-	// context Playwright would have built.
+	// context Playwright would have built. Options that are no fixture of their
+	// own, `reducedMotion` among them, cannot be reached from here at all and have
+	// to be emulated on the page instead.
 	page: async ({ browser, baseURL, account, serviceWorkers }, use) => {
 		// Important: authenticate in a clean environment by unsetting storage state.
 		const page = await browser.newPage({ storageState: undefined, baseURL, serviceWorkers })
@@ -134,6 +142,16 @@ export const test = baseTest.extend<PhotosOptions & PhotosFixtures>({
 			baseURL,
 			(request) => seedPhotosTakenAt(request, account.user, namePrefix, takenAt),
 		))
+	},
+
+	seedVideos: async ({ playwright, baseURL, account }, use) => {
+		await use(async () => {
+			await withRequestContext(
+				playwright.request,
+				baseURL,
+				(request) => seedVideos(request, account.user),
+			)
+		})
 	},
 
 	removePhotoLocations: async ({ playwright, baseURL, account }, use) => {

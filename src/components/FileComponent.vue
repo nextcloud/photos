@@ -32,7 +32,9 @@
 			@pointerdown="startLongPress"
 			@pointerup="cancelLongPress"
 			@pointercancel="cancelLongPress"
-			@pointerleave="cancelLongPress">
+			@pointerleave="cancelLongPress"
+			@mouseenter="schedulePreview"
+			@mouseleave="cancelPreview">
 
 			<!-- image and loading placeholder -->
 			<div class="file__images">
@@ -87,6 +89,28 @@
 						loading="lazy"
 						@load="onLoadLarge"
 						@error="onErrorLarge">
+
+					<!--
+						The video of a tile, played on top of its preview while the
+						pointer rests on it. It shows the same picture the layers below
+						already do, so it is left out of the accessibility tree and
+						carries no controls of its own.
+					-->
+					<video
+						v-if="videoPreviewPlaying"
+						ref="videoPreview"
+						class="file__layer file__layer--video"
+						:src="file.source"
+						muted
+						loop
+						autoplay
+						playsinline
+						disablepictureinpicture
+						disableremoteplayback
+						preload="metadata"
+						aria-hidden="true"
+						tabindex="-1"
+						@error="onVideoPreviewError" />
 				</template>
 			</div>
 		</a>
@@ -126,6 +150,7 @@ import PhotoActionsMenu from './PhotoActionsMenu.vue'
 import logger from '../services/logger.ts'
 import { isCachedPreview } from '../services/PreviewService.js'
 import { getVideoDurationFromUrl, toPhotoTarget } from '../utils/fileUtils.ts'
+import { isPreviewableVideoMime, playsVideoPreviews, VIDEO_PREVIEW_DELAY } from '../utils/videoPreview.ts'
 
 export default {
 	name: 'FileComponent',
@@ -184,6 +209,11 @@ export default {
 			videoDuration: '',
 			longPressTimeout: null as null | ReturnType<typeof setTimeout>,
 			longPressed: false,
+			videoPreviewPlaying: false,
+			videoPreviewTimeout: null as null | ReturnType<typeof setTimeout>,
+			// A video that could not be played once is not tried again, or a broken
+			// file would fire a load on every pass of the pointer.
+			videoPreviewFailed: false,
 		}
 	},
 
@@ -226,6 +256,10 @@ export default {
 		blurhash(): string | undefined {
 			return this.file.attributes['metadata-blurhash']
 		},
+
+		isPreviewableVideo(): boolean {
+			return isPreviewableVideoMime(this.file.mime)
+		},
 	},
 
 	watch: {
@@ -236,6 +270,11 @@ export default {
 			this.loadedLarge = false
 			this.errorLarge = false
 			this.videoDuration = ''
+
+			// The grid recycles a tile for the next photo as it scrolls, so what was
+			// found about the previous one says nothing about this one.
+			this.cancelPreview()
+			this.videoPreviewFailed = false
 
 			await this.init()
 		},
@@ -255,6 +294,7 @@ export default {
 		}
 
 		this.cancelLongPress()
+		this.cancelPreview()
 	},
 
 	methods: {
@@ -318,6 +358,47 @@ export default {
 			this.errorLarge = true
 		},
 
+		// Start playing the video of a tile once the pointer has rested on it, which
+		// is what keeps a sweep across the grid from loading every video it passes.
+		schedulePreview() {
+			if (!this.isPreviewableVideo || this.videoPreviewFailed || !playsVideoPreviews()) {
+				return
+			}
+
+			this.cancelPreview()
+			this.videoPreviewTimeout = setTimeout(() => {
+				this.videoPreviewTimeout = null
+				this.videoPreviewPlaying = true
+			}, VIDEO_PREVIEW_DELAY)
+		},
+
+		cancelPreview() {
+			if (this.videoPreviewTimeout !== null) {
+				clearTimeout(this.videoPreviewTimeout)
+				this.videoPreviewTimeout = null
+			}
+
+			if (!this.videoPreviewPlaying) {
+				return
+			}
+
+			// Emptying the source before the element goes away is what makes the
+			// browser let go of the buffered video instead of holding on to it.
+			const video = this.$refs.videoPreview as HTMLVideoElement | undefined
+			if (video !== undefined) {
+				video.pause()
+				video.removeAttribute('src')
+				video.load()
+			}
+
+			this.videoPreviewPlaying = false
+		},
+
+		onVideoPreviewError() {
+			this.videoPreviewFailed = true
+			this.videoPreviewPlaying = false
+		},
+
 		onToggle(value) {
 			this.$emit('select-toggled', { id: this.file.fileid, value })
 		},
@@ -359,6 +440,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// The magnify a tile answers a hover with. Carried by every preview layer, so
+// that blurhash, small and large stay in lockstep and do not slide against each
+// other. The curve is ease-out-quint: quick to answer the pointer, then settling
+// slowly into the final scale. Layers that transition something of their own
+// have to list this alongside it, as the shorthand would otherwise drop it.
+$magnify-transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+
 .file-container {
 	// How much of the tile is left to the card backs of a folded run of photos.
 	// Zero for a tile standing for a single photo, so its preview and everything
@@ -426,6 +514,32 @@ export default {
 		pointer-events: none;
 	}
 
+	// Hovering lifts the tile with a soft shadow and magnifies the preview inside
+	// it, clipped by the tile's paint containment. Gated on `:not(.selected)` so
+	// the selection visual above stays the dominant state.
+	&:hover:not(.selected) {
+		box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+		z-index: 1;
+
+		.file__layer--small,
+		.file__layer--large,
+		.file__layer--blurhash,
+		.file__layer--video {
+			transform: scale(1.07);
+		}
+	}
+
+	// Reduced motion keeps the shadow, which does not move, and drops the magnify.
+	@media (prefers-reduced-motion: reduce) {
+		&:hover:not(.selected) {
+			.file__layer--small,
+			.file__layer--large,
+			.file__layer--blurhash {
+				transform: none;
+			}
+		}
+	}
+
 	// Selected images shrink into a glowing frame, which is softer than an
 	// outline and does not fight the photo for attention.
 	&.selected {
@@ -481,6 +595,7 @@ export default {
 				height: 100%;
 				object-fit: cover;
 				color: transparent; // Hide alt='' text when loading.
+				transition: $magnify-transition;
 			}
 
 			.file__layer--blurhash {
@@ -503,17 +618,30 @@ export default {
 			.file__layer--small {
 				z-index: 2;
 				opacity: 0;
-				transition: opacity var(--animation-quick) ease-out;
+				transition: $magnify-transition, opacity var(--animation-quick) ease-out;
 			}
 
 			.file__layer--large {
 				z-index: 3;
 				opacity: 0;
-				transition: opacity var(--animation-slow) ease-out;
+				transition: $magnify-transition, opacity var(--animation-slow) ease-out;
 			}
 
 			.file__layer--visible {
 				opacity: 1;
+			}
+
+			// The video is the freshest picture of the file, so it covers the still
+			// layers. It fades in over them rather than replacing them at once, and
+			// crops the same way, so that the swap reads as the picture coming alive
+			// instead of as a second one being put on top.
+			.file__layer--video {
+				z-index: 4;
+				animation: file-layer-video-fade-in var(--animation-quick) ease-out;
+
+				@media (prefers-reduced-motion: reduce) {
+					animation: none;
+				}
 			}
 		}
 
@@ -529,7 +657,7 @@ export default {
 			border-radius: var(--border-radius);
 			background: rgba(0, 0, 0, 0.4);
 			color: #fff;
-			z-index: 4; // above the preview layers
+			z-index: 5; // above the preview layers, the playing video among them
 
 			&__label {
 				font-weight: 600;
@@ -627,6 +755,11 @@ export default {
 			transition: none;
 		}
 	}
+}
+
+@keyframes file-layer-video-fade-in {
+	from { opacity: 0; }
+	to { opacity: 1; }
 }
 
 @keyframes file-layer-shimmer {

@@ -9,6 +9,50 @@ import { expect } from '@playwright/test'
 import { PhotoActionsMenu } from './PhotoActionsMenu.ts'
 
 /**
+ * How a grid builds a tile.
+ *
+ * `layered` tiles stack three preview layers — blurhash, small and large —
+ * inside a frame that also holds the checkbox, the actions and the favorite
+ * star. `legacy` tiles, which only the folders view still renders, are the link
+ * itself with a single preview image in it.
+ */
+export type TileFlavour = 'layered' | 'legacy'
+
+/** The scale a tile magnifies its preview to while it is hovered. */
+const MAGNIFIED_TRANSFORM = 'matrix(1.07, 0, 0, 1.07, 0, 0)'
+
+/**
+ * How a preview layer is timed to magnify: 520ms on an ease-out-quint curve.
+ *
+ * A layer that also fades lists its own transition after the magnify, so only
+ * the first entry of each computed value is the magnify's.
+ */
+const MAGNIFY_TIMING = {
+	property: /^transform(,|$)/,
+	duration: /^0\.52s(,|$)/,
+	timingFunction: /^cubic-bezier\(0\.22, 1, 0\.36, 1\)(,|$)/,
+} as const
+
+/**
+ * How long to leave a hovered tile alone before a preview found unscaled can be
+ * called one that never scaled. Long enough for the magnify above to have run.
+ */
+const MAGNIFY_SETTLE = 800
+
+/**
+ * How long to leave a hovered tile alone before a tile found without a video can
+ * be called one that never plays it. Several times the delay a tile waits out
+ * before starting one, so that a slow answer is not read as a refusal.
+ */
+const VIDEO_PREVIEW_SETTLE = 2000
+
+/**
+ * Where the recorder of {@link MediaGrid.recordVideoPreviews} keeps its count on
+ * the page, out of the way of anything the app puts on `window`.
+ */
+const VIDEO_PREVIEW_RECORDER = '__photosVideoPreviewsStarted'
+
+/**
  * A grid of photo tiles — the timeline, the contents of a collection and the
  * photo picker all render the same tiles, so they all use this section.
  */
@@ -17,6 +61,8 @@ export class MediaGrid {
 		public readonly page: Page,
 		/** The element the grid is rendered in, so two grids cannot be confused. */
 		private readonly container: Locator,
+		/** How this grid builds its tiles. */
+		private readonly flavour: TileFlavour = 'layered',
 	) {}
 
 	/** Every photo of the grid. */
@@ -52,17 +98,202 @@ export class MediaGrid {
 
 	/**
 	 * The tile of a photo, i.e. the frame holding its preview together with its
-	 * checkbox, its actions and its favorite star.
+	 * checkbox, its actions and its favorite star. A `legacy` grid has no such
+	 * frame, so there the tile is the link itself.
 	 *
 	 * @param name - Name of the photo file
 	 */
 	public getTile(name: string): Locator {
+		if (this.flavour === 'legacy') {
+			return this.getMedia(name)
+		}
+
 		// The link is looked up from the page rather than through `getMedia`: a
 		// `has` locator is resolved inside the element it filters, where the grid
 		// container of `getMedia` is nowhere to be found.
 		return this.container.locator('.file-container').filter({
 			has: this.page.getByRole('link', { name: `open the full size "${name}" image` }),
 		})
+	}
+
+	/**
+	 * The layers a tile stacks its preview out of. They are the picture rather
+	 * than anything a reader could name, so they are hidden from assistive
+	 * technology and addressed by their class.
+	 *
+	 * The placeholder is left out: it stands in for a preview that has not landed
+	 * yet, and unlike the preview it does not follow the tile's magnify.
+	 *
+	 * @param name - Name of the photo file
+	 */
+	public getPreviewLayers(name: string): Locator {
+		return this.getTile(name).locator(this.flavour === 'legacy'
+			? 'img'
+			: '.file__layer--blurhash, .file__layer--small, .file__layer--large')
+	}
+
+	/**
+	 * Put the pointer on a tile, which is what makes it lift and magnify.
+	 *
+	 * @param name - Name of the photo file
+	 */
+	public async hoverTile(name: string): Promise<void> {
+		await this.getMedia(name).hover()
+	}
+
+	/**
+	 * Put the pointer on a tile and leave it there long enough for the magnify to
+	 * have run, so that a preview found unscaled afterwards is one that never
+	 * scaled. Proving that something never happens takes waiting out the time in
+	 * which it would have, hence a pause rather than a poll.
+	 *
+	 * @param name - Name of the photo file
+	 */
+	public async hoverTileAndSettle(name: string): Promise<void> {
+		await this.hoverTile(name)
+		await this.page.waitForTimeout(MAGNIFY_SETTLE)
+	}
+
+	/**
+	 * The video a tile plays on top of its preview while the pointer rests on it.
+	 * It shows the same picture the preview does, so it is hidden from assistive
+	 * technology and addressed by its class.
+	 *
+	 * @param name - Name of the video file
+	 */
+	public getVideoPreview(name: string): Locator {
+		return this.getTile(name).locator(this.videoPreviewSelector())
+	}
+
+	/**
+	 * Put the pointer on a tile and wait for it to have started playing its video.
+	 *
+	 * @param name - Name of the video file
+	 * @return The video the tile is playing
+	 */
+	public async hoverTileAndPlay(name: string): Promise<Locator> {
+		await this.hoverTile(name)
+
+		const video = this.getVideoPreview(name)
+		await expect(video).toBeAttached()
+		return video
+	}
+
+	/**
+	 * Put the pointer on a tile and leave it there long enough for a video to have
+	 * been started, so that a tile found without one afterwards is one that never
+	 * starts it. Proving that something never happens takes waiting out the time
+	 * in which it would have, hence a pause rather than a poll.
+	 *
+	 * @param name - Name of the media file
+	 */
+	public async hoverTileAndSettleVideo(name: string): Promise<void> {
+		await this.hoverTile(name)
+		await this.settleVideoPreviews()
+	}
+
+	/**
+	 * Wait out the time in which a tile would have started a video, so that a grid
+	 * found without one is one that never starts it.
+	 */
+	public async settleVideoPreviews(): Promise<void> {
+		await this.page.waitForTimeout(VIDEO_PREVIEW_SETTLE)
+	}
+
+	/**
+	 * Sweep the pointer across a tile without ever resting on it, the way a reader
+	 * crosses the grid on the way somewhere else.
+	 *
+	 * @param name - Name of the media file
+	 */
+	public async sweepPointerAcross(name: string): Promise<void> {
+		const box = await this.getTile(name).boundingBox()
+		if (box === null) {
+			throw new Error(`The tile of "${name}" is not rendered`)
+		}
+
+		const middle = box.y + box.height / 2
+		await this.page.mouse.move(box.x - 10, middle)
+		await this.page.mouse.move(box.x + box.width + 10, middle, { steps: 10 })
+		await this.page.mouse.move(0, 0)
+	}
+
+	/**
+	 * Start counting the videos the tiles of the page mount from here on, so that
+	 * a test can tell a video that was never started from one that was started and
+	 * taken off again — which a locator cannot, as a video that fails to load is
+	 * gone again within a frame of having been mounted.
+	 *
+	 * Calling it again starts a fresh count.
+	 */
+	public async recordVideoPreviews(): Promise<void> {
+		await this.page.evaluate(([property, selector]) => {
+			const recorder = window as unknown as Record<string, unknown>
+			;(recorder[`${property}Observer`] as MutationObserver | undefined)?.disconnect()
+			recorder[property] = 0
+
+			const observer = new MutationObserver((records) => {
+				for (const record of records) {
+					for (const node of Array.from(record.addedNodes)) {
+						if (node instanceof Element && (node.matches(selector) || node.querySelector(selector) !== null)) {
+							recorder[property] = (recorder[property] as number) + 1
+						}
+					}
+				}
+			})
+
+			observer.observe(document.body, { childList: true, subtree: true })
+			recorder[`${property}Observer`] = observer
+		}, [VIDEO_PREVIEW_RECORDER, this.videoPreviewSelector()] as const)
+	}
+
+	/**
+	 * Assert how many videos the tiles have started since
+	 * {@link recordVideoPreviews}.
+	 *
+	 * @param count - The number of videos that should have been started
+	 */
+	public async expectVideoPreviewsStarted(count: number): Promise<void> {
+		expect(await this.page.evaluate(
+			(property) => (window as unknown as Record<string, number>)[property],
+			VIDEO_PREVIEW_RECORDER,
+		)).toBe(count)
+	}
+
+	/**
+	 * Assert that a video is playing muted, on a loop and without a soundtrack the
+	 * reader did not ask for — the terms on which a browser lets a page play a
+	 * video by itself.
+	 *
+	 * @param video - The video of a tile, as {@link getVideoPreview} finds it
+	 */
+	public async expectVideoAutoplaying(video: Locator): Promise<void> {
+		await expect.poll(() => video.evaluate((element: HTMLVideoElement) => ({
+			paused: element.paused,
+			muted: element.muted,
+			loop: element.loop,
+			// HAVE_CURRENT_DATA, i.e. the browser has decoded a frame to show.
+			hasFrame: element.readyState >= 2,
+		}))).toEqual({ paused: false, muted: true, loop: true, hasFrame: true })
+	}
+
+	/**
+	 * Assert that a tile draws its duration badge on top of the video it plays,
+	 * rather than letting the video cover it.
+	 *
+	 * @param name - Name of the video file
+	 */
+	public async expectDurationAboveVideo(name: string): Promise<void> {
+		const badge = this.getTile(name).locator('.file__duration')
+		await expect(badge).toBeVisible()
+
+		const stacking = async (locator: Locator) => Number(await locator.evaluate((element) => window.getComputedStyle(element).zIndex))
+		expect(await stacking(badge)).toBeGreaterThan(await stacking(this.getVideoPreview(name)))
+	}
+
+	/** How a tile of this grid names the video it plays. */
+	private videoPreviewSelector(): string {
+		return this.flavour === 'legacy' ? 'video.video-preview' : 'video.file__layer--video'
 	}
 
 	/**
@@ -204,6 +435,63 @@ export class MediaGrid {
 		await expect(this.getMedia(name)).toHaveAccessibleName(favorite
 			? `Favorite image, open the full size "${name}" image`
 			: `Open the full size "${name}" image`)
+	}
+
+	/**
+	 * Assert whether the preview of a photo is magnified, as it is while the tile
+	 * is hovered.
+	 *
+	 * Every layer of the preview is asserted, which is what keeps them in lockstep:
+	 * a layer left behind would slide against the others during the magnify.
+	 *
+	 * @param name - Name of the photo file
+	 * @param magnified - The state to assert
+	 */
+	public async expectPreviewMagnified(name: string, magnified: boolean): Promise<void> {
+		const layers = this.getPreviewLayers(name)
+
+		// The count is read first: asserting on the layers of a tile that renders
+		// none of them would pass without having looked at anything.
+		await expect(layers.first()).toBeAttached()
+		const count = await layers.count()
+
+		for (let index = 0; index < count; index++) {
+			await expect(layers.nth(index)).toHaveCSS('transform', magnified ? MAGNIFIED_TRANSFORM : 'none')
+		}
+	}
+
+	/**
+	 * Assert whether a tile is lifted off the grid by the soft shadow it takes
+	 * while it is hovered.
+	 *
+	 * @param name - Name of the photo file
+	 * @param lifted - The state to assert
+	 */
+	public async expectTileLifted(name: string, lifted: boolean): Promise<void> {
+		await expect(this.getTile(name)).toHaveCSS('box-shadow', lifted
+			? /^rgba\(0, 0, 0, 0\.14\) 0px 6px 18px 0px$/
+			: 'none')
+	}
+
+	/**
+	 * Assert that every layer of a preview is timed to magnify on the same curve.
+	 * A layer timed differently would slide against the others on the way to the
+	 * magnified scale, however well they agree on where to end up.
+	 *
+	 * @param name - Name of the photo file
+	 */
+	public async expectMagnifyTiming(name: string): Promise<void> {
+		const layers = this.getPreviewLayers(name)
+
+		await expect(layers.first()).toBeAttached()
+		const count = await layers.count()
+
+		for (let index = 0; index < count; index++) {
+			const layer = layers.nth(index)
+			await expect(layer).toHaveCSS('transition-property', MAGNIFY_TIMING.property)
+			await expect(layer).toHaveCSS('transition-duration', MAGNIFY_TIMING.duration)
+			await expect(layer).toHaveCSS('transition-timing-function', MAGNIFY_TIMING.timingFunction)
+		}
 	}
 
 	/**

@@ -13,14 +13,15 @@ import { MediaGrid } from './MediaGrid.ts'
  * of the account.
  *
  * Its tiles come from a different component than the ones of the timeline, but
- * they carry the same accessible names — so the same grid section drives both.
+ * they carry the same accessible names — so the same grid section drives both,
+ * told which of the two flavours of tile to expect.
  */
 export class FoldersPage {
 	/** The photos of the open folder. */
 	public readonly grid: MediaGrid
 
 	constructor(public readonly page: Page) {
-		this.grid = new MediaGrid(page, page.getByRole('main'))
+		this.grid = new MediaGrid(page, page.getByRole('main'), 'legacy')
 	}
 
 	/**

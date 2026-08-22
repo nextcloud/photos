@@ -6,19 +6,37 @@ SPDX-PackageSupplier = "Nextcloud <info@nextcloud.com>"
 SPDX-PackageDownloadLocation = "https://github.com/nextcloud/photos"
 
 [[annotations]]
-path = [".gitattributes", ".github/**", ".editorconfig", "babel.config.cjs", ".php-cs-fixer.dist.php", "package-lock.json", "package.json", "composer.json", "composer.lock", "stylelint.config.cjs", ".eslintrc.cjs", ".gitignore", ".jshintrc", ".l10nignore", "action/.gitignore", "action/package.json", "action/package-lock.json", "action/dist/index.js", "tests/**", "psalm.xml", "playwright.config.ts", "vendor-bin/**/composer.json", "stylelint.config.cjs", "vendor-bin/**/composer.lock", ".tx/config", "webpack.config.js", "tsconfig.json", "vite.config.ts", "js/vendor.LICENSE.txt", "krankerl.toml", ".npmignore", "postcss.config.cjs", "jest.config.js"]
+path = [".gitattributes", ".editorconfig", ".tx/config", ".l10nignore", ".npmignore"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "none"
 SPDX-License-Identifier = "CC0-1.0"
 
 [[annotations]]
-path = ["js/**.map"]
-precedence = "override"
+path = [".github/ISSUE_TEMPLATE/*.md"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2019 Nextcloud GmbH and Nextcloud contributors"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = [
+	"package.json",
+	"package-lock.json",
+	"**/composer.json",
+	"**/composer.lock",
+	"**/tsconfig.json",
+]
+precedence = "aggregate"
 SPDX-FileCopyrightText = "2019 Nextcloud GmbH and Nextcloud contributors"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
 
 [[annotations]]
-path = ["l10n/**.js", "l10n/**.json", "css/**.css", "js/**.mjs", "js/photos-service-worker.js", "screenshots/screenshot1.png", "src/assets/file-placeholder.svg"]
+path = ["l10n/**.js", "l10n/**.json"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2019 Nextcloud GmbH and Nextcloud translators"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = ["css/*.css", "js/photos-service-worker.js"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2019 Nextcloud GmbH and Nextcloud contributors"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
@@ -28,9 +46,3 @@ path = ["img/app.svg", "img/photos.svg", "img/yourphotos.svg", "src/assets/image
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2018-2024 Google LLC"
 SPDX-License-Identifier = "Apache-2.0"
-
-[[annotations]]
-path = ["src/assets/Illustrations/empty.svg", "src/assets/Illustrations/folder.svg", "src/assets/Illustrations/images.svg"]
-precedence = "aggregate"
-SPDX-FileCopyrightText = "2024 Katerina Limpitsouni"
-SPDX-License-Identifier = "LicenseRef-unDrawLicense"

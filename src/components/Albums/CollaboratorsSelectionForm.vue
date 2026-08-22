@@ -157,6 +157,8 @@ export default {
 			currentSearchResults: [] as Collaborator[],
 			loadingCollaborators: false,
 			randomId: Math.random().toString().substring(2, 10),
+			// Sequence number of the latest lookup, to tell the answers of the ones before it apart.
+			searchSequence: 0,
 			publicLinkCopied: false,
 			collaboratorTypes: ShareType,
 			config: {
@@ -250,6 +252,8 @@ export default {
 				return
 			}
 
+			const sequence = ++this.searchSequence
+
 			try {
 				this.loadingCollaborators = true
 				const response = await axios.get(generateOcsUrl('core/autocomplete/get'), {
@@ -262,6 +266,10 @@ export default {
 						],
 					},
 				}) as AxiosResponse<OCSResponse<IUserAutocompleteResult[]>>
+
+				if (sequence !== this.searchSequence) {
+					return
+				}
 
 				this.currentSearchResults = response.data.ocs.data
 					.map((collaborator) => {
@@ -280,11 +288,17 @@ export default {
 					...this.currentSearchResults.reduce(this.indexCollaborators, {}),
 				}
 			} catch (error) {
+				if (sequence !== this.searchSequence) {
+					return
+				}
+
 				this.errorFetchingCollaborators = error
 				logger.error(this.t('photos', 'Failed to fetch collaborators list.'), { error })
 				showError(this.t('photos', 'Failed to fetch collaborators list.'))
 			} finally {
-				this.loadingCollaborators = false
+				if (sequence === this.searchSequence) {
+					this.loadingCollaborators = false
+				}
 			}
 		},
 
