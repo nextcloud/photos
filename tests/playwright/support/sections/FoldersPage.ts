@@ -12,16 +12,16 @@ import { MediaGrid } from './MediaGrid.ts'
  * The folders view, which browses the photos as they are laid out in the files
  * of the account.
  *
- * Its tiles come from a different component than the ones of the timeline, but
- * they carry the same accessible names — so the same grid section drives both,
- * told which of the two flavours of tile to expect.
+ * Its listing comes from an endpoint of its own rather than from DAV, but the
+ * photos in it are shown on the very tile of the timeline — so the same grid
+ * section drives both.
  */
 export class FoldersPage {
 	/** The photos of the open folder. */
 	public readonly grid: MediaGrid
 
 	constructor(public readonly page: Page) {
-		this.grid = new MediaGrid(page, page.getByRole('main'), 'legacy')
+		this.grid = new MediaGrid(page, page.getByRole('main'))
 	}
 
 	/**

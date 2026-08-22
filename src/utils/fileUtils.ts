@@ -5,8 +5,10 @@
 
 import type { Node } from '@nextcloud/files'
 import type { FoldersNode } from '../services/FolderContent.ts'
+import type { PhotoFile } from '../store/files.ts'
 
 import {
+	File,
 	FileType,
 	Permission,
 } from '@nextcloud/files'
@@ -149,19 +151,32 @@ export function toPhotoTarget(file: Node): PhotoTarget {
 }
 
 /**
- * @param file - Photo of a folder listing, which is not read over DAV
+ * Adapt a photo of a folder listing to the node the photo tile is built on, so
+ * that the folders view shows the tile the timeline shows.
+ *
+ * The folder listing is not read over DAV and carries nothing but the etag
+ * besides the file itself, so what the tile makes of metadata stays out: no
+ * blurhash, no favorite state, no live photo.
+ *
+ * @param file - Photo of a folder listing
  */
-export function legacyToPhotoTarget(file: FoldersNode): PhotoTarget {
-	return {
-		fileid: file.fileid,
-		basename: file.basename,
-		davPath: file.filename,
+export function legacyToPhotoFile(file: FoldersNode): PhotoFile {
+	return new File({
+		id: file.fileid,
+		source: file.source,
+		mime: file.mime,
+		mtime: new Date(file.lastmod * 1000),
+		size: file.size,
 		permissions: parsePermissions(file.permissions),
-		// Folder listings are not read over DAV and carry no favorite bit, so a
-		// photo of the folders view starts out as "not a favorite" — the action
-		// marks it as one, which is what it says it does.
-		favorite: false,
-	}
+		// The listing holds the folders of the account next to the ones shared
+		// with it, and names the owner of neither.
+		owner: null,
+		root: getRootPath(),
+		attributes: {
+			etag: file.etag,
+			hasPreview: file.hasPreview,
+		},
+	}) as PhotoFile
 }
 
 export type ViewerFileInfo = {
