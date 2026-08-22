@@ -7,7 +7,7 @@
 	<div
 		class="file-container"
 		data-test="media"
-		:class="{ selected, 'file-container--stack': isStack }">
+		:class="{ selected, 'file-container--stack': isStack, 'file-container--uncropped': !cropped }">
 		<!--
 			A tile standing for a run of photos taken in one go is drawn as a deck of
 			cards: two backs peeking out behind the preview, which costs no further
@@ -190,6 +190,17 @@ export default {
 		// Opt-out: the menu manages the photo it belongs to, which only gets in
 		// the way where photos are being picked rather than managed.
 		showActionsMenu: {
+			type: Boolean,
+			// eslint-disable-next-line vue/no-boolean-default
+			default: true,
+		},
+
+		/**
+		 * Whether the preview fills the tile, cropped to it, or is fit whole
+		 * inside it. A grid laying its tiles out in the shape of the photos they
+		 * hold has nothing to crop away, one laying them out as squares does.
+		 */
+		cropped: {
 			type: Boolean,
 			// eslint-disable-next-line vue/no-boolean-default
 			default: true,
@@ -452,6 +463,8 @@ $magnify-transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 	// Zero for a tile standing for a single photo, so its preview and everything
 	// overlaid on it keep filling the whole tile.
 	--stack-peek: 0px;
+	// How the preview meets its tile: filling it, or fit whole inside it.
+	--preview-fit: cover;
 	contain: strict;
 	background: var(--color-primary-element-light);
 	position: relative;
@@ -468,6 +481,10 @@ $magnify-transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 		--stack-peek: 6px;
 		padding-inline-end: var(--stack-peek);
 		padding-block-end: var(--stack-peek);
+	}
+
+	&--uncropped {
+		--preview-fit: contain;
 	}
 
 	// The two card backs, each one further out of the corner than the one before.
@@ -593,7 +610,7 @@ $magnify-transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 				inset-inline-start: 0;
 				width: 100%;
 				height: 100%;
-				object-fit: cover;
+				object-fit: var(--preview-fit);
 				color: transparent; // Hide alt='' text when loading.
 				transition: $magnify-transition;
 			}

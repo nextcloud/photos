@@ -173,8 +173,8 @@ test.describe('The tile of a video of the folders view', () => {
 	test('plays the video once the pointer rests on it', async ({ photosApp }) => {
 		const { grid } = photosApp.folders
 
-		// The folders view builds its tiles from a component of its own, and a video
-		// has to come alive there the same way it does on the timeline.
+		// The folders view shows the tile of the timeline, so a video read from a
+		// folder listing has to come alive there the same way.
 		const video = await grid.hoverTileAndPlay(PLAYABLE_VIDEO)
 
 		await grid.expectVideoAutoplaying(video)
