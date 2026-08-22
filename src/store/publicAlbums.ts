@@ -4,10 +4,9 @@
  */
 
 import type { PhotosRootSate } from '.'
+import type { Album } from './albums.ts'
 
 import {
-	type Album,
-
 	albumsExtraProps,
 } from './albums.ts'
 

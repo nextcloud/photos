@@ -1,9 +1,9 @@
+import type { Node } from '@nextcloud/files'
 import type { FoldersNode } from '../services/FolderContent.ts'
 
 import {
-	type Node,
-
-	FileType, Permission,
+	FileType,
+	Permission,
 } from '@nextcloud/files'
 import { getRemoteURL, getRootPath } from '@nextcloud/files/dav'
 /**

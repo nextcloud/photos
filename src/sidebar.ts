@@ -18,6 +18,7 @@ registerDavProperty('nc:metadata-photos-place')
 // Init Photos tab component
 let PhotosTabView = null
 let PhotosTabInstance = null
+// eslint-disable-next-line @nextcloud/no-removed-globals
 const photosTab = new OCA.Files.Sidebar.Tab({
 	id: 'photos',
 	name: t('photos', 'Details'),
