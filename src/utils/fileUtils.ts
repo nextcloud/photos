@@ -4,15 +4,12 @@
  */
 
 import type { Node } from '@nextcloud/files'
-import type { FoldersNode } from '../services/FolderContent.ts'
-import type { PhotoFile } from '../store/files.ts'
 
 import {
-	File,
 	FileType,
 	Permission,
 } from '@nextcloud/files'
-import { getRemoteURL, getRootPath, parsePermissions } from '@nextcloud/files/dav'
+import { getRemoteURL, getRootPath } from '@nextcloud/files/dav'
 import { getLanguage } from '@nextcloud/l10n'
 import { basename } from '@nextcloud/paths'
 import { generateUrl } from '@nextcloud/router'
@@ -62,39 +59,13 @@ export function sortCompare(fileInfo1: Node, fileInfo2: Node, key: string, asc: 
 }
 
 /**
- * Sorting comparison function
+ * Sort nodes by the moment they were last modified, the most recent one first.
  *
- * @param fileInfo1
- * @param fileInfo2
- * @param key
- * @param asc
+ * @param node1 - Node to compare
+ * @param node2 - Node to compare it to
  */
-export function sortCompareFileInfo(fileInfo1: FoldersNode, fileInfo2: FoldersNode, key: keyof FoldersNode, asc: boolean = true): number {
-	// if this is a number, let's sort by integer
-	if (isNumber(fileInfo1[key]) && isNumber(fileInfo2[key])) {
-		return asc
-			? Number(fileInfo2[key]) - Number(fileInfo1[key])
-			: Number(fileInfo1[key]) - Number(fileInfo2[key])
-	}
-
-	// else we sort by string, so let's sort directories first
-	if (fileInfo1.type === FileType.Folder && fileInfo2.type === FileType.File) {
-		return asc ? -1 : 1
-	} else if (fileInfo1.type === FileType.File && fileInfo2.type === FileType.Folder) {
-		return asc ? 1 : -1
-	}
-
-	// if this is a date, let's sort by date
-	if (isNumber(new Date(fileInfo1[key]).getTime()) && isNumber(new Date(fileInfo2[key]).getTime())) {
-		return asc
-			? new Date(fileInfo2[key]).getTime() - new Date(fileInfo1[key]).getTime()
-			: new Date(fileInfo1[key]).getTime() - new Date(fileInfo2[key]).getTime()
-	}
-
-	// finally sort by name
-	return asc
-		? fileInfo1[key]?.toString()?.localeCompare(fileInfo2[key].toString(), getLanguage()) || 1
-		: -fileInfo1[key]?.toString()?.localeCompare(fileInfo2[key].toString(), getLanguage()) || -1
+export function compareModificationTime(node1: Node, node2: Node): number {
+	return (node2.mtime?.getTime() ?? 0) - (node1.mtime?.getTime() ?? 0)
 }
 
 /**
@@ -148,35 +119,6 @@ export function toPhotoTarget(file: Node): PhotoTarget {
 		permissions: file.permissions,
 		favorite: file.attributes.favorite === 1,
 	}
-}
-
-/**
- * Adapt a photo of a folder listing to the node the photo tile is built on, so
- * that the folders view shows the tile the timeline shows.
- *
- * The folder listing is not read over DAV and carries nothing but the etag
- * besides the file itself, so what the tile makes of metadata stays out: no
- * blurhash, no favorite state, no live photo.
- *
- * @param file - Photo of a folder listing
- */
-export function legacyToPhotoFile(file: FoldersNode): PhotoFile {
-	return new File({
-		id: file.fileid,
-		source: file.source,
-		mime: file.mime,
-		mtime: new Date(file.lastmod * 1000),
-		size: file.size,
-		permissions: parsePermissions(file.permissions),
-		// The listing holds the folders of the account next to the ones shared
-		// with it, and names the owner of neither.
-		owner: null,
-		root: getRootPath(),
-		attributes: {
-			etag: file.etag,
-			hasPreview: file.hasPreview,
-		},
-	}) as PhotoFile
 }
 
 export type ViewerFileInfo = {
@@ -237,24 +179,6 @@ export function toViewerFileInfo(file: Node): ViewerFileInfo {
 		previewUrl: file.attributes.previewUrl ?? getPreviewUrl(file, 4096),
 		etag: file.attributes.etag,
 		permissions,
-	}
-}
-
-/**
- *
- * @param file
- */
-export function legacyToViewerFileInfo(file: FoldersNode) {
-	return {
-		fileid: file.fileid,
-		basename: file.basename,
-		filename: file.filename,
-		mime: file.mime,
-		mtime: file.lastmod,
-		source: file.source,
-		hasPreview: file.hasPreview,
-		etag: file.etag,
-		permissions: file.permissions,
 	}
 }
 

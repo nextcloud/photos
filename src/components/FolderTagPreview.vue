@@ -13,7 +13,7 @@
 			class="folder__image"
 			:src="previewUrl"
 			alt=""
-			@error="onPreviewFail(file)">
+			@error="onPreviewFail">
 
 		<span v-else class="folder__image folder__image--placeholder">
 			<FolderOutline
@@ -30,11 +30,10 @@
 </template>
 
 <script lang='ts'>
+import type { File } from '@nextcloud/files'
 import type { PropType } from 'vue'
 import type { Route } from 'vue-router'
-import type { FoldersNode } from '../services/FolderContent.ts'
 
-import { getCurrentUser } from '@nextcloud/auth'
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { RouterLink } from 'vue-router'
@@ -54,13 +53,14 @@ export default {
 			required: true,
 		},
 
+		/** Path of the folder, relative to the root of the account. */
 		path: {
 			type: String,
 			default: '',
 		},
 
 		fileList: {
-			type: Array as PropType<FoldersNode[]>,
+			type: Array as PropType<File[]>,
 			default: () => [],
 		},
 	},
@@ -84,20 +84,23 @@ export default {
 		/**
 		 * Previews list without the failed ones
 		 */
-		previewList(): FoldersNode[] {
+		previewList(): File[] {
 			return this.fileList
-				.filter((file) => this.failed.indexOf(file.fileid) === -1)
+				.filter((file) => this.failed.indexOf(file.fileid as number) === -1)
 		},
 
-		previewUrl() {
-			if (this.previewList.length === 0) {
+		/** The photo the folder is shown under, the last one that has not failed. */
+		cover(): File | undefined {
+			return this.previewList.at(-1)
+		},
+
+		previewUrl(): string | null {
+			if (this.cover === undefined) {
 				return null
 			}
 
-			// TODO: Check that etag is not null
-			const { fileid, etag } = this.previewList.at(-1) as FoldersNode
 			// use etag to force cache reload if file changed
-			return generateUrl(`/core/preview?fileId=${fileid}&c=${etag}&x=${250}&y=${250}&forceIcon=0&a=0`)
+			return generateUrl(`/core/preview?fileId=${this.cover.id}&c=${this.cover.attributes.etag}&x=${250}&y=${250}&forceIcon=0&a=0`)
 		},
 
 		/**
@@ -108,14 +111,10 @@ export default {
 		 * Which vue-router does not encode afterwards!
 		 */
 		toLink(): Route {
-			// Remove leading /file/{userId}
-			const prefix = `/files/${getCurrentUser()?.uid}`
-			let path = this.path.replace(new RegExp(`^${prefix}`), '')
-
 			// always remove first slash, the router
 			// manage it automatically
 			const regex = /^\/?(.+)/i
-			path = (regex.exec(path) as string[])[1]
+			const path = (regex.exec(this.path) as string[])[1]
 
 			// apply to current route
 			return { ...this.$route, params: { path: path.split('/') } }
@@ -123,8 +122,14 @@ export default {
 	},
 
 	methods: {
-		onPreviewFail({ fileid }) {
-			this.failed.push(fileid)
+		/**
+		 * Drop the photo whose preview could not be shown, so that the folder falls
+		 * back to the next one it holds — and to its icon once none is left.
+		 */
+		onPreviewFail(): void {
+			if (this.cover !== undefined) {
+				this.failed.push(this.cover.fileid as number)
+			}
 		},
 
 		t,

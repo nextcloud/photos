@@ -94,6 +94,8 @@ const names = await seedPhotos('recap', [new Date(Date.UTC(2024, 0, 5, 12)), …
 
 They are server-side copies of a fixture, so a library of dozens of them costs no upload, and their taken date is stored the way the metadata editor of the app does it. Date them around noon UTC: the day a photo counts as taken on is read in the timezone the browser runs in, which differs between a local run and CI. `removePhotoLocations()` is the counterpart for the tests about a library with nothing to place on a map.
 
+A test that is about a view reading state rather than writing it brings that state about before it opens the view — a listing carries what was stored the moment it was read. `favoritePhoto` and `seedTag` put the state on a photo, `setPhotosSetting` stores one of the settings of the app for the account, and `readFavorite`, `readTags` and `readFolderListing` read back what the server holds.
+
 ## Writing a test
 
 - `test` and `expect` come from `support/fixtures/photos-app.ts`; `photosApp` gathers the page objects of all the views of one session.
