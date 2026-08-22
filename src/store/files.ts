@@ -221,7 +221,12 @@ const actions = {
 	 */
 	async setPhotoFavorite(context: PhotosContext<FilesState>, { photo, favorite }: { photo: PhotoTarget, favorite: boolean }) {
 		await setPhotoFavorite(photo, favorite)
-		context.commit('favoriteFile', { fileId: photo.fileid, favoriteState: favorite ? 1 : 0 })
+
+		// The photo can be one of a timeline as well as one of a folder, and the
+		// two views hold their own listings.
+		const favoriteState = favorite ? 1 : 0
+		context.commit('favoriteFile', { fileId: photo.fileid, favoriteState })
+		context.commit('favoriteFolderFile', { fileId: photo.fileid, favoriteState })
 	},
 
 	/**
