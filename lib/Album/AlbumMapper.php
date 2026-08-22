@@ -145,22 +145,27 @@ class AlbumMapper {
 	public function delete(int $id): void {
 		$this->connection->beginTransaction();
 
-		$query = $this->connection->getQueryBuilder();
-		$query->delete('photos_albums')
-			->where($query->expr()->eq('album_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
-		$query->executeStatement();
+		try {
+			$query = $this->connection->getQueryBuilder();
+			$query->delete('photos_albums_files')
+				->where($query->expr()->eq('album_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+			$query->executeStatement();
 
-		$query = $this->connection->getQueryBuilder();
-		$query->delete('photos_albums_files')
-			->where($query->expr()->eq('album_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
-		$query->executeStatement();
+			$query = $this->connection->getQueryBuilder();
+			$query->delete('photos_albums_collabs')
+				->where($query->expr()->eq('album_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+			$query->executeStatement();
 
-		$query = $this->connection->getQueryBuilder();
-		$query->delete('photos_albums_collabs')
-			->where($query->expr()->eq('album_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
-		$query->executeStatement();
+			$query = $this->connection->getQueryBuilder();
+			$query->delete('photos_albums')
+				->where($query->expr()->eq('album_id', $query->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+			$query->executeStatement();
 
-		$this->connection->commit();
+			$this->connection->commit();
+		} catch (\Throwable $e) {
+			$this->connection->rollBack();
+			throw $e;
+		}
 	}
 
 	/**
@@ -401,49 +406,54 @@ class AlbumMapper {
 
 		$this->connection->beginTransaction();
 
-		foreach ($collaboratorsToAdd as $collaborator) {
-			switch ($collaborator['type']) {
-				case self::TYPE_USER:
-					if (is_null($this->userManager->get($collaborator['id']))) {
-						throw new \Exception('Unknown collaborator: ' . $collaborator['id']);
-					}
-					break;
-				case self::TYPE_GROUP:
-					if (is_null($this->groupManager->get($collaborator['id']))) {
-						throw new \Exception('Unknown collaborator: ' . $collaborator['id']);
-					}
-					break;
-				case self::TYPE_LINK:
-					$collaborator['id'] = $this->random->generate(32, ISecureRandom::CHAR_UPPER . ISecureRandom::CHAR_LOWER . ISecureRandom::CHAR_DIGITS);
-					break;
-				default:
-					throw new \Exception('Invalid collaborator type: ' . $collaborator['type']);
+		try {
+			foreach ($collaboratorsToAdd as $collaborator) {
+				switch ($collaborator['type']) {
+					case self::TYPE_USER:
+						if (is_null($this->userManager->get($collaborator['id']))) {
+							throw new \Exception('Unknown collaborator: ' . $collaborator['id']);
+						}
+						break;
+					case self::TYPE_GROUP:
+						if (is_null($this->groupManager->get($collaborator['id']))) {
+							throw new \Exception('Unknown collaborator: ' . $collaborator['id']);
+						}
+						break;
+					case self::TYPE_LINK:
+						$collaborator['id'] = $this->random->generate(32, ISecureRandom::CHAR_UPPER . ISecureRandom::CHAR_LOWER . ISecureRandom::CHAR_DIGITS);
+						break;
+					default:
+						throw new \Exception('Invalid collaborator type: ' . $collaborator['type']);
+				}
+
+				$query = $this->connection->getQueryBuilder();
+				$query->insert('photos_albums_collabs')
+					->setValue('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT))
+					->setValue('collaborator_id', $query->createNamedParameter($collaborator['id']))
+					->setValue('collaborator_type', $query->createNamedParameter($collaborator['type'], IQueryBuilder::PARAM_INT))
+					->executeStatement();
 			}
 
-			$query = $this->connection->getQueryBuilder();
-			$query->insert('photos_albums_collabs')
-				->setValue('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT))
-				->setValue('collaborator_id', $query->createNamedParameter($collaborator['id']))
-				->setValue('collaborator_type', $query->createNamedParameter($collaborator['type'], IQueryBuilder::PARAM_INT))
-				->executeStatement();
-		}
-
-		foreach ($collaboratorsToRemove as $collaborator) {
-			switch ($collaborator['type']) {
-				case self::TYPE_USER:
-					$this->deleteUserFromAlbumCollaboratorsList($collaborator['id'], $albumId);
-					break;
-				default:
-					$query = $this->connection->getQueryBuilder();
-					$query->delete('photos_albums_collabs')
-						->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
-						->andWhere($query->expr()->eq('collaborator_id', $query->createNamedParameter($collaborator['id'])))
-						->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter($collaborator['type'], IQueryBuilder::PARAM_INT)))
-						->executeStatement();
+			foreach ($collaboratorsToRemove as $collaborator) {
+				switch ($collaborator['type']) {
+					case self::TYPE_USER:
+						$this->deleteUserFromAlbumCollaboratorsList($collaborator['id'], $albumId);
+						break;
+					default:
+						$query = $this->connection->getQueryBuilder();
+						$query->delete('photos_albums_collabs')
+							->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
+							->andWhere($query->expr()->eq('collaborator_id', $query->createNamedParameter($collaborator['id'])))
+							->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter($collaborator['type'], IQueryBuilder::PARAM_INT)))
+							->executeStatement();
+				}
 			}
-		}
 
-		$this->connection->commit();
+			$this->connection->commit();
+		} catch (\Throwable $e) {
+			$this->connection->rollBack();
+			throw $e;
+		}
 	}
 
 	/**
