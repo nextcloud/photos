@@ -13,16 +13,16 @@
 
 <script lang='ts'>
 import type Vue from 'vue'
+import type { PropType } from 'vue'
+import type { FoldersNode } from '../services/FolderContent.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import {
-	type PropType,
-
 	defineComponent,
 } from 'vue'
 import FolderTagPreview from './FolderTagPreview.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.ts'
-import getFolderContent, { type FoldersNode } from '../services/FolderContent.ts'
+import getFolderContent from '../services/FolderContent.ts'
 import logger from '../services/logger.ts'
 
 export type InjectedItem = {

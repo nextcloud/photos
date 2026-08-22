@@ -22,10 +22,10 @@
 </template>
 
 <script lang='ts'>
+import type { PropType } from 'vue'
+
 import { t } from '@nextcloud/l10n'
 import {
-	type PropType,
-
 	defineComponent,
 } from 'vue'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
