@@ -191,8 +191,8 @@ test.describe('The hover of a photo tile of the folders view', () => {
 
 		await grid.hoverTile(PHOTO)
 
-		// The folders view builds its tiles from a component of its own, and the
-		// effect has to come out the same as on the timeline.
+		// The folders view shows the tile of the timeline, so the effect has to come
+		// out the same on a photo read from a folder listing.
 		await grid.expectPreviewMagnified(PHOTO, true)
 		await grid.expectTileLifted(PHOTO, true)
 		await grid.expectMagnifyTiming(PHOTO)

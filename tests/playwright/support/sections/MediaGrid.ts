@@ -8,16 +8,6 @@ import type { Locator, Page } from '@playwright/test'
 import { expect } from '@playwright/test'
 import { PhotoActionsMenu } from './PhotoActionsMenu.ts'
 
-/**
- * How a grid builds a tile.
- *
- * `layered` tiles stack three preview layers — blurhash, small and large —
- * inside a frame that also holds the checkbox, the actions and the favorite
- * star. `legacy` tiles, which only the folders view still renders, are the link
- * itself with a single preview image in it.
- */
-export type TileFlavour = 'layered' | 'legacy'
-
 /** The scale a tile magnifies its preview to while it is hovered. */
 const MAGNIFIED_TRANSFORM = 'matrix(1.07, 0, 0, 1.07, 0, 0)'
 
@@ -53,16 +43,22 @@ const VIDEO_PREVIEW_SETTLE = 2000
 const VIDEO_PREVIEW_RECORDER = '__photosVideoPreviewsStarted'
 
 /**
- * A grid of photo tiles — the timeline, the contents of a collection and the
- * photo picker all render the same tiles, so they all use this section.
+ * The video a tile plays on top of its preview. It shows the same picture the
+ * still layers do, so it is hidden from assistive technology and can only be
+ * addressed by its class.
+ */
+const VIDEO_PREVIEW_SELECTOR = 'video.file__layer--video'
+
+/**
+ * A grid of photo tiles — the timeline, the contents of a collection, the photo
+ * picker and the folders view all render the same tiles, so they all use this
+ * section.
  */
 export class MediaGrid {
 	constructor(
 		public readonly page: Page,
 		/** The element the grid is rendered in, so two grids cannot be confused. */
 		private readonly container: Locator,
-		/** How this grid builds its tiles. */
-		private readonly flavour: TileFlavour = 'layered',
 	) {}
 
 	/** Every photo of the grid. */
@@ -98,16 +94,11 @@ export class MediaGrid {
 
 	/**
 	 * The tile of a photo, i.e. the frame holding its preview together with its
-	 * checkbox, its actions and its favorite star. A `legacy` grid has no such
-	 * frame, so there the tile is the link itself.
+	 * checkbox, its actions and its favorite star.
 	 *
 	 * @param name - Name of the photo file
 	 */
 	public getTile(name: string): Locator {
-		if (this.flavour === 'legacy') {
-			return this.getMedia(name)
-		}
-
 		// The link is looked up from the page rather than through `getMedia`: a
 		// `has` locator is resolved inside the element it filters, where the grid
 		// container of `getMedia` is nowhere to be found.
@@ -127,9 +118,7 @@ export class MediaGrid {
 	 * @param name - Name of the photo file
 	 */
 	public getPreviewLayers(name: string): Locator {
-		return this.getTile(name).locator(this.flavour === 'legacy'
-			? 'img'
-			: '.file__layer--blurhash, .file__layer--small, .file__layer--large')
+		return this.getTile(name).locator('.file__layer--blurhash, .file__layer--small, .file__layer--large')
 	}
 
 	/**
@@ -162,7 +151,7 @@ export class MediaGrid {
 	 * @param name - Name of the video file
 	 */
 	public getVideoPreview(name: string): Locator {
-		return this.getTile(name).locator(this.videoPreviewSelector())
+		return this.getTile(name).locator(VIDEO_PREVIEW_SELECTOR)
 	}
 
 	/**
@@ -244,7 +233,7 @@ export class MediaGrid {
 
 			observer.observe(document.body, { childList: true, subtree: true })
 			recorder[`${property}Observer`] = observer
-		}, [VIDEO_PREVIEW_RECORDER, this.videoPreviewSelector()] as const)
+		}, [VIDEO_PREVIEW_RECORDER, VIDEO_PREVIEW_SELECTOR] as const)
 	}
 
 	/**
@@ -289,11 +278,6 @@ export class MediaGrid {
 
 		const stacking = async (locator: Locator) => Number(await locator.evaluate((element) => window.getComputedStyle(element).zIndex))
 		expect(await stacking(badge)).toBeGreaterThan(await stacking(this.getVideoPreview(name)))
-	}
-
-	/** How a tile of this grid names the video it plays. */
-	private videoPreviewSelector(): string {
-		return this.flavour === 'legacy' ? 'video.video-preview' : 'video.file__layer--video'
 	}
 
 	/**
@@ -435,6 +419,24 @@ export class MediaGrid {
 		await expect(this.getMedia(name)).toHaveAccessibleName(favorite
 			? `Favorite image, open the full size "${name}" image`
 			: `Open the full size "${name}" image`)
+	}
+
+	/**
+	 * Assert whether the preview of a photo fills its tile, cropped to it, or is
+	 * fit whole inside it.
+	 *
+	 * @param name - Name of the photo file
+	 * @param cropped - The state to assert
+	 */
+	public async expectPreviewCropped(name: string, cropped: boolean): Promise<void> {
+		const layers = this.getPreviewLayers(name)
+
+		await expect(layers.first()).toBeAttached()
+		const count = await layers.count()
+
+		for (let index = 0; index < count; index++) {
+			await expect(layers.nth(index)).toHaveCSS('object-fit', cropped ? 'cover' : 'contain')
+		}
 	}
 
 	/**

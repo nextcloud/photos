@@ -131,3 +131,18 @@ export async function setAppConfig(appId: string, key: string, value: string): P
 		`set the ${appId} config ${key}`,
 	)
 }
+
+/**
+ * Set a setting of one account, the way the settings of an app store it.
+ *
+ * @param user - Account the setting belongs to
+ * @param appId - App the setting belongs to
+ * @param key - Name of the setting
+ * @param value - Value to set
+ */
+export async function setUserSetting(user: User, appId: string, key: string, value: string): Promise<void> {
+	await withRetry(
+		() => runOcc(['user:setting', user.userId, appId, key, value]),
+		`set the ${appId} setting ${key} of "${user.userId}"`,
+	)
+}

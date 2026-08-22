@@ -14,7 +14,7 @@ import { PhotosApp } from '../sections/PhotosApp.ts'
 import { createPhotosAccounts, openPhotosSession, withRequestContext } from '../utils/accounts.ts'
 import { assignSystemTag, createSystemTag, readFileTags, readPhotoFavorite } from '../utils/dav.ts'
 import { PHOTOS_FOLDER, removeMediaLocations, seedPhotosTakenAt, seedVideos } from '../utils/media.ts'
-import { deleteUser } from '../utils/occ.ts'
+import { deleteUser, setUserSetting } from '../utils/occ.ts'
 import { withRetry } from '../utils/retry.ts'
 
 interface PhotosOptions {
@@ -84,6 +84,14 @@ interface PhotosFixtures {
 	readTags: (photoName: MediaFixture) => Promise<string[]>
 	/** Whether the server has a photo of the test account marked as a favorite. */
 	readFavorite: (photoName: MediaFixture) => Promise<boolean>
+	/**
+	 * Store one of the settings of the app for the test account, the way its
+	 * settings section does.
+	 *
+	 * The views are handed the settings when the page is loaded, so a test has to
+	 * set one before it opens the view it is about.
+	 */
+	setPhotosSetting: (key: string, value: string) => Promise<void>
 }
 
 /**
@@ -190,6 +198,10 @@ export const test = baseTest.extend<PhotosOptions & PhotosFixtures>({
 			baseURL,
 			(request) => readPhotoFavorite(request, account.user, `${PHOTOS_FOLDER}/${photoName}`),
 		))
+	},
+
+	setPhotosSetting: async ({ account }, use) => {
+		await use((key: string, value: string) => setUserSetting(account.user, 'photos', key, value))
 	},
 
 	openSession: async ({ browser, baseURL }, use) => {
