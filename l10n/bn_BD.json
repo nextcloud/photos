@@ -8,12 +8,13 @@
     "Shared by" : "যাদের মাঝে ভাগাভাগি করা হয়েছে",
     "Favorite" : "প্রিয়জন",
     "Go back" : "ফিরে যাও",
+    "Remove from favorites" : "Remove from favorites",
     "Delete" : "Delete",
     "Cancel" : "Cancel",
     "Location" : "অবস্থান",
+    "Add" : "যোগ কর",
     "Home" : "বাড়ি",
     "General" : "সাধারণ",
-    "Remove from favorites" : "Remove from favorites",
     "Group" : "গোষ্ঠীসমূহ",
     "Details" : "বিসতারিত"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
