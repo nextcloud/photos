@@ -7,6 +7,7 @@ OC.L10N.register(
     "Back" : "Air ais",
     "Save" : "Sàbhail",
     "Favorite" : "Annsachd",
+    "Add to favorites" : "Cuir ris na h-annsachdan",
     "Share" : "Co-roinn",
     "Delete" : "Delete",
     "Cancel" : "Cancel",

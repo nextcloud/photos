@@ -8,6 +8,7 @@ OC.L10N.register(
     "Back" : "Yzyna",
     "Save" : "Saklamak",
     "Favorite" : "Halaýan",
+    "Add to favorites" : "Saýlananlara goşuň",
     "Share" : "Paýlaş",
     "Delete" : "Delete",
     "Cancel" : "Cancel",

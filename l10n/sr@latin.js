@@ -9,11 +9,11 @@ OC.L10N.register(
     "Back" : "Nazad",
     "Save" : "Sačuvaj",
     "Favorite" : "Omiljene",
+    "Remove from favorites" : "Ukloni iz omiljenih",
     "Share" : "Deli",
     "Delete" : "Obriši",
     "Cancel" : "Poništi",
     "Home" : "Početak",
-    "Remove from favorites" : "Ukloni iz omiljenih",
     "Loading folders…" : "Učitavam fascikle…",
     "Details" : "Detalji"
 },
