@@ -8,12 +8,13 @@ OC.L10N.register(
     "Back" : "ត្រឡប់ក្រោយ",
     "Save" : "រក្សាទុក",
     "Shared by" : "បាន​ចែក​រំលែក​ដោយ",
+    "Remove from favorites" : "Remove from favorites",
     "Delete" : "Delete",
     "Cancel" : "Cancel",
     "Location" : "ទីតាំង",
+    "Add" : "បន្ថែម",
     "Home" : "ទំព័រដើម",
     "General" : "ទូទៅ",
-    "Remove from favorites" : "Remove from favorites",
     "Details" : "ព័ត៌មាន​លម្អិត"
 },
 "nplurals=1; plural=0;");
