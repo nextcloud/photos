@@ -12,6 +12,7 @@ OC.L10N.register(
     "Cancel" : "Cancel",
     "Filename" : "ගොනුවේ නම",
     "Location" : "ස්ථානය",
+    "Add" : "එකතු කරන්න",
     "Home" : "මුල් පිටුව",
     "General" : "සමාන්‍යය",
     "Confirm" : "තහවුරු කරන්න"
