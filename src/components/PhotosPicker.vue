@@ -122,9 +122,9 @@ import NcSelect from '@nextcloud/vue/components/NcSelect'
 import ImagePlusOutline from 'vue-material-design-icons/ImagePlusOutline.vue'
 import FileComponent from './FileComponent.vue'
 import FilesListViewer from './FilesListViewer.vue'
-import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
-import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
-import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
+import { useFetchFiles } from '../composables/useFetchFiles.ts'
+import { useFilesByMonth } from '../composables/useFilesByMonth.ts'
+import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import allowedMimes from '../services/AllowedMimes.js'
 
 export default defineComponent({
@@ -141,12 +141,6 @@ export default defineComponent({
 		NcNoteCard,
 		UploadPicker,
 	},
-
-	mixins: [
-		FetchFilesMixin,
-		FilesByMonthMixin,
-		FilesSelectionMixin,
-	],
 
 	props: {
 		/**
@@ -187,8 +181,22 @@ export default defineComponent({
 	emits: ['files-picked', 'update:open'],
 
 	setup() {
+		const { fetchFiles, fetchedFileIds, loadingFiles } = useFetchFiles()
+		// The picker shows every photo as its own tile: folding a burst would hide
+		// photos the user has to be able to pick.
+		const { fileIdsByMonth, monthsList } = useFilesByMonth(fetchedFileIds)
+		const { selection, selectedFileIds, onFileSelectToggle, resetSelection } = useFilesSelection()
+
 		return {
 			isMobile: useIsMobile(),
+			fetchFiles,
+			loadingFiles,
+			fileIdsByMonth,
+			monthsList,
+			selection,
+			selectedFileIds,
+			onFileSelectToggle,
+			resetSelection,
 		}
 	},
 

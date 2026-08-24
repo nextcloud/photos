@@ -91,7 +91,7 @@ import Check from 'vue-material-design-icons/Check.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 import ContentCopy from 'vue-material-design-icons/ContentCopy.vue'
 import Earth from 'vue-material-design-icons/Earth.vue'
-import FetchCollectionContentMixin from '../../mixins/FetchCollectionContentMixin.js'
+import { useFetchCollectionContent } from '../../composables/useFetchCollectionContent.ts'
 import logger from '../../services/logger.js'
 import { albumsExtraProps } from '../../store/albums.ts'
 
@@ -131,8 +131,6 @@ export default {
 		NcSelectUsers,
 	},
 
-	mixins: [FetchCollectionContentMixin],
-
 	props: {
 		albumName: {
 			type: String,
@@ -148,6 +146,14 @@ export default {
 			type: Boolean,
 			default: true,
 		},
+	},
+
+	setup() {
+		const { fetchCollection } = useFetchCollectionContent()
+
+		return {
+			fetchCollection,
+		}
 	},
 
 	data() {

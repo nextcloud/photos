@@ -19,24 +19,26 @@
 <script lang='ts'>
 import { translatePlural as n } from '@nextcloud/l10n'
 import AccountOffOutlineIcon from 'vue-material-design-icons/AccountOffOutline.vue'
-import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
-import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
+import { useFetchFaces } from '../../composables/useFetchFaces.ts'
 
 export default {
 	name: 'UnassignedFacesCover',
 
 	components: { AccountOffOutlineIcon },
 
-	mixins: [
-		FetchFacesMixin,
-		FaceCoverMixin,
-	],
-
 	props: {
 		small: {
 			type: Boolean,
 			default: false,
 		},
+	},
+
+	setup() {
+		const { fetchUnassignedFacesCount } = useFetchFaces()
+
+		return {
+			fetchUnassignedFacesCount,
+		}
 	},
 
 	computed: {

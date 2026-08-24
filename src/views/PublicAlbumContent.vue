@@ -83,7 +83,7 @@ import { getClient } from '@nextcloud/files/dav'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
 import { translate } from '@nextcloud/l10n'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
-import { isMobile, /** NcButton, */ NcActions, /** NcActionSeparator, */ NcEmptyContent } from '@nextcloud/vue'
+import { /** NcButton, */ NcActions, /** NcActionSeparator, */ NcEmptyContent } from '@nextcloud/vue'
 // import Plus from 'vue-material-design-icons/Plus.vue'
 // import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
 import ImageOffOutline from 'vue-material-design-icons/ImageOffOutline.vue'
@@ -91,7 +91,7 @@ import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
-import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.ts'
+import { useFetchCollectionContent } from '../composables/useFetchCollectionContent.ts'
 import { albumFilesExtraProps } from '../store/albums.ts'
 import { publicAlbumsExtraProps, publicAlbumsPrefix } from '../store/publicAlbums.ts'
 
@@ -113,16 +113,31 @@ export default {
 		HeaderNavigation,
 	},
 
-	mixins: [
-		FetchCollectionContentMixin,
-		isMobile,
-	],
-
 	props: {
 		token: {
 			type: String,
 			required: true,
 		},
+	},
+
+	setup() {
+		const {
+			fetchCollection,
+			fetchCollectionFiles,
+			loadingCollection,
+			loadingCollectionFiles,
+			errorFetchingCollection,
+			errorFetchingCollectionFiles,
+		} = useFetchCollectionContent()
+
+		return {
+			fetchCollection,
+			fetchCollectionFiles,
+			loadingCollection,
+			loadingCollectionFiles,
+			errorFetchingCollection,
+			errorFetchingCollectionFiles,
+		}
 	},
 
 	data() {

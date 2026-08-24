@@ -53,7 +53,7 @@ import ImagePlusOutline from 'vue-material-design-icons/ImagePlusOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
+import { useFetchCollectionContent } from '../composables/useFetchCollectionContent.ts'
 import { placesPrefix } from '../store/places.js'
 
 export default {
@@ -67,8 +67,6 @@ export default {
 		HeaderNavigation,
 	},
 
-	mixins: [FetchCollectionContentMixin],
-
 	props: {
 		placeName: {
 			type: String,
@@ -78,16 +76,29 @@ export default {
 
 	setup() {
 		const isMobile = useIsMobile()
+		const {
+			fetchCollection,
+			fetchCollectionFiles,
+			loadingCollection,
+			loadingCollectionFiles,
+			errorFetchingCollection,
+			errorFetchingCollectionFiles,
+		} = useFetchCollectionContent()
+
 		return {
 			isMobile,
+			fetchCollection,
+			fetchCollectionFiles,
+			loadingCollection,
+			loadingCollectionFiles,
+			errorFetchingCollection,
+			errorFetchingCollectionFiles,
 		}
 	},
 
 	data() {
 		return {
 			showAddPhotosModal: false,
-			loadingCollection: false,
-			errorFetchingCollection: null,
 			loadingCount: 0,
 			loadingAddFilesToPlace: false,
 		}

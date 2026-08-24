@@ -15,22 +15,25 @@
 
 <script lang='ts'>
 import FaceCover from './FaceCover.vue'
-import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
-import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
+import { useFetchFaces } from '../../composables/useFetchFaces.ts'
 
 export default {
 	name: 'FaceMergeForm',
 	components: { FaceCover },
-	mixins: [
-		FaceCoverMixin,
-		FetchFacesMixin,
-	],
 
 	props: {
 		firstFace: {
 			type: String,
 			required: true,
 		},
+	},
+
+	setup() {
+		const { faces } = useFetchFaces()
+
+		return {
+			faces,
+		}
 	},
 
 	data() {
@@ -40,14 +43,6 @@ export default {
 	},
 
 	computed: {
-		files() {
-			return this.$store.state.files.files
-		},
-
-		faces() {
-			return this.$store.state.faces.faces
-		},
-
 		facesFiles() {
 			return this.$store.getters.facesFiles
 		},

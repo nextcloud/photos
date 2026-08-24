@@ -30,16 +30,10 @@ import type { Collection } from '../../services/collectionFetcher.js'
 
 import { translatePlural as n } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
-import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
-import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
+import { getFaceCover, getFaceCoverStyle } from '../../utils/faceCover.ts'
 
 export default {
 	name: 'FaceCover',
-
-	mixins: [
-		FetchFacesMixin,
-		FaceCoverMixin,
-	],
 
 	props: {
 		baseName: {
@@ -53,27 +47,17 @@ export default {
 		},
 	},
 
-	data() {
-		return {
-			observer: null,
-		}
-	},
-
 	computed: {
-		files() {
-			return this.$store.state.files.files
-		},
-
 		faces() {
 			return this.$store.state.faces.faces
 		},
 
-		facesFiles() {
-			return this.$store.state.faces.facesFiles
-		},
-
 		face(): Collection {
 			return this.faces[this.baseName]
+		},
+
+		cover() {
+			return getFaceCover(this.face)
 		},
 
 		coverUrl(): string {
@@ -84,16 +68,12 @@ export default {
 			return generateUrl(`/apps/photos/api/v1/preview/${this.cover.fileid}?x=${512}&y=${512}`)
 		},
 
-		cover() {
-			return this.getFaceCover(this.face.basename)
-		},
-
 		coverDimensions() {
 			if (!this.cover) {
 				return {}
 			}
 
-			return this.getCoverStyle(this.face.basename)
+			return getFaceCoverStyle(this.face)
 		},
 	},
 

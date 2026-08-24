@@ -36,7 +36,7 @@ import {
 } from 'vue'
 import { RouterLink } from 'vue-router'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
-import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
+import { useAbortController } from '../composables/useAbortController.ts'
 
 export default defineComponent({
 	name: 'TagCover',
@@ -46,13 +46,19 @@ export default defineComponent({
 		ImageMultipleOutline,
 	},
 
-	mixins: [AbortControllerMixin],
-
 	props: {
 		tag: {
 			type: Object as PropType<Tag>,
 			required: true,
 		},
+	},
+
+	setup() {
+		const { abortSignal } = useAbortController()
+
+		return {
+			abortSignal,
+		}
 	},
 
 	data() {
@@ -88,7 +94,7 @@ export default defineComponent({
 			if (this.tag.attributes['files-assigned']) {
 				return
 			}
-			this.$store.dispatch('fetchTagFiles', { id: this.tag.attributes.id, signal: this.abortController.signal })
+			this.$store.dispatch('fetchTagFiles', { id: this.tag.attributes.id, signal: this.abortSignal })
 		},
 	},
 

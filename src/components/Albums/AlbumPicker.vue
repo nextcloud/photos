@@ -67,7 +67,7 @@ import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import AlbumForm from './AlbumForm.vue'
-import FetchCollectionsMixin from '../../mixins/FetchCollectionsMixin.ts'
+import { useFetchCollections } from '../../composables/useFetchCollections.ts'
 import { albumsExtraProps } from '../../store/albums.ts'
 
 export default defineComponent({
@@ -89,7 +89,14 @@ export default defineComponent({
 		},
 	},
 
-	mixins: [FetchCollectionsMixin],
+	setup() {
+		const { fetchCollections, loadingCollections } = useFetchCollections()
+
+		return {
+			fetchCollections,
+			loadingCollections,
+		}
+	},
 
 	data() {
 		return {

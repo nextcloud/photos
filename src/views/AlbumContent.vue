@@ -199,8 +199,7 @@ import CollaboratorsSelectionForm from '../components/Albums/CollaboratorsSelect
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import PhotosPicker from '../components/PhotosPicker.vue'
-import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
-import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
+import { useFetchCollectionContent } from '../composables/useFetchCollectionContent.ts'
 import logger from '../services/logger.js'
 import { albumFilesExtraProps, albumsExtraProps } from '../store/albums.ts'
 import { pickAlbumCover } from '../utils/albumCover.ts'
@@ -235,11 +234,6 @@ export default {
 		ShareVariantOutline,
 	},
 
-	mixins: [
-		FetchCollectionContentMixin,
-		FetchFilesMixin,
-	],
-
 	props: {
 		albumName: {
 			type: String,
@@ -249,8 +243,23 @@ export default {
 
 	setup() {
 		const isMobile = useIsMobile()
+		const {
+			fetchCollection,
+			fetchCollectionFiles,
+			loadingCollection,
+			loadingCollectionFiles,
+			errorFetchingCollection,
+			errorFetchingCollectionFiles,
+		} = useFetchCollectionContent()
+
 		return {
 			isMobile,
+			fetchCollection,
+			fetchCollectionFiles,
+			loadingCollection,
+			loadingCollectionFiles,
+			errorFetchingCollection,
+			errorFetchingCollectionFiles,
 		}
 	},
 

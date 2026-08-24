@@ -111,9 +111,8 @@ import DownloadOutline from 'vue-material-design-icons/TrayArrowDown.vue'
 import FaceMergeForm from '../components/Faces/FaceMergeForm.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
-import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
-import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
-import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
+import { useFetchFaces } from '../composables/useFetchFaces.ts'
+import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import logger from '../services/logger.js'
 import { toViewerFileInfo } from '../utils/fileUtils.js'
 
@@ -142,11 +141,21 @@ export default {
 		},
 	},
 
-	mixins: [
-		FetchFacesMixin,
-		FetchFilesMixin,
-		FilesSelectionMixin,
-	],
+	setup() {
+		const { fetchUnassignedFaces, loadingFaces, loadingFiles, errorFetchingFiles } = useFetchFaces()
+		const { selection, selectedFileIds, onFileSelectToggle, onUncheckFiles } = useFilesSelection()
+
+		return {
+			fetchUnassignedFaces,
+			loadingFaces,
+			loadingFiles,
+			errorFetchingFiles,
+			selection,
+			selectedFileIds,
+			onFileSelectToggle,
+			onUncheckFiles,
+		}
+	},
 
 	data() {
 		return {

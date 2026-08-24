@@ -85,7 +85,7 @@ import AlbumForm from '../components/Albums/AlbumForm.vue'
 import CollectionCover from '../components/Collection/CollectionCover.vue'
 import CollectionsList from '../components/Collection/CollectionsList.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
+import { useFetchCollections } from '../composables/useFetchCollections.ts'
 import { albumsExtraProps, albumsPrefix } from '../store/albums.js'
 
 export default defineComponent({
@@ -112,12 +112,15 @@ export default defineComponent({
 		},
 	},
 
-	mixins: [FetchCollectionsMixin],
-
 	setup() {
 		const isMobile = useIsSmallMobile()
+		const { fetchCollections, errorFetchingCollections, loadingCollections } = useFetchCollections()
+
 		return {
 			isMobile,
+			fetchCollections,
+			errorFetchingCollections,
+			loadingCollections,
 		}
 	},
 

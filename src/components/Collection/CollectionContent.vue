@@ -60,7 +60,7 @@ import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import FileComponent from '../FileComponent.vue'
 import FilesListViewer from '../FilesListViewer.vue'
-import FilesSelectionMixin from '../../mixins/FilesSelectionMixin.js'
+import { useFilesSelection } from '../../composables/useFilesSelection.ts'
 import { toViewerFileInfo } from '../../utils/fileUtils.js'
 
 export default defineComponent({
@@ -73,8 +73,6 @@ export default defineComponent({
 		FilesListViewer,
 		FileComponent,
 	},
-
-	mixins: [FilesSelectionMixin],
 
 	props: {
 		collection: {
@@ -104,8 +102,15 @@ export default defineComponent({
 	},
 
 	setup() {
+		const { selection, selectedFileIds, onFileSelectToggle, onUncheckFiles, resetSelection } = useFilesSelection()
+
 		return {
 			isMobile: useIsMobile(),
+			selection,
+			selectedFileIds,
+			onFileSelectToggle,
+			onUncheckFiles,
+			resetSelection,
 		}
 	},
 

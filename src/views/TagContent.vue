@@ -59,8 +59,8 @@ import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
-import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
-import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
+import { useAbortController } from '../composables/useAbortController.ts'
+import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import logger from '../services/logger.js'
 import { toViewerFileInfo } from '../utils/fileUtils.js'
 
@@ -76,11 +76,6 @@ export default {
 		ArrowLeft,
 	},
 
-	mixins: [
-		FilesSelectionMixin,
-		AbortControllerMixin,
-	],
-
 	props: {
 		path: {
 			type: String,
@@ -89,8 +84,15 @@ export default {
 	},
 
 	setup() {
+		const { abortSignal } = useAbortController()
+		const { selection, onFileSelectToggle, onUncheckFiles } = useFilesSelection()
+
 		return {
 			isMobile: useIsMobile(),
+			abortSignal,
+			selection,
+			onFileSelectToggle,
+			onUncheckFiles,
 		}
 	},
 
@@ -159,11 +161,11 @@ export default {
 			try {
 				// if we don't already have some cached data let's show a loader
 				if (!this.tags[this.tagId]) {
-					await this.$store.dispatch('fetchAllTags', { signal: this.abortController.signal })
+					await this.$store.dispatch('fetchAllTags', { signal: this.abortSignal })
 				}
 
 				if (this.tag && !this.fileIds) {
-					await this.$store.dispatch('fetchTagFiles', { id: this.tagId, signal: this.abortController.signal })
+					await this.$store.dispatch('fetchTagFiles', { id: this.tagId, signal: this.abortSignal })
 				}
 			} catch (error) {
 				logger.error('Failed to fetch tags', { error })

@@ -104,7 +104,7 @@ import FolderComponent from '../components/FolderComponent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import TiledLayout from '../components/TiledLayout/TiledLayout.vue'
 import VirtualScrolling from '../components/VirtualScrolling.vue'
-import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
+import { useAbortController } from '../composables/useAbortController.ts'
 import allowedMimes from '../services/AllowedMimes.js'
 import { fetchFile } from '../services/fileFetcher.ts'
 import getFolderContent from '../services/FolderContent.ts'
@@ -125,10 +125,6 @@ export default {
 		VirtualScrolling,
 	},
 
-	mixins: [
-		AbortControllerMixin,
-	],
-
 	props: {
 		rootTitle: {
 			type: String,
@@ -144,6 +140,14 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+	},
+
+	setup() {
+		const { abortSignal } = useAbortController()
+
+		return {
+			abortSignal,
+		}
 	},
 
 	data() {
@@ -333,7 +337,7 @@ export default {
 				// get content and current folder info
 				const { folder, folders, files } = await getFolderContent(this.path, {
 					shared: this.showShared,
-					signal: this.abortController.signal,
+					signal: this.abortSignal,
 				})
 				this.$store.dispatch('addPath', { path: this.path, fileid: folder?.fileid })
 				this.$store.dispatch('updateFolders', { fileid: folder?.fileid, files, folders })

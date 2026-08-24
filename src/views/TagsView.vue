@@ -35,7 +35,7 @@ import { defineComponent } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import TagCover from '../components/TagCover.vue'
-import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
+import { useAbortController } from '../composables/useAbortController.ts'
 import logger from '../services/logger.js'
 
 export default defineComponent({
@@ -46,7 +46,13 @@ export default defineComponent({
 		NcEmptyContent,
 	},
 
-	mixins: [AbortControllerMixin],
+	setup() {
+		const { abortSignal } = useAbortController()
+
+		return {
+			abortSignal,
+		}
+	},
 
 	data() {
 		return {
@@ -100,7 +106,7 @@ export default defineComponent({
 				if (!this.tagsList.length) {
 					this.loading = true
 					await this.$store.dispatch('fetchAllTags', {
-						signal: this.abortController.signal,
+						signal: this.abortSignal,
 					})
 				}
 			} catch (error) {

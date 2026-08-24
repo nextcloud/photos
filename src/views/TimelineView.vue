@@ -246,10 +246,10 @@ import FilesListViewer from '../components/FilesListViewer.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import PhotoSlideshow from '../components/PhotoSlideshow.vue'
 import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
+import { useFetchFiles } from '../composables/useFetchFiles.ts'
+import { useFilesByMonth } from '../composables/useFilesByMonth.ts'
+import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { useGridDensity } from '../composables/useGridDensity.ts'
-import FetchFilesMixin from '../mixins/FetchFilesMixin.ts'
-import FilesByMonthMixin from '../mixins/FilesByMonthMixin.ts'
-import FilesSelectionMixin from '../mixins/FilesSelectionMixin.ts'
 import { allMimes } from '../services/AllowedMimes.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
 import useFilterStore from '../store/filters.ts'
@@ -295,12 +295,6 @@ export default {
 		},
 	},
 
-	mixins: [
-		FetchFilesMixin,
-		FilesSelectionMixin,
-		FilesByMonthMixin,
-	],
-
 	beforeRouteLeave(to, from, next) {
 		this.appContent?.scrollTo(0, 0)
 		next()
@@ -339,6 +333,12 @@ export default {
 
 		const { gridDensity, tileBaseHeight, setGridDensity } = useGridDensity()
 
+		const { fetchFiles, resetFetchFilesState, fetchedFileIds, loadingFiles, errorFetchingFiles } = useFetchFiles()
+		// Photos taken in one go are shown as a single tile of the timeline, and are
+		// reachable from the viewer it opens.
+		const { fileIdsByMonthUngrouped, burstStacks, fileIdsByMonth, monthsList } = useFilesByMonth(fetchedFileIds, { foldBursts: true })
+		const { selection, selectedFileIds, setSelected, onUncheckFiles, resetSelection } = useFilesSelection()
+
 		return {
 			isMobile,
 			selectedFilters,
@@ -346,6 +346,20 @@ export default {
 			gridDensity,
 			tileBaseHeight,
 			setGridDensity,
+			fetchFiles,
+			resetFetchFilesState,
+			fetchedFileIds,
+			loadingFiles,
+			errorFetchingFiles,
+			fileIdsByMonthUngrouped,
+			burstStacks,
+			fileIdsByMonth,
+			monthsList,
+			selection,
+			selectedFileIds,
+			setSelected,
+			onUncheckFiles,
+			resetSelection,
 		}
 	},
 
@@ -375,16 +389,10 @@ export default {
 				.filter((file) => file !== undefined)
 		},
 
-		// Photos taken in one go are shown as a single tile of the timeline, and are
-		// reachable from the viewer it opens.
-		foldBursts(): boolean {
-			return true
-		},
-
 		// Photo count per month, drives the density ticks of the scrubber. Counted
 		// before the folding, so a month of bursts reads as dense as it is.
 		monthCounts(): Record<string, number> {
-			const entries = Object.entries(this.fileIdsByMonthUngrouped as Record<string, string[]>)
+			const entries = Object.entries(this.fileIdsByMonthUngrouped)
 			return Object.fromEntries(entries.map(([month, fileIds]) => [month, fileIds.length]))
 		},
 
@@ -433,10 +441,7 @@ export default {
 		// downloading or deleting a part of a burst would silently leave the rest
 		// behind.
 		onFileSelectToggle({ id, value }: { id: string, value: boolean }): void {
-			const fileIds = this.burstStacks[id]?.memberIds ?? [id]
-			for (const fileId of fileIds) {
-				this.$set(this.selection, fileId, value)
-			}
+			this.setSelected(this.burstStacks[id]?.memberIds ?? [id], value)
 		},
 
 		// How many photos the tile of a photo stands for, one being itself.

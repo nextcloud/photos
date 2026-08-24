@@ -49,7 +49,7 @@ import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline
 import CollectionCover from '../components/Collection/CollectionCover.vue'
 import CollectionsList from '../components/Collection/CollectionsList.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
+import { useFetchCollections } from '../composables/useFetchCollections.ts'
 import { placesPrefix } from '../store/places.js'
 
 export default {
@@ -72,7 +72,15 @@ export default {
 		},
 	},
 
-	mixins: [FetchCollectionsMixin],
+	setup() {
+		const { fetchCollections, errorFetchingCollections, loadingCollections } = useFetchCollections()
+
+		return {
+			fetchCollections,
+			errorFetchingCollections,
+			loadingCollections,
+		}
+	},
 
 	computed: {
 		places() {

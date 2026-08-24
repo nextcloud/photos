@@ -45,8 +45,6 @@
 </template>
 
 <script lang='ts'>
-import type { Collection } from '../services/collectionFetcher.js'
-
 import { t } from '@nextcloud/l10n'
 import { RouterLink } from 'vue-router'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
@@ -54,7 +52,7 @@ import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
 import FaceCover from '../components/Faces/FaceCover.vue'
 import UnassignedFacesCover from '../components/Faces/UnassignedFacesCover.vue'
-import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
+import { useFetchFaces } from '../composables/useFetchFaces.ts'
 
 export default {
 	name: 'FacesView',
@@ -67,7 +65,15 @@ export default {
 		AccountBoxMultipleOutline,
 	},
 
-	mixins: [FetchFacesMixin],
+	setup() {
+		const { faces, loadingFaces, errorFetchingFaces } = useFetchFaces()
+
+		return {
+			faces,
+			loadingFaces,
+			errorFetchingFaces,
+		}
+	},
 
 	computed: {
 		facesFiles() {
@@ -83,7 +89,7 @@ export default {
 		},
 
 		orderedFaces() {
-			return Object.values(this.faces as Collection[]).sort((a, b) => {
+			return Object.values(this.faces).sort((a, b) => {
 				if (a.attributes.nbItems && b.attributes.nbItems) {
 					return b.attributes.nbItems - a.attributes.nbItems
 				}
