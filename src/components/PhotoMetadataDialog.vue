@@ -10,7 +10,15 @@
 		<NcLoadingIcon v-if="exifEntries === undefined" :size="32" class="photo-metadata__loading" />
 
 		<template v-else>
+			<p v-if="details?.description" class="photo-metadata__description">
+				{{ details.description }}
+			</p>
+
 			<dl class="photo-metadata">
+				<div v-if="details && details.rating > 0" class="photo-metadata__entry">
+					<dt>{{ t('photos', 'Rating') }}</dt>
+					<dd><StarRating :rating="details.rating" readonly :size="18" /></dd>
+				</div>
 				<div class="photo-metadata__entry">
 					<dt>{{ t('photos', 'Filename') }}</dt>
 					<dd>{{ photo.basename }}</dd>
@@ -45,6 +53,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { PhotoDetails } from '../services/photoDetails.ts'
 import type { PhotoExif } from '../utils/exif.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
@@ -52,7 +61,9 @@ import { translate as t } from '@nextcloud/l10n'
 import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+import StarRating from './StarRating.vue'
 import { fetchPhotoExif } from '../services/exifFetcher.ts'
+import { getPhotoDetails } from '../services/photoDetails.ts'
 import { formatCoordinates, getExifSummary, getPhotoLocation } from '../utils/exif.ts'
 
 const props = defineProps<{
@@ -70,17 +81,32 @@ const LocationMap = defineAsyncComponent(() => import('./LocationMap.vue'))
 /** Metadata of the photo, `undefined` while it is being fetched. */
 const metadata = ref<PhotoExif | undefined>()
 
+/** Description and rating of the photo, `undefined` while being fetched. */
+const details = ref<PhotoDetails | undefined>()
+
 const exifEntries = computed(() => metadata.value === undefined ? undefined : getExifSummary(metadata.value))
 const location = computed(() => metadata.value === undefined ? null : getPhotoLocation(metadata.value.gps))
 
-// The EXIF properties are not part of the file listings, they are only fetched
-// once the user asks for them.
+// Neither the EXIF properties nor the description and rating are part of the
+// file listings, they are only fetched once the user asks for them.
 onMounted(async () => {
-	metadata.value = await fetchPhotoExif(props.photo)
+	const [exif, photoDetails] = await Promise.all([
+		fetchPhotoExif(props.photo),
+		getPhotoDetails(props.photo.fileid),
+	])
+	details.value = photoDetails
+	metadata.value = exif
 })
 </script>
 
 <style lang="scss" scoped>
+.photo-metadata__description {
+	margin: 0 0 calc(var(--default-grid-baseline) * 3);
+	white-space: pre-wrap;
+	word-break: break-word;
+	color: var(--color-main-text);
+}
+
 .photo-metadata {
 	margin: 0;
 
