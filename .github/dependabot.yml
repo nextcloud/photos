@@ -45,6 +45,24 @@ updates:
 
 # Main stableXX npm
 - package-ecosystem: npm
+  target-branch: stable35
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  cooldown:
+    default-days: 10
+  labels:
+    - "3. to review"
+    - "dependencies"
+  ignore:
+    # do not do breaking changes on stable branches
+    - dependency-name: "*"
+      update-types: ["version-update:semver-major", "version-update:semver-minor"]
+
+- package-ecosystem: npm
   target-branch: stable34
   directory: "/"
   schedule:
