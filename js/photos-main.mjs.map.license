@@ -6,5 +6,5 @@ This file is generated from multiple sources. Included packages:
 	- version: 8.40.0
 	- license: AGPL-3.0-or-later
 - photos
-	- version: 8.0.0-dev.0
+	- version: 9.0.0-dev.0
 	- license: AGPL-3.0-or-later
