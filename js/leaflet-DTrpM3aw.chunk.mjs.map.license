@@ -10,7 +10,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 1.9.4
 	- license: BSD-2-Clause
 - photos
-	- version: 8.0.0-dev.0
+	- version: 9.0.0-dev.0
 	- license: AGPL-3.0-or-later
 - vue2-leaflet
 	- version: 2.7.1
