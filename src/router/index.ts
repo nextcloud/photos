@@ -11,6 +11,7 @@ import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
 import areTagsInstalled from '../services/AreTagsInstalled.js'
 import isRecognizeInstalled from '../services/IsRecognizeInstalled.js'
 
+const DuplicatesView = () => import('../views/DuplicatesView.vue')
 const FoldersView = () => import('../views/FoldersView.vue')
 const MapView = () => import('../views/MapView.vue')
 const MemoriesView = () => import('../views/MemoriesView.vue')
@@ -268,6 +269,19 @@ const router = new Router({
 			meta: {
 				rootTitle: () => {
 					return t('photos', 'Memories')
+				},
+			},
+		},
+		{
+			path: '/duplicates',
+			name: 'duplicates',
+			component: DuplicatesView,
+			props: () => ({
+				rootTitle: t('photos', 'Duplicates'),
+			}),
+			meta: {
+				rootTitle: () => {
+					return t('photos', 'Duplicates')
 				},
 			},
 		},
