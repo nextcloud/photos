@@ -24,6 +24,12 @@ declare global {
 				close: () => void
 			}
 		}
+		OCP?: {
+			Accessibility?: {
+				/** Whether the reader opted out of the keyboard shortcuts of the apps. */
+				disableKeyboardShortcuts?: () => boolean
+			}
+		}
 	}
 }
 
