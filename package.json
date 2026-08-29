@@ -85,7 +85,7 @@
     "@nextcloud/vite-config": "^1.7.0",
     "@playwright/test": "^1.62.1",
     "@types/dockerode": "^3.3.39",
-    "@vitest/coverage-v8": "^4.1.10",
+    "@vitest/coverage-v8": "^4.1.11",
     "@vue/test-utils": "^1.3.6",
     "@vue/tsconfig": "^0.5.1",
     "autoprefixer": "^10.5.4",
