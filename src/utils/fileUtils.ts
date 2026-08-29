@@ -182,15 +182,18 @@ export function legacyToPhotoFile(file: FoldersNode): PhotoFile {
 export type ViewerFileInfo = {
 	fileid?: number
 	basename: string
+	displayname?: string
 	filename: string
 	mime?: string
-	mtime?: Date
+	mtime?: Date | number
+	lastmod?: number
 	ownerId: string | null
 	source: string
 	hasPreview: boolean
 	previewUrl: string
 	etag: string
 	permissions: string
+	davPath?: string
 }
 
 /**
@@ -225,18 +228,29 @@ export function toViewerFileInfo(file: Node): ViewerFileInfo {
 		source = getRemoteURL() + getRootPath() + filename
 	}
 
+	let davPath = file.attributes['photos-collection-file-original-filename'] !== undefined
+		? file.attributes['photos-collection-file-original-filename']
+		: file.path
+
+	if (!davPath.startsWith(getRootPath())) {
+		davPath = `${getRootPath()}/${davPath.replace(/^\//, '')}`
+	}
+
 	return {
 		fileid: file.fileid,
 		basename: file.basename,
+		displayname: file.basename,
 		filename,
 		mime: file.mime,
 		mtime: file.mtime,
+		lastmod: file.mtime ? new Date(file.mtime).getTime() : undefined,
 		ownerId: file.owner,
 		source,
 		hasPreview: file.attributes.hasPreview,
 		previewUrl: file.attributes.previewUrl ?? getPreviewUrl(file, 4096),
 		etag: file.attributes.etag,
 		permissions,
+		davPath,
 	}
 }
 
@@ -245,16 +259,24 @@ export function toViewerFileInfo(file: Node): ViewerFileInfo {
  * @param file
  */
 export function legacyToViewerFileInfo(file: FoldersNode) {
+	let davPath = file.filename
+	if (!davPath.startsWith(getRootPath())) {
+		davPath = `${getRootPath()}/${davPath.replace(/^\//, '')}`
+	}
+
 	return {
 		fileid: file.fileid,
 		basename: file.basename,
+		displayname: file.basename,
 		filename: file.filename,
 		mime: file.mime,
 		mtime: file.lastmod,
+		lastmod: file.lastmod * 1000,
 		source: file.source,
 		hasPreview: file.hasPreview,
 		etag: file.etag,
 		permissions: file.permissions,
+		davPath,
 	}
 }
 
