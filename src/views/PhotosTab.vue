@@ -43,12 +43,12 @@ import type { PhotoFile } from '../store/files.ts'
 
 import { formatFileSize } from '@nextcloud/files'
 import { t } from '@nextcloud/l10n'
-import moment from '@nextcloud/moment'
 import { defineComponent } from 'vue'
 import CalendarOutline from 'vue-material-design-icons/CalendarOutline.vue'
 import CameraIris from 'vue-material-design-icons/CameraIris.vue'
 import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
 import LocationMap from '../components/LocationMap.vue'
+import { formatDate, formatTime } from '../utils/dateUtils.ts'
 
 type SideBarFile = PhotoFile & {
 	attributes: {
@@ -113,11 +113,11 @@ export default defineComponent({
 		},
 
 		takenDate() {
-			return moment(this.originalDateTime).format('ll')
+			return formatDate(new Date(this.originalDateTime))
 		},
 
 		takenTime() {
-			return moment(this.originalDateTime).format('LT')
+			return formatTime(new Date(this.originalDateTime))
 		},
 
 		focal() {

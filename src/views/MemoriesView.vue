@@ -88,7 +88,6 @@
 import type { Trip, YearRecap } from '../services/memories.ts'
 
 import { translatePlural as n, translate as t } from '@nextcloud/l10n'
-import moment from '@nextcloud/moment'
 import { computed, onMounted, ref } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import AnimatedNumber from '../components/AnimatedNumber.vue'
@@ -97,6 +96,7 @@ import HeaderNavigation from '../components/HeaderNavigation.vue'
 import PhotoSlideshow from '../components/PhotoSlideshow.vue'
 import { useLoadedPhotos } from '../composables/useLoadedPhotos.ts'
 import { buildYearRecap, detectTrips } from '../services/memories.ts'
+import { formatDateRange as formatRange } from '../utils/dateUtils.ts'
 import { getPreviewUrl, toViewerFileInfo } from '../utils/fileUtils.ts'
 
 defineProps<{
@@ -140,22 +140,7 @@ function openTrip(trip: Trip): void {
  * @param trip - The trip to format the date range of
  */
 function formatDateRange(trip: Trip): string {
-	const start = moment.unix(trip.startTimestamp)
-	const end = moment.unix(trip.endTimestamp)
-
-	if (start.isSame(end, 'day')) {
-		return start.format('LL')
-	}
-
-	if (start.isSame(end, 'month')) {
-		return `${start.format('D')} – ${end.format('LL')}`
-	}
-
-	if (start.isSame(end, 'year')) {
-		return `${start.format('D MMM')} – ${end.format('LL')}`
-	}
-
-	return `${start.format('LL')} – ${end.format('LL')}`
+	return formatRange(new Date(trip.startTimestamp * 1000), new Date(trip.endTimestamp * 1000))
 }
 </script>
 

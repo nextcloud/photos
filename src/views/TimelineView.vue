@@ -219,7 +219,6 @@ import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
-import moment from '@nextcloud/moment'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { storeToRefs } from 'pinia'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
@@ -254,6 +253,7 @@ import { allMimes } from '../services/AllowedMimes.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
 import useFilterStore from '../store/filters.ts'
 import { configChangedEvent } from '../store/userConfig.ts'
+import { formatMonth, formatYear } from '../utils/dateUtils.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
 export default {
@@ -286,13 +286,8 @@ export default {
 	},
 
 	filters: {
-		dateMonth(date: string): string {
-			return moment(date, 'YYYYMM').format('MMMM')
-		},
-
-		dateYear(date: string): string {
-			return moment(date, 'YYYYMM').format('YYYY')
-		},
+		dateMonth: formatMonth,
+		dateYear: formatYear,
 	},
 
 	mixins: [
