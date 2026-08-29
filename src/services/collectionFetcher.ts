@@ -9,8 +9,8 @@ import type { FileStat, ResponseDataDetailed, StatOptions, WebDAVClient } from '
 
 import { resultToNode } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
-import moment from '@nextcloud/moment'
 import { generateRemoteUrl } from '@nextcloud/router'
+import { formatMonthAndYear } from '../utils/dateUtils.ts'
 import { davClient } from './DavClient.ts'
 import logger from './logger.js'
 
@@ -151,13 +151,15 @@ function formatCollection(rawCollection: RawCollection, root: string): Collectio
 
 	// Compute date range label.
 	const dateRange = JSON.parse(rawCollection.props.dateRange?.replace(/&quot;/g, '"') ?? '{}')
-	if (dateRange.start === null) {
-		dateRange.start = moment().unix()
-		dateRange.end = moment().unix()
-	}
+	// An empty album reports a range of `null`, and the collections that carry no
+	// range at all - the places among them - report none. Both fall back to today,
+	// as `Intl` refuses to format an invalid date.
+	const now = Math.floor(Date.now() / 1000)
+	const start = Number.isFinite(dateRange.start) ? dateRange.start as number : now
+	const end = Number.isFinite(dateRange.end) ? dateRange.end as number : now
 	const dateRangeFormatted = {
-		startDate: moment.unix(dateRange.start).format('MMMM YYYY'),
-		endDate: moment.unix(dateRange.end).format('MMMM YYYY'),
+		startDate: formatMonthAndYear(new Date(start * 1000)),
+		endDate: formatMonthAndYear(new Date(end * 1000)),
 	}
 	if (dateRangeFormatted.startDate === dateRangeFormatted.endDate) {
 		rawCollection.props.date = dateRangeFormatted.startDate
