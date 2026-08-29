@@ -24,12 +24,12 @@
 			:class="{ 'photos-navigation--uploading': uploader.queue?.length > 0 }"
 			:loading="loading"
 			:path="path"
-			:title="folder?.basename?.toString?.() || rootTitle"
+			:title="folder?.basename ?? rootTitle"
 			:root-title="rootTitle"
 			@refresh="onRefresh">
 			<UploadPicker
 				:accept="allowedMimes"
-				:destination="folderAsFolder"
+				:destination="folder"
 				:multiple="true"
 				@uploaded="onUpload" />
 		</HeaderNavigation>
@@ -65,15 +65,15 @@
 									:class="{ 'last-tiled-row': rowIndex === visibleSections[0].rows.length - 1 }"
 									:style="{ flexBasis: `${item.width - 1}px`, height: `${item.height}px` }">
 									<FileComponent
-										v-if="item.type === 'file'"
-										:file="photoFiles[item.fileid]"
+										v-if="item.node.type === 'file'"
+										:file="item.node"
 										:allow-selection="false"
 										:cropped="croppedLayout"
 										@click="openViewer"
 										@deleted="onPhotoDeleted" />
 									<FolderComponent
 										v-else
-										:item="item"
+										:item="item.node"
 										:show-shared="showShared" />
 								</li>
 							</template>
@@ -86,14 +86,12 @@
 </template>
 
 <script lang='ts'>
+import type { File, Folder, Node } from '@nextcloud/files'
 import type { Upload } from '@nextcloud/upload'
-import type { FoldersNode } from '../services/FolderContent.ts'
 import type { Section, TiledItem } from '../services/TiledLayout.ts'
-import type { PhotoFile } from '../store/files.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
-import { Folder } from '@nextcloud/files'
-import { defaultRootPath, parsePermissions } from '@nextcloud/files/dav'
+import { defaultRootPath } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
 import { getUploader, UploadPicker } from '@nextcloud/upload'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
@@ -109,7 +107,7 @@ import allowedMimes from '../services/AllowedMimes.js'
 import { fetchFile } from '../services/fileFetcher.ts'
 import getFolderContent from '../services/FolderContent.ts'
 import logger from '../services/logger.ts'
-import { legacyToPhotoFile, legacyToViewerFileInfo } from '../utils/fileUtils.ts'
+import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
 export default {
 	name: 'FoldersView',
@@ -174,22 +172,9 @@ export default {
 			return this.$store.state.folders.paths[this.path]
 		},
 
-		// files list of the current folder
-		folder() {
-			return this.files[this.folderId] as unknown as FoldersNode
-		},
-
-		folderAsFolder() {
-			if (!this.folder) {
-				return undefined
-			}
-
-			return new Folder({
-				root: defaultRootPath,
-				...this.folder,
-				permissions: parsePermissions(this.folder.permissions),
-				owner: null,
-			})
+		/** The folder that is open. */
+		folder(): Folder | undefined {
+			return this.files[this.folderId] as Folder | undefined
 		},
 
 		folderContent() {
@@ -204,16 +189,10 @@ export default {
 			return list
 		},
 
-		/** The photos of the open folder, as the photo tile reads them, by file id. */
-		photoFiles(): Record<number, PhotoFile> {
-			return Object.fromEntries((this.fileList || [])
-				.map((file: FoldersNode) => [file.fileid, legacyToPhotoFile(file)]))
-		},
-
 		/**
 		 * Whether a photo is cropped to its tile rather than shown whole inside it.
-		 * The tiles here are squares, as the listing does not say what shape the
-		 * photos are, so there is always something to crop away.
+		 * The tiles here are squares whatever shape the photos are, so there is
+		 * always something to crop away.
 		 */
 		croppedLayout(): boolean {
 			return this.$store.state.userConfig.croppedLayout
@@ -282,8 +261,8 @@ export default {
 		 */
 		openViewer(fileid: number) {
 			window.OCA.Viewer.open({
-				fileInfo: legacyToViewerFileInfo(this.files[fileid]),
-				list: this.fileList.map((file: FoldersNode) => legacyToViewerFileInfo(file)),
+				fileInfo: toViewerFileInfo(this.files[fileid]),
+				list: this.fileList.map((file: File) => toViewerFileInfo(file)),
 				onClose: () => window.OCA?.Files?.Sidebar?.close?.(),
 			})
 		},
@@ -301,14 +280,17 @@ export default {
 		/**
 		 * TiledLayout justifies the rows from the `ratio` of the items, the given
 		 * width and height are only the untiled defaults.
-		 * Folders and files are laid out as squares as the folder listing endpoint
-		 * does not return the photo dimensions.
+		 * Folders and photos are laid out as squares here, whatever shape the photos
+		 * are, so that a folder reads as a grid rather than as a timeline.
+		 *
+		 * The node is carried along rather than spread into the item: the layout
+		 * copies the items it lays out, which a node does not survive.
 		 *
 		 * @param node - The folder or file to lay out
 		 */
-		mapNodeToItem(node: FoldersNode): FoldersNode & TiledItem {
+		mapNodeToItem(node: Node): TiledItem & { node: Node } {
 			return {
-				...node,
+				node,
 				id: `${node.type}-${node.fileid}`,
 				width: 220,
 				height: 220,
@@ -371,22 +353,8 @@ export default {
 				return
 			}
 
-			const file: FoldersNode = {
-				fileid: node.fileid as number,
-				basename: node.basename,
-				etag: node.attributes.etag,
-				filename: node.root + node.path,
-				source: node.source,
-				lastmod: node.mtime?.getTime() as number,
-				mime: node.mime as string,
-				size: node.size as number,
-				type: 'file',
-				permissions: '', // HACK: we don't need it but the format is not the expected one
-				hasPreview: node.attributes.hasPreview,
-			}
-
-			this.$store.dispatch('appendFoldersFiles', [file])
-			this.$store.dispatch('addFilesToFolder', { fileid: this.folderId, files: [file] })
+			this.$store.dispatch('appendFoldersFiles', [node])
+			this.$store.dispatch('addFilesToFolder', { fileid: this.folderId, files: [node] })
 		},
 
 		t,

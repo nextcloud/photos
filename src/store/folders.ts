@@ -1,4 +1,4 @@
-import type { FoldersNode } from '../services/FolderContent.ts'
+import type { File, Folder, Node } from '@nextcloud/files'
 import type { PhotosContext } from './index.js'
 
 import { defaultRootPath } from '@nextcloud/files/dav'
@@ -7,12 +7,12 @@ import { defaultRootPath } from '@nextcloud/files/dav'
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import Vue from 'vue'
-import { sortCompareFileInfo } from '../utils/fileUtils.js'
+import { compareModificationTime } from '../utils/fileUtils.ts'
 
 const state = {
 	paths: {} as Record<string, number>,
 	folders: {} as Record<string, number[]>,
-	files: {} as Record<string, FoldersNode>,
+	files: {} as Record<string, Node>,
 	subFolders: {} as Record<string, number[]>,
 }
 
@@ -27,12 +27,12 @@ const mutations = {
 	 * @param root0.fileid
 	 * @param root0.files
 	 */
-	updateFolders(state: FoldersState, { fileid, files }: { fileid: number, files: FoldersNode[] }) {
+	updateFolders(state: FoldersState, { fileid, files }: { fileid: number, files: File[] }) {
 		if (files.length > 0) {
 			// sort by last modified
 			const list = files
-				.sort((a, b) => sortCompareFileInfo(a, b, 'lastmod'))
-				.filter((file) => file.fileid >= 0)
+				.sort(compareModificationTime)
+				.filter((file) => (file.fileid ?? -1) >= 0)
 
 			// Set folder list
 			Vue.set(state.folders, fileid, list.map((file) => file.fileid))
@@ -55,6 +55,25 @@ const mutations = {
 	},
 
 	/**
+	 * Mark a file of a folder as a favorite, or take that mark off again
+	 *
+	 * A photo is only known here once the folder holding it was browsed.
+	 *
+	 * @param state
+	 * @param root0
+	 * @param root0.fileId
+	 * @param root0.favoriteState
+	 */
+	favoriteFolderFile(state: FoldersState, { fileId, favoriteState }: { fileId: number, favoriteState: 0 | 1 }) {
+		const attributes = state.files[fileId]?.attributes
+		if (attributes === undefined) {
+			return
+		}
+
+		Vue.set(attributes, 'favorite', favoriteState)
+	},
+
+	/**
 	 * Append or update given files
 	 *
 	 * @param state
@@ -62,15 +81,15 @@ const mutations = {
 	 * @param root0.newFiles
 	 * @param root0.nomediaPaths
 	 */
-	updateFoldersFiles(state: FoldersState, { newFiles, nomediaPaths }: { newFiles: FoldersNode[], nomediaPaths: string[] }) {
+	updateFoldersFiles(state: FoldersState, { newFiles, nomediaPaths }: { newFiles: Node[], nomediaPaths: string[] }) {
 		const files = {}
 		newFiles
 			// TODO: Is this needed? .filter(file => !file.hidden)
 			.forEach((file) => {
 				// Ignore the file if the path is excluded
 				// TODO: Check that it works
-				if (nomediaPaths.some((nomediaPath) => file.filename.startsWith(nomediaPath)
-					|| file.filename.startsWith(`${defaultRootPath}${nomediaPath}`))) {
+				if (nomediaPaths.some((nomediaPath) => file.path.startsWith(nomediaPath)
+					|| file.path.startsWith(`${defaultRootPath}${nomediaPath}`))) {
 					return
 				}
 
@@ -91,7 +110,7 @@ const mutations = {
 	 * @param root0.fileid
 	 * @param root0.folders
 	 */
-	setSubFolders(state: FoldersState, { fileid, folders }: { fileid: number, folders: FoldersNode[] }) {
+	setSubFolders(state: FoldersState, { fileid, folders }: { fileid: number, folders: Folder[] }) {
 		if (state.folders[fileid]) {
 			const subfolders = folders
 				.map((folder) => folder.fileid as number)
@@ -123,13 +142,13 @@ const mutations = {
 	 * @param root0.fileid
 	 * @param root0.files
 	 */
-	addFilesToFolder(state: FoldersState, { fileid, files }: { fileid: number, files: FoldersNode[] }) {
+	addFilesToFolder(state: FoldersState, { fileid, files }: { fileid: number, files: File[] }) {
 		if (fileid >= 0 && files.length > 0) {
 			// and sort by last modified
 			const list = files
-				.sort((a, b) => sortCompareFileInfo(a, b, 'lastmod'))
-				.filter((file) => file.fileid >= 0)
-				.map((file) => file.fileid)
+				.sort(compareModificationTime)
+				.filter((file) => (file.fileid ?? -1) >= 0)
+				.map((file) => file.fileid as number)
 			Vue.set(state.folders, fileid, [...list, ...state.folders[fileid]])
 		}
 	},
@@ -151,7 +170,7 @@ const actions = {
 	 * @param root0.files
 	 * @param root0.folders
 	 */
-	updateFoldersFiles(context: PhotosContext<FoldersState>, { folder, files = [], folders = [] }: { folder: FoldersNode, files: FoldersNode[], folders: FoldersNode[] }) {
+	updateFoldersFiles(context: PhotosContext<FoldersState>, { folder, files = [], folders = [] }: { folder: Folder, files: File[], folders: Folder[] }) {
 		// we want all the FileInfo! Folders included!
 		context.commit('updateFoldersFiles', { newFiles: [folder, ...files, ...folders], nomediaPaths: context.rootState.files.nomediaPaths })
 		context.commit('setSubFolders', { fileid: folder.fileid, folders })
@@ -163,7 +182,7 @@ const actions = {
 	 * @param context
 	 * @param files
 	 */
-	appendFoldersFiles(context: PhotosContext<FoldersState>, files: FoldersNode[] = []) {
+	appendFoldersFiles(context: PhotosContext<FoldersState>, files: Node[] = []) {
 		context.commit('updateFoldersFiles', { newFiles: files, nomediaPaths: context.rootState.files.nomediaPaths })
 	},
 
@@ -176,11 +195,11 @@ const actions = {
 	 * @param root0.files
 	 * @param root0.folders
 	 */
-	updateFolders(context: PhotosContext<FoldersState>, { fileid, files, folders }: { fileid: number, files: FoldersNode[], folders: FoldersNode[] }) {
+	updateFolders(context: PhotosContext<FoldersState>, { fileid, files, folders }: { fileid: number, files: File[], folders: Folder[] }) {
 		context.commit('updateFolders', { fileid, files })
 
 		// then add each folders path indexes
-		folders.forEach((folder) => context.commit('addPath', { path: folder.filename, fileid: folder.fileid }))
+		folders.forEach((folder) => context.commit('addPath', { path: folder.path, fileid: folder.fileid }))
 	},
 
 	/**
@@ -203,7 +222,7 @@ const actions = {
 	 * @param root0.fileid
 	 * @param root0.files
 	 */
-	addFilesToFolder(context: PhotosContext<FoldersState>, { fileid, files }: { fileid: number, files: FoldersNode[] }) {
+	addFilesToFolder(context: PhotosContext<FoldersState>, { fileid, files }: { fileid: number, files: File[] }) {
 		context.commit('addFilesToFolder', { fileid, files })
 	},
 }

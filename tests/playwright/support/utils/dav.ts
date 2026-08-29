@@ -18,6 +18,9 @@ export const RECOGNIZE_DAV_ROOT = '/remote.php/dav/recognize'
 /** WebDAV endpoint of the tags of the instance. */
 export const SYSTEMTAGS_DAV_ROOT = '/remote.php/dav/systemtags'
 
+/** The app's own API, which the folders view reads its listings from. */
+export const PHOTOS_API_ROOT = '/index.php/apps/photos/api/v1'
+
 /** WebDAV endpoint of the tags assigned to a file. */
 export const TAG_ASSIGNMENTS_DAV_ROOT = '/remote.php/dav/systemtags-relations/files'
 
@@ -276,6 +279,69 @@ export async function readPhotoPlace(request: APIRequestContext, user: User, pat
 	})
 
 	return body.match(/<[^>]*metadata-photos-place>([^<]*)</)?.[1] ?? ''
+}
+
+/**
+ * Mark a photo as one of the favorites of an account, or take that mark off
+ * again — as the actions of a photo do.
+ *
+ * @param request - Request context to use
+ * @param user - Owner of the photo
+ * @param path - Path of the photo, relative to the account's root
+ * @param favorite - Whether the photo should be a favorite
+ */
+export async function setPhotoFavorite(request: APIRequestContext, user: User, path: string, favorite: boolean): Promise<void> {
+	await davRequest(request, user, 'PROPPATCH', filesDavUrl(user, path), {
+		headers: { 'Content-Type': 'application/xml' },
+		data: `<?xml version="1.0"?>
+			<d:propertyupdate xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">
+				<d:set>
+					<d:prop><oc:favorite>${favorite ? 1 : 0}</oc:favorite></d:prop>
+				</d:set>
+			</d:propertyupdate>`,
+	})
+}
+
+/**
+ * A node of a folder listing, as the folder endpoint of the app describes it.
+ *
+ * Spelled out here rather than imported from the app: the point of asserting on
+ * it is that the payload the views are built from keeps its shape.
+ */
+export interface FolderListingEntry {
+	id: string
+	filename: string
+	mime: string
+	mtime: number
+	size: number
+	type: 'file' | 'dir'
+	permissions: string
+	owner: string | null
+	attributes: Record<string, unknown>
+}
+
+/**
+ * Read the listing of a folder, as the folders view of the app does.
+ *
+ * The endpoint is a plain app route rather than a DAV or OCS one, and refuses a
+ * request that carries neither a session nor the header marking it as an API
+ * call — Basic auth alone does not pass its CSRF check.
+ *
+ * @param request - Request context to use
+ * @param user - Account to read as
+ * @param path - Path of the folder, relative to the account's root
+ */
+export async function readFolderListing(request: APIRequestContext, user: User, path: string): Promise<FolderListingEntry[]> {
+	const url = `${PHOTOS_API_ROOT}/albums${encodePath(`/${path}`.replace(/\/+/g, '/'))}`
+	const response = await fetchWithRetry(request, url, {
+		headers: { ...basicAuth(user), Accept: 'application/json', 'OCS-APIRequest': 'true' },
+	})
+
+	if (!response.ok()) {
+		throw new Error(`Failed to read the listing of "${path}": ${response.status()} ${await response.text()}`)
+	}
+
+	return await response.json()
 }
 
 /**
