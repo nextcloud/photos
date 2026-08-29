@@ -143,8 +143,10 @@ test.describe('The hover of a photo tile', () => {
 		const { grid } = photosApp.timeline
 
 		// More than one layer, or there is nothing to keep in lockstep and the test
-		// would pass on a tile that has stopped stacking its preview.
-		expect(await grid.getPreviewLayers(PHOTO).count()).toBeGreaterThan(1)
+		// would pass on a tile that has stopped stacking its preview. The layers
+		// are stacked as their previews land, so the count is polled rather than
+		// read the moment the grid comes up.
+		await expect.poll(() => grid.getPreviewLayers(PHOTO).count()).toBeGreaterThan(1)
 
 		await grid.expectMagnifyTiming(PHOTO)
 	})
