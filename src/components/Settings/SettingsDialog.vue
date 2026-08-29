@@ -14,9 +14,7 @@
 			<PhotosUploadLocationSettings />
 			<CroppedLayoutSettings />
 		</NcAppSettingsSection>
-		<NcAppSettingsSection id="keyboard-shortcuts-settings" :name="t('photos', 'Keyboard shortcuts')">
-			<KeyboardShortcutsSettings />
-		</NcAppSettingsSection>
+		<KeyboardShortcutsSettings />
 	</NcAppSettingsDialog>
 </template>
 
