@@ -14,10 +14,10 @@ OC.L10N.register(
     "Delete" : "Delete",
     "Cancel" : "Cancel",
     "Location" : "Yerləşdiyiniz ünvan",
+    "Slideshow" : "Slayd şou",
     "Home" : "Ev",
     "General" : "Ümumi",
     "Start slideshow" : "Slayd şouya başlayın",
-    "Slideshow" : "Slayd şou",
     "Group" : "Qrup",
     "Details" : "Detallar",
     "Confirm" : "Təsdiq edin"
