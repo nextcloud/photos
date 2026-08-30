@@ -87,6 +87,8 @@ OC.L10N.register(
     "The destination folder is owned by {owner}" : "Destinationsmappen ejes af {owner}",
     "There are no photos or videos yet!" : "Der er endnu ingen fotos eller videoer!",
     "_{years} year ago_::_{years} years ago_" : ["{years} år siden","{years} år siden"],
+    "Previous photo" : "Forrige foto",
+    "Next photo" : "Næste foto",
     "Delete source directory" : "Slet kildemappe",
     "Pick folder" : "Vælg mappe",
     "Select a source folder for your media" : "Vælg en kildemappe til dine medier",
