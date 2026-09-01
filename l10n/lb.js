@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Photos" : "Photos",
     "Favorites" : "Favoriten",
+    "Memories" : "Memories",
     "Shared with you" : "Mat dir gedeelt",
     "Tags" : "Tags",
     "Back" : "Zeréck",
@@ -13,11 +14,15 @@ OC.L10N.register(
     "Remove from favorites" : "Remove from favorites",
     "Delete" : "Delete",
     "Cancel" : "Cancel",
+    "Filename" : "Fichiernumm",
     "Location" : "Uert",
     "Add" : "Dobäisetzen",
     "Home" : "Doheem",
     "General" : "Allgemeng",
+    "Default" : "Standard",
+    "Camera" : "Kamera",
     "Group" : "Grupp",
+    "View" : "Usiicht",
     "Details" : "Detailer",
     "Confirm" : "Konfirméieren"
 },
