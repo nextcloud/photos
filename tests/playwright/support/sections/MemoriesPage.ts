@@ -7,7 +7,6 @@ import type { Locator, Page } from '@playwright/test'
 
 import { expect } from '@playwright/test'
 import { waitForTimelineSearch } from '../utils/requests.ts'
-import { SlideshowModal } from './SlideshowModal.ts'
 import { ViewerModal } from './ViewerModal.ts'
 
 /** The memories view, showing the trips and the year recap of a library. */
@@ -120,11 +119,11 @@ export class MemoriesPage {
 	 *
 	 * @param year - Year to play the recap of
 	 */
-	public async openRecapSlideshow(year: number): Promise<SlideshowModal> {
+	public async openRecapSlideshow(year: number): Promise<ViewerModal> {
 		await this.recapCard(year).click()
 
-		const slideshow = new SlideshowModal(this.page)
-		await expect(slideshow.photo()).toBeVisible()
+		const slideshow = new ViewerModal(this.page)
+		await expect(slideshow.dialog()).toBeVisible()
 		return slideshow
 	}
 }
