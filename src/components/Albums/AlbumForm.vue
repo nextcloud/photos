@@ -101,7 +101,6 @@ import type { Album, AlbumEditableProperties, Collaborator } from '../../store/a
 import { InvalidFilenameError, InvalidFilenameErrorReason, validateFilename } from '@nextcloud/files'
 import { resultToNode } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
-import moment from '@nextcloud/moment'
 import { generateRemoteUrl } from '@nextcloud/router'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
@@ -114,6 +113,7 @@ import PhotosFiltersInput from '../PhotosFilters/PhotosFiltersInput.vue'
 import CollaboratorsSelectionForm from './CollaboratorsSelectionForm.vue'
 import filters from '../../services/PhotosFilters/index.ts'
 import { albumsPrefix } from '../../store/albums.ts'
+import { formatMonthAndYear } from '../../utils/dateUtils.ts'
 
 export default {
 	name: 'AlbumForm',
@@ -256,7 +256,7 @@ export default {
 						nbItems: 0,
 						location: this.albumLocation,
 						'last-photo': -1,
-						date: moment().format('MMMM YYYY'),
+						date: formatMonthAndYear(new Date()),
 						collaborators,
 						filters: this.filtersValue,
 						source: generateRemoteUrl(`dav/${this.albumFileName}`),
