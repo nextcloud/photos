@@ -4,7 +4,8 @@
  */
 
 import { expect, test } from '../support/fixtures/photos-app.ts'
-import { MEDIA_COUNT } from '../support/utils/media.ts'
+import { Timeline } from '../support/sections/TimelinePage.ts'
+import { MEDIA_COUNT, PLAYABLE_VIDEO } from '../support/utils/media.ts'
 
 /**
  * The camera settings the fixtures share, as they were all taken with the same
@@ -152,5 +153,90 @@ test.describe('The slideshow of the timeline', () => {
 
 		await expect(slideshow.getEntry('Camera')).toHaveText(CAMERA)
 		await expect(slideshow.metadataLabels()).toHaveText(METADATA_LABELS)
+	})
+})
+
+test.describe('The slideshow of the videos', () => {
+	test.beforeEach(async ({ photosApp, seedVideos }) => {
+		await seedVideos()
+		await photosApp.timeline.open(Timeline.videos)
+	})
+
+	test('plays a video rather than showing the still it is previewed by', async ({ photosApp }) => {
+		const slideshow = await photosApp.timeline.startSlideshow()
+
+		await slideshow.showVideo(PLAYABLE_VIDEO)
+
+		await slideshow.expectVideoPlaying(PLAYABLE_VIDEO)
+	})
+
+	test('leaves a video on screen for as long as it takes to watch it', async ({ photosApp }) => {
+		const slideshow = await photosApp.timeline.startSlideshow()
+
+		await slideshow.showVideo(PLAYABLE_VIDEO)
+		await slideshow.expectVideoPlaying(PLAYABLE_VIDEO)
+		await slideshow.pauseVideo(PLAYABLE_VIDEO)
+
+		// A video is not a still: the delay the slideshow gives a photo has no say
+		// over it, however long the reader takes over it.
+		await slideshow.expectVideoHeld(PLAYABLE_VIDEO)
+	})
+
+	test('moves on once the video has been watched to its end', async ({ photosApp }) => {
+		const slideshow = await photosApp.timeline.startSlideshow()
+
+		await slideshow.showVideo(PLAYABLE_VIDEO)
+		await slideshow.expectVideoPlaying(PLAYABLE_VIDEO)
+
+		await slideshow.playVideoToEnd(PLAYABLE_VIDEO)
+
+		// The end of the video is what moves the slideshow on, well before the delay
+		// of a still photo would have.
+		await expect
+			.poll(() => slideshow.currentPhotoName(), { timeout: 2000 })
+			.not.toBe(PLAYABLE_VIDEO)
+	})
+
+	test('holds the video with the space bar rather than the slideshow', async ({ photosApp }) => {
+		const slideshow = await photosApp.timeline.startSlideshow()
+
+		await slideshow.showVideo(PLAYABLE_VIDEO)
+		await slideshow.expectVideoPlaying(PLAYABLE_VIDEO)
+
+		await slideshow.press(' ')
+
+		// The slideshow is already waiting for the video, so the space bar holds the
+		// video itself — stopping the slideshow on top of that would leave the reader
+		// with two things to resume.
+		await slideshow.expectVideoPaused(PLAYABLE_VIDEO, true)
+		await expect(slideshow.pauseButton()).toBeVisible()
+
+		await slideshow.press(' ')
+
+		await slideshow.expectVideoPaused(PLAYABLE_VIDEO, false)
+	})
+})
+
+test.describe('The slideshow of a video the browser fails on', () => {
+	/**
+	 * The app answers its own requests from a service worker, which a route of the
+	 * page cannot reach into — so it stays out of the way here.
+	 */
+	test.use({ serviceWorkers: 'block' })
+
+	test('falls back to the still preview and plays on', async ({ page, photosApp, seedVideos }) => {
+		await seedVideos()
+		await page.route(`**/${PLAYABLE_VIDEO}`, (route) => route.abort())
+		await photosApp.timeline.open(Timeline.videos)
+
+		const slideshow = await photosApp.timeline.startSlideshow()
+
+		// Nothing plays, so the video is shown as the picture its preview is and the
+		// slideshow times it the way it times a photo.
+		await expect(slideshow.photo(PLAYABLE_VIDEO)).toBeVisible({ timeout: 15_000 })
+		await expect(slideshow.video()).toHaveCount(0)
+		await expect
+			.poll(() => slideshow.currentPhotoName(), { timeout: 10_000 })
+			.not.toBe(PLAYABLE_VIDEO)
 	})
 })

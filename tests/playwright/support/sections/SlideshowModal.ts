@@ -8,6 +8,13 @@ import type { Locator, Page } from '@playwright/test'
 import { expect } from '@playwright/test'
 
 /**
+ * How long the slideshow leaves a still photo on screen, as `PhotoSlideshow`
+ * sets it. Keep it in sync with the component: it is the delay a video must
+ * not be cut off after.
+ */
+const SLIDESHOW_DELAY = 4000
+
+/**
  * The slideshow playing a set of photos full screen, opened from the timeline
  * and from the year recap of the memories view.
  */
@@ -35,11 +42,114 @@ export class SlideshowModal {
 	}
 
 	/**
-	 * Name of the photo file that is on screen, which the photo carries as its
-	 * alternative text.
+	 * The video that is on screen. A video of the set is played rather than shown
+	 * as the still a photo is, and it carries its file name as its label.
+	 *
+	 * @param name - Name of the video file, omit for whichever video is shown
+	 */
+	public video(name?: string): Locator {
+		return name === undefined
+			? this.dialog().locator('video')
+			: this.dialog().locator('video').and(this.page.getByLabel(name))
+	}
+
+	/**
+	 * Whatever the slideshow has on screen, the still of a photo or the video of
+	 * a video.
+	 */
+	public media(): Locator {
+		return this.dialog().locator('img, video')
+	}
+
+	/**
+	 * Name of the file that is on screen, which a photo carries as its alternative
+	 * text and a video as its label.
 	 */
 	public async currentPhotoName(): Promise<string> {
-		return await this.photo().getAttribute('alt') ?? ''
+		const media = this.media()
+		return await media.getAttribute('alt') ?? await media.getAttribute('aria-label') ?? ''
+	}
+
+	/**
+	 * Assert that the video on screen is playing, which is what the slideshow
+	 * asks it to do as it arrives.
+	 *
+	 * @param name - Name of the video file
+	 */
+	public async expectVideoPlaying(name: string): Promise<void> {
+		await expect.poll(() => this.video(name).evaluate((element: HTMLVideoElement) => ({
+			paused: element.paused,
+			ended: element.ended,
+			// HAVE_CURRENT_DATA, i.e. the browser has decoded a frame to show.
+			hasFrame: element.readyState >= 2,
+		}))).toEqual({ paused: false, ended: false, hasFrame: true })
+	}
+
+	/**
+	 * Hold the video on screen where it is, the way the reader does with the
+	 * controls of the video itself.
+	 *
+	 * @param name - Name of the video file
+	 */
+	public async pauseVideo(name: string): Promise<void> {
+		await this.video(name).evaluate((element: HTMLVideoElement) => element.pause())
+		await this.expectVideoPaused(name, true)
+	}
+
+	/**
+	 * Assert whether the video on screen is being held rather than played.
+	 *
+	 * @param name - Name of the video file
+	 * @param paused - Whether it is expected to be held
+	 */
+	public async expectVideoPaused(name: string, paused: boolean): Promise<void> {
+		await expect
+			.poll(() => this.video(name).evaluate((element: HTMLVideoElement) => element.paused))
+			.toBe(paused)
+	}
+
+	/**
+	 * Wait for the slideshow to come round to a video, whichever file of the set
+	 * it started with.
+	 *
+	 * @param name - Name of the video file
+	 */
+	public async showVideo(name: string): Promise<void> {
+		await expect(this.video(name)).toBeVisible({ timeout: 15_000 })
+	}
+
+	/**
+	 * Assert that the slideshow keeps the video on screen well past the delay a
+	 * still photo is taken away after.
+	 *
+	 * @param name - Name of the video file
+	 */
+	public async expectVideoHeld(name: string): Promise<void> {
+		const moment = await this.video(name).evaluate((element: HTMLVideoElement) => element.currentTime)
+
+		// There is nothing to wait for other than the delay running out, twice
+		// over — which is the point of the assertion.
+		await this.page.waitForTimeout(SLIDESHOW_DELAY * 2)
+
+		await expect(this.video(name)).toBeVisible()
+		// A slideshow which had moved on and come round again would have started
+		// the video over rather than left it where it was.
+		await expect
+			.poll(() => this.video(name).evaluate((element: HTMLVideoElement) => element.currentTime))
+			.toBe(moment)
+	}
+
+	/**
+	 * Let the video on screen run out, the way it does once it has been watched.
+	 * Seeking to its last moment keeps a test from waiting out the whole file.
+	 *
+	 * @param name - Name of the video file
+	 */
+	public async playVideoToEnd(name: string): Promise<void> {
+		await this.video(name).evaluate(async (element: HTMLVideoElement) => {
+			element.currentTime = Math.max(element.duration - 0.05, 0)
+			await element.play()
+		})
 	}
 
 	/** The button pausing the slideshow, which is only there while it plays. */
