@@ -65,7 +65,7 @@
 					v-if="selectedFileIds.length === 0 && fetchedFileIds.length > 0"
 					:aria-label="t('photos', 'Start slideshow')"
 					data-cy-header-action="slideshow"
-					@click="showSlideshow = true">
+					@click="startSlideshow">
 					<template #icon>
 						<Play :size="20" />
 					</template>
@@ -204,11 +204,6 @@
 			@close="showAlbumPicker = false">
 			<AlbumPicker @album-picked="addSelectionToAlbum" />
 		</NcModal>
-
-		<PhotoSlideshow
-			v-if="showSlideshow"
-			:photos="timelinePhotos"
-			@close="showSlideshow = false" />
 	</div>
 </template>
 
@@ -244,7 +239,6 @@ import DateScrubber from '../components/DateScrubber.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-import PhotoSlideshow from '../components/PhotoSlideshow.vue'
 import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
 import { useGridDensity } from '../composables/useGridDensity.ts'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.ts'
@@ -281,7 +275,6 @@ export default {
 		HeaderNavigation,
 		PhotosSourceLocationsSettings,
 		AlertCircleOutline,
-		PhotoSlideshow,
 		ViewGridOutline,
 	},
 
@@ -356,7 +349,6 @@ export default {
 			showAlbumPicker: false,
 			appContent: document.getElementById('app-content-vue'),
 			showFilters: false,
-			showSlideshow: false,
 			// Month section the user picked in the DateScrubber, forwarded to
 			// FilesListViewer's `scrollToSection`. Empty means no override.
 			scrubberTarget: '',
@@ -457,6 +449,14 @@ export default {
 					.map((id) => this.files[id])
 					.filter((file) => file !== undefined)
 					.map(toViewerFileInfo),
+			})
+		},
+
+		startSlideshow() {
+			window.OCA.Viewer.open({
+				fileInfo: toViewerFileInfo(this.timelinePhotos[0]),
+				list: this.timelinePhotos.map(toViewerFileInfo),
+				startSlideshow: true,
 			})
 		},
 
