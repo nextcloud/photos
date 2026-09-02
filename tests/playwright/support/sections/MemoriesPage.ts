@@ -124,7 +124,7 @@ export class MemoriesPage {
 		await this.recapCard(year).click()
 
 		const slideshow = new SlideshowModal(this.page)
-		await expect(slideshow.photo()).toBeVisible()
+		await expect(slideshow.media()).toBeVisible()
 		return slideshow
 	}
 }

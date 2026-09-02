@@ -117,7 +117,9 @@ export class TimelinePage {
 		await this.slideshowButton().click()
 
 		const slideshow = new SlideshowModal(this.page)
-		await expect(slideshow.photo()).toBeVisible()
+		// Whichever the timeline starts with, which is a video on a set that holds
+		// one — the slideshow plays those rather than showing their still.
+		await expect(slideshow.media()).toBeVisible()
 		return slideshow
 	}
 
