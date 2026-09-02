@@ -28,7 +28,7 @@
 			type="button"
 			class="memories__recap"
 			:aria-label="recapAriaLabel"
-			@click="recapOpen = true">
+			@click="startRecap">
 			<img
 				class="memories__recap__cover"
 				:src="getPreviewUrl(yearRecap.cover, 1024)"
@@ -76,11 +76,6 @@
 				</button>
 			</li>
 		</ul>
-
-		<PhotoSlideshow
-			v-if="recapOpen && yearRecap !== null"
-			:photos="yearRecap.highlights"
-			@close="recapOpen = false" />
 	</div>
 </template>
 
@@ -89,12 +84,11 @@ import type { Trip, YearRecap } from '../services/memories.ts'
 
 import { translatePlural as n, translate as t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import AnimatedNumber from '../components/AnimatedNumber.vue'
 import EmptyIllustration from '../components/EmptyIllustration.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-import PhotoSlideshow from '../components/PhotoSlideshow.vue'
 import { useLoadedPhotos } from '../composables/useLoadedPhotos.ts'
 import { buildYearRecap, detectTrips } from '../services/memories.ts'
 import { getPreviewUrl, toViewerFileInfo } from '../utils/fileUtils.ts'
@@ -111,8 +105,6 @@ const trips = computed<Trip[]>(() => detectTrips(photos.value))
 
 const yearRecap = computed<YearRecap | null>(() => buildYearRecap(photos.value))
 
-const recapOpen = ref(false)
-
 const recapAriaLabel = computed<string>(() => yearRecap.value === null
 	? ''
 	: t('photos', 'Play a slideshow of your {year} highlights', { year: yearRecap.value.year }))
@@ -122,6 +114,18 @@ onMounted(() => {
 		loadPhotos()
 	}
 })
+
+function startRecap(): void {
+	if (yearRecap.value === null) {
+		return
+	}
+
+	window.OCA.Viewer.open({
+		fileInfo: toViewerFileInfo(yearRecap.value.highlights[0]),
+		list: yearRecap.value.highlights.map((photo) => toViewerFileInfo(photo)),
+		startSlideshow: true,
+	})
+}
 
 /**
  * @param trip - The trip to open in the viewer

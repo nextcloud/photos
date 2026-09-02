@@ -15,7 +15,7 @@ import { AlbumPickerDialog } from './AlbumPickerDialog.ts'
 import { DateScrubber } from './DateScrubber.ts'
 import { MediaGrid } from './MediaGrid.ts'
 import { PhotosNavigation } from './PhotosNavigation.ts'
-import { SlideshowModal } from './SlideshowModal.ts'
+import { ViewerModal } from './ViewerModal.ts'
 
 /** The timeline views of the app, which all share one component. */
 export const Timeline = {
@@ -113,11 +113,11 @@ export class TimelinePage {
 	}
 
 	/** Play the photos of the timeline as a slideshow. */
-	public async startSlideshow(): Promise<SlideshowModal> {
+	public async startSlideshow(): Promise<ViewerModal> {
 		await this.slideshowButton().click()
 
-		const slideshow = new SlideshowModal(this.page)
-		await expect(slideshow.photo()).toBeVisible()
+		const slideshow = new ViewerModal(this.page)
+		await expect(slideshow.dialog()).toBeVisible()
 		return slideshow
 	}
 
