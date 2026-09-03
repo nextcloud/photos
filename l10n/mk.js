@@ -80,6 +80,7 @@ OC.L10N.register(
     "Latitude" : "Географска ширина",
     "Longitude" : "Географска должина",
     "Remove location" : "Избриши локација",
+    "{position} of {count}" : "{position} од {count}",
     "Create new tag" : "Креирај нова ознака",
     "Add" : "Додади",
     "Select a custom date range" : "Избери сопствен опсег на датуми",
