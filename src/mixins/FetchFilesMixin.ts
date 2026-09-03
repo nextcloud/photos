@@ -12,6 +12,7 @@ import { t } from '@nextcloud/l10n'
 import { join } from '@nextcloud/paths'
 import { defineComponent } from 'vue'
 import { davClient } from '../services/DavClient.ts'
+import { getErrorBody } from '../services/DavResponse.ts'
 import logger from '../services/logger.js'
 import getPhotos from '../services/PhotoSearch.js'
 import store from '../store/index.js'
@@ -90,20 +91,30 @@ export default defineComponent({
 				return fileIds
 			} catch (error) {
 				if (error.response?.status === 404) {
-					const sources = store.state.userConfig.photosSourceFolders
-					for (const source of sources) {
-						if (error.response?.data?.match(`File with name /${source} could not be located`) === null) {
-							continue
-						}
-						logger.debug(`The ${source} folder does not exist, creating it.`)
-						try {
-							await davClient.createDirectory(join(defaultRootPath, source))
-							this.resetFetchFilesState()
-							return []
-						} catch (error) {
+					const { photosLocation, photosSourceFolders } = store.state.userConfig
+					const errorBody = await getErrorBody(error)
+					const missingFolder = photosSourceFolders
+						.find((source) => errorBody.includes(`File with name ${source} could not be located`))
+
+					if (missingFolder !== undefined) {
+						if (missingFolder === photosLocation) {
+							logger.debug(`The ${missingFolder} folder does not exist, creating it.`)
+							try {
+								await davClient.createDirectory(join(defaultRootPath, missingFolder))
+								this.resetFetchFilesState()
+								return []
+							} catch (error) {
+								this.errorFetchingFiles = 404
+								logger.error('Fail to create source directory', { error })
+							}
+						} else {
 							this.errorFetchingFiles = 404
-							logger.error('Fail to create source directory', { error })
+							logger.error(`The ${missingFolder} media folder does not exist.`)
+							showError(t('photos', 'The folder {folder} does not exist anymore. You can remove it from your media folders in the Photos settings.', { folder: missingFolder }))
+							return []
 						}
+					} else {
+						this.errorFetchingFiles = error
 					}
 				} else if (error instanceof DOMException && error.code === error.ABORT_ERR) {
 					return []
