@@ -5,6 +5,7 @@ OC.L10N.register(
     "Photos" : "Ljósmyndir",
     "On This Day" : "Á þessum degi",
     "Your memories under your control" : "Haltu minningunum þínum undir þinni stjórn",
+    "Search by file name" : "Leita eftir skráarheiti",
     "Clear search" : "Hreinsa leit",
     "All media" : "Allt myndefni",
     "Videos" : "Myndskeið",

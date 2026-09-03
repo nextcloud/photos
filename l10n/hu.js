@@ -5,6 +5,7 @@ OC.L10N.register(
     "Photos" : "Fényképek",
     "On This Day" : "Ezen a napon",
     "Your memories under your control" : "Az Ön emlékei, az Ön felügyelete alatt",
+    "Search by file name" : "Keresés fájlnév alapján",
     "Clear search" : "Keresés törlése",
     "All media" : "Összes média",
     "Videos" : "Videók",
