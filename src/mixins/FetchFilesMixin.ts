@@ -109,7 +109,7 @@ export default defineComponent({
 							}
 						} else {
 							this.errorFetchingFiles = 404
-							logger.error(`The ${missingFolder} media folder does not exist.`)
+							logger.error(`The ${missingFolder} media folder does not exist.`, { error })
 							showError(t('photos', 'The folder {folder} does not exist anymore. You can remove it from your media folders in the Photos settings.', { folder: missingFolder }))
 							return []
 						}
