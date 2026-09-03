@@ -92,6 +92,14 @@ interface PhotosFixtures {
 	 * set one before it opens the view it is about.
 	 */
 	setPhotosSetting: (key: string, value: string) => Promise<void>
+	/**
+	 * Create a folder in the home of the test account.
+	 */
+	createFolder: (path: string) => Promise<void>
+	/**
+	 * Delete a file or folder of the test account.
+	 */
+	deleteFromFiles: (path: string) => Promise<void>
 }
 
 /**
