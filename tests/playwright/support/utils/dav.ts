@@ -167,6 +167,17 @@ export async function mkdir(request: APIRequestContext, user: User, path: string
 }
 
 /**
+ * Delete a file or folder in the home of an account.
+ *
+ * @param request - Request context to use
+ * @param user - Owner of the path
+ * @param path - Path to delete, relative to the account's root
+ */
+export async function deletePath(request: APIRequestContext, user: User, path: string): Promise<void> {
+	await davRequest(request, user, 'DELETE', filesDavUrl(user, path))
+}
+
+/**
  * Upload a file into the home of an account.
  *
  * @param request - Request context to use

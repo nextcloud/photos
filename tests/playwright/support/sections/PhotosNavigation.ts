@@ -5,7 +5,9 @@
 
 import type { Locator, Page } from '@playwright/test'
 
+import { expect } from '@playwright/test'
 import { PhotosFilters } from './PhotosFilters.ts'
+import { PhotosSettingsDialog } from './PhotosSettingsDialog.ts'
 
 /**
  * Names of the app navigation entries, as they are shown to the user.
@@ -63,5 +65,17 @@ export class PhotosNavigation {
 	 */
 	public clearSearchButton(): Locator {
 		return this.navigation().getByRole('button', { name: 'Clear search' })
+	}
+
+	public settingsButton(): Locator {
+		return this.navigation().getByRole('button', { name: 'Photos settings' })
+	}
+
+	public async openSettings(): Promise<PhotosSettingsDialog> {
+		await this.settingsButton().click()
+
+		const settings = new PhotosSettingsDialog(this.page)
+		await expect(settings.dialog()).toBeVisible()
+		return settings
 	}
 }
