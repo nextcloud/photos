@@ -12,6 +12,7 @@ import { t } from '@nextcloud/l10n'
 import { joinPaths } from '@nextcloud/paths'
 import { defineComponent } from 'vue'
 import { davClient } from '../services/DavClient.ts'
+import { getErrorBody } from '../services/DavResponse.ts'
 import logger from '../services/logger.js'
 import getPhotos from '../services/PhotoSearch.js'
 import store from '../store/index.js'
@@ -102,8 +103,12 @@ export default defineComponent({
 							return []
 						} catch (error) {
 							this.errorFetchingFiles = 404
-							logger.error('Fail to create source directory', { error })
+							logger.error(`The ${missingFolder} media folder does not exist.`)
+							showError(t('photos', 'The folder {folder} does not exist anymore. You can remove it from your media folders in the Photos settings.', { folder: missingFolder }))
+							return []
 						}
+					} else {
+						this.errorFetchingFiles = error
 					}
 				} else if (error instanceof DOMException && error.code === error.ABORT_ERR) {
 					return []
