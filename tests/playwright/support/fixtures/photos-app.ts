@@ -13,7 +13,7 @@ import { login } from '@nextcloud/e2e-test-server/playwright'
 import { test as baseTest } from '@playwright/test'
 import { PhotosApp } from '../sections/PhotosApp.ts'
 import { createPhotosAccounts, openPhotosSession, withRequestContext } from '../utils/accounts.ts'
-import { assignSystemTag, createSystemTag, readFileTags, readFolderListing, readPhotoFavorite, setPhotoFavorite } from '../utils/dav.ts'
+import { assignSystemTag, createSystemTag, deletePath, mkdir, readFileTags, readFolderListing, readPhotoFavorite, setPhotoFavorite } from '../utils/dav.ts'
 import { PHOTOS_FOLDER, removeMediaLocations, seedPhotosTakenAt, seedVideos } from '../utils/media.ts'
 import { deleteUser, setUserSetting } from '../utils/occ.ts'
 import { withRetry } from '../utils/retry.ts'
@@ -104,6 +104,14 @@ interface PhotosFixtures {
 	 * set one before it opens the view it is about.
 	 */
 	setPhotosSetting: (key: string, value: string) => Promise<void>
+	/**
+	 * Create a folder in the home of the test account.
+	 */
+	createFolder: (path: string) => Promise<void>
+	/**
+	 * Delete a file or folder of the test account.
+	 */
+	deleteFromFiles: (path: string) => Promise<void>
 }
 
 /**
@@ -229,6 +237,22 @@ export const test = baseTest.extend<PhotosOptions & PhotosFixtures>({
 			playwright.request,
 			baseURL,
 			(request) => readFolderListing(request, account.user, path),
+		))
+	},
+
+	createFolder: async ({ playwright, baseURL, account }, use) => {
+		await use((path: string) => withRequestContext(
+			playwright.request,
+			baseURL,
+			(request) => mkdir(request, account.user, path),
+		))
+	},
+
+	deleteFromFiles: async ({ playwright, baseURL, account }, use) => {
+		await use((path: string) => withRequestContext(
+			playwright.request,
+			baseURL,
+			(request) => deletePath(request, account.user, path),
 		))
 	},
 
