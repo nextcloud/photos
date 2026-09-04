@@ -70,6 +70,20 @@ export class TimelinePage {
 	}
 
 	/**
+	 * Open a timeline that is expected to report a missing source folder.
+	 *
+	 * The regular heading and grid never render in this state — the view shows
+	 * {@link missingSourceFolderMessage} in their place instead, so `open` cannot
+	 * be reused here.
+	 *
+	 * @param view - The timeline to open, the whole library by default
+	 */
+	public async openExpectingMissingSourceFolder(view: TimelineView = Timeline.allMedia): Promise<void> {
+		await this.page.goto(`apps/photos/${view.path}`)
+		await expect(this.missingSourceFolderMessage()).toBeVisible()
+	}
+
+	/**
 	 * The heading naming the open timeline.
 	 *
 	 * @param view - The timeline to name
@@ -101,6 +115,14 @@ export class TimelinePage {
 	/** The message shown instead of the grid when nothing matches. */
 	public emptyMessage(): Locator {
 		return this.page.getByRole('note', { name: 'No photos or videos in here' })
+	}
+
+	/**
+	 * The message shown instead of the grid when a configured source folder no
+	 * longer exists. Carries the settings removing it as its action.
+	 */
+	public missingSourceFolderMessage(): Locator {
+		return this.page.getByRole('note', { name: 'One of the source folders does not exist' })
 	}
 
 	/**
