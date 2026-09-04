@@ -75,6 +75,7 @@ OC.L10N.register(
     "Location" : "Staðsetning",
     "Latitude" : "Breiddargráða",
     "Longitude" : "Lengdargráða",
+    "{position} of {count}" : "{position} af {count}",
     "Create new tag" : "Búa til nýtt merki",
     "Add" : "Bæta við",
     "Select a custom date range" : "Velja sérsniðið svið dagsetninga",
