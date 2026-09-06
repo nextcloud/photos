@@ -1,5 +1,28 @@
+# This workflow is provided via the organization template repository
+#
+# https://github.com/nextcloud/.github
+# https://docs.github.com/en/actions/learn-github-actions/sharing-workflows-with-your-organization
+#
 # SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
 # SPDX-License-Identifier: MIT
+
+# This workflow runs Playwright tests on pull requests to the master and stable branches.
+# It expects the following npm scripts to be defined in package.json:
+# - "playwright": runs the Playwright tests
+# - "playwright:install-ci": installs the Playwright browsers for CI (optional)
+#
+# If you only use the "Desktop Chrome" browser with "channel: chrome" in your Playwright config,
+# you can skip the "playwright:install-ci" script as the GitHub Actions runner already has Chrome Browser installed.
+#
+# For merging the reports, it expects a Playwright merge config file at tests/playwright/merge.config.ts.
+# You can adjust the path in the "Merge into HTML Report" step if you have a different location for the merge config file.
+# The default configuration would look like this:
+# ```js
+# export default {
+#   testDir: 'tests/playwright/e2e', // path to your Playwright tests
+#   reporter: [['html', { open: 'never' }]],
+# }
+# ```
 
 name: Playwright Tests
 
@@ -7,55 +30,38 @@ on:
   pull_request:
     branches:
       - master
+      - stable35
+      - stable34
+      - stable33
 
 permissions:
   contents: read
+concurrency:
+  group: node-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
   playwright-setup:
-    timeout-minutes: 15
+    timeout-minutes: 10
     name: Playwright setup
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         persist-credentials: false
-
-    - name: Get version matrix
-      id: php-versions
-      uses: icewind1991/nextcloud-version-matrix@8a7bac6300b2f0f3100088b297995a229558ddba # v1.3.2
-
-    - name: Set up PHP
-      uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2.37.2
-      with:
-        php-version: ${{ steps.php-versions.outputs.php-min }}
-        extensions: bz2, ctype, curl, dom, fileinfo, gd, iconv, intl, json, libxml, mbstring, openssl, pcntl, posix, session, simplexml, xmlreader, xmlwriter, zip, zlib, oci8
-        coverage: none
-        ini-file: development
-        tools: composer
-        ini-values: disable_functions=
-
-    - name: Install PHP dependencies
-      run: |
-        composer install --no-dev --no-scripts
-
     - name: Read package.json
       uses: nextcloud-libraries/parse-package-engines-action@122ae05d4257008180a514e1ddeb0c1b9d094bdd # v0.1.0
       id: versions
-
     - name: Set up node
       uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
       with:
         node-version: ${{ steps.versions.outputs.node-version }}
-
     - name: Set up npm
       run: npm i -g 'npm@${{ steps.versions.outputs.package-manager-version }}'
-
     - name: Install dependencies and build
       run: |
         npm ci
         npm run build --if-present
-
     - name: Save context
       uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
@@ -64,14 +70,14 @@ jobs:
 
   playwright-tests:
     needs: [playwright-setup]
-    timeout-minutes: 60
-    name: Playwright tests ${{ matrix.shardIndex == 'recognize' && 'with "recognize" app' || format('{0} / {1}', matrix.shardIndex, matrix.shardTotal) }}
+    timeout-minutes: 30
+    name: Playwright tests ${{ matrix.shardIndex }} / ${{ matrix.shardTotal }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        shardIndex: [1, 2, 3, 4, "recognize"]
-        shardTotal: [4]
+        shardIndex: [1, 2] # adjust to your needs
+        shardTotal: [2]
     outputs:
       node-version: ${{ steps.versions.outputs.node-version }}
       package-manager-version: ${{ steps.versions.outputs.package-manager-version }}
@@ -99,7 +105,6 @@ jobs:
         node-version: ${{ steps.versions.outputs.node-version }}
 
     - name: Set up npm
-      if: steps.cache.outputs.cache-hit != 'true'
       run: npm i -g 'npm@${{ steps.versions.outputs.package-manager-version }}'
 
     - name: Install dependencies and build
@@ -108,28 +113,11 @@ jobs:
         npm ci
         npm run build --if-present
 
-    # We use the default chrome shipped with the actions runner
-    # - name: Install Playwright browsers
-    #   run: npm run playwright:install
+    - name: Install Playwright browsers
+      run: npm run playwright:install-ci --if-present
 
     - name: Run Playwright tests
-      if: matrix.shardIndex != 'recognize'
       run: npm run playwright -- --shard='${{ matrix.shardIndex }}/${{ matrix.shardTotal }}'
-
-    - name: Run Playwright tests for recognize integration
-      if: matrix.shardIndex == 'recognize'
-      run: npm run playwright:faces
-
-    - name: Show logs
-      if: failure()
-      run: |
-        # @nextcloud/e2e-test-server names the container after the app directory,
-        # so it is discovered rather than hardcoded.
-        container=$(docker ps -a --format '{{.Names}}' | grep -i nextcloud | head -n1)
-        echo "=== Logs of container ${container} ==="
-        docker logs "$container" || true
-        echo '=== Nextcloud server logs ==='
-        docker exec "$container" cat data/nextcloud.log || true
 
     - name: Upload blob report to GitHub Actions Artifacts
       if: ${{ !cancelled() }}
@@ -186,9 +174,9 @@ jobs:
       with:
         name: html-report--attempt-${{ github.run_attempt }}
         path: playwright-report
-        retention-days: 5
+        retention-days: 7
 
-    - name: Show the logs
+    - name: How to show the logs
       run: |
         echo 'To view the report:'
         echo '  1. Extract the folder from the zip file'
