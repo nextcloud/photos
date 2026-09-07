@@ -221,6 +221,23 @@ export const test = baseTest.extend<PhotosOptions & PhotosFixtures>({
 			(request) => readFolderListing(request, account.user, path),
 		))
 	},
+
+	createFolder: async ({ playwright, baseURL, account }, use) => {
+		await use((path: string) => withRequestContext(
+			playwright.request,
+			baseURL,
+			(request) => mkdir(request, account.user, path),
+		))
+	},
+
+	deleteFromFiles: async ({ playwright, baseURL, account }, use) => {
+		await use((path: string) => withRequestContext(
+			playwright.request,
+			baseURL,
+			(request) => deletePath(request, account.user, path),
+		))
+	},
+
 	setPhotosSetting: async ({ account }, use) => {
 		await use((key: string, value: string) => setUserSetting(account.user, 'photos', key, value))
 	},
