@@ -6,13 +6,14 @@
 import type { User } from '@nextcloud/e2e-test-server'
 import type { Page } from '@playwright/test'
 import type { PhotosAccount, PhotosSession } from '../utils/accounts.ts'
+import type { FolderListingEntry } from '../utils/dav.ts'
 import type { MediaFixture, SeededMedia } from '../utils/media.ts'
 
 import { login } from '@nextcloud/e2e-test-server/playwright'
 import { test as baseTest } from '@playwright/test'
 import { PhotosApp } from '../sections/PhotosApp.ts'
 import { createPhotosAccounts, openPhotosSession, withRequestContext } from '../utils/accounts.ts'
-import { assignSystemTag, createSystemTag, readFileTags, readPhotoFavorite } from '../utils/dav.ts'
+import { assignSystemTag, createSystemTag, deletePath, mkdir, readFileTags, readFolderListing, readPhotoFavorite } from '../utils/dav.ts'
 import { PHOTOS_FOLDER, removeMediaLocations, seedPhotosTakenAt, seedVideos } from '../utils/media.ts'
 import { deleteUser, setUserSetting } from '../utils/occ.ts'
 import { withRetry } from '../utils/retry.ts'
@@ -84,6 +85,11 @@ interface PhotosFixtures {
 	readTags: (photoName: MediaFixture) => Promise<string[]>
 	/** Whether the server has a photo of the test account marked as a favorite. */
 	readFavorite: (photoName: MediaFixture) => Promise<boolean>
+	/**
+	 * The listing the folders view of the test account is built from, straight
+	 * from the endpoint that answers it.
+	 */
+	readFolderListing: (path: string) => Promise<FolderListingEntry[]>
 	/**
 	 * Store one of the settings of the app for the test account, the way its
 	 * settings section does.
@@ -208,6 +214,13 @@ export const test = baseTest.extend<PhotosOptions & PhotosFixtures>({
 		))
 	},
 
+	readFolderListing: async ({ playwright, baseURL, account }, use) => {
+		await use((path: string) => withRequestContext(
+			playwright.request,
+			baseURL,
+			(request) => readFolderListing(request, account.user, path),
+		))
+	},
 	setPhotosSetting: async ({ account }, use) => {
 		await use((key: string, value: string) => setUserSetting(account.user, 'photos', key, value))
 	},
