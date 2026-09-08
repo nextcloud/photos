@@ -11,11 +11,11 @@ import type { PhotosContext } from './index.ts'
 import { showError } from '@nextcloud/dialogs'
 import { defaultRootPath } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
-import moment from '@nextcloud/moment'
 import Vue from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import { deletePhoto, savePhotoMetadata, setPhotoFavorite } from '../services/photoActions.ts'
+import { toDayKey, toMonthKey } from '../utils/dateUtils.ts'
 import Semaphore from '../utils/semaphoreWithPriority.js'
 
 export type PhotoFile = File & {
@@ -64,10 +64,10 @@ const mutations = {
 				}
 
 				// Precalculate dates as it is expensive.
-				const date = moment((file.attributes['metadata-photos-original_date_time'] * 1000) || file.mtime)
-				file.attributes.timestamp = date.unix() // For sorting
-				file.attributes.month = date.format('YYYYMM') // For grouping by month
-				file.attributes.day = date.format('MMDD') // For On this day
+				const date = new Date((file.attributes['metadata-photos-original_date_time'] * 1000) || file.mtime || Date.now())
+				file.attributes.timestamp = Math.floor(date.getTime() / 1000) // For sorting
+				file.attributes.month = toMonthKey(date) // For grouping by month
+				file.attributes.day = toDayKey(date) // For On this day
 
 				files[file.fileid as number] = file
 			})
@@ -135,11 +135,11 @@ const mutations = {
 
 		// The dates driving the sorting and the grouping are precalculated, so
 		// they have to be recomputed for the photo to move to its new month.
-		const date = moment(takenAt * 1000)
+		const date = new Date(takenAt * 1000)
 		Vue.set(attributes, 'metadata-photos-original_date_time', takenAt)
-		Vue.set(attributes, 'timestamp', date.unix())
-		Vue.set(attributes, 'month', date.format('YYYYMM'))
-		Vue.set(attributes, 'day', date.format('MMDD'))
+		Vue.set(attributes, 'timestamp', Math.floor(date.getTime() / 1000))
+		Vue.set(attributes, 'month', toMonthKey(date))
+		Vue.set(attributes, 'day', toDayKey(date))
 
 		if (location === null) {
 			Vue.delete(attributes, 'metadata-photos-gps')
