@@ -6,13 +6,14 @@
 import type { User } from '@nextcloud/e2e-test-server'
 import type { Page } from '@playwright/test'
 import type { PhotosAccount, PhotosSession } from '../utils/accounts.ts'
+import type { FolderListingEntry } from '../utils/dav.ts'
 import type { MediaFixture, SeededMedia } from '../utils/media.ts'
 
 import { login } from '@nextcloud/e2e-test-server/playwright'
 import { test as baseTest } from '@playwright/test'
 import { PhotosApp } from '../sections/PhotosApp.ts'
 import { createPhotosAccounts, openPhotosSession, withRequestContext } from '../utils/accounts.ts'
-import { assignSystemTag, createSystemTag, readFileTags, readPhotoFavorite } from '../utils/dav.ts'
+import { assignSystemTag, createSystemTag, deletePath, mkdir, readFileTags, readFolderListing, readPhotoFavorite } from '../utils/dav.ts'
 import { PHOTOS_FOLDER, removeMediaLocations, seedPhotosTakenAt, seedVideos } from '../utils/media.ts'
 import { deleteUser, setUserSetting } from '../utils/occ.ts'
 import { withRetry } from '../utils/retry.ts'
@@ -85,6 +86,11 @@ interface PhotosFixtures {
 	/** Whether the server has a photo of the test account marked as a favorite. */
 	readFavorite: (photoName: MediaFixture) => Promise<boolean>
 	/**
+	 * The listing the folders view of the test account is built from, straight
+	 * from the endpoint that answers it.
+	 */
+	readFolderListing: (path: string) => Promise<FolderListingEntry[]>
+	/**
 	 * Store one of the settings of the app for the test account, the way its
 	 * settings section does.
 	 *
@@ -92,6 +98,14 @@ interface PhotosFixtures {
 	 * set one before it opens the view it is about.
 	 */
 	setPhotosSetting: (key: string, value: string) => Promise<void>
+	/**
+	 * Create a folder in the home of the test account.
+	 */
+	createFolder: (path: string) => Promise<void>
+	/**
+	 * Delete a file or folder of the test account.
+	 */
+	deleteFromFiles: (path: string) => Promise<void>
 }
 
 /**
@@ -197,6 +211,30 @@ export const test = baseTest.extend<PhotosOptions & PhotosFixtures>({
 			playwright.request,
 			baseURL,
 			(request) => readPhotoFavorite(request, account.user, `${PHOTOS_FOLDER}/${photoName}`),
+		))
+	},
+
+	readFolderListing: async ({ playwright, baseURL, account }, use) => {
+		await use((path: string) => withRequestContext(
+			playwright.request,
+			baseURL,
+			(request) => readFolderListing(request, account.user, path),
+		))
+	},
+
+	createFolder: async ({ playwright, baseURL, account }, use) => {
+		await use((path: string) => withRequestContext(
+			playwright.request,
+			baseURL,
+			(request) => mkdir(request, account.user, path),
+		))
+	},
+
+	deleteFromFiles: async ({ playwright, baseURL, account }, use) => {
+		await use((path: string) => withRequestContext(
+			playwright.request,
+			baseURL,
+			(request) => deletePath(request, account.user, path),
 		))
 	},
 
