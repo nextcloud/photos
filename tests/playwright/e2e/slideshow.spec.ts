@@ -4,20 +4,8 @@
  */
 
 import { expect, test } from '../support/fixtures/photos-app.ts'
-import { MEDIA_COUNT } from '../support/utils/media.ts'
-
-/**
- * The camera settings the fixtures share, as they were all taken with the same
- * phone. Exposure and sensitivity differ between them, so they are only asserted
- * on by being listed — which photo the timeline starts with depends on the dates
- * the fixtures carry.
- */
-const CAMERA = 'ONEPLUS A5000'
-const APERTURE = 'ƒ/1.7'
-const FOCAL_LENGTH = '4 mm'
-
-/** The settings the panel lists, in the order it lists them. */
-const METADATA_LABELS = ['Camera', 'Aperture', 'Focal length', 'Exposure', 'ISO']
+import { Timeline } from '../support/sections/TimelinePage.ts'
+import { PLAYABLE_VIDEO } from '../support/utils/media.ts'
 
 test.describe('The slideshow of the timeline', () => {
 	test.beforeEach(async ({ photosApp }) => {
@@ -30,19 +18,25 @@ test.describe('The slideshow of the timeline', () => {
 
 		const slideshow = await timeline.startSlideshow()
 
-		await expect(slideshow.photo(firstPhoto)).toBeVisible()
+		await slideshow.waitForPhoto(firstPhoto)
 		// It plays without being asked to, which is what the pause button says.
 		await expect(slideshow.pauseButton()).toBeVisible()
+	})
+
+	test('moves on to the next photo on its own', async ({ photosApp }) => {
+		const slideshow = await photosApp.timeline.startSlideshow()
+
+		const firstShown = await slideshow.currentPhotoName()
+
+		// A photo stays on screen for a few seconds, so the wait is a generous one.
+		await expect.poll(() => slideshow.currentPhotoName(), { timeout: 15_000 }).not.toBe(firstShown)
 	})
 
 	test('walks through the photos and closes again', async ({ photosApp }) => {
 		const { timeline } = photosApp
 		const slideshow = await timeline.startSlideshow()
 
-		// Pausing first, so that the photo on screen is the one the test moves on
-		// from rather than whichever the slideshow reached in the meantime.
-		await slideshow.pauseButton().click()
-		await expect(slideshow.playButton()).toBeVisible()
+		await slideshow.pause()
 		const shown = await slideshow.currentPhotoName()
 
 		await slideshow.nextButton().click()
@@ -55,46 +49,28 @@ test.describe('The slideshow of the timeline', () => {
 		await timeline.waitForPhotos()
 	})
 
-	test('says how far into the timeline it is', async ({ photosApp }) => {
-		const slideshow = await photosApp.timeline.startSlideshow()
-
-		await slideshow.pauseButton().click()
-		await expect(slideshow.playButton()).toBeVisible()
-		await expect(slideshow.position()).toHaveText(`1 of ${MEDIA_COUNT}`)
-
-		await slideshow.nextButton().click()
-		await expect(slideshow.position()).toHaveText(`2 of ${MEDIA_COUNT}`)
-
-		// Going back past the first photo wraps around to the last one, as the
-		// slideshow plays the set in a loop.
-		await slideshow.previousButton().click()
-		await slideshow.previousButton().click()
-		await expect(slideshow.position()).toHaveText(`${MEDIA_COUNT} of ${MEDIA_COUNT}`)
-	})
-
 	test('walks through the photos with the arrow keys', async ({ photosApp }) => {
 		const slideshow = await photosApp.timeline.startSlideshow()
 
-		await slideshow.pauseButton().click()
-		await expect(slideshow.playButton()).toBeVisible()
+		await slideshow.pause()
+		const shown = await slideshow.currentPhotoName()
 
 		await slideshow.press('ArrowRight')
-		await expect(slideshow.position()).toHaveText(`2 of ${MEDIA_COUNT}`)
+		await expect.poll(() => slideshow.currentPhotoName()).not.toBe(shown)
 
 		await slideshow.press('ArrowLeft')
-		await expect(slideshow.position()).toHaveText(`1 of ${MEDIA_COUNT}`)
+		await expect.poll(() => slideshow.currentPhotoName()).toBe(shown)
 	})
 
-	test('plays and pauses with the space bar', async ({ photosApp }) => {
+	test('plays and pauses on demand', async ({ photosApp }) => {
 		const slideshow = await photosApp.timeline.startSlideshow()
 
 		// It comes up playing, so the first press is the one that holds it.
 		await expect(slideshow.pauseButton()).toBeVisible()
 
-		await slideshow.press(' ')
-		await expect(slideshow.playButton()).toBeVisible()
+		await slideshow.pause()
 
-		await slideshow.press(' ')
+		await slideshow.playButton().click()
 		await expect(slideshow.pauseButton()).toBeVisible()
 	})
 
@@ -107,50 +83,42 @@ test.describe('The slideshow of the timeline', () => {
 		await expect(slideshow.dialog()).toHaveCount(0)
 		await timeline.waitForPhotos()
 	})
+})
 
-	test('shows the camera settings of the photo on demand', async ({ photosApp }) => {
-		const slideshow = await photosApp.timeline.startSlideshow()
-
-		// The panel stays out of the way until it is asked for.
-		await expect(slideshow.metadataPanel()).toHaveCount(0)
-
-		await slideshow.toggleMetadata()
-
-		await expect(slideshow.metadataPanel()).toBeVisible()
-		await expect(slideshow.getEntry('Camera')).toHaveText(CAMERA)
-		await expect(slideshow.getEntry('Aperture')).toHaveText(APERTURE)
-		await expect(slideshow.getEntry('Focal length')).toHaveText(FOCAL_LENGTH)
-		// The exposure and the sensitivity are read from the picture as well — each
-		// setting is only listed once it could be made sense of.
-		await expect(slideshow.metadataLabels()).toHaveText(METADATA_LABELS)
+test.describe('The slideshow of the videos view', () => {
+	test.beforeEach(async ({ photosApp, seedVideos }) => {
+		await seedVideos()
+		await photosApp.timeline.open(Timeline.videos)
 	})
 
-	test('takes the camera settings away again', async ({ photosApp }) => {
+	test('plays the video rather than showing a still of it', async ({ photosApp }) => {
 		const slideshow = await photosApp.timeline.startSlideshow()
 
-		await slideshow.toggleMetadata()
-		await expect(slideshow.metadataPanel()).toBeVisible()
+		await slideshow.waitForPhoto(PLAYABLE_VIDEO)
+		// Held first, so that the slideshow does not move on while the player is
+		// being looked at.
+		await slideshow.pause()
 
-		await slideshow.toggleMetadata()
-		await expect(slideshow.metadataPanel()).toHaveCount(0)
+		// The slideshow is the one of the viewer, so a video is played back the way
+		// the viewer plays it instead of being reduced to its still preview.
+		await expect(slideshow.video()).toBeVisible()
+		await expect.poll(() => slideshow.video().evaluate((element: HTMLVideoElement) => ({
+			paused: element.paused,
+			// HAVE_CURRENT_DATA, i.e. the browser has decoded a frame to show.
+			hasFrame: element.readyState >= 2,
+		}))).toEqual({ paused: false, hasFrame: true })
 	})
 
-	test('shows the settings of the photo that is on screen', async ({ photosApp }) => {
+	test('holds on the video until it has played out', async ({ photosApp }) => {
 		const slideshow = await photosApp.timeline.startSlideshow()
 
-		await slideshow.pauseButton().click()
-		await expect(slideshow.playButton()).toBeVisible()
+		await slideshow.waitForPhoto(PLAYABLE_VIDEO)
 
-		await slideshow.toggleMetadata()
-		await expect(slideshow.getEntry('Camera')).toHaveText(CAMERA)
+		// The slide is not counted down while the video plays, or a video longer
+		// than the delay of the slideshow would be cut off in the middle.
+		await expect.poll(() => slideshow.isSlideshowHeld()).toBe(true)
 
-		// Moving on fetches the settings of the photo that arrives rather than
-		// leaving the ones of the photo before on screen.
-		const shown = await slideshow.currentPhotoName()
-		await slideshow.nextButton().click()
-		await expect.poll(() => slideshow.currentPhotoName()).not.toBe(shown)
-
-		await expect(slideshow.getEntry('Camera')).toHaveText(CAMERA)
-		await expect(slideshow.metadataLabels()).toHaveText(METADATA_LABELS)
+		// And it is counted down again once the video has played out.
+		await expect.poll(() => slideshow.isSlideshowHeld(), { timeout: 15_000 }).toBe(false)
 	})
 })

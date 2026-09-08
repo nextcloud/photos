@@ -50,7 +50,7 @@
 import type { PhotoFile } from '../store/files.ts'
 import type { ExifEntry } from '../utils/exif.ts'
 
-import { translate as t } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import NcModal from '@nextcloud/vue/components/NcModal'
 import { fetchPhotoExif } from '../services/exifFetcher.ts'
@@ -89,6 +89,9 @@ const positionLabel = computed<string>(() => t('photos', '{position} of {count}'
 /** Elements a key press belongs to rather than to the slideshow around them. */
 const CONTROL_SELECTOR = 'button, a[href], input, select, textarea, [contenteditable]'
 
+/** Whether the reader asked for the shortcuts of the app to be left alone. */
+const shortcutsDisabled = window.OCP?.Accessibility?.disableKeyboardShortcuts?.() ?? false
+
 /** Whether the metadata of the current photo is shown, toggled with the `i` key. */
 const exifShown = ref(false)
 const exifEntries = ref<ExifEntry[]>([])
@@ -100,8 +103,10 @@ let pendingRequest = 0
 // away instead of waiting for the play button of the modal to be pressed.
 onMounted(() => modal.value?.togglePlayPause())
 
-// The modal takes the focus, so the shortcut is bound to the document rather
-// than to an element of the slideshow.
+// The modal takes the focus, so the shortcuts are bound to the document rather
+// than to an element of the slideshow. `useHotKey` cannot carry them: it drops
+// every press made while a modal is open, which the slideshow always is.
+// Stepping through the photos and closing them are the modal's own shortcuts.
 onMounted(() => document.addEventListener('keydown', onKeyDown))
 onBeforeUnmount(() => document.removeEventListener('keydown', onKeyDown))
 
@@ -134,7 +139,8 @@ function showPrevious(): void {
  * @param event - The key press to handle
  */
 function onKeyDown(event: KeyboardEvent): void {
-	if (event.ctrlKey || event.metaKey || event.altKey) {
+	// The shortcuts are opt-out, the same as the ones of the server around them.
+	if (shortcutsDisabled || event.ctrlKey || event.metaKey || event.altKey) {
 		return
 	}
 

@@ -20,8 +20,14 @@ declare global {
 				}
 			}
 			Viewer: {
-				open: ({ fileInfo, list, onClose }: { fileInfo: ViewerFileInfo, list: ViewerFileInfo[], onClose?: () => void }) => void
+				open: ({ fileInfo, list, onClose, startSlideshow }: { fileInfo: ViewerFileInfo, list: ViewerFileInfo[], onClose?: () => void, startSlideshow?: boolean }) => void
 				close: () => void
+			}
+		}
+		OCP?: {
+			Accessibility?: {
+				/** Whether the reader opted out of the keyboard shortcuts of the apps. */
+				disableKeyboardShortcuts?: () => boolean
 			}
 		}
 	}
