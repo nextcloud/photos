@@ -36,7 +36,6 @@ class OriginalDateTimeMetadataProvider implements IEventListener {
 
 	private function dateToTimestamp(string $format, string $date, File $node): int|false {
 		try {
-			// Note: We do not have the timezone when parsing the date, so the timestamp will be off by X hours.
 			$dateTime = DateTime::createFromFormat($format, $date);
 			if ($dateTime !== false && $dateTime->getTimestamp() > 0) {
 				return $dateTime->getTimestamp();
@@ -86,8 +85,23 @@ class OriginalDateTimeMetadataProvider implements IEventListener {
 			$metadata->hasKey(ExifMetadataProvider::METADATA_KEY_EXIF)
 			&& !empty($metadata->getArray(ExifMetadataProvider::METADATA_KEY_EXIF)['DateTimeOriginal'])
 		) {
-			$rawDateTimeOriginal = $metadata->getArray(ExifMetadataProvider::METADATA_KEY_EXIF)['DateTimeOriginal'];
-			$timestampOriginal = $this->dateToTimestamp('Y:m:d G:i:s', $rawDateTimeOriginal, $node);
+			$exif = $metadata->getArray(ExifMetadataProvider::METADATA_KEY_EXIF);
+			$rawDateTimeOriginal = $exif['DateTimeOriginal'];
+			$offsetTimeOriginal = $exif['OffsetTimeOriginal'] ?? null;
+
+			if (is_string($offsetTimeOriginal) && $offsetTimeOriginal !== '') {
+				$timestampOriginal = $this->dateToTimestamp(
+					'Y:m:d G:i:sP',
+					$rawDateTimeOriginal . $offsetTimeOriginal,
+					$node,
+				);
+			} else {
+				$timestampOriginal = false;
+			}
+
+			if ($timestampOriginal === false) {
+				$timestampOriginal = $this->dateToTimestamp('Y:m:d G:i:s', $rawDateTimeOriginal, $node);
+			}
 			if ($timestampOriginal !== false) {
 				$metadata->setInt(self::METADATA_KEY, $timestampOriginal, true);
 				return;

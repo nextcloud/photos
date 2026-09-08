@@ -230,7 +230,16 @@ class ExifMetadataProvider implements IEventListener {
 	private function sanitizeEntries(array $data, File $node): array {
 		$cleanData = [];
 
+		// PHP's EXIF extension reports the OffsetTime tags using their numeric tag IDs.
+		$knownExifTags = [
+			'UndefinedTag:0x9010' => 'OffsetTime',
+			'UndefinedTag:0x9011' => 'OffsetTimeOriginal',
+			'UndefinedTag:0x9012' => 'OffsetTimeDigitized',
+		];
+
 		foreach ($data as $key => $value) {
+			$key = $knownExifTags[$key] ?? $key;
+
 			if (is_string($value) && !mb_check_encoding($value, 'UTF-8')) {
 				$value = 'base64:' . base64_encode($value);
 			} elseif (is_string($value)) {
