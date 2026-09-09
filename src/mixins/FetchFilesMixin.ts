@@ -91,17 +91,23 @@ export default defineComponent({
 				return fileIds
 			} catch (error) {
 				if (error.response?.status === 404) {
-					const sources = store.state.userConfig.photosSourceFolders
-					for (const source of sources) {
-						if (error.response?.data?.match(`File with name /${source} could not be located`) === null) {
-							continue
-						}
-						logger.debug(`The ${source} folder does not exist, creating it.`)
-						try {
-							await davClient.createDirectory(joinPaths(defaultRootPath, source))
-							this.resetFetchFilesState()
-							return []
-						} catch (error) {
+					const { photosLocation, photosSourceFolders } = store.state.userConfig
+					const errorBody = await getErrorBody(error)
+					const missingFolder = photosSourceFolders
+						.find((source) => errorBody.includes(`File with name ${source} could not be located`))
+
+					if (missingFolder !== undefined) {
+						if (missingFolder === photosLocation) {
+							logger.debug(`The ${missingFolder} folder does not exist, creating it.`)
+							try {
+								await davClient.createDirectory(joinPaths(defaultRootPath, missingFolder))
+								this.resetFetchFilesState()
+								return []
+							} catch (error) {
+								this.errorFetchingFiles = 404
+								logger.error('Fail to create source directory', { error })
+							}
+						} else {
 							this.errorFetchingFiles = 404
 							logger.error(`The ${missingFolder} media folder does not exist.`, { error })
 							showError(t('photos', 'The folder {folder} does not exist anymore. You can remove it from your media folders in the Photos settings.', { folder: missingFolder }))
