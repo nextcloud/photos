@@ -209,6 +209,7 @@ OC.L10N.register(
     "Failed to fetch collection." : "Derleme alınamadı",
     "Failed to fetch collections list." : "Derleme listesi alınamadı.",
     "Failed to fetch faces list." : "Yüzlerin listesi alınamadı.",
+    "The folder {folder} does not exist anymore. You can remove it from your media folders in the Photos settings." : "{folder} klasörü artık yok. Fotoğraflar ayarlarındaki ortam klasörlerinizden kaldırabilirsiniz.",
     "All your media" : "Tüm ortamlarınız",
     "Album {title}" : "{title} albümü",
     "Shared Albums" : "Paylaşılmış albümler",

@@ -207,6 +207,7 @@
     "Failed to fetch collection." : "Failed to fetch collection.",
     "Failed to fetch collections list." : "Failed to fetch collections list.",
     "Failed to fetch faces list." : "Failed to fetch faces list.",
+    "The folder {folder} does not exist anymore. You can remove it from your media folders in the Photos settings." : "The folder {folder} does not exist anymore. You can remove it from your media folders in the Photos settings.",
     "All your media" : "All your media",
     "Album {title}" : "Album {title}",
     "Shared Albums" : "Shared Albums",
