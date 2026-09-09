@@ -209,6 +209,7 @@ OC.L10N.register(
     "Failed to fetch collection." : "Falha ao obter a coleção.",
     "Failed to fetch collections list." : "Falha ao obter a lista de coleções.",
     "Failed to fetch faces list." : "Falha ao obter a lista de rostos.",
+    "The folder {folder} does not exist anymore. You can remove it from your media folders in the Photos settings." : "A pasta {folder} não existe mais. Você pode removê-la das suas pastas de mídia nas configurações do aplicativo Fotos.",
     "All your media" : "Todas as suas mídias",
     "Album {title}" : "Álbum {title}",
     "Shared Albums" : "Álbuns Compartilhados",

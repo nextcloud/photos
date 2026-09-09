@@ -209,6 +209,7 @@ OC.L10N.register(
     "Failed to fetch collection." : "Kogumiku laadimine ei õnnestunud.",
     "Failed to fetch collections list." : "Kogumiku loendi laadimine ei õnnestunud.",
     "Failed to fetch faces list." : "Nägude loendi laadimine ei õnnestunud.",
+    "The folder {folder} does not exist anymore. You can remove it from your media folders in the Photos settings." : "„{folder}“ kausta pole enam olemas. Võid ta Fotorakenduse seadistustest eemaldada meediumikaustade loendist.",
     "All your media" : "Kõik sinu multimeediasisu",
     "Album {title}" : "„{title}“ album",
     "Shared Albums" : "Jagatud albumid",

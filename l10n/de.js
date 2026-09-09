@@ -209,6 +209,7 @@ OC.L10N.register(
     "Failed to fetch collection." : "Sammlung konnte nicht abgerufen werden.",
     "Failed to fetch collections list." : "Sammlungsliste konnte nicht geladen werden.",
     "Failed to fetch faces list." : "Liste mit Gesichter konnte nicht geladen werden.",
+    "The folder {folder} does not exist anymore. You can remove it from your media folders in the Photos settings." : "Der Ordner {folder} existiert nicht mehr. Du kannst ihn aus deinem Medienordner in den Fotoeinstellungen entfernen.",
     "All your media" : "Alle deine Medien",
     "Album {title}" : "Album {title}",
     "Shared Albums" : "Geteilte Alben",

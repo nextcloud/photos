@@ -5,6 +5,7 @@ OC.L10N.register(
     "Photos" : "Fotos",
     "On This Day" : "Neste dia",
     "Your memories under your control" : "As suas memórias estão sob o seu controlo",
+    "Search by file name" : "Pesquisar pelo nome do ficheiro",
     "Clear search" : "Limpar pesquisa",
     "All media" : "Todas as mídias",
     "Videos" : "Vídeos",
