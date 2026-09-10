@@ -209,6 +209,7 @@ OC.L10N.register(
     "Failed to fetch collection." : "擷取收藏品失敗。",
     "Failed to fetch collections list." : "擷取收藏清單失敗。",
     "Failed to fetch faces list." : "擷取臉部清單失敗。",
+    "The folder {folder} does not exist anymore. You can remove it from your media folders in the Photos settings." : "資料夾 {folder} 已不存在。您可以在「相片」設定的媒體資料夾中將其移除。",
     "All your media" : "您所有的媒體",
     "Album {title}" : "相簿 {title}",
     "Shared Albums" : "已分享的相簿",
