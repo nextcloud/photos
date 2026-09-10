@@ -207,6 +207,7 @@
     "Failed to fetch collection." : "Det gick inte att hämta samlingen.",
     "Failed to fetch collections list." : "Det gick inte att hämta listan över samlingar.",
     "Failed to fetch faces list." : "Det gick inte att hämta listan över ansikten.",
+    "The folder {folder} does not exist anymore. You can remove it from your media folders in the Photos settings." : "Mappen {folder} finns inte längre. Du kan ta bort den från dina mediamappar i Foto-inställningarna.",
     "All your media" : "Alla dina medier",
     "Album {title}" : "Album {title}",
     "Shared Albums" : "Delade album",
