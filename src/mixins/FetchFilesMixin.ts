@@ -15,6 +15,7 @@ import { davClient } from '../services/DavClient.ts'
 import { getErrorBody } from '../services/DavResponse.ts'
 import logger from '../services/logger.js'
 import getPhotos from '../services/PhotoSearch.js'
+import useFilesStore from '../store/files.ts'
 import useUserConfigStore from '../store/userConfig.ts'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
 import AbortControllerMixin from './AbortControllerMixin.js'
@@ -84,7 +85,7 @@ export default defineComponent({
 
 				this.fetchedFileIds.push(...fileIds)
 
-				this.$store.dispatch('appendFiles', fetchedFiles)
+				useFilesStore().appendFiles(fetchedFiles)
 
 				logger.debug(`[FetchFilesMixin] Fetched ${fileIds.length} new files: `, { fileIds })
 

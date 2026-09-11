@@ -31,6 +31,7 @@ import {
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import Star from 'vue-material-design-icons/Star.vue'
 import StarOutline from 'vue-material-design-icons/StarOutline.vue'
+import useFilesStore from '../../store/files.ts'
 
 export default defineComponent({
 	name: 'ActionFavorite',
@@ -49,7 +50,7 @@ export default defineComponent({
 
 	computed: {
 		files() {
-			return this.$store.state.files.files
+			return useFilesStore().files
 		},
 
 		shouldFavoriteSelection() {
@@ -60,11 +61,11 @@ export default defineComponent({
 
 	methods: {
 		async favoriteSelection() {
-			await this.$store.dispatch('toggleFavoriteForFiles', { fileIds: this.selectedFileIds, favoriteState: 1 })
+			await useFilesStore().toggleFavoriteForFiles(this.selectedFileIds, 1)
 		},
 
 		async unFavoriteSelection() {
-			await this.$store.dispatch('toggleFavoriteForFiles', { fileIds: this.selectedFileIds, favoriteState: 0 })
+			await useFilesStore().toggleFavoriteForFiles(this.selectedFileIds, 0)
 		},
 
 		t,

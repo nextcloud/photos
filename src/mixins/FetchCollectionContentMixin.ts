@@ -16,6 +16,7 @@ import {
 } from '../services/collectionFetcher.js'
 import logger from '../services/logger.js'
 import { collectionFilesExtraProps } from '../store/collections.js'
+import useFilesStore from '../store/files.ts'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
 import AbortControllerMixin from './AbortControllerMixin.js'
 
@@ -79,7 +80,7 @@ export default defineComponent({
 				const fetchedFiles = await fetchCollectionFiles(collectionFileName, { signal: this.abortController.signal }, extraProps, client)
 				const fileIds = fetchedFiles.map((file) => file.fileid?.toString())
 
-				this.$store.dispatch('appendFiles', fetchedFiles)
+				useFilesStore().appendFiles(fetchedFiles)
 
 				await this.$store.commit('setCollectionFiles', { collectionFileName, fileIds })
 

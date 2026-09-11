@@ -77,6 +77,7 @@ import PackageVariant from 'vue-material-design-icons/PackageVariant.vue'
 import TiledLayout from '../components/TiledLayout/TiledLayout.vue'
 import VirtualScrolling from '../components/VirtualScrolling.vue'
 import { fetchFile } from '../services/fileFetcher.ts'
+import useFilesStore from '../store/files.ts'
 import useUserConfigStore from '../store/userConfig.ts'
 
 export default {
@@ -169,7 +170,7 @@ export default {
 
 	computed: {
 		files(): Record<string, PhotoFile> {
-			return this.$store.state.files.files
+			return useFilesStore().files
 		},
 
 		showPlaceholders(): boolean {
@@ -251,7 +252,11 @@ export default {
 
 		async handleFileUpdated({ fileid }: File): Promise<void> {
 			const fetchedFile = await fetchFile(this.files[fileid as number].path)
-			this.$store.dispatch('appendFiles', [fetchedFile])
+			if (fetchedFile === null) {
+				return
+			}
+
+			useFilesStore().appendFiles([fetchedFile as File])
 		},
 
 		handleFileDeleted({ fileid }: File) {
