@@ -87,6 +87,8 @@ export default defineComponent({
 
 	mixins: [FetchCollectionsMixin],
 
+	emits: ['albumPicked'],
+
 	setup() {
 		return { albumsStore: useAlbumsStore(), sharedAlbumsStore: useSharedAlbumsStore() }
 	},

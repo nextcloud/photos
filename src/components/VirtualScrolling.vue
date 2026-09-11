@@ -87,6 +87,8 @@ export default {
 		},
 	},
 
+	emits: ['needContent'],
+
 	data() {
 		return {
 			scrollPosition: 0,

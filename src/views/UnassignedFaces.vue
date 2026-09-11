@@ -102,7 +102,7 @@
 </template>
 
 <script lang='ts'>
-import { t } from '@nextcloud/l10n'
+import { n, t } from '@nextcloud/l10n'
 import { nextTick } from 'vue'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
@@ -254,6 +254,7 @@ export default {
 		},
 
 		t,
+		n,
 	},
 }
 </script>
