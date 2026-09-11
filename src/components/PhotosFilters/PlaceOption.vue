@@ -31,10 +31,11 @@ const props = defineProps<{
 
 const emit = defineEmits(['deselect'])
 
+const placesStore = usePlacesStore()
 const { fetchCollections } = useFetchCollections()
 
 const placeImageSource = computed<string>(() => {
-	const place = usePlacesStore().getPlace(props.value)
+	const place = placesStore.getPlace(props.value)
 
 	if (!place) {
 		return ''
@@ -43,7 +44,7 @@ const placeImageSource = computed<string>(() => {
 	return generateUrl(`/apps/photos/api/v1/preview/${place.attributes['last-photo']}?x=${64}&y=${64}`)
 })
 
-if (Object.values(usePlacesStore().places).length === 0) {
+if (Object.values(placesStore.places).length === 0) {
 	fetchCollections(placesPrefix)
 }
 

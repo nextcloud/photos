@@ -30,12 +30,13 @@ export function useLoadedPhotos(): {
 	loading: Ref<boolean>
 	loadPhotos: () => Promise<void>
 } {
+	const filesStore = useFilesStore()
 	const abortController = new AbortController()
 	const loading = ref(false)
 
 	// The store also holds the folders and their content, so only the files
 	// with a media mime type are kept here.
-	const photos = computed<PhotoFile[]>(() => Object.values(useFilesStore().files)
+	const photos = computed<PhotoFile[]>(() => Object.values(filesStore.files)
 		.filter((file) => allMimes.includes(file.mime ?? ''))
 		.sort((photo1, photo2) => photo2.attributes.timestamp - photo1.attributes.timestamp))
 
@@ -51,7 +52,7 @@ export function useLoadedPhotos(): {
 				nbResults: BATCH_SIZE,
 				signal: abortController.signal,
 			})
-			useFilesStore().appendFiles(files)
+			filesStore.appendFiles(files)
 		} catch (error) {
 			if (error instanceof DOMException && error.code === error.ABORT_ERR) {
 				return
