@@ -110,8 +110,8 @@ import allowedMimes from '../services/AllowedMimes.js'
 import { fetchFile } from '../services/fileFetcher.ts'
 import getFolderContent from '../services/FolderContent.ts'
 import logger from '../services/logger.ts'
-import useFoldersStore from '../store/folders.ts'
-import useUserConfigStore from '../store/userConfig.ts'
+import { useFoldersStore } from '../store/folders.ts'
+import { useUserConfigStore } from '../store/userConfig.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
 export default {
@@ -149,6 +149,10 @@ export default {
 		},
 	},
 
+	setup() {
+		return { foldersStore: useFoldersStore(), userConfigStore: useUserConfigStore() }
+	},
+
 	data() {
 		return {
 			error: null as null | 404 | Error,
@@ -165,16 +169,16 @@ export default {
 
 	computed: {
 		files() {
-			return useFoldersStore().files
+			return this.foldersStore.files
 		},
 
 		folders() {
-			return useFoldersStore().folders
+			return this.foldersStore.folders
 		},
 
 		// current folder id from current path
 		folderId() {
-			return useFoldersStore().paths[this.path]
+			return this.foldersStore.paths[this.path]
 		},
 
 		/** The folder that is open. */
@@ -200,14 +204,14 @@ export default {
 		 * always something to crop away.
 		 */
 		croppedLayout(): boolean {
-			return useUserConfigStore().croppedLayout
+			return this.userConfigStore.croppedLayout
 		},
 
 		// subfolders of the current folder
 		subFolders() {
 			return this.folderId
 				&& this.files[this.folderId]
-				&& useFoldersStore().subFolders[this.folderId]
+				&& this.foldersStore.subFolders[this.folderId]
 		},
 
 		folderList() {
@@ -275,7 +279,7 @@ export default {
 		// Folders keep the ids of the files they hold, the listing skips the
 		// ones which are gone.
 		onPhotoDeleted(photo: PhotoTarget) {
-			useFoldersStore().deleteFolderFile(photo.fileid)
+			this.foldersStore.deleteFolderFile(photo.fileid)
 		},
 
 		onRefresh() {
@@ -322,9 +326,9 @@ export default {
 					shared: this.showShared,
 					signal: this.abortController.signal,
 				})
-				useFoldersStore().addPath(this.path, folder?.fileid)
-				useFoldersStore().updateFolders(folder?.fileid, files, folders)
-				useFoldersStore().updateFoldersFiles(folder, files, folders)
+				this.foldersStore.addPath(this.path, folder?.fileid)
+				this.foldersStore.updateFolders(folder?.fileid, files, folders)
+				this.foldersStore.updateFoldersFiles(folder, files, folders)
 			} catch (error) {
 				if (error?.response && error.response.status) {
 					if (error.response.status === 404) {
@@ -366,8 +370,8 @@ export default {
 				return
 			}
 
-			useFoldersStore().appendFoldersFiles([node])
-			useFoldersStore().addFilesToFolder(this.folderId, [node])
+			this.foldersStore.appendFoldersFiles([node])
+			this.foldersStore.addFilesToFolder(this.folderId, [node])
 		},
 
 		t,

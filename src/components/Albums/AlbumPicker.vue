@@ -69,8 +69,8 @@ import Plus from 'vue-material-design-icons/Plus.vue'
 import AlbumForm from './AlbumForm.vue'
 import FetchCollectionsMixin from '../../mixins/FetchCollectionsMixin.ts'
 import { albumsExtraProps } from '../../store/albums.ts'
-import useAlbumsStore from '../../store/albums.ts'
-import useSharedAlbumsStore from '../../store/sharedAlbums.ts'
+import { useAlbumsStore } from '../../store/albums.ts'
+import { useSharedAlbumsStore } from '../../store/sharedAlbums.ts'
 
 export default defineComponent({
 	name: 'AlbumPicker',
@@ -87,6 +87,10 @@ export default defineComponent({
 
 	mixins: [FetchCollectionsMixin],
 
+	setup() {
+		return { albumsStore: useAlbumsStore(), sharedAlbumsStore: useSharedAlbumsStore() }
+	},
+
 	data() {
 		return {
 			showAlbumCreationForm: false,
@@ -95,11 +99,11 @@ export default defineComponent({
 
 	computed: {
 		albums() {
-			return useAlbumsStore().albums
+			return this.albumsStore.albums
 		},
 
 		sharedAlbums() {
-			return useSharedAlbumsStore().sharedAlbums
+			return this.sharedAlbumsStore.sharedAlbums
 		},
 
 		allAlbums() {

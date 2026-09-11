@@ -13,14 +13,14 @@ import { ref } from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
-import useFilesStore from './files.ts'
+import { useFilesStore } from './files.ts'
 
 export const collectionFilesExtraProps = ['<nc:photos-collection-file-original-filename />']
 
 /**
  * Collections are indexed by their `filename`.
  */
-export default defineStore('collections', () => {
+export const useCollectionsStore = defineStore('collections', () => {
 	// "photos/{userName}/{collection}/{collectionName}": Collection
 	const collections = ref<Record<string, Collection>>({})
 	// "photos/{userName}/{collection}/{collectionName}": ["1", "2", ...]

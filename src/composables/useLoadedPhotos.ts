@@ -12,7 +12,7 @@ import { computed, onUnmounted, ref } from 'vue'
 import { allMimes } from '../services/AllowedMimes.ts'
 import logger from '../services/logger.ts'
 import getPhotos from '../services/PhotoSearch.ts'
-import useFilesStore from '../store/files.ts'
+import { useFilesStore } from '../store/files.ts'
 
 /**
  * Number of photos fetched at once. Views built on top of the loaded photos

@@ -102,10 +102,10 @@
 							</ActionDownload>-->
 
 								<NcActionButton
-									v-if="shouldFavoriteSelection"
+									v-if="shouldFavoriteSelection(selectedFileIds)"
 									:closeAfterClick="true"
 									:aria-label="t('photos', 'Mark selection as favorite')"
-									@click="favoriteSelection">
+									@click="favoriteSelection(selectedFileIds)">
 									{{ t('photos', 'Add selection to favorites') }}
 									<template #icon>
 										<StarOutline />
@@ -115,7 +115,7 @@
 									v-else
 									:closeAfterClick="true"
 									:aria-label="t('photos', 'Remove selection from favorites')"
-									@click="unFavoriteSelection">
+									@click="unFavoriteSelection(selectedFileIds)">
 									{{ t('photos', 'Remove selection from favorites') }}
 									<template #icon>
 										<Star />
@@ -242,9 +242,9 @@ import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.j
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import logger from '../services/logger.js'
 import { albumFilesExtraProps, albumsExtraProps } from '../store/albums.ts'
-import useAlbumsStore from '../store/albums.ts'
-import useCollectionsStore from '../store/collections.ts'
-import useFilesStore from '../store/files.ts'
+import { useAlbumsStore } from '../store/albums.ts'
+import { useCollectionsStore } from '../store/collections.ts'
+import { useFilesStore } from '../store/files.ts'
 import { pickAlbumCover } from '../utils/albumCover.ts'
 
 export default {
@@ -294,6 +294,9 @@ export default {
 		const isMobile = useIsMobile()
 		return {
 			isMobile,
+			albumsStore: useAlbumsStore(),
+			collectionsStore: useCollectionsStore(),
+			filesStore: useFilesStore(),
 		}
 	},
 
@@ -308,17 +311,12 @@ export default {
 	},
 
 	computed: {
-		shouldFavoriteSelection(): boolean {
-			// Favorite all selection if at least one file is not in the favorites.
-			return this.selectedFileIds.some((fileId) => useFilesStore().files[fileId].attributes.favorite === 0)
-		},
-
 		album(): Album {
-			return useAlbumsStore().getAlbum(this.albumName)
+			return this.albumsStore.getAlbum(this.albumName)
 		},
 
 		albumFileIds(): string[] {
-			return useAlbumsStore().getAlbumFiles(this.albumName)
+			return this.albumsStore.getAlbumFiles(this.albumName)
 		},
 
 		sharingEnabled(): boolean {
@@ -326,12 +324,12 @@ export default {
 		},
 
 		albumFileName(): string {
-			return useAlbumsStore().getAlbumName(this.albumName)
+			return this.albumsStore.getAlbumName(this.albumName)
 		},
 
 		albumPhotos(): PhotoFile[] {
 			return this.albumFileIds
-				.map((fileId) => useFilesStore().files[fileId])
+				.map((fileId) => this.filesStore.files[fileId])
 				.filter((file) => file !== undefined)
 		},
 
@@ -363,8 +361,8 @@ export default {
 		},
 
 		removableSelectedFiles() {
-			return (this.$refs.collectionContent?.selectedFileIds as string[])
-				.map((fileId) => useFilesStore().files[fileId])
+			return ((this.$refs.collectionContent?.selectedFileIds ?? []) as string[])
+				.map((fileId) => this.filesStore.files[fileId])
 				.filter((file) => file.attributes['photos-album-file-origin'] !== 'filters')
 				.map((file) => file.fileid.toString())
 		},
@@ -376,12 +374,17 @@ export default {
 	},
 
 	methods: {
-		async favoriteSelection(): Promise<void> {
-			await useFilesStore().toggleFavoriteForFiles(this.selectedFileIds, 1)
+		// Favorite the whole selection if at least one of its photos is not a favorite yet.
+		shouldFavoriteSelection(selectedFileIds: string[]): boolean {
+			return selectedFileIds.some((fileId) => this.filesStore.files[fileId].attributes.favorite === 0)
 		},
 
-		async unFavoriteSelection(): Promise<void> {
-			await useFilesStore().toggleFavoriteForFiles(this.selectedFileIds, 0)
+		async favoriteSelection(selectedFileIds: string[]): Promise<void> {
+			await this.filesStore.toggleFavoriteForFiles(selectedFileIds, 1)
+		},
+
+		async unFavoriteSelection(selectedFileIds: string[]): Promise<void> {
+			await this.filesStore.toggleFavoriteForFiles(selectedFileIds, 0)
 		},
 
 		async fetchAlbum() {
@@ -409,18 +412,18 @@ export default {
 
 		async handleFilesPicked(fileIds: string[]) {
 			this.showAddPhotosModal = false
-			await useCollectionsStore().addFilesToCollection(this.album?.root + this.album?.path, fileIds)
+			await this.collectionsStore.addFilesToCollection(this.album?.root + this.album?.path, fileIds)
 			// Re-fetch album content to have the proper filenames.
 			await this.fetchAlbumContent()
 		},
 
 		async handleRemoveFilesFromAlbum(fileIds: string[]) {
 			this.$refs.collectionContent?.onUncheckFiles(fileIds)
-			await useCollectionsStore().removeFilesFromCollection(this.album?.root + this.album?.path, fileIds)
+			await this.collectionsStore.removeFilesFromCollection(this.album?.root + this.album?.path, fileIds)
 		},
 
 		async handleDeleteAlbum() {
-			const isDeleted = await useCollectionsStore().deleteCollection(this.album?.root + this.album?.path)
+			const isDeleted = await this.collectionsStore.deleteCollection(this.album?.root + this.album?.path)
 			if (isDeleted) {
 				this.$router.push('/albums')
 			}
@@ -430,7 +433,7 @@ export default {
 			try {
 				this.loadingAddCollaborators = true
 				this.showManageCollaboratorView = false
-				await useCollectionsStore().updateCollection(this.album?.root + this.album?.path, { collaborators })
+				await this.collectionsStore.updateCollection(this.album?.root + this.album?.path, { collaborators })
 			} catch (error) {
 				logger.error('Error while setting album collaborators', { error })
 			} finally {
@@ -439,7 +442,7 @@ export default {
 		},
 
 		async handleFiltersChange(filters) {
-			await useCollectionsStore().updateCollection(this.album?.root + this.album?.path, { filters })
+			await this.collectionsStore.updateCollection(this.album?.root + this.album?.path, { filters })
 			this.fetchAlbumContent()
 		},
 

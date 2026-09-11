@@ -5,8 +5,8 @@
 
 import he from 'he'
 import { defineComponent } from 'vue'
-import useFacesStore from '../store/faces.ts'
-import useFilesStore from '../store/files.ts'
+import { useFacesStore } from '../store/faces.ts'
+import { useFilesStore } from '../store/files.ts'
 
 type Cover = {
 	detection: {

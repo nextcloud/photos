@@ -17,8 +17,8 @@
 import FaceCover from './FaceCover.vue'
 import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
 import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
-import useFacesStore from '../../store/faces.ts'
-import useFilesStore from '../../store/files.ts'
+import { useFacesStore } from '../../store/faces.ts'
+import { useFilesStore } from '../../store/files.ts'
 
 export default {
 	name: 'FaceMergeForm',
@@ -35,6 +35,10 @@ export default {
 		},
 	},
 
+	setup() {
+		return { facesStore: useFacesStore(), filesStore: useFilesStore() }
+	},
+
 	data() {
 		return {
 			loading: false,
@@ -43,15 +47,15 @@ export default {
 
 	computed: {
 		files() {
-			return useFilesStore().files
+			return this.filesStore.files
 		},
 
 		faces() {
-			return useFacesStore().faces
+			return this.facesStore.faces
 		},
 
 		facesFiles() {
-			return useFacesStore().facesFiles
+			return this.facesStore.facesFiles
 		},
 
 		filteredFaces() {

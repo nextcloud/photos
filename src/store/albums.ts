@@ -9,7 +9,7 @@ import type { Collection } from '../services/collectionFetcher.ts'
 import { getCurrentUser } from '@nextcloud/auth'
 import { defineStore } from 'pinia'
 import { computed } from 'vue'
-import useCollectionsStore from './collections.ts'
+import { useCollectionsStore } from './collections.ts'
 
 export type Collaborator = {
 	id: string // - The id of the collaborator.
@@ -40,7 +40,7 @@ export const albumFilesExtraProps = ['<nc:photos-album-file-origin />']
 
 export const albumsPrefix = `/photos/${getCurrentUser()?.uid}/albums`
 
-export default defineStore('albums', () => {
+export const useAlbumsStore = defineStore('albums', () => {
 	const collectionsStore = useCollectionsStore()
 
 	const albums = computed(() => collectionsStore.collectionsWithPrefix(albumsPrefix) as unknown as Record<string, Album>)

@@ -8,7 +8,7 @@ import type { GridDensity } from '../store/userConfig.ts'
 
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { computed } from 'vue'
-import useUserConfigStore from '../store/userConfig.ts'
+import { useUserConfigStore } from '../store/userConfig.ts'
 
 /**
  * Target height of a tile row for each density, per form factor.

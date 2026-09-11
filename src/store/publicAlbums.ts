@@ -8,7 +8,7 @@ import type { Album } from './albums.ts'
 import { defineStore } from 'pinia'
 import { computed } from 'vue'
 import { albumsExtraProps } from './albums.ts'
-import useCollectionsStore from './collections.ts'
+import { useCollectionsStore } from './collections.ts'
 
 export type PublicAlbum = Album & {
 	attributes: {
@@ -22,7 +22,7 @@ export const publicAlbumsExtraProps = [
 ]
 export const publicAlbumsPrefix = '/photospublic'
 
-export default defineStore('publicAlbums', () => {
+export const usePublicAlbumsStore = defineStore('publicAlbums', () => {
 	const collectionsStore = useCollectionsStore()
 
 	const publicAlbums = computed(() => collectionsStore.collectionsWithPrefix(publicAlbumsPrefix) as unknown as Record<string, PublicAlbum>)

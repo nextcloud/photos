@@ -21,7 +21,7 @@ import { translatePlural as n } from '@nextcloud/l10n'
 import AccountOffOutlineIcon from 'vue-material-design-icons/AccountOffOutline.vue'
 import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
 import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
-import useFacesStore from '../../store/faces.ts'
+import { useFacesStore } from '../../store/faces.ts'
 
 export default {
 	name: 'UnassignedFacesCover',
@@ -40,9 +40,13 @@ export default {
 		},
 	},
 
+	setup() {
+		return { facesStore: useFacesStore() }
+	},
+
 	computed: {
 		unassignedFilesCount() {
-			return useFacesStore().unassignedFilesCount
+			return this.facesStore.unassignedFilesCount
 		},
 
 		colorMainBackground() {

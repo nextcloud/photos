@@ -9,9 +9,9 @@ import { defaultRootPath } from '@nextcloud/files/dav'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { compareModificationTime } from '../utils/fileUtils.ts'
-import useFilesStore from './files.ts'
+import { useFilesStore } from './files.ts'
 
-export default defineStore('folders', () => {
+export const useFoldersStore = defineStore('folders', () => {
 	const paths = ref<Record<string, number>>({})
 	const folders = ref<Record<string, number[]>>({})
 	const files = ref<Record<string, Node>>({})

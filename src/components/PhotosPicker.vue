@@ -128,8 +128,8 @@ import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import allowedMimes from '../services/AllowedMimes.js'
 import getFolderContent from '../services/FolderContent.ts'
-import useFilesStore from '../store/files.ts'
-import useUserConfigStore from '../store/userConfig.ts'
+import { useFilesStore } from '../store/files.ts'
+import { useUserConfigStore } from '../store/userConfig.ts'
 
 export default defineComponent({
 	name: 'PhotosPicker',
@@ -193,6 +193,8 @@ export default defineComponent({
 	setup() {
 		return {
 			isMobile: useIsMobile(),
+			filesStore: useFilesStore(),
+			userConfigStore: useUserConfigStore(),
 		}
 	},
 
@@ -206,11 +208,11 @@ export default defineComponent({
 
 	computed: {
 		files() {
-			return useFilesStore().files
+			return this.filesStore.files
 		},
 
 		photosLocationFolder() {
-			return useUserConfigStore().photosLocationFolder
+			return this.userConfigStore.photosLocationFolder
 		},
 	},
 

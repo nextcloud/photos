@@ -14,7 +14,7 @@ import { ref } from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
-import useFilesStore from './files.ts'
+import { useFilesStore } from './files.ts'
 
 type FaceDetection = {
 	id: number
@@ -57,7 +57,7 @@ function getRecognizeFileName(detection: FaceDetection, fileBaseName: string): s
 	return `${detection.id}-${fileBaseName}`
 }
 
-export default defineStore('faces', () => {
+export const useFacesStore = defineStore('faces', () => {
 	const faces = ref<Record<string, Collection>>({})
 	const facesFiles = ref<Record<string, string[]>>({})
 	const unassignedFiles = ref<string[]>([])

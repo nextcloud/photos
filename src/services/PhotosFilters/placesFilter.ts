@@ -8,9 +8,9 @@ import type { PhotosFilter } from './PhotosFilter.ts'
 import mapMarkerSvg from '@mdi/svg/svg/map-marker.svg?raw'
 import { generateUrl } from '@nextcloud/router'
 import PlacesOption from '../../components/PhotosFilters/PlaceOption.vue'
-import useCollectionsStore from '../../store/collections.ts'
+import { useCollectionsStore } from '../../store/collections.ts'
 import { placesPrefix } from '../../store/places.ts'
-import usePlacesStore from '../../store/places.ts'
+import { usePlacesStore } from '../../store/places.ts'
 import { fetchCollections } from '../collectionFetcher.ts'
 
 export type PlacesValueType = string

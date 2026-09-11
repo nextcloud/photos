@@ -140,8 +140,8 @@ import PhotoMetadataEditDialog from './PhotoMetadataEditDialog.vue'
 import PhotoTagsDialog from './PhotoTagsDialog.vue'
 import areTagsInstalled from '../services/AreTagsInstalled.ts'
 import logger from '../services/logger.ts'
-import useCollectionsStore from '../store/collections.ts'
-import useFilesStore from '../store/files.ts'
+import { useCollectionsStore } from '../store/collections.ts'
+import { useFilesStore } from '../store/files.ts'
 
 const props = defineProps<{
 	/** Photo the actions apply to. */

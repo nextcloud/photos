@@ -272,9 +272,9 @@ import FilesByMonthMixin from '../mixins/FilesByMonthMixin.ts'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.ts'
 import { allMimes } from '../services/AllowedMimes.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
-import useCollectionsStore from '../store/collections.ts'
-import useFilesStore from '../store/files.ts'
-import useFilterStore from '../store/filters.ts'
+import { useCollectionsStore } from '../store/collections.ts'
+import { useFilesStore } from '../store/files.ts'
+import { useFilterStore } from '../store/filters.ts'
 import { configChangedEvent } from '../store/userConfig.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
@@ -358,6 +358,8 @@ export default {
 			gridDensity,
 			tileBaseHeight,
 			setGridDensity,
+			collectionsStore: useCollectionsStore(),
+			filesStore: useFilesStore(),
 		}
 	},
 
@@ -377,11 +379,11 @@ export default {
 	computed: {
 		shouldFavoriteSelection(): boolean {
 			// Favorite all selection if at least one file is not in the favorites.
-			return this.selectedFileIds.some((fileId) => useFilesStore().files[fileId].attributes.favorite === 0)
+			return this.selectedFileIds.some((fileId) => this.filesStore.files[fileId].attributes.favorite === 0)
 		},
 
 		files() {
-			return useFilesStore().files
+			return this.filesStore.files
 		},
 
 		// Photos of the timeline that are loaded, in the order they are shown.
@@ -430,11 +432,11 @@ export default {
 
 	methods: {
 		async favoriteSelection(): Promise<void> {
-			await useFilesStore().toggleFavoriteForFiles(this.selectedFileIds, 1)
+			await this.filesStore.toggleFavoriteForFiles(this.selectedFileIds, 1)
 		},
 
 		async unFavoriteSelection(): Promise<void> {
-			await useFilesStore().toggleFavoriteForFiles(this.selectedFileIds, 0)
+			await this.filesStore.toggleFavoriteForFiles(this.selectedFileIds, 0)
 		},
 
 		dateMonth(date: string): string {
@@ -506,7 +508,7 @@ export default {
 
 		async addSelectionToAlbum(album: Album) {
 			this.showAlbumPicker = false
-			await useCollectionsStore().addFilesToCollection(album.root + album.path, this.selectedFileIds)
+			await this.collectionsStore.addFilesToCollection(album.root + album.path, this.selectedFileIds)
 		},
 
 		// The photo is already gone from the store, it only has to leave the
@@ -521,7 +523,7 @@ export default {
 			const fileIds = this.selectedFileIds
 			this.onUncheckFiles(fileIds)
 			this.fetchedFileIds = this.fetchedFileIds.filter((fileid) => !fileIds.includes(fileid))
-			await useFilesStore().deleteFiles(fileIds)
+			await this.filesStore.deleteFiles(fileIds)
 		},
 
 		handleUserConfigChange({ key }) {

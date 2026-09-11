@@ -64,7 +64,7 @@ import CollectionsList from '../components/Collection/CollectionsList.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
 import { albumsExtraProps } from '../store/albums.ts'
-import useSharedAlbumsStore from '../store/sharedAlbums.ts'
+import { useSharedAlbumsStore } from '../store/sharedAlbums.ts'
 
 export default {
 	name: 'SharedAlbums',
@@ -79,9 +79,13 @@ export default {
 
 	mixins: [FetchCollectionsMixin],
 
+	setup() {
+		return { sharedAlbumsStore: useSharedAlbumsStore() }
+	},
+
 	computed: {
 		sharedAlbums(): Record<string, Album> {
-			return useSharedAlbumsStore().sharedAlbums
+			return this.sharedAlbumsStore.sharedAlbums
 		},
 	},
 

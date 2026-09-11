@@ -63,8 +63,8 @@ import FilesListViewer from '../components/FilesListViewer.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import logger from '../services/logger.js'
-import useFilesStore from '../store/files.ts'
-import useSystemTagsStore from '../store/systemtags.ts'
+import { useFilesStore } from '../store/files.ts'
+import { useSystemTagsStore } from '../store/systemtags.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.js'
 
 export default {
@@ -94,6 +94,8 @@ export default {
 	setup() {
 		return {
 			isMobile: useIsMobile(),
+			filesStore: useFilesStore(),
+			systemTagsStore: useSystemTagsStore(),
 		}
 	},
 
@@ -107,16 +109,16 @@ export default {
 
 	computed: {
 		files() {
-			return useFilesStore().files
+			return this.filesStore.files
 		},
 
 		tags() {
-			return useSystemTagsStore().tags
+			return this.systemTagsStore.tags
 		},
 
 		// current tag id from current path
 		tagId() {
-			return useSystemTagsStore().tagId(this.path)
+			return this.systemTagsStore.tagId(this.path)
 		},
 
 		// current tag
@@ -126,7 +128,7 @@ export default {
 
 		// files list of the current tag
 		fileIds() {
-			return useSystemTagsStore().tagsFiles[this.tagId]
+			return this.systemTagsStore.tagsFiles[this.tagId]
 		},
 
 		isEmpty() {
@@ -162,11 +164,11 @@ export default {
 			try {
 				// if we don't already have some cached data let's show a loader
 				if (!this.tags[this.tagId]) {
-					await useSystemTagsStore().fetchAllTags(this.abortController.signal)
+					await this.systemTagsStore.fetchAllTags(this.abortController.signal)
 				}
 
 				if (this.tag && !this.fileIds) {
-					await useSystemTagsStore().fetchTagFiles(this.tagId, this.abortController.signal)
+					await this.systemTagsStore.fetchTagFiles(this.tagId, this.abortController.signal)
 				}
 			} catch (error) {
 				logger.error('Failed to fetch tags', { error })

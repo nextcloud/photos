@@ -16,8 +16,8 @@ import { defineComponent } from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import { getPropFind } from '../services/DavRequest.ts'
 import logger from '../services/logger.js'
-import useFacesStore from '../store/faces.ts'
-import useFilesStore from '../store/files.ts'
+import { useFacesStore } from '../store/faces.ts'
+import { useFilesStore } from '../store/files.ts'
 import AbortControllerMixin from './AbortControllerMixin.js'
 
 const recognizeDAVProps = [

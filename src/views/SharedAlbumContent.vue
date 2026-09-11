@@ -161,9 +161,9 @@ import PhotosPicker from '../components/PhotosPicker.vue'
 import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import { albumFilesExtraProps, albumsExtraProps } from '../store/albums.ts'
-import useCollectionsStore from '../store/collections.ts'
-import useFilesStore from '../store/files.ts'
-import useSharedAlbumsStore from '../store/sharedAlbums.ts'
+import { useCollectionsStore } from '../store/collections.ts'
+import { useFilesStore } from '../store/files.ts'
+import { useSharedAlbumsStore } from '../store/sharedAlbums.ts'
 
 export default {
 	name: 'SharedAlbumContent',
@@ -203,6 +203,9 @@ export default {
 		const isMobile = useIsMobile()
 		return {
 			isMobile,
+			collectionsStore: useCollectionsStore(),
+			filesStore: useFilesStore(),
+			sharedAlbumsStore: useSharedAlbumsStore(),
 		}
 	},
 
@@ -217,15 +220,15 @@ export default {
 
 	computed: {
 		files() {
-			return useFilesStore().files
+			return this.filesStore.files
 		},
 
 		album() {
-			return useSharedAlbumsStore().getSharedAlbum(this.albumName)
+			return this.sharedAlbumsStore.getSharedAlbum(this.albumName)
 		},
 
 		albumFileIds() {
-			return useSharedAlbumsStore().getSharedAlbumFiles(this.albumName)
+			return this.sharedAlbumsStore.getSharedAlbumFiles(this.albumName)
 		},
 
 		albumOriginalName(): string {
@@ -233,12 +236,12 @@ export default {
 		},
 
 		albumFileName(): string {
-			return useSharedAlbumsStore().getSharedAlbumName(this.albumName)
+			return this.sharedAlbumsStore.getSharedAlbumName(this.albumName)
 		},
 
 		removableSelectedFiles() {
-			return (this.$refs.collectionContent?.selectedFileIds as string[])
-				.map((fileId) => useFilesStore().files[fileId])
+			return ((this.$refs.collectionContent?.selectedFileIds ?? []) as string[])
+				.map((fileId) => this.filesStore.files[fileId])
 				.filter((file) => file.attributes['photos-album-file-origin'] !== 'filters')
 				.map((file) => file.fileid.toString())
 		},
@@ -263,18 +266,18 @@ export default {
 
 		async handleFilesPicked(fileIds) {
 			this.showAddPhotosModal = false
-			await useCollectionsStore().addFilesToCollection(this.album.root + this.album.path, fileIds)
+			await this.collectionsStore.addFilesToCollection(this.album.root + this.album.path, fileIds)
 			// Re-fetch album content to have the proper filenames.
 			await this.fetchAlbumContent()
 		},
 
 		async handleRemoveFilesFromAlbum(fileIds: string[]) {
 			this.$refs.collectionContent?.onUncheckFiles(fileIds)
-			await useCollectionsStore().removeFilesFromCollection(this.album.root + this.album.path, fileIds)
+			await this.collectionsStore.removeFilesFromCollection(this.album.root + this.album.path, fileIds)
 		},
 
 		async handleDeleteAlbum() {
-			const isDeleted = await useCollectionsStore().deleteCollection(this.album.root + this.album.path)
+			const isDeleted = await this.collectionsStore.deleteCollection(this.album.root + this.album.path)
 			if (isDeleted) {
 				this.$router.push('/sharedalbums')
 			}

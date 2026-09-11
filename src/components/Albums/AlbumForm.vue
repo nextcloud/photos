@@ -115,8 +115,8 @@ import PhotosFiltersInput from '../PhotosFilters/PhotosFiltersInput.vue'
 import CollaboratorsSelectionForm from './CollaboratorsSelectionForm.vue'
 import filters from '../../services/PhotosFilters/index.ts'
 import { albumsPrefix } from '../../store/albums.ts'
-import useAlbumsStore from '../../store/albums.ts'
-import useCollectionsStore from '../../store/collections.ts'
+import { useAlbumsStore } from '../../store/albums.ts'
+import { useCollectionsStore } from '../../store/collections.ts'
 
 export default {
 	name: 'AlbumForm',
@@ -150,6 +150,10 @@ export default {
 		},
 	},
 
+	setup() {
+		return { albumsStore: useAlbumsStore(), collectionsStore: useCollectionsStore() }
+	},
+
 	data() {
 		return {
 			showCollaboratorView: false,
@@ -170,14 +174,14 @@ export default {
 		},
 
 		albumFileName(): string {
-			return useAlbumsStore().getAlbumName(this.albumName)
+			return this.albumsStore.getAlbumName(this.albumName)
 		},
 
 		albumNameValidationError(): string | undefined {
 			// If loading is true, it means that the album is being created
 			// so this condition will eventually become true
 			// but we don't want to show the error message while loading
-			const existingAlbum = useAlbumsStore().albums[this.albumFileName]
+			const existingAlbum = this.albumsStore.albums[this.albumFileName]
 			if (existingAlbum !== undefined && this.album !== existingAlbum && !this.loading) {
 				return t('files', 'This name is already in use.')
 			}
@@ -266,7 +270,7 @@ export default {
 					},
 				}, albumsPrefix) as Collection
 
-				let album = await useCollectionsStore().createCollection(localAlbum)
+				let album = await this.collectionsStore.createCollection(localAlbum)
 
 				if (album === undefined) {
 					return
@@ -286,7 +290,7 @@ export default {
 					propertiesToUpdate.filters = this.filtersValue
 				}
 
-				album = await useCollectionsStore().updateCollection(this.albumFileName, propertiesToUpdate)
+				album = await this.collectionsStore.updateCollection(this.albumFileName, propertiesToUpdate)
 
 				this.$emit('done', { album })
 			} finally {
@@ -303,7 +307,7 @@ export default {
 
 				if (this.album !== null && this.album.basename !== this.albumName) {
 					changes.push('name')
-					album = await useCollectionsStore().renameCollection(this.album.root + this.album.path, this.albumName) as Album
+					album = await this.collectionsStore.renameCollection(this.album.root + this.album.path, this.albumName) as Album
 
 					if (album === this.album) {
 						return // Abort, and do not close the form if renaming failed
@@ -312,12 +316,12 @@ export default {
 
 				if (this.album !== null && this.album.attributes.location !== this.albumLocation) {
 					changes.push('location')
-					album = await useCollectionsStore().updateCollection(album.root + album.path, { location: this.albumLocation }) as Album
+					album = await this.collectionsStore.updateCollection(album.root + album.path, { location: this.albumLocation }) as Album
 				}
 
 				if (this.album !== null && JSON.stringify(this.album.attributes.filters) !== JSON.stringify(this.albumFilters)) {
 					changes.push('filters')
-					album = await useCollectionsStore().updateCollection(album.root + album.path, { filters: this.albumFilters }) as Album
+					album = await this.collectionsStore.updateCollection(album.root + album.path, { filters: this.albumFilters }) as Album
 				}
 
 				this.$emit('done', { album, changes })

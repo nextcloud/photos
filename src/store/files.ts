@@ -17,7 +17,7 @@ import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import { deletePhoto as deletePhotoRequest, savePhotoMetadata, setPhotoFavorite as setPhotoFavoriteRequest } from '../services/photoActions.ts'
 import Semaphore from '../utils/semaphoreWithPriority.js'
-import useFoldersStore from './folders.ts'
+import { useFoldersStore } from './folders.ts'
 
 export type PhotoFile = File & {
 	fileid: number
@@ -34,7 +34,7 @@ export type PhotoFile = File & {
 	}
 }
 
-export default defineStore('files', () => {
+export const useFilesStore = defineStore('files', () => {
 	const files = ref<Record<string, PhotoFile>>({})
 	const nomediaPaths = ref<string[]>([])
 

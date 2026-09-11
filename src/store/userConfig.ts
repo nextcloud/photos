@@ -72,7 +72,7 @@ function parseGridDensity(value: string): GridDensity {
 	return value === 'small' || value === 'large' ? value : 'medium'
 }
 
-export default defineStore('userConfig', () => {
+export const useUserConfigStore = defineStore('userConfig', () => {
 	const croppedLayout = ref(loadState('photos', 'croppedLayout', 'false') as 'false' | 'true' === 'true')
 	const gridDensity = ref<GridDensity>(parseGridDensity(loadState('photos', 'gridDensity', 'medium')))
 	const photosSourceFolders = ref<string[]>(JSON.parse(loadState('photos', 'photosSourceFolders', '["/Photos"]')))
