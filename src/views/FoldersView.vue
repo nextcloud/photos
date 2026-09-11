@@ -27,11 +27,13 @@
 			:title="folder?.basename ?? rootTitle"
 			:rootTitle="rootTitle"
 			@refresh="onRefresh">
-			<UploadPicker
+			<NcUploadPicker
+				v-if="folder !== undefined"
 				:accept="allowedMimes"
+				:content="uploadDestinationContent"
 				:destination="folder"
 				:multiple="true"
-				@uploaded="onUpload" />
+				@upload:finished="onUpload" />
 		</HeaderNavigation>
 
 		<!-- Empty folder, should only happen via direct link -->
@@ -87,15 +89,16 @@
 
 <script lang='ts'>
 import type { Folder, Node } from '@nextcloud/files'
-import type { Upload } from '@nextcloud/upload'
+import type { IUpload } from '@nextcloud/files/upload'
 import type { Section, TiledItem } from '../services/TiledLayout.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { defaultRootPath } from '@nextcloud/files/dav'
+import { getUploader } from '@nextcloud/files/upload'
 import { t } from '@nextcloud/l10n'
-import { getUploader, UploadPicker } from '@nextcloud/upload'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+import NcUploadPicker from '@nextcloud/vue/components/NcUploadPicker'
 import FolderOutline from 'vue-material-design-icons/FolderOutline.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FolderComponent from '../components/FolderComponent.vue'
@@ -121,7 +124,7 @@ export default {
 		NcEmptyContent,
 		NcLoadingIcon,
 		TiledLayout,
-		UploadPicker,
+		NcUploadPicker,
 		VirtualScrolling,
 	},
 
@@ -347,11 +350,19 @@ export default {
 		},
 
 		/**
+		 * List the nodes of the destination folder, so the picker can spot conflicts.
+		 */
+		async uploadDestinationContent(): Promise<Node[]> {
+			const { folders, files } = await getFolderContent(this.path, { signal: this.abortController.signal })
+			return [...folders, ...files]
+		},
+
+		/**
 		 * Fetch file Info and add them into the store
 		 *
 		 * @param upload
 		 */
-		async onUpload(upload: Upload) {
+		async onUpload(upload: IUpload) {
 			const relPath = upload.source.split(defaultRootPath).pop()
 			const node = await fetchFile(defaultRootPath + relPath)
 			if (node === null) {

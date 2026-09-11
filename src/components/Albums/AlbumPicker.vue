@@ -133,7 +133,7 @@ export default defineComponent({
 		},
 
 		pickAlbum(album: Album) {
-			this.$emit('album-picked', album)
+			this.$emit('albumPicked', album)
 		},
 
 		isSharedAlbum(album: Album) {

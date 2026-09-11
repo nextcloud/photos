@@ -16,6 +16,7 @@
 				<HeaderNavigation
 					v-if="place !== null"
 					key="navigation"
+
 					:loading="loadingCollection || loadingCollectionFiles"
 					:params="{ placeName }"
 					:path="'/' + placeName"
@@ -24,8 +25,9 @@
 			</template>
 
 			<!-- No content -->
-			<template #empty-content>
+			<template #emptyContent>
 				<NcEmptyContent
+
 					:name="t('photos', 'This place does not have any photos or videos yet!')"
 					class="place__empty">
 					<template #icon>
@@ -34,6 +36,7 @@
 
 					<template #action>
 						<NcButton
+
 							variant="primary"
 							:aria-label="t('photos', 'Add photos to this place')"
 							@click="showAddPhotosModal = true">
