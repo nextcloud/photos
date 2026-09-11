@@ -105,6 +105,15 @@ export default defineStore('files', () => {
 	}
 
 	/**
+	 * Drop a photo from the listings, without touching the server
+	 *
+	 * @param fileId - Id of the photo
+	 */
+	function deleteFile(fileId: number | string): void {
+		Vue.delete(files.value, fileId)
+	}
+
+	/**
 	 * Correct the taken date and the position of a photo
 	 *
 	 * @param photo - Photo to update
@@ -168,7 +177,7 @@ export default defineStore('files', () => {
 	 */
 	async function deletePhoto(photo: PhotoTarget): Promise<void> {
 		await deletePhotoRequest(photo)
-		Vue.delete(files.value, photo.fileid)
+		deleteFile(photo.fileid)
 	}
 
 	/**
@@ -183,7 +192,7 @@ export default defineStore('files', () => {
 			.map((fileId) => files.value[fileId])
 			.reduce((deleted, file) => ({ ...deleted, [file.fileid]: file }), {} as Record<string, PhotoFile>)
 
-		fileIds.forEach((fileId) => Vue.delete(files.value, fileId))
+		fileIds.forEach((fileId) => deleteFile(fileId))
 
 		const promises = fileIds
 			.map(async (fileId) => {
@@ -255,6 +264,7 @@ export default defineStore('files', () => {
 		appendFiles,
 		setNomediaPaths,
 		favoriteFile,
+		deleteFile,
 		updatePhotoMetadata,
 		setPhotoFavorite,
 		deletePhoto,

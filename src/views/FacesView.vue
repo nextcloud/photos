@@ -55,6 +55,7 @@ import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMulti
 import FaceCover from '../components/Faces/FaceCover.vue'
 import UnassignedFacesCover from '../components/Faces/UnassignedFacesCover.vue'
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
+import useFacesStore from '../store/faces.ts'
 
 export default {
 	name: 'FacesView',
@@ -71,11 +72,11 @@ export default {
 
 	computed: {
 		facesFiles() {
-			return this.$store.state.faces.facesFiles
+			return useFacesStore().facesFiles
 		},
 
 		unassignedFilesCount() {
-			return this.$store.state.faces.unassignedFilesCount
+			return useFacesStore().unassignedFilesCount
 		},
 
 		noFaces(): boolean {
@@ -83,7 +84,7 @@ export default {
 		},
 
 		orderedFaces() {
-			return Object.values(this.faces as Collection[]).sort((a, b) => {
+			return Object.values(this.faces as Record<string, Collection>).sort((a, b) => {
 				if (a.attributes.nbItems && b.attributes.nbItems) {
 					return b.attributes.nbItems - a.attributes.nbItems
 				}
