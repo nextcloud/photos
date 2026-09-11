@@ -6,6 +6,7 @@
 <template>
 	<LMap
 		class="location-map"
+		:useGlobalLeaflet="true"
 		:zoom="previewZoom"
 		:center="center"
 		:options="{

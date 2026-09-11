@@ -135,7 +135,26 @@
 							</template>
 						</NcActionButton>
 
-						<ActionFavorite :selectedFileIds="selectedFileIds" />
+						<NcActionButton
+							v-if="shouldFavoriteSelection"
+							:closeAfterClick="true"
+							:aria-label="t('photos', 'Mark selection as favorite')"
+							@click="favoriteSelection">
+							{{ t('photos', 'Add selection to favorites') }}
+							<template #icon>
+								<StarOutline />
+							</template>
+						</NcActionButton>
+						<NcActionButton
+							v-else
+							:closeAfterClick="true"
+							:aria-label="t('photos', 'Remove selection from favorites')"
+							@click="unFavoriteSelection">
+							{{ t('photos', 'Remove selection from favorites') }}
+							<template #icon>
+								<Star />
+							</template>
+						</NcActionButton>
 
 						<NcActionButton
 							:closeAfterClick="true"
@@ -412,6 +431,14 @@ export default {
 	},
 
 	methods: {
+		async favoriteSelection(): Promise<void> {
+			await this.filesStore.toggleFavoriteForFiles(this.selectedFileIds, 1)
+		},
+
+		async unFavoriteSelection(): Promise<void> {
+			await this.filesStore.toggleFavoriteForFiles(this.selectedFileIds, 0)
+		},
+
 		dateMonth: formatMonth,
 		dateYear: formatYear,
 
