@@ -5,12 +5,9 @@
 
 import { translate, translatePlural } from '@nextcloud/l10n'
 import Vue from 'vue'
-import { sync } from 'vuex-router-sync'
 import PhotosAppPublic from './PhotosAppPublic.vue'
 import router from './router/index.js'
 import store from './store/index.js'
-
-sync(store, router)
 
 Vue.prototype.t = translate
 Vue.prototype.n = translatePlural

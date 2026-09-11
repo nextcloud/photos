@@ -335,7 +335,7 @@ export default {
 
 	computed: {
 		isTimelineView() {
-			return ['all_media', 'photos', 'videos'].includes(this.$store.state.route.name || '')
+			return ['all_media', 'photos', 'videos'].includes(this.$route.name || '')
 		},
 	},
 
