@@ -31,18 +31,19 @@
 
 		<FilesListViewer
 			class="tag__photos"
-			:container-element="appContent"
-			:file-ids="fileIds"
-			:base-height="isMobile ? 120 : 200"
+			:containerElement="appContent"
+			:fileIds="fileIds"
+			:baseHeight="isMobile ? 120 : 200"
 			:loading="loading">
-			<FileComponent
-				slot-scope="{ file }"
-				:file="files[file.id]"
-				:allow-selection="true"
-				:selected="selection[file.id] === true"
-				@click="openViewer"
-				@select-toggled="onFileSelectToggle"
-				@deleted="onPhotoDeleted" />
+			<template #default="{ file }">
+				<FileComponent
+					:file="files[file.id]"
+					:allowSelection="true"
+					:selected="selection[file.id] === true"
+					@click="openViewer"
+					@selectToggled="onFileSelectToggle"
+					@deleted="onPhotoDeleted" />
+			</template>
 		</FilesListViewer>
 	</div>
 </template>

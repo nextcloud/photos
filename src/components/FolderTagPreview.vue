@@ -19,7 +19,7 @@
 			<FolderOutline
 				class="folder__icon"
 				:size="96"
-				fill-color="var(--color-primary-element)" />
+				fillColor="var(--color-primary-element)" />
 		</span>
 
 		<span class="folder__details">
@@ -32,7 +32,7 @@
 <script lang='ts'>
 import type { File } from '@nextcloud/files'
 import type { PropType } from 'vue'
-import type { Route } from 'vue-router'
+import type { RouteLocationRaw } from 'vue-router'
 
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
@@ -110,7 +110,7 @@ export default {
 		 * and use it as a direct string.
 		 * Which vue-router does not encode afterwards!
 		 */
-		toLink(): Route {
+		toLink(): RouteLocationRaw {
 			// always remove first slash, the router
 			// manage it automatically
 			const regex = /^\/?(.+)/i

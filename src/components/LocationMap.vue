@@ -19,7 +19,7 @@
 		<LControlAttribution
 			position="bottomright"
 			:prefix="attribution" />
-		<LMarker :lat-lng="center">
+		<LMarker :latLng="center">
 			<LTooltip
 				:options="{
 					direction: 'top',
@@ -39,7 +39,7 @@ import {
 	LMarker,
 	LTileLayer,
 	LTooltip,
-} from 'vue2-leaflet'
+} from '@vue-leaflet/vue-leaflet'
 
 import 'leaflet/dist/leaflet.css'
 import '../utils/leaflet-icons.ts'
