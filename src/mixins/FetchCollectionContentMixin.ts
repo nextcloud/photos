@@ -14,11 +14,11 @@ import {
 	fetchCollection,
 	fetchCollectionFiles,
 } from '../services/collectionFetcher.js'
-import logger from '../services/logger.js'
+import { logger } from '../services/logger.ts'
 import { collectionFilesExtraProps } from '../store/collections.js'
 import { useCollectionsStore } from '../store/collections.ts'
 import { useFilesStore } from '../store/files.ts'
-import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
+import { SemaphoreWithPriority } from '../utils/semaphoreWithPriority.ts'
 import AbortControllerMixin from './AbortControllerMixin.js'
 
 export default defineComponent({

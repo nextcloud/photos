@@ -28,7 +28,7 @@ import NcFormBox from '@nextcloud/vue/components/NcFormBox'
 import NcFormBoxButton from '@nextcloud/vue/components/NcFormBoxButton'
 import FolderOpenOutline from 'vue-material-design-icons/FolderOpenOutline.vue'
 import HomeOutline from 'vue-material-design-icons/HomeOutline.vue'
-import logger from '../../services/logger.js'
+import { logger } from '../../services/logger.ts'
 import { useUserConfigStore } from '../../store/userConfig.ts'
 
 export default defineComponent({

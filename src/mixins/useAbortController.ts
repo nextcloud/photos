@@ -4,7 +4,7 @@
  */
 
 import { computed, markRaw, onUnmounted, ref } from 'vue'
-import router from '../router/index.ts'
+import { router } from '../router/index.ts'
 
 /**
  *

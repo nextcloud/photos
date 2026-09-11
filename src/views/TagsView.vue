@@ -36,7 +36,7 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import TagCover from '../components/TagCover.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
-import logger from '../services/logger.js'
+import { logger } from '../services/logger.ts'
 import { useFilesStore } from '../store/files.ts'
 import { useSystemTagsStore } from '../store/systemtags.ts'
 

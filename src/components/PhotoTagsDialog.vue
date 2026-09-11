@@ -62,7 +62,7 @@ import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
 import Plus from 'vue-material-design-icons/Plus.vue'
-import logger from '../services/logger.ts'
+import { logger } from '../services/logger.ts'
 import {
 	assignTagToFile,
 	createTag,

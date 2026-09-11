@@ -12,7 +12,7 @@ import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
 import { generateRemoteUrl } from '@nextcloud/router'
 import { davClient } from './DavClient.ts'
-import logger from './logger.js'
+import { logger } from './logger.ts'
 
 export type Collection = Folder & {
 	attributes: {

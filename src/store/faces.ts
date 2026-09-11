@@ -12,8 +12,8 @@ import { t } from '@nextcloud/l10n'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { davClient } from '../services/DavClient.ts'
-import logger from '../services/logger.js'
-import Semaphore from '../utils/semaphoreWithPriority.js'
+import { logger } from '../services/logger.ts'
+import { SemaphoreWithPriority as Semaphore } from '../utils/semaphoreWithPriority.ts'
 import { useFilesStore } from './files.ts'
 
 type FaceDetection = {

@@ -74,7 +74,7 @@ import MapIcon from 'vue-material-design-icons/Map.vue'
 import EmptyIllustration from '../components/EmptyIllustration.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import { useLoadedPhotos } from '../composables/useLoadedPhotos.ts'
-import isMapsInstalled from '../services/IsMapsInstalled.ts'
+import { isMapsInstalled } from '../services/IsMapsInstalled.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
 import 'leaflet/dist/leaflet.css'

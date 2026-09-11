@@ -30,7 +30,7 @@ export type PhotoSearchOptions = SearchOptions & {
  *
  * @param _options
  */
-export default async function(_options: Partial<PhotoSearchOptions> = {}): Promise<File[]> {
+export async function getPhotos(_options: Partial<PhotoSearchOptions> = {}): Promise<File[]> {
 	// default function options
 	const options: PhotoSearchOptions = {
 		firstResult: 0,

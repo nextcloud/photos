@@ -82,7 +82,7 @@ import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
 import MapMarkerOffOutline from 'vue-material-design-icons/MapMarkerOffOutline.vue'
 import { fetchPhotoExif } from '../services/exifFetcher.ts'
-import logger from '../services/logger.ts'
+import { logger } from '../services/logger.ts'
 import { useFilesStore } from '../store/files.ts'
 import { COORDINATE_LIMITS, getPhotoLocation, parseCoordinate } from '../utils/exif.ts'
 

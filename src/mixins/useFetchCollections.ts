@@ -11,7 +11,7 @@ import {
 	fetchCollections,
 } from '../services/collectionFetcher.js'
 import { davClient } from '../services/DavClient.ts'
-import logger from '../services/logger.js'
+import { logger } from '../services/logger.ts'
 import { useCollectionsStore } from '../store/collections.ts'
 import useAbortController from './useAbortController.ts'
 

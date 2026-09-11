@@ -35,7 +35,7 @@ import NcContent from '@nextcloud/vue/components/NcContent'
 import svgplaceholder from './assets/file-placeholder.svg'
 import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'
-import logger from './services/logger.js'
+import { logger } from './services/logger.ts'
 
 export default {
 	name: 'PhotosAppPublic',

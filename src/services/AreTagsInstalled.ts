@@ -6,4 +6,4 @@
 import { loadState } from '@nextcloud/initial-state'
 
 const systemtags = loadState('photos', 'systemtags', false) as boolean
-export default systemtags
+export const areTagsInstalled = systemtags

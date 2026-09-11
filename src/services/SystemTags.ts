@@ -15,7 +15,7 @@ import { davClient } from './DavClient.ts'
  * @param path
  * @param options
  */
-export default async function(path: string, options: GetDirectoryContentsOptions = {}): Promise<Folder[]> {
+export async function getSystemTags(path: string, options: GetDirectoryContentsOptions = {}): Promise<Folder[]> {
 	const response = await davClient.getDirectoryContents('/systemtags-assigned/image', {
 		data: `<?xml version="1.0"?>
 			<d:propfind  xmlns:d="DAV:"

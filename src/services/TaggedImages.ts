@@ -7,7 +7,7 @@ import type { File } from '@nextcloud/files'
 import type { FileStat, GetDirectoryContentsOptions, ResponseDataDetailed } from 'webdav'
 
 import { defaultRootPath, resultToNode } from '@nextcloud/files/dav'
-import allowedMimes from './AllowedMimes.js'
+import { allMimes as allowedMimes } from './AllowedMimes.ts'
 import { davClient } from './DavClient.ts'
 import { getDefaultDavProps } from './DavRequest.ts'
 
@@ -17,7 +17,7 @@ import { getDefaultDavProps } from './DavRequest.ts'
  * @param id
  * @param options
  */
-export default async function(id: number, options: GetDirectoryContentsOptions = {}): Promise<File[]> {
+export async function getTaggedImages(id: number, options: GetDirectoryContentsOptions = {}): Promise<File[]> {
 	options = {
 		headers: {
 			method: 'REPORT',

@@ -17,7 +17,7 @@ import { generateUrl } from '@nextcloud/router'
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 import { davClient } from '../services/DavClient.ts'
-import logger from '../services/logger.js'
+import { logger } from '../services/logger.ts'
 
 export const configChangedEvent = 'photos:user-config-changed'
 

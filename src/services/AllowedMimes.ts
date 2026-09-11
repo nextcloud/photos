@@ -9,4 +9,4 @@ const imageMimes = loadState('photos', 'image-mimes', [])
 const videoMimes = loadState('photos', 'video-mimes', [])
 const allMimes = [...imageMimes, ...videoMimes] as string[]
 
-export { allMimes, allMimes as default, imageMimes, videoMimes }
+export { allMimes, imageMimes, videoMimes }

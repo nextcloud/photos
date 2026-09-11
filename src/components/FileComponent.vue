@@ -147,7 +147,7 @@ import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwit
 import PlayCircleOutlineIcon from 'vue-material-design-icons/PlayCircleOutline.vue'
 import FavoriteIcon from './FavoriteIcon.vue'
 import PhotoActionsMenu from './PhotoActionsMenu.vue'
-import logger from '../services/logger.ts'
+import { logger } from '../services/logger.ts'
 import { isCachedPreview } from '../services/PreviewService.js'
 import { getVideoDurationFromUrl, toPhotoTarget } from '../utils/fileUtils.ts'
 import { isPreviewableVideoMime, playsVideoPreviews, VIDEO_PREVIEW_DELAY } from '../utils/videoPreview.ts'

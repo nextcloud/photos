@@ -7,8 +7,8 @@ import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { createRouter, createWebHistory } from 'vue-router'
 import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
-import areTagsInstalled from '../services/AreTagsInstalled.js'
-import isRecognizeInstalled from '../services/IsRecognizeInstalled.js'
+import { areTagsInstalled } from '../services/AreTagsInstalled.ts'
+import { isRecognizeInstalled } from '../services/IsRecognizeInstalled.ts'
 
 const FoldersView = () => import('../views/FoldersView.vue')
 const MapView = () => import('../views/MapView.vue')
@@ -40,7 +40,7 @@ function parsePathParams(path: string | string[]): string {
 	return `/${Array.isArray(path) ? path.join('/') : path || ''}`
 }
 
-const router = createRouter({
+export const router = createRouter({
 	// if index.php is in the url AND we got this far, then it's working:
 	// let's keep using index.php in the url
 	history: createWebHistory(generateUrl('/apps/photos')),
@@ -334,5 +334,3 @@ router.afterEach((to, from) => {
 		window.OCA.Files.Sidebar.close()
 	}
 })
-
-export default router

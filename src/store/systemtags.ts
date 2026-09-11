@@ -6,9 +6,9 @@ import type { File, Folder } from '@nextcloud/files'
  */
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import logger from '../services/logger.js'
-import getSystemTags from '../services/SystemTags.js'
-import getTaggedImages from '../services/TaggedImages.js'
+import { logger } from '../services/logger.ts'
+import { getSystemTags } from '../services/SystemTags.ts'
+import { getTaggedImages } from '../services/TaggedImages.ts'
 import { sortCompare } from '../utils/fileUtils.js'
 import { useFilesStore } from './files.ts'
 

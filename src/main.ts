@@ -7,7 +7,7 @@ import { registerDavProperty } from '@nextcloud/files/dav'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 import PhotosApp from './PhotosApp.vue'
-import router from './router/index.ts'
+import { router } from './router/index.ts'
 
 registerDavProperty('nc:metadata-photos-size')
 registerDavProperty('nc:metadata-files-live-photo')
