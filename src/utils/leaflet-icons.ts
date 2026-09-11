@@ -8,7 +8,7 @@ import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png?url'
 import iconUrl from 'leaflet/dist/images/marker-icon.png?url'
 import shadowUrl from 'leaflet/dist/images/marker-shadow.png?url'
 
-// see https://vue2-leaflet.netlify.app/quickstart/#marker-icons-are-missing
+// see https://vue-leaflet.github.io/vue-leaflet/#marker-icons-are-missing
 
 type D = L.Icon.Default & {
 	_getIconUrl?: string

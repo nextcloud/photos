@@ -8,58 +8,63 @@
 			v-if="emptyMessage !== '' && photosCount === 0 && !loading"
 			key="emptycontent"
 			:name="emptyMessage">
-			<PackageVariant slot="icon" />
+			<template #icon>
+				<PackageVariant />
+			</template>
 		</NcEmptyContent>
 
-		<TiledLayout :base-height="baseHeight" :sections="itemsBySections">
-			<VirtualScrolling
-				slot-scope="{ tiledSections }"
-				:use-window="useWindow"
-				:container-element="containerElement"
-				:sections="tiledSections"
-				:scroll-to-key="scrollToSection"
-				:header-height="sectionHeaderHeight"
-				@need-content="needContent">
-				<template slot-scope="{ visibleSections }">
-					<div v-for="section of visibleSections" :key="section.id">
-						<template v-if="section.id !== ''">
-							<!-- Placeholder when initial loading -->
-							<div
-								v-if="showPlaceholders"
-								class="files-list-viewer__placeholder"
-								:style="{ 'flex-basis': '100%', height: `${sectionHeaderHeight}px` }" />
-							<!-- Real file. -->
-							<slot
-								v-else
-								:file="{ id: section.id }"
-								:is-header="true"
-								class="files-list-viewer__section-header"
-								:style="{ 'flex-basis': '100%', height: `${sectionHeaderHeight}px` }" />
-						</template>
+		<TiledLayout :baseHeight="baseHeight" :sections="itemsBySections">
+			<template #default="{ tiledSections }">
+				<VirtualScrolling
+					:useWindow="useWindow"
+					:containerElement="containerElement"
+					:sections="tiledSections"
+					:scrollToKey="scrollToSection"
+					:headerHeight="sectionHeaderHeight"
+					@needContent="needContent">
+					<template #default="{ visibleSections }">
+						<div v-for="section of visibleSections" :key="section.id">
+							<template v-if="section.id !== ''">
+								<!-- Placeholder when initial loading -->
+								<div
+									v-if="showPlaceholders"
+									class="files-list-viewer__placeholder"
+									:style="{ 'flex-basis': '100%', height: `${sectionHeaderHeight}px` }" />
+								<!-- Real file. -->
+								<slot
+									v-else
+									:file="{ id: section.id }"
+									:isHeader="true"
+									class="files-list-viewer__section-header"
+									:style="{ 'flex-basis': '100%', height: `${sectionHeaderHeight}px` }" />
+							</template>
 
-						<ul>
-							<template v-for="(row, rowIndex) of section.rows">
-								<!--
+							<ul>
+								<template v-for="(row, rowIndex) of section.rows">
+									<!--
 									We are subtracting 1 from flex-basis to compensate for rounding issues.
 									The flex algo will then compensate with flex-grow.
 									'last-tiled-row' prevents the last row's items from growing.
 								-->
-								<li
-									v-for="item of row.items"
-									:key="item.key"
-									:class="{ 'last-tiled-rows': rowIndex === section.rows.length - 1 }"
-									:style="{ 'flex-basis': `${item.width - 1}px`, height: `${item.height}px` }">
-									<!-- Placeholder when initial loading -->
-									<div v-if="showPlaceholders" class="files-list-viewer__placeholder" />
-									<!-- Real file. -->
-									<slot v-else :file="item" />
-								</li>
-							</template>
-						</ul>
-					</div>
-				</template>
-				<NcLoadingIcon v-if="loading && !showPlaceholders" slot="loader" class="files-list-viewer__loader" />
-			</VirtualScrolling>
+									<li
+										v-for="item of row.items"
+										:key="item.key"
+										:class="{ 'last-tiled-rows': rowIndex === section.rows.length - 1 }"
+										:style="{ 'flex-basis': `${item.width - 1}px`, height: `${item.height}px` }">
+										<!-- Placeholder when initial loading -->
+										<div v-if="showPlaceholders" class="files-list-viewer__placeholder" />
+										<!-- Real file. -->
+										<slot v-else :file="item" />
+									</li>
+								</template>
+							</ul>
+						</div>
+					</template>
+					<template #loader>
+						<NcLoadingIcon v-if="loading && !showPlaceholders" class="files-list-viewer__loader" />
+					</template>
+				</VirtualScrolling>
+			</template>
 		</TiledLayout>
 	</div>
 </template>
@@ -229,7 +234,7 @@ export default {
 		subscribe('files:node:deleted', this.handleFileDeleted)
 	},
 
-	destroyed() {
+	unmounted() {
 		unsubscribe('files:node:updated', this.handleFileUpdated)
 		unsubscribe('files:node:deleted', this.handleFileDeleted)
 	},
@@ -237,7 +242,7 @@ export default {
 	methods: {
 		// Ask the parent for more content.
 		needContent(): void {
-			this.$emit('need-content')
+			this.$emit('needContent')
 		},
 
 		mapFileToItem(fileId: string): TiledItem {

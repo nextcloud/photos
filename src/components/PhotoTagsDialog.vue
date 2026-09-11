@@ -21,9 +21,9 @@
 				<NcCheckboxRadioSwitch
 					v-for="tag of tags"
 					:key="tag.id"
-					:model-value="assignedTagIds.includes(tag.id)"
+					:modelValue="assignedTagIds.includes(tag.id)"
 					:disabled="!tag.canAssign || busyTagIds.includes(tag.id)"
-					@update:model-value="toggle(tag, $event)">
+					@update:modelValue="toggle(tag, $event)">
 					{{ tag.displayName }}
 				</NcCheckboxRadioSwitch>
 			</fieldset>

@@ -4,26 +4,26 @@
 -->
 
 <template>
-	<NcContent app-name="photos">
+	<NcContent appName="photos">
 		<NcAppNavigation :aria-label="t('photos', 'Photos')">
 			<template v-if="isTimelineView" #search>
 				<NcTextField
 					v-model="searchTerm"
 					class="app-navigation__search"
 					:label="t('photos', 'Search by file name')"
-					:show-trailing-button="searchTerm.length > 0"
-					:trailing-button-label="t('photos', 'Clear search')"
-					@trailing-button-click="searchTerm = ''">
+					:showTrailingButton="searchTerm.length > 0"
+					:trailingButtonLabel="t('photos', 'Clear search')"
+					@trailingButtonClick="searchTerm = ''">
 					<template #icon>
 						<Magnify :size="20" />
 					</template>
 				</NcTextField>
 				<PhotosFiltersInput
-					:selected-filters="selectedFilters"
-					@select-filter="selectFilter" />
+					:selectedFilters="selectedFilters"
+					@selectFilter="selectFilter" />
 				<PhotosFiltersDisplay
-					:selected-filters="selectedFilters"
-					@deselect-filter="deselectFilter" />
+					:selectedFilters="selectedFilters"
+					@deselectFilter="deselectFilter" />
 			</template>
 
 			<template #list>
@@ -31,8 +31,7 @@
 					:to="{ name: 'all_media' }"
 					:name="t('photos', 'All media')"
 					class="app-navigation__all_media"
-					data-id-app-nav-item="all-media"
-					exact>
+					data-id-app-nav-item="all-media">
 					<template #icon="{ active }">
 						<ImageIcon v-if="active" :size="20" />
 						<ImageOutline v-else :size="20" />
@@ -43,7 +42,7 @@
 					:name="t('photos', 'Photos')"
 					data-id-app-nav-item="photos">
 					<template #icon="{ active }">
-						<Camera v-if="active" :size="20" />
+						<CameraIcon v-if="active" :size="20" />
 						<CameraOutline v-else :size="20" />
 					</template>
 				</NcAppNavigationItem>
@@ -185,7 +184,7 @@
 		</NcAppContent>
 
 		<!-- Main settings Modal-->
-		<SettingsDialog :open.sync="openedSettings" />
+		<SettingsDialog v-model:open="openedSettings" />
 	</NcContent>
 </template>
 
@@ -211,7 +210,7 @@ import AccountGroup from 'vue-material-design-icons/AccountGroup.vue'
 import AccountGroupOutline from 'vue-material-design-icons/AccountGroupOutline.vue'
 import CalendarToday from 'vue-material-design-icons/CalendarToday.vue'
 import CalendarTodayOutline from 'vue-material-design-icons/CalendarTodayOutline.vue'
-import Camera from 'vue-material-design-icons/Camera.vue'
+import CameraIcon from 'vue-material-design-icons/Camera.vue'
 import CameraOutline from 'vue-material-design-icons/CameraOutline.vue'
 import CogOutline from 'vue-material-design-icons/CogOutline.vue'
 import Folder from 'vue-material-design-icons/Folder.vue'
@@ -256,7 +255,7 @@ export default {
 		CogOutline,
 		CalendarToday,
 		CalendarTodayOutline,
-		Camera,
+		CameraIcon,
 		CameraOutline,
 		AccountGroup,
 		AccountGroupOutline,
@@ -364,7 +363,7 @@ export default {
 		}
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		window.removeEventListener('load', () => {
 			navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js', {}, {
 				noRewrite: true,

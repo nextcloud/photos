@@ -12,7 +12,7 @@ import { defaultRootPath } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
 import { defineStore } from 'pinia'
-import Vue, { ref } from 'vue'
+import { ref } from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import { deletePhoto as deletePhotoRequest, savePhotoMetadata, setPhotoFavorite as setPhotoFavoriteRequest } from '../services/photoActions.ts'
@@ -99,9 +99,7 @@ export default defineStore('files', () => {
 			return
 		}
 
-		// Vue 2 does not track properties added to an object, and a photo that
-		// was never a favorite has no favorite attribute yet.
-		Vue.set(attributes, 'favorite', favoriteState)
+		attributes.favorite = favoriteState
 	}
 
 	/**
@@ -110,7 +108,7 @@ export default defineStore('files', () => {
 	 * @param fileId - Id of the photo
 	 */
 	function deleteFile(fileId: number | string): void {
-		Vue.delete(files.value, fileId)
+		delete files.value[fileId]
 	}
 
 	/**
@@ -133,19 +131,19 @@ export default defineStore('files', () => {
 		// The dates driving the sorting and the grouping are precalculated, so
 		// they have to be recomputed for the photo to move to its new month.
 		const date = moment(takenAt * 1000)
-		Vue.set(attributes, 'metadata-photos-original_date_time', takenAt)
-		Vue.set(attributes, 'timestamp', date.unix())
-		Vue.set(attributes, 'month', date.format('YYYYMM'))
-		Vue.set(attributes, 'day', date.format('MMDD'))
+		attributes['metadata-photos-original_date_time'] = takenAt
+		attributes.timestamp = date.unix()
+		attributes.month = date.format('YYYYMM')
+		attributes.day = date.format('MMDD')
 
 		if (location === null) {
-			Vue.delete(attributes, 'metadata-photos-gps')
+			delete attributes['metadata-photos-gps']
 		} else {
 			// Coordinates are strings once they come back from a DAV listing.
-			Vue.set(attributes, 'metadata-photos-gps', {
+			attributes['metadata-photos-gps'] = {
 				latitude: String(location.latitude),
 				longitude: String(location.longitude),
-			})
+			}
 		}
 	}
 

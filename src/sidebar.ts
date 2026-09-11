@@ -5,12 +5,6 @@
 
 /* eslint-disable @stylistic/no-tabs */
 import { registerDavProperty } from '@nextcloud/files/dav'
-import { translatePlural as n, translate as t } from '@nextcloud/l10n'
-import Vue from 'vue'
-
-Vue.prototype.t = t
-Vue.prototype.n = n
-
 registerDavProperty('nc:metadata-photos-exif')
 registerDavProperty('nc:metadata-photos-ifd0')
 registerDavProperty('nc:metadata-photos-gps')

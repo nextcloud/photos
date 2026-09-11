@@ -5,8 +5,7 @@
 
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
 import areTagsInstalled from '../services/AreTagsInstalled.js'
 import isRecognizeInstalled from '../services/IsRecognizeInstalled.js'
@@ -31,8 +30,6 @@ const UnassignedFaces = () => import('../views/UnassignedFaces.vue')
 
 const baseTitle = document.title
 
-Vue.use(Router)
-
 /**
  * Parse the path of a route : join the elements of the array and return a single string with slashes
  * + always lead current path with a slash
@@ -43,11 +40,10 @@ function parsePathParams(path: string | string[]): string {
 	return `/${Array.isArray(path) ? path.join('/') : path || ''}`
 }
 
-const router = new Router({
-	mode: 'history',
+const router = createRouter({
 	// if index.php is in the url AND we got this far, then it's working:
 	// let's keep using index.php in the url
-	base: generateUrl('/apps/photos'),
+	history: createWebHistory(generateUrl('/apps/photos')),
 	linkActiveClass: 'active',
 	routes: [
 		{

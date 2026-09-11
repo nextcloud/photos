@@ -7,36 +7,38 @@
 		<CollectionContent
 			ref="collectionContent"
 			:collection="album"
-			:collection-file-ids="albumFileIds"
-			:allow-selection="false"
+			:collectionFileIds="albumFileIds"
+			:allowSelection="false"
 			:loading="loadingCollection || loadingCollectionFiles"
 			:error="errorFetchingCollection || errorFetchingCollectionFiles">
 			<!-- Header -->
-			<HeaderNavigation
-				v-if="albumOriginalName !== ''"
-				key="navigation"
-				slot="header"
-				slot-scope="{ selectedFileIds }"
-				:loading="loadingCollection || loadingCollectionFiles"
-				:params="{ token }"
-				path="/"
-				:root-title="albumOriginalName"
-				:title="albumOriginalName"
-				@refresh="fetchAlbumContent">
-				<div v-if="album.attributes.location !== ''" slot="subtitle" class="album__location">
-					<MapMarkerOutline />{{ album.attributes.location }}
-				</div>
+			<template #header="{ selectedFileIds }">
+				<HeaderNavigation
+					v-if="albumOriginalName !== ''"
+					key="navigation"
 
-				<template v-if="album !== undefined" slot="right">
-					<NcActions :force-menu="true" :aria-label="t('photos', 'Open actions menu')">
-						<!-- TODO: enable download on public albums -->
-						<!-- <ActionDownload v-if="albumFileIds.length > 0"
+					:loading="loadingCollection || loadingCollectionFiles"
+					:params="{ token }"
+					path="/"
+					:rootTitle="albumOriginalName"
+					:title="albumOriginalName"
+					@refresh="fetchAlbumContent">
+					<template #subtitle>
+						<div v-if="album.attributes.location !== ''" class="album__location">
+							<MapMarkerOutline />{{ album.attributes.location }}
+						</div>
+					</template>
+
+					<template v-if="album !== undefined" #right>
+						<NcActions :forceMenu="true" :aria-label="t('photos', 'Open actions menu')">
+							<!-- TODO: enable download on public albums -->
+							<!-- <ActionDownload v-if="albumFileIds.length > 0"
 							:selected-file-ids="albumFileIds"
 							:title="t('photos', 'Download all files in album')">
 							<DownloadMultiple slot="icon" />
 						</ActionDownload> -->
 
-						<template v-if="selectedFileIds.length > 0">
+							<template v-if="selectedFileIds.length > 0">
 							<!-- TODO: enable download on public albums -->
 							<!-- <NcActionSeparator />
 
@@ -49,17 +51,21 @@
 								{{ t('photos', 'Remove selection from album') }}
 								<Close slot="icon" />
 							<//** > */ -->
-						</template>
-					</NcActions>
-				</template>
-			</HeaderNavigation>
+							</template>
+						</NcActions>
+					</template>
+				</HeaderNavigation>
+			</template>
 
 			<!-- No content -->
-			<NcEmptyContent
-				slot="empty-content"
-				:name="t('photos', 'This album does not have any photos or videos yet!')"
-				class="album__empty">
-				<ImageOffOutline slot="icon" />
+			<template #emptyContent>
+				<NcEmptyContent
+
+					:name="t('photos', 'This album does not have any photos or videos yet!')"
+					class="album__empty">
+					<template #icon>
+						<ImageOffOutline />
+					</template>
 
 				<!-- Public upload is not implemented yet
 				<NcButton slot="action"
@@ -70,7 +76,8 @@
 					{{ t('photos', "Add") }}
 				</NcButton>
 				-->
-			</NcEmptyContent>
+				</NcEmptyContent>
+			</template>
 		</CollectionContent>
 	</div>
 </template>
@@ -83,7 +90,9 @@ import { getClient } from '@nextcloud/files/dav'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
 import { translate } from '@nextcloud/l10n'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
-import { isMobile, /** NcButton, */ NcActions, /** NcActionSeparator, */ NcEmptyContent } from '@nextcloud/vue'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
+import NcActions from '@nextcloud/vue/components/NcActions'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 // import Plus from 'vue-material-design-icons/Plus.vue'
 // import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
 import ImageOffOutline from 'vue-material-design-icons/ImageOffOutline.vue'
@@ -117,7 +126,6 @@ export default {
 
 	mixins: [
 		FetchCollectionContentMixin,
-		isMobile,
 	],
 
 	props: {
@@ -125,6 +133,10 @@ export default {
 			type: String,
 			required: true,
 		},
+	},
+
+	setup() {
+		return { isMobile: useIsMobile() }
 	},
 
 	data() {

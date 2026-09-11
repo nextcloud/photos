@@ -21,7 +21,7 @@ export default defineComponent({
 		},
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		this.abortController.abort()
 	},
 

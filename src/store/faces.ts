@@ -10,7 +10,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import { defineStore } from 'pinia'
-import Vue, { ref } from 'vue'
+import { ref } from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
@@ -68,7 +68,7 @@ export default defineStore('faces', () => {
 	 */
 	function addFaces(newFaces: Collection[]): void {
 		for (const face of newFaces) {
-			Vue.set(faces.value, face.basename, face)
+			faces.value[face.basename] = face
 		}
 	}
 
@@ -77,8 +77,8 @@ export default defineStore('faces', () => {
 	 */
 	function removeFaces(faceNames: string[]): void {
 		faceNames.forEach((faceName) => {
-			Vue.delete(faces.value, faceName)
-			Vue.delete(facesFiles.value, faceName)
+			delete faces.value[faceName]
+			delete facesFiles.value[faceName]
 		})
 	}
 
@@ -88,7 +88,7 @@ export default defineStore('faces', () => {
 	 */
 	function addFileIdsToFace(faceName: string, fileIdsToAdd: string[]): void {
 		if (!facesFiles.value[faceName]) {
-			Vue.set(facesFiles.value, faceName, [])
+			facesFiles.value[faceName] = []
 		}
 		const faceFiles = facesFiles.value[faceName]
 		faceFiles.push(...fileIdsToAdd.filter((fileId) => !faceFiles.includes(fileId))) // Filter to prevent duplicate fileId.
@@ -114,7 +114,7 @@ export default defineStore('faces', () => {
 	 * @param fileIdsToRemove - Files to remove
 	 */
 	function removeFileIdsFromFace(faceName: string, fileIdsToRemove: string[]): void {
-		Vue.set(facesFiles.value, faceName, facesFiles.value[faceName].filter((fileId) => !fileIdsToRemove.includes(fileId)))
+		facesFiles.value[faceName] = facesFiles.value[faceName].filter((fileId) => !fileIdsToRemove.includes(fileId))
 	}
 
 	/**

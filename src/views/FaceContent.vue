@@ -43,7 +43,7 @@
 			<div v-if="face !== undefined" class="face__header__actions">
 				<NcActions>
 					<NcActionButton
-						:close-after-click="true"
+						:closeAfterClick="true"
 						:aria-label="t('photos', 'Rename person')"
 						@click="showRenameModal = true">
 						<template #icon>
@@ -52,10 +52,10 @@
 						{{ t('photos', 'Rename person') }}
 					</NcActionButton>
 				</NcActions>
-				<NcActions :force-menu="true">
+				<NcActions :forceMenu="true">
 					<NcActionButton
 						v-if="Object.keys(faces).length > 1"
-						:close-after-click="true"
+						:closeAfterClick="true"
 						:aria-label="t('photos', 'Merge with different person')"
 						@click="showMergeModal = true">
 						<template #icon>
@@ -65,30 +65,36 @@
 					</NcActionButton>
 					<template v-if="selectedFileIds.length">
 						<NcActionButton
-							:close-after-click="true"
+							:closeAfterClick="true"
 							:aria-label="t('photos', 'Download selected files')"
 							@click="downloadSelection">
-							<Download slot="icon" />
+							<template #icon>
+								<Download />
+							</template>
 							{{ t('photos', 'Download selected photos') }}
 						</NcActionButton>
 						<NcActionButton
 							v-if="shouldFavoriteSelection"
-							:close-after-click="true"
+							:closeAfterClick="true"
 							:aria-label="t('photos', 'Mark selection as favorite')"
 							@click="favoriteSelection">
-							<StarOutline slot="icon" />
+							<template #icon>
+								<StarOutline />
+							</template>
 							{{ t('photos', 'Favorite') }}
 						</NcActionButton>
 						<NcActionButton
 							v-else
-							:close-after-click="true"
+							:closeAfterClick="true"
 							:aria-label="t('photos', 'Remove selection from favorites')"
 							@click="unFavoriteSelection">
-							<Star slot="icon" />
+							<template #icon>
+								<Star />
+							</template>
 							{{ t('photos', 'Remove from favorites') }}
 						</NcActionButton>
 						<NcActionButton
-							:close-after-click="true"
+							:closeAfterClick="true"
 							@click="showMoveModal = true">
 							<template #icon>
 								<AccountSwitchOutline />
@@ -96,7 +102,7 @@
 							{{ n('photos', 'Move photo to a different person', 'Move photos to a different person', selectedFileIds.length) }}
 						</NcActionButton>
 						<NcActionButton
-							:close-after-click="true"
+							:closeAfterClick="true"
 							@click="handleRemoveFilesFromFace(selectedFileIds)">
 							<template #icon>
 								<Close />
@@ -105,7 +111,7 @@
 						</NcActionButton>
 					</template>
 					<NcActionButton
-						:close-after-click="true"
+						:closeAfterClick="true"
 						@click="handleDeleteFace">
 						<template #icon>
 							<Close />
@@ -119,23 +125,24 @@
 		<FilesListViewer
 			v-if="face !== undefined"
 			class="face__photos"
-			:container-element="appContent"
-			:file-ids="faceFileIds"
+			:containerElement="appContent"
+			:fileIds="faceFileIds"
 			:loading="loadingFiles || loadingFaces">
-			<FileComponent
-				slot-scope="{ file }"
-				:file="files[file.id]"
-				:allow-selection="true"
-				:selected="selection[file.id] === true"
-				@click="openViewer"
-				@select-toggled="onFileSelectToggle"
-				@deleted="onPhotoDeleted" />
+			<template #default="{ file }">
+				<FileComponent
+					:file="files[file.id]"
+					:allowSelection="true"
+					:selected="selection[file.id] === true"
+					@click="openViewer"
+					@selectToggled="onFileSelectToggle"
+					@deleted="onPhotoDeleted" />
+			</template>
 		</FilesListViewer>
 
 		<NcDialog
 			v-if="showRenameModal"
 			:name="t('photos', 'Rename person')"
-			close-on-click-outside
+			closeOnClickOutside
 			size="small"
 			@closing="showRenameModal = false">
 			<div class="rename-form">
@@ -167,19 +174,19 @@
 		<NcDialog
 			v-if="showMergeModal"
 			:name="t('photos', 'Merge person')"
-			close-on-click-outside
+			closeOnClickOutside
 			size="normal"
 			@closing="showMergeModal = false">
-			<FaceMergeForm :first-face="faceName" @select="handleMerge($event)" />
+			<FaceMergeForm :firstFace="faceName" @select="handleMerge($event)" />
 		</NcDialog>
 
 		<NcDialog
 			v-if="showMoveModal"
 			:name="t('photos', 'Move to different person')"
-			close-on-click-outside
+			closeOnClickOutside
 			size="normal"
 			@closing="showMoveModal = false">
-			<FaceMergeForm :first-face="faceName" @select="handleMove($event, selectedFileIds)" />
+			<FaceMergeForm :firstFace="faceName" @select="handleMove($event, selectedFileIds)" />
 		</NcDialog>
 	</div>
 </template>
@@ -189,7 +196,7 @@ import type { Collection } from '../services/collectionFetcher.js'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { translatePlural as n, translate as t } from '@nextcloud/l10n'
-import Vue from 'vue'
+import { nextTick } from 'vue'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -246,7 +253,7 @@ export default {
 
 	directives: {
 		focus(el) {
-			Vue.nextTick(() => el.focus())
+			nextTick(() => el.focus())
 		},
 	},
 

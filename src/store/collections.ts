@@ -9,7 +9,7 @@ import { showConfirmation, showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import { isAxiosError } from 'axios'
 import { defineStore } from 'pinia'
-import Vue, { ref } from 'vue'
+import { ref } from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
@@ -49,7 +49,7 @@ export default defineStore('collections', () => {
 	 * @param collection - Collection to replace
 	 */
 	function updateCollectionState(collection: Collection): void {
-		Vue.set(collections.value, collection.root + collection.path, collection)
+		collections.value[collection.root + collection.path] = collection
 	}
 
 	/**
@@ -57,8 +57,8 @@ export default defineStore('collections', () => {
 	 */
 	function removeCollections(collectionFileNames: string[]): void {
 		collectionFileNames.forEach((collectionFileName) => {
-			Vue.delete(collections.value, collectionFileName)
-			Vue.delete(collectionsFiles.value, collectionFileName)
+			delete collections.value[collectionFileName]
+			delete collectionsFiles.value[collectionFileName]
 		})
 	}
 

@@ -8,7 +8,7 @@
 		:id="item.fileid"
 		:name="item.basename"
 		:path="item.path"
-		:file-list="previewFiles" />
+		:fileList="previewFiles" />
 </template>
 
 <script setup lang='ts'>

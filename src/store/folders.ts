@@ -7,7 +7,7 @@ import type { Folder, Node } from '@nextcloud/files'
 
 import { defaultRootPath } from '@nextcloud/files/dav'
 import { defineStore } from 'pinia'
-import Vue, { ref } from 'vue'
+import { ref } from 'vue'
 import { compareModificationTime } from '../utils/fileUtils.ts'
 import useFilesStore from './files.ts'
 
@@ -29,10 +29,10 @@ export default defineStore('folders', () => {
 		}
 
 		if (folders.value[fileid]) {
-			Vue.set(subFolders.value, fileid, newFolders
+			subFolders.value[fileid] = newFolders
 				.map((folder) => folder.fileid as number)
 				// some invalid folders have an id of -1 (ext storage)
-				.filter((id) => id >= 0))
+				.filter((id) => id >= 0)
 		}
 	}
 
@@ -89,7 +89,7 @@ export default defineStore('folders', () => {
 	 * @param fileId - Id of the file
 	 */
 	function deleteFolderFile(fileId: number): void {
-		Vue.delete(files.value, fileId)
+		delete files.value[fileId]
 	}
 
 	/**
@@ -106,9 +106,7 @@ export default defineStore('folders', () => {
 			return
 		}
 
-		// Vue 2 does not track properties added to an object, and a photo that
-		// was never a favorite has no favorite attribute yet.
-		Vue.set(attributes, 'favorite', favoriteState)
+		attributes.favorite = favoriteState
 	}
 
 	/**
@@ -119,7 +117,7 @@ export default defineStore('folders', () => {
 	 */
 	function addPath(path: string, fileid: number | undefined): void {
 		if (fileid !== undefined && fileid >= 0) {
-			Vue.set(paths.value, path, fileid)
+			paths.value[path] = fileid
 		}
 	}
 
@@ -136,10 +134,10 @@ export default defineStore('folders', () => {
 		}
 
 		// sort by last modified
-		Vue.set(folders.value, fileid, newFiles
+		folders.value[fileid] = newFiles
 			.sort(compareModificationTime)
 			.filter((file) => (file.fileid ?? -1) >= 0)
-			.map((file) => file.fileid as number))
+			.map((file) => file.fileid as number)
 
 		// then add each folders path indexes
 		newFolders.forEach((folder) => addPath(folder.path, folder.fileid))
@@ -158,7 +156,7 @@ export default defineStore('folders', () => {
 				.sort(compareModificationTime)
 				.filter((file) => (file.fileid ?? -1) >= 0)
 				.map((file) => file.fileid as number)
-			Vue.set(folders.value, fileid, [...list, ...folders.value[fileid]])
+			folders.value[fileid] = [...list, ...folders.value[fileid]]
 		}
 	}
 

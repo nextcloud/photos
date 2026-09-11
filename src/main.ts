@@ -4,14 +4,10 @@
  */
 
 import { registerDavProperty } from '@nextcloud/files/dav'
-import { translate, translatePlural } from '@nextcloud/l10n'
-import { createPinia, PiniaVuePlugin } from 'pinia'
-import Vue from 'vue'
+import { createPinia } from 'pinia'
+import { createApp } from 'vue'
 import PhotosApp from './PhotosApp.vue'
-import router from './router/index.js'
-
-Vue.prototype.t = translate
-Vue.prototype.n = translatePlural
+import router from './router/index.ts'
 
 registerDavProperty('nc:metadata-photos-size')
 registerDavProperty('nc:metadata-files-live-photo')
@@ -21,12 +17,11 @@ registerDavProperty('nc:metadata-photos-original_date_time')
 // property unless it is registered.
 registerDavProperty('nc:metadata-photos-gps')
 
-Vue.use(PiniaVuePlugin)
+const app = createApp(PhotosApp)
+// several apps can share a page, and useId has to stay unique across them
+app.config.idPrefix = 'photos'
+app.use(createPinia())
+app.use(router)
+app.mount('#content')
 
-export default new Vue({
-	el: '#content',
-	name: 'PhotosRoot',
-	router,
-	pinia: createPinia(),
-	render: (h) => h(PhotosApp),
-})
+export default app

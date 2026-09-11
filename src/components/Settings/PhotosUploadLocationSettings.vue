@@ -8,7 +8,7 @@
 		<NcFormBox>
 			<NcFormBoxButton
 				:description="photosLocationName"
-				:inverted-accent="true"
+				:invertedAccent="true"
 				@click="debounceSelectPhotosFolder">
 				<template #icon>
 					<FolderOpenOutline :size="20" />

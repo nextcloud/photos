@@ -4,10 +4,10 @@
 -->
 <template>
 	<NcDialog
-		content-classes="photos-picker"
+		contentClasses="photos-picker"
 		:name="name"
 		:open="open"
-		out-transition
+		outTransition
 		size="large"
 		@update:open="(open) => $emit('update:open', open)">
 		<!-- Navigation containing the months available -->
@@ -19,7 +19,7 @@
 				:aria-label-listbox="t('photos', 'Dates')"
 				class="photos-picker__navigation__month-select"
 				:clearable="false"
-				:input-label="t('photos', 'Jump to specific date in list')"
+				:inputLabel="t('photos', 'Jump to specific date in list')"
 				:options="monthsList">
 				<template #selected-option="{ label }">
 					{{ dateMonthAndYear(label) }}
@@ -49,12 +49,13 @@
 		<template #actions>
 			<div class="photos-picker__actions">
 				<div class="photos-picker__actions__buttons">
-					<UploadPicker
+					<NcUploadPicker
+						v-if="photosLocationFolder !== undefined"
 						:accept="allowedMimes"
-						:context="uploadContext"
+						:content="uploadDestinationContent"
 						:destination="photosLocationFolder"
 						multiple
-						@uploaded="refreshFiles" />
+						@finished="refreshFiles" />
 					<NcButton variant="primary" :disabled="loading || selectedFileIds.length === 0" @click="emitPickedEvent">
 						<template #icon>
 							<ImagePlusOutline v-if="!loading" />
@@ -72,16 +73,16 @@
 		<FilesListViewer
 			class="photos-picker__file-list"
 			:class="{ 'photos-picker__file-list--placeholder': monthsList.length === 0 }"
-			:file-ids-by-section="fileIdsByMonth"
-			:empty-message="t('photos', 'There are no photos or videos yet!')"
+			:fileIdsBySection="fileIdsByMonth"
+			:emptyMessage="t('photos', 'There are no photos or videos yet!')"
 			:sections="monthsList"
 			:loading="loadingFiles"
-			:base-height="100"
-			:section-header-height="50"
-			:scroll-to-section="targetMonth"
-			@need-content="getFiles"
-			@focusout.native="onFocusOut">
-			<template slot-scope="{ file, height, isHeader }">
+			:baseHeight="100"
+			:sectionHeaderHeight="50"
+			:scrollToSection="targetMonth"
+			@needContent="getFiles"
+			@focusout="onFocusOut">
+			<template #default="{ file, height, isHeader }">
 				<h3
 					v-if="isHeader"
 					:id="`photos-picker-section-header-${file.id}`"
@@ -93,23 +94,22 @@
 				<FileComponent
 					v-else
 					:file="files[file.id]"
-					:allow-selection="true"
+					:allowSelection="true"
 					:selected="selection[file.id] === true"
-					:show-actions-menu="false"
-					@select-toggled="onFileSelectToggle" />
+					:showActionsMenu="false"
+					@selectToggled="onFileSelectToggle" />
 			</template>
 		</FilesListViewer>
 	</NcDialog>
 </template>
 
 <script lang='ts'>
-import type { File } from '@nextcloud/files'
+import type { File, Node } from '@nextcloud/files'
 import type { PropType } from 'vue'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
-import { UploadPicker } from '@nextcloud/upload'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import {
 	defineComponent,
@@ -119,6 +119,7 @@ import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 import NcSelect from '@nextcloud/vue/components/NcSelect'
+import NcUploadPicker from '@nextcloud/vue/components/NcUploadPicker'
 import ImagePlusOutline from 'vue-material-design-icons/ImagePlusOutline.vue'
 import FileComponent from './FileComponent.vue'
 import FilesListViewer from './FilesListViewer.vue'
@@ -126,6 +127,7 @@ import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import allowedMimes from '../services/AllowedMimes.js'
+import getFolderContent from '../services/FolderContent.ts'
 import useFilesStore from '../store/files.ts'
 import useUserConfigStore from '../store/userConfig.ts'
 
@@ -141,7 +143,7 @@ export default defineComponent({
 		NcLoadingIcon,
 		NcSelect,
 		NcNoteCard,
-		UploadPicker,
+		NcUploadPicker,
 	},
 
 	mixins: [
@@ -186,7 +188,7 @@ export default defineComponent({
 		},
 	},
 
-	emits: ['files-picked', 'update:open'],
+	emits: ['filesPicked', 'update:open'],
 
 	setup() {
 		return {
@@ -198,10 +200,6 @@ export default defineComponent({
 		return {
 			allowedMimes,
 			targetMonth: null as string | null,
-			uploadContext: {
-				route: 'albumpicker',
-			},
-
 			currentUser: getCurrentUser()?.uid,
 		}
 	},
@@ -225,6 +223,14 @@ export default defineComponent({
 	},
 
 	methods: {
+		/**
+		 * List the nodes of the photos folder, so the picker can spot conflicts.
+		 */
+		async uploadDestinationContent(): Promise<Node[]> {
+			const { folders, files } = await getFolderContent(this.photosLocationFolder?.path ?? '/', { signal: this.abortController.signal })
+			return [...folders, ...files]
+		},
+
 		onFocusOut(event: FocusEvent) {
 			if (event.relatedTarget === null) { // Focus escaping to body
 				event.target?.focus({ preventScroll: true })
@@ -244,7 +250,7 @@ export default defineComponent({
 		},
 
 		emitPickedEvent() {
-			this.$emit('files-picked', this.selectedFileIds)
+			this.$emit('filesPicked', this.selectedFileIds)
 			this.resetSelection()
 		},
 

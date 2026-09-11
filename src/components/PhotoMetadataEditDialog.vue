@@ -24,13 +24,13 @@
 						v-model="latitude"
 						inputmode="decimal"
 						:error="latitudeError !== undefined"
-						:helper-text="latitudeError ?? ''"
+						:helperText="latitudeError ?? ''"
 						:label="t('photos', 'Latitude')" />
 					<NcTextField
 						v-model="longitude"
 						inputmode="decimal"
 						:error="longitudeError !== undefined"
-						:helper-text="longitudeError ?? ''"
+						:helperText="longitudeError ?? ''"
 						:label="t('photos', 'Longitude')" />
 				</div>
 

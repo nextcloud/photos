@@ -119,7 +119,7 @@
 			v-if="allowSelection"
 			class="selection-checkbox"
 			:aria-label="t('photos', 'Select image {imageName}', { imageName: file.basename })"
-			:model-value="selected"
+			:modelValue="selected"
 			@update:checked="onToggle" />
 
 		<PhotoActionsMenu
@@ -207,7 +207,7 @@ export default {
 		},
 	},
 
-	emits: ['click', 'select-toggled', 'deleted'],
+	emits: ['click', 'selectToggled', 'deleted'],
 
 	data() {
 		return {
@@ -295,7 +295,7 @@ export default {
 		await this.init()
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		// cancel any pending load
 		if (this.$refs.imgSmall !== undefined) {
 			(this.$refs.imgSmall as HTMLImageElement).src = ''
@@ -411,7 +411,7 @@ export default {
 		},
 
 		onToggle(value) {
-			this.$emit('select-toggled', { id: this.file.fileid, value })
+			this.$emit('selectToggled', { id: this.file.fileid, value })
 		},
 
 		getItemURL(size) {

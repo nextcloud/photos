@@ -3,21 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { translate, translatePlural } from '@nextcloud/l10n'
-import { createPinia, PiniaVuePlugin } from 'pinia'
-import Vue from 'vue'
+import { createPinia } from 'pinia'
+import { createApp } from 'vue'
 import PhotosAppPublic from './PhotosAppPublic.vue'
-import router from './router/index.js'
+import router from './router/index.ts'
 
-Vue.prototype.t = translate
-Vue.prototype.n = translatePlural
+const app = createApp(PhotosAppPublic)
+app.config.idPrefix = 'photos'
+app.use(createPinia())
+app.use(router)
+app.mount('#content')
 
-Vue.use(PiniaVuePlugin)
-
-export default new Vue({
-	el: '#content',
-	name: 'PhotosRoot',
-	router,
-	pinia: createPinia(),
-	render: (h) => h(PhotosAppPublic),
-})
+export default app
