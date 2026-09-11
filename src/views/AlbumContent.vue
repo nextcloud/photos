@@ -203,6 +203,8 @@ import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.j
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import logger from '../services/logger.js'
 import { albumFilesExtraProps, albumsExtraProps } from '../store/albums.ts'
+import useAlbumsStore from '../store/albums.ts'
+import useCollectionsStore from '../store/collections.ts'
 import useFilesStore from '../store/files.ts'
 import { pickAlbumCover } from '../utils/albumCover.ts'
 
@@ -267,11 +269,11 @@ export default {
 
 	computed: {
 		album(): Album {
-			return this.$store.getters.getAlbum(this.albumName)
+			return useAlbumsStore().getAlbum(this.albumName)
 		},
 
 		albumFileIds(): string[] {
-			return this.$store.getters.getAlbumFiles(this.albumName)
+			return useAlbumsStore().getAlbumFiles(this.albumName)
 		},
 
 		sharingEnabled(): boolean {
@@ -279,7 +281,7 @@ export default {
 		},
 
 		albumFileName(): string {
-			return this.$store.getters.getAlbumName(this.albumName)
+			return useAlbumsStore().getAlbumName(this.albumName)
 		},
 
 		albumPhotos(): PhotoFile[] {
@@ -354,18 +356,18 @@ export default {
 
 		async handleFilesPicked(fileIds: string[]) {
 			this.showAddPhotosModal = false
-			await this.$store.dispatch('addFilesToCollection', { collectionFileName: this.album?.root + this.album?.path, fileIdsToAdd: fileIds })
+			await useCollectionsStore().addFilesToCollection(this.album?.root + this.album?.path, fileIds)
 			// Re-fetch album content to have the proper filenames.
 			await this.fetchAlbumContent()
 		},
 
 		async handleRemoveFilesFromAlbum(fileIds: string[]) {
 			this.$refs.collectionContent?.onUncheckFiles(fileIds)
-			await this.$store.dispatch('removeFilesFromCollection', { collectionFileName: this.album?.root + this.album?.path, fileIdsToRemove: fileIds })
+			await useCollectionsStore().removeFilesFromCollection(this.album?.root + this.album?.path, fileIds)
 		},
 
 		async handleDeleteAlbum() {
-			const isDeleted = await this.$store.dispatch('deleteCollection', { collectionFileName: this.album?.root + this.album?.path })
+			const isDeleted = await useCollectionsStore().deleteCollection(this.album?.root + this.album?.path)
 			if (isDeleted) {
 				this.$router.push('/albums')
 			}
@@ -375,7 +377,7 @@ export default {
 			try {
 				this.loadingAddCollaborators = true
 				this.showManageCollaboratorView = false
-				await this.$store.dispatch('updateCollection', { collectionFileName: this.album?.root + this.album?.path, properties: { collaborators } })
+				await useCollectionsStore().updateCollection(this.album?.root + this.album?.path, { collaborators })
 			} catch (error) {
 				logger.error('Error while setting album collaborators', { error })
 			} finally {
@@ -384,7 +386,7 @@ export default {
 		},
 
 		async handleFiltersChange(filters) {
-			await this.$store.dispatch('updateCollection', { collectionFileName: this.album?.root + this.album?.path, properties: { filters } })
+			await useCollectionsStore().updateCollection(this.album?.root + this.album?.path, { filters })
 			this.fetchAlbumContent()
 		},
 

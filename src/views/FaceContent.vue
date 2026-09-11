@@ -213,7 +213,9 @@ import FilesListViewer from '../components/FilesListViewer.vue'
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
+import { downloadFiles } from '../services/downloadFiles.ts'
 import logger from '../services/logger.js'
+import useFacesStore from '../store/faces.ts'
 import useFilesStore from '../store/files.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.js'
 
@@ -277,7 +279,7 @@ export default {
 		},
 
 		facesFiles() {
-			return this.$store.state.faces.facesFiles
+			return useFacesStore().facesFiles
 		},
 
 		face(): Collection {
@@ -311,10 +313,7 @@ export default {
 		// face it was recognized on.
 		onPhotoDeleted(photo: PhotoTarget) {
 			this.onUncheckFiles([photo.fileid.toString()])
-			this.$store.commit('removeFilesFromFace', {
-				faceName: this.faceName,
-				fileIdsToRemove: [photo.fileid.toString()],
-			})
+			useFacesStore().removeFilesFromFace(this.faceName, [photo.fileid.toString()])
 		},
 
 		openViewer(fileId: string) {
@@ -327,7 +326,7 @@ export default {
 		async handleRemoveFilesFromFace(fileIds: string[]) {
 			try {
 				this.loadingCount++
-				await this.$store.dispatch('removeFilesFromFace', { faceName: this.faceName, fileIdsToRemove: fileIds })
+				await useFacesStore().removeFilesFromFace(this.faceName, fileIds)
 				this.resetSelection()
 			} catch (error) {
 				logger.error(error)
@@ -339,7 +338,7 @@ export default {
 		async handleDeleteFace() {
 			try {
 				this.loadingCount++
-				await this.$store.dispatch('deleteFace', { faceName: this.faceName })
+				await useFacesStore().deleteFace(this.faceName)
 				this.$router.push('/faces')
 			} catch (error) {
 				logger.error(error)
@@ -353,7 +352,7 @@ export default {
 				this.loadingCount++
 				this.showRenameModal = false
 				const oldName = this.faceName
-				await this.$store.dispatch('renameFace', { oldName, faceName })
+				await useFacesStore().renameFace(oldName, faceName)
 				this.$router.push({ name: 'facecontent', params: { faceName } })
 			} catch (error) {
 				logger.error(error)
@@ -365,8 +364,8 @@ export default {
 		async handleMerge(faceName: string) {
 			try {
 				this.loadingCount++
-				await this.$store.dispatch('moveFilesToFace', { oldFace: this.faceName, faceName, fileIdsToMove: this.facesFiles[this.faceName] })
-				await this.$store.dispatch('deleteFace', { faceName: this.faceName })
+				await useFacesStore().moveFilesToFace(faceName, this.facesFiles[this.faceName], this.faceName)
+				await useFacesStore().deleteFace(this.faceName)
 				this.showMergeModal = false
 				this.$router.push({ name: 'facecontent', params: { faceName } })
 			} catch (error) {
@@ -379,7 +378,7 @@ export default {
 		async handleMove(faceName: string, fileIds: string[]) {
 			try {
 				this.loadingCount++
-				await this.$store.dispatch('moveFilesToFace', { oldFace: this.faceName, faceName, fileIdsToMove: fileIds })
+				await useFacesStore().moveFilesToFace(faceName, fileIds, this.faceName)
 				this.showMoveModal = false
 			} catch (error) {
 				logger.error(error)
@@ -413,7 +412,7 @@ export default {
 		async downloadSelection() {
 			try {
 				this.loadingCount++
-				await this.$store.dispatch('downloadFiles', this.selectedFileIds)
+				await downloadFiles(this.selectedFileIds.map((fileId) => this.files[fileId]))
 			} catch (error) {
 				logger.error(error)
 			} finally {
