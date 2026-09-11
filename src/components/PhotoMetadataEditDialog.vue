@@ -46,6 +46,7 @@
 
 				<div v-if="location !== null" class="metadata-editor__location__map">
 					<LocationMap
+						height="200px"
 						:latitude="location.latitude"
 						:longitude="location.longitude"
 						:name="photo.basename" />
@@ -82,7 +83,7 @@ import NcTextField from '@nextcloud/vue/components/NcTextField'
 import MapMarkerOffOutline from 'vue-material-design-icons/MapMarkerOffOutline.vue'
 import { fetchPhotoExif } from '../services/exifFetcher.ts'
 import logger from '../services/logger.ts'
-import useFilesStore from '../store/files.ts'
+import { useFilesStore } from '../store/files.ts'
 import { COORDINATE_LIMITS, getPhotoLocation, parseCoordinate } from '../utils/exif.ts'
 
 const props = defineProps<{
@@ -221,8 +222,6 @@ async function save(): Promise<void> {
 			// fills the width of the dialog.
 			:deep(.location-map) {
 				margin: 0;
-				width: 100%;
-				height: 200px;
 			}
 		}
 	}
