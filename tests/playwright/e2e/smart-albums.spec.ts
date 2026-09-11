@@ -11,7 +11,7 @@ test.use({ withPlaces: true })
 const ALBUM_NAME = 'smart_album_test'
 
 /** A range covering the three fixtures taken in 2019. */
-const YEAR_2019 = '2019-01-01 ~ 2019-12-31'
+const YEAR_2019 = '2019-01-01 - 2019-12-31'
 
 /**
  * A smart album has no photos of its own: it holds whatever matches its filters,

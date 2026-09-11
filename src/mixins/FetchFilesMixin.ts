@@ -10,7 +10,7 @@ import { showError } from '@nextcloud/dialogs'
 import { defaultRootPath } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
 import { join } from '@nextcloud/paths'
-import { defineComponent } from 'vue'
+import { defineComponent, markRaw } from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import { getErrorBody } from '../services/DavResponse.ts'
 import logger from '../services/logger.js'
@@ -30,7 +30,7 @@ export default defineComponent({
 			errorFetchingFiles: null as null | number | Error | unknown,
 			loadingFiles: false,
 			doneFetchingFiles: false,
-			fetchSemaphore: new SemaphoreWithPriority(1),
+			fetchSemaphore: markRaw(new SemaphoreWithPriority(1)),
 			fetchedFileIds: [] as number[],
 		}
 	},

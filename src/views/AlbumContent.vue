@@ -101,7 +101,26 @@
 								<Download slot="icon" />
 							</ActionDownload>-->
 
-								<ActionFavorite :selectedFileIds="selectedFileIds" />
+								<NcActionButton
+									v-if="shouldFavoriteSelection"
+									:closeAfterClick="true"
+									:aria-label="t('photos', 'Mark selection as favorite')"
+									@click="favoriteSelection">
+									{{ t('photos', 'Add selection to favorites') }}
+									<template #icon>
+										<StarOutline />
+									</template>
+								</NcActionButton>
+								<NcActionButton
+									v-else
+									:closeAfterClick="true"
+									:aria-label="t('photos', 'Remove selection from favorites')"
+									@click="unFavoriteSelection">
+									{{ t('photos', 'Remove selection from favorites') }}
+									<template #icon>
+										<Star />
+									</template>
+								</NcActionButton>
 
 								<NcActionButton
 									v-if="removableSelectedFiles.length !== 0"
@@ -209,9 +228,10 @@ import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
 import PencilOutline from 'vue-material-design-icons/PencilOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import ShareVariantOutline from 'vue-material-design-icons/ShareVariantOutline.vue'
+import Star from 'vue-material-design-icons/Star.vue'
+import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
-import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import AlbumHero from '../components/AlbumHero.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import CollaboratorsSelectionForm from '../components/Albums/CollaboratorsSelectionForm.vue'
@@ -230,8 +250,9 @@ import { pickAlbumCover } from '../utils/albumCover.ts'
 export default {
 	name: 'AlbumContent',
 	components: {
+		StarOutline,
+		Star,
 		// ActionDownload,
-		ActionFavorite,
 		AlbumForm,
 		AlbumHero,
 		Close,
@@ -287,6 +308,11 @@ export default {
 	},
 
 	computed: {
+		shouldFavoriteSelection(): boolean {
+			// Favorite all selection if at least one file is not in the favorites.
+			return this.selectedFileIds.some((fileId) => useFilesStore().files[fileId].attributes.favorite === 0)
+		},
+
 		album(): Album {
 			return useAlbumsStore().getAlbum(this.albumName)
 		},
@@ -350,6 +376,14 @@ export default {
 	},
 
 	methods: {
+		async favoriteSelection(): Promise<void> {
+			await useFilesStore().toggleFavoriteForFiles(this.selectedFileIds, 1)
+		},
+
+		async unFavoriteSelection(): Promise<void> {
+			await useFilesStore().toggleFavoriteForFiles(this.selectedFileIds, 0)
+		},
+
 		async fetchAlbum() {
 			await this.fetchCollection(
 				this.albumFileName,

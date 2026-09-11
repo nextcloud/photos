@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { computed, onUnmounted, ref } from 'vue'
+import { computed, markRaw, onUnmounted, ref } from 'vue'
 import router from '../router/index.ts'
 
 /**
  *
  */
 export default function() {
-	const abortController = ref(new AbortController())
+	const abortController = ref(markRaw(new AbortController()))
 
 	const abortSignal = computed(() => abortController.value.signal)
 
@@ -19,7 +19,7 @@ export default function() {
 	 */
 	function abortPendingRequest() {
 		abortController.value.abort()
-		abortController.value = new AbortController()
+		abortController.value = markRaw(new AbortController())
 	}
 
 	onUnmounted(() => {

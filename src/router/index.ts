@@ -98,7 +98,7 @@ const router = createRouter({
 			},
 		},
 		{
-			path: '/albums/:albumName*',
+			path: '/albums/:albumName(.+)',
 			component: AlbumContent,
 			name: 'albumsContent',
 			props: (route) => ({
@@ -121,7 +121,7 @@ const router = createRouter({
 			},
 		},
 		{
-			path: '/sharedalbums/:albumName*',
+			path: '/sharedalbums/:albumName(.+)',
 			component: SharedAlbumContent,
 			name: 'sharedAlbumsContent',
 			props: (route) => ({
@@ -152,7 +152,7 @@ const router = createRouter({
 			name: 'places',
 		},
 		{
-			path: '/places/:placeName*',
+			path: '/places/:placeName(.+)',
 			component: PlaceContent,
 			name: 'placesContent',
 			props: (route) => ({
@@ -160,7 +160,7 @@ const router = createRouter({
 			}),
 		},
 		{
-			path: '/folders/:path*',
+			path: '/folders/:path(.*)?',
 			component: FoldersView,
 			name: 'folders',
 			props: (route) => ({
@@ -176,7 +176,7 @@ const router = createRouter({
 			},
 		},
 		{
-			path: '/shared/:path*',
+			path: '/shared/:path(.*)?',
 			component: FoldersView,
 			name: 'shared',
 			props: (route) => ({

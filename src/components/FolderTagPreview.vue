@@ -116,8 +116,8 @@ export default {
 			const regex = /^\/?(.+)/i
 			const path = (regex.exec(this.path) as string[])[1]
 
-			// apply to current route
-			return { ...this.$route, params: { path: path.split('/') } }
+			// keep the current route, so folders and shared folders each stay in theirs
+			return { name: this.$route.name ?? undefined, params: { path } }
 		},
 	},
 
