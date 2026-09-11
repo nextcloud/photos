@@ -158,6 +158,8 @@ export default {
 		},
 	},
 
+	emits: ['needContent'],
+
 	setup() {
 		return { filesStore: useFilesStore(), userConfigStore: useUserConfigStore() }
 	},

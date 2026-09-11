@@ -150,6 +150,8 @@ export default {
 		},
 	},
 
+	emits: ['back', 'done'],
+
 	setup() {
 		return { albumsStore: useAlbumsStore(), collectionsStore: useCollectionsStore() }
 	},

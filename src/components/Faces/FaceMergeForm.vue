@@ -35,6 +35,8 @@ export default {
 		},
 	},
 
+	emits: ['select'],
+
 	setup() {
 		return { facesStore: useFacesStore(), filesStore: useFilesStore() }
 	},
