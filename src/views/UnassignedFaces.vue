@@ -115,6 +115,7 @@ import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import logger from '../services/logger.js'
+import useFilesStore from '../store/files.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.js'
 
 export default {
@@ -158,7 +159,7 @@ export default {
 
 	computed: {
 		files() {
-			return this.$store.state.files.files
+			return useFilesStore().files
 		},
 
 		unassignedFiles() {
@@ -171,7 +172,7 @@ export default {
 
 		shouldFavoriteSelection(): boolean {
 			// Favorite all selection if at least one file is not on the favorites.
-			return this.selectedFileIds.some((fileId) => this.$store.state.files.files[fileId].attributes.favorite === 0)
+			return this.selectedFileIds.some((fileId) => useFilesStore().files[fileId].attributes.favorite === 0)
 		},
 	},
 
@@ -209,7 +210,7 @@ export default {
 		async favoriteSelection() {
 			try {
 				this.loadingCount++
-				await this.$store.dispatch('toggleFavoriteForFiles', { fileIds: this.selectedFileIds, favoriteState: true })
+				await useFilesStore().toggleFavoriteForFiles(this.selectedFileIds, 1)
 			} catch (error) {
 				logger.error('Failed to favorite selection', { error })
 			} finally {
@@ -220,7 +221,7 @@ export default {
 		async unFavoriteSelection() {
 			try {
 				this.loadingCount++
-				await this.$store.dispatch('toggleFavoriteForFiles', { fileIds: this.selectedFileIds, favoriteState: false })
+				await useFilesStore().toggleFavoriteForFiles(this.selectedFileIds, 0)
 			} catch (error) {
 				logger.error('Failed to unfavorite selection', { error })
 			} finally {

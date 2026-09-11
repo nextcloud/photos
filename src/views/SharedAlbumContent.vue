@@ -144,6 +144,7 @@ import PhotosPicker from '../components/PhotosPicker.vue'
 import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import { albumFilesExtraProps, albumsExtraProps } from '../store/albums.ts'
+import useFilesStore from '../store/files.ts'
 
 export default {
 	name: 'SharedAlbumContent',
@@ -197,7 +198,7 @@ export default {
 
 	computed: {
 		files() {
-			return this.$store.state.files.files
+			return useFilesStore().files
 		},
 
 		album() {
@@ -218,7 +219,7 @@ export default {
 
 		removableSelectedFiles() {
 			return (this.$refs.collectionContent?.selectedFileIds as string[])
-				.map((fileId) => this.$store.state.files.files[fileId])
+				.map((fileId) => useFilesStore().files[fileId])
 				.filter((file) => file.attributes['photos-album-file-origin'] !== 'filters')
 				.map((file) => file.fileid.toString())
 		},

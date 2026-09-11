@@ -140,6 +140,7 @@ import PhotoMetadataEditDialog from './PhotoMetadataEditDialog.vue'
 import PhotoTagsDialog from './PhotoTagsDialog.vue'
 import areTagsInstalled from '../services/AreTagsInstalled.ts'
 import logger from '../services/logger.ts'
+import useFilesStore from '../store/files.ts'
 import store from '../store/index.ts'
 
 const props = defineProps<{
@@ -185,7 +186,7 @@ async function toggleFavorite(): Promise<void> {
 	const favorite = !props.photo.favorite
 
 	try {
-		await store.dispatch('setPhotoFavorite', { photo: props.photo, favorite })
+		await useFilesStore().setPhotoFavorite(props.photo, favorite)
 	} catch (error) {
 		logger.error('Error setting the favorite state of a photo', { error, filename: props.photo.basename })
 		showError(favorite
@@ -207,7 +208,7 @@ async function confirmDelete(): Promise<void> {
 	deleteConfirmationShown.value = false
 
 	try {
-		await store.dispatch('deletePhoto', props.photo)
+		await useFilesStore().deletePhoto(props.photo)
 		emit('deleted', props.photo)
 	} catch (error) {
 		logger.error('Error deleting a photo', { error, filename: props.photo.basename })

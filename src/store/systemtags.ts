@@ -5,12 +5,12 @@ import type { File, Folder } from '@nextcloud/files'
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import Vue, { ref } from 'vue'
 import logger from '../services/logger.js'
 import getSystemTags from '../services/SystemTags.js'
 import getTaggedImages from '../services/TaggedImages.js'
 import { sortCompare } from '../utils/fileUtils.js'
-import store from './index.ts'
+import useFilesStore from './files.ts'
 
 /** A tag, identified by the `id` of the Node rather than its file id. */
 export type Tag = Folder & {
@@ -39,8 +39,8 @@ export default defineStore('systemtags', () => {
 		newTags
 			.sort((a, b) => sortCompare(a, b, 'display-name'))
 			.forEach((tag) => {
-				tags.value[tag.id] = tag
-				names.value[tag.attributes['display-name']] = tag.id
+				Vue.set(tags.value, tag.id, tag)
+				Vue.set(names.value, tag.attributes['display-name'], tag.id)
 			})
 	}
 
@@ -48,8 +48,8 @@ export default defineStore('systemtags', () => {
 	 * @param id - Id of the tag to forget
 	 */
 	function removeTag(id: string): void {
-		delete names.value[tags.value[id].attributes['display-name']]
-		delete tags.value[id]
+		Vue.delete(names.value, tags.value[id].attributes['display-name'])
+		Vue.delete(tags.value, id)
 	}
 
 	/**
@@ -68,7 +68,7 @@ export default defineStore('systemtags', () => {
 		const list = files.sort((a, b) => sortCompare(a, b, 'files-assigned'))
 
 		logger.debug(`Overwrite list, id: ${id}`, { list })
-		tagsFiles.value[id] = list.map((file) => file.fileid!)
+		Vue.set(tagsFiles.value, id, list.map((file) => file.fileid!))
 	}
 
 	/**
@@ -79,7 +79,7 @@ export default defineStore('systemtags', () => {
 		try {
 			const files = await getTaggedImages(id, { signal })
 			updateTag(id, files)
-			await store.dispatch('appendFiles', files)
+			useFilesStore().appendFiles(files)
 		} catch (error) {
 			logger.error(`Failed to get tag content, id: ${id}`, { error })
 		}

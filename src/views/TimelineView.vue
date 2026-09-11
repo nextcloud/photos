@@ -245,6 +245,7 @@ import FilesByMonthMixin from '../mixins/FilesByMonthMixin.ts'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.ts'
 import { allMimes } from '../services/AllowedMimes.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
+import useFilesStore from '../store/files.ts'
 import useFilterStore from '../store/filters.ts'
 import { configChangedEvent } from '../store/userConfig.ts'
 import { formatMonth, formatYear } from '../utils/dateUtils.ts'
@@ -352,7 +353,7 @@ export default {
 
 	computed: {
 		files() {
-			return this.$store.state.files.files
+			return useFilesStore().files
 		},
 
 		// Photos of the timeline that are loaded, in the order they are shown.
@@ -479,7 +480,7 @@ export default {
 			const fileIds = this.selectedFileIds
 			this.onUncheckFiles(fileIds)
 			this.fetchedFileIds = this.fetchedFileIds.filter((fileid) => !fileIds.includes(fileid))
-			await this.$store.dispatch('deleteFiles', fileIds)
+			await useFilesStore().deleteFiles(fileIds)
 		},
 
 		handleUserConfigChange({ key }) {

@@ -5,6 +5,7 @@
 
 import he from 'he'
 import { defineComponent } from 'vue'
+import useFilesStore from '../store/files.ts'
 
 type Cover = {
 	detection: {
@@ -20,7 +21,7 @@ export default defineComponent({
 
 	computed: {
 		files() {
-			return this.$store.state.files.files
+			return useFilesStore().files
 		},
 
 		faces() {

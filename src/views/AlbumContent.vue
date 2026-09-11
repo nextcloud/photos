@@ -203,6 +203,7 @@ import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.j
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import logger from '../services/logger.js'
 import { albumFilesExtraProps, albumsExtraProps } from '../store/albums.ts'
+import useFilesStore from '../store/files.ts'
 import { pickAlbumCover } from '../utils/albumCover.ts'
 
 export default {
@@ -283,7 +284,7 @@ export default {
 
 		albumPhotos(): PhotoFile[] {
 			return this.albumFileIds
-				.map((fileId) => this.$store.state.files.files[fileId])
+				.map((fileId) => useFilesStore().files[fileId])
 				.filter((file) => file !== undefined)
 		},
 
@@ -316,7 +317,7 @@ export default {
 
 		removableSelectedFiles() {
 			return (this.$refs.collectionContent?.selectedFileIds as string[])
-				.map((fileId) => this.$store.state.files.files[fileId])
+				.map((fileId) => useFilesStore().files[fileId])
 				.filter((file) => file.attributes['photos-album-file-origin'] !== 'filters')
 				.map((file) => file.fileid.toString())
 		},

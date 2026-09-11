@@ -37,6 +37,7 @@ import {
 import { RouterLink } from 'vue-router'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
+import useFilesStore from '../store/files.ts'
 import useSystemTagsStore from '../store/systemtags.ts'
 
 export default defineComponent({
@@ -65,7 +66,7 @@ export default defineComponent({
 
 	computed: {
 		files() {
-			return this.$store.state.files.files
+			return useFilesStore().files
 		},
 
 		coverUrl(): string {
