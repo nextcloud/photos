@@ -17,6 +17,7 @@
 import FaceCover from './FaceCover.vue'
 import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
 import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
+import useFilesStore from '../../store/files.ts'
 
 export default {
 	name: 'FaceMergeForm',
@@ -41,7 +42,7 @@ export default {
 
 	computed: {
 		files() {
-			return this.$store.state.files.files
+			return useFilesStore().files
 		},
 
 		faces() {

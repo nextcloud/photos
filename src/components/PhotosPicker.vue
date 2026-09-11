@@ -126,6 +126,7 @@ import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import allowedMimes from '../services/AllowedMimes.js'
+import useFilesStore from '../store/files.ts'
 import useUserConfigStore from '../store/userConfig.ts'
 
 export default defineComponent({
@@ -207,7 +208,7 @@ export default defineComponent({
 
 	computed: {
 		files() {
-			return this.$store.state.files.files
+			return useFilesStore().files
 		},
 
 		photosLocationFolder() {

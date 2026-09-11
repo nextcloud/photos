@@ -12,6 +12,7 @@ import { isAxiosError } from 'axios'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
+import useFilesStore from './files.ts'
 
 export const collectionFilesExtraProps = ['<nc:photos-collection-file-original-filename />']
 
@@ -166,7 +167,7 @@ const actions = {
 
 		const promises = fileIdsToAdd
 			.map(async (fileId) => {
-				const file = context.rootState.files.files[fileId]
+				const file = useFilesStore().files[fileId]
 				const collection = context.state.collections[collectionFileName]
 				const symbol = await semaphore.acquire()
 
@@ -205,7 +206,7 @@ const actions = {
 
 		const promises = fileIdsToRemove
 			.map(async (fileId) => {
-				const file = context.rootState.files.files[fileId]
+				const file = useFilesStore().files[fileId]
 				const symbol = await semaphore.acquire()
 
 				try {

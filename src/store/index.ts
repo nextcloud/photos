@@ -7,8 +7,6 @@ import type { Collection } from '../services/collectionFetcher.ts'
 import type { Album } from './albums.ts'
 import type { CollectionState } from './collections.ts'
 import type { FacesState } from './faces.ts'
-import type { FilesState } from './files.ts'
-import type { FoldersState } from './folders.ts'
 import type { PublicAlbum } from './publicAlbums.ts'
 
 import Vue from 'vue'
@@ -16,17 +14,13 @@ import Vuex, { Store } from 'vuex'
 import albums from './albums.ts'
 import collections from './collections.ts'
 import faces from './faces.ts'
-import files from './files.ts'
-import folders from './folders.ts'
 import places from './places.ts'
 import publicAlbums from './publicAlbums.ts'
 import sharedAlbums from './sharedAlbums.ts'
 
 export type PhotosRootSate = {
-	files: FilesState
 	collections: CollectionState
 	faces: FacesState
-	folders: FoldersState
 }
 
 export type PhotosStore = {
@@ -60,8 +54,6 @@ export type PhotosContext<T> = PhotosStore & {
 Vue.use(Vuex)
 const photosStore = new Store({
 	modules: {
-		files,
-		folders,
 		albums,
 		sharedAlbums,
 		publicAlbums,

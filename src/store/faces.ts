@@ -14,6 +14,7 @@ import Vue from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
 import Semaphore from '../utils/semaphoreWithPriority.js'
+import useFilesStore from './files.ts'
 
 type FaceDetection = {
 	id: number
@@ -183,7 +184,7 @@ const actions = {
 
 		const promises = fileIdsToMove
 			.map(async (fileId) => {
-				const file = context.rootState.files.files[fileId]
+				const file = useFilesStore().files[fileId]
 				const fileBaseName = file.basename
 				const detection = findFaceDetection(file, oldFace)
 				const recognizeFileName = getRecognizeFileName(detection, fileBaseName)
@@ -228,7 +229,7 @@ const actions = {
 
 		const promises = fileIdsToRemove
 			.map(async (fileId) => {
-				const file = context.rootState.files.files[fileId]
+				const file = useFilesStore().files[fileId]
 				const fileBaseName = file.basename
 				const recognizeFileName = getRecognizeFileName(findFaceDetection(file, faceName), fileBaseName)
 				const symbol = await semaphore.acquire()

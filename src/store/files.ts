@@ -3,20 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type { File, Folder } from '@nextcloud/files'
+import type { File } from '@nextcloud/files'
 import type { PhotoMetadataUpdate } from '../services/photoActions.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
-import type { PhotosContext } from './index.ts'
 
 import { showError } from '@nextcloud/dialogs'
 import { defaultRootPath } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
-import Vue from 'vue'
+import { defineStore } from 'pinia'
+import Vue, { ref } from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
-import { deletePhoto, savePhotoMetadata, setPhotoFavorite } from '../services/photoActions.ts'
+import { deletePhoto as deletePhotoRequest, savePhotoMetadata, setPhotoFavorite as setPhotoFavoriteRequest } from '../services/photoActions.ts'
 import Semaphore from '../utils/semaphoreWithPriority.js'
+import useFoldersStore from './folders.ts'
 
 export type PhotoFile = File & {
 	fileid: number
@@ -33,28 +34,23 @@ export type PhotoFile = File & {
 	}
 }
 
-const state = {
-	files: {} as Record<string, PhotoFile>,
-	nomediaPaths: [] as string[],
-}
+export default defineStore('files', () => {
+	const files = ref<Record<string, PhotoFile>>({})
+	const nomediaPaths = ref<string[]>([])
 
-export type FilesState = typeof state
-
-const mutations = {
 	/**
 	 * Append or update given files
 	 *
-	 * @param state
-	 * @param newFiles
+	 * @param newFiles - Files to index
 	 */
-	updateFiles(state: FilesState, newFiles: File[]) {
-		const files = {}
+	function appendFiles(newFiles: File[] = []): void {
+		const indexed = {}
 		newFiles
 			.filter((file) => !file.attributes.hidden)
 			.forEach((file) => {
 				// Ignore the file if the path is excluded
 				// TODO: Check that it works
-				if (state.nomediaPaths.some((nomediaPath) => file.path.startsWith(nomediaPath)
+				if (nomediaPaths.value.some((nomediaPath) => file.path.startsWith(nomediaPath)
 					|| file.path.startsWith(`${defaultRootPath}${nomediaPath}`))) {
 					return
 				}
@@ -69,66 +65,58 @@ const mutations = {
 				file.attributes.month = date.format('YYYYMM') // For grouping by month
 				file.attributes.day = date.format('MMDD') // For On this day
 
-				files[file.fileid as number] = file
+				indexed[file.fileid as number] = file
 			})
 
-		state.files = {
-			...state.files,
-			...files,
+		files.value = {
+			...files.value,
+			...indexed,
 		}
-	},
+	}
 
 	/**
 	 * Set list of all .nomedia/.noimage files
 	 *
-	 * @param state
-	 * @param paths
+	 * @param paths - Paths to exclude from the listings
 	 */
-	setNomediaPaths(state: FilesState, paths: string[]) {
-		state.nomediaPaths = paths
-	},
+	function setNomediaPaths(paths: string[]): void {
+		logger.debug('Ignored paths', { paths })
+		nomediaPaths.value = paths
+	}
 
 	/**
-	 * Delete a file
-	 *
-	 * @param state
-	 * @param fileId
-	 */
-	deleteFile(state: FilesState, fileId: number) {
-		Vue.delete(state.files, fileId)
-	},
-
-	/**
-	 * Favorite a list of files
+	 * Favorite a file, or take that mark off again
 	 *
 	 * Photos of the folders view are not part of this store, so the state is
 	 * only updated when the file is known.
 	 *
-	 * @param state
-	 * @param root0
-	 * @param root0.fileId
-	 * @param root0.favoriteState
+	 * @param fileId - Id of the file
+	 * @param favoriteState - 1 to favorite, 0 to unfavorite
 	 */
-	favoriteFile(state: FilesState, { fileId, favoriteState }: { fileId: number, favoriteState: 0 | 1 }) {
-		const attributes = state.files[fileId]?.attributes
+	function favoriteFile(fileId: number | string, favoriteState: 0 | 1): void {
+		const attributes = files.value[fileId]?.attributes
 		if (attributes === undefined) {
 			return
 		}
 
+		// Vue 2 does not track properties added to an object, and a photo that
+		// was never a favorite has no favorite attribute yet.
 		Vue.set(attributes, 'favorite', favoriteState)
-	},
+	}
 
 	/**
-	 * Store the corrected taken date and position of a photo
+	 * Correct the taken date and the position of a photo
 	 *
-	 * @param state
-	 * @param root0
-	 * @param root0.fileId
-	 * @param root0.takenAt
-	 * @param root0.location
+	 * @param photo - Photo to update
+	 * @param update - New taken date and position
+	 * @param update.takenAt - Corrected capture time, as a unix timestamp
+	 * @param update.location - Corrected position, or null to drop it
+	 * @throws {Error} When the server rejects the update
 	 */
-	setPhotoMetadata(state: FilesState, { fileId, takenAt, location }: { fileId: number } & PhotoMetadataUpdate) {
-		const attributes = state.files[fileId]?.attributes
+	async function updatePhotoMetadata(photo: PhotoTarget, { takenAt, location }: PhotoMetadataUpdate): Promise<void> {
+		await savePhotoMetadata(photo, { takenAt, location })
+
+		const attributes = files.value[photo.fileid]?.attributes
 		if (attributes === undefined) {
 			return
 		}
@@ -150,84 +138,24 @@ const mutations = {
 				longitude: String(location.longitude),
 			})
 		}
-	},
-}
-
-const getters = {
-	files: (state: FilesState) => state.files,
-	nomediaPaths: (state: FilesState) => state.nomediaPaths,
-}
-
-const actions = {
-	/**
-	 * Update files, folders and their respective subfolders
-	 *
-	 * @param context
-	 * @param root0
-	 * @param root0.folder
-	 * @param root0.files
-	 * @param root0.folders
-	 */
-	updateFiles(context: PhotosContext<FilesState>, { folder, files = [], folders = [] }: { folder: Folder, files: File[], folders: Folder[] }) {
-		// we want all the FileInfo! Folders included!
-		context.commit('updateFiles', [folder, ...files, ...folders])
-		context.commit('setSubFolders', { fileid: folder.fileid, folders })
-	},
-
-	/**
-	 * Append or update given files
-	 *
-	 * @param context
-	 * @param files
-	 */
-	appendFiles(context: PhotosContext<FilesState>, files: File[] = []) {
-		context.commit('updateFiles', files)
-	},
-
-	/**
-	 * Set list of all .nomedia/.noimage files
-	 *
-	 * @param context
-	 * @param paths
-	 */
-	setNomediaPaths(context: PhotosContext<FilesState>, paths: string[]) {
-		logger.debug('Ignored paths', { paths })
-		context.commit('setNomediaPaths', paths)
-	},
-
-	/**
-	 * Correct the taken date and the position of a photo
-	 *
-	 * @param context
-	 * @param root0
-	 * @param root0.photo
-	 * @param root0.takenAt
-	 * @param root0.location
-	 * @throws {Error} When the server rejects the update
-	 */
-	async updatePhotoMetadata(context: PhotosContext<FilesState>, { photo, takenAt, location }: { photo: PhotoTarget } & PhotoMetadataUpdate) {
-		await savePhotoMetadata(photo, { takenAt, location })
-		context.commit('setPhotoMetadata', { fileId: photo.fileid, takenAt, location })
-	},
+	}
 
 	/**
 	 * Mark a single photo as a favorite, or take that mark off again
 	 *
-	 * @param context
-	 * @param root0
-	 * @param root0.photo
-	 * @param root0.favorite
+	 * @param photo - Photo to update
+	 * @param favorite - Whether the photo becomes a favorite
 	 * @throws {Error} When the server rejects the update
 	 */
-	async setPhotoFavorite(context: PhotosContext<FilesState>, { photo, favorite }: { photo: PhotoTarget, favorite: boolean }) {
-		await setPhotoFavorite(photo, favorite)
+	async function setPhotoFavorite(photo: PhotoTarget, favorite: boolean): Promise<void> {
+		await setPhotoFavoriteRequest(photo, favorite)
 
 		// The photo can be one of a timeline as well as one of a folder, and the
 		// two views hold their own listings.
 		const favoriteState = favorite ? 1 : 0
-		context.commit('favoriteFile', { fileId: photo.fileid, favoriteState })
-		context.commit('favoriteFolderFile', { fileId: photo.fileid, favoriteState })
-	},
+		favoriteFile(photo.fileid, favoriteState)
+		useFoldersStore().favoriteFolderFile(photo.fileid, favoriteState)
+	}
 
 	/**
 	 * Move a photo to the trash
@@ -235,33 +163,31 @@ const actions = {
 	 * Photos of the folders view are not part of this store, so the file is
 	 * only dropped from it when it is known.
 	 *
-	 * @param context
-	 * @param photo
+	 * @param photo - Photo to delete
 	 * @throws {Error} When the server refuses to delete the photo
 	 */
-	async deletePhoto(context: PhotosContext<FilesState>, photo: PhotoTarget) {
-		await deletePhoto(photo)
-		context.commit('deleteFile', photo.fileid)
-	},
+	async function deletePhoto(photo: PhotoTarget): Promise<void> {
+		await deletePhotoRequest(photo)
+		Vue.delete(files.value, photo.fileid)
+	}
 
 	/**
 	 * Delete a list of files
 	 *
-	 * @param context
-	 * @param fileIds
+	 * @param fileIds - Ids of the files to delete
 	 */
-	deleteFiles(context: PhotosContext<FilesState>, fileIds: number[]) {
+	function deleteFiles(fileIds: Array<number | string>): Promise<unknown[]> {
 		const semaphore = new Semaphore(5)
 
-		const files = fileIds
-			.map((fileId) => state.files[fileId])
-			.reduce((files, file) => ({ ...files, [file.fileid]: file }), {} as Record<string, PhotoFile>)
+		const deleted = fileIds
+			.map((fileId) => files.value[fileId])
+			.reduce((deleted, file) => ({ ...deleted, [file.fileid]: file }), {} as Record<string, PhotoFile>)
 
-		fileIds.forEach((fileId) => context.commit('deleteFile', fileId))
+		fileIds.forEach((fileId) => Vue.delete(files.value, fileId))
 
 		const promises = fileIds
 			.map(async (fileId) => {
-				const file = files[fileId]
+				const file = deleted[fileId]
 				const symbol = await semaphore.acquire()
 
 				try {
@@ -269,33 +195,31 @@ const actions = {
 				} catch (error) {
 					logger.error(t('photos', 'Failed to delete {fileId}', { fileId }), { error })
 					showError(t('photos', 'Failed to delete {fileName}', { fileName: file.basename }))
-					context.dispatch('appendFiles', [file])
+					appendFiles([file])
 				} finally {
 					semaphore.release(symbol)
 				}
 			})
 
 		return Promise.all(promises)
-	},
+	}
 
 	/**
 	 * Favorite a list of files
 	 *
-	 * @param context
-	 * @param root0
-	 * @param root0.fileIds
-	 * @param root0.favoriteState
+	 * @param fileIds - Ids of the files to update
+	 * @param favoriteState - 1 to favorite, 0 to unfavorite
 	 */
-	toggleFavoriteForFiles(context: PhotosContext<FilesState>, { fileIds, favoriteState }: { fileIds: string[], favoriteState: 0 | 1 }) {
+	function toggleFavoriteForFiles(fileIds: string[], favoriteState: 0 | 1): Promise<unknown[]> {
 		const semaphore = new Semaphore(5)
 
 		const promises = fileIds
 			.map(async (fileId) => {
-				const file = context.state.files[fileId]
+				const file = files.value[fileId]
 				const symbole = await semaphore.acquire()
 
 				try {
-					context.commit('favoriteFile', { fileId, favoriteState })
+					favoriteFile(fileId, favoriteState)
 					await davClient.customRequest(
 						file.root + file.path,
 						{
@@ -314,7 +238,7 @@ const actions = {
 						},
 					)
 				} catch (error) {
-					context.commit('favoriteFile', { fileId, favoriteState: favoriteState === 0 ? 1 : 0 })
+					favoriteFile(fileId, favoriteState === 0 ? 1 : 0)
 					logger.error(t('photos', 'Failed to set favorite state for {fileId}', { fileId: file.fileid }), { error })
 					showError(t('photos', 'Failed to set favorite state for {fileName}', { fileName: file.basename }))
 				}
@@ -323,7 +247,18 @@ const actions = {
 			})
 
 		return Promise.all(promises)
-	},
-}
+	}
 
-export default { state, mutations, getters, actions }
+	return {
+		files,
+		nomediaPaths,
+		appendFiles,
+		setNomediaPaths,
+		favoriteFile,
+		updatePhotoMetadata,
+		setPhotoFavorite,
+		deletePhoto,
+		deleteFiles,
+		toggleFavoriteForFiles,
+	}
+})

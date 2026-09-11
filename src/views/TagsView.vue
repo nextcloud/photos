@@ -37,6 +37,7 @@ import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import TagCover from '../components/TagCover.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import logger from '../services/logger.js'
+import useFilesStore from '../store/files.ts'
 import useSystemTagsStore from '../store/systemtags.ts'
 
 export default defineComponent({
@@ -59,7 +60,7 @@ export default defineComponent({
 
 	computed: {
 		files() {
-			return this.$store.state.files.files
+			return useFilesStore().files
 		},
 
 		tags() {

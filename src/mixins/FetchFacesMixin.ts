@@ -15,6 +15,7 @@ import { defineComponent } from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import { getPropFind } from '../services/DavRequest.ts'
 import logger from '../services/logger.js'
+import useFilesStore from '../store/files.ts'
 import AbortControllerMixin from './AbortControllerMixin.js'
 
 const recognizeDAVProps = [
@@ -130,7 +131,7 @@ export default defineComponent({
 
 				const fileIds = fetchedFiles.map((file) => file.fileid?.toString() as string)
 
-				this.$store.dispatch('appendFiles', fetchedFiles)
+				useFilesStore().appendFiles(fetchedFiles)
 
 				if (fetchedFiles.length > 0) {
 					await this.$store.commit('addFilesToFace', { faceName, fileIdsToAdd: fileIds })
@@ -188,7 +189,7 @@ export default defineComponent({
 					})
 
 				const fileIds = [...new Set(fetchedFiles.map((file) => '' + file.fileid))]
-				this.$store.dispatch('appendFiles', fetchedFiles)
+				useFilesStore().appendFiles(fetchedFiles)
 
 				if (fetchedFiles.length > 0) {
 					await this.$store.commit('addUnassignedFiles', { fileIdsToAdd: fileIds })

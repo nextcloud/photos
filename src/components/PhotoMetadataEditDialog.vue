@@ -82,7 +82,7 @@ import NcTextField from '@nextcloud/vue/components/NcTextField'
 import MapMarkerOffOutline from 'vue-material-design-icons/MapMarkerOffOutline.vue'
 import { fetchPhotoExif } from '../services/exifFetcher.ts'
 import logger from '../services/logger.ts'
-import store from '../store/index.ts'
+import useFilesStore from '../store/files.ts'
 import { COORDINATE_LIMITS, getPhotoLocation, parseCoordinate } from '../utils/exif.ts'
 
 const props = defineProps<{
@@ -177,8 +177,7 @@ async function save(): Promise<void> {
 	saving.value = true
 
 	try {
-		await store.dispatch('updatePhotoMetadata', {
-			photo: props.photo,
+		await useFilesStore().updatePhotoMetadata(props.photo, {
 			takenAt: Math.floor(date.getTime() / 1000),
 			location: location.value,
 		})

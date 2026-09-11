@@ -62,6 +62,7 @@ import FilesListViewer from '../components/FilesListViewer.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import logger from '../services/logger.js'
+import useFilesStore from '../store/files.ts'
 import useSystemTagsStore from '../store/systemtags.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.js'
 
@@ -105,7 +106,7 @@ export default {
 
 	computed: {
 		files() {
-			return this.$store.state.files.files
+			return useFilesStore().files
 		},
 
 		tags() {

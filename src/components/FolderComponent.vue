@@ -19,7 +19,7 @@ import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import FolderTagPreview from './FolderTagPreview.vue'
 import getFolderContent from '../services/FolderContent.ts'
 import logger from '../services/logger.ts'
-import store from '../store/index.ts'
+import useFoldersStore from '../store/folders.ts'
 
 const props = defineProps({
 	item: {
@@ -37,9 +37,9 @@ const abortController = new AbortController()
 
 onBeforeUnmount(() => abortController.abort())
 
-const files = computed(() => store.state.folders.files)
-const folders = computed(() => store.state.folders.folders)
-const subFolders = computed(() => store.state.folders.subFolders)
+const files = computed(() => useFoldersStore().files)
+const folders = computed(() => useFoldersStore().folders)
+const subFolders = computed(() => useFoldersStore().subFolders)
 
 /** Id of the folder, which a node of a listing always carries. */
 const folderId = computed(() => props.item.fileid as number)
@@ -65,8 +65,8 @@ async function getFolderData(path: string) {
 			shared: props.showShared,
 			signal: abortController.signal,
 		})
-		store.dispatch('updateFolders', { fileid: folder?.fileid, files, folders })
-		store.dispatch('updateFoldersFiles', { folder, files, folders })
+		useFoldersStore().updateFolders(folder?.fileid, files, folders)
+		useFoldersStore().updateFoldersFiles(folder, files, folders)
 	} catch (error) {
 		logger.error('Failed to get folder content', { error, path })
 	}
