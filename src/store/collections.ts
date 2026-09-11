@@ -9,7 +9,7 @@ import { showConfirmation, showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import { isAxiosError } from 'axios'
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, toRaw } from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import { logger } from '../services/logger.ts'
 import { SemaphoreWithPriority as Semaphore } from '../utils/semaphoreWithPriority.ts'
@@ -201,7 +201,8 @@ export const useCollectionsStore = defineStore('collections', () => {
 	 */
 	async function renameCollection(collectionFileName: string, newBaseName: string): Promise<Collection> {
 		const collection = collections.value[collectionFileName]
-		const newCollection = collection.clone()
+		// The node clones itself through structuredClone, which rejects a proxy.
+		const newCollection = toRaw(collection).clone()
 		newCollection.rename(newBaseName)
 
 		try {
@@ -225,7 +226,7 @@ export const useCollectionsStore = defineStore('collections', () => {
 	async function updateCollection(collectionFileName: string, properties: object): Promise<Collection> {
 		const collection = collections.value[collectionFileName]
 
-		const updatedCollection = collection.clone()
+		const updatedCollection = toRaw(collection).clone()
 		updatedCollection.update(properties)
 
 		const stringifiedProperties = Object
