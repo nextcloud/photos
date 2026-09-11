@@ -5,5 +5,4 @@
 
 import { loadState } from '@nextcloud/initial-state'
 
-const recognizeApiKey = loadState('photos', 'recognizeApiKey', '') as string
-export default recognizeApiKey
+export const recognizeApiKey = loadState('photos', 'recognizeApiKey', '') as string

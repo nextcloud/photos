@@ -35,8 +35,8 @@ import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import ImageOutlineIcon from 'vue-material-design-icons/ImageOutline.vue'
 import FileComponent from '../FileComponent.vue'
 import { allMimes } from '../../services/AllowedMimes.js'
-import logger from '../../services/logger.js'
-import getPhotos from '../../services/PhotoSearch.js'
+import { logger } from '../../services/logger.ts'
+import { getPhotos } from '../../services/PhotoSearch.ts'
 
 export default {
 	name: 'DashboardOnThisDay',

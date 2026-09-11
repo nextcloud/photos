@@ -25,7 +25,7 @@
 <script lang='ts'>
 import type { PropType } from 'vue'
 
-import logger from '../services/logger.js'
+import { logger } from '../services/logger.ts'
 
 export type Row = {
 	key: string // Unique key for the row.

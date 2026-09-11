@@ -26,7 +26,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import NcIconSvgWrapper from '@nextcloud/vue/components/NcIconSvgWrapper'
-import filters from '../../services/PhotosFilters/index.ts'
+import { photosFilters as filters } from '../../services/PhotosFilters/index.ts'
 
 const props = defineProps<{
 	selectedFilters: Record<string, unknown[]>

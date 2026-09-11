@@ -8,8 +8,8 @@ import { generateUrl } from '@nextcloud/router'
 import Vue from 'vue'
 import Router from 'vue-router'
 import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
-import areTagsInstalled from '../services/AreTagsInstalled.js'
-import isRecognizeInstalled from '../services/IsRecognizeInstalled.js'
+import { areTagsInstalled } from '../services/AreTagsInstalled.ts'
+import { isRecognizeInstalled } from '../services/IsRecognizeInstalled.ts'
 
 const FoldersView = () => import('../views/FoldersView.vue')
 const MapView = () => import('../views/MapView.vue')
@@ -43,7 +43,7 @@ function parsePathParams(path: string | string[]): string {
 	return `/${Array.isArray(path) ? path.join('/') : path || ''}`
 }
 
-const router = new Router({
+export const router = new Router({
 	mode: 'history',
 	// if index.php is in the url AND we got this far, then it's working:
 	// let's keep using index.php in the url
@@ -338,5 +338,3 @@ router.afterEach((to, from) => {
 		window.OCA.Files.Sidebar.close()
 	}
 })
-
-export default router
