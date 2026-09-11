@@ -126,6 +126,7 @@ import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import allowedMimes from '../services/AllowedMimes.js'
+import useUserConfigStore from '../store/userConfig.ts'
 
 export default defineComponent({
 	name: 'PhotosPicker',
@@ -210,7 +211,7 @@ export default defineComponent({
 		},
 
 		photosLocationFolder() {
-			return this.$store.state.userConfig.photosLocationFolder
+			return useUserConfigStore().photosLocationFolder
 		},
 	},
 

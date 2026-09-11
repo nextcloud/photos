@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type { File } from '@nextcloud/files'
+import type { Folder } from '@nextcloud/files'
 import type { FileStat, GetDirectoryContentsOptions, ResponseDataDetailed } from 'webdav'
 
 import { resultToNode } from '@nextcloud/files/dav'
@@ -15,7 +15,7 @@ import { davClient } from './DavClient.ts'
  * @param path
  * @param options
  */
-export default async function(path: string, options: GetDirectoryContentsOptions = {}): Promise<File[]> {
+export default async function(path: string, options: GetDirectoryContentsOptions = {}): Promise<Folder[]> {
 	const response = await davClient.getDirectoryContents('/systemtags-assigned/image', {
 		data: `<?xml version="1.0"?>
 			<d:propfind  xmlns:d="DAV:"
@@ -34,5 +34,5 @@ export default async function(path: string, options: GetDirectoryContentsOptions
 		...options,
 	}) as ResponseDataDetailed<FileStat[]>
 
-	return response.data.map((data) => resultToNode(data, '/systemtags-assigned/image') as File)
+	return response.data.map((data) => resultToNode(data, '/systemtags-assigned/image') as Folder)
 }

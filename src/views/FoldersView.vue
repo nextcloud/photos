@@ -107,6 +107,7 @@ import allowedMimes from '../services/AllowedMimes.js'
 import { fetchFile } from '../services/fileFetcher.ts'
 import getFolderContent from '../services/FolderContent.ts'
 import logger from '../services/logger.ts'
+import useUserConfigStore from '../store/userConfig.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
 export default {
@@ -195,7 +196,7 @@ export default {
 		 * always something to crop away.
 		 */
 		croppedLayout(): boolean {
-			return this.$store.state.userConfig.croppedLayout
+			return useUserConfigStore().croppedLayout
 		},
 
 		// subfolders of the current folder
