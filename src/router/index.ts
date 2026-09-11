@@ -210,7 +210,7 @@ export const router = createRouter({
 			path: '/tags/',
 			component: TagsView,
 			name: 'tags',
-			redirect: !areTagsInstalled ? { name: 'timeline' } : undefined,
+			redirect: !areTagsInstalled ? { name: 'all_media' } : undefined,
 			props: (route) => ({
 				path: '',
 				isRoot: !route.params.path,
@@ -226,7 +226,7 @@ export const router = createRouter({
 			path: '/tags/:path',
 			component: TagContent,
 			name: 'tagcontent',
-			redirect: !areTagsInstalled ? { name: 'timeline' } : undefined,
+			redirect: !areTagsInstalled ? { name: 'all_media' } : undefined,
 			props: (route) => ({
 				path: `${route.params.path ? route.params.path : ''}`,
 			}),
@@ -286,9 +286,13 @@ export const router = createRouter({
 			name: 'faces',
 			component: FacesView,
 			...((!isRecognizeInstalled) && {
+				// Returning nothing lets the navigation through in vue-router 5, so
+				// it is cancelled explicitly: the view has nothing to show without
+				// recognize.
 				beforeEnter() {
 					const recognizeInstallLink = generateUrl('/settings/apps/installed/recognize')
 					window.open(recognizeInstallLink, '_blank')
+					return false
 				},
 			}),
 		},
