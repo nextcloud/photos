@@ -27,10 +27,10 @@
 
 		<PhotosFiltersInput
 			:selectedFilters="albumFilters"
-			@select-filter="selectFilter" />
+			@selectFilter="selectFilter" />
 		<PhotosFiltersDisplay
 			:selectedFilters="albumFilters"
-			@deselect-filter="deselectFilter" />
+			@deselectFilter="deselectFilter" />
 
 		<div class="form-buttons">
 			<span class="left-buttons">

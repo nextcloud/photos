@@ -63,7 +63,7 @@ export default defineComponent({
 		},
 	},
 
-	emits: ['remove-folder'],
+	emits: ['removeFolder'],
 
 	computed: {
 		folderName() {
@@ -99,7 +99,7 @@ export default defineComponent({
 
 	methods: {
 		emitRemoveSourceFolder() {
-			this.$emit('remove-folder')
+			this.$emit('removeFolder')
 		},
 
 		t,
