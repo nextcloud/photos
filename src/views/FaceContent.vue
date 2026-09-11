@@ -134,7 +134,7 @@
 					:allowSelection="true"
 					:selected="selection[file.id] === true"
 					@click="openViewer"
-					@select-toggled="onFileSelectToggle"
+					@selectToggled="onFileSelectToggle"
 					@deleted="onPhotoDeleted" />
 			</template>
 		</FilesListViewer>

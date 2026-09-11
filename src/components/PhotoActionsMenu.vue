@@ -88,7 +88,7 @@
 			v-if="albumPickerShown"
 			:labelId="`album-picker-${photo.fileid}`"
 			@close="albumPickerShown = false">
-			<AlbumPicker @album-picked="addToAlbum" />
+			<AlbumPicker @albumPicked="addToAlbum" />
 		</NcModal>
 
 		<NcDialog

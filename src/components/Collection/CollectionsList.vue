@@ -15,7 +15,7 @@
 		<slot name="header" />
 
 		<!-- No collections -->
-		<slot v-if="noCollection && !loading" name="empty-collections-list" class="collections__empty" />
+		<slot v-if="noCollection && !loading" name="emptyCollectionsList" class="collections__empty" />
 
 		<!-- List -->
 		<ul v-else-if="!noCollection" class="collections__list">

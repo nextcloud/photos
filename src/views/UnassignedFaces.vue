@@ -85,7 +85,7 @@
 					:allowSelection="true"
 					:selected="selection[file.id] === true"
 					@click="openViewer"
-					@select-toggled="onFileSelectToggle"
+					@selectToggled="onFileSelectToggle"
 					@deleted="onPhotoDeleted" />
 			</template>
 		</FilesListViewer>
@@ -102,7 +102,7 @@
 </template>
 
 <script lang='ts'>
-import { n, t } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 import { nextTick } from 'vue'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'

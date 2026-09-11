@@ -17,7 +17,7 @@
 					:key="`${filter.id}_${i}`"
 					class="photos-filters-display__filter__options-container__option"
 					:value="value"
-					@deselect="emit('deselect-filter', { filterId: filter.id, value })" />
+					@deselect="emit('deselectFilter', { filterId: filter.id, value })" />
 			</div>
 		</div>
 	</div>
@@ -33,7 +33,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-	(e: 'deselect-filter', option: { filterId: string, value: unknown }): void
+	(e: 'deselectFilter', option: { filterId: string, value: unknown }): void
 }>()
 
 const availableFilters = computed(() => {

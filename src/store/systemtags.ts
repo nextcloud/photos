@@ -5,7 +5,7 @@ import type { File, Folder } from '@nextcloud/files'
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import { defineStore } from 'pinia'
-import Vue, { ref } from 'vue'
+import { ref } from 'vue'
 import { logger } from '../services/logger.ts'
 import { getSystemTags } from '../services/SystemTags.ts'
 import { getTaggedImages } from '../services/TaggedImages.ts'
@@ -39,8 +39,8 @@ export const useSystemTagsStore = defineStore('systemtags', () => {
 		newTags
 			.sort((a, b) => sortCompare(a, b, 'display-name'))
 			.forEach((tag) => {
-				Vue.set(tags.value, tag.id, tag)
-				Vue.set(names.value, tag.attributes['display-name'], tag.id)
+				tags.value[tag.id] = tag
+				names.value[tag.attributes['display-name']] = tag.id
 			})
 	}
 
@@ -48,8 +48,8 @@ export const useSystemTagsStore = defineStore('systemtags', () => {
 	 * @param id - Id of the tag to forget
 	 */
 	function removeTag(id: string): void {
-		Vue.delete(names.value, tags.value[id].attributes['display-name'])
-		Vue.delete(tags.value, id)
+		delete names.value[tags.value[id].attributes['display-name']]
+		delete tags.value[id]
 	}
 
 	/**
@@ -68,7 +68,7 @@ export const useSystemTagsStore = defineStore('systemtags', () => {
 		const list = files.sort((a, b) => sortCompare(a, b, 'files-assigned'))
 
 		logger.debug(`Overwrite list, id: ${id}`, { list })
-		Vue.set(tagsFiles.value, id, list.map((file) => file.fileid!))
+		tagsFiles.value[id] = list.map((file) => file.fileid!)
 	}
 
 	/**

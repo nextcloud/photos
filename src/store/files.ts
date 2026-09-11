@@ -11,7 +11,7 @@ import { showError } from '@nextcloud/dialogs'
 import { defaultRootPath } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
 import { defineStore } from 'pinia'
-import Vue, { ref } from 'vue'
+import { ref } from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import { logger } from '../services/logger.ts'
 import { deletePhoto as deletePhotoRequest, savePhotoMetadata, setPhotoFavorite as setPhotoFavoriteRequest } from '../services/photoActions.ts'
@@ -99,9 +99,7 @@ export const useFilesStore = defineStore('files', () => {
 			return
 		}
 
-		// Vue 2 does not track properties added to an object, and a photo that
-		// was never a favorite has no favorite attribute yet.
-		Vue.set(attributes, 'favorite', favoriteState)
+		attributes.favorite = favoriteState
 	}
 
 	/**
@@ -110,7 +108,7 @@ export const useFilesStore = defineStore('files', () => {
 	 * @param fileId - Id of the photo
 	 */
 	function deleteFile(fileId: number | string): void {
-		Vue.delete(files.value, fileId)
+		delete files.value[fileId]
 	}
 
 	/**
@@ -133,19 +131,19 @@ export const useFilesStore = defineStore('files', () => {
 		// The dates driving the sorting and the grouping are precalculated, so
 		// they have to be recomputed for the photo to move to its new month.
 		const date = new Date(takenAt * 1000)
-		Vue.set(attributes, 'metadata-photos-original_date_time', takenAt)
-		Vue.set(attributes, 'timestamp', Math.floor(date.getTime() / 1000))
-		Vue.set(attributes, 'month', toMonthKey(date))
-		Vue.set(attributes, 'day', toDayKey(date))
+		attributes['metadata-photos-original_date_time'] = takenAt
+		attributes.timestamp = Math.floor(date.getTime() / 1000)
+		attributes.month = toMonthKey(date)
+		attributes.day = toDayKey(date)
 
 		if (location === null) {
-			Vue.delete(attributes, 'metadata-photos-gps')
+			delete attributes['metadata-photos-gps']
 		} else {
 			// Coordinates are strings once they come back from a DAV listing.
-			Vue.set(attributes, 'metadata-photos-gps', {
+			attributes['metadata-photos-gps'] = {
 				latitude: String(location.latitude),
 				longitude: String(location.longitude),
-			})
+			}
 		}
 	}
 

@@ -21,7 +21,7 @@
 					:sections="tiledSections"
 					:scrollToKey="scrollToSection"
 					:headerHeight="sectionHeaderHeight"
-					@need-content="needContent">
+					@needContent="needContent">
 					<template #default="{ visibleSections }">
 						<div v-for="section of visibleSections" :key="section.id">
 							<template v-if="section.id !== ''">
@@ -240,7 +240,7 @@ export default {
 		subscribe('files:node:deleted', this.handleFileDeleted)
 	},
 
-	destroyed() {
+	unmounted() {
 		unsubscribe('files:node:updated', this.handleFileUpdated)
 		unsubscribe('files:node:deleted', this.handleFileDeleted)
 	},
@@ -248,7 +248,7 @@ export default {
 	methods: {
 		// Ask the parent for more content.
 		needContent(): void {
-			this.$emit('need-content')
+			this.$emit('needContent')
 		},
 
 		mapFileToItem(fileId: string): TiledItem {

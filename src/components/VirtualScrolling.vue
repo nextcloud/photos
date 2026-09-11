@@ -246,7 +246,7 @@ export default {
 		isNearBottom(value) {
 			logger.debug('[VirtualScrolling] isNearBottom changed', { value })
 			if (value) {
-				this.$emit('need-content')
+				this.$emit('needContent')
 			}
 		},
 
@@ -254,7 +254,7 @@ export default {
 			// Re-emit need-content when rows is updated and isNearBottom is still true.
 			// If the height of added rows is under `bottomBufferRatio`, `isNearBottom` will still be true so we need more content.
 			if (this.isNearBottom) {
-				this.$emit('need-content')
+				this.$emit('needContent')
 			}
 		},
 
@@ -315,7 +315,7 @@ export default {
 		this.container?.addEventListener('scroll', this.updateScrollPosition, { passive: true })
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		if (this.useWindow) {
 			window.removeEventListener('resize', this.updateContainerSize)
 		}
