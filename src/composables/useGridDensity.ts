@@ -8,7 +8,7 @@ import type { GridDensity } from '../store/userConfig.ts'
 
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { computed } from 'vue'
-import store from '../store/index.ts'
+import useUserConfigStore from '../store/userConfig.ts'
 
 /**
  * Target height of a tile row for each density, per form factor.
@@ -29,8 +29,9 @@ export function useGridDensity(): {
 	setGridDensity: (value: GridDensity) => void
 } {
 	const isMobile = useIsMobile()
+	const userConfigStore = useUserConfigStore()
 
-	const gridDensity = computed(() => store.state.userConfig.gridDensity)
+	const gridDensity = computed(() => userConfigStore.gridDensity)
 
 	const tileBaseHeight = computed(() => {
 		const baseHeight = BASE_HEIGHTS[gridDensity.value] ?? BASE_HEIGHTS.medium
@@ -41,7 +42,7 @@ export function useGridDensity(): {
 	 * @param value - The density to persist
 	 */
 	function setGridDensity(value: GridDensity): void {
-		store.dispatch('updateUserConfig', { key: 'gridDensity', value })
+		userConfigStore.updateUserConfig('gridDensity', value)
 	}
 
 	return {

@@ -15,6 +15,7 @@
 <script lang='ts'>
 import NcFormBox from '@nextcloud/vue/components/NcFormBox'
 import NcFormBoxSwitch from '@nextcloud/vue/components/NcFormBoxSwitch'
+import useUserConfigStore from '../../store/userConfig.ts'
 
 export default {
 	name: 'CroppedLayoutSettings',
@@ -26,13 +27,13 @@ export default {
 
 	computed: {
 		croppedLayout() {
-			return this.$store.state.userConfig.croppedLayout
+			return useUserConfigStore().croppedLayout
 		},
 	},
 
 	methods: {
 		updateSetting(value) {
-			this.$store.dispatch('updateUserConfig', { key: 'croppedLayout', value })
+			useUserConfigStore().updateUserConfig('croppedLayout', value)
 		},
 	},
 }
