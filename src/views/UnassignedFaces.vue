@@ -114,7 +114,9 @@ import FilesListViewer from '../components/FilesListViewer.vue'
 import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
+import { downloadFiles } from '../services/downloadFiles.ts'
 import logger from '../services/logger.js'
+import useFacesStore from '../store/faces.ts'
 import useFilesStore from '../store/files.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.js'
 
@@ -163,7 +165,7 @@ export default {
 		},
 
 		unassignedFiles() {
-			return this.$store.state.faces.unassignedFiles
+			return useFacesStore().unassignedFiles
 		},
 
 		faceFileIds(): string[] {
@@ -185,7 +187,7 @@ export default {
 		// list of the unassigned faces.
 		onPhotoDeleted(photo) {
 			this.onUncheckFiles([photo.fileid.toString()])
-			this.$store.commit('removeUnassignedFile', { fileIdsToRemove: [photo.fileid.toString()] })
+			useFacesStore().removeUnassignedFiles([photo.fileid.toString()])
 		},
 
 		openViewer(fileId) {
@@ -198,7 +200,7 @@ export default {
 		async handleMove(faceName, fileIds) {
 			try {
 				this.loadingCount++
-				await this.$store.dispatch('moveFilesToFace', { oldFace: null, faceName, fileIdsToMove: fileIds })
+				await useFacesStore().moveFilesToFace(faceName, fileIds)
 				this.showMoveModal = false
 			} catch (error) {
 				logger.error('Failed to move selection', { error })
@@ -232,7 +234,7 @@ export default {
 		async downloadSelection() {
 			try {
 				this.loadingCount++
-				await this.$store.dispatch('downloadFiles', this.selectedFileIds)
+				await downloadFiles(this.selectedFileIds.map((fileId) => this.files[fileId]))
 			} catch (error) {
 				logger.error('Faile to download selection', { error })
 			} finally {

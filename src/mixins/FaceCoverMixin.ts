@@ -5,6 +5,7 @@
 
 import he from 'he'
 import { defineComponent } from 'vue'
+import useFacesStore from '../store/faces.ts'
 import useFilesStore from '../store/files.ts'
 
 type Cover = {
@@ -25,11 +26,11 @@ export default defineComponent({
 		},
 
 		faces() {
-			return this.$store.state.faces.faces
+			return useFacesStore().faces
 		},
 
 		facesFiles() {
-			return this.$store.state.faces.facesFiles
+			return useFacesStore().facesFiles
 		},
 	},
 

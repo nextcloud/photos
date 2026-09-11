@@ -12,7 +12,7 @@ import {
 } from '../services/collectionFetcher.js'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
-import store from '../store/index.ts'
+import useCollectionsStore from '../store/collections.ts'
 import useAbortController from './useAbortController.ts'
 
 export default function() {
@@ -37,7 +37,7 @@ export default function() {
 
 			const collections = await fetchCollections(collectionHome, { signal: abortSignal.value }, extraProps, client)
 
-			store.dispatch('addCollections', { collections })
+			useCollectionsStore().addCollections(collections)
 
 			return collections
 		} catch (error) {

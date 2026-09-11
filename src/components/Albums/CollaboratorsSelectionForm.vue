@@ -94,6 +94,8 @@ import Earth from 'vue-material-design-icons/Earth.vue'
 import FetchCollectionContentMixin from '../../mixins/FetchCollectionContentMixin.js'
 import logger from '../../services/logger.js'
 import { albumsExtraProps } from '../../store/albums.ts'
+import useAlbumsStore from '../../store/albums.ts'
+import useCollectionsStore from '../../store/collections.ts'
 
 interface IUserData {
 	key: string
@@ -221,7 +223,7 @@ export default {
 		},
 
 		albumFileName(): string {
-			return this.$store.getters.getAlbumName(this.albumName)
+			return useAlbumsStore().getAlbumName(this.albumName)
 		},
 	},
 
@@ -348,12 +350,7 @@ export default {
 
 		async updateAlbumCollaborators() {
 			try {
-				await this.$store.dispatch('updateCollection', {
-					collectionFileName: this.albumFileName,
-					properties: {
-						collaborators: this.selectedCollaborators,
-					},
-				})
+				await useCollectionsStore().updateCollection(this.albumFileName, { collaborators: this.selectedCollaborators })
 			} catch (error) {
 				logger.error('[PublicAlbumContent] Error updating album', { error })
 				showError(this.t('photos', 'Failed to update album.'))

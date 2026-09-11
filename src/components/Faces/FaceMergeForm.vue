@@ -17,6 +17,7 @@
 import FaceCover from './FaceCover.vue'
 import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
 import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
+import useFacesStore from '../../store/faces.ts'
 import useFilesStore from '../../store/files.ts'
 
 export default {
@@ -46,11 +47,11 @@ export default {
 		},
 
 		faces() {
-			return this.$store.state.faces.faces
+			return useFacesStore().faces
 		},
 
 		facesFiles() {
-			return this.$store.getters.facesFiles
+			return useFacesStore().facesFiles
 		},
 
 		filteredFaces() {

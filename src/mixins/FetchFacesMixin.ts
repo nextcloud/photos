@@ -5,6 +5,7 @@
 
 import type { File } from '@nextcloud/files'
 import type { FileStat, ResponseDataDetailed } from 'webdav'
+import type { Collection } from '../services/collectionFetcher.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError } from '@nextcloud/dialogs'
@@ -15,6 +16,7 @@ import { defineComponent } from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import { getPropFind } from '../services/DavRequest.ts'
 import logger from '../services/logger.js'
+import useFacesStore from '../store/faces.ts'
 import useFilesStore from '../store/files.ts'
 import AbortControllerMixin from './AbortControllerMixin.js'
 
@@ -53,7 +55,7 @@ export default defineComponent({
 
 	computed: {
 		faces() {
-			return this.$store.state.faces.faces
+			return useFacesStore().faces
 		},
 	},
 
@@ -77,9 +79,9 @@ export default defineComponent({
 					signal: this.abortController.signal,
 				}) as ResponseDataDetailed<FileStat[]>
 
-				const fetchedFace = fetchedRawFaces.map((file) => resultToNode(file, `/recognize/${getCurrentUser()?.uid}/faces/`) as FaceNode)
-				this.$store.dispatch('addFaces', { faces: fetchedFace })
-				logger.debug(`[FetchFacesMixin] Fetched ${fetchedFace.length} new faces: `, { fetchedFace })
+				const fetchedFaces = fetchedRawFaces.map((file) => resultToNode(file, `/recognize/${getCurrentUser()?.uid}/faces/`) as unknown as Collection)
+				useFacesStore().addFaces(fetchedFaces)
+				logger.debug(`[FetchFacesMixin] Fetched ${fetchedFaces.length} new faces: `, { fetchedFaces })
 			} catch (error) {
 				if (error.response?.status === 404) {
 					this.errorFetchingFaces = 404
@@ -98,7 +100,8 @@ export default defineComponent({
 				return
 			}
 
-			if (!force && this.facesFiles[faceName] && this.facesFiles[faceName].length) {
+			const facesFiles = useFacesStore().facesFiles
+			if (!force && facesFiles[faceName] && facesFiles[faceName].length) {
 				return
 			}
 
@@ -134,7 +137,7 @@ export default defineComponent({
 				useFilesStore().appendFiles(fetchedFiles)
 
 				if (fetchedFiles.length > 0) {
-					await this.$store.commit('addFilesToFace', { faceName, fileIdsToAdd: fileIds })
+					useFacesStore().addFileIdsToFace(faceName, fileIds)
 				}
 
 				logger.debug(`[FetchFacesMixin] Fetched ${fileIds.length} new files: `, { fileIds })
@@ -157,7 +160,7 @@ export default defineComponent({
 				return
 			}
 
-			if (!force && this.unassignedFiles && this.unassignedFiles.length) {
+			if (!force && useFacesStore().unassignedFiles.length) {
 				return
 			}
 
@@ -192,7 +195,7 @@ export default defineComponent({
 				useFilesStore().appendFiles(fetchedFiles)
 
 				if (fetchedFiles.length > 0) {
-					await this.$store.commit('addUnassignedFiles', { fileIdsToAdd: fileIds })
+					await useFacesStore().addUnassignedFiles(fileIds)
 				}
 
 				logger.debug(`[FetchFacesMixin] Fetched ${fileIds.length} new unassigned files: `, { fileIds })
@@ -223,7 +226,7 @@ export default defineComponent({
 
 				const count = Number(unassignedFacesRoot.props?.nbItems)
 
-				await this.$store.commit('setUnassignedFilesCount', count)
+				await useFacesStore().setUnassignedFilesCount(count)
 
 				logger.debug('[FetchFacesMixin] Fetched unassigned files count: ', { count })
 			} catch (error) {

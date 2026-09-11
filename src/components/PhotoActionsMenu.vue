@@ -140,8 +140,8 @@ import PhotoMetadataEditDialog from './PhotoMetadataEditDialog.vue'
 import PhotoTagsDialog from './PhotoTagsDialog.vue'
 import areTagsInstalled from '../services/AreTagsInstalled.ts'
 import logger from '../services/logger.ts'
+import useCollectionsStore from '../store/collections.ts'
 import useFilesStore from '../store/files.ts'
-import store from '../store/index.ts'
 
 const props = defineProps<{
 	/** Photo the actions apply to. */
@@ -198,10 +198,7 @@ async function toggleFavorite(): Promise<void> {
 async function addToAlbum(album: Album): Promise<void> {
 	albumPickerShown.value = false
 
-	await store.dispatch('addFilesToCollection', {
-		collectionFileName: album.root + album.path,
-		fileIdsToAdd: [props.photo.fileid.toString()],
-	})
+	await useCollectionsStore().addFilesToCollection(album.root + album.path, [props.photo.fileid.toString()])
 }
 
 async function confirmDelete(): Promise<void> {

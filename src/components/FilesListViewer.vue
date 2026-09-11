@@ -260,7 +260,7 @@ export default {
 		},
 
 		handleFileDeleted({ fileid }: File) {
-			this.$store.commit('deleteFile', fileid)
+			useFilesStore().deleteFile(fileid as number)
 		},
 	},
 }

@@ -16,6 +16,7 @@ import {
 } from '../services/collectionFetcher.js'
 import logger from '../services/logger.js'
 import { collectionFilesExtraProps } from '../store/collections.js'
+import useCollectionsStore from '../store/collections.ts'
 import useFilesStore from '../store/files.ts'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
 import AbortControllerMixin from './AbortControllerMixin.js'
@@ -46,7 +47,11 @@ export default defineComponent({
 				this.errorFetchingCollection = null
 
 				const collection = await fetchCollection(collectionFileName, { signal: this.abortController.signal }, extraProps, client)
-				this.$store.dispatch('addCollections', { collections: [collection] })
+				if (collection === null) {
+					return null
+				}
+
+				useCollectionsStore().addCollections([collection])
 				return collection
 			} catch (error) {
 				if (error.response?.status === 404) {
@@ -78,11 +83,11 @@ export default defineComponent({
 				this.loadingCollectionFiles = true
 
 				const fetchedFiles = await fetchCollectionFiles(collectionFileName, { signal: this.abortController.signal }, extraProps, client)
-				const fileIds = fetchedFiles.map((file) => file.fileid?.toString())
+				const fileIds = fetchedFiles.map((file) => String(file.fileid))
 
 				useFilesStore().appendFiles(fetchedFiles)
 
-				await this.$store.commit('setCollectionFiles', { collectionFileName, fileIds })
+				useCollectionsStore().setCollectionFiles(collectionFileName, fileIds)
 
 				return fetchedFiles
 			} catch (error) {
