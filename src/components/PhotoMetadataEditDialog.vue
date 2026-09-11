@@ -46,6 +46,7 @@
 
 				<div v-if="location !== null" class="metadata-editor__location__map">
 					<LocationMap
+						height="200px"
 						:latitude="location.latitude"
 						:longitude="location.longitude"
 						:name="photo.basename" />
@@ -223,8 +224,6 @@ async function save(): Promise<void> {
 			// fills the width of the dialog.
 			:deep(.location-map) {
 				margin: 0;
-				width: 100%;
-				height: 200px;
 			}
 		}
 	}
