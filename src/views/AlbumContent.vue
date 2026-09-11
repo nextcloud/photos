@@ -101,7 +101,26 @@
 								<Download slot="icon" />
 							</ActionDownload>-->
 
-								<ActionFavorite :selectedFileIds="selectedFileIds" />
+								<NcActionButton
+									v-if="shouldFavoriteSelection(selectedFileIds)"
+									:closeAfterClick="true"
+									:aria-label="t('photos', 'Mark selection as favorite')"
+									@click="favoriteSelection(selectedFileIds)">
+									{{ t('photos', 'Add selection to favorites') }}
+									<template #icon>
+										<StarOutline />
+									</template>
+								</NcActionButton>
+								<NcActionButton
+									v-else
+									:closeAfterClick="true"
+									:aria-label="t('photos', 'Remove selection from favorites')"
+									@click="unFavoriteSelection(selectedFileIds)">
+									{{ t('photos', 'Remove selection from favorites') }}
+									<template #icon>
+										<Star />
+									</template>
+								</NcActionButton>
 
 								<NcActionButton
 									v-if="removableSelectedFiles.length !== 0"
@@ -209,9 +228,10 @@ import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
 import PencilOutline from 'vue-material-design-icons/PencilOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import ShareVariantOutline from 'vue-material-design-icons/ShareVariantOutline.vue'
+import Star from 'vue-material-design-icons/Star.vue'
+import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
-import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import AlbumHero from '../components/AlbumHero.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import CollaboratorsSelectionForm from '../components/Albums/CollaboratorsSelectionForm.vue'
@@ -230,8 +250,9 @@ import { pickAlbumCover } from '../utils/albumCover.ts'
 export default {
 	name: 'AlbumContent',
 	components: {
+		StarOutline,
+		Star,
 		// ActionDownload,
-		ActionFavorite,
 		AlbumForm,
 		AlbumHero,
 		Close,
@@ -340,7 +361,7 @@ export default {
 		},
 
 		removableSelectedFiles() {
-			return (this.$refs.collectionContent?.selectedFileIds as string[])
+			return ((this.$refs.collectionContent?.selectedFileIds ?? []) as string[])
 				.map((fileId) => this.filesStore.files[fileId])
 				.filter((file) => file.attributes['photos-album-file-origin'] !== 'filters')
 				.map((file) => file.fileid.toString())
@@ -353,6 +374,19 @@ export default {
 	},
 
 	methods: {
+		// Favorite the whole selection if at least one of its photos is not a favorite yet.
+		shouldFavoriteSelection(selectedFileIds: string[]): boolean {
+			return selectedFileIds.some((fileId) => this.filesStore.files[fileId].attributes.favorite === 0)
+		},
+
+		async favoriteSelection(selectedFileIds: string[]): Promise<void> {
+			await this.filesStore.toggleFavoriteForFiles(selectedFileIds, 1)
+		},
+
+		async unFavoriteSelection(selectedFileIds: string[]): Promise<void> {
+			await this.filesStore.toggleFavoriteForFiles(selectedFileIds, 0)
+		},
+
 		async fetchAlbum() {
 			await this.fetchCollection(
 				this.albumFileName,

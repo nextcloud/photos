@@ -99,7 +99,7 @@ export class PhotosFilters {
 	 * own. Its input takes the range as text, which is how a range is entered
 	 * without clicking through two calendars, and commits it on Enter.
 	 *
-	 * @param range - The range as the picker formats it, e.g. `2019-01-01 ~ 2019-12-31`
+	 * @param range - The range as the picker formats it, e.g. `2019-01-01 - 2019-12-31`
 	 */
 	public async selectDateRange(range: string): Promise<void> {
 		await this.pickOption('Custom…')
