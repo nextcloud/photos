@@ -87,7 +87,7 @@ export default {
 		},
 	},
 
-	emits: ['need-content'],
+	emits: ['needContent'],
 
 	data() {
 		return {
