@@ -77,6 +77,7 @@ import PackageVariant from 'vue-material-design-icons/PackageVariant.vue'
 import TiledLayout from '../components/TiledLayout/TiledLayout.vue'
 import VirtualScrolling from '../components/VirtualScrolling.vue'
 import { fetchFile } from '../services/fileFetcher.ts'
+import useUserConfigStore from '../store/userConfig.ts'
 
 export default {
 	name: 'FilesListViewer',
@@ -218,7 +219,7 @@ export default {
 		},
 
 		croppedLayout(): boolean {
-			return this.$store.state.userConfig.croppedLayout
+			return useUserConfigStore().croppedLayout
 		},
 	},
 

@@ -10,10 +10,7 @@ import type { FacesState } from './faces.ts'
 import type { FilesState } from './files.ts'
 import type { FoldersState } from './folders.ts'
 import type { PublicAlbum } from './publicAlbums.ts'
-import type { SystemTagsState } from './systemtags.ts'
-import type { UserConfigState } from './userConfig.ts'
 
-import { getCurrentUser } from '@nextcloud/auth'
 import Vue from 'vue'
 import Vuex, { Store } from 'vuex'
 import albums from './albums.ts'
@@ -24,18 +21,12 @@ import folders from './folders.ts'
 import places from './places.ts'
 import publicAlbums from './publicAlbums.ts'
 import sharedAlbums from './sharedAlbums.ts'
-import systemtags from './systemtags.ts'
-import userConfig, {
-	getFolder,
-} from './userConfig.ts'
 
 export type PhotosRootSate = {
 	files: FilesState
 	collections: CollectionState
 	faces: FacesState
 	folders: FoldersState
-	systemtags: SystemTagsState
-	userConfig: UserConfigState
 }
 
 export type PhotosStore = {
@@ -59,23 +50,11 @@ export type PhotosStore = {
 		getPlace(sharedAlbumName: string): Collection | undefined
 		getPlaceFiles(sharedAlbumName: string): string[]
 		getSharedAlbumName(sharedAlbumName: string): string
-		tagId(name: string): string
 	}
 }
 export type PhotosContext<T> = PhotosStore & {
 	state: T
 	rootState: PhotosRootSate
-}
-
-/**
- * Get the information of photosLocation and store it as photosLocationFolder
- *
- * @param store
- * @param state
- */
-async function initPhotosLocationFolder(store: typeof photosStore, state) {
-	const photosLocationFolder = await getFolder(state.userConfig.photosLocation)
-	store.commit('updateUserConfig', { key: 'photosLocationFolder', value: photosLocationFolder })
 }
 
 Vue.use(Vuex)
@@ -87,25 +66,9 @@ const photosStore = new Store({
 		sharedAlbums,
 		publicAlbums,
 		faces,
-		systemtags,
 		collections,
 		places,
-		userConfig,
 	},
-
-	plugins: [
-		(store) => {
-			if (getCurrentUser() !== null) {
-				initPhotosLocationFolder(store, store.state)
-			}
-
-			store.subscribe(async (mutation, state) => {
-				if (mutation.type === 'updateUserConfig' && mutation.payload.key === 'photosLocation') {
-					initPhotosLocationFolder(store, state)
-				}
-			})
-		},
-	],
 
 	strict: process.env.NODE_ENV !== 'production',
 }) as PhotosStore
