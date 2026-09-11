@@ -10,7 +10,7 @@ import logger from '../services/logger.js'
 import getSystemTags from '../services/SystemTags.js'
 import getTaggedImages from '../services/TaggedImages.js'
 import { sortCompare } from '../utils/fileUtils.js'
-import useFilesStore from './files.ts'
+import { useFilesStore } from './files.ts'
 
 /** A tag, identified by the `id` of the Node rather than its file id. */
 export type Tag = Folder & {
@@ -25,7 +25,7 @@ export type Tag = Folder & {
 	}
 }
 
-export default defineStore('systemtags', () => {
+export const useSystemTagsStore = defineStore('systemtags', () => {
 	const tags = ref<Record<string, Tag>>({})
 	const names = ref<Record<string, string>>({})
 	const tagsFiles = ref<Record<string, number[]>>({})

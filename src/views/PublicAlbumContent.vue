@@ -93,9 +93,9 @@ import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
 import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.ts'
 import { albumFilesExtraProps } from '../store/albums.ts'
-import useCollectionsStore from '../store/collections.ts'
+import { useCollectionsStore } from '../store/collections.ts'
 import { publicAlbumsExtraProps, publicAlbumsPrefix } from '../store/publicAlbums.ts'
-import usePublicAlbumsStore from '../store/publicAlbums.ts'
+import { usePublicAlbumsStore } from '../store/publicAlbums.ts'
 
 export default {
 	name: 'PublicAlbumContent',
@@ -127,6 +127,10 @@ export default {
 		},
 	},
 
+	setup() {
+		return { collectionsStore: useCollectionsStore(), publicAlbumsStore: usePublicAlbumsStore() }
+	},
+
 	data() {
 		return {
 			showAddPhotosModal: false,
@@ -141,7 +145,7 @@ export default {
 
 	computed: {
 		album(): PublicAlbum | null {
-			return usePublicAlbumsStore().getPublicAlbum(this.albumName)
+			return this.publicAlbumsStore.getPublicAlbum(this.albumName)
 		},
 
 		albumName(): string {
@@ -149,11 +153,11 @@ export default {
 		},
 
 		albumFileIds(): string[] {
-			return usePublicAlbumsStore().getPublicAlbumFiles(this.albumName)
+			return this.publicAlbumsStore.getPublicAlbumFiles(this.albumName)
 		},
 
 		publicAlbumFileName(): string {
-			return usePublicAlbumsStore().getPublicAlbumName(this.albumName)
+			return this.publicAlbumsStore.getPublicAlbumName(this.albumName)
 		},
 	},
 
@@ -196,14 +200,14 @@ export default {
 
 		async handleFilesPicked(fileIds: string[]) {
 			this.showAddPhotosModal = false
-			await useCollectionsStore().addFilesToCollection(this.album.root + this.albumName, fileIds)
+			await this.collectionsStore.addFilesToCollection(this.album.root + this.albumName, fileIds)
 			// Re-fetch album content to have the proper filenames.
 			await this.fetchAlbumContent()
 		},
 
 		async handleRemoveFilesFromAlbum(fileIds: string[]) {
 			this.$refs.collectionContent.onUncheckFiles(fileIds)
-			await useCollectionsStore().removeFilesFromCollection(this.album.root + this.albumName, fileIds)
+			await this.collectionsStore.removeFilesFromCollection(this.album.root + this.albumName, fileIds)
 		},
 
 		t: translate,

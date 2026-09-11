@@ -245,9 +245,9 @@ import FilesByMonthMixin from '../mixins/FilesByMonthMixin.ts'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.ts'
 import { allMimes } from '../services/AllowedMimes.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
-import useCollectionsStore from '../store/collections.ts'
-import useFilesStore from '../store/files.ts'
-import useFilterStore from '../store/filters.ts'
+import { useCollectionsStore } from '../store/collections.ts'
+import { useFilesStore } from '../store/files.ts'
+import { useFilterStore } from '../store/filters.ts'
 import { configChangedEvent } from '../store/userConfig.ts'
 import { formatMonth, formatYear } from '../utils/dateUtils.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.ts'
@@ -330,6 +330,8 @@ export default {
 		const { gridDensity, tileBaseHeight, setGridDensity } = useGridDensity()
 
 		return {
+			collectionsStore: useCollectionsStore(),
+			filesStore: useFilesStore(),
 			isMobile,
 			selectedFilters,
 			filtersQuery,
@@ -354,7 +356,7 @@ export default {
 
 	computed: {
 		files() {
-			return useFilesStore().files
+			return this.filesStore.files
 		},
 
 		// Photos of the timeline that are loaded, in the order they are shown.
@@ -463,7 +465,7 @@ export default {
 
 		async addSelectionToAlbum(album: Album) {
 			this.showAlbumPicker = false
-			await useCollectionsStore().addFilesToCollection(album.root + album.path, this.selectedFileIds)
+			await this.collectionsStore.addFilesToCollection(album.root + album.path, this.selectedFileIds)
 		},
 
 		// The photo is already gone from the store, it only has to leave the
@@ -478,7 +480,7 @@ export default {
 			const fileIds = this.selectedFileIds
 			this.onUncheckFiles(fileIds)
 			this.fetchedFileIds = this.fetchedFileIds.filter((fileid) => !fileIds.includes(fileid))
-			await useFilesStore().deleteFiles(fileIds)
+			await this.filesStore.deleteFiles(fileIds)
 		},
 
 		handleUserConfigChange({ key }) {

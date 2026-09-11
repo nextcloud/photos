@@ -12,7 +12,7 @@ import {
 } from '../services/collectionFetcher.js'
 import { davClient } from '../services/DavClient.ts'
 import logger from '../services/logger.js'
-import useCollectionsStore from '../store/collections.ts'
+import { useCollectionsStore } from '../store/collections.ts'
 import AbortControllerMixin from './AbortControllerMixin.js'
 
 export default defineComponent({

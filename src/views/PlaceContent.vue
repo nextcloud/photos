@@ -55,7 +55,7 @@ import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
 import { placesPrefix } from '../store/places.js'
-import usePlacesStore from '../store/places.ts'
+import { usePlacesStore } from '../store/places.ts'
 
 export default {
 	name: 'PlaceContent',
@@ -81,6 +81,7 @@ export default {
 		const isMobile = useIsMobile()
 		return {
 			isMobile,
+			placesStore: usePlacesStore(),
 		}
 	},
 
@@ -96,7 +97,7 @@ export default {
 
 	computed: {
 		place(): Collection | null {
-			return usePlacesStore().getPlace(this.placeName)
+			return this.placesStore.getPlace(this.placeName)
 		},
 
 		placeFileName(): string {
@@ -104,7 +105,7 @@ export default {
 		},
 
 		placeFileIds(): string[] {
-			return usePlacesStore().getPlaceFiles(this.placeName)
+			return this.placesStore.getPlaceFiles(this.placeName)
 		},
 	},
 

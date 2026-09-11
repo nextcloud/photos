@@ -245,8 +245,8 @@ import isAppStoreEnabled from './services/IsAppStoreEnabled.ts'
 import isRecognizeInstalled from './services/IsRecognizeInstalled.ts'
 import logger from './services/logger.ts'
 import { nameFilterId } from './services/PhotosFilters/nameFilter.ts'
-import useFilesStore from './store/files.ts'
-import useFilterStore from './store/filters.ts'
+import { useFilesStore } from './store/files.ts'
+import { useFilterStore } from './store/filters.ts'
 
 export default {
 	name: 'PhotosApp',
@@ -316,6 +316,7 @@ export default {
 		return {
 			selectedFilters,
 			searchTerm,
+			filesStore: useFilesStore(),
 		}
 	},
 
@@ -343,7 +344,7 @@ export default {
 	async beforeMount() {
 		// Register excluded paths
 		const files = loadState('photos', 'nomedia-paths', [])
-		useFilesStore().setNomediaPaths(files)
+		this.filesStore.setNomediaPaths(files)
 		logger.debug('Known .nomedia and .noimage  paths', { files })
 
 		if ('serviceWorker' in navigator) {

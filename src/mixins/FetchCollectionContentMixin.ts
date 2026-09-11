@@ -16,8 +16,8 @@ import {
 } from '../services/collectionFetcher.js'
 import logger from '../services/logger.js'
 import { collectionFilesExtraProps } from '../store/collections.js'
-import useCollectionsStore from '../store/collections.ts'
-import useFilesStore from '../store/files.ts'
+import { useCollectionsStore } from '../store/collections.ts'
+import { useFilesStore } from '../store/files.ts'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
 import AbortControllerMixin from './AbortControllerMixin.js'
 

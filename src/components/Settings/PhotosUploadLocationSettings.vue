@@ -29,7 +29,7 @@ import NcFormBoxButton from '@nextcloud/vue/components/NcFormBoxButton'
 import FolderOpenOutline from 'vue-material-design-icons/FolderOpenOutline.vue'
 import HomeOutline from 'vue-material-design-icons/HomeOutline.vue'
 import logger from '../../services/logger.js'
-import useUserConfigStore from '../../store/userConfig.ts'
+import { useUserConfigStore } from '../../store/userConfig.ts'
 
 export default defineComponent({
 	name: 'PhotosUploadLocationSettings',
@@ -40,6 +40,10 @@ export default defineComponent({
 		FolderOpenOutline,
 	},
 
+	setup() {
+		return { userConfigStore: useUserConfigStore() }
+	},
+
 	data() {
 		return {
 			HomeOutline,
@@ -48,7 +52,7 @@ export default defineComponent({
 
 	computed: {
 		photosLocation(): string {
-			return useUserConfigStore().photosLocation
+			return this.userConfigStore.photosLocation
 		},
 
 		photosLocationName(): string {
@@ -87,7 +91,7 @@ export default defineComponent({
 		},
 
 		updatePhotosFolder(path: string): void {
-			useUserConfigStore().updateUserConfig('photosLocation', path)
+			this.userConfigStore.updateUserConfig('photosLocation', path)
 		},
 
 		t,

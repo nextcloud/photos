@@ -23,7 +23,7 @@ import { computed } from 'vue'
 import NcChip from '@nextcloud/vue/components/NcChip'
 import useFetchCollections from '../../mixins/useFetchCollections.ts'
 import { placesPrefix } from '../../store/places.ts'
-import usePlacesStore from '../../store/places.ts'
+import { usePlacesStore } from '../../store/places.ts'
 
 const props = defineProps<{
 	value: PlacesValueType

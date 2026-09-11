@@ -8,11 +8,11 @@ import type { Album } from './albums.ts'
 import { getCurrentUser } from '@nextcloud/auth'
 import { defineStore } from 'pinia'
 import { computed } from 'vue'
-import useCollectionsStore from './collections.ts'
+import { useCollectionsStore } from './collections.ts'
 
 const sharedAlbumsPrefix = `/photos/${getCurrentUser()?.uid}/sharedalbums`
 
-export default defineStore('sharedAlbums', () => {
+export const useSharedAlbumsStore = defineStore('sharedAlbums', () => {
 	const collectionsStore = useCollectionsStore()
 
 	const sharedAlbums = computed(() => collectionsStore.collectionsWithPrefix(sharedAlbumsPrefix) as unknown as Record<string, Album>)

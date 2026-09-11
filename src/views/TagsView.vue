@@ -37,8 +37,8 @@ import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import TagCover from '../components/TagCover.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
 import logger from '../services/logger.js'
-import useFilesStore from '../store/files.ts'
-import useSystemTagsStore from '../store/systemtags.ts'
+import { useFilesStore } from '../store/files.ts'
+import { useSystemTagsStore } from '../store/systemtags.ts'
 
 export default defineComponent({
 	name: 'TagsView',
@@ -50,6 +50,10 @@ export default defineComponent({
 
 	mixins: [AbortControllerMixin],
 
+	setup() {
+		return { filesStore: useFilesStore(), systemTagsStore: useSystemTagsStore() }
+	},
+
 	data() {
 		return {
 			error: null as boolean | null,
@@ -60,15 +64,15 @@ export default defineComponent({
 
 	computed: {
 		files() {
-			return useFilesStore().files
+			return this.filesStore.files
 		},
 
 		tags() {
-			return useSystemTagsStore().tags
+			return this.systemTagsStore.tags
 		},
 
 		tagsNames() {
-			return useSystemTagsStore().names
+			return this.systemTagsStore.names
 		},
 
 		tagsList() {
@@ -101,7 +105,7 @@ export default defineComponent({
 				// fetch content
 				if (!this.tagsList.length) {
 					this.loading = true
-					await useSystemTagsStore().fetchAllTags(this.abortController.signal)
+					await this.systemTagsStore.fetchAllTags(this.abortController.signal)
 				}
 			} catch (error) {
 				logger.error('Failed to fetch tags', { error })
