@@ -14,15 +14,10 @@
 				inputId="sharing-search-input"
 				:inputLabel="t('photos', 'Add people or groups who can edit your album')"
 				:loading="loadingCollaborators"
-				label="label"
-				:filterable="false"
 				:placeholder="t('photos', 'Search people or groups')"
-				:clearSearchOnBlur="() => false"
 				:multiple="true"
-				:appendToBody="false"
 				:options="searchResults"
-				@search="searchCollaborators"
-				@option:selected="({ key }) => selectEntity(key)">
+				@search="searchCollaborators">
 				{{ t('photos', 'No recommendations. Start typing.') }}
 			</NcSelectUsers>
 		</form>

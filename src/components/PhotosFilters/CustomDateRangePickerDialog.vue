@@ -15,7 +15,8 @@
 				class="date-range-picker-dialog__picker"
 				:clearable="true"
 				type="date-range"
-				:placeholder="t('photos', 'Select a date range')">
+				:placeholder="t('photos', 'Select a date range')"
+				format="yyyy-MM-dd">
 				<template #default>
 					{{ t('photos', 'Date range') }}
 				</template>
@@ -36,15 +37,17 @@ const emit = defineEmits<{
 	(event: 'close', value: DateRangeValueType | undefined): void
 }>()
 
-const dateRange = ref<[Date, Date] | [null, null]>([null, null])
+const dateRange = ref<[Date, Date] | null>(null)
 
 watch(dateRange, (newDateRangeValue) => {
-	if (newDateRangeValue[0] !== null || newDateRangeValue[1] !== null) {
-		emit('close', {
-			start: newDateRangeValue[0].getTime(),
-			end: newDateRangeValue[1].getTime(),
-		})
+	if (newDateRangeValue === null) {
+		return
 	}
+
+	emit('close', {
+		start: newDateRangeValue[0].getTime(),
+		end: newDateRangeValue[1].getTime(),
+	})
 })
 </script>
 

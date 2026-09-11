@@ -101,7 +101,26 @@
 								<Download slot="icon" />
 							</ActionDownload>-->
 
-								<ActionFavorite :selectedFileIds="selectedFileIds" />
+								<NcActionButton
+									v-if="shouldFavoriteSelection(selectedFileIds)"
+									:closeAfterClick="true"
+									:aria-label="t('photos', 'Mark selection as favorite')"
+									@click="favoriteSelection(selectedFileIds)">
+									{{ t('photos', 'Add selection to favorites') }}
+									<template #icon>
+										<StarOutline />
+									</template>
+								</NcActionButton>
+								<NcActionButton
+									v-else
+									:closeAfterClick="true"
+									:aria-label="t('photos', 'Remove selection from favorites')"
+									@click="unFavoriteSelection(selectedFileIds)">
+									{{ t('photos', 'Remove selection from favorites') }}
+									<template #icon>
+										<Star />
+									</template>
+								</NcActionButton>
 
 								<NcActionButton
 									v-if="removableSelectedFiles.length !== 0"

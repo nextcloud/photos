@@ -10,7 +10,7 @@ export type FilterOption<T> = {
 	label: string
 	value?: T
 	imgSrc?: string
-	getValue?: () => Promise<T>
+	getValue?: () => Promise<T | undefined>
 }
 
 export type PhotosFilter<T> = {

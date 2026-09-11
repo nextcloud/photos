@@ -3,21 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { defineComponent } from 'vue'
+import { defineComponent, markRaw } from 'vue'
 
 export default defineComponent({
 	name: 'AbortControllerMixin',
 
 	data() {
 		return {
-			abortController: new AbortController(),
+			abortController: markRaw(new AbortController()),
 		}
 	},
 
 	methods: {
 		abortPendingRequest() {
 			this.abortController.abort()
-			this.abortController = new AbortController()
+			this.abortController = markRaw(new AbortController())
 		},
 	},
 
