@@ -31,7 +31,7 @@ import {
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import Star from 'vue-material-design-icons/Star.vue'
 import StarOutline from 'vue-material-design-icons/StarOutline.vue'
-import useFilesStore from '../../store/files.ts'
+import { useFilesStore } from '../../store/files.ts'
 
 export default defineComponent({
 	name: 'ActionFavorite',

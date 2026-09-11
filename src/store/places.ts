@@ -8,11 +8,11 @@ import type { Collection } from '../services/collectionFetcher.ts'
 import { getCurrentUser } from '@nextcloud/auth'
 import { defineStore } from 'pinia'
 import { computed } from 'vue'
-import useCollectionsStore from './collections.ts'
+import { useCollectionsStore } from './collections.ts'
 
 export const placesPrefix = `/photos/${getCurrentUser()?.uid}/places`
 
-export default defineStore('places', () => {
+export const usePlacesStore = defineStore('places', () => {
 	const collectionsStore = useCollectionsStore()
 
 	const places = computed(() => collectionsStore.collectionsWithPrefix(placesPrefix))

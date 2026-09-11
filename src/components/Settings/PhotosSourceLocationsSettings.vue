@@ -47,7 +47,7 @@ import FolderMultipleOutline from 'vue-material-design-icons/FolderMultipleOutli
 import Plus from 'vue-material-design-icons/Plus.vue'
 import PhotosFolder from './PhotosFolder.vue'
 import logger from '../../services/logger.js'
-import useUserConfigStore from '../../store/userConfig.ts'
+import { useUserConfigStore } from '../../store/userConfig.ts'
 
 export default defineComponent({
 	name: 'PhotosSourceLocationsSettings',
@@ -58,6 +58,10 @@ export default defineComponent({
 		Plus,
 	},
 
+	setup() {
+		return { userConfigStore: useUserConfigStore() }
+	},
+
 	data() {
 		return {
 			FolderMultipleOutline,
@@ -66,7 +70,7 @@ export default defineComponent({
 
 	computed: {
 		photosSourceFolders(): string[] {
-			return useUserConfigStore().photosSourceFolders
+			return this.userConfigStore.photosSourceFolders
 		},
 	},
 
@@ -94,13 +98,13 @@ export default defineComponent({
 			if (this.photosSourceFolders.includes(pickedFolder)) {
 				return
 			}
-			useUserConfigStore().updateUserConfig('photosSourceFolders', [...this.photosSourceFolders, pickedFolder])
+			this.userConfigStore.updateUserConfig('photosSourceFolders', [...this.photosSourceFolders, pickedFolder])
 		},
 
 		removeSourceFolder(index) {
 			const folders = [...this.photosSourceFolders]
 			folders.splice(index, 1)
-			useUserConfigStore().updateUserConfig('photosSourceFolders', folders)
+			this.userConfigStore.updateUserConfig('photosSourceFolders', folders)
 		},
 
 		t,

@@ -116,8 +116,8 @@ import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import { downloadFiles } from '../services/downloadFiles.ts'
 import logger from '../services/logger.js'
-import useFacesStore from '../store/faces.ts'
-import useFilesStore from '../store/files.ts'
+import { useFacesStore } from '../store/faces.ts'
+import { useFilesStore } from '../store/files.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.js'
 
 export default {
@@ -151,6 +151,10 @@ export default {
 		FilesSelectionMixin,
 	],
 
+	setup() {
+		return { facesStore: useFacesStore(), filesStore: useFilesStore() }
+	},
+
 	data() {
 		return {
 			showMoveModal: false,
@@ -161,11 +165,11 @@ export default {
 
 	computed: {
 		files() {
-			return useFilesStore().files
+			return this.filesStore.files
 		},
 
 		unassignedFiles() {
-			return useFacesStore().unassignedFiles
+			return this.facesStore.unassignedFiles
 		},
 
 		faceFileIds(): string[] {
@@ -174,7 +178,7 @@ export default {
 
 		shouldFavoriteSelection(): boolean {
 			// Favorite all selection if at least one file is not on the favorites.
-			return this.selectedFileIds.some((fileId) => useFilesStore().files[fileId].attributes.favorite === 0)
+			return this.selectedFileIds.some((fileId) => this.filesStore.files[fileId].attributes.favorite === 0)
 		},
 	},
 
@@ -187,7 +191,7 @@ export default {
 		// list of the unassigned faces.
 		onPhotoDeleted(photo) {
 			this.onUncheckFiles([photo.fileid.toString()])
-			useFacesStore().removeUnassignedFiles([photo.fileid.toString()])
+			this.facesStore.removeUnassignedFiles([photo.fileid.toString()])
 		},
 
 		openViewer(fileId) {
@@ -200,7 +204,7 @@ export default {
 		async handleMove(faceName, fileIds) {
 			try {
 				this.loadingCount++
-				await useFacesStore().moveFilesToFace(faceName, fileIds)
+				await this.facesStore.moveFilesToFace(faceName, fileIds)
 				this.showMoveModal = false
 			} catch (error) {
 				logger.error('Failed to move selection', { error })
@@ -212,7 +216,7 @@ export default {
 		async favoriteSelection() {
 			try {
 				this.loadingCount++
-				await useFilesStore().toggleFavoriteForFiles(this.selectedFileIds, 1)
+				await this.filesStore.toggleFavoriteForFiles(this.selectedFileIds, 1)
 			} catch (error) {
 				logger.error('Failed to favorite selection', { error })
 			} finally {
@@ -223,7 +227,7 @@ export default {
 		async unFavoriteSelection() {
 			try {
 				this.loadingCount++
-				await useFilesStore().toggleFavoriteForFiles(this.selectedFileIds, 0)
+				await this.filesStore.toggleFavoriteForFiles(this.selectedFileIds, 0)
 			} catch (error) {
 				logger.error('Failed to unfavorite selection', { error })
 			} finally {

@@ -215,8 +215,8 @@ import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import { downloadFiles } from '../services/downloadFiles.ts'
 import logger from '../services/logger.js'
-import useFacesStore from '../store/faces.ts'
-import useFilesStore from '../store/files.ts'
+import { useFacesStore } from '../store/faces.ts'
+import { useFilesStore } from '../store/files.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.js'
 
 export default {
@@ -263,6 +263,10 @@ export default {
 		},
 	},
 
+	setup() {
+		return { facesStore: useFacesStore(), filesStore: useFilesStore() }
+	},
+
 	data() {
 		return {
 			showMoveModal: false,
@@ -275,11 +279,11 @@ export default {
 
 	computed: {
 		files() {
-			return useFilesStore().files
+			return this.filesStore.files
 		},
 
 		facesFiles() {
-			return useFacesStore().facesFiles
+			return this.facesStore.facesFiles
 		},
 
 		face(): Collection {
@@ -292,7 +296,7 @@ export default {
 
 		shouldFavoriteSelection(): boolean {
 			// Favorite all selection if at least one file is not on the favorites.
-			return this.selectedFileIds.some((fileId) => useFilesStore().files[fileId].attributes.favorite === 0)
+			return this.selectedFileIds.some((fileId) => this.filesStore.files[fileId].attributes.favorite === 0)
 		},
 	},
 
@@ -313,7 +317,7 @@ export default {
 		// face it was recognized on.
 		onPhotoDeleted(photo: PhotoTarget) {
 			this.onUncheckFiles([photo.fileid.toString()])
-			useFacesStore().removeFileIdsFromFace(this.faceName, [photo.fileid.toString()])
+			this.facesStore.removeFileIdsFromFace(this.faceName, [photo.fileid.toString()])
 		},
 
 		openViewer(fileId: string) {
@@ -326,7 +330,7 @@ export default {
 		async handleRemoveFilesFromFace(fileIds: string[]) {
 			try {
 				this.loadingCount++
-				await useFacesStore().removeFilesFromFace(this.faceName, fileIds)
+				await this.facesStore.removeFilesFromFace(this.faceName, fileIds)
 				this.resetSelection()
 			} catch (error) {
 				logger.error(error)
@@ -338,7 +342,7 @@ export default {
 		async handleDeleteFace() {
 			try {
 				this.loadingCount++
-				await useFacesStore().deleteFace(this.faceName)
+				await this.facesStore.deleteFace(this.faceName)
 				this.$router.push('/faces')
 			} catch (error) {
 				logger.error(error)
@@ -352,7 +356,7 @@ export default {
 				this.loadingCount++
 				this.showRenameModal = false
 				const oldName = this.faceName
-				await useFacesStore().renameFace(oldName, faceName)
+				await this.facesStore.renameFace(oldName, faceName)
 				this.$router.push({ name: 'facecontent', params: { faceName } })
 			} catch (error) {
 				logger.error(error)
@@ -364,8 +368,8 @@ export default {
 		async handleMerge(faceName: string) {
 			try {
 				this.loadingCount++
-				await useFacesStore().moveFilesToFace(faceName, this.facesFiles[this.faceName], this.faceName)
-				await useFacesStore().deleteFace(this.faceName)
+				await this.facesStore.moveFilesToFace(faceName, this.facesFiles[this.faceName], this.faceName)
+				await this.facesStore.deleteFace(this.faceName)
 				this.showMergeModal = false
 				this.$router.push({ name: 'facecontent', params: { faceName } })
 			} catch (error) {
@@ -378,7 +382,7 @@ export default {
 		async handleMove(faceName: string, fileIds: string[]) {
 			try {
 				this.loadingCount++
-				await useFacesStore().moveFilesToFace(faceName, fileIds, this.faceName)
+				await this.facesStore.moveFilesToFace(faceName, fileIds, this.faceName)
 				this.showMoveModal = false
 			} catch (error) {
 				logger.error(error)
@@ -390,7 +394,7 @@ export default {
 		async favoriteSelection() {
 			try {
 				this.loadingCount++
-				await useFilesStore().toggleFavoriteForFiles(this.selectedFileIds, 1)
+				await this.filesStore.toggleFavoriteForFiles(this.selectedFileIds, 1)
 			} catch (error) {
 				logger.error(error)
 			} finally {
@@ -401,7 +405,7 @@ export default {
 		async unFavoriteSelection() {
 			try {
 				this.loadingCount++
-				await useFilesStore().toggleFavoriteForFiles(this.selectedFileIds, 0)
+				await this.filesStore.toggleFavoriteForFiles(this.selectedFileIds, 0)
 			} catch (error) {
 				logger.error(error)
 			} finally {

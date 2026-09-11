@@ -77,8 +77,8 @@ import PackageVariant from 'vue-material-design-icons/PackageVariant.vue'
 import TiledLayout from '../components/TiledLayout/TiledLayout.vue'
 import VirtualScrolling from '../components/VirtualScrolling.vue'
 import { fetchFile } from '../services/fileFetcher.ts'
-import useFilesStore from '../store/files.ts'
-import useUserConfigStore from '../store/userConfig.ts'
+import { useFilesStore } from '../store/files.ts'
+import { useUserConfigStore } from '../store/userConfig.ts'
 
 export default {
 	name: 'FilesListViewer',
@@ -153,6 +153,10 @@ export default {
 		},
 	},
 
+	setup() {
+		return { filesStore: useFilesStore(), userConfigStore: useUserConfigStore() }
+	},
+
 	data() {
 		return {
 			placeholderFiles: Array(20).fill(0).map((_, index) => {
@@ -170,7 +174,7 @@ export default {
 
 	computed: {
 		files(): Record<string, PhotoFile> {
-			return useFilesStore().files
+			return this.filesStore.files
 		},
 
 		showPlaceholders(): boolean {
@@ -220,7 +224,7 @@ export default {
 		},
 
 		croppedLayout(): boolean {
-			return useUserConfigStore().croppedLayout
+			return this.userConfigStore.croppedLayout
 		},
 	},
 
@@ -256,11 +260,11 @@ export default {
 				return
 			}
 
-			useFilesStore().appendFiles([fetchedFile as File])
+			this.filesStore.appendFiles([fetchedFile as File])
 		},
 
 		handleFileDeleted({ fileid }: File) {
-			useFilesStore().deleteFile(fileid as number)
+			this.filesStore.deleteFile(fileid as number)
 		},
 	},
 }
