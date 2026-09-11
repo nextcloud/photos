@@ -7,7 +7,7 @@ import { dateRangeFilter } from './dateRangeFilter.ts'
 import { nameFilter } from './nameFilter.ts'
 import { placesFilter } from './placesFilter.ts'
 
-export default [
+export const photosFilters = [
 	nameFilter,
 	dateRangeFilter,
 	placesFilter,

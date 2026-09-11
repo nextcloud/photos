@@ -17,8 +17,8 @@ import type { PropType } from 'vue'
 
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import FolderTagPreview from './FolderTagPreview.vue'
-import getFolderContent from '../services/FolderContent.ts'
-import logger from '../services/logger.ts'
+import { getFolderContent } from '../services/FolderContent.ts'
+import { logger } from '../services/logger.ts'
 import { useFoldersStore } from '../store/folders.ts'
 
 const props = defineProps({
