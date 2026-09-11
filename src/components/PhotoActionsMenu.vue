@@ -154,6 +154,9 @@ const emit = defineEmits<{
 	(event: 'deleted', photo: PhotoTarget): void
 }>()
 
+const filesStore = useFilesStore()
+const collectionsStore = useCollectionsStore()
+
 const menuOpen = ref(false)
 const metadataShown = ref(false)
 const metadataEditShown = ref(false)
@@ -186,7 +189,7 @@ async function toggleFavorite(): Promise<void> {
 	const favorite = !props.photo.favorite
 
 	try {
-		await useFilesStore().setPhotoFavorite(props.photo, favorite)
+		await filesStore.setPhotoFavorite(props.photo, favorite)
 	} catch (error) {
 		logger.error('Error setting the favorite state of a photo', { error, filename: props.photo.basename })
 		showError(favorite
@@ -198,14 +201,14 @@ async function toggleFavorite(): Promise<void> {
 async function addToAlbum(album: Album): Promise<void> {
 	albumPickerShown.value = false
 
-	await useCollectionsStore().addFilesToCollection(album.root + album.path, [props.photo.fileid.toString()])
+	await collectionsStore.addFilesToCollection(album.root + album.path, [props.photo.fileid.toString()])
 }
 
 async function confirmDelete(): Promise<void> {
 	deleteConfirmationShown.value = false
 
 	try {
-		await useFilesStore().deletePhoto(props.photo)
+		await filesStore.deletePhoto(props.photo)
 		emit('deleted', props.photo)
 	} catch (error) {
 		logger.error('Error deleting a photo', { error, filename: props.photo.basename })

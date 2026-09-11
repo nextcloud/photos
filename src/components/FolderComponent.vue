@@ -37,9 +37,11 @@ const abortController = new AbortController()
 
 onBeforeUnmount(() => abortController.abort())
 
-const files = computed(() => useFoldersStore().files)
-const folders = computed(() => useFoldersStore().folders)
-const subFolders = computed(() => useFoldersStore().subFolders)
+const foldersStore = useFoldersStore()
+
+const files = computed(() => foldersStore.files)
+const folders = computed(() => foldersStore.folders)
+const subFolders = computed(() => foldersStore.subFolders)
 
 /** Id of the folder, which a node of a listing always carries. */
 const folderId = computed(() => props.item.fileid as number)
@@ -65,8 +67,8 @@ async function getFolderData(path: string) {
 			shared: props.showShared,
 			signal: abortController.signal,
 		})
-		useFoldersStore().updateFolders(folder?.fileid, files, folders)
-		useFoldersStore().updateFoldersFiles(folder, files, folders)
+		foldersStore.updateFolders(folder?.fileid, files, folders)
+		foldersStore.updateFoldersFiles(folder, files, folders)
 	} catch (error) {
 		logger.error('Failed to get folder content', { error, path })
 	}

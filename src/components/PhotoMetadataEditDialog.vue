@@ -97,6 +97,8 @@ const emit = defineEmits<{
 // Leaflet is heavy and only ever needed once this dialog is open.
 const LocationMap = defineAsyncComponent(() => import('./LocationMap.vue'))
 
+const filesStore = useFilesStore()
+
 const loading = ref(true)
 const saving = ref(false)
 
@@ -177,7 +179,7 @@ async function save(): Promise<void> {
 	saving.value = true
 
 	try {
-		await useFilesStore().updatePhotoMetadata(props.photo, {
+		await filesStore.updatePhotoMetadata(props.photo, {
 			takenAt: Math.floor(date.getTime() / 1000),
 			location: location.value,
 		})
