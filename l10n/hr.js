@@ -64,6 +64,7 @@ OC.L10N.register(
     "Go back" : "Natrag",
     "Failed to delete {fileName}" : "Brisanje {fileName} nije uspjelo",
     "Remove from favorites" : "Ukloni iz favorita",
+    "Add to favorites" : "Dodaj u favorite",
     "Manage tags" : "Upravljaj oznakama",
     "Add to album" : "Dodaj u album",
     "Share" : "Dijeli",
