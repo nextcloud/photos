@@ -35,6 +35,7 @@
 
 		<LMap
 			v-else
+			:useGlobalLeaflet="true"
 			class="photos-map__map"
 			:zoom="zoom"
 			:center="center"

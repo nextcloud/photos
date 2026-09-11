@@ -67,7 +67,7 @@ test.describe('Searching the timeline by file name', () => {
 	test('narrows a date range down with a term', async ({ photosApp }) => {
 		const { timeline } = photosApp
 
-		await timeline.filterByDateRange('2019-01-01 ~ 2019-12-31')
+		await timeline.filterByDateRange('2019-01-01 - 2019-12-31')
 		await expect(timeline.grid.getAllMedia()).toHaveCount(PHOTOS_OF_2019)
 
 		// The search composes with the filters instead of replacing them: it is one
