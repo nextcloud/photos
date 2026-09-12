@@ -23,7 +23,7 @@
 		<div class="face__header">
 			<div class="face__header__left">
 				<NcActions>
-					<NcActionButton @click="$router.push('/faces/')">
+					<NcActionButton @click="router.push('/faces/')">
 						<template #icon>
 							<ArrowLeft />
 						</template>{{ t('photos', 'Back') }}
@@ -154,14 +154,14 @@
 					name="name"
 					required
 					:placeholder="t('photos', 'Name of this person')"
-					@keydown.enter="handleRenameFace($refs.nameInput.value)">
+					@keydown.enter="handleRenameFace(nameInput!.value)">
 			</div>
 			<template #actions>
 				<NcButton
 					:aria-label="t('photos', 'Save.')"
 					variant="primary"
-					:disabled="$refs.nameInput && $refs.nameInput.value.trim() === ''"
-					@click="handleRenameFace($refs.nameInput.value)">
+					:disabled="nameInput !== null && nameInput.value.trim() === ''"
+					@click="handleRenameFace(nameInput!.value)">
 					<template #icon>
 						<NcLoadingIcon v-if="loadingCount" />
 						<SendOutline v-else />
@@ -191,12 +191,13 @@
 	</div>
 </template>
 
-<script lang='ts'>
-import type { Collection } from '../services/collectionFetcher.js'
+<script setup lang="ts">
+import type { Collection } from '../services/collectionFetcher.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { translatePlural as n, translate as t } from '@nextcloud/l10n'
-import { nextTick } from 'vue'
+import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -217,226 +218,169 @@ import Download from 'vue-material-design-icons/TrayArrowDown.vue'
 import FaceMergeForm from '../components/Faces/FaceMergeForm.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
-import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
-import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
-import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
+import { useFetchFaces } from '../composables/useFetchFaces.ts'
+import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
 import { logger } from '../services/logger.ts'
 import { useFacesStore } from '../store/faces.ts'
 import { useFilesStore } from '../store/files.ts'
-import { toViewerFileInfo } from '../utils/fileUtils.js'
+import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
-export default {
-	name: 'FaceContent',
-	components: {
-		PencilOutline,
-		Star,
-		StarOutline,
-		Download,
-		Close,
-		AlertCircleOutline,
-		SendOutline,
-		Merge,
-		ArrowLeft,
-		AccountBoxMultipleOutline,
-		FaceMergeForm,
-		FilesListViewer,
-		FileComponent,
-		NcLoadingIcon,
-		NcEmptyContent,
-		NcActions,
-		NcActionButton,
-		NcDialog,
-		NcButton,
-		AccountSwitchOutline,
-	},
+const props = withDefaults(defineProps<{
+	faceName?: string
+}>(), {
+	faceName: '/',
+})
 
-	directives: {
-		focus(el) {
-			nextTick(() => el.focus())
-		},
-	},
+const router = useRouter()
+const facesStore = useFacesStore()
+const filesStore = useFilesStore()
+const { fetchFaceContent, loadingFaces, loadingFiles, errorFetchingFaces, errorFetchingFiles } = useFetchFaces()
+const { selection, selectedFileIds, onFileSelectToggle, onUncheckFiles, resetSelection } = useFilesSelection()
 
-	mixins: [
-		FetchFacesMixin,
-		FetchFilesMixin,
-		FilesSelectionMixin,
-	],
+const nameInput = useTemplateRef<HTMLInputElement>('nameInput')
 
-	props: {
-		faceName: {
-			type: String,
-			default: '/',
-		},
-	},
+const showMoveModal = ref(false)
+const showMergeModal = ref(false)
+const showRenameModal = ref(false)
+const loadingCount = ref(0)
+const appContent = document.getElementById('app-content-vue')
 
-	setup() {
-		return { facesStore: useFacesStore(), filesStore: useFilesStore() }
-	},
+const files = computed(() => filesStore.files)
+const faces = computed(() => facesStore.faces)
+const facesFiles = computed(() => facesStore.facesFiles)
+const face = computed<Collection | undefined>(() => faces.value[props.faceName])
+const faceFileIds = computed<string[]>(() => facesFiles.value[props.faceName] || [])
 
-	data() {
-		return {
-			showMoveModal: false,
-			showMergeModal: false,
-			showRenameModal: false,
-			loadingCount: 0,
-			appContent: document.getElementById('app-content-vue'),
-		}
-	},
+// Favorite all selection if at least one file is not on the favorites.
+const shouldFavoriteSelection = computed<boolean>(() => selectedFileIds.value.some((fileId) => filesStore.files[fileId].attributes.favorite === 0))
 
-	computed: {
-		files() {
-			return this.filesStore.files
-		},
+watch(face, () => {
+	if (face.value) {
+		fetchFaceContent(props.faceName)
+	}
+})
 
-		facesFiles() {
-			return this.facesStore.facesFiles
-		},
-
-		face(): Collection {
-			return this.faces[this.faceName]
-		},
-
-		faceFileIds(): string[] {
-			return this.facesFiles[this.faceName] || []
-		},
-
-		shouldFavoriteSelection(): boolean {
-			// Favorite all selection if at least one file is not on the favorites.
-			return this.selectedFileIds.some((fileId) => this.filesStore.files[fileId].attributes.favorite === 0)
-		},
-	},
-
-	watch: {
-		face() {
-			if (this.face) {
-				this.fetchFaceContent(this.faceName)
-			}
-		},
-	},
-
-	mounted() {
-		this.fetchFaceContent(this.faceName)
-	},
-
-	methods: {
-		// The photo is already gone from the store, it only has to leave the
-		// face it was recognized on.
-		onPhotoDeleted(photo: PhotoTarget) {
-			this.onUncheckFiles([photo.fileid.toString()])
-			this.facesStore.removeFilesFromFace(this.faceName, [photo.fileid.toString()])
-		},
-
-		openViewer(fileId: string) {
-			window.OCA.Viewer.open({
-				fileInfo: toViewerFileInfo(this.files[fileId]),
-				list: this.faceFileIds.map((fileId) => toViewerFileInfo(this.files[fileId])),
-			})
-		},
-
-		async handleRemoveFilesFromFace(fileIds: string[]) {
-			try {
-				this.loadingCount++
-				await this.facesStore.removeFilesFromFace(this.faceName, fileIds)
-				this.resetSelection()
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		async handleDeleteFace() {
-			try {
-				this.loadingCount++
-				await this.facesStore.deleteFace(this.faceName)
-				this.$router.push('/faces')
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		async handleRenameFace(faceName: string) {
-			try {
-				this.loadingCount++
-				this.showRenameModal = false
-				const oldName = this.faceName
-				await this.facesStore.renameFace(oldName, faceName)
-				this.$router.push({ name: 'facecontent', params: { faceName } })
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		async handleMerge(faceName: string) {
-			try {
-				this.loadingCount++
-				await this.facesStore.moveFilesToFace(faceName, this.facesFiles[this.faceName], this.faceName)
-				await this.facesStore.deleteFace(this.faceName)
-				this.showMergeModal = false
-				this.$router.push({ name: 'facecontent', params: { faceName } })
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		async handleMove(faceName: string, fileIds: string[]) {
-			try {
-				this.loadingCount++
-				await this.facesStore.moveFilesToFace(faceName, fileIds, this.faceName)
-				this.showMoveModal = false
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		async favoriteSelection() {
-			try {
-				this.loadingCount++
-				await this.filesStore.toggleFavoriteForFiles(this.selectedFileIds, 1)
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		async unFavoriteSelection() {
-			try {
-				this.loadingCount++
-				await this.filesStore.toggleFavoriteForFiles(this.selectedFileIds, 0)
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		async downloadSelection() {
-			try {
-				this.loadingCount++
-				await downloadFiles(this.selectedFileIds.map((fileId) => this.files[fileId]))
-			} catch (error) {
-				logger.error(error)
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		t,
-		n,
-	},
+function vFocus(el: HTMLElement): void {
+	nextTick(() => el.focus())
 }
+
+// The photo is already gone from the store, it only has to leave the
+// face it was recognized on.
+function onPhotoDeleted(photo: PhotoTarget): void {
+	onUncheckFiles([photo.fileid.toString()])
+	facesStore.removeFilesFromFace(props.faceName, [photo.fileid.toString()])
+}
+
+function openViewer(fileId: number): void {
+	window.OCA.Viewer.open({
+		fileInfo: toViewerFileInfo(files.value[fileId]),
+		list: faceFileIds.value.map((fileId) => toViewerFileInfo(files.value[fileId])),
+	})
+}
+
+async function handleRemoveFilesFromFace(fileIds: string[]): Promise<void> {
+	try {
+		loadingCount.value++
+		await facesStore.removeFilesFromFace(props.faceName, fileIds)
+		resetSelection()
+	} catch (error) {
+		logger.error('Failed to remove files from face', { error })
+	} finally {
+		loadingCount.value--
+	}
+}
+
+async function handleDeleteFace(): Promise<void> {
+	try {
+		loadingCount.value++
+		await facesStore.deleteFace(props.faceName)
+		router.push('/faces')
+	} catch (error) {
+		logger.error('Failed to delete face', { error })
+	} finally {
+		loadingCount.value--
+	}
+}
+
+async function handleRenameFace(faceName: string): Promise<void> {
+	try {
+		loadingCount.value++
+		showRenameModal.value = false
+		const oldName = props.faceName
+		await facesStore.renameFace(oldName, faceName)
+		router.push({ name: 'facecontent', params: { faceName } })
+	} catch (error) {
+		logger.error('Failed to rename face', { error })
+	} finally {
+		loadingCount.value--
+	}
+}
+
+async function handleMerge(faceName: string): Promise<void> {
+	try {
+		loadingCount.value++
+		await facesStore.moveFilesToFace(faceName, facesFiles.value[props.faceName], props.faceName)
+		await facesStore.deleteFace(props.faceName)
+		showMergeModal.value = false
+		router.push({ name: 'facecontent', params: { faceName } })
+	} catch (error) {
+		logger.error('Failed to merge faces', { error })
+	} finally {
+		loadingCount.value--
+	}
+}
+
+async function handleMove(faceName: string, fileIds: string[]): Promise<void> {
+	try {
+		loadingCount.value++
+		await facesStore.moveFilesToFace(faceName, fileIds, props.faceName)
+		showMoveModal.value = false
+	} catch (error) {
+		logger.error('Failed to move selection', { error })
+	} finally {
+		loadingCount.value--
+	}
+}
+
+async function favoriteSelection(): Promise<void> {
+	try {
+		loadingCount.value++
+		await filesStore.toggleFavoriteForFiles(selectedFileIds.value, 1)
+	} catch (error) {
+		logger.error('Failed to favorite selection', { error })
+	} finally {
+		loadingCount.value--
+	}
+}
+
+async function unFavoriteSelection(): Promise<void> {
+	try {
+		loadingCount.value++
+		await filesStore.toggleFavoriteForFiles(selectedFileIds.value, 0)
+	} catch (error) {
+		logger.error('Failed to unfavorite selection', { error })
+	} finally {
+		loadingCount.value--
+	}
+}
+
+async function downloadSelection(): Promise<void> {
+	try {
+		loadingCount.value++
+		await downloadFiles(selectedFileIds.value.map((fileId) => files.value[fileId]))
+	} catch (error) {
+		logger.error('Failed to download selection', { error })
+	} finally {
+		loadingCount.value--
+	}
+}
+
+onMounted(() => {
+	fetchFaceContent(props.faceName)
+})
 </script>
 
 <style lang="scss" scoped>
-@use '../mixins/FaceContent.scss';
+@use './FaceContent.scss';
 </style>
