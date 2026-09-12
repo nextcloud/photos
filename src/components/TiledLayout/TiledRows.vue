@@ -19,20 +19,12 @@
 	</ul>
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue'
+<script setup lang="ts">
 import type { TiledRow } from '../../services/TiledLayout.ts'
 
-export default {
-	name: 'TiledRows',
-
-	props: {
-		rows: {
-			type: Array as PropType<TiledRow[]>,
-			required: true,
-		},
-	},
-}
+defineProps<{
+	rows: TiledRow[]
+}>()
 </script>
 
 <style lang="scss" scoped>
