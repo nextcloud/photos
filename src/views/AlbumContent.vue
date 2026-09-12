@@ -206,12 +206,14 @@
 	</div>
 </template>
 
-<script lang='ts'>
-import type { Album } from '../store/albums.js'
+<script setup lang="ts">
+import type { Collection } from '../services/collectionFetcher.ts'
+import type { Collaborator } from '../store/albums.ts'
 import type { PhotoFile } from '../store/files.ts'
 
-import { translate, translatePlural } from '@nextcloud/l10n'
-import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
+import { n, t } from '@nextcloud/l10n'
+import { computed, onMounted, ref, useTemplateRef } from 'vue'
+import { useRouter } from 'vue-router'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
@@ -238,217 +240,149 @@ import CollaboratorsSelectionForm from '../components/Albums/CollaboratorsSelect
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import PhotosPicker from '../components/PhotosPicker.vue'
-import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
-import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
+import { useFetchCollectionContent } from '../composables/useFetchCollectionContent.ts'
 import { logger } from '../services/logger.ts'
-import { albumFilesExtraProps, albumsExtraProps } from '../store/albums.ts'
-import { useAlbumsStore } from '../store/albums.ts'
+import { albumFilesExtraProps, albumsExtraProps, useAlbumsStore } from '../store/albums.ts'
 import { useCollectionsStore } from '../store/collections.ts'
 import { useFilesStore } from '../store/files.ts'
 import { pickAlbumCover } from '../utils/albumCover.ts'
 
-export default {
-	name: 'AlbumContent',
-	components: {
-		StarOutline,
-		Star,
-		// ActionDownload,
-		AlbumForm,
-		AlbumHero,
-		Close,
-		CollaboratorsSelectionForm,
-		CollectionContent,
-		DeleteOutline,
-		// Download,
-		// DownloadMultiple,
-		PhotosPicker,
-		HeaderNavigation,
-		ImagePlusOutline,
-		MapMarkerOutline,
-		NcActionButton,
-		NcActions,
-		NcActionSeparator,
-		NcButton,
-		NcDialog,
-		NcEmptyContent,
-		NcLoadingIcon,
-		NcModal,
-		PencilOutline,
-		Plus,
-		ShareVariantOutline,
-	},
+const props = withDefaults(defineProps<{
+	albumName?: string
+}>(), {
+	albumName: '/',
+})
 
-	mixins: [
-		FetchCollectionContentMixin,
-		FetchFilesMixin,
-	],
+const router = useRouter()
+const albumsStore = useAlbumsStore()
+const collectionsStore = useCollectionsStore()
+const filesStore = useFilesStore()
+const {
+	fetchCollection,
+	fetchCollectionFiles,
+	loadingCollection,
+	loadingCollectionFiles,
+	errorFetchingCollection,
+	errorFetchingCollectionFiles,
+} = useFetchCollectionContent()
 
-	props: {
-		albumName: {
-			type: String,
-			default: '/',
-		},
-	},
+const collectionContent = useTemplateRef<InstanceType<typeof CollectionContent>>('collectionContent')
 
-	setup() {
-		const isMobile = useIsMobile()
-		return {
-			isMobile,
-			albumsStore: useAlbumsStore(),
-			collectionsStore: useCollectionsStore(),
-			filesStore: useFilesStore(),
-		}
-	},
+const showAddPhotosModal = ref(false)
+const showManageCollaboratorView = ref(false)
+const showEditAlbumForm = ref(false)
 
-	data() {
-		return {
-			showAddPhotosModal: false,
-			showManageCollaboratorView: false,
-			showEditAlbumForm: false,
+const loadingAddCollaborators = ref(false)
 
-			loadingAddCollaborators: false,
-		}
-	},
+const album = computed(() => albumsStore.getAlbum(props.albumName))
 
-	computed: {
-		album(): Album {
-			return this.albumsStore.getAlbum(this.albumName)
-		},
+const albumFileIds = computed(() => albumsStore.getAlbumFiles(props.albumName))
 
-		albumFileIds(): string[] {
-			return this.albumsStore.getAlbumFiles(this.albumName)
-		},
+const sharingEnabled = computed(() => OC.Share !== undefined)
 
-		sharingEnabled(): boolean {
-			return OC.Share !== undefined
-		},
+const albumFileName = computed(() => albumsStore.getAlbumName(props.albumName))
 
-		albumFileName(): string {
-			return this.albumsStore.getAlbumName(this.albumName)
-		},
+const albumPhotos = computed<PhotoFile[]>(() => albumFileIds.value
+	.map((fileId) => filesStore.files[fileId])
+	.filter((file) => file !== undefined))
 
-		albumPhotos(): PhotoFile[] {
-			return this.albumFileIds
-				.map((fileId) => this.filesStore.files[fileId])
-				.filter((file) => file !== undefined)
-		},
+// The photo shown by the hero, which is only known once the album
+// content is there - until then the album cover is used as is.
+const coverPhoto = computed(() => pickAlbumCover(albumPhotos.value, album.value?.attributes['last-photo'] ?? -1))
 
-		// The photo shown by the hero, which is only known once the album
-		// content is there - until then the album cover is used as is.
-		coverPhoto(): PhotoFile | undefined {
-			return pickAlbumCover(this.albumPhotos, this.album?.attributes['last-photo'] ?? -1)
-		},
+const coverFileId = computed(() => coverPhoto.value?.fileid ?? album.value?.attributes['last-photo'] ?? -1)
 
-		coverFileId(): number {
-			return this.coverPhoto?.fileid ?? this.album?.attributes['last-photo'] ?? -1
-		},
+const coverBlurhash = computed(() => coverPhoto.value?.attributes['metadata-blurhash'])
 
-		coverBlurhash(): string | undefined {
-			return this.coverPhoto?.attributes['metadata-blurhash']
-		},
+// Line shown under the album name in the hero, both parts of it are
+// optional so that it degrades to an empty string.
+const albumSubtitle = computed(() => {
+	if (album.value === undefined) {
+		return ''
+	}
 
-		// Line shown under the album name in the hero, both parts of it are
-		// optional so that it degrades to an empty string.
-		albumSubtitle(): string {
-			if (this.album === undefined) {
-				return ''
-			}
+	return [
+		album.value.attributes.location,
+		n('photos', '%n photo', '%n photos', album.value.attributes.nbItems),
+	].filter((part) => part !== '').join(' · ')
+})
 
-			return [
-				this.album.attributes.location,
-				translatePlural('photos', '%n photo', '%n photos', this.album.attributes.nbItems),
-			].filter((part) => part !== '').join(' · ')
-		},
+const removableSelectedFiles = computed(() => (collectionContent.value?.selectedFileIds ?? [])
+	.map((fileId) => filesStore.files[fileId])
+	.filter((file) => file.attributes['photos-album-file-origin'] !== 'filters')
+	.map((file) => file.fileid.toString()))
 
-		removableSelectedFiles() {
-			return ((this.$refs.collectionContent?.selectedFileIds ?? []) as string[])
-				.map((fileId) => this.filesStore.files[fileId])
-				.filter((file) => file.attributes['photos-album-file-origin'] !== 'filters')
-				.map((file) => file.fileid.toString())
-		},
-	},
-
-	async mounted() {
-		this.fetchAlbum()
-		this.fetchAlbumContent()
-	},
-
-	methods: {
-		// Favorite the whole selection if at least one of its photos is not a favorite yet.
-		shouldFavoriteSelection(selectedFileIds: string[]): boolean {
-			return selectedFileIds.some((fileId) => this.filesStore.files[fileId].attributes.favorite === 0)
-		},
-
-		async favoriteSelection(selectedFileIds: string[]): Promise<void> {
-			await this.filesStore.toggleFavoriteForFiles(selectedFileIds, 1)
-		},
-
-		async unFavoriteSelection(selectedFileIds: string[]): Promise<void> {
-			await this.filesStore.toggleFavoriteForFiles(selectedFileIds, 0)
-		},
-
-		async fetchAlbum() {
-			await this.fetchCollection(
-				this.albumFileName,
-				albumsExtraProps,
-			)
-		},
-
-		async fetchAlbumContent() {
-			await this.fetchCollectionFiles(this.albumFileName, albumFilesExtraProps)
-		},
-
-		async handleAlbumUpdate({ album, changes }) {
-			this.showEditAlbumForm = false
-
-			if (changes.includes('name')) {
-				await this.$router.push(`/albums/${album.basename}`)
-			}
-
-			if (changes.includes('filters')) {
-				this.fetchAlbumContent()
-			}
-		},
-
-		async handleFilesPicked(fileIds: string[]) {
-			this.showAddPhotosModal = false
-			await this.collectionsStore.addFilesToCollection(this.album?.root + this.album?.path, fileIds)
-			// Re-fetch album content to have the proper filenames.
-			await this.fetchAlbumContent()
-		},
-
-		async handleRemoveFilesFromAlbum(fileIds: string[]) {
-			this.$refs.collectionContent?.onUncheckFiles(fileIds)
-			await this.collectionsStore.removeFilesFromCollection(this.album?.root + this.album?.path, fileIds)
-		},
-
-		async handleDeleteAlbum() {
-			const isDeleted = await this.collectionsStore.deleteCollection(this.album?.root + this.album?.path)
-			if (isDeleted) {
-				this.$router.push('/albums')
-			}
-		},
-
-		async handleSetCollaborators(collaborators) {
-			try {
-				this.loadingAddCollaborators = true
-				this.showManageCollaboratorView = false
-				await this.collectionsStore.updateCollection(this.album?.root + this.album?.path, { collaborators })
-			} catch (error) {
-				logger.error('Error while setting album collaborators', { error })
-			} finally {
-				this.loadingAddCollaborators = false
-			}
-		},
-
-		async handleFiltersChange(filters) {
-			await this.collectionsStore.updateCollection(this.album?.root + this.album?.path, { filters })
-			this.fetchAlbumContent()
-		},
-
-		t: translate,
-	},
+// Favorite the whole selection if at least one of its photos is not a favorite yet.
+function shouldFavoriteSelection(selectedFileIds: string[]): boolean {
+	return selectedFileIds.some((fileId) => filesStore.files[fileId].attributes.favorite === 0)
 }
+
+async function favoriteSelection(selectedFileIds: string[]): Promise<void> {
+	await filesStore.toggleFavoriteForFiles(selectedFileIds, 1)
+}
+
+async function unFavoriteSelection(selectedFileIds: string[]): Promise<void> {
+	await filesStore.toggleFavoriteForFiles(selectedFileIds, 0)
+}
+
+async function fetchAlbum() {
+	await fetchCollection(
+		albumFileName.value,
+		albumsExtraProps,
+	)
+}
+
+async function fetchAlbumContent() {
+	await fetchCollectionFiles(albumFileName.value, albumFilesExtraProps)
+}
+
+async function handleAlbumUpdate({ album, changes = [] }: { album: Collection, changes?: string[] }) {
+	showEditAlbumForm.value = false
+
+	if (changes.includes('name')) {
+		await router.push(`/albums/${album.basename}`)
+	}
+
+	if (changes.includes('filters')) {
+		fetchAlbumContent()
+	}
+}
+
+async function handleFilesPicked(fileIds: string[]) {
+	showAddPhotosModal.value = false
+	await collectionsStore.addFilesToCollection(album.value?.root + album.value?.path, fileIds)
+	// Re-fetch album content to have the proper filenames.
+	await fetchAlbumContent()
+}
+
+async function handleRemoveFilesFromAlbum(fileIds: string[]) {
+	collectionContent.value?.onUncheckFiles(fileIds)
+	await collectionsStore.removeFilesFromCollection(album.value?.root + album.value?.path, fileIds)
+}
+
+async function handleDeleteAlbum() {
+	const isDeleted = await collectionsStore.deleteCollection(album.value?.root + album.value?.path)
+	if (isDeleted) {
+		router.push('/albums')
+	}
+}
+
+async function handleSetCollaborators(collaborators: Collaborator[]) {
+	try {
+		loadingAddCollaborators.value = true
+		showManageCollaboratorView.value = false
+		await collectionsStore.updateCollection(album.value?.root + album.value?.path, { collaborators })
+	} catch (error) {
+		logger.error('Error while setting album collaborators', { error })
+	} finally {
+		loadingAddCollaborators.value = false
+	}
+}
+
+onMounted(() => {
+	fetchAlbum()
+	fetchAlbumContent()
+})
 </script>
 
 <style lang="scss" scoped>

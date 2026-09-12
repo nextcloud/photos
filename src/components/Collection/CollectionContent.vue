@@ -50,125 +50,84 @@
 	</div>
 </template>
 
-<script lang='ts'>
-import type { File } from '@nextcloud/files'
-import type { PropType } from 'vue'
-import type { Collection } from '../../services/collectionFetcher.js'
+<script setup lang="ts">
+import type { Node } from '@nextcloud/files'
+import type { Collection } from '../../services/collectionFetcher.ts'
 import type { PhotoTarget } from '../../utils/fileUtils.ts'
 
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { translate } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
-import { defineComponent } from 'vue'
+import { computed, onMounted, onUnmounted } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import FileComponent from '../FileComponent.vue'
 import FilesListViewer from '../FilesListViewer.vue'
-import FilesSelectionMixin from '../../mixins/FilesSelectionMixin.js'
+import { useFilesSelection } from '../../composables/useFilesSelection.ts'
 import { useCollectionsStore } from '../../store/collections.ts'
 import { useFilesStore } from '../../store/files.ts'
-import { toViewerFileInfo } from '../../utils/fileUtils.js'
+import { toViewerFileInfo } from '../../utils/fileUtils.ts'
 
-export default defineComponent({
-	name: 'CollectionContent',
-
-	components: {
-		AlertCircleOutline,
-		ImageMultipleOutline,
-		NcEmptyContent,
-		FilesListViewer,
-		FileComponent,
-	},
-
-	mixins: [FilesSelectionMixin],
-
-	props: {
-		collection: {
-			type: Object as PropType<Collection>,
-			default: () => undefined,
-		},
-
-		collectionFileIds: {
-			type: Array as PropType<string[]>,
-			required: true,
-		},
-
-		loading: {
-			type: Boolean,
-			default: false,
-		},
-
-		allowSelection: {
-			type: Boolean,
-			default: true,
-		},
-
-		error: {
-			type: [Error, Number],
-			default: null,
-		},
-	},
-
-	setup() {
-		return {
-			isMobile: useIsMobile(),
-			collectionsStore: useCollectionsStore(),
-			filesStore: useFilesStore(),
-		}
-	},
-
-	data() {
-		return {
-			appContent: document.getElementById('app-content-vue'),
-		}
-	},
-
-	computed: {
-		files() {
-			return this.filesStore.files
-		},
-
-		sortedCollectionFileIds() {
-			return this.collectionFileIds.toSorted((fileId1, fileId2) => this.files[fileId1].attributes.timestamp < this.files[fileId2].attributes.timestamp ? -1 : 1)
-		},
-	},
-
-	mounted() {
-		subscribe('files:node:deleted', this.handleFileDeleted)
-	},
-
-	unmounted() {
-		unsubscribe('files:node:deleted', this.handleFileDeleted)
-	},
-
-	methods: {
-		openViewer(fileId: string) {
-			window.OCA.Viewer.open({
-				fileInfo: toViewerFileInfo(this.files[fileId]),
-				list: this.sortedCollectionFileIds.map((fileId) => toViewerFileInfo(this.files[fileId])),
-			})
-		},
-
-		handleFileDeleted({ fileid }: File) {
-			this.removeFromCollection(fileid as number)
-		},
-
-		// The photo is already gone from the store, it only has to leave the
-		// collection it was shown in.
-		onPhotoDeleted(photo: PhotoTarget) {
-			this.onUncheckFiles([photo.fileid.toString()])
-			this.removeFromCollection(photo.fileid)
-		},
-
-		removeFromCollection(fileId: number) {
-			this.collectionsStore.removeFileIdsFromCollection(this.collection.root + this.collection.path, [fileId?.toString()])
-		},
-
-		t: translate,
-	},
+const props = withDefaults(defineProps<{
+	collection?: Collection
+	collectionFileIds: string[]
+	loading?: boolean
+	allowSelection?: boolean
+	error?: Error | number | null
+}>(), {
+	collection: undefined,
+	loading: false,
+	allowSelection: true,
+	error: null,
 })
 
+const isMobile = useIsMobile()
+const collectionsStore = useCollectionsStore()
+const filesStore = useFilesStore()
+const { selection, selectedFileIds, onFileSelectToggle, onUncheckFiles, resetSelection } = useFilesSelection()
+
+const appContent = document.getElementById('app-content-vue')
+
+const files = computed(() => filesStore.files)
+
+const sortedCollectionFileIds = computed(() => props.collectionFileIds.toSorted((fileId1, fileId2) => files.value[fileId1].attributes.timestamp < files.value[fileId2].attributes.timestamp ? -1 : 1))
+
+function openViewer(fileId: number): void {
+	window.OCA.Viewer.open({
+		fileInfo: toViewerFileInfo(files.value[fileId]),
+		list: sortedCollectionFileIds.value.map((fileId) => toViewerFileInfo(files.value[fileId])),
+	})
+}
+
+function handleFileDeleted({ fileid }: Node): void {
+	removeFromCollection(fileid as number)
+}
+
+// The photo is already gone from the store, it only has to leave the
+// collection it was shown in.
+function onPhotoDeleted(photo: PhotoTarget): void {
+	onUncheckFiles([photo.fileid.toString()])
+	removeFromCollection(photo.fileid)
+}
+
+function removeFromCollection(fileId: number): void {
+	if (props.collection === undefined) {
+		return
+	}
+
+	collectionsStore.removeFileIdsFromCollection(props.collection.root + props.collection.path, [fileId?.toString()])
+}
+
+onMounted(() => {
+	subscribe('files:node:deleted', handleFileDeleted)
+})
+
+onUnmounted(() => {
+	unsubscribe('files:node:deleted', handleFileDeleted)
+})
+
+defineExpose({ selectedFileIds, onUncheckFiles })
 </script>
 
 <style lang="scss" scoped>
