@@ -69,12 +69,10 @@
 	</div>
 </template>
 
-<script lang='ts'>
-import type { PropType } from 'vue'
-
+<script setup lang="ts">
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
-import { defineComponent } from 'vue'
+import { computed, onBeforeUnmount, ref, useTemplateRef } from 'vue'
 import { monthDensities } from '../utils/monthDensity.ts'
 
 interface YearLabel {
@@ -89,198 +87,173 @@ interface MonthTick {
 	density: number
 }
 
-export default defineComponent({
-	name: 'DateScrubber',
+const props = withDefaults(defineProps<{
+	// Month sections in display order (newest first), e.g. ['202604', '202603', ...].
+	months: string[]
+	// The month currently scrolled into view, drives the thumb position.
+	currentMonth?: string
+	// Photo count per month, drives the width of the density ticks.
+	// Months missing from the map render at the minimum tick width.
+	monthCounts?: Record<string, number>
+}>(), {
+	currentMonth: '',
+	monthCounts: () => ({}),
+})
 
-	props: {
-		// Month sections in display order (newest first), e.g. ['202604', '202603', ...].
-		months: {
-			type: Array as PropType<string[]>,
-			required: true,
-		},
+const emit = defineEmits<{
+	jump: [month: string]
+}>()
 
-		// The month currently scrolled into view, drives the thumb position.
-		currentMonth: {
-			type: String,
-			default: '',
-		},
+const track = useTemplateRef<HTMLDivElement>('track')
 
-		// Photo count per month, drives the width of the density ticks.
-		// Months missing from the map render at the minimum tick width.
-		monthCounts: {
-			type: Object as PropType<Record<string, number>>,
-			default: () => ({}),
-		},
-	},
+const isHovered = ref(false)
+const isDragging = ref(false)
+// While dragging, the thumb follows the pointer instead of
+// `currentMonth`, so it does not bounce back between two jumps.
+const dragMonth = ref('')
 
-	emits: ['jump'],
+const isActive = computed<boolean>(() => isHovered.value || isDragging.value)
 
-	data() {
-		return {
-			isHovered: false,
-			isDragging: false,
-			// While dragging, the thumb follows the pointer instead of
-			// `currentMonth`, so it does not bounce back between two jumps.
-			dragMonth: '',
+// One label per year, at the position of that year's first month,
+// decimated to at most 12 so they do not overlap on short windows.
+const yearLabels = computed<YearLabel[]>(() => {
+	const labels: YearLabel[] = []
+	const seenYears = new Set<string>()
+	const maxLabels = 12
+
+	for (let index = 0; index < props.months.length; index++) {
+		const year = props.months[index].substring(0, 4)
+		if (seenYears.has(year)) {
+			continue
 		}
-	},
+		seenYears.add(year)
+		labels.push({ year, percent: percentAt(index) })
+	}
 
-	computed: {
-		isActive(): boolean {
-			return this.isHovered || this.isDragging
-		},
+	if (labels.length <= maxLabels) {
+		return labels
+	}
 
-		// One label per year, at the position of that year's first month,
-		// decimated to at most 12 so they do not overlap on short windows.
-		yearLabels(): YearLabel[] {
-			const labels: YearLabel[] = []
-			const seenYears = new Set<string>()
-			const maxLabels = 12
+	const stride = Math.ceil(labels.length / maxLabels)
+	return labels.filter((_, index) => index === 0 || index === labels.length - 1 || index % stride === 0)
+})
 
-			for (let index = 0; index < this.months.length; index++) {
-				const year = this.months[index].substring(0, 4)
-				if (seenYears.has(year)) {
-					continue
-				}
-				seenYears.add(year)
-				labels.push({ year, percent: this.percentAt(index) })
-			}
+const activeMonth = computed<string>(() => {
+	if (isDragging.value && dragMonth.value !== '') {
+		return dragMonth.value
+	}
+	return props.currentMonth || props.months[0] || ''
+})
 
-			if (labels.length <= maxLabels) {
-				return labels
-			}
+const activeMonthLabel = computed<string>(() => {
+	if (activeMonth.value === '') {
+		return ''
+	}
+	return moment(activeMonth.value, 'YYYYMM').format('MMMM YYYY')
+})
 
-			const stride = Math.ceil(labels.length / maxLabels)
-			return labels.filter((_, index) => index === 0 || index === labels.length - 1 || index % stride === 0)
-		},
+const activeYear = computed<string>(() => activeMonth.value.substring(0, 4))
 
-		activeMonth(): string {
-			if (this.isDragging && this.dragMonth !== '') {
-				return this.dragMonth
-			}
-			return this.currentMonth || this.months[0] || ''
-		},
+const thumbPercent = computed<number>(() => percentAt(props.months.indexOf(activeMonth.value)))
 
-		activeMonthLabel(): string {
-			if (this.activeMonth === '') {
-				return ''
-			}
-			return moment(this.activeMonth, 'YYYYMM').format('MMMM YYYY')
-		},
+const monthTicks = computed<MonthTick[]>(() => {
+	const densities = monthDensities(props.months, props.monthCounts)
 
-		activeYear(): string {
-			return this.activeMonth.substring(0, 4)
-		},
+	return props.months.map((month, index) => ({
+		month,
+		year: month.substring(0, 4),
+		percent: percentAt(index),
+		density: densities[index],
+	}))
+})
 
-		thumbPercent(): number {
-			return this.percentAt(this.months.indexOf(this.activeMonth))
-		},
+// Position of a month index along the track, in percent.
+function percentAt(index: number): number {
+	if (index <= 0 || props.months.length <= 1) {
+		return 0
+	}
+	return (index / (props.months.length - 1)) * 100
+}
 
-		monthTicks(): MonthTick[] {
-			const densities = monthDensities(this.months, this.monthCounts)
+// Closest month to a pointer position on the track.
+function monthAtY(clientY: number): string | null {
+	if (track.value === null || props.months.length === 0) {
+		return null
+	}
+	const rect = track.value.getBoundingClientRect()
+	const ratio = Math.max(0, Math.min(1, (clientY - rect.top) / rect.height))
+	return props.months[Math.round(ratio * (props.months.length - 1))] ?? null
+}
 
-			return this.months.map((month, index) => ({
-				month,
-				year: month.substring(0, 4),
-				percent: this.percentAt(index),
-				density: densities[index],
-			}))
-		},
-	},
+// The track and the thumb share this handler, so press-and-drag works
+// on a blank stretch of track too. Document listeners rather than
+// setPointerCapture, as the capture can be dropped mid-drag.
+function startDrag(event: PointerEvent) {
+	isDragging.value = true
+	jumpTo(monthAtY(event.clientY))
 
-	beforeUnmount() {
-		this.stopDrag()
-	},
+	document.addEventListener('pointermove', onPointerMove)
+	document.addEventListener('pointerup', stopDrag)
+	document.addEventListener('pointercancel', stopDrag)
+}
 
-	methods: {
-		t,
+function stopDrag() {
+	isDragging.value = false
+	dragMonth.value = ''
 
-		// Position of a month index along the track, in percent.
-		percentAt(index: number): number {
-			if (index <= 0 || this.months.length <= 1) {
-				return 0
-			}
-			return (index / (this.months.length - 1)) * 100
-		},
+	document.removeEventListener('pointermove', onPointerMove)
+	document.removeEventListener('pointerup', stopDrag)
+	document.removeEventListener('pointercancel', stopDrag)
+}
 
-		// Closest month to a pointer position on the track.
-		monthAtY(clientY: number): string | null {
-			const track = this.$refs.track as HTMLElement | undefined
-			if (track === undefined || this.months.length === 0) {
-				return null
-			}
-			const rect = track.getBoundingClientRect()
-			const ratio = Math.max(0, Math.min(1, (clientY - rect.top) / rect.height))
-			return this.months[Math.round(ratio * (this.months.length - 1))] ?? null
-		},
+function onPointerMove(event: PointerEvent) {
+	if (isDragging.value) {
+		jumpTo(monthAtY(event.clientY))
+	}
+}
 
-		// The track and the thumb share this handler, so press-and-drag works
-		// on a blank stretch of track too. Document listeners rather than
-		// setPointerCapture, as the capture can be dropped mid-drag.
-		startDrag(event: PointerEvent) {
-			this.isDragging = true
-			this.jumpTo(this.monthAtY(event.clientY))
+// Move the thumb and emit on every step of a drag, so the grid
+// follows the pointer instead of waiting for the release.
+function jumpTo(month: string | null) {
+	if (month === null || month === dragMonth.value) {
+		return
+	}
+	dragMonth.value = month
+	emit('jump', month)
+}
 
-			document.addEventListener('pointermove', this.onPointerMove)
-			document.addEventListener('pointerup', this.stopDrag)
-			document.addEventListener('pointercancel', this.stopDrag)
-		},
+// Standard slider keyboard semantics: arrows step by one month,
+// Home/End jump to the newest / oldest one.
+function onThumbKey(event: KeyboardEvent) {
+	const index = props.months.indexOf(activeMonth.value)
+	let target: string | undefined
+	switch (event.key) {
+		case 'ArrowUp':
+		case 'ArrowLeft':
+			target = props.months[Math.max(0, index - 1)]
+			break
+		case 'ArrowDown':
+		case 'ArrowRight':
+			target = props.months[Math.min(props.months.length - 1, index + 1)]
+			break
+		case 'Home':
+			target = props.months[0]
+			break
+		case 'End':
+			target = props.months[props.months.length - 1]
+			break
+		default:
+			return
+	}
 
-		stopDrag() {
-			this.isDragging = false
-			this.dragMonth = ''
+	event.preventDefault()
+	if (target !== undefined && target !== activeMonth.value) {
+		emit('jump', target)
+	}
+}
 
-			document.removeEventListener('pointermove', this.onPointerMove)
-			document.removeEventListener('pointerup', this.stopDrag)
-			document.removeEventListener('pointercancel', this.stopDrag)
-		},
-
-		onPointerMove(event: PointerEvent) {
-			if (this.isDragging) {
-				this.jumpTo(this.monthAtY(event.clientY))
-			}
-		},
-
-		// Move the thumb and emit on every step of a drag, so the grid
-		// follows the pointer instead of waiting for the release.
-		jumpTo(month: string | null) {
-			if (month === null || month === this.dragMonth) {
-				return
-			}
-			this.dragMonth = month
-			this.$emit('jump', month)
-		},
-
-		// Standard slider keyboard semantics: arrows step by one month,
-		// Home/End jump to the newest / oldest one.
-		onThumbKey(event: KeyboardEvent) {
-			const index = this.months.indexOf(this.activeMonth)
-			let target: string | undefined
-			switch (event.key) {
-				case 'ArrowUp':
-				case 'ArrowLeft':
-					target = this.months[Math.max(0, index - 1)]
-					break
-				case 'ArrowDown':
-				case 'ArrowRight':
-					target = this.months[Math.min(this.months.length - 1, index + 1)]
-					break
-				case 'Home':
-					target = this.months[0]
-					break
-				case 'End':
-					target = this.months[this.months.length - 1]
-					break
-				default:
-					return
-			}
-
-			event.preventDefault()
-			if (target !== undefined && target !== this.activeMonth) {
-				this.$emit('jump', target)
-			}
-		},
-	},
+onBeforeUnmount(() => {
+	stopDrag()
 })
 </script>
 

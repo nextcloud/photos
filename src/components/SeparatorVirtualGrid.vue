@@ -13,25 +13,16 @@
 	</h2>
 </template>
 
-<script lang='ts'>
+<script setup lang="ts">
 import { n } from '@nextcloud/l10n'
 
-export default {
-	name: 'SeparatorVirtualGrid',
-
+defineOptions({
 	inheritAttrs: false,
+})
 
-	props: {
-		item: {
-			type: Object,
-			required: true,
-		},
-	},
-
-	methods: {
-		n,
-	},
-}
+defineProps<{
+	item: Record<string, unknown>
+}>()
 </script>
 
 <style lang="scss" scoped>
