@@ -21,7 +21,7 @@ import type { PlacesValueType } from '../../services/PhotosFilters/placesFilter.
 import { generateUrl } from '@nextcloud/router'
 import { computed } from 'vue'
 import NcChip from '@nextcloud/vue/components/NcChip'
-import useFetchCollections from '../../mixins/useFetchCollections.ts'
+import { useFetchCollections } from '../../composables/useFetchCollections.ts'
 import { placesPrefix } from '../../store/places.ts'
 import { usePlacesStore } from '../../store/places.ts'
 

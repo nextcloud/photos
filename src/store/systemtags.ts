@@ -72,6 +72,16 @@ export const useSystemTagsStore = defineStore('systemtags', () => {
 	}
 
 	/**
+	 * Drop a file from the list of a tag, after it was deleted.
+	 *
+	 * @param id - Id of the tag
+	 * @param fileId - Id of the deleted file
+	 */
+	function removeTagFile(id: string, fileId: number): void {
+		tagsFiles.value[id] = (tagsFiles.value[id] ?? []).filter((tagFileId) => tagFileId !== fileId)
+	}
+
+	/**
 	 * @param id - Id of the tag
 	 * @param signal - Abort signal of the caller
 	 */
@@ -105,6 +115,7 @@ export const useSystemTagsStore = defineStore('systemtags', () => {
 		tagsFiles,
 		updateTags,
 		removeTag,
+		removeTagFile,
 		updateTag,
 		fetchTagFiles,
 		fetchAllTags,
