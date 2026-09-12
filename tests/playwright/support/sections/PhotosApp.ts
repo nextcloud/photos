@@ -17,6 +17,7 @@ import { PlacesPage } from './PlacesPage.ts'
 import { PublicAlbumPage } from './PublicAlbumPage.ts'
 import { SharedAlbumPage } from './SharedAlbumPage.ts'
 import { SharedAlbumsPage } from './SharedAlbumsPage.ts'
+import { TagsPage } from './TagsPage.ts'
 import { TimelinePage } from './TimelinePage.ts'
 import { ViewerModal } from './ViewerModal.ts'
 
@@ -42,6 +43,7 @@ export class PhotosApp {
 	public readonly folders: FoldersPage
 	public readonly faces: FacesPage
 	public readonly face: FacePage
+	public readonly tags: TagsPage
 	public readonly viewer: ViewerModal
 
 	constructor(public readonly page: Page) {
@@ -58,6 +60,7 @@ export class PhotosApp {
 		this.folders = new FoldersPage(page)
 		this.faces = new FacesPage(page)
 		this.face = new FacePage(page)
+		this.tags = new TagsPage(page)
 		this.viewer = new ViewerModal(page)
 	}
 }
