@@ -18,7 +18,7 @@
 	</NcAppSettingsDialog>
 </template>
 
-<script lang='ts'>
+<script setup lang="ts">
 import { t } from '@nextcloud/l10n'
 import NcAppSettingsDialog from '@nextcloud/vue/components/NcAppSettingsDialog'
 import NcAppSettingsSection from '@nextcloud/vue/components/NcAppSettingsSection'
@@ -27,35 +27,19 @@ import KeyboardShortcutsSettings from './KeyboardShortcutsSettings.vue'
 import PhotosSourceLocationsSettings from './PhotosSourceLocationsSettings.vue'
 import PhotosUploadLocationSettings from './PhotosUploadLocationSettings.vue'
 
-export default {
-	name: 'SettingsDialog',
+withDefaults(defineProps<{
+	open?: boolean
+}>(), {
+	open: false,
+})
 
-	components: {
-		NcAppSettingsDialog,
-		NcAppSettingsSection,
-		CroppedLayoutSettings,
-		KeyboardShortcutsSettings,
-		PhotosSourceLocationsSettings,
-		PhotosUploadLocationSettings,
-	},
+const emit = defineEmits<{
+	'update:open': [open: boolean]
+}>()
 
-	props: {
-		open: {
-			type: Boolean,
-			default: false,
-		},
-	},
-
-	emits: ['update:open'],
-
-	methods: {
-		// This can only be called if the AppSettingsDialog
-		// is shown. So closing only
-		onClose() {
-			this.$emit('update:open', false)
-		},
-
-		t,
-	},
+// This can only be called if the AppSettingsDialog
+// is shown. So closing only
+function onClose() {
+	emit('update:open', false)
 }
 </script>
