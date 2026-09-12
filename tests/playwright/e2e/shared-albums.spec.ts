@@ -10,6 +10,7 @@ import type { SeededMedia } from '../support/utils/media.ts'
 import { expect, test } from '../support/fixtures/photos-app.ts'
 import { PublicAlbumPage } from '../support/sections/PublicAlbumPage.ts'
 import { sharedAlbumName } from '../support/sections/SharedAlbumsPage.ts'
+import { ViewerModal } from '../support/sections/ViewerModal.ts'
 import { collectionPhotoName, MEDIA_FIXTURES } from '../support/utils/media.ts'
 
 const [firstPhoto, secondPhoto, thirdPhoto] = MEDIA_FIXTURES
@@ -313,6 +314,31 @@ test.describe('An album shared through a public link', () => {
 
 		const download = await publicAlbum.downloadPhoto(inAlbum)
 		expect(download.suggestedFilename()).toBe(inAlbum)
+
+		await visitorPage.close()
+	})
+
+	test('lets a visitor look at one of its photos', async ({ browser, baseURL, photosApp, media }) => {
+		const { album, albums } = photosApp
+		const photo = MEDIA_FIXTURES[2]
+
+		await albums.open()
+		await albums.createAlbum(albumName)
+		await album.addPhotos(albumName, [photo])
+
+		const link = await (await album.openCollaborators()).createPublicLink()
+
+		const visitorPage = await browser.newPage({ storageState: undefined, baseURL })
+		const publicAlbum = new PublicAlbumPage(visitorPage)
+		const viewer = new ViewerModal(visitorPage)
+
+		await publicAlbum.open(link)
+		await publicAlbum.grid.open(collectionPhotoName(media[photo], photo))
+
+		// The visitor has no session, so the photo has to come through the
+		// preview endpoint of the album rather than the one of the files.
+		await viewer.waitForPhoto(photo)
+		await expect.poll(() => viewer.image().evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true)
 
 		await visitorPage.close()
 	})

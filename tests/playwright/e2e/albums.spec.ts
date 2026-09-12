@@ -131,6 +131,17 @@ test.describe('Managing an album', () => {
 		await expect(album.location()).toHaveCount(0)
 	})
 
+	test('opens a photo of the album in the viewer as the file it stands for', async ({ media, photosApp }) => {
+		const { album, viewer } = photosApp
+
+		await album.grid.open(inAlbum(media, ALBUM_PHOTOS[0]))
+
+		// The album lists the photo under a name of its own, the viewer shows
+		// the file itself, which is what it acts on.
+		await viewer.waitForPhoto(ALBUM_PHOTOS[0])
+		await expect.poll(() => viewer.image().evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true)
+	})
+
 	test('drops a photo of the album when the file itself is deleted', async ({ media, photosApp }) => {
 		const { album, timeline } = photosApp
 

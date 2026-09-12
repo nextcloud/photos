@@ -14,11 +14,10 @@ export class ViewerModal {
 	constructor(public readonly page: Page) {}
 
 	/**
-	 * The viewer itself. Its class tells it apart from the slideshow of the photos
-	 * app, which is a dialog of its own.
+	 * The viewer itself, the one modal of the page carrying its class.
 	 */
 	public dialog(): Locator {
-		return this.page.locator('.viewer')
+		return this.page.locator('.viewer__modal')
 	}
 
 	/**
@@ -57,9 +56,14 @@ export class ViewerModal {
 		return this.dialog().getByRole('button', { name: 'Start slideshow' })
 	}
 
+	/** The image on screen, if the file on screen is one. */
+	public image(): Locator {
+		return this.dialog().locator('img')
+	}
+
 	/** The player of the video on screen, if the file on screen is one. */
 	public video(): Locator {
-		return this.dialog().locator('.viewer__file--active video')
+		return this.dialog().locator('video')
 	}
 
 	/**
