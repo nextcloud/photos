@@ -11,9 +11,10 @@ import getSystemTags from '../services/SystemTags.js'
 import getTaggedImages from '../services/TaggedImages.js'
 import { sortCompare } from '../utils/fileUtils.js'
 
+/** A tag, identified by the `id` of the Node rather than its file id. */
 export type Tag = Folder & {
+	readonly id: string
 	attributes: {
-		id: number
 		'display-name': string
 		'user-visible': boolean
 		'user-assignable': boolean
@@ -24,9 +25,9 @@ export type Tag = Folder & {
 }
 
 const state = {
-	tags: {} as Record<number, Tag>,
-	names: {} as Record<string, number>,
-	tagsFiles: {} as Record<number, number[]>,
+	tags: {} as Record<string, Tag>,
+	names: {} as Record<string, string>,
+	tagsFiles: {} as Record<string, number[]>,
 }
 
 export type SystemTagsState = typeof state
@@ -45,8 +46,8 @@ const mutations = {
 
 			// store tag and its index
 			list.forEach((tag) => {
-				Vue.set(state.tags, tag.attributes.id, tag)
-				Vue.set(state.names, tag.attributes['display-name'], tag.attributes.id)
+				Vue.set(state.tags, tag.id, tag)
+				Vue.set(state.names, tag.attributes['display-name'], tag.id)
 			})
 		}
 	},
@@ -58,7 +59,7 @@ const mutations = {
 	 * @param root0
 	 * @param root0.id
 	 */
-	removeTag(state: SystemTagsState, { id }: { id: number }) {
+	removeTag(state: SystemTagsState, { id }: { id: string }) {
 		Vue.delete(state.names, state.tags[id].attributes.displayname)
 		Vue.delete(state.tags, id)
 	},
@@ -71,7 +72,7 @@ const mutations = {
 	 * @param root0.id
 	 * @param root0.files
 	 */
-	updateTag(state: SystemTagsState, { id, files }: { id: number, files: File[] }) {
+	updateTag(state: SystemTagsState, { id, files }: { id: string, files: File[] }) {
 		if (files.length === 0) {
 			// Remove this tag from the list if there's no files for it
 			Vue.delete(state.names, state.tags[id].attributes.displayname)
@@ -91,7 +92,7 @@ const mutations = {
 const getters = {
 	tags: (state: SystemTagsState) => state.tags,
 	tagsNames: (state: SystemTagsState) => state.names,
-	tag: (state: SystemTagsState) => (id: number) => state.tags[id],
+	tag: (state: SystemTagsState) => (id: string) => state.tags[id],
 	tagId: (state: SystemTagsState) => (name: string) => state.names[name],
 }
 
@@ -114,7 +115,7 @@ const actions = {
 	 * @param root0.id
 	 * @param root0.files
 	 */
-	updateTag(context: PhotosContext<SystemTagsState>, { id, files }: { id: number, files: File[] }) {
+	updateTag(context: PhotosContext<SystemTagsState>, { id, files }: { id: string, files: File[] }) {
 		if (files.length === 0) {
 			// Remove this tag from the list if there's no files for it
 			context.commit('removeTag', { id })
@@ -122,7 +123,7 @@ const actions = {
 		context.commit('updateTag', { id, files })
 	},
 
-	async fetchTagFiles(context: PhotosContext<SystemTagsState>, { id, signal }: { id: number, signal: AbortSignal }) {
+	async fetchTagFiles(context: PhotosContext<SystemTagsState>, { id, signal }: { id: string, signal: AbortSignal }) {
 		try {
 			// get data
 			const files = await getTaggedImages(id, { signal })
