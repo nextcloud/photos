@@ -86,6 +86,13 @@ test.describe('The slideshow of the timeline', () => {
 })
 
 test.describe('The slideshow of the videos view', () => {
+	/**
+	 * The view leads with the newest video, which is not the playable one, so the
+	 * slideshow only reaches that one after a turn: the first video plays out and
+	 * the slide is counted down before moving on.
+	 */
+	const SLIDESHOW_TURN = 15_000
+
 	test.beforeEach(async ({ photosApp, seedVideos }) => {
 		await seedVideos()
 		await photosApp.timeline.open(Timeline.videos)
@@ -94,7 +101,7 @@ test.describe('The slideshow of the videos view', () => {
 	test('plays the video rather than showing a still of it', async ({ photosApp }) => {
 		const slideshow = await photosApp.timeline.startSlideshow()
 
-		await slideshow.waitForPhoto(PLAYABLE_VIDEO)
+		await slideshow.waitForPhoto(PLAYABLE_VIDEO, { timeout: SLIDESHOW_TURN })
 		// Held first, so that the slideshow does not move on while the player is
 		// being looked at.
 		await slideshow.pause()
@@ -112,7 +119,7 @@ test.describe('The slideshow of the videos view', () => {
 	test('holds on the video until it has played out', async ({ photosApp }) => {
 		const slideshow = await photosApp.timeline.startSlideshow()
 
-		await slideshow.waitForPhoto(PLAYABLE_VIDEO)
+		await slideshow.waitForPhoto(PLAYABLE_VIDEO, { timeout: SLIDESHOW_TURN })
 
 		// The slide is not counted down while the video plays, or a video longer
 		// than the delay of the slideshow would be cut off in the middle.
