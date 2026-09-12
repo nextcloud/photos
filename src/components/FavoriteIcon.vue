@@ -3,13 +3,17 @@
  - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<NcIconSvgWrapper class="favorite-marker-icon" :name="t('photos', 'Favorite')" :svg="StarSvg" />
+	<NcIconSvgWrapper
+		ref="icon"
+		class="favorite-marker-icon"
+		:name="t('photos', 'Favorite')"
+		:svg="StarSvg" />
 </template>
 
-<script lang='ts'>
+<script setup lang="ts">
 import StarSvg from '@mdi/svg/svg/star.svg?raw'
 import { t } from '@nextcloud/l10n'
-import { defineComponent } from 'vue'
+import { nextTick, onMounted, useTemplateRef } from 'vue'
 import NcIconSvgWrapper from '@nextcloud/vue/components/NcIconSvgWrapper'
 
 /**
@@ -23,29 +27,14 @@ import NcIconSvgWrapper from '@nextcloud/vue/components/NcIconSvgWrapper'
  * }
  * ```
  */
-export default defineComponent({
-	name: 'FavoriteIcon',
-	components: {
-		NcIconSvgWrapper,
-	},
+const icon = useTemplateRef<InstanceType<typeof NcIconSvgWrapper>>('icon')
 
-	data() {
-		return {
-			StarSvg,
-		}
-	},
-
-	mounted() {
-		this.$nextTick(() => {
-			// MDI default viewbox is "0 0 24 24" but we add a stroke of 10px so we must adjust it
-			const el = this.$el.querySelector('svg')
-			el?.setAttribute?.('viewBox', '-4 -4 30 30')
-		})
-	},
-
-	methods: {
-		t,
-	},
+onMounted(() => {
+	nextTick(() => {
+		// MDI default viewbox is "0 0 24 24" but we add a stroke of 10px so we must adjust it
+		const el = (icon.value?.$el as HTMLElement | undefined)?.querySelector('svg')
+		el?.setAttribute?.('viewBox', '-4 -4 30 30')
+	})
 })
 </script>
 
