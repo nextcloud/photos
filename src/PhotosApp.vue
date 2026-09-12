@@ -188,7 +188,7 @@
 	</NcContent>
 </template>
 
-<script lang='ts'>
+<script setup lang="ts">
 import type { FilterOption } from './services/PhotosFilters/PhotosFilter.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
@@ -197,7 +197,8 @@ import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import debounce from 'debounce'
 import { storeToRefs } from 'pinia'
-import { ref, watch } from 'vue'
+import { computed, onBeforeMount, onBeforeUnmount, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
 import NcAppNavigation from '@nextcloud/vue/components/NcAppNavigation'
 import NcAppNavigationItem from '@nextcloud/vue/components/NcAppNavigationItem'
@@ -247,151 +248,84 @@ import { nameFilterId } from './services/PhotosFilters/nameFilter.ts'
 import { useFilesStore } from './store/files.ts'
 import { useFilterStore } from './store/filters.ts'
 
-export default {
-	name: 'PhotosApp',
-	components: {
-		AccountBoxMultiple,
-		AccountBoxMultipleOutline,
-		CogOutline,
-		CalendarToday,
-		CalendarTodayOutline,
-		CameraIcon,
-		CameraOutline,
-		AccountGroup,
-		AccountGroupOutline,
-		Folder,
-		FolderOutline,
-		ImageMultiple,
-		ImageMultipleOutline,
-		ImageIcon,
-		ImageOutline,
-		ShareVariant,
-		ShareVariantOutline,
-		Star,
-		StarOutline,
-		Tag,
-		TagOutline,
-		TimelapseIcon,
-		VideoIcon,
-		VideoOutline,
-		Magnify,
-		MapIcon,
-		MapOutline,
-		MapMarker,
-		MapMarkerOutline,
-		NcAppContent,
-		NcAppNavigation,
-		NcAppNavigationItem,
-		NcButton,
-		NcContent,
-		NcTextField,
-		SettingsDialog,
-		PhotosFiltersInput,
-		PhotosFiltersDisplay,
-	},
+const route = useRoute()
+const filesStore = useFilesStore()
+const filtersStore = useFilterStore()
+const { selectedFilters } = storeToRefs(filtersStore)
 
-	setup() {
-		const filtersStore = useFilterStore()
-		const { selectedFilters } = storeToRefs(filtersStore)
+const searchTerm = ref('')
+const openedSettings = ref(false)
 
-		const searchTerm = ref('')
+const currentUser = getCurrentUser()
+const showPeopleMenuEntry = currentUser === null
+	? false
+	: (currentUser.isAdmin && loadState('photos', 'showPeopleMenuEntry', true) && isAppStoreEnabled) || isRecognizeInstalled
 
-		// Debounced so that a search request is not sent on every keystroke.
-		const applySearchTerm = debounce((value: string) => {
-			selectedFilters.value[nameFilterId] = value === '' ? [] : [value]
-		}, 300)
+const isTimelineView = computed(() => typeof route.name === 'string' && ['all_media', 'photos', 'videos'].includes(route.name))
 
-		watch(searchTerm, (value) => applySearchTerm(value.trim()))
+// Debounced so that a search request is not sent on every keystroke.
+const applySearchTerm = debounce((value: string) => {
+	selectedFilters.value[nameFilterId] = value === '' ? [] : [value]
+}, 300)
 
-		// Keep the field in sync when the filter is cleared somewhere else,
-		// like when leaving the timeline.
-		watch(() => selectedFilters.value[nameFilterId], (values) => {
-			const [value = ''] = values as string[]
-			if (value !== searchTerm.value.trim()) {
-				searchTerm.value = value
-			}
-		})
+watch(searchTerm, (value) => applySearchTerm(value.trim()))
 
-		return {
-			selectedFilters,
-			searchTerm,
-			filesStore: useFilesStore(),
-		}
-	},
+// Keep the field in sync when the filter is cleared somewhere else,
+// like when leaving the timeline.
+watch(() => selectedFilters.value[nameFilterId], (values) => {
+	const [value = ''] = values as string[]
+	if (value !== searchTerm.value.trim()) {
+		searchTerm.value = value
+	}
+})
 
-	data() {
-		return {
-			svgplaceholder,
-			imgplaceholder,
-			videoplaceholder,
-			areTagsInstalled,
-
-			showPeopleMenuEntry: getCurrentUser() === null
-				? false
-				: (getCurrentUser().isAdmin && loadState('photos', 'showPeopleMenuEntry', true) && isAppStoreEnabled) || isRecognizeInstalled,
-
-			openedSettings: false,
-		}
-	},
-
-	computed: {
-		isTimelineView() {
-			return ['all_media', 'photos', 'videos'].includes(this.$route.name || '')
-		},
-	},
-
-	async beforeMount() {
-		// Register excluded paths
-		const files = loadState('photos', 'nomedia-paths', [])
-		this.filesStore.setNomediaPaths(files)
-		logger.debug('Known .nomedia and .noimage  paths', { files })
-
-		if ('serviceWorker' in navigator) {
-			// Use the window load event to keep the page load performant
-			window.addEventListener('load', () => {
-				navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js', {}, {
-					noRewrite: true,
-				}), {
-					scope: generateUrl('/apps/photos'),
-				}).then((registration) => {
-					logger.debug('SW registered: ', { registration })
-				}).catch((registrationError) => {
-					logger.error('SW registration failed: ', { registrationError })
-				})
-			})
-		} else {
-			logger.debug('Service Worker is not enabled on this browser.')
-		}
-	},
-
-	beforeUnmount() {
-		window.removeEventListener('load', () => {
-			navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js', {}, {
-				noRewrite: true,
-			}))
-		})
-	},
-
-	methods: {
-		showSettings() {
-			this.openedSettings = true
-		},
-
-		selectFilter(filterOption: FilterOption<unknown>) {
-			this.selectedFilters[filterOption.filterId].push(filterOption.value)
-		},
-
-		deselectFilter(filterOption: { filterId: string, value: unknown }) {
-			const index = this.selectedFilters[filterOption.filterId].indexOf(filterOption.value)
-
-			if (index !== -1) {
-				this.selectedFilters[filterOption.filterId].splice(index, 1)
-			}
-		},
-
-		t,
-	},
+function showSettings() {
+	openedSettings.value = true
 }
+
+function selectFilter(filterOption: FilterOption<unknown>) {
+	selectedFilters.value[filterOption.filterId].push(filterOption.value)
+}
+
+function deselectFilter(filterOption: { filterId: string, value: unknown }) {
+	const index = selectedFilters.value[filterOption.filterId].indexOf(filterOption.value)
+
+	if (index !== -1) {
+		selectedFilters.value[filterOption.filterId].splice(index, 1)
+	}
+}
+
+/**
+ * Register the service worker once the page is loaded, to keep the load performant.
+ */
+function registerServiceWorker() {
+	navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js', {}, {
+		noRewrite: true,
+	}), {
+		scope: generateUrl('/apps/photos'),
+	}).then((registration) => {
+		logger.debug('SW registered: ', { registration })
+	}).catch((registrationError) => {
+		logger.error('SW registration failed: ', { registrationError })
+	})
+}
+
+onBeforeMount(() => {
+	// Register excluded paths
+	const files = loadState('photos', 'nomedia-paths', [])
+	filesStore.setNomediaPaths(files)
+	logger.debug('Known .nomedia and .noimage  paths', { files })
+
+	if ('serviceWorker' in navigator) {
+		window.addEventListener('load', registerServiceWorker)
+	} else {
+		logger.debug('Service Worker is not enabled on this browser.')
+	}
+})
+
+onBeforeUnmount(() => {
+	window.removeEventListener('load', registerServiceWorker)
+})
 </script>
 
 <style lang="scss">

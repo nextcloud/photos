@@ -82,11 +82,10 @@
 			:scrollToSection="targetMonth"
 			@needContent="getFiles"
 			@focusout="onFocusOut">
-			<template #default="{ file, height, isHeader }">
+			<template #default="{ file, isHeader }">
 				<h3
 					v-if="isHeader"
 					:id="`photos-picker-section-header-${file.id}`"
-					:style="{ height: `${height}px` }"
 					class="section-header">
 					{{ dateMonthAndYear(file.id) }}
 				</h3>
@@ -103,17 +102,14 @@
 	</NcDialog>
 </template>
 
-<script lang='ts'>
+<script setup lang="ts">
 import type { File, Node } from '@nextcloud/files'
-import type { PropType } from 'vue'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
-import {
-	defineComponent,
-} from 'vue'
+import { computed, ref, watch } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
@@ -123,152 +119,106 @@ import NcUploadPicker from '@nextcloud/vue/components/NcUploadPicker'
 import ImagePlusOutline from 'vue-material-design-icons/ImagePlusOutline.vue'
 import FileComponent from './FileComponent.vue'
 import FilesListViewer from './FilesListViewer.vue'
-import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
-import FilesByMonthMixin from '../mixins/FilesByMonthMixin.js'
-import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
+import { useAbortController } from '../composables/useAbortController.ts'
+import { useFetchFiles } from '../composables/useFetchFiles.ts'
+import { useFilesByMonth } from '../composables/useFilesByMonth.ts'
+import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { allMimes as allowedMimes } from '../services/AllowedMimes.ts'
 import { getFolderContent } from '../services/FolderContent.ts'
 import { useFilesStore } from '../store/files.ts'
 import { useUserConfigStore } from '../store/userConfig.ts'
 
-export default defineComponent({
-	name: 'PhotosPicker',
+const props = withDefaults(defineProps<{
+	/**
+	 * If the photos picker should be opened
+	 */
+	open?: boolean
 
-	components: {
-		FileComponent,
-		FilesListViewer,
-		ImagePlusOutline,
-		NcButton,
-		NcDialog,
-		NcLoadingIcon,
-		NcSelect,
-		NcNoteCard,
-		NcUploadPicker,
-	},
+	/**
+	 * Name to be used as heading
+	 */
+	name: string
 
-	mixins: [
-		FetchFilesMixin,
-		FilesByMonthMixin,
-		FilesSelectionMixin,
-	],
+	// Label to show in the submit button.
+	destination: string
 
-	props: {
-		/**
-		 * If the photos picker should be opened
-		 */
-		open: {
-			type: Boolean,
-			default: true,
-		},
+	// List of file ids to not show.
+	blacklistIds?: string[]
 
-		/**
-		 * Name to be used as heading
-		 */
-		name: {
-			type: String,
-			required: true,
-		},
-
-		// Label to show in the submit button.
-		destination: {
-			type: String,
-			required: true,
-		},
-
-		// List of file ids to not show.
-		blacklistIds: {
-			type: Array as PropType<string[]>,
-			default: () => [],
-		},
-
-		// Whether we should disable the submit button and show a spinner.
-		loading: {
-			type: Boolean,
-			default: false,
-		},
-	},
-
-	emits: ['filesPicked', 'update:open'],
-
-	setup() {
-		return {
-			isMobile: useIsMobile(),
-			filesStore: useFilesStore(),
-			userConfigStore: useUserConfigStore(),
-		}
-	},
-
-	data() {
-		return {
-			allowedMimes,
-			targetMonth: null as string | null,
-			currentUser: getCurrentUser()?.uid,
-		}
-	},
-
-	computed: {
-		files() {
-			return this.filesStore.files
-		},
-
-		photosLocationFolder() {
-			return this.userConfigStore.photosLocationFolder
-		},
-	},
-
-	watch: {
-		monthsList(value) {
-			if (this.targetMonth === null) {
-				this.targetMonth = value[0]
-			}
-		},
-	},
-
-	methods: {
-		/**
-		 * List the nodes of the photos folder, so the picker can spot conflicts.
-		 */
-		async uploadDestinationContent(): Promise<Node[]> {
-			const { folders, files } = await getFolderContent(this.photosLocationFolder?.path ?? '/', { signal: this.abortController.signal })
-			return [...folders, ...files]
-		},
-
-		onFocusOut(event: FocusEvent) {
-			if (event.relatedTarget === null) { // Focus escaping to body
-				event.target?.focus({ preventScroll: true })
-			}
-		},
-
-		getFiles() {
-			this.fetchFiles({}, this.shouldShowFile)
-		},
-
-		refreshFiles() {
-			this.fetchFiles({ firstResult: 0 }, this.shouldShowFile, true)
-		},
-
-		shouldShowFile(file: File) {
-			return file.attributes['mount-type'] === '' && !this.blacklistIds.includes(file.fileid?.toString() ?? '')
-		},
-
-		emitPickedEvent() {
-			this.$emit('filesPicked', this.selectedFileIds)
-			this.resetSelection()
-		},
-
-		/**
-		 * @param date - In the following format: YYYYMM
-		 */
-		dateMonthAndYear(date: string) {
-			if (this.isMobile) {
-				return moment(date, 'YYYYMM').format('MMM YYYY')
-			}
-			return moment(date, 'YYYYMM').format('MMMM YYYY')
-		},
-
-		t,
-	},
+	// Whether we should disable the submit button and show a spinner.
+	loading?: boolean
+}>(), {
+	open: true,
+	blacklistIds: () => [],
+	loading: false,
 })
+
+const emit = defineEmits<{
+	filesPicked: [fileIds: string[]]
+	'update:open': [open: boolean]
+}>()
+
+const isMobile = useIsMobile()
+const filesStore = useFilesStore()
+const userConfigStore = useUserConfigStore()
+const { abortSignal } = useAbortController()
+const { fetchFiles, fetchedFileIds, loadingFiles } = useFetchFiles()
+const { selection, selectedFileIds, onFileSelectToggle, resetSelection } = useFilesSelection()
+
+const targetMonth = ref<string>()
+const currentUser = getCurrentUser()?.uid
+
+const files = computed(() => filesStore.files)
+const photosLocationFolder = computed(() => userConfigStore.photosLocationFolder)
+
+const { fileIdsByMonth, monthsList } = useFilesByMonth(fetchedFileIds, files)
+
+watch(monthsList, (value) => {
+	if (targetMonth.value === undefined) {
+		targetMonth.value = value[0]
+	}
+})
+
+/**
+ * List the nodes of the photos folder, so the picker can spot conflicts.
+ */
+async function uploadDestinationContent(): Promise<Node[]> {
+	const { folders, files } = await getFolderContent(photosLocationFolder.value?.path ?? '/', { signal: abortSignal.value })
+	return [...folders, ...files]
+}
+
+function onFocusOut(event: FocusEvent) {
+	if (event.relatedTarget === null) { // Focus escaping to body
+		(event.target as HTMLElement | null)?.focus({ preventScroll: true })
+	}
+}
+
+function getFiles() {
+	fetchFiles({}, shouldShowFile)
+}
+
+function refreshFiles() {
+	fetchFiles({ firstResult: 0 }, shouldShowFile, true)
+}
+
+function shouldShowFile(file: File) {
+	return file.attributes['mount-type'] === '' && !props.blacklistIds.includes(file.fileid?.toString() ?? '')
+}
+
+function emitPickedEvent() {
+	emit('filesPicked', selectedFileIds.value)
+	resetSelection()
+}
+
+/**
+ * @param date - In the following format: YYYYMM
+ */
+function dateMonthAndYear(date: string) {
+	if (isMobile.value) {
+		return moment(date, 'YYYYMM').format('MMM YYYY')
+	}
+	return moment(date, 'YYYYMM').format('MMMM YYYY')
+}
 </script>
 
 <style lang="scss" scoped>

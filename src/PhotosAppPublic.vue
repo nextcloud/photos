@@ -28,8 +28,9 @@
 	</NcContent>
 </template>
 
-<script lang='ts'>
+<script setup lang="ts">
 import { generateUrl } from '@nextcloud/router'
+import { onBeforeMount, onBeforeUnmount } from 'vue'
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
 import NcContent from '@nextcloud/vue/components/NcContent'
 import svgplaceholder from './assets/file-placeholder.svg'
@@ -37,46 +38,30 @@ import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'
 import { logger } from './services/logger.ts'
 
-export default {
-	name: 'PhotosAppPublic',
-	components: {
-		NcAppContent,
-		NcContent,
-	},
-
-	data() {
-		return {
-			svgplaceholder,
-			imgplaceholder,
-			videoplaceholder,
-		}
-	},
-
-	async beforeMount() {
-		if ('serviceWorker' in navigator) {
-			// Use the window load event to keep the page load performant
-			window.addEventListener('load', async () => {
-				try {
-					const url = generateUrl('/apps/photos/service-worker.js', {}, { noRewrite: true })
-					const registration = await navigator.serviceWorker.register(url, { scope: generateUrl('/apps/photos') })
-					logger.debug('SW registered: ', { registration })
-				} catch (error) {
-					logger.error('SW registration failed: ', { error })
-				}
-			})
-		} else {
-			logger.debug('Service Worker is not enabled on this browser.')
-		}
-	},
-
-	beforeUnmount() {
-		window.removeEventListener('load', () => {
-			navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js', {}, {
-				noRewrite: true,
-			}))
-		})
-	},
+/**
+ * Register the service worker once the page is loaded, to keep the load performant.
+ */
+async function registerServiceWorker() {
+	try {
+		const url = generateUrl('/apps/photos/service-worker.js', {}, { noRewrite: true })
+		const registration = await navigator.serviceWorker.register(url, { scope: generateUrl('/apps/photos') })
+		logger.debug('SW registered: ', { registration })
+	} catch (error) {
+		logger.error('SW registration failed: ', { error })
+	}
 }
+
+onBeforeMount(() => {
+	if ('serviceWorker' in navigator) {
+		window.addEventListener('load', registerServiceWorker)
+	} else {
+		logger.debug('Service Worker is not enabled on this browser.')
+	}
+})
+
+onBeforeUnmount(() => {
+	window.removeEventListener('load', registerServiceWorker)
+})
 </script>
 
 <style lang="scss">
