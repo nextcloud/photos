@@ -119,14 +119,14 @@
 			v-if="allowSelection"
 			class="selection-checkbox"
 			:aria-label="t('photos', 'Select image {imageName}', { imageName: file.basename })"
-			:model-value="selected"
-			@update:checked="onToggle" />
+			:modelValue="selected"
+			@update:modelValue="onToggle" />
 
 		<PhotoActionsMenu
 			v-if="showActionsMenu"
 			class="photo-actions-menu"
 			:photo="photoTarget"
-			@deleted="$emit('deleted', $event)" />
+			@deleted="emit('deleted', $event)" />
 
 		<Transition name="favorite-pop">
 			<FavoriteIcon v-if="file.attributes.favorite === 1" class="favorite-state" />
@@ -134,320 +134,273 @@
 	</div>
 </template>
 
-<script lang='ts'>
-import type { PropType } from 'vue'
+<script setup lang="ts">
+import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import type { PhotoFile } from '../store/files.js'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
+import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import NcBlurHash from '@nextcloud/vue/components/NcBlurHash'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import PlayCircleOutlineIcon from 'vue-material-design-icons/PlayCircleOutline.vue'
 import FavoriteIcon from './FavoriteIcon.vue'
 import PhotoActionsMenu from './PhotoActionsMenu.vue'
-import logger from '../services/logger.ts'
+import { logger } from '../services/logger.ts'
 import { isCachedPreview } from '../services/PreviewService.js'
 import { getVideoDurationFromUrl, toPhotoTarget } from '../utils/fileUtils.ts'
 import { isPreviewableVideoMime, playsVideoPreviews, VIDEO_PREVIEW_DELAY } from '../utils/videoPreview.ts'
 
-export default {
-	name: 'FileComponent',
-	components: {
-		FavoriteIcon,
-		NcBlurHash,
-		NcCheckboxRadioSwitch,
-		PhotoActionsMenu,
-		PlayCircleOutlineIcon,
-	},
+defineOptions({ inheritAttrs: false })
 
-	inheritAttrs: false,
-	props: {
-		file: {
-			type: Object as PropType<PhotoFile>,
-			required: true,
-		},
+const props = withDefaults(defineProps<{
+	file: PhotoFile
+	selected?: boolean
+	allowSelection?: boolean
+	// How many photos this tile stands for, one being itself. A tile standing for
+	// several of them was folded out of a run of photos taken in one go, and is
+	// drawn as a deck of cards carrying their count.
+	burstCount?: number
+	// Opt-out: the menu manages the photo it belongs to, which only gets in
+	// the way where photos are being picked rather than managed.
+	showActionsMenu?: boolean
+	/**
+	 * Whether the preview fills the tile, cropped to it, or is fit whole
+	 * inside it. A grid laying its tiles out in the shape of the photos they
+	 * hold has nothing to crop away, one laying them out as squares does.
+	 */
+	cropped?: boolean
+}>(), {
+	selected: false,
+	allowSelection: true,
+	burstCount: 1,
+	// eslint-disable-next-line vue/no-boolean-default
+	showActionsMenu: true,
+	// eslint-disable-next-line vue/no-boolean-default
+	cropped: true,
+})
 
-		selected: {
-			type: Boolean,
-			default: false,
-		},
+const emit = defineEmits<{
+	click: [fileid: number]
+	selectToggled: [toggle: { id: number, value: boolean }]
+	deleted: [photo: PhotoTarget]
+}>()
 
-		allowSelection: {
-			type: Boolean,
-			default: true,
-		},
+// The dashboard widget mounts this component without a router.
+const route: RouteLocationNormalizedLoaded | undefined = useRoute()
+const isMobile = useIsMobile()
 
-		// How many photos this tile stands for, one being itself. A tile standing for
-		// several of them was folded out of a run of photos taken in one go, and is
-		// drawn as a deck of cards carrying their count.
-		burstCount: {
-			type: Number,
-			default: 1,
-		},
+const imgSmall = useTemplateRef<HTMLImageElement>('imgSmall')
+const imgLarge = useTemplateRef<HTMLImageElement>('imgLarge')
+const videoPreview = useTemplateRef<HTMLVideoElement>('videoPreview')
 
-		// Opt-out: the menu manages the photo it belongs to, which only gets in
-		// the way where photos are being picked rather than managed.
-		showActionsMenu: {
-			type: Boolean,
-			// eslint-disable-next-line vue/no-boolean-default
-			default: true,
-		},
+const initialized = ref(false)
+const loadedSmall = ref(false)
+const errorSmall = ref(false)
+const loadedLarge = ref(false)
+const errorLarge = ref(false)
+const videoDuration = ref('')
+let longPressTimeout: null | ReturnType<typeof setTimeout> = null
+const longPressed = ref(false)
+const videoPreviewPlaying = ref(false)
+let videoPreviewTimeout: null | ReturnType<typeof setTimeout> = null
+// A video that could not be played once is not tried again, or a broken
+// file would fire a load on every pass of the pointer.
+const videoPreviewFailed = ref(false)
 
-		/**
-		 * Whether the preview fills the tile, cropped to it, or is fit whole
-		 * inside it. A grid laying its tiles out in the shape of the photos they
-		 * hold has nothing to crop away, one laying them out as squares does.
-		 */
-		cropped: {
-			type: Boolean,
-			// eslint-disable-next-line vue/no-boolean-default
-			default: true,
-		},
-	},
+const photoTarget = computed<PhotoTarget>(() => toPhotoTarget(props.file))
 
-	emits: ['click', 'select-toggled', 'deleted'],
+const ariaLabel = computed<string>(() => {
+	if (props.file.attributes.favorite) {
+		return t('photos', 'Favorite image, open the full size "{name}" image', { name: props.file.basename })
+	}
+	return t('photos', 'Open the full size "{name}" image', { name: props.file.basename })
+})
 
-	data() {
-		return {
-			initialized: false,
-			loadedSmall: false,
-			errorSmall: false,
-			loadedLarge: false,
-			errorLarge: false,
-			isMobile: useIsMobile(),
-			videoDuration: '',
-			longPressTimeout: null as null | ReturnType<typeof setTimeout>,
-			longPressed: false,
-			videoPreviewPlaying: false,
-			videoPreviewTimeout: null as null | ReturnType<typeof setTimeout>,
-			// A video that could not be played once is not tried again, or a broken
-			// file would fire a load on every pass of the pointer.
-			videoPreviewFailed: false,
-		}
-	},
+const isStack = computed<boolean>(() => props.burstCount > 1)
 
-	computed: {
-		photoTarget(): PhotoTarget {
-			return toPhotoTarget(this.file)
-		},
+const isVideo = computed<boolean>(() => props.file.mime?.includes('video') ?? false)
 
-		ariaLabel(): string {
-			if (this.file.attributes.favorite) {
-				return t('photos', 'Favorite image, open the full size "{name}" image', { name: this.file.basename })
-			}
-			return t('photos', 'Open the full size "{name}" image', { name: this.file.basename })
-		},
+const decodedEtag = computed<string>(() => props.file.attributes.etag.replace('&quot;', '').replace('&quot;', ''))
 
-		isStack(): boolean {
-			return this.burstCount > 1
-		},
+const srcLarge = computed<string>(() => isMobile.value ? getItemURL(256) : getItemURL(1024))
 
-		isImage(): boolean {
-			return this.file.mime?.startsWith('image') ?? false
-		},
+const srcSmall = computed<string>(() => getItemURL(64))
 
-		isVideo(): boolean {
-			return this.file.mime?.includes('video') ?? false
-		},
+const blurhash = computed<string | undefined>(() => props.file.attributes['metadata-blurhash'])
 
-		decodedEtag(): string {
-			return this.file.attributes.etag.replace('&quot;', '').replace('&quot;', '')
-		},
+const isPreviewableVideo = computed<boolean>(() => isPreviewableVideoMime(props.file.mime))
 
-		srcLarge(): string {
-			return this.isMobile ? this.getItemURL(256) : this.getItemURL(1024)
-		},
+watch(() => props.file, async () => {
+	initialized.value = false
+	loadedSmall.value = false
+	errorSmall.value = false
+	loadedLarge.value = false
+	errorLarge.value = false
+	videoDuration.value = ''
 
-		srcSmall(): string {
-			return this.getItemURL(64)
-		},
+	// The grid recycles a tile for the next photo as it scrolls, so what was
+	// found about the previous one says nothing about this one.
+	cancelPreview()
+	videoPreviewFailed.value = false
 
-		blurhash(): string | undefined {
-			return this.file.attributes['metadata-blurhash']
-		},
+	await init()
+})
 
-		isPreviewableVideo(): boolean {
-			return isPreviewableVideoMime(this.file.mime)
-		},
-	},
+async function init() {
+	[loadedSmall.value, loadedLarge.value] = await Promise.all([
+		await isCachedPreview(srcSmall.value),
+		await isCachedPreview(srcLarge.value),
+	])
 
-	watch: {
-		async file() {
-			this.initialized = false
-			this.loadedSmall = false
-			this.errorSmall = false
-			this.loadedLarge = false
-			this.errorLarge = false
-			this.videoDuration = ''
+	initialized.value = true
 
-			// The grid recycles a tile for the next photo as it scrolls, so what was
-			// found about the previous one says nothing about this one.
-			this.cancelPreview()
-			this.videoPreviewFailed = false
-
-			await this.init()
-		},
-	},
-
-	async mounted() {
-		await this.init()
-	},
-
-	beforeDestroy() {
-		// cancel any pending load
-		if (this.$refs.imgSmall !== undefined) {
-			(this.$refs.imgSmall as HTMLImageElement).src = ''
-		}
-		if (this.$refs.imgLarge !== undefined) {
-			(this.$refs.imgLarge as HTMLImageElement).src = ''
-		}
-
-		this.cancelLongPress()
-		this.cancelPreview()
-	},
-
-	methods: {
-		async init() {
-			[this.loadedSmall, this.loadedLarge] = await Promise.all([
-				await isCachedPreview(this.srcSmall),
-				await isCachedPreview(this.srcLarge),
-			])
-
-			this.initialized = true
-
-			await this.getVideoDuration()
-		},
-
-		onClick() {
-			// A long press toggles the selection, the click it ends with must
-			// not open the file on top of it.
-			if (this.longPressed) {
-				this.longPressed = false
-				return
-			}
-
-			this.$emit('click', this.file.fileid)
-		},
-
-		// Long pressing a file selects it, which is easier to hit on a touch
-		// device than the checkbox.
-		startLongPress() {
-			if (!this.allowSelection) {
-				return
-			}
-
-			this.cancelLongPress()
-			this.longPressed = false
-			this.longPressTimeout = setTimeout(() => {
-				this.longPressed = true
-				this.onToggle(!this.selected)
-			}, 500)
-		},
-
-		cancelLongPress() {
-			if (this.longPressTimeout !== null) {
-				clearTimeout(this.longPressTimeout)
-				this.longPressTimeout = null
-			}
-		},
-
-		onLoadSmall() {
-			this.loadedSmall = true
-		},
-
-		onLoadLarge() {
-			this.loadedLarge = true
-		},
-
-		onErrorSmall() {
-			this.errorSmall = true
-		},
-
-		onErrorLarge() {
-			this.errorLarge = true
-		},
-
-		// Start playing the video of a tile once the pointer has rested on it, which
-		// is what keeps a sweep across the grid from loading every video it passes.
-		schedulePreview() {
-			if (!this.isPreviewableVideo || this.videoPreviewFailed || !playsVideoPreviews()) {
-				return
-			}
-
-			this.cancelPreview()
-			this.videoPreviewTimeout = setTimeout(() => {
-				this.videoPreviewTimeout = null
-				this.videoPreviewPlaying = true
-			}, VIDEO_PREVIEW_DELAY)
-		},
-
-		cancelPreview() {
-			if (this.videoPreviewTimeout !== null) {
-				clearTimeout(this.videoPreviewTimeout)
-				this.videoPreviewTimeout = null
-			}
-
-			if (!this.videoPreviewPlaying) {
-				return
-			}
-
-			// Emptying the source before the element goes away is what makes the
-			// browser let go of the buffered video instead of holding on to it.
-			const video = this.$refs.videoPreview as HTMLVideoElement | undefined
-			if (video !== undefined) {
-				video.pause()
-				video.removeAttribute('src')
-				video.load()
-			}
-
-			this.videoPreviewPlaying = false
-		},
-
-		onVideoPreviewError() {
-			this.videoPreviewFailed = true
-			this.videoPreviewPlaying = false
-		},
-
-		onToggle(value) {
-			this.$emit('select-toggled', { id: this.file.fileid, value })
-		},
-
-		getItemURL(size) {
-			const token = this.$route?.params.token
-			if (token) {
-				return generateUrl(`/apps/photos/api/v1/publicPreview/${this.file.fileid}?etag=${this.decodedEtag}&x=${size}&y=${size}&token=${token}`)
-			} else {
-				return generateUrl(`/apps/photos/api/v1/preview/${this.file.fileid}?etag=${this.decodedEtag}&x=${size}&y=${size}`)
-			}
-		},
-
-		async getVideoDuration() {
-			if (!this.isVideo) {
-				return
-			}
-
-			try {
-				const totalSeconds = await getVideoDurationFromUrl(this.file.source)
-				const hours = Math.floor(totalSeconds / 3600)
-				const minutes = Math.floor((totalSeconds % 3600) / 60)
-				const seconds = totalSeconds % 60
-
-				if (hours > 0) {
-					this.videoDuration = `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
-				}
-
-				this.videoDuration = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
-			} catch (error) {
-				logger.error('Failed to get video duration for file', { error, filename: this.file.basename })
-			}
-		},
-
-		t,
-	},
-
+	await getVideoDuration()
 }
+
+function onClick() {
+	// A long press toggles the selection, the click it ends with must
+	// not open the file on top of it.
+	if (longPressed.value) {
+		longPressed.value = false
+		return
+	}
+
+	emit('click', props.file.fileid)
+}
+
+// Long pressing a file selects it, which is easier to hit on a touch
+// device than the checkbox.
+function startLongPress() {
+	if (!props.allowSelection) {
+		return
+	}
+
+	cancelLongPress()
+	longPressed.value = false
+	longPressTimeout = setTimeout(() => {
+		longPressed.value = true
+		onToggle(!props.selected)
+	}, 500)
+}
+
+function cancelLongPress() {
+	if (longPressTimeout !== null) {
+		clearTimeout(longPressTimeout)
+		longPressTimeout = null
+	}
+}
+
+function onLoadSmall() {
+	loadedSmall.value = true
+}
+
+function onLoadLarge() {
+	loadedLarge.value = true
+}
+
+function onErrorSmall() {
+	errorSmall.value = true
+}
+
+function onErrorLarge() {
+	errorLarge.value = true
+}
+
+// Start playing the video of a tile once the pointer has rested on it, which
+// is what keeps a sweep across the grid from loading every video it passes.
+function schedulePreview() {
+	if (!isPreviewableVideo.value || videoPreviewFailed.value || !playsVideoPreviews()) {
+		return
+	}
+
+	cancelPreview()
+	videoPreviewTimeout = setTimeout(() => {
+		videoPreviewTimeout = null
+		videoPreviewPlaying.value = true
+	}, VIDEO_PREVIEW_DELAY)
+}
+
+function cancelPreview() {
+	if (videoPreviewTimeout !== null) {
+		clearTimeout(videoPreviewTimeout)
+		videoPreviewTimeout = null
+	}
+
+	if (!videoPreviewPlaying.value) {
+		return
+	}
+
+	// Emptying the source before the element goes away is what makes the
+	// browser let go of the buffered video instead of holding on to it.
+	const video = videoPreview.value
+	if (video !== null) {
+		video.pause()
+		video.removeAttribute('src')
+		video.load()
+	}
+
+	videoPreviewPlaying.value = false
+}
+
+function onVideoPreviewError() {
+	videoPreviewFailed.value = true
+	videoPreviewPlaying.value = false
+}
+
+function onToggle(value: boolean) {
+	emit('selectToggled', { id: props.file.fileid, value })
+}
+
+function getItemURL(size: number): string {
+	const token = route?.params.token
+	if (token) {
+		return generateUrl(`/apps/photos/api/v1/publicPreview/${props.file.fileid}?etag=${decodedEtag.value}&x=${size}&y=${size}&token=${token}`)
+	} else {
+		return generateUrl(`/apps/photos/api/v1/preview/${props.file.fileid}?etag=${decodedEtag.value}&x=${size}&y=${size}`)
+	}
+}
+
+async function getVideoDuration() {
+	if (!isVideo.value) {
+		return
+	}
+
+	try {
+		const totalSeconds = await getVideoDurationFromUrl(props.file.source)
+		const hours = Math.floor(totalSeconds / 3600)
+		const minutes = Math.floor((totalSeconds % 3600) / 60)
+		const seconds = totalSeconds % 60
+
+		if (hours > 0) {
+			videoDuration.value = `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+		}
+
+		videoDuration.value = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+	} catch (error) {
+		logger.error('Failed to get video duration for file', { error, filename: props.file.basename })
+	}
+}
+
+onMounted(async () => {
+	await init()
+})
+
+onBeforeUnmount(() => {
+	// cancel any pending load
+	if (imgSmall.value !== null) {
+		imgSmall.value.src = ''
+	}
+	if (imgLarge.value !== null) {
+		imgLarge.value.src = ''
+	}
+
+	cancelLongPress()
+	cancelPreview()
+})
 </script>
 
 <style lang="scss" scoped>

@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<RouterLink class="tag-cover" :to="`/tags/${tag.attributes['display-name']}`">
+	<RouterLink ref="cover" class="tag-cover" :to="`/tags/${tag.attributes['display-name']}`">
 		<img
 			v-if="tag.attributes['files-assigned'] !== 0"
 			class="tag-cover__image"
@@ -25,87 +25,53 @@
 	</RouterLink>
 </template>
 
-<script lang='ts'>
-import type { PropType } from 'vue'
-import type { Tag } from '../store/systemtags.js'
+<script setup lang="ts">
+import type { ComponentPublicInstance } from 'vue'
+import type { Tag } from '../store/systemtags.ts'
 
 import { translatePlural as n, translate as t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
-import {
-	defineComponent,
-} from 'vue'
+import { computed, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
-import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
+import { useAbortController } from '../composables/useAbortController.ts'
+import { useSystemTagsStore } from '../store/systemtags.ts'
 
-export default defineComponent({
-	name: 'TagCover',
+const props = defineProps<{
+	tag: Tag
+}>()
 
-	components: {
-		RouterLink,
-		ImageMultipleOutline,
-	},
+const systemTagsStore = useSystemTagsStore()
+const { abortSignal } = useAbortController()
 
-	mixins: [AbortControllerMixin],
+const cover = useTemplateRef<ComponentPublicInstance>('cover')
 
-	props: {
-		tag: {
-			type: Object as PropType<Tag>,
-			required: true,
-		},
-	},
+const loadCover = ref(false)
 
-	data() {
-		return {
-			loadCover: false,
-			observer: null as IntersectionObserver | null,
+const coverUrl = computed<string>(() => {
+	if (!loadCover.value) {
+		return ''
+	}
+	return generateUrl(`/core/preview?fileId=${props.tag.attributes['reference-fileid']}&x=${512}&y=${512}&forceIcon=0&a=1`)
+})
+
+const count = computed(() => props.tag.attributes['files-assigned'])
+
+watch(loadCover, () => {
+	if (props.tag.attributes['files-assigned']) {
+		return
+	}
+	systemTagsStore.fetchTagFiles(props.tag.attributes.id, abortSignal.value)
+})
+
+onMounted(() => {
+	const observer = new IntersectionObserver((entries) => {
+		if (entries[0].isIntersecting) {
+			loadCover.value = true
+			observer.disconnect()
 		}
-	},
-
-	computed: {
-		tags() {
-			return this.$store.state.systemtags.tags
-		},
-
-		files() {
-			return this.$store.state.files.files
-		},
-
-		coverUrl(): string {
-			if (!this.loadCover) {
-				return ''
-			}
-			return generateUrl(`/core/preview?fileId=${this.tag.attributes['reference-fileid']}&x=${512}&y=${512}&forceIcon=0&a=1`)
-		},
-
-		count() {
-			return this.tag.attributes['files-assigned']
-		},
-	},
-
-	watch: {
-		loadCover() {
-			if (this.tag.attributes['files-assigned']) {
-				return
-			}
-			this.$store.dispatch('fetchTagFiles', { id: this.tag.attributes.id, signal: this.abortController.signal })
-		},
-	},
-
-	mounted() {
-		this.observer = new IntersectionObserver((entries) => {
-			if (entries[0].isIntersecting) {
-				this.loadCover = true
-				this.observer?.disconnect()
-			}
-		})
-		this.observer.observe(this.$el)
-	},
-
-	methods: {
-		t,
-		n,
-	},
+	})
+	observer.observe(cover.value!.$el)
 })
 </script>
 

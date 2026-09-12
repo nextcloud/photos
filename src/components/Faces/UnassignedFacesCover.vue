@@ -6,7 +6,7 @@
 <template>
 	<div class="face-cover" :class="[small && 'face-cover--small']" @click="$emit('click')">
 		<div class="face-cover__crop-container">
-			<AccountOffOutlineIcon :size="128" :fill-color="colorMainBackground" />
+			<AccountOffOutlineIcon :size="128" :fillColor="colorMainBackground" />
 		</div>
 		<div class="face-cover__details">
 			<div v-if="!small" class="face-cover__details__second-line">
@@ -16,49 +16,33 @@
 	</div>
 </template>
 
-<script lang='ts'>
-import { translatePlural as n } from '@nextcloud/l10n'
+<script setup lang="ts">
+import { n } from '@nextcloud/l10n'
+import { computed, onMounted } from 'vue'
 import AccountOffOutlineIcon from 'vue-material-design-icons/AccountOffOutline.vue'
-import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
-import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
+import { useFetchFaces } from '../../composables/useFetchFaces.ts'
+import { useFacesStore } from '../../store/faces.ts'
 
-export default {
-	name: 'UnassignedFacesCover',
+withDefaults(defineProps<{
+	small?: boolean
+}>(), {
+	small: false,
+})
 
-	components: { AccountOffOutlineIcon },
+defineEmits<{ click: [] }>()
 
-	mixins: [
-		FetchFacesMixin,
-		FaceCoverMixin,
-	],
+const facesStore = useFacesStore()
+const { fetchUnassignedFacesCount } = useFetchFaces()
 
-	props: {
-		small: {
-			type: Boolean,
-			default: false,
-		},
-	},
+const unassignedFilesCount = computed(() => facesStore.unassignedFilesCount)
 
-	computed: {
-		unassignedFilesCount() {
-			return this.$store.state.faces.unassignedFilesCount
-		},
+const colorMainBackground = computed(() => getComputedStyle(document.documentElement).getPropertyValue('--color-main-background'))
 
-		colorMainBackground() {
-			return getComputedStyle(document.documentElement).getPropertyValue('--color-main-background')
-		},
-	},
-
-	async mounted() {
-		await this.fetchUnassignedFacesCount()
-	},
-
-	methods: {
-		n,
-	},
-}
+onMounted(async () => {
+	await fetchUnassignedFacesCount()
+})
 </script>
 
 <style lang="scss" scoped>
-@use '../../mixins/FaceCover';
+@use './FaceCover.scss';
 </style>

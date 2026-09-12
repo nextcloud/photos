@@ -15,7 +15,7 @@
 		<div class="face__header">
 			<div class="face__header__left">
 				<NcActions>
-					<NcActionButton @click="$router.push('/faces/')">
+					<NcActionButton @click="router.push('/faces/')">
 						<template #icon>
 							<ArrowLeft />
 						</template>{{ t('photos', 'Back') }}
@@ -30,33 +30,39 @@
 				<NcLoadingIcon v-if="loadingCount > 0 || loadingFaces" />
 			</div>
 			<div class="face__header__actions">
-				<NcActions :force-menu="true">
+				<NcActions :forceMenu="true">
 					<template v-if="selectedFileIds.length">
 						<NcActionButton
-							:close-after-click="true"
+							:closeAfterClick="true"
 							:aria-label="t('photos', 'Download selected files')"
 							@click="downloadSelection">
-							<DownloadOutline slot="icon" />
+							<template #icon>
+								<DownloadOutline />
+							</template>
 							{{ t('photos', 'Download selected photos') }}
 						</NcActionButton>
 						<NcActionButton
 							v-if="shouldFavoriteSelection"
-							:close-after-click="true"
+							:closeAfterClick="true"
 							:aria-label="t('photos', 'Mark selection as favorite')"
 							@click="favoriteSelection">
-							<StarOutline slot="icon" />
+							<template #icon>
+								<StarOutline />
+							</template>
 							{{ t('photos', 'Favorite') }}
 						</NcActionButton>
 						<NcActionButton
 							v-else
-							:close-after-click="true"
+							:closeAfterClick="true"
 							:aria-label="t('photos', 'Remove selection from favorites')"
 							@click="unFavoriteSelection">
-							<Star slot="icon" />
+							<template #icon>
+								<Star />
+							</template>
 							{{ t('photos', 'Remove from favorites') }}
 						</NcActionButton>
 						<NcActionButton
-							:close-after-click="true"
+							:closeAfterClick="true"
 							@click="showMoveModal = true">
 							<template #icon>
 								<AccountSwitchOutline />
@@ -70,33 +76,37 @@
 
 		<FilesListViewer
 			class="face__photos"
-			:container-element="appContent"
-			:file-ids="faceFileIds"
+			:containerElement="appContent"
+			:fileIds="faceFileIds"
 			:loading="loadingFiles || loadingFaces">
-			<FileComponent
-				slot-scope="{ file }"
-				:file="files[file.id]"
-				:allow-selection="true"
-				:selected="selection[file.id] === true"
-				@click="openViewer"
-				@select-toggled="onFileSelectToggle"
-				@deleted="onPhotoDeleted" />
+			<template #default="{ file }">
+				<FileComponent
+					:file="files[file.id]"
+					:allowSelection="true"
+					:selected="selection[file.id] === true"
+					@click="openViewer"
+					@selectToggled="onFileSelectToggle"
+					@deleted="onPhotoDeleted" />
+			</template>
 		</FilesListViewer>
 
 		<NcDialog
 			v-if="showMoveModal"
 			:name="t('photos', 'Move to different person')"
-			close-on-click-outside
+			closeOnClickOutside
 			size="normal"
 			@closing="showMoveModal = false">
-			<FaceMergeForm first-face="-1" @select="handleMove($event, selectedFileIds)" />
+			<FaceMergeForm firstFace="-1" @select="handleMove($event, selectedFileIds)" />
 		</NcDialog>
 	</div>
 </template>
 
-<script lang='ts'>
-import { t } from '@nextcloud/l10n'
-import Vue from 'vue'
+<script setup lang="ts">
+import type { PhotoTarget } from '../utils/fileUtils.ts'
+
+import { n, t } from '@nextcloud/l10n'
+import { computed, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
@@ -111,139 +121,95 @@ import DownloadOutline from 'vue-material-design-icons/TrayArrowDown.vue'
 import FaceMergeForm from '../components/Faces/FaceMergeForm.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
-import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
-import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
-import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
-import logger from '../services/logger.js'
-import { toViewerFileInfo } from '../utils/fileUtils.js'
+import { useFetchFaces } from '../composables/useFetchFaces.ts'
+import { useFilesSelection } from '../composables/useFilesSelection.ts'
+import { downloadFiles } from '../services/downloadFiles.ts'
+import { logger } from '../services/logger.ts'
+import { useFacesStore } from '../store/faces.ts'
+import { useFilesStore } from '../store/files.ts'
+import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
-export default {
-	name: 'UnassignedFaces',
-	components: {
-		Star,
-		StarOutline,
-		DownloadOutline,
-		AlertCircleOutline,
-		ArrowLeft,
-		FaceMergeForm,
-		FilesListViewer,
-		FileComponent,
-		NcLoadingIcon,
-		NcEmptyContent,
-		NcActions,
-		NcActionButton,
-		NcDialog,
-		AccountSwitchOutline,
-	},
+const router = useRouter()
+const facesStore = useFacesStore()
+const filesStore = useFilesStore()
+const { fetchUnassignedFaces, loadingFaces, loadingFiles, errorFetchingFiles } = useFetchFaces()
+const { selection, selectedFileIds, onFileSelectToggle, onUncheckFiles } = useFilesSelection()
 
-	directives: {
-		focus(el) {
-			Vue.nextTick(() => el.focus())
-		},
-	},
+const showMoveModal = ref(false)
+const loadingCount = ref(0)
+const appContent = document.getElementById('app-content-vue')
 
-	mixins: [
-		FetchFacesMixin,
-		FetchFilesMixin,
-		FilesSelectionMixin,
-	],
+const files = computed(() => filesStore.files)
+const unassignedFiles = computed(() => facesStore.unassignedFiles)
+const faceFileIds = computed<string[]>(() => unassignedFiles.value || [])
 
-	data() {
-		return {
-			showMoveModal: false,
-			loadingCount: 0,
-			appContent: document.getElementById('app-content-vue'),
-		}
-	},
+// Favorite all selection if at least one file is not on the favorites.
+const shouldFavoriteSelection = computed<boolean>(() => selectedFileIds.value.some((fileId) => filesStore.files[fileId].attributes.favorite === 0))
 
-	computed: {
-		files() {
-			return this.$store.state.files.files
-		},
-
-		unassignedFiles() {
-			return this.$store.state.faces.unassignedFiles
-		},
-
-		faceFileIds(): string[] {
-			return this.unassignedFiles || []
-		},
-
-		shouldFavoriteSelection(): boolean {
-			// Favorite all selection if at least one file is not on the favorites.
-			return this.selectedFileIds.some((fileId) => this.$store.state.files.files[fileId].attributes.favorite === 0)
-		},
-	},
-
-	mounted() {
-		this.fetchUnassignedFaces()
-	},
-
-	methods: {
-		// The photo is already gone from the store, it only has to leave the
-		// list of the unassigned faces.
-		onPhotoDeleted(photo) {
-			this.onUncheckFiles([photo.fileid.toString()])
-			this.$store.commit('removeUnassignedFile', { fileIdsToRemove: [photo.fileid.toString()] })
-		},
-
-		openViewer(fileId) {
-			window.OCA.Viewer.open({
-				fileInfo: toViewerFileInfo(this.files[fileId]),
-				list: this.faceFileIds.map((fileId) => toViewerFileInfo(this.files[fileId])),
-			})
-		},
-
-		async handleMove(faceName, fileIds) {
-			try {
-				this.loadingCount++
-				await this.$store.dispatch('moveFilesToFace', { oldFace: null, faceName, fileIdsToMove: fileIds })
-				this.showMoveModal = false
-			} catch (error) {
-				logger.error('Failed to move selection', { error })
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		async favoriteSelection() {
-			try {
-				this.loadingCount++
-				await this.$store.dispatch('toggleFavoriteForFiles', { fileIds: this.selectedFileIds, favoriteState: true })
-			} catch (error) {
-				logger.error('Failed to favorite selection', { error })
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		async unFavoriteSelection() {
-			try {
-				this.loadingCount++
-				await this.$store.dispatch('toggleFavoriteForFiles', { fileIds: this.selectedFileIds, favoriteState: false })
-			} catch (error) {
-				logger.error('Failed to unfavorite selection', { error })
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		async downloadSelection() {
-			try {
-				this.loadingCount++
-				await this.$store.dispatch('downloadFiles', this.selectedFileIds)
-			} catch (error) {
-				logger.error('Faile to download selection', { error })
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		t,
-	},
+// The photo is already gone from the store, it only has to leave the
+// list of the unassigned faces.
+function onPhotoDeleted(photo: PhotoTarget): void {
+	onUncheckFiles([photo.fileid.toString()])
+	facesStore.removeUnassignedFiles([photo.fileid.toString()])
 }
+
+function openViewer(fileId: number): void {
+	window.OCA.Viewer.open({
+		fileInfo: toViewerFileInfo(files.value[fileId]),
+		list: faceFileIds.value.map((fileId) => toViewerFileInfo(files.value[fileId])),
+	})
+}
+
+async function handleMove(faceName: string, fileIds: string[]): Promise<void> {
+	try {
+		loadingCount.value++
+		await facesStore.moveFilesToFace(faceName, fileIds)
+		showMoveModal.value = false
+	} catch (error) {
+		logger.error('Failed to move selection', { error })
+	} finally {
+		loadingCount.value--
+	}
+}
+
+async function favoriteSelection(): Promise<void> {
+	try {
+		loadingCount.value++
+		await filesStore.toggleFavoriteForFiles(selectedFileIds.value, 1)
+	} catch (error) {
+		logger.error('Failed to favorite selection', { error })
+	} finally {
+		loadingCount.value--
+	}
+}
+
+async function unFavoriteSelection(): Promise<void> {
+	try {
+		loadingCount.value++
+		await filesStore.toggleFavoriteForFiles(selectedFileIds.value, 0)
+	} catch (error) {
+		logger.error('Failed to unfavorite selection', { error })
+	} finally {
+		loadingCount.value--
+	}
+}
+
+async function downloadSelection(): Promise<void> {
+	try {
+		loadingCount.value++
+		await downloadFiles(selectedFileIds.value.map((fileId) => files.value[fileId]))
+	} catch (error) {
+		logger.error('Faile to download selection', { error })
+	} finally {
+		loadingCount.value--
+	}
+}
+
+onMounted(() => {
+	fetchUnassignedFaces()
+})
 </script>
 
 <style lang="scss" scoped>
-@use '../mixins/FaceContent';
+@use './FaceContent.scss';
 </style>

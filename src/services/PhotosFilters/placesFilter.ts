@@ -8,8 +8,9 @@ import type { PhotosFilter } from './PhotosFilter.ts'
 import mapMarkerSvg from '@mdi/svg/svg/map-marker.svg?raw'
 import { generateUrl } from '@nextcloud/router'
 import PlacesOption from '../../components/PhotosFilters/PlaceOption.vue'
-import store from '../../store/index.ts'
+import { useCollectionsStore } from '../../store/collections.ts'
 import { placesPrefix } from '../../store/places.ts'
+import { usePlacesStore } from '../../store/places.ts'
 import { fetchCollections } from '../collectionFetcher.ts'
 
 export type PlacesValueType = string
@@ -21,12 +22,12 @@ export const placesFilter: PhotosFilter<PlacesValueType> = {
 	icon: mapMarkerSvg,
 	renderOptionComponent: PlacesOption,
 	async getOptions() {
-		if (Object.values(store.getters.places).length === 0) {
+		if (Object.values(usePlacesStore().places).length === 0) {
 			const collections = await fetchCollections(placesPrefix)
-			store.dispatch('addCollections', { collections })
+			useCollectionsStore().addCollections(collections)
 		}
 
-		return Object.values(Object.values(store.getters.places)).map((place) => {
+		return Object.values(Object.values(usePlacesStore().places)).map((place) => {
 			return {
 				filterId: placesFilterId,
 				label: place.displayname,

@@ -4,10 +4,12 @@
  */
 
 import type { ShareType } from '@nextcloud/sharing'
-import type { PhotosRootSate } from '.'
 import type { Collection } from '../services/collectionFetcher.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
+import { defineStore } from 'pinia'
+import { computed } from 'vue'
+import { useCollectionsStore } from './collections.ts'
 
 export type Collaborator = {
 	id: string // - The id of the collaborator.
@@ -38,10 +40,31 @@ export const albumFilesExtraProps = ['<nc:photos-album-file-origin />']
 
 export const albumsPrefix = `/photos/${getCurrentUser()?.uid}/albums`
 
-const getters = {
-	albums: (_, __, ___, rootGetters): Record<string, Album> => rootGetters.collectionsWithPrefix(albumsPrefix),
-	getAlbum: (_, __, rootState: PhotosRootSate) => (albumName: string): Album => rootState.collections.collections[`${albumsPrefix}/${albumName}`] as unknown as Album,
-	getAlbumFiles: (_, __, rootState: PhotosRootSate) => (albumName: string): string[] => rootState.collections.collectionsFiles[`${albumsPrefix}/${albumName}`] || [],
-	getAlbumName: () => (albumName: string) => `${albumsPrefix}/${albumName}`,
-}
-export default { getters }
+export const useAlbumsStore = defineStore('albums', () => {
+	const collectionsStore = useCollectionsStore()
+
+	const albums = computed(() => collectionsStore.collectionsWithPrefix(albumsPrefix) as unknown as Record<string, Album>)
+
+	/**
+	 * @param albumName - Name of the album
+	 */
+	function getAlbumName(albumName: string): string {
+		return `${albumsPrefix}/${albumName}`
+	}
+
+	/**
+	 * @param albumName - Name of the album
+	 */
+	function getAlbum(albumName: string): Album {
+		return collectionsStore.collections[getAlbumName(albumName)] as unknown as Album
+	}
+
+	/**
+	 * @param albumName - Name of the album
+	 */
+	function getAlbumFiles(albumName: string): string[] {
+		return collectionsStore.collectionsFiles[getAlbumName(albumName)] || []
+	}
+
+	return { albums, getAlbumName, getAlbum, getAlbumFiles }
+})

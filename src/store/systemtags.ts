@@ -1,15 +1,16 @@
 import type { File, Folder } from '@nextcloud/files'
-import type { PhotosContext } from './index.js'
 
 /**
  * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import Vue from 'vue'
-import logger from '../services/logger.js'
-import getSystemTags from '../services/SystemTags.js'
-import getTaggedImages from '../services/TaggedImages.js'
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
+import { logger } from '../services/logger.ts'
+import { getSystemTags } from '../services/SystemTags.ts'
+import { getTaggedImages } from '../services/TaggedImages.ts'
 import { sortCompare } from '../utils/fileUtils.js'
+import { useFilesStore } from './files.ts'
 
 export type Tag = Folder & {
 	attributes: {
@@ -23,122 +24,100 @@ export type Tag = Folder & {
 	}
 }
 
-const state = {
-	tags: {} as Record<number, Tag>,
-	names: {} as Record<string, number>,
-	tagsFiles: {} as Record<number, number[]>,
-}
+export const useSystemTagsStore = defineStore('systemtags', () => {
+	const tags = ref<Record<number, Tag>>({})
+	const names = ref<Record<string, number>>({})
+	const tagsFiles = ref<Record<number, number[]>>({})
 
-export type SystemTagsState = typeof state
-
-const mutations = {
 	/**
-	 * Order and save tags
+	 * Order and save tags.
 	 *
-	 * @param state
-	 * @param tags
+	 * @param newTags - Tags to store
 	 */
-	updateTags(state: SystemTagsState, tags: Tag[]) {
-		if (tags.length > 0) {
-			// sort by basename
-			const list = tags.sort((a, b) => sortCompare(a, b, 'display-name'))
-
-			// store tag and its index
-			list.forEach((tag) => {
-				Vue.set(state.tags, tag.attributes.id, tag)
-				Vue.set(state.names, tag.attributes['display-name'], tag.attributes.id)
+	function updateTags(newTags: Tag[]): void {
+		newTags
+			.sort((a, b) => sortCompare(a, b, 'display-name'))
+			.forEach((tag) => {
+				tags.value[tag.attributes.id] = tag
+				names.value[tag.attributes['display-name']] = tag.attributes.id
 			})
-		}
-	},
+	}
 
 	/**
-	 * Update tag files list
-	 *
-	 * @param state
-	 * @param root0
-	 * @param root0.id
+	 * @param id - Id of the tag to forget
 	 */
-	removeTag(state: SystemTagsState, { id }: { id: number }) {
-		Vue.delete(state.names, state.tags[id].attributes.displayname)
-		Vue.delete(state.tags, id)
-	},
+	function removeTag(id: number): void {
+		delete names.value[tags.value[id].attributes['display-name']]
+		delete tags.value[id]
+	}
 
 	/**
-	 * Update tag files list
+	 * Update the file list of a tag, dropping the tag when it has none left.
 	 *
-	 * @param state
-	 * @param root0
-	 * @param root0.id
-	 * @param root0.files
+	 * @param id - Id of the tag
+	 * @param files - Files assigned to the tag
 	 */
-	updateTag(state: SystemTagsState, { id, files }: { id: number, files: File[] }) {
+	function updateTag(id: number, files: File[]): void {
 		if (files.length === 0) {
-			// Remove this tag from the list if there's no files for it
-			Vue.delete(state.names, state.tags[id].attributes.displayname)
-			Vue.delete(state.tags, id)
+			removeTag(id)
 			return
 		}
 
 		// sort by last modified
 		const list = files.sort((a, b) => sortCompare(a, b, 'files-assigned'))
 
-		// overwrite list
 		logger.debug(`Overwrite list, id: ${id}`, { list })
-		Vue.set(state.tagsFiles, id, list.map((file) => file.fileid))
-	},
-}
-
-const getters = {
-	tags: (state: SystemTagsState) => state.tags,
-	tagsNames: (state: SystemTagsState) => state.names,
-	tag: (state: SystemTagsState) => (id: number) => state.tags[id],
-	tagId: (state: SystemTagsState) => (name: string) => state.names[name],
-}
-
-const actions = {
-	/**
-	 * Update files and folders
-	 *
-	 * @param context
-	 * @param tags
-	 */
-	updateTags(context: PhotosContext<SystemTagsState>, tags: string[]) {
-		context.commit('updateTags', tags)
-	},
+		tagsFiles.value[id] = list.map((file) => file.fileid!)
+	}
 
 	/**
-	 * Update tag files list
+	 * Drop a file from the list of a tag, after it was deleted.
 	 *
-	 * @param context
-	 * @param root0
-	 * @param root0.id
-	 * @param root0.files
+	 * @param id - Id of the tag
+	 * @param fileId - Id of the deleted file
 	 */
-	updateTag(context: PhotosContext<SystemTagsState>, { id, files }: { id: number, files: File[] }) {
-		if (files.length === 0) {
-			// Remove this tag from the list if there's no files for it
-			context.commit('removeTag', { id })
-		}
-		context.commit('updateTag', { id, files })
-	},
+	function removeTagFile(id: number, fileId: number): void {
+		tagsFiles.value[id] = (tagsFiles.value[id] ?? []).filter((tagFileId) => tagFileId !== fileId)
+	}
 
-	async fetchTagFiles(context: PhotosContext<SystemTagsState>, { id, signal }: { id: number, signal: AbortSignal }) {
+	/**
+	 * @param id - Id of the tag
+	 * @param signal - Abort signal of the caller
+	 */
+	async function fetchTagFiles(id: number, signal: AbortSignal): Promise<void> {
 		try {
-			// get data
 			const files = await getTaggedImages(id, { signal })
-			await context.dispatch('updateTag', { id, files })
-			await context.dispatch('appendFiles', files)
+			updateTag(id, files)
+			useFilesStore().appendFiles(files)
 		} catch (error) {
 			logger.error(`Failed to get tag content, id: ${id}`, { error })
 		}
-	},
+	}
 
-	async fetchAllTags(context: PhotosContext<SystemTagsState>, { signal }: { signal: AbortSignal }) {
-		const tags = await getSystemTags('', {
-			signal,
-		})
-		await context.dispatch('updateTags', tags)
-	},
-}
+	/**
+	 * @param signal - Abort signal of the caller
+	 */
+	async function fetchAllTags(signal: AbortSignal): Promise<void> {
+		updateTags(await getSystemTags('', { signal }) as Tag[])
+	}
 
-export default { state, mutations, getters, actions }
+	/**
+	 * @param name - Display name of the tag
+	 */
+	function tagId(name: string): number {
+		return names.value[name]
+	}
+
+	return {
+		tags,
+		names,
+		tagsFiles,
+		updateTags,
+		removeTag,
+		removeTagFile,
+		updateTag,
+		fetchTagFiles,
+		fetchAllTags,
+		tagId,
+	}
+})

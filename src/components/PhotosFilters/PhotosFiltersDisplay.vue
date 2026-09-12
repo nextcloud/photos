@@ -17,7 +17,7 @@
 					:key="`${filter.id}_${i}`"
 					class="photos-filters-display__filter__options-container__option"
 					:value="value"
-					@deselect="emit('deselect-filter', { filterId: filter.id, value })" />
+					@deselect="emit('deselectFilter', { filterId: filter.id, value })" />
 			</div>
 		</div>
 	</div>
@@ -26,14 +26,14 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import NcIconSvgWrapper from '@nextcloud/vue/components/NcIconSvgWrapper'
-import filters from '../../services/PhotosFilters/index.ts'
+import { photosFilters as filters } from '../../services/PhotosFilters/index.ts'
 
 const props = defineProps<{
 	selectedFilters: Record<string, unknown[]>
 }>()
 
 const emit = defineEmits<{
-	(e: 'deselect-filter', option: { filterId: string, value: unknown }): void
+	(e: 'deselectFilter', option: { filterId: string, value: unknown }): void
 }>()
 
 const availableFilters = computed(() => {

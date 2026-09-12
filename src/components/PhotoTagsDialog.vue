@@ -21,9 +21,9 @@
 				<NcCheckboxRadioSwitch
 					v-for="tag of tags"
 					:key="tag.id"
-					:model-value="assignedTagIds.includes(tag.id)"
+					:modelValue="assignedTagIds.includes(tag.id)"
 					:disabled="!tag.canAssign || busyTagIds.includes(tag.id)"
-					@update:model-value="toggle(tag, $event)">
+					@update:modelValue="toggle(tag, $event)">
 					{{ tag.displayName }}
 				</NcCheckboxRadioSwitch>
 			</fieldset>
@@ -62,7 +62,7 @@ import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
 import Plus from 'vue-material-design-icons/Plus.vue'
-import logger from '../services/logger.ts'
+import { logger } from '../services/logger.ts'
 import {
 	assignTagToFile,
 	createTag,

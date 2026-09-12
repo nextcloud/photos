@@ -10,7 +10,7 @@
 			:loading="loading"
 			path="/"
 			:title="rootTitle"
-			:root-title="rootTitle"
+			:rootTitle="rootTitle"
 			@refresh="loadPhotos">
 			<NcButton
 				v-if="isMapsInstalled"
@@ -35,6 +35,7 @@
 
 		<LMap
 			v-else
+			:useGlobalLeaflet="true"
 			class="photos-map__map"
 			:zoom="zoom"
 			:center="center"
@@ -48,7 +49,7 @@
 			<LMarker
 				v-for="photo in geotaggedPhotos"
 				:key="photo.fileid"
-				:lat-lng="getCoordinates(photo)"
+				:latLng="getCoordinates(photo)"
 				:options="{ title: photo.basename }"
 				@click="openPhoto(photo)" />
 		</LMap>
@@ -60,20 +61,20 @@ import type { PhotoFile } from '../store/files.ts'
 
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
-import { computed, onMounted, ref, watch } from 'vue'
 import {
 	LControlAttribution,
 	LMap,
 	LMarker,
 	LTileLayer,
-} from 'vue2-leaflet'
+} from '@vue-leaflet/vue-leaflet'
+import { computed, onMounted, ref, watch } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import MapIcon from 'vue-material-design-icons/Map.vue'
 import EmptyIllustration from '../components/EmptyIllustration.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import { useLoadedPhotos } from '../composables/useLoadedPhotos.ts'
-import isMapsInstalled from '../services/IsMapsInstalled.ts'
+import { isMapsInstalled } from '../services/IsMapsInstalled.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
 import 'leaflet/dist/leaflet.css'

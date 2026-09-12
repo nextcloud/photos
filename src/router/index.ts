@@ -5,11 +5,10 @@
 
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
-import areTagsInstalled from '../services/AreTagsInstalled.js'
-import isRecognizeInstalled from '../services/IsRecognizeInstalled.js'
+import { areTagsInstalled } from '../services/AreTagsInstalled.ts'
+import { isRecognizeInstalled } from '../services/IsRecognizeInstalled.ts'
 
 const FoldersView = () => import('../views/FoldersView.vue')
 const MapView = () => import('../views/MapView.vue')
@@ -31,8 +30,6 @@ const UnassignedFaces = () => import('../views/UnassignedFaces.vue')
 
 const baseTitle = document.title
 
-Vue.use(Router)
-
 /**
  * Parse the path of a route : join the elements of the array and return a single string with slashes
  * + always lead current path with a slash
@@ -43,11 +40,10 @@ function parsePathParams(path: string | string[]): string {
 	return `/${Array.isArray(path) ? path.join('/') : path || ''}`
 }
 
-const router = new Router({
-	mode: 'history',
+export const router = createRouter({
 	// if index.php is in the url AND we got this far, then it's working:
 	// let's keep using index.php in the url
-	base: generateUrl('/apps/photos'),
+	history: createWebHistory(generateUrl('/apps/photos')),
 	linkActiveClass: 'active',
 	routes: [
 		{
@@ -102,7 +98,7 @@ const router = new Router({
 			},
 		},
 		{
-			path: '/albums/:albumName*',
+			path: '/albums/:albumName(.+)',
 			component: AlbumContent,
 			name: 'albumsContent',
 			props: (route) => ({
@@ -125,7 +121,7 @@ const router = new Router({
 			},
 		},
 		{
-			path: '/sharedalbums/:albumName*',
+			path: '/sharedalbums/:albumName(.+)',
 			component: SharedAlbumContent,
 			name: 'sharedAlbumsContent',
 			props: (route) => ({
@@ -156,7 +152,7 @@ const router = new Router({
 			name: 'places',
 		},
 		{
-			path: '/places/:placeName*',
+			path: '/places/:placeName(.+)',
 			component: PlaceContent,
 			name: 'placesContent',
 			props: (route) => ({
@@ -164,7 +160,7 @@ const router = new Router({
 			}),
 		},
 		{
-			path: '/folders/:path*',
+			path: '/folders/:path(.*)?',
 			component: FoldersView,
 			name: 'folders',
 			props: (route) => ({
@@ -180,7 +176,7 @@ const router = new Router({
 			},
 		},
 		{
-			path: '/shared/:path*',
+			path: '/shared/:path(.*)?',
 			component: FoldersView,
 			name: 'shared',
 			props: (route) => ({
@@ -214,7 +210,7 @@ const router = new Router({
 			path: '/tags/',
 			component: TagsView,
 			name: 'tags',
-			redirect: !areTagsInstalled ? { name: 'timeline' } : undefined,
+			redirect: !areTagsInstalled ? { name: 'all_media' } : undefined,
 			props: (route) => ({
 				path: '',
 				isRoot: !route.params.path,
@@ -230,7 +226,7 @@ const router = new Router({
 			path: '/tags/:path',
 			component: TagContent,
 			name: 'tagcontent',
-			redirect: !areTagsInstalled ? { name: 'timeline' } : undefined,
+			redirect: !areTagsInstalled ? { name: 'all_media' } : undefined,
 			props: (route) => ({
 				path: `${route.params.path ? route.params.path : ''}`,
 			}),
@@ -290,9 +286,13 @@ const router = new Router({
 			name: 'faces',
 			component: FacesView,
 			...((!isRecognizeInstalled) && {
+				// Returning nothing lets the navigation through in vue-router 5, so
+				// it is cancelled explicitly: the view has nothing to show without
+				// recognize.
 				beforeEnter() {
 					const recognizeInstallLink = generateUrl('/settings/apps/installed/recognize')
 					window.open(recognizeInstallLink, '_blank')
+					return false
 				},
 			}),
 		},
@@ -338,5 +338,3 @@ router.afterEach((to, from) => {
 		window.OCA.Files.Sidebar.close()
 	}
 })
-
-export default router

@@ -6,34 +6,24 @@
 <template>
 	<NcFormBox>
 		<NcFormBoxSwitch
-			:model-value="croppedLayout"
+			:modelValue="croppedLayout"
 			:label="t('photos', 'Squared photos view')"
 			@update:modelValue="updateSetting" />
 	</NcFormBox>
 </template>
 
-<script lang='ts'>
+<script setup lang="ts">
+import { t } from '@nextcloud/l10n'
+import { computed } from 'vue'
 import NcFormBox from '@nextcloud/vue/components/NcFormBox'
 import NcFormBoxSwitch from '@nextcloud/vue/components/NcFormBoxSwitch'
+import { useUserConfigStore } from '../../store/userConfig.ts'
 
-export default {
-	name: 'CroppedLayoutSettings',
+const userConfigStore = useUserConfigStore()
 
-	components: {
-		NcFormBoxSwitch,
-		NcFormBox,
-	},
+const croppedLayout = computed(() => userConfigStore.croppedLayout)
 
-	computed: {
-		croppedLayout() {
-			return this.$store.state.userConfig.croppedLayout
-		},
-	},
-
-	methods: {
-		updateSetting(value) {
-			this.$store.dispatch('updateUserConfig', { key: 'croppedLayout', value })
-		},
-	},
+function updateSetting(value: boolean) {
+	userConfigStore.updateUserConfig('croppedLayout', value)
 }
 </script>

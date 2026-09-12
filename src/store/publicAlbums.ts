@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type { PhotosRootSate } from '.'
 import type { Album } from './albums.ts'
 
-import {
-	albumsExtraProps,
-} from './albums.ts'
+import { defineStore } from 'pinia'
+import { computed } from 'vue'
+import { albumsExtraProps } from './albums.ts'
+import { useCollectionsStore } from './collections.ts'
 
 export type PublicAlbum = Album & {
 	attributes: {
@@ -22,10 +22,31 @@ export const publicAlbumsExtraProps = [
 ]
 export const publicAlbumsPrefix = '/photospublic'
 
-const getters = {
-	publicAlbums: (_, __, ___, rootGetters): Record<string, PublicAlbum> => rootGetters.collectionsWithPrefix(publicAlbumsPrefix),
-	getPublicAlbum: (_, __, rootState: PhotosRootSate) => (publicAlbumName: string): PublicAlbum => rootState.collections.collections[`${publicAlbumsPrefix}/${publicAlbumName}`] as unknown as PublicAlbum || null,
-	getPublicAlbumFiles: (_, __, rootState: PhotosRootSate) => (publicAlbumName: string): string[] => rootState.collections.collectionsFiles[`${publicAlbumsPrefix}/${publicAlbumName}`] || [],
-	getPublicAlbumName: () => (publicAlbumName: string) => `${publicAlbumsPrefix}/${publicAlbumName}`,
-}
-export default { getters }
+export const usePublicAlbumsStore = defineStore('publicAlbums', () => {
+	const collectionsStore = useCollectionsStore()
+
+	const publicAlbums = computed(() => collectionsStore.collectionsWithPrefix(publicAlbumsPrefix) as unknown as Record<string, PublicAlbum>)
+
+	/**
+	 * @param publicAlbumName - Name of the public album
+	 */
+	function getPublicAlbumName(publicAlbumName: string): string {
+		return `${publicAlbumsPrefix}/${publicAlbumName}`
+	}
+
+	/**
+	 * @param publicAlbumName - Name of the public album
+	 */
+	function getPublicAlbum(publicAlbumName: string): PublicAlbum | null {
+		return collectionsStore.collections[getPublicAlbumName(publicAlbumName)] as unknown as PublicAlbum || null
+	}
+
+	/**
+	 * @param publicAlbumName - Name of the public album
+	 */
+	function getPublicAlbumFiles(publicAlbumName: string): string[] {
+		return collectionsStore.collectionsFiles[getPublicAlbumName(publicAlbumName)] || []
+	}
+
+	return { publicAlbums, getPublicAlbumName, getPublicAlbum, getPublicAlbumFiles }
+})

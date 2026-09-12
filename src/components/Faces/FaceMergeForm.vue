@@ -7,72 +7,49 @@
 		<FaceCover
 			v-for="face in filteredFaces"
 			:key="face.basename"
-			:base-name="face.basename"
+			:baseName="face.basename"
 			small
 			@click="handleSelect(face.basename)" />
 	</div>
 </template>
 
-<script lang='ts'>
+<script setup lang="ts">
+import { computed, ref } from 'vue'
 import FaceCover from './FaceCover.vue'
-import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
-import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
+import { useFetchFaces } from '../../composables/useFetchFaces.ts'
+import { useFacesStore } from '../../store/faces.ts'
 
-export default {
-	name: 'FaceMergeForm',
-	components: { FaceCover },
-	mixins: [
-		FaceCoverMixin,
-		FetchFacesMixin,
-	],
+const props = defineProps<{
+	firstFace: string
+}>()
 
-	props: {
-		firstFace: {
-			type: String,
-			required: true,
-		},
-	},
+const emit = defineEmits<{ select: [faceName: string] }>()
 
-	data() {
-		return {
-			loading: false,
-		}
-	},
+const facesStore = useFacesStore()
+useFetchFaces()
 
-	computed: {
-		files() {
-			return this.$store.state.files.files
-		},
+const loading = ref(false)
 
-		faces() {
-			return this.$store.state.faces.faces
-		},
+const faces = computed(() => facesStore.faces)
+const facesFiles = computed(() => facesStore.facesFiles)
 
-		facesFiles() {
-			return this.$store.getters.facesFiles
-		},
+const filteredFaces = computed(() => {
+	return Object.values(faces.value)
+		.filter((face) => face.basename !== props.firstFace)
+		.sort((a, b) => {
+			if (a.attributes.nbItems && b.attributes.nbItems) {
+				return b.attributes.nbItems - a.attributes.nbItems
+			}
+			if (!facesFiles.value[b.basename] || !facesFiles.value[a.basename]) {
+				return 0
+			}
+			return facesFiles.value[b.basename].length - facesFiles.value[a.basename].length
+		})
+})
 
-		filteredFaces() {
-			return Object.values(this.faces)
-				.filter((face) => face.basename !== this.firstFace)
-				.sort((a, b) => {
-					if (a.attributes.nbItems && b.attributes.nbItems) {
-						return b.attributes.nbItems - a.attributes.nbItems
-					}
-					if (!this.facesFiles[b.basename] || !this.facesFiles[a.basename]) {
-						return 0
-					}
-					return this.facesFiles[b.basename].length - this.facesFiles[a.basename].length
-				})
-		},
-	},
-
-	methods: {
-		handleSelect(faceName) {
-			this.$emit('select', faceName)
-			this.loading = true
-		},
-	},
+function handleSelect(faceName: string): void {
+	emit('select', faceName)
+	loading.value = true
 }
 </script>
 

@@ -8,122 +8,140 @@
 			v-if="true"
 			ref="collectionContent"
 			:collection="album"
-			:collection-file-ids="albumFileIds"
+			:collectionFileIds="albumFileIds"
 			:loading="loadingCollection || loadingCollectionFiles"
 			:error="errorFetchingCollection || errorFetchingCollectionFiles">
 			<!-- Header -->
-			<HeaderNavigation
-				key="navigation"
-				slot="header"
-				slot-scope="{ selectedFileIds, resetSelection }"
-				:loading="loadingCollectionFiles"
-				:params="{ albumName }"
-				:path="'/' + albumName"
-				:title="albumOriginalName"
-				@refresh="fetchAlbumContent">
-				<div
-					v-if="album !== undefined && album.attributes.location !== ''"
-					slot="subtitle"
-					class="album__location">
-					<MapMarkerOutline />{{ album.attributes.location }} ⸱ {{ t('photos', 'Shared by') }}&nbsp;
-					<NcUserBubble
-						:display-name="album.attributes.collaborators[0].label"
-						:user="album.attributes.collaborators[0].id" />
-				</div>
+			<template #header="{ selectedFileIds, resetSelection }">
+				<HeaderNavigation
+					key="navigation"
 
-				<template slot="default">
-					<NcButton
-						v-if="selectedFileIds.length > 0"
-						:aria-label="t('photos', 'Unselect all')"
-						@click="resetSelection">
-						<template #icon>
-							<Close />
-						</template>
-						{{ t('photos', 'Unselect all') }}
-					</NcButton>
-				</template>
+					:loading="loadingCollectionFiles"
+					:params="{ albumName }"
+					:path="'/' + albumName"
+					:title="albumOriginalName"
+					@refresh="fetchAlbumContent">
+					<template #subtitle>
+						<div
+							v-if="album !== undefined && album.attributes.location !== ''"
 
-				<template v-if="album !== undefined" slot="right">
-					<NcButton
-						v-if="album.attributes.nbItems !== 0"
-						variant="secondary"
-						:aria-label="t('photos', 'Add photos to this album')"
-						@click="showAddPhotosModal = true">
-						<Plus slot="icon" />
-						{{ t('photos', "Add") }}
-					</NcButton>
+							class="album__location">
+							<MapMarkerOutline />{{ album.attributes.location }} ⸱ {{ t('photos', 'Shared by') }}&nbsp;
+							<NcUserBubble
+								:displayName="album.attributes.collaborators[0].label"
+								:user="album.attributes.collaborators[0].id" />
+						</div>
+					</template>
 
-					<NcActions :force-menu="true" :aria-label="t('photos', 'Open actions menu')">
-						<!-- TODO: enable download on shared albums -->
-						<!-- <ActionDownload v-if="albumFileIds.length > 0"
+					<template #default>
+						<NcButton
+							v-if="selectedFileIds.length > 0"
+							:aria-label="t('photos', 'Unselect all')"
+							@click="resetSelection">
+							<template #icon>
+								<Close />
+							</template>
+							{{ t('photos', 'Unselect all') }}
+						</NcButton>
+					</template>
+
+					<template v-if="album !== undefined" #right>
+						<NcButton
+							v-if="album.attributes.nbItems !== 0"
+							variant="secondary"
+							:aria-label="t('photos', 'Add photos to this album')"
+							@click="showAddPhotosModal = true">
+							<template #icon>
+								<Plus />
+							</template>
+							{{ t('photos', "Add") }}
+						</NcButton>
+
+						<NcActions :forceMenu="true" :aria-label="t('photos', 'Open actions menu')">
+							<!-- TODO: enable download on shared albums -->
+							<!-- <ActionDownload v-if="albumFileIds.length > 0"
 							:selected-file-ids="albumFileIds"
 							:title="t('photos', 'Download all files in album')">
 							<DownloadMultiple slot="icon" />
 						</ActionDownload> -->
 
-						<NcActionButton
-							v-if="album.attributes.collaborators[0].type === collaboratorTypes.User"
-							:close-after-click="true"
-							@click="handleDeleteAlbum">
-							{{ t('photos', 'Delete album') }}
-							<DeleteOutline slot="icon" />
-						</NcActionButton>
+							<NcActionButton
+								v-if="album.attributes.collaborators[0].type === collaboratorTypes.User"
+								:closeAfterClick="true"
+								@click="handleDeleteAlbum">
+								{{ t('photos', 'Delete album') }}
+								<template #icon>
+									<DeleteOutline />
+								</template>
+							</NcActionButton>
 
-						<template v-if="selectedFileIds.length > 0">
-							<NcActionSeparator />
+							<template v-if="selectedFileIds.length > 0">
+								<NcActionSeparator />
 
-							<!-- TODO: enable download on shared albums -->
-							<!-- <ActionDownload :selected-file-ids="selectedFileIds" :title="t('photos', 'Download selected files')">
+								<!-- TODO: enable download on shared albums -->
+								<!-- <ActionDownload :selected-file-ids="selectedFileIds" :title="t('photos', 'Download selected files')">
 								<Download slot="icon" />
 							</ActionDownload> -->
 
-							<NcActionButton
-								v-if="removableSelectedFiles.length !== 0"
-								:close-after-click="true"
-								@click="handleRemoveFilesFromAlbum(removableSelectedFiles)">
-								{{ t('photos', 'Remove selection from album') }}
-								<Close slot="icon" />
-							</NcActionButton>
-						</template>
-					</NcActions>
-				</template>
-			</HeaderNavigation>
+								<NcActionButton
+									v-if="removableSelectedFiles.length !== 0"
+									:closeAfterClick="true"
+									@click="handleRemoveFilesFromAlbum(removableSelectedFiles)">
+									{{ t('photos', 'Remove selection from album') }}
+									<template #icon>
+										<Close />
+									</template>
+								</NcActionButton>
+							</template>
+						</NcActions>
+					</template>
+				</HeaderNavigation>
+			</template>
 
 			<!-- No content -->
-			<NcEmptyContent
-				v-if="album !== undefined && album.attributes.nbItems === 0 && !(loadingCollectionFiles || loadingCollection)"
-				slot="empty-content"
-				:name="t('photos', 'This album does not have any photos or videos yet!')"
-				class="album__empty">
-				<ImagePlusOutline slot="icon" />
+			<template #emptyContent>
+				<NcEmptyContent
+					v-if="album !== undefined && album.attributes.nbItems === 0 && !(loadingCollectionFiles || loadingCollection)"
 
-				<NcButton
-					slot="action"
-					class="album__empty__button"
-					variant="primary"
-					:aria-label="t('photos', 'Add photos to this album')"
-					@click="showAddPhotosModal = true">
-					<Plus slot="icon" />
-					{{ t('photos', "Add") }}
-				</NcButton>
-			</NcEmptyContent>
+					:name="t('photos', 'This album does not have any photos or videos yet!')"
+					class="album__empty">
+					<template #icon>
+						<ImagePlusOutline />
+					</template>
+
+					<template #action>
+						<NcButton
+
+							class="album__empty__button"
+							variant="primary"
+							:aria-label="t('photos', 'Add photos to this album')"
+							@click="showAddPhotosModal = true">
+							<template #icon>
+								<Plus />
+							</template>
+							{{ t('photos', "Add") }}
+						</NcButton>
+					</template>
+				</NcEmptyContent>
+			</template>
 		</CollectionContent>
 
 		<PhotosPicker
 			v-if="album !== undefined"
-			:open.sync="showAddPhotosModal"
+			v-model:open="showAddPhotosModal"
 			:name="t('photos', 'Add photos to {albumName}', { albumName: albumOriginalName })"
 			:destination="album.basename"
-			:blacklist-ids="albumFileIds"
+			:blacklistIds="albumFileIds"
 			:loading="loadingAddFilesToAlbum"
-			@files-picked="handleFilesPicked" />
+			@filesPicked="handleFilesPicked" />
 	</div>
 </template>
 
-<script lang='ts'>
-import { translate } from '@nextcloud/l10n'
+<script setup lang="ts">
+import { t } from '@nextcloud/l10n'
 import { ShareType } from '@nextcloud/sharing'
-import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
+import { computed, onMounted, ref, useTemplateRef } from 'vue'
+import { useRouter } from 'vue-router'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
@@ -141,128 +159,84 @@ import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
 import PhotosPicker from '../components/PhotosPicker.vue'
-import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
-import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
+import { useFetchCollectionContent } from '../composables/useFetchCollectionContent.ts'
 import { albumFilesExtraProps, albumsExtraProps } from '../store/albums.ts'
+import { useCollectionsStore } from '../store/collections.ts'
+import { useFilesStore } from '../store/files.ts'
+import { useSharedAlbumsStore } from '../store/sharedAlbums.ts'
 
-export default {
-	name: 'SharedAlbumContent',
-	components: {
-		MapMarkerOutline,
-		Plus,
-		Close,
-		// Download,
-		// DownloadMultiple,
-		DeleteOutline,
-		ImagePlusOutline,
-		NcEmptyContent,
-		NcActions,
-		NcActionButton,
-		NcActionSeparator,
-		NcButton,
-		NcUserBubble,
-		CollectionContent,
-		// ActionDownload,
-		PhotosPicker,
-		HeaderNavigation,
-	},
+const props = withDefaults(defineProps<{
+	albumName?: string
+}>(), {
+	albumName: '/',
+})
 
-	mixins: [
-		FetchCollectionContentMixin,
-		FetchFilesMixin,
-	],
+const router = useRouter()
+const collectionsStore = useCollectionsStore()
+const filesStore = useFilesStore()
+const sharedAlbumsStore = useSharedAlbumsStore()
+const {
+	fetchCollection,
+	fetchCollectionFiles,
+	loadingCollection,
+	loadingCollectionFiles,
+	errorFetchingCollection,
+	errorFetchingCollectionFiles,
+} = useFetchCollectionContent()
 
-	props: {
-		albumName: {
-			type: String,
-			default: '/',
-		},
-	},
+const collectionContent = useTemplateRef<InstanceType<typeof CollectionContent>>('collectionContent')
 
-	setup() {
-		const isMobile = useIsMobile()
-		return {
-			isMobile,
-		}
-	},
+const showAddPhotosModal = ref(false)
+const loadingAddFilesToAlbum = ref(false)
+const collaboratorTypes = ShareType
 
-	data() {
-		return {
-			showAddPhotosModal: false,
-			loadingCount: 0,
-			loadingAddFilesToAlbum: false,
-			collaboratorTypes: ShareType,
-		}
-	},
+const album = computed(() => sharedAlbumsStore.getSharedAlbum(props.albumName))
 
-	computed: {
-		files() {
-			return this.$store.state.files.files
-		},
+const albumFileIds = computed(() => sharedAlbumsStore.getSharedAlbumFiles(props.albumName))
 
-		album() {
-			return this.$store.getters.getSharedAlbum(this.albumName)
-		},
+const albumOriginalName = computed(() => props.albumName.replace(new RegExp(`\\(${album.value?.attributes.collaborators[0].id}\\)$`), ''))
 
-		albumFileIds() {
-			return this.$store.getters.getSharedAlbumFiles(this.albumName)
-		},
+const albumFileName = computed(() => sharedAlbumsStore.getSharedAlbumName(props.albumName))
 
-		albumOriginalName(): string {
-			return this.albumName.replace(new RegExp(`\\(${this.album?.attributes.collaborators[0].id}\\)$`), '')
-		},
+const removableSelectedFiles = computed(() => (collectionContent.value?.selectedFileIds ?? [])
+	.map((fileId) => filesStore.files[fileId])
+	.filter((file) => file.attributes['photos-album-file-origin'] !== 'filters')
+	.map((file) => file.fileid.toString()))
 
-		albumFileName(): string {
-			return this.$store.getters.getSharedAlbumName(this.albumName)
-		},
-
-		removableSelectedFiles() {
-			return (this.$refs.collectionContent?.selectedFileIds as string[])
-				.map((fileId) => this.$store.state.files.files[fileId])
-				.filter((file) => file.attributes['photos-album-file-origin'] !== 'filters')
-				.map((file) => file.fileid.toString())
-		},
-	},
-
-	async mounted() {
-		this.fetchAlbum()
-		this.fetchAlbumContent()
-	},
-
-	methods: {
-		async fetchAlbum() {
-			await this.fetchCollection(
-				this.albumFileName,
-				albumsExtraProps,
-			)
-		},
-
-		async fetchAlbumContent() {
-			await this.fetchCollectionFiles(this.albumFileName, albumFilesExtraProps)
-		},
-
-		async handleFilesPicked(fileIds) {
-			this.showAddPhotosModal = false
-			await this.$store.dispatch('addFilesToCollection', { collectionFileName: this.album.root + this.album.path, fileIdsToAdd: fileIds })
-			// Re-fetch album content to have the proper filenames.
-			await this.fetchAlbumContent()
-		},
-
-		async handleRemoveFilesFromAlbum(fileIds: string[]) {
-			this.$refs.collectionContent?.onUncheckFiles(fileIds)
-			await this.$store.dispatch('removeFilesFromCollection', { collectionFileName: this.album.root + this.album.path, fileIdsToRemove: fileIds })
-		},
-
-		async handleDeleteAlbum() {
-			const isDeleted = await this.$store.dispatch('deleteCollection', { collectionFileName: this.album.root + this.album.path })
-			if (isDeleted) {
-				this.$router.push('/sharedalbums')
-			}
-		},
-
-		t: translate,
-	},
+async function fetchAlbum() {
+	await fetchCollection(
+		albumFileName.value,
+		albumsExtraProps,
+	)
 }
+
+async function fetchAlbumContent() {
+	await fetchCollectionFiles(albumFileName.value, albumFilesExtraProps)
+}
+
+async function handleFilesPicked(fileIds: string[]) {
+	showAddPhotosModal.value = false
+	await collectionsStore.addFilesToCollection(album.value.root + album.value.path, fileIds)
+	// Re-fetch album content to have the proper filenames.
+	await fetchAlbumContent()
+}
+
+async function handleRemoveFilesFromAlbum(fileIds: string[]) {
+	collectionContent.value?.onUncheckFiles(fileIds)
+	await collectionsStore.removeFilesFromCollection(album.value.root + album.value.path, fileIds)
+}
+
+async function handleDeleteAlbum() {
+	const isDeleted = await collectionsStore.deleteCollection(album.value.root + album.value.path)
+	if (isDeleted) {
+		router.push('/sharedalbums')
+	}
+}
+
+onMounted(() => {
+	fetchAlbum()
+	fetchAlbumContent()
+})
 </script>
 
 <style lang="scss" scoped>

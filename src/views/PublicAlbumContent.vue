@@ -5,38 +5,39 @@
 <template>
 	<div>
 		<CollectionContent
-			ref="collectionContent"
-			:collection="album"
-			:collection-file-ids="albumFileIds"
-			:allow-selection="false"
+			:collection="album ?? undefined"
+			:collectionFileIds="albumFileIds"
+			:allowSelection="false"
 			:loading="loadingCollection || loadingCollectionFiles"
 			:error="errorFetchingCollection || errorFetchingCollectionFiles">
 			<!-- Header -->
-			<HeaderNavigation
-				v-if="albumOriginalName !== ''"
-				key="navigation"
-				slot="header"
-				slot-scope="{ selectedFileIds }"
-				:loading="loadingCollection || loadingCollectionFiles"
-				:params="{ token }"
-				path="/"
-				:root-title="albumOriginalName"
-				:title="albumOriginalName"
-				@refresh="fetchAlbumContent">
-				<div v-if="album.attributes.location !== ''" slot="subtitle" class="album__location">
-					<MapMarkerOutline />{{ album.attributes.location }}
-				</div>
+			<template #header="{ selectedFileIds }">
+				<HeaderNavigation
+					v-if="albumOriginalName !== ''"
+					key="navigation"
 
-				<template v-if="album !== undefined" slot="right">
-					<NcActions :force-menu="true" :aria-label="t('photos', 'Open actions menu')">
-						<!-- TODO: enable download on public albums -->
-						<!-- <ActionDownload v-if="albumFileIds.length > 0"
+					:loading="loadingCollection || loadingCollectionFiles"
+					:params="{ token }"
+					path="/"
+					:rootTitle="albumOriginalName"
+					:title="albumOriginalName"
+					@refresh="fetchAlbumContent">
+					<template #subtitle>
+						<div v-if="album !== null && album.attributes.location !== ''" class="album__location">
+							<MapMarkerOutline />{{ album.attributes.location }}
+						</div>
+					</template>
+
+					<template v-if="album !== undefined" #right>
+						<NcActions :forceMenu="true" :aria-label="t('photos', 'Open actions menu')">
+							<!-- TODO: enable download on public albums -->
+							<!-- <ActionDownload v-if="albumFileIds.length > 0"
 							:selected-file-ids="albumFileIds"
 							:title="t('photos', 'Download all files in album')">
 							<DownloadMultiple slot="icon" />
 						</ActionDownload> -->
 
-						<template v-if="selectedFileIds.length > 0">
+							<template v-if="selectedFileIds.length > 0">
 							<!-- TODO: enable download on public albums -->
 							<!-- <NcActionSeparator />
 
@@ -49,17 +50,21 @@
 								{{ t('photos', 'Remove selection from album') }}
 								<Close slot="icon" />
 							<//** > */ -->
-						</template>
-					</NcActions>
-				</template>
-			</HeaderNavigation>
+							</template>
+						</NcActions>
+					</template>
+				</HeaderNavigation>
+			</template>
 
 			<!-- No content -->
-			<NcEmptyContent
-				slot="empty-content"
-				:name="t('photos', 'This album does not have any photos or videos yet!')"
-				class="album__empty">
-				<ImageOffOutline slot="icon" />
+			<template #emptyContent>
+				<NcEmptyContent
+
+					:name="t('photos', 'This album does not have any photos or videos yet!')"
+					class="album__empty">
+					<template #icon>
+						<ImageOffOutline />
+					</template>
 
 				<!-- Public upload is not implemented yet
 				<NcButton slot="action"
@@ -70,20 +75,23 @@
 					{{ t('photos', "Add") }}
 				</NcButton>
 				-->
-			</NcEmptyContent>
+				</NcEmptyContent>
+			</template>
 		</CollectionContent>
 	</div>
 </template>
 
-<script lang='ts'>
+<script setup lang="ts">
 import type { PublicAlbum } from '../store/publicAlbums.ts'
 
 import { getClient } from '@nextcloud/files/dav'
 // import Download from 'vue-material-design-icons/TrayArrowDown.vue'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
-import { translate } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
-import { isMobile, /** NcButton, */ NcActions, /** NcActionSeparator, */ NcEmptyContent } from '@nextcloud/vue'
+import { computed, onBeforeMount, ref } from 'vue'
+import NcActions from '@nextcloud/vue/components/NcActions'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 // import Plus from 'vue-material-design-icons/Plus.vue'
 // import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
 import ImageOffOutline from 'vue-material-design-icons/ImageOffOutline.vue'
@@ -91,122 +99,70 @@ import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
-import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.ts'
+import { useFetchCollectionContent } from '../composables/useFetchCollectionContent.ts'
 import { albumFilesExtraProps } from '../store/albums.ts'
-import { publicAlbumsExtraProps, publicAlbumsPrefix } from '../store/publicAlbums.ts'
+import { publicAlbumsExtraProps, publicAlbumsPrefix, usePublicAlbumsStore } from '../store/publicAlbums.ts'
 
-export default {
-	name: 'PublicAlbumContent',
-	components: {
-		MapMarkerOutline,
-		// Plus,
-		// Download,
-		// DownloadMultiple,
-		// ImagePlus,
-		ImageOffOutline,
-		NcEmptyContent,
-		NcActions,
-		// NcActionSeparator,
-		// NcButton,
-		CollectionContent,
-		// ActionDownload,
-		HeaderNavigation,
-	},
+const props = defineProps<{
+	token: string
+}>()
 
-	mixins: [
-		FetchCollectionContentMixin,
-		isMobile,
-	],
+const publicAlbumsStore = usePublicAlbumsStore()
+const {
+	fetchCollection,
+	fetchCollectionFiles,
+	loadingCollection,
+	loadingCollectionFiles,
+	errorFetchingCollection,
+	errorFetchingCollectionFiles,
+} = useFetchCollectionContent()
 
-	props: {
-		token: {
-			type: String,
-			required: true,
-		},
-	},
+const albumOriginalName = ref('')
+const publicClient = getClient(generateRemoteUrl('dav'), {
+	Authorization: `Basic ${btoa(`${props.token}:`)}`,
+})
 
-	data() {
-		return {
-			showAddPhotosModal: false,
-			loadingCount: 0,
-			loadingAddFilesToAlbum: false,
-			albumOriginalName: '',
-			publicClient: getClient(generateRemoteUrl('dav'), {
-				Authorization: `Basic ${btoa(`${this.token}:`)}`,
-			}),
-		}
-	},
+const albumName = computed(() => props.token)
 
-	computed: {
-		album(): PublicAlbum {
-			return this.$store.getters.getPublicAlbum(this.albumName)
-		},
+const album = computed(() => publicAlbumsStore.getPublicAlbum(albumName.value))
 
-		albumName(): string {
-			return this.token
-		},
+const albumFileIds = computed(() => publicAlbumsStore.getPublicAlbumFiles(albumName.value))
 
-		albumFileIds(): string[] {
-			return this.$store.getters.getPublicAlbumFiles(this.albumName)
-		},
+async function fetchAlbumInfo() {
+	const album = await fetchCollection(
+		`${publicAlbumsPrefix}/${props.token}`,
+		publicAlbumsExtraProps,
+		publicClient,
+	) as PublicAlbum
 
-		publicAlbumFileName(): string {
-			return this.$store.getters.getPublicAlbumName(this.albumName)
-		},
-	},
-
-	async beforeMount() {
-		await this.fetchAlbumInfo()
-		await this.fetchAlbumContent()
-	},
-
-	methods: {
-		async fetchAlbumInfo() {
-			const album = await this.fetchCollection(
-				`${publicAlbumsPrefix}/${this.token}`,
-				publicAlbumsExtraProps,
-				this.publicClient,
-			) as PublicAlbum
-
-			if (album !== null) { // Could be null in case of 404.
-				this.albumOriginalName = album.attributes['original-name']
-			}
-		},
-
-		async fetchAlbumContent() {
-			const files = await this.fetchCollectionFiles(
-				`${publicAlbumsPrefix}/${this.token}`,
-				[...albumFilesExtraProps, ...publicAlbumsExtraProps],
-				this.publicClient,
-			)
-
-			files.forEach((file) => {
-				const decodedEtag = String(file.attributes.etag).replace(/(&quot;|")/g, '')
-
-				file.update({
-					// Use custom preview URL to avoid authentication prompt
-					previewUrl: generateUrl(`/apps/photos/api/v1/publicPreview/${file.fileid}?etag=${decodedEtag}&x=4096&y=4096&token=${this.token}`),
-					// Disable use of generic file previews for public albums - for older versions of the Viewer app
-					hasPreview: false,
-				})
-			})
-		},
-
-		async handleFilesPicked(fileIds: string[]) {
-			this.showAddPhotosModal = false
-			await this.$store.dispatch('addFilesToCollection', { collectionFileName: this.album.root + this.albumName, fileIdsToAdd: fileIds })
-			// Re-fetch album content to have the proper filenames.
-			await this.fetchAlbumContent()
-		},
-
-		async handleRemoveFilesFromAlbum(fileIds: string[]) {
-			this.$refs.collectionContent.onUncheckFiles(fileIds)
-			await this.$store.dispatch('removeFilesFromCollection', { collectionFileName: this.album.root + this.albumName, fileIdsToRemove: fileIds })
-		},
-
-		t: translate,
-	},
+	if (album !== null) { // Could be null in case of 404.
+		albumOriginalName.value = album.attributes['original-name']
+	}
 }
+
+async function fetchAlbumContent() {
+	const files = await fetchCollectionFiles(
+		`${publicAlbumsPrefix}/${props.token}`,
+		[...albumFilesExtraProps, ...publicAlbumsExtraProps],
+		publicClient,
+	)
+
+	files.forEach((file) => {
+		const decodedEtag = String(file.attributes.etag).replace(/(&quot;|")/g, '')
+
+		file.update({
+			// Use custom preview URL to avoid authentication prompt
+			previewUrl: generateUrl(`/apps/photos/api/v1/publicPreview/${file.fileid}?etag=${decodedEtag}&x=4096&y=4096&token=${props.token}`),
+			// Disable use of generic file previews for public albums - for older versions of the Viewer app
+			hasPreview: false,
+		})
+	})
+}
+
+onBeforeMount(async () => {
+	await fetchAlbumInfo()
+	await fetchAlbumContent()
+})
 </script>
 
 <style lang="scss" scoped>

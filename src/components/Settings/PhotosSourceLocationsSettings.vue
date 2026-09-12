@@ -18,10 +18,10 @@
 				:key="index">
 				<PhotosFolder
 					:path="source"
-					can-delete
-					:root-folder-label="t('photos', 'All folders')"
-					:root-folder-icon="FolderMultipleOutline"
-					@remove-folder="removeSourceFolder(index)" />
+					canDelete
+					:rootFolderLabel="t('photos', 'All folders')"
+					:rootFolderIcon="FolderMultipleOutline"
+					@removeFolder="removeSourceFolder(index)" />
 			</li>
 		</ul>
 
@@ -37,74 +37,51 @@
 	</div>
 </template>
 
-<script lang='ts'>
+<script setup lang="ts">
 import { getFilePickerBuilder } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import debounce from 'debounce'
-import { defineComponent } from 'vue'
+import { computed } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import FolderMultipleOutline from 'vue-material-design-icons/FolderMultipleOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import PhotosFolder from './PhotosFolder.vue'
-import logger from '../../services/logger.js'
+import { logger } from '../../services/logger.ts'
+import { useUserConfigStore } from '../../store/userConfig.ts'
 
-export default defineComponent({
-	name: 'PhotosSourceLocationsSettings',
+const userConfigStore = useUserConfigStore()
 
-	components: {
-		NcButton,
-		PhotosFolder,
-		Plus,
-	},
+const photosSourceFolders = computed<string[]>(() => userConfigStore.photosSourceFolders)
 
-	data() {
-		return {
-			FolderMultipleOutline,
-		}
-	},
+const debounceAddSourceFolder = debounce(addSourceFolder, 200, { immediate: false })
 
-	computed: {
-		photosSourceFolders(): string[] {
-			return this.$store.state.userConfig.photosSourceFolders
-		},
-	},
+async function openFilePicker(title: string): Promise<string> {
+	const picker = getFilePickerBuilder(title)
+		.setMultiSelect(false)
+		.addMimeTypeFilter('httpd/unix-directory')
+		.allowDirectories()
+		.addButton({
+			label: t('photos', 'Pick folder'),
+			callback: (nodes) => logger.debug('Picked', { nodes }),
+		})
+		.build()
 
-	methods: {
-		debounceAddSourceFolder: debounce(function(...args) {
-			this.addSourceFolder(...args)
-		}, 200, { immediate: false }),
+	return picker.pick()
+}
 
-		async openFilePicker(title: string): Promise<string> {
-			const picker = getFilePickerBuilder(title)
-				.setMultiSelect(false)
-				.addMimeTypeFilter('httpd/unix-directory')
-				.allowDirectories()
-				.addButton({
-					label: t('photos', 'Pick folder'),
-					callback: (nodes) => logger.debug('Picked', { nodes }),
-				})
-				.build()
+async function addSourceFolder() {
+	const pickedFolder = await openFilePicker(t('photos', 'Select a source folder for your media'))
+	if (photosSourceFolders.value.includes(pickedFolder)) {
+		return
+	}
+	userConfigStore.updateUserConfig('photosSourceFolders', [...photosSourceFolders.value, pickedFolder])
+}
 
-			return picker.pick()
-		},
-
-		async addSourceFolder() {
-			const pickedFolder = await this.openFilePicker(t('photos', 'Select a source folder for your media'))
-			if (this.photosSourceFolders.includes(pickedFolder)) {
-				return
-			}
-			this.$store.dispatch('updateUserConfig', { key: 'photosSourceFolders', value: [...this.photosSourceFolders, pickedFolder] })
-		},
-
-		removeSourceFolder(index) {
-			const folders = [...this.photosSourceFolders]
-			folders.splice(index, 1)
-			this.$store.dispatch('updateUserConfig', { key: 'photosSourceFolders', value: folders })
-		},
-
-		t,
-	},
-})
+function removeSourceFolder(index: number) {
+	const folders = [...photosSourceFolders.value]
+	folders.splice(index, 1)
+	userConfigStore.updateUserConfig('photosSourceFolders', folders)
+}
 </script>
 
 <style lang="scss" scoped>

@@ -5,9 +5,9 @@
 
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import filters from '../services/PhotosFilters/index.ts'
+import { photosFilters as filters } from '../services/PhotosFilters/index.ts'
 
-export default defineStore('filters', () => {
+export const useFilterStore = defineStore('filters', () => {
 	const selectedFilters = ref<Record<string, unknown[]>>(filters.reduce((acc, filter) => ({ ...acc, [filter.id]: [] }), {}))
 
 	const filtersQuery = computed(() => {

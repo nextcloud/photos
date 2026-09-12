@@ -9,90 +9,78 @@
 			:loading="loadingCollections"
 			:error="errorFetchingCollections"
 			class="places-list">
-			<HeaderNavigation
-				key="navigation"
-				slot="header"
-				:loading="loadingCollections"
-				:title="t('photos', 'Places')"
-				:root-title="t('photos', 'Places')"
-				@refresh="fetchPlaces" />
+			<template #header>
+				<HeaderNavigation
+					key="navigation"
 
-			<CollectionCover
-				:key="collection.basename"
-				slot-scope="{ collection }"
-				parent-route="/places"
-				:collection-name="collection.basename"
-				:alt-img="t('photos', 'Cover photo for place {placeName}', { placeName: collection.basename })"
-				:cover-url="collection.attributes['last-photo'] | coverUrl">
-				<span class="place__name">
-					{{ collection.basename }}
-				</span>
+					:loading="loadingCollections"
+					:title="t('photos', 'Places')"
+					:rootTitle="t('photos', 'Places')"
+					@refresh="fetchPlaces" />
+			</template>
 
-				<div slot="subtitle" class="place__details">
-					{{ n('photos', '%n item', '%n photos and videos', collection.attributes.nbItems) }}
-				</div>
-			</CollectionCover>
+			<template #default="{ collection }">
+				<CollectionCover
+					:key="collection.basename"
+					parentRoute="/places"
+					:collectionName="collection.basename"
+					:altImg="t('photos', 'Cover photo for place {placeName}', { placeName: collection.basename })"
+					:coverUrl="coverUrl(collection.attributes['last-photo'])">
+					<span class="place__name">
+						{{ collection.basename }}
+					</span>
 
-			<NcEmptyContent slot="empty-collections-list" :name="t('photos', 'There is no place yet!')">
-				<ImageMultipleOutline slot="icon" />
-			</NcEmptyContent>
+					<template #subtitle>
+						<div class="place__details">
+							{{ n('photos', '%n item', '%n photos and videos', collection.attributes.nbItems) }}
+						</div>
+					</template>
+				</CollectionCover>
+			</template>
+
+			<template #emptyCollectionsList>
+				<NcEmptyContent :name="t('photos', 'There is no place yet!')">
+					<template #icon>
+						<ImageMultipleOutline />
+					</template>
+				</NcEmptyContent>
+			</template>
 		</CollectionsList>
 	</div>
 </template>
 
-<script lang='ts'>
-
-import { translate, translatePlural } from '@nextcloud/l10n'
+<script setup lang="ts">
+import { n, t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
+import { computed, onBeforeMount } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import CollectionCover from '../components/Collection/CollectionCover.vue'
 import CollectionsList from '../components/Collection/CollectionsList.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
-import { placesPrefix } from '../store/places.js'
+import { useFetchCollections } from '../composables/useFetchCollections.ts'
+import { placesPrefix, usePlacesStore } from '../store/places.ts'
 
-export default {
-	name: 'PlacesView',
-	components: {
-		ImageMultipleOutline,
-		NcEmptyContent,
-		CollectionsList,
-		CollectionCover,
-		HeaderNavigation,
-	},
+const placesStore = usePlacesStore()
+const { fetchCollections, errorFetchingCollections, loadingCollections } = useFetchCollections()
 
-	filters: {
-		coverUrl(fileId: number) {
-			if (fileId === -1) {
-				return ''
-			}
+const places = computed(() => placesStore.places)
 
-			return generateUrl(`/apps/photos/api/v1/preview/${fileId}?x=${512}&y=${512}`)
-		},
-	},
+function coverUrl(fileId: number): string {
+	if (fileId === -1) {
+		return ''
+	}
 
-	mixins: [FetchCollectionsMixin],
-
-	computed: {
-		places() {
-			return this.$store.getters.places
-		},
-	},
-
-	async beforeMount() {
-		this.fetchPlaces()
-	},
-
-	methods: {
-		fetchPlaces() {
-			this.fetchCollections(placesPrefix)
-		},
-
-		t: translate,
-		n: translatePlural,
-	},
+	return generateUrl(`/apps/photos/api/v1/preview/${fileId}?x=${512}&y=${512}`)
 }
+
+function fetchPlaces() {
+	fetchCollections(placesPrefix)
+}
+
+onBeforeMount(() => {
+	fetchPlaces()
+})
 </script>
 
 <style lang="scss" scoped>

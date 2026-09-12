@@ -18,4 +18,4 @@ function getLogger(user) {
 		.build()
 }
 
-export default getLogger(getCurrentUser())
+export const logger = getLogger(getCurrentUser())

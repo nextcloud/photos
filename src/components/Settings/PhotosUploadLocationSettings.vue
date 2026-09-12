@@ -8,7 +8,7 @@
 		<NcFormBox>
 			<NcFormBoxButton
 				:description="photosLocationName"
-				:inverted-accent="true"
+				:invertedAccent="true"
 				@click="debounceSelectPhotosFolder">
 				<template #icon>
 					<FolderOpenOutline :size="20" />
@@ -19,79 +19,55 @@
 	</div>
 </template>
 
-<script lang='ts'>
+<script setup lang="ts">
 import { getFilePickerBuilder } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import debounce from 'debounce'
-import { defineComponent } from 'vue'
+import { computed } from 'vue'
 import NcFormBox from '@nextcloud/vue/components/NcFormBox'
 import NcFormBoxButton from '@nextcloud/vue/components/NcFormBoxButton'
 import FolderOpenOutline from 'vue-material-design-icons/FolderOpenOutline.vue'
-import HomeOutline from 'vue-material-design-icons/HomeOutline.vue'
-import logger from '../../services/logger.js'
+import { logger } from '../../services/logger.ts'
+import { useUserConfigStore } from '../../store/userConfig.ts'
 
-export default defineComponent({
-	name: 'PhotosUploadLocationSettings',
+const userConfigStore = useUserConfigStore()
 
-	components: {
-		NcFormBox,
-		NcFormBoxButton,
-		FolderOpenOutline,
-	},
+const photosLocation = computed<string>(() => userConfigStore.photosLocation)
 
-	data() {
-		return {
-			HomeOutline,
-		}
-	},
-
-	computed: {
-		photosLocation(): string {
-			return this.$store.state.userConfig.photosLocation
-		},
-
-		photosLocationName(): string {
-			switch (this.photosLocation) {
-				case '/':
-					return t('photos', 'Home')
-				default:
-					return this.photosLocation
-			}
-		},
-	},
-
-	methods: {
-		debounceSelectPhotosFolder: debounce(function() {
-			this.selectPhotosFolder()
-		}),
-
-		async selectPhotosFolder(): Promise<void> {
-			const pickedFolder = await this.openFilePicker(t('photos', 'Select the default upload location for your media'))
-			this.updatePhotosFolder(pickedFolder)
-		},
-
-		async openFilePicker(title: string): Promise<string> {
-			const picker = getFilePickerBuilder(title)
-				.setMultiSelect(false)
-				.addMimeTypeFilter('httpd/unix-directory')
-				.allowDirectories()
-				.startAt(this.photosLocation)
-				.addButton({
-					label: t('photos', 'Pick folder'),
-					callback: (nodes) => logger.debug('Picked', { nodes }),
-				})
-				.build()
-
-			return picker.pick()
-		},
-
-		updatePhotosFolder(path: string): void {
-			this.$store.dispatch('updateUserConfig', { key: 'photosLocation', value: path })
-		},
-
-		t,
-	},
+const photosLocationName = computed<string>(() => {
+	switch (photosLocation.value) {
+		case '/':
+			return t('photos', 'Home')
+		default:
+			return photosLocation.value
+	}
 })
+
+const debounceSelectPhotosFolder = debounce(selectPhotosFolder)
+
+async function selectPhotosFolder(): Promise<void> {
+	const pickedFolder = await openFilePicker(t('photos', 'Select the default upload location for your media'))
+	updatePhotosFolder(pickedFolder)
+}
+
+async function openFilePicker(title: string): Promise<string> {
+	const picker = getFilePickerBuilder(title)
+		.setMultiSelect(false)
+		.addMimeTypeFilter('httpd/unix-directory')
+		.allowDirectories()
+		.startAt(photosLocation.value)
+		.addButton({
+			label: t('photos', 'Pick folder'),
+			callback: (nodes) => logger.debug('Picked', { nodes }),
+		})
+		.build()
+
+	return picker.pick()
+}
+
+function updatePhotosFolder(path: string): void {
+	userConfigStore.updateUserConfig('photosLocation', path)
+}
 </script>
 
 <style lang="scss" scoped>

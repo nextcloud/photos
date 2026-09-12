@@ -17,8 +17,8 @@
 				:name="originalName(album)"
 				:aria-label="t('photos', 'Add selection to album {albumName}', { albumName: album.basename })"
 				@click="pickAlbum(album)">
-				<template slot="icon">
-					<img v-if="album.attributes['last-photo'] !== -1" class="album__image" :src="album.attributes['last-photo'] | toCoverUrl">
+				<template #icon>
+					<img v-if="album.attributes['last-photo'] !== -1" class="album__image" :src="toCoverUrl(album.attributes['last-photo'])">
 					<div v-else class="album__image album__image--placeholder">
 						<ImageMultipleOutline :size="32" />
 					</div>
@@ -27,7 +27,7 @@
 				<template #subname>
 					{{ n('photos', '%n item', '%n photos and videos', album.attributes.nbItems) }}
 					<template v-if="isSharedAlbum(album)">
-						⸱ {{ t('photos', 'Shared by') }}&nbsp;<NcUserBubble :display-name="album.attributes.collaborators[0].label" :user="album.attributes.collaborators[0].id" />
+						⸱ {{ t('photos', 'Shared by') }}&nbsp;<NcUserBubble :displayName="album.attributes.collaborators[0].label" :user="album.attributes.collaborators[0].id" />
 					</template>
 				</template>
 			</NcListItem>
@@ -47,19 +47,19 @@
 
 	<AlbumForm
 		v-else
-		:display-back-button="true"
+		:displayBackButton="true"
 		:title="t('photos', 'New album')"
 		@back="showAlbumCreationForm = false"
 		@done="albumCreatedHandler" />
 </template>
 
-<script lang='ts'>
+<script setup lang="ts">
 import type { Album } from '../../store/albums.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
-import { translate, translatePlural } from '@nextcloud/l10n'
+import { n, t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
-import { defineComponent } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcListItem from '@nextcloud/vue/components/NcListItem'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
@@ -67,84 +67,59 @@ import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import AlbumForm from './AlbumForm.vue'
-import FetchCollectionsMixin from '../../mixins/FetchCollectionsMixin.ts'
+import { useFetchCollections } from '../../composables/useFetchCollections.ts'
 import { albumsExtraProps } from '../../store/albums.ts'
+import { useAlbumsStore } from '../../store/albums.ts'
+import { useSharedAlbumsStore } from '../../store/sharedAlbums.ts'
 
-export default defineComponent({
-	name: 'AlbumPicker',
+const emit = defineEmits<{
+	albumPicked: [album: Album]
+}>()
 
-	components: {
-		Plus,
-		ImageMultipleOutline,
-		NcButton,
-		NcListItem,
-		NcLoadingIcon,
-		NcUserBubble,
-		AlbumForm,
-	},
+const albumsStore = useAlbumsStore()
+const sharedAlbumsStore = useSharedAlbumsStore()
+const { fetchCollections, loadingCollections } = useFetchCollections()
 
-	filters: {
-		toCoverUrl(fileId: string): string {
-			return generateUrl(`/apps/photos/api/v1/preview/${fileId}?x=${64}&y=${64}`)
-		},
-	},
+const showAlbumCreationForm = ref(false)
 
-	mixins: [FetchCollectionsMixin],
+const albums = computed(() => albumsStore.albums)
 
-	data() {
-		return {
-			showAlbumCreationForm: false,
-		}
-	},
+const sharedAlbums = computed(() => sharedAlbumsStore.sharedAlbums)
 
-	computed: {
-		albums() {
-			return this.$store.getters.albums
-		},
+const allAlbums = computed(() => [...Object.values(albums.value), ...Object.values(sharedAlbums.value)] as Album[])
 
-		sharedAlbums() {
-			return this.$store.getters.sharedAlbums
-		},
+function toCoverUrl(fileId: number): string {
+	return generateUrl(`/apps/photos/api/v1/preview/${fileId}?x=${64}&y=${64}`)
+}
 
-		allAlbums() {
-			return [...Object.values(this.albums), ...Object.values(this.sharedAlbums)] as Album[]
-		},
-	},
+async function fetchAlbumList() {
+	await fetchCollections(`/photos/${getCurrentUser()?.uid}/albums`, albumsExtraProps)
+	await fetchCollections(`/photos/${getCurrentUser()?.uid}/sharedalbums`, albumsExtraProps)
+}
 
-	mounted() {
-		this.fetchAlbumList()
-	},
+function albumCreatedHandler() {
+	showAlbumCreationForm.value = false
+	fetchAlbumList()
+}
 
-	methods: {
-		async fetchAlbumList() {
-			await this.fetchCollections(`/photos/${getCurrentUser()?.uid}/albums`, albumsExtraProps)
-			await this.fetchCollections(`/photos/${getCurrentUser()?.uid}/sharedalbums`, albumsExtraProps)
-		},
+function pickAlbum(album: Album) {
+	emit('albumPicked', album)
+}
 
-		albumCreatedHandler() {
-			this.showAlbumCreationForm = false
-			this.fetchAlbumList()
-		},
+function isSharedAlbum(album: Album) {
+	return album.path.match(/^\/photos\/.+\/sharedalbums\//) !== null
+}
 
-		pickAlbum(album: Album) {
-			this.$emit('album-picked', album)
-		},
+function originalName(album: Album) {
+	if (isSharedAlbum(album)) {
+		return album.basename.replace(new RegExp(`\\(${album.attributes.collaborators[0].id}\\)$`), '')
+	} else {
+		return album.basename
+	}
+}
 
-		isSharedAlbum(album: Album) {
-			return album.path.match(/^\/photos\/.+\/sharedalbums\//) !== null
-		},
-
-		originalName(album: Album) {
-			if (this.isSharedAlbum(album)) {
-				return album.basename.replace(new RegExp(`\\(${album.attributes.collaborators[0].id}\\)$`), '')
-			} else {
-				return album.basename
-			}
-		},
-
-		t: translate,
-		n: translatePlural,
-	},
+onMounted(() => {
+	fetchAlbumList()
 })
 </script>
 

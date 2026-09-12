@@ -32,7 +32,7 @@
 				data-test="face"
 				:data-test-face-name="face.basename"
 				:to="`/faces/${encodeURIComponent(face.basename)}`">
-				<FaceCover :base-name="face.basename" />
+				<FaceCover :baseName="face.basename" />
 			</RouterLink>
 			<RouterLink
 				key="unassigned"
@@ -44,61 +44,37 @@
 	</div>
 </template>
 
-<script lang='ts'>
-import type { Collection } from '../services/collectionFetcher.js'
+<script setup lang="ts">
+import type { Collection } from '../services/collectionFetcher.ts'
 
 import { t } from '@nextcloud/l10n'
+import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
 import FaceCover from '../components/Faces/FaceCover.vue'
 import UnassignedFacesCover from '../components/Faces/UnassignedFacesCover.vue'
-import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
+import { useFetchFaces } from '../composables/useFetchFaces.ts'
+import { useFacesStore } from '../store/faces.ts'
 
-export default {
-	name: 'FacesView',
-	components: {
-		UnassignedFacesCover,
-		FaceCover,
-		NcEmptyContent,
-		NcLoadingIcon,
-		RouterLink,
-		AccountBoxMultipleOutline,
-	},
+const facesStore = useFacesStore()
+const { loadingFaces, errorFetchingFaces } = useFetchFaces()
 
-	mixins: [FetchFacesMixin],
+const faces = computed(() => facesStore.faces)
+const facesFiles = computed(() => facesStore.facesFiles)
 
-	computed: {
-		facesFiles() {
-			return this.$store.state.faces.facesFiles
-		},
+const noFaces = computed<boolean>(() => Object.keys(faces.value).length === 0)
 
-		unassignedFilesCount() {
-			return this.$store.state.faces.unassignedFilesCount
-		},
-
-		noFaces(): boolean {
-			return Object.keys(this.faces).length === 0
-		},
-
-		orderedFaces() {
-			return Object.values(this.faces as Collection[]).sort((a, b) => {
-				if (a.attributes.nbItems && b.attributes.nbItems) {
-					return b.attributes.nbItems - a.attributes.nbItems
-				}
-				if (!this.facesFiles[b.basename] || !this.facesFiles[a.basename]) {
-					return 0
-				}
-				return this.facesFiles[b.basename].length - this.facesFiles[a.basename].length
-			})
-		},
-	},
-
-	methods: {
-		t,
-	},
-}
+const orderedFaces = computed<Collection[]>(() => Object.values(faces.value).sort((a, b) => {
+	if (a.attributes.nbItems && b.attributes.nbItems) {
+		return b.attributes.nbItems - a.attributes.nbItems
+	}
+	if (!facesFiles.value[b.basename] || !facesFiles.value[a.basename]) {
+		return 0
+	}
+	return facesFiles.value[b.basename].length - facesFiles.value[a.basename].length
+}))
 </script>
 
 <style lang="scss" scoped>

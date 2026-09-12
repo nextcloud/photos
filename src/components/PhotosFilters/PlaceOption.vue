@@ -21,9 +21,9 @@ import type { PlacesValueType } from '../../services/PhotosFilters/placesFilter.
 import { generateUrl } from '@nextcloud/router'
 import { computed } from 'vue'
 import NcChip from '@nextcloud/vue/components/NcChip'
-import useFetchCollections from '../../mixins/useFetchCollections.ts'
-import store from '../../store/index.ts'
+import { useFetchCollections } from '../../composables/useFetchCollections.ts'
 import { placesPrefix } from '../../store/places.ts'
+import { usePlacesStore } from '../../store/places.ts'
 
 const props = defineProps<{
 	value: PlacesValueType
@@ -31,10 +31,11 @@ const props = defineProps<{
 
 const emit = defineEmits(['deselect'])
 
+const placesStore = usePlacesStore()
 const { fetchCollections } = useFetchCollections()
 
 const placeImageSource = computed<string>(() => {
-	const place = store.getters.getPlace(props.value)
+	const place = placesStore.getPlace(props.value)
 
 	if (!place) {
 		return ''
@@ -43,7 +44,7 @@ const placeImageSource = computed<string>(() => {
 	return generateUrl(`/apps/photos/api/v1/preview/${place.attributes['last-photo']}?x=${64}&y=${64}`)
 })
 
-if (Object.values(store.getters.places).length === 0) {
+if (Object.values(placesStore.places).length === 0) {
 	fetchCollections(placesPrefix)
 }
 

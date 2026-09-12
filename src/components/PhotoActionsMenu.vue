@@ -7,28 +7,28 @@
 	<div class="photo-actions" :class="{ 'photo-actions--open': menuOpen }" @click.stop>
 		<NcActions
 			:aria-label="t('photos', 'Actions for {name}', { name: photo.basename })"
-			force-menu
+			forceMenu
 			:open="menuOpen"
 			@update:open="menuOpen = $event">
 			<template #icon>
 				<DotsVertical :size="20" />
 			</template>
 
-			<NcActionButton close-after-click @click="metadataShown = true">
+			<NcActionButton closeAfterClick @click="metadataShown = true">
 				<template #icon>
 					<InformationOutline :size="20" />
 				</template>
 				{{ t('photos', 'View metadata') }}
 			</NcActionButton>
 
-			<NcActionButton v-if="canEdit" close-after-click @click="metadataEditShown = true">
+			<NcActionButton v-if="canEdit" closeAfterClick @click="metadataEditShown = true">
 				<template #icon>
 					<PencilOutline :size="20" />
 				</template>
 				{{ t('photos', 'Edit metadata') }}
 			</NcActionButton>
 
-			<NcActionButton v-if="isLoggedIn" close-after-click @click="toggleFavorite">
+			<NcActionButton v-if="isLoggedIn" closeAfterClick @click="toggleFavorite">
 				<template #icon>
 					<Star v-if="photo.favorite" :size="20" />
 					<StarOutline v-else :size="20" />
@@ -38,21 +38,21 @@
 					: t('photos', 'Add to favorites') }}
 			</NcActionButton>
 
-			<NcActionButton v-if="canTag" close-after-click @click="tagsShown = true">
+			<NcActionButton v-if="canTag" closeAfterClick @click="tagsShown = true">
 				<template #icon>
 					<TagMultipleOutline :size="20" />
 				</template>
 				{{ t('photos', 'Manage tags') }}
 			</NcActionButton>
 
-			<NcActionButton v-if="isLoggedIn" close-after-click @click="albumPickerShown = true">
+			<NcActionButton v-if="isLoggedIn" closeAfterClick @click="albumPickerShown = true">
 				<template #icon>
 					<ImageMultipleOutline :size="20" />
 				</template>
 				{{ t('photos', 'Add to album') }}
 			</NcActionButton>
 
-			<NcActionButton v-if="canShare" close-after-click @click="share">
+			<NcActionButton v-if="canShare" closeAfterClick @click="share">
 				<template #icon>
 					<ShareVariantOutline :size="20" />
 				</template>
@@ -61,7 +61,7 @@
 
 			<NcActionSeparator v-if="canDelete" />
 
-			<NcActionButton v-if="canDelete" close-after-click @click="deleteConfirmationShown = true">
+			<NcActionButton v-if="canDelete" closeAfterClick @click="deleteConfirmationShown = true">
 				<template #icon>
 					<TrashCanOutline :size="20" />
 				</template>
@@ -86,9 +86,9 @@
 
 		<NcModal
 			v-if="albumPickerShown"
-			:label-id="`album-picker-${photo.fileid}`"
+			:labelId="`album-picker-${photo.fileid}`"
 			@close="albumPickerShown = false">
-			<AlbumPicker @album-picked="addToAlbum" />
+			<AlbumPicker @albumPicked="addToAlbum" />
 		</NcModal>
 
 		<NcDialog
@@ -138,9 +138,10 @@ import AlbumPicker from './Albums/AlbumPicker.vue'
 import PhotoMetadataDialog from './PhotoMetadataDialog.vue'
 import PhotoMetadataEditDialog from './PhotoMetadataEditDialog.vue'
 import PhotoTagsDialog from './PhotoTagsDialog.vue'
-import areTagsInstalled from '../services/AreTagsInstalled.ts'
-import logger from '../services/logger.ts'
-import store from '../store/index.ts'
+import { areTagsInstalled } from '../services/AreTagsInstalled.ts'
+import { logger } from '../services/logger.ts'
+import { useCollectionsStore } from '../store/collections.ts'
+import { useFilesStore } from '../store/files.ts'
 
 const props = defineProps<{
 	/** Photo the actions apply to. */
@@ -152,6 +153,9 @@ const props = defineProps<{
 const emit = defineEmits<{
 	(event: 'deleted', photo: PhotoTarget): void
 }>()
+
+const filesStore = useFilesStore()
+const collectionsStore = useCollectionsStore()
 
 const menuOpen = ref(false)
 const metadataShown = ref(false)
@@ -185,7 +189,7 @@ async function toggleFavorite(): Promise<void> {
 	const favorite = !props.photo.favorite
 
 	try {
-		await store.dispatch('setPhotoFavorite', { photo: props.photo, favorite })
+		await filesStore.setPhotoFavorite(props.photo, favorite)
 	} catch (error) {
 		logger.error('Error setting the favorite state of a photo', { error, filename: props.photo.basename })
 		showError(favorite
@@ -197,17 +201,14 @@ async function toggleFavorite(): Promise<void> {
 async function addToAlbum(album: Album): Promise<void> {
 	albumPickerShown.value = false
 
-	await store.dispatch('addFilesToCollection', {
-		collectionFileName: album.root + album.path,
-		fileIdsToAdd: [props.photo.fileid.toString()],
-	})
+	await collectionsStore.addFilesToCollection(album.root + album.path, [props.photo.fileid.toString()])
 }
 
 async function confirmDelete(): Promise<void> {
 	deleteConfirmationShown.value = false
 
 	try {
-		await store.dispatch('deletePhoto', props.photo)
+		await filesStore.deletePhoto(props.photo)
 		emit('deleted', props.photo)
 	} catch (error) {
 		logger.error('Error deleting a photo', { error, filename: props.photo.basename })

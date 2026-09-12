@@ -24,13 +24,13 @@
 						v-model="latitude"
 						inputmode="decimal"
 						:error="latitudeError !== undefined"
-						:helper-text="latitudeError ?? ''"
+						:helperText="latitudeError ?? ''"
 						:label="t('photos', 'Latitude')" />
 					<NcTextField
 						v-model="longitude"
 						inputmode="decimal"
 						:error="longitudeError !== undefined"
-						:helper-text="longitudeError ?? ''"
+						:helperText="longitudeError ?? ''"
 						:label="t('photos', 'Longitude')" />
 				</div>
 
@@ -46,6 +46,7 @@
 
 				<div v-if="location !== null" class="metadata-editor__location__map">
 					<LocationMap
+						height="200px"
 						:latitude="location.latitude"
 						:longitude="location.longitude"
 						:name="photo.basename" />
@@ -81,8 +82,8 @@ import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
 import MapMarkerOffOutline from 'vue-material-design-icons/MapMarkerOffOutline.vue'
 import { fetchPhotoExif } from '../services/exifFetcher.ts'
-import logger from '../services/logger.ts'
-import store from '../store/index.ts'
+import { logger } from '../services/logger.ts'
+import { useFilesStore } from '../store/files.ts'
 import { COORDINATE_LIMITS, getPhotoLocation, parseCoordinate } from '../utils/exif.ts'
 
 const props = defineProps<{
@@ -96,6 +97,8 @@ const emit = defineEmits<{
 
 // Leaflet is heavy and only ever needed once this dialog is open.
 const LocationMap = defineAsyncComponent(() => import('./LocationMap.vue'))
+
+const filesStore = useFilesStore()
 
 const loading = ref(true)
 const saving = ref(false)
@@ -177,8 +180,7 @@ async function save(): Promise<void> {
 	saving.value = true
 
 	try {
-		await store.dispatch('updatePhotoMetadata', {
-			photo: props.photo,
+		await filesStore.updatePhotoMetadata(props.photo, {
 			takenAt: Math.floor(date.getTime() / 1000),
 			location: location.value,
 		})
@@ -222,8 +224,6 @@ async function save(): Promise<void> {
 			// fills the width of the dialog.
 			:deep(.location-map) {
 				margin: 0;
-				width: 100%;
-				height: 200px;
 			}
 		}
 	}

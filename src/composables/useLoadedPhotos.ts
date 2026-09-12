@@ -10,9 +10,9 @@ import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import { computed, onUnmounted, ref } from 'vue'
 import { allMimes } from '../services/AllowedMimes.ts'
-import logger from '../services/logger.ts'
-import getPhotos from '../services/PhotoSearch.ts'
-import store from '../store/index.ts'
+import { logger } from '../services/logger.ts'
+import { getPhotos } from '../services/PhotoSearch.ts'
+import { useFilesStore } from '../store/files.ts'
 
 /**
  * Number of photos fetched at once. Views built on top of the loaded photos
@@ -30,12 +30,13 @@ export function useLoadedPhotos(): {
 	loading: Ref<boolean>
 	loadPhotos: () => Promise<void>
 } {
+	const filesStore = useFilesStore()
 	const abortController = new AbortController()
 	const loading = ref(false)
 
 	// The store also holds the folders and their content, so only the files
 	// with a media mime type are kept here.
-	const photos = computed<PhotoFile[]>(() => Object.values(store.state.files.files)
+	const photos = computed<PhotoFile[]>(() => Object.values(filesStore.files)
 		.filter((file) => allMimes.includes(file.mime ?? ''))
 		.sort((photo1, photo2) => photo2.attributes.timestamp - photo1.attributes.timestamp))
 
@@ -51,7 +52,7 @@ export function useLoadedPhotos(): {
 				nbResults: BATCH_SIZE,
 				signal: abortController.signal,
 			})
-			store.dispatch('appendFiles', files)
+			filesStore.appendFiles(files)
 		} catch (error) {
 			if (error instanceof DOMException && error.code === error.ABORT_ERR) {
 				return

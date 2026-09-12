@@ -9,13 +9,19 @@
 		<NcEmptyContent
 			v-if="errorFetchingFiles === 404"
 			:name="t('photos', 'One of the source folders does not exist')">
-			<FolderAlertOutline slot="icon" />
-			<PhotosSourceLocationsSettings
-				slot="action"
-				class="timeline__update_source_directory" />
+			<template #icon>
+				<FolderAlertOutline />
+			</template>
+			<template #action>
+				<PhotosSourceLocationsSettings
+
+					class="timeline__update_source_directory" />
+			</template>
 		</NcEmptyContent>
 		<NcEmptyContent v-else :name="t('photos', 'An error occurred')">
-			<AlertCircleOutline slot="icon" />
+			<template #icon>
+				<AlertCircleOutline />
+			</template>
 		</NcEmptyContent>
 	</div>
 
@@ -23,17 +29,16 @@
 		<!-- Header -->
 		<HeaderNavigation
 			key="navigation"
-			:loading="loadingCount > 0"
 			path="/"
 			:title="rootTitle"
-			:root-title="rootTitle"
+			:rootTitle="rootTitle"
 			@refresh="resetFetchFilesState">
 			<div class="timeline__header__left">
 				<!-- TODO: UploadPicker -->
 				<NcActions
 					v-if="selectedFileIds.length === 0"
 					:aria-label="t('photos', 'Change tile density')"
-					:menu-name="t('photos', 'Density')"
+					:menuName="t('photos', 'Density')"
 					data-cy-header-action="density">
 					<template #icon>
 						<ViewGridOutline :size="20" />
@@ -41,22 +46,22 @@
 					<NcActionRadio
 						name="photos-density"
 						value="small"
-						:model-value="gridDensity"
-						@update:model-value="setGridDensity">
+						:modelValue="gridDensity"
+						@update:modelValue="setGridDensity">
 						{{ t('photos', 'Small tiles') }}
 					</NcActionRadio>
 					<NcActionRadio
 						name="photos-density"
 						value="medium"
-						:model-value="gridDensity"
-						@update:model-value="setGridDensity">
+						:modelValue="gridDensity"
+						@update:modelValue="setGridDensity">
 						{{ t('photos', 'Default') }}
 					</NcActionRadio>
 					<NcActionRadio
 						name="photos-density"
 						value="large"
-						:model-value="gridDensity"
-						@update:model-value="setGridDensity">
+						:modelValue="gridDensity"
+						@update:modelValue="setGridDensity">
 						{{ t('photos', 'Large tiles') }}
 					</NcActionRadio>
 				</NcActions>
@@ -90,7 +95,7 @@
 
 				<template v-else>
 					<NcButton
-						:close-after-click="true"
+						:closeAfterClick="true"
 						variant="primary"
 						:aria-label="t('photos', 'Add to album')"
 						data-cy-header-action="add-to-album"
@@ -119,7 +124,7 @@
 					<NcActions :aria-label="t('photos', 'Open actions menu')">
 						<NcActionButton
 							data-cy-header-action="download-selection"
-							:close-after-click="true"
+							:closeAfterClick="true"
 							:aria-label="t('photos', 'Download selected files')"
 							@click="downloadSelectedFiles">
 							{{ t('photos', 'Download selected files') }}
@@ -129,10 +134,29 @@
 							</template>
 						</NcActionButton>
 
-						<ActionFavorite :selected-file-ids="selectedFileIds" />
+						<NcActionButton
+							v-if="shouldFavoriteSelection"
+							:closeAfterClick="true"
+							:aria-label="t('photos', 'Mark selection as favorite')"
+							@click="favoriteSelection">
+							{{ t('photos', 'Add selection to favorites') }}
+							<template #icon>
+								<StarOutline />
+							</template>
+						</NcActionButton>
+						<NcActionButton
+							v-else
+							:closeAfterClick="true"
+							:aria-label="t('photos', 'Remove selection from favorites')"
+							@click="unFavoriteSelection">
+							{{ t('photos', 'Remove selection from favorites') }}
+							<template #icon>
+								<Star />
+							</template>
+						</NcActionButton>
 
 						<NcActionButton
-							:close-after-click="true"
+							:closeAfterClick="true"
 							:aria-label="t('photos', 'Delete selection')"
 							data-cy-header-action="delete-selection"
 							@click="deleteSelection">
@@ -147,32 +171,31 @@
 		</HeaderNavigation>
 
 		<FilesListViewer
-			ref="filesListViewer"
-			:container-element="appContent"
+			:containerElement="appContent"
 			class="timeline__file-list"
-			:file-ids-by-section="fileIdsByMonth"
+			:fileIdsBySection="fileIdsByMonth"
 			:sections="monthsList"
 			:loading="loadingFiles"
-			:base-height="tileBaseHeight"
-			:empty-message="t('photos', 'No photos or videos in here')"
-			:scroll-to-section="scrubberTarget"
-			@need-content="getContent">
-			<template slot-scope="{ file, isHeader }">
+			:baseHeight="tileBaseHeight"
+			:emptyMessage="t('photos', 'No photos or videos in here')"
+			:scrollToSection="scrubberTarget"
+			@needContent="getContent">
+			<template #default="{ file, isHeader }">
 				<h2
 					v-if="isHeader"
 					:id="`file-picker-section-header-${file.id}`"
 					class="section-header">
-					<b>{{ file.id | dateMonth }}</b>
-					{{ file.id | dateYear }}
+					<b>{{ dateMonth(file.id) }}</b>
+					{{ dateYear(file.id) }}
 				</h2>
 				<FileComponent
 					v-else
 					:file="files[file.id]"
-					:allow-selection="true"
-					:burst-count="burstCount(file.id)"
+					:allowSelection="true"
+					:burstCount="burstCount(file.id)"
 					:selected="selection[file.id] === true"
 					@click="openViewer"
-					@select-toggled="onFileSelectToggle"
+					@selectToggled="onFileSelectToggle"
 					@deleted="onPhotoDeleted" />
 			</template>
 		</FilesListViewer>
@@ -181,34 +204,34 @@
 			month - there is nothing to scrub then. -->
 		<DateScrubber
 			:months="monthsList"
-			:month-counts="monthCounts"
-			:current-month="scrubberTarget || monthsList[0]"
+			:monthCounts="monthCounts"
+			:currentMonth="scrubberTarget || monthsList[0]"
 			@jump="onScrubberJump" />
 
 		<NcModal
 			v-if="showAlbumCreationForm"
 			key="albumCreationForm"
-			label-id="new-album-form"
-			:set-return-focus="$refs.newAlbumButton?.$el"
+			labelId="new-album-form"
+			:setReturnFocus="newAlbumButton?.$el"
 			@close="showAlbumCreationForm = false">
 			<h2 class="timeline__heading">
 				{{ t('photos', 'New album') }}
 			</h2>
-			<AlbumForm :filters-value="selectedFilters" @done="handleFormCreationDone" />
+			<AlbumForm :filtersValue="selectedFilters" @done="handleFormCreationDone" />
 		</NcModal>
 
 		<NcModal
 			v-if="showAlbumPicker"
 			key="albumPicker"
-			label-id="album-picker"
+			labelId="album-picker"
 			@close="showAlbumPicker = false">
-			<AlbumPicker @album-picked="addSelectionToAlbum" />
+			<AlbumPicker @albumPicked="addSelectionToAlbum" />
 		</NcModal>
 	</div>
 </template>
 
-<script lang='ts'>
-import type { PropType } from 'vue'
+<script setup lang="ts">
+import type { Collection } from '../services/collectionFetcher.ts'
 import type { Album } from '../store/albums.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
@@ -217,6 +240,8 @@ import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { storeToRefs } from 'pinia'
+import { computed, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
+import { onBeforeRouteLeave, useRouter } from 'vue-router'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActionRadio from '@nextcloud/vue/components/NcActionRadio'
 import NcActions from '@nextcloud/vue/components/NcActions'
@@ -229,10 +254,11 @@ import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue
 import Play from 'vue-material-design-icons/Play.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import PlusBoxMultipleOutline from 'vue-material-design-icons/PlusBoxMultipleOutline.vue'
+import Star from 'vue-material-design-icons/Star.vue'
+import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 import DownloadOutline from 'vue-material-design-icons/TrayArrowDown.vue'
 import ViewGridOutline from 'vue-material-design-icons/ViewGridOutline.vue'
-import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import AlbumPicker from '../components/Albums/AlbumPicker.vue'
 import DateScrubber from '../components/DateScrubber.vue'
@@ -240,273 +266,208 @@ import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
+import { useFetchFiles } from '../composables/useFetchFiles.ts'
+import { useFilesByMonth } from '../composables/useFilesByMonth.ts'
+import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { useGridDensity } from '../composables/useGridDensity.ts'
-import FetchFilesMixin from '../mixins/FetchFilesMixin.ts'
-import FilesByMonthMixin from '../mixins/FilesByMonthMixin.ts'
-import FilesSelectionMixin from '../mixins/FilesSelectionMixin.ts'
 import { allMimes } from '../services/AllowedMimes.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
-import useFilterStore from '../store/filters.ts'
+import { useCollectionsStore } from '../store/collections.ts'
+import { useFilesStore } from '../store/files.ts'
+import { useFilterStore } from '../store/filters.ts'
 import { configChangedEvent } from '../store/userConfig.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
-export default {
-	name: 'TimelineView',
-	components: {
-		DeleteOutline,
-		PlusBoxMultipleOutline,
-		DownloadOutline,
-		Close,
-		Play,
-		Plus,
-		FolderAlertOutline,
-		NcEmptyContent,
-		NcModal,
-		NcActions,
-		NcActionButton,
-		NcActionRadio,
-		NcButton,
-		AlbumForm,
-		AlbumPicker,
-		DateScrubber,
-		FilesListViewer,
-		FileComponent,
-		ActionFavorite,
-		HeaderNavigation,
-		PhotosSourceLocationsSettings,
-		AlertCircleOutline,
-		ViewGridOutline,
-	},
+const props = withDefaults(defineProps<{
+	onlyFavorites?: boolean
+	mimesType?: string[]
+	onThisDay?: boolean
+	rootTitle: string
+}>(), {
+	onlyFavorites: false,
+	mimesType: () => allMimes,
+	onThisDay: false,
+})
 
-	filters: {
-		dateMonth(date: string): string {
-			return moment(date, 'YYYYMM').format('MMMM')
-		},
+const router = useRouter()
+const isMobile = useIsMobile()
 
-		dateYear(date: string): string {
-			return moment(date, 'YYYYMM').format('YYYY')
-		},
-	},
+const collectionsStore = useCollectionsStore()
+const filesStore = useFilesStore()
+const filtersStore = useFilterStore()
+const { selectedFilters, filtersQuery } = storeToRefs(filtersStore)
 
-	mixins: [
-		FetchFilesMixin,
-		FilesSelectionMixin,
-		FilesByMonthMixin,
-	],
+const { gridDensity, tileBaseHeight, setGridDensity } = useGridDensity()
+const { fetchFiles, resetFetchFilesState, fetchedFileIds, loadingFiles, errorFetchingFiles } = useFetchFiles()
+const { selection, selectedFileIds, onUncheckFiles, resetSelection } = useFilesSelection()
 
-	beforeRouteLeave(to, from, next) {
-		this.appContent?.scrollTo(0, 0)
-		next()
-		Object.keys(this.selectedFilters).forEach((key) => {
-			this.selectedFilters[key] = []
-		})
-	},
+const newAlbumButton = useTemplateRef<InstanceType<typeof NcButton>>('newAlbumButton')
 
-	props: {
-		onlyFavorites: {
-			type: Boolean,
-			default: false,
-		},
+const showAlbumCreationForm = ref(false)
+const showAlbumPicker = ref(false)
+const appContent = document.getElementById('app-content-vue')
+// Month section the user picked in the DateScrubber, forwarded to
+// FilesListViewer's `scrollToSection`. Empty means no override.
+const scrubberTarget = ref('')
 
-		mimesType: {
-			type: Array as PropType<string[]>,
-			default: () => allMimes,
-		},
+const files = computed(() => filesStore.files)
 
-		onThisDay: {
-			type: Boolean,
-			default: false,
-		},
+// Photos taken in one go are shown as a single tile of the timeline, and are
+// reachable from the viewer it opens.
+const { fileIdsByMonthUngrouped, burstStacks, fileIdsByMonth, monthsList } = useFilesByMonth(fetchedFileIds, files, true)
 
-		rootTitle: {
-			type: String,
-			required: true,
-		},
-	},
+const shouldFavoriteSelection = computed<boolean>(() => {
+	// Favorite all selection if at least one file is not in the favorites.
+	return selectedFileIds.value.some((fileId) => files.value[fileId].attributes.favorite === 0)
+})
 
-	setup() {
-		const isMobile = useIsMobile()
+// Photos of the timeline that are loaded, in the order they are shown.
+const timelinePhotos = computed(() => fetchedFileIds.value
+	.map((fileId) => files.value[fileId])
+	.filter((file) => file !== undefined))
 
-		const filtersStore = useFilterStore()
-		const { selectedFilters, filtersQuery } = storeToRefs(filtersStore)
+// Photo count per month, drives the density ticks of the scrubber. Counted
+// before the folding, so a month of bursts reads as dense as it is.
+const monthCounts = computed<Record<string, number>>(() => {
+	const entries = Object.entries(fileIdsByMonthUngrouped.value)
+	return Object.fromEntries(entries.map(([month, fileIds]) => [month, fileIds.length]))
+})
 
-		const { gridDensity, tileBaseHeight, setGridDensity } = useGridDensity()
+const createAlbumButtonLabel = computed(() => {
+	if (Object.keys(selectedFilters.value).length > 0) {
+		return t('photos', 'Create new album from filters')
+	} else {
+		return t('photos', 'Create new album')
+	}
+})
 
-		return {
-			isMobile,
-			selectedFilters,
-			filtersQuery,
-			gridDensity,
-			tileBaseHeight,
-			setGridDensity,
-		}
-	},
+watch(filtersQuery, () => {
+	resetFetchFilesState()
+	getContent()
+})
 
-	data() {
-		return {
-			loadingCount: 0,
-			showAlbumCreationForm: false,
-			showAlbumPicker: false,
-			appContent: document.getElementById('app-content-vue'),
-			showFilters: false,
-			// Month section the user picked in the DateScrubber, forwarded to
-			// FilesListViewer's `scrollToSection`. Empty means no override.
-			scrubberTarget: '',
-		}
-	},
-
-	computed: {
-		files() {
-			return this.$store.state.files.files
-		},
-
-		// Photos of the timeline that are loaded, in the order they are shown.
-		timelinePhotos() {
-			return this.fetchedFileIds
-				.map((fileId: number) => this.files[fileId])
-				.filter((file) => file !== undefined)
-		},
-
-		// Photos taken in one go are shown as a single tile of the timeline, and are
-		// reachable from the viewer it opens.
-		foldBursts(): boolean {
-			return true
-		},
-
-		// Photo count per month, drives the density ticks of the scrubber. Counted
-		// before the folding, so a month of bursts reads as dense as it is.
-		monthCounts(): Record<string, number> {
-			const entries = Object.entries(this.fileIdsByMonthUngrouped as Record<string, string[]>)
-			return Object.fromEntries(entries.map(([month, fileIds]) => [month, fileIds.length]))
-		},
-
-		createAlbumButtonLabel() {
-			if (Object.keys(this.selectedFilters).length > 0) {
-				return this.t('photos', 'Create new album from filters')
-			} else {
-				return this.t('photos', 'Create new album')
-			}
-		},
-	},
-
-	watch: {
-		filtersQuery() {
-			this.resetFetchFilesState()
-			this.getContent()
-		},
-	},
-
-	mounted() {
-		subscribe(configChangedEvent, this.handleUserConfigChange)
-	},
-
-	destroyed() {
-		unsubscribe(configChangedEvent, this.handleUserConfigChange)
-	},
-
-	methods: {
-		getContent() {
-			this.fetchFiles({
-				mimesType: this.mimesType,
-				onThisDay: this.onThisDay,
-				onlyFavorites: this.onlyFavorites,
-				extraFilters: this.filtersQuery,
-			})
-		},
-
-		// FilesListViewer scrolls on its `scrollToSection` prop, so stashing
-		// the month is all there is to do.
-		onScrubberJump(month: string) {
-			this.scrubberTarget = month
-		},
-
-		// Selecting the tile of a run selects every photo of it: the photos folded
-		// into it have no tile of their own to be picked from, and favoriting,
-		// downloading or deleting a part of a burst would silently leave the rest
-		// behind.
-		onFileSelectToggle({ id, value }: { id: string, value: boolean }): void {
-			const fileIds = this.burstStacks[id]?.memberIds ?? [id]
-			for (const fileId of fileIds) {
-				this.$set(this.selection, fileId, value)
-			}
-		},
-
-		// How many photos the tile of a photo stands for, one being itself.
-		burstCount(fileId: string): number {
-			return this.burstStacks[fileId]?.memberIds.length ?? 1
-		},
-
-		openViewer(fileId: string) {
-			// A tile standing for a run of photos hands the viewer that run alone, so
-			// flipping through it stays inside the burst rather than leaving it for the
-			// rest of the timeline. Every other tile hands it the whole grid.
-			const fileIds = this.burstStacks[fileId]?.memberIds
-				?? Object.values(this.fileIdsByMonth).flat()
-
-			window.OCA.Viewer.open({
-				fileInfo: toViewerFileInfo(this.files[fileId]),
-				list: fileIds
-					.map((id) => this.files[id])
-					.filter((file) => file !== undefined)
-					.map(toViewerFileInfo),
-			})
-		},
-
-		startSlideshow() {
-			window.OCA.Viewer.open({
-				fileInfo: toViewerFileInfo(this.timelinePhotos[0]),
-				list: this.timelinePhotos.map(toViewerFileInfo),
-				startSlideshow: true,
-			})
-		},
-
-		openUploader() {
-			// TODO: finish when implementing upload
-		},
-
-		async addSelectionToAlbum(album: Album) {
-			this.showAlbumPicker = false
-			await this.$store.dispatch('addFilesToCollection', {
-				collectionFileName: album.root + album.path,
-				fileIdsToAdd: this.selectedFileIds,
-			})
-		},
-
-		// The photo is already gone from the store, it only has to leave the
-		// list of the photos this timeline fetched.
-		onPhotoDeleted(photo: PhotoTarget) {
-			this.onUncheckFiles([photo.fileid.toString()])
-			this.fetchedFileIds = this.fetchedFileIds.filter((fileId) => fileId !== photo.fileid)
-		},
-
-		async deleteSelection() {
-			// Need to store the file ids so it is not changed before the deleteFiles call.
-			const fileIds = this.selectedFileIds
-			this.onUncheckFiles(fileIds)
-			this.fetchedFileIds = this.fetchedFileIds.filter((fileid) => !fileIds.includes(fileid))
-			await this.$store.dispatch('deleteFiles', fileIds)
-		},
-
-		handleUserConfigChange({ key }) {
-			if (key === 'photosSourceFolders') {
-				this.resetFetchFilesState()
-			}
-		},
-
-		handleFormCreationDone({ album }: { album: Album }) {
-			this.showAlbumCreationForm = false
-			this.$router.push(`/albums/${album.basename}`)
-		},
-
-		downloadSelectedFiles() {
-			const fileIds = this.selectedFileIds
-			this.onUncheckFiles(fileIds)
-			downloadFiles(fileIds.map((fileId) => this.files[fileId]))
-		},
-
-		t,
-	},
+async function favoriteSelection(): Promise<void> {
+	await filesStore.toggleFavoriteForFiles(selectedFileIds.value, 1)
 }
+
+async function unFavoriteSelection(): Promise<void> {
+	await filesStore.toggleFavoriteForFiles(selectedFileIds.value, 0)
+}
+
+function dateMonth(date: string): string {
+	return moment(date, 'YYYYMM').format('MMMM')
+}
+
+function dateYear(date: string): string {
+	return moment(date, 'YYYYMM').format('YYYY')
+}
+
+function getContent() {
+	fetchFiles({
+		mimesType: props.mimesType,
+		onThisDay: props.onThisDay,
+		onlyFavorites: props.onlyFavorites,
+		extraFilters: filtersQuery.value,
+	})
+}
+
+// FilesListViewer scrolls on its `scrollToSection` prop, so stashing
+// the month is all there is to do.
+function onScrubberJump(month: string) {
+	scrubberTarget.value = month
+}
+
+// Selecting the tile of a run selects every photo of it: the photos folded
+// into it have no tile of their own to be picked from, and favoriting,
+// downloading or deleting a part of a burst would silently leave the rest
+// behind.
+function onFileSelectToggle({ id, value }: { id: number, value: boolean }): void {
+	const fileIds = burstStacks.value[id]?.memberIds ?? [String(id)]
+	for (const fileId of fileIds) {
+		selection.value[fileId] = value
+	}
+}
+
+// How many photos the tile of a photo stands for, one being itself.
+function burstCount(fileId: string): number {
+	return burstStacks.value[fileId]?.memberIds.length ?? 1
+}
+
+function openViewer(fileId: number) {
+	// A tile standing for a run of photos hands the viewer that run alone, so
+	// flipping through it stays inside the burst rather than leaving it for the
+	// rest of the timeline. Every other tile hands it the whole grid.
+	const fileIds = burstStacks.value[fileId]?.memberIds
+		?? Object.values(fileIdsByMonth.value).flat()
+
+	window.OCA.Viewer.open({
+		fileInfo: toViewerFileInfo(files.value[fileId]),
+		list: fileIds
+			.map((id) => files.value[id])
+			.filter((file) => file !== undefined)
+			.map(toViewerFileInfo),
+	})
+}
+
+function startSlideshow() {
+	window.OCA.Viewer.open({
+		fileInfo: toViewerFileInfo(timelinePhotos.value[0]),
+		list: timelinePhotos.value.map(toViewerFileInfo),
+		startSlideshow: true,
+	})
+}
+
+async function addSelectionToAlbum(album: Album) {
+	showAlbumPicker.value = false
+	await collectionsStore.addFilesToCollection(album.root + album.path, selectedFileIds.value)
+}
+
+// The photo is already gone from the store, it only has to leave the
+// list of the photos this timeline fetched.
+function onPhotoDeleted(photo: PhotoTarget) {
+	onUncheckFiles([photo.fileid.toString()])
+	fetchedFileIds.value = fetchedFileIds.value.filter((fileId) => fileId !== photo.fileid)
+}
+
+async function deleteSelection() {
+	// Need to store the file ids so it is not changed before the deleteFiles call.
+	const fileIds = selectedFileIds.value
+	onUncheckFiles(fileIds)
+	fetchedFileIds.value = fetchedFileIds.value.filter((fileid) => !fileIds.includes(fileid.toString()))
+	await filesStore.deleteFiles(fileIds)
+}
+
+function handleUserConfigChange({ key }: { key: string }) {
+	if (key === 'photosSourceFolders') {
+		resetFetchFilesState()
+	}
+}
+
+function handleFormCreationDone({ album }: { album: Collection }) {
+	showAlbumCreationForm.value = false
+	router.push(`/albums/${album.basename}`)
+}
+
+function downloadSelectedFiles() {
+	const fileIds = selectedFileIds.value
+	onUncheckFiles(fileIds)
+	downloadFiles(fileIds.map((fileId) => files.value[fileId]))
+}
+
+onBeforeRouteLeave(() => {
+	appContent?.scrollTo(0, 0)
+	Object.keys(selectedFilters.value).forEach((key) => {
+		selectedFilters.value[key] = []
+	})
+})
+
+onMounted(() => {
+	subscribe(configChangedEvent, handleUserConfigChange)
+})
+
+onUnmounted(() => {
+	unsubscribe(configChangedEvent, handleUserConfigChange)
+})
 </script>
 
 <style lang="scss" scoped>

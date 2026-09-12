@@ -8,82 +8,67 @@
 		class="tiled-container">
 		<!-- Slot to allow changing the rows before passing them to TiledRows -->
 		<!-- Useful for partially rendering rows like with VirtualScrolling -->
-		<slot :tiled-sections="tiledSections">
+		<slot :tiledSections="tiledSections">
 			<!-- Default rendering -->
 			<TiledRows :rows="tiledSections" />
 		</slot>
 	</div>
 </template>
 
-<script lang='ts'>
-import type { PropType } from 'vue'
-import type { Section, TiledSection } from '../../services/TiledLayout.js'
+<script setup lang="ts" generic="I extends TiledItem">
+import type { Section, TiledItem, TiledSection } from '../../services/TiledLayout.ts'
 
+import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef } from 'vue'
 import TiledRows from './TiledRows.vue'
-import logger from '../../services/logger.js'
-import {
-	splitItemsInRows,
-} from '../../services/TiledLayout.js'
+import { logger } from '../../services/logger.ts'
+import { splitItemsInRows } from '../../services/TiledLayout.ts'
 
-export default {
-	name: 'TiledLayout',
+const props = withDefaults(defineProps<{
+	sections: Section<I>[]
+	baseHeight?: number
+}>(), {
+	baseHeight: 200,
+})
 
-	components: {
-		TiledRows,
-	},
+defineSlots<{
+	default(props: { tiledSections: TiledSection<I>[] }): unknown
+}>()
 
-	props: {
-		sections: {
-			type: Array as PropType<Section[]>,
-			required: true,
-		},
+const tiledLayoutContainer = useTemplateRef<HTMLDivElement>('tiledLayoutContainer')
 
-		baseHeight: {
-			type: Number,
-			default: 200,
-		},
-	},
+const containerWidth = ref(0)
+let resizeObserver: ResizeObserver | null = null
 
-	data() {
+const tiledSections = computed<TiledSection<I>[]>(() => {
+	logger.debug('[TiledLayout] Computing rows', { items: props.sections })
+
+	return props.sections.map((section) => {
+		const rows = splitItemsInRows(section.items, containerWidth.value, props.baseHeight)
 		return {
-			containerWidth: 0,
-			resizeObserver: null as ResizeObserver | null,
+			...section,
+			key: section.id,
+			rows: rows.map((row) => ({ ...row, sectionKey: section.id })),
+			height: rows.reduce((totalHeight, row) => totalHeight + row.height, 0),
 		}
-	},
+	})
+})
 
-	computed: {
-		tiledSections(): TiledSection[] {
-			logger.debug('[TiledLayout] Computing rows', { items: this.sections })
-
-			return this.sections.map((section) => {
-				const rows = splitItemsInRows(section.items, this.containerWidth, this.baseHeight)
-				return {
-					...section,
-					key: section.id,
-					rows: rows.map((row) => ({ ...row, sectionKey: section.id })),
-					height: rows.reduce((totalHeight, row) => totalHeight + row.height, 0),
-				}
-			})
-		},
-	},
-
-	mounted() {
-		this.resizeObserver = new ResizeObserver((entries) => {
-			for (const entry of entries) {
-				const cr = entry.contentRect
-				if (entry.target.classList.contains('tiled-container')) {
-					this.containerWidth = cr.width
-				}
+onMounted(() => {
+	resizeObserver = new ResizeObserver((entries) => {
+		for (const entry of entries) {
+			const cr = entry.contentRect
+			if (entry.target.classList.contains('tiled-container')) {
+				containerWidth.value = cr.width
 			}
-		})
+		}
+	})
 
-		this.resizeObserver.observe(this.$refs.tiledLayoutContainer as Element)
-	},
+	resizeObserver.observe(tiledLayoutContainer.value as Element)
+})
 
-	beforeDestroy() {
-		this.resizeObserver?.disconnect()
-	},
-}
+onBeforeUnmount(() => {
+	resizeObserver?.disconnect()
+})
 </script>
 
 <style scoped lang="scss">

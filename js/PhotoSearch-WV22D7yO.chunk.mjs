@@ -1,0 +1,73 @@
+import{j as c,d as m,a as f}from"./dav--9zNVXiK.chunk.mjs";import{c as t,d as u}from"./files-B4nYn5v2.chunk.mjs";import{h}from"./he-vNBkvMwK.chunk.mjs";import{u as g}from"./userConfig-D1YjrqQQ.chunk.mjs";import{b as y}from"./AllowedMimes-D6DwqNIb.chunk.mjs";import{g as $}from"./DavRequest-CbjrIjJe.chunk.mjs";async function F(o={}){const e={firstResult:0,nbResults:200,mimesType:y,onThisDay:!1,onlyFavorites:!1,full:!1,extraFilters:"",...o},a=e.mimesType.reduce((d,r)=>`${d}
+		<d:eq>
+			<d:prop>
+				<d:getcontenttype/>
+			</d:prop>
+			<d:literal>${r}</d:literal>
+		</d:eq>
+	`,""),s=e.onlyFavorites?`<d:eq>
+				<d:prop>
+					<oc:favorite/>
+				</d:prop>
+				<d:literal>1</d:literal>
+			</d:eq>`:"",i=e.onThisDay?`<d:or>${Array(20).fill(1).map((d,r)=>{const l=t(Date.now()).startOf("day").subtract(3,"d").subtract(r+1,"y"),p=t(Date.now()).endOf("day").add(3,"d").subtract(r+1,"y");return`<d:and>
+				<d:gt>
+					<d:prop>
+						<nc:metadata-photos-original_date_time/>
+					</d:prop>
+					<d:literal>${l.valueOf()/1e3}</d:literal>
+				</d:gt>
+				<d:lt>
+					<d:prop>
+						<nc:metadata-photos-original_date_time/>
+					</d:prop>
+					<d:literal>${p.valueOf()/1e3}</d:literal>
+				</d:lt>
+			</d:and>`}).join(`
+`)}</d:or>`:"",n=g().photosSourceFolders.map(d=>`
+			<d:scope>
+				<d:href>${c(m,h.encode(d))}</d:href>
+				<d:depth>infinity</d:depth>
+			</d:scope>`).join(`
+`);return e.data=`<?xml version="1.0" encoding="UTF-8"?>
+		<d:searchrequest xmlns:d="DAV:"
+			xmlns:oc="http://owncloud.org/ns"
+			xmlns:nc="http://nextcloud.org/ns"
+			xmlns:ns="https://github.com/icewind1991/SearchDAV/ns"
+			xmlns:ocs="http://open-collaboration-services.org/ns">
+			<d:basicsearch>
+				<d:select>
+					<d:prop>
+						${$()}
+					</d:prop>
+				</d:select>
+				<d:from>
+					${n}
+				</d:from>
+				<d:where>
+					<d:and>
+						<d:or>
+							${a}
+						</d:or>
+						${s}
+						${i}
+						${e.extraFilters}
+					</d:and>
+				</d:where>
+				<d:orderby>
+					<d:order>
+						<d:prop><nc:metadata-photos-original_date_time/></d:prop>
+						<d:descending/>
+					</d:order>
+					<d:order>
+						<d:prop><d:getlastmodified/></d:prop>
+						<d:descending/>
+					</d:order>
+				</d:orderby>
+				<d:limit>
+					<d:nresults>${e.nbResults}</d:nresults>
+					<ns:firstresult>${e.firstResult}</ns:firstresult>
+				</d:limit>
+			</d:basicsearch>
+		</d:searchrequest>`,e.details=!0,(await u.search("/",e)).data.results.map(d=>(d.filename=d.filename.replace(/^\/remote.php\/dav/,""),d)).map(d=>f(d))}export{F as g};
+//# sourceMappingURL=PhotoSearch-WV22D7yO.chunk.mjs.map

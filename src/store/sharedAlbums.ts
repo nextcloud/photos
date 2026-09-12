@@ -3,17 +3,40 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type { PhotosRootSate } from '.'
 import type { Album } from './albums.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
+import { defineStore } from 'pinia'
+import { computed } from 'vue'
+import { useCollectionsStore } from './collections.ts'
 
 const sharedAlbumsPrefix = `/photos/${getCurrentUser()?.uid}/sharedalbums`
 
-const getters = {
-	sharedAlbums: (_, __, ___, rootGetters): Record<string, Album> => rootGetters.collectionsWithPrefix(sharedAlbumsPrefix),
-	getSharedAlbum: (_, __, rootState: PhotosRootSate) => (sharedAlbumName: string): Album => rootState.collections.collections[`${sharedAlbumsPrefix}/${sharedAlbumName}`] as unknown as Album,
-	getSharedAlbumFiles: (_, __, rootState: PhotosRootSate) => (sharedAlbumName: string): string[] => rootState.collections.collectionsFiles[`${sharedAlbumsPrefix}/${sharedAlbumName}`] || [],
-	getSharedAlbumName: () => (sharedAlbumName: string) => `${sharedAlbumsPrefix}/${sharedAlbumName}`,
-}
-export default { getters }
+export const useSharedAlbumsStore = defineStore('sharedAlbums', () => {
+	const collectionsStore = useCollectionsStore()
+
+	const sharedAlbums = computed(() => collectionsStore.collectionsWithPrefix(sharedAlbumsPrefix) as unknown as Record<string, Album>)
+
+	/**
+	 * @param sharedAlbumName - Name of the shared album
+	 */
+	function getSharedAlbumName(sharedAlbumName: string): string {
+		return `${sharedAlbumsPrefix}/${sharedAlbumName}`
+	}
+
+	/**
+	 * @param sharedAlbumName - Name of the shared album
+	 */
+	function getSharedAlbum(sharedAlbumName: string): Album {
+		return collectionsStore.collections[getSharedAlbumName(sharedAlbumName)] as unknown as Album
+	}
+
+	/**
+	 * @param sharedAlbumName - Name of the shared album
+	 */
+	function getSharedAlbumFiles(sharedAlbumName: string): string[] {
+		return collectionsStore.collectionsFiles[getSharedAlbumName(sharedAlbumName)] || []
+	}
+
+	return { sharedAlbums, getSharedAlbumName, getSharedAlbum, getSharedAlbumFiles }
+})

@@ -8,7 +8,7 @@
 		:id="item.fileid"
 		:name="item.basename"
 		:path="item.path"
-		:file-list="previewFiles" />
+		:fileList="previewFiles" />
 </template>
 
 <script setup lang='ts'>
@@ -17,9 +17,9 @@ import type { PropType } from 'vue'
 
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import FolderTagPreview from './FolderTagPreview.vue'
-import getFolderContent from '../services/FolderContent.ts'
-import logger from '../services/logger.ts'
-import store from '../store/index.ts'
+import { getFolderContent } from '../services/FolderContent.ts'
+import { logger } from '../services/logger.ts'
+import { useFoldersStore } from '../store/folders.ts'
 
 const props = defineProps({
 	item: {
@@ -37,9 +37,11 @@ const abortController = new AbortController()
 
 onBeforeUnmount(() => abortController.abort())
 
-const files = computed(() => store.state.folders.files)
-const folders = computed(() => store.state.folders.folders)
-const subFolders = computed(() => store.state.folders.subFolders)
+const foldersStore = useFoldersStore()
+
+const files = computed(() => foldersStore.files)
+const folders = computed(() => foldersStore.folders)
+const subFolders = computed(() => foldersStore.subFolders)
 
 /** Id of the folder, which a node of a listing always carries. */
 const folderId = computed(() => props.item.fileid as number)
@@ -65,8 +67,8 @@ async function getFolderData(path: string) {
 			shared: props.showShared,
 			signal: abortController.signal,
 		})
-		store.dispatch('updateFolders', { fileid: folder?.fileid, files, folders })
-		store.dispatch('updateFoldersFiles', { folder, files, folders })
+		foldersStore.updateFolders(folder?.fileid, files, folders)
+		foldersStore.updateFoldersFiles(folder, files, folders)
 	} catch (error) {
 		logger.error('Failed to get folder content', { error, path })
 	}
