@@ -49,62 +49,38 @@
 	</div>
 </template>
 
-<script lang='ts'>
-
-import { translate, translatePlural } from '@nextcloud/l10n'
+<script setup lang="ts">
+import { n, t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
+import { computed, onBeforeMount } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import CollectionCover from '../components/Collection/CollectionCover.vue'
 import CollectionsList from '../components/Collection/CollectionsList.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
-import { placesPrefix } from '../store/places.js'
-import { usePlacesStore } from '../store/places.ts'
+import { useFetchCollections } from '../composables/useFetchCollections.ts'
+import { placesPrefix, usePlacesStore } from '../store/places.ts'
 
-export default {
-	name: 'PlacesView',
-	components: {
-		ImageMultipleOutline,
-		NcEmptyContent,
-		CollectionsList,
-		CollectionCover,
-		HeaderNavigation,
-	},
+const placesStore = usePlacesStore()
+const { fetchCollections, errorFetchingCollections, loadingCollections } = useFetchCollections()
 
-	mixins: [FetchCollectionsMixin],
+const places = computed(() => placesStore.places)
 
-	setup() {
-		return { placesStore: usePlacesStore() }
-	},
+function coverUrl(fileId: number): string {
+	if (fileId === -1) {
+		return ''
+	}
 
-	computed: {
-		places() {
-			return this.placesStore.places
-		},
-	},
-
-	async beforeMount() {
-		this.fetchPlaces()
-	},
-
-	methods: {
-		coverUrl(fileId: number) {
-			if (fileId === -1) {
-				return ''
-			}
-
-			return generateUrl(`/apps/photos/api/v1/preview/${fileId}?x=${512}&y=${512}`)
-		},
-
-		fetchPlaces() {
-			this.fetchCollections(placesPrefix)
-		},
-
-		t: translate,
-		n: translatePlural,
-	},
+	return generateUrl(`/apps/photos/api/v1/preview/${fileId}?x=${512}&y=${512}`)
 }
+
+function fetchPlaces() {
+	fetchCollections(placesPrefix)
+}
+
+onBeforeMount(() => {
+	fetchPlaces()
+})
 </script>
 
 <style lang="scss" scoped>

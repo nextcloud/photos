@@ -29,96 +29,60 @@
 	</div>
 </template>
 
-<script lang='ts'>
+<script setup lang="ts">
+import type { Tag } from '../store/systemtags.ts'
+
 import { t } from '@nextcloud/l10n'
-import { defineComponent } from 'vue'
+import { computed, onBeforeMount, ref } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import TagCover from '../components/TagCover.vue'
-import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
+import { useAbortController } from '../composables/useAbortController.ts'
 import { logger } from '../services/logger.ts'
-import { useFilesStore } from '../store/files.ts'
 import { useSystemTagsStore } from '../store/systemtags.ts'
 
-export default defineComponent({
-	name: 'TagsView',
-	components: {
-		TagCover,
-		NcLoadingIcon,
-		NcEmptyContent,
-	},
+const systemTagsStore = useSystemTagsStore()
+const { abortSignal } = useAbortController()
 
-	mixins: [AbortControllerMixin],
+const error = ref<boolean | null>(null)
+const loading = ref(false)
 
-	setup() {
-		return { filesStore: useFilesStore(), systemTagsStore: useSystemTagsStore() }
-	},
+const tags = computed(() => systemTagsStore.tags)
+const tagsNames = computed(() => systemTagsStore.names)
 
-	data() {
-		return {
-			error: null as boolean | null,
-			loading: false,
-			showTags: false,
+const tagsList = computed<Tag[]>(() => Object.keys(tagsNames.value)
+	.map((tagName) => tags.value[tagsNames.value[tagName]])
+	.filter((tag) => tag && tag.attributes.id))
+
+const popularTags = computed<Tag[]>(() => Object.keys(tagsNames.value)
+	.filter((tagName) => (tags.value[tagsNames.value[tagName]].attributes['files-assigned']) > 50)
+	.sort((a, b) => (tags.value[tagsNames.value[b]]['files-assigned']) - (tags.value[tagsNames.value[a]]['files-assigned']))
+	.slice(0, 9)
+	.map((tagName) => tags.value[tagsNames.value[tagName]]))
+
+async function fetchRootContent(): Promise<void> {
+	// close any potential opened viewer
+	window.OCA.Viewer.close()
+
+	error.value = null
+
+	try {
+		// fetch content
+		if (!tagsList.value.length) {
+			loading.value = true
+			await systemTagsStore.fetchAllTags(abortSignal.value)
 		}
-	},
+	} catch (fetchError) {
+		logger.error('Failed to fetch tags', { error: fetchError })
+		error.value = true
+	} finally {
+		// done loading
+		loading.value = false
+	}
+}
 
-	computed: {
-		files() {
-			return this.filesStore.files
-		},
-
-		tags() {
-			return this.systemTagsStore.tags
-		},
-
-		tagsNames() {
-			return this.systemTagsStore.names
-		},
-
-		tagsList() {
-			return Object.keys(this.tagsNames)
-				.map((tagName) => this.tags[this.tagsNames[tagName]])
-				.filter((tag) => tag && tag.attributes.id)
-		},
-
-		popularTags() {
-			return Object.keys(this.tagsNames)
-				.filter((tagName) => (this.tags[this.tagsNames[tagName]].attributes['files-assigned']) > 50)
-				.sort((a, b) => (this.tags[this.tagsNames[b]]['files-assigned']) - (this.tags[this.tagsNames[a]]['files-assigned']))
-				.slice(0, 9)
-				.map((tagName) => this.tags[this.tagsNames[tagName]])
-		},
-	},
-
-	async beforeMount() {
-		await this.fetchRootContent()
-	},
-
-	methods: {
-		async fetchRootContent() {
-			// close any potential opened viewer
-			window.OCA.Viewer.close()
-
-			this.error = null
-
-			try {
-				// fetch content
-				if (!this.tagsList.length) {
-					this.loading = true
-					await this.systemTagsStore.fetchAllTags(this.abortController.signal)
-				}
-			} catch (error) {
-				logger.error('Failed to fetch tags', { error })
-				this.error = true
-			} finally {
-				// done loading
-				this.loading = false
-			}
-		},
-
-		t,
-	},
-
+onBeforeMount(async () => {
+	await fetchRootContent()
 })
 </script>
 

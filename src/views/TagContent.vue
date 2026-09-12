@@ -13,7 +13,7 @@
 	<div v-else>
 		<div class="photos-navigation">
 			<NcActions class="photos-navigation__back">
-				<NcActionButton @click="$router.push({ name: 'tags' })">
+				<NcActionButton @click="router.push({ name: 'tags' })">
 					<template #icon>
 						<ArrowLeft />
 					</template>
@@ -48,11 +48,13 @@
 	</div>
 </template>
 
-<script lang='ts'>
+<script setup lang="ts">
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { translatePlural as n, translate as t } from '@nextcloud/l10n'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
+import { computed, onBeforeMount, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
@@ -60,136 +62,90 @@ import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
-import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
-import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
+import { useAbortController } from '../composables/useAbortController.ts'
+import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { logger } from '../services/logger.ts'
 import { useFilesStore } from '../store/files.ts'
 import { useSystemTagsStore } from '../store/systemtags.ts'
-import { toViewerFileInfo } from '../utils/fileUtils.js'
+import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
-export default {
-	name: 'TagContent',
-	components: {
-		FileComponent,
-		FilesListViewer,
-		NcEmptyContent,
-		NcActions,
-		NcActionButton,
-		NcLoadingIcon,
-		ArrowLeft,
-	},
+const props = withDefaults(defineProps<{
+	path?: string
+}>(), {
+	path: '',
+})
 
-	mixins: [
-		FilesSelectionMixin,
-		AbortControllerMixin,
-	],
+const router = useRouter()
+const isMobile = useIsMobile()
+const filesStore = useFilesStore()
+const systemTagsStore = useSystemTagsStore()
+const { abortSignal } = useAbortController()
+const { selection, onFileSelectToggle, onUncheckFiles } = useFilesSelection()
 
-	props: {
-		path: {
-			type: String,
-			default: '',
-		},
-	},
+const error = ref<boolean | null>(null)
+const loading = ref(false)
+const appContent = document.getElementById('app-content-vue')
 
-	setup() {
-		return {
-			isMobile: useIsMobile(),
-			filesStore: useFilesStore(),
-			systemTagsStore: useSystemTagsStore(),
-		}
-	},
+const files = computed(() => filesStore.files)
+const tags = computed(() => systemTagsStore.tags)
 
-	data() {
-		return {
-			error: null as boolean | null,
-			loading: false,
-			appContent: document.getElementById('app-content-vue'),
-		}
-	},
+// current tag id from current path
+const tagId = computed(() => systemTagsStore.tagId(props.path))
 
-	computed: {
-		files() {
-			return this.filesStore.files
-		},
+// current tag
+const tag = computed(() => tags.value[tagId.value])
 
-		tags() {
-			return this.systemTagsStore.tags
-		},
+// files list of the current tag, as the string ids the file listing works with
+const fileIds = computed(() => (systemTagsStore.tagsFiles[tagId.value] ?? []).map(String))
 
-		// current tag id from current path
-		tagId() {
-			return this.systemTagsStore.tagId(this.path)
-		},
+const isEmpty = computed(() => fileIds.value.length === 0)
 
-		// current tag
-		tag() {
-			return this.tags[this.tagId]
-		},
+watch(() => props.path, () => {
+	fetchContent()
+})
 
-		// files list of the current tag
-		fileIds() {
-			return this.systemTagsStore.tagsFiles[this.tagId]
-		},
-
-		isEmpty() {
-			return this.fileIds.length === 0
-		},
-	},
-
-	watch: {
-		async path() {
-			this.fetchContent()
-		},
-	},
-
-	async beforeMount() {
-		this.fetchContent()
-	},
-
-	methods: {
-		// The photo is already gone from the store, it only has to leave the
-		// list of the photos this view fetched.
-		onPhotoDeleted(photo: PhotoTarget) {
-			this.onUncheckFiles([photo.fileid.toString()])
-			this.fetchedFileIds = this.fetchedFileIds.filter((fileId) => fileId !== photo.fileid)
-		},
-
-		async fetchContent() {
-			// close any potential opened viewer
-			window.OCA.Viewer.close()
-
-			this.loading = true
-			this.error = null
-
-			try {
-				// if we don't already have some cached data let's show a loader
-				if (!this.tags[this.tagId]) {
-					await this.systemTagsStore.fetchAllTags(this.abortController.signal)
-				}
-
-				if (this.tag && !this.fileIds) {
-					await this.systemTagsStore.fetchTagFiles(this.tagId, this.abortController.signal)
-				}
-			} catch (error) {
-				logger.error('Failed to fetch tags', { error })
-				this.error = true
-			} finally {
-				// done loading
-				this.loading = false
-			}
-		},
-
-		openViewer(fileId: number) {
-			window.OCA.Viewer.open({
-				fileInfo: toViewerFileInfo(this.files[fileId]),
-				list: this.fileIds.map((fileId) => toViewerFileInfo(this.files[fileId])),
-			})
-		},
-
-		t,
-		n,
-	},
+// The photo is already gone from the files store, it only has to leave the
+// list of the photos of the tag.
+function onPhotoDeleted(photo: PhotoTarget): void {
+	onUncheckFiles([photo.fileid.toString()])
+	systemTagsStore.removeTagFile(tagId.value, photo.fileid)
 }
+
+async function fetchContent(): Promise<void> {
+	// close any potential opened viewer
+	window.OCA.Viewer.close()
+
+	loading.value = true
+	error.value = null
+
+	try {
+		// if we don't already have some cached data let's show a loader
+		if (!tags.value[tagId.value]) {
+			await systemTagsStore.fetchAllTags(abortSignal.value)
+		}
+
+		if (tag.value && !fileIds.value) {
+			await systemTagsStore.fetchTagFiles(tagId.value, abortSignal.value)
+		}
+	} catch (fetchError) {
+		logger.error('Failed to fetch tags', { error: fetchError })
+		error.value = true
+	} finally {
+		// done loading
+		loading.value = false
+	}
+}
+
+function openViewer(fileId: number): void {
+	window.OCA.Viewer.open({
+		fileInfo: toViewerFileInfo(files.value[fileId]),
+		list: fileIds.value.map((fileId) => toViewerFileInfo(files.value[fileId])),
+	})
+}
+
+onBeforeMount(() => {
+	fetchContent()
+})
 </script>
 
 <style scoped lang="scss">

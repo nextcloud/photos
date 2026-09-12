@@ -15,7 +15,7 @@
 		<div class="face__header">
 			<div class="face__header__left">
 				<NcActions>
-					<NcActionButton @click="$router.push('/faces/')">
+					<NcActionButton @click="router.push('/faces/')">
 						<template #icon>
 							<ArrowLeft />
 						</template>{{ t('photos', 'Back') }}
@@ -101,9 +101,12 @@
 	</div>
 </template>
 
-<script lang='ts'>
+<script setup lang="ts">
+import type { PhotoTarget } from '../utils/fileUtils.ts'
+
 import { n, t } from '@nextcloud/l10n'
-import { nextTick } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
@@ -118,147 +121,95 @@ import DownloadOutline from 'vue-material-design-icons/TrayArrowDown.vue'
 import FaceMergeForm from '../components/Faces/FaceMergeForm.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
-import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
-import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
-import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
+import { useFetchFaces } from '../composables/useFetchFaces.ts'
+import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
 import { logger } from '../services/logger.ts'
 import { useFacesStore } from '../store/faces.ts'
 import { useFilesStore } from '../store/files.ts'
-import { toViewerFileInfo } from '../utils/fileUtils.js'
+import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
-export default {
-	name: 'UnassignedFaces',
-	components: {
-		Star,
-		StarOutline,
-		DownloadOutline,
-		AlertCircleOutline,
-		ArrowLeft,
-		FaceMergeForm,
-		FilesListViewer,
-		FileComponent,
-		NcLoadingIcon,
-		NcEmptyContent,
-		NcActions,
-		NcActionButton,
-		NcDialog,
-		AccountSwitchOutline,
-	},
+const router = useRouter()
+const facesStore = useFacesStore()
+const filesStore = useFilesStore()
+const { fetchUnassignedFaces, loadingFaces, loadingFiles, errorFetchingFiles } = useFetchFaces()
+const { selection, selectedFileIds, onFileSelectToggle, onUncheckFiles } = useFilesSelection()
 
-	directives: {
-		focus(el) {
-			nextTick(() => el.focus())
-		},
-	},
+const showMoveModal = ref(false)
+const loadingCount = ref(0)
+const appContent = document.getElementById('app-content-vue')
 
-	mixins: [
-		FetchFacesMixin,
-		FetchFilesMixin,
-		FilesSelectionMixin,
-	],
+const files = computed(() => filesStore.files)
+const unassignedFiles = computed(() => facesStore.unassignedFiles)
+const faceFileIds = computed<string[]>(() => unassignedFiles.value || [])
 
-	setup() {
-		return { facesStore: useFacesStore(), filesStore: useFilesStore() }
-	},
+// Favorite all selection if at least one file is not on the favorites.
+const shouldFavoriteSelection = computed<boolean>(() => selectedFileIds.value.some((fileId) => filesStore.files[fileId].attributes.favorite === 0))
 
-	data() {
-		return {
-			showMoveModal: false,
-			loadingCount: 0,
-			appContent: document.getElementById('app-content-vue'),
-		}
-	},
-
-	computed: {
-		files() {
-			return this.filesStore.files
-		},
-
-		unassignedFiles() {
-			return this.facesStore.unassignedFiles
-		},
-
-		faceFileIds(): string[] {
-			return this.unassignedFiles || []
-		},
-
-		shouldFavoriteSelection(): boolean {
-			// Favorite all selection if at least one file is not on the favorites.
-			return this.selectedFileIds.some((fileId) => this.filesStore.files[fileId].attributes.favorite === 0)
-		},
-	},
-
-	mounted() {
-		this.fetchUnassignedFaces()
-	},
-
-	methods: {
-		// The photo is already gone from the store, it only has to leave the
-		// list of the unassigned faces.
-		onPhotoDeleted(photo) {
-			this.onUncheckFiles([photo.fileid.toString()])
-			this.facesStore.removeUnassignedFiles([photo.fileid.toString()])
-		},
-
-		openViewer(fileId) {
-			window.OCA.Viewer.open({
-				fileInfo: toViewerFileInfo(this.files[fileId]),
-				list: this.faceFileIds.map((fileId) => toViewerFileInfo(this.files[fileId])),
-			})
-		},
-
-		async handleMove(faceName, fileIds) {
-			try {
-				this.loadingCount++
-				await this.facesStore.moveFilesToFace(faceName, fileIds)
-				this.showMoveModal = false
-			} catch (error) {
-				logger.error('Failed to move selection', { error })
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		async favoriteSelection() {
-			try {
-				this.loadingCount++
-				await this.filesStore.toggleFavoriteForFiles(this.selectedFileIds, 1)
-			} catch (error) {
-				logger.error('Failed to favorite selection', { error })
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		async unFavoriteSelection() {
-			try {
-				this.loadingCount++
-				await this.filesStore.toggleFavoriteForFiles(this.selectedFileIds, 0)
-			} catch (error) {
-				logger.error('Failed to unfavorite selection', { error })
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		async downloadSelection() {
-			try {
-				this.loadingCount++
-				await downloadFiles(this.selectedFileIds.map((fileId) => this.files[fileId]))
-			} catch (error) {
-				logger.error('Faile to download selection', { error })
-			} finally {
-				this.loadingCount--
-			}
-		},
-
-		t,
-		n,
-	},
+// The photo is already gone from the store, it only has to leave the
+// list of the unassigned faces.
+function onPhotoDeleted(photo: PhotoTarget): void {
+	onUncheckFiles([photo.fileid.toString()])
+	facesStore.removeUnassignedFiles([photo.fileid.toString()])
 }
+
+function openViewer(fileId: number): void {
+	window.OCA.Viewer.open({
+		fileInfo: toViewerFileInfo(files.value[fileId]),
+		list: faceFileIds.value.map((fileId) => toViewerFileInfo(files.value[fileId])),
+	})
+}
+
+async function handleMove(faceName: string, fileIds: string[]): Promise<void> {
+	try {
+		loadingCount.value++
+		await facesStore.moveFilesToFace(faceName, fileIds)
+		showMoveModal.value = false
+	} catch (error) {
+		logger.error('Failed to move selection', { error })
+	} finally {
+		loadingCount.value--
+	}
+}
+
+async function favoriteSelection(): Promise<void> {
+	try {
+		loadingCount.value++
+		await filesStore.toggleFavoriteForFiles(selectedFileIds.value, 1)
+	} catch (error) {
+		logger.error('Failed to favorite selection', { error })
+	} finally {
+		loadingCount.value--
+	}
+}
+
+async function unFavoriteSelection(): Promise<void> {
+	try {
+		loadingCount.value++
+		await filesStore.toggleFavoriteForFiles(selectedFileIds.value, 0)
+	} catch (error) {
+		logger.error('Failed to unfavorite selection', { error })
+	} finally {
+		loadingCount.value--
+	}
+}
+
+async function downloadSelection(): Promise<void> {
+	try {
+		loadingCount.value++
+		await downloadFiles(selectedFileIds.value.map((fileId) => files.value[fileId]))
+	} catch (error) {
+		logger.error('Faile to download selection', { error })
+	} finally {
+		loadingCount.value--
+	}
+}
+
+onMounted(() => {
+	fetchUnassignedFaces()
+})
 </script>
 
 <style lang="scss" scoped>
-@use '../mixins/FaceContent.scss';
+@use './FaceContent.scss';
 </style>
