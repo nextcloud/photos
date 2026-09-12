@@ -17,7 +17,7 @@ import { getDefaultDavProps } from './DavRequest.ts'
  * @param id
  * @param options
  */
-export default async function(id: number, options: GetDirectoryContentsOptions = {}): Promise<File[]> {
+export default async function(id: string, options: GetDirectoryContentsOptions = {}): Promise<File[]> {
 	options = {
 		headers: {
 			method: 'REPORT',
