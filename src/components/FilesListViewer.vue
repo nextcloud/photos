@@ -40,7 +40,7 @@
 							</template>
 
 							<ul>
-								<template v-for="(row, rowIndex) of section.rows">
+								<template v-for="(row, rowIndex) of section.rows" :key="row.key">
 									<!--
 									We are subtracting 1 from flex-basis to compensate for rounding issues.
 									The flex algo will then compensate with flex-grow.
@@ -69,13 +69,13 @@
 	</div>
 </template>
 
-<script lang='ts'>
-import type { File } from '@nextcloud/files'
-import type { PropType } from 'vue'
+<script setup lang="ts">
+import type { File, Node } from '@nextcloud/files'
 import type { TiledItem } from '../services/TiledLayout.ts'
 import type { PhotoFile } from '../store/files.ts'
 
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { computed, onMounted, onUnmounted } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import PackageVariant from 'vue-material-design-icons/PackageVariant.vue'
@@ -85,196 +85,142 @@ import { fetchFile } from '../services/fileFetcher.ts'
 import { useFilesStore } from '../store/files.ts'
 import { useUserConfigStore } from '../store/userConfig.ts'
 
-export default {
-	name: 'FilesListViewer',
+const props = withDefaults(defineProps<{
+	// Array of file ids that should be rendered.
+	fileIds?: string[]
+	// An object mapping a list of section to a list of fileIds.
+	fileIdsBySection?: Record<string, string[]>
+	// The list of sorted sections.
+	sections?: string[]
+	// Whether we should display a loading indicator.
+	loading?: boolean
+	// Message to display when there is no files.
+	emptyMessage?: string
+	// The base height to forward to TileLayout.
+	baseHeight?: number
+	// The height to use for section headers.
+	sectionHeaderHeight?: number
+	// Instruct VirtualScrolling to scroll to the given section id.
+	scrollToSection?: string
+	// The containerElement props to forward to TileLayout.
+	containerElement?: HTMLElement | null
+	// The useWindow props to forward to TileLayout.
+	useWindow?: boolean
+}>(), {
+	fileIds: undefined,
+	fileIdsBySection: undefined,
+	sections: undefined,
+	loading: false,
+	emptyMessage: '',
+	baseHeight: 200,
+	sectionHeaderHeight: 75,
+	scrollToSection: '',
+	containerElement: null,
+	useWindow: false,
+})
 
-	components: {
-		PackageVariant,
-		NcEmptyContent,
-		NcLoadingIcon,
-		TiledLayout,
-		VirtualScrolling,
-	},
+const emit = defineEmits<{
+	needContent: []
+}>()
 
-	props: {
-		// Array of file ids that should be rendered.
-		fileIds: {
-			type: Array as PropType<string[]>,
-			default: undefined,
-		},
+defineSlots<{
+	// Section headers only carry the section id as file id.
+	default(props: { file: Pick<TiledItem, 'id'>, isHeader?: boolean }): unknown
+}>()
 
-		// An object mapping a list of section to a list of fileIds.
-		fileIdsBySection: {
-			type: Object as PropType<Record<string, string[]>>,
-			default: undefined,
-		},
+const filesStore = useFilesStore()
+const userConfigStore = useUserConfigStore()
 
-		// The list of sorted sections.
-		sections: {
-			type: Array as PropType<string[]>,
-			default: undefined,
-		},
+const files = computed<Record<string, PhotoFile>>(() => filesStore.files)
 
-		// Whether we should display a loading indicator.
-		loading: {
-			type: Boolean,
-			default: false,
-		},
+const croppedLayout = computed<boolean>(() => userConfigStore.croppedLayout)
 
-		// Message to display when there is no files.
-		emptyMessage: {
-			type: String,
-			default: '',
-		},
+const placeholderFiles: TiledItem[] = Array(20).fill(0).map((_, index) => {
+	const height = 200
+	const width = croppedLayout.value ? height : height * (1 + Math.random() * 2)
+	return {
+		id: index.toString(),
+		width,
+		height,
+		ratio: width / height,
+	}
+})
 
-		// The base height to forward to TileLayout.
-		baseHeight: {
-			type: Number,
-			default: 200,
-		},
+const showPlaceholders = computed<boolean>(() => props.loading && (props.fileIds?.length === 0 || props.sections?.length === 0))
 
-		// The height to use for section headers.
-		sectionHeaderHeight: {
-			type: Number,
-			default: 75,
-		},
-
-		// Instruct VirtualScrolling to scroll to the given section id.
-		scrollToSection: {
-			type: String,
-			default: '',
-		},
-
-		// The containerElement props to forward to TileLayout.
-		containerElement: {
-			type: [HTMLElement, null],
-			default: null,
-		},
-
-		// The useWindow props to forward to TileLayout.
-		useWindow: {
-			type: Boolean,
-			default: false,
-		},
-	},
-
-	emits: ['needContent'],
-
-	setup() {
-		return { filesStore: useFilesStore(), userConfigStore: useUserConfigStore() }
-	},
-
-	data() {
-		return {
-			placeholderFiles: Array(20).fill(0).map((_, index) => {
-				const height = 200
-				const width = this.croppedLayout ? height : height * (1 + Math.random() * 2)
-				return {
-					id: index.toString(),
-					width,
-					height,
-					ratio: width / height,
-				}
-			}),
+const itemsBySections = computed<{ id: string, items: TiledItem[] }[]>(() => {
+	if (props.fileIds !== undefined) {
+		if (showPlaceholders.value) {
+			return [{ id: '', items: placeholderFiles }]
 		}
-	},
 
-	computed: {
-		files(): Record<string, PhotoFile> {
-			return this.filesStore.files
-		},
+		return [
+			{
+				id: '',
+				items: props.fileIds
+					.filter((fileId) => files.value[fileId])
+					.map(mapFileToItem),
+			},
+		]
+	}
 
-		showPlaceholders(): boolean {
-			return this.loading && (this.fileIds?.length === 0 || this.sections?.length === 0)
-		},
+	if (props.sections !== undefined) {
+		if (showPlaceholders.value) {
+			return [{ id: 'placeholder', items: placeholderFiles }]
+		}
 
-		itemsBySections(): { id: string, items: TiledItem[] }[] {
-			if (this.fileIds !== undefined) {
-				if (this.showPlaceholders) {
-					return [{ id: '', items: this.placeholderFiles }]
-				}
-
-				return [
-					{
-						id: '',
-						items: this.fileIds
-							.filter((fileId) => this.files[fileId])
-							.map(this.mapFileToItem),
-					},
-				]
-			}
-
-			if (this.sections !== undefined) {
-				if (this.showPlaceholders) {
-					return [{ id: 'placeholder', items: this.placeholderFiles }]
-				}
-
-				return this.sections.map((sectionId) => {
-					return {
-						id: sectionId,
-						items: this.fileIdsBySection[sectionId]
-							.filter((fileId) => this.files[fileId])
-							.map(this.mapFileToItem),
-					}
-				})
-			}
-
-			return []
-		},
-
-		photosCount(): number {
-			return this.itemsBySections.map(({ items }) => items.length).reduce((total, length) => total + length, 0)
-		},
-
-		showLoader(): boolean {
-			return this.loading && (this.fileIds?.length !== 0 || this.sections?.length !== 0)
-		},
-
-		croppedLayout(): boolean {
-			return this.userConfigStore.croppedLayout
-		},
-	},
-
-	mounted() {
-		subscribe('files:node:updated', this.handleFileUpdated)
-		subscribe('files:node:deleted', this.handleFileDeleted)
-	},
-
-	unmounted() {
-		unsubscribe('files:node:updated', this.handleFileUpdated)
-		unsubscribe('files:node:deleted', this.handleFileDeleted)
-	},
-
-	methods: {
-		// Ask the parent for more content.
-		needContent(): void {
-			this.$emit('needContent')
-		},
-
-		mapFileToItem(fileId: string): TiledItem {
-			const file = this.files[fileId] as File
+		return props.sections.map((sectionId) => {
 			return {
-				id: file.fileid?.toString() as string,
-				width: file.attributes['metadata-photos-size'].width,
-				height: file.attributes['metadata-photos-size'].height,
-				ratio: this.croppedLayout ? 1 : file.attributes['metadata-photos-size'].width / file.attributes['metadata-photos-size'].height,
+				id: sectionId,
+				items: (props.fileIdsBySection?.[sectionId] ?? [])
+					.filter((fileId) => files.value[fileId])
+					.map(mapFileToItem),
 			}
-		},
+		})
+	}
 
-		async handleFileUpdated({ fileid }: File): Promise<void> {
-			const fetchedFile = await fetchFile(this.files[fileid as number].path)
-			if (fetchedFile === null) {
-				return
-			}
+	return []
+})
 
-			this.filesStore.appendFiles([fetchedFile as File])
-		},
+const photosCount = computed<number>(() => itemsBySections.value.map(({ items }) => items.length).reduce((total, length) => total + length, 0))
 
-		handleFileDeleted({ fileid }: File) {
-			this.filesStore.deleteFile(fileid as number)
-		},
-	},
+// Ask the parent for more content.
+function needContent(): void {
+	emit('needContent')
 }
+
+function mapFileToItem(fileId: string): TiledItem {
+	const file = files.value[fileId] as File
+	return {
+		id: file.fileid?.toString() as string,
+		width: file.attributes['metadata-photos-size'].width,
+		height: file.attributes['metadata-photos-size'].height,
+		ratio: croppedLayout.value ? 1 : file.attributes['metadata-photos-size'].width / file.attributes['metadata-photos-size'].height,
+	}
+}
+
+async function handleFileUpdated({ fileid }: Node): Promise<void> {
+	const fetchedFile = await fetchFile(files.value[fileid as number].path)
+	if (fetchedFile === null) {
+		return
+	}
+
+	filesStore.appendFiles([fetchedFile as File])
+}
+
+function handleFileDeleted({ fileid }: Node) {
+	filesStore.deleteFile(fileid as number)
+}
+
+onMounted(() => {
+	subscribe('files:node:updated', handleFileUpdated)
+	subscribe('files:node:deleted', handleFileDeleted)
+})
+
+onUnmounted(() => {
+	unsubscribe('files:node:updated', handleFileUpdated)
+	unsubscribe('files:node:deleted', handleFileDeleted)
+})
 </script>
 
 <style lang="scss" scoped>
