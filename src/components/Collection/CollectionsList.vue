@@ -26,49 +26,30 @@
 	</div>
 </template>
 
-<script lang='ts'>
-import type { PropType } from 'vue'
+<script setup lang="ts" generic="T extends Collection">
 import type { Collection } from '../../services/collectionFetcher.ts'
 
-import { translate } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
+import { computed } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 
-export default {
-	name: 'CollectionsList',
+const props = withDefaults(defineProps<{
+	collections: Record<string, T>
+	loading?: boolean
+	error?: Error | number | null
+}>(), {
+	loading: false,
+	error: null,
+})
 
-	components: {
-		AlertCircleOutline,
-		NcEmptyContent,
-	},
+defineSlots<{
+	header(): unknown
+	emptyCollectionsList(): unknown
+	default(props: { collection: T }): unknown
+}>()
 
-	props: {
-		collections: {
-			type: Object as PropType<Record<string, Collection>>,
-			required: true,
-		},
-
-		loading: {
-			type: Boolean,
-			default: false,
-		},
-
-		error: {
-			type: Error,
-			default: null,
-		},
-	},
-
-	computed: {
-		noCollection(): boolean {
-			return Object.keys(this.collections).length === 0
-		},
-	},
-
-	methods: {
-		t: translate,
-	},
-}
+const noCollection = computed(() => Object.keys(props.collections).length === 0)
 </script>
 
 <style lang="scss" scoped>
