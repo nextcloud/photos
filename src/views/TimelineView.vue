@@ -272,11 +272,11 @@ import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { useGridDensity } from '../composables/useGridDensity.ts'
 import { allMimes } from '../services/AllowedMimes.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
+import { openInViewer } from '../services/viewer.ts'
 import { useCollectionsStore } from '../store/collections.ts'
 import { useFilesStore } from '../store/files.ts'
 import { useFilterStore } from '../store/filters.ts'
 import { configChangedEvent } from '../store/userConfig.ts'
-import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
 const props = withDefaults(defineProps<{
 	onlyFavorites?: boolean
@@ -400,21 +400,11 @@ function openViewer(fileId: number) {
 	const fileIds = burstStacks.value[fileId]?.memberIds
 		?? Object.values(fileIdsByMonth.value).flat()
 
-	window.OCA.Viewer.open({
-		fileInfo: toViewerFileInfo(files.value[fileId]),
-		list: fileIds
-			.map((id) => files.value[id])
-			.filter((file) => file !== undefined)
-			.map(toViewerFileInfo),
-	})
+	openInViewer(fileIds.map((id) => files.value[id]).filter((file) => file !== undefined), files.value[fileId])
 }
 
 function startSlideshow() {
-	window.OCA.Viewer.open({
-		fileInfo: toViewerFileInfo(timelinePhotos.value[0]),
-		list: timelinePhotos.value.map(toViewerFileInfo),
-		startSlideshow: true,
-	})
+	openInViewer(timelinePhotos.value, timelinePhotos.value[0], { startSlideshow: true })
 }
 
 async function addSelectionToAlbum(album: Album) {

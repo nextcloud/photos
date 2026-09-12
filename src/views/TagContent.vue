@@ -65,9 +65,9 @@ import FilesListViewer from '../components/FilesListViewer.vue'
 import { useAbortController } from '../composables/useAbortController.ts'
 import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { logger } from '../services/logger.ts'
+import { closeViewer, openInViewer } from '../services/viewer.ts'
 import { useFilesStore } from '../store/files.ts'
 import { useSystemTagsStore } from '../store/systemtags.ts'
-import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
 const props = withDefaults(defineProps<{
 	path?: string
@@ -113,7 +113,7 @@ function onPhotoDeleted(photo: PhotoTarget): void {
 
 async function fetchContent(): Promise<void> {
 	// close any potential opened viewer
-	window.OCA.Viewer.close()
+	closeViewer()
 
 	loading.value = true
 	error.value = null
@@ -137,10 +137,7 @@ async function fetchContent(): Promise<void> {
 }
 
 function openViewer(fileId: number): void {
-	window.OCA.Viewer.open({
-		fileInfo: toViewerFileInfo(files.value[fileId]),
-		list: fileIds.value.map((fileId) => toViewerFileInfo(files.value[fileId])),
-	})
+	openInViewer(fileIds.value.map((fileId) => files.value[fileId]), files.value[fileId])
 }
 
 onBeforeMount(() => {

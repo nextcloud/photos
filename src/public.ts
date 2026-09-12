@@ -7,6 +7,9 @@ import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 import PhotosAppPublic from './PhotosAppPublic.vue'
 import { router } from './router/index.ts'
+import { registerViewerHandlers } from './services/viewer.ts'
+
+registerViewerHandlers()
 
 const app = createApp(PhotosAppPublic)
 app.config.idPrefix = 'photos'

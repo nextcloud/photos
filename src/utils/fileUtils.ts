@@ -5,10 +5,7 @@
 
 import type { Node } from '@nextcloud/files'
 
-import {
-	FileType,
-	Permission,
-} from '@nextcloud/files'
+import { File, FileType } from '@nextcloud/files'
 import { getRemoteURL, getRootPath } from '@nextcloud/files/dav'
 import { getLanguage } from '@nextcloud/l10n'
 import { basename } from '@nextcloud/paths'
@@ -121,65 +118,37 @@ export function toPhotoTarget(file: Node): PhotoTarget {
 	}
 }
 
-export type ViewerFileInfo = {
-	fileid?: number
-	basename: string
-	filename: string
-	mime?: string
-	mtime?: Date
-	ownerId: string | null
-	source: string
-	hasPreview: boolean
-	previewUrl: string
-	etag: string
-	permissions: string
-}
-
 /**
+ * The node the viewer is handed for a photo.
  *
- * @param file
+ * A photo of a collection is listed under the collection, and a request on
+ * that path acts on the membership rather than on the photo itself. The viewer
+ * gets the original file, so that what it deletes, renames or edits is the
+ * photo. The preview comes off the endpoint of the app, which also serves the
+ * photos of a shared album the account does not hold in its own files.
+ *
+ * @param file - Photo of a DAV listing
  */
-export function toViewerFileInfo(file: Node): ViewerFileInfo {
-	let permissions = ''
+export function toViewerNode(file: File): File {
+	const originalFilename = file.attributes['photos-collection-file-original-filename']
+	const location = originalFilename === undefined
+		? { source: file.source, root: file.root }
+		: { source: getRemoteURL() + getRootPath() + originalFilename, root: getRootPath() }
 
-	if ((file.permissions & Permission.CREATE) === Permission.CREATE) {
-		permissions += 'CK'
-	}
-	if ((file.permissions & Permission.UPDATE) === Permission.UPDATE) {
-		permissions += 'WNV'
-	}
-	if ((file.permissions & Permission.READ) === Permission.READ) {
-		permissions += 'G'
-	}
-	if ((file.permissions & Permission.DELETE) === Permission.DELETE) {
-		permissions += 'D'
-	}
-	if ((file.permissions & Permission.SHARE) === Permission.SHARE) {
-		permissions += 'R'
-	}
-
-	let filename = file.path
-	let source = file.source
-	// Override the filename and source to allow deleting a file from the viewer.
-	// This is needed when the filename and source are related to the albums.
-	if (file.attributes['photos-collection-file-original-filename'] !== undefined) {
-		filename = file.attributes['photos-collection-file-original-filename']
-		source = getRemoteURL() + getRootPath() + filename
-	}
-
-	return {
-		fileid: file.fileid,
-		basename: file.basename,
-		filename,
-		mime: file.mime,
+	return new File({
+		...location,
+		id: file.fileid,
 		mtime: file.mtime,
-		ownerId: file.owner,
-		source,
-		hasPreview: file.attributes.hasPreview,
-		previewUrl: file.attributes.previewUrl ?? getPreviewUrl(file, 4096),
-		etag: file.attributes.etag,
-		permissions,
-	}
+		crtime: file.crtime,
+		mime: file.mime,
+		size: file.size,
+		permissions: file.permissions,
+		owner: file.owner,
+		attributes: {
+			...file.attributes,
+			previewUrl: file.attributes.previewUrl ?? getPreviewUrl(file, 4096),
+		},
+	})
 }
 
 export async function getVideoDurationFromUrl(url): Promise<number> {

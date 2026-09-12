@@ -39,6 +39,7 @@ import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import TagCover from '../components/TagCover.vue'
 import { useAbortController } from '../composables/useAbortController.ts'
 import { logger } from '../services/logger.ts'
+import { closeViewer } from '../services/viewer.ts'
 import { useSystemTagsStore } from '../store/systemtags.ts'
 
 const systemTagsStore = useSystemTagsStore()
@@ -62,7 +63,7 @@ const popularTags = computed<Tag[]>(() => Object.keys(tagsNames.value)
 
 async function fetchRootContent(): Promise<void> {
 	// close any potential opened viewer
-	window.OCA.Viewer.close()
+	closeViewer()
 
 	error.value = null
 

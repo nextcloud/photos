@@ -114,9 +114,9 @@ import { allMimes as allowedMimes } from '../services/AllowedMimes.ts'
 import { fetchFile } from '../services/fileFetcher.ts'
 import { getFolderContent } from '../services/FolderContent.ts'
 import { logger } from '../services/logger.ts'
+import { closeViewer, openInViewer } from '../services/viewer.ts'
 import { useFoldersStore } from '../store/folders.ts'
 import { useUserConfigStore } from '../store/userConfig.ts'
-import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
 // A laid out tile that still knows which folder or photo it stands for.
 type NodeItem = TiledItem & { node: Folder | PhotoFile }
@@ -216,9 +216,7 @@ watch(() => props.showShared, () => {
  * @param fileid - Id of the photo to open
  */
 function openViewer(fileid: number) {
-	window.OCA.Viewer.open({
-		fileInfo: toViewerFileInfo(files.value[fileid]),
-		list: fileList.value.map((file) => toViewerFileInfo(file)),
+	openInViewer(fileList.value, files.value[fileid] as PhotoFile, {
 		onClose: () => window.OCA?.Files?.Sidebar?.close?.(),
 	})
 }
@@ -259,7 +257,7 @@ async function fetchFolderContent() {
 	loading.value = true
 
 	// close any potential opened viewer & sidebar
-	window.OCA?.Viewer?.close?.()
+	closeViewer()
 	window.OCA?.Files?.Sidebar?.close?.()
 
 	// if we don't already have some cached data let's show a loader
