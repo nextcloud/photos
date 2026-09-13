@@ -1,0 +1,73 @@
+import{j as c,d as m,b as h}from"./dav-i4TJ-db1.chunk.mjs";import{h as u}from"./he-Dqpj1h95.chunk.mjs";import{a as g,p as f,g as $,d as y}from"./index-TVQumSFb.chunk.mjs";async function D(o={}){const d={firstResult:0,nbResults:200,mimesType:g,onThisDay:!1,onlyFavorites:!1,full:!1,extraFilters:"",...o},a=d.mimesType.reduce((e,r)=>`${e}
+		<d:eq>
+			<d:prop>
+				<d:getcontenttype/>
+			</d:prop>
+			<d:literal>${r}</d:literal>
+		</d:eq>
+	`,""),s=d.onlyFavorites?`<d:eq>
+				<d:prop>
+					<oc:favorite/>
+				</d:prop>
+				<d:literal>1</d:literal>
+			</d:eq>`:"",n=d.onThisDay?`<d:or>${Array(20).fill(1).map((e,r)=>{const t=new Date,i=new Date(t.getFullYear()-(r+1),t.getMonth(),t.getDate()-3),p=new Date(t.getFullYear()-(r+1),t.getMonth(),t.getDate()+3,23,59,59,999);return`<d:and>
+				<d:gt>
+					<d:prop>
+						<nc:metadata-photos-original_date_time/>
+					</d:prop>
+					<d:literal>${i.valueOf()/1e3}</d:literal>
+				</d:gt>
+				<d:lt>
+					<d:prop>
+						<nc:metadata-photos-original_date_time/>
+					</d:prop>
+					<d:literal>${p.valueOf()/1e3}</d:literal>
+				</d:lt>
+			</d:and>`}).join(`
+`)}</d:or>`:"",l=f.state.userConfig.photosSourceFolders.map(e=>`
+			<d:scope>
+				<d:href>${c(m,u.encode(e))}</d:href>
+				<d:depth>infinity</d:depth>
+			</d:scope>`).join(`
+`);return d.data=`<?xml version="1.0" encoding="UTF-8"?>
+		<d:searchrequest xmlns:d="DAV:"
+			xmlns:oc="http://owncloud.org/ns"
+			xmlns:nc="http://nextcloud.org/ns"
+			xmlns:ns="https://github.com/icewind1991/SearchDAV/ns"
+			xmlns:ocs="http://open-collaboration-services.org/ns">
+			<d:basicsearch>
+				<d:select>
+					<d:prop>
+						${$()}
+					</d:prop>
+				</d:select>
+				<d:from>
+					${l}
+				</d:from>
+				<d:where>
+					<d:and>
+						<d:or>
+							${a}
+						</d:or>
+						${s}
+						${n}
+						${d.extraFilters}
+					</d:and>
+				</d:where>
+				<d:orderby>
+					<d:order>
+						<d:prop><nc:metadata-photos-original_date_time/></d:prop>
+						<d:descending/>
+					</d:order>
+					<d:order>
+						<d:prop><d:getlastmodified/></d:prop>
+						<d:descending/>
+					</d:order>
+				</d:orderby>
+				<d:limit>
+					<d:nresults>${d.nbResults}</d:nresults>
+					<ns:firstresult>${d.firstResult}</ns:firstresult>
+				</d:limit>
+			</d:basicsearch>
+		</d:searchrequest>`,d.details=!0,(await y.search("/",d)).data.results.map(e=>(e.filename=e.filename.replace(/^\/remote.php\/dav/,""),e)).map(e=>h(e))}export{D as g};
+//# sourceMappingURL=PhotoSearch-BXWBq9EM.chunk.mjs.map

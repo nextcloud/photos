@@ -123,13 +123,7 @@ jobs:
     - name: Show logs
       if: failure()
       run: |
-        # @nextcloud/e2e-test-server names the container after the app directory,
-        # so it is discovered rather than hardcoded.
-        container=$(docker ps -a --format '{{.Names}}' | grep -i nextcloud | head -n1)
-        echo "=== Logs of container ${container} ==="
-        docker logs "$container" || true
-        echo '=== Nextcloud server logs ==='
-        docker exec "$container" cat data/nextcloud.log || true
+        cat nextcloud.log || true
 
     - name: Upload blob report to GitHub Actions Artifacts
       if: ${{ !cancelled() }}

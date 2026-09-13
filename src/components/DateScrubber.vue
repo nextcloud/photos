@@ -73,8 +73,8 @@
 import type { PropType } from 'vue'
 
 import { t } from '@nextcloud/l10n'
-import moment from '@nextcloud/moment'
 import { defineComponent } from 'vue'
+import { formatMonthAndYear } from '../utils/dateUtils.ts'
 import { monthDensities } from '../utils/monthDensity.ts'
 
 interface YearLabel {
@@ -165,7 +165,7 @@ export default defineComponent({
 			if (this.activeMonth === '') {
 				return ''
 			}
-			return moment(this.activeMonth, 'YYYYMM').format('MMMM YYYY')
+			return formatMonthAndYear(this.activeMonth)
 		},
 
 		activeYear(): string {

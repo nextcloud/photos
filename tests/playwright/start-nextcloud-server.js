@@ -55,13 +55,8 @@ async function start() {
 }
 
 async function stop() {
-	if (process.env.CI) {
-		process.stderr.write('=== Nextcloud log ===\n')
-		await runExec(['cat', 'data/nextcloud.log'], { verbose: true })
-	}
-
 	process.stderr.write('Stopping Nextcloud server …\n')
-	await stopNextcloud()
+	await stopNextcloud({ saveLogTo: 'nextcloud.log' })
 	process.exit(0)
 }
 
