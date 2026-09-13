@@ -184,15 +184,24 @@
 			<span class="hidden-visually" role="none" v-html="videoplaceholder" />
 		</NcAppContent>
 
+		<!-- Metadata dialog opened from the Viewer's "Open Sidebar" button -->
+		<PhotoMetadataDialog
+			v-if="sidebarPhoto !== null"
+			:photo="sidebarPhoto"
+			@close="sidebarPhoto = null" />
+
 		<!-- Main settings Modal-->
 		<SettingsDialog :open.sync="openedSettings" />
 	</NcContent>
 </template>
 
 <script lang='ts'>
+import type { Node } from '@nextcloud/files'
 import type { FilterOption } from './services/PhotosFilters/PhotosFilter.ts'
+import type { PhotoTarget } from './utils/fileUtils.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
@@ -234,6 +243,7 @@ import TagOutline from 'vue-material-design-icons/TagOutline.vue'
 import TimelapseIcon from 'vue-material-design-icons/Timelapse.vue'
 import VideoIcon from 'vue-material-design-icons/Video.vue'
 import VideoOutline from 'vue-material-design-icons/VideoOutline.vue'
+import PhotoMetadataDialog from './components/PhotoMetadataDialog.vue'
 import PhotosFiltersDisplay from './components/PhotosFilters/PhotosFiltersDisplay.vue'
 import PhotosFiltersInput from './components/PhotosFilters/PhotosFiltersInput.vue'
 import SettingsDialog from './components/Settings/SettingsDialog.vue'
@@ -246,6 +256,7 @@ import isRecognizeInstalled from './services/IsRecognizeInstalled.ts'
 import logger from './services/logger.ts'
 import { nameFilterId } from './services/PhotosFilters/nameFilter.ts'
 import useFilterStore from './store/filters.ts'
+import { toPhotoTarget } from './utils/fileUtils.ts'
 
 export default {
 	name: 'PhotosApp',
@@ -286,6 +297,7 @@ export default {
 		NcContent,
 		NcTextField,
 		SettingsDialog,
+		PhotoMetadataDialog,
 		PhotosFiltersInput,
 		PhotosFiltersDisplay,
 	},
@@ -330,6 +342,8 @@ export default {
 				: (getCurrentUser().isAdmin && loadState('photos', 'showPeopleMenuEntry', true) && isAppStoreEnabled) || isRecognizeInstalled,
 
 			openedSettings: false,
+			/** Photo whose metadata dialog is shown from the Viewer sidebar button. */
+			sidebarPhoto: null as PhotoTarget | null,
 		}
 	},
 
@@ -363,7 +377,13 @@ export default {
 		}
 	},
 
+	mounted() {
+		subscribe('viewer:sidebar:open', this.handleViewerSidebarOpen)
+	},
+
 	beforeDestroy() {
+		unsubscribe('viewer:sidebar:open', this.handleViewerSidebarOpen)
+
 		window.removeEventListener('load', () => {
 			navigator.serviceWorker.register(generateUrl('/apps/photos/service-worker.js', {}, {
 				noRewrite: true,
@@ -374,6 +394,36 @@ export default {
 	methods: {
 		showSettings() {
 			this.openedSettings = true
+		},
+
+		/**
+		 * Handle the Viewer's "Open Sidebar" button click.
+		 * The Viewer emits `viewer:sidebar:open` with a Node, but the Photos app
+		 * does not have the Files app sidebar loaded. Instead, we open the
+		 * existing metadata dialog.
+		 *
+		 * @param node - The node emitted by the viewer
+		 */
+		handleViewerSidebarOpen(node: Node) {
+			const fileid = node.fileid ?? (node as { id?: number }).id
+			if (fileid === undefined) {
+				return
+			}
+
+			// Look up the photo in the store to get the full PhotoTarget data.
+			const file = this.$store.state.files.files[fileid]
+			if (file !== undefined) {
+				this.sidebarPhoto = toPhotoTarget(file)
+			} else {
+				// Fallback: construct a minimal PhotoTarget from the node itself.
+				this.sidebarPhoto = {
+					fileid,
+					basename: node.basename,
+					davPath: node.path ?? '',
+					permissions: node.permissions,
+					favorite: false,
+				}
+			}
 		},
 
 		selectFilter(filterOption: FilterOption<unknown>) {
