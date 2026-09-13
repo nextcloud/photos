@@ -209,6 +209,7 @@ OC.L10N.register(
     "Failed to fetch collection." : "Theip ar bhailiú a fháil.",
     "Failed to fetch collections list." : "Theip ar an liosta bailiúcháin a fháil.",
     "Failed to fetch faces list." : "Theip ar an liosta aghaidheanna a fháil.",
+    "The folder {folder} does not exist anymore. You can remove it from your media folders in the Photos settings." : "Níl an fillteán {folder} ann a thuilleadh. Is féidir leat é a bhaint as do fhillteáin meán sna socruithe Grianghraif.",
     "All your media" : "Na meáin go léir agat",
     "Album {title}" : "Albam {title}",
     "Shared Albums" : "Albaim Roinnte",
