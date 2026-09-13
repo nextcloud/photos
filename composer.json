@@ -23,7 +23,7 @@
 		"lint": "find . -name \\*.php -not -path './vendor/*' -print0 | xargs -0 -n1 php -l",
 		"psalm": "psalm --no-cache --threads=$(nproc)",
 		"psalm:update-baseline": "psalm --threads=1 --update-baseline --set-baseline=tests/psalm-baseline.xml",
-		"test:unit": "phpunit -c tests/phpunit.xml --color --fail-on-warning --fail-on-risky",
+		"test:unit": "phpunit -c tests/Unit/phpunit.xml --color --fail-on-warning --fail-on-risky",
 		"rector": "rector && composer cs:fix",
 		"post-install-cmd": [
 			"[ $COMPOSER_DEV_MODE -eq 0 ] || composer bin all install --ansi"
