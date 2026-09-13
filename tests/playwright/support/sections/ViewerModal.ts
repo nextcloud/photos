@@ -94,9 +94,10 @@ export class ViewerModal {
 	 * Wait for the viewer to show a photo.
 	 *
 	 * @param name - Name of the photo file it is expected to open on
+	 * @param options - How long to wait, when the photo is due later than a load
 	 */
-	public async waitForPhoto(name: string): Promise<void> {
-		await expect(this.heading(name)).toBeVisible()
+	public async waitForPhoto(name: string, options?: { timeout: number }): Promise<void> {
+		await expect(this.heading(name)).toBeVisible(options)
 	}
 
 	/**
