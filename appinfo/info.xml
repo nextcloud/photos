@@ -29,6 +29,7 @@
 
     <background-jobs>
         <job>OCA\Photos\Jobs\AutomaticPlaceMapperJob</job>
+        <job>OCA\Photos\Jobs\CleanupOrphanAlbumFilesJob</job>
     </background-jobs>
 
     <repair-steps>
