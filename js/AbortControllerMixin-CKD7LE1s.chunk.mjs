@@ -1,0 +1,2 @@
+import{c as t}from"./dav-xf6aI6bL.chunk.mjs";const a=t({name:"AbortControllerMixin",data(){return{abortController:new AbortController}},methods:{abortPendingRequest(){this.abortController.abort(),this.abortController=new AbortController}},beforeDestroy(){this.abortController.abort()},beforeRouteLeave(r,e,o){this.abortPendingRequest(),o()}});export{a as A};
+//# sourceMappingURL=AbortControllerMixin-CKD7LE1s.chunk.mjs.map
