@@ -12,6 +12,12 @@ vi.mock('@nextcloud/router', () => ({
 	generateUrl: (url: string) => url,
 }))
 
+vi.mock('@nextcloud/files/dav', () => ({
+	getRootPath: () => '/files/alice',
+	getRemoteURL: () => 'https://example.com/remote.php/dav',
+	parsePermissions: (perms: number) => perms,
+}))
+
 describe('toViewerFileInfo', () => {
 	test.each([
 		'&quot;etag-value&quot;',
@@ -32,5 +38,42 @@ describe('toViewerFileInfo', () => {
 
 		expect(toViewerFileInfo(file).previewUrl)
 			.toBe('/apps/photos/api/v1/preview/42?etag=etag-value&x=4096&y=4096')
+	})
+
+	test('sets correct davPath when photos-collection-file-original-filename is not defined', () => {
+		const file = {
+			fileid: 42,
+			basename: 'photo.jpg',
+			path: '/photo.jpg',
+			root: '/files/alice',
+			source: '/remote.php/dav/files/alice/photo.jpg',
+			owner: 'alice',
+			permissions: 0,
+			attributes: {
+				etag: 'etag-value',
+				hasPreview: true,
+			},
+		} as unknown as Node
+
+		expect(toViewerFileInfo(file).davPath).toBe('/files/alice/photo.jpg')
+	})
+
+	test('sets correct davPath when photos-collection-file-original-filename is defined', () => {
+		const file = {
+			fileid: 42,
+			basename: 'photo.jpg',
+			path: '/photo.jpg',
+			root: '/files/alice',
+			source: '/remote.php/dav/files/alice/photo.jpg',
+			owner: 'alice',
+			permissions: 0,
+			attributes: {
+				etag: 'etag-value',
+				hasPreview: true,
+				'photos-collection-file-original-filename': '/Photos/original.jpg',
+			},
+		} as unknown as Node
+
+		expect(toViewerFileInfo(file).davPath).toBe('/files/alice/Photos/original.jpg')
 	})
 })
