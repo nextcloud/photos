@@ -32,7 +32,7 @@
 				data-test="face"
 				:data-test-face-name="face.basename"
 				:to="`/faces/${encodeURIComponent(face.basename)}`">
-				<FaceCover :base-name="face.basename" />
+				<FaceCover :baseName="face.basename" />
 			</RouterLink>
 			<RouterLink
 				key="unassigned"

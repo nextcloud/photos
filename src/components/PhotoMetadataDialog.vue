@@ -31,6 +31,7 @@
 
 			<div v-if="location !== null" class="photo-metadata__map">
 				<LocationMap
+					height="200px"
 					:latitude="location.latitude"
 					:longitude="location.longitude"
 					:name="metadata?.place || photo.basename" />
@@ -114,8 +115,6 @@ onMounted(async () => {
 		// the width of the dialog.
 		:deep(.location-map) {
 			margin: 0;
-			width: 100%;
-			height: 200px;
 		}
 	}
 

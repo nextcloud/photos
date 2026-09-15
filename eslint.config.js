@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: CC0-1.0
  */
 
-import { recommendedVue2 } from '@nextcloud/eslint-config'
+import { recommended } from '@nextcloud/eslint-config'
 
 export default [
-	...recommendedVue2,
+	...recommended,
 	{
 		ignores: [
 			'js/',

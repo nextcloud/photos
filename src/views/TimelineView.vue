@@ -9,13 +9,19 @@
 		<NcEmptyContent
 			v-if="errorFetchingFiles === 404"
 			:name="t('photos', 'One of the source folders does not exist')">
-			<FolderAlertOutline slot="icon" />
-			<PhotosSourceLocationsSettings
-				slot="action"
-				class="timeline__update_source_directory" />
+			<template #icon>
+				<FolderAlertOutline />
+			</template>
+			<template #action>
+				<PhotosSourceLocationsSettings
+
+					class="timeline__update_source_directory" />
+			</template>
 		</NcEmptyContent>
 		<NcEmptyContent v-else :name="t('photos', 'An error occurred')">
-			<AlertCircleOutline slot="icon" />
+			<template #icon>
+				<AlertCircleOutline />
+			</template>
 		</NcEmptyContent>
 	</div>
 
@@ -26,14 +32,14 @@
 			:loading="loadingCount > 0"
 			path="/"
 			:title="rootTitle"
-			:root-title="rootTitle"
+			:rootTitle="rootTitle"
 			@refresh="resetFetchFilesState">
 			<div class="timeline__header__left">
 				<!-- TODO: UploadPicker -->
 				<NcActions
 					v-if="selectedFileIds.length === 0"
 					:aria-label="t('photos', 'Change tile density')"
-					:menu-name="t('photos', 'Density')"
+					:menuName="t('photos', 'Density')"
 					data-cy-header-action="density">
 					<template #icon>
 						<ViewGridOutline :size="20" />
@@ -41,22 +47,22 @@
 					<NcActionRadio
 						name="photos-density"
 						value="small"
-						:model-value="gridDensity"
-						@update:model-value="setGridDensity">
+						:modelValue="gridDensity"
+						@update:modelValue="setGridDensity">
 						{{ t('photos', 'Small tiles') }}
 					</NcActionRadio>
 					<NcActionRadio
 						name="photos-density"
 						value="medium"
-						:model-value="gridDensity"
-						@update:model-value="setGridDensity">
+						:modelValue="gridDensity"
+						@update:modelValue="setGridDensity">
 						{{ t('photos', 'Default') }}
 					</NcActionRadio>
 					<NcActionRadio
 						name="photos-density"
 						value="large"
-						:model-value="gridDensity"
-						@update:model-value="setGridDensity">
+						:modelValue="gridDensity"
+						@update:modelValue="setGridDensity">
 						{{ t('photos', 'Large tiles') }}
 					</NcActionRadio>
 				</NcActions>
@@ -90,7 +96,7 @@
 
 				<template v-else>
 					<NcButton
-						:close-after-click="true"
+						:closeAfterClick="true"
 						variant="primary"
 						:aria-label="t('photos', 'Add to album')"
 						data-cy-header-action="add-to-album"
@@ -119,7 +125,7 @@
 					<NcActions :aria-label="t('photos', 'Open actions menu')">
 						<NcActionButton
 							data-cy-header-action="download-selection"
-							:close-after-click="true"
+							:closeAfterClick="true"
 							:aria-label="t('photos', 'Download selected files')"
 							@click="downloadSelectedFiles">
 							{{ t('photos', 'Download selected files') }}
@@ -129,10 +135,29 @@
 							</template>
 						</NcActionButton>
 
-						<ActionFavorite :selected-file-ids="selectedFileIds" />
+						<NcActionButton
+							v-if="shouldFavoriteSelection"
+							:closeAfterClick="true"
+							:aria-label="t('photos', 'Mark selection as favorite')"
+							@click="favoriteSelection">
+							{{ t('photos', 'Add selection to favorites') }}
+							<template #icon>
+								<StarOutline />
+							</template>
+						</NcActionButton>
+						<NcActionButton
+							v-else
+							:closeAfterClick="true"
+							:aria-label="t('photos', 'Remove selection from favorites')"
+							@click="unFavoriteSelection">
+							{{ t('photos', 'Remove selection from favorites') }}
+							<template #icon>
+								<Star />
+							</template>
+						</NcActionButton>
 
 						<NcActionButton
-							:close-after-click="true"
+							:closeAfterClick="true"
 							:aria-label="t('photos', 'Delete selection')"
 							data-cy-header-action="delete-selection"
 							@click="deleteSelection">
@@ -148,31 +173,31 @@
 
 		<FilesListViewer
 			ref="filesListViewer"
-			:container-element="appContent"
+			:containerElement="appContent"
 			class="timeline__file-list"
-			:file-ids-by-section="fileIdsByMonth"
+			:fileIdsBySection="fileIdsByMonth"
 			:sections="monthsList"
 			:loading="loadingFiles"
-			:base-height="tileBaseHeight"
-			:empty-message="t('photos', 'No photos or videos in here')"
-			:scroll-to-section="scrubberTarget"
-			@need-content="getContent">
-			<template slot-scope="{ file, isHeader }">
+			:baseHeight="tileBaseHeight"
+			:emptyMessage="t('photos', 'No photos or videos in here')"
+			:scrollToSection="scrubberTarget"
+			@needContent="getContent">
+			<template #default="{ file, isHeader }">
 				<h2
 					v-if="isHeader"
 					:id="`file-picker-section-header-${file.id}`"
 					class="section-header">
-					<b>{{ file.id | dateMonth }}</b>
-					{{ file.id | dateYear }}
+					<b>{{ dateMonth(file.id) }}</b>
+					{{ dateYear(file.id) }}
 				</h2>
 				<FileComponent
 					v-else
 					:file="files[file.id]"
-					:allow-selection="true"
-					:burst-count="burstCount(file.id)"
+					:allowSelection="true"
+					:burstCount="burstCount(file.id)"
 					:selected="selection[file.id] === true"
 					@click="openViewer"
-					@select-toggled="onFileSelectToggle"
+					@selectToggled="onFileSelectToggle"
 					@deleted="onPhotoDeleted" />
 			</template>
 		</FilesListViewer>
@@ -181,28 +206,28 @@
 			month - there is nothing to scrub then. -->
 		<DateScrubber
 			:months="monthsList"
-			:month-counts="monthCounts"
-			:current-month="scrubberTarget || monthsList[0]"
+			:monthCounts="monthCounts"
+			:currentMonth="scrubberTarget || monthsList[0]"
 			@jump="onScrubberJump" />
 
 		<NcModal
 			v-if="showAlbumCreationForm"
 			key="albumCreationForm"
-			label-id="new-album-form"
-			:set-return-focus="$refs.newAlbumButton?.$el"
+			labelId="new-album-form"
+			:setReturnFocus="$refs.newAlbumButton?.$el"
 			@close="showAlbumCreationForm = false">
 			<h2 class="timeline__heading">
 				{{ t('photos', 'New album') }}
 			</h2>
-			<AlbumForm :filters-value="selectedFilters" @done="handleFormCreationDone" />
+			<AlbumForm :filtersValue="selectedFilters" @done="handleFormCreationDone" />
 		</NcModal>
 
 		<NcModal
 			v-if="showAlbumPicker"
 			key="albumPicker"
-			label-id="album-picker"
+			labelId="album-picker"
 			@close="showAlbumPicker = false">
-			<AlbumPicker @album-picked="addSelectionToAlbum" />
+			<AlbumPicker @albumPicked="addSelectionToAlbum" />
 		</NcModal>
 	</div>
 </template>
@@ -228,10 +253,11 @@ import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue
 import Play from 'vue-material-design-icons/Play.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import PlusBoxMultipleOutline from 'vue-material-design-icons/PlusBoxMultipleOutline.vue'
+import Star from 'vue-material-design-icons/Star.vue'
+import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 import DownloadOutline from 'vue-material-design-icons/TrayArrowDown.vue'
 import ViewGridOutline from 'vue-material-design-icons/ViewGridOutline.vue'
-import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import AlbumPicker from '../components/Albums/AlbumPicker.vue'
 import DateScrubber from '../components/DateScrubber.vue'
@@ -255,6 +281,8 @@ import { toViewerFileInfo } from '../utils/fileUtils.ts'
 export default {
 	name: 'TimelineView',
 	components: {
+		StarOutline,
+		Star,
 		DeleteOutline,
 		PlusBoxMultipleOutline,
 		DownloadOutline,
@@ -273,16 +301,10 @@ export default {
 		DateScrubber,
 		FilesListViewer,
 		FileComponent,
-		ActionFavorite,
 		HeaderNavigation,
 		PhotosSourceLocationsSettings,
 		AlertCircleOutline,
 		ViewGridOutline,
-	},
-
-	filters: {
-		dateMonth: formatMonth,
-		dateYear: formatYear,
 	},
 
 	mixins: [
@@ -355,6 +377,11 @@ export default {
 	},
 
 	computed: {
+		shouldFavoriteSelection(): boolean {
+			// Favorite all selection if at least one file is not in the favorites.
+			return this.selectedFileIds.some((fileId) => this.filesStore.files[fileId].attributes.favorite === 0)
+		},
+
 		files() {
 			return this.filesStore.files
 		},
@@ -399,11 +426,22 @@ export default {
 		subscribe(configChangedEvent, this.handleUserConfigChange)
 	},
 
-	destroyed() {
+	unmounted() {
 		unsubscribe(configChangedEvent, this.handleUserConfigChange)
 	},
 
 	methods: {
+		async favoriteSelection(): Promise<void> {
+			await this.filesStore.toggleFavoriteForFiles(this.selectedFileIds, 1)
+		},
+
+		async unFavoriteSelection(): Promise<void> {
+			await this.filesStore.toggleFavoriteForFiles(this.selectedFileIds, 0)
+		},
+
+		dateMonth: formatMonth,
+		dateYear: formatYear,
+
 		getContent() {
 			this.fetchFiles({
 				mimesType: this.mimesType,
@@ -426,7 +464,7 @@ export default {
 		onFileSelectToggle({ id, value }: { id: string, value: boolean }): void {
 			const fileIds = this.burstStacks[id]?.memberIds ?? [id]
 			for (const fileId of fileIds) {
-				this.$set(this.selection, fileId, value)
+				this.selection[fileId] = value
 			}
 		},
 

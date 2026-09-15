@@ -17,7 +17,7 @@
 			<template #option="option">
 				<NcListItemIcon
 					:name="option.label"
-					:is-no-user="true"
+					:isNoUser="true"
 					:url="option.imgSrc" />
 			</template>
 		</NcSelect>
@@ -38,7 +38,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-	(e: 'select-filter', option: FilterOption<unknown>): void
+	(e: 'selectFilter', option: FilterOption<unknown>): void
 }>()
 
 const availableOptions = ref<FilterOption<unknown>[]>([])
@@ -64,7 +64,7 @@ function handleSelectOptions(options: FilterOption<unknown>[]): void {
 			return
 		}
 
-		emit('select-filter', option)
+		emit('selectFilter', option)
 	})
 }
 

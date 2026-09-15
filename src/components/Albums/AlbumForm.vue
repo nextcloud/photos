@@ -10,7 +10,7 @@
 				v-model.trim="albumName"
 				type="text"
 				name="name"
-				:helper-text="albumNameValidationError"
+				:helperText="albumNameValidationError"
 				:error="albumNameValidationError !== undefined"
 				:required="true"
 				:label="t('photos', 'Name of the album')" />
@@ -26,11 +26,11 @@
 		</div>
 
 		<PhotosFiltersInput
-			:selected-filters="albumFilters"
-			@select-filter="selectFilter" />
+			:selectedFilters="albumFilters"
+			@selectFilter="selectFilter" />
 		<PhotosFiltersDisplay
-			:selected-filters="albumFilters"
-			@deselect-filter="deselectFilter" />
+			:selectedFilters="albumFilters"
+			@deselectFilter="deselectFilter" />
 
 		<div class="form-buttons">
 			<span class="left-buttons">
@@ -67,8 +67,8 @@
 	</form>
 	<CollaboratorsSelectionForm
 		v-else
-		:album-name="albumName"
-		:allow-public-link="false">
+		:albumName="albumName"
+		:allowPublicLink="false">
 		<template #default="{ collaborators }">
 			<span class="left-buttons">
 				<NcButton
@@ -103,6 +103,7 @@ import { InvalidFilenameError, InvalidFilenameErrorReason, validateFilename } fr
 import { resultToNode } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
 import { generateRemoteUrl } from '@nextcloud/router'
+import { toRaw } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
@@ -149,6 +150,8 @@ export default {
 			default: false,
 		},
 	},
+
+	emits: ['back', 'done'],
 
 	setup() {
 		return { albumsStore: useAlbumsStore(), collectionsStore: useCollectionsStore() }
@@ -219,12 +222,12 @@ export default {
 			this.albumLocation = this.album?.attributes.location ?? ''
 			this.albumFilters = {
 				...this.albumFilters,
-				...structuredClone(this.album?.attributes.filters ?? {}),
+				...structuredClone(toRaw(this.album?.attributes.filters ?? {})),
 			}
 		} else {
 			this.albumFilters = {
 				...this.albumFilters,
-				...structuredClone(this.filtersValue),
+				...structuredClone(toRaw(this.filtersValue)),
 			}
 		}
 
@@ -302,7 +305,7 @@ export default {
 			try {
 				this.loading = true
 
-				let album = this.album?.clone() as Album
+				let album = toRaw(this.album)?.clone() as Album
 				const changes: string[] = []
 
 				if (this.album !== null && this.album.basename !== this.albumName) {

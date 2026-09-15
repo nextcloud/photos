@@ -6,7 +6,7 @@
 	<div class="album-container">
 		<AlbumHero
 			v-if="album !== undefined"
-			:cover-file-id="coverFileId"
+			:coverFileId="coverFileId"
 			:blurhash="coverBlurhash"
 			:title="albumName"
 			:subtitle="albumSubtitle" />
@@ -14,135 +14,173 @@
 		<CollectionContent
 			ref="collectionContent"
 			:collection="album"
-			:collection-file-ids="albumFileIds"
+			:collectionFileIds="albumFileIds"
 			:loading="loadingCollection || loadingCollectionFiles"
 			:error="errorFetchingCollection || errorFetchingCollectionFiles">
 			<!-- Header -->
-			<HeaderNavigation
-				key="navigation"
-				slot="header"
-				slot-scope="{ selectedFileIds, resetSelection }"
-				:loading="loadingCollectionFiles"
-				:params="{ albumName }"
-				:path="'/' + albumName"
-				:title="albumName"
-				@refresh="fetchAlbumContent">
-				<div
-					v-if="album !== undefined && album.attributes.location !== ''"
-					slot="subtitle"
-					class="album__location">
-					<MapMarkerOutline />{{ album.attributes.location }}
-				</div>
+			<template #header="{ selectedFileIds, resetSelection }">
+				<HeaderNavigation
+					key="navigation"
 
-				<template slot="default">
-					<NcButton
-						v-if="selectedFileIds.length > 0"
-						:aria-label="t('photos', 'Unselect all')"
-						@click="resetSelection">
-						<template #icon>
-							<Close />
-						</template>
-						{{ t('photos', 'Unselect all') }}
-					</NcButton>
-				</template>
+					:loading="loadingCollectionFiles"
+					:params="{ albumName }"
+					:path="'/' + albumName"
+					:title="albumName"
+					@refresh="fetchAlbumContent">
+					<template #subtitle>
+						<div
+							v-if="album !== undefined && album.attributes.location !== ''"
 
-				<template v-if="album !== undefined" slot="right">
-					<NcButton @click="showAddPhotosModal = true">
-						<template #icon>
-							<Plus :size="20" />
-						</template>
-						{{ t('photos', 'Add photos to this album') }}
-					</NcButton>
+							class="album__location">
+							<MapMarkerOutline />{{ album.attributes.location }}
+						</div>
+					</template>
 
-					<NcButton
-						v-if="sharingEnabled"
-						variant="tertiary"
-						:aria-label="t('photos', 'Manage collaborators for this album')"
-						@click="showManageCollaboratorView = true">
-						<ShareVariantOutline slot="icon" />
-					</NcButton>
+					<template #default>
+						<NcButton
+							v-if="selectedFileIds.length > 0"
+							:aria-label="t('photos', 'Unselect all')"
+							@click="resetSelection">
+							<template #icon>
+								<Close />
+							</template>
+							{{ t('photos', 'Unselect all') }}
+						</NcButton>
+					</template>
 
-					<NcActions :aria-label="t('photos', 'Open actions menu')">
-						<NcActionButton
-							:close-after-click="true"
-							:aria-label="t('photos', 'Edit album details')"
-							@click="showEditAlbumForm = true">
-							{{ t('photos', 'Edit album details') }}
-							<PencilOutline slot="icon" />
-						</NcActionButton>
+					<template v-if="album !== undefined" #right>
+						<NcButton @click="showAddPhotosModal = true">
+							<template #icon>
+								<Plus :size="20" />
+							</template>
+							{{ t('photos', 'Add photos to this album') }}
+						</NcButton>
 
-						<!-- Support download from arbitrary origin
+						<NcButton
+							v-if="sharingEnabled"
+							variant="tertiary"
+							:aria-label="t('photos', 'Manage collaborators for this album')"
+							@click="showManageCollaboratorView = true">
+							<template #icon>
+								<ShareVariantOutline />
+							</template>
+						</NcButton>
+
+						<NcActions :aria-label="t('photos', 'Open actions menu')">
+							<NcActionButton
+								:closeAfterClick="true"
+								:aria-label="t('photos', 'Edit album details')"
+								@click="showEditAlbumForm = true">
+								{{ t('photos', 'Edit album details') }}
+								<template #icon>
+									<PencilOutline />
+								</template>
+							</NcActionButton>
+
+							<!-- Support download from arbitrary origin
 						<ActionDownload v-if="albumFileIds.length > 0"
 							:selected-file-ids="albumFileIds"
 							:title="t('photos', 'Download all files in album')">
 							<DownloadMultiple slot="icon" />
 						</ActionDownload>-->
 
-						<NcActionButton
-							:close-after-click="true"
-							@click="handleDeleteAlbum">
-							{{ t('photos', 'Delete album') }}
-							<DeleteOutline slot="icon" />
-						</NcActionButton>
+							<NcActionButton
+								:closeAfterClick="true"
+								@click="handleDeleteAlbum">
+								{{ t('photos', 'Delete album') }}
+								<template #icon>
+									<DeleteOutline />
+								</template>
+							</NcActionButton>
 
-						<template v-if="selectedFileIds.length > 0">
-							<NcActionSeparator />
+							<template v-if="selectedFileIds.length > 0">
+								<NcActionSeparator />
 
-							<!-- Support download from arbitrary origin
+								<!-- Support download from arbitrary origin
 							<ActionDownload :selected-file-ids="selectedFileIds" :title="t('photos', 'Download selected files')">
 								<Download slot="icon" />
 							</ActionDownload>-->
 
-							<ActionFavorite :selected-file-ids="selectedFileIds" />
+								<NcActionButton
+									v-if="shouldFavoriteSelection(selectedFileIds)"
+									:closeAfterClick="true"
+									:aria-label="t('photos', 'Mark selection as favorite')"
+									@click="favoriteSelection(selectedFileIds)">
+									{{ t('photos', 'Add selection to favorites') }}
+									<template #icon>
+										<StarOutline />
+									</template>
+								</NcActionButton>
+								<NcActionButton
+									v-else
+									:closeAfterClick="true"
+									:aria-label="t('photos', 'Remove selection from favorites')"
+									@click="unFavoriteSelection(selectedFileIds)">
+									{{ t('photos', 'Remove selection from favorites') }}
+									<template #icon>
+										<Star />
+									</template>
+								</NcActionButton>
 
-							<NcActionButton
-								v-if="removableSelectedFiles.length !== 0"
-								:close-after-click="true"
-								@click="handleRemoveFilesFromAlbum(removableSelectedFiles)">
-								{{ t('photos', 'Remove selection from album') }}
-								<Close slot="icon" />
-							</NcActionButton>
-						</template>
-					</NcActions>
-				</template>
-			</HeaderNavigation>
+								<NcActionButton
+									v-if="removableSelectedFiles.length !== 0"
+									:closeAfterClick="true"
+									@click="handleRemoveFilesFromAlbum(removableSelectedFiles)">
+									{{ t('photos', 'Remove selection from album') }}
+									<template #icon>
+										<Close />
+									</template>
+								</NcActionButton>
+							</template>
+						</NcActions>
+					</template>
+				</HeaderNavigation>
+			</template>
 
 			<!-- No content -->
-			<NcEmptyContent
-				v-if="album !== undefined && album.attributes.nbItems === 0 && !(loadingCollectionFiles || loadingCollection)"
-				slot="empty-content"
-				:name="t('photos', 'This album does not have any photos or videos yet!')"
-				class="album__empty">
-				<ImagePlusOutline slot="icon" />
+			<template #emptyContent>
+				<NcEmptyContent
+					v-if="album !== undefined && album.attributes.nbItems === 0 && !(loadingCollectionFiles || loadingCollection)"
 
-				<NcButton
-					slot="action"
-					class="album__empty__button"
-					variant="primary"
-					:aria-label="t('photos', 'Add photos to this album')"
-					@click="showAddPhotosModal = true">
-					<Plus slot="icon" />
-					{{ t('photos', "Add") }}
-				</NcButton>
-			</NcEmptyContent>
+					:name="t('photos', 'This album does not have any photos or videos yet!')"
+					class="album__empty">
+					<template #icon>
+						<ImagePlusOutline />
+					</template>
+
+					<template #action>
+						<NcButton
+
+							class="album__empty__button"
+							variant="primary"
+							:aria-label="t('photos', 'Add photos to this album')"
+							@click="showAddPhotosModal = true">
+							<template #icon>
+								<Plus />
+							</template>
+							{{ t('photos', "Add") }}
+						</NcButton>
+					</template>
+				</NcEmptyContent>
+			</template>
 		</CollectionContent>
 
 		<PhotosPicker
 			v-if="album !== undefined"
-			:open.sync="showAddPhotosModal"
-			:blacklist-ids="albumFileIds"
+			v-model:open="showAddPhotosModal"
+			:blacklistIds="albumFileIds"
 			:destination="album.basename"
 			:name="t('photos', 'Add photos to {albumName}', { albumName: albumName }, undefined, { escape: false, sanitize: false })"
-			@files-picked="handleFilesPicked" />
+			@filesPicked="handleFilesPicked" />
 
 		<NcModal
 			v-if="showManageCollaboratorView && album !== undefined"
 			:name="t('photos', 'Manage collaborators')"
 			@close="showManageCollaboratorView = false">
 			<CollaboratorsSelectionForm
-				:album-name="album.basename"
+				:albumName="album.basename"
 				:collaborators="album.attributes.collaborators">
-				<template slot-scope="{ collaborators }">
+				<template #default="{ collaborators }">
 					<NcButton
 						:aria-label="t('photos', 'Save collaborators for this album.')"
 						variant="primary"
@@ -160,7 +198,7 @@
 		<NcDialog
 			v-if="showEditAlbumForm"
 			:name="t('photos', 'Edit album details')"
-			close-on-click-outside
+			closeOnClickOutside
 			size="normal"
 			@closing="showEditAlbumForm = false">
 			<AlbumForm :album="album" @done="(event) => handleAlbumUpdate(event)" />
@@ -190,9 +228,10 @@ import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
 import PencilOutline from 'vue-material-design-icons/PencilOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import ShareVariantOutline from 'vue-material-design-icons/ShareVariantOutline.vue'
+import Star from 'vue-material-design-icons/Star.vue'
+import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
-import ActionFavorite from '../components/Actions/ActionFavorite.vue'
 import AlbumHero from '../components/AlbumHero.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import CollaboratorsSelectionForm from '../components/Albums/CollaboratorsSelectionForm.vue'
@@ -211,8 +250,9 @@ import { pickAlbumCover } from '../utils/albumCover.ts'
 export default {
 	name: 'AlbumContent',
 	components: {
+		StarOutline,
+		Star,
 		// ActionDownload,
-		ActionFavorite,
 		AlbumForm,
 		AlbumHero,
 		Close,
@@ -321,7 +361,7 @@ export default {
 		},
 
 		removableSelectedFiles() {
-			return (this.$refs.collectionContent?.selectedFileIds as string[])
+			return ((this.$refs.collectionContent?.selectedFileIds ?? []) as string[])
 				.map((fileId) => this.filesStore.files[fileId])
 				.filter((file) => file.attributes['photos-album-file-origin'] !== 'filters')
 				.map((file) => file.fileid.toString())
@@ -334,6 +374,19 @@ export default {
 	},
 
 	methods: {
+		// Favorite the whole selection if at least one of its photos is not a favorite yet.
+		shouldFavoriteSelection(selectedFileIds: string[]): boolean {
+			return selectedFileIds.some((fileId) => this.filesStore.files[fileId].attributes.favorite === 0)
+		},
+
+		async favoriteSelection(selectedFileIds: string[]): Promise<void> {
+			await this.filesStore.toggleFavoriteForFiles(selectedFileIds, 1)
+		},
+
+		async unFavoriteSelection(selectedFileIds: string[]): Promise<void> {
+			await this.filesStore.toggleFavoriteForFiles(selectedFileIds, 0)
+		},
+
 		async fetchAlbum() {
 			await this.fetchCollection(
 				this.albumFileName,
