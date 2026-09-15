@@ -140,7 +140,8 @@ import PhotoMetadataEditDialog from './PhotoMetadataEditDialog.vue'
 import PhotoTagsDialog from './PhotoTagsDialog.vue'
 import areTagsInstalled from '../services/AreTagsInstalled.ts'
 import logger from '../services/logger.ts'
-import store from '../store/index.ts'
+import { useCollectionsStore } from '../store/collections.ts'
+import { useFilesStore } from '../store/files.ts'
 
 const props = defineProps<{
 	/** Photo the actions apply to. */
@@ -152,6 +153,9 @@ const props = defineProps<{
 const emit = defineEmits<{
 	(event: 'deleted', photo: PhotoTarget): void
 }>()
+
+const filesStore = useFilesStore()
+const collectionsStore = useCollectionsStore()
 
 const menuOpen = ref(false)
 const metadataShown = ref(false)
@@ -185,7 +189,7 @@ async function toggleFavorite(): Promise<void> {
 	const favorite = !props.photo.favorite
 
 	try {
-		await store.dispatch('setPhotoFavorite', { photo: props.photo, favorite })
+		await filesStore.setPhotoFavorite(props.photo, favorite)
 	} catch (error) {
 		logger.error('Error setting the favorite state of a photo', { error, filename: props.photo.basename })
 		showError(favorite
@@ -197,17 +201,14 @@ async function toggleFavorite(): Promise<void> {
 async function addToAlbum(album: Album): Promise<void> {
 	albumPickerShown.value = false
 
-	await store.dispatch('addFilesToCollection', {
-		collectionFileName: album.root + album.path,
-		fileIdsToAdd: [props.photo.fileid.toString()],
-	})
+	await collectionsStore.addFilesToCollection(album.root + album.path, [props.photo.fileid.toString()])
 }
 
 async function confirmDelete(): Promise<void> {
 	deleteConfirmationShown.value = false
 
 	try {
-		await store.dispatch('deletePhoto', props.photo)
+		await filesStore.deletePhoto(props.photo)
 		emit('deleted', props.photo)
 	} catch (error) {
 		logger.error('Error deleting a photo', { error, filename: props.photo.basename })

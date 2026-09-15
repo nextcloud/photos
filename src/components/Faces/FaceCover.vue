@@ -32,6 +32,8 @@ import { translatePlural as n } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
 import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
+import { useFacesStore } from '../../store/faces.ts'
+import { useFilesStore } from '../../store/files.ts'
 
 export default {
 	name: 'FaceCover',
@@ -53,6 +55,10 @@ export default {
 		},
 	},
 
+	setup() {
+		return { facesStore: useFacesStore(), filesStore: useFilesStore() }
+	},
+
 	data() {
 		return {
 			observer: null,
@@ -61,15 +67,15 @@ export default {
 
 	computed: {
 		files() {
-			return this.$store.state.files.files
+			return this.filesStore.files
 		},
 
 		faces() {
-			return this.$store.state.faces.faces
+			return this.facesStore.faces
 		},
 
 		facesFiles() {
-			return this.$store.state.faces.facesFiles
+			return this.facesStore.facesFiles
 		},
 
 		face(): Collection {

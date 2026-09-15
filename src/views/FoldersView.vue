@@ -86,7 +86,7 @@
 </template>
 
 <script lang='ts'>
-import type { File, Folder, Node } from '@nextcloud/files'
+import type { Folder, Node } from '@nextcloud/files'
 import type { Upload } from '@nextcloud/upload'
 import type { Section, TiledItem } from '../services/TiledLayout.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
@@ -107,6 +107,8 @@ import allowedMimes from '../services/AllowedMimes.js'
 import { fetchFile } from '../services/fileFetcher.ts'
 import getFolderContent from '../services/FolderContent.ts'
 import logger from '../services/logger.ts'
+import { useFoldersStore } from '../store/folders.ts'
+import { useUserConfigStore } from '../store/userConfig.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
 export default {
@@ -144,6 +146,10 @@ export default {
 		},
 	},
 
+	setup() {
+		return { foldersStore: useFoldersStore(), userConfigStore: useUserConfigStore() }
+	},
+
 	data() {
 		return {
 			error: null as null | 404 | Error,
@@ -160,16 +166,16 @@ export default {
 
 	computed: {
 		files() {
-			return this.$store.state.folders.files
+			return this.foldersStore.files
 		},
 
 		folders() {
-			return this.$store.state.folders.folders
+			return this.foldersStore.folders
 		},
 
 		// current folder id from current path
 		folderId() {
-			return this.$store.state.folders.paths[this.path]
+			return this.foldersStore.paths[this.path]
 		},
 
 		/** The folder that is open. */
@@ -195,14 +201,14 @@ export default {
 		 * always something to crop away.
 		 */
 		croppedLayout(): boolean {
-			return this.$store.state.userConfig.croppedLayout
+			return this.userConfigStore.croppedLayout
 		},
 
 		// subfolders of the current folder
 		subFolders() {
 			return this.folderId
 				&& this.files[this.folderId]
-				&& this.$store.state.folders.subFolders[this.folderId]
+				&& this.foldersStore.subFolders[this.folderId]
 		},
 
 		folderList() {
@@ -262,7 +268,7 @@ export default {
 		openViewer(fileid: number) {
 			window.OCA.Viewer.open({
 				fileInfo: toViewerFileInfo(this.files[fileid]),
-				list: this.fileList.map((file: File) => toViewerFileInfo(file)),
+				list: this.fileList.map((file: Node) => toViewerFileInfo(file)),
 				onClose: () => window.OCA?.Files?.Sidebar?.close?.(),
 			})
 		},
@@ -270,7 +276,7 @@ export default {
 		// Folders keep the ids of the files they hold, the listing skips the
 		// ones which are gone.
 		onPhotoDeleted(photo: PhotoTarget) {
-			this.$store.commit('deleteFolderFile', photo.fileid)
+			this.foldersStore.deleteFolderFile(photo.fileid)
 		},
 
 		onRefresh() {
@@ -317,9 +323,9 @@ export default {
 					shared: this.showShared,
 					signal: this.abortController.signal,
 				})
-				this.$store.dispatch('addPath', { path: this.path, fileid: folder?.fileid })
-				this.$store.dispatch('updateFolders', { fileid: folder?.fileid, files, folders })
-				this.$store.dispatch('updateFoldersFiles', { folder, files, folders })
+				this.foldersStore.addPath(this.path, folder?.fileid)
+				this.foldersStore.updateFolders(folder?.fileid, files, folders)
+				this.foldersStore.updateFoldersFiles(folder, files, folders)
 			} catch (error) {
 				if (error?.response && error.response.status) {
 					if (error.response.status === 404) {
@@ -353,8 +359,8 @@ export default {
 				return
 			}
 
-			this.$store.dispatch('appendFoldersFiles', [node])
-			this.$store.dispatch('addFilesToFolder', { fileid: this.folderId, files: [node] })
+			this.foldersStore.appendFoldersFiles([node])
+			this.foldersStore.addFilesToFolder(this.folderId, [node])
 		},
 
 		t,

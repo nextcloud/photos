@@ -7,12 +7,8 @@ import { registerDavProperty } from '@nextcloud/files/dav'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { createPinia, PiniaVuePlugin } from 'pinia'
 import Vue from 'vue'
-import { sync } from 'vuex-router-sync'
 import PhotosApp from './PhotosApp.vue'
 import router from './router/index.js'
-import store from './store/index.js'
-
-sync(store, router)
 
 Vue.prototype.t = translate
 Vue.prototype.n = translatePlural
@@ -31,7 +27,6 @@ export default new Vue({
 	el: '#content',
 	name: 'PhotosRoot',
 	router,
-	store,
 	pinia: createPinia(),
 	render: (h) => h(PhotosApp),
 })

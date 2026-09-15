@@ -77,6 +77,8 @@ import PackageVariant from 'vue-material-design-icons/PackageVariant.vue'
 import TiledLayout from '../components/TiledLayout/TiledLayout.vue'
 import VirtualScrolling from '../components/VirtualScrolling.vue'
 import { fetchFile } from '../services/fileFetcher.ts'
+import { useFilesStore } from '../store/files.ts'
+import { useUserConfigStore } from '../store/userConfig.ts'
 
 export default {
 	name: 'FilesListViewer',
@@ -151,6 +153,10 @@ export default {
 		},
 	},
 
+	setup() {
+		return { filesStore: useFilesStore(), userConfigStore: useUserConfigStore() }
+	},
+
 	data() {
 		return {
 			placeholderFiles: Array(20).fill(0).map((_, index) => {
@@ -168,7 +174,7 @@ export default {
 
 	computed: {
 		files(): Record<string, PhotoFile> {
-			return this.$store.state.files.files
+			return this.filesStore.files
 		},
 
 		showPlaceholders(): boolean {
@@ -218,7 +224,7 @@ export default {
 		},
 
 		croppedLayout(): boolean {
-			return this.$store.state.userConfig.croppedLayout
+			return this.userConfigStore.croppedLayout
 		},
 	},
 
@@ -250,11 +256,15 @@ export default {
 
 		async handleFileUpdated({ fileid }: File): Promise<void> {
 			const fetchedFile = await fetchFile(this.files[fileid as number].path)
-			this.$store.dispatch('appendFiles', [fetchedFile])
+			if (fetchedFile === null) {
+				return
+			}
+
+			this.filesStore.appendFiles([fetchedFile as File])
 		},
 
 		handleFileDeleted({ fileid }: File) {
-			this.$store.commit('deleteFile', fileid)
+			this.filesStore.deleteFile(fileid as number)
 		},
 	},
 }

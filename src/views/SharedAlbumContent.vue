@@ -144,6 +144,9 @@ import PhotosPicker from '../components/PhotosPicker.vue'
 import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import { albumFilesExtraProps, albumsExtraProps } from '../store/albums.ts'
+import { useCollectionsStore } from '../store/collections.ts'
+import { useFilesStore } from '../store/files.ts'
+import { useSharedAlbumsStore } from '../store/sharedAlbums.ts'
 
 export default {
 	name: 'SharedAlbumContent',
@@ -183,6 +186,9 @@ export default {
 		const isMobile = useIsMobile()
 		return {
 			isMobile,
+			collectionsStore: useCollectionsStore(),
+			filesStore: useFilesStore(),
+			sharedAlbumsStore: useSharedAlbumsStore(),
 		}
 	},
 
@@ -197,15 +203,15 @@ export default {
 
 	computed: {
 		files() {
-			return this.$store.state.files.files
+			return this.filesStore.files
 		},
 
 		album() {
-			return this.$store.getters.getSharedAlbum(this.albumName)
+			return this.sharedAlbumsStore.getSharedAlbum(this.albumName)
 		},
 
 		albumFileIds() {
-			return this.$store.getters.getSharedAlbumFiles(this.albumName)
+			return this.sharedAlbumsStore.getSharedAlbumFiles(this.albumName)
 		},
 
 		albumOriginalName(): string {
@@ -213,12 +219,12 @@ export default {
 		},
 
 		albumFileName(): string {
-			return this.$store.getters.getSharedAlbumName(this.albumName)
+			return this.sharedAlbumsStore.getSharedAlbumName(this.albumName)
 		},
 
 		removableSelectedFiles() {
-			return (this.$refs.collectionContent?.selectedFileIds as string[])
-				.map((fileId) => this.$store.state.files.files[fileId])
+			return ((this.$refs.collectionContent?.selectedFileIds ?? []) as string[])
+				.map((fileId) => this.filesStore.files[fileId])
 				.filter((file) => file.attributes['photos-album-file-origin'] !== 'filters')
 				.map((file) => file.fileid.toString())
 		},
@@ -243,18 +249,18 @@ export default {
 
 		async handleFilesPicked(fileIds) {
 			this.showAddPhotosModal = false
-			await this.$store.dispatch('addFilesToCollection', { collectionFileName: this.album.root + this.album.path, fileIdsToAdd: fileIds })
+			await this.collectionsStore.addFilesToCollection(this.album.root + this.album.path, fileIds)
 			// Re-fetch album content to have the proper filenames.
 			await this.fetchAlbumContent()
 		},
 
 		async handleRemoveFilesFromAlbum(fileIds: string[]) {
 			this.$refs.collectionContent?.onUncheckFiles(fileIds)
-			await this.$store.dispatch('removeFilesFromCollection', { collectionFileName: this.album.root + this.album.path, fileIdsToRemove: fileIds })
+			await this.collectionsStore.removeFilesFromCollection(this.album.root + this.album.path, fileIds)
 		},
 
 		async handleDeleteAlbum() {
-			const isDeleted = await this.$store.dispatch('deleteCollection', { collectionFileName: this.album.root + this.album.path })
+			const isDeleted = await this.collectionsStore.deleteCollection(this.album.root + this.album.path)
 			if (isDeleted) {
 				this.$router.push('/sharedalbums')
 			}
