@@ -14,6 +14,18 @@ return [
 			'verb' => 'PUT',
 		],
 		[
+			'name' => 'metadata#get',
+			'url' => '/api/v1/metadata/{fileId}',
+			'verb' => 'GET',
+			'requirements' => ['fileId' => '\d+'],
+		],
+		[
+			'name' => 'metadata#update',
+			'url' => '/api/v1/metadata/{fileId}',
+			'verb' => 'PUT',
+			'requirements' => ['fileId' => '\d+'],
+		],
+		[
 			'name' => 'api#serviceWorker',
 			'url' => '/service-worker.js',
 			'verb' => 'GET',

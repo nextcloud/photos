@@ -11,6 +11,21 @@
 		<NcLoadingIcon v-if="loading" :size="32" class="metadata-editor__loading" />
 
 		<form v-else class="metadata-editor" @submit.prevent="save">
+			<fieldset class="metadata-editor__details">
+				<legend>{{ t('photos', 'Description and rating') }}</legend>
+
+				<NcTextArea
+					v-model="description"
+					:label="t('photos', 'Description')"
+					:placeholder="t('photos', 'Add a description…')"
+					resize="vertical" />
+
+				<div class="metadata-editor__details__rating">
+					<span class="metadata-editor__details__rating__label">{{ t('photos', 'Rating') }}</span>
+					<StarRating :rating="rating" @change="rating = $event" />
+				</div>
+			</fieldset>
+
 			<NcDateTimePickerNative
 				v-model="takenAt"
 				type="datetime-local"
@@ -78,10 +93,13 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 import NcDateTimePickerNative from '@nextcloud/vue/components/NcDateTimePickerNative'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+import NcTextArea from '@nextcloud/vue/components/NcTextArea'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
 import MapMarkerOffOutline from 'vue-material-design-icons/MapMarkerOffOutline.vue'
+import StarRating from './StarRating.vue'
 import { fetchPhotoExif } from '../services/exifFetcher.ts'
 import logger from '../services/logger.ts'
+import { getPhotoDetails, savePhotoDetails } from '../services/photoDetails.ts'
 import store from '../store/index.ts'
 import { COORDINATE_LIMITS, getPhotoLocation, parseCoordinate } from '../utils/exif.ts'
 
@@ -103,13 +121,18 @@ const saving = ref(false)
 const takenAt = ref<Date | null>(null)
 const latitude = ref('')
 const longitude = ref('')
+const description = ref('')
+const rating = ref(0)
 
-// Neither the coordinates nor the taken date the server holds are part of the
-// file listings, so they are fetched before they can be edited.
+// Neither the coordinates and taken date nor the description and rating are part
+// of the file listings, so they are all fetched before they can be edited.
 onMounted(async () => {
-	const metadata = await fetchPhotoExif(props.photo)
-	const location = getPhotoLocation(metadata.gps)
+	const [metadata, details] = await Promise.all([
+		fetchPhotoExif(props.photo),
+		getPhotoDetails(props.photo.fileid),
+	])
 
+	const location = getPhotoLocation(metadata.gps)
 	if (location !== null) {
 		latitude.value = String(location.latitude)
 		longitude.value = String(location.longitude)
@@ -118,6 +141,9 @@ onMounted(async () => {
 	// Photos always carry a taken date, at worst the one of their upload, but
 	// a photo whose metadata was never extracted has none to show.
 	takenAt.value = metadata.takenAt === undefined ? new Date() : new Date(metadata.takenAt * 1000)
+
+	description.value = details.description ?? ''
+	rating.value = details.rating
 
 	loading.value = false
 })
@@ -177,11 +203,17 @@ async function save(): Promise<void> {
 	saving.value = true
 
 	try {
-		await store.dispatch('updatePhotoMetadata', {
-			photo: props.photo,
-			takenAt: Math.floor(date.getTime() / 1000),
-			location: location.value,
-		})
+		await Promise.all([
+			store.dispatch('updatePhotoMetadata', {
+				photo: props.photo,
+				takenAt: Math.floor(date.getTime() / 1000),
+				location: location.value,
+			}),
+			savePhotoDetails(props.photo.fileid, {
+				description: description.value,
+				rating: rating.value,
+			}),
+		])
 		emit('close')
 	} catch (error) {
 		logger.error('Error saving the metadata of a photo', { error, filename: props.photo.basename })
@@ -200,6 +232,29 @@ async function save(): Promise<void> {
 
 	&__loading {
 		margin: calc(var(--default-grid-baseline) * 4) auto;
+	}
+
+	&__details {
+		display: flex;
+		flex-direction: column;
+		gap: calc(var(--default-grid-baseline) * 2);
+		margin: 0;
+		padding: 0;
+		border: none;
+
+		legend {
+			color: var(--color-text-maxcontrast);
+		}
+
+		&__rating {
+			display: flex;
+			align-items: center;
+			gap: calc(var(--default-grid-baseline) * 2);
+
+			&__label {
+				color: var(--color-text-maxcontrast);
+			}
+		}
 	}
 
 	&__location {
