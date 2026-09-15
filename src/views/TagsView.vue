@@ -17,13 +17,13 @@
 				{{ t('photos', 'Popular tags') }}
 			</h2>
 			<div class="popular-tags">
-				<TagCover v-for="tag in popularTags" :key="tag.attributes.id" :tag="tag" />
+				<TagCover v-for="tag in popularTags" :key="tag.id" :tag="tag" />
 			</div>
 			<h2 v-if="tagsList.length">
 				{{ t('photos', 'All tags') }}
 			</h2>
 			<div class="tags">
-				<TagCover v-for="tag in tagsList" :key="tag.attributes.id" :tag="tag" />
+				<TagCover v-for="tag in tagsList" :key="tag.id" :tag="tag" />
 			</div>
 		</div>
 	</div>
@@ -72,7 +72,7 @@ export default defineComponent({
 		tagsList() {
 			return Object.keys(this.tagsNames)
 				.map((tagName) => this.tags[this.tagsNames[tagName]])
-				.filter((tag) => tag && tag.attributes.id)
+				.filter((tag) => tag !== undefined)
 		},
 
 		popularTags() {

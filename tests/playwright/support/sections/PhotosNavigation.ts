@@ -28,6 +28,7 @@ export const NavigationEntry = {
 	memories: 'Memories',
 	places: 'Places',
 	map: 'Map',
+	tags: 'Tags',
 } as const
 
 export type NavigationEntryName = (typeof NavigationEntry)[keyof typeof NavigationEntry]
