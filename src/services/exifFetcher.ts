@@ -8,7 +8,7 @@ import type { PhotoExif } from '../utils/exif.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { davClient } from './DavClient.ts'
-import logger from './logger.ts'
+import { logger } from './logger.ts'
 
 const exifPropFind = `<?xml version="1.0"?>
 		<d:propfind xmlns:d="DAV:" xmlns:nc="http://nextcloud.org/ns">

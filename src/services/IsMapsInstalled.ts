@@ -6,4 +6,4 @@
 import { loadState } from '@nextcloud/initial-state'
 
 const maps = loadState('photos', 'maps', false) as boolean
-export default maps
+export const isMapsInstalled = maps

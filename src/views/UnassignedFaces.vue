@@ -115,7 +115,7 @@ import FetchFacesMixin from '../mixins/FetchFacesMixin.js'
 import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
 import FilesSelectionMixin from '../mixins/FilesSelectionMixin.js'
 import { downloadFiles } from '../services/downloadFiles.ts'
-import logger from '../services/logger.js'
+import { logger } from '../services/logger.ts'
 import { useFacesStore } from '../store/faces.ts'
 import { useFilesStore } from '../store/files.ts'
 import { toViewerFileInfo } from '../utils/fileUtils.js'
@@ -252,5 +252,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '../mixins/FaceContent';
+@use '../mixins/FaceContent.scss';
 </style>
