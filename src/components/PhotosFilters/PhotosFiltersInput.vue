@@ -17,7 +17,7 @@
 			<template #option="option">
 				<NcListItemIcon
 					:name="option.label"
-					:is-no-user="true"
+					:isNoUser="true"
 					:url="option.imgSrc" />
 			</template>
 		</NcSelect>

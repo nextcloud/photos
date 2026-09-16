@@ -8,7 +8,7 @@
 		class="tiled-container">
 		<!-- Slot to allow changing the rows before passing them to TiledRows -->
 		<!-- Useful for partially rendering rows like with VirtualScrolling -->
-		<slot :tiled-sections="tiledSections">
+		<slot :tiledSections="tiledSections">
 			<!-- Default rendering -->
 			<TiledRows :rows="tiledSections" />
 		</slot>

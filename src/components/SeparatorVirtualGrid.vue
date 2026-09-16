@@ -14,6 +14,8 @@
 </template>
 
 <script lang='ts'>
+import { n } from '@nextcloud/l10n'
+
 export default {
 	name: 'SeparatorVirtualGrid',
 
@@ -24,6 +26,10 @@ export default {
 			type: Object,
 			required: true,
 		},
+	},
+
+	methods: {
+		n,
 	},
 }
 </script>
