@@ -6,7 +6,7 @@
 import type { WebDAVClient } from 'webdav'
 
 import { defaultRemoteURL, getClient } from '@nextcloud/files/dav'
-import recognizeApiKey from './recognizeApiKey.ts'
+import { recognizeApiKey } from './recognizeApiKey.ts'
 
 export const davClient: WebDAVClient = getClient(defaultRemoteURL, {
 	'X-Recognize-Api-Key': recognizeApiKey,

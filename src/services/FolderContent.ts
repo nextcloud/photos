@@ -10,7 +10,7 @@ import axios from '@nextcloud/axios'
 import { File, Folder } from '@nextcloud/files'
 import { defaultRemoteURL, defaultRootPath, parsePermissions } from '@nextcloud/files/dav'
 import { generateUrl } from '@nextcloud/router'
-import allowedMimes from './AllowedMimes.js'
+import { allMimes as allowedMimes } from './AllowedMimes.ts'
 
 /**
  * A node of a folder listing, as the endpoint describes it: the fields a DAV node
@@ -66,7 +66,7 @@ function toNode(entry: FolderListingEntry): File | Folder {
  * @param path
  * @param options
  */
-export default async function(path: string = '/', options: AxiosRequestConfig & { shared?: boolean } = {}) {
+export async function getFolderContent(path: string = '/', options: AxiosRequestConfig & { shared?: boolean } = {}) {
 	const endpoint = generateUrl(`/apps/photos/api/v1/${options.shared ? 'shared' : 'albums'}`)
 
 	// fetch listing

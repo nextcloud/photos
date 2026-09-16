@@ -1,2 +1,0 @@
-import{g as n,c as r}from"./index-CqCwDYb2.chunk.mjs";import{d as i}from"./index-2Ce0hegW.chunk.mjs";import{u as a}from"./collections-CEQyUXH-.chunk.mjs";const t=`/photos/${n()?.uid}/places`,m=i("places",()=>{const o=a(),e=r(()=>o.collectionsWithPrefix(t));function c(s){return o.collections[`${t}/${s}`]||null}function l(s){return o.collectionsFiles[`${t}/${s}`]||[]}return{places:e,getPlace:c,getPlaceFiles:l}});export{t as p,m as u};
-//# sourceMappingURL=places-CdV5G7rT.chunk.mjs.map

@@ -8,7 +8,7 @@ import { translate, translatePlural } from '@nextcloud/l10n'
 import { createPinia, PiniaVuePlugin } from 'pinia'
 import Vue from 'vue'
 import PhotosApp from './PhotosApp.vue'
-import router from './router/index.js'
+import { router } from './router/index.ts'
 
 Vue.prototype.t = translate
 Vue.prototype.n = translatePlural

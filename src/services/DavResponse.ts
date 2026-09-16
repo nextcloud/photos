@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import logger from './logger.js'
+import { logger } from './logger.ts'
 
 /**
  * Read the body of a failed dav request.
