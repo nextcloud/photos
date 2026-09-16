@@ -6,6 +6,7 @@
 <template>
 	<LMap
 		class="location-map"
+		:style="{ height }"
 		:zoom="previewZoom"
 		:center="center"
 		:options="{
@@ -13,8 +14,7 @@
 			zoomControl: false,
 			dragging: false,
 			attributionControl: false,
-		}"
-		@scroll.prevent="">
+		}">
 		<LTileLayer :url="url" :options="tileLayerOptions" />
 		<LControlAttribution
 			position="bottomright"
@@ -39,7 +39,7 @@ import {
 	LMarker,
 	LTileLayer,
 	LTooltip,
-} from 'vue2-leaflet'
+} from '@vue-leaflet/vue-leaflet'
 
 import 'leaflet/dist/leaflet.css'
 import '../utils/leaflet-icons.ts'
@@ -69,6 +69,15 @@ export default {
 		longitude: {
 			type: Number,
 			required: true,
+		},
+
+		/**
+		 * Height of the map. It is set inline because the map element carries an
+		 * inline height of its own, which a stylesheet cannot override.
+		 */
+		height: {
+			type: String,
+			default: '250px',
 		},
 
 		/**
@@ -108,7 +117,5 @@ export default {
 	position: relative;
 	margin: 16px;
 	border-radius: var(--border-radius-large);
-	height: 250px;
-	width: 90%;
 }
 </style>

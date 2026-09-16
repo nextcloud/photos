@@ -27,7 +27,7 @@
 			:resetSelection="resetSelection" />
 
 		<!-- No content -->
-		<slot v-if="sortedCollectionFileIds.length === 0 && !loading" name="empty-content" />
+		<slot v-if="sortedCollectionFileIds.length === 0 && !loading" name="emptyContent" />
 
 		<!-- Media list -->
 		<FilesListViewer
@@ -43,7 +43,7 @@
 					:allowSelection="allowSelection"
 					:selected="selection[file.id] === true"
 					@click="openViewer"
-					@select-toggled="onFileSelectToggle"
+					@selectToggled="onFileSelectToggle"
 					@deleted="onPhotoDeleted" />
 			</template>
 		</FilesListViewer>
@@ -138,7 +138,7 @@ export default defineComponent({
 		subscribe('files:node:deleted', this.handleFileDeleted)
 	},
 
-	destroyed() {
+	unmounted() {
 		unsubscribe('files:node:deleted', this.handleFileDeleted)
 	},
 

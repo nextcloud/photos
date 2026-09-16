@@ -85,7 +85,7 @@
 					:allowSelection="true"
 					:selected="selection[file.id] === true"
 					@click="openViewer"
-					@select-toggled="onFileSelectToggle"
+					@selectToggled="onFileSelectToggle"
 					@deleted="onPhotoDeleted" />
 			</template>
 		</FilesListViewer>
@@ -260,5 +260,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '../mixins/FaceContent';
+@use '../mixins/FaceContent.scss';
 </style>

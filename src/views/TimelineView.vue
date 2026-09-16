@@ -13,7 +13,9 @@
 				<FolderAlertOutline />
 			</template>
 			<template #action>
-				<PhotosSourceLocationsSettings class="timeline__update_source_directory" />
+				<PhotosSourceLocationsSettings
+
+					class="timeline__update_source_directory" />
 			</template>
 		</NcEmptyContent>
 		<NcEmptyContent v-else :name="t('photos', 'An error occurred')">
@@ -46,21 +48,21 @@
 						name="photos-density"
 						value="small"
 						:modelValue="gridDensity"
-						@update:model-value="setGridDensity">
+						@update:modelValue="setGridDensity">
 						{{ t('photos', 'Small tiles') }}
 					</NcActionRadio>
 					<NcActionRadio
 						name="photos-density"
 						value="medium"
 						:modelValue="gridDensity"
-						@update:model-value="setGridDensity">
+						@update:modelValue="setGridDensity">
 						{{ t('photos', 'Default') }}
 					</NcActionRadio>
 					<NcActionRadio
 						name="photos-density"
 						value="large"
 						:modelValue="gridDensity"
-						@update:model-value="setGridDensity">
+						@update:modelValue="setGridDensity">
 						{{ t('photos', 'Large tiles') }}
 					</NcActionRadio>
 				</NcActions>
@@ -179,7 +181,7 @@
 			:baseHeight="tileBaseHeight"
 			:emptyMessage="t('photos', 'No photos or videos in here')"
 			:scrollToSection="scrubberTarget"
-			@need-content="getContent">
+			@needContent="getContent">
 			<template #default="{ file, isHeader }">
 				<h2
 					v-if="isHeader"
@@ -195,7 +197,7 @@
 					:burstCount="burstCount(file.id)"
 					:selected="selection[file.id] === true"
 					@click="openViewer"
-					@select-toggled="onFileSelectToggle"
+					@selectToggled="onFileSelectToggle"
 					@deleted="onPhotoDeleted" />
 			</template>
 		</FilesListViewer>
@@ -225,7 +227,7 @@
 			key="albumPicker"
 			labelId="album-picker"
 			@close="showAlbumPicker = false">
-			<AlbumPicker @album-picked="addSelectionToAlbum" />
+			<AlbumPicker @albumPicked="addSelectionToAlbum" />
 		</NcModal>
 	</div>
 </template>
@@ -424,7 +426,7 @@ export default {
 		subscribe(configChangedEvent, this.handleUserConfigChange)
 	},
 
-	destroyed() {
+	unmounted() {
 		unsubscribe(configChangedEvent, this.handleUserConfigChange)
 	},
 
@@ -462,7 +464,7 @@ export default {
 		onFileSelectToggle({ id, value }: { id: string, value: boolean }): void {
 			const fileIds = this.burstStacks[id]?.memberIds ?? [id]
 			for (const fileId of fileIds) {
-				this.$set(this.selection, fileId, value)
+				this.selection[fileId] = value
 			}
 		},
 

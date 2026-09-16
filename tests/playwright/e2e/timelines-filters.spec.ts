@@ -12,8 +12,8 @@ import { MEDIA_COUNT } from '../support/utils/media.ts'
 test.use({ withPlaces: true })
 
 /** Ranges covering exactly one of the two years the fixtures were taken in. */
-const YEAR_2019 = '2019-01-01 ~ 2019-12-31'
-const YEAR_2020 = '2020-01-01 ~ 2020-12-31'
+const YEAR_2019 = '2019-01-01 - 2019-12-31'
+const YEAR_2020 = '2020-01-01 - 2020-12-31'
 
 test.describe('Filtering the timeline', () => {
 	test.beforeEach(async ({ photosApp }) => {

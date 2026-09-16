@@ -13,3 +13,8 @@ declare module '*?raw' {
 declare module '*?url' {
 	export default string
 }
+
+declare module '*.svg' {
+	const content: string
+	export default content
+}

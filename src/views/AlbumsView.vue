@@ -50,7 +50,7 @@
 				</CollectionCover>
 			</template>
 
-			<template #empty-collections-list>
+			<template #emptyCollectionsList>
 				<NcEmptyContent :name="t('photos', 'There is no album yet!')">
 					<template #icon>
 						<ImageMultipleOutline />
