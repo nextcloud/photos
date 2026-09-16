@@ -25,86 +25,61 @@
 	</div>
 </template>
 
-<script lang='ts'>
+<script setup lang="ts">
+import type { Component } from 'vue'
+
 import { t } from '@nextcloud/l10n'
-import { defineComponent } from 'vue'
+import { computed } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import Close from 'vue-material-design-icons/Close.vue'
 import FolderOutline from 'vue-material-design-icons/FolderOutline.vue'
 
-export default defineComponent({
-	name: 'PhotosFolder',
-
-	components: {
-		NcButton,
-		FolderOutline,
-		Close,
-	},
-
-	props: {
-		path: {
-			type: String,
-			required: true,
-		},
-
-		canDelete: {
-			type: Boolean,
-			default: false,
-		},
-
-		rootFolderLabel: {
-			type: String,
-			required: true,
-		},
-
-		rootFolderIcon: {
-			type: Object,
-			required: true,
-		},
-	},
-
-	emits: ['removeFolder'],
-
-	computed: {
-		folderName() {
-			if (this.path === '/') {
-				return this.rootFolderLabel
-			} else {
-				return this.path.split('/').pop()
-			}
-		},
-
-		/**
-		 * Return the summary path of the folder
-		 * Examples:
-		 *  - /        ==> Home
-		 *  - /a       ==> nothing
-		 *  - /a/b     ==> /a
-		 *  - /a/b/c   ==> /a/b
-		 *  - /a/b/c/d ==> /a/b
-		 */
-		subname() {
-			const slashesCount = (this.path.match(/\//g) ?? []).length
-
-			switch (slashesCount) {
-				case 1:
-					return ''
-				case 2:
-					return this.path.split('/').splice(0, 2).join('/')
-				default:
-					return this.path.split('/').splice(0, 3).join('/')
-			}
-		},
-	},
-
-	methods: {
-		emitRemoveSourceFolder() {
-			this.$emit('removeFolder')
-		},
-
-		t,
-	},
+const props = withDefaults(defineProps<{
+	path: string
+	canDelete?: boolean
+	rootFolderLabel: string
+	rootFolderIcon: Component
+}>(), {
+	canDelete: false,
 })
+
+const emit = defineEmits<{
+	removeFolder: []
+}>()
+
+const folderName = computed(() => {
+	if (props.path === '/') {
+		return props.rootFolderLabel
+	} else {
+		return props.path.split('/').pop()
+	}
+})
+
+/**
+ * Return the summary path of the folder
+ * Examples:
+ *  - /        ==> Home
+ *  - /a       ==> nothing
+ *  - /a/b     ==> /a
+ *  - /a/b/c   ==> /a/b
+ *  - /a/b/c/d ==> /a/b
+ */
+const subname = computed(() => {
+	const slashesCount = (props.path.match(/\//g) ?? []).length
+
+	switch (slashesCount) {
+		case 1:
+			return ''
+		case 2:
+			return props.path.split('/').splice(0, 2).join('/')
+		default:
+			return props.path.split('/').splice(0, 3).join('/')
+	}
+})
+
+function emitRemoveSourceFolder() {
+	emit('removeFolder')
+}
 </script>
 
 <style lang="scss" scoped>

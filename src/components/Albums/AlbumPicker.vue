@@ -53,13 +53,13 @@
 		@done="albumCreatedHandler" />
 </template>
 
-<script lang='ts'>
+<script setup lang="ts">
 import type { Album } from '../../store/albums.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
-import { translate, translatePlural } from '@nextcloud/l10n'
+import { n, t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
-import { defineComponent } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcListItem from '@nextcloud/vue/components/NcListItem'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
@@ -67,90 +67,59 @@ import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import AlbumForm from './AlbumForm.vue'
-import FetchCollectionsMixin from '../../mixins/FetchCollectionsMixin.ts'
+import { useFetchCollections } from '../../composables/useFetchCollections.ts'
 import { albumsExtraProps } from '../../store/albums.ts'
 import { useAlbumsStore } from '../../store/albums.ts'
 import { useSharedAlbumsStore } from '../../store/sharedAlbums.ts'
 
-export default defineComponent({
-	name: 'AlbumPicker',
+const emit = defineEmits<{
+	albumPicked: [album: Album]
+}>()
 
-	components: {
-		Plus,
-		ImageMultipleOutline,
-		NcButton,
-		NcListItem,
-		NcLoadingIcon,
-		NcUserBubble,
-		AlbumForm,
-	},
+const albumsStore = useAlbumsStore()
+const sharedAlbumsStore = useSharedAlbumsStore()
+const { fetchCollections, loadingCollections } = useFetchCollections()
 
-	mixins: [FetchCollectionsMixin],
+const showAlbumCreationForm = ref(false)
 
-	emits: ['albumPicked'],
+const albums = computed(() => albumsStore.albums)
 
-	setup() {
-		return { albumsStore: useAlbumsStore(), sharedAlbumsStore: useSharedAlbumsStore() }
-	},
+const sharedAlbums = computed(() => sharedAlbumsStore.sharedAlbums)
 
-	data() {
-		return {
-			showAlbumCreationForm: false,
-		}
-	},
+const allAlbums = computed(() => [...Object.values(albums.value), ...Object.values(sharedAlbums.value)] as Album[])
 
-	computed: {
-		albums() {
-			return this.albumsStore.albums
-		},
+function toCoverUrl(fileId: number): string {
+	return generateUrl(`/apps/photos/api/v1/preview/${fileId}?x=${64}&y=${64}`)
+}
 
-		sharedAlbums() {
-			return this.sharedAlbumsStore.sharedAlbums
-		},
+async function fetchAlbumList() {
+	await fetchCollections(`/photos/${getCurrentUser()?.uid}/albums`, albumsExtraProps)
+	await fetchCollections(`/photos/${getCurrentUser()?.uid}/sharedalbums`, albumsExtraProps)
+}
 
-		allAlbums() {
-			return [...Object.values(this.albums), ...Object.values(this.sharedAlbums)] as Album[]
-		},
-	},
+function albumCreatedHandler() {
+	showAlbumCreationForm.value = false
+	fetchAlbumList()
+}
 
-	mounted() {
-		this.fetchAlbumList()
-	},
+function pickAlbum(album: Album) {
+	emit('albumPicked', album)
+}
 
-	methods: {
-		toCoverUrl(fileId: string): string {
-			return generateUrl(`/apps/photos/api/v1/preview/${fileId}?x=${64}&y=${64}`)
-		},
+function isSharedAlbum(album: Album) {
+	return album.path.match(/^\/photos\/.+\/sharedalbums\//) !== null
+}
 
-		async fetchAlbumList() {
-			await this.fetchCollections(`/photos/${getCurrentUser()?.uid}/albums`, albumsExtraProps)
-			await this.fetchCollections(`/photos/${getCurrentUser()?.uid}/sharedalbums`, albumsExtraProps)
-		},
+function originalName(album: Album) {
+	if (isSharedAlbum(album)) {
+		return album.basename.replace(new RegExp(`\\(${album.attributes.collaborators[0].id}\\)$`), '')
+	} else {
+		return album.basename
+	}
+}
 
-		albumCreatedHandler() {
-			this.showAlbumCreationForm = false
-			this.fetchAlbumList()
-		},
-
-		pickAlbum(album: Album) {
-			this.$emit('albumPicked', album)
-		},
-
-		isSharedAlbum(album: Album) {
-			return album.path.match(/^\/photos\/.+\/sharedalbums\//) !== null
-		},
-
-		originalName(album: Album) {
-			if (this.isSharedAlbum(album)) {
-				return album.basename.replace(new RegExp(`\\(${album.attributes.collaborators[0].id}\\)$`), '')
-			} else {
-				return album.basename
-			}
-		},
-
-		t: translate,
-		n: translatePlural,
-	},
+onMounted(() => {
+	fetchAlbumList()
 })
 </script>
 

@@ -26,60 +26,43 @@
 	</div>
 </template>
 
-<script lang='ts'>
+<script setup lang="ts">
+import type { PhotoFile } from '../../store/files.ts'
+
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
+import { ref, shallowRef } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import ImageOutlineIcon from 'vue-material-design-icons/ImageOutline.vue'
 import FileComponent from '../FileComponent.vue'
-import { allMimes } from '../../services/AllowedMimes.js'
+import { allMimes } from '../../services/AllowedMimes.ts'
 import { logger } from '../../services/logger.ts'
 import { getPhotos } from '../../services/PhotoSearch.ts'
 
-export default {
-	name: 'DashboardOnThisDay',
-	components: {
-		FileComponent,
-		NcButton,
-		NcLoadingIcon,
-		NcEmptyContent,
-		ImageOutlineIcon,
-	},
+const loading = ref(true)
+const items = shallowRef<PhotoFile[]>([])
 
-	data() {
-		return {
-			loading: true,
-			items: [],
-		}
-	},
+const moreUrl = generateUrl('/apps/photos/thisday')
 
-	computed: {
-		moreUrl() {
-			return generateUrl('/apps/photos/thisday')
-		},
-	},
-
-	async created() {
-		try {
-			this.items = await getPhotos({
-				firstResult: 0,
-				nbResults: 1,
-				mimesType: allMimes,
-				onThisDay: true,
-			})
-		} catch (error) {
-			logger.error('Failed to load on this day pictures', { error })
-		} finally {
-			this.loading = false
-		}
-	},
-
-	methods: {
-		t,
-	},
+async function loadOnThisDay(): Promise<void> {
+	try {
+		// The search asks for the photos properties, which the generic File type does not carry.
+		items.value = await getPhotos({
+			firstResult: 0,
+			nbResults: 1,
+			mimesType: allMimes,
+			onThisDay: true,
+		}) as PhotoFile[]
+	} catch (error) {
+		logger.error('Failed to load on this day pictures', { error })
+	} finally {
+		loading.value = false
+	}
 }
+
+loadOnThisDay()
 </script>
 
 <style lang="scss" scoped>
