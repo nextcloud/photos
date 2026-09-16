@@ -4,21 +4,20 @@
  */
 
 import { translate, translatePlural } from '@nextcloud/l10n'
+import { createPinia, PiniaVuePlugin } from 'pinia'
 import Vue from 'vue'
-import { sync } from 'vuex-router-sync'
 import PhotosAppPublic from './PhotosAppPublic.vue'
 import router from './router/index.js'
-import store from './store/index.js'
-
-sync(store, router)
 
 Vue.prototype.t = translate
 Vue.prototype.n = translatePlural
+
+Vue.use(PiniaVuePlugin)
 
 export default new Vue({
 	el: '#content',
 	name: 'PhotosRoot',
 	router,
-	store,
+	pinia: createPinia(),
 	render: (h) => h(PhotosAppPublic),
 })

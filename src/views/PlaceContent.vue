@@ -6,7 +6,7 @@
 	<div>
 		<CollectionContent
 			ref="collectionContent"
-			:collection="place"
+			:collection="place ?? undefined"
 			:collection-file-ids="placeFileIds"
 			:allow-selection="false"
 			:loading="loadingCollection || loadingCollectionFiles"
@@ -55,6 +55,7 @@ import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
 import { placesPrefix } from '../store/places.js'
+import { usePlacesStore } from '../store/places.ts'
 
 export default {
 	name: 'PlaceContent',
@@ -80,6 +81,7 @@ export default {
 		const isMobile = useIsMobile()
 		return {
 			isMobile,
+			placesStore: usePlacesStore(),
 		}
 	},
 
@@ -94,8 +96,8 @@ export default {
 	},
 
 	computed: {
-		place(): Collection {
-			return this.$store.getters.getPlace(this.placeName)
+		place(): Collection | null {
+			return this.placesStore.getPlace(this.placeName)
 		},
 
 		placeFileName(): string {
@@ -103,7 +105,7 @@ export default {
 		},
 
 		placeFileIds(): string[] {
-			return this.$store.getters.getPlaceFiles(this.placeName)
+			return this.placesStore.getPlaceFiles(this.placeName)
 		},
 	},
 

@@ -87,6 +87,7 @@ import CollectionsList from '../components/Collection/CollectionsList.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
 import { albumsExtraProps, albumsPrefix } from '../store/albums.js'
+import { useAlbumsStore } from '../store/albums.ts'
 
 export default defineComponent({
 	name: 'AlbumsView',
@@ -118,6 +119,7 @@ export default defineComponent({
 		const isMobile = useIsSmallMobile()
 		return {
 			isMobile,
+			albumsStore: useAlbumsStore(),
 		}
 	},
 
@@ -129,7 +131,7 @@ export default defineComponent({
 
 	computed: {
 		albums() {
-			return this.$store.getters.albums
+			return this.albumsStore.albums
 		},
 	},
 

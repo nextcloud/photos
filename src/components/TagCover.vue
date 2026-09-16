@@ -37,6 +37,8 @@ import {
 import { RouterLink } from 'vue-router'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import AbortControllerMixin from '../mixins/AbortControllerMixin.js'
+import { useFilesStore } from '../store/files.ts'
+import { useSystemTagsStore } from '../store/systemtags.ts'
 
 export default defineComponent({
 	name: 'TagCover',
@@ -55,6 +57,10 @@ export default defineComponent({
 		},
 	},
 
+	setup() {
+		return { filesStore: useFilesStore(), systemTagsStore: useSystemTagsStore() }
+	},
+
 	data() {
 		return {
 			loadCover: false,
@@ -63,12 +69,8 @@ export default defineComponent({
 	},
 
 	computed: {
-		tags() {
-			return this.$store.state.systemtags.tags
-		},
-
 		files() {
-			return this.$store.state.files.files
+			return this.filesStore.files
 		},
 
 		coverUrl(): string {
@@ -88,7 +90,7 @@ export default defineComponent({
 			if (this.tag.attributes['files-assigned']) {
 				return
 			}
-			this.$store.dispatch('fetchTagFiles', { id: this.tag.id, signal: this.abortController.signal })
+			this.systemTagsStore.fetchTagFiles(this.tag.id, this.abortController.signal)
 		},
 	},
 

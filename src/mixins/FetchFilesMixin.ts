@@ -15,7 +15,8 @@ import { davClient } from '../services/DavClient.ts'
 import { getErrorBody } from '../services/DavResponse.ts'
 import logger from '../services/logger.js'
 import getPhotos from '../services/PhotoSearch.js'
-import store from '../store/index.js'
+import { useFilesStore } from '../store/files.ts'
+import { useUserConfigStore } from '../store/userConfig.ts'
 import SemaphoreWithPriority from '../utils/semaphoreWithPriority.js'
 import AbortControllerMixin from './AbortControllerMixin.js'
 
@@ -84,14 +85,14 @@ export default defineComponent({
 
 				this.fetchedFileIds.push(...fileIds)
 
-				this.$store.dispatch('appendFiles', fetchedFiles)
+				useFilesStore().appendFiles(fetchedFiles)
 
 				logger.debug(`[FetchFilesMixin] Fetched ${fileIds.length} new files: `, { fileIds })
 
 				return fileIds
 			} catch (error) {
 				if (error.response?.status === 404) {
-					const { photosLocation, photosSourceFolders } = store.state.userConfig
+					const { photosLocation, photosSourceFolders } = useUserConfigStore()
 					const errorBody = await getErrorBody(error)
 					const missingFolder = photosSourceFolders
 						.find((source) => errorBody.includes(`File with name ${source} could not be located`))

@@ -51,6 +51,7 @@ import CollectionsList from '../components/Collection/CollectionsList.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
 import { placesPrefix } from '../store/places.js'
+import { usePlacesStore } from '../store/places.ts'
 
 export default {
 	name: 'PlacesView',
@@ -74,9 +75,13 @@ export default {
 
 	mixins: [FetchCollectionsMixin],
 
+	setup() {
+		return { placesStore: usePlacesStore() }
+	},
+
 	computed: {
 		places() {
-			return this.$store.getters.places
+			return this.placesStore.places
 		},
 	},
 
