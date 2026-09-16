@@ -55,6 +55,8 @@ export default {
 		},
 	},
 
+	emits: ['click'],
+
 	setup() {
 		return { facesStore: useFacesStore(), filesStore: useFilesStore() }
 	},

@@ -19,4 +19,11 @@ export default [
 			'jsdoc/require-param-description': 'off',
 		},
 	},
+	{
+		files: ['**/*.vue'],
+		rules: {
+			// Same as the Vue 3 preset of @nextcloud/eslint-config, which the app moves to next
+			'vue/attribute-hyphenation': ['error', 'never'],
+		},
+	},
 ]

@@ -10,7 +10,7 @@
 			:loading="loading"
 			path="/"
 			:title="rootTitle"
-			:root-title="rootTitle"
+			:rootTitle="rootTitle"
 			@refresh="loadPhotos">
 			<NcButton
 				v-if="isMapsInstalled"
@@ -48,7 +48,7 @@
 			<LMarker
 				v-for="photo in geotaggedPhotos"
 				:key="photo.fileid"
-				:lat-lng="getCoordinates(photo)"
+				:latLng="getCoordinates(photo)"
 				:options="{ title: photo.basename }"
 				@click="openPhoto(photo)" />
 		</LMap>

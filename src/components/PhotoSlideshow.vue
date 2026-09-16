@@ -8,11 +8,11 @@
 		ref="modal"
 		size="full"
 		dark
-		enable-slideshow
-		:slideshow-delay="SLIDESHOW_DELAY"
+		enableSlideshow
+		:slideshowDelay="SLIDESHOW_DELAY"
 		:name="currentPhoto?.basename ?? ''"
-		:has-previous="photos.length > 1"
-		:has-next="photos.length > 1"
+		:hasPrevious="photos.length > 1"
+		:hasNext="photos.length > 1"
 		@previous="showPrevious"
 		@next="showNext"
 		@close="emit('close')">

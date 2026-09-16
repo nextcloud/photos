@@ -17,8 +17,8 @@
 			<FileComponent
 				class="on-this-day-dashboard__file"
 				:file="items[0]"
-				:allow-selection="false"
-				:show-actions-menu="false" />
+				:allowSelection="false"
+				:showActionsMenu="false" />
 			<NcButton :href="moreUrl">
 				{{ t('photos', 'More photos from this day') }}
 			</NcButton>

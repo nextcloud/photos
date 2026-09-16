@@ -10,7 +10,7 @@
 			:loading="loading"
 			path="/"
 			:title="rootTitle"
-			:root-title="rootTitle"
+			:rootTitle="rootTitle"
 			@refresh="loadPhotos" />
 
 		<NcEmptyContent

@@ -25,7 +25,7 @@
 			:loading="loading"
 			:path="path"
 			:title="folder?.basename ?? rootTitle"
-			:root-title="rootTitle"
+			:rootTitle="rootTitle"
 			@refresh="onRefresh">
 			<UploadPicker
 				:accept="allowedMimes"
@@ -45,11 +45,11 @@
 			v-else
 			class="nodes-container"
 			:sections="contentList"
-			:base-height="220">
+			:baseHeight="220">
 			<template #default="{ tiledSections }">
 				<VirtualScrolling
-					:container-element="appContent"
-					:header-height="0"
+					:containerElement="appContent"
+					:headerHeight="0"
 					:sections="tiledSections">
 					<template #default="{ visibleSections }">
 						<ul v-if="visibleSections.length === 1">
@@ -67,14 +67,14 @@
 									<FileComponent
 										v-if="item.node.type === 'file'"
 										:file="item.node"
-										:allow-selection="false"
+										:allowSelection="false"
 										:cropped="croppedLayout"
 										@click="openViewer"
 										@deleted="onPhotoDeleted" />
 									<FolderComponent
 										v-else
 										:item="item.node"
-										:show-shared="showShared" />
+										:showShared="showShared" />
 								</li>
 							</template>
 						</ul>

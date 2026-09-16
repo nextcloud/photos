@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<NcContent app-name="photos">
+	<NcContent appName="photos">
 		<!--
 		Needed for isPublicShare to return true
 		https://github.com/nextcloud-libraries/nextcloud-sharing/blob/15f38dfdeb2c72501008e5ae89d3eb424b83aed5/lib/publicShare.ts#L12-L20

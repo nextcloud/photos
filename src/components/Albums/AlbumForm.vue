@@ -10,7 +10,7 @@
 				v-model.trim="albumName"
 				type="text"
 				name="name"
-				:helper-text="albumNameValidationError"
+				:helperText="albumNameValidationError"
 				:error="albumNameValidationError !== undefined"
 				:required="true"
 				:label="t('photos', 'Name of the album')" />
@@ -26,10 +26,10 @@
 		</div>
 
 		<PhotosFiltersInput
-			:selected-filters="albumFilters"
+			:selectedFilters="albumFilters"
 			@select-filter="selectFilter" />
 		<PhotosFiltersDisplay
-			:selected-filters="albumFilters"
+			:selectedFilters="albumFilters"
 			@deselect-filter="deselectFilter" />
 
 		<div class="form-buttons">
@@ -67,8 +67,8 @@
 	</form>
 	<CollaboratorsSelectionForm
 		v-else
-		:album-name="albumName"
-		:allow-public-link="false">
+		:albumName="albumName"
+		:allowPublicLink="false">
 		<template #default="{ collaborators }">
 			<span class="left-buttons">
 				<NcButton
@@ -149,6 +149,8 @@ export default {
 			default: false,
 		},
 	},
+
+	emits: ['back', 'done'],
 
 	setup() {
 		return { albumsStore: useAlbumsStore(), collectionsStore: useCollectionsStore() }

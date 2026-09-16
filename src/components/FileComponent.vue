@@ -119,7 +119,7 @@
 			v-if="allowSelection"
 			class="selection-checkbox"
 			:aria-label="t('photos', 'Select image {imageName}', { imageName: file.basename })"
-			:model-value="selected"
+			:modelValue="selected"
 			@update:checked="onToggle" />
 
 		<PhotoActionsMenu
