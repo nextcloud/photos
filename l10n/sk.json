@@ -207,6 +207,7 @@
     "Failed to fetch collection." : "Zlyhalo načítanie kolekcie.",
     "Failed to fetch collections list." : "Zlyhalo načítanie zoznamu kolekcií.",
     "Failed to fetch faces list." : "Nepodarilo sa načítať zoznam tvárí.",
+    "The folder {folder} does not exist anymore. You can remove it from your media folders in the Photos settings." : "Priečinok {folder} už neexistuje. Môžete ho odstrániť z priečinkov médií v nastaveniach aplikácie Fotky.",
     "All your media" : "Všetky vaše médiá",
     "Album {title}" : "Album {title}",
     "Shared Albums" : "Zdieľané albumy",
