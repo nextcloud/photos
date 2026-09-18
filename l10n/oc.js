@@ -25,6 +25,7 @@ OC.L10N.register(
     "Filename" : "Nom de fichièr",
     "Location" : "Emplaçament",
     "Add" : "Apondre",
+    "Home" : "Acuèlh",
     "General" : "Generals",
     "Rename person" : "Renomenar la persona",
     "This folder does not exist" : "Aqueste dossièr existís pas",
