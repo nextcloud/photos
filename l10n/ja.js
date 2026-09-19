@@ -76,6 +76,7 @@ OC.L10N.register(
     "Location" : "場所",
     "Latitude" : "緯度",
     "Longitude" : "経度",
+    "{position} of {count}" : "{position} / {count}",
     "Create new tag" : "新しいタグを作成",
     "Add" : "追加",
     "Select a custom date range" : "カスタム日付範囲の選択",
