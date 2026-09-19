@@ -87,7 +87,7 @@
     "@vue/tsconfig": "^0.5.1",
     "autoprefixer": "^10.5.4",
     "dockerode": "^5.0.1",
-    "eslint": "^10.9.1",
+    "eslint": "^10.10.0",
     "happy-dom": "^20.12.2",
     "postcss": "^8.5.25",
     "ts-node": "^10.9.2",
