@@ -77,6 +77,7 @@ OC.L10N.register(
     "Latitude" : "Szélesség",
     "Longitude" : "Hosszúság",
     "Remove location" : "Hely eltávolítása",
+    "{position} of {count}" : "{position} / {count}",
     "Create new tag" : "Új címke létrehozása",
     "Add" : "Hozzáadás",
     "Dates" : "Dátumok",
