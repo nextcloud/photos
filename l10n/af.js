@@ -3,6 +3,8 @@ OC.L10N.register(
     {
     "Public link" : "Openbare skakel",
     "Photos" : "Foto’s",
+    "Search by file name" : "Soek met lêer naam",
+    "Clear search" : "Maak soektog skoon",
     "Videos" : "Video's ",
     "Folders" : "Vouers",
     "Favorites" : "Gunstelinge",
