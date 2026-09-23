@@ -5,6 +5,7 @@ OC.L10N.register(
     "Photos" : "Фото",
     "On This Day" : "В этот день",
     "Your memories under your control" : "Ваши воспоминания под вашим контролем",
+    "Search by file name" : "Поиск здесь по названию файла",
     "Clear search" : "Очистить поиск",
     "All media" : "Все медиафайлы",
     "Videos" : "Видео",
