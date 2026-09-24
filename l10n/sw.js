@@ -5,6 +5,7 @@ OC.L10N.register(
     "Photos" : "Picha",
     "On This Day" : "Katika siku hii",
     "Your memories under your control" : "Kumbukumbu zako chini ya udhibiti wako",
+    "Search by file name" : "Tafuta kwa jina la faili",
     "Clear search" : "Futa utafutaji",
     "All media" : "Media zote",
     "Videos" : "Picha mjongeo",
