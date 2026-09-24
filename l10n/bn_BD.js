@@ -2,6 +2,8 @@ OC.L10N.register(
     "photos",
     {
     "Photos" : "Photos",
+    "Search by file name" : "Search by file name",
+    "Clear search" : "Clear search",
     "Favorites" : "প্রিয়জন",
     "Shared with you" : "Shared with you",
     "Tags" : "ট্যাগ",
