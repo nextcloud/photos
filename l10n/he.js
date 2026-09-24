@@ -4,6 +4,8 @@ OC.L10N.register(
     "Public link" : "קישור ציבורי",
     "Photos" : "תמונות",
     "Your memories under your control" : "הזכרונות שלך בשליטתך",
+    "Search by file name" : "חפש לפי שם קובץ",
+    "Clear search" : "נקה חיפוש",
     "All media" : "כל המדיה",
     "Videos" : "סרטונים",
     "Albums" : "אלבומים",
