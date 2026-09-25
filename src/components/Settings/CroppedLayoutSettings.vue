@@ -5,14 +5,16 @@
 
 <template>
 	<NcFormBox>
+		<!-- NcFormBoxSwitch only declares update:modelValue, Vue 2.7 does not normalize event names -->
 		<NcFormBoxSwitch
-			:model-value="croppedLayout"
+			:modelValue="croppedLayout"
 			:label="t('photos', 'Squared photos view')"
 			@update:modelValue="updateSetting" />
 	</NcFormBox>
 </template>
 
 <script lang='ts'>
+import { t } from '@nextcloud/l10n'
 import NcFormBox from '@nextcloud/vue/components/NcFormBox'
 import NcFormBoxSwitch from '@nextcloud/vue/components/NcFormBoxSwitch'
 import { useUserConfigStore } from '../../store/userConfig.ts'
@@ -39,6 +41,8 @@ export default {
 		updateSetting(value) {
 			this.userConfigStore.updateUserConfig('croppedLayout', value)
 		},
+
+		t,
 	},
 }
 </script>

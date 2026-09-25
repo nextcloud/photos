@@ -18,9 +18,9 @@
 				:key="index">
 				<PhotosFolder
 					:path="source"
-					can-delete
-					:root-folder-label="t('photos', 'All folders')"
-					:root-folder-icon="FolderMultipleOutline"
+					canDelete
+					:rootFolderLabel="t('photos', 'All folders')"
+					:rootFolderIcon="FolderMultipleOutline"
 					@remove-folder="removeSourceFolder(index)" />
 			</li>
 		</ul>

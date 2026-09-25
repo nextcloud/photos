@@ -19,7 +19,7 @@
 			<FolderOutline
 				class="folder__icon"
 				:size="96"
-				fill-color="var(--color-primary-element)" />
+				fillColor="var(--color-primary-element)" />
 		</span>
 
 		<span class="folder__details">
