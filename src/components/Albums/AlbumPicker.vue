@@ -87,7 +87,7 @@ export default defineComponent({
 
 	mixins: [FetchCollectionsMixin],
 
-	emits: ['album-picked'],
+	emits: ['albumPicked'],
 
 	setup() {
 		return { albumsStore: useAlbumsStore(), sharedAlbumsStore: useSharedAlbumsStore() }
@@ -133,7 +133,7 @@ export default defineComponent({
 		},
 
 		pickAlbum(album: Album) {
-			this.$emit('album-picked', album)
+			this.$emit('albumPicked', album)
 		},
 
 		isSharedAlbum(album: Album) {

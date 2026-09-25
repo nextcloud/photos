@@ -16,6 +16,7 @@
 				<HeaderNavigation
 					v-if="albumOriginalName !== ''"
 					key="navigation"
+
 					:loading="loadingCollection || loadingCollectionFiles"
 					:params="{ token }"
 					path="/"
@@ -57,8 +58,9 @@
 			</template>
 
 			<!-- No content -->
-			<template #empty-content>
+			<template #emptyContent>
 				<NcEmptyContent
+
 					:name="t('photos', 'This album does not have any photos or videos yet!')"
 					class="album__empty">
 					<template #icon>

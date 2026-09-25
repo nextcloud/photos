@@ -12,6 +12,7 @@
 			<template #header>
 				<HeaderNavigation
 					key="navigation"
+
 					:loading="loadingCollections"
 					:title="t('photos', 'Places')"
 					:rootTitle="t('photos', 'Places')"
@@ -37,7 +38,7 @@
 				</CollectionCover>
 			</template>
 
-			<template #empty-collections-list>
+			<template #emptyCollectionsList>
 				<NcEmptyContent :name="t('photos', 'There is no place yet!')">
 					<template #icon>
 						<ImageMultipleOutline />

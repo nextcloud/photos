@@ -11,6 +11,7 @@
 		<template #header>
 			<HeaderNavigation
 				key="navigation"
+
 				:loading="loadingCollections"
 				:title="t('photos', 'Collaborative albums')"
 				:rootTitle="t('photos', 'Collaborative albums')"
@@ -39,7 +40,7 @@
 			</CollectionCover>
 		</template>
 
-		<template #empty-collections-list>
+		<template #emptyCollectionsList>
 			<NcEmptyContent :name="t('photos', 'There is no album yet!')">
 				<template #icon>
 					<ImageMultipleOutline />
