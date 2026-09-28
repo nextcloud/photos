@@ -3,16 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { createPinia } from 'pinia'
-import { createApp } from 'vue'
-import DashboardOnThisDay from './components/Dashboard/DashboardOnThisDay.vue'
-
 window.addEventListener('DOMContentLoaded', () => {
-	window.OCA.Dashboard.register('photos-onthisday', (el) => {
-		const app = createApp(DashboardOnThisDay)
-		app.config.idPrefix = 'photos-dashboard'
-		app.use(createPinia())
-		app.mount(el)
-		global.PhotosOnThisDay = app
+	window.OCA.Dashboard.register('photos-onthisday', async (el) => {
+		// The dashboard loads this entry point even when the widget is not displayed,
+		// so the widget itself is only fetched once the dashboard renders it.
+		const { mountOnThisDay } = await import('./components/Dashboard/mountOnThisDay.ts')
+		global.PhotosOnThisDay = mountOnThisDay(el)
 	})
 })
