@@ -5,6 +5,7 @@ OC.L10N.register(
     "Photos" : "عکس‌ها",
     "On This Day" : "در این روز",
     "Your memories under your control" : "خاطرات شما تحت کنترل شما",
+    "Search by file name" : "جستجو بر اساس نام فایل",
     "Clear search" : "پاک کردن جستجو",
     "All media" : "همه رسانه‌ها",
     "Videos" : "ویدیوها",
