@@ -3,22 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { translate, translatePlural } from '@nextcloud/l10n'
-import { createPinia, PiniaVuePlugin } from 'pinia'
-import Vue from 'vue'
-import DashboardOnThisDay from './components/Dashboard/DashboardOnThisDay.vue'
-
-Vue.prototype.t = translate
-Vue.prototype.n = translatePlural
-
-Vue.use(PiniaVuePlugin)
-
 window.addEventListener('DOMContentLoaded', () => {
-	window.OCA.Dashboard.register('photos-onthisday', (el) => {
-		global.PhotosOnThisDay = new Vue({
-			el,
-			pinia: createPinia(),
-			render: (h) => h(DashboardOnThisDay),
-		})
+	window.OCA.Dashboard.register('photos-onthisday', async (el) => {
+		// The dashboard loads this entry point even when the widget is not displayed,
+		// so the widget itself is only fetched once the dashboard renders it.
+		const { mountOnThisDay } = await import('./components/Dashboard/mountOnThisDay.ts')
+		global.PhotosOnThisDay = mountOnThisDay(el)
 	})
 })
