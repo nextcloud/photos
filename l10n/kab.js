@@ -16,6 +16,7 @@ OC.L10N.register(
     "This name is already in use." : "Isem-a yettuseqdec yakan",
     "Back" : "Retour",
     "Save" : "Sekles",
+    "New album" : "Album amaynut",
     "An error occurred" : "Teḍra-d tuccḍa",
     "Favorite" : "Menyif",
     "Go back" : "Tuɣalin",
