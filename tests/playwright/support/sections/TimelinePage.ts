@@ -245,7 +245,7 @@ export class TimelinePage {
 	/**
 	 * Filter the timeline by a date range.
 	 *
-	 * @param range - The range as the picker formats it, e.g. `2019-01-01 ~ 2019-12-31`
+	 * @param range - The range as the picker formats it, e.g. `2019-01-01 - 2019-12-31`
 	 */
 	public async filterByDateRange(range: string): Promise<void> {
 		await this.withRefetch(() => this.filters.selectDateRange(range))

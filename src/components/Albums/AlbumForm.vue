@@ -27,10 +27,10 @@
 
 		<PhotosFiltersInput
 			:selectedFilters="albumFilters"
-			@select-filter="selectFilter" />
+			@selectFilter="selectFilter" />
 		<PhotosFiltersDisplay
 			:selectedFilters="albumFilters"
-			@deselect-filter="deselectFilter" />
+			@deselectFilter="deselectFilter" />
 
 		<div class="form-buttons">
 			<span class="left-buttons">
@@ -103,6 +103,7 @@ import { InvalidFilenameError, InvalidFilenameErrorReason, validateFilename } fr
 import { resultToNode } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
 import { generateRemoteUrl } from '@nextcloud/router'
+import { toRaw } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
@@ -221,12 +222,12 @@ export default {
 			this.albumLocation = this.album?.attributes.location ?? ''
 			this.albumFilters = {
 				...this.albumFilters,
-				...structuredClone(this.album?.attributes.filters ?? {}),
+				...structuredClone(toRaw(this.album?.attributes.filters ?? {})),
 			}
 		} else {
 			this.albumFilters = {
 				...this.albumFilters,
-				...structuredClone(this.filtersValue),
+				...structuredClone(toRaw(this.filtersValue)),
 			}
 		}
 
@@ -304,7 +305,7 @@ export default {
 			try {
 				this.loading = true
 
-				let album = this.album?.clone() as Album
+				let album = toRaw(this.album)?.clone() as Album
 				const changes: string[] = []
 
 				if (this.album !== null && this.album.basename !== this.albumName) {

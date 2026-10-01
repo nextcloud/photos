@@ -97,9 +97,10 @@ export class PhotosFilters {
 	 *
 	 * The option opens a date picker dialog rather than applying a value of its
 	 * own. Its input takes the range as text, which is how a range is entered
-	 * without clicking through two calendars, and commits it on Enter.
+	 * without clicking through two calendars, and the picker applies it as soon
+	 * as the input holds both ends of a valid range.
 	 *
-	 * @param range - The range as the picker formats it, e.g. `2019-01-01 ~ 2019-12-31`
+	 * @param range - The range as the picker formats it, e.g. `2019-01-01 - 2019-12-31`
 	 */
 	public async selectDateRange(range: string): Promise<void> {
 		await this.pickOption('Custom…')
@@ -108,9 +109,12 @@ export class PhotosFilters {
 		await expect(dialog).toBeVisible()
 
 		// The picker renders a single text input holding both ends of the range.
+		// The dialog only traps the focus once it has faded in, and it gives the
+		// input the focus when it does. Typing before that, the album form the
+		// dialog may be opened from still holds the focus and takes the text.
 		const input = dialog.getByRole('textbox')
+		await expect(input).toBeFocused()
 		await input.fill(range)
-		await input.press('Enter')
 
 		await expect(dialog).toHaveCount(0)
 	}

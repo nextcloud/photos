@@ -21,6 +21,7 @@
 			<template #header="{ selectedFileIds, resetSelection }">
 				<HeaderNavigation
 					key="navigation"
+
 					:loading="loadingCollectionFiles"
 					:params="{ albumName }"
 					:path="'/' + albumName"
@@ -29,6 +30,7 @@
 					<template #subtitle>
 						<div
 							v-if="album !== undefined && album.attributes.location !== ''"
+
 							class="album__location">
 							<MapMarkerOutline />{{ album.attributes.location }}
 						</div>
@@ -136,9 +138,10 @@
 			</template>
 
 			<!-- No content -->
-			<template #empty-content>
+			<template #emptyContent>
 				<NcEmptyContent
 					v-if="album !== undefined && album.attributes.nbItems === 0 && !(loadingCollectionFiles || loadingCollection)"
+
 					:name="t('photos', 'This album does not have any photos or videos yet!')"
 					class="album__empty">
 					<template #icon>
@@ -147,6 +150,7 @@
 
 					<template #action>
 						<NcButton
+
 							class="album__empty__button"
 							variant="primary"
 							:aria-label="t('photos', 'Add photos to this album')"
@@ -163,11 +167,11 @@
 
 		<PhotosPicker
 			v-if="album !== undefined"
-			:open.sync="showAddPhotosModal"
+			v-model:open="showAddPhotosModal"
 			:blacklistIds="albumFileIds"
 			:destination="album.basename"
 			:name="t('photos', 'Add photos to {albumName}', { albumName: albumName }, undefined, { escape: false, sanitize: false })"
-			@files-picked="handleFilesPicked" />
+			@filesPicked="handleFilesPicked" />
 
 		<NcModal
 			v-if="showManageCollaboratorView && album !== undefined"

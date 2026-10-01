@@ -21,7 +21,7 @@
 					canDelete
 					:rootFolderLabel="t('photos', 'All folders')"
 					:rootFolderIcon="FolderMultipleOutline"
-					@remove-folder="removeSourceFolder(index)" />
+					@removeFolder="removeSourceFolder(index)" />
 			</li>
 		</ul>
 
