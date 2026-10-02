@@ -8,22 +8,29 @@ export type TiledItem = {
 	width: number // Real width of the item.
 	height: number // Real height of the item.
 	ratio: number // The aspect ratio of the item.
+	key?: string // Recycled DOM key, assigned by VirtualScrolling.
 }
 
-export type Section = {
+// Items may carry more than the layout needs, the extra data is passed
+// along untouched, hence the type parameter.
+export type Section<I extends TiledItem = TiledItem> = {
 	id: string // Unique id for the section.
-	items: TiledItem[] // Real width of the item.
+	items: I[] // Items of the section.
 }
 
-export type TiledRow = {
-	items: TiledItem[] // List of item in the row.
+export type TiledRow<I extends TiledItem = TiledItem> = {
+	items: I[] // List of item in the row.
 	height: number // Height of the row.
 	key: string // Unique key for the row.
 }
 
-export type TiledSection = Section & {
+export type TiledSectionRow<I extends TiledItem = TiledItem> = TiledRow<I> & {
+	sectionKey: string // Key of the section the row belongs to.
+}
+
+export type TiledSection<I extends TiledItem = TiledItem> = Section<I> & {
 	key: string // Unique key for the section.
-	rows: TiledRow[] // Real width of the item.
+	rows: TiledSectionRow<I>[] // Rows of the section.
 	height: number // Height of the section.
 }
 
@@ -35,17 +42,17 @@ export type TiledSection = Section & {
  * @param containerWidth
  * @param baseHeight
  */
-export function splitItemsInRows(items: TiledItem[], containerWidth: number, baseHeight: number = 200): TiledRow[] {
+export function splitItemsInRows<I extends TiledItem>(items: I[], containerWidth: number, baseHeight: number = 200): TiledRow<I>[] {
 	if (containerWidth === 0) {
 		return []
 	}
 
-	const rows: TiledRow[] = []
+	const rows: TiledRow<I>[] = []
 	let rowNumber = 0
 	let currentItem = 0
 
 	while (currentItem < items.length) {
-		const rowItems: TiledItem[] = []
+		const rowItems: I[] = []
 
 		// Fill the row with new items as long as the width is less than containerWidth.
 		do {

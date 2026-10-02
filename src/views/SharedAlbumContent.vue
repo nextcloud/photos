@@ -137,10 +137,11 @@
 	</div>
 </template>
 
-<script lang='ts'>
-import { translate } from '@nextcloud/l10n'
+<script setup lang="ts">
+import { t } from '@nextcloud/l10n'
 import { ShareType } from '@nextcloud/sharing'
-import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
+import { computed, onMounted, ref, useTemplateRef } from 'vue'
+import { useRouter } from 'vue-router'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
@@ -158,134 +159,84 @@ import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
 import PhotosPicker from '../components/PhotosPicker.vue'
-import FetchCollectionContentMixin from '../mixins/FetchCollectionContentMixin.js'
-import FetchFilesMixin from '../mixins/FetchFilesMixin.js'
+import { useFetchCollectionContent } from '../composables/useFetchCollectionContent.ts'
 import { albumFilesExtraProps, albumsExtraProps } from '../store/albums.ts'
 import { useCollectionsStore } from '../store/collections.ts'
 import { useFilesStore } from '../store/files.ts'
 import { useSharedAlbumsStore } from '../store/sharedAlbums.ts'
 
-export default {
-	name: 'SharedAlbumContent',
-	components: {
-		MapMarkerOutline,
-		Plus,
-		Close,
-		// Download,
-		// DownloadMultiple,
-		DeleteOutline,
-		ImagePlusOutline,
-		NcEmptyContent,
-		NcActions,
-		NcActionButton,
-		NcActionSeparator,
-		NcButton,
-		NcUserBubble,
-		CollectionContent,
-		// ActionDownload,
-		PhotosPicker,
-		HeaderNavigation,
-	},
+const props = withDefaults(defineProps<{
+	albumName?: string
+}>(), {
+	albumName: '/',
+})
 
-	mixins: [
-		FetchCollectionContentMixin,
-		FetchFilesMixin,
-	],
+const router = useRouter()
+const collectionsStore = useCollectionsStore()
+const filesStore = useFilesStore()
+const sharedAlbumsStore = useSharedAlbumsStore()
+const {
+	fetchCollection,
+	fetchCollectionFiles,
+	loadingCollection,
+	loadingCollectionFiles,
+	errorFetchingCollection,
+	errorFetchingCollectionFiles,
+} = useFetchCollectionContent()
 
-	props: {
-		albumName: {
-			type: String,
-			default: '/',
-		},
-	},
+const collectionContent = useTemplateRef<InstanceType<typeof CollectionContent>>('collectionContent')
 
-	setup() {
-		const isMobile = useIsMobile()
-		return {
-			isMobile,
-			collectionsStore: useCollectionsStore(),
-			filesStore: useFilesStore(),
-			sharedAlbumsStore: useSharedAlbumsStore(),
-		}
-	},
+const showAddPhotosModal = ref(false)
+const loadingAddFilesToAlbum = ref(false)
+const collaboratorTypes = ShareType
 
-	data() {
-		return {
-			showAddPhotosModal: false,
-			loadingCount: 0,
-			loadingAddFilesToAlbum: false,
-			collaboratorTypes: ShareType,
-		}
-	},
+const album = computed(() => sharedAlbumsStore.getSharedAlbum(props.albumName))
 
-	computed: {
-		files() {
-			return this.filesStore.files
-		},
+const albumFileIds = computed(() => sharedAlbumsStore.getSharedAlbumFiles(props.albumName))
 
-		album() {
-			return this.sharedAlbumsStore.getSharedAlbum(this.albumName)
-		},
+const albumOriginalName = computed(() => props.albumName.replace(new RegExp(`\\(${album.value?.attributes.collaborators[0].id}\\)$`), ''))
 
-		albumFileIds() {
-			return this.sharedAlbumsStore.getSharedAlbumFiles(this.albumName)
-		},
+const albumFileName = computed(() => sharedAlbumsStore.getSharedAlbumName(props.albumName))
 
-		albumOriginalName(): string {
-			return this.albumName.replace(new RegExp(`\\(${this.album?.attributes.collaborators[0].id}\\)$`), '')
-		},
+const removableSelectedFiles = computed(() => (collectionContent.value?.selectedFileIds ?? [])
+	.map((fileId) => filesStore.files[fileId])
+	.filter((file) => file.attributes['photos-album-file-origin'] !== 'filters')
+	.map((file) => file.fileid.toString()))
 
-		albumFileName(): string {
-			return this.sharedAlbumsStore.getSharedAlbumName(this.albumName)
-		},
-
-		removableSelectedFiles() {
-			return ((this.$refs.collectionContent?.selectedFileIds ?? []) as string[])
-				.map((fileId) => this.filesStore.files[fileId])
-				.filter((file) => file.attributes['photos-album-file-origin'] !== 'filters')
-				.map((file) => file.fileid.toString())
-		},
-	},
-
-	async mounted() {
-		this.fetchAlbum()
-		this.fetchAlbumContent()
-	},
-
-	methods: {
-		async fetchAlbum() {
-			await this.fetchCollection(
-				this.albumFileName,
-				albumsExtraProps,
-			)
-		},
-
-		async fetchAlbumContent() {
-			await this.fetchCollectionFiles(this.albumFileName, albumFilesExtraProps)
-		},
-
-		async handleFilesPicked(fileIds) {
-			this.showAddPhotosModal = false
-			await this.collectionsStore.addFilesToCollection(this.album.root + this.album.path, fileIds)
-			// Re-fetch album content to have the proper filenames.
-			await this.fetchAlbumContent()
-		},
-
-		async handleRemoveFilesFromAlbum(fileIds: string[]) {
-			this.$refs.collectionContent?.onUncheckFiles(fileIds)
-			await this.collectionsStore.removeFilesFromCollection(this.album.root + this.album.path, fileIds)
-		},
-
-		async handleDeleteAlbum() {
-			const isDeleted = await this.collectionsStore.deleteCollection(this.album.root + this.album.path)
-			if (isDeleted) {
-				this.$router.push('/sharedalbums')
-			}
-		},
-
-		t: translate,
-	},
+async function fetchAlbum() {
+	await fetchCollection(
+		albumFileName.value,
+		albumsExtraProps,
+	)
 }
+
+async function fetchAlbumContent() {
+	await fetchCollectionFiles(albumFileName.value, albumFilesExtraProps)
+}
+
+async function handleFilesPicked(fileIds: string[]) {
+	showAddPhotosModal.value = false
+	await collectionsStore.addFilesToCollection(album.value.root + album.value.path, fileIds)
+	// Re-fetch album content to have the proper filenames.
+	await fetchAlbumContent()
+}
+
+async function handleRemoveFilesFromAlbum(fileIds: string[]) {
+	collectionContent.value?.onUncheckFiles(fileIds)
+	await collectionsStore.removeFilesFromCollection(album.value.root + album.value.path, fileIds)
+}
+
+async function handleDeleteAlbum() {
+	const isDeleted = await collectionsStore.deleteCollection(album.value.root + album.value.path)
+	if (isDeleted) {
+		router.push('/sharedalbums')
+	}
+}
+
+onMounted(() => {
+	fetchAlbum()
+	fetchAlbumContent()
+})
 </script>
 
 <style lang="scss" scoped>

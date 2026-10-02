@@ -2,9 +2,15 @@
  * SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+/// <reference types="@nextcloud/typings" />
 import type { ViewerFileInfo } from './utils/fileUtils.ts'
 
 declare global {
+	const OC: Nextcloud.v32.OC & {
+		/** Registered by files_sharing, absent when sharing is disabled. */
+		Share?: object
+	}
+
 	interface Window {
 		OCA: {
 			Dashboard: {
