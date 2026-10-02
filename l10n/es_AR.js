@@ -34,6 +34,7 @@ OC.L10N.register(
     "No photos in here" : "No hay fotos aquí",
     "No tags yet" : "Todavía no hay etiquetas",
     "Photos with tags will show up here" : "Las fotos con etiquetas aparecerán aquí",
+    "Default" : "Por defecto",
     "Tagged photos" : "Fotos etiquetadas",
     "Group" : "Grupo",
     "Enable squared photos view" : "Habilitar vista de fotos cuadradas",
