@@ -166,7 +166,7 @@ namespace OC\Files\Search {
 	use OCP\Files\Search\ISearchBinaryOperator;
 	use OCP\Files\Search\ISearchOperator;
 
-	class SearchBinaryOperator implements ISearchBinaryOperator {
+	class SearchBinaryOperator implements ISearchBinaryOperator, ISearchOperator {
 		/** @var string */
 		private $type;
 		/** @var (SearchBinaryOperator|SearchComparison)[] */
