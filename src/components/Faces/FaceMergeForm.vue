@@ -13,74 +13,43 @@
 	</div>
 </template>
 
-<script lang='ts'>
+<script setup lang="ts">
+import { computed, ref } from 'vue'
 import FaceCover from './FaceCover.vue'
-import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
-import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
+import { useFetchFaces } from '../../composables/useFetchFaces.ts'
 import { useFacesStore } from '../../store/faces.ts'
-import { useFilesStore } from '../../store/files.ts'
 
-export default {
-	name: 'FaceMergeForm',
-	components: { FaceCover },
-	mixins: [
-		FaceCoverMixin,
-		FetchFacesMixin,
-	],
+const props = defineProps<{
+	firstFace: string
+}>()
 
-	props: {
-		firstFace: {
-			type: String,
-			required: true,
-		},
-	},
+const emit = defineEmits<{ select: [faceName: string] }>()
 
-	emits: ['select'],
+const facesStore = useFacesStore()
+useFetchFaces()
 
-	setup() {
-		return { facesStore: useFacesStore(), filesStore: useFilesStore() }
-	},
+const loading = ref(false)
 
-	data() {
-		return {
-			loading: false,
-		}
-	},
+const faces = computed(() => facesStore.faces)
+const facesFiles = computed(() => facesStore.facesFiles)
 
-	computed: {
-		files() {
-			return this.filesStore.files
-		},
+const filteredFaces = computed(() => {
+	return Object.values(faces.value)
+		.filter((face) => face.basename !== props.firstFace)
+		.sort((a, b) => {
+			if (a.attributes.nbItems && b.attributes.nbItems) {
+				return b.attributes.nbItems - a.attributes.nbItems
+			}
+			if (!facesFiles.value[b.basename] || !facesFiles.value[a.basename]) {
+				return 0
+			}
+			return facesFiles.value[b.basename].length - facesFiles.value[a.basename].length
+		})
+})
 
-		faces() {
-			return this.facesStore.faces
-		},
-
-		facesFiles() {
-			return this.facesStore.facesFiles
-		},
-
-		filteredFaces() {
-			return Object.values(this.faces)
-				.filter((face) => face.basename !== this.firstFace)
-				.sort((a, b) => {
-					if (a.attributes.nbItems && b.attributes.nbItems) {
-						return b.attributes.nbItems - a.attributes.nbItems
-					}
-					if (!this.facesFiles[b.basename] || !this.facesFiles[a.basename]) {
-						return 0
-					}
-					return this.facesFiles[b.basename].length - this.facesFiles[a.basename].length
-				})
-		},
-	},
-
-	methods: {
-		handleSelect(faceName) {
-			this.$emit('select', faceName)
-			this.loading = true
-		},
-	},
+function handleSelect(faceName: string): void {
+	emit('select', faceName)
+	loading.value = true
 }
 </script>
 
