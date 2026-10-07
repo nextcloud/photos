@@ -88,7 +88,7 @@ export default defineComponent({
 			if (this.tag.attributes['files-assigned']) {
 				return
 			}
-			this.$store.dispatch('fetchTagFiles', { id: this.tag.attributes.id, signal: this.abortController.signal })
+			this.$store.dispatch('fetchTagFiles', { id: this.tag.id, signal: this.abortController.signal })
 		},
 	},
 
