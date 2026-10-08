@@ -31,9 +31,6 @@
 			</NcTextField>
 		</div>
 
-		<PhotosFiltersInput
-			:selectedFilters="albumFilters"
-			@select-filter="selectFilter" />
 		<PhotosFiltersDisplay
 			:selectedFilters="albumFilters"
 			@deselect-filter="deselectFilter" />
@@ -54,22 +51,11 @@
 			</span>
 			<span class="right-buttons">
 				<NcButton
-					v-if="sharingEnabled && !editMode"
-					variant="secondary"
-					:disabled="!canSubmit"
-					@click="showCollaboratorView = true">
-					<template #icon>
-						<AccountMultiplePlusOutline :size="20" />
-					</template>
-					{{ t('photos', 'Add collaborators') }}
-				</NcButton>
-				<NcButton
 					variant="primary"
 					:disabled="!canSubmit"
 					@click="submit()">
-					<template #icon>
-						<NcLoadingIcon v-if="loading" :size="20" />
-						<SendOutline v-else :size="20" />
+					<template v-if="loading" #icon>
+						<NcLoadingIcon :size="20" />
 					</template>
 					{{ editMode ? t('photos', 'Save') : t('photos', 'Create album') }}
 				</NcButton>
@@ -107,7 +93,6 @@
 <script lang='ts'>
 import type { PropType } from 'vue'
 import type { Collection } from '../../services/collectionFetcher.ts'
-import type { FilterOption } from '../../services/PhotosFilters/PhotosFilter.ts'
 import type { Album, AlbumEditableProperties, Collaborator } from '../../store/albums.ts'
 
 import { InvalidFilenameError, InvalidFilenameErrorReason, validateFilename } from '@nextcloud/files'
@@ -117,11 +102,9 @@ import { generateRemoteUrl } from '@nextcloud/router'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
-import AccountMultiplePlusOutline from 'vue-material-design-icons/AccountMultiplePlusOutline.vue'
 import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
 import SendOutline from 'vue-material-design-icons/SendOutline.vue'
 import PhotosFiltersDisplay from '../PhotosFilters/PhotosFiltersDisplay.vue'
-import PhotosFiltersInput from '../PhotosFilters/PhotosFiltersInput.vue'
 import AlbumShare from './AlbumShare.vue'
 import { photosFilters as filters } from '../../services/PhotosFilters/index.ts'
 import { albumsPrefix } from '../../store/albums.ts'
@@ -134,13 +117,11 @@ export default {
 
 	components: {
 		MapMarkerOutline,
-		AccountMultiplePlusOutline,
 		SendOutline,
 		NcButton,
 		NcLoadingIcon,
 		NcTextField,
 		AlbumShare,
-		PhotosFiltersInput,
 		PhotosFiltersDisplay,
 	},
 
@@ -180,10 +161,6 @@ export default {
 	computed: {
 		editMode(): boolean {
 			return this.album !== null
-		},
-
-		sharingEnabled(): boolean {
-			return OC.Share !== undefined
 		},
 
 		albumFileName(): string {
@@ -347,10 +324,6 @@ export default {
 			}
 		},
 
-		selectFilter(filterOption: FilterOption<unknown>) {
-			this.albumFilters[filterOption.filterId].push(filterOption.value)
-		},
-
 		deselectFilter(filterOption: { filterId: string, value: unknown }) {
 			const index = this.albumFilters[filterOption.filterId].indexOf(filterOption.value)
 
@@ -379,6 +352,10 @@ export default {
 	justify-content: space-between;
 	height: 350px;
 	padding: calc(var(--default-grid-baseline) * 4);
+
+	.form-cover {
+		margin-block-end: calc(var(--default-grid-baseline) * 6);
+	}
 
 	.form-title {
 		font-weight: bold;
