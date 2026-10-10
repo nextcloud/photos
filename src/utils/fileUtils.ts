@@ -80,6 +80,23 @@ export function getPreviewUrl(file: Node, size: number): string {
 }
 
 /**
+ * Get the URL of the parent folder of a photo inside the Files app.
+ *
+ * Strips the leading WebDAV root (e.g. "/files/<user>") so the Files app
+ * receives the user-relative path it expects as `?dir=`.
+ *
+ * @param file - The photo or underlying file node
+ */
+export function getOpenInFilesUrl(file: Node | PhotoTarget): string {
+	const filePath = 'davPath' in file
+		? file.davPath
+		: `${file.root}${file.path}`
+	const userRelative = filePath.replace(/^\/files\/[^/]+/, '')
+	const parentDir = userRelative.substring(0, userRelative.lastIndexOf('/'))
+	return generateUrl('/apps/files/{dir}', { dir: parentDir })
+}
+
+/**
  * The bits of a photo the actions need, whichever listing it was read from.
  */
 export type PhotoTarget = {
