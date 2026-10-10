@@ -59,7 +59,7 @@
     "@vue-leaflet/vue-leaflet": "^0.10.1",
     "axios": "^1.12.1",
     "camelcase": "^9.0.0",
-    "debounce": "^2.2.0",
+    "debounce": "^3.0.0",
     "he": "^1.2.0",
     "leaflet": "^1.9.4",
     "path-posix": "^1.0.0",
