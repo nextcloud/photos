@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Public link" : "Publika ligilo",
     "Photos" : "Fotoj",
+    "Clear search" : "Viŝi serĉon",
     "Videos" : "Videaĵoj",
     "People" : "Homoj",
     "Folders" : "Dosierujoj",
