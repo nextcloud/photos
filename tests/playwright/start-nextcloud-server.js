@@ -14,9 +14,9 @@ async function start() {
 	})
 
 	await waitOnNextcloud(ip)
-	// The mounted app is not enabled just because it is mounted, so it is listed
-	// here alongside the apps the tests need next to it.
-	await configureNextcloud(['photos', 'viewer'])
+	// The mounted app is not enabled just because it is mounted. The viewer ships
+	// with the server, so it is not listed.
+	await configureNextcloud(['photos'])
 
 	process.stdout.write('\nApply custom configuration for Playwright tests\n')
 
