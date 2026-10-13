@@ -57,6 +57,7 @@ import type { PhotoTarget } from '../../utils/fileUtils.ts'
 
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
+import { getViewer } from '@nextcloud/viewer'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { computed, onMounted, onUnmounted } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
@@ -67,7 +68,6 @@ import FilesListViewer from '../FilesListViewer.vue'
 import { useFilesSelection } from '../../composables/useFilesSelection.ts'
 import { useCollectionsStore } from '../../store/collections.ts'
 import { useFilesStore } from '../../store/files.ts'
-import { toViewerFileInfo } from '../../utils/fileUtils.ts'
 
 const props = withDefaults(defineProps<{
 	collection?: Collection
@@ -94,10 +94,7 @@ const files = computed(() => filesStore.files)
 const sortedCollectionFileIds = computed(() => props.collectionFileIds.toSorted((fileId1, fileId2) => files.value[fileId1].attributes.timestamp < files.value[fileId2].attributes.timestamp ? -1 : 1))
 
 function openViewer(fileId: number): void {
-	window.OCA.Viewer.open({
-		fileInfo: toViewerFileInfo(files.value[fileId]),
-		list: sortedCollectionFileIds.value.map((fileId) => toViewerFileInfo(files.value[fileId])),
-	})
+	getViewer().open(sortedCollectionFileIds.value.map((fileId) => files.value[fileId]), files.value[fileId], { enableSidebar: false })
 }
 
 function handleFileDeleted({ fileid }: Node): void {

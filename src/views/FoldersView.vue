@@ -97,6 +97,7 @@ import type { PhotoTarget } from '../utils/fileUtils.ts'
 import { defaultRootPath } from '@nextcloud/files/dav'
 import { getUploader } from '@nextcloud/files/upload'
 import { t } from '@nextcloud/l10n'
+import { getViewer } from '@nextcloud/viewer'
 import { isAxiosError } from 'axios'
 import { computed, onBeforeMount, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -116,7 +117,6 @@ import { getFolderContent } from '../services/FolderContent.ts'
 import { logger } from '../services/logger.ts'
 import { useFoldersStore } from '../store/folders.ts'
 import { useUserConfigStore } from '../store/userConfig.ts'
-import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
 // A laid out tile that still knows which folder or photo it stands for.
 type NodeItem = TiledItem & { node: Folder | PhotoFile }
@@ -215,12 +215,9 @@ watch(() => props.showShared, () => {
  *
  * @param fileid - Id of the photo to open
  */
-function openViewer(fileid: number) {
-	window.OCA.Viewer.open({
-		fileInfo: toViewerFileInfo(files.value[fileid]),
-		list: fileList.value.map((file) => toViewerFileInfo(file)),
-		onClose: () => window.OCA?.Files?.Sidebar?.close?.(),
-	})
+async function openViewer(fileid: number) {
+	const session = await getViewer().open(fileList.value, files.value[fileid] as PhotoFile)
+	session.addEventListener('close', () => window.OCA?.Files?.Sidebar?.close?.(), { once: true })
 }
 
 // Folders keep the ids of the files they hold, the listing skips the
@@ -259,7 +256,7 @@ async function fetchFolderContent() {
 	loading.value = true
 
 	// close any potential opened viewer & sidebar
-	window.OCA?.Viewer?.close?.()
+	getViewer().close()
 	window.OCA?.Files?.Sidebar?.close?.()
 
 	// if we don't already have some cached data let's show a loader

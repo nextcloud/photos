@@ -33,6 +33,7 @@
 import type { Tag } from '../store/systemtags.ts'
 
 import { t } from '@nextcloud/l10n'
+import { getViewer } from '@nextcloud/viewer'
 import { computed, onBeforeMount, ref } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
@@ -62,7 +63,7 @@ const popularTags = computed<Tag[]>(() => Object.keys(tagsNames.value)
 
 async function fetchRootContent(): Promise<void> {
 	// close any potential opened viewer
-	window.OCA.Viewer.close()
+	getViewer().close()
 
 	error.value = null
 

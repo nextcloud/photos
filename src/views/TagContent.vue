@@ -52,6 +52,7 @@
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { translatePlural as n, translate as t } from '@nextcloud/l10n'
+import { getViewer } from '@nextcloud/viewer'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { computed, onBeforeMount, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -67,7 +68,6 @@ import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { logger } from '../services/logger.ts'
 import { useFilesStore } from '../store/files.ts'
 import { useSystemTagsStore } from '../store/systemtags.ts'
-import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
 const props = withDefaults(defineProps<{
 	path?: string
@@ -113,7 +113,7 @@ function onPhotoDeleted(photo: PhotoTarget): void {
 
 async function fetchContent(): Promise<void> {
 	// close any potential opened viewer
-	window.OCA.Viewer.close()
+	getViewer().close()
 
 	loading.value = true
 	error.value = null
@@ -137,10 +137,7 @@ async function fetchContent(): Promise<void> {
 }
 
 function openViewer(fileId: number): void {
-	window.OCA.Viewer.open({
-		fileInfo: toViewerFileInfo(files.value[fileId]),
-		list: fileIds.value.map((fileId) => toViewerFileInfo(files.value[fileId])),
-	})
+	getViewer().open(fileIds.value.map((fileId) => files.value[fileId]), files.value[fileId])
 }
 
 onBeforeMount(() => {

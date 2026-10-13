@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 /// <reference types="@nextcloud/typings" />
-import type { ViewerFileInfo } from './utils/fileUtils.ts'
 
 declare global {
 	const OC: Nextcloud.v32.OC & {
@@ -24,10 +23,6 @@ declare global {
 					registerTab(tab: unknown): void
 					Tab: unknown
 				}
-			}
-			Viewer: {
-				open: ({ fileInfo, list, onClose, startSlideshow }: { fileInfo: ViewerFileInfo, list: ViewerFileInfo[], onClose?: () => void, startSlideshow?: boolean }) => void
-				close: () => void
 			}
 		}
 		OCP?: {
