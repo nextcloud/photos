@@ -71,11 +71,14 @@
 	</div>
 </template>
 
-<script lang='ts'>
-import { translate, translatePlural } from '@nextcloud/l10n'
+<script setup lang="ts">
+import type { Collection } from '../services/collectionFetcher.ts'
+
+import { n, t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { useIsSmallMobile } from '@nextcloud/vue/composables/useIsMobile'
-import { defineComponent } from 'vue'
+import { computed, onBeforeMount, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcModal from '@nextcloud/vue/components/NcModal'
@@ -85,74 +88,40 @@ import AlbumForm from '../components/Albums/AlbumForm.vue'
 import CollectionCover from '../components/Collection/CollectionCover.vue'
 import CollectionsList from '../components/Collection/CollectionsList.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
-import { albumsExtraProps, albumsPrefix } from '../store/albums.js'
-import { useAlbumsStore } from '../store/albums.ts'
+import { useFetchCollections } from '../composables/useFetchCollections.ts'
+import { albumsExtraProps, albumsPrefix, useAlbumsStore } from '../store/albums.ts'
 
-export default defineComponent({
-	name: 'AlbumsView',
-	components: {
-		Plus,
-		ImageMultipleOutline,
-		NcModal,
-		NcButton,
-		NcEmptyContent,
-		CollectionsList,
-		CollectionCover,
-		HeaderNavigation,
-		AlbumForm,
-	},
+const router = useRouter()
+const isMobile = useIsSmallMobile()
+const albumsStore = useAlbumsStore()
+const { fetchCollections, errorFetchingCollections, loadingCollections } = useFetchCollections()
 
-	mixins: [FetchCollectionsMixin],
+const showAlbumCreationForm = ref(false)
 
-	setup() {
-		const isMobile = useIsSmallMobile()
-		return {
-			isMobile,
-			albumsStore: useAlbumsStore(),
-		}
-	},
+const albums = computed(() => albumsStore.albums)
 
-	data() {
-		return {
-			showAlbumCreationForm: false,
-		}
-	},
+function coverUrl(lastPhoto: number): string {
+	if (lastPhoto === -1) {
+		return ''
+	}
 
-	computed: {
-		albums() {
-			return this.albumsStore.albums
-		},
-	},
+	return generateUrl(`/apps/photos/api/v1/preview/${lastPhoto}?x=${512}&y=${512}`)
+}
 
-	async beforeMount() {
-		this.fetchAlbums()
-	},
+function fetchAlbums() {
+	fetchCollections(
+		albumsPrefix,
+		albumsExtraProps,
+	)
+}
 
-	methods: {
-		coverUrl(lastPhoto: number): string {
-			if (lastPhoto === -1) {
-				return ''
-			}
+function handleAlbumCreated({ album }: { album: Collection }) {
+	showAlbumCreationForm.value = false
+	router.push(`/albums/${album.basename}`)
+}
 
-			return generateUrl(`/apps/photos/api/v1/preview/${lastPhoto}?x=${512}&y=${512}`)
-		},
-
-		fetchAlbums() {
-			this.fetchCollections(
-				albumsPrefix,
-				albumsExtraProps,
-			)
-		},
-
-		handleAlbumCreated({ album }) {
-			this.showAlbumCreationForm = false
-			this.$router.push(`/albums/${album.basename}`)
-		},
-
-		t: translate,
-		n: translatePlural,
-	},
+onBeforeMount(() => {
+	fetchAlbums()
 })
 </script>
 

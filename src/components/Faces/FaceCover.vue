@@ -7,7 +7,6 @@
 	<div class="face-cover" :class="[small && 'face-cover--small']" @click="$emit('click')">
 		<div class="face-cover__crop-container">
 			<img
-				ref="image"
 				class="face-cover__image"
 				:src="coverUrl"
 				:style="coverDimensions">
@@ -25,92 +24,50 @@
 	</div>
 </template>
 
-<script lang='ts'>
+<script setup lang="ts">
 import type { Collection } from '../../services/collectionFetcher.js'
 
-import { translatePlural as n } from '@nextcloud/l10n'
+import { n } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
-import FaceCoverMixin from '../../mixins/FaceCoverMixin.js'
-import FetchFacesMixin from '../../mixins/FetchFacesMixin.js'
+import { computed } from 'vue'
+import { useFaceCover } from '../../composables/useFaceCover.ts'
+import { useFetchFaces } from '../../composables/useFetchFaces.ts'
 import { useFacesStore } from '../../store/faces.ts'
-import { useFilesStore } from '../../store/files.ts'
 
-export default {
-	name: 'FaceCover',
+const props = withDefaults(defineProps<{
+	baseName: string
+	small?: boolean
+}>(), {
+	small: false,
+})
 
-	mixins: [
-		FetchFacesMixin,
-		FaceCoverMixin,
-	],
+defineEmits<{ click: [] }>()
 
-	props: {
-		baseName: {
-			type: String,
-			required: true,
-		},
+const facesStore = useFacesStore()
+useFetchFaces()
+const { getFaceCover, getCoverStyle } = useFaceCover()
 
-		small: {
-			type: Boolean,
-			default: false,
-		},
-	},
+const face = computed<Collection>(() => facesStore.faces[props.baseName])
 
-	emits: ['click'],
+const cover = computed(() => getFaceCover(face.value.basename))
 
-	setup() {
-		return { facesStore: useFacesStore(), filesStore: useFilesStore() }
-	},
+const coverUrl = computed<string>(() => {
+	if (!cover.value) {
+		return ''
+	}
 
-	data() {
-		return {
-			observer: null,
-		}
-	},
+	return generateUrl(`/apps/photos/api/v1/preview/${cover.value.fileid}?x=${512}&y=${512}`)
+})
 
-	computed: {
-		files() {
-			return this.filesStore.files
-		},
+const coverDimensions = computed(() => {
+	if (!cover.value) {
+		return {}
+	}
 
-		faces() {
-			return this.facesStore.faces
-		},
-
-		facesFiles() {
-			return this.facesStore.facesFiles
-		},
-
-		face(): Collection {
-			return this.faces[this.baseName]
-		},
-
-		coverUrl(): string {
-			if (!this.cover) {
-				return ''
-			}
-
-			return generateUrl(`/apps/photos/api/v1/preview/${this.cover.fileid}?x=${512}&y=${512}`)
-		},
-
-		cover() {
-			return this.getFaceCover(this.face.basename)
-		},
-
-		coverDimensions() {
-			if (!this.cover) {
-				return {}
-			}
-
-			return this.getCoverStyle(this.face.basename)
-		},
-	},
-
-	methods: {
-		n,
-	},
-}
+	return getCoverStyle(face.value.basename)
+})
 </script>
 
 <style lang="scss" scoped>
-@use '../../mixins/FaceCover.scss';
+@use './FaceCover.scss';
 </style>

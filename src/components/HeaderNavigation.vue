@@ -41,72 +41,51 @@
 	</div>
 </template>
 
-<script lang='ts'>
+<script setup lang="ts">
 import { t } from '@nextcloud/l10n'
+import { computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 
-export default {
-	name: 'HeaderNavigation',
-
-	components: {
-		ArrowLeft,
-		NcButton,
-		NcLoadingIcon,
-	},
-
+defineOptions({
 	inheritAttrs: false,
+})
 
-	props: {
-		loading: {
-			type: Boolean,
-			default: false,
-		},
+const props = withDefaults(defineProps<{
+	loading?: boolean
+	path?: string
+	title: string
+	rootTitle?: string
+}>(), {
+	loading: false,
+	path: '/',
+	rootTitle: t('photos', 'Photos'),
+})
 
-		path: {
-			type: String,
-			default: '/',
-		},
+const emit = defineEmits<{
+	refresh: []
+}>()
 
-		title: {
-			type: String,
-			required: true,
-		},
+const route = useRoute()
+const router = useRouter()
 
-		rootTitle: {
-			type: String,
-			default: t('photos', 'Photos'),
-		},
-	},
+const isRoot = computed(() => props.path === '/')
 
-	emits: ['refresh'],
+const name = computed(() => {
+	if (isRoot.value) {
+		return props.rootTitle
+	}
+	return props.title
+})
 
-	computed: {
-		isRoot() {
-			const isRoot = this.path === '/'
-			return isRoot
-		},
+function folderUp() {
+	router.push(route.path.split('/').slice(0, -1).join('/'))
+}
 
-		name() {
-			if (this.isRoot) {
-				return this.rootTitle
-			}
-			return this.title
-		},
-	},
-
-	methods: {
-		folderUp() {
-			this.$router.push(this.$route.path.split('/').slice(0, -1).join('/'))
-		},
-
-		refresh() {
-			this.$emit('refresh')
-		},
-
-		t,
-	},
+function refresh() {
+	emit('refresh')
 }
 </script>
 
