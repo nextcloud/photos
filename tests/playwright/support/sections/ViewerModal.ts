@@ -64,10 +64,12 @@ export class ViewerModal {
 
 	/**
    * Whether the slideshow is held on the file that is on screen, which the
-   * button carries as a class rather than as a state of its own.
+   * icons of its button carry as a class rather than as a state of their own.
+   * While a video plays the viewer holds it, and the button then offers to
+   * start the slideshow rather than to pause it.
    */
 	public async isSlideshowHeld(): Promise<boolean> {
-		const classes = (await this.pauseButton().getAttribute('class')) ?? ''
+		const classes = (await this.dialog().locator('.play-pause-icons').getAttribute('class')) ?? ''
 		return classes.includes('play-pause-icons--paused')
 	}
 

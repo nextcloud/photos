@@ -101,10 +101,9 @@ test.describe('The slideshow of the videos view', () => {
 	test('plays the video rather than showing a still of it', async ({ photosApp }) => {
 		const slideshow = await photosApp.timeline.startSlideshow()
 
+		// The slideshow holds on the video while it plays, so it does not move on
+		// while the player is looked at.
 		await slideshow.waitForPhoto(PLAYABLE_VIDEO, { timeout: SLIDESHOW_TURN })
-		// Held first, so that the slideshow does not move on while the player is
-		// being looked at.
-		await slideshow.pause()
 
 		// The slideshow is the one of the viewer, so a video is played back the way
 		// the viewer plays it instead of being reduced to its still preview.
