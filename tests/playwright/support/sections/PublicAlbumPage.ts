@@ -59,7 +59,7 @@ export class PublicAlbumPage {
 	public async downloadPhoto(name: string): Promise<Download> {
 		await this.grid.getMedia(name).click()
 
-		const viewer = this.page.locator('.viewer')
+		const viewer = this.page.locator('.viewer__modal')
 		await expect(viewer).toBeVisible()
 
 		await viewer.getByRole('button', { name: 'Actions' }).click()
