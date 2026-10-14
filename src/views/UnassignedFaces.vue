@@ -105,6 +105,7 @@
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { n, t } from '@nextcloud/l10n'
+import { getViewer } from '@nextcloud/viewer'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
@@ -127,7 +128,6 @@ import { downloadFiles } from '../services/downloadFiles.ts'
 import { logger } from '../services/logger.ts'
 import { useFacesStore } from '../store/faces.ts'
 import { useFilesStore } from '../store/files.ts'
-import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
 const router = useRouter()
 const facesStore = useFacesStore()
@@ -154,10 +154,7 @@ function onPhotoDeleted(photo: PhotoTarget): void {
 }
 
 function openViewer(fileId: number): void {
-	window.OCA.Viewer.open({
-		fileInfo: toViewerFileInfo(files.value[fileId]),
-		list: faceFileIds.value.map((fileId) => toViewerFileInfo(files.value[fileId])),
-	})
+	getViewer().open(faceFileIds.value.map((fileId) => files.value[fileId]), files.value[fileId], { enableSidebar: false })
 }
 
 async function handleMove(faceName: string, fileIds: string[]): Promise<void> {

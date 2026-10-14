@@ -1,0 +1,12 @@
+SPDX-License-Identifier: BSD-3-Clause
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: David Myers <hello@davidmyers.dev>
+SPDX-FileCopyrightText: PhonicScore
+
+This file is generated from multiple sources. Included packages:
+- opensheetmusicdisplay
+	- version: 2.2.1
+	- license: BSD-3-Clause
+- vite-plugin-node-polyfills
+	- version: 0.28.0
+	- license: MIT

@@ -18,7 +18,7 @@ export class ViewerModal {
 	 * app, which is a dialog of its own.
 	 */
 	public dialog(): Locator {
-		return this.page.locator('.viewer')
+		return this.page.locator('.viewer__modal')
 	}
 
 	/**
@@ -57,17 +57,19 @@ export class ViewerModal {
 		return this.dialog().getByRole('button', { name: 'Start slideshow' })
 	}
 
-	/** The player of the video on screen, if the file on screen is one. */
+	/** The player of the video on screen, if the file on screen is one. Only that file is rendered. */
 	public video(): Locator {
-		return this.dialog().locator('.viewer__file--active video')
+		return this.dialog().locator('video')
 	}
 
 	/**
    * Whether the slideshow is held on the file that is on screen, which the
-   * button carries as a class rather than as a state of its own.
+   * icons of its button carry as a class rather than as a state of their own.
+   * While a video plays the viewer holds it, and the button then offers to
+   * start the slideshow rather than to pause it.
    */
 	public async isSlideshowHeld(): Promise<boolean> {
-		const classes = (await this.pauseButton().getAttribute('class')) ?? ''
+		const classes = (await this.dialog().locator('.play-pause-icons').getAttribute('class')) ?? ''
 		return classes.includes('play-pause-icons--paused')
 	}
 

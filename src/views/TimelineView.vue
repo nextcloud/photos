@@ -237,6 +237,7 @@ import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
+import { getViewer } from '@nextcloud/viewer'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { storeToRefs } from 'pinia'
 import { computed, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
@@ -276,7 +277,6 @@ import { useFilesStore } from '../store/files.ts'
 import { useFilterStore } from '../store/filters.ts'
 import { configChangedEvent } from '../store/userConfig.ts'
 import { formatMonth, formatYear } from '../utils/dateUtils.ts'
-import { toViewerFileInfo } from '../utils/fileUtils.ts'
 
 const props = withDefaults(defineProps<{
 	onlyFavorites?: boolean
@@ -392,21 +392,16 @@ function openViewer(fileId: number) {
 	const fileIds = burstStacks.value[fileId]?.memberIds
 		?? Object.values(fileIdsByMonth.value).flat()
 
-	window.OCA.Viewer.open({
-		fileInfo: toViewerFileInfo(files.value[fileId]),
-		list: fileIds
+	getViewer().open(
+		fileIds
 			.map((id) => files.value[id])
-			.filter((file) => file !== undefined)
-			.map(toViewerFileInfo),
-	})
+			.filter((file) => file !== undefined),
+		files.value[fileId],
+	)
 }
 
 function startSlideshow() {
-	window.OCA.Viewer.open({
-		fileInfo: toViewerFileInfo(timelinePhotos.value[0]),
-		list: timelinePhotos.value.map(toViewerFileInfo),
-		startSlideshow: true,
-	})
+	getViewer().open(timelinePhotos.value, timelinePhotos.value[0], { startSlideshow: true })
 }
 
 async function addSelectionToAlbum(album: Album) {

@@ -1,0 +1,7 @@
+SPDX-License-Identifier: Apache-2.0
+SPDX-FileCopyrightText: @videojs/core developers
+
+This file is generated from multiple sources. Included packages:
+- @videojs/core
+	- version: 10.1.0
+	- license: Apache-2.0

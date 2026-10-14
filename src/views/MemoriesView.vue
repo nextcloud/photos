@@ -83,6 +83,7 @@
 import type { Trip, YearRecap } from '../services/memories.ts'
 
 import { n, t } from '@nextcloud/l10n'
+import { getViewer } from '@nextcloud/viewer'
 import { computed, onMounted } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import AnimatedNumber from '../components/AnimatedNumber.vue'
@@ -91,7 +92,7 @@ import HeaderNavigation from '../components/HeaderNavigation.vue'
 import { useLoadedPhotos } from '../composables/useLoadedPhotos.ts'
 import { buildYearRecap, detectTrips } from '../services/memories.ts'
 import { formatDateRange as formatRange } from '../utils/dateUtils.ts'
-import { getPreviewUrl, toViewerFileInfo } from '../utils/fileUtils.ts'
+import { getPreviewUrl } from '../utils/fileUtils.ts'
 
 defineProps<{
 	rootTitle: string
@@ -120,21 +121,14 @@ function startRecap(): void {
 		return
 	}
 
-	window.OCA.Viewer.open({
-		fileInfo: toViewerFileInfo(yearRecap.value.highlights[0]),
-		list: yearRecap.value.highlights.map((photo) => toViewerFileInfo(photo)),
-		startSlideshow: true,
-	})
+	getViewer().open(yearRecap.value.highlights, yearRecap.value.highlights[0], { startSlideshow: true })
 }
 
 /**
  * @param trip - The trip to open in the viewer
  */
 function openTrip(trip: Trip): void {
-	window.OCA.Viewer.open({
-		fileInfo: toViewerFileInfo(trip.cover),
-		list: trip.photos.map((photo) => toViewerFileInfo(photo)),
-	})
+	getViewer().open(trip.photos, trip.cover)
 }
 
 /**
