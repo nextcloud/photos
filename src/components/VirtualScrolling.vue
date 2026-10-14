@@ -22,325 +22,285 @@
 	</div>
 </template>
 
-<script lang='ts'>
-import type { PropType } from 'vue'
+<script setup lang="ts" generic="I extends TiledItem">
+import type { TiledItem, TiledSection, TiledSectionRow } from '../services/TiledLayout.ts'
 
+import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { logger } from '../services/logger.ts'
 
-export type Row = {
-	key: string // Unique key for the row.
-	height: number // The height of the row.
-	sectionKey: string // Unique key for the row.
-}
-
-export type VisibleRow = Row & {
+export type VisibleRow<I extends TiledItem = TiledItem> = TiledSectionRow<I> & {
 	distance: number // The distance from the visible viewport
 }
 
-export type Section = {
-	id: string // Unique key for the section.
-	rows: Row[] // The height of the row.
-	height: number // Height of the section, excluding the header.
+export type VisibleSection<I extends TiledItem = TiledItem> = Omit<TiledSection<I>, 'rows'> & {
+	rows: VisibleRow<I>[] // Rows close enough to the viewport to be rendered.
 }
 
-export type VisibleSection = Section & {
-	rows: VisibleRow[] // The height of the row.
-}
+const props = withDefaults(defineProps<{
+	sections: TiledSection<I>[]
+	containerElement?: HTMLElement | null
+	useWindow?: boolean
+	headerHeight?: number
+	renderDistance?: number
+	bottomBufferRatio?: number
+	scrollToKey?: string
+}>(), {
+	containerElement: null,
+	useWindow: false,
+	headerHeight: 75,
+	renderDistance: 0.5,
+	bottomBufferRatio: 2,
+	scrollToKey: '',
+})
 
-export default {
-	name: 'VirtualScrolling',
+const emit = defineEmits<{
+	needContent: []
+}>()
 
-	props: {
-		sections: {
-			type: Array as PropType<Section[]>,
-			required: true,
-		},
+defineSlots<{
+	default(props: { visibleSections: VisibleSection<I>[] }): unknown
+	loader(): unknown
+}>()
 
-		containerElement: {
-			type: [HTMLElement, null],
-			default: null,
-		},
+const container = useTemplateRef<HTMLDivElement>('container')
+const rowsContainer = useTemplateRef<HTMLDivElement>('rowsContainer')
 
-		useWindow: {
-			type: Boolean,
-			default: false,
-		},
+const scrollPosition = ref(0)
+const containerHeight = ref(0)
+const rowsContainerHeight = ref(0)
+let resizeObserver: ResizeObserver | null = null
+let rowIdToKeyMap: Record<string, string> = {}
+let onScrollHandle: number | null = null
 
-		headerHeight: {
-			type: Number,
-			default: 75,
-		},
+const visibleSections = computed<VisibleSection<I>[]>(() => {
+	logger.debug('[VirtualScrolling] Computing visible section', { sections: props.sections })
 
-		renderDistance: {
-			type: Number,
-			default: 0.5,
-		},
+	// Optimisation: get those computed properties once to not go through vue's internal every time we need them.
+	const containerHeightValue = containerHeight.value
+	const containerTop = scrollPosition.value
+	const containerBottom = containerTop + containerHeightValue
 
-		bottomBufferRatio: {
-			type: Number,
-			default: 2,
-		},
+	let currentRowTop = 0
+	let currentRowBottom = 0
 
-		scrollToKey: {
-			type: String,
-			default: '',
-		},
-	},
+	// Compute whether a row should be included in the DOM (shouldRender)
+	// And how visible the row is.
+	const visibleSections = props.sections
+		.map((section) => {
+			currentRowBottom += props.headerHeight
 
-	emits: ['needContent'],
-
-	data() {
-		return {
-			scrollPosition: 0,
-			containerHeight: 0,
-			rowsContainerHeight: 0,
-			resizeObserver: null as ResizeObserver | null,
-		}
-	},
-
-	computed: {
-		visibleSections(): VisibleSection[] {
-			logger.debug('[VirtualScrolling] Computing visible section', { sections: this.sections })
-
-			// Optimisation: get those computed properties once to not go through vue's internal every time we need them.
-			const containerHeight = this.containerHeight
-			const containerTop = this.scrollPosition
-			const containerBottom = containerTop + containerHeight
-
-			let currentRowTop = 0
-			let currentRowBottom = 0
-
-			// Compute whether a row should be included in the DOM (shouldRender)
-			// And how visible the row is.
-			const visibleSections = this.sections
-				.map((section) => {
-					currentRowBottom += this.headerHeight
-
-					return {
-						...section,
-						rows: section.rows.reduce((visibleRows, row) => {
-							currentRowTop = currentRowBottom
-							currentRowBottom += row.height
-
-							let distance = 0
-
-							if (currentRowBottom < containerTop) {
-								distance = (containerTop - currentRowBottom) / containerHeight
-							} else if (currentRowTop > containerBottom) {
-								distance = (currentRowTop - containerBottom) / containerHeight
-							}
-
-							if (distance > this.renderDistance) {
-								return visibleRows
-							}
-
-							return [
-								...visibleRows,
-								{
-									...row,
-									distance,
-								},
-							]
-						}, [] as VisibleRow[]),
-					}
-				})
-				.filter((section) => section.rows.length > 0)
-
-			// To allow vue to recycle the DOM elements instead of adding and deleting new ones,
-			// we assign a random key to each items. When a item removed, we recycle its key for new items,
-			// so vue can replace the content of removed DOM elements with the content of new items, but keep the other DOM elements untouched.
-			const visibleItems = visibleSections
-				.flatMap(({ rows }) => rows)
-				.flatMap(({ items }) => items)
-
-			visibleItems.forEach((item) => (item.key = this.rowIdToKeyMap[item.id]))
-
-			const usedTokens = visibleItems
-				.map(({ key }) => key)
-				.filter((key) => key !== undefined)
-
-			const unusedTokens = Object.values(this.rowIdToKeyMap).filter((key) => !usedTokens.includes(key))
-
-			visibleItems
-				.filter(({ key }) => key === undefined)
-				.forEach((item) => (item.key = unusedTokens.pop() ?? Math.random().toString(36).substr(2)))
-
-			// this.rowIdToKeyMap is created in the beforeCreate hook, so value changes are not tracked.
-			// Therefore, we wont trigger the computation of visibleSections again if we alter the value of this.rowIdToKeyMap.
-			// eslint-disable-next-line vue/no-side-effects-in-computed-properties
-			this.rowIdToKeyMap = visibleItems.reduce((finalMapping, { id, key }) => ({ ...finalMapping, [`${id}`]: key }), {})
-
-			return visibleSections
-		},
-
-		/**
-		 * Total height of all the rows + some room for the loader.
-		 */
-		totalHeight(): number {
-			const loaderHeight = 200
-
-			return this.sections
-				.map((section) => this.headerHeight + section.height)
-				.reduce((totalHeight, sectionHeight) => totalHeight + sectionHeight, 0) + loaderHeight
-		},
-
-		paddingTop(): number {
-			if (this.visibleSections.length === 0) {
-				return 0
-			}
-
-			let paddingTop = 0
-
-			for (const section of this.sections) {
-				if (section.key !== this.visibleSections[0].rows[0].sectionKey) {
-					paddingTop += this.headerHeight + section.height
-					continue
-				}
-
-				for (const row of section.rows) {
-					if (row.key === this.visibleSections[0].rows[0].key) {
-						return paddingTop
-					}
-
-					paddingTop += row.height
-				}
-
-				paddingTop += this.headerHeight
-			}
-
-			return paddingTop
-		},
-
-		/**
-		 * padding-top is used to replace not included item in the container.
-		 */
-		rowsContainerStyle(): { height: string, paddingTop: string } {
 			return {
-				height: `${this.totalHeight}px`,
-				paddingTop: `${this.paddingTop}px`,
-			}
-		},
+				...section,
+				rows: section.rows.reduce((visibleRows, row) => {
+					currentRowTop = currentRowBottom
+					currentRowBottom += row.height
 
-		/**
-		 * Whether the user is near the bottom.
-		 * If true, then the need-content event will be emitted.
-		 */
-		isNearBottom(): boolean {
-			const buffer = this.containerHeight * this.bottomBufferRatio
-			return this.scrollPosition + this.containerHeight >= this.totalHeight - buffer
-		},
+					let distance = 0
 
-		container(): HTMLElement | Window {
-			logger.debug('[VirtualScrolling] Computing container')
-			if (this.containerElement !== null) {
-				return this.containerElement
-			} else if (this.useWindow) {
-				return window
-			} else {
-				return this.$refs.container as HTMLElement
-			}
-		},
-	},
+					if (currentRowBottom < containerTop) {
+						distance = (containerTop - currentRowBottom) / containerHeightValue
+					} else if (currentRowTop > containerBottom) {
+						distance = (currentRowTop - containerBottom) / containerHeightValue
+					}
 
-	watch: {
-		isNearBottom(value) {
-			logger.debug('[VirtualScrolling] isNearBottom changed', { value })
-			if (value) {
-				this.$emit('needContent')
-			}
-		},
+					if (distance > props.renderDistance) {
+						return visibleRows
+					}
 
-		visibleSections() {
-			// Re-emit need-content when rows is updated and isNearBottom is still true.
-			// If the height of added rows is under `bottomBufferRatio`, `isNearBottom` will still be true so we need more content.
-			if (this.isNearBottom) {
-				this.$emit('needContent')
-			}
-		},
-
-		scrollToKey(key) {
-			if (!this.sections.some((section) => section.key === key)) {
-				return
-			}
-
-			let currentRowTopDistanceFromTop = 0
-
-			for (const section of this.sections) {
-				if (section.key !== key) {
-					currentRowTopDistanceFromTop += this.headerHeight + section.height
-					continue
-				}
-
-				break
-			}
-
-			// Section offsets are relative to the rows container, which is not
-			// necessarily at the top of the scroll container - the timeline
-			// renders its own header above the grid.
-			const rowsContainer = this.$refs.rowsContainer as HTMLElement
-			const containerTop = this.useWindow ? 0 : (this.container as HTMLElement).getBoundingClientRect().top
-			const scrollTop = this.useWindow ? window.scrollY : (this.container as HTMLElement).scrollTop
-			const top = scrollTop + rowsContainer.getBoundingClientRect().top - containerTop + currentRowTopDistanceFromTop
-
-			logger.debug('[VirtualScrolling] Scrolling to', { top })
-			this.container.scrollTo({ top, behavior: 'smooth' })
-		},
-	},
-
-	beforeCreate() {
-		this.rowIdToKeyMap = {}
-	},
-
-	mounted() {
-		this.resizeObserver = new ResizeObserver((entries) => {
-			for (const entry of entries) {
-				const cr = entry.contentRect
-				if (entry.target === this.container) {
-					this.containerHeight = cr.height
-				}
-				if (entry.target.classList.contains('vs-rows-container')) {
-					this.rowsContainerHeight = cr.height
-				}
+					return [
+						...visibleRows,
+						{
+							...row,
+							distance,
+						},
+					]
+				}, [] as VisibleRow<I>[]),
 			}
 		})
+		.filter((section) => section.rows.length > 0)
 
-		if (this.useWindow) {
-			window.addEventListener('resize', this.updateContainerSize, { passive: true })
-			this.containerHeight = window.innerHeight
+	// To allow vue to recycle the DOM elements instead of adding and deleting new ones,
+	// we assign a random key to each items. When a item removed, we recycle its key for new items,
+	// so vue can replace the content of removed DOM elements with the content of new items, but keep the other DOM elements untouched.
+	const visibleItems = visibleSections
+		.flatMap(({ rows }) => rows)
+		.flatMap(({ items }) => items)
+
+	visibleItems.forEach((item) => (item.key = rowIdToKeyMap[item.id]))
+
+	const usedTokens = visibleItems
+		.map(({ key }) => key)
+		.filter((key) => key !== undefined)
+
+	const unusedTokens = Object.values(rowIdToKeyMap).filter((key) => !usedTokens.includes(key))
+
+	visibleItems
+		.filter(({ key }) => key === undefined)
+		.forEach((item) => (item.key = unusedTokens.pop() ?? Math.random().toString(36).substr(2)))
+
+	// rowIdToKeyMap is a plain variable, so value changes are not tracked.
+	// Therefore, we wont trigger the computation of visibleSections again if we alter the value of rowIdToKeyMap.
+	rowIdToKeyMap = visibleItems.reduce((finalMapping, { id, key }) => ({ ...finalMapping, [`${id}`]: key }), {})
+
+	return visibleSections
+})
+
+/**
+ * Total height of all the rows + some room for the loader.
+ */
+const totalHeight = computed<number>(() => {
+	const loaderHeight = 200
+
+	return props.sections
+		.map((section) => props.headerHeight + section.height)
+		.reduce((totalHeight, sectionHeight) => totalHeight + sectionHeight, 0) + loaderHeight
+})
+
+const paddingTop = computed<number>(() => {
+	if (visibleSections.value.length === 0) {
+		return 0
+	}
+
+	let paddingTop = 0
+
+	for (const section of props.sections) {
+		if (section.key !== visibleSections.value[0].rows[0].sectionKey) {
+			paddingTop += props.headerHeight + section.height
+			continue
+		}
+
+		for (const row of section.rows) {
+			if (row.key === visibleSections.value[0].rows[0].key) {
+				return paddingTop
+			}
+
+			paddingTop += row.height
+		}
+
+		paddingTop += props.headerHeight
+	}
+
+	return paddingTop
+})
+
+/**
+ * padding-top is used to replace not included item in the container.
+ */
+const rowsContainerStyle = computed<{ height: string, paddingTop: string }>(() => ({
+	height: `${totalHeight.value}px`,
+	paddingTop: `${paddingTop.value}px`,
+}))
+
+/**
+ * Whether the user is near the bottom.
+ * If true, then the need-content event will be emitted.
+ */
+const isNearBottom = computed<boolean>(() => {
+	const buffer = containerHeight.value * props.bottomBufferRatio
+	return scrollPosition.value + containerHeight.value >= totalHeight.value - buffer
+})
+
+const scrollContainer = computed<HTMLElement | Window>(() => {
+	logger.debug('[VirtualScrolling] Computing container')
+	if (props.containerElement !== null) {
+		return props.containerElement
+	} else if (props.useWindow) {
+		return window
+	} else {
+		return container.value as HTMLElement
+	}
+})
+
+watch(isNearBottom, (value) => {
+	logger.debug('[VirtualScrolling] isNearBottom changed', { value })
+	if (value) {
+		emit('needContent')
+	}
+})
+
+watch(visibleSections, () => {
+	// Re-emit need-content when rows is updated and isNearBottom is still true.
+	// If the height of added rows is under `bottomBufferRatio`, `isNearBottom` will still be true so we need more content.
+	if (isNearBottom.value) {
+		emit('needContent')
+	}
+})
+
+watch(() => props.scrollToKey, (key) => {
+	if (!props.sections.some((section) => section.key === key)) {
+		return
+	}
+
+	let currentRowTopDistanceFromTop = 0
+
+	for (const section of props.sections) {
+		if (section.key !== key) {
+			currentRowTopDistanceFromTop += props.headerHeight + section.height
+			continue
+		}
+
+		break
+	}
+
+	// Section offsets are relative to the rows container, which is not
+	// necessarily at the top of the scroll container - the timeline
+	// renders its own header above the grid.
+	const rowsContainerElement = rowsContainer.value as HTMLElement
+	const containerTop = props.useWindow ? 0 : (scrollContainer.value as HTMLElement).getBoundingClientRect().top
+	const scrollTop = props.useWindow ? window.scrollY : (scrollContainer.value as HTMLElement).scrollTop
+	const top = scrollTop + rowsContainerElement.getBoundingClientRect().top - containerTop + currentRowTopDistanceFromTop
+
+	logger.debug('[VirtualScrolling] Scrolling to', { top })
+	scrollContainer.value.scrollTo({ top, behavior: 'smooth' })
+})
+
+function updateScrollPosition() {
+	onScrollHandle ??= requestAnimationFrame(() => {
+		onScrollHandle = null
+		if (props.useWindow) {
+			scrollPosition.value = (scrollContainer.value as Window).scrollY
 		} else {
-			this.resizeObserver.observe(this.container as Element)
+			scrollPosition.value = (scrollContainer.value as HTMLElement).scrollTop
 		}
-
-		this.resizeObserver.observe(this.$refs.rowsContainer as Element)
-		this.container?.addEventListener('scroll', this.updateScrollPosition, { passive: true })
-	},
-
-	beforeUnmount() {
-		if (this.useWindow) {
-			window.removeEventListener('resize', this.updateContainerSize)
-		}
-
-		this.resizeObserver?.disconnect()
-		this.container?.removeEventListener('scroll', this.updateScrollPosition)
-	},
-
-	methods: {
-		updateScrollPosition() {
-			this._onScrollHandle ??= requestAnimationFrame(() => {
-				this._onScrollHandle = null
-				if (this.useWindow) {
-					this.scrollPosition = (this.container as Window).scrollY
-				} else {
-					this.scrollPosition = (this.container as HTMLElement).scrollTop
-				}
-			})
-		},
-
-		updateContainerSize() {
-			this.containerHeight = window.innerHeight
-		},
-	},
+	})
 }
+
+function updateContainerSize() {
+	containerHeight.value = window.innerHeight
+}
+
+onMounted(() => {
+	resizeObserver = new ResizeObserver((entries) => {
+		for (const entry of entries) {
+			const cr = entry.contentRect
+			if (entry.target === scrollContainer.value) {
+				containerHeight.value = cr.height
+			}
+			if (entry.target.classList.contains('vs-rows-container')) {
+				rowsContainerHeight.value = cr.height
+			}
+		}
+	})
+
+	if (props.useWindow) {
+		window.addEventListener('resize', updateContainerSize, { passive: true })
+		containerHeight.value = window.innerHeight
+	} else {
+		resizeObserver.observe(scrollContainer.value as Element)
+	}
+
+	resizeObserver.observe(rowsContainer.value as Element)
+	scrollContainer.value?.addEventListener('scroll', updateScrollPosition, { passive: true })
+})
+
+onBeforeUnmount(() => {
+	if (props.useWindow) {
+		window.removeEventListener('resize', updateContainerSize)
+	}
+
+	resizeObserver?.disconnect()
+	scrollContainer.value?.removeEventListener('scroll', updateScrollPosition)
+})
 </script>
 
 <style scoped lang="scss">

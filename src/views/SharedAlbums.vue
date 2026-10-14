@@ -50,73 +50,50 @@
 	</CollectionsList>
 </template>
 
-<script lang='ts'>
-import type { Album } from '../store/albums.js'
+<script setup lang="ts">
+import type { Album } from '../store/albums.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
-import { translate, translatePlural } from '@nextcloud/l10n'
+import { n, t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
+import { computed, onBeforeMount } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import CollectionCover from '../components/Collection/CollectionCover.vue'
 import CollectionsList from '../components/Collection/CollectionsList.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
-import FetchCollectionsMixin from '../mixins/FetchCollectionsMixin.js'
+import { useFetchCollections } from '../composables/useFetchCollections.ts'
 import { albumsExtraProps } from '../store/albums.ts'
 import { useSharedAlbumsStore } from '../store/sharedAlbums.ts'
 
-export default {
-	name: 'SharedAlbums',
-	components: {
-		ImageMultipleOutline,
-		NcEmptyContent,
-		CollectionsList,
-		CollectionCover,
-		HeaderNavigation,
-		NcUserBubble,
-	},
+const sharedAlbumsStore = useSharedAlbumsStore()
+const { fetchCollections, errorFetchingCollections, loadingCollections } = useFetchCollections()
 
-	mixins: [FetchCollectionsMixin],
+const sharedAlbums = computed<Record<string, Album>>(() => sharedAlbumsStore.sharedAlbums)
 
-	setup() {
-		return { sharedAlbumsStore: useSharedAlbumsStore() }
-	},
+function coverUrl(lastPhoto: number): string {
+	if (lastPhoto === -1) {
+		return ''
+	}
 
-	computed: {
-		sharedAlbums(): Record<string, Album> {
-			return this.sharedAlbumsStore.sharedAlbums
-		},
-	},
-
-	async beforeMount() {
-		this.fetchSharedAlbums()
-	},
-
-	methods: {
-		coverUrl(lastPhoto: number): string {
-			if (lastPhoto === -1) {
-				return ''
-			}
-
-			return generateUrl(`/apps/photos/api/v1/preview/${lastPhoto}?x=${512}&y=${512}`)
-		},
-
-		albumOriginalName(album: Album): string {
-			return album.basename.replace(new RegExp(`\\(${album.attributes.collaborators[0].id}\\)$`), '')
-		},
-
-		fetchSharedAlbums() {
-			this.fetchCollections(
-				`/photos/${getCurrentUser()?.uid}/sharedalbums`,
-				albumsExtraProps,
-			)
-		},
-
-		t: translate,
-		n: translatePlural,
-	},
+	return generateUrl(`/apps/photos/api/v1/preview/${lastPhoto}?x=${512}&y=${512}`)
 }
+
+function albumOriginalName(album: Album): string {
+	return album.basename.replace(new RegExp(`\\(${album.attributes.collaborators[0].id}\\)$`), '')
+}
+
+function fetchSharedAlbums() {
+	fetchCollections(
+		`/photos/${getCurrentUser()?.uid}/sharedalbums`,
+		albumsExtraProps,
+	)
+}
+
+onBeforeMount(() => {
+	fetchSharedAlbums()
+})
 </script>
 
 <style lang="scss" scoped>

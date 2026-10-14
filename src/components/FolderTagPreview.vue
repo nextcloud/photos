@@ -29,111 +29,75 @@
 	</RouterLink>
 </template>
 
-<script lang='ts'>
+<script setup lang="ts">
 import type { File } from '@nextcloud/files'
-import type { PropType } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
-import { RouterLink } from 'vue-router'
+import { computed, ref } from 'vue'
+import { RouterLink, useRoute } from 'vue-router'
 import FolderOutline from 'vue-material-design-icons/FolderOutline.vue'
 
-export default {
-	name: 'FolderTagPreview',
+const props = withDefaults(defineProps<{
+	name: string
+	/** Path of the folder, relative to the root of the account. */
+	path?: string
+	fileList?: File[]
+}>(), {
+	path: '',
+	fileList: () => [],
+})
 
-	components: {
-		FolderOutline,
-		RouterLink,
-	},
+const route = useRoute()
 
-	props: {
-		name: {
-			type: String,
-			required: true,
-		},
+const failed = ref<number[]>([])
 
-		/** Path of the folder, relative to the root of the account. */
-		path: {
-			type: String,
-			default: '',
-		},
+const ariaLabel = computed(() => t('photos', 'Open the "{name}" folder', { name: props.name }))
 
-		fileList: {
-			type: Array as PropType<File[]>,
-			default: () => [],
-		},
-	},
+/**
+ * Previews list without the failed ones
+ */
+const previewList = computed<File[]>(() => props.fileList
+	.filter((file) => failed.value.indexOf(file.fileid as number) === -1))
 
-	data() {
-		return {
-			failed: [] as number[],
-		}
-	},
+/** The photo the folder is shown under, the last one that has not failed. */
+const cover = computed<File | undefined>(() => previewList.value.at(-1))
 
-	computed: {
-		// folder is empty
-		isEmpty() {
-			return this.previewList.length === 0
-		},
+const previewUrl = computed<string | null>(() => {
+	if (cover.value === undefined) {
+		return null
+	}
 
-		ariaLabel() {
-			return t('photos', 'Open the "{name}" folder', { name: this.name })
-		},
+	// use etag to force cache reload if file changed
+	return generateUrl(`/core/preview?fileId=${cover.value.id}&c=${cover.value.attributes.etag}&x=${250}&y=${250}&forceIcon=0&a=0`)
+})
 
-		/**
-		 * Previews list without the failed ones
-		 */
-		previewList(): File[] {
-			return this.fileList
-				.filter((file) => this.failed.indexOf(file.fileid as number) === -1)
-		},
+/**
+ * We do not want encoded slashes when browsing by folder
+ * so we generate a new valid route object based on the
+ * current named route, get the final url back, decode it
+ * and use it as a direct string.
+ * Which vue-router does not encode afterwards!
+ */
+const toLink = computed<RouteLocationRaw>(() => {
+	// always remove first slash, the router
+	// manage it automatically
+	const regex = /^\/?(.+)/i
+	const path = (regex.exec(props.path) as string[])[1]
 
-		/** The photo the folder is shown under, the last one that has not failed. */
-		cover(): File | undefined {
-			return this.previewList.at(-1)
-		},
+	// keep the current route, so folders and shared folders each stay in theirs
+	return { name: route.name ?? undefined, params: { path } }
+})
 
-		previewUrl(): string | null {
-			if (this.cover === undefined) {
-				return null
-			}
-
-			// use etag to force cache reload if file changed
-			return generateUrl(`/core/preview?fileId=${this.cover.id}&c=${this.cover.attributes.etag}&x=${250}&y=${250}&forceIcon=0&a=0`)
-		},
-
-		/**
-		 * We do not want encoded slashes when browsing by folder
-		 * so we generate a new valid route object based on the
-		 * current named route, get the final url back, decode it
-		 * and use it as a direct string.
-		 * Which vue-router does not encode afterwards!
-		 */
-		toLink(): RouteLocationRaw {
-			// always remove first slash, the router
-			// manage it automatically
-			const regex = /^\/?(.+)/i
-			const path = (regex.exec(this.path) as string[])[1]
-
-			// keep the current route, so folders and shared folders each stay in theirs
-			return { name: this.$route.name ?? undefined, params: { path } }
-		},
-	},
-
-	methods: {
-		/**
-		 * Drop the photo whose preview could not be shown, so that the folder falls
-		 * back to the next one it holds — and to its icon once none is left.
-		 */
-		onPreviewFail(): void {
-			if (this.cover !== undefined) {
-				this.failed.push(this.cover.fileid as number)
-			}
-		},
-
-		t,
-	},
+/**
+ * Drop the photo whose preview could not be shown, so that the folder falls
+ * back to the next one it holds — and to its icon once none is left.
+ */
+function onPreviewFail(): void {
+	if (cover.value !== undefined) {
+		failed.value.push(cover.value.fileid as number)
+	}
 }
 </script>
 
