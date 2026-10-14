@@ -18,7 +18,7 @@ export class ViewerModal {
 	 * app, which is a dialog of its own.
 	 */
 	public dialog(): Locator {
-		return this.page.locator('.viewer')
+		return this.page.locator('.viewer__modal')
 	}
 
 	/**
@@ -57,9 +57,9 @@ export class ViewerModal {
 		return this.dialog().getByRole('button', { name: 'Start slideshow' })
 	}
 
-	/** The player of the video on screen, if the file on screen is one. */
+	/** The player of the video on screen, if the file on screen is one. Only that file is rendered. */
 	public video(): Locator {
-		return this.dialog().locator('.viewer__file--active video')
+		return this.dialog().locator('video')
 	}
 
 	/**
