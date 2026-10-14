@@ -1,0 +1,2 @@
+import{c as s}from"./AllowedMimes-CDLw4ZKR.chunk.mjs";const n=["B","KB","MB","GB","TB","PB"],r=["B","KiB","MiB","GiB","TiB","PiB"];function p(o,B=!1,i=!1,e=!1){i=i&&!e,typeof o=="string"&&(o=Number(o));let t=o>0?Math.floor(Math.log(o)/Math.log(e?1e3:1024)):0;t=Math.min((i?r.length:n.length)-1,t);const h=i?r[t]:n[t];let a=(o/Math.pow(e?1e3:1024,t)).toFixed(1);return B===!0&&t===0?(a!=="0.0"?"< 1 ":"0 ")+(i?r[1]:n[1]):(t<2?a=parseFloat(a).toFixed(0):a=parseFloat(a).toLocaleString(s()),a+" "+h)}export{p as f};
+//# sourceMappingURL=fileSize-Cl4x3sHh.chunk.mjs.map
