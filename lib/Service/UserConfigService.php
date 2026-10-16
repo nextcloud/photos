@@ -11,6 +11,7 @@ namespace OCA\Photos\Service;
 use Exception;
 use OCA\Photos\AppInfo\Application;
 use OCP\Config\IUserConfig;
+use OCP\IAppConfig;
 use OCP\IUserSession;
 
 class UserConfigService {
@@ -23,6 +24,7 @@ class UserConfigService {
 	];
 
 	public function __construct(
+		private readonly IAppConfig $appConfig,
 		private readonly IUserConfig $userConfig,
 		private readonly IUserSession $userSession,
 	) {
@@ -38,7 +40,7 @@ class UserConfigService {
 			throw new Exception('Unknown user config key');
 		}
 
-		$default = self::DEFAULT_CONFIGS[$key];
+		$default = $this->appConfig->getValueString(Application::APP_ID, 'default_' . $key, self::DEFAULT_CONFIGS[$key]);
 		$value = $this->userConfig->getValueString($userId, Application::APP_ID, $key, $default);
 
 		return $value;
