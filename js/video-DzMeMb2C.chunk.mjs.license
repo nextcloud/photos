@@ -15,7 +15,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 8.41.0
 	- license: AGPL-3.0-or-later
 - nanoid
-	- version: 3.3.18
+	- version: 3.3.20
 	- license: MIT
 - photos
 	- version: 6.0.0
