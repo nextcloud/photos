@@ -32,7 +32,6 @@ jobs:
           - 'stable35'
           - 'stable34'
           - 'stable33'
-          - 'stable32'
 
     name: update-nextcloud-ocp-${{ matrix.branches }}
 
