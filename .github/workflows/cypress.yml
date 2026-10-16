@@ -32,8 +32,8 @@ jobs:
   init:
     runs-on: ubuntu-latest
     outputs:
-      nodeVersion: ${{ steps.versions.outputs.nodeVersion }}
-      npmVersion: ${{ steps.versions.outputs.npmVersion }}
+      nodeVersion: ${{ steps.versions.outputs.node-version }}
+      npmVersion: ${{ steps.versions.outputs.package-manager-version }}
 
     env:
       PUPPETEER_SKIP_DOWNLOAD: true
@@ -63,19 +63,16 @@ jobs:
           composer-options: '--no-dev'
 
       - name: Read package.json node and npm engines version
-        uses: skjnldsv/read-package-engines-version-actions@06d6baf7d8f41934ab630e97d9e6c0bc9c9ac5e4 # v3
+        uses: nextcloud-libraries/parse-package-engines-action@122ae05d4257008180a514e1ddeb0c1b9d094bdd # v0.1.0
         id: versions
-        with:
-          fallbackNode: '^24'
-          fallbackNpm: '^11.3'
 
-      - name: Set up node ${{ steps.versions.outputs.nodeVersion }}
+      - name: Set up node ${{ steps.versions.outputs.node-version }}
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: ${{ steps.versions.outputs.nodeVersion }}
+          node-version: ${{ steps.versions.outputs.node-version }}
 
-      - name: Set up npm ${{ steps.versions.outputs.npmVersion }}
-        run: npm i -g 'npm@${{ steps.versions.outputs.npmVersion }}'
+      - name: Set up npm ${{ steps.versions.outputs.package-manager-version }}
+        run: npm i -g 'npm@${{ steps.versions.outputs.package-manager-version }}'
 
       - name: Install node dependencies & build app
         run: |
@@ -118,7 +115,7 @@ jobs:
         run: npm i -g 'npm@${{ needs.init.outputs.npmVersion }}'
 
       - name: Run ${{ matrix.containers == 'component' && 'component' || 'E2E' }} cypress tests
-        uses: cypress-io/github-action@09090944bd8aaa2a517cefb6e38bf1aae336b42b # v7.4.3
+        uses: cypress-io/github-action@c541a95ea92d9239347a2355f2e895cd4b3f8060 # v7.4.6
         with:
           record: ${{ secrets.CYPRESS_RECORD_KEY && true }}
           parallel: ${{ secrets.CYPRESS_RECORD_KEY && true }}
