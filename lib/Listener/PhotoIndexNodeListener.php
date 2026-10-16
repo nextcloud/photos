@@ -9,7 +9,11 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Listener;
 
+use OCA\Photos\DB\PhotoPreviewWarmupMapper;
+use OCA\Photos\DB\PhotoTranscodeMapper;
 use OCA\Photos\Service\PhotoIndexService;
+use OCA\Photos\Service\PhotoTranscodeService;
+use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Files\Config\IUserMountCache;
@@ -44,7 +48,11 @@ use Psr\Log\LoggerInterface;
 class PhotoIndexNodeListener implements IEventListener {
 	public function __construct(
 		private readonly PhotoIndexService $indexService,
+		private readonly PhotoTranscodeService $transcodeService,
+		private readonly PhotoTranscodeMapper $transcodeMapper,
+		private readonly PhotoPreviewWarmupMapper $warmupMapper,
 		private readonly IUserMountCache $userMountCache,
+		private readonly ITimeFactory $time,
 		private readonly LoggerInterface $logger,
 	) {
 	}
@@ -89,11 +97,25 @@ class PhotoIndexNodeListener implements IEventListener {
 			if ($owner !== null) {
 				$this->indexService->indexNodeForUser($node, $owner->getUID());
 			}
-			return;
+		} else {
+			foreach ($mounts as $mount) {
+				$this->indexService->indexNodeForUser($node, $mount->getUser()->getUID());
+			}
 		}
-		foreach ($mounts as $mount) {
-			$this->indexService->indexNodeForUser($node, $mount->getUser()->getUID());
+
+		// Queue HEVC / AVI / etc. for HLS transcoding so the hover
+		// preview can autoplay them in browsers that don't support
+		// the source codec. mp4/webm/ogg files skip — `shouldQueue`
+		// already filters them out.
+		if ($this->transcodeService->shouldQueue($node)) {
+			$this->transcodeMapper->markPending($node->getId(), $this->time->getTime());
 		}
+
+		// Queue every photo/video for preview-cache warming so the
+		// first scroll doesn't pay the on-demand `IPreview::getPreview`
+		// cost. Idempotent — `markPending` is a no-op for files that
+		// are already pending / warmed.
+		$this->warmupMapper->markPending($node->getId(), $this->time->getTime());
 	}
 
 	private function onDeleted(Node $node): void {
@@ -101,5 +123,12 @@ class PhotoIndexNodeListener implements IEventListener {
 		// already be partially detached. A no-op delete on a non-photo
 		// is harmless (file_id won't exist in the index).
 		$this->indexService->deleteFile($node->getId());
+		// Wipe any cached transcode segments — drops the row + the
+		// on-disk segments so the cache doesn't outlive the file.
+		$this->transcodeService->deleteForFileId($node->getId());
+		// Drop the warmup queue row. NC's preview cache itself is
+		// cleaned by NC's own NodeDeleted hooks; this just clears
+		// our bookkeeping.
+		$this->warmupMapper->deleteByFileId($node->getId());
 	}
 }

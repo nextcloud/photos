@@ -441,11 +441,19 @@ export default {
 		},
 
 		getContent() {
+			// Pull the raw search term out of the filter store so the
+			// indexed search endpoint can use it directly. The DAV
+			// `extraFilters` path also covers it via nameFilter, so
+			// this is just a fast-path hint — falling back to DAV on
+			// older instances still works.
+			const nameValues = (this.selectedFilters.name ?? []) as string[]
+			const searchQuery = nameValues.join(' ').trim()
 			this.fetchFiles({
 				mimesType: this.mimesType,
 				onThisDay: this.onThisDay,
 				onlyFavorites: this.onlyFavorites,
 				extraFilters: this.filtersQuery,
+				searchQuery,
 			})
 		},
 

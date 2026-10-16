@@ -31,7 +31,9 @@
 			@pointerdown="onTilePointerDown"
 			@pointerup="onTilePointerUp"
 			@pointercancel="cancelLongPress"
-			@pointerleave="cancelLongPress">
+			@pointerleave="cancelLongPress"
+			@mouseenter="schedulePreview"
+			@mouseleave="cancelPreview">
 
 			<!-- image and loading placeholder -->
 			<div class="file__images">
@@ -91,6 +93,31 @@
 						loading="lazy"
 						@load="onLoadLarge"
 						@error="onErrorLarge">
+
+					<!--
+						Hover-autoplay video preview. Mounted only after
+						the cursor has been on a video tile for the
+						preview-delay (~250ms) so a quick swipe across
+						many tiles doesn't fire dozens of media loads.
+						Muted + playsinline + autoplay satisfies the
+						browser autoplay policy without user gesture.
+						Codec gating in `isPreviewableVideo` keeps
+						HEIC/HEVC/etc. on the still-thumbnail path —
+						those need a transcode pipeline we don't have.
+					-->
+					<video
+						v-if="videoPreviewActive"
+						ref="videoPreview"
+						class="file__layer file__layer--video"
+						:src="file.source"
+						muted
+						loop
+						autoplay
+						playsinline
+						preload="metadata"
+						aria-hidden="true"
+						@canplay="onVideoPreviewReady"
+						@error="onVideoPreviewError" />
 				</template>
 			</div>
 		</a>
@@ -199,6 +226,10 @@ export default {
 			// reactivity) and cleared on cancel / release.
 			longPressTimer: null as ReturnType<typeof setTimeout> | null,
 			longPressFired: false,
+			// Hover video preview state.
+			videoPreviewActive: false,
+			videoPreviewTimer: null as ReturnType<typeof setTimeout> | null,
+			videoPreviewError: false,
 		}
 	},
 
@@ -247,6 +278,22 @@ export default {
 		stackCount(): number {
 			return this.stack?.memberIds.length ?? 0
 		},
+
+		// Browser-playable video formats. We can't transcode, so codecs
+		// the browser refuses (HEVC, ProRes, AV1 in older browsers)
+		// stay on the still-thumbnail path. mp4 + webm + ogg cover the
+		// vast majority of files uploaded from desktops and modern
+		// Android. iOS HEVC remains a known gap until we add
+		// transcoding (see PR description).
+		isPreviewableVideo(): boolean {
+			const mime = this.file.mime ?? ''
+			if (!mime.startsWith('video/')) {
+				return false
+			}
+			return mime === 'video/mp4'
+				|| mime === 'video/webm'
+				|| mime === 'video/ogg'
+		},
 	},
 
 	watch: {
@@ -276,6 +323,7 @@ export default {
 			(this.$refs.imgLarge as HTMLImageElement).src = ''
 		}
 		this.cancelLongPress()
+		this.cancelPreview()
 	},
 
 	methods: {
@@ -343,6 +391,60 @@ export default {
 
 		onErrorLarge() {
 			this.errorLarge = true
+		},
+
+		// --- Hover video preview ---
+		// 250ms delay before mounting the <video> so a fast cursor
+		// sweep across the grid doesn't fire dozens of media loads.
+		// Honours `prefers-reduced-motion` (no autoplay) and skips
+		// codecs the browser can't play (still-thumbnail fallback).
+		schedulePreview() {
+			if (!this.isPreviewableVideo || this.videoPreviewError) {
+				return
+			}
+			if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+				return
+			}
+			this.cancelPreview()
+			this.videoPreviewTimer = setTimeout(() => {
+				this.videoPreviewActive = true
+				this.videoPreviewTimer = null
+			}, 250)
+		},
+
+		cancelPreview() {
+			if (this.videoPreviewTimer !== null) {
+				clearTimeout(this.videoPreviewTimer)
+				this.videoPreviewTimer = null
+			}
+			if (this.videoPreviewActive) {
+				// Pause + clear src so the browser releases the buffer
+				// instead of keeping the (potentially big) video in
+				// memory after hover-out.
+				const video = this.$refs.videoPreview as HTMLVideoElement | undefined
+				if (video !== undefined) {
+					video.pause()
+					video.removeAttribute('src')
+					video.load()
+				}
+				this.videoPreviewActive = false
+			}
+		},
+
+		onVideoPreviewReady() {
+			// canplay fired — nothing else to do, the element is
+			// already autoplaying. Hook is left in place so future
+			// affordances (e.g. fade-in, loading indicator) have a
+			// natural attachment point.
+		},
+
+		onVideoPreviewError() {
+			// Codec error / 404 / network drop — back off to the
+			// still thumbnail and remember not to retry on the next
+			// hover (else we'd churn loads forever for a broken
+			// file).
+			this.videoPreviewError = true
+			this.videoPreviewActive = false
 		},
 
 		onToggle(value) {
@@ -636,6 +738,22 @@ export default {
 				&.file__layer--visible {
 					opacity: 1;
 				}
+			}
+
+			// Hover video preview sits above the still layers (it's
+			// the freshest content) and crops to the same square as
+			// the photos via object-fit so motion doesn't reflow the
+			// tile. Briefly fades in so the swap from still → motion
+			// reads as a transition, not a pop.
+			.file__layer--video {
+				z-index: 5;
+				object-fit: cover;
+				animation: file-layer-video-fade-in 240ms ease-out;
+			}
+
+			@keyframes file-layer-video-fade-in {
+				from { opacity: 0; }
+				to { opacity: 1; }
 			}
 		}
 	}

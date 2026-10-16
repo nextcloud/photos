@@ -22,6 +22,13 @@ export type PhotoSearchOptions = SearchOptions & {
 	onThisDay: boolean // get only items from this day of year. Default: false.
 	onlyFavorites: boolean // get only favorite items. Default: false.
 	extraFilters: string // a raw dav string that will be added in the 'where' clause. Default: ''.
+	// Raw user-typed search term. When set + the per-user backfill is
+	// ready, FetchFilesMixin routes through the indexed search endpoint
+	// (`/api/v1/index/search?q=…`) instead of DAV. The DAV path also
+	// honours this via the nameFilter — the indexed endpoint is just a
+	// faster shortcut that bypasses NC's broken-on-some-builds DAV
+	// SEARCH backend.
+	searchQuery: string
 }
 
 /**

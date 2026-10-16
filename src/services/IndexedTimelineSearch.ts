@@ -174,6 +174,68 @@ function detectKind(mimesType: string[] | undefined): 'images' | 'videos' | unde
  *
  * @param options
  */
+/**
+ * Indexed search — same enriched-row response shape as the timeline,
+ * but on the `/api/v1/index/search?q=…` endpoint. Bypasses DAV
+ * SEARCH entirely (workaround for NC34 dev builds where DAV SEARCH
+ * throws inside `getKnownMetadata()` due to lazy-AppConfig strict
+ * mode), and faster anyway because there's no XML body to parse
+ * server-side.
+ *
+ * Throws on HTTP errors so the caller (FetchFilesMixin) can
+ * fall back to the legacy DAV path.
+ *
+ * @param query - The raw search term typed by the user.
+ * @param options - Same shape as the timeline fetcher (firstResult
+ *   resets the cursor; nbResults caps the page; mimesType maps to
+ *   the kind filter).
+ */
+export async function getIndexedSearchPhotos(
+	query: string,
+	options: Partial<PhotoSearchOptions> = {},
+): Promise<File[]> {
+	const trimmed = query.trim()
+	if (trimmed === '') {
+		return []
+	}
+
+	const user = getCurrentUser()
+	if (user === null) {
+		return []
+	}
+
+	const firstResult = options.firstResult ?? 0
+	const limit = options.nbResults ?? 200
+
+	// Search has its own cursor namespace so it doesn't fight the
+	// timeline cursor when the user clears search and goes back.
+	const cursorKey = 1
+	if (firstResult === 0) {
+		cursorState.delete(cursorKey)
+	}
+	const before = cursorState.get(cursorKey) ?? null
+
+	const params: Record<string, string> = { q: trimmed, limit: String(limit) }
+	if (before !== null) {
+		params.before = String(before)
+	}
+	const kind = detectKind(options.mimesType)
+	if (kind !== undefined) {
+		params.kind = kind
+	}
+
+	const { data } = await axios.get<IndexedTimelineResponse>(
+		generateUrl('/apps/photos/api/v1/index/search'),
+		{ params, signal: options.signal },
+	)
+
+	if (data.nextBefore !== null) {
+		cursorState.set(cursorKey, data.nextBefore)
+	}
+
+	return data.items.map(rowToFile)
+}
+
 export async function getIndexedPhotos(options: Partial<PhotoSearchOptions> = {}): Promise<File[]> {
 	const user = getCurrentUser()
 	if (user === null) {

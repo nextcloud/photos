@@ -52,6 +52,15 @@
 
 			<NcActionButton
 				:closeAfterClick="true"
+				@click="onEditMetadata">
+				<template #icon>
+					<PencilOutline :size="20" />
+				</template>
+				{{ t('photos', 'Edit metadata…') }}
+			</NcActionButton>
+
+			<NcActionButton
+				:closeAfterClick="true"
 				@click="onToggleFavorite">
 				<template #icon>
 					<Star v-if="isFavorite" :size="20" />
@@ -121,6 +130,17 @@
 				{{ t('photos', 'No camera metadata is available for this photo.') }}
 			</p>
 		</NcDialog>
+
+		<!-- Per-user EXIF editor dialog. Mounted only when the user
+			opened it so the API call doesn't fire for every tile in
+			the grid. -->
+		<MetadataEditDialog
+			v-if="editDialogOpen"
+			:fileId="fileIdNumber"
+			:initialTakenAt="initialTakenAt"
+			:initialGpsLat="initialGpsLat"
+			:initialGpsLng="initialGpsLng"
+			@close="editDialogOpen = false" />
 
 		<!-- Confirm before destructive delete. -->
 		<NcDialog
@@ -212,12 +232,14 @@ import NcTextField from '@nextcloud/vue/components/NcTextField'
 import DotsVertical from 'vue-material-design-icons/DotsVertical.vue'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import InformationOutline from 'vue-material-design-icons/InformationOutline.vue'
+import PencilOutline from 'vue-material-design-icons/PencilOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import ShareVariantOutline from 'vue-material-design-icons/ShareVariantOutline.vue'
 import Star from 'vue-material-design-icons/Star.vue'
 import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import TagMultipleOutline from 'vue-material-design-icons/TagMultipleOutline.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
+import MetadataEditDialog from './MetadataEditDialog.vue'
 import logger from '../services/logger.ts'
 import {
 	assignTagToFile,
@@ -246,6 +268,7 @@ export default defineComponent({
 		DotsVertical,
 		ImageMultipleOutline,
 		InformationOutline,
+		MetadataEditDialog,
 		NcActionButton,
 		NcActionSeparator,
 		NcActions,
@@ -254,6 +277,7 @@ export default defineComponent({
 		NcDialog,
 		NcLoadingIcon,
 		NcTextField,
+		PencilOutline,
 		Plus,
 		ShareVariantOutline,
 		Star,
@@ -273,6 +297,7 @@ export default defineComponent({
 	data() {
 		return {
 			metadataDialogOpen: false,
+			editDialogOpen: false,
 			confirmDeleteOpen: false,
 			tagDialogOpen: false,
 			tagsLoading: false,
@@ -335,6 +360,24 @@ export default defineComponent({
 				? this.file.fileid
 				: Number.parseInt(String(this.file.fileid))
 		},
+
+		// EXIF-derived seeds for the edit dialog. The dialog reads
+		// these as fallbacks when the user hasn't stored an
+		// override yet, AND uses them as the "reset to original"
+		// target.
+		initialTakenAt(): number | null {
+			const attrs = (this.file.attributes ?? {}) as Record<string, unknown>
+			const raw = attrs['metadata-photos-original_date_time']
+			return typeof raw === 'number' && raw > 0 ? raw : null
+		},
+
+		initialGpsLat(): number | null {
+			return this.extractGpsCoord('latitude')
+		},
+
+		initialGpsLng(): number | null {
+			return this.extractGpsCoord('longitude')
+		},
 	},
 
 	methods: {
@@ -342,6 +385,24 @@ export default defineComponent({
 
 		onViewMetadata() {
 			this.metadataDialogOpen = true
+		},
+
+		onEditMetadata() {
+			this.editDialogOpen = true
+		},
+
+		// Pull a single GPS axis out of the EXIF metadata. The
+		// `metadata-photos-gps` shape is `{latitude, longitude}` —
+		// produced server-side by ExifMetadataProvider and now also
+		// by IndexController.composeItem when an override exists.
+		extractGpsCoord(axis: 'latitude' | 'longitude'): number | null {
+			const attrs = (this.file.attributes ?? {}) as Record<string, unknown>
+			const gps = attrs['metadata-photos-gps'] as Record<string, unknown> | undefined
+			if (gps === undefined) {
+				return null
+			}
+			const raw = gps[axis]
+			return typeof raw === 'number' ? raw : null
 		},
 
 		onAddToAlbum() {

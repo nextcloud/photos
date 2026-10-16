@@ -4,7 +4,10 @@
 -->
 
 <template>
-	<div class="file-legacy-wrap">
+	<div
+		class="file-legacy-wrap"
+		@mouseenter="schedulePreview"
+		@mouseleave="cancelPreview">
 		<a
 			:class="{
 				'file--cropped': croppedLayout,
@@ -24,6 +27,26 @@
 				:aria-describedby="ariaUuid"
 				@load="onLoad"
 				@error="onError">
+
+			<!--
+				Hover video preview — same affordance as the timeline
+				tile. Mounted only after a 250ms hover delay and only
+				for codecs the browser can play (mp4/webm/ogg). HEVC
+				and friends stay on the still thumbnail until we add
+				transcoding.
+			-->
+			<video
+				v-if="videoPreviewActive"
+				ref="videoPreview"
+				class="video-preview"
+				:src="item.source"
+				muted
+				loop
+				autoplay
+				playsinline
+				preload="metadata"
+				aria-hidden="true"
+				@error="onVideoPreviewError" />
 
 			<!-- image name and cover -->
 			<p :id="ariaUuid" class="hidden-visually">{{ item.basename }}</p>
@@ -81,12 +104,29 @@ export default {
 		return {
 			loaded: false,
 			error: false,
+			// Hover video preview state — mirrors FileComponent.
+			videoPreviewActive: false,
+			videoPreviewTimer: null as ReturnType<typeof setTimeout> | null,
+			videoPreviewError: false,
 		}
 	},
 
 	computed: {
 		ariaUuid() {
 			return `image-${this.item.fileid}`
+		},
+
+		// Same codec gating as FileComponent — only formats the
+		// browser can play inline. HEVC / ProRes etc. need the
+		// transcoding pipeline that's a separate change.
+		isPreviewableVideo(): boolean {
+			const mime = this.item.mime ?? ''
+			if (!mime.startsWith('video/')) {
+				return false
+			}
+			return mime === 'video/mp4'
+				|| mime === 'video/webm'
+				|| mime === 'video/ogg'
 		},
 
 		// Adapter: PhotoActionsMenu's `file` prop accepts the
@@ -136,9 +176,46 @@ export default {
 		if (this.$refs.img !== undefined) {
 			(this.$refs.img as HTMLImageElement).src = ''
 		}
+		this.cancelPreview()
 	},
 
 	methods: {
+		// --- Hover video preview (mirrors FileComponent) ---
+		schedulePreview() {
+			if (!this.isPreviewableVideo || this.videoPreviewError) {
+				return
+			}
+			if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+				return
+			}
+			this.cancelPreview()
+			this.videoPreviewTimer = setTimeout(() => {
+				this.videoPreviewActive = true
+				this.videoPreviewTimer = null
+			}, 250)
+		},
+
+		cancelPreview() {
+			if (this.videoPreviewTimer !== null) {
+				clearTimeout(this.videoPreviewTimer)
+				this.videoPreviewTimer = null
+			}
+			if (this.videoPreviewActive) {
+				const video = this.$refs.videoPreview as HTMLVideoElement | undefined
+				if (video !== undefined) {
+					video.pause()
+					video.removeAttribute('src')
+					video.load()
+				}
+				this.videoPreviewActive = false
+			}
+		},
+
+		onVideoPreviewError() {
+			this.videoPreviewError = true
+			this.videoPreviewActive = false
+		},
+
 		openViewer() {
 			window.OCA.Viewer.open({
 				fileInfo: legacyToViewerFileInfo(this.item),
@@ -262,6 +339,25 @@ img {
 	.file-legacy-wrap:hover img {
 		transform: none;
 	}
+}
+
+// Hover video preview sits above the image (img is z-index 10, so
+// 11) and crops to the same square via object-fit. Brief fade-in
+// so the still→motion swap doesn't pop.
+.video-preview {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 11;
+	object-fit: cover;
+	animation: file-legacy-video-fade-in 240ms ease-out;
+}
+
+@keyframes file-legacy-video-fade-in {
+	from { opacity: 0; }
+	to { opacity: 1; }
 }
 
 svg {

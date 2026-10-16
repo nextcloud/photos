@@ -11,7 +11,7 @@ import { t } from '@nextcloud/l10n'
 import { joinPaths } from '@nextcloud/paths'
 import { defineComponent, markRaw } from 'vue'
 import { davClient } from '../services/DavClient.ts'
-import { getIndexedPhotos, resetIndexedCursor } from '../services/IndexedTimelineSearch.ts'
+import { getIndexedPhotos, getIndexedSearchPhotos, resetIndexedCursor } from '../services/IndexedTimelineSearch.ts'
 import logger from '../services/logger.js'
 import getPhotos, { type PhotoSearchOptions } from '../services/PhotoSearch.js'
 import store from '../store/index.js'
@@ -64,21 +64,39 @@ export default defineComponent({
 
 				const numberOfImagesPerBatch = 200
 
-				// Load next batch of images. Prefer the indexed read
-				// path when the per-user backfill has finished AND the
-				// caller didn't pass options that the indexed endpoint
-				// doesn't yet implement (filters, onThisDay, favourites
-				// scoping). On any failure we fall back to DAV — the
-				// indexed endpoint is purely an optimisation, never
-				// load-bearing for correctness.
+				// Three-way routing for the data path:
+				//   1. Search active + index ready → /api/v1/index/search
+				//      (bypasses DAV SEARCH entirely; works on instances
+				//      where DAV SEARCH is broken — e.g. NC34 dev builds
+				//      with strict lazy-AppConfig validation throwing in
+				//      `getKnownMetadata()`).
+				//   2. No search + index ready + no exotic filters →
+				//      /api/v1/index/timeline.
+				//   3. Anything else → legacy DAV REPORT.
+				// Indexed paths are best-effort: any HTTP failure falls
+				// back to DAV silently.
 				const indexStatus = indexStatusStore()
-				const canUseIndexed = indexStatus.ready === true
-					&& options.onThisDay !== true
+				const searchQuery = (options.searchQuery ?? '').trim()
+				const indexReady = indexStatus.ready === true
+				const noExoticFilters = options.onThisDay !== true
 					&& options.onlyFavorites !== true
 					&& (options.extraFilters ?? '') === ''
 
 				let fetchedFiles: File[] | null = null
-				if (canUseIndexed) {
+
+				if (searchQuery !== '' && indexReady) {
+					try {
+						fetchedFiles = await getIndexedSearchPhotos(searchQuery, {
+							firstResult: this.fetchedFileIds.length,
+							nbResults: numberOfImagesPerBatch,
+							...options,
+							signal,
+						})
+					} catch (e) {
+						logger.warn('[FetchFilesMixin] Indexed search failed; falling back to DAV', { error: e })
+						fetchedFiles = null
+					}
+				} else if (searchQuery === '' && indexReady && noExoticFilters) {
 					try {
 						fetchedFiles = await getIndexedPhotos({
 							firstResult: this.fetchedFileIds.length,
