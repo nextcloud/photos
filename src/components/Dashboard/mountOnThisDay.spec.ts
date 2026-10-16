@@ -3,31 +3,27 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type { CreateElement } from 'vue'
-
+import { getActivePinia } from 'pinia'
 import { describe, expect, test, vi } from 'vitest'
-import Vue from 'vue'
+import { h } from 'vue'
 import { mountOnThisDay } from './mountOnThisDay.ts'
 
 vi.mock('./DashboardOnThisDay.vue', () => ({
 	default: {
-		render(h: CreateElement) {
-			return h('div', { class: 'on-this-day' })
-		},
+		render: () => h('div', { class: 'on-this-day' }),
 	},
 }))
 
 describe('mountOnThisDay', () => {
-	test('mounts the widget with translations and a pinia store', () => {
+	test('mounts the widget with its own id prefix and a pinia store', () => {
 		const el = document.createElement('div')
 		document.body.appendChild(el)
 
-		const vm = mountOnThisDay(el)
+		const app = mountOnThisDay(el)
 
-		expect(vm.$el.classList.contains('on-this-day')).toBe(true)
-		expect(Vue.prototype.t).toBeTypeOf('function')
-		expect(Vue.prototype.n).toBeTypeOf('function')
-		expect(vm.$pinia).toBeDefined()
-		vm.$destroy()
+		expect(el.querySelector('.on-this-day')).not.toBeNull()
+		expect(app.config.idPrefix).toBe('photos-dashboard')
+		expect(getActivePinia()).toBeDefined()
+		app.unmount()
 	})
 })
