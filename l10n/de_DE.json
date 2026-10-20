@@ -244,14 +244,6 @@
     "ISO" : "ISO",
     "{focalLength} mm" : "{focalLength} mm",
     "{exposureTime} s" : "{exposureTime} s",
-    "Group" : "Gruppe",
-    "Remove {collaboratorLabel} from the collaborators list" : "{collaboratorLabel} aus der Liste der Mitarbeitenden entfernen",
-    "Enable squared photos view" : "Quadratische Fotoansicht aktivieren",
-    "Choose default Photos upload and Albums location" : "Den Standardspeicherort für das Hochladen von Fotos und Alben wählen",
-    "Choose a different folder" : "Anderen Ordner wählen",
-    "View" : "Ansicht",
-    "Choose the folder where photos and albums are uploaded to." : "Ordner wählen, in den Fotos und Videos hochgeladen werden.",
-    "Loading folders …" : "Lade Ordner …",
     "Details" : "Details",
     "Confirm" : "Bestätigen"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

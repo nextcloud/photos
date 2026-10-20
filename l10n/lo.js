@@ -72,9 +72,6 @@ OC.L10N.register(
     "Last week" : "Last week",
     "Failed to create {collectionFileName}" : "ສ້າງ {collectionFileName} ບໍ່ສຳເລັດ",
     "Camera" : "ກ້ອງ",
-    "Group" : "Group",
-    "Remove {collaboratorLabel} from the collaborators list" : "ລຶບ {collaboratorLabel} ອອກຈາກລາຍຊື່ຜູ້ຮ່ວມມື",
-    "View" : "ເບິ່ງ",
     "Details" : "ລາຍລະອຽດ",
     "Confirm" : "ຢືນຢັນ"
 },

@@ -189,14 +189,6 @@
     "Camera" : "Cámara",
     "Focal length" : "Lonxitude focal",
     "Exposure" : "Exposición",
-    "Group" : "Grupo",
-    "Remove {collaboratorLabel} from the collaborators list" : "Retirar a {collaboratorLabel} da lista de colaboradores",
-    "Enable squared photos view" : "Activar a vista das fotos en cadrado",
-    "Choose default Photos upload and Albums location" : "Escolla o envío predeterminado en Fotos e a localización en Álbums",
-    "Choose a different folder" : "Escolla un cartafol diferente",
-    "View" : "Ver",
-    "Choose the folder where photos and albums are uploaded to." : "Escolla o cartafol ao que se enviarán as fotos e os álbums.",
-    "Loading folders …" : "Cargando cartafoles…",
     "Details" : "Detalles",
     "Confirm" : "Confirmar"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

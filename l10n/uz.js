@@ -30,8 +30,6 @@ OC.L10N.register(
     "Start slideshow" : "Slayd-shouni boshlash",
     "Last week" : "O`tgan yil",
     "Camera" : "Kamera",
-    "Group" : "Guruh",
-    "View" : "Ko'rish",
     "Details" : "Details",
     "Confirm" : "Tasdiqlash"
 },

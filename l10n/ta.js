@@ -15,7 +15,6 @@ OC.L10N.register(
     "Add" : "சேர்க்க",
     "Home" : "அகம்",
     "General" : "பொதுவான",
-    "Group" : "Group",
     "Details" : "விவரங்கள்"
 },
 "nplurals=2; plural=(n != 1);");

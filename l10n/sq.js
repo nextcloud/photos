@@ -24,8 +24,6 @@ OC.L10N.register(
     "General" : "Të përgjithshme",
     "Loading folders…" : "Duke ngarkuar dosjet…",
     "Default" : "Paraprake",
-    "Group" : "Grup",
-    "View" : "Shiko",
     "Details" : "Detajet",
     "Confirm" : "Konfirmo"
 },

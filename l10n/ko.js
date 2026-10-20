@@ -78,9 +78,6 @@ OC.L10N.register(
     "Camera" : "카메라",
     "Focal length" : "초점 거리",
     "Exposure" : "노출",
-    "Group" : "구룹",
-    "Remove {collaboratorLabel} from the collaborators list" : "공동 작업자 목록에서 {collaboratorLabel} 제거",
-    "View" : "보기",
     "Details" : "세부사항",
     "Confirm" : "확인"
 },

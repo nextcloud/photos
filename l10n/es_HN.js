@@ -23,7 +23,6 @@ OC.L10N.register(
     "Dates" : "Fechas",
     "Home" : "Inicio",
     "General" : "General",
-    "Group" : "Grupo",
     "Details" : "Detalles",
     "Confirm" : "Confirmar"
 },

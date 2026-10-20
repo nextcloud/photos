@@ -171,13 +171,6 @@ OC.L10N.register(
     "Camera" : "الكاميرا",
     "Focal length" : "البُعد البُؤري Focal length",
     "Exposure" : "التعريض exposure",
-    "Group" : "مجموعة",
-    "Remove {collaboratorLabel} from the collaborators list" : "حذف {collaboratorLabel} من قائمة المتعاونين",
-    "Enable squared photos view" : "تفعيل عرض الصور المربعة",
-    "Choose default Photos upload and Albums location" : "اختر افتراضي رفع الصور وموقع الألبومات",
-    "Choose a different folder" : "إختَر مجلداً مختلفاً",
-    "View" : "عرض",
-    "Choose the folder where photos and albums are uploaded to." : "إختَر المجلد الذي تُرفع إليه الصور و الألبومات",
     "Details" : "التفاصيل",
     "Confirm" : "تأكيد"
 },

@@ -165,13 +165,6 @@ OC.L10N.register(
     "Camera" : "Fényképezőgép",
     "Focal length" : "Fókusztávolság",
     "Exposure" : "Expozíció",
-    "Group" : "Csoport",
-    "Remove {collaboratorLabel} from the collaborators list" : "{collaboratorLabel} eltávolítása a közreműködőktől",
-    "Enable squared photos view" : "A négyzet alakú fotónézet engedélyezése",
-    "Choose default Photos upload and Albums location" : "A Fényképfeltöltés és az Albumok alapértelmezett helyének kiválasztása",
-    "Choose a different folder" : "Válassz másik könyvtárat",
-    "View" : "Megtekintés",
-    "Choose the folder where photos and albums are uploaded to." : "Válassz másik könyvtárat a fotók és albumok feltöltése számára.",
     "Details" : "Részletek",
     "Confirm" : "Megerősítés"
 },

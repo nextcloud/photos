@@ -25,8 +25,6 @@ OC.L10N.register(
     "Home" : "Heim",
     "Upload folder" : "Last opp mappe",
     "General" : "Generelt",
-    "Group" : "Gruppe",
-    "View" : "Vis",
     "Details" : "Detaljar"
 },
 "nplurals=2; plural=(n != 1);");

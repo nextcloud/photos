@@ -43,9 +43,6 @@ OC.L10N.register(
     "Tagged photos" : "Ảnh gắn nhãn",
     "Last week" : "Tuần trước",
     "Camera" : "Máy Ảnh",
-    "Group" : "Nhóm",
-    "Enable squared photos view" : "Bật chế độ xem theo ô",
-    "View" : "Xem",
     "Details" : "Chi tiết",
     "Confirm" : "Xác nhận"
 },

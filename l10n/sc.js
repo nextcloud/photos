@@ -50,9 +50,6 @@ OC.L10N.register(
     "Camera" : "Fotocamera",
     "Focal length" : "Longària de sa focale",
     "Exposure" : "Espositzione",
-    "Group" : "Grupu",
-    "Enable squared photos view" : "Ativa sa visualizatzione a fotos cuadradas",
-    "View" : "Visualiza",
     "Details" : "Detàllios",
     "Confirm" : "Cunfirma"
 },
