@@ -150,13 +150,6 @@ OC.L10N.register(
     "Camera" : "Cámara",
     "Focal length" : "Llongura focal",
     "Exposure" : "Esposición",
-    "Group" : "Grupu",
-    "Remove {collaboratorLabel} from the collaborators list" : "Quitar «{collaboratorLabel}» de la llista de collaboradores",
-    "Enable squared photos view" : "Activar la vista de semeyes en cuadráu",
-    "Choose default Photos upload and Albums location" : "Escueyi la llocalización pa los álbumes y la xuba de semeyes",
-    "Choose a different folder" : "Escueyi una carpeta diferente",
-    "View" : "Ver",
-    "Choose the folder where photos and albums are uploaded to." : "Escueyu la carpeta a onde se xuben les semeyes y los álbumes.",
     "Details" : "Detalles",
     "Confirm" : "Confirmar"
 },

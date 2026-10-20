@@ -168,12 +168,6 @@ OC.L10N.register(
     "Camera" : "Kamera",
     "Focal length" : "Goriščna razdalja",
     "Exposure" : "Osvetljitev",
-    "Group" : "Skupina",
-    "Remove {collaboratorLabel} from the collaborators list" : "Odstrani {collaboratorLabel} s seznama sodelujočih",
-    "Enable squared photos view" : "Omogoči kvadratne prikaze slik",
-    "Choose a different folder" : "Izberite drugo mapo",
-    "View" : "Poglej",
-    "Choose the folder where photos and albums are uploaded to." : "Izberi mapo, kamor se bodo naložile fotografije in albumi",
     "Details" : "Podrobnosti",
     "Confirm" : "Potrdi"
 },

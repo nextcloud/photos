@@ -185,14 +185,6 @@
     "Failed to set favorite state for {fileName}" : "{fileName} のお気に入り状態の設定に失敗しました",
     "Could not load photos folder" : "写真フォルダを読み込めませんでした",
     "Camera" : "カメラ",
-    "Group" : "グループ",
-    "Remove {collaboratorLabel} from the collaborators list" : "コラボレーターリストから {collaboratorLabel} を削除する",
-    "Enable squared photos view" : "写真を矩形での表示を有効化",
-    "Choose default Photos upload and Albums location" : "デフォルトの写真のアップロードとアルバムの場所を選択する",
-    "Choose a different folder" : "別のフォルダーを選択する",
-    "View" : "表示",
-    "Choose the folder where photos and albums are uploaded to." : "写真やアルバムをアップロードするフォルダを選択します。",
-    "Loading folders …" : "フォルダを読み込み中…",
     "Details" : "詳細",
     "Confirm" : "承認"
 },"pluralForm" :"nplurals=1; plural=0;"

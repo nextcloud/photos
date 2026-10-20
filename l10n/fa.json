@@ -191,14 +191,6 @@
     "Camera" : "دوربین",
     "Focal length" : "فاصله کانونی",
     "Exposure" : "نوردهی",
-    "Group" : "گروه",
-    "Remove {collaboratorLabel} from the collaborators list" : "حذف {collaboratorLabel} از فهرست همکاران",
-    "Enable squared photos view" : "فعال‌سازی نمای مربعی عکس‌ها",
-    "Choose default Photos upload and Albums location" : "انتخاب مکان پیش‌فرض بارگذاری عکس‌ها و آلبوم‌ها",
-    "Choose a different folder" : "انتخاب پوشه دیگر",
-    "View" : "نمایش",
-    "Choose the folder where photos and albums are uploaded to." : "پوشه‌ای را انتخاب کنید که عکس‌ها و آلبوم‌ها در آن بارگذاری شوند.",
-    "Loading folders …" : "در حال بارگیری پوشه‌ها...",
     "Details" : "جزئیات",
     "Confirm" : "تأیید"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"

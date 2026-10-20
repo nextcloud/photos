@@ -36,9 +36,6 @@ OC.L10N.register(
     "Photos with tags will show up here" : "Las fotos con etiquetas aparecerán aquí",
     "Default" : "Por defecto",
     "Tagged photos" : "Fotos etiquetadas",
-    "Group" : "Grupo",
-    "Enable squared photos view" : "Habilitar vista de fotos cuadradas",
-    "View" : "Ver",
     "Details" : "Detalles",
     "Confirm" : "Confirmar"
 },

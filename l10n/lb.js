@@ -21,8 +21,6 @@ OC.L10N.register(
     "General" : "Allgemeng",
     "Default" : "Standard",
     "Camera" : "Kamera",
-    "Group" : "Grupp",
-    "View" : "Usiicht",
     "Details" : "Detailer",
     "Confirm" : "Konfirméieren"
 },

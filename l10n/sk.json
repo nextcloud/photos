@@ -244,14 +244,6 @@
     "ISO" : "ISO",
     "{focalLength} mm" : "{focalLength} mm",
     "{exposureTime} s" : "{exposureTime} s",
-    "Group" : "Skupina",
-    "Remove {collaboratorLabel} from the collaborators list" : "Odobrať {collaboratorLabel} zo zoznamu spolupracovníkov",
-    "Enable squared photos view" : "Zapnúť štvorcové zobrazenie fotiek",
-    "Choose default Photos upload and Albums location" : "Vyberte predvolené umiestnenie pre nahrávané fotky a albumy",
-    "Choose a different folder" : "Vyberte iný priečinok",
-    "View" : "Prezerať",
-    "Choose the folder where photos and albums are uploaded to." : "Vyberte priečinok, do ktorého sa budú nahrávať fotografie a albumy.",
-    "Loading folders …" : "Načítavanie priečinkov …",
     "Details" : "Podrobnosti",
     "Confirm" : "Potvrdiť"
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);"

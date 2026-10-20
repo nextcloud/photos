@@ -139,10 +139,6 @@ OC.L10N.register(
     "Camera" : "Камера",
     "Focal length" : "Фокусно разстояние",
     "Exposure" : "Експонация",
-    "Group" : "Група",
-    "Remove {collaboratorLabel} from the collaborators list" : "Премахване на {collaboratorLabel} от списъка със сътрудници",
-    "Enable squared photos view" : "Активирайте изгледа на снимки в квадратче",
-    "View" : "Изглед",
     "Details" : "Подробности",
     "Confirm" : "Потвърдете"
 },

@@ -187,13 +187,6 @@ OC.L10N.register(
     "Camera" : "Камера",
     "Focal length" : "Жижна даљина",
     "Exposure" : "Експозиција",
-    "Group" : "Група",
-    "Remove {collaboratorLabel} from the collaborators list" : "Уклони {collaboratorLabel} из листе сарадника",
-    "Enable squared photos view" : "Укључи квадратасти приказ слика",
-    "Choose default Photos upload and Albums location" : "Изаберите подразумевано место за отпремање Фотографија и албума",
-    "Choose a different folder" : "Изаберите неки други фолдер",
-    "View" : "Погледај",
-    "Choose the folder where photos and albums are uploaded to." : "Изаберите фолдер у који се отпремају фотографије и албуми.",
     "Details" : "Детаљи",
     "Confirm" : "Потврди"
 },
