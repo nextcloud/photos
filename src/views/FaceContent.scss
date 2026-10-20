@@ -39,10 +39,23 @@
 		}
 
 		&__title {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			min-width: 0;
 			margin-inline-start: 10px;
 			h2 {
 				margin-bottom: 0;
 			}
+		}
+
+		// The linked contact sits under the name as a secondary line
+		&__contact {
+			display: inline-flex;
+			align-items: center;
+			gap: 4px;
+			max-width: 100%;
+			color: var(--color-text-maxcontrast);
 		}
 
 		&__loader {

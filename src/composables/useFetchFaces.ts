@@ -24,6 +24,8 @@ import { useAbortController } from './useAbortController.ts'
 const recognizeDAVProps = [
 	'<nc:face-detections/>',
 	'<nc:face-preview-image/>',
+	'<nc:face-cluster-id/>',
+	'<nc:face-contact/>',
 	'<nc:realpath/>',
 	'<nc:nbItems/>',
 ]
