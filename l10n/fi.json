@@ -216,14 +216,6 @@
     "ISO" : "ISO",
     "{focalLength} mm" : "{focalLength} mm",
     "{exposureTime} s" : "{exposureTime} s",
-    "Group" : "Ryhmä",
-    "Remove {collaboratorLabel} from the collaborators list" : "Poista {collaboratorLabel} osanottajista",
-    "Enable squared photos view" : "Ota käyttöön neliömäinen kuvanäkymä",
-    "Choose default Photos upload and Albums location" : "Valitse kuvien ja albumien oletussijainti",
-    "Choose a different folder" : "Valitse eri kansio",
-    "View" : "Näytä",
-    "Choose the folder where photos and albums are uploaded to." : "Valitse kansio, johon kuvat ja albumit lähetetään.",
-    "Loading folders …" : "Ladataan kansioita …",
     "Details" : "Tiedot",
     "Confirm" : "Vahvista"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

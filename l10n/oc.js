@@ -36,9 +36,6 @@ OC.L10N.register(
     "Tagged photos" : "Fòtos etiquetadas",
     "Last week" : "La setmana passada",
     "Camera" : "Camèra",
-    "Group" : "Grop",
-    "Enable squared photos view" : "Activar la vista amb fòtos carrat",
-    "View" : "Vista",
     "Details" : "Detalhs",
     "Confirm" : "Confirmar"
 },

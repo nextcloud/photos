@@ -19,7 +19,6 @@ OC.L10N.register(
     "Add" : "যোগ কর",
     "Home" : "বাড়ি",
     "General" : "সাধারণ",
-    "Group" : "গোষ্ঠীসমূহ",
     "Details" : "বিসতারিত"
 },
 "nplurals=2; plural=(n != 1);");

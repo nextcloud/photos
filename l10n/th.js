@@ -49,9 +49,6 @@ OC.L10N.register(
     "All your media" : "สื่อทั้งหมดของคุณ",
     "Tagged photos" : "รูปภาพที่ติดแท็ก",
     "Last week" : "สัปดาห์ที่แล้ว",
-    "Group" : "กลุ่ม",
-    "Enable squared photos view" : "เปิดมุมมองรูปภาพสี่เหลี่ยม",
-    "View" : "มุมมอง",
     "Details" : "รายละเอียด",
     "Confirm" : "ยืนยัน"
 },

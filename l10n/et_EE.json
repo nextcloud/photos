@@ -244,14 +244,6 @@
     "ISO" : "ISO",
     "{focalLength} mm" : "{focalLength} mm",
     "{exposureTime} s" : "{exposureTime} sek",
-    "Group" : "Grupp",
-    "Remove {collaboratorLabel} from the collaborators list" : "Eemalda {collaboratorLabel} kaasautorite hulgast",
-    "Enable squared photos view" : "Luba piltide ruutvaade",
-    "Choose default Photos upload and Albums location" : "Vali vaikimisi fotode üleslaadimise ja albumite asukoht",
-    "Choose a different folder" : "Vali mõni muu kaust",
-    "View" : "Vaata",
-    "Choose the folder where photos and albums are uploaded to." : "Vali kaust, kuhu fotod ja albumid üles laaditakse",
-    "Loading folders …" : "Laadin kaustu…",
     "Details" : "Üksikasjad",
     "Confirm" : "Kinnita"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

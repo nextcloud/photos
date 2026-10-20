@@ -161,13 +161,6 @@ OC.L10N.register(
     "Camera" : "Kamera",
     "Focal length" : "Brennvidde",
     "Exposure" : "Eksponering",
-    "Group" : "Gruppe",
-    "Remove {collaboratorLabel} from the collaborators list" : "Fjern {collaboratorLabel} fra samarbeidspartnerlisten",
-    "Enable squared photos view" : "Aktiver visning med kvadratiske bilder",
-    "Choose default Photos upload and Albums location" : "Velg standard bildeopplasting og albumplassering",
-    "Choose a different folder" : "Velg en annen mappe",
-    "View" : "Vis",
-    "Choose the folder where photos and albums are uploaded to." : "Velg mappen der bilder og album lastes opp.",
     "Details" : "Detaljer",
     "Confirm" : "Bekreft"
 },

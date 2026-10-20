@@ -131,11 +131,6 @@ OC.L10N.register(
     "Camera" : "Cámara",
     "Focal length" : "Longitud focal",
     "Exposure" : "Exposición",
-    "Group" : "Grupo",
-    "Remove {collaboratorLabel} from the collaborators list" : "Eliminar {etiquetaColaborador} de la lista de colaboradores",
-    "Enable squared photos view" : "Habilitar vista de fotos cuadradas",
-    "Choose default Photos upload and Albums location" : "Seleccionar ubicación predeterminada de carga de fotos y álbumes",
-    "View" : "Ver",
     "Details" : "Detalles",
     "Confirm" : "Confirmar"
 },

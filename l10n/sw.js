@@ -183,13 +183,6 @@ OC.L10N.register(
     "Camera" : "Kamera",
     "Focal length" : "Urefu wa kuzingatia",
     "Exposure" : "Mfiduo",
-    "Group" : "Kundi",
-    "Remove {collaboratorLabel} from the collaborators list" : "Ondoa {collaboratorLabel}kutoka kwenye orodha ya washiriki",
-    "Enable squared photos view" : "Washa mwonekano wa picha za mraba",
-    "Choose default Photos upload and Albums location" : "Chagua upakiaji chaguomsingi wa Picha na eneo la Albamu",
-    "Choose a different folder" : "Chagua kisanduku tofauti",
-    "View" : "Angalia",
-    "Choose the folder where photos and albums are uploaded to." : "Chagua folda ambapo picha na albamu hupakiwa",
     "Details" : "Maelezo ya kina",
     "Confirm" : "Thibitisha"
 },

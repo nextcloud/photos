@@ -21,8 +21,6 @@ OC.L10N.register(
     "Add folder" : "Ychwanegu ffolder",
     "Home" : "Cartref",
     "General" : "Cyffredinol",
-    "Group" : "Grŵp",
-    "View" : "Golwg",
     "Details" : "Manylion",
     "Confirm" : "Cadarnhau"
 },

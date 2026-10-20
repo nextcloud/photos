@@ -189,13 +189,6 @@ OC.L10N.register(
     "Camera" : "كامېرا",
     "Focal length" : "فوكۇس ئۇزۇنلۇقى",
     "Exposure" : "ئاشكارىلاش",
-    "Group" : "گۇرۇپپا",
-    "Remove {collaboratorLabel} from the collaborators list" : "ھەمكارلاشقۇچىلار تىزىملىكىدىن {collaboratorLabel} نى ئۆچۈرۈڭ",
-    "Enable squared photos view" : "كۋادرات رەسىم كۆرۈنۈشىنى قوزغىتىڭ",
-    "Choose default Photos upload and Albums location" : "سۈكۈتتىكى رەسىم يوللاش ۋە پىلاستىنكا ئورنىنى تاللاڭ",
-    "Choose a different folder" : "باشقا ھۆججەت قىسقۇچنى تاللاڭ",
-    "View" : "كۆرۈش",
-    "Choose the folder where photos and albums are uploaded to." : "رەسىم ۋە پىلاستىنكىلار يۈكلەنگەن ھۆججەت قىسقۇچنى تاللاڭ.",
     "Details" : "تەپسىلاتى",
     "Confirm" : "جەزملەشتۈرۈڭ"
 },

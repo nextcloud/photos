@@ -76,9 +76,6 @@ OC.L10N.register(
     "Failed to delete {faceName}" : "Neizdevās izdzēst {faceName}",
     "Failed to delete {fileId}" : "Neizdevās izdzēst {fileId}",
     "Could not load photos folder" : "Nevarēja ielādēt fotoattēlu mapi",
-    "Group" : "Grupa",
-    "View" : "Skats",
-    "Choose the folder where photos and albums are uploaded to." : "Izvēlēties mapi, kurā tiek augšupielādēti fotoattēli un albumi.",
     "Details" : "Informācija",
     "Confirm" : "Apstiprināt"
 },

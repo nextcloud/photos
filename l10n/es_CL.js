@@ -25,7 +25,6 @@ OC.L10N.register(
     "General" : "General",
     "Loading folders…" : "Cargando carpetas…",
     "Default" : "Por defecto",
-    "Group" : "Grupo",
     "Confirm" : "Confirmar"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
