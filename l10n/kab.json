@@ -42,8 +42,6 @@
     "Camera" : "Takamiṛat",
     "{focalLength} mm" : "{focalLength} tsd",
     "{exposureTime} s" : "{exposureTime} tsn",
-    "Group" : "Agraw",
-    "View" : "Askan",
     "Details" : "Talqayt",
     "Confirm" : "Sergeg"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

@@ -28,8 +28,6 @@ OC.L10N.register(
     "General" : "Ĝenerala",
     "Loading folders…" : "Ŝargado de dosierujoj...",
     "Delete selection" : "Forigi elekton",
-    "Group" : "Grupo",
-    "View" : "Vidi",
     "Details" : "Detaloj",
     "Confirm" : "Konfirmi"
 },

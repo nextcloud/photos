@@ -158,13 +158,6 @@ OC.L10N.register(
     "Camera" : "Càmera",
     "Focal length" : "Longitud focal",
     "Exposure" : "Exposició",
-    "Group" : "Grup",
-    "Remove {collaboratorLabel} from the collaborators list" : "Suprimeix {collaboratorLabel} de la llista de col·laboradors",
-    "Enable squared photos view" : "Habilita la visualització de fotos quadrada",
-    "Choose default Photos upload and Albums location" : "Tria la ubicació per defecte de les pujades de fotos i dels àlbums",
-    "Choose a different folder" : "Tria una carpeta diferent",
-    "View" : "Visualització",
-    "Choose the folder where photos and albums are uploaded to." : "Trieu la carpeta on es pugen les fotos i els àlbums.",
     "Details" : "Detalls",
     "Confirm" : "Confirma"
 },

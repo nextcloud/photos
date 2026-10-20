@@ -189,13 +189,6 @@
     "Camera" : "Камера",
     "Focal length" : "Фокусна должина",
     "Exposure" : "Експозитура",
-    "Group" : "Група",
-    "Remove {collaboratorLabel} from the collaborators list" : "Избриши {collaboratorLabel} од листата на соработници",
-    "Enable squared photos view" : "Овозможи поглед на фотографиите во квадрати",
-    "Choose default Photos upload and Albums location" : "Стандардна локација за прикачени фотографии и локации на албуми",
-    "Choose a different folder" : "Избери друга папка",
-    "View" : "Погледни",
-    "Choose the folder where photos and albums are uploaded to." : "Изберете ги папките од каде што се прикачуваат фотографиите и албумите.",
     "Details" : "Детали",
     "Confirm" : "Потврди"
 },"pluralForm" :"nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;"

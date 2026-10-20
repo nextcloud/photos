@@ -44,8 +44,6 @@ OC.L10N.register(
     "Camera" : "Takamiṛat",
     "{focalLength} mm" : "{focalLength} tsd",
     "{exposureTime} s" : "{exposureTime} tsn",
-    "Group" : "Agraw",
-    "View" : "Askan",
     "Details" : "Talqayt",
     "Confirm" : "Sergeg"
 },

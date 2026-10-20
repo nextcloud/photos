@@ -31,8 +31,6 @@ OC.L10N.register(
     "Default" : "Default",
     "Last week" : "Last week",
     "Camera" : "Camera",
-    "Group" : "Group",
-    "View" : "View",
     "Details" : "Details",
     "Confirm" : "Confirm"
 },

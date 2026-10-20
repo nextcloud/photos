@@ -16,8 +16,6 @@ OC.L10N.register(
     "Location" : "Loco",
     "Home" : "Initio",
     "General" : "General",
-    "Group" : "Gruppo",
-    "View" : "Vider",
     "Details" : "Detalios",
     "Confirm" : "Confirmar"
 },

@@ -18,7 +18,6 @@ OC.L10N.register(
     "Home" : "Ev",
     "General" : "Ümumi",
     "Start slideshow" : "Slayd şouya başlayın",
-    "Group" : "Qrup",
     "Details" : "Detallar",
     "Confirm" : "Təsdiq edin"
 },

@@ -83,10 +83,6 @@ OC.L10N.register(
     "Shared Albums" : "אלבומים משותפים",
     "Tagged photos" : "תמונות מתויגות",
     "Last week" : "שבוע שעבר",
-    "Group" : "קבוצה",
-    "Remove {collaboratorLabel} from the collaborators list" : "הסר את {collaboratorLabel} מרשימת השותפים",
-    "Enable squared photos view" : "הפעלת תצוגת תמונות מרובעות",
-    "View" : "צפייה",
     "Details" : "פרטים",
     "Confirm" : "אישור"
 },

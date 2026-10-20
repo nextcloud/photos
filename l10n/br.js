@@ -24,7 +24,6 @@ OC.L10N.register(
     "General" : "Hollek",
     "Unselect all" : "Diziuzañ pep tra",
     "Loading folders…" : "O kargañ an teuliad...",
-    "View" : "Gwell",
     "Details" : "Munudoù",
     "Confirm" : "Kadarnaat"
 },

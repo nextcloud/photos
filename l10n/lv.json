@@ -74,9 +74,6 @@
     "Failed to delete {faceName}" : "Neizdevās izdzēst {faceName}",
     "Failed to delete {fileId}" : "Neizdevās izdzēst {fileId}",
     "Could not load photos folder" : "Nevarēja ielādēt fotoattēlu mapi",
-    "Group" : "Grupa",
-    "View" : "Skats",
-    "Choose the folder where photos and albums are uploaded to." : "Izvēlēties mapi, kurā tiek augšupielādēti fotoattēli un albumi.",
     "Details" : "Informācija",
     "Confirm" : "Apstiprināt"
 },"pluralForm" :"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);"

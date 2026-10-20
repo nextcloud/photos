@@ -191,14 +191,6 @@
     "Camera" : "Camera",
     "Focal length" : "Brandpuntsafstanf",
     "Exposure" : "Belichting",
-    "Group" : "Groep",
-    "Remove {collaboratorLabel} from the collaborators list" : "Verwijder {collaboratorLabel} van de bijdragerslijst",
-    "Enable squared photos view" : "Inschakelen vierkante foto overzicht",
-    "Choose default Photos upload and Albums location" : "Kies de standaardlocatie voor het uploaden van foto's en albums.",
-    "Choose a different folder" : "Kies een andere map",
-    "View" : "Bekijken",
-    "Choose the folder where photos and albums are uploaded to." : "Kies de mappen waar foto's en video's naar geüpload worden.",
-    "Loading folders …" : "Mappen laden ...",
     "Details" : "Details",
     "Confirm" : "Bevestigen"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

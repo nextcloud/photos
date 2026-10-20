@@ -24,7 +24,6 @@ OC.L10N.register(
     "Add folder" : "Voeg 'n gids by",
     "Home" : "Tuis",
     "Loading folders…" : "Laai tans gidse...",
-    "View" : "Bekyk",
     "Details" : "Besonderhede",
     "Confirm" : "Bevestig"
 },

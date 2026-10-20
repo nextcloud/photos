@@ -29,7 +29,6 @@ OC.L10N.register(
     "No tags yet" : "Aún no hay etiquetas",
     "Photos with tags will show up here" : "Fotos con etiquetas serán mostradas aquí",
     "Tagged photos" : "Fotos etiquetadas",
-    "Group" : "Grupo",
     "Details" : "Detalles",
     "Confirm" : "Confirmar"
 },
