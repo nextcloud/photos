@@ -59,6 +59,17 @@
 				{{ t('photos', 'Share') }}
 			</NcActionButton>
 
+			<NcActionButton v-if="isLoggedIn" closeAfterClick @click="openInFiles">
+				<template #icon>
+					<!-- The <Folder> component comes from "vue-material-design-icons".
+					     eslint-plugin-vue does not statically resolve MDI components imported
+					     via <script setup>, so we disable the rule only on this line. -->
+					<!-- eslint-disable-next-line vue/no-undef-components -->
+					<Folder :size="20" />
+				</template>
+				{{ t('photos', 'Open folder in Files') }}
+			</NcActionButton>
+
 			<NcActionSeparator v-if="canDelete" />
 
 			<NcActionButton v-if="canDelete" closeAfterClick @click="deleteConfirmationShown = true">
@@ -183,6 +194,13 @@ const canTag = computed(() => areTagsInstalled && canEdit.value)
 // is sent there with the sidebar already open.
 function share(): void {
 	window.location.href = generateUrl('/apps/files/files/{fileid}?opendetails=true', { fileid: props.photo.fileid })
+}
+
+// The Photos action menu has no folder picker, but every photo still has a
+// parent directory in the underlying storage — surface it so the user can
+// manage siblings and parent-folder state from the Files app.
+function openInFiles(): void {
+	window.location.href = getOpenInFilesUrl(props.photo)
 }
 
 async function toggleFavorite(): Promise<void> {
