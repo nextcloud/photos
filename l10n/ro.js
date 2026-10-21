@@ -23,7 +23,7 @@ OC.L10N.register(
     "Photos settings" : "Setări Fotografii",
     "This name is already in use." : "Acest nume este deja folosit.",
     "\"{char}\" is not allowed inside a filename." : "„{char}” nu este permis în numele unui fișier.",
-    "Invalid filename." : "Nume de fișier invalid.",
+    "Invalid filename." : "Nume de fișier nevalid.",
     "Name of the album" : "Numele albumului",
     "Location of the album" : "Locația albumului",
     "Back" : "Înapoi",
