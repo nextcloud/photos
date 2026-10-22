@@ -4,6 +4,7 @@
  */
 
 import type { Collection } from '../services/collectionFetcher.ts'
+import type { FaceContactLink } from '../services/recognizeContacts.ts'
 import type { PhotoFile } from './files.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
@@ -34,7 +35,7 @@ type FaceDetection = {
  * @param face The name of the face the detection belongs to, or `undefined` for
  *             the unassigned-faces collection.
  */
-function findFaceDetection(file: PhotoFile, face?: string): FaceDetection {
+export function findFaceDetection(file: PhotoFile, face?: string): FaceDetection {
 	const detections = ((file.attributes as Record<string, unknown>)['face-detections'] ?? []) as FaceDetection[]
 	// recognize lists unassigned faces as detections with a cluster id of -1, and
 	// names a face after its cluster title, falling back to the cluster id.
@@ -125,6 +126,20 @@ export const useFacesStore = defineStore('faces', () => {
 	}
 
 	/**
+	 * Remember which contact a face is linked to, the way the WebDAV listing reports it.
+	 *
+	 * @param faceName - Face the link belongs to
+	 * @param link - The contact and who linked it
+	 */
+	function setFaceContact(faceName: string, link: FaceContactLink): void {
+		const face = faces.value[faceName]
+		if (face === undefined) {
+			return
+		}
+		face.attributes['face-contact'] = JSON.stringify(link)
+	}
+
+	/**
 	 * Move photos from one face to another, or out of the unassigned ones
 	 *
 	 * @param faceName - Face the photos land on
@@ -200,6 +215,27 @@ export const useFacesStore = defineStore('faces', () => {
 	}
 
 	/**
+	 * Record a name the server already gave a face, for example when linking it
+	 * to a contact named it.
+	 *
+	 * @param oldName - Name the face carried
+	 * @param faceName - Name it carries now
+	 */
+	function relabelFace(oldName: string, faceName: string): void {
+		const face = faces.value[oldName]
+		if (face === undefined || oldName === faceName) {
+			return
+		}
+		const files = facesFiles.value[oldName]
+		removeFaces([oldName])
+		face.rename(faceName)
+		addFaces([face])
+		if (files !== undefined) {
+			facesFiles.value[faceName] = files
+		}
+	}
+
+	/**
 	 * @param oldName - Name the face carries
 	 * @param faceName - Name to give it
 	 * @throws {Error} When the name is taken, or the server refuses the rename
@@ -250,6 +286,8 @@ export const useFacesStore = defineStore('faces', () => {
 		addUnassignedFiles,
 		removeUnassignedFiles,
 		setUnassignedFilesCount,
+		setFaceContact,
+		relabelFace,
 		moveFilesToFace,
 		removeFilesFromFace,
 		renameFace,

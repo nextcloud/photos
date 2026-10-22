@@ -36,6 +36,23 @@
 						:class="{ 'hidden-visually': face.basename.match(/^[0-9]+$/) }">
 						{{ face.basename }}
 					</h2>
+					<NcButton
+						v-if="linkedContact !== null && linkedContact.url !== null"
+						class="face__header__contact"
+						variant="tertiary"
+						size="small"
+						:href="linkedContact.url"
+						:aria-label="t('photos', 'Open contact {name}', { name: linkedContact.displayName })"
+						:title="t('photos', 'Open contact {name}', { name: linkedContact.displayName })">
+						<template #icon>
+							<CardAccountDetailsOutline :size="20" />
+						</template>
+						{{ linkedContact.displayName }}
+					</NcButton>
+					<span v-else-if="linkedContact !== null" class="face__header__contact">
+						<CardAccountDetailsOutline :size="20" />
+						{{ linkedContact.displayName }}
+					</span>
 				</div>
 
 				<NcLoadingIcon v-if="loadingCount > 0 || loadingFaces" />
@@ -53,6 +70,35 @@
 					</NcActionButton>
 				</NcActions>
 				<NcActions :forceMenu="true">
+					<template v-if="contactLinkingAvailable">
+						<NcActionButton
+							:closeAfterClick="true"
+							@click="showContactLinkModal = true">
+							<template #icon>
+								<LinkVariant />
+							</template>
+							{{ linkedContact !== null ? t('photos', 'Link to a different contact') : t('photos', 'Link to contact') }}
+						</NcActionButton>
+						<NcActionLink
+							v-if="linkedContact !== null && linkedContact.url !== null"
+							:href="linkedContact.url"
+							:closeAfterClick="true">
+							<template #icon>
+								<OpenInNew />
+							</template>
+							{{ t('photos', 'Open contact') }}
+						</NcActionLink>
+						<NcActionButton
+							v-if="linkedContact !== null"
+							:closeAfterClick="true"
+							@click="handleUnlinkContact">
+							<template #icon>
+								<LinkVariantOff />
+							</template>
+							{{ t('photos', 'Unlink contact') }}
+						</NcActionButton>
+						<NcActionSeparator />
+					</template>
 					<NcActionButton
 						v-if="Object.keys(faces).length > 1"
 						:closeAfterClick="true"
@@ -64,6 +110,15 @@
 						{{ t('photos', 'Merge with different person') }}
 					</NcActionButton>
 					<template v-if="selectedFileIds.length">
+						<NcActionButton
+							v-if="contactLinkingAvailable && selectedFileIds.length === 1"
+							:closeAfterClick="true"
+							@click="handleUseAsContactPhoto(selectedFileIds[0])">
+							<template #icon>
+								<AccountBoxOutline />
+							</template>
+							{{ t('photos', 'Use as contact photo') }}
+						</NcActionButton>
 						<NcActionButton
 							:closeAfterClick="true"
 							:aria-label="t('photos', 'Download selected files')"
@@ -180,6 +235,13 @@
 			<FaceMergeForm :firstFace="faceName" @select="handleMerge($event)" />
 		</NcDialog>
 
+		<FaceContactLinkDialog
+			v-if="showContactLinkModal"
+			:faceName="faceName"
+			:linking="linkingContact"
+			@select="handleLinkContact"
+			@close="closeContactLinkModal" />
+
 		<NcDialog
 			v-if="showMoveModal"
 			:name="t('photos', 'Move to different person')"
@@ -193,29 +255,39 @@
 
 <script setup lang="ts">
 import type { Collection } from '../services/collectionFetcher.ts'
+import type { RecognizeContact } from '../services/recognizeContacts.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
+import { showError, showSuccess } from '@nextcloud/dialogs'
 import { translatePlural as n, translate as t } from '@nextcloud/l10n'
 import { getViewer } from '@nextcloud/viewer'
 import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcActionLink from '@nextcloud/vue/components/NcActionLink'
 import NcActions from '@nextcloud/vue/components/NcActions'
+import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
+import AccountBoxOutline from 'vue-material-design-icons/AccountBoxOutline.vue'
 import AccountSwitchOutline from 'vue-material-design-icons/AccountSwitchOutline.vue'
 import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
+import CardAccountDetailsOutline from 'vue-material-design-icons/CardAccountDetailsOutline.vue'
 import Close from 'vue-material-design-icons/Close.vue'
+import LinkVariant from 'vue-material-design-icons/LinkVariant.vue'
+import LinkVariantOff from 'vue-material-design-icons/LinkVariantOff.vue'
 import Merge from 'vue-material-design-icons/Merge.vue'
+import OpenInNew from 'vue-material-design-icons/OpenInNew.vue'
 import PencilOutline from 'vue-material-design-icons/PencilOutline.vue'
 import SendOutline from 'vue-material-design-icons/SendOutline.vue'
 import Star from 'vue-material-design-icons/Star.vue'
 import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import Download from 'vue-material-design-icons/TrayArrowDown.vue'
+import FaceContactLinkDialog from '../components/Faces/FaceContactLinkDialog.vue'
 import FaceMergeForm from '../components/Faces/FaceMergeForm.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
@@ -223,7 +295,15 @@ import { useFetchFaces } from '../composables/useFetchFaces.ts'
 import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
 import { logger } from '../services/logger.ts'
-import { useFacesStore } from '../store/faces.ts'
+import {
+	getFaceClusterId,
+	isContactLinkingAvailable,
+	linkFaceToContact,
+	parseFaceContact,
+	setContactPhotoFromFace,
+	unlinkFace,
+} from '../services/recognizeContacts.ts'
+import { findFaceDetection, useFacesStore } from '../store/faces.ts'
 import { useFilesStore } from '../store/files.ts'
 
 const props = withDefaults(defineProps<{
@@ -243,7 +323,12 @@ const nameInput = useTemplateRef<HTMLInputElement>('nameInput')
 const showMoveModal = ref(false)
 const showMergeModal = ref(false)
 const showRenameModal = ref(false)
+const showContactLinkModal = ref(false)
+const linkingContact = ref(false)
+/** Photo whose face becomes the contact photo as soon as the person is linked to a contact. */
+const pendingContactPhotoFileId = ref<string | null>(null)
 const loadingCount = ref(0)
+const contactLinkingAvailable = isContactLinkingAvailable()
 const appContent = document.getElementById('app-content-vue')
 
 const files = computed(() => filesStore.files)
@@ -251,6 +336,8 @@ const faces = computed(() => facesStore.faces)
 const facesFiles = computed(() => facesStore.facesFiles)
 const face = computed<Collection | undefined>(() => faces.value[props.faceName])
 const faceFileIds = computed<string[]>(() => facesFiles.value[props.faceName] || [])
+
+const linkedContact = computed<RecognizeContact | null>(() => (face.value !== undefined ? parseFaceContact(face.value).contact : null))
 
 // Favorite all selection if at least one file is not on the favorites.
 const shouldFavoriteSelection = computed<boolean>(() => selectedFileIds.value.some((fileId) => filesStore.files[fileId].attributes.favorite === 0))
@@ -335,6 +422,92 @@ async function handleMove(faceName: string, fileIds: string[]): Promise<void> {
 		showMoveModal.value = false
 	} catch (error) {
 		logger.error('Failed to move selection', { error })
+	} finally {
+		loadingCount.value--
+	}
+}
+
+function closeContactLinkModal(): void {
+	showContactLinkModal.value = false
+	pendingContactPhotoFileId.value = null
+}
+
+async function handleLinkContact(contact: RecognizeContact): Promise<void> {
+	const clusterId = face.value !== undefined ? getFaceClusterId(face.value) : null
+	if (clusterId === null || linkingContact.value) {
+		return
+	}
+
+	try {
+		linkingContact.value = true
+		loadingCount.value++
+		const updated = await linkFaceToContact(clusterId, contact)
+		facesStore.setFaceContact(props.faceName, { linkSource: updated.linkSource, contact: updated.contact })
+		showContactLinkModal.value = false
+
+		const fileId = pendingContactPhotoFileId.value
+		pendingContactPhotoFileId.value = null
+		if (fileId !== null) {
+			await setContactPhoto(fileId)
+		} else {
+			showSuccess(t('photos', '{faceName} is now linked to the contact {contactName}', { faceName: updated.name, contactName: contact.displayName }))
+		}
+
+		// An unnamed person takes the name of the contact, which changes its address
+		if (updated.name !== props.faceName) {
+			facesStore.relabelFace(props.faceName, updated.name)
+			router.push({ name: 'facecontent', params: { faceName: updated.name } })
+		}
+	} catch (error) {
+		logger.error('Failed to link face to contact', { error })
+		showError(t('photos', 'Failed to link the person to the contact'))
+	} finally {
+		linkingContact.value = false
+		loadingCount.value--
+	}
+}
+
+async function handleUnlinkContact(): Promise<void> {
+	const clusterId = face.value !== undefined ? getFaceClusterId(face.value) : null
+	if (clusterId === null) {
+		return
+	}
+
+	try {
+		loadingCount.value++
+		const updated = await unlinkFace(clusterId)
+		facesStore.setFaceContact(props.faceName, { linkSource: updated.linkSource, contact: updated.contact })
+	} catch (error) {
+		logger.error('Failed to unlink face from contact', { error })
+		showError(t('photos', 'Failed to unlink the person from the contact'))
+	} finally {
+		loadingCount.value--
+	}
+}
+
+// Without a linked contact the user picks one first, and the photo follows once the link is made.
+async function handleUseAsContactPhoto(fileId: string): Promise<void> {
+	if (linkedContact.value === null) {
+		pendingContactPhotoFileId.value = fileId
+		showContactLinkModal.value = true
+		return
+	}
+	await setContactPhoto(fileId)
+}
+
+/**
+ * @param fileId - Photo holding the face that becomes the contact photo
+ */
+async function setContactPhoto(fileId: string): Promise<void> {
+	try {
+		loadingCount.value++
+		const detection = findFaceDetection(files.value[fileId], props.faceName)
+		const contact = await setContactPhotoFromFace(detection.id)
+		resetSelection()
+		showSuccess(t('photos', 'The photo of {contactName} was updated', { contactName: contact.displayName }))
+	} catch (error) {
+		logger.error('Failed to set the contact photo', { error })
+		showError(t('photos', 'Failed to set the contact photo'))
 	} finally {
 		loadingCount.value--
 	}
