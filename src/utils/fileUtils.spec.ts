@@ -33,4 +33,39 @@ describe('toViewerFileInfo', () => {
 		expect(toViewerFileInfo(file).previewUrl)
 			.toBe('/apps/photos/api/v1/preview/42?etag=etag-value&x=4096&y=4096')
 	})
+
+	test('converts the live photo metadata file id to a number', () => {
+		const file = {
+			fileid: 42,
+			basename: 'photo.jpg',
+			path: '/photo.jpg',
+			source: '/remote.php/dav/files/alice/photo.jpg',
+			owner: 'alice',
+			permissions: 0,
+			attributes: {
+				etag: 'etag-value',
+				hasPreview: true,
+				'metadata-files-live-photo': '77',
+			},
+		} as unknown as Node
+
+		expect(toViewerFileInfo(file).metadataFilesLivePhoto).toBe(77)
+	})
+
+	test('leaves the live photo metadata file id undefined when absent', () => {
+		const file = {
+			fileid: 42,
+			basename: 'photo.jpg',
+			path: '/photo.jpg',
+			source: '/remote.php/dav/files/alice/photo.jpg',
+			owner: 'alice',
+			permissions: 0,
+			attributes: {
+				etag: 'etag-value',
+				hasPreview: true,
+			},
+		} as unknown as Node
+
+		expect(toViewerFileInfo(file).metadataFilesLivePhoto).toBeUndefined()
+	})
 })
