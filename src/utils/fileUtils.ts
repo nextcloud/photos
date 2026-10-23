@@ -191,6 +191,7 @@ export type ViewerFileInfo = {
 	previewUrl: string
 	etag: string
 	permissions: string
+	metadataFilesLivePhoto?: number
 }
 
 /**
@@ -199,6 +200,7 @@ export type ViewerFileInfo = {
  */
 export function toViewerFileInfo(file: Node): ViewerFileInfo {
 	let permissions = ''
+	const livePhotoPeerId = file.attributes['metadata-files-live-photo']
 
 	if ((file.permissions & Permission.CREATE) === Permission.CREATE) {
 		permissions += 'CK'
@@ -237,6 +239,9 @@ export function toViewerFileInfo(file: Node): ViewerFileInfo {
 		previewUrl: file.attributes.previewUrl ?? getPreviewUrl(file, 4096),
 		etag: file.attributes.etag,
 		permissions,
+		metadataFilesLivePhoto: livePhotoPeerId !== undefined
+			? Number(livePhotoPeerId)
+			: undefined,
 	}
 }
 
