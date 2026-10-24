@@ -79,7 +79,7 @@
     "@nextcloud/eslint-config": "^9.0.1",
     "@nextcloud/stylelint-config": "^3.1.0",
     "@nextcloud/vite-config": "^2.5.4",
-    "@playwright/test": "^1.62.1",
+    "@playwright/test": "^1.64.0",
     "@types/dockerode": "^4.0.1",
     "@vitest/coverage-v8": "^4.1.11",
     "@vue/test-utils": "^2.4.6",
