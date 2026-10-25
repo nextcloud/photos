@@ -51,7 +51,7 @@ jobs:
       with:
         persist-credentials: false
     - name: Read package.json
-      uses: nextcloud-libraries/parse-package-engines-action@122ae05d4257008180a514e1ddeb0c1b9d094bdd # v0.1.0
+      uses: nextcloud-libraries/parse-package-engines-action@39fcc545a815c353dd0a3fd8fd2ef6e59fd02b92 # v0.2.0
       id: versions
     - name: Check composer.json
       id: check_composer
@@ -107,7 +107,7 @@ jobs:
         persist-credentials: false
 
     - name: Read package.json
-      uses: nextcloud-libraries/parse-package-engines-action@122ae05d4257008180a514e1ddeb0c1b9d094bdd # v0.1.0
+      uses: nextcloud-libraries/parse-package-engines-action@39fcc545a815c353dd0a3fd8fd2ef6e59fd02b92 # v0.2.0
       id: versions
 
     - name: Set up node
