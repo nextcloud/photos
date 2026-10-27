@@ -1,0 +1,10 @@
+import{d as a,c as t,u as i}from"./preload-helper-Bnn7Ijva.chunk.mjs";import{n as l,k as g}from"./index-ViJiMj4X.chunk.mjs";const p=`<svg
+	xmlns="http://www.w3.org/2000/svg"
+	viewBox="0 0 24 12">
+	<path d="M17,1H7A5,5 0 0,0 2,6 5,5 0 0,0 7,11H17A5,5 0 0,0 22,6 5,5 0 0,0 17,1Z" />
+	<circle
+		cy="6"
+		r="3"
+		fill="var(--color-main-background)" />
+</svg>`,v=a({__name:"NcIconToggleSwitch",props:{checked:{type:Boolean},size:{default:34},inline:{type:Boolean,default:!1}},setup(o){const c=o;i((w,s)=>({"2d1b8583":s.color,"78386a55":s.cx}));const e=t(()=>c.checked?"var(--color-primary-element)":"var(--color-text-maxcontrast)"),n=t(()=>c.checked?"calc(17 / 24 * 100%)":"calc(7 / 24 * 100%)");return{__sfc:!0,svg:p,props:c,color:e,cx:n,NcIconSvgWrapper:g}}}),h="_iconToggleSwitch_l-EPW",m={"material-design-icon":"_material-design-icon_Sb2uS",iconToggleSwitch:h};var u=function(){var o=this,c=o._self._c,e=o._self._setupProxy;return c(e.NcIconSvgWrapper,{class:o.$style.iconToggleSwitch,attrs:{svg:e.svg,size:o.size,inline:o.inline}})},_=[];const r={$style:m};function d(o){for(var c in r)this[c]=r[c]}var f=l(v,u,_,!1,d,null);const y=f.exports;export{y as N};
+//# sourceMappingURL=NcIconToggleSwitch-CaDISrhm-BzT-rqEY.chunk.mjs.map
