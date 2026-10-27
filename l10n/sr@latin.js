@@ -13,6 +13,7 @@ OC.L10N.register(
     "Share" : "Deli",
     "Delete" : "Obriši",
     "Cancel" : "Poništi",
+    "Add" : "Dodaj",
     "Home" : "Početak",
     "Loading folders…" : "Učitavam fascikle…",
     "Details" : "Detalji"
