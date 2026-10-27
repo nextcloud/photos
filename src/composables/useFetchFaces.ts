@@ -12,7 +12,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { showError } from '@nextcloud/dialogs'
 import { resultToNode } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
-import he from 'he'
+import { decode } from 'he'
 import { onBeforeMount, ref } from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import { getPropFind } from '../services/DavRequest.ts'
@@ -45,14 +45,14 @@ function toFaceNodes(fetchedRawFiles: FileStat[]): FaceNode[] {
 	return fetchedRawFiles
 		.map((file) => ({
 			...file,
-			filename: he.decode(file.props?.realpath).replace(`/${getCurrentUser()?.uid}/files`, `/files/${getCurrentUser()?.uid}`),
+			filename: decode(file.props?.realpath).replace(`/${getCurrentUser()?.uid}/files`, `/files/${getCurrentUser()?.uid}`),
 		}))
 		.map((file) => {
 			const node = resultToNode(file) as FaceNode
 			// Set the parsed detections after resultToNode: it builds attributes
 			// as `{ ...node, ...props }`, so assigning before would be overwritten
 			// by the raw JSON string still held in props.
-			node.attributes['face-detections'] = JSON.parse(he.decode(file.props?.['face-detections']))
+			node.attributes['face-detections'] = JSON.parse(decode(file.props?.['face-detections']))
 			return node
 		})
 }

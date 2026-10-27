@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import he from 'he'
+import { decode } from 'he'
 import { useFacesStore } from '../store/faces.ts'
 
 type Cover = {
@@ -31,7 +31,7 @@ export function useFaceCover(): {
 	 * @param faceName - Face the cover belongs to
 	 */
 	function getFaceCover(faceName: string): Cover {
-		return JSON.parse(he.decode(facesStore.faces[faceName].attributes['face-preview-image'] || '{}'))
+		return JSON.parse(decode(facesStore.faces[faceName].attributes['face-preview-image'] || '{}'))
 	}
 
 	/**

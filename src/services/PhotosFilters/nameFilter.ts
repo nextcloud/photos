@@ -6,7 +6,7 @@
 import type { PhotosFilter } from './PhotosFilter.ts'
 
 import magnifySvg from '@mdi/svg/svg/magnify.svg?raw'
-import he from 'he'
+import { encode } from 'he'
 
 export type NameValueType = string
 
@@ -19,7 +19,7 @@ export const nameFilterId = 'name'
  * @param searchTerm - Term typed by the user
  */
 function escapeSearchTerm(searchTerm: string): string {
-	return he.encode(searchTerm.replace(/[\\%_]/g, '\\$&'))
+	return encode(searchTerm.replace(/[\\%_]/g, '\\$&'))
 }
 
 /**

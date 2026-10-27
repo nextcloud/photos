@@ -8,7 +8,7 @@ import type { ResponseDataDetailed, SearchOptions, SearchResult } from 'webdav'
 
 import { defaultRootPath, resultToNode } from '@nextcloud/files/dav'
 import { join } from '@nextcloud/paths'
-import he from 'he'
+import { encode } from 'he'
 import { useUserConfigStore } from '../store/userConfig.ts'
 import { allMimes } from './AllowedMimes.js'
 import { davClient } from './DavClient.ts'
@@ -89,7 +89,7 @@ export async function getPhotos(_options: Partial<PhotoSearchOptions> = {}): Pro
 	const sourceFolders = useUserConfigStore().photosSourceFolders
 		.map((folder) => `
 			<d:scope>
-				<d:href>${join(defaultRootPath, he.encode(folder))}</d:href>
+				<d:href>${join(defaultRootPath, encode(folder))}</d:href>
 				<d:depth>infinity</d:depth>
 			</d:scope>`)
 		.join('\n')
