@@ -26,7 +26,7 @@ export default defineConfig({
 	// on CI we retry once to get traces of failures
 	retries: process.env.CI ? 1 : 0,
 	// we shard on CI to speed up the tests so no parallelism in workers
-	workers: process.env.CI ? 2 : undefined,
+	workers: process.env.CI ? 1 : undefined,
 	// on CI we want to have blob (so we can merge reports and download them for inspection),
 	// dot (so we have a quick overview in the logs while the tests are running)
 	// github (to have annotations in the PR)
