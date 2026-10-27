@@ -266,12 +266,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextcloud-deps/ocp.git",
-                "reference": "764d44bcebeb1195d5c1b57d9ecbb0154e7ebff9"
+                "reference": "b1ed392a115fdb533c900e971885004081375fa9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/764d44bcebeb1195d5c1b57d9ecbb0154e7ebff9",
-                "reference": "764d44bcebeb1195d5c1b57d9ecbb0154e7ebff9",
+                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/b1ed392a115fdb533c900e971885004081375fa9",
+                "reference": "b1ed392a115fdb533c900e971885004081375fa9",
                 "shasum": ""
             },
             "require": {
@@ -312,7 +312,7 @@
                 "issues": "https://github.com/nextcloud-deps/ocp/issues",
                 "source": "https://github.com/nextcloud-deps/ocp/tree/master"
             },
-            "time": "2026-10-09T03:32:47+00:00"
+            "time": "2026-10-25T02:11:02+00:00"
         },
         {
             "name": "psr/cache",
