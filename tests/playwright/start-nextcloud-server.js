@@ -8,7 +8,7 @@ import { configureNextcloud, runExec, runOcc, startNextcloud, stopNextcloud, wai
 async function start() {
 	const port = Number.parseInt(process.env.NEXTCLOUD_PORT ?? '8090', 10)
 
-	const ip = await startNextcloud(process.env.BRANCH, true, {
+	const ip = await startNextcloud(process.env.BRANCH ?? 'stable35', true, {
 		exposePort: port,
 		forceRecreate: true,
 	})
