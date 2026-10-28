@@ -197,7 +197,7 @@ export default {
 		async handleMove(faceName, fileIds) {
 			try {
 				this.loadingCount++
-				await this.$store.dispatch('moveFilesToFace', { oldFace: null, faceName, fileIdsToMove: fileIds })
+				await this.$store.dispatch('moveFilesToFace', { faceName, fileIdsToMove: fileIds })
 				this.showMoveModal = false
 			} catch (error) {
 				logger.error('Failed to move selection', { error })
