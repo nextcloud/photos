@@ -97,6 +97,42 @@ describe('useFacesStore', () => {
 		expect(store.facesFiles.Alice).toEqual(['1'])
 	})
 
+	test('moveFilesToFace names each unassigned face on a photo in turn', async () => {
+		const store = useFacesStore()
+		store.addFaces([face('Alice'), face('Bob')])
+		store.addUnassignedFiles(['1'])
+		seedPhoto(1, [
+			{ id: 7, clusterId: -1, title: null },
+			{ id: 8, clusterId: -1, title: null },
+		])
+
+		await store.moveFilesToFace('Alice', ['1'])
+
+		expect(davClient.moveFile).toHaveBeenLastCalledWith('/recognize/alice/unassigned-faces/7-1.jpg', `${FACES_ROOT}/Alice/7-1.jpg`)
+		expect(store.unassignedFiles).toEqual(['1'])
+
+		await store.moveFilesToFace('Bob', ['1'])
+
+		expect(davClient.moveFile).toHaveBeenLastCalledWith('/recognize/alice/unassigned-faces/8-1.jpg', `${FACES_ROOT}/Bob/8-1.jpg`)
+		expect(store.unassignedFiles).toEqual([])
+		expect(store.facesFiles.Alice).toEqual(['1'])
+		expect(store.facesFiles.Bob).toEqual(['1'])
+	})
+
+	test('moveFilesToFace moves a freshly named face on to another one', async () => {
+		const store = useFacesStore()
+		store.addFaces([face('Alice'), face('Bob')])
+		store.addUnassignedFiles(['1'])
+		seedPhoto(1, [{ id: 7, clusterId: -1, title: null }])
+
+		await store.moveFilesToFace('Alice', ['1'])
+		await store.moveFilesToFace('Bob', ['1'], 'Alice')
+
+		expect(davClient.moveFile).toHaveBeenLastCalledWith(`${FACES_ROOT}/Alice/7-1.jpg`, `${FACES_ROOT}/Bob/7-1.jpg`)
+		expect(store.facesFiles.Alice).toEqual([])
+		expect(store.facesFiles.Bob).toEqual(['1'])
+	})
+
 	test('moveFilesToFace leaves the state alone when the server refuses', async () => {
 		const store = useFacesStore()
 		store.addFaces([face('Alice'), face('Bob')])
