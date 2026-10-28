@@ -22,6 +22,22 @@ type FaceDetection = {
 }
 
 /**
+ * @param file The photo node carrying the parsed `face-detections` attribute.
+ */
+function getFaceDetections(file: PhotoFile): FaceDetection[] {
+	return ((file.attributes as Record<string, unknown>)['face-detections'] ?? []) as FaceDetection[]
+}
+
+/**
+ * recognize lists unassigned faces as detections with a cluster id of -1.
+ *
+ * @param detection The face detection to check.
+ */
+function isUnassigned(detection: FaceDetection): boolean {
+	return detection.clusterId === -1
+}
+
+/**
  * Find the face detection of a file that belongs to the given face.
  *
  * The recognize WebDAV API names every detected face `{detectionId}-{fileName}`
@@ -30,18 +46,16 @@ type FaceDetection = {
  * name therefore yields a 404, so we need the detection to build the correct path.
  *
  * @param file The photo node carrying the parsed `face-detections` attribute.
- * @param face The name of the face the detection belongs to, or `undefined` for
+ * @param face The name of the face the detection belongs to, or empty for
  *             the unassigned-faces collection.
  */
 function findFaceDetection(file: PhotoFile, face?: string): FaceDetection {
-	const detections = ((file.attributes as Record<string, unknown>)['face-detections'] ?? []) as FaceDetection[]
-	// recognize lists unassigned faces as detections with a cluster id of -1, and
-	// names a face after its cluster title, falling back to the cluster id.
-	const detection = face === undefined
-		? detections.find((d) => d.clusterId === -1)
-		: detections.find((d) => (d.title || `${d.clusterId}`) === face)
+	// recognize names a face after its cluster title, falling back to the cluster id.
+	const detection = face
+		? getFaceDetections(file).find((d) => (d.title || `${d.clusterId}`) === face)
+		: getFaceDetections(file).find(isUnassigned)
 	if (detection === undefined) {
-		throw new Error(`No face detection found for file "${file.basename}" in face "${face ?? 'unassigned'}"`)
+		throw new Error(`No face detection found for file "${file.basename}" in face "${face || 'unassigned'}"`)
 	}
 	return detection
 }
@@ -194,11 +208,13 @@ const actions = {
 						oldFace ? `/recognize/${getCurrentUser()?.uid}/faces/${oldFace}/${recognizeFileName}` : `/recognize/${getCurrentUser()?.uid}/unassigned-faces/${recognizeFileName}`,
 						`/recognize/${getCurrentUser()?.uid}/faces/${faceName}/${recognizeFileName}`,
 					)
+					// The id of the target cluster is unknown here, the title identifies it.
 					detection.title = faceName
+					detection.clusterId = null
 					await context.commit('addFilesToFace', { faceName, fileIdsToAdd: [fileId] })
 					if (oldFace) {
 						await context.commit('removeFilesFromFace', { faceName: oldFace, fileIdsToRemove: [fileId] })
-					} else {
+					} else if (!getFaceDetections(file).some(isUnassigned)) {
 						await context.commit('removeUnassignedFile', { fileIdsToRemove: [fileId] })
 					}
 					semaphore.release(symbol)
