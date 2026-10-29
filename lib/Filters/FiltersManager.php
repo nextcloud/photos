@@ -16,8 +16,10 @@ use OCA\Photos\AppInfo\Application;
 use OCA\Photos\Service\UserConfigService;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
+use OCP\Files\Node;
 use OCP\Files\Search\ISearchBinaryOperator;
 use OCP\Files\Search\ISearchComparison;
+use OCP\Files\Storage\ISharedStorage;
 
 class FiltersManager {
 	/**
@@ -69,6 +71,8 @@ class FiltersManager {
 
 		$files = $this->rootFolder->getUserFolder($userId)->search($query);
 
+		$files = array_values(array_filter($files, [$this, 'isDownloadAllowed']));
+
 		return array_map(
 			function ($file) use ($userId) {
 				return new AlbumFile(
@@ -85,6 +89,23 @@ class FiltersManager {
 			},
 			$files
 		);
+	}
+
+	/**
+	 * A filter search spans the user's received-share mounts. A file reached
+	 * through a share whose download permission is disabled must not be
+	 * surfaced as an album entry: the album content and preview paths serve the
+	 * file bytes without a per-share check, which would otherwise expose the
+	 * file to the album owner and its collaborators in breach of the share.
+	 */
+	public function isDownloadAllowed(Node $file): bool {
+		$storage = $file->getStorage();
+		if (!$storage->instanceOfStorage(ISharedStorage::class)) {
+			return true;
+		}
+
+		/** @var ISharedStorage $storage */
+		return $storage->getShare()->canDownload();
 	}
 
 	private function getPhotosDefaultSearchConditions(string $userId): array {
