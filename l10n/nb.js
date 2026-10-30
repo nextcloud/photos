@@ -5,7 +5,7 @@ OC.L10N.register(
     "Photos" : "Bilder",
     "On This Day" : "På denne dagen",
     "Your memories under your control" : "Dine minner under din kontroll",
-    "Search by file name" : "Søk med filnavn",
+    "Search by file name" : "Søk etter filnavn",
     "Clear search" : "Tøm søk",
     "All media" : "Alle mediefiler",
     "Videos" : "Filmer",
