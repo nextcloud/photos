@@ -62,6 +62,7 @@ OC.L10N.register(
     "Open the \"{name}\" folder" : "Отвори ја папката на \"{name}\"",
     "Go back" : "Назад",
     "Failed to delete {fileName}" : "Не успеа да се избрише {fileName}",
+    "Actions for {name}" : "Акции за {name}",
     "View metadata" : "Види метаподатоци",
     "Edit metadata" : "Уреди метаподатоци",
     "Remove from favorites" : "Отстрани од фаворити",
