@@ -1,0 +1,2 @@
+import{m as n,o as r}from"./AllowedMimes-Ddfx6HXR.chunk.mjs";import{s as e,o as l,i as s,c as u}from"./icons-C9jNe4Lo.chunk.mjs";function c(){const o=e(new AbortController),a=u(()=>o.value.signal);function t(){o.value.abort(),o.value=new AbortController}return l(()=>o.value.abort()),s(n,null)!==null&&r(t),{abortSignal:a,abortPendingRequest:t}}export{c as u};
+//# sourceMappingURL=useAbortController-D1FRLl1r.chunk.mjs.map
