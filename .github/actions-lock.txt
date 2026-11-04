@@ -25,7 +25,7 @@ dc1f60c242a2377a0de26a521c68b49a psalm.yml
 2dbec18233063b42f4d8e03bbb43671c reuse.yml
 3688c8c5aa6a98dcd3b5019dcecccddd sync-workflow-templates.yml
 abcb8206c3f6c5a9dc86cccf57846bfc update-nextcloud-ocp-approve-merge.yml
-5165b2cbba7d5b36735419524e2fe4e9 update-nextcloud-ocp.yml
+9d8001c85ee83c52786a6b1b3243a45b update-nextcloud-ocp.yml
 22604c31b526de270a080eb19967a638 update-stable-titles.yml
 6e07ed85ca156b6bf121a50dc1af6712 npm-build.yml
 cc0602ed005f19639c69c0b975c9c84f playwright.yml
