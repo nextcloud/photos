@@ -43,8 +43,8 @@
 					:name="t('photos', 'Photos')"
 					data-id-app-nav-item="photos">
 					<template #icon="{ active }">
-						<Camera v-if="active" :size="20" />
-						<CameraOutline v-else :size="20" />
+						<IconCamera v-if="active" :size="20" />
+						<IconCameraOutline v-else :size="20" />
 					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
@@ -211,8 +211,8 @@ import AccountGroup from 'vue-material-design-icons/AccountGroup.vue'
 import AccountGroupOutline from 'vue-material-design-icons/AccountGroupOutline.vue'
 import CalendarToday from 'vue-material-design-icons/CalendarToday.vue'
 import CalendarTodayOutline from 'vue-material-design-icons/CalendarTodayOutline.vue'
-import Camera from 'vue-material-design-icons/Camera.vue'
-import CameraOutline from 'vue-material-design-icons/CameraOutline.vue'
+import IconCamera from 'vue-material-design-icons/Camera.vue'
+import IconCameraOutline from 'vue-material-design-icons/CameraOutline.vue'
 import CogOutline from 'vue-material-design-icons/CogOutline.vue'
 import Folder from 'vue-material-design-icons/Folder.vue'
 import FolderOutline from 'vue-material-design-icons/FolderOutline.vue'
@@ -255,8 +255,8 @@ export default {
 		CogOutline,
 		CalendarToday,
 		CalendarTodayOutline,
-		Camera,
-		CameraOutline,
+		IconCamera,
+		IconCameraOutline,
 		AccountGroup,
 		AccountGroupOutline,
 		Folder,
