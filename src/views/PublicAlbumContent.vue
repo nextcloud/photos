@@ -30,12 +30,15 @@
 
 					<template v-if="album !== undefined" #right>
 						<NcActions :forceMenu="true" :aria-label="t('photos', 'Open actions menu')">
-							<!-- TODO: enable download on public albums -->
-							<!-- <ActionDownload v-if="albumFileIds.length > 0"
-							:selected-file-ids="albumFileIds"
-							:title="t('photos', 'Download all files in album')">
-							<DownloadMultiple slot="icon" />
-						</ActionDownload> -->
+							<NcActionLink
+								v-if="albumFileIds.length > 0"
+								:href="downloadUrl"
+								download>
+								{{ t('photos', 'Download all files in album') }}
+								<template #icon>
+									<DownloadMultiple />
+								</template>
+							</NcActionLink>
 
 							<template v-if="selectedFileIds.length > 0">
 							<!-- TODO: enable download on public albums -->
@@ -86,14 +89,15 @@ import type { PublicAlbum } from '../store/publicAlbums.ts'
 
 import { getClient } from '@nextcloud/files/dav'
 // import Download from 'vue-material-design-icons/TrayArrowDown.vue'
-// import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
 import { t } from '@nextcloud/l10n'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
 import { computed, onBeforeMount, ref } from 'vue'
+import NcActionLink from '@nextcloud/vue/components/NcActionLink'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 // import Plus from 'vue-material-design-icons/Plus.vue'
 // import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
+import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
 import ImageOffOutline from 'vue-material-design-icons/ImageOffOutline.vue'
 import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
@@ -125,6 +129,8 @@ const publicClient = getClient(generateRemoteUrl('dav'), {
 const albumName = computed(() => props.token)
 
 const album = computed(() => publicAlbumsStore.getPublicAlbum(albumName.value))
+
+const downloadUrl = computed(() => generateUrl(`/apps/photos/api/v1/publicDownload/${props.token}`))
 
 const albumFileIds = computed(() => publicAlbumsStore.getPublicAlbumFiles(albumName.value))
 

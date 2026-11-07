@@ -286,6 +286,16 @@ namespace OCA\DAV\Events {
 	}
 }
 
+namespace OC {
+	class Streamer {
+		public function __construct(\OCP\IRequest|bool $preferTar, int|float $size, int $numberOfFiles, \OCP\IDateTimeZone $timezoneFactory);
+		public function sendHeaders(string $name): void;
+		/** @param resource $stream */
+		public function addFileFromStream($stream, string $internalName, int|float $size, int|false $time): bool;
+		public function finalize(): void;
+	}
+}
+
 namespace OC\User {
 	class NoUserException extends \Exception {
 	}
