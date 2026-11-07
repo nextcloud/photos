@@ -84,7 +84,7 @@
     "@vitest/coverage-v8": "^4.1.11",
     "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.9.1",
-    "autoprefixer": "^10.6.1",
+    "autoprefixer": "^10.6.2",
     "dockerode": "^5.0.1",
     "eslint": "^10.13.0",
     "happy-dom": "^21.0.4",
