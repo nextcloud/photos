@@ -29,7 +29,7 @@ class CSPListener implements IEventListener {
 		}
 
 		$csp = new ContentSecurityPolicy();
-		$csp->addAllowedImageDomain('https://*.tile.openstreetmap.org');
+		$csp->addAllowedConnectDomain('https://tiles.openfreemap.org');
 		$event->addPolicy($csp);
 	}
 }
