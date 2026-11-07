@@ -219,5 +219,10 @@ return [
 				'fileId' => '.*',
 			],
 		],
+		[
+			'name' => 'publicDownload#index',
+			'url' => '/api/v1/publicDownload/{token}',
+			'verb' => 'GET',
+		],
 	],
 ];
