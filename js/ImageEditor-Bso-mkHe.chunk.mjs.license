@@ -15,7 +15,7 @@ This file is generated from multiple sources. Included packages:
 	- version: 3.6.1
 	- license: MIT
 - @nextcloud/image-editor
-	- version: 1.0.0-beta.7
+	- version: 1.0.0-beta.8
 	- license: AGPL-3.0-or-later
 - @nextcloud/viewer
 	- version: 2.0.0-beta.20
