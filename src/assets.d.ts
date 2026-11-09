@@ -14,6 +14,10 @@ declare module '*?url' {
 	export default string
 }
 
+declare module '*?worker&url' {
+	export default string
+}
+
 declare module '*.svg' {
 	const content: string
 	export default content

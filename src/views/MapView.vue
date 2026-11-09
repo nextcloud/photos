@@ -39,8 +39,8 @@
 			class="photos-map__map"
 			:zoom="zoom"
 			:center="center"
-			:options="{ attributionControl: false }">
-			<LTileLayer :url="tileServerUrl" :options="TILE_LAYER_OPTIONS" />
+			:options="{ attributionControl: false }"
+			@ready="addOpenFreeMapLayer">
 			<LControlAttribution position="bottomright" :prefix="attribution" />
 			<!--
 				One marker per photo: libraries with more than a few thousand
@@ -66,7 +66,6 @@ import {
 	LControlAttribution,
 	LMap,
 	LMarker,
-	LTileLayer,
 } from '@vue-leaflet/vue-leaflet'
 import { computed, onMounted, ref, watch } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -76,6 +75,7 @@ import EmptyIllustration from '../components/EmptyIllustration.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import { useLoadedPhotos } from '../composables/useLoadedPhotos.ts'
 import { isMapsInstalled } from '../services/IsMapsInstalled.ts'
+import { addOpenFreeMapLayer, OPENFREEMAP_ATTRIBUTION } from '../utils/openFreeMap.ts'
 
 import 'leaflet/dist/leaflet.css'
 
@@ -86,18 +86,8 @@ defineProps<{
 /** Number of photos used to compute the initial center of the map. */
 const CENTER_SAMPLE_SIZE = 200
 
-const tileServerUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-const attribution = '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+const attribution = OPENFREEMAP_ATTRIBUTION
 const mapsAppUrl = generateUrl('/apps/maps')
-
-/**
- * Nextcloud answers every request with `Referrer-Policy: no-referrer`, and the
- * tile server turns a request that carries no referrer down. Setting the policy
- * on the tiles themselves overrides that for them alone, and the origin is all
- * it hands out — the instance identifies itself without telling the tile server
- * which page of it the photos are being looked at from.
- */
-const TILE_LAYER_OPTIONS = { referrerPolicy: 'strict-origin-when-cross-origin' }
 
 const { photos, loading, loadPhotos } = useLoadedPhotos()
 
