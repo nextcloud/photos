@@ -10,6 +10,7 @@ OC.L10N.register(
     "Favorites" : "Favorits",
     "Shared with you" : "Shared with you",
     "Tags" : "Etiquetas",
+    "Invalid filename." : "Nom de fichièr invalid",
     "Back" : "Retorn",
     "Save" : "Enregistrar",
     "Copy public link" : "Copiar lo ligam public",
