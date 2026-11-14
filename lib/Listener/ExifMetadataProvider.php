@@ -85,7 +85,7 @@ class ExifMetadataProvider implements IEventListener {
 
 			$exifSupportedMimes = ['image/jpeg', 'image/tiff'];
 			if (in_array($node->getMimeType(), $exifSupportedMimes, true)) {
-				$rawExifData = @exif_read_data($fileDescriptor, 'EXIF, GPS', true);
+				$rawExifData = @exif_read_data($fileDescriptor, 'IFD0, EXIF, GPS', true);
 			}
 
 			// We then revert the change after having read the exif data.
