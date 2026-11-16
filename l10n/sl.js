@@ -5,6 +5,7 @@ OC.L10N.register(
     "Photos" : "Fotografije",
     "On This Day" : "Na današnji dan",
     "Your memories under your control" : "Spomini pod vašim nadzorom",
+    "Search by file name" : "Iskanje po datotekah",
     "Clear search" : "Počisti iskanje",
     "All media" : "Vsi viri",
     "Videos" : "Video posnetki",
