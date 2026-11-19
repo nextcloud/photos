@@ -6,7 +6,7 @@
 <template>
 	<div class="photo-actions" :class="{ 'photo-actions--open': menuOpen }" @click.stop>
 		<NcActions
-			:aria-label="t('photos', 'Actions for {name}', { name: photo.basename })"
+			:aria-label="actionsLabel"
 			forceMenu
 			:open="menuOpen"
 			@update:open="menuOpen = $event">
@@ -170,6 +170,9 @@ const isLoggedIn = getCurrentUser() !== null
 
 // Writing is the permission to change the content of the photo, which is what
 // the server checks before it stores corrected metadata.
+// TRANSLATORS Screen reader label of the actions menu of a photo or video. {name} is the file name, e.g. "IMG_1234.jpg"
+const actionsLabel = computed(() => t('photos', 'Actions for {name}', { name: props.photo.basename }))
+
 const canEdit = computed(() => isLoggedIn && (props.photo.permissions & Permission.WRITE) !== 0)
 const canShare = computed(() => isLoggedIn && (props.photo.permissions & Permission.SHARE) !== 0)
 const canDelete = computed(() => isLoggedIn && (props.photo.permissions & Permission.DELETE) !== 0)

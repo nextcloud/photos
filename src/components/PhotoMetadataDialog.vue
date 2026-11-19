@@ -20,10 +20,12 @@
 					<dd>{{ entry.value }}</dd>
 				</div>
 				<div v-if="metadata?.place" class="photo-metadata__entry">
+					<!-- TRANSLATORS Name of the town or city where the photo was taken, worked out from its GPS position -->
 					<dt>{{ t('photos', 'Place') }}</dt>
 					<dd>{{ metadata.place }}</dd>
 				</div>
 				<div v-if="location !== null" class="photo-metadata__entry">
+					<!-- TRANSLATORS GPS position (latitude and longitude) of the photo. Not the same as "Place", which is the name of a town or city -->
 					<dt>{{ t('photos', 'Location') }}</dt>
 					<dd>{{ formatCoordinates(location) }}</dd>
 				</div>

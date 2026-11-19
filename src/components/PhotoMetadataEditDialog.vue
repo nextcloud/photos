@@ -17,6 +17,7 @@
 				:label="t('photos', 'Date and time the photo was taken')" />
 
 			<fieldset class="metadata-editor__location">
+				<!-- TRANSLATORS GPS position (latitude and longitude) of the photo. Not the same as "Place", which is the name of a town or city -->
 				<legend>{{ t('photos', 'Location') }}</legend>
 
 				<div class="metadata-editor__location__coordinates">
