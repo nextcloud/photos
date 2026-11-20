@@ -214,7 +214,7 @@
     "Shared album {title}" : "Geteiltes Album {title}",
     "Public album {title}" : "Öffentliches Album {title}",
     "Tagged photos" : "Fotos mit Schlagworten",
-    "Tagged photo {title}" : "Fotos mit Schlagworten",
+    "Tagged photo {title}" : "Foto mit Schlagwort: {title}",
     "{title}'s face" : "{title}s Gesicht",
     "Last week" : "Letzte Woche",
     "Last Month" : "Letzten Monat",
