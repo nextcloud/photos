@@ -6,7 +6,7 @@
 <template>
 	<div class="photo-actions" :class="{ 'photo-actions--open': menuOpen }" @click.stop>
 		<NcActions
-			:aria-label="t('photos', 'Actions for {name}', { name: photo.basename })"
+			:aria-label="actionsLabel"
 			forceMenu
 			:open="menuOpen"
 			@update:open="menuOpen = $event">
@@ -167,6 +167,9 @@ const deleteConfirmationShown = ref(false)
 // Public shares are browsed without an account, the actions writing anything
 // have nowhere to write to.
 const isLoggedIn = getCurrentUser() !== null
+
+// TRANSLATORS Screen reader label of the actions menu of a photo or video. {name} is the file name, e.g. "IMG_1234.jpg"
+const actionsLabel = computed(() => t('photos', 'Actions for {name}', { name: props.photo.basename }))
 
 // Writing is the permission to change the content of the photo, which is what
 // the server checks before it stores corrected metadata.
