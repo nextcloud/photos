@@ -9,6 +9,7 @@ import { defaultRootPath } from '@nextcloud/files/dav'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { compareModificationTime } from '../utils/fileUtils.ts'
+import { isLivePhotoVideo } from '../utils/livePhoto.ts'
 import { useFilesStore } from './files.ts'
 
 export const useFoldersStore = defineStore('folders', () => {
@@ -45,7 +46,7 @@ export const useFoldersStore = defineStore('folders', () => {
 		const { nomediaPaths } = useFilesStore()
 		const indexed = {}
 		newFiles
-			// TODO: Is this needed? .filter(file => !file.hidden)
+			.filter((file) => !isLivePhotoVideo(file))
 			.forEach((file) => {
 				// Ignore the file if the path is excluded
 				// TODO: Check that it works

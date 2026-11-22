@@ -29,10 +29,10 @@
 			:href="file.source"
 			:aria-label="ariaLabel"
 			@click.stop.prevent="onClick"
-			@pointerdown="startLongPress"
-			@pointerup="cancelLongPress"
-			@pointercancel="cancelLongPress"
-			@pointerleave="cancelLongPress"
+			@pointerdown="startPress"
+			@pointerup="endPress"
+			@pointercancel="endPress"
+			@pointerleave="endPress"
 			@mouseenter="schedulePreview"
 			@mouseleave="cancelPreview">
 
@@ -42,7 +42,19 @@
 					<span class="file__duration__label">{{ videoDuration }}</span>
 					<PlayCircleOutlineIcon class="file__duration__icon" :size="16" />
 				</div>
-				<PlayCircleOutlineIcon v-else-if="file.attributes['metadata-files-live-photo'] !== undefined" :size="64" />
+				<!-- The still of a live photo, whose motion plays on hover or while held. -->
+				<div v-else-if="livePhotoVideoId !== undefined" class="file__live" aria-hidden="true">
+					<svg
+						class="file__live__icon"
+						viewBox="0 0 24 24"
+						width="16"
+						height="16">
+						<circle cx="12" cy="12" r="2.5" />
+						<circle cx="12" cy="12" r="6" />
+						<circle cx="12" cy="12" r="10" />
+					</svg>
+					<span class="file__live__label">{{ t('photos', 'LIVE') }}</span>
+				</div>
 
 				<!--
 					Three layers stacked on top of each other, each one fading in
@@ -97,12 +109,12 @@
 						carries no controls of its own.
 					-->
 					<video
-						v-if="videoPreviewPlaying"
+						v-if="videoPreviewSource !== null"
 						ref="videoPreview"
 						class="file__layer file__layer--video"
-						:src="file.source"
+						:src="videoPreviewSource"
 						muted
-						loop
+						:loop="livePhotoVideoId === undefined"
 						autoplay
 						playsinline
 						disablepictureinpicture
@@ -110,7 +122,8 @@
 						preload="metadata"
 						aria-hidden="true"
 						tabindex="-1"
-						@error="onVideoPreviewError" />
+						@error="onVideoPreviewError"
+						@ended="cancelPreview" />
 				</template>
 			</div>
 		</a>
@@ -152,7 +165,8 @@ import PhotoActionsMenu from './PhotoActionsMenu.vue'
 import { logger } from '../services/logger.ts'
 import { isCachedPreview } from '../services/PreviewService.js'
 import { getVideoDurationFromUrl, toPhotoTarget } from '../utils/fileUtils.ts'
-import { isPreviewableVideoMime, playsVideoPreviews, VIDEO_PREVIEW_DELAY } from '../utils/videoPreview.ts'
+import { getLivePhotoVideoId, getLivePhotoVideoUrl } from '../utils/livePhoto.ts'
+import { isPreviewableVideoMime, playsMotionOnPress, playsVideoPreviews, VIDEO_PREVIEW_DELAY } from '../utils/videoPreview.ts'
 
 defineOptions({ inheritAttrs: false })
 
@@ -205,8 +219,12 @@ const errorLarge = ref(false)
 const videoDuration = ref('')
 let longPressTimeout: null | ReturnType<typeof setTimeout> = null
 const longPressed = ref(false)
-const videoPreviewPlaying = ref(false)
+// What the video playing on the tile plays from, null while none is playing.
+const videoPreviewSource = ref<string | null>(null)
 let videoPreviewTimeout: null | ReturnType<typeof setTimeout> = null
+// Counts the previews started and cancelled, so that a lookup finishing after
+// its preview was cancelled does not start it anyway.
+let videoPreviewRun = 0
 // A video that could not be played once is not tried again, or a broken
 // file would fire a load on every pass of the pointer.
 const videoPreviewFailed = ref(false)
@@ -233,6 +251,8 @@ const srcSmall = computed<string>(() => getItemURL(64))
 const blurhash = computed<string | undefined>(() => props.file.attributes['metadata-blurhash'])
 
 const isPreviewableVideo = computed<boolean>(() => isPreviewableVideoMime(props.file.mime))
+
+const livePhotoVideoId = computed<number | undefined>(() => getLivePhotoVideoId(props.file))
 
 watch(() => props.file, async () => {
 	initialized.value = false
@@ -270,6 +290,30 @@ function onClick() {
 	}
 
 	emit('click', props.file.fileid)
+}
+
+/**
+ * A finger resting on a live photo plays its motion until it lifts.
+ *
+ * @param event - The pointer going down on the tile
+ */
+function startPress(event: PointerEvent) {
+	startLongPress()
+
+	if (event.pointerType !== 'mouse' && livePhotoVideoId.value !== undefined && playsMotionOnPress()) {
+		startPreview()
+	}
+}
+
+/**
+ * @param event - The pointer going up, away or being cancelled
+ */
+function endPress(event: PointerEvent) {
+	cancelLongPress()
+
+	if (event.pointerType !== 'mouse') {
+		cancelPreview()
+	}
 }
 
 // Long pressing a file selects it, which is easier to hit on a touch
@@ -310,27 +354,58 @@ function onErrorLarge() {
 	errorLarge.value = true
 }
 
-// Start playing the video of a tile once the pointer has rested on it, which
-// is what keeps a sweep across the grid from loading every video it passes.
 function schedulePreview() {
-	if (!isPreviewableVideo.value || videoPreviewFailed.value || !playsVideoPreviews()) {
+	if (playsVideoPreviews()) {
+		startPreview()
+	}
+}
+
+// Start playing the video of a tile, or the motion of a live photo, once the
+// pointer has rested on it, which is what keeps a sweep across the grid from
+// loading every video it passes.
+function startPreview() {
+	const videoId = livePhotoVideoId.value
+	if (videoPreviewFailed.value || (!isPreviewableVideo.value && videoId === undefined)) {
+		return
+	}
+
+	// A public album only hands out the photos it holds, the motion of a live
+	// photo is not among them.
+	if (videoId !== undefined && route?.params.token) {
 		return
 	}
 
 	cancelPreview()
-	videoPreviewTimeout = setTimeout(() => {
+	const run = videoPreviewRun
+	const source = videoId === undefined
+		? Promise.resolve(props.file.source)
+		: getLivePhotoVideoUrl(videoId)
+
+	videoPreviewTimeout = setTimeout(async () => {
 		videoPreviewTimeout = null
-		videoPreviewPlaying.value = true
+		const url = await source
+		if (run !== videoPreviewRun) {
+			return
+		}
+
+		if (url === null) {
+			videoPreviewFailed.value = true
+			return
+		}
+
+		videoPreviewSource.value = url
 	}, VIDEO_PREVIEW_DELAY)
 }
 
 function cancelPreview() {
+	videoPreviewRun++
+
 	if (videoPreviewTimeout !== null) {
 		clearTimeout(videoPreviewTimeout)
 		videoPreviewTimeout = null
 	}
 
-	if (!videoPreviewPlaying.value) {
+	if (videoPreviewSource.value === null) {
 		return
 	}
 
@@ -343,12 +418,12 @@ function cancelPreview() {
 		video.load()
 	}
 
-	videoPreviewPlaying.value = false
+	videoPreviewSource.value = null
 }
 
 function onVideoPreviewError() {
 	videoPreviewFailed.value = true
-	videoPreviewPlaying.value = false
+	videoPreviewSource.value = null
 }
 
 function onToggle(value: boolean) {
@@ -615,7 +690,8 @@ $magnify-transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 			}
 		}
 
-		&__duration {
+		&__duration,
+		&__live {
 			position: absolute;
 			bottom: 8px;
 			inset-inline-end: 8px;
@@ -631,6 +707,37 @@ $magnify-transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 
 			&__label {
 				font-weight: 600;
+			}
+		}
+
+		// The badge of a live photo, in the small spaced capitals it is known by.
+		&__live {
+			pointer-events: none;
+
+			// A dot in a ring in a dotted ring.
+			&__icon {
+				fill: none;
+				stroke: currentColor;
+
+				circle:nth-child(1) {
+					fill: currentColor;
+					stroke: none;
+				}
+
+				circle:nth-child(2) {
+					stroke-width: 2;
+				}
+
+				circle:nth-child(3) {
+					stroke-width: 1.5;
+					stroke-dasharray: 0.1 3.05;
+					stroke-linecap: round;
+				}
+			}
+
+			&__label {
+				font-size: 11px;
+				letter-spacing: 0.08em;
 			}
 		}
 	}

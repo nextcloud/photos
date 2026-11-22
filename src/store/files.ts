@@ -16,6 +16,7 @@ import { davClient } from '../services/DavClient.ts'
 import { logger } from '../services/logger.ts'
 import { deletePhoto as deletePhotoRequest, savePhotoMetadata, setPhotoFavorite as setPhotoFavoriteRequest } from '../services/photoActions.ts'
 import { toDayKey, toMonthKey } from '../utils/dateUtils.ts'
+import { isLivePhotoVideo } from '../utils/livePhoto.ts'
 import { SemaphoreWithPriority as Semaphore } from '../utils/semaphoreWithPriority.ts'
 import { useFoldersStore } from './folders.ts'
 
@@ -46,7 +47,7 @@ export const useFilesStore = defineStore('files', () => {
 	function appendFiles(newFiles: File[] = []): void {
 		const indexed = {}
 		newFiles
-			.filter((file) => !file.attributes.hidden)
+			.filter((file) => !file.attributes.hidden && !isLivePhotoVideo(file))
 			.forEach((file) => {
 				// Ignore the file if the path is excluded
 				// TODO: Check that it works

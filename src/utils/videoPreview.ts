@@ -32,3 +32,11 @@ export function isPreviewableVideoMime(mime: string | undefined): boolean {
 export function playsVideoPreviews(): boolean {
 	return window.matchMedia('(hover: hover) and (prefers-reduced-motion: no-preference)').matches
 }
+
+/**
+ * Whether this session plays the motion of a live photo while a finger holds
+ * its tile.
+ */
+export function playsMotionOnPress(): boolean {
+	return window.matchMedia('(prefers-reduced-motion: no-preference)').matches
+}
