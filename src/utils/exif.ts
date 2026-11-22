@@ -59,6 +59,27 @@ export function parseCoordinate(value: unknown, limit: number): number | null {
 }
 
 /**
+ * A coordinate has to be reported as invalid while its counterpart is being
+ * typed, otherwise saving silently drops the position.
+ *
+ * @param value - Coordinate as typed by the user
+ * @param limit - Absolute maximum of the coordinate, in degrees
+ * @param counterpart - The other coordinate of the pair
+ * @return The error to show, `undefined` when the coordinate is valid
+ */
+export function validateCoordinate(value: string, limit: number, counterpart: string): string | undefined {
+	if (value.trim() === '') {
+		return counterpart.trim() === '' ? undefined : t('photos', 'Both coordinates are required')
+	}
+
+	if (parseCoordinate(value, limit) === null) {
+		return t('photos', 'Enter decimal degrees between -{limit} and {limit}', { limit })
+	}
+
+	return undefined
+}
+
+/**
  * Read the coordinates of a photo. They are transported as strings over DAV
  * and are absent from photos which carry no position.
  *

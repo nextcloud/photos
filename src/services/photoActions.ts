@@ -8,11 +8,12 @@ import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { davClient } from './DavClient.ts'
 
+/** Values to store, the ones left undefined are kept as they are. */
 export type PhotoMetadataUpdate = {
 	/** Moment the photo was taken, as a unix timestamp in seconds. */
-	takenAt: number
+	takenAt?: number
 	/** Position the photo was taken at, `null` to drop the one it carries. */
-	location: PhotoLocation | null
+	location?: PhotoLocation | null
 }
 
 /**
@@ -29,11 +30,13 @@ export type PhotoMetadataUpdate = {
 export async function savePhotoMetadata(photo: PhotoTarget, update: PhotoMetadataUpdate): Promise<void> {
 	const { takenAt, location } = update
 
-	const setProperties = [
-		`<nc:metadata-photos-original_date_time>${takenAt}</nc:metadata-photos-original_date_time>`,
-	]
+	const setProperties: string[] = []
 
-	if (location !== null) {
+	if (takenAt !== undefined) {
+		setProperties.push(`<nc:metadata-photos-original_date_time>${takenAt}</nc:metadata-photos-original_date_time>`)
+	}
+
+	if (location !== undefined && location !== null) {
 		setProperties.push(`<nc:metadata-photos-gps>
 			<nc:latitude>${location.latitude}</nc:latitude>
 			<nc:longitude>${location.longitude}</nc:longitude>
@@ -46,15 +49,15 @@ export async function savePhotoMetadata(photo: PhotoTarget, update: PhotoMetadat
 		? '<d:remove><d:prop><nc:metadata-photos-gps /></d:prop></d:remove>'
 		: ''
 
+	const setElement = setProperties.length > 0
+		? `<d:set><d:prop>${setProperties.join('\n')}</d:prop></d:set>`
+		: ''
+
 	await davClient.customRequest(photo.davPath, {
 		method: 'PROPPATCH',
 		data: `<?xml version="1.0"?>
 			<d:propertyupdate xmlns:d="DAV:" xmlns:nc="http://nextcloud.org/ns">
-				<d:set>
-					<d:prop>
-						${setProperties.join('\n')}
-					</d:prop>
-				</d:set>
+				${setElement}
 				${removeProperties}
 			</d:propertyupdate>`,
 	})
