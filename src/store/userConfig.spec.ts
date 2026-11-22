@@ -37,6 +37,7 @@ describe('useUserConfigStore', () => {
 
 		expect(store.croppedLayout).toBe(false)
 		expect(store.gridDensity).toBe('medium')
+		expect(store.onThisDayNotifications).toBe(true)
 		expect(store.photosSourceFolders).toEqual(['/Photos'])
 		expect(store.photosLocation).toBe('')
 	})
@@ -44,6 +45,7 @@ describe('useUserConfigStore', () => {
 	test('reads the initial state the server rendered', () => {
 		initialState.croppedLayout = 'true'
 		initialState.gridDensity = 'large'
+		initialState.onThisDayNotifications = 'false'
 		initialState.photosSourceFolders = '["/Photos","/Camera"]'
 		initialState.photosLocation = '/Photos'
 
@@ -51,6 +53,7 @@ describe('useUserConfigStore', () => {
 
 		expect(store.croppedLayout).toBe(true)
 		expect(store.gridDensity).toBe('large')
+		expect(store.onThisDayNotifications).toBe(false)
 		expect(store.photosSourceFolders).toEqual(['/Photos', '/Camera'])
 		expect(store.photosLocation).toBe('/Photos')
 	})
@@ -76,9 +79,12 @@ describe('useUserConfigStore', () => {
 
 		await store.updateUserConfig('photosSourceFolders', ['/Photos', '/Camera'])
 		await store.updateUserConfig('croppedLayout', true)
+		await store.updateUserConfig('onThisDayNotifications', false)
 
 		expect(store.photosSourceFolders).toEqual(['/Photos', '/Camera'])
 		expect(axios.put).toHaveBeenCalledWith('/index.php/apps/photos/api/v1/config/photosSourceFolders', { value: '["/Photos","/Camera"]' })
 		expect(axios.put).toHaveBeenCalledWith('/index.php/apps/photos/api/v1/config/croppedLayout', { value: 'true' })
+		expect(axios.put).toHaveBeenCalledWith('/index.php/apps/photos/api/v1/config/onThisDayNotifications', { value: 'false' })
+		expect(store.onThisDayNotifications).toBe(false)
 	})
 })

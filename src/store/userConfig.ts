@@ -59,6 +59,7 @@ export type GridDensity = 'small' | 'medium' | 'large'
 export type PersistedUserConfig = {
 	croppedLayout: boolean
 	gridDensity: GridDensity
+	onThisDayNotifications: boolean
 	photosSourceFolders: string[]
 	photosLocation: string
 }
@@ -75,13 +76,14 @@ function parseGridDensity(value: string): GridDensity {
 export const useUserConfigStore = defineStore('userConfig', () => {
 	const croppedLayout = ref(loadState('photos', 'croppedLayout', 'false') as 'false' | 'true' === 'true')
 	const gridDensity = ref<GridDensity>(parseGridDensity(loadState('photos', 'gridDensity', 'medium')))
+	const onThisDayNotifications = ref(loadState<string>('photos', 'onThisDayNotifications', 'true') !== 'false')
 	const photosSourceFolders = ref<string[]>(JSON.parse(loadState('photos', 'photosSourceFolders', '["/Photos"]')))
 	const photosLocation = ref(loadState('photos', 'photosLocation', ''))
 
 	/** Node of photosLocation, resolved from dav and created if missing. */
 	const photosLocationFolder = ref<Folder | undefined>(undefined)
 
-	const refs = { croppedLayout, gridDensity, photosSourceFolders, photosLocation }
+	const refs = { croppedLayout, gridDensity, onThisDayNotifications, photosSourceFolders, photosLocation }
 
 	/**
 	 * Persist a user config value and notify the rest of the app.
@@ -112,6 +114,7 @@ export const useUserConfigStore = defineStore('userConfig', () => {
 	return {
 		croppedLayout,
 		gridDensity,
+		onThisDayNotifications,
 		photosSourceFolders,
 		photosLocation,
 		photosLocationFolder,
