@@ -41,7 +41,9 @@
 		</template>
 
 		<template #emptyCollectionsList>
-			<NcEmptyContent :name="t('photos', 'There is no album yet!')">
+			<NcEmptyContent
+				:name="t('photos', 'There is no album yet!')"
+				:description="t('photos', 'Albums shared with you show up here')">
 				<template #icon>
 					<ImageMultipleOutline />
 				</template>

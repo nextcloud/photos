@@ -7,7 +7,9 @@
 		<NcEmptyContent
 			v-if="emptyMessage !== '' && photosCount === 0 && !loading"
 			key="emptycontent"
-			:name="emptyMessage">
+			class="files-list-viewer__empty"
+			:name="emptyMessage"
+			:description="emptyDescription">
 			<template #icon>
 				<PackageVariant />
 			</template>
@@ -96,6 +98,8 @@ const props = withDefaults(defineProps<{
 	loading?: boolean
 	// Message to display when there is no files.
 	emptyMessage?: string
+	// Line explaining the empty message.
+	emptyDescription?: string
 	// The base height to forward to TileLayout.
 	baseHeight?: number
 	// The height to use for section headers.
@@ -112,6 +116,7 @@ const props = withDefaults(defineProps<{
 	sections: undefined,
 	loading: false,
 	emptyMessage: '',
+	emptyDescription: '',
 	baseHeight: 200,
 	sectionHeaderHeight: 75,
 	scrollToSection: '',
@@ -227,6 +232,12 @@ onUnmounted(() => {
 .files-list-viewer {
 	height: 100%;
 	position: relative;
+
+	// The empty state lies over the list, which still takes its place while it has nothing to show.
+	&__empty {
+		position: absolute;
+		inset: 0;
+	}
 
 	&__placeholder {
 		background: var(--color-primary-element-light);

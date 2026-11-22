@@ -352,6 +352,11 @@ onMounted(() => subscribe('viewer:sidebar:open', handleViewerSidebarOpen))
 	align-content: space-between;
 }
 
+// An empty state stands in the middle of the content area, below the header of its view.
+.app-content .empty-content {
+	min-height: calc(100dvh - var(--header-height) - 2 * var(--body-container-margin) - var(--default-clickable-area) - 2 * var(--app-navigation-padding));
+}
+
 .app-navigation__photos :deep(.app-navigation-entry-icon.icon-photos) {
 	background-size: 20px;
 }
