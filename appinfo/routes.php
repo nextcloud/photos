@@ -220,4 +220,11 @@ return [
 			],
 		],
 	],
+	'ocs' => [
+		[
+			'name' => 'library#status',
+			'url' => '/api/v1/library/status',
+			'verb' => 'GET',
+		],
+	],
 ];

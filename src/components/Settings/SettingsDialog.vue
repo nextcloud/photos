@@ -9,6 +9,9 @@
 		:name="t('photos', 'Photos settings')"
 		:legacy="false"
 		@update:open="onClose">
+		<NcAppSettingsSection id="library-status" :name="t('photos', 'On this server')">
+			<LibraryStatusSettings />
+		</NcAppSettingsSection>
 		<NcAppSettingsSection id="layout-settings" :name="t('photos', 'General')">
 			<PhotosSourceLocationsSettings />
 			<PhotosUploadLocationSettings />
@@ -24,6 +27,7 @@ import NcAppSettingsDialog from '@nextcloud/vue/components/NcAppSettingsDialog'
 import NcAppSettingsSection from '@nextcloud/vue/components/NcAppSettingsSection'
 import CroppedLayoutSettings from './CroppedLayoutSettings.vue'
 import KeyboardShortcutsSettings from './KeyboardShortcutsSettings.vue'
+import LibraryStatusSettings from './LibraryStatusSettings.vue'
 import PhotosSourceLocationsSettings from './PhotosSourceLocationsSettings.vue'
 import PhotosUploadLocationSettings from './PhotosUploadLocationSettings.vue'
 
