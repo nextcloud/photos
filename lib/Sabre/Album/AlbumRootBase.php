@@ -161,9 +161,21 @@ abstract class AlbumRootBase implements ICollection, ICopyTarget {
 		}
 	}
 
+	/**
+	 * When a photo was last added to the album, or when it was created if
+	 * none was added since.
+	 */
 	#[\Override]
 	final public function getLastModified(): int {
-		return 0;
+		$lastModified = $this->album->getAlbum()->getCreated();
+
+		foreach ($this->album->getFiles() as $file) {
+			if ($file->origin === 'user') {
+				$lastModified = max($lastModified, $file->getAdded());
+			}
+		}
+
+		return $lastModified;
 	}
 
 	abstract protected function addFile(int $sourceId, string $ownerUID);

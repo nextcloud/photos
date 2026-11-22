@@ -3,7 +3,8 @@ import type { Folder } from '@nextcloud/files'
  * SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import type { FileStat, ResponseDataDetailed } from 'webdav'
+import type { FileStat, ResponseDataDetailed, WebDAVClientError } from 'webdav'
+import type { AlbumPhotosSortOrder, AlbumsSortOrder } from '../utils/albumSort.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
@@ -32,7 +33,7 @@ export async function getFolder(path) {
 		const stat = await davClient.stat(location, { details: true, data: getDefaultPropfind() }) as ResponseDataDetailed<FileStat>
 		return resultToNode(stat.data)
 	} catch (error) {
-		if (error.response?.status === 404) {
+		if ((error as WebDAVClientError).response?.status === 404) {
 			logger.debug('Photo location does not exist, creating it.')
 			await davClient.createDirectory(location)
 			const stat = await davClient.stat(location, { details: true, data: getDefaultPropfind() }) as ResponseDataDetailed<FileStat>
@@ -41,7 +42,7 @@ export async function getFolder(path) {
 
 		// In case terms of service is installed, the dav endpoint
 		// will return 403 until TOS is accepted.
-		if (error.response?.status === 403) {
+		if ((error as WebDAVClientError).response?.status === 403) {
 			logger.debug('User is not authenticated, cannot load photos folder')
 		} else {
 			logger.fatal('Could not load photos folder', { error })
@@ -61,6 +62,8 @@ export type PersistedUserConfig = {
 	gridDensity: GridDensity
 	photosSourceFolders: string[]
 	photosLocation: string
+	albumsSortOrder: AlbumsSortOrder
+	albumPhotosSortOrder: AlbumPhotosSortOrder
 }
 
 /**
@@ -72,16 +75,27 @@ function parseGridDensity(value: string): GridDensity {
 	return value === 'small' || value === 'large' ? value : 'medium'
 }
 
+/**
+ * Fall back to the most recently changed albums first for any unknown value.
+ *
+ * @param value - The persisted order
+ */
+function parseAlbumsSortOrder(value: string): AlbumsSortOrder {
+	return value === 'name' || value === 'date' ? value : 'recent'
+}
+
 export const useUserConfigStore = defineStore('userConfig', () => {
 	const croppedLayout = ref(loadState('photos', 'croppedLayout', 'false') as 'false' | 'true' === 'true')
 	const gridDensity = ref<GridDensity>(parseGridDensity(loadState('photos', 'gridDensity', 'medium')))
 	const photosSourceFolders = ref<string[]>(JSON.parse(loadState('photos', 'photosSourceFolders', '["/Photos"]')))
 	const photosLocation = ref(loadState('photos', 'photosLocation', ''))
+	const albumsSortOrder = ref<AlbumsSortOrder>(parseAlbumsSortOrder(loadState('photos', 'albumsSortOrder', 'recent')))
+	const albumPhotosSortOrder = ref<AlbumPhotosSortOrder>(loadState<string>('photos', 'albumPhotosSortOrder', 'oldest') === 'newest' ? 'newest' : 'oldest')
 
 	/** Node of photosLocation, resolved from dav and created if missing. */
 	const photosLocationFolder = ref<Folder | undefined>(undefined)
 
-	const refs = { croppedLayout, gridDensity, photosSourceFolders, photosLocation }
+	const refs = { croppedLayout, gridDensity, photosSourceFolders, photosLocation, albumsSortOrder, albumPhotosSortOrder }
 
 	/**
 	 * Persist a user config value and notify the rest of the app.
@@ -114,6 +128,8 @@ export const useUserConfigStore = defineStore('userConfig', () => {
 		gridDensity,
 		photosSourceFolders,
 		photosLocation,
+		albumsSortOrder,
+		albumPhotosSortOrder,
 		photosLocationFolder,
 		updateUserConfig,
 		initPhotosLocationFolder,

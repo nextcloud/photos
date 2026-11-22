@@ -4,7 +4,7 @@
 -->
 <template>
 	<CollectionsList
-		:collections="sharedAlbums"
+		:collections="sortedSharedAlbums"
 		:loading="loadingCollections"
 		:error="errorFetchingCollections"
 		class="albums-list">
@@ -15,7 +15,14 @@
 				:loading="loadingCollections"
 				:title="t('photos', 'Collaborative albums')"
 				:rootTitle="t('photos', 'Collaborative albums')"
-				@refresh="fetchSharedAlbums" />
+				@refresh="fetchSharedAlbums">
+				<SortOrderMenu
+					name="photos-albums-sort"
+					:label="t('photos', 'Sort albums')"
+					:options="albumsSortOptions()"
+					:modelValue="userConfigStore.albumsSortOrder"
+					@update:modelValue="userConfigStore.updateUserConfig('albumsSortOrder', $event)" />
+			</HeaderNavigation>
 		</template>
 
 		<template #default="{ collection }">
@@ -63,14 +70,19 @@ import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline
 import CollectionCover from '../components/Collection/CollectionCover.vue'
 import CollectionsList from '../components/Collection/CollectionsList.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import SortOrderMenu from '../components/SortOrderMenu.vue'
 import { useFetchCollections } from '../composables/useFetchCollections.ts'
 import { albumsExtraProps } from '../store/albums.ts'
 import { useSharedAlbumsStore } from '../store/sharedAlbums.ts'
+import { useUserConfigStore } from '../store/userConfig.ts'
+import { albumsSortOptions, sortAlbums } from '../utils/albumSort.ts'
 
 const sharedAlbumsStore = useSharedAlbumsStore()
 const { fetchCollections, errorFetchingCollections, loadingCollections } = useFetchCollections()
 
-const sharedAlbums = computed<Record<string, Album>>(() => sharedAlbumsStore.sharedAlbums)
+const userConfigStore = useUserConfigStore()
+
+const sortedSharedAlbums = computed<Record<string, Album>>(() => sortAlbums(sharedAlbumsStore.sharedAlbums, userConfigStore.albumsSortOrder))
 
 function coverUrl(lastPhoto: number): string {
 	if (lastPhoto === -1) {

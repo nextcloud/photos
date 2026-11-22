@@ -19,6 +19,8 @@ class UserConfigService {
 		'gridDensity' => 'medium',
 		'photosLocation' => '/Photos',
 		'photosSourceFolders' => '["/Photos"]',
+		'albumsSortOrder' => 'recent',
+		'albumPhotosSortOrder' => 'oldest',
 		/** If you add any new configs, make sure to validate the contents in {@see \OCA\Photos\Controller\ApiController::setUserConfig} */
 	];
 
