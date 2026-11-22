@@ -202,6 +202,23 @@ return [
 			],
 		],
 
+		// Imports from other photo services
+		[
+			'name' => 'import#index',
+			'url' => '/api/v1/import',
+			'verb' => 'GET',
+		],
+		[
+			'name' => 'import#start',
+			'url' => '/api/v1/import',
+			'verb' => 'POST',
+		],
+		[
+			'name' => 'import#status',
+			'url' => '/api/v1/import/{id}',
+			'verb' => 'GET',
+		],
+
 		// Preview APIs
 		[
 			'name' => 'preview#index',

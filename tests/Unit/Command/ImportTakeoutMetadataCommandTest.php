@@ -10,6 +10,7 @@ namespace OCA\Photos\Tests\Command;
 
 use OC\FilesMetadata\Model\FilesMetadata;
 use OCA\Photos\Command\ImportTakeoutMetadataCommand;
+use OCA\Photos\Import\TakeoutImporter;
 use OCA\Photos\Listener\ExifMetadataProvider;
 use OCA\Photos\Listener\OriginalDateTimeMetadataProvider;
 use OCA\Photos\Listener\PlaceMetadataProvider;
@@ -23,6 +24,7 @@ use OCP\Files\Node;
 use OCP\Files\NotFoundException;
 use OCP\FilesMetadata\IFilesMetadataManager;
 use OCP\FilesMetadata\Model\IFilesMetadata;
+use OCP\IL10N;
 use OCP\IUser;
 use OCP\IUserManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -68,9 +70,12 @@ class ImportTakeoutMetadataCommandTest extends TestCase {
 		$this->commandTester = new CommandTester(new ImportTakeoutMetadataCommand(
 			$this->userManager,
 			$rootFolder,
-			$this->filesMetadataManager,
-			$this->mediaPlaceManager,
-			new TakeoutSidecarService(),
+			new TakeoutImporter(
+				$this->filesMetadataManager,
+				$this->mediaPlaceManager,
+				new TakeoutSidecarService(),
+				$this->createMock(IL10N::class),
+			),
 		));
 	}
 
