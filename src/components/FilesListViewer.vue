@@ -13,7 +13,7 @@
 			</template>
 		</NcEmptyContent>
 
-		<TiledLayout :baseHeight="baseHeight" :groupHeaderHeight="groupHeaderHeight" :sections="itemsBySections">
+		<TiledLayout :baseHeight="baseHeight" :groupLabelHeight="groupLabelHeight" :sections="itemsBySections">
 			<template #default="{ tiledSections }">
 				<VirtualScrolling
 					:useWindow="useWindow"
@@ -41,12 +41,6 @@
 
 							<ul>
 								<template v-for="(row, rowIndex) of section.rows" :key="row.key">
-									<li
-										v-if="row.groupId !== undefined"
-										class="files-list-viewer__group-header"
-										:style="{ 'flex-basis': '100%', height: `${row.height}px` }">
-										<slot :file="{ id: row.groupId }" :isGroupHeader="true" />
-									</li>
 									<!--
 									We are subtracting 1 from flex-basis to compensate for rounding issues.
 									The flex algo will then compensate with flex-grow.
@@ -55,8 +49,15 @@
 									<li
 										v-for="item of row.items"
 										:key="item.key"
-										:class="{ 'last-tiled-rows': rowIndex === section.rows.length - 1 || section.rows[rowIndex + 1].groupId !== undefined }"
-										:style="{ 'flex-basis': `${item.width - 1}px`, height: `${item.height}px` }">
+										:class="{ 'last-tiled-rows': rowIndex === section.rows.length - 1 }"
+										:style="{ 'flex-basis': `${item.width - 1}px`, height: `${row.height}px`, 'padding-top': `${row.labelHeight ?? 0}px` }">
+										<div
+											v-for="label of row.labels?.filter(({ itemId }) => itemId === item.id)"
+											:key="label.groupId"
+											class="files-list-viewer__group-label"
+											:style="{ width: `${label.width}px`, height: `${row.labelHeight}px` }">
+											<slot :file="{ id: label.groupId }" :isGroupHeader="true" />
+										</div>
 										<!-- Placeholder when initial loading -->
 										<div v-if="showPlaceholders" class="files-list-viewer__placeholder" />
 										<!-- Real file. -->
@@ -98,7 +99,7 @@ const props = withDefaults(defineProps<{
 	fileIdsBySection?: Record<string, string[]>
 	// The list of sorted sections.
 	sections?: string[]
-	// Optional groups splitting the sections, each one shown under its own header.
+	// Optional groups splitting the sections, each one labelled above its first file.
 	groupsBySection?: Record<string, { id: string, fileIds: string[] }[]>
 	// Whether we should display a loading indicator.
 	loading?: boolean
@@ -108,8 +109,8 @@ const props = withDefaults(defineProps<{
 	baseHeight?: number
 	// The height to use for section headers.
 	sectionHeaderHeight?: number
-	// The height to use for group headers.
-	groupHeaderHeight?: number
+	// The height to use for group labels.
+	groupLabelHeight?: number
 	// Instruct VirtualScrolling to scroll to the given section id.
 	scrollToSection?: string
 	// The containerElement props to forward to TileLayout.
@@ -125,7 +126,7 @@ const props = withDefaults(defineProps<{
 	emptyMessage: '',
 	baseHeight: 200,
 	sectionHeaderHeight: 75,
-	groupHeaderHeight: 48,
+	groupLabelHeight: 32,
 	scrollToSection: '',
 	containerElement: null,
 	useWindow: false,
@@ -267,9 +268,22 @@ onUnmounted(() => {
 		display: flex;
 		flex-wrap: wrap;
 
-		li:not(.last-tiled-rows) {
-			flex-grow: 1;
+		li {
+			position: relative;
+			box-sizing: border-box;
+
+			&:not(.last-tiled-rows) {
+				flex-grow: 1;
+			}
 		}
+	}
+
+	// Sits in the band the row leaves above its files, and spans the files of its group.
+	&__group-label {
+		position: absolute;
+		top: 0;
+		inset-inline-start: 0;
+		z-index: 1;
 	}
 
 	&__section-header {

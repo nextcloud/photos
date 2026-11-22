@@ -107,7 +107,7 @@ describe('splitSectionInRows', () => {
 		expect(splitSectionInRows({ id: 'section', items }, 2000)).toStrictEqual(expectedLayout)
 	})
 
-	test('puts a header row before the rows of every group', () => {
+	test('lets the groups share a row, each one labelled above its first item', () => {
 		const section = {
 			id: 'section',
 			items: [squareImage1, squareImage2, squareImage3],
@@ -117,30 +117,47 @@ describe('splitSectionInRows', () => {
 			],
 		}
 
-		const rows = splitSectionInRows(section, 2000, 200, 48)
+		const rows = splitSectionInRows(section, 2000, 200, 32)
 
-		expect(rows.map(({ key, groupId, height }) => ({ key, groupId, height }))).toStrictEqual([
-			{ key: 'group-header-day1', groupId: 'day1', height: 48 },
-			{ key: 'squareImage1-squareImage2', groupId: undefined, height: 220 },
-			{ key: 'group-header-day2', groupId: 'day2', height: 48 },
-			{ key: 'squareImage3', groupId: undefined, height: 220 },
+		expect(rows).toHaveLength(1)
+		expect(rows[0].key).toBe('squareImage1-squareImage2-squareImage3')
+		expect(rows[0].height).toBe(252)
+		expect(rows[0].labelHeight).toBe(32)
+		expect(rows[0].items.map(({ height }) => height)).toStrictEqual([220, 220, 220])
+		expect(rows[0].labels).toStrictEqual([
+			{ groupId: 'day1', itemId: 'squareImage1', width: 352 },
+			{ groupId: 'day2', itemId: 'squareImage3', width: 176 },
 		])
-		expect(rows[0].items).toStrictEqual([])
 	})
 
-	test('leaves out the header of an empty group', () => {
+	test('labels a group in the row it starts in only', () => {
+		const section = {
+			id: 'section',
+			items: [squareImage1, squareImage2, squareImage3],
+			groups: [{ id: 'day1', items: [squareImage1, squareImage2, squareImage3] }],
+		}
+
+		const rows = splitSectionInRows(section, 450, 200, 32)
+
+		expect(rows.map(({ key, height, labels }) => ({ key, height, labels }))).toStrictEqual([
+			{ key: 'squareImage1-squareImage2', height: 313.25, labels: [{ groupId: 'day1', itemId: 'squareImage1', width: 450 }] },
+			{ key: 'squareImage3', height: 220, labels: undefined },
+		])
+	})
+
+	test('leaves out the label of an empty group', () => {
 		const section = {
 			id: 'section',
 			items: [squareImage1],
 			groups: [{ id: 'day1', items: [] }, { id: 'day2', items: [squareImage1] }],
 		}
 
-		expect(splitSectionInRows(section, 2000, 200, 48).map(({ key }) => key)).toStrictEqual(['group-header-day2', 'squareImage1'])
+		expect(splitSectionInRows(section, 2000, 200, 32)[0].labels).toStrictEqual([{ groupId: 'day2', itemId: 'squareImage1', width: 176 }])
 	})
 
 	test('returns no row before the container is measured', () => {
 		const section = { id: 'section', items: [squareImage1], groups: [{ id: 'day1', items: [squareImage1] }] }
 
-		expect(splitSectionInRows(section, 0, 200, 48)).toStrictEqual([])
+		expect(splitSectionInRows(section, 0, 200, 32)).toStrictEqual([])
 	})
 })

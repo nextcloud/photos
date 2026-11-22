@@ -193,7 +193,7 @@
 					v-else-if="isGroupHeader"
 					class="day-header"
 					:class="{ 'day-header--selecting': selectedFileIds.length > 0 }">
-					<h3 class="day-header__title">
+					<h3 class="day-header__title" :title="formatDay(file.id)">
 						{{ formatDay(file.id) }}
 					</h3>
 					<NcCheckboxRadioSwitch
@@ -547,22 +547,38 @@ onUnmounted(() => {
 	}
 }
 
+// The label of a day, in the band above its first tile.
 .day-header {
 	display: flex;
 	align-items: center;
 	gap: var(--default-grid-baseline);
 	height: 100%;
+	box-sizing: border-box;
+	// Lines up with the picture of the tile, inside its border.
+	padding-inline: 2px calc(2 * var(--default-grid-baseline));
 
 	&__title {
+		overflow: hidden;
 		margin: 0;
-		font-size: var(--default-font-size);
+		font-size: var(--font-size-small, 13px);
 		font-weight: 600;
+		color: var(--color-text-maxcontrast);
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
 
 	// The checkbox shows on hover, like the ones of the tiles, and stays once a
 	// selection is going on.
 	&__checkbox {
+		// Fits the band of the label.
+		--default-clickable-area: 24px;
+		flex-shrink: 0;
 		opacity: 0;
+
+		:deep(.checkbox-radio-switch__content) {
+			padding: 0;
+			gap: 0;
+		}
 	}
 
 	&:hover,
