@@ -13,6 +13,7 @@ use OCA\Photos\Album\AlbumFile;
 use OCA\Photos\Album\AlbumInfo;
 use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Command\ImportICloudCommand;
+use OCA\Photos\Import\ICloudImporter;
 use OCA\Photos\Listener\ExifMetadataProvider;
 use OCA\Photos\Listener\OriginalDateTimeMetadataProvider;
 use OCA\Photos\Service\ICloudExportService;
@@ -23,6 +24,7 @@ use OCP\Files\IUserFolder;
 use OCP\Files\Node;
 use OCP\FilesMetadata\IFilesMetadataManager;
 use OCP\FilesMetadata\Model\IFilesMetadata;
+use OCP\IL10N;
 use OCP\ITagManager;
 use OCP\ITags;
 use OCP\IUser;
@@ -92,10 +94,13 @@ class ImportICloudCommandTest extends TestCase {
 		$this->commandTester = new CommandTester(new ImportICloudCommand(
 			$userManager,
 			$rootFolder,
-			$this->filesMetadataManager,
-			$tagManager,
-			$this->albumMapper,
-			new ICloudExportService(),
+			new ICloudImporter(
+				$this->filesMetadataManager,
+				$tagManager,
+				$this->albumMapper,
+				new ICloudExportService(),
+				$this->createMock(IL10N::class),
+			),
 		));
 	}
 
@@ -229,9 +234,9 @@ class ImportICloudCommandTest extends TestCase {
 		$this->assertNull($this->takenAt($readOnly));
 		$this->assertNull($this->takenAt($withoutDetails));
 
-		$this->assertSame(['Summer', ImportICloudCommand::HIDDEN_ALBUM], array_keys($this->albums));
+		$this->assertSame(['Summer', ICloudImporter::HIDDEN_ALBUM], array_keys($this->albums));
 		$this->assertSame([$plain->getId(), $favorite->getId()], $this->albumFiles['Summer']);
-		$this->assertSame([$hidden->getId()], $this->albumFiles[ImportICloudCommand::HIDDEN_ALBUM]);
+		$this->assertSame([$hidden->getId()], $this->albumFiles[ICloudImporter::HIDDEN_ALBUM]);
 
 		$this->assertStringContainsString('Media files: 7', $display);
 		$this->assertStringContainsString('Media files with details: 6', $display);
