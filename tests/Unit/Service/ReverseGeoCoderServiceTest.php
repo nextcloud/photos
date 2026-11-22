@@ -22,9 +22,27 @@ use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
 class ReverseGeoCoderServiceTest extends TestCase {
+	/** Rows of the GeoNames cities list: id, name, latitude, longitude, country, feature code, population. */
 	private const CITIES = [
-		['2988507', 'Paris', 48.85341, 2.3488, 'FR'],
-		['2950159', 'Berlin', 52.52437, 13.41053, 'DE'],
+		['2988507', 'Paris', 48.85341, 2.3488, 'FR', 'PPLC', 2138551],
+		['2970761', 'Vanves', 48.82345, 2.29025, 'FR', 'PPL', 26068],
+		['3031137', 'Boulogne-Billancourt', 48.83545, 2.24128, 'FR', 'PPLA3', 108782],
+		['2969679', 'Versailles', 48.80359, 2.13424, 'FR', 'PPLA2', 85416],
+		['2973783', 'Strasbourg', 48.58392, 7.74553, 'FR', 'PPLA', 274845],
+		['2950159', 'Berlin', 52.52437, 13.41053, 'DE', 'PPLC', 3426354],
+		['2852458', 'Potsdam', 52.39886, 13.06566, 'DE', 'PPLA', 182112],
+		['2891951', 'Kehl', 48.57297, 7.81523, 'DE', 'PPL', 34009],
+		['1850147', 'Tokyo', 35.6895, 139.69171, 'JP', 'PPLC', 8336599],
+		['8715035', 'Nakano', 35.70449, 139.66946, 'JP', 'PPLX', 344880],
+		['3413829', 'Reykjavík', 64.13548, -21.89541, 'IS', 'PPLC', 118918],
+		['3415212', 'Kópavogur', 64.11234, -21.91298, 'IS', 'PPL', 37959],
+		['3416706', 'Hafnarfjörður', 64.0671, -21.93774, 'IS', 'PPL', 29971],
+		['2267057', 'Lisbon', 38.71667, -9.13333, 'PT', 'PPLC', 517802],
+		['2262912', 'Sintra', 38.80097, -9.37826, 'PT', 'PPLA2', 26193],
+		['5391959', 'San Francisco', 37.77493, -122.41942, 'US', 'PPLA2', 864816],
+		['5378538', 'Oakland', 37.80437, -122.2708, 'US', 'PPLA2', 419267],
+		['2747373', 'The Hague', 52.07667, 4.29861, 'NL', 'PPLG', 474292],
+		['2757345', 'Delft', 52.00667, 4.35556, 'NL', 'PPL', 95060],
 	];
 
 	private string $folderPath;
@@ -96,7 +114,7 @@ class ReverseGeoCoderServiceTest extends TestCase {
 	 */
 	private static function citiesArchive(): string {
 		$rows = array_map(
-			fn (array $city): string => implode("\t", [$city[0], $city[1], $city[1], '', $city[2], $city[3], 'P', 'PPLC', $city[4], '', '']),
+			fn (array $city): string => implode("\t", [$city[0], $city[1], $city[1], '', $city[2], $city[3], 'P', $city[5], $city[4], '', '', '', '', '', $city[6], '', '', '', '']),
 			self::CITIES,
 		);
 
@@ -118,11 +136,59 @@ class ReverseGeoCoderServiceTest extends TestCase {
 	}
 
 	/**
-	 * Write the cities list cached before the country codes were stored.
+	 * Write the cities list as it was cached when it had the given number of columns.
 	 */
-	private function writeOutdatedCities(): void {
-		$rows = array_map(fn (array $city): string => implode(',', array_slice($city, 0, 4)), self::CITIES);
+	private function writeOutdatedCities(int $columns = 4): void {
+		$rows = array_map(fn (array $city): string => implode(',', array_slice($city, 0, $columns)), self::CITIES);
 		file_put_contents($this->folderPath . '/cities1000.csv', implode("\n", $rows) . "\n");
+	}
+
+	public static function dataCoordinatesInACity(): array {
+		return [
+			'Nakano, a ward of Tokyo' => [35.7074, 139.6638, 'Tokyo', 'JP'],
+			'Vanves, a suburb next to Paris' => [48.8214, 2.2897, 'Paris', 'FR'],
+			'the Eiffel Tower, nearer to Vanves than to the centre of Paris' => [48.8584, 2.2945, 'Paris', 'FR'],
+			'Kópavogur, a suburb next to Reykjavík' => [64.1010, -21.8830, 'Reykjavík', 'IS'],
+			'the centre of Berlin' => [52.5163, 13.3777, 'Berlin', 'DE'],
+		];
+	}
+
+	/**
+	 * @dataProvider dataCoordinatesInACity
+	 */
+	public function testAttributesCoordinatesToTheCityReachingThem(float $latitude, float $longitude, string $name, string $countryCode): void {
+		$this->expectDownloads(1);
+
+		$this->assertSame(
+			['name' => $name, 'countryCode' => $countryCode],
+			$this->service->getPlaceForCoordinates($latitude, $longitude),
+		);
+	}
+
+	public static function dataCoordinatesOutsideOfTheNextCity(): array {
+		return [
+			'Potsdam, a city of its own 26 km from Berlin' => [52.4042, 13.0385, 'Potsdam', 'DE'],
+			'Babelsberg, the part of Potsdam facing Berlin' => [52.3936, 13.0940, 'Potsdam', 'DE'],
+			'Sintra, a town 22 km from Lisbon' => [38.7876, -9.3906, 'Sintra', 'PT'],
+			'Oakland, a city across the bay from San Francisco' => [37.7955, -122.2775, 'Oakland', 'US'],
+			'Versailles, a town beyond the reach of Paris' => [48.8049, 2.1204, 'Versailles', 'FR'],
+			'Delft, a town beyond the reach of The Hague' => [52.0116, 4.3571, 'Delft', 'NL'],
+			'Hafnarfjörður, a town beyond the reach of Reykjavík' => [64.0671, -21.9377, 'Hafnarfjörður', 'IS'],
+			'Boulogne-Billancourt, a city of its own next to Paris' => [48.8352, 2.2410, 'Boulogne-Billancourt', 'FR'],
+			'Kehl, across the border from Strasbourg' => [48.5735, 7.8115, 'Kehl', 'DE'],
+		];
+	}
+
+	/**
+	 * @dataProvider dataCoordinatesOutsideOfTheNextCity
+	 */
+	public function testKeepsSeparatePlaces(float $latitude, float $longitude, string $name, string $countryCode): void {
+		$this->expectDownloads(1);
+
+		$this->assertSame(
+			['name' => $name, 'countryCode' => $countryCode],
+			$this->service->getPlaceForCoordinates($latitude, $longitude),
+		);
 	}
 
 	public function testFindsTheNearestCityWithItsCountry(): void {
@@ -145,6 +211,27 @@ class ReverseGeoCoderServiceTest extends TestCase {
 		$this->assertSame(
 			['name' => 'Berlin', 'countryCode' => 'DE'],
 			$this->service->getPlaceForCoordinates(52.5, 13.4),
+		);
+	}
+
+	public function testRefreshesACitiesListWithoutPopulations(): void {
+		$this->writeOutdatedCities(5);
+		$this->expectDownloads(1);
+
+		$this->assertSame(
+			['name' => 'Paris', 'countryCode' => 'FR'],
+			$this->service->getPlaceForCoordinates(48.8214, 2.2897),
+		);
+	}
+
+	public function testFallsBackToTheNearestPlaceWhenTheCitiesListCannotBeRefreshed(): void {
+		$this->writeOutdatedCities(5);
+		$this->client->expects($this->once())->method('get')->willThrowException(new \Exception('offline'));
+		$this->logger->expects($this->once())->method('warning');
+
+		$this->assertSame(
+			['name' => 'Vanves', 'countryCode' => 'FR'],
+			$this->service->getPlaceForCoordinates(48.8214, 2.2897),
 		);
 	}
 
