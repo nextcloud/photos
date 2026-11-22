@@ -52,6 +52,32 @@ class NameFilterTest extends TestCase {
 		);
 	}
 
+	public function testRequiresEveryWordToMatchInAnyOrder(): void {
+		$this->knownMetadata->method('isIndex')->with('photos-caption')->willReturn(true);
+
+		$operator = $this->filter->getSearchOperator(['beach  dog']);
+
+		$this->assertEquals(ISearchBinaryOperator::OPERATOR_AND, $operator->getType());
+		$this->assertCount(2, $operator->getArguments());
+		foreach ($operator->getArguments() as $index => $either) {
+			$this->assertInstanceOf(ISearchBinaryOperator::class, $either);
+			$this->assertEquals(ISearchBinaryOperator::OPERATOR_OR, $either->getType());
+			$this->assertEquals(
+				[['name', ['%beach%', '%dog%'][$index]], ['photos-caption', ['%beach%', '%dog%'][$index]]],
+				array_map(fn ($comparison) => [$comparison->getField(), $comparison->getValue()], $either->getArguments()),
+			);
+		}
+	}
+
+	public function testSplitsOnAnyWhitespaceAndIgnoresRepeatedWords(): void {
+		$operator = $this->filter->getSearchOperator(["dog\ton the\nbeach Dög DOG", 'the']);
+
+		$this->assertEquals(
+			['%dog%', '%on%', '%the%', '%beach%', '%Dög%'],
+			array_map(fn ($comparison) => $comparison->getValue(), $operator->getArguments()),
+		);
+	}
+
 	public function testEscapesTheLikeWildcards(): void {
 		$operator = $this->filter->getSearchOperator(['100%_of\\it']);
 

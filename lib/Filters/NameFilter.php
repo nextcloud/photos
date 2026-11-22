@@ -30,13 +30,21 @@ class NameFilter implements IFilter {
 	}
 
 	/**
-	 * Match the file name, or the description of the photo, against the search
-	 * terms, all of them have to match.
+	 * Split the search terms into words and match each word, in any order,
+	 * against the file name or the description of the photo: all words have to match.
 	 */
 	#[\Override]
 	public function getSearchOperator(array $filterValues): ISearchBinaryOperator {
-		$searchTerms = array_map(fn ($searchTerm) => is_string($searchTerm) ? trim($searchTerm) : '', $filterValues);
-		$searchTerms = array_values(array_filter($searchTerms, fn (string $searchTerm) => $searchTerm !== ''));
+		$words = [];
+		foreach ($filterValues as $searchTerm) {
+			if (!is_string($searchTerm)) {
+				continue;
+			}
+
+			foreach (preg_split('/\s+/u', $searchTerm, -1, PREG_SPLIT_NO_EMPTY) ?: [] as $word) {
+				$words[mb_strtolower($word)] ??= $word;
+			}
+		}
 
 		// Only indexed metadata can be searched, the key is indexed once the first description is stored.
 		$matchCaptions = $this->metadataManager->getKnownMetadata()->isIndex(CaptionMetadataProvider::METADATA_KEY);
@@ -44,8 +52,8 @@ class NameFilter implements IFilter {
 		return new SearchBinaryOperator(
 			ISearchBinaryOperator::OPERATOR_AND,
 			array_map(
-				fn (string $searchTerm) => $this->getTermOperator('%' . SearchComparison::escapeLikeParameter($searchTerm) . '%', $matchCaptions),
-				$searchTerms
+				fn (string $word) => $this->getTermOperator('%' . SearchComparison::escapeLikeParameter($word) . '%', $matchCaptions),
+				array_values($words)
 			),
 		);
 	}

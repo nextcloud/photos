@@ -56,9 +56,24 @@ describe('nameFilter', () => {
 		expect(getLiterals(query)).toEqual(['%holidays%', '%rome%'])
 	})
 
+	test('requires every word of a search term to match, in any order', () => {
+		vi.mocked(loadState).mockReturnValueOnce(true)
+
+		const query = nameFilter.getQuery(['beach  dog'])
+
+		expect(query.match(/<d:and>/g)).toHaveLength(1)
+		expect(query.match(/<d:or>/g)).toHaveLength(2)
+		expect(getLiterals(query)).toEqual(['%beach%', '%beach%', '%dog%', '%dog%'])
+	})
+
+	test('splits on any whitespace and ignores repeated words', () => {
+		expect(getLiterals(nameFilter.getQuery(['dog\ton the\nbeach Dog', 'the']))).toEqual(['%dog%', '%on%', '%the%', '%beach%'])
+	})
+
 	test('escapes the XML entities of the search term', () => {
-		expect(getLiterals(nameFilter.getQuery(['<a href="me & you">']))).toEqual([
-			'%&#x3C;a href=&#x22;me &#x26; you&#x22;&#x3E;%',
+		expect(getLiterals(nameFilter.getQuery(['<a href="me&you">']))).toEqual([
+			'%&#x3C;a%',
+			'%href=&#x22;me&#x26;you&#x22;&#x3E;%',
 		])
 	})
 
