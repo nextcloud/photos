@@ -7,18 +7,7 @@
 	<NcContent appName="photos">
 		<NcAppNavigation :aria-label="t('photos', 'Photos')">
 			<template v-if="isTimelineView" #search>
-				<NcTextField
-					v-model="searchTerm"
-					class="app-navigation__search"
-					:label="t('photos', 'Search by file name')"
-					:showTrailingButton="searchTerm.length > 0"
-					:trailingButtonLabel="t('photos', 'Clear search')"
-					@trailingButtonClick="searchTerm = ''">
-					<template #icon>
-						<Magnify :size="20" />
-					</template>
-				</NcTextField>
-				<PhotosFiltersInput
+				<PhotosSearch
 					:selectedFilters="selectedFilters"
 					@selectFilter="selectFilter" />
 				<PhotosFiltersDisplay
@@ -195,16 +184,14 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
-import debounce from 'debounce'
 import { storeToRefs } from 'pinia'
-import { computed, onBeforeMount, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, onBeforeMount, onBeforeUnmount, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
 import NcAppNavigation from '@nextcloud/vue/components/NcAppNavigation'
 import NcAppNavigationItem from '@nextcloud/vue/components/NcAppNavigationItem'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcContent from '@nextcloud/vue/components/NcContent'
-import NcTextField from '@nextcloud/vue/components/NcTextField'
 import AccountBoxMultiple from 'vue-material-design-icons/AccountBoxMultiple.vue'
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
 import AccountGroup from 'vue-material-design-icons/AccountGroup.vue'
@@ -220,7 +207,6 @@ import ImageIcon from 'vue-material-design-icons/Image.vue'
 import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import ImageOutline from 'vue-material-design-icons/ImageOutline.vue'
-import Magnify from 'vue-material-design-icons/Magnify.vue'
 import MapIcon from 'vue-material-design-icons/Map.vue'
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
@@ -235,7 +221,7 @@ import TimelapseIcon from 'vue-material-design-icons/Timelapse.vue'
 import VideoIcon from 'vue-material-design-icons/Video.vue'
 import VideoOutline from 'vue-material-design-icons/VideoOutline.vue'
 import PhotosFiltersDisplay from './components/PhotosFilters/PhotosFiltersDisplay.vue'
-import PhotosFiltersInput from './components/PhotosFilters/PhotosFiltersInput.vue'
+import PhotosSearch from './components/PhotosFilters/PhotosSearch.vue'
 import SettingsDialog from './components/Settings/SettingsDialog.vue'
 import svgplaceholder from './assets/file-placeholder.svg'
 import imgplaceholder from './assets/image.svg'
@@ -244,7 +230,6 @@ import { areTagsInstalled } from './services/AreTagsInstalled.ts'
 import { isAppStoreEnabled } from './services/IsAppStoreEnabled.ts'
 import { isRecognizeInstalled } from './services/IsRecognizeInstalled.ts'
 import { logger } from './services/logger.ts'
-import { nameFilterId } from './services/PhotosFilters/nameFilter.ts'
 import { useFilesStore } from './store/files.ts'
 import { useFilterStore } from './store/filters.ts'
 
@@ -253,7 +238,6 @@ const filesStore = useFilesStore()
 const filtersStore = useFilterStore()
 const { selectedFilters } = storeToRefs(filtersStore)
 
-const searchTerm = ref('')
 const openedSettings = ref(false)
 
 const currentUser = getCurrentUser()
@@ -262,22 +246,6 @@ const showPeopleMenuEntry = currentUser === null
 	: (currentUser.isAdmin && loadState('photos', 'showPeopleMenuEntry', true) && isAppStoreEnabled) || isRecognizeInstalled
 
 const isTimelineView = computed(() => typeof route.name === 'string' && ['all_media', 'photos', 'videos'].includes(route.name))
-
-// Debounced so that a search request is not sent on every keystroke.
-const applySearchTerm = debounce((value: string) => {
-	selectedFilters.value[nameFilterId] = value === '' ? [] : [value]
-}, 300)
-
-watch(searchTerm, (value) => applySearchTerm(value.trim()))
-
-// Keep the field in sync when the filter is cleared somewhere else,
-// like when leaving the timeline.
-watch(() => selectedFilters.value[nameFilterId], (values) => {
-	const [value = ''] = values as string[]
-	if (value !== searchTerm.value.trim()) {
-		searchTerm.value = value
-	}
-})
 
 function showSettings() {
 	openedSettings.value = true
@@ -342,9 +310,5 @@ onBeforeUnmount(() => {
 
 .app-navigation__footer {
 	padding: calc(var(--default-grid-baseline) * 2);
-}
-
-.app-navigation__search {
-	padding: calc(var(--default-grid-baseline) * 2) calc(var(--default-grid-baseline) * 2) 0;
 }
 </style>
