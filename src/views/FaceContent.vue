@@ -236,7 +236,6 @@ const router = useRouter()
 const facesStore = useFacesStore()
 const filesStore = useFilesStore()
 const { fetchFaceContent, loadingFaces, loadingFiles, errorFetchingFaces, errorFetchingFiles } = useFetchFaces()
-const { selection, selectedFileIds, onFileSelectToggle, onUncheckFiles, resetSelection } = useFilesSelection()
 
 const nameInput = useTemplateRef<HTMLInputElement>('nameInput')
 
@@ -251,6 +250,8 @@ const faces = computed(() => facesStore.faces)
 const facesFiles = computed(() => facesStore.facesFiles)
 const face = computed<Collection | undefined>(() => faces.value[props.faceName])
 const faceFileIds = computed<string[]>(() => facesFiles.value[props.faceName] || [])
+
+const { selection, selectedFileIds, onFileSelectToggle, onUncheckFiles, resetSelection } = useFilesSelection(() => faceFileIds.value.filter((fileId) => files.value[fileId] !== undefined))
 
 // Favorite all selection if at least one file is not on the favorites.
 const shouldFavoriteSelection = computed<boolean>(() => selectedFileIds.value.some((fileId) => filesStore.files[fileId].attributes.favorite === 0))

@@ -133,7 +133,6 @@ const router = useRouter()
 const facesStore = useFacesStore()
 const filesStore = useFilesStore()
 const { fetchUnassignedFaces, loadingFaces, loadingFiles, errorFetchingFiles } = useFetchFaces()
-const { selection, selectedFileIds, onFileSelectToggle, onUncheckFiles } = useFilesSelection()
 
 const showMoveModal = ref(false)
 const loadingCount = ref(0)
@@ -142,6 +141,8 @@ const appContent = document.getElementById('app-content-vue')
 const files = computed(() => filesStore.files)
 const unassignedFiles = computed(() => facesStore.unassignedFiles)
 const faceFileIds = computed<string[]>(() => unassignedFiles.value || [])
+
+const { selection, selectedFileIds, onFileSelectToggle, onUncheckFiles } = useFilesSelection(() => faceFileIds.value.filter((fileId) => files.value[fileId] !== undefined))
 
 // Favorite all selection if at least one file is not on the favorites.
 const shouldFavoriteSelection = computed<boolean>(() => selectedFileIds.value.some((fileId) => filesStore.files[fileId].attributes.favorite === 0))

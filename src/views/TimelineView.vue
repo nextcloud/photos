@@ -299,7 +299,6 @@ const { selectedFilters, filtersQuery } = storeToRefs(filtersStore)
 
 const { gridDensity, tileBaseHeight, setGridDensity } = useGridDensity()
 const { fetchFiles, resetFetchFilesState, fetchedFileIds, loadingFiles, errorFetchingFiles } = useFetchFiles()
-const { selection, selectedFileIds, onUncheckFiles, resetSelection } = useFilesSelection()
 
 const newAlbumButton = useTemplateRef<InstanceType<typeof NcButton>>('newAlbumButton')
 
@@ -315,6 +314,15 @@ const files = computed(() => filesStore.files)
 // Photos taken in one go are shown as a single tile of the timeline, and are
 // reachable from the viewer it opens.
 const { fileIdsByMonthUngrouped, burstStacks, fileIdsByMonth, monthsList } = useFilesByMonth(fetchedFileIds, files, true)
+
+// Selecting the tile of a run selects every photo of it: the photos folded
+// into it have no tile of their own to be picked from, and favoriting,
+// downloading or deleting a part of a burst would silently leave the rest
+// behind.
+const { selection, selectedFileIds, onFileSelectToggle, onUncheckFiles, resetSelection } = useFilesSelection(
+	() => monthsList.value.flatMap((month) => fileIdsByMonth.value[month]),
+	(fileId) => burstStacks.value[fileId]?.memberIds ?? [fileId],
+)
 
 const shouldFavoriteSelection = computed<boolean>(() => {
 	// Favorite all selection if at least one file is not in the favorites.
@@ -367,17 +375,6 @@ function getContent() {
 // the month is all there is to do.
 function onScrubberJump(month: string) {
 	scrubberTarget.value = month
-}
-
-// Selecting the tile of a run selects every photo of it: the photos folded
-// into it have no tile of their own to be picked from, and favoriting,
-// downloading or deleting a part of a burst would silently leave the rest
-// behind.
-function onFileSelectToggle({ id, value }: { id: number, value: boolean }): void {
-	const fileIds = burstStacks.value[id]?.memberIds ?? [String(id)]
-	for (const fileId of fileIds) {
-		selection.value[fileId] = value
-	}
 }
 
 // How many photos the tile of a photo stands for, one being itself.
