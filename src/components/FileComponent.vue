@@ -649,39 +649,66 @@ $magnify-transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 		}
 	}
 
+	// A small translucent ring, as in other photo apps, rather than a boxed
+	// checkbox: it shows that the tile can be selected without covering the photo.
 	.selection-checkbox {
 		opacity: 0;
+		transition: opacity var(--animation-quick) ease-out;
 		position: absolute;
 		top: 8px;
-		// Fancy calculation to render the checkbox in the middle of narrow images.
-		inset-inline-end: calc(min(22px, calc(50% - 7px)) + var(--stack-peek));
+		// Keep the ring inside narrow images.
+		inset-inline-end: calc(min(8px, calc(50% - 11px)) + var(--stack-peek));
 		z-index: 5; // above the preview layers
 		width: fit-content;
 
-		:deep .checkbox-radio-switch__input:focus-visible+.checkbox-radio-switch__content,
-		.checkbox-radio-switch__input:focus-visible {
-			outline: 2px solid var(--color-main-text);
-			box-shadow: 0 0 0 3px var(--color-main-background);
-			outline-offset: 0px;
+		:deep(.checkbox-radio-switch__content) {
+			flex: 0 0 22px;
+			width: 22px;
+			min-width: 22px;
+			max-width: none;
+			height: 22px;
+			min-height: 0;
+			padding: 0;
+			gap: 0;
+			box-sizing: border-box;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border: 2px solid rgba(255, 255, 255, 0.9);
+			border-radius: 50%;
+			// The component paints its own hover and focus backgrounds with more
+			// specific selectors, which would replace the ring's colours.
+			background-color: rgba(0, 0, 0, 0.15) !important;
+			box-shadow: 0 0 3px rgba(0, 0, 0, 0.45);
+			transition: background-color var(--animation-quick) ease-out;
+
+			&:hover {
+				background-color: rgba(0, 0, 0, 0.35) !important;
+			}
 		}
 
-		:deep(.checkbox-radio-switch__content) {
-			padding: 10px;
-			box-sizing: border-box;
-			background: var(--color-main-background);
+		:deep(.checkbox-radio-switch__icon) {
+			display: none;
+		}
 
-			// Add a background to the checkbox so we do not see the image through it.
-			&::after {
+		:deep(.checkbox-radio-switch__input:focus-visible + .checkbox-radio-switch__content) {
+			outline: 2px solid var(--color-main-background);
+			box-shadow: 0 0 0 4px var(--color-primary-element);
+		}
+
+		&.checkbox-radio-switch--checked :deep(.checkbox-radio-switch__content) {
+			border-color: var(--color-primary-element-text);
+			background-color: var(--color-primary-element) !important;
+
+			// Check mark
+			&::before {
 				content: '';
-				width: 16px;
-				height: 16px;
-				position: absolute;
-				inset-inline-start: 14px;
-				z-index: -1;
-			}
-
-			.checkbox-radio-switch__icon {
-				margin: 0;
+				width: 5px;
+				height: 9px;
+				margin-top: -2px;
+				border: solid var(--color-primary-element-text);
+				border-width: 0 2px 2px 0;
+				transform: rotate(45deg);
 			}
 		}
 
@@ -690,6 +717,10 @@ $magnify-transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 			z-index: -1;
 			top: -5000px;
 			inset-inline-start: -5000px;
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			transition: none;
 		}
 	}
 
