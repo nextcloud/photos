@@ -155,6 +155,16 @@
 						<MapOutline v-else :size="20" />
 					</template>
 				</NcAppNavigationItem>
+				<NcAppNavigationItem
+					v-if="isTrashbinEnabled"
+					:to="{ name: 'recentlyDeleted' }"
+					:name="t('photos', 'Recently deleted')"
+					data-id-app-nav-item="recently-deleted">
+					<template #icon="{ active }">
+						<DeleteIcon v-if="active" :size="20" />
+						<DeleteOutline v-else :size="20" />
+					</template>
+				</NcAppNavigationItem>
 			</template>
 			<template #footer>
 				<div class="app-navigation__footer">
@@ -214,6 +224,8 @@ import CalendarTodayOutline from 'vue-material-design-icons/CalendarTodayOutline
 import CameraIcon from 'vue-material-design-icons/Camera.vue'
 import CameraOutline from 'vue-material-design-icons/CameraOutline.vue'
 import CogOutline from 'vue-material-design-icons/CogOutline.vue'
+import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import DeleteOutline from 'vue-material-design-icons/DeleteOutline.vue'
 import Folder from 'vue-material-design-icons/Folder.vue'
 import FolderOutline from 'vue-material-design-icons/FolderOutline.vue'
 import ImageIcon from 'vue-material-design-icons/Image.vue'
@@ -243,6 +255,7 @@ import videoplaceholder from './assets/video.svg'
 import { areTagsInstalled } from './services/AreTagsInstalled.ts'
 import { isAppStoreEnabled } from './services/IsAppStoreEnabled.ts'
 import { isRecognizeInstalled } from './services/IsRecognizeInstalled.ts'
+import { isTrashbinEnabled } from './services/IsTrashbinEnabled.ts'
 import { logger } from './services/logger.ts'
 import { nameFilterId } from './services/PhotosFilters/nameFilter.ts'
 import { useFilesStore } from './store/files.ts'
