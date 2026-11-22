@@ -44,6 +44,14 @@
 			@update:bounds="bounds = $event">
 			<LTileLayer :url="tileServerUrl" :options="TILE_LAYER_OPTIONS" />
 			<LControlAttribution position="bottomright" :prefix="attribution" />
+			<LControl position="topright">
+				<NcButton @click="showPhotosInArea">
+					<template #icon>
+						<ImageSearchOutline :size="20" />
+					</template>
+					{{ t('photos', 'Show photos in this area') }}
+				</NcButton>
+			</LControl>
 			<LMarker
 				v-for="marker in visibleMarkers"
 				:key="marker.cluster.items[0].fileid"
@@ -52,6 +60,26 @@
 				:options="{ riseOnHover: true }"
 				@click="onMarkerClick(marker.cluster.items[0].fileid)" />
 		</LMap>
+
+		<NcDialog
+			:open="areaPhotos !== undefined"
+			:name="n('photos', '%n photo in this area', '%n photos in this area', areaPhotos?.length ?? 0)"
+			size="large"
+			contentClasses="photos-map__area"
+			@update:open="areaPhotos = undefined">
+			<FilesListViewer
+				class="photos-map__area-photos"
+				:fileIds="areaFileIds"
+				:emptyMessage="t('photos', 'No photos in this area')"
+				:baseHeight="isMobile ? 120 : 200">
+				<template #default="{ file }">
+					<FileComponent
+						:file="filesStore.files[file.id]"
+						:allowSelection="false"
+						@click="openAreaPhoto" />
+				</template>
+			</FilesListViewer>
+		</NcDialog>
 	</div>
 </template>
 
@@ -62,7 +90,9 @@ import type { MapCluster } from '../utils/mapClusters.ts'
 import { n, t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { getViewer } from '@nextcloud/viewer'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import {
+	LControl,
 	LControlAttribution,
 	LMap,
 	LMarker,
@@ -71,13 +101,19 @@ import {
 import L from 'leaflet'
 import { computed, onMounted, ref, shallowRef, watch } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
+import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import ImageSearchOutline from 'vue-material-design-icons/ImageSearchOutline.vue'
 import MapIcon from 'vue-material-design-icons/Map.vue'
 import EmptyIllustration from '../components/EmptyIllustration.vue'
+import FileComponent from '../components/FileComponent.vue'
+import FilesListViewer from '../components/FilesListViewer.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import { useLoadedPhotos } from '../composables/useLoadedPhotos.ts'
 import { isMapsInstalled } from '../services/IsMapsInstalled.ts'
+import { useFilesStore } from '../store/files.ts'
 import { getPreviewUrl } from '../utils/fileUtils.ts'
+import { itemsInBounds } from '../utils/mapBounds.ts'
 import { clusterMarkers } from '../utils/mapClusters.ts'
 
 import 'leaflet/dist/leaflet.css'
@@ -115,6 +151,8 @@ const mapsAppUrl = generateUrl('/apps/maps')
 const TILE_LAYER_OPTIONS = { referrerPolicy: 'strict-origin-when-cross-origin' }
 
 const { photos, loading, loadPhotos } = useLoadedPhotos()
+const filesStore = useFilesStore()
+const isMobile = useIsMobile()
 
 const geotaggedPhotos = computed<PhotoFile[]>(() => photos.value.filter((photo) => {
 	const [latitude, longitude] = getCoordinates(photo)
@@ -127,6 +165,10 @@ const center = ref<[number, number]>([20, 0])
 const zoom = ref(2)
 const map = shallowRef<L.Map>()
 const bounds = shallowRef<L.LatLngBounds>()
+
+/** The photos of the visible area, while they are shown as a grid. */
+const areaPhotos = shallowRef<PhotoFile[]>()
+const areaFileIds = computed(() => areaPhotos.value?.map(({ fileid }) => String(fileid)) ?? [])
 
 const clusters = computed(() => clusterMarkers(geotaggedPhotos.value, getCoordinates, zoom.value, CLUSTER_RADIUS))
 const icons = new WeakMap<MapCluster<PhotoFile>, L.DivIcon>()
@@ -185,6 +227,23 @@ function getCoordinates(photo: PhotoFile): [number, number] {
 function onMapReady(leafletMap: L.Map): void {
 	map.value = leafletMap
 	bounds.value = leafletMap.getBounds()
+}
+
+function showPhotosInArea(): void {
+	if (map.value) {
+		areaPhotos.value = itemsInBounds(geotaggedPhotos.value, getCoordinates, map.value.getBounds())
+	}
+}
+
+/**
+ * @param fileid - The photo of the grid to open in the viewer
+ */
+function openAreaPhoto(fileid: number): void {
+	const shown = areaPhotos.value ?? []
+	const photo = shown.find((areaPhoto) => areaPhoto.fileid === fileid)
+	if (photo) {
+		getViewer().open(shown, photo)
+	}
 }
 
 /**
@@ -302,6 +361,19 @@ function onMarkerClick(fileid: number): void {
 		line-height: 22px;
 		text-align: center;
 	}
+}
+
+:deep(.photos-map__area) {
+	display: flex;
+	height: 70vh;
+	// The grid scrolls on its own, its scrollbar at the edge of the dialog.
+	padding-inline-end: 0 !important;
+}
+
+.photos-map__area-photos {
+	flex-grow: 1;
+	min-width: 0;
+	height: 100%;
 }
 
 // The illustration stands in for the icon, so it must not be held to the icon size.
