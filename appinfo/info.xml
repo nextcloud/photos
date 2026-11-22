@@ -44,6 +44,7 @@
         <command>OCA\Photos\Command\UpdateReverseGeocodingFilesCommand</command>
         <command>OCA\Photos\Command\AlbumAddCommand</command>
         <command>OCA\Photos\Command\AlbumCreateCommand</command>
+        <command>OCA\Photos\Command\ImportICloudCommand</command>
     </commands>
 
     <navigations>
