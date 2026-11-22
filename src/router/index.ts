@@ -111,6 +111,20 @@ export const router = createRouter({
 			},
 		},
 		{
+			path: '/smartalbums/:smartAlbumId',
+			component: TimelineView,
+			name: 'smartAlbum',
+			props: (route) => ({
+				rootTitle: t('photos', 'Smart album'),
+				smartAlbumId: route.params.smartAlbumId,
+			}),
+			meta: {
+				rootTitle: () => {
+					return t('photos', 'Smart album')
+				},
+			},
+		},
+		{
 			path: '/sharedalbums',
 			component: SharedAlbums,
 			name: 'sharedAlbums',

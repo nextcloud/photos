@@ -74,6 +74,28 @@
 					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
+					v-for="smartAlbum in smartAlbums"
+					:key="smartAlbum.id"
+					:to="{ name: 'smartAlbum', params: { smartAlbumId: smartAlbum.id } }"
+					:name="smartAlbum.name"
+					editable
+					:editLabel="t('photos', 'Rename smart album')"
+					data-id-app-nav-item="smart-album"
+					@update:name="renameSmartAlbum(smartAlbum.id, $event)">
+					<template #icon="{ active }">
+						<ImageSearch v-if="active" :size="20" />
+						<ImageSearchOutline v-else :size="20" />
+					</template>
+					<template #actions>
+						<NcActionButton closeAfterClick @click="deleteSmartAlbum(smartAlbum.id)">
+							<template #icon>
+								<TrashCanOutline :size="20" />
+							</template>
+							{{ t('photos', 'Delete smart album') }}
+						</NcActionButton>
+					</template>
+				</NcAppNavigationItem>
+				<NcAppNavigationItem
 					v-if="showPeopleMenuEntry"
 					:to="{ name: 'faces' }"
 					:name="t('photos', 'People')"
@@ -192,13 +214,15 @@
 import type { FilterOption } from './services/PhotosFilters/PhotosFilter.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
+import { showError } from '@nextcloud/dialogs'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import debounce from 'debounce'
 import { storeToRefs } from 'pinia'
 import { computed, onBeforeMount, onBeforeUnmount, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
 import NcAppNavigation from '@nextcloud/vue/components/NcAppNavigation'
 import NcAppNavigationItem from '@nextcloud/vue/components/NcAppNavigationItem'
@@ -220,6 +244,8 @@ import ImageIcon from 'vue-material-design-icons/Image.vue'
 import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import ImageOutline from 'vue-material-design-icons/ImageOutline.vue'
+import ImageSearch from 'vue-material-design-icons/ImageSearch.vue'
+import ImageSearchOutline from 'vue-material-design-icons/ImageSearchOutline.vue'
 import Magnify from 'vue-material-design-icons/Magnify.vue'
 import MapIcon from 'vue-material-design-icons/Map.vue'
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
@@ -232,6 +258,7 @@ import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import Tag from 'vue-material-design-icons/Tag.vue'
 import TagOutline from 'vue-material-design-icons/TagOutline.vue'
 import TimelapseIcon from 'vue-material-design-icons/Timelapse.vue'
+import TrashCanOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 import VideoIcon from 'vue-material-design-icons/Video.vue'
 import VideoOutline from 'vue-material-design-icons/VideoOutline.vue'
 import PhotosFiltersDisplay from './components/PhotosFilters/PhotosFiltersDisplay.vue'
@@ -247,11 +274,15 @@ import { logger } from './services/logger.ts'
 import { nameFilterId } from './services/PhotosFilters/nameFilter.ts'
 import { useFilesStore } from './store/files.ts'
 import { useFilterStore } from './store/filters.ts'
+import { useSmartAlbumsStore } from './store/smartAlbums.ts'
 
 const route = useRoute()
+const router = useRouter()
 const filesStore = useFilesStore()
 const filtersStore = useFilterStore()
 const { selectedFilters } = storeToRefs(filtersStore)
+const smartAlbumsStore = useSmartAlbumsStore()
+const { smartAlbums } = storeToRefs(smartAlbumsStore)
 
 const searchTerm = ref('')
 const openedSettings = ref(false)
@@ -261,7 +292,7 @@ const showPeopleMenuEntry = currentUser === null
 	? false
 	: (currentUser.isAdmin && loadState('photos', 'showPeopleMenuEntry', true) && isAppStoreEnabled) || isRecognizeInstalled
 
-const isTimelineView = computed(() => typeof route.name === 'string' && ['all_media', 'photos', 'videos'].includes(route.name))
+const isTimelineView = computed(() => typeof route.name === 'string' && ['all_media', 'photos', 'videos', 'smartAlbum'].includes(route.name))
 
 // Debounced so that a search request is not sent on every keystroke.
 const applySearchTerm = debounce((value: string) => {
@@ -292,6 +323,29 @@ function deselectFilter(filterOption: { filterId: string, value: unknown }) {
 
 	if (index !== -1) {
 		selectedFilters.value[filterOption.filterId].splice(index, 1)
+	}
+}
+
+async function renameSmartAlbum(id: string, name: string) {
+	try {
+		await smartAlbumsStore.renameSmartAlbum(id, name)
+	} catch (error) {
+		logger.error('Could not rename the smart album', { error })
+		showError(t('photos', 'Could not rename the smart album'))
+	}
+}
+
+async function deleteSmartAlbum(id: string) {
+	try {
+		await smartAlbumsStore.deleteSmartAlbum(id)
+	} catch (error) {
+		logger.error('Could not delete the smart album', { error })
+		showError(t('photos', 'Could not delete the smart album'))
+		return
+	}
+
+	if (route.name === 'smartAlbum' && route.params.smartAlbumId === id) {
+		router.push({ name: 'all_media' })
 	}
 }
 
