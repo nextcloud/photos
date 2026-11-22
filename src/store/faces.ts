@@ -109,6 +109,17 @@ export const useFacesStore = defineStore('faces', () => {
 	}
 
 	/**
+	 * Photos in which both faces were recognized, in the order of the first face
+	 *
+	 * @param faceName - Face whose photos are listed
+	 * @param otherFaceName - Face that must also be on the photos
+	 */
+	function getFileIdsTogether(faceName: string, otherFaceName: string): string[] {
+		const otherFileIds = new Set(facesFiles.value[otherFaceName] ?? [])
+		return (facesFiles.value[faceName] ?? []).filter((fileId) => otherFileIds.has(fileId))
+	}
+
+	/**
 	 * @param fileIdsToAdd - Files to add
 	 */
 	function addUnassignedFiles(fileIdsToAdd: string[]): void {
@@ -263,6 +274,7 @@ export const useFacesStore = defineStore('faces', () => {
 		removeFaces,
 		addFileIdsToFace,
 		removeFileIdsFromFace,
+		getFileIdsTogether,
 		addUnassignedFiles,
 		removeUnassignedFiles,
 		setUnassignedFilesCount,
