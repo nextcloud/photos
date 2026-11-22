@@ -18,6 +18,7 @@
 						<Magnify :size="20" />
 					</template>
 				</NcTextField>
+				<PhotosFiltersAsk />
 				<PhotosFiltersInput
 					:selectedFilters="selectedFilters"
 					@selectFilter="selectFilter" />
@@ -234,6 +235,7 @@ import TagOutline from 'vue-material-design-icons/TagOutline.vue'
 import TimelapseIcon from 'vue-material-design-icons/Timelapse.vue'
 import VideoIcon from 'vue-material-design-icons/Video.vue'
 import VideoOutline from 'vue-material-design-icons/VideoOutline.vue'
+import PhotosFiltersAsk from './components/PhotosFilters/PhotosFiltersAsk.vue'
 import PhotosFiltersDisplay from './components/PhotosFilters/PhotosFiltersDisplay.vue'
 import PhotosFiltersInput from './components/PhotosFilters/PhotosFiltersInput.vue'
 import SettingsDialog from './components/Settings/SettingsDialog.vue'
