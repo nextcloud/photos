@@ -16,14 +16,21 @@ export type TiledItem = {
 export type Section<I extends TiledItem = TiledItem> = {
 	id: string // Unique id for the section.
 	items: I[] // Items of the section.
-	groups?: Section<I>[] // Groups splitting the items, each one laid out under its own header row.
+	groups?: Section<I>[] // Groups splitting the items, each one labelled above its first item.
+}
+
+export type TiledGroupLabel = {
+	groupId: string // Id of the group starting in the row.
+	itemId: string // Id of the first item of the group, the label sits above it.
+	width: number // Width of the items of the group in the row, the room the label has.
 }
 
 export type TiledRow<I extends TiledItem = TiledItem> = {
 	items: I[] // List of item in the row.
-	height: number // Height of the row.
+	height: number // Height of the row, the band of its group labels included.
 	key: string // Unique key for the row.
-	groupId?: string // Set on the header row of a group, which holds no items.
+	labels?: TiledGroupLabel[] // The groups starting in the row.
+	labelHeight?: number // Height of the band above the items holding the group labels, when a group starts in the row.
 }
 
 export type TiledSectionRow<I extends TiledItem = TiledItem> = TiledRow<I> & {
@@ -85,30 +92,42 @@ export function splitItemsInRows<I extends TiledItem>(items: I[], containerWidth
 }
 
 /**
- * Split the items of a section in rows. A section split in groups gets a
- * header row of `groupHeaderHeight` before the rows of each group, and the rows
- * of a group never hold items of another one.
+ * Split the items of a section in rows. The groups of a section share its
+ * rows: a group starts right after the one before it, so that small groups sit
+ * side by side. A row in which a group starts is `groupLabelHeight` higher,
+ * which leaves a band above its items for the labels of these groups.
  *
  * @param section - The section to lay out.
  * @param containerWidth - Width of the container.
  * @param baseHeight - Target height of the rows.
- * @param groupHeaderHeight - Height of the header row of a group.
+ * @param groupLabelHeight - Height of the band holding the labels of the groups.
  */
-export function splitSectionInRows<I extends TiledItem>(section: Section<I>, containerWidth: number, baseHeight: number = 200, groupHeaderHeight: number = 0): TiledRow<I>[] {
+export function splitSectionInRows<I extends TiledItem>(section: Section<I>, containerWidth: number, baseHeight: number = 200, groupLabelHeight: number = 0): TiledRow<I>[] {
 	if (section.groups === undefined) {
 		return splitItemsInRows(section.items, containerWidth, baseHeight)
 	}
 
-	if (containerWidth === 0) {
-		return []
-	}
+	const groups = section.groups.filter((group) => group.items.length > 0)
+	const groupIdByItemId = new Map(groups.flatMap((group) => group.items.map((item) => [item.id, group.id])))
+	const groupIdByFirstItemId = new Map(groups.map((group) => [group.items[0].id, group.id]))
 
-	return section.groups
-		.filter((group) => group.items.length > 0)
-		.flatMap((group) => [
-			{ items: [], height: groupHeaderHeight, key: `group-header-${group.id}`, groupId: group.id },
-			...splitItemsInRows(group.items, containerWidth, baseHeight),
-		])
+	return splitItemsInRows(groups.flatMap((group) => group.items), containerWidth, baseHeight).map((row) => {
+		const labels = row.items
+			.filter((item) => groupIdByFirstItemId.has(item.id))
+			.map((item) => {
+				const groupId = groupIdByFirstItemId.get(item.id) as string
+				const width = row.items
+					.filter(({ id }) => groupIdByItemId.get(id) === groupId)
+					.reduce((sum, { width }) => sum + width, 0)
+				return { groupId, itemId: item.id, width }
+			})
+
+		if (labels.length === 0) {
+			return row
+		}
+
+		return { ...row, height: row.height + groupLabelHeight, labels, labelHeight: groupLabelHeight }
+	})
 }
 
 /**
