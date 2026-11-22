@@ -19,6 +19,7 @@ use OCA\Photos\Listener\ExifMetadataProvider;
 use OCA\Photos\Listener\LoadSidebarScripts;
 use OCA\Photos\Listener\OriginalDateTimeMetadataProvider;
 use OCA\Photos\Listener\PlaceMetadataProvider;
+use OCA\Photos\Listener\PreviewPregenerationListener;
 use OCA\Photos\Listener\SabrePluginAddListener;
 use OCA\Photos\Listener\SabrePluginAuthInitListener;
 use OCA\Photos\Listener\SizeMetadataProvider;
@@ -28,6 +29,7 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Files\Events\Node\NodeDeletedEvent;
+use OCP\Files\Events\Node\NodeWrittenEvent;
 use OCP\FilesMetadata\Event\MetadataBackgroundEvent;
 use OCP\FilesMetadata\Event\MetadataLiveEvent;
 use OCP\Group\Events\GroupDeletedEvent;
@@ -87,6 +89,8 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(MetadataBackgroundEvent::class, OriginalDateTimeMetadataProvider::class);
 		$context->registerEventListener(MetadataLiveEvent::class, PlaceMetadataProvider::class);
 		$context->registerEventListener(MetadataBackgroundEvent::class, PlaceMetadataProvider::class);
+
+		$context->registerEventListener(NodeWrittenEvent::class, PreviewPregenerationListener::class);
 
 		$context->registerEventListener(NodeDeletedEvent::class, AlbumsManagementEventListener::class);
 		$context->registerEventListener(UserRemovedEvent::class, AlbumsManagementEventListener::class);
