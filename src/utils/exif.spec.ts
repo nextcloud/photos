@@ -3,8 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { describe, expect, test } from 'vitest'
-import { formatCoordinates, getExifSummary, getPhotoLocation, parseCoordinate } from './exif.ts'
+import { describe, expect, test, vi } from 'vitest'
+import { formatCoordinates, formatTakenAt, getExifSummary, getPhotoLocation, parseCoordinate } from './exif.ts'
+
+vi.mock('./dateUtils.ts', () => ({
+	formatDateTime: (date: Date) => date.toISOString(),
+}))
 
 /**
  * @param exif - Entries of the EXIF IFD
@@ -97,5 +101,23 @@ describe('parseCoordinate', () => {
 	test('refuses coordinates which are off world', () => {
 		expect(parseCoordinate('90.1', 90)).toBeNull()
 		expect(parseCoordinate('-180.1', 180)).toBeNull()
+	})
+})
+
+describe('formatTakenAt', () => {
+	test('formats the unix timestamp of the metadata', () => {
+		expect(formatTakenAt(1756471980)).toBe('2025-08-29T12:53:00.000Z')
+	})
+
+	test('reads a timestamp transported as a string', () => {
+		expect(formatTakenAt('1756471980')).toBe('2025-08-29T12:53:00.000Z')
+	})
+
+	test('returns nothing for a missing or unreadable timestamp', () => {
+		expect(formatTakenAt(undefined)).toBe('')
+		expect(formatTakenAt('')).toBe('')
+		expect(formatTakenAt('yesterday')).toBe('')
+		expect(formatTakenAt(0)).toBe('')
+		expect(formatTakenAt(Number.NaN)).toBe('')
 	})
 })

@@ -114,6 +114,15 @@ export function formatTime(date: Date): string {
 }
 
 /**
+ * Format a date with its time, like *29 Aug 2026, 14:53*.
+ *
+ * @param date - The date to format.
+ */
+export function formatDateTime(date: Date): string {
+	return getFormatter({ dateStyle: 'medium', timeStyle: 'short' }).format(date)
+}
+
+/**
  * Format a date range as a single label, leaving out the parts shared by both
  * ends of the range, like *3 – 5 August 2026*.
  *
