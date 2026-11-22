@@ -52,6 +52,13 @@
 				:options="{ riseOnHover: true }"
 				@click="onMarkerClick(marker.cluster.items[0].fileid)" />
 		</LMap>
+
+		<MapTimeRange
+			v-if="monthRange && monthRange[0] < monthRange[1]"
+			v-model:start="rangeStart"
+			v-model:end="rangeEnd"
+			:min="monthRange[0]"
+			:max="monthRange[1]" />
 	</div>
 </template>
 
@@ -75,10 +82,12 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import MapIcon from 'vue-material-design-icons/Map.vue'
 import EmptyIllustration from '../components/EmptyIllustration.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import MapTimeRange from '../components/MapTimeRange.vue'
 import { useLoadedPhotos } from '../composables/useLoadedPhotos.ts'
 import { isMapsInstalled } from '../services/IsMapsInstalled.ts'
 import { getPreviewUrl } from '../utils/fileUtils.ts'
 import { clusterMarkers } from '../utils/mapClusters.ts'
+import { filterByMonthRange, getMonthRange } from '../utils/mapTimeRange.ts'
 
 import 'leaflet/dist/leaflet.css'
 
@@ -123,12 +132,21 @@ const geotaggedPhotos = computed<PhotoFile[]>(() => photos.value.filter((photo) 
 		&& !(latitude === 0 && longitude === 0)
 }))
 
+const getMonth = (photo: PhotoFile) => photo.attributes.month
+const monthRange = computed(() => getMonthRange(geotaggedPhotos.value, getMonth))
+// Month indices of the oldest and the newest month whose photos are shown,
+// left undefined at the ends of the range so that newly loaded photos are not
+// cut off.
+const rangeStart = ref<number>()
+const rangeEnd = ref<number>()
+const shownPhotos = computed(() => filterByMonthRange(geotaggedPhotos.value, getMonth, rangeStart.value, rangeEnd.value))
+
 const center = ref<[number, number]>([20, 0])
 const zoom = ref(2)
 const map = shallowRef<L.Map>()
 const bounds = shallowRef<L.LatLngBounds>()
 
-const clusters = computed(() => clusterMarkers(geotaggedPhotos.value, getCoordinates, zoom.value, CLUSTER_RADIUS))
+const clusters = computed(() => clusterMarkers(shownPhotos.value, getCoordinates, zoom.value, CLUSTER_RADIUS))
 const icons = new WeakMap<MapCluster<PhotoFile>, L.DivIcon>()
 
 // Only the markers around the visible area are rendered, and their thumbnails
@@ -242,7 +260,7 @@ function onMarkerClick(fileid: number): void {
 
 	const [photo] = cluster.items
 	if (cluster.items.length === 1) {
-		getViewer().open(geotaggedPhotos.value, photo)
+		getViewer().open(shownPhotos.value, photo)
 		return
 	}
 
