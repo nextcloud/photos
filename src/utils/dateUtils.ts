@@ -195,3 +195,19 @@ export function formatCaptureTime(date: Date, utcOffset: number | null = null): 
 		utcOffset: formatUtcOffset(utcOffset),
 	}, undefined, { escape: false, sanitize: false })
 }
+
+/**
+ * Keep a formatted time together with what follows it, like its day period
+ * and UTC offset, so a line only ever wraps before the time.
+ *
+ * @param dateTime - A formatted date and time, like *14 June 2024 at 9:12 AM (UTC+9)*
+ * @return The text with non-breaking spaces from the time on
+ */
+export function keepTimeTogether(dateTime: string): string {
+	const timeStart = dateTime.search(/\d{1,2}[:.]\d{2}/)
+	if (timeStart === -1) {
+		return dateTime
+	}
+
+	return dateTime.slice(0, timeStart) + dateTime.slice(timeStart).replace(/ /g, '\u00A0')
+}

@@ -58,7 +58,7 @@ import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import { fetchPhotoExif } from '../services/exifFetcher.ts'
-import { formatCaptureTime, parseUtcOffset } from '../utils/dateUtils.ts'
+import { formatCaptureTime, keepTimeTogether, parseUtcOffset } from '../utils/dateUtils.ts'
 import { formatCoordinates, getExifSummary, getPhotoLocation } from '../utils/exif.ts'
 
 const props = defineProps<{
@@ -86,7 +86,7 @@ const captureTime = computed(() => {
 		return null
 	}
 
-	return formatCaptureTime(new Date(metadata.value.takenAt * 1000), parseUtcOffset(metadata.value.exif.OffsetTimeOriginal))
+	return keepTimeTogether(formatCaptureTime(new Date(metadata.value.takenAt * 1000), parseUtcOffset(metadata.value.exif.OffsetTimeOriginal)))
 })
 
 // The EXIF properties are not part of the file listings, they are only fetched
