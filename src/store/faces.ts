@@ -4,6 +4,7 @@
  */
 
 import type { Collection } from '../services/collectionFetcher.ts'
+import type { FaceDetection } from '../utils/faceDetections.ts'
 import type { PhotoFile } from './files.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
@@ -15,12 +16,6 @@ import { davClient } from '../services/DavClient.ts'
 import { logger } from '../services/logger.ts'
 import { SemaphoreWithPriority as Semaphore } from '../utils/semaphoreWithPriority.ts'
 import { useFilesStore } from './files.ts'
-
-type FaceDetection = {
-	id: number
-	clusterId: number | null
-	title: string | null
-}
 
 /**
  * @param file The photo node carrying the parsed `face-detections` attribute.
