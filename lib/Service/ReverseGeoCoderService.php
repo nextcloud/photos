@@ -22,6 +22,7 @@ use OCP\Files\NotFoundException;
 use OCP\Files\SimpleFS\ISimpleFolder;
 use OCP\Http\Client\IClientService;
 use OCP\IConfig;
+use Psr\Log\LoggerInterface;
 
 class ReverseGeoCoderService {
 	public const CONFIG_DISABLE_PLACES = 'disable_places';
@@ -29,18 +30,27 @@ class ReverseGeoCoderService {
 	private ?NearestSearch $fsSearcher = null;
 	/** @var array<int, string> */
 	private ?array $citiesMapping = null;
+	/** @var array<int, string> */
+	private ?array $countryCodesMapping = null;
 
 	public function __construct(
 		private readonly IAppData $appData,
 		private readonly IClientService $clientService,
 		private readonly IConfig $config,
+		private readonly LoggerInterface $logger,
 	) {
 	}
 
-	public function getPlaceForCoordinates(float $latitude, float $longitude): string {
+	/**
+	 * The city nearest to the coordinates, with the ISO 3166-1 alpha-2 code of
+	 * its country, or an empty code when the cities list carries none.
+	 *
+	 * @return array{name: string, countryCode: string}
+	 */
+	public function getPlaceForCoordinates(float $latitude, float $longitude): array {
 		$this->loadKdTree();
 		$result = $this->fsSearcher->search(new Point([$latitude, $longitude]), 1);
-		return $this->getPlaceNameForPlaceId($result[0]->getId());
+		return $this->getPlaceForPlaceId($result[0]->getId());
 	}
 
 	private function geoNameFolder(): ISimpleFolder {
@@ -55,17 +65,25 @@ class ReverseGeoCoderService {
 		return $this->geoNameFolderCache;
 	}
 
-	private function getPlaceNameForPlaceId(int $placeId): string {
-		if ($this->citiesMapping === null) {
+	/**
+	 * @return array{name: string, countryCode: string}
+	 */
+	private function getPlaceForPlaceId(int $placeId): array {
+		if ($this->citiesMapping === null || $this->countryCodesMapping === null) {
 			$this->downloadCities1000();
 			$cities1000 = $this->loadCities1000();
 			$this->citiesMapping = [];
+			$this->countryCodesMapping = [];
 			foreach ($cities1000 as $city) {
 				$this->citiesMapping[$city['id']] = $city['name'];
+				$this->countryCodesMapping[$city['id']] = $city['countryCode'];
 			}
 		}
 
-		return $this->citiesMapping[$placeId];
+		return [
+			'name' => $this->citiesMapping[$placeId],
+			'countryCode' => $this->countryCodesMapping[$placeId],
+		];
 	}
 
 	public function arePlacesEnabled(): bool {
@@ -113,8 +131,8 @@ class ReverseGeoCoderService {
 
 		try {
 			while (($fields = fgetcsv($cities1000TxtStream, 0, "\t")) !== false) {
-				if (count($fields) < 6) {
-					throw new \Exception('Malformed cities1000.txt row: expected at least 6 fields, got ' . count($fields));
+				if (count($fields) < 9) {
+					throw new \Exception('Malformed cities1000.txt row: expected at least 9 fields, got ' . count($fields));
 				}
 				$result = fputcsv(
 					$destinationStream,
@@ -123,6 +141,7 @@ class ReverseGeoCoderService {
 						'name' => $fields[1],
 						'latitude' => (float)$fields[4],
 						'longitude' => (float)$fields[5],
+						'countryCode' => $fields[8],
 					]
 				);
 				if ($result === false) {
@@ -137,6 +156,9 @@ class ReverseGeoCoderService {
 		}
 	}
 
+	/**
+	 * @return list<array{id: int, name: string, latitude: float, longitude: float, countryCode: string}>
+	 */
 	private function loadCities1000(): array {
 		$csvStream = $this->geoNameFolder()->getFile('cities1000.csv')->read();
 		if ($csvStream === false || !is_resource($csvStream)) {
@@ -154,6 +176,7 @@ class ReverseGeoCoderService {
 				'name' => $fields[1],
 				'latitude' => (float)$fields[2],
 				'longitude' => (float)$fields[3],
+				'countryCode' => $fields[4] ?? '',
 			];
 		}
 
@@ -184,9 +207,36 @@ class ReverseGeoCoderService {
 		unlink($kdTreeTmpFileName);
 	}
 
+	/**
+	 * Whether the cached cities list predates the country codes.
+	 */
+	private function isCities1000Outdated(): bool {
+		if (!$this->arePlacesEnabled() || !$this->geoNameFolder()->fileExists('cities1000.csv')) {
+			return false;
+		}
+
+		$csvStream = $this->geoNameFolder()->getFile('cities1000.csv')->read();
+		if ($csvStream === false || !is_resource($csvStream)) {
+			return false;
+		}
+
+		$fields = fgetcsv($csvStream, 0, ',', '"', '\\');
+		fclose($csvStream);
+
+		return $fields !== false && count($fields) < 5;
+	}
+
 	private function loadKdTree(): void {
 		if ($this->fsSearcher !== null) {
 			return;
+		}
+
+		if ($this->isCities1000Outdated()) {
+			try {
+				$this->buildKDTree(true);
+			} catch (\Exception $e) {
+				$this->logger->warning('Failed to update the cities list, places will have no country', ['exception' => $e]);
+			}
 		}
 
 		$this->buildKDTree();

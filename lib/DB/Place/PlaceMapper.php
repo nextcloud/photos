@@ -36,17 +36,14 @@ class PlaceMapper {
 		$mimetypes = array_map(fn ($mimetype) => $this->mimeTypeLoader->getId($mimetype), Application::IMAGE_MIMES);
 
 		$qb = $this->connection->getQueryBuilder();
-
-		$qb->selectDistinct('meta_value_string')
-			->from('filecache', 'file');
-		$metadataQuery = $this->filesMetadataManager->getMetadataQuery($qb, 'file', 'fileid');
-		$metadataQuery->joinIndex(PlaceMetadataProvider::METADATA_KEY, true);
+		$qb->from('filecache', 'file');
+		$this->selectPlaceAndCountry($qb);
 		$rows = $qb->where($qb->expr()->eq('file.storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->in('file.mimetype', $qb->createNamedParameter($mimetypes, IQueryBuilder::PARAM_INT_ARRAY)))
 			->executeQuery()
 			->fetchAll();
 
-		return array_map(fn ($row): PlaceInfo => new PlaceInfo($userId, $row['meta_value_string']), $rows);
+		return $this->placesFromRows($userId, $rows);
 	}
 
 	/** @return PlaceInfo */
@@ -59,22 +56,67 @@ class PlaceMapper {
 		$mimetypes = array_map(fn ($mimetype) => $this->mimeTypeLoader->getId($mimetype), Application::IMAGE_MIMES);
 
 		$qb = $this->connection->getQueryBuilder();
-
-		$qb->selectDistinct('meta_value_string')
-			->from('filecache', 'file');
-		$metadataQuery = $this->filesMetadataManager->getMetadataQuery($qb, 'file', 'fileid');
-		$metadataQuery->joinIndex(PlaceMetadataProvider::METADATA_KEY, true);
+		$qb->from('filecache', 'file');
+		$placeColumn = $this->selectPlaceAndCountry($qb);
 		$rows = $qb->where($qb->expr()->eq('file.storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->in('file.mimetype', $qb->createNamedParameter($mimetypes, IQueryBuilder::PARAM_INT_ARRAY)))
-			->andWhere($qb->expr()->eq('meta_value_string', $qb->createNamedParameter($place)))
+			->andWhere($qb->expr()->eq($placeColumn, $qb->createNamedParameter($place)))
 			->executeQuery()
 			->fetchAll();
 
-		if (count($rows) !== 1) {
+		$places = $this->placesFromRows($userId, $rows);
+		if (count($places) !== 1) {
 			throw new NotFoundException();
 		}
 
-		return new PlaceInfo($userId, $rows[0]['meta_value_string']);
+		return $places[0];
+	}
+
+	/**
+	 * Select the place and country of the files, counting the files of each pair.
+	 *
+	 * @return string the place column, to filter on
+	 */
+	private function selectPlaceAndCountry(IQueryBuilder $qb): string {
+		$metadataQuery = $this->filesMetadataManager->getMetadataQuery($qb, 'file', 'fileid');
+		$placeColumn = $metadataQuery->joinIndex(PlaceMetadataProvider::METADATA_KEY, true) . '.meta_value_string';
+		$countryColumn = $metadataQuery->joinIndex(PlaceMetadataProvider::METADATA_KEY_COUNTRY) . '.meta_value_string';
+
+		$qb->selectAlias($placeColumn, 'place')
+			->selectAlias($countryColumn, 'country')
+			->selectAlias($qb->func()->count('file.fileid'), 'files')
+			->groupBy($placeColumn, $countryColumn);
+
+		return $placeColumn;
+	}
+
+	/**
+	 * One place per name, in the country most of its files lie in.
+	 *
+	 * Distinct cities can share a name, and files reverse geocoded before
+	 * countries were stored have none.
+	 *
+	 * @param array<array{place: string, country: ?string, files: int|string}> $rows
+	 * @return list<PlaceInfo>
+	 */
+	private function placesFromRows(string $userId, array $rows): array {
+		/** @var array<string, array<string, int>> $countries */
+		$countries = [];
+		foreach ($rows as $row) {
+			$countries[$row['place']] ??= [];
+			$country = (string)$row['country'];
+			if ($country !== '') {
+				$countries[$row['place']][$country] = (int)$row['files'];
+			}
+		}
+
+		$places = [];
+		foreach ($countries as $place => $fileCounts) {
+			uksort($fileCounts, fn (string $a, string $b): int => [$fileCounts[$b], $a] <=> [$fileCounts[$a], $b]);
+			$places[] = new PlaceInfo($userId, (string)$place, (string)(array_key_first($fileCounts) ?? ''));
+		}
+
+		return $places;
 	}
 
 	/** @return PlaceFile[] */

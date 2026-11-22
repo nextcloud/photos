@@ -40,6 +40,7 @@ class PropFindPlugin extends ServerPlugin {
 	public const LOCATION_PROPERTYNAME = '{http://nextcloud.org/ns}location';
 	public const LAST_PHOTO_PROPERTYNAME = '{http://nextcloud.org/ns}last-photo';
 	public const NBITEMS_PROPERTYNAME = '{http://nextcloud.org/ns}nbItems';
+	public const PLACE_COUNTRY_PROPERTYNAME = '{http://nextcloud.org/ns}place-country';
 	public const COLLABORATORS_PROPERTYNAME = '{http://nextcloud.org/ns}collaborators';
 	public const FILTERS_PROPERTYNAME = '{http://nextcloud.org/ns}filters';
 	public const PERMISSIONS_PROPERTYNAME = '{http://owncloud.org/ns}permissions';
@@ -154,6 +155,7 @@ class PropFindPlugin extends ServerPlugin {
 
 		if ($node instanceof PlaceRoot) {
 			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn (): int => $node->getFirstPhoto());
+			$propFind->handle(self::PLACE_COUNTRY_PROPERTYNAME, fn (): string => $node->getCountryCode());
 		}
 	}
 

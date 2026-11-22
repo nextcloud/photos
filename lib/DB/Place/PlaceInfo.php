@@ -12,6 +12,7 @@ class PlaceInfo {
 	public function __construct(
 		private readonly string $userId,
 		private readonly string $place,
+		private readonly string $countryCode = '',
 	) {
 	}
 
@@ -21,5 +22,12 @@ class PlaceInfo {
 
 	public function getPlace(): string {
 		return $this->place;
+	}
+
+	/**
+	 * ISO 3166-1 alpha-2 code of the country, empty when unknown.
+	 */
+	public function getCountryCode(): string {
+		return $this->countryCode;
 	}
 }

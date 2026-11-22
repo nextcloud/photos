@@ -21,7 +21,7 @@
 				</div>
 				<div v-if="metadata?.place" class="photo-metadata__entry">
 					<dt>{{ t('photos', 'Place') }}</dt>
-					<dd>{{ metadata.place }}</dd>
+					<dd>{{ formatPlaceName(metadata.place, metadata.placeCountry) }}</dd>
 				</div>
 				<div v-if="location !== null" class="photo-metadata__entry">
 					<dt>{{ t('photos', 'Location') }}</dt>
@@ -55,6 +55,7 @@ import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import { fetchPhotoExif } from '../services/exifFetcher.ts'
 import { formatCoordinates, getExifSummary, getPhotoLocation } from '../utils/exif.ts'
+import { formatPlaceName } from '../utils/placeCountry.ts'
 
 const props = defineProps<{
 	/** Photo to show the metadata of. */

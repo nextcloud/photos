@@ -17,6 +17,7 @@ const exifPropFind = `<?xml version="1.0"?>
 				<nc:metadata-photos-ifd0 />
 				<nc:metadata-photos-gps />
 				<nc:metadata-photos-place />
+				<nc:metadata-photos-place-country />
 				<nc:metadata-photos-original_date_time />
 			</d:prop>
 		</d:propfind>`
@@ -46,6 +47,7 @@ export async function fetchPhotoExif(photo: PhotoTarget): Promise<PhotoExif> {
 			ifd0: (props['metadata-photos-ifd0'] ?? {}) as Record<string, unknown>,
 			gps: props['metadata-photos-gps'] as PhotoExif['gps'],
 			place: props['metadata-photos-place'] as PhotoExif['place'],
+			placeCountry: props['metadata-photos-place-country'] as PhotoExif['placeCountry'],
 			takenAt: props['metadata-photos-original_date_time'] as PhotoExif['takenAt'],
 		}
 	} catch (error) {

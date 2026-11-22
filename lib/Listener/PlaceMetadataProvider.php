@@ -22,6 +22,7 @@ use OCP\FilesMetadata\Event\MetadataLiveEvent;
 class PlaceMetadataProvider implements IEventListener {
 
 	public const METADATA_KEY = 'photos-place';
+	public const METADATA_KEY_COUNTRY = 'photos-place-country';
 
 	public function __construct(
 		private readonly MediaPlaceManager $mediaPlaceManager,
@@ -45,11 +46,7 @@ class PlaceMetadataProvider implements IEventListener {
 		}
 
 		if ($event instanceof MetadataBackgroundEvent) {
-			$metadata = $event->getMetadata();
-			$place = $this->mediaPlaceManager->getPlaceForMetadata($metadata);
-			if ($place !== null) {
-				$metadata->setString(self::METADATA_KEY, $place, true);
-			}
+			$this->mediaPlaceManager->setPlaceForMetadata($event->getMetadata());
 		}
 	}
 }

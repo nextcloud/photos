@@ -116,11 +116,9 @@ class MetadataPropPatchPlugin extends ServerPlugin {
 
 			// The place is derived from the coordinates, keeping the previous
 			// one would leave the photo in the wrong place collection.
-			$place = $this->mediaPlaceManager->getPlaceForMetadata($metadata);
-			if ($place === null) {
+			if (!$this->mediaPlaceManager->setPlaceForMetadata($metadata)) {
 				$metadata->unset(PlaceMetadataProvider::METADATA_KEY);
-			} else {
-				$metadata->setString(PlaceMetadataProvider::METADATA_KEY, $place, true);
+				$metadata->unset(PlaceMetadataProvider::METADATA_KEY_COUNTRY);
 			}
 		}
 
