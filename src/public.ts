@@ -8,6 +8,8 @@ import { createApp } from 'vue'
 import PhotosAppPublic from './PhotosAppPublic.vue'
 import { router } from './router/index.ts'
 
+import '@nextcloud/dialogs/style.css'
+
 const app = createApp(PhotosAppPublic)
 app.config.idPrefix = 'photos'
 app.use(createPinia())

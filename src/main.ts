@@ -9,6 +9,8 @@ import { createApp } from 'vue'
 import PhotosApp from './PhotosApp.vue'
 import { router } from './router/index.ts'
 
+import '@nextcloud/dialogs/style.css'
+
 registerDavProperty('nc:metadata-photos-size')
 registerDavProperty('nc:metadata-files-live-photo')
 registerDavProperty('nc:metadata-blurhash')
