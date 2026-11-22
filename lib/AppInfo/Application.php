@@ -23,6 +23,7 @@ use OCA\Photos\Listener\SabrePluginAddListener;
 use OCA\Photos\Listener\SabrePluginAuthInitListener;
 use OCA\Photos\Listener\SizeMetadataProvider;
 use OCA\Photos\Listener\TagListener;
+use OCA\Photos\Listener\XmpSidecarMetadataProvider;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -80,6 +81,9 @@ class Application extends App implements IBootstrap {
 		// Metadata
 		$context->registerEventListener(MetadataLiveEvent::class, ExifMetadataProvider::class, 10);
 		$context->registerEventListener(MetadataBackgroundEvent::class, ExifMetadataProvider::class, 10);
+		// The sidecar overrides the EXIF data before the date and the place are derived from it
+		$context->registerEventListener(MetadataLiveEvent::class, XmpSidecarMetadataProvider::class, 5);
+		$context->registerEventListener(MetadataBackgroundEvent::class, XmpSidecarMetadataProvider::class, 5);
 		// SizeMetadataProvider depends on ExifMetadataProvider, which is why it's given a higher priority (above)
 		$context->registerEventListener(MetadataLiveEvent::class, SizeMetadataProvider::class);
 		$context->registerEventListener(MetadataBackgroundEvent::class, SizeMetadataProvider::class);

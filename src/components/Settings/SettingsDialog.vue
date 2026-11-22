@@ -13,6 +13,7 @@
 			<PhotosSourceLocationsSettings />
 			<PhotosUploadLocationSettings />
 			<CroppedLayoutSettings />
+			<XmpSidecarsSettings />
 		</NcAppSettingsSection>
 		<KeyboardShortcutsSettings />
 	</NcAppSettingsDialog>
@@ -26,6 +27,7 @@ import CroppedLayoutSettings from './CroppedLayoutSettings.vue'
 import KeyboardShortcutsSettings from './KeyboardShortcutsSettings.vue'
 import PhotosSourceLocationsSettings from './PhotosSourceLocationsSettings.vue'
 import PhotosUploadLocationSettings from './PhotosUploadLocationSettings.vue'
+import XmpSidecarsSettings from './XmpSidecarsSettings.vue'
 
 withDefaults(defineProps<{
 	open?: boolean

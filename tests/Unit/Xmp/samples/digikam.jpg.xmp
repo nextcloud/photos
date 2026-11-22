@@ -1,0 +1,42 @@
+<?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+<!--
+ - SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
+ - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="XMP Core 4.4.0-Exiv2">
+ <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about=""
+    xmlns:xmp="http://ns.adobe.com/xap/1.0/"
+    xmlns:exif="http://ns.adobe.com/exif/1.0/"
+    xmlns:tiff="http://ns.adobe.com/tiff/1.0/"
+    xmlns:digiKam="http://www.digikam.org/ns/1.0/"
+    xmlns:MicrosoftPhoto="http://ns.microsoft.com/photo/1.0/"
+    xmlns:acdsee="http://ns.acdsee.com/iptc/1.0/"
+   xmp:Rating="2"
+   xmp:CreateDate="2021-06-12T09:15:00"
+   tiff:Make="FUJIFILM"
+   tiff:Model="X-T3"
+   MicrosoftPhoto:Rating="25"
+   acdsee:categories="&lt;Categories&gt;&lt;Category Assigned=&quot;1&quot;&gt;Family&lt;/Category&gt;&lt;/Categories&gt;">
+   <exif:DateTimeOriginal>2021-06-12T09:15:00</exif:DateTimeOriginal>
+   <exif:GPSLatitude>48,51,30.12N</exif:GPSLatitude>
+   <exif:GPSLongitude>2,17,40.2E</exif:GPSLongitude>
+   <digiKam:TagsList>
+    <rdf:Seq>
+     <rdf:li>Family</rdf:li>
+    </rdf:Seq>
+   </digiKam:TagsList>
+   <MicrosoftPhoto:LastKeywordXMP>
+    <rdf:Bag>
+     <rdf:li>Family</rdf:li>
+    </rdf:Bag>
+   </MicrosoftPhoto:LastKeywordXMP>
+   <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <rdf:Bag>
+     <rdf:li>Family</rdf:li>
+    </rdf:Bag>
+   </dc:subject>
+  </rdf:Description>
+ </rdf:RDF>
+</x:xmpmeta>
+<?xpacket end="w"?>

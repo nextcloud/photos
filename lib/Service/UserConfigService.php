@@ -19,6 +19,7 @@ class UserConfigService {
 		'gridDensity' => 'medium',
 		'photosLocation' => '/Photos',
 		'photosSourceFolders' => '["/Photos"]',
+		'xmpSidecars' => 'false',
 		/** If you add any new configs, make sure to validate the contents in {@see \OCA\Photos\Controller\ApiController::setUserConfig} */
 	];
 

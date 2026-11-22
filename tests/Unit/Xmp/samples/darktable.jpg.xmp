@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ - SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
+ - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="XMP Core 4.4.0-Exiv2">
+ <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about=""
+    xmlns:exif="http://ns.adobe.com/exif/1.0/"
+    xmlns:xmp="http://ns.adobe.com/xap/1.0/"
+    xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:lr="http://ns.adobe.com/lightroom/1.0/"
+    xmlns:darktable="http://darktable.sf.net/"
+   exif:DateTimeOriginal="2019:08:17 12:34:56"
+   exif:GPSVersionID="2.2.0.0"
+   exif:GPSLatitude="51,18.81N"
+   exif:GPSLongitude="12,22.452E"
+   exif:GPSAltitude="1150/10"
+   exif:GPSAltitudeRef="0"
+   xmp:Rating="3"
+   xmpMM:DerivedFrom="IMG_1234.jpg"
+   darktable:import_timestamp="63796802765658848"
+   darktable:xmp_version="5"
+   darktable:raw_params="0"
+   darktable:auto_presets_applied="1"
+   darktable:history_end="2"
+   darktable:iop_order_version="2">
+   <dc:subject>
+    <rdf:Bag>
+     <rdf:li>holiday</rdf:li>
+     <rdf:li>darktable|format|jpg</rdf:li>
+    </rdf:Bag>
+   </dc:subject>
+   <lr:hierarchicalSubject>
+    <rdf:Bag>
+     <rdf:li>darktable|format|jpg</rdf:li>
+    </rdf:Bag>
+   </lr:hierarchicalSubject>
+   <darktable:history>
+    <rdf:Seq>
+     <rdf:li
+      darktable:num="0"
+      darktable:operation="exposure"
+      darktable:enabled="1"
+      darktable:modversion="6"
+      darktable:params="00000000000080b9d8f0e43e0000484200000000"
+      darktable:multi_name=""
+      darktable:multi_priority="0"/>
+     <rdf:li
+      darktable:num="1"
+      darktable:operation="crop"
+      darktable:enabled="1"
+      darktable:modversion="1"
+      darktable:params="0000000000000000ffff7f3fffff7f3fffffffff"
+      darktable:multi_name=""
+      darktable:multi_priority="0"/>
+    </rdf:Seq>
+   </darktable:history>
+  </rdf:Description>
+ </rdf:RDF>
+</x:xmpmeta>

@@ -13,7 +13,10 @@ use OCA\Photos\Listener\ExifMetadataProvider;
 use OCA\Photos\Listener\OriginalDateTimeMetadataProvider;
 use OCA\Photos\Listener\PlaceMetadataProvider;
 use OCA\Photos\Service\MediaPlaceManager;
+use OCA\Photos\Service\UserConfigService;
+use OCA\Photos\Xmp\XmpSidecarManager;
 use OCP\FilesMetadata\IFilesMetadataManager;
+use OCP\IUserSession;
 use Sabre\DAV\Exception\BadRequest;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\PropPatch;
@@ -28,7 +31,8 @@ use function Sabre\Xml\Deserializer\keyValue;
  * Both are extracted from the picture itself, but cameras do get them wrong:
  * the clock is off, the GPS module was disabled, or the picture was scanned
  * from an old print. The corrected values are stored as file metadata, the
- * picture itself is left untouched.
+ * picture itself is left untouched. Users who opted in also get them written
+ * to the XMP sidecar of the picture, for other applications to find.
  *
  * The properties are handled here rather than by the metadata handling of the
  * DAV app, which cannot write them: it rejects any metadata not declared as
@@ -52,6 +56,9 @@ class MetadataPropPatchPlugin extends ServerPlugin {
 	public function __construct(
 		private readonly IFilesMetadataManager $filesMetadataManager,
 		private readonly MediaPlaceManager $mediaPlaceManager,
+		private readonly UserConfigService $userConfigService,
+		private readonly IUserSession $userSession,
+		private readonly XmpSidecarManager $xmpSidecarManager,
 	) {
 	}
 
@@ -125,8 +132,34 @@ class MetadataPropPatchPlugin extends ServerPlugin {
 		}
 
 		$this->filesMetadataManager->saveMetadata($metadata);
+		$this->writeSidecar($node, $properties);
 
 		return true;
+	}
+
+	/**
+	 * @param array<string, mixed> $properties Requested properties, by name
+	 */
+	private function writeSidecar(File $node, array $properties): void {
+		$user = $this->userSession->getUser();
+		if ($user === null || $this->userConfigService->getConfigForUser($user->getUID(), 'xmpSidecars') !== 'true') {
+			return;
+		}
+
+		$photo = $node->getNode();
+		if (!($photo instanceof \OCP\Files\File)) {
+			return;
+		}
+
+		$changes = [];
+		if (array_key_exists(self::ORIGINAL_DATE_TIME_PROPERTYNAME, $properties)) {
+			$changes['takenAt'] = $properties[self::ORIGINAL_DATE_TIME_PROPERTYNAME];
+		}
+		if (array_key_exists(self::GPS_PROPERTYNAME, $properties)) {
+			$changes['gps'] = $properties[self::GPS_PROPERTYNAME] ?: null;
+		}
+
+		$this->xmpSidecarManager->write($photo, $user->getUID(), $changes);
 	}
 
 	/**

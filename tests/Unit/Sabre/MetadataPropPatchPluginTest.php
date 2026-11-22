@@ -14,9 +14,14 @@ use OCA\Photos\Listener\OriginalDateTimeMetadataProvider;
 use OCA\Photos\Listener\PlaceMetadataProvider;
 use OCA\Photos\Sabre\MetadataPropPatchPlugin;
 use OCA\Photos\Service\MediaPlaceManager;
+use OCA\Photos\Service\UserConfigService;
+use OCA\Photos\Xmp\XmpSidecarManager;
+use OCP\Files\File as FileNode;
 use OCP\Files\FileInfo;
 use OCP\FilesMetadata\IFilesMetadataManager;
 use OCP\FilesMetadata\Model\IFilesMetadata;
+use OCP\IUser;
+use OCP\IUserSession;
 use PHPUnit\Framework\MockObject\MockObject;
 use Sabre\DAV\Exception\BadRequest;
 use Sabre\DAV\Exception\Forbidden;
@@ -32,6 +37,10 @@ class MetadataPropPatchPluginTest extends TestCase {
 	private IFilesMetadataManager&MockObject $filesMetadataManager;
 	private MediaPlaceManager&MockObject $mediaPlaceManager;
 	private IFilesMetadata&MockObject $metadata;
+	private UserConfigService&MockObject $userConfigService;
+	private IUserSession&MockObject $userSession;
+	private XmpSidecarManager&MockObject $xmpSidecarManager;
+	private FileNode&MockObject $photo;
 	private MetadataPropPatchPlugin $plugin;
 
 	protected function setUp(): void {
@@ -45,9 +54,17 @@ class MetadataPropPatchPluginTest extends TestCase {
 			->with(self::FILE_ID)
 			->willReturn($this->metadata);
 
+		$this->userConfigService = $this->createMock(UserConfigService::class);
+		$this->userSession = $this->createMock(IUserSession::class);
+		$this->xmpSidecarManager = $this->createMock(XmpSidecarManager::class);
+		$this->photo = $this->createMock(FileNode::class);
+
 		$this->plugin = new MetadataPropPatchPlugin(
 			$this->filesMetadataManager,
 			$this->mediaPlaceManager,
+			$this->userConfigService,
+			$this->userSession,
+			$this->xmpSidecarManager,
 		);
 	}
 
@@ -80,6 +97,7 @@ class MetadataPropPatchPluginTest extends TestCase {
 		$node = $this->createMock(File::class);
 		$node->method('getFileInfo')->willReturn($fileInfo);
 		$node->method('getId')->willReturn(self::FILE_ID);
+		$node->method('getNode')->willReturn($this->photo);
 
 		$tree = $this->createMock(Tree::class);
 		$tree->method('getNodeForPath')->willReturn($node);
@@ -276,5 +294,70 @@ class MetadataPropPatchPluginTest extends TestCase {
 
 		// Nothing handled the property, so the update is reported as failed.
 		$this->assertFalse($propPatch->commit());
+	}
+
+	private function enableSidecars(bool $enabled): void {
+		$user = $this->createMock(IUser::class);
+		$user->method('getUID')->willReturn('alice');
+		$this->userSession->method('getUser')->willReturn($user);
+		$this->userConfigService->method('getConfigForUser')
+			->with('alice', 'xmpSidecars')
+			->willReturn($enabled ? 'true' : 'false');
+	}
+
+	public function testWritesTheEditedValuesToTheSidecarWhenEnabled(): void {
+		$this->createServerForNode();
+		$this->enableSidecars(true);
+
+		$this->xmpSidecarManager->expects($this->once())
+			->method('write')
+			->with($this->photo, 'alice', ['takenAt' => 1594762200, 'gps' => ['latitude' => 48.8583, 'longitude' => 2.2945]]);
+
+		$propPatch = new PropPatch([
+			MetadataPropPatchPlugin::ORIGINAL_DATE_TIME_PROPERTYNAME => 1594762200,
+			MetadataPropPatchPlugin::GPS_PROPERTYNAME => ['latitude' => 48.8583, 'longitude' => 2.2945],
+		]);
+		$this->plugin->handleUpdateProperties('photo.jpg', $propPatch);
+
+		$this->assertTrue($propPatch->commit());
+	}
+
+	public function testRemovesTheLocationFromTheSidecar(): void {
+		$this->createServerForNode();
+		$this->enableSidecars(true);
+
+		$this->xmpSidecarManager->expects($this->once())
+			->method('write')
+			->with($this->photo, 'alice', ['gps' => null]);
+
+		$propPatch = new PropPatch([MetadataPropPatchPlugin::GPS_PROPERTYNAME => []]);
+		$this->plugin->handleUpdateProperties('photo.jpg', $propPatch);
+
+		$this->assertTrue($propPatch->commit());
+	}
+
+	public function testWritesNoSidecarByDefault(): void {
+		$this->createServerForNode();
+		$this->enableSidecars(false);
+
+		$this->xmpSidecarManager->expects($this->never())->method('write');
+
+		$propPatch = new PropPatch([MetadataPropPatchPlugin::ORIGINAL_DATE_TIME_PROPERTYNAME => 1594762200]);
+		$this->plugin->handleUpdateProperties('photo.jpg', $propPatch);
+
+		$this->assertTrue($propPatch->commit());
+	}
+
+	public function testWritesNoSidecarForAPhotoWhichCannotBeWritten(): void {
+		$this->createServerForNode(updateable: false);
+		$this->enableSidecars(true);
+
+		$this->xmpSidecarManager->expects($this->never())->method('write');
+
+		$propPatch = new PropPatch([MetadataPropPatchPlugin::ORIGINAL_DATE_TIME_PROPERTYNAME => 1594762200]);
+		$this->plugin->handleUpdateProperties('photo.jpg', $propPatch);
+
+		$this->expectException(Forbidden::class);
+		$propPatch->commit();
 	}
 }
