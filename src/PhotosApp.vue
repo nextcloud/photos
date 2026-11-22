@@ -84,6 +84,16 @@
 					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
+					v-if="showPetsMenuEntry"
+					:to="{ name: 'pets' }"
+					:name="t('photos', 'Pets')"
+					data-id-app-nav-item="pets">
+					<template #icon="{ active }">
+						<Paw v-if="active" :size="20" />
+						<PawOutline v-else :size="20" />
+					</template>
+				</NcAppNavigationItem>
+				<NcAppNavigationItem
 					:to="{ name: 'folders' }"
 					:name="t('photos', 'Folders')"
 					data-id-app-nav-item="folders">
@@ -225,6 +235,8 @@ import MapIcon from 'vue-material-design-icons/Map.vue'
 import MapMarker from 'vue-material-design-icons/MapMarker.vue'
 import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
 import MapOutline from 'vue-material-design-icons/MapOutline.vue'
+import Paw from 'vue-material-design-icons/Paw.vue'
+import PawOutline from 'vue-material-design-icons/PawOutline.vue'
 import ShareVariant from 'vue-material-design-icons/ShareVariant.vue'
 import ShareVariantOutline from 'vue-material-design-icons/ShareVariantOutline.vue'
 import Star from 'vue-material-design-icons/Star.vue'
@@ -240,6 +252,8 @@ import SettingsDialog from './components/Settings/SettingsDialog.vue'
 import svgplaceholder from './assets/file-placeholder.svg'
 import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'
+import { useAbortController } from './composables/useAbortController.ts'
+import { getAnimalTag, getAnimalTypeTags } from './services/AnimalTags.ts'
 import { areTagsInstalled } from './services/AreTagsInstalled.ts'
 import { isAppStoreEnabled } from './services/IsAppStoreEnabled.ts'
 import { isRecognizeInstalled } from './services/IsRecognizeInstalled.ts'
@@ -247,10 +261,13 @@ import { logger } from './services/logger.ts'
 import { nameFilterId } from './services/PhotosFilters/nameFilter.ts'
 import { useFilesStore } from './store/files.ts'
 import { useFilterStore } from './store/filters.ts'
+import { useSystemTagsStore } from './store/systemtags.ts'
 
 const route = useRoute()
 const filesStore = useFilesStore()
 const filtersStore = useFilterStore()
+const systemTagsStore = useSystemTagsStore()
+const { abortSignal } = useAbortController()
 const { selectedFilters } = storeToRefs(filtersStore)
 
 const searchTerm = ref('')
@@ -260,6 +277,13 @@ const currentUser = getCurrentUser()
 const showPeopleMenuEntry = currentUser === null
 	? false
 	: (currentUser.isAdmin && loadState('photos', 'showPeopleMenuEntry', true) && isAppStoreEnabled) || isRecognizeInstalled
+
+// The pets view lists the photos recognize tagged with animals, so it is only
+// offered once such tags exist.
+const showPetsMenuEntry = computed(() => {
+	const tags = Object.values(systemTagsStore.tags)
+	return isRecognizeInstalled && (getAnimalTypeTags(tags).length > 0 || getAnimalTag(tags) !== undefined)
+})
 
 const isTimelineView = computed(() => typeof route.name === 'string' && ['all_media', 'photos', 'videos'].includes(route.name))
 
@@ -315,6 +339,11 @@ onBeforeMount(() => {
 	const files = loadState('photos', 'nomedia-paths', [])
 	filesStore.setNomediaPaths(files)
 	logger.debug('Known .nomedia and .noimage  paths', { files })
+
+	if (isRecognizeInstalled && areTagsInstalled) {
+		systemTagsStore.fetchAllTags(abortSignal.value)
+			.catch((error) => logger.error('Failed to fetch tags', { error }))
+	}
 
 	if ('serviceWorker' in navigator) {
 		window.addEventListener('load', registerServiceWorker)

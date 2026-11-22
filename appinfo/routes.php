@@ -62,6 +62,12 @@ return [
 			'postfix' => 'map',
 		],
 		[
+			'name' => 'page#index',
+			'url' => '/pets',
+			'verb' => 'GET',
+			'postfix' => 'pets',
+		],
+		[
 			// The map used to be handled by the Maps app, the frontend router sends
 			// the old links to the map view.
 			'name' => 'page#index',
