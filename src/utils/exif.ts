@@ -108,12 +108,10 @@ export function getExifSummary(metadata: PhotoExif): ExifEntry[] {
  * precision of the camera, which is far below what a photo is worth showing.
  *
  * @param location - Position to display
- * @return The coordinates, rounded to about a meter
+ * @return The coordinates with five decimals each, which is about a meter
  */
 export function formatCoordinates(location: PhotoLocation): string {
-	const round = (coordinate: number) => Number(coordinate.toFixed(5))
-
-	return `${round(location.latitude)}, ${round(location.longitude)}`
+	return `${location.latitude.toFixed(5)}, ${location.longitude.toFixed(5)}`
 }
 
 /**

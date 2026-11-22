@@ -76,8 +76,8 @@ describe('formatCoordinates', () => {
 		expect(formatCoordinates({ latitude: 43.739255555556, longitude: 5.31345 })).toBe('43.73926, 5.31345')
 	})
 
-	test('does not pad the coordinates with zeroes', () => {
-		expect(formatCoordinates({ latitude: -12.5, longitude: 0 })).toBe('-12.5, 0')
+	test('writes both coordinates with the same number of decimals', () => {
+		expect(formatCoordinates({ latitude: -12.5, longitude: 0 })).toBe('-12.50000, 0.00000')
 	})
 })
 

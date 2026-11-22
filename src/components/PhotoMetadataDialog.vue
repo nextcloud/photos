@@ -10,24 +10,30 @@
 		<NcLoadingIcon v-if="exifEntries === undefined" :size="32" class="photo-metadata__loading" />
 
 		<template v-else>
-			<dl class="photo-metadata">
-				<div class="photo-metadata__entry">
-					<dt>{{ t('photos', 'Filename') }}</dt>
-					<dd>{{ photo.basename }}</dd>
-				</div>
-				<div v-for="entry in exifEntries" :key="entry.label" class="photo-metadata__entry">
-					<dt>{{ entry.label }}</dt>
-					<dd>{{ entry.value }}</dd>
-				</div>
-				<div v-if="metadata?.place" class="photo-metadata__entry">
-					<dt>{{ t('photos', 'Place') }}</dt>
-					<dd>{{ metadata.place }}</dd>
-				</div>
-				<div v-if="location !== null" class="photo-metadata__entry">
-					<dt>{{ t('photos', 'Location') }}</dt>
-					<dd>{{ formatCoordinates(location) }}</dd>
-				</div>
-			</dl>
+			<div class="photo-metadata">
+				<dl class="photo-metadata__section">
+					<div class="photo-metadata__entry">
+						<dt>{{ t('photos', 'File name') }}</dt>
+						<dd>{{ photo.basename }}</dd>
+					</div>
+				</dl>
+				<dl v-if="exifEntries.length > 0" class="photo-metadata__section">
+					<div v-for="entry in exifEntries" :key="entry.label" class="photo-metadata__entry">
+						<dt>{{ entry.label }}</dt>
+						<dd>{{ entry.value }}</dd>
+					</div>
+				</dl>
+				<dl v-if="metadata?.place || location !== null" class="photo-metadata__section">
+					<div v-if="metadata?.place" class="photo-metadata__entry">
+						<dt>{{ t('photos', 'Place') }}</dt>
+						<dd>{{ metadata.place }}</dd>
+					</div>
+					<div v-if="location !== null" class="photo-metadata__entry">
+						<dt>{{ t('photos', 'Location') }}</dt>
+						<dd>{{ formatCoordinates(location) }}</dd>
+					</div>
+				</dl>
+			</div>
 
 			<div v-if="location !== null" class="photo-metadata__map">
 				<LocationMap
@@ -83,27 +89,57 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 .photo-metadata {
-	margin: 0;
+	// One grid for all the sections, so their labels share a single column.
+	display: grid;
+	grid-template-columns: fit-content(40%) minmax(0, 1fr);
+	column-gap: calc(var(--default-grid-baseline) * 4);
 
 	&__loading {
 		margin: calc(var(--default-grid-baseline) * 4) auto;
 	}
 
+	&__section,
 	&__entry {
-		display: flex;
+		display: grid;
+		grid-column: 1 / -1;
+		grid-template-columns: subgrid;
+	}
+
+	&__section {
+		margin: 0;
+		padding-block: calc(var(--default-grid-baseline) * 3);
+		row-gap: calc(var(--default-grid-baseline) * 2);
+
+		&:first-child {
+			padding-block-start: 0;
+		}
+
+		& + & {
+			border-block-start: 1px solid var(--color-border);
+		}
+	}
+
+	&__entry {
 		align-items: baseline;
-		justify-content: space-between;
-		gap: calc(var(--default-grid-baseline) * 4);
+	}
+
+	// The server styles definition lists as a fixed width label column.
+	dt,
+	dd {
+		width: auto;
+		margin: 0;
+		padding: 0;
+		text-align: start;
 	}
 
 	dt {
 		color: var(--color-text-maxcontrast);
+		white-space: normal;
 	}
 
 	dd {
-		margin: 0;
 		font-variant-numeric: tabular-nums;
-		word-break: break-all;
+		overflow-wrap: anywhere;
 	}
 
 	// Sits next to the entries rather than inside them, so the map is not
