@@ -16,14 +16,15 @@
 			@error="onPreviewFail">
 
 		<span v-else class="folder__image folder__image--placeholder">
-			<FolderOutline
+			<component
+				:is="folderIcon"
 				class="folder__icon"
 				:size="96"
 				fillColor="var(--color-primary-element)" />
 		</span>
 
 		<span class="folder__details">
-			<FolderOutline />
+			<component :is="folderIcon" />
 			<span class="folder__title">{{ name }}</span>
 		</span>
 	</RouterLink>
@@ -37,6 +38,7 @@ import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { computed, ref } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
+import FolderLockOutline from 'vue-material-design-icons/FolderLockOutline.vue'
 import FolderOutline from 'vue-material-design-icons/FolderOutline.vue'
 
 const props = withDefaults(defineProps<{
@@ -44,16 +46,23 @@ const props = withDefaults(defineProps<{
 	/** Path of the folder, relative to the root of the account. */
 	path?: string
 	fileList?: File[]
+	/** Whether the folder is end-to-end encrypted, and so shown locked. */
+	encrypted?: boolean
 }>(), {
 	path: '',
 	fileList: () => [],
+	encrypted: false,
 })
 
 const route = useRoute()
 
 const failed = ref<number[]>([])
 
-const ariaLabel = computed(() => t('photos', 'Open the "{name}" folder', { name: props.name }))
+const ariaLabel = computed(() => props.encrypted
+	? t('photos', 'Open the end-to-end encrypted "{name}" folder', { name: props.name })
+	: t('photos', 'Open the "{name}" folder', { name: props.name }))
+
+const folderIcon = computed(() => props.encrypted ? FolderLockOutline : FolderOutline)
 
 /**
  * Previews list without the failed ones
