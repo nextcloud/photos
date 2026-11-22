@@ -15,6 +15,7 @@ use OC\User\NoUserException;
 use OCA\Files\Event\LoadSidebar;
 use OCA\Photos\AppInfo\Application;
 use OCA\Photos\Service\UserConfigService;
+use OCA\Photos\Service\VideoRenditionService;
 use OCP\App\IAppManager;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
@@ -60,6 +61,7 @@ class PageController extends Controller {
 		private readonly IConfig $config,
 		IL10N $l10n,
 		private ?\OCA\Recognize\Public\ApiKeyManager $apiKeyManager,
+		private readonly VideoRenditionService $videoRenditionService,
 	) {
 		parent::__construct(Application::APP_ID, $request);
 
@@ -92,6 +94,7 @@ class PageController extends Controller {
 		$this->initialState->provideInitialState('systemtags', $this->appManager->isEnabledForUser('systemtags') === true);
 		$this->initialState->provideInitialState('showPeopleMenuEntry', $this->config->getAppValue('photos', 'showPeopleMenuEntry', 'true') === 'true');
 		$this->initialState->provideInitialState('appStoreEnabled', $this->config->getSystemValueBool('appstoreenabled', true));
+		$this->initialState->provideInitialState('video-renditions', $this->videoRenditionService->isEnabled());
 
 		if ($this->apiKeyManager !== null) {
 			try {
