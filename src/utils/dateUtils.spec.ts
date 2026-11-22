@@ -14,6 +14,7 @@ import {
 	formatUtcOffset,
 	formatYear,
 	fromMonthKey,
+	keepTimeTogether,
 	parseUtcOffset,
 	toDayKey,
 	toMonthKey,
@@ -238,5 +239,16 @@ describe('formatCaptureTime', () => {
 	test('follows the user locale', () => {
 		getCanonicalLocale.mockReturnValue('en-US')
 		expect(formatCaptureTime(takenAt, 540)).toBe('June 14, 2024 at 9:12 AM (UTC+9)')
+	})
+})
+
+describe('keepTimeTogether', () => {
+	test('only lets the text wrap before the time', () => {
+		expect(keepTimeTogether('June 14, 2024 at 9:12 AM (UTC+9)')).toBe('June 14, 2024 at 9:12\u00A0AM\u00A0(UTC+9)')
+		expect(keepTimeTogether('14. Juni 2024 um 09:12 (UTC+5:30)')).toBe('14. Juni 2024 um 09:12\u00A0(UTC+5:30)')
+	})
+
+	test('leaves a text without a time alone', () => {
+		expect(keepTimeTogether('14 June 2024')).toBe('14 June 2024')
 	})
 })
