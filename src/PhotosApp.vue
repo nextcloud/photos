@@ -119,6 +119,14 @@
 					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
+					:to="{ name: 'frame' }"
+					:name="t('photos', 'Photo frame')"
+					data-id-app-nav-item="frame">
+					<template #icon>
+						<ImageFrame :size="20" />
+					</template>
+				</NcAppNavigationItem>
+				<NcAppNavigationItem
 					:to="{ name: 'shared' }"
 					:name="t('photos', 'Shared with you')"
 					data-id-app-nav-item="shared">
@@ -217,6 +225,7 @@ import CogOutline from 'vue-material-design-icons/CogOutline.vue'
 import Folder from 'vue-material-design-icons/Folder.vue'
 import FolderOutline from 'vue-material-design-icons/FolderOutline.vue'
 import ImageIcon from 'vue-material-design-icons/Image.vue'
+import ImageFrame from 'vue-material-design-icons/ImageFrame.vue'
 import ImageMultiple from 'vue-material-design-icons/ImageMultiple.vue'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import ImageOutline from 'vue-material-design-icons/ImageOutline.vue'
