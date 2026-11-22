@@ -14,14 +14,18 @@ use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
 use OCP\Files\IUserFolder;
 use OCP\Files\Node;
+use OCP\Files\Search\ISearchQuery;
 use OCP\Files\Storage\ISharedStorage;
 use OCP\Files\Storage\IStorage;
+use OCP\IUser;
+use OCP\IUserManager;
 use OCP\Share\IShare;
 use Test\TestCase;
 
 class FiltersManagerTest extends TestCase {
 	private IRootFolder $rootFolder;
 	private UserConfigService $userConfigService;
+	private IUserManager $userManager;
 	private FiltersManager $filtersManager;
 
 	protected function setUp(): void {
@@ -29,11 +33,13 @@ class FiltersManagerTest extends TestCase {
 
 		$this->rootFolder = $this->createMock(IRootFolder::class);
 		$this->userConfigService = $this->createMock(UserConfigService::class);
+		$this->userManager = $this->createMock(IUserManager::class);
 
 		$this->filtersManager = new FiltersManager(
 			$this->rootFolder,
 			$this->createMock(IMimeTypeLoader::class),
 			$this->userConfigService,
+			$this->userManager,
 		);
 	}
 
@@ -70,6 +76,39 @@ class FiltersManagerTest extends TestCase {
 
 		$this->assertCount(1, $result);
 		$this->assertSame(10, $result[0]->getFileId());
+	}
+
+	public function testGetFilesBasedOnFiltersSearchesAsTheUser(): void {
+		$alice = $this->createMock(IUser::class);
+		$this->userManager->method('get')->with('alice')->willReturn($alice);
+
+		$userFolder = $this->createMock(IUserFolder::class);
+		$userFolder->expects($this->once())
+			->method('search')
+			->with($this->callback(fn (ISearchQuery $query) => $query->getUser() === $alice))
+			->willReturn([]);
+		$this->rootFolder->method('getUserFolder')->with('alice')->willReturn($userFolder);
+		$this->userConfigService->method('getConfigForUser')->willReturn('["/Photos"]');
+
+		$this->assertSame([], $this->filtersManager->getFilesBasedOnFilters('alice', ['tags' => ['dog']]));
+	}
+
+	public function testGetFilesBasedOnFiltersReturnsEachFileOnce(): void {
+		$storage = $this->createMock(IStorage::class);
+		$storage->method('instanceOfStorage')->with(ISharedStorage::class)->willReturn(false);
+
+		$userFolder = $this->createMock(IUserFolder::class);
+		$userFolder->method('search')->willReturn([
+			$this->searchResult(10, 'dog-on-beach.jpg', $storage),
+			$this->searchResult(10, 'dog-on-beach.jpg', $storage),
+			$this->searchResult(20, 'dog.jpg', $storage),
+		]);
+		$this->rootFolder->method('getUserFolder')->with('alice')->willReturn($userFolder);
+		$this->userConfigService->method('getConfigForUser')->willReturn('["/Photos"]');
+
+		$result = $this->filtersManager->getFilesBasedOnFilters('alice', ['tags' => ['dog', 'beach']]);
+
+		$this->assertSame([10, 20], array_map(fn ($file) => $file->getFileId(), $result));
 	}
 
 	private function nodeWithStorage(IStorage $storage): Node {

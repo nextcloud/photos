@@ -6,9 +6,11 @@
 import { dateRangeFilter } from './dateRangeFilter.ts'
 import { nameFilter } from './nameFilter.ts'
 import { placesFilter } from './placesFilter.ts'
+import { tagsFilter } from './tagsFilter.ts'
 
 export const photosFilters = [
 	nameFilter,
 	dateRangeFilter,
 	placesFilter,
+	tagsFilter,
 ]
