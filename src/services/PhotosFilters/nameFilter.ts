@@ -7,6 +7,7 @@ import type { PhotosFilter } from './PhotosFilter.ts'
 
 import magnifySvg from '@mdi/svg/svg/magnify.svg?raw'
 import { encode } from 'he'
+import NameOption from '../../components/PhotosFilters/NameOption.vue'
 
 export type NameValueType = string
 
@@ -25,12 +26,13 @@ function escapeSearchTerm(searchTerm: string): string {
 /**
  * Free text filter matching the name of the files.
  *
- * Its values are provided by the search field of the navigation instead of the
- * filters input, so it does not provide any option to pick from.
+ * Its values are typed in the search field of the navigation,
+ * so it does not provide any option to pick from.
  */
 export const nameFilter: PhotosFilter<NameValueType> = {
 	id: nameFilterId,
 	icon: magnifySvg,
+	renderOptionComponent: NameOption,
 	async getOptions() {
 		return []
 	},
