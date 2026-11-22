@@ -90,6 +90,7 @@ class PageController extends Controller {
 		$this->initialState->provideInitialState('maps', $this->appManager->isEnabledForUser('maps') === true);
 		$this->initialState->provideInitialState('recognize', $this->appManager->isEnabledForUser('recognize') === true);
 		$this->initialState->provideInitialState('systemtags', $this->appManager->isEnabledForUser('systemtags') === true);
+		$this->initialState->provideInitialState('endToEndEncryption', $this->appManager->isEnabledForUser('end_to_end_encryption') === true);
 		$this->initialState->provideInitialState('showPeopleMenuEntry', $this->config->getAppValue('photos', 'showPeopleMenuEntry', 'true') === 'true');
 		$this->initialState->provideInitialState('appStoreEnabled', $this->config->getSystemValueBool('appstoreenabled', true));
 
