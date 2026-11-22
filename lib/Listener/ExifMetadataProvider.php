@@ -11,6 +11,7 @@ namespace OCA\Photos\Listener;
 use Nelexa\Buffer\Buffer;
 use Nelexa\Buffer\ResourceBuffer;
 use OCA\Photos\AppInfo\Application;
+use OCA\Photos\Service\HeifExifReader;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Files\File;
@@ -81,6 +82,10 @@ class ExifMetadataProvider implements IEventListener {
 			$oldBufferSize = stream_set_chunk_size($fileDescriptor, 1);
 			if ($node->getMimeType() === 'image/webp') {
 				$rawExifData = $this->getExifFromWebP($fileDescriptor);
+			}
+
+			if (in_array($node->getMimeType(), ['image/heic', 'image/heif', 'image/avif'], true)) {
+				$rawExifData = $this->getExifFromHeif($fileDescriptor);
 			}
 
 			$exifSupportedMimes = ['image/jpeg', 'image/tiff'];
@@ -189,6 +194,30 @@ class ExifMetadataProvider implements IEventListener {
 			return $chunk->getParsedExif();
 		} else {
 			return false;
+		}
+	}
+
+	/**
+	 * @param resource $fileDescriptor
+	 */
+	private function getExifFromHeif($fileDescriptor): array|false {
+		$tiff = HeifExifReader::readTiff($fileDescriptor);
+		if ($tiff === null) {
+			return false;
+		}
+
+		// exif_read_data() reads standalone TIFF data but not the HEIF container.
+		$stream = fopen('php://memory', 'r+b');
+		if ($stream === false) {
+			return false;
+		}
+
+		try {
+			fwrite($stream, $tiff);
+			rewind($stream);
+			return @exif_read_data($stream, 'EXIF, GPS', true);
+		} finally {
+			fclose($stream);
 		}
 	}
 
