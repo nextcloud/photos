@@ -119,6 +119,14 @@
 					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
+					:to="{ name: 'duplicates' }"
+					:name="t('photos', 'Duplicates')"
+					data-id-app-nav-item="duplicates">
+					<template #icon>
+						<ContentDuplicate :size="20" />
+					</template>
+				</NcAppNavigationItem>
+				<NcAppNavigationItem
 					:to="{ name: 'shared' }"
 					:name="t('photos', 'Shared with you')"
 					data-id-app-nav-item="shared">
@@ -214,6 +222,7 @@ import CalendarTodayOutline from 'vue-material-design-icons/CalendarTodayOutline
 import CameraIcon from 'vue-material-design-icons/Camera.vue'
 import CameraOutline from 'vue-material-design-icons/CameraOutline.vue'
 import CogOutline from 'vue-material-design-icons/CogOutline.vue'
+import ContentDuplicate from 'vue-material-design-icons/ContentDuplicate.vue'
 import Folder from 'vue-material-design-icons/Folder.vue'
 import FolderOutline from 'vue-material-design-icons/FolderOutline.vue'
 import ImageIcon from 'vue-material-design-icons/Image.vue'
