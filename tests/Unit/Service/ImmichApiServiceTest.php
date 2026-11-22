@@ -86,6 +86,7 @@ class ImmichApiServiceTest extends TestCase {
 				$this->assertSame('secret-key', $options['headers']['x-api-key']);
 				$this->assertSame(ImmichApiService::TIMEOUT, $options['timeout']);
 				$this->assertFalse($options['allow_redirects']);
+				$this->assertArrayNotHasKey('nextcloud', $options);
 				return true;
 			}))
 			->willReturn($this->response([
@@ -99,6 +100,14 @@ class ImmichApiServiceTest extends TestCase {
 			['id' => 'a1', 'name' => 'Summer'],
 			['id' => 'a2', 'name' => 'Été à Paris'],
 		], $this->service->getAlbums(self::API_URL, 'secret-key'));
+	}
+
+	public function testAllowsLocalAddressesOnlyWhenAsked(): void {
+		$this->client->expects($this->once())->method('post')
+			->with(self::API_URL . '/search/metadata', $this->callback(fn (array $options): bool => $options['nextcloud']['allow_local_address'] === true))
+			->willReturn($this->response(['assets' => ['items' => [], 'nextPage' => null]]));
+
+		$this->assertSame([], $this->service->getFavoriteAssets(self::API_URL, 'secret-key', true));
 	}
 
 	public function testGetAlbumAssetsFollowsPages(): void {

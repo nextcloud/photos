@@ -8,17 +8,13 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Command;
 
-use OCA\Photos\Album\AlbumMapper;
-use OCA\Photos\AppInfo\Application;
-use OCA\Photos\Exception\AlreadyInAlbumException;
-use OCA\Photos\Listener\OriginalDateTimeMetadataProvider;
+use OCA\Photos\Import\ImmichImporter;
+use OCA\Photos\Import\ImportException;
+use OCA\Photos\Import\ImportReport;
 use OCA\Photos\Service\ImmichApiService;
-use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
-use OCP\FilesMetadata\IFilesMetadataManager;
-use OCP\ITagManager;
 use OCP\IUserManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -28,24 +24,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Recreate the albums and favorites of an Immich user for the photos and
- * videos already copied from Immich into a folder. Nothing is downloaded:
- * files are matched by their original name and capture time.
- *
- * @psalm-import-type ImmichAsset from ImmichApiService
+ * videos already copied from Immich into a folder.
  */
 class ImportImmichAlbumsCommand extends Command {
-	private const METADATA_BATCH_SIZE = 500;
-
-	/** @var array<string, int> Number of assets, by outcome */
-	private array $results = [];
-
 	public function __construct(
 		private readonly IUserManager $userManager,
 		private readonly IRootFolder $rootFolder,
-		private readonly IFilesMetadataManager $filesMetadataManager,
-		private readonly ITagManager $tagManager,
-		private readonly AlbumMapper $albumMapper,
 		private readonly ImmichApiService $immichApiService,
+		private readonly ImmichImporter $importer,
 	) {
 		parent::__construct();
 	}
@@ -99,32 +85,20 @@ class ImportImmichAlbumsCommand extends Command {
 			return 1;
 		}
 
+		$report = new ImportReport(static function (string $result, ?string $item) use ($output): void {
+			$output->writeln($item . ': ' . $result, OutputInterface::VERBOSITY_VERBOSE);
+		});
 		try {
-			$albums = [];
-			foreach ($this->immichApiService->getAlbums($apiUrl, $apiKey) as $album) {
-				$albums[] = [$album['name'], $this->immichApiService->getAlbumAssets($apiUrl, $apiKey, $album['id'])];
-			}
-			$favorites = $this->immichApiService->getFavoriteAssets($apiUrl, $apiKey);
-		} catch (\Exception $e) {
-			$output->writeln('<error>Could not read from Immich: ' . $e->getMessage() . '</error>');
+			// Only administrators run occ, they may reach Immich in the local network.
+			$this->importer->importAlbums($userId, $folder, $apiUrl, $apiKey, $dryRun, $report, true);
+		} catch (ImportException $e) {
+			$output->writeln('<error>' . $e->getMessage() . '</error>');
 			return 1;
 		}
 
-		$names = [];
-		foreach ([...array_merge(...array_column($albums, 1)), ...$favorites] as $asset) {
-			$names[$asset['name']] = true;
-		}
-		$files = $this->findFiles($folder, $names);
-
-		$this->results = [];
-		foreach ($albums as [$name, $assets]) {
-			$this->fillAlbum($name, $this->matchAssets($assets, $files), $userId, $dryRun, $output);
-		}
-		$this->addFavorites($this->matchAssets($favorites, $files), $userId, $dryRun, $output);
-
 		$would = $dryRun ? 'Would be ' : '';
-		$output->writeln(sprintf('Immich albums: %d', count($albums)));
-		$output->writeln(sprintf('Immich favorites: %d', count($favorites)));
+		$output->writeln(sprintf('Immich albums: %d', $report->get('albums')));
+		$output->writeln(sprintf('Immich favorites: %d', $report->get('favorites')));
 		foreach ([
 			'album_created' => $would . 'created albums: %d',
 			'album_file' => $would . 'added to albums: %d',
@@ -132,137 +106,9 @@ class ImportImmichAlbumsCommand extends Command {
 			'not_found' => 'Assets without matching file: %d',
 			'ambiguous' => 'Assets skipped, several matching files: %d',
 		] as $result => $format) {
-			$output->writeln(sprintf(ucfirst($format), $this->results[$result] ?? 0));
+			$output->writeln(sprintf(ucfirst($format), $report->get($result)));
 		}
 
 		return 0;
-	}
-
-	/**
-	 * @param array<string, true> $names Names of the files to find
-	 * @return array<string, list<array{File, ?int}>> Media files and their capture time, by name
-	 */
-	private function findFiles(Folder $folder, array $names): array {
-		$files = [];
-		$this->collectFiles($folder, $names, $files);
-
-		$takenAt = [];
-		foreach (array_chunk(array_keys($files), self::METADATA_BATCH_SIZE) as $fileIds) {
-			foreach ($this->filesMetadataManager->getMetadataForFiles($fileIds) as $fileId => $metadata) {
-				if ($metadata->hasKey(OriginalDateTimeMetadataProvider::METADATA_KEY)) {
-					$takenAt[$fileId] = $metadata->getInt(OriginalDateTimeMetadataProvider::METADATA_KEY);
-				}
-			}
-		}
-
-		$filesByName = [];
-		foreach ($files as $fileId => $file) {
-			$filesByName[$file->getName()][] = [$file, $takenAt[$fileId] ?? null];
-		}
-
-		return $filesByName;
-	}
-
-	/**
-	 * @param array<string, true> $names
-	 * @param array<int, File> $files Media files, by id
-	 */
-	private function collectFiles(Folder $folder, array $names, array &$files): void {
-		foreach ($folder->getDirectoryListing() as $node) {
-			if ($node instanceof Folder) {
-				$this->collectFiles($node, $names, $files);
-			} elseif ($node instanceof File && isset($names[$node->getName()])
-				&& (in_array($node->getMimeType(), Application::IMAGE_MIMES, true) || in_array($node->getMimeType(), Application::VIDEO_MIMES, true))) {
-				$files[$node->getId()] = $node;
-			}
-		}
-	}
-
-	/**
-	 * @param list<ImmichAsset> $assets
-	 * @param array<string, list<array{File, ?int}>> $files
-	 * @return list<File> The files matching exactly one asset each
-	 */
-	private function matchAssets(array $assets, array $files): array {
-		$matches = [];
-		foreach ($assets as $asset) {
-			$candidates = array_filter(
-				$files[$asset['name']] ?? [],
-				fn (array $file): bool => $file[1] !== null && $this->immichApiService->isSameTime($asset, $file[1]),
-			);
-
-			if (count($candidates) === 1) {
-				$matches[] = reset($candidates)[0];
-			} else {
-				$this->count($candidates === [] ? 'not_found' : 'ambiguous');
-			}
-		}
-
-		return $matches;
-	}
-
-	/**
-	 * Add the files to the album of the user with that name, creating it when
-	 * needed. Albums without files are not created.
-	 *
-	 * @param list<File> $files
-	 */
-	private function fillAlbum(string $name, array $files, string $userId, bool $dryRun, OutputInterface $output): void {
-		if ($files === []) {
-			return;
-		}
-
-		$album = $this->albumMapper->getByName($name, $userId);
-		if ($album === null) {
-			$this->count('album_created');
-			$output->writeln("Album $name: created", OutputInterface::VERBOSITY_VERBOSE);
-			if (!$dryRun) {
-				$album = $this->albumMapper->create($userId, $name);
-			}
-		}
-
-		foreach ($files as $file) {
-			if ($album !== null && $this->albumMapper->getForAlbumIdAndFileId($album->getId(), $file->getId()) !== null) {
-				continue;
-			}
-
-			if (!$dryRun && $album !== null) {
-				try {
-					$this->albumMapper->addFile($album->getId(), $file->getId(), $userId);
-				} catch (AlreadyInAlbumException) {
-					continue;
-				}
-			}
-			$this->count('album_file');
-			$output->writeln($file->getPath() . ": added to album $name", OutputInterface::VERBOSITY_VERBOSE);
-		}
-	}
-
-	/**
-	 * @param list<File> $files
-	 */
-	private function addFavorites(array $files, string $userId, bool $dryRun, OutputInterface $output): void {
-		$tags = $this->tagManager->load('files', [], false, $userId);
-		if ($tags === null || $files === []) {
-			return;
-		}
-
-		$favorites = array_fill_keys($tags->getFavorites() ?: [], true);
-		foreach ($files as $file) {
-			if (isset($favorites[$file->getId()])) {
-				continue;
-			}
-
-			if (!$dryRun) {
-				$tags->addToFavorites($file->getId());
-			}
-			$favorites[$file->getId()] = true;
-			$this->count('favorite');
-			$output->writeln($file->getPath() . ': favorite', OutputInterface::VERBOSITY_VERBOSE);
-		}
-	}
-
-	private function count(string $result): void {
-		$this->results[$result] = ($this->results[$result] ?? 0) + 1;
 	}
 }

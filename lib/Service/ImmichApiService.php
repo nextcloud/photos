@@ -54,12 +54,13 @@ class ImmichApiService {
 	/**
 	 * Albums owned by or shared with the user of the API key.
 	 *
+	 * @param bool $allowLocalAddress Whether the server may be in the local network
 	 * @return list<ImmichAlbum>
 	 * @throws \Exception on network or API errors
 	 */
-	public function getAlbums(string $apiUrl, string $apiKey): array {
+	public function getAlbums(string $apiUrl, #[\SensitiveParameter] string $apiKey, bool $allowLocalAddress = false): array {
 		$albums = [];
-		foreach ($this->request('GET', $apiUrl . '/albums', $apiKey) as $album) {
+		foreach ($this->request('GET', $apiUrl . '/albums', $apiKey, $allowLocalAddress) as $album) {
 			if (is_array($album) && is_string($album['id'] ?? null) && is_string($album['albumName'] ?? null)) {
 				$albums[] = ['id' => $album['id'], 'name' => $album['albumName']];
 			}
@@ -72,16 +73,16 @@ class ImmichApiService {
 	 * @return list<ImmichAsset>
 	 * @throws \Exception on network or API errors
 	 */
-	public function getAlbumAssets(string $apiUrl, string $apiKey, string $albumId): array {
-		return $this->searchAssets($apiUrl, $apiKey, ['albumIds' => [$albumId]]);
+	public function getAlbumAssets(string $apiUrl, #[\SensitiveParameter] string $apiKey, string $albumId, bool $allowLocalAddress = false): array {
+		return $this->searchAssets($apiUrl, $apiKey, ['albumIds' => [$albumId]], $allowLocalAddress);
 	}
 
 	/**
 	 * @return list<ImmichAsset>
 	 * @throws \Exception on network or API errors
 	 */
-	public function getFavoriteAssets(string $apiUrl, string $apiKey): array {
-		return $this->searchAssets($apiUrl, $apiKey, ['isFavorite' => true]);
+	public function getFavoriteAssets(string $apiUrl, #[\SensitiveParameter] string $apiKey, bool $allowLocalAddress = false): array {
+		return $this->searchAssets($apiUrl, $apiKey, ['isFavorite' => true], $allowLocalAddress);
 	}
 
 	/**
@@ -106,12 +107,12 @@ class ImmichApiService {
 	 * @return list<ImmichAsset>
 	 * @throws \Exception on network or API errors
 	 */
-	private function searchAssets(string $apiUrl, string $apiKey, array $filters): array {
+	private function searchAssets(string $apiUrl, #[\SensitiveParameter] string $apiKey, array $filters, bool $allowLocalAddress): array {
 		$assets = [];
 		$page = 1;
 
 		for ($i = 0; $i < self::MAX_PAGES; $i++) {
-			$response = $this->request('POST', $apiUrl . '/search/metadata', $apiKey, [
+			$response = $this->request('POST', $apiUrl . '/search/metadata', $apiKey, $allowLocalAddress, [
 				...$filters,
 				'page' => $page,
 				'size' => self::PAGE_SIZE,
@@ -175,19 +176,22 @@ class ImmichApiService {
 
 	/**
 	 * Requests are bound to the given server: redirects are not followed.
+	 * Local and private addresses are refused unless allowed, the server
+	 * address may come from any user.
 	 *
 	 * @param ?array<string, mixed> $body JSON body
 	 * @throws \Exception on network or API errors
 	 */
-	private function request(string $method, string $url, string $apiKey, ?array $body = null): array {
+	private function request(string $method, string $url, #[\SensitiveParameter] string $apiKey, bool $allowLocalAddress, ?array $body = null): array {
 		$options = [
 			'headers' => ['x-api-key' => $apiKey, 'Accept' => 'application/json'],
 			'timeout' => self::TIMEOUT,
 			'connect_timeout' => self::CONNECT_TIMEOUT,
 			'allow_redirects' => false,
-			// Immich commonly runs in the local network, the URL is given by an administrator.
-			'nextcloud' => ['allow_local_address' => true],
 		];
+		if ($allowLocalAddress) {
+			$options['nextcloud'] = ['allow_local_address' => true];
+		}
 
 		$client = $this->clientService->newClient();
 		$response = $body === null
