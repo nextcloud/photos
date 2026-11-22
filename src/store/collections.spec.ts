@@ -126,6 +126,19 @@ describe('useCollectionsStore', () => {
 		expect(store.collections[`${ALBUMS_ROOT}/Holidays`].attributes.location).toBe('Lisbon')
 	})
 
+	test('sends numeric properties as their value', async () => {
+		const store = useCollectionsStore()
+		store.addCollections([album('Holidays')])
+		davClient.customRequest.mockResolvedValue(undefined)
+
+		const updated = await store.updateCollection(`${ALBUMS_ROOT}/Holidays`, { 'guest-upload': 1 })
+
+		expect(davClient.customRequest).toHaveBeenCalledWith(`${ALBUMS_ROOT}/Holidays`, expect.objectContaining({
+			data: expect.stringContaining('<nc:guest-upload>1</nc:guest-upload>'),
+		}))
+		expect(updated.attributes['guest-upload']).toBe(1)
+	})
+
 	test('puts the files back when adding them to a collection fails', async () => {
 		const store = useCollectionsStore()
 		store.addCollections([album('Holidays', ['1'])])

@@ -22,6 +22,15 @@
 			</NcSelectUsers>
 		</form>
 
+		<div v-if="allowPublicLink && isPublicLinkSelected && publicLink.id !== ''" class="manage-collaborators__guests">
+			<NcCheckboxRadioSwitch
+				type="switch"
+				:modelValue="guestUploadAllowed"
+				@update:modelValue="setGuestUpload">
+				{{ t('photos', 'Allow guests to add photos') }}
+			</NcCheckboxRadioSwitch>
+		</div>
+
 		<div class="actions">
 			<div v-if="allowPublicLink" class="actions__public-link">
 				<template v-if="isPublicLinkSelected && publicLink.id !== ''">
@@ -84,6 +93,7 @@ import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { ShareType } from '@nextcloud/sharing'
 import { computed, onMounted, ref, watch } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import NcSelectUsers from '@nextcloud/vue/components/NcSelectUsers'
 import Check from 'vue-material-design-icons/Check.vue'
 import Close from 'vue-material-design-icons/Close.vue'
@@ -173,7 +183,7 @@ const selectedUsers = computed<IUserData[]>({
 				id: collaborator.id,
 				user: collaborator.id,
 				displayName: collaborator.label,
-				type: collaborator.type === ShareType.User ? 'user' : 'group',
+				type: (collaborator.type === ShareType.User ? 'user' : 'group') as 'user' | 'group',
 				iconSvg: collaborator.type === ShareType.Group ? AccountGroupOutlineSvg : undefined,
 			}))
 	},
@@ -190,6 +200,8 @@ const publicLink = computed<Collaborator>(() => availableCollaborators.value[Sha
 const publicLinkURL = computed<string>(() => `${window.location.protocol}//${window.location.host}${generateUrl(`apps/photos/public/${publicLink.value.id}`)}`)
 
 const albumFileName = computed<string>(() => albumsStore.getAlbumName(props.albumName))
+
+const guestUploadAllowed = computed<boolean>(() => albumsStore.getAlbum(props.albumName)?.attributes['guest-upload'] === 1)
 
 watch(() => props.collaborators, (collaborators) => {
 	populateCollaborators(collaborators)
@@ -313,6 +325,13 @@ async function updateAlbumCollaborators() {
 	}
 }
 
+/**
+ * @param allowed - Whether visitors of the public link may add photos
+ */
+async function setGuestUpload(allowed: boolean) {
+	await collectionsStore.updateCollection(albumFileName.value, { 'guest-upload': allowed ? 1 : 0 })
+}
+
 async function copyPublicLink() {
 	await navigator.clipboard.writeText(publicLinkURL.value)
 	publicLinkCopied.value = true
@@ -361,6 +380,10 @@ onMounted(() => {
 
 	&__public-link-button {
 		margin: 4px 0;
+	}
+
+	&__guests {
+		margin-top: calc(var(--default-grid-baseline) * 2);
 	}
 
 	&__form {

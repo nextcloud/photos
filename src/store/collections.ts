@@ -234,6 +234,7 @@ export const useCollectionsStore = defineStore('collections', () => {
 			.map(([name, value]) => {
 				switch (typeof value) {
 					case 'string':
+					case 'number':
 						return `<nc:${name}>${value}</nc:${name}>`
 					case 'object':
 						return `<nc:${name}>${JSON.stringify(value)}</nc:${name}>`

@@ -29,6 +29,10 @@
 					</template>
 
 					<template v-if="album !== undefined" #right>
+						<GuestUpload
+							v-if="guestUploadAllowed"
+							:token="token"
+							@uploaded="fetchAlbumContent" />
 						<NcActions :forceMenu="true" :aria-label="t('photos', 'Open actions menu')">
 							<!-- TODO: enable download on public albums -->
 							<!-- <ActionDownload v-if="albumFileIds.length > 0"
@@ -65,16 +69,6 @@
 					<template #icon>
 						<ImageOffOutline />
 					</template>
-
-				<!-- Public upload is not implemented yet
-				<NcButton slot="action"
-					type="primary"
-					:aria-label="t('photos', 'Add photos to this album')"
-					@click="showAddPhotosModal = true">
-					<Plus slot="icon" />
-					{{ t('photos', "Add") }}
-				</NcButton>
-				-->
 				</NcEmptyContent>
 			</template>
 		</CollectionContent>
@@ -92,10 +86,10 @@ import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
 import { computed, onBeforeMount, ref } from 'vue'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
-// import Plus from 'vue-material-design-icons/Plus.vue'
 // import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
 import ImageOffOutline from 'vue-material-design-icons/ImageOffOutline.vue'
 import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
+import GuestUpload from '../components/Albums/GuestUpload.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
@@ -127,6 +121,8 @@ const albumName = computed(() => props.token)
 const album = computed(() => publicAlbumsStore.getPublicAlbum(albumName.value))
 
 const albumFileIds = computed(() => publicAlbumsStore.getPublicAlbumFiles(albumName.value))
+
+const guestUploadAllowed = computed(() => album.value?.attributes['guest-upload'] === 1)
 
 async function fetchAlbumInfo() {
 	const album = await fetchCollection(

@@ -26,6 +26,7 @@ export type AlbumEditableProperties = {
 export type Album = Collection & {
 	attributes: AlbumEditableProperties & {
 		date: string // The date of the collection.
+		'guest-upload'?: number // 1 when visitors of the public link may add photos.
 	}
 }
 
@@ -34,6 +35,7 @@ export const albumsExtraProps = [
 	'<nc:dateRange />',
 	'<nc:collaborators />',
 	'<nc:filters />',
+	'<nc:guest-upload />',
 ]
 
 export const albumFilesExtraProps = ['<nc:photos-album-file-origin />']
