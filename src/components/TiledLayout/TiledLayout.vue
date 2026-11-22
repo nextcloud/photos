@@ -21,13 +21,15 @@ import type { Section, TiledItem, TiledSection } from '../../services/TiledLayou
 import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef } from 'vue'
 import TiledRows from './TiledRows.vue'
 import { logger } from '../../services/logger.ts'
-import { splitItemsInRows } from '../../services/TiledLayout.ts'
+import { splitSectionInRows } from '../../services/TiledLayout.ts'
 
 const props = withDefaults(defineProps<{
 	sections: Section<I>[]
 	baseHeight?: number
+	groupHeaderHeight?: number
 }>(), {
 	baseHeight: 200,
+	groupHeaderHeight: 0,
 })
 
 defineSlots<{
@@ -43,7 +45,7 @@ const tiledSections = computed<TiledSection<I>[]>(() => {
 	logger.debug('[TiledLayout] Computing rows', { items: props.sections })
 
 	return props.sections.map((section) => {
-		const rows = splitItemsInRows(section.items, containerWidth.value, props.baseHeight)
+		const rows = splitSectionInRows(section, containerWidth.value, props.baseHeight, props.groupHeaderHeight)
 		return {
 			...section,
 			key: section.id,

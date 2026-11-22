@@ -8,6 +8,7 @@ import type { TiledItem, TiledRow } from './TiledLayout.js'
 import { describe, expect, test } from 'vitest'
 import {
 	splitItemsInRows,
+	splitSectionInRows,
 } from './TiledLayout.js'
 
 const squareImage1 = {
@@ -98,5 +99,48 @@ const expectedLayout: TiledRow[] = [
 describe('TileLayout', () => {
 	test('Adding permissions', () => {
 		expect(splitItemsInRows(items, 2000)).toStrictEqual(expectedLayout)
+	})
+})
+
+describe('splitSectionInRows', () => {
+	test('lays out a section without groups like its items', () => {
+		expect(splitSectionInRows({ id: 'section', items }, 2000)).toStrictEqual(expectedLayout)
+	})
+
+	test('puts a header row before the rows of every group', () => {
+		const section = {
+			id: 'section',
+			items: [squareImage1, squareImage2, squareImage3],
+			groups: [
+				{ id: 'day1', items: [squareImage1, squareImage2] },
+				{ id: 'day2', items: [squareImage3] },
+			],
+		}
+
+		const rows = splitSectionInRows(section, 2000, 200, 48)
+
+		expect(rows.map(({ key, groupId, height }) => ({ key, groupId, height }))).toStrictEqual([
+			{ key: 'group-header-day1', groupId: 'day1', height: 48 },
+			{ key: 'squareImage1-squareImage2', groupId: undefined, height: 220 },
+			{ key: 'group-header-day2', groupId: 'day2', height: 48 },
+			{ key: 'squareImage3', groupId: undefined, height: 220 },
+		])
+		expect(rows[0].items).toStrictEqual([])
+	})
+
+	test('leaves out the header of an empty group', () => {
+		const section = {
+			id: 'section',
+			items: [squareImage1],
+			groups: [{ id: 'day1', items: [] }, { id: 'day2', items: [squareImage1] }],
+		}
+
+		expect(splitSectionInRows(section, 2000, 200, 48).map(({ key }) => key)).toStrictEqual(['group-header-day2', 'squareImage1'])
+	})
+
+	test('returns no row before the container is measured', () => {
+		const section = { id: 'section', items: [squareImage1], groups: [{ id: 'day1', items: [squareImage1] }] }
+
+		expect(splitSectionInRows(section, 0, 200, 48)).toStrictEqual([])
 	})
 })

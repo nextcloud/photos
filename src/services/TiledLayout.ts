@@ -16,12 +16,14 @@ export type TiledItem = {
 export type Section<I extends TiledItem = TiledItem> = {
 	id: string // Unique id for the section.
 	items: I[] // Items of the section.
+	groups?: Section<I>[] // Groups splitting the items, each one laid out under its own header row.
 }
 
 export type TiledRow<I extends TiledItem = TiledItem> = {
 	items: I[] // List of item in the row.
 	height: number // Height of the row.
 	key: string // Unique key for the row.
+	groupId?: string // Set on the header row of a group, which holds no items.
 }
 
 export type TiledSectionRow<I extends TiledItem = TiledItem> = TiledRow<I> & {
@@ -80,6 +82,33 @@ export function splitItemsInRows<I extends TiledItem>(items: I[], containerWidth
 	}
 
 	return rows
+}
+
+/**
+ * Split the items of a section in rows. A section split in groups gets a
+ * header row of `groupHeaderHeight` before the rows of each group, and the rows
+ * of a group never hold items of another one.
+ *
+ * @param section - The section to lay out.
+ * @param containerWidth - Width of the container.
+ * @param baseHeight - Target height of the rows.
+ * @param groupHeaderHeight - Height of the header row of a group.
+ */
+export function splitSectionInRows<I extends TiledItem>(section: Section<I>, containerWidth: number, baseHeight: number = 200, groupHeaderHeight: number = 0): TiledRow<I>[] {
+	if (section.groups === undefined) {
+		return splitItemsInRows(section.items, containerWidth, baseHeight)
+	}
+
+	if (containerWidth === 0) {
+		return []
+	}
+
+	return section.groups
+		.filter((group) => group.items.length > 0)
+		.flatMap((group) => [
+			{ items: [], height: groupHeaderHeight, key: `group-header-${group.id}`, groupId: group.id },
+			...splitItemsInRows(group.items, containerWidth, baseHeight),
+		])
 }
 
 /**

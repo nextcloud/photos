@@ -7,10 +7,12 @@ import { beforeEach, describe, expect, test, vi } from 'vitest'
 import {
 	formatDate,
 	formatDateRange,
+	formatDay,
 	formatMonth,
 	formatMonthAndYear,
 	formatTime,
 	formatYear,
+	fromDateKey,
 	fromMonthKey,
 	toDayKey,
 	toMonthKey,
@@ -63,6 +65,23 @@ describe('fromMonthKey', () => {
 
 	test('round trips with toMonthKey', () => {
 		expect(toMonthKey(fromMonthKey('199912'))).toBe('199912')
+	})
+})
+
+describe('fromDateKey', () => {
+	test('parses a day key into the start of that day', () => {
+		expect(fromDateKey('20260614')).toEqual(new Date(2026, 5, 14))
+	})
+})
+
+describe('formatDay', () => {
+	test('formats a day key as its weekday, day and month', () => {
+		expect(formatDay('20260614')).toBe('Sun 14 June')
+	})
+
+	test('follows the user locale', () => {
+		getCanonicalLocale.mockReturnValue('de-DE')
+		expect(formatDay('20260614')).toBe('So., 14. Juni')
 	})
 })
 

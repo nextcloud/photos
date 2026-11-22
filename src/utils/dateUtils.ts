@@ -67,6 +67,24 @@ export function fromMonthKey(month: string): Date {
 }
 
 /**
+ * Parse a `YYYYMMDD` day key back into the start of that day, in local time.
+ *
+ * @param day - The day key to parse.
+ */
+export function fromDateKey(day: string): Date {
+	return new Date(Number.parseInt(day.slice(0, 4)), Number.parseInt(day.slice(4, 6)) - 1, Number.parseInt(day.slice(6, 8)))
+}
+
+/**
+ * Format a day key as its weekday, day and month, like *Sat 14 June*.
+ *
+ * @param day - The `YYYYMMDD` day key to format.
+ */
+export function formatDay(day: string): string {
+	return getFormatter({ weekday: 'short', day: 'numeric', month: 'long' }).format(fromDateKey(day))
+}
+
+/**
  * Format a month key as its month name only, like *August*.
  *
  * @param month - The `YYYYMM` month key to format.
