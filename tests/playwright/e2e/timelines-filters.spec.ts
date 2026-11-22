@@ -86,7 +86,7 @@ test.describe('Filtering the timeline', () => {
 
 		// The form comes up carrying the filters of the timeline, which is what
 		// makes the album a smart one rather than a copy of the current selection.
-		await expect(form.filters.getChip('January 1, 2019')).toContainText('December 31, 2019')
+		await expect(form.filters.getChip('Jan 1, 2019')).toContainText('Dec 31, 2019')
 		await expect(form.filters.getChip('Lauris')).toBeVisible()
 
 		await form.createButton().click()

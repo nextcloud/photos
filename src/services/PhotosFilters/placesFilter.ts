@@ -6,6 +6,7 @@
 import type { PhotosFilter } from './PhotosFilter.ts'
 
 import mapMarkerSvg from '@mdi/svg/svg/map-marker.svg?raw'
+import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import PlacesOption from '../../components/PhotosFilters/PlaceOption.vue'
 import { useCollectionsStore } from '../../store/collections.ts'
@@ -20,6 +21,7 @@ export const placesFilterId = 'places'
 export const placesFilter: PhotosFilter<PlacesValueType> = {
 	id: placesFilterId,
 	icon: mapMarkerSvg,
+	label: t('photos', 'Place'),
 	renderOptionComponent: PlacesOption,
 	async getOptions() {
 		if (Object.values(usePlacesStore().places).length === 0) {

@@ -54,8 +54,10 @@ const availableFilters = computed(() => {
 			display: flex;
 			flex-wrap: wrap;
 			gap: 4px;
+			min-width: 0;
 
 			&__option {
+				max-width: 100%;
 				margin: calc((32px - 24px) / 2) 0; // 32 is the size of the icon, 24 is the size of the option. We want to match the size of the icon.
 			}
 		}

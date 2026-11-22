@@ -18,6 +18,7 @@ export const dateRangeFilterId = 'date-range'
 export const dateRangeFilter: PhotosFilter<DateRangeValueType> = {
 	id: dateRangeFilterId,
 	icon: calendarMonthSvg,
+	label: t('photos', 'Date'),
 	renderOptionComponent: DateRangeOption,
 	async getOptions() {
 		const now = new Date()
@@ -33,7 +34,7 @@ export const dateRangeFilter: PhotosFilter<DateRangeValueType> = {
 			},
 			{
 				filterId: dateRangeFilterId,
-				label: t('photos', 'Last Month'),
+				label: t('photos', 'Last month'),
 				value: {
 					start: new Date(now.getFullYear(), now.getMonth() - 1, 1).getTime(),
 					end: new Date(now.getFullYear(), now.getMonth(), 0).getTime(),

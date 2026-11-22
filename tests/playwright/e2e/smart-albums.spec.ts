@@ -40,7 +40,7 @@ test.describe('A smart album', () => {
 		await album.setFilters(ALBUM_NAME, (form) => form.filters.selectPlace('Lauris'))
 
 		const form = await album.openDetailsForm()
-		await expect(form.filters.getChip('January 1, 2019')).toContainText('December 31, 2019')
+		await expect(form.filters.getChip('Jan 1, 2019')).toContainText('Dec 31, 2019')
 		await expect(form.filters.getChip('Lauris')).toBeVisible()
 	})
 
