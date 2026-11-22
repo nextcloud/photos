@@ -23,12 +23,31 @@
 		</form>
 
 		<div v-if="allowPublicLink && isPublicLinkSelected && publicLink.id !== ''" class="manage-collaborators__guests">
-			<NcCheckboxRadioSwitch
-				type="switch"
-				:modelValue="guestUploadAllowed"
-				@update:modelValue="setGuestUpload">
-				{{ t('photos', 'Allow guests to add photos') }}
-			</NcCheckboxRadioSwitch>
+			<div class="manage-collaborators__guests__row">
+				<NcCheckboxRadioSwitch
+					type="switch"
+					:modelValue="guestUploadAllowed"
+					@update:modelValue="setGuestUpload">
+					{{ t('photos', 'Allow guests to add photos') }}
+				</NcCheckboxRadioSwitch>
+				<NcButton
+					variant="tertiary"
+					:aria-expanded="showQrCode ? 'true' : 'false'"
+					@click="showQrCode = !showQrCode">
+					<template #icon>
+						<Qrcode :size="20" />
+					</template>
+					{{ showQrCode ? t('photos', 'Hide QR code') : t('photos', 'Show QR code') }}
+				</NcButton>
+			</div>
+			<svg
+				v-if="showQrCode"
+				class="manage-collaborators__guests__qr"
+				:viewBox="`0 0 ${qrCode.size} ${qrCode.size}`"
+				role="img"
+				:aria-label="t('photos', 'QR code of the public link')">
+				<path :d="qrCode.path" />
+			</svg>
 		</div>
 
 		<div class="actions">
@@ -91,6 +110,7 @@ import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { ShareType } from '@nextcloud/sharing'
+import { encode } from 'uqr'
 import { computed, onMounted, ref, watch } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
@@ -99,6 +119,7 @@ import Check from 'vue-material-design-icons/Check.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 import ContentCopy from 'vue-material-design-icons/ContentCopy.vue'
 import Earth from 'vue-material-design-icons/Earth.vue'
+import Qrcode from 'vue-material-design-icons/Qrcode.vue'
 import { useFetchCollectionContent } from '../../composables/useFetchCollectionContent.ts'
 import { logger } from '../../services/logger.ts'
 import { albumsExtraProps } from '../../store/albums.ts'
@@ -149,6 +170,7 @@ const loadingCollaborators = ref(false)
 // Sequence number of the latest lookup, to tell the answers of the ones before it apart.
 const searchSequence = ref(0)
 const publicLinkCopied = ref(false)
+const showQrCode = ref(false)
 const config = ref({
 	minSearchStringLength: parseInt(OC.config['sharing.minSearchStringLength'], 10) || 0,
 })
@@ -202,6 +224,16 @@ const publicLinkURL = computed<string>(() => `${window.location.protocol}//${win
 const albumFileName = computed<string>(() => albumsStore.getAlbumName(props.albumName))
 
 const guestUploadAllowed = computed<boolean>(() => albumsStore.getAlbum(props.albumName)?.attributes['guest-upload'] === 1)
+
+// Dark modules drawn as one path, on the light background the scanners expect.
+const qrCode = computed(() => {
+	const { data, size } = encode(publicLinkURL.value, { ecc: 'M', border: 2 })
+	const path = data
+		.flatMap((row, y) => row.map((dark, x) => (dark ? `M${x} ${y}h1v1h-1z` : '')))
+		.join('')
+
+	return { size, path }
+})
 
 watch(() => props.collaborators, (collaborators) => {
 	populateCollaborators(collaborators)
@@ -383,7 +415,28 @@ onMounted(() => {
 	}
 
 	&__guests {
+		display: flex;
+		flex-direction: column;
+		gap: var(--default-grid-baseline);
 		margin-top: calc(var(--default-grid-baseline) * 2);
+
+		&__row {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			justify-content: space-between;
+			gap: var(--default-grid-baseline);
+		}
+
+		&__qr {
+			align-self: center;
+			width: 160px;
+			height: 160px;
+			flex-shrink: 0;
+			background: #fff;
+			fill: #000;
+			border-radius: var(--border-radius);
+		}
 	}
 
 	&__form {
