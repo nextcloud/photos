@@ -155,6 +155,14 @@
 						<MapOutline v-else :size="20" />
 					</template>
 				</NcAppNavigationItem>
+				<NcAppNavigationItem
+					:to="{ name: 'freeSpace' }"
+					:name="t('photos', 'Free up space')"
+					data-id-app-nav-item="free-space">
+					<template #icon>
+						<Broom :size="20" />
+					</template>
+				</NcAppNavigationItem>
 			</template>
 			<template #footer>
 				<div class="app-navigation__footer">
@@ -209,6 +217,7 @@ import AccountBoxMultiple from 'vue-material-design-icons/AccountBoxMultiple.vue
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
 import AccountGroup from 'vue-material-design-icons/AccountGroup.vue'
 import AccountGroupOutline from 'vue-material-design-icons/AccountGroupOutline.vue'
+import Broom from 'vue-material-design-icons/Broom.vue'
 import CalendarToday from 'vue-material-design-icons/CalendarToday.vue'
 import CalendarTodayOutline from 'vue-material-design-icons/CalendarTodayOutline.vue'
 import CameraIcon from 'vue-material-design-icons/Camera.vue'

@@ -24,6 +24,7 @@ const TagsView = () => import('../views/TagsView.vue')
 const TagContent = () => import('../views/TagContent.vue')
 const TimelineView = () => import('../views/TimelineView.vue')
 const FacesView = () => import('../views/FacesView.vue')
+const FreeSpaceView = () => import('../views/FreeSpaceView.vue')
 const FaceContent = () => import('../views/FaceContent.vue')
 
 const UnassignedFaces = () => import('../views/UnassignedFaces.vue')
@@ -278,6 +279,19 @@ export const router = createRouter({
 			meta: {
 				rootTitle: () => {
 					return t('photos', 'On this day')
+				},
+			},
+		},
+		{
+			path: '/free-space',
+			name: 'freeSpace',
+			component: FreeSpaceView,
+			props: () => ({
+				rootTitle: t('photos', 'Free up space'),
+			}),
+			meta: {
+				rootTitle: () => {
+					return t('photos', 'Free up space')
 				},
 			},
 		},
