@@ -88,6 +88,7 @@ export type PhotoTarget = {
 	permissions: number
 	/** Whether the current user marked the photo as a favorite. */
 	favorite: boolean
+	mime: string
 }
 
 /**
@@ -106,6 +107,7 @@ export function toPhotoTarget(file: Node): PhotoTarget {
 			davPath: `${file.root}${file.path}`,
 			permissions: file.permissions,
 			favorite: file.attributes.favorite === 1,
+			mime: file.mime,
 		}
 	}
 
@@ -115,6 +117,7 @@ export function toPhotoTarget(file: Node): PhotoTarget {
 		davPath: `${getRootPath()}${originalFilename}`,
 		permissions: file.permissions,
 		favorite: file.attributes.favorite === 1,
+		mime: file.mime,
 	}
 }
 
