@@ -15,6 +15,10 @@
 					<dt>{{ t('photos', 'Filename') }}</dt>
 					<dd>{{ photo.basename }}</dd>
 				</div>
+				<div v-if="captureTime !== null" class="photo-metadata__entry">
+					<dt>{{ t('photos', 'Taken') }}</dt>
+					<dd>{{ captureTime }}</dd>
+				</div>
 				<div v-for="entry in exifEntries" :key="entry.label" class="photo-metadata__entry">
 					<dt>{{ entry.label }}</dt>
 					<dd>{{ entry.value }}</dd>
@@ -54,6 +58,7 @@ import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import { fetchPhotoExif } from '../services/exifFetcher.ts'
+import { formatCaptureTime, parseUtcOffset } from '../utils/dateUtils.ts'
 import { formatCoordinates, getExifSummary, getPhotoLocation } from '../utils/exif.ts'
 
 const props = defineProps<{
@@ -73,6 +78,16 @@ const metadata = ref<PhotoExif | undefined>()
 
 const exifEntries = computed(() => metadata.value === undefined ? undefined : getExifSummary(metadata.value))
 const location = computed(() => metadata.value === undefined ? null : getPhotoLocation(metadata.value.gps))
+
+// The taken date is read server side in the offset of `OffsetTimeOriginal`, so
+// that entry also gives the local time of the place the photo was taken at.
+const captureTime = computed(() => {
+	if (metadata.value?.takenAt === undefined) {
+		return null
+	}
+
+	return formatCaptureTime(new Date(metadata.value.takenAt * 1000), parseUtcOffset(metadata.value.exif.OffsetTimeOriginal))
+})
 
 // The EXIF properties are not part of the file listings, they are only fetched
 // once the user asks for them.
