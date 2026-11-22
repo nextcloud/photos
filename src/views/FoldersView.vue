@@ -75,8 +75,7 @@
 										@deleted="onPhotoDeleted" />
 									<FolderComponent
 										v-else
-										:item="item.node"
-										:showShared="showShared" />
+										:item="item.node" />
 								</li>
 							</template>
 						</ul>
