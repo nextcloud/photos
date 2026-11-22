@@ -43,7 +43,6 @@
 							{{ n('photos', '%n highlight', '%n highlights', current) }}
 						</template>
 					</AnimatedNumber>
-					·
 					<AnimatedNumber :value="yearRecap.totalCount">
 						<template #default="{ current }">
 							{{ n('photos', '%n photo this year', '%n photos this year', current) }}
@@ -67,12 +66,14 @@
 						decoding="async">
 					<span class="memories__trip__details">
 						<span class="memories__trip__details__title">{{ getTripTitle(trip) ?? formatDateRange(trip) }}</span>
-						<span v-if="trip.places.length > 0">{{ formatDateRange(trip) }}</span>
-						<AnimatedNumber :value="trip.photos.length">
-							<template #default="{ current }">
-								{{ n('photos', '%n photo', '%n photos', current) }}
-							</template>
-						</AnimatedNumber>
+						<span class="memories__trip__details__meta">
+							<span v-if="trip.places.length > 0">{{ formatDateRange(trip) }}</span>
+							<AnimatedNumber :value="trip.photos.length">
+								<template #default="{ current }">
+									{{ n('photos', '%n photo', '%n photos', current) }}
+								</template>
+							</AnimatedNumber>
+						</span>
 					</span>
 				</button>
 			</li>
@@ -166,6 +167,40 @@ function formatDateRange(trip: Trip): string {
 </script>
 
 <style lang="scss" scoped>
+// Text laid over the bottom of a cover. The scrim is at least 62% black behind
+// the text and only fades out in the padding above it, which keeps white text
+// above a 4.5:1 contrast even on a white photo.
+@mixin cover-details {
+	--memories-scrim-fade: calc(var(--default-grid-baseline) * 12);
+	position: absolute;
+	inset-block-end: 0;
+	inset-inline: 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--default-grid-baseline);
+	padding: calc(var(--default-grid-baseline) * 4);
+	padding-block-start: var(--memories-scrim-fade);
+	text-align: start;
+	color: #fff;
+	background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.62) calc(100% - var(--memories-scrim-fade)), transparent);
+}
+
+// The date range and the counts, set apart from the title by their size and weight.
+@mixin cover-meta {
+	display: flex;
+	flex-wrap: wrap;
+	column-gap: calc(var(--default-grid-baseline) * 2);
+	font-size: var(--font-size-small, 13px);
+	font-weight: normal;
+	line-height: 1.4;
+	color: rgba(255, 255, 255, 0.9);
+
+	> :not(:first-child)::before {
+		content: '·';
+		margin-inline-end: calc(var(--default-grid-baseline) * 2);
+	}
+}
+
 .memories {
 	display: flex;
 	flex-direction: column;
@@ -175,11 +210,16 @@ function formatDateRange(trip: Trip): string {
 		flex: 1;
 	}
 
+	// The cards are buttons: the element selector outweighs the margin the
+	// server styles give to every button.
+	button#{&}__recap {
+		margin: calc(var(--default-grid-baseline) * 4) calc(var(--default-grid-baseline) * 4) 0;
+	}
+
 	&__recap {
 		position: relative;
 		flex-shrink: 0;
 		height: 280px;
-		margin: calc(var(--default-grid-baseline) * 4) calc(var(--default-grid-baseline) * 4) 0;
 		padding: 0;
 		overflow: hidden;
 		border: none;
@@ -194,6 +234,15 @@ function formatDateRange(trip: Trip): string {
 			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
 		}
 
+		@media (prefers-reduced-motion: reduce) {
+			transition: none;
+
+			&:hover,
+			&:focus-visible {
+				transform: none;
+			}
+		}
+
 		&__cover {
 			width: 100%;
 			height: 100%;
@@ -201,30 +250,24 @@ function formatDateRange(trip: Trip): string {
 		}
 
 		&__details {
-			position: absolute;
-			inset-block-end: 0;
-			inset-inline: 0;
-			display: flex;
-			flex-direction: column;
-			padding: calc(var(--default-grid-baseline) * 6);
-			text-align: start;
-			color: #fff;
-			text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-			background-image: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+			@include cover-details;
 
 			&__eyebrow {
 				text-transform: uppercase;
 				letter-spacing: 0.12em;
 				font-size: 0.75rem;
 				font-weight: bold;
-				opacity: 0.85;
+				line-height: 1.4;
 			}
 
 			&__title {
-				margin-block: 6px;
-				font-size: 2rem;
+				font-size: clamp(1.5rem, 5vw, 2rem);
 				font-weight: bold;
-				line-height: 1.1;
+				line-height: 1.15;
+			}
+
+			&__meta {
+				@include cover-meta;
 			}
 		}
 	}
@@ -243,9 +286,11 @@ function formatDateRange(trip: Trip): string {
 		border-radius: var(--border-radius-large);
 		background-color: var(--color-primary-element-light);
 
-		&__button {
+		button#{&}__button {
+			display: block;
 			width: 100%;
 			height: 100%;
+			margin: 0;
 			padding: 0;
 			border: none;
 			border-radius: 0;
@@ -260,18 +305,20 @@ function formatDateRange(trip: Trip): string {
 		}
 
 		&__details {
-			position: absolute;
-			inset-block-end: 0;
-			inset-inline: 0;
-			display: flex;
-			flex-direction: column;
-			padding: calc(var(--default-grid-baseline) * 4);
-			text-align: start;
-			color: #fff;
-			background-image: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+			@include cover-details;
 
 			&__title {
+				display: -webkit-box;
+				overflow: hidden;
+				font-size: 1.25rem;
 				font-weight: bold;
+				line-height: 1.25;
+				-webkit-box-orient: vertical;
+				-webkit-line-clamp: 2;
+			}
+
+			&__meta {
+				@include cover-meta;
 			}
 		}
 	}
