@@ -34,7 +34,11 @@
 			:containerElement="appContent"
 			:fileIds="fileIds"
 			:baseHeight="isMobile ? 120 : 200"
-			:loading="loading">
+			:loading="loading"
+			:selectable="true"
+			:selectionActive="selectedFileIds.length > 0"
+			@selectRectangle="onFileSelectRectangle"
+			@selectAll="selectAll">
 			<template #default="{ file }">
 				<FileComponent
 					:file="files[file.id]"
@@ -99,7 +103,7 @@ const fileIds = computed(() => (systemTagsStore.tagsFiles[tagId.value] ?? []).ma
 
 const isEmpty = computed(() => fileIds.value.length === 0)
 
-const { selection, onFileSelectToggle, onUncheckFiles } = useFilesSelection(() => fileIds.value.filter((fileId) => files.value[fileId] !== undefined))
+const { selection, selectedFileIds, onFileSelectToggle, onFileSelectRectangle, selectAll, onUncheckFiles } = useFilesSelection(() => fileIds.value.filter((fileId) => files.value[fileId] !== undefined))
 
 watch(() => props.path, () => {
 	fetchContent()

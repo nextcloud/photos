@@ -3,7 +3,11 @@
  - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<div class="files-list-viewer">
+	<div
+		ref="root"
+		class="files-list-viewer"
+		@pointerdown="onPointerDown"
+		@keydown="onKeyDown">
 		<NcEmptyContent
 			v-if="emptyMessage !== '' && photosCount === 0 && !loading"
 			key="emptycontent"
@@ -13,7 +17,7 @@
 			</template>
 		</NcEmptyContent>
 
-		<TiledLayout :baseHeight="baseHeight" :sections="itemsBySections">
+		<TiledLayout ref="tiledLayout" :baseHeight="baseHeight" :sections="itemsBySections">
 			<template #default="{ tiledSections }">
 				<VirtualScrolling
 					:useWindow="useWindow"
@@ -50,6 +54,7 @@
 										v-for="item of row.items"
 										:key="item.key"
 										:class="{ 'last-tiled-rows': rowIndex === section.rows.length - 1 }"
+										:data-tile-id="showPlaceholders ? undefined : item.id"
 										:style="{ 'flex-basis': `${item.width - 1}px`, height: `${item.height}px` }">
 										<!-- Placeholder when initial loading -->
 										<div v-if="showPlaceholders" class="files-list-viewer__placeholder" />
@@ -66,21 +71,28 @@
 				</VirtualScrolling>
 			</template>
 		</TiledLayout>
+
+		<div
+			v-if="rectangle !== null"
+			class="files-list-viewer__selection-rectangle"
+			:style="{ left: `${rectangle.left}px`, top: `${rectangle.top}px`, width: `${rectangle.width}px`, height: `${rectangle.height}px` }" />
 	</div>
 </template>
 
 <script setup lang="ts">
 import type { File, Node } from '@nextcloud/files'
-import type { TiledItem } from '../services/TiledLayout.ts'
+import type { FileSelectRectangle } from '../composables/useFilesSelection.ts'
+import type { TiledItem, TiledSection } from '../services/TiledLayout.ts'
 import type { PhotoFile } from '../store/files.ts'
 
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { computed, onMounted, onUnmounted } from 'vue'
+import { computed, onMounted, onUnmounted, useTemplateRef } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import PackageVariant from 'vue-material-design-icons/PackageVariant.vue'
 import TiledLayout from '../components/TiledLayout/TiledLayout.vue'
 import VirtualScrolling from '../components/VirtualScrolling.vue'
+import { tileBoxes, useRectangleSelection } from '../composables/useRectangleSelection.ts'
 import { fetchFile } from '../services/fileFetcher.ts'
 import { useFilesStore } from '../store/files.ts'
 import { useUserConfigStore } from '../store/userConfig.ts'
@@ -106,6 +118,10 @@ const props = withDefaults(defineProps<{
 	containerElement?: HTMLElement | null
 	// The useWindow props to forward to TileLayout.
 	useWindow?: boolean
+	// Whether files can be selected by drawing a rectangle over them and with Ctrl+A.
+	selectable?: boolean
+	// Whether files are selected, a drag on a tile then draws a rectangle too.
+	selectionActive?: boolean
 }>(), {
 	fileIds: undefined,
 	fileIdsBySection: undefined,
@@ -117,10 +133,14 @@ const props = withDefaults(defineProps<{
 	scrollToSection: '',
 	containerElement: null,
 	useWindow: false,
+	selectable: false,
+	selectionActive: false,
 })
 
 const emit = defineEmits<{
 	needContent: []
+	selectRectangle: [rectangle: FileSelectRectangle]
+	selectAll: []
 }>()
 
 defineSlots<{
@@ -181,6 +201,34 @@ const itemsBySections = computed<{ id: string, items: TiledItem[] }[]>(() => {
 
 	return []
 })
+
+const root = useTemplateRef<HTMLDivElement>('root')
+const tiledLayout = useTemplateRef<{ tiledSections: TiledSection[] }>('tiledLayout')
+
+const tiles = computed(() => tileBoxes(tiledLayout.value?.tiledSections ?? [], props.sectionHeaderHeight))
+
+const { rectangle, onPointerDown } = useRectangleSelection({
+	root,
+	boxes: () => tiles.value,
+	scrollContainer: () => props.containerElement ?? (props.useWindow ? window : root.value?.querySelector<HTMLElement>('.vs-container') ?? window),
+	enabled: () => props.selectable && !showPlaceholders.value,
+	selectionActive: () => props.selectionActive,
+	onSelect: (rectangle) => emit('selectRectangle', rectangle),
+})
+
+/**
+ * Selects every file with Ctrl+A or Cmd+A while the focus is in the grid.
+ *
+ * @param event - The pressed key
+ */
+function onKeyDown(event: KeyboardEvent): void {
+	if (!props.selectable || !(event.ctrlKey || event.metaKey) || event.shiftKey || event.altKey || event.key.toLowerCase() !== 'a') {
+		return
+	}
+
+	event.preventDefault()
+	emit('selectAll')
+}
 
 const photosCount = computed<number>(() => itemsBySections.value.map(({ items }) => items.length).reduce((total, length) => total + length, 0))
 
@@ -257,6 +305,15 @@ onUnmounted(() => {
 
 	&__loader {
 		margin: 50px 0;
+	}
+
+	&__selection-rectangle {
+		position: absolute;
+		z-index: 4;
+		pointer-events: none;
+		border: 1px solid var(--color-primary-element);
+		border-radius: var(--border-radius-small);
+		background-color: color-mix(in srgb, var(--color-primary-element) 20%, transparent);
 	}
 }
 </style>

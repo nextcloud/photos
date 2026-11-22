@@ -17,6 +17,15 @@ export type FileSelectToggle = {
 	range?: boolean
 }
 
+export type FileSelectRectangle = {
+	/** Ids of the files whose tiles the rectangle touches */
+	fileIds: string[]
+	/** Whether the tiles add to the selection the drag started with instead of replacing it */
+	additive: boolean
+	/** Whether the drag has just started */
+	start: boolean
+}
+
 /**
  * The files from one file up to another, both included, in the order of the list.
  * Only the target is returned when either of them is not in the list.
@@ -48,6 +57,8 @@ export function useFilesSelection(
 	selection: Ref<Record<string, boolean>>
 	selectedFileIds: ComputedRef<string[]>
 	onFileSelectToggle: (toggle: FileSelectToggle) => void
+	onFileSelectRectangle: (rectangle: FileSelectRectangle) => void
+	selectAll: () => void
 	onUncheckFiles: (fileIds: string[]) => void
 	resetSelection: () => void
 } {
@@ -59,6 +70,17 @@ export function useFilesSelection(
 
 	// The file a range starts from.
 	let lastToggledFileId: string | undefined
+	// The selection a drawn rectangle adds its tiles to.
+	let selectionBeforeRectangle: Record<string, boolean> = {}
+
+	/**
+	 * @param fileIds - Tiles to select, along with the files they stand for
+	 */
+	function selectedTiles(fileIds: string[]): Record<string, boolean> {
+		return Object.fromEntries(fileIds
+			.flatMap((fileId) => expandFileId(fileId))
+			.map((fileId) => [fileId, true]))
+	}
 
 	/**
 	 * @param toggle - The file and its new selection state
@@ -82,6 +104,24 @@ export function useFilesSelection(
 	}
 
 	/**
+	 * @param rectangle - The tiles touched by a rectangle drawn over the grid
+	 * @param rectangle.fileIds - Ids of the files whose tiles the rectangle touches
+	 * @param rectangle.additive - Whether the tiles add to the selection the drag started with instead of replacing it
+	 * @param rectangle.start - Whether the drag has just started
+	 */
+	function onFileSelectRectangle({ fileIds, additive, start }: FileSelectRectangle): void {
+		if (start) {
+			selectionBeforeRectangle = additive ? { ...selection.value } : {}
+		}
+
+		selection.value = { ...selectionBeforeRectangle, ...selectedTiles(fileIds) }
+	}
+
+	function selectAll(): void {
+		selection.value = { ...selection.value, ...selectedTiles(toValue(orderedFileIds)) }
+	}
+
+	/**
 	 * @param fileIds - Files to drop from the selection
 	 */
 	function onUncheckFiles(fileIds: string[]): void {
@@ -101,6 +141,8 @@ export function useFilesSelection(
 		selection,
 		selectedFileIds,
 		onFileSelectToggle,
+		onFileSelectRectangle,
+		selectAll,
 		onUncheckFiles,
 		resetSelection,
 	}

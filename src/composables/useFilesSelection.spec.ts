@@ -120,6 +120,55 @@ describe('useFilesSelection', () => {
 		expect(selectedFileIds.value.toSorted()).toEqual(['1', '2', '3', '7', '8'])
 	})
 
+	test('selects every file of the grid', () => {
+		const stacks: Record<string, string[]> = { 2: ['2', '7', '8'] }
+		const { selectedFileIds, onFileSelectToggle, selectAll } = useFilesSelection(
+			() => ['1', '2', '3'],
+			(fileId) => stacks[fileId] ?? [fileId],
+		)
+
+		onFileSelectToggle({ id: 1, value: true })
+		selectAll()
+		expect(selectedFileIds.value.toSorted()).toEqual(['1', '2', '3', '7', '8'])
+	})
+
+	test('keeps selected files that are not in the grid when selecting all', () => {
+		const fileIds = ref(['1', '2'])
+		const { selectedFileIds, onFileSelectToggle, selectAll } = useFilesSelection(fileIds)
+
+		onFileSelectToggle({ id: 1, value: true })
+		fileIds.value = ['2', '3']
+		selectAll()
+		expect(selectedFileIds.value.toSorted()).toEqual(['1', '2', '3'])
+	})
+
+	test('replaces the selection with the tiles of a rectangle', () => {
+		const { selectedFileIds, onFileSelectToggle, onFileSelectRectangle } = useFilesSelection(['1', '2', '3', '4'])
+
+		onFileSelectToggle({ id: 1, value: true })
+		onFileSelectRectangle({ fileIds: ['2', '3'], additive: false, start: true })
+		expect(selectedFileIds.value).toEqual(['2', '3'])
+
+		onFileSelectRectangle({ fileIds: ['3'], additive: false, start: false })
+		expect(selectedFileIds.value).toEqual(['3'])
+	})
+
+	test('adds the tiles of a rectangle to the selection it started with', () => {
+		const stacks: Record<string, string[]> = { 3: ['3', '9'] }
+		const { selectedFileIds, onFileSelectToggle, onFileSelectRectangle } = useFilesSelection(
+			['1', '2', '3', '4'],
+			(fileId) => stacks[fileId] ?? [fileId],
+		)
+
+		onFileSelectToggle({ id: 1, value: true })
+		onFileSelectRectangle({ fileIds: ['1', '2', '3'], additive: true, start: true })
+		expect(selectedFileIds.value.toSorted()).toEqual(['1', '2', '3', '9'])
+
+		// Shrinking the rectangle unselects what it no longer touches, but not what was selected before.
+		onFileSelectRectangle({ fileIds: [], additive: true, start: false })
+		expect(selectedFileIds.value).toEqual(['1'])
+	})
+
 	test('drops the selection on navigation', async () => {
 		const { selectedFileIds, onFileSelectToggle } = useFilesSelection(['1', '2'])
 
