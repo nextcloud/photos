@@ -6,8 +6,7 @@
 	<CollectionsList
 		:collections="sharedAlbums"
 		:loading="loadingCollections"
-		:error="errorFetchingCollections"
-		class="albums-list">
+		:error="errorFetchingCollections">
 		<template #header>
 			<HeaderNavigation
 				key="navigation"
@@ -26,16 +25,14 @@
 				:altImg="t('photos', 'Cover photo for shared album {albumName}', { albumName: collection.basename })"
 				:data-test="collection.basename"
 				:coverUrl="coverUrl(collection.attributes['last-photo'])">
-				<span class="album__name">
+				<template #default>
 					{{ albumOriginalName(collection) }}
-				</span>
+				</template>
 
 				<template #subtitle>
-					<div class="album__details">
-						{{ collection.attributes.date }} ⸱ {{ n('photos', '%n item', '%n photos and videos', collection.attributes.nbItems) }}
-						<br>
-						{{ t('photos', 'Shared by') }}&nbsp;<NcUserBubble :displayName="collection.attributes.collaborators[0].label" :user="collection.attributes.collaborators[0].id" />
-					</div>
+					{{ collection.attributes.date }} ⸱ {{ n('photos', '%n item', '%n photos and videos', collection.attributes.nbItems) }}
+					<br>
+					{{ t('photos', 'Shared by') }}&nbsp;<NcUserBubble :displayName="collection.attributes.collaborators[0].label" :user="collection.attributes.collaborators[0].id" />
 				</template>
 			</CollectionCover>
 		</template>
@@ -97,21 +94,3 @@ onBeforeMount(() => {
 	fetchSharedAlbums()
 })
 </script>
-
-<style lang="scss" scoped>
-.albums-list {
-	display: flex;
-	flex-direction: column;
-
-	.album__name {
-		font-weight: normal;
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-		font-size: 20px;
-		margin-bottom: 12px;
-		line-height: 30px;
-		color: var(--color-main-text);
-	}
-}
-</style>

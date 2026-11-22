@@ -53,25 +53,23 @@ const noCollection = computed(() => Object.keys(props.collections).length === 0)
 </script>
 
 <style lang="scss" scoped>
+@use './CollectionsGrid.scss' as grid;
+
 .collections {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
 
-	&__list {
-		padding: 32px 48px;
-		flex-grow: 1;
-		display: flex;
-		flex-wrap: wrap;
-		gap: 16px;
-		align-items: flex-start;
-		height: calc(100% - 60px);
-		overflow-x: scroll;
+	@include grid.spacing;
 
-		@media only screen and (max-width: 1200px) {
-			padding: 32px 12px;
-			justify-content: center;
-		}
+	&__list {
+		flex-grow: 1;
+		align-content: start;
+		height: calc(100% - 60px);
+		padding: var(--collections-gap) var(--collections-padding) calc(var(--default-grid-baseline) * 8);
+		overflow-y: auto;
+
+		@include grid.grid;
 	}
 }
 </style>

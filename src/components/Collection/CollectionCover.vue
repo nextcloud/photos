@@ -12,13 +12,13 @@
 			@error="coverLoadingError = true">
 
 		<div v-else class="collection-cover__image collection-cover__image--placeholder">
-			<ImageMultipleOutline :size="128" />
+			<ImageMultipleOutline :size="64" />
 		</div>
 		<div class="collection-cover__details">
-			<div class="collection-cover__details__title">
+			<div class="collection-cover__title">
 				<slot name="default" />
 			</div>
-			<div class="collection-cover__details__subtitle">
+			<div class="collection-cover__subtitle">
 				<slot name="subtitle" />
 			</div>
 		</div>
@@ -45,58 +45,46 @@ const link = computed(() => `${props.parentRoute}/${encodeURIComponent(props.col
 .collection-cover {
 	display: flex;
 	flex-direction: column;
-	padding: 16px;
+	padding: calc(var(--default-grid-baseline) * 2);
 	border-radius: var(--border-radius-large);
 
-	&:hover, &:focus {
-		background: var(--color-background-dark);
+	&:hover, &:focus-visible {
+		background: var(--color-background-hover);
 	}
 
 	&__image {
-		width: 350px;
-		height: 350px;
+		// The cover is as wide as the list lets it be.
+		width: 100%;
+		aspect-ratio: 1;
 		object-fit: cover;
 		border-radius: var(--border-radius-large);
 
-		@media only screen and (max-width: 1200px) {
-			width: 250px;
-			height: 250px;
-		}
-
 		&--placeholder {
+			display: flex;
+			align-items: center;
+			justify-content: center;
 			background: var(--color-primary-element-light);
-
-			:deep(.material-design-icon) {
-				width: 100%;
-				height: 100%;
-
-				.material-design-icon__svg {
-					fill: var(--color-primary-element);
-				}
-			}
+			color: var(--color-primary-element);
 		}
 	}
 
 	&__details {
 		display: flex;
 		flex-direction: column;
-		margin-top: 16px;
-		width: 350px;
-
-		@media only screen and (max-width: 1200px) {
-			width: 250px;
-		}
-
-		&__title {
-			display: flex;
-			justify-content: space-between;
-		}
-
-		&__subtitle {
-			display: flex;
-			color: var(--color-text-lighter);
-		}
+		min-width: 0;
+		margin-top: calc(var(--default-grid-baseline) * 2);
 	}
 
+	&__title {
+		overflow: hidden;
+		font-weight: bold;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		color: var(--color-main-text);
+	}
+
+	&__subtitle {
+		color: var(--color-text-maxcontrast);
+	}
 }
 </style>

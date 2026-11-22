@@ -7,8 +7,7 @@
 		<CollectionsList
 			:collections="places"
 			:loading="loadingCollections"
-			:error="errorFetchingCollections"
-			class="places-list">
+			:error="errorFetchingCollections">
 			<template #header>
 				<HeaderNavigation
 					key="navigation"
@@ -26,14 +25,12 @@
 					:collectionName="collection.basename"
 					:altImg="t('photos', 'Cover photo for place {placeName}', { placeName: collection.basename })"
 					:coverUrl="coverUrl(collection.attributes['last-photo'])">
-					<span class="place__name">
+					<template #default>
 						{{ collection.basename }}
-					</span>
+					</template>
 
 					<template #subtitle>
-						<div class="place__details">
-							{{ n('photos', '%n item', '%n photos and videos', collection.attributes.nbItems) }}
-						</div>
+						{{ n('photos', '%n item', '%n photos and videos', collection.attributes.nbItems) }}
 					</template>
 				</CollectionCover>
 			</template>
@@ -84,21 +81,3 @@ onBeforeMount(() => {
 	fetchPlaces()
 })
 </script>
-
-<style lang="scss" scoped>
-.places-list {
-	display: flex;
-	flex-direction: column;
-
-	.place__name {
-		font-weight: normal;
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-		font-size: 20px;
-		margin-bottom: 12px;
-		line-height: 30px;
-		color: var(--color-main-text);
-	}
-}
-</style>
