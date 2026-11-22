@@ -16,25 +16,27 @@ vi.mock('./components/Dashboard/mountOnThisDay.ts', () => {
 })
 
 const register = vi.fn()
+// Vitest clears mock calls before each test, so keep the ones made while loading the entry point
+let registerCalls: unknown[][] = []
 
 beforeAll(async () => {
 	window.OCA = { Dashboard: { register } } as unknown as Window['OCA']
 	// The entry point has no exports, it only registers the widget
 	await import('./dashboard.ts' as string)
 	window.dispatchEvent(new Event('DOMContentLoaded'))
+	registerCalls = [...register.mock.calls]
 })
 
 describe('dashboard entry point', () => {
 	test('registers the widget without loading it', () => {
-		expect(register).toHaveBeenCalledOnce()
-		expect(register).toHaveBeenCalledWith('photos-onthisday', expect.any(Function))
+		expect(registerCalls).toEqual([['photos-onthisday', expect.any(Function)]])
 		expect(widgetModule.loaded).toBe(false)
 		expect(mountOnThisDay).not.toHaveBeenCalled()
 	})
 
 	test('loads and mounts the widget when the dashboard renders it', async () => {
 		const el = document.createElement('div')
-		const callback = register.mock.calls[0][1]
+		const callback = registerCalls[0][1] as (el: HTMLElement) => Promise<void>
 
 		await callback(el)
 
