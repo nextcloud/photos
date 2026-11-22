@@ -3,10 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import type { Album } from '../store/albums.ts'
 import type { PhotoFile } from '../store/files.ts'
 
 import { describe, expect, test } from 'vitest'
-import { pickAlbumCover } from './albumCover.ts'
+import { albumCoverFileId, pickAlbumCover } from './albumCover.ts'
 
 /**
  * Build the parts of a photo the cover is picked by.
@@ -46,5 +47,26 @@ describe('pickAlbumCover', () => {
 
 	test('has no cover for an album without photos', () => {
 		expect(pickAlbumCover([], -1)).toBeUndefined()
+	})
+})
+
+describe('albumCoverFileId', () => {
+	/**
+	 * Build the parts of an album its cover is read from.
+	 *
+	 * @param cover - File id of the photo picked as cover
+	 * @param lastPhoto - File id of the photo the album points at
+	 */
+	function album(cover: number | undefined, lastPhoto: number): Album {
+		return { attributes: { cover, 'last-photo': lastPhoto } } as unknown as Album
+	}
+
+	test('uses the photo picked by the owner', () => {
+		expect(albumCoverFileId(album(5, 9))).toBe(5)
+	})
+
+	test('falls back to the photo the album points at when none was picked', () => {
+		expect(albumCoverFileId(album(-1, 9))).toBe(9)
+		expect(albumCoverFileId(album(undefined, 9))).toBe(9)
 	})
 })

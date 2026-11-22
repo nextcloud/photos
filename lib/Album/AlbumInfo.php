@@ -18,6 +18,8 @@ class AlbumInfo {
 		private readonly int $lastAdded,
 		private readonly ?string $filters = null,
 		private readonly ?int $receivedFrom = null,
+		private readonly int $cover = -1,
+		private readonly string $description = '',
 	) {
 	}
 
@@ -43,6 +45,17 @@ class AlbumInfo {
 
 	public function getLastAddedPhoto(): int {
 		return $this->lastAdded;
+	}
+
+	/**
+	 * File id of the photo the owner picked as cover, -1 when none was picked.
+	 */
+	public function getCover(): int {
+		return $this->cover;
+	}
+
+	public function getDescription(): string {
+		return $this->description;
 	}
 
 	public function getReceivedFrom(): ?int {

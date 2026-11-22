@@ -26,6 +26,7 @@
 						<div v-if="album !== null && album.attributes.location !== ''" class="album__location">
 							<MapMarkerOutline />{{ album.attributes.location }}
 						</div>
+						<AlbumDescription :description="album?.attributes.description" />
 					</template>
 
 					<template v-if="album !== undefined" #right>
@@ -96,6 +97,7 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 // import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
 import ImageOffOutline from 'vue-material-design-icons/ImageOffOutline.vue'
 import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
+import AlbumDescription from '../components/Albums/AlbumDescription.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'

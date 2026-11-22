@@ -52,6 +52,13 @@
 				{{ t('photos', 'Add to album') }}
 			</NcActionButton>
 
+			<NcActionButton v-if="setAlbumCover !== undefined" closeAfterClick @click="setAlbumCover(photo.fileid)">
+				<template #icon>
+					<ImageCheckOutline :size="20" />
+				</template>
+				{{ t('photos', 'Set as album cover') }}
+			</NcActionButton>
+
 			<NcActionButton v-if="canShare" closeAfterClick @click="share">
 				<template #icon>
 					<ShareVariantOutline :size="20" />
@@ -118,7 +125,7 @@ import { showError } from '@nextcloud/dialogs'
 import { Permission } from '@nextcloud/files'
 import { translate as t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
-import { computed, ref } from 'vue'
+import { computed, inject, ref } from 'vue'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
@@ -126,6 +133,7 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcModal from '@nextcloud/vue/components/NcModal'
 import DotsVertical from 'vue-material-design-icons/DotsVertical.vue'
+import ImageCheckOutline from 'vue-material-design-icons/ImageCheckOutline.vue'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import InformationOutline from 'vue-material-design-icons/InformationOutline.vue'
 import PencilOutline from 'vue-material-design-icons/PencilOutline.vue'
@@ -142,6 +150,7 @@ import { areTagsInstalled } from '../services/AreTagsInstalled.ts'
 import { logger } from '../services/logger.ts'
 import { useCollectionsStore } from '../store/collections.ts'
 import { useFilesStore } from '../store/files.ts'
+import { setAlbumCoverKey } from '../utils/albumCover.ts'
 
 const props = defineProps<{
 	/** Photo the actions apply to. */
@@ -156,6 +165,8 @@ const emit = defineEmits<{
 
 const filesStore = useFilesStore()
 const collectionsStore = useCollectionsStore()
+
+const setAlbumCover = inject(setAlbumCoverKey, undefined)
 
 const menuOpen = ref(false)
 const metadataShown = ref(false)

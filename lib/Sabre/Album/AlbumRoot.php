@@ -9,6 +9,8 @@ declare(strict_types=1);
 namespace OCA\Photos\Sabre\Album;
 
 use OCA\Photos\Album\AlbumFile;
+use OCA\Photos\Album\AlbumMapper;
+use Sabre\DAV\Exception\BadRequest;
 use Sabre\DAV\Exception\Conflict;
 use Sabre\DAV\ICollection;
 use Sabre\DAV\ICopyTarget;
@@ -76,5 +78,23 @@ class AlbumRoot extends AlbumRootBase implements ICollection, ICopyTarget {
 	#[\Override]
 	public function setFilters(string $filters) {
 		$this->albumMapper->setAlbumFilters($this->getAlbum()->getAlbum()->getId(), $filters);
+	}
+
+	#[\Override]
+	public function setDescription(string $description): void {
+		if (mb_strlen($description) > AlbumMapper::DESCRIPTION_MAX_LENGTH) {
+			throw new BadRequest('The description is too long');
+		}
+
+		$this->albumMapper->setDescription($this->getAlbum()->getAlbum()->getId(), $description);
+	}
+
+	#[\Override]
+	public function setCover(int $fileId): void {
+		if ($fileId !== -1 && !in_array($fileId, $this->getAlbum()->getFileIds(), true)) {
+			throw new BadRequest('The cover must be a photo of the album');
+		}
+
+		$this->albumMapper->setCover($this->getAlbum()->getAlbum()->getId(), $fileId);
 	}
 }

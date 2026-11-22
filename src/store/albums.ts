@@ -21,6 +21,8 @@ export type AlbumEditableProperties = {
 	location: string // - The user set location of the album.
 	collaborators: Collaborator[] // - The list of collaborators.
 	filters?: Record<string, unknown[]> // - The list of filters.
+	description: string // - The user set description of the album.
+	cover: number // - The file id of the photo picked as cover, -1 when none was picked.
 }
 
 export type Album = Collection & {
@@ -34,6 +36,8 @@ export const albumsExtraProps = [
 	'<nc:dateRange />',
 	'<nc:collaborators />',
 	'<nc:filters />',
+	'<nc:cover />',
+	'<nc:description />',
 ]
 
 export const albumFilesExtraProps = ['<nc:photos-album-file-origin />']

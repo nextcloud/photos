@@ -126,6 +126,20 @@ describe('useCollectionsStore', () => {
 		expect(store.collections[`${ALBUMS_ROOT}/Holidays`].attributes.location).toBe('Lisbon')
 	})
 
+	test('escapes text and sends numbers when updating a collection', async () => {
+		const store = useCollectionsStore()
+		store.addCollections([album('Holidays')])
+		davClient.customRequest.mockResolvedValue(undefined)
+
+		const updated = await store.updateCollection(`${ALBUMS_ROOT}/Holidays`, { description: 'Sun & <sea>', cover: 7 })
+
+		const { data } = davClient.customRequest.mock.calls[0][1]
+		expect(data).toContain('<nc:description>Sun &amp; &lt;sea&gt;</nc:description>')
+		expect(data).toContain('<nc:cover>7</nc:cover>')
+		expect(updated.attributes.description).toBe('Sun & <sea>')
+		expect(updated.attributes.cover).toBe(7)
+	})
+
 	test('puts the files back when adding them to a collection fails', async () => {
 		const store = useCollectionsStore()
 		store.addCollections([album('Holidays', ['1'])])

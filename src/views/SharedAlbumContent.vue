@@ -31,6 +31,7 @@
 								:displayName="album.attributes.collaborators[0].label"
 								:user="album.attributes.collaborators[0].id" />
 						</div>
+						<AlbumDescription :description="album?.attributes.description" />
 					</template>
 
 					<template #default>
@@ -155,6 +156,7 @@ import Plus from 'vue-material-design-icons/Plus.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 // import Download from 'vue-material-design-icons/TrayArrowDown.vue'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
+import AlbumDescription from '../components/Albums/AlbumDescription.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
