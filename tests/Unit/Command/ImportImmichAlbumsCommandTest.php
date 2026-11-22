@@ -13,6 +13,7 @@ use OCA\Photos\Album\AlbumFile;
 use OCA\Photos\Album\AlbumInfo;
 use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Command\ImportImmichAlbumsCommand;
+use OCA\Photos\Import\ImmichImporter;
 use OCA\Photos\Listener\OriginalDateTimeMetadataProvider;
 use OCA\Photos\Service\ImmichApiService;
 use OCP\Files\File;
@@ -24,10 +25,13 @@ use OCP\FilesMetadata\IFilesMetadataManager;
 use OCP\Http\Client\IClient;
 use OCP\Http\Client\IClientService;
 use OCP\Http\Client\IResponse;
+use OCP\IGroupManager;
+use OCP\IL10N;
 use OCP\ITagManager;
 use OCP\ITags;
 use OCP\IUser;
 use OCP\IUserManager;
+use OCP\Security\IRemoteHostValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -132,13 +136,23 @@ class ImportImmichAlbumsCommandTest extends TestCase {
 		$clientService = $this->createMock(IClientService::class);
 		$clientService->method('newClient')->willReturn($this->client);
 
+		$l10n = $this->createMock(IL10N::class);
+		$l10n->method('t')->willReturnCallback(fn (string $text, array $parameters = []): string => vsprintf($text, $parameters));
+
+		$immichApiService = new ImmichApiService($clientService);
 		$this->commandTester = new CommandTester(new ImportImmichAlbumsCommand(
 			$userManager,
 			$rootFolder,
-			$filesMetadataManager,
-			$tagManager,
-			$this->albumMapper,
-			new ImmichApiService($clientService),
+			$immichApiService,
+			new ImmichImporter(
+				$filesMetadataManager,
+				$tagManager,
+				$this->albumMapper,
+				$immichApiService,
+				$this->createMock(IGroupManager::class),
+				$this->createMock(IRemoteHostValidator::class),
+				$l10n,
+			),
 		));
 	}
 
@@ -243,7 +257,7 @@ class ImportImmichAlbumsCommandTest extends TestCase {
 		$this->assertStringContainsString('Added to albums: 2', $display);
 		$this->assertStringContainsString('Marked as favorite: 1', $display);
 		$this->assertStringContainsString('Assets without matching file: 3', $display);
-		$this->assertStringContainsString('/alice/files/Immich/IMG_0001.JPG: added to album Summer', $display);
+		$this->assertStringContainsString('/alice/files/Immich/IMG_0001.JPG: album_file', $display);
 	}
 
 	public function testSkipsAmbiguousMatches(): void {
