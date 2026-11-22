@@ -86,14 +86,26 @@ defineProps<{
 	rootTitle: string
 }>()
 
-/** Number of photos used to compute the initial center of the map. */
-const CENTER_SAMPLE_SIZE = 200
+/** Number of photos the initial view of the map is fitted to. */
+const INITIAL_VIEW_SAMPLE_SIZE = 200
+
+/** Zoom level the initial view stops at, so that photos taken at one place still show its surroundings. */
+const INITIAL_VIEW_MAX_ZOOM = 13
 
 /** Size of a marker in pixels. */
 const MARKER_SIZE = 48
 
 /** Distance in pixels below which photos share a marker. */
 const CLUSTER_RADIUS = 56
+
+/** Zoom level the initial view never goes below, as a small map is then wider than the world. */
+const INITIAL_VIEW_MIN_ZOOM = 2
+
+/** Space in pixels kept between the center of a marker and the edges of the initial view: half a marker, its count and a margin. */
+const INITIAL_VIEW_PADDING = MARKER_SIZE / 2 + 16
+
+/** Height in pixels kept free for the attribution at the bottom of the initial view. */
+const ATTRIBUTION_HEIGHT = 24
 
 /** Size of the thumbnails, the one the timeline loads first so it is usually cached. */
 const THUMBNAIL_SIZE = 64
@@ -123,9 +135,10 @@ const geotaggedPhotos = computed<PhotoFile[]>(() => photos.value.filter((photo) 
 		&& !(latitude === 0 && longitude === 0)
 }))
 
-const center = ref<[number, number]>([20, 0])
-const zoom = ref(2)
+const center: [number, number] = [20, 0]
+const zoom = ref(INITIAL_VIEW_MIN_ZOOM)
 const map = shallowRef<L.Map>()
+const initialSample = shallowRef<[number, number][]>([])
 const bounds = shallowRef<L.LatLngBounds>()
 
 const clusters = computed(() => clusterMarkers(geotaggedPhotos.value, getCoordinates, zoom.value, CLUSTER_RADIUS))
@@ -149,19 +162,15 @@ const visibleMarkers = computed(() => {
 		})
 })
 
-// The view is centered on the photos loaded first, and left alone afterwards so
+// The view is fitted to the photos loaded first, and left alone afterwards so
 // that the map does not move under the user while more photos are coming in.
+// The map is only created once there are photos, so the area is kept for then.
 watch(geotaggedPhotos, (newPhotos, previousPhotos) => {
 	if (newPhotos.length === 0 || (previousPhotos?.length ?? 0) > 0) {
 		return
 	}
 
-	const sample = newPhotos.slice(0, CENTER_SAMPLE_SIZE).map((photo) => getCoordinates(photo))
-	center.value = [
-		sample.reduce((sum, [latitude]) => sum + latitude, 0) / sample.length,
-		sample.reduce((sum, [, longitude]) => sum + longitude, 0) / sample.length,
-	]
-	zoom.value = 4
+	initialSample.value = newPhotos.slice(0, INITIAL_VIEW_SAMPLE_SIZE).map((photo) => getCoordinates(photo))
 }, { immediate: true })
 
 onMounted(() => {
@@ -180,10 +189,29 @@ function getCoordinates(photo: PhotoFile): [number, number] {
 }
 
 /**
+ * Fit the view to the photos loaded first, keeping their markers whole and
+ * clear of the zoom control and of the attribution. Photos spread too far to
+ * fit on the map are left out from the end, half of them at a time.
+ *
  * @param leafletMap - The map, once it is created
  */
 function onMapReady(leafletMap: L.Map): void {
 	map.value = leafletMap
+
+	// The zoom control takes no room where it is hidden.
+	const zoomControl = leafletMap.zoomControl?.getContainer()
+	const zoomControlWidth = zoomControl ? zoomControl.offsetLeft + zoomControl.offsetWidth : 0
+	const paddingTopLeft = L.point(INITIAL_VIEW_PADDING + zoomControlWidth, INITIAL_VIEW_PADDING)
+	const paddingBottomRight = L.point(INITIAL_VIEW_PADDING, INITIAL_VIEW_PADDING + ATTRIBUTION_HEIGHT)
+
+	for (let size = initialSample.value.length; size > 0; size = Math.floor(size / 2)) {
+		const sampleBounds = L.latLngBounds(initialSample.value.slice(0, size))
+		if (size === 1 || leafletMap.getBoundsZoom(sampleBounds, false, paddingTopLeft.add(paddingBottomRight)) >= INITIAL_VIEW_MIN_ZOOM) {
+			leafletMap.fitBounds(sampleBounds, { paddingTopLeft, paddingBottomRight, maxZoom: INITIAL_VIEW_MAX_ZOOM, animate: false })
+			break
+		}
+	}
+
 	bounds.value = leafletMap.getBounds()
 }
 
@@ -267,6 +295,20 @@ function onMarkerClick(fileid: number): void {
 	&__map {
 		flex: 1;
 		min-height: 0;
+	}
+
+	// Leaflet stacks its layers and controls with z-indexes up to 1000, which
+	// must not compete with the menus and dialogs of the app.
+	&__map {
+		isolation: isolate;
+	}
+
+	// Touch screens zoom by pinching, and the buttons would cover the markers
+	// of a small map.
+	@media (hover: none) and (pointer: coarse) {
+		:deep(.leaflet-control-zoom) {
+			display: none;
+		}
 	}
 
 	:deep(.photos-map-marker > div) {
