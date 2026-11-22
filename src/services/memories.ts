@@ -104,6 +104,41 @@ export function buildYearRecap(photos: PhotoFile[]): YearRecap | null {
 	}
 }
 
+export type YearsAgoMemory = {
+	/** How many years before today the photos were taken. */
+	yearsAgo: number
+	/** Photos of that year, in chronological order. */
+	photos: PhotoFile[]
+	/** Photo to use as the cover of the memory. */
+	cover: PhotoFile
+}
+
+const SECONDS_PER_YEAR = 365.25 * SECONDS_PER_DAY
+
+/**
+ * Group the photos taken around today's date in earlier years by how many
+ * years ago they were taken. The "On this day" search matches a few days
+ * around the date, so the distance is rounded to the closest year to keep a
+ * year-end match with the year it was searched for.
+ *
+ * @param photos - Photos taken around today's date in earlier years
+ * @param now - The current date
+ * @return The memories, most recent first
+ */
+export function groupByYearsAgo(photos: PhotoFile[], now: Date = new Date()): YearsAgoMemory[] {
+	const nowTimestamp = now.getTime() / 1000
+	const chronological = [...photos].sort((photo1, photo2) => photo1.attributes.timestamp - photo2.attributes.timestamp)
+
+	return [...groupPhotos(chronological, (photo) => Math.round((nowTimestamp - photo.attributes.timestamp) / SECONDS_PER_YEAR)).entries()]
+		.filter(([yearsAgo]) => yearsAgo > 0)
+		.sort(([yearsAgo1], [yearsAgo2]) => yearsAgo1 - yearsAgo2)
+		.map(([yearsAgo, yearPhotos]) => ({
+			yearsAgo,
+			photos: yearPhotos,
+			cover: yearPhotos.find((photo) => photo.attributes.favorite === 1) ?? yearPhotos[Math.floor(yearPhotos.length / 2)],
+		}))
+}
+
 /**
  * Select the photos of a recap: all the favorites first, then a share of every
  * month until the recap is full.

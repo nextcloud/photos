@@ -6,7 +6,7 @@
 import type { PhotoFile } from '../store/files.ts'
 
 import { describe, expect, test } from 'vitest'
-import { buildYearRecap, detectTrips } from './memories.ts'
+import { buildYearRecap, detectTrips, groupByYearsAgo } from './memories.ts'
 
 const DAY = 24 * 60 * 60
 
@@ -199,5 +199,66 @@ describe('buildYearRecap', () => {
 		const highlights = recap?.highlights ?? []
 
 		expect(recap?.cover).toBe(highlights[Math.floor(highlights.length / 2)])
+	})
+})
+
+describe('groupByYearsAgo', () => {
+	const now = new Date(2026, 10, 22, 10, 0)
+
+	/**
+	 * @param fileId - File id of the photo
+	 * @param date - Capture date of the photo
+	 * @param favorite - Whether the photo is a favorite
+	 */
+	function photoTakenOn(fileId: number, date: Date, favorite: number = 0): PhotoFile {
+		return { fileid: fileId, attributes: { timestamp: date.getTime() / 1000, favorite } } as unknown as PhotoFile
+	}
+
+	test('returns no memory without photos', () => {
+		expect(groupByYearsAgo([], now)).toEqual([])
+	})
+
+	test('groups the photos by how many years ago they were taken, most recent first', () => {
+		const memories = groupByYearsAgo([
+			photoTakenOn(1, new Date(2020, 10, 22, 8, 0)),
+			photoTakenOn(2, new Date(2025, 10, 21, 18, 0)),
+			photoTakenOn(3, new Date(2020, 10, 23, 9, 0)),
+			photoTakenOn(4, new Date(2023, 10, 22, 12, 0)),
+		], now)
+
+		expect(memories.map((memory) => memory.yearsAgo)).toEqual([1, 3, 6])
+		expect(memories[2].photos.map((photo) => photo.fileid)).toEqual([1, 3])
+	})
+
+	test('keeps a match across the turn of the year with the year it was searched for', () => {
+		const memories = groupByYearsAgo([
+			photoTakenOn(1, new Date(2023, 11, 30)),
+		], new Date(2025, 0, 2))
+
+		expect(memories.map((memory) => memory.yearsAgo)).toEqual([1])
+	})
+
+	test('leaves out photos taken this year', () => {
+		expect(groupByYearsAgo([photoTakenOn(1, new Date(2026, 10, 20))], now)).toEqual([])
+	})
+
+	test('uses a favorite as cover when there is one', () => {
+		const memories = groupByYearsAgo([
+			photoTakenOn(1, new Date(2024, 10, 22, 8, 0)),
+			photoTakenOn(2, new Date(2024, 10, 22, 9, 0)),
+			photoTakenOn(3, new Date(2024, 10, 22, 10, 0), 1),
+		], now)
+
+		expect(memories[0].cover.fileid).toBe(3)
+	})
+
+	test('uses the middle photo as cover without favorites', () => {
+		const memories = groupByYearsAgo([
+			photoTakenOn(1, new Date(2024, 10, 22, 8, 0)),
+			photoTakenOn(2, new Date(2024, 10, 22, 9, 0)),
+			photoTakenOn(3, new Date(2024, 10, 22, 10, 0)),
+		], now)
+
+		expect(memories[0].cover.fileid).toBe(2)
 	})
 })
