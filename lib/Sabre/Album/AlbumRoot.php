@@ -77,4 +77,9 @@ class AlbumRoot extends AlbumRootBase implements ICollection, ICopyTarget {
 	public function setFilters(string $filters) {
 		$this->albumMapper->setAlbumFilters($this->getAlbum()->getAlbum()->getId(), $filters);
 	}
+
+	#[\Override]
+	public function setGuestUpload(bool $allowed): void {
+		$this->albumMapper->setGuestUpload($this->getAlbum()->getAlbum()->getId(), $allowed);
+	}
 }

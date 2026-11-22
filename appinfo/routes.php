@@ -177,6 +177,11 @@ return [
 				'token' => '.*',
 			],
 		],
+		[
+			'name' => 'publicAlbum#upload',
+			'url' => '/api/v1/public/{token}/upload',
+			'verb' => 'POST',
+		],
 
 		// Data APIs
 		[

@@ -11,8 +11,10 @@ namespace OCA\Photos\Sabre;
 use OCA\DAV\Connector\Sabre\FilesPlugin;
 use OCA\Photos\Album\AlbumFile;
 use OCA\Photos\Sabre\Album\AlbumPhoto;
+use OCA\Photos\Sabre\Album\AlbumRoot;
 use OCA\Photos\Sabre\Album\AlbumRootBase;
 use OCA\Photos\Sabre\Album\PublicAlbumPhoto;
+use OCA\Photos\Sabre\Album\PublicAlbumRoot;
 use OCA\Photos\Sabre\Place\PlacePhoto;
 use OCA\Photos\Sabre\Place\PlaceRoot;
 use OCP\Files\DavUtil;
@@ -42,6 +44,7 @@ class PropFindPlugin extends ServerPlugin {
 	public const NBITEMS_PROPERTYNAME = '{http://nextcloud.org/ns}nbItems';
 	public const COLLABORATORS_PROPERTYNAME = '{http://nextcloud.org/ns}collaborators';
 	public const FILTERS_PROPERTYNAME = '{http://nextcloud.org/ns}filters';
+	public const GUEST_UPLOAD_PROPERTYNAME = '{http://nextcloud.org/ns}guest-upload';
 	public const PERMISSIONS_PROPERTYNAME = '{http://owncloud.org/ns}permissions';
 	public const PHOTOS_ALBUM_FILE_ORIGIN_PROPERTYNAME = '{http://nextcloud.org/ns}photos-album-file-origin';
 	public const PHOTOS_COLLECTION_FILE_ORIGINAL_FILENAME_PROPERTYNAME = '{http://nextcloud.org/ns}photos-collection-file-original-filename';
@@ -152,6 +155,10 @@ class PropFindPlugin extends ServerPlugin {
 			$propFind->handle(self::FILTERS_PROPERTYNAME, fn (): ?string => $node->getFilters());
 		}
 
+		if ($node instanceof AlbumRoot || $node instanceof PublicAlbumRoot) {
+			$propFind->handle(self::GUEST_UPLOAD_PROPERTYNAME, fn (): int => $node->isGuestUploadAllowed() ? 1 : 0);
+		}
+
 		if ($node instanceof PlaceRoot) {
 			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn (): int => $node->getFirstPhoto());
 		}
@@ -228,6 +235,10 @@ class PropFindPlugin extends ServerPlugin {
 			});
 			$propPatch->handle(self::FILTERS_PROPERTYNAME, function ($filters) use ($node) {
 				$node->setFilters($filters);
+				return true;
+			});
+			$propPatch->handle(self::GUEST_UPLOAD_PROPERTYNAME, function ($allowed) use ($node) {
+				$node->setGuestUpload($allowed === '1');
 				return true;
 			});
 		}

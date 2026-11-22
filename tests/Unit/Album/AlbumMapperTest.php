@@ -165,6 +165,28 @@ class AlbumMapperTest extends TestCase {
 		$this->assertEquals('renamed', $retrievedAlbum->getTitle());
 	}
 
+	public function testGuestUploadIsOffByDefaultAndFollowsTheLink(): void {
+		$this->l10n->method('t')->willReturnArgument(0);
+		$this->secureRandom->method('generate')->willReturnOnConsecutiveCalls('token1', 'token2');
+		$album = $this->mapper->create('user1', 'album1');
+		$link = ['id' => '', 'type' => AlbumMapper::TYPE_LINK];
+
+		$this->mapper->setGuestUpload($album->getId(), true);
+		$this->assertFalse($this->mapper->isGuestUploadAllowed($album->getId()), 'no link, nothing to allow');
+
+		$this->mapper->setCollaborators($album->getId(), [$link]);
+		$this->assertFalse($this->mapper->isGuestUploadAllowed($album->getId()), 'a new link starts without guest uploads');
+
+		$this->mapper->setGuestUpload($album->getId(), true);
+		$this->assertTrue($this->mapper->isGuestUploadAllowed($album->getId()));
+
+		$this->mapper->setCollaborators($album->getId(), []);
+		$this->mapper->setCollaborators($album->getId(), [$link]);
+		$this->assertFalse($this->mapper->isGuestUploadAllowed($album->getId()), 'a recreated link starts without guest uploads');
+
+		$this->mapper->delete($album->getId());
+	}
+
 	public function testCreateUpdateGet() {
 		$album = $this->mapper->create('user1', 'album1');
 		$this->mapper->setLocation($album->getId(), 'nowhere');

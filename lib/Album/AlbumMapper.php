@@ -457,6 +457,32 @@ class AlbumMapper {
 	}
 
 	/**
+	 * Whether visitors of the album's public link may add photos to it.
+	 */
+	public function isGuestUploadAllowed(int $albumId): bool {
+		$query = $this->connection->getQueryBuilder();
+		$query->select('guest_upload')
+			->from('photos_albums_collabs')
+			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter(self::TYPE_LINK, IQueryBuilder::PARAM_INT)));
+
+		return (bool)$query->executeQuery()->fetchOne();
+	}
+
+	/**
+	 * Allow or forbid guest uploads on the album's public link, if it has one.
+	 * A newly created link starts with guest uploads forbidden.
+	 */
+	public function setGuestUpload(int $albumId, bool $allowed): void {
+		$query = $this->connection->getQueryBuilder();
+		$query->update('photos_albums_collabs')
+			->set('guest_upload', $query->createNamedParameter($allowed, IQueryBuilder::PARAM_BOOL))
+			->where($query->expr()->eq('album_id', $query->createNamedParameter($albumId, IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->eq('collaborator_type', $query->createNamedParameter(self::TYPE_LINK, IQueryBuilder::PARAM_INT)))
+			->executeStatement();
+	}
+
+	/**
 	 * @return AlbumInfo[]
 	 */
 	public function getSharedAlbumsForCollaborator(string $collaboratorId, int $collaboratorType): array {

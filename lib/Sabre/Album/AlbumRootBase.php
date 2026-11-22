@@ -234,6 +234,14 @@ abstract class AlbumRootBase implements ICollection, ICopyTarget {
 		throw new Forbidden('Setting the filters is not allowed on this type of album');
 	}
 
+	final public function isGuestUploadAllowed(): bool {
+		return $this->albumMapper->isGuestUploadAllowed($this->album->getAlbum()->getId());
+	}
+
+	public function setGuestUpload(bool $allowed): void {
+		throw new Forbidden('Setting guest uploads is not allowed on this type of album');
+	}
+
 	public function getCover(): int {
 		$lastAddedPhoto = $this->album->getAlbum()->getLastAddedPhoto();
 
