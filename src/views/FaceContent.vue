@@ -94,6 +94,17 @@
 							{{ t('photos', 'Remove from favorites') }}
 						</NcActionButton>
 						<NcActionButton
+							v-if="socialEnabled"
+							:closeAfterClick="true"
+							:disabled="!canPostToSocial(selectedPhotos)"
+							:description="canPostToSocial(selectedPhotos) ? '' : t('photos', 'Up to {count} photos, no videos', { count: MAX_SOCIAL_PHOTOS })"
+							@click="showSocialPost = true">
+							<template #icon>
+								<SendOutline />
+							</template>
+							{{ t('photos', 'Post to Social') }}
+						</NcActionButton>
+						<NcActionButton
 							:closeAfterClick="true"
 							@click="showMoveModal = true">
 							<template #icon>
@@ -188,6 +199,11 @@
 			@closing="showMoveModal = false">
 			<FaceMergeForm :firstFace="faceName" @select="handleMove($event, selectedFileIds)" />
 		</NcDialog>
+
+		<PostToSocialDialog
+			v-if="showSocialPost"
+			:photos="selectedPhotos"
+			@close="showSocialPost = false" />
 	</div>
 </template>
 
@@ -219,12 +235,15 @@ import Download from 'vue-material-design-icons/TrayArrowDown.vue'
 import FaceMergeForm from '../components/Faces/FaceMergeForm.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
+import PostToSocialDialog from '../components/PostToSocialDialog.vue'
 import { useFetchFaces } from '../composables/useFetchFaces.ts'
 import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
 import { logger } from '../services/logger.ts'
+import { canPostToSocial, isSocialEnabled, MAX_SOCIAL_PHOTOS } from '../services/socialPost.ts'
 import { useFacesStore } from '../store/faces.ts'
 import { useFilesStore } from '../store/files.ts'
+import { toPhotoTarget } from '../utils/fileUtils.ts'
 
 const props = withDefaults(defineProps<{
 	faceName?: string
@@ -241,6 +260,8 @@ const { selection, selectedFileIds, onFileSelectToggle, onUncheckFiles, resetSel
 const nameInput = useTemplateRef<HTMLInputElement>('nameInput')
 
 const showMoveModal = ref(false)
+const showSocialPost = ref(false)
+const socialEnabled = isSocialEnabled()
 const showMergeModal = ref(false)
 const showRenameModal = ref(false)
 const loadingCount = ref(0)
@@ -251,6 +272,8 @@ const faces = computed(() => facesStore.faces)
 const facesFiles = computed(() => facesStore.facesFiles)
 const face = computed<Collection | undefined>(() => faces.value[props.faceName])
 const faceFileIds = computed<string[]>(() => facesFiles.value[props.faceName] || [])
+
+const selectedPhotos = computed(() => selectedFileIds.value.map((fileId) => toPhotoTarget(filesStore.files[fileId])))
 
 // Favorite all selection if at least one file is not on the favorites.
 const shouldFavoriteSelection = computed<boolean>(() => selectedFileIds.value.some((fileId) => filesStore.files[fileId].attributes.favorite === 0))

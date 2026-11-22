@@ -156,6 +156,18 @@
 						</NcActionButton>
 
 						<NcActionButton
+							v-if="socialEnabled"
+							:closeAfterClick="true"
+							:disabled="!canPostToSocial(selectedPhotos)"
+							:description="canPostToSocial(selectedPhotos) ? '' : t('photos', 'Up to {count} photos, no videos', { count: MAX_SOCIAL_PHOTOS })"
+							@click="showSocialPost = true">
+							{{ t('photos', 'Post to Social') }}
+							<template #icon>
+								<SendOutline />
+							</template>
+						</NcActionButton>
+
+						<NcActionButton
 							:closeAfterClick="true"
 							:aria-label="t('photos', 'Delete selection')"
 							data-cy-header-action="delete-selection"
@@ -227,6 +239,11 @@
 			@close="showAlbumPicker = false">
 			<AlbumPicker @albumPicked="addSelectionToAlbum" />
 		</NcModal>
+
+		<PostToSocialDialog
+			v-if="showSocialPost"
+			:photos="selectedPhotos"
+			@close="showSocialPost = false" />
 	</div>
 </template>
 
@@ -254,6 +271,7 @@ import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue
 import Play from 'vue-material-design-icons/Play.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import PlusBoxMultipleOutline from 'vue-material-design-icons/PlusBoxMultipleOutline.vue'
+import SendOutline from 'vue-material-design-icons/SendOutline.vue'
 import Star from 'vue-material-design-icons/Star.vue'
 import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
@@ -265,6 +283,7 @@ import DateScrubber from '../components/DateScrubber.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import PostToSocialDialog from '../components/PostToSocialDialog.vue'
 import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
 import { useFetchFiles } from '../composables/useFetchFiles.ts'
 import { useFilesByMonth } from '../composables/useFilesByMonth.ts'
@@ -272,11 +291,13 @@ import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { useGridDensity } from '../composables/useGridDensity.ts'
 import { allMimes } from '../services/AllowedMimes.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
+import { canPostToSocial, isSocialEnabled, MAX_SOCIAL_PHOTOS } from '../services/socialPost.ts'
 import { useCollectionsStore } from '../store/collections.ts'
 import { useFilesStore } from '../store/files.ts'
 import { useFilterStore } from '../store/filters.ts'
 import { configChangedEvent } from '../store/userConfig.ts'
 import { formatMonth, formatYear } from '../utils/dateUtils.ts'
+import { toPhotoTarget } from '../utils/fileUtils.ts'
 
 const props = withDefaults(defineProps<{
 	onlyFavorites?: boolean
@@ -305,6 +326,8 @@ const newAlbumButton = useTemplateRef<InstanceType<typeof NcButton>>('newAlbumBu
 
 const showAlbumCreationForm = ref(false)
 const showAlbumPicker = ref(false)
+const showSocialPost = ref(false)
+const socialEnabled = isSocialEnabled()
 const appContent = document.getElementById('app-content-vue')
 // Month section the user picked in the DateScrubber, forwarded to
 // FilesListViewer's `scrollToSection`. Empty means no override.
@@ -320,6 +343,8 @@ const shouldFavoriteSelection = computed<boolean>(() => {
 	// Favorite all selection if at least one file is not in the favorites.
 	return selectedFileIds.value.some((fileId) => files.value[fileId].attributes.favorite === 0)
 })
+
+const selectedPhotos = computed(() => selectedFileIds.value.map((fileId) => toPhotoTarget(files.value[fileId])))
 
 // Photos of the timeline that are loaded, in the order they are shown.
 const timelinePhotos = computed(() => fetchedFileIds.value

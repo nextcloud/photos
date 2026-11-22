@@ -84,6 +84,7 @@ export type PhotoTarget = {
 	basename: string
 	/** Path of the photo on the files DAV endpoint. */
 	davPath: string
+	mime: string
 	/** Permissions of the current user on the photo. */
 	permissions: number
 	/** Whether the current user marked the photo as a favorite. */
@@ -104,6 +105,7 @@ export function toPhotoTarget(file: Node): PhotoTarget {
 			fileid: file.fileid as number,
 			basename: file.basename,
 			davPath: `${file.root}${file.path}`,
+			mime: file.mime ?? '',
 			permissions: file.permissions,
 			favorite: file.attributes.favorite === 1,
 		}
@@ -113,6 +115,7 @@ export function toPhotoTarget(file: Node): PhotoTarget {
 		fileid: file.fileid as number,
 		basename: basename(originalFilename),
 		davPath: `${getRootPath()}${originalFilename}`,
+		mime: file.mime ?? '',
 		permissions: file.permissions,
 		favorite: file.attributes.favorite === 1,
 	}

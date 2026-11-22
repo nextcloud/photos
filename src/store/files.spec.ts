@@ -58,7 +58,7 @@ function photo(fileId: number, attributes: Record<string, unknown> = {}): File {
  * @param fileId - Id of the photo
  */
 function target(fileId: number): PhotoTarget {
-	return { fileid: fileId, basename: `${fileId}.jpg`, davPath: `/files/alice/Photos/${fileId}.jpg`, permissions: 31, favorite: false }
+	return { fileid: fileId, basename: `${fileId}.jpg`, davPath: `/files/alice/Photos/${fileId}.jpg`, mime: 'image/jpeg', permissions: 31, favorite: false }
 }
 
 describe('useFilesStore', () => {
