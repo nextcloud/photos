@@ -220,4 +220,11 @@ return [
 			],
 		],
 	],
+	'ocs' => [
+		[
+			'name' => 'timeline#days',
+			'url' => '/api/v1/timeline/days',
+			'verb' => 'GET',
+		],
+	],
 ];
