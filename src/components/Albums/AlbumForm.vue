@@ -98,10 +98,7 @@ import type { Collection } from '../../services/collectionFetcher.ts'
 import type { FilterOption } from '../../services/PhotosFilters/PhotosFilter.ts'
 import type { Album, AlbumEditableProperties, Collaborator } from '../../store/albums.ts'
 
-import { InvalidFilenameError, InvalidFilenameErrorReason, validateFilename } from '@nextcloud/files'
-import { resultToNode } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
-import { generateRemoteUrl } from '@nextcloud/router'
 import { computed, nextTick, onMounted, ref, toRaw, useTemplateRef } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
@@ -113,10 +110,8 @@ import PhotosFiltersDisplay from '../PhotosFilters/PhotosFiltersDisplay.vue'
 import PhotosFiltersInput from '../PhotosFilters/PhotosFiltersInput.vue'
 import CollaboratorsSelectionForm from './CollaboratorsSelectionForm.vue'
 import { photosFilters as filters } from '../../services/PhotosFilters/index.ts'
-import { albumsPrefix } from '../../store/albums.ts'
-import { useAlbumsStore } from '../../store/albums.ts'
+import { buildLocalAlbum, getAlbumNameError, useAlbumsStore } from '../../store/albums.ts'
 import { useCollectionsStore } from '../../store/collections.ts'
-import { formatMonthAndYear } from '../../utils/dateUtils.ts'
 
 const props = withDefaults(defineProps<{
 	album?: Album | null
@@ -159,26 +154,7 @@ const albumNameValidationError = computed<string | undefined>(() => {
 		return t('files', 'This name is already in use.')
 	}
 
-	try {
-		validateFilename(albumName.value)
-	} catch (error) {
-		if (!(error instanceof InvalidFilenameError)) {
-			throw error
-		}
-
-		switch (error.reason) {
-			case InvalidFilenameErrorReason.Character:
-				return t('files', '"{char}" is not allowed inside a filename.', { char: error.segment })
-			case InvalidFilenameErrorReason.ReservedName:
-				return undefined // We don't need to enforce that for albums.
-			case InvalidFilenameErrorReason.Extension:
-				return undefined // We don't need to enforce that for albums.
-			default:
-				return t('files', 'Invalid filename.')
-		}
-	}
-
-	return undefined
+	return getAlbumNameError(albumName.value)
 })
 
 const canSubmit = computed(() => albumName.value !== '' && albumNameValidationError.value === undefined && !loading.value)
@@ -199,25 +175,11 @@ async function handleCreateAlbum(collaborators: Collaborator[] = []) {
 	try {
 		loading.value = true
 
-		const localAlbum = resultToNode({
-			basename: albumName.value,
-			filename: albumsPrefix + '/' + albumName.value,
-			lastmod: '',
-			size: 0,
-			type: 'directory',
-			etag: null,
-			props: {
-				displayname: albumName.value,
-				resourcetype: {},
-				nbItems: 0,
-				location: albumLocation.value,
-				'last-photo': -1,
-				date: formatMonthAndYear(new Date()),
-				collaborators,
-				filters: props.filtersValue,
-				source: generateRemoteUrl(`dav/${albumFileName.value}`),
-			},
-		}, albumsPrefix) as Collection
+		const localAlbum = buildLocalAlbum(albumName.value, {
+			location: albumLocation.value,
+			collaborators,
+			filters: props.filtersValue,
+		})
 
 		let album = await collectionsStore.createCollection(localAlbum)
 
