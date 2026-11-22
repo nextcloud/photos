@@ -8,12 +8,13 @@ import type { PhotoFile } from '../store/files.ts'
 /**
  * A run of photos taken in one go - a burst, a live photo, a quick double tap -
  * folded into the tile of its first member so the grid does not drown in a dozen
- * near-identical pictures of the same subject.
+ * near-identical pictures of the same subject. The variants of one shot (see
+ * `shotVariants.ts`) are stacked the same way.
  */
 export interface BurstStack {
-	/** The photo the grid renders, i.e. the first one of the run. */
+	/** The photo the grid renders: the first one of a run, the preferred variant of a shot. */
 	leaderId: string
-	/** Every photo of the run, the leader first, in the order they were given. */
+	/** Every photo of the stack, the leader first. */
 	memberIds: string[]
 }
 
@@ -94,7 +95,9 @@ export function clusterBursts(
 
 /**
  * Fold the members of every run into their leader, leaving the list the grid
- * renders: one tile per run, and the photos that are part of none unchanged.
+ * renders: one tile per run, at the position of its leader, and the photos that
+ * are part of none unchanged. A member whose leader is not in the list, such as
+ * the variant of a shot whose leader sits in another month, is left out too.
  *
  * @param fileIds - File ids in the order the grid shows them.
  * @param stacks - The runs, as {@link clusterBursts} returns them.
@@ -114,16 +117,5 @@ export function applyBurstStacks(
 		}
 	}
 
-	const folded: string[] = []
-	const seen = new Set<string>()
-	for (const fileId of fileIds) {
-		const leaderId = leaderOf[fileId] ?? fileId
-		if (seen.has(leaderId)) {
-			continue
-		}
-		seen.add(leaderId)
-		folded.push(leaderId)
-	}
-
-	return folded
+	return fileIds.filter((fileId) => (leaderOf[fileId] ?? fileId) === fileId)
 }
