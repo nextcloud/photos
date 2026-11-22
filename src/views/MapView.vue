@@ -40,7 +40,7 @@
 			:zoom="zoom"
 			:center="center"
 			:options="{ attributionControl: false }">
-			<LTileLayer :url="tileServerUrl" :options="TILE_LAYER_OPTIONS" />
+			<LTileLayer :url="TILE_SERVER_URL" :options="TILE_LAYER_OPTIONS" />
 			<LControlAttribution position="bottomright" :prefix="attribution" />
 			<!--
 				One marker per photo: libraries with more than a few thousand
@@ -76,6 +76,7 @@ import EmptyIllustration from '../components/EmptyIllustration.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import { useLoadedPhotos } from '../composables/useLoadedPhotos.ts'
 import { isMapsInstalled } from '../services/IsMapsInstalled.ts'
+import { TILE_SERVER_URL } from '../utils/mapTiles.ts'
 
 import 'leaflet/dist/leaflet.css'
 
@@ -86,7 +87,6 @@ defineProps<{
 /** Number of photos used to compute the initial center of the map. */
 const CENTER_SAMPLE_SIZE = 200
 
-const tileServerUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 const attribution = '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 const mapsAppUrl = generateUrl('/apps/maps')
 

@@ -457,6 +457,20 @@ class AlbumMapper {
 	}
 
 	/**
+	 * Count the albums of a user that anyone with a public link can open.
+	 */
+	public function countPublicLinkAlbumsForUser(string $userId): int {
+		$query = $this->connection->getQueryBuilder();
+		$query->select($query->createFunction('COUNT(DISTINCT ' . $query->getColumnName('a.album_id') . ')'))
+			->from('photos_albums', 'a')
+			->innerJoin('a', 'photos_albums_collabs', 'c', $query->expr()->eq('a.album_id', 'c.album_id'))
+			->where($query->expr()->eq('a.user', $query->createNamedParameter($userId)))
+			->andWhere($query->expr()->eq('c.collaborator_type', $query->createNamedParameter(self::TYPE_LINK, IQueryBuilder::PARAM_INT)));
+
+		return (int)$query->executeQuery()->fetchOne();
+	}
+
+	/**
 	 * @return AlbumInfo[]
 	 */
 	public function getSharedAlbumsForCollaborator(string $collaboratorId, int $collaboratorType): array {

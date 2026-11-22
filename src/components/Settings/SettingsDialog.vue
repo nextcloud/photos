@@ -14,6 +14,7 @@
 			<PhotosUploadLocationSettings />
 			<CroppedLayoutSettings />
 		</NcAppSettingsSection>
+		<PrivacySettings />
 		<KeyboardShortcutsSettings />
 	</NcAppSettingsDialog>
 </template>
@@ -26,6 +27,7 @@ import CroppedLayoutSettings from './CroppedLayoutSettings.vue'
 import KeyboardShortcutsSettings from './KeyboardShortcutsSettings.vue'
 import PhotosSourceLocationsSettings from './PhotosSourceLocationsSettings.vue'
 import PhotosUploadLocationSettings from './PhotosUploadLocationSettings.vue'
+import PrivacySettings from './PrivacySettings.vue'
 
 withDefaults(defineProps<{
 	open?: boolean

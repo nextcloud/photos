@@ -18,6 +18,7 @@ use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\IMimeTypeLoader;
 use OCP\IDBConnection;
+use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IL10N;
 use OCP\IUserManager;
@@ -84,6 +85,7 @@ class AlbumMapperTest extends TestCase {
 
 		$this->connection->getQueryBuilder()->delete('photos_albums')->executeStatement();
 		$this->connection->getQueryBuilder()->delete('photos_albums_files')->executeStatement();
+		$this->connection->getQueryBuilder()->delete('photos_albums_collabs')->executeStatement();
 
 		parent::tearDown();
 	}
@@ -163,6 +165,23 @@ class AlbumMapperTest extends TestCase {
 
 		$retrievedAlbum = $this->mapper->get($album->getId());
 		$this->assertEquals('renamed', $retrievedAlbum->getTitle());
+	}
+
+	public function testCountPublicLinkAlbumsForUser() {
+		$this->secureRandom->method('generate')->willReturnOnConsecutiveCalls('token1', 'token2', 'token3');
+		$this->groupManager->method('get')->willReturn($this->createMock(IGroup::class));
+		$linked1 = $this->mapper->create('user1', 'linked1');
+		$linked2 = $this->mapper->create('user1', 'linked2');
+		$groupOnly = $this->mapper->create('user1', 'group');
+		$otherUser = $this->mapper->create('user2', 'linked3');
+		$this->mapper->setCollaborators($linked1->getId(), [['id' => '', 'type' => AlbumMapper::TYPE_LINK]]);
+		$this->mapper->setCollaborators($linked2->getId(), [['id' => '', 'type' => AlbumMapper::TYPE_LINK], ['id' => 'group1', 'type' => AlbumMapper::TYPE_GROUP]]);
+		$this->mapper->setCollaborators($groupOnly->getId(), [['id' => 'group1', 'type' => AlbumMapper::TYPE_GROUP]]);
+		$this->mapper->setCollaborators($otherUser->getId(), [['id' => '', 'type' => AlbumMapper::TYPE_LINK]]);
+
+		$this->assertSame(2, $this->mapper->countPublicLinkAlbumsForUser('user1'));
+		$this->assertSame(1, $this->mapper->countPublicLinkAlbumsForUser('user2'));
+		$this->assertSame(0, $this->mapper->countPublicLinkAlbumsForUser('user3'));
 	}
 
 	public function testCreateUpdateGet() {

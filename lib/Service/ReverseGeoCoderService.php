@@ -25,6 +25,7 @@ use OCP\IConfig;
 
 class ReverseGeoCoderService {
 	public const CONFIG_DISABLE_PLACES = 'disable_places';
+	public const CITIES_DOWNLOAD_URL = 'https://download.nextcloud.com/server/apps/photos/cities1000.zip';
 	private ?ISimpleFolder $geoNameFolderCache = null;
 	private ?NearestSearch $fsSearcher = null;
 	/** @var array<int, string> */
@@ -81,7 +82,7 @@ class ReverseGeoCoderService {
 			return;
 		}
 
-		$response = $this->clientService->newClient()->get('https://download.nextcloud.com/server/apps/photos/cities1000.zip');
+		$response = $this->clientService->newClient()->get(self::CITIES_DOWNLOAD_URL);
 		$tmpFile = tmpfile();
 		$cities1000ZipTmpFileName = stream_get_meta_data($tmpFile)['uri'];
 		fclose($tmpFile);

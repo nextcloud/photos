@@ -15,7 +15,7 @@
 			dragging: false,
 			attributionControl: false,
 		}">
-		<LTileLayer :url="url" :options="tileLayerOptions" />
+		<LTileLayer :url="TILE_SERVER_URL" :options="tileLayerOptions" />
 		<LControlAttribution
 			position="bottomright"
 			:prefix="attribution" />
@@ -41,6 +41,7 @@ import {
 	LTooltip,
 } from '@vue-leaflet/vue-leaflet'
 import { computed } from 'vue'
+import { TILE_SERVER_URL } from '../utils/mapTiles.ts'
 
 import 'leaflet/dist/leaflet.css'
 import '../utils/leaflet-icons.ts'
@@ -71,7 +72,6 @@ const props = withDefaults(defineProps<{
 	name: '',
 })
 
-const url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 // Nextcloud answers every request with `Referrer-Policy: no-referrer`,
 // and the tile server turns a request that carries no referrer down.
 // Setting the policy on the tiles themselves overrides that for them

@@ -14,6 +14,11 @@ return [
 			'verb' => 'PUT',
 		],
 		[
+			'name' => 'api#privacy',
+			'url' => '/api/v1/privacy',
+			'verb' => 'GET',
+		],
+		[
 			'name' => 'api#serviceWorker',
 			'url' => '/service-worker.js',
 			'verb' => 'GET',

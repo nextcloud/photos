@@ -10,6 +10,7 @@ namespace OCA\Photos\Controller;
 
 use JsonException;
 use OCA\Photos\AppInfo\Application;
+use OCA\Photos\Service\PrivacyOverviewService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
@@ -24,6 +25,7 @@ class ApiController extends Controller {
 		IRequest $request,
 		private readonly IUserConfig $userConfig,
 		private readonly IUserSession $userSession,
+		private readonly PrivacyOverviewService $privacyOverview,
 	) {
 		parent::__construct(Application::APP_ID, $request);
 	}
@@ -83,6 +85,20 @@ class ApiController extends Controller {
 
 		$this->userConfig->setValueString($user->getUid(), Application::APP_ID, $key, $value);
 		return new JSONResponse([], Http::STATUS_OK);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * Where the photos and metadata of the current user are processed
+	 */
+	public function privacy(): JSONResponse {
+		$user = $this->userSession->getUser();
+		if (is_null($user)) {
+			return new JSONResponse([], Http::STATUS_PRECONDITION_FAILED);
+		}
+
+		return new JSONResponse($this->privacyOverview->getOverview($user));
 	}
 
 	private function validatePath(mixed $path): bool {
