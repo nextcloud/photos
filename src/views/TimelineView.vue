@@ -175,6 +175,7 @@
 			class="timeline__file-list"
 			:fileIdsBySection="fileIdsByMonth"
 			:sections="monthsList"
+			:sectionHeaderHeight="48"
 			:loading="loadingFiles"
 			:baseHeight="tileBaseHeight"
 			:emptyMessage="t('photos', 'No photos or videos in here')"
@@ -506,5 +507,17 @@ onUnmounted(() => {
 			top: var(--photos-navigation-height);
 		}
 	}
+}
+
+.section-header {
+	display: flex;
+	align-items: baseline;
+	gap: var(--default-grid-baseline);
+	margin: 0;
+	padding-block-start: calc(4 * var(--default-grid-baseline));
+	padding-inline-start: 2px;
+	font-size: 20px;
+	font-weight: normal;
+	line-height: 28px;
 }
 </style>
