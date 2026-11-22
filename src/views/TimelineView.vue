@@ -496,7 +496,8 @@ onUnmounted(() => {
 	}
 
 	&__file-list {
-		padding: 0 64px;
+		// The end side leaves room for the year labels of the date scrubber.
+		padding-inline: 64px 96px;
 
 		@media only screen and (max-width: 1200px) {
 			padding: 0 4px;
