@@ -8,7 +8,11 @@
 		The album name and its location are already announced by the navigation
 		header below, so the hero is only there to be looked at.
 	-->
-	<header v-if="hasCover" class="album-hero" aria-hidden="true">
+	<header
+		v-if="hasCover"
+		ref="hero"
+		class="album-hero"
+		aria-hidden="true">
 		<!--
 			The cover is a layer of its own so that the parallax moves the photo
 			and the blurhash standing in for it while it loads together.
@@ -45,8 +49,11 @@
 
 <script lang="ts" setup>
 import { generateUrl } from '@nextcloud/router'
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
 import NcBlurHash from '@nextcloud/vue/components/NcBlurHash'
+
+/** Whether some of the hero is on screen, false when the album has none. */
+const inView = defineModel<boolean>('inView', { default: false })
 
 const props = withDefaults(defineProps<{
 	/** File id of the cover photo, `-1` when the album has no photo yet. */
@@ -111,6 +118,26 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => scroller.removeEventListener('scroll', onScroll))
+
+const hero = useTemplateRef<HTMLElement>('hero')
+
+const inViewObserver = new IntersectionObserver(([entry]) => {
+	inView.value = entry.isIntersecting
+}, { root: scroller instanceof Window ? null : scroller })
+
+watch(hero, (element) => {
+	inViewObserver.disconnect()
+	if (element) {
+		inViewObserver.observe(element)
+	} else {
+		inView.value = false
+	}
+})
+
+onBeforeUnmount(() => {
+	inViewObserver.disconnect()
+	inView.value = false
+})
 
 /**
  * Move the cover slower than the rest of the page, up to the extra height it

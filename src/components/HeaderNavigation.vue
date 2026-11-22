@@ -18,7 +18,7 @@
 		</NcButton>
 
 		<!-- Main Navigation title -->
-		<div class="photos-navigation__title">
+		<div class="photos-navigation__title" :class="{ 'hidden-visually': titleHidden }">
 			<h1 class="photos-navigation__title__main" @click="refresh">
 				{{ name }}
 			</h1>
@@ -58,6 +58,8 @@ const props = withDefaults(defineProps<{
 	path?: string
 	title: string
 	rootTitle?: string
+	/** Keep the title and its subtitle for screen readers only, for a page that already shows them. */
+	titleHidden?: boolean
 }>(), {
 	loading: false,
 	path: '/',
