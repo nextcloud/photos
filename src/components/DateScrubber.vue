@@ -11,8 +11,8 @@
 	Not an NcSlider: the thumb maps to a month, a categorical scale, rather
 	than to a continuous numeric value.
 
-	Only the months already fetched by the timeline are reachable; the track
-	grows as the grid loads more content.
+	The parent decides which months are reachable: the timeline passes every
+	month of the library when it knows them, else only the loaded ones.
 -->
 
 <template>

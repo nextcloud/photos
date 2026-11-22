@@ -32,7 +32,7 @@
 			path="/"
 			:title="rootTitle"
 			:rootTitle="rootTitle"
-			@refresh="resetFetchFilesState">
+			@refresh="refreshTimeline">
 			<div class="timeline__header__left">
 				<!-- TODO: UploadPicker -->
 				<NcActions
@@ -175,7 +175,7 @@
 			class="timeline__file-list"
 			:fileIdsBySection="fileIdsByMonth"
 			:sections="monthsList"
-			:loading="loadingFiles"
+			:loading="loadingFiles || loadingJump"
 			:baseHeight="tileBaseHeight"
 			:emptyMessage="t('photos', 'No photos or videos in here')"
 			:scrollToSection="scrubberTarget"
@@ -203,9 +203,9 @@
 		<!-- Drag-to-jump date navigation, hidden when there is only one
 			month - there is nothing to scrub then. -->
 		<DateScrubber
-			:months="monthsList"
-			:monthCounts="monthCounts"
-			:currentMonth="scrubberTarget || monthsList[0]"
+			:months="scrubberMonths"
+			:monthCounts="scrubberMonthCounts"
+			:currentMonth="scrubberTarget || scrubberMonths[0]"
 			@jump="onScrubberJump" />
 
 		<NcModal
@@ -232,6 +232,7 @@
 
 <script setup lang="ts">
 import type { Collection } from '../services/collectionFetcher.ts'
+import type { TimelineMediaType } from '../services/TimelineDays.ts'
 import type { Album } from '../store/albums.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
@@ -240,8 +241,8 @@ import { t } from '@nextcloud/l10n'
 import { getViewer } from '@nextcloud/viewer'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { storeToRefs } from 'pinia'
-import { computed, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
-import { onBeforeRouteLeave, useRouter } from 'vue-router'
+import { computed, nextTick, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
+import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActionRadio from '@nextcloud/vue/components/NcActionRadio'
 import NcActions from '@nextcloud/vue/components/NcActions'
@@ -270,13 +271,17 @@ import { useFetchFiles } from '../composables/useFetchFiles.ts'
 import { useFilesByMonth } from '../composables/useFilesByMonth.ts'
 import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { useGridDensity } from '../composables/useGridDensity.ts'
+import { useTimelineJump } from '../composables/useTimelineJump.ts'
 import { allMimes } from '../services/AllowedMimes.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
+import { logger } from '../services/logger.ts'
+import { fetchTimelineDays } from '../services/TimelineDays.ts'
 import { useCollectionsStore } from '../store/collections.ts'
 import { useFilesStore } from '../store/files.ts'
 import { useFilterStore } from '../store/filters.ts'
 import { configChangedEvent } from '../store/userConfig.ts'
 import { formatMonth, formatYear } from '../utils/dateUtils.ts'
+import { closestLoadedMonth, mergeMonthCounts, monthCountsFromDays, sortMonthsNewestFirst } from '../utils/timelineMonths.ts'
 
 const props = withDefaults(defineProps<{
 	onlyFavorites?: boolean
@@ -289,6 +294,7 @@ const props = withDefaults(defineProps<{
 	onThisDay: false,
 })
 
+const route = useRoute()
 const router = useRouter()
 const isMobile = useIsMobile()
 
@@ -310,11 +316,28 @@ const appContent = document.getElementById('app-content-vue')
 // FilesListViewer's `scrollToSection`. Empty means no override.
 const scrubberTarget = ref('')
 
+// Kind of media the days summary counts for the routes it describes.
+const daysMediaTypes: Record<string, TimelineMediaType> = {
+	all_media: 'all',
+	photos: 'photos',
+	videos: 'videos',
+}
+
+// Photo count per month of the whole library, from the days summary. Empty
+// when the route has no summary or it failed to load.
+const libraryMonthCounts = ref<Record<string, number>>({})
+let libraryMonthCountsController: AbortController | null = null
+
 const files = computed(() => filesStore.files)
 
 // Photos taken in one go are shown as a single tile of the timeline, and are
 // reachable from the viewer it opens.
 const { fileIdsByMonthUngrouped, burstStacks, fileIdsByMonth, monthsList } = useFilesByMonth(fetchedFileIds, files, true)
+
+const { jumpActive, loadingJump, jumpToMonth, loadMoreAfterJump, cancelJump, forgetJumpFiles, resetJump } = useTimelineJump(fetchedFileIds, searchOptions)
+// Increased on every scrubber jump, so a slow one does not scroll after a
+// later one.
+let jumpSequence = 0
 
 const shouldFavoriteSelection = computed<boolean>(() => {
 	// Favorite all selection if at least one file is not in the favorites.
@@ -333,6 +356,14 @@ const monthCounts = computed<Record<string, number>>(() => {
 	return Object.fromEntries(entries.map(([month, fileIds]) => [month, fileIds.length]))
 })
 
+// The summary does not know about filters, so it only adds the months not
+// loaded yet to an unfiltered timeline.
+const scrubberMonthCounts = computed<Record<string, number>>(() => filtersQuery.value === ''
+	? mergeMonthCounts(libraryMonthCounts.value, monthCounts.value)
+	: monthCounts.value)
+
+const scrubberMonths = computed<string[]>(() => sortMonthsNewestFirst(Object.keys(scrubberMonthCounts.value)))
+
 const createAlbumButtonLabel = computed(() => {
 	if (Object.keys(selectedFilters.value).length > 0) {
 		return t('photos', 'Create new album from filters')
@@ -342,9 +373,40 @@ const createAlbumButtonLabel = computed(() => {
 })
 
 watch(filtersQuery, () => {
+	resetJump()
 	resetFetchFilesState()
 	getContent()
 })
+
+watch(() => route.path, resetJump)
+
+watch(() => route.name, fetchLibraryMonthCounts, { immediate: true })
+
+async function fetchLibraryMonthCounts(): Promise<void> {
+	libraryMonthCountsController?.abort()
+	libraryMonthCounts.value = {}
+	const mediaType = daysMediaTypes[String(route.name)]
+	if (mediaType === undefined) {
+		return
+	}
+
+	const controller = new AbortController()
+	libraryMonthCountsController = controller
+	try {
+		const days = await fetchTimelineDays(mediaType, controller.signal)
+		libraryMonthCounts.value = monthCountsFromDays(days)
+	} catch (error) {
+		if (!controller.signal.aborted) {
+			logger.warn('Could not fetch the photo count per day', { error })
+		}
+	}
+}
+
+function refreshTimeline() {
+	resetJump()
+	resetFetchFilesState()
+	fetchLibraryMonthCounts()
+}
 
 async function favoriteSelection(): Promise<void> {
 	await filesStore.toggleFavoriteForFiles(selectedFileIds.value, 1)
@@ -354,19 +416,52 @@ async function unFavoriteSelection(): Promise<void> {
 	await filesStore.toggleFavoriteForFiles(selectedFileIds.value, 0)
 }
 
-function getContent() {
-	fetchFiles({
+function searchOptions() {
+	return {
 		mimesType: props.mimesType,
 		onThisDay: props.onThisDay,
 		onlyFavorites: props.onlyFavorites,
 		extraFilters: filtersQuery.value,
-	})
+	}
 }
 
-// FilesListViewer scrolls on its `scrollToSection` prop, so stashing
-// the month is all there is to do.
-function onScrubberJump(month: string) {
-	scrubberTarget.value = month
+// Once the user jumped to a month that was not loaded, the grid grows down
+// from that month rather than from the newest photos.
+function getContent() {
+	if (jumpActive.value) {
+		loadMoreAfterJump()
+	} else {
+		fetchFiles(searchOptions())
+	}
+}
+
+// FilesListViewer scrolls on its `scrollToSection` prop. A month not loaded
+// yet is fetched first, without the newer photos in between.
+async function onScrubberJump(month: string) {
+	const sequence = ++jumpSequence
+
+	if (monthsList.value.includes(month)) {
+		cancelJump()
+		scrubberTarget.value = month
+		return
+	}
+
+	// A drag emits a jump for every month it passes, only the one the
+	// pointer rests on is fetched.
+	await new Promise((resolve) => setTimeout(resolve, 150))
+	if (sequence !== jumpSequence || !await jumpToMonth(month) || sequence !== jumpSequence) {
+		return
+	}
+
+	await nextTick()
+	const target = closestLoadedMonth(month, monthsList.value)
+	if (target === scrubberTarget.value) {
+		scrubberTarget.value = ''
+		await nextTick()
+	}
+	if (sequence === jumpSequence) {
+		scrubberTarget.value = target
+	}
 }
 
 // Selecting the tile of a run selects every photo of it: the photos folded
@@ -413,6 +508,7 @@ async function addSelectionToAlbum(album: Album) {
 // list of the photos this timeline fetched.
 function onPhotoDeleted(photo: PhotoTarget) {
 	onUncheckFiles([photo.fileid.toString()])
+	forgetJumpFiles([photo.fileid])
 	fetchedFileIds.value = fetchedFileIds.value.filter((fileId) => fileId !== photo.fileid)
 }
 
@@ -420,13 +516,14 @@ async function deleteSelection() {
 	// Need to store the file ids so it is not changed before the deleteFiles call.
 	const fileIds = selectedFileIds.value
 	onUncheckFiles(fileIds)
+	forgetJumpFiles(fileIds.map(Number))
 	fetchedFileIds.value = fetchedFileIds.value.filter((fileid) => !fileIds.includes(fileid.toString()))
 	await filesStore.deleteFiles(fileIds)
 }
 
 function handleUserConfigChange({ key }: { key: string }) {
 	if (key === 'photosSourceFolders') {
-		resetFetchFilesState()
+		refreshTimeline()
 	}
 }
 
@@ -454,6 +551,8 @@ onMounted(() => {
 
 onUnmounted(() => {
 	unsubscribe(configChangedEvent, handleUserConfigChange)
+	resetJump()
+	libraryMonthCountsController?.abort()
 })
 </script>
 
