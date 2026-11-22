@@ -8,18 +8,22 @@ declare(strict_types=1);
 
 namespace OCA\Photos\Sabre;
 
+use OCA\DAV\Connector\Sabre\File;
 use OCA\DAV\Connector\Sabre\FilesPlugin;
 use OCA\Photos\Album\AlbumFile;
+use OCA\Photos\Listener\AddedByMetadataProvider;
 use OCA\Photos\Sabre\Album\AlbumPhoto;
 use OCA\Photos\Sabre\Album\AlbumRootBase;
 use OCA\Photos\Sabre\Album\PublicAlbumPhoto;
 use OCA\Photos\Sabre\Place\PlacePhoto;
 use OCA\Photos\Sabre\Place\PlaceRoot;
 use OCP\Files\DavUtil;
+use OCP\Files\FileInfo;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\FilesMetadata\IFilesMetadataManager;
 use OCP\IPreview;
+use OCP\IUserManager;
 use OCP\IUserSession;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;
@@ -45,6 +49,7 @@ class PropFindPlugin extends ServerPlugin {
 	public const PERMISSIONS_PROPERTYNAME = '{http://owncloud.org/ns}permissions';
 	public const PHOTOS_ALBUM_FILE_ORIGIN_PROPERTYNAME = '{http://nextcloud.org/ns}photos-album-file-origin';
 	public const PHOTOS_COLLECTION_FILE_ORIGINAL_FILENAME_PROPERTYNAME = '{http://nextcloud.org/ns}photos-collection-file-original-filename';
+	public const ADDED_BY_DISPLAY_NAME_PROPERTYNAME = '{http://nextcloud.org/ns}photos-added-by-display-name';
 
 	private ?Tree $tree = null;
 
@@ -53,6 +58,7 @@ class PropFindPlugin extends ServerPlugin {
 		private readonly IFilesMetadataManager $filesMetadataManager,
 		private readonly IUserSession $userSession,
 		private readonly IRootFolder $rootFolder,
+		private readonly IUserManager $userManager,
 	) {
 	}
 
@@ -80,6 +86,10 @@ class PropFindPlugin extends ServerPlugin {
 	}
 
 	public function propFind(PropFind $propFind, INode $node): void {
+		if ($node instanceof File) {
+			$propFind->handle(self::ADDED_BY_DISPLAY_NAME_PROPERTYNAME, fn (): ?string => $this->getAddedByDisplayName($node->getFileInfo()));
+		}
+
 		if ($node instanceof AlbumPhoto || $node instanceof PlacePhoto) {
 			// Checking if the node is truly available and ignoring if not
 			// Should be pre-emptively handled by the NodeDeletedEvent
@@ -115,6 +125,8 @@ class PropFindPlugin extends ServerPlugin {
 				$metadata = $this->filesMetadataManager->getMetadata((int)$node->getFileInfo()->getId(), true);
 				return $metadata->hasKey('files-live-photo') && $node->getFileInfo()->getMimetype() === 'video/quicktime' ? 'true' : 'false';
 			});
+
+			$propFind->handle(self::ADDED_BY_DISPLAY_NAME_PROPERTYNAME, fn (): ?string => $this->getAddedByDisplayName($fileInfo));
 
 			$propFind->handle(self::PHOTOS_ALBUM_FILE_ORIGIN_PROPERTYNAME, function () use ($node) {
 				$file = $node->getFile();
@@ -155,6 +167,20 @@ class PropFindPlugin extends ServerPlugin {
 		if ($node instanceof PlaceRoot) {
 			$propFind->handle(self::LAST_PHOTO_PROPERTYNAME, fn (): int => $node->getFirstPhoto());
 		}
+	}
+
+	/**
+	 * Display name of the user who added a file, for signed in users only as
+	 * for the display name of its owner.
+	 */
+	private function getAddedByDisplayName(FileInfo $fileInfo): ?string {
+		if ($this->userSession->getUser() === null) {
+			return null;
+		}
+
+		$userId = $fileInfo->getMetadata()[AddedByMetadataProvider::METADATA_KEY] ?? null;
+
+		return is_string($userId) ? $this->userManager->getDisplayName($userId) : null;
 	}
 
 	/**

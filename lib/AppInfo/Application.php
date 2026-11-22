@@ -13,6 +13,7 @@ use OCA\DAV\Events\SabrePluginAddEvent;
 use OCA\DAV\Events\SabrePluginAuthInitEvent;
 use OCA\Files\Event\LoadSidebar;
 use OCA\Photos\Dashboard\OnThisDay;
+use OCA\Photos\Listener\AddedByMetadataProvider;
 use OCA\Photos\Listener\AlbumsManagementEventListener;
 use OCA\Photos\Listener\CSPListener;
 use OCA\Photos\Listener\ExifMetadataProvider;
@@ -78,6 +79,8 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(AddContentSecurityPolicyEvent::class, CSPListener::class);
 
 		// Metadata
+		// AddedByMetadataProvider tells new files from existing ones by the metadata the others leave, so it runs first
+		$context->registerEventListener(MetadataLiveEvent::class, AddedByMetadataProvider::class, 20);
 		$context->registerEventListener(MetadataLiveEvent::class, ExifMetadataProvider::class, 10);
 		$context->registerEventListener(MetadataBackgroundEvent::class, ExifMetadataProvider::class, 10);
 		// SizeMetadataProvider depends on ExifMetadataProvider, which is why it's given a higher priority (above)
