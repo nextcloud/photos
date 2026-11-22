@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import type { Contributor } from './familyLibrary.ts'
+
 import { translate as t } from '@nextcloud/l10n'
 
 /**
@@ -24,6 +26,8 @@ export type PhotoExif = {
 	place?: string
 	/** Moment the photo was taken, as a unix timestamp in seconds. */
 	takenAt?: number
+	/** The user who added the photo, when known. */
+	addedBy?: Contributor | null
 }
 
 /** Position a photo was taken at, in decimal degrees. */

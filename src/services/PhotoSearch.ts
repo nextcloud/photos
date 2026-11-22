@@ -22,6 +22,7 @@ export type PhotoSearchOptions = SearchOptions & {
 	onThisDay: boolean // get only items from this day of year. Default: false.
 	onlyFavorites: boolean // get only favorite items. Default: false.
 	extraFilters: string // a raw dav string that will be added in the 'where' clause. Default: ''.
+	sourceFolders: string[] // folders to search in. Default: the media folders of the user.
 }
 
 /**
@@ -39,6 +40,7 @@ export async function getPhotos(_options: Partial<PhotoSearchOptions> = {}): Pro
 		onlyFavorites: false,
 		full: false,
 		extraFilters: '',
+		sourceFolders: useUserConfigStore().photosSourceFolders,
 		..._options,
 	}
 
@@ -86,7 +88,7 @@ export async function getPhotos(_options: Partial<PhotoSearchOptions> = {}): Pro
 			}).join('\n')}</d:or>`
 		: ''
 
-	const sourceFolders = useUserConfigStore().photosSourceFolders
+	const sourceFolders = options.sourceFolders
 		.map((folder) => `
 			<d:scope>
 				<d:href>${join(defaultRootPath, encode(folder))}</d:href>

@@ -67,6 +67,19 @@
 				</NcActions>
 
 				<NcButton
+					v-if="selectedFileIds.length === 0 && familyLibrary !== ''"
+					v-model:pressed="familyOnly"
+					:aria-label="t('photos', 'Show only the family library')"
+					data-cy-header-action="family-library">
+					<template #icon>
+						<AccountGroupOutline :size="20" />
+					</template>
+					<template v-if="!isMobile" #default>
+						{{ t('photos', 'Family') }}
+					</template>
+				</NcButton>
+
+				<NcButton
 					v-if="selectedFileIds.length === 0 && fetchedFileIds.length > 0"
 					:aria-label="t('photos', 'Start slideshow')"
 					data-cy-header-action="slideshow"
@@ -193,6 +206,7 @@
 					:file="files[file.id]"
 					:allowSelection="true"
 					:burstCount="burstCount(file.id)"
+					:addedBy="familyAddedBy(files[file.id])"
 					:selected="selection[file.id] === true"
 					@click="openViewer"
 					@selectToggled="onFileSelectToggle"
@@ -233,6 +247,8 @@
 <script setup lang="ts">
 import type { Collection } from '../services/collectionFetcher.ts'
 import type { Album } from '../store/albums.ts'
+import type { PhotoFile } from '../store/files.ts'
+import type { Contributor } from '../utils/familyLibrary.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
@@ -248,6 +264,7 @@ import NcActions from '@nextcloud/vue/components/NcActions'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcModal from '@nextcloud/vue/components/NcModal'
+import AccountGroupOutline from 'vue-material-design-icons/AccountGroupOutline.vue'
 import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
@@ -275,8 +292,9 @@ import { downloadFiles } from '../services/downloadFiles.ts'
 import { useCollectionsStore } from '../store/collections.ts'
 import { useFilesStore } from '../store/files.ts'
 import { useFilterStore } from '../store/filters.ts'
-import { configChangedEvent } from '../store/userConfig.ts'
+import { configChangedEvent, useUserConfigStore } from '../store/userConfig.ts'
 import { formatMonth, formatYear } from '../utils/dateUtils.ts'
+import { getAddedBy, isInFolder } from '../utils/familyLibrary.ts'
 
 const props = withDefaults(defineProps<{
 	onlyFavorites?: boolean
@@ -296,6 +314,7 @@ const collectionsStore = useCollectionsStore()
 const filesStore = useFilesStore()
 const filtersStore = useFilterStore()
 const { selectedFilters, filtersQuery } = storeToRefs(filtersStore)
+const { familyLibrary } = storeToRefs(useUserConfigStore())
 
 const { gridDensity, tileBaseHeight, setGridDensity } = useGridDensity()
 const { fetchFiles, resetFetchFilesState, fetchedFileIds, loadingFiles, errorFetchingFiles } = useFetchFiles()
@@ -309,6 +328,8 @@ const appContent = document.getElementById('app-content-vue')
 // Month section the user picked in the DateScrubber, forwarded to
 // FilesListViewer's `scrollToSection`. Empty means no override.
 const scrubberTarget = ref('')
+// Whether the timeline is narrowed down to the family library.
+const familyOnly = ref(false)
 
 const files = computed(() => filesStore.files)
 
@@ -341,10 +362,23 @@ const createAlbumButtonLabel = computed(() => {
 	}
 })
 
-watch(filtersQuery, () => {
+watch([filtersQuery, familyOnly], () => {
 	resetFetchFilesState()
 	getContent()
 })
+
+watch(familyLibrary, () => {
+	familyOnly.value = false
+})
+
+// Who added a photo of the family library, nothing for any other photo.
+function familyAddedBy(file: PhotoFile | undefined): Contributor | null {
+	if (file === undefined || familyLibrary.value === '' || !isInFolder(file.path, familyLibrary.value)) {
+		return null
+	}
+
+	return getAddedBy(file.attributes)
+}
 
 async function favoriteSelection(): Promise<void> {
 	await filesStore.toggleFavoriteForFiles(selectedFileIds.value, 1)
@@ -360,6 +394,7 @@ function getContent() {
 		onThisDay: props.onThisDay,
 		onlyFavorites: props.onlyFavorites,
 		extraFilters: filtersQuery.value,
+		...(familyOnly.value ? { sourceFolders: [familyLibrary.value] } : {}),
 	})
 }
 

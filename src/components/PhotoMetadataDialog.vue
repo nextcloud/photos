@@ -15,6 +15,20 @@
 					<dt>{{ t('photos', 'Filename') }}</dt>
 					<dd>{{ photo.basename }}</dd>
 				</div>
+				<div v-if="addedBy !== null" class="photo-metadata__entry">
+					<dt>{{ t('photos', 'Added by') }}</dt>
+					<dd class="photo-metadata__added-by">
+						<NcAvatar
+							:user="addedBy.userId"
+							:displayName="addedBy.displayName"
+							:size="20"
+							hideStatus
+							disableMenu
+							disableTooltip
+							aria-hidden="true" />
+						{{ addedBy.displayName }}
+					</dd>
+				</div>
 				<div v-for="entry in exifEntries" :key="entry.label" class="photo-metadata__entry">
 					<dt>{{ entry.label }}</dt>
 					<dd>{{ entry.value }}</dd>
@@ -49,8 +63,10 @@
 import type { PhotoExif } from '../utils/exif.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
+import { getCurrentUser } from '@nextcloud/auth'
 import { translate as t } from '@nextcloud/l10n'
 import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
+import NcAvatar from '@nextcloud/vue/components/NcAvatar'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import { fetchPhotoExif } from '../services/exifFetcher.ts'
@@ -72,6 +88,11 @@ const LocationMap = defineAsyncComponent(() => import('./LocationMap.vue'))
 const metadata = ref<PhotoExif | undefined>()
 
 const exifEntries = computed(() => metadata.value === undefined ? undefined : getExifSummary(metadata.value))
+// Photos the user added themselves need no mention of it.
+const addedBy = computed(() => {
+	const contributor = metadata.value?.addedBy ?? null
+	return contributor?.userId === getCurrentUser()?.uid ? null : contributor
+})
 const location = computed(() => metadata.value === undefined ? null : getPhotoLocation(metadata.value.gps))
 
 // The EXIF properties are not part of the file listings, they are only fetched
@@ -98,6 +119,12 @@ onMounted(async () => {
 
 	dt {
 		color: var(--color-text-maxcontrast);
+	}
+
+	&__added-by {
+		display: flex;
+		align-items: center;
+		gap: var(--default-grid-baseline);
 	}
 
 	dd {

@@ -7,7 +7,7 @@
 	<div
 		class="file-container"
 		data-test="media"
-		:class="{ selected, 'file-container--stack': isStack, 'file-container--uncropped': !cropped }">
+		:class="{ selected, 'file-container--stack': isStack, 'file-container--uncropped': !cropped, 'file-container--added-by': addedBy !== null }">
 		<!--
 			A tile standing for a run of photos taken in one go is drawn as a deck of
 			cards: two backs peeking out behind the preview, which costs no further
@@ -128,6 +128,21 @@
 			:photo="photoTarget"
 			@deleted="emit('deleted', $event)" />
 
+		<span
+			v-if="addedBy !== null"
+			class="added-by"
+			role="img"
+			:aria-label="t('photos', 'Added by {name}', { name: addedBy.displayName })">
+			<NcAvatar
+				:user="addedBy.userId"
+				:displayName="addedBy.displayName"
+				:size="24"
+				hideStatus
+				disableMenu
+				disableTooltip
+				aria-hidden="true" />
+		</span>
+
 		<Transition name="favorite-pop">
 			<FavoriteIcon v-if="file.attributes.favorite === 1" class="favorite-state" />
 		</Transition>
@@ -137,6 +152,7 @@
 <script setup lang="ts">
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import type { PhotoFile } from '../store/files.js'
+import type { Contributor } from '../utils/familyLibrary.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { t } from '@nextcloud/l10n'
@@ -144,6 +160,7 @@ import { generateUrl } from '@nextcloud/router'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import NcAvatar from '@nextcloud/vue/components/NcAvatar'
 import NcBlurHash from '@nextcloud/vue/components/NcBlurHash'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import PlayCircleOutlineIcon from 'vue-material-design-icons/PlayCircleOutline.vue'
@@ -173,6 +190,8 @@ const props = withDefaults(defineProps<{
 	 * hold has nothing to crop away, one laying them out as squares does.
 	 */
 	cropped?: boolean
+	/** The user who added the photo, shown on the tile when set. */
+	addedBy?: Contributor | null
 }>(), {
 	selected: false,
 	allowSelection: true,
@@ -181,6 +200,7 @@ const props = withDefaults(defineProps<{
 	showActionsMenu: true,
 	// eslint-disable-next-line vue/no-boolean-default
 	cropped: true,
+	addedBy: null,
 })
 
 const emit = defineEmits<{
@@ -482,6 +502,22 @@ $magnify-transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 		// Tabular figures, so the badge does not jitter as the count grows.
 		font-variant-numeric: tabular-nums;
 		pointer-events: none;
+	}
+
+	// Who added the photo, in the corner of the deck count, which moves aside.
+	.added-by {
+		position: absolute;
+		inset-block-end: calc(8px + var(--stack-peek));
+		inset-inline-start: 8px;
+		z-index: 6; // above the preview layers and the overlays
+		display: flex;
+		border-radius: 50%;
+		box-shadow: 0 0 0 2px var(--color-main-background);
+		pointer-events: none;
+	}
+
+	&.file-container--added-by .stack-count {
+		inset-inline-start: 40px;
 	}
 
 	// Hovering lifts the tile with a soft shadow and magnifies the preview inside

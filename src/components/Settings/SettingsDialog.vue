@@ -11,6 +11,7 @@
 		@update:open="onClose">
 		<NcAppSettingsSection id="layout-settings" :name="t('photos', 'General')">
 			<PhotosSourceLocationsSettings />
+			<FamilyLibrarySettings />
 			<PhotosUploadLocationSettings />
 			<CroppedLayoutSettings />
 		</NcAppSettingsSection>
@@ -23,6 +24,7 @@ import { t } from '@nextcloud/l10n'
 import NcAppSettingsDialog from '@nextcloud/vue/components/NcAppSettingsDialog'
 import NcAppSettingsSection from '@nextcloud/vue/components/NcAppSettingsSection'
 import CroppedLayoutSettings from './CroppedLayoutSettings.vue'
+import FamilyLibrarySettings from './FamilyLibrarySettings.vue'
 import KeyboardShortcutsSettings from './KeyboardShortcutsSettings.vue'
 import PhotosSourceLocationsSettings from './PhotosSourceLocationsSettings.vue'
 import PhotosUploadLocationSettings from './PhotosUploadLocationSettings.vue'

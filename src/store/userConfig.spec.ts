@@ -39,6 +39,7 @@ describe('useUserConfigStore', () => {
 		expect(store.gridDensity).toBe('medium')
 		expect(store.photosSourceFolders).toEqual(['/Photos'])
 		expect(store.photosLocation).toBe('')
+		expect(store.familyLibrary).toBe('')
 	})
 
 	test('reads the initial state the server rendered', () => {
@@ -80,5 +81,36 @@ describe('useUserConfigStore', () => {
 		expect(store.photosSourceFolders).toEqual(['/Photos', '/Camera'])
 		expect(axios.put).toHaveBeenCalledWith('/index.php/apps/photos/api/v1/config/photosSourceFolders', { value: '["/Photos","/Camera"]' })
 		expect(axios.put).toHaveBeenCalledWith('/index.php/apps/photos/api/v1/config/croppedLayout', { value: 'true' })
+	})
+
+	test('setFamilyLibrary adds the family library to the media folders', async () => {
+		const store = useUserConfigStore()
+
+		await store.setFamilyLibrary('/Family')
+
+		expect(store.familyLibrary).toBe('/Family')
+		expect(store.photosSourceFolders).toEqual(['/Photos', '/Family'])
+		expect(axios.put).toHaveBeenCalledWith('/index.php/apps/photos/api/v1/config/familyLibrary', { value: '/Family' })
+	})
+
+	test('setFamilyLibrary leaves the media folders alone when one covers it', async () => {
+		initialState.photosSourceFolders = '["/Shared"]'
+		const store = useUserConfigStore()
+
+		await store.setFamilyLibrary('/Shared/Family')
+
+		expect(store.photosSourceFolders).toEqual(['/Shared'])
+		expect(axios.put).toHaveBeenCalledTimes(1)
+	})
+
+	test('setFamilyLibrary unsets the family library without touching the media folders', async () => {
+		initialState.familyLibrary = '/Family'
+		initialState.photosSourceFolders = '["/Photos","/Family"]'
+		const store = useUserConfigStore()
+
+		await store.setFamilyLibrary('')
+
+		expect(store.familyLibrary).toBe('')
+		expect(store.photosSourceFolders).toEqual(['/Photos', '/Family'])
 	})
 })

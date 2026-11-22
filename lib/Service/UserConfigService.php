@@ -16,6 +16,7 @@ use OCP\IUserSession;
 class UserConfigService {
 	public const array DEFAULT_CONFIGS = [
 		'croppedLayout' => 'false',
+		'familyLibrary' => '',
 		'gridDensity' => 'medium',
 		'photosLocation' => '/Photos',
 		'photosSourceFolders' => '["/Photos"]',

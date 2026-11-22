@@ -7,17 +7,23 @@ import type { FileStat, ResponseDataDetailed } from 'webdav'
 import type { PhotoExif } from '../utils/exif.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
+import { getAddedBy } from '../utils/familyLibrary.ts'
 import { davClient } from './DavClient.ts'
 import { logger } from './logger.ts'
 
 const exifPropFind = `<?xml version="1.0"?>
-		<d:propfind xmlns:d="DAV:" xmlns:nc="http://nextcloud.org/ns">
+		<d:propfind xmlns:d="DAV:" xmlns:nc="http://nextcloud.org/ns" xmlns:oc="http://owncloud.org/ns">
 			<d:prop>
 				<nc:metadata-photos-exif />
 				<nc:metadata-photos-ifd0 />
 				<nc:metadata-photos-gps />
 				<nc:metadata-photos-place />
 				<nc:metadata-photos-original_date_time />
+				<nc:metadata-photos-added-by />
+				<nc:photos-added-by-display-name />
+				<oc:owner-id />
+				<oc:owner-display-name />
+				<nc:mount-type />
 			</d:prop>
 		</d:propfind>`
 
@@ -47,6 +53,7 @@ export async function fetchPhotoExif(photo: PhotoTarget): Promise<PhotoExif> {
 			gps: props['metadata-photos-gps'] as PhotoExif['gps'],
 			place: props['metadata-photos-place'] as PhotoExif['place'],
 			takenAt: props['metadata-photos-original_date_time'] as PhotoExif['takenAt'],
+			addedBy: getAddedBy(props),
 		}
 	} catch (error) {
 		logger.error('Error fetching the metadata of a photo', { error, filename: photo.basename })

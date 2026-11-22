@@ -3,7 +3,7 @@ import type { Folder } from '@nextcloud/files'
  * SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import type { FileStat, ResponseDataDetailed } from 'webdav'
+import type { FileStat, ResponseDataDetailed, WebDAVClientError } from 'webdav'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
@@ -18,6 +18,7 @@ import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import { logger } from '../services/logger.ts'
+import { isInFolder } from '../utils/familyLibrary.ts'
 
 export const configChangedEvent = 'photos:user-config-changed'
 
@@ -32,7 +33,8 @@ export async function getFolder(path) {
 		const stat = await davClient.stat(location, { details: true, data: getDefaultPropfind() }) as ResponseDataDetailed<FileStat>
 		return resultToNode(stat.data)
 	} catch (error) {
-		if (error.response?.status === 404) {
+		const status = (error as WebDAVClientError).response?.status
+		if (status === 404) {
 			logger.debug('Photo location does not exist, creating it.')
 			await davClient.createDirectory(location)
 			const stat = await davClient.stat(location, { details: true, data: getDefaultPropfind() }) as ResponseDataDetailed<FileStat>
@@ -41,7 +43,7 @@ export async function getFolder(path) {
 
 		// In case terms of service is installed, the dav endpoint
 		// will return 403 until TOS is accepted.
-		if (error.response?.status === 403) {
+		if (status === 403) {
 			logger.debug('User is not authenticated, cannot load photos folder')
 		} else {
 			logger.fatal('Could not load photos folder', { error })
@@ -58,6 +60,7 @@ export type GridDensity = 'small' | 'medium' | 'large'
 /** User config keys persisted through the config endpoint. */
 export type PersistedUserConfig = {
 	croppedLayout: boolean
+	familyLibrary: string
 	gridDensity: GridDensity
 	photosSourceFolders: string[]
 	photosLocation: string
@@ -74,6 +77,8 @@ function parseGridDensity(value: string): GridDensity {
 
 export const useUserConfigStore = defineStore('userConfig', () => {
 	const croppedLayout = ref(loadState('photos', 'croppedLayout', 'false') as 'false' | 'true' === 'true')
+	/** Folder shared by a household, empty when none is set. */
+	const familyLibrary = ref(loadState('photos', 'familyLibrary', ''))
 	const gridDensity = ref<GridDensity>(parseGridDensity(loadState('photos', 'gridDensity', 'medium')))
 	const photosSourceFolders = ref<string[]>(JSON.parse(loadState('photos', 'photosSourceFolders', '["/Photos"]')))
 	const photosLocation = ref(loadState('photos', 'photosLocation', ''))
@@ -81,7 +86,7 @@ export const useUserConfigStore = defineStore('userConfig', () => {
 	/** Node of photosLocation, resolved from dav and created if missing. */
 	const photosLocationFolder = ref<Folder | undefined>(undefined)
 
-	const refs = { croppedLayout, gridDensity, photosSourceFolders, photosLocation }
+	const refs = { croppedLayout, familyLibrary, gridDensity, photosSourceFolders, photosLocation }
 
 	/**
 	 * Persist a user config value and notify the rest of the app.
@@ -98,6 +103,19 @@ export const useUserConfigStore = defineStore('userConfig', () => {
 	}
 
 	/**
+	 * Mark a folder as the family library, and show it in the timelines when
+	 * no media folder covers it yet.
+	 *
+	 * @param path - Path of the folder, empty to unset the family library
+	 */
+	async function setFamilyLibrary(path: string): Promise<void> {
+		await updateUserConfig('familyLibrary', path)
+		if (path !== '' && !photosSourceFolders.value.some((folder) => isInFolder(path, folder))) {
+			await updateUserConfig('photosSourceFolders', [...photosSourceFolders.value, path])
+		}
+	}
+
+	/**
 	 * Resolve photosLocation into a Folder node.
 	 */
 	async function initPhotosLocationFolder(): Promise<void> {
@@ -111,11 +129,13 @@ export const useUserConfigStore = defineStore('userConfig', () => {
 
 	return {
 		croppedLayout,
+		familyLibrary,
 		gridDensity,
 		photosSourceFolders,
 		photosLocation,
 		photosLocationFolder,
 		updateUserConfig,
+		setFamilyLibrary,
 		initPhotosLocationFolder,
 	}
 })

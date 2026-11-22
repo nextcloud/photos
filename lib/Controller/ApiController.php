@@ -55,6 +55,12 @@ class ApiController extends Controller {
 					return new JSONResponse([], Http::STATUS_BAD_REQUEST);
 				}
 				break;
+			case 'familyLibrary':
+				// Empty when unset; the root folder holds every file, not a library.
+				if ($value !== '' && (!$this->validatePath($value) || $value === '/')) {
+					return new JSONResponse([], Http::STATUS_BAD_REQUEST);
+				}
+				break;
 			case 'photosLocation':
 				if (!$this->validatePath($value)) {
 					return new JSONResponse([], Http::STATUS_BAD_REQUEST);
