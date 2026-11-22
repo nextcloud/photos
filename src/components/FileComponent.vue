@@ -100,7 +100,7 @@
 						v-if="videoPreviewPlaying"
 						ref="videoPreview"
 						class="file__layer file__layer--video"
-						:src="file.source"
+						:src="videoPreviewSources[videoPreviewSourceIndex]"
 						muted
 						loop
 						autoplay
@@ -110,6 +110,7 @@
 						preload="metadata"
 						aria-hidden="true"
 						tabindex="-1"
+						@loadedmetadata="onVideoPreviewMetadata"
 						@error="onVideoPreviewError" />
 				</template>
 			</div>
@@ -152,7 +153,7 @@ import PhotoActionsMenu from './PhotoActionsMenu.vue'
 import { logger } from '../services/logger.ts'
 import { isCachedPreview } from '../services/PreviewService.js'
 import { getVideoDurationFromUrl, toPhotoTarget } from '../utils/fileUtils.ts'
-import { isPreviewableVideoMime, playsVideoPreviews, VIDEO_PREVIEW_DELAY } from '../utils/videoPreview.ts'
+import { getVideoPreviewSources, getVideoRenditionUrl, playsVideoPreviews, VIDEO_PREVIEW_DELAY } from '../utils/videoPreview.ts'
 
 defineOptions({ inheritAttrs: false })
 
@@ -210,6 +211,9 @@ let videoPreviewTimeout: null | ReturnType<typeof setTimeout> = null
 // A video that could not be played once is not tried again, or a broken
 // file would fire a load on every pass of the pointer.
 const videoPreviewFailed = ref(false)
+// Which of the sources of the video is played, moving on to the next one when
+// the browser fails to play it.
+const videoPreviewSourceIndex = ref(0)
 
 const photoTarget = computed<PhotoTarget>(() => toPhotoTarget(props.file))
 
@@ -232,7 +236,11 @@ const srcSmall = computed<string>(() => getItemURL(64))
 
 const blurhash = computed<string | undefined>(() => props.file.attributes['metadata-blurhash'])
 
-const isPreviewableVideo = computed<boolean>(() => isPreviewableVideoMime(props.file.mime))
+const videoPreviewSources = computed<string[]>(() => getVideoPreviewSources(
+	props.file.mime,
+	props.file.source,
+	route?.params.token ? null : getVideoRenditionUrl(props.file.fileid, decodedEtag.value),
+))
 
 watch(() => props.file, async () => {
 	initialized.value = false
@@ -246,6 +254,7 @@ watch(() => props.file, async () => {
 	// found about the previous one says nothing about this one.
 	cancelPreview()
 	videoPreviewFailed.value = false
+	videoPreviewSourceIndex.value = 0
 
 	await init()
 })
@@ -313,7 +322,7 @@ function onErrorLarge() {
 // Start playing the video of a tile once the pointer has rested on it, which
 // is what keeps a sweep across the grid from loading every video it passes.
 function schedulePreview() {
-	if (!isPreviewableVideo.value || videoPreviewFailed.value || !playsVideoPreviews()) {
+	if (videoPreviewSources.value.length === 0 || videoPreviewFailed.value || !playsVideoPreviews()) {
 		return
 	}
 
@@ -346,7 +355,20 @@ function cancelPreview() {
 	videoPreviewPlaying.value = false
 }
 
+// A browser that cannot decode the picture of a video may still play its sound,
+// which would leave the tile black, so that counts as failing to play it.
+function onVideoPreviewMetadata() {
+	if (videoPreview.value?.videoWidth === 0) {
+		onVideoPreviewError()
+	}
+}
+
 function onVideoPreviewError() {
+	if (videoPreviewSourceIndex.value < videoPreviewSources.value.length - 1) {
+		videoPreviewSourceIndex.value++
+		return
+	}
+
 	videoPreviewFailed.value = true
 	videoPreviewPlaying.value = false
 }
