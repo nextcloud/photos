@@ -15,7 +15,7 @@ export const VIDEO_PREVIEW_DELAY = 250
  * so everything else — QuickTime above all, which is what iOS writes — keeps to
  * its still preview.
  */
-const PREVIEWABLE_VIDEO_MIMES = ['video/mp4', 'video/webm', 'video/ogg']
+const PREVIEWABLE_VIDEO_MIMES = ['video/mp4', 'video/x-m4v', 'video/webm', 'video/ogg']
 
 /**
  * Whether a file can be previewed by playing it inline on its tile.
