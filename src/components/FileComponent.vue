@@ -70,7 +70,7 @@
 						class="file__layer file__layer--small"
 						:class="{ 'file__layer--visible': loadedSmall }"
 						:src="srcSmall"
-						:alt="file.basename"
+						:alt="altText"
 						decoding="async"
 						fetchpriority="low"
 						@load="onLoadSmall"
@@ -83,7 +83,7 @@
 						class="file__layer file__layer--large"
 						:class="{ 'file__layer--visible': loadedLarge }"
 						:src="srcLarge"
-						:alt="file.basename"
+						:alt="altText"
 						decoding="async"
 						:fetchpriority="loadedSmall ? 'high' : 'low'"
 						loading="lazy"
@@ -152,6 +152,7 @@ import PhotoActionsMenu from './PhotoActionsMenu.vue'
 import { logger } from '../services/logger.ts'
 import { isCachedPreview } from '../services/PreviewService.js'
 import { getVideoDurationFromUrl, toPhotoTarget } from '../utils/fileUtils.ts'
+import { getPhotoCaption } from '../utils/photoCaption.ts'
 import { isPreviewableVideoMime, playsVideoPreviews, VIDEO_PREVIEW_DELAY } from '../utils/videoPreview.ts'
 
 defineOptions({ inheritAttrs: false })
@@ -219,6 +220,9 @@ const ariaLabel = computed<string>(() => {
 	}
 	return t('photos', 'Open the full size "{name}" image', { name: props.file.basename })
 })
+
+// The generated description, when there is one, tells more than the file name.
+const altText = computed<string>(() => getPhotoCaption(props.file.attributes) ?? props.file.basename)
 
 const isStack = computed<boolean>(() => props.burstCount > 1)
 

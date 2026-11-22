@@ -16,6 +16,7 @@ use OCP\Files\IUserFolder;
 use OCP\Files\Node;
 use OCP\Files\Storage\ISharedStorage;
 use OCP\Files\Storage\IStorage;
+use OCP\FilesMetadata\IFilesMetadataManager;
 use OCP\Share\IShare;
 use Test\TestCase;
 
@@ -34,6 +35,7 @@ class FiltersManagerTest extends TestCase {
 			$this->rootFolder,
 			$this->createMock(IMimeTypeLoader::class),
 			$this->userConfigService,
+			$this->createMock(IFilesMetadataManager::class),
 		);
 	}
 

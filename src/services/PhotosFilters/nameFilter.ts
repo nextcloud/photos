@@ -7,6 +7,7 @@ import type { PhotosFilter } from './PhotosFilter.ts'
 
 import magnifySvg from '@mdi/svg/svg/magnify.svg?raw'
 import { encode } from 'he'
+import { isCaptionSearchEnabled } from '../../utils/photoCaption.ts'
 
 export type NameValueType = string
 
@@ -23,7 +24,8 @@ function escapeSearchTerm(searchTerm: string): string {
 }
 
 /**
- * Free text filter matching the name of the files.
+ * Free text filter matching the name of the files, and the description of
+ * the photos once the server stores them.
  *
  * Its values are provided by the search field of the navigation instead of the
  * filters input, so it does not provide any option to pick from.
@@ -35,15 +37,23 @@ export const nameFilter: PhotosFilter<NameValueType> = {
 		return []
 	},
 	getQuery(searchTerms: NameValueType[]): string {
-		// A substring match on the file name, all terms have to match.
+		// A substring match on the file name or description, all terms have to match.
+		const properties = isCaptionSearchEnabled()
+			? ['<d:displayname/>', '<nc:metadata-photos-caption/>']
+			: ['<d:displayname/>']
+
 		const comparisons = searchTerms
 			.map((searchTerm) => searchTerm.trim())
 			.filter((searchTerm) => searchTerm.length > 0)
-			.map((searchTerm) => `
+			.map((searchTerm) => {
+				const likes = properties.map((property) => `
 				<d:like>
-					<d:prop><d:displayname/></d:prop>
+					<d:prop>${property}</d:prop>
 					<d:literal>%${escapeSearchTerm(searchTerm)}%</d:literal>
 				</d:like>`)
+
+				return likes.length === 1 ? likes[0] : `<d:or>${likes.join('')}</d:or>`
+			})
 
 		if (comparisons.length === 0) {
 			return ''

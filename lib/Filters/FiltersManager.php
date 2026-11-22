@@ -20,6 +20,7 @@ use OCP\Files\Node;
 use OCP\Files\Search\ISearchBinaryOperator;
 use OCP\Files\Search\ISearchComparison;
 use OCP\Files\Storage\ISharedStorage;
+use OCP\FilesMetadata\IFilesMetadataManager;
 
 class FiltersManager {
 	/**
@@ -31,9 +32,10 @@ class FiltersManager {
 		private IRootFolder $rootFolder,
 		private readonly IMimeTypeLoader $mimeTypeLoader,
 		private readonly UserConfigService $userConfigService,
+		IFilesMetadataManager $metadataManager,
 	) {
 		$this->registerFilter(new DateRangeFilter());
-		$this->registerFilter(new NameFilter());
+		$this->registerFilter(new NameFilter($metadataManager));
 		$this->registerFilter(new PlacesFilter());
 	}
 
