@@ -8,10 +8,11 @@ import type { PhotoMetadataUpdate } from '../services/photoActions.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { showError } from '@nextcloud/dialogs'
-import { defaultRootPath } from '@nextcloud/files/dav'
+import { defaultRemoteURL, defaultRootPath } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { setPhotoArchived } from '../services/archive.ts'
 import { davClient } from '../services/DavClient.ts'
 import { logger } from '../services/logger.ts'
 import { deletePhoto as deletePhotoRequest, savePhotoMetadata, setPhotoFavorite as setPhotoFavoriteRequest } from '../services/photoActions.ts'
@@ -179,6 +180,40 @@ export const useFilesStore = defineStore('files', () => {
 	}
 
 	/**
+	 * Move a list of photos into the archive, or back out of it
+	 *
+	 * The photos stay in the store, at their new place, for the listings not
+	 * made of folders, like the tags, to keep them.
+	 *
+	 * @param photos - Photos to move
+	 * @param archived - Whether the photos are to be archived
+	 * @return Ids of the photos that were moved
+	 */
+	async function setPhotosArchived(photos: PhotoTarget[], archived: boolean): Promise<number[]> {
+		const semaphore = new Semaphore(5)
+		const moved: number[] = []
+
+		await Promise.all(photos.map(async (photo) => {
+			const symbol = await semaphore.acquire()
+
+			try {
+				const davPath = await setPhotoArchived(photo, archived)
+				files.value[photo.fileid]?.move(defaultRemoteURL + davPath)
+				moved.push(photo.fileid)
+			} catch (error) {
+				logger.error('Error moving a photo into or out of the archive', { error, filename: photo.basename })
+				showError(archived
+					? t('photos', 'Failed to archive {fileName}', { fileName: photo.basename })
+					: t('photos', 'Failed to unarchive {fileName}', { fileName: photo.basename }))
+			} finally {
+				semaphore.release(symbol)
+			}
+		}))
+
+		return moved
+	}
+
+	/**
 	 * Delete a list of files
 	 *
 	 * @param fileIds - Ids of the files to delete
@@ -266,6 +301,7 @@ export const useFilesStore = defineStore('files', () => {
 		updatePhotoMetadata,
 		setPhotoFavorite,
 		deletePhoto,
+		setPhotosArchived,
 		deleteFiles,
 		toggleFavoriteForFiles,
 	}

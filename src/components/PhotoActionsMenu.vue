@@ -59,6 +59,16 @@
 				{{ t('photos', 'Share') }}
 			</NcActionButton>
 
+			<NcActionButton v-if="canArchive" closeAfterClick @click="toggleArchived">
+				<template #icon>
+					<ArchiveArrowUpOutline v-if="isArchived" :size="20" />
+					<ArchiveArrowDownOutline v-else :size="20" />
+				</template>
+				{{ isArchived
+					? t('photos', 'Unarchive')
+					: t('photos', 'Archive') }}
+			</NcActionButton>
+
 			<NcActionSeparator v-if="canDelete" />
 
 			<NcActionButton v-if="canDelete" closeAfterClick @click="deleteConfirmationShown = true">
@@ -125,6 +135,8 @@ import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcModal from '@nextcloud/vue/components/NcModal'
+import ArchiveArrowDownOutline from 'vue-material-design-icons/ArchiveArrowDownOutline.vue'
+import ArchiveArrowUpOutline from 'vue-material-design-icons/ArchiveArrowUpOutline.vue'
 import DotsVertical from 'vue-material-design-icons/DotsVertical.vue'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import InformationOutline from 'vue-material-design-icons/InformationOutline.vue'
@@ -138,6 +150,7 @@ import AlbumPicker from './Albums/AlbumPicker.vue'
 import PhotoMetadataDialog from './PhotoMetadataDialog.vue'
 import PhotoMetadataEditDialog from './PhotoMetadataEditDialog.vue'
 import PhotoTagsDialog from './PhotoTagsDialog.vue'
+import { isPhotoArchived } from '../services/archive.ts'
 import { areTagsInstalled } from '../services/AreTagsInstalled.ts'
 import { logger } from '../services/logger.ts'
 import { useCollectionsStore } from '../store/collections.ts'
@@ -149,9 +162,11 @@ const props = defineProps<{
 }>()
 
 // The photo is gone from the server once it is deleted, but each view keeps
-// its own list of the photos it shows and has to drop it from there.
+// its own list of the photos it shows and has to drop it from there. A photo
+// moved into the archive or out of it leaves the folder it was listed from.
 const emit = defineEmits<{
 	(event: 'deleted', photo: PhotoTarget): void
+	(event: 'moved', photo: PhotoTarget): void
 }>()
 
 const filesStore = useFilesStore()
@@ -173,6 +188,9 @@ const isLoggedIn = getCurrentUser() !== null
 const canEdit = computed(() => isLoggedIn && (props.photo.permissions & Permission.WRITE) !== 0)
 const canShare = computed(() => isLoggedIn && (props.photo.permissions & Permission.SHARE) !== 0)
 const canDelete = computed(() => isLoggedIn && (props.photo.permissions & Permission.DELETE) !== 0)
+
+const canArchive = computed(() => isLoggedIn && props.photo.archivable)
+const isArchived = computed(() => isPhotoArchived(props.photo))
 
 // Tags belong to their own app, and the server refuses to put one on a photo
 // the account cannot write to.
@@ -202,6 +220,14 @@ async function addToAlbum(album: Album): Promise<void> {
 	albumPickerShown.value = false
 
 	await collectionsStore.addFilesToCollection(album.root + album.path, [props.photo.fileid.toString()])
+}
+
+async function toggleArchived(): Promise<void> {
+	const moved = await filesStore.setPhotosArchived([props.photo], !isArchived.value)
+
+	if (moved.length > 0) {
+		emit('moved', props.photo)
+	}
 }
 
 async function confirmDelete(): Promise<void> {

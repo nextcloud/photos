@@ -156,6 +156,20 @@
 						</NcActionButton>
 
 						<NcActionButton
+							v-if="canArchiveSelection"
+							:closeAfterClick="true"
+							data-cy-header-action="archive-selection"
+							@click="toggleSelectionArchived">
+							{{ archive
+								? t('photos', 'Unarchive selection')
+								: t('photos', 'Archive selection') }}
+							<template #icon>
+								<ArchiveArrowUpOutline v-if="archive" />
+								<ArchiveArrowDownOutline v-else />
+							</template>
+						</NcActionButton>
+
+						<NcActionButton
 							:closeAfterClick="true"
 							:aria-label="t('photos', 'Delete selection')"
 							data-cy-header-action="delete-selection"
@@ -177,7 +191,9 @@
 			:sections="monthsList"
 			:loading="loadingFiles"
 			:baseHeight="tileBaseHeight"
-			:emptyMessage="t('photos', 'No photos or videos in here')"
+			:emptyMessage="archive
+				? t('photos', 'Archived photos and videos are hidden from the timeline and show up here')
+				: t('photos', 'No photos or videos in here')"
 			:scrollToSection="scrubberTarget"
 			@needContent="getContent">
 			<template #default="{ file, isHeader }">
@@ -196,7 +212,8 @@
 					:selected="selection[file.id] === true"
 					@click="openViewer"
 					@selectToggled="onFileSelectToggle"
-					@deleted="onPhotoDeleted" />
+					@deleted="onPhotoRemoved"
+					@moved="onPhotoRemoved" />
 			</template>
 		</FilesListViewer>
 
@@ -249,6 +266,8 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcModal from '@nextcloud/vue/components/NcModal'
 import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
+import ArchiveArrowDownOutline from 'vue-material-design-icons/ArchiveArrowDownOutline.vue'
+import ArchiveArrowUpOutline from 'vue-material-design-icons/ArchiveArrowUpOutline.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
 import Play from 'vue-material-design-icons/Play.vue'
@@ -271,22 +290,27 @@ import { useFilesByMonth } from '../composables/useFilesByMonth.ts'
 import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { useGridDensity } from '../composables/useGridDensity.ts'
 import { allMimes } from '../services/AllowedMimes.ts'
+import { archiveFolder, isArchiveInFolders, isInArchive } from '../services/archive.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
 import { useCollectionsStore } from '../store/collections.ts'
 import { useFilesStore } from '../store/files.ts'
 import { useFilterStore } from '../store/filters.ts'
-import { configChangedEvent } from '../store/userConfig.ts'
+import { configChangedEvent, useUserConfigStore } from '../store/userConfig.ts'
 import { formatMonth, formatYear } from '../utils/dateUtils.ts'
+import { toPhotoTarget } from '../utils/fileUtils.ts'
 
 const props = withDefaults(defineProps<{
 	onlyFavorites?: boolean
 	mimesType?: string[]
 	onThisDay?: boolean
+	/** Whether the archived photos are shown, rather than the media folders. */
+	archive?: boolean
 	rootTitle: string
 }>(), {
 	onlyFavorites: false,
 	mimesType: () => allMimes,
 	onThisDay: false,
+	archive: false,
 })
 
 const router = useRouter()
@@ -295,6 +319,7 @@ const isMobile = useIsMobile()
 const collectionsStore = useCollectionsStore()
 const filesStore = useFilesStore()
 const filtersStore = useFilterStore()
+const userConfigStore = useUserConfigStore()
 const { selectedFilters, filtersQuery } = storeToRefs(filtersStore)
 
 const { gridDensity, tileBaseHeight, setGridDensity } = useGridDensity()
@@ -312,9 +337,22 @@ const scrubberTarget = ref('')
 
 const files = computed(() => filesStore.files)
 
+// A media folder holding the archive, like the root of the account, makes the
+// search return the archived photos too, they are left out here then.
+const shownFileIds = computed(() => {
+	if (props.archive || !isArchiveInFolders(userConfigStore.photosSourceFolders)) {
+		return fetchedFileIds.value
+	}
+
+	return fetchedFileIds.value.filter((fileId) => {
+		const file = files.value[fileId]
+		return file === undefined || !isInArchive(file.path)
+	})
+})
+
 // Photos taken in one go are shown as a single tile of the timeline, and are
 // reachable from the viewer it opens.
-const { fileIdsByMonthUngrouped, burstStacks, fileIdsByMonth, monthsList } = useFilesByMonth(fetchedFileIds, files, true)
+const { fileIdsByMonthUngrouped, burstStacks, fileIdsByMonth, monthsList } = useFilesByMonth(shownFileIds, files, true)
 
 const shouldFavoriteSelection = computed<boolean>(() => {
 	// Favorite all selection if at least one file is not in the favorites.
@@ -322,7 +360,7 @@ const shouldFavoriteSelection = computed<boolean>(() => {
 })
 
 // Photos of the timeline that are loaded, in the order they are shown.
-const timelinePhotos = computed(() => fetchedFileIds.value
+const timelinePhotos = computed(() => shownFileIds.value
 	.map((fileId) => files.value[fileId])
 	.filter((file) => file !== undefined))
 
@@ -332,6 +370,11 @@ const monthCounts = computed<Record<string, number>>(() => {
 	const entries = Object.entries(fileIdsByMonthUngrouped.value)
 	return Object.fromEntries(entries.map(([month, fileIds]) => [month, fileIds.length]))
 })
+
+// Archiving moves the photos within the files of the account, which only its
+// own photos can be.
+const canArchiveSelection = computed(() => selectedFileIds.value
+	.every((fileId) => files.value[fileId] !== undefined && toPhotoTarget(files.value[fileId]).archivable))
 
 const createAlbumButtonLabel = computed(() => {
 	if (Object.keys(selectedFilters.value).length > 0) {
@@ -360,6 +403,7 @@ function getContent() {
 		onThisDay: props.onThisDay,
 		onlyFavorites: props.onlyFavorites,
 		extraFilters: filtersQuery.value,
+		...(props.archive && { sourceFolders: [archiveFolder] }),
 	})
 }
 
@@ -409,9 +453,10 @@ async function addSelectionToAlbum(album: Album) {
 	await collectionsStore.addFilesToCollection(album.root + album.path, selectedFileIds.value)
 }
 
-// The photo is already gone from the store, it only has to leave the
-// list of the photos this timeline fetched.
-function onPhotoDeleted(photo: PhotoTarget) {
+// The store is up to date with the photo deleted, or moved into or out of
+// the archive, it only has to leave the list of the photos this timeline
+// fetched.
+function onPhotoRemoved(photo: PhotoTarget) {
 	onUncheckFiles([photo.fileid.toString()])
 	fetchedFileIds.value = fetchedFileIds.value.filter((fileId) => fileId !== photo.fileid)
 }
@@ -422,6 +467,13 @@ async function deleteSelection() {
 	onUncheckFiles(fileIds)
 	fetchedFileIds.value = fetchedFileIds.value.filter((fileid) => !fileIds.includes(fileid.toString()))
 	await filesStore.deleteFiles(fileIds)
+}
+
+async function toggleSelectionArchived() {
+	const fileIds = selectedFileIds.value
+	onUncheckFiles(fileIds)
+	const moved = await filesStore.setPhotosArchived(fileIds.map((fileId) => toPhotoTarget(files.value[fileId])), !props.archive)
+	fetchedFileIds.value = fetchedFileIds.value.filter((fileId) => !moved.includes(fileId))
 }
 
 function handleUserConfigChange({ key }: { key: string }) {

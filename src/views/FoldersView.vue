@@ -72,7 +72,8 @@
 										:allowSelection="false"
 										:cropped="croppedLayout"
 										@click="openViewer"
-										@deleted="onPhotoDeleted" />
+										@deleted="onPhotoRemoved"
+										@moved="onPhotoRemoved" />
 									<FolderComponent
 										v-else
 										:item="item.node"
@@ -222,7 +223,7 @@ async function openViewer(fileid: number) {
 
 // Folders keep the ids of the files they hold, the listing skips the
 // ones which are gone.
-function onPhotoDeleted(photo: PhotoTarget) {
+function onPhotoRemoved(photo: PhotoTarget) {
 	foldersStore.deleteFolderFile(photo.fileid)
 }
 

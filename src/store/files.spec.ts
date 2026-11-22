@@ -11,7 +11,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { useFilesStore } from './files.ts'
 import { useFoldersStore } from './folders.ts'
 
-const { davClient, photoActions, showError } = vi.hoisted(() => ({
+const { davClient, photoActions, archive, showError } = vi.hoisted(() => ({
 	davClient: {
 		deleteFile: vi.fn(),
 		customRequest: vi.fn(),
@@ -21,11 +21,15 @@ const { davClient, photoActions, showError } = vi.hoisted(() => ({
 		setPhotoFavorite: vi.fn(),
 		deletePhoto: vi.fn(),
 	},
+	archive: {
+		setPhotoArchived: vi.fn(),
+	},
 	showError: vi.fn(),
 }))
 
 vi.mock('../services/DavClient.ts', () => ({ davClient }))
 vi.mock('../services/photoActions.ts', () => photoActions)
+vi.mock('../services/archive.ts', () => archive)
 vi.mock('@nextcloud/dialogs', () => ({ showError }))
 vi.mock('@nextcloud/auth', () => ({ getCurrentUser: () => ({ uid: 'alice' }) }))
 
@@ -58,7 +62,7 @@ function photo(fileId: number, attributes: Record<string, unknown> = {}): File {
  * @param fileId - Id of the photo
  */
 function target(fileId: number): PhotoTarget {
-	return { fileid: fileId, basename: `${fileId}.jpg`, davPath: `/files/alice/Photos/${fileId}.jpg`, permissions: 31, favorite: false }
+	return { fileid: fileId, basename: `${fileId}.jpg`, davPath: `/files/alice/Photos/${fileId}.jpg`, permissions: 31, favorite: false, archivable: true }
 }
 
 describe('useFilesStore', () => {
@@ -181,5 +185,22 @@ describe('useFilesStore', () => {
 		expect(davClient.customRequest.mock.calls[0][1].data).toContain('<oc:favorite>1</oc:favorite>')
 		expect(store.files[1].attributes.favorite).toBe(0)
 		expect(store.files[2].attributes.favorite).toBe(1)
+	})
+
+	test('setPhotosArchived moves the photos the server moved and reports the others', async () => {
+		const store = useFilesStore()
+		store.appendFiles([photo(1), photo(2)])
+		archive.setPhotoArchived
+			.mockRejectedValueOnce(new Error('Precondition failed'))
+			.mockResolvedValueOnce('/files/alice/.archive/Photos/2.jpg')
+
+		const moved = await store.setPhotosArchived([target(1), target(2)], true)
+
+		expect(archive.setPhotoArchived).toHaveBeenCalledTimes(2)
+		expect(archive.setPhotoArchived).toHaveBeenCalledWith(target(2), true)
+		expect(moved).toEqual([2])
+		expect(showError).toHaveBeenCalledTimes(1)
+		expect(store.files[1].path).toBe('/Photos/1.jpg')
+		expect(store.files[2].path).toBe('/.archive/Photos/2.jpg')
 	})
 })

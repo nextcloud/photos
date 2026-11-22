@@ -126,7 +126,8 @@
 			v-if="showActionsMenu"
 			class="photo-actions-menu"
 			:photo="photoTarget"
-			@deleted="emit('deleted', $event)" />
+			@deleted="emit('deleted', $event)"
+			@moved="emit('moved', $event)" />
 
 		<Transition name="favorite-pop">
 			<FavoriteIcon v-if="file.attributes.favorite === 1" class="favorite-state" />
@@ -187,6 +188,7 @@ const emit = defineEmits<{
 	click: [fileid: number]
 	selectToggled: [toggle: { id: number, value: boolean }]
 	deleted: [photo: PhotoTarget]
+	moved: [photo: PhotoTarget]
 }>()
 
 // The dashboard widget mounts this component without a router.

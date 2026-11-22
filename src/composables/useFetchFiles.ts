@@ -95,7 +95,12 @@ export function useFetchFiles(): {
 
 			return fileIds
 		} catch (error) {
-			if ((error as WebDAVClientError).response?.status === 404) {
+			if ((error as WebDAVClientError).response?.status === 404 && options.sourceFolders !== undefined) {
+				// A folder of its own the view searches, like the archive, holds
+				// nothing until it is created.
+				doneFetchingFiles.value = true
+				return []
+			} else if ((error as WebDAVClientError).response?.status === 404) {
 				const { photosLocation, photosSourceFolders } = userConfigStore
 				const errorBody = await getErrorBody(error)
 				const missingFolder = photosSourceFolders
