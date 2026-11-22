@@ -353,7 +353,7 @@ const monthCounts = computed<Record<string, number>>(() => {
 })
 
 const createAlbumButtonLabel = computed(() => {
-	if (Object.keys(selectedFilters.value).length > 0) {
+	if (Object.values(selectedFilters.value).some((values) => values.length > 0)) {
 		return t('photos', 'Create new album from filters')
 	} else {
 		return t('photos', 'Create new album')
