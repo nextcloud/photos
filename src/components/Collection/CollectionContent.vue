@@ -24,7 +24,8 @@
 			class="collection__header"
 			name="header"
 			:selectedFileIds="selectedFileIds"
-			:resetSelection="resetSelection" />
+			:resetSelection="resetSelection"
+			:selectAll="selectAll" />
 
 		<!-- No content -->
 		<slot v-if="sortedCollectionFileIds.length === 0 && !loading" name="emptyContent" />
@@ -36,7 +37,11 @@
 			class="collection__media"
 			:fileIds="sortedCollectionFileIds"
 			:baseHeight="isMobile ? 120 : 200"
-			:loading="loading">
+			:loading="loading"
+			:selectable="allowSelection"
+			:selectionActive="selectedFileIds.length > 0"
+			@selectRectangle="onFileSelectRectangle"
+			@selectAll="selectAll">
 			<template #default="{ file }">
 				<FileComponent
 					:file="files[file.id]"
@@ -92,7 +97,7 @@ const files = computed(() => filesStore.files)
 
 const sortedCollectionFileIds = computed(() => props.collectionFileIds.toSorted((fileId1, fileId2) => files.value[fileId1].attributes.timestamp < files.value[fileId2].attributes.timestamp ? -1 : 1))
 
-const { selection, selectedFileIds, onFileSelectToggle, onUncheckFiles, resetSelection } = useFilesSelection(sortedCollectionFileIds)
+const { selection, selectedFileIds, onFileSelectToggle, onFileSelectRectangle, selectAll, onUncheckFiles, resetSelection } = useFilesSelection(sortedCollectionFileIds)
 
 function openViewer(fileId: number): void {
 	getViewer().open(sortedCollectionFileIds.value.map((fileId) => files.value[fileId]), files.value[fileId], { enableSidebar: false })

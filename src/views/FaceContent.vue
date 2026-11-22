@@ -66,6 +66,14 @@
 					<template v-if="selectedFileIds.length">
 						<NcActionButton
 							:closeAfterClick="true"
+							@click="selectAll">
+							<template #icon>
+								<SelectAll />
+							</template>
+							{{ t('photos', 'Select all') }}
+						</NcActionButton>
+						<NcActionButton
+							:closeAfterClick="true"
 							:aria-label="t('photos', 'Download selected files')"
 							@click="downloadSelection">
 							<template #icon>
@@ -127,7 +135,11 @@
 			class="face__photos"
 			:containerElement="appContent"
 			:fileIds="faceFileIds"
-			:loading="loadingFiles || loadingFaces">
+			:loading="loadingFiles || loadingFaces"
+			:selectable="true"
+			:selectionActive="selectedFileIds.length > 0"
+			@selectRectangle="onFileSelectRectangle"
+			@selectAll="selectAll">
 			<template #default="{ file }">
 				<FileComponent
 					:file="files[file.id]"
@@ -212,6 +224,7 @@ import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 import Merge from 'vue-material-design-icons/Merge.vue'
 import PencilOutline from 'vue-material-design-icons/PencilOutline.vue'
+import SelectAll from 'vue-material-design-icons/SelectAll.vue'
 import SendOutline from 'vue-material-design-icons/SendOutline.vue'
 import Star from 'vue-material-design-icons/Star.vue'
 import StarOutline from 'vue-material-design-icons/StarOutline.vue'
@@ -251,7 +264,7 @@ const facesFiles = computed(() => facesStore.facesFiles)
 const face = computed<Collection | undefined>(() => faces.value[props.faceName])
 const faceFileIds = computed<string[]>(() => facesFiles.value[props.faceName] || [])
 
-const { selection, selectedFileIds, onFileSelectToggle, onUncheckFiles, resetSelection } = useFilesSelection(() => faceFileIds.value.filter((fileId) => files.value[fileId] !== undefined))
+const { selection, selectedFileIds, onFileSelectToggle, onFileSelectRectangle, selectAll, onUncheckFiles, resetSelection } = useFilesSelection(() => faceFileIds.value.filter((fileId) => files.value[fileId] !== undefined))
 
 // Favorite all selection if at least one file is not on the favorites.
 const shouldFavoriteSelection = computed<boolean>(() => selectedFileIds.value.some((fileId) => filesStore.files[fileId].attributes.favorite === 0))

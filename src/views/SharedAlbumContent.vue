@@ -12,7 +12,7 @@
 			:loading="loadingCollection || loadingCollectionFiles"
 			:error="errorFetchingCollection || errorFetchingCollectionFiles">
 			<!-- Header -->
-			<template #header="{ selectedFileIds, resetSelection }">
+			<template #header="{ selectedFileIds, resetSelection, selectAll }">
 				<HeaderNavigation
 					key="navigation"
 
@@ -34,6 +34,15 @@
 					</template>
 
 					<template #default>
+						<NcButton
+							v-if="selectedFileIds.length > 0"
+							:aria-label="t('photos', 'Select all')"
+							@click="selectAll">
+							<template #icon>
+								<SelectAll />
+							</template>
+							{{ t('photos', 'Select all') }}
+						</NcButton>
 						<NcButton
 							v-if="selectedFileIds.length > 0"
 							:aria-label="t('photos', 'Unselect all')"
@@ -152,6 +161,7 @@ import Close from 'vue-material-design-icons/Close.vue'
 import ImagePlusOutline from 'vue-material-design-icons/ImagePlusOutline.vue'
 import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
+import SelectAll from 'vue-material-design-icons/SelectAll.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 // import Download from 'vue-material-design-icons/TrayArrowDown.vue'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'

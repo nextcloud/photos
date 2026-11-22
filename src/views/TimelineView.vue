@@ -110,6 +110,19 @@
 
 					<NcButton
 						v-if="selectedFileIds.length > 0"
+						:aria-label="t('photos', 'Select all')"
+						data-cy-header-action="select-all"
+						@click="selectAll">
+						<template #icon>
+							<SelectAll />
+						</template>
+						<template v-if="!isMobile" #default>
+							{{ t('photos', 'Select all') }}
+						</template>
+					</NcButton>
+
+					<NcButton
+						v-if="selectedFileIds.length > 0"
 						:aria-label="t('photos', 'Unselect all')"
 						data-cy-header-action="unselect-all"
 						@click="resetSelection">
@@ -179,7 +192,11 @@
 			:baseHeight="tileBaseHeight"
 			:emptyMessage="t('photos', 'No photos or videos in here')"
 			:scrollToSection="scrubberTarget"
-			@needContent="getContent">
+			:selectable="true"
+			:selectionActive="selectedFileIds.length > 0"
+			@needContent="getContent"
+			@selectRectangle="onFileSelectRectangle"
+			@selectAll="selectAll">
 			<template #default="{ file, isHeader }">
 				<h2
 					v-if="isHeader"
@@ -254,6 +271,7 @@ import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue
 import Play from 'vue-material-design-icons/Play.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import PlusBoxMultipleOutline from 'vue-material-design-icons/PlusBoxMultipleOutline.vue'
+import SelectAll from 'vue-material-design-icons/SelectAll.vue'
 import Star from 'vue-material-design-icons/Star.vue'
 import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
@@ -319,7 +337,7 @@ const { fileIdsByMonthUngrouped, burstStacks, fileIdsByMonth, monthsList } = use
 // into it have no tile of their own to be picked from, and favoriting,
 // downloading or deleting a part of a burst would silently leave the rest
 // behind.
-const { selection, selectedFileIds, onFileSelectToggle, onUncheckFiles, resetSelection } = useFilesSelection(
+const { selection, selectedFileIds, onFileSelectToggle, onFileSelectRectangle, selectAll, onUncheckFiles, resetSelection } = useFilesSelection(
 	() => monthsList.value.flatMap((month) => fileIdsByMonth.value[month]),
 	(fileId) => burstStacks.value[fileId]?.memberIds ?? [fileId],
 )

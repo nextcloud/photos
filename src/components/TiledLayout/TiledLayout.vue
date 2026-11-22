@@ -53,6 +53,8 @@ const tiledSections = computed<TiledSection<I>[]>(() => {
 	})
 })
 
+defineExpose({ tiledSections })
+
 onMounted(() => {
 	resizeObserver = new ResizeObserver((entries) => {
 		for (const entry of entries) {

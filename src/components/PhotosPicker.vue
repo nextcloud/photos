@@ -80,7 +80,11 @@
 			:baseHeight="100"
 			:sectionHeaderHeight="50"
 			:scrollToSection="targetMonth"
+			:selectable="true"
+			:selectionActive="selectedFileIds.length > 0"
 			@needContent="getFiles"
+			@selectRectangle="onFileSelectRectangle"
+			@selectAll="selectAll"
 			@focusout="onFocusOut">
 			<template #default="{ file, isHeader }">
 				<h3
@@ -172,7 +176,7 @@ const photosLocationFolder = computed(() => userConfigStore.photosLocationFolder
 
 const { fileIdsByMonth, monthsList } = useFilesByMonth(fetchedFileIds, files)
 
-const { selection, selectedFileIds, onFileSelectToggle, resetSelection } = useFilesSelection(() => monthsList.value.flatMap((month) => fileIdsByMonth.value[month]))
+const { selection, selectedFileIds, onFileSelectToggle, onFileSelectRectangle, selectAll, resetSelection } = useFilesSelection(() => monthsList.value.flatMap((month) => fileIdsByMonth.value[month]))
 
 watch(monthsList, (value) => {
 	if (targetMonth.value === undefined) {
