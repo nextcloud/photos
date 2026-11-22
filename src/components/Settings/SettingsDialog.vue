@@ -14,6 +14,9 @@
 			<PhotosUploadLocationSettings />
 			<CroppedLayoutSettings />
 		</NcAppSettingsSection>
+		<NcAppSettingsSection id="import-settings" :name="t('photos', 'Import from other services')">
+			<ImportSettings />
+		</NcAppSettingsSection>
 		<KeyboardShortcutsSettings />
 	</NcAppSettingsDialog>
 </template>
@@ -23,6 +26,7 @@ import { t } from '@nextcloud/l10n'
 import NcAppSettingsDialog from '@nextcloud/vue/components/NcAppSettingsDialog'
 import NcAppSettingsSection from '@nextcloud/vue/components/NcAppSettingsSection'
 import CroppedLayoutSettings from './CroppedLayoutSettings.vue'
+import ImportSettings from './ImportSettings.vue'
 import KeyboardShortcutsSettings from './KeyboardShortcutsSettings.vue'
 import PhotosSourceLocationsSettings from './PhotosSourceLocationsSettings.vue'
 import PhotosUploadLocationSettings from './PhotosUploadLocationSettings.vue'
