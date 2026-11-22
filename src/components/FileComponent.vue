@@ -28,7 +28,9 @@
 			class="file"
 			:href="file.source"
 			:aria-label="ariaLabel"
+			v-bind="gridItemAttrs"
 			@click.stop.prevent="onClick"
+			@keydown.space.exact="onSpace"
 			@pointerdown="startLongPress"
 			@pointerup="cancelLongPress"
 			@pointercancel="cancelLongPress"
@@ -119,6 +121,7 @@
 			v-if="allowSelection"
 			class="selection-checkbox"
 			:aria-label="t('photos', 'Select image {imageName}', { imageName: file.basename })"
+			:tabindex="gridItemAttrs.tabindex"
 			:modelValue="selected"
 			@update:modelValue="onToggle" />
 
@@ -149,6 +152,7 @@ import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwit
 import PlayCircleOutlineIcon from 'vue-material-design-icons/PlayCircleOutline.vue'
 import FavoriteIcon from './FavoriteIcon.vue'
 import PhotoActionsMenu from './PhotoActionsMenu.vue'
+import { useGridNavigationItem } from '../composables/useGridNavigation.ts'
 import { logger } from '../services/logger.ts'
 import { isCachedPreview } from '../services/PreviewService.js'
 import { getVideoDurationFromUrl, toPhotoTarget } from '../utils/fileUtils.ts'
@@ -173,6 +177,8 @@ const props = withDefaults(defineProps<{
 	 * hold has nothing to crop away, one laying them out as squares does.
 	 */
 	cropped?: boolean
+	// The id of the tile in the layout of the grid holding it, when that is not the file id.
+	gridItemId?: string
 }>(), {
 	selected: false,
 	allowSelection: true,
@@ -181,6 +187,7 @@ const props = withDefaults(defineProps<{
 	showActionsMenu: true,
 	// eslint-disable-next-line vue/no-boolean-default
 	cropped: true,
+	gridItemId: undefined,
 })
 
 const emit = defineEmits<{
@@ -210,6 +217,8 @@ let videoPreviewTimeout: null | ReturnType<typeof setTimeout> = null
 // A video that could not be played once is not tried again, or a broken
 // file would fire a load on every pass of the pointer.
 const videoPreviewFailed = ref(false)
+
+const gridItemAttrs = useGridNavigationItem(() => props.gridItemId ?? String(props.file.fileid))
 
 const photoTarget = computed<PhotoTarget>(() => toPhotoTarget(props.file))
 
@@ -270,6 +279,15 @@ function onClick() {
 	}
 
 	emit('click', props.file.fileid)
+}
+
+function onSpace(event: KeyboardEvent) {
+	if (!props.allowSelection) {
+		return
+	}
+
+	event.preventDefault()
+	onToggle(!props.selected)
 }
 
 // Long pressing a file selects it, which is easier to hit on a touch

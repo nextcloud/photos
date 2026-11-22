@@ -8,7 +8,8 @@
 		:id="item.fileid"
 		:name="item.basename"
 		:path="item.path"
-		:fileList="previewFiles" />
+		:fileList="previewFiles"
+		v-bind="gridItemAttrs" />
 </template>
 
 <script setup lang='ts'>
@@ -17,6 +18,7 @@ import type { PropType } from 'vue'
 
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import FolderTagPreview from './FolderTagPreview.vue'
+import { useGridNavigationItem } from '../composables/useGridNavigation.ts'
 import { getFolderContent } from '../services/FolderContent.ts'
 import { logger } from '../services/logger.ts'
 import { useFoldersStore } from '../store/folders.ts'
@@ -31,7 +33,15 @@ const props = defineProps({
 		type: Boolean,
 		default: false,
 	},
+
+	// The id of the tile in the layout of the grid holding it.
+	gridItemId: {
+		type: String,
+		required: true,
+	},
 })
+
+const gridItemAttrs = useGridNavigationItem(() => props.gridItemId)
 
 const abortController = new AbortController()
 
