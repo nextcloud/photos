@@ -11,7 +11,7 @@
 			:loading="loadingCollection || loadingCollectionFiles"
 			:error="errorFetchingCollection || errorFetchingCollectionFiles">
 			<!-- Header -->
-			<template #header="{ selectedFileIds }">
+			<template #header="{ selectedFileIds, startSlideshow }">
 				<HeaderNavigation
 					v-if="albumOriginalName !== ''"
 					key="navigation"
@@ -29,6 +29,19 @@
 					</template>
 
 					<template v-if="album !== undefined" #right>
+						<NcButton
+							v-if="albumFileIds.length > 0"
+							:aria-label="t('photos', 'Start slideshow')"
+							data-cy-header-action="slideshow"
+							@click="startSlideshow">
+							<template #icon>
+								<Play :size="20" />
+							</template>
+							<template v-if="!isMobile" #default>
+								{{ t('photos', 'Slideshow') }}
+							</template>
+						</NcButton>
+
 						<NcActions :forceMenu="true" :aria-label="t('photos', 'Open actions menu')">
 							<!-- TODO: enable download on public albums -->
 							<!-- <ActionDownload v-if="albumFileIds.length > 0"
@@ -89,13 +102,16 @@ import { getClient } from '@nextcloud/files/dav'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
 import { t } from '@nextcloud/l10n'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { computed, onBeforeMount, ref } from 'vue'
 import NcActions from '@nextcloud/vue/components/NcActions'
+import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 // import Plus from 'vue-material-design-icons/Plus.vue'
 // import ImagePlus from 'vue-material-design-icons/ImagePlus.vue'
 import ImageOffOutline from 'vue-material-design-icons/ImageOffOutline.vue'
 import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
+import Play from 'vue-material-design-icons/Play.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
@@ -107,6 +123,7 @@ const props = defineProps<{
 	token: string
 }>()
 
+const isMobile = useIsMobile()
 const publicAlbumsStore = usePublicAlbumsStore()
 const {
 	fetchCollection,
