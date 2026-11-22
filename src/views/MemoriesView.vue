@@ -11,7 +11,7 @@
 			path="/"
 			:title="rootTitle"
 			:rootTitle="rootTitle"
-			@refresh="loadPhotos" />
+			@refresh="loadPhotos(true)" />
 
 		<NcEmptyContent
 			v-if="trips.length === 0 && yearRecap === null"
@@ -100,8 +100,8 @@ defineProps<{
 
 const { photos, loading, loadPhotos } = useLoadedPhotos()
 
-// The trips are refined as more photos get loaded by the other views, so they
-// are built from whatever is already in the store instead of waiting a fetch.
+// The trips are refined as the library gets loaded batch by batch, so they are
+// built from whatever is already in the store instead of waiting for the end.
 const trips = computed<Trip[]>(() => detectTrips(photos.value))
 
 const yearRecap = computed<YearRecap | null>(() => buildYearRecap(photos.value))
@@ -110,11 +110,7 @@ const recapAriaLabel = computed<string>(() => yearRecap.value === null
 	? ''
 	: t('photos', 'Play a slideshow of your {year} highlights', { year: yearRecap.value.year }))
 
-onMounted(() => {
-	if (photos.value.length === 0) {
-		loadPhotos()
-	}
-})
+onMounted(() => loadPhotos())
 
 function startRecap(): void {
 	if (yearRecap.value === null) {
