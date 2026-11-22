@@ -6,7 +6,7 @@
 import type { PhotoFile } from '../store/files.ts'
 
 import { describe, expect, test } from 'vitest'
-import { buildYearRecap, detectTrips } from './memories.ts'
+import { buildYearRecap, detectTrips, getMainPlaces } from './memories.ts'
 
 const DAY = 24 * 60 * 60
 
@@ -110,6 +110,70 @@ describe('detectTrips', () => {
 
 		expect(detectTrips(photos, 0.25, 3).map((trip) => trip.id)).toEqual(['trip-11-13', 'trip-1-3'])
 		expect(detectTrips(photos, 1, 3).map((trip) => trip.id)).toEqual(['trip-1-13'])
+	})
+
+	test('gives each trip the main places of its photos', () => {
+		const trips = detectTrips(withPlaces(buildPhotos(0, 10), ['Lisbon', 'Lisbon', 'Lisbon', 'Sintra', 'Sintra']))
+
+		expect(trips[0].places).toEqual(['Lisbon', 'Sintra'])
+	})
+})
+
+/**
+ * Give the photos a place, in order. Photos past the end of `places` keep none.
+ *
+ * @param photos - Photos to give a place to
+ * @param places - Place of each photo, `undefined` for none
+ */
+function withPlaces(photos: PhotoFile[], places: (string | undefined)[]): PhotoFile[] {
+	photos.forEach((photo, index) => {
+		photo.attributes['metadata-photos-place'] = places[index]
+	})
+	return photos
+}
+
+describe('getMainPlaces', () => {
+	test('returns no place when no photo has one', () => {
+		expect(getMainPlaces(buildPhotos(0, 5))).toEqual([])
+		expect(getMainPlaces(withPlaces(buildPhotos(0, 2), ['', '  ']))).toEqual([])
+	})
+
+	test('returns the only place', () => {
+		expect(getMainPlaces(withPlaces(buildPhotos(0, 5), ['Lisbon', 'Lisbon']))).toEqual(['Lisbon'])
+	})
+
+	test('returns the two main places, most frequent first', () => {
+		const photos = withPlaces(buildPhotos(0, 6), ['Sintra', 'Lisbon', 'Lisbon', 'Sintra', 'Lisbon', 'Cascais'])
+
+		expect(getMainPlaces(photos)).toEqual(['Lisbon', 'Sintra'])
+	})
+
+	test('leaves out a second place with less than half the photos of the first one', () => {
+		const photos = withPlaces(buildPhotos(0, 7), ['Lisbon', 'Lisbon', 'Lisbon', 'Lisbon', 'Lisbon', 'Sintra', 'Sintra'])
+
+		expect(getMainPlaces(photos)).toEqual(['Lisbon'])
+	})
+
+	test('keeps a second place with exactly half the photos of the first one', () => {
+		const photos = withPlaces(buildPhotos(0, 6), ['Lisbon', 'Lisbon', 'Lisbon', 'Lisbon', 'Sintra', 'Sintra'])
+
+		expect(getMainPlaces(photos)).toEqual(['Lisbon', 'Sintra'])
+	})
+
+	test('orders places with the same count chronologically', () => {
+		const photos = withPlaces(buildPhotos(0, 6), ['Porto', 'Lisbon', 'Faro', 'Lisbon', 'Porto', 'Faro'])
+
+		expect(getMainPlaces(photos)).toEqual(['Porto', 'Lisbon'])
+	})
+
+	test('ignores photos without a place', () => {
+		const photos = withPlaces(buildPhotos(0, 10), [undefined, 'Lisbon', '', 'Lisbon', undefined, 'Sintra'])
+
+		expect(getMainPlaces(photos)).toEqual(['Lisbon', 'Sintra'])
+	})
+
+	test('trims the places before comparing them', () => {
+		expect(getMainPlaces(withPlaces(buildPhotos(0, 4), ['Lisbon ', 'Lisbon', ' Lisbon', 'Sintra']))).toEqual(['Lisbon'])
 	})
 })
 

@@ -16,6 +16,8 @@ export type Trip = {
 	endTimestamp: number
 	/** Photo to use as the cover of the trip. */
 	cover: PhotoFile
+	/** Places where most of the photos were taken, most frequent first: none, one or two. */
+	places: string[]
 }
 
 const SECONDS_PER_DAY = 24 * 60 * 60
@@ -192,5 +194,38 @@ function toTrip(photos: PhotoFile[]): Trip {
 		startTimestamp: first.attributes.timestamp,
 		endTimestamp: last.attributes.timestamp,
 		cover,
+		places: getMainPlaces(photos),
 	}
+}
+
+/**
+ * Find the places where most of the given photos were taken. The most frequent
+ * place is always kept; the second one only when it holds at least half as
+ * many photos, so that a short detour does not end up in the title.
+ *
+ * @param photos - Photos to find the places of, in chronological order
+ * @return Up to two places, most frequent first, earliest first on a tie
+ */
+export function getMainPlaces(photos: PhotoFile[]): string[] {
+	const counts = new Map<string, number>()
+
+	for (const photo of photos) {
+		const place = String(photo.attributes['metadata-photos-place'] ?? '').trim()
+		if (place !== '') {
+			counts.set(place, (counts.get(place) ?? 0) + 1)
+		}
+	}
+
+	// The sort is stable, so places with the same count keep their chronological order.
+	const [first, second] = [...counts.entries()].sort(([, count1], [, count2]) => count2 - count1)
+
+	if (first === undefined) {
+		return []
+	}
+
+	if (second === undefined || second[1] * 2 < first[1]) {
+		return [first[0]]
+	}
+
+	return [first[0], second[0]]
 }
