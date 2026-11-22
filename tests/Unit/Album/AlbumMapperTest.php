@@ -14,6 +14,7 @@ use OCA\Photos\Album\AlbumMapper;
 use OCA\Photos\Album\AlbumWithFiles;
 use OCA\Photos\Filters\FiltersManager;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\Comments\ICommentsManager;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\IMimeTypeLoader;
@@ -69,6 +70,7 @@ class AlbumMapperTest extends TestCase {
 			$this->l10n,
 			$this->secureRandom,
 			$this->filtersManager,
+			$this->createMock(ICommentsManager::class),
 		);
 	}
 

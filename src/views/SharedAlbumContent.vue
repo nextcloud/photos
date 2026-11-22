@@ -57,6 +57,17 @@
 							{{ t('photos', "Add") }}
 						</NcButton>
 
+						<NcButton
+							v-if="albumId !== undefined"
+							variant="tertiary"
+							:aria-label="t('photos', 'Comments')"
+							:pressed="showComments"
+							@click="showComments = !showComments">
+							<template #icon>
+								<CommentOutline />
+							</template>
+						</NcButton>
+
 						<NcActions :forceMenu="true" :aria-label="t('photos', 'Open actions menu')">
 							<!-- TODO: enable download on shared albums -->
 							<!-- <ActionDownload v-if="albumFileIds.length > 0"
@@ -134,6 +145,12 @@
 			:blacklistIds="albumFileIds"
 			:loading="loadingAddFilesToAlbum"
 			@filesPicked="handleFilesPicked" />
+
+		<AlbumComments
+			v-if="showComments && albumId !== undefined"
+			:albumId="albumId"
+			:albumName="albumOriginalName"
+			@close="showComments = false" />
 	</div>
 </template>
 
@@ -149,12 +166,14 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 import Close from 'vue-material-design-icons/Close.vue'
+import CommentOutline from 'vue-material-design-icons/CommentOutline.vue'
 import ImagePlusOutline from 'vue-material-design-icons/ImagePlusOutline.vue'
 import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 // import Download from 'vue-material-design-icons/TrayArrowDown.vue'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
+import AlbumComments from '../components/Albums/AlbumComments.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
@@ -188,11 +207,14 @@ const collectionContent = useTemplateRef<InstanceType<typeof CollectionContent>>
 
 const showAddPhotosModal = ref(false)
 const loadingAddFilesToAlbum = ref(false)
+const showComments = ref(false)
 const collaboratorTypes = ShareType
 
 const album = computed(() => sharedAlbumsStore.getSharedAlbum(props.albumName))
 
 const albumFileIds = computed(() => sharedAlbumsStore.getSharedAlbumFiles(props.albumName))
+
+const albumId = computed(() => album.value?.attributes['album-id'])
 
 const albumOriginalName = computed(() => props.albumName.replace(new RegExp(`\\(${album.value?.attributes.collaborators[0].id}\\)$`), ''))
 
