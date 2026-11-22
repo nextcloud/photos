@@ -25,6 +25,7 @@
 		</template>
 
 		<a
+			ref="fileLink"
 			class="file"
 			:href="file.source"
 			:aria-label="ariaLabel"
@@ -83,6 +84,7 @@
 						class="file__layer file__layer--large"
 						:class="{ 'file__layer--visible': loadedLarge }"
 						:src="srcLarge"
+						:srcset="srcsetLarge"
 						:alt="file.basename"
 						decoding="async"
 						:fetchpriority="loadedSmall ? 'high' : 'low'"
@@ -138,11 +140,12 @@
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import type { PhotoFile } from '../store/files.js'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
+import type { Size } from '../utils/previewSize.ts'
 
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
-import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import NcBlurHash from '@nextcloud/vue/components/NcBlurHash'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
@@ -152,6 +155,7 @@ import PhotoActionsMenu from './PhotoActionsMenu.vue'
 import { logger } from '../services/logger.ts'
 import { isCachedPreview } from '../services/PreviewService.js'
 import { getVideoDurationFromUrl, toPhotoTarget } from '../utils/fileUtils.ts'
+import { MAX_PIXEL_RATIO, observeSize, previewBox } from '../utils/previewSize.ts'
 import { isPreviewableVideoMime, playsVideoPreviews, VIDEO_PREVIEW_DELAY } from '../utils/videoPreview.ts'
 
 defineOptions({ inheritAttrs: false })
@@ -193,6 +197,7 @@ const emit = defineEmits<{
 const route: RouteLocationNormalizedLoaded | undefined = useRoute()
 const isMobile = useIsMobile()
 
+const fileLink = useTemplateRef<HTMLAnchorElement>('fileLink')
 const imgSmall = useTemplateRef<HTMLImageElement>('imgSmall')
 const imgLarge = useTemplateRef<HTMLImageElement>('imgLarge')
 const videoPreview = useTemplateRef<HTMLVideoElement>('videoPreview')
@@ -210,6 +215,10 @@ let videoPreviewTimeout: null | ReturnType<typeof setTimeout> = null
 // A video that could not be played once is not tried again, or a broken
 // file would fire a load on every pass of the pointer.
 const videoPreviewFailed = ref(false)
+// The largest size the tile was laid out at for the current file. A tile that
+// shrinks keeps the preview it has rather than loading a smaller one.
+const tileSize = ref<Size>({ width: 0, height: 0 })
+let stopObservingSize = () => {}
 
 const photoTarget = computed<PhotoTarget>(() => toPhotoTarget(props.file))
 
@@ -226,9 +235,27 @@ const isVideo = computed<boolean>(() => props.file.mime?.includes('video') ?? fa
 
 const decodedEtag = computed<string>(() => props.file.attributes.etag.replace('&quot;', '').replace('&quot;', ''))
 
-const srcLarge = computed<string>(() => isMobile.value ? getItemURL(256) : getItemURL(1024))
+const photoSize = computed<Size | undefined>(() => props.file.attributes['metadata-photos-size'])
 
-const srcSmall = computed<string>(() => getItemURL(64))
+// Until the tile is laid out, a size large enough for any tile of the form factor.
+const srcLarge = computed<string>(() => {
+	const box = previewBox(tileSize.value, photoSize.value, props.cropped, 1)
+	if (box === undefined) {
+		const size = isMobile.value ? 256 : 1024
+		return getItemURL(size, size)
+	}
+	return getItemURL(box.width, box.height)
+})
+
+const srcLarge2x = computed<string>(() => {
+	const box = previewBox(tileSize.value, photoSize.value, props.cropped, MAX_PIXEL_RATIO)
+	return box === undefined ? srcLarge.value : getItemURL(box.width, box.height)
+})
+
+// Lets the browser pick the preview matching the pixel ratio of the screen.
+const srcsetLarge = computed<string | undefined>(() => srcLarge2x.value === srcLarge.value ? undefined : `${srcLarge.value} 1x, ${srcLarge2x.value} 2x`)
+
+const srcSmall = computed<string>(() => getItemURL(64, 64))
 
 const blurhash = computed<string | undefined>(() => props.file.attributes['metadata-blurhash'])
 
@@ -246,14 +273,21 @@ watch(() => props.file, async () => {
 	// found about the previous one says nothing about this one.
 	cancelPreview()
 	videoPreviewFailed.value = false
+	tileSize.value = { width: 0, height: 0 }
 
+	// Measured once the tile is laid out for the new file.
+	await nextTick()
 	await init()
 })
 
 async function init() {
+	if (fileLink.value !== null) {
+		growTileSize({ width: fileLink.value.clientWidth, height: fileLink.value.clientHeight })
+	}
+
 	[loadedSmall.value, loadedLarge.value] = await Promise.all([
 		await isCachedPreview(srcSmall.value),
-		await isCachedPreview(srcLarge.value),
+		await isCachedPreview(window.devicePixelRatio > 1 ? srcLarge2x.value : srcLarge.value),
 	])
 
 	initialized.value = true
@@ -291,6 +325,18 @@ function cancelLongPress() {
 	if (longPressTimeout !== null) {
 		clearTimeout(longPressTimeout)
 		longPressTimeout = null
+	}
+}
+
+/**
+ * @param size - Size the tile is laid out at
+ */
+function growTileSize(size: Size) {
+	if (size.width > tileSize.value.width || size.height > tileSize.value.height) {
+		tileSize.value = {
+			width: Math.max(size.width, tileSize.value.width),
+			height: Math.max(size.height, tileSize.value.height),
+		}
 	}
 }
 
@@ -355,12 +401,12 @@ function onToggle(value: boolean) {
 	emit('selectToggled', { id: props.file.fileid, value })
 }
 
-function getItemURL(size: number): string {
+function getItemURL(width: number, height: number): string {
 	const token = route?.params.token
 	if (token) {
-		return generateUrl(`/apps/photos/api/v1/publicPreview/${props.file.fileid}?etag=${decodedEtag.value}&x=${size}&y=${size}&token=${token}`)
+		return generateUrl(`/apps/photos/api/v1/publicPreview/${props.file.fileid}?etag=${decodedEtag.value}&x=${width}&y=${height}&token=${token}`)
 	} else {
-		return generateUrl(`/apps/photos/api/v1/preview/${props.file.fileid}?etag=${decodedEtag.value}&x=${size}&y=${size}`)
+		return generateUrl(`/apps/photos/api/v1/preview/${props.file.fileid}?etag=${decodedEtag.value}&x=${width}&y=${height}`)
 	}
 }
 
@@ -386,6 +432,9 @@ async function getVideoDuration() {
 }
 
 onMounted(async () => {
+	if (fileLink.value !== null) {
+		stopObservingSize = observeSize(fileLink.value, growTileSize)
+	}
 	await init()
 })
 
@@ -395,11 +444,13 @@ onBeforeUnmount(() => {
 		imgSmall.value.src = ''
 	}
 	if (imgLarge.value !== null) {
+		imgLarge.value.srcset = ''
 		imgLarge.value.src = ''
 	}
 
 	cancelLongPress()
 	cancelPreview()
+	stopObservingSize()
 })
 </script>
 
