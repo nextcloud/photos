@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<NcContent appName="photos">
+	<NcContent appName="photos" :class="{ 'photos-app--bottom-navigation': isMobile }">
 		<NcAppNavigation :aria-label="t('photos', 'Photos')">
 			<template v-if="isTimelineView" #search>
 				<NcTextField
@@ -183,6 +183,8 @@
 			<span class="hidden-visually" role="none" v-html="videoplaceholder" />
 		</NcAppContent>
 
+		<BottomNavigation v-if="isMobile" />
+
 		<!-- Main settings Modal-->
 		<SettingsDialog v-model:open="openedSettings" />
 	</NcContent>
@@ -195,6 +197,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import debounce from 'debounce'
 import { storeToRefs } from 'pinia'
 import { computed, onBeforeMount, onBeforeUnmount, ref, watch } from 'vue'
@@ -234,6 +237,7 @@ import TagOutline from 'vue-material-design-icons/TagOutline.vue'
 import TimelapseIcon from 'vue-material-design-icons/Timelapse.vue'
 import VideoIcon from 'vue-material-design-icons/Video.vue'
 import VideoOutline from 'vue-material-design-icons/VideoOutline.vue'
+import BottomNavigation from './components/BottomNavigation.vue'
 import PhotosFiltersDisplay from './components/PhotosFilters/PhotosFiltersDisplay.vue'
 import PhotosFiltersInput from './components/PhotosFilters/PhotosFiltersInput.vue'
 import SettingsDialog from './components/Settings/SettingsDialog.vue'
@@ -249,6 +253,7 @@ import { useFilesStore } from './store/files.ts'
 import { useFilterStore } from './store/filters.ts'
 
 const route = useRoute()
+const isMobile = useIsMobile()
 const filesStore = useFilesStore()
 const filtersStore = useFilterStore()
 const { selectedFilters } = storeToRefs(filtersStore)
@@ -334,6 +339,15 @@ onBeforeUnmount(() => {
 	flex-grow: 1;
 	flex-direction: column;
 	align-content: space-between;
+}
+
+.photos-app--bottom-navigation {
+	--photos-bottom-navigation-height: calc(56px + env(safe-area-inset-bottom, 0px));
+
+	// Keeps the end of the content reachable above the bottom navigation.
+	.app-content {
+		padding-bottom: var(--photos-bottom-navigation-height);
+	}
 }
 
 .app-navigation__photos :deep(.app-navigation-entry-icon.icon-photos) {
