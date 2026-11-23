@@ -401,6 +401,9 @@ function openViewer(fileId: number) {
 }
 
 function startSlideshow() {
+	if (timelinePhotos.value.length === 0) {
+		return
+	}
 	getViewer().open(timelinePhotos.value, timelinePhotos.value[0], { startSlideshow: true })
 }
 
@@ -450,10 +453,12 @@ onBeforeRouteLeave(() => {
 
 onMounted(() => {
 	subscribe(configChangedEvent, handleUserConfigChange)
+	subscribe('photos:start-slideshow', startSlideshow)
 })
 
 onUnmounted(() => {
 	unsubscribe(configChangedEvent, handleUserConfigChange)
+	unsubscribe('photos:start-slideshow', startSlideshow)
 })
 </script>
 

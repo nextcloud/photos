@@ -5,6 +5,11 @@
 
 <template>
 	<NcAppSettingsShortcutsSection>
+		<NcHotkeyList :label="t('photos', 'Navigation')">
+			<NcHotkey
+				:label="t('photos', 'Open the quick navigation')"
+				hotkey="g" />
+		</NcHotkeyList>
 		<NcHotkeyList :label="t('photos', 'Slideshow')">
 			<NcHotkey
 				:label="t('photos', 'Previous photo')"
