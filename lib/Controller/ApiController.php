@@ -55,6 +55,16 @@ class ApiController extends Controller {
 					return new JSONResponse([], Http::STATUS_BAD_REQUEST);
 				}
 				break;
+			case 'albumsSortOrder':
+				if (!in_array($value, ['recent', 'name', 'date'], true)) {
+					return new JSONResponse([], Http::STATUS_BAD_REQUEST);
+				}
+				break;
+			case 'albumPhotosSortOrder':
+				if (!in_array($value, ['oldest', 'newest'], true)) {
+					return new JSONResponse([], Http::STATUS_BAD_REQUEST);
+				}
+				break;
 			case 'photosLocation':
 				if (!$this->validatePath($value)) {
 					return new JSONResponse([], Http::STATUS_BAD_REQUEST);

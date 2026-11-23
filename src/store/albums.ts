@@ -34,6 +34,7 @@ export const albumsExtraProps = [
 	'<nc:dateRange />',
 	'<nc:collaborators />',
 	'<nc:filters />',
+	'<d:getlastmodified />',
 ]
 
 export const albumFilesExtraProps = ['<nc:photos-album-file-origin />']

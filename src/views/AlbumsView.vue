@@ -5,7 +5,7 @@
 <template>
 	<div>
 		<CollectionsList
-			:collections="albums"
+			:collections="sortedAlbums"
 			:loading="loadingCollections"
 			:error="errorFetchingCollections"
 			class="albums-list">
@@ -16,6 +16,12 @@
 					:title="t('photos', 'Albums')"
 					:rootTitle="t('photos', 'Albums')"
 					@refresh="fetchAlbums">
+					<SortOrderMenu
+						name="photos-albums-sort"
+						:label="t('photos', 'Sort albums')"
+						:options="albumsSortOptions()"
+						:modelValue="userConfigStore.albumsSortOrder"
+						@update:modelValue="userConfigStore.updateUserConfig('albumsSortOrder', $event)" />
 					<NcButton
 						:aria-label="isMobile ? t('photos', 'New album') : undefined"
 						@click="showAlbumCreationForm = true">
@@ -88,8 +94,11 @@ import AlbumForm from '../components/Albums/AlbumForm.vue'
 import CollectionCover from '../components/Collection/CollectionCover.vue'
 import CollectionsList from '../components/Collection/CollectionsList.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import SortOrderMenu from '../components/SortOrderMenu.vue'
 import { useFetchCollections } from '../composables/useFetchCollections.ts'
 import { albumsExtraProps, albumsPrefix, useAlbumsStore } from '../store/albums.ts'
+import { useUserConfigStore } from '../store/userConfig.ts'
+import { albumsSortOptions, sortAlbums } from '../utils/albumSort.ts'
 
 const router = useRouter()
 const isMobile = useIsSmallMobile()
@@ -98,7 +107,9 @@ const { fetchCollections, errorFetchingCollections, loadingCollections } = useFe
 
 const showAlbumCreationForm = ref(false)
 
-const albums = computed(() => albumsStore.albums)
+const userConfigStore = useUserConfigStore()
+
+const sortedAlbums = computed(() => sortAlbums(albumsStore.albums, userConfigStore.albumsSortOrder))
 
 function coverUrl(lastPhoto: number): string {
 	if (lastPhoto === -1) {

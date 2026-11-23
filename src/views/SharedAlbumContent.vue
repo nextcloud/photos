@@ -9,6 +9,7 @@
 			ref="collectionContent"
 			:collection="album"
 			:collectionFileIds="albumFileIds"
+			:sortOrder="userConfigStore.albumPhotosSortOrder"
 			:loading="loadingCollection || loadingCollectionFiles"
 			:error="errorFetchingCollection || errorFetchingCollectionFiles">
 			<!-- Header -->
@@ -46,6 +47,12 @@
 					</template>
 
 					<template v-if="album !== undefined" #right>
+						<SortOrderMenu
+							name="photos-album-photos-sort"
+							:label="t('photos', 'Sort photos')"
+							:options="albumPhotosSortOptions()"
+							:modelValue="userConfigStore.albumPhotosSortOrder"
+							@update:modelValue="userConfigStore.updateUserConfig('albumPhotosSortOrder', $event)" />
 						<NcButton
 							v-if="album.attributes.nbItems !== 0"
 							variant="secondary"
@@ -159,11 +166,14 @@ import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
 import PhotosPicker from '../components/PhotosPicker.vue'
+import SortOrderMenu from '../components/SortOrderMenu.vue'
 import { useFetchCollectionContent } from '../composables/useFetchCollectionContent.ts'
 import { albumFilesExtraProps, albumsExtraProps } from '../store/albums.ts'
 import { useCollectionsStore } from '../store/collections.ts'
 import { useFilesStore } from '../store/files.ts'
 import { useSharedAlbumsStore } from '../store/sharedAlbums.ts'
+import { useUserConfigStore } from '../store/userConfig.ts'
+import { albumPhotosSortOptions } from '../utils/albumSort.ts'
 
 const props = withDefaults(defineProps<{
 	albumName?: string
@@ -174,6 +184,7 @@ const props = withDefaults(defineProps<{
 const router = useRouter()
 const collectionsStore = useCollectionsStore()
 const filesStore = useFilesStore()
+const userConfigStore = useUserConfigStore()
 const sharedAlbumsStore = useSharedAlbumsStore()
 const {
 	fetchCollection,

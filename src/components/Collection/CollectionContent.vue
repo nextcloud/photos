@@ -53,6 +53,7 @@
 <script setup lang="ts">
 import type { Node } from '@nextcloud/files'
 import type { Collection } from '../../services/collectionFetcher.ts'
+import type { AlbumPhotosSortOrder } from '../../utils/albumSort.ts'
 import type { PhotoTarget } from '../../utils/fileUtils.ts'
 
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
@@ -68,6 +69,7 @@ import FilesListViewer from '../FilesListViewer.vue'
 import { useFilesSelection } from '../../composables/useFilesSelection.ts'
 import { useCollectionsStore } from '../../store/collections.ts'
 import { useFilesStore } from '../../store/files.ts'
+import { sortAlbumPhotos } from '../../utils/albumSort.ts'
 
 const props = withDefaults(defineProps<{
 	collection?: Collection
@@ -75,11 +77,14 @@ const props = withDefaults(defineProps<{
 	loading?: boolean
 	allowSelection?: boolean
 	error?: Error | number | null
+	/** Order of the photos, by when they were taken. */
+	sortOrder?: AlbumPhotosSortOrder
 }>(), {
 	collection: undefined,
 	loading: false,
 	allowSelection: true,
 	error: null,
+	sortOrder: 'oldest',
 })
 
 const isMobile = useIsMobile()
@@ -91,7 +96,7 @@ const appContent = document.getElementById('app-content-vue')
 
 const files = computed(() => filesStore.files)
 
-const sortedCollectionFileIds = computed(() => props.collectionFileIds.toSorted((fileId1, fileId2) => files.value[fileId1].attributes.timestamp < files.value[fileId2].attributes.timestamp ? -1 : 1))
+const sortedCollectionFileIds = computed(() => sortAlbumPhotos(props.collectionFileIds, (fileId) => files.value[fileId].attributes.timestamp, props.sortOrder))
 
 function openViewer(fileId: number): void {
 	getViewer().open(sortedCollectionFileIds.value.map((fileId) => files.value[fileId]), files.value[fileId], { enableSidebar: false })
