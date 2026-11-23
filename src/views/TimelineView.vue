@@ -181,6 +181,9 @@
 			:emptyDescription="emptyState.description"
 			:scrollToSection="scrubberTarget"
 			@needContent="getContent">
+			<template v-if="onlyFavorites" #emptyIcon>
+				<StarOutline />
+			</template>
 			<template #default="{ file, isHeader }">
 				<h2
 					v-if="isHeader"

@@ -46,7 +46,7 @@ export class AlbumPage {
 
 	/** The message shown while the album holds no photo. */
 	public emptyMessage(): Locator {
-		return this.page.getByRole('note', { name: 'This album does not have any photos or videos yet!' })
+		return this.page.getByRole('note', { name: 'No photos or videos in this album yet' })
 	}
 
 	/**

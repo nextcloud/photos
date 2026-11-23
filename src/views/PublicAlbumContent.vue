@@ -60,7 +60,7 @@
 			<template #emptyContent>
 				<NcEmptyContent
 
-					:name="t('photos', 'This album does not have any photos or videos yet!')"
+					:name="t('photos', 'No photos or videos in this album yet')"
 					class="album__empty">
 					<template #icon>
 						<ImageOffOutline />

@@ -11,7 +11,9 @@
 			:name="emptyMessage"
 			:description="emptyDescription">
 			<template #icon>
-				<PackageVariant />
+				<slot name="emptyIcon">
+					<ImageMultipleOutline />
+				</slot>
 			</template>
 		</NcEmptyContent>
 
@@ -80,7 +82,7 @@ import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { computed, onMounted, onUnmounted } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
-import PackageVariant from 'vue-material-design-icons/PackageVariant.vue'
+import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import TiledLayout from '../components/TiledLayout/TiledLayout.vue'
 import VirtualScrolling from '../components/VirtualScrolling.vue'
 import { fetchFile } from '../services/fileFetcher.ts'

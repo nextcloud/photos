@@ -47,7 +47,7 @@ export class AlbumsPage {
 	 * announces itself as a note labelled by the message it carries.
 	 */
 	public emptyMessage(): Locator {
-		return this.page.getByRole('note', { name: 'There is no album yet!' })
+		return this.page.getByRole('note', { name: 'No albums yet' })
 	}
 
 	/**

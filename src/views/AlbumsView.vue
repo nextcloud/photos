@@ -52,7 +52,7 @@
 
 			<template #emptyCollectionsList>
 				<NcEmptyContent
-					:name="t('photos', 'There is no album yet!')"
+					:name="t('photos', 'No albums yet')"
 					:description="t('photos', 'Albums gather photos and videos from any of your folders')">
 					<template #icon>
 						<ImageMultipleOutline />

@@ -74,7 +74,7 @@
 			class="photos-picker__file-list"
 			:class="{ 'photos-picker__file-list--placeholder': monthsList.length === 0 }"
 			:fileIdsBySection="fileIdsByMonth"
-			:emptyMessage="t('photos', 'There are no photos or videos yet!')"
+			:emptyMessage="t('photos', 'No photos or videos yet')"
 			:sections="monthsList"
 			:loading="loadingFiles"
 			:baseHeight="100"
