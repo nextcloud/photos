@@ -68,13 +68,14 @@ export class FoldersPage {
 	}
 
 	/**
-	 * The photo a folder is shown under. It stands for the folder rather than for
-	 * itself, so it carries no accessible name and is addressed by its class.
+	 * The first photo of the mosaic a folder is shown under. It stands for the
+	 * folder rather than for itself, so it carries no accessible name and is
+	 * addressed by its class.
 	 *
 	 * @param folderName - Name of the folder
 	 */
 	public getFolderCover(folderName: string): Locator {
-		return this.getFolder(folderName).locator('img.folder__image')
+		return this.getFolder(folderName).locator('img.folder__preview').first()
 	}
 
 	/**
