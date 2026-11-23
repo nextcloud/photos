@@ -3,8 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { describe, expect, test } from 'vitest'
+import { loadState } from '@nextcloud/initial-state'
+import { describe, expect, test, vi } from 'vitest'
 import { nameFilter } from './nameFilter.ts'
+
+vi.mock('@nextcloud/initial-state', () => ({
+	loadState: vi.fn((app: string, key: string, fallback: unknown) => fallback),
+}))
 
 /**
  * Extract the literals of the comparisons of a query.
@@ -29,7 +34,19 @@ describe('nameFilter', () => {
 		const query = nameFilter.getQuery(['holidays'])
 
 		expect(query).toContain('<d:displayname/>')
+		expect(query).not.toContain('metadata-photos-caption')
 		expect(getLiterals(query)).toEqual(['%holidays%'])
+	})
+
+	test('also matches the description once the server can search it', () => {
+		vi.mocked(loadState).mockReturnValueOnce(true)
+
+		const query = nameFilter.getQuery(['beach', 'dog'])
+
+		expect(query.match(/<d:or>/g)).toHaveLength(2)
+		expect(query.match(/<d:displayname\/>/g)).toHaveLength(2)
+		expect(query.match(/<nc:metadata-photos-caption\/>/g)).toHaveLength(2)
+		expect(getLiterals(query)).toEqual(['%beach%', '%beach%', '%dog%', '%dog%'])
 	})
 
 	test('trims the search terms and requires all of them to match', () => {

@@ -15,6 +15,10 @@
 					<dt>{{ t('photos', 'Filename') }}</dt>
 					<dd>{{ photo.basename }}</dd>
 				</div>
+				<div v-if="metadata?.caption" class="photo-metadata__entry photo-metadata__entry--text">
+					<dt>{{ t('photos', 'AI description') }}</dt>
+					<dd>{{ metadata.caption }}</dd>
+				</div>
 				<div v-for="entry in exifEntries" :key="entry.label" class="photo-metadata__entry">
 					<dt>{{ entry.label }}</dt>
 					<dd>{{ entry.value }}</dd>
@@ -104,6 +108,13 @@ onMounted(async () => {
 		margin: 0;
 		font-variant-numeric: tabular-nums;
 		word-break: break-all;
+	}
+
+	// Prose, wrapped between words rather than anywhere.
+	&__entry--text dd {
+		text-align: end;
+		word-break: normal;
+		overflow-wrap: anywhere;
 	}
 
 	// Sits next to the entries rather than inside them, so the map is not

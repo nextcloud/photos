@@ -10,7 +10,7 @@
 				<NcTextField
 					v-model="searchTerm"
 					class="app-navigation__search"
-					:label="t('photos', 'Search by file name')"
+					:label="captionSearch ? t('photos', 'Search by name or description') : t('photos', 'Search by file name')"
 					:showTrailingButton="searchTerm.length > 0"
 					:trailingButtonLabel="t('photos', 'Clear search')"
 					@trailingButtonClick="searchTerm = ''">
@@ -247,6 +247,7 @@ import { logger } from './services/logger.ts'
 import { nameFilterId } from './services/PhotosFilters/nameFilter.ts'
 import { useFilesStore } from './store/files.ts'
 import { useFilterStore } from './store/filters.ts'
+import { isCaptionSearchEnabled } from './utils/photoCaption.ts'
 
 const route = useRoute()
 const filesStore = useFilesStore()
@@ -254,6 +255,7 @@ const filtersStore = useFilterStore()
 const { selectedFilters } = storeToRefs(filtersStore)
 
 const searchTerm = ref('')
+const captionSearch = isCaptionSearchEnabled()
 const openedSettings = ref(false)
 
 const currentUser = getCurrentUser()

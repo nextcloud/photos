@@ -65,6 +65,7 @@ function getCollectionFilesDavRequest(extraProps: string[] = []): string {
 					<nc:metadata-blurhash />
 					<nc:metadata-photos-size />
 					<nc:metadata-photos-original_date_time />
+					<nc:metadata-photos-caption />
 					<nc:metadata-files-live-photo />
 					<nc:has-preview />
 					<nc:hidden />

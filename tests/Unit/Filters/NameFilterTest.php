@@ -11,15 +11,24 @@ namespace OCA\Photos\Tests\Filters;
 use OCA\Photos\Filters\NameFilter;
 use OCP\Files\Search\ISearchBinaryOperator;
 use OCP\Files\Search\ISearchComparison;
+use OCP\FilesMetadata\IFilesMetadataManager;
+use OCP\FilesMetadata\IMetadataQuery;
+use OCP\FilesMetadata\Model\IFilesMetadata;
+use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
 class NameFilterTest extends TestCase {
+	private IFilesMetadata&MockObject $knownMetadata;
 	private NameFilter $filter;
 
 	protected function setUp(): void {
 		parent::setUp();
 
-		$this->filter = new NameFilter();
+		$this->knownMetadata = $this->createMock(IFilesMetadata::class);
+		$metadataManager = $this->createMock(IFilesMetadataManager::class);
+		$metadataManager->method('getKnownMetadata')->willReturn($this->knownMetadata);
+
+		$this->filter = new NameFilter($metadataManager);
 	}
 
 	public function testMatchesTheNameAsSubstring(): void {
@@ -56,5 +65,25 @@ class NameFilterTest extends TestCase {
 			['%rome%'],
 			array_map(fn ($comparison) => $comparison->getValue(), $operator->getArguments()),
 		);
+	}
+
+	public function testAlsoMatchesTheDescriptionOnceItIsIndexed(): void {
+		$this->knownMetadata->method('isIndex')->with('photos-caption')->willReturn(true);
+
+		$operator = $this->filter->getSearchOperator(['beach']);
+
+		$this->assertCount(1, $operator->getArguments());
+		$either = $operator->getArguments()[0];
+		$this->assertInstanceOf(ISearchBinaryOperator::class, $either);
+		$this->assertEquals(ISearchBinaryOperator::OPERATOR_OR, $either->getType());
+
+		[$name, $caption] = $either->getArguments();
+		$this->assertInstanceOf(ISearchComparison::class, $name);
+		$this->assertInstanceOf(ISearchComparison::class, $caption);
+		$this->assertEquals('name', $name->getField());
+		$this->assertEquals('photos-caption', $caption->getField());
+		$this->assertEquals(ISearchComparison::COMPARE_LIKE, $caption->getType());
+		$this->assertEquals(IMetadataQuery::EXTRA, $caption->getExtra());
+		$this->assertEquals('%beach%', $caption->getValue());
 	}
 }

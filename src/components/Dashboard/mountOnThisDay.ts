@@ -5,9 +5,13 @@
 
 import type { App } from 'vue'
 
+import { registerDavProperty } from '@nextcloud/files/dav'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 import DashboardOnThisDay from './DashboardOnThisDay.vue'
+
+// Used as the alternative text of the photos.
+registerDavProperty('nc:metadata-photos-caption')
 
 /**
  * Mount the "On This Day" dashboard widget.

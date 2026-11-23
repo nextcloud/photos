@@ -12,8 +12,11 @@ use OCA\DAV\Connector\Sabre\Principal;
 use OCA\DAV\Events\SabrePluginAddEvent;
 use OCA\DAV\Events\SabrePluginAuthInitEvent;
 use OCA\Files\Event\LoadSidebar;
+use OCA\Photos\ConfigLexicon;
 use OCA\Photos\Dashboard\OnThisDay;
 use OCA\Photos\Listener\AlbumsManagementEventListener;
+use OCA\Photos\Listener\CaptionMetadataProvider;
+use OCA\Photos\Listener\CaptionTaskListener;
 use OCA\Photos\Listener\CSPListener;
 use OCA\Photos\Listener\ExifMetadataProvider;
 use OCA\Photos\Listener\LoadSidebarScripts;
@@ -35,6 +38,7 @@ use OCP\Group\Events\UserRemovedEvent;
 use OCP\Security\CSP\AddContentSecurityPolicyEvent;
 use OCP\Share\Events\ShareDeletedEvent;
 use OCP\SystemTag\MapperEvent;
+use OCP\TaskProcessing\Events\TaskSuccessfulEvent;
 use OCP\User\Events\UserDeletedEvent;
 
 class Application extends App implements IBootstrap {
@@ -70,6 +74,7 @@ class Application extends App implements IBootstrap {
 	#[\Override]
 	public function register(IRegistrationContext $context): void {
 		$context->registerDashboardWidget(OnThisDay::class);
+		$context->registerConfigLexicon(ConfigLexicon::class);
 		/** Register $principalBackend for the DAV collection */
 		$context->registerServiceAlias('principalBackend', Principal::class);
 
@@ -87,6 +92,9 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(MetadataBackgroundEvent::class, OriginalDateTimeMetadataProvider::class);
 		$context->registerEventListener(MetadataLiveEvent::class, PlaceMetadataProvider::class);
 		$context->registerEventListener(MetadataBackgroundEvent::class, PlaceMetadataProvider::class);
+		$context->registerEventListener(MetadataLiveEvent::class, CaptionMetadataProvider::class);
+		$context->registerEventListener(MetadataBackgroundEvent::class, CaptionMetadataProvider::class);
+		$context->registerEventListener(TaskSuccessfulEvent::class, CaptionTaskListener::class);
 
 		$context->registerEventListener(NodeDeletedEvent::class, AlbumsManagementEventListener::class);
 		$context->registerEventListener(UserRemovedEvent::class, AlbumsManagementEventListener::class);

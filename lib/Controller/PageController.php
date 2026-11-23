@@ -14,6 +14,7 @@ use OC\Files\Search\SearchQuery;
 use OC\User\NoUserException;
 use OCA\Files\Event\LoadSidebar;
 use OCA\Photos\AppInfo\Application;
+use OCA\Photos\Listener\CaptionMetadataProvider;
 use OCA\Photos\Service\UserConfigService;
 use OCP\App\IAppManager;
 use OCP\AppFramework\Controller;
@@ -28,6 +29,7 @@ use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
 use OCP\Files\Search\ISearchBinaryOperator;
 use OCP\Files\Search\ISearchComparison;
+use OCP\FilesMetadata\IFilesMetadataManager;
 use OCP\ICache;
 use OCP\ICacheFactory;
 use OCP\IConfig;
@@ -59,6 +61,7 @@ class PageController extends Controller {
 		private readonly LoggerInterface $logger,
 		private readonly IConfig $config,
 		IL10N $l10n,
+		private readonly IFilesMetadataManager $metadataManager,
 		private ?\OCA\Recognize\Public\ApiKeyManager $apiKeyManager,
 	) {
 		parent::__construct(Application::APP_ID, $request);
@@ -92,6 +95,8 @@ class PageController extends Controller {
 		$this->initialState->provideInitialState('systemtags', $this->appManager->isEnabledForUser('systemtags') === true);
 		$this->initialState->provideInitialState('showPeopleMenuEntry', $this->config->getAppValue('photos', 'showPeopleMenuEntry', 'true') === 'true');
 		$this->initialState->provideInitialState('appStoreEnabled', $this->config->getSystemValueBool('appstoreenabled', true));
+		// Only indexed metadata can be searched, the key is indexed once the first description is stored.
+		$this->initialState->provideInitialState('caption-search', $this->metadataManager->getKnownMetadata()->isIndex(CaptionMetadataProvider::METADATA_KEY));
 
 		if ($this->apiKeyManager !== null) {
 			try {
