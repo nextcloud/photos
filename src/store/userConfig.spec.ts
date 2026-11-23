@@ -39,6 +39,7 @@ describe('useUserConfigStore', () => {
 		expect(store.gridDensity).toBe('medium')
 		expect(store.photosSourceFolders).toEqual(['/Photos'])
 		expect(store.photosLocation).toBe('')
+		expect(store.welcomeDismissed).toBe(false)
 	})
 
 	test('reads the initial state the server rendered', () => {
@@ -46,6 +47,7 @@ describe('useUserConfigStore', () => {
 		initialState.gridDensity = 'large'
 		initialState.photosSourceFolders = '["/Photos","/Camera"]'
 		initialState.photosLocation = '/Photos'
+		initialState.welcomeDismissed = 'true'
 
 		const store = useUserConfigStore()
 
@@ -53,6 +55,7 @@ describe('useUserConfigStore', () => {
 		expect(store.gridDensity).toBe('large')
 		expect(store.photosSourceFolders).toEqual(['/Photos', '/Camera'])
 		expect(store.photosLocation).toBe('/Photos')
+		expect(store.welcomeDismissed).toBe(true)
 	})
 
 	test('ignores a grid density it does not know', () => {

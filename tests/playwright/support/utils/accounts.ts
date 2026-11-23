@@ -9,6 +9,7 @@ import type { SeededMedia } from './media.ts'
 import { User } from '@nextcloud/e2e-test-server'
 import { login } from '@nextcloud/e2e-test-server/playwright'
 import { PhotosApp } from '../sections/PhotosApp.ts'
+import { basicAuth, PHOTOS_API_ROOT } from './dav.ts'
 import { seedMedia } from './media.ts'
 import { createUser, generatePhotoPlaces } from './occ.ts'
 import { withRetry } from './retry.ts'
@@ -65,6 +66,26 @@ export async function withRequestContext<T>(
 }
 
 /**
+ * Store that an account dismissed the welcome dialog, which would otherwise
+ * cover the app the first time the account opens it.
+ *
+ * @param request - Request context that carries no session
+ * @param user - Account to dismiss the dialog for
+ */
+export async function dismissWelcome(request: APIRequestContext, user: User): Promise<void> {
+	await withRetry(async () => {
+		const response = await request.put(`${PHOTOS_API_ROOT}/config/welcomeDismissed`, {
+			headers: { ...basicAuth(user), 'OCS-APIRequest': 'true' },
+			data: { value: 'true' },
+		})
+
+		if (!response.ok()) {
+			throw new Error(`HTTP ${response.status()}`)
+		}
+	}, `dismiss the welcome dialog of "${user.userId}"`)
+}
+
+/**
  * Create accounts seeded with the media fixtures.
  *
  * The places of the photos are resolved for all of them in one go: that step
@@ -97,7 +118,10 @@ export async function createPhotosAccounts(
 	// that contention into failed requests.
 	const accounts: PhotosAccount[] = []
 	for (const user of users) {
-		const media = await withRequestContext(apiRequest, baseURL, (request) => seedMedia(request, user))
+		const media = await withRequestContext(apiRequest, baseURL, async (request) => {
+			await dismissWelcome(request, user)
+			return seedMedia(request, user)
+		})
 		accounts.push({ user, media })
 	}
 

@@ -7,7 +7,7 @@ import { User } from '@nextcloud/e2e-test-server'
 import { login } from '@nextcloud/e2e-test-server/playwright'
 import { test as baseTest } from '@playwright/test'
 import { PhotosApp } from '../sections/PhotosApp.ts'
-import { withRequestContext } from '../utils/accounts.ts'
+import { dismissWelcome, withRequestContext } from '../utils/accounts.ts'
 import { classifyFaces, expectFaceClusters, seedFaceMedia } from '../utils/faces.ts'
 import { createUser } from '../utils/occ.ts'
 import { withRetry } from '../utils/retry.ts'
@@ -45,6 +45,7 @@ export const test = baseTest.extend<FacesFixtures, FacesWorkerFixtures>({
 		await withRequestContext(playwright.request, baseURL, (admin) => createUser(admin, user))
 
 		await withRequestContext(playwright.request, baseURL, async (request) => {
+			await dismissWelcome(request, user)
 			await seedFaceMedia(request, user)
 			await classifyFaces(user)
 			// Fail here, with the reason, rather than as an unexplained timeout in a test.
