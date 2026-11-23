@@ -219,5 +219,13 @@ return [
 				'fileId' => '.*',
 			],
 		],
+		[
+			'name' => 'video#rendition',
+			'url' => '/api/v1/video/{fileId}',
+			'verb' => 'GET',
+			'requirements' => [
+				'fileId' => '\\d+',
+			],
+		],
 	],
 ];

@@ -23,6 +23,7 @@ use OCA\Photos\Listener\SabrePluginAddListener;
 use OCA\Photos\Listener\SabrePluginAuthInitListener;
 use OCA\Photos\Listener\SizeMetadataProvider;
 use OCA\Photos\Listener\TagListener;
+use OCA\Photos\Listener\VideoRenditionCleanupListener;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -93,6 +94,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(GroupDeletedEvent::class, AlbumsManagementEventListener::class);
 		$context->registerEventListener(UserDeletedEvent::class, AlbumsManagementEventListener::class);
 		$context->registerEventListener(ShareDeletedEvent::class, AlbumsManagementEventListener::class);
+		$context->registerEventListener(NodeDeletedEvent::class, VideoRenditionCleanupListener::class);
 
 		$context->registerEventListener(SabrePluginAddEvent::class, SabrePluginAddListener::class);
 		$context->registerEventListener(SabrePluginAuthInitEvent::class, SabrePluginAuthInitListener::class);
