@@ -188,6 +188,108 @@ class MetadataPropPatchPluginTest extends TestCase {
 		);
 	}
 
+	public function testReadsTheCaptionAsPlainText(): void {
+		$properties = $this->parseProperties(
+			"<d:set><d:prop>
+				<nc:metadata-photos-description>  Tom &amp; Anna &lt;3\r\nat\tthe beach\u{0085} \u{1F3D6}  </nc:metadata-photos-description>
+			</d:prop></d:set>"
+		);
+
+		$this->assertSame(
+			"Tom & Anna <3\nat the beach \u{1F3D6}",
+			$properties[MetadataPropPatchPlugin::DESCRIPTION_PROPERTYNAME],
+		);
+	}
+
+	public static function dataEmptyCaptions(): array {
+		return [
+			'empty' => ['<nc:metadata-photos-description />'],
+			'blank' => ["<nc:metadata-photos-description> \n\t </nc:metadata-photos-description>"],
+		];
+	}
+
+	/**
+	 * @dataProvider dataEmptyCaptions
+	 */
+	public function testReadsAnEmptyCaptionAsItsRemoval(string $caption): void {
+		$properties = $this->parseProperties('<d:set><d:prop>' . $caption . '</d:prop></d:set>');
+
+		$this->assertArrayHasKey(MetadataPropPatchPlugin::DESCRIPTION_PROPERTYNAME, $properties);
+		$this->assertNull($properties[MetadataPropPatchPlugin::DESCRIPTION_PROPERTYNAME]);
+	}
+
+	public function testAcceptsACaptionOfTheMaximumLength(): void {
+		$caption = str_repeat('é', MetadataPropPatchPlugin::DESCRIPTION_MAX_LENGTH);
+
+		$properties = $this->parseProperties(
+			'<d:set><d:prop><nc:metadata-photos-description>' . $caption . '</nc:metadata-photos-description></d:prop></d:set>'
+		);
+
+		$this->assertSame($caption, $properties[MetadataPropPatchPlugin::DESCRIPTION_PROPERTYNAME]);
+	}
+
+	public static function dataInvalidCaptions(): array {
+		return [
+			'too long' => [str_repeat('a', MetadataPropPatchPlugin::DESCRIPTION_MAX_LENGTH + 1)],
+			'markup' => ['A day at the <b>beach</b>'],
+		];
+	}
+
+	/**
+	 * @dataProvider dataInvalidCaptions
+	 */
+	public function testRefusesCaptionsWhichAreNotShortPlainText(string $caption): void {
+		$this->expectException(BadRequest::class);
+
+		$this->parseProperties(
+			'<d:set><d:prop><nc:metadata-photos-description>' . $caption . '</nc:metadata-photos-description></d:prop></d:set>'
+		);
+	}
+
+	public function testStoresTheCaptionWithoutIndexingIt(): void {
+		$this->createServerForNode();
+
+		$this->metadata->expects($this->once())
+			->method('setString')
+			->with(MetadataPropPatchPlugin::DESCRIPTION_METADATA_KEY, 'A day at the beach');
+		$this->metadata->expects($this->never())->method('setInt');
+		$this->metadata->expects($this->never())->method('setArray');
+		$this->filesMetadataManager->expects($this->once())->method('saveMetadata')->with($this->metadata);
+
+		$propPatch = new PropPatch([MetadataPropPatchPlugin::DESCRIPTION_PROPERTYNAME => 'A day at the beach']);
+
+		$this->plugin->handleUpdateProperties('photo.jpg', $propPatch);
+
+		$this->assertTrue($propPatch->commit());
+	}
+
+	public function testRemovesTheCaption(): void {
+		$this->createServerForNode();
+
+		$this->metadata->expects($this->once())
+			->method('unset')
+			->with(MetadataPropPatchPlugin::DESCRIPTION_METADATA_KEY);
+		$this->metadata->expects($this->never())->method('setString');
+
+		$propPatch = new PropPatch([MetadataPropPatchPlugin::DESCRIPTION_PROPERTYNAME => null]);
+
+		$this->plugin->handleUpdateProperties('photo.jpg', $propPatch);
+
+		$this->assertTrue($propPatch->commit());
+	}
+
+	public function testRefusesToCaptionAPhotoWhichCannotBeWritten(): void {
+		$this->createServerForNode(updateable: false);
+
+		$this->filesMetadataManager->expects($this->never())->method('saveMetadata');
+
+		$propPatch = new PropPatch([MetadataPropPatchPlugin::DESCRIPTION_PROPERTYNAME => 'A day at the beach']);
+		$this->plugin->handleUpdateProperties('photo.jpg', $propPatch);
+
+		$this->expectException(Forbidden::class);
+		$propPatch->commit();
+	}
+
 	public function testStoresTheCorrectedMetadata(): void {
 		$this->createServerForNode();
 

@@ -4,7 +4,7 @@
  */
 
 import { describe, expect, test } from 'vitest'
-import { formatCoordinates, getExifSummary, getPhotoLocation, parseCoordinate } from './exif.ts'
+import { formatCoordinates, getExifSummary, getPhotoLocation, parseCoordinate, readCaption } from './exif.ts'
 
 /**
  * @param exif - Entries of the EXIF IFD
@@ -97,5 +97,22 @@ describe('parseCoordinate', () => {
 	test('refuses coordinates which are off world', () => {
 		expect(parseCoordinate('90.1', 90)).toBeNull()
 		expect(parseCoordinate('-180.1', 180)).toBeNull()
+	})
+})
+
+describe('readCaption', () => {
+	test('returns the caption without its surrounding blanks', () => {
+		expect(readCaption('  A day at the beach\n')).toBe('A day at the beach')
+	})
+
+	test('reads captions the DAV client parsed as something else', () => {
+		expect(readCaption(2024)).toBe('2024')
+		expect(readCaption(true)).toBe('true')
+	})
+
+	test('is empty for photos without a caption', () => {
+		expect(readCaption(undefined)).toBe('')
+		expect(readCaption(null)).toBe('')
+		expect(readCaption({})).toBe('')
 	})
 })

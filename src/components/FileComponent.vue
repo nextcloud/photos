@@ -70,7 +70,7 @@
 						class="file__layer file__layer--small"
 						:class="{ 'file__layer--visible': loadedSmall }"
 						:src="srcSmall"
-						:alt="file.basename"
+						:alt="altText"
 						decoding="async"
 						fetchpriority="low"
 						@load="onLoadSmall"
@@ -83,7 +83,7 @@
 						class="file__layer file__layer--large"
 						:class="{ 'file__layer--visible': loadedLarge }"
 						:src="srcLarge"
-						:alt="file.basename"
+						:alt="altText"
 						decoding="async"
 						:fetchpriority="loadedSmall ? 'high' : 'low'"
 						loading="lazy"
@@ -151,6 +151,7 @@ import FavoriteIcon from './FavoriteIcon.vue'
 import PhotoActionsMenu from './PhotoActionsMenu.vue'
 import { logger } from '../services/logger.ts'
 import { isCachedPreview } from '../services/PreviewService.js'
+import { readCaption } from '../utils/exif.ts'
 import { getVideoDurationFromUrl, toPhotoTarget } from '../utils/fileUtils.ts'
 import { isPreviewableVideoMime, playsVideoPreviews, VIDEO_PREVIEW_DELAY } from '../utils/videoPreview.ts'
 
@@ -219,6 +220,9 @@ const ariaLabel = computed<string>(() => {
 	}
 	return t('photos', 'Open the full size "{name}" image', { name: props.file.basename })
 })
+
+// A caption describes the picture, which the name of the file rarely does.
+const altText = computed<string>(() => readCaption(props.file.attributes['metadata-photos-description']) || props.file.basename)
 
 const isStack = computed<boolean>(() => props.burstCount > 1)
 

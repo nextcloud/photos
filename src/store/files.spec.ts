@@ -103,9 +103,9 @@ describe('useFilesStore', () => {
 		store.appendFiles([photo(1, { 'metadata-photos-gps': { latitude: '1', longitude: '2' } })])
 
 		// 2023-12-24T18:30:00Z
-		await store.updatePhotoMetadata(target(1), { takenAt: 1703442600, location: null })
+		await store.updatePhotoMetadata(target(1), { takenAt: 1703442600, location: null, caption: '' })
 
-		expect(photoActions.savePhotoMetadata).toHaveBeenCalledWith(target(1), { takenAt: 1703442600, location: null })
+		expect(photoActions.savePhotoMetadata).toHaveBeenCalledWith(target(1), { takenAt: 1703442600, location: null, caption: '' })
 		expect(store.files[1].attributes.month).toBe('202312')
 		expect(store.files[1].attributes.day).toBe('1224')
 		expect(store.files[1].attributes['metadata-photos-gps']).toBeUndefined()
@@ -115,9 +115,20 @@ describe('useFilesStore', () => {
 		const store = useFilesStore()
 		store.appendFiles([photo(1)])
 
-		await store.updatePhotoMetadata(target(1), { takenAt: TAKEN_AT, location: { latitude: 38.7, longitude: -9.1 } })
+		await store.updatePhotoMetadata(target(1), { takenAt: TAKEN_AT, location: { latitude: 38.7, longitude: -9.1 }, caption: '' })
 
 		expect(store.files[1].attributes['metadata-photos-gps']).toEqual({ latitude: '38.7', longitude: '-9.1' })
+	})
+
+	test('updatePhotoMetadata captions the photo of the listing', async () => {
+		const store = useFilesStore()
+		store.appendFiles([photo(1)])
+
+		await store.updatePhotoMetadata(target(1), { takenAt: TAKEN_AT, location: null, caption: ' A day at the beach ' })
+		expect(store.files[1].attributes['metadata-photos-description']).toBe('A day at the beach')
+
+		await store.updatePhotoMetadata(target(1), { takenAt: TAKEN_AT, location: null, caption: '' })
+		expect(store.files[1].attributes['metadata-photos-description']).toBe('')
 	})
 
 	test('setPhotoFavorite marks the photo in the timeline and the folders listings', async () => {

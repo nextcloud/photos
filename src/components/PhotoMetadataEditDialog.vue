@@ -11,6 +11,12 @@
 		<NcLoadingIcon v-if="loading" :size="32" class="metadata-editor__loading" />
 
 		<form v-else class="metadata-editor" @submit.prevent="save">
+			<NcTextArea
+				v-model="caption"
+				resize="vertical"
+				:maxlength="CAPTION_MAX_LENGTH"
+				:label="t('photos', 'Caption')" />
+
 			<NcDateTimePickerNative
 				v-model="takenAt"
 				type="datetime-local"
@@ -79,12 +85,13 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 import NcDateTimePickerNative from '@nextcloud/vue/components/NcDateTimePickerNative'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+import NcTextArea from '@nextcloud/vue/components/NcTextArea'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
 import MapMarkerOffOutline from 'vue-material-design-icons/MapMarkerOffOutline.vue'
 import { fetchPhotoExif } from '../services/exifFetcher.ts'
 import { logger } from '../services/logger.ts'
 import { useFilesStore } from '../store/files.ts'
-import { COORDINATE_LIMITS, getPhotoLocation, parseCoordinate } from '../utils/exif.ts'
+import { CAPTION_MAX_LENGTH, COORDINATE_LIMITS, getPhotoLocation, parseCoordinate } from '../utils/exif.ts'
 
 const props = defineProps<{
 	/** Photo to edit the metadata of. */
@@ -106,9 +113,11 @@ const saving = ref(false)
 const takenAt = ref<Date | null>(null)
 const latitude = ref('')
 const longitude = ref('')
+const caption = ref('')
 
-// Neither the coordinates nor the taken date the server holds are part of the
-// file listings, so they are fetched before they can be edited.
+// The coordinates and the taken date the server holds are not part of the
+// file listings, and the caption is not part of every one of them, so they are
+// fetched before they can be edited.
 onMounted(async () => {
 	const metadata = await fetchPhotoExif(props.photo)
 	const location = getPhotoLocation(metadata.gps)
@@ -121,6 +130,8 @@ onMounted(async () => {
 	// Photos always carry a taken date, at worst the one of their upload, but
 	// a photo whose metadata was never extracted has none to show.
 	takenAt.value = metadata.takenAt === undefined ? new Date() : new Date(metadata.takenAt * 1000)
+
+	caption.value = metadata.caption ?? ''
 
 	loading.value = false
 })
@@ -183,6 +194,7 @@ async function save(): Promise<void> {
 		await filesStore.updatePhotoMetadata(props.photo, {
 			takenAt: Math.floor(date.getTime() / 1000),
 			location: location.value,
+			caption: caption.value,
 		})
 		emit('close')
 	} catch (error) {

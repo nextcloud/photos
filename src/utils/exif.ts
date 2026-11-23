@@ -24,6 +24,26 @@ export type PhotoExif = {
 	place?: string
 	/** Moment the photo was taken, as a unix timestamp in seconds. */
 	takenAt?: number
+	/** Caption written by a user. */
+	caption?: string
+}
+
+/** Maximum length of a caption, in characters. */
+export const CAPTION_MAX_LENGTH = 1000
+
+/**
+ * Read the caption of a photo. The DAV client turns a caption which looks like
+ * a number or a boolean into one, and a photo without a caption has no value.
+ *
+ * @param value - Raw `metadata-photos-description` property of the photo
+ * @return The caption, empty when the photo has none
+ */
+export function readCaption(value: unknown): string {
+	if (typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'boolean') {
+		return ''
+	}
+
+	return String(value).trim()
 }
 
 /** Position a photo was taken at, in decimal degrees. */

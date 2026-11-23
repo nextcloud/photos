@@ -10,6 +10,10 @@
 		<NcLoadingIcon v-if="exifEntries === undefined" :size="32" class="photo-metadata__loading" />
 
 		<template v-else>
+			<p v-if="metadata?.caption" class="photo-metadata__caption">
+				{{ metadata.caption }}
+			</p>
+
 			<dl class="photo-metadata">
 				<div class="photo-metadata__entry">
 					<dt>{{ t('photos', 'Filename') }}</dt>
@@ -87,6 +91,13 @@ onMounted(async () => {
 
 	&__loading {
 		margin: calc(var(--default-grid-baseline) * 4) auto;
+	}
+
+	&__caption {
+		margin-block-end: calc(var(--default-grid-baseline) * 4);
+		// Line breaks are part of the caption.
+		white-space: pre-line;
+		overflow-wrap: anywhere;
 	}
 
 	&__entry {
