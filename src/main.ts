@@ -16,6 +16,8 @@ registerDavProperty('nc:metadata-photos-original_date_time')
 // Needed by the map view to place the photos, the timeline does not return the
 // property unless it is registered.
 registerDavProperty('nc:metadata-photos-gps')
+// Needed to count the places visited during a year.
+registerDavProperty('nc:metadata-photos-place')
 
 const app = createApp(PhotosApp)
 // several apps can share a page, and useId has to stay unique across them
