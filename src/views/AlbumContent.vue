@@ -173,6 +173,8 @@
 			:name="t('photos', 'Add photos to {albumName}', { albumName: albumName }, undefined, { escape: false, sanitize: false })"
 			@filesPicked="handleFilesPicked" />
 
+		<DropUpload v-if="album !== undefined" @uploaded="handleFilesPicked" />
+
 		<NcModal
 			v-if="showManageCollaboratorView && album !== undefined"
 			:name="t('photos', 'Manage collaborators')"
@@ -238,6 +240,7 @@ import AlbumHero from '../components/AlbumHero.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import CollaboratorsSelectionForm from '../components/Albums/CollaboratorsSelectionForm.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
+import DropUpload from '../components/DropUpload.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import PhotosPicker from '../components/PhotosPicker.vue'
 import { useFetchCollectionContent } from '../composables/useFetchCollectionContent.ts'
