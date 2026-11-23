@@ -85,13 +85,14 @@ const props = withDefaults(defineProps<{
 const isMobile = useIsMobile()
 const collectionsStore = useCollectionsStore()
 const filesStore = useFilesStore()
-const { selection, selectedFileIds, onFileSelectToggle, onUncheckFiles, resetSelection } = useFilesSelection()
 
 const appContent = document.getElementById('app-content-vue')
 
 const files = computed(() => filesStore.files)
 
 const sortedCollectionFileIds = computed(() => props.collectionFileIds.toSorted((fileId1, fileId2) => files.value[fileId1].attributes.timestamp < files.value[fileId2].attributes.timestamp ? -1 : 1))
+
+const { selection, selectedFileIds, onFileSelectToggle, onUncheckFiles, resetSelection } = useFilesSelection(sortedCollectionFileIds)
 
 function openViewer(fileId: number): void {
 	getViewer().open(sortedCollectionFileIds.value.map((fileId) => files.value[fileId]), files.value[fileId], { enableSidebar: false })

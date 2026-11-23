@@ -7,7 +7,9 @@
 	<div
 		class="file-container"
 		data-test="media"
-		:class="{ selected, 'file-container--stack': isStack, 'file-container--uncropped': !cropped }">
+		:class="{ selected, 'file-container--stack': isStack, 'file-container--uncropped': !cropped }"
+		@mousedown="onMouseDown"
+		@click.capture="onClickCapture">
 		<!--
 			A tile standing for a run of photos taken in one go is drawn as a deck of
 			cards: two backs peeking out behind the preview, which costs no further
@@ -120,7 +122,7 @@
 			class="selection-checkbox"
 			:aria-label="t('photos', 'Select image {imageName}', { imageName: file.basename })"
 			:modelValue="selected"
-			@update:modelValue="onToggle" />
+			@update:modelValue="onCheckboxToggle" />
 
 		<PhotoActionsMenu
 			v-if="showActionsMenu"
@@ -136,6 +138,7 @@
 
 <script setup lang="ts">
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
+import type { FileSelectToggle } from '../composables/useFilesSelection.ts'
 import type { PhotoFile } from '../store/files.js'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
@@ -185,7 +188,7 @@ const props = withDefaults(defineProps<{
 
 const emit = defineEmits<{
 	click: [fileid: number]
-	selectToggled: [toggle: { id: number, value: boolean }]
+	selectToggled: [toggle: FileSelectToggle]
 	deleted: [photo: PhotoTarget]
 }>()
 
@@ -210,6 +213,9 @@ let videoPreviewTimeout: null | ReturnType<typeof setTimeout> = null
 // A video that could not be played once is not tried again, or a broken
 // file would fire a load on every pass of the pointer.
 const videoPreviewFailed = ref(false)
+// Whether the click being handled was made with shift held, which makes
+// toggling the checkbox select a range.
+let shiftClick = false
 
 const photoTarget = computed<PhotoTarget>(() => toPhotoTarget(props.file))
 
@@ -261,7 +267,7 @@ async function init() {
 	await getVideoDuration()
 }
 
-function onClick() {
+function onClick(event: MouseEvent) {
 	// A long press toggles the selection, the click it ends with must
 	// not open the file on top of it.
 	if (longPressed.value) {
@@ -269,7 +275,28 @@ function onClick() {
 		return
 	}
 
+	if (event.shiftKey && props.allowSelection) {
+		onToggle(!props.selected, true)
+		return
+	}
+
 	emit('click', props.file.fileid)
+}
+
+// Keep a shift click from extending the text selection across the grid.
+function onMouseDown(event: MouseEvent) {
+	if (event.shiftKey && props.allowSelection) {
+		event.preventDefault()
+	}
+}
+
+function onClickCapture(event: MouseEvent) {
+	shiftClick = event.shiftKey
+}
+
+function onCheckboxToggle(value: boolean) {
+	onToggle(value, shiftClick)
+	shiftClick = false
 }
 
 // Long pressing a file selects it, which is easier to hit on a touch
@@ -351,8 +378,8 @@ function onVideoPreviewError() {
 	videoPreviewPlaying.value = false
 }
 
-function onToggle(value: boolean) {
-	emit('selectToggled', { id: props.file.fileid, value })
+function onToggle(value: boolean, range = false) {
+	emit('selectToggled', { id: props.file.fileid, value, range })
 }
 
 function getItemURL(size: number): string {

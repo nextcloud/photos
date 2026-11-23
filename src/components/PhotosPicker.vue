@@ -163,7 +163,6 @@ const filesStore = useFilesStore()
 const userConfigStore = useUserConfigStore()
 const { abortSignal } = useAbortController()
 const { fetchFiles, fetchedFileIds, loadingFiles } = useFetchFiles()
-const { selection, selectedFileIds, onFileSelectToggle, resetSelection } = useFilesSelection()
 
 const targetMonth = ref<string>()
 const currentUser = getCurrentUser()?.uid
@@ -172,6 +171,8 @@ const files = computed(() => filesStore.files)
 const photosLocationFolder = computed(() => userConfigStore.photosLocationFolder)
 
 const { fileIdsByMonth, monthsList } = useFilesByMonth(fetchedFileIds, files)
+
+const { selection, selectedFileIds, onFileSelectToggle, resetSelection } = useFilesSelection(() => monthsList.value.flatMap((month) => fileIdsByMonth.value[month]))
 
 watch(monthsList, (value) => {
 	if (targetMonth.value === undefined) {

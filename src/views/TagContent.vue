@@ -80,7 +80,6 @@ const isMobile = useIsMobile()
 const filesStore = useFilesStore()
 const systemTagsStore = useSystemTagsStore()
 const { abortSignal } = useAbortController()
-const { selection, onFileSelectToggle, onUncheckFiles } = useFilesSelection()
 
 const error = ref<boolean | null>(null)
 const loading = ref(false)
@@ -99,6 +98,8 @@ const tag = computed(() => tags.value[tagId.value])
 const fileIds = computed(() => (systemTagsStore.tagsFiles[tagId.value] ?? []).map(String))
 
 const isEmpty = computed(() => fileIds.value.length === 0)
+
+const { selection, onFileSelectToggle, onUncheckFiles } = useFilesSelection(() => fileIds.value.filter((fileId) => files.value[fileId] !== undefined))
 
 watch(() => props.path, () => {
 	fetchContent()
