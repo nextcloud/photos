@@ -21,6 +21,14 @@
 				</template>
 				{{ t('photos', 'Open the Maps app') }}
 			</NcButton>
+			<NcButton
+				v-if="map && geotaggedPhotos.length > 0"
+				v-model:pressed="playbackOpen">
+				<template #icon>
+					<MapMarkerPath :size="20" />
+				</template>
+				{{ t('photos', 'Play trip') }}
+			</NcButton>
 		</HeaderNavigation>
 
 		<NcEmptyContent
@@ -45,13 +53,21 @@
 			<LTileLayer :url="tileServerUrl" :options="TILE_LAYER_OPTIONS" />
 			<LControlAttribution position="bottomright" :prefix="attribution" />
 			<LMarker
-				v-for="marker in visibleMarkers"
+				v-for="marker in playbackOpen ? [] : visibleMarkers"
 				:key="marker.cluster.items[0].fileid"
 				:latLng="marker.cluster.latLng"
 				:icon="marker.icon"
 				:options="{ riseOnHover: true }"
 				@click="onMarkerClick(marker.cluster.items[0].fileid)" />
 		</LMap>
+
+		<MapTripPlayback
+			v-if="playbackOpen && map && geotaggedPhotos.length > 0"
+			:map
+			:photos="geotaggedPhotos"
+			:getCoordinates
+			:createIcon
+			@close="playbackOpen = false" />
 	</div>
 </template>
 
@@ -73,8 +89,10 @@ import { computed, onMounted, ref, shallowRef, watch } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import MapIcon from 'vue-material-design-icons/Map.vue'
+import MapMarkerPath from 'vue-material-design-icons/MapMarkerPath.vue'
 import EmptyIllustration from '../components/EmptyIllustration.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import MapTripPlayback from '../components/MapTripPlayback.vue'
 import { useLoadedPhotos } from '../composables/useLoadedPhotos.ts'
 import { isMapsInstalled } from '../services/IsMapsInstalled.ts'
 import { getPreviewUrl } from '../utils/fileUtils.ts'
@@ -127,6 +145,7 @@ const center = ref<[number, number]>([20, 0])
 const zoom = ref(2)
 const map = shallowRef<L.Map>()
 const bounds = shallowRef<L.LatLngBounds>()
+const playbackOpen = ref(false)
 
 const clusters = computed(() => clusterMarkers(geotaggedPhotos.value, getCoordinates, zoom.value, CLUSTER_RADIUS))
 const icons = new WeakMap<MapCluster<PhotoFile>, L.DivIcon>()
