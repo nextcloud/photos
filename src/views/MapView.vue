@@ -144,8 +144,9 @@ function getCoordinates(photo: PhotoFile): [number, number] {
 /**
  * @param photo - The photo to open in the viewer
  */
-function openPhoto(photo: PhotoFile): void {
-	getViewer().open(geotaggedPhotos.value, photo)
+async function openPhoto(photo: PhotoFile): Promise<void> {
+	const session = await getViewer().open(geotaggedPhotos.value, photo)
+	session.addEventListener('close', () => window.OCA?.Files?.Sidebar?.close?.(), { once: true })
 }
 </script>
 

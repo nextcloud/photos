@@ -385,23 +385,25 @@ function burstCount(fileId: string): number {
 	return burstStacks.value[fileId]?.memberIds.length ?? 1
 }
 
-function openViewer(fileId: number) {
+async function openViewer(fileId: number) {
 	// A tile standing for a run of photos hands the viewer that run alone, so
 	// flipping through it stays inside the burst rather than leaving it for the
 	// rest of the timeline. Every other tile hands it the whole grid.
 	const fileIds = burstStacks.value[fileId]?.memberIds
 		?? Object.values(fileIdsByMonth.value).flat()
 
-	getViewer().open(
+	const session = await getViewer().open(
 		fileIds
 			.map((id) => files.value[id])
 			.filter((file) => file !== undefined),
 		files.value[fileId],
 	)
+	session.addEventListener('close', () => window.OCA?.Files?.Sidebar?.close?.(), { once: true })
 }
 
-function startSlideshow() {
-	getViewer().open(timelinePhotos.value, timelinePhotos.value[0], { startSlideshow: true })
+async function startSlideshow() {
+	const session = await getViewer().open(timelinePhotos.value, timelinePhotos.value[0], { startSlideshow: true })
+	session.addEventListener('close', () => window.OCA?.Files?.Sidebar?.close?.(), { once: true })
 }
 
 async function addSelectionToAlbum(album: Album) {

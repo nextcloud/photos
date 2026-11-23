@@ -136,8 +136,9 @@ async function fetchContent(): Promise<void> {
 	}
 }
 
-function openViewer(fileId: number): void {
-	getViewer().open(fileIds.value.map((fileId) => files.value[fileId]), files.value[fileId])
+async function openViewer(fileId: number): Promise<void> {
+	const session = await getViewer().open(fileIds.value.map((fileId) => files.value[fileId]), files.value[fileId])
+	session.addEventListener('close', () => window.OCA?.Files?.Sidebar?.close?.(), { once: true })
 }
 
 onBeforeMount(() => {
