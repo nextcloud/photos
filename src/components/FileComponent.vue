@@ -173,6 +173,13 @@ const props = withDefaults(defineProps<{
 	 * hold has nothing to crop away, one laying them out as squares does.
 	 */
 	cropped?: boolean
+	/**
+	 * Builds the URL of a preview of the given size, for files the photos
+	 * preview endpoint cannot serve.
+	 */
+	previewUrl?: (size: number) => string
+	/** Accessible name of the tile, replacing the one opening the file. */
+	label?: string
 }>(), {
 	selected: false,
 	allowSelection: true,
@@ -181,6 +188,8 @@ const props = withDefaults(defineProps<{
 	showActionsMenu: true,
 	// eslint-disable-next-line vue/no-boolean-default
 	cropped: true,
+	previewUrl: undefined,
+	label: undefined,
 })
 
 const emit = defineEmits<{
@@ -214,6 +223,9 @@ const videoPreviewFailed = ref(false)
 const photoTarget = computed<PhotoTarget>(() => toPhotoTarget(props.file))
 
 const ariaLabel = computed<string>(() => {
+	if (props.label !== undefined) {
+		return props.label
+	}
 	if (props.file.attributes.favorite) {
 		return t('photos', 'Favorite image, open the full size "{name}" image', { name: props.file.basename })
 	}
@@ -356,6 +368,10 @@ function onToggle(value: boolean) {
 }
 
 function getItemURL(size: number): string {
+	if (props.previewUrl !== undefined) {
+		return props.previewUrl(size)
+	}
+
 	const token = route?.params.token
 	if (token) {
 		return generateUrl(`/apps/photos/api/v1/publicPreview/${props.file.fileid}?etag=${decodedEtag.value}&x=${size}&y=${size}&token=${token}`)

@@ -9,6 +9,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { imageMimes, videoMimes } from '../services/AllowedMimes.js'
 import { areTagsInstalled } from '../services/AreTagsInstalled.ts'
 import { isRecognizeInstalled } from '../services/IsRecognizeInstalled.ts'
+import { isTrashbinEnabled } from '../services/IsTrashbinEnabled.ts'
 
 const FoldersView = () => import('../views/FoldersView.vue')
 const MapView = () => import('../views/MapView.vue')
@@ -27,6 +28,7 @@ const FacesView = () => import('../views/FacesView.vue')
 const FaceContent = () => import('../views/FaceContent.vue')
 
 const UnassignedFaces = () => import('../views/UnassignedFaces.vue')
+const RecentlyDeletedView = () => import('../views/RecentlyDeletedView.vue')
 
 const baseTitle = document.title
 
@@ -278,6 +280,19 @@ export const router = createRouter({
 			meta: {
 				rootTitle: () => {
 					return t('photos', 'On this day')
+				},
+			},
+		},
+		{
+			path: '/recently-deleted',
+			name: 'recentlyDeleted',
+			component: RecentlyDeletedView,
+			...(!isTrashbinEnabled && {
+				beforeEnter: () => ({ name: 'all_media' }),
+			}),
+			meta: {
+				rootTitle: () => {
+					return t('photos', 'Recently deleted')
 				},
 			},
 		},
