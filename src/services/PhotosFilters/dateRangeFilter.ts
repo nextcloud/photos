@@ -53,10 +53,10 @@ export const dateRangeFilter: PhotosFilter<DateRangeValueType> = {
 		// Add one day to the end date to include the whole day.
 		const dav = dateRangeOptions.map((option) => `
 			<d:and>
-				<d:gt>
+				<d:gte>
 					<d:prop><nc:metadata-photos-original_date_time/></d:prop>
 					<d:literal>${option.start / 1000}</d:literal>
-				</d:gt>
+				</d:gte>
 				<d:lt>
 					<d:prop><nc:metadata-photos-original_date_time/></d:prop>
 					<d:literal>${option.end / 1000 + 24 * 60 * 60}</d:literal>

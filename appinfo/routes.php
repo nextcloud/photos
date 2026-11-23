@@ -51,6 +51,12 @@ return [
 		],
 		[
 			'name' => 'page#index',
+			'url' => '/calendar',
+			'verb' => 'GET',
+			'postfix' => 'calendar',
+		],
+		[
+			'name' => 'page#index',
 			'url' => '/memories',
 			'verb' => 'GET',
 			'postfix' => 'memories',

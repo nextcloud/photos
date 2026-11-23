@@ -14,6 +14,7 @@ const FoldersView = () => import('../views/FoldersView.vue')
 const MapView = () => import('../views/MapView.vue')
 const MemoriesView = () => import('../views/MemoriesView.vue')
 const AlbumsView = () => import('../views/AlbumsView.vue')
+const CalendarView = () => import('../views/CalendarView.vue')
 const AlbumContent = () => import('../views/AlbumContent.vue')
 const SharedAlbums = () => import('../views/SharedAlbums.vue')
 const SharedAlbumContent = () => import('../views/SharedAlbumContent.vue')
@@ -278,6 +279,19 @@ export const router = createRouter({
 			meta: {
 				rootTitle: () => {
 					return t('photos', 'On this day')
+				},
+			},
+		},
+		{
+			path: '/calendar',
+			name: 'calendar',
+			component: CalendarView,
+			props: () => ({
+				rootTitle: t('photos', 'Calendar'),
+			}),
+			meta: {
+				rootTitle: () => {
+					return t('photos', 'Calendar')
 				},
 			},
 		},
