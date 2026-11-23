@@ -50,6 +50,7 @@ tests/playwright/
 ├── fixtures/
 │   ├── media/                # The five photos every test account is seeded with
 │   └── faces/                # Portraits for the people tests, from recognize's dataset
+├── perf/                     # Speed measurement of the timeline, see its README
 ├── support/
 │   ├── fixtures/             # Playwright fixture extensions (accounts, page objects)
 │   ├── sections/             # Page Object Models
