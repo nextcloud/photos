@@ -128,6 +128,7 @@ import { downloadFiles } from '../services/downloadFiles.ts'
 import { logger } from '../services/logger.ts'
 import { useFacesStore } from '../store/faces.ts'
 import { useFilesStore } from '../store/files.ts'
+import { openViewerFromTile } from '../utils/viewerTransition.ts'
 
 const router = useRouter()
 const facesStore = useFacesStore()
@@ -154,7 +155,7 @@ function onPhotoDeleted(photo: PhotoTarget): void {
 }
 
 function openViewer(fileId: number): void {
-	getViewer().open(faceFileIds.value.map((fileId) => files.value[fileId]), files.value[fileId], { enableSidebar: false })
+	openViewerFromTile(fileId, () => getViewer().open(faceFileIds.value.map((fileId) => files.value[fileId]), files.value[fileId], { enableSidebar: false }))
 }
 
 async function handleMove(faceName: string, fileIds: string[]): Promise<void> {

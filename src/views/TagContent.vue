@@ -68,6 +68,7 @@ import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { logger } from '../services/logger.ts'
 import { useFilesStore } from '../store/files.ts'
 import { useSystemTagsStore } from '../store/systemtags.ts'
+import { openViewerFromTile } from '../utils/viewerTransition.ts'
 
 const props = withDefaults(defineProps<{
 	path?: string
@@ -137,7 +138,7 @@ async function fetchContent(): Promise<void> {
 }
 
 function openViewer(fileId: number): void {
-	getViewer().open(fileIds.value.map((fileId) => files.value[fileId]), files.value[fileId])
+	openViewerFromTile(fileId, () => getViewer().open(fileIds.value.map((fileId) => files.value[fileId]), files.value[fileId]))
 }
 
 onBeforeMount(() => {

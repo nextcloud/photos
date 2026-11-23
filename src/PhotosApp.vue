@@ -347,4 +347,24 @@ onBeforeUnmount(() => {
 .app-navigation__search {
 	padding: calc(var(--default-grid-baseline) * 2) calc(var(--default-grid-baseline) * 2) 0;
 }
+
+// Changing the view cross-fades the content area, which is the only part of
+// the page captured under a name of its own. The rest is the same before and
+// after, and is given the same duration so that the page is not held longer.
+::view-transition-group(root),
+::view-transition-old(root),
+::view-transition-new(root),
+::view-transition-group(photos-content),
+::view-transition-old(photos-content),
+::view-transition-new(photos-content) {
+	animation-duration: 180ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	::view-transition-group(*),
+	::view-transition-old(*),
+	::view-transition-new(*) {
+		animation: none;
+	}
+}
 </style>

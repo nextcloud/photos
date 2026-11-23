@@ -7,6 +7,7 @@
 	<div
 		class="file-container"
 		data-test="media"
+		:data-file-id="file.fileid"
 		:class="{ selected, 'file-container--stack': isStack, 'file-container--uncropped': !cropped }">
 		<!--
 			A tile standing for a run of photos taken in one go is drawn as a deck of
@@ -599,6 +600,14 @@ $magnify-transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 
 			.file__layer--visible {
 				opacity: 1;
+			}
+
+			// Reduced motion lets a loaded preview replace its placeholder at once.
+			@media (prefers-reduced-motion: reduce) {
+				.file__layer--small,
+				.file__layer--large {
+					transition: none;
+				}
 			}
 
 			// The video is the freshest picture of the file, so it covers the still

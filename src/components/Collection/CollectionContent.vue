@@ -68,6 +68,7 @@ import FilesListViewer from '../FilesListViewer.vue'
 import { useFilesSelection } from '../../composables/useFilesSelection.ts'
 import { useCollectionsStore } from '../../store/collections.ts'
 import { useFilesStore } from '../../store/files.ts'
+import { openViewerFromTile } from '../../utils/viewerTransition.ts'
 
 const props = withDefaults(defineProps<{
 	collection?: Collection
@@ -94,7 +95,7 @@ const files = computed(() => filesStore.files)
 const sortedCollectionFileIds = computed(() => props.collectionFileIds.toSorted((fileId1, fileId2) => files.value[fileId1].attributes.timestamp < files.value[fileId2].attributes.timestamp ? -1 : 1))
 
 function openViewer(fileId: number): void {
-	getViewer().open(sortedCollectionFileIds.value.map((fileId) => files.value[fileId]), files.value[fileId], { enableSidebar: false })
+	openViewerFromTile(fileId, () => getViewer().open(sortedCollectionFileIds.value.map((fileId) => files.value[fileId]), files.value[fileId], { enableSidebar: false }))
 }
 
 function handleFileDeleted({ fileid }: Node): void {

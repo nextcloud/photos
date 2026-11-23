@@ -8,6 +8,7 @@ import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 import PhotosApp from './PhotosApp.vue'
 import { router } from './router/index.ts'
+import { installRouteTransition } from './utils/routeTransition.ts'
 
 registerDavProperty('nc:metadata-photos-size')
 registerDavProperty('nc:metadata-files-live-photo')
@@ -21,6 +22,7 @@ const app = createApp(PhotosApp)
 // several apps can share a page, and useId has to stay unique across them
 app.config.idPrefix = 'photos'
 app.use(createPinia())
+installRouteTransition(router)
 app.use(router)
 app.mount('#content')
 
