@@ -131,6 +131,18 @@
 										<Close />
 									</template>
 								</NcActionButton>
+
+								<NcActionButton
+									v-if="socialEnabled"
+									:closeAfterClick="true"
+									:disabled="!canPostToSocial(selectedPhotos)"
+									:description="canPostToSocial(selectedPhotos) ? '' : t('photos', 'Up to {count} photos, no videos', { count: MAX_SOCIAL_PHOTOS })"
+									@click="showSocialPost = true">
+									{{ t('photos', 'Post to Social') }}
+									<template #icon>
+										<SendOutline />
+									</template>
+								</NcActionButton>
 							</template>
 						</NcActions>
 					</template>
@@ -164,6 +176,11 @@
 				</NcEmptyContent>
 			</template>
 		</CollectionContent>
+
+		<PostToSocialDialog
+			v-if="showSocialPost"
+			:photos="selectedPhotos"
+			@close="showSocialPost = false" />
 
 		<PhotosPicker
 			v-if="album !== undefined"
@@ -229,6 +246,7 @@ import ImagePlusOutline from 'vue-material-design-icons/ImagePlusOutline.vue'
 import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
 import PencilOutline from 'vue-material-design-icons/PencilOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
+import SendOutline from 'vue-material-design-icons/SendOutline.vue'
 import ShareVariantOutline from 'vue-material-design-icons/ShareVariantOutline.vue'
 import Star from 'vue-material-design-icons/Star.vue'
 import StarOutline from 'vue-material-design-icons/StarOutline.vue'
@@ -240,12 +258,15 @@ import CollaboratorsSelectionForm from '../components/Albums/CollaboratorsSelect
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import PhotosPicker from '../components/PhotosPicker.vue'
+import PostToSocialDialog from '../components/PostToSocialDialog.vue'
 import { useFetchCollectionContent } from '../composables/useFetchCollectionContent.ts'
 import { logger } from '../services/logger.ts'
+import { canPostToSocial, isSocialEnabled, MAX_SOCIAL_PHOTOS } from '../services/socialPost.ts'
 import { albumFilesExtraProps, albumsExtraProps, useAlbumsStore } from '../store/albums.ts'
 import { useCollectionsStore } from '../store/collections.ts'
 import { useFilesStore } from '../store/files.ts'
 import { pickAlbumCover } from '../utils/albumCover.ts'
+import { toPhotoTarget } from '../utils/fileUtils.ts'
 
 const props = withDefaults(defineProps<{
 	albumName?: string
@@ -271,6 +292,8 @@ const collectionContent = useTemplateRef<InstanceType<typeof CollectionContent>>
 const showAddPhotosModal = ref(false)
 const showManageCollaboratorView = ref(false)
 const showEditAlbumForm = ref(false)
+const showSocialPost = ref(false)
+const socialEnabled = isSocialEnabled()
 
 const loadingAddCollaborators = ref(false)
 
@@ -306,6 +329,9 @@ const albumSubtitle = computed(() => {
 		n('photos', '%n photo', '%n photos', album.value.attributes.nbItems),
 	].filter((part) => part !== '').join(' · ')
 })
+
+const selectedPhotos = computed(() => (collectionContent.value?.selectedFileIds ?? [])
+	.map((fileId) => toPhotoTarget(filesStore.files[fileId])))
 
 const removableSelectedFiles = computed(() => (collectionContent.value?.selectedFileIds ?? [])
 	.map((fileId) => filesStore.files[fileId])

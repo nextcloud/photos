@@ -62,6 +62,17 @@
 							{{ t('photos', 'Remove from favorites') }}
 						</NcActionButton>
 						<NcActionButton
+							v-if="socialEnabled"
+							:closeAfterClick="true"
+							:disabled="!canPostToSocial(selectedPhotos)"
+							:description="canPostToSocial(selectedPhotos) ? '' : t('photos', 'Up to {count} photos, no videos', { count: MAX_SOCIAL_PHOTOS })"
+							@click="showSocialPost = true">
+							<template #icon>
+								<SendOutline />
+							</template>
+							{{ t('photos', 'Post to Social') }}
+						</NcActionButton>
+						<NcActionButton
 							:closeAfterClick="true"
 							@click="showMoveModal = true">
 							<template #icon>
@@ -98,6 +109,11 @@
 			@closing="showMoveModal = false">
 			<FaceMergeForm firstFace="-1" @select="handleMove($event, selectedFileIds)" />
 		</NcDialog>
+
+		<PostToSocialDialog
+			v-if="showSocialPost"
+			:photos="selectedPhotos"
+			@close="showSocialPost = false" />
 	</div>
 </template>
 
@@ -116,18 +132,22 @@ import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import AccountSwitchOutline from 'vue-material-design-icons/AccountSwitchOutline.vue'
 import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
+import SendOutline from 'vue-material-design-icons/SendOutline.vue'
 import Star from 'vue-material-design-icons/Star.vue'
 import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import DownloadOutline from 'vue-material-design-icons/TrayArrowDown.vue'
 import FaceMergeForm from '../components/Faces/FaceMergeForm.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
+import PostToSocialDialog from '../components/PostToSocialDialog.vue'
 import { useFetchFaces } from '../composables/useFetchFaces.ts'
 import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
 import { logger } from '../services/logger.ts'
+import { canPostToSocial, isSocialEnabled, MAX_SOCIAL_PHOTOS } from '../services/socialPost.ts'
 import { useFacesStore } from '../store/faces.ts'
 import { useFilesStore } from '../store/files.ts'
+import { toPhotoTarget } from '../utils/fileUtils.ts'
 
 const router = useRouter()
 const facesStore = useFacesStore()
@@ -136,12 +156,16 @@ const { fetchUnassignedFaces, loadingFaces, loadingFiles, errorFetchingFiles } =
 const { selection, selectedFileIds, onFileSelectToggle, onUncheckFiles } = useFilesSelection()
 
 const showMoveModal = ref(false)
+const showSocialPost = ref(false)
+const socialEnabled = isSocialEnabled()
 const loadingCount = ref(0)
 const appContent = document.getElementById('app-content-vue')
 
 const files = computed(() => filesStore.files)
 const unassignedFiles = computed(() => facesStore.unassignedFiles)
 const faceFileIds = computed<string[]>(() => unassignedFiles.value || [])
+
+const selectedPhotos = computed(() => selectedFileIds.value.map((fileId) => toPhotoTarget(filesStore.files[fileId])))
 
 // Favorite all selection if at least one file is not on the favorites.
 const shouldFavoriteSelection = computed<boolean>(() => selectedFileIds.value.some((fileId) => filesStore.files[fileId].attributes.favorite === 0))

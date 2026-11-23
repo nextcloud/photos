@@ -59,6 +59,13 @@
 				{{ t('photos', 'Share') }}
 			</NcActionButton>
 
+			<NcActionButton v-if="canPostToSocial" closeAfterClick @click="socialPostShown = true">
+				<template #icon>
+					<SendOutline :size="20" />
+				</template>
+				{{ t('photos', 'Post to Social') }}
+			</NcActionButton>
+
 			<NcActionSeparator v-if="canDelete" />
 
 			<NcActionButton v-if="canDelete" closeAfterClick @click="deleteConfirmationShown = true">
@@ -83,6 +90,11 @@
 			v-if="tagsShown"
 			:photo="photo"
 			@close="tagsShown = false" />
+
+		<PostToSocialDialog
+			v-if="socialPostShown"
+			:photos="[photo]"
+			@close="socialPostShown = false" />
 
 		<NcModal
 			v-if="albumPickerShown"
@@ -129,6 +141,7 @@ import DotsVertical from 'vue-material-design-icons/DotsVertical.vue'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import InformationOutline from 'vue-material-design-icons/InformationOutline.vue'
 import PencilOutline from 'vue-material-design-icons/PencilOutline.vue'
+import SendOutline from 'vue-material-design-icons/SendOutline.vue'
 import ShareVariantOutline from 'vue-material-design-icons/ShareVariantOutline.vue'
 import Star from 'vue-material-design-icons/Star.vue'
 import StarOutline from 'vue-material-design-icons/StarOutline.vue'
@@ -138,8 +151,10 @@ import AlbumPicker from './Albums/AlbumPicker.vue'
 import PhotoMetadataDialog from './PhotoMetadataDialog.vue'
 import PhotoMetadataEditDialog from './PhotoMetadataEditDialog.vue'
 import PhotoTagsDialog from './PhotoTagsDialog.vue'
+import PostToSocialDialog from './PostToSocialDialog.vue'
 import { areTagsInstalled } from '../services/AreTagsInstalled.ts'
 import { logger } from '../services/logger.ts'
+import { canPostToSocial as fitsSocialPost, isSocialEnabled } from '../services/socialPost.ts'
 import { useCollectionsStore } from '../store/collections.ts'
 import { useFilesStore } from '../store/files.ts'
 
@@ -163,6 +178,7 @@ const metadataEditShown = ref(false)
 const tagsShown = ref(false)
 const albumPickerShown = ref(false)
 const deleteConfirmationShown = ref(false)
+const socialPostShown = ref(false)
 
 // Public shares are browsed without an account, the actions writing anything
 // have nowhere to write to.
@@ -173,6 +189,8 @@ const isLoggedIn = getCurrentUser() !== null
 const canEdit = computed(() => isLoggedIn && (props.photo.permissions & Permission.WRITE) !== 0)
 const canShare = computed(() => isLoggedIn && (props.photo.permissions & Permission.SHARE) !== 0)
 const canDelete = computed(() => isLoggedIn && (props.photo.permissions & Permission.DELETE) !== 0)
+
+const canPostToSocial = computed(() => isLoggedIn && isSocialEnabled() && fitsSocialPost([props.photo]))
 
 // Tags belong to their own app, and the server refuses to put one on a photo
 // the account cannot write to.
