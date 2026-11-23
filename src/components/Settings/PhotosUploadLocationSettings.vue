@@ -29,6 +29,7 @@ import NcFormBoxButton from '@nextcloud/vue/components/NcFormBoxButton'
 import FolderOpenOutline from 'vue-material-design-icons/FolderOpenOutline.vue'
 import { logger } from '../../services/logger.ts'
 import { useUserConfigStore } from '../../store/userConfig.ts'
+import { isEndToEndEncrypted } from '../../utils/fileUtils.ts'
 
 const userConfigStore = useUserConfigStore()
 
@@ -54,6 +55,7 @@ async function openFilePicker(title: string): Promise<string> {
 	const picker = getFilePickerBuilder(title)
 		.setMultiSelect(false)
 		.addMimeTypeFilter('httpd/unix-directory')
+		.setFilter((node) => !isEndToEndEncrypted(node))
 		.allowDirectories()
 		.startAt(photosLocation.value)
 		.addButton({

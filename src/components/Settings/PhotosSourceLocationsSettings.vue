@@ -48,6 +48,7 @@ import Plus from 'vue-material-design-icons/Plus.vue'
 import PhotosFolder from './PhotosFolder.vue'
 import { logger } from '../../services/logger.ts'
 import { useUserConfigStore } from '../../store/userConfig.ts'
+import { isEndToEndEncrypted } from '../../utils/fileUtils.ts'
 
 const userConfigStore = useUserConfigStore()
 
@@ -59,6 +60,7 @@ async function openFilePicker(title: string): Promise<string> {
 	const picker = getFilePickerBuilder(title)
 		.setMultiSelect(false)
 		.addMimeTypeFilter('httpd/unix-directory')
+		.setFilter((node) => !isEndToEndEncrypted(node))
 		.allowDirectories()
 		.addButton({
 			label: t('photos', 'Pick folder'),

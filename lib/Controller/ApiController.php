@@ -16,7 +16,12 @@ use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\StreamResponse;
 use OCP\Config\IUserConfig;
+use OCP\Files\Folder;
+use OCP\Files\IRootFolder;
+use OCP\Files\NotFoundException;
+use OCP\Files\NotPermittedException;
 use OCP\IRequest;
+use OCP\IUser;
 use OCP\IUserSession;
 
 class ApiController extends Controller {
@@ -24,6 +29,7 @@ class ApiController extends Controller {
 		IRequest $request,
 		private readonly IUserConfig $userConfig,
 		private readonly IUserSession $userSession,
+		private readonly IRootFolder $rootFolder,
 	) {
 		parent::__construct(Application::APP_ID, $request);
 	}
@@ -56,7 +62,7 @@ class ApiController extends Controller {
 				}
 				break;
 			case 'photosLocation':
-				if (!$this->validatePath($value)) {
+				if (!$this->validatePath($value) || $this->isEndToEndEncrypted($user, $value)) {
 					return new JSONResponse([], Http::STATUS_BAD_REQUEST);
 				}
 				break;
@@ -72,7 +78,7 @@ class ApiController extends Controller {
 				}
 
 				foreach ($paths as $path) {
-					if (!$this->validatePath($path)) {
+					if (!$this->validatePath($path) || $this->isEndToEndEncrypted($user, $path)) {
 						return new JSONResponse([], Http::STATUS_BAD_REQUEST);
 					}
 				}
@@ -99,6 +105,23 @@ class ApiController extends Controller {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Whether the given path of the account is an end-to-end encrypted folder,
+	 * whose content only the clients holding its keys can read.
+	 *
+	 * A folder that does not exist yet is not one: it can only be created
+	 * inside an encrypted folder by such a client.
+	 */
+	private function isEndToEndEncrypted(IUser $user, string $path): bool {
+		try {
+			$node = $this->rootFolder->getUserFolder($user->getUID())->get($path);
+		} catch (NotFoundException|NotPermittedException) {
+			return false;
+		}
+
+		return $node instanceof Folder && $node->isEncrypted();
 	}
 
 	/**

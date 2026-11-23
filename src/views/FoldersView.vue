@@ -28,7 +28,7 @@
 			:rootTitle="rootTitle"
 			@refresh="onRefresh">
 			<NcUploadPicker
-				v-if="folder !== undefined"
+				v-if="folder !== undefined && !encrypted"
 				:accept="allowedMimes"
 				:content="uploadDestinationContent"
 				:destination="folder"
@@ -36,8 +36,18 @@
 				@upload:finished="onUpload" />
 		</HeaderNavigation>
 
+		<NcEmptyContent
+			v-if="encrypted"
+			key="encrypted"
+			:name="t('photos', 'End-to-end encrypted folder')"
+			:description="t('photos', 'The photos in this folder can only be decrypted on your devices. Open it in the Nextcloud desktop or mobile app.')">
+			<template #icon>
+				<FolderLockOutline />
+			</template>
+		</NcEmptyContent>
+
 		<!-- Empty folder, should only happen via direct link -->
-		<NcEmptyContent v-if="isEmpty" key="emptycontent" :name="t('photos', 'No photos in here')">
+		<NcEmptyContent v-else-if="isEmpty" key="emptycontent" :name="t('photos', 'No photos in here')">
 			<template #icon>
 				<FolderOutline />
 			</template>
@@ -104,6 +114,7 @@ import { useRoute, useRouter } from 'vue-router'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcUploadPicker from '@nextcloud/vue/components/NcUploadPicker'
+import FolderLockOutline from 'vue-material-design-icons/FolderLockOutline.vue'
 import FolderOutline from 'vue-material-design-icons/FolderOutline.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FolderComponent from '../components/FolderComponent.vue'
@@ -117,6 +128,7 @@ import { getFolderContent } from '../services/FolderContent.ts'
 import { logger } from '../services/logger.ts'
 import { useFoldersStore } from '../store/folders.ts'
 import { useUserConfigStore } from '../store/userConfig.ts'
+import { isEndToEndEncrypted } from '../utils/fileUtils.ts'
 
 // A laid out tile that still knows which folder or photo it stands for.
 type NodeItem = TiledItem & { node: Folder | PhotoFile }
@@ -154,6 +166,9 @@ const folderId = computed(() => foldersStore.paths[props.path])
 
 /** The folder that is open. */
 const folder = computed(() => files.value[folderId.value] as Folder | undefined)
+
+/** An end-to-end encrypted folder is shown, but its content is not. */
+const encrypted = computed(() => folder.value !== undefined && isEndToEndEncrypted(folder.value))
 
 const folderContent = computed(() => folders.value[folderId.value] || [])
 

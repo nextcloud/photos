@@ -106,6 +106,7 @@ class AlbumsController extends Controller {
 					'etag' => $node->getEtag(),
 					'hasPreview' => $this->previewManager->isAvailable($node),
 					'favorite' => isset($favorites[$node->getId()]) ? 1 : 0,
+					...($node instanceof Folder ? ['is-encrypted' => $node->isEncrypted() ? 1 : 0] : []),
 					...$this->formatMetadata($metadata[$node->getId()] ?? null),
 				],
 			];
@@ -174,14 +175,29 @@ class AlbumsController extends Controller {
 		return $attributes;
 	}
 
+	/**
+	 * The folder itself, followed by the photos it holds and the folders that
+	 * hold photos.
+	 *
+	 * End-to-end encrypted folders only hold ciphertext that the server cannot
+	 * read: they are listed as they are, but never looked into.
+	 */
 	private function scanCurrentFolder(Folder $folder, bool $shared): iterable {
-		$nodes = $folder->getDirectoryListing();
-
 		// add current folder to iterable set
 		yield $folder;
 
+		if ($folder->isEncrypted()) {
+			return;
+		}
+
+		$nodes = $folder->getDirectoryListing();
+
 		foreach ($nodes as $node) {
-			if ($node instanceof Folder && $this->scanFolder($node, 0, $shared)) {
+			if ($node instanceof Folder && $node->isEncrypted()) {
+				if ($this->isShared($node) === $shared) {
+					yield $node;
+				}
+			} elseif ($node instanceof Folder && $this->scanFolder($node, 0, $shared)) {
 				yield $node;
 			} elseif ($node instanceof File) {
 				if ($this->validFile($node, $shared)) {
@@ -211,7 +227,7 @@ class AlbumsController extends Controller {
 	}
 
 	private function scanFolder(Folder $folder, int $depth, bool $shared): bool {
-		if ($depth > 4) {
+		if ($depth > 4 || $folder->isEncrypted()) {
 			return false;
 		}
 

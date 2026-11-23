@@ -8,7 +8,8 @@
 		:id="item.fileid"
 		:name="item.basename"
 		:path="item.path"
-		:fileList="previewFiles" />
+		:fileList="previewFiles"
+		:encrypted="encrypted" />
 </template>
 
 <script setup lang='ts'>
@@ -20,6 +21,7 @@ import FolderTagPreview from './FolderTagPreview.vue'
 import { getFolderContent } from '../services/FolderContent.ts'
 import { logger } from '../services/logger.ts'
 import { useFoldersStore } from '../store/folders.ts'
+import { isEndToEndEncrypted } from '../utils/fileUtils.ts'
 
 const props = defineProps({
 	item: {
@@ -45,6 +47,9 @@ const subFolders = computed(() => foldersStore.subFolders)
 
 /** Id of the folder, which a node of a listing always carries. */
 const folderId = computed(() => props.item.fileid as number)
+
+/** An end-to-end encrypted folder only holds ciphertext, it is never listed. */
+const encrypted = computed(() => isEndToEndEncrypted(props.item))
 
 /** Folder the cover images are taken from: the folder itself or one of its children. */
 const previewFolder = ref(folderId.value)
@@ -77,11 +82,12 @@ async function getFolderData(path: string) {
 // If we did not find any preview in the folder we try the next subfolder.
 // We limit to one subfolder for performance concerns.
 watch(previewFiles, () => {
-	if (previewFiles.value.length > 0 || previewFolder.value !== folderId.value) {
+	if (encrypted.value || previewFiles.value.length > 0 || previewFolder.value !== folderId.value) {
 		return
 	}
 
-	const firstChildFolder = subFolders.value[folderId.value]?.[0]
+	const firstChildFolder = subFolders.value[folderId.value]
+		?.find((id) => files.value[id] === undefined || !isEndToEndEncrypted(files.value[id]))
 	if (firstChildFolder === undefined) {
 		return
 	}
@@ -92,7 +98,7 @@ watch(previewFiles, () => {
 	}
 }, { immediate: true })
 
-if (folders.value[folderId.value] === undefined) {
+if (!encrypted.value && folders.value[folderId.value] === undefined) {
 	getFolderData(props.item.path)
 }
 </script>

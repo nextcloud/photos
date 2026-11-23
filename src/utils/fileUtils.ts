@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type { Node } from '@nextcloud/files'
+import type { INode, Node } from '@nextcloud/files'
 
 import { FileType } from '@nextcloud/files'
 import { getRootPath } from '@nextcloud/files/dav'
@@ -63,6 +63,17 @@ export function sortCompare(fileInfo1: Node, fileInfo2: Node, key: string, asc: 
  */
 export function compareModificationTime(node1: Node, node2: Node): number {
 	return (node2.mtime?.getTime() ?? 0) - (node1.mtime?.getTime() ?? 0)
+}
+
+/**
+ * Whether a node is an end-to-end encrypted folder: its content is
+ * ciphertext that only the desktop and mobile clients holding its keys can
+ * read, so it can be neither listed nor previewed here.
+ *
+ * @param node - Node of a folder listing or of a DAV listing
+ */
+export function isEndToEndEncrypted(node: INode): boolean {
+	return node.type === FileType.Folder && node.attributes['is-encrypted'] === 1
 }
 
 /**
