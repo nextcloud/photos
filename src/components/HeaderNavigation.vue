@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<div :class="{ 'photos-navigation--root': isRoot }" class="photos-navigation" role="toolbar">
+	<div :class="{ 'photos-navigation--root': isRoot, 'photos-navigation--mobile': isMobile }" class="photos-navigation" role="toolbar">
 		<!-- Back navigation button -->
 		<NcButton
 			v-if="!isRoot"
@@ -43,6 +43,7 @@
 
 <script setup lang="ts">
 import { t } from '@nextcloud/l10n'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -70,6 +71,7 @@ const emit = defineEmits<{
 
 const route = useRoute()
 const router = useRouter()
+const isMobile = useIsMobile()
 
 const isRoot = computed(() => props.path === '/')
 
@@ -104,6 +106,17 @@ function refresh() {
 	// Align with app navigation toggle
 	padding-block: var(--app-navigation-padding);
 	background: var(--color-main-background);
+
+	&--mobile {
+		// The larger buttons need the room on a phone.
+		gap: var(--app-navigation-padding);
+	}
+
+	// Touch targets of at least 44px for the buttons of the header.
+	&--mobile &__back,
+	&--mobile &__content {
+		--default-clickable-area: 44px;
+	}
 
 	&__title {
 		max-width: 45%;

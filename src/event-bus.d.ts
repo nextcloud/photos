@@ -8,7 +8,9 @@ declare module '@nextcloud/event-bus' {
 	export interface NextcloudEvents {
 		'files:node:deleted': Node
 		'files:node:updated': Node
+		'navigation-toggled': { open: boolean }
 		'photos:user-config-changed': { key: string, value: unknown }
+		'toggle-navigation': { open: boolean }
 	}
 }
 

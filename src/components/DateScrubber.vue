@@ -265,7 +265,7 @@ onBeforeUnmount(() => {
 	// box positioned against the grid would be as tall as the whole loaded
 	// library and scroll out of view.
 	position: fixed;
-	inset-block: calc(var(--header-height, 50px) + var(--default-clickable-area) + 24px) 24px;
+	inset-block: calc(var(--header-height, 50px) + var(--default-clickable-area) + 24px) calc(24px + var(--photos-bottom-navigation-height, 0px));
 	inset-inline-end: 4px;
 	width: 84px;
 	z-index: 4;
