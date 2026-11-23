@@ -14,7 +14,7 @@
 			@refresh="loadPhotos" />
 
 		<NcEmptyContent
-			v-if="trips.length === 0 && yearRecap === null"
+			v-if="trips.length === 0 && yearRecap === null && thenAndNowPairs.length === 0"
 			class="memories__empty-content empty-content-with-illustration"
 			:name="loading ? t('photos', 'Looking for memories…') : t('photos', 'No memories yet')"
 			:description="t('photos', 'Memories gather the photos of your trips and multi-day events.')">
@@ -53,6 +53,33 @@
 			</span>
 		</button>
 
+		<section v-if="thenAndNowPairs.length > 0" class="memories__then-and-now" :aria-labelledby="thenAndNowTitleId">
+			<h2 :id="thenAndNowTitleId" class="memories__then-and-now__title">
+				{{ t('photos', 'Then and now') }}
+			</h2>
+			<ul class="memories__list">
+				<li v-for="pair in thenAndNowPairs" :key="pair.id" class="memories__pair">
+					<button
+						type="button"
+						class="memories__pair__button"
+						@click="openPair(pair)">
+						<span class="memories__pair__photos">
+							<span v-for="photo in [pair.then, pair.now]" :key="photo.fileid" class="memories__pair__photo">
+								<img
+									class="memories__pair__photo__image"
+									:src="getPreviewUrl(photo, 512)"
+									alt=""
+									loading="lazy"
+									decoding="async">
+								<span class="memories__pair__photo__date">{{ formatDate(new Date(photo.attributes.timestamp * 1000)) }}</span>
+							</span>
+						</span>
+						<span class="memories__pair__place">{{ pair.place }}</span>
+					</button>
+				</li>
+			</ul>
+		</section>
+
 		<ul v-if="trips.length > 0" class="memories__list">
 			<li v-for="trip in trips" :key="trip.id" class="memories__trip">
 				<button
@@ -80,18 +107,18 @@
 </template>
 
 <script lang="ts" setup>
-import type { Trip, YearRecap } from '../services/memories.ts'
+import type { ThenAndNow, Trip, YearRecap } from '../services/memories.ts'
 
 import { n, t } from '@nextcloud/l10n'
 import { getViewer } from '@nextcloud/viewer'
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, useId } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import AnimatedNumber from '../components/AnimatedNumber.vue'
 import EmptyIllustration from '../components/EmptyIllustration.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import { useLoadedPhotos } from '../composables/useLoadedPhotos.ts'
-import { buildYearRecap, detectTrips } from '../services/memories.ts'
-import { formatDateRange as formatRange } from '../utils/dateUtils.ts'
+import { buildThenAndNow, buildYearRecap, detectTrips } from '../services/memories.ts'
+import { formatDate, formatDateRange as formatRange } from '../utils/dateUtils.ts'
 import { getPreviewUrl } from '../utils/fileUtils.ts'
 
 defineProps<{
@@ -105,6 +132,10 @@ const { photos, loading, loadPhotos } = useLoadedPhotos()
 const trips = computed<Trip[]>(() => detectTrips(photos.value))
 
 const yearRecap = computed<YearRecap | null>(() => buildYearRecap(photos.value))
+
+const thenAndNowPairs = computed<ThenAndNow[]>(() => buildThenAndNow(photos.value))
+
+const thenAndNowTitleId = useId()
 
 const recapAriaLabel = computed<string>(() => yearRecap.value === null
 	? ''
@@ -129,6 +160,13 @@ function startRecap(): void {
  */
 function openTrip(trip: Trip): void {
 	getViewer().open(trip.photos, trip.cover)
+}
+
+/**
+ * @param pair - The pair of photos to open in the viewer
+ */
+function openPair(pair: ThenAndNow): void {
+	getViewer().open([pair.then, pair.now], pair.then)
 }
 
 /**
@@ -211,6 +249,82 @@ function formatDateRange(trip: Trip): string {
 		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 		gap: calc(var(--default-grid-baseline) * 4);
 		padding: calc(var(--default-grid-baseline) * 4);
+	}
+
+	&__then-and-now {
+		flex-shrink: 0;
+
+		&__title {
+			margin: calc(var(--default-grid-baseline) * 4) calc(var(--default-grid-baseline) * 4) 0;
+			font-size: 1.25rem;
+			font-weight: bold;
+		}
+	}
+
+	&__pair {
+		overflow: hidden;
+		border-radius: var(--border-radius-large);
+		background-color: var(--color-background-dark);
+
+		&__button {
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			border: none;
+			border-radius: 0;
+			background-color: transparent;
+			color: var(--color-main-text);
+			cursor: pointer;
+
+			&:hover,
+			&:focus-visible {
+				background-color: var(--color-background-hover);
+			}
+
+			&:focus-visible {
+				outline: 2px solid var(--color-main-text);
+				outline-offset: -2px;
+			}
+		}
+
+		&__photos {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 2px;
+			width: 100%;
+		}
+
+		&__photo {
+			position: relative;
+			aspect-ratio: 3 / 4;
+			background-color: var(--color-primary-element-light);
+
+			&__image {
+				display: block;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+
+			&__date {
+				position: absolute;
+				inset-block-end: 0;
+				inset-inline: 0;
+				padding: calc(var(--default-grid-baseline) * 6) calc(var(--default-grid-baseline) * 2) calc(var(--default-grid-baseline) * 2);
+				text-align: start;
+				color: #fff;
+				background-image: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+			}
+		}
+
+		&__place {
+			padding: calc(var(--default-grid-baseline) * 2) calc(var(--default-grid-baseline) * 3);
+			text-align: start;
+			font-weight: bold;
+		}
 	}
 
 	&__trip {
