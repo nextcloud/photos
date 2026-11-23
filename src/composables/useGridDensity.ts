@@ -15,6 +15,7 @@ import { useUserConfigStore } from '../store/userConfig.ts'
  * The row justification adapts the real height to the container width.
  */
 const BASE_HEIGHTS: Record<GridDensity, { mobile: number, desktop: number }> = {
+	overview: { mobile: 52, desktop: 72 },
 	small: { mobile: 80, desktop: 120 },
 	medium: { mobile: 120, desktop: 200 },
 	large: { mobile: 200, desktop: 320 },

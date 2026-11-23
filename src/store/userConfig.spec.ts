@@ -55,6 +55,12 @@ describe('useUserConfigStore', () => {
 		expect(store.photosLocation).toBe('/Photos')
 	})
 
+	test('reads the overview grid density', () => {
+		initialState.gridDensity = 'overview'
+
+		expect(useUserConfigStore().gridDensity).toBe('overview')
+	})
+
 	test('ignores a grid density it does not know', () => {
 		initialState.gridDensity = 'huge'
 

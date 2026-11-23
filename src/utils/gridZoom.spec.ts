@@ -31,6 +31,7 @@ describe('stepDensity', () => {
 	test('steps to the neighbouring level', () => {
 		expect(stepDensity('medium', 1)).toBe('large')
 		expect(stepDensity('medium', -1)).toBe('small')
+		expect(stepDensity('small', -1)).toBe('overview')
 	})
 
 	test('stays on the level at either end', () => {

@@ -7,7 +7,7 @@ import type { TiledSection } from '../services/TiledLayout.ts'
 import type { GridDensity } from '../store/userConfig.ts'
 
 /** Sizes of the tiles of the photo grids, from the smallest tiles to the largest. */
-export const gridDensities = ['small', 'medium', 'large'] as const
+export const gridDensities = ['overview', 'small', 'medium', 'large'] as const
 
 /** 1 for larger tiles, -1 for smaller ones, 0 to stay on the level. */
 export type ZoomDirection = -1 | 0 | 1

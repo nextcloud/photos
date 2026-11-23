@@ -315,6 +315,7 @@ const filesListViewer = useTemplateRef<InstanceType<typeof FilesListViewer>>('fi
 const { zoomAnchor, zoomIndicatorShown } = useGridZoom(computed(() => filesListViewer.value?.$el))
 
 const gridDensityLabels: Record<GridDensity, string> = {
+	overview: t('photos', 'Overview'),
 	small: t('photos', 'Small tiles'),
 	medium: t('photos', 'Default'),
 	large: t('photos', 'Large tiles'),
