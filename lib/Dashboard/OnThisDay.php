@@ -8,6 +8,7 @@
 namespace OCA\Photos\Dashboard;
 
 use OCA\Photos\AppInfo\Application;
+use OCA\Photos\Service\UserConfigService;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\Dashboard\IIconWidget;
 use OCP\IL10N;
@@ -19,6 +20,7 @@ class OnThisDay implements IIconWidget {
 		private readonly IL10N $l,
 		private readonly IURLGenerator $url,
 		private readonly IInitialState $initialState,
+		private readonly UserConfigService $userConfig,
 	) {
 	}
 
@@ -79,5 +81,11 @@ class OnThisDay implements IIconWidget {
 		Util::addStyle('photos', 'photos-dashboard');
 		$this->initialState->provideInitialState('image-mimes', Application::IMAGE_MIMES);
 		$this->initialState->provideInitialState('video-mimes', Application::VIDEO_MIMES);
+
+		// Provide user config, like PageController, so the widget searches
+		// the configured source folders too.
+		foreach (array_keys(UserConfigService::DEFAULT_CONFIGS) as $key) {
+			$this->initialState->provideInitialState($key, $this->userConfig->getUserConfig($key));
+		}
 	}
 }
