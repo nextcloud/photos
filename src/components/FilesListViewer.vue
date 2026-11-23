@@ -20,6 +20,7 @@
 					:containerElement="containerElement"
 					:sections="tiledSections"
 					:scrollToKey="scrollToSection"
+					:anchorPoint="anchorPoint"
 					:headerHeight="sectionHeaderHeight"
 					@needContent="needContent">
 					<template #default="{ visibleSections }">
@@ -73,6 +74,7 @@
 import type { File, Node } from '@nextcloud/files'
 import type { TiledItem } from '../services/TiledLayout.ts'
 import type { PhotoFile } from '../store/files.ts'
+import type { ViewportPoint } from '../utils/gridZoom.ts'
 
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { computed, onMounted, onUnmounted } from 'vue'
@@ -102,6 +104,8 @@ const props = withDefaults(defineProps<{
 	sectionHeaderHeight?: number
 	// Instruct VirtualScrolling to scroll to the given section id.
 	scrollToSection?: string
+	// The anchorPoint props to forward to VirtualScrolling.
+	anchorPoint?: ViewportPoint | null
 	// The containerElement props to forward to TileLayout.
 	containerElement?: HTMLElement | null
 	// The useWindow props to forward to TileLayout.
@@ -115,6 +119,7 @@ const props = withDefaults(defineProps<{
 	baseHeight: 200,
 	sectionHeaderHeight: 75,
 	scrollToSection: '',
+	anchorPoint: null,
 	containerElement: null,
 	useWindow: false,
 })

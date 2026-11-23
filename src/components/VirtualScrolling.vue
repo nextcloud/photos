@@ -24,9 +24,11 @@
 
 <script setup lang="ts" generic="I extends TiledItem">
 import type { TiledItem, TiledSection, TiledSectionRow } from '../services/TiledLayout.ts'
+import type { ViewportPoint } from '../utils/gridZoom.ts'
 
-import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { logger } from '../services/logger.ts'
+import { anchorOffset, findAnchor } from '../utils/gridZoom.ts'
 
 export type VisibleRow<I extends TiledItem = TiledItem> = TiledSectionRow<I> & {
 	distance: number // The distance from the visible viewport
@@ -44,6 +46,8 @@ const props = withDefaults(defineProps<{
 	renderDistance?: number
 	bottomBufferRatio?: number
 	scrollToKey?: string
+	// Point of the viewport whose item stays in place when the rows are laid out anew.
+	anchorPoint?: ViewportPoint | null
 }>(), {
 	containerElement: null,
 	useWindow: false,
@@ -51,6 +55,7 @@ const props = withDefaults(defineProps<{
 	renderDistance: 0.5,
 	bottomBufferRatio: 2,
 	scrollToKey: '',
+	anchorPoint: null,
 })
 
 const emit = defineEmits<{
@@ -252,6 +257,30 @@ watch(() => props.scrollToKey, (key) => {
 
 	logger.debug('[VirtualScrolling] Scrolling to', { top })
 	scrollContainer.value.scrollTo({ top, behavior: 'smooth' })
+})
+
+// Runs before the new rows are rendered, while the DOM still shows the previous ones.
+watch(() => props.sections, async (sections, previousSections) => {
+	if (props.anchorPoint === null || rowsContainer.value === null) {
+		return
+	}
+
+	const origin = rowsContainer.value.getBoundingClientRect()
+	const offset = props.anchorPoint.y - origin.top
+	const anchor = findAnchor(previousSections, props.headerHeight, props.anchorPoint.x - origin.left, offset)
+	const newOffset = anchor === null ? null : anchorOffset(sections, props.headerHeight, anchor)
+	if (newOffset === null) {
+		return
+	}
+
+	const scrollTop = props.useWindow ? window.scrollY : (scrollContainer.value as HTMLElement).scrollTop
+	const top = Math.max(0, scrollTop + newOffset - offset)
+
+	// Renders the rows around the new position right away, the container can
+	// only be scrolled there once it got its new height.
+	scrollPosition.value = top
+	await nextTick()
+	scrollContainer.value.scrollTo({ top, behavior: 'instant' })
 })
 
 function updateScrollPosition() {
