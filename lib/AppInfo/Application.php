@@ -23,6 +23,7 @@ use OCA\Photos\Listener\SabrePluginAddListener;
 use OCA\Photos\Listener\SabrePluginAuthInitListener;
 use OCA\Photos\Listener\SizeMetadataProvider;
 use OCA\Photos\Listener\TagListener;
+use OCA\Photos\Notification\Notifier;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -70,6 +71,7 @@ class Application extends App implements IBootstrap {
 	#[\Override]
 	public function register(IRegistrationContext $context): void {
 		$context->registerDashboardWidget(OnThisDay::class);
+		$context->registerNotifierService(Notifier::class);
 		/** Register $principalBackend for the DAV collection */
 		$context->registerServiceAlias('principalBackend', Principal::class);
 

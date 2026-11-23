@@ -17,6 +17,7 @@ class UserConfigService {
 	public const array DEFAULT_CONFIGS = [
 		'croppedLayout' => 'false',
 		'gridDensity' => 'medium',
+		'onThisDayNotifications' => 'true',
 		'photosLocation' => '/Photos',
 		'photosSourceFolders' => '["/Photos"]',
 		/** If you add any new configs, make sure to validate the contents in {@see \OCA\Photos\Controller\ApiController::setUserConfig} */
