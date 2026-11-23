@@ -12,11 +12,13 @@ import { showError } from '@nextcloud/dialogs'
 import { defaultRootPath } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
 import { join } from '@nextcloud/paths'
-import { ref, watch } from 'vue'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
+import { onBeforeUnmount, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { davClient } from '../services/DavClient.ts'
 import { getErrorBody } from '../services/DavResponse.ts'
 import { logger } from '../services/logger.ts'
+import { filterOfflineFiles, isPlainTimelineQuery, loadOfflineFiles, refreshOfflineCopy } from '../services/offlineTimeline.ts'
 import { getPhotos } from '../services/PhotoSearch.ts'
 import { useFilesStore } from '../store/files.ts'
 import { useUserConfigStore } from '../store/userConfig.ts'
@@ -24,6 +26,9 @@ import { SemaphoreWithPriority } from '../utils/semaphoreWithPriority.ts'
 import { useAbortController } from './useAbortController.ts'
 
 const numberOfImagesPerBatch = 200
+
+// The offline copy is refreshed once per page load.
+let offlineCopyRefreshed = false
 
 /**
  * Fetch the photos of the library in batches into the store, and keep track
@@ -36,17 +41,21 @@ export function useFetchFiles(): {
 	loadingFiles: Ref<boolean>
 	doneFetchingFiles: Ref<boolean>
 	errorFetchingFiles: Ref<null | number | Error>
+	showingSavedFiles: Ref<boolean>
 } {
 	const route = useRoute()
 	const filesStore = useFilesStore()
 	const userConfigStore = useUserConfigStore()
 	const { abortSignal, abortPendingRequest } = useAbortController()
+	const isMobile = useIsMobile()
 
 	const fetchSemaphore = new SemaphoreWithPriority(1)
 	const fetchedFileIds = ref<number[]>([])
 	const loadingFiles = ref(false)
 	const doneFetchingFiles = ref(false)
 	const errorFetchingFiles = ref<null | number | Error>(null)
+	// Whether the files shown are the ones saved for offline use, as the server could not be reached.
+	const showingSavedFiles = ref(false)
 
 	/**
 	 * @param options - Options to pass to getPhotos.
@@ -74,6 +83,11 @@ export function useFetchFiles(): {
 				signal,
 			})
 
+			if (!offlineCopyRefreshed && fetchedFileIds.value.length === 0 && filter === undefined && isPlainTimelineQuery(options)) {
+				offlineCopyRefreshed = true
+				refreshOfflineCopy(fetchedFiles, isMobile.value ? 256 : 1024)
+			}
+
 			// If we get less files than requested that means we got to the end
 			if (fetchedFiles.length !== numberOfImagesPerBatch) {
 				doneFetchingFiles.value = true
@@ -95,6 +109,24 @@ export function useFetchFiles(): {
 
 			return fileIds
 		} catch (error) {
+			// Without a connection, the first batch is answered from the saved files.
+			if (showingSavedFiles.value) {
+				return []
+			}
+			if ((error instanceof TypeError || !navigator.onLine) && fetchedFileIds.value.length === 0 && !signal.aborted) {
+				let savedFiles = filterOfflineFiles(await loadOfflineFiles(), options)
+				if (filter !== undefined) {
+					savedFiles = savedFiles.filter(filter)
+				}
+				if (savedFiles.length > 0) {
+					showingSavedFiles.value = true
+					doneFetchingFiles.value = true
+					fetchedFileIds.value = savedFiles.map((file) => file.fileid as number)
+					filesStore.appendFiles(savedFiles)
+					return fetchedFileIds.value
+				}
+			}
+
 			if ((error as WebDAVClientError).response?.status === 404) {
 				const { photosLocation, photosSourceFolders } = userConfigStore
 				const errorBody = await getErrorBody(error)
@@ -143,7 +175,18 @@ export function useFetchFiles(): {
 		errorFetchingFiles.value = null
 		loadingFiles.value = false
 		fetchedFileIds.value = []
+		showingSavedFiles.value = false
 	}
+
+	// Back online, the saved files make room for the ones of the server.
+	function onOnline(): void {
+		if (showingSavedFiles.value) {
+			resetFetchFilesState()
+		}
+	}
+
+	window.addEventListener('online', onOnline)
+	onBeforeUnmount(() => window.removeEventListener('online', onOnline))
 
 	watch(() => route.path, resetFetchFilesState)
 
@@ -154,5 +197,6 @@ export function useFetchFiles(): {
 		loadingFiles,
 		doneFetchingFiles,
 		errorFetchingFiles,
+		showingSavedFiles,
 	}
 }

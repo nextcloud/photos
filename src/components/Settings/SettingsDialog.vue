@@ -14,6 +14,7 @@
 			<PhotosUploadLocationSettings />
 			<CroppedLayoutSettings />
 		</NcAppSettingsSection>
+		<InstallAppSettings />
 		<KeyboardShortcutsSettings />
 	</NcAppSettingsDialog>
 </template>
@@ -23,6 +24,7 @@ import { t } from '@nextcloud/l10n'
 import NcAppSettingsDialog from '@nextcloud/vue/components/NcAppSettingsDialog'
 import NcAppSettingsSection from '@nextcloud/vue/components/NcAppSettingsSection'
 import CroppedLayoutSettings from './CroppedLayoutSettings.vue'
+import InstallAppSettings from './InstallAppSettings.vue'
 import KeyboardShortcutsSettings from './KeyboardShortcutsSettings.vue'
 import PhotosSourceLocationsSettings from './PhotosSourceLocationsSettings.vue'
 import PhotosUploadLocationSettings from './PhotosUploadLocationSettings.vue'

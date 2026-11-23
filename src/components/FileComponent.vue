@@ -150,7 +150,7 @@ import PlayCircleOutlineIcon from 'vue-material-design-icons/PlayCircleOutline.v
 import FavoriteIcon from './FavoriteIcon.vue'
 import PhotoActionsMenu from './PhotoActionsMenu.vue'
 import { logger } from '../services/logger.ts'
-import { isCachedPreview } from '../services/PreviewService.js'
+import { getPreviewUrl, isCachedPreview } from '../services/PreviewService.js'
 import { getVideoDurationFromUrl, toPhotoTarget } from '../utils/fileUtils.ts'
 import { isPreviewableVideoMime, playsVideoPreviews, VIDEO_PREVIEW_DELAY } from '../utils/videoPreview.ts'
 
@@ -360,7 +360,7 @@ function getItemURL(size: number): string {
 	if (token) {
 		return generateUrl(`/apps/photos/api/v1/publicPreview/${props.file.fileid}?etag=${decodedEtag.value}&x=${size}&y=${size}&token=${token}`)
 	} else {
-		return generateUrl(`/apps/photos/api/v1/preview/${props.file.fileid}?etag=${decodedEtag.value}&x=${size}&y=${size}`)
+		return getPreviewUrl(props.file.fileid as number, props.file.attributes.etag, size)
 	}
 }
 

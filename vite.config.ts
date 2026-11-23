@@ -8,6 +8,7 @@ import type { UserConfig } from 'vitest/node'
 import { createAppConfig } from '@nextcloud/vite-config'
 import { join } from 'path'
 import { VitePWA } from 'vite-plugin-pwa'
+import { isAppShellRequest } from './src/utils/appShell.ts'
 import SassGridConfig from './src/utils/SassGridConfig.js'
 
 // replaced by vite
@@ -80,6 +81,21 @@ export default createAppConfig({
 								expiration: {
 									maxAgeSeconds: 3600 * 24 * 7, // one week
 									maxEntries: 10000,
+								},
+							},
+						},
+						{
+							// The network always wins, the cached app shell
+							// is only what opens the app without a connection.
+							urlPattern: isAppShellRequest,
+							handler: 'NetworkFirst',
+							options: {
+								cacheName: 'photos-shell',
+								cacheableResponse: {
+									statuses: [200],
+								},
+								expiration: {
+									maxEntries: 1000,
 								},
 							},
 						},
