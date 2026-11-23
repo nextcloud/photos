@@ -7,6 +7,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest'
 import {
 	formatDate,
 	formatDateRange,
+	formatDateTime,
 	formatMonth,
 	formatMonthAndYear,
 	formatTime,
@@ -122,6 +123,17 @@ describe('formatTime', () => {
 	test('follows the user locale', () => {
 		getCanonicalLocale.mockReturnValue('en-US')
 		expect(formatTime(new Date(2026, 7, 29, 14, 53))).toBe('2:53 PM')
+	})
+})
+
+describe('formatDateTime', () => {
+	test('formats a date with its time', () => {
+		expect(formatDateTime(new Date(2026, 7, 29, 14, 53, 42))).toBe('29 Aug 2026, 14:53')
+	})
+
+	test('follows the user locale', () => {
+		getCanonicalLocale.mockReturnValue('en-US')
+		expect(formatDateTime(new Date(2026, 7, 29, 14, 53))).toMatch(/^Aug 29, 2026.*2:53\sPM$/)
 	})
 })
 

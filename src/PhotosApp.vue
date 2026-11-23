@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<NcContent appName="photos">
+	<NcContent ref="content" appName="photos">
 		<NcAppNavigation :aria-label="t('photos', 'Photos')">
 			<template v-if="isTimelineView" #search>
 				<NcTextField
@@ -192,12 +192,13 @@
 import type { FilterOption } from './services/PhotosFilters/PhotosFilter.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
+import { getSidebar } from '@nextcloud/files'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import debounce from 'debounce'
 import { storeToRefs } from 'pinia'
-import { computed, onBeforeMount, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
 import NcAppNavigation from '@nextcloud/vue/components/NcAppNavigation'
@@ -253,6 +254,7 @@ const filesStore = useFilesStore()
 const filtersStore = useFilterStore()
 const { selectedFilters } = storeToRefs(filtersStore)
 
+const content = useTemplateRef<InstanceType<typeof NcContent>>('content')
 const searchTerm = ref('')
 const openedSettings = ref(false)
 
@@ -321,6 +323,12 @@ onBeforeMount(() => {
 	} else {
 		logger.debug('Service Worker is not enabled on this browser.')
 	}
+})
+
+// The files sidebar renders into the page before the app is mounted over it,
+// so it is rendered again next to the app content, as in the files app.
+onMounted(() => {
+	getSidebar().mount(content.value!.$el)
 })
 
 onBeforeUnmount(() => {

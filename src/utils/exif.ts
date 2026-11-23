@@ -4,6 +4,7 @@
  */
 
 import { translate as t } from '@nextcloud/l10n'
+import { formatDateTime } from './dateUtils.ts'
 
 /**
  * Raw EXIF metadata of a photo. Entries are only sanitized server side, their
@@ -101,6 +102,21 @@ export function getExifSummary(metadata: PhotoExif): ExifEntry[] {
 		{ label: t('photos', 'Exposure'), value: formatExposureTime(exif.ExposureTime) },
 		{ label: t('photos', 'ISO'), value: formatIsoSpeed(exif.ISOSpeedRatings) },
 	].filter((entry) => entry.value !== '')
+}
+
+/**
+ * Write the moment a photo was taken.
+ *
+ * @param takenAt - Unix timestamp in seconds, as stored in the photo metadata
+ * @return The date and time, empty when the timestamp cannot be read
+ */
+export function formatTakenAt(takenAt: unknown): string {
+	const seconds = typeof takenAt === 'string' && takenAt.trim() !== '' ? Number(takenAt) : takenAt
+	if (typeof seconds !== 'number' || !Number.isFinite(seconds) || seconds <= 0) {
+		return ''
+	}
+
+	return formatDateTime(new Date(seconds * 1000))
 }
 
 /**

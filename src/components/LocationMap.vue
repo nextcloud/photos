@@ -21,6 +21,7 @@
 			:prefix="attribution" />
 		<LMarker :latLng="center">
 			<LTooltip
+				v-if="name"
 				:options="{
 					direction: 'top',
 					permanent: 'true',

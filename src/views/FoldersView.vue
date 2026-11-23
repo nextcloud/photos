@@ -94,6 +94,7 @@ import type { Section, TiledItem } from '../services/TiledLayout.ts'
 import type { PhotoFile } from '../store/files.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
+import { getSidebar } from '@nextcloud/files'
 import { defaultRootPath } from '@nextcloud/files/dav'
 import { getUploader } from '@nextcloud/files/upload'
 import { t } from '@nextcloud/l10n'
@@ -216,8 +217,7 @@ watch(() => props.showShared, () => {
  * @param fileid - Id of the photo to open
  */
 async function openViewer(fileid: number) {
-	const session = await getViewer().open(fileList.value, files.value[fileid] as PhotoFile)
-	session.addEventListener('close', () => window.OCA?.Files?.Sidebar?.close?.(), { once: true })
+	await getViewer().open(fileList.value, files.value[fileid] as PhotoFile)
 }
 
 // Folders keep the ids of the files they hold, the listing skips the
@@ -257,7 +257,7 @@ async function fetchFolderContent() {
 
 	// close any potential opened viewer & sidebar
 	getViewer().close()
-	window.OCA?.Files?.Sidebar?.close?.()
+	getSidebar().close()
 
 	// if we don't already have some cached data let's show a loader
 	if (!files.value[folderId.value] || !folders.value[folderId.value]) {

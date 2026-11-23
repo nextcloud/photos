@@ -15,15 +15,6 @@ declare global {
 			Dashboard: {
 				register(name: string, callback: (el: HTMLElement) => void): void
 			}
-			Files: {
-				Sidebar: {
-					open: (path: string) => void
-					close: () => void
-					file: string | null | undefined
-					registerTab(tab: unknown): void
-					Tab: unknown
-				}
-			}
 		}
 		OCP?: {
 			Accessibility?: {
