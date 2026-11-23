@@ -89,6 +89,7 @@ class PageController extends Controller {
 		$this->initialState->provideInitialState('video-mimes', Application::VIDEO_MIMES);
 		$this->initialState->provideInitialState('maps', $this->appManager->isEnabledForUser('maps') === true);
 		$this->initialState->provideInitialState('recognize', $this->appManager->isEnabledForUser('recognize') === true);
+		$this->initialState->provideInitialState('contacts', $this->appManager->isEnabledForUser('contacts') === true);
 		$this->initialState->provideInitialState('systemtags', $this->appManager->isEnabledForUser('systemtags') === true);
 		$this->initialState->provideInitialState('showPeopleMenuEntry', $this->config->getAppValue('photos', 'showPeopleMenuEntry', 'true') === 'true');
 		$this->initialState->provideInitialState('appStoreEnabled', $this->config->getSystemValueBool('appstoreenabled', true));

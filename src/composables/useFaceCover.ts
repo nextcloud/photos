@@ -3,8 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { generateUrl } from '@nextcloud/router'
 import { decode } from 'he'
 import { useFacesStore } from '../store/faces.ts'
+import { getFaceSquare } from '../utils/contacts.ts'
 
 type Cover = {
 	fileid: number
@@ -24,6 +26,7 @@ type CoverStyle = Record<string, never> | { transform: string, width: string, tr
 export function useFaceCover(): {
 	getFaceCover: (faceName: string) => Cover
 	getCoverStyle: (faceName: string) => CoverStyle
+	getFaceCoverJpeg: (faceName: string) => Promise<string>
 } {
 	const facesStore = useFacesStore()
 
@@ -65,8 +68,28 @@ export function useFaceCover(): {
 		}
 	}
 
+	/**
+	 * Cut the face out of the cover picture, as a base64 encoded JPEG
+	 * of at most 512 pixels.
+	 *
+	 * @param faceName - Face the cover belongs to
+	 */
+	async function getFaceCoverJpeg(faceName: string): Promise<string> {
+		const cover = getFaceCover(faceName)
+		const image = new Image()
+		image.src = generateUrl(`/apps/photos/api/v1/preview/${cover.fileid}?x=${1024}&y=${1024}`)
+		await image.decode()
+
+		const square = getFaceSquare(cover.detection, image.naturalWidth, image.naturalHeight)
+		const canvas = document.createElement('canvas')
+		canvas.width = canvas.height = Math.min(square.size, 512)
+		canvas.getContext('2d')!.drawImage(image, square.x, square.y, square.size, square.size, 0, 0, canvas.width, canvas.height)
+		return canvas.toDataURL('image/jpeg', 0.9).split(',')[1]
+	}
+
 	return {
 		getFaceCover,
 		getCoverStyle,
+		getFaceCoverJpeg,
 	}
 }

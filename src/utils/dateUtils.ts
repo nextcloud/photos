@@ -96,6 +96,17 @@ export function formatMonthAndYear(date: Date | string, short = false): string {
 }
 
 /**
+ * Format a day of the year, like *14 June*.
+ *
+ * @param month - The month, starting at 1.
+ * @param day - The day of the month.
+ */
+export function formatDayAndMonth(month: number, day: number): string {
+	// 2000 is a leap year, so the 29th of February is kept.
+	return getFormatter({ day: 'numeric', month: 'long' }).format(new Date(2000, month - 1, day))
+}
+
+/**
  * Format a date without its time, like *29 Aug 2026*.
  *
  * @param date - The date to format.
