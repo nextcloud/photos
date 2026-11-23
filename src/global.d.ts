@@ -5,6 +5,9 @@
 /// <reference types="@nextcloud/typings" />
 
 declare global {
+	/** Version of the app, which the build inserts from its appinfo. */
+	const appVersion: string
+
 	const OC: Nextcloud.v32.OC & {
 		/** Registered by files_sharing, absent when sharing is disabled. */
 		Share?: object

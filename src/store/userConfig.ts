@@ -61,6 +61,7 @@ export type PersistedUserConfig = {
 	gridDensity: GridDensity
 	photosSourceFolders: string[]
 	photosLocation: string
+	lastSeenVersion: string
 }
 
 /**
@@ -77,11 +78,12 @@ export const useUserConfigStore = defineStore('userConfig', () => {
 	const gridDensity = ref<GridDensity>(parseGridDensity(loadState('photos', 'gridDensity', 'medium')))
 	const photosSourceFolders = ref<string[]>(JSON.parse(loadState('photos', 'photosSourceFolders', '["/Photos"]')))
 	const photosLocation = ref(loadState('photos', 'photosLocation', ''))
+	const lastSeenVersion = ref(loadState('photos', 'lastSeenVersion', ''))
 
 	/** Node of photosLocation, resolved from dav and created if missing. */
 	const photosLocationFolder = ref<Folder | undefined>(undefined)
 
-	const refs = { croppedLayout, gridDensity, photosSourceFolders, photosLocation }
+	const refs = { croppedLayout, gridDensity, photosSourceFolders, photosLocation, lastSeenVersion }
 
 	/**
 	 * Persist a user config value and notify the rest of the app.
@@ -114,6 +116,7 @@ export const useUserConfigStore = defineStore('userConfig', () => {
 		gridDensity,
 		photosSourceFolders,
 		photosLocation,
+		lastSeenVersion,
 		photosLocationFolder,
 		updateUserConfig,
 		initPhotosLocationFolder,

@@ -55,6 +55,11 @@ class ApiController extends Controller {
 					return new JSONResponse([], Http::STATUS_BAD_REQUEST);
 				}
 				break;
+			case 'lastSeenVersion':
+				if (preg_match('/^\d+(\.\d+){0,2}$/D', $value) !== 1) {
+					return new JSONResponse([], Http::STATUS_BAD_REQUEST);
+				}
+				break;
 			case 'photosLocation':
 				if (!$this->validatePath($value)) {
 					return new JSONResponse([], Http::STATUS_BAD_REQUEST);

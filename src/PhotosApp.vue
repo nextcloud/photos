@@ -184,7 +184,9 @@
 		</NcAppContent>
 
 		<!-- Main settings Modal-->
-		<SettingsDialog v-model:open="openedSettings" />
+		<SettingsDialog v-model:open="openedSettings" @showWhatsNew="showWhatsNew" />
+
+		<WhatsNewDialog v-model:open="openedWhatsNew" />
 	</NcContent>
 </template>
 
@@ -237,6 +239,7 @@ import VideoOutline from 'vue-material-design-icons/VideoOutline.vue'
 import PhotosFiltersDisplay from './components/PhotosFilters/PhotosFiltersDisplay.vue'
 import PhotosFiltersInput from './components/PhotosFilters/PhotosFiltersInput.vue'
 import SettingsDialog from './components/Settings/SettingsDialog.vue'
+import WhatsNewDialog from './components/WhatsNewDialog.vue'
 import svgplaceholder from './assets/file-placeholder.svg'
 import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'
@@ -255,6 +258,7 @@ const { selectedFilters } = storeToRefs(filtersStore)
 
 const searchTerm = ref('')
 const openedSettings = ref(false)
+const openedWhatsNew = ref(false)
 
 const currentUser = getCurrentUser()
 const showPeopleMenuEntry = currentUser === null
@@ -281,6 +285,11 @@ watch(() => selectedFilters.value[nameFilterId], (values) => {
 
 function showSettings() {
 	openedSettings.value = true
+}
+
+function showWhatsNew() {
+	openedSettings.value = false
+	openedWhatsNew.value = true
 }
 
 function selectFilter(filterOption: FilterOption<unknown>) {

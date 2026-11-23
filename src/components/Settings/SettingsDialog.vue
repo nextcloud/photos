@@ -13,6 +13,13 @@
 			<PhotosSourceLocationsSettings />
 			<PhotosUploadLocationSettings />
 			<CroppedLayoutSettings />
+			<NcFormBox>
+				<NcFormBoxButton :label="t('photos', 'What\'s new')" @click="emit('showWhatsNew')">
+					<template #icon>
+						<CreationOutline :size="20" />
+					</template>
+				</NcFormBoxButton>
+			</NcFormBox>
 		</NcAppSettingsSection>
 		<KeyboardShortcutsSettings />
 	</NcAppSettingsDialog>
@@ -22,6 +29,9 @@
 import { t } from '@nextcloud/l10n'
 import NcAppSettingsDialog from '@nextcloud/vue/components/NcAppSettingsDialog'
 import NcAppSettingsSection from '@nextcloud/vue/components/NcAppSettingsSection'
+import NcFormBox from '@nextcloud/vue/components/NcFormBox'
+import NcFormBoxButton from '@nextcloud/vue/components/NcFormBoxButton'
+import CreationOutline from 'vue-material-design-icons/CreationOutline.vue'
 import CroppedLayoutSettings from './CroppedLayoutSettings.vue'
 import KeyboardShortcutsSettings from './KeyboardShortcutsSettings.vue'
 import PhotosSourceLocationsSettings from './PhotosSourceLocationsSettings.vue'
@@ -35,6 +45,7 @@ withDefaults(defineProps<{
 
 const emit = defineEmits<{
 	'update:open': [open: boolean]
+	showWhatsNew: []
 }>()
 
 // This can only be called if the AppSettingsDialog
