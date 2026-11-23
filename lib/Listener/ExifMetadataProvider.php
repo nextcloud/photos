@@ -112,8 +112,13 @@ class ExifMetadataProvider implements IEventListener {
 				array_key_exists('GPSLatitude', $rawExifData['GPS']) && array_key_exists('GPSLatitudeRef', $rawExifData['GPS'])
 				&& array_key_exists('GPSLongitude', $rawExifData['GPS']) && array_key_exists('GPSLongitudeRef', $rawExifData['GPS'])
 			) {
-				$gps['latitude'] = $this->gpsDegreesToDecimal($rawExifData['GPS']['GPSLatitude'], $rawExifData['GPS']['GPSLatitudeRef']);
-				$gps['longitude'] = $this->gpsDegreesToDecimal($rawExifData['GPS']['GPSLongitude'], $rawExifData['GPS']['GPSLongitudeRef']);
+				$latitude = $this->gpsDegreesToDecimal($rawExifData['GPS']['GPSLatitude'], $rawExifData['GPS']['GPSLatitudeRef']);
+				$longitude = $this->gpsDegreesToDecimal($rawExifData['GPS']['GPSLongitude'], $rawExifData['GPS']['GPSLongitudeRef']);
+
+				if ($latitude !== null && $longitude !== null) {
+					$gps['latitude'] = $latitude;
+					$gps['longitude'] = $longitude;
+				}
 			}
 
 			if (array_key_exists('GPSAltitude', $rawExifData['GPS']) && array_key_exists('GPSAltitudeRef', $rawExifData['GPS']) && is_string($rawExifData['GPS']['GPSAltitude'])) {
@@ -195,16 +200,16 @@ class ExifMetadataProvider implements IEventListener {
 	/**
 	 * @param array|string $coordinates
 	 */
-	private function gpsDegreesToDecimal($coordinates, ?string $hemisphere): float {
+	private function gpsDegreesToDecimal($coordinates, ?string $hemisphere): ?float {
 		if (is_string($coordinates)) {
 			$coordinates = array_map('trim', explode(',', $coordinates));
 		}
 
-		if (count($coordinates) !== 3) {
-			throw new \Exception('Invalid coordinate format: ' . json_encode($coordinates));
+		if (!is_array($coordinates) || count($coordinates) !== 3 || array_filter($coordinates, fn ($coordinate): bool => !is_scalar($coordinate))) {
+			return null;
 		}
 
-		[$degrees, $minutes, $seconds] = array_map(fn ($rawDegree): float => $this->parseGPSData($rawDegree), $coordinates);
+		[$degrees, $minutes, $seconds] = array_map(fn ($rawDegree): float => $this->parseGPSData((string)$rawDegree), $coordinates);
 
 		$sign = ($hemisphere === 'W' || $hemisphere === 'S') ? -1 : 1;
 		return $sign * ($degrees + $minutes / 60 + $seconds / 3600);
@@ -213,7 +218,7 @@ class ExifMetadataProvider implements IEventListener {
 	private function parseGPSData(string $rawData): float {
 		$parts = explode('/', $rawData);
 
-		if ($parts[1] === '0') {
+		if (($parts[1] ?? null) === '0') {
 			return 0;
 		}
 
