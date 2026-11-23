@@ -184,12 +184,17 @@
 				<h2
 					v-if="isHeader"
 					:id="`file-picker-section-header-${file.id}`"
-					class="section-header">
+					class="section-header"
+					:class="{ 'section-header--with-events': eventsByMonth[file.id] !== undefined }">
 					<b>{{ formatMonth(file.id) }}</b>
 					{{ formatYear(file.id) }}
 				</h2>
+				<TimelineMonthEvents
+					v-if="isHeader && eventsByMonth[file.id] !== undefined"
+					:events="eventsByMonth[file.id]"
+					@select="filterByEvent" />
 				<FileComponent
-					v-else
+					v-if="!isHeader"
 					:file="files[file.id]"
 					:allowSelection="true"
 					:burstCount="burstCount(file.id)"
@@ -233,6 +238,7 @@
 <script setup lang="ts">
 import type { Collection } from '../services/collectionFetcher.ts'
 import type { Album } from '../store/albums.ts'
+import type { MonthEvent } from '../utils/calendarEvents.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
@@ -266,12 +272,15 @@ import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
+import TimelineMonthEvents from '../components/TimelineMonthEvents.vue'
+import { useCalendarEvents } from '../composables/useCalendarEvents.ts'
 import { useFetchFiles } from '../composables/useFetchFiles.ts'
 import { useFilesByMonth } from '../composables/useFilesByMonth.ts'
 import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { useGridDensity } from '../composables/useGridDensity.ts'
 import { allMimes } from '../services/AllowedMimes.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
+import { dateRangeFilterId } from '../services/PhotosFilters/dateRangeFilter.ts'
 import { useCollectionsStore } from '../store/collections.ts'
 import { useFilesStore } from '../store/files.ts'
 import { useFilterStore } from '../store/filters.ts'
@@ -315,6 +324,8 @@ const files = computed(() => filesStore.files)
 // Photos taken in one go are shown as a single tile of the timeline, and are
 // reachable from the viewer it opens.
 const { fileIdsByMonthUngrouped, burstStacks, fileIdsByMonth, monthsList } = useFilesByMonth(fetchedFileIds, files, true)
+
+const { eventsByMonth } = useCalendarEvents(monthsList, fetchedFileIds, files)
 
 const shouldFavoriteSelection = computed<boolean>(() => {
 	// Favorite all selection if at least one file is not in the favorites.
@@ -361,6 +372,11 @@ function getContent() {
 		onlyFavorites: props.onlyFavorites,
 		extraFilters: filtersQuery.value,
 	})
+}
+
+// Narrow the timeline down to the days of a calendar event.
+function filterByEvent(event: MonthEvent) {
+	selectedFilters.value[dateRangeFilterId] = [{ start: event.start, end: event.end }]
 }
 
 // FilesListViewer scrolls on its `scrollToSection` prop, so stashing
@@ -493,6 +509,11 @@ onUnmounted(() => {
 		padding: calc(var(--default-grid-baseline) * 4);
 		margin-bottom: 0px;
 		padding-bottom: 0px;
+	}
+
+	// Hands the events line the room it takes, so the header keeps its height.
+	.section-header--with-events {
+		margin: calc(var(--default-grid-baseline) * 2) 0 0;
 	}
 
 	&__file-list {
