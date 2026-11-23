@@ -11,8 +11,10 @@ namespace OCA\Photos\Sabre;
 use OCA\DAV\Connector\Sabre\FilesPlugin;
 use OCA\Photos\Album\AlbumFile;
 use OCA\Photos\Sabre\Album\AlbumPhoto;
+use OCA\Photos\Sabre\Album\AlbumRoot;
 use OCA\Photos\Sabre\Album\AlbumRootBase;
 use OCA\Photos\Sabre\Album\PublicAlbumPhoto;
+use OCA\Photos\Sabre\Album\SharedAlbumRoot;
 use OCA\Photos\Sabre\Place\PlacePhoto;
 use OCA\Photos\Sabre\Place\PlaceRoot;
 use OCP\Files\DavUtil;
@@ -45,6 +47,7 @@ class PropFindPlugin extends ServerPlugin {
 	public const PERMISSIONS_PROPERTYNAME = '{http://owncloud.org/ns}permissions';
 	public const PHOTOS_ALBUM_FILE_ORIGIN_PROPERTYNAME = '{http://nextcloud.org/ns}photos-album-file-origin';
 	public const PHOTOS_COLLECTION_FILE_ORIGINAL_FILENAME_PROPERTYNAME = '{http://nextcloud.org/ns}photos-collection-file-original-filename';
+	public const ALBUM_ID_PROPERTYNAME = '{http://nextcloud.org/ns}album-id';
 
 	private ?Tree $tree = null;
 
@@ -150,6 +153,10 @@ class PropFindPlugin extends ServerPlugin {
 			$propFind->handle(self::DATE_RANGE_PROPERTYNAME, fn () => json_encode($node->getDateRange()));
 			$propFind->handle(self::COLLABORATORS_PROPERTYNAME, fn (): array => $node->getCollaborators());
 			$propFind->handle(self::FILTERS_PROPERTYNAME, fn (): ?string => $node->getFilters());
+		}
+
+		if ($node instanceof AlbumRoot || $node instanceof SharedAlbumRoot) {
+			$propFind->handle(self::ALBUM_ID_PROPERTYNAME, fn (): int => $node->getAlbum()->getAlbum()->getId());
 		}
 
 		if ($node instanceof PlaceRoot) {

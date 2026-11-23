@@ -57,6 +57,17 @@
 						</NcButton>
 
 						<NcButton
+							v-if="albumId !== undefined && hasCollaborators"
+							variant="tertiary"
+							:aria-label="t('photos', 'Comments')"
+							:pressed="showComments"
+							@click="showComments = !showComments">
+							<template #icon>
+								<CommentOutline />
+							</template>
+						</NcButton>
+
+						<NcButton
 							v-if="sharingEnabled"
 							variant="tertiary"
 							:aria-label="t('photos', 'Manage collaborators for this album')"
@@ -195,6 +206,12 @@
 			</CollaboratorsSelectionForm>
 		</NcModal>
 
+		<AlbumComments
+			v-if="showComments && albumId !== undefined"
+			:albumId="albumId"
+			:albumName="albumName"
+			@close="showComments = false" />
+
 		<NcDialog
 			v-if="showEditAlbumForm"
 			:name="t('photos', 'Edit album details')"
@@ -212,6 +229,7 @@ import type { Collaborator } from '../store/albums.ts'
 import type { PhotoFile } from '../store/files.ts'
 
 import { n, t } from '@nextcloud/l10n'
+import { ShareType } from '@nextcloud/sharing'
 import { computed, onMounted, ref, useTemplateRef } from 'vue'
 import { useRouter } from 'vue-router'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
@@ -223,6 +241,7 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcModal from '@nextcloud/vue/components/NcModal'
 import Close from 'vue-material-design-icons/Close.vue'
+import CommentOutline from 'vue-material-design-icons/CommentOutline.vue'
 // import Download from 'vue-material-design-icons/TrayArrowDown.vue'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
 import ImagePlusOutline from 'vue-material-design-icons/ImagePlusOutline.vue'
@@ -235,6 +254,7 @@ import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
 import AlbumHero from '../components/AlbumHero.vue'
+import AlbumComments from '../components/Albums/AlbumComments.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import CollaboratorsSelectionForm from '../components/Albums/CollaboratorsSelectionForm.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
@@ -271,6 +291,7 @@ const collectionContent = useTemplateRef<InstanceType<typeof CollectionContent>>
 const showAddPhotosModal = ref(false)
 const showManageCollaboratorView = ref(false)
 const showEditAlbumForm = ref(false)
+const showComments = ref(false)
 
 const loadingAddCollaborators = ref(false)
 
@@ -279,6 +300,12 @@ const album = computed(() => albumsStore.getAlbum(props.albumName))
 const albumFileIds = computed(() => albumsStore.getAlbumFiles(props.albumName))
 
 const sharingEnabled = computed(() => OC.Share !== undefined)
+
+const albumId = computed(() => album.value?.attributes['album-id'])
+
+// Comments are for the people the album is shared with, link visitors excluded.
+const hasCollaborators = computed(() => (album.value?.attributes.collaborators ?? [])
+	.some((collaborator) => collaborator.type !== ShareType.Link))
 
 const albumFileName = computed(() => albumsStore.getAlbumName(props.albumName))
 

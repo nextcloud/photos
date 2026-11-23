@@ -26,6 +26,7 @@ export type AlbumEditableProperties = {
 export type Album = Collection & {
 	attributes: AlbumEditableProperties & {
 		date: string // The date of the collection.
+		'album-id'?: number // The id of the album, used for its comments.
 	}
 }
 
@@ -34,6 +35,7 @@ export const albumsExtraProps = [
 	'<nc:dateRange />',
 	'<nc:collaborators />',
 	'<nc:filters />',
+	'<nc:album-id />',
 ]
 
 export const albumFilesExtraProps = ['<nc:photos-album-file-origin />']

@@ -12,6 +12,7 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use OCA\Photos\Exception\AlreadyInAlbumException;
 use OCA\Photos\Filters\FiltersManager;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\Comments\ICommentsManager;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\IMimeTypeLoader;
 use OCP\IDBConnection;
@@ -27,6 +28,8 @@ class AlbumMapper {
 	public const TYPE_GROUP = 1;
 	public const TYPE_LINK = 3;
 
+	public const COMMENTS_OBJECT_TYPE = 'photos_album';
+
 	public function __construct(
 		private readonly IDBConnection $connection,
 		private readonly IMimeTypeLoader $mimeTypeLoader,
@@ -36,6 +39,7 @@ class AlbumMapper {
 		private readonly IL10N $l,
 		private readonly ISecureRandom $random,
 		private readonly FiltersManager $filtersManager,
+		private readonly ICommentsManager $commentsManager,
 	) {
 	}
 
@@ -166,6 +170,8 @@ class AlbumMapper {
 			$this->connection->rollBack();
 			throw $e;
 		}
+
+		$this->commentsManager->deleteCommentsAtObject(self::COMMENTS_OBJECT_TYPE, (string)$id);
 	}
 
 	/**

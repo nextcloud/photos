@@ -13,6 +13,7 @@ use OCA\DAV\Events\SabrePluginAddEvent;
 use OCA\DAV\Events\SabrePluginAuthInitEvent;
 use OCA\Files\Event\LoadSidebar;
 use OCA\Photos\Dashboard\OnThisDay;
+use OCA\Photos\Listener\AlbumCommentsEntityListener;
 use OCA\Photos\Listener\AlbumsManagementEventListener;
 use OCA\Photos\Listener\CSPListener;
 use OCA\Photos\Listener\ExifMetadataProvider;
@@ -27,6 +28,7 @@ use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
+use OCP\Comments\CommentsEntityEvent;
 use OCP\Files\Events\Node\NodeDeletedEvent;
 use OCP\FilesMetadata\Event\MetadataBackgroundEvent;
 use OCP\FilesMetadata\Event\MetadataLiveEvent;
@@ -99,6 +101,8 @@ class Application extends App implements IBootstrap {
 
 		$context->registerEventListener(MapperEvent::EVENT_ASSIGN, TagListener::class);
 		$context->registerEventListener(MapperEvent::EVENT_UNASSIGN, TagListener::class);
+
+		$context->registerEventListener(CommentsEntityEvent::class, AlbumCommentsEntityListener::class);
 	}
 
 	#[\Override]
