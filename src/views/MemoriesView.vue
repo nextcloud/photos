@@ -23,35 +23,46 @@
 			</template>
 		</NcEmptyContent>
 
-		<button
-			v-if="yearRecap !== null"
-			type="button"
-			class="memories__recap"
-			:aria-label="recapAriaLabel"
-			@click="startRecap">
-			<img
-				class="memories__recap__cover"
-				:src="getPreviewUrl(yearRecap.cover, 1024)"
-				alt=""
-				decoding="async">
-			<span class="memories__recap__details">
-				<span class="memories__recap__details__eyebrow">{{ t('photos', 'Year in review') }}</span>
-				<span class="memories__recap__details__title">{{ t('photos', 'Your {year} in photos', { year: yearRecap.year }) }}</span>
-				<span class="memories__recap__details__meta">
-					<AnimatedNumber :value="yearRecap.highlights.length">
-						<template #default="{ current }">
-							{{ n('photos', '%n highlight', '%n highlights', current) }}
-						</template>
-					</AnimatedNumber>
-					·
-					<AnimatedNumber :value="yearRecap.totalCount">
-						<template #default="{ current }">
-							{{ n('photos', '%n photo this year', '%n photos this year', current) }}
-						</template>
-					</AnimatedNumber>
+		<div v-if="yearRecap !== null" class="memories__recap-wrapper">
+			<button
+				type="button"
+				class="memories__recap"
+				:aria-label="recapAriaLabel"
+				@click="startRecap">
+				<img
+					class="memories__recap__cover"
+					:src="getPreviewUrl(yearRecap.cover, 1024)"
+					alt=""
+					decoding="async">
+				<span class="memories__recap__details">
+					<span class="memories__recap__details__eyebrow">{{ t('photos', 'Year in review') }}</span>
+					<span class="memories__recap__details__title">{{ t('photos', 'Your {year} in photos', { year: yearRecap.year }) }}</span>
+					<span class="memories__recap__details__meta">
+						<AnimatedNumber :value="yearRecap.highlights.length">
+							<template #default="{ current }">
+								{{ n('photos', '%n highlight', '%n highlights', current) }}
+							</template>
+						</AnimatedNumber>
+						·
+						<AnimatedNumber :value="yearRecap.totalCount">
+							<template #default="{ current }">
+								{{ n('photos', '%n photo this year', '%n photos this year', current) }}
+							</template>
+						</AnimatedNumber>
+					</span>
 				</span>
-			</span>
-		</button>
+			</button>
+			<NcButton
+				v-if="videoSupported"
+				class="memories__video-button"
+				:aria-label="t('photos', 'Create a video of {memory}', { memory: t('photos', 'Your {year} in photos', { year: yearRecap.year }) })"
+				:title="t('photos', 'Create video')"
+				@click="createRecapVideo">
+				<template #icon>
+					<MovieOpenPlayOutline :size="20" />
+				</template>
+			</NcButton>
+		</div>
 
 		<ul v-if="trips.length > 0" class="memories__list">
 			<li v-for="trip in trips" :key="trip.id" class="memories__trip">
@@ -74,23 +85,43 @@
 						</AnimatedNumber>
 					</span>
 				</button>
+				<NcButton
+					v-if="videoSupported"
+					class="memories__video-button"
+					:aria-label="t('photos', 'Create a video of {memory}', { memory: formatDateRange(trip) })"
+					:title="t('photos', 'Create video')"
+					@click="createTripVideo(trip)">
+					<template #icon>
+						<MovieOpenPlayOutline :size="20" />
+					</template>
+				</NcButton>
 			</li>
 		</ul>
+
+		<MemoryVideoDialog
+			v-if="videoMemory !== null"
+			v-bind="videoMemory"
+			@close="videoMemory = null" />
 	</div>
 </template>
 
 <script lang="ts" setup>
 import type { Trip, YearRecap } from '../services/memories.ts'
+import type { PhotoFile } from '../store/files.ts'
 
 import { n, t } from '@nextcloud/l10n'
 import { getViewer } from '@nextcloud/viewer'
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, shallowRef } from 'vue'
+import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import MovieOpenPlayOutline from 'vue-material-design-icons/MovieOpenPlayOutline.vue'
 import AnimatedNumber from '../components/AnimatedNumber.vue'
 import EmptyIllustration from '../components/EmptyIllustration.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import MemoryVideoDialog from '../components/MemoryVideoDialog.vue'
 import { useLoadedPhotos } from '../composables/useLoadedPhotos.ts'
 import { buildYearRecap, detectTrips } from '../services/memories.ts'
+import { isVideoRecordingSupported } from '../services/videoRecorder.ts'
 import { formatDateRange as formatRange } from '../utils/dateUtils.ts'
 import { getPreviewUrl } from '../utils/fileUtils.ts'
 
@@ -109,6 +140,11 @@ const yearRecap = computed<YearRecap | null>(() => buildYearRecap(photos.value))
 const recapAriaLabel = computed<string>(() => yearRecap.value === null
 	? ''
 	: t('photos', 'Play a slideshow of your {year} highlights', { year: yearRecap.value.year }))
+
+const videoSupported = isVideoRecordingSupported()
+
+/** Memory the video dialog is open for. */
+const videoMemory = shallowRef<{ photos: PhotoFile[], title: string, subtitle: string } | null>(null)
 
 onMounted(() => {
 	if (photos.value.length === 0) {
@@ -132,6 +168,29 @@ function openTrip(trip: Trip): void {
 }
 
 /**
+ * @param trip - The trip to create a video of
+ */
+function createTripVideo(trip: Trip): void {
+	videoMemory.value = {
+		photos: trip.photos,
+		title: formatDateRange(trip),
+		subtitle: n('photos', '%n photo', '%n photos', trip.photos.length),
+	}
+}
+
+function createRecapVideo(): void {
+	if (yearRecap.value === null) {
+		return
+	}
+
+	videoMemory.value = {
+		photos: yearRecap.value.highlights,
+		title: t('photos', 'Your {year} in photos', { year: yearRecap.value.year }),
+		subtitle: n('photos', '%n photo this year', '%n photos this year', yearRecap.value.totalCount),
+	}
+}
+
+/**
  * Format the period covered by a trip, leaving out the parts shared by both
  * ends of the range.
  *
@@ -152,11 +211,23 @@ function formatDateRange(trip: Trip): string {
 		flex: 1;
 	}
 
+	&__recap-wrapper {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		flex-shrink: 0;
+		margin: calc(var(--default-grid-baseline) * 4) calc(var(--default-grid-baseline) * 4) 0;
+	}
+
+	&__video-button {
+		position: absolute !important;
+		inset-block-start: calc(var(--default-grid-baseline) * 2);
+		inset-inline-end: calc(var(--default-grid-baseline) * 2);
+	}
+
 	&__recap {
 		position: relative;
-		flex-shrink: 0;
 		height: 280px;
-		margin: calc(var(--default-grid-baseline) * 4) calc(var(--default-grid-baseline) * 4) 0;
 		padding: 0;
 		overflow: hidden;
 		border: none;
