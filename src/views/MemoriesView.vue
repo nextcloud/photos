@@ -53,6 +53,16 @@
 			</span>
 		</button>
 
+		<NcButton
+			v-if="yearRecap !== null"
+			class="memories__numbers"
+			@click="showYearStats = true">
+			<template #icon>
+				<ChartBoxOutline :size="20" />
+			</template>
+			{{ t('photos', 'Your {year} in numbers', { year: yearRecap.year }) }}
+		</NcButton>
+
 		<ul v-if="trips.length > 0" class="memories__list">
 			<li v-for="trip in trips" :key="trip.id" class="memories__trip">
 				<button
@@ -76,6 +86,12 @@
 				</button>
 			</li>
 		</ul>
+
+		<YearStatsDialog
+			v-if="showYearStats && yearRecap !== null"
+			:photos="photos"
+			:year="yearRecap.year"
+			@close="showYearStats = false" />
 	</div>
 </template>
 
@@ -84,8 +100,10 @@ import type { Trip, YearRecap } from '../services/memories.ts'
 
 import { n, t } from '@nextcloud/l10n'
 import { getViewer } from '@nextcloud/viewer'
-import { computed, onMounted } from 'vue'
+import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
+import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import ChartBoxOutline from 'vue-material-design-icons/ChartBoxOutline.vue'
 import AnimatedNumber from '../components/AnimatedNumber.vue'
 import EmptyIllustration from '../components/EmptyIllustration.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
@@ -98,6 +116,8 @@ defineProps<{
 	rootTitle: string
 }>()
 
+const YearStatsDialog = defineAsyncComponent(() => import('../components/YearStatsDialog.vue'))
+
 const { photos, loading, loadPhotos } = useLoadedPhotos()
 
 // The trips are refined as more photos get loaded by the other views, so they
@@ -105,6 +125,8 @@ const { photos, loading, loadPhotos } = useLoadedPhotos()
 const trips = computed<Trip[]>(() => detectTrips(photos.value))
 
 const yearRecap = computed<YearRecap | null>(() => buildYearRecap(photos.value))
+
+const showYearStats = ref(false)
 
 const recapAriaLabel = computed<string>(() => yearRecap.value === null
 	? ''
@@ -204,6 +226,12 @@ function formatDateRange(trip: Trip): string {
 				line-height: 1.1;
 			}
 		}
+	}
+
+	&__numbers {
+		flex-shrink: 0;
+		align-self: flex-start;
+		margin: calc(var(--default-grid-baseline) * 3) calc(var(--default-grid-baseline) * 4) 0;
 	}
 
 	&__list {
