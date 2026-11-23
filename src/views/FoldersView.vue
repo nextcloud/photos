@@ -117,6 +117,7 @@ import { getFolderContent } from '../services/FolderContent.ts'
 import { logger } from '../services/logger.ts'
 import { useFoldersStore } from '../store/folders.ts'
 import { useUserConfigStore } from '../store/userConfig.ts'
+import { openViewerFromTile } from '../utils/viewerTransition.ts'
 
 // A laid out tile that still knows which folder or photo it stands for.
 type NodeItem = TiledItem & { node: Folder | PhotoFile }
@@ -216,7 +217,7 @@ watch(() => props.showShared, () => {
  * @param fileid - Id of the photo to open
  */
 async function openViewer(fileid: number) {
-	const session = await getViewer().open(fileList.value, files.value[fileid] as PhotoFile)
+	const session = await openViewerFromTile(fileid, () => getViewer().open(fileList.value, files.value[fileid] as PhotoFile))
 	session.addEventListener('close', () => window.OCA?.Files?.Sidebar?.close?.(), { once: true })
 }
 

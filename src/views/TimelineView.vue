@@ -277,6 +277,7 @@ import { useFilesStore } from '../store/files.ts'
 import { useFilterStore } from '../store/filters.ts'
 import { configChangedEvent } from '../store/userConfig.ts'
 import { formatMonth, formatYear } from '../utils/dateUtils.ts'
+import { openViewerFromTile } from '../utils/viewerTransition.ts'
 
 const props = withDefaults(defineProps<{
 	onlyFavorites?: boolean
@@ -392,12 +393,12 @@ function openViewer(fileId: number) {
 	const fileIds = burstStacks.value[fileId]?.memberIds
 		?? Object.values(fileIdsByMonth.value).flat()
 
-	getViewer().open(
+	openViewerFromTile(fileId, () => getViewer().open(
 		fileIds
 			.map((id) => files.value[id])
 			.filter((file) => file !== undefined),
 		files.value[fileId],
-	)
+	))
 }
 
 function startSlideshow() {
