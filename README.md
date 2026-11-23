@@ -54,3 +54,6 @@ Follow its development setup and then continue here.
 To ensure quality of this app we use both unit tests, PHPUnit tests on the backend and Vitest unit tests on the frontend, and end-to-end tests.
 
 When adding new features at least an end-to-end test for the feature should be added, some documentation on how to do so can be found [here](./tests/playwright/README.md).
+
+### Demo library
+A large synthetic photo library for demos and performance work can be generated with `php tests/demo-library/generate.php <target folder>`, see [its documentation](./tests/demo-library/README.md) for the options and for how to load the result into a Nextcloud.
