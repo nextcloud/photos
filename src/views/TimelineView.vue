@@ -237,7 +237,6 @@ import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
-import { getViewer } from '@nextcloud/viewer'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { storeToRefs } from 'pinia'
 import { computed, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
@@ -272,6 +271,7 @@ import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { useGridDensity } from '../composables/useGridDensity.ts'
 import { allMimes } from '../services/AllowedMimes.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
+import { openInViewer } from '../services/viewerFilmstrip.ts'
 import { useCollectionsStore } from '../store/collections.ts'
 import { useFilesStore } from '../store/files.ts'
 import { useFilterStore } from '../store/filters.ts'
@@ -392,7 +392,7 @@ function openViewer(fileId: number) {
 	const fileIds = burstStacks.value[fileId]?.memberIds
 		?? Object.values(fileIdsByMonth.value).flat()
 
-	getViewer().open(
+	openInViewer(
 		fileIds
 			.map((id) => files.value[id])
 			.filter((file) => file !== undefined),
@@ -401,7 +401,7 @@ function openViewer(fileId: number) {
 }
 
 function startSlideshow() {
-	getViewer().open(timelinePhotos.value, timelinePhotos.value[0], { startSlideshow: true })
+	openInViewer(timelinePhotos.value, timelinePhotos.value[0], { startSlideshow: true })
 }
 
 async function addSelectionToAlbum(album: Album) {

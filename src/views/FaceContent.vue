@@ -196,7 +196,6 @@ import type { Collection } from '../services/collectionFetcher.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { translatePlural as n, translate as t } from '@nextcloud/l10n'
-import { getViewer } from '@nextcloud/viewer'
 import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
@@ -223,6 +222,7 @@ import { useFetchFaces } from '../composables/useFetchFaces.ts'
 import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
 import { logger } from '../services/logger.ts'
+import { openInViewer } from '../services/viewerFilmstrip.ts'
 import { useFacesStore } from '../store/faces.ts'
 import { useFilesStore } from '../store/files.ts'
 
@@ -273,7 +273,7 @@ function onPhotoDeleted(photo: PhotoTarget): void {
 }
 
 function openViewer(fileId: number): void {
-	getViewer().open(faceFileIds.value.map((fileId) => files.value[fileId]), files.value[fileId], { enableSidebar: false })
+	openInViewer(faceFileIds.value.map((fileId) => files.value[fileId]), files.value[fileId], { enableSidebar: false })
 }
 
 async function handleRemoveFilesFromFace(fileIds: string[]): Promise<void> {

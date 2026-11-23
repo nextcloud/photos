@@ -66,6 +66,7 @@ import FilesListViewer from '../components/FilesListViewer.vue'
 import { useAbortController } from '../composables/useAbortController.ts'
 import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { logger } from '../services/logger.ts'
+import { openInViewer } from '../services/viewerFilmstrip.ts'
 import { useFilesStore } from '../store/files.ts'
 import { useSystemTagsStore } from '../store/systemtags.ts'
 
@@ -137,7 +138,7 @@ async function fetchContent(): Promise<void> {
 }
 
 function openViewer(fileId: number): void {
-	getViewer().open(fileIds.value.map((fileId) => files.value[fileId]), files.value[fileId])
+	openInViewer(fileIds.value.map((fileId) => files.value[fileId]), files.value[fileId])
 }
 
 onBeforeMount(() => {

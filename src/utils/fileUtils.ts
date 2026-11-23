@@ -70,9 +70,13 @@ export function compareModificationTime(node1: Node, node2: Node): number {
  *
  * @param file - The file to get a preview of
  * @param size - Maximum width and height of the preview
+ * @param token - Token of the public album the file is shown in, if any
  */
-export function getPreviewUrl(file: Node, size: number): string {
+export function getPreviewUrl(file: Node, size: number, token?: string): string {
 	const decodedEtag = String(file.attributes.etag).replace(/(&quot;|")/g, '')
+	if (token) {
+		return generateUrl(`/apps/photos/api/v1/publicPreview/${file.fileid}?etag=${decodedEtag}&x=${size}&y=${size}&token=${token}`)
+	}
 	return generateUrl(`/apps/photos/api/v1/preview/${file.fileid}?etag=${decodedEtag}&x=${size}&y=${size}`)
 }
 
