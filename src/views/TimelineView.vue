@@ -170,6 +170,8 @@
 			</div>
 		</HeaderNavigation>
 
+		<MemoriesStrip v-if="showMemoriesStrip" class="timeline__memories" />
+
 		<FilesListViewer
 			:containerElement="appContent"
 			class="timeline__file-list"
@@ -240,8 +242,8 @@ import { t } from '@nextcloud/l10n'
 import { getViewer } from '@nextcloud/viewer'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { storeToRefs } from 'pinia'
-import { computed, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
-import { onBeforeRouteLeave, useRouter } from 'vue-router'
+import { computed, defineAsyncComponent, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
+import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActionRadio from '@nextcloud/vue/components/NcActionRadio'
 import NcActions from '@nextcloud/vue/components/NcActions'
@@ -289,6 +291,9 @@ const props = withDefaults(defineProps<{
 	onThisDay: false,
 })
 
+const MemoriesStrip = defineAsyncComponent(() => import('../components/MemoriesStrip.vue'))
+
+const route = useRoute()
 const router = useRouter()
 const isMobile = useIsMobile()
 
@@ -311,6 +316,10 @@ const appContent = document.getElementById('app-content-vue')
 const scrubberTarget = ref('')
 
 const files = computed(() => filesStore.files)
+
+// The memories only show on the unfiltered "All media" timeline. They are
+// loaded once its first photos are there, so they never hold back its first paint.
+const showMemoriesStrip = computed(() => route.name === 'all_media' && fetchedFileIds.value.length > 0 && filtersQuery.value === '')
 
 // Photos taken in one go are shown as a single tile of the timeline, and are
 // reachable from the viewer it opens.
@@ -495,6 +504,7 @@ onUnmounted(() => {
 		padding-bottom: 0px;
 	}
 
+	&__memories,
 	&__file-list {
 		padding: 0 64px;
 
