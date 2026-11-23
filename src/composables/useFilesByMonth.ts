@@ -6,9 +6,11 @@
 import type { ComputedRef, MaybeRefOrGetter, Ref } from 'vue'
 import type { PhotoFile } from '../store/files.ts'
 import type { BurstStack } from '../utils/burstClustering.ts'
+import type { DayGroup } from '../utils/dayGrouping.ts'
 
 import { computed, toValue } from 'vue'
 import { applyBurstStacks, clusterBursts } from '../utils/burstClustering.ts'
+import { groupFileIdsByDay } from '../utils/dayGrouping.ts'
 
 /**
  * Group the fetched photos by month, the sections of a timeline grid.
@@ -28,6 +30,7 @@ export function useFilesByMonth(
 	fileIdsByMonthUngrouped: ComputedRef<Record<string, string[]>>
 	burstStacks: ComputedRef<Record<string, BurstStack>>
 	fileIdsByMonth: ComputedRef<Record<string, string[]>>
+	daysByMonth: ComputedRef<Record<string, DayGroup[]>>
 	monthsList: ComputedRef<string[]>
 } {
 	/**
@@ -88,6 +91,11 @@ export function useFilesByMonth(
 			.map(([month, fileIds]) => [month, applyBurstStacks(fileIds, burstStacks.value)]))
 	})
 
+	// The photos the grid renders, by month, split into the days of the month.
+	const daysByMonth = computed<Record<string, DayGroup[]>>(() => Object.fromEntries(Object
+		.entries(fileIdsByMonth.value)
+		.map(([month, fileIds]) => [month, groupFileIdsByDay(fileIds, files.value)])))
+
 	const monthsList = computed(() => Object
 		.keys(fileIdsByMonth.value)
 		.sort((month1, month2) => month1 > month2 ? -1 : 1))
@@ -96,6 +104,7 @@ export function useFilesByMonth(
 		fileIdsByMonthUngrouped,
 		burstStacks,
 		fileIdsByMonth,
+		daysByMonth,
 		monthsList,
 	}
 }

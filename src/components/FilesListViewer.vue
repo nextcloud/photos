@@ -13,7 +13,7 @@
 			</template>
 		</NcEmptyContent>
 
-		<TiledLayout :baseHeight="baseHeight" :sections="itemsBySections">
+		<TiledLayout :baseHeight="baseHeight" :groupHeaderHeight="groupHeaderHeight" :sections="itemsBySections">
 			<template #default="{ tiledSections }">
 				<VirtualScrolling
 					:useWindow="useWindow"
@@ -41,6 +41,12 @@
 
 							<ul>
 								<template v-for="(row, rowIndex) of section.rows" :key="row.key">
+									<li
+										v-if="row.groupId !== undefined"
+										class="files-list-viewer__group-header"
+										:style="{ 'flex-basis': '100%', height: `${row.height}px` }">
+										<slot :file="{ id: row.groupId }" :isGroupHeader="true" />
+									</li>
 									<!--
 									We are subtracting 1 from flex-basis to compensate for rounding issues.
 									The flex algo will then compensate with flex-grow.
@@ -49,7 +55,7 @@
 									<li
 										v-for="item of row.items"
 										:key="item.key"
-										:class="{ 'last-tiled-rows': rowIndex === section.rows.length - 1 }"
+										:class="{ 'last-tiled-rows': rowIndex === section.rows.length - 1 || section.rows[rowIndex + 1].groupId !== undefined }"
 										:style="{ 'flex-basis': `${item.width - 1}px`, height: `${item.height}px` }">
 										<!-- Placeholder when initial loading -->
 										<div v-if="showPlaceholders" class="files-list-viewer__placeholder" />
@@ -71,7 +77,7 @@
 
 <script setup lang="ts">
 import type { File, Node } from '@nextcloud/files'
-import type { TiledItem } from '../services/TiledLayout.ts'
+import type { Section, TiledItem } from '../services/TiledLayout.ts'
 import type { PhotoFile } from '../store/files.ts'
 
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
@@ -92,6 +98,8 @@ const props = withDefaults(defineProps<{
 	fileIdsBySection?: Record<string, string[]>
 	// The list of sorted sections.
 	sections?: string[]
+	// Optional groups splitting the sections, each one shown under its own header.
+	groupsBySection?: Record<string, { id: string, fileIds: string[] }[]>
 	// Whether we should display a loading indicator.
 	loading?: boolean
 	// Message to display when there is no files.
@@ -100,6 +108,8 @@ const props = withDefaults(defineProps<{
 	baseHeight?: number
 	// The height to use for section headers.
 	sectionHeaderHeight?: number
+	// The height to use for group headers.
+	groupHeaderHeight?: number
 	// Instruct VirtualScrolling to scroll to the given section id.
 	scrollToSection?: string
 	// The containerElement props to forward to TileLayout.
@@ -110,10 +120,12 @@ const props = withDefaults(defineProps<{
 	fileIds: undefined,
 	fileIdsBySection: undefined,
 	sections: undefined,
+	groupsBySection: undefined,
 	loading: false,
 	emptyMessage: '',
 	baseHeight: 200,
 	sectionHeaderHeight: 75,
+	groupHeaderHeight: 48,
 	scrollToSection: '',
 	containerElement: null,
 	useWindow: false,
@@ -124,8 +136,8 @@ const emit = defineEmits<{
 }>()
 
 defineSlots<{
-	// Section headers only carry the section id as file id.
-	default(props: { file: Pick<TiledItem, 'id'>, isHeader?: boolean }): unknown
+	// Section and group headers only carry the section or group id as file id.
+	default(props: { file: Pick<TiledItem, 'id'>, isHeader?: boolean, isGroupHeader?: boolean }): unknown
 }>()
 
 const filesStore = useFilesStore()
@@ -148,7 +160,7 @@ const placeholderFiles: TiledItem[] = Array(20).fill(0).map((_, index) => {
 
 const showPlaceholders = computed<boolean>(() => props.loading && (props.fileIds?.length === 0 || props.sections?.length === 0))
 
-const itemsBySections = computed<{ id: string, items: TiledItem[] }[]>(() => {
+const itemsBySections = computed<Section[]>(() => {
 	if (props.fileIds !== undefined) {
 		if (showPlaceholders.value) {
 			return [{ id: '', items: placeholderFiles }]
@@ -157,9 +169,7 @@ const itemsBySections = computed<{ id: string, items: TiledItem[] }[]>(() => {
 		return [
 			{
 				id: '',
-				items: props.fileIds
-					.filter((fileId) => files.value[fileId])
-					.map(mapFileToItem),
+				items: fileIdsToItems(props.fileIds),
 			},
 		]
 	}
@@ -170,11 +180,19 @@ const itemsBySections = computed<{ id: string, items: TiledItem[] }[]>(() => {
 		}
 
 		return props.sections.map((sectionId) => {
+			const groups = props.groupsBySection?.[sectionId]
+			if (groups !== undefined) {
+				const tiledGroups = groups.map(({ id, fileIds }) => ({ id, items: fileIdsToItems(fileIds) }))
+				return {
+					id: sectionId,
+					items: tiledGroups.flatMap(({ items }) => items),
+					groups: tiledGroups,
+				}
+			}
+
 			return {
 				id: sectionId,
-				items: (props.fileIdsBySection?.[sectionId] ?? [])
-					.filter((fileId) => files.value[fileId])
-					.map(mapFileToItem),
+				items: fileIdsToItems(props.fileIdsBySection?.[sectionId] ?? []),
 			}
 		})
 	}
@@ -187,6 +205,12 @@ const photosCount = computed<number>(() => itemsBySections.value.map(({ items })
 // Ask the parent for more content.
 function needContent(): void {
 	emit('needContent')
+}
+
+function fileIdsToItems(fileIds: string[]): TiledItem[] {
+	return fileIds
+		.filter((fileId) => files.value[fileId])
+		.map(mapFileToItem)
 }
 
 function mapFileToItem(fileId: string): TiledItem {

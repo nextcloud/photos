@@ -175,12 +175,13 @@
 			class="timeline__file-list"
 			:fileIdsBySection="fileIdsByMonth"
 			:sections="monthsList"
+			:groupsBySection="daysByMonth"
 			:loading="loadingFiles"
 			:baseHeight="tileBaseHeight"
 			:emptyMessage="t('photos', 'No photos or videos in here')"
 			:scrollToSection="scrubberTarget"
 			@needContent="getContent">
-			<template #default="{ file, isHeader }">
+			<template #default="{ file, isHeader, isGroupHeader }">
 				<h2
 					v-if="isHeader"
 					:id="`file-picker-section-header-${file.id}`"
@@ -188,6 +189,20 @@
 					<b>{{ formatMonth(file.id) }}</b>
 					{{ formatYear(file.id) }}
 				</h2>
+				<div
+					v-else-if="isGroupHeader"
+					class="day-header"
+					:class="{ 'day-header--selecting': selectedFileIds.length > 0 }">
+					<h3 class="day-header__title">
+						{{ formatDay(file.id) }}
+					</h3>
+					<NcCheckboxRadioSwitch
+						class="day-header__checkbox"
+						:aria-label="t('photos', 'Select all photos of {day}', { day: formatDay(file.id) })"
+						:modelValue="daySelection(file.id) === 'all'"
+						:indeterminate="daySelection(file.id) === 'some'"
+						@update:modelValue="onDaySelectToggle(file.id, $event)" />
+				</div>
 				<FileComponent
 					v-else
 					:file="files[file.id]"
@@ -246,6 +261,7 @@ import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActionRadio from '@nextcloud/vue/components/NcActionRadio'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcButton from '@nextcloud/vue/components/NcButton'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcModal from '@nextcloud/vue/components/NcModal'
 import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
@@ -276,7 +292,7 @@ import { useCollectionsStore } from '../store/collections.ts'
 import { useFilesStore } from '../store/files.ts'
 import { useFilterStore } from '../store/filters.ts'
 import { configChangedEvent } from '../store/userConfig.ts'
-import { formatMonth, formatYear } from '../utils/dateUtils.ts'
+import { formatDay, formatMonth, formatYear } from '../utils/dateUtils.ts'
 
 const props = withDefaults(defineProps<{
 	onlyFavorites?: boolean
@@ -314,7 +330,13 @@ const files = computed(() => filesStore.files)
 
 // Photos taken in one go are shown as a single tile of the timeline, and are
 // reachable from the viewer it opens.
-const { fileIdsByMonthUngrouped, burstStacks, fileIdsByMonth, monthsList } = useFilesByMonth(fetchedFileIds, files, true)
+const { fileIdsByMonthUngrouped, burstStacks, fileIdsByMonth, daysByMonth, monthsList } = useFilesByMonth(fetchedFileIds, files, true)
+
+// The tiles of the timeline by the day they were taken on.
+const fileIdsByDay = computed<Record<string, string[]>>(() => Object.fromEntries(Object
+	.values(daysByMonth.value)
+	.flat()
+	.map(({ id, fileIds }) => [id, fileIds])))
 
 const shouldFavoriteSelection = computed<boolean>(() => {
 	// Favorite all selection if at least one file is not in the favorites.
@@ -378,6 +400,23 @@ function onFileSelectToggle({ id, value }: { id: number, value: boolean }): void
 	for (const fileId of fileIds) {
 		selection.value[fileId] = value
 	}
+}
+
+// Selecting a day selects every tile of it, and with them the runs they stand for.
+function onDaySelectToggle(day: string, value: boolean): void {
+	for (const fileId of fileIdsByDay.value[day] ?? []) {
+		onFileSelectToggle({ id: Number(fileId), value })
+	}
+}
+
+// Whether none, some or all the tiles of a day are selected.
+function daySelection(day: string): 'none' | 'some' | 'all' {
+	const fileIds = fileIdsByDay.value[day] ?? []
+	const selectedCount = fileIds.filter((fileId) => selection.value[fileId] === true).length
+	if (selectedCount === 0) {
+		return 'none'
+	}
+	return selectedCount === fileIds.length ? 'all' : 'some'
 }
 
 // How many photos the tile of a photo stands for, one being itself.
@@ -504,6 +543,39 @@ onUnmounted(() => {
 
 		:deep(.files-list-viewer__section-header) {
 			top: var(--photos-navigation-height);
+		}
+	}
+}
+
+.day-header {
+	display: flex;
+	align-items: center;
+	gap: var(--default-grid-baseline);
+	height: 100%;
+
+	&__title {
+		margin: 0;
+		font-size: var(--default-font-size);
+		font-weight: 600;
+	}
+
+	// The checkbox shows on hover, like the ones of the tiles, and stays once a
+	// selection is going on.
+	&__checkbox {
+		opacity: 0;
+	}
+
+	&:hover,
+	&:focus-within,
+	&--selecting {
+		.day-header__checkbox {
+			opacity: 1;
+		}
+	}
+
+	@media (hover: none) {
+		&__checkbox {
+			opacity: 1;
 		}
 	}
 }
