@@ -80,6 +80,19 @@
 				</NcButton>
 
 				<NcButton
+					v-if="selectedFileIds.length === 0 && fetchedFileIds.length > 0"
+					:aria-label="t('photos', 'Review photos')"
+					data-cy-header-action="review"
+					@click="reviewScope = 'timeline'">
+					<template #icon>
+						<Broom :size="20" />
+					</template>
+					<template v-if="!isMobile" #default>
+						{{ t('photos', 'Review') }}
+					</template>
+				</NcButton>
+
+				<NcButton
 					v-if="selectedFileIds.length === 0"
 					ref="newAlbumButton"
 					:aria-label="createAlbumButtonLabel"
@@ -157,6 +170,16 @@
 
 						<NcActionButton
 							:closeAfterClick="true"
+							data-cy-header-action="review-selection"
+							@click="reviewSelection">
+							{{ t('photos', 'Review selection') }}
+							<template #icon>
+								<Broom />
+							</template>
+						</NcActionButton>
+
+						<NcActionButton
+							:closeAfterClick="true"
 							:aria-label="t('photos', 'Delete selection')"
 							data-cy-header-action="delete-selection"
 							@click="deleteSelection">
@@ -227,12 +250,22 @@
 			@close="showAlbumPicker = false">
 			<AlbumPicker @albumPicked="addSelectionToAlbum" />
 		</NcModal>
+
+		<PhotoReview
+			v-if="reviewScope !== null"
+			:photos="reviewScope === 'selection' ? selectionToReview : timelinePhotos"
+			:loading="reviewScope === 'timeline' && loadingFiles"
+			@needContent="onReviewNeedContent"
+			@deleted="onPhotoDeleted"
+			@restored="onPhotoRestored"
+			@close="reviewScope = null" />
 	</div>
 </template>
 
 <script setup lang="ts">
 import type { Collection } from '../services/collectionFetcher.ts'
 import type { Album } from '../store/albums.ts'
+import type { PhotoFile } from '../store/files.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
@@ -240,7 +273,7 @@ import { t } from '@nextcloud/l10n'
 import { getViewer } from '@nextcloud/viewer'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { storeToRefs } from 'pinia'
-import { computed, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, shallowRef, useTemplateRef, watch } from 'vue'
 import { onBeforeRouteLeave, useRouter } from 'vue-router'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActionRadio from '@nextcloud/vue/components/NcActionRadio'
@@ -249,6 +282,7 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcModal from '@nextcloud/vue/components/NcModal'
 import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
+import Broom from 'vue-material-design-icons/Broom.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
 import Play from 'vue-material-design-icons/Play.vue'
@@ -265,6 +299,7 @@ import DateScrubber from '../components/DateScrubber.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import PhotoReview from '../components/PhotoReview.vue'
 import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
 import { useFetchFiles } from '../composables/useFetchFiles.ts'
 import { useFilesByMonth } from '../composables/useFilesByMonth.ts'
@@ -305,6 +340,10 @@ const newAlbumButton = useTemplateRef<InstanceType<typeof NcButton>>('newAlbumBu
 
 const showAlbumCreationForm = ref(false)
 const showAlbumPicker = ref(false)
+// What the review mode goes through: the whole timeline, or the photos that
+// were selected when it was opened. Null while it is closed.
+const reviewScope = ref<'timeline' | 'selection' | null>(null)
+const selectionToReview = shallowRef<PhotoFile[]>([])
 const appContent = document.getElementById('app-content-vue')
 // Month section the user picked in the DateScrubber, forwarded to
 // FilesListViewer's `scrollToSection`. Empty means no override.
@@ -414,6 +453,23 @@ async function addSelectionToAlbum(album: Album) {
 function onPhotoDeleted(photo: PhotoTarget) {
 	onUncheckFiles([photo.fileid.toString()])
 	fetchedFileIds.value = fetchedFileIds.value.filter((fileId) => fileId !== photo.fileid)
+}
+
+function onPhotoRestored(photo: PhotoFile) {
+	fetchedFileIds.value.push(photo.fileid)
+}
+
+function reviewSelection() {
+	selectionToReview.value = timelinePhotos.value.filter((photo) => selection.value[photo.fileid] === true)
+	reviewScope.value = 'selection'
+}
+
+// The timeline is fetched in batches, the review asks for the next one as it
+// gets to the end of the photos loaded so far.
+function onReviewNeedContent() {
+	if (reviewScope.value === 'timeline') {
+		getContent()
+	}
 }
 
 async function deleteSelection() {
