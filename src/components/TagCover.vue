@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<RouterLink ref="cover" class="tag-cover" :to="`/tags/${tag.attributes['display-name']}`">
+	<RouterLink ref="cover" class="tag-cover" :to="`/tags/${encodeURIComponent(tag.attributes['display-name'])}`">
 		<img
 			v-if="tag.attributes['files-assigned'] !== 0"
 			class="tag-cover__image"
