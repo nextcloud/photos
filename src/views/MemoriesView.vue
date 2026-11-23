@@ -116,19 +116,21 @@ onMounted(() => {
 	}
 })
 
-function startRecap(): void {
+async function startRecap(): Promise<void> {
 	if (yearRecap.value === null) {
 		return
 	}
 
-	getViewer().open(yearRecap.value.highlights, yearRecap.value.highlights[0], { startSlideshow: true })
+	const session = await getViewer().open(yearRecap.value.highlights, yearRecap.value.highlights[0], { startSlideshow: true })
+	session.addEventListener('close', () => window.OCA?.Files?.Sidebar?.close?.(), { once: true })
 }
 
 /**
  * @param trip - The trip to open in the viewer
  */
-function openTrip(trip: Trip): void {
-	getViewer().open(trip.photos, trip.cover)
+async function openTrip(trip: Trip): Promise<void> {
+	const session = await getViewer().open(trip.photos, trip.cover)
+	session.addEventListener('close', () => window.OCA?.Files?.Sidebar?.close?.(), { once: true })
 }
 
 /**
