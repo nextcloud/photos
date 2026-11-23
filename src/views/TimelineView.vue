@@ -30,8 +30,8 @@
 		<HeaderNavigation
 			key="navigation"
 			path="/"
-			:title="rootTitle"
-			:rootTitle="rootTitle"
+			:title="title"
+			:rootTitle="title"
 			@refresh="resetFetchFilesState">
 			<div class="timeline__header__left">
 				<!-- TODO: UploadPicker -->
@@ -76,6 +76,19 @@
 					</template>
 					<template v-if="!isMobile" #default>
 						{{ t('photos', 'Slideshow') }}
+					</template>
+				</NcButton>
+
+				<NcButton
+					v-if="selectedFileIds.length === 0 && hasActiveFilters(selectedFilters)"
+					:aria-label="t('photos', 'Save as smart album')"
+					data-cy-header-action="save-smart-album"
+					@click="saveAsSmartAlbum">
+					<template v-if="!isMobile" #default>
+						{{ t('photos', 'Save as smart album') }}
+					</template>
+					<template #icon>
+						<ImageSearchOutline />
 					</template>
 				</NcButton>
 
@@ -235,10 +248,12 @@ import type { Collection } from '../services/collectionFetcher.ts'
 import type { Album } from '../store/albums.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
+import { showError } from '@nextcloud/dialogs'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 import { getViewer } from '@nextcloud/viewer'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
+import { spawnDialog } from '@nextcloud/vue/functions/dialog'
 import { storeToRefs } from 'pinia'
 import { computed, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
 import { onBeforeRouteLeave, useRouter } from 'vue-router'
@@ -251,6 +266,7 @@ import NcModal from '@nextcloud/vue/components/NcModal'
 import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
+import ImageSearchOutline from 'vue-material-design-icons/ImageSearchOutline.vue'
 import Play from 'vue-material-design-icons/Play.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import PlusBoxMultipleOutline from 'vue-material-design-icons/PlusBoxMultipleOutline.vue'
@@ -266,15 +282,19 @@ import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
+import SmartAlbumNameDialog from '../components/SmartAlbums/SmartAlbumNameDialog.vue'
 import { useFetchFiles } from '../composables/useFetchFiles.ts'
 import { useFilesByMonth } from '../composables/useFilesByMonth.ts'
 import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { useGridDensity } from '../composables/useGridDensity.ts'
 import { allMimes } from '../services/AllowedMimes.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
+import { logger } from '../services/logger.ts'
+import { photosFilters } from '../services/PhotosFilters/index.ts'
 import { useCollectionsStore } from '../store/collections.ts'
 import { useFilesStore } from '../store/files.ts'
 import { useFilterStore } from '../store/filters.ts'
+import { hasActiveFilters, pickActiveFilters, useSmartAlbumsStore } from '../store/smartAlbums.ts'
 import { configChangedEvent } from '../store/userConfig.ts'
 import { formatMonth, formatYear } from '../utils/dateUtils.ts'
 
@@ -282,11 +302,13 @@ const props = withDefaults(defineProps<{
 	onlyFavorites?: boolean
 	mimesType?: string[]
 	onThisDay?: boolean
+	smartAlbumId?: string
 	rootTitle: string
 }>(), {
 	onlyFavorites: false,
 	mimesType: () => allMimes,
 	onThisDay: false,
+	smartAlbumId: undefined,
 })
 
 const router = useRouter()
@@ -296,6 +318,7 @@ const collectionsStore = useCollectionsStore()
 const filesStore = useFilesStore()
 const filtersStore = useFilterStore()
 const { selectedFilters, filtersQuery } = storeToRefs(filtersStore)
+const smartAlbumsStore = useSmartAlbumsStore()
 
 const { gridDensity, tileBaseHeight, setGridDensity } = useGridDensity()
 const { fetchFiles, resetFetchFilesState, fetchedFileIds, loadingFiles, errorFetchingFiles } = useFetchFiles()
@@ -340,6 +363,28 @@ const createAlbumButtonLabel = computed(() => {
 		return t('photos', 'Create new album')
 	}
 })
+
+const smartAlbum = computed(() => props.smartAlbumId === undefined ? undefined : smartAlbumsStore.getSmartAlbum(props.smartAlbumId))
+
+const title = computed(() => smartAlbum.value?.name ?? props.rootTitle)
+
+// Opening a smart album selects its filters, the timeline then fetches
+// the photos currently matching them.
+watch(() => props.smartAlbumId, (smartAlbumId) => {
+	if (smartAlbumId === undefined) {
+		return
+	}
+
+	if (smartAlbum.value === undefined) {
+		router.replace({ name: 'all_media' })
+		return
+	}
+
+	const savedFilters = pickActiveFilters(smartAlbum.value.filters)
+	for (const filter of photosFilters) {
+		selectedFilters.value[filter.id] = savedFilters[filter.id] ?? []
+	}
+}, { immediate: true })
 
 watch(filtersQuery, () => {
 	resetFetchFilesState()
@@ -427,6 +472,21 @@ async function deleteSelection() {
 function handleUserConfigChange({ key }: { key: string }) {
 	if (key === 'photosSourceFolders') {
 		resetFetchFilesState()
+	}
+}
+
+async function saveAsSmartAlbum() {
+	const name = await spawnDialog(SmartAlbumNameDialog)
+	if (name === undefined) {
+		return
+	}
+
+	try {
+		const smartAlbum = await smartAlbumsStore.createSmartAlbum(name, selectedFilters.value)
+		router.push({ name: 'smartAlbum', params: { smartAlbumId: smartAlbum.id } })
+	} catch (error) {
+		logger.error('Could not save the smart album', { error })
+		showError(t('photos', 'Could not save the smart album'))
 	}
 }
 

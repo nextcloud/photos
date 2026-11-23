@@ -55,12 +55,20 @@ export async function getFolder(path) {
 /** Size of the tiles of the photo grids. */
 export type GridDensity = 'small' | 'medium' | 'large'
 
+/** Timeline filters saved under a name, see the smartAlbums store. */
+export type SmartAlbum = {
+	id: string
+	name: string
+	filters: Record<string, unknown[]>
+}
+
 /** User config keys persisted through the config endpoint. */
 export type PersistedUserConfig = {
 	croppedLayout: boolean
 	gridDensity: GridDensity
 	photosSourceFolders: string[]
 	photosLocation: string
+	smartAlbums: SmartAlbum[]
 }
 
 /**
@@ -77,11 +85,12 @@ export const useUserConfigStore = defineStore('userConfig', () => {
 	const gridDensity = ref<GridDensity>(parseGridDensity(loadState('photos', 'gridDensity', 'medium')))
 	const photosSourceFolders = ref<string[]>(JSON.parse(loadState('photos', 'photosSourceFolders', '["/Photos"]')))
 	const photosLocation = ref(loadState('photos', 'photosLocation', ''))
+	const smartAlbums = ref<SmartAlbum[]>(JSON.parse(loadState('photos', 'smartAlbums', '[]')))
 
 	/** Node of photosLocation, resolved from dav and created if missing. */
 	const photosLocationFolder = ref<Folder | undefined>(undefined)
 
-	const refs = { croppedLayout, gridDensity, photosSourceFolders, photosLocation }
+	const refs = { croppedLayout, gridDensity, photosSourceFolders, photosLocation, smartAlbums }
 
 	/**
 	 * Persist a user config value and notify the rest of the app.
@@ -114,6 +123,7 @@ export const useUserConfigStore = defineStore('userConfig', () => {
 		gridDensity,
 		photosSourceFolders,
 		photosLocation,
+		smartAlbums,
 		photosLocationFolder,
 		updateUserConfig,
 		initPhotosLocationFolder,

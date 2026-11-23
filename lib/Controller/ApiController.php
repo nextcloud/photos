@@ -77,6 +77,11 @@ class ApiController extends Controller {
 					}
 				}
 				break;
+			case 'smartAlbums':
+				if (!$this->validateSmartAlbums($value)) {
+					return new JSONResponse([], Http::STATUS_BAD_REQUEST);
+				}
+				break;
 			default:
 				return new JSONResponse([], Http::STATUS_BAD_REQUEST);
 		}
@@ -96,6 +101,58 @@ class ApiController extends Controller {
 
 		if (str_contains($path, '..')) {
 			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * A list of `{ id, name, filters }` objects with unique ids, where filters
+	 * maps a filter id to the list of its selected values.
+	 */
+	private function validateSmartAlbums(string $value): bool {
+		try {
+			$smartAlbums = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+		} catch (JsonException) {
+			return false;
+		}
+
+		if (!is_array($smartAlbums) || !array_is_list($smartAlbums)) {
+			return false;
+		}
+
+		$ids = [];
+		foreach ($smartAlbums as $smartAlbum) {
+			if (!is_array($smartAlbum)) {
+				return false;
+			}
+
+			$keys = array_keys($smartAlbum);
+			sort($keys);
+			if ($keys !== ['filters', 'id', 'name']) {
+				return false;
+			}
+
+			['id' => $id, 'name' => $name, 'filters' => $filters] = $smartAlbum;
+
+			if (!is_string($id) || preg_match('/^[A-Za-z0-9_-]{1,64}$/', $id) !== 1 || isset($ids[$id])) {
+				return false;
+			}
+			$ids[$id] = true;
+
+			if (!is_string($name) || trim($name) === '' || mb_strlen($name) > 255) {
+				return false;
+			}
+
+			if (!is_array($filters)) {
+				return false;
+			}
+
+			foreach ($filters as $filterId => $filterValues) {
+				if (!is_string($filterId) || !is_array($filterValues) || !array_is_list($filterValues)) {
+					return false;
+				}
+			}
 		}
 
 		return true;
