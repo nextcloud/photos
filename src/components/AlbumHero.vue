@@ -5,15 +5,20 @@
 
 <template>
 	<!--
-		The album name and its location are already announced by the navigation
-		header below, so the hero is only there to be looked at.
+		Next to a navigation header announcing the album name and its location,
+		the hero is only there to be looked at. A standalone hero is the heading
+		of the page instead, and is shown for an album without a cover as well.
 	-->
-	<header v-if="hasCover" class="album-hero" aria-hidden="true">
+	<header
+		v-if="hasCover || standalone"
+		class="album-hero"
+		:class="{ 'album-hero--plain': !hasCover }"
+		:aria-hidden="standalone ? undefined : 'true'">
 		<!--
 			The cover is a layer of its own so that the parallax moves the photo
 			and the blurhash standing in for it while it loads together.
 		-->
-		<div class="album-hero__cover" :style="coverStyle">
+		<div v-if="hasCover" class="album-hero__cover" :style="coverStyle">
 			<NcBlurHash
 				v-if="blurhash !== undefined"
 				class="album-hero__layer"
@@ -21,21 +26,21 @@
 
 			<img
 				v-if="!coverFailed"
-				:key="coverUrl"
+				:key="coverSrc"
 				class="album-hero__layer album-hero__photo"
 				:class="{ 'album-hero__photo--visible': coverLoaded }"
-				:src="coverUrl"
+				:src="coverSrc"
 				alt=""
 				decoding="async"
 				fetchpriority="high"
 				@load="coverLoaded = true"
 				@error="coverFailed = true">
 		</div>
-		<div class="album-hero__scrim" />
+		<div v-if="hasCover" class="album-hero__scrim" />
 		<div class="album-hero__content">
-			<div class="album-hero__title">
+			<component :is="standalone ? 'h1' : 'div'" class="album-hero__title">
 				{{ title }}
-			</div>
+			</component>
 			<div v-if="subtitle !== ''" class="album-hero__subtitle">
 				{{ subtitle }}
 			</div>
@@ -53,14 +58,20 @@ const props = withDefaults(defineProps<{
 	coverFileId?: number
 	/** Blurhash of the cover photo, shown until its preview is loaded. */
 	blurhash?: string
+	/** Address of the cover preview, for the pages that cannot use the default one. */
+	coverUrl?: string
 	/** Name of the album. */
 	title: string
 	/** Line shown below the title, hidden when empty. */
 	subtitle?: string
+	/** Whether the hero is the heading of the page rather than a decoration. */
+	standalone?: boolean
 }>(), {
 	coverFileId: -1,
 	blurhash: undefined,
+	coverUrl: undefined,
 	subtitle: '',
+	standalone: false,
 })
 
 /** Longest distance the cover is moved by the parallax, in pixels. */
@@ -79,7 +90,7 @@ const COVER_PREVIEW_SIZE = 1024
 
 const hasCover = computed<boolean>(() => props.coverFileId > 0)
 
-const coverUrl = computed<string>(() => generateUrl(`/apps/photos/api/v1/preview/${props.coverFileId}?x=${COVER_PREVIEW_SIZE}&y=${COVER_PREVIEW_SIZE}`))
+const coverSrc = computed<string>(() => props.coverUrl ?? generateUrl(`/apps/photos/api/v1/preview/${props.coverFileId}?x=${COVER_PREVIEW_SIZE}&y=${COVER_PREVIEW_SIZE}`))
 
 const coverLoaded = ref(false)
 
@@ -88,7 +99,7 @@ const coverLoaded = ref(false)
 // background of the hero, as what the album is shown with.
 const coverFailed = ref(false)
 
-watch(coverUrl, () => {
+watch(coverSrc, () => {
 	coverLoaded.value = false
 	coverFailed.value = false
 })
@@ -105,7 +116,14 @@ const coverStyle = computed(() => ({
 // The album page scrolls inside the app content, the window itself never moves.
 const scroller = document.getElementById('app-content-vue') ?? window
 
+// The cover stays where it is for people who asked for less motion.
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
 onMounted(() => {
+	if (reducedMotion) {
+		return
+	}
+
 	scroller.addEventListener('scroll', onScroll, { passive: true })
 	onScroll()
 })
@@ -132,6 +150,21 @@ function onScroll(): void {
 	border-end-end-radius: var(--border-radius-large);
 	background-color: var(--color-primary-element-light);
 	color: #fff;
+
+	// Without a cover there is nothing to read the text against, so the hero
+	// shrinks to a plain heading in the colors of the page.
+	&--plain {
+		height: auto;
+		padding-block: calc(var(--default-grid-baseline) * 8) calc(var(--default-grid-baseline) * 2);
+		background-color: transparent;
+		color: var(--color-main-text);
+
+		.album-hero__content {
+			position: static;
+			margin-inline: calc(var(--default-grid-baseline) * 8);
+			text-shadow: none;
+		}
+	}
 
 	&__cover {
 		position: absolute;
@@ -170,14 +203,37 @@ function onScroll(): void {
 	}
 
 	&__title {
+		margin: 0;
 		font-size: 2rem;
 		font-weight: bold;
 		line-height: 1.1;
+		overflow-wrap: anywhere;
 	}
 
 	&__subtitle {
 		margin-block-start: 6px;
 		opacity: 0.9;
+	}
+
+	@media only screen and (max-width: 512px) {
+		height: 220px;
+
+		&__content {
+			inset-block-end: calc(var(--default-grid-baseline) * 4);
+			inset-inline: calc(var(--default-grid-baseline) * 4);
+		}
+
+		&--plain {
+			height: auto;
+		}
+
+		&--plain &__content {
+			margin-inline: calc(var(--default-grid-baseline) * 4);
+		}
+
+		&__title {
+			font-size: 1.6rem;
+		}
 	}
 }
 </style>
