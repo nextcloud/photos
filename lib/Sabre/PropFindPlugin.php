@@ -42,6 +42,8 @@ class PropFindPlugin extends ServerPlugin {
 	public const NBITEMS_PROPERTYNAME = '{http://nextcloud.org/ns}nbItems';
 	public const COLLABORATORS_PROPERTYNAME = '{http://nextcloud.org/ns}collaborators';
 	public const FILTERS_PROPERTYNAME = '{http://nextcloud.org/ns}filters';
+	public const COVER_PROPERTYNAME = '{http://nextcloud.org/ns}cover';
+	public const DESCRIPTION_PROPERTYNAME = '{http://nextcloud.org/ns}description';
 	public const PERMISSIONS_PROPERTYNAME = '{http://owncloud.org/ns}permissions';
 	public const PHOTOS_ALBUM_FILE_ORIGIN_PROPERTYNAME = '{http://nextcloud.org/ns}photos-album-file-origin';
 	public const PHOTOS_COLLECTION_FILE_ORIGINAL_FILENAME_PROPERTYNAME = '{http://nextcloud.org/ns}photos-collection-file-original-filename';
@@ -150,6 +152,8 @@ class PropFindPlugin extends ServerPlugin {
 			$propFind->handle(self::DATE_RANGE_PROPERTYNAME, fn () => json_encode($node->getDateRange()));
 			$propFind->handle(self::COLLABORATORS_PROPERTYNAME, fn (): array => $node->getCollaborators());
 			$propFind->handle(self::FILTERS_PROPERTYNAME, fn (): ?string => $node->getFilters());
+			$propFind->handle(self::COVER_PROPERTYNAME, fn (): int => $node->getAlbum()->getAlbum()->getCover());
+			$propFind->handle(self::DESCRIPTION_PROPERTYNAME, fn (): string => $node->getDescription());
 		}
 
 		if ($node instanceof PlaceRoot) {
@@ -228,6 +232,17 @@ class PropFindPlugin extends ServerPlugin {
 			});
 			$propPatch->handle(self::FILTERS_PROPERTYNAME, function ($filters) use ($node) {
 				$node->setFilters($filters);
+				return true;
+			});
+			$propPatch->handle(self::COVER_PROPERTYNAME, function ($cover) use ($node) {
+				$node->setCover((int)$cover);
+				return true;
+			});
+			$propPatch->handle(self::DESCRIPTION_PROPERTYNAME, function ($description) use ($node) {
+				if ($description instanceof Complex) {
+					$description = $description->getXml();
+				}
+				$node->setDescription($description ?? '');
 				return true;
 			});
 		}

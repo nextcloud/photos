@@ -173,6 +173,26 @@ class AlbumMapperTest extends TestCase {
 		$this->assertEquals('nowhere', $retrievedAlbum->getLocation());
 	}
 
+	public function testCreateSetCoverAndDescriptionGet() {
+		$album = $this->mapper->create('user1', 'album1');
+		$this->assertEquals(-1, $album->getCover());
+		$this->assertEquals('', $album->getDescription());
+
+		$this->mapper->setCover($album->getId(), 42);
+		$this->mapper->setDescription($album->getId(), 'Summer <3 & sun');
+
+		$retrievedAlbum = $this->mapper->get($album->getId());
+		$this->assertEquals(42, $retrievedAlbum->getCover());
+		$this->assertEquals('Summer <3 & sun', $retrievedAlbum->getDescription());
+
+		[$listedAlbum] = $this->mapper->getForUser('user1');
+		$this->assertEquals(42, $listedAlbum->getCover());
+		$this->assertEquals('Summer <3 & sun', $listedAlbum->getDescription());
+
+		$this->mapper->setCover($album->getId(), -1);
+		$this->assertEquals(-1, $this->mapper->get($album->getId())->getCover());
+	}
+
 	/**
 	 * Disabled as the function does no longer exist
 	 * public function testEmptyFiles() {

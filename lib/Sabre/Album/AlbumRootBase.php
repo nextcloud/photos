@@ -234,7 +234,31 @@ abstract class AlbumRootBase implements ICollection, ICopyTarget {
 		throw new Forbidden('Setting the filters is not allowed on this type of album');
 	}
 
+	final public function getDescription(): string {
+		return $this->album->getAlbum()->getDescription();
+	}
+
+	public function setDescription(string $description): void {
+		throw new Forbidden('Setting the description is not allowed on this type of album');
+	}
+
+	/**
+	 * @param int $fileId File id of a photo of the album, -1 to go back to the photo added last
+	 */
+	public function setCover(int $fileId): void {
+		throw new Forbidden('Setting the cover is not allowed on this type of album');
+	}
+
+	/**
+	 * The photo picked by the owner while it is still part of the album, the
+	 * photo added last otherwise.
+	 */
 	public function getCover(): int {
+		$pickedCover = $this->album->getAlbum()->getCover();
+		if ($pickedCover !== -1 && in_array($pickedCover, $this->album->getFileIds(), true)) {
+			return $pickedCover;
+		}
+
 		$lastAddedPhoto = $this->album->getAlbum()->getLastAddedPhoto();
 
 		// If the album might be empty, but still contain photos based on filters.

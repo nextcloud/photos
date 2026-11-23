@@ -34,6 +34,7 @@
 							class="album__location">
 							<MapMarkerOutline />{{ album.attributes.location }}
 						</div>
+						<AlbumDescription :description="album?.attributes.description" />
 					</template>
 
 					<template #default>
@@ -212,7 +213,7 @@ import type { Collaborator } from '../store/albums.ts'
 import type { PhotoFile } from '../store/files.ts'
 
 import { n, t } from '@nextcloud/l10n'
-import { computed, onMounted, ref, useTemplateRef } from 'vue'
+import { computed, onMounted, provide, ref, useTemplateRef } from 'vue'
 import { useRouter } from 'vue-router'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
@@ -235,6 +236,7 @@ import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
 import AlbumHero from '../components/AlbumHero.vue'
+import AlbumDescription from '../components/Albums/AlbumDescription.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import CollaboratorsSelectionForm from '../components/Albums/CollaboratorsSelectionForm.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
@@ -245,7 +247,7 @@ import { logger } from '../services/logger.ts'
 import { albumFilesExtraProps, albumsExtraProps, useAlbumsStore } from '../store/albums.ts'
 import { useCollectionsStore } from '../store/collections.ts'
 import { useFilesStore } from '../store/files.ts'
-import { pickAlbumCover } from '../utils/albumCover.ts'
+import { albumCoverFileId, pickAlbumCover, setAlbumCoverKey } from '../utils/albumCover.ts'
 
 const props = withDefaults(defineProps<{
 	albumName?: string
@@ -288,9 +290,11 @@ const albumPhotos = computed<PhotoFile[]>(() => albumFileIds.value
 
 // The photo shown by the hero, which is only known once the album
 // content is there - until then the album cover is used as is.
-const coverPhoto = computed(() => pickAlbumCover(albumPhotos.value, album.value?.attributes['last-photo'] ?? -1))
+const albumCover = computed(() => album.value === undefined ? -1 : albumCoverFileId(album.value))
 
-const coverFileId = computed(() => coverPhoto.value?.fileid ?? album.value?.attributes['last-photo'] ?? -1)
+const coverPhoto = computed(() => pickAlbumCover(albumPhotos.value, albumCover.value))
+
+const coverFileId = computed(() => coverPhoto.value?.fileid ?? albumCover.value)
 
 const coverBlurhash = computed(() => coverPhoto.value?.attributes['metadata-blurhash'])
 
@@ -359,6 +363,10 @@ async function handleRemoveFilesFromAlbum(fileIds: string[]) {
 	collectionContent.value?.onUncheckFiles(fileIds)
 	await collectionsStore.removeFilesFromCollection(album.value?.root + album.value?.path, fileIds)
 }
+
+provide(setAlbumCoverKey, async (fileId: number) => {
+	await collectionsStore.updateCollection(albumFileName.value, { cover: fileId })
+})
 
 async function handleDeleteAlbum() {
 	const isDeleted = await collectionsStore.deleteCollection(album.value?.root + album.value?.path)

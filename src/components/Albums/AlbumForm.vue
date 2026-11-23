@@ -23,6 +23,12 @@
 					<MapMarkerOutline :size="20" />
 				</template>
 			</NcTextField>
+			<NcTextArea
+				v-model="albumDescription"
+				name="description"
+				resize="vertical"
+				:maxlength="DESCRIPTION_MAX_LENGTH"
+				:label="t('photos', 'Description of the album')" />
 		</div>
 
 		<PhotosFiltersInput
@@ -105,6 +111,7 @@ import { generateRemoteUrl } from '@nextcloud/router'
 import { computed, nextTick, onMounted, ref, toRaw, useTemplateRef } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+import NcTextArea from '@nextcloud/vue/components/NcTextArea'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
 import AccountMultiplePlusOutline from 'vue-material-design-icons/AccountMultiplePlusOutline.vue'
 import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
@@ -133,6 +140,9 @@ const emit = defineEmits<{
 	done: [event: { album: Collection, changes?: string[] }]
 }>()
 
+/** Longest description the server accepts. */
+const DESCRIPTION_MAX_LENGTH = 2000
+
 const albumsStore = useAlbumsStore()
 const collectionsStore = useCollectionsStore()
 
@@ -141,6 +151,7 @@ const nameInput = useTemplateRef<InstanceType<typeof NcTextField>>('nameInput')
 const showCollaboratorView = ref(false)
 const albumName = ref('')
 const albumLocation = ref('')
+const albumDescription = ref('')
 const albumFilters = ref<Record<string, unknown[]>>(filters.reduce((acc, filter) => ({ ...acc, [filter.id]: [] }), {}))
 const loading = ref(false)
 
@@ -211,6 +222,8 @@ async function handleCreateAlbum(collaborators: Collaborator[] = []) {
 				resourcetype: {},
 				nbItems: 0,
 				location: albumLocation.value,
+				description: albumDescription.value.trim(),
+				cover: -1,
 				'last-photo': -1,
 				date: formatMonthAndYear(new Date()),
 				collaborators,
@@ -229,6 +242,10 @@ async function handleCreateAlbum(collaborators: Collaborator[] = []) {
 
 		if (albumLocation.value !== '') {
 			propertiesToUpdate.location = albumLocation.value
+		}
+
+		if (albumDescription.value.trim() !== '') {
+			propertiesToUpdate.description = albumDescription.value.trim()
 		}
 
 		if (albumLocation.value !== '' || collaborators.length !== 0) {
@@ -268,6 +285,11 @@ async function handleUpdateAlbum() {
 			album = await collectionsStore.updateCollection(album.root + album.path, { location: albumLocation.value }) as Album
 		}
 
+		if (props.album !== null && String(props.album.attributes.description ?? '') !== albumDescription.value.trim()) {
+			changes.push('description')
+			album = await collectionsStore.updateCollection(album.root + album.path, { description: albumDescription.value.trim() }) as Album
+		}
+
 		if (props.album !== null && JSON.stringify(props.album.attributes.filters) !== JSON.stringify(albumFilters.value)) {
 			changes.push('filters')
 			album = await collectionsStore.updateCollection(album.root + album.path, { filters: albumFilters.value }) as Album
@@ -299,6 +321,7 @@ onMounted(() => {
 	if (editMode.value) {
 		albumName.value = props.album?.basename as string
 		albumLocation.value = props.album?.attributes.location ?? ''
+		albumDescription.value = String(props.album?.attributes.description ?? '')
 		albumFilters.value = {
 			...albumFilters.value,
 			...structuredClone(toRaw(props.album?.attributes.filters ?? {})),
@@ -321,7 +344,8 @@ onMounted(() => {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	height: 350px;
+	gap: calc(var(--default-grid-baseline) * 4);
+	min-height: 350px;
 	padding: calc(var(--default-grid-baseline) * 4);
 
 	.form-title {

@@ -234,9 +234,11 @@ export const useCollectionsStore = defineStore('collections', () => {
 			.map(([name, value]) => {
 				switch (typeof value) {
 					case 'string':
+						return `<nc:${name}>${escapeXml(value)}</nc:${name}>`
+					case 'number':
 						return `<nc:${name}>${value}</nc:${name}>`
 					case 'object':
-						return `<nc:${name}>${JSON.stringify(value)}</nc:${name}>`
+						return `<nc:${name}>${escapeXml(JSON.stringify(value))}</nc:${name}>`
 					default:
 						return ''
 				}
@@ -329,6 +331,18 @@ export const useCollectionsStore = defineStore('collections', () => {
 		deleteCollection,
 	}
 })
+
+/**
+ * Escape a value for the text content of an XML element.
+ *
+ * @param value - Text to escape
+ */
+function escapeXml(value: string): string {
+	return value
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+}
 
 /**
  * @param name - Title of the confirmation dialog

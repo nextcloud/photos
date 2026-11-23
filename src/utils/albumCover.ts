@@ -3,7 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import type { InjectionKey } from 'vue'
+import type { Album } from '../store/albums.ts'
 import type { PhotoFile } from '../store/files.ts'
+
+/**
+ * Picks the cover of the album being shown, provided only where the user may
+ * change it.
+ */
+export const setAlbumCoverKey: InjectionKey<(fileId: number) => Promise<void>> = Symbol('setAlbumCover')
+
+/**
+ * File id of the photo an album is shown with: the one its owner picked, or
+ * the photo the album points at when none was picked.
+ *
+ * @param album - The album
+ */
+export function albumCoverFileId(album: Album): number {
+	return (album.attributes.cover ?? -1) > 0 ? album.attributes.cover : album.attributes['last-photo']
+}
 
 /**
  * Pick the photo to show as the cover of an album.
