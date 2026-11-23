@@ -162,6 +162,17 @@
 						variant="tertiary"
 						alignment="start"
 						wide
+						data-id-app-nav-action="command-palette"
+						@click="openedCommandPalette = true">
+						<template #icon>
+							<CompassOutline :size="20" />
+						</template>
+						{{ t('photos', 'Quick navigation') }}
+					</NcButton>
+					<NcButton
+						variant="tertiary"
+						alignment="start"
+						wide
 						@click="showSettings">
 						<template #icon>
 							<CogOutline :size="20" />
@@ -185,6 +196,11 @@
 
 		<!-- Main settings Modal-->
 		<SettingsDialog v-model:open="openedSettings" />
+
+		<CommandPalette
+			v-if="openedCommandPalette"
+			:openSettings="showSettings"
+			@close="openedCommandPalette = false" />
 	</NcContent>
 </template>
 
@@ -195,6 +211,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
+import { useHotKey } from '@nextcloud/vue/composables/useHotKey'
 import debounce from 'debounce'
 import { storeToRefs } from 'pinia'
 import { computed, onBeforeMount, onBeforeUnmount, ref, watch } from 'vue'
@@ -214,6 +231,7 @@ import CalendarTodayOutline from 'vue-material-design-icons/CalendarTodayOutline
 import CameraIcon from 'vue-material-design-icons/Camera.vue'
 import CameraOutline from 'vue-material-design-icons/CameraOutline.vue'
 import CogOutline from 'vue-material-design-icons/CogOutline.vue'
+import CompassOutline from 'vue-material-design-icons/CompassOutline.vue'
 import Folder from 'vue-material-design-icons/Folder.vue'
 import FolderOutline from 'vue-material-design-icons/FolderOutline.vue'
 import ImageIcon from 'vue-material-design-icons/Image.vue'
@@ -234,6 +252,7 @@ import TagOutline from 'vue-material-design-icons/TagOutline.vue'
 import TimelapseIcon from 'vue-material-design-icons/Timelapse.vue'
 import VideoIcon from 'vue-material-design-icons/Video.vue'
 import VideoOutline from 'vue-material-design-icons/VideoOutline.vue'
+import CommandPalette from './components/CommandPalette.vue'
 import PhotosFiltersDisplay from './components/PhotosFilters/PhotosFiltersDisplay.vue'
 import PhotosFiltersInput from './components/PhotosFilters/PhotosFiltersInput.vue'
 import SettingsDialog from './components/Settings/SettingsDialog.vue'
@@ -255,6 +274,11 @@ const { selectedFilters } = storeToRefs(filtersStore)
 
 const searchTerm = ref('')
 const openedSettings = ref(false)
+const openedCommandPalette = ref(false)
+
+useHotKey('g', () => {
+	openedCommandPalette.value = true
+}, { prevent: true })
 
 const currentUser = getCurrentUser()
 const showPeopleMenuEntry = currentUser === null
