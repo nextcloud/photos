@@ -135,6 +135,17 @@
 						</NcActionButton>
 
 						<NcActionButton
+							v-if="isTalkEnabled"
+							data-cy-header-action="send-to-talk"
+							:closeAfterClick="true"
+							@click="showSendToTalk = true">
+							{{ t('photos', 'Send to Talk…') }}
+							<template #icon>
+								<ForumOutline />
+							</template>
+						</NcActionButton>
+
+						<NcActionButton
 							v-if="shouldFavoriteSelection"
 							:closeAfterClick="true"
 							:aria-label="t('photos', 'Mark selection as favorite')"
@@ -227,6 +238,11 @@
 			@close="showAlbumPicker = false">
 			<AlbumPicker @albumPicked="addSelectionToAlbum" />
 		</NcModal>
+
+		<SendToTalkDialog
+			v-if="showSendToTalk"
+			:photos="selectedPhotos"
+			@close="showSendToTalk = false" />
 	</div>
 </template>
 
@@ -251,6 +267,7 @@ import NcModal from '@nextcloud/vue/components/NcModal'
 import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
+import ForumOutline from 'vue-material-design-icons/ForumOutline.vue'
 import Play from 'vue-material-design-icons/Play.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import PlusBoxMultipleOutline from 'vue-material-design-icons/PlusBoxMultipleOutline.vue'
@@ -265,6 +282,7 @@ import DateScrubber from '../components/DateScrubber.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import SendToTalkDialog from '../components/SendToTalkDialog.vue'
 import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
 import { useFetchFiles } from '../composables/useFetchFiles.ts'
 import { useFilesByMonth } from '../composables/useFilesByMonth.ts'
@@ -272,11 +290,13 @@ import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { useGridDensity } from '../composables/useGridDensity.ts'
 import { allMimes } from '../services/AllowedMimes.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
+import { isTalkEnabled } from '../services/talk.ts'
 import { useCollectionsStore } from '../store/collections.ts'
 import { useFilesStore } from '../store/files.ts'
 import { useFilterStore } from '../store/filters.ts'
 import { configChangedEvent } from '../store/userConfig.ts'
 import { formatMonth, formatYear } from '../utils/dateUtils.ts'
+import { toPhotoTarget } from '../utils/fileUtils.ts'
 
 const props = withDefaults(defineProps<{
 	onlyFavorites?: boolean
@@ -305,6 +325,7 @@ const newAlbumButton = useTemplateRef<InstanceType<typeof NcButton>>('newAlbumBu
 
 const showAlbumCreationForm = ref(false)
 const showAlbumPicker = ref(false)
+const showSendToTalk = ref(false)
 const appContent = document.getElementById('app-content-vue')
 // Month section the user picked in the DateScrubber, forwarded to
 // FilesListViewer's `scrollToSection`. Empty means no override.
@@ -325,6 +346,11 @@ const shouldFavoriteSelection = computed<boolean>(() => {
 const timelinePhotos = computed(() => fetchedFileIds.value
 	.map((fileId) => files.value[fileId])
 	.filter((file) => file !== undefined))
+
+// The selection in the order of the timeline, which is the order it is sent in.
+const selectedPhotos = computed(() => timelinePhotos.value
+	.filter((file) => selection.value[file.fileid as number] === true)
+	.map(toPhotoTarget))
 
 // Photo count per month, drives the density ticks of the scrubber. Counted
 // before the folding, so a month of bursts reads as dense as it is.
