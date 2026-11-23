@@ -119,6 +119,22 @@ describe('useFoldersStore', () => {
 		expect(Object.keys(store.files)).toEqual(['1'])
 	})
 
+	test('appendFoldersFiles skips the video of a live photo', () => {
+		const store = useFoldersStore()
+		const video = new File({
+			id: 2,
+			source: `https://cloud.example.org/remote.php/dav${ROOT}/Photos/IMG_0001.MOV`,
+			owner: 'alice',
+			root: ROOT,
+			mime: 'video/quicktime',
+			attributes: { 'metadata-files-live-photo': 1 },
+		})
+
+		store.appendFoldersFiles([photo(1, '/Photos/IMG_0001.JPG'), video])
+
+		expect(Object.keys(store.files)).toEqual(['1'])
+	})
+
 	test('deleteFolderFile forgets the file', () => {
 		const store = useFoldersStore()
 		store.appendFoldersFiles([photo(1, '/Photos/a.jpg'), photo(2, '/Photos/b.jpg')])

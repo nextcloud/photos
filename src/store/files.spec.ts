@@ -79,6 +79,22 @@ describe('useFilesStore', () => {
 		expect(store.files[1].attributes['metadata-photos-size']).toEqual({ width: 256, height: 256 })
 	})
 
+	test('appendFiles leaves the video of a live photo out, its still stands for the pair', () => {
+		const store = useFilesStore()
+		const video = new File({
+			id: 2,
+			source: 'https://cloud.example.org/remote.php/dav/files/alice/Photos/1.mov',
+			owner: 'alice',
+			root: '/files/alice',
+			mime: 'video/quicktime',
+			attributes: { 'metadata-files-live-photo': 1 },
+		})
+
+		store.appendFiles([photo(1, { 'metadata-files-live-photo': 2 }), video])
+
+		expect(Object.keys(store.files)).toEqual(['1'])
+	})
+
 	test('appendFiles skips photos under a .nomedia path', () => {
 		const store = useFilesStore()
 		store.setNomediaPaths(['/Photos/Private'])
