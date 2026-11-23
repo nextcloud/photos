@@ -6,7 +6,7 @@
 import type { PhotoFile } from '../store/files.ts'
 
 import { describe, expect, test } from 'vitest'
-import { buildYearRecap, detectTrips } from './memories.ts'
+import { buildThenAndNow, buildYearRecap, detectTrips } from './memories.ts'
 
 const DAY = 24 * 60 * 60
 
@@ -199,5 +199,118 @@ describe('buildYearRecap', () => {
 		const highlights = recap?.highlights ?? []
 
 		expect(recap?.cover).toBe(highlights[Math.floor(highlights.length / 2)])
+	})
+})
+
+describe('buildThenAndNow', () => {
+	let nextFileId = 1
+
+	/**
+	 * @param place - Name of the place the photo was taken at
+	 * @param date - Capture date of the photo
+	 * @param favorite - Whether the photo is a favorite
+	 */
+	function buildPlacePhoto(place: string | undefined, date: Date, favorite: boolean = false): PhotoFile {
+		return {
+			fileid: nextFileId++,
+			attributes: { timestamp: date.getTime() / 1000, 'metadata-photos-place': place, favorite: favorite ? 1 : 0 },
+		} as unknown as PhotoFile
+	}
+
+	test('returns no pair without photos', () => {
+		expect(buildThenAndNow([])).toEqual([])
+	})
+
+	test('pairs two photos of the same place taken two years apart', () => {
+		const then = buildPlacePhoto('Lisbon', new Date(2022, 4, 10))
+		const now = buildPlacePhoto('Lisbon', new Date(2024, 4, 10))
+
+		expect(buildThenAndNow([now, then])).toEqual([{ id: `then-and-now-${then.fileid}-${now.fileid}`, place: 'Lisbon', then, now }])
+	})
+
+	test('ignores places visited less than two years apart', () => {
+		expect(buildThenAndNow([
+			buildPlacePhoto('Lisbon', new Date(2022, 4, 11)),
+			buildPlacePhoto('Lisbon', new Date(2024, 4, 10)),
+		])).toEqual([])
+	})
+
+	test('does not pair photos of different places or without a place', () => {
+		expect(buildThenAndNow([
+			buildPlacePhoto('Lisbon', new Date(2020, 4, 10)),
+			buildPlacePhoto('Porto', new Date(2024, 4, 10)),
+			buildPlacePhoto(undefined, new Date(2019, 4, 10)),
+			buildPlacePhoto(undefined, new Date(2024, 4, 10)),
+			buildPlacePhoto('', new Date(2019, 4, 10)),
+			buildPlacePhoto('', new Date(2024, 4, 10)),
+		])).toEqual([])
+	})
+
+	test('compares the latest visit with the earliest one', () => {
+		const earliest = buildPlacePhoto('Lisbon', new Date(2018, 0, 1))
+		const latest = buildPlacePhoto('Lisbon', new Date(2024, 0, 1))
+
+		const [pair] = buildThenAndNow([
+			earliest,
+			buildPlacePhoto('Lisbon', new Date(2020, 0, 1)),
+			buildPlacePhoto('Lisbon', new Date(2022, 0, 1)),
+			latest,
+		])
+
+		expect(pair).toMatchObject({ then: earliest, now: latest })
+	})
+
+	test('picks the photo in the middle of a visit', () => {
+		const thenVisit = [1, 2, 3].map((day) => buildPlacePhoto('Lisbon', new Date(2020, 4, day)))
+		const nowVisit = [1, 2, 3].map((day) => buildPlacePhoto('Lisbon', new Date(2024, 4, day)))
+
+		const [pair] = buildThenAndNow([...thenVisit, ...nowVisit])
+
+		expect(pair).toMatchObject({ then: thenVisit[1], now: nowVisit[1] })
+	})
+
+	test('prefers the favorites of a visit', () => {
+		const thenFavorite = buildPlacePhoto('Lisbon', new Date(2020, 4, 3), true)
+		const nowFavorite = buildPlacePhoto('Lisbon', new Date(2024, 4, 1), true)
+
+		const [pair] = buildThenAndNow([
+			buildPlacePhoto('Lisbon', new Date(2020, 4, 1)),
+			buildPlacePhoto('Lisbon', new Date(2020, 4, 2)),
+			thenFavorite,
+			nowFavorite,
+			buildPlacePhoto('Lisbon', new Date(2024, 4, 2)),
+			buildPlacePhoto('Lisbon', new Date(2024, 4, 3)),
+			// A favorite from another visit must not be picked over the visits compared.
+			buildPlacePhoto('Lisbon', new Date(2022, 4, 1), true),
+		])
+
+		expect(pair).toMatchObject({ then: thenFavorite, now: nowFavorite })
+	})
+
+	test('never pairs photos less than two years apart within long visits', () => {
+		const then = buildPlacePhoto('Lisbon', new Date(2022, 4, 1))
+		const now = buildPlacePhoto('Lisbon', new Date(2024, 4, 5))
+
+		const [pair] = buildThenAndNow([
+			then,
+			// Part of the earliest visit, but too close to the recent photo.
+			buildPlacePhoto('Lisbon', new Date(2022, 4, 20), true),
+			now,
+		])
+
+		expect(pair).toMatchObject({ then, now })
+	})
+
+	test('returns the most recently visited places first, up to the limit', () => {
+		const pairs = buildThenAndNow([
+			buildPlacePhoto('Lisbon', new Date(2019, 0, 1)),
+			buildPlacePhoto('Lisbon', new Date(2022, 0, 1)),
+			buildPlacePhoto('Porto', new Date(2019, 0, 1)),
+			buildPlacePhoto('Porto', new Date(2024, 0, 1)),
+			buildPlacePhoto('Faro', new Date(2019, 0, 1)),
+			buildPlacePhoto('Faro', new Date(2023, 0, 1)),
+		], 2, 2)
+
+		expect(pairs.map((pair) => pair.place)).toEqual(['Porto', 'Faro'])
 	})
 })

@@ -139,6 +139,69 @@ function pickHighlights(photos: PhotoFile[]): PhotoFile[] {
 	return [...highlights].sort((photo1, photo2) => photo1.attributes.timestamp - photo2.attributes.timestamp)
 }
 
+export type ThenAndNow = {
+	/** Stable id, derived from the two photos of the pair. */
+	id: string
+	/** Name of the place both photos were taken at. */
+	place: string
+	/** The older photo. */
+	then: PhotoFile
+	/** The recent photo, taken at least two years after the older one. */
+	now: PhotoFile
+}
+
+/** Photos taken within that many days of each other count as the same visit of a place. */
+const VISIT_DAYS = 30
+
+/**
+ * Pair photos taken at the same place at least `minYears` apart: one from the
+ * latest visit of the place, and one from the earliest visit which is old enough.
+ *
+ * @param photos - Photos to build the pairs from
+ * @param minYears - Minimum number of years between the two photos of a pair
+ * @param limit - Maximum number of pairs
+ * @return At most one pair per place, the most recently visited places first
+ */
+export function buildThenAndNow(photos: PhotoFile[], minYears: number = 2, limit: number = 6): ThenAndNow[] {
+	const located = photos
+		.filter((photo) => typeof photo.attributes['metadata-photos-place'] === 'string' && photo.attributes['metadata-photos-place'] !== '')
+		.sort((photo1, photo2) => photo1.attributes.timestamp - photo2.attributes.timestamp)
+
+	const pairs: ThenAndNow[] = []
+
+	for (const [place, placePhotos] of groupPhotos(located, (photo) => photo.attributes['metadata-photos-place'] as string)) {
+		const latest = placePhotos[placePhotos.length - 1]
+		const now = pickRepresentative(placePhotos.filter((photo) => latest.attributes.timestamp - photo.attributes.timestamp <= VISIT_DAYS * SECONDS_PER_DAY))
+
+		// Calendar years are used, so a photo taken on the same day two years
+		// earlier matches whatever the number of leap days in between.
+		const limitDate = getCaptureDate(now)
+		limitDate.setFullYear(limitDate.getFullYear() - minYears)
+		const oldEnough = placePhotos.filter((photo) => photo.attributes.timestamp <= limitDate.getTime() / 1000)
+		if (oldEnough.length === 0) {
+			continue
+		}
+
+		const then = pickRepresentative(oldEnough.filter((photo) => photo.attributes.timestamp - oldEnough[0].attributes.timestamp <= VISIT_DAYS * SECONDS_PER_DAY))
+
+		pairs.push({ id: `then-and-now-${then.fileid}-${now.fileid}`, place, then, now })
+	}
+
+	return pairs
+		.sort((pair1, pair2) => pair2.now.attributes.timestamp - pair1.now.attributes.timestamp)
+		.slice(0, limit)
+}
+
+/**
+ * Pick the photo standing for a visit: its first favorite, or else the photo
+ * in the middle of it.
+ *
+ * @param photos - Photos of the visit, in chronological order
+ */
+function pickRepresentative(photos: PhotoFile[]): PhotoFile {
+	return photos.find((photo) => photo.attributes.favorite === 1) ?? photos[Math.floor(photos.length / 2)]
+}
+
 /**
  * @param photo - Photo to get the capture date of
  */
