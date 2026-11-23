@@ -6,18 +6,21 @@
 import type { AlbumComment } from '../services/albumComments.ts'
 
 import { beforeEach, describe, expect, test, vi } from 'vitest'
-import { useAlbumComments } from './useAlbumComments.ts'
+import { groupAlbumReactions, useAlbumComments } from './useAlbumComments.ts'
 
 const { service, showError } = vi.hoisted(() => ({
 	service: {
 		fetchAlbumComments: vi.fn(),
 		addAlbumComment: vi.fn(),
+		addAlbumReaction: vi.fn(),
+		REACTION_VERB: 'reaction',
 		deleteAlbumComment: vi.fn(),
 	},
 	showError: vi.fn(),
 }))
 
 vi.mock('../services/albumComments.ts', () => service)
+vi.mock('@nextcloud/auth', () => ({ getCurrentUser: () => ({ uid: 'alice' }) }))
 vi.mock('@nextcloud/dialogs', () => ({ showError }))
 vi.mock('../services/logger.ts', () => ({ logger: { error: vi.fn() } }))
 
@@ -25,7 +28,16 @@ vi.mock('../services/logger.ts', () => ({ logger: { error: vi.fn() } }))
  * @param id - Id of the comment
  */
 function comment(id: string): AlbumComment {
-	return { id, actorId: 'alice', actorDisplayName: 'Alice', message: `Comment ${id}`, creationDateTime: '' }
+	return { id, verb: 'comment', actorId: 'alice', actorDisplayName: 'Alice', message: `Comment ${id}`, creationDateTime: '' }
+}
+
+/**
+ * @param id - Id of the reaction
+ * @param emoji - Emoji of the reaction
+ * @param actorId - Id of the person who reacted
+ */
+function reaction(id: string, emoji: string, actorId = 'alice'): AlbumComment {
+	return { id, verb: 'reaction', actorId, actorDisplayName: actorId === 'bob' ? 'Bob' : '', message: emoji, creationDateTime: '' }
 }
 
 beforeEach(() => {
@@ -106,5 +118,78 @@ describe('useAlbumComments', () => {
 
 		expect(comments.value.map(({ id }) => id)).toEqual(['1'])
 		expect(showError).toHaveBeenCalled()
+	})
+})
+
+describe('groupAlbumReactions', () => {
+	test('groups the reactions by emoji with the people who reacted', () => {
+		const reactions = groupAlbumReactions([reaction('1', '👍', 'bob'), reaction('2', '🎉'), reaction('3', '👍')], 'alice')
+
+		expect(reactions).toEqual([
+			{ emoji: '👍', actors: ['Bob', 'alice'], ownIds: ['3'] },
+			{ emoji: '🎉', actors: ['alice'], ownIds: ['2'] },
+		])
+	})
+
+	test('counts a person once per emoji but keeps all their own entries', () => {
+		const [group] = groupAlbumReactions([reaction('1', '👍'), reaction('2', '👍'), reaction('3', '👍', 'bob')], 'alice')
+
+		expect(group.actors).toHaveLength(2)
+		expect(group.ownIds).toEqual(['1', '2'])
+	})
+})
+
+describe('album reactions', () => {
+	test('keeps reactions out of the comments', async () => {
+		service.fetchAlbumComments.mockResolvedValue([comment('1'), reaction('2', '👍', 'bob')])
+		const { comments, reactions, fetchComments } = useAlbumComments(7)
+
+		await fetchComments()
+
+		expect(comments.value.map(({ id }) => id)).toEqual(['1'])
+		expect(reactions.value).toEqual([{ emoji: '👍', actors: ['Bob'], ownIds: [] }])
+	})
+
+	test('adds a reaction the user has not given yet', async () => {
+		service.fetchAlbumComments.mockResolvedValueOnce([reaction('2', '👍', 'bob')])
+			.mockResolvedValueOnce([reaction('2', '👍', 'bob'), reaction('3', '👍')])
+		service.addAlbumReaction.mockResolvedValue(undefined)
+		const { reactions, loading, fetchComments, toggleReaction } = useAlbumComments(7)
+		await fetchComments()
+
+		const promise = toggleReaction('👍')
+		expect(loading.value).toBe(false)
+		await promise
+
+		expect(service.addAlbumReaction).toHaveBeenCalledWith(7, '👍')
+		expect(service.deleteAlbumComment).not.toHaveBeenCalled()
+		expect(reactions.value[0].ownIds).toEqual(['3'])
+	})
+
+	test('removes all own entries of a reaction the user has given', async () => {
+		service.fetchAlbumComments.mockResolvedValueOnce([reaction('2', '👍', 'bob'), reaction('3', '👍'), reaction('4', '👍')])
+			.mockResolvedValueOnce([reaction('2', '👍', 'bob')])
+		service.deleteAlbumComment.mockResolvedValue(undefined)
+		const { reactions, fetchComments, toggleReaction } = useAlbumComments(7)
+		await fetchComments()
+
+		await toggleReaction('👍')
+
+		expect(service.deleteAlbumComment.mock.calls).toEqual([[7, '3'], [7, '4']])
+		expect(service.addAlbumReaction).not.toHaveBeenCalled()
+		expect(reactions.value).toEqual([{ emoji: '👍', actors: ['Bob'], ownIds: [] }])
+	})
+
+	test('shows an error and keeps the reactions when toggling fails', async () => {
+		service.fetchAlbumComments.mockResolvedValue([reaction('2', '👍', 'bob')])
+		service.addAlbumReaction.mockRejectedValue(new Error('403'))
+		const { reactions, reacting, fetchComments, toggleReaction } = useAlbumComments(7)
+		await fetchComments()
+
+		await toggleReaction('🎉')
+
+		expect(showError).toHaveBeenCalled()
+		expect(reacting.value).toBe(false)
+		expect(reactions.value.map(({ emoji }) => emoji)).toEqual(['👍'])
 	})
 })

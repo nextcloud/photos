@@ -8,11 +8,15 @@ import { generateRemoteUrl } from '@nextcloud/router'
 
 export type AlbumComment = {
 	id: string
+	verb: string
 	actorId: string
 	actorDisplayName: string
 	message: string
 	creationDateTime: string
 }
+
+// Verb of a comment that is an emoji reaction to the album.
+export const REACTION_VERB = 'reaction'
 
 const OC_NAMESPACE = 'http://owncloud.org/ns'
 
@@ -27,7 +31,8 @@ function getAlbumCommentsUrl(albumId: number): string {
 }
 
 /**
- * Parse the multistatus answer of the comments report, oldest comment first.
+ * Parse the multistatus answer of the comments report, oldest entry first.
+ * The entries are the comments and the reactions of the album, told apart by their verb.
  *
  * @param xml - Body of the report response
  */
@@ -40,6 +45,7 @@ export function parseAlbumComments(xml: string): AlbumComment[] {
 	return findElements(document, 'DAV:', 'response')
 		.map((response) => ({
 			id: readProp(response, 'id'),
+			verb: readProp(response, 'verb'),
 			actorId: readProp(response, 'actorId'),
 			actorDisplayName: readProp(response, 'actorDisplayName'),
 			message: readProp(response, 'message'),
@@ -50,7 +56,7 @@ export function parseAlbumComments(xml: string): AlbumComment[] {
 }
 
 /**
- * Fetch the latest comments of an album.
+ * Fetch the latest comments and reactions of an album.
  *
  * @param albumId - Id of the album
  */
@@ -82,6 +88,22 @@ export async function addAlbumComment(albumId: number, message: string): Promise
 }
 
 /**
+ * React to an album. The server only accepts a single emoji.
+ *
+ * @param albumId - Id of the album
+ * @param emoji - Emoji to react with
+ */
+export async function addAlbumReaction(albumId: number, emoji: string): Promise<void> {
+	await axios.post(getAlbumCommentsUrl(albumId), {
+		actorType: 'users',
+		verb: REACTION_VERB,
+		message: emoji,
+	})
+}
+
+/**
+ * Delete a comment or a reaction, which only its author may do.
+ *
  * @param albumId - Id of the album
  * @param commentId - Id of the comment
  */
