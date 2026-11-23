@@ -170,6 +170,13 @@
 			</div>
 		</HeaderNavigation>
 
+		<NcNoteCard
+			v-if="showingSavedFiles"
+			class="timeline__offline"
+			type="info"
+			role="status"
+			:text="t('photos', 'You are offline — showing saved photos')" />
+
 		<FilesListViewer
 			:containerElement="appContent"
 			class="timeline__file-list"
@@ -248,6 +255,7 @@ import NcActions from '@nextcloud/vue/components/NcActions'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcModal from '@nextcloud/vue/components/NcModal'
+import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
@@ -298,7 +306,7 @@ const filtersStore = useFilterStore()
 const { selectedFilters, filtersQuery } = storeToRefs(filtersStore)
 
 const { gridDensity, tileBaseHeight, setGridDensity } = useGridDensity()
-const { fetchFiles, resetFetchFilesState, fetchedFileIds, loadingFiles, errorFetchingFiles } = useFetchFiles()
+const { fetchFiles, resetFetchFilesState, fetchedFileIds, loadingFiles, errorFetchingFiles, showingSavedFiles } = useFetchFiles()
 const { selection, selectedFileIds, onUncheckFiles, resetSelection } = useFilesSelection()
 
 const newAlbumButton = useTemplateRef<InstanceType<typeof NcButton>>('newAlbumButton')
@@ -493,6 +501,14 @@ onUnmounted(() => {
 		padding: calc(var(--default-grid-baseline) * 4);
 		margin-bottom: 0px;
 		padding-bottom: 0px;
+	}
+
+	&__offline {
+		margin: 0 64px calc(var(--default-grid-baseline) * 2);
+
+		@media only screen and (max-width: 1200px) {
+			margin-inline: calc(var(--default-grid-baseline) * 2);
+		}
 	}
 
 	&__file-list {
