@@ -25,6 +25,8 @@
 			<!-- eslint-disable-next-line vue/no-v-html (because it's an SVG file) -->
 			<span class="hidden-visually" role="none" v-html="videoplaceholder" />
 		</NcAppContent>
+
+		<ViewerFilmstrip />
 	</NcContent>
 </template>
 
@@ -33,6 +35,7 @@ import { generateUrl } from '@nextcloud/router'
 import { onBeforeMount, onBeforeUnmount } from 'vue'
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
 import NcContent from '@nextcloud/vue/components/NcContent'
+import ViewerFilmstrip from './components/ViewerFilmstrip.vue'
 import svgplaceholder from './assets/file-placeholder.svg'
 import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'

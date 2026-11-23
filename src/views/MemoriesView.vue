@@ -83,7 +83,6 @@
 import type { Trip, YearRecap } from '../services/memories.ts'
 
 import { n, t } from '@nextcloud/l10n'
-import { getViewer } from '@nextcloud/viewer'
 import { computed, onMounted } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import AnimatedNumber from '../components/AnimatedNumber.vue'
@@ -91,6 +90,7 @@ import EmptyIllustration from '../components/EmptyIllustration.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import { useLoadedPhotos } from '../composables/useLoadedPhotos.ts'
 import { buildYearRecap, detectTrips } from '../services/memories.ts'
+import { openInViewer } from '../services/viewerFilmstrip.ts'
 import { formatDateRange as formatRange } from '../utils/dateUtils.ts'
 import { getPreviewUrl } from '../utils/fileUtils.ts'
 
@@ -121,14 +121,14 @@ function startRecap(): void {
 		return
 	}
 
-	getViewer().open(yearRecap.value.highlights, yearRecap.value.highlights[0], { startSlideshow: true })
+	openInViewer(yearRecap.value.highlights, yearRecap.value.highlights[0], { startSlideshow: true })
 }
 
 /**
  * @param trip - The trip to open in the viewer
  */
 function openTrip(trip: Trip): void {
-	getViewer().open(trip.photos, trip.cover)
+	openInViewer(trip.photos, trip.cover)
 }
 
 /**

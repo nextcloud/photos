@@ -61,7 +61,6 @@ import type { PhotoFile } from '../store/files.ts'
 
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
-import { getViewer } from '@nextcloud/viewer'
 import {
 	LControlAttribution,
 	LMap,
@@ -76,6 +75,7 @@ import EmptyIllustration from '../components/EmptyIllustration.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import { useLoadedPhotos } from '../composables/useLoadedPhotos.ts'
 import { isMapsInstalled } from '../services/IsMapsInstalled.ts'
+import { openInViewer } from '../services/viewerFilmstrip.ts'
 
 import 'leaflet/dist/leaflet.css'
 
@@ -145,7 +145,7 @@ function getCoordinates(photo: PhotoFile): [number, number] {
  * @param photo - The photo to open in the viewer
  */
 function openPhoto(photo: PhotoFile): void {
-	getViewer().open(geotaggedPhotos.value, photo)
+	openInViewer(geotaggedPhotos.value, photo)
 }
 </script>
 
