@@ -5,8 +5,9 @@
 
 import type { Node } from '@nextcloud/files'
 
-import { FileType } from '@nextcloud/files'
-import { getRootPath } from '@nextcloud/files/dav'
+import { getCurrentUser } from '@nextcloud/auth'
+import { FileType, Permission } from '@nextcloud/files'
+import { defaultRootPath, getRootPath } from '@nextcloud/files/dav'
 import { getLanguage } from '@nextcloud/l10n'
 import { basename } from '@nextcloud/paths'
 import { generateUrl } from '@nextcloud/router'
@@ -88,6 +89,8 @@ export type PhotoTarget = {
 	permissions: number
 	/** Whether the current user marked the photo as a favorite. */
 	favorite: boolean
+	/** Whether the photo can be moved into the archive of the account, or out of it. */
+	archivable: boolean
 }
 
 /**
@@ -106,6 +109,13 @@ export function toPhotoTarget(file: Node): PhotoTarget {
 			davPath: `${file.root}${file.path}`,
 			permissions: file.permissions,
 			favorite: file.attributes.favorite === 1,
+			// Archiving moves the photo within the files of the account, which
+			// would take a photo of a share or a group folder away from the
+			// others having it.
+			archivable: file.root === defaultRootPath
+				&& file.attributes['mount-type'] === ''
+				&& file.owner === getCurrentUser()?.uid
+				&& (file.permissions & Permission.DELETE) !== 0,
 		}
 	}
 
@@ -115,6 +125,7 @@ export function toPhotoTarget(file: Node): PhotoTarget {
 		davPath: `${getRootPath()}${originalFilename}`,
 		permissions: file.permissions,
 		favorite: file.attributes.favorite === 1,
+		archivable: false,
 	}
 }
 

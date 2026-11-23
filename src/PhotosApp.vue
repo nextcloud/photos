@@ -119,6 +119,15 @@
 					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
+					:to="{ name: 'archive' }"
+					:name="t('photos', 'Archive')"
+					data-id-app-nav-item="archive">
+					<template #icon="{ active }">
+						<ArchiveIcon v-if="active" :size="20" />
+						<ArchiveOutline v-else :size="20" />
+					</template>
+				</NcAppNavigationItem>
+				<NcAppNavigationItem
 					:to="{ name: 'shared' }"
 					:name="t('photos', 'Shared with you')"
 					data-id-app-nav-item="shared">
@@ -209,6 +218,8 @@ import AccountBoxMultiple from 'vue-material-design-icons/AccountBoxMultiple.vue
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
 import AccountGroup from 'vue-material-design-icons/AccountGroup.vue'
 import AccountGroupOutline from 'vue-material-design-icons/AccountGroupOutline.vue'
+import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
+import ArchiveOutline from 'vue-material-design-icons/ArchiveOutline.vue'
 import CalendarToday from 'vue-material-design-icons/CalendarToday.vue'
 import CalendarTodayOutline from 'vue-material-design-icons/CalendarTodayOutline.vue'
 import CameraIcon from 'vue-material-design-icons/Camera.vue'

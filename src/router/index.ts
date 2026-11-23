@@ -207,6 +207,20 @@ export const router = createRouter({
 			},
 		},
 		{
+			path: '/archive',
+			component: TimelineView,
+			name: 'archive',
+			props: () => ({
+				rootTitle: t('photos', 'Archive'),
+				archive: true,
+			}),
+			meta: {
+				rootTitle: () => {
+					return t('photos', 'Archive')
+				},
+			},
+		},
+		{
 			path: '/tags/',
 			component: TagsView,
 			name: 'tags',
