@@ -10,6 +10,11 @@
 			:loading="loading && comments.length === 0"
 			@close="emit('close')">
 			<div class="album-comments">
+				<AlbumReactions
+					:reactions="reactions"
+					:disabled="reacting"
+					@toggle="toggleReaction" />
+
 				<p v-if="!loading && comments.length === 0" class="album-comments__empty">
 					{{ t('photos', 'No comments yet. Start the conversation!') }}
 				</p>
@@ -84,6 +89,7 @@ import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcTextArea from '@nextcloud/vue/components/NcTextArea'
 import Send from 'vue-material-design-icons/Send.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
+import AlbumReactions from './AlbumReactions.vue'
 import { useAlbumComments } from '../../composables/useAlbumComments.ts'
 
 const props = defineProps<{
@@ -99,7 +105,7 @@ const currentUserId = getCurrentUser()?.uid
 const message = ref('')
 const list = useTemplateRef<HTMLUListElement>('list')
 
-const { comments, loading, posting, fetchComments, addComment, deleteComment } = useAlbumComments(() => props.albumId)
+const { comments, reactions, loading, posting, reacting, fetchComments, addComment, deleteComment, toggleReaction } = useAlbumComments(() => props.albumId)
 
 async function submit() {
 	if (await addComment(message.value)) {
@@ -117,7 +123,7 @@ function onEnter(event: KeyboardEvent) {
 }
 
 // Keep the newest comment, shown last, in view.
-watch(comments, async () => {
+watch(() => comments.value.at(-1)?.id, async () => {
 	await nextTick()
 	list.value?.lastElementChild?.scrollIntoView({ block: 'nearest' })
 })

@@ -4,7 +4,7 @@
  */
 
 import { beforeEach, describe, expect, test, vi } from 'vitest'
-import { addAlbumComment, deleteAlbumComment, fetchAlbumComments, parseAlbumComments } from './albumComments.ts'
+import { addAlbumComment, addAlbumReaction, deleteAlbumComment, fetchAlbumComments, parseAlbumComments } from './albumComments.ts'
 
 const { axios } = vi.hoisted(() => ({
 	axios: {
@@ -23,13 +23,15 @@ vi.mock('@nextcloud/router', () => ({ generateRemoteUrl: (path: string) => `http
  * @param id - Id of the comment
  * @param message - Text of the comment
  * @param date - Creation date of the comment
+ * @param verb - Verb of the entry
  */
-function response(id: string, message: string, date: string): string {
+function response(id: string, message: string, date: string, verb = 'comment'): string {
 	return `<d:response>
 		<d:href>/remote.php/dav/comments/photos_album/7/${id}</d:href>
 		<d:propstat>
 			<d:prop>
 				<oc:id>${id}</oc:id>
+				<oc:verb>${verb}</oc:verb>
 				<oc:message>${message}</oc:message>
 				<oc:actorId>alice</oc:actorId>
 				<oc:actorDisplayName>Alice &amp; co</oc:actorDisplayName>
@@ -68,11 +70,21 @@ describe('parseAlbumComments', () => {
 
 		expect(comment).toEqual({
 			id: '1',
+			verb: 'comment',
 			actorId: 'alice',
 			actorDisplayName: 'Alice & co',
 			message: '1e5 <b>bold</b>\nline',
 			creationDateTime: 'Sun, 22 Nov 2026 10:00:00 GMT',
 		})
+	})
+
+	test('reads the verb that tells reactions from comments', () => {
+		const xml = multistatus(
+			response('1', 'Hello', 'Sun, 22 Nov 2026 10:00:00 GMT'),
+			response('2', '👍', 'Sun, 22 Nov 2026 11:00:00 GMT', 'reaction'),
+		)
+
+		expect(parseAlbumComments(xml).map(({ verb, message }) => [verb, message])).toEqual([['comment', 'Hello'], ['reaction', '👍']])
 	})
 
 	test('returns nothing for an empty answer', () => {
@@ -99,6 +111,15 @@ describe('album comments requests', () => {
 		expect(axios.post).toHaveBeenCalledWith(
 			'https://cloud.example.org/remote.php/dav/comments/photos_album/7',
 			{ actorType: 'users', verb: 'comment', message: 'Nice!' },
+		)
+	})
+
+	test('posts a reaction as the current user', async () => {
+		await addAlbumReaction(7, '🎉')
+
+		expect(axios.post).toHaveBeenCalledWith(
+			'https://cloud.example.org/remote.php/dav/comments/photos_album/7',
+			{ actorType: 'users', verb: 'reaction', message: '🎉' },
 		)
 	})
 
