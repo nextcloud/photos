@@ -2,6 +2,7 @@ OC.L10N.register(
     "photos",
     {
     "Public link" : "Public link",
+    "Search by file name" : "ძებნა ფაილის სახელით",
     "Clear search" : "ძებნის გასუფთავება",
     "Videos" : "Videos",
     "People" : "People",
