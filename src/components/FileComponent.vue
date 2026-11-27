@@ -536,8 +536,7 @@ $magnify-transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 			pointer-events: none;
 		}
 
-		.selection-checkbox,
-		.photo-actions-menu {
+		.selection-checkbox {
 			opacity: 1;
 		}
 	}
@@ -635,12 +634,19 @@ $magnify-transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 		}
 	}
 
-	// Reveal checkbox and actions menu on hover.
+	// Reveal checkbox and actions menu on hover. A selected tile keeps its
+	// checkbox only, so that a selection is not cluttered with actions buttons.
+	&:hover,
+	&:has(:focus-visible) {
+		.photo-actions-menu {
+			opacity: 1;
+		}
+	}
+
 	&:hover,
 	&.selected,
 	&:focus-within {
-		.selection-checkbox,
-		.photo-actions-menu {
+		.selection-checkbox {
 			opacity: 1;
 		}
 
