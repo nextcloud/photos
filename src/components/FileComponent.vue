@@ -60,9 +60,19 @@
 
 					<!-- Sweeps over the blurhash, or over the empty tile when there is none, until a preview lands. -->
 					<div
-						v-if="!loadedSmall && !loadedLarge"
+						v-if="!loadedSmall && !loadedLarge && !previewMissing"
 						class="file__layer file__layer--shimmer"
 						aria-hidden="true" />
+
+					<!-- Stands in for the preview of a file the server cannot render one for. -->
+					<div
+						v-if="previewMissing"
+						class="file__layer file__layer--placeholder"
+						data-test="preview-placeholder"
+						aria-hidden="true">
+						<VideoOutlineIcon v-if="isVideo" :size="48" />
+						<ImageOutlineIcon v-else :size="48" />
+					</div>
 
 					<img
 						v-if="!errorSmall"
@@ -149,7 +159,9 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, wa
 import { useRoute } from 'vue-router'
 import NcBlurHash from '@nextcloud/vue/components/NcBlurHash'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import ImageOutlineIcon from 'vue-material-design-icons/ImageOutline.vue'
 import PlayCircleOutlineIcon from 'vue-material-design-icons/PlayCircleOutline.vue'
+import VideoOutlineIcon from 'vue-material-design-icons/VideoOutline.vue'
 import FavoriteIcon from './FavoriteIcon.vue'
 import PhotoActionsMenu from './PhotoActionsMenu.vue'
 import { logger } from '../services/logger.ts'
@@ -260,6 +272,10 @@ const srcSmall = computed<string>(() => getItemURL(64, 64))
 const blurhash = computed<string | undefined>(() => props.file.attributes['metadata-blurhash'])
 
 const isPreviewableVideo = computed<boolean>(() => isPreviewableVideoMime(props.file.mime))
+
+// Both previews failing means the server has no preview for the file, as for
+// a video without ffmpeg or a format no enabled provider renders.
+const previewMissing = computed<boolean>(() => errorSmall.value && errorLarge.value)
 
 watch(() => props.file, async () => {
 	initialized.value = false
@@ -633,6 +649,14 @@ $magnify-transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 				@media (prefers-reduced-motion: reduce) {
 					animation: none;
 				}
+			}
+
+			.file__layer--placeholder {
+				z-index: 2;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: var(--color-text-maxcontrast);
 			}
 
 			.file__layer--small {
