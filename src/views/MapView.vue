@@ -11,7 +11,7 @@
 			path="/"
 			:title="rootTitle"
 			:rootTitle="rootTitle"
-			@refresh="loadPhotos">
+			@refresh="loadPhotos(true)">
 			<NcButton
 				v-if="isMapsInstalled"
 				:href="mapsAppUrl"
@@ -126,11 +126,7 @@ watch(geotaggedPhotos, (newPhotos, previousPhotos) => {
 	zoom.value = 4
 }, { immediate: true })
 
-onMounted(() => {
-	if (photos.value.length === 0) {
-		loadPhotos()
-	}
-})
+onMounted(() => loadPhotos())
 
 /**
  * @param photo - The photo to get the coordinates of
