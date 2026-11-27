@@ -211,11 +211,22 @@ test.describe('The tile of a photo without a preview', () => {
 	test('sweeps a placeholder over the tile until a preview arrives', async ({ page, photosApp }) => {
 		const { timeline } = photosApp
 
-		// No preview is ever answered, which is the state the placeholder is for.
-		await page.route(PREVIEW_ENDPOINT, (route) => route.abort())
+		// The previews are never answered, so they stay on their way, which is
+		// the state the placeholder is for. A failed preview shows an icon instead.
+		await page.route(PREVIEW_ENDPOINT, () => {})
 		await timeline.open()
 
 		await expect(timeline.grid.getPlaceholder(PHOTO)).toBeVisible()
+	})
+
+	test('shows an icon instead when the server has no preview', async ({ page, photosApp }) => {
+		const { timeline } = photosApp
+
+		await page.route(PREVIEW_ENDPOINT, (route) => route.abort())
+		await timeline.open()
+
+		await expect(timeline.grid.getMissingPreview(PHOTO)).toBeVisible()
+		await expect(timeline.grid.getPlaceholder(PHOTO)).toHaveCount(0)
 	})
 
 	test('takes the placeholder away once the preview is there', async ({ photosApp }) => {

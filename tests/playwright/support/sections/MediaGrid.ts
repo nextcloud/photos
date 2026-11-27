@@ -328,6 +328,16 @@ export class MediaGrid {
 	}
 
 	/**
+	 * The icon standing in for the preview of a file the server has no preview
+	 * for. It is hidden from assistive technology like the picture it replaces.
+	 *
+	 * @param name - Name of the photo file
+	 */
+	public getMissingPreview(name: string): Locator {
+		return this.getTile(name).locator('[data-test="preview-placeholder"]')
+	}
+
+	/**
 	 * Select photos and wait for each of them to be marked as selected.
 	 *
 	 * @param names - Names of the photo files to select
