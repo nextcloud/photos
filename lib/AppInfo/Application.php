@@ -23,6 +23,8 @@ use OCA\Photos\Listener\SabrePluginAddListener;
 use OCA\Photos\Listener\SabrePluginAuthInitListener;
 use OCA\Photos\Listener\SizeMetadataProvider;
 use OCA\Photos\Listener\TagListener;
+use OCA\Photos\Search\AlbumSearchProvider;
+use OCA\Photos\Search\PlaceSearchProvider;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -70,6 +72,8 @@ class Application extends App implements IBootstrap {
 	#[\Override]
 	public function register(IRegistrationContext $context): void {
 		$context->registerDashboardWidget(OnThisDay::class);
+		$context->registerSearchProvider(AlbumSearchProvider::class);
+		$context->registerSearchProvider(PlaceSearchProvider::class);
 		/** Register $principalBackend for the DAV collection */
 		$context->registerServiceAlias('principalBackend', Principal::class);
 
