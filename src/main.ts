@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { getSidebar } from '@nextcloud/files'
 import { registerDavProperty } from '@nextcloud/files/dav'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
@@ -22,6 +23,10 @@ const app = createApp(PhotosApp)
 app.config.idPrefix = 'photos'
 app.use(createPinia())
 app.use(router)
-app.mount('#content')
+const content = app.mount('#content').$el
+if (!(content instanceof HTMLElement)) {
+	throw new Error('Could not mount the Files sidebar because the Photos content element is missing')
+}
+getSidebar().mount(content)
 
 export default app
