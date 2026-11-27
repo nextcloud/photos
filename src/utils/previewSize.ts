@@ -9,9 +9,10 @@ export type Size = { width: number, height: number }
  * Edge lengths previews are requested at. The server rounds every preview it
  * generates up to a power of four on one side, so a box made of these lengths
  * matches a preview it keeps in its cache, and a photo only ever has a handful
- * of distinct preview URLs for the browser to cache.
+ * of distinct preview URLs for the browser to cache. Tiles stop at 1024: the
+ * next size is the full max preview, several megabytes per photo.
  */
-export const PREVIEW_SIZE_BUCKETS = [64, 256, 1024, 4096]
+export const PREVIEW_SIZE_BUCKETS = [64, 256, 1024]
 
 /**
  * Highest device pixel ratio previews are sized for. Denser screens get the
@@ -56,8 +57,10 @@ export function drawnSize(tile: Size, photo: Size | undefined, cropped: boolean)
 /**
  * The box to request a tile's preview in, so that it is sharp at the given
  * device pixel ratio, capped at MAX_PIXEL_RATIO and within HIGH_DENSITY_TOLERANCE.
- * The server fits the photo inside the box. Undefined while the tile has not
- * been laid out.
+ * The server fits the photo inside the box, keeping its aspect ratio, so a
+ * square box as long as the longer drawn side covers the tile, and a photo only
+ * gets one stored preview per bucket. Undefined while the tile has not been
+ * laid out.
  *
  * @param tile - Size of the tile in CSS pixels
  * @param photo - Size of the photo, only its aspect ratio matters
@@ -72,10 +75,8 @@ export function previewBox(tile: Size, photo: Size | undefined, cropped: boolean
 	const ratio = Math.min(Math.max(pixelRatio, 1), MAX_PIXEL_RATIO)
 	const scale = ratio > 1 ? Math.max(1, ratio * HIGH_DENSITY_TOLERANCE) : 1
 	const drawn = drawnSize(tile, photo, cropped)
-	return {
-		width: previewSizeBucket(drawn.width * scale),
-		height: previewSizeBucket(drawn.height * scale),
-	}
+	const side = previewSizeBucket(Math.max(drawn.width, drawn.height) * scale)
+	return { width: side, height: side }
 }
 
 const sizeObservers = new WeakMap<Element, (size: Size) => void>()
