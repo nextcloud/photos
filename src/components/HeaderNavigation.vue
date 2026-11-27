@@ -106,6 +106,9 @@ function refresh() {
 	background: var(--color-main-background);
 
 	&__title {
+		// Gives way before the actions next to it do.
+		flex: 0 1000 auto;
+		min-width: 5em;
 		max-width: 45%;
 		display: flex;
 		flex-direction: column;
@@ -130,7 +133,8 @@ function refresh() {
 
 	&__content {
 		display: flex;
-		flex-grow: 1;
+		flex: 1 1 auto;
+		min-width: 0;
 		// We need to wrap on small devices for accessibility
 		flex-wrap: wrap;
 		gap: 16px;
@@ -149,6 +153,19 @@ function refresh() {
 			align-items: center;
 			justify-content: flex-end;
 			flex-wrap: wrap;
+		}
+	}
+
+	@media (max-width: 512px) {
+		gap: var(--app-navigation-padding);
+
+		&__title__main {
+			font-size: 20px;
+		}
+
+		&__content,
+		&__content__left {
+			gap: var(--default-grid-baseline);
 		}
 	}
 }

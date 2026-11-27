@@ -44,16 +44,20 @@
 							<template #icon>
 								<Close />
 							</template>
-							{{ t('photos', 'Unselect all') }}
+							<template v-if="!isMobile" #default>
+								{{ t('photos', 'Unselect all') }}
+							</template>
 						</NcButton>
 					</template>
 
 					<template v-if="album !== undefined" #right>
-						<NcButton @click="showAddPhotosModal = true">
+						<NcButton :aria-label="t('photos', 'Add photos to this album')" @click="showAddPhotosModal = true">
 							<template #icon>
 								<Plus :size="20" />
 							</template>
-							{{ t('photos', 'Add photos to this album') }}
+							<template v-if="!isMobile" #default>
+								{{ t('photos', 'Add photos to this album') }}
+							</template>
 						</NcButton>
 
 						<NcButton
@@ -212,6 +216,7 @@ import type { Collaborator } from '../store/albums.ts'
 import type { PhotoFile } from '../store/files.ts'
 
 import { n, t } from '@nextcloud/l10n'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { computed, onMounted, ref, useTemplateRef } from 'vue'
 import { useRouter } from 'vue-router'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
@@ -254,6 +259,7 @@ const props = withDefaults(defineProps<{
 })
 
 const router = useRouter()
+const isMobile = useIsMobile()
 const albumsStore = useAlbumsStore()
 const collectionsStore = useCollectionsStore()
 const filesStore = useFilesStore()

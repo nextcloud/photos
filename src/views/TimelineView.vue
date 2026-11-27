@@ -38,7 +38,7 @@
 				<NcActions
 					v-if="selectedFileIds.length === 0"
 					:aria-label="t('photos', 'Change tile density')"
-					:menuName="t('photos', 'Density')"
+					:menuName="isMobile ? undefined : t('photos', 'Density')"
 					data-cy-header-action="density">
 					<template #icon>
 						<ViewGridOutline :size="20" />
@@ -482,6 +482,7 @@ onUnmounted(() => {
 	&__header {
 		&__left {
 			display: flex;
+			flex-wrap: wrap;
 			gap: 4px;
 		}
 	}

@@ -41,7 +41,9 @@
 							<template #icon>
 								<Close />
 							</template>
-							{{ t('photos', 'Unselect all') }}
+							<template v-if="!isMobile" #default>
+								{{ t('photos', 'Unselect all') }}
+							</template>
 						</NcButton>
 					</template>
 
@@ -140,6 +142,7 @@
 <script setup lang="ts">
 import { t } from '@nextcloud/l10n'
 import { ShareType } from '@nextcloud/sharing'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { computed, onMounted, ref, useTemplateRef } from 'vue'
 import { useRouter } from 'vue-router'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
@@ -172,6 +175,7 @@ const props = withDefaults(defineProps<{
 })
 
 const router = useRouter()
+const isMobile = useIsMobile()
 const collectionsStore = useCollectionsStore()
 const filesStore = useFilesStore()
 const sharedAlbumsStore = useSharedAlbumsStore()
