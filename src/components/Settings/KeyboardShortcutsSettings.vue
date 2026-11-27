@@ -22,6 +22,20 @@
 				:label="t('photos', 'Show or hide photo metadata')"
 				hotkey="i" />
 		</NcHotkeyList>
+		<NcHotkeyList :label="t('photos', 'Review photos')">
+			<NcHotkey
+				:label="t('photos', 'Keep the photo')"
+				hotkey="ArrowRight" />
+			<NcHotkey
+				:label="t('photos', 'Add the photo to the favorites')"
+				hotkey="F" />
+			<NcHotkey
+				:label="t('photos', 'Delete the photo')"
+				hotkey="Delete" />
+			<NcHotkey
+				:label="t('photos', 'Undo last action')"
+				hotkey="Z" />
+		</NcHotkeyList>
 	</NcAppSettingsShortcutsSection>
 </template>
 
