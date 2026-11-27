@@ -38,6 +38,13 @@
 					: t('photos', 'Add to favorites') }}
 			</NcActionButton>
 
+			<NcActionButton v-if="canEditWithAi" closeAfterClick @click="aiEditShown = true">
+				<template #icon>
+					<CreationOutline :size="20" />
+				</template>
+				{{ t('photos', 'Edit with AI') }}
+			</NcActionButton>
+
 			<NcActionButton v-if="canTag" closeAfterClick @click="tagsShown = true">
 				<template #icon>
 					<TagMultipleOutline :size="20" />
@@ -79,6 +86,11 @@
 			:photo="photo"
 			@close="metadataEditShown = false" />
 
+		<PhotoAiEditDialog
+			v-if="aiEditShown"
+			:photo="photo"
+			@close="aiEditShown = false" />
+
 		<PhotoTagsDialog
 			v-if="tagsShown"
 			:photo="photo"
@@ -118,13 +130,14 @@ import { showError } from '@nextcloud/dialogs'
 import { Permission } from '@nextcloud/files'
 import { translate as t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcModal from '@nextcloud/vue/components/NcModal'
+import CreationOutline from 'vue-material-design-icons/CreationOutline.vue'
 import DotsVertical from 'vue-material-design-icons/DotsVertical.vue'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import InformationOutline from 'vue-material-design-icons/InformationOutline.vue'
@@ -135,10 +148,12 @@ import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import TagMultipleOutline from 'vue-material-design-icons/TagMultipleOutline.vue'
 import TrashCanOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 import AlbumPicker from './Albums/AlbumPicker.vue'
+import PhotoAiEditDialog from './PhotoAiEditDialog.vue'
 import PhotoMetadataDialog from './PhotoMetadataDialog.vue'
 import PhotoMetadataEditDialog from './PhotoMetadataEditDialog.vue'
 import PhotoTagsDialog from './PhotoTagsDialog.vue'
 import { areTagsInstalled } from '../services/AreTagsInstalled.ts'
+import { isImageEditingAvailable } from '../services/imageEditing.ts'
 import { logger } from '../services/logger.ts'
 import { useCollectionsStore } from '../store/collections.ts'
 import { useFilesStore } from '../store/files.ts'
@@ -161,6 +176,7 @@ const menuOpen = ref(false)
 const metadataShown = ref(false)
 const metadataEditShown = ref(false)
 const tagsShown = ref(false)
+const aiEditShown = ref(false)
 const albumPickerShown = ref(false)
 const deleteConfirmationShown = ref(false)
 
@@ -177,6 +193,18 @@ const canDelete = computed(() => isLoggedIn && (props.photo.permissions & Permis
 // Tags belong to their own app, and the server refuses to put one on a photo
 // the account cannot write to.
 const canTag = computed(() => areTagsInstalled && canEdit.value)
+
+// Editing runs as a task of the current account and needs a provider to be set
+// up on the server. Whether there is one is only asked once a menu is opened,
+// rather than by every photo of the grid.
+const imageEditingAvailable = ref(false)
+const canEditWithAi = computed(() => imageEditingAvailable.value && props.photo.mime.startsWith('image/'))
+
+watch(menuOpen, async (open) => {
+	if (open && isLoggedIn && !imageEditingAvailable.value) {
+		imageEditingAvailable.value = await isImageEditingAvailable()
+	}
+})
 
 // The sharing UI lives in the details sidebar of the Files app, and its API
 // needs a navigation context which the photos app does not set up, so the user
