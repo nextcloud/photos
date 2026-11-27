@@ -27,6 +27,24 @@
 					<dt>{{ t('photos', 'Location') }}</dt>
 					<dd>{{ formatCoordinates(location) }}</dd>
 				</div>
+				<div v-if="people.length > 0" class="photo-metadata__entry">
+					<dt>{{ t('photos', 'People') }}</dt>
+					<dd>
+						<ul class="photo-metadata__people">
+							<li v-for="person in people" :key="person.name">
+								<RouterLink
+									class="photo-metadata__person"
+									:to="{ name: 'facecontent', params: { faceName: person.name } }"
+									@click="emit('close')">
+									<span class="photo-metadata__person-face">
+										<img :src="previewUrl" alt="" :style="getFaceCropStyle(person.box)">
+									</span>
+									{{ person.name }}
+								</RouterLink>
+							</li>
+						</ul>
+					</dd>
+				</div>
 			</dl>
 
 			<div v-if="location !== null" class="photo-metadata__map">
@@ -47,14 +65,20 @@
 
 <script lang="ts" setup>
 import type { PhotoExif } from '../utils/exif.ts'
+import type { PersonInPhoto } from '../utils/faceDetections.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { translate as t } from '@nextcloud/l10n'
+import { generateUrl } from '@nextcloud/router'
 import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
+import { RouterLink } from 'vue-router'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import { fetchPhotoExif } from '../services/exifFetcher.ts'
+import { fetchFaceDetections } from '../services/faceDetectionsFetcher.ts'
+import { isRecognizeInstalled } from '../services/IsRecognizeInstalled.ts'
 import { formatCoordinates, getExifSummary, getPhotoLocation } from '../utils/exif.ts'
+import { getFaceCropStyle, getPeopleInPhoto } from '../utils/faceDetections.ts'
 
 const props = defineProps<{
 	/** Photo to show the metadata of. */
@@ -74,10 +98,21 @@ const metadata = ref<PhotoExif | undefined>()
 const exifEntries = computed(() => metadata.value === undefined ? undefined : getExifSummary(metadata.value))
 const location = computed(() => metadata.value === undefined ? null : getPhotoLocation(metadata.value.gps))
 
+/** Named people recognized in the photo. */
+const people = ref<PersonInPhoto[]>([])
+
+// Large enough for a small face to stay sharp once the photo is cropped onto it.
+const previewUrl = computed(() => generateUrl(`/apps/photos/api/v1/preview/${props.photo.fileid}?x=512&y=512`))
+
 // The EXIF properties are not part of the file listings, they are only fetched
 // once the user asks for them.
 onMounted(async () => {
-	metadata.value = await fetchPhotoExif(props.photo)
+	const [exif, detections] = await Promise.all([
+		fetchPhotoExif(props.photo),
+		isRecognizeInstalled ? fetchFaceDetections(props.photo) : [],
+	])
+	people.value = getPeopleInPhoto(detections)
+	metadata.value = exif
 })
 </script>
 
@@ -120,6 +155,39 @@ onMounted(async () => {
 
 	&__empty {
 		color: var(--color-text-maxcontrast);
+	}
+
+	&__people {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+		gap: var(--default-grid-baseline) calc(var(--default-grid-baseline) * 3);
+	}
+
+	&__person {
+		display: flex;
+		align-items: center;
+		gap: calc(var(--default-grid-baseline) * 2);
+		border-radius: var(--border-radius-element);
+		word-break: normal;
+
+		&:hover,
+		&:focus-visible {
+			text-decoration: underline;
+		}
+	}
+
+	&__person-face {
+		position: relative;
+		flex-shrink: 0;
+		width: var(--default-clickable-area);
+		height: var(--default-clickable-area);
+		overflow: hidden;
+		border-radius: 50%;
+		background-color: var(--color-background-dark);
 	}
 }
 </style>
