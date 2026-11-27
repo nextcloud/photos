@@ -71,6 +71,41 @@ describe('useFacesStore', () => {
 		expect(store.facesFiles.Alice).toEqual(['1', '2', '3'])
 	})
 
+	test('getFileIdsTogether lists the photos both faces are on, in the order of the first face', () => {
+		const store = useFacesStore()
+		store.addFileIdsToFace('Anna', ['5', '1', '3', '8'])
+		store.addFileIdsToFace('Tom', ['3', '2', '5'])
+
+		expect(store.getFileIdsTogether('Anna', 'Tom')).toEqual(['5', '3'])
+		expect(store.getFileIdsTogether('Tom', 'Anna')).toEqual(['3', '5'])
+	})
+
+	test('getFileIdsTogether is empty when the faces share no photo', () => {
+		const store = useFacesStore()
+		store.addFileIdsToFace('Anna', ['1', '2'])
+		store.addFileIdsToFace('Tom', ['3'])
+
+		expect(store.getFileIdsTogether('Anna', 'Tom')).toEqual([])
+	})
+
+	test('getFileIdsTogether is empty while a face has no photos loaded', () => {
+		const store = useFacesStore()
+		store.addFileIdsToFace('Anna', ['1', '2'])
+
+		expect(store.getFileIdsTogether('Anna', 'Tom')).toEqual([])
+		expect(store.getFileIdsTogether('Tom', 'Anna')).toEqual([])
+	})
+
+	test('getFileIdsTogether follows photos leaving a face', () => {
+		const store = useFacesStore()
+		store.addFileIdsToFace('Anna', ['1', '2'])
+		store.addFileIdsToFace('Tom', ['1', '2'])
+
+		store.removeFileIdsFromFace('Tom', ['2'])
+
+		expect(store.getFileIdsTogether('Anna', 'Tom')).toEqual(['1'])
+	})
+
 	test('moveFilesToFace moves the detection file from the old face', async () => {
 		const store = useFacesStore()
 		store.addFaces([face('Alice'), face('Bob')])

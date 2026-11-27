@@ -5,7 +5,7 @@
 <template>
 	<!-- Errors handlers-->
 	<NcEmptyContent
-		v-if="face === undefined && !loadingFiles && !loadingFaces"
+		v-if="(face === undefined || (otherFaceName !== undefined && otherFace === undefined)) && !loadingFiles && !loadingFaces"
 		class="empty-content-with-illustration">
 		<template #icon>
 			<AccountBoxMultipleOutline />
@@ -23,15 +23,18 @@
 		<div class="face__header">
 			<div class="face__header__left">
 				<NcActions>
-					<NcActionButton @click="router.push('/faces/')">
+					<NcActionButton @click="goBack">
 						<template #icon>
 							<ArrowLeft />
 						</template>{{ t('photos', 'Back') }}
 					</NcActionButton>
 				</NcActions>
 				<div class="face__header__title">
+					<h2 v-if="otherFaceName !== undefined" class="face-name">
+						{{ t('photos', '{first} and {second}', { first: faceName, second: otherFaceName }) }}
+					</h2>
 					<h2
-						v-if="face !== undefined"
+						v-else-if="face !== undefined"
 						class="face-name"
 						:class="{ 'hidden-visually': face.basename.match(/^[0-9]+$/) }">
 						{{ face.basename }}
@@ -41,7 +44,7 @@
 				<NcLoadingIcon v-if="loadingCount > 0 || loadingFaces" />
 			</div>
 			<div v-if="face !== undefined" class="face__header__actions">
-				<NcActions>
+				<NcActions v-if="otherFaceName === undefined">
 					<NcActionButton
 						:closeAfterClick="true"
 						:aria-label="t('photos', 'Rename person')"
@@ -54,7 +57,16 @@
 				</NcActions>
 				<NcActions :forceMenu="true">
 					<NcActionButton
-						v-if="Object.keys(faces).length > 1"
+						v-if="otherFaceName === undefined && Object.keys(faces).length > 1"
+						:closeAfterClick="true"
+						@click="showTogetherModal = true">
+						<template #icon>
+							<AccountMultipleOutline />
+						</template>
+						{{ t('photos', 'Together with…') }}
+					</NcActionButton>
+					<NcActionButton
+						v-if="otherFaceName === undefined && Object.keys(faces).length > 1"
 						:closeAfterClick="true"
 						:aria-label="t('photos', 'Merge with different person')"
 						@click="showMergeModal = true">
@@ -94,6 +106,7 @@
 							{{ t('photos', 'Remove from favorites') }}
 						</NcActionButton>
 						<NcActionButton
+							v-if="otherFaceName === undefined"
 							:closeAfterClick="true"
 							@click="showMoveModal = true">
 							<template #icon>
@@ -102,6 +115,7 @@
 							{{ n('photos', 'Move photo to a different person', 'Move photos to a different person', selectedFileIds.length) }}
 						</NcActionButton>
 						<NcActionButton
+							v-if="otherFaceName === undefined"
 							:closeAfterClick="true"
 							@click="handleRemoveFilesFromFace(selectedFileIds)">
 							<template #icon>
@@ -111,6 +125,7 @@
 						</NcActionButton>
 					</template>
 					<NcActionButton
+						v-if="otherFaceName === undefined"
 						:closeAfterClick="true"
 						@click="handleDeleteFace">
 						<template #icon>
@@ -127,6 +142,7 @@
 			class="face__photos"
 			:containerElement="appContent"
 			:fileIds="faceFileIds"
+			:emptyMessage="otherFaceName !== undefined ? t('photos', 'No photos of {first} and {second} together', { first: faceName, second: otherFaceName }) : ''"
 			:loading="loadingFiles || loadingFaces">
 			<template #default="{ file }">
 				<FileComponent
@@ -181,6 +197,15 @@
 		</NcDialog>
 
 		<NcDialog
+			v-if="showTogetherModal"
+			:name="t('photos', 'Show photos together with')"
+			closeOnClickOutside
+			size="normal"
+			@closing="showTogetherModal = false">
+			<FaceMergeForm :firstFace="faceName" @select="showTogether($event)" />
+		</NcDialog>
+
+		<NcDialog
 			v-if="showMoveModal"
 			:name="t('photos', 'Move to different person')"
 			closeOnClickOutside
@@ -206,6 +231,7 @@ import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
+import AccountMultipleOutline from 'vue-material-design-icons/AccountMultipleOutline.vue'
 import AccountSwitchOutline from 'vue-material-design-icons/AccountSwitchOutline.vue'
 import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
@@ -228,8 +254,11 @@ import { useFilesStore } from '../store/files.ts'
 
 const props = withDefaults(defineProps<{
 	faceName?: string
+	// Second face that must be on the photos too
+	otherFaceName?: string
 }>(), {
 	faceName: '/',
+	otherFaceName: undefined,
 })
 
 const router = useRouter()
@@ -241,6 +270,7 @@ const { selection, selectedFileIds, onFileSelectToggle, onUncheckFiles, resetSel
 const nameInput = useTemplateRef<HTMLInputElement>('nameInput')
 
 const showMoveModal = ref(false)
+const showTogetherModal = ref(false)
 const showMergeModal = ref(false)
 const showRenameModal = ref(false)
 const loadingCount = ref(0)
@@ -250,16 +280,48 @@ const files = computed(() => filesStore.files)
 const faces = computed(() => facesStore.faces)
 const facesFiles = computed(() => facesStore.facesFiles)
 const face = computed<Collection | undefined>(() => faces.value[props.faceName])
-const faceFileIds = computed<string[]>(() => facesFiles.value[props.faceName] || [])
+const otherFace = computed<Collection | undefined>(() => props.otherFaceName === undefined ? undefined : faces.value[props.otherFaceName])
+const faceFileIds = computed<string[]>(() => props.otherFaceName === undefined
+	? facesFiles.value[props.faceName] || []
+	: facesStore.getFileIdsTogether(props.faceName, props.otherFaceName))
 
 // Favorite all selection if at least one file is not on the favorites.
 const shouldFavoriteSelection = computed<boolean>(() => selectedFileIds.value.some((fileId) => filesStore.files[fileId].attributes.favorite === 0))
 
 watch(face, () => {
 	if (face.value) {
-		fetchFaceContent(props.faceName)
+		fetchContent()
 	}
 })
+
+watch(() => props.otherFaceName, () => {
+	resetSelection()
+	fetchContent()
+})
+
+/**
+ * Fetch the photos of the face, and of the second face when both are shown together.
+ * The fetches run one after the other because useFetchFaces skips a fetch while another one runs.
+ */
+async function fetchContent(): Promise<void> {
+	await fetchFaceContent(props.faceName)
+	if (props.otherFaceName !== undefined) {
+		await fetchFaceContent(props.otherFaceName)
+	}
+}
+
+function goBack(): void {
+	if (props.otherFaceName === undefined) {
+		router.push('/faces/')
+	} else {
+		router.push({ name: 'facecontent', params: { faceName: props.faceName } })
+	}
+}
+
+function showTogether(otherFaceName: string): void {
+	showTogetherModal.value = false
+	router.push({ name: 'facetogether', params: { faceName: props.faceName, otherFaceName } })
+}
 
 function vFocus(el: HTMLElement): void {
 	nextTick(() => el.focus())
@@ -270,6 +332,9 @@ function vFocus(el: HTMLElement): void {
 function onPhotoDeleted(photo: PhotoTarget): void {
 	onUncheckFiles([photo.fileid.toString()])
 	facesStore.removeFileIdsFromFace(props.faceName, [photo.fileid.toString()])
+	if (props.otherFaceName !== undefined) {
+		facesStore.removeFileIdsFromFace(props.otherFaceName, [photo.fileid.toString()])
+	}
 }
 
 function openViewer(fileId: number): void {
@@ -373,9 +438,7 @@ async function downloadSelection(): Promise<void> {
 	}
 }
 
-onMounted(() => {
-	fetchFaceContent(props.faceName)
-})
+onMounted(fetchContent)
 </script>
 
 <style lang="scss" scoped>

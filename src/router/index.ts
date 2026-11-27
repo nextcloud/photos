@@ -320,6 +320,20 @@ export const router = createRouter({
 				},
 			},
 		},
+		{
+			path: '/faces/:faceName/with/:otherFaceName',
+			name: 'facetogether',
+			component: FaceContent,
+			props: (route) => ({
+				faceName: route.params.faceName,
+				otherFaceName: route.params.otherFaceName,
+			}),
+			meta: {
+				rootTitle: (to) => {
+					return t('photos', '{first} and {second}', { first: to.params.faceName, second: to.params.otherFaceName })
+				},
+			},
+		},
 	],
 })
 
