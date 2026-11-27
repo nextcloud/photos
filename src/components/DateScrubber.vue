@@ -19,13 +19,15 @@
 	<div
 		v-if="months.length > 1"
 		class="date-scrubber"
-		:class="{ 'date-scrubber--active': isActive }"
+		:class="{ 'date-scrubber--active': isActive, 'date-scrubber--dragging': isDragging }"
 		@pointerenter="isHovered = true"
 		@pointerleave="isHovered = false">
 		<div
 			ref="track"
 			class="date-scrubber__track"
-			@pointerdown="startDrag">
+			@pointerdown="startDrag"
+			@pointermove="onTrackHover"
+			@pointerleave="hoverMonth = ''">
 			<!-- One tick per month, width proportional to that month's photo
 				count, so the track doubles as a histogram of where the
 				library is dense. -->
@@ -46,6 +48,16 @@
 				:class="{ 'date-scrubber__year-label--active': label.year === activeYear }"
 				:style="{ top: `${label.percent}%` }">
 				{{ label.year }}
+			</span>
+
+			<!-- The month a press would jump to, next to the pointer. The thumb
+				carries the bubble itself while it is dragged or focused. -->
+			<span
+				v-if="hoverMonth !== '' && !isDragging"
+				class="date-scrubber__bubble"
+				:style="{ top: `${percentAt(months.indexOf(hoverMonth))}%` }"
+				aria-hidden="true">
+				{{ formatMonthAndYear(hoverMonth) }}
 			</span>
 
 			<div
@@ -71,14 +83,10 @@
 
 <script setup lang="ts">
 import { t } from '@nextcloud/l10n'
-import { computed, onBeforeUnmount, ref, useTemplateRef } from 'vue'
+import { computed, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue'
 import { formatMonthAndYear } from '../utils/dateUtils.ts'
 import { monthDensities } from '../utils/monthDensity.ts'
-
-interface YearLabel {
-	year: string
-	percent: number
-}
+import { yearLabels as thinnedYearLabels } from '../utils/yearLabels.ts'
 
 interface MonthTick {
 	month: string
@@ -111,32 +119,15 @@ const isDragging = ref(false)
 // While dragging, the thumb follows the pointer instead of
 // `currentMonth`, so it does not bounce back between two jumps.
 const dragMonth = ref('')
+// The month under the pointer while it rests on the track.
+const hoverMonth = ref('')
+const trackHeight = ref(0)
+// Smallest distance between two year labels, a bit more than their height.
+const YEAR_LABEL_GAP = 24
 
 const isActive = computed<boolean>(() => isHovered.value || isDragging.value)
 
-// One label per year, at the position of that year's first month,
-// decimated to at most 12 so they do not overlap on short windows.
-const yearLabels = computed<YearLabel[]>(() => {
-	const labels: YearLabel[] = []
-	const seenYears = new Set<string>()
-	const maxLabels = 12
-
-	for (let index = 0; index < props.months.length; index++) {
-		const year = props.months[index].substring(0, 4)
-		if (seenYears.has(year)) {
-			continue
-		}
-		seenYears.add(year)
-		labels.push({ year, percent: percentAt(index) })
-	}
-
-	if (labels.length <= maxLabels) {
-		return labels
-	}
-
-	const stride = Math.ceil(labels.length / maxLabels)
-	return labels.filter((_, index) => index === 0 || index === labels.length - 1 || index % stride === 0)
-})
+const yearLabels = computed(() => thinnedYearLabels(props.months, trackHeight.value, YEAR_LABEL_GAP))
 
 const activeMonth = computed<string>(() => {
 	if (isDragging.value && dragMonth.value !== '') {
@@ -206,6 +197,13 @@ function stopDrag() {
 	document.removeEventListener('pointercancel', stopDrag)
 }
 
+function onTrackHover(event: PointerEvent) {
+	// A finger on the track drags, only a mouse or a pen hovers it.
+	if (event.pointerType !== 'touch') {
+		hoverMonth.value = monthAtY(event.clientY) ?? ''
+	}
+}
+
 function onPointerMove(event: PointerEvent) {
 	if (isDragging.value) {
 		jumpTo(monthAtY(event.clientY))
@@ -252,14 +250,28 @@ function onThumbKey(event: KeyboardEvent) {
 	}
 }
 
+const trackObserver = new ResizeObserver(([entry]) => {
+	trackHeight.value = entry.contentRect.height
+})
+
+// The track is only rendered once there are several months to scrub through.
+watch(track, (element) => {
+	trackObserver.disconnect()
+	if (element !== null) {
+		trackObserver.observe(element)
+	}
+})
+
 onBeforeUnmount(() => {
 	stopDrag()
+	trackObserver.disconnect()
 })
 </script>
 
 <style lang="scss" scoped>
-// Idle the scrubber is only a hairline, so it does not compete with the
-// photos. Hovering, focusing or dragging it brings the whole track out.
+// Idle the scrubber shows its track, the years along it and the thumb, quiet
+// enough not to compete with the photos. Hovering, focusing or dragging it
+// brings out the density ticks and the month bubble.
 .date-scrubber {
 	// Pinned to the viewport: the timeline scrolls in `#app-content-vue`, so a
 	// box positioned against the grid would be as tall as the whole loaded
@@ -298,14 +310,11 @@ onBeforeUnmount(() => {
 			top: 0;
 			bottom: 0;
 			inset-inline-end: 12px;
-			width: 2px;
-			border-radius: 1px;
-			background: linear-gradient(
-				to bottom,
-				color-mix(in srgb, var(--color-primary-element) 25%, transparent),
-				color-mix(in srgb, var(--color-primary-element) 8%, transparent)
-			);
-			transition: background var(--animation-slow) ease-out;
+			width: 4px;
+			border-radius: var(--border-radius-pill);
+			background: var(--color-border-maxcontrast);
+			opacity: 0.6;
+			transition: opacity var(--animation-slow) ease-out;
 		}
 	}
 
@@ -331,22 +340,25 @@ onBeforeUnmount(() => {
 	&__year-label {
 		position: absolute;
 		inset-inline-end: 32px;
-		transform: translateY(-50%) translateX(8px);
+		transform: translateY(-50%);
 		padding: 1px 7px;
 		border-radius: var(--border-radius-pill);
-		background: color-mix(in srgb, var(--color-main-background) 70%, transparent);
+		background: color-mix(in srgb, var(--color-main-background) 80%, transparent);
 		backdrop-filter: blur(6px);
-		font-size: 11px;
+		font-size: 12px;
 		font-variant-numeric: tabular-nums;
 		font-weight: 600;
 		letter-spacing: 0.03em;
 		color: var(--color-text-maxcontrast);
 		white-space: nowrap;
 		pointer-events: none;
-		opacity: 0;
-		transition:
-			opacity var(--animation-slow) ease-out,
-			transform var(--animation-slow) cubic-bezier(0.22, 1, 0.36, 1);
+		transition: opacity var(--animation-slow) ease-out;
+
+		// The timeline leaves the labels no room of their own on narrow
+		// screens, where they only show while the scrubber is in use.
+		@media (max-width: 1200px) {
+			opacity: 0;
+		}
 
 		&--active {
 			color: var(--color-primary-element);
@@ -409,26 +421,38 @@ onBeforeUnmount(() => {
 		}
 	}
 
+	// The month under the pointer, shaped like the bubble of the thumb.
+	&__bubble {
+		position: absolute;
+		inset-inline-end: 32px;
+		z-index: 1;
+		transform: translateY(-50%);
+		padding: 4px 12px;
+		border-radius: var(--border-radius-pill);
+		background: var(--color-main-background);
+		box-shadow: 0 2px 8px var(--color-box-shadow);
+		color: var(--color-main-text);
+		font-size: 12px;
+		font-weight: 600;
+		white-space: nowrap;
+		pointer-events: none;
+	}
+
 	&--active,
 	&:hover,
 	&:focus-within {
 		.date-scrubber__track::before {
-			background: linear-gradient(
-				to bottom,
-				color-mix(in srgb, var(--color-primary-element) 35%, transparent),
-				color-mix(in srgb, var(--color-primary-element) 12%, transparent)
-			);
-		}
-
-		.date-scrubber__tick {
 			opacity: 1;
 		}
 
+		.date-scrubber__tick,
 		.date-scrubber__year-label {
 			opacity: 1;
-			transform: translateY(-50%) translateX(0);
 		}
+	}
 
+	&--dragging,
+	&:has(.date-scrubber__thumb:focus-visible) {
 		.date-scrubber__thumb__pill {
 			min-width: 110px;
 			padding-inline: 14px 12px;
@@ -444,10 +468,14 @@ onBeforeUnmount(() => {
 		}
 	}
 
-	&--active .date-scrubber__thumb__pill {
-		box-shadow:
-			0 6px 18px rgba(0, 0, 0, 0.4),
-			0 0 0 8px color-mix(in srgb, var(--color-primary-element) 30%, transparent);
+	@media (prefers-reduced-motion: reduce) {
+		&__track::before,
+		&__tick,
+		&__year-label,
+		&__thumb__pill,
+		&__thumb__date {
+			transition: none;
+		}
 	}
 }
 </style>
