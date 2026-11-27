@@ -25,6 +25,7 @@ const TagContent = () => import('../views/TagContent.vue')
 const TimelineView = () => import('../views/TimelineView.vue')
 const FacesView = () => import('../views/FacesView.vue')
 const FaceContent = () => import('../views/FaceContent.vue')
+const PetsView = () => import('../views/PetsView.vue')
 
 const UnassignedFaces = () => import('../views/UnassignedFaces.vue')
 
@@ -278,6 +279,17 @@ export const router = createRouter({
 			meta: {
 				rootTitle: () => {
 					return t('photos', 'On this day')
+				},
+			},
+		},
+		{
+			path: '/pets',
+			name: 'pets',
+			component: PetsView,
+			beforeEnter: () => (isRecognizeInstalled && areTagsInstalled) || { name: 'all_media' },
+			meta: {
+				rootTitle: () => {
+					return t('photos', 'Pets')
 				},
 			},
 		},
