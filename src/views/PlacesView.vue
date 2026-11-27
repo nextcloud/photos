@@ -39,7 +39,9 @@
 			</template>
 
 			<template #emptyCollectionsList>
-				<NcEmptyContent :name="t('photos', 'There is no place yet!')">
+				<NcEmptyContent
+					:name="t('photos', 'No places yet')"
+					:description="t('photos', 'Photos taken with a device recording its location are grouped by place here')">
 					<template #icon>
 						<ImageMultipleOutline />
 					</template>

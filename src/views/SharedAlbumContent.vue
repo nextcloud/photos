@@ -105,7 +105,7 @@
 				<NcEmptyContent
 					v-if="album !== undefined && album.attributes.nbItems === 0 && !(loadingCollectionFiles || loadingCollection)"
 
-					:name="t('photos', 'This album does not have any photos or videos yet!')"
+					:name="t('photos', 'No photos or videos in this album yet')"
 					class="album__empty">
 					<template #icon>
 						<ImagePlusOutline />

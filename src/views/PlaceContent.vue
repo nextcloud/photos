@@ -27,7 +27,7 @@
 			<template #emptyContent>
 				<NcEmptyContent
 
-					:name="t('photos', 'This place does not have any photos or videos yet!')"
+					:name="t('photos', 'No photos or videos in this place yet')"
 					class="place__empty">
 					<template #icon>
 						<ImagePlusOutline />

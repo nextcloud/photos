@@ -37,7 +37,13 @@
 		</HeaderNavigation>
 
 		<!-- Empty folder, should only happen via direct link -->
-		<NcEmptyContent v-if="isEmpty" key="emptycontent" :name="t('photos', 'No photos in here')">
+		<NcEmptyContent
+			v-if="isEmpty"
+			key="emptycontent"
+			:name="t('photos', 'No photos in here')"
+			:description="showShared
+				? t('photos', 'Photos and videos shared with you show up here')
+				: t('photos', 'Folders holding photos or videos show up here')">
 			<template #icon>
 				<FolderOutline />
 			</template>

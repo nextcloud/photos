@@ -27,7 +27,11 @@
 		<div class="heading-subline">
 			{{ n('photos', '%n photo', '%n photos', fileIds.length) }}
 		</div>
-		<NcEmptyContent v-if="isEmpty" :name="t('photos', 'No photos with this tag yet')" />
+		<NcEmptyContent v-if="isEmpty" :name="t('photos', 'No photos with this tag yet')" :description="t('photos', 'Photos with this tag will show up here')">
+			<template #icon>
+				<TagOutline />
+			</template>
+		</NcEmptyContent>
 
 		<FilesListViewer
 			class="tag__photos"
@@ -61,6 +65,7 @@ import NcActions from '@nextcloud/vue/components/NcActions'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
+import TagOutline from 'vue-material-design-icons/TagOutline.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import { useAbortController } from '../composables/useAbortController.ts'

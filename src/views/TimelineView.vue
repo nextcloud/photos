@@ -177,9 +177,13 @@
 			:sections="monthsList"
 			:loading="loadingFiles"
 			:baseHeight="tileBaseHeight"
-			:emptyMessage="t('photos', 'No photos or videos in here')"
+			:emptyMessage="emptyState.name"
+			:emptyDescription="emptyState.description"
 			:scrollToSection="scrubberTarget"
 			@needContent="getContent">
+			<template v-if="onlyFavorites" #emptyIcon>
+				<StarOutline />
+			</template>
 			<template #default="{ file, isHeader }">
 				<h2
 					v-if="isHeader"
@@ -291,6 +295,21 @@ const props = withDefaults(defineProps<{
 
 const router = useRouter()
 const isMobile = useIsMobile()
+
+/** What is shown when the view has no photo or video. */
+const emptyState = computed<{ name: string, description: string }>(() => {
+	if (props.onlyFavorites) {
+		return {
+			name: t('photos', 'No favorites yet'),
+			description: t('photos', 'Photos and videos you mark as favorite show up here'),
+		}
+	}
+
+	return {
+		name: t('photos', 'No photos or videos in here'),
+		description: t('photos', 'Photos and videos of your media folders show up here'),
+	}
+})
 
 const collectionsStore = useCollectionsStore()
 const filesStore = useFilesStore()
