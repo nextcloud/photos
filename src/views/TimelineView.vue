@@ -156,6 +156,17 @@
 						</NcActionButton>
 
 						<NcActionButton
+							v-if="canCompareSelection"
+							:closeAfterClick="true"
+							data-cy-header-action="compare-selection"
+							@click="compareSelection">
+							{{ t('photos', 'Compare') }}
+							<template #icon>
+								<Compare />
+							</template>
+						</NcActionButton>
+
+						<NcActionButton
 							:closeAfterClick="true"
 							:aria-label="t('photos', 'Delete selection')"
 							data-cy-header-action="delete-selection"
@@ -231,12 +242,19 @@
 			@close="showAlbumPicker = false">
 			<AlbumPicker @albumPicked="addSelectionToAlbum" />
 		</NcModal>
+
+		<PhotoCompare
+			v-if="photosToCompare.length > 0"
+			:photos="photosToCompare"
+			@deleted="onPhotoDeleted"
+			@close="photosToCompare = []" />
 	</div>
 </template>
 
 <script setup lang="ts">
 import type { Collection } from '../services/collectionFetcher.ts'
 import type { Album } from '../store/albums.ts'
+import type { PhotoFile } from '../store/files.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
@@ -244,7 +262,7 @@ import { t } from '@nextcloud/l10n'
 import { getViewer } from '@nextcloud/viewer'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { storeToRefs } from 'pinia'
-import { computed, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, shallowRef, useTemplateRef, watch } from 'vue'
 import { onBeforeRouteLeave, useRouter } from 'vue-router'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActionRadio from '@nextcloud/vue/components/NcActionRadio'
@@ -254,6 +272,7 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcModal from '@nextcloud/vue/components/NcModal'
 import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 import Close from 'vue-material-design-icons/Close.vue'
+import Compare from 'vue-material-design-icons/Compare.vue'
 import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
 import Play from 'vue-material-design-icons/Play.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
@@ -269,6 +288,7 @@ import DateScrubber from '../components/DateScrubber.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
+import PhotoCompare from '../components/PhotoCompare.vue'
 import PhotosSourceLocationsSettings from '../components/Settings/PhotosSourceLocationsSettings.vue'
 import { useFetchFiles } from '../composables/useFetchFiles.ts'
 import { useFilesByMonth } from '../composables/useFilesByMonth.ts'
@@ -324,6 +344,9 @@ const newAlbumButton = useTemplateRef<InstanceType<typeof NcButton>>('newAlbumBu
 
 const showAlbumCreationForm = ref(false)
 const showAlbumPicker = ref(false)
+// The photos shown side by side, the ones selected when the comparison was
+// opened. Empty while it is closed.
+const photosToCompare = shallowRef<PhotoFile[]>([])
 const appContent = document.getElementById('app-content-vue')
 // Month section the user picked in the DateScrubber, forwarded to
 // FilesListViewer's `scrollToSection`. Empty means no override.
@@ -338,6 +361,14 @@ const { fileIdsByMonthUngrouped, burstStacks, fileIdsByMonth, monthsList } = use
 const shouldFavoriteSelection = computed<boolean>(() => {
 	// Favorite all selection if at least one file is not in the favorites.
 	return selectedFileIds.value.some((fileId) => files.value[fileId].attributes.favorite === 0)
+})
+
+// Comparing takes two to four pictures: more of them do not fit side by side,
+// and a video has no still to zoom into.
+const canCompareSelection = computed<boolean>(() => {
+	const { length } = selectedFileIds.value
+	return length >= 2 && length <= 4
+		&& selectedFileIds.value.every((fileId) => files.value[fileId]?.mime.startsWith('image/'))
 })
 
 // Photos of the timeline that are loaded, in the order they are shown.
@@ -434,6 +465,10 @@ async function addSelectionToAlbum(album: Album) {
 function onPhotoDeleted(photo: PhotoTarget) {
 	onUncheckFiles([photo.fileid.toString()])
 	fetchedFileIds.value = fetchedFileIds.value.filter((fileId) => fileId !== photo.fileid)
+}
+
+function compareSelection() {
+	photosToCompare.value = timelinePhotos.value.filter((photo) => selection.value[photo.fileid] === true)
 }
 
 async function deleteSelection() {
