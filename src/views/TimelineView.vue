@@ -135,6 +135,17 @@
 						</NcActionButton>
 
 						<NcActionButton
+							v-if="sharingEnabled"
+							:closeAfterClick="true"
+							data-cy-header-action="share-selection"
+							@click="quickShareFileIds = selectedFileIds">
+							{{ t('photos', 'Share link') }}
+							<template #icon>
+								<LinkVariant />
+							</template>
+						</NcActionButton>
+
+						<NcActionButton
 							v-if="shouldFavoriteSelection"
 							:closeAfterClick="true"
 							:aria-label="t('photos', 'Mark selection as favorite')"
@@ -231,6 +242,11 @@
 			@close="showAlbumPicker = false">
 			<AlbumPicker @albumPicked="addSelectionToAlbum" />
 		</NcModal>
+
+		<QuickShareDialog
+			v-if="quickShareFileIds.length > 0"
+			:fileIds="quickShareFileIds"
+			@close="quickShareFileIds = []" />
 	</div>
 </template>
 
@@ -255,6 +271,7 @@ import NcModal from '@nextcloud/vue/components/NcModal'
 import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
+import LinkVariant from 'vue-material-design-icons/LinkVariant.vue'
 import Play from 'vue-material-design-icons/Play.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import PlusBoxMultipleOutline from 'vue-material-design-icons/PlusBoxMultipleOutline.vue'
@@ -265,6 +282,7 @@ import DownloadOutline from 'vue-material-design-icons/TrayArrowDown.vue'
 import ViewGridOutline from 'vue-material-design-icons/ViewGridOutline.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import AlbumPicker from '../components/Albums/AlbumPicker.vue'
+import QuickShareDialog from '../components/Albums/QuickShareDialog.vue'
 import DateScrubber from '../components/DateScrubber.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
@@ -324,6 +342,9 @@ const newAlbumButton = useTemplateRef<InstanceType<typeof NcButton>>('newAlbumBu
 
 const showAlbumCreationForm = ref(false)
 const showAlbumPicker = ref(false)
+// Photos the share link dialog is open for, none while it is closed.
+const quickShareFileIds = ref<string[]>([])
+const sharingEnabled = OC.Share !== undefined
 const appContent = document.getElementById('app-content-vue')
 // Month section the user picked in the DateScrubber, forwarded to
 // FilesListViewer's `scrollToSection`. Empty means no override.
