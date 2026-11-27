@@ -6,6 +6,7 @@
 import type { PhotoLocation } from '../utils/exif.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
+import { encode } from 'he'
 import { davClient } from './DavClient.ts'
 
 export type PhotoMetadataUpdate = {
@@ -13,10 +14,12 @@ export type PhotoMetadataUpdate = {
 	takenAt: number
 	/** Position the photo was taken at, `null` to drop the one it carries. */
 	location: PhotoLocation | null
+	/** Caption of the photo, empty to drop the one it carries. */
+	caption: string
 }
 
 /**
- * Correct the taken date and the position of a photo.
+ * Correct the taken date and the position of a photo, and caption it.
  *
  * The values are stored next to the ones extracted from the picture rather
  * than written into it, so re-reading the file will not bring the old values
@@ -28,6 +31,7 @@ export type PhotoMetadataUpdate = {
  */
 export async function savePhotoMetadata(photo: PhotoTarget, update: PhotoMetadataUpdate): Promise<void> {
 	const { takenAt, location } = update
+	const caption = update.caption.trim()
 
 	const setProperties = [
 		`<nc:metadata-photos-original_date_time>${takenAt}</nc:metadata-photos-original_date_time>`,
@@ -40,11 +44,23 @@ export async function savePhotoMetadata(photo: PhotoTarget, update: PhotoMetadat
 		</nc:metadata-photos-gps>`)
 	}
 
+	const removedProperties: string[] = []
+
 	// Removing the property rather than sending empty coordinates keeps the
 	// photo out of the places, which a position of 0/0 would not.
-	const removeProperties = location === null
-		? '<d:remove><d:prop><nc:metadata-photos-gps /></d:prop></d:remove>'
-		: ''
+	if (location === null) {
+		removedProperties.push('<nc:metadata-photos-gps />')
+	}
+
+	if (caption === '') {
+		removedProperties.push('<nc:metadata-photos-description />')
+	} else {
+		setProperties.push(`<nc:metadata-photos-description>${encode(caption)}</nc:metadata-photos-description>`)
+	}
+
+	const removeProperties = removedProperties.length === 0
+		? ''
+		: `<d:remove><d:prop>${removedProperties.join('')}</d:prop></d:remove>`
 
 	await davClient.customRequest(photo.davPath, {
 		method: 'PROPPATCH',

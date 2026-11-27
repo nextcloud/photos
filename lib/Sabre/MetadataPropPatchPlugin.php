@@ -23,7 +23,8 @@ use Sabre\Xml\Reader;
 use function Sabre\Xml\Deserializer\keyValue;
 
 /**
- * Let the position and the taken date of a photo be corrected through PROPPATCH.
+ * Let the position and the taken date of a photo be corrected, and a caption
+ * be written for it, through PROPPATCH.
  *
  * Both are extracted from the picture itself, but cameras do get them wrong:
  * the clock is off, the GPS module was disabled, or the picture was scanned
@@ -40,6 +41,13 @@ class MetadataPropPatchPlugin extends ServerPlugin {
 
 	public const string GPS_PROPERTYNAME = '{' . self::NS_NEXTCLOUD . '}metadata-' . ExifMetadataProvider::METADATA_KEY_GPS;
 	public const string ORIGINAL_DATE_TIME_PROPERTYNAME = '{' . self::NS_NEXTCLOUD . '}metadata-' . OriginalDateTimeMetadataProvider::METADATA_KEY;
+
+	/** Caption written by a user, as opposed to anything derived from the picture. */
+	public const string DESCRIPTION_METADATA_KEY = 'photos-description';
+	public const string DESCRIPTION_PROPERTYNAME = '{' . self::NS_NEXTCLOUD . '}metadata-' . self::DESCRIPTION_METADATA_KEY;
+
+	/** Maximum length of a caption, in characters. */
+	public const int DESCRIPTION_MAX_LENGTH = 1000;
 
 	/** Absolute maximum of the coordinates, in degrees. */
 	private const array COORDINATE_LIMITS = [
@@ -63,6 +71,7 @@ class MetadataPropPatchPlugin extends ServerPlugin {
 		// cannot carry the coordinates, and are passed on unvalidated.
 		$server->xml->elementMap[self::GPS_PROPERTYNAME] = self::deserializeCoordinates(...);
 		$server->xml->elementMap[self::ORIGINAL_DATE_TIME_PROPERTYNAME] = self::deserializeTimestamp(...);
+		$server->xml->elementMap[self::DESCRIPTION_PROPERTYNAME] = self::deserializeDescription(...);
 
 		// The metadata handling of the DAV app runs at the default priority and
 		// only sees the properties which are still unhandled by then.
@@ -76,7 +85,7 @@ class MetadataPropPatchPlugin extends ServerPlugin {
 		}
 
 		$propPatch->handle(
-			[self::GPS_PROPERTYNAME, self::ORIGINAL_DATE_TIME_PROPERTYNAME],
+			[self::GPS_PROPERTYNAME, self::ORIGINAL_DATE_TIME_PROPERTYNAME, self::DESCRIPTION_PROPERTYNAME],
 			fn (array $properties): bool => $this->updateMetadata($node, $properties),
 		);
 	}
@@ -121,6 +130,16 @@ class MetadataPropPatchPlugin extends ServerPlugin {
 				$metadata->unset(PlaceMetadataProvider::METADATA_KEY);
 			} else {
 				$metadata->setString(PlaceMetadataProvider::METADATA_KEY, $place, true);
+			}
+		}
+
+		if (array_key_exists(self::DESCRIPTION_PROPERTYNAME, $properties)) {
+			$description = $properties[self::DESCRIPTION_PROPERTYNAME];
+			if ($description === null) {
+				$metadata->unset(self::DESCRIPTION_METADATA_KEY);
+			} else {
+				// Left out of the index, whose values are limited to 63 characters.
+				$metadata->setString(self::DESCRIPTION_METADATA_KEY, $description);
 			}
 		}
 
@@ -190,5 +209,32 @@ class MetadataPropPatchPlugin extends ServerPlugin {
 		}
 
 		return $timestamp;
+	}
+
+	/**
+	 * The caption is plain text: line breaks are kept, tabs become spaces
+	 * and any other control character is dropped. Escaping is left to whatever
+	 * displays it.
+	 *
+	 * @return ?string The caption, NULL to remove the one of the photo
+	 * @throws BadRequest
+	 */
+	private static function deserializeDescription(Reader $reader): ?string {
+		$value = $reader->parseInnerTree();
+		if ($value === null) {
+			return null;
+		}
+
+		if (!is_string($value) || !mb_check_encoding($value, 'UTF-8')) {
+			throw new BadRequest('The caption must be plain text');
+		}
+
+		$description = str_replace(["\r\n", "\r", "\t"], ["\n", "\n", ' '], $value);
+		$description = trim(preg_replace('/[^\P{Cc}\n]/u', '', $description) ?? '');
+		if (mb_strlen($description) > self::DESCRIPTION_MAX_LENGTH) {
+			throw new BadRequest('The caption cannot exceed ' . self::DESCRIPTION_MAX_LENGTH . ' characters');
+		}
+
+		return $description === '' ? null : $description;
 	}
 }

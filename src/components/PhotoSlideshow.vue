@@ -20,7 +20,7 @@
 			v-if="currentPhoto !== undefined"
 			class="slideshow__photo"
 			:src="getPreviewUrl(currentPhoto, PREVIEW_SIZE)"
-			:alt="currentPhoto.basename">
+			:alt="readCaption(currentPhoto.attributes['metadata-photos-description']) || currentPhoto.basename">
 
 		<!-- How far into the set the slideshow is, as the header only names the photo. -->
 		<p class="slideshow__position">
@@ -54,7 +54,7 @@ import { t } from '@nextcloud/l10n'
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import NcModal from '@nextcloud/vue/components/NcModal'
 import { fetchPhotoExif } from '../services/exifFetcher.ts'
-import { getExifSummary } from '../utils/exif.ts'
+import { getExifSummary, readCaption } from '../utils/exif.ts'
 import { getPreviewUrl, toPhotoTarget } from '../utils/fileUtils.ts'
 
 const props = withDefaults(defineProps<{

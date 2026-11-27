@@ -26,6 +26,8 @@ export type PhotoFile = File & {
 		'metadata-photos-original_date_time': number
 		'metadata-photos-size': { width: number, height: number }
 		'metadata-photos-gps'?: { latitude: string, longitude: string, altitude?: string }
+		/** Caption written by a user. */
+		'metadata-photos-description'?: string
 		/** Whether a preview can be generated for this file - not whether one exists already. */
 		hasPreview?: boolean
 		timestamp: number
@@ -112,16 +114,17 @@ export const useFilesStore = defineStore('files', () => {
 	}
 
 	/**
-	 * Correct the taken date and the position of a photo
+	 * Correct the taken date and the position of a photo, and caption it
 	 *
 	 * @param photo - Photo to update
 	 * @param update - New taken date and position
 	 * @param update.takenAt - Corrected capture time, as a unix timestamp
 	 * @param update.location - Corrected position, or null to drop it
+	 * @param update.caption - Caption of the photo, empty to drop it
 	 * @throws {Error} When the server rejects the update
 	 */
-	async function updatePhotoMetadata(photo: PhotoTarget, { takenAt, location }: PhotoMetadataUpdate): Promise<void> {
-		await savePhotoMetadata(photo, { takenAt, location })
+	async function updatePhotoMetadata(photo: PhotoTarget, { takenAt, location, caption }: PhotoMetadataUpdate): Promise<void> {
+		await savePhotoMetadata(photo, { takenAt, location, caption })
 
 		const attributes = files.value[photo.fileid]?.attributes
 		if (attributes === undefined) {
@@ -145,6 +148,8 @@ export const useFilesStore = defineStore('files', () => {
 				longitude: String(location.longitude),
 			}
 		}
+
+		attributes['metadata-photos-description'] = caption.trim()
 	}
 
 	/**

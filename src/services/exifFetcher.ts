@@ -7,6 +7,7 @@ import type { FileStat, ResponseDataDetailed } from 'webdav'
 import type { PhotoExif } from '../utils/exif.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
+import { readCaption } from '../utils/exif.ts'
 import { davClient } from './DavClient.ts'
 import { logger } from './logger.ts'
 
@@ -18,6 +19,7 @@ const exifPropFind = `<?xml version="1.0"?>
 				<nc:metadata-photos-gps />
 				<nc:metadata-photos-place />
 				<nc:metadata-photos-original_date_time />
+				<nc:metadata-photos-description />
 			</d:prop>
 		</d:propfind>`
 
@@ -47,6 +49,7 @@ export async function fetchPhotoExif(photo: PhotoTarget): Promise<PhotoExif> {
 			gps: props['metadata-photos-gps'] as PhotoExif['gps'],
 			place: props['metadata-photos-place'] as PhotoExif['place'],
 			takenAt: props['metadata-photos-original_date_time'] as PhotoExif['takenAt'],
+			caption: readCaption(props['metadata-photos-description']),
 		}
 	} catch (error) {
 		logger.error('Error fetching the metadata of a photo', { error, filename: photo.basename })
