@@ -13,6 +13,7 @@ import { isRecognizeInstalled } from '../services/IsRecognizeInstalled.ts'
 const FoldersView = () => import('../views/FoldersView.vue')
 const MapView = () => import('../views/MapView.vue')
 const MemoriesView = () => import('../views/MemoriesView.vue')
+const DuplicatesView = () => import('../views/DuplicatesView.vue')
 const AlbumsView = () => import('../views/AlbumsView.vue')
 const AlbumContent = () => import('../views/AlbumContent.vue')
 const SharedAlbums = () => import('../views/SharedAlbums.vue')
@@ -264,6 +265,19 @@ export const router = createRouter({
 			meta: {
 				rootTitle: () => {
 					return t('photos', 'Memories')
+				},
+			},
+		},
+		{
+			path: '/duplicates',
+			name: 'duplicates',
+			component: DuplicatesView,
+			props: () => ({
+				rootTitle: t('photos', 'Duplicates'),
+			}),
+			meta: {
+				rootTitle: () => {
+					return t('photos', 'Duplicates')
 				},
 			},
 		},
