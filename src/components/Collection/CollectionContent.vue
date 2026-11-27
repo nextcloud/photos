@@ -24,7 +24,8 @@
 			class="collection__header"
 			name="header"
 			:selectedFileIds="selectedFileIds"
-			:resetSelection="resetSelection" />
+			:resetSelection="resetSelection"
+			:startSlideshow="startSlideshow" />
 
 		<!-- No content -->
 		<slot v-if="sortedCollectionFileIds.length === 0 && !loading" name="emptyContent" />
@@ -93,8 +94,21 @@ const files = computed(() => filesStore.files)
 
 const sortedCollectionFileIds = computed(() => props.collectionFileIds.toSorted((fileId1, fileId2) => files.value[fileId1].attributes.timestamp < files.value[fileId2].attributes.timestamp ? -1 : 1))
 
+const sortedCollectionFiles = computed(() => sortedCollectionFileIds.value.map((fileId) => files.value[fileId]))
+
 function openViewer(fileId: number): void {
-	getViewer().open(sortedCollectionFileIds.value.map((fileId) => files.value[fileId]), files.value[fileId], { enableSidebar: false })
+	getViewer().open(sortedCollectionFiles.value, files.value[fileId], { enableSidebar: false })
+}
+
+/**
+ * Play the whole collection in the viewer, in the order of the grid.
+ */
+function startSlideshow(): void {
+	if (sortedCollectionFiles.value.length === 0) {
+		return
+	}
+
+	getViewer().open(sortedCollectionFiles.value, sortedCollectionFiles.value[0], { enableSidebar: false, startSlideshow: true })
 }
 
 function handleFileDeleted({ fileid }: Node): void {
