@@ -46,6 +46,7 @@ class ApiController extends Controller {
 
 		switch ($key) {
 			case 'croppedLayout':
+			case 'welcomeDismissed':
 				if ($value !== 'true' && $value !== 'false') {
 					return new JSONResponse([], Http::STATUS_BAD_REQUEST);
 				}

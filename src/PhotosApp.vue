@@ -185,6 +185,8 @@
 
 		<!-- Main settings Modal-->
 		<SettingsDialog v-model:open="openedSettings" />
+
+		<WelcomeDialog @openSettings="showSettings" />
 	</NcContent>
 </template>
 
@@ -240,6 +242,7 @@ import VideoOutline from 'vue-material-design-icons/VideoOutline.vue'
 import PhotosFiltersDisplay from './components/PhotosFilters/PhotosFiltersDisplay.vue'
 import PhotosFiltersInput from './components/PhotosFilters/PhotosFiltersInput.vue'
 import SettingsDialog from './components/Settings/SettingsDialog.vue'
+import WelcomeDialog from './components/WelcomeDialog.vue'
 import svgplaceholder from './assets/file-placeholder.svg'
 import imgplaceholder from './assets/image.svg'
 import videoplaceholder from './assets/video.svg'
