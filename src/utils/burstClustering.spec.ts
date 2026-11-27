@@ -111,4 +111,20 @@ describe('applyBurstStacks', () => {
 
 		expect(applyBurstStacks(['1', '2', '3', '4', '5'], stacks)).toEqual(['1', '3', '4'])
 	})
+
+	test('places the tile of a stack where its leader is, not where its first photo is', () => {
+		const stacks = {
+			3: { leaderId: '3', memberIds: ['3', '2'] },
+		}
+
+		expect(applyBurstStacks(['1', '2', '3', '4'], stacks)).toEqual(['1', '3', '4'])
+	})
+
+	test('leaves out a member whose leader is not in the list', () => {
+		const stacks = {
+			9: { leaderId: '9', memberIds: ['9', '2'] },
+		}
+
+		expect(applyBurstStacks(['1', '2', '3'], stacks)).toEqual(['1', '3'])
+	})
 })
