@@ -80,6 +80,22 @@
 				</NcButton>
 
 				<NcButton
+					v-if="selectedFileIds.length === 0 && fetchedFileIds.length > 0 && !onThisDay"
+					:aria-label="t('photos', 'Surprise me')"
+					:title="t('photos', 'Open a random photo from the past')"
+					:disabled="loadingSurprise"
+					data-cy-header-action="surprise"
+					@click="surpriseMe">
+					<template #icon>
+						<NcLoadingIcon v-if="loadingSurprise" :size="20" />
+						<DiceMultipleOutline v-else :size="20" />
+					</template>
+					<template v-if="!isMobile" #default>
+						{{ t('photos', 'Surprise me') }}
+					</template>
+				</NcButton>
+
+				<NcButton
 					v-if="selectedFileIds.length === 0"
 					ref="newAlbumButton"
 					:aria-label="createAlbumButtonLabel"
@@ -239,6 +255,7 @@ import type { Collection } from '../services/collectionFetcher.ts'
 import type { Album } from '../store/albums.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
+import { showError, showInfo } from '@nextcloud/dialogs'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 import { getViewer } from '@nextcloud/viewer'
@@ -251,9 +268,11 @@ import NcActionRadio from '@nextcloud/vue/components/NcActionRadio'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcModal from '@nextcloud/vue/components/NcModal'
 import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 import Close from 'vue-material-design-icons/Close.vue'
+import DiceMultipleOutline from 'vue-material-design-icons/DiceMultipleOutline.vue'
 import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
 import Play from 'vue-material-design-icons/Play.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
@@ -276,6 +295,8 @@ import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { useGridDensity } from '../composables/useGridDensity.ts'
 import { allMimes } from '../services/AllowedMimes.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
+import { logger } from '../services/logger.ts'
+import { pickSurprise } from '../services/surpriseMe.ts'
 import { useCollectionsStore } from '../store/collections.ts'
 import { useFilesStore } from '../store/files.ts'
 import { useFilterStore } from '../store/filters.ts'
@@ -324,6 +345,7 @@ const newAlbumButton = useTemplateRef<InstanceType<typeof NcButton>>('newAlbumBu
 
 const showAlbumCreationForm = ref(false)
 const showAlbumPicker = ref(false)
+const loadingSurprise = ref(false)
 const appContent = document.getElementById('app-content-vue')
 // Month section the user picked in the DateScrubber, forwarded to
 // FilesListViewer's `scrollToSection`. Empty means no override.
@@ -422,6 +444,34 @@ function openViewer(fileId: number) {
 
 function startSlideshow() {
 	getViewer().open(timelinePhotos.value, timelinePhotos.value[0], { enableSidebar: true, startSlideshow: true })
+}
+
+// Opens a random photo of the whole library, loaded or not. Moving to the
+// next photo in the viewer draws another one.
+async function surpriseMe() {
+	const options = { mimesType: props.mimesType, onlyFavorites: props.onlyFavorites }
+	const seenFileIds = new Set<number>()
+
+	try {
+		loadingSurprise.value = true
+		const photo = await pickSurprise(options, seenFileIds)
+		if (photo === null) {
+			showInfo(t('photos', 'No photos to surprise you with yet'))
+			return
+		}
+
+		await getViewer().open([photo], photo, {
+			async loadMore() {
+				const nextPhoto = await pickSurprise(options, seenFileIds)
+				return nextPhoto === null ? [] : [nextPhoto]
+			},
+		})
+	} catch (error) {
+		logger.error('Error fetching a random photo', { error })
+		showError(t('photos', 'Error fetching files'))
+	} finally {
+		loadingSurprise.value = false
+	}
 }
 
 async function addSelectionToAlbum(album: Album) {
