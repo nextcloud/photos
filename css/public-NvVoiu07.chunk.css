@@ -1,0 +1,1 @@
+.app-content{display:flex;flex-grow:1;flex-direction:column;align-content:space-between}.app-content .empty-content{min-height:calc(100dvh - var(--header-height) - 2 * var(--body-container-margin) - var(--default-clickable-area) - 2 * var(--app-navigation-padding))}.app-navigation__photos:deep(.app-navigation-entry-icon.icon-photos){background-size:20px}
