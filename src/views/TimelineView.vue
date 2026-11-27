@@ -135,6 +135,17 @@
 						</NcActionButton>
 
 						<NcActionButton
+							v-if="canCreateCollage"
+							:closeAfterClick="true"
+							data-cy-header-action="create-collage"
+							@click="showCollageDialog = true">
+							{{ t('photos', 'Create collage') }}
+							<template #icon>
+								<ViewDashboardOutline />
+							</template>
+						</NcActionButton>
+
+						<NcActionButton
 							v-if="shouldFavoriteSelection"
 							:closeAfterClick="true"
 							:aria-label="t('photos', 'Mark selection as favorite')"
@@ -231,6 +242,12 @@
 			@close="showAlbumPicker = false">
 			<AlbumPicker @albumPicked="addSelectionToAlbum" />
 		</NcModal>
+
+		<CollageDialog
+			v-if="showCollageDialog"
+			:photos="collagePhotos"
+			@close="showCollageDialog = false"
+			@saved="handleCollageSaved" />
 	</div>
 </template>
 
@@ -262,9 +279,11 @@ import Star from 'vue-material-design-icons/Star.vue'
 import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 import DownloadOutline from 'vue-material-design-icons/TrayArrowDown.vue'
+import ViewDashboardOutline from 'vue-material-design-icons/ViewDashboardOutline.vue'
 import ViewGridOutline from 'vue-material-design-icons/ViewGridOutline.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import AlbumPicker from '../components/Albums/AlbumPicker.vue'
+import CollageDialog from '../components/CollageDialog.vue'
 import DateScrubber from '../components/DateScrubber.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
@@ -280,6 +299,7 @@ import { useCollectionsStore } from '../store/collections.ts'
 import { useFilesStore } from '../store/files.ts'
 import { useFilterStore } from '../store/filters.ts'
 import { configChangedEvent } from '../store/userConfig.ts'
+import { COLLAGE_MAX_PHOTOS, COLLAGE_MIN_PHOTOS } from '../utils/collageLayout.ts'
 import { formatMonth, formatYear } from '../utils/dateUtils.ts'
 
 const props = withDefaults(defineProps<{
@@ -324,6 +344,7 @@ const newAlbumButton = useTemplateRef<InstanceType<typeof NcButton>>('newAlbumBu
 
 const showAlbumCreationForm = ref(false)
 const showAlbumPicker = ref(false)
+const showCollageDialog = ref(false)
 const appContent = document.getElementById('app-content-vue')
 // Month section the user picked in the DateScrubber, forwarded to
 // FilesListViewer's `scrollToSection`. Empty means no override.
@@ -339,6 +360,16 @@ const shouldFavoriteSelection = computed<boolean>(() => {
 	// Favorite all selection if at least one file is not in the favorites.
 	return selectedFileIds.value.some((fileId) => files.value[fileId].attributes.favorite === 0)
 })
+
+// The selected images, oldest first: the first one is the featured photo of a collage.
+const collagePhotos = computed(() => selectedFileIds.value
+	.map((fileId) => files.value[fileId])
+	.filter((file) => file?.mime?.startsWith('image/'))
+	.sort((photo1, photo2) => photo1.attributes.timestamp - photo2.attributes.timestamp))
+
+const canCreateCollage = computed<boolean>(() => collagePhotos.value.length === selectedFileIds.value.length
+	&& collagePhotos.value.length >= COLLAGE_MIN_PHOTOS
+	&& collagePhotos.value.length <= COLLAGE_MAX_PHOTOS)
 
 // Photos of the timeline that are loaded, in the order they are shown.
 const timelinePhotos = computed(() => fetchedFileIds.value
@@ -453,6 +484,13 @@ function handleUserConfigChange({ key }: { key: string }) {
 function handleFormCreationDone({ album }: { album: Collection }) {
 	showAlbumCreationForm.value = false
 	router.push(`/albums/${album.basename}`)
+}
+
+// The collage is a new photo of the library, so the timeline is fetched again to show it.
+function handleCollageSaved() {
+	showCollageDialog.value = false
+	resetSelection()
+	resetFetchFilesState()
 }
 
 function downloadSelectedFiles() {
