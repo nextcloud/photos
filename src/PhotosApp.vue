@@ -111,6 +111,15 @@
 					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
+					:to="{ name: 'calendar' }"
+					:name="t('photos', 'Calendar')"
+					data-id-app-nav-item="calendar">
+					<template #icon="{ active }">
+						<CalendarMonth v-if="active" :size="20" />
+						<CalendarMonthOutline v-else :size="20" />
+					</template>
+				</NcAppNavigationItem>
+				<NcAppNavigationItem
 					:to="{ name: 'memories' }"
 					:name="t('photos', 'Memories')"
 					data-id-app-nav-item="memories">
@@ -212,6 +221,8 @@ import AccountBoxMultiple from 'vue-material-design-icons/AccountBoxMultiple.vue
 import AccountBoxMultipleOutline from 'vue-material-design-icons/AccountBoxMultipleOutline.vue'
 import AccountGroup from 'vue-material-design-icons/AccountGroup.vue'
 import AccountGroupOutline from 'vue-material-design-icons/AccountGroupOutline.vue'
+import CalendarMonth from 'vue-material-design-icons/CalendarMonth.vue'
+import CalendarMonthOutline from 'vue-material-design-icons/CalendarMonthOutline.vue'
 import CalendarToday from 'vue-material-design-icons/CalendarToday.vue'
 import CalendarTodayOutline from 'vue-material-design-icons/CalendarTodayOutline.vue'
 import CameraIcon from 'vue-material-design-icons/Camera.vue'
