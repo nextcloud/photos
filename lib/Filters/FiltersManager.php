@@ -20,6 +20,7 @@ use OCP\Files\Node;
 use OCP\Files\Search\ISearchBinaryOperator;
 use OCP\Files\Search\ISearchComparison;
 use OCP\Files\Storage\ISharedStorage;
+use OCP\IUserManager;
 
 class FiltersManager {
 	/**
@@ -31,10 +32,12 @@ class FiltersManager {
 		private IRootFolder $rootFolder,
 		private readonly IMimeTypeLoader $mimeTypeLoader,
 		private readonly UserConfigService $userConfigService,
+		private readonly IUserManager $userManager,
 	) {
 		$this->registerFilter(new DateRangeFilter());
 		$this->registerFilter(new NameFilter());
 		$this->registerFilter(new PlacesFilter());
+		$this->registerFilter(new TagsFilter());
 	}
 
 	public function registerFilter(IFilter $filter): void {
@@ -69,11 +72,25 @@ class FiltersManager {
 
 		array_push($filtersOperations, ...$this->getPhotosDefaultSearchConditions($userId));
 
-		$query = new SearchQuery(new SearchBinaryOperator(ISearchBinaryOperator::OPERATOR_AND, $filtersOperations), 1000, 0, []);
+		// The user scopes the system tags comparisons to the tags they can see.
+		$query = new SearchQuery(
+			new SearchBinaryOperator(ISearchBinaryOperator::OPERATOR_AND, $filtersOperations),
+			1000,
+			0,
+			[],
+			$this->userManager->get($userId),
+		);
 
 		$files = $this->rootFolder->getUserFolder($userId)->search($query);
 
 		$files = array_values(array_filter($files, [$this, 'isDownloadAllowed']));
+
+		// A file carrying several of the searched system tags is found once per tag.
+		$uniqueFiles = [];
+		foreach ($files as $file) {
+			$uniqueFiles[$file->getId()] ??= $file;
+		}
+		$files = array_values($uniqueFiles);
 
 		return array_map(
 			function ($file) use ($userId) {
