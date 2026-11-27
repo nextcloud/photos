@@ -75,7 +75,7 @@ export class MemoriesPage {
 	 * @param year - Year the card is about
 	 */
 	public recapCounters(year: number): Locator {
-		return this.recapCard(year).locator('.memories__recap__details__meta')
+		return this.recapCard(year).locator('.memories__recap__details__meta .animated-number')
 	}
 
 	/**
