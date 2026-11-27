@@ -84,15 +84,6 @@
 					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
-					:to="{ name: 'folders' }"
-					:name="t('photos', 'Folders')"
-					data-id-app-nav-item="folders">
-					<template #icon="{ active }">
-						<Folder v-if="active" :size="20" />
-						<FolderOutline v-else :size="20" />
-					</template>
-				</NcAppNavigationItem>
-				<NcAppNavigationItem
 					to="/favorites"
 					:name="t('photos', 'Favorites')"
 					data-id-app-nav-item="favorites">
@@ -154,6 +145,25 @@
 						<MapIcon v-if="active" :size="20" />
 						<MapOutline v-else :size="20" />
 					</template>
+				</NcAppNavigationItem>
+				<NcAppNavigationItem
+					v-model:open="advancedOpen"
+					:name="t('photos', 'Advanced')"
+					allowCollapse
+					data-id-app-nav-item="advanced"
+					@click="advancedOpen = !advancedOpen">
+					<template #icon>
+						<DotsHorizontal :size="20" />
+					</template>
+					<NcAppNavigationItem
+						:to="{ name: 'folders' }"
+						:name="t('photos', 'Folders')"
+						data-id-app-nav-item="folders">
+						<template #icon="{ active }">
+							<Folder v-if="active" :size="20" />
+							<FolderOutline v-else :size="20" />
+						</template>
+					</NcAppNavigationItem>
 				</NcAppNavigationItem>
 			</template>
 			<template #footer>
@@ -217,6 +227,7 @@ import CalendarTodayOutline from 'vue-material-design-icons/CalendarTodayOutline
 import CameraIcon from 'vue-material-design-icons/Camera.vue'
 import CameraOutline from 'vue-material-design-icons/CameraOutline.vue'
 import CogOutline from 'vue-material-design-icons/CogOutline.vue'
+import DotsHorizontal from 'vue-material-design-icons/DotsHorizontal.vue'
 import Folder from 'vue-material-design-icons/Folder.vue'
 import FolderOutline from 'vue-material-design-icons/FolderOutline.vue'
 import ImageIcon from 'vue-material-design-icons/Image.vue'
@@ -258,6 +269,15 @@ const { selectedFilters } = storeToRefs(filtersStore)
 
 const searchTerm = ref('')
 const openedSettings = ref(false)
+
+const ADVANCED_ROUTES = ['folders']
+// The advanced entries stay folded away until the user opens them or navigates to one of them.
+const advancedOpen = ref(false)
+watch(() => route.name, (name) => {
+	if (ADVANCED_ROUTES.includes(String(name))) {
+		advancedOpen.value = true
+	}
+}, { immediate: true })
 
 const currentUser = getCurrentUser()
 const showPeopleMenuEntry = currentUser === null
