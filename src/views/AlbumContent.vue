@@ -6,6 +6,7 @@
 	<div class="album-container">
 		<AlbumHero
 			v-if="album !== undefined"
+			v-model:inView="heroInView"
 			:coverFileId="coverFileId"
 			:blurhash="coverBlurhash"
 			:title="albumName"
@@ -26,6 +27,7 @@
 					:params="{ albumName }"
 					:path="'/' + albumName"
 					:title="albumName"
+					:titleHidden="heroInView"
 					@refresh="fetchAlbumContent">
 					<template #subtitle>
 						<div
@@ -299,6 +301,10 @@ const coverPhoto = computed(() => pickAlbumCover(albumPhotos.value, album.value?
 const coverFileId = computed(() => coverPhoto.value?.fileid ?? album.value?.attributes['last-photo'] ?? -1)
 
 const coverBlurhash = computed(() => coverPhoto.value?.attributes['metadata-blurhash'])
+
+// The hero carries the name and the location of the album as long as it is
+// on screen, the header takes over once it is scrolled away.
+const heroInView = ref(false)
 
 // Line shown under the album name in the hero, both parts of it are
 // optional so that it degrades to an empty string.
