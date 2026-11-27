@@ -61,7 +61,7 @@ test.describe('The memories of a library', () => {
 
 		// Every photo of the year makes it into the recap, as it aims for sixty.
 		await expect(memories.recapCounters(RECAP_YEAR))
-			.toHaveText(`${RECAP_PHOTO_COUNT} highlights · ${RECAP_PHOTO_COUNT} photos this year`)
+			.toHaveText([`${RECAP_PHOTO_COUNT} highlights`, `${RECAP_PHOTO_COUNT} photos this year`])
 	})
 
 	test('gathers the photos of consecutive days into a trip', async ({ photosApp }) => {
