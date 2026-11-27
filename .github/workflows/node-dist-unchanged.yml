@@ -1,0 +1,31 @@
+# SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+# The compiled assets are built and pushed by npmbuildbot once a pull request
+# is merged, so pull requests must leave them alone.
+name: Check node dist files
+
+on: pull_request
+
+permissions:
+  contents: read
+
+jobs:
+  changed_files:
+    runs-on: ubuntu-latest-low
+    name: Check node dist files
+    permissions:
+      pull-requests: read
+
+    steps:
+      - name: Fail if the pull request changes compiled assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          changed=$(gh api --paginate "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/files" --jq '.[].filename' | grep -E '^(js|css)/' || true)
+          if [ -n "$changed" ]; then
+            echo "Do not commit files in js/ or css/, npmbuildbot builds them once the pull request is merged:"
+            echo "$changed"
+            exit 1
+          fi
