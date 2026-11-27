@@ -91,6 +91,16 @@
 						</ActionDownload>-->
 
 							<NcActionButton
+								v-if="albumFileIds.length > 0"
+								:closeAfterClick="true"
+								@click="showPhotoBookDialog = true">
+								{{ t('photos', 'Create photo book (PDF)') }}
+								<template #icon>
+									<BookOpenPageVariantOutline />
+								</template>
+							</NcActionButton>
+
+							<NcActionButton
 								:closeAfterClick="true"
 								@click="handleDeleteAlbum">
 								{{ t('photos', 'Delete album') }}
@@ -209,6 +219,13 @@
 			@closing="showEditAlbumForm = false">
 			<AlbumForm :album="album" @done="(event) => handleAlbumUpdate(event)" />
 		</NcDialog>
+
+		<PhotoBookDialog
+			v-if="showPhotoBookDialog && album !== undefined"
+			:title="albumName"
+			:subtitles="[album.attributes.location, album.attributes.date].filter((line) => line !== '')"
+			:fileIds="albumFileIds"
+			@close="showPhotoBookDialog = false" />
 	</div>
 </template>
 
@@ -229,6 +246,7 @@ import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcModal from '@nextcloud/vue/components/NcModal'
+import BookOpenPageVariantOutline from 'vue-material-design-icons/BookOpenPageVariantOutline.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 // import Download from 'vue-material-design-icons/TrayArrowDown.vue'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
@@ -244,6 +262,7 @@ import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 import AlbumHero from '../components/AlbumHero.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import CollaboratorsSelectionForm from '../components/Albums/CollaboratorsSelectionForm.vue'
+import PhotoBookDialog from '../components/Albums/PhotoBookDialog.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import PhotosPicker from '../components/PhotosPicker.vue'
@@ -277,6 +296,7 @@ const {
 const collectionContent = useTemplateRef<InstanceType<typeof CollectionContent>>('collectionContent')
 
 const showAddPhotosModal = ref(false)
+const showPhotoBookDialog = ref(false)
 const showManageCollaboratorView = ref(false)
 const showEditAlbumForm = ref(false)
 

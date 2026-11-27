@@ -68,6 +68,16 @@
 						</ActionDownload> -->
 
 							<NcActionButton
+								v-if="albumFileIds.length > 0"
+								:closeAfterClick="true"
+								@click="showPhotoBookDialog = true">
+								{{ t('photos', 'Create photo book (PDF)') }}
+								<template #icon>
+									<BookOpenPageVariantOutline />
+								</template>
+							</NcActionButton>
+
+							<NcActionButton
 								v-if="album.attributes.collaborators[0].type === collaboratorTypes.User"
 								:closeAfterClick="true"
 								@click="handleDeleteAlbum">
@@ -136,6 +146,13 @@
 			:blacklistIds="albumFileIds"
 			:loading="loadingAddFilesToAlbum"
 			@filesPicked="handleFilesPicked" />
+
+		<PhotoBookDialog
+			v-if="showPhotoBookDialog && album !== undefined"
+			:title="albumOriginalName"
+			:subtitles="[album.attributes.location, album.attributes.date].filter((line) => line !== '')"
+			:fileIds="albumFileIds"
+			@close="showPhotoBookDialog = false" />
 	</div>
 </template>
 
@@ -151,6 +168,7 @@ import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
+import BookOpenPageVariantOutline from 'vue-material-design-icons/BookOpenPageVariantOutline.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 import ImagePlusOutline from 'vue-material-design-icons/ImagePlusOutline.vue'
 import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue'
@@ -158,6 +176,7 @@ import Plus from 'vue-material-design-icons/Plus.vue'
 import DeleteOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 // import Download from 'vue-material-design-icons/TrayArrowDown.vue'
 // import DownloadMultiple from 'vue-material-design-icons/DownloadMultiple.vue'
+import PhotoBookDialog from '../components/Albums/PhotoBookDialog.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 // import ActionDownload from '../components/Actions/ActionDownload.vue'
@@ -191,6 +210,7 @@ const {
 const collectionContent = useTemplateRef<InstanceType<typeof CollectionContent>>('collectionContent')
 
 const showAddPhotosModal = ref(false)
+const showPhotoBookDialog = ref(false)
 const loadingAddFilesToAlbum = ref(false)
 const collaboratorTypes = ShareType
 
