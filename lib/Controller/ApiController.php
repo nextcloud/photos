@@ -51,7 +51,7 @@ class ApiController extends Controller {
 				}
 				break;
 			case 'gridDensity':
-				if (!in_array($value, ['small', 'medium', 'large'], true)) {
+				if (!in_array($value, ['overview', 'small', 'medium', 'large'], true)) {
 					return new JSONResponse([], Http::STATUS_BAD_REQUEST);
 				}
 				break;

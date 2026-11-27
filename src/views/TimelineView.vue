@@ -44,25 +44,13 @@
 						<ViewGridOutline :size="20" />
 					</template>
 					<NcActionRadio
+						v-for="density of gridDensities"
+						:key="density"
 						name="photos-density"
-						value="small"
+						:value="density"
 						:modelValue="gridDensity"
 						@update:modelValue="setGridDensity">
-						{{ t('photos', 'Small tiles') }}
-					</NcActionRadio>
-					<NcActionRadio
-						name="photos-density"
-						value="medium"
-						:modelValue="gridDensity"
-						@update:modelValue="setGridDensity">
-						{{ t('photos', 'Default') }}
-					</NcActionRadio>
-					<NcActionRadio
-						name="photos-density"
-						value="large"
-						:modelValue="gridDensity"
-						@update:modelValue="setGridDensity">
-						{{ t('photos', 'Large tiles') }}
+						{{ gridDensityLabels[density] }}
 					</NcActionRadio>
 				</NcActions>
 
@@ -170,7 +158,24 @@
 			</div>
 		</HeaderNavigation>
 
+		<!-- Always rendered, so that screen readers announce the level it gets. -->
+		<div class="timeline__zoom-indicator" role="status">
+			<Transition name="timeline__zoom-level">
+				<span v-if="zoomIndicatorShown" class="timeline__zoom-level">
+					{{ gridDensityLabels[gridDensity] }}
+					<span class="timeline__zoom-level__dots" aria-hidden="true">
+						<span
+							v-for="density of gridDensities"
+							:key="density"
+							:class="{ 'timeline__zoom-level__dot--active': density === gridDensity }"
+							class="timeline__zoom-level__dot" />
+					</span>
+				</span>
+			</Transition>
+		</div>
+
 		<FilesListViewer
+			ref="filesListViewer"
 			:containerElement="appContent"
 			class="timeline__file-list"
 			:fileIdsBySection="fileIdsByMonth"
@@ -180,6 +185,7 @@
 			:emptyMessage="emptyState.name"
 			:emptyDescription="emptyState.description"
 			:scrollToSection="scrubberTarget"
+			:anchorPoint="zoomAnchor"
 			@needContent="getContent">
 			<template v-if="onlyFavorites" #emptyIcon>
 				<StarOutline />
@@ -237,6 +243,7 @@
 <script setup lang="ts">
 import type { Collection } from '../services/collectionFetcher.ts'
 import type { Album } from '../store/albums.ts'
+import type { GridDensity } from '../store/userConfig.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
@@ -274,6 +281,7 @@ import { useFetchFiles } from '../composables/useFetchFiles.ts'
 import { useFilesByMonth } from '../composables/useFilesByMonth.ts'
 import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { useGridDensity } from '../composables/useGridDensity.ts'
+import { useGridZoom } from '../composables/useGridZoom.ts'
 import { allMimes } from '../services/AllowedMimes.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
 import { useCollectionsStore } from '../store/collections.ts'
@@ -281,6 +289,7 @@ import { useFilesStore } from '../store/files.ts'
 import { useFilterStore } from '../store/filters.ts'
 import { configChangedEvent } from '../store/userConfig.ts'
 import { formatMonth, formatYear } from '../utils/dateUtils.ts'
+import { gridDensities } from '../utils/gridZoom.ts'
 
 const props = withDefaults(defineProps<{
 	onlyFavorites?: boolean
@@ -321,6 +330,15 @@ const { fetchFiles, resetFetchFilesState, fetchedFileIds, loadingFiles, errorFet
 const { selection, selectedFileIds, onUncheckFiles, resetSelection } = useFilesSelection()
 
 const newAlbumButton = useTemplateRef<InstanceType<typeof NcButton>>('newAlbumButton')
+const filesListViewer = useTemplateRef<InstanceType<typeof FilesListViewer>>('filesListViewer')
+const { zoomAnchor, zoomIndicatorShown } = useGridZoom(computed(() => filesListViewer.value?.$el))
+
+const gridDensityLabels: Record<GridDensity, string> = {
+	overview: t('photos', 'Overview'),
+	small: t('photos', 'Small tiles'),
+	medium: t('photos', 'Default'),
+	large: t('photos', 'Large tiles'),
+}
 
 const showAlbumCreationForm = ref(false)
 const showAlbumPicker = ref(false)
@@ -516,8 +534,67 @@ onUnmounted(() => {
 		padding-bottom: 0px;
 	}
 
+	// Takes no room in the layout, its level floats over the top of the grid,
+	// below the header and its height.
+	&__zoom-indicator {
+		position: sticky;
+		top: calc(var(--default-clickable-area) + var(--app-navigation-padding) * 2 + var(--default-grid-baseline) * 4);
+		z-index: 10;
+		display: flex;
+		justify-content: center;
+		height: 0;
+		pointer-events: none;
+	}
+
+	&__zoom-level {
+		display: flex;
+		align-items: center;
+		gap: calc(var(--default-grid-baseline) * 3);
+		height: var(--default-clickable-area);
+		padding: 0 calc(var(--default-grid-baseline) * 4);
+		border-radius: var(--border-radius-pill);
+		background: var(--color-main-background);
+		color: var(--color-main-text);
+		box-shadow: 0 2px 8px var(--color-box-shadow);
+		white-space: nowrap;
+
+		&-enter-active,
+		&-leave-active {
+			transition: opacity var(--animation-quick) ease;
+
+			@media (prefers-reduced-motion: reduce) {
+				transition: none;
+			}
+		}
+
+		&-enter-from,
+		&-leave-to {
+			opacity: 0;
+		}
+
+		&__dots {
+			display: flex;
+			gap: var(--default-grid-baseline);
+		}
+
+		&__dot {
+			width: 6px;
+			height: 6px;
+			border-radius: 50%;
+			background: var(--color-text-maxcontrast);
+			opacity: 0.4;
+
+			&--active {
+				background: var(--color-primary-element);
+				opacity: 1;
+			}
+		}
+	}
+
 	&__file-list {
 		padding: 0 64px;
+		// The grid only scrolls vertically, a pinch on it changes the tile density.
+		touch-action: pan-y;
 
 		@media only screen and (max-width: 1200px) {
 			padding: 0 4px;

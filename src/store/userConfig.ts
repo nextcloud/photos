@@ -18,6 +18,7 @@ import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 import { davClient } from '../services/DavClient.ts'
 import { logger } from '../services/logger.ts'
+import { gridDensities } from '../utils/gridZoom.ts'
 
 export const configChangedEvent = 'photos:user-config-changed'
 
@@ -53,7 +54,7 @@ export async function getFolder(path) {
 }
 
 /** Size of the tiles of the photo grids. */
-export type GridDensity = 'small' | 'medium' | 'large'
+export type GridDensity = typeof gridDensities[number]
 
 /** User config keys persisted through the config endpoint. */
 export type PersistedUserConfig = {
@@ -69,7 +70,7 @@ export type PersistedUserConfig = {
  * @param value - The persisted density
  */
 function parseGridDensity(value: string): GridDensity {
-	return value === 'small' || value === 'large' ? value : 'medium'
+	return gridDensities.find((density) => density === value) ?? 'medium'
 }
 
 export const useUserConfigStore = defineStore('userConfig', () => {
