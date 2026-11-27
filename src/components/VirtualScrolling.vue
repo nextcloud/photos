@@ -7,7 +7,8 @@
 		<div
 			ref="rowsContainer"
 			class="vs-rows-container"
-			:style="rowsContainerStyle">
+			:style="rowsContainerStyle"
+			@keydown="onKeydown">
 			<slot :visibleSections="visibleSections" />
 			<slot name="loader" />
 		</div>
@@ -16,7 +17,8 @@
 		v-else
 		ref="rowsContainer"
 		class="vs-rows-container"
-		:style="rowsContainerStyle">
+		:style="rowsContainerStyle"
+		@keydown="onKeydown">
 		<slot :visibleSections="visibleSections" />
 		<slot name="loader" />
 	</div>
@@ -25,7 +27,9 @@
 <script setup lang="ts" generic="I extends TiledItem">
 import type { TiledItem, TiledSection, TiledSectionRow } from '../services/TiledLayout.ts'
 
-import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
+import { isRTL } from '@nextcloud/l10n'
+import { computed, nextTick, onBeforeUnmount, onMounted, provide, ref, useTemplateRef, watch } from 'vue'
+import { getNextGridIndex, GRID_ITEM_ATTRIBUTE, gridNavigationKey, isGridNavigationKey } from '../composables/useGridNavigation.ts'
 import { logger } from '../services/logger.ts'
 
 export type VisibleRow<I extends TiledItem = TiledItem> = TiledSectionRow<I> & {
@@ -71,6 +75,8 @@ const rowsContainerHeight = ref(0)
 let resizeObserver: ResizeObserver | null = null
 let rowIdToKeyMap: Record<string, string> = {}
 let onScrollHandle: number | null = null
+// The item of the grid last focused.
+const activeItemId = ref<string | null>(null)
 
 const visibleSections = computed<VisibleSection<I>[]>(() => {
 	logger.debug('[VirtualScrolling] Computing visible section', { sections: props.sections })
@@ -143,6 +149,26 @@ const visibleSections = computed<VisibleSection<I>[]>(() => {
 	rowIdToKeyMap = visibleItems.reduce((finalMapping, { id, key }) => ({ ...finalMapping, [`${id}`]: key }), {})
 
 	return visibleSections
+})
+
+/**
+ * The item holding the single tab stop of the grid: the active one while it is
+ * rendered, the first one in view otherwise.
+ */
+const tabbableItemId = computed<string | null>(() => {
+	const rows = visibleSections.value.flatMap((section) => section.rows)
+	if (rows.some(({ items }) => items.some(({ id }) => id === activeItemId.value))) {
+		return activeItemId.value
+	}
+
+	return (rows.find(({ distance }) => distance === 0) ?? rows[0])?.items[0]?.id ?? null
+})
+
+provide(gridNavigationKey, {
+	tabbableItemId,
+	setActiveItem: (id: string) => {
+		activeItemId.value = id
+	},
 })
 
 /**
@@ -254,15 +280,66 @@ watch(() => props.scrollToKey, (key) => {
 	scrollContainer.value.scrollTo({ top, behavior: 'smooth' })
 })
 
+function readScrollPosition() {
+	if (props.useWindow) {
+		scrollPosition.value = (scrollContainer.value as Window).scrollY
+	} else {
+		scrollPosition.value = (scrollContainer.value as HTMLElement).scrollTop
+	}
+}
+
 function updateScrollPosition() {
 	onScrollHandle ??= requestAnimationFrame(() => {
 		onScrollHandle = null
-		if (props.useWindow) {
-			scrollPosition.value = (scrollContainer.value as Window).scrollY
-		} else {
-			scrollPosition.value = (scrollContainer.value as HTMLElement).scrollTop
-		}
+		readScrollPosition()
 	})
+}
+
+/**
+ * Move the focus between the items of the grid with the arrow keys.
+ *
+ * @param event - The keydown event, from anywhere in the grid
+ */
+async function onKeydown(event: KeyboardEvent) {
+	const target = event.target as HTMLElement
+	const id = target.getAttribute(GRID_ITEM_ATTRIBUTE)
+	if (id === null || !isGridNavigationKey(event.key) || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
+		return
+	}
+
+	const rows = props.sections.flatMap((section) => section.rows.map(({ items }) => items))
+	const items = rows.flat()
+	const index = items.findIndex((item) => item.id === id)
+	if (index === -1) {
+		return
+	}
+
+	event.preventDefault()
+
+	const next = items[getNextGridIndex(rows.map((row) => row.map(({ width }) => width)), index, event.key, isRTL())]
+	if (next.id === id) {
+		return
+	}
+
+	let element = findGridItem(next.id)
+	if (element === null) {
+		// Only the rows near the viewport are rendered: bringing the current item
+		// back into view renders its neighbours along with it.
+		target.scrollIntoView({ block: 'nearest' })
+		readScrollPosition()
+		await nextTick()
+		element = findGridItem(next.id)
+	}
+
+	element?.focus({ preventScroll: true })
+	element?.scrollIntoView({ block: 'nearest' })
+}
+
+/**
+ * @param id - The id of the item in the layout
+ */
+function findGridItem(id: string): HTMLElement | null {
+	return rowsContainer.value?.querySelector<HTMLElement>(`[${GRID_ITEM_ATTRIBUTE}="${CSS.escape(id)}"]`) ?? null
 }
 
 function updateContainerSize() {
@@ -313,5 +390,10 @@ onBeforeUnmount(() => {
 	box-sizing: border-box;
 	will-change: scroll-position, padding;
 	contain: layout paint style;
+
+	// Keeps an item scrolled to with the keyboard clear of the sticky header navigation.
+	:deep([data-grid-item-id]) {
+		scroll-margin-block-start: calc(var(--default-clickable-area) + 2 * var(--app-navigation-padding));
+	}
 }
 </style>

@@ -75,6 +75,7 @@
 									<FileComponent
 										v-if="item.node.type === 'file'"
 										:file="item.node"
+										:gridItemId="item.id"
 										:allowSelection="false"
 										:cropped="croppedLayout"
 										@click="openViewer"
@@ -82,6 +83,7 @@
 									<FolderComponent
 										v-else
 										:item="item.node"
+										:gridItemId="item.id"
 										:showShared="showShared" />
 								</li>
 							</template>

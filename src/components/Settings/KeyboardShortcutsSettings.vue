@@ -5,6 +5,26 @@
 
 <template>
 	<NcAppSettingsShortcutsSection>
+		<NcHotkeyList :label="t('photos', 'Photo grid')">
+			<NcHotkey
+				:label="t('photos', 'Move to the photo on the left')"
+				hotkey="ArrowLeft" />
+			<NcHotkey
+				:label="t('photos', 'Move to the photo on the right')"
+				hotkey="ArrowRight" />
+			<NcHotkey
+				:label="t('photos', 'Move to the photo above')"
+				hotkey="ArrowUp" />
+			<NcHotkey
+				:label="t('photos', 'Move to the photo below')"
+				hotkey="ArrowDown" />
+			<NcHotkey
+				:label="t('photos', 'Open the photo')"
+				hotkey="Enter" />
+			<NcHotkey
+				:label="t('photos', 'Select or unselect the photo')"
+				hotkey="Space" />
+		</NcHotkeyList>
 		<NcHotkeyList :label="t('photos', 'Slideshow')">
 			<NcHotkey
 				:label="t('photos', 'Previous photo')"
