@@ -5,13 +5,16 @@
 
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 import {
+	formatCaptureTime,
 	formatDate,
 	formatDateRange,
 	formatMonth,
 	formatMonthAndYear,
 	formatTime,
+	formatUtcOffset,
 	formatYear,
 	fromMonthKey,
+	parseUtcOffset,
 	toDayKey,
 	toMonthKey,
 } from './dateUtils.ts'
@@ -20,7 +23,11 @@ import {
 // of following whatever locale the machine running the tests happens to have.
 const { getCanonicalLocale } = vi.hoisted(() => ({ getCanonicalLocale: vi.fn(() => 'en-GB') }))
 
-vi.mock('@nextcloud/l10n', () => ({ getCanonicalLocale }))
+vi.mock('@nextcloud/l10n', () => ({
+	getCanonicalLocale,
+	translate: (app: string, text: string, placeholders: Record<string, string> = {}) => text
+		.replace(/{(\w+)}/g, (match, key) => placeholders[key] ?? match),
+}))
 
 beforeEach(() => {
 	getCanonicalLocale.mockReturnValue('en-GB')
@@ -152,5 +159,84 @@ describe('formatDateRange', () => {
 		getCanonicalLocale.mockReturnValue('en-US')
 		expect(formatDateRange(new Date(2026, 7, 3), new Date(2026, 7, 5)))
 			.toMatch(/^August 3\s–\s5, 2026$/)
+	})
+})
+
+describe('parseUtcOffset', () => {
+	test('reads an offset east of UTC', () => {
+		expect(parseUtcOffset('+09:00')).toBe(540)
+	})
+
+	test('reads an offset west of UTC', () => {
+		expect(parseUtcOffset('-03:30')).toBe(-210)
+	})
+
+	test('reads a zero offset', () => {
+		expect(parseUtcOffset('+00:00')).toBe(0)
+	})
+
+	test('reads an offset written without a colon', () => {
+		expect(parseUtcOffset('+0545')).toBe(345)
+	})
+
+	test('ignores surrounding whitespace', () => {
+		expect(parseUtcOffset(' +01:00 ')).toBe(60)
+	})
+
+	test.each([
+		['an empty entry', ''],
+		['a blank entry', '   :  '],
+		['a missing sign', '09:00'],
+		['out of range minutes', '+05:75'],
+		['an offset beyond UTC+14', '+15:00'],
+		['a number', 9],
+		['a missing entry', undefined],
+	])('rejects %s', (_, value) => {
+		expect(parseUtcOffset(value)).toBeNull()
+	})
+})
+
+describe('formatUtcOffset', () => {
+	test('leaves out whole minutes', () => {
+		expect(formatUtcOffset(540)).toBe('UTC+9')
+	})
+
+	test('writes partial hours', () => {
+		expect(formatUtcOffset(345)).toBe('UTC+5:45')
+	})
+
+	test('writes offsets west of UTC', () => {
+		expect(formatUtcOffset(-210)).toBe('UTC-3:30')
+	})
+
+	test('writes a zero offset as UTC alone', () => {
+		expect(formatUtcOffset(0)).toBe('UTC')
+	})
+})
+
+describe('formatCaptureTime', () => {
+	// 2024-06-14 00:12 UTC, which is 09:12 in Tokyo and 02:12 in CET.
+	const takenAt = new Date(Date.UTC(2024, 5, 14, 0, 12))
+
+	test('uses the local time zone when the offset is unknown', () => {
+		expect(formatCaptureTime(takenAt)).toBe('14 June 2024 at 02:12')
+		expect(formatCaptureTime(takenAt, null)).toBe('14 June 2024 at 02:12')
+	})
+
+	test('uses the wall clock time at the offset when it is known', () => {
+		expect(formatCaptureTime(takenAt, 540)).toBe('14 June 2024 at 09:12 (UTC+9)')
+	})
+
+	test('moves to the previous day west of UTC', () => {
+		expect(formatCaptureTime(takenAt, -300)).toBe('13 June 2024 at 19:12 (UTC-5)')
+	})
+
+	test('handles partial hour offsets', () => {
+		expect(formatCaptureTime(takenAt, 330)).toBe('14 June 2024 at 05:42 (UTC+5:30)')
+	})
+
+	test('follows the user locale', () => {
+		getCanonicalLocale.mockReturnValue('en-US')
+		expect(formatCaptureTime(takenAt, 540)).toBe('June 14, 2024 at 9:12 AM (UTC+9)')
 	})
 })
