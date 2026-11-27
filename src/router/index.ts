@@ -24,6 +24,7 @@ const TagsView = () => import('../views/TagsView.vue')
 const TagContent = () => import('../views/TagContent.vue')
 const TimelineView = () => import('../views/TimelineView.vue')
 const FacesView = () => import('../views/FacesView.vue')
+const PhotoFrame = () => import('../views/PhotoFrame.vue')
 const FaceContent = () => import('../views/FaceContent.vue')
 
 const UnassignedFaces = () => import('../views/UnassignedFaces.vue')
@@ -278,6 +279,16 @@ export const router = createRouter({
 			meta: {
 				rootTitle: () => {
 					return t('photos', 'On this day')
+				},
+			},
+		},
+		{
+			path: '/frame',
+			name: 'frame',
+			component: PhotoFrame,
+			meta: {
+				rootTitle: () => {
+					return t('photos', 'Photo frame')
 				},
 			},
 		},
