@@ -26,6 +26,7 @@ export type PhotoFile = File & {
 		'metadata-photos-original_date_time': number
 		'metadata-photos-size': { width: number, height: number }
 		'metadata-photos-gps'?: { latitude: string, longitude: string, altitude?: string }
+		'metadata-photos-place'?: string
 		/** Whether a preview can be generated for this file - not whether one exists already. */
 		hasPreview?: boolean
 		timestamp: number

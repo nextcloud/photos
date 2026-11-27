@@ -66,7 +66,8 @@
 						loading="lazy"
 						decoding="async">
 					<span class="memories__trip__details">
-						<span class="memories__trip__details__title">{{ formatDateRange(trip) }}</span>
+						<span class="memories__trip__details__title">{{ getTripTitle(trip) ?? formatDateRange(trip) }}</span>
+						<span v-if="trip.places.length > 0">{{ formatDateRange(trip) }}</span>
 						<AnimatedNumber :value="trip.photos.length">
 							<template #default="{ current }">
 								{{ n('photos', '%n photo', '%n photos', current) }}
@@ -129,6 +130,28 @@ function startRecap(): void {
  */
 function openTrip(trip: Trip): void {
 	getViewer().open(trip.photos, trip.cover)
+}
+
+/**
+ * Name a trip after the places where most of its photos were taken.
+ *
+ * @param trip - The trip to name
+ * @return The name, `null` when none of the photos of the trip has a place
+ */
+function getTripTitle(trip: Trip): string | null {
+	const [firstPlace, secondPlace] = trip.places
+
+	if (firstPlace === undefined) {
+		return null
+	}
+
+	if (secondPlace === undefined) {
+		return firstPlace
+	}
+
+	// Rendered as text, so neither escaping nor sanitizing is needed, and both
+	// would turn the "&" into an HTML entity.
+	return t('photos', '{firstPlace} & {secondPlace}', { firstPlace, secondPlace }, undefined, { escape: false, sanitize: false })
 }
 
 /**
