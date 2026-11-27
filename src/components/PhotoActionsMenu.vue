@@ -59,6 +59,13 @@
 				{{ t('photos', 'Share') }}
 			</NcActionButton>
 
+			<NcActionButton v-if="burst" closeAfterClick @click="emit('bestShot')">
+				<template #icon>
+					<StarFourPointsOutline :size="20" />
+				</template>
+				{{ t('photos', 'Find best shot') }}
+			</NcActionButton>
+
 			<NcActionSeparator v-if="canDelete" />
 
 			<NcActionButton v-if="canDelete" closeAfterClick @click="deleteConfirmationShown = true">
@@ -131,6 +138,7 @@ import InformationOutline from 'vue-material-design-icons/InformationOutline.vue
 import PencilOutline from 'vue-material-design-icons/PencilOutline.vue'
 import ShareVariantOutline from 'vue-material-design-icons/ShareVariantOutline.vue'
 import Star from 'vue-material-design-icons/Star.vue'
+import StarFourPointsOutline from 'vue-material-design-icons/StarFourPointsOutline.vue'
 import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import TagMultipleOutline from 'vue-material-design-icons/TagMultipleOutline.vue'
 import TrashCanOutline from 'vue-material-design-icons/TrashCanOutline.vue'
@@ -146,12 +154,16 @@ import { useFilesStore } from '../store/files.ts'
 const props = defineProps<{
 	/** Photo the actions apply to. */
 	photo: PhotoTarget
+	/** Whether the photo stands for a burst whose photos can be ranked by sharpness. */
+	burst?: boolean
 }>()
 
 // The photo is gone from the server once it is deleted, but each view keeps
 // its own list of the photos it shows and has to drop it from there.
 const emit = defineEmits<{
 	(event: 'deleted', photo: PhotoTarget): void
+	/** The best shot of the burst the photo stands for is asked for. */
+	(event: 'bestShot'): void
 }>()
 
 const filesStore = useFilesStore()

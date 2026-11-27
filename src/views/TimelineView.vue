@@ -193,7 +193,10 @@
 					:file="files[file.id]"
 					:allowSelection="true"
 					:burstCount="burstCount(file.id)"
+					:burstComparable="comparableBurst(file.id) !== undefined"
 					:selected="selection[file.id] === true"
+					@burstRest="warmBestShot"
+					@bestShot="bestShotFiles = comparableBurst($event)"
 					@click="openViewer"
 					@selectToggled="onFileSelectToggle"
 					@deleted="onPhotoDeleted" />
@@ -207,6 +210,12 @@
 			:monthCounts="monthCounts"
 			:currentMonth="scrubberTarget || monthsList[0]"
 			@jump="onScrubberJump" />
+
+		<BurstBestShotDialog
+			v-if="bestShotFiles !== undefined"
+			:files="bestShotFiles"
+			@close="bestShotFiles = undefined"
+			@keep="keepBestShot" />
 
 		<NcModal
 			v-if="showAlbumCreationForm"
@@ -233,6 +242,7 @@
 <script setup lang="ts">
 import type { Collection } from '../services/collectionFetcher.ts'
 import type { Album } from '../store/albums.ts'
+import type { PhotoFile } from '../store/files.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
@@ -261,6 +271,7 @@ import DownloadOutline from 'vue-material-design-icons/TrayArrowDown.vue'
 import ViewGridOutline from 'vue-material-design-icons/ViewGridOutline.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import AlbumPicker from '../components/Albums/AlbumPicker.vue'
+import BurstBestShotDialog from '../components/BurstBestShotDialog.vue'
 import DateScrubber from '../components/DateScrubber.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
@@ -271,6 +282,7 @@ import { useFilesByMonth } from '../composables/useFilesByMonth.ts'
 import { useFilesSelection } from '../composables/useFilesSelection.ts'
 import { useGridDensity } from '../composables/useGridDensity.ts'
 import { allMimes } from '../services/AllowedMimes.ts'
+import { isComparableBurst, scoreSharpness } from '../services/bestShot.ts'
 import { downloadFiles } from '../services/downloadFiles.ts'
 import { useCollectionsStore } from '../store/collections.ts'
 import { useFilesStore } from '../store/files.ts'
@@ -309,6 +321,8 @@ const appContent = document.getElementById('app-content-vue')
 // Month section the user picked in the DateScrubber, forwarded to
 // FilesListViewer's `scrollToSection`. Empty means no override.
 const scrubberTarget = ref('')
+// The burst whose best shot is being picked, if any.
+const bestShotFiles = ref<PhotoFile[]>()
 
 const files = computed(() => filesStore.files)
 
@@ -385,7 +399,32 @@ function burstCount(fileId: string): number {
 	return burstStacks.value[fileId]?.memberIds.length ?? 1
 }
 
+// The photos of the burst a tile stands for, if they can be ranked by sharpness.
+function comparableBurst(fileId: string | number): PhotoFile[] | undefined {
+	const burst = burstStacks.value[fileId]?.memberIds
+		.map((id) => files.value[id])
+		.filter((file) => file !== undefined)
+
+	return burst !== undefined && isComparableBurst(burst) ? burst : undefined
+}
+
+// Measuring a burst ahead of time, while it is hovered or looked at, is what
+// makes its best shot known the moment it is asked for.
+function warmBestShot(fileId: number) {
+	const burst = comparableBurst(fileId)
+	if (burst !== undefined) {
+		scoreSharpness(burst)
+	}
+}
+
+async function keepBestShot(others: PhotoFile[]) {
+	bestShotFiles.value = undefined
+	await deleteFileIds(others.map((file) => String(file.fileid)))
+}
+
 function openViewer(fileId: number) {
+	warmBestShot(fileId)
+
 	// A tile standing for a run of photos hands the viewer that run alone, so
 	// flipping through it stays inside the burst rather than leaving it for the
 	// rest of the timeline. Every other tile hands it the whole grid.
@@ -419,7 +458,10 @@ function onPhotoDeleted(photo: PhotoTarget) {
 
 async function deleteSelection() {
 	// Need to store the file ids so it is not changed before the deleteFiles call.
-	const fileIds = selectedFileIds.value
+	await deleteFileIds(selectedFileIds.value)
+}
+
+async function deleteFileIds(fileIds: string[]) {
 	onUncheckFiles(fileIds)
 	fetchedFileIds.value = fetchedFileIds.value.filter((fileid) => !fileIds.includes(fileid.toString()))
 	await filesStore.deleteFiles(fileIds)

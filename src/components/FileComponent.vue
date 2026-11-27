@@ -33,8 +33,8 @@
 			@pointerup="cancelLongPress"
 			@pointercancel="cancelLongPress"
 			@pointerleave="cancelLongPress"
-			@mouseenter="schedulePreview"
-			@mouseleave="cancelPreview">
+			@mouseenter="onPointerRest"
+			@mouseleave="onPointerGone">
 
 			<!-- image and loading placeholder -->
 			<div class="file__images">
@@ -126,6 +126,8 @@
 			v-if="showActionsMenu"
 			class="photo-actions-menu"
 			:photo="photoTarget"
+			:burst="burstComparable"
+			@bestShot="emit('bestShot', file.fileid)"
 			@deleted="emit('deleted', $event)" />
 
 		<Transition name="favorite-pop">
@@ -149,6 +151,7 @@ import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwit
 import PlayCircleOutlineIcon from 'vue-material-design-icons/PlayCircleOutline.vue'
 import FavoriteIcon from './FavoriteIcon.vue'
 import PhotoActionsMenu from './PhotoActionsMenu.vue'
+import { BEST_SHOT_HOVER_DELAY } from '../services/bestShot.ts'
 import { logger } from '../services/logger.ts'
 import { isCachedPreview } from '../services/PreviewService.js'
 import { getVideoDurationFromUrl, toPhotoTarget } from '../utils/fileUtils.ts'
@@ -164,6 +167,8 @@ const props = withDefaults(defineProps<{
 	// several of them was folded out of a run of photos taken in one go, and is
 	// drawn as a deck of cards carrying their count.
 	burstCount?: number
+	// Whether the photos folded into this tile can be ranked by sharpness.
+	burstComparable?: boolean
 	// Opt-out: the menu manages the photo it belongs to, which only gets in
 	// the way where photos are being picked rather than managed.
 	showActionsMenu?: boolean
@@ -187,6 +192,9 @@ const emit = defineEmits<{
 	click: [fileid: number]
 	selectToggled: [toggle: { id: number, value: boolean }]
 	deleted: [photo: PhotoTarget]
+	// The pointer rested on the tile of a burst that can be ranked.
+	burstRest: [fileid: number]
+	bestShot: [fileid: number]
 }>()
 
 // The dashboard widget mounts this component without a router.
@@ -210,6 +218,7 @@ let videoPreviewTimeout: null | ReturnType<typeof setTimeout> = null
 // A video that could not be played once is not tried again, or a broken
 // file would fire a load on every pass of the pointer.
 const videoPreviewFailed = ref(false)
+let burstRestTimeout: null | ReturnType<typeof setTimeout> = null
 
 const photoTarget = computed<PhotoTarget>(() => toPhotoTarget(props.file))
 
@@ -310,6 +319,23 @@ function onErrorLarge() {
 	errorLarge.value = true
 }
 
+function onPointerRest() {
+	schedulePreview()
+
+	if (props.burstComparable) {
+		burstRestTimeout = setTimeout(() => emit('burstRest', props.file.fileid), BEST_SHOT_HOVER_DELAY)
+	}
+}
+
+function onPointerGone() {
+	cancelPreview()
+
+	if (burstRestTimeout !== null) {
+		clearTimeout(burstRestTimeout)
+		burstRestTimeout = null
+	}
+}
+
 // Start playing the video of a tile once the pointer has rested on it, which
 // is what keeps a sweep across the grid from loading every video it passes.
 function schedulePreview() {
@@ -399,7 +425,7 @@ onBeforeUnmount(() => {
 	}
 
 	cancelLongPress()
-	cancelPreview()
+	onPointerGone()
 })
 </script>
 
