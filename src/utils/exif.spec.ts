@@ -4,7 +4,7 @@
  */
 
 import { describe, expect, test } from 'vitest'
-import { formatCoordinates, getExifSummary, getPhotoLocation, parseCoordinate } from './exif.ts'
+import { formatCoordinates, getExifSummary, getPhotoLocation, parseCoordinate, validateCoordinate } from './exif.ts'
 
 /**
  * @param exif - Entries of the EXIF IFD
@@ -97,5 +97,20 @@ describe('parseCoordinate', () => {
 	test('refuses coordinates which are off world', () => {
 		expect(parseCoordinate('90.1', 90)).toBeNull()
 		expect(parseCoordinate('-180.1', 180)).toBeNull()
+	})
+})
+
+describe('validateCoordinate', () => {
+	test('accepts a coordinate in range and an empty pair', () => {
+		expect(validateCoordinate('38.7', 90, '-9.1')).toBeUndefined()
+		expect(validateCoordinate('', 90, '')).toBeUndefined()
+	})
+
+	test('requires both coordinates of the pair', () => {
+		expect(validateCoordinate('', 90, '-9.1')).toBe('Both coordinates are required')
+	})
+
+	test('rejects coordinates off world', () => {
+		expect(validateCoordinate('91', 90, '0')).toBe('Enter decimal degrees between -90 and 90')
 	})
 })

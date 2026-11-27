@@ -8,7 +8,7 @@ import type { PhotoTarget } from '../utils/fileUtils.ts'
 import { File, Folder } from '@nextcloud/files'
 import { createPinia, setActivePinia } from 'pinia'
 import { beforeEach, describe, expect, test, vi } from 'vitest'
-import { useFilesStore } from './files.ts'
+import { METADATA_UPDATE_CONCURRENCY, useFilesStore } from './files.ts'
 import { useFoldersStore } from './folders.ts'
 
 const { davClient, photoActions, showError } = vi.hoisted(() => ({
@@ -118,6 +118,65 @@ describe('useFilesStore', () => {
 		await store.updatePhotoMetadata(target(1), { takenAt: TAKEN_AT, location: { latitude: 38.7, longitude: -9.1 } })
 
 		expect(store.files[1].attributes['metadata-photos-gps']).toEqual({ latitude: '38.7', longitude: '-9.1' })
+	})
+
+	test('updatePhotoMetadata leaves the values it is not given alone', async () => {
+		const store = useFilesStore()
+		store.appendFiles([photo(1, { 'metadata-photos-gps': { latitude: '1', longitude: '2' } })])
+
+		await store.updatePhotoMetadata(target(1), { takenAt: 1703442600 })
+		expect(store.files[1].attributes['metadata-photos-gps']).toEqual({ latitude: '1', longitude: '2' })
+
+		await store.updatePhotoMetadata(target(1), { location: null })
+		expect(store.files[1].attributes.timestamp).toBe(1703442600)
+		expect(store.files[1].attributes['metadata-photos-gps']).toBeUndefined()
+	})
+
+	test('updatePhotosMetadata limits the number of requests running at once', async () => {
+		const store = useFilesStore()
+		const fileIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+		store.appendFiles(fileIds.map((fileId) => photo(fileId)))
+
+		let running = 0
+		let maxRunning = 0
+		photoActions.savePhotoMetadata.mockImplementation(async () => {
+			maxRunning = Math.max(maxRunning, ++running)
+			await new Promise((resolve) => setTimeout(resolve, 1))
+			running--
+		})
+
+		const progress: number[] = []
+		const failures = await store.updatePhotosMetadata(
+			fileIds.map((fileId) => ({ photo: target(fileId), update: { takenAt: TAKEN_AT + fileId } })),
+			(done) => progress.push(done),
+		)
+
+		expect(failures).toEqual([])
+		expect(photoActions.savePhotoMetadata).toHaveBeenCalledTimes(fileIds.length)
+		expect(maxRunning).toBe(METADATA_UPDATE_CONCURRENCY)
+		expect(progress).toEqual(fileIds)
+		expect(store.files[10].attributes.timestamp).toBe(TAKEN_AT + 10)
+	})
+
+	test('updatePhotosMetadata reports the photos the server refused and goes on with the others', async () => {
+		const store = useFilesStore()
+		store.appendFiles([photo(1), photo(2), photo(3)])
+		const forbidden = Object.assign(new Error('Forbidden'), { status: 403 })
+		photoActions.savePhotoMetadata.mockImplementation(async (photo: PhotoTarget) => {
+			if (photo.fileid === 2) {
+				throw forbidden
+			}
+		})
+
+		const failures = await store.updatePhotosMetadata([1, 2, 3].map((fileId) => ({
+			photo: target(fileId),
+			update: { location: { latitude: 38.7, longitude: -9.1 } },
+		})))
+
+		expect(failures).toEqual([{ photo: target(2), error: forbidden }])
+		expect(store.files[1].attributes['metadata-photos-gps']).toEqual({ latitude: '38.7', longitude: '-9.1' })
+		expect(store.files[2].attributes['metadata-photos-gps']).toBeUndefined()
+		expect(store.files[3].attributes['metadata-photos-gps']).toEqual({ latitude: '38.7', longitude: '-9.1' })
 	})
 
 	test('setPhotoFavorite marks the photo in the timeline and the folders listings', async () => {

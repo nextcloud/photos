@@ -7,19 +7,21 @@
 	<LMap
 		class="location-map"
 		:style="{ height }"
-		:zoom="previewZoom"
+		:class="{ 'location-map--pickable': pickable }"
+		:zoom="zoom"
 		:center="center"
 		:options="{
-			scrollWheelZoom: false,
-			zoomControl: false,
-			dragging: false,
+			scrollWheelZoom: pickable,
+			zoomControl: pickable,
+			dragging: pickable,
 			attributionControl: false,
-		}">
+		}"
+		@click="onClick">
 		<LTileLayer :url="url" :options="tileLayerOptions" />
 		<LControlAttribution
 			position="bottomright"
 			:prefix="attribution" />
-		<LMarker :latLng="center">
+		<LMarker v-if="!hideMarker" :latLng="center">
 			<LTooltip
 				:options="{
 					direction: 'top',
@@ -33,6 +35,8 @@
 </template>
 
 <script setup lang="ts">
+import type { PhotoLocation } from '../utils/exif.ts'
+
 import {
 	LControlAttribution,
 	LMap,
@@ -66,10 +70,33 @@ const props = withDefaults(defineProps<{
 	 * The name of the location
 	 */
 	name?: string
+
+	/**
+	 * Zoom level the map opens at
+	 */
+	zoom?: number
+
+	/**
+	 * Whether the marker of the location is left out
+	 */
+	hideMarker?: boolean
+
+	/**
+	 * Whether the map can be moved around and a location picked by clicking it
+	 */
+	pickable?: boolean
 }>(), {
 	height: '250px',
 	name: '',
+	// The zoom level of the map in the messages list
+	zoom: 13,
+	hideMarker: false,
+	pickable: false,
 })
+
+const emit = defineEmits<{
+	(event: 'pick', location: PhotoLocation): void
+}>()
 
 const url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 // Nextcloud answers every request with `Referrer-Policy: no-referrer`,
@@ -78,11 +105,27 @@ const url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 // alone, and the origin is all it hands out — the instance identifies
 // itself without telling the tile server which page of it is open.
 const tileLayerOptions = { referrerPolicy: 'strict-origin-when-cross-origin' }
-// The zoom level of the map in the messages list
-const previewZoom = 13
 const attribution = '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 
 const center = computed<[number, number]>(() => [props.latitude, props.longitude])
+
+/** The part of a Leaflet mouse event the map reads. */
+type MapClickEvent = {
+	latlng: { wrap(): { lat: number, lng: number } }
+}
+
+/**
+ * @param event - Click on the map
+ */
+function onClick(event: MapClickEvent): void {
+	if (!props.pickable) {
+		return
+	}
+
+	// Coordinates are wrapped around the world once the map is panned past it.
+	const { lat, lng } = event.latlng.wrap()
+	emit('pick', { latitude: lat, longitude: lng })
+}
 </script>
 
 <style scoped lang="scss">
@@ -90,5 +133,9 @@ const center = computed<[number, number]>(() => [props.latitude, props.longitude
 	position: relative;
 	margin: 16px;
 	border-radius: var(--border-radius-large);
+
+	&--pickable {
+		cursor: crosshair;
+	}
 }
 </style>

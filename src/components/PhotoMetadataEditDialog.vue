@@ -84,7 +84,7 @@ import MapMarkerOffOutline from 'vue-material-design-icons/MapMarkerOffOutline.v
 import { fetchPhotoExif } from '../services/exifFetcher.ts'
 import { logger } from '../services/logger.ts'
 import { useFilesStore } from '../store/files.ts'
-import { COORDINATE_LIMITS, getPhotoLocation, parseCoordinate } from '../utils/exif.ts'
+import { COORDINATE_LIMITS, getPhotoLocation, parseCoordinate, validateCoordinate } from '../utils/exif.ts'
 
 const props = defineProps<{
 	/** Photo to edit the metadata of. */
@@ -124,26 +124,6 @@ onMounted(async () => {
 
 	loading.value = false
 })
-
-/**
- * A coordinate has to be reported as invalid while its counterpart is being
- * typed, otherwise saving silently drops the position.
- *
- * @param value - Coordinate as typed by the user
- * @param limit - Absolute maximum of the coordinate, in degrees
- * @param counterpart - The other coordinate of the pair
- */
-function validateCoordinate(value: string, limit: number, counterpart: string): string | undefined {
-	if (value.trim() === '') {
-		return counterpart.trim() === '' ? undefined : t('photos', 'Both coordinates are required')
-	}
-
-	if (parseCoordinate(value, limit) === null) {
-		return t('photos', 'Enter decimal degrees between -{limit} and {limit}', { limit })
-	}
-
-	return undefined
-}
 
 const latitudeError = computed(() => validateCoordinate(latitude.value, COORDINATE_LIMITS.latitude, longitude.value))
 const longitudeError = computed(() => validateCoordinate(longitude.value, COORDINATE_LIMITS.longitude, latitude.value))

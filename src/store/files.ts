@@ -35,6 +35,9 @@ export type PhotoFile = File & {
 	}
 }
 
+/** Number of metadata updates sent to the server at the same time. */
+export const METADATA_UPDATE_CONCURRENCY = 4
+
 export const useFilesStore = defineStore('files', () => {
 	const files = ref<Record<string, PhotoFile>>({})
 	const nomediaPaths = ref<string[]>([])
@@ -116,7 +119,7 @@ export const useFilesStore = defineStore('files', () => {
 	 * Correct the taken date and the position of a photo
 	 *
 	 * @param photo - Photo to update
-	 * @param update - New taken date and position
+	 * @param update - New taken date and position, undefined ones are kept
 	 * @param update.takenAt - Corrected capture time, as a unix timestamp
 	 * @param update.location - Corrected position, or null to drop it
 	 * @throws {Error} When the server rejects the update
@@ -129,13 +132,19 @@ export const useFilesStore = defineStore('files', () => {
 			return
 		}
 
-		// The dates driving the sorting and the grouping are precalculated, so
-		// they have to be recomputed for the photo to move to its new month.
-		const date = new Date(takenAt * 1000)
-		attributes['metadata-photos-original_date_time'] = takenAt
-		attributes.timestamp = Math.floor(date.getTime() / 1000)
-		attributes.month = toMonthKey(date)
-		attributes.day = toDayKey(date)
+		if (takenAt !== undefined) {
+			// The dates driving the sorting and the grouping are precalculated, so
+			// they have to be recomputed for the photo to move to its new month.
+			const date = new Date(takenAt * 1000)
+			attributes['metadata-photos-original_date_time'] = takenAt
+			attributes.timestamp = Math.floor(date.getTime() / 1000)
+			attributes.month = toMonthKey(date)
+			attributes.day = toDayKey(date)
+		}
+
+		if (location === undefined) {
+			return
+		}
 
 		if (location === null) {
 			delete attributes['metadata-photos-gps']
@@ -146,6 +155,41 @@ export const useFilesStore = defineStore('files', () => {
 				longitude: String(location.longitude),
 			}
 		}
+	}
+
+	/**
+	 * Correct the taken date and the position of several photos
+	 *
+	 * Each photo is a request of its own, checked against the permissions of
+	 * that photo, so a failure only affects the photo it is about.
+	 *
+	 * @param updates - Photos to update, with the values to store for each
+	 * @param onProgress - Called with the number of photos handled so far
+	 * @return The photos that could not be updated, with the reason why
+	 */
+	async function updatePhotosMetadata(
+		updates: { photo: PhotoTarget, update: PhotoMetadataUpdate }[],
+		onProgress: (done: number) => void = () => {},
+	): Promise<{ photo: PhotoTarget, error: unknown }[]> {
+		const semaphore = new Semaphore(METADATA_UPDATE_CONCURRENCY)
+		const failures: { photo: PhotoTarget, error: unknown }[] = []
+		let done = 0
+
+		await Promise.all(updates.map(async ({ photo, update }) => {
+			const symbol = await semaphore.acquire()
+
+			try {
+				await updatePhotoMetadata(photo, update)
+			} catch (error) {
+				logger.error('Error saving the metadata of a photo', { error, filename: photo.basename })
+				failures.push({ photo, error })
+			} finally {
+				semaphore.release(symbol)
+				onProgress(++done)
+			}
+		}))
+
+		return failures
 	}
 
 	/**
@@ -265,6 +309,7 @@ export const useFilesStore = defineStore('files', () => {
 		favoriteFile,
 		deleteFile,
 		updatePhotoMetadata,
+		updatePhotosMetadata,
 		setPhotoFavorite,
 		deletePhoto,
 		deleteFiles,

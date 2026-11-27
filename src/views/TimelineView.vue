@@ -156,6 +156,17 @@
 						</NcActionButton>
 
 						<NcActionButton
+							v-if="canEditSelection"
+							:closeAfterClick="true"
+							data-cy-header-action="edit-selection-metadata"
+							@click="showBulkMetadataEditor = true">
+							{{ t('photos', 'Edit date & location') }}
+							<template #icon>
+								<PencilOutline />
+							</template>
+						</NcActionButton>
+
+						<NcActionButton
 							:closeAfterClick="true"
 							:aria-label="t('photos', 'Delete selection')"
 							data-cy-header-action="delete-selection"
@@ -231,6 +242,11 @@
 			@close="showAlbumPicker = false">
 			<AlbumPicker @albumPicked="addSelectionToAlbum" />
 		</NcModal>
+
+		<BulkMetadataEditDialog
+			v-if="showBulkMetadataEditor"
+			:fileIds="selectedFileIds"
+			@close="showBulkMetadataEditor = false" />
 	</div>
 </template>
 
@@ -240,6 +256,7 @@ import type { Album } from '../store/albums.ts'
 import type { PhotoTarget } from '../utils/fileUtils.ts'
 
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { Permission } from '@nextcloud/files'
 import { t } from '@nextcloud/l10n'
 import { getViewer } from '@nextcloud/viewer'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
@@ -255,6 +272,7 @@ import NcModal from '@nextcloud/vue/components/NcModal'
 import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 import FolderAlertOutline from 'vue-material-design-icons/FolderAlertOutline.vue'
+import PencilOutline from 'vue-material-design-icons/PencilOutline.vue'
 import Play from 'vue-material-design-icons/Play.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import PlusBoxMultipleOutline from 'vue-material-design-icons/PlusBoxMultipleOutline.vue'
@@ -265,6 +283,7 @@ import DownloadOutline from 'vue-material-design-icons/TrayArrowDown.vue'
 import ViewGridOutline from 'vue-material-design-icons/ViewGridOutline.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import AlbumPicker from '../components/Albums/AlbumPicker.vue'
+import BulkMetadataEditDialog from '../components/BulkMetadataEditDialog.vue'
 import DateScrubber from '../components/DateScrubber.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
@@ -324,6 +343,7 @@ const newAlbumButton = useTemplateRef<InstanceType<typeof NcButton>>('newAlbumBu
 
 const showAlbumCreationForm = ref(false)
 const showAlbumPicker = ref(false)
+const showBulkMetadataEditor = ref(false)
 const appContent = document.getElementById('app-content-vue')
 // Month section the user picked in the DateScrubber, forwarded to
 // FilesListViewer's `scrollToSection`. Empty means no override.
@@ -339,6 +359,9 @@ const shouldFavoriteSelection = computed<boolean>(() => {
 	// Favorite all selection if at least one file is not in the favorites.
 	return selectedFileIds.value.some((fileId) => files.value[fileId].attributes.favorite === 0)
 })
+
+const canEditSelection = computed(() => selectedFileIds.value
+	.some((fileId) => (files.value[fileId].permissions & Permission.WRITE) !== 0))
 
 // Photos of the timeline that are loaded, in the order they are shown.
 const timelinePhotos = computed(() => fetchedFileIds.value
