@@ -38,6 +38,13 @@
 					: t('photos', 'Add to favorites') }}
 			</NcActionButton>
 
+			<NcActionButton v-if="canExtractText" closeAfterClick @click="textShown = true">
+				<template #icon>
+					<TextRecognition :size="20" />
+				</template>
+				{{ t('photos', 'Extract text') }}
+			</NcActionButton>
+
 			<NcActionButton v-if="canTag" closeAfterClick @click="tagsShown = true">
 				<template #icon>
 					<TagMultipleOutline :size="20" />
@@ -79,6 +86,11 @@
 			:photo="photo"
 			@close="metadataEditShown = false" />
 
+		<PhotoTextDialog
+			v-if="textShown"
+			:photo="photo"
+			@close="textShown = false" />
+
 		<PhotoTagsDialog
 			v-if="tagsShown"
 			:photo="photo"
@@ -118,7 +130,7 @@ import { showError } from '@nextcloud/dialogs'
 import { Permission } from '@nextcloud/files'
 import { translate as t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
@@ -133,13 +145,16 @@ import ShareVariantOutline from 'vue-material-design-icons/ShareVariantOutline.v
 import Star from 'vue-material-design-icons/Star.vue'
 import StarOutline from 'vue-material-design-icons/StarOutline.vue'
 import TagMultipleOutline from 'vue-material-design-icons/TagMultipleOutline.vue'
+import TextRecognition from 'vue-material-design-icons/TextRecognition.vue'
 import TrashCanOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 import AlbumPicker from './Albums/AlbumPicker.vue'
 import PhotoMetadataDialog from './PhotoMetadataDialog.vue'
 import PhotoMetadataEditDialog from './PhotoMetadataEditDialog.vue'
 import PhotoTagsDialog from './PhotoTagsDialog.vue'
+import PhotoTextDialog from './PhotoTextDialog.vue'
 import { areTagsInstalled } from '../services/AreTagsInstalled.ts'
 import { logger } from '../services/logger.ts'
+import { isTextExtractionAvailable } from '../services/textExtraction.ts'
 import { useCollectionsStore } from '../store/collections.ts'
 import { useFilesStore } from '../store/files.ts'
 
@@ -161,6 +176,7 @@ const menuOpen = ref(false)
 const metadataShown = ref(false)
 const metadataEditShown = ref(false)
 const tagsShown = ref(false)
+const textShown = ref(false)
 const albumPickerShown = ref(false)
 const deleteConfirmationShown = ref(false)
 
@@ -177,6 +193,18 @@ const canDelete = computed(() => isLoggedIn && (props.photo.permissions & Permis
 // Tags belong to their own app, and the server refuses to put one on a photo
 // the account cannot write to.
 const canTag = computed(() => areTagsInstalled && canEdit.value)
+
+// Text recognition runs as a task of the current account, and needs a provider
+// to be set up on the server. Whether there is one is only asked once a menu
+// is opened, rather than by every photo of the grid.
+const textExtractionAvailable = ref(false)
+const canExtractText = computed(() => textExtractionAvailable.value && props.photo.mime.startsWith('image/'))
+
+watch(menuOpen, async (open) => {
+	if (open && isLoggedIn && !textExtractionAvailable.value) {
+		textExtractionAvailable.value = await isTextExtractionAvailable()
+	}
+})
 
 // The sharing UI lives in the details sidebar of the Files app, and its API
 // needs a navigation context which the photos app does not set up, so the user
