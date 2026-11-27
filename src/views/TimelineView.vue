@@ -397,11 +397,12 @@ function openViewer(fileId: number) {
 			.map((id) => files.value[id])
 			.filter((file) => file !== undefined),
 		files.value[fileId],
+		{ enableSidebar: true },
 	)
 }
 
 function startSlideshow() {
-	getViewer().open(timelinePhotos.value, timelinePhotos.value[0], { startSlideshow: true })
+	getViewer().open(timelinePhotos.value, timelinePhotos.value[0], { enableSidebar: true, startSlideshow: true })
 }
 
 async function addSelectionToAlbum(album: Album) {

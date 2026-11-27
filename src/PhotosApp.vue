@@ -189,15 +189,18 @@
 </template>
 
 <script setup lang="ts">
+import type { Node } from '@nextcloud/files'
 import type { FilterOption } from './services/PhotosFilters/PhotosFilter.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { getSidebar } from '@nextcloud/files'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import debounce from 'debounce'
 import { storeToRefs } from 'pinia'
-import { computed, onBeforeMount, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
 import NcAppNavigation from '@nextcloud/vue/components/NcAppNavigation'
@@ -283,6 +286,16 @@ function showSettings() {
 	openedSettings.value = true
 }
 
+function handleViewerSidebarOpen(node: Node): void {
+	const sidebar = getSidebar()
+	if (!sidebar.available) {
+		logger.error('Could not open the Files sidebar from the viewer because it is not available')
+		return
+	}
+
+	sidebar.open(node)
+}
+
 function selectFilter(filterOption: FilterOption<unknown>) {
 	selectedFilters.value[filterOption.filterId].push(filterOption.value)
 }
@@ -325,7 +338,10 @@ onBeforeMount(() => {
 
 onBeforeUnmount(() => {
 	window.removeEventListener('load', registerServiceWorker)
+	unsubscribe('viewer:sidebar:open', handleViewerSidebarOpen)
 })
+
+onMounted(() => subscribe('viewer:sidebar:open', handleViewerSidebarOpen))
 </script>
 
 <style lang="scss">

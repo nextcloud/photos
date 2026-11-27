@@ -9,6 +9,7 @@ declare module '@nextcloud/event-bus' {
 		'files:node:deleted': Node
 		'files:node:updated': Node
 		'photos:user-config-changed': { key: string, value: unknown }
+		'viewer:sidebar:open': Node
 	}
 }
 
