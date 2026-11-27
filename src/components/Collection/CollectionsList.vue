@@ -17,6 +17,20 @@
 		<!-- No collections -->
 		<slot v-if="noCollection && !loading" name="emptyCollectionsList" class="collections__empty" />
 
+		<!-- Grouped list -->
+		<div v-else-if="!noCollection && groups?.length" class="collections__groups">
+			<section v-for="group in groups" :key="group.key" class="collections__group">
+				<h2 class="collections__group-title">
+					{{ group.title }}
+				</h2>
+				<ul class="collections__list collections__list--grouped">
+					<li v-for="collection in group.collections" :key="collection.basename" :data-cy-collections-list-collection="collection.basename">
+						<slot :collection="collection" />
+					</li>
+				</ul>
+			</section>
+		</div>
+
 		<!-- List -->
 		<ul v-else-if="!noCollection" class="collections__list">
 			<li v-for="collection in collections" :key="collection.basename" :data-cy-collections-list-collection="collection.basename">
@@ -36,9 +50,12 @@ import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue
 
 const props = withDefaults(defineProps<{
 	collections: Record<string, T>
+	/** Sections to show the collections in, instead of a single list. */
+	groups?: { key: string, title: string, collections: T[] }[]
 	loading?: boolean
 	error?: Error | number | null
 }>(), {
+	groups: undefined,
 	loading: false,
 	error: null,
 })
@@ -72,6 +89,33 @@ const noCollection = computed(() => Object.keys(props.collections).length === 0)
 			padding: 32px 12px;
 			justify-content: center;
 		}
+
+		&--grouped {
+			height: auto;
+			padding: 0 0 32px;
+			overflow: visible;
+
+			@media only screen and (max-width: 1200px) {
+				padding: 0 0 32px;
+			}
+		}
+	}
+
+	&__groups {
+		flex-grow: 1;
+		height: calc(100% - 60px);
+		padding: 0 48px;
+		overflow-y: auto;
+
+		@media only screen and (max-width: 1200px) {
+			padding: 0 12px;
+		}
+	}
+
+	&__group-title {
+		margin: 32px 0 16px;
+		font-size: 20px;
+		font-weight: bold;
 	}
 }
 </style>

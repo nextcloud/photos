@@ -22,6 +22,8 @@ export type PhotoExif = {
 	}
 	/** Name of the place the coordinates were resolved to, when enabled. */
 	place?: string
+	/** ISO 3166-1 alpha-2 code of the country of the place. */
+	placeCountry?: string
 	/** Moment the photo was taken, as a unix timestamp in seconds. */
 	takenAt?: number
 }

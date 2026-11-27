@@ -19,7 +19,7 @@
 					:loading="loadingCollection || loadingCollectionFiles"
 					:params="{ placeName }"
 					:path="'/' + placeName"
-					:title="place.basename"
+					:title="formatPlaceName(place.basename, place.attributes['place-country'])"
 					@refresh="fetchPlaceFiles" />
 			</template>
 
@@ -61,7 +61,8 @@ import Plus from 'vue-material-design-icons/Plus.vue'
 import CollectionContent from '../components/Collection/CollectionContent.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import { useFetchCollectionContent } from '../composables/useFetchCollectionContent.ts'
-import { placesPrefix, usePlacesStore } from '../store/places.ts'
+import { placesExtraProps, placesPrefix, usePlacesStore } from '../store/places.ts'
+import { formatPlaceName } from '../utils/placeCountry.ts'
 
 const props = withDefaults(defineProps<{
 	placeName?: string
@@ -88,7 +89,7 @@ const placeFileName = computed(() => `${placesPrefix}/${props.placeName}`)
 const placeFileIds = computed(() => placesStore.getPlaceFiles(props.placeName))
 
 async function fetchPlace() {
-	fetchCollection(placeFileName.value, [])
+	fetchCollection(placeFileName.value, placesExtraProps)
 }
 
 async function fetchPlaceFiles() {

@@ -10,6 +10,7 @@ namespace OCA\Photos\Service;
 
 use OCA\Photos\DB\Place\PlaceMapper;
 use OCA\Photos\Listener\ExifMetadataProvider;
+use OCA\Photos\Listener\PlaceMetadataProvider;
 use OCP\FilesMetadata\IFilesMetadataManager;
 use OCP\FilesMetadata\Model\IFilesMetadata;
 
@@ -29,10 +30,34 @@ class MediaPlaceManager {
 			return;
 		}
 
-		$metadata->setString('gps', $place, true);
+		$metadata->setString('gps', $place['name'], true);
 	}
 
-	public function getPlaceForMetadata(IFilesMetadata $metadata): ?string {
+	/**
+	 * Store the place derived from the coordinates and its country code.
+	 *
+	 * @return bool false when no place can be derived, the metadata is then left untouched
+	 */
+	public function setPlaceForMetadata(IFilesMetadata $metadata): bool {
+		$place = $this->getPlaceForMetadata($metadata);
+		if ($place === null) {
+			return false;
+		}
+
+		$metadata->setString(PlaceMetadataProvider::METADATA_KEY, $place['name'], true);
+		if ($place['countryCode'] === '') {
+			$metadata->unset(PlaceMetadataProvider::METADATA_KEY_COUNTRY);
+		} else {
+			$metadata->setString(PlaceMetadataProvider::METADATA_KEY_COUNTRY, $place['countryCode'], true);
+		}
+
+		return true;
+	}
+
+	/**
+	 * @return array{name: string, countryCode: string}|null
+	 */
+	public function getPlaceForMetadata(IFilesMetadata $metadata): ?array {
 		if (!$this->rgcService->arePlacesEnabled() || !$metadata->hasKey(ExifMetadataProvider::METADATA_KEY_GPS)) {
 			return null;
 		}

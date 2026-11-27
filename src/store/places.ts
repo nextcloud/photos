@@ -12,6 +12,9 @@ import { useCollectionsStore } from './collections.ts'
 
 export const placesPrefix = `/photos/${getCurrentUser()?.uid}/places`
 
+/** Dav properties of the places on top of the default collection ones. */
+export const placesExtraProps = ['<nc:place-country />']
+
 export const usePlacesStore = defineStore('places', () => {
 	const collectionsStore = useCollectionsStore()
 

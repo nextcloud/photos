@@ -6,6 +6,7 @@
 	<div>
 		<CollectionsList
 			:collections="places"
+			:groups="countryGroups"
 			:loading="loadingCollections"
 			:error="errorFetchingCollections"
 			class="places-list">
@@ -61,12 +62,30 @@ import CollectionCover from '../components/Collection/CollectionCover.vue'
 import CollectionsList from '../components/Collection/CollectionsList.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
 import { useFetchCollections } from '../composables/useFetchCollections.ts'
-import { placesPrefix, usePlacesStore } from '../store/places.ts'
+import { placesExtraProps, placesPrefix, usePlacesStore } from '../store/places.ts'
+import { groupPlacesByCountry } from '../utils/placeCountry.ts'
 
 const placesStore = usePlacesStore()
 const { fetchCollections, errorFetchingCollections, loadingCollections } = useFetchCollections()
 
 const places = computed(() => placesStore.places)
+
+/**
+ * Places grouped under their country, none when no place has a known country.
+ */
+const countryGroups = computed(() => {
+	const { countries, others } = groupPlacesByCountry(Object.values(places.value))
+	if (countries.length === 0) {
+		return undefined
+	}
+
+	const groups = countries.map(({ code, name, places }) => ({ key: code, title: name, collections: places }))
+	if (others.length > 0) {
+		groups.push({ key: '', title: t('photos', 'Other places'), collections: others })
+	}
+
+	return groups
+})
 
 function coverUrl(fileId: number): string {
 	if (fileId === -1) {
@@ -77,7 +96,7 @@ function coverUrl(fileId: number): string {
 }
 
 function fetchPlaces() {
-	fetchCollections(placesPrefix)
+	fetchCollections(placesPrefix, placesExtraProps)
 }
 
 onBeforeMount(() => {

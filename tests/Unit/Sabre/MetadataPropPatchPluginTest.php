@@ -199,10 +199,11 @@ class MetadataPropPatchPluginTest extends TestCase {
 			->with(ExifMetadataProvider::METADATA_KEY_GPS, ['latitude' => 48.8583, 'longitude' => 2.2945]);
 
 		// The place is derived from the coordinates, it has to follow them.
-		$this->mediaPlaceManager->method('getPlaceForMetadata')->willReturn('Vanves');
-		$this->metadata->expects($this->once())
-			->method('setString')
-			->with(PlaceMetadataProvider::METADATA_KEY, 'Vanves', true);
+		$this->mediaPlaceManager->expects($this->once())
+			->method('setPlaceForMetadata')
+			->with($this->metadata)
+			->willReturn(true);
+		$this->metadata->expects($this->never())->method('unset');
 
 		$this->filesMetadataManager->expects($this->once())->method('saveMetadata')->with($this->metadata);
 
@@ -219,14 +220,15 @@ class MetadataPropPatchPluginTest extends TestCase {
 	public function testRemovesTheLocationAndThePlaceItStandsFor(): void {
 		$this->createServerForNode();
 
-		$this->mediaPlaceManager->method('getPlaceForMetadata')->willReturn(null);
+		$this->mediaPlaceManager->method('setPlaceForMetadata')->willReturn(false);
 
-		$this->metadata->expects($this->exactly(2))
+		$unsetKeys = [];
+		$this->metadata->expects($this->exactly(3))
 			->method('unset')
-			->willReturnMap([
-				[ExifMetadataProvider::METADATA_KEY_GPS, $this->metadata],
-				[PlaceMetadataProvider::METADATA_KEY, $this->metadata],
-			]);
+			->willReturnCallback(function (string $key) use (&$unsetKeys): IFilesMetadata {
+				$unsetKeys[] = $key;
+				return $this->metadata;
+			});
 		$this->metadata->expects($this->never())->method('setArray');
 
 		$propPatch = new PropPatch([MetadataPropPatchPlugin::GPS_PROPERTYNAME => null]);
@@ -234,6 +236,11 @@ class MetadataPropPatchPluginTest extends TestCase {
 		$this->plugin->handleUpdateProperties('photo.jpg', $propPatch);
 
 		$this->assertTrue($propPatch->commit());
+		$this->assertSame([
+			ExifMetadataProvider::METADATA_KEY_GPS,
+			PlaceMetadataProvider::METADATA_KEY,
+			PlaceMetadataProvider::METADATA_KEY_COUNTRY,
+		], $unsetKeys);
 	}
 
 	public function testLeavesUntouchedPropertiesAlone(): void {

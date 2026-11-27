@@ -44,6 +44,10 @@ class PlaceRoot implements ICollection {
 		return $this->placeInfo->getPlace();
 	}
 
+	public function getCountryCode(): string {
+		return $this->placeInfo->getCountryCode();
+	}
+
 	/**
 	 * @return never
 	 */
