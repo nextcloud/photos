@@ -4,27 +4,38 @@
 -->
 
 <template>
-	<div>
+	<div class="tags-view">
+		<HeaderNavigation
+			key="navigation"
+			:loading="loading"
+			:title="t('photos', 'Tags')"
+			:rootTitle="t('photos', 'Tags')"
+			@refresh="fetchRootContent" />
+
 		<!-- Errors handlers-->
 		<NcEmptyContent v-if="error" :name="t('photos', 'An error occurred')" />
 
-		<NcEmptyContent v-if="!loading && tagsList.length === 0" :name="t('photos', 'No tags yet')" :description="t('photos', 'Photos with tags will show up here')" />
+		<NcEmptyContent v-else-if="!loading && tagsList.length === 0" :name="t('photos', 'No tags yet')" :description="t('photos', 'Photos with tags will show up here')">
+			<template #icon>
+				<TagOutline />
+			</template>
+		</NcEmptyContent>
 
-		<NcLoadingIcon v-if="loading" class="loader" />
-
-		<div v-else class="container">
-			<h2 v-if="popularTags.length">
-				{{ t('photos', 'Popular tags') }}
-			</h2>
-			<div class="popular-tags">
-				<TagCover v-for="tag in popularTags" :key="tag.id" :tag="tag" />
-			</div>
-			<h2 v-if="tagsList.length">
-				{{ t('photos', 'All tags') }}
-			</h2>
-			<div class="tags">
-				<TagCover v-for="tag in tagsList" :key="tag.id" :tag="tag" />
-			</div>
+		<div v-else-if="!loading" class="tags-view__content">
+			<template v-if="popularTags.length">
+				<h2>{{ t('photos', 'Popular tags') }}</h2>
+				<ul class="tags-view__list">
+					<li v-for="tag in popularTags" :key="tag.id">
+						<TagCover :tag="tag" />
+					</li>
+				</ul>
+				<h2>{{ t('photos', 'All tags') }}</h2>
+			</template>
+			<ul class="tags-view__list">
+				<li v-for="tag in tagsList" :key="tag.id">
+					<TagCover :tag="tag" />
+				</li>
+			</ul>
 		</div>
 	</div>
 </template>
@@ -36,7 +47,8 @@ import { t } from '@nextcloud/l10n'
 import { getViewer } from '@nextcloud/viewer'
 import { computed, onBeforeMount, ref } from 'vue'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
-import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+import TagOutline from 'vue-material-design-icons/TagOutline.vue'
+import HeaderNavigation from '../components/HeaderNavigation.vue'
 import TagCover from '../components/TagCover.vue'
 import { useAbortController } from '../composables/useAbortController.ts'
 import { logger } from '../services/logger.ts'
@@ -88,23 +100,25 @@ onBeforeMount(async () => {
 </script>
 
 <style lang="scss" scoped>
-.loader {
-	margin-top: 30vh;
-}
+@use '../components/Collection/CollectionsGrid.scss' as grid;
 
-.container {
-	padding-inline-start: 44px;
+.tags-view {
+	@include grid.spacing;
 
-	> h2 {
-		margin-inline-start: 14px;
-		margin-top: 40px;
+	&__content {
+		padding: var(--collections-gap) var(--collections-padding) calc(var(--default-grid-baseline) * 8);
+
+		> h2 {
+			@include grid.section-title;
+
+			&:not(:first-child) {
+				margin-top: calc(var(--default-grid-baseline) * 4);
+			}
+		}
 	}
-}
 
-.popular-tags, .tags {
-	display: flex;
-	flex-direction: row;
-	gap: 8px;
-	flex-wrap: wrap;
+	&__list {
+		@include grid.grid;
+	}
 }
 </style>

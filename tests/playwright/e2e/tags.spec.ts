@@ -17,7 +17,7 @@ test.describe('The tags view', () => {
 		await photosApp.timeline.open()
 		await photosApp.navigation.getEntry(NavigationEntry.tags).click()
 
-		await expect(photosApp.tags.allTagsHeading()).toBeVisible()
+		await expect(photosApp.tags.overviewHeading()).toBeVisible()
 		await expect(photosApp.tags.getTag(tag)).toContainText('2 photos')
 	})
 
@@ -55,7 +55,7 @@ test.describe('The tags view', () => {
 
 		await photosApp.tags.backButton().click()
 
-		await expect(photosApp.tags.allTagsHeading()).toBeVisible()
+		await expect(photosApp.tags.overviewHeading()).toBeVisible()
 		await expect(photosApp.tags.getTag(tag)).toBeVisible()
 		await expect(photosApp.page).toHaveURL(/\/apps\/photos\/tags\/?$/)
 	})
@@ -64,6 +64,6 @@ test.describe('The tags view', () => {
 		await photosApp.tags.open()
 
 		await expect(photosApp.tags.emptyState()).toBeVisible()
-		await expect(photosApp.tags.allTagsHeading()).toHaveCount(0)
+		await expect(photosApp.tags.getAllTags()).toHaveCount(0)
 	})
 })

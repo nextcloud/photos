@@ -23,9 +23,9 @@ export class TagsPage {
 		this.grid = new MediaGrid(page, page.getByRole('main'))
 	}
 
-	/** The heading above the list of every tag. */
-	public allTagsHeading(): Locator {
-		return this.page.getByRole('heading', { level: 2, name: 'All tags' })
+	/** The heading of the tags overview. */
+	public overviewHeading(): Locator {
+		return this.page.getByRole('heading', { level: 1, name: 'Tags', exact: true })
 	}
 
 	/** The message shown in place of the overview while no photo carries a tag. */
@@ -35,14 +35,17 @@ export class TagsPage {
 
 	/**
 	 * The cover of one tag, which is also the link opening it. It is named after
-	 * the tag and the number of photos carrying it.
+	 * the cover photo of the tag.
 	 *
 	 * @param tagName - Name of the tag
 	 */
 	public getTag(tagName: string): Locator {
-		return this.page.getByRole('main').getByRole('link').filter({
-			has: this.page.getByRole('heading', { level: 3, name: tagName, exact: true }),
-		})
+		return this.page.getByRole('main').getByRole('link', { name: `Cover photo for tag ${tagName}` })
+	}
+
+	/** Every tag of the overview. */
+	public getAllTags(): Locator {
+		return this.page.getByRole('main').getByRole('link', { name: /^Cover photo for tag / })
 	}
 
 	/** The heading naming the open tag. */

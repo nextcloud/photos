@@ -7,8 +7,7 @@
 		<CollectionsList
 			:collections="albums"
 			:loading="loadingCollections"
-			:error="errorFetchingCollections"
-			class="albums-list">
+			:error="errorFetchingCollections">
 			<template #header>
 				<HeaderNavigation
 					key="navigation"
@@ -37,15 +36,11 @@
 					:altImg="t('photos', 'Cover photo for album {albumName}', { albumName: collection.basename })"
 					:coverUrl="coverUrl(collection.attributes['last-photo'])">
 					<template #default>
-						<span class="album__name">
-							{{ collection.basename }}
-						</span>
+						{{ collection.basename }}
 					</template>
 
 					<template #subtitle>
-						<div class="album__details">
-							{{ collection.attributes.date }} ⸱ {{ n('photos', '%n item', '%n photos and videos', collection.attributes.nbItems) }}
-						</div>
+						{{ collection.attributes.date }} ⸱ {{ n('photos', '%n item', '%n photos and videos', collection.attributes.nbItems) }}
 					</template>
 				</CollectionCover>
 			</template>
@@ -128,20 +123,6 @@ onBeforeMount(() => {
 </script>
 
 <style lang="scss" scoped>
-.albums-list {
-	display: flex;
-	flex-direction: column;
-
-	.album__name {
-		font-weight: normal;
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-		font-size: 20px;
-		color: var(--color-main-text);
-	}
-}
-
 .album-creation__heading {
 	padding: calc(var(--default-grid-baseline) * 4);
 	margin-bottom: 0px;

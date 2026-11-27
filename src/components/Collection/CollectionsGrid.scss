@@ -1,0 +1,42 @@
+/**
+ * SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+// Space around a list of covers, which lines them up with the title of the header.
+@mixin spacing {
+	--collections-padding: calc(var(--default-clickable-area) + var(--app-navigation-padding));
+	--collections-gap: calc(var(--default-grid-baseline) * 2);
+
+	@media only screen and (max-width: 1200px) {
+		--collections-padding: calc(var(--default-grid-baseline) * 2);
+	}
+}
+
+// As many covers per row as fit, two on a phone.
+@mixin grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+	gap: var(--collections-gap);
+
+	@media only screen and (max-width: 480px) {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	> li {
+		min-width: 0;
+	}
+}
+
+// Heading of a section of covers.
+@mixin section-title {
+	margin: 0;
+	padding: var(--default-grid-baseline) calc(var(--default-grid-baseline) * 2);
+	overflow: hidden;
+	font-size: var(--default-font-size);
+	font-weight: bold;
+	line-height: var(--default-line-height);
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	color: var(--color-text-maxcontrast);
+}
