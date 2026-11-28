@@ -29,6 +29,9 @@ use OCP\IRequest;
 use OCP\ITagManager;
 
 class AlbumsController extends Controller {
+	/** How many photos a sub folder of a listing is shown with, at most. */
+	private const FOLDER_PREVIEWS = 4;
+
 	public function __construct(
 		private readonly string $userId,
 		IRequest $request,
@@ -66,8 +69,9 @@ class AlbumsController extends Controller {
 			}
 		}
 
-		$data = $this->scanCurrentFolder($folder, $shared);
-		$result = $this->formatData($folder, $data);
+		$previews = [];
+		$data = $this->scanCurrentFolder($folder, $shared, $previews);
+		$result = $this->formatData($folder, $data, $previews);
 
 		return new JSONResponse($result, Http::STATUS_OK);
 	}
@@ -78,11 +82,12 @@ class AlbumsController extends Controller {
 	 *
 	 * @param Folder $folder the folder being listed, which is the parent of every
 	 *                       node of the listing but itself
-	 * @param iterable<Node> $nodes
+	 * @param list<Node> $nodes
+	 * @param array<int, list<File>> $previews the photos to show each sub folder
+	 *                                         with, by folder id
 	 */
-	private function formatData(Folder $folder, iterable $nodes): array {
+	private function formatData(Folder $folder, array $nodes, array $previews): array {
 		$userFolder = $this->rootFolder->getUserFolder($this->userId);
-		$nodes = is_array($nodes) ? $nodes : iterator_to_array($nodes, false);
 		$favorites = $this->favoriteFileIds();
 		$metadata = $this->metadataOfNodes($nodes);
 
@@ -107,6 +112,7 @@ class AlbumsController extends Controller {
 					'hasPreview' => $this->previewManager->isAvailable($node),
 					'favorite' => isset($favorites[$node->getId()]) ? 1 : 0,
 					...$this->formatMetadata($metadata[$node->getId()] ?? null),
+					...$this->formatPreviews($previews[$node->getId()] ?? []),
 				],
 			];
 		}
@@ -174,21 +180,49 @@ class AlbumsController extends Controller {
 		return $attributes;
 	}
 
-	private function scanCurrentFolder(Folder $folder, bool $shared): iterable {
-		$nodes = $folder->getDirectoryListing();
+	/**
+	 * The photos a folder is shown with, as what it takes to ask for the preview
+	 * of each of them. Nothing for a node that has none, as files do.
+	 *
+	 * @param list<File> $files
+	 */
+	private function formatPreviews(array $files): array {
+		if ($files === []) {
+			return [];
+		}
 
-		// add current folder to iterable set
-		yield $folder;
+		return ['previews' => array_map(static fn (File $file): array => [
+			'id' => (string)$file->getId(),
+			'etag' => $file->getEtag(),
+		], $files)];
+	}
 
-		foreach ($nodes as $node) {
-			if ($node instanceof Folder && $this->scanFolder($node, 0, $shared)) {
-				yield $node;
+	/**
+	 * The folder itself, followed by the folders and the files it holds that
+	 * have something to show.
+	 *
+	 * @param array<int, list<File>> $previews filled with the photos to show
+	 *                                         each sub folder with, by folder id
+	 * @return list<Node>
+	 */
+	private function scanCurrentFolder(Folder $folder, bool $shared, array &$previews): array {
+		$result = [$folder];
+
+		foreach ($folder->getDirectoryListing() as $node) {
+			if ($node instanceof Folder) {
+				$folderPreviews = $this->scanFolder($node, 0, $shared);
+				if ($folderPreviews !== []) {
+					$previews[$node->getId()] = $folderPreviews;
+					$result[] = $node;
+				}
 			} elseif ($node instanceof File) {
 				if ($this->validFile($node, $shared)) {
-					yield $node;
+					$result[] = $node;
 				}
 			}
 		}
+
+		return $result;
 	}
 
 	private function validFile(File $file, bool $shared): bool {
@@ -210,38 +244,51 @@ class AlbumsController extends Controller {
 			|| $node->getStorage()->instanceOfStorage(\OCA\GroupFolders\Mount\GroupFolderStorage::class);
 	}
 
-	private function scanFolder(Folder $folder, int $depth, bool $shared): bool {
+	/**
+	 * The first photos and videos of a folder, to show it with. They are those
+	 * of the first sub folder that has some when the folder holds none itself.
+	 *
+	 * @return list<File> empty when the folder has nothing to show
+	 */
+	private function scanFolder(Folder $folder, int $depth, bool $shared): array {
 		if ($depth > 4) {
-			return false;
+			return [];
 		}
 
 		try {
 			// Ignore folder with a .noimage or .nomedia node
 			if ($folder->nodeExists('.noimage') || $folder->nodeExists('.nomedia')) {
-				return false;
+				return [];
 			}
 
 			$nodes = $folder->getDirectoryListing();
 		} catch (StorageNotAvailableException) {
-			return false;
+			return [];
 		}
 
+		$files = [];
 		foreach ($nodes as $node) {
-			if ($node instanceof File) {
-				if ($this->validFile($node, $shared)) {
-					return true;
+			if ($node instanceof File && $this->validFile($node, $shared)) {
+				$files[] = $node;
+				if (count($files) === self::FOLDER_PREVIEWS) {
+					return $files;
 				}
 			}
+		}
+
+		if ($files !== []) {
+			return $files;
 		}
 
 		foreach ($nodes as $node) {
 			if ($node instanceof Folder && $this->isShared($node) === $shared) {
-				if ($this->scanFolder($node, $depth + 1, $shared)) {
-					return true;
+				$files = $this->scanFolder($node, $depth + 1, $shared);
+				if ($files !== []) {
+					return $files;
 				}
 			}
 		}
 
-		return false;
+		return [];
 	}
 }
