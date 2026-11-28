@@ -166,6 +166,8 @@ export default {
 
 		openViewer(fileId: number) {
 			window.OCA.Viewer.open({
+				// Before Nextcloud 35 the Files sidebar only exists in the Files app
+				enableSidebar: false,
 				fileInfo: toViewerFileInfo(this.files[fileId]),
 				list: this.fileIds.map((fileId) => toViewerFileInfo(this.files[fileId])),
 			})
