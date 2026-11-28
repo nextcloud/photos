@@ -231,6 +231,8 @@
 			@close="showAlbumPicker = false">
 			<AlbumPicker @albumPicked="addSelectionToAlbum" />
 		</NcModal>
+
+		<DropUpload @uploaded="refreshContent" />
 	</div>
 </template>
 
@@ -266,6 +268,7 @@ import ViewGridOutline from 'vue-material-design-icons/ViewGridOutline.vue'
 import AlbumForm from '../components/Albums/AlbumForm.vue'
 import AlbumPicker from '../components/Albums/AlbumPicker.vue'
 import DateScrubber from '../components/DateScrubber.vue'
+import DropUpload from '../components/DropUpload.vue'
 import FileComponent from '../components/FileComponent.vue'
 import FilesListViewer from '../components/FilesListViewer.vue'
 import HeaderNavigation from '../components/HeaderNavigation.vue'
@@ -380,6 +383,12 @@ function getContent() {
 		onlyFavorites: props.onlyFavorites,
 		extraFilters: filtersQuery.value,
 	})
+}
+
+// Start over from the first page, so uploaded photos show up where they belong.
+function refreshContent() {
+	resetFetchFilesState()
+	getContent()
 }
 
 // FilesListViewer scrolls on its `scrollToSection` prop, so stashing
