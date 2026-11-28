@@ -38,7 +38,7 @@
 		"nextcloud/ocp": "dev-stable33"
 	},
 	"require": {
-		"hexogen/kdtree": "^0.2.5",
+		"hexogen/kdtree": "^0.2.8",
 		"woltlab/webp-exif": "^0.1.5"
 	},
 	"extra": {
