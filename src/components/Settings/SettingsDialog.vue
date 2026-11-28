@@ -13,6 +13,7 @@
 			<PhotosSourceLocationsSettings />
 			<PhotosUploadLocationSettings />
 			<CroppedLayoutSettings />
+			<CalendarEventsSettings />
 		</NcAppSettingsSection>
 		<KeyboardShortcutsSettings />
 	</NcAppSettingsDialog>
@@ -22,6 +23,7 @@
 import { t } from '@nextcloud/l10n'
 import NcAppSettingsDialog from '@nextcloud/vue/components/NcAppSettingsDialog'
 import NcAppSettingsSection from '@nextcloud/vue/components/NcAppSettingsSection'
+import CalendarEventsSettings from './CalendarEventsSettings.vue'
 import CroppedLayoutSettings from './CroppedLayoutSettings.vue'
 import KeyboardShortcutsSettings from './KeyboardShortcutsSettings.vue'
 import PhotosSourceLocationsSettings from './PhotosSourceLocationsSettings.vue'
