@@ -37,9 +37,12 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import ImageOutlineIcon from 'vue-material-design-icons/ImageOutline.vue'
 import FileComponent from '../FileComponent.vue'
+import { useAbortController } from '../../composables/useAbortController.ts'
 import { allMimes } from '../../services/AllowedMimes.ts'
 import { logger } from '../../services/logger.ts'
 import { getPhotos } from '../../services/PhotoSearch.ts'
+
+const { abortSignal } = useAbortController()
 
 const loading = ref(true)
 const items = shallowRef<PhotoFile[]>([])
@@ -54,8 +57,13 @@ async function loadOnThisDay(): Promise<void> {
 			nbResults: 1,
 			mimesType: allMimes,
 			onThisDay: true,
+			signal: abortSignal.value,
 		}) as PhotoFile[]
 	} catch (error) {
+		// Navigating away aborts the request, nothing to report then.
+		if (abortSignal.value.aborted) {
+			return
+		}
 		logger.error('Failed to load on this day pictures', { error })
 	} finally {
 		loading.value = false
