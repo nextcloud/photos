@@ -2,6 +2,7 @@ OC.L10N.register(
     "photos",
     {
     "Public link" : "Public link",
+    "Places" : "ადგილები",
     "Search by file name" : "ძებნა ფაილის სახელით",
     "Clear search" : "ძებნის გასუფთავება",
     "Videos" : "Videos",
@@ -9,7 +10,6 @@ OC.L10N.register(
     "Favorites" : "Favorites",
     "Shared with you" : "Shared with you",
     "Tags" : "Tags",
-    "Places" : "ადგილები",
     "Back" : "Back",
     "Save" : "Save",
     "Shared by" : "Shared by",
@@ -29,6 +29,7 @@ OC.L10N.register(
     "Home" : "მთავარი",
     "General" : "General",
     "Unselect all" : "Unselect all",
+    "No favorites yet" : "No favorites yet",
     "Default" : "Default",
     "Last week" : "Last week",
     "Camera" : "Camera",

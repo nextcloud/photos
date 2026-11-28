@@ -1,8 +1,8 @@
 { "translations": {
     "Photos" : "Ảnh",
+    "Albums" : "Albums",
     "Your memories under your control" : "Các ký ức của bạn dưới sự kiểm soát của bạn",
     "Videos" : "Phim",
-    "Albums" : "Albums",
     "People" : "Mọi người",
     "Folders" : "Thư mục",
     "Favorites" : "Ưa thích",
@@ -38,6 +38,7 @@
     "No photos in here" : "Không có ảnh nào trong này",
     "No tags yet" : "Chưa gắn nhãn",
     "Photos with tags will show up here" : "Ảnh đã gắn nhãn sẽ được cho thấy trên này",
+    "No favorites yet" : "Chưa có yêu thích nào",
     "Tagged photos" : "Ảnh gắn nhãn",
     "Last week" : "Tuần trước",
     "Camera" : "Máy Ảnh",

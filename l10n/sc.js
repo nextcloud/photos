@@ -3,9 +3,9 @@ OC.L10N.register(
     {
     "Public link" : "Ligòngiu pùblicu",
     "Photos" : "Fotografias",
+    "Albums" : "Album",
     "Your memories under your control" : "Is regordos tuos controllados",
     "Videos" : "Vìdeos",
-    "Albums" : "Album",
     "People" : "Gente",
     "Folders" : "Cartellas",
     "Favorites" : "Preferidos",
