@@ -22,6 +22,7 @@ OC.L10N.register(
     "Dates" : "Fechas",
     "Home" : "Inicio",
     "General" : "General",
+    "No favorites yet" : "Aún no hay favoritos",
     "Details" : "Detalles",
     "Confirm" : "Confirmar"
 },

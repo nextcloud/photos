@@ -24,6 +24,7 @@ OC.L10N.register(
     "Home" : "Inicio",
     "General" : "General",
     "Loading folders…" : "Cargando carpetas…",
+    "No favorites yet" : "Aún no hay favoritos",
     "Details" : "Detalles",
     "Confirm" : "Confirmar"
 },

@@ -15,6 +15,7 @@ OC.L10N.register(
     "Add" : "එකතු කරන්න",
     "Home" : "මුල් පිටුව",
     "General" : "සමාන්‍යය",
+    "No favorites yet" : "තවමත් ප්‍රියතමයන් නොමැත",
     "Confirm" : "තහවුරු කරන්න"
 },
 "nplurals=2; plural=(n != 1);");
