@@ -59,6 +59,13 @@
 				{{ t('photos', 'Share') }}
 			</NcActionButton>
 
+			<NcActionButton v-if="canSendToTalk" closeAfterClick @click="sendToTalkShown = true">
+				<template #icon>
+					<ForumOutline :size="20" />
+				</template>
+				{{ t('photos', 'Send to Talk…') }}
+			</NcActionButton>
+
 			<NcActionSeparator v-if="canDelete" />
 
 			<NcActionButton v-if="canDelete" closeAfterClick @click="deleteConfirmationShown = true">
@@ -83,6 +90,11 @@
 			v-if="tagsShown"
 			:photo="photo"
 			@close="tagsShown = false" />
+
+		<SendToTalkDialog
+			v-if="sendToTalkShown"
+			:photos="[photo]"
+			@close="sendToTalkShown = false" />
 
 		<NcModal
 			v-if="albumPickerShown"
@@ -126,6 +138,7 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcModal from '@nextcloud/vue/components/NcModal'
 import DotsVertical from 'vue-material-design-icons/DotsVertical.vue'
+import ForumOutline from 'vue-material-design-icons/ForumOutline.vue'
 import ImageMultipleOutline from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import InformationOutline from 'vue-material-design-icons/InformationOutline.vue'
 import PencilOutline from 'vue-material-design-icons/PencilOutline.vue'
@@ -138,8 +151,10 @@ import AlbumPicker from './Albums/AlbumPicker.vue'
 import PhotoMetadataDialog from './PhotoMetadataDialog.vue'
 import PhotoMetadataEditDialog from './PhotoMetadataEditDialog.vue'
 import PhotoTagsDialog from './PhotoTagsDialog.vue'
+import SendToTalkDialog from './SendToTalkDialog.vue'
 import { areTagsInstalled } from '../services/AreTagsInstalled.ts'
 import { logger } from '../services/logger.ts'
+import { isTalkEnabled } from '../services/talk.ts'
 import { useCollectionsStore } from '../store/collections.ts'
 import { useFilesStore } from '../store/files.ts'
 
@@ -162,6 +177,7 @@ const metadataShown = ref(false)
 const metadataEditShown = ref(false)
 const tagsShown = ref(false)
 const albumPickerShown = ref(false)
+const sendToTalkShown = ref(false)
 const deleteConfirmationShown = ref(false)
 
 // Public shares are browsed without an account, the actions writing anything
@@ -173,6 +189,9 @@ const isLoggedIn = getCurrentUser() !== null
 const canEdit = computed(() => isLoggedIn && (props.photo.permissions & Permission.WRITE) !== 0)
 const canShare = computed(() => isLoggedIn && (props.photo.permissions & Permission.SHARE) !== 0)
 const canDelete = computed(() => isLoggedIn && (props.photo.permissions & Permission.DELETE) !== 0)
+
+// Posting a photo in a conversation shares it with the participants.
+const canSendToTalk = computed(() => isTalkEnabled && canShare.value)
 
 // Tags belong to their own app, and the server refuses to put one on a photo
 // the account cannot write to.
