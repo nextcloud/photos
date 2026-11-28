@@ -23,6 +23,7 @@ OC.L10N.register(
     "Home" : "Kryefaqja",
     "General" : "Të përgjithshme",
     "Loading folders…" : "Duke ngarkuar dosjet…",
+    "No favorites yet" : "Asnjë preferencë akoma",
     "Default" : "Paraprake",
     "Details" : "Detajet",
     "Confirm" : "Konfirmo"

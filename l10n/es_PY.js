@@ -28,6 +28,7 @@ OC.L10N.register(
     "No photos in here" : "No hay fotos aquí",
     "No tags yet" : "Aún no hay etiquetas",
     "Photos with tags will show up here" : "Fotos con etiquetas serán mostradas aquí",
+    "No favorites yet" : "Aún no hay favoritos",
     "Tagged photos" : "Fotos etiquetadas",
     "Details" : "Detalles",
     "Confirm" : "Confirmar"
