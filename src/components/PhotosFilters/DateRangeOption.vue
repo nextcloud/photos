@@ -9,12 +9,12 @@
 		<template #default>
 			<NcDateTime
 				:timestamp="value['start']"
-				:format=" { dateStyle: 'long' }"
+				:format=" { dateStyle: 'medium' }"
 				:relativeTime="false" />
-			⸱
+			–
 			<NcDateTime
 				:timestamp="value['end']"
-				:format=" { dateStyle: 'long' }"
+				:format=" { dateStyle: 'medium' }"
 				:relativeTime="false" />
 		</template>
 	</NcChip>

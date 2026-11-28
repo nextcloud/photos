@@ -16,6 +16,8 @@ export type FilterOption<T> = {
 export type PhotosFilter<T> = {
 	id: string
 	icon: string
+	/** Heading of its options in the filters input, needed by every filter providing options. */
+	label?: string
 	/** Component rendering a selected value, filters without one are not displayed. */
 	renderOptionComponent?: Component
 	getQuery(value: T[]): string

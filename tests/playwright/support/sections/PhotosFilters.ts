@@ -24,7 +24,7 @@ export class PhotosFilters {
 
 	/** The combobox offering the available filters. */
 	public input(): Locator {
-		return this.container.getByRole('combobox', { name: 'Select filters' })
+		return this.container.getByRole('combobox', { name: 'Filter by date or place' })
 	}
 
 	/**
