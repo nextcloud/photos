@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3d5f90d0c9c5accd6a7c73b280b4ea26",
+    "content-hash": "9a387b5052930276ca19382489e97e72",
     "packages": [
         {
             "name": "hexogen/kdtree",
-            "version": "v0.2.6",
+            "version": "v0.2.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hexogen/kdtree.git",
-                "reference": "fbcd2b472c1bb3401929b38144ddd66f8fd14c65"
+                "reference": "c2f104d5c486be7b8ac9e5e6b30b3658d8a2488c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hexogen/kdtree/zipball/fbcd2b472c1bb3401929b38144ddd66f8fd14c65",
-                "reference": "fbcd2b472c1bb3401929b38144ddd66f8fd14c65",
+                "url": "https://api.github.com/repos/hexogen/kdtree/zipball/c2f104d5c486be7b8ac9e5e6b30b3658d8a2488c",
+                "reference": "c2f104d5c486be7b8ac9e5e6b30b3658d8a2488c",
                 "shasum": ""
             },
             "require": {
@@ -63,9 +63,9 @@
             ],
             "support": {
                 "issues": "https://github.com/hexogen/kdtree/issues",
-                "source": "https://github.com/hexogen/kdtree/tree/v0.2.6"
+                "source": "https://github.com/hexogen/kdtree/tree/v0.2.8"
             },
-            "time": "2024-09-15T21:06:32+00:00"
+            "time": "2026-11-11T23:36:34+00:00"
         },
         {
             "name": "nelexa/buffer",
