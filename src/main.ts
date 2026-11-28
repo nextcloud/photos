@@ -3,6 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import type { Node } from '@nextcloud/files'
+
+import { subscribe } from '@nextcloud/event-bus'
+import { getSidebar } from '@nextcloud/files'
 import { registerDavProperty } from '@nextcloud/files/dav'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { createPinia, PiniaVuePlugin } from 'pinia'
@@ -10,6 +14,7 @@ import Vue from 'vue'
 import { sync } from 'vuex-router-sync'
 import PhotosApp from './PhotosApp.vue'
 import router from './router/index.js'
+import logger from './services/logger.ts'
 import store from './store/index.js'
 
 sync(store, router)
@@ -27,7 +32,7 @@ registerDavProperty('nc:metadata-photos-gps')
 
 Vue.use(PiniaVuePlugin)
 
-export default new Vue({
+const app = new Vue({
 	el: '#content',
 	name: 'PhotosRoot',
 	router,
@@ -35,3 +40,16 @@ export default new Vue({
 	pinia: createPinia(),
 	render: (h) => h(PhotosApp),
 })
+
+// The viewer asks for the Files sidebar of the photo it shows, render it next to the photos
+const sidebar = getSidebar()
+sidebar.mount(app.$el as HTMLElement)
+subscribe('viewer:sidebar:open', (node: Node) => {
+	if (!sidebar.available) {
+		logger.error('Could not open the Files sidebar from the viewer because it is not available')
+		return
+	}
+	sidebar.open(node)
+})
+
+export default app
