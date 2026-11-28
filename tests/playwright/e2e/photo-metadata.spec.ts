@@ -108,7 +108,7 @@ test.describe('Reaching the actions of a photo outside of the timeline', () => {
 		await folders.open(PHOTOS_FOLDER)
 		const metadata = await (await folders.grid.openActionsMenu(PHOTO)).viewMetadata()
 
-		await expect(metadata.getEntry('Filename')).toHaveText(PHOTO)
+		await expect(metadata.getEntry('File name')).toHaveText(PHOTO)
 	})
 
 	test('manages a photo of an album', async ({ media, photosApp }) => {
@@ -130,7 +130,7 @@ test.describe('Reaching the actions of a photo outside of the timeline', () => {
 		await expect(album.grid.getMedia(collectionPhotoName(media[PHOTO], PHOTO))).toBeVisible()
 		const metadata = await (await album.grid.openActionsMenu(PHOTO)).viewMetadata()
 
-		await expect(metadata.getEntry('Filename')).toHaveText(PHOTO)
+		await expect(metadata.getEntry('File name')).toHaveText(PHOTO)
 	})
 
 	test('leaves the picking of photos alone', async ({ photosApp }) => {
